@@ -4361,7 +4361,6 @@ gtk_widget_set_receives_default
 gtk_widget_get_receives_default
 gtk_widget_set_support_multidevice
 gtk_widget_get_support_multidevice
-gtk_widget_set_realized
 gtk_widget_get_realized
 gtk_widget_get_mapped
 gtk_widget_device_is_shadowed

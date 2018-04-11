@@ -571,9 +571,6 @@ gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_drawable            (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_realized           (GtkWidget    *widget,
-                                                         gboolean      realized);
-GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_realized           (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_mapped             (GtkWidget    *widget);

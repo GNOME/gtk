@@ -6636,27 +6636,6 @@ gtk_widget_get_realized (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_realized:
- * @widget: a #GtkWidget
- * @realized: %TRUE to mark the widget as realized
- *
- * Marks the widget as being realized. This function must only be 
- * called after all #GdkSurfaces for the @widget have been created 
- * and registered.
- *
- * This function should only ever be called in a derived widget's
- * “realize” or “unrealize” implementation.
- */
-void
-gtk_widget_set_realized (GtkWidget *widget,
-                         gboolean   realized)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  widget->priv->realized = realized;
-}
-
-/**
  * gtk_widget_get_mapped:
  * @widget: a #GtkWidget
  *
@@ -8766,7 +8745,7 @@ gtk_widget_real_realize (GtkWidget *widget)
       g_object_ref (priv->surface);
     }
 
-  gtk_widget_set_realized (widget, TRUE);
+  priv->realized = TRUE;
 }
 
 /*****************************************
@@ -8792,6 +8771,8 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   gtk_widget_forall (widget, (GtkCallback)gtk_widget_unrealize, NULL);
 
+  priv->realized = FALSE;
+
   if (_gtk_widget_get_has_surface (widget))
     {
       gtk_widget_unregister_surface (widget, priv->surface);
@@ -8803,8 +8784,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
       g_object_unref (priv->surface);
       priv->surface = NULL;
     }
-
-  gtk_widget_set_realized (widget, FALSE);
 }
 
 void
