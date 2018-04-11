@@ -1077,7 +1077,7 @@ event_close_to_indicator (GtkScrolledWindow *sw,
   else
     distance = INDICATOR_CLOSE_DISTANCE;
 
-  graphene_rect_inset (&indicator_bounds, distance, distance);
+  graphene_rect_inset (&indicator_bounds, - distance, - distance);
 
   if (indicator == &priv->hindicator)
     {
