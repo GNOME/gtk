@@ -5297,7 +5297,7 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
 
   priv = widget->priv;
 
-  if (priv->realized && !priv->clock_tick_id)
+  if (priv->frameclock_connected && !priv->clock_tick_id)
     {
       frame_clock = gtk_widget_get_frame_clock (widget);
 
@@ -5368,6 +5368,8 @@ gtk_widget_connect_frame_clock (GtkWidget     *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
 
+  priv->frameclock_connected = TRUE;
+
   if (GTK_IS_CONTAINER (widget))
     _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
 
@@ -5402,6 +5404,8 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
       priv->clock_tick_id = 0;
       gdk_frame_clock_end_updating (frame_clock);
     }
+
+  priv->frameclock_connected = FALSE;
 
   if (priv->context)
     gtk_style_context_set_frame_clock (priv->context, NULL);

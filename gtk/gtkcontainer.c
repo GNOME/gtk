@@ -2087,6 +2087,9 @@ gtk_container_start_idle_sizer (GtkContainer *container)
   if (clock == NULL)
     return;
 
+  if (!GTK_WIDGET (container)->priv->frameclock_connected)
+    return;
+
   container->priv->resize_clock = clock;
   container->priv->resize_handler = g_signal_connect (clock, "layout",
 						      G_CALLBACK (gtk_container_idle_sizer), container);

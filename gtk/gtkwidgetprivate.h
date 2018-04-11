@@ -89,6 +89,7 @@ struct _GtkWidgetPrivate
   guint hexpand_set           : 1; /* whether to use application-forced  */
   guint vexpand_set           : 1; /* instead of computing from children */
   guint has_tooltip           : 1;
+  guint frameclock_connected  : 1;
 
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
