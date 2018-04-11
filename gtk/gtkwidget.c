@@ -8755,14 +8755,18 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  g_assert (!_gtk_widget_get_has_surface (widget));
-
-  gtk_widget_set_realized (widget, TRUE);
-  if (priv->parent)
+  if (_gtk_widget_get_has_surface (widget))
     {
+      g_assert (priv->surface != NULL);
+    }
+  else
+    {
+      g_assert (priv->parent);
       priv->surface = gtk_widget_get_parent_surface (widget);
       g_object_ref (priv->surface);
     }
+
+  gtk_widget_set_realized (widget, TRUE);
 }
 
 /*****************************************
