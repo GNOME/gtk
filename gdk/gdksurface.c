@@ -122,8 +122,6 @@ static void gdk_surface_get_property (GObject      *object,
                                       GValue       *value,
                                       GParamSpec   *pspec);
 
-static void gdk_surface_clear_backing_region (GdkSurface *surface);
-
 static void recompute_visible_regions   (GdkSurface *private,
                                          gboolean recalculate_children);
 static void gdk_surface_invalidate_in_parent (GdkSurface *private);
@@ -906,18 +904,6 @@ surface_remove_from_pointer_info (GdkSurface  *surface,
                                      surface);
 }
 
-static void
-gdk_surface_free_current_paint (GdkSurface *surface)
-{
-  cairo_surface_destroy (surface->current_paint.surface);
-  surface->current_paint.surface = NULL;
-
-  cairo_region_destroy (surface->current_paint.region);
-  surface->current_paint.region = NULL;
-
-  surface->current_paint.surface_needs_composite = FALSE;
-}
-
 /**
  * _gdk_surface_destroy_hierarchy:
  * @surface: a #GdkSurface
@@ -996,8 +982,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
               g_object_run_dispose (G_OBJECT (surface->frame_clock));
               gdk_surface_set_frame_clock (surface, NULL);
             }
-
-          gdk_surface_free_current_paint (surface);
 
           if (surface->surface_type == GDK_SURFACE_FOREIGN)
             g_assert (surface->children == NULL);
@@ -1407,21 +1391,6 @@ gdk_surface_get_state (GdkSurface *surface)
   return surface->state;
 }
 
-static cairo_content_t
-gdk_surface_get_content (GdkSurface *surface)
-{
-  cairo_surface_t *cairo_surface;
-  cairo_content_t content;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
-
-  cairo_surface = gdk_surface_ref_impl_surface (surface);
-  content = cairo_surface_get_content (cairo_surface);
-  cairo_surface_destroy (cairo_surface);
-
-  return content;
-}
-
 static cairo_surface_t *
 gdk_surface_ref_impl_surface (GdkSurface *surface)
 {
@@ -1564,102 +1533,6 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
                          error,
                          "surface", surface,
                          NULL);
-}
-
-void
-gdk_surface_begin_paint_internal (GdkSurface            *surface,
-                                  const cairo_region_t *region);
-void
-gdk_surface_begin_paint_internal (GdkSurface            *surface,
-                                  const cairo_region_t *region)
-{
-  GdkRectangle clip_box;
-  GdkSurfaceImplClass *impl_class;
-  double sx, sy;
-  gboolean needs_surface;
-  cairo_content_t surface_content;
-
-  if (surface->current_paint.surface != NULL)
-    {
-      g_warning ("A paint operation on the surface is alredy in progress. "
-                 "This is not allowed.");
-      return;
-    }
-
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  needs_surface = TRUE;
-  if (impl_class->begin_paint)
-    needs_surface = impl_class->begin_paint (surface);
-
-  surface->current_paint.region = cairo_region_copy (region);
-  cairo_region_get_extents (surface->current_paint.region, &clip_box);
-
-  surface_content = gdk_surface_get_content (surface);
-
-  if (needs_surface)
-    {
-      surface->current_paint.surface = gdk_surface_create_similar_surface (surface,
-                                                                         surface_content,
-                                                                         MAX (clip_box.width, 1),
-                                                                         MAX (clip_box.height, 1));
-      sx = sy = 1;
-      cairo_surface_get_device_scale (surface->current_paint.surface, &sx, &sy);
-      cairo_surface_set_device_offset (surface->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
-      gdk_cairo_surface_mark_as_direct (surface->current_paint.surface, surface);
-
-      surface->current_paint.surface_needs_composite = TRUE;
-    }
-  else
-    {
-      surface->current_paint.surface = gdk_surface_ref_impl_surface (surface);
-      surface->current_paint.surface_needs_composite = FALSE;
-    }
-
-  if (!cairo_region_is_empty (surface->current_paint.region))
-    gdk_surface_clear_backing_region (surface);
-}
-
-void
-gdk_surface_end_paint_internal (GdkSurface *surface);
-void
-gdk_surface_end_paint_internal (GdkSurface *surface)
-{
-  GdkSurfaceImplClass *impl_class;
-  cairo_t *cr;
-
-  if (surface->current_paint.surface == NULL)
-    {
-      g_warning (G_STRLOC": no preceding call to gdk_surface_begin_draw_frame(), see documentation");
-      return;
-    }
-
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  if (impl_class->end_paint)
-    impl_class->end_paint (surface);
-
-  if (surface->current_paint.surface_needs_composite)
-    {
-      cairo_surface_t *cairo_surface;
-
-      cairo_surface = gdk_surface_ref_impl_surface (surface);
-      cr = cairo_create (cairo_surface);
-
-      cairo_set_source_surface (cr, surface->current_paint.surface, 0, 0);
-      gdk_cairo_region (cr, surface->current_paint.region);
-      cairo_clip (cr);
-
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-
-      cairo_destroy (cr);
-
-      cairo_surface_flush (cairo_surface);
-      cairo_surface_destroy (cairo_surface);
-    }
-
-  gdk_surface_free_current_paint (surface);
 }
 
 /**
@@ -1842,23 +1715,6 @@ gdk_surface_get_drawing_context (GdkSurface *surface)
     return NULL;
 
   return surface->drawing_context;
-}
-
-static void
-gdk_surface_clear_backing_region (GdkSurface *surface)
-{
-  cairo_t *cr;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  cr = cairo_create (surface->current_paint.surface);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, surface->current_paint.region);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
 }
 
 /* This returns either the current working surface on the paint stack
