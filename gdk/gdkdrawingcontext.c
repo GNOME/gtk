@@ -232,7 +232,7 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
   g_return_val_if_fail (GDK_IS_SURFACE (priv->surface), NULL);
 
-  if (priv->paint_context != NULL)
+  if (!GDK_IS_CAIRO_CONTEXT (priv->paint_context))
     return NULL;
 
   if (priv->cr == NULL)

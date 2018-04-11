@@ -1496,7 +1496,7 @@ gdk_surface_get_paint_gl_context (GdkSurface  *surface,
  * %NULL on error
  **/
 GdkGLContext *
-gdk_surface_create_gl_context (GdkSurface    *surface,
+gdk_surface_create_gl_context (GdkSurface   *surface,
                                GError      **error)
 {
   GdkGLContext *paint_context;
@@ -1509,9 +1509,17 @@ gdk_surface_create_gl_context (GdkSurface    *surface,
     return NULL;
 
   return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->create_gl_context (surface->impl_surface,
-                                                                      FALSE,
-                                                                      paint_context,
-                                                                      error);
+                                                                        FALSE,
+                                                                        paint_context,
+                                                                        error);
+}
+
+GdkCairoContext *
+gdk_surface_create_cairo_context (GdkSurface *surface)
+{
+  return g_object_new (GDK_TYPE_CAIRO_CONTEXT,
+                       "surface", surface,
+                       NULL);
 }
 
 /**
@@ -1558,7 +1566,10 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
                          NULL);
 }
 
-static void
+void
+gdk_surface_begin_paint_internal (GdkSurface            *surface,
+                                  const cairo_region_t *region);
+void
 gdk_surface_begin_paint_internal (GdkSurface            *surface,
                                   const cairo_region_t *region)
 {
@@ -1609,7 +1620,9 @@ gdk_surface_begin_paint_internal (GdkSurface            *surface,
     gdk_surface_clear_backing_region (surface);
 }
 
-static void
+void
+gdk_surface_end_paint_internal (GdkSurface *surface);
+void
 gdk_surface_end_paint_internal (GdkSurface *surface)
 {
   GdkSurfaceImplClass *impl_class;
@@ -1688,7 +1701,7 @@ gdk_surface_end_paint_internal (GdkSurface *surface)
  *   by GDK.
  */
 GdkDrawingContext *
-gdk_surface_begin_draw_frame (GdkSurface            *surface,
+gdk_surface_begin_draw_frame (GdkSurface           *surface,
                               GdkDrawContext       *draw_context,
                               const cairo_region_t *region)
 {
@@ -1698,12 +1711,9 @@ gdk_surface_begin_draw_frame (GdkSurface            *surface,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (gdk_surface_has_native (surface), NULL);
   g_return_val_if_fail (gdk_surface_is_toplevel (surface), NULL);
+  g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (draw_context), NULL);
+  g_return_val_if_fail (gdk_draw_context_get_surface (draw_context) == surface, NULL);
   g_return_val_if_fail (region != NULL, NULL);
-  if (draw_context != NULL)
-    {
-      g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (draw_context), NULL);
-      g_return_val_if_fail (gdk_draw_context_get_surface (draw_context) == surface, NULL);
-    }
 
   if (GDK_SURFACE_DESTROYED (surface))
     return NULL;
@@ -1718,10 +1728,7 @@ gdk_surface_begin_draw_frame (GdkSurface            *surface,
 
   real_region = cairo_region_copy (region);
 
-  if (draw_context)
-    gdk_draw_context_begin_frame (draw_context, real_region);
-  else
-    gdk_surface_begin_paint_internal (surface, real_region);
+  gdk_draw_context_begin_frame (draw_context, real_region);
 
   context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
                           "surface", surface,
@@ -1784,7 +1791,6 @@ gdk_surface_end_draw_frame (GdkSurface         *surface,
     }
   else
     {
-      gdk_surface_end_paint_internal (surface);
     }
 
   surface->drawing_context = NULL;
