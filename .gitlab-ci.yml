@@ -2,25 +2,27 @@ stages:
   - build
   - flatpak
 
-gtk:
-  image: ebassi/gitlab-gtk:latest
-  stage: build
-  before_script:
-    - export CCACHE_DISABLE=true_
-  script:
-    - bash -x ./.gitlab-ci/test-docker.sh
+.cache-defaults: &cache-defaults
   cache:
     paths:
+      - _ccache/
       - subprojects/gdk-pixbuf/
       - subprojects/glib/
       - subprojects/graphene/
       - subprojects/libepoxy/
       - subprojects/pango/
+
+gtk:
+  image: ebassi/gitlab-gtk:latest
+  stage: build
+  script:
+    - bash -x ./.gitlab-ci/test-docker.sh
   artifacts:
     when: on_failure
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+  <<: *cache-defaults
 
 .mingw-defaults: &mingw-defaults
   stage: build
@@ -35,6 +37,7 @@ mingw32:
     MSYSTEM: "MINGW32"
     CHERE_INVOKING: "yes"
   <<: *mingw-defaults
+  <<: *cache-defaults
 
 flatpak:demo:
   image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
