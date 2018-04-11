@@ -10,6 +10,15 @@ rgba_to_float (const GdkRGBA *c,
   f[3] = c->alpha;
 }
 
+float
+ops_get_scale (const RenderOpBuilder *builder)
+{
+  const graphene_matrix_t *mv = &builder->current_modelview;
+
+  return MAX (graphene_matrix_get_x_scale (mv),
+              graphene_matrix_get_y_scale (mv));
+}
+
 void
 ops_set_program (RenderOpBuilder *builder,
                  const Program   *program)

@@ -235,6 +235,8 @@ typedef struct
 
 
 
+float             ops_get_scale          (const RenderOpBuilder   *builder);
+
 void              ops_set_program        (RenderOpBuilder         *builder,
                                           const Program           *program);
 

@@ -241,6 +241,7 @@ rounded_rect_to_floats (GskGLRenderer        *self,
                         float                *corner_widths,
                         float                *corner_heights)
 {
+  const float scale = ops_get_scale (builder);
   int i;
   graphene_rect_t transformed_bounds;
 
@@ -253,8 +254,8 @@ rounded_rect_to_floats (GskGLRenderer        *self,
 
   for (i = 0; i < 4; i ++)
     {
-      corner_widths[i] = rect->corner[i].width * self->scale_factor;
-      corner_heights[i] = rect->corner[i].height * self->scale_factor;
+      corner_widths[i] = rect->corner[i].width * scale;
+      corner_heights[i] = rect->corner[i].height * scale;
     }
 }
 
@@ -317,6 +318,7 @@ render_text_node (GskGLRenderer   *self,
 {
   const PangoFont *font = gsk_text_node_peek_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+  const float text_scale = ops_get_scale (builder);
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
@@ -352,7 +354,7 @@ render_text_node (GskGLRenderer   *self,
                                          TRUE,
                                          (PangoFont *)font,
                                          gi->glyph,
-                                         self->scale_factor);
+                                         text_scale);
 
       /* e.g. whitespace */
       if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
@@ -362,7 +364,7 @@ render_text_node (GskGLRenderer   *self,
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
       ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
-                                                                   glyph)->texture_id);
+                                                                    glyph)->texture_id);
 
       tx  = glyph->tx;
       ty  = glyph->ty;
@@ -394,6 +396,7 @@ render_border_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
+  const float scale = ops_get_scale (builder);
   const float min_x = node->bounds.origin.x;
   const float min_y = node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
@@ -459,7 +462,7 @@ render_border_node (GskGLRenderer   *self,
     sizes[3].h = 0;
 
   for (i = 0; i < 4; i ++)
-    widths[i] *= self->scale_factor;
+    widths[i] *= scale;
 
   {
     const GskQuadVertex side_data[4][6] = {
@@ -516,8 +519,8 @@ render_border_node (GskGLRenderer   *self,
                                       &outline.bounds, &outline.bounds);
     for (i = 0; i < 4; i ++)
       {
-        outline.corner[i].width *= self->scale_factor;
-        outline.corner[i].height *= self->scale_factor;
+        outline.corner[i].width *= scale;
+        outline.corner[i].height *= scale;
       }
 
     ops_set_program (builder, &self->border_program);
@@ -737,6 +740,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
                           RenderOpBuilder     *builder)
 {
+  const float scale = ops_get_scale (builder);
   const float min_x = node->bounds.origin.x;
   const float min_y = node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
@@ -756,14 +760,14 @@ render_rounded_clip_node (GskGLRenderer       *self,
    *       We do, however, apply the scale factor to the child clip of course.
    */
 
-  graphene_matrix_init_scale (&scale_matrix, self->scale_factor, self->scale_factor, 1.0f);
+  graphene_matrix_init_scale (&scale_matrix, scale, scale, 1.0f);
   graphene_matrix_transform_bounds (&scale_matrix, &child_clip.bounds, &child_clip.bounds);
 
   /* Increase corner radius size by scale factor */
   for (i = 0; i < 4; i ++)
     {
-      child_clip.corner[i].width *= self->scale_factor;
-      child_clip.corner[i].height *= self->scale_factor;
+      child_clip.corner[i].width *= scale;
+      child_clip.corner[i].height *= scale;
     }
 
   prev_clip = ops_set_clip (builder, &child_clip);
@@ -881,6 +885,7 @@ render_inset_shadow_node (GskGLRenderer       *self,
                           RenderOpBuilder     *builder,
                           const GskQuadVertex *vertex_data)
 {
+  const float scale = ops_get_scale (builder);
   RenderOp op;
 
   /* TODO: Implement blurred inset shadows as well */
@@ -897,10 +902,10 @@ render_inset_shadow_node (GskGLRenderer       *self,
                           op.inset_shadow.outline,
                           op.inset_shadow.corner_widths,
                           op.inset_shadow.corner_heights);
-  op.inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node) * self->scale_factor;
-  op.inset_shadow.spread = gsk_inset_shadow_node_get_spread (node) * self->scale_factor;
-  op.inset_shadow.offset[0] = gsk_inset_shadow_node_get_dx (node) * self->scale_factor;
-  op.inset_shadow.offset[1] = -gsk_inset_shadow_node_get_dy (node) * self->scale_factor;
+  op.inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node) * scale;
+  op.inset_shadow.spread = gsk_inset_shadow_node_get_spread (node) * scale;
+  op.inset_shadow.offset[0] = gsk_inset_shadow_node_get_dx (node) * scale;
+  op.inset_shadow.offset[1] = -gsk_inset_shadow_node_get_dy (node) * scale;
 
   ops_set_program (builder, &self->inset_shadow_program);
   ops_add (builder, &op);
@@ -913,6 +918,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
                                      RenderOpBuilder     *builder,
                                      const GskQuadVertex *vertex_data)
 {
+  const float scale = ops_get_scale (builder);
   const float spread = gsk_outset_shadow_node_get_spread (node);
   GskRoundedRect r = *gsk_outset_shadow_node_peek_outline (node);
   RenderOp op;
@@ -928,9 +934,9 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
                           op.unblurred_outset_shadow.corner_widths,
                           op.unblurred_outset_shadow.corner_heights);
 
-  op.unblurred_outset_shadow.spread = gsk_outset_shadow_node_get_spread (node) * self->scale_factor;
-  op.unblurred_outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node) * self->scale_factor;
-  op.unblurred_outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node) * self->scale_factor;
+  op.unblurred_outset_shadow.spread = gsk_outset_shadow_node_get_spread (node) * scale;
+  op.unblurred_outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node) * scale;
+  op.unblurred_outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node) * scale;
 
   ops_set_program (builder, &self->unblurred_outset_shadow_program);
   ops_add (builder, &op);
@@ -2145,8 +2151,9 @@ add_offscreen_ops (GskGLRenderer   *self,
                    gboolean         force_offscreen,
                    gboolean         reset_clip)
 {
-  const float width = (max_x - min_x) * self->scale_factor;
-  const float height = (max_y - min_y) * self->scale_factor;
+  const float scale = ops_get_scale (builder);
+  const float width = (max_x - min_x) * scale;
+  const float height = (max_y - min_y) * scale;
   int render_target;
   int prev_render_target;
   RenderOp op;
@@ -2180,12 +2187,12 @@ add_offscreen_ops (GskGLRenderer   *self,
   render_target = gsk_gl_driver_create_render_target (self->gl_driver, *texture_id, TRUE, TRUE);
 
   graphene_matrix_init_ortho (&item_proj,
-                              min_x * self->scale_factor, max_x * self->scale_factor,
-                              min_y * self->scale_factor, max_y * self->scale_factor,
+                              min_x * scale, max_x * scale,
+                              min_y * scale, max_y * scale,
                               ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
   graphene_matrix_scale (&item_proj, 1, -1, 1);
   graphene_matrix_init_identity (&identity);
-  graphene_matrix_scale (&identity, self->scale_factor, self->scale_factor, 1);
+  graphene_matrix_scale (&identity, scale, scale, 1);
 
   prev_render_target = ops_set_render_target (builder, render_target);
   /* Clear since we use this rendertarget for the first time */
@@ -2193,13 +2200,13 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
   prev_modelview = ops_set_modelview (builder, &identity);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x * self->scale_factor,
-                                                                  min_y * self->scale_factor,
+  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x * scale,
+                                                                  min_y * scale,
                                                                   width, height));
   if (reset_clip)
     prev_clip = ops_set_clip (builder,
-                              &GSK_ROUNDED_RECT_INIT (min_x * self->scale_factor,
-                                                      min_y * self->scale_factor,
+                              &GSK_ROUNDED_RECT_INIT (min_x * scale,
+                                                      min_y * scale,
                                                       width, height));
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
