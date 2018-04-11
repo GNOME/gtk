@@ -224,8 +224,6 @@ struct _GskGLRenderer
 #endif
 
   cairo_region_t *render_region;
-
-  gboolean has_buffers : 1;
 };
 
 struct _GskGLRendererClass
