@@ -3834,7 +3834,7 @@ gtk_widget_unrealize (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
       g_assert (!widget->priv->mapped);
-      gtk_widget_set_realized (widget, FALSE);
+      g_assert (!widget->priv->realized);
     }
 
   gtk_widget_pop_verify_invariants (widget);
