@@ -1357,8 +1357,6 @@ render_shadow_node (GskGLRenderer       *self,
       const float dy = shadow->dy;
       int texture_id;
       gboolean is_offscreen;
-      float prev_dx;
-      float prev_dy;
 
       g_assert (shadow->radius <= 0);
 
@@ -1367,14 +1365,11 @@ render_shadow_node (GskGLRenderer       *self,
       max_x = min_x + shadow_child->bounds.size.width;
       max_y = min_y + shadow_child->bounds.size.height;
 
-      prev_dx = builder->dx;
-      prev_dy = builder->dy;
-
       if (gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
         {
           ops_offset (builder, dx, dy);
           render_text_node (self, shadow_child, builder, &shadow->color, TRUE);
-          ops_offset (builder, prev_dx, prev_dy);
+          ops_offset (builder, - dx, - dy);
           continue;
         }
 
@@ -1416,7 +1411,7 @@ render_shadow_node (GskGLRenderer       *self,
           ops_draw (builder, vertex_data);
         }
 
-      ops_offset (builder, prev_dx, prev_dy);
+      ops_offset (builder, - dx, - dy);
     }
 
   /* Now draw the child normally */

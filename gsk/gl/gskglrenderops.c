@@ -429,8 +429,8 @@ ops_offset (RenderOpBuilder *builder,
             float            x,
             float            y)
 {
-  builder->dx = x;
-  builder->dy = y;
+  builder->dx += x;
+  builder->dy += y;
 }
 
 void
