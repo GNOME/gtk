@@ -843,11 +843,13 @@ gboolean  gdk_surface_show_window_menu          (GdkSurface      *surface,
                                                  GdkEvent       *event);
 
 GDK_AVAILABLE_IN_ALL
-GdkGLContext * gdk_surface_create_gl_context    (GdkSurface      *surface,
+GdkCairoContext *gdk_surface_create_cairo_context(GdkSurface    *surface);
+GDK_AVAILABLE_IN_ALL
+GdkGLContext * gdk_surface_create_gl_context    (GdkSurface     *surface,
                                                  GError        **error);
 GDK_AVAILABLE_IN_ALL
 GdkVulkanContext *
-               gdk_surface_create_vulkan_context(GdkSurface      *surface,
+               gdk_surface_create_vulkan_context(GdkSurface     *surface,
                                                  GError        **error);
 
 G_END_DECLS
