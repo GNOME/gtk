@@ -745,49 +745,74 @@ render_rounded_clip_node (GskGLRenderer       *self,
   const float min_y = node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
-  graphene_matrix_t scale_matrix;
   GskRoundedRect child_clip = *gsk_rounded_clip_node_peek_clip (node);
+  GskRoundedRect transformed_clip;
   GskRoundedRect prev_clip;
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
-  int texture_id;
-  gboolean is_offscreen;
   int i;
 
-  /* NOTE: We are *not* transforming the clip by the current modelview here.
-   *       We instead draw the untransformed clip to a texture and then transform
-   *       that texture.
-   *
-   *       We do, however, apply the scale factor to the child clip of course.
-   */
+  transformed_clip = child_clip;
+  graphene_matrix_transform_bounds (&builder->current_modelview, &child_clip.bounds, &transformed_clip.bounds);
 
-  graphene_matrix_init_scale (&scale_matrix, scale, scale, 1.0f);
-  graphene_matrix_transform_bounds (&scale_matrix, &child_clip.bounds, &child_clip.bounds);
-
-  /* Increase corner radius size by scale factor */
-  for (i = 0; i < 4; i ++)
+  if (graphene_rect_contains_rect (&builder->current_clip.bounds,
+                                   &transformed_clip.bounds))
     {
-      child_clip.corner[i].width *= scale;
-      child_clip.corner[i].height *= scale;
+      /* If they don't intersect at all, we can simply set
+       * the new clip and add the render ops */
+      for (i = 0; i < 4; i ++)
+        {
+          transformed_clip.corner[i].width *= scale;
+          transformed_clip.corner[i].height *= scale;
+        }
+
+      prev_clip = ops_set_clip (builder, &transformed_clip);
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+
+      ops_set_clip (builder, &prev_clip);
     }
+  else if (graphene_rect_intersection (&builder->current_clip.bounds,
+                                       &transformed_clip.bounds, NULL))
+    {
+      graphene_matrix_t scale_matrix;
+      gboolean is_offscreen;
+      int texture_id;
+      /* NOTE: We are *not* transforming the clip by the current modelview here.
+       *       We instead draw the untransformed clip to a texture and then transform
+       *       that texture.
+       *
+       *       We do, however, apply the scale factor to the child clip of course.
+       */
 
-  prev_clip = ops_set_clip (builder, &child_clip);
-  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
-                     child,
-                     &texture_id, &is_offscreen, TRUE, FALSE);
+      graphene_matrix_init_scale (&scale_matrix, scale, scale, 1.0f);
+      graphene_matrix_transform_bounds (&scale_matrix, &child_clip.bounds, &child_clip.bounds);
 
-  ops_set_clip (builder, &prev_clip);
-  ops_set_program (builder, &self->blit_program);
-  ops_set_texture (builder, texture_id);
+      /* Increase corner radius size by scale factor */
+      for (i = 0; i < 4; i ++)
+        {
+          child_clip.corner[i].width *= scale;
+          child_clip.corner[i].height *= scale;
+        }
 
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { min_x, min_y }, { 0, 1 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
+      prev_clip = ops_set_clip (builder, &child_clip);
+      add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                         child,
+                         &texture_id, &is_offscreen, TRUE, FALSE);
 
-    { { max_x, max_y }, { 1, 0 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-  });
+      ops_set_clip (builder, &prev_clip);
+      ops_set_program (builder, &self->blit_program);
+      ops_set_texture (builder, texture_id);
+
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { min_x, min_y }, { 0, 1 }, },
+        { { min_x, max_y }, { 0, 0 }, },
+        { { max_x, min_y }, { 1, 1 }, },
+
+        { { max_x, max_y }, { 1, 0 }, },
+        { { min_x, max_y }, { 0, 0 }, },
+        { { max_x, min_y }, { 1, 1 }, },
+      });
+    }
+  /* Else this node is entirely out of the current clip node and we don't draw it anyway. */
 }
 
 static inline void
