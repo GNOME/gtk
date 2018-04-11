@@ -42,24 +42,23 @@ msys2-mingw32:
     CHERE_INVOKING: "yes"
   <<: *mingw-defaults
 
-flatpak:demo:
+.flatpak-defaults: &flatpak-defaults
   image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
   stage: flatpak
-  script:
-    - bash -x ./.gitlab-ci/flatpak-build.sh org.gtk.Demo
   artifacts:
     paths:
-      - org.gtk.Demo-dev.flatpak
+      - "${APPID}-dev.flatpak"
     expire_in: 1 day
   allow_failure: true
+  script:
+    - bash -x ./.gitlab-ci/flatpak-build.sh "${APPID}"
+
+flatpak:demo:
+  variables:
+    APPID: org.gtk.Demo
+  <<: *flatpak-defaults
 
 flatpak:widget-factory:
-  image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
-  stage: flatpak
-  script:
-    - bash -x ./.gitlab-ci/flatpak-build.sh org.gtk.WidgetFactory
-  artifacts:
-    paths:
-      - org.gtk.WidgetFactory-dev.flatpak
-    expire_in: 1 day
-  allow_failure: true
+  variables:
+    APPID: org.gtk.WidgetFactory
+  <<: *flatpak-defaults
