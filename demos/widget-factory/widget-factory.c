@@ -1082,7 +1082,7 @@ set_accel (GtkApplication *app, GtkWidget *widget)
 typedef struct
 {
   GtkTextView tv;
-  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
 } MyTextView;
 
 typedef GtkTextViewClass MyTextViewClass;
@@ -1101,10 +1101,10 @@ my_tv_draw_layer (GtkTextView      *widget,
 {
   MyTextView *tv = (MyTextView *)widget;
 
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->surface)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->pixbuf)
     {
       cairo_save (cr);
-      cairo_set_source_surface (cr, tv->surface, 0.0, 0.0);
+      gdk_cairo_set_source_pixbuf (cr, tv->pixbuf, 0.0, 0.0);
       cairo_paint_with_alpha (cr, 0.333);
       cairo_restore (cr);
     }
@@ -1115,8 +1115,7 @@ my_tv_finalize (GObject *object)
 {
   MyTextView *tv = (MyTextView *)object;
 
-  if (tv->surface)
-    cairo_surface_destroy (tv->surface);
+  g_clear_object (&tv->pixbuf);
 
   G_OBJECT_CLASS (my_text_view_parent_class)->finalize (object);
 }
@@ -1134,28 +1133,20 @@ my_text_view_class_init (MyTextViewClass *class)
 static void
 my_text_view_set_background (MyTextView *tv, const gchar *filename)
 {
-  GdkPixbuf *pixbuf;
   GError *error = NULL;
 
-  if (tv->surface)
-    cairo_surface_destroy (tv->surface);
-
-  tv->surface = NULL;
+  g_clear_object (&tv->pixbuf);
 
   if (filename == NULL)
     return;
 
-  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+  tv->pixbuf = gdk_pixbuf_new_from_file (filename, &error);
   if (error)
     {
       g_warning ("%s", error->message);
       g_error_free (error);
       return;
     }
-
-  tv->surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
-
-  g_object_unref (pixbuf);
 
   gtk_widget_queue_draw (GTK_WIDGET (tv));
 }
