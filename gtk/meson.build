@@ -600,10 +600,6 @@ proto_sources = [
 ]
 
 im_wayland_sources = files('gtkimcontextwayland.c')
-if wayland_enabled
-  wayland_scanner = find_program('wayland-scanner')
-  genprotocols = find_program('../gdk/wayland/genprotocolfiles.py')
-endif
 
 foreach p: proto_sources
   proto_name = p.get(0)
@@ -619,24 +615,23 @@ foreach p: proto_sources
   endif
 
   if wayland_enabled
+    # wayland_scanner is defined in gdk/wayland/meson.build
     im_wayland_sources += custom_target('@0@ client header'.format(output_base),
                                         input: input,
                                         output: '@0@-client-protocol.h'.format(output_base),
                                         command: [
-                                          genprotocols,
                                           wayland_scanner,
-                                          '@INPUT@', '@OUTPUT@',
                                           'client-header',
+                                          '@INPUT@', '@OUTPUT@',
                                         ])
 
     im_wayland_sources += custom_target('@0@ source'.format(output_base),
                                         input: input,
                                         output: '@0@-protocol.c'.format(output_base),
                                         command: [
-                                          genprotocols,
                                           wayland_scanner,
+                                          'private-code',
                                           '@INPUT@', '@OUTPUT@',
-                                          'code',
                                         ])
   endif
 endforeach

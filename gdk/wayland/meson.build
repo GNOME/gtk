@@ -41,7 +41,6 @@ proto_dir = dependency('wayland-protocols').get_pkgconfig_variable('pkgdatadir')
 assert(proto_dir != '', 'Could not get pkgdatadir from wayland-protocols.pc')
 
 wayland_scanner = find_program('wayland-scanner')
-genprotocols = find_program('genprotocolfiles.py')
 
 # Format:
 #  - protocol name
@@ -77,20 +76,18 @@ foreach p: proto_sources
                                            input: input,
                                            output: '@0@-client-protocol.h'.format(output_base),
                                            command: [
-                                             genprotocols,
                                              wayland_scanner,
-                                             '@INPUT@', '@OUTPUT@',
                                              'client-header',
+                                             '@INPUT@', '@OUTPUT@',
                                            ])
 
   gdk_wayland_sources += custom_target('@0@ source'.format(output_base),
                                        input: input,
                                        output: '@0@-protocol.c'.format(output_base),
                                        command: [
-                                         genprotocols,
                                          wayland_scanner,
+                                         'private-code',
                                          '@INPUT@', '@OUTPUT@',
-                                         'code',
                                        ])
 endforeach
 
