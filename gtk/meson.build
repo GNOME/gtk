@@ -919,6 +919,10 @@ if cloudproviders_enabled
   gtk_deps += cloudproviders_dep
 endif
 
+# Unconditional. If libintl isn't found,
+# the object just does nothing being in the deplist
+gtk_deps += libintl_dep
+
 gtk_settings_schemas = [
   'org.gtk.Settings.FileChooser.gschema.xml',
   'org.gtk.Settings.ColorChooser.gschema.xml',
