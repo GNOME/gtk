@@ -51,6 +51,7 @@ flatpak:demo:
     paths:
       - org.gtk.Demo-dev.flatpak
     expire_in: 1 day
+  allow_failure: true
 
 flatpak:widget-factory:
   image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
@@ -61,3 +62,4 @@ flatpak:widget-factory:
     paths:
       - org.gtk.WidgetFactory-dev.flatpak
     expire_in: 1 day
+  allow_failure: true
