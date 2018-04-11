@@ -4,12 +4,15 @@ set -e
 
 srcdir=$(pwd)
 
+echo "${CCACHE_DIR}"
+export CCACHE_DISABLE=1
 meson \
         -Dx11-backend=true \
         -Dwayland-backend=true \
         -Dbroadway-backend=true \
         -Dvulkan=yes \
         _build $srcdir
+unset CCACHE_DISABLE
 
 cd _build
 

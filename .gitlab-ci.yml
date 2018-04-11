@@ -2,25 +2,32 @@ stages:
   - build
   - flatpak
 
-gtk:
+.cache-paths: &cache-paths
+  paths:
+    - _ccache/
+    - subprojects/gdk-pixbuf/
+    - subprojects/glib/
+    - subprojects/graphene/
+    - subprojects/libepoxy/
+    - subprojects/pango/
+
+fedora-x86_64:
   image: ebassi/gitlab-gtk:latest
   stage: build
   before_script:
-    - export CCACHE_DISABLE=true_
+    - mkdir -p _ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/_ccache
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
-  cache:
-    paths:
-      - subprojects/gdk-pixbuf/
-      - subprojects/glib/
-      - subprojects/graphene/
-      - subprojects/libepoxy/
-      - subprojects/pango/
   artifacts:
     when: on_failure
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+  cache:
+    key: "$CI_JOB_NAME"
+    <<: *cache-paths
 
 .mingw-defaults: &mingw-defaults
   stage: build
@@ -30,10 +37,13 @@ gtk:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
 
-mingw32:
+msys2-mingw32:
   variables:
     MSYSTEM: "MINGW32"
     CHERE_INVOKING: "yes"
+  cache:
+    key: "%CI_JOB_NAME%"
+    <<: *cache-paths
   <<: *mingw-defaults
 
 flatpak:demo:
