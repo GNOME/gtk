@@ -51,11 +51,6 @@ struct _GdkSurfaceImplClass
 
   cairo_surface_t *
                (* ref_cairo_surface)    (GdkSurface       *surface);
-  cairo_surface_t *
-               (* create_similar_image_surface) (GdkSurface *     surface,
-                                                 cairo_format_t  format,
-                                                 int             width,
-                                                 int             height);
 
   void         (* show)                 (GdkSurface       *surface,
                                          gboolean         already_mapped);

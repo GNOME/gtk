@@ -725,13 +725,6 @@ cairo_surface_t *
                                                   cairo_content_t  content,
                                                   int              width,
                                                   int              height);
-GDK_AVAILABLE_IN_ALL
-cairo_surface_t *
-              gdk_surface_create_similar_image_surface (GdkSurface *surface,
-                                                        cairo_format_t format,
-                                                        int            width,
-                                                        int            height,
-                                                        int            scale);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_beep            (GdkSurface       *surface);
