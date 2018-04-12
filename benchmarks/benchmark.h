@@ -145,7 +145,7 @@ benchmark_suite_run (BenchmarkSuite *bs)
                 }
 
           /* Median of SAMPLE_SIZE */
-          printf ("%s (%" G_GSIZE_FORMAT ") |  %.2f\n", b->name, b->size,
+          printf ("%s (%" G_GSIZE_FORMAT ") |  %.2fms\n", b->name, b->size,
                   samples[SAMPLE_SIZE / 2 + 1] / 1000.0);
         }
     }
