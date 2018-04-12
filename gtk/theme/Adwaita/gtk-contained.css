@@ -684,6 +684,10 @@ window.tiled headerbar, window.tiled headerbar:first-child, window.tiled headerb
 
 window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
+window.csd > .titlebar:not(headerbar) > separator { background-color: #b6b6b3; box-shadow: inset 0 -1px #91918c; }
+
+window.csd > .titlebar:not(headerbar).selection-mode > separator { background-color: #184472; box-shadow: inset 0 -1px #184472; }
+
 .titlebar:not(headerbar) > separator { background-color: #b6b6b3; }
 
 /************ Pathbars * */

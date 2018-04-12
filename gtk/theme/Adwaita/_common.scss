@@ -1702,13 +1702,32 @@ headerbar { // headerbar border rounding
 
 .titlebar:not(headerbar) {
   window.csd > & {
-    // in csd we assume every titlebar is a headerbar so reset anything, this is needed for split toolbars cases
+    // applications with split headerbars has a container in the titlebar
+    // slot so the .titlebar style there needs to be reset; since we can't
+    // go backward with selectors, we just assume that applications either have
+    // a headerbar in the titlebar slot, or a container which houses multiple
+    // headerbars together with separators, so we reset the style for all
+    // non-headerbar widgets here
+
     padding: 0;
     background-color: transparent;
     background-image: none;
     border-style: none;
     border-color: transparent;
     box-shadow: none;
+
+    // using box shadows rather than borders for separators because paned
+    // sepearator border rendering is broken (borders are double the size)
+
+    & > separator {
+      background-color: $borders_color; 
+      box-shadow: inset 0 -1px $alt_borders_color;
+    }
+
+    &.selection-mode > separator {
+      background-color: $selected_borders_color; 
+      box-shadow: inset 0 -1px $selected_borders_color;
+    }
   }
 
   > separator { background-color: $borders_color; }  // FIXME: use darker border?
