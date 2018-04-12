@@ -23,6 +23,7 @@
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
+#include "gdkcairocontext-win32.h"
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-win32.h"
 #include "gdkdisplay-win32.h"
@@ -1090,6 +1091,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   object_class->finalize = gdk_win32_display_finalize;
 
   display_class->surface_type = GDK_TYPE_WIN32_SURFACE;
+  display_class->cairo_context_type = GDK_TYPE_WIN32_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_win32_display_get_name;
   display_class->beep = gdk_win32_display_beep;

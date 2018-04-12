@@ -2,6 +2,7 @@
 gdk_quartz_sources = files([
   'GdkQuartzView.c',
   'GdkQuartzNSWindow.c',
+  'gdkcairocontext-quartz.c',
   'gdkcursor-quartz.c',
   'gdkdevice-core-quartz.c',
   'gdkdevicemanager-core-quartz.c',
