@@ -407,17 +407,21 @@ ops_draw (RenderOpBuilder     *builder,
     }
   else
     {
-      RenderOp op;
+      const gsize n_ops = builder->render_ops->len;
+      RenderOp *op;
       gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
 
-      op.op = OP_CHANGE_VAO;
-      memcpy (&op.vertex_data, vertex_data, sizeof(GskQuadVertex) * GL_N_VERTICES);
-      g_array_append_val (builder->render_ops, op);
+      /* We will add two render ops here. */
+      g_array_set_size (builder->render_ops, n_ops + 2);
 
-      op.op = OP_DRAW;
-      op.draw.vao_offset = offset;
-      op.draw.vao_size = GL_N_VERTICES;
-      g_array_append_val (builder->render_ops, op);
+      op = &g_array_index (builder->render_ops, RenderOp, n_ops);
+      op->op = OP_CHANGE_VAO;
+      memcpy (&op->vertex_data, vertex_data, sizeof(GskQuadVertex) * GL_N_VERTICES);
+
+      op = &g_array_index (builder->render_ops, RenderOp, n_ops + 1);
+      op->op = OP_DRAW;
+      op->draw.vao_offset = offset;
+      op->draw.vao_size = GL_N_VERTICES;
     }
 
   /* We added new vertex data in both cases so increase the buffer size */
