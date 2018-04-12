@@ -585,15 +585,9 @@ get_renderer_for_display (GdkSurface *surface)
 static GType
 get_renderer_for_env_var (GdkSurface *surface)
 {
-  static GType env_var_type = G_TYPE_NONE;
+  const char *renderer_name = g_getenv ("GSK_RENDERER");
 
-  if (env_var_type == G_TYPE_NONE)
-    {
-      const char *renderer_name = g_getenv ("GSK_RENDERER");
-      env_var_type = get_renderer_for_name (renderer_name);
-    }
-
-  return env_var_type;
+  return get_renderer_for_name (renderer_name);
 }
 
 static GType
