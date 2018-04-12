@@ -49,7 +49,6 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdksurfaceimpl.h"
-#include "gdkglcontextprivate.h"
 #include "gdk-private.h"
 
 typedef struct _GdkDrawingContextPrivate GdkDrawingContextPrivate;
@@ -203,56 +202,6 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
 static void
 gdk_drawing_context_init (GdkDrawingContext *self)
 {
-}
-
-/**
- * gdk_drawing_context_get_cairo_context:
- * @context: a #GdkDrawingContext created with a %NULL paint context
- *
- * Retrieves a Cairo context to be used to draw on the #GdkSurface
- * that created the #GdkDrawingContext. The @context must have been
- * created without a #GdkDrawContext for this function to work. If
- * gdk_drawing_context_get_paint_context() does not return %NULL,
- * then this function will.
- *
- * The returned context is guaranteed to be valid as long as the
- * #GdkDrawingContext is valid, that is between a call to
- * gdk_surface_begin_draw_frame() and gdk_surface_end_draw_frame().
- *
- * Returns: (transfer none) (nullable): a Cairo context to be used to draw
- *   the contents of the #GdkSurface. The context is owned by the
- *   #GdkDrawingContext and should not be destroyed. %NULL is
- *   returned when a paint context is in used.
- */
-cairo_t *
-gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
-{
-  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
-  g_return_val_if_fail (GDK_IS_SURFACE (priv->surface), NULL);
-
-  if (!GDK_IS_CAIRO_CONTEXT (priv->paint_context))
-    return NULL;
-
-  if (priv->cr == NULL)
-    {
-      cairo_region_t *region;
-      cairo_surface_t *surface;
-
-      surface = _gdk_surface_ref_cairo_surface (priv->surface);
-      priv->cr = cairo_create (surface);
-
-      region = gdk_surface_get_current_paint_region (priv->surface);
-      cairo_region_union (region, priv->clip);
-      gdk_cairo_region (priv->cr, region);
-      cairo_clip (priv->cr);
-
-      cairo_region_destroy (region);
-      cairo_surface_destroy (surface);
-    }
-
-  return priv->cr;
 }
 
 /**
