@@ -41,9 +41,6 @@ GdkDrawContext* gdk_drawing_context_get_paint_context   (GdkDrawingContext *cont
 GDK_AVAILABLE_IN_ALL
 cairo_region_t *gdk_drawing_context_get_clip            (GdkDrawingContext *context);
 
-GDK_AVAILABLE_IN_ALL
-cairo_t *       gdk_drawing_context_get_cairo_context   (GdkDrawingContext *context);
-
 G_END_DECLS
 
 #endif /* __GDK_DRAWING_CONTEXT_H__ */

@@ -115,7 +115,7 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
   context = gdk_surface_begin_draw_frame (surface,
                                           GDK_DRAW_CONTEXT (self->cairo_context),
                                           region);
-  cr = gdk_drawing_context_get_cairo_context (context);
+  cr = gdk_cairo_context_cairo_create (self->cairo_context);
 
   g_return_if_fail (cr != NULL);
 
@@ -134,6 +134,8 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
 #endif
 
   gsk_cairo_renderer_do_render (renderer, cr, root);
+
+  cairo_destroy (cr);
 
   gdk_surface_end_draw_frame (surface, context);
 }
