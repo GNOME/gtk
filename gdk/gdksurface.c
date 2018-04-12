@@ -1483,10 +1483,24 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
                                                                         error);
 }
 
+/**
+ * gdk_surface_create_cairo_context:
+ * @surface: a #GdkSurface
+ *
+ * Creates a new #GdkCairoContext for rendering on @surface.
+ *
+ * Returns: (transfer full): the newly created #GdkCairoContext
+ **/
 GdkCairoContext *
 gdk_surface_create_cairo_context (GdkSurface *surface)
 {
-  return g_object_new (GDK_TYPE_CAIRO_CONTEXT,
+  GdkDisplay *display;
+
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
+
+  display = gdk_surface_get_display (surface);
+
+  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->cairo_context_type,
                        "surface", surface,
                        NULL);
 }

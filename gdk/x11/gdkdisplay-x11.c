@@ -40,6 +40,7 @@
 #include "gdkclipboard-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkcairocontext-x11.h"
 #include "gdkglcontext-x11.h"
 #include "gdkvulkancontext-x11.h"
 #include "gdk-private.h"
@@ -3032,6 +3033,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   object_class->finalize = gdk_x11_display_finalize;
 
   display_class->surface_type = GDK_TYPE_X11_SURFACE;
+  display_class->cairo_context_type = GDK_TYPE_X11_CAIRO_CONTEXT;
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_X11_VULKAN_CONTEXT;
   display_class->vk_extension_name = VK_KHR_XLIB_SURFACE_EXTENSION_NAME;

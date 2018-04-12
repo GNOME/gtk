@@ -1,4 +1,5 @@
 gdk_win32_sources = files([
+  'gdkcairocontext-win32.c',
   'gdkcursor-win32.c',
   'gdkclipboard-win32.c',
   'gdkclipdrop-win32.c',

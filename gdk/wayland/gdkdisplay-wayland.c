@@ -42,6 +42,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
+#include "gdkcairocontext-wayland.h"
 #include "gdkglcontext-wayland.h"
 #include "gdkvulkancontext-wayland.h"
 #include "gdkwaylandmonitor.h"
@@ -954,6 +955,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   object_class->finalize = gdk_wayland_display_finalize;
 
   display_class->surface_type = gdk_wayland_surface_get_type ();
+  display_class->cairo_context_type = GDK_TYPE_WAYLAND_CAIRO_CONTEXT;
 
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_WAYLAND_VULKAN_CONTEXT;

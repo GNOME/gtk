@@ -28,6 +28,7 @@
 #include "gdkquartzdevicemanager-core.h"
 #include "gdkmonitorprivate.h"
 #include "gdkdisplay-quartz.h"
+#include "gdkcairocontext-quartz.h"
 
 
 static GdkSurface *
@@ -216,6 +217,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   object_class->dispose = gdk_quartz_display_dispose;
 
   display_class->surface_type = GDK_TYPE_QUARTZ_SURFACE;
+  display_class->cairo_context_type = GDK_TYPE_QUARTZ_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_quartz_display_get_name;
   display_class->beep = gdk_quartz_display_beep;
