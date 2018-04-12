@@ -2465,6 +2465,9 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
 
+  /* We correctly reset the state everywhere */
+  g_assert_cmpint (render_op_builder.current_render_target, ==, texture_id);
+
   /*g_message ("Ops: %u", self->render_ops->len);*/
 
   /* Now actually draw things... */
@@ -2540,7 +2543,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   gsk_gl_driver_end_frame (self->gl_driver);
 
   /* Render the actual scene */
-  gsk_gl_renderer_do_render (renderer, root, viewport, texture_id, 1);
+  gsk_gl_renderer_do_render (renderer, root, viewport, fbo_id, 1);
 
   texture = gdk_gl_texture_new (self->gl_context,
                                 texture_id,
