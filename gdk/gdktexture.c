@@ -552,3 +552,50 @@ gdk_texture_get_render_data (GdkTexture  *self,
 
   return self->render_data;
 }
+
+/**
+ * gdk_texture_save_to_png:
+ * @texture: a #GdkTexture
+ * @filename: the filename to store to
+ *
+ * Store the given @texture to the @filename as a PNG file.
+ *
+ * This is a utility function intended for debugging and testing.
+ * If you want more control over formats, proper error handling or
+ * want to store to a #GFile or other location, you might want to
+ * look into using the gdk-pixbuf library.
+ *
+ * Returns: %TRUE if saving succeeded, %FALSE on failure.
+ **/
+gboolean
+gdk_texture_save_to_png (GdkTexture *texture,
+                         const char *filename)
+{
+  cairo_surface_t *surface;
+  cairo_status_t status;
+  gboolean result;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        gdk_texture_get_width (texture),
+                                        gdk_texture_get_height (texture));
+  gdk_texture_download (texture,
+                        cairo_image_surface_get_data (surface),
+                        cairo_image_surface_get_stride (surface));
+  cairo_surface_mark_dirty (surface);
+
+  status = cairo_surface_write_to_png (surface, filename);
+
+  if (status != CAIRO_STATUS_SUCCESS ||
+      cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
+    result = FALSE;
+  else
+    result = TRUE;
+
+  cairo_surface_destroy (surface);
+
+  return result;
+}
+
