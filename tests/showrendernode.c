@@ -168,21 +168,12 @@ main (int argc, char **argv)
       GdkSurface *window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
       GskRenderer *renderer = gsk_renderer_new_for_surface (window);
       GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
-      cairo_surface_t *rendered_surface;
 
       g_message ("Writing .node file to .png using %s", G_OBJECT_TYPE_NAME (renderer));
 
       g_assert (texture != NULL);
 
-      rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                     gdk_texture_get_width (texture),
-                                                     gdk_texture_get_height (texture));
-      gdk_texture_download (texture,
-                            cairo_image_surface_get_data (rendered_surface),
-                            cairo_image_surface_get_stride (rendered_surface));
-      cairo_surface_mark_dirty (rendered_surface);
-
-      cairo_surface_write_to_png (rendered_surface, write_to_filename);
+      gdk_texture_save_to_png (texture, write_to_filename);
 
       gsk_renderer_unrealize (renderer);
 
