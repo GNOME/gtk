@@ -430,9 +430,22 @@ gtk_snapshot_collect_offset (GtkSnapshot       *snapshot,
       previous_state->translate_y == 0.0)
     return node;
 
-  offset_node = gsk_offset_node_new (node,
-                                     previous_state->translate_x,
-                                     previous_state->translate_y);
+  if (gsk_render_node_get_node_type (node) == GSK_OFFSET_NODE)
+    {
+      const float dx = previous_state->translate_x;
+      const float dy = previous_state->translate_y;
+
+      offset_node = gsk_offset_node_new (gsk_offset_node_get_child (node),
+                                         gsk_offset_node_get_x_offset (node) + dx,
+                                         gsk_offset_node_get_y_offset (node) + dy);
+    }
+  else
+    {
+      offset_node = gsk_offset_node_new (node,
+                                         previous_state->translate_x,
+                                         previous_state->translate_y);
+    }
+
   if (name)
     gsk_render_node_set_name (offset_node, name);
 
