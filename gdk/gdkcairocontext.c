@@ -53,8 +53,8 @@ struct _GdkCairoContextPrivate {
   gpointer unused;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GdkCairoContext, gdk_cairo_context, GDK_TYPE_DRAW_CONTEXT,
-                         G_ADD_PRIVATE (GdkCairoContext))
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkCairoContext, gdk_cairo_context, GDK_TYPE_DRAW_CONTEXT,
+                                  G_ADD_PRIVATE (GdkCairoContext))
 
 static cairo_surface_t *
 gdk_surface_ref_impl_surface (GdkSurface *surface)

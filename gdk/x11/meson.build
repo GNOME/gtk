@@ -2,6 +2,7 @@
 gdk_x11_sources = files([
   'gdkapplaunchcontext-x11.c',
   'gdkasync.c',
+  'gdkcairocontext-x11.c',
   'gdkclipboard-x11.c',
   'gdkcursor-x11.c',
   'gdkdevice-core-x11.c',

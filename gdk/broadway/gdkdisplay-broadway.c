@@ -24,6 +24,7 @@
 
 #include "gdkdisplay-broadway.h"
 
+#include "gdkcairocontext-broadway.h"
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
 #include "gdkmonitor-broadway.h"
@@ -521,6 +522,7 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   object_class->finalize = gdk_broadway_display_finalize;
 
   display_class->surface_type = GDK_TYPE_BROADWAY_SURFACE;
+  display_class->cairo_context_type = GDK_TYPE_BROADWAY_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_broadway_display_get_name;
   display_class->beep = gdk_broadway_display_beep;
