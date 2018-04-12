@@ -970,6 +970,37 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
 }
 
 /**
+ * gtk_printer_get_hard_margins_for_paper_size:
+ * @printer: a #GtkPrinter
+ * @paper_size: a #GtkPaperSize
+ * @top: (out): a location to store the top margin in
+ * @bottom: (out): a location to store the bottom margin in
+ * @left: (out): a location to store the left margin in
+ * @right: (out): a location to store the right margin in
+ *
+ * Retrieve the hard margins of @printer for @paper_size, i.e. the
+ * margins that define the area at the borders of the paper that the
+ * printer cannot print to.
+ *
+ * Note: This will not succeed unless the printer's details are available,
+ * see gtk_printer_has_details() and gtk_printer_request_details().
+ *
+ * Return value: %TRUE iff the hard margins were retrieved
+ */
+gboolean
+gtk_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
+					     GtkPaperSize *paper_size,
+					     gdouble      *top,
+					     gdouble      *bottom,
+					     gdouble      *left,
+					     gdouble      *right)
+{
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+
+  return backend_class->printer_get_hard_margins_for_paper_size (printer, paper_size, top, bottom, left, right);
+}
+
+/**
  * gtk_printer_get_capabilities:
  * @printer: a #GtkPrinter
  * 
