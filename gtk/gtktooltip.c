@@ -1022,7 +1022,7 @@ gtk_tooltip_start_delay (GdkDisplay *display)
 void
 _gtk_tooltip_focus_in (GtkWidget *widget)
 {
-  gint x, y;
+  gint x = 0, y = 0;
   gboolean return_value = FALSE;
   GdkDisplay *display;
   GtkTooltip *tooltip;
@@ -1193,7 +1193,7 @@ gtk_tooltip_handle_event_internal (GdkEventType  event_type,
                                    gdouble       dx,
                                    gdouble       dy)
 {
-  gint x, y;
+  int x = 0, y = 0;
   GtkWidget *has_tooltip_widget;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
