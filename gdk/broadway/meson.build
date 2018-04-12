@@ -3,6 +3,7 @@ gdk_broadway_sources = files([
   'broadway-server.c',
   'broadwayd.c',
   'gdkbroadway-server.c',
+  'gdkcairocontext-broadway.c',
   'gdkcursor-broadway.c',
   'gdkdevice-broadway.c',
   'gdkdisplay-broadway.c',
