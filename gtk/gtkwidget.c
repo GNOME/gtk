@@ -13304,7 +13304,7 @@ void
 gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   graphene_rect_t clip;
   gboolean has_clip;
   double opacity;
@@ -13317,8 +13317,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
       g_warning ("Trying to snapshot %s %p without a current allocation", G_OBJECT_TYPE_NAME (widget), widget);
       return;
     }
-
-  priv = widget->priv;
 
   opacity = widget->priv->alpha / 255.0;
   if (opacity <= 0.0)
