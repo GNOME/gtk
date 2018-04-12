@@ -25,7 +25,7 @@ borders_benchmark (Benchmark *b,
       GskRoundedRect outline;
 
       gsk_rounded_rect_init (&outline,
-                             &GRAPHENE_RECT_INIT (0, 0, 20, 20),
+                             &GRAPHENE_RECT_INIT (0, 0, 1920, 1080),
                              &(graphene_size_t){4, 4},
                              &(graphene_size_t){4, 4},
                              &(graphene_size_t){4, 4},
@@ -42,6 +42,9 @@ borders_benchmark (Benchmark *b,
     }
 
   root_node = gsk_container_node_new (child_nodes, size);
+
+  for (i = 0; i < size; i ++)
+    gsk_render_node_unref (child_nodes[i]);
 
   benchmark_start (b);
   gsk_renderer_render_texture (renderer, root_node, NULL);
@@ -68,7 +71,7 @@ outset_shadows_unblurred_benchmark (Benchmark *b,
       GskRoundedRect outline;
 
       gsk_rounded_rect_init (&outline,
-                             &GRAPHENE_RECT_INIT (0, 0, 20, 20),
+                             &GRAPHENE_RECT_INIT (0, 0, 1920, 1080),
                              &(graphene_size_t){4, 4},
                              &(graphene_size_t){4, 4},
                              &(graphene_size_t){4, 4},
@@ -81,7 +84,11 @@ outset_shadows_unblurred_benchmark (Benchmark *b,
                                                    0); /* Blur */
     }
 
+
   root_node = gsk_container_node_new (child_nodes, size);
+
+  for (i = 0; i < size; i ++)
+    gsk_render_node_unref (child_nodes[i]);
 
   benchmark_start (b);
   texture = gsk_renderer_render_texture (renderer, root_node, NULL);
@@ -109,7 +116,7 @@ outset_shadows_blurred_benchmark (Benchmark *b,
       GskRoundedRect outline;
 
       gsk_rounded_rect_init (&outline,
-                             &GRAPHENE_RECT_INIT (0, 0, 20, 20),
+                             &GRAPHENE_RECT_INIT (0, 0, 1920, 1080),
                              &(graphene_size_t){4, 4},
                              &(graphene_size_t){4, 4},
                              &(graphene_size_t){4, 4},
@@ -123,6 +130,9 @@ outset_shadows_blurred_benchmark (Benchmark *b,
     }
 
   root_node = gsk_container_node_new (child_nodes, size);
+  for (i = 0; i < size; i ++)
+    gsk_render_node_unref (child_nodes[i]);
+
 
   benchmark_start (b);
   texture = gsk_renderer_render_texture (renderer, root_node, NULL);
@@ -148,7 +158,7 @@ linear_gradient_benchmark (Benchmark *b,
   for (i = 0; i < size; i ++)
     {
       if (i % 2 == 0)
-        child_nodes[i] = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 20, 20),
+        child_nodes[i] = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 1920, 1080),
                                                        &(graphene_point_t){0, 0},
                                                        &(graphene_point_t){0, 20},
                                                        (GskColorStop[3]) {
@@ -157,7 +167,7 @@ linear_gradient_benchmark (Benchmark *b,
                                                          {1.0, (GdkRGBA){0, 0, 1, 1}},
                                                        }, 3);
       else
-        child_nodes[i] = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 20, 20),
+        child_nodes[i] = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 1920, 1080),
                                                        &(graphene_point_t){0, 0},
                                                        &(graphene_point_t){20, 20},
                                                        (GskColorStop[3]) {
@@ -169,6 +179,9 @@ linear_gradient_benchmark (Benchmark *b,
     }
 
   root_node = gsk_container_node_new (child_nodes, size);
+  for (i = 0; i < size; i ++)
+    gsk_render_node_unref (child_nodes[i]);
+
 
   benchmark_start (b);
   texture = gsk_renderer_render_texture (renderer, root_node, NULL);
@@ -212,6 +225,7 @@ main (int argc, char **argv)
     {
       GskRenderer *renderer;
       GdkSurface *surface;
+      gsize s = 0;
 
       g_setenv ("GSK_RENDERER", renderers[i].renderer_name, TRUE);
 
@@ -226,27 +240,30 @@ main (int argc, char **argv)
           continue;
         }
 
-      /* All the benchmarks for this renderer type */
-      benchmark_suite_add (&suite,
-                           g_strdup_printf ("%s borders", renderers[i].renderer_name),
-                           10000,
-                           borders_benchmark,
-                           renderer);
-      benchmark_suite_add (&suite,
-                           g_strdup_printf ("%s outset shadows unblurred", renderers[i].renderer_name),
-                           10000,
-                           outset_shadows_unblurred_benchmark,
-                           renderer);
-      benchmark_suite_add (&suite,
-                           g_strdup_printf ("%s outset shadows blurred", renderers[i].renderer_name),
-                           500,
-                           outset_shadows_blurred_benchmark,
-                           renderer);
-      benchmark_suite_add (&suite,
-                           g_strdup_printf ("%s linear gradient", renderers[i].renderer_name),
-                           1000,
-                           linear_gradient_benchmark,
-                           renderer);
+      for (s = 2; s < 256; s *= 2)
+        {
+          /* All the benchmarks for this renderer type */
+          benchmark_suite_add (&suite,
+                               g_strdup_printf ("%s borders", renderers[i].renderer_name),
+                               s,
+                               borders_benchmark,
+                               renderer);
+          benchmark_suite_add (&suite,
+                               g_strdup_printf ("%s outset shadows unblurred", renderers[i].renderer_name),
+                               s,
+                               outset_shadows_unblurred_benchmark,
+                               renderer);
+          benchmark_suite_add (&suite,
+                               g_strdup_printf ("%s outset shadows blurred", renderers[i].renderer_name),
+                               s,
+                               outset_shadows_blurred_benchmark,
+                               renderer);
+          benchmark_suite_add (&suite,
+                               g_strdup_printf ("%s linear gradient", renderers[i].renderer_name),
+                               s,
+                               linear_gradient_benchmark,
+                               renderer);
+        }
 
       /* XXX We can't do this here of course since the renderers have to live until
        * benchmark_suite_run is done. */
