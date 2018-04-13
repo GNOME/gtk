@@ -16,102 +16,11 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    button9
-      "push button"
+    button1
+      "toggle button"
       parent: grid1
       index: 0
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-    button8
-      "push button"
-      parent: grid1
-      index: 1
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-    button7
-      "push button"
-      parent: grid1
-      index: 2
-      name: Text Button
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-    button6
-      "toggle button"
-      parent: grid1
-      index: 3
-      name: Test switch
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkAction>
-      action 0 name: toggle
-      action 0 description: Toggles the switch
-    button5
-      "toggle button"
-      parent: grid1
-      index: 4
-      state: checked enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkAction>
-      action 0 name: toggle
-      action 0 description: Toggles the switch
-    button4
-      "radio button"
-      parent: grid1
-      index: 5
       name: Hello World!
-      member-of: button4
-                 button3
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-    button3
-      "radio button"
-      parent: grid1
-      index: 6
-      name: Hello World!
-      member-of: button4
-                 button3
       state: checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -126,7 +35,7 @@ window1
     button2
       "check box"
       parent: grid1
-      index: 7
+      index: 1
       name: Hello World!
       state: enabled focusable sensitive showing visible
       toolkit: gtk
@@ -139,12 +48,103 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 description: Clicks the button
-    button1
+    button3
+      "radio button"
+      parent: grid1
+      index: 2
+      name: Hello World!
+      member-of: button4
+                 button3
+      state: checked enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button4
+      "radio button"
+      parent: grid1
+      index: 3
+      name: Hello World!
+      member-of: button4
+                 button3
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button5
       "toggle button"
       parent: grid1
-      index: 8
-      name: Hello World!
+      index: 4
       state: checked enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: toggle
+      action 0 description: Toggles the switch
+    button6
+      "toggle button"
+      parent: grid1
+      index: 5
+      name: Test switch
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: toggle
+      action 0 description: Toggles the switch
+    button7
+      "push button"
+      parent: grid1
+      index: 6
+      name: Text Button
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button8
+      "push button"
+      parent: grid1
+      index: 7
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button9
+      "push button"
+      parent: grid1
+      index: 8
+      state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

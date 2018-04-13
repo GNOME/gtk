@@ -48,7 +48,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 0
-            name: Dark Aluminum 2
+            name: Light Scarlet Red
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -65,7 +65,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 1
-            name: Aluminum 2
+            name: Scarlet Red
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -82,7 +82,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 2
-            name: Light Aluminum 2
+            name: Dark Scarlet Red
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -99,7 +99,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 3
-            name: Dark Aluminum 1
+            name: Light Orange
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -116,7 +116,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 4
-            name: Aluminum 1
+            name: Orange
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -133,7 +133,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 5
-            name: Light Aluminum 1
+            name: Dark Orange
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -150,7 +150,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 6
-            name: Dark Chocolate
+            name: Light Butter
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -167,7 +167,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 7
-            name: Chocolate
+            name: Butter
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -184,7 +184,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 8
-            name: Light Chocolate
+            name: Dark Butter
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -201,7 +201,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 9
-            name: Dark Plum
+            name: Light Chameleon
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -218,7 +218,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 10
-            name: Plum
+            name: Chameleon
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -235,7 +235,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 11
-            name: Light Plum
+            name: Dark Chameleon
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -252,7 +252,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 12
-            name: Dark Sky Blue
+            name: Light Sky Blue
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -286,7 +286,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 14
-            name: Light Sky Blue
+            name: Dark Sky Blue
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -303,7 +303,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 15
-            name: Dark Chameleon
+            name: Light Plum
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -320,7 +320,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 16
-            name: Chameleon
+            name: Plum
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -337,7 +337,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 17
-            name: Light Chameleon
+            name: Dark Plum
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -354,7 +354,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 18
-            name: Dark Butter
+            name: Light Chocolate
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -371,7 +371,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 19
-            name: Butter
+            name: Chocolate
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -388,7 +388,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 20
-            name: Light Butter
+            name: Dark Chocolate
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -405,7 +405,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 21
-            name: Dark Orange
+            name: Light Aluminum 1
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -422,7 +422,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 22
-            name: Orange
+            name: Aluminum 1
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -439,7 +439,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 23
-            name: Light Orange
+            name: Dark Aluminum 1
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -456,7 +456,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 24
-            name: Dark Scarlet Red
+            name: Light Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -473,7 +473,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 25
-            name: Scarlet Red
+            name: Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -490,7 +490,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 26
-            name: Light Scarlet Red
+            name: Dark Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -516,8 +516,8 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 0
-            name: White
-            state: checked enabled focusable sensitive showing visible
+            name: Black
+            state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
@@ -533,7 +533,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 1
-            name: Very Light Gray
+            name: Very Dark Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -550,7 +550,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 2
-            name: Lighter Gray
+            name: Darker Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -567,7 +567,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 3
-            name: Light Gray
+            name: Dark Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -601,7 +601,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 5
-            name: Dark Gray
+            name: Light Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -618,7 +618,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 6
-            name: Darker Gray
+            name: Lighter Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -635,7 +635,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 7
-            name: Very Dark Gray
+            name: Very Light Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -652,8 +652,8 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 8
-            name: Black
-            state: enabled focusable sensitive showing visible
+            name: White
+            state: checked enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
@@ -768,48 +768,26 @@ window1
               <AtkComponent>
               layer: widget
               alpha: 1
-              sv_plane
-                "color chooser"
+              swatch
+                "radio button"
                 parent: grid
                 index: 0
-                name: Color Plane
-                state: enabled focusable sensitive visible
+                state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-              a_slider
-                "color chooser"
-                parent: grid
-                index: 1
-                name: Alpha
-                state: enabled focusable horizontal sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkValue>
-                minimum value: 0.000000
-                maximum value: 1.000000
-                current value: 0.000000
-              h_slider
-                "color chooser"
-                parent: grid
-                index: 2
-                name: Hue
-                state: enabled focusable sensitive vertical visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkValue>
-                minimum value: 0.000000
-                maximum value: 1.000000
-                current value: 0.000000
+                <AtkAction>
+                action 0 name: select
+                action 0 description: Selects the color
+                action 1 name: activate
+                action 1 description: Activates the color
+                action 2 name: customize
+                action 2 description: Customizes the color
               entry
                 "text"
                 parent: grid
-                index: 3
+                index: 1
                 name: Color Name
                 state: editable enabled focusable sensitive single-line visible
                 toolkit: gtk
@@ -848,22 +826,44 @@ window1
                 <AtkAction>
                 action 0 name: activate
                 action 0 description: Activates the entry
-              swatch
-                "radio button"
+              h_slider
+                "color chooser"
                 parent: grid
-                index: 4
-                state: enabled sensitive visible
+                index: 2
+                name: Hue
+                state: enabled focusable sensitive vertical visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                <AtkAction>
-                action 0 name: select
-                action 0 description: Selects the color
-                action 1 name: activate
-                action 1 description: Activates the color
-                action 2 name: customize
-                action 2 description: Customizes the color
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 1.000000
+                current value: 0.000000
+              a_slider
+                "color chooser"
+                parent: grid
+                index: 3
+                name: Alpha
+                state: enabled focusable horizontal sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 1.000000
+                current value: 0.000000
+              sv_plane
+                "color chooser"
+                parent: grid
+                index: 4
+                name: Color Plane
+                state: enabled focusable sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
             sv_popup
               "filler"
               parent: overlay
@@ -882,78 +882,10 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                v_entry
-                  "spin button"
-                  parent: grid2
-                  index: 0
-                  name: Value
-                  state: enabled focusable horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkValue>
-                  minimum value: 0.000000
-                  maximum value: 100.000000
-                  current value: 0.000000
-                s_entry
-                  "spin button"
-                  parent: grid2
-                  index: 1
-                  name: Saturation
-                  state: enabled focusable horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkValue>
-                  minimum value: 0.000000
-                  maximum value: 100.000000
-                  current value: 0.000000
-                label2
-                  "label"
-                  parent: grid2
-                  index: 2
-                  name: V
-                  state: enabled multi-line sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkText>
-                  text: V
-                  character count: 1
-                  caret offset: 0
-                  default attributes: bg-color: <omitted>
-                                      bg-full-height: 0
-                                      direction: <omitted>
-                                      editable: false
-                                      family-name: <omitted>
-                                      fg-color: <omitted>
-                                      indent: 0
-                                      invisible: false
-                                      justification: left
-                                      language: <omitted>
-                                      left-margin: 0
-                                      pixels-above-lines: 0
-                                      pixels-below-lines: 0
-                                      pixels-inside-wrap: 0
-                                      right-margin: 0
-                                      rise: 0
-                                      scale: 1
-                                      size: <omitted>
-                                      stretch: <omitted>
-                                      strikethrough: false
-                                      style: <omitted>
-                                      underline: none
-                                      variant: <omitted>
-                                      weight: <omitted>
-                                      wrap-mode: word
-                  <AtkHypertext>
                 label1
                   "label"
                   parent: grid2
-                  index: 3
+                  index: 0
                   name: S
                   state: enabled multi-line sensitive visible
                   toolkit: gtk
@@ -990,6 +922,74 @@ window1
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkHypertext>
+                label2
+                  "label"
+                  parent: grid2
+                  index: 1
+                  name: V
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: V
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+                s_entry
+                  "spin button"
+                  parent: grid2
+                  index: 2
+                  name: Saturation
+                  state: enabled focusable horizontal sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+                v_entry
+                  "spin button"
+                  parent: grid2
+                  index: 3
+                  name: Value
+                  state: enabled focusable horizontal sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
             h_popup
               "filler"
               parent: overlay
@@ -1008,24 +1008,10 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                h_entry
-                  "spin button"
-                  parent: grid3
-                  index: 0
-                  name: Hue
-                  state: enabled focusable horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkValue>
-                  minimum value: 0.000000
-                  maximum value: 100.000000
-                  current value: 0.000000
                 label3
                   "label"
                   parent: grid3
-                  index: 1
+                  index: 0
                   name: H
                   state: enabled multi-line sensitive visible
                   toolkit: gtk
@@ -1062,6 +1048,20 @@ window1
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkHypertext>
+                h_entry
+                  "spin button"
+                  parent: grid3
+                  index: 1
+                  name: Hue
+                  state: enabled focusable horizontal sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
             a_popup
               "filler"
               parent: overlay
@@ -1080,24 +1080,10 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                a_entry
-                  "spin button"
-                  parent: grid4
-                  index: 0
-                  name: Alpha
-                  state: enabled focusable horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkValue>
-                  minimum value: 0.000000
-                  maximum value: 100.000000
-                  current value: 0.000000
                 label4
                   "label"
                   parent: grid4
-                  index: 1
+                  index: 0
                   name: A
                   state: enabled multi-line sensitive visible
                   toolkit: gtk
@@ -1134,6 +1120,20 @@ window1
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkHypertext>
+                a_entry
+                  "spin button"
+                  parent: grid4
+                  index: 1
+                  name: Alpha
+                  state: enabled focusable horizontal sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
     action_box
       "filler"
       parent: dialog-vbox1
