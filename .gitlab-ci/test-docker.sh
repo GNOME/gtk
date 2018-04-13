@@ -28,5 +28,4 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
     meson test \
         --print-errorlogs \
         --suite=gtk+ \
-        --no-suite=gtk+:gsk \
-        --no-suite=gtk+:a11y
+        --no-suite=gtk+:gsk
