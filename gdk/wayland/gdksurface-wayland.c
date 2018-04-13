@@ -527,48 +527,50 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
 
   callback = wl_surface_frame (impl->display_server.wl_surface);
   wl_callback_add_listener (callback, &frame_listener, surface);
-  _gdk_frame_clock_freeze (clock);
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
   impl->awaiting_frame = TRUE;
 }
 
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
-                            GdkSurface     *surface)
+                            GdkSurface    *surface)
 {
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
 
-  if (!impl->pending_commit)
-    return;
+  if (impl->pending_commit)
+    {
+      if (surface->update_freeze_count > 0)
+        return;
 
-  if (surface->update_freeze_count > 0)
-    return;
+      gdk_wayland_surface_request_frame (surface);
 
-  gdk_wayland_surface_request_frame (surface);
+      /* Before we commit a new buffer, make sure we've backfilled
+       * undrawn parts from any old committed buffer
+       */
+      if (impl->pending_buffer_attached)
+        read_back_cairo_surface (surface);
 
-  /* Before we commit a new buffer, make sure we've backfilled
-   * undrawn parts from any old committed buffer
-   */
-  if (impl->pending_buffer_attached)
-    read_back_cairo_surface (surface);
+      /* From this commit forward, we can't write to the buffer,
+       * it's "live".  In the future, if we need to stage more changes
+       * we have to allocate a new staging buffer and draw to it instead.
+       *
+       * Our one saving grace is if the compositor releases the buffer
+       * before we need to stage any changes, then we can take it back and
+       * use it again.
+       */
+      wl_surface_commit (impl->display_server.wl_surface);
 
-  /* From this commit forward, we can't write to the buffer,
-   * it's "live".  In the future, if we need to stage more changes
-   * we have to allocate a new staging buffer and draw to it instead.
-   *
-   * Our one saving grace is if the compositor releases the buffer
-   * before we need to stage any changes, then we can take it back and
-   * use it again.
-   */
-  wl_surface_commit (impl->display_server.wl_surface);
+      if (impl->pending_buffer_attached)
+        impl->committed_cairo_surface = g_steal_pointer (&impl->staging_cairo_surface);
 
-  if (impl->pending_buffer_attached)
-    impl->committed_cairo_surface = g_steal_pointer (&impl->staging_cairo_surface);
+      impl->pending_buffer_attached = FALSE;
+      impl->pending_commit = FALSE;
 
-  impl->pending_buffer_attached = FALSE;
-  impl->pending_commit = FALSE;
+      g_signal_emit (impl, signals[COMMITTED], 0);
+    }
 
-  g_signal_emit (impl, signals[COMMITTED], 0);
+  if (impl->awaiting_frame)
+    _gdk_frame_clock_freeze (clock);
 }
 
 void
