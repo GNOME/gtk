@@ -644,9 +644,6 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
-static void             gtk_widget_real_set_has_tooltip         (GtkWidget *widget,
-								 gboolean   has_tooltip,
-								 gboolean   force);
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
                                                                  const gchar      *name);
@@ -2328,8 +2325,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_cursor (widget, g_value_get_object (value));
       break;
     case PROP_HAS_TOOLTIP:
-      gtk_widget_real_set_has_tooltip (widget,
-				       g_value_get_boolean (value), FALSE);
+      gtk_widget_set_has_tooltip (widget, g_value_get_boolean (value));
       break;
     case PROP_TOOLTIP_MARKUP:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
@@ -2348,7 +2344,7 @@ gtk_widget_set_property (GObject         *object,
 			       tooltip_markup, g_free);
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_set_has_tooltip (widget, tmp);
       if (_gtk_widget_get_visible (widget))
         gtk_widget_queue_tooltip_query (widget);
       break;
@@ -2369,7 +2365,7 @@ gtk_widget_set_property (GObject         *object,
                                tooltip_markup, g_free);
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_set_has_tooltip (widget, tmp);
       if (_gtk_widget_get_visible (widget))
         gtk_widget_queue_tooltip_query (widget);
       break;
@@ -3790,8 +3786,6 @@ gtk_widget_realize (GtkWidget *widget)
 	gtk_widget_realize (priv->parent);
 
       g_signal_emit (widget, widget_signals[REALIZE], 0);
-
-      gtk_widget_real_set_has_tooltip (widget, gtk_widget_get_has_tooltip (widget), TRUE);
 
       gtk_widget_update_input_shape (widget);
 
@@ -11053,21 +11047,6 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 			     new_list, (GDestroyNotify) g_slist_free);
 }
 
-static void
-gtk_widget_real_set_has_tooltip (GtkWidget *widget,
-			         gboolean   has_tooltip,
-			         gboolean   force)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-
-  if (priv->has_tooltip != has_tooltip || force)
-    {
-      priv->has_tooltip = has_tooltip;
-
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
-    }
-}
-
 /**
  * gtk_widget_set_tooltip_window:
  * @widget: a #GtkWidget
@@ -11098,7 +11077,7 @@ gtk_widget_set_tooltip_window (GtkWidget *widget,
 			   custom_window, g_object_unref);
 
   has_tooltip = (custom_window != NULL || tooltip_markup != NULL);
-  gtk_widget_real_set_has_tooltip (widget, has_tooltip, FALSE);
+  gtk_widget_set_has_tooltip (widget, has_tooltip);
 
   if (has_tooltip && _gtk_widget_get_visible (widget))
     gtk_widget_queue_tooltip_query (widget);
@@ -11263,11 +11242,20 @@ gtk_widget_get_tooltip_markup (GtkWidget *widget)
  */
 void
 gtk_widget_set_has_tooltip (GtkWidget *widget,
-			    gboolean   has_tooltip)
+                            gboolean   has_tooltip)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_real_set_has_tooltip (widget, has_tooltip, FALSE);
+  has_tooltip = !!has_tooltip;
+
+  if (priv->has_tooltip != has_tooltip)
+    {
+      priv->has_tooltip = has_tooltip;
+
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
+    }
 }
 
 /**
