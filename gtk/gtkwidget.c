@@ -13312,7 +13312,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
       return;
     }
 
-  opacity = widget->priv->alpha / 255.0;
+  opacity = priv->alpha / 255.0;
   if (opacity <= 0.0)
     return;
 
