@@ -40,6 +40,8 @@ typedef struct _GdkX11CairoContextClass GdkX11CairoContextClass;
 struct _GdkX11CairoContext
 {
   GdkCairoContext parent_instance;
+
+  cairo_surface_t *paint_surface;
 };
 
 struct _GdkX11CairoContextClass
