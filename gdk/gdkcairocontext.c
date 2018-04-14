@@ -77,6 +77,34 @@ gdk_surface_get_content (GdkSurface *surface)
   return content;
 }
 
+static cairo_t *
+gdk_cairo_context_default_cairo_create (GdkCairoContext *self)
+{
+  GdkSurface *surface;
+  cairo_region_t *region;
+  cairo_surface_t *cairo_surface;
+  cairo_t *cr;
+
+  g_return_val_if_fail (GDK_IS_CAIRO_CONTEXT (self), NULL);
+
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  if (surface->drawing_context == NULL ||
+      gdk_drawing_context_get_paint_context (surface->drawing_context) != GDK_DRAW_CONTEXT (self))
+    return NULL;
+
+  cairo_surface = _gdk_surface_ref_cairo_surface (surface);
+  cr = cairo_create (cairo_surface);
+
+  region = gdk_surface_get_current_paint_region (surface);
+  gdk_cairo_region (cr, region);
+  cairo_clip (cr);
+
+  cairo_region_destroy (region);
+  cairo_surface_destroy (cairo_surface);
+
+  return cr;
+}
+
 static void
 gdk_surface_clear_backing_region (GdkSurface *surface)
 {
@@ -215,6 +243,8 @@ gdk_cairo_context_class_init (GdkCairoContextClass *klass)
   draw_context_class->begin_frame = gdk_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_cairo_context_end_frame;
   draw_context_class->surface_resized = gdk_cairo_context_surface_resized;
+
+  klass->cairo_create = gdk_cairo_context_default_cairo_create;
 }
 
 static void
@@ -240,28 +270,6 @@ gdk_cairo_context_init (GdkCairoContext *self)
 cairo_t *
 gdk_cairo_context_cairo_create (GdkCairoContext *self)
 {
-  GdkSurface *surface;
-  cairo_region_t *region;
-  cairo_surface_t *cairo_surface;
-  cairo_t *cr;
-
-  g_return_val_if_fail (GDK_IS_CAIRO_CONTEXT (self), NULL);
-
-  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
-  if (surface->drawing_context == NULL ||
-      gdk_drawing_context_get_paint_context (surface->drawing_context) != GDK_DRAW_CONTEXT (self))
-    return NULL;
-
-  cairo_surface = _gdk_surface_ref_cairo_surface (surface);
-  cr = cairo_create (cairo_surface);
-
-  region = gdk_surface_get_current_paint_region (surface);
-  gdk_cairo_region (cr, region);
-  cairo_clip (cr);
-
-  cairo_region_destroy (region);
-  cairo_surface_destroy (cairo_surface);
-
-  return cr;
+  return GDK_CAIRO_CONTEXT_GET_CLASS (self)->cairo_create (self);
 }
 
