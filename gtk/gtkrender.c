@@ -835,8 +835,6 @@ gtk_render_activity (GtkStyleContext *context,
  * regardless of scaling factors, which may not be appropriate when
  * drawing on displays with high pixel densities.
  *
- * You probably want to use gtk_render_icon_surface() instead, if you
- * already have a Cairo surface.
  **/
 void
 gtk_render_icon (GtkStyleContext *context,
@@ -859,30 +857,3 @@ gtk_render_icon (GtkStyleContext *context,
 
   cairo_surface_destroy (surface);
 }
-
-/**
- * gtk_render_icon_surface:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
- * @surface: a #cairo_surface_t containing the icon to draw
- * @x: X position for the @icon
- * @y: Y position for the @incon
- *
- * Renders the icon in @surface at the specified @x and @y coordinates.
- **/
-void
-gtk_render_icon_surface (GtkStyleContext *context,
-			 cairo_t         *cr,
-			 cairo_surface_t *surface,
-			 gdouble          x,
-			 gdouble          y)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (cr != NULL);
-
-  gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
-                                     cr,
-                                     surface,
-                                     x, y);
-}
-

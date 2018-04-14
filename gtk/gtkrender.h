@@ -140,13 +140,6 @@ void        gtk_render_icon        (GtkStyleContext     *context,
                                     GdkTexture          *texture,
                                     gdouble              x,
                                     gdouble              y);
-GDK_AVAILABLE_IN_ALL
-void        gtk_render_icon_surface (GtkStyleContext    *context,
-				     cairo_t            *cr,
-				     cairo_surface_t    *surface,
-				     gdouble             x,
-				     gdouble             y);
-
 G_END_DECLS
 
 #endif /* __GTK_RENDER_H__ */
