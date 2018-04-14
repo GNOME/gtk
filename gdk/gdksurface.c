@@ -4610,30 +4610,17 @@ gdk_surface_create_similar_surface (GdkSurface *     surface,
                                     int             width,
                                     int             height)
 {
-  cairo_surface_t *surface_surface, *similar_surface;
-  double sx, sy;
+  cairo_surface_t *similar_surface;
+  int scale;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  surface_surface = gdk_surface_ref_impl_surface (surface);
-  sx = sy = 1;
-  cairo_surface_get_device_scale (surface_surface, &sx, &sy);
+  scale = gdk_surface_get_scale_factor (surface);
 
-  if (GDK_DISPLAY_DEBUG_CHECK (surface->display, CAIRO_IMAGE))
-    {
-      similar_surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
-                                                    content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
-                                                    width * sx, height * sy);
-      cairo_surface_set_device_scale (similar_surface, sx, sy);
-    }
-  else
-    {
-      similar_surface = cairo_surface_create_similar (surface_surface,
-                                                      content,
-                                                      width, height);
-    }
-
-  cairo_surface_destroy (surface_surface);
+  similar_surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
+                                                content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
+                                                width * scale, height * scale);
+  cairo_surface_set_device_scale (similar_surface, scale, scale);
 
   return similar_surface;
 }
