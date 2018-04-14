@@ -842,7 +842,6 @@ gtk_flow_box_update_cursor (GtkFlowBox      *box,
 {
   BOX_PRIV (box)->cursor_child = child;
   gtk_widget_grab_focus (GTK_WIDGET (child));
-  gtk_widget_queue_draw (GTK_WIDGET (child));
   _gtk_flow_box_accessible_update_cursor (GTK_WIDGET (box), GTK_WIDGET (child));
 }
 
