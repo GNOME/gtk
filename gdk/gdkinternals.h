@@ -285,8 +285,6 @@ void           gdk_gl_texture_quads               (GdkGLContext *paint_context,
 void            gdk_cairo_surface_paint_pixbuf   (cairo_surface_t *surface,
                                                   const GdkPixbuf *pixbuf);
 
-void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *cairo_surface,
-                                                  GdkSurface       *surface);
 cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
 
 void            gdk_cairo_set_drawing_context    (cairo_t           *cr,
