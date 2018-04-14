@@ -842,7 +842,6 @@ gtk_paned_set_property (GObject        *object,
             gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
                                              GTK_ORIENTATION_VERTICAL);
 
-          /* state_flags_changed updates the cursor */
           gtk_widget_queue_resize (GTK_WIDGET (paned));
           g_object_notify_by_pspec (object, pspec);
         }
