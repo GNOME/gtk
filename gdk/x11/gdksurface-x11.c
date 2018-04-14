@@ -467,44 +467,6 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
  * X11 specific implementations of generic functions *
  *****************************************************/
 
-static cairo_surface_t *
-gdk_x11_create_cairo_surface (GdkSurfaceImplX11 *impl,
-			      int width,
-			      int height)
-{
-  Visual *visual;
-    
-  visual = gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (gdk_surface_get_display (impl->wrapper)));
-  return cairo_xlib_surface_create (GDK_SURFACE_XDISPLAY (impl->wrapper),
-                                    GDK_SURFACE_IMPL_X11 (impl)->xid,
-                                    visual,
-                                    width, height);
-}
-
-static cairo_surface_t *
-gdk_x11_ref_cairo_surface (GdkSurface *surface)
-{
-  GdkSurfaceImplX11 *impl = GDK_SURFACE_IMPL_X11 (surface->impl);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return NULL;
-
-  if (!impl->cairo_surface)
-    {
-      impl->cairo_surface = gdk_x11_create_cairo_surface (impl,
-                                                          gdk_surface_get_width (surface) * impl->surface_scale,
-                                                          gdk_surface_get_height (surface) * impl->surface_scale);
-      cairo_surface_set_device_scale (impl->cairo_surface, impl->surface_scale, impl->surface_scale);
-
-      if (SURFACE_IS_TOPLEVEL (surface) && impl->toplevel->in_frame)
-        hook_surface_changed (surface);
-    }
-
-  cairo_surface_reference (impl->cairo_surface);
-
-  return impl->cairo_surface;
-}
-
 static void
 gdk_surface_impl_x11_finalize (GObject *object)
 {
@@ -4858,7 +4820,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   
   object_class->finalize = gdk_surface_impl_x11_finalize;
   
-  impl_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
   impl_class->show = gdk_surface_x11_show;
   impl_class->hide = gdk_surface_x11_hide;
   impl_class->withdraw = gdk_surface_x11_withdraw;
