@@ -382,37 +382,6 @@
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
-                          <object class="GtkLabel" id="rendering_mode_label">
-                            <property name="label" translatable="yes">Rendering Mode</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="rendering_mode_combo">
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="hexpand">1</property>
-                            <signal name="changed" handler="rendering_mode_changed"/>
-                            <items>
-                              <item translatable="yes" id="similar">Similar</item>
-                              <item translatable="yes" id="image">Image</item>
-                            </items>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
                           <object class="GtkLabel" id="fps_label">
                             <property name="label" translatable="yes">Show fps overlay</property>
                             <property name="halign">start</property>
@@ -678,7 +647,6 @@
       <widget name="direction_label"/>
       <widget name="hidpi_label"/>
       <widget name="animation_label"/>
-      <widget name="rendering_mode_label"/>
       <widget name="updates_label"/>
       <widget name="baselines_label"/>
       <widget name="layout_label"/>
@@ -695,7 +663,6 @@
       <widget name="cursor_combo"/>
       <widget name="font_button"/>
       <widget name="direction_combo"/>
-      <widget name="rendering_mode_combo"/>
       <widget name="gl_combo"/>
     </widgets>
   </object>
