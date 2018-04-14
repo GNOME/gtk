@@ -3597,7 +3597,7 @@ static guint tick_callback_id;
  * repaint or relayout, and aren’t changing widget properties that
  * would trigger that (for example, changing the text of a #GtkLabel),
  * then you will have to call gtk_widget_queue_resize() or
- * gtk_widget_queue_draw_area() yourself.
+ * gtk_widget_queue_draw() yourself.
  *
  * gdk_frame_clock_get_frame_time() should generally be used for timing
  * continuous animations and
@@ -3758,8 +3758,7 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
  * isn’t very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
- * #GtkWidget::draw. Or simply g_signal_connect () to the
- * #GtkWidget::realize signal.
+ * #GtkWidget::realize.
  **/
 void
 gtk_widget_realize (GtkWidget *widget)
@@ -3895,8 +3894,9 @@ gtk_widget_invalidate_paintable_size (GtkWidget *widget)
  * gtk_widget_queue_draw:
  * @widget: a #GtkWidget
  *
- * Equivalent to calling gtk_widget_queue_draw_area() for the
- * entire area of a widget.
+ * Schedules this widget to be redrawn in paint phase of the
+ * current or the next frame. This means @widget's GtkWidgetClass.snapshot()
+ * implementation will be called.
  **/
 void
 gtk_widget_queue_draw (GtkWidget *widget)
@@ -5155,9 +5155,7 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
  * be emitted without using this function to do so).
  * If you want to synthesize an event though, don’t use this function;
  * instead, use gtk_main_do_event() so the event will behave as if
- * it were in the event queue. Don’t synthesize expose events; instead,
- * use gtk_widget_queue_draw_region() to invalidate a region of the
- * window.
+ * it were in the event queue.
  *
  * Returns: return from the event signal emission (%TRUE if
  *               the event was handled)
@@ -6606,7 +6604,7 @@ _gtk_widget_set_is_toplevel (GtkWidget *widget,
  * @widget: a #GtkWidget
  *
  * Determines whether @widget can be drawn to. A widget can be drawn
- * to if it is mapped and visible.
+ * if it is mapped and visible.
  *
  * Returns: %TRUE if @widget is drawable, %FALSE otherwise
  **/
@@ -11493,8 +11491,6 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
  * @widget: the widget to query
  *
  * Returns the width that has currently been allocated to @widget.
- * This function is intended to be used when implementing handlers
- * for the #GtkWidget::draw function.
  *
  * Returns: the width of the @widget
  **/
@@ -11511,8 +11507,6 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
  * @widget: the widget to query
  *
  * Returns the height that has currently been allocated to @widget.
- * This function is intended to be used when implementing handlers
- * for the #GtkWidget::draw function.
  *
  * Returns: the height of the @widget
  **/
@@ -11530,7 +11524,7 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  *
  * Returns the baseline that has currently been allocated to @widget.
  * This function is intended to be used when implementing handlers
- * for the #GtkWidget::draw function, and when allocating child
+ * for the #GtkWidget::snapshot function, and when allocating child
  * widgets in #GtkWidget::size_allocate.
  *
  * Returns: the baseline of the @widget, or -1 if none
