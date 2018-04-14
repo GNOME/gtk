@@ -1731,18 +1731,6 @@ gdk_surface_get_drawing_context (GdkSurface *surface)
   return surface->drawing_context;
 }
 
-/* This returns either the current working surface on the paint stack
- * or the actual impl surface of the surface. This should not be used
- * from very many places: be careful! */
-static cairo_surface_t *
-ref_surface_surface (GdkSurface *surface)
-{
-  if (surface->impl_surface->current_paint.surface)
-    return cairo_surface_reference (surface->impl_surface->current_paint.surface);
-  else
-    return gdk_surface_ref_impl_surface (surface);
-}
-
 /* This is used in places like gdk_cairo_set_source_surface and
  * other places to take "screenshots" of surfaces. Thus, we allow
  * it to be used outside of a begin_paint / end_paint. */
@@ -1753,7 +1741,13 @@ _gdk_surface_ref_cairo_surface (GdkSurface *surface)
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  cairo_surface = ref_surface_surface (surface);
+  /* This returns either the current working surface on the paint stack
+   * or the actual impl surface of the surface. This should not be used
+   * from very many places: be careful! */
+  if (surface->impl_surface->current_paint.surface)
+    cairo_surface = cairo_surface_reference (surface->impl_surface->current_paint.surface);
+  else
+    cairo_surface = gdk_surface_ref_impl_surface (surface);
 
   if (gdk_surface_has_impl (surface))
     {
