@@ -26,16 +26,6 @@
 #include <math.h>
 #include <string.h>
 
-static cairo_user_data_key_t direct_key;
-
-void
-gdk_cairo_surface_mark_as_direct (cairo_surface_t *cairo_surface,
-                                  GdkSurface *surface)
-{
-  cairo_surface_set_user_data (cairo_surface, &direct_key,
-                               g_object_ref (surface),  g_object_unref);
-}
-
 static const char *
 get_vertex_type_name (int type)
 {

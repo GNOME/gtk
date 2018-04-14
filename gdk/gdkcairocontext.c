@@ -145,7 +145,6 @@ gdk_cairo_context_begin_frame (GdkDrawContext *draw_context,
       sx = sy = 1;
       cairo_surface_get_device_scale (surface->current_paint.surface, &sx, &sy);
       cairo_surface_set_device_offset (surface->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
-      gdk_cairo_surface_mark_as_direct (surface->current_paint.surface, surface);
 
       surface->current_paint.surface_needs_composite = TRUE;
     }
