@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-13 00:22+0000\n"
-"PO-Revision-Date: 2018-03-04 22:04+0800\n"
+"PO-Revision-Date: 2018-04-14 13:10+0800\n"
 "Last-Translator: Dingzhong Chen <wsxy162@@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -2959,7 +2959,7 @@ msgstr "打开 %s"
 
 #: gtk/gtkplacessidebar.c:1070
 msgid "Recent"
-msgstr "最近使用的"
+msgstr "最近使用"
 
 #: gtk/gtkplacessidebar.c:1072
 msgid "Recent files"
