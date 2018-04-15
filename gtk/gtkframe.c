@@ -61,10 +61,10 @@
  * |[
  * <object class="GtkFrame">
  *   <child type="label">
- *     <object class="GtkLabel" id="frame-label"/>
+ *     <object class="GtkLabel" id="frame_label"/>
  *   </child>
  *   <child>
- *     <object class="GtkEntry" id="frame-content"/>
+ *     <object class="GtkEntry" id="frame_content"/>
  *   </child>
  * </object>
  * ]|
