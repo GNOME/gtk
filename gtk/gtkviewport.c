@@ -348,7 +348,7 @@ gtk_viewport_get_property (GObject         *object,
       break;
     }
 }
-#include <stdio.h>
+
 static void
 gtk_viewport_init (GtkViewport *viewport)
 {
