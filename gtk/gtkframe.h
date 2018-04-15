@@ -44,15 +44,11 @@ G_BEGIN_DECLS
 #define GTK_FRAME_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FRAME, GtkFrameClass))
 
 typedef struct _GtkFrame              GtkFrame;
-typedef struct _GtkFramePrivate       GtkFramePrivate;
 typedef struct _GtkFrameClass         GtkFrameClass;
 
 struct _GtkFrame
 {
-  GtkBin bin;
-
-  /*< private >*/
-  GtkFramePrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**

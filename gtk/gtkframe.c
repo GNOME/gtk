@@ -87,14 +87,14 @@
  * any other shadow type to remove it.
  */
 
-struct _GtkFramePrivate
+typedef struct
 {
   /* Properties */
   GtkWidget *label_widget;
 
   gint16 shadow_type;
   gfloat label_xalign;
-};
+} GtkFramePrivate;
 
 enum {
   PROP_0,
@@ -229,10 +229,7 @@ gtk_frame_buildable_add_child (GtkBuildable *buildable,
 static void
 gtk_frame_init (GtkFrame *frame)
 {
-  GtkFramePrivate *priv;
-
-  frame->priv = gtk_frame_get_instance_private (frame); 
-  priv = frame->priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   priv->label_widget = NULL;
   priv->shadow_type = GTK_SHADOW_ETCHED_IN;
@@ -274,7 +271,7 @@ gtk_frame_get_property (GObject         *object,
 			GParamSpec      *pspec)
 {
   GtkFrame *frame = GTK_FRAME (object);
-  GtkFramePrivate *priv = frame->priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   switch (prop_id)
     {
@@ -318,7 +315,7 @@ gtk_frame_remove (GtkContainer *container,
 		  GtkWidget    *child)
 {
   GtkFrame *frame = GTK_FRAME (container);
-  GtkFramePrivate *priv = frame->priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   if (priv->label_widget == child)
     gtk_frame_set_label_widget (frame, NULL);
@@ -333,7 +330,7 @@ gtk_frame_forall (GtkContainer *container,
 {
   GtkBin *bin = GTK_BIN (container);
   GtkFrame *frame = GTK_FRAME (container);
-  GtkFramePrivate *priv = frame->priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   GtkWidget *child;
 
   child = gtk_bin_get_child (bin);
@@ -388,11 +385,9 @@ gtk_frame_set_label (GtkFrame *frame,
 const gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
-  GtkFramePrivate *priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
-
-  priv = frame->priv;
 
   if (GTK_IS_LABEL (priv->label_widget))
     return gtk_label_get_text (GTK_LABEL (priv->label_widget));
@@ -412,14 +407,12 @@ void
 gtk_frame_set_label_widget (GtkFrame  *frame,
 			    GtkWidget *label_widget)
 {
-  GtkFramePrivate *priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   gboolean need_resize = FALSE;
 
   g_return_if_fail (GTK_IS_FRAME (frame));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
   g_return_if_fail (label_widget == NULL || gtk_widget_get_parent (label_widget) == NULL);
-
-  priv = frame->priv;
 
   if (priv->label_widget == label_widget)
     return;
@@ -461,9 +454,11 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
 GtkWidget *
 gtk_frame_get_label_widget (GtkFrame *frame)
 {
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
+
   g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
 
-  return frame->priv->label_widget;
+  return priv->label_widget;
 }
 
 /**
@@ -480,11 +475,9 @@ void
 gtk_frame_set_label_align (GtkFrame *frame,
                            gfloat    xalign)
 {
-  GtkFramePrivate *priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   g_return_if_fail (GTK_IS_FRAME (frame));
-
-  priv = frame->priv;
 
   xalign = CLAMP (xalign, 0.0, 1.0);
 
@@ -509,9 +502,11 @@ gtk_frame_set_label_align (GtkFrame *frame,
 gfloat
 gtk_frame_get_label_align (GtkFrame *frame)
 {
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
+
   g_return_val_if_fail (GTK_IS_FRAME (frame), 0.0);
 
-  return frame->priv->label_xalign;
+  return priv->label_xalign;
 }
 
 /**
@@ -528,11 +523,9 @@ void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)
 {
-  GtkFramePrivate *priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   g_return_if_fail (GTK_IS_FRAME (frame));
-
-  priv = frame->priv;
 
   if ((GtkShadowType) priv->shadow_type != type)
     {
@@ -561,9 +554,11 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
 GtkShadowType
 gtk_frame_get_shadow_type (GtkFrame *frame)
 {
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
+
   g_return_val_if_fail (GTK_IS_FRAME (frame), GTK_SHADOW_ETCHED_IN);
 
-  return frame->priv->shadow_type;
+  return priv->shadow_type;
 }
 
 static void
@@ -572,7 +567,7 @@ gtk_frame_size_allocate (GtkWidget           *widget,
                          int                  baseline)
 {
   GtkFrame *frame = GTK_FRAME (widget);
-  GtkFramePrivate *priv = frame->priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   GtkWidget *child;
   GtkAllocation new_allocation;
 
@@ -623,7 +618,7 @@ static void
 gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 					 GtkAllocation *child_allocation)
 {
-  GtkFramePrivate *priv = frame->priv;
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   int frame_width, frame_height;
   gint height;
 
@@ -658,13 +653,10 @@ gtk_frame_measure (GtkWidget      *widget,
                    gint            *minimum_baseline,
                    gint            *natural_baseline)
 {
+  GtkFrame *frame = GTK_FRAME (widget);
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   GtkWidget *child;
-  GtkFrame *frame;
-  GtkFramePrivate *priv;
-  gint child_min, child_nat;
-
-  frame = GTK_FRAME (widget);
-  priv = frame->priv;
+  int child_min, child_nat;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
