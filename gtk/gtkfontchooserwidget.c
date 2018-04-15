@@ -1897,7 +1897,7 @@ update_feature_example (FeatureItem          *item,
   const char *letter_case[] = { "smcp", "c2sc", "pcap", "c2pc", "unic", "cpsp", "case", NULL };
   const char *number_case[] = { "xxxx", "lnum", "onum", NULL };
   const char *number_spacing[] = { "xxxx", "pnum", "tnum", NULL };
-  const char *number_formatting[] = { "zero", "nalt", NULL };
+  const char *number_formatting[] = { "zero", "nalt", "frac", NULL };
   const char *char_variants[] = {
     "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
@@ -1940,6 +1940,8 @@ update_feature_example (FeatureItem          *item,
         input = g_strdup ("AaBbCc…");
       else if (strcmp (item->name, "zero") == 0)
         input = g_strdup ("0");
+      else if (strcmp (item->name, "frac") == 0)
+        input = g_strdup ("1/2 2/3 7/8");
       else if (strcmp (item->name, "nalt") == 0)
         input = find_affected_text (item->tag, hb_face, script_tag, lang_tag, 3);
       else
@@ -2128,7 +2130,7 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   const char *letter_case[] = { "smcp", "c2sc", "pcap", "c2pc", "unic", "cpsp", "case", NULL };
   const char *number_case[] = { "xxxx", "lnum", "onum", NULL };
   const char *number_spacing[] = { "xxxx", "pnum", "tnum", NULL };
-  const char *number_formatting[] = { "zero", "nalt", NULL };
+  const char *number_formatting[] = { "zero", "nalt", "frac", NULL };
   const char *char_variants[] = {
     "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
