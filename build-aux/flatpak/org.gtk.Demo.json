@@ -28,6 +28,20 @@
     ],
     "modules": [
         {
+            "name" : "wayland",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/wayland-project/wayland.git"
+                }
+            ]
+        },
+        {
             "name": "graphene",
             "buildsystem": "meson",
             "builddir": true,
