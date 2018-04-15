@@ -9609,7 +9609,7 @@ static void
 set_enable_emoji_completion (GtkEntry *entry,
                              gboolean  value)
 {
-  GtkEntryPrivate *priv = entry->priv;
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   if (priv->enable_emoji_completion == value)
     return;
