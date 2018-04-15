@@ -548,7 +548,6 @@ gtk_viewport_size_allocate (GtkWidget           *widget,
       child_allocation.width = gtk_adjustment_get_upper (hadjustment);
       child_allocation.height = gtk_adjustment_get_upper (vadjustment);
 
-      /* Explicitly ignore the child clip here. */
       gtk_widget_size_allocate (child, &child_allocation, -1);
     }
 
