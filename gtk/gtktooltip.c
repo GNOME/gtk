@@ -1176,8 +1176,18 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   GdkEventType event_type;
   GdkSurface *surface;
   gdouble dx, dy;
+  GdkModifierType event_state = 0;
 
   if (!tooltips_enabled (event))
+    return;
+
+  gdk_event_get_state (event, &event_state);
+  if ((event_state &
+       (GDK_BUTTON1_MASK |
+        GDK_BUTTON2_MASK |
+        GDK_BUTTON3_MASK |
+        GDK_BUTTON4_MASK |
+        GDK_BUTTON5_MASK)) != 0)
     return;
 
   event_type = gdk_event_get_event_type (event);
