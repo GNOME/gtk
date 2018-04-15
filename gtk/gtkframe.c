@@ -94,9 +94,6 @@ struct _GtkFramePrivate
 
   gint16 shadow_type;
   gfloat label_xalign;
-
-  GtkAllocation child_allocation;
-  GtkAllocation label_allocation;
 };
 
 enum {
@@ -580,13 +577,13 @@ gtk_frame_size_allocate (GtkWidget           *widget,
   GtkAllocation new_allocation;
 
   gtk_frame_compute_child_allocation (frame, &new_allocation);
-  priv->child_allocation = new_allocation;
 
   if (priv->label_widget &&
       gtk_widget_get_visible (priv->label_widget))
     {
-      gint nat_width, width, height;
-      gfloat xalign;
+      GtkAllocation label_allocation;
+      int nat_width, width, height;
+      float xalign;
 
       if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
         xalign = priv->label_xalign;
@@ -599,19 +596,17 @@ gtk_frame_size_allocate (GtkWidget           *widget,
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_VERTICAL, width,
                           &height, NULL, NULL, NULL);
 
-      priv->label_allocation.x = new_allocation.x + (new_allocation.width - width) * xalign;
-      priv->label_allocation.y = new_allocation.y - height;
-      priv->label_allocation.height = height;
-      priv->label_allocation.width = width;
+      label_allocation.x = new_allocation.x + (new_allocation.width - width) * xalign;
+      label_allocation.y = new_allocation.y - height;
+      label_allocation.height = height;
+      label_allocation.width = width;
 
-      gtk_widget_size_allocate (priv->label_widget, &priv->label_allocation, -1);
+      gtk_widget_size_allocate (priv->label_widget, &label_allocation, -1);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    {
-      gtk_widget_size_allocate (child, &priv->child_allocation, -1);
-    }
+    gtk_widget_size_allocate (child, &new_allocation, -1);
 }
 
 static void
