@@ -184,8 +184,6 @@ struct _GskGLRenderer
 
   int scale_factor;
 
-  graphene_rect_t viewport;
-
   GdkGLContext *gl_context;
   GskGLDriver *gl_driver;
   GskGLProfiler *gl_profiler;
@@ -1964,15 +1962,14 @@ static void
 gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
                                  const graphene_rect_t *viewport)
 {
-  int width = viewport->size.width;
-  int height = viewport->size.height;
+  const int width = ceilf (viewport->size.width);
+  const int height = ceilf (viewport->size.height);
 
   GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("glViewport(0, 0, %d, %d) [scale:%d]",
                              width,
                              height,
                              self->scale_factor));
 
-  graphene_rect_init (&self->viewport, 0, 0, width, height);
   glViewport (0, 0, width, height);
 }
 
@@ -2435,8 +2432,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
       return;
     }
 
-  self->viewport = *viewport;
-
   /* Set up the modelview and projection matrices to fit our viewport */
   graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
   graphene_matrix_init_ortho (&projection,
@@ -2458,7 +2453,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_viewport = *viewport;
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
-  gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, &self->viewport, 0.0f);
+  gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);
 
   if (texture_id != 0)
     ops_set_render_target (&render_op_builder, texture_id);
