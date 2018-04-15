@@ -1693,7 +1693,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
                           item->cell_area.width  + icon_view->priv->item_padding * 2,
                           item->cell_area.height + icon_view->priv->item_padding * 2);
 
-      if (!gtk_snapshot_clips_rect (snapshot, &area))
+      if (gdk_rectangle_intersect (&item->cell_area, &(GdkRectangle) { 0, 0, width, height }, NULL))
         {
           gtk_icon_view_snapshot_item (icon_view, snapshot, item,
                                        item->cell_area.x, item->cell_area.y,

@@ -35,11 +35,8 @@ struct _GtkSnapshotState {
   guint                  start_node_index;
   guint                  n_nodes;
 
-  graphene_rect_t        clip;
   int                    translate_x;
   int                    translate_y;
-
-  guint                  has_clip : 1;
 
   GtkSnapshotCollectFunc collect_func;
   union {
@@ -104,8 +101,6 @@ GtkSnapshot *           gtk_snapshot_new_child                  (GtkSnapshot    
                                                                  ...) G_GNUC_PRINTF (2, 3);
 void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
                                                                  GskRenderNode          *node);
-gboolean                gtk_snapshot_get_clip                   (GtkSnapshot            *snapshot,
-                                                                 graphene_rect_t        *out_clip);
 
 G_END_DECLS
 

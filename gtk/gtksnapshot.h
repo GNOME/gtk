@@ -170,10 +170,6 @@ void            gtk_snapshot_append_layout              (GtkSnapshot            
 
 
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_snapshot_clips_rect                 (GtkSnapshot            *snapshot,
-                                                         const graphene_rect_t  *bounds);
-
-GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_render_background          (GtkSnapshot            *snapshot,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,

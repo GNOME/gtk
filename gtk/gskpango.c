@@ -132,9 +132,6 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
                       ink_rect.x + ink_rect.width,
                       ink_rect.height);
 
-  if (gtk_snapshot_clips_rect (crenderer->snapshot, &node_bounds))
-    return;
-
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
   graphene_rect_offset (&node_bounds, x_offset, y_offset);
 

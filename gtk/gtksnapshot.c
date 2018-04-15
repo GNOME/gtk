@@ -111,7 +111,6 @@ gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
 static GtkSnapshotState *
 gtk_snapshot_push_state (GtkSnapshot            *snapshot,
                          char                   *name,
-                         const graphene_rect_t  *clip,
                          int                     translate_x,
                          int                     translate_y,
                          GtkSnapshotCollectFunc  collect_func)
@@ -119,12 +118,6 @@ gtk_snapshot_push_state (GtkSnapshot            *snapshot,
   GtkSnapshotState state = { 0, };
 
   state.name = name;
-  if (clip)
-    {
-      state.clip = *clip;
-      state.has_clip = TRUE;
-    }
-
   state.translate_x = translate_x;
   state.translate_y = translate_y;
   state.collect_func = collect_func;
@@ -160,7 +153,6 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
 
 static GtkSnapshot *
 gtk_snapshot_new_internal (gboolean               record_names,
-                           const graphene_rect_t *clip,
                            char                  *name)
 {
   GtkSnapshot *snapshot;
@@ -174,7 +166,6 @@ gtk_snapshot_new_internal (gboolean               record_names,
 
   gtk_snapshot_push_state (snapshot,
                            name,
-                           clip,
                            0, 0,
                            gtk_snapshot_collect_default);
 
@@ -210,7 +201,6 @@ gtk_snapshot_new (gboolean    record_names,
     str = NULL;
 
   return gtk_snapshot_new_internal (record_names,
-                                    NULL,
                                     str);
 }
 
@@ -219,9 +209,7 @@ gtk_snapshot_new_child (GtkSnapshot *parent,
                         const char  *name,
                         ...)
 {
-  GtkSnapshotState *parent_state;
   GtkSnapshot *snapshot;
-  graphene_rect_t c, *clip;
   char *str;
 
   if (name && parent->record_names)
@@ -235,20 +223,7 @@ gtk_snapshot_new_child (GtkSnapshot *parent,
   else
     str = NULL;
 
-  parent_state = gtk_snapshot_get_current_state (parent);
-  if (parent_state->has_clip)
-    {
-      graphene_rect_offset_r (&parent_state->clip,
-                              - parent_state->translate_x,
-                              - parent_state->translate_y,
-                              &c);
-      clip = &c;
-    }
-  else
-    clip = NULL;
-
   snapshot = gtk_snapshot_new_internal (parent->record_names,
-                                        clip,
                                         str);
 
   return snapshot;
@@ -300,9 +275,8 @@ gtk_snapshot_free_to_paintable (GtkSnapshot           *snapshot,
 /**
  * gtk_snapshot_push:
  * @snapshot: a #GtkSnapshot
- * @keep_coordinates: If %TRUE, the current offset and clip will be kept.
- *     Otherwise, the clip will be unset and the offset will be reset to
- *     (0, 0).
+ * @keep_coordinates: If %TRUE, the current offset will be kept.
+ *     Otherwise, the offset will be reset to (0, 0).
  * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
  *
@@ -334,7 +308,6 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
 
       gtk_snapshot_push_state (snapshot,
                                g_strdup (str),
-                               state->has_clip ? &state->clip : NULL,
                                state->translate_x,
                                state->translate_y,
                                gtk_snapshot_collect_default);
@@ -344,7 +317,7 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
     {
       gtk_snapshot_push_state (snapshot,
                                g_strdup (str),
-                               NULL, 0, 0,
+                               0, 0,
                                gtk_snapshot_collect_default);
     }
 }
@@ -395,7 +368,6 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   NULL,
                                    0, 0,
                                    gtk_snapshot_collect_transform);
 
@@ -459,7 +431,6 @@ gtk_snapshot_push_offset (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   char *str;
-  graphene_rect_t clip;
 
   if (snapshot->record_names)
     {
@@ -468,15 +439,8 @@ gtk_snapshot_push_offset (GtkSnapshot *snapshot)
   else
     str = NULL;
 
-  if (state->has_clip)
-    graphene_rect_offset_r (&state->clip,
-                            - state->translate_x,
-                            - state->translate_y,
-                            &clip);
-
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   state->has_clip ? &clip : NULL,
                                    0, 0,
                                    gtk_snapshot_collect_offset);
 }
@@ -537,7 +501,6 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   current_state->has_clip ? &current_state->clip : NULL,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_opacity);
@@ -595,7 +558,6 @@ gtk_snapshot_push_blur (GtkSnapshot *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   current_state->has_clip ? &current_state->clip : NULL,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_blur);
@@ -682,7 +644,6 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   current_state->has_clip ? &current_state->clip : NULL,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_color_matrix);
@@ -756,7 +717,6 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   &real_child_bounds,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_repeat);
@@ -807,7 +767,7 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
 {
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
-  graphene_rect_t clip, real_bounds;
+  graphene_rect_t real_bounds;
   cairo_rectangle_int_t rect;
   char *str;
 
@@ -825,14 +785,9 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
     str = NULL;
 
   rectangle_init_from_graphene (&rect, &real_bounds);
-  if (current_state->has_clip)
-    graphene_rect_intersection (&current_state->clip, &real_bounds, &clip);
-  else
-    clip = real_bounds;
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   &clip,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_clip);
@@ -895,7 +850,6 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   GskRoundedRect real_bounds;
-  graphene_rect_t clip;
   char *str;
 
   gsk_rounded_rect_init_copy (&real_bounds, bounds);
@@ -912,14 +866,8 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
   else
     str = NULL;
 
-  if (current_state->has_clip)
-    graphene_rect_intersection (&current_state->clip, &real_bounds.bounds, &clip);
-  else
-    clip = real_bounds.bounds;
-
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   &clip,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_rounded_clip);
@@ -979,7 +927,6 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    str,
-                                   current_state->has_clip ? &current_state->clip : NULL,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_shadow);
@@ -1082,7 +1029,6 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
 
   top_state = gtk_snapshot_push_state (snapshot,
                                        str,
-                                       current_state->has_clip ? &current_state->clip : NULL,
                                        current_state->translate_x,
                                        current_state->translate_y,
                                        gtk_snapshot_collect_blend_top);
@@ -1090,7 +1036,6 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
 
   gtk_snapshot_push_state (snapshot,
                            g_strdup (str),
-                           top_state->has_clip ? &top_state->clip : NULL,
                            top_state->translate_x,
                            top_state->translate_y,
                            gtk_snapshot_collect_blend_bottom);
@@ -1207,7 +1152,6 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
 
   end_state = gtk_snapshot_push_state (snapshot,
                                        str,
-                                       current_state->has_clip ? &current_state->clip : NULL,
                                        current_state->translate_x,
                                        current_state->translate_y,
                                        gtk_snapshot_collect_cross_fade_end);
@@ -1215,7 +1159,6 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
 
   gtk_snapshot_push_state (snapshot,
                            g_strdup (str),
-                           end_state->has_clip ? &end_state->clip : NULL,
                            end_state->translate_x,
                            end_state->translate_y,
                            gtk_snapshot_collect_cross_fade_start);
@@ -1486,9 +1429,6 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
 
   graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
 
-  if (current_state->has_clip)
-    graphene_rect_intersection (&current_state->clip, &real_bounds, &real_bounds);
-
   node = gsk_cairo_node_new (&real_bounds);
 
   if (name && snapshot->record_names)
@@ -1593,10 +1533,6 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
 
   graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
 
-  /* Color nodes are trivially "clippable" so we do it now */
-  if (current_state->has_clip)
-    graphene_rect_intersection (&current_state->clip, &real_bounds, &real_bounds);
-
   node = gsk_color_node_new (color, &real_bounds);
 
   if (name && snapshot->record_names)
@@ -1615,50 +1551,6 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
 
   gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
-}
-
-gboolean
-gtk_snapshot_get_clip (GtkSnapshot     *snapshot,
-                       graphene_rect_t *out_clip)
-{
-  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-
-  if (!current_state->has_clip)
-    return FALSE;
-
-  graphene_rect_offset_r (&current_state->clip,
-                          - current_state->translate_x,
-                          - current_state->translate_y,
-                          out_clip);
-
-  return TRUE;
-}
-
-/**
- * gtk_snapshot_clips_rect:
- * @snapshot: a #GtkSnapshot
- * @bounds: a rectangle
- *
- * Tests whether the rectangle is entirely outside the clip region of @snapshot.
- *
- * Returns: %TRUE if @bounds is entirely outside the clip region
- */
-gboolean
-gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
-                         const graphene_rect_t *bounds)
-{
-  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  graphene_rect_t offset_rect;
-
-  if (!current_state->has_clip)
-    return FALSE;
-
-  graphene_rect_offset_r (bounds, 
-                          current_state->translate_x,
-                          current_state->translate_y,
-                          &offset_rect);
-
-  return !graphene_rect_intersection (&offset_rect, &current_state->clip, NULL);
 }
 
 /**
@@ -1835,10 +1727,6 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
   real_end_point.x = end_point->x + current_state->translate_x;
   real_end_point.y = end_point->y + current_state->translate_y;
 
-  /* Linear gradients can be trivially clipped if we don't change the start/end points. */
-  if (current_state->has_clip)
-    graphene_rect_intersection (&current_state->clip, &real_bounds, &real_bounds);
-
   node = gsk_linear_gradient_node_new (&real_bounds,
                                        &real_start_point,
                                        &real_end_point,
@@ -1901,10 +1789,6 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
   real_start_point.y = start_point->y + current_state->translate_y;
   real_end_point.x = end_point->x + current_state->translate_x;
   real_end_point.y = end_point->y + current_state->translate_y;
-
-  /* Repeating Linear gradients can be trivially clipped if we don't change the start/end points. */
-  if (current_state->has_clip)
-    graphene_rect_intersection (&current_state->clip, &real_bounds, &real_bounds);
 
   node = gsk_repeating_linear_gradient_node_new (&real_bounds,
                                                  &real_start_point,

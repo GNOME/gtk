@@ -78,8 +78,6 @@ struct _GtkWidgetPrivate
 
   /* Queue-draw related flags */
   guint draw_needed           : 1;
-  guint render_node_has_clip  : 1;
-
   /* Expand-related flags */
   guint need_compute_expand   : 1; /* Need to recompute computed_[hv]_expand */
   guint computed_hexpand      : 1; /* computed results (composite of child flags) */
@@ -146,9 +144,6 @@ struct _GtkWidgetPrivate
 
   /* The render node we draw or %NULL if not yet created.*/
   GskRenderNode *render_node;
-  /* The clip that existed when the render node was drawn
-   * Ignored when render_node_has_clip == FALSE */
-  graphene_rect_t render_node_clip;
 
   GSList *paintables;
 
