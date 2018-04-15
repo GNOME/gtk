@@ -127,7 +127,6 @@ static void recompute_visible_regions   (GdkSurface *private,
 static void gdk_surface_invalidate_in_parent (GdkSurface *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
-static cairo_surface_t *gdk_surface_ref_impl_surface (GdkSurface *surface);
 
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
@@ -1391,12 +1390,6 @@ gdk_surface_get_state (GdkSurface *surface)
   return surface->state;
 }
 
-static cairo_surface_t *
-gdk_surface_ref_impl_surface (GdkSurface *surface)
-{
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->ref_cairo_surface (gdk_surface_get_impl_surface (surface));
-}
-
 GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
                                   GError    **error)
@@ -1747,7 +1740,7 @@ _gdk_surface_ref_cairo_surface (GdkSurface *surface)
   if (surface->impl_surface->current_paint.surface)
     cairo_surface = cairo_surface_reference (surface->impl_surface->current_paint.surface);
   else
-    cairo_surface = gdk_surface_ref_impl_surface (surface);
+    cairo_surface = GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->ref_cairo_surface (gdk_surface_get_impl_surface (surface));
 
   if (gdk_surface_has_impl (surface))
     {
