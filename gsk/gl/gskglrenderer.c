@@ -263,14 +263,15 @@ render_fallback_node (GskGLRenderer       *self,
                       RenderOpBuilder     *builder,
                       const GskQuadVertex *vertex_data)
 {
+  const float scale = ops_get_scale (builder);
   cairo_surface_t *surface;
   cairo_t *cr;
   int texture_id;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceilf (node->bounds.size.width) * self->scale_factor,
-                                        ceilf (node->bounds.size.height) * self->scale_factor);
-  cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
+                                        ceilf (node->bounds.size.width) * scale,
+                                        ceilf (node->bounds.size.height) * scale);
+  cairo_surface_set_device_scale (surface, scale, scale);
   cr = cairo_create (surface);
 
   cairo_save (cr);
@@ -291,8 +292,8 @@ render_fallback_node (GskGLRenderer       *self,
 
   /* Upload the Cairo surface to a GL texture */
   texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                             node->bounds.size.width * self->scale_factor,
-                                             node->bounds.size.height * self->scale_factor);
+                                             cairo_image_surface_get_width (surface),
+                                             cairo_image_surface_get_height (surface));
 
   gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
   gsk_gl_driver_init_texture_with_surface (self->gl_driver,
