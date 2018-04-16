@@ -375,10 +375,11 @@ entry_key_press (GtkEntry           *entry,
 
 static gboolean
 entry_focus_out (GtkWidget *entry,
-                 GdkEventFocus *event,
+                 GParamSpec *pspec,
                  GtkEmojiCompletion *completion)
 {
-  gtk_popover_popdown (GTK_POPOVER (completion));
+  if (!gtk_widget_has_focus (entry))
+    gtk_popover_popdown (GTK_POPOVER (completion));
   return FALSE;
 }
 
@@ -390,7 +391,7 @@ connect_signals (GtkEmojiCompletion *completion,
 
   completion->changed_id = g_signal_connect (entry, "changed", G_CALLBACK (entry_changed), completion);
   g_signal_connect (entry, "key-press-event", G_CALLBACK (entry_key_press), completion);
-  g_signal_connect (entry, "focus-out-event", G_CALLBACK (entry_focus_out), completion);
+  g_signal_connect (entry, "notify::has-focus", G_CALLBACK (entry_focus_out), completion);
 }
 
 static void
