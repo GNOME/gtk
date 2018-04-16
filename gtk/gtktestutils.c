@@ -64,9 +64,8 @@
  *
  * It will in turn call g_test_init() and gtk_init() to properly
  * initialize the testing framework and graphical toolkit. It’ll 
- * also set the program’s locale to “C” and prevent loading of rc 
- * files and Gtk+ modules. This is done to make tets program
- * environments as deterministic as possible.
+ * also set the program’s locale to “C”. This is done to make test
+ * program environments as deterministic as possible.
  *
  * Like gtk_init() and g_test_init(), any known arguments will be
  * processed and stripped from @argc and @argv.
@@ -77,16 +76,6 @@ gtk_test_init (int    *argcp,
                ...)
 {
   g_test_init (argcp, argvp, NULL);
-  /* - enter C locale
-   * - call g_test_init();
-   * - call gtk_init();
-   * - prevent RC files from loading;
-   * - prevent Gtk modules from loading;
-   * - supply mock object for GtkSettings
-   * FUTURE TODO:
-   * - this function could install a mock object around GtkSettings
-   */
-  g_setenv ("GTK_MODULES", "", TRUE);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
   g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
