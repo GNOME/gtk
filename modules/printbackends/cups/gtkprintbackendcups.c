@@ -195,6 +195,12 @@ static gboolean             cups_printer_get_hard_margins          (GtkPrinter  
 								    gdouble                           *bottom,
 								    gdouble                           *left,
 								    gdouble                           *right);
+static gboolean             cups_printer_get_hard_margins_for_paper_size (GtkPrinter                  *printer,
+									  GtkPaperSize                *paper_size,
+									  gdouble                     *top,
+									  gdouble                     *bottom,
+									  gdouble                     *left,
+									  gdouble                     *right);
 static GtkPrintCapabilities cups_printer_get_capabilities          (GtkPrinter                        *printer);
 static void                 set_option_from_settings               (GtkPrinterOption                  *option,
 								    GtkPrintSettings                  *setting);
@@ -372,6 +378,7 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
   backend_class->printer_list_papers = cups_printer_list_papers;
   backend_class->printer_get_default_page_size = cups_printer_get_default_page_size;
   backend_class->printer_get_hard_margins = cups_printer_get_hard_margins;
+  backend_class->printer_get_hard_margins_for_paper_size = cups_printer_get_hard_margins_for_paper_size;
   backend_class->printer_get_capabilities = cups_printer_get_capabilities;
   backend_class->set_password = gtk_print_backend_cups_set_password;
 }
@@ -6739,6 +6746,47 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
     }
 
   return result;
+}
+
+static gboolean
+cups_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
+					      GtkPaperSize *paper_size,
+					      gdouble      *top,
+					      gdouble      *bottom,
+					      gdouble      *left,
+					      gdouble      *right)
+{
+  ppd_file_t *ppd_file;
+  ppd_size_t *size;
+  const gchar *paper_name;
+  int i;
+
+  ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
+  if (ppd_file == NULL)
+    return FALSE;
+
+  paper_name = gtk_paper_size_get_ppd_name (paper_size);
+
+  for (i = 0; i < ppd_file->num_sizes; i++)
+    {
+      size = &ppd_file->sizes[i];
+      if (g_strcmp0(size->name, paper_name) == 0)
+        {
+	   *top = size->length - size->top;
+	   *bottom = size->bottom;
+	   *left = size->left;
+	   *right = size->width - size->right;
+	   return TRUE;
+	}
+    }
+
+  /* Custom size */
+  *left = ppd_file->custom_margins[0];
+  *bottom = ppd_file->custom_margins[1];
+  *right = ppd_file->custom_margins[2];
+  *top = ppd_file->custom_margins[3];
+
+  return TRUE;
 }
 
 static GtkPrintCapabilities

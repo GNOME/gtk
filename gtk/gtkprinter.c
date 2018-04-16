@@ -941,6 +941,19 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 						      width, height, cache_io);
 }
 
+gboolean
+_gtk_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
+					      GtkPaperSize *paper_size,
+					      gdouble      *top,
+					      gdouble      *bottom,
+					      gdouble      *left,
+					      gdouble      *right)
+{
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+
+  return backend_class->printer_get_hard_margins_for_paper_size (printer, paper_size, top, bottom, left, right);
+}
+
 /**
  * gtk_printer_list_papers:
  * @printer: a #GtkPrinter

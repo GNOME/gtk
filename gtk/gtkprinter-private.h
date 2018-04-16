@@ -44,6 +44,12 @@ cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter         
 							     gdouble              height,
 							     GIOChannel          *cache_io);
 GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
+gboolean             _gtk_printer_get_hard_margins_for_paper_size (GtkPrinter       *printer,
+								   GtkPaperSize     *paper_size,
+								   gdouble          *top,
+								   gdouble          *bottom,
+								   gdouble          *left,
+								   gdouble          *right);
 
 /* GtkPrintJob private methods: */
 GDK_AVAILABLE_IN_ALL

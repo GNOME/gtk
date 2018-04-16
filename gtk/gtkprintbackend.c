@@ -350,6 +350,12 @@ static gboolean             fallback_printer_get_hard_margins      (GtkPrinter  
                                                                     gdouble             *bottom,
                                                                     gdouble             *left,
                                                                     gdouble             *right);
+static gboolean             fallback_printer_get_hard_margins_for_paper_size (GtkPrinter          *printer,
+									      GtkPaperSize        *paper_size,
+									      gdouble             *top,
+									      gdouble             *bottom,
+									      gdouble             *left,
+									      gdouble             *right);
 static GList *              fallback_printer_list_papers           (GtkPrinter          *printer);
 static GtkPageSetup *       fallback_printer_get_default_page_size (GtkPrinter          *printer);
 static GtkPrintCapabilities fallback_printer_get_capabilities      (GtkPrinter          *printer);
@@ -376,6 +382,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   class->printer_request_details = fallback_printer_request_details;
   class->printer_mark_conflicts = fallback_printer_mark_conflicts;
   class->printer_get_hard_margins = fallback_printer_get_hard_margins;
+  class->printer_get_hard_margins_for_paper_size = fallback_printer_get_hard_margins_for_paper_size;
   class->printer_list_papers = fallback_printer_list_papers;
   class->printer_get_default_page_size = fallback_printer_get_default_page_size;
   class->printer_get_capabilities = fallback_printer_get_capabilities;
@@ -495,6 +502,17 @@ fallback_printer_get_hard_margins (GtkPrinter *printer,
 				   gdouble    *bottom,
 				   gdouble    *left,
 				   gdouble    *right)
+{
+  return FALSE;
+}
+
+static gboolean
+fallback_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
+						  GtkPaperSize *paper_size,
+						  gdouble      *top,
+						  gdouble      *bottom,
+						  gdouble      *left,
+						  gdouble      *right)
 {
   return FALSE;
 }

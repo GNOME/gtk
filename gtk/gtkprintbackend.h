@@ -133,11 +133,17 @@ struct _GtkPrintBackendClass
                                                               gchar              **auth_info,
                                                               gboolean             store_auth_info);
 
+  gboolean              (*printer_get_hard_margins_for_paper_size) (GtkPrinter    *printer,
+								    GtkPaperSize  *paper_size,
+								    gdouble       *top,
+								    gdouble       *bottom,
+								    gdouble       *left,
+								    gdouble       *right);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GDK_AVAILABLE_IN_ALL

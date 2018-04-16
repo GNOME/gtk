@@ -32,6 +32,7 @@
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
 #include "gtkmessagedialog.h"
+#include "gtkprinter-private.h"
 
 #include <cairo-pdf.h>
 #include <cairo-ps.h>
@@ -536,7 +537,8 @@ finish_print (PrintResponseData *rdata,
 
       if (gtk_print_settings_get_number_up (settings) < 2)
         {
-	  if (printer && gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
+	  if (printer && (_gtk_printer_get_hard_margins_for_paper_size (printer, gtk_page_setup_get_paper_size (page_setup), &top, &bottom, &left, &right) ||
+			  gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right)))
 	    _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
 	}
       else
