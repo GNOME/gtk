@@ -1,3 +1,47 @@
+Overview of Changes in GTK+ 3.22.30
+===================================
+
+* gtk-demo has a new 'Widgetbowl' demo
+
+* The wayland backend now supports the stable xdg-shell protocol
+
+* Bugs fixed:
+  #28 Adwaita: Selection mode styling flickers
+  #83 Completion popup on non-default GdkDisplay freezes GtkFileChooserDialog
+  #88 GtkSpinButton: Buttons aren't de/sensitised as they were in GTK+ 3
+ #114 All Wayland apps crash when focused (gtk_gesture_multi_press_end→...
+ #129 Segfault in `wl_proxy_marshal()`
+ #132 GtkTextView auto-scrolling to insert mark upon focus changes due to...
+ #141 GtkEntry: add a way to set the font to monospace
+ #146 GtkExpander arrow is not dimmed when the Expander is not :sensitive
+ #156 Transfer annotation for gtk_gl_area_new is incorrect
+ #157 Crashes in gdkdisplay-wayland when clicking any button/menu item
+ #163 Unable to explicitly set GtkModelButton role
+ 705509	notebook popup window on tabs shows underscores
+ 745128	Search is useless for translated app names
+ 748784	GtkProgressBar text cannot be superimposed on the progress bar
+ 791939	Add xdg-shell (stable) support
+ 792632	Emoji Chooser: section buttons have no tooltips
+ 793062	Crash under gdk_wayland_window_attach_image() 
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Chinese
+ Chinese (Taiwan)
+ Dutch
+ French
+ German
+ Hungarian
+ Indonesian
+ Italian
+ Latvian
+ Serbian
+ Slovak
+ Slovenian
+ Turkish
+
+
 Overview of Changes in GTK+ 3.22.29
 ====================================
 
