@@ -60,4 +60,6 @@ $ git checkout -b your-branch
 
 Once you've finished working on the bug fix or feature, push the branch
 to the Git repository and open a new merge request, to let the GTK
-maintainers review your contribution.
+maintainers review your contribution. The [CODE-OWNERS](./docs-CODE-OWNERS)
+document contains the list of core contributors to GTK and the areas for
+which they are responsible.
