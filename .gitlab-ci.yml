@@ -49,7 +49,6 @@ msys2-mingw32:
     paths:
       - "${APPID}-dev.flatpak"
     expire_in: 1 day
-  allow_failure: true
   script:
     - bash -x ./.gitlab-ci/flatpak-build.sh "${APPID}"
 
