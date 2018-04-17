@@ -2351,7 +2351,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
 /**
  * gtk_menu_set_accel_path:
  * @menu:       a valid #GtkMenu
- * @accel_path: (allow-none): a valid accelerator path
+ * @accel_path: (nullable): a valid accelerator path, or %NULL to unset the path
  *
  * Sets an accelerator path for this menu from which accelerator paths
  * for its immediate children, its menu items, can be constructed.
