@@ -1462,9 +1462,13 @@ void
 gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
                              gboolean      search_sensitive)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
+  GtkMenuShellPrivate *priv;
   GtkWidget *to_select = NULL;
   GList *tmp_list;
+
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  priv = menu_shell->priv;
 
   tmp_list = priv->children;
   while (tmp_list)
