@@ -38,6 +38,10 @@ typedef struct _GdkWaylandCairoContextClass GdkWaylandCairoContextClass;
 struct _GdkWaylandCairoContext
 {
   GdkCairoContext parent_instance;
+
+  GSList *surfaces;
+  cairo_surface_t *cached_surface;
+  cairo_surface_t *paint_surface;
 };
 
 struct _GdkWaylandCairoContextClass
