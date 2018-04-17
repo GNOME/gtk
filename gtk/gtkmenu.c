@@ -2967,6 +2967,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
   priv = menu->priv;
 
+  torn_off = !!torn_off;
   if (priv->torn_off != torn_off)
     {
       priv->torn_off = torn_off;
