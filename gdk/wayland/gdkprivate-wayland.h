@@ -90,6 +90,9 @@ guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
 
 void       gdk_wayland_surface_sync (GdkSurface *surface);
 void       gdk_wayland_surface_request_frame (GdkSurface *surface);
+void            gdk_wayland_surface_attach_image           (GdkSurface           *surface,
+                                                            cairo_surface_t      *cairo_surface,
+                                                            const cairo_region_t *damage);
 
 void            _gdk_wayland_surface_register_dnd          (GdkSurface *surface);
 GdkDragContext *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
