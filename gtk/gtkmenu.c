@@ -2814,7 +2814,6 @@ _gtk_menu_refresh_accel_paths (GtkMenu  *menu,
                                gboolean  group_changed)
 {
   GtkMenuPrivate *priv = menu->priv;
-  g_return_if_fail (GTK_IS_MENU (menu));
 
   if (priv->accel_path && priv->accel_group)
     {
