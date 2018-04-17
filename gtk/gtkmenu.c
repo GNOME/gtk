@@ -2587,11 +2587,13 @@ gtk_menu_popdown (GtkMenu *menu)
 GtkWidget*
 gtk_menu_get_active (GtkMenu *menu)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
   GtkWidget *child;
   GList *children;
 
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  priv = menu->priv;
 
   if (!priv->old_active_menu_item)
     {
@@ -2629,11 +2631,13 @@ void
 gtk_menu_set_active (GtkMenu *menu,
                      guint    index)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
   GtkWidget *child;
   GList *tmp_list;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
 
   tmp_list = g_list_nth (GTK_MENU_SHELL (menu)->priv->children, index);
   if (tmp_list)
@@ -2666,8 +2670,11 @@ void
 gtk_menu_set_accel_group (GtkMenu       *menu,
                           GtkAccelGroup *accel_group)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
+
   g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
 
   if (priv->accel_group != accel_group)
     {
@@ -2746,8 +2753,11 @@ void
 gtk_menu_set_accel_path (GtkMenu     *menu,
                          const gchar *accel_path)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
+
   g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
 
   if (accel_path)
     g_return_if_fail (accel_path[0] == '<' && strchr (accel_path, '/')); /* simplistic check */
@@ -2950,10 +2960,12 @@ void
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
                             gboolean  torn_off)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
   gint height;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
 
   if (priv->torn_off != torn_off)
     {
@@ -3088,10 +3100,12 @@ void
 gtk_menu_set_title (GtkMenu     *menu,
                     const gchar *title)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
   char *old_title;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
 
   old_title = priv->title;
   priv->title = g_strdup (title);
@@ -6072,9 +6086,11 @@ void
 gtk_menu_set_monitor (GtkMenu *menu,
                       gint     monitor_num)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
 
   if (priv->monitor_num != monitor_num)
     {
@@ -6207,13 +6223,14 @@ void
 gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
                                   gboolean  reserve_toggle_size)
 {
-  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuPrivate *priv;
   gboolean no_toggle_size;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  no_toggle_size = !reserve_toggle_size;
+  priv = menu->priv;
 
+  no_toggle_size = !reserve_toggle_size;
   if (priv->no_toggle_size != no_toggle_size)
     {
       priv->no_toggle_size = no_toggle_size;
