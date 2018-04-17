@@ -2,7 +2,7 @@
 
 set -e
 
-TAG="ebassi/gitlab-gtk:latest"
+TAG="registry.gitlab.gnome.org/gnome/gtk/master:v1"
 
 sudo docker build --build-arg HOST_USER_ID="$UID" --tag "${TAG}" \
     --file "Dockerfile" .

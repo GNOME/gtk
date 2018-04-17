@@ -12,7 +12,7 @@ stages:
     - subprojects/pango/
 
 fedora-x86_64:
-  image: ebassi/gitlab-gtk:latest
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v1
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
