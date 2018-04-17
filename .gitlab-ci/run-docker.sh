@@ -8,7 +8,7 @@
 
 set -e
 
-TAG="lazka/gitlab-gtk-3-22:v1"
+TAG="registry.gitlab.gnome.org/gnome/gtk/gtk-3-22:v2"
 
 # HOST_USER_ID gets used to create a user with the same ID so that files
 # created in the mounted volume have the same owner
