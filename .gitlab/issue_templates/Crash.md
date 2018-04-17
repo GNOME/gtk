@@ -11,26 +11,24 @@
   exhibits the issue.
 -->
 
-## Current behavior
-<!--
-  Please describe the current behaviour
--->
-
-## Expected outcome
-<!--
-  Please describe the expected outcome
--->
-
 ## Version information
 <!--
  - Which version of GTK+ you are using
  - What operating system and version
-  - For Linux, which distribution
+  - for Linux, which distribution
  - If you built GTK+ yourself, the list of options used to configure the build
 -->
 
-## Additional information
+## Warnings
 <!--
- - Screenshots or screen recordings are useful for visual errors
- - Please report any warning or message printed on the terminal
+ - If the application generates warning messages before crashing please
+   report them here
+-->
+
+## Backtrace
+<!--
+ - Attaching a stack trace obtained using GDB is appreciated; follow the
+   instructions on the wiki:
+
+   https://wiki.gnome.org/Community/GettingInTouch/Bugzilla/GettingTraces
 -->
