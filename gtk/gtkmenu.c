@@ -2726,7 +2726,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
 /**
  * gtk_menu_set_accel_path:
  * @menu:       a valid #GtkMenu
- * @accel_path: (allow-none): a valid accelerator path
+ * @accel_path: (nullable): a valid accelerator path, or %NULL to unset the path
  *
  * Sets an accelerator path for this menu from which accelerator paths
  * for its immediate children, its menu items, can be constructed.
@@ -3086,7 +3086,8 @@ gtk_menu_get_tearoff_state (GtkMenu *menu)
 /**
  * gtk_menu_set_title:
  * @menu: a #GtkMenu
- * @title: a string containing the title for the menu
+ * @title: (nullable): a string containing the title for the menu, or %NULL to
+ *   inherit the title of the parent menu item, if any
  *
  * Sets the title string for the menu.
  *
