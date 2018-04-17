@@ -34,7 +34,7 @@ struct _GtkMenuItemPrivate
 
   guint timer;
 
-  gchar  *accel_path;
+  const char *accel_path;
 
   GtkActionHelper *action_helper;
 
