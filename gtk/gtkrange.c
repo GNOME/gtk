@@ -949,6 +949,24 @@ should_invert (GtkRange *range)
     return priv->inverted;
 }
 
+static gboolean
+should_invert_move (GtkRange       *range,
+                    GtkOrientation  move_orientation)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  /* If the move is parallel to the range, use general check for inversion */
+  if (move_orientation == priv->orientation)
+    return should_invert (range);
+
+  /* H range/V move: Always invert, so down/up always dec/increase the value */
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    return TRUE;
+
+  /* V range/H move: Left/right always dec/increase the value */
+  return FALSE;
+}
+
 static void
 update_highlight_position (GtkRange *range)
 {
