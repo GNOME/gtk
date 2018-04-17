@@ -2673,6 +2673,7 @@ gtk_menu_set_accel_group (GtkMenu       *menu,
   GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   priv = menu->priv;
 
