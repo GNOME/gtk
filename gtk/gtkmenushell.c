@@ -1692,6 +1692,7 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
 
   priv = menu_shell->priv;
 
+  take_focus = !!take_focus;
   if (priv->take_focus != take_focus)
     {
       priv->take_focus = take_focus;
