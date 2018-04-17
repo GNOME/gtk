@@ -17,13 +17,13 @@
 
 /**
  * SECTION:gtkcelleditable
- * @Short_description: Interface for widgets which can are used for editing
- *  cells
+ * @Short_description: Interface for widgets that can be used for editing cells
  * @Title: GtkCellEditable
- * @See_also: #GtkEntry, #GtkCellRenderer
+ * @See_also: #GtkCellRenderer
  *
  * The #GtkCellEditable interface must be implemented for widgets to be usable
- * when editing the contents of a #GtkTreeView cell.
+ * to edit the contents of a #GtkTreeView cell. It provides a way to specify how
+ * temporary widgets should be configured for editing, get the new value, etc.
  */
 
 #include "config.h"
@@ -62,7 +62,9 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
    *
    * Implementations of #GtkCellEditable are responsible for
    * emitting this signal when they are done editing, e.g.
-   * #GtkEntry is emitting it when the user presses Enter.
+   * #GtkEntry emits this signal when the user presses Enter. Typical things to
+   * do in a handler for ::editing-done are to capture the edited value,
+   * disconnect the @cell_editable from signals on the #GtkCellRenderer, etc.
    *
    * gtk_cell_editable_editing_done() is a convenience method
    * for emitting #GtkCellEditable::editing-done.
@@ -80,7 +82,8 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
    * @cell_editable: the object on which the signal was emitted
    *
    * This signal is meant to indicate that the cell is finished
-   * editing, and the widget may now be destroyed.
+   * editing, and the @cell_editable widget is being removed and may
+   * subsequently be destroyed.
    *
    * Implementations of #GtkCellEditable are responsible for
    * emitting this signal when they are done editing. It must
@@ -103,11 +106,19 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
 /**
  * gtk_cell_editable_start_editing:
  * @cell_editable: A #GtkCellEditable
- * @event: (allow-none): A #GdkEvent, or %NULL
+ * @event: (nullable): The #GdkEvent that began the editing process, or
+ *   %NULL if editing was initiated programmatically
  * 
- * Begins editing on a @cell_editable. @event is the #GdkEvent that began 
- * the editing process. It may be %NULL, in the instance that editing was 
- * initiated through programatic means.
+ * Begins editing on a @cell_editable.
+ *
+ * The #GtkCellRenderer for the cell creates and returns a #GtkCellEditable from
+ * gtk_cell_renderer_start_editing(), configured for the #GtkCellRenderer type.
+ *
+ * gtk_cell_editable_start_editing() can then set up @cell_editable suitably for
+ * editing a cell, e.g. making the Esc key emit #GtkCellEditable::editing-done.
+ *
+ * Note that the @cell_editable is created on-demand for the current edit; its
+ * lifetime is temporary and does not persist across other edits and/or cells.
  **/
 void
 gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
