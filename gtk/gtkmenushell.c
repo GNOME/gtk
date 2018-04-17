@@ -727,7 +727,7 @@ gtk_menu_shell_event (GtkWidget *widget,
       if (priv->active)
         {
           GtkWidget *menu_item;
-          gint button = priv->button;
+          guint button = priv->button;
 
           priv->button = 0;
 
