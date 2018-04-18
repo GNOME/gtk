@@ -32,10 +32,12 @@
 
 /**
  * SECTION:selections
- * @Short_description: Functions for transfering data via the X selection mechanism
+ * @Short_description: Functions for transferring data between programs
  * @Title: Selections
  *
- * The X selection mechanism provides a way to transfer arbitrary chunks of
+ * GDK’s selection functions, based on the [X selection mechanism](
+ * https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html),
+ * provide a way to transfer arbitrary chunks of
  * data between programs. A “selection” is a essentially
  * a named clipboard, identified by a string interned as a #GdkAtom. By
  * claiming ownership of a selection, an application indicates that it will
@@ -57,7 +59,11 @@
  * `gtkselection.h` and programmers should use those functions
  * instead of the ones presented here. If you plan to implement selection
  * handling directly on top of the functions here, you should refer to the
- * X Inter-client Communication Conventions Manual (ICCCM).
+ * [X Inter-Client Communication Conventions Manual (ICCCM)](
+ * https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html).
+ *
+ * Note that although much of the selection API design is based on that of X,
+ * it will work on other GDK backends too.
  */
 
 /**
