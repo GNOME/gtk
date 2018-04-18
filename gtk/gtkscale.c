@@ -85,7 +85,7 @@
  * │   ┊    ╰── indicator
  * ┊   ┊
  * │   ╰── mark
- * ├── [value]
+ * ├── [value][.top][.bottom]
  * ├── trough
  * │   ├── [fill]
  * │   ├── [highlight]
