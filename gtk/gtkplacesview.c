@@ -402,6 +402,9 @@ gtk_places_view_destroy (GtkWidget *widget)
   if (priv->network_monitor)
     g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, widget);
 
+  if (priv->server_list_monitor)
+    g_signal_handlers_disconnect_by_func (priv->server_list_monitor, server_file_changed_cb, widget);
+
   g_cancellable_cancel (priv->cancellable);
   g_cancellable_cancel (priv->networks_fetching_cancellable);
 
@@ -1405,6 +1408,7 @@ pulse_entry_cb (gpointer user_data)
     {
       gtk_entry_set_progress_pulse_step (GTK_ENTRY (priv->address_entry), 0.0);
       gtk_entry_set_progress_fraction (GTK_ENTRY (priv->address_entry), 0.0);
+      priv->entry_pulse_timeout_id = 0;
 
       return G_SOURCE_REMOVE;
     }
