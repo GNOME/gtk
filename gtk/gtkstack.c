@@ -1670,6 +1670,8 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
+  g_return_if_fail (GTK_IS_STACK (stack));
+
   gtk_stack_set_visible_child_full (stack, name, priv->transition_type);
 }
 
