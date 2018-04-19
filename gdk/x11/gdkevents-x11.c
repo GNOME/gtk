@@ -622,7 +622,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
 }
 
 #define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
+  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 static void
 generate_focus_event (GdkWindow *window,
