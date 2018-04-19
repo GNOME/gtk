@@ -1405,6 +1405,7 @@ pulse_entry_cb (gpointer user_data)
     {
       gtk_entry_set_progress_pulse_step (GTK_ENTRY (priv->address_entry), 0.0);
       gtk_entry_set_progress_fraction (GTK_ENTRY (priv->address_entry), 0.0);
+      priv->entry_pulse_timeout_id = 0;
 
       return G_SOURCE_REMOVE;
     }
