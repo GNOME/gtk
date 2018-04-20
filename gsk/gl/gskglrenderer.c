@@ -2577,7 +2577,12 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
                       gdk_surface_get_width (surface) * self->scale_factor,
                       gdk_surface_get_height (surface) * self->scale_factor
                   };
-  damage = gdk_gl_context_get_damage (self->gl_context);
+
+  context = gdk_surface_begin_draw_frame (surface,
+                                          GDK_DRAW_CONTEXT (self->gl_context),
+                                          update_area);
+
+  damage = gdk_drawing_context_get_clip (context);
   cairo_region_union (damage, update_area);
 
   if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
@@ -2597,17 +2602,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
         self->render_region = cairo_region_reference (damage);
     }
 
-  context = gdk_surface_begin_draw_frame (surface,
-                                          GDK_DRAW_CONTEXT (self->gl_context),
-                                          damage);
-
   cairo_region_destroy (damage);
-  if (self->render_region)
-    {
-      damage = gdk_drawing_context_get_clip (context);
-      cairo_region_union (self->render_region, damage);
-      cairo_region_destroy (damage);
-    }
 
   self->scale_factor = gdk_surface_get_scale_factor (surface);
   gdk_gl_context_make_current (self->gl_context);
