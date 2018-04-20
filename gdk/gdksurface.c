@@ -1586,7 +1586,6 @@ gdk_surface_begin_draw_frame (GdkSurface           *surface,
                               const cairo_region_t *region)
 {
   GdkDrawingContext *context;
-  cairo_region_t *real_region;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (gdk_surface_has_native (surface), NULL);
@@ -1606,20 +1605,18 @@ gdk_surface_begin_draw_frame (GdkSurface           *surface,
       return NULL;
     }
 
-  real_region = cairo_region_copy (region);
+  draw_context->frame_region = cairo_region_copy (region);
 
-  gdk_draw_context_begin_frame (draw_context, real_region);
+  gdk_draw_context_begin_frame (draw_context, draw_context->frame_region);
 
   context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
                           "surface", surface,
                           "paint-context", draw_context,
-                          "clip", real_region,
+                          "clip", draw_context->frame_region,
                           NULL);
 
   /* Do not take a reference, to avoid creating cycles */
   surface->drawing_context = context;
-
-  cairo_region_destroy (real_region);
 
   return context;
 }
@@ -1659,22 +1656,13 @@ gdk_surface_end_draw_frame (GdkSurface         *surface,
   g_return_if_fail (surface->drawing_context == context);
 
   paint_context = gdk_drawing_context_get_paint_context (context);
-  if (paint_context)
-    {
-      cairo_region_t *clip = gdk_drawing_context_get_clip (context);
-
-      gdk_draw_context_end_frame (paint_context,
-                                  clip,
-                                  surface->active_update_area);
-
-      cairo_region_destroy (clip);
-    }
-  else
-    {
-    }
+  gdk_draw_context_end_frame (paint_context,
+                              paint_context->frame_region,
+                              surface->active_update_area);
 
   surface->drawing_context = NULL;
 
+  g_clear_pointer (&paint_context->frame_region, cairo_region_destroy);
   g_object_unref (context);
 }
 

@@ -303,3 +303,26 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
   return priv->surface;
 }
 
+/**
+ * gdk_draw_context_get_frame_region:
+ * @context: a #GdkDrawContext
+ *
+ * Retrieves the region that is currently in the process of being repainted.
+ *
+ * After a call to gdk_draw_context_begin_frame() this function will return
+ * a union of the region passed to that function and the area of the surface
+ * that the @context determined needs to be repainted.
+ *
+ * If @context is not inbetween calls to gdk_draw_context_begin_frame() and
+ * gdk_draw_context_end_frame(), %NULL will be returned.
+ *
+ * Returns: (transfer none) (nullable): a Cairo region or %NULL if not drawing
+ *     a frame.
+ */
+const cairo_region_t *
+gdk_draw_context_get_frame_region (GdkDrawContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
+
+  return context->frame_region;
+}
