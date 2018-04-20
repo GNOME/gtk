@@ -38,7 +38,6 @@
 #include "gdkmarshalers.h"
 #include "gdksurfaceimpl.h"
 #include "gdkglcontextprivate.h"
-#include "gdkdrawingcontextprivate.h"
 #include "gdk-private.h"
 
 #include <math.h>
@@ -1549,7 +1548,7 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
  * @region: a Cairo region
  *
  * Indicates that you are beginning the process of redrawing @region
- * on @surface, and provides you with a #GdkDrawingContext.
+ * on @surface.
  *
  * If @surface is a top level #GdkSurface, backed by a native surface
  * implementation, a backing store (offscreen buffer) large enough to
@@ -1575,94 +1574,72 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
  * and already has a backing store. Therefore in most cases, application
  * code in GTK does not need to call gdk_surface_begin_draw_frame()
  * explicitly.
- *
- * Returns: (transfer none): a #GdkDrawingContext context that should be
- *   used to draw the contents of the surface; the returned context is owned
- *   by GDK.
  */
-GdkDrawingContext *
+void
 gdk_surface_begin_draw_frame (GdkSurface           *surface,
                               GdkDrawContext       *draw_context,
                               const cairo_region_t *region)
 {
-  GdkDrawingContext *context;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-  g_return_val_if_fail (gdk_surface_has_native (surface), NULL);
-  g_return_val_if_fail (gdk_surface_is_toplevel (surface), NULL);
-  g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (draw_context), NULL);
-  g_return_val_if_fail (gdk_draw_context_get_surface (draw_context) == surface, NULL);
-  g_return_val_if_fail (region != NULL, NULL);
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+  g_return_if_fail (gdk_surface_has_native (surface));
+  g_return_if_fail (gdk_surface_is_toplevel (surface));
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (draw_context));
+  g_return_if_fail (gdk_draw_context_get_surface (draw_context) == surface);
+  g_return_if_fail (region != NULL);
 
   if (GDK_SURFACE_DESTROYED (surface))
-    return NULL;
+    return;
 
-  if (surface->drawing_context != NULL)
+  if (surface->paint_context != NULL)
     {
       g_critical ("The surface %p already has a drawing context. You cannot "
                   "call gdk_surface_begin_draw_frame() without calling "
                   "gdk_surface_end_draw_frame() first.", surface);
-      return NULL;
+      return;
     }
 
   draw_context->frame_region = cairo_region_copy (region);
 
   gdk_draw_context_begin_frame (draw_context, draw_context->frame_region);
 
-  context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
-                          "surface", surface,
-                          "paint-context", draw_context,
-                          NULL);
-
-  /* Do not take a reference, to avoid creating cycles */
-  surface->drawing_context = context;
-
-  return context;
+  surface->paint_context = g_object_ref (draw_context);
 }
 
 /**
  * gdk_surface_end_draw_frame:
  * @surface: a #GdkSurface
- * @context: the #GdkDrawingContext created by gdk_surface_begin_draw_frame()
  *
  * Indicates that the drawing of the contents of @surface started with
  * gdk_surface_begin_frame() has been completed.
- *
- * This function will take care of destroying the #GdkDrawingContext.
  *
  * It is an error to call this function without a matching
  * gdk_surface_begin_frame() first.
  */
 void
-gdk_surface_end_draw_frame (GdkSurface         *surface,
-                            GdkDrawingContext *context)
+gdk_surface_end_draw_frame (GdkSurface *surface)
 {
   GdkDrawContext *paint_context;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (surface->drawing_context == NULL)
+  if (surface->paint_context == NULL)
     {
       g_critical ("The surface %p has no drawing context. You must call "
                   "gdk_surface_begin_draw_frame() before calling "
                   "gdk_surface_end_draw_frame().", surface);
       return;
     }
-  g_return_if_fail (surface->drawing_context == context);
 
-  paint_context = gdk_drawing_context_get_paint_context (context);
+  paint_context = g_steal_pointer (&surface->paint_context);
   gdk_draw_context_end_frame (paint_context,
                               paint_context->frame_region,
                               surface->active_update_area);
 
-  surface->drawing_context = NULL;
-
   g_clear_pointer (&paint_context->frame_region, cairo_region_destroy);
-  g_object_unref (context);
+  g_object_unref (paint_context);
 }
 
 /*< private >
@@ -1689,26 +1666,6 @@ gdk_surface_get_current_paint_region (GdkSurface *surface)
     }
 
   return region;
-}
-
-/*< private >
- * gdk_surface_get_drawing_context:
- * @surface: a #GdkSurface
- *
- * Retrieves the #GdkDrawingContext associated to @surface by
- * gdk_surface_begin_draw_frame().
- *
- * Returns: (transfer none) (nullable): a #GdkDrawingContext, if any is set
- */
-GdkDrawingContext *
-gdk_surface_get_drawing_context (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return NULL;
-
-  return surface->drawing_context;
 }
 
 /* This is used in places like gdk_cairo_set_source_surface and

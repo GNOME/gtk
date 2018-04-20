@@ -116,7 +116,6 @@ main (int argc, char **argv)
 #endif
 	  /* Not allowed to finalize a GdkPixbufLoader without calling gdk_pixbuf_loader_close() */
 	  all_types[i] != GDK_TYPE_PIXBUF_LOADER &&
-	  all_types[i] != GDK_TYPE_DRAWING_CONTEXT &&
 	  all_types[i] != gdk_pixbuf_simple_anim_iter_get_type())
 	{
 	  gchar *test_path = g_strdup_printf ("/FinalizeObject/%s", g_type_name (all_types[i]));

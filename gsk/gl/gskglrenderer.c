@@ -2564,7 +2564,6 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_rect_t viewport;
   const cairo_region_t *damage;
-  GdkDrawingContext *context;
   GdkRectangle whole_surface;
   GdkSurface *surface;
 
@@ -2578,9 +2577,9 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
                       gdk_surface_get_height (surface) * self->scale_factor
                   };
 
-  context = gdk_surface_begin_draw_frame (surface,
-                                          GDK_DRAW_CONTEXT (self->gl_context),
-                                          update_area);
+  gdk_surface_begin_draw_frame (surface,
+                                GDK_DRAW_CONTEXT (self->gl_context),
+                                update_area);
 
   damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->gl_context));
 
@@ -2613,7 +2612,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
 
-  gdk_surface_end_draw_frame (surface, context);
+  gdk_surface_end_draw_frame (surface);
 
   g_clear_pointer (&self->render_region, cairo_region_destroy);
 }

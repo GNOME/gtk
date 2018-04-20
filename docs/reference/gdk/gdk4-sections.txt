@@ -1184,22 +1184,6 @@ GDK_IS_MONITOR
 </SECTION>
 
 <SECTION>
-<FILE>gdkdrawingcontext</FILE>
-GdkDrawingContext
-gdk_drawing_context_get_paint_context
-
-<SUBSECTION Standard>
-gdk_drawing_context_get_type
-GdkDrawingContextClass
-GDK_TYPE_DRAWING_CONTEXT
-GDK_DRAWING_CONTEXT_CLASS
-GDK_DRAWING_CONTEXT_GET_CLASS
-GDK_IS_DRAWING_CONTEXT_CLASS
-GDK_DRAWING_CONTEXT
-GDK_IS_DRAWING_CONTEXT
-</SECTION>
-
-<SECTION>
 <FILE>gdkcairocontext</FILE>
 GdkCairoContext
 gdk_cairo_context_cairo_create

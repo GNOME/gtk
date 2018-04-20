@@ -17,7 +17,6 @@ gdk_public_sources = files([
   'gdkdisplaymanager.c',
   'gdkdnd.c',
   'gdkdrawcontext.c',
-  'gdkdrawingcontext.c',
   'gdkevents.c',
   'gdkframeclock.c',
   'gdkframeclockidle.c',
@@ -67,7 +66,6 @@ gdk_public_headers = files([
   'gdkdisplaymanager.h',
   'gdkdnd.h',
   'gdkdrawcontext.h',
-  'gdkdrawingcontext.h',
   'gdkevents.h',
   'gdkframeclock.h',
   'gdkframetimings.h',
@@ -97,7 +95,6 @@ gdk_sources = gdk_public_sources
 gdk_private_h_sources = files([
   'gdkeventsprivate.h',
   'gdkdevicetoolprivate.h',
-  'gdkdrawingcontextprivate.h',
   'gdkmonitorprivate.h',
   'gdkseatdefaultprivate.h',
 ])
