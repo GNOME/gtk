@@ -902,8 +902,11 @@ gtk_page_setup_new_from_gvariant (GVariant *variant)
   setup = gtk_page_setup_new ();
 
   paper_size = gtk_paper_size_new_from_gvariant (variant);
-  gtk_page_setup_set_paper_size (setup, paper_size);
-  gtk_paper_size_free (paper_size);
+  if (paper_size)
+    {
+      gtk_page_setup_set_paper_size (setup, paper_size);
+      gtk_paper_size_free (paper_size);
+    }
 
   if (g_variant_lookup (variant, "MarginTop", "d", &margin))
     gtk_page_setup_set_top_margin (setup, margin, GTK_UNIT_MM);
