@@ -1106,6 +1106,7 @@ gdk_frame_timings_get_type
 GdkDrawContext
 gdk_draw_context_get_display
 gdk_draw_context_get_surface
+gdk_draw_context_get_frame_region
 
 <SUBSECTION Standard>
 GDK_DRAW_CONTEXT

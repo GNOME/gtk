@@ -34,6 +34,8 @@ typedef struct _GdkDrawContextClass GdkDrawContextClass;
 struct _GdkDrawContext
 {
   GObject parent_instance;
+
+  cairo_region_t *frame_region;
 };
 
 struct _GdkDrawContextClass
