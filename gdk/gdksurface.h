@@ -31,7 +31,6 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkdrawingcontext.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkframeclock.h>
 #include <gdk/gdkmonitor.h>
@@ -577,12 +576,11 @@ void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
                                               GdkSurfaceHints      geom_mask);
 
 GDK_AVAILABLE_IN_ALL
-GdkDrawingContext *gdk_surface_begin_draw_frame  (GdkSurface            *surface,
+void          gdk_surface_begin_draw_frame       (GdkSurface            *surface,
                                                   GdkDrawContext       *context,
                                                   const cairo_region_t *region);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_end_draw_frame    (GdkSurface            *surface,
-                                             GdkDrawingContext    *context);
+void          gdk_surface_end_draw_frame    (GdkSurface            *surface);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_title         (GdkSurface   *surface,

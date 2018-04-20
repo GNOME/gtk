@@ -80,26 +80,24 @@ gdk_surface_get_content (GdkSurface *surface)
 static cairo_t *
 gdk_cairo_context_default_cairo_create (GdkCairoContext *self)
 {
+  GdkDrawContext *context;
   GdkSurface *surface;
-  cairo_region_t *region;
   cairo_surface_t *cairo_surface;
   cairo_t *cr;
 
   g_return_val_if_fail (GDK_IS_CAIRO_CONTEXT (self), NULL);
 
-  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
-  if (surface->drawing_context == NULL ||
-      gdk_drawing_context_get_paint_context (surface->drawing_context) != GDK_DRAW_CONTEXT (self))
+  context = GDK_DRAW_CONTEXT (self);
+  if (!gdk_draw_context_is_drawing (context))
     return NULL;
 
+  surface = gdk_draw_context_get_surface (context);
   cairo_surface = _gdk_surface_ref_cairo_surface (surface);
   cr = cairo_create (cairo_surface);
 
-  region = gdk_surface_get_current_paint_region (surface);
-  gdk_cairo_region (cr, region);
+  gdk_cairo_region (cr, gdk_draw_context_get_frame_region (context));
   cairo_clip (cr);
 
-  cairo_region_destroy (region);
   cairo_surface_destroy (cairo_surface);
 
   return cr;

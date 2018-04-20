@@ -221,7 +221,7 @@ struct _GdkSurface
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 
   GSList *draw_contexts;
-  GdkDrawingContext *drawing_context;
+  GdkDrawContext *paint_context;
 
   cairo_region_t *opaque_region;
 };
@@ -286,9 +286,6 @@ void            gdk_cairo_surface_paint_pixbuf   (cairo_surface_t *surface,
 
 cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
 
-void            gdk_cairo_set_drawing_context    (cairo_t           *cr,
-                                                  GdkDrawingContext *context);
-
 /*************************************
  * Interfaces used by windowing code *
  *************************************/
@@ -309,8 +306,6 @@ GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
 void gdk_surface_get_unscaled_size (GdkSurface *surface,
                                     int *unscaled_width,
                                     int *unscaled_height);
-
-GdkDrawingContext *gdk_surface_get_drawing_context (GdkSurface *surface);
 
 cairo_region_t *gdk_surface_get_current_paint_region (GdkSurface *surface);
 
