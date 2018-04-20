@@ -219,7 +219,7 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   GskVulkanRender *render;
   GdkDrawingContext *context;
   GdkSurface *surface;
-  cairo_region_t *clip;
+  const cairo_region_t *clip;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -240,9 +240,8 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
                                           region);
   render = self->render;
 
-  clip = gdk_drawing_context_get_clip (context);
+  clip = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->vulkan));
   gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)], NULL, clip);
-  cairo_region_destroy (clip);
 
   gsk_vulkan_render_add_node (render, root);
 

@@ -1612,7 +1612,6 @@ gdk_surface_begin_draw_frame (GdkSurface           *surface,
   context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
                           "surface", surface,
                           "paint-context", draw_context,
-                          "clip", draw_context->frame_region,
                           NULL);
 
   /* Do not take a reference, to avoid creating cycles */

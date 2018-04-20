@@ -57,7 +57,6 @@ struct _GdkDrawingContextPrivate {
   GdkSurface *surface;
   GdkDrawContext *paint_context;
 
-  cairo_region_t *clip;
   cairo_t *cr;
 };
 
@@ -67,7 +66,6 @@ enum {
   PROP_0,
 
   PROP_SURFACE,
-  PROP_CLIP,
   PROP_PAINT_CONTEXT,
 
   N_PROPS
@@ -83,7 +81,6 @@ gdk_drawing_context_dispose (GObject *gobject)
 
   g_clear_object (&priv->surface);
   g_clear_object (&priv->paint_context);
-  g_clear_pointer (&priv->clip, cairo_region_destroy);
   g_clear_pointer (&priv->cr, cairo_destroy);
 
   G_OBJECT_CLASS (gdk_drawing_context_parent_class)->dispose (gobject);
@@ -116,10 +113,6 @@ gdk_drawing_context_set_property (GObject      *gobject,
       priv->paint_context = g_value_dup_object (value);
       break;
 
-    case PROP_CLIP:
-      priv->clip = g_value_dup_boxed (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -138,10 +131,6 @@ gdk_drawing_context_get_property (GObject    *gobject,
     {
     case PROP_SURFACE:
       g_value_set_object (value, priv->surface);
-      break;
-
-    case PROP_CLIP:
-      g_value_set_boxed (value, priv->clip);
       break;
 
     case PROP_PAINT_CONTEXT:
@@ -173,17 +162,6 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS);
-  /**
-   * GdkDrawingContext:clip:
-   *
-   * The clip region applied to the drawing context.
-   */
-  obj_property[PROP_CLIP] =
-    g_param_spec_boxed ("clip", "Clip", "The clip region of the context",
-                        CAIRO_GOBJECT_TYPE_REGION,
-                        G_PARAM_CONSTRUCT_ONLY |
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_STRINGS);
   /**
    * GdkDrawingContext:paint-context:
    *
@@ -220,26 +198,5 @@ gdk_drawing_context_get_paint_context (GdkDrawingContext *context)
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
 
   return priv->paint_context;
-}
-
-/**
- * gdk_drawing_context_get_clip:
- * @context: a #GdkDrawingContext
- *
- * Retrieves a copy of the clip region used when creating the @context.
- *
- * Returns: (transfer full) (nullable): a Cairo region
- */
-cairo_region_t *
-gdk_drawing_context_get_clip (GdkDrawingContext *context)
-{
-  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
-
-  if (priv->clip == NULL)
-    return NULL;
-
-  return cairo_region_copy (priv->clip);
 }
 

@@ -2557,7 +2557,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_rect_t viewport;
-  cairo_region_t *damage;
+  const cairo_region_t *damage;
   GdkDrawingContext *context;
   GdkRectangle whole_surface;
   GdkSurface *surface;
@@ -2576,8 +2576,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
                                           GDK_DRAW_CONTEXT (self->gl_context),
                                           update_area);
 
-  damage = gdk_drawing_context_get_clip (context);
-  cairo_region_union (damage, update_area);
+  damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->gl_context));
 
   if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
     {
@@ -2588,15 +2587,12 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
       GdkRectangle extents;
 
       cairo_region_get_extents (damage, &extents);
-      cairo_region_union_rectangle (damage, &extents);
 
       if (gdk_rectangle_equal (&extents, &whole_surface))
         self->render_region = NULL;
       else
-        self->render_region = cairo_region_reference (damage);
+        self->render_region = cairo_region_create_rectangle (&extents);
     }
-
-  cairo_region_destroy (damage);
 
   self->scale_factor = gdk_surface_get_scale_factor (surface);
   gdk_gl_context_make_current (self->gl_context);
