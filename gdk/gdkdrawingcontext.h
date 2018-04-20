@@ -38,8 +38,6 @@ GType gdk_drawing_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkDrawContext* gdk_drawing_context_get_paint_context   (GdkDrawingContext *context);
-GDK_AVAILABLE_IN_ALL
-cairo_region_t *gdk_drawing_context_get_clip            (GdkDrawingContext *context);
 
 G_END_DECLS
 
