@@ -1695,7 +1695,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
- * @n_stops: the number of elements in @color_stops
+ * @n_stops: the number of elements in @stops
  *
  * Appends a linear gradient node with the given stops to @snapshot.
  */
@@ -1758,7 +1758,7 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
- * @n_stops: the number of elements in @color_stops
+ * @n_stops: the number of elements in @stops
  *
  * Appends a repeating linear gradient node with the given stops to @snapshot.
  */
