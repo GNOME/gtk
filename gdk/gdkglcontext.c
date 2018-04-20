@@ -305,7 +305,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
       return;
     }
 
-  damage = gdk_gl_context_get_damage (context);
+  damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
@@ -394,24 +394,6 @@ gdk_gl_context_init (GdkGLContext *self)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   priv->use_es = -1;
-}
-
-/**
- * gdk_gl_context_get_damage:
- * @context: a #GdkGLContext
- *
- * Returns the part of the backbuffer that is known to be damaged and would
- * need to be redrawn. This is the area that needs to be respected in addition
- * to areas invalidated by GTK or the windowing system itself.
- *
- * Returns: The damage to the backbuffer
- **/
-cairo_region_t *
-gdk_gl_context_get_damage (GdkGLContext *context)
-{
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), cairo_region_create ());
-
-  return GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
 }
 
 GdkGLContextPaintData *

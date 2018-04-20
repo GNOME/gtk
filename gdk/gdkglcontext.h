@@ -82,8 +82,6 @@ gboolean                gdk_gl_context_get_use_es               (GdkGLContext  *
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_realize                  (GdkGLContext  *context,
                                                                  GError       **error);
-GDK_AVAILABLE_IN_ALL
-cairo_region_t *        gdk_gl_context_get_damage               (GdkGLContext  *context);
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_make_current             (GdkGLContext  *context);

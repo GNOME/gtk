@@ -1139,7 +1139,6 @@ gdk_gl_context_is_legacy
 <SUBSECTION>
 GdkGLError
 gdk_gl_context_realize
-gdk_gl_context_get_damage
 gdk_gl_context_make_current
 gdk_gl_context_get_current
 gdk_gl_context_clear_current
