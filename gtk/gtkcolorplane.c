@@ -36,8 +36,6 @@ struct _GtkColorPlanePrivate
   GtkAdjustment *v_adj;
 
   GdkTexture *texture;
-
-  GtkEventController *key_controller;
 };
 
 enum {
@@ -392,6 +390,7 @@ plane_drag_gesture_end (GtkGestureDrag *gesture,
 static void
 gtk_color_plane_init (GtkColorPlane *plane)
 {
+  GtkEventController *controller;
   GtkGesture *gesture;
   AtkObject *atk_obj;
 
@@ -424,9 +423,10 @@ gtk_color_plane_init (GtkColorPlane *plane)
                                      TRUE);
   gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 
-  plane->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (plane));
-  g_signal_connect (plane->priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (key_controller_key_pressed), plane);
+  gtk_widget_add_controller (GTK_WIDGET (plane), controller);
 }
 
 static void
@@ -439,8 +439,6 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->h_adj);
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
-
-  g_clear_object (&plane->priv->key_controller);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }

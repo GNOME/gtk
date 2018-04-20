@@ -974,9 +974,10 @@ gtk_icon_view_init (GtkIconView *icon_view)
                     icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), controller);
 
-  icon_view->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (icon_view));
-  g_signal_connect (icon_view->priv->key_controller, "key-pressed", G_CALLBACK (gtk_icon_view_key_pressed),
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (gtk_icon_view_key_pressed),
                     icon_view);
+  gtk_widget_add_controller (GTK_WIDGET (icon_view), controller);
 }
 
 /* GObject methods */

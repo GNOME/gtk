@@ -666,7 +666,6 @@ struct _GtkFlowBoxPrivate {
   GDestroyNotify     sort_destroy;
 
   GtkGesture        *drag_gesture;
-  GtkEventController *key_controller;
 
   GtkFlowBoxChild   *rubberband_first;
   GtkFlowBoxChild   *rubberband_last;
@@ -3377,8 +3376,6 @@ gtk_flow_box_finalize (GObject *obj)
   g_clear_object (&priv->hadjustment);
   g_clear_object (&priv->vadjustment);
 
-  g_object_unref (priv->key_controller);
-
   if (priv->bound_model)
     {
       if (priv->create_widget_func_data_destroy)
@@ -3724,6 +3721,7 @@ static void
 gtk_flow_box_init (GtkFlowBox *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
@@ -3771,9 +3769,10 @@ gtk_flow_box_init (GtkFlowBox *box)
                     G_CALLBACK (gtk_flow_box_drag_gesture_end), box);
   gtk_widget_add_controller (GTK_WIDGET (box), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (box));
-  g_signal_connect (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_flow_box_key_controller_key_pressed), box);
+  gtk_widget_add_controller (GTK_WIDGET (box), controller);
 }
 
 static void

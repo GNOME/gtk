@@ -1691,7 +1691,7 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (controller, "motion", G_CALLBACK (gtk_text_view_motion), widget);
   gtk_widget_add_controller (widget, controller);
 
-  priv->key_controller = gtk_event_controller_key_new (widget);
+  priv->key_controller = gtk_event_controller_key_new ();
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_text_view_key_controller_key_pressed),
                     widget);
@@ -1706,6 +1706,7 @@ gtk_text_view_init (GtkTextView *text_view)
                             widget);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
+  gtk_widget_add_controller (widget, priv->key_controller);
 
   priv->selection_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->selection_node, I_("selection"));
@@ -3601,8 +3602,6 @@ gtk_text_view_finalize (GObject *object)
   g_assert (priv->buffer == NULL);
   
   cancel_pending_scroll (text_view);
-
-  g_object_unref (priv->key_controller);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);

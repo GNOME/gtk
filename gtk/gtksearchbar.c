@@ -727,7 +727,8 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
 
   if (priv->capture_widget)
     {
-      g_clear_object (&priv->capture_widget_controller);
+      gtk_widget_remove_controller (priv->capture_widget,
+                                    priv->capture_widget_controller);
       g_object_remove_weak_pointer (G_OBJECT (priv->capture_widget),
                                     (gpointer *) &priv->capture_widget);
     }
@@ -739,13 +740,14 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
       g_object_add_weak_pointer (G_OBJECT (priv->capture_widget),
                                  (gpointer *) &priv->capture_widget);
 
-      priv->capture_widget_controller = gtk_event_controller_key_new (widget);
+      priv->capture_widget_controller = gtk_event_controller_key_new ();
       gtk_event_controller_set_propagation_phase (priv->capture_widget_controller,
                                                   GTK_PHASE_CAPTURE);
       g_signal_connect (priv->capture_widget_controller, "key-pressed",
                         G_CALLBACK (capture_widget_key_handled), bar);
       g_signal_connect (priv->capture_widget_controller, "key-released",
                         G_CALLBACK (capture_widget_key_handled), bar);
+      gtk_widget_add_controller (widget, priv->capture_widget_controller);
     }
 }
 

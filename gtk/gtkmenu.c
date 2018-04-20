@@ -1150,10 +1150,10 @@ gtk_menu_init (GtkMenu *menu)
   g_signal_connect (controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
   gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 
-  priv->key_controller =
-    gtk_event_controller_key_new (GTK_WIDGET (menu));
-  g_signal_connect (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_menu_key_pressed), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 }
 
 static void
@@ -1225,7 +1225,6 @@ gtk_menu_finalize (GObject *object)
 
   gtk_widget_unparent (priv->top_arrow_widget);
   gtk_widget_unparent (priv->bottom_arrow_widget);
-  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }

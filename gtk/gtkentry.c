@@ -2578,7 +2578,7 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (entry_motion_cb), entry);
   gtk_widget_add_controller (GTK_WIDGET (entry), controller);
 
-  priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (entry));
+  priv->key_controller = gtk_event_controller_key_new ();
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_entry_key_controller_key_pressed), entry);
   g_signal_connect_swapped (priv->key_controller, "im-update",
@@ -2589,6 +2589,7 @@ gtk_entry_init (GtkEntry *entry)
                             G_CALLBACK (gtk_entry_focus_out), entry);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
+  gtk_widget_add_controller (GTK_WIDGET (entry), priv->key_controller);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
   for (i = 0; i < 2; i++)

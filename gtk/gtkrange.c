@@ -117,7 +117,6 @@ struct _GtkRangePrivate
 
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
-  GtkEventController *key_controller;
 
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;
@@ -596,10 +595,10 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_scroll_controller_scroll), range);
   gtk_widget_add_controller (GTK_WIDGET (range), controller);
 
-  priv->key_controller =
-    gtk_event_controller_key_new (GTK_WIDGET (range));
-  g_signal_connect (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_range_key_controller_key_pressed), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), controller);
 }
 
 /**
@@ -1292,8 +1291,6 @@ gtk_range_finalize (GObject *object)
 {
   GtkRange *range = GTK_RANGE (object);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-
-  g_clear_object (&priv->key_controller);
 
   gtk_widget_unparent (priv->slider_widget);
 

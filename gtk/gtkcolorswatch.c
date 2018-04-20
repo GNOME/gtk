@@ -65,7 +65,6 @@ struct _GtkColorSwatchPrivate
   guint    selectable       : 1;
   guint    has_menu         : 1;
 
-  GtkEventController *key_controller;
   GtkWidget *overlay_widget;
 
   GtkWidget *popover;
@@ -502,8 +501,6 @@ swatch_dispose (GObject *object)
       swatch->priv->popover = NULL;
     }
 
-  g_clear_object (&swatch->priv->key_controller);
-
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->dispose (object);
 }
 
@@ -558,6 +555,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
@@ -581,9 +579,10 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                     G_CALLBACK (tap_action), swatch);
   gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (gesture));
 
-  swatch->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (swatch));
-  g_signal_connect (swatch->priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (key_controller_key_pressed), swatch);
+  gtk_widget_add_controller (GTK_WIDGET (swatch), controller);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (swatch)), "activatable");
 

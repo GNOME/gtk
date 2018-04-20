@@ -248,11 +248,8 @@ struct _GtkCalendarPrivate
   gint detail_height_rows;
   gint detail_width_chars;
   gint detail_overflow[6];
-
-  GtkEventController *key_controller;
 };
 
-static void gtk_calendar_finalize     (GObject     *object);
 static void gtk_calendar_destroy      (GtkWidget    *widget);
 static void gtk_calendar_set_property (GObject      *object,
                                        guint         prop_id,
@@ -369,7 +366,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
-  gobject_class->finalize = gtk_calendar_finalize;
 
   widget_class->destroy = gtk_calendar_destroy;
   widget_class->snapshot = gtk_calendar_snapshot;
@@ -689,17 +685,17 @@ gtk_calendar_init (GtkCalendar *calendar)
                     calendar);
   gtk_widget_add_controller (GTK_WIDGET (calendar), controller);
 
-  priv->key_controller =
-    gtk_event_controller_key_new (GTK_WIDGET (calendar));
-  g_signal_connect (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_calendar_key_controller_key_pressed),
                     calendar);
-  g_signal_connect (priv->key_controller, "focus-in",
+  g_signal_connect (controller, "focus-in",
                     G_CALLBACK (gtk_calendar_key_controller_focus),
                     calendar);
-  g_signal_connect (priv->key_controller, "focus-out",
+  g_signal_connect (controller, "focus-out",
                     G_CALLBACK (gtk_calendar_key_controller_focus),
                     calendar);
+  gtk_widget_add_controller (GTK_WIDGET (calendar), controller);
 
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)
@@ -1327,16 +1323,6 @@ calendar_set_month_prev (GtkCalendar *calendar)
 /****************************************
  *           Basic object methods       *
  ****************************************/
-
-static void
-gtk_calendar_finalize (GObject *object)
-{
-  GtkCalendarPrivate *priv = GTK_CALENDAR (object)->priv;
-
-  g_object_unref (priv->key_controller);
-
-  G_OBJECT_CLASS (gtk_calendar_parent_class)->finalize (object);
-}
 
 static void
 gtk_calendar_destroy (GtkWidget *widget)

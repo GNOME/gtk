@@ -91,7 +91,6 @@ enum {
 };
 
 #define GTK_CELL_RENDERER_SPIN_PATH "gtk-cell-renderer-spin-path"
-#define GTK_CELL_RENDERER_SPIN_KEY_CONTROLLER "gtk-cell-renderer-spin-key-controller"
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererSpin, gtk_cell_renderer_spin, GTK_TYPE_CELL_RENDERER_TEXT)
 
@@ -340,13 +339,12 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
       g_free (text);
     }
 
-  key_controller = gtk_event_controller_key_new (spin);
+  key_controller = gtk_event_controller_key_new ();
   g_signal_connect (key_controller, "key-pressed",
                     G_CALLBACK (gtk_cell_renderer_spin_key_pressed),
                     spin);
+  gtk_widget_add_controller (spin, key_controller);
 
-  g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_KEY_CONTROLLER,
-                          key_controller, g_object_unref);
   g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);
 
