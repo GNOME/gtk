@@ -7763,21 +7763,9 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
 GdkDisplay*
 gtk_widget_get_display (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  toplevel = _gtk_widget_get_toplevel (widget);
-
-  if (_gtk_widget_is_toplevel (toplevel))
-    {
-      if (GTK_IS_WINDOW (toplevel))
-	return gtk_window_get_display (GTK_WINDOW (toplevel));
-      else if (GTK_IS_INVISIBLE (toplevel))
-	return gtk_invisible_get_display (GTK_INVISIBLE (widget));
-    }
-  
-  return gdk_display_get_default ();
+  return _gtk_widget_get_display (widget);
 }
 
 /**

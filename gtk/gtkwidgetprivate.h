@@ -32,6 +32,8 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontroller.h"
 #include "gtksizerequestcacheprivate.h"
+#include "gtkwindowprivate.h"
+#include "gtkinvisible.h"
 
 G_BEGIN_DECLS
 
@@ -410,6 +412,22 @@ _gtk_widget_get_toplevel (GtkWidget *widget)
     widget = widget->priv->parent;
 
   return widget;
+}
+
+static inline GdkDisplay *
+_gtk_widget_get_display (GtkWidget *widget)
+{
+  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
+
+  if (_gtk_widget_is_toplevel (toplevel))
+    {
+      if (GTK_IS_WINDOW (toplevel))
+        return gtk_window_get_display (GTK_WINDOW (toplevel));
+      else if (GTK_IS_INVISIBLE (toplevel))
+        return gtk_invisible_get_display (GTK_INVISIBLE (widget));
+    }
+
+  return gdk_display_get_default ();
 }
 
 static inline GtkStyleContext *
