@@ -1264,7 +1264,7 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
     {
       priv->in_child = event->window;
       update_node_state (spin);
-      gtk_widget_queue_draw (GTK_WIDGET (spin));
+      gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
     }
 
   return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event (widget, event);
@@ -1281,7 +1281,7 @@ gtk_spin_button_leave_notify (GtkWidget        *widget,
     {
       priv->in_child = NULL;
       update_node_state (spin);
-      gtk_widget_queue_draw (GTK_WIDGET (spin));
+      gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
     }
 
   return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->leave_notify_event (widget, event);
