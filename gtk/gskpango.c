@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gsk/gsk.h"
+#include "gsk/gskrendernodeprivate.h"
 #include "gskpango.h"
 #include "gtksnapshotprivate.h"
 
