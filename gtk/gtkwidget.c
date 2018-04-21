@@ -7618,7 +7618,7 @@ gtk_widget_get_parent_surface (GtkWidget *widget)
 /**
  * gtk_widget_set_child_visible:
  * @widget: a #GtkWidget
- * @is_visible: if %TRUE, @widget should be mapped along with its parent.
+ * @child_visible: if %TRUE, @widget should be mapped along with its parent.
  *
  * Sets whether @widget should be mapped along with its when its parent
  * is mapped and @widget has been shown with gtk_widget_show().
@@ -7640,17 +7640,22 @@ gtk_widget_get_parent_surface (GtkWidget *widget)
  **/
 void
 gtk_widget_set_child_visible (GtkWidget *widget,
-			      gboolean   is_visible)
+                              gboolean   child_visible)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!_gtk_widget_is_toplevel (widget));
 
+  child_visible = !!child_visible;
+
+  if (priv->child_visible == child_visible)
+    return;
+
   g_object_ref (widget);
   gtk_widget_verify_invariants (widget);
 
-  if (is_visible)
+  if (child_visible)
     priv->child_visible = TRUE;
   else
     {
