@@ -538,6 +538,18 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GTK_OVERLAY_SCROLLING</envar></title>
+
+  <para>
+    The default value of this environment variable is 1, which means that each
+    instance of GtkScrolledWindow will choose whether to use overlay or full-
+    size scrollbars via its own GtkScrolledWindow:overlay-scrolling property,
+    which defaults to <literal>TRUE</literal>. If this variable is set to 0,
+    all GtkScrolledWindow instances are made to use full/non-overlay scrollbars.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>
