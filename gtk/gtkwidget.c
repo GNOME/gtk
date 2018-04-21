@@ -2435,7 +2435,7 @@ gtk_widget_get_property (GObject         *object,
 			 GParamSpec      *pspec)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   switch (prop_id)
     {
@@ -2645,7 +2645,7 @@ static const GdkEvent *
 _gtk_widget_get_last_event (GtkWidget        *widget,
                             GdkEventSequence *sequence)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
   const GdkEvent *event;
   GList *l;
@@ -2671,7 +2671,7 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
                                     GdkEventSequence  *sequence,
                                     GdkEventSequence **sequence_out)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
   *sequence_out = sequence;
@@ -2712,7 +2712,7 @@ static gboolean
 gtk_widget_needs_press_emulation (GtkWidget        *widget,
                                   GdkEventSequence *sequence)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean sequence_press_handled = FALSE;
   GList *l;
 
@@ -2748,8 +2748,8 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GtkEventSequenceState  state,
                                          GtkGesture            *emitter)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean emulates_pointer, sequence_handled = FALSE;
-  GtkWidgetPrivate *priv = widget->priv;
   const GdkEvent *mimic_event;
   GList *group = NULL, *l;
   GdkEventSequence *seq;
@@ -2838,7 +2838,7 @@ static gboolean
 _gtk_widget_cancel_sequence (GtkWidget        *widget,
                              GdkEventSequence *sequence)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean emulates_pointer;
   gboolean handled = FALSE;
   GdkEventSequence *seq;
@@ -2876,10 +2876,9 @@ static void
 gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 {
   GtkWidget *widget = GTK_WIDGET (instance);
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  widget->priv = gtk_widget_get_instance_private (widget); 
-  priv = widget->priv;
+  widget->priv = priv;
 
   priv->visible = gtk_widget_class_get_visible_by_default (g_class);
   priv->child_visible = TRUE;
@@ -2956,7 +2955,7 @@ gtk_widget_dispatch_child_properties_changed (GtkWidget   *widget,
 					      guint        n_pspecs,
 					      GParamSpec **pspecs)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *container = priv->parent;
   guint i;
 
@@ -3084,14 +3083,12 @@ gtk_widget_new (GType        type,
 void
 gtk_widget_unparent (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GObjectNotifyQueue *nqueue;
   GtkWidget *toplevel;
   GtkWidget *old_parent;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   if (priv->parent == NULL)
     return;
@@ -3323,7 +3320,7 @@ gtk_widget_show (GtkWidget *widget)
 static void
 gtk_widget_real_show (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (!_gtk_widget_get_visible (widget))
     {
@@ -3495,7 +3492,7 @@ unref_tick_callback_info (GtkWidget           *widget,
                           GtkTickCallbackInfo *info,
                           GList               *link)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   info->refcount--;
   if (info->refcount == 0)
@@ -3530,7 +3527,7 @@ destroy_tick_callback_info (GtkWidget           *widget,
 static void
 destroy_tick_callbacks (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
   for (l = priv->tick_callbacks; l;)
@@ -3545,7 +3542,7 @@ static void
 gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
                                   GtkWidget     *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
   g_object_ref (widget);
@@ -3613,13 +3610,11 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
                               gpointer         user_data,
                               GDestroyNotify   notify)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkTickCallbackInfo *info;
   GdkFrameClock *frame_clock;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  priv = widget->priv;
 
   if (priv->realized && !priv->clock_tick_id)
     {
@@ -3660,12 +3655,10 @@ void
 gtk_widget_remove_tick_callback (GtkWidget *widget,
                                  guint      id)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   for (l = priv->tick_callbacks; l; l = l->next)
     {
@@ -3687,7 +3680,7 @@ gtk_widget_has_tick_callback (GtkWidget *widget)
 static void
 gtk_widget_connect_frame_clock (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkFrameClock *frame_clock;
 
   if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
@@ -3712,7 +3705,7 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
 static void
 gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
     gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
@@ -3759,13 +3752,11 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 void
 gtk_widget_realize (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->priv->anchored ||
 		    GTK_IS_INVISIBLE (widget));
-
-  priv = widget->priv;
 
   if (!_gtk_widget_get_realized (widget))
     {
@@ -4692,7 +4683,7 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
                                    gint              *allocated_pos,
                                    gint              *allocated_size)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -4725,7 +4716,7 @@ static gboolean
 gtk_widget_real_can_activate_accel (GtkWidget *widget,
                                     guint      signal_id)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   /* widgets must be onscreen for accels to take effect */
   return gtk_widget_is_sensitive (widget) &&
@@ -5183,12 +5174,11 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
                              const GdkEvent      *event,
                              GtkPropagationPhase  phase)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
   gboolean handled = FALSE;
-  GtkWidgetPrivate *priv;
   GList *l;
 
-  priv = widget->priv;
   g_object_ref (widget);
 
   l = priv->event_controllers;
@@ -5537,15 +5527,13 @@ gtk_widget_intersect (GtkWidget	         *widget,
 		      const GdkRectangle *area,
 		      GdkRectangle       *intersection)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle *dest;
   GdkRectangle tmp;
   gint return_val;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (area != NULL, FALSE);
-
-  priv = widget->priv;
 
   if (intersection)
     dest = intersection;
@@ -5983,11 +5971,9 @@ void
 gtk_widget_set_focus_on_click (GtkWidget *widget,
 			       gboolean   focus_on_click)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   focus_on_click = focus_on_click != FALSE;
 
@@ -6293,11 +6279,9 @@ gtk_widget_set_name (GtkWidget	 *widget,
 const gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
 
   if (priv->name)
     return priv->name;
@@ -6309,9 +6293,7 @@ gtk_widget_update_state_flags (GtkWidget     *widget,
                                GtkStateFlags  flags_to_set,
                                GtkStateFlags  flags_to_unset)
 {
-  GtkWidgetPrivate *priv;
-
-  priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   /* Handle insensitive first, since it is propagated
    * differently throughout the widget hierarchy.
@@ -6450,7 +6432,7 @@ void
 _gtk_widget_set_visible_flag (GtkWidget *widget,
                               gboolean   visible)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   priv->visible = visible;
 
@@ -6508,7 +6490,7 @@ gtk_widget_is_visible (GtkWidget *widget)
 
   while (widget)
     {
-      GtkWidgetPrivate *priv = widget->priv;
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
       if (!priv->visible)
         return FALSE;
@@ -6656,11 +6638,9 @@ void
 gtk_widget_set_sensitive (GtkWidget *widget,
 			  gboolean   sensitive)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   sensitive = (sensitive != FALSE);
 
@@ -6969,7 +6949,7 @@ static void
 gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 						gpointer   client_data)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   HierarchyChangedInfo *info = client_data;
   gboolean new_anchored = _gtk_widget_is_toplevel (widget) ||
                  (priv->parent && priv->parent->priv->anchored);
@@ -7004,7 +6984,7 @@ static void
 _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
                                          GtkWidget *previous_toplevel)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   HierarchyChangedInfo info;
 
   info.previous_toplevel = previous_toplevel;
@@ -7115,28 +7095,29 @@ gtk_widget_reset_style (GtkWidget *widget)
 static void
 gtk_widget_verify_invariants (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *parent;
 
-  if (widget->priv->verifying_invariants_count > 0)
+  if (priv->verifying_invariants_count > 0)
     return;
 
-  parent = widget->priv->parent;
+  parent = priv->parent;
 
-  if (widget->priv->mapped)
+  if (priv->mapped)
     {
       /* Mapped implies ... */
 
-      if (!widget->priv->realized)
+      if (!priv->realized)
         g_warning ("%s %p is mapped but not realized",
                    G_OBJECT_TYPE_NAME (widget), widget);
 
-      if (!widget->priv->visible)
+      if (!priv->visible)
         g_warning ("%s %p is mapped but not visible",
                    G_OBJECT_TYPE_NAME (widget), widget);
 
-      if (!widget->priv->toplevel)
+      if (!priv->toplevel)
         {
-          if (!widget->priv->child_visible)
+          if (!priv->child_visible)
             g_warning ("%s %p is mapped but not child_visible",
                        G_OBJECT_TYPE_NAME (widget), widget);
         }
@@ -7182,11 +7163,11 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        G_OBJECT_TYPE_NAME (widget), widget);
 #endif
         }
-      else if (!widget->priv->toplevel)
+      else if (!priv->toplevel)
         {
           /* No parent or parent not realized on non-toplevel implies... */
 
-          if (widget->priv->realized)
+          if (priv->realized)
             g_warning ("%s %p is not realized but child %s %p is realized",
                        parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
@@ -7194,12 +7175,12 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
       if (parent &&
           parent->priv->mapped &&
-          widget->priv->visible &&
-          widget->priv->child_visible)
+          priv->visible &&
+          priv->child_visible)
         {
           /* Parent mapped and we are visible implies... */
 
-          if (!widget->priv->mapped)
+          if (!priv->mapped)
             g_warning ("%s %p is mapped but visible child %s %p is not mapped",
                        G_OBJECT_TYPE_NAME (parent), parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
@@ -7208,17 +7189,17 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         {
           /* No parent or parent not mapped on non-toplevel implies... */
 
-          if (widget->priv->mapped)
+          if (priv->mapped)
             g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
                        G_OBJECT_TYPE_NAME (widget), widget,
-                       widget->priv->visible,
-                       widget->priv->child_visible,
+                       priv->visible,
+                       priv->child_visible,
                        parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
                        parent ? parent->priv->mapped : FALSE);
         }
     }
 
-  if (!widget->priv->realized)
+  if (!priv->realized)
     {
       /* Not realized implies... */
 
@@ -7616,12 +7597,10 @@ gtk_widget_set_parent_surface (GtkWidget *widget,
 GdkSurface *
 gtk_widget_get_parent_surface (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkSurface *parent_surface;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
 
   parent_surface = g_object_get_qdata (G_OBJECT (widget), quark_parent_surface);
 
@@ -7657,12 +7636,10 @@ void
 gtk_widget_set_child_visible (GtkWidget *widget,
 			      gboolean   is_visible)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!_gtk_widget_is_toplevel (widget));
-
-  priv = widget->priv;
 
   g_object_ref (widget);
   gtk_widget_verify_invariants (widget);
@@ -7718,11 +7695,9 @@ gtk_widget_get_child_visible (GtkWidget *widget)
 void
 _gtk_widget_scale_changed (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
@@ -7923,13 +7898,11 @@ gtk_widget_keynav_failed (GtkWidget        *widget,
 void
 gtk_widget_error_bell (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkSettings* settings;
   gboolean beep;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   settings = gtk_widget_get_settings (widget);
   if (!settings)
@@ -7948,7 +7921,7 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
 			       gint                width,
 			       gint                height)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean changed = FALSE;
 
   g_object_freeze_notify (G_OBJECT (widget));
@@ -8043,13 +8016,15 @@ gtk_widget_get_size_request (GtkWidget *widget,
                              gint      *width,
                              gint      *height)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (width)
-    *width = widget->priv->width;
+    *width = priv->width;
 
   if (height)
-    *height = widget->priv->height;
+    *height = priv->height;
 }
 
 /*< private >
@@ -8378,7 +8353,7 @@ static void
 gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
 
   if (priv->parent && GTK_IS_CONTAINER (priv->parent))
@@ -8502,7 +8477,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 {
   /* gtk_object_destroy() will already hold a refcount on object */
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (g_object_get_qdata (G_OBJECT (widget), quark_auto_children))
     {
@@ -8592,7 +8567,7 @@ static void
 gtk_widget_finalize (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
   gtk_grab_remove (widget);
@@ -8652,7 +8627,7 @@ gtk_widget_finalize (GObject *object)
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_assert (_gtk_widget_get_realized (widget));
 
@@ -8687,7 +8662,7 @@ gtk_widget_real_map (GtkWidget *widget)
 static void
 gtk_widget_real_unmap (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (_gtk_widget_get_mapped (widget))
     {
@@ -8723,7 +8698,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
 static void
 gtk_widget_real_realize (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (_gtk_widget_get_has_surface (widget))
     {
@@ -8752,7 +8727,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 static void
 gtk_widget_real_unrealize (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_assert (!widget->priv->mapped);
 
@@ -8787,7 +8762,7 @@ gtk_widget_adjust_size_request (GtkWidget      *widget,
                                 gint           *minimum_size,
                                 gint           *natural_size)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL && priv->width > 0)
     *minimum_size = MAX (*minimum_size, priv->width);
@@ -8817,7 +8792,7 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
                                     gint      *minimum_baseline,
                                     gint      *natural_baseline)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (priv->height >= 0)
     {
@@ -9144,7 +9119,7 @@ static void
 gtk_widget_propagate_state (GtkWidget          *widget,
                             const GtkStateData *data)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateData child_data;
   GtkWidget *child;
@@ -9247,7 +9222,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 static void
 gtk_widget_update_input_shape (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   /* set shape if widget has a GDK surface already.
    * otherwise the shape is scheduled to be set by gtk_widget_realize().
@@ -9554,9 +9529,7 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
 static void
 gtk_widget_update_computed_expand (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
-
-  priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (priv->need_compute_expand)
     {
@@ -9684,14 +9657,12 @@ gtk_widget_set_expand (GtkWidget     *widget,
                        GtkOrientation orientation,
                        gboolean       expand)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gint expand_prop;
   gint expand_set_prop;
   gboolean was_both;
-  GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   expand = expand != FALSE;
 
@@ -9737,10 +9708,8 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
                            GtkOrientation  orientation,
                            gboolean        set)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gint prop;
-
-  priv = widget->priv;
 
   set = set != FALSE;
 
@@ -11295,12 +11264,10 @@ gtk_widget_get_allocated_size (GtkWidget     *widget,
                                GtkAllocation *allocation,
                                int           *baseline)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (allocation != NULL);
-
-  priv = widget->priv;
 
   *allocation = priv->allocated_size;
 
@@ -11331,12 +11298,10 @@ void
 gtk_widget_get_allocation (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (allocation != NULL);
-
-  priv = widget->priv;
 
   *allocation = priv->allocation;
 }
@@ -11545,12 +11510,10 @@ void
 gtk_widget_set_surface (GtkWidget *widget,
                         GdkSurface *surface)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (surface == NULL || GDK_IS_SURFACE (surface));
-
-  priv = widget->priv;
 
   if (priv->surface != surface)
     {
@@ -11659,11 +11622,10 @@ void
 gtk_widget_set_support_multidevice (GtkWidget *widget,
                                     gboolean   support_multidevice)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  priv = widget->priv;
   priv->multidevice = (support_multidevice == TRUE);
 
   if (_gtk_widget_get_realized (widget))
@@ -11679,12 +11641,10 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
 static void
 gtk_widget_update_alpha (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkStyleContext *context;
   gdouble opacity;
   guint8 alpha;
-
-  priv = widget->priv;
 
   context = _gtk_widget_get_style_context (widget);
   opacity =
@@ -11731,12 +11691,10 @@ void
 gtk_widget_set_opacity (GtkWidget *widget,
                         gdouble    opacity)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   guint8 alpha;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   opacity = CLAMP (opacity, 0.0, 1.0);
 
@@ -11874,7 +11832,7 @@ _gtk_widget_get_alloc_needed (GtkWidget *widget)
 static void
 gtk_widget_set_alloc_needed (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   priv->alloc_needed = TRUE;
 
@@ -11906,7 +11864,7 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
 gboolean
 gtk_widget_needs_allocate (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (!priv->visible || !priv->child_visible)
     return FALSE;
@@ -11920,7 +11878,7 @@ gtk_widget_needs_allocate (GtkWidget *widget)
 void
 gtk_widget_ensure_allocate (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (!gtk_widget_needs_allocate (widget))
     return;
@@ -11958,7 +11916,7 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
 void
 gtk_widget_ensure_resize (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (!priv->resize_needed)
     return;
@@ -12058,9 +12016,7 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
 GtkWidgetPath *
 _gtk_widget_create_path (GtkWidget *widget)
 {
-  GtkWidget *parent;
-
-  parent = widget->priv->parent;
+  GtkWidget *parent = _gtk_widget_get_parent (widget);
 
   if (parent && GTK_IS_CONTAINER (parent))
     return gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
@@ -12920,11 +12876,9 @@ static EventControllerData *
 _gtk_widget_has_controller (GtkWidget          *widget,
                             GtkEventController *controller)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
-  GtkWidgetPrivate *priv;
   GList *l;
-
-  priv = widget->priv;
 
   for (l = priv->event_controllers; l; l = l->next)
     {
@@ -12941,14 +12895,13 @@ void
 _gtk_widget_add_controller (GtkWidget          *widget,
                             GtkEventController *controller)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
-  GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
 
-  priv = widget->priv;
   data = _gtk_widget_has_controller (widget, controller);
 
   if (data)
@@ -13002,13 +12955,11 @@ GList *
 _gtk_widget_list_controllers (GtkWidget           *widget,
                               GtkPropagationPhase  phase)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
-  GtkWidgetPrivate *priv;
   GList *l, *retval = NULL;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
 
   for (l = priv->event_controllers; l; l = l->next)
     {
@@ -13026,13 +12977,11 @@ gboolean
 _gtk_widget_consumes_motion (GtkWidget        *widget,
                              GdkEventSequence *sequence)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
-  GtkWidgetPrivate *priv;
   GList *l;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  priv = widget->priv;
 
   for (l = priv->event_controllers; l; l = l->next)
     {
@@ -13055,8 +13004,8 @@ _gtk_widget_consumes_motion (GtkWidget        *widget,
 void
 gtk_widget_reset_controllers (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *controller_data;
-  GtkWidgetPrivate *priv = widget->priv;
   GList *l;
 
   /* Reset all controllers */
@@ -13220,7 +13169,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                GtkSnapshot *parent_snapshot)
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssValue *filter_value;
   double opacity;
   GtkCssStyle *style;
@@ -13237,7 +13186,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
-  opacity = widget->priv->alpha / 255.0;
+  opacity = priv->alpha / 255.0;
 
   _gtk_widget_get_allocation (widget, &allocation);
 
