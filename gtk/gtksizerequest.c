@@ -122,18 +122,11 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        gint             *natural_baseline)
 {
   SizeRequestCache *cache;
-  GtkWidgetClass *widget_class;
   gint min_size = 0;
   gint nat_size = 0;
   gint min_baseline = -1;
   gint nat_baseline = -1;
   gboolean found_in_cache;
-  GtkCssStyle *style;
-  GtkBorder margin, border, padding;
-  int css_min_size;
-  int css_min_for_size;
-  int css_extra_for_size;
-  int css_extra_size;
 
   gtk_widget_ensure_resize (widget);
 
@@ -149,18 +142,25 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                                    &min_baseline,
                                                    &nat_baseline);
 
-  widget_class = GTK_WIDGET_GET_CLASS (widget);
-
   if (!found_in_cache)
     {
+      GtkWidgetClass *widget_class;
+      GtkCssStyle *style;
+      GtkBorder margin, border, padding;
       int adjusted_min, adjusted_natural;
       int reported_min_size = 0;
       int reported_nat_size = 0;
+      int css_min_size;
+      int css_min_for_size;
+      int css_extra_for_size;
+      int css_extra_size;
 
       style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
       get_box_margin (style, &margin);
       get_box_border (style, &border);
       get_box_padding (style, &padding);
+
+      widget_class = GTK_WIDGET_GET_CLASS (widget);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
