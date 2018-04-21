@@ -115,9 +115,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      SizeRequestX **cached_sizes;
+      SizeRequestX **cached_sizes = cache->requests_x;
       SizeRequestX  *cached_size;
-      cached_sizes = cache->requests_x;
 
       for (i = 0; i < n_sizes; i++)
 	{
@@ -158,9 +157,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
     }
   else
     {
-      SizeRequestY **cached_sizes;
+      SizeRequestY **cached_sizes = cache->requests_y;
       SizeRequestY  *cached_size;
-      cached_sizes = cache->requests_y;
 
       for (i = 0; i < n_sizes; i++)
 	{
