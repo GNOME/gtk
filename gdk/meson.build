@@ -189,9 +189,9 @@ gdk_sources += [
 ]
 
 if wayland_enabled or broadway_enabled
-  if cc.has_function('shm_open', name : 'shm_open() in libc')
+  if cc.has_function('shm_open')
     shmlib = []
-  elif cc.has_function('shm_open', args : '-lrt', name : 'shm_open() in librt')
+  elif cc.has_function('shm_open', args : '-lrt')
     shmlib = cc.find_library('rt')
   else
     shmlib = []
