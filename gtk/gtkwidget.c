@@ -4155,7 +4155,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
     goto out;
 
 #ifdef G_ENABLE_DEBUG
-  display = gtk_widget_get_display (widget);
+  display = _gtk_widget_get_display (widget);
   if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE))
     {
       priv->highlight_resize = TRUE;
@@ -6988,11 +6988,11 @@ _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
   HierarchyChangedInfo info;
 
   info.previous_toplevel = previous_toplevel;
-  info.previous_display = previous_toplevel ? gtk_widget_get_display (previous_toplevel) : NULL;
+  info.previous_display = previous_toplevel ? _gtk_widget_get_display (previous_toplevel) : NULL;
 
   if (_gtk_widget_is_toplevel (widget) ||
       (priv->parent && priv->parent->priv->anchored))
-    info.new_display = gtk_widget_get_display (widget);
+    info.new_display = _gtk_widget_get_display (widget);
   else
     info.new_display = NULL;
 
@@ -7740,7 +7740,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   /* else fall back to something that is more likely to be right than
    * just returning 1:
    */
-  display = gtk_widget_get_display (widget);
+  display = _gtk_widget_get_display (widget);
   monitor = gdk_display_get_monitor (display, 0);
 
   return gdk_monitor_get_scale_factor (monitor);
@@ -8125,7 +8125,7 @@ gtk_widget_get_settings (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gtk_settings_get_for_display (gtk_widget_get_display (widget));
+  return gtk_settings_get_for_display (_gtk_widget_get_display (widget));
 }
 
 /**
@@ -8857,7 +8857,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
   if (!_gtk_widget_get_mapped (widget))
     return NULL;
 
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  seat = gdk_display_get_default_seat (_gtk_widget_get_display (widget));
   device = gdk_seat_get_pointer (seat);
   if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
     result = g_list_prepend (result, device);
@@ -10891,7 +10891,7 @@ gtk_widget_get_clipboard (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gdk_display_get_clipboard (gtk_widget_get_display (widget));
+  return gdk_display_get_clipboard (_gtk_widget_get_display (widget));
 }
 
 /**
@@ -10911,7 +10911,7 @@ gtk_widget_get_primary_clipboard (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gdk_display_get_primary_clipboard (gtk_widget_get_display (widget));
+  return gdk_display_get_primary_clipboard (_gtk_widget_get_display (widget));
 }
 
 /**
@@ -12169,7 +12169,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
       gtk_style_context_set_state (priv->context, priv->state_flags);
       gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
-      display = gtk_widget_get_display (widget);
+      display = _gtk_widget_get_display (widget);
       if (display)
         gtk_style_context_set_display (priv->context, display);
 
@@ -12205,7 +12205,7 @@ gtk_widget_get_modifier_mask (GtkWidget         *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  display = gtk_widget_get_display (widget);
+  display = _gtk_widget_get_display (widget);
 
   return gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                        intent);
@@ -13013,7 +13013,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
                                          GtkSnapshot           *snapshot)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkDisplay *display = gtk_widget_get_display (widget);
+  GdkDisplay *display = _gtk_widget_get_display (widget);
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
 

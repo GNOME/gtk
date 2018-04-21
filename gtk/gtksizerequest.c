@@ -350,7 +350,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
   g_assert (min_size <= nat_size);
 
-  GTK_DISPLAY_NOTE (gtk_widget_get_display (widget), SIZE_REQUEST, {
+  GTK_DISPLAY_NOTE (_gtk_widget_get_display (widget), SIZE_REQUEST, {
             GString *s;
 
             s = g_string_new ("");
