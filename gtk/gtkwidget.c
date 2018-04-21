@@ -13467,9 +13467,7 @@ gtk_widget_forall (GtkWidget   *widget,
  * the @snapshot the widget received.
  *
  * gtk_widget_snapshot_child() takes care of translating the origin of
- * @snapshot, and deciding whether the child needs to be snapshot. It is a
- * convenient and optimized way of getting the same effect as calling
- * gtk_widget_snapshot() on the child directly.
+ * @snapshot, and deciding whether the child needs to be snapshot.
  **/
 void
 gtk_widget_snapshot_child (GtkWidget   *widget,
