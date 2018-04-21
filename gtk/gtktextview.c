@@ -276,8 +276,6 @@ struct _GtkTextViewPrivate
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
   guint populate_all   : 1;
-
-  guint handling_key_event : 1;
 };
 
 struct _GtkTextPendingScroll
@@ -4967,8 +4965,6 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
   if (priv->layout == NULL || get_buffer (text_view) == NULL)
     return FALSE;
 
-  priv->handling_key_event = TRUE;
-
   /* Make sure input method knows where it is */
   flush_update_im_spot_location (text_view);
 
@@ -5018,8 +5014,6 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
   gtk_text_view_selection_bubble_popup_unset (text_view);
-
-  priv->handling_key_event = FALSE;
 
   return retval;
 }
