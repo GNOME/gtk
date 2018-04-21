@@ -810,7 +810,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
       else
         g_object_set_property (obj, name, value);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents (value);
@@ -874,7 +874,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
       else
         g_object_set_property (info->object, name, value);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents (value);
