@@ -589,7 +589,7 @@ GdkSurface           * gtk_widget_get_parent_surface    (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
-                                                         gboolean      is_visible);
+                                                         gboolean      child_visible);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
