@@ -1452,7 +1452,8 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
  * gtk_button_new_from_stock:
  * @stock_id: the name of the stock item 
  *
- * Creates a new #GtkButton containing the image and text from a stock item.
+ * Creates a new #GtkButton containing the image and text from a
+ * [stock item][gtkstock].
  * Some stock ids have preprocessor macros like #GTK_STOCK_OK and
  * #GTK_STOCK_APPLY.
  *
@@ -1461,7 +1462,8 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
  *
  * Returns: a new #GtkButton
  *
- * Deprecated: 3.10: Use gtk_button_new_with_label() instead.
+ * Deprecated: 3.10: Stock items are deprecated. Use gtk_button_new_with_label()
+ * instead.
  */
 GtkWidget*
 gtk_button_new_from_stock (const gchar *stock_id)

@@ -36,9 +36,13 @@
 
 /**
  * SECTION:gtkstock
- * @Short_description:
-Prebuilt common menu/toolbar items and corresponding icons
+ * @Short_description: Prebuilt common menu/toolbar items and corresponding
+ *                     icons
  * @Title: Stock Items
+ *
+ * > Since GTK+ 3.10, stock items are deprecated. You should instead set
+ * > up whatever labels and/or icons you need using normal widget API,
+ * > rather than relying on GTK+ providing ready-made combinations of these.
  *
  * Stock items represent commonly-used menu or toolbar items such as
  * “Open” or “Exit”. Each stock item is identified by a stock ID;
