@@ -761,7 +761,7 @@ summary = [
   '       Build tests: @0@'.format(get_option('build-tests')),
   '     Install tests: @0@'.format(get_option('install-tests')),
   '             Demos: @0@'.format(get_option('demos')),
-  '          Examples: @0@'.format(get_option('demos')),
+  '          Examples: @0@'.format(get_option('build-examples')),
   'Directories:',
   '            prefix: @0@'.format(gtk_prefix),
   '        includedir: @0@'.format(gtk_includedir),
