@@ -115,8 +115,6 @@ typedef enum
   GDK_EVENT_FLUSHED = 1 << 2
 } GdkEventFlags;
 
-typedef struct _GdkSurfacePaint GdkSurfacePaint;
-
 typedef enum
 {
   GDK_INPUT_OUTPUT,
