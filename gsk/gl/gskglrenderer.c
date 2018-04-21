@@ -2412,7 +2412,7 @@ static void
 gsk_gl_renderer_do_render (GskRenderer           *renderer,
                            GskRenderNode         *root,
                            const graphene_rect_t *viewport,
-                           int                    texture_id,
+                           int                    fbo_id,
                            int                    scale_factor)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
@@ -2456,13 +2456,13 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.render_ops = self->render_ops;
   gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);
 
-  if (texture_id != 0)
-    ops_set_render_target (&render_op_builder, texture_id);
+  if (fbo_id != 0)
+    ops_set_render_target (&render_op_builder, fbo_id);
 
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
 
   /* We correctly reset the state everywhere */
-  g_assert_cmpint (render_op_builder.current_render_target, ==, texture_id);
+  g_assert_cmpint (render_op_builder.current_render_target, ==, fbo_id);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/
 
