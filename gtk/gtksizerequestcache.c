@@ -72,11 +72,11 @@ _gtk_size_request_cache_clear (SizeRequestCache *cache)
 void
 _gtk_size_request_cache_commit (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
-                                gint              for_size,
-                                gint              minimum_size,
-                                gint              natural_size,
-				gint              minimum_baseline,
-				gint              natural_baseline)
+                                int               for_size,
+                                int               minimum_size,
+                                int               natural_size,
+                                int               minimum_baseline,
+                                int               natural_baseline)
 {
   guint         i, n_sizes;
 
@@ -213,11 +213,11 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 gboolean
 _gtk_size_request_cache_lookup (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
-                                gint              for_size,
-                                gint             *minimum,
-                                gint             *natural,
-				gint             *minimum_baseline,
-				gint             *natural_baseline)
+                                int               for_size,
+                                int              *minimum,
+                                int              *natural,
+                                int              *minimum_baseline,
+                                int              *natural_baseline)
 {
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
