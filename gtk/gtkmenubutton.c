@@ -953,6 +953,12 @@ update_popover_direction (GtkMenuButton *menu_button)
     }
 }
 
+static void
+popover_destroy_cb (GtkMenuButton *menu_button)
+{
+  gtk_menu_button_set_popover (menu_button, NULL);
+}
+
 /**
  * gtk_menu_button_set_direction:
  * @menu_button: a #GtkMenuButton
@@ -1026,6 +1032,9 @@ gtk_menu_button_dispose (GObject *object)
 
   if (priv->popover)
     {
+      g_signal_handlers_disconnect_by_func (priv->popover,
+                                            popover_destroy_cb,
+                                            object);
       gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
       priv->popover = NULL;
     }
@@ -1090,12 +1099,6 @@ gtk_menu_button_get_use_popover (GtkMenuButton *menu_button)
   return priv->use_popover;
 }
 
-static void
-popover_destroy_cb (GtkMenuButton *menu_button)
-{
-  gtk_menu_button_set_popover (menu_button, NULL);
-}
-
 /**
  * gtk_menu_button_set_popover:
  * @menu_button: a #GtkMenuButton
@@ -1127,6 +1130,9 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 
       g_signal_handlers_disconnect_by_func (priv->popover,
                                             menu_deactivate_cb,
+                                            menu_button);
+      g_signal_handlers_disconnect_by_func (priv->popover,
+                                            popover_destroy_cb,
                                             menu_button);
 
       gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
