@@ -933,7 +933,7 @@ update_arrow_classes (GtkMenuItem *menu_item)
       child = gtk_widget_get_first_child (GTK_WIDGET (menu_item));
 
       if (child != priv->arrow_widget)
-        gtk_widget_insert_after (GTK_WIDGET (menu_item), priv->arrow_widget, NULL);
+        gtk_widget_insert_after (priv->arrow_widget, GTK_WIDGET (menu_item), NULL);
     }
   else
     {
@@ -943,7 +943,7 @@ update_arrow_classes (GtkMenuItem *menu_item)
       child = gtk_widget_get_last_child (GTK_WIDGET (menu_item));
 
       if (child != priv->arrow_widget)
-        gtk_widget_insert_before (GTK_WIDGET (menu_item), priv->arrow_widget, NULL);
+        gtk_widget_insert_before (priv->arrow_widget, GTK_WIDGET (menu_item), NULL);
     }
 }
 
