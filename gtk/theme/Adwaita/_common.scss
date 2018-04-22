@@ -944,18 +944,47 @@ toolbar.inline-toolbar toolbutton:backdrop {
   border-right-style: none;
 }
 
-%linked {
-  @extend %linked_middle;
-
-  &:first-child {
+%linked_left {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-  }
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-style: none;
+}
 
-  &:last-child {
+%linked_right {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     border-right-style: solid;
+}
+
+// .linked assumes Box, which reverses nodes in RTL, so 1st child is always left
+%linked {
+  @extend %linked_middle;
+
+  &:first-child { @extend %linked_left; }
+  &:last-child { @extend %linked_right; }
+
+  &:only-child {
+    border-radius: 3px;
+    border-style: solid;
+  }
+}
+
+// Other widgets let CSS give the order, so 1st/last child are at text start/end
+%linked_flippable {
+  @extend %linked_middle;
+
+  &:dir(ltr) {
+    &:first-child { @extend %linked_left; }
+    &:last-child { @extend %linked_right; }
+  }
+
+  &:dir(rtl) {
+    &:first-child { @extend %linked_right; }
+    &:last-child { @extend %linked_left; }
   }
 
   &:only-child {
@@ -1720,6 +1749,14 @@ headerbar { // headerbar border rounding
 /************
  * Pathbars *
  ************/
+
+// GtkPathBar does not work with just .linked, so we must override that. But we
+// can’t simply remove .linked from the widget as that might break other themes.
+// Note also we select on filechooser to avoid interfering with NautilusPathBar.
+filechooser .path-bar.linked > button {
+  @extend %linked_flippable;
+}
+
 .path-bar button {
   &.text-button, &.image-button, & {
     padding-left: 4px;
@@ -1746,6 +1783,7 @@ headerbar { // headerbar border rounding
     padding-right: 0;
   }
 }
+
 
 /**************
  * Tree Views *
