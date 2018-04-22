@@ -418,7 +418,6 @@ get_im (GdkSurface *client_surface,
 	    }
 	  else
 	    {
-	      tmp_info = tmp_info;
 	      break;
 	    }
 	}
