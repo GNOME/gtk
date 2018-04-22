@@ -6716,7 +6716,7 @@ gtk_widget_is_sensitive (GtkWidget *widget)
 
 
 /* Insert @widget into the children list of @parent,
- * after @previous_child */
+ * after @previous_sibling */
 static void
 gtk_widget_reposition_after (GtkWidget *widget,
                              GtkWidget *parent,
