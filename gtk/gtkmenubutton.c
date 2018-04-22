@@ -1107,6 +1107,12 @@ gtk_menu_button_get_use_popover (GtkMenuButton *menu_button)
   return menu_button->priv->use_popover;
 }
 
+static void
+popover_destroy_cb (GtkMenuButton *menu_button)
+{
+  gtk_menu_button_set_popover (menu_button, NULL);
+}
+
 /**
  * gtk_menu_button_set_popover:
  * @menu_button: a #GtkMenuButton
@@ -1150,6 +1156,8 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
       gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), GTK_WIDGET (menu_button));
       g_signal_connect_swapped (priv->popover, "closed",
                                 G_CALLBACK (menu_deactivate_cb), menu_button);
+      g_signal_connect_swapped (priv->popover, "destroy",
+                                G_CALLBACK (popover_destroy_cb), menu_button);
       update_popover_direction (menu_button);
       gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (menu_button)), "menu-button");
     }
