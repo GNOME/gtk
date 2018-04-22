@@ -973,7 +973,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   }
 }
 
-// Other widgets let CSS give the order, so 1st/last child are at text start/end
+// Other widgets use widget child order, so 1st/last child are at text start/end
 %linked_flippable {
   @extend %linked_middle;
 
