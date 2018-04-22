@@ -6731,7 +6731,11 @@ gtk_widget_reposition_after (GtkWidget *widget,
 
   if (priv->parent != NULL && priv->parent != parent)
     {
-      g_warning ("Can't set a parent on widget which has a parent");
+      g_warning ("Can't set new parent %s %p on widget %s %p,"
+                 "which already has parent %s %p",
+                 gtk_widget_get_name (parent), (void *)parent,
+                 gtk_widget_get_name (widget), (void *)widget,
+                 gtk_widget_get_name (priv->parent), (void *)priv->parent);
       return;
     }
 
