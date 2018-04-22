@@ -4355,8 +4355,10 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   gtk_widget_invalidate_paintable_size (widget);
 
 check_clip:
-  if (position_changed || size_changed || baseline_changed)
+  if (size_changed || baseline_changed)
     gtk_widget_queue_draw (widget);
+  else if (position_changed && priv->parent)
+    gtk_widget_queue_draw (priv->parent);
 
 out:
   if (priv->alloc_needed_on_child)
