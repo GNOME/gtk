@@ -1050,6 +1050,9 @@ gtk_menu_button_dispose (GObject *object)
   if (priv->popover)
     {
       g_signal_handlers_disconnect_by_func (priv->popover,
+                                            menu_deactivate_cb,
+                                            object);
+      g_signal_handlers_disconnect_by_func (priv->popover,
                                             popover_destroy_cb,
                                             object);
       gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
