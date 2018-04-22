@@ -524,7 +524,7 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
       child = gtk_widget_get_last_child (widget);
 
       if (child != priv->indicator_widget)
-        gtk_widget_insert_before (widget, priv->indicator_widget, NULL);
+        gtk_widget_insert_before (priv->indicator_widget, widget, NULL);
     }
   else
     {
@@ -534,7 +534,7 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
       child = gtk_widget_get_first_child (widget);
 
       if (child != priv->indicator_widget)
-        gtk_widget_insert_after (widget, priv->indicator_widget, NULL);
+        gtk_widget_insert_after (priv->indicator_widget, widget, NULL);
     }
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->direction_changed (widget, previous_dir);
