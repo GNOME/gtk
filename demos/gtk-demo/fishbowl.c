@@ -190,9 +190,11 @@ do_fishbowl (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
-      g_timeout_add_seconds (1,
-                             move_fish,
-                             bowl);
+      g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE,
+                                  1,
+                                  move_fish,
+                                  bowl,
+                                  NULL);
     }
 
   if (!gtk_widget_get_visible (window))
