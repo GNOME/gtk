@@ -1,8 +1,8 @@
 # GDK backends
 option('x11-backend', type: 'boolean', value: true,
-  description : 'Enable the X11 gdk backend (only when building on Linux or macOS)')
+  description : 'Enable the X11 gdk backend (only when building on Unix)')
 option('wayland-backend', type: 'boolean', value: true,
-  description : 'Enable the wayland gdk backend (only when building on Linux)')
+  description : 'Enable the wayland gdk backend (only when building on Unix except for macOS)')
 option('broadway-backend', type: 'boolean', value: false,
   description : 'Enable the broadway (HTML5) gdk backend')
 option('win32-backend', type: 'boolean', value: true,
