@@ -284,8 +284,12 @@ endif
 
 common_ldflags = []
 
-if host_machine.system() == 'linux' and cc.get_id() == 'gcc'
-  common_ldflags += [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
+if os_unix and not os_darwin
+  foreach ldflag: [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
+    if cc.links('int main () { return 0; }', name: ldflag, args: ldflag)
+      common_ldflags += [ ldflag ]
+    endif
+  endforeach
 endif
 
 # Maintain compatibility with autotools
