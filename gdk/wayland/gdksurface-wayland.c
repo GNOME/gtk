@@ -914,8 +914,7 @@ gdk_surface_impl_wayland_finalize (GObject *object)
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
   g_clear_pointer (&impl->staged_updates_region, cairo_region_destroy);
-
-  g_hash_table_destroy (impl->shortcuts_inhibitors);
+  g_clear_pointer (&impl->shortcuts_inhibitors, g_hash_table_unref);
 
   G_OBJECT_CLASS (_gdk_surface_impl_wayland_parent_class)->finalize (object);
 }
