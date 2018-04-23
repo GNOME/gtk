@@ -174,6 +174,7 @@ enum
   PROP_ROLE,
   PROP_ICON,
   PROP_TEXT,
+  PROP_USE_MARKUP,
   PROP_ACTIVE,
   PROP_MENU_NAME,
   PROP_INVERTED,
@@ -397,6 +398,15 @@ gtk_model_button_set_text (GtkModelButton *button,
 }
 
 static void
+gtk_model_button_set_use_markup (GtkModelButton *button,
+                                 gboolean        val)
+{
+  gtk_label_set_use_markup (GTK_LABEL (button->label), val);
+  update_visibility (button);
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_USE_MARKUP]);
+}
+
+static void
 gtk_model_button_set_active (GtkModelButton *button,
                              gboolean        active)
 {
@@ -518,6 +528,10 @@ gtk_model_button_get_property (GObject    *object,
       g_value_set_string (value, gtk_label_get_text (GTK_LABEL (button->label)));
       break;
 
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, gtk_label_get_use_markup (GTK_LABEL (button->label)));
+      break;
+
     case PROP_ACTIVE:
       g_value_set_boolean (value, button->active);
       break;
@@ -564,6 +578,10 @@ gtk_model_button_set_property (GObject      *object,
 
     case PROP_TEXT:
       gtk_model_button_set_text (button, g_value_get_string (value));
+      break;
+
+    case PROP_USE_MARKUP:
+      gtk_model_button_set_use_markup (button, g_value_get_boolean (value));
       break;
 
     case PROP_ACTIVE:
@@ -1137,6 +1155,20 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
                          P_("The text"),
                          "",
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:use-markup:
+   *
+   * If %TRUE, XML tags in the text of the button are interpreted as by
+   * pango_parse_markup() to format the enclosed spans of text. If %FALSE, the
+   * text will be displayed verbatim.
+   */
+  properties[PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup",
+                          P_("Use markup"),
+                          P_("The text of the button includes XML markup. See pango_parse_markup()"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkModelButton:active:
