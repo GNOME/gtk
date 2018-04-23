@@ -106,9 +106,6 @@ gdk_x11_cairo_context_cairo_create (GdkCairoContext *context)
 {
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (context);
 
-  if (self->paint_surface == NULL)
-    return NULL;
-
   return cairo_create (self->paint_surface);
 }
 
