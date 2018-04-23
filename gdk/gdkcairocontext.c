@@ -196,7 +196,7 @@ gdk_cairo_context_end_frame (GdkDrawContext *draw_context,
   surface = gdk_draw_context_get_surface (draw_context);
   if (surface->current_paint.surface == NULL)
     {
-      g_warning (G_STRLOC": no preceding call to gdk_surface_begin_draw_frame(), see documentation");
+      g_warning (G_STRLOC": no preceding call to gdk_draw_context_end_frame(), see documentation");
       return;
     }
 
@@ -255,11 +255,11 @@ gdk_cairo_context_init (GdkCairoContext *self)
  * @context: a #GdkCairoContext that is currently drawing
  *
  * Retrieves a Cairo context to be used to draw on the #GdkSurface
- * of @context. A call to gdk_surface_begin_draw_frame() with this
+ * of @context. A call to gdk_draw_context_begin_frame() with this
  * @context must have been done or this function will return %NULL.
  *
  * The returned context is guaranteed to be valid until
- * gdk_surface_end_draw_frame() is called.
+ * gdk_draw_context_end_frame() is called.
  *
  * Returns: (transfer full) (nullable): a Cairo context to be used
  *   to draw the contents of the #GdkSurface. %NULL is returned

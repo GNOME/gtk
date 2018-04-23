@@ -217,14 +217,11 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
-  GdkSurface *surface;
   const cairo_region_t *clip;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
 #endif
-
-  surface = gsk_renderer_get_surface (renderer);
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
@@ -234,9 +231,7 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gdk_surface_begin_draw_frame (surface,
-                                GDK_DRAW_CONTEXT (self->vulkan),
-                                region);
+  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->vulkan), region);
   render = self->render;
 
   clip = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->vulkan));
@@ -257,7 +252,7 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   gsk_profiler_push_samples (profiler);
 #endif
 
-  gdk_surface_end_draw_frame (surface);
+  gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->vulkan));
 }
 
 static void

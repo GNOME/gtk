@@ -576,13 +576,6 @@ void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
                                               GdkSurfaceHints      geom_mask);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_begin_draw_frame       (GdkSurface            *surface,
-                                                  GdkDrawContext       *context,
-                                                  const cairo_region_t *region);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_end_draw_frame    (GdkSurface            *surface);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_title         (GdkSurface   *surface,
                                              const gchar  *title);
 GDK_AVAILABLE_IN_ALL

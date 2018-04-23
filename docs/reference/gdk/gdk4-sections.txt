@@ -234,10 +234,6 @@ gdk_surface_create_gl_context
 gdk_surface_create_vulkan_context
 
 <SUBSECTION>
-gdk_surface_begin_draw_frame
-gdk_surface_end_draw_frame
-
-<SUBSECTION>
 gdk_surface_invalidate_rect
 gdk_surface_invalidate_region
 gdk_surface_queue_expose
@@ -1106,6 +1102,8 @@ gdk_frame_timings_get_type
 GdkDrawContext
 gdk_draw_context_get_display
 gdk_draw_context_get_surface
+gdk_draw_context_begin_frame
+gdk_draw_context_end_frame
 gdk_draw_context_get_frame_region
 
 <SUBSECTION Standard>

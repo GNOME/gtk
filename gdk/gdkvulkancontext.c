@@ -707,9 +707,8 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
  *
  * Gets the index of the image that is currently being drawn.
  *
- * This function can only be used between gdk_surface_begin_draw_frame() and
- * gdk_surface_end_draw_frame() calls for the toplevel surface that the
- * @context is associated with.
+ * This function can only be used between gdk_cairo_context_begin_frame() and
+ * gdk_draw_context_end_frame() calls.
  *
  * Returns: the index of the images that is being drawn
  */
@@ -731,9 +730,8 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
  * Gets the Vulkan semaphore that protects access to the image that is
  * currently being drawn.
  *
- * This function can only be used between gdk_surface_begin_draw_frame() and
- * gdk_surface_end_draw_frame() calls for the toplevel surface that the
- * @context is associated with.
+ * This function can only be used between gdk_cairo_context_begin_frame() and
+ * gdk_draw_context_end_frame() calls.
  *
  * Returns: (transfer none): the VkSemaphore
  */
