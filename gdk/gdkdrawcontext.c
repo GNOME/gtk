@@ -51,7 +51,7 @@ typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 struct _GdkDrawContextPrivate {
   GdkSurface *surface;
 
-  guint is_drawing : 1;
+  cairo_region_t *frame_region;
 };
 
 enum {
@@ -194,7 +194,7 @@ gdk_draw_context_is_drawing (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  return priv->is_drawing;
+  return priv->frame_region != NULL;
 }
 
 /*< private >
@@ -305,11 +305,10 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
       return;
     }
 
-  context->frame_region = cairo_region_copy (region);
-  priv->is_drawing = TRUE;
+  priv->frame_region = cairo_region_copy (region);
   priv->surface->paint_context = g_object_ref (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, context->frame_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, priv->frame_region);
 }
 
 /**
@@ -350,12 +349,10 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
     }
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context,
-                                                   context->frame_region,
+                                                   priv->frame_region,
                                                    priv->surface->active_update_area);
 
-
-  priv->is_drawing = FALSE;
-  g_clear_pointer (&context->frame_region, cairo_region_destroy);
+  g_clear_pointer (&priv->frame_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);
 }
 
@@ -378,7 +375,9 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
 const cairo_region_t *
 gdk_draw_context_get_frame_region (GdkDrawContext *context)
 {
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
-  return context->frame_region;
+  return priv->frame_region;
 }
