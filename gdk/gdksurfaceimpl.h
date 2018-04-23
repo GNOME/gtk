@@ -95,8 +95,6 @@ struct _GdkSurfaceImplClass
                                          gdouble         *x,
                                          gdouble         *y,
                                          GdkModifierType *mask);
-  gboolean    (* begin_paint)           (GdkSurface       *surface);
-  void        (* end_paint)             (GdkSurface       *surface);
 
   void         (* input_shape_combine_region) (GdkSurface       *surface,
                                                const cairo_region_t *shape_region,

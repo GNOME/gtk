@@ -205,16 +205,8 @@ static cairo_t *
 gdk_wayland_cairo_context_cairo_create (GdkCairoContext *context)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (context);
-  cairo_t *cr;
 
-  if (self->paint_surface == NULL)
-    return NULL;
-
-  cr = cairo_create (self->paint_surface);
-  gdk_cairo_region (cr, gdk_wayland_cairo_context_surface_get_region (self->paint_surface));
-  cairo_clip (cr);
-
-  return cr;
+  return cairo_create (self->paint_surface);
 }
 
 static void
