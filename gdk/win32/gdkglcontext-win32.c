@@ -102,8 +102,7 @@ gdk_gl_blit_region (GdkSurface *surface, cairo_region_t *region)
 
 static void
 gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
-                                cairo_region_t *painted,
-                                cairo_region_t *damage)
+                                cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
@@ -112,7 +111,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
   gboolean can_wait = display->hasWglOMLSyncControl;
   cairo_rectangle_int_t whole_window;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->end_frame (draw_context, painted);
   if (gdk_gl_context_get_shared_context (context))
     return;
 

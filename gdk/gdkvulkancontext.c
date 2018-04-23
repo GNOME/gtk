@@ -401,8 +401,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
-                              cairo_region_t *painted,
-                              cairo_region_t *damage)
+                              cairo_region_t *painted)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);

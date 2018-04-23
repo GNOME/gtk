@@ -61,15 +61,14 @@ gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
 
 static void
 gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
-                                      cairo_region_t *painted,
-                                      cairo_region_t *damage)
+                                      cairo_region_t *painted)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted, damage);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted);
 }
 
 static void
