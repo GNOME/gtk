@@ -158,16 +158,6 @@ struct _GdkSurface
   GList *children;
   GList children_list_node;
 
-  struct {
-    /* The temporary surface that we're painting to. This will be composited
-     * back into the surface when we call end_paint. This is our poor-man's
-     * way of doing double buffering. */
-    cairo_surface_t *surface;
-
-    cairo_region_t *region;
-
-    gboolean surface_needs_composite;
-  } current_paint;
   GdkGLContext *gl_paint_context;
 
   cairo_region_t *update_area;
@@ -290,9 +280,6 @@ cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
  * Interfaces used by windowing code *
  *************************************/
 
-cairo_surface_t *
-           _gdk_surface_ref_cairo_surface (GdkSurface *surface);
-
 GdkSurface* gdk_surface_new               (GdkDisplay     *display,
                                            GdkSurface      *parent,
                                            GdkSurfaceAttr  *attributes);
@@ -306,8 +293,6 @@ GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
 void gdk_surface_get_unscaled_size (GdkSurface *surface,
                                     int *unscaled_width,
                                     int *unscaled_height);
-
-cairo_region_t *gdk_surface_get_current_paint_region (GdkSurface *surface);
 
 /*****************************************
  * Interfaces provided by windowing code *

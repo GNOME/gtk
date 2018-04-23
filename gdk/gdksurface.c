@@ -1541,67 +1541,6 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
                          NULL);
 }
 
-/*< private >
- * gdk_surface_get_current_paint_region:
- * @surface: a #GdkSurface
- *
- * Retrieves a copy of the current paint region.
- *
- * Returns: (transfer full): a Cairo region
- */
-cairo_region_t *
-gdk_surface_get_current_paint_region (GdkSurface *surface)
-{
-  cairo_region_t *region;
-
-  if (surface->impl_surface->current_paint.region != NULL)
-    {
-      region = cairo_region_copy (surface->impl_surface->current_paint.region);
-      cairo_region_translate (region, -surface->abs_x, -surface->abs_y);
-    }
-  else
-    {
-      region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, surface->width, surface->height });
-    }
-
-  return region;
-}
-
-/* This is used in places like gdk_cairo_set_source_surface and
- * other places to take "screenshots" of surfaces. Thus, we allow
- * it to be used outside of a begin_paint / end_paint. */
-cairo_surface_t *
-_gdk_surface_ref_cairo_surface (GdkSurface *surface)
-{
-  cairo_surface_t *cairo_surface;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  /* This returns either the current working surface on the paint stack
-   * or the actual impl surface of the surface. This should not be used
-   * from very many places: be careful! */
-  if (surface->impl_surface->current_paint.surface)
-    cairo_surface = cairo_surface_reference (surface->impl_surface->current_paint.surface);
-  else
-    cairo_surface = GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->ref_cairo_surface (gdk_surface_get_impl_surface (surface));
-
-  if (gdk_surface_has_impl (surface))
-    {
-      return cairo_surface;
-    }
-  else
-    {
-      cairo_surface_t *subsurface;
-      subsurface = cairo_surface_create_for_rectangle (cairo_surface,
-                                                       surface->abs_x,
-                                                       surface->abs_y,
-                                                       surface->width,
-                                                       surface->height);
-      cairo_surface_destroy (cairo_surface);
-      return subsurface;
-    }
-}
-
 /* Code for dirty-region queueing
  */
 static GSList *update_surfaces = NULL;

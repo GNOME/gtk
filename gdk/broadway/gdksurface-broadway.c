@@ -871,14 +871,6 @@ gdk_broadway_surface_set_functions (GdkSurface    *surface,
     return;
 }
 
-static void
-gdk_broadway_surface_end_paint (GdkSurface *surface)
-{
-  GdkSurfaceImplBroadway *impl;
-  impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
-  impl->dirty = TRUE;
-}
-
 typedef struct _MoveResizeData MoveResizeData;
 
 struct _MoveResizeData
@@ -1375,7 +1367,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->get_device_state = gdk_surface_broadway_get_device_state;
   impl_class->input_shape_combine_region = gdk_surface_broadway_input_shape_combine_region;
   impl_class->destroy = _gdk_broadway_surface_destroy;
-  impl_class->end_paint = gdk_broadway_surface_end_paint;
   impl_class->beep = gdk_broadway_surface_beep;
 
   impl_class->focus = gdk_broadway_surface_focus;
