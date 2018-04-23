@@ -102,20 +102,25 @@ os_darwin = false
 # to ensure they are enabled
 if host_machine.system() == 'darwin'
   os_darwin = true
-  win32_enabled = false
 elif host_machine.system() == 'windows'
   os_win32 = true
-  win32_enabled = true
-  x11_enabled = false
-  wayland_enabled = false
-  quartz_enabled = false
 elif host_machine.system() == 'linux'
   os_linux = true
-  win32_enabled = false
+endif
+os_unix = not os_win32
+
+if os_darwin
+  wayland_enabled = false
+else
   quartz_enabled = false
 endif
 
-os_unix = not os_win32
+if os_win32
+  wayland_enabled = false
+  x11_enabled = false
+else
+  win32_enabled = false
+endif
 
 gtk_prefix = get_option('prefix')
 gtk_includedir = join_paths(gtk_prefix, get_option('includedir'))
@@ -265,7 +270,7 @@ common_cflags = cc.get_supported_arguments(test_cflags)
 
 # Symbol visibility
 if get_option('default_library') != 'static'
-  if host_machine.system() == 'windows'
+  if os_win32
     cdata.set('DLL_EXPORT', true)
     cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
     if cc.get_id() != 'msvc'
@@ -279,12 +284,16 @@ endif
 
 common_ldflags = []
 
-if host_machine.system() == 'linux' and cc.get_id() == 'gcc'
-  common_ldflags += [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
+if os_unix and not os_darwin
+  foreach ldflag: [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
+    if cc.links('int main () { return 0; }', name: ldflag, args: ldflag)
+      common_ldflags += [ ldflag ]
+    endif
+  endforeach
 endif
 
 # Maintain compatibility with autotools
-if host_machine.system() == 'darwin'
+if os_darwin
   common_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
 endif
 
@@ -299,10 +308,11 @@ glib_dep       = dependency('glib-2.0', version: glib_req,
                             fallback : ['glib', 'libglib_dep'])
 gobject_dep    = dependency('gobject-2.0', version: glib_req,
                             fallback : ['glib', 'libgobject_dep'])
-if host_machine.system() == 'windows'
+if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
                             fallback : ['glib', 'libgio_dep'])
-else
+endif
+if os_unix
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
                             fallback : ['glib', 'libgio_dep'])
 endif
@@ -370,9 +380,10 @@ iso_codes_dep  = dependency('iso-codes', required: false)
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
 
-if host_machine.system() == 'windows'
+if os_win32
   platform_gio_dep = giowin32_dep
-else
+endif
+if os_unix
   platform_gio_dep = giounix_dep
 endif
 
@@ -582,7 +593,7 @@ if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
 endif
 
-if host_machine.system() != 'windows'
+if os_unix
   cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
 endif
 
@@ -723,7 +734,7 @@ foreach pkg: pkgs
                  install_dir: pkg_install_dir)
 endforeach
 
-if host_machine.system() != 'windows'
+if os_unix
   configure_file(input: 'gtk+-unix-print-4.0.pc.in',
                  output: 'gtk+-unix-print-4.0.pc',
                  configuration: pkgconf,

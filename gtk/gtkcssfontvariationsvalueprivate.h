@@ -18,7 +18,7 @@
  */
 
 #ifndef __GTK_CSS_FONT_VARIATIONS_VALUE_PRIVATE_H__
-#define __GTK_CSS_FONT_VARIATIONS_PRIVATE_H__
+#define __GTK_CSS_FONT_VARIATIONS_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"

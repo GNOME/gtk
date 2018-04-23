@@ -33,14 +33,14 @@ hex_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
   gchar *buf;
-  gint val;
+  gdouble val;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);
-  val = (gint) gtk_adjustment_get_value (adjustment);
+  val = gtk_adjustment_get_value (adjustment);
   if (fabs (val) < 1e-5)
     buf = g_strdup ("0x00");
   else
-    buf = g_strdup_printf ("0x%.2X", val);
+    buf = g_strdup_printf ("0x%.2X", (gint) val);
   if (strcmp (buf, gtk_spin_button_get_text (spin_button)))
     gtk_spin_button_set_text (spin_button, buf);
   g_free (buf);

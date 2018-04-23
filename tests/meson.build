@@ -133,7 +133,7 @@ gtk_tests = [
   ['testtexture'],
 ]
 
-if os_linux
+if os_unix
   gtk_tests += [['testfontchooserdialog']]
 endif
 
