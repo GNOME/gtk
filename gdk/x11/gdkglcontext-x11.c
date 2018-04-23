@@ -1250,7 +1250,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
       return FALSE;
     }
 
-  if (context_x11->is_attached || gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)))
+  if (context_x11->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     drawable = context_x11->attached_drawable;
   else
     drawable = context_x11->unattached_drawable;

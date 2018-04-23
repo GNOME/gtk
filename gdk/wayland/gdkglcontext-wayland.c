@@ -504,7 +504,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   surface = gdk_gl_context_get_surface (context);
 
-  if (context_wayland->is_attached || gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)))
+  if (context_wayland->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     egl_surface = gdk_wayland_surface_get_egl_surface (surface->impl_surface, context_wayland->egl_config);
   else
     {

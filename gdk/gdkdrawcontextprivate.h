@@ -48,8 +48,6 @@ struct _GdkDrawContextClass
   void                  (* surface_resized)                     (GdkDrawContext         *context);
 };
 
-gboolean                gdk_draw_context_is_drawing             (GdkDrawContext         *context);
-
 void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
 
 G_END_DECLS

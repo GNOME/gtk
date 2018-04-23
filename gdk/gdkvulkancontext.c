@@ -718,7 +718,7 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
-  g_return_val_if_fail (gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)), 0);
+  g_return_val_if_fail (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)), 0);
 
   return priv->draw_index;
 }
@@ -741,7 +741,7 @@ gdk_vulkan_context_get_draw_semaphore (GdkVulkanContext *context)
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_NULL_HANDLE);
-  g_return_val_if_fail (gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)), VK_NULL_HANDLE);
+  g_return_val_if_fail (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)), VK_NULL_HANDLE);
 
   return priv->draw_semaphore;
 }
