@@ -2577,8 +2577,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
                       gdk_surface_get_height (surface) * self->scale_factor
                   };
 
-  gdk_surface_begin_draw_frame (surface,
-                                GDK_DRAW_CONTEXT (self->gl_context),
+  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->gl_context),
                                 update_area);
 
   damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->gl_context));
@@ -2612,7 +2611,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
 
-  gdk_surface_end_draw_frame (surface);
+  gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->gl_context));
 
   g_clear_pointer (&self->render_region, cairo_region_destroy);
 }

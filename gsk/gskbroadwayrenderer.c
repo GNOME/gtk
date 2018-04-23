@@ -681,7 +681,7 @@ gsk_broadway_renderer_render (GskRenderer          *self,
                                            gdk_surface_get_width (surface),
                                            gdk_surface_get_height (surface)
                                          });
-  gdk_surface_begin_draw_frame (surface, NULL, whole);
+  gdk_draw_context_begin_frame (NULL, whole);
   cairo_region_destroy (whole);
 
   nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
@@ -691,7 +691,7 @@ gsk_broadway_renderer_render (GskRenderer          *self,
   g_array_unref (nodes);
   g_ptr_array_unref (node_textures);
 
-  gdk_surface_end_draw_frame (surface);
+  gdk_draw_context_end_frame (NULL);
 }
 
 static void

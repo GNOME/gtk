@@ -38,12 +38,17 @@ GDK_AVAILABLE_IN_ALL
 GType gdk_draw_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkDisplay *            gdk_draw_context_get_display              (GdkDrawContext  *context);
+GdkDisplay *            gdk_draw_context_get_display            (GdkDrawContext         *context);
 GDK_AVAILABLE_IN_ALL
-GdkSurface *            gdk_draw_context_get_surface              (GdkDrawContext  *context);
+GdkSurface *            gdk_draw_context_get_surface            (GdkDrawContext         *context);
 
 GDK_AVAILABLE_IN_ALL
-const cairo_region_t *  gdk_draw_context_get_frame_region         (GdkDrawContext  *context);
+void                    gdk_draw_context_begin_frame            (GdkDrawContext         *context,
+                                                                 const cairo_region_t   *region);
+GDK_AVAILABLE_IN_ALL
+void                    gdk_draw_context_end_frame              (GdkDrawContext         *context);
+GDK_AVAILABLE_IN_ALL
+const cairo_region_t *  gdk_draw_context_get_frame_region       (GdkDrawContext         *context);
 
 G_END_DECLS
 

@@ -198,63 +198,6 @@ gdk_draw_context_is_drawing (GdkDrawContext *context)
 }
 
 /*< private >
- * gdk_draw_context_begin_frame:
- * @context: a #GdkDrawContext
- * @region: (inout): The clip region that needs to be repainted
- *
- * Sets up @context and @drawing for a new drawing.
- *
- * The @context is free to update @region to the size that actually needs to
- * be repainted. Contexts that do not support partial blits for example may
- * want to invalidate the whole surface instead.
- *
- * The function does not clear the background. Clearing the backgroud is the
- * job of the renderer. The contents of the backbuffer are undefined after this
- * function call.
- */
-void
-gdk_draw_context_begin_frame (GdkDrawContext *context,
-                              cairo_region_t *region)
-{
-  GdkDrawContextPrivate *priv;
-
-  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
-  g_return_if_fail (region != NULL);
-
-  priv = gdk_draw_context_get_instance_private (context);
-  priv->is_drawing = TRUE;
-
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, region);
-}
-
-/*< private >
- * gdk_draw_context_end_frame:
- * @context: a #GdkDrawContext
- * @painted: The area that has been redrawn this frame
- * @damage: The area that we know is actually different from the last frame
- *
- * Copies the back buffer to the front buffer.
- *
- * This function may call `glFlush()` implicitly before returning; it
- * is not recommended to call `glFlush()` explicitly before calling
- * this function.
- */
-void
-gdk_draw_context_end_frame (GdkDrawContext *context,
-                            cairo_region_t *painted,
-                            cairo_region_t *damage)
-{
-  GdkDrawContextPrivate *priv;
-
-  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
-
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, painted, damage);
-
-  priv = gdk_draw_context_get_instance_private (context);
-  priv->is_drawing = FALSE;
-}
-
-/*< private >
  * gdk_draw_context_surface_resized:
  * @context: a #GdkDrawContext
  *
@@ -301,6 +244,119 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
   return priv->surface;
+}
+
+/**
+ * gdk_draw_context_begin_frame:
+ * @context: the context used to draw the frame
+ * @region: minimum region that should be drawn
+ *
+ * Indicates that you are beginning the process of redrawing @region
+ * on the @context's surface.
+ *
+ * Calling this function begins a drawing operation using @context on the
+ * surface that @context was created from. The actual requirements and
+ * guarantees for the drawing operation vary for different implementations
+ * of drawing, so a #GdkCairoContext and a #GdkGLContext need to be treated
+ * differently.
+ *
+ * A call to this function is a requirement for drawing and must be followed
+ * by a call to gdk_draw_context_end_frame(), which will complete the
+ * drawing operation and ensure the contents become visible on screen.
+ *
+ * Note that the @region passed to this function is the minimum region that
+ * needs to be drawn and depending on implementation, windowing system and
+ * hardware in use, it might be necessary to draw a larger region. Drawing
+ * implementation must use gdk_draw_context_get_frame_region() to query the
+ * region that must be drawn.
+ *
+ * When using GTK+, the widget system automatically places calls to
+ * gdk_draw_context_begin_frame() and gdk_draw_context_end_frame() via the
+ * use of #GskRenderers, so application code does not need to call these
+ * functions explicitly.
+ */
+void
+gdk_draw_context_begin_frame (GdkDrawContext       *context,
+                              const cairo_region_t *region)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+  g_return_if_fail (region != NULL);
+
+  if (GDK_SURFACE_DESTROYED (priv->surface))
+    return;
+
+  if (priv->surface->paint_context != NULL)
+    {
+      if (priv->surface->paint_context == context)
+        {
+          g_critical ("The surface %p is already drawing. You must finish the "
+                      "previous drawing operation with gdk_draw_context_end_frame() first.",
+                      priv->surface);
+        }
+      else
+        {
+          g_critical ("The surface %p is already being drawn by %s %p. "
+                      "You cannot draw s surface wih multiple contexts at the same time.",
+                      priv->surface,
+                      G_OBJECT_TYPE_NAME (priv->surface->paint_context), priv->surface->paint_context);
+        }
+      return;
+    }
+
+  context->frame_region = cairo_region_copy (region);
+  priv->is_drawing = TRUE;
+  priv->surface->paint_context = g_object_ref (context);
+
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, context->frame_region);
+}
+
+/**
+ * gdk_draw_context_end_frame:
+ * @context: a #GdkDrawContext
+ *
+ * Ends a drawing operation started with gdk_draw_context_begin_frame()
+ * and makes the drawing available on screen. See that function for more
+ * details about drawing.
+ *
+ * When using a #GdkGLContext, this function may call `glFlush()`
+ * implicitly before returning; it is not recommended to call `glFlush()`
+ * explicitly before calling this function.
+ */
+void
+gdk_draw_context_end_frame (GdkDrawContext *context)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+
+  if (GDK_SURFACE_DESTROYED (priv->surface))
+    return;
+
+  if (priv->surface->paint_context == NULL)
+    {
+      g_critical ("The surface %p has no drawing context. You must call "
+                  "gdk_draw_context_begin_frame() before calling "
+                  "gdk_draw_context_end_frame().", priv->surface);
+      return;
+    }
+  else if (priv->surface->paint_context != context)
+    {
+      g_critical ("The surface %p is not drawn by this context but by %s %p.",
+                  priv->surface, 
+                  G_OBJECT_TYPE_NAME (priv->surface->paint_context), priv->surface->paint_context);
+      return;
+    }
+
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context,
+                                                   context->frame_region,
+                                                   priv->surface->active_update_area);
+
+
+  priv->is_drawing = FALSE;
+  g_clear_pointer (&context->frame_region, cairo_region_destroy);
+  g_clear_object (&priv->surface->paint_context);
 }
 
 /**
