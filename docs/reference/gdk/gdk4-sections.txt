@@ -1104,6 +1104,7 @@ gdk_draw_context_get_display
 gdk_draw_context_get_surface
 gdk_draw_context_begin_frame
 gdk_draw_context_end_frame
+gdk_draw_context_in_frame
 gdk_draw_context_get_frame_region
 
 <SUBSECTION Standard>

@@ -179,20 +179,24 @@ gdk_draw_context_init (GdkDrawContext *self)
 {
 }
 
-/*< private >
- * gdk_draw_context_is_drawing:
+/**
+ * gdk_draw_context_is_in_frame:
  * @context: a #GdkDrawContext
  *
- * Returns %TRUE if @context is in the process of drawing to its surface. In such
- * cases, it will have access to the surface's backbuffer to render the new frame
- * onto it.
+ * Returns %TRUE if @context is in the process of drawing to its surface
+ * after a call to gdk_draw_context_begin_frame() and not yet having called
+ * gdk_draw_context_end_frame().
+ * In this situation, drawing commands may be effecting the contents of a
+ * @context's surface.
  *
  * Returns: %TRUE if the context is between begin_frame() and end_frame() calls.
  */
 gboolean
-gdk_draw_context_is_drawing (GdkDrawContext *context)
+gdk_draw_context_is_in_frame (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), FALSE);
 
   return priv->frame_region != NULL;
 }

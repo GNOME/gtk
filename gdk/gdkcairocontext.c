@@ -88,7 +88,7 @@ gdk_cairo_context_default_cairo_create (GdkCairoContext *self)
   g_return_val_if_fail (GDK_IS_CAIRO_CONTEXT (self), NULL);
 
   context = GDK_DRAW_CONTEXT (self);
-  if (!gdk_draw_context_is_drawing (context))
+  if (!gdk_draw_context_is_in_frame (context))
     return NULL;
 
   surface = gdk_draw_context_get_surface (context);
