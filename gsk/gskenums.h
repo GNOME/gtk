@@ -73,7 +73,8 @@ typedef enum {
   GSK_CROSS_FADE_NODE,
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,
-  GSK_OFFSET_NODE
+  GSK_OFFSET_NODE,
+  GSK_DEBUG_NODE
 } GskRenderNodeType;
 
 /**

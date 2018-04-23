@@ -151,6 +151,8 @@ node_type_name (GskRenderNodeType type)
       return "Unknown";
     case GSK_CONTAINER_NODE:
       return "Container";
+    case GSK_DEBUG_NODE:
+      return "Debug";
     case GSK_CAIRO_NODE:
       return "Cairo";
     case GSK_COLOR_NODE:
@@ -624,6 +626,10 @@ populate_render_node_properties (GtkListStore  *store,
       tmp = g_strdup_printf ("%d", gsk_container_node_get_n_children (node));
       add_text_row (store, "Children", tmp);
       g_free (tmp);
+      break;
+
+    case GSK_DEBUG_NODE:
+      add_text_row (store, "Message", gsk_debug_node_get_message (node));
       break;
 
     case GSK_SHADOW_NODE:

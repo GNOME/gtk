@@ -2077,6 +2077,12 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
+    case GSK_DEBUG_NODE:
+      gsk_gl_renderer_add_render_ops (self, 
+                                      gsk_debug_node_get_child (node),
+                                      builder);
+    break;
+
     case GSK_COLOR_NODE:
       render_color_node (self, node, builder, vertex_data);
     break;

@@ -600,6 +600,10 @@ append_node (GtkTreeModelRenderNode *nodemodel,
           }
       }
       break;
+
+    case GSK_DEBUG_NODE:
+      append_node (nodemodel, gsk_debug_node_get_child (node), priv->nodes->len - 1);
+      break;
     }
 }
 

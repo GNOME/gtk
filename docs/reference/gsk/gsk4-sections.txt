@@ -108,6 +108,9 @@ gsk_text_node_get_y
 gsk_blur_node_new
 gsk_blur_node_get_child
 gsk_blur_node_get_radius
+gsk_debug_node_new
+gsk_debug_node_get_child
+gsk_debug_node_get_message
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE

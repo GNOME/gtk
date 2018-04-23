@@ -2752,6 +2752,177 @@ gsk_offset_node_get_y_offset (GskRenderNode *node)
   return self->y_offset;
 }
 
+/*** GSK_DEBUG_NODE ***/
+
+typedef struct _GskDebugNode GskDebugNode;
+
+struct _GskDebugNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  char *message;
+};
+
+static void
+gsk_debug_node_finalize (GskRenderNode *node)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  gsk_render_node_unref (self->child);
+  g_free (self->message);
+}
+
+static void
+gsk_debug_node_draw (GskRenderNode *node,
+                      cairo_t       *cr)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  gsk_render_node_draw (self->child, cr);
+}
+
+static gboolean
+gsk_debug_node_can_diff (GskRenderNode *node1,
+                         GskRenderNode *node2)
+{
+  GskDebugNode *self1 = (GskDebugNode *) node1;
+  GskDebugNode *self2 = (GskDebugNode *) node2;
+
+  return gsk_render_node_can_diff (self1->child, self2->child);
+}
+
+static void
+gsk_debug_node_diff (GskRenderNode  *node1,
+                     GskRenderNode  *node2,
+                     cairo_region_t *region)
+{
+  GskDebugNode *self1 = (GskDebugNode *) node1;
+  GskDebugNode *self2 = (GskDebugNode *) node2;
+
+  gsk_render_node_diff (self1->child, self2->child, region);
+}
+
+#define GSK_DEBUG_NODE_VARIANT_TYPE "(uvs)"
+
+static GVariant *
+gsk_debug_node_serialize (GskRenderNode *node)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  return g_variant_new (GSK_DEBUG_NODE_VARIANT_TYPE,
+                        (guint32) gsk_render_node_get_node_type (self->child),
+                        gsk_render_node_serialize_node (self->child),
+                        self->message);
+}
+
+static GskRenderNode *
+gsk_debug_node_deserialize (GVariant  *variant,
+                            GError   **error)
+{
+  guint32 child_type;
+  GVariant *child_variant;
+  char *message;
+  GskRenderNode *result, *child;
+
+  if (!check_variant_type (variant, GSK_DEBUG_NODE_VARIANT_TYPE, error))
+    return NULL;
+
+  g_variant_get (variant, GSK_DEBUG_NODE_VARIANT_TYPE,
+                 &child_type, &child_variant,
+                 &message);
+
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
+  g_variant_unref (child_variant);
+
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_debug_node_new (child, message);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_DEBUG_NODE_CLASS = {
+  GSK_DEBUG_NODE,
+  sizeof (GskDebugNode),
+  "GskDebugNode",
+  gsk_debug_node_finalize,
+  gsk_debug_node_draw,
+  gsk_debug_node_can_diff,
+  gsk_debug_node_diff,
+  gsk_debug_node_serialize,
+  gsk_debug_node_deserialize
+};
+
+/**
+ * gsk_debug_node_new:
+ * @child: The child to add debug info for
+ * @message: (transfer full): The debug message 
+ *
+ * Creates a #GskRenderNode that will add debug information about
+ * the given @child.
+ *
+ * Adding this node has no visual effect.
+ *
+ * Returns: A new #GskRenderNode
+ */
+GskRenderNode *
+gsk_debug_node_new (GskRenderNode *child,
+                    char          *message)
+{
+  GskDebugNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = (GskDebugNode *) gsk_render_node_new (&GSK_DEBUG_NODE_CLASS, 0);
+
+  self->child = gsk_render_node_ref (child);
+  self->message = message;
+
+  graphene_rect_init_from_rect (&self->render_node.bounds, &child->bounds);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_debug_node_get_child:
+ * @node: a debug @GskRenderNode
+ *
+ * Gets the child node that is getting debug by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting debug
+ **/
+GskRenderNode *
+gsk_debug_node_get_child (GskRenderNode *node)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_DEBUG_NODE), NULL);
+
+  return self->child;
+}
+
+/**
+ * gsk_debug_node_get_message:
+ * @node: a debug #GskRenderNode
+ *
+ * Gets the debug message that was set on this node
+ *
+ * Returns: (transfer none): The debug message
+ **/
+const char *
+gsk_debug_node_get_message (GskRenderNode *node)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_DEBUG_NODE), "You run broken code!");
+
+  return self->message;
+}
+
 /*** GSK_OPACITY_NODE ***/
 
 typedef struct _GskOpacityNode GskOpacityNode;

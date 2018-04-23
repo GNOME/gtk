@@ -90,6 +90,14 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes        *
                                                                  GError       **error);
 
 GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_debug_node_new                      (GskRenderNode            *child,
+                                                                 char                     *message);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_debug_node_get_child                (GskRenderNode            *node);
+GDK_AVAILABLE_IN_ALL
+const char *            gsk_debug_node_get_message              (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
                                                                  const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_ALL

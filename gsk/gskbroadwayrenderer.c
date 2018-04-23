@@ -619,6 +619,11 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
+    case GSK_DEBUG_NODE:
+      gsk_broadway_renderer_add_node (self, nodes, node_textures,
+                                      gsk_debug_node_get_child (node), offset_x, offset_y);
+      return;
+
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:

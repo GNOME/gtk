@@ -545,6 +545,10 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       }
       return;
 
+    case GSK_DEBUG_NODE:
+      gsk_vulkan_render_pass_add_node (self, render, constants, gsk_debug_node_get_child (node));
+      return;
+
     case GSK_OFFSET_NODE:
     case GSK_TRANSFORM_NODE:
       {
