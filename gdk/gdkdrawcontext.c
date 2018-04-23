@@ -352,9 +352,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
       return;
     }
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context,
-                                                   priv->frame_region,
-                                                   priv->surface->active_update_area);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->frame_region);
 
   g_clear_pointer (&priv->frame_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);

@@ -326,8 +326,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
-                               cairo_region_t *painted,
-                               cairo_region_t *damage)
+                               cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkGLContext *shared;
@@ -335,7 +334,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   shared = gdk_gl_context_get_shared_context (context);
   if (shared)
     {
-      GDK_DRAW_CONTEXT_GET_CLASS (GDK_DRAW_CONTEXT (shared))->end_frame (GDK_DRAW_CONTEXT (shared), painted, damage);
+      GDK_DRAW_CONTEXT_GET_CLASS (GDK_DRAW_CONTEXT (shared))->end_frame (GDK_DRAW_CONTEXT (shared), painted);
       return;
     }
 

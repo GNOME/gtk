@@ -43,8 +43,7 @@ struct _GdkDrawContextClass
   void                  (* begin_frame)                         (GdkDrawContext         *context,
                                                                  cairo_region_t         *update_area);
   void                  (* end_frame)                           (GdkDrawContext         *context,
-                                                                 cairo_region_t         *painted,
-                                                                 cairo_region_t         *damage);
+                                                                 cairo_region_t         *painted);
   void                  (* surface_resized)                     (GdkDrawContext         *context);
 };
 

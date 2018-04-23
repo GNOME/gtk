@@ -173,8 +173,7 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                     cairo_region_t *painted,
-                                     cairo_region_t *damage)
+                                     cairo_region_t *painted)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);

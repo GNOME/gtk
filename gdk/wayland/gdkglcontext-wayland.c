@@ -204,8 +204,7 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
 
 static void
 gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
-                                  cairo_region_t *painted,
-                                  cairo_region_t *damage)
+                                  cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
@@ -214,7 +213,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   EGLSurface egl_surface;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
   if (gdk_gl_context_get_shared_context (context))
     return;
 
@@ -226,16 +225,16 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
-  if (display_wayland->have_egl_swap_buffers_with_damage && damage != NULL)
+  if (display_wayland->have_egl_swap_buffers_with_damage)
     {
-      int i, j, n_rects = cairo_region_num_rectangles (damage);
+      int i, j, n_rects = cairo_region_num_rectangles (painted);
       EGLint *rects = g_new (EGLint, n_rects * 4);
       cairo_rectangle_int_t rect;
       int surface_height = gdk_surface_get_height (surface);
 
       for (i = 0, j = 0; i < n_rects; i++)
         {
-          cairo_region_get_rectangle (damage, i, &rect);
+          cairo_region_get_rectangle (painted, i, &rect);
           rects[j++] = rect.x;
           rects[j++] = surface_height - rect.height - rect.y;
           rects[j++] = rect.width;

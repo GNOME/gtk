@@ -120,8 +120,7 @@ maybe_wait_for_vblank (GdkDisplay  *display,
 
 static void
 gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
-                              cairo_region_t *painted,
-                              cairo_region_t *damage)
+                              cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
@@ -133,7 +132,7 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
   DrawableInfo *info;
   GLXDrawable drawable;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted);
   if (gdk_gl_context_get_shared_context (context))
     return;
 
