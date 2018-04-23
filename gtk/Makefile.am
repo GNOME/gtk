@@ -811,7 +811,6 @@ gtk_base_c_sources = 		\
 	gtklockbutton.c		\
 	gtkmain.c		\
 	gtkmagnifier.c		\
-	gtkmarshalers.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
 	gtkmenubutton.c		\
@@ -848,7 +847,6 @@ gtk_base_c_sources = 		\
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
 	gtkprivate.c		\
-	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
 	gtkprogresstracker.c	\
 	gtkpixelcache.c		\
@@ -871,7 +869,6 @@ gtk_base_c_sources = 		\
 	gtkrenderbackground.c	\
 	gtkrenderborder.c	\
 	gtkrendericon.c		\
-	gtkresources.c		\
 	gtkrevealer.c		\
 	gtkroundedbox.c		\
 	gtkscale.c		\
@@ -947,7 +944,6 @@ gtk_base_c_sources = 		\
 	gtktreestore.c		\
 	gtktreeview.c		\
 	gtktreeviewcolumn.c	\
-	gtktypebuiltins.c	\
 	gtkutils.c		\
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
@@ -1127,9 +1123,10 @@ gtk_built_sources =				\
 	gtkresources.c				\
 	gtk.gresource.xml			\
 	gtktypebuiltins.c			\
-	gtktypefuncs.c				\
 	gtkmarshalers.c				\
 	gtkprivatetypebuiltins.c
+
+nodist_gtk_c_sources += $(gtk_built_sources)
 
 stamp_files =					\
 	stamp-gtkmarshalers.h			\
@@ -1426,7 +1423,7 @@ gtktypefuncs.c: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_src
 	  sort | uniq | \
 	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\|gtk_plug_\|gtk_socket_\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' >> xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
-gtktestutils.c: gtktypefuncs.c
+$(srcdir)/gtktestutils.c: gtktypefuncs.c
 
 # target platform:
 lib_LTLIBRARIES = libgtk-3.la
