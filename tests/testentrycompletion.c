@@ -233,7 +233,7 @@ animation_timer (GtkEntryCompletion *completion)
 	{
 	  g_print ("removing model!\n");
 
-	  old_store = g_object_ref (gtk_entry_completion_get_model (completion));
+	  old_store = g_object_ref (store);
 	  gtk_entry_completion_set_model (completion, NULL);
 	}
       else
