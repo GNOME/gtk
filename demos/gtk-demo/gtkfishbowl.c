@@ -28,9 +28,14 @@ struct _GtkFishbowlPrivate
   guint count;
 
   gint64 last_frame_time;
+  gint64 update_delay;
   guint tick_id;
 
-  guint use_icons: 1;
+  double framerate;
+  int last_benchmark_change;
+
+  guint use_icons : 1;
+  guint benchmark : 1;
 };
 
 struct _GtkFishbowlChild
@@ -45,7 +50,10 @@ struct _GtkFishbowlChild
 enum {
    PROP_0,
    PROP_ANIMATING,
+   PROP_BENCHMARK,
    PROP_COUNT,
+   PROP_FRAMERATE,
+   PROP_UPDATE_DELAY,
    NUM_PROPERTIES
 };
 
@@ -56,7 +64,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkFishbowl, gtk_fishbowl, GTK_TYPE_CONTAINER)
 static void
 gtk_fishbowl_init (GtkFishbowl *fishbowl)
 {
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
   gtk_widget_set_has_surface (GTK_WIDGET (fishbowl), FALSE);
+
+  priv->update_delay = G_USEC_PER_SEC;
 }
 
 /**
@@ -264,8 +276,16 @@ gtk_fishbowl_set_property (GObject         *object,
       gtk_fishbowl_set_animating (fishbowl, g_value_get_boolean (value));
       break;
 
+    case PROP_BENCHMARK:
+      gtk_fishbowl_set_benchmark (fishbowl, g_value_get_boolean (value));
+      break;
+
     case PROP_COUNT:
       gtk_fishbowl_set_count (fishbowl, g_value_get_uint (value));
+      break;
+
+    case PROP_UPDATE_DELAY:
+      gtk_fishbowl_set_update_delay (fishbowl, g_value_get_int64 (value));
       break;
 
     default:
@@ -288,8 +308,20 @@ gtk_fishbowl_get_property (GObject         *object,
       g_value_set_boolean (value, gtk_fishbowl_get_animating (fishbowl));
       break;
 
+    case PROP_BENCHMARK:
+      g_value_set_boolean (value, gtk_fishbowl_get_benchmark (fishbowl));
+      break;
+
     case PROP_COUNT:
       g_value_set_uint (value, gtk_fishbowl_get_count (fishbowl));
+      break;
+
+    case PROP_FRAMERATE:
+      g_value_set_double (value, gtk_fishbowl_get_framerate (fishbowl));
+      break;
+
+    case PROP_UPDATE_DELAY:
+      g_value_set_int64 (value, gtk_fishbowl_get_update_delay (fishbowl));
       break;
 
     default:
@@ -323,13 +355,36 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
                             FALSE,
                             G_PARAM_READWRITE);
 
+  props[PROP_BENCHMARK] =
+      g_param_spec_boolean ("benchmark",
+                            "Benchmark",
+                            "Adapt the count property to hit the maximum framerate",
+                            FALSE,
+                            G_PARAM_READWRITE);
+
   props[PROP_COUNT] =
       g_param_spec_uint ("count",
                          "Count",
                          "Number of widgets",
                          0, G_MAXUINT,
                          0,
-                         G_PARAM_READABLE);
+                         G_PARAM_READWRITE);
+
+  props[PROP_FRAMERATE] =
+      g_param_spec_double ("framerate",
+                           "Framerate",
+                           "Framerate of this widget in frames per second",
+                           0, G_MAXDOUBLE,
+                           0,
+                           G_PARAM_READABLE);
+
+  props[PROP_UPDATE_DELAY] =
+      g_param_spec_int64 ("update-delay",
+                          "Update delay",
+                          "Number of usecs between updates",
+                          0, G_MAXINT64,
+                          G_USEC_PER_SEC,
+                          G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 }
@@ -433,11 +488,140 @@ gtk_fishbowl_set_count (GtkFishbowl *fishbowl,
 }
 
 gboolean
+gtk_fishbowl_get_benchmark (GtkFishbowl *fishbowl)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  return priv->benchmark;
+}
+
+void
+gtk_fishbowl_set_benchmark (GtkFishbowl *fishbowl,
+                            gboolean     benchmark)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  if (priv->benchmark == benchmark)
+    return;
+
+  priv->benchmark = benchmark;
+  if (!benchmark)
+    priv->last_benchmark_change = 0;
+
+  g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_BENCHMARK]);
+}
+
+gboolean
 gtk_fishbowl_get_animating (GtkFishbowl *fishbowl)
 {
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
 
   return priv->tick_id != 0;
+}
+
+static gint64
+guess_refresh_interval (GdkFrameClock *frame_clock)
+{
+  gint64 interval;
+  gint64 i;
+
+  interval = G_MAXINT64;
+
+  for (i = gdk_frame_clock_get_history_start (frame_clock);
+       i < gdk_frame_clock_get_frame_counter (frame_clock);
+       i++)
+    {
+      GdkFrameTimings *t, *before;
+      gint64 ts, before_ts;
+
+      t = gdk_frame_clock_get_timings (frame_clock, i);
+      before = gdk_frame_clock_get_timings (frame_clock, i - 1);
+      if (t == NULL || before == NULL)
+        continue;
+
+      ts = gdk_frame_timings_get_frame_time (t);
+      before_ts = gdk_frame_timings_get_frame_time (before);
+      if (ts == 0 || before_ts == 0)
+        continue;
+
+      interval = MIN (interval, ts - before_ts);
+    }
+
+  if (interval == G_MAXINT64)
+    return 0;
+
+  return interval;
+}
+
+static void
+gtk_fishbowl_do_update (GtkFishbowl *fishbowl)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+  GdkFrameClock *frame_clock;
+  GdkFrameTimings *start, *end;
+  gint64 start_counter, end_counter;
+  gint64 n_frames, expected_frames;
+  gint64 start_timestamp, end_timestamp;
+  gint64 interval;
+
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (fishbowl));
+  if (frame_clock == NULL)
+    return;
+
+  start_counter = gdk_frame_clock_get_history_start (frame_clock);
+  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
+  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
+  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
+       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
+       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
+    end_counter--;
+  if (end_counter - start_counter < 4)
+    return;
+
+  start_timestamp = gdk_frame_timings_get_presentation_time (start);
+  end_timestamp = gdk_frame_timings_get_presentation_time (end);
+  if (start_timestamp == 0 || end_timestamp == 0)
+    {
+      start_timestamp = gdk_frame_timings_get_frame_time (start);
+      end_timestamp = gdk_frame_timings_get_frame_time (end);
+    }
+
+  n_frames = end_counter - start_counter;
+  priv->framerate = ((double) n_frames) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
+  g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_FRAMERATE]);
+
+  if (!priv->benchmark)
+    return;
+
+  interval = gdk_frame_timings_get_refresh_interval (end);
+  if (interval == 0)
+    {
+      interval = guess_refresh_interval (frame_clock);
+      if (interval == 0)
+        return;
+    }
+  expected_frames = round ((double) (end_timestamp - start_timestamp) / interval);
+
+  if (n_frames >= expected_frames)
+    {
+      if (priv->last_benchmark_change > 0)
+        priv->last_benchmark_change *= 2;
+      else
+        priv->last_benchmark_change = 1;
+    }
+  else if (n_frames + 1 < expected_frames)
+    {
+      if (priv->last_benchmark_change < 0)
+        priv->last_benchmark_change--;
+      else
+        priv->last_benchmark_change = -1;
+    }
+  else
+    {
+      priv->last_benchmark_change = 0;
+    }
+
+  gtk_fishbowl_set_count (fishbowl, MAX (1, priv->count + priv->last_benchmark_change));
 }
 
 static gboolean
@@ -450,9 +634,11 @@ gtk_fishbowl_tick (GtkWidget     *widget,
   GtkFishbowlChild *child;
   GList *l;
   gint64 frame_time, elapsed;
+  gboolean do_update;
 
   frame_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
   elapsed = frame_time - priv->last_frame_time;
+  do_update = frame_time / priv->update_delay != priv->last_frame_time / priv->update_delay;
   priv->last_frame_time = frame_time;
 
   /* last frame was 0, so we're just starting to animate */
@@ -491,6 +677,9 @@ gtk_fishbowl_tick (GtkWidget     *widget,
 
   gtk_widget_queue_allocate (widget);
 
+  if (do_update)
+    gtk_fishbowl_do_update (fishbowl);
+
   return G_SOURCE_CONTINUE;
 }
 
@@ -515,8 +704,40 @@ gtk_fishbowl_set_animating (GtkFishbowl *fishbowl,
       priv->last_frame_time = 0;
       gtk_widget_remove_tick_callback (GTK_WIDGET (fishbowl), priv->tick_id);
       priv->tick_id = 0;
+      priv->framerate = 0;
+      g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_FRAMERATE]);
     }
 
   g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_ANIMATING]);
+}
+
+double
+gtk_fishbowl_get_framerate (GtkFishbowl *fishbowl)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  return priv->framerate;
+}
+
+gint64
+gtk_fishbowl_get_update_delay (GtkFishbowl *fishbowl)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  return priv->update_delay;
+}
+
+void
+gtk_fishbowl_set_update_delay (GtkFishbowl *fishbowl,
+                               gint64       update_delay)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  if (priv->update_delay == update_delay)
+    return;
+
+  priv->update_delay = update_delay;
+
+  g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_UPDATE_DELAY]);
 }
 

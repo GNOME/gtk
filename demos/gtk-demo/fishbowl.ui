@@ -7,7 +7,24 @@
       <object class="GtkHeaderBar" id="">
         <property name="show-title-buttons">1</property>
         <child>
-          <object class="GtkLabel" id="info_label">
+          <object class="GtkLabel">
+            <property name="label">fps</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" bind-source="bowl" bind-property="framerate"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Icons, </property>
           </object>
           <packing>
             <property name="pack-type">end</property>
@@ -48,6 +65,7 @@
       <object class="GtkFishbowl" id="bowl">
         <property name="visible">True</property>
         <property name="animating">True</property>
+        <property name="benchmark" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean">True</property>
       </object>
     </child>
   </object>

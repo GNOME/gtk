@@ -55,6 +55,13 @@ void       gtk_fishbowl_set_count         (GtkFishbowl       *fishbowl,
 gboolean   gtk_fishbowl_get_animating     (GtkFishbowl       *fishbowl);
 void       gtk_fishbowl_set_animating     (GtkFishbowl       *fishbowl,
                                            gboolean           animating);
+gboolean   gtk_fishbowl_get_benchmark     (GtkFishbowl       *fishbowl);
+void       gtk_fishbowl_set_benchmark     (GtkFishbowl       *fishbowl,
+                                           gboolean           animating);
+double     gtk_fishbowl_get_framerate     (GtkFishbowl       *fishbowl);
+gint64     gtk_fishbowl_get_update_delay  (GtkFishbowl       *fishbowl);
+void       gtk_fishbowl_set_update_delay  (GtkFishbowl       *fishbowl,
+                                           gint64             update_delay);
 
 G_END_DECLS
 
