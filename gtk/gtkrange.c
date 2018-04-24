@@ -1857,7 +1857,7 @@ gtk_range_key_controller_key_pressed (GtkEventControllerKey *controller,
       return GDK_EVENT_STOP;
     }
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
