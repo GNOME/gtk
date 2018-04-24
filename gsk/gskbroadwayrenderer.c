@@ -580,6 +580,15 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
 
       /* Bin nodes */
 
+    case GSK_OFFSET_NODE:
+      {
+        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
+                                        gsk_offset_node_get_child (node),
+                                        offset_x - gsk_offset_node_get_x_offset (node),
+                                        offset_y - gsk_offset_node_get_y_offset (node));
+      }
+      return;
+
     case GSK_SHADOW_NODE:
       {
         gsize i, n_shadows = gsk_shadow_node_get_n_shadows (node);
@@ -656,7 +665,6 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_OFFSET_NODE:
     case GSK_TRANSFORM_NODE:
     case GSK_REPEAT_NODE:
     case GSK_BLEND_NODE:
