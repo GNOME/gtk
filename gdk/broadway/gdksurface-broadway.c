@@ -412,7 +412,10 @@ gdk_surface_broadway_move_resize (GdkSurface *surface,
                                             surface->width, surface->height);
   queue_flush (surface);
   if (size_changed)
-    surface->resize_count++;
+    {
+      surface->resize_count++;
+      _gdk_surface_update_size (surface);
+    }
 }
 
 static void
