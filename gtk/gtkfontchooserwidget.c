@@ -1900,6 +1900,8 @@ update_feature_example (FeatureItem          *item,
   const char *number_formatting[] = { "zero", "nalt", "frac", NULL };
   const char *char_variants[] = {
     "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
+    "cv01", "cv02", "cv03", "cv04", "cv05", "cv06", "cv07", "cv08", "cv09", "cv10",
+    "cv11", "cv12", "cv13", "cv14", "cv15", "cv16", "cv17", "cv18", "cv19", "cv20",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
     "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
     NULL };
@@ -2133,6 +2135,8 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   const char *number_formatting[] = { "zero", "nalt", "frac", NULL };
   const char *char_variants[] = {
     "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
+    "cv01", "cv02", "cv03", "cv04", "cv05", "cv06", "cv07", "cv08", "cv09", "cv10",
+    "cv11", "cv12", "cv13", "cv14", "cv15", "cv16", "cv17", "cv18", "cv19", "cv20",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
     "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
     NULL };
