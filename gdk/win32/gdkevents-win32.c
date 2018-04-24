@@ -1794,11 +1794,6 @@ handle_dpi_changed (GdkSurface *window,
             cairo_surface_set_device_scale (impl->cache_surface,
                                             impl->surface_scale,
                                             impl->surface_scale);
-
-          if (impl->cairo_surface != NULL)
-            cairo_surface_set_device_scale (impl->cairo_surface,
-                                            impl->surface_scale,
-                                            impl->surface_scale);
         }
     }
 

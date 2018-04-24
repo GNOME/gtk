@@ -2405,6 +2405,7 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
       return;
     }
 
+/*
   win_surface = _gdk_surface_ref_cairo_surface (win32_context->drag_surface);
   surface = gdk_surface_create_similar_surface (win32_context->drag_surface,
                                                 cairo_surface_get_content (win_surface),
@@ -2416,14 +2417,13 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
   cairo_destroy (cr);
   cairo_surface_destroy (win_surface);
 
-/*
   pattern = cairo_pattern_create_for_surface (surface);
 
   gdk_surface_set_background_pattern (win32_context->drag_surface, pattern);
 
   cairo_pattern_destroy (pattern);
-*/
   cairo_surface_destroy (surface);
+*/
 
   anim = g_slice_new0 (GdkDragAnim);
   g_set_object (&anim->context, win32_context);

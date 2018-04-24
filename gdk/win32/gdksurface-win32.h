@@ -291,7 +291,6 @@ struct _GdkSurfaceImplWin32
    * UpdateLayeredWindow() doesn't do partial redraws.
    */
   cairo_surface_t *cache_surface;
-  cairo_surface_t *cairo_surface;
 
   /* Unlike window-backed surfaces, DIB-backed surface
    * does not provide a way to query its size,
@@ -364,6 +363,16 @@ void  _gdk_win32_surface_tmp_reset_parent_bg (GdkSurface *window);
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *window);
 
 gint  _gdk_win32_surface_get_scale_factor    (GdkSurface *window);
+
+void  _gdk_win32_get_window_client_area_rect (GdkSurface *window,
+                                              gint        scale,
+                                              RECT       *rect);
+void  _gdk_win32_update_layered_window_from_cache (GdkSurface *window,
+                                                   RECT       *client_rect,
+                                                   gboolean    do_move,
+                                                   gboolean    do_resize,
+                                                   gboolean    do_paint);
+
 
 G_END_DECLS
 
