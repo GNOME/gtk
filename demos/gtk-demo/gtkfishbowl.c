@@ -523,7 +523,7 @@ gtk_fishbowl_do_update (GtkFishbowl *fishbowl)
       priv->last_benchmark_change = 0;
     }
 
-  gtk_fishbowl_set_count (fishbowl, MAX (1, priv->count + priv->last_benchmark_change));
+  gtk_fishbowl_set_count (fishbowl, MAX (1, (int) priv->count + priv->last_benchmark_change));
 }
 
 static gboolean
@@ -652,6 +652,7 @@ gtk_fishbowl_set_creation_func (GtkFishbowl         *fishbowl,
   g_object_freeze_notify (G_OBJECT (fishbowl));
 
   gtk_fishbowl_set_count (fishbowl, 0);
+  priv->last_benchmark_change = 0;
 
   priv->creation_func = creation_func;
 

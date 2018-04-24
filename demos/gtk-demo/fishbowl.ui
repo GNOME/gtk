@@ -7,6 +7,25 @@
       <object class="GtkHeaderBar" id="">
         <property name="show-title-buttons">1</property>
         <child>
+          <object class="GtkBox">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">pan-start-symbolic</property>
+                <signal name="clicked" handler="prev_button_clicked_cb" object="bowl" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">pan-end-symbolic</property>
+                <signal name="clicked" handler="next_button_clicked_cb" object="bowl" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkLabel">
             <property name="label">fps</property>
           </object>
