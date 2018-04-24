@@ -22,6 +22,7 @@
 
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkdebug.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrendericonprivate.h"
@@ -159,7 +160,6 @@ gtk_snapshot_new (void)
 
   snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
 
-  snapshot->record_names = FALSE;
   snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
   g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
   snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
@@ -249,7 +249,7 @@ gtk_snapshot_push_debug (GtkSnapshot *snapshot,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_debug);
 
-  if (snapshot->record_names)
+  if (GTK_DEBUG_CHECK (SNAPSHOT))
     {
       va_list args;
 

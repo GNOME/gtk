@@ -88,7 +88,6 @@ struct _GtkSnapshotState {
 struct _GdkSnapshot {
   GObject                parent_instance; /* it's really GdkSnapshot, but don't tell anyone! */
 
-  gboolean               record_names;
   GArray                *state_stack;
   GPtrArray             *nodes;
 };
