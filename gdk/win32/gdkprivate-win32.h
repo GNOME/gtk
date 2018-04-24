@@ -128,6 +128,13 @@ GdkWin32Screen *GDK_SURFACE_SCREEN(GObject *win);
 
 #define GDK_SURFACE_IS_WIN32(win)        (GDK_IS_SURFACE_IMPL_WIN32 (win->impl))
 
+/* Use this for hWndInsertAfter (2nd argument to SetWindowPos()) if
+ * SWP_NOZORDER flag is used. Otherwise it's unobvious why a particular
+ * argument is used. Using NULL is misleading, because
+ * NULL is equivalent to HWND_TOP.
+ */
+#define SWP_NOZORDER_SPECIFIED HWND_TOP
+
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 
 struct _GdkWin32SingleFont
