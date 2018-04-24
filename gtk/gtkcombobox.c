@@ -1948,10 +1948,10 @@ gtk_combo_box_menu_event (GtkWidget *widget,
       /* The menu hasn't managed the
        * event, forward it to the combobox
        */
-      gtk_bindings_activate_event (G_OBJECT (combo_box), (GdkEventKey *)event);
+      return gtk_bindings_activate_event (G_OBJECT (combo_box), (GdkEventKey *)event);
     }
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 /*
