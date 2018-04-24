@@ -33,6 +33,7 @@
 #include <gdk/gdkinternals.h>
 #include "gdksurface-broadway.h"
 #include "gdkdisplay-broadway.h"
+#include "gdkdrawcontext-broadway.h"
 
 #include "gdkbroadwaycursor.h"
 #include "gdkbroadwaysurface.h"

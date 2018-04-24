@@ -8,11 +8,10 @@
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
 
-
 struct _GskBroadwayRenderer
 {
   GskRenderer parent_instance;
-
+  GdkBroadwayDrawContext *draw_context;
 };
 
 struct _GskBroadwayRendererClass
@@ -23,21 +22,33 @@ struct _GskBroadwayRendererClass
 G_DEFINE_TYPE (GskBroadwayRenderer, gsk_broadway_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
-gsk_broadway_renderer_realize (GskRenderer  *self,
-                               GdkSurface    *surface,
+gsk_broadway_renderer_realize (GskRenderer  *renderer,
+                               GdkSurface   *surface,
                                GError      **error)
 {
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
+
+  if (!GDK_IS_BROADWAY_SURFACE (surface))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                   "Broadway renderer only works for broadway surfaces");
+      return FALSE;
+    }
+
+  self->draw_context = gdk_broadway_draw_context_context (surface);
+
   return TRUE;
 }
 
 static void
-gsk_broadway_renderer_unrealize (GskRenderer *self)
+gsk_broadway_renderer_unrealize (GskRenderer *renderer)
 {
-
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
+  g_clear_object (&self->draw_context);
 }
 
 static GdkTexture *
-gsk_broadway_renderer_render_texture (GskRenderer           *self,
+gsk_broadway_renderer_render_texture (GskRenderer           *renderer,
                                       GskRenderNode         *root,
                                       const graphene_rect_t *viewport)
 {
@@ -443,14 +454,14 @@ node_texture_fallback (GskRenderNode *node,
    parent-relative which is what the dom uses, and
    which is good for re-using subtrees. */
 static void
-gsk_broadway_renderer_add_node (GskRenderer *self,
+gsk_broadway_renderer_add_node (GskRenderer *renderer,
                                 GArray *nodes,
                                 GPtrArray *node_textures,
                                 GskRenderNode *node,
                                 float offset_x,
                                 float offset_y)
 {
-  GdkDisplay *display = gsk_renderer_get_display (self);
+  GdkDisplay *display = gsk_renderer_get_display (renderer);
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -564,7 +575,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
             add_float (nodes, shadow->dy);
             add_float (nodes, shadow->radius);
           }
-        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
                                         gsk_shadow_node_get_child (node),
                                         offset_x, offset_y);
       }
@@ -574,7 +585,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       {
         add_uint32 (nodes, BROADWAY_NODE_OPACITY);
         add_float (nodes, gsk_opacity_node_get_opacity (node));
-        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
                                         gsk_opacity_node_get_child (node),
                                         offset_x, offset_y);
       }
@@ -585,7 +596,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
         const GskRoundedRect *rclip = gsk_rounded_clip_node_peek_clip (node);
         add_uint32 (nodes, BROADWAY_NODE_ROUNDED_CLIP);
         add_rounded_rect (nodes, rclip, offset_x, offset_y);
-        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
                                         gsk_rounded_clip_node_get_child (node),
                                         rclip->bounds.origin.x,
                                         rclip->bounds.origin.y);
@@ -597,7 +608,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
         const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
         add_uint32 (nodes, BROADWAY_NODE_CLIP);
         add_rect (nodes, clip, offset_x, offset_y);
-        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
                                         gsk_clip_node_get_child (node),
                                         clip->origin.x,
                                         clip->origin.y);
@@ -614,7 +625,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
         add_uint32 (nodes, gsk_container_node_get_n_children (node));
 
         for (i = 0; i < gsk_container_node_get_n_children (node); i++)
-          gsk_broadway_renderer_add_node (self, nodes, node_textures,
+          gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
                                           gsk_container_node_get_child (node, i), offset_x, offset_y);
       }
       return;
@@ -661,32 +672,15 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
 }
 
 static void
-gsk_broadway_renderer_render (GskRenderer          *self,
+gsk_broadway_renderer_render (GskRenderer          *renderer,
                               GskRenderNode        *root,
                               const cairo_region_t *update_area)
 {
-  GArray *nodes;
-  GPtrArray *node_textures;
-  cairo_region_t *whole;
-  GdkSurface *surface;
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
 
-  surface = gsk_renderer_get_surface (self);
-  whole = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                           0, 0,
-                                           gdk_surface_get_width (surface),
-                                           gdk_surface_get_height (surface)
-                                         });
-  gdk_draw_context_begin_frame (NULL, whole);
-  cairo_region_destroy (whole);
-
-  nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
-  node_textures = g_ptr_array_new_with_free_func (g_object_unref);
-  gsk_broadway_renderer_add_node (self, nodes, node_textures, root, 0, 0);
-  gdk_broadway_surface_set_nodes (surface, nodes, node_textures);
-  g_array_unref (nodes);
-  g_ptr_array_unref (node_textures);
-
-  gdk_draw_context_end_frame (NULL);
+  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->draw_context), update_area);
+  gsk_broadway_renderer_add_node (renderer, self->draw_context->nodes, self->draw_context->node_textures, root, 0, 0);
+  gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->draw_context));
 }
 
 static void
