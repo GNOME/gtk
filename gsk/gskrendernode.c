@@ -66,8 +66,6 @@ gsk_render_node_finalize (GskRenderNode *self)
 {
   self->node_class->finalize (self);
 
-  g_clear_pointer (&self->name, g_free);
-
   g_free (self);
 }
 
@@ -165,43 +163,6 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
 }
 
 /**
- * gsk_render_node_set_name:
- * @node: a #GskRenderNode
- * @name: (nullable): a name for the node
- *
- * Sets the name of the node.
- *
- * A name is generally useful for debugging purposes.
- */
-void
-gsk_render_node_set_name (GskRenderNode *node,
-                          const char    *name)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-
-  g_free (node->name);
-  node->name = g_strdup (name);
-}
-
-/**
- * gsk_render_node_get_name:
- * @node: a #GskRenderNode
- *
- * Retrieves the name previously set via gsk_render_node_set_name().
- * If no name has been set, %NULL is returned.
- *
- * Returns: (nullable): The name previously set via
- *     gsk_render_node_set_name() or %NULL
- **/
-const char *
-gsk_render_node_get_name (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-
-  return node->name;
-}
-
-/**
  * gsk_render_node_draw:
  * @node: a #GskRenderNode
  * @cr: cairo context to draw to
@@ -238,8 +199,7 @@ gsk_render_node_draw (GskRenderNode *node,
 #endif
 
   GSK_NOTE (CAIRO, g_message ("Rendering node %s[%p]",
-                            node->name ? node->name : node->node_class->type_name,
-                            node));
+                            node->node_class->type_name, node));
 
   node->node_class->draw (node, cr);
 
@@ -259,9 +219,8 @@ gsk_render_node_draw (GskRenderNode *node,
 
   if (cairo_status (cr))
     {
-      g_warning ("drawing failure for render node %s '%s': %s",
+      g_warning ("drawing failure for render node %s: %s",
                  node->node_class->type_name,
-                 gsk_render_node_get_name (node),
                  cairo_status_to_string (cairo_status (cr)));
     }
 }

@@ -16,9 +16,6 @@ struct _GskRenderNode
 
   volatile int ref_count;
 
-  /* Use for debugging */
-  char *name;
-
   graphene_rect_t bounds;
 };
 

@@ -122,24 +122,6 @@ recordings_list_row_selected (GtkListBox           *box,
     g_object_unref (recording);
 }
 
-static void
-render_node_list_get_value (GtkTreeModelRenderNode *model,
-                            GskRenderNode          *node,
-                            int                     column,
-                            GValue                 *value)
-{
-  switch (column)
-    {
-    case COLUMN_NODE_NAME:
-      g_value_set_string (value, gsk_render_node_get_name (node));
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-}
-
 static const char *
 node_type_name (GskRenderNodeType type)
 {
@@ -193,6 +175,69 @@ node_type_name (GskRenderNodeType type)
       return "Text";
     case GSK_BLUR_NODE:
       return "Blur";
+    }
+}
+
+static char *
+node_name (GskRenderNode *node)
+{
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+    case GSK_CONTAINER_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_TRANSFORM_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_BLUR_NODE:
+      return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
+
+    case GSK_OFFSET_NODE:
+      return g_strdup_printf ("Offset %g, %g", gsk_offset_node_get_x_offset (node), gsk_offset_node_get_y_offset (node));
+
+    case GSK_DEBUG_NODE:
+      return g_strdup (gsk_debug_node_get_message (node));
+
+    case GSK_COLOR_NODE:
+      return gdk_rgba_to_string (gsk_color_node_peek_color (node));
+
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        return g_strdup_printf ("%dx%d Texture", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+      }
+    }
+}
+
+static void
+render_node_list_get_value (GtkTreeModelRenderNode *model,
+                            GskRenderNode          *node,
+                            int                     column,
+                            GValue                 *value)
+{
+  switch (column)
+    {
+    case COLUMN_NODE_NAME:
+      g_value_take_string (value, node_name (node));
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -742,7 +787,7 @@ render_node_save (GtkButton            *button,
   GskRenderNode *node;
   GtkTreeIter iter;
   GtkWidget *dialog;
-  char *filename;
+  char *filename, *nodename;
 
   if (!gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->render_node_tree)), NULL, &iter))
     return;
@@ -755,8 +800,9 @@ render_node_save (GtkButton            *button,
                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         _("_Save"), GTK_RESPONSE_ACCEPT,
                                         NULL);
-  filename = g_strdup_printf ("%s.node", gsk_render_node_get_name (node) ? gsk_render_node_get_name (node)
-                                                                         : node_type_name (gsk_render_node_get_node_type (node)));
+  nodename = node_name (node);
+  filename = g_strdup_printf ("%s.node", nodename);
+  g_free (nodename);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
   g_free (filename);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);

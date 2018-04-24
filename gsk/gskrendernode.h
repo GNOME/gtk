@@ -67,11 +67,6 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNodeType       gsk_render_node_get_node_type           (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_ALL
-void                    gsk_render_node_set_name                (GskRenderNode *node,
-                                                                 const char    *name);
-GDK_AVAILABLE_IN_ALL
-const char *            gsk_render_node_get_name                (GskRenderNode *node);
-GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_get_bounds              (GskRenderNode   *node,
                                                                  graphene_rect_t *bounds);
 
