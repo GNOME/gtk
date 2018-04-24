@@ -38,6 +38,8 @@ typedef struct _GdkBroadwayCairoContextClass GdkBroadwayCairoContextClass;
 struct _GdkBroadwayCairoContext
 {
   GdkCairoContext parent_instance;
+
+  cairo_surface_t *paint_surface;
 };
 
 struct _GdkBroadwayCairoContextClass
