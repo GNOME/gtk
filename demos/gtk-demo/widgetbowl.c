@@ -140,177 +140,15 @@ static void
 set_widget_type (GtkWidget *headerbar,
                  int        widget_type_index)
 {
-  GList *children, *l;
-
   if (widget_type_index == selected_widget_type)
     return;
-
-  /* Remove everything */
-  children = gtk_container_get_children (GTK_CONTAINER (fishbowl));
-  for (l = children; l; l = l->next)
-    {
-      gtk_container_remove (GTK_CONTAINER (fishbowl), (GtkWidget*)l->data);
-    }
-
-  g_list_free (children);
 
   selected_widget_type = widget_type_index;
 
   gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar),
                             widget_types[selected_widget_type].name);
-}
-
-
-typedef struct _Stats Stats;
-struct _Stats {
-  gint64 last_stats;
-  gint64 last_frame;
-  gint last_suggestion;
-  guint frame_counter_max;
-
-  guint stats_index;
-  guint frame_counter[N_STATS];
-  guint item_counter[N_STATS];
-};
-
-static Stats *
-get_stats (GtkWidget *widget)
-{
-  static GQuark stats_quark = 0;
-  Stats *stats;
-
-  if (G_UNLIKELY (stats_quark == 0))
-    stats_quark = g_quark_from_static_string ("stats");
-
-  stats = g_object_get_qdata (G_OBJECT (widget), stats_quark);
-  if (stats == NULL)
-    {
-      stats = g_new0 (Stats, 1);
-      g_object_set_qdata_full (G_OBJECT (widget), stats_quark, stats, g_free);
-      stats->last_frame = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-      stats->last_stats = stats->last_frame;
-    }
-
-  return stats;
-}
-
-static void
-do_stats (GtkWidget *widget,
-          GtkWidget *info_label,
-          gint      *suggested_change)
-{
-  Stats *stats;
-  gint64 frame_time;
-
-  stats = get_stats (widget);
-  frame_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-
-  if (stats->last_stats + STATS_UPDATE_TIME < frame_time)
-    {
-      char *new_label;
-      guint i, n_frames;
-
-      n_frames = 0;
-      for (i = 0; i < N_STATS; i++)
-        {
-          n_frames += stats->frame_counter[i];
-        }
-
-      new_label = g_strdup_printf ("widgets - %.1f fps",
-                                   (double) G_USEC_PER_SEC * n_frames
-                                       / (N_STATS * STATS_UPDATE_TIME));
-      gtk_label_set_label (GTK_LABEL (info_label), new_label);
-      g_free (new_label);
-
-      if (stats->frame_counter[stats->stats_index] >= 19 * stats->frame_counter_max / 20)
-        {
-          if (stats->last_suggestion > 0)
-            stats->last_suggestion *= 2;
-          else
-            stats->last_suggestion = 1;
-        }
-      else
-        {
-          if (stats->last_suggestion < 0)
-            stats->last_suggestion--;
-          else
-            stats->last_suggestion = -1;
-          stats->last_suggestion = MAX (stats->last_suggestion, 1 - (int) stats->item_counter[stats->stats_index]);
-        }
-
-      stats->stats_index = (stats->stats_index + 1) % N_STATS;
-      stats->frame_counter[stats->stats_index] = 0;
-      stats->item_counter[stats->stats_index] = stats->item_counter[(stats->stats_index + N_STATS - 1) % N_STATS];
-      stats->last_stats = frame_time;
-
-      if (suggested_change)
-        *suggested_change = stats->last_suggestion;
-      else
-        stats->last_suggestion = 0;
-    }
-  else
-    {
-      if (suggested_change)
-        *suggested_change = 0;
-    }
-
-  stats->last_frame = frame_time;
-  stats->frame_counter[stats->stats_index]++;
-  stats->frame_counter_max = MAX (stats->frame_counter_max, stats->frame_counter[stats->stats_index]);
-}
-
-static void
-stats_update (GtkWidget *widget)
-{
-  Stats *stats;
-
-  stats = get_stats (widget);
-
-  stats->item_counter[stats->stats_index] = gtk_fishbowl_get_count (GTK_FISHBOWL (widget));
-}
-
-static gboolean
-move_fish (GtkWidget     *bowl,
-           GdkFrameClock *frame_clock,
-           gpointer       info_label)
-{
-  gint suggested_change = 0;
-
-  do_stats (bowl, info_label, &suggested_change);
-
-  if (suggested_change > 0)
-    {
-      int i;
-
-      for (i = 0; i < suggested_change; i ++)
-        {
-          GtkWidget *new_widget = widget_types[selected_widget_type].create_func ();
-
-          gtk_container_add (GTK_CONTAINER (fishbowl), new_widget);
-
-        }
-    }
-  else if (suggested_change < 0)
-    {
-      GList *children, *l;
-      int n_removed = 0;
-
-      children = gtk_container_get_children (GTK_CONTAINER (fishbowl));
-      for (l = children; l; l = l->next)
-        {
-          gtk_container_remove (GTK_CONTAINER (fishbowl), (GtkWidget *)l->data);
-          n_removed ++;
-
-          if (n_removed >= (-suggested_change))
-            break;
-        }
-
-      g_list_free (children);
-    }
-
-  stats_update (bowl);
-
-  return G_SOURCE_CONTINUE;
+  gtk_fishbowl_set_creation_func (GTK_FISHBOWL (fishbowl),
+                                  widget_types[selected_widget_type].create_func);
 }
 
 static void
@@ -386,6 +224,7 @@ do_widgetbowl (GtkWidget *do_widget)
       g_signal_connect (prev_button, "clicked", G_CALLBACK (prev_button_clicked_cb), titlebar);
 
       gtk_fishbowl_set_animating (GTK_FISHBOWL (fishbowl), TRUE);
+      gtk_fishbowl_set_benchmark (GTK_FISHBOWL (fishbowl), TRUE);
 
       gtk_widget_set_hexpand (title_box, TRUE);
       gtk_widget_set_halign (title_box, GTK_ALIGN_END);
@@ -408,7 +247,6 @@ do_widgetbowl (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
-      gtk_widget_add_tick_callback (fishbowl, move_fish, info_label, NULL);
 
       set_widget_type (titlebar, 0);
     }

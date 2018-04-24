@@ -24,6 +24,7 @@ typedef struct _GtkFishbowlChild         GtkFishbowlChild;
 
 struct _GtkFishbowlPrivate
 {
+  GtkFishCreationFunc creation_func;
   GList *children;
   guint count;
 
@@ -34,7 +35,6 @@ struct _GtkFishbowlPrivate
   double framerate;
   int last_benchmark_change;
 
-  guint use_icons : 1;
   guint benchmark : 1;
 };
 
@@ -59,7 +59,7 @@ enum {
 
 static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkFishbowl, gtk_fishbowl, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkFishbowl, gtk_fishbowl, GTK_TYPE_WIDGET)
 
 static void
 gtk_fishbowl_init (GtkFishbowl *fishbowl)
@@ -82,15 +82,6 @@ GtkWidget*
 gtk_fishbowl_new (void)
 {
   return g_object_new (GTK_TYPE_FISHBOWL, NULL);
-}
-
-void
-gtk_fishbowl_set_use_icons (GtkFishbowl *fishbowl,
-                            gboolean     use_icons)
-{
-  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
-
-  priv->use_icons = use_icons;
 }
 
 static void
@@ -173,10 +164,9 @@ new_speed (void)
 }
 
 static void
-gtk_fishbowl_add (GtkContainer *container,
-                  GtkWidget    *widget)
+gtk_fishbowl_add (GtkFishbowl *fishbowl,
+                  GtkWidget   *widget)
 {
-  GtkFishbowl *fishbowl = GTK_FISHBOWL (container);
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
   GtkFishbowlChild *child_info;
 
@@ -198,13 +188,12 @@ gtk_fishbowl_add (GtkContainer *container,
 }
 
 static void
-gtk_fishbowl_remove (GtkContainer *container,
-                     GtkWidget    *widget)
+gtk_fishbowl_remove (GtkFishbowl *fishbowl,
+                     GtkWidget   *widget)
 {
-  GtkFishbowl *fishbowl = GTK_FISHBOWL (container);
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
   GtkFishbowlChild *child;
-  GtkWidget *widget_container = GTK_WIDGET (container);
+  GtkWidget *widget_bowl = GTK_WIDGET (fishbowl);
   GList *children;
 
   for (children = priv->children; children; children = children->next)
@@ -221,33 +210,13 @@ gtk_fishbowl_remove (GtkContainer *container,
           g_list_free (children);
           g_free (child);
 
-          if (was_visible && gtk_widget_get_visible (widget_container))
-            gtk_widget_queue_resize (widget_container);
+          if (was_visible && gtk_widget_get_visible (widget_bowl))
+            gtk_widget_queue_resize (widget_bowl);
 
           priv->count--;
           g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_COUNT]);
           break;
         }
-    }
-}
-
-static void
-gtk_fishbowl_forall (GtkContainer *container,
-                     GtkCallback   callback,
-                     gpointer      callback_data)
-{
-  GtkFishbowl *fishbowl = GTK_FISHBOWL (container);
-  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
-  GtkFishbowlChild *child;
-  GList *children;
-
-  children = priv->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      (* callback) (child->widget, callback_data);
     }
 }
 
@@ -335,7 +304,6 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->dispose = gtk_fishbowl_dispose;
   object_class->set_property = gtk_fishbowl_set_property;
@@ -343,10 +311,6 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
 
   widget_class->measure = gtk_fishbowl_measure;
   widget_class->size_allocate = gtk_fishbowl_size_allocate;
-
-  container_class->add = gtk_fishbowl_add;
-  container_class->remove = gtk_fishbowl_remove;
-  container_class->forall = gtk_fishbowl_forall;
 
   props[PROP_ANIMATING] =
       g_param_spec_boolean ("animating",
@@ -397,91 +361,29 @@ gtk_fishbowl_get_count (GtkFishbowl *fishbowl)
   return priv->count;
 }
 
-char **icon_names = NULL;
-gsize n_icon_names = 0;
-
-static void
-init_icon_names (GtkIconTheme *theme)
-{
-  GPtrArray *icons;
-  GList *l, *icon_list;
-
-  if (icon_names)
-    return;
-
-  icon_list = gtk_icon_theme_list_icons (theme, NULL);
-  icons = g_ptr_array_new ();
-
-  for (l = icon_list; l; l = l->next)
-    {
-      if (g_str_has_suffix (l->data, "symbolic"))
-        continue;
-
-      g_ptr_array_add (icons, g_strdup (l->data));
-    }
-
-  n_icon_names = icons->len;
-  g_ptr_array_add (icons, NULL); /* NULL-terminate the array */
-  icon_names = (char **) g_ptr_array_free (icons, FALSE);
-
-  /* don't free strings, we assigned them to the array */
-  g_list_free_full (icon_list, g_free);
-}
-
-static const char *
-get_random_icon_name (GtkIconTheme *theme)
-{
-  init_icon_names (theme);
-
-  return icon_names[g_random_int_range(0, n_icon_names)];
-}
-
-static GType
-get_random_widget_type ()
-{
-  GType types[] = {
-    GTK_TYPE_SWITCH,
-    GTK_TYPE_BUTTON,
-    GTK_TYPE_ENTRY,
-    GTK_TYPE_SPIN_BUTTON,
-    GTK_TYPE_FONT_BUTTON,
-    GTK_TYPE_SCROLLBAR,
-    GTK_TYPE_SCALE,
-    GTK_TYPE_LEVEL_BAR,
-    GTK_TYPE_PROGRESS_BAR,
-    GTK_TYPE_RADIO_BUTTON,
-    GTK_TYPE_CHECK_BUTTON
-  };
-  return types[g_random_int_range (0, G_N_ELEMENTS (types))];
-}
-
 void
 gtk_fishbowl_set_count (GtkFishbowl *fishbowl,
                         guint        count)
 {
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
 
+  if (priv->count == count)
+    return;
+
   g_object_freeze_notify (G_OBJECT (fishbowl));
 
   while (priv->count > count)
     {
-      gtk_container_remove (GTK_CONTAINER (fishbowl),
-                            ((GtkFishbowlChild *) priv->children->data)->widget);
+      gtk_fishbowl_remove (fishbowl, gtk_widget_get_first_child (GTK_WIDGET (fishbowl)));
     }
 
   while (priv->count < count)
     {
       GtkWidget *new_widget;
 
-      if (priv->use_icons)
-        {
-          new_widget = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()));
-          gtk_image_set_icon_size (GTK_IMAGE (new_widget), GTK_ICON_SIZE_LARGE);
-        }
-      else
-        new_widget = g_object_new (get_random_widget_type (), NULL);
+      new_widget = priv->creation_func ();
 
-      gtk_container_add (GTK_CONTAINER (fishbowl), new_widget);
+      gtk_fishbowl_add (fishbowl, new_widget);
     }
 
   g_object_thaw_notify (G_OBJECT (fishbowl));
@@ -741,3 +643,17 @@ gtk_fishbowl_set_update_delay (GtkFishbowl *fishbowl,
   g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_UPDATE_DELAY]);
 }
 
+void
+gtk_fishbowl_set_creation_func (GtkFishbowl         *fishbowl,
+                                GtkFishCreationFunc  creation_func)
+{
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  g_object_freeze_notify (G_OBJECT (fishbowl));
+
+  gtk_fishbowl_set_count (fishbowl, 0);
+
+  priv->creation_func = creation_func;
+
+  g_object_thaw_notify (G_OBJECT (fishbowl));
+}

@@ -32,22 +32,21 @@ G_BEGIN_DECLS
 typedef struct _GtkFishbowl              GtkFishbowl;
 typedef struct _GtkFishbowlClass         GtkFishbowlClass;
 
+typedef GtkWidget * (* GtkFishCreationFunc) (void);
+
 struct _GtkFishbowl
 {
-  GtkContainer container;
+  GtkWidget parent;
 };
 
 struct _GtkFishbowlClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 GType      gtk_fishbowl_get_type          (void) G_GNUC_CONST;
 
 GtkWidget* gtk_fishbowl_new               (void);
-
-void       gtk_fishbowl_set_use_icons     (GtkFishbowl       *fishbowl,
-                                           gboolean           use_icons);
 
 guint      gtk_fishbowl_get_count         (GtkFishbowl       *fishbowl);
 void       gtk_fishbowl_set_count         (GtkFishbowl       *fishbowl,
@@ -62,6 +61,8 @@ double     gtk_fishbowl_get_framerate     (GtkFishbowl       *fishbowl);
 gint64     gtk_fishbowl_get_update_delay  (GtkFishbowl       *fishbowl);
 void       gtk_fishbowl_set_update_delay  (GtkFishbowl       *fishbowl,
                                            gint64             update_delay);
+void       gtk_fishbowl_set_creation_func (GtkFishbowl       *fishbowl,
+                                           GtkFishCreationFunc creation_func);
 
 G_END_DECLS
 
