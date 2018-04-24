@@ -62,7 +62,11 @@ gtk_inspector_overlay_snapshot (GtkInspectorOverlay *self,
                                 GskRenderNode       *node,
                                 GtkWidget           *widget)
 {
+  gtk_snapshot_push_debug (snapshot, "%s %p", G_OBJECT_TYPE_NAME (self), self);
+
   GTK_INSPECTOR_OVERLAY_GET_CLASS (self)->snapshot (self, snapshot, node, widget);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 void

@@ -47,9 +47,7 @@
 void
 gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
                              GdkTexture             *texture,
-                             const graphene_rect_t  *bounds,
-                             const char             *name,
-                             ...) G_GNUC_PRINTF (4, 5);
+                             const graphene_rect_t  *bounds);
 
 /**
  * SECTION:gdktexture
@@ -93,10 +91,7 @@ gdk_texture_paintable_snapshot (GdkPaintable *paintable,
 
   gtk_snapshot_append_texture (snapshot,
                                self,
-                               &GRAPHENE_RECT_INIT (0, 0, width, height),
-                               "%s as paintable %dx%d",
-                               G_OBJECT_TYPE_NAME (paintable),
-                               self->width, self->height);
+                               &GRAPHENE_RECT_INIT (0, 0, width, height));
 }
 
 static GdkPaintableFlags

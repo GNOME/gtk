@@ -111,7 +111,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                       });
       graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
 
-      gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset, "Recolor");
+      gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
     }
 
   gtk_snapshot_append_texture (snapshot,
@@ -121,8 +121,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    (height - texture_height) / 2.0,
                                    texture_width,
                                    texture_height
-                               ),
-                               "CssImageIconTheme<%s@%d>", icon_theme->name, icon_theme->scale);
+                               ));
   if (symbolic)
     gtk_snapshot_pop (snapshot);
 }

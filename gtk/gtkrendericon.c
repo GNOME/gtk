@@ -119,6 +119,8 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   if (!gtk_css_transform_value_get_matrix (transform_value, &transform_matrix))
     return;
 
+  gtk_snapshot_push_debug (snapshot, "CSS Icon @ %gx%g", width, height);
+
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
@@ -137,7 +139,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
       graphene_matrix_multiply (&m2, &m3, &m1);
 
-      gtk_snapshot_push_transform (snapshot, &m1, "CSS Icon Transform Container");
+      gtk_snapshot_push_transform (snapshot, &m1);
 
       gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
 
@@ -148,6 +150,8 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
     gtk_snapshot_pop (snapshot);
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 static gboolean
@@ -309,7 +313,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
                                        });
       graphene_vec4_init (&color_offset, fg.red, fg.green, fg.blue, 0);
 
-      gtk_snapshot_push_color_matrix (snapshot, &color_matrix, &color_offset, "Recoloring Icon");
+      gtk_snapshot_push_color_matrix (snapshot, &color_matrix, &color_offset);
     }
 
   if (graphene_matrix_is_identity (&transform_matrix))
@@ -326,7 +330,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
       graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
       graphene_matrix_multiply (&m2, &m3, &m1);
 
-      gtk_snapshot_push_transform (snapshot, &m1, "Icon Transform");
+      gtk_snapshot_push_transform (snapshot, &m1);
 
       gdk_paintable_snapshot (paintable, snapshot, width, height);
 

@@ -251,7 +251,7 @@ _gtk_css_image_draw (GtkCssImage        *image,
 
   cairo_save (cr);
 
-  snapshot = gtk_snapshot_new (FALSE, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  snapshot = gtk_snapshot_new ();
   gtk_css_image_snapshot (image, snapshot, width, height);
   node = gtk_snapshot_free_to_node (snapshot);
 

@@ -91,8 +91,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
   cairo_t *cr;
 
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                  "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   x = _gtk_css_position_value_get_x (radial->position, width);
   y = _gtk_css_position_value_get_y (radial->position, height);

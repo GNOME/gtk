@@ -90,18 +90,15 @@ gtk_theming_background_snapshot_color (const GtkThemingBackground *bg,
     {
       gtk_snapshot_append_color (snapshot,
                                  bg_color,
-                                 &bg->boxes[clip].bounds,
-                                 "BackgroundColor");
+                                 &bg->boxes[clip].bounds);
     }
   else
     {
       gtk_snapshot_push_rounded_clip (snapshot,
-                                      &bg->boxes[clip],
-                                      "BackgroundColorClip");
+                                      &bg->boxes[clip]);
       gtk_snapshot_append_color (snapshot,
                                  bg_color,
-                                 &bg->boxes[clip].bounds,
-                                 "BackgroundColor");
+                                 &bg->boxes[clip].bounds);
       gtk_snapshot_pop (snapshot);
     }
 }
@@ -390,7 +387,8 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
   if (image_height == height)
     vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
 
-  gtk_snapshot_push_rounded_clip (snapshot, clip, "BackgroundLayerClip<%u>", idx);
+  gtk_snapshot_push_debug (snapshot, "Layer %u", idx);
+  gtk_snapshot_push_rounded_clip (snapshot, clip);
 
   gtk_snapshot_offset (snapshot, origin->bounds.origin.x, origin->bounds.origin.y);
 
@@ -501,8 +499,7 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
                                 &GRAPHENE_RECT_INIT (
                                     position_x, position_y,
                                     repeat_width, repeat_height
-                                ),
-                                "BackgroundLayerRepeat<%u>", idx);
+                                ));
                                 
       gtk_snapshot_offset (snapshot,
                            position_x + 0.5 * (repeat_width - image_width),
@@ -514,6 +511,7 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
 
   gtk_snapshot_offset (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);
 
+  gtk_snapshot_pop (snapshot);
   gtk_snapshot_pop (snapshot);
 }
 
@@ -640,6 +638,8 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
 
   gtk_theming_background_init (&bg, style, width, height);
 
+  gtk_snapshot_push_debug (snapshot, "CSS background");
+
   gtk_css_shadows_value_snapshot_outset (box_shadow,
                                          snapshot,
                                          &bg.boxes[GTK_CSS_AREA_BORDER_BOX]);
@@ -653,8 +653,7 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
       blend_mode_values[idx] = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
 
       if (blend_mode_values[idx] != GSK_BLEND_MODE_DEFAULT)
-        gtk_snapshot_push_blend (snapshot, blend_mode_values[idx], "Background<%u>Blend<%u>",
-                                 idx, blend_mode_values[idx]);
+        gtk_snapshot_push_blend (snapshot, blend_mode_values[idx]);
     }
 
   if (!gdk_rgba_is_clear (bg_color))
@@ -677,5 +676,7 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
   gtk_css_shadows_value_snapshot_inset (box_shadow,
                                         snapshot,
                                         &bg.boxes[GTK_CSS_AREA_PADDING_BOX]);
+
+  gtk_snapshot_pop (snapshot);
 }
 

@@ -46,7 +46,6 @@ struct _GskPangoRenderer
   GtkSnapshot *snapshot;
   GdkRGBA fg_color;
   graphene_rect_t bounds;
-  char *name;
 
   /* house-keeping options */
   gboolean is_cached_renderer;
@@ -147,13 +146,6 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   if (node == NULL)
     return;
 
-  if (gtk_snapshot_get_record_names (crenderer->snapshot))
-    {
-      char *s = g_strdup_printf ("%s<%d>", crenderer->name, glyphs->num_glyphs);
-      gsk_render_node_set_name (node, s);
-      g_free (s);
-    }
-
   gtk_snapshot_append_node_internal (crenderer->snapshot, node);
   gsk_render_node_unref (node);
 }
@@ -199,7 +191,7 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
                       (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
                       (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
 
-  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds, "DrawRectangle");
+  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds);
 }
 
 static void
@@ -216,7 +208,7 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
   cairo_t *cr;
   gdouble x, y;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawTrapezoid");
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
   set_color (crenderer, part, cr);
 
@@ -319,7 +311,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   cairo_t *cr;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawTrapezoid");
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
   set_color (crenderer, PANGO_RENDER_PART_UNDERLINE, cr);
 
@@ -348,7 +340,7 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
   double base_x = (double)x / PANGO_SCALE;
   double base_y = (double)y / PANGO_SCALE;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawShape");
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
   layout = pango_renderer_get_layout (renderer);
   if (!layout)
@@ -419,7 +411,6 @@ release_renderer (GskPangoRenderer *renderer)
   if (G_LIKELY (renderer->is_cached_renderer))
     {
       renderer->snapshot = NULL;
-      g_clear_pointer (&renderer->name, g_free);
 
       G_UNLOCK (cached_renderer);
     }
@@ -432,19 +423,15 @@ release_renderer (GskPangoRenderer *renderer)
  * @snapshot: a #GtkSnapshot
  * @layout: the #PangoLayout to render
  * @color: the foreground color to render the layout in
- * @name: (transfer none): a printf() style format string for the name for the new node
- * @...: arguments to insert into the format string
  *
  * Creates render nodes for rendering @layout in the given foregound @color
  * and appends them to the current node of @snapshot without changing the
  * current node.
  **/
 void
-gtk_snapshot_append_layout (GtkSnapshot            *snapshot,
-                            PangoLayout            *layout,
-                            const GdkRGBA          *color,
-                            const char             *name,
-                            ...)
+gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
+                            PangoLayout   *layout,
+                            const GdkRGBA *color)
 {
   GskPangoRenderer *crenderer;
   PangoRectangle ink_rect;
@@ -456,16 +443,6 @@ gtk_snapshot_append_layout (GtkSnapshot            *snapshot,
 
   crenderer->snapshot = snapshot;
   crenderer->fg_color = *color;
-  if (name && gtk_snapshot_get_record_names (crenderer->snapshot))
-    {
-      va_list args;
-
-      va_start (args, name);
-      crenderer->name = g_strdup_vprintf (name, args);
-      va_end (args);
-    }
-  else
-    crenderer->name = NULL;
 
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
   graphene_rect_init (&crenderer->bounds, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);

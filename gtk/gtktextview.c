@@ -5432,9 +5432,9 @@ gtk_text_view_snapshot (GtkWidget   *widget,
                       gtk_widget_get_width (widget),
                       gtk_widget_get_height (widget));
 
-  gtk_snapshot_push_clip (snapshot, &bounds, "Textview Clip");
+  gtk_snapshot_push_clip (snapshot, &bounds);
 
-  cr = gtk_snapshot_append_cairo (snapshot, &bounds, "GtkTextView");
+  cr = gtk_snapshot_append_cairo (snapshot, &bounds);
 
   context = gtk_widget_get_style_context (widget);
 

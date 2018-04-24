@@ -103,8 +103,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
 
       gtk_snapshot_append_texture (snapshot,
                                    texture,
-                                   &GRAPHENE_RECT_INIT(x, y, width, height),
-                                   "ColorScaleHue");
+                                   &GRAPHENE_RECT_INIT(x, y, width, height));
       g_object_unref (texture);
     }
   else if (scale->priv->type == GTK_COLOR_SCALE_ALPHA)
@@ -113,8 +112,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       graphene_point_t start, end;
 
       cr = gtk_snapshot_append_cairo (snapshot,
-                                      &GRAPHENE_RECT_INIT(x, y, width, height),
-                                      "ColorScaleAlpha");
+                                      &GRAPHENE_RECT_INIT(x, y, width, height));
       cairo_translate (cr, x, y);
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
@@ -157,8 +155,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                                { 0, { color->red, color->green, color->blue, 0 } },
                                                { 1, { color->red, color->green, color->blue, 1 } },
                                            },
-                                           2,
-                                           "ColorAlphaGradient");
+                                           2);
     }
 }
 

@@ -227,8 +227,7 @@ gtk_updates_overlay_snapshot (GtkInspectorOverlay *overlay,
           cairo_region_get_rectangle (draw->region, i, &rect);
           gtk_snapshot_append_color (snapshot,
                                      &(GdkRGBA) { 1, 0, 0, 0.4 * (1 - progress) },
-                                     &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
-                                     "Debug Updates<%g>", progress);
+                                     &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height));
         }
     }
 }

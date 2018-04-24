@@ -513,8 +513,7 @@ gtk_viewport_snapshot (GtkWidget   *widget,
                           &GRAPHENE_RECT_INIT(
                             0, 0,
                             gtk_widget_get_width (widget),
-                            gtk_widget_get_height (widget)),
-                            "Viewport");
+                            gtk_widget_get_height (widget)));
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->snapshot (widget, snapshot);
 

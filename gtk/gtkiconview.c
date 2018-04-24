@@ -1665,8 +1665,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
                           &GRAPHENE_RECT_INIT (
                               0, 0,
                               width, height
-                          ),
-                          "IconView Clip");
+                          ));
 
   gtk_snapshot_offset (snapshot,
                        - gtk_adjustment_get_value (icon_view->priv->hadjustment),
@@ -6699,7 +6698,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
       
       if (index == item->index)
         {
-          snapshot = gtk_snapshot_new (FALSE, "IconView DragIcon");
+          snapshot = gtk_snapshot_new ();
           gtk_icon_view_snapshot_item (icon_view, snapshot, item,
                                        icon_view->priv->item_padding,
                                        icon_view->priv->item_padding,

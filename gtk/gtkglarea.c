@@ -744,8 +744,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
                                    texture->holder,
                                    &GRAPHENE_RECT_INIT (0, 0,
                                                         gtk_widget_get_width (widget),
-                                                        gtk_widget_get_height (widget)),
-                                   "GL Area");
+                                                        gtk_widget_get_height (widget)));
 
       g_object_unref (texture->holder);
     }

@@ -2325,8 +2325,7 @@ calendar_snapshot_day (GtkCalendar *calendar,
                                  &GRAPHENE_RECT_INIT (
                                      day_rect.x + 2, y_loc,
                                      day_rect.width - 2, 1
-                                 ),
-                                 "CalendarDetailSeparator");
+                                 ));
 
       y_loc += 2;
     }

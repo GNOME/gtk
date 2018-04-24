@@ -117,8 +117,7 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
     return;
 
   gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT (0, 0, width, height),
-                          "MagnifierClip");
+                          &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (
                                  - CLAMP (priv->x, 0, paintable_width),
@@ -130,7 +129,7 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
   if (!priv->resize)
     graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (width / 2, height / 2, 0));
 
-  gtk_snapshot_push_transform (snapshot, &transform, "Magnifier transform");
+  gtk_snapshot_push_transform (snapshot, &transform);
   gdk_paintable_snapshot (priv->paintable, snapshot, paintable_width, paintable_height);
   gtk_snapshot_pop (snapshot);
 

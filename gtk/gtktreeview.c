@@ -4441,8 +4441,7 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
                                      MIN (y1, y2),
                                      ABS (x2 - x1) + 1,
                                      ABS (y2 - y1) + 1
-                                  ),
-                                  "TreeViewGridLine");
+                                  ));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
 
@@ -4840,8 +4839,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                                                  cell_area.y + cell_area.height / 2,
                                                  cell_area.x + cell_area.width,
                                                  1
-                                             ),
-                                             "Separator");
+                                             ));
 
                   gtk_style_context_restore (context);
                 }
@@ -4881,8 +4879,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                                                  cell_area.y + cell_area.height / 2,
                                                  cell_area.x + cell_area.width,
                                                  1
-                                             ),
-                                             "Separator");
+                                             ));
 
                   gtk_style_context_restore (context);
                 }
@@ -5144,8 +5141,7 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
                               0, gtk_tree_view_get_effective_header_height (tree_view),
                               width,
                               height - gtk_tree_view_get_effective_header_height (tree_view)
-                          ),
-                          "TreeViewContentClip");
+                          ));
 
   gtk_snapshot_offset (snapshot,
                        - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
@@ -5201,8 +5197,7 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
                               0, 0,
                               width,
                               gtk_tree_view_get_effective_header_height (tree_view)
-                          ),
-                          "TreeViewHeaderClip");
+                          ));
 
   gtk_style_context_save (context);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VIEW);
@@ -13709,7 +13704,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 
   bin_window_width = gtk_widget_get_width (GTK_WIDGET (tree_view));
 
-  snapshot = gtk_snapshot_new (FALSE, "TreeView DragIcon");
+  snapshot = gtk_snapshot_new ();
 
   gtk_snapshot_render_background (snapshot, context,
                                   0, 0,
@@ -13769,8 +13764,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                                              cell_area.y + cell_area.height / 2,
                                              cell_area.x + cell_area.width,
                                              1
-                                         ),
-                                         "Separator");
+                                         ));
 
               gtk_style_context_restore (context);
             }

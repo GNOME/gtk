@@ -117,17 +117,13 @@ swatch_snapshot (GtkWidget   *widget,
                                         0, 0,
                                         gtk_widget_get_width (widget),
                                         gtk_widget_get_height (widget));
-      gtk_snapshot_push_rounded_clip (snapshot,
-                                      &content_box,
-                                      "ColorSwatchClip");
+      gtk_snapshot_push_rounded_clip (snapshot, &content_box);
 
       if (swatch->priv->use_alpha && !gdk_rgba_is_opaque (&swatch->priv->color))
         {
           cairo_t *cr;
 
-          cr = gtk_snapshot_append_cairo (snapshot,
-                                          &content_box.bounds,
-                                          "CheckeredBackground");
+          cr = gtk_snapshot_append_cairo (snapshot, &content_box.bounds);
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
           cairo_paint (cr);
 
@@ -143,8 +139,7 @@ swatch_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_append_color (snapshot,
                                      &swatch->priv->color,
-                                     &content_box.bounds,
-                                     "ColorSwatch Color");
+                                     &content_box.bounds);
         }
       else
         {
@@ -154,8 +149,7 @@ swatch_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_append_color (snapshot,
                                      &color,
-                                     &content_box.bounds,
-                                     "ColorSwatch Opaque Color");
+                                     &content_box.bounds);
         }
 
       gtk_snapshot_pop (snapshot);
@@ -172,11 +166,10 @@ drag_set_color_icon (GdkDragContext *context,
   GtkSnapshot *snapshot;
   GdkPaintable *paintable;
 
-  snapshot = gtk_snapshot_new (FALSE, "ColorDragIcon");
+  snapshot = gtk_snapshot_new ();
   gtk_snapshot_append_color (snapshot,
                              color,
-                             &GRAPHENE_RECT_INIT(0, 0, 48, 32),
-                             "ColorDragColor");
+                             &GRAPHENE_RECT_INIT(0, 0, 48, 32));
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
   gtk_drag_set_icon_paintable (context, paintable, 4, 4);

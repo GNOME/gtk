@@ -672,8 +672,7 @@ gtk_overlay_snapshot (GtkWidget   *widget,
             {
               GtkSnapshot *child_snapshot;
 
-              child_snapshot = gtk_snapshot_new (gtk_snapshot_get_record_names (snapshot),
-                                                 "OverlayCaptureMainChild");
+              child_snapshot = gtk_snapshot_new ();
               gtk_snapshot_offset (child_snapshot, main_alloc.x, main_alloc.y);
               gtk_widget_snapshot (main_widget, child_snapshot);
               gtk_snapshot_offset (child_snapshot, -main_alloc.x, -main_alloc.y);
@@ -682,8 +681,8 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 
           gtk_widget_get_allocation (child, &alloc);
           graphene_rect_init (&bounds, alloc.x, alloc.y, alloc.width, alloc.height);
-          gtk_snapshot_push_clip (snapshot, &bounds, "Overlay Effect Clip");
-          gtk_snapshot_push_blur (snapshot, blur, "Overlay Effect");
+          gtk_snapshot_push_clip (snapshot, &bounds);
+          gtk_snapshot_push_blur (snapshot, blur);
           gtk_snapshot_append_node (snapshot, main_widget_node);
           gtk_snapshot_pop (snapshot);
           gtk_snapshot_pop (snapshot);
@@ -714,7 +713,7 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 
       cairo_region_get_rectangle (clip, i, &rect);
       graphene_rect_init (&bounds, rect.x, rect.y, rect.width, rect.height);
-      gtk_snapshot_push_clip (snapshot, &bounds, "Overlay Non-Effect Clip");
+      gtk_snapshot_push_clip (snapshot, &bounds);
       gtk_snapshot_append_node (snapshot, main_widget_node);
       gtk_snapshot_pop (snapshot);
     }

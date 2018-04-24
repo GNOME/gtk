@@ -27,7 +27,7 @@ snapshot_blur (GtkWidget   *widget,
 {
   GtkBlurBox *box = (GtkBlurBox *) widget;
 
-  gtk_snapshot_push_blur (snapshot, box->radius, "blur");
+  gtk_snapshot_push_blur (snapshot, box->radius);
 
   GTK_WIDGET_CLASS (gtk_blur_box_parent_class)->snapshot (widget, snapshot);
 

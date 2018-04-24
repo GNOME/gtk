@@ -226,12 +226,12 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   limit_layout_lines (layout);
 
-  snapshot = gtk_snapshot_new (FALSE, "TextDragIcon");
+  snapshot = gtk_snapshot_new ();
 
   style_context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (style_context,
                                &color);
-  gtk_snapshot_append_layout (snapshot, layout, &color, "TextDragIcon");
+  gtk_snapshot_append_layout (snapshot, layout, &color);
 
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
   g_object_unref (layout);
@@ -332,10 +332,9 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
-  snapshot = gtk_snapshot_new (FALSE, "RichTextDragIcon");
+  snapshot = gtk_snapshot_new ();
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, layout_width, layout_height),
-                                  "Text");
+                                  &GRAPHENE_RECT_INIT (0, 0, layout_width, layout_height));
 
   gtk_text_layout_draw (layout, widget, cr);
 

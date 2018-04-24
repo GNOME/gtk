@@ -68,8 +68,7 @@ plane_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_allocated_height (widget);
 
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                  "FontPlane");
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   cairo_set_source_rgb (cr, 0, 0, 0);
   cairo_rectangle (cr, 0, 0, width, height);

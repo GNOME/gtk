@@ -53,8 +53,7 @@ gtk_highlight_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   gtk_snapshot_append_color (snapshot,
                              &self->color,
-                             &bounds,
-                             "InspectorHighlight");
+                             &bounds);
 }
 
 static void

@@ -1787,7 +1787,7 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
 
-  gtk_snapshot_push_cross_fade (snapshot, progress, "CrossFade<%g>", progress);
+  gtk_snapshot_push_cross_fade (snapshot, progress);
 
   if (priv->last_visible_node)
     {
@@ -1849,9 +1849,7 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
       g_assert_not_reached ();
     }
 
-  gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT(x, y, width, height),
-                          "StackUnder");
+  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT(x, y, width, height));
 
   gtk_widget_snapshot_child (widget,
                              priv->visible_child->widget,
@@ -1946,8 +1944,7 @@ gtk_stack_snapshot (GtkWidget   *widget,
 
               gtk_widget_get_allocation (priv->last_visible_child->widget,
                                          &priv->last_visible_surface_allocation);
-              last_visible_snapshot = gtk_snapshot_new (gtk_snapshot_get_record_names (snapshot),
-                                                        "StackCaptureLastVisibleChild");
+              last_visible_snapshot = gtk_snapshot_new ();
               gtk_widget_snapshot (priv->last_visible_child->widget, last_visible_snapshot);
               priv->last_visible_node = gtk_snapshot_free_to_node (last_visible_snapshot);
             }
@@ -1957,8 +1954,7 @@ gtk_stack_snapshot (GtkWidget   *widget,
                                       0, 0,
                                       gtk_widget_get_width (widget),
                                       gtk_widget_get_height (widget)
-                                  ),
-                                  "StackAnimationClip");
+                                  ));
 
           switch (priv->active_transition_type)
             {

@@ -1216,8 +1216,7 @@ gtk_popover_snapshot (GtkWidget   *widget,
                                     0, 0,
                                     gtk_widget_get_width (widget),
                                     gtk_widget_get_height (widget)
-                                  ),
-                                  "Popover");
+                                  ));
 
   /* Clip to the arrow shape */
   cairo_save (cr);

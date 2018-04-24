@@ -186,8 +186,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
 
       gtk_snapshot_append_color (snapshot,
                                  _gtk_css_rgba_value_get_rgba (stop->color),
-                                 &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                 "RepeatingLinearGradient<degenerate>");
+                                 &GRAPHENE_RECT_INIT (0, 0, width, height));
       return;
     }
 
@@ -238,8 +237,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
           &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
           stops,
-          linear->stops->len,
-          "RepeatingLinearGradient<%ustops>", linear->stops->len);
+          linear->stops->len);
     }
   else
     {
@@ -249,8 +247,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
           &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
           stops,
-          linear->stops->len,
-          "LinearGradient<%ustops>", linear->stops->len);
+          linear->stops->len);
     }
 }
 

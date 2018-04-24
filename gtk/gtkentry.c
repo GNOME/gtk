@@ -3321,8 +3321,7 @@ gtk_entry_snapshot (GtkWidget   *widget,
                             priv->text_x,
                             0,
                             priv->text_width,
-                            gtk_widget_get_height (widget)),
-                          "Entry Clip");
+                            gtk_widget_get_height (widget)));
 
   /* Draw text and cursor */
   if (priv->dnd_position != -1)
@@ -5700,7 +5699,7 @@ gtk_entry_draw_text (GtkEntry    *entry,
       clip = gdk_pango_layout_get_clip_region (layout, x, y, range, 1);
       cairo_region_get_extents (clip, &clip_extents);
 
-      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Selected Text");
+      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents));
       gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
       gtk_snapshot_render_layout (snapshot, context, x, y, layout);
       gtk_snapshot_pop (snapshot);
@@ -5763,7 +5762,7 @@ gtk_entry_draw_cursor (GtkEntry    *entry,
 
       gtk_style_context_save_to_node (context, priv->block_cursor_node);
 
-      gtk_snapshot_push_clip (snapshot, &bounds, "Block Cursor");
+      gtk_snapshot_push_clip (snapshot, &bounds);
       gtk_snapshot_render_background (snapshot, context,  0, 0, width, height);
       gtk_snapshot_render_layout (snapshot, context,  x, y, layout);
       gtk_snapshot_pop (snapshot);

@@ -69,7 +69,7 @@ gtk_texture_view_snapshot (GtkWidget   *widget,
       bounds.size.width = MIN (width, gdk_texture_get_width (self->texture));
       bounds.size.height = MIN (height, gdk_texture_get_height (self->texture));
 
-      gtk_snapshot_append_texture (snapshot, self->texture, &bounds, "Texture");
+      gtk_snapshot_append_texture (snapshot, self->texture, &bounds);
     }
 }
 

@@ -100,18 +100,12 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
 
   /* need to clip because widgets may draw out of bounds */
   gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT(0, 0, width, height),
-                          "WidgetPaintableClip<%g,%g>",
-                          width, height);
+                          &GRAPHENE_RECT_INIT(0, 0, width, height));
   graphene_matrix_init_scale (&transform,
                               width / gtk_widget_get_allocated_width (self->widget),
                               height / gtk_widget_get_allocated_height (self->widget),
                               1.0);
-  gtk_snapshot_push_transform (snapshot,
-                               &transform,
-                               "WidgetPaintableScale<%g,%g>",
-                               width / gtk_widget_get_allocated_width (self->widget),
-                               height / gtk_widget_get_allocated_height (self->widget));
+  gtk_snapshot_push_transform (snapshot, &transform);
 
   gtk_widget_snapshot (self->widget, snapshot);
 
@@ -136,7 +130,7 @@ gtk_widget_paintable_paintable_get_current_image (GdkPaintable *paintable)
   if (width == 0 || height == 0)
     return gdk_paintable_new_empty (width, height);
 
-  snapshot = gtk_snapshot_new (FALSE, "WidgetPaintableCurrentImage");
+  snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (GDK_PAINTABLE (self), 
                           snapshot,
                           width, height);

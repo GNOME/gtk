@@ -1730,8 +1730,7 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
                                  &GRAPHENE_RECT_INIT(
                                      background_area->x, background_area->y,
                                      background_area->width, background_area->height
-                                 ),
-                                 "CellTextBackground");
+                                 ));
     }
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -1749,8 +1748,7 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
                           &GRAPHENE_RECT_INIT(
                               cell_area->x, cell_area->y,
                               cell_area->width, cell_area->height
-                          ),
-                          "CellTextClip");
+                          ));
 
   gtk_snapshot_render_layout (snapshot, context,
                               cell_area->x + x_offset + xpad,

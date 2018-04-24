@@ -2348,8 +2348,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
       vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
 
       cr = gtk_snapshot_append_cairo (snapshot,
-                                      &GRAPHENE_RECT_INIT (x, y, width, height),
-                                      "FlowBox Rubberband");
+                                      &GRAPHENE_RECT_INIT (x, y, width, height));
 
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_save_to_node (context, priv->rubberband_node);

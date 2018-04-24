@@ -141,7 +141,7 @@ gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
 
-  gtk_snapshot_push_cross_fade (snapshot, cross_fade->progress, "CrossFadeImage<%g>", cross_fade->progress);
+  gtk_snapshot_push_cross_fade (snapshot, cross_fade->progress);
 
   if (cross_fade->start)
     gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);

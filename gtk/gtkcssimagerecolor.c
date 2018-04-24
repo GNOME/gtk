@@ -192,14 +192,11 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
                        0, 0, 0, fg.alpha
                       });
   graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
-  gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset, "Recolor");
+  gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
 
   gtk_snapshot_append_texture (snapshot,
                                recolor->texture,
-                               &GRAPHENE_RECT_INIT (0, 0, width, height),
-                               "Recolor Image %dx%d",
-                               gdk_texture_get_width (recolor->texture),
-                               gdk_texture_get_height (recolor->texture));
+                               &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   gtk_snapshot_pop (snapshot);
 }

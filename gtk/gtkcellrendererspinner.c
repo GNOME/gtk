@@ -418,8 +418,7 @@ gtk_cell_renderer_spinner_snapshot (GtkCellRenderer      *cellr,
                                   &GRAPHENE_RECT_INIT (
                                       cell_area->x, cell_area->y,
                                       cell_area->width, cell_area->height
-                                  ),
-                                  "CellSpinner");
+                                  ));
 
   gtk_paint_spinner (gtk_widget_get_style_context (widget),
                      cr,

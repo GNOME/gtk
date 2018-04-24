@@ -57,11 +57,10 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
                                   height / (self->bounds.size.height),
                                   1.0);
       gtk_snapshot_push_transform (snapshot,
-                                   &transform,
-                                   "RenderNodeScaleToFit");
+                                   &transform);
     }
 
-  gtk_snapshot_push_clip (snapshot, &self->bounds, "RenderNodePaintableClip");
+  gtk_snapshot_push_clip (snapshot, &self->bounds);
   gtk_snapshot_offset (snapshot, self->bounds.origin.x, self->bounds.origin.y);
 
   gtk_snapshot_append_node (snapshot, self->node);

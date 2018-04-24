@@ -3870,7 +3870,7 @@ gtk_label_snapshot (GtkWidget   *widget,
             {
               cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
-              gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect), "Selected Text");
+              gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
               gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
               gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
               gtk_snapshot_pop (snapshot);
@@ -3918,7 +3918,7 @@ gtk_label_snapshot (GtkWidget   *widget,
                 {
                   cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
-                  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect), "Active Link");
+                  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
                   gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
                   gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
                   gtk_snapshot_pop (snapshot);

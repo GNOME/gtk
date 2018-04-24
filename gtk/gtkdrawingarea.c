@@ -250,8 +250,7 @@ gtk_drawing_area_snapshot (GtkWidget   *widget,
                                   &GRAPHENE_RECT_INIT (
                                       0, 0,
                                       width, height
-                                  ),
-                                  "DrawingAreaContents");
+                                  ));
   priv->draw_func (self,
                    cr,
                    width, height,

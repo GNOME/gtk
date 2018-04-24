@@ -13037,48 +13037,50 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       get_box_border (style, &border);
       get_box_padding (style, &padding);
 
+      gtk_snapshot_push_debug (snapshot, "Widget layout debugging");
+
       /* Widget margins */
       graphene_rect_init (&bounds,
                           0, -priv->margin.top,
                           priv->allocation.width, priv->margin.top);
-      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin top");
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds);
 
       graphene_rect_init (&bounds,
                           0, priv->allocation.height,
                           priv->allocation.width, priv->margin.bottom);
-      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin bottom");
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds);
 
       graphene_rect_init (&bounds,
                           -priv->margin.left, 0,
                           priv->margin.left, priv->allocation.height);
-      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin left");
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds);
 
       graphene_rect_init (&bounds,
                           priv->allocation.width, 0,
                           priv->margin.right, priv->allocation.height);
-      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin right");
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds);
 
 
       /* CSS Margins */
       graphene_rect_init (&bounds,
                           0, 0,
                           priv->allocation.width, margin.top);
-      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin top");
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds);
 
       graphene_rect_init (&bounds,
                           0, priv->allocation.height - margin.bottom,
                           priv->allocation.width, margin.bottom);
-      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin bottom");
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds);
 
       graphene_rect_init (&bounds,
                           0, margin.top,
                           margin.left, priv->allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin left");
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds);
 
       graphene_rect_init (&bounds,
                           priv->allocation.width - margin.right, margin.top,
                           margin.right, priv->allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin right");
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds);
 
 
       /* Padding */
@@ -13087,28 +13089,30 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
                           margin.top + border.top,
                           priv->allocation.width - margin.left - margin.right - border.left - border.right,
                           padding.top);
-      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding top");
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds);
 
       graphene_rect_init (&bounds,
                           margin.left + border.left,
                           priv->allocation.height - margin.bottom - border.bottom - padding.bottom,
                           priv->allocation.width - margin.left - margin.right - border.left - border.right,
                           padding.bottom);
-      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding bottom");
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds);
 
       graphene_rect_init (&bounds,
                           margin.left + border.left,
                           margin.top + border.top + padding.top,
                           padding.left,
                           priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
-      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding left");
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds);
 
       graphene_rect_init (&bounds,
                           priv->allocation.width - margin.right - border.right - padding.right,
                           margin.top + border.top + padding.top,
                           padding.right,
                           priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
-      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding right");
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds);
+
+      gtk_snapshot_pop (snapshot);
     }
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
@@ -13133,8 +13137,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
                               priv->allocation.width, 1);
           gtk_snapshot_append_color (snapshot,
                                      &red,
-                                     &bounds,
-                                     "Baseline Debug");
+                                     &bounds);
         }
     }
 
@@ -13150,8 +13153,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
 
       gtk_snapshot_append_color (snapshot,
                                  &blue,
-                                 &bounds,
-                                 "Baseline Debug");
+                                 &bounds);
       priv->highlight_resize = FALSE;
       gtk_widget_queue_draw (widget);
     }
@@ -13171,7 +13173,13 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkBorder margin, border, padding;
   GtkSnapshot *snapshot;
 
-  snapshot = gtk_snapshot_new_child (parent_snapshot, "%s<%p>", gtk_widget_get_name (widget), widget);
+  snapshot = gtk_snapshot_new ();
+
+  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_snapshot_push_debug (snapshot,
+                           "RenderNode for %s %p @ %d x %d",
+                           G_OBJECT_TYPE_NAME (widget), widget,
+                           allocation.width, allocation.height);
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
@@ -13182,10 +13190,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   get_box_padding (style, &padding);
   opacity = priv->alpha / 255.0;
 
-  _gtk_widget_get_allocation (widget, &allocation);
-
   if (opacity < 1.0)
-    gtk_snapshot_push_opacity (snapshot, opacity, "Opacity<%s,%f>", G_OBJECT_TYPE_NAME (widget), opacity);
+    gtk_snapshot_push_opacity (snapshot, opacity);
 
   if (!GTK_IS_WINDOW (widget))
     {
@@ -13220,6 +13226,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 #ifdef G_ENABLE_DEBUG
   gtk_widget_maybe_add_debug_render_nodes (widget, snapshot);
 #endif
+
+  gtk_snapshot_pop (snapshot);
 
   return gtk_snapshot_free_to_node (snapshot);
 }
@@ -13261,14 +13269,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
     gtk_snapshot_append_node (snapshot, priv->render_node);
 }
 
-static gboolean
-should_record_names (GtkWidget   *widget,
-                     GskRenderer *renderer)
-{
-  return gtk_inspector_is_recording (widget) ||
-         ((gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_ANY)  != 0);
-}
-
 void
 gtk_widget_render (GtkWidget            *widget,
                    GdkSurface            *surface,
@@ -13286,8 +13286,7 @@ gtk_widget_render (GtkWidget            *widget,
   if (renderer == NULL)
     return;
 
-  snapshot = gtk_snapshot_new (should_record_names (widget, renderer),
-                               "Render<%s>", G_OBJECT_TYPE_NAME (widget));
+  snapshot = gtk_snapshot_new ();
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);
 

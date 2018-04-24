@@ -102,8 +102,7 @@ drawing_area_snapshot (GtkWidget   *widget,
                                     0, 0,
 				    allocation.width,
 				    allocation.height
-                                  ),
-                                  "DrawingArea");
+                                  ));
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);

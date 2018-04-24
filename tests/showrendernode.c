@@ -73,8 +73,7 @@ gtk_node_view_snapshot (GtkWidget   *widget,
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT (
                                 0, 0,
-                                gtk_widget_get_width (widget), gtk_widget_get_height (widget)),
-                              "nodeview clip");
+                                gtk_widget_get_width (widget), gtk_widget_get_height (widget)));
       gtk_snapshot_append_node (snapshot, self->node);
       gtk_snapshot_pop (snapshot);
     }

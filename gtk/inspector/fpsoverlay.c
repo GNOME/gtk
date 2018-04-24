@@ -217,15 +217,13 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   gtk_snapshot_offset (snapshot, bounds.origin.x + bounds.size.width - width, bounds.origin.y);
   if (overlay_opacity < 1.0)
-    gtk_snapshot_push_opacity (snapshot, overlay_opacity, "Fps Overlay Opacity: %g", overlay_opacity);
+    gtk_snapshot_push_opacity (snapshot, overlay_opacity);
   gtk_snapshot_append_color (snapshot,
                              &(GdkRGBA) { 0, 0, 0, 0.5 },
-                             &GRAPHENE_RECT_INIT (-1, -1, width + 2, height + 2),
-                             "Fps Overlay background");
+                             &GRAPHENE_RECT_INIT (-1, -1, width + 2, height + 2));
   gtk_snapshot_append_layout (snapshot,
                               layout,
-                              &(GdkRGBA) { 1, 1, 1, 1 },
-                              "Fps Overlay: %s", fps_string);
+                              &(GdkRGBA) { 1, 1, 1, 1 });
   if (overlay_opacity < 1.0)
     gtk_snapshot_pop (snapshot);
   gtk_snapshot_offset (snapshot, - bounds.origin.x - bounds.size.width + width, - bounds.origin.y);

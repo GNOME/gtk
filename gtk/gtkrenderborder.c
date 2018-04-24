@@ -439,8 +439,6 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
   gsk_rounded_rect_offset (&offset_outline, off_x, off_y);
   
   node = gsk_border_node_new (&offset_outline, border_width, colors);
-  if (gtk_snapshot_get_record_names (snapshot))
-    gsk_render_node_set_name (node, "Border");
   gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
@@ -591,8 +589,7 @@ snapshot_frame_stroke (GtkSnapshot    *snapshot,
   cairo_t *cr;
 
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &outline->bounds,
-                                  "BorderStroke");
+                                  &outline->bounds);
   render_frame_stroke (cr, outline, double_width, colors, hidden_side, stroke_style);
   cairo_destroy (cr);
 }
@@ -942,11 +939,12 @@ gtk_css_style_snapshot_border (GtkCssStyle *style,
     {
       double double_width[4] = { border_width[0], border_width[1], border_width[2], border_width[3] };
 
+      gtk_snapshot_push_debug (snapshot, "CSS border image");
       cr = gtk_snapshot_append_cairo (snapshot,
-                                      &bounds,
-                                      "Border Image");
+                                      &bounds);
       gtk_border_image_render (&border_image, double_width, cr, 0, 0, width, height);
       cairo_destroy (cr);
+      gtk_snapshot_pop (snapshot);
     }
   else
     {
@@ -978,7 +976,9 @@ gtk_css_style_snapshot_border (GtkCssStyle *style,
 
       gtk_rounded_boxes_init_for_style (&border_box, NULL, NULL, style, 0, 0, width, height);
 
+      gtk_snapshot_push_debug (snapshot, "CSS border");
       snapshot_border (snapshot, &border_box, border_width, colors, border_style);
+      gtk_snapshot_pop (snapshot);
     }
 }
 

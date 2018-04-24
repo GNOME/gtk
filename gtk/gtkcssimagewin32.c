@@ -37,8 +37,7 @@ gtk_css_image_win32_snapshot (GtkCssImage *image,
   cairo_t *cr;
 
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                  "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   surface = gtk_win32_theme_create_surface (wimage->theme, wimage->part, wimage->state, wimage->margins,
 				            width, height, &dx, &dy);

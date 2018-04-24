@@ -417,7 +417,7 @@ gtk_css_shadows_value_push_snapshot (const GtkCssValue *value,
     {
       GskShadow *shadows = g_newa (GskShadow, value->len);
       gtk_css_shadows_value_get_shadows (value, shadows);
-      gtk_snapshot_push_shadow (snapshot, shadows, value->len, "Shadow<%u>", value->len);
+      gtk_snapshot_push_shadow (snapshot, shadows, value->len);
     }
 
   return need_shadow;

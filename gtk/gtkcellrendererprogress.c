@@ -648,8 +648,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                               &GRAPHENE_RECT_INIT(
                                   clip.x, clip.y,
                                   clip.width, clip.height
-                              ),
-                              "CellProgressClip");
+                              ));
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
@@ -681,8 +680,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                                   &GRAPHENE_RECT_INIT(
                                       clip.x, clip.y,
                                       clip.width, clip.height
-                                  ),
-                                  "CellTroughClip");
+                                  ));
 
           gtk_snapshot_render_layout (snapshot, context,
                                       x_pos, y_pos,
@@ -708,8 +706,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                                   &GRAPHENE_RECT_INIT(
                                       clip.x, clip.y,
                                       clip.width, clip.height
-                                  ),
-                                  "CellTroughClip");
+                                  ));
 
           gtk_snapshot_render_layout (snapshot, context,
                                       x_pos, y_pos,

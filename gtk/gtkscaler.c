@@ -53,10 +53,7 @@ gtk_scaler_paintable_snapshot (GdkPaintable *paintable,
       graphene_matrix_t scale_matrix;
 
       graphene_matrix_init_scale (&scale_matrix, 1.0 / self->scale_factor, 1.0 / self->scale_factor, 1.0);
-      gtk_snapshot_push_transform (snapshot,
-                                   &scale_matrix,
-                                   "GtkScaler<%g>",
-                                   self->scale_factor);
+      gtk_snapshot_push_transform (snapshot, &scale_matrix);
       gdk_paintable_snapshot (self->paintable,
                               snapshot,
                               width * self->scale_factor,

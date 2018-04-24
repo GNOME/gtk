@@ -1404,8 +1404,7 @@ gtk_paned_snapshot (GtkWidget   *widget,
                               0, 0,
                               gtk_widget_get_width (widget),
                               gtk_widget_get_height (widget)
-                          ),
-                          "GtkPaned");
+                          ));
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))

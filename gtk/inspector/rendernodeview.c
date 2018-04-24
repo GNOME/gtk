@@ -226,8 +226,7 @@ gtk_render_node_view_snapshot (GtkWidget   *widget,
 
   graphene_rect_init (&rect, 0, 0, width, height);
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &rect,
-                                  "RenderNodeView");
+                                  &rect);
 
   cairo_translate (cr, width / 2.0, height / 2.0);
   if (width < viewport.width || height < viewport.height)

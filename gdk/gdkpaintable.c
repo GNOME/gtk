@@ -23,6 +23,12 @@
 
 #include "gdksnapshotprivate.h"
 
+/* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
+void            gtk_snapshot_push_debug                 (GdkSnapshot            *snapshot,
+                                                         const char             *message,
+                                                         ...) G_GNUC_PRINTF (2, 3);
+void            gtk_snapshot_pop                        (GdkSnapshot            *snapshot);
+
 /**
  * SECTION:paintable
  * @Title: GdkPaintable
@@ -206,8 +212,12 @@ gdk_paintable_snapshot (GdkPaintable *paintable,
   if (width <= 0.0 || height <= 0.0)
     return;
 
+  gtk_snapshot_push_debug (snapshot, "%s %p @ %gx%g", G_OBJECT_TYPE_NAME (paintable), paintable, width, height);
+
   iface = GDK_PAINTABLE_GET_IFACE (paintable);
   iface->snapshot (paintable, snapshot, width, height);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 #define GDK_PAINTABLE_IMMUTABLE (GDK_PAINTABLE_STATIC_SIZE | GDK_PAINTABLE_STATIC_CONTENTS)

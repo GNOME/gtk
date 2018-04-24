@@ -84,11 +84,9 @@ plane_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_append_texture (snapshot,
                                plane->priv->texture,
-                               &GRAPHENE_RECT_INIT (0, 0, width, height),
-                               "ColorPlane");
+                               &GRAPHENE_RECT_INIT (0, 0, width, height));
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                  "ColorPlane");
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   cairo_move_to (cr, 0,     y + 0.5);
   cairo_line_to (cr, width, y + 0.5);

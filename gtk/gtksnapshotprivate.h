@@ -27,11 +27,9 @@ typedef struct _GtkSnapshotState GtkSnapshotState;
 typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
                                                     GtkSnapshotState *state,
                                                     GskRenderNode   **nodes,
-                                                    guint             n_nodes,
-                                                    const char       *name);
+                                                    guint             n_nodes);
 
 struct _GtkSnapshotState {
-  char                  *name;
   guint                  start_node_index;
   guint                  n_nodes;
 
@@ -76,6 +74,9 @@ struct _GtkSnapshotState {
       double progress;
       GskRenderNode *start_node;
     } cross_fade;
+    struct {
+      char *message;
+    } debug;
   } data;
 };
 
@@ -96,9 +97,6 @@ struct _GtkSnapshotClass {
   GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
 };
 
-GtkSnapshot *           gtk_snapshot_new_child                  (GtkSnapshot            *parent,
-                                                                 const char             *name,
-                                                                 ...) G_GNUC_PRINTF (2, 3);
 void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
                                                                  GskRenderNode          *node);
 

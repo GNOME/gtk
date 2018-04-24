@@ -56,15 +56,13 @@ gtk_nuclear_snapshot (GtkSnapshot *snapshot,
 
   gtk_snapshot_append_color (snapshot,
                              &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 },
-                             &GRAPHENE_RECT_INIT (0, 0, width, height),
-                             "Yellow background");
+                             &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   size = MIN (width, height);
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT ((width - size) / 2.0,
                                                        (height - size) / 2.0,
-                                                       size, size),
-                                  "Radioactive Icon");
+                                                       size, size));
   cairo_translate (cr, width / 2.0, height / 2.0);
   cairo_scale (cr, size, size);
   cairo_rotate (cr, rotation);

@@ -423,8 +423,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
                           &GRAPHENE_RECT_INIT (
                              cell_area->x, cell_area->y,
                              cell_area->width, cell_area->height
-                          ),
-                          "CellToggleClip");
+                          ));
 
   context = gtk_cell_renderer_toggle_save_context (cell, widget);
   gtk_style_context_set_state (context, state);

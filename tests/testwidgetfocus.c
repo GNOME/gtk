@@ -174,8 +174,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
       bounds.size.height = alloc.height;
       gtk_snapshot_append_color (snapshot,
                                  &black,
-                                 &bounds,
-                                 "Crosshair 1");
+                                 &bounds);
 
       bounds.origin.x = -30;
       bounds.origin.y = self->mouse_y;
@@ -183,8 +182,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
       bounds.size.height = 1;
       gtk_snapshot_append_color (snapshot,
                                  &black,
-                                 &bounds,
-                                 "Crosshair 2");
+                                 &bounds);
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
       text = g_strdup_printf ("%.2f×%.2f", self->mouse_x, self->mouse_y);

@@ -422,7 +422,7 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
       GtkSnapshot *snapshot;
       GList *l;
 
-      snapshot = gtk_snapshot_new (FALSE, "Inspector Overlay");
+      snapshot = gtk_snapshot_new ();
       gtk_snapshot_append_node (snapshot, node);
 
       for (l = iw->overlays; l; l = l->next)

@@ -707,6 +707,8 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
 
   selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
 
+  gtk_snapshot_push_debug (snapshot, "%s", G_OBJECT_TYPE_NAME (cell));
+
   if (priv->cell_background_set && !selected)
     {
       gtk_snapshot_append_color (snapshot,
@@ -714,16 +716,14 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
                                  &GRAPHENE_RECT_INIT (
                                      background_area->x, background_area->y,
                                      background_area->width, background_area->height
-                                 ),
-                                 "CellBackground");
+                                 ));
     }
 
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
                               background_area->x, background_area->y,
                               background_area->width, background_area->height
-                          ),
-                          "CellClip");
+                          ));
 
   context = gtk_widget_get_style_context (widget);
 
@@ -740,6 +740,7 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
                                                 cell_area,
                                                 flags);
   gtk_style_context_restore (context);
+  gtk_snapshot_pop (snapshot);
   gtk_snapshot_pop (snapshot);
 }
 

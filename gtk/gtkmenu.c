@@ -2743,8 +2743,7 @@ gtk_menu_snapshot (GtkWidget   *widget,
                           &GRAPHENE_RECT_INIT(
                             0, 0,
                             gtk_widget_get_width (widget),
-                            gtk_widget_get_height (widget)),
-                          "MenuClip");
+                            gtk_widget_get_height (widget)));
 
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->snapshot (widget, snapshot);
 
