@@ -487,17 +487,35 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
 
     case GSK_CAIRO_NODE:
       {
-        const cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
+        cairo_surface_t *surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (node);
+        cairo_surface_t *image_surface = NULL;
         GdkTexture *texture;
         guint32 texture_id;
 
-        texture = gdk_texture_new_for_surface ((cairo_surface_t *)surface);
+        if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
+          image_surface = cairo_surface_reference (surface);
+        else
+          {
+            cairo_t *cr;
+            image_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                        ceilf (node->bounds.size.width),
+                                                        ceilf (node->bounds.size.height));
+            cr = cairo_create (image_surface);
+            cairo_set_source_surface (cr, surface, 0, 0);
+            cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
+            cairo_fill (cr);
+            cairo_destroy (cr);
+          }
+
+        texture = gdk_texture_new_for_surface (image_surface);
         g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
         texture_id = gdk_broadway_display_ensure_texture (display, texture);
 
         add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
         add_rect (nodes, &node->bounds, offset_x, offset_y);
         add_uint32 (nodes, texture_id);
+
+        cairo_surface_destroy (image_surface);
       }
       return;
 
