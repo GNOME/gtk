@@ -8,27 +8,76 @@
         <property name="visible">True</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkLabel" id="info_label">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="label">icons - 0 fps</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">pan-start-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+                <signal name="clicked" handler="prev_button_clicked_cb" object="bowl" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">pan-end-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+                <signal name="clicked" handler="next_button_clicked_cb" object="bowl" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">fps</property>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label" bind-source="bowl" bind-property="count">0</property>
+            <property name="label" bind-source="bowl" bind-property="framerate"/>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">Icons, </property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" bind-source="bowl" bind-property="count"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
           </packing>
         </child>
         <child>
           <object class="GtkToggleButton" id="changes_allow">
-            <property name="active">False</property>
-            <property name="visible" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean">True</property>
+            <property name="visible" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean"/>
             <property name="relief">none</property>
             <child>
               <object class="GtkImage">
@@ -38,7 +87,7 @@
             </child>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
         <child>
@@ -54,7 +103,7 @@
             </child>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
       </object>
@@ -63,6 +112,7 @@
       <object class="GtkFishbowl" id="bowl">
         <property name="visible">True</property>
         <property name="animating">True</property>
+        <property name="benchmark" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean">True</property>
       </object>
     </child>
   </object>

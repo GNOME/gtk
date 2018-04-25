@@ -9,163 +9,254 @@
 
 #include "gtkfishbowl.h"
 
-GtkWidget *allow_changes;
+const char *const css =
+".blurred-button {"
+"  box-shadow: 0px 0px 5px 10px rgba(0, 0, 0, 0.5);"
+"}"
+"";
 
-#define N_STATS 5
+char **icon_names = NULL;
+gsize n_icon_names = 0;
 
-#define STATS_UPDATE_TIME G_USEC_PER_SEC
+static void
+init_icon_names (GtkIconTheme *theme)
+{
+  GPtrArray *icons;
+  GList *l, *icon_list;
 
-typedef struct _Stats Stats;
-struct _Stats {
-  gint64 last_stats;
-  gint64 last_frame;
-  gint last_suggestion;
-  guint frame_counter_max;
+  if (icon_names)
+    return;
 
-  guint stats_index;
-  guint frame_counter[N_STATS];
-  guint item_counter[N_STATS];
+  icon_list = gtk_icon_theme_list_icons (theme, NULL);
+  icons = g_ptr_array_new ();
+
+  for (l = icon_list; l; l = l->next)
+    {
+      if (g_str_has_suffix (l->data, "symbolic"))
+        continue;
+
+      g_ptr_array_add (icons, g_strdup (l->data));
+    }
+
+  n_icon_names = icons->len;
+  g_ptr_array_add (icons, NULL); /* NULL-terminate the array */
+  icon_names = (char **) g_ptr_array_free (icons, FALSE);
+
+  /* don't free strings, we assigned them to the array */
+  g_list_free_full (icon_list, g_free);
+}
+
+static const char *
+get_random_icon_name (GtkIconTheme *theme)
+{
+  init_icon_names (theme);
+
+  return icon_names[g_random_int_range(0, n_icon_names)];
+}
+
+GtkWidget *
+create_icon (void)
+{
+  GtkWidget *image;
+
+  image = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()), GTK_ICON_SIZE_DND);
+
+  return image;
+}
+
+static GtkWidget *
+create_button (void)
+{
+  return gtk_button_new_with_label ("Button");
+}
+
+static GtkWidget *
+create_blurred_button (void)
+{
+  GtkWidget *w = gtk_button_new ();
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (w), "blurred-button");
+
+  return w;
+}
+
+static GtkWidget *
+create_font_button (void)
+{
+  return gtk_font_button_new ();
+}
+
+static GtkWidget *
+create_level_bar (void)
+{
+  GtkWidget *w = gtk_level_bar_new_for_interval (0, 100);
+
+  gtk_level_bar_set_value (GTK_LEVEL_BAR (w), 50);
+
+  /* Force them to be a bit larger */
+  gtk_widget_set_size_request (w, 200, -1);
+
+  return w;
+}
+
+static GtkWidget *
+create_spinner (void)
+{
+  GtkWidget *w = gtk_spinner_new ();
+
+  gtk_spinner_start (GTK_SPINNER (w));
+
+  return w;
+}
+
+static GtkWidget *
+create_spinbutton (void)
+{
+  GtkWidget *w = gtk_spin_button_new_with_range (0, 10, 1);
+
+  return w;
+}
+
+static GtkWidget *
+create_label (void)
+{
+  GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+
+  gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
+  gtk_label_set_max_width_chars (GTK_LABEL (w), 100);
+
+  return w;
+}
+
+#if 0
+static GtkWidget *
+create_gears (void)
+{
+  GtkWidget *w = gtk_gears_new ();
+
+  gtk_widget_set_size_request (w, 100, 100);
+
+  return w;
+}
+#endif
+
+static GtkWidget *
+create_switch (void)
+{
+  GtkWidget *w = gtk_switch_new ();
+
+  gtk_switch_set_state (GTK_SWITCH (w), TRUE);
+
+  return w;
+}
+
+static const struct {
+  const char *name;
+  GtkWidget * (*create_func) (void);
+} widget_types[] = {
+  { "Icon",       create_icon           },
+  { "Button",     create_button         },
+  { "Blurbutton", create_blurred_button },
+  { "Fontbutton", create_font_button    },
+  { "Levelbar",   create_level_bar      },
+  { "Label",      create_label          },
+  { "Spinner",    create_spinner        },
+  { "Spinbutton", create_spinbutton     },
+ // { "Gears",      create_gears          },
+  { "Switch",     create_switch         },
 };
 
-static Stats *
-get_stats (GtkWidget *widget)
-{
-  static GQuark stats_quark = 0;
-  Stats *stats;
-
-  if (G_UNLIKELY (stats_quark == 0))
-    stats_quark = g_quark_from_static_string ("stats");
-
-  stats = g_object_get_qdata (G_OBJECT (widget), stats_quark);
-  if (stats == NULL)
-    {
-      stats = g_new0 (Stats, 1);
-      g_object_set_qdata_full (G_OBJECT (widget), stats_quark, stats, g_free);
-      stats->last_frame = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-      stats->last_stats = stats->last_frame;
-    }
-
-  return stats;
-}
+static int selected_widget_type = -1;
+static const int N_WIDGET_TYPES = G_N_ELEMENTS (widget_types);
 
 static void
-do_stats (GtkWidget *widget,
-          GtkWidget *info_label,
-          gint      *suggested_change)
+set_widget_type (GtkFishbowl *fishbowl,
+                 int          widget_type_index)
 {
-  Stats *stats;
-  gint64 frame_time;
+  GtkWidget *window, *headerbar;
 
-  stats = get_stats (widget);
-  frame_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
+  if (widget_type_index == selected_widget_type)
+    return;
 
-  if (stats->last_stats + STATS_UPDATE_TIME < frame_time)
-    {
-      char *new_label;
-      guint i, n_frames;
+  selected_widget_type = widget_type_index;
 
-      n_frames = 0;
-      for (i = 0; i < N_STATS; i++)
-        {
-          n_frames += stats->frame_counter[i];
-        }
-      
-      new_label = g_strdup_printf ("icons - %.1f fps",
-                                   (double) G_USEC_PER_SEC * n_frames
-                                       / (N_STATS * STATS_UPDATE_TIME));
-      gtk_label_set_label (GTK_LABEL (info_label), new_label);
-      g_free (new_label);
+  gtk_fishbowl_set_creation_func (fishbowl,
+                                  widget_types[selected_widget_type].create_func);
 
-      if (stats->frame_counter[stats->stats_index] >= 19 * stats->frame_counter_max / 20)
-        {
-          if (stats->last_suggestion > 0)
-            stats->last_suggestion *= 2;
-          else
-            stats->last_suggestion = 1;
-        }
-      else
-        {
-          if (stats->last_suggestion < 0)
-            stats->last_suggestion--;
-          else
-            stats->last_suggestion = -1;
-          stats->last_suggestion = MAX (stats->last_suggestion, 1 - (int) stats->item_counter[stats->stats_index]);
-        }
+  window = gtk_widget_get_toplevel (GTK_WIDGET (fishbowl));
+  headerbar = gtk_window_get_titlebar (GTK_WINDOW (window));
+  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar),
+                            widget_types[selected_widget_type].name);
+}
 
-      stats->stats_index = (stats->stats_index + 1) % N_STATS;
-      stats->frame_counter[stats->stats_index] = 0;
-      stats->item_counter[stats->stats_index] = stats->item_counter[(stats->stats_index + N_STATS - 1) % N_STATS];
-      stats->last_stats = frame_time;
-      
-      if (suggested_change)
-        *suggested_change = stats->last_suggestion;
-      else
-        stats->last_suggestion = 0;
-    }
+void
+next_button_clicked_cb (GtkButton *source,
+                        gpointer   user_data)
+{
+  GtkFishbowl *fishbowl = user_data;
+  int new_index;
+
+  if (selected_widget_type + 1 >= N_WIDGET_TYPES)
+    new_index = 0;
   else
-    {
-      if (suggested_change)
-        *suggested_change = 0;
-    }
+    new_index = selected_widget_type + 1;
 
-  stats->last_frame = frame_time;
-  stats->frame_counter[stats->stats_index]++;
-  stats->frame_counter_max = MAX (stats->frame_counter_max, stats->frame_counter[stats->stats_index]);
+  set_widget_type (fishbowl, new_index);
 }
 
-static void
-stats_update (GtkWidget *widget)
+void
+prev_button_clicked_cb (GtkButton *source,
+                        gpointer   user_data)
 {
-  Stats *stats;
+  GtkFishbowl *fishbowl = user_data;
+  int new_index;
 
-  stats = get_stats (widget);
+  if (selected_widget_type - 1 < 0)
+    new_index = N_WIDGET_TYPES - 1;
+  else
+    new_index = selected_widget_type - 1;
 
-  stats->item_counter[stats->stats_index] = gtk_fishbowl_get_count (GTK_FISHBOWL (widget));
+  set_widget_type (fishbowl, new_index);
 }
 
-static gboolean
-move_fish (GtkWidget     *bowl,
-           GdkFrameClock *frame_clock,
-           gpointer       info_label)
-{
-  gint suggested_change = 0;
-  
-  do_stats (bowl,
-            info_label,
-            !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allow_changes)) ? &suggested_change : NULL);
-
-  gtk_fishbowl_set_count (GTK_FISHBOWL (bowl),
-                          gtk_fishbowl_get_count (GTK_FISHBOWL (bowl)) + suggested_change);
-  stats_update (bowl);
-
-  return G_SOURCE_CONTINUE;
-}
 
 GtkWidget *
 do_fishbowl (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
+  static GtkCssProvider *provider = NULL;
+
+  if (provider == NULL)
+    {
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_data (provider, css, -1, NULL);
+      gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                                 GTK_STYLE_PROVIDER (provider),
+                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 
   if (!window)
     {
       GtkBuilder *builder;
-      GtkWidget *bowl, *info_label;
+      GtkWidget *bowl;
 
       g_type_ensure (GTK_TYPE_FISHBOWL);
 
       builder = gtk_builder_new_from_resource ("/fishbowl/fishbowl.ui");
+      gtk_builder_add_callback_symbols (builder,
+                                        "next_button_clicked_cb", G_CALLBACK (next_button_clicked_cb),
+                                        "prev_button_clicked_cb", G_CALLBACK (prev_button_clicked_cb),
+                                        NULL);
       gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       bowl = GTK_WIDGET (gtk_builder_get_object (builder, "bowl"));
-      info_label = GTK_WIDGET (gtk_builder_get_object (builder, "info_label"));
-      allow_changes = GTK_WIDGET (gtk_builder_get_object (builder, "changes_allow"));
+      set_widget_type (GTK_FISHBOWL (bowl), 0);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
-      gtk_widget_add_tick_callback (bowl, move_fish, info_label, NULL);
     }
 
   if (!gtk_widget_get_visible (window))
