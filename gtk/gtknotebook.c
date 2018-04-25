@@ -2671,15 +2671,12 @@ gtk_notebook_motion (GtkEventController *controller,
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   guint state;
-  GdkEventMotion *event;
-
-  event = (GdkEventMotion *)gtk_get_current_event (); /* FIXME: controller event */
 
   page = priv->cur_page;
   if (!page)
     return;
 
-  if (!gdk_event_get_state ((GdkEvent *) event, &state))
+  if (!gtk_get_current_event_state (&state))
     return;
 
   if (!(state & GDK_BUTTON1_MASK) &&
@@ -2701,7 +2698,7 @@ gtk_notebook_motion (GtkEventController *controller,
       priv->detached_tab = priv->cur_page;
 
       gtk_drag_begin_with_coordinates (widget,
-                                       gdk_event_get_device ((GdkEvent*) event),
+                                       gtk_get_current_event_device (),
                                        priv->source_targets, GDK_ACTION_MOVE,
                                        priv->drag_begin_x, priv->drag_begin_y);
       return;
