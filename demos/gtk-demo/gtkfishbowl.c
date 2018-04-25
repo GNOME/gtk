@@ -656,5 +656,7 @@ gtk_fishbowl_set_creation_func (GtkFishbowl         *fishbowl,
 
   priv->creation_func = creation_func;
 
+  gtk_fishbowl_set_count (fishbowl, 1);
+
   g_object_thaw_notify (G_OBJECT (fishbowl));
 }
