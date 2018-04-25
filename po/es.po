@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-19 14:19+0000\n"
-"PO-Revision-Date: 2018-04-20 11:42+0200\n"
+"POT-Creation-Date: 2018-04-24 21:50+0000\n"
+"PO-Revision-Date: 2018-04-25 13:03+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -34,11 +34,11 @@ msgstr "Tipo de pantalla «broadway» no soportado: %s"
 
 #: gdk/gdkclipboard.c:239
 msgid "This clipboard cannot store data."
-msgstr ""
+msgstr "El portapapeles no puede contener datos"
 
 #: gdk/gdkclipboard.c:294 gdk/gdkclipboard.c:789 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
-msgstr ""
+msgstr "No se puede leer de un portapapeles vacío."
 
 #: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1136 gdk/gdkdnd.c:701
 msgid "No compatible formats to transfer clipboard contents."
@@ -59,17 +59,17 @@ msgstr "No se pudo leer el contenido de %s"
 
 #: gdk/gdkdnd.c:342
 msgid "Reading not implemented."
-msgstr ""
+msgstr "Lectura no implementada."
 
-#: gdk/gdksurface.c:1441
+#: gdk/gdksurface.c:1402
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
-#: gdk/gdksurface.c:1452
+#: gdk/gdksurface.c:1413
 msgid "The current backend does not support OpenGL"
 msgstr "El «backend» actual no soporta OpenGL"
 
-#: gdk/gdksurface.c:1541
+#: gdk/gdksurface.c:1524
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Soporte de Vulkan desactivado mediante GDK_DEBUG"
 
@@ -351,7 +351,6 @@ msgid "AudioMedia"
 msgstr "Sonido: medio"
 
 #: gdk/keyname-table.h:6897
-#| msgid "_Eject"
 msgctxt "keyboard label"
 msgid "Eject"
 msgstr "Expulsar"
@@ -359,7 +358,7 @@ msgstr "Expulsar"
 #: gdk/keyname-table.h:6898
 msgctxt "keyboard label"
 msgid "Explorer"
-msgstr ""
+msgstr "Explorador"
 
 #: gdk/keyname-table.h:6899
 msgctxt "keyboard label"
@@ -377,7 +376,6 @@ msgid "WWW"
 msgstr "WWW"
 
 #: gdk/keyname-table.h:6902
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "Buscar"
@@ -462,23 +460,23 @@ msgstr "No implementado en OS X"
 msgid "No compatible transfer format found"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:146 gdk/win32/gdkglcontext-win32.c:706
-#: gdk/x11/gdkglcontext-x11.c:661 gdk/x11/gdkglcontext-x11.c:711
+#: gdk/wayland/gdkglcontext-wayland.c:146 gdk/win32/gdkglcontext-win32.c:705
+#: gdk/x11/gdkglcontext-x11.c:660 gdk/x11/gdkglcontext-x11.c:710
 msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:397
-#: gdk/wayland/gdkglcontext-wayland.c:407 gdk/win32/gdkglcontext-win32.c:660
-#: gdk/x11/gdkglcontext-x11.c:909
+#: gdk/wayland/gdkglcontext-wayland.c:396
+#: gdk/wayland/gdkglcontext-wayland.c:406 gdk/win32/gdkglcontext-win32.c:659
+#: gdk/x11/gdkglcontext-x11.c:908
 msgid "No available configurations for the given pixel format"
 msgstr "No hay ninguna configuración disponible para el formato de píxel dado"
 
-#: gdk/wayland/gdkglcontext-wayland.c:436 gdk/win32/gdkglcontext-win32.c:772
-#: gdk/x11/gdkglcontext-x11.c:1212
+#: gdk/wayland/gdkglcontext-wayland.c:435 gdk/win32/gdkglcontext-win32.c:771
+#: gdk/x11/gdkglcontext-x11.c:1211
 msgid "No GL implementation is available"
 msgstr "No hay ninguna implementación de GL disponible"
 
-#: gdk/wayland/gdkglcontext-wayland.c:444
+#: gdk/wayland/gdkglcontext-wayland.c:443
 msgid "Core GL is not available on EGL implementation"
 msgstr "El núcleo de GL no está disponible en la implementación de EGL"
 
@@ -516,16 +514,22 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. OpenClipboard() falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:873
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. GlobalLock(0x%p) falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:884
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. GlobalSize(0x%p) falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
@@ -537,6 +541,7 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. OpenClipboard() ha expirado."
 
 #: gdk/win32/gdkclipdrop-win32.c:938
 #, c-format
@@ -553,6 +558,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. OpenClipboard() falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:990
 #, c-format
@@ -563,16 +570,18 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. GetClipboardData() falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1046
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "No se pueden obtener los datos de DnD. GlobalLock(0x%p) falló: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1055
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "No se pueden obtener los datos de DnD. GlobalSize(0x%p) falló: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1065
 #, c-format
@@ -607,12 +616,12 @@ msgstr "No se puede cerrar el flujo"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
-msgstr ""
+msgstr "g_try_realloc () falló"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:94
 #: gdk/win32/gdkhdataoutputstream-win32.c:232
 msgid "GlobalReAlloc() failed: "
-msgstr ""
+msgstr "GlobalReAlloc() falló: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
@@ -629,11 +638,11 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
-msgstr ""
+msgstr "GlobalLock() falló: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:366
 msgid "GlobalAlloc() failed: "
-msgstr ""
+msgstr "GlobalAlloc() falló: "
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:56
@@ -690,7 +699,7 @@ msgstr ""
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 
-#: gdk/x11/gdkglcontext-x11.c:937
+#: gdk/x11/gdkglcontext-x11.c:936
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
@@ -1729,7 +1738,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:222 gtk/gtkcolorbutton.c:396
+#: gtk/gtkcolorbutton.c:222 gtk/gtkcolorbutton.c:395
 msgid "Pick a Color"
 msgstr "Escoja un color"
 
@@ -1947,21 +1956,21 @@ msgstr "Crear un color personalizado"
 msgid "Custom color %d: %s"
 msgstr "Color personalizado %d: %s"
 
-#: gtk/gtkcolorplane.c:409
+#: gtk/gtkcolorplane.c:407
 msgid "Color Plane"
 msgstr "Plano de color"
 
-#: gtk/gtkcolorscale.c:223
+#: gtk/gtkcolorscale.c:220
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Tono"
 
-#: gtk/gtkcolorscale.c:225
+#: gtk/gtkcolorscale.c:222
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/gtkcolorswatch.c:299
+#: gtk/gtkcolorswatch.c:292
 msgid "C_ustomize"
 msgstr "_Personalizar"
 
@@ -2029,52 +2038,52 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:8247 gtk/gtklabel.c:6099 gtk/gtktextview.c:8595
+#: gtk/gtkentry.c:8261 gtk/gtklabel.c:6099 gtk/gtktextview.c:8589
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:8251 gtk/gtklabel.c:6100 gtk/gtktextview.c:8599
+#: gtk/gtkentry.c:8265 gtk/gtklabel.c:6100 gtk/gtktextview.c:8593
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:8255 gtk/gtklabel.c:6101 gtk/gtktextview.c:8601
+#: gtk/gtkentry.c:8269 gtk/gtklabel.c:6101 gtk/gtktextview.c:8595
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtkentry.c:8258 gtk/gtkfilechooserwidget.c:1485
-#: gtk/gtkfilechooserwidget.c:2206 gtk/gtklabel.c:6103 gtk/gtktextview.c:8604
+#: gtk/gtkentry.c:8272 gtk/gtkfilechooserwidget.c:1485
+#: gtk/gtkfilechooserwidget.c:2206 gtk/gtklabel.c:6103 gtk/gtktextview.c:8598
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:8269 gtk/gtklabel.c:6112 gtk/gtktextview.c:8618
+#: gtk/gtkentry.c:8283 gtk/gtklabel.c:6112 gtk/gtktextview.c:8612
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:8279 gtk/gtktextview.c:8628
+#: gtk/gtkentry.c:8293 gtk/gtktextview.c:8622
 msgid "Insert _Emoji"
 msgstr "Insertar _emoticono"
 
-#: gtk/gtkentry.c:8433 gtk/gtktextview.c:8831
+#: gtk/gtkentry.c:8447 gtk/gtktextview.c:8825
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:8436 gtk/gtktextview.c:8834
+#: gtk/gtkentry.c:8450 gtk/gtktextview.c:8828
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtkentry.c:8439 gtk/gtktextview.c:8837
+#: gtk/gtkentry.c:8453 gtk/gtktextview.c:8831
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:8442 gtk/gtktextview.c:8840
+#: gtk/gtkentry.c:8456 gtk/gtktextview.c:8834
 msgid "Paste"
 msgstr "Pegar"
 
-#: gtk/gtkentry.c:9296
+#: gtk/gtkentry.c:9310
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
-#: gtk/gtkentry.c:9568
+#: gtk/gtkentry.c:9582
 msgid "Insert Emoji"
 msgstr "Insertar emoticono"
 
@@ -2162,7 +2171,7 @@ msgstr "Ya existe un archivo con ese nombre"
 #: gtk/gtkprintbackend.c:639 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
 #: gtk/gtkwindow.c:10899 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:749 gtk/ui/gtkappchooserdialog.ui:49
+#: gtk/inspector/recorder.c:800 gtk/ui/gtkappchooserdialog.ui:49
 #: gtk/ui/gtkassistant.ui:107 gtk/ui/gtkcolorchooserdialog.ui:32
 #: gtk/ui/gtkfontchooserdialog.ui:26
 msgid "_Cancel"
@@ -2176,7 +2185,7 @@ msgid "_Open"
 msgstr "_Abrir"
 
 #: gtk/gtkfilechoosernative.c:596 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:750
+#: gtk/inspector/recorder.c:801
 msgid "_Save"
 msgstr "_Guardar"
 
@@ -2445,19 +2454,14 @@ msgid "None"
 msgstr "Ninguna"
 
 #: gtk/gtkfontchooserwidget.c:1566
-#| msgid "_Width:"
 msgid "Width"
 msgstr "Anchura"
 
 #: gtk/gtkfontchooserwidget.c:1567
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Weight"
 msgstr "Peso"
 
 #: gtk/gtkfontchooserwidget.c:1568
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
 msgstr "Cursiva"
 
@@ -2467,15 +2471,13 @@ msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:1570
 msgid "Optical Size"
-msgstr ""
+msgstr "Tamaño óptico"
 
 #: gtk/gtkfontchooserwidget.c:2096 gtk/inspector/prop-editor.c:1613
 msgid "Default"
 msgstr "Predeterminada"
 
 #: gtk/gtkfontchooserwidget.c:2140
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
 msgstr "Ligaduras"
 
@@ -2499,10 +2501,9 @@ msgid "Number Formatting"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2145
-#, fuzzy
 #| msgid "Dark Variant"
 msgid "Character Variants"
-msgstr "Variante oscura"
+msgstr "Variantes de caracteres"
 
 #: gtk/gtkglarea.c:286
 msgid "OpenGL context creation failed"
@@ -2871,12 +2872,10 @@ msgid "Recent files"
 msgstr "Archivos recientes"
 
 #: gtk/gtkplacessidebar.c:1054
-#| msgid "_Start"
 msgid "Starred"
 msgstr "Destacados"
 
 #: gtk/gtkplacessidebar.c:1056
-#| msgid "Save recorded frames"
 msgid "Starred files"
 msgstr "Archivos destacados"
 
@@ -3680,16 +3679,12 @@ msgstr "Ninguno"
 
 # src/file-manager/fm-icon-text-window.c:85
 #: gtk/inspector/general.c:443
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ninguno"
 
 # src/file-manager/fm-icon-text-window.c:85
 #: gtk/inspector/general.c:444 gtk/inspector/general.c:445
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ninguna"
@@ -3703,7 +3698,6 @@ msgid "GDK Backend"
 msgstr "«Backend» de GDK"
 
 #: gtk/inspector/general.ui:81
-#| msgid "GL Rendering"
 msgid "GSK Renderer"
 msgstr "Renderizador GSK"
 
@@ -3728,17 +3722,16 @@ msgid "GL Vendor"
 msgstr "Fabricante GL"
 
 #: gtk/inspector/general.ui:482
-#| msgid "_Unlock Device"
 msgid "Vulkan Device"
 msgstr "Dispositivo vulkan"
 
 #: gtk/inspector/general.ui:510
 msgid "Vulkan API version"
-msgstr ""
+msgstr "Versión de la API Vulkan"
 
 #: gtk/inspector/general.ui:538
 msgid "Vulkan driver version"
-msgstr ""
+msgstr "Versión del driver Vulkan"
 
 # src/file-manager/fm-icon-text-window.c:85
 #: gtk/inspector/gestures.c:129
@@ -3972,7 +3965,7 @@ msgstr "Atributo"
 msgid "Defined At"
 msgstr "Definida en"
 
-#: gtk/inspector/recorder.c:717
+#: gtk/inspector/recorder.c:768
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Falló al guardar el RenderNode"
@@ -3991,7 +3984,7 @@ msgstr "Añadir nodos de depuración"
 
 #: gtk/inspector/recorder.ui:41
 msgid "Save selected node"
-msgstr ""
+msgstr "Guardar el nodo seleccionado"
 
 #: gtk/inspector/resource-list.ui:68
 msgid "Path"
@@ -4091,19 +4084,19 @@ msgstr "Acumulativo"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Activar estadísticas con with GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:446 gtk/inspector/visual.c:461
+#: gtk/inspector/visual.c:445 gtk/inspector/visual.c:460
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "El tema está codificado en GTK_THEME"
 
-#: gtk/inspector/visual.c:669
+#: gtk/inspector/visual.c:668
 msgid "Backend does not support window scaling"
 msgstr "El «backend» no soporta el escalado de ventanas"
 
-#: gtk/inspector/visual.c:764
+#: gtk/inspector/visual.c:763
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "La configuración está codificada en GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:825
+#: gtk/inspector/visual.c:824
 #, fuzzy
 #| msgid ""
 #| "Not settable at runtime.\n"
@@ -4115,7 +4108,7 @@ msgstr ""
 "No configurable en tiempo de ejecución.\n"
 "Use GDK_GL=always o GDK_GL=disable en su lugar"
 
-#: gtk/inspector/visual.c:834 gtk/inspector/visual.c:835
+#: gtk/inspector/visual.c:833 gtk/inspector/visual.c:834
 msgid "GL rendering is disabled"
 msgstr "El renderizado GL está desactivado"
 
@@ -4168,58 +4161,46 @@ msgid "Slowdown"
 msgstr "Ralentizar"
 
 #: gtk/inspector/visual.ui:386
-msgid "Rendering Mode"
-msgstr "Modo de renderizado"
-
-#: gtk/inspector/visual.ui:399
-msgid "Similar"
-msgstr "Similar"
-
-#: gtk/inspector/visual.ui:400
-msgid "Image"
-msgstr "Imagen"
-
-#: gtk/inspector/visual.ui:417
 msgid "Show fps overlay"
 msgstr ""
 
-#: gtk/inspector/visual.ui:444
+#: gtk/inspector/visual.ui:413
 msgid "Show Graphic Updates"
 msgstr "Mostrar actualizaciones de gráficos"
 
-#: gtk/inspector/visual.ui:471
+#: gtk/inspector/visual.ui:440
 msgid "Show Baselines"
 msgstr "Mostrar líneas base"
 
-#: gtk/inspector/visual.ui:498
+#: gtk/inspector/visual.ui:467
 msgid "Show Layout Borders"
 msgstr "Mostrar bordes de la distribución"
 
-#: gtk/inspector/visual.ui:525
+#: gtk/inspector/visual.ui:494
 msgid "Show Widget Resizes"
 msgstr "Mostrar cambios de tamaño de los widgets"
 
-#: gtk/inspector/visual.ui:552
+#: gtk/inspector/visual.ui:521
 msgid "Simulate Touchscreen"
 msgstr "Simular pantalla táctil"
 
-#: gtk/inspector/visual.ui:588
+#: gtk/inspector/visual.ui:557
 msgid "GL Rendering"
 msgstr "Renderizado GL"
 
-#: gtk/inspector/visual.ui:600
+#: gtk/inspector/visual.ui:569
 msgid "When Needed"
 msgstr "Cuando sea necesario"
 
-#: gtk/inspector/visual.ui:601
+#: gtk/inspector/visual.ui:570
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: gtk/inspector/visual.ui:618
+#: gtk/inspector/visual.ui:587
 msgid "Software GL"
 msgstr "Software GL"
 
-#: gtk/inspector/visual.ui:645
+#: gtk/inspector/visual.ui:614
 msgid "Texture Rectangle Extension"
 msgstr "Extensión del rectángulo de la textura"
 
@@ -4469,19 +4450,16 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
 msgstr "Formas de terminal nº 2"
 
 #: gtk/open-type-layout.h:41
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
 msgstr "Formas de terminal nº 3"
 
 #: gtk/open-type-layout.h:42
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
 msgstr "Formas de terminal"
@@ -4492,13 +4470,11 @@ msgid "Flattened accent forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:44
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
 msgstr "Fracciones"
 
 #: gtk/open-type-layout.h:45
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
 msgstr "Anchura completa"
@@ -4549,8 +4525,6 @@ msgid "Half Widths"
 msgstr "Anchura media"
 
 #: gtk/open-type-layout.h:55
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
 msgstr "Formas iniciales"
@@ -4561,8 +4535,6 @@ msgid "Isolated Forms"
 msgstr "Formas aisladas"
 
 #: gtk/open-type-layout.h:57
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
 msgstr "Cursivas"
@@ -4593,21 +4565,16 @@ msgid "JIS2004 Forms"
 msgstr "Formularios JIS2004"
 
 #: gtk/open-type-layout.h:63
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
 msgstr "Interletraje"
 
 #: gtk/open-type-layout.h:64
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
 msgstr "Márgenes izquierdos"
 
 #: gtk/open-type-layout.h:65
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
 msgstr "Ligaduras estándar"
@@ -4628,13 +4595,11 @@ msgid "Localized Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:69
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "Alternativas de izquierda a derecha"
 
 #: gtk/open-type-layout.h:70
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
 msgstr "Formas espejadas de izquierda a derecha"
@@ -4700,7 +4665,6 @@ msgid "Optical Bounds"
 msgstr "Límites ópticos"
 
 #: gtk/open-type-layout.h:83
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
 msgstr "Ordinales"
@@ -4726,7 +4690,6 @@ msgid "Proportional Kana"
 msgstr "Kana proporcional"
 
 #: gtk/open-type-layout.h:88
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
 msgstr "Figuras proporcionales"
@@ -4787,20 +4750,16 @@ msgid "Reph Forms"
 msgstr "Formas Reph"
 
 #: gtk/open-type-layout.h:100
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Márgenes derechos"
 
 #: gtk/open-type-layout.h:101
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Alternativas de derecha a izquierda"
 
 #: gtk/open-type-layout.h:102
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Formas espejadas de derecha a izquierda"
@@ -4936,7 +4895,6 @@ msgid "Stylistic Set 19"
 msgstr "Conjunto estilístico nº 19"
 
 #: gtk/open-type-layout.h:129
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
 msgstr "Conjunto estilístico nº 20"
@@ -4952,14 +4910,11 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#| msgid "PostScript"
 msgctxt "OpenType layout"
 msgid "Subscript"
 msgstr "Subíndice"
 
 #: gtk/open-type-layout.h:133
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
 msgstr "Superíndice"
@@ -5010,14 +4965,11 @@ msgid "Alternate Vertical Metrics"
 msgstr "Métricas verticales alternativas"
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Variantes de vattu"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Escritura vertical"
@@ -5038,8 +4990,6 @@ msgid "Vertical Kana Alternates"
 msgstr "Alternativa Kana vertical"
 
 #: gtk/open-type-layout.h:148
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
 msgstr "Interletraje vertical"
@@ -6035,7 +5985,6 @@ msgid "Gothic"
 msgstr "Gótico"
 
 #: gtk/script-names.c:28
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
 msgstr "Griego"
@@ -6086,7 +6035,6 @@ msgid "Khmer"
 msgstr "Camboyano"
 
 #: gtk/script-names.c:38
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
 msgstr "Lao"
@@ -6117,8 +6065,6 @@ msgid "Ogham"
 msgstr "Ogham"
 
 #: gtk/script-names.c:44
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
 msgstr "Cursiva antigua"
@@ -6144,7 +6090,6 @@ msgid "Syriac"
 msgstr "Sirio"
 
 #: gtk/script-names.c:49
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
 msgstr "Tamil"
@@ -6160,8 +6105,6 @@ msgid "Thaana"
 msgstr "Thaana"
 
 #: gtk/script-names.c:52
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
 msgstr "Tailandés"
@@ -6227,8 +6170,6 @@ msgid "Shavian"
 msgstr "Shavian"
 
 #: gtk/script-names.c:65
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
 msgstr "B lineal"
@@ -6279,13 +6220,11 @@ msgid "Kharoshthi"
 msgstr "Kharoshthi"
 
 #: gtk/script-names.c:75
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Desconocido"
 
 #: gtk/script-names.c:76
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
 msgstr "Balinés"
@@ -6336,8 +6275,6 @@ msgid "Saurashtra"
 msgstr "Saurashtra"
 
 #: gtk/script-names.c:86
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
 msgstr "Cham"
@@ -6548,7 +6485,6 @@ msgid "Mende Kikakui"
 msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:128
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
 msgstr "Modi"
@@ -6624,8 +6560,6 @@ msgid "Hatran"
 msgstr "Hatran"
 
 #: gtk/script-names.c:143
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr "Multani"
@@ -6636,8 +6570,6 @@ msgid "Old Hungarian"
 msgstr "Húngaro antiguo"
 
 #: gtk/script-names.c:145
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "Signoescritura"
@@ -6653,7 +6585,6 @@ msgid "Bhaiksuki"
 msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
 msgstr "Marchen"
@@ -6847,7 +6778,6 @@ msgid "Flags"
 msgstr "Banderas"
 
 #: gtk/ui/gtkemojichooser.ui:170
-#| msgid "Recent"
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Recientes"
@@ -7347,17 +7277,14 @@ msgstr ""
 
 #: modules/media/gtkffmediafile.c:216
 #, c-format
-#| msgid "Unspecified error"
 msgid "Unspecified error decoding video"
 msgstr "Error no especificado al decodificar el vídeo"
 
 #: modules/media/gtkffmediafile.c:318 modules/media/gtkffmediafile.c:492
-#| msgid "Not enough free memory"
 msgid "Not enough memory"
 msgstr "No hay memoria suficiente"
 
 #: modules/media/gtkffmediafile.c:515
-#| msgid "Not a valid page setup file"
 msgid "Not a video file"
 msgstr "No es un archivo de vídeo"
 
@@ -7959,6 +7886,15 @@ msgstr "No hay un perfil disponible"
 #: modules/printbackends/gtkprintercups.c:292
 msgid "Unspecified profile"
 msgstr "Perfil no especificado"
+
+#~ msgid "Rendering Mode"
+#~ msgstr "Modo de renderizado"
+
+#~ msgid "Similar"
+#~ msgstr "Similar"
+
+#~ msgid "Image"
+#~ msgstr "Imagen"
 
 #~ msgid "3.2 core GL profile is not available on EGL implementation"
 #~ msgstr ""
