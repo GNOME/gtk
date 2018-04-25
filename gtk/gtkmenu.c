@@ -235,6 +235,11 @@ static void     gtk_menu_enter             (GtkEventController *controller,
                                             gpointer            user_data);
 static void     gtk_menu_leave             (GtkEventController *controller,
                                             gpointer            user_data);
+static gboolean gtk_menu_key_pressed       (GtkEventControllerKey *controller,
+                                            guint                  keyval,
+                                            guint                  keycode,
+                                            GdkModifierType        state,
+                                            GtkMenu               *menu);
 static void     gtk_menu_scroll_to         (GtkMenu          *menu,
                                             gint              offset);
 static void     gtk_menu_grab_notify       (GtkWidget        *widget,
@@ -1145,8 +1150,8 @@ gtk_menu_init (GtkMenu *menu)
 
   priv->key_controller =
     gtk_event_controller_key_new (GTK_WIDGET (menu));
-  g_signal_connect_swapped (priv->key_controller, "key-pressed",
-                            G_CALLBACK (gtk_menu_stop_navigating_submenu), menu);
+  g_signal_connect (priv->key_controller, "key-pressed",
+                    G_CALLBACK (gtk_menu_key_pressed), menu);
 }
 
 static void
@@ -3479,6 +3484,17 @@ gtk_menu_leave (GtkEventController *controller,
 
   if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
+}
+
+static gboolean
+gtk_menu_key_pressed (GtkEventControllerKey *controller,
+                      guint                  keyval,
+                      guint                  keycode,
+                      GdkModifierType        state,
+                      GtkMenu               *menu)
+{
+  gtk_menu_stop_navigating_submenu (menu);
+  return FALSE;
 }
 
 static gboolean
