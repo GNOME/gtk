@@ -1427,28 +1427,31 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       gboolean success = FALSE;
 
 #ifdef GDK_WINDOWING_WIN32
-      guint16  output[2];
-      gsize    output_size = 2;
-
-      switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
-                                              priv->compose_buffer,
-                                              n_compose,
-                                              output, &output_size))
+      if (GDK_IS_WIN32_DISPLAY (display))
         {
-        case GDK_WIN32_KEYMAP_MATCH_NONE:
-          break;
-        case GDK_WIN32_KEYMAP_MATCH_EXACT:
-        case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
-          for (i = 0; i < output_size; i++)
+          guint16  output[2];
+          gsize    output_size = 2;
+
+          switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
+                                                  priv->compose_buffer,
+                                                  n_compose,
+                                                  output, &output_size))
             {
-              output_char = gdk_keyval_to_unicode (output[i]);
-              gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
-                                                 output_char);
+            case GDK_WIN32_KEYMAP_MATCH_NONE:
+              break;
+            case GDK_WIN32_KEYMAP_MATCH_EXACT:
+            case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
+              for (i = 0; i < output_size; i++)
+                {
+                  output_char = gdk_keyval_to_unicode (output[i]);
+                  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                                     output_char);
+                }
+              priv->compose_buffer[0] = 0;
+              return TRUE;
+            case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
+              return TRUE;
             }
-          priv->compose_buffer[0] = 0;
-          return TRUE;
-        case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
-          return TRUE;
         }
 #endif
 
