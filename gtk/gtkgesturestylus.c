@@ -131,7 +131,6 @@ gtk_gesture_stylus_init (GtkGestureStylus *gesture)
 
 /**
  * gtk_gesture_stylus_new:
- * @widget: a #GtkWidget
  *
  * Creates a new #GtkGestureStylus.
  *
@@ -140,10 +139,9 @@ gtk_gesture_stylus_init (GtkGestureStylus *gesture)
  * Since: 3.94
  **/
 GtkGesture *
-gtk_gesture_stylus_new (GtkWidget *widget)
+gtk_gesture_stylus_new (void)
 {
   return g_object_new (GTK_TYPE_GESTURE_STYLUS,
-                       "widget", widget,
                        NULL);
 }
 

@@ -11,8 +11,6 @@ typedef struct
   cairo_surface_t *surface;
   cairo_t *cr;
   GdkRGBA draw_color;
-
-  GtkGesture *stylus_gesture;
 } DrawingArea;
 
 typedef struct
@@ -207,13 +205,16 @@ stylus_gesture_motion (GtkGestureStylus *gesture,
 static void
 drawing_area_init (DrawingArea *area)
 {
+  GtkGesture *gesture;
+
   gtk_widget_set_has_surface (GTK_WIDGET (area), FALSE);
 
-  area->stylus_gesture = gtk_gesture_stylus_new (GTK_WIDGET (area));
-  g_signal_connect (area->stylus_gesture, "down",
+  gesture = gtk_gesture_stylus_new ();
+  g_signal_connect (gesture, "down",
                     G_CALLBACK (stylus_gesture_down), area);
-  g_signal_connect (area->stylus_gesture, "motion",
+  g_signal_connect (gesture, "motion",
                     G_CALLBACK (stylus_gesture_motion), area);
+  gtk_widget_add_controller (GTK_WIDGET (area), GTK_EVENT_CONTROLLER (gesture));
 
   area->draw_color = (GdkRGBA) { 0, 0, 0, 1 };
 }
