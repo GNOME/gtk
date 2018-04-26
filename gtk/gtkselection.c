@@ -986,15 +986,16 @@ gtk_selection_add_targets (GtkWidget            *widget,
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
-  {
-    int i;
-    GdkAtom *atoms = g_new (GdkAtom, ntargets);
+  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      int i;
+      GdkAtom *atoms = g_new (GdkAtom, ntargets);
 
-    for (i = 0; i < ntargets; ++i)
-      atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
-    gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, ntargets, atoms);
-    g_free (atoms);
-  }
+      for (i = 0; i < ntargets; ++i)
+        atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
+      gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, ntargets, atoms);
+      g_free (atoms);
+    }
 #endif
 }
 
