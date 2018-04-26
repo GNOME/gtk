@@ -942,7 +942,8 @@ gtk_selection_add_target (GtkWidget	    *widget,
     gdk_wayland_selection_add_targets (gtk_widget_get_window (widget), selection, 1, &target);
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, 1, &target);
+  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (widget)))
+    gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, 1, &target);
 #endif
 }
 
