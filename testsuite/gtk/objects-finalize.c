@@ -52,11 +52,12 @@ test_finalize_object (gconstpointer data)
   GType test_type = GPOINTER_TO_SIZE (data);
   GObject *object;
 
-  if (g_str_equal (g_type_name (test_type), "GdkClipboard") ||
-      g_str_equal (g_type_name (test_type), "GdkDragContext"))
+  if (g_str_equal (g_type_name (test_type), "GdkClipboard"))
     object = g_object_new (test_type, "display", gdk_display_get_default (), NULL);
+  else if (g_str_equal (g_type_name (test_type), "GdkDragContext"))
+    object = g_object_new (test_type, "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())), NULL);
   else
-  object = g_object_new (test_type, NULL);
+    object = g_object_new (test_type, NULL);
   g_assert (G_IS_OBJECT (object));
 
   /* Make sure we have the only reference */

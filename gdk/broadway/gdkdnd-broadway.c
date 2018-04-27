@@ -84,7 +84,7 @@ gdk_broadway_drag_context_finalize (GObject *object)
 /* Drag Contexts */
 
 GdkDragContext *
-_gdk_broadway_surface_drag_begin (GdkSurface          *surface,
+_gdk_broadway_surface_drag_begin (GdkSurface         *surface,
                                   GdkDevice          *device,
                                   GdkContentProvider *content,
                                   GdkDragAction       actions,
@@ -97,7 +97,7 @@ _gdk_broadway_surface_drag_begin (GdkSurface          *surface,
   g_return_val_if_fail (GDK_SURFACE_IS_BROADWAY (surface), NULL);
 
   new_context = g_object_new (GDK_TYPE_BROADWAY_DRAG_CONTEXT,
-                              "display", gdk_surface_get_display (surface),
+                              "device", device,
                               "content", content,
                               NULL);
 
