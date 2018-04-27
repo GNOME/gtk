@@ -24,6 +24,10 @@
 #include <epoxy/gl.h>
 #include <epoxy/wgl.h>
 
+#ifdef GDK_ENABLE_WIN32_EGL
+# include <epoxy/egl.h>
+#endif
+
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkvisual.h"
@@ -46,6 +50,14 @@ struct _GdkWin32GLContext
   guint is_attached : 1;
   guint do_frame_sync : 1;
   guint do_blit_swap : 1;
+
+#ifdef GDK_ENABLE_WIN32_EGL
+  /* EGL (Angle) Context Items */
+  EGLContext egl_context;
+  EGLConfig egl_config;
+  EGLSurface egl_surface;
+  EGLSurface dummy_egl_surface;
+#endif
 };
 
 struct _GdkWin32GLContextClass
