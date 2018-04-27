@@ -6276,3 +6276,35 @@ gdk_win32_window_get_handle (GdkWindow *window)
 
   return GDK_WINDOW_HWND (window);
 }
+
+#ifdef GDK_ENABLE_WIN32_EGL
+EGLSurface
+_gdk_win32_window_get_egl_surface (GdkWindow *window,
+                                  EGLConfig  config,
+                                  gboolean   is_dummy)
+{
+  EGLSurface surface;
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_window_get_display (window));
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  if (is_dummy)
+    {
+      if (impl->egl_dummy_surface == EGL_NO_SURFACE)
+        {
+          EGLint attribs[] = {EGL_WIDTH, 1, EGL_WIDTH, 1, EGL_NONE};
+          impl->egl_dummy_surface = eglCreatePbufferSurface (display->egl_disp,
+                                                             config,
+                                                             attribs);
+        }
+      return impl->egl_dummy_surface;
+    }
+  else
+    {
+      if (impl->egl_surface == EGL_NO_SURFACE)
+        impl->egl_surface = eglCreateWindowSurface (display->egl_disp, config, GDK_WINDOW_HWND (window), NULL);
+
+      return impl->egl_surface;
+    }
+
+}
+#endif
