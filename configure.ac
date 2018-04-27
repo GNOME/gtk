@@ -1434,6 +1434,43 @@ else
   X11_PREFIX="$ac_default_prefix"
 fi
 
+AC_ARG_ENABLE(win32-gles,
+              [AS_HELP_STRING([--enable-win32-gles],
+                              [enable OpenGL ES rendering in Win32 backend, disabled by default])],
+                              [win32_gles=yes],
+                              [win32_gles=no])
+
+if test x"$enable_win32_backend" = xyes; then
+  AC_MSG_CHECKING(WGL support in epoxy)
+  WGL_SUPPORT="`$PKG_CONFIG --variable=epoxy_has_wgl epoxy`"
+  if test x"$WGL_SUPPORT" = x1; then
+    AC_MSG_RESULT([supported])
+  else
+    AC_MSG_ERROR([
+*** epoxy was not built with WGL support or epoxy version is too old.
+*** WGL support in epoxy is enabled by default for all Windows builds,
+*** and is used by GTK+ uncondititonally. If it is not there, then
+*** something is very wrong.
+])
+  fi
+  if test x"$win32_gles" = xyes; then
+    AC_MSG_CHECKING(EGL support in epoxy)
+    EGL_SUPPORT="`$PKG_CONFIG --variable=epoxy_has_egl epoxy`"
+    if test x"$EGL_SUPPORT" = x1; then
+      AC_MSG_RESULT([supported])
+    else
+      AC_MSG_ERROR([
+*** epoxy was not built with EGL support or epoxy version is too old.
+*** EGL support in epoxy is disabled by default in Windows builds,
+*** you might need to rebuild epoxy with explicit --enable-egl=yes.
+*** EGL support is needed for OpenGL ES rendering.
+])
+    fi
+  fi
+fi
+
+AM_CONDITIONAL(WIN32_GLES, test x"$platform_win32" = xyes -a x"$win32_gles" = xyes)
+
 GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
