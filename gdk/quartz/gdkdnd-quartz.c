@@ -44,7 +44,7 @@ _gdk_quartz_surface_drag_begin (GdkSurface *window,
 
   /* Create fake context */
   _gdk_quartz_drag_source_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT,
-                                                  "display", display,
+                                                  "device", device,
                                                   NULL);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
@@ -52,8 +52,6 @@ _gdk_quartz_surface_drag_begin (GdkSurface *window,
   g_object_ref (window);
 
   _gdk_quartz_drag_source_context->targets = targets;
-
-  gdk_drag_context_set_device (_gdk_quartz_drag_source_context, device);
 
   return _gdk_quartz_drag_source_context;
 }

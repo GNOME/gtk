@@ -494,14 +494,12 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
-                                  "display", display_wayland,
+                                  "device", device,
                                   "content", content,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->source_surface = g_object_ref (surface);
   context->is_source = TRUE;
-
-  gdk_drag_context_set_device (context, device);
 
   context_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
   context_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (context_wayland->dnd_surface);
@@ -534,14 +532,14 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 
 
 GdkDragContext *
-_gdk_wayland_drop_context_new (GdkDisplay            *display,
+_gdk_wayland_drop_context_new (GdkDevice             *device,
                                struct wl_data_device *data_device)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
-                                  "display", display,
+                                  "device", device,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->is_source = FALSE;
