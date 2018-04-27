@@ -141,12 +141,10 @@ gdk_drop_context_new (GdkDisplay      *display,
   GdkDragContext *context;
 
   context_win32 = g_object_new (GDK_TYPE_WIN32_DROP_CONTEXT,
-                                "display", display,
+                                "device", gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                                 NULL);
 
   context = GDK_DRAG_CONTEXT (context_win32);
-
-  gdk_drag_context_set_device (context, gdk_seat_get_pointer (gdk_display_get_default_seat (display)));
 
   if (win32_display->has_fixed_scale)
     context_win32->scale = win32_display->surface_scale;

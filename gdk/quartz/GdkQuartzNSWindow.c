@@ -584,15 +584,12 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   if (current_context)
     g_object_unref (current_context);
 
-  current_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT, NULL);
+  current_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT,
+                                  "device", gdk_seat_get_pointer (gdk_display_get_default_seat (current_context->display)),
+                                  NULL);
   update_context_from_dragging_info (sender);
 
   window = [[self contentView] gdkSurface];
-
-  current_context->display = gdk_surface_get_display (window);
-
-  gdk_drag_context_set_device (current_context,
-                               gdk_seat_get_pointer (gdk_display_get_default_seat (current_context->display)));
 
   event = gdk_event_new (GDK_DRAG_ENTER);
   event->dnd.window = g_object_ref (window);

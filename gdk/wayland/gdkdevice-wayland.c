@@ -1078,6 +1078,7 @@ data_device_enter (void                  *data,
 {
   GdkWaylandSeat *seat = data;
   GdkSurface *dest_surface, *dnd_owner;
+  GdkDevice *device;
 
   dest_surface = wl_surface_get_user_data (surface);
 
@@ -1093,12 +1094,17 @@ data_device_enter (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
-  seat->drop_context = _gdk_wayland_drop_context_new (seat->display,
-                                                      seat->data_device);
   if (seat->master_pointer)
-    gdk_drag_context_set_device (seat->drop_context, seat->master_pointer);
+    device = seat->master_pointer;
   else if (seat->touch_master)
-    gdk_drag_context_set_device (seat->drop_context, seat->touch_master);
+    device = seat->touch_master;
+  else
+    {
+      g_warning ("No device for DND enter, ignoring.");
+      return;
+    }
+  seat->drop_context = _gdk_wayland_drop_context_new (device,
+                                                      seat->data_device);
 
   gdk_wayland_drop_context_update_targets (seat->drop_context);
 

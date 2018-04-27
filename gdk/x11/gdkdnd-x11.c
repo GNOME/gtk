@@ -1776,8 +1776,9 @@ xdnd_enter_filter (const XEvent *xevent,
       display_x11->current_dest_drag = NULL;
     }
 
+  seat = gdk_display_get_default_seat (display);
   context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
-                              "display", display,
+                              "device", gdk_seat_get_pointer (seat),
                               NULL);
   context = (GdkDragContext *)context_x11;
 
@@ -1785,8 +1786,6 @@ xdnd_enter_filter (const XEvent *xevent,
   context_x11->version = version;
 
   /* FIXME: Should extend DnD protocol to have device info */
-  seat = gdk_display_get_default_seat (display);
-  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   context->source_surface = gdk_x11_surface_foreign_new_for_display (display, source_surface);
   if (!context->source_surface)
@@ -2957,7 +2956,7 @@ _gdk_x11_surface_drag_begin (GdkSurface          *surface,
   display = gdk_surface_get_display (surface);
 
   context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
-                                             "display", display,
+                                             "device", device,
                                              "content", content,
                                              NULL);
   x11_context = GDK_X11_DRAG_CONTEXT (context);
@@ -2968,7 +2967,6 @@ _gdk_x11_surface_drag_begin (GdkSurface          *surface,
 
   precache_target_list (context);
 
-  gdk_drag_context_set_device (context, device);
   gdk_device_get_position (device, &x_root, &y_root);
   x_root += dx;
   y_root += dy;

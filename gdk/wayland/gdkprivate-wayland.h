@@ -104,7 +104,7 @@ GdkDragContext *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
 void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);
-GdkDragContext * _gdk_wayland_drop_context_new (GdkDisplay            *display,
+GdkDragContext * _gdk_wayland_drop_context_new (GdkDevice             *device,
                                                 struct wl_data_device *data_device);
 void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *surface);
