@@ -1093,6 +1093,13 @@ data_device_enter (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
+  seat->drop_context = _gdk_wayland_drop_context_new (seat->display,
+                                                      seat->data_device);
+  if (seat->master_pointer)
+    gdk_drag_context_set_device (seat->drop_context, seat->master_pointer);
+  else if (seat->touch_master)
+    gdk_drag_context_set_device (seat->drop_context, seat->touch_master);
+
   gdk_wayland_drop_context_update_targets (seat->drop_context);
 
   dnd_owner = seat->foreign_dnd_surface;
@@ -1119,7 +1126,7 @@ data_device_leave (void                  *data,
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device leave, data device %p", data_device));
 
-  if (!gdk_drag_context_get_dest_surface (seat->drop_context))
+  if (seat->drop_context == NULL)
     return;
 
   g_object_unref (seat->pointer_info.focus);
@@ -1129,6 +1136,8 @@ data_device_leave (void                  *data,
   _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_LEAVE,
                                         GDK_CURRENT_TIME);
   _gdk_wayland_drag_context_set_dest_surface (seat->drop_context, NULL, 0);
+
+  g_clear_object (&seat->drop_context);
 }
 
 static void
@@ -1144,7 +1153,7 @@ data_device_motion (void                  *data,
             g_message ("data device motion, data_device = %p, time = %d, x = %f, y = %f",
                        data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y)));
 
-  if (!gdk_drag_context_get_dest_surface (seat->drop_context))
+  if (seat->drop_context == NULL)
     return;
 
   /* Update pointer state, so device state queries work during DnD */
@@ -3014,11 +3023,6 @@ seat_handle_capabilities (void                    *data,
       g_clear_object (&seat->touch_master);
       g_clear_object (&seat->touch);
     }
-
-  if (seat->master_pointer)
-    gdk_drag_context_set_device (seat->drop_context, seat->master_pointer);
-  else if (seat->touch_master)
-    gdk_drag_context_set_device (seat->drop_context, seat->touch_master);
 }
 
 static GdkDevice *
@@ -4816,8 +4820,6 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
                                             seat->wl_seat);
   seat->clipboard = gdk_wayland_clipboard_new (display);
-  seat->drop_context = _gdk_wayland_drop_context_new (display,
-                                                      seat->data_device);
   wl_data_device_add_listener (seat->data_device,
                                &data_device_listener, seat);
 

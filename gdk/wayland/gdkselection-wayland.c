@@ -156,15 +156,16 @@ data_offer_source_actions (void                 *data,
   seat = gdk_display_get_default_seat (display);
   device = gdk_seat_get_pointer (seat);
   drop_context = gdk_wayland_device_get_drop_context (device);
+  if (drop_context == NULL)
+    return;
 
   drop_context->actions = _wl_to_gdk_actions (source_actions);
 
   GDK_DISPLAY_NOTE (display, EVENTS,
             g_message ("data offer source actions, offer %p, actions %d", wl_data_offer, source_actions));
 
-  if (gdk_drag_context_get_dest_surface (drop_context))
-    _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
-                                          GDK_CURRENT_TIME);
+  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
+                                        GDK_CURRENT_TIME);
 }
 
 static void
@@ -181,12 +182,13 @@ data_offer_action (void                 *data,
   seat = gdk_display_get_default_seat (display);
   device = gdk_seat_get_pointer (seat);
   drop_context = gdk_wayland_device_get_drop_context (device);
+  if (drop_context == NULL)
+    return;
 
   drop_context->action = _wl_to_gdk_actions (action);
 
-  if (gdk_drag_context_get_dest_surface (drop_context))
-    _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
-                                          GDK_CURRENT_TIME);
+  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
+                                        GDK_CURRENT_TIME);
 }
 
 static const struct wl_data_offer_listener data_offer_listener = {
