@@ -793,11 +793,17 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       has_npot = priv->gl_version >= 20;
       has_texture_rectangle = FALSE;
 
-      /* This should check for GL_NV_framebuffer_blit - see extension at:
+      /* This should check for GL_NV_framebuffer_blit as well - see extension at:
        *
        * https://www.khronos.org/registry/gles/extensions/NV/NV_framebuffer_blit.txt
+       *
+       * for ANGLE, we can enable bit blitting if we have the
+       * GL_ANGLE_framebuffer_blit extension
        */
-      priv->has_gl_framebuffer_blit = FALSE;
+      if (epoxy_has_gl_extension ("GL_ANGLE_framebuffer_blit"))
+        priv->has_gl_framebuffer_blit = TRUE;
+      else
+        priv->has_gl_framebuffer_blit = FALSE;
 
       /* No OES version */
       priv->has_frame_terminator = FALSE;

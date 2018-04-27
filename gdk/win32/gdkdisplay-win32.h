@@ -19,6 +19,10 @@
 
 #include "gdkdisplayprivate.h"
 
+#ifdef GDK_WIN32_ENABLE_EGL
+# include <epoxy/egl.h>
+#endif
+
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__
 
@@ -75,6 +79,14 @@ struct _GdkWin32Display
   guint gl_version;
   HWND gl_hwnd;
 
+#ifdef GDK_WIN32_ENABLE_EGL
+  /* EGL (Angle) Items */
+  guint have_egl : 1;
+  guint egl_version;
+  EGLDisplay egl_disp;
+  HDC hdc_egl_temp;
+#endif
+
   GPtrArray *monitors;
 
   guint hasWglARBCreateContext : 1;
@@ -82,6 +94,12 @@ struct _GdkWin32Display
   guint hasWglOMLSyncControl : 1;
   guint hasWglARBPixelFormat : 1;
   guint hasWglARBmultisample : 1;
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  guint hasEglKHRCreateContext : 1;
+  guint hasEglSurfacelessContext : 1;
+  EGLint egl_min_swap_interval;
+#endif
 
   /* HiDPI Items */
   guint have_at_least_win81 : 1;
