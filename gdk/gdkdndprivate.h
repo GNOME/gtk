@@ -102,8 +102,6 @@ struct _GdkDragContext {
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
 
-void     gdk_drag_context_set_device          (GdkDragContext *context,
-                                               GdkDevice      *device);
 void     gdk_drag_context_set_cursor          (GdkDragContext *context,
                                                GdkCursor      *cursor);
 void     gdk_drag_context_cancel              (GdkDragContext      *context,

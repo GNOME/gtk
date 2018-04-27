@@ -51,6 +51,7 @@ static struct {
 enum {
   PROP_0,
   PROP_CONTENT,
+  PROP_DEVICE,
   PROP_DISPLAY,
   PROP_FORMATS,
   N_PROPERTIES
@@ -203,30 +204,6 @@ gdk_drag_context_get_dest_surface (GdkDragContext *context)
 }
 
 /**
- * gdk_drag_context_set_device:
- * @context: a #GdkDragContext
- * @device: a #GdkDevice
- *
- * Associates a #GdkDevice to @context, so all Drag and Drop events
- * for @context are emitted as if they came from this device.
- */
-void
-gdk_drag_context_set_device (GdkDragContext *context,
-                             GdkDevice      *device)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  if (context->device)
-    g_object_unref (context->device);
-
-  context->device = device;
-
-  if (context->device)
-    g_object_ref (context->device);
-}
-
-/**
  * gdk_drag_context_get_device:
  * @context: a #GdkDragContext
  *
@@ -266,9 +243,10 @@ gdk_drag_context_set_property (GObject      *gobject,
         context->formats = gdk_content_provider_ref_formats (context->content);
       break;
 
-    case PROP_DISPLAY:
-      context->display = g_value_get_object (value);
-      g_assert (context->display != NULL);
+    case PROP_DEVICE:
+      context->device = g_value_dup_object (value);
+      g_assert (context->device != NULL);
+      context->display = gdk_device_get_display (context->device);
       break;
 
     default:
@@ -289,6 +267,10 @@ gdk_drag_context_get_property (GObject    *gobject,
     {
     case PROP_CONTENT:
       g_value_set_object (value, context->content);
+      break;
+
+    case PROP_DEVICE:
+      g_value_set_object (value, context->device);
       break;
 
     case PROP_DISPLAY:
@@ -386,15 +368,29 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   /**
    * GdkDragContext:display:
    *
+   * The #GdkDevice that is performing the drag.
+   */
+  properties[PROP_DEVICE] =
+    g_param_spec_object ("device",
+                         "Device",
+                         "The device performing the drag",
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkDragContext:display:
+   *
    * The #GdkDisplay that the drag context belongs to.
    */
   properties[PROP_DISPLAY] =
     g_param_spec_object ("display",
                          "Display",
-                         "Display owning this clipboard",
+                         "Display this drag belongs to",
                          GDK_TYPE_DISPLAY,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
 
