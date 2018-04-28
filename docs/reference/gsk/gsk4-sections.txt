@@ -68,6 +68,10 @@ gsk_container_node_get_child
 gsk_transform_node_new
 gsk_transform_node_get_child
 gsk_transform_node_peek_transform
+gsk_offset_node_new
+gsk_offset_node_get_child
+gsk_offset_node_get_x_offset
+gsk_offset_node_get_y_offset
 gsk_opacity_node_new
 gsk_opacity_node_get_child
 gsk_opacity_node_get_opacity
