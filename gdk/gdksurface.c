@@ -55,7 +55,7 @@
 
 
 /**
- * SECTION:surfaces
+ * SECTION:gdksurface
  * @Short_description: Onscreen display areas in the target window system
  * @Title: Surfaces
  *

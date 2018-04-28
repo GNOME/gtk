@@ -2336,7 +2336,7 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
  **/
 gboolean
 gdk_event_get_grab_surface (const GdkEvent  *event,
-                           GdkSurface      **surface)
+                            GdkSurface     **surface)
 {
   if (!event)
     return FALSE;

@@ -167,8 +167,8 @@ gdk_rgba_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Windows</TITLE>
-<FILE>windows</FILE>
+<TITLE>GdkSurface</TITLE>
+<FILE>gdksurface</FILE>
 GdkSurface
 GdkSurfaceType
 GdkSurfaceClass
@@ -655,7 +655,7 @@ gdk_event_get_crossing_detail
 gdk_event_get_crossing_mode
 gdk_event_get_drag_context
 gdk_event_get_focus_in
-gdk_event_get_grab_window
+gdk_event_get_grab_surface
 gdk_event_get_motion_history
 gdk_event_get_key_group
 gdk_event_get_key_is_modifier
@@ -1104,7 +1104,7 @@ gdk_draw_context_get_display
 gdk_draw_context_get_surface
 gdk_draw_context_begin_frame
 gdk_draw_context_end_frame
-gdk_draw_context_in_frame
+gdk_draw_context_is_in_frame
 gdk_draw_context_get_frame_region
 
 <SUBSECTION Standard>
