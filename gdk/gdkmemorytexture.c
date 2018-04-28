@@ -105,6 +105,20 @@ gdk_memory_texture_init (GdkMemoryTexture *self)
 {
 }
 
+/**
+ * gdk_memory_texture_new:
+ * @width: the width of the texture
+ * @height: the height of the texture
+ * @format: the format of the data
+ * @bytes: the #GBytes containing the pixel data
+ * @stride: rowstride for the data
+ *
+ * Creates a new texture for a blob of image data.
+ * The #GBytes must contain @stride x @height pixels
+ * in the given format.
+ *
+ * Returns: A newly-created #GdkTexture
+ */
 GdkTexture *
 gdk_memory_texture_new (int              width,
                         int              height,

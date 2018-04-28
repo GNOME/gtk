@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-/*
+/**
  * GdkMemoryFormat:
  * @GDK_MEMORY_B8G8R8A8_PREMULTIPLIED: 4 bytes; for blue, green, red, alpha.
  *     The color values are premultiplied with the alpha value.
