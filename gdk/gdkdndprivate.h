@@ -83,8 +83,6 @@ struct _GdkDragContext {
   GObject parent_instance;
 
   /*< private >*/
-  GdkDisplay *display;
-
   gboolean is_source;
   GdkSurface *source_surface;
   GdkSurface *dest_surface;
@@ -95,8 +93,6 @@ struct _GdkDragContext {
   GdkDragAction actions;
   GdkDragAction suggested_action;
   GdkDragAction action;
-
-  GdkDevice *device;
 
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
