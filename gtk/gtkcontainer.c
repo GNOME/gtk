@@ -454,7 +454,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GError *error = NULL;
   GObjectNotifyQueue *nqueue;
 
-  if (SPECIAL_CONTAINER (container))
+  if (SPECIAL_CONTAINER (container) && !GTK_IS_ASSISTANT (container))
     {
       /* This can happen with internal children of complex widgets.
        * Silently ignore the child properties in this case. We explicitly
