@@ -65,6 +65,7 @@ RUN dnf -y install \
     wayland-protocols-devel \
     which \
     xorg-x11-server-Xvfb \
+    gtk-doc \
  && dnf clean all
 
 RUN pip3 install meson
