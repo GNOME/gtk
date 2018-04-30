@@ -37,7 +37,7 @@ static void     gdk_event_source_finalize (GSource     *source);
 static GQuark quark_needs_enter = 0;
 
 #define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
+  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 struct _GdkEventSource
 {
