@@ -412,6 +412,8 @@ test_type (gconstpointer data)
     instance = g_object_new (type, "display", display, NULL);
   else if (g_str_equal (g_type_name (type), "GdkDragContext"))
     instance = g_object_new (type, "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())), NULL);
+  else if (g_str_equal (g_type_name (type), "GdkDrop"))
+    instance = g_object_new (type, "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())), NULL);
   else
     instance = g_object_new (type, NULL);
 

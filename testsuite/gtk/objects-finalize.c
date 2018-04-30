@@ -54,7 +54,8 @@ test_finalize_object (gconstpointer data)
 
   if (g_str_equal (g_type_name (test_type), "GdkClipboard"))
     object = g_object_new (test_type, "display", gdk_display_get_default (), NULL);
-  else if (g_str_equal (g_type_name (test_type), "GdkDragContext"))
+  else if (g_str_equal (g_type_name (test_type), "GdkDragContext") ||
+           g_str_equal (g_type_name (test_type), "GdkDrop"))
     object = g_object_new (test_type, "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())), NULL);
   else
     object = g_object_new (test_type, NULL);
