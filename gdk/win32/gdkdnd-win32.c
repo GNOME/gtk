@@ -2239,7 +2239,7 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
           g_object_ref (dest_surface);
         }
       else
-        dest_surface = gdk_win32_surface_foreign_new_for_display (context->display, a.result);
+        dest_surface = gdk_win32_surface_foreign_new_for_display (gdk_drag_context_get_display (context), a.result);
 
       if (use_ole2_dnd)
         *protocol = GDK_DRAG_PROTO_OLE2;
