@@ -2144,7 +2144,7 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
                                    gint             y_root,
                                    GdkDragProtocol *protocol)
 {
-  GdkX11Screen *screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (context->display)->screen);
+  GdkX11Screen *screen_x11;
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
   GdkSurfaceCache *window_cache;
   GdkDisplay *display;
@@ -2152,6 +2152,7 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
   GdkSurface *dest_surface;
 
   display = gdk_drag_context_get_display (context);
+  screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (display)->screen);
 
   window_cache = drag_context_find_window_cache (context_x11, display);
 
@@ -2822,7 +2823,7 @@ drag_context_grab (GdkDragContext *context)
 
   g_set_object (&x11_context->grab_seat, seat);
 
-  gdk_x11_display_error_trap_push (context->display);
+  gdk_x11_display_error_trap_push (display);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
@@ -2874,7 +2875,7 @@ drag_context_grab (GdkDragContext *context)
         }
     }
 
-  gdk_x11_display_error_trap_pop_ignored (context->display);
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   return TRUE;
 }

@@ -35,6 +35,14 @@
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
 
+typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
+
+struct _GdkDragContextPrivate 
+{
+  GdkDisplay *display;
+  GdkDevice *device;
+};
+
 static struct {
   GdkDragAction action;
   const gchar  *name;
@@ -68,6 +76,8 @@ enum {
 static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 static GList *contexts = NULL;
+
+G_DEFINE_TYPE_WITH_PRIVATE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT)
 
 /**
  * SECTION:dnd
@@ -103,7 +113,11 @@ static GList *contexts = NULL;
 GdkDisplay *
 gdk_drag_context_get_display (GdkDragContext *context)
 {
-  return context->display;
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  return priv->display;
 }
 
 /**
@@ -214,12 +228,12 @@ gdk_drag_context_get_dest_surface (GdkDragContext *context)
 GdkDevice *
 gdk_drag_context_get_device (GdkDragContext *context)
 {
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->device;
+  return priv->device;
 }
-
-G_DEFINE_TYPE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT)
 
 static void
 gdk_drag_context_init (GdkDragContext *context)
@@ -234,6 +248,7 @@ gdk_drag_context_set_property (GObject      *gobject,
                                GParamSpec   *pspec)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (gobject);
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
 
   switch (prop_id)
     {
@@ -244,9 +259,9 @@ gdk_drag_context_set_property (GObject      *gobject,
       break;
 
     case PROP_DEVICE:
-      context->device = g_value_dup_object (value);
-      g_assert (context->device != NULL);
-      context->display = gdk_device_get_display (context->device);
+      priv->device = g_value_dup_object (value);
+      g_assert (priv->device != NULL);
+      priv->display = gdk_device_get_display (priv->device);
       break;
 
     default:
@@ -262,6 +277,7 @@ gdk_drag_context_get_property (GObject    *gobject,
                                GParamSpec *pspec)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (gobject);
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
 
   switch (prop_id)
     {
@@ -270,11 +286,11 @@ gdk_drag_context_get_property (GObject    *gobject,
       break;
 
     case PROP_DEVICE:
-      g_value_set_object (value, context->device);
+      g_value_set_object (value, priv->device);
       break;
 
     case PROP_DISPLAY:
-      g_value_set_object (value, context->display);
+      g_value_set_object (value, priv->display);
       break;
 
     case PROP_FORMATS:
