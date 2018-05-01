@@ -2055,7 +2055,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
   const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
-
   /* Default vertex data */
   const GskQuadVertex vertex_data[GL_N_VERTICES] = {
     { { min_x, min_y }, { 0, 0 }, },
@@ -2071,6 +2070,21 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
    * GtkSnapshot, so let's juse be safe. */
   if (node->bounds.size.width == 0.0f || node->bounds.size.height == 0.0f)
     return;
+
+  /* Check whether the render node is entirely out of the current
+   * already transformed clip region */
+  {
+    graphene_rect_t real_node_bounds;
+
+    graphene_matrix_transform_bounds (&builder->current_modelview,
+                                      &node->bounds,
+                                      &real_node_bounds);
+    graphene_rect_offset (&real_node_bounds, builder->dx, builder->dy);
+
+    if (!graphene_rect_intersection (&builder->current_clip.bounds,
+                                     &real_node_bounds, NULL))
+      return;
+  }
 
 #if DEBUG_OPS
   if (gsk_render_node_get_node_type (node) != GSK_CONTAINER_NODE)
