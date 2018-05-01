@@ -140,9 +140,6 @@ GdkDragContext *        gdk_drag_begin                  (GdkSurface             
                                                          gint                    dy);
 
 GDK_AVAILABLE_IN_ALL
-gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
-
-GDK_AVAILABLE_IN_ALL
 void            gdk_drag_drop_done   (GdkDragContext *context,
                                       gboolean        success);
 

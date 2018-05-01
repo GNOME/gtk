@@ -2634,14 +2634,6 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
     }
 }
 
-static gboolean
-gdk_win32_drag_context_drop_status (GdkDragContext *context)
-{
-  GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
-
-  return ! context_win32->drop_failed;
-}
-
 static GdkAtom
 gdk_win32_drag_context_get_selection (GdkDragContext *context)
 {
@@ -3244,7 +3236,6 @@ gdk_win32_drag_context_class_init (GdkWin32DragContextClass *klass)
   context_class->drag_drop = gdk_win32_drag_context_drag_drop;
   context_class->drop_reply = gdk_win32_drag_context_drop_reply;
   context_class->drop_finish = gdk_win32_drag_context_drop_finish;
-  context_class->drop_status = gdk_win32_drag_context_drop_status;
 
   context_class->get_drag_surface = gdk_win32_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_win32_drag_context_set_hotspot;

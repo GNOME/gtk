@@ -56,7 +56,6 @@ struct _GdkDragContextClass {
                                                                  const char            **out_mime_type,
                                                                  GAsyncResult           *result,
                                                                  GError                **error);
-  gboolean    (*drop_status)   (GdkDragContext  *context);
   GdkSurface*  (*get_drag_surface) (GdkDragContext *context);
   void        (*set_hotspot)   (GdkDragContext  *context,
                                 gint             hot_x,

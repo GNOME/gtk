@@ -249,7 +249,6 @@ static void        gdk_x11_drag_context_drop_reply  (GdkDragContext  *context,
 static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
                                                      gboolean         success,
                                                      guint32          time_);
-static gboolean    gdk_x11_drag_context_drop_status (GdkDragContext  *context);
 static GdkSurface * gdk_x11_drag_context_get_drag_surface (GdkDragContext *context);
 static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_x,
@@ -405,7 +404,6 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
   context_class->drop_reply = gdk_x11_drag_context_drop_reply;
   context_class->drop_finish = gdk_x11_drag_context_drop_finish;
-  context_class->drop_status = gdk_x11_drag_context_drop_status;
   context_class->read_async = gdk_x11_drag_context_read_async;
   context_class->read_finish = gdk_x11_drag_context_read_finish;
   context_class->get_drag_surface = gdk_x11_drag_context_get_drag_surface;
@@ -2532,12 +2530,6 @@ _gdk_x11_surface_register_dnd (GdkSurface *surface)
                    gdk_x11_get_xatom_by_name_for_display (display, "XdndAware"),
                    XA_ATOM, 32, PropModeReplace,
                    (guchar *)&xdnd_version, 1);
-}
-
-static gboolean
-gdk_x11_drag_context_drop_status (GdkDragContext *context)
-{
-  return ! GDK_X11_DRAG_CONTEXT (context)->drop_failed;
 }
 
 static GdkSurface *
