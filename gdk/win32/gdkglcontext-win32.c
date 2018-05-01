@@ -70,7 +70,7 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
     }
 
 #ifdef GDK_ENABLE_WIN32_EGL
-  if (context_win32->egl_context != NULL)
+  if (context_win32->egl_context != EGL_NO_CONTEXT)
     {
       if (eglGetCurrentContext () == context_win32->egl_context)
         eglMakeCurrent(display_win32->egl_disp, EGL_NO_SURFACE, EGL_NO_SURFACE,
@@ -579,12 +579,12 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
 
   if (egl_disp == EGL_NO_DISPLAY ||
       !eglInitialize (egl_disp, NULL, NULL))
-    {/* XXX/WIP: Deal with cleanup on error!
+    {
       if (egl_disp != EGL_NO_DISPLAY)
         {
           eglTerminate (egl_disp);
           egl_disp = EGL_NO_DISPLAY;
-        }*/
+        }
 
       return FALSE;
     }
@@ -604,7 +604,7 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
                      "\t* EGL_KHR_surfaceless_context: %s\n",
                      display_win32->egl_version / 10,
                      display_win32->egl_version % 10,
-                     eglGetString (EGL_VENDOR),
+                     eglQueryString (display_win32->egl_disp, EGL_VENDOR),
                      display_win32->hasEglSurfacelessContext ? "yes" : "no"));
 
   return TRUE;
@@ -836,16 +836,16 @@ find_eglconfig_for_window (GdkWin32Display  *display,
   /* We don't want to repeat getting an EGLDisplay for a display where we already have done so */
   if (display->egl_disp == EGL_NO_DISPLAY)
     {
-      display->egl_disp = eglGetDisplay (display->hdc_egl_temp);
+      EGLDisplay egl_disp = eglGetDisplay (display->hdc_egl_temp);
 
-      if (display->egl_disp == EGL_NO_DISPLAY ||
-          !eglInitialize (display->egl_disp, NULL, NULL))
-        {/* XXX/WIP: Deal with cleanup on error!
-          if (display->egl_disp != EGL_NO_DISPLAY)
+      if (egl_disp == EGL_NO_DISPLAY ||
+          !eglInitialize (egl_disp, NULL, NULL))
+        {
+          if (egl_disp != EGL_NO_DISPLAY)
             {
-              eglTerminate (display->egl_disp);
-              display->egl_disp = EGL_NO_DISPLAY;
-            }*/
+              eglTerminate (egl_disp);
+              egl_disp = EGL_NO_DISPLAY;
+            }
 
           g_set_error_literal (error, GDK_GL_ERROR,
                                GDK_GL_ERROR_UNSUPPORTED_FORMAT,
@@ -853,6 +853,7 @@ find_eglconfig_for_window (GdkWin32Display  *display,
 
           return FALSE;
         }
+      display->egl_disp = egl_disp;
     }
 
   if (!eglChooseConfig (display->egl_disp, attrs, NULL, 0, &count) || count < 1)
