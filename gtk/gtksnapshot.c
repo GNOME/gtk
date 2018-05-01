@@ -1076,8 +1076,22 @@ gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
 
   if (current_state)
     {
-      g_ptr_array_add (snapshot->nodes, gsk_render_node_ref (node));
-      current_state->n_nodes ++;
+      if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+        {
+          guint i, p;
+
+          for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i ++)
+            g_ptr_array_add (snapshot->nodes,
+                             gsk_render_node_ref (gsk_container_node_get_child (node, i)));
+
+          current_state->n_nodes += p;
+          /* Don't unref @node... */
+        }
+      else
+        {
+          g_ptr_array_add (snapshot->nodes, gsk_render_node_ref (node));
+          current_state->n_nodes ++;
+        }
     }
   else
     {
