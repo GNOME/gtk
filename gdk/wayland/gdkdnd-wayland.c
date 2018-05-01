@@ -341,12 +341,6 @@ gdk_wayland_drag_context_read_finish (GdkDragContext  *context,
   return g_task_propagate_pointer (task, error);
 }
 
-static gboolean
-gdk_wayland_drag_context_drop_status (GdkDragContext *context)
-{
-  return FALSE;
-}
-
 static void
 gdk_wayland_drag_context_init (GdkWaylandDragContext *context_wayland)
 {
@@ -449,7 +443,6 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
   context_class->read_async = gdk_wayland_drag_context_read_async;
   context_class->read_finish = gdk_wayland_drag_context_read_finish;
-  context_class->drop_status = gdk_wayland_drag_context_drop_status;
   context_class->get_drag_surface = gdk_wayland_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
   context_class->drop_done = gdk_wayland_drag_context_drop_done;

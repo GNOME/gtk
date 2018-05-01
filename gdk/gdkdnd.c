@@ -575,25 +575,6 @@ gdk_drop_finish (GdkDragContext *context,
   GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_finish (context, success, time_);
 }
 
-/**
- * gdk_drag_drop_succeeded:
- * @context: a #GdkDragContext
- *
- * Returns whether the dropped data has been successfully
- * transferred. This function is intended to be used while
- * handling a %GDK_DROP_FINISHED event, its return value is
- * meaningless at other times.
- *
- * Returns: %TRUE if the drop was successful.
- **/
-gboolean
-gdk_drag_drop_succeeded (GdkDragContext *context)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), FALSE);
-
-  return GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_status (context);
-}
-
 static void
 gdk_drag_context_write_done (GObject      *content,
                              GAsyncResult *result,

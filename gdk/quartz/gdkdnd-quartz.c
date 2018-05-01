@@ -100,13 +100,6 @@ _gdk_quartz_surface_register_dnd (GdkSurface *window)
   /* FIXME: Implement */
 }
 
-static gboolean
-gdk_quartz_drag_context_drop_status (GdkDragContext *context)
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
 id
 gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context)
 {
@@ -137,5 +130,4 @@ gdk_quartz_drag_context_class_init (GdkQuartzDragContextClass *klass)
   context_class->drag_drop = gdk_quartz_drag_context_drag_drop;
   context_class->drop_reply = gdk_quartz_drag_context_drop_reply;
   context_class->drop_finish = gdk_quartz_drag_context_drop_finish;
-  context_class->drop_status = gdk_quartz_drag_context_drop_status;
 }
