@@ -34,6 +34,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+#define MAX_RECENT (7*3)
+
 typedef struct {
   GtkWidget *box;
   GtkWidget *heading;
@@ -42,6 +44,14 @@ typedef struct {
   gunichar label;
   gboolean empty;
 } EmojiSection;
+
+typedef struct {
+  GtkEmojiChooser *chooser;
+  GVariantIter iter;
+  GtkWidget *box; /* We need to keep this around so subsequent
+                     emojis get added to the rigth section */
+  gint64 start;
+} PopulateData;
 
 struct _GtkEmojiChooser
 {
@@ -74,6 +84,9 @@ struct _GtkEmojiChooser
   GVariant *data;
 
   GSettings *settings;
+
+  guint populated : 1;
+  guint populate_idle_id;
 };
 
 struct _GtkEmojiChooserClass {
@@ -88,6 +101,13 @@ enum {
 static int signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GtkEmojiChooser, gtk_emoji_chooser, GTK_TYPE_POPOVER)
+
+static void
+add_emoji (GtkWidget       *box,
+           gboolean         prepend,
+           GVariant        *item,
+           gunichar         modifier,
+           GtkEmojiChooser *chooser);
 
 static void
 gtk_emoji_chooser_finalize (GObject *object)
@@ -124,14 +144,6 @@ scroll_to_section (GtkButton *button,
   gtk_adjustment_animate_to_value (adj, alloc.y);
 }
 
-static void
-add_emoji (GtkWidget    *box,
-           gboolean      prepend,
-           GVariant     *item,
-           gunichar      modifier,
-           GtkEmojiChooser *chooser);
-
-#define MAX_RECENT (7*3)
 
 static void
 populate_recent_section (GtkEmojiChooser *chooser)
@@ -333,111 +345,6 @@ popup_menu (GtkWidget *widget,
 }
 
 static void
-add_emoji (GtkWidget    *box,
-           gboolean      prepend,
-           GVariant     *item,
-           gunichar      modifier,
-           GtkEmojiChooser *chooser)
-{
-  GtkWidget *child;
-  GtkWidget *label;
-  PangoAttrList *attrs;
-  GVariant *codes;
-  char text[64];
-  char *p = text;
-  int i;
-  PangoLayout *layout;
-  PangoRectangle rect;
-
-  codes = g_variant_get_child_value (item, 0);
-  for (i = 0; i < g_variant_n_children (codes); i++)
-    {
-      gunichar code;
-
-      g_variant_get_child (codes, i, "u", &code);
-      if (code == 0)
-        code = modifier;
-      if (code != 0)
-        p += g_unichar_to_utf8 (code, p);
-    }
-  g_variant_unref (codes);
-  p[0] = 0;
-
-  label = gtk_label_new (text);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
-
-  layout = gtk_label_get_layout (GTK_LABEL (label));
-  pango_layout_get_extents (layout, &rect, NULL);
-
-  /* Check for fallback rendering that generates too wide items */
-  if (rect.width >= 2 * chooser->emoji_max_width)
-    {
-      gtk_widget_destroy (label);
-      return;
-    }
-
-  child = gtk_flow_box_child_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
-  g_object_set_data_full (G_OBJECT (child), "emoji-data",
-                          g_variant_ref (item),
-                          (GDestroyNotify)g_variant_unref);
-  if (modifier != 0)
-    g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
-
-  if (chooser)
-    g_signal_connect (child, "popup-menu", G_CALLBACK (popup_menu), chooser);
-
-  gtk_container_add (GTK_CONTAINER (child), label);
-  gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
-}
-
-static void
-populate_emoji_chooser (GtkEmojiChooser *chooser)
-{
-  GBytes *bytes = NULL;
-  GVariantIter iter;
-  GVariant *item;
-  GtkWidget *box;
-
-  bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
-
-  g_variant_iter_init (&iter, chooser->data);
-  box = chooser->people.box;
-  while ((item = g_variant_iter_next_value (&iter)))
-    {
-      const char *name;
-
-      g_variant_get_child (item, 1, "&s", &name);
-
-      if (strcmp (name, chooser->body.first) == 0)
-        box = chooser->body.box;
-      else if (strcmp (name, chooser->nature.first) == 0)
-        box = chooser->nature.box;
-      else if (strcmp (name, chooser->food.first) == 0)
-        box = chooser->food.box;
-      else if (strcmp (name, chooser->travel.first) == 0)
-        box = chooser->travel.box;
-      else if (strcmp (name, chooser->activities.first) == 0)
-        box = chooser->activities.box;
-      else if (strcmp (name, chooser->objects.first) == 0)
-        box = chooser->objects.box;
-      else if (strcmp (name, chooser->symbols.first) == 0)
-        box = chooser->symbols.box;
-      else if (strcmp (name, chooser->flags.first) == 0)
-        box = chooser->flags.box;
-
-      add_emoji (box, FALSE, item, 0, chooser);
-      g_variant_unref (item);
-    }
-
-  g_bytes_unref (bytes);
-}
-
-static void
 adj_value_changed (GtkAdjustment *adj,
                    gpointer       data)
 {
@@ -605,9 +512,122 @@ setup_section (GtkEmojiChooser *chooser,
 }
 
 static void
+add_emoji (GtkWidget       *box,
+           gboolean         prepend,
+           GVariant        *item,
+           gunichar         modifier,
+           GtkEmojiChooser *chooser)
+{
+  GtkWidget *child;
+  GtkWidget *label;
+  PangoAttrList *attrs;
+  GVariant *codes;
+  char text[64];
+  char *p = text;
+  guint i;
+
+  codes = g_variant_get_child_value (item, 0);
+  for (i = 0; i < g_variant_n_children (codes); i++)
+    {
+      gunichar code;
+
+      g_variant_get_child (codes, i, "u", &code);
+      if (code == 0)
+        code = modifier;
+      if (code != 0)
+        p += g_unichar_to_utf8 (code, p);
+    }
+  g_variant_unref (codes);
+  p[0] = 0;
+
+  label = gtk_label_new (text);
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+
+  if (chooser != NULL)
+    {
+      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (label));
+      PangoRectangle rect;
+      pango_layout_get_extents (layout, &rect, NULL);
+
+      /* Check for fallback rendering that generates too wide items */
+      if (rect.width >= 2 * chooser->emoji_max_width)
+        {
+          gtk_widget_destroy (label);
+          return;
+        }
+    }
+
+  child = gtk_flow_box_child_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
+  g_object_set_data_full (G_OBJECT (child), "emoji-data",
+                          g_variant_ref (item),
+                          (GDestroyNotify)g_variant_unref);
+  if (modifier != 0)
+    g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
+
+  if (chooser)
+    g_signal_connect (child, "popup-menu", G_CALLBACK (popup_menu), chooser);
+
+  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
+}
+
+static gboolean
+populate_one_emoji (gpointer user_data)
+{
+  const guint N = 4; /* Kinda-sorta sweetspot on my system... */
+  PopulateData *data = user_data;
+  const char *name;
+  guint i = 0;
+  static int iter = 0;
+
+
+  for (i = 0; i < N; i ++)
+    {
+      GVariant *item = g_variant_iter_next_value (&data->iter);
+
+      if (item == NULL)
+        {
+          data->chooser->populate_idle_id = 0;
+          return G_SOURCE_REMOVE;
+        }
+
+      g_variant_get_child (item, 1, "&s", &name);
+
+      if (strcmp (name, data->chooser->body.first) == 0)
+        data->box = data->chooser->body.box;
+      else if (strcmp (name, data->chooser->nature.first) == 0)
+        data->box = data->chooser->nature.box;
+      else if (strcmp (name, data->chooser->food.first) == 0)
+        data->box = data->chooser->food.box;
+      else if (strcmp (name, data->chooser->travel.first) == 0)
+        data->box = data->chooser->travel.box;
+      else if (strcmp (name, data->chooser->activities.first) == 0)
+        data->box = data->chooser->activities.box;
+      else if (strcmp (name, data->chooser->objects.first) == 0)
+        data->box = data->chooser->objects.box;
+      else if (strcmp (name, data->chooser->symbols.first) == 0)
+        data->box = data->chooser->symbols.box;
+      else if (strcmp (name, data->chooser->flags.first) == 0)
+        data->box = data->chooser->flags.box;
+
+      add_emoji (data->box, FALSE, item, 0, data->chooser);
+      g_variant_unref (item);
+    }
+
+  iter ++;
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
 gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
 {
   GtkAdjustment *adj;
+  GBytes *bytes;
 
   chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
 
@@ -665,7 +685,11 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   setup_section (chooser, &chooser->symbols, "ATM sign", 0x2764);
   setup_section (chooser, &chooser->flags, "chequered flag", 0x1f3f4);
 
-  populate_emoji_chooser (chooser);
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
+  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+  g_bytes_unref (bytes);
+
+  /* Populate recent section now, do the heavy lifting on show() */
   populate_recent_section (chooser);
 
   /* We scroll to the top on show, so check the right button for the 1st time */
@@ -684,6 +708,23 @@ gtk_emoji_chooser_show (GtkWidget *widget)
   gtk_adjustment_set_value (adj, 0);
 
   gtk_entry_set_text (GTK_ENTRY (chooser->search_entry), "");
+
+  if (!chooser->populated)
+    {
+      PopulateData *data = g_malloc0 (sizeof (PopulateData));
+
+      data->chooser = chooser;
+
+      g_variant_iter_init (&data->iter, chooser->data);
+      data->box = chooser->people.box;
+
+      data->start = g_get_monotonic_time ();
+      chooser->populate_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                                                   populate_one_emoji,
+                                                   data,
+                                                   g_free);
+      chooser->populated = TRUE;
+    }
 }
 
 static void
