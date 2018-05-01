@@ -1963,20 +1963,22 @@ gtk_window_constructed (GObject *object)
 
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
-      priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
+      priv->multipress_gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
                                                   GTK_PHASE_NONE);
       g_signal_connect (priv->multipress_gesture, "pressed",
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
+      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
 
-      priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (object));
+      priv->drag_gesture = gtk_gesture_drag_new ();
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
                                                   GTK_PHASE_CAPTURE);
       g_signal_connect (priv->drag_gesture, "drag-begin",
                         G_CALLBACK (drag_gesture_begin_cb), object);
       g_signal_connect (priv->drag_gesture, "drag-update",
                         G_CALLBACK (drag_gesture_update_cb), object);
+      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->drag_gesture));
     }
 }
 
@@ -2229,10 +2231,8 @@ gtk_window_buildable_add_child (GtkBuildable *buildable,
 {
   if (type && strcmp (type, "titlebar") == 0)
     gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
@@ -5953,12 +5953,6 @@ gtk_window_finalize (GObject *object)
       g_source_remove (priv->mnemonics_display_timeout_id);
       priv->mnemonics_display_timeout_id = 0;
     }
-
-  if (priv->multipress_gesture)
-    g_object_unref (priv->multipress_gesture);
-
-  if (priv->drag_gesture)
-    g_object_unref (priv->drag_gesture);
 
   g_clear_object (&priv->renderer);
 

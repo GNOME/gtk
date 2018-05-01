@@ -42,7 +42,7 @@ GDK_AVAILABLE_IN_ALL
 GType        gtk_gesture_multi_press_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkGesture * gtk_gesture_multi_press_new      (GtkWidget            *widget);
+GtkGesture * gtk_gesture_multi_press_new      (void);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_gesture_multi_press_set_area (GtkGestureMultiPress *gesture,

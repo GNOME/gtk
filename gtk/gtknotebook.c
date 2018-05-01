@@ -207,9 +207,6 @@ struct _GtkNotebookPrivate
   guint          switch_tab_timer;
   GList         *switch_tab;
 
-  GtkGesture    *press_gesture;
-  GtkEventController *motion_controller;
-
   guint32        timer;
 
   guint          child_has_focus    : 1;
@@ -1042,6 +1039,8 @@ gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
   GdkContentFormats *targets;
+  GtkEventController *controller;
+  GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (notebook), FALSE);
@@ -1111,22 +1110,28 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_set_vexpand (priv->stack_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->stack_widget);
 
-  priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (notebook));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->press_gesture), 0);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->press_gesture), GTK_PHASE_CAPTURE);
-  g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
-  g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
+  g_signal_connect (gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
+  gtk_widget_add_controller (GTK_WIDGET (notebook), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (notebook));
-  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
+  gtk_widget_add_controller (GTK_WIDGET (notebook), controller);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (notebook)),
                                GTK_STYLE_CLASS_FRAME);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_notebook_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_notebook_buildable_add_child;
 }
 
@@ -1138,31 +1143,38 @@ gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (buildable);
 
-  if (type && strcmp (type, "tab") == 0)
+  if (GTK_IS_WIDGET (child))
     {
-      GtkWidget * page;
+      if (type && strcmp (type, "tab") == 0)
+        {
+          GtkWidget * page;
 
-      page = gtk_notebook_get_nth_page (notebook, -1);
-      /* To set the tab label widget, we must have already a child
-       * inside the tab container. */
-      g_assert (page != NULL);
-      /* warn when Glade tries to overwrite label */
-      if (gtk_notebook_get_tab_label (notebook, page))
-        g_warning ("Overriding tab label for notebook");
-      gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
+          page = gtk_notebook_get_nth_page (notebook, -1);
+          /* To set the tab label widget, we must have already a child
+           * inside the tab container. */
+          g_assert (page != NULL);
+          /* warn when Glade tries to overwrite label */
+          if (gtk_notebook_get_tab_label (notebook, page))
+            g_warning ("Overriding tab label for notebook");
+          gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
+        }
+      else if (type && strcmp (type, "action-start") == 0)
+        {
+          gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_START);
+        }
+      else if (type && strcmp (type, "action-end") == 0)
+        {
+          gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_END);
+        }
+      else if (!type)
+        gtk_notebook_append_page (notebook, GTK_WIDGET (child), NULL);
+      else
+        GTK_BUILDER_WARN_INVALID_CHILD_TYPE (notebook, type);
     }
-  else if (type && strcmp (type, "action-start") == 0)
-    {
-      gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_START);
-    }
-  else if (type && strcmp (type, "action-end") == 0)
-    {
-      gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_END);
-    }
-  else if (!type)
-    gtk_notebook_append_page (notebook, GTK_WIDGET (child), NULL);
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (notebook, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static gboolean
@@ -1597,8 +1609,6 @@ gtk_notebook_finalize (GObject *object)
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  g_clear_object (&priv->press_gesture);
-  g_clear_object (&priv->motion_controller);
   gtk_widget_unparent (priv->box);
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->finalize (object);

@@ -630,16 +630,6 @@ gtk_font_chooser_widget_map (GtkWidget *widget)
 }
 
 static void
-setup_scroll_resize (GtkWidget            *widget,
-                     GtkFontChooserWidget *fontchooser)
-{
-  GtkEventController *controller;
-
-  controller = gtk_event_controller_scroll_new (widget, GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL);
-  g_signal_connect (controller, "scroll", G_CALLBACK (resize_by_scroll_cb), fontchooser);
-}
-
-static void
 gtk_font_chooser_widget_measure (GtkWidget       *widget,
                                  GtkOrientation  orientation,
                                  int             for_size,
@@ -767,6 +757,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, resize_by_scroll_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("fontchooser"));
 }
@@ -888,9 +879,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
                                            gtk_font_chooser_widget_cell_data_func,
                                            fontchooser,
                                            NULL);
-
-  setup_scroll_resize (priv->preview, fontchooser);
-  setup_scroll_resize (priv->size_slider, fontchooser);
 
   priv->tweak_action = G_ACTION (g_simple_action_new_stateful ("tweak", NULL, g_variant_new_boolean (FALSE)));
   g_signal_connect (priv->tweak_action, "change-state", G_CALLBACK (change_tweak), fontchooser);
@@ -2026,11 +2014,10 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gesture = gtk_gesture_multi_press_new (feat);
-      g_object_set_data_full (G_OBJECT (feat), "press", gesture, g_object_unref);
-
+      gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
+      gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));
 
       example = gtk_label_new ("");
       gtk_label_set_selectable (GTK_LABEL (example), TRUE);

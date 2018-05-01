@@ -2471,10 +2471,12 @@ maybe_accept_completion (GtkEntry *entry,
 static void
 connect_completion_signals (GtkEntryCompletion *completion)
 {
-  completion->priv->entry_key_controller =
-    gtk_event_controller_key_new (completion->priv->entry);
-  g_signal_connect (completion->priv->entry_key_controller, "key-pressed",
+  GtkEventController *controller;
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
+  gtk_widget_add_controller (completion->priv->entry, controller);
 
   completion->priv->changed_id =
     g_signal_connect (completion->priv->entry, "changed",
@@ -2524,8 +2526,6 @@ unset_accessible_relation (GtkWidget *window,
 static void
 disconnect_completion_signals (GtkEntryCompletion *completion)
 {
-  g_clear_object (&completion->priv->entry_key_controller);
-
   if (completion->priv->changed_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->changed_id))

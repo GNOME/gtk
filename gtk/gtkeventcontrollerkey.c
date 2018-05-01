@@ -205,12 +205,9 @@ gtk_event_controller_key_init (GtkEventControllerKey *controller)
 }
 
 GtkEventController *
-gtk_event_controller_key_new (GtkWidget *widget)
+gtk_event_controller_key_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_KEY,
-                       "widget", widget,
                        NULL);
 }
 

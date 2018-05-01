@@ -481,9 +481,10 @@ on_hierarchy_changed (GtkWidget *widget,
     g_object_set_data (G_OBJECT (previous_toplevel), "controller", NULL);
 
   toplevel = gtk_widget_get_toplevel (widget);
-  controller = gtk_event_controller_key_new (toplevel);
+  controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "controller", controller, g_object_unref);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
+  gtk_widget_add_controller (toplevel, controller);
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar),
                                          toplevel);

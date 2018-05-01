@@ -82,7 +82,6 @@ struct _GtkPlacesViewPrivate
 
   GtkEntryCompletion            *address_entry_completion;
   GtkListStore                  *completion_store;
-  GtkEventController            *key_controller;
 
   GCancellable                  *networks_fetching_cancellable;
 
@@ -419,7 +418,6 @@ gtk_places_view_finalize (GObject *object)
   g_clear_object (&priv->networks_fetching_cancellable);
   g_clear_object (&priv->path_size_group);
   g_clear_object (&priv->space_size_group);
-  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->finalize (object);
 }
@@ -2267,6 +2265,7 @@ static void
 gtk_places_view_init (GtkPlacesView *self)
 {
   GtkPlacesViewPrivate *priv;
+  GtkEventController *controller;
 
   priv = gtk_places_view_get_instance_private (self);
 
@@ -2274,8 +2273,10 @@ gtk_places_view_init (GtkPlacesView *self)
   priv->open_flags = GTK_PLACES_OPEN_NORMAL;
   priv->path_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   priv->space_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (self));
-  g_signal_connect (priv->key_controller, "key-pressed", G_CALLBACK (on_key_press_event), self);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (on_key_press_event), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 }

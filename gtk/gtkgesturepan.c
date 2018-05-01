@@ -276,13 +276,9 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
  * Returns: a newly created #GtkGesturePan
  **/
 GtkGesture *
-gtk_gesture_pan_new (GtkWidget      *widget,
-                     GtkOrientation  orientation)
+gtk_gesture_pan_new (GtkOrientation  orientation)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_PAN,
-                       "widget", widget,
                        "orientation", orientation,
                        NULL);
 }

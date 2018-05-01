@@ -1085,6 +1085,8 @@ static void
 gtk_menu_init (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
+  GtkGesture *gesture;
+  GtkEventController *controller;
 
   priv = gtk_menu_get_instance_private (menu);
 
@@ -1129,29 +1131,29 @@ gtk_menu_init (GtkMenu *menu)
   gtk_widget_set_parent (priv->bottom_arrow_widget, GTK_WIDGET (menu));
   gtk_widget_hide (priv->bottom_arrow_widget);
 
-  priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (menu));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
-  g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_menu_pressed_cb), menu);
-  g_signal_connect (priv->click_gesture, "released", G_CALLBACK (gtk_menu_released_cb), menu);
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_menu_pressed_cb), menu);
+  g_signal_connect (gesture, "released", G_CALLBACK (gtk_menu_released_cb), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (menu),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_menu_scroll_controller_scroll), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 
-  priv->motion_controller =
-    gtk_event_controller_motion_new (GTK_WIDGET (menu));
-  g_signal_connect (priv->motion_controller, "enter", G_CALLBACK (gtk_menu_enter), menu);
-  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_menu_motion), menu);
-  g_signal_connect (priv->motion_controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_menu_enter), menu);
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_menu_motion), menu);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 
-  priv->key_controller =
-    gtk_event_controller_key_new (GTK_WIDGET (menu));
-  g_signal_connect (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_menu_key_pressed), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 }
 
 static void
@@ -1223,10 +1225,6 @@ gtk_menu_finalize (GObject *object)
 
   gtk_widget_unparent (priv->top_arrow_widget);
   gtk_widget_unparent (priv->bottom_arrow_widget);
-  g_clear_object (&priv->click_gesture);
-  g_clear_object (&priv->scroll_controller);
-  g_clear_object (&priv->motion_controller);
-  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }

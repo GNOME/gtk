@@ -256,9 +256,9 @@ do_hypertext (GtkWidget *do_widget)
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
-      controller = gtk_event_controller_key_new (view);
-      g_object_set_data_full (G_OBJECT (view), "controller", controller, g_object_unref);
+      controller = gtk_event_controller_key_new ();
       g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), view);
+      gtk_widget_add_controller (view, controller);
       g_signal_connect (view, "event",
                         G_CALLBACK (event_cb), NULL);
 

@@ -411,13 +411,15 @@ static void
 gtk_menu_shell_init (GtkMenuShell *menu_shell)
 {
   GtkWidget *widget = GTK_WIDGET (menu_shell);
+  GtkEventController *controller;
 
   menu_shell->priv = gtk_menu_shell_get_instance_private (menu_shell);
   menu_shell->priv->take_focus = TRUE;
 
-  menu_shell->priv->key_controller = gtk_event_controller_key_new (widget);
-  g_signal_connect (menu_shell->priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_menu_shell_key_press), widget);
+  gtk_widget_add_controller (widget, controller);
 
   gtk_widget_set_has_surface (widget, FALSE);
 }
@@ -470,8 +472,6 @@ gtk_menu_shell_finalize (GObject *object)
     _gtk_mnemonic_hash_free (priv->mnemonic_hash);
   if (priv->key_hash)
     _gtk_key_hash_free (priv->key_hash);
-
-  g_object_unref (priv->key_controller);
 
   G_OBJECT_CLASS (gtk_menu_shell_parent_class)->finalize (object);
 }

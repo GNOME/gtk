@@ -157,7 +157,6 @@ struct _GtkPlacesSidebar {
   gint drag_y;
   GtkWidget *row_placeholder;
   DropState drop_state;
-  GtkGesture *long_press_gesture;
 
   /* volume mounting - delayed open process */
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
@@ -174,8 +173,6 @@ struct _GtkPlacesSidebar {
   GtkPlacesOpenFlags open_flags;
 
   GActionGroup *action_group;
-
-  GtkEventController *list_box_key_controller;
 
   guint mounting               : 1;
   guint  drag_data_received    : 1;
@@ -4008,6 +4005,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   GdkContentFormats *target_list;
   gboolean show_desktop;
   GtkStyleContext *context;
+  GtkEventController *controller;
+  GtkGesture *gesture;
 
   sidebar->cancellable = g_cancellable_new ();
 
@@ -4046,15 +4045,16 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   g_signal_connect (sidebar->list_box, "row-activated",
                     G_CALLBACK (on_row_activated), sidebar);
 
-  sidebar->list_box_key_controller =
-    gtk_event_controller_key_new (sidebar->list_box);
-  g_signal_connect (sidebar->list_box_key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (on_key_pressed), sidebar);
+  gtk_widget_add_controller (sidebar->list_box, controller);
 
-  sidebar->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (sidebar));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (sidebar->long_press_gesture), TRUE);
-  g_signal_connect (sidebar->long_press_gesture, "pressed",
+  gesture = gtk_gesture_long_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (long_press_cb), sidebar);
+  gtk_widget_add_controller (GTK_WIDGET (sidebar), GTK_EVENT_CONTROLLER (gesture));
 
   /* DND support */
   gtk_drag_dest_set (sidebar->list_box,
@@ -4322,9 +4322,6 @@ gtk_places_sidebar_dispose (GObject *object)
 
   g_clear_object (&sidebar->current_location);
   g_clear_pointer (&sidebar->rename_uri, g_free);
-
-  g_clear_object (&sidebar->long_press_gesture);
-  g_clear_object (&sidebar->list_box_key_controller);
 
   if (sidebar->source_targets)
     {

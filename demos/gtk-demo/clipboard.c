@@ -321,10 +321,10 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (drag_data_received), image);
 
       /* context menu on image */
-      gesture = gtk_gesture_multi_press_new (image);
+      gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
-      g_object_set_data_full (G_OBJECT (image), "gesture", gesture, g_object_unref);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
+      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
 
       /* Create the second image */
       image = gtk_image_new_from_icon_name ("process-stop");
@@ -346,10 +346,10 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (drag_data_received), image);
 
       /* context menu on image */
-      gesture = gtk_gesture_multi_press_new (image);
+      gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
-      g_object_set_data_full (G_OBJECT (image), "gesture", gesture, g_object_unref);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
+      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
     }
 
   if (!gtk_widget_get_visible (window))

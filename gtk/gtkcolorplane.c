@@ -36,10 +36,6 @@ struct _GtkColorPlanePrivate
   GtkAdjustment *v_adj;
 
   GdkTexture *texture;
-
-  GtkGesture *drag_gesture;
-  GtkGesture *long_press_gesture;
-  GtkEventController *key_controller;
 };
 
 enum {
@@ -394,6 +390,8 @@ plane_drag_gesture_end (GtkGestureDrag *gesture,
 static void
 gtk_color_plane_init (GtkColorPlane *plane)
 {
+  GtkEventController *controller;
+  GtkGesture *gesture;
   AtkObject *atk_obj;
 
   plane->priv = gtk_color_plane_get_instance_private (plane);
@@ -408,24 +406,27 @@ gtk_color_plane_init (GtkColorPlane *plane)
       atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
     }
 
-  plane->priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (plane));
-  g_signal_connect (plane->priv->drag_gesture, "drag-begin",
+  gesture = gtk_gesture_drag_new ();
+  g_signal_connect (gesture, "drag-begin",
 		    G_CALLBACK (plane_drag_gesture_begin), plane);
-  g_signal_connect (plane->priv->drag_gesture, "drag-update",
+  g_signal_connect (gesture, "drag-update",
 		    G_CALLBACK (plane_drag_gesture_update), plane);
-  g_signal_connect (plane->priv->drag_gesture, "drag-end",
+  g_signal_connect (gesture, "drag-end",
 		    G_CALLBACK (plane_drag_gesture_end), plane);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (plane->priv->drag_gesture), 0);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 
-  plane->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (plane));
-  g_signal_connect (plane->priv->long_press_gesture, "pressed",
+  gesture = gtk_gesture_long_press_new ();
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (hold_action), plane);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->long_press_gesture),
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      TRUE);
+  gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 
-  plane->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (plane));
-  g_signal_connect (plane->priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (key_controller_key_pressed), plane);
+  gtk_widget_add_controller (GTK_WIDGET (plane), controller);
 }
 
 static void
@@ -438,10 +439,6 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->h_adj);
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
-
-  g_clear_object (&plane->priv->drag_gesture);
-  g_clear_object (&plane->priv->long_press_gesture);
-  g_clear_object (&plane->priv->key_controller);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }

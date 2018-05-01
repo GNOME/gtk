@@ -54,7 +54,6 @@ struct _IconBrowserWindow
   GtkWidget *image6;
   GtkWidget *label6;
   GtkWidget *description;
-  GtkEventController *controller;
 };
 
 struct _IconBrowserWindowClass
@@ -455,6 +454,7 @@ static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GdkContentFormats *list;
+  GtkEventController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
@@ -484,8 +484,9 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
 
-  win->controller = gtk_event_controller_key_new (GTK_WIDGET (win));
-  g_signal_connect (win->controller, "key-pressed", G_CALLBACK (key_event_cb), win);
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_event_cb), win);
+  gtk_widget_add_controller (GTK_WIDGET (win), controller);
 
   populate (win);
 }
@@ -496,8 +497,6 @@ icon_browser_window_finalize (GObject *object)
   IconBrowserWindow *win = ICON_BROWSER_WINDOW (object);
 
   g_hash_table_unref (win->contexts);
-
-  g_object_unref (win->controller);
 
   G_OBJECT_CLASS (icon_browser_window_parent_class)->finalize (object);
 }

@@ -47,8 +47,6 @@ struct _GtkEmojiCompletion
   GtkWidget *active_variation;
 
   GVariant *data;
-
-  GtkGesture *long_press;
 };
 
 struct _GtkEmojiCompletionClass {
@@ -75,8 +73,6 @@ gtk_emoji_completion_finalize (GObject *object)
 
   g_free (completion->text);
   g_variant_unref (completion->data);
-
-  g_clear_object (&completion->long_press);
 
   G_OBJECT_CLASS (gtk_emoji_completion_parent_class)->finalize (object);
 }
@@ -625,14 +621,16 @@ static void
 gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 {
   g_autoptr(GBytes) bytes = NULL;
+  GtkGesture *long_press;
 
   gtk_widget_init_template (GTK_WIDGET (completion));
 
   bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
   completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
 
-  completion->long_press = gtk_gesture_long_press_new (completion->list);
-  g_signal_connect (completion->long_press, "pressed", G_CALLBACK (long_pressed_cb), completion);
+  long_press = gtk_gesture_long_press_new ();
+  g_signal_connect (long_press, "pressed", G_CALLBACK (long_pressed_cb), completion);
+  gtk_widget_add_controller (completion->list, GTK_EVENT_CONTROLLER (long_press));
 }
 
 static void

@@ -244,13 +244,14 @@ do_drawingarea (GtkWidget *do_widget)
       g_signal_connect (da, "size-allocate",
                         G_CALLBACK (scribble_size_allocate), NULL);
 
-      drag = gtk_gesture_drag_new (da);
+      drag = gtk_gesture_drag_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
-      g_object_set_data_full (G_OBJECT (da), "drag", drag, g_object_unref);
+      gtk_widget_add_controller (da, GTK_EVENT_CONTROLLER (drag));
 
       g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), da);
       g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), da);
       g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), da);
+
     }
 
   if (!gtk_widget_get_visible (window))

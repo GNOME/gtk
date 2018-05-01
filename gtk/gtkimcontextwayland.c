@@ -436,8 +436,11 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
   if (widget == context_wayland->widget)
     return;
 
-  if (context_wayland->widget && context_wayland->widget != widget)
-    g_clear_object (&context_wayland->gesture);
+  if (context_wayland->widget)
+    {
+      gtk_widget_remove_controller (context_wayland->widget, GTK_EVENT_CONTROLLER (context_wayland->gesture));
+      context_wayland->gesture = NULL;
+    }
 
   g_set_object (&context_wayland->widget, widget);
 
@@ -445,13 +448,14 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
     {
       GtkGesture *gesture;
 
-      gesture = gtk_gesture_multi_press_new (widget);
+      gesture = gtk_gesture_multi_press_new ();
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_CAPTURE);
       g_signal_connect (gesture, "pressed",
                         G_CALLBACK (pressed_cb), context);
       g_signal_connect (gesture, "released",
                         G_CALLBACK (released_cb), context);
+      gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
       context_wayland->gesture = gesture;
     }
 }

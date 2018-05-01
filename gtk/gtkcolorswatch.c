@@ -65,9 +65,6 @@ struct _GtkColorSwatchPrivate
   guint    selectable       : 1;
   guint    has_menu         : 1;
 
-  GtkGesture *long_press_gesture;
-  GtkGesture *multipress_gesture;
-  GtkEventController *key_controller;
   GtkWidget *overlay_widget;
 
   GtkWidget *popover;
@@ -504,10 +501,6 @@ swatch_dispose (GObject *object)
       swatch->priv->popover = NULL;
     }
 
-  g_clear_object (&swatch->priv->long_press_gesture);
-  g_clear_object (&swatch->priv->multipress_gesture);
-  g_clear_object (&swatch->priv->key_controller);
-
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->dispose (object);
 }
 
@@ -562,6 +555,9 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
+  GtkEventController *controller;
+  GtkGesture *gesture;
+
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
   swatch->priv->use_alpha = TRUE;
   swatch->priv->selectable = TRUE;
@@ -570,20 +566,23 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (swatch), FALSE);
 
-  swatch->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (swatch));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->long_press_gesture),
+  gesture = gtk_gesture_long_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      TRUE);
-  g_signal_connect (swatch->priv->long_press_gesture, "pressed",
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (hold_action), swatch);
+  gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (gesture));
 
-  swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
-  g_signal_connect (swatch->priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
+  gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (gesture));
 
-  swatch->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (swatch));
-  g_signal_connect (swatch->priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (key_controller_key_pressed), swatch);
+  gtk_widget_add_controller (GTK_WIDGET (swatch), controller);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (swatch)), "activatable");
 

@@ -520,7 +520,6 @@ struct _GtkCellEditableWidget
   GtkCellRendererAccelMode accel_mode;
   gchar *path;
   GtkCellRenderer *cell;
-  GtkEventController *key_controller;
 };
 
 enum {
@@ -718,7 +717,6 @@ gtk_cell_editable_widget_finalize (GObject *object)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)object;
 
-  g_object_unref (box->key_controller);
   g_free (box->path);
 
   G_OBJECT_CLASS (gtk_cell_editable_widget_parent_class)->finalize (object);
@@ -757,14 +755,16 @@ static void
 gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
 {
   GtkWidget *widget = GTK_WIDGET (box);
+  GtkEventController *controller;
 
   gtk_widget_set_can_focus (widget, TRUE);
 
-  box->key_controller = gtk_event_controller_key_new (widget);
-  g_signal_connect (box->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (key_controller_key_pressed), box);
-  g_signal_connect (box->key_controller, "modifiers",
+  g_signal_connect (controller, "modifiers",
                     G_CALLBACK (key_controller_modifiers), box);
+  gtk_widget_add_controller (widget, controller);
 
   gtk_widget_set_has_surface (widget, FALSE);
 }

@@ -88,6 +88,8 @@ enum {
   PROP_ORIENTATION
 };
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void gtk_center_box_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkCenterBox, gtk_center_box, GTK_TYPE_WIDGET,
@@ -107,12 +109,14 @@ gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
   else if (g_strcmp0 (type, "end") == 0)
     gtk_center_box_set_end_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_CENTER_BOX (buildable), type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_center_box_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_center_box_buildable_add_child;
 }
 

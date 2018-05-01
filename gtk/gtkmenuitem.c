@@ -661,6 +661,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 static void
 gtk_menu_item_init (GtkMenuItem *menu_item)
 {
+  GtkEventController *controller;
   GtkMenuItemPrivate *priv;
 
   priv = gtk_menu_item_get_instance_private (menu_item);
@@ -680,9 +681,10 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   priv->submenu_placement = GTK_TOP_BOTTOM;
   priv->timer = 0;
 
-  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (menu_item));
-  g_signal_connect (priv->motion_controller, "enter", G_CALLBACK (gtk_menu_item_enter), menu_item);
-  g_signal_connect (priv->motion_controller, "leave", G_CALLBACK (gtk_menu_item_leave), menu_item);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_menu_item_enter), menu_item);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_menu_item_leave), menu_item);
+  gtk_widget_add_controller (GTK_WIDGET (menu_item), controller);
 }
 
 /**

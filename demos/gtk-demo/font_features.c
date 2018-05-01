@@ -1718,9 +1718,10 @@ do_font_features (GtkWidget *do_widget)
       entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
 
-      controller = gtk_event_controller_key_new (entry);
+      controller = gtk_event_controller_key_new ();
       g_object_set_data_full (G_OBJECT (entry), "controller", controller, g_object_unref);
       g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), entry);
+      gtk_widget_add_controller (entry, controller);
 
       add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
       add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",

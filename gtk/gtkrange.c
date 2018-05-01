@@ -115,11 +115,8 @@ struct _GtkRangePrivate
   /* Whether dragging is ongoing */
   guint in_drag                : 1;
 
-  GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
-  GtkEventController *scroll_controller;
-  GtkEventController *key_controller;
 
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;
@@ -535,6 +532,8 @@ static void
 gtk_range_init (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+  GtkGesture *gesture;
+  GtkEventController *controller;
 
   gtk_widget_set_has_surface (GTK_WIDGET (range), FALSE);
 
@@ -567,37 +566,39 @@ gtk_range_init (GtkRange *range)
    * in the oppposite order in which they are added to their
    * widget.
    */
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (range));
+  priv->drag_gesture = gtk_gesture_drag_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
   g_signal_connect (priv->drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_range_drag_gesture_begin), range);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (range));
+  priv->multipress_gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  gtk_gesture_group (priv->drag_gesture, priv->multipress_gesture);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_range_multipress_gesture_released), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+  gtk_gesture_group (priv->drag_gesture, priv->multipress_gesture);
 
-  priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (range));
-  g_object_set (priv->long_press_gesture, "delay-factor", 2.0, NULL);
-  gtk_gesture_group (priv->drag_gesture, priv->long_press_gesture);
-  g_signal_connect (priv->long_press_gesture, "pressed",
+  gesture = gtk_gesture_long_press_new ();
+  g_object_set (gesture, "delay-factor", 2.0, NULL);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
+  gtk_gesture_group (priv->drag_gesture, gesture);
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (range),
-                                     GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_range_scroll_controller_scroll), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), controller);
 
-  priv->key_controller =
-    gtk_event_controller_key_new (GTK_WIDGET (range));
-  g_signal_connect (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_range_key_controller_key_pressed), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), controller);
 }
 
 /**
@@ -1290,12 +1291,6 @@ gtk_range_finalize (GObject *object)
 {
   GtkRange *range = GTK_RANGE (object);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-
-  g_clear_object (&priv->drag_gesture);
-  g_clear_object (&priv->multipress_gesture);
-  g_clear_object (&priv->long_press_gesture);
-  g_clear_object (&priv->scroll_controller);
-  g_clear_object (&priv->key_controller);
 
   gtk_widget_unparent (priv->slider_widget);
 

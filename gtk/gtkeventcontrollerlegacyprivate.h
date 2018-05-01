@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_EVENT_CONTROLLER_LEGACY         (_gtk_event_controller_legacy_get_type ())
+#define GTK_TYPE_EVENT_CONTROLLER_LEGACY         (gtk_event_controller_legacy_get_type ())
 #define GTK_EVENT_CONTROLLER_LEGACY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_EVENT_CONTROLLER_LEGACY, GtkEventControllerLegacy))
 #define GTK_EVENT_CONTROLLER_LEGACY_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_EVENT_CONTROLLER_LEGACY, GtkEventControllerLegacyClass))
 #define GTK_IS_EVENT_CONTROLLER_LEGACY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_EVENT_CONTROLLER_LEGACY))
@@ -45,7 +45,7 @@ struct _GtkEventControllerLegacyClass
   GtkEventControllerClass parent_class;
 };
 
-GType               _gtk_event_controller_legacy_get_type  (void) G_GNUC_CONST;
-GtkEventController *_gtk_event_controller_legacy_new       (GtkWidget *widget);
+GType               gtk_event_controller_legacy_get_type   (void) G_GNUC_CONST;
+GtkEventController *gtk_event_controller_legacy_new        (void);
 
 #endif /* __GTK_EVENT_CONTROLLER_LEGACY_H__ */
