@@ -375,36 +375,53 @@ populate_render_node_properties (GtkListStore  *store,
 
   switch (gsk_render_node_get_node_type (node))
     {
-    case GSK_TEXTURE_NODE:
     case GSK_CAIRO_NODE:
       {
-        const char *text;
         GdkTexture *texture;
+        cairo_surface_t *drawn_surface;
+        cairo_t *cr;
         gboolean show_inline;
 
-        if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
-          {
-            text = "Texture";
-            texture = g_object_ref (gsk_texture_node_get_texture (node));
-          }
-        else
-          {
-            const cairo_surface_t *surface;
+        drawn_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                    ceilf (node->bounds.size.width),
+                                                    ceilf (node->bounds.size.height));
+        cr = cairo_create (drawn_surface);
+        cairo_save (cr);
+        cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+        gsk_render_node_draw (node, cr);
+        cairo_restore (cr);
 
-            text = "Surface";
-            surface = gsk_cairo_node_peek_surface (node);
-            texture = gdk_texture_new_for_surface ((cairo_surface_t *) surface);
-          }
+        cairo_destroy (cr);
+
+        texture = gdk_texture_new_for_surface (drawn_surface);
+        cairo_surface_destroy (drawn_surface);
 
         show_inline = gdk_texture_get_height (texture) <= 40 &&
                       gdk_texture_get_width (texture) <= 100;
 
         gtk_list_store_insert_with_values (store, NULL, -1,
-                                             0, text,
-                                             1, show_inline ? "" : "Yes (click to show)",
-                                             2, show_inline,
-                                             3, texture,
-                                             -1);
+                                           0, "Surface",
+                                           1, show_inline ? "" : "Yes (click to show)",
+                                           2, show_inline,
+                                           3, texture,
+                                           -1);
+      }
+      break;
+
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = g_object_ref (gsk_texture_node_get_texture (node));
+        gboolean show_inline;
+
+        show_inline = gdk_texture_get_height (texture) <= 40 &&
+                      gdk_texture_get_width (texture) <= 100;
+
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Texture",
+                                           1, show_inline ? "" : "Yes (click to show)",
+                                           2, show_inline,
+                                           3, texture,
+                                           -1);
       }
       break;
 
