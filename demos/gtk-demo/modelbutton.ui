@@ -56,6 +56,7 @@
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.color</property>
+            <property name="action-target">'red'</property>
             <property name="text">Red</property>
             <property name="inverted">1</property>
           </object>
@@ -63,6 +64,7 @@
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.color</property>
+            <property name="action-target">'green'</property>
             <property name="text">Green</property>
             <property name="inverted">1</property>
           </object>
@@ -70,6 +72,7 @@
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.color</property>
+            <property name="action-target">'blue'</property>
             <property name="text">Blue</property>
             <property name="inverted">1</property>
           </object>
