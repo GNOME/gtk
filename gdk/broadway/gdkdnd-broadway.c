@@ -149,14 +149,6 @@ _gdk_broadway_surface_register_dnd (GdkSurface      *surface)
 {
 }
 
-static gboolean
-gdk_broadway_drag_context_drop_status (GdkDragContext *context)
-{
-  g_return_val_if_fail (context != NULL, FALSE);
-
-  return FALSE;
-}
-
 void
 _gdk_broadway_display_init_dnd (GdkDisplay *display)
 {
@@ -175,5 +167,4 @@ gdk_broadway_drag_context_class_init (GdkBroadwayDragContextClass *klass)
   context_class->drag_drop = gdk_broadway_drag_context_drag_drop;
   context_class->drop_reply = gdk_broadway_drag_context_drop_reply;
   context_class->drop_finish = gdk_broadway_drag_context_drop_finish;
-  context_class->drop_status = gdk_broadway_drag_context_drop_status;
 }

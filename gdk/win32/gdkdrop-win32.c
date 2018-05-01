@@ -1019,14 +1019,6 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
     }
 }
 
-static gboolean
-gdk_win32_drop_context_drop_status (GdkDragContext *context)
-{
-  GdkWin32DropContext *context_win32 = GDK_WIN32_DROP_CONTEXT (context);
-
-  return ! context_win32->drop_failed;
-}
-
 static gpointer
 grab_data_from_hdata (GTask  *task,
                       HANDLE  hdata,
@@ -1223,7 +1215,6 @@ gdk_win32_drop_context_class_init (GdkWin32DropContextClass *klass)
   context_class->drag_status = gdk_win32_drop_context_drag_status;
   context_class->drop_reply = gdk_win32_drop_context_drop_reply;
   context_class->drop_finish = gdk_win32_drop_context_drop_finish;
-  context_class->drop_status = gdk_win32_drop_context_drop_status;
   context_class->read_async = gdk_win32_drop_context_read_async;
   context_class->read_finish = gdk_win32_drop_context_read_finish;
 }
