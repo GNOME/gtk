@@ -68,7 +68,7 @@ gdk_cairo_context_init (GdkCairoContext *self)
 
 /**
  * gdk_cairo_context_cairo_create:
- * @context: a #GdkCairoContext that is currently drawing
+ * @self: a #GdkCairoContext that is currently drawing
  *
  * Retrieves a Cairo context to be used to draw on the #GdkSurface
  * of @context. A call to gdk_draw_context_begin_frame() with this

@@ -366,7 +366,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDragContext:display:
+   * GdkDragContext:device:
    *
    * The #GdkDevice that is performing the drag.
    */
