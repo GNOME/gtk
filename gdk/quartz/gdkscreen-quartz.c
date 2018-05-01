@@ -67,7 +67,7 @@ static void  gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen);
 static void display_reconfiguration_callback (CGDirectDisplayID            display,
                                               CGDisplayChangeSummaryFlags  flags,
                                               void                        *userInfo);
-
+static const double dpi = 96.0;
 static gint get_mm_from_pixels (NSScreen *screen, int pixels);
 
 G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, GDK_TYPE_SCREEN);
@@ -76,10 +76,17 @@ static void
 gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
 {
   GdkScreen *screen = GDK_SCREEN (quartz_screen);
-  NSDictionary *dd = [[[NSScreen screens] objectAtIndex:0] deviceDescription];
-  NSSize size = [[dd valueForKey:NSDeviceResolution] sizeValue];
+  /* Screen resolution is used exclusively to pass to Pango for font
+   * scaling. There's a long discussion in
+   * https://bugzilla.gnome.org/show_bug.cgi?id=787867 exploring how
+   * screen resolution and pangocairo-coretext interact. The summary
+   * is that MacOS takes care of scaling fonts for Retina screens and
+   * that while the Apple Documentation goes on about "points" they're
+   * CSS points (96/in), not typeography points (72/in) and
+   * pangocairo-coretext needs to default to that scaling factor.
+   */
 
-  _gdk_screen_set_resolution (screen, size.width);
+  _gdk_screen_set_resolution (screen, dpi);
 
   gdk_quartz_screen_calculate_layout (quartz_screen);
 
@@ -335,9 +342,6 @@ static gint
 get_mm_from_pixels (NSScreen *screen, int pixels)
 {
   const float mm_per_inch = 25.4;
-  NSDictionary *dd = [[[NSScreen screens] objectAtIndex:0] deviceDescription];
-  NSSize size = [[dd valueForKey:NSDeviceResolution] sizeValue];
-  float dpi = size.width;
   return (pixels / dpi) * mm_per_inch;
 }
 
