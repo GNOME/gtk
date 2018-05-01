@@ -2086,12 +2086,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       return;
   }
 
-#if DEBUG_OPS
-  if (gsk_render_node_get_node_type (node) != GSK_CONTAINER_NODE)
-    g_message ("Adding ops for node %s with type %u", node->name,
-               gsk_render_node_get_node_type (node));
-#endif
-
   switch (gsk_render_node_get_node_type (node))
     {
     case GSK_NOT_A_RENDER_NODE:
