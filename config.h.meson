@@ -286,6 +286,10 @@
 /* Define to 1 if linux/memfd.h exists */
 #mesondefine HAVE_LINUX_MEMFD_H
 
+#mesondefine HAVE_LINUX_INPUT_H
+
+#mesondefine HAVE_DEV_EVDEV_INPUT_H
+
 #mesondefine GTK_SYSCONFDIR
 
 #mesondefine GTK_LOCALEDIR

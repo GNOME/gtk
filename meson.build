@@ -149,9 +149,11 @@ cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
 
 check_headers = [
   'crt/externs.h',
+  'dev/evdev/input.h',
   'dlfcn.h',
   'ftw.h',
   'inttypes.h',
+  'linux/input.h',
   'linux/memfd.h',
   'locale.h',
   'memory.h',
