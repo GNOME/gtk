@@ -129,14 +129,6 @@ gdk_broadway_drag_context_drag_status (GdkDragContext   *context,
 }
 
 static void
-gdk_broadway_drag_context_drop_reply (GdkDragContext   *context,
-                                      gboolean          ok,
-                                      guint32           time)
-{
-  g_return_if_fail (context != NULL);
-}
-
-static void
 gdk_broadway_drag_context_drop_finish (GdkDragContext   *context,
                                        gboolean          success,
                                        guint32           time)
@@ -165,6 +157,5 @@ gdk_broadway_drag_context_class_init (GdkBroadwayDragContextClass *klass)
   context_class->drag_status = gdk_broadway_drag_context_drag_status;
   context_class->drag_abort = gdk_broadway_drag_context_drag_abort;
   context_class->drag_drop = gdk_broadway_drag_context_drag_drop;
-  context_class->drop_reply = gdk_broadway_drag_context_drop_reply;
   context_class->drop_finish = gdk_broadway_drag_context_drop_finish;
 }

@@ -468,15 +468,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
         
         /* Send a reply.
          */
-        if (event_type == GDK_DRAG_MOTION)
-          {
-            if (!found)
-              gdk_drag_status (context, 0, time);
-          }
-        else if (event_type == GDK_DROP_START)
-          {
-            gdk_drop_reply (context, found, time);
-          }
+        if (!found)
+          gdk_drag_status (context, 0, time);
       }
       break;
 

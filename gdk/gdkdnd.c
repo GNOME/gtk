@@ -535,27 +535,6 @@ gdk_drag_drop (GdkDragContext *context,
 }
 
 /**
- * gdk_drop_reply:
- * @context: a #GdkDragContext
- * @accepted: %TRUE if the drop is accepted
- * @time_: the timestamp for this operation
- *
- * Accepts or rejects a drop.
- *
- * This function is called by the drag destination in response
- * to a drop initiated by the drag source.
- */
-void
-gdk_drop_reply (GdkDragContext *context,
-                gboolean        accepted,
-                guint32         time_)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_reply (context, accepted, time_);
-}
-
-/**
  * gdk_drop_finish:
  * @context: a #GdkDragContext
  * @success: %TRUE if the data was successfully received

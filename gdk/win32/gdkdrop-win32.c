@@ -875,23 +875,6 @@ gdk_win32_drop_context_drag_status (GdkDragContext *context,
 }
 
 static void
-gdk_win32_drop_context_drop_reply (GdkDragContext *context,
-                gboolean        ok,
-                guint32         time)
-{
-  g_return_if_fail (context != NULL);
-
-  GDK_NOTE (DND, g_print ("gdk_drop_reply\n"));
-
-  if (!use_ole2_dnd)
-    if (context->dest_surface)
-      {
-        if (GDK_WIN32_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_WIN32_DROPFILES)
-          _gdk_dropfiles_store (NULL);
-      }
-}
-
-static void
 _gdk_display_put_event (GdkDisplay *display,
                         GdkEvent   *event)
 {
@@ -1213,7 +1196,6 @@ gdk_win32_drop_context_class_init (GdkWin32DropContextClass *klass)
   object_class->finalize = gdk_win32_drop_context_finalize;
 
   context_class->drag_status = gdk_win32_drop_context_drag_status;
-  context_class->drop_reply = gdk_win32_drop_context_drop_reply;
   context_class->drop_finish = gdk_win32_drop_context_drop_finish;
   context_class->read_async = gdk_win32_drop_context_read_async;
   context_class->read_finish = gdk_win32_drop_context_read_finish;
