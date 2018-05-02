@@ -235,15 +235,6 @@ gdk_wayland_drag_context_drag_status (GdkDragContext *context,
 }
 
 static void
-gdk_wayland_drag_context_drop_reply (GdkDragContext *context,
-				     gboolean        accepted,
-				     guint32         time_)
-{
-  if (!accepted)
-    gdk_wayland_drop_context_set_status (context, accepted);
-}
-
-static void
 gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 				      gboolean        success,
 				      guint32         time)
@@ -438,7 +429,6 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->drag_status = gdk_wayland_drag_context_drag_status;
   context_class->drag_abort = gdk_wayland_drag_context_drag_abort;
   context_class->drag_drop = gdk_wayland_drag_context_drag_drop;
-  context_class->drop_reply = gdk_wayland_drag_context_drop_reply;
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
   context_class->read_async = gdk_wayland_drag_context_read_async;

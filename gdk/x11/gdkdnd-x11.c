@@ -243,9 +243,6 @@ static void        gdk_x11_drag_context_drag_abort  (GdkDragContext  *context,
                                                      guint32          time_);
 static void        gdk_x11_drag_context_drag_drop   (GdkDragContext  *context,
                                                      guint32          time_);
-static void        gdk_x11_drag_context_drop_reply  (GdkDragContext  *context,
-                                                     gboolean         accept,
-                                                     guint32          time_);
 static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
                                                      gboolean         success,
                                                      guint32          time_);
@@ -402,7 +399,6 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->drag_status = gdk_x11_drag_context_drag_status;
   context_class->drag_abort = gdk_x11_drag_context_drag_abort;
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
-  context_class->drop_reply = gdk_x11_drag_context_drop_reply;
   context_class->drop_finish = gdk_x11_drag_context_drop_finish;
   context_class->read_async = gdk_x11_drag_context_read_async;
   context_class->read_finish = gdk_x11_drag_context_read_finish;
@@ -2448,13 +2444,6 @@ gdk_x11_drag_context_drag_status (GdkDragContext *context,
     }
 
   context_x11->old_action = action;
-}
-
-static void
-gdk_x11_drag_context_drop_reply (GdkDragContext *context,
-                                 gboolean        accepted,
-                                 guint32         time_)
-{
 }
 
 static void

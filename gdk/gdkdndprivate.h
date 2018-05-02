@@ -40,9 +40,6 @@ struct _GdkDragContextClass {
                                 guint32          time_);
   void        (*drag_drop)     (GdkDragContext  *context,
                                 guint32          time_);
-  void        (*drop_reply)    (GdkDragContext  *context,
-                                gboolean         accept,
-                                guint32          time_);
   void        (*drop_finish)   (GdkDragContext  *context,
                                 gboolean         success,
                                 guint32          time_);

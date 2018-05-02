@@ -108,10 +108,6 @@ void             gdk_drag_status        (GdkDragContext   *context,
                                          GdkDragAction     action,
                                          guint32           time_);
 GDK_AVAILABLE_IN_ALL
-void             gdk_drop_reply         (GdkDragContext   *context,
-                                         gboolean          accepted,
-                                         guint32           time_);
-GDK_AVAILABLE_IN_ALL
 void             gdk_drop_finish        (GdkDragContext   *context,
                                          gboolean          success,
                                          guint32           time_);
