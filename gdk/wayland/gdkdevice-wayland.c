@@ -38,11 +38,13 @@
 
 #include <xkbcommon/xkbcommon.h>
 
-#include <linux/input.h>
-
 #include <sys/time.h>
 #include <sys/mman.h>
+#if defined(HAVE_DEV_EVDEV_INPUT_H)
+#include <dev/evdev/input.h>
+#elif defined(HAVE_LINUX_INPUT_H)
 #include <linux/input.h>
+#endif
 
 #define BUTTON_BASE (BTN_LEFT - 1) /* Used to translate to 1-indexed buttons */
 

@@ -819,7 +819,13 @@ LIBS=$gtk_save_LIBS
 
 AC_CHECK_HEADERS(linux/memfd.h,
                  AC_DEFINE(HAVE_LINUX_MEMFD_H, 1,
-                           [Define to 1 if memfd.h is available]))
+                           [Define to 1 if linux/memfd.h is available]))
+AC_CHECK_HEADERS(linux/input.h,
+                 AC_DEFINE(HAVE_LINUX_INPUT_H, 1,
+                           [Define to 1 if linux/input.h is available]))
+AC_CHECK_HEADERS(dev/evdev/input.h,
+                 AC_DEFINE(HAVE_DEV_EVDEV_INPUT_H, 1,
+                           [Define to 1 if dev/evdev/input.h is available]))
 AC_CHECK_HEADERS(sys/mman.h,
                  AC_DEFINE(HAVE_SYS_MMAN_H, 1,
                            [Define to 1 if mman.h is available]))
