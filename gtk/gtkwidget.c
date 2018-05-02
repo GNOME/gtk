@@ -12903,14 +12903,12 @@ void
 gtk_widget_add_controller (GtkWidget          *widget,
                            GtkEventController *controller)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
-
-  priv = widget->priv;
 
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
 
@@ -12948,15 +12946,13 @@ void
 gtk_widget_remove_controller (GtkWidget          *widget,
                               GtkEventController *controller)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   EventControllerData *data = NULL;
-  GtkWidgetPrivate *priv;
   GList *l;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (gtk_event_controller_get_widget (controller) == widget);
-
-  priv = widget->priv;
 
   for (l = priv->event_controllers; l; l = l->next)
     {
