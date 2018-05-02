@@ -501,7 +501,6 @@ do_drag_drop_response (gpointer user_data)
   GdkDragContext *context = GDK_DRAG_CONTEXT (ddd->base.opaque_context);
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   gpointer table_value = g_hash_table_lookup (clipdrop->active_source_drags, context);
-  GdkEvent *tmp_event;
 
   /* This just verifies that we got the right context,
    * we don't need the ddd struct itself.
@@ -938,7 +937,7 @@ notify_dnd_enter (gpointer user_data)
   if (dw)
     dest_surface = g_object_ref (dw);
   else
-    dest_surface = gdk_win32_surface_foreign_new_for_display (context->display, notify->target_window_handle);
+    dest_surface = gdk_win32_surface_foreign_new_for_display (gdk_drag_context_get_display (context), notify->target_window_handle);
 
   g_clear_object (&context->dest_surface);
   context->dest_surface = dest_surface;
@@ -1158,7 +1157,6 @@ idropsource_givefeedback (LPDROPSOURCE This,
                           DWORD        dwEffect)
 {
   source_drag_context *ctx = (source_drag_context *) This;
-  POINT pt;
   GdkWin32DnDThreadGiveFeedback *feedback;
 
   GDK_NOTE (DND, g_print ("idropsource_givefeedback %p with drop effect %lu S_OK\n", This, dwEffect));
@@ -1904,7 +1902,6 @@ _gdk_win32_surface_drag_begin (GdkSurface        *window,
 {
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
-  BYTE kbd_state[256];
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   int x_root, y_root;
 
@@ -2055,7 +2052,7 @@ gdk_win32_drag_context_find_surface (GdkDragContext  *context,
           g_object_ref (dest_surface);
         }
       else
-        dest_surface = gdk_win32_surface_foreign_new_for_display (context->display, a.result);
+        dest_surface = gdk_win32_surface_foreign_new_for_display (gdk_drag_context_get_display (context), a.result);
 
       if (use_ole2_dnd)
         *protocol = GDK_DRAG_PROTO_OLE2;
@@ -2087,7 +2084,6 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
                                     guint32          time)
 {
   GdkWin32DragContext *context_win32;
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
   g_assert (_win32_main_thread == NULL ||
             _win32_main_thread == g_thread_self ());
@@ -2362,9 +2358,11 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
 {
   GdkWin32DragContext *win32_context = GDK_WIN32_DRAG_CONTEXT (context);
   GdkDragAnim *anim;
+/*
   cairo_surface_t *win_surface;
   cairo_surface_t *surface;
   cairo_t *cr;
+*/
   guint id;
 
   GDK_NOTE (DND, g_print ("gdk_drag_context_drop_done: 0x%p %s\n",
