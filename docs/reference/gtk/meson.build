@@ -207,17 +207,18 @@ else
   types_conf.set('DISABLE_ON_QUARTZ', '')
 endif
 
-configure_file(input: 'gtk4.types.in', output: 'gtk4.types', configuration: types_conf)
-
 gnome.gtkdoc('gtk4',
              mode: 'none',
              main_xml: 'gtk4-docs.xml',
              src_dir: [
-	       join_paths(meson.source_root(), 'gtk'),
-	       join_paths(meson.build_root(), 'gtk'),
+               gtkinc,
 	     ],
              dependencies: libgtk_dep,
-             gobject_typesfile: 'gtk4.types',
+             gobject_typesfile: configure_file(
+               input: 'gtk4.types.in',
+               output: 'gtk4.types',
+               configuration: types_conf,
+             ),
              scan_args: [
                '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
                '--ignore-headers=' + ' '.join(private_headers),

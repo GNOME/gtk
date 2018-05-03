@@ -40,11 +40,10 @@ gnome.gtkdoc('gsk4',
              mode: 'none',
              main_xml: 'gsk4-docs.xml',
              src_dir: [
-	       join_paths(meson.source_root(), 'gsk'),
-	       join_paths(meson.build_root(), 'gsk'),
+               gskinc,
 	     ],
              dependencies: libgtk_dep,
-             gobject_typesfile: join_paths(meson.source_root(), 'docs/reference/gsk/gsk4.types'),
+             gobject_typesfile: join_paths(meson.current_source_dir(), 'gsk4.types'),
              scan_args: [
                '--ignore-decorators=_GDK_EXTERN',
                '--ignore-headers=' + ' '.join(private_headers),

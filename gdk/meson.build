@@ -154,8 +154,9 @@ gdkversionmacros = configure_file(
   install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'))
 
 gdkinc = include_directories('.')
+gdkx11_inc = include_directories('x11')
+gdkwayland_inc = include_directories('wayland')
 
-xinc = include_directories('x11')
 wlinc = include_directories('.')
 
 gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros]
@@ -220,7 +221,7 @@ endif
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   dependencies: gdk_deps,
-  include_directories: [confinc, xinc, wlinc],
+  include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: [
     '-DGDK_COMPILATION',
     '-DG_LOG_DOMAIN="Gdk"',
@@ -233,5 +234,5 @@ libgdk = static_library('gdk',
 # "public" libgtk_dep used by internal executables.
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
-  include_directories: [confinc, xinc, wlinc],
+  include_directories: [confinc, gdkx11_inc, wlinc],
   dependencies: gdk_deps)
