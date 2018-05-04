@@ -1,3 +1,72 @@
+Overview of Changes in GTK+ 3.94.0
+==================================
+
+* GdkPaintable is a new, powerful abstraction for drawable content.
+  gtk4-demo has a new "Paint" demo to show some of its capabilities.
+
+* There is support for displaying media, with
+  GtkVideo
+  GtkMediaFile
+  GtkMediaStream
+
+* GtkFontChooser now supports OpenType font variations and features.
+
+* The Ctrl-Shift-E support in the simple IM context has been replaced
+  by an optional completion popup for Emoji alpha codes. This can be
+  enabled with the GtkEntry::enable-emoji-completion property.
+
+* Wayland has an input method based on the text protocol now
+
+* Input methods and print backends have been converted to GIOModules
+  and extension points, and support for generic loadable modules has
+  been dropped. Platform im modules are always included.
+
+* GdkWindow has been renamed to GdkSurface.
+
+* Widget event signals have been replaced by event controller, and
+  some new event controllers have been introduced for this:
+  GtkEventControllerMotion
+  GtkEventControllerKey
+  GtkGestureStylus
+
+* Event controllers can now be created in .ui files.
+
+* The Vulkan support in GDK can now use a particular device that is
+  specified by the GDK_VULKAN_DEVICE environment variable. use
+  GDK_VULKAN_DEVICE=list to see them all.
+
+* GTK+ Inspector
+  - has logging support, and the logging settings have been cleaned up
+  - has an fps overlay
+
+* Removed APIs and features:
+  Individual event signals such as ::proximity-in-event
+  threading support
+  non-platform IM modules
+  papi and test print backends
+  GtkPlacesSidebar
+  GtkRecentChooser
+  GtkToolPalette
+  GdkStatus
+  gtk_true, gtk_false
+  gtk_widget_show_now
+  gtk_widget_draw
+  gtk_render_icon_surface
+
+* Translation updates:
+ Croatian
+ Esperanto
+ Estonian
+ French
+ Friulian
+ Icelandic
+ Latvian
+ Polish
+ Russian
+ Scottish Gaelic
+ Spanish
+
+
 Overview of Changes in GTK+ 3.93.0
 ==================================
 
