@@ -692,11 +692,14 @@ gdk_drag_context_write_finish (GdkDragContext *context,
 /**
  * gdk_drop_read_async:
  * @context: a #GdkDragContext
- * @mime_types: (array zero-terminated=1) (element-type utf8):
- * @io_priority:
- * @cancellable:
- * @callback:
- * @user_data: (closure):
+ * @mime_types: (array zero-terminated=1) (element-type utf8): pointer to an array of mime types
+ * @io_priority: the io priority for the read operation
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to @callback
+ *
+ * Asynchronously read the dropped data from a DND context
+ * in a format that complies with one of the mime types.
  */
 void
 gdk_drop_read_async (GdkDragContext      *context,
@@ -728,9 +731,11 @@ gdk_drop_read_async (GdkDragContext      *context,
 /**
  * gdk_drop_read_finish:
  * @context: a #GdkDragContext
- * @out_mime_type: (out) (type utf8):
- * @result:
- * @error:
+ * @out_mime_type: (out) (type utf8): return location for the used mime type
+ * @result: a #GAsyncResult
+ * @error: (allow-none): location to store error information on failure, or %NULL
+ *
+ * Finishes an async drop read operation, see gdk_drop_read_async().
  *
  * Returns: (nullable) (transfer full): the #GInputStream, or %NULL
  */
