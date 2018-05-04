@@ -1787,15 +1787,39 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            PangoDirection   direction,
                            gboolean         draw_arrow)
 {
-  graphene_rect_t bounds;
-  cairo_t *cr;
-  
-  get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
-  cr = gtk_snapshot_append_cairo (snapshot, &bounds);
+  if (draw_arrow)
+    {
+      cairo_t *cr;
+      graphene_rect_t bounds;
 
-  draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
+      get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
+      cr = gtk_snapshot_append_cairo (snapshot, &bounds);
 
-  cairo_destroy (cr);
+      draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
+
+      cairo_destroy (cr);
+    }
+  else
+    {
+      GdkRGBA primary_color;
+      GdkRGBA secondary_color;
+      int stem_width;
+      int offset;
+
+      _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
+
+      stem_width = height * CURSOR_ASPECT_RATIO + 1;
+
+      /* put (stem_width % 2) on the proper side of the cursor */
+      if (direction == PANGO_DIRECTION_LTR)
+        offset = stem_width / 2;
+      else
+        offset = stem_width - stem_width / 2;
+
+      gtk_snapshot_append_color (snapshot,
+                                 is_primary ? &primary_color : &secondary_color,
+                                 &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
+    }
 }
 
 /**
