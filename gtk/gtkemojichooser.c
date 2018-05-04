@@ -535,7 +535,7 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   g_variant_get_child (emoji_data, 1, "&s", &name);
-  res = strstr (name, text) != NULL;
+  res = g_str_match_string (text, name, TRUE);
 
 out:
   if (res)
