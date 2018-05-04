@@ -8,6 +8,7 @@ Overview of Changes in GTK+ 3.94.0
   GtkVideo
   GtkMediaFile
   GtkMediaStream
+  GtkMediaControls
 
 * GtkFontChooser now supports OpenType font variations and features.
 
@@ -17,11 +18,14 @@ Overview of Changes in GTK+ 3.94.0
 
 * Wayland has an input method based on the text protocol now
 
-* Input methods and print backends have been converted to GIOModules
-  and extension points, and support for generic loadable modules has
-  been dropped. Platform im modules are always included.
+* Input methods, print backends and media backends have been converted
+  to GIOModules and extension points, and support for generic loadable
+  modules has been dropped. Platform im modules are always included.
 
 * GdkWindow has been renamed to GdkSurface.
+
+* Applications can now create their own GtkSnapshot objects for
+  intermediate rendering.
 
 * Widget event signals have been replaced by event controller, and
   some new event controllers have been introduced for this:
@@ -30,6 +34,16 @@ Overview of Changes in GTK+ 3.94.0
   GtkGestureStylus
 
 * Event controllers can now be created in .ui files.
+
+* Invalidation tracking has been changed, only gtk_widget_queue_draw is left.
+
+* Observing widget contents and size is now done by using the
+  GtkWidgetPaintable object instead of connecting to widget signals.
+
+* The GtkWidget::draw signal has been removed, widgets need
+  to implement GtkWidget::snapshot.
+
+* GdkTexture now has GdkMemoryTexture and GdkGLTexture subclasses.
 
 * The Vulkan support in GDK can now use a particular device that is
   specified by the GDK_VULKAN_DEVICE environment variable. use
@@ -41,6 +55,7 @@ Overview of Changes in GTK+ 3.94.0
 
 * Removed APIs and features:
   Individual event signals such as ::proximity-in-event
+  The ::draw signal
   threading support
   non-platform IM modules
   papi and test print backends
