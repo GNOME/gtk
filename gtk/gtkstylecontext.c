@@ -1696,10 +1696,6 @@ draw_insertion_cursor (GtkStyleContext *context,
   _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
   gdk_cairo_set_source_rgba (cr, is_primary ? &primary_color : &secondary_color);
 
-  /* When changing the shape or size of the cursor here,
-   * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
-   */
-
   stem_width = height * CURSOR_ASPECT_RATIO + 1;
 
   /* put (stem_width % 2) on the proper side of the cursor */
