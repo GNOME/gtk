@@ -2100,6 +2100,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * GtkStyleContextPrintFlags:
+ * @GTK_STYLE_CONTEXT_PRINT_NONE: Default value.
  * @GTK_STYLE_CONTEXT_PRINT_RECURSE: Print the entire tree of
  *     CSS nodes starting at the style context's node
  * @GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE: Show the values of the

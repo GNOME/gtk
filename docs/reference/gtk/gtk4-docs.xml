@@ -297,6 +297,7 @@
       <xi:include href="xml/gtkgestureswipe.xml" />
       <xi:include href="xml/gtkgesturerotate.xml" />
       <xi:include href="xml/gtkgesturezoom.xml" />
+      <xi:include href="xml/gtkgesturestylus.xml" />
       <xi:include href="xml/gtkpadcontroller.xml" />
     </chapter>
 

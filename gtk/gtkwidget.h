@@ -229,9 +229,9 @@ struct _GtkWidget
  *   widget extra space when possible.
  * @style_updated: Signal emitted when the GtkStyleContext of a widget
  *   is changed.
- * @touch_event:
- * @snapshot: Signal emitted when a widget is supposed to create a snapshot
- *   of itself.
+ * @snapshot: Vfunc for gtk_widget_snapshot().
+ * @contains: Vfunc for gtk_widget_contains().
+ * @pick: Vfunc for gtk_widget_pick().
  */
 struct _GtkWidgetClass
 {

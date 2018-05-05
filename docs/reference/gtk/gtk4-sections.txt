@@ -1270,8 +1270,6 @@ gtk_fixed_get_type
 GtkFontButton
 gtk_font_button_new
 gtk_font_button_new_with_font
-gtk_font_button_set_font_name
-gtk_font_button_get_font_name
 gtk_font_button_set_use_font
 gtk_font_button_get_use_font
 gtk_font_button_set_use_size
@@ -1302,7 +1300,7 @@ gtk_font_chooser_set_font
 gtk_font_chooser_get_font_desc
 gtk_font_chooser_set_font_desc
 gtk_font_chooser_get_font_features
-gtk_font_chooser_get_font_language
+gtk_font_chooser_set_language
 gtk_font_chooser_get_preview_text
 gtk_font_chooser_set_preview_text
 gtk_font_chooser_get_show_preview_entry
@@ -1483,24 +1481,24 @@ GtkIconViewPrivate
 <TITLE>GtkImage</TITLE>
 GtkImage
 GtkImageType
-gtk_image_get_texture
-gtk_image_get_icon_name
-gtk_image_get_gicon
-gtk_image_get_storage_type
+gtk_image_new
 gtk_image_new_from_file
+gtk_image_new_from_resource
 gtk_image_new_from_pixbuf
+gtk_image_new_from_paintable
 gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
-gtk_image_new_from_resource
-gtk_image_new_from_texture
+gtk_image_clear
 gtk_image_set_from_file
+gtk_image_set_from_resource
 gtk_image_set_from_pixbuf
+gtk_image_set_from_paintable
 gtk_image_set_from_icon_name
 gtk_image_set_from_gicon
-gtk_image_set_from_resource
-gtk_image_set_from_texture
-gtk_image_clear
-gtk_image_new
+gtk_image_get_storage_type
+gtk_image_get_paintable
+gtk_image_get_icon_name
+gtk_image_get_gicon
 gtk_image_set_pixel_size
 gtk_image_get_pixel_size
 gtk_image_set_icon_size
@@ -1923,8 +1921,8 @@ gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
 gtk_info_bar_get_action_area
 gtk_info_bar_get_content_area
-gtk_info_bar_get_show_title_buttons
-gtk_info_bar_set_show_title_buttons
+gtk_info_bar_get_show_close_button
+gtk_info_bar_set_show_close_button
 gtk_info_bar_get_revealed
 gtk_info_bar_set_revealed
 
@@ -4172,15 +4170,10 @@ gtk_volume_button_get_type
 <TITLE>GtkSnapshot</TITLE>
 GtkSnapshot
 gtk_snapshot_new
-gtk_snapshot_ref
-gtk_snapshot_unref
 gtk_snapshot_to_node
 gtk_snapshot_to_paintable
 gtk_snapshot_free_to_node
 gtk_snapshot_free_to_paintable
-gtk_snapshot_get_renderer
-gtk_snapshot_get_record_names
-gtk_snapshot_push
 gtk_snapshot_push_transform
 gtk_snapshot_push_opacity
 gtk_snapshot_push_color_matrix
@@ -4197,7 +4190,6 @@ gtk_snapshot_append_cairo
 gtk_snapshot_append_texture
 gtk_snapshot_append_color
 gtk_snapshot_append_layout
-gtk_snapshot_clips_rect
 gtk_snapshot_render_background
 gtk_snapshot_render_frame
 gtk_snapshot_render_focus
@@ -4893,7 +4885,6 @@ gtk_render_line
 gtk_render_option
 gtk_render_slider
 gtk_render_activity
-gtk_render_icon_surface
 gtk_render_icon
 gtk_render_insertion_cursor
 
@@ -6638,14 +6629,38 @@ gtk_pad_controller_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkgesturestylus</FILE>
+<TITLE>GtkGestureStylus</TITLE>
+GtkGestureStylus
+
+gtk_gesture_stylus_new
+gtk_gesture_stylus_get_axis
+gtk_gesture_stylus_get_axes
+gtk_gesture_stylus_get_backlog
+gtk_gesture_stylus_get_device_tool
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_STYLUS
+GTK_GESTURE_STYLUS
+GTK_GESTURE_STYLUS_CLASS
+GTK_IS_GESTURE_STYLUS
+GTK_IS_GESTURE_STYLUS_CLASS
+GTK_GESTURE_STYLUS_GET_CLASS
+GtkGestureStylusClass
+
+<SUBSECTION Private>
+gtk_gesture_stylus_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkstacksidebar</FILE>
 GtkStackSidebar
-GtkStackSidebarClass
 gtk_stack_sidebar_new
 gtk_stack_sidebar_set_stack
 gtk_stack_sidebar_get_stack
 
 <SUBSECTION Standard>
+GtkStackSidebarClass
 GTK_TYPE_STACK_SIDEBAR
 GTK_STACK_SIDEBAR
 GTK_STACK_SIDEBAR_CLASS
@@ -6670,8 +6685,6 @@ gtk_gl_area_attach_buffers
 gtk_gl_area_set_error
 gtk_gl_area_get_error
 <SUBSECTION>
-gtk_gl_area_set_has_alpha
-gtk_gl_area_get_has_alpha
 gtk_gl_area_set_has_depth_buffer
 gtk_gl_area_get_has_depth_buffer
 gtk_gl_area_set_has_stencil_buffer

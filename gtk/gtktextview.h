@@ -151,6 +151,7 @@ struct _GtkTextView
  *   layers %GTK_TEXT_VIEW_LAYER_BELOW and %GTK_TEXT_VIEW_LAYER_ABOVE work in viewport
  *   coordinates, which makes them unnecessarily hard to use.
  * @extend_selection: The class handler for the #GtkTextView::extend-selection signal.
+ * @insert_emoji: The class handler for the #GtkTextView::insert-emoji signal.
  */
 struct _GtkTextViewClass
 {

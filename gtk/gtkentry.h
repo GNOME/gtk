@@ -103,6 +103,7 @@ struct _GtkEntry
  *   the current selection if one exists.
  * @toggle_overwrite: Class handler for the #GtkEntry::toggle-overwrite signal.
  *   The default implementation toggles overwrite mode and blinks the cursor.
+ * @insert_emoji: Class handler for the #GtkEntry::insert-emoji signal.
  *
  * Class structure for #GtkEntry. All virtual functions have a default
  * implementation. Derived classes may set the virtual function pointers for the
