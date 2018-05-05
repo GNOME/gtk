@@ -172,7 +172,6 @@ gdk_pipe_input_stream_read (GInputStream  *stream,
       amount = MIN (count, pipe->size);
       
       memcpy (buffer, pipe->buffer, amount);
-      count -= amount;
       pipe->size -= amount;
 
       if (pipe->size == 0)
@@ -308,7 +307,6 @@ gdk_pipe_output_stream_write (GOutputStream  *stream,
       amount = MIN (count, pipe->size);
       
       memcpy (pipe->buffer, buffer, amount);
-      count -= amount;
       pipe->size -= amount;
 
       if (pipe->size == 0)
