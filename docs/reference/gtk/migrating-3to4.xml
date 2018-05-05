@@ -217,9 +217,12 @@
     </section>
 
     <section>
-      <title>Adapt to GdkSurface API changes</title>
+      <title>Adapt to GdkWindow API changes</title>
       <para>
-        The gdk_surface_new() function has been replaced by a number of more
+        GdkWindow has been renamed to GdkSurface.
+      </para>
+      <para>
+        The gdk_window_new() function has been replaced by a number of more
         specialized constructors: gdk_surface_new_toplevel(), gdk_surface_new_popup(),
         gdk_surface_new_temp(), gdk_surface_new_child(), gdk_surface_new_input(),
         gdk_wayland_surface_new_subsurface(). Use the appropriate ones to create
@@ -230,7 +233,7 @@
         complicating the code and could not be supported across backends.
       </para>
       <para>
-        gdk_surface_reparent() is no longer available.
+        gdk_window_reparent() is no longer available.
       </para>
     </section>
 
@@ -416,8 +419,8 @@
       <title>GdkPixbuf is deemphasized</title>
       <para>
         A number of #GdkPixbuf-based APIs have been removed. The available replacements
-        are either using #GIcon, cairo_surface_t or the newly introduced #GdkTexture class
-        instead.
+        are either using #GIcon, or the newly introduced #GdkTexture or #GdkPaintable
+        classes instead.
       </para>
       <para>
         If you are dealing with pixbufs, you can use gdk_texture_new_for_pixbuf()
@@ -426,12 +429,37 @@
     </section>
 
     <section>
-      <title>GtkWidget event signals are deemphasized</title>
+      <title>GtkWidget event signals are removed</title>
       <para>
         Event controllers and #GtkGestures have already been introduced in GTK+ 3 to handle
         input for many cases. In GTK+ 4, even more are available, such as #GtkEventControllerScroll
         and GtkEventControllerMotion, and the traditional widget signals for handling input,
-        such as #GtkWidget::motion-event or #GtkWidget::event have been deprecated.
+        such as #GtkWidget::motion-event or #GtkWidget::event have been removed.
+      </para>
+    </section>
+
+    <section>
+      <title>Invalidation handling has changed</title>
+      <para>
+        Only gtk_widget_queue_draw() is left to mark a widget as needing redraw.
+        Variations like gtk_widget_queue_draw_rectangle() or gtk_widget_queue_draw_region()
+        are no longer available.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using GtkWidget::draw</title>
+      <para>
+        The #GtkWidget::draw signal has been removed. Widgets need to implement the
+        #GtkWidget::snapshot function now. Connecting draw signal handlers is no longer possible.
+      </para>
+    </section>
+
+    <section>
+      <title>Window content observation has changed</title>
+      <para>
+        Observing widget contents and widget size is now done by using the
+        #GtkWidgetPaintable object instead of connecting to widget signals.
       </para>
     </section>
 
@@ -475,6 +503,7 @@
         #GtkCellRendererPixbuf:icon-size.
       </para>
     </section>
+
   </section>
 
 </chapter>
