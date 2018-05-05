@@ -2,6 +2,15 @@ subdir('deprecated')
 subdir('a11y')
 subdir('inspector')
 
+gtk_cargs = [
+  '-DGTK_COMPILATION',
+  '-DG_LOG_DOMAIN="Gtk"',
+  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
+  '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
+  '-DGTK_HOST="@0@"'.format(host_machine.system()),
+  '-DGTK_DATA_PREFIX="@0@"'.format(gtk_prefix),
+]
+
 # List of sources that do not contain public API, and should not be
 # introspected
 gtk_private_sources = files([
@@ -826,15 +835,6 @@ gtkversion = configure_file(input: 'gtkversion.h.in',
                             output: 'gtkversion.h',
                             configuration: gtkversion_cdata,
                             install_dir: join_paths(gtk_includedir, 'gtk-4.0/gtk'))
-
-gtk_cargs = [
-  '-DGTK_COMPILATION',
-  '-DG_LOG_DOMAIN="Gtk"',
-  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-  '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
-  '-DGTK_HOST="@0@"'.format(host_machine.system()),
-  '-DGTK_DATA_PREFIX="@0@"'.format(gtk_prefix),
-]
 
 gtk_gen_headers = [
   gtkmarshal_h,
