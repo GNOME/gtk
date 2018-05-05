@@ -3602,7 +3602,8 @@ static guint tick_callback_id;
  * have to worry about when a #GdkFrameClock is assigned to a widget.
  *
  * Returns: an id for the connection of this callback. Remove the callback
- *     by passing it to gtk_widget_remove_tick_callback()
+ *     by passing the id returned from this function to
+ *     gtk_widget_remove_tick_callback()
  */
 guint
 gtk_widget_add_tick_callback (GtkWidget       *widget,
