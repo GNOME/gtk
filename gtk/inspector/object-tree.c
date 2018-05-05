@@ -801,6 +801,10 @@ on_hierarchy_changed (GtkWidget *widget,
     g_object_set_data (G_OBJECT (previous_toplevel), "object-controller", NULL);
 
   toplevel = gtk_widget_get_toplevel (widget);
+
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "object-controller", controller, g_object_unref);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
