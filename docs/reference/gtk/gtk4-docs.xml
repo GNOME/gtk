@@ -101,6 +101,14 @@
       <xi:include href="xml/gtkaccellabel.xml" />
     </chapter>
 
+    <chapter id="MediaSupport">
+      <title>Media Support</title>
+      <xi:include href="xml/gtkvideo.xml" />
+      <xi:include href="xml/gtkmediacontrols.xml" />
+      <xi:include href="xml/gtkmediastream.xml" />
+      <xi:include href="xml/gtkmediafile.xml" />
+    </chapter>
+
     <chapter id="ButtonWidgets">
       <title>Buttons and Toggles</title>
       <xi:include href="xml/gtkbutton.xml" />
