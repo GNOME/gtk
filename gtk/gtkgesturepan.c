@@ -268,7 +268,6 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
 
 /**
  * gtk_gesture_pan_new:
- * @widget: a #GtkWidget
  * @orientation: expected orientation
  *
  * Returns a newly created #GtkGesture that recognizes pan gestures.
@@ -276,7 +275,7 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
  * Returns: a newly created #GtkGesturePan
  **/
 GtkGesture *
-gtk_gesture_pan_new (GtkOrientation  orientation)
+gtk_gesture_pan_new (GtkOrientation orientation)
 {
   return g_object_new (GTK_TYPE_GESTURE_PAN,
                        "orientation", orientation,
