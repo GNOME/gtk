@@ -329,11 +329,11 @@ hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel;
 
   if (previous_toplevel)
-    g_object_set_data (G_OBJECT (previous_toplevel), "controller", NULL);
+    g_object_set_data (G_OBJECT (previous_toplevel), "statistics-controller", NULL);
 
   toplevel = gtk_widget_get_toplevel (widget);
   controller = gtk_event_controller_key_new ();
-  g_object_set_data_full (G_OBJECT (toplevel), "controller", controller, g_object_unref);
+  g_object_set_data_full (G_OBJECT (toplevel), "statistics-controller", controller, g_object_unref);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
