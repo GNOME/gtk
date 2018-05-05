@@ -339,7 +339,7 @@ _gdk_input_grab_pointer (GdkWindow      *window,
   GList *tmp_list;
   XEventClass event_classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
-  gint result;
+  gint result = Success;
   GdkDisplayX11 *display_impl  = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
   int (*old_handler) (Display *, XErrorEvent *);
 
@@ -387,17 +387,22 @@ _gdk_input_grab_pointer (GdkWindow      *window,
 				      GrabModeAsync, GrabModeAsync, time);
 		XSetErrorHandler (old_handler);
 
-	      /* FIXME: if failure occurs on something other than the first
-		 device, things will be badly inconsistent */
+	      /* if failure occurs on something other than the first
+	      * device, things will be badly inconsistent.
+	      * Break the loop and ungrab all previously grabbed devices.
+	      */
 	      if (result != Success)
-		return result;
+	        break;
 	    }
 	  tmp_list = tmp_list->next;
 	}
     }
-  else
+  if (! priv->extension_events || result != Success)
     {
-      tmp_list = display_impl->input_devices;
+      if (! priv->extension_events)
+        tmp_list = display_impl->input_devices;
+      else
+        tmp_list = tmp_list->prev;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -411,11 +416,14 @@ _gdk_input_grab_pointer (GdkWindow      *window,
 	      gdkdev->button_count = 0;
 	    }
 
-	  tmp_list = tmp_list->next;
+	  if (! priv->extension_events)
+	    tmp_list = tmp_list->next;
+	  else
+	    tmp_list = tmp_list->prev;
 	}
     }
 
-  return Success;
+  return result;
 }
 
 void
