@@ -101,6 +101,7 @@
 
 #include "config.h"
 
+#include <math.h>
 #include <string.h>
 
 #include  <gobject/gvaluecollector.h>
@@ -4817,16 +4818,13 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
                                         GdkEventCrossing *event)
 {
   GtkMenuPrivate *priv = menu->priv;
-  gint submenu_left = 0;
-  gint submenu_right = 0;
-  gint submenu_top = 0;
-  gint submenu_bottom = 0;
-  gint width = 0;
-  gint x_root = 0;
-  gint y_root = 0;
   GtkWidget *event_widget;
-  GtkMenuPopdownData *popdown_data;
   GdkWindow *window;
+  int submenu_left;
+  int submenu_right;
+  int submenu_top;
+  int submenu_bottom;
+  int width;
 
   g_return_if_fail (menu_item->priv->submenu != NULL);
   g_return_if_fail (event != NULL);
@@ -4841,11 +4839,13 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 
   width = gdk_window_get_width (gtk_widget_get_window (event_widget));
 
-  x_root = floor (event->x_root);
-  y_root = floor (event->y_root);
-
   if (event->x >= 0 && event->x < width)
     {
+      GtkMenuPopdownData *popdown_data;
+      /* The calculations below assume floored coordinates */
+      int x_root = floor (event->x_root);
+      int y_root = floor (event->y_root);
+
       gtk_menu_stop_navigating_submenu (menu);
 
       /* The navigation region is the triangle closest to the x/y
