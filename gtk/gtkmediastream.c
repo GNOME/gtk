@@ -483,7 +483,7 @@ gtk_media_stream_is_prepared (GtkMediaStream *self)
  *
  * Returns whether the stream has audio.
  *
- * Returns: %TRUe if the stream has audio
+ * Returns: %TRUE if the stream has audio
  */
 gboolean
 gtk_media_stream_has_audio (GtkMediaStream *self)
@@ -501,7 +501,7 @@ gtk_media_stream_has_audio (GtkMediaStream *self)
  *
  * Returns whether the stream has video.
  *
- * Returns: %TRUe if the stream has video 
+ * Returns: %TRUE if the stream has video
  */
 gboolean
 gtk_media_stream_has_video (GtkMediaStream *self)
