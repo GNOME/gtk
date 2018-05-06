@@ -30,11 +30,15 @@
  * SECTION:gtkmediafile
  * @Short_description: Open media files for use in GTK
  * @Title: GtkMediaFile
- * @See_also: #GtkMediaStream
+ * @See_also: #GtkMediaStream, #GtkVideo
  *
  * #GtkMediaFile is the implementation for media file usage with #GtkMediaStream.
  *
  * This provides a simple way to play back video files with GTK.
+ *
+ * GTK+ provides a GIO extension point for #GtkMediaFile implementations
+ * to allow for external implementations using various media frameworks.
+ * GTK+ itself includes implementations using GStreamer and ffmpeg.
  */
 
 typedef struct _GtkMediaFilePrivate GtkMediaFilePrivate;

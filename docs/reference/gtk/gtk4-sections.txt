@@ -6875,6 +6875,17 @@ gtk_media_stream_set_volume
 gtk_media_stream_realize
 gtk_media_stream_unrealize
 
+<SUBSECTION>
+gtk_media_stream_prepared
+gtk_media_stream_unprepared
+gtk_media_stream_update
+gtk_media_stream_ended
+gtk_media_stream_seek_success
+gtk_media_stream_seek_failed
+gtk_media_stream_gerror
+gtk_media_stream_error
+gtk_media_stream_error_valist
+
 <SUBSECTION Private>
 GTK_TYPE_MEDIA_STREAM
 gtk_media_stream_get_type

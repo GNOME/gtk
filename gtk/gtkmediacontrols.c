@@ -30,6 +30,7 @@
  * SECTION:gtkmediacontrols
  * @title: GtkMediaControls
  * @short_description: A widget showing controls for a media stream
+ * @see_also: #GtkVideo
  *
  * GtkMediaControls is a widget to show controls for a #GtkMediaStream
  * and giving users a way to use it.
@@ -464,6 +465,13 @@ gtk_media_controls_notify_cb (GtkMediaStream   *stream,
     update_volume (controls);
 }
 
+/**
+ * gtk_media_controls_set_media_stream:
+ * @controls: a #GtkMediaControls widget
+ * @stream: (nullable):  a #GtkMediaStream, or %NULL
+ *
+ * Sets the stream that is controlled by @controls.
+ */
 void
 gtk_media_controls_set_media_stream (GtkMediaControls *controls,
                                      GtkMediaStream   *stream)

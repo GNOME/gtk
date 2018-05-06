@@ -31,8 +31,18 @@
  *
  * #GtkMediaStream is the integration point for media playback inside GTK.
  *
- * FIXME: Write more about how frameworks should implement this thing and how
- * GTK widgets exist (once they do) that consume it.
+ * Apart from application-facing API for stream playback, #GtkMediaStream
+ * has a number of APIs that are only useful for implementations and should
+ * not be used in applications:
+ * gtk_media_stream_prepared(),
+ * gtk_media_stream_unprepared(),
+ * gtk_media_stream_update(),
+ * gtk_media_stream_ended(),
+ * gtk_media_stream_seek_success(),
+ * gtk_media_stream_seek_failed(),
+ * gtk_media_stream_gerror(),
+ * gtk_media_stream_error(),
+ * gtk_media_stream_error_valist().
  */
 
 typedef struct _GtkMediaStreamPrivate GtkMediaStreamPrivate;
@@ -448,6 +458,15 @@ gtk_media_stream_init (GtkMediaStream *self)
   priv->volume = 1.0;
 }
 
+/**
+ * gtk_media_stream_is_prepared:
+ * @self: a #GtkMediaStream
+ *
+ * Returns whether the stream has finished initializing and existence of
+ * audio and video is known.
+ *
+ * Returns: %TRUE if the stream is prepared
+ */
 gboolean
 gtk_media_stream_is_prepared (GtkMediaStream *self)
 {
@@ -458,6 +477,14 @@ gtk_media_stream_is_prepared (GtkMediaStream *self)
   return priv->prepared;
 }
 
+/**
+ * gtk_media_stream_has_audio:
+ * @self: a #GtkMediaStream
+ *
+ * Returns whether the stream has audio.
+ *
+ * Returns: %TRUe if the stream has audio
+ */
 gboolean
 gtk_media_stream_has_audio (GtkMediaStream *self)
 {
@@ -468,6 +495,14 @@ gtk_media_stream_has_audio (GtkMediaStream *self)
   return priv->has_audio;
 }
 
+/**
+ * gtk_media_stream_has_video:
+ * @self: a #GtkMediaStream
+ *
+ * Returns whether the stream has video.
+ *
+ * Returns: %TRUe if the stream has video 
+ */
 gboolean
 gtk_media_stream_has_video (GtkMediaStream *self)
 {
@@ -478,6 +513,13 @@ gtk_media_stream_has_video (GtkMediaStream *self)
   return priv->has_video;
 }
 
+/**
+ * gtk_media_stream_play:
+ * @self: a #GtkMediaStream
+ *
+ * Starts playing the stream. If the stream
+ * is in error or already playing, do nothing.
+ */
 void
 gtk_media_stream_play (GtkMediaStream *self)
 {
@@ -508,6 +550,13 @@ gtk_media_stream_play (GtkMediaStream *self)
     }
 }
 
+/**
+ * gtk_media_stream_pause:
+ * @self: a #GtkMediaStream
+ *
+ * Pauses playback of the stream. If the stream
+ * is not playing, do nothing.
+ */
 void
 gtk_media_stream_pause (GtkMediaStream *self)
 {
@@ -527,6 +576,14 @@ gtk_media_stream_pause (GtkMediaStream *self)
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
 }
 
+/**
+ * gtk_media_stream_get_playing:
+ * @self: a #GtkMediaStream
+ *
+ * Return whether the stream is currently playing.
+ *
+ * Returns: %TRUE if the stream is playing
+ */
 gboolean
 gtk_media_stream_get_playing (GtkMediaStream *self)
 {
@@ -537,6 +594,13 @@ gtk_media_stream_get_playing (GtkMediaStream *self)
   return priv->playing;
 }
 
+/**
+ * gtk_media_stream_set_playing:
+ * @self: a #GtkMediaStream
+ * @playing: whether to start or pause playback
+ *
+ * Starts or pauses playback of the stream.
+ */
 void
 gtk_media_stream_set_playing (GtkMediaStream *self,
                               gboolean        playing)
@@ -549,6 +613,14 @@ gtk_media_stream_set_playing (GtkMediaStream *self,
     gtk_media_stream_pause (self);
 }
 
+/**
+ * gtk_medai_stream_get_ended:
+ * @self: a #GtkMediaStream
+ *
+ * Returns whether the streams playback is finished.
+ *
+ * Return: %TRUE if playback is finished
+ */
 gboolean
 gtk_media_stream_get_ended (GtkMediaStream *self)
 {
@@ -559,6 +631,14 @@ gtk_media_stream_get_ended (GtkMediaStream *self)
   return priv->ended;
 }
 
+/**
+ * gtk_media_stream_get_timestamp:
+ * @self: a #GtkMediaStream
+ *
+ * Returns the current presentation timestamp in microseconds.
+ *
+ * Return: the timestamp in microseconds
+ */
 gint64
 gtk_media_stream_get_timestamp (GtkMediaStream *self)
 {

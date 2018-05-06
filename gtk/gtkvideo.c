@@ -32,8 +32,12 @@
  * SECTION:gtkvideo
  * @title: GtkVideo
  * @short_description: A widget for displaying video
+ * @see_also: #GtkMediaControls
  *
  * GtkVideo is a widget to show a #GtkMediaStream.
+ *
+ * It is commonly combined with #GtkMediaControls to give the
+ * user a way to control the playback.
  */
 
 struct _GtkVideo
