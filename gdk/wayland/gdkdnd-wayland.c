@@ -85,7 +85,8 @@ gdk_wayland_drag_context_finalize (GObject *object)
     }
 
   if (wayland_context->data_source)
-    wl_data_source_destroy (wayland_context->data_source);
+  g_clear_pointer (&wayland_context->data_source, (GDestroyNotify) wl_data_source_destroy);
+  g_clear_pointer (&wayland_context->offer, (GDestroyNotify) wl_data_offer_destroy);
 
   dnd_surface = wayland_context->dnd_surface;
 
