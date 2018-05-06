@@ -105,7 +105,8 @@ void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);
 GdkDragContext * _gdk_wayland_drop_context_new (GdkDevice             *device,
-                                                struct wl_data_device *data_device);
+                                                GdkContentFormats     *formats,
+                                                struct wl_data_offer  *offer);
 void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *surface);
 void _gdk_wayland_drag_context_set_dest_surface (GdkDragContext *context,
@@ -124,8 +125,6 @@ void gdk_wayland_drag_context_set_action (GdkDragContext *context,
 GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
 GdkDragContext * gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *surface);
 struct wl_data_source * gdk_wayland_drag_context_get_data_source  (GdkDragContext *context);
-
-void gdk_wayland_drop_context_update_targets (GdkDragContext *context);
 
 void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
                                               GdkSurface     *surface,
@@ -198,21 +197,8 @@ GdkWaylandSelection * gdk_wayland_selection_new (void);
 void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 
 
-void gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
-                                         struct wl_data_offer *wl_offer);
-void gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *display,
-                                                 struct gtk_primary_selection_offer *wp_offer);
-GdkContentFormats *gdk_wayland_selection_steal_offer (GdkDisplay *display, gpointer wl_offer);
-
-void gdk_wayland_selection_set_offer (GdkDisplay           *display,
-                                      gpointer              offer);
-gpointer gdk_wayland_selection_get_offer (GdkDisplay *display);
-GdkContentFormats *gdk_wayland_selection_get_targets (GdkDisplay *display);
-
 struct wl_data_source * gdk_wayland_selection_get_data_source (GdkSurface *owner);
 void gdk_wayland_selection_unset_data_source (GdkDisplay *display);
-gboolean gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
-                                                          uint32_t    actions);
 
 EGLSurface gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
                                                EGLConfig config);

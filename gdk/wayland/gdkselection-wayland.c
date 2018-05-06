@@ -33,51 +33,10 @@
 
 #include <string.h>
 
-typedef struct _SelectionData SelectionData;
-typedef struct _DataOfferData DataOfferData;
-
-struct _DataOfferData
-{
-  GDestroyNotify destroy_notify;
-  gpointer offer_data;
-  GdkContentFormats *targets;
-};
-
-struct _SelectionData
-{
-  DataOfferData *offer;
-};
-
 struct _GdkWaylandSelection
 {
-  /* Destination-side data */
-  SelectionData selection;
-  GHashTable *offers; /* Currently alive offers, Hashtable of wl_data_offer->DataOfferData */
-
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
 };
-
-static DataOfferData *
-data_offer_data_new (gpointer       offer,
-                     GDestroyNotify destroy_notify)
-{
-  DataOfferData *info;
-
-  info = g_slice_new0 (DataOfferData);
-  info->offer_data = offer;
-  info->destroy_notify = destroy_notify;
-  info->targets = gdk_content_formats_new (NULL, 0);
-
-  return info;
-}
-
-static void
-data_offer_data_free (DataOfferData *info)
-{
-  info->destroy_notify (info->offer_data);
-  gdk_content_formats_unref (info->targets);
-  g_slice_free (DataOfferData, info);
-}
 
 GdkWaylandSelection *
 gdk_wayland_selection_new (void)
@@ -86,45 +45,16 @@ gdk_wayland_selection_new (void)
 
   selection = g_new0 (GdkWaylandSelection, 1);
 
-  selection->offers =
-    g_hash_table_new_full (NULL, NULL, NULL,
-                           (GDestroyNotify) data_offer_data_free);
   return selection;
 }
 
 void
 gdk_wayland_selection_free (GdkWaylandSelection *selection)
 {
-  g_hash_table_destroy (selection->offers);
-
   if (selection->dnd_source)
     wl_data_source_destroy (selection->dnd_source);
 
   g_free (selection);
-}
-
-static void
-data_offer_offer (void                 *data,
-                  struct wl_data_offer *wl_data_offer,
-                  const char           *type)
-{
-  GdkWaylandSelection *selection = data;
-  GdkContentFormatsBuilder *builder;
-  DataOfferData *info;
-
-  info = g_hash_table_lookup (selection->offers, wl_data_offer);
-
-  if (!info || gdk_content_formats_contain_mime_type (info->targets, type))
-    return;
-
-  GDK_NOTE (EVENTS,
-            g_message ("data offer offer, offer %p, type = %s", wl_data_offer, type));
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_formats (builder, info->targets);
-  gdk_content_formats_builder_add_mime_type (builder, type);
-  gdk_content_formats_unref (info->targets);
-  info->targets = gdk_content_formats_builder_free_to_formats (builder);
 }
 
 static inline GdkDragAction
@@ -140,158 +70,6 @@ _wl_to_gdk_actions (uint32_t dnd_actions)
     actions |= GDK_ACTION_ASK;
 
   return actions;
-}
-
-static void
-data_offer_source_actions (void                 *data,
-                           struct wl_data_offer *wl_data_offer,
-                           uint32_t              source_actions)
-{
-  GdkDragContext *drop_context;
-  GdkDisplay *display;
-  GdkDevice *device;
-  GdkSeat *seat;
-
-  display = gdk_display_get_default ();
-  seat = gdk_display_get_default_seat (display);
-  device = gdk_seat_get_pointer (seat);
-  drop_context = gdk_wayland_device_get_drop_context (device);
-  if (drop_context == NULL)
-    return;
-
-  drop_context->actions = _wl_to_gdk_actions (source_actions);
-
-  GDK_DISPLAY_NOTE (display, EVENTS,
-            g_message ("data offer source actions, offer %p, actions %d", wl_data_offer, source_actions));
-
-  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
-                                        GDK_CURRENT_TIME);
-}
-
-static void
-data_offer_action (void                 *data,
-                   struct wl_data_offer *wl_data_offer,
-                   uint32_t              action)
-{
-  GdkDragContext *drop_context;
-  GdkDisplay *display;
-  GdkDevice *device;
-  GdkSeat *seat;
-
-  display = gdk_display_get_default ();
-  seat = gdk_display_get_default_seat (display);
-  device = gdk_seat_get_pointer (seat);
-  drop_context = gdk_wayland_device_get_drop_context (device);
-  if (drop_context == NULL)
-    return;
-
-  drop_context->action = _wl_to_gdk_actions (action);
-
-  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
-                                        GDK_CURRENT_TIME);
-}
-
-static const struct wl_data_offer_listener data_offer_listener = {
-  data_offer_offer,
-  data_offer_source_actions,
-  data_offer_action
-};
-
-static SelectionData *
-selection_lookup_offer_by_atom (GdkWaylandSelection *selection)
-{
-  return &selection->selection;
-}
-
-void
-gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
-                                    struct wl_data_offer *wl_offer)
-{
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  DataOfferData *info;
-
-  info = g_hash_table_lookup (selection->offers, wl_offer);
-
-  if (!info)
-    {
-      info = data_offer_data_new (wl_offer,
-                                  (GDestroyNotify) wl_data_offer_destroy);
-      g_hash_table_insert (selection->offers, wl_offer, info);
-      wl_data_offer_add_listener (wl_offer,
-                                  &data_offer_listener,
-                                  selection);
-    }
-}
-
-GdkContentFormats *
-gdk_wayland_selection_steal_offer (GdkDisplay *display,
-                                   gpointer    wl_offer)
-{
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  GdkContentFormats *formats;
-  DataOfferData *info;
-
-  info = g_hash_table_lookup (selection->offers, wl_offer);
-  if (info == NULL)
-    return NULL;
-
-  g_hash_table_steal (selection->offers, wl_offer);
-  formats = info->targets;
-  g_slice_free (DataOfferData, info);
-
-  return formats;
-}
-
-void
-gdk_wayland_selection_set_offer (GdkDisplay *display,
-                                 gpointer    wl_offer)
-{
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  struct wl_data_offer *prev_offer;
-  SelectionData *selection_data;
-  DataOfferData *info;
-
-  info = g_hash_table_lookup (selection->offers, wl_offer);
-
-  prev_offer = gdk_wayland_selection_get_offer (display);
-
-  if (prev_offer)
-    g_hash_table_remove (selection->offers, prev_offer);
-
-  selection_data = selection_lookup_offer_by_atom (selection);
-
-  if (selection_data)
-    {
-      selection_data->offer = info;
-    }
-}
-
-gpointer
-gdk_wayland_selection_get_offer (GdkDisplay *display)
-{
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  const SelectionData *data;
-
-  data = selection_lookup_offer_by_atom (selection);
-
-  if (data && data->offer)
-    return data->offer->offer_data;
-
-  return NULL;
-}
-
-GdkContentFormats *
-gdk_wayland_selection_get_targets (GdkDisplay *display)
-{
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  const SelectionData *data;
-
-  data = selection_lookup_offer_by_atom (selection);
-
-  if (data && data->offer)
-    return data->offer->targets;
-
-  return NULL;
 }
 
 static void
@@ -565,26 +343,3 @@ _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
   return sanitize_utf8 (str, TRUE);
 }
 
-gboolean
-gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
-                                                 uint32_t    action)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  struct wl_data_offer *offer;
-  uint32_t all_actions = 0;
-
-  offer = gdk_wayland_selection_get_offer (display);
-
-  if (!offer)
-    return FALSE;
-
-  if (action != 0)
-    all_actions = WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY |
-      WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE |
-      WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
-
-  if (display_wayland->data_device_manager_version >=
-      WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION)
-    wl_data_offer_set_actions (offer, all_actions, action);
-  return TRUE;
-}

@@ -229,6 +229,11 @@ struct _GdkWaylandSeat
   uint32_t server_repeat_rate;
   uint32_t server_repeat_delay;
 
+  struct wl_data_offer *pending_offer;
+  GdkContentFormatsBuilder *pending_builder;
+  GdkDragAction pending_source_actions;
+  GdkDragAction pending_action;
+
   struct wl_callback *repeat_callback;
   guint32 repeat_timer;
   guint32 repeat_key;
@@ -1056,6 +1061,111 @@ _gdk_wayland_device_get_keymap (GdkDevice *device)
 }
 
 static void
+gdk_wayland_seat_discard_pending_offer (GdkWaylandSeat *seat)
+{
+  if (seat->pending_builder)
+    {
+      GdkContentFormats *ignore = gdk_content_formats_builder_free_to_formats (seat->pending_builder);
+      gdk_content_formats_unref (ignore);
+      seat->pending_builder = NULL;
+    }
+  g_clear_pointer (&seat->pending_offer, (GDestroyNotify) wl_data_offer_destroy);
+  seat->pending_source_actions = 0;
+  seat->pending_action = 0;
+}
+
+static inline GdkDragAction
+gdk_wayland_actions_to_gdk_actions (uint32_t dnd_actions)
+{
+  GdkDragAction actions = 0;
+
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY)
+    actions |= GDK_ACTION_COPY;
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE)
+    actions |= GDK_ACTION_MOVE;
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
+    actions |= GDK_ACTION_ASK;
+
+  return actions;
+}
+
+static void
+data_offer_offer (void                 *data,
+                  struct wl_data_offer *offer,
+                  const char           *type)
+{
+  GdkWaylandSeat *seat = data;
+
+  if (seat->pending_offer != offer)
+    {
+      GDK_DISPLAY_NOTE (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS,
+                        g_message ("%p: offer for unknown offer %p of %s",
+                                   seat, offer, type));
+      return;
+    }
+
+  gdk_content_formats_builder_add_mime_type (seat->pending_builder, type);
+}
+
+static void
+data_offer_source_actions (void                 *data,
+                           struct wl_data_offer *offer,
+                           uint32_t              source_actions)
+{
+  GdkWaylandSeat *seat = data;
+  GdkDragContext *drop_context;
+  GdkDevice *device;
+
+  if (offer == seat->pending_offer)
+    {
+      seat->pending_source_actions = gdk_wayland_actions_to_gdk_actions (source_actions);
+      return;
+    }
+  
+  device = gdk_seat_get_pointer (GDK_SEAT (seat));
+  drop_context = gdk_wayland_device_get_drop_context (device);
+  if (drop_context == NULL)
+    return;
+
+  drop_context->actions = gdk_wayland_actions_to_gdk_actions (source_actions);
+
+  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
+                                        GDK_CURRENT_TIME);
+}
+
+static void
+data_offer_action (void                 *data,
+                   struct wl_data_offer *offer,
+                   uint32_t              action)
+{
+  GdkWaylandSeat *seat = data;
+  GdkDragContext *drop_context;
+  GdkDevice *device;
+
+  if (offer == seat->pending_offer)
+    {
+      seat->pending_action = gdk_wayland_actions_to_gdk_actions (action);
+      return;
+    }
+  
+  device = gdk_seat_get_pointer (GDK_SEAT (seat));
+  drop_context = gdk_wayland_device_get_drop_context (device);
+  if (drop_context == NULL)
+    return;
+
+  drop_context->action = gdk_wayland_actions_to_gdk_actions (action);
+
+  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
+                                        GDK_CURRENT_TIME);
+}
+
+static const struct wl_data_offer_listener data_offer_listener = {
+  data_offer_offer,
+  data_offer_source_actions,
+  data_offer_action
+};
+
+static void
 data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
                         struct wl_data_offer  *offer)
@@ -1066,7 +1176,16 @@ data_device_data_offer (void                  *data,
             g_message ("data device data offer, data device %p, offer %p",
                        data_device, offer));
 
-  gdk_wayland_selection_ensure_offer (seat->display, offer);
+  gdk_wayland_seat_discard_pending_offer (seat);
+
+  seat->pending_offer = offer;
+  wl_data_offer_add_listener (offer,
+                              &data_offer_listener,
+                              seat);
+
+  seat->pending_builder = gdk_content_formats_builder_new ();
+  seat->pending_source_actions = 0;
+  seat->pending_action = 0;
 }
 
 static void
@@ -1080,12 +1199,21 @@ data_device_enter (void                  *data,
 {
   GdkWaylandSeat *seat = data;
   GdkSurface *dest_surface, *dnd_owner;
+  GdkContentFormats *formats;
   GdkDevice *device;
 
   dest_surface = wl_surface_get_user_data (surface);
 
   if (!GDK_IS_SURFACE (dest_surface))
     return;
+
+  if (offer != seat->pending_offer)
+    {
+      GDK_DISPLAY_NOTE (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS,
+                        g_message ("%p: enter event for unknown offer %p, expected %p",
+                                   seat, offer, seat->pending_offer));
+      return;
+    }
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device enter, data device %p serial %u, surface %p, x %f y %f, offer %p",
@@ -1105,10 +1233,12 @@ data_device_enter (void                  *data,
       g_warning ("No device for DND enter, ignoring.");
       return;
     }
-  seat->drop_context = _gdk_wayland_drop_context_new (device,
-                                                      seat->data_device);
 
-  gdk_wayland_drop_context_update_targets (seat->drop_context);
+  formats = gdk_content_formats_builder_free_to_formats (seat->pending_builder);
+  seat->pending_builder = NULL;
+  seat->pending_offer = NULL;
+
+  seat->drop_context = _gdk_wayland_drop_context_new (device, formats, offer);
 
   dnd_owner = seat->foreign_dnd_surface;
 
@@ -1119,10 +1249,11 @@ data_device_enter (void                  *data,
   _gdk_wayland_drag_context_set_coords (seat->drop_context,
                                         wl_fixed_to_double (x),
                                         wl_fixed_to_double (y));
+
+  gdk_wayland_seat_discard_pending_offer (seat);
+
   _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_ENTER,
                                         GDK_CURRENT_TIME);
-
-  gdk_wayland_selection_set_offer (seat->display, offer);
 }
 
 static void
@@ -1168,7 +1299,6 @@ data_device_motion (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
-  gdk_wayland_drop_context_update_targets (seat->drop_context);
   _gdk_wayland_drag_context_set_coords (seat->drop_context,
                                         wl_fixed_to_double (x),
                                         wl_fixed_to_double (y));
@@ -1198,9 +1328,25 @@ data_device_selection (void                  *data,
   GdkContentFormats *formats;
 
   if (offer)
-    formats = gdk_wayland_selection_steal_offer (seat->display, offer);
+    {
+      if (offer == seat->pending_offer)
+        {
+          formats = gdk_content_formats_builder_free_to_formats (seat->pending_builder);
+          seat->pending_builder = NULL;
+          seat->pending_offer = NULL;
+        }
+      else
+        {
+          formats = gdk_content_formats_new (NULL, 0);
+          offer = NULL;
+        }
+
+      gdk_wayland_seat_discard_pending_offer (seat);
+    }
   else
-    formats = gdk_content_formats_new (NULL, 0);
+    {
+      formats = gdk_content_formats_new (NULL, 0);
+    }
 
   gdk_wayland_clipboard_claim_remote (GDK_WAYLAND_CLIPBOARD (seat->clipboard),
                                       offer,
