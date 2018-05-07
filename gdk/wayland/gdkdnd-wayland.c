@@ -84,7 +84,6 @@ gdk_wayland_drag_context_finalize (GObject *object)
       gdk_drag_context_set_cursor (context, NULL);
     }
 
-  if (wayland_context->data_source)
   g_clear_pointer (&wayland_context->data_source, (GDestroyNotify) wl_data_source_destroy);
   g_clear_pointer (&wayland_context->offer, (GDestroyNotify) wl_data_offer_destroy);
 
