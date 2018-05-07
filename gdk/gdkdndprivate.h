@@ -86,7 +86,6 @@ struct _GdkDragContext {
   GdkSurface *drag_surface;
 
   GdkContentProvider *content;
-  GdkContentFormats *formats;
   GdkDragAction actions;
   GdkDragAction suggested_action;
   GdkDragAction action;
