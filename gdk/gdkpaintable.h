@@ -52,7 +52,7 @@ typedef enum {
 } GdkPaintableFlags;
 
 /**
- * GdkPaintableIface:
+ * GdkPaintableInterface:
  * @snapshot: Snapshot the paintable. The given @width and @height are
  *     guaranteed to be larger than 0.0. The resulting snapshot must modify
  *     only the area in the rectangle from (0,0) to (width, height).

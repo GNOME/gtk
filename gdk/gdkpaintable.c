@@ -30,7 +30,7 @@ void            gtk_snapshot_push_debug                 (GdkSnapshot            
 void            gtk_snapshot_pop                        (GdkSnapshot            *snapshot);
 
 /**
- * SECTION:paintable
+ * SECTION:gdkpaintable
  * @Title: GdkPaintable
  * @Short_description: An interface for a paintable region
  * @See_also: #ClutterContent, #GtkImage, #GdkTexture, #GtkSnapshot
@@ -71,6 +71,12 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * #GdkPaintable::invalidate-size signal.
  * And just like for contents, if a paintable is known to never change its size,
  * it will set the %GDK_PAINTABLE_STATIC_SIZE flag.
+ *
+ * Besides API for applications, there are some functions that are only
+ * useful for implementing subclasses and should not be used by applications:
+ * gdk_paintable_invalidate_contents(),
+ * gdk_paintable_invalidate_size(),
+ * gdk_paintable_new_empty().
  */
 
 G_DEFINE_INTERFACE (GdkPaintable, gdk_paintable, G_TYPE_OBJECT)
@@ -149,8 +155,6 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    *
    * Examples for such an event would be videos changing to the next frame or
    * the icon theme for an icon changing.
-   *
-   * Since: 4.0
    */
   signals[INVALIDATE_CONTENTS] =
     g_signal_new ("invalidate-contents",
@@ -172,8 +176,6 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    *
    * Examples for such an event would be a paintable displaying the contents of a toplevel
    * surface being resized.
-   *
-   * Since: 4.0
    */
   signals[INVALIDATE_SIZE] =
     g_signal_new ("invalidate-size",
@@ -195,9 +197,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
  * Snapshots the given paintable with the given @width and @height at the
  * current (0,0) offset of the @snapshot. If @width and @height are not larger
  * than zero, this function will do nothing.
- *
- * Since: 4.0
- **/
+ */
 void
 gdk_paintable_snapshot (GdkPaintable *paintable,
                         GdkSnapshot  *snapshot,
@@ -240,7 +240,7 @@ gdk_paintable_is_immutable (GdkPaintable *paintable)
  *
  * Returns: (transfer full): An immutable paintable for the current
  *     contents of @paintable.
- **/
+ */
 GdkPaintable *
 gdk_paintable_get_current_image (GdkPaintable *paintable)
 {
@@ -264,7 +264,7 @@ gdk_paintable_get_current_image (GdkPaintable *paintable)
  * See #GdkPaintableFlags for the flags and what they mean.
  *
  * Returns: The #GdkPaintableFlags for this paintable.
- **/
+ */
 GdkPaintableFlags
 gdk_paintable_get_flags (GdkPaintable *paintable)
 {
@@ -291,7 +291,7 @@ gdk_paintable_get_flags (GdkPaintable *paintable)
  * values are never returned.
  *
  * Returns: the intrinsic width of @paintable or 0 if none.
- **/
+ */
 int
 gdk_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
@@ -318,7 +318,7 @@ gdk_paintable_get_intrinsic_width (GdkPaintable *paintable)
  * values are never returned.
  *
  * Returns: the intrinsic height of @paintable or 0 if none.
- **/
+ */
 int
 gdk_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
@@ -351,7 +351,7 @@ gdk_paintable_get_intrinsic_height (GdkPaintable *paintable)
  * Negative values are never returned.
  *
  * Returns: the intrinsic aspect ratio of @paintable or 0.0 if none.
- **/
+ */
 double
 gdk_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
@@ -375,7 +375,7 @@ gdk_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
  *
  * If a @paintable reports the %GDK_PAINTABLE_STATIC_CONTENTS flag,
  * it must not call this function.
- **/
+ */
 void
 gdk_paintable_invalidate_contents (GdkPaintable *paintable)
 {
@@ -397,7 +397,7 @@ gdk_paintable_invalidate_contents (GdkPaintable *paintable)
  *
  * If a @paintable reports the %GDK_PAINTABLE_STATIC_SIZE flag,
  * it must not call this function.
- **/
+ */
 void
 gdk_paintable_invalidate_size (GdkPaintable *paintable)
 {
@@ -636,7 +636,7 @@ gdk_empty_paintable_init (GdkEmptyPaintable *self)
  * #GtkMediaStream before receiving the first frame).
  *
  * Returns: (transfer full): a #GdkPaintable
- **/
+ */
 GdkPaintable *
 gdk_paintable_new_empty (int intrinsic_width,
                          int intrinsic_height)

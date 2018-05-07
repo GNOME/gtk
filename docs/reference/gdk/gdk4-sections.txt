@@ -698,20 +698,27 @@ gdk_event_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Paintable</TITLE>
-<FILE>paintable</FILE>
+<FILE>gdkpaintable</FILE>
+<TITLE>GdkPaintable/TITLE>
 GdkPaintable
-gdk_paintable_snapshot
+GdkPaintableFlags
 gdk_paintable_get_current_image
+gdk_paintable_snapshot
 gdk_paintable_get_flags
 gdk_paintable_get_intrinsic_width
 gdk_paintable_get_intrinsic_height
 gdk_paintable_get_intrinsic_aspect_ratio
 gdk_paintable_compute_concrete_size
+
+<SUBSECTION>
 gdk_paintable_invalidate_contents
 gdk_paintable_invalidate_size
 gdk_paintable_new_empty
-<SECTION>
+
+<SUBSECTION Private>
+GDK_TYPE_PAINTABLE
+gdk_paintable_get_type
+</SECTION>
 
 <SECTION>
 <TITLE>Textures</TITLE>
@@ -1318,3 +1325,4 @@ GDK_CONTENT_DESERIALIZER
 GDK_IS_CONTENT_DESERIALIZER
 gdk_content_deserializer_get_type
 </SECTION>
+
