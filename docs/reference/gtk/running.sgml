@@ -309,7 +309,7 @@ nevertheless.
       <listitem><para>Use a legacy OpenGL context</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>gl-legacy</term>
+      <term>gl-gles</term>
       <listitem><para>Use a GLES OpenGL context</para></listitem>
     </varlistentry>
     <varlistentry>
@@ -319,11 +319,6 @@ nevertheless.
     <varlistentry>
       <term>vulkan-validate</term>
       <listitem><para>Load the Vulkan validation layer, if available</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>cairo-image</term>
-      <listitem><para>Use image surfaces for cairo rendering. This essentially
-         turns off all hardware acceleration with the cairo renderer</para></listitem>
     </varlistentry>
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
@@ -353,6 +348,14 @@ nevertheless.
       <listitem><para>OpenGL renderer information</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>shaders</term>
+      <listitem><para>Shaders</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>ssurface</term>
+      <listitem><para>Surfaces</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>vulkan</term>
       <listitem><para>Vulkan renderer information</para></listitem>
     </varlistentry>
@@ -367,6 +370,10 @@ nevertheless.
   </variablelist>
   A number of options affect behavior instead of logging:
   <variablelist>
+    <varlistentry>
+      <term>diff</term>
+      <listitem><para>Show differences</para></listitem>
+    </varlistentry>
     <varlistentry>
       <term>geometry</term>
       <listitem><para>Show borders</para></listitem>
