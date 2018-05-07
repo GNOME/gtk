@@ -253,14 +253,14 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 }
 
 static void
-gdk_wayland_drag_context_read_async (GdkDragContext      *context,
+gdk_wayland_drag_context_read_async (GdkDrop             *drop,
                                      GdkContentFormats   *formats,
                                      int                  io_priority,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
 {
-  GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (drop);
   GdkDisplay *display;
   GInputStream *stream;
   const char *mime_type;
@@ -268,16 +268,16 @@ gdk_wayland_drag_context_read_async (GdkDragContext      *context,
   GError *error = NULL;
   GTask *task;
 
-  display = gdk_drag_context_get_display (context),
-  task = g_task_new (context, cancellable, callback, user_data);
+  display = gdk_drop_get_display (drop),
+  task = g_task_new (drop, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_drag_context_read_async);
 
   GDK_DISPLAY_NOTE (display, DND, char *s = gdk_content_formats_to_string (formats);
-                 g_message ("%p: read for %s", context, s);
+                 g_message ("%p: read for %s", drop, s);
                  g_free (s); );
   mime_type = gdk_content_formats_match_mime_type (formats,
-                                                   gdk_drag_context_get_formats (context));
+                                                   gdk_drop_get_formats (drop));
   if (mime_type == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
@@ -300,14 +300,14 @@ gdk_wayland_drag_context_read_async (GdkDragContext      *context,
 }
 
 static GInputStream *
-gdk_wayland_drag_context_read_finish (GdkDragContext  *context,
+gdk_wayland_drag_context_read_finish (GdkDrop         *drop,
                                       const char     **out_mime_type,
                                       GAsyncResult    *result,
                                       GError         **error)
 {
   GTask *task;
 
-  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (context)), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (drop)), NULL);
   task = G_TASK (result);
   g_return_val_if_fail (g_task_get_source_tag (task) == gdk_wayland_drag_context_read_async, NULL);
 
@@ -407,17 +407,19 @@ static void
 gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDropClass *drop_class = GDK_DROP_CLASS (klass);
   GdkDragContextClass *context_class = GDK_DRAG_CONTEXT_CLASS (klass);
 
   object_class->finalize = gdk_wayland_drag_context_finalize;
+
+  drop_class->read_async = gdk_wayland_drag_context_read_async;
+  drop_class->read_finish = gdk_wayland_drag_context_read_finish;
 
   context_class->drag_status = gdk_wayland_drag_context_drag_status;
   context_class->drag_abort = gdk_wayland_drag_context_drag_abort;
   context_class->drag_drop = gdk_wayland_drag_context_drag_drop;
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
-  context_class->read_async = gdk_wayland_drag_context_read_async;
-  context_class->read_finish = gdk_wayland_drag_context_read_finish;
   context_class->get_drag_surface = gdk_wayland_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
   context_class->drop_done = gdk_wayland_drag_context_drop_done;

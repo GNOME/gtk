@@ -38,6 +38,17 @@ struct _GdkDrop {
 
 struct _GdkDropClass {
   GObjectClass parent_class;
+
+  void                  (* read_async)                          (GdkDrop                *self,
+                                                                 GdkContentFormats      *formats,
+                                                                 int                     io_priority,
+                                                                 GCancellable           *cancellable,
+                                                                 GAsyncReadyCallback     callback,
+                                                                 gpointer                user_data);
+  GInputStream *        (* read_finish)                         (GdkDrop                *self,
+                                                                 const char            **out_mime_type,
+                                                                 GAsyncResult           *result,
+                                                                 GError                **error);
 };
 
 

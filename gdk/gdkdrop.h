@@ -43,6 +43,19 @@ GdkDevice *             gdk_drop_get_device             (GdkDrop                
 GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_drop_get_formats            (GdkDrop                *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gdk_drop_read_async             (GdkDrop                *self,
+                                                         const char            **mime_types,
+                                                         int                     io_priority,
+                                                         GCancellable           *cancellable,
+                                                         GAsyncReadyCallback     callback,
+                                                         gpointer                user_data);
+GDK_AVAILABLE_IN_ALL
+GInputStream *          gdk_drop_read_finish            (GdkDrop                *self,
+                                                         const char            **out_mime_type,
+                                                         GAsyncResult           *result,
+                                                         GError                **error);
+
 G_END_DECLS
 
 #endif /* __GDK_DROP_H__ */

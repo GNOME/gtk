@@ -1053,14 +1053,14 @@ grab_data_from_hdata (GTask  *task,
 }
 
 static void
-gdk_win32_drop_context_read_async (GdkDragContext      *context,
+gdk_win32_drop_context_read_async (GdkDrop             *drop,
                                    GdkContentFormats   *formats,
                                    int                  io_priority,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
-  GdkWin32DropContext       *context_win32 = GDK_WIN32_DROP_CONTEXT (context);
+  GdkWin32DropContext       *context_win32 = GDK_WIN32_DROP_CONTEXT (drop);
   GTask                     *task;
   target_drag_context       *tctx;
   const char * const        *mime_types;
@@ -1073,16 +1073,16 @@ gdk_win32_drop_context_read_async (GdkDragContext      *context,
   gsize                      data_len;
   GInputStream              *stream;
 
-  task = g_task_new (context, cancellable, callback, user_data);
+  task = g_task_new (drop, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_win32_drop_context_read_async);
 
-  tctx = find_droptarget_for_target_context (context);
+  tctx = find_droptarget_for_target_context (GDK_DRAG_CONTEXT (drop));
 
   if (tctx == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
-                               _("Failed to find target context record for context 0x%p"), context);
+                               _("Failed to find target context record for context 0x%p"), drop);
       return;
     }
 
@@ -1171,15 +1171,15 @@ gdk_win32_drop_context_read_async (GdkDragContext      *context,
 }
 
 static GInputStream *
-gdk_win32_drop_context_read_finish (GdkDragContext  *context,
-                                    const char     **out_mime_type,
-                                    GAsyncResult    *result,
-                                    GError         **error)
+gdk_win32_drop_context_read_finish (GdkDrop       *drop,
+                                    const char   **out_mime_type,
+                                    GAsyncResult  *result,
+                                    GError       **error)
 {
   GTask *task;
   GInputStream *stream;
 
-  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (context)), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (drop)), NULL);
   task = G_TASK (result);
   g_return_val_if_fail (g_task_get_source_tag (task) == gdk_win32_drop_context_read_async, NULL);
 
