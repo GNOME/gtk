@@ -50,7 +50,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-0 example-0.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-0 example-0.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
 
@@ -160,7 +160,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-1 example-1.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-1 example-1.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
   </section>
@@ -238,7 +238,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-2 example-2.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-2 example-2.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
   </section>
@@ -264,7 +264,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-3 example-3.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
 
@@ -1078,7 +1078,7 @@ example_app_window_init (ExampleAppWindow *win)
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-4 example-4.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-4 example-4.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
   </section>
