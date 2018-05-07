@@ -9,15 +9,13 @@
       <object class="GtkBox" id="vbox">
         <child>
           <object class="GtkGrid" id="grid">
-            <property name="visible">True</property>
             <property name="margin">6</property>
             <property name="row-spacing">12</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="fontlabel">
-                <property name="visible">True</property>
                 <property name="label">_Font:</property>
-                <property name="use-underline">True</property>
+                <property name="use-underline">1</property>
                 <property name="mnemonic-widget">font</property>
                 <property name="xalign">1</property>
               </object>
@@ -28,7 +26,6 @@
             </child>
             <child>
               <object class="GtkFontButton" id="font">
-                <property name="visible">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -37,9 +34,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="transitionlabel">
-                <property name="visible">True</property>
                 <property name="label">_Transition:</property>
-                <property name="use-underline">True</property>
+                <property name="use-underline">1</property>
                 <property name="mnemonic-widget">transition</property>
                 <property name="xalign">1</property>
               </object>
@@ -50,7 +46,6 @@
             </child>
             <child>
               <object class="GtkComboBoxText" id="transition">
-                <property name="visible">True</property>
                 <items>
                   <item translatable="yes" id="none">None</item>
                   <item translatable="yes" id="crossfade">Fade</item>
