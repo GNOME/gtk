@@ -46,7 +46,7 @@ broadwayd :5
 Then point your web browser at <literal>http://127.0.0.1:8085</literal>.
 Start your applications like this:
 <programlisting>
-GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 gtk3-demo
+GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 gtk4-demo
 </programlisting>
 </para>
 
