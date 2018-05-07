@@ -112,19 +112,6 @@ void             gdk_drop_finish        (GdkDragContext   *context,
                                          gboolean          success,
                                          guint32           time_);
 
-GDK_AVAILABLE_IN_ALL
-void                    gdk_drop_read_async             (GdkDragContext        *context,
-                                                         const char           **mime_types,
-                                                         int                    io_priority,
-                                                         GCancellable          *cancellable,
-                                                         GAsyncReadyCallback    callback,
-                                                         gpointer               user_data);
-GDK_AVAILABLE_IN_ALL
-GInputStream *          gdk_drop_read_finish            (GdkDragContext        *context,
-                                                         const char           **out_mime_type,
-                                                         GAsyncResult          *result,
-                                                         GError               **error);
-
 /* Source side */
 
 GDK_AVAILABLE_IN_ALL
