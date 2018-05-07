@@ -31,26 +31,25 @@
  * @Title: GtkWidgetPaintable
  * @see_also: #GtkWidget, #GdkPaintable
  *
- * #GtkWidgetPaintable is an implementation of the #GdkPaintable interface 
+ * GtkWidgetPaintable is an implementation of the #GdkPaintable interface 
  * that allows displaying the contents of a #GtkWidget.
  *
- * #GtkWidgetPaintable will also take care of the widget not being in a
+ * GtkWidgetPaintable will also take care of the widget not being in a
  * state where it can be drawn (like when it isn't shown) and just draw
  * nothing or where it does not have a size (like when it is hidden) and
  * report no size in that case.
  *
- * Of course, #GtkWidgetPaintable allows you to monitor widgets for size
- * changes by emitting the GdkPaintable::invalidate-size signal whenever
+ * Of course, GtkWidgetPaintable allows you to monitor widgets for size
+ * changes by emitting the #GdkPaintable::invalidate-size signal whenever
  * the size of the widget changes as well as for visual changes by
- * emitting the GdkPaintable::invalidate-contents signal whenever the
+ * emitting the #GdkPaintable::invalidate-contents signal whenever the
  * widget changes.
  *
- * You can of course use a #GtkWidgetPaintable everywhere a
+ * You can of course use a GtkWidgetPaintable everywhere a
  * #GdkPaintable is allowed, including using it on a #GtkImage (or one
- * of its parents) that it was set on itself via
- * gtk_image_set_from_paintable(). The paintable will take care of recursion
- * when this happens.  
- * If you do this however, make sure to set the GtkImage:can-shrink property
+ * of its parents) that it was set on itself via gtk_image_set_from_paintable().
+ * The paintable will take care of recursion when this happens. If you do
+ * this however, make sure to set the #GtkImage:can-shrink property
  * to %TRUE or you might end up with an infinitely growing image.
  */
 struct _GtkWidgetPaintable

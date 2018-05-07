@@ -44,11 +44,11 @@
  * a cairo context, and maintains a stack of render nodes and their associated
  * transformations.
  *
- * The node at the top of the stack is the the one that gtk_snapshot_append()
- * operates on. Use the gtk_snapshot_push() and gtk_snapshot_pop() functions to
- * change the current node.
+ * The node at the top of the stack is the the one that gtk_snapshot_append_…
+ * functions operate on. Use the gtk_snapshot_push_… functions and gtk_snapshot_pop()
+ * to change the current node.
  *
- * The typical way to obtain a #GtkSnapshot object is as an argument to
+ * The typical way to obtain a GtkSnapshot object is as an argument to
  * the #GtkWidget::snapshot vfunc. If you need to create your own GtkSnapshot,
  * use gtk_snapshot_new().
  */
