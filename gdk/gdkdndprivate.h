@@ -45,16 +45,6 @@ struct _GdkDragContextClass {
   void        (*drop_finish)   (GdkDragContext  *context,
                                 gboolean         success,
                                 guint32          time_);
-  void                  (* read_async)                          (GdkDragContext         *context,
-                                                                 GdkContentFormats      *formats,
-                                                                 int                     io_priority,
-                                                                 GCancellable           *cancellable,
-                                                                 GAsyncReadyCallback     callback,
-                                                                 gpointer                user_data);
-  GInputStream *        (* read_finish)                         (GdkDragContext         *context,
-                                                                 const char            **out_mime_type,
-                                                                 GAsyncResult           *result,
-                                                                 GError                **error);
   GdkSurface*  (*get_drag_surface) (GdkDragContext *context);
   void        (*set_hotspot)   (GdkDragContext  *context,
                                 gint             hot_x,

@@ -373,40 +373,6 @@ gdk_drag_context_finalize (GObject *object)
 }
 
 static void
-gdk_drag_context_read_local_async (GdkDragContext      *context,
-                                   GdkContentFormats   *formats,
-                                   int                  io_priority,
-                                   GCancellable        *cancellable,
-                                   GAsyncReadyCallback  callback,
-                                   gpointer             user_data)
-{
-  GTask *task;
-
-  task = g_task_new (context, cancellable, callback, user_data);
-  g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, gdk_drag_context_read_local_async);
-
-  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                                 _("Reading not implemented."));
-  g_object_unref (task);
-}
-
-static GInputStream *
-gdk_drag_context_read_local_finish (GdkDragContext  *context,
-                                    const char     **out_mime_type,
-                                    GAsyncResult    *result,
-                                    GError         **error)
-{
-  g_return_val_if_fail (g_task_is_valid (result, context), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drag_context_read_local_async, NULL);
-
-  if (out_mime_type)
-    *out_mime_type = g_task_get_task_data (G_TASK (result));
-
-  return g_task_propagate_pointer (G_TASK (result), error);
-}
-
-static void
 gdk_drag_context_class_init (GdkDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -740,75 +706,6 @@ gdk_drag_context_write_finish (GdkDragContext *context,
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drag_context_write_async, FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error); 
-}
-
-/**
- * gdk_drop_read_async:
- * @context: a #GdkDragContext
- * @mime_types: (array zero-terminated=1) (element-type utf8): pointer to an array of mime types
- * @io_priority: the io priority for the read operation
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure): the data to pass to @callback
- *
- * Asynchronously read the dropped data from a DND context
- * in a format that complies with one of the mime types.
- */
-void
-gdk_drop_read_async (GdkDragContext      *context,
-                     const char         **mime_types,
-                     int                  io_priority,
-                     GCancellable        *cancellable,
-                     GAsyncReadyCallback  callback,
-                     gpointer             user_data)
-{
-  GdkContentFormats *formats;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (mime_types != NULL && mime_types[0] != NULL);
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (callback != NULL);
-
-  formats = gdk_content_formats_new (mime_types, g_strv_length ((char **) mime_types));
-
-  GDK_DRAG_CONTEXT_GET_CLASS (context)->read_async (context,
-                                                    formats,
-                                                    io_priority,
-                                                    cancellable,
-                                                    callback,
-                                                    user_data);
-
-  gdk_content_formats_unref (formats);
-}
-
-/**
- * gdk_drop_read_finish:
- * @context: a #GdkDragContext
- * @out_mime_type: (out) (type utf8): return location for the used mime type
- * @result: a #GAsyncResult
- * @error: (allow-none): location to store error information on failure, or %NULL
- *
- * Finishes an async drop read operation, see gdk_drop_read_async().
- *
- * Returns: (nullable) (transfer full): the #GInputStream, or %NULL
- */
-GInputStream *
-gdk_drop_read_finish (GdkDragContext *context,
-                      const char    **out_mime_type,
-                      GAsyncResult   *result,
-                      GError        **error)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  if (g_async_result_is_tagged (result, gdk_drag_context_read_local_async))
-    {
-      return gdk_drag_context_read_local_finish (context, out_mime_type, result, error);
-    }
-  else
-    {
-      return GDK_DRAG_CONTEXT_GET_CLASS (context)->read_finish (context, out_mime_type, result, error);
-    }
 }
 
 /**
