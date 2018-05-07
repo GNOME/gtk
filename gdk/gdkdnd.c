@@ -41,6 +41,7 @@ struct _GdkDragContextPrivate
 {
   GdkDisplay *display;
   GdkDevice *device;
+  GdkContentFormats *formats;
 };
 
 static struct {
@@ -131,9 +132,11 @@ gdk_drag_context_get_display (GdkDragContext *context)
 GdkContentFormats *
 gdk_drag_context_get_formats (GdkDragContext *context)
 {
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->formats;
+  return priv->formats;
 }
 
 /**
@@ -255,13 +258,23 @@ gdk_drag_context_set_property (GObject      *gobject,
     case PROP_CONTENT:
       context->content = g_value_dup_object (value);
       if (context->content)
-        context->formats = gdk_content_provider_ref_formats (context->content);
+        priv->formats = gdk_content_provider_ref_formats (context->content);
       break;
 
     case PROP_DEVICE:
       priv->device = g_value_dup_object (value);
       g_assert (priv->device != NULL);
       priv->display = gdk_device_get_display (priv->device);
+      break;
+
+    case PROP_FORMATS:
+      if (priv->formats)
+        g_assert (g_value_get_boxed (value) == NULL);
+      else
+        {
+          priv->formats = g_value_dup_boxed (value);
+          g_assert (priv->formats != NULL);
+        }
       break;
 
     default:
@@ -294,7 +307,7 @@ gdk_drag_context_get_property (GObject    *gobject,
       break;
 
     case PROP_FORMATS:
-      g_value_set_boxed (value, context->formats);
+      g_value_set_boxed (value, priv->formats);
       break;
 
     default:
@@ -307,11 +320,12 @@ static void
 gdk_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
 
   contexts = g_list_remove (contexts, context);
 
   g_clear_object (&context->content);
-  g_clear_pointer (&context->formats, gdk_content_formats_unref);
+  g_clear_pointer (&priv->formats, gdk_content_formats_unref);
 
   if (context->source_surface)
     g_object_unref (context->source_surface);
@@ -420,7 +434,8 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                         "Formats",
                         "The possible formats for data",
                         GDK_TYPE_CONTENT_FORMATS,
-                        G_PARAM_READABLE |
+                        G_PARAM_READWRITE |
+                        G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 

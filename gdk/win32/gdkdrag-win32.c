@@ -1659,7 +1659,7 @@ data_object_new (GdkDragContext *context)
   result->context = context;
   result->formats = g_array_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair));
 
-  mime_types = gdk_content_formats_get_mime_types (context->formats, &n_mime_types);
+  mime_types = gdk_content_formats_get_mime_types (gdk_drag_context_get_mime_types (context), &n_mime_types);
 
   for (i = 0; i < n_mime_types; i++)
     {
@@ -1944,7 +1944,9 @@ _gdk_win32_surface_drag_begin (GdkSurface        *window,
       source_drag_context *source_ctx;
       data_object         *data_obj;
 
-      source_ctx = source_context_new (context, window, context->formats);
+      source_ctx = source_context_new (context, 
+                                       window,
+                                       gdk_drag_context_get_mime_types (context));
       data_obj = data_object_new (context);
 
       ddd->base.item_type = GDK_WIN32_DND_THREAD_QUEUE_ITEM_DO_DRAG_DROP;
