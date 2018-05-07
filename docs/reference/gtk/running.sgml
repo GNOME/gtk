@@ -475,7 +475,7 @@ nevertheless.
 
       <varlistentry>
         <term>gl</term>
-        <listitem><para>Selects the Vulkan renderer</para></listitem>
+        <listitem><para>Selects the OpenGL renderer</para></listitem>
       </varlistentry>
 
       <varlistentry>
