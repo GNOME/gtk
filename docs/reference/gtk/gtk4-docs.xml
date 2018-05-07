@@ -99,6 +99,7 @@
       <xi:include href="xml/gtklevelbar.xml" />
       <xi:include href="xml/gtkstatusbar.xml" />
       <xi:include href="xml/gtkaccellabel.xml" />
+      <xi:include href="xml/gtkcalendar.xml" />
     </chapter>
 
     <chapter id="MediaSupport">
@@ -218,6 +219,12 @@
       <xi:include href="xml/gtkfontchooserdialog.xml" />
     </chapter>
 
+    <chapter id="DrawingWidgets">
+      <title>Widgets for custom drawing</title>
+      <xi:include href="xml/gtkdrawingarea.xml" />
+      <xi:include href="xml/gtkglarea.xml" />
+    </chapter>
+
     <chapter id="Ornaments">
       <title>Ornaments</title>
       <xi:include href="xml/gtkframe.xml" />
@@ -229,6 +236,7 @@
       <xi:include href="xml/gtkscrollbar.xml" />
       <xi:include href="xml/gtkscrolledwindow.xml" />
       <xi:include href="xml/gtkscrollable.xml" />
+      <xi:include href="xml/gtkviewport.xml" />
     </chapter>
 
     <chapter id="Printing">
@@ -255,16 +263,12 @@
     <chapter id="MiscObjects">
       <title>Miscellaneous</title>
       <xi:include href="xml/gtkadjustment.xml" />
-      <xi:include href="xml/gtkcalendar.xml" />
-      <xi:include href="xml/gtkdrawingarea.xml" />
-      <xi:include href="xml/gtkglarea.xml" />
       <xi:include href="xml/gtkimcontextsimple.xml" />
       <xi:include href="xml/gtkimmulticontext.xml" />
       <xi:include href="xml/gtksizegroup.xml" />
       <xi:include href="xml/gtktooltip.xml" />
-      <xi:include href="xml/gtkviewport.xml" />
-      <xi:include href="xml/gtkaccessible.xml" />
       <xi:include href="xml/gtksnapshot.xml" />
+      <xi:include href="xml/gtkwidgetpaintable.xml" />
     </chapter>
 
     <chapter id="AbstractObjects">
@@ -276,6 +280,7 @@
       <xi:include href="xml/gtkrange.xml" />
       <xi:include href="xml/gtkimcontext.xml" />
       <xi:include href="xml/gtknativedialog.xml" />
+      <xi:include href="xml/gtkaccessible.xml" />
     </chapter>
 
     <chapter id="RecentDocuments">
