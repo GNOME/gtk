@@ -130,11 +130,12 @@ gdk_win32_drop_context_finalize (GObject *object)
 /* Drag Contexts */
 
 static GdkDragContext *
-gdk_drop_context_new (GdkDisplay      *display,
-                      GdkSurface      *source_surface,
-                      GdkSurface      *dest_surface,
-                      GdkDragAction    actions,
-                      GdkDragProtocol  protocol)
+gdk_drop_context_new (GdkDisplay        *display,
+                      GdkSurface        *source_surface,
+                      GdkSurface        *dest_surface,
+                      GdkContentFormats *formats,
+                      GdkDragAction      actions,
+                      GdkDragProtocol    protocol)
 {
   GdkWin32DropContext *context_win32;
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
@@ -142,6 +143,7 @@ gdk_drop_context_new (GdkDisplay      *display,
 
   context_win32 = g_object_new (GDK_TYPE_WIN32_DROP_CONTEXT,
                                 "device", gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
+                                "formats", formats,
                                 NULL);
 
   context = GDK_DRAG_CONTEXT (context_win32);
@@ -431,11 +433,11 @@ idroptarget_dragenter (LPDROPTARGET This,
                                    */
                                   source_context ? source_context->source_surface : NULL,
                                   ctx->dest_surface,
+                                  query_targets (pDataObj, context_win32->droptarget_w32format_contentformat_map),
                                   GDK_ACTION_DEFAULT | GDK_ACTION_COPY | GDK_ACTION_MOVE,
                                   GDK_DRAG_PROTO_OLE2);
   context_win32 = GDK_WIN32_DROP_CONTEXT (context);
   g_array_set_size (context_win32->droptarget_w32format_contentformat_map, 0);
-  context->formats = query_targets (pDataObj, context_win32->droptarget_w32format_contentformat_map);
   g_set_object (&context_win32->local_source_context, GDK_WIN32_DRAG_CONTEXT (source_context));
 
   ctx->context = context;
@@ -721,14 +723,14 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       context = gdk_drop_context_new (display,
                                       NULL,
                                       window,
+                                      gdk_content_formats_new ((const char *[2]) {
+                                                                 "text/uri-list",
+                                                                 NULL
+                                                               }, 1),
                                       GDK_ACTION_COPY,
                                       GDK_DRAG_PROTO_WIN32_DROPFILES);
       context_win32 = GDK_WIN32_DROP_CONTEXT (context);
       /* WM_DROPFILES drops are always file names */
-      context->formats = gdk_content_formats_new ((const char *[2]) {
-                                                    "text/uri-list",
-                                                    NULL
-                                                  }, 1);
 
 
       context->suggested_action = GDK_ACTION_COPY;
@@ -1221,9 +1223,9 @@ _gdk_win32_local_send_enter (GdkDragContext *context,
   new_context = gdk_drop_context_new (gdk_surface_get_display (context->source_surface),
                                       context->source_surface,
                                       context->dest_surface,
+                                      gdk_content_formats_ref (gdk_drag_context_get_formats (context)),
                                       context->actions,
                                       GDK_DRAG_PROTO_LOCAL);
-  new_context->formats = gdk_content_formats_ref (context->formats);
 
   gdk_surface_set_events (new_context->source_surface,
                           gdk_surface_get_events (new_context->source_surface) |
