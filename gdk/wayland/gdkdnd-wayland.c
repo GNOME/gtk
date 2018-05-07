@@ -181,7 +181,7 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
       const char *const *mimetypes;
       gsize i, n_mimetypes;
       
-      mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
+      mimetypes = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mimetypes);
       for (i = 0; i < n_mimetypes; i++)
         {
           if (mimetypes[i] != g_intern_static_string ("DELETE"))
@@ -474,7 +474,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
   context_wayland->data_source =
   gdk_wayland_selection_get_data_source (surface);
 
-  mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
+  mimetypes = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mimetypes);
   for (i = 0; i < n_mimetypes; i++)
     {
       wl_data_source_offer (context_wayland->data_source, mimetypes[i]);
@@ -509,10 +509,10 @@ _gdk_wayland_drop_context_new (GdkDevice            *device,
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
                                   "device", device,
+                                  "formats", formats,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->is_source = FALSE;
-  context->formats = formats;
   context_wayland->offer = offer;
 
   return context;
