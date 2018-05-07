@@ -57,8 +57,37 @@ G_DEFINE_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
  */
 
 static void
-gdk_drop_init (GdkDrop *self)
+gdk_drop_read_local_async (GdkDrop             *self,
+                           GdkContentFormats   *formats,
+                           int                  io_priority,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
 {
+  GTask *task;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_drop_read_local_async);
+
+  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                                 _("Reading not implemented."));
+  g_object_unref (task);
+}
+
+static GInputStream *
+gdk_drop_read_local_finish (GdkDrop         *self,
+                            const char     **out_mime_type,
+                            GAsyncResult    *result,
+                            GError         **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drop_read_local_async, NULL);
+
+  if (out_mime_type)
+    *out_mime_type = g_task_get_task_data (G_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -185,6 +214,11 @@ gdk_drop_class_init (GdkDropClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
+static void
+gdk_drop_init (GdkDrop *self)
+{
+}
+
 /**
  * gdk_drop_get_display:
  * @self: a #GdkDrop
@@ -238,5 +272,77 @@ gdk_drop_get_formats (GdkDrop *self)
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
   return priv->formats;
+}
+
+/**
+ * gdk_drop_read_async:
+ * @self: a #GdkDrop
+ * @mime_types: (array zero-terminated=1) (element-type utf8):
+ *     pointer to an array of mime types
+ * @io_priority: the io priority for the read operation
+ * @cancellable: (allow-none): optional #GCancellable object,
+ *     %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when
+ *     the request is satisfied
+ * @user_data: (closure): the data to pass to @callback
+ *
+ * Asynchronously read the dropped data from a #GdkDrop
+ * in a format that complies with one of the mime types.
+ */
+void
+gdk_drop_read_async (GdkDrop             *self,
+                     const char         **mime_types,
+                     int                  io_priority,
+                     GCancellable        *cancellable,
+                     GAsyncReadyCallback  callback,
+                     gpointer             user_data)
+{
+  GdkContentFormats *formats;
+
+  g_return_if_fail (GDK_IS_DROP (self));
+  g_return_if_fail (mime_types != NULL && mime_types[0] != NULL);
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  formats = gdk_content_formats_new (mime_types, g_strv_length ((char **) mime_types));
+
+  GDK_DROP_GET_CLASS (self)->read_async (self,
+                                         formats,
+                                         io_priority,
+                                         cancellable,
+                                         callback,
+                                         user_data);
+
+  gdk_content_formats_unref (formats);
+}
+
+/**
+ * gdk_drop_read_finish:
+ * @self: a #GdkDrop
+ * @out_mime_type: (out) (type utf8): return location for the used mime type
+ * @result: a #GAsyncResult
+ * @error: (allow-none): location to store error information on failure, or %NULL
+ *
+ * Finishes an async drop read operation, see gdk_drop_read_async().
+ *
+ * Returns: (nullable) (transfer full): the #GInputStream, or %NULL
+ */
+GInputStream *
+gdk_drop_read_finish (GdkDrop       *self,
+                      const char   **out_mime_type,
+                      GAsyncResult  *result,
+                      GError       **error)
+{
+  g_return_val_if_fail (GDK_IS_DROP (self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  if (g_async_result_is_tagged (result, gdk_drop_read_local_async))
+    {
+      return gdk_drop_read_local_finish (self, out_mime_type, result, error);
+    }
+  else
+    {
+      return GDK_DROP_GET_CLASS (self)->read_finish (self, out_mime_type, result, error);
+    }
 }
 
