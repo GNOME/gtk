@@ -801,6 +801,7 @@ static GdkDragContext *
 gdk_drag_context_new (GdkDisplay         *display,
                       GdkContentProvider *content,
                       GdkSurface         *source_surface,
+                      GdkContentFormats  *formats,
                       GdkDragAction       actions,
                       GdkDevice          *device,
                       GdkDragProtocol     protocol)
@@ -812,6 +813,7 @@ gdk_drag_context_new (GdkDisplay         *display,
   context_win32 = g_object_new (GDK_TYPE_WIN32_DRAG_CONTEXT,
                                 "device", device ? device : gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                                 "content", content,
+                                "formats", formats,
                                 NULL);
 
   context = GDK_DRAG_CONTEXT (context_win32);
@@ -825,6 +827,8 @@ gdk_drag_context_new (GdkDisplay         *display,
   g_set_object (&context->source_surface, source_surface);
   context->actions = actions;
   context_win32->protocol = protocol;
+
+  gdk_content_formats_unref (formats);
 
   return context;
 }
@@ -1659,7 +1663,7 @@ data_object_new (GdkDragContext *context)
   result->context = context;
   result->formats = g_array_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair));
 
-  mime_types = gdk_content_formats_get_mime_types (context->formats, &n_mime_types);
+  mime_types = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mime_types);
 
   for (i = 0; i < n_mime_types; i++)
     {
@@ -1910,10 +1914,10 @@ _gdk_win32_surface_drag_begin (GdkSurface        *window,
   context = gdk_drag_context_new (gdk_surface_get_display (window),
                                   content,
                                   window,
+                                  gdk_content_formats_union_serialize_mime_types (gdk_content_provider_ref_storable_formats (content)),
                                   actions,
                                   device,
                                   use_ole2_dnd ? GDK_DRAG_PROTO_OLE2 : GDK_DRAG_PROTO_LOCAL);
-  context->formats = gdk_content_formats_union_serialize_mime_types (gdk_content_provider_ref_storable_formats (content));
 
   context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
 
@@ -1944,7 +1948,9 @@ _gdk_win32_surface_drag_begin (GdkSurface        *window,
       source_drag_context *source_ctx;
       data_object         *data_obj;
 
-      source_ctx = source_context_new (context, window, context->formats);
+      source_ctx = source_context_new (context, 
+                                       window,
+                                       gdk_drag_context_get_formats (context));
       data_obj = data_object_new (context);
 
       ddd->base.item_type = GDK_WIN32_DND_THREAD_QUEUE_ITEM_DO_DRAG_DROP;

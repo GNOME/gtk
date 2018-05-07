@@ -55,7 +55,14 @@ test_finalize_object (gconstpointer data)
   if (g_str_equal (g_type_name (test_type), "GdkClipboard"))
     object = g_object_new (test_type, "display", gdk_display_get_default (), NULL);
   else if (g_str_equal (g_type_name (test_type), "GdkDragContext"))
-    object = g_object_new (test_type, "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())), NULL);
+    {
+      GdkContentFormats *formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
+      object = g_object_new (test_type,
+                             "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())),
+                             "formats", formats,
+                             NULL);
+      gdk_content_formats_unref (formats);
+    }
   else
     object = g_object_new (test_type, NULL);
   g_assert (G_IS_OBJECT (object));
