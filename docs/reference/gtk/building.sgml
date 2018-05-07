@@ -294,13 +294,52 @@ How to compile GTK+ itself
           <command>meson</command>
           <sbr/>
           <group>
-            <arg choice="plain">-Ddocumentation=true</arg>
-            <arg choice="plain">-Ddocumentation=false</arg>
+            <arg choice="plain">-Dx11-backend=true</arg>
+            <arg choice="plain">-Dx11-backend=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Dman-pages=true</arg>
-            <arg choice="plain">-Dman-pages=false</arg>
+            <arg choice="plain">-Dwayland-backend=true</arg>
+            <arg choice="plain">-Dwayland-backend=false</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dbroadway-backend=true</arg>
+            <arg choice="plain">-Dbroadway-backend=false</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dwin32-backend=true</arg>
+            <arg choice="plain">-Dwin32-backend=false</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dquartz-backend=true</arg>
+            <arg choice="plain">-Dquartz-backend=false</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dmedia=gstreamer</arg>
+            <arg choice="plain">-Dmedia=ffmpeg</arg>
+            <arg choice="plain">-Dmedia=all</arg>
+            <arg choice="plain">-Dmedia=none</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dvulkan=yes</arg>
+            <arg choice="plain">-Dvulkan=no</arg>
+            <arg choice="plain">-Dvulkan=auto</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dxinerama=yes</arg>
+            <arg choice="plain">-Dxinerama=no</arg>
+            <arg choice="plain">-Dxinerama=auto</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">-Dcloudproviders=true</arg>
+            <arg choice="plain">-Dcloudproviders=false</arg>
           </group>
           <sbr/>
           <group>
@@ -316,45 +355,13 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Dvulkan=yes</arg>
-            <arg choice="plain">-Dvulkan=no</arg>
-            <arg choice="plain">-Dvulkan=auto</arg>
+            <arg choice="plain">-Ddocumentation=true</arg>
+            <arg choice="plain">-Ddocumentation=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Dx11-backend=true</arg>
-            <arg choice="plain">-Dx11-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dcloudproviders=true</arg>
-            <arg choice="plain">-Dcloudproviders=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dxinerama=yes</arg>
-            <arg choice="plain">-Dxinerama=no</arg>
-            <arg choice="plain">-Dxinerama=auto</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dwin32-backend=true</arg>
-            <arg choice="plain">-Dwin32-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dquartz-backend=true</arg>
-            <arg choice="plain">-Dquartz-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dbroadway-backend=true</arg>
-            <arg choice="plain">-Dbroadway-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dwayland-backend=true</arg>
-            <arg choice="plain">-Dwayland-backend=false</arg>
+            <arg choice="plain">-Dman-pages=true</arg>
+            <arg choice="plain">-Dman-pages=false</arg>
           </group>
           <sbr/>
           <group>
