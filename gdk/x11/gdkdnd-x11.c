@@ -482,17 +482,15 @@ gdk_drag_context_find (GdkDisplay *display,
 static void
 precache_target_list (GdkDragContext *context)
 {
-  if (context->formats)
-    {
-      const char * const *atoms;
-      gsize n_atoms;
+  GdkContentFormats *formats = gdk_drag_context_get_formats (context);
+  const char * const *atoms;
+  gsize n_atoms;
 
-      atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
+  atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
 
-      _gdk_x11_precache_atoms (gdk_drag_context_get_display (context),
-                               (const gchar **) atoms,
-                               n_atoms);
-    }
+  _gdk_x11_precache_atoms (gdk_drag_context_get_display (context),
+                           (const gchar **) atoms,
+                           n_atoms);
 }
 
 /* Utility functions */
@@ -1145,7 +1143,7 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
   gsize i, n_atoms;
   GdkDisplay *display = gdk_drag_context_get_display (context);
 
-  atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
+  atoms = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_atoms);
   atomlist = g_new (Atom, n_atoms);
   for (i = 0; i < n_atoms; i++)
     atomlist[i] = gdk_x11_get_xatom_by_name_for_display (display, atoms[i]);
@@ -1332,7 +1330,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   GDK_DISPLAY_NOTE (display, DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
                       GDK_SURFACE_XID (context_x11->ipc_surface), context_x11->version));
-  atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
+  atoms = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_atoms);
 
   if (n_atoms > 3)
     {
@@ -1735,6 +1733,7 @@ xdnd_enter_filter (const XEvent *xevent,
   gulong nitems, after;
   guchar *data;
   Atom *atoms;
+  GdkContentFormats *content_formats;
   GPtrArray *formats;
   guint32 source_surface;
   gboolean get_types;
@@ -1771,24 +1770,6 @@ xdnd_enter_filter (const XEvent *xevent,
     }
 
   seat = gdk_display_get_default_seat (display);
-  context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
-                              "device", gdk_seat_get_pointer (seat),
-                              NULL);
-  context = (GdkDragContext *)context_x11;
-
-  context_x11->protocol = GDK_DRAG_PROTO_XDND;
-  context_x11->version = version;
-
-  /* FIXME: Should extend DnD protocol to have device info */
-
-  context->source_surface = gdk_x11_surface_foreign_new_for_display (display, source_surface);
-  if (!context->source_surface)
-    {
-      g_object_unref (context);
-      return GDK_FILTER_REMOVE;
-    }
-  context->dest_surface = event->any.surface;
-  g_object_ref (context->dest_surface);
 
   formats = g_ptr_array_new ();
   if (get_types)
@@ -1803,8 +1784,6 @@ xdnd_enter_filter (const XEvent *xevent,
 
       if (gdk_x11_display_error_trap_pop (display) || (format != 32) || (type != XA_ATOM))
         {
-          g_object_unref (context);
-
           if (data)
             XFree (data);
 
@@ -1826,14 +1805,33 @@ xdnd_enter_filter (const XEvent *xevent,
                            (gpointer) gdk_x11_get_xatom_name_for_display (display,
                                                                           xevent->xclient.data.l[2 + i]));
     }
-  context->formats = gdk_content_formats_new ((const char **) formats->pdata, formats->len);
+  content_formats = gdk_content_formats_new ((const char **) formats->pdata, formats->len);
   g_ptr_array_unref (formats);
 
 #ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
-    print_target_list (context->formats);
+    print_target_list (content_formats);
 #endif /* G_ENABLE_DEBUG */
 
+  context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
+                              "device", gdk_seat_get_pointer (seat),
+                              "formats", content_formats,
+                              NULL);
+  context = (GdkDragContext *)context_x11;
+
+  context_x11->protocol = GDK_DRAG_PROTO_XDND;
+  context_x11->version = version;
+
+  /* FIXME: Should extend DnD protocol to have device info */
+
+  context->source_surface = gdk_x11_surface_foreign_new_for_display (display, source_surface);
+  if (!context->source_surface)
+    {
+      g_object_unref (context);
+      return GDK_FILTER_REMOVE;
+    }
+  context->dest_surface = event->any.surface;
+  g_object_ref (context->dest_surface);
   xdnd_manage_source_filter (context, context->source_surface, TRUE);
   xdnd_read_actions (context_x11);
 
@@ -1843,6 +1841,8 @@ xdnd_enter_filter (const XEvent *xevent,
   g_object_ref (context);
 
   display_x11->current_dest_drag = context;
+
+  gdk_content_formats_unref (content_formats);
 
   return GDK_FILTER_TRANSLATE;
 }
@@ -2345,11 +2345,12 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
             case GDK_DRAG_PROTO_ROOTWIN:
               {
+                GdkContentFormats *formats = gdk_drag_context_get_formats (context);
                 /* GTK+ traditionally has used application/x-rootwin-drop,
                  * but the XDND spec specifies x-rootwindow-drop.
                  */
-                if (gdk_content_formats_contain_mime_type (context->formats, "application/x-rootwindow-drop") ||
-                    gdk_content_formats_contain_mime_type (context->formats, "application/x-rootwin-drop"))
+                if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
+                    gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
                   context->action = context->suggested_action;
                 else
                   context->action = 0;
