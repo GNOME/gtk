@@ -465,22 +465,33 @@ nevertheless.
 
   <para>
     If set, selects the GSK renderer to use. The following renderers can
-    be selected, provided they are included in the GSK libraries you are using:
+    be selected, provided they are included in the GTK library you are using
+    and the GDK backend supports them:
     <variablelist>
 
       <varlistentry>
-        <term>vulkan</term>
-        <listitem><para>Selects the Vulkan renderer</para></listitem>
+        <term>help</term>
+        <listitem><para>Prints information about available options</para></listitem>
       </varlistentry>
 
       <varlistentry>
-        <term>gl</term>
-        <listitem><para>Selects the Vulkan renderer</para></listitem>
+        <term>broadway</term>
+        <listitem><para>Selects the Broadway-backend specific renderer</para></listitem>
       </varlistentry>
 
       <varlistentry>
         <term>cairo</term>
-        <listitem><para>Selects the cairo renderer</para></listitem>
+        <listitem><para>Selects the fallback Cairo renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>gl</term>
+        <listitem><para>Selects the default OpenGL renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>vulkan</term>
+        <listitem><para>Selects the Vulkan renderer</para></listitem>
       </varlistentry>
 
     </variablelist>

@@ -545,6 +545,10 @@ get_renderer_for_name (const char *renderer_name)
 {
   if (renderer_name == NULL)
     return G_TYPE_INVALID;
+#ifdef GDK_WINDOWING_BROADWAY
+  else if (g_ascii_strcasecmp (renderer_name, "broadway") == 0)
+    return GSK_TYPE_BROADWAY_RENDERER;
+#endif
   else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
     return GSK_TYPE_CAIRO_RENDERER;
   else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0
@@ -557,10 +561,17 @@ get_renderer_for_name (const char *renderer_name)
   else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
     {
       g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
+#ifdef GDK_WINDOWING_BROADWAY
+      g_print ("broadway - Use the Broadway specific renderer\n");
+#else
+      g_print ("broadway - disabled during GTK build\n");
+#endif
       g_print ("   cairo - Use the Cairo fallback renderer\n");
       g_print ("  opengl - Use the default OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
       g_print ("  vulkan - Use the Vulkan renderer\n");
+#else
+      g_print ("  vulkan - Disabled during GTK build\n");
 #endif
       g_print ("    help - Print this help\n\n");
       g_print ("Other arguments will cause a warning and be ignored.\n");
