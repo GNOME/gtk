@@ -32,7 +32,7 @@ media-view-subtitles=The icon used to show subtitles in a media player
 
 [network]
 Name=Network
-Description=Icons related to network status");
+Description=Icons related to network status
 
 network-transmit-receive=The icon used data is being both transmitted and received simultaneously, while the computing device is connected to a network
 network-transmit=The icon used when data is being transmitted, while the computing device is connected to a network
