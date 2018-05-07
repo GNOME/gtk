@@ -162,10 +162,10 @@ additional environment variables.
     Linux and Unix, and the ';' character on Windows.
   </para>
   <warning>
-    Note that this environment variable is read by GTK+ 2.x too, which
-    makes it unsuitable for setting it system-wide (or session-wide),
-    since doing so will cause either GTK+ 2.x applications or GTK+ 3
-    applications to see incompatible modules.
+    Note that this environment variable is read by GTK+ 2.x and GTK+ 3.x too,
+    which makes it unsuitable for setting it system-wide (or session-wide),
+    since doing so will cause applications using different GTK+ versions
+    to see incompatible modules.
   </warning>
 </formalpara>
 
@@ -450,6 +450,33 @@ nevertheless.
     default selection of the device that is used for Vulkan rendering.
     The special value <literal>list</literal> can be used to obtain a list
     of all Vulkan devices.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GSK_RENDERER</envar></title>
+
+  <para>
+    If set, selects the GSK renderer to use. The following renderers can
+    be selected, provided they are included in the GSK libraries you are using:
+    <variablelist>
+
+      <varlistentry>
+        <term>vulkan</term>
+        <listitem><para>Selects the Vulkan renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>gl</term>
+        <listitem><para>Selects the Vulkan renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>cairo</term>
+        <listitem><para>Selects the cairo renderer</para></listitem>
+      </varlistentry>
+
+    </variablelist>
   </para>
 </formalpara>
 
