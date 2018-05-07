@@ -279,13 +279,13 @@ gdk_x11_drag_context_read_got_stream (GObject      *source,
       next = targets->next;
       if (next)
         {
-          GdkDragContext *context = GDK_DRAG_CONTEXT (g_task_get_source_object (task));
+          GdkDrop *drop = GDK_DROP (g_task_get_source_object (task));
 
-          GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("reading %s failed, trying %s next\n",
+          GDK_DISPLAY_NOTE (gdk_drop_get_display (drop), DND, g_printerr ("reading %s failed, trying %s next\n",
                                      (char *) targets->data, (char *) next->data));
           targets->next = NULL;
           g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
-          gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
+          gdk_x11_selection_input_stream_new_async (gdk_drop_get_display (drop),
                                                     "XdndSelection",
                                                     next->data,
                                                     CurrentTime,
@@ -330,7 +330,7 @@ gdk_x11_drag_context_read_got_stream (GObject      *source,
 }
 
 static void
-gdk_x11_drag_context_read_async (GdkDragContext      *context,
+gdk_x11_drag_context_read_async (GdkDrop             *drop,
                                  GdkContentFormats   *formats,
                                  int                  io_priority,
                                  GCancellable        *cancellable,
@@ -340,7 +340,7 @@ gdk_x11_drag_context_read_async (GdkDragContext      *context,
   GSList *targets;
   GTask *task;
 
-  task = g_task_new (context, cancellable, callback, user_data);
+  task = g_task_new (drop, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_x11_drag_context_read_async);
 
@@ -353,9 +353,9 @@ gdk_x11_drag_context_read_async (GdkDragContext      *context,
       return;
     }
 
-  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("new read for %s (%u other options)\n",
+  GDK_DISPLAY_NOTE (gdk_drop_get_display (drop), DND, g_printerr ("new read for %s (%u other options)\n",
                             (char *) targets->data, g_slist_length (targets->next)));
-  gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
+  gdk_x11_selection_input_stream_new_async (gdk_drop_get_display (drop),
                                             "XdndSelection",
                                             targets->data,
                                             CurrentTime,
@@ -366,14 +366,14 @@ gdk_x11_drag_context_read_async (GdkDragContext      *context,
 }
 
 static GInputStream *
-gdk_x11_drag_context_read_finish (GdkDragContext  *context,
+gdk_x11_drag_context_read_finish (GdkDrop         *drop,
                                   const char     **out_mime_type,
                                   GAsyncResult    *result,
                                   GError         **error)
 {
   GTask *task;
 
-  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (context)), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (drop)), NULL);
   task = G_TASK (result);
   g_return_val_if_fail (g_task_get_source_tag (task) == gdk_x11_drag_context_read_async, NULL);
 
@@ -392,16 +392,18 @@ static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDropClass *drop_class = GDK_DROP_CLASS (klass);
   GdkDragContextClass *context_class = GDK_DRAG_CONTEXT_CLASS (klass);
 
   object_class->finalize = gdk_x11_drag_context_finalize;
+
+  drop_class->read_async = gdk_x11_drag_context_read_async;
+  drop_class->read_finish = gdk_x11_drag_context_read_finish;
 
   context_class->drag_status = gdk_x11_drag_context_drag_status;
   context_class->drag_abort = gdk_x11_drag_context_drag_abort;
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
   context_class->drop_finish = gdk_x11_drag_context_drop_finish;
-  context_class->read_async = gdk_x11_drag_context_read_async;
-  context_class->read_finish = gdk_x11_drag_context_read_finish;
   context_class->get_drag_surface = gdk_x11_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
   context_class->drop_done = gdk_x11_drag_context_drop_done;
