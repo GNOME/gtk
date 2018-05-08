@@ -20,9 +20,9 @@ struct _ExampleAppWindow
 G_DEFINE_TYPE (ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
-search_text_changed (GtkEntry *entry)
+search_text_changed (GtkEntry         *entry,
+                     ExampleAppWindow *win)
 {
-  ExampleAppWindow *win;
   const gchar *text;
   GtkWidget *tab;
   GtkWidget *view;
@@ -33,8 +33,6 @@ search_text_changed (GtkEntry *entry)
 
   if (text[0] == '\0')
     return;
-
-  win = EXAMPLE_APP_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (entry)));
 
   tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
   view = gtk_bin_get_child (GTK_BIN (tab));
@@ -119,15 +117,12 @@ done:
 }
 
 static void
-visible_child_changed (GObject    *stack,
-                       GParamSpec *pspec)
+visible_child_changed (GObject          *stack,
+                       GParamSpec       *pspec,
+                       ExampleAppWindow *win)
 {
-  ExampleAppWindow *win;
-
   if (gtk_widget_in_destruction (GTK_WIDGET (stack)))
     return;
-
-  win = EXAMPLE_APP_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (stack)));
 
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (win->searchbar), FALSE);
   update_words (win);
