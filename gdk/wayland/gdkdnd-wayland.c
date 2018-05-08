@@ -136,7 +136,7 @@ gdk_to_wl_actions (GdkDragAction action)
 {
   uint32_t dnd_actions = 0;
 
-  if (action & (GDK_ACTION_COPY | GDK_ACTION_LINK | GDK_ACTION_PRIVATE))
+  if (action & (GDK_ACTION_COPY | GDK_ACTION_LINK))
     dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY;
   if (action & GDK_ACTION_MOVE)
     dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE;

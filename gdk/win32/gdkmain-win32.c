@@ -438,11 +438,9 @@ _gdk_win32_drag_action_to_string (GdkDragAction actions)
   if (actions & GDK_ACTION_ ## x)				\
     (bufp += sprintf (bufp, "%s" #x, s), s = "|")
 
-  BIT (DEFAULT);
   BIT (COPY);
   BIT (MOVE);
   BIT (LINK);
-  BIT (PRIVATE);
   BIT (ASK);
 #undef BIT
 
