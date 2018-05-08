@@ -436,7 +436,7 @@ idroptarget_dragenter (LPDROPTARGET This,
                                   source_context ? source_context->source_surface : NULL,
                                   ctx->dest_surface,
                                   query_targets (pDataObj, context_win32->droptarget_w32format_contentformat_map),
-                                  GDK_ACTION_DEFAULT | GDK_ACTION_COPY | GDK_ACTION_MOVE,
+                                  GDK_ACTION_COPY | GDK_ACTION_MOVE,
                                   GDK_DRAG_PROTO_OLE2);
   context_win32 = GDK_WIN32_DROP_CONTEXT (context);
   g_array_set_size (context_win32->droptarget_w32format_contentformat_map, 0);

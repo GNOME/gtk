@@ -527,16 +527,6 @@ drag_operation_to_drag_action (NSDragOperation operation)
   /* GDK and Quartz drag operations do not map 1:1.
    * This mapping represents about the best that we
    * can come up.
-   *
-   * Note that NSDragOperationPrivate and GDK_ACTION_PRIVATE
-   * have almost opposite meanings: the GDK one means that the
-   * destination is solely responsible for the action; the Quartz
-   * one means that the source and destination will agree
-   * privately on the action. NSOperationGeneric is close in meaning
-   * to GDK_ACTION_PRIVATE but there is a problem: it will be
-   * sent for any ordinary drag, and likely not understood
-   * by any intra-widget drag (since the source & dest are the
-   * same).
    */
 
   if (operation & NSDragOperationGeneric)
