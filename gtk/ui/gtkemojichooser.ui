@@ -12,6 +12,8 @@
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">1</property>
+            <property name="margin">9</property>
+            <property name="margin-top">7</property>
             <property name="input-hints">no-emoji</property>
             <signal name="search-changed" handler="search_changed"/>
           </object>
@@ -57,7 +59,7 @@
                         <child>
                           <object class="GtkFlowBox" id="people.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -72,7 +74,7 @@
                         <child>
                           <object class="GtkFlowBox" id="body.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -87,7 +89,7 @@
                         <child>
                           <object class="GtkFlowBox" id="nature.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -102,7 +104,7 @@
                         <child>
                           <object class="GtkFlowBox" id="food.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -117,7 +119,7 @@
                         <child>
                           <object class="GtkFlowBox" id="travel.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -132,7 +134,7 @@
                         <child>
                           <object class="GtkFlowBox" id="activities.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -147,7 +149,7 @@
                         <child>
                           <object class="GtkFlowBox" id="objects.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -162,7 +164,7 @@
                         <child>
                           <object class="GtkFlowBox" id="symbols.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>
@@ -177,7 +179,7 @@
                         <child>
                           <object class="GtkFlowBox" id="flags.box">
                             <property name="visible">1</property>
-                            <property name="homogeneous">1</property>
+                            <property name="homogeneous">0</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
                           </object>

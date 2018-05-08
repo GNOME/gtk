@@ -397,6 +397,8 @@ add_emoji (GtkWidget    *box,
     }
 
   child = gtk_flow_box_child_new ();
+  gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
   gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
   g_object_set_data_full (G_OBJECT (child), "emoji-data",
                           g_variant_ref (item),

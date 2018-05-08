@@ -4525,6 +4525,11 @@ stackswitcher button.text-button.circular { // FIXME aggregate with buttons
 
 popover.emoji-picker { padding-left: 0; padding-right: 0; }
 
+popover.emoji-picker .view {
+  border-top: 1px solid rgb(192,192,189);
+  border-bottom: 1px solid rgb(192,192,189);
+}
+
 button.emoji-section {
   border-color: transparent;
   border-width: 3px;
@@ -4557,12 +4562,12 @@ button.emoji-section {
   &:checked label { opacity: 1; }
 }
 
-.emoji {
+.emoji label {
   font-size: x-large;
   padding: 6px;
-  border-radius: 6px;
+}
 
-  :hover {
-    background: $selected_bg_color;
-  }
+.emoji :hover {
+  border-radius: 6px;
+  background: $selected_bg_color;
 }
