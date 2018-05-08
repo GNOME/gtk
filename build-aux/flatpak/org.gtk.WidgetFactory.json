@@ -46,7 +46,9 @@
             "buildsystem": "meson",
             "builddir": true,
             "config-opts": [
-                "--libdir=/app/lib"
+                "--libdir=/app/lib",
+                "-Dtests=false",
+                "-Dbenchmarks=false"
             ],
             "sources": [
                 {
