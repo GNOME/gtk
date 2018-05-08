@@ -6,16 +6,11 @@
 struct _ExampleAppWindow
 {
   GtkApplicationWindow parent;
-};
 
-typedef struct _ExampleAppWindowPrivate ExampleAppWindowPrivate;
-
-struct _ExampleAppWindowPrivate
-{
   GtkWidget *stack;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE (ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
 example_app_window_init (ExampleAppWindow *win)
@@ -28,7 +23,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 {
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
 }
 
 ExampleAppWindow *
@@ -41,13 +36,11 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  ExampleAppWindowPrivate *priv;
   gchar *basename;
   GtkWidget *scrolled, *view;
   gchar *contents;
   gsize length;
 
-  priv = example_app_window_get_instance_private (win);
   basename = g_file_get_basename (file);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -59,7 +52,7 @@ example_app_window_open (ExampleAppWindow *win,
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
   gtk_widget_show (view);
   gtk_container_add (GTK_CONTAINER (scrolled), view);
-  gtk_stack_add_titled (GTK_STACK (priv->stack), scrolled, basename, basename);
+  gtk_stack_add_titled (GTK_STACK (win->stack), scrolled, basename, basename);
 
   if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL))
     {

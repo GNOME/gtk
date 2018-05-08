@@ -6,12 +6,7 @@
 struct _ExampleAppWindow
 {
   GtkApplicationWindow parent;
-};
 
-typedef struct _ExampleAppWindowPrivate ExampleAppWindowPrivate;
-
-struct _ExampleAppWindowPrivate
-{
   GSettings *settings;
   GtkWidget *stack;
   GtkWidget *search;
@@ -24,13 +19,12 @@ struct _ExampleAppWindowPrivate
   GtkWidget *lines_label;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE (ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
 search_text_changed (GtkEntry *entry)
 {
   ExampleAppWindow *win;
-  ExampleAppWindowPrivate *priv;
   const gchar *text;
   GtkWidget *tab;
   GtkWidget *view;
@@ -43,9 +37,8 @@ search_text_changed (GtkEntry *entry)
     return;
 
   win = EXAMPLE_APP_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (entry)));
-  priv = example_app_window_get_instance_private (win);
 
-  tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
   view = gtk_bin_get_child (GTK_BIN (tab));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
@@ -64,19 +57,15 @@ static void
 find_word (GtkButton        *button,
            ExampleAppWindow *win)
 {
-  ExampleAppWindowPrivate *priv;
   const gchar *word;
 
-  priv = example_app_window_get_instance_private (win);
-
   word = gtk_button_get_label (button);
-  gtk_entry_set_text (GTK_ENTRY (priv->searchentry), word);
+  gtk_entry_set_text (GTK_ENTRY (win->searchentry), word);
 }
 
 static void
 update_words (ExampleAppWindow *win)
 {
-  ExampleAppWindowPrivate *priv;
   GHashTable *strings;
   GHashTableIter iter;
   GtkWidget *tab, *view, *row;
@@ -85,9 +74,7 @@ update_words (ExampleAppWindow *win)
   GList *children, *l;
   gchar *word, *key;
 
-  priv = example_app_window_get_instance_private (win);
-
-  tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
 
   if (tab == NULL)
     return;
@@ -115,9 +102,9 @@ update_words (ExampleAppWindow *win)
     }
 
 done:
-  children = gtk_container_get_children (GTK_CONTAINER (priv->words));
+  children = gtk_container_get_children (GTK_CONTAINER (win->words));
   for (l = children; l; l = l->next)
-    gtk_container_remove (GTK_CONTAINER (priv->words), GTK_WIDGET (l->data));
+    gtk_container_remove (GTK_CONTAINER (win->words), GTK_WIDGET (l->data));
   g_list_free (children);
 
   g_hash_table_iter_init (&iter, strings);
@@ -127,7 +114,7 @@ done:
       g_signal_connect (row, "clicked",
                         G_CALLBACK (find_word), win);
       gtk_widget_show (row);
-      gtk_container_add (GTK_CONTAINER (priv->words), row);
+      gtk_container_add (GTK_CONTAINER (win->words), row);
     }
 
   g_hash_table_unref (strings);
@@ -136,16 +123,13 @@ done:
 static void
 update_lines (ExampleAppWindow *win)
 {
-  ExampleAppWindowPrivate *priv;
   GtkWidget *tab, *view;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   int count;
   gchar *lines;
 
-  priv = example_app_window_get_instance_private (win);
-
-  tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
 
   if (tab == NULL)
     return;
@@ -164,7 +148,7 @@ update_lines (ExampleAppWindow *win)
     }
 
   lines = g_strdup_printf ("%d", count);
-  gtk_label_set_text (GTK_LABEL (priv->lines), lines);
+  gtk_label_set_text (GTK_LABEL (win->lines), lines);
   g_free (lines);
 }
 
@@ -173,14 +157,12 @@ visible_child_changed (GObject    *stack,
                        GParamSpec *pspec)
 {
   ExampleAppWindow *win;
-  ExampleAppWindowPrivate *priv;
 
   if (gtk_widget_in_destruction (GTK_WIDGET (stack)))
     return;
 
   win = EXAMPLE_APP_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (stack)));
-  priv = example_app_window_get_instance_private (win);
-  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->searchbar), FALSE);
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (win->searchbar), FALSE);
   update_words (win);
   update_lines (win);
 }
@@ -196,45 +178,43 @@ words_changed (GObject          *sidebar,
 static void
 example_app_window_init (ExampleAppWindow *win)
 {
-  ExampleAppWindowPrivate *priv;
   GtkBuilder *builder;
   GMenuModel *menu;
   GAction *action;
 
-  priv = example_app_window_get_instance_private (win);
   gtk_widget_init_template (GTK_WIDGET (win));
-  priv->settings = g_settings_new ("org.gtk.exampleapp");
+  win->settings = g_settings_new ("org.gtk.exampleapp");
 
-  g_settings_bind (priv->settings, "transition",
-                   priv->stack, "transition-type",
+  g_settings_bind (win->settings, "transition",
+                   win->stack, "transition-type",
                    G_SETTINGS_BIND_DEFAULT);
 
-  g_settings_bind (priv->settings, "show-words",
-                   priv->sidebar, "reveal-child",
+  g_settings_bind (win->settings, "show-words",
+                   win->sidebar, "reveal-child",
                    G_SETTINGS_BIND_DEFAULT);
 
-  g_object_bind_property (priv->search, "active",
-                          priv->searchbar, "search-mode-enabled",
+  g_object_bind_property (win->search, "active",
+                          win->searchbar, "search-mode-enabled",
                           G_BINDING_BIDIRECTIONAL);
 
-  g_signal_connect (priv->sidebar, "notify::reveal-child",
+  g_signal_connect (win->sidebar, "notify::reveal-child",
                     G_CALLBACK (words_changed), win);
 
   builder = gtk_builder_new_from_resource ("/org/gtk/exampleapp/gears-menu.ui");
   menu = G_MENU_MODEL (gtk_builder_get_object (builder, "menu"));
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->gears), menu);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (win->gears), menu);
   g_object_unref (builder);
 
-  action = g_settings_create_action (priv->settings, "show-words");
+  action = g_settings_create_action (win->settings, "show-words");
   g_action_map_add_action (G_ACTION_MAP (win), action);
   g_object_unref (action);
 
-  action = (GAction*) g_property_action_new ("show-lines", priv->lines, "visible");
+  action = (GAction*) g_property_action_new ("show-lines", win->lines, "visible");
   g_action_map_add_action (G_ACTION_MAP (win), action);
   g_object_unref (action);
 
-  g_object_bind_property (priv->lines, "visible",
-                          priv->lines_label, "visible",
+  g_object_bind_property (win->lines, "visible",
+                          win->lines_label, "visible",
                           G_BINDING_DEFAULT);
 }
 
@@ -242,12 +222,10 @@ static void
 example_app_window_dispose (GObject *object)
 {
   ExampleAppWindow *win;
-  ExampleAppWindowPrivate *priv;
 
   win = EXAMPLE_APP_WINDOW (object);
-  priv = example_app_window_get_instance_private (win);
 
-  g_clear_object (&priv->settings);
+  g_clear_object (&win->settings);
 
   G_OBJECT_CLASS (example_app_window_parent_class)->dispose (object);
 }
@@ -260,15 +238,15 @@ example_app_window_class_init (ExampleAppWindowClass *class)
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
 
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, search);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchbar);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchentry);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, gears);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, words);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, sidebar);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, lines);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, lines_label);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, search);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchbar);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchentry);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, gears);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, words);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, sidebar);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, lines);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, lines_label);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), visible_child_changed);
@@ -284,7 +262,6 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  ExampleAppWindowPrivate *priv;
   gchar *basename;
   GtkWidget *scrolled, *view;
   gchar *contents;
@@ -293,7 +270,6 @@ example_app_window_open (ExampleAppWindow *win,
   GtkTextTag *tag;
   GtkTextIter start_iter, end_iter;
 
-  priv = example_app_window_get_instance_private (win);
   basename = g_file_get_basename (file);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -305,7 +281,7 @@ example_app_window_open (ExampleAppWindow *win,
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
   gtk_widget_show (view);
   gtk_container_add (GTK_CONTAINER (scrolled), view);
-  gtk_stack_add_titled (GTK_STACK (priv->stack), scrolled, basename, basename);
+  gtk_stack_add_titled (GTK_STACK (win->stack), scrolled, basename, basename);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
@@ -316,7 +292,7 @@ example_app_window_open (ExampleAppWindow *win,
     }
 
   tag = gtk_text_buffer_create_tag (buffer, NULL, NULL);
-  g_settings_bind (priv->settings, "font",
+  g_settings_bind (win->settings, "font",
                    tag, "font",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -326,7 +302,7 @@ example_app_window_open (ExampleAppWindow *win,
 
   g_free (basename);
 
-  gtk_widget_set_sensitive (priv->search, TRUE);
+  gtk_widget_set_sensitive (win->search, TRUE);
 
   update_words (win);
   update_lines (win);
