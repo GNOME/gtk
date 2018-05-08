@@ -53,7 +53,6 @@ static struct {
   const gchar  *name;
   GdkCursor    *cursor;
 } drag_cursors[] = {
-  { GDK_ACTION_DEFAULT, NULL,       NULL },
   { GDK_ACTION_ASK,     "dnd-ask",  NULL },
   { GDK_ACTION_COPY,    "dnd-copy", NULL },
   { GDK_ACTION_MOVE,    "dnd-move", NULL },
@@ -167,7 +166,7 @@ gdk_drag_context_get_formats (GdkDragContext *context)
 GdkDragAction
 gdk_drag_context_get_actions (GdkDragContext *context)
 {
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_ACTION_DEFAULT);
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), 0);
 
   return context->actions;
 }
