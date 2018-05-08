@@ -903,9 +903,6 @@ action_for_drop_effect (DWORD effect)
   if (effect & DROPEFFECT_COPY)
     action |= GDK_ACTION_COPY;
 
-  if (action == 0)
-    action = GDK_ACTION_DEFAULT;
-
   return action;
 }
 
@@ -1738,9 +1735,6 @@ _gdk_win32_drag_context_send_local_status_event (GdkDragContext *src_context,
 
   if (src_context_win32->drag_status == GDK_DRAG_STATUS_MOTION_WAIT)
     src_context_win32->drag_status = GDK_DRAG_STATUS_DRAG;
-
-  if (action == GDK_ACTION_DEFAULT)
-    action = 0;
 
   src_context->action = action;
 
