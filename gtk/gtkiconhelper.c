@@ -591,7 +591,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
   width = height = 0;
 
-  /* Certain kinds of images are easy to calculate the size for,</cosimoc>3 these
+  /* Certain kinds of images are easy to calculate the size for, these
      we do immediately to avoid having to potentially load the image
      data for something that may not yet be visible */
   switch (gtk_image_definition_get_storage_type (self->def))
