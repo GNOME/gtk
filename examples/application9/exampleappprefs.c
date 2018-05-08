@@ -55,5 +55,5 @@ example_app_prefs_class_init (ExampleAppPrefsClass *class)
 ExampleAppPrefs *
 example_app_prefs_new (ExampleAppWindow *win)
 {
-  return g_object_new (EXAMPLE_APP_PREFS_TYPE, "transient-for", win, "use-header-bar", TRUE, NULL);
+  return g_object_new (EXAMPLE_TYPE_APP_PREFS, "transient-for", win, "use-header-bar", TRUE, NULL);
 }

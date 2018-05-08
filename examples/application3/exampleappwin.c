@@ -29,7 +29,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 ExampleAppWindow *
 example_app_window_new (ExampleApp *app)
 {
-  return g_object_new (EXAMPLE_APP_WINDOW_TYPE, "application", app, NULL);
+  return g_object_new (EXAMPLE_TYPE_APP_WINDOW, "application", app, NULL);
 }
 
 void
