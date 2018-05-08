@@ -134,16 +134,7 @@ update_lines (ExampleAppWindow *win)
   view = gtk_bin_get_child (GTK_BIN (tab));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-  count = 0;
-
-  gtk_text_buffer_get_start_iter (buffer, &iter);
-  while (!gtk_text_iter_is_end (&iter))
-    {
-      count++;
-      if (!gtk_text_iter_forward_line (&iter))
-        break;
-    }
-
+  count = gtk_text_buffer_get_line_count (buffer);
   lines = g_strdup_printf ("%d", count);
   gtk_label_set_text (GTK_LABEL (win->lines), lines);
   g_free (lines);
