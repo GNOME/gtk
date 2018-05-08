@@ -5,7 +5,7 @@
 #include "exampleapp.h"
 
 
-#define EXAMPLE_APP_WINDOW_TYPE (example_app_window_get_type ())
+#define EXAMPLE_TYPE_APP_WINDOW (example_app_window_get_type ())
 G_DECLARE_FINAL_TYPE (ExampleAppWindow, example_app_window, EXAMPLE, APP_WINDOW, GtkApplicationWindow)
 
 

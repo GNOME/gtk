@@ -100,7 +100,7 @@ example_app_class_init (ExampleAppClass *class)
 ExampleApp *
 example_app_new (void)
 {
-  return g_object_new (EXAMPLE_APP_TYPE,
+  return g_object_new (EXAMPLE_TYPE_APP,
                        "application-id", "org.gtk.exampleapp",
                        "flags", G_APPLICATION_HANDLES_OPEN,
                        NULL);
