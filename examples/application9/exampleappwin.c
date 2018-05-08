@@ -111,7 +111,6 @@ done:
       row = gtk_button_new_with_label (key);
       g_signal_connect (row, "clicked",
                         G_CALLBACK (find_word), win);
-      gtk_widget_show (row);
       gtk_container_add (GTK_CONTAINER (win->words), row);
     }
 
@@ -269,13 +268,11 @@ example_app_window_open (ExampleAppWindow *win,
   basename = g_file_get_basename (file);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_show (scrolled);
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();
   gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
-  gtk_widget_show (view);
   gtk_container_add (GTK_CONTAINER (scrolled), view);
   gtk_stack_add_titled (GTK_STACK (win->stack), scrolled, basename, basename);
 
