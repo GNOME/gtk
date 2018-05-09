@@ -419,13 +419,16 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
   else
     {
       pointer->cursor_timeout_id = 0;
-      return TRUE;
+      return G_SOURCE_REMOVE;
     }
 
   if (tablet)
     {
       if (!tablet->current_tool)
-        return retval;
+        {
+          pointer->cursor_timeout_id = 0;
+          return G_SOURCE_REMOVE;
+        }
 
       zwp_tablet_tool_v2_set_cursor (tablet->current_tool->wp_tablet_tool,
                                      pointer->enter_serial,
@@ -440,7 +443,10 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
                              x, y);
     }
   else
-    return retval;
+    {
+      pointer->cursor_timeout_id = 0;
+      return G_SOURCE_REMOVE;
+    }
 
   if (buffer)
     {
@@ -462,7 +468,8 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
 
   if (next_image_index != pointer->cursor_image_index)
     {
-      if (next_image_delay != pointer->cursor_image_delay)
+      if (next_image_delay != pointer->cursor_image_delay ||
+          pointer->cursor_timeout_id == 0)
         {
           guint id;
 
