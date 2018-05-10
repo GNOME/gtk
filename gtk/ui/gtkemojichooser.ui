@@ -43,7 +43,7 @@
                         <!-- Remember to keep headings here in sync with button tooltips below -->
                         <child>
                           <object class="GtkFlowBox" id="recent.box">
-                            <property name="visible">1</property>
+                            <property name="visible">0</property>
                             <property name="homogeneous">1</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
@@ -195,6 +195,7 @@
                     <child>
                       <object class="GtkButton" id="recent.button">
                         <property name="visible">1</property>
+                        <property name="sensitive">0</property>
                         <property name="relief">none</property>
                         <property name="tooltip-text" translatable="yes">Recent</property>
                         <style>
