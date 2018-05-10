@@ -1926,12 +1926,6 @@ button.emoji-section:hover { border-color: #1b1f20; }
 
 button.emoji-section:checked { border-color: #215d9c; }
 
-button.emoji-section label { padding: 0; opacity: 0.55; }
-
-button.emoji-section:hover label { opacity: 0.775; }
-
-button.emoji-section:checked label { opacity: 1; }
-
 .emoji label { font-size: x-large; padding: 6px; }
 
 .emoji :hover { border-radius: 6px; background: #215d9c; }

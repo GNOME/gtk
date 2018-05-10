@@ -124,7 +124,7 @@ scroll_to_section (GtkButton *button,
   if (section->heading)
     gtk_widget_get_allocation (section->heading, &alloc);
 
-  gtk_adjustment_animate_to_value (adj, alloc.y);
+  gtk_adjustment_animate_to_value (adj, alloc.y - alloc.height/2);
 }
 
 static void
@@ -142,6 +142,7 @@ populate_recent_section (GtkEmojiChooser *chooser)
   GVariant *variant;
   GVariant *item;
   GVariantIter iter;
+  gboolean empty = TRUE;
 
   variant = g_settings_get_value (chooser->settings, "recent-emoji");
   g_variant_iter_init (&iter, variant);
@@ -155,6 +156,14 @@ populate_recent_section (GtkEmojiChooser *chooser)
       add_emoji (chooser->recent.box, FALSE, emoji_data, modifier, chooser);
       g_variant_unref (emoji_data);
       g_variant_unref (item);
+      empty = FALSE;
+    }
+
+  /* Show the recent section if it is not empty */
+  if (!empty)
+    {
+      gtk_widget_show (chooser->recent.box);
+      gtk_widget_set_sensitive (chooser->recent.button, TRUE);
     }
   g_variant_unref (variant);
 }
@@ -174,6 +183,7 @@ add_recent_item (GtkEmojiChooser *chooser,
   g_variant_builder_add (&builder, "(@(auss)u)", item, modifier);
 
   children = gtk_container_get_children (GTK_CONTAINER (chooser->recent.box));
+
   for (l = children, i = 1; l; l = l->next, i++)
     {
       GVariant *item2 = g_object_get_data (G_OBJECT (l->data), "emoji-data");
@@ -196,6 +206,10 @@ add_recent_item (GtkEmojiChooser *chooser,
   g_list_free (children);
 
   add_emoji (chooser->recent.box, TRUE, item, modifier, chooser);
+
+  /* Enable recent */
+  gtk_widget_show (chooser->recent.box);
+  gtk_widget_set_sensitive (chooser->recent.button, TRUE);
 
   g_settings_set_value (chooser->settings, "recent-emoji", g_variant_builder_end (&builder));
 
@@ -383,6 +397,10 @@ add_emoji (GtkWidget    *box,
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  /* Force noto emoji color font */
+  PangoFontDescription * font_desc;
+  font_desc = pango_font_description_from_string ("Noto Color Emoji");
+  pango_attr_list_insert (attrs, pango_attr_font_desc_new (font_desc));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
 
@@ -390,7 +408,7 @@ add_emoji (GtkWidget    *box,
   pango_layout_get_extents (layout, &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
-  if (rect.width >= 2 * chooser->emoji_max_width)
+  if (rect.width >= 1.5 * chooser->emoji_max_width)
     {
       gtk_widget_destroy (label);
       return;
@@ -495,7 +513,7 @@ adj_value_changed (GtkAdjustment *adj,
       else
         gtk_widget_get_allocation (section->box, &alloc);
 
-      if (value < alloc.y)
+      if (value < alloc.y - alloc.height/2)
         break;
 
       select_section = section;
@@ -609,19 +627,15 @@ static void
 setup_section (GtkEmojiChooser *chooser,
                EmojiSection   *section,
                const char     *first,
-               gunichar        label)
+               const gchar    *icon)
 {
-  char text[14];
-  char *p;
   GtkAdjustment *adj;
+  GtkWidget *img;
 
   section->first = first;
 
-  p = text;
-  p += g_unichar_to_utf8 (label, p);
-  p += g_unichar_to_utf8 (0xfe0e, p);
-  p[0] = 0;
-  gtk_button_set_label (GTK_BUTTON (section->button), text);
+  img = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (section->button), img);
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
 
@@ -680,22 +694,19 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   g_signal_connect (adj, "value-changed", G_CALLBACK (adj_value_changed), chooser);
 
-  setup_section (chooser, &chooser->recent, NULL, 0x1f557);
-  setup_section (chooser, &chooser->people, "grinning face", 0x1f642);
-  setup_section (chooser, &chooser->body, "selfie", 0x1f44d);
-  setup_section (chooser, &chooser->nature, "monkey face", 0x1f337);
-  setup_section (chooser, &chooser->food, "grapes", 0x1f374);
-  setup_section (chooser, &chooser->travel, "globe showing Europe-Africa", 0x2708);
-  setup_section (chooser, &chooser->activities, "jack-o-lantern", 0x1f3c3);
-  setup_section (chooser, &chooser->objects, "muted speaker", 0x1f514);
-  setup_section (chooser, &chooser->symbols, "ATM sign", 0x2764);
-  setup_section (chooser, &chooser->flags, "chequered flag", 0x1f3f4);
+  setup_section (chooser, &chooser->recent, NULL, "document-open-recent-symbolic");
+  setup_section (chooser, &chooser->people, "grinning face", "face-smile-big-symbolic");
+  setup_section (chooser, &chooser->body, "selfie", "system-users-symbolic");
+  setup_section (chooser, &chooser->nature, "monkey face", "weather-few-clouds-symbolic");
+  setup_section (chooser, &chooser->food, "grapes", "food-drink-symbolic");
+  setup_section (chooser, &chooser->travel, "globe showing Europe-Africa", "airplane-mode-symbolic");
+  setup_section (chooser, &chooser->activities, "jack-o-lantern", "activities-symbolic");
+  setup_section (chooser, &chooser->objects, "muted speaker", "dialog-information-symbolic");
+  setup_section (chooser, &chooser->symbols, "ATM sign", "emote-love-symbolic");
+  setup_section (chooser, &chooser->flags, "chequered flag", "preferences-desktop-locale-symbolic");
 
   populate_emoji_chooser (chooser);
   populate_recent_section (chooser);
-
-  /* We scroll to the top on show, so check the right button for the 1st time */
-  gtk_widget_set_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED, FALSE);
 }
 
 static void
@@ -705,6 +716,16 @@ gtk_emoji_chooser_show (GtkWidget *widget)
   GtkAdjustment *adj;
 
   GTK_WIDGET_CLASS (gtk_emoji_chooser_parent_class)->show (widget);
+
+  /* We scroll to the top on show, so check the right button for the 1st time */
+  if (gtk_widget_get_sensitive (chooser->recent.button)) {
+    gtk_widget_unset_state_flags (chooser->people.button, GTK_STATE_FLAG_CHECKED);
+    gtk_widget_set_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED, FALSE);
+  }
+  else {
+    gtk_widget_unset_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED);
+    gtk_widget_set_state_flags (chooser->people.button, GTK_STATE_FLAG_CHECKED, FALSE);
+  }
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   gtk_adjustment_set_value (adj, 0);
