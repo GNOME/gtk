@@ -166,7 +166,6 @@ do_gestures (GtkWidget *do_widget)
 
       /* 3fg swipe for touchpads */
       gesture = g_object_new (GTK_TYPE_GESTURE_SWIPE,
-                              "widget", drawing_area,
                               "n-points", 3,
                               NULL);
       g_signal_connect (gesture, "begin",
@@ -175,7 +174,8 @@ do_gestures (GtkWidget *do_widget)
                         G_CALLBACK (swipe_gesture_swept), drawing_area);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_BUBBLE);
-      g_object_weak_ref (G_OBJECT (drawing_area), (GWeakNotify) g_object_unref, gesture);
+      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
+
 
       /* Long press */
       gesture = gtk_gesture_long_press_new ();
