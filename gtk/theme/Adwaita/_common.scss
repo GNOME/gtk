@@ -4551,15 +4551,6 @@ button.emoji-section {
   &:backdrop:not(:checked) { border-color: transparent; }
   &:hover { border-color: $borders_color; }
   &:checked { border-color: $selected_bg_color; }
-
-  label {
-    padding: 0;
-
-    opacity: 0.55;
-  }
-
-  &:hover label { opacity: 0.775; }
-  &:checked label { opacity: 1; }
 }
 
 .emoji label {
