@@ -8789,9 +8789,6 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   all_selected = gtk_text_iter_equal (&start, &sel_start) &&
                  gtk_text_iter_equal (&end, &sel_end);
 
-  if (!priv->editable && !has_selection)
-    return G_SOURCE_REMOVE;
-
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
@@ -8817,8 +8814,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view));
   has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_TEXT_BUFFER);
 
-  if (range_contains_editable_text (&sel_start, &sel_end, priv->editable) && has_selection)
-    append_bubble_action (text_view, toolbar, _("Select all"), "edit-select-all-symbolic", "select-all", !all_selected);
+  append_bubble_action (text_view, toolbar, _("Select all"), "edit-select-all-symbolic", "select-all", !all_selected);
 
   if (range_contains_editable_text (&sel_start, &sel_end, priv->editable) && has_selection)
     append_bubble_action (text_view, toolbar, _("Cut"), "edit-cut-symbolic", "cut-clipboard", TRUE);
