@@ -8781,6 +8781,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   GtkWidget *box;
   GtkWidget *toolbar;
 
+  priv->selection_bubble_timeout_id = 0;
   has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                         &sel_start, &sel_end);
   gtk_text_buffer_get_bounds (get_buffer (text_view), &start, &end);
@@ -8789,10 +8790,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
                  gtk_text_iter_equal (&end, &sel_end);
 
   if (!priv->editable && !has_selection)
-    {
-      priv->selection_bubble_timeout_id = 0;
-      return G_SOURCE_REMOVE;
-    }
+    return G_SOURCE_REMOVE;
 
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
