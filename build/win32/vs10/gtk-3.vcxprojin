@@ -205,6 +205,12 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenerateGtkWin32Manifest)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
     </CustomBuild>
+    <CustomBuild Include="..\gentypefuncs.py">
+      <Message>Generating ..\..\..\gtk\gtktypefuncs.c</Message>
+      <Command Condition="'$(Platform)'=='Win32'">$(GenerateTypeFuncs)</Command>
+      <Command Condition="'$(Platform)'=='x64'">$(GenerateTypeFuncs)</Command>
+      <Outputs>..\..\..\gtk\gtktypefuncs.c</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc" />

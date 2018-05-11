@@ -36,8 +36,9 @@ SUBDIRS =	\
 
 EXTRA_DIST +=	\
 	detectenv-msvc.mak		\
-	introspection-msvc.mak		\
+	gentypefuncs.py			\
 	gtk-introspection-msvc.mak	\
+	introspection-msvc.mak		\
 	replace.py			\
 	pc_base.py			\
 	gtkpc.py			\
