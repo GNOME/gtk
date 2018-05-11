@@ -8822,8 +8822,8 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   if (has_selection)
     append_bubble_action (text_view, toolbar, _("Copy"), "edit-copy-symbolic", "copy-clipboard", TRUE);
 
-  if (can_insert)
-    append_bubble_action (text_view, toolbar, _("Paste"), "edit-paste-symbolic", "paste-clipboard", has_clipboard);
+  if (can_insert && has_clipboard)
+    append_bubble_action (text_view, toolbar, _("Paste"), "edit-paste-symbolic", "paste-clipboard", TRUE);
 
   if (priv->populate_all)
     g_signal_emit (text_view, signals[POPULATE_POPUP], 0, box);
