@@ -799,6 +799,9 @@ gdk_drag_context_get_dest_surface
 gdk_drag_context_get_drag_surface
 gdk_drag_context_set_hotspot
 
+<SUBSECTION>
+gdk_drag_action_is_unique
+
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT
 GDK_TYPE_DRAG_CONTEXT
