@@ -8753,19 +8753,14 @@ append_bubble_action (GtkTextView  *text_view,
                       const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *item, *image;
+  GtkWidget *item;
 
-  item = gtk_button_new ();
+  item = gtk_button_new_from_icon_name (icon_name);
   gtk_widget_set_focus_on_click (item, FALSE);
-  image = gtk_image_new_from_icon_name (icon_name);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (item), image);
   gtk_widget_set_tooltip_text (item, label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
   g_object_set_qdata (G_OBJECT (item), quark_gtk_signal, (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), text_view);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
-  gtk_widget_show (GTK_WIDGET (item));
   gtk_container_add (GTK_CONTAINER (toolbar), item);
 }
 
