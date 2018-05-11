@@ -1475,7 +1475,8 @@ gtk_3_FILES = \
 	$(gtk_base_c_sources)		\
 	$(gtk_os_win32_c_sources)	\
 	$(gtk_use_win32_c_sources)	\
-	$(gtk_dbus_built_sources)
+	$(gtk_dbus_built_sources)	\
+	$(gtk_built_sources)
 
 gtk_3_EXCLUDES = dummy
 gtk_3_HEADERS_DIR = $(gtkincludedir)
