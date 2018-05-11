@@ -876,3 +876,22 @@ gdk_drag_context_handle_dest_event (GdkEvent *event)
   gdk_drag_context_commit_drag_status (context);
   return TRUE;;
 }
+
+/**
+ * gdk_drag_action_is_unique:
+ * @action: a #GdkDragAction
+ *
+ * Checks if @action represents a single action or if it
+ * includes multiple flags that can be selected from.
+ *
+ * When @action is 0 - ie no action was given, %TRUE
+ * is returned.
+ *
+ * Returns: %TRUE if exactly one action was given
+ **/
+GdkDragAction
+gdk_drag_action_is_unique (GdkDragAction action)
+{
+  return (action & (action - 1)) == 0;
+}
+
