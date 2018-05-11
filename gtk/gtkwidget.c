@@ -8114,9 +8114,6 @@ gtk_widget_get_ancestor (GtkWidget *widget,
   while (widget && !g_type_is_a (G_OBJECT_TYPE (widget), widget_type))
     widget = widget->priv->parent;
 
-  if (!(widget && g_type_is_a (G_OBJECT_TYPE (widget), widget_type)))
-    return NULL;
-
   return widget;
 }
 
