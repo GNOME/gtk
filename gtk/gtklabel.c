@@ -270,11 +270,11 @@ struct _GtkLabelPrivate
   guint    jtype              : 2;
   guint    wrap               : 1;
   guint    use_underline      : 1;
-  guint    use_markup         : 1;
   guint    ellipsize          : 3;
+  guint    use_markup         : 1;
+  guint    wrap_mode          : 3;
   guint    single_line_mode   : 1;
   guint    in_click           : 1;
-  guint    wrap_mode          : 3;
   guint    pattern_set        : 1;
   guint    track_links        : 1;
 
