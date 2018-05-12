@@ -122,7 +122,6 @@ update_lines (ExampleAppWindow *win)
 {
   GtkWidget *tab, *view;
   GtkTextBuffer *buffer;
-  GtkTextIter iter;
   int count;
   gchar *lines;
 
