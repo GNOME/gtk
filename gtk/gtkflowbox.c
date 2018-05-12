@@ -4068,8 +4068,9 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
  *
  * Binds @model to @box.
  *
- * If @box was already bound to a model, that previous binding is
- * destroyed.
+ * If @box was already bound to @model, the function does nothing.
+ * If @box was already bound to a different model, that previous
+ * binding is destroyed.
  *
  * The contents of @box are cleared and then filled with widgets that
  * represent items from @model. @box is updated whenever @model changes.
@@ -4095,6 +4096,9 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
   g_return_if_fail (GTK_IS_FLOW_BOX (box));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
   g_return_if_fail (model == NULL || create_widget_func != NULL);
+
+  if (priv->bound_model == model)
+    return;
 
   if (priv->bound_model)
     {
