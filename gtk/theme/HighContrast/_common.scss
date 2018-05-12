@@ -3537,6 +3537,11 @@ stackswitcher button.circular {
 
 popover.emoji-picker { padding-left: 0; padding-right: 0; }
 
+popover.emoji-picker .view {
+  border-top: 1px solid $borders_color;
+  border-bottom: 1px solid $borders_color;
+}
+
 button.emoji-section,
 button.emoji-section:backdrop { /* Dodge stuff inherited from backdrop button */
   border-color: transparent;
@@ -3557,32 +3562,23 @@ button.emoji-section:backdrop { /* Dodge stuff inherited from backdrop button */
   outline-offset: -5px;
 
   &:backdrop:not(:checked) { border-color: transparent; }
-  &:hover { border-color: $borders_color; }
-  &:checked { border-color: $selected_bg_color; }
-
-  label {
-    padding: 0;
-
-    opacity: 0.55;
+  &:hover {
+    border-width: 3px;
+    border-style: none none solid;
+    border-color: $borders_color;
   }
-
-  &:hover label { opacity: 0.775; }
-
-  &:checked label {
-    opacity: 1;
-
-    /* Dodge default inversion to white for non-flat, selected button */
+  &:checked {
     color: $fg_color;
+    border-color: $selected_bg_color;
   }
 }
 
-.emoji {
+.emoji label {
   font-size: x-large;
   padding: 6px;
-  border-radius: 6px;
+}
 
-  :hover {
-    background: $selected_bg_color;
-    color: $selected_fg_color;
-  }
+.emoji :hover {
+  border-radius: 6px;
+  background: $selected_bg_color;
 }
