@@ -12,14 +12,17 @@
     <GtkSeparateVSDllSuffix>-vs$(VSVer)</GtkSeparateVSDllSuffix>
     <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
     <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
-    <PythonDir Condition="'$(VisualStudioVersion)' == '10.0'">c:\python34</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)' == '11.0'">c:\python34</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)' == '12.0'">c:\python34</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)' == '14.0'">c:\python36</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)' == '15.0'">c:\python36</PythonDir>
-    <PythonDirX64>$(PythonDir).x64</PythonDirX64>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|Win32'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|Win32'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|Win32'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|Win32'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|Win32'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|x64'">c:\python34.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|x64'">c:\python34.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|x64'">c:\python34.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|x64'">c:\python36.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|x64'">c:\python36.x64</PythonDir>
     <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
-    <IntrospectPythonParamX64>PYTHON=$(PythonDirX64)\python.exe</IntrospectPythonParamX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3versionpathsprops</_PropertySheetDisplayName>
@@ -61,14 +64,8 @@
     <BuildMacro Include="PythonDir">
       <Value>$(PythonDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="PythonDirX64">
-      <Value>$(PythonDirX64)</Value>
-    </BuildMacro>
     <BuildMacro Include="IntrospectPythonParam">
       <Value>$(IntrospectPythonParam)</Value>
-    </BuildMacro>
-    <BuildMacro Include="IntrospectPythonParamX64">
-      <Value>$(IntrospectPythonParamX64)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
