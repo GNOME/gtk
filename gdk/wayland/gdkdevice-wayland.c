@@ -1180,7 +1180,7 @@ data_offer_action (void                 *data,
   if (drop_context == NULL)
     return;
 
-  drop_context->action = gdk_wayland_actions_to_gdk_actions (action);
+  drop_context->suggested_action = gdk_wayland_actions_to_gdk_actions (action);
 
   _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                         GDK_CURRENT_TIME);
