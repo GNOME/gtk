@@ -191,16 +191,16 @@
  *     {
  *        if (i_am_in_height_for_width_mode)
  *          {
- *            int min_width;
+ *            int min_width, dummy;
  *
  *            // First, get the minimum width of our widget
  *            GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
- *                                                    &min_width, NULL, NULL, NULL);
+ *                                                    &min_width, &dummy, &dummy, &dummy);
  *
- *            // Now use the minimum width to retrieve the minmimum and natural height to display
+ *            // Now use the minimum width to retrieve the minimum and natural height to display
  *            // that width.
  *            GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_VERTICAL, min_width,
- *                                                    minimum_size, natural_size, NULL, NULL);
+ *                                                    minimum_size, natural_size, &dummy, &dummy);
  *          }
  *        else
  *          {
