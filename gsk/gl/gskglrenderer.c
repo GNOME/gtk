@@ -53,6 +53,65 @@
                               glGetUniformLocation(program_ptr->id, "u_" #uniform_basename);\
               }G_STMT_END
 
+
+static void G_GNUC_UNUSED
+print_render_node_tree (GskRenderNode *root, int level)
+{
+#define INDENT 4
+  const guint type = gsk_render_node_get_node_type (root);
+  guint i;
+
+  switch (type)
+    {
+      case GSK_CONTAINER_NODE:
+        g_print ("%*s Container\n", level * INDENT, " ");
+        for (i = 0; i < gsk_container_node_get_n_children (root); i++)
+          print_render_node_tree (gsk_container_node_get_child (root, i), level + 1);
+        break;
+
+      case GSK_OFFSET_NODE:
+        g_print ("%*s Offset\n", level * INDENT, " ");
+        print_render_node_tree (gsk_offset_node_get_child (root), level + 1);
+        break;
+
+      case GSK_TRANSFORM_NODE:
+        g_print ("%*s Transform\n", level * INDENT, " ");
+        print_render_node_tree (gsk_transform_node_get_child (root), level + 1);
+        break;
+
+      case GSK_COLOR_MATRIX_NODE:
+        g_print ("%*s Color Matrix\n", level * INDENT, " ");
+        print_render_node_tree (gsk_color_matrix_node_get_child (root), level + 1);
+        break;
+
+      case GSK_CROSS_FADE_NODE:
+        g_print ("%*s Crossfade(%.2f)\n", level * INDENT, " ",
+                 gsk_cross_fade_node_get_progress (root));
+        print_render_node_tree (gsk_cross_fade_node_get_start_child (root), level + 1);
+        print_render_node_tree (gsk_cross_fade_node_get_end_child (root), level + 1);
+        break;
+
+      case GSK_TEXT_NODE:
+        g_print ("%*s Text\n", level * INDENT, " ");
+        break;
+
+      case GSK_SHADOW_NODE:
+        g_print ("%*s Shadow\n", level * INDENT, " ");
+        print_render_node_tree (gsk_shadow_node_get_child (root), level + 1);
+        break;
+
+      case GSK_TEXTURE_NODE:
+        g_print ("%*s Texture %p\n", level * INDENT, " ", gsk_texture_node_get_texture (root));
+        break;
+
+      default:
+        g_print ("UNKNOWN: %u\n", type);
+    }
+
+#undef INDENT
+}
+
+
 static void G_GNUC_UNUSED
 dump_framebuffer (const char *filename, int w, int h)
 {
