@@ -1018,7 +1018,7 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_offset:
- * @snapshot: a $GtkSnapshot
+ * @snapshot: a #GtkSnapshot
  * @x: horizontal translation
  * @y: vertical translation
  *
