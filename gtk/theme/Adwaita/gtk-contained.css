@@ -1936,7 +1936,7 @@ stackswitcher button.circular, stackswitcher button.text-button.circular { min-w
 /********* Emoji * */
 popover.emoji-picker { padding-left: 0; padding-right: 0; }
 
-popover.emoji-picker .view, popover.emoji-picker iconview { border-top: 1px solid #c0c0bd; border-bottom: 1px solid #c0c0bd; }
+popover.emoji-picker .view, popover.emoji-picker iconview { /* rgb(192,192,189); */ border-top: 1px solid #b6b6b3; border-bottom: 1px solid #b6b6b3; }
 
 button.emoji-section { border-color: transparent; border-width: 3px; border-style: none none solid; border-radius: 0; margin: 2px 4px 2px 4px; padding: 3px 0 0; min-width: 32px; min-height: 28px; /* reset props inherited from the button style */ background: none; box-shadow: none; text-shadow: none; outline-offset: -5px; }
 
