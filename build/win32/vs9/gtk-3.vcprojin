@@ -252,6 +252,36 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File RelativePath="..\gentypefuncs.py">
+				<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VCCustomBuildTool"
+						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						CommandLine="$(GenerateTypeFuncs)"
+						Outputs="..\..\..\gtk\gtktypefuncs.c"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						CommandLine="$(GenerateTypeFuncs)"
+						Outputs="..\..\..\gtk\gtktypefuncs.c"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						CommandLine="$(GenerateTypeFuncsX64)"
+						Outputs="..\..\..\gtk\gtktypefuncs.c"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						CommandLine="$(GenerateTypeFuncsX64)"
+						Outputs="..\..\..\gtk\gtktypefuncs.c"
+					/>
+				</FileConfiguration>
+			</File>
 			<File RelativePath="..\..\..\gtk\gtk-win32.rc" />
 			<File RelativePath="..\..\..\gtk\libgtk3.manifest" />
 		</Filter>
