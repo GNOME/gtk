@@ -158,7 +158,7 @@ gdk_drop_context_new (GdkDisplay        *display,
   context->is_source = FALSE;
   g_set_object (&context->source_surface, source_surface);
   g_set_object (&context->dest_surface, dest_surface);
-  context->actions = actions;
+  gdk_drag_context_set_actions (context, actions, actions);
   context_win32->protocol = protocol;
 
   gdk_content_formats_unref (formats);
@@ -444,7 +444,9 @@ idroptarget_dragenter (LPDROPTARGET This,
 
   ctx->context = context;
   context->action = GDK_ACTION_MOVE;
-  context->suggested_action = get_suggested_action (context_win32, grfKeyState);
+  gdk_drag_context_set_actions (context, 
+                                GDK_ACTION_COPY | GDK_ACTION_MOVE,
+                                get_suggested_action (context_win32, grfKeyState));
   set_data_object (&ctx->data_object, pDataObj);
   pt_x = pt.x / context_win32->scale + _gdk_offset_x;
   pt_y = pt.y / context_win32->scale + _gdk_offset_y;
@@ -481,9 +483,11 @@ idroptarget_dragover (LPDROPTARGET This,
   gint pt_x = pt.x / context_win32->scale + _gdk_offset_x;
   gint pt_y = pt.y / context_win32->scale + _gdk_offset_y;
 
-  ctx->context->suggested_action = get_suggested_action (context_win32, grfKeyState);
+  gdk_drag_context_set_actions (ctx->context,
+                                gdk_drag_context_get_actions (ctx->context),
+                                get_suggested_action (context_win32, grfKeyState));
 
-  GDK_NOTE (DND, g_print ("idroptarget_dragover %p @ %d : %d (raw %ld : %ld), suggests %d action S_OK\n", This, pt_x, pt_y, pt.x, pt.y, ctx->context->suggested_action));
+  GDK_NOTE (DND, g_print ("idroptarget_dragover %p @ %d : %d (raw %ld : %ld), suggests %d action S_OK\n", This, pt_x, pt_y, pt.x, pt.y, gdk_drag_context_get_suggested_action (ctx->context)));
 
   if (pt_x != context_win32->last_x ||
       pt_y != context_win32->last_y ||
@@ -541,7 +545,9 @@ idroptarget_drop (LPDROPTARGET This,
       return E_POINTER;
     }
 
-  ctx->context->suggested_action = get_suggested_action (context_win32, grfKeyState);
+  gdk_drag_context_set_actions (ctx->context,
+                                gdk_drag_context_get_actions (ctx->context),
+                                get_suggested_action (context_win32, grfKeyState));
 
   dnd_event_emit (GDK_DROP_START, ctx->context, pt_x, pt_y, ctx->context->dest_surface);
 
@@ -734,8 +740,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       context_win32 = GDK_WIN32_DROP_CONTEXT (context);
       /* WM_DROPFILES drops are always file names */
 
-
-      context->suggested_action = GDK_ACTION_COPY;
+      gdk_drag_context_set_actions (context, GDK_ACTION_COPY, GDK_ACTION_COPY);
       current_dest_drag = context;
 
       hdrop = (HANDLE) msg->wParam;
@@ -860,8 +865,8 @@ gdk_win32_drop_context_drag_status (GdkDragContext *context,
                           " context=%p:{actions=%s,suggested=%s,action=%s}\n",
                           _gdk_win32_drag_action_to_string (action),
                           context,
-                          _gdk_win32_drag_action_to_string (context->actions),
-                          _gdk_win32_drag_action_to_string (context->suggested_action),
+                          _gdk_win32_drag_action_to_string (gdk_drag_context_get_actions (context)),
+                          _gdk_win32_drag_action_to_string (gdk_drag_context_get_suggested_action (context)),
                           _gdk_win32_drag_action_to_string (context->action)));
 
   context->action = action;

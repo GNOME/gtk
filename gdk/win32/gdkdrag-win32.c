@@ -825,7 +825,7 @@ gdk_drag_context_new (GdkDisplay         *display,
 
   context->is_source = TRUE;
   g_set_object (&context->source_surface, source_surface);
-  context->actions = actions;
+  gdk_drag_context_set_actions (context, actions);
   context_win32->protocol = protocol;
 
   gdk_content_formats_unref (formats);
@@ -1806,7 +1806,7 @@ local_send_motion (GdkDragContext *context,
       tmp_event->dnd.time = time;
       gdk_event_set_device (tmp_event, gdk_drag_context_get_device (current_dest_drag));
 
-      current_dest_drag->suggested_action = action;
+      gdk_drag_context_set_actions (current_dest_drag, action, action);
 
       tmp_event->dnd.x_root = x_root;
       tmp_event->dnd.y_root = y_root;
@@ -2090,8 +2090,6 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
 
   g_return_val_if_fail (context != NULL, FALSE);
 
-  context->actions = possible_actions;
-
   GDK_NOTE (DND, g_print ("gdk_win32_drag_context_drag_motion: @ %+d:%+d %s suggested=%s, possible=%s\n"
                           " context=%p:{actions=%s,suggested=%s,action=%s}\n",
                           x_root, y_root,
@@ -2099,8 +2097,8 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
                           _gdk_win32_drag_action_to_string (suggested_action),
                           _gdk_win32_drag_action_to_string (possible_actions),
                           context,
-                          _gdk_win32_drag_action_to_string (context->actions),
-                          _gdk_win32_drag_action_to_string (context->suggested_action),
+                          _gdk_win32_drag_action_to_string (gdk_drag_context_get_actions (context)),
+                          _gdk_win32_drag_action_to_string (gdk_drag_context_get_suggested_action (context)),
                           _gdk_win32_drag_action_to_string (context->action)));
 
   context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
@@ -2118,9 +2116,9 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
                                                        dest_surface);
 
           if (dest_context)
-            dest_context->actions = context->actions;
+            gdk_drag_context_set_actions (dest_context, possible_actions, suggested_action);
 
-          context->suggested_action = suggested_action;
+          gdk_drag_context_set_actions (context, possible_actions, suggested_action);
         }
       else
         {
@@ -2144,12 +2142,12 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
                 default:
                   break;
                 }
-              context->suggested_action = suggested_action;
+              gdk_drag_context_set_actions (context, possible_actions, suggested_action);
             }
           else
             {
               context->dest_surface = NULL;
-              context->action = 0;
+              gdk_drag_context_set_actions (context, 0, 0);
             }
 
           GDK_NOTE (DND, g_print ("gdk_dnd_handle_drag_status: 0x%p\n",
@@ -2190,8 +2188,8 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
               GDK_NOTE (DND, g_print (" returning TRUE\n"
                                       " context=%p:{actions=%s,suggested=%s,action=%s}\n",
                                       context,
-                                      _gdk_win32_drag_action_to_string (context->actions),
-                                      _gdk_win32_drag_action_to_string (context->suggested_action),
+                                      _gdk_win32_drag_action_to_string (gdk_drag_context_get_actions (context)),
+                                      _gdk_win32_drag_action_to_string (gdk_drag_context_get_suggested_action (context)),
                                       _gdk_win32_drag_action_to_string (context->action)));
               return TRUE;
             }
@@ -2201,8 +2199,8 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
   GDK_NOTE (DND, g_print (" returning FALSE\n"
                           " context=%p:{actions=%s,suggested=%s,action=%s}\n",
                           context,
-                          _gdk_win32_drag_action_to_string (context->actions),
-                          _gdk_win32_drag_action_to_string (context->suggested_action),
+                          _gdk_win32_drag_action_to_string (gdk_drag_context_get_actions (context)),
+                          _gdk_win32_drag_action_to_string (gdk_drag_context_get_suggested_action (context)),
                           _gdk_win32_drag_action_to_string (context->action)));
   return FALSE;
 }
