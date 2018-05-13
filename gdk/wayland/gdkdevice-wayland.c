@@ -1127,7 +1127,9 @@ data_offer_source_actions (void                 *data,
   if (drop_context == NULL)
     return;
 
-  drop_context->actions = gdk_wayland_actions_to_gdk_actions (source_actions);
+  gdk_drag_context_set_actions (drop_context,
+                                gdk_wayland_actions_to_gdk_actions (source_actions),
+                                gdk_drag_context_get_suggested_action (drop_context));
 
   _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                         GDK_CURRENT_TIME);
@@ -1153,7 +1155,9 @@ data_offer_action (void                 *data,
   if (drop_context == NULL)
     return;
 
-  drop_context->suggested_action = gdk_wayland_actions_to_gdk_actions (action);
+  gdk_drag_context_set_actions (drop_context,
+                                gdk_drag_context_get_actions (drop_context),
+                                gdk_wayland_actions_to_gdk_actions (action));
 
   _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                         GDK_CURRENT_TIME);
