@@ -188,6 +188,7 @@ gtk_video_dispose (GObject *object)
   gtk_video_set_media_stream (self, NULL);
 
   g_clear_pointer (&self->box, gtk_widget_unparent);
+  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (gtk_video_parent_class)->dispose (object);
 }
