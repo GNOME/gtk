@@ -104,8 +104,6 @@ struct _GdkX11DragContext
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
   gulong timestamp;            /* Timestamp we claimed the DND selection with */
-  GdkDragAction old_action;    /* The last action we sent to the source */
-  GdkDragAction old_actions;   /* The last actions we sent to the source */
   GdkDragAction xdnd_actions;  /* What is currently set in XdndActionList */
   guint version;               /* Xdnd protocol version */
 
@@ -125,7 +123,6 @@ struct _GdkX11DragContext
   Window dest_xid;             /* The last window we looked up */
   Window drop_xid;             /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set  : 1; /* Whether we've already set XdndTypeList */
-  guint xdnd_actions_set  : 1; /* Whether we've already set XdndActionList */
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
   guint drag_status       : 4; /* current status of drag */
   guint drop_failed       : 1; /* Whether the drop was unsuccessful */
@@ -1171,7 +1168,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
   guint actions;
   GdkDisplay *display = gdk_drag_context_get_display (context);
 
-  actions = context->actions;
+  actions = gdk_drag_context_get_actions (context);
   n_atoms = 0;
   for (i = 0; i < xdnd_n_actions; i++)
     {
@@ -1184,7 +1181,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
 
   atomlist = g_new (Atom, n_atoms);
 
-  actions = context->actions;
+  actions = gdk_drag_context_get_actions (context);
   n_atoms = 0;
   for (i = 0; i < xdnd_n_actions; i++)
     {
@@ -1204,8 +1201,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
 
   g_free (atomlist);
 
-  context_x11->xdnd_actions_set = TRUE;
-  context_x11->xdnd_actions = context->actions;
+  context_x11->xdnd_actions = gdk_drag_context_get_actions (context);
 }
 
 static void
@@ -2223,11 +2219,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
   if (context_x11->drag_surface)
     move_drag_surface (context, x_root, y_root);
 
-  context_x11->old_actions = context->actions;
   context->actions = possible_actions;
-
-  if (context_x11->old_actions != possible_actions)
-    context_x11->xdnd_actions_set = FALSE;
 
   if (protocol == GDK_DRAG_PROTO_XDND && context_x11->version == 0)
     {
@@ -2252,7 +2244,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
   /* When we have a Xdnd target, make sure our XdndActionList
    * matches the current actions;
    */
-  if (protocol == GDK_DRAG_PROTO_XDND && !context_x11->xdnd_actions_set)
+  if (protocol == GDK_DRAG_PROTO_XDND && context_x11->xdnd_actions != gdk_drag_context_get_actions (context))
     {
       if (dest_surface)
         {
@@ -2302,9 +2294,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
             default:
               break;
             }
-          context_x11->old_action = suggested_action;
           context->suggested_action = suggested_action;
-          context_x11->old_actions = possible_actions;
         }
       else
         {
@@ -2324,7 +2314,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
     }
   else
     {
-      context_x11->old_action = context->suggested_action;
       context->suggested_action = suggested_action;
     }
 
@@ -2446,8 +2435,6 @@ gdk_x11_drag_context_drag_status (GdkDragContext *context,
                                GDK_SURFACE_XID (context->source_surface)));
         }
     }
-
-  context_x11->old_action = action;
 }
 
 static void
