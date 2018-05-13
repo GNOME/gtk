@@ -119,9 +119,6 @@ void _gdk_wayland_drag_context_set_coords (GdkDragContext *context,
                                            gdouble         x,
                                            gdouble         y);
 
-void gdk_wayland_drag_context_set_action (GdkDragContext *context,
-                                          GdkDragAction   action);
-
 GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
 GdkDragContext * gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *surface);
 struct wl_data_source * gdk_wayland_drag_context_get_data_source  (GdkDragContext *context);
