@@ -146,13 +146,6 @@ gdk_to_wl_actions (GdkDragAction action)
   return dnd_actions;
 }
 
-void
-gdk_wayland_drag_context_set_action (GdkDragContext *context,
-                                     GdkDragAction   action)
-{
-  context->suggested_action = context->action = action;
-}
-
 static void
 gdk_wayland_drag_context_drag_abort (GdkDragContext *context,
 				     guint32         time)
@@ -326,8 +319,6 @@ gdk_wayland_drag_context_init (GdkWaylandDragContext *context_wayland)
   contexts = g_list_prepend (contexts, context);
 
   context->action = GDK_ACTION_COPY;
-  context->suggested_action = GDK_ACTION_COPY;
-  context->actions = GDK_ACTION_COPY | GDK_ACTION_MOVE;
 }
 
 static GdkSurface *

@@ -1527,6 +1527,7 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   GdkDisplay *display = gdk_drag_context_get_display (context);
+  GdkDragAction actions = GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK;
   Atom type;
   int format;
   gulong nitems, after;
@@ -1549,12 +1550,12 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
                               &after, &data) == Success &&
           type == XA_ATOM)
         {
+          actions = 0;
+
           atoms = (Atom *)data;
 
-          context->actions = 0;
-
           for (i = 0; i < nitems; i++)
-            context->actions |= xdnd_action_from_atom (display, atoms[i]);
+            actions |= xdnd_action_from_atom (display, atoms[i]);
 
           context_x11->xdnd_have_actions = TRUE;
 
@@ -1562,20 +1563,20 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
           if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
             {
               GString *action_str = g_string_new (NULL);
-              if (context->actions & GDK_ACTION_MOVE)
+              GdkDragAction actions = gdk_drag_context_get_actions (context);
+              if (actions & GDK_ACTION_MOVE)
                 g_string_append(action_str, "MOVE ");
-              if (context->actions & GDK_ACTION_COPY)
+              if (actions & GDK_ACTION_COPY)
                 g_string_append(action_str, "COPY ");
-              if (context->actions & GDK_ACTION_LINK)
+              if (actions & GDK_ACTION_LINK)
                 g_string_append(action_str, "LINK ");
-              if (context->actions & GDK_ACTION_ASK)
+              if (actions & GDK_ACTION_ASK)
                 g_string_append(action_str, "ASK ");
 
               g_message("Xdnd actions = %s", action_str->str);
               g_string_free (action_str, TRUE);
             }
 #endif /* G_ENABLE_DEBUG */
-
         }
 
       if (data)
@@ -1595,10 +1596,12 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
 
       if (source_context)
         {
-          context->actions = source_context->actions;
+          actions = gdk_drag_context_get_actions (source_context);
           context_x11->xdnd_have_actions = TRUE;
         }
     }
+
+  gdk_drag_context_set_actions (context, actions, gdk_drag_context_get_suggested_action (context));
 }
 
 /* We have to make sure that the XdndActionList we keep internally
@@ -1899,6 +1902,7 @@ xdnd_position_filter (const XEvent *xevent,
   GdkX11Display *display_x11;
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
+  GdkDragAction suggested_action;
 
    if (!event->any.surface ||
        gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
@@ -1930,10 +1934,15 @@ xdnd_position_filter (const XEvent *xevent,
 
       event->dnd.time = time;
 
-      context->suggested_action = xdnd_action_from_atom (display, action);
-
-      if (!context_x11->xdnd_have_actions)
-        context->actions = context->suggested_action;
+      suggested_action = xdnd_action_from_atom (display, action);
+      if (context_x11->xdnd_have_actions)
+        gdk_drag_context_set_actions (context,
+                                      gdk_drag_context_get_actions (context),
+                                      suggested_action);
+      else
+        gdk_drag_context_set_actions (context,
+                                      suggested_action,
+                                      suggested_action);
 
       event->dnd.x_root = x_root / impl->surface_scale;
       event->dnd.y_root = y_root / impl->surface_scale;
@@ -2219,7 +2228,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
   if (context_x11->drag_surface)
     move_drag_surface (context, x_root, y_root);
 
-  context->actions = possible_actions;
+  gdk_drag_context_set_actions (context, possible_actions, suggested_action);
 
   if (protocol == GDK_DRAG_PROTO_XDND && context_x11->version == 0)
     {
@@ -2261,7 +2270,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
               if (dest_context)
                 {
-                  dest_context->actions = context->actions;
+                  gdk_drag_context_set_actions (dest_context, possible_actions, suggested_action);
                   GDK_X11_DRAG_CONTEXT (dest_context)->xdnd_have_actions = TRUE;
                 }
             }
@@ -2294,7 +2303,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
             default:
               break;
             }
-          context->suggested_action = suggested_action;
         }
       else
         {
@@ -2311,10 +2319,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
           context_x11->current_action = context->action;
           g_signal_emit_by_name (context, "action-changed", context->action);
         }
-    }
-  else
-    {
-      context->suggested_action = suggested_action;
     }
 
   /* Send a drag-motion event */
@@ -2342,7 +2346,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
                     gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
-                  context->action = context->suggested_action;
+                  context->action = gdk_drag_context_get_suggested_action (context);
                 else
                   context->action = 0;
 
