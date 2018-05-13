@@ -78,8 +78,6 @@ struct _GdkDragContext {
   GdkSurface *drag_surface;
 
   GdkContentProvider *content;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
   GdkDragAction action;
 
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
@@ -87,6 +85,10 @@ struct _GdkDragContext {
 
 void     gdk_drag_context_set_cursor          (GdkDragContext *context,
                                                GdkCursor      *cursor);
+void     gdk_drag_context_set_actions         (GdkDragContext *context,
+                                               GdkDragAction   actions,
+                                               GdkDragAction   suggested_action);
+
 void     gdk_drag_context_cancel              (GdkDragContext      *context,
                                                GdkDragCancelReason  reason);
 gboolean gdk_drag_context_handle_source_event (GdkEvent *event);

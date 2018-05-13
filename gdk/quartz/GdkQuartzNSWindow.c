@@ -559,11 +559,13 @@ drag_action_to_drag_operation (GdkDragAction action)
 static void
 update_context_from_dragging_info (id <NSDraggingInfo> sender)
 {
+  GdkDragAction action;
+
   g_assert (current_context != NULL);
 
   GDK_QUARTZ_DRAG_CONTEXT (current_context)->dragging_info = sender;
-  current_context->suggested_action = drag_operation_to_drag_action ([sender draggingSourceOperationMask]);
-  current_context->actions = current_context->suggested_action;
+  action = drag_operation_to_drag_action ([sender draggingSourceOperationMask]);
+  gdk_drag_context_set_actions (current_context, action, action);
 }
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender

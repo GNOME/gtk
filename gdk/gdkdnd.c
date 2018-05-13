@@ -46,6 +46,8 @@ struct _GdkDragContextPrivate
   GdkDevice *device;
 #endif
   GdkContentFormats *formats;
+  GdkDragAction actions;
+  GdkDragAction suggested_action;
 };
 
 static struct {
@@ -166,9 +168,11 @@ gdk_drag_context_get_formats (GdkDragContext *context)
 GdkDragAction
 gdk_drag_context_get_actions (GdkDragContext *context)
 {
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), 0);
 
-  return context->actions;
+  return priv->actions;
 }
 
 /**
@@ -182,9 +186,11 @@ gdk_drag_context_get_actions (GdkDragContext *context)
 GdkDragAction
 gdk_drag_context_get_suggested_action (GdkDragContext *context)
 {
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), 0);
 
-  return context->suggested_action;
+  return priv->suggested_action;
 }
 
 /**
@@ -707,6 +713,17 @@ gdk_drag_context_write_finish (GdkDragContext *context,
   return g_task_propagate_boolean (G_TASK (result), error); 
 }
 
+void
+gdk_drag_context_set_actions (GdkDragContext *context,
+                              GdkDragAction   actions,
+                              GdkDragAction   suggested_action)
+{
+  GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
+
+  priv->actions = actions;
+  priv->suggested_action = suggested_action;
+}
+
 /**
  * gdk_drag_context_get_drag_surface:
  * @context: a #GdkDragContext
@@ -894,4 +911,3 @@ gdk_drag_action_is_unique (GdkDragAction action)
 {
   return (action & (action - 1)) == 0;
 }
-
