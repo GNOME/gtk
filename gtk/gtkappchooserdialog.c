@@ -685,7 +685,8 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
                                P_("Heading"),
                                P_("The text to show at the top of the dialog"),
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+                               G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
 
   /* Bind class to template
