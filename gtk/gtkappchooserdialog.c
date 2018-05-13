@@ -532,6 +532,7 @@ gtk_app_chooser_dialog_finalize (GObject *object)
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
 
   g_free (self->priv->content_type);
+  g_free (self->priv->heading);
 
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->finalize (object);
 }
