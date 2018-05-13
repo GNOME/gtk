@@ -801,6 +801,7 @@ gtk_about_dialog_finalize (GObject *object)
   g_free (priv->website_url);
   g_free (priv->website_text);
   g_free (priv->translator_credits);
+  g_free (priv->system_information);
 
   g_strfreev (priv->authors);
   g_strfreev (priv->documenters);
@@ -1371,6 +1372,7 @@ gtk_about_dialog_set_system_information (GtkAboutDialog *about,
 
   priv = about->priv;
 
+  g_free (priv->system_information);
   priv->system_information = g_strdup (system_information);
   update_system_button_visibility (about);
 
