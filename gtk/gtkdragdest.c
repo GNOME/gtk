@@ -115,7 +115,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * behaviors described by @flags make some assumptions, that can conflict
  * with your own signal handlers. For instance #GTK_DEST_DEFAULT_DROP causes
  * invokations of gdk_drag_status() in the context of #GtkWidget::drag-motion,
- * and invokations of gtk_drag_finish() in #GtkWidget::drag-data-received.
+ * and invokations of gdk_drag_finish() in #GtkWidget::drag-data-received.
  * Especially the later is dramatic, when your own #GtkWidget::drag-motion
  * handler calls gtk_drag_get_data() to inspect the dragged data.
  *

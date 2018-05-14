@@ -49,9 +49,9 @@ G_BEGIN_DECLS
  * @GTK_DEST_DEFAULT_DROP: If set for a widget, when a drop occurs, GTK+ will
  *   will check if the drag matches this widget’s list of possible formats and
  *   actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget.
- *   Whether or not the drop is successful, GTK+ will call gtk_drag_finish(). If
+ *   Whether or not the drop is successful, GTK+ will call gdk_drag_finish(). If
  *   the action was a move, then if the drag was successful, then %TRUE will be
- *   passed for the @delete parameter to gtk_drag_finish().
+ *   passed for the @delete parameter to gdk_drag_finish().
  * @GTK_DEST_DEFAULT_ALL: If set, specifies that all default actions should
  *   be taken.
  *
