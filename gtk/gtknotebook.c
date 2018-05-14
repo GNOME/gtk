@@ -3300,10 +3300,10 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
       child = (void*) gtk_selection_data_get_data (data);
 
       do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child);
-      gtk_drag_finish (context, TRUE, time);
+      gdk_drag_finish (context, TRUE, time);
     }
   else
-    gtk_drag_finish (context, FALSE, time);
+    gdk_drag_finish (context, FALSE, time);
 }
 
 /* Private GtkContainer Methods :

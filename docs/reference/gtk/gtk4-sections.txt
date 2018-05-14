@@ -5026,7 +5026,6 @@ gtk_drag_dest_add_image_targets
 gtk_drag_dest_add_uri_targets
 gtk_drag_dest_set_track_motion
 gtk_drag_dest_get_track_motion
-gtk_drag_finish
 gtk_drag_get_data
 gtk_drag_get_source_widget
 gtk_drag_highlight

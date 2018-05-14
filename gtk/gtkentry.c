@@ -8623,7 +8623,7 @@ gtk_entry_drag_drop  (GtkWidget        *widget,
       gtk_drag_get_data (widget, context, target, time);
     }
   else
-    gtk_drag_finish (context, FALSE, time);
+    gdk_drag_finish (context, FALSE, time);
   
   return TRUE;
 }
@@ -8730,12 +8730,12 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
           end_change (entry);
 	}
       
-      gtk_drag_finish (context, TRUE, time);
+      gdk_drag_finish (context, TRUE, time);
     }
   else
     {
       /* Drag and drop didn't happen! */
-      gtk_drag_finish (context, FALSE, time);
+      gdk_drag_finish (context, FALSE, time);
     }
 
   g_free (str);
