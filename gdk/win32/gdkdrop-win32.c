@@ -853,10 +853,10 @@ gdk_dropfiles_filter (GdkWin32Display *display,
 /* Destination side */
 
 static void
-gdk_win32_drop_context_drag_status (GdkDragContext *context,
-                 GdkDragAction   action,
-                 guint32         time)
+gdk_win32_drop_context_status (GdkDrop       *drop,
+                               GdkDragAction  action)
 {
+  GdkDragContext *context = GDK_DRAG_CONTEXT (drop);
   GdkDragContext *src_context;
 
   g_return_if_fail (context != NULL);
@@ -1205,10 +1205,10 @@ gdk_win32_drop_context_class_init (GdkWin32DropContextClass *klass)
 
   object_class->finalize = gdk_win32_drop_context_finalize;
 
+  drop_class->status = gdk_win32_drop_context_status;
   drop_class->read_async = gdk_win32_drop_context_read_async;
   drop_class->read_finish = gdk_win32_drop_context_read_finish;
 
-  context_class->drag_status = gdk_win32_drop_context_drag_status;
   context_class->drop_finish = gdk_win32_drop_context_drop_finish;
 }
 
