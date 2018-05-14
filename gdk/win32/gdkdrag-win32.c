@@ -2368,7 +2368,7 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
                           success ? "dropped successfully" : "dropped unsuccessfully"));
 
   /* FIXME: This is temporary, until the code is fixed to ensure that
-   * gdk_drop_finish () is called by GTK.
+   * gdk_drag_finish () is called by GTK.
    */
   if (use_ole2_dnd)
     {
