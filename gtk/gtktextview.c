@@ -7859,7 +7859,7 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
   if (target != NULL)
     gtk_drag_get_data (widget, context, target, time);
   else
-    gtk_drag_finish (context, FALSE, time);
+    gdk_drag_finish (context, FALSE, time);
 
   return TRUE;
 }
@@ -7965,7 +7965,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     insert_text_data (text_view, &drop_point, selection_data);
 
  done:
-  gtk_drag_finish (context, success, time);
+  gdk_drag_finish (context, success, time);
 
   if (success)
     {

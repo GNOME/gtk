@@ -6422,7 +6422,7 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
         accepted = TRUE;
     }
 
-  gtk_drag_finish (context,
+  gdk_drag_finish (context,
                    accepted,
                    time);
 

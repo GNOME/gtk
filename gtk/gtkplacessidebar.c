@@ -2094,7 +2094,7 @@ drag_data_received_callback (GtkWidget        *list_box,
 
 out:
   sidebar->drop_occurred = FALSE;
-  gtk_drag_finish (context, success, time);
+  gdk_drag_finish (context, success, time);
   stop_drop_feedback (sidebar);
   g_free (target_uri);
 }

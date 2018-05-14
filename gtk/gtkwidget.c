@@ -1951,8 +1951,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * the cursor position is in a drop zone or not. If it is not in a drop
    * zone, it returns %FALSE and no further processing is necessary.
    * Otherwise, the handler returns %TRUE. In this case, the handler must
-   * ensure that gtk_drag_finish() is called to let the source know that
-   * the drop is done. The call to gtk_drag_finish() can be done either
+   * ensure that gdk_drag_finish() is called to let the source know that
+   * the drop is done. The call to gdk_drag_finish() can be done either
    * directly or in a #GtkWidget::drag-data-received handler which gets
    * triggered by calling gtk_drag_get_data() to receive the data for one
    * or more of the supported targets.
@@ -2015,15 +2015,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * If the data was received in response to a #GtkWidget::drag-drop signal
    * (and this is the last target to be received), the handler for this
    * signal is expected to process the received data and then call
-   * gtk_drag_finish(), setting the @success parameter depending on
+   * gdk_drag_finish(), setting the @success parameter depending on
    * whether the data was processed successfully.
    *
    * Applications must create some means to determine why the signal was emitted 
-   * and therefore whether to call gdk_drag_status() or gtk_drag_finish(). 
+   * and therefore whether to call gdk_drag_status() or gdk_drag_finish(). 
    *
    * The handler may inspect the selected action with
    * gdk_drag_context_get_selected_action() before calling
-   * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as
+   * gdk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as
    * shown in the following example:
    * |[<!-- language="C" -->
    * void
@@ -2062,10 +2062,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *             action = GDK_ACTION_COPY;
    *          }
    *
-   *       gtk_drag_finish (context, TRUE, action == GDK_ACTION_MOVE, time);
+   *       gdk_drag_finish (context, TRUE, action == GDK_ACTION_MOVE, time);
    *     }
    *   else
-   *     gtk_drag_finish (context, FALSE, FALSE, time);
+   *     gdk_drag_finish (context, FALSE, FALSE, time);
    *  }
    * ]|
    */
