@@ -1728,7 +1728,7 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->tabs = NULL;
   priv->editable = TRUE;
 
-  priv->scroll_after_paste = TRUE;
+  priv->scroll_after_paste = FALSE;
 
   gtk_drag_dest_set (widget, 0, NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
@@ -5666,10 +5666,6 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   else if (button == GDK_BUTTON_MIDDLE &&
            get_middle_click_paste (text_view))
     {
-      /* We do not want to scroll back to the insert iter when we paste
-         with the middle button */
-      priv->scroll_after_paste = FALSE;
-
       get_iter_from_gesture (text_view, priv->multipress_gesture,
                              &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
@@ -7217,6 +7213,8 @@ gtk_text_view_paste_clipboard (GtkTextView *text_view)
   GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 						      GDK_SELECTION_CLIPBOARD);
   
+  text_view->priv->scroll_after_paste = TRUE;
+
   gtk_text_buffer_paste_clipboard (get_buffer (text_view),
 				   clipboard,
 				   NULL,
@@ -7239,7 +7237,7 @@ gtk_text_view_paste_done_handler (GtkTextBuffer *buffer,
       gtk_text_view_scroll_mark_onscreen (text_view, gtk_text_buffer_get_insert (buffer));
     }
 
-  priv->scroll_after_paste = TRUE;
+  priv->scroll_after_paste = FALSE;
 }
 
 static void
