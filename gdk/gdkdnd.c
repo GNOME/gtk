@@ -722,6 +722,11 @@ gdk_drag_context_set_actions (GdkDragContext *context,
 
   priv->actions = actions;
   priv->suggested_action = suggested_action;
+
+  if (suggested_action & GDK_ACTION_ASK)
+    gdk_drop_set_actions (GDK_DROP (context), actions & GDK_ACTION_ALL);
+  else
+    gdk_drop_set_actions (GDK_DROP (context), suggested_action);
 }
 
 /**
