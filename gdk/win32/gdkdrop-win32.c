@@ -905,7 +905,7 @@ gdk_win32_drop_context_drop_finish (GdkDragContext *context,
 
   g_return_if_fail (context != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_drop_finish\n"));
+  GDK_NOTE (DND, g_print ("gdk_drag_finish\n"));
 
   if (!use_ole2_dnd)
     {
