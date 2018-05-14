@@ -204,7 +204,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   
   if (site && site->flags & GTK_DEST_DEFAULT_DROP)
     {
-      gtk_drag_finish (context, 
+      gdk_drag_finish (context, 
 		       (selection_data->length >= 0),
 		       (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
 		       time);
@@ -212,7 +212,7 @@ gtk_drag_get_data (GtkWidget      *widget,
 }
 
 /**
- * gtk_drag_finish: (method)
+ * gdk_drag_finish: (method)
  * @context: the drag context.
  * @success: a flag indicating whether the drop was successful
  * @del: a flag indicating whether the source should delete the
@@ -220,7 +220,7 @@ gtk_drag_get_data (GtkWidget      *widget,
  * @time_: the timestamp from the #GtkWidget::drag-drop signal.
  */
 void 
-gtk_drag_finish (GdkDragContext *context,
+gdk_drag_finish (GdkDragContext *context,
 		 gboolean        success,
 		 gboolean        del,
 		 guint32         time)
@@ -831,7 +831,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 
       if (target == NULL)
 	{
-	  gtk_drag_finish (context, FALSE, FALSE, time);
+	  gdk_drag_finish (context, FALSE, FALSE, time);
 	  return TRUE;
 	}
       else

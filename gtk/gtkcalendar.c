@@ -3056,7 +3056,7 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
     {
       g_warning ("Received invalid date data");
       g_date_free (date);
-      gtk_drag_finish (context, FALSE, time);
+      gdk_drag_finish (context, FALSE, time);
       return;
     }
 
@@ -3065,7 +3065,7 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
   year = g_date_get_year (date);
   g_date_free (date);
 
-  gtk_drag_finish (context, TRUE, time);
+  gdk_drag_finish (context, TRUE, time);
 
 
   g_object_freeze_notify (G_OBJECT (calendar));
