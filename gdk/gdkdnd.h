@@ -60,6 +60,15 @@ typedef enum
 } GdkDragAction;
 
 /**
+ * GDK_ACTION_ALL:
+ *
+ * Defines all possible DND actions. This can be used in gdk_drop_status()
+ * messages when any drop can be accepted or a more specific drop method
+ * is not yet known.
+ */
+#define GDK_ACTION_ALL (GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK)
+
+/**
  * GdkDragCancelReason:
  * @GDK_DRAG_CANCEL_NO_TARGET: There is no suitable drop target.
  * @GDK_DRAG_CANCEL_USER_CANCELLED: Drag cancelled by the user

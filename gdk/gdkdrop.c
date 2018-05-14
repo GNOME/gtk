@@ -35,10 +35,12 @@ typedef struct _GdkDropPrivate GdkDropPrivate;
 struct _GdkDropPrivate {
   GdkDevice *device;
   GdkContentFormats *formats;
+  GdkDragAction actions;
 };
 
 enum {
   PROP_0,
+  PROP_ACTIONS,
   PROP_DEVICE,
   PROP_DISPLAY,
   PROP_FORMATS,
@@ -101,6 +103,10 @@ gdk_drop_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
+    case PROP_ACTIONS:
+      gdk_drop_set_actions (self, g_value_get_flags (value));
+      break;
+
     case PROP_DEVICE:
       priv->device = g_value_dup_object (value);
       g_assert (priv->device != NULL);
@@ -130,6 +136,10 @@ gdk_drop_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
+    case PROP_ACTIONS:
+      g_value_set_flags (value, priv->actions);
+      break;
+
     case PROP_DEVICE:
       g_value_set_object (value, priv->device);
       break;
@@ -167,6 +177,22 @@ gdk_drop_class_init (GdkDropClass *klass)
   object_class->get_property = gdk_drop_get_property;
   object_class->set_property = gdk_drop_set_property;
   object_class->finalize = gdk_drop_finalize;
+
+  /**
+   * GdkDrop:actions:
+   *
+   * The possible actions for this drop
+   */
+  properties[PROP_ACTIONS] =
+    g_param_spec_flags ("actions",
+                        "Actions",
+                        "The possible actions for this drop",
+                         GDK_TYPE_DRAG_ACTION,
+                         GDK_ACTION_ALL,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GdkDrop:device:
@@ -272,6 +298,49 @@ gdk_drop_get_formats (GdkDrop *self)
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
   return priv->formats;
+}
+
+/**
+ * gdk_drop_get_actions:
+ * @self: a #GdkDrop
+ *
+ * Returns the possible actions for this #GdkDrop. If this value
+ * contains multiple actions - ie gdk_drag_action_is_unique()
+ * returns %FALSE for the result - gdk_drop_finish() must choose
+ * the action to use when accepting the drop.
+ *
+ * This value may change over the lifetime of the #GdkDrop both
+ * as a response to source side actions as well as to calls to
+ * gdk_drop_status() or gdk_drop_finish(). The source side will
+ * not change this value anymore once a drop has started.
+ *
+ * Returns: The possible #GdkDragActions
+ **/
+GdkDragAction
+gdk_drop_get_actions (GdkDrop *self)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DROP (self), 0);
+
+  return priv->actions;
+}
+
+void
+gdk_drop_set_actions (GdkDrop       *self,
+                      GdkDragAction  actions)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  g_return_if_fail (GDK_IS_DROP (self));
+  g_return_if_fail ((actions & GDK_ACTION_ASK) == 0);
+
+  if (priv->actions == actions)
+    return;
+
+  priv->actions = actions;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIONS]);
 }
 
 /**
