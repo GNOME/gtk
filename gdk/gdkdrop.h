@@ -49,6 +49,10 @@ GDK_AVAILABLE_IN_ALL
 GdkDragAction           gdk_drop_get_actions            (GdkDrop                *self);
 
 GDK_AVAILABLE_IN_ALL
+void                    gdk_drop_status                 (GdkDrop                *self,
+                                                         GdkDragAction           actions);
+
+GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_read_async             (GdkDrop                *self,
                                                          const char            **mime_types,
                                                          int                     io_priority,

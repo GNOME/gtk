@@ -533,9 +533,7 @@ gdk_drag_status (GdkDragContext *context,
                  GdkDragAction   action,
                  guint32         time_)
 {
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  GDK_DRAG_CONTEXT_GET_CLASS (context)->drag_status (context, action, time_);
+  gdk_drop_status (GDK_DROP (context), action);
 }
 
 /*

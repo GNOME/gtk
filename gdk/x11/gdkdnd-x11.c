@@ -233,9 +233,8 @@ static gboolean    gdk_x11_drag_context_drag_motion (GdkDragContext  *context,
                                                      GdkDragAction    suggested_action,
                                                      GdkDragAction    possible_actions,
                                                      guint32          time);
-static void        gdk_x11_drag_context_drag_status (GdkDragContext  *context,
-                                                     GdkDragAction    action,
-                                                     guint32          time_);
+static void        gdk_x11_drag_context_status      (GdkDrop         *drop,
+                                                     GdkDragAction    actions);
 static void        gdk_x11_drag_context_drag_abort  (GdkDragContext  *context,
                                                      guint32          time_);
 static void        gdk_x11_drag_context_drag_drop   (GdkDragContext  *context,
@@ -394,10 +393,10 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 
   object_class->finalize = gdk_x11_drag_context_finalize;
 
+  drop_class->status = gdk_x11_drag_context_status;
   drop_class->read_async = gdk_x11_drag_context_read_async;
   drop_class->read_finish = gdk_x11_drag_context_read_finish;
 
-  context_class->drag_status = gdk_x11_drag_context_drag_status;
   context_class->drag_abort = gdk_x11_drag_context_drag_abort;
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
   context_class->drop_finish = gdk_x11_drag_context_drop_finish;
@@ -2408,30 +2407,32 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
 /* Destination side */
 
 static void
-gdk_x11_drag_context_drag_status (GdkDragContext *context,
-                                  GdkDragAction   action,
-                                  guint32         time_)
+gdk_x11_drag_context_status (GdkDrop       *drop,
+                             GdkDragAction  actions)
 {
+  GdkDragContext *context = GDK_DRAG_CONTEXT (drop);
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
   XEvent xev;
   GdkDisplay *display;
 
   display = gdk_drag_context_get_display (context);
 
-  context->action = action;
+  context->action = actions;
 
   if (context_x11->protocol == GDK_DRAG_PROTO_XDND)
     {
+      GdkDragAction possible_actions = actions & gdk_drop_get_actions (drop);
+
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
       xev.xclient.format = 32;
       xev.xclient.window = GDK_SURFACE_XID (context->source_surface);
 
       xev.xclient.data.l[0] = GDK_SURFACE_XID (context->dest_surface);
-      xev.xclient.data.l[1] = (action != 0) ? (2 | 1) : 0;
+      xev.xclient.data.l[1] = (possible_actions != 0) ? (2 | 1) : 0;
       xev.xclient.data.l[2] = 0;
       xev.xclient.data.l[3] = 0;
-      xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
+      xev.xclient.data.l[4] = xdnd_action_to_atom (display, possible_actions);
       if (!xdnd_send_xevent (context_x11, context->source_surface, FALSE, &xev))
         {
           GDK_DISPLAY_NOTE (display, DND,
