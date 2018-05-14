@@ -104,6 +104,12 @@ key_pressed (GtkEventController   *controller,
 }
 
 static void
+destroy_controller (GtkEventController *controller)
+{
+  gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
+}
+
+static void
 hierarchy_changed (GtkWidget *widget,
                    GtkWidget *previous_toplevel)
 {
@@ -119,7 +125,7 @@ hierarchy_changed (GtkWidget *widget,
     return;
 
   controller = gtk_event_controller_key_new ();
-  g_object_set_data_full (G_OBJECT (toplevel), "prop-controller", controller, g_object_unref);
+  g_object_set_data_full (G_OBJECT (toplevel), "prop-controller", controller, (GDestroyNotify)destroy_controller);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 }

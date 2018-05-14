@@ -34,6 +34,7 @@
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkinvisible.h"
+#include "gtkgesture.h"
 
 G_BEGIN_DECLS
 
@@ -330,6 +331,12 @@ void              gtk_widget_init_legacy_controller        (GtkWidget *widget);
 void              gtk_widget_get_origin_relative_to_parent (GtkWidget        *widget,
                                                             int              *origin_x,
                                                             int              *origin_y);
+
+void              gtk_widget_cancel_event_sequence         (GtkWidget             *widget,
+                                                            GtkGesture            *gesture,
+                                                            GdkEventSequence      *sequence,
+                                                            GtkEventSequenceState  state);
+
 
 
 
