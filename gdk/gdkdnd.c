@@ -573,7 +573,7 @@ gdk_drag_drop (GdkDragContext *context,
 }
 
 /**
- * gdk_drop_finish:
+ * gdk_drag_finish:
  * @context: a #GdkDragContext
  * @success: %TRUE if the data was successfully received
  * @time_: the timestamp for this operation
@@ -583,7 +583,7 @@ gdk_drag_drop (GdkDragContext *context,
  * This function is called by the drag destination.
  */
 void
-gdk_drop_finish (GdkDragContext *context,
+gdk_drag_finish (GdkDragContext *context,
                  gboolean        success,
                  guint32         time_)
 {

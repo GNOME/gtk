@@ -351,7 +351,7 @@ gtk_drag_finish (GdkDragContext *context,
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  gdk_drop_finish (context, success, time);
+  gdk_drag_finish (context, success, time);
 }
 
 /**
