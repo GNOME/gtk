@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-12 04:05+0000\n"
-"PO-Revision-Date: 2018-05-14 07:20+0200\n"
+"PO-Revision-Date: 2018-05-14 13:11+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -475,21 +475,27 @@ msgstr "GL core nol è disponibil su la implementazion EGL"
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
+"Impussibil rivendicâ la proprietât des notis. Timp scjadût par "
+"OpenClipboard()."
 
 #: gdk/win32/gdkclipdrop-win32.c:728
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
+"Impussibil rivendicâ la proprietât des notis. Un altri procès le à riclamade "
+"prime di nô."
 
 #: gdk/win32/gdkclipdrop-win32.c:742
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Impussibil rivendicâ la proprietât des notis. OpenClipboard() falît: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
+"Impussibil rivendicâ la proprietât des notis. EmptyClipboard() falît: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
@@ -3946,14 +3952,12 @@ msgid "Saving RenderNode failed"
 msgstr "Salvament di RenderNode falît"
 
 #: gtk/inspector/recorder.ui:16
-#, fuzzy
-#| msgid "Recorder"
 msgid "Record frames"
-msgstr "Regjistradôr"
+msgstr "Regjistre fotograms"
 
 #: gtk/inspector/recorder.ui:24
 msgid "Clear recorded frames"
-msgstr ""
+msgstr "Nete fotograms regjistrâts"
 
 #: gtk/inspector/recorder.ui:32
 msgid "Add debug nodes"
@@ -4073,16 +4077,12 @@ msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "La impostazion e je une codifiche fisse di GTK_TEST_TOUCHSCREEN"
 
 #: gtk/inspector/visual.c:824
-#, fuzzy
-#| msgid ""
-#| "Not settable at runtime.\n"
-#| "Use GDK_GL=always or GDK_GL=disable instead"
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_DEBUG=gl-disable instead"
 msgstr ""
 "No si puest stabilî in timp di esecuzion (runtime).\n"
-"Doprâ invezit GDK_GL=always o GDK_GL=disable"
+"Doprâ invezit GDK_DEBUG=gl-disable"
 
 #: gtk/inspector/visual.c:833 gtk/inspector/visual.c:834
 msgid "GL rendering is disabled"
@@ -4138,7 +4138,7 @@ msgstr "Ralentament"
 
 #: gtk/inspector/visual.ui:386
 msgid "Show fps overlay"
-msgstr ""
+msgstr "Mostre soreposizion fps"
 
 #: gtk/inspector/visual.ui:413
 msgid "Show Graphic Updates"
@@ -4274,7 +4274,7 @@ msgstr "Statistichis"
 
 #: gtk/inspector/window.ui:443
 msgid "Logging"
-msgstr ""
+msgstr "Regjistrazion"
 
 #: gtk/inspector/window.ui:451
 msgid "Global"
@@ -6163,7 +6163,7 @@ msgstr "Braille"
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "Cipriote"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
@@ -6243,12 +6243,12 @@ msgstr "Balinês"
 #: gtk/script-names.c:77
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr ""
+msgstr "Cuneiformi"
 
 #: gtk/script-names.c:78
 msgctxt "Script"
 msgid "Phoenician"
-msgstr ""
+msgstr "Fenici"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
@@ -6328,12 +6328,12 @@ msgstr "Bamum"
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Egyptian Hieroglpyhs"
-msgstr ""
+msgstr "Jeroglifics egjizians"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Aramaic imperiâl"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
@@ -6373,7 +6373,7 @@ msgstr "Arabic dal sud vieli"
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Turc vieli"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
@@ -6413,12 +6413,12 @@ msgstr "Chakma"
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Corsîf meroitic "
 
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Jeroglifics meroitics"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
@@ -6448,7 +6448,7 @@ msgstr "Bassa"
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Albanês caucasic"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
@@ -6458,7 +6458,7 @@ msgstr "Duployan"
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
@@ -6473,7 +6473,7 @@ msgstr "Khojki"
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "Khudawadi, Sindhi"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
@@ -6488,7 +6488,7 @@ msgstr "Mahajani"
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "Manicheu"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
@@ -6563,7 +6563,7 @@ msgstr "Ahom"
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Jeroglifics anatolic"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
