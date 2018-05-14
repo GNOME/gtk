@@ -59,6 +59,12 @@ G_DEFINE_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
  */
 
 static void
+gdk_drop_default_status (GdkDrop       *self,
+                         GdkDragAction  actions)
+{
+}
+
+static void
 gdk_drop_read_local_async (GdkDrop             *self,
                            GdkContentFormats   *formats,
                            int                  io_priority,
@@ -173,6 +179,8 @@ static void
 gdk_drop_class_init (GdkDropClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  klass->status = gdk_drop_default_status;
 
   object_class->get_property = gdk_drop_get_property;
   object_class->set_property = gdk_drop_set_property;
@@ -341,6 +349,32 @@ gdk_drop_set_actions (GdkDrop       *self,
   priv->actions = actions;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIONS]);
+}
+
+/**
+ * gdk_drop_status:
+ * @self: a #GdkDrop
+ * @actions: Supported actions of the destination, or 0 to indicate
+ *    that a drop will not be accepted
+ *
+ * Selects all actions that are potentially supported by the destination.
+ *
+ * When calling this function, do not restrict the passed in actions to
+ * the ones provided by gdk_drop_get_actions(). Those actions may
+ * change in the future, even depending on the actions you provide here.
+ *
+ * This function should be called by drag destinations in response to
+ * %GDK_DRAG_ENTER or %GDK_DRAG_MOTION events. If the destination does
+ * not yet know the exact actions it supports, it should set any possible
+ * actions first and then later call this function again.
+ */
+void
+gdk_drop_status (GdkDrop       *self,
+                 GdkDragAction  actions)
+{
+  g_return_if_fail (GDK_IS_DROP (self));
+
+  GDK_DROP_GET_CLASS (self)->status (self, actions);
 }
 
 /**

@@ -35,9 +35,6 @@ typedef struct _GdkDragContextClass GdkDragContextClass;
 struct _GdkDragContextClass {
   GdkDropClass parent_class;
 
-  void        (*drag_status)   (GdkDragContext  *context,
-                                GdkDragAction    action,
-                                guint32          time_);
   void        (*drag_abort)    (GdkDragContext  *context,
                                 guint32          time_);
   void        (*drag_drop)     (GdkDragContext  *context,

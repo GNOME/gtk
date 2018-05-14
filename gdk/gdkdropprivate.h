@@ -39,6 +39,8 @@ struct _GdkDrop {
 struct _GdkDropClass {
   GObjectClass parent_class;
 
+  void                  (* status)                              (GdkDrop                *self,
+                                                                 GdkDragAction           action);
   void                  (* read_async)                          (GdkDrop                *self,
                                                                  GdkContentFormats      *formats,
                                                                  int                     io_priority,

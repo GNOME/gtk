@@ -215,13 +215,12 @@ gdk_wayland_drag_context_commit_status (GdkDragContext *context)
 }
 
 static void
-gdk_wayland_drag_context_drag_status (GdkDragContext *context,
-				      GdkDragAction   action,
-				      guint32         time_)
+gdk_wayland_drag_context_status (GdkDrop       *drop,
+				 GdkDragAction  action)
 {
   GdkWaylandDragContext *wayland_context;
 
-  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (drop);
   wayland_context->selected_action = action;
 }
 
@@ -403,10 +402,10 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 
   object_class->finalize = gdk_wayland_drag_context_finalize;
 
+  drop_class->status = gdk_wayland_drag_context_status;
   drop_class->read_async = gdk_wayland_drag_context_read_async;
   drop_class->read_finish = gdk_wayland_drag_context_read_finish;
 
-  context_class->drag_status = gdk_wayland_drag_context_drag_status;
   context_class->drag_abort = gdk_wayland_drag_context_drag_abort;
   context_class->drag_drop = gdk_wayland_drag_context_drag_drop;
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
