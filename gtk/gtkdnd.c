@@ -202,7 +202,7 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
   if (site && site->flags & GTK_DEST_DEFAULT_DROP)
     {
 
-      gtk_drag_finish (data->context, 
+      gdk_drag_finish (data->context, 
                        size > 0,
                        data->time);
     }
@@ -334,25 +334,6 @@ gtk_drag_get_source_widget (GdkDragContext *context)
     }
 
   return NULL;
-}
-
-/**
- * gtk_drag_finish:
- * @context: the drag context
- * @success: a flag indicating whether the drop was successful
- * @time_: the timestamp from the #GtkWidget::drag-drop signal
- *
- * Informs the drag source that the drop is finished, and
- * that the data of the drag will no longer be required.
- */
-void 
-gtk_drag_finish (GdkDragContext *context,
-                 gboolean        success,
-                 guint32         time)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  gdk_drag_finish (context, success, time);
 }
 
 /**
@@ -751,7 +732,7 @@ gtk_drag_dest_drop (GtkWidget      *widget,
 
       if (target == NULL)
         {
-          gtk_drag_finish (context, FALSE, time);
+          gdk_drag_finish (context, FALSE, time);
           return TRUE;
         }
       else 

@@ -1255,7 +1255,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
       g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
     }
 
-  gtk_drag_finish (context, TRUE, drag_time);
+  gdk_drag_finish (context, TRUE, drag_time);
 }
 
 static void
