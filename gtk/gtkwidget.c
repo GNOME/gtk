@@ -457,7 +457,6 @@ typedef struct {
 
 typedef struct {
   GtkEventController *controller;
-  guint grab_notify_id;
   guint sequence_state_changed_id;
 } EventControllerData;
 
@@ -846,6 +845,28 @@ gtk_widget_real_pick (GtkWidget *widget,
 }
 
 static void
+gtk_widget_real_grab_notify (GtkWidget *widget,
+                             gboolean   was_grabbed)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = g_list_last (priv->event_controllers); l; l = l->prev)
+    {
+      EventControllerData *data = l->data;
+      GdkDevice *device = NULL;
+
+      if (GTK_IS_GESTURE (data->controller))
+        device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
+
+      if (!device || !gtk_widget_device_is_shadowed (widget, device))
+        continue;
+
+      gtk_event_controller_reset (data->controller);
+    }
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
@@ -897,7 +918,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->hierarchy_changed = NULL;
   klass->direction_changed = gtk_widget_real_direction_changed;
-  klass->grab_notify = NULL;
+  klass->grab_notify = gtk_widget_real_grab_notify;
   klass->child_notify = NULL;
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
@@ -12847,22 +12868,6 @@ gtk_widget_get_action_group (GtkWidget   *widget,
 }
 
 static void
-event_controller_grab_notify (GtkWidget           *widget,
-                              gboolean             was_grabbed,
-                              EventControllerData *data)
-{
-  GdkDevice *device = NULL;
-
-  if (GTK_IS_GESTURE (data->controller))
-    device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
-
-  if (!device || !gtk_widget_device_is_shadowed (widget, device))
-    return;
-
-  gtk_event_controller_reset (data->controller);
-}
-
-static void
 event_controller_sequence_state_changed (GtkGesture            *gesture,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
@@ -12912,9 +12917,6 @@ gtk_widget_add_controller (GtkWidget          *widget,
 
   data = g_new0 (EventControllerData, 1);
   data->controller = controller;
-  data->grab_notify_id =
-    g_signal_connect (widget, "grab-notify",
-                      G_CALLBACK (event_controller_grab_notify), data);
 
   g_object_add_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
 
@@ -12965,9 +12967,6 @@ gtk_widget_remove_controller (GtkWidget          *widget,
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->unset_widget (controller);
 
   g_object_remove_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
-
-  if (g_signal_handler_is_connected (widget, data->grab_notify_id))
-    g_signal_handler_disconnect (widget, data->grab_notify_id);
 
   if (data->sequence_state_changed_id)
     g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);

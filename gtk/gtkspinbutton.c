@@ -1112,6 +1112,8 @@ gtk_spin_button_grab_notify (GtkWidget *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->grab_notify (widget, was_grabbed);
+
   if (!was_grabbed)
     {
       if (gtk_spin_button_stop_spinning (spin))

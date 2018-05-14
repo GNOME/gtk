@@ -3897,6 +3897,8 @@ gtk_scrolled_window_grab_notify (GtkWidget *widget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->grab_notify (widget, was_grabbed);
+
   if (priv->drag_device &&
       gtk_widget_device_is_shadowed (widget,
                                      priv->drag_device))

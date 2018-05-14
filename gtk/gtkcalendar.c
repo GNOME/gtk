@@ -2892,6 +2892,8 @@ static void
 gtk_calendar_grab_notify (GtkWidget *widget,
                           gboolean   was_grabbed)
 {
+  GTK_WIDGET_CLASS (gtk_calendar_parent_class)->grab_notify (widget, was_grabbed);
+
   if (!was_grabbed)
     calendar_stop_spinning (GTK_CALENDAR (widget));
 }
