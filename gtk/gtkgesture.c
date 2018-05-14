@@ -1046,6 +1046,8 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
     return FALSE;
 
   data->state = state;
+  gtk_widget_cancel_event_sequence (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
+                                    gesture, sequence, state);
   g_signal_emit (gesture, signals[SEQUENCE_STATE_CHANGED], 0,
                  sequence, state);
 
