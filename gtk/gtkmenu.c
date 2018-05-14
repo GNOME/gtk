@@ -4743,6 +4743,8 @@ gtk_menu_grab_notify (GtkWidget *widget,
   GtkWidget *grab;
   GdkDevice *pointer;
 
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->grab_notify (widget, was_grabbed);
+
   menu = GTK_MENU (widget);
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (widget));
 

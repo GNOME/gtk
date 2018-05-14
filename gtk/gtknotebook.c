@@ -2760,6 +2760,8 @@ gtk_notebook_grab_notify (GtkWidget *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->grab_notify (widget, was_grabbed);
+
   if (!was_grabbed)
     {
       gtk_notebook_stop_reorder (notebook);

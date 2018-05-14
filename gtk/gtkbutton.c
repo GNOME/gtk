@@ -1051,10 +1051,12 @@ gtk_button_state_flags_changed (GtkWidget     *widget,
 
 static void
 gtk_button_grab_notify (GtkWidget *widget,
-			gboolean   was_grabbed)
+                        gboolean   was_grabbed)
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->grab_notify (widget, was_grabbed);
 
   if (priv->activate_timeout &&
       priv->grab_keyboard &&

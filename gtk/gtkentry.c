@@ -8190,6 +8190,8 @@ gtk_entry_grab_notify (GtkWidget *widget,
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (GTK_ENTRY (widget));
   gint i;
 
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_notify (widget, was_grabbed);
+
   for (i = 0; i < MAX_ICONS; i++)
     {
       if (priv->icons[i])
