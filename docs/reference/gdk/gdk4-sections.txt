@@ -786,6 +786,7 @@ gdk_drag_drop_done
 gdk_drag_begin
 gdk_drop_finish
 GdkDragAction
+GDK_ACTION_ALL
 gdk_drag_status
 
 gdk_drag_context_get_display

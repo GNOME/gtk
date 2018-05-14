@@ -51,6 +51,8 @@ struct _GdkDropClass {
                                                                  GError                **error);
 };
 
+void                    gdk_drop_set_actions                    (GdkDrop                *self,
+                                                                 GdkDragAction           actions);
 
 G_END_DECLS
 
