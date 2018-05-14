@@ -45,6 +45,8 @@ GDK_AVAILABLE_IN_ALL
 GdkDevice *             gdk_drop_get_device             (GdkDrop                *self);
 GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_drop_get_formats            (GdkDrop                *self);
+GDK_AVAILABLE_IN_ALL
+GdkDragAction           gdk_drop_get_actions            (GdkDrop                *self);
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_read_async             (GdkDrop                *self,
