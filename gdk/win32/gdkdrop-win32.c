@@ -895,10 +895,10 @@ _gdk_display_put_event (GdkDisplay *display,
 }
 
 static void
-gdk_win32_drop_context_drop_finish (GdkDragContext *context,
-                 gboolean        success,
-                 guint32         time)
+gdk_win32_drop_context_finish (GdkDrop       *drop,
+                               GdkDragAction  action)
 {
+  GdkDragContext *context = GDK_DRAG_CONTEXT (drop);
   GdkDragContext *src_context;
   GdkEvent *tmp_event;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
@@ -906,6 +906,9 @@ gdk_win32_drop_context_drop_finish (GdkDragContext *context,
   g_return_if_fail (context != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_drag_finish\n"));
+
+  if (context->action != action)
+    gdk_win32_drop_context_status (context, action);
 
   if (!use_ole2_dnd)
     {
@@ -922,9 +925,9 @@ gdk_win32_drop_context_drop_finish (GdkDragContext *context,
     }
   else
     {
-      _gdk_win32_drag_do_leave (context, time);
+      _gdk_win32_drag_do_leave (context, GDK_CURRENT_TIME);
 
-      if (success)
+      if (action)
         clipdrop->dnd_target_state = GDK_WIN32_DND_DROPPED;
       else
         clipdrop->dnd_target_state = GDK_WIN32_DND_FAILED;
@@ -1206,10 +1209,9 @@ gdk_win32_drop_context_class_init (GdkWin32DropContextClass *klass)
   object_class->finalize = gdk_win32_drop_context_finalize;
 
   drop_class->status = gdk_win32_drop_context_status;
+  drop_class->finish = gdk_win32_drop_context_finish;
   drop_class->read_async = gdk_win32_drop_context_read_async;
   drop_class->read_finish = gdk_win32_drop_context_read_finish;
-
-  context_class->drop_finish = gdk_win32_drop_context_drop_finish;
 }
 
 void

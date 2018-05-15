@@ -70,14 +70,6 @@ gdk_quartz_drag_context_drag_abort (GdkDragContext *context,
   /* FIXME: Implement */
 }
 
-static void
-gdk_quartz_drag_context_drop_finish (GdkDragContext *context,
-                                     gboolean        success,
-                                     guint32         time)
-{
-  /* FIXME: Implement */
-}
-
 void
 _gdk_quartz_surface_register_dnd (GdkSurface *window)
 {
@@ -111,5 +103,4 @@ gdk_quartz_drag_context_class_init (GdkQuartzDragContextClass *klass)
 
   context_class->drag_abort = gdk_quartz_drag_context_drag_abort;
   context_class->drag_drop = gdk_quartz_drag_context_drag_drop;
-  context_class->drop_finish = gdk_quartz_drag_context_drop_finish;
 }

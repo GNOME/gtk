@@ -589,7 +589,10 @@ gdk_drag_finish (GdkDragContext *context,
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_finish (context, success, time_);
+  if (success)
+    gdk_drop_finish (GDK_DROP (context), gdk_drag_context_get_selected_action (context));
+  else
+    gdk_drop_finish (GDK_DROP (context), 0);
 }
 
 static void
