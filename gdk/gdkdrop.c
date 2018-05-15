@@ -378,6 +378,27 @@ gdk_drop_status (GdkDrop       *self,
 }
 
 /**
+ * gdk_drop_finish:
+ * @self: a #GdkDrop
+ * @action: the action performed by the destination or 0 if the drop
+ *     failed
+ *
+ * Ends the drag operation after a drop.
+ * 
+ * The @action must be a single action selected from the actions
+ * available via gdk_drop_get_actions().
+ **/
+void
+gdk_drop_finish (GdkDrop       *self,
+                 GdkDragAction  action)
+{
+  g_return_if_fail (GDK_IS_DROP (self));
+  g_return_if_fail (gdk_drag_action_is_unique (action));
+
+  GDK_DROP_GET_CLASS (self)->finish (self, action);
+}
+
+/**
  * gdk_drop_read_async:
  * @self: a #GdkDrop
  * @mime_types: (array zero-terminated=1) (element-type utf8):
