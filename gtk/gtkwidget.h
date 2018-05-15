@@ -315,8 +315,7 @@ struct _GtkWidgetClass
 
   /* Target side drag signals */
   void     (* drag_leave)          (GtkWidget          *widget,
-                                    GdkDragContext     *context,
-                                    guint               time_);
+                                    GdkDrop            *drop);
   gboolean (* drag_motion)         (GtkWidget          *widget,
                                     GdkDragContext     *context,
                                     gint                x,

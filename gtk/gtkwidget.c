@@ -1788,10 +1788,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_leave),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_UINT,
-		  G_TYPE_NONE, 2,
-		  GDK_TYPE_DRAG_CONTEXT,
-		  G_TYPE_UINT);
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_DROP);
 
   /**
    * GtkWidget::drag-begin:

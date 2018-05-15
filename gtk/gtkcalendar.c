@@ -321,8 +321,7 @@ static gboolean gtk_calendar_drag_motion        (GtkWidget        *widget,
                                                  gint              y,
                                                  guint             time);
 static void     gtk_calendar_drag_leave         (GtkWidget        *widget,
-                                                 GdkDragContext   *context,
-                                                 guint             time);
+                                                 GdkDrop          *drop);
 static gboolean gtk_calendar_drag_drop          (GtkWidget        *widget,
                                                  GdkDragContext   *context,
                                                  gint              x,
@@ -2941,15 +2940,13 @@ get_status_pending (GdkDragContext *context)
 }
 
 static void
-gtk_calendar_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time)
+gtk_calendar_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
 
   priv->drag_highlight = 0;
   gtk_drag_unhighlight (widget);
-
 }
 
 static gboolean

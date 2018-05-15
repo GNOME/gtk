@@ -447,8 +447,7 @@ static gboolean gtk_entry_drag_motion        (GtkWidget        *widget,
 					      gint              y,
 					      guint             time);
 static void     gtk_entry_drag_leave         (GtkWidget        *widget,
-					      GdkDragContext   *context,
-					      guint             time);
+					      GdkDrop          *drop);
 static void     gtk_entry_drag_data_received (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection_data,
@@ -8586,9 +8585,8 @@ gtk_entry_drag_end (GtkWidget      *widget,
 }
 
 static void
-gtk_entry_drag_leave (GtkWidget        *widget,
-		      GdkDragContext   *context,
-		      guint             time)
+gtk_entry_drag_leave (GtkWidget *widget,
+		      GdkDrop   *drop)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

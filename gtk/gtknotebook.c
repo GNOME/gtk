@@ -398,8 +398,7 @@ static gboolean gtk_notebook_drag_motion     (GtkWidget        *widget,
                                               gint              y,
                                               guint             time);
 static void gtk_notebook_drag_leave          (GtkWidget        *widget,
-                                              GdkDragContext   *context,
-                                              guint             time);
+                                              GdkDrop          *drop);
 static gboolean gtk_notebook_drag_drop       (GtkWidget        *widget,
                                               GdkDragContext   *context,
                                               gint              x,
@@ -3142,9 +3141,8 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 }
 
 static void
-gtk_notebook_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time)
+gtk_notebook_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
