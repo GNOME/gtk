@@ -27,6 +27,7 @@ typedef struct _GtkInspectorOverlayPrivate GtkInspectorOverlayPrivate;
 
 struct _GtkInspectorOverlayPrivate
 {
+  gchar dummy;
 };
 
 G_DEFINE_ABSTRACT_TYPE (GtkInspectorOverlay, gtk_inspector_overlay, G_TYPE_OBJECT)
