@@ -118,16 +118,6 @@ gdk_broadway_drag_context_drag_abort (GdkDragContext *context,
   g_return_if_fail (context != NULL);
 }
 
-/* Destination side */
-
-static void
-gdk_broadway_drag_context_drop_finish (GdkDragContext   *context,
-                                       gboolean          success,
-                                       guint32           time)
-{
-  g_return_if_fail (context != NULL);
-}
-
 void
 _gdk_broadway_surface_register_dnd (GdkSurface      *surface)
 {
@@ -148,5 +138,4 @@ gdk_broadway_drag_context_class_init (GdkBroadwayDragContextClass *klass)
 
   context_class->drag_abort = gdk_broadway_drag_context_drag_abort;
   context_class->drag_drop = gdk_broadway_drag_context_drag_drop;
-  context_class->drop_finish = gdk_broadway_drag_context_drop_finish;
 }
