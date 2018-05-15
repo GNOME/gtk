@@ -184,8 +184,7 @@ static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
                                              gint              y,
                                              guint             time);
 static void     gtk_expander_drag_leave     (GtkWidget        *widget,
-                                             GdkDragContext   *context,
-                                             guint             time);
+                                             GdkDrop          *drop);
 
 static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
@@ -546,9 +545,8 @@ gtk_expander_drag_motion (GtkWidget        *widget,
 }
 
 static void
-gtk_expander_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time)
+gtk_expander_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);

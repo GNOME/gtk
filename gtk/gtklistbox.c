@@ -230,8 +230,7 @@ static void                 gtk_list_box_size_allocate                (GtkWidget
                                                                        const GtkAllocation *allocation,
                                                                        int                  baseline);
 static void                 gtk_list_box_drag_leave                   (GtkWidget           *widget,
-                                                                       GdkDragContext      *context,
-                                                                       guint                time_);
+                                                                       GdkDrop             *drop);
 static void                 gtk_list_box_activate_cursor_row          (GtkListBox          *box);
 static void                 gtk_list_box_toggle_cursor_row            (GtkListBox          *box);
 static void                 gtk_list_box_move_cursor                  (GtkListBox          *box,
@@ -2721,9 +2720,8 @@ gtk_list_box_drag_highlight_row (GtkListBox    *box,
 }
 
 static void
-gtk_list_box_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time_)
+gtk_list_box_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   gtk_list_box_drag_unhighlight_row (GTK_LIST_BOX (widget));
 }
