@@ -239,9 +239,8 @@ static void        gdk_x11_drag_context_drag_abort  (GdkDragContext  *context,
                                                      guint32          time_);
 static void        gdk_x11_drag_context_drag_drop   (GdkDragContext  *context,
                                                      guint32          time_);
-static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
-                                                     gboolean         success,
-                                                     guint32          time_);
+static void        gdk_x11_drag_context_finish      (GdkDrop         *drop,
+                                                     GdkDragAction    action);
 static GdkSurface * gdk_x11_drag_context_get_drag_surface (GdkDragContext *context);
 static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_x,
@@ -394,12 +393,12 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   object_class->finalize = gdk_x11_drag_context_finalize;
 
   drop_class->status = gdk_x11_drag_context_status;
+  drop_class->finish = gdk_x11_drag_context_finish;
   drop_class->read_async = gdk_x11_drag_context_read_async;
   drop_class->read_finish = gdk_x11_drag_context_read_finish;
 
   context_class->drag_abort = gdk_x11_drag_context_drag_abort;
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
-  context_class->drop_finish = gdk_x11_drag_context_drop_finish;
   context_class->get_drag_surface = gdk_x11_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
   context_class->drop_done = gdk_x11_drag_context_drop_done;
@@ -2443,23 +2442,23 @@ gdk_x11_drag_context_status (GdkDrop       *drop,
 }
 
 static void
-gdk_x11_drag_context_drop_finish (GdkDragContext *context,
-                                  gboolean        success,
-                                  guint32         time)
+gdk_x11_drag_context_finish (GdkDrop       *drop,
+                             GdkDragAction  action)
 {
-  if (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND)
+  if (GDK_X11_DRAG_CONTEXT (drop)->protocol == GDK_DRAG_PROTO_XDND)
     {
-      GdkDisplay *display = gdk_drag_context_get_display (context);
+      GdkDragContext *context = GDK_DRAG_CONTEXT (drop);
+      GdkDisplay *display = gdk_drop_get_display (drop);
       XEvent xev;
 
-      if (success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
+      if (action == GDK_ACTION_MOVE)
         {
           XConvertSelection (GDK_DISPLAY_XDISPLAY (display),
                              gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection"),
                              gdk_x11_get_xatom_by_name_for_display (display, "DELETE"),
                              gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION"),
                              GDK_SURFACE_XID (context->source_surface),
-                             time);
+                             GDK_X11_DRAG_CONTEXT (drop)->timestamp);
           /* XXX: Do we need to wait for a reply here before sending the next message? */
         }
 
@@ -2469,11 +2468,10 @@ gdk_x11_drag_context_drop_finish (GdkDragContext *context,
       xev.xclient.window = GDK_SURFACE_XID (context->source_surface);
 
       xev.xclient.data.l[0] = GDK_SURFACE_XID (context->dest_surface);
-      if (success)
+      if (action != 0)
         {
           xev.xclient.data.l[1] = 1;
-          xev.xclient.data.l[2] = xdnd_action_to_atom (display,
-                                                       context->action);
+          xev.xclient.data.l[2] = xdnd_action_to_atom (display, action);
         }
       else
         {
