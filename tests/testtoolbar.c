@@ -400,10 +400,9 @@ toolbar_drag_motion (GtkToolbar     *toolbar,
 }
 
 static void
-toolbar_drag_leave (GtkToolbar     *toolbar,
-		    GdkDragContext *context,
-		    guint           time,
-		    gpointer	    null)
+toolbar_drag_leave (GtkToolbar *toolbar,
+		    GdkDrop    *drop,
+		    gpointer    null)
 {
   if (drag_item)
     {
