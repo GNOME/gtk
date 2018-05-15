@@ -335,9 +335,8 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
 }
 
 static void
-gtk_stack_switcher_drag_leave (GtkWidget      *widget,
-                               GdkDragContext *context,
-                               guint           time)
+gtk_stack_switcher_drag_leave (GtkWidget *widget,
+                               GdkDrop   *drop)
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
 

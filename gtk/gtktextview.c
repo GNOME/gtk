@@ -429,8 +429,7 @@ static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
 
 /* Target side drag signals */
 static void     gtk_text_view_drag_leave         (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
-                                                  guint             time);
+                                                  GdkDrop          *drop);
 static gboolean gtk_text_view_drag_motion        (GtkWidget        *widget,
                                                   GdkDragContext   *context,
                                                   gint              x,
@@ -7698,9 +7697,8 @@ gtk_text_view_drag_data_delete (GtkWidget        *widget,
 }
 
 static void
-gtk_text_view_drag_leave (GtkWidget        *widget,
-                          GdkDragContext   *context,
-                          guint             time)
+gtk_text_view_drag_leave (GtkWidget *widget,
+                          GdkDrop   *drop)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
