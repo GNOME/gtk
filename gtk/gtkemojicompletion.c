@@ -620,13 +620,15 @@ long_pressed_cb (GtkGesture *gesture,
 static void
 gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 {
-  g_autoptr(GBytes) bytes = NULL;
+  GBytes *bytes = NULL;
   GtkGesture *long_press;
 
   gtk_widget_init_template (GTK_WIDGET (completion));
 
   bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
   completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+
+  g_bytes_unref (bytes);
 
   long_press = gtk_gesture_long_press_new ();
   g_signal_connect (long_press, "pressed", G_CALLBACK (long_pressed_cb), completion);
