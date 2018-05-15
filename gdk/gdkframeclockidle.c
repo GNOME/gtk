@@ -29,6 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkframeclockprivate.h"
 #include "gdk.h"
+#include "gdkprofiler.h"
 
 #ifdef G_OS_WIN32
 #include <windows.h>
@@ -126,6 +127,12 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
 
   priv->frame_time = g_get_monotonic_time (); /* more sane than zero */
   priv->freeze_count = 0;
+
+  /* FIXME */
+#ifdef G_ENABLE_DEBUG
+  if (g_getenv ("GDK_TRACE"))
+    gdk_profiler_start ();
+#endif
 }
 
 static void
@@ -416,7 +423,7 @@ gdk_frame_clock_paint_idle (void *data)
             {
 	      int iter;
 #ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
+              if (GDK_DEBUG_CHECK (FRAMES) || g_getenv ("GDK_TRACE"))
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
@@ -445,7 +452,7 @@ gdk_frame_clock_paint_idle (void *data)
           if (priv->freeze_count == 0)
             {
 #ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
+              if (GDK_DEBUG_CHECK (FRAMES) || g_getenv ("GDK_TRACE"))
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
@@ -471,7 +478,7 @@ gdk_frame_clock_paint_idle (void *data)
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
 #ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
+              if (GDK_DEBUG_CHECK (FRAMES) || g_getenv ("GDK_TRACE"))
                 timings->frame_end_time = g_get_monotonic_time ();
 #endif /* G_ENABLE_DEBUG */
             }
@@ -483,6 +490,9 @@ gdk_frame_clock_paint_idle (void *data)
     }
 
 #ifdef G_ENABLE_DEBUG
+  if (g_getenv ("GDK_TRACE"))
+    gdk_profiler_add_frame (timings);
+
   if (GDK_DEBUG_CHECK (FRAMES))
     {
       if (timings && timings->complete)
