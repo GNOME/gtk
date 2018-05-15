@@ -377,14 +377,14 @@ emit_unmount_operation (GtkPlacesSidebar *sidebar,
 
 static GdkDragAction
 emit_drag_action_requested (GtkPlacesSidebar *sidebar,
-                            GdkDragContext   *context,
+                            GdkDrop          *drop,
                             GFile            *dest_file,
                             GList            *source_file_list)
 {
   GdkDragAction ret_action = 0;
 
   g_signal_emit (sidebar, places_sidebar_signals[DRAG_ACTION_REQUESTED], 0,
-                 context, dest_file, source_file_list, &ret_action);
+                 drop, dest_file, source_file_list, &ret_action);
 
   return ret_action;
 }
@@ -1512,7 +1512,7 @@ update_places (GtkPlacesSidebar *sidebar)
 static gboolean
 check_valid_drop_target (GtkPlacesSidebar *sidebar,
                          GtkSidebarRow    *row,
-                         GdkDragContext   *context)
+                         GdkDrop          *drop)
 {
   GtkPlacesSidebarPlaceType place_type;
   GtkPlacesSidebarSectionType section_type;
@@ -1568,12 +1568,12 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
   else
     {
       /* Dragging a file */
-      if (context)
+      if (drop)
         {
           if (uri != NULL)
             {
               dest_file = g_file_new_for_uri (uri);
-              drag_action = emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list);
+              drag_action = emit_drag_action_requested (sidebar, drop, dest_file, sidebar->drag_list);
               valid = drag_action > 0;
 
               g_object_unref (dest_file);
@@ -1585,8 +1585,8 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
         }
       else
         {
-          /* We cannot discern if it is valid or not because there is not drag
-           * context available to ask the client.
+          /* We cannot discern if it is valid or not because there is not drop
+           * available to ask the client.
            * Simply make insensitive the drop targets we know are not valid for
            * files, that are the ones remaining.
            */
@@ -1601,7 +1601,7 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
 static void
 update_possible_drop_targets (GtkPlacesSidebar *sidebar,
                               gboolean          dragging,
-                              GdkDragContext   *context)
+                              GdkDrop          *drop)
 {
   GList *rows;
   GList *l;
@@ -1611,7 +1611,7 @@ update_possible_drop_targets (GtkPlacesSidebar *sidebar,
 
   for (l = rows; l != NULL; l = l->next)
     {
-      sensitive = !dragging || check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (l->data), context);
+      sensitive = !dragging || check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (l->data), drop);
       gtk_widget_set_sensitive (GTK_WIDGET (l->data), sensitive);
     }
 
@@ -1651,7 +1651,7 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 static void
 start_drop_feedback (GtkPlacesSidebar *sidebar,
                      GtkSidebarRow    *row,
-                     GdkDragContext   *context)
+                     GdkDrop          *drop)
 {
   if (sidebar->drag_data_info != DND_GTK_SIDEBAR_ROW)
     {
@@ -1661,7 +1661,7 @@ start_drop_feedback (GtkPlacesSidebar *sidebar,
         sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED;
     }
 
-  update_possible_drop_targets (sidebar, TRUE, context);
+  update_possible_drop_targets (sidebar, TRUE, drop);
 }
 
 static void
@@ -1770,6 +1770,7 @@ drag_motion_callback (GtkWidget      *widget,
                       guint           time,
                       gpointer        user_data)
 {
+  GdkDrop *drop = GDK_DROP (context);
   gint action;
   GtkListBoxRow *row;
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
@@ -1790,7 +1791,7 @@ drag_motion_callback (GtkWidget      *widget,
     goto out;
 
   /* Nothing to do if the target is not valid drop destination */
-  if (!check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (row), context))
+  if (!check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (row), drop))
     goto out;
 
   if (sidebar->drag_data_received &&
@@ -1877,7 +1878,7 @@ drag_motion_callback (GtkWidget      *widget,
                 {
                   GFile *dest_file = g_file_new_for_uri (drop_target_uri);
 
-                  action = emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list);
+                  action = emit_drag_action_requested (sidebar, drop, dest_file, sidebar->drag_list);
 
                   g_object_unref (dest_file);
                 }
@@ -1888,7 +1889,7 @@ drag_motion_callback (GtkWidget      *widget,
     }
 
  out:
-  start_drop_feedback (sidebar, GTK_SIDEBAR_ROW (row), context);
+  start_drop_feedback (sidebar, GTK_SIDEBAR_ROW (row), drop);
 
   g_signal_stop_emission_by_name (sidebar->list_box, "drag-motion");
 
@@ -2038,7 +2039,7 @@ drag_data_received_callback (GtkWidget        *list_box,
 
   success = FALSE;
 
-  if (!check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (target_row), context))
+  if (!check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (target_row), GDK_DROP (context)))
     goto out;
 
   if (sidebar->drag_data_info == DND_GTK_SIDEBAR_ROW)
@@ -2126,16 +2127,15 @@ drag_end_callback (GtkWidget      *widget,
  * we build new drag data in drag_data_received.
  */
 static void
-drag_leave_callback (GtkWidget      *widget,
-                     GdkDragContext *context,
-                     guint           time,
-                     gpointer        user_data)
+drag_leave_callback (GtkWidget *widget,
+                     GdkDrop   *drop,
+                     gpointer   user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
 
   if (sidebar->drop_state != DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT)
     {
-      update_possible_drop_targets (sidebar, FALSE, context);
+      update_possible_drop_targets (sidebar, FALSE, drop);
       gtk_sidebar_row_hide (GTK_SIDEBAR_ROW (sidebar->new_bookmark_row), FALSE);
       sidebar->drop_state = DROP_STATE_NORMAL;
     }
@@ -4486,7 +4486,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /*
    * GtkPlacesSidebar::drag-action-requested:
    * @sidebar: the object which received the signal.
-   * @context: (type Gdk.DragContext): #GdkDragContext with information about the drag operation
+   * @drop: (type Gdk.Drop): #GdkDrop with information about the drag operation
    * @dest_file: (type Gio.File): #GFile with the tentative location that is being hovered for a drop
    * @source_file_list: (type GLib.List) (element-type GFile) (transfer none):
 	 *   List of #GFile that are being dragged
@@ -4513,7 +4513,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         NULL, NULL,
                         _gtk_marshal_INT__OBJECT_OBJECT_POINTER,
                         G_TYPE_INT, 3,
-                        GDK_TYPE_DRAG_CONTEXT,
+                        GDK_TYPE_DROP,
                         G_TYPE_OBJECT,
                         G_TYPE_POINTER /* GList of GFile */ );
 
@@ -5316,7 +5316,7 @@ gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar,
  * gtk_places_sidebar_set_drop_targets_visible:
  * @sidebar: a places sidebar.
  * @visible: whether to show the valid targets or not.
- * @context: drag context used to ask the source about the action that wants to
+ * @drop: #GdkDrop used to ask the source about the action that wants to
  *     perform, so hints are more accurate.
  *
  * Make the GtkPlacesSidebar show drop targets, so it can show the available
@@ -5332,12 +5332,12 @@ gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar,
 void
 gtk_places_sidebar_set_drop_targets_visible (GtkPlacesSidebar *sidebar,
                                              gboolean          visible,
-                                             GdkDragContext   *context)
+                                             GdkDrop          *drop)
 {
   if (visible)
     {
       sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT;
-      start_drop_feedback (sidebar, NULL, context);
+      start_drop_feedback (sidebar, NULL, drop);
     }
   else
     {
