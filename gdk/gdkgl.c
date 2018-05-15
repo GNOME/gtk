@@ -23,7 +23,7 @@
 #include "gdkinternals.h"
 
 #ifdef GDK_WINDOWING_WIN32
-# include "gdkwin32.h"
+# include "win32/gdkwin32.h"
 #endif
 
 #include <epoxy/gl.h>
