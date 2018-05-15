@@ -25,7 +25,7 @@
 
 #include "gdkdrawcontextprivate.h"
 
-#include <cairo/cairo.h>
+#include <cairo.h>
 
 G_BEGIN_DECLS
 

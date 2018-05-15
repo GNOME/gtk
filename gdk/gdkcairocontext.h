@@ -28,7 +28,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 
-#include <cairo/cairo.h>
+#include <cairo.h>
 
 G_BEGIN_DECLS
 
