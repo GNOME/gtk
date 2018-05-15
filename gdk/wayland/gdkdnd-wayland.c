@@ -225,18 +225,16 @@ gdk_wayland_drag_context_status (GdkDrop       *drop,
 }
 
 static void
-gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
-				      gboolean        success,
-				      guint32         time)
+gdk_wayland_drag_context_finish (GdkDrop       *drop,
+                                 GdkDragAction  action)
 {
-  GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
-  GdkDisplay *display = gdk_device_get_display (gdk_drag_context_get_device (context));
+  GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (drop);
+  GdkDisplay *display = gdk_drop_get_display (drop);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  if (success && wayland_context->selected_action &&
-      wayland_context->selected_action != GDK_ACTION_ASK)
+  if (action)
     {
-      gdk_wayland_drag_context_commit_status (context);
+      gdk_wayland_drag_context_commit_status (GDK_DRAG_CONTEXT (drop));
 
       if (display_wayland->data_device_manager_version >=
           WL_DATA_OFFER_FINISH_SINCE_VERSION)
@@ -403,13 +401,12 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   object_class->finalize = gdk_wayland_drag_context_finalize;
 
   drop_class->status = gdk_wayland_drag_context_status;
+  drop_class->finish = gdk_wayland_drag_context_finish;
   drop_class->read_async = gdk_wayland_drag_context_read_async;
   drop_class->read_finish = gdk_wayland_drag_context_read_finish;
 
   context_class->drag_abort = gdk_wayland_drag_context_drag_abort;
   context_class->drag_drop = gdk_wayland_drag_context_drag_drop;
-  context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
-  context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
   context_class->get_drag_surface = gdk_wayland_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
   context_class->drop_done = gdk_wayland_drag_context_drop_done;
