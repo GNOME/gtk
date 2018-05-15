@@ -630,8 +630,7 @@ static void gtk_tree_view_drag_data_delete (GtkWidget        *widget,
 
 /* Target side drag signals */
 static void     gtk_tree_view_drag_leave         (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
-                                                  guint             time);
+                                                  GdkDrop          *drop);
 static gboolean gtk_tree_view_drag_motion        (GtkWidget        *widget,
                                                   GdkDragContext   *context,
                                                   gint              x,
@@ -7535,9 +7534,8 @@ gtk_tree_view_drag_data_delete (GtkWidget      *widget,
 }
 
 static void
-gtk_tree_view_drag_leave (GtkWidget      *widget,
-                          GdkDragContext *context,
-                          guint             time)
+gtk_tree_view_drag_leave (GtkWidget *widget,
+                          GdkDrop   *drop)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
