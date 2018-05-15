@@ -51,6 +51,9 @@ GdkDragAction           gdk_drop_get_actions            (GdkDrop                
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_status                 (GdkDrop                *self,
                                                          GdkDragAction           actions);
+GDK_AVAILABLE_IN_ALL
+void                    gdk_drop_finish                 (GdkDrop                *self,
+                                                         GdkDragAction           action);
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_read_async             (GdkDrop                *self,

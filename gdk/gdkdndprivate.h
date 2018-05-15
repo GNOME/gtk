@@ -39,9 +39,6 @@ struct _GdkDragContextClass {
                                 guint32          time_);
   void        (*drag_drop)     (GdkDragContext  *context,
                                 guint32          time_);
-  void        (*drop_finish)   (GdkDragContext  *context,
-                                gboolean         success,
-                                guint32          time_);
   GdkSurface*  (*get_drag_surface) (GdkDragContext *context);
   void        (*set_hotspot)   (GdkDragContext  *context,
                                 gint             hot_x,
