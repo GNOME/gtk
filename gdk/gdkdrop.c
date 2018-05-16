@@ -34,6 +34,7 @@ typedef struct _GdkDropPrivate GdkDropPrivate;
 
 struct _GdkDropPrivate {
   GdkDevice *device;
+  GdkDragContext *drag;
   GdkContentFormats *formats;
   GdkDragAction actions;
 };
@@ -43,6 +44,7 @@ enum {
   PROP_ACTIONS,
   PROP_DEVICE,
   PROP_DISPLAY,
+  PROP_DRAG,
   PROP_FORMATS,
   N_PROPERTIES
 };
@@ -118,6 +120,10 @@ gdk_drop_set_property (GObject      *gobject,
       g_assert (priv->device != NULL);
       break;
 
+    case PROP_DRAG:
+      priv->drag = g_value_dup_object (value);
+      break;
+
     case PROP_FORMATS:
       priv->formats = g_value_dup_boxed (value);
 #ifdef DROP_SUBCLASS
@@ -154,6 +160,10 @@ gdk_drop_get_property (GObject    *gobject,
       g_value_set_object (value, gdk_device_get_display (priv->device));
       break;
 
+    case PROP_DRAG:
+      g_value_set_object (value, priv->drag);
+      break;
+
     case PROP_FORMATS:
       g_value_set_boxed (value, priv->formats);
       break;
@@ -171,6 +181,7 @@ gdk_drop_finalize (GObject *object)
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
 
   g_clear_object (&priv->device);
+  g_clear_object (&priv->drag);
 
   G_OBJECT_CLASS (gdk_drop_parent_class)->finalize (object);
 }
@@ -228,6 +239,21 @@ gdk_drop_class_init (GdkDropClass *klass)
                          "Display this drag belongs to",
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READABLE |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkDrop:drag:
+   *
+   * The #GdkDrag that initiated this drop
+   */
+  properties[PROP_DRAG] =
+    g_param_spec_object ("drag",
+                         "Drag",
+                         "The drag that initiated this drop",
+                         GDK_TYPE_DRAG_CONTEXT,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
 
@@ -349,6 +375,27 @@ gdk_drop_set_actions (GdkDrop       *self,
   priv->actions = actions;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIONS]);
+}
+
+/**
+ * gdk_drop_get_drag:
+ * @self: a #GdkDrop
+ *
+ * If this is an in-app drag-and-drop operation, returns the #GdkDrag
+ * that corresponds to this drop.
+ *
+ * If it is not, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): the corresponding #GdkDrag
+ **/
+GdkDragContext *
+gdk_drop_get_drag (GdkDrop *self)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DROP (self), 0);
+
+  return priv->drag;
 }
 
 /**
