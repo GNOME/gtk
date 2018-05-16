@@ -928,8 +928,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
 
   if (priv->homogeneous)
     {
-      extra[0] = ((box_size - center_size) / 2 - nvis[0] * priv->spacing) / nvis[0];
-      extra[1] = ((box_size - center_size) / 2 - nvis[1] * priv->spacing) / nvis[1];
+      extra[0] = nvis[0] ? ((box_size - center_size) / 2 - nvis[0] * priv->spacing) / nvis[0] : 0;
+      extra[1] = nvis[1] ? ((box_size - center_size) / 2 - nvis[1] * priv->spacing) / nvis[1] : 0;
       extra[0] = MIN (extra[0], extra[1]);
       n_extra_widgets[0] = 0;
     }
