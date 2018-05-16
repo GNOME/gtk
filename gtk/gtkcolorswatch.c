@@ -208,9 +208,8 @@ swatch_drag_data_get (GtkWidget        *widget,
 
 static void
 swatch_drag_data_received (GtkWidget        *widget,
-                           GdkDragContext   *context,
-                           GtkSelectionData *selection_data,
-                           guint             time)
+                           GdkDrop          *drop,
+                           GtkSelectionData *selection_data)
 {
   gint length;
   guint16 *vals;
