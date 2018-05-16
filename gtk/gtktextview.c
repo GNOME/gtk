@@ -441,9 +441,8 @@ static gboolean gtk_text_view_drag_drop          (GtkWidget        *widget,
                                                   gint              y,
                                                   guint             time);
 static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
-                                                  GtkSelectionData *selection_data,
-                                                  guint             time);
+                                                  GdkDrop          *drop,
+                                                  GtkSelectionData *selection_data);
 
 static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
 
@@ -7735,7 +7734,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GdkRectangle target_rect;
   gint bx, by;
   GdkAtom target;
-  GdkDragAction suggested_action = 0;
+  gboolean can_accept = FALSE;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -7773,33 +7772,13 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     }
   else
     {      
-      if (gtk_text_iter_can_insert (&newplace, priv->editable))
-        {
-          GtkWidget *source_widget;
-          
-          suggested_action = gdk_drag_context_get_suggested_action (context);
-          
-          source_widget = gtk_drag_get_source_widget (context);
-          
-          if (source_widget == widget)
-            {
-              /* Default to MOVE, unless the user has
-               * pressed ctrl or alt to affect available actions
-               */
-              if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
-                suggested_action = GDK_ACTION_MOVE;
-            }
-        }
-      else
-        {
-          /* Can't drop here. */
-        }
+      can_accept = gtk_text_iter_can_insert (&newplace, priv->editable);
     }
 
-  if (suggested_action != 0)
+  if (can_accept)
     {
       gtk_text_mark_set_visible (priv->dnd_mark, cursor_visible (text_view));
-      gdk_drag_status (context, suggested_action, time);
+      gdk_drag_status (context, GDK_ACTION_COPY | GDK_ACTION_MOVE, time);
     }
   else
     {
@@ -7886,17 +7865,39 @@ insert_text_data (GtkTextView      *text_view,
     }
 }
 
+static GdkDragAction
+gtk_text_view_get_action (GtkWidget *textview,
+                          GdkDrop   *drop)
+{
+  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
+  GdkDragAction actions;
+
+  actions = gdk_drop_get_actions (drop);
+
+  if (source_widget == textview &&
+      actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  return 0;
+}
+
 static void
 gtk_text_view_drag_data_received (GtkWidget        *widget,
-                                  GdkDragContext   *context,
-                                  GtkSelectionData *selection_data,
-                                  guint             time)
+                                  GdkDrop          *drop,
+                                  GtkSelectionData *selection_data)
 {
   GtkTextIter drop_point;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  gboolean success = FALSE;
   GtkTextBuffer *buffer = NULL;
+  GdkDragAction action = 0;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -7913,7 +7914,9 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   if (!gtk_text_iter_can_insert (&drop_point, priv->editable))
     goto done;
 
-  success = TRUE;
+  action = gtk_text_view_get_action (widget, drop);
+  if (action == 0)
+    goto done;
 
   gtk_text_buffer_begin_user_action (buffer);
 
@@ -7965,9 +7968,9 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     insert_text_data (text_view, &drop_point, selection_data);
 
  done:
-  gdk_drag_finish (context, success, time);
+  gdk_drop_finish (drop, action);
 
-  if (success)
+  if (action)
     {
       gtk_text_buffer_get_iter_at_mark (buffer,
                                         &drop_point,
