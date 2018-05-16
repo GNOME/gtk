@@ -186,9 +186,8 @@ image_drag_data_get (GtkWidget        *widget,
 
 static void
 image_drag_data_received (GtkWidget        *widget,
-                          GdkDragContext   *context,
+                          GdkDrop          *drop,
                           GtkSelectionData *selection_data,
-                          guint32           time,
                           gpointer          data)
 {
   gchar *text;
