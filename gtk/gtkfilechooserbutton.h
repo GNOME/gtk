@@ -56,13 +56,13 @@ struct _GtkFileChooserButtonClass
 
   void (* file_set) (GtkFileChooserButton *fc);
 
-  void (*__gtk_reserved1);
-  void (*__gtk_reserved2);
-  void (*__gtk_reserved3);
-  void (*__gtk_reserved4);
-  void (*__gtk_reserved5);
-  void (*__gtk_reserved6);
-  void (*__gtk_reserved7);
+  void *__gtk_reserved1;
+  void *__gtk_reserved2;
+  void *__gtk_reserved3;
+  void *__gtk_reserved4;
+  void *__gtk_reserved5;
+  void *__gtk_reserved6;
+  void *__gtk_reserved7;
 };
 
 

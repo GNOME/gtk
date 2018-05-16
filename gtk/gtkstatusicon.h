@@ -73,8 +73,8 @@ struct _GtkStatusIconClass
                                      gboolean        keyboard_mode,
                                      GtkTooltip     *tooltip);
 
-  void (*__gtk_reserved1);
-  void (*__gtk_reserved2);
+  void *__gtk_reserved1;
+  void *__gtk_reserved2;
 };
 
 GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
