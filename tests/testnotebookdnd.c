@@ -122,9 +122,8 @@ remove_in_idle (gpointer data)
 
 static void
 on_button_drag_data_received (GtkWidget        *widget,
-                              GdkDragContext   *context,
+                              GdkDrop          *drop,
                               GtkSelectionData *data,
-                              guint             time,
                               gpointer          user_data)
 {
   GtkWidget **child;
