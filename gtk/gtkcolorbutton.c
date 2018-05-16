@@ -120,11 +120,8 @@ static void gtk_color_button_drag_data_get (GtkWidget        *widget,
 
 /* target side drag signals */
 static void gtk_color_button_drag_data_received (GtkWidget        *widget,
-                                                 GdkDragContext   *context,
-                                                 gint              x,
-                                                 gint              y,
+                                                 GdkDrop          *drop,
                                                  GtkSelectionData *selection_data,
-                                                 guint32           time,
                                                  GtkColorButton   *button);
 
 
@@ -276,11 +273,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 
 static void
 gtk_color_button_drag_data_received (GtkWidget        *widget,
-                                     GdkDragContext   *context,
-                                     gint              x,
-                                     gint              y,
+                                     GdkDrop          *drop,
                                      GtkSelectionData *selection_data,
-                                     guint32           time,
                                      GtkColorButton   *button)
 {
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);

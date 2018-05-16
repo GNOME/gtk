@@ -409,9 +409,8 @@ static void gtk_notebook_drag_data_get       (GtkWidget        *widget,
                                               GtkSelectionData *data,
                                               guint             time);
 static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
-                                              GdkDragContext   *context,
-                                              GtkSelectionData *data,
-                                              guint             time);
+                                              GdkDrop          *drop,
+                                              GtkSelectionData *data);
 static void gtk_notebook_direction_changed   (GtkWidget        *widget,
                                               GtkTextDirection  previous_direction);
 
@@ -3281,27 +3280,29 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 
 static void
 gtk_notebook_drag_data_received (GtkWidget        *widget,
-                                 GdkDragContext   *context,
-                                 GtkSelectionData *data,
-                                 guint             time)
+                                 GdkDrop          *drop,
+                                 GtkSelectionData *data)
 {
   GtkNotebook *notebook;
+  GdkDragContext *drag;
   GtkWidget *source_widget;
   GtkWidget **child;
 
   notebook = GTK_NOTEBOOK (widget);
-  source_widget = gtk_drag_get_source_widget (context);
+  drag = gdk_drop_get_drag (drop);
+  source_widget = gtk_drag_get_source_widget (drag);
 
   if (source_widget &&
+      (gdk_drop_get_actions (drop) & GDK_ACTION_MOVE) &&
       gtk_selection_data_get_target (data) == g_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       child = (void*) gtk_selection_data_get_data (data);
 
       do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child);
-      gdk_drag_finish (context, TRUE, time);
+      gdk_drop_finish (drop, GDK_ACTION_MOVE);
     }
   else
-    gdk_drag_finish (context, FALSE, time);
+    gdk_drop_finish (drop, 0);
 }
 
 /* Private GtkContainer Methods :
