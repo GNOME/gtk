@@ -252,9 +252,8 @@ static void     gtk_file_chooser_button_finalize           (GObject          *ob
 /* GtkWidget Functions */
 static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
 static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *widget,
-							    GdkDragContext   *context,
-							    GtkSelectionData *data,
-							    guint             drag_time);
+							    GdkDrop          *drop,
+							    GtkSelectionData *data);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_map                (GtkWidget        *widget);
@@ -1199,9 +1198,8 @@ dnd_select_folder_get_info_cb (GCancellable *cancellable,
 
 static void
 gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
-					    GdkDragContext   *context,
-					    GtkSelectionData *data,
-					    guint	      drag_time)
+					    GdkDrop          *drop,
+					    GtkSelectionData *data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
@@ -1210,11 +1208,10 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received != NULL)
     GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received (widget,
-										 context,
-										 data,
-										 drag_time);
+										 drop,
+										 data);
 
-  if (widget == NULL || context == NULL || data == NULL || gtk_selection_data_get_length (data) < 0)
+  if (widget == NULL || gtk_selection_data_get_length (data) < 0)
     return;
 
   if (gtk_selection_data_targets_include_uri (data))
@@ -1255,7 +1252,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
       g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
     }
 
-  gdk_drag_finish (context, TRUE, drag_time);
+  gdk_drop_finish (drop, GDK_ACTION_COPY);
 }
 
 static void

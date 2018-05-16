@@ -2001,11 +2001,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-received:
    * @widget: the object which received the signal
-   * @context: the drag context
+   * @drop: the #GdkDrop
    * @x: where the drop happened
    * @y: where the drop happened
    * @data: the received data
-   * @time: the timestamp at which the data was received
    *
    * The ::drag-data-received signal is emitted on the drop site when the
    * dragged data has been received. If the data was received in order to
@@ -2027,12 +2026,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * |[<!-- language="C" -->
    * void
    * drag_data_received (GtkWidget          *widget,
-   *                     GdkDragContext     *context,
-   *                     gint                x,
-   *                     gint                y,
-   *                     GtkSelectionData   *data,
-   *                     guint               info,
-   *                     guint               time)
+   *                     GdkDrop            *drop,
+   *                     GtkSelectionData   *data)
    * {
    *   if ((data->length >= 0) && (data->format == 8))
    *     {
@@ -2040,8 +2035,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    *       // handle data here
    *
-   *       action = gdk_drag_context_get_selected_action (context);
-   *       if (action == GDK_ACTION_ASK)
+   *       action = gdk_drop_get_actions (drop);
+   *       if (!gdk_drag_action_is_unique (action))
    *         {
    *           GtkWidget *dialog;
    *           gint response;
@@ -2061,10 +2056,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *             action = GDK_ACTION_COPY;
    *          }
    *
-   *       gdk_drag_finish (context, TRUE, action == GDK_ACTION_MOVE, time);
+   *       gdk_drop_finish (context, action);
    *     }
    *   else
-   *     gdk_drag_finish (context, FALSE, FALSE, time);
+   *     gdk_drop_finish (context, 0);
    *  }
    * ]|
    */
@@ -2074,11 +2069,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_received),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_BOXED_UINT,
-		  G_TYPE_NONE, 3,
-		  GDK_TYPE_DRAG_CONTEXT,
-		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT);
+		  _gtk_marshal_VOID__OBJECT_BOXED,
+		  G_TYPE_NONE, 2,
+		  GDK_TYPE_DROP,
+		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::query-tooltip:

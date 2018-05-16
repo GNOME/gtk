@@ -186,8 +186,7 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
             g_signal_emit_by_name (data->widget,
                                    "drag-data-received",
                                    data->context,
-                                   &sdata,
-                                   data->time);
+                                   &sdata);
         }
     }
   else
@@ -195,8 +194,7 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
       g_signal_emit_by_name (data->widget,
                              "drag-data-received",
                              data->context,
-                             &sdata,
-                             data->time);
+                             &sdata);
     }
   
   if (site && site->flags & GTK_DEST_DEFAULT_DROP)
