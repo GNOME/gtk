@@ -1932,9 +1932,8 @@ out:
 
 static void
 file_list_drag_data_received_cb (GtkWidget        *widget,
-                                 GdkDragContext   *context,
+                                 GdkDrop          *drop,
                                  GtkSelectionData *selection_data,
-                                 guint             time_,
                                  gpointer          user_data)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
@@ -1944,11 +1943,13 @@ file_list_drag_data_received_cb (GtkWidget        *widget,
   GFile *file;
 
   /* Allow only drags from other widgets; see bug #533891. */
-  if (gtk_drag_get_source_widget (context) == widget)
+  if (gdk_drop_get_drag (drop) &&
+      gtk_drag_get_source_widget (gdk_drop_get_drag (drop)) == widget)
     {
       g_signal_stop_emission_by_name (widget, "drag-data-received");
       return;
     }
+
 
   /* Parse the text/uri-list string, navigate to the first one */
   uris = gtk_selection_data_get_uris (selection_data);
