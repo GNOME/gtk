@@ -36,7 +36,6 @@
 
 G_BEGIN_DECLS
 
-typedef GdkSnapshot                    GtkSnapshot;
 typedef struct _GtkSnapshotClass       GtkSnapshotClass;
 
 #define GTK_TYPE_SNAPSHOT               (gtk_snapshot_get_type ())
