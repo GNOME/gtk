@@ -70,6 +70,15 @@ add_mark (SpCaptureWriter *writer,
 }
 
 void
+gdk_profiler_add_mark (gint64      start,
+                       guint64     duration,
+                       const char *name,
+                       const char *message)
+{
+  sp_capture_writer_add_mark (writer, start, 0, getpid (), duration, "gtk", name, message);
+}
+
+void
 gdk_profiler_add_frame (GdkFrameTimings *timings)
 {
   if (!writer)

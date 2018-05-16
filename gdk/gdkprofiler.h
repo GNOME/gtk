@@ -30,6 +30,10 @@ G_BEGIN_DECLS
 void     gdk_profiler_start      (void);
 void     gdk_profiler_stop       (void);
 gboolean gdk_profiler_is_running (void);
+void     gdk_profiler_add_mark   (gint64           start,
+                                  guint64          duration,
+                                  const char      *name,
+                                  const char      *message);
 void     gdk_profiler_add_frame  (GdkFrameTimings *timings);
 
 G_END_DECLS
