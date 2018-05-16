@@ -22,7 +22,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include "gdk/gdkframetimings.h"
+#include "gdk/gdkframeclock.h"
 #include "gdk/gdkdisplay.h"
 
 G_BEGIN_DECLS
@@ -34,7 +34,8 @@ void     gdk_profiler_add_mark   (gint64           start,
                                   guint64          duration,
                                   const char      *name,
                                   const char      *message);
-void     gdk_profiler_add_frame  (GdkFrameTimings *timings);
+void     gdk_profiler_add_frame  (GdkFrameClock   *clock,
+                                  GdkFrameTimings *timings);
 
 G_END_DECLS
 
