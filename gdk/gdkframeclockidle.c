@@ -491,7 +491,7 @@ gdk_frame_clock_paint_idle (void *data)
 
 #ifdef G_ENABLE_DEBUG
   if (g_getenv ("GDK_TRACE"))
-    gdk_profiler_add_frame (timings);
+    gdk_profiler_add_frame (clock, timings);
 
   if (GDK_DEBUG_CHECK (FRAMES))
     {
