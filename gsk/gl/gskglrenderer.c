@@ -2453,7 +2453,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   graphene_matrix_t modelview, projection;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
-  gint64 gpu_time, cpu_time;
+  gint64 gpu_time, cpu_time, start_time;
 #endif
 
 #ifdef G_ENABLE_DEBUG
@@ -2524,6 +2524,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
 
+  start_time = gsk_profiler_timer_get_start (profiler, self->profile_timers.cpu_time);
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
 
@@ -2531,6 +2532,10 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_profiler_timer_set (profiler, self->profile_timers.gpu_time, gpu_time);
 
   gsk_profiler_push_samples (profiler);
+
+  if (g_getenv ("GDK_TRACE"))
+    gdk_profiler_add_mark (start_time, cpu_time, "render", "");
+
 #endif
 }
 
