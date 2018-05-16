@@ -36,6 +36,7 @@ tests = [
   ['recentmanager'],
   ['regression-tests'],
   ['scrolledwindow'],
+  ['searchbar'],
   ['spinbutton'],
   ['stylecontext'],
   ['templates'],
