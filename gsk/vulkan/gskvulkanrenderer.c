@@ -170,7 +170,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
-  gint64 cpu_time;
+  gint64 cpu_time, start_time;
 #endif
 
 #ifdef G_ENABLE_DEBUG
@@ -201,10 +201,14 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   gsk_vulkan_render_free (render);
 
 #ifdef G_ENABLE_DEBUG
+  start_time = gsk_profiler_timer_get_start (profiler, self->profile_timers.cpu_time);
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
 
   gsk_profiler_push_samples (profiler);
+
+  if (g_getenv ("GDK_TRACE"))
+    gdk_profiler_add_mark (start_time, cpu_time, "render", "");
 #endif
 
   return texture;
