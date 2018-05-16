@@ -99,6 +99,7 @@ gboolean    gtk_search_bar_handle_event    (GtkSearchBar *bar,
 GDK_AVAILABLE_IN_ALL
 void        gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
                                                    GtkWidget    *widget);
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar);
 
 G_END_DECLS
