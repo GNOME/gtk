@@ -73,9 +73,6 @@ void           gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
                                              GtkAdjustment *adjustment);
 GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_scrollbar_get_adjustment (GtkScrollbar  *self);
-GDK_AVAILABLE_IN_ALL
-double         gtk_scrollbar_get_wheel_delta (GtkScrollbar         *self,
-                                              const GdkEventScroll *event);
 
 G_END_DECLS
 
