@@ -179,10 +179,9 @@ static void     gtk_expander_size_allocate  (GtkWidget           *widget,
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
-                                             GdkDragContext   *context,
+                                             GdkDrop          *drop,
                                              gint              x,
-                                             gint              y,
-                                             guint             time);
+                                             gint              y);
 static void     gtk_expander_drag_leave     (GtkWidget        *widget,
                                              GdkDrop          *drop);
 
@@ -526,11 +525,10 @@ expand_timeout (gpointer data)
 }
 
 static gboolean
-gtk_expander_drag_motion (GtkWidget        *widget,
-                          GdkDragContext   *context,
-                          gint              x,
-                          gint              y,
-                          guint             time)
+gtk_expander_drag_motion (GtkWidget *widget,
+                          GdkDrop   *drop,
+                          gint       x,
+                          gint       y)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
