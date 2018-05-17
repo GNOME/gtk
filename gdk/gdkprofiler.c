@@ -29,7 +29,7 @@
 
 static SpCaptureWriter *writer = NULL;
 static gboolean running = FALSE;
-static int fps_counter = 0;
+static guint fps_counter = 0;
 
 static void
 profiler_stop (void)
@@ -55,7 +55,7 @@ gdk_profiler_start (void)
   writer = sp_capture_writer_new (filename, 16*1024);
   g_free (filename);
 
-  fps_counter = sp_capture_writer_request_counter (writer, 1);
+  fps_counter = (guint) sp_capture_writer_request_counter (writer, 1);
   counter.id = fps_counter;
   counter.type = SP_CAPTURE_COUNTER_DOUBLE;
   counter.value.vdbl = 0;
