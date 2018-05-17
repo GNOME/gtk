@@ -30,8 +30,6 @@ void     gdk_profiler_add_mark   (gint64           start,
                                   guint64          duration,
                                   const char      *name,
                                   const char      *message);
-void     gdk_profiler_add_frame  (GdkFrameClock   *clock,
-                                  GdkFrameTimings *timings);
 guint    gdk_profiler_define_counter (const char *name,
                                       const char *description);
 void     gdk_profiler_set_counter    (guint  id,
