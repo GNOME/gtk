@@ -697,16 +697,16 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   g_signal_connect (adj, "value-changed", G_CALLBACK (adj_value_changed), chooser);
 
-  setup_section (chooser, &chooser->recent, NULL, "recent-symbolic");
-  setup_section (chooser, &chooser->people, "grinning face", "people-symbolic");
-  setup_section (chooser, &chooser->body, "selfie", "body-symbolic");
-  setup_section (chooser, &chooser->nature, "monkey face", "nature-symbolic");
-  setup_section (chooser, &chooser->food, "grapes", "food-drink-symbolic");
-  setup_section (chooser, &chooser->travel, "globe showing Europe-Africa", "travel-symbolic");
-  setup_section (chooser, &chooser->activities, "jack-o-lantern", "activities-symbolic");
-  setup_section (chooser, &chooser->objects, "muted speaker", "objects-symbolic");
-  setup_section (chooser, &chooser->symbols, "ATM sign", "symbols-symbolic");
-  setup_section (chooser, &chooser->flags, "chequered flag", "flags-symbolic");
+  setup_section (chooser, &chooser->recent, NULL, "emoji-recent-symbolic");
+  setup_section (chooser, &chooser->people, "grinning face", "emoji-people-symbolic");
+  setup_section (chooser, &chooser->body, "selfie", "emoji-body-symbolic");
+  setup_section (chooser, &chooser->nature, "monkey face", "emoji-nature-symbolic");
+  setup_section (chooser, &chooser->food, "grapes", "emoji-food-symbolic");
+  setup_section (chooser, &chooser->travel, "globe showing Europe-Africa", "emoji-travel-symbolic");
+  setup_section (chooser, &chooser->activities, "jack-o-lantern", "emoji-activities-symbolic");
+  setup_section (chooser, &chooser->objects, "muted speaker", "emoji-objects-symbolic");
+  setup_section (chooser, &chooser->symbols, "ATM sign", "emoji-symbols-symbolic");
+  setup_section (chooser, &chooser->flags, "chequered flag", "emoji-flags-symbolic");
 
   populate_emoji_chooser (chooser);
   populate_recent_section (chooser);
