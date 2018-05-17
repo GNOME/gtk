@@ -35,6 +35,11 @@ guint    gdk_profiler_define_counter (const char *name,
 void     gdk_profiler_set_counter    (guint  id,
                                       gint64 time,
                                       double value);
+guint    gdk_profiler_define_int_counter (const char *name,
+                                          const char *description);
+void     gdk_profiler_set_int_counter (guint  id,
+                                       gint64 time,
+                                       gint64 value);
 
 G_END_DECLS
 
