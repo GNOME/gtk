@@ -588,7 +588,7 @@ gdk_frame_clock_paint_idle (void *data)
   if (g_getenv ("GDK_TRACE"))
     {
       add_timings_to_profiler (timings);
-      gdk_profiler_set_counter (fps_counter, timings->frame_end_time, frame_clock_get_fps (clock)); 
+      gdk_profiler_set_counter (fps_counter, timings->frame_end_time * 1000, frame_clock_get_fps (clock)); 
     }
 
   if (GDK_DEBUG_CHECK (FRAMES))
