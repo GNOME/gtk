@@ -51,7 +51,7 @@ gdk_profiler_start (void)
 
   sp_clock_init ();
 
-  filename = g_strdup_printf ("gtk.trace.%d", getpid ());
+  filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
   writer = sp_capture_writer_new (filename, 16*1024);
   g_free (filename);
 
