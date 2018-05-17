@@ -2534,7 +2534,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_profiler_push_samples (profiler);
 
-  if (g_getenv ("GDK_TRACE"))
+  if (gdk_profiler_is_running ())
     gdk_profiler_add_mark (start_time, cpu_time, "render", "");
 
 #endif
