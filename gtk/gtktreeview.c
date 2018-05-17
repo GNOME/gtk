@@ -632,15 +632,13 @@ static void gtk_tree_view_drag_data_delete (GtkWidget        *widget,
 static void     gtk_tree_view_drag_leave         (GtkWidget        *widget,
                                                   GdkDrop          *drop);
 static gboolean gtk_tree_view_drag_motion        (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static gboolean gtk_tree_view_drag_drop          (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDrop          *drop,
                                                   GtkSelectionData *selection_data);
@@ -7130,7 +7128,7 @@ scroll_row_timeout (gpointer data)
 /* Returns TRUE if event should not be propagated to parent widgets */
 static gboolean
 set_destination_row (GtkTreeView    *tree_view,
-                     GdkDragContext *context,
+                     GdkDrop        *drop,
                      /* coordinates relative to the widget */
                      gint            x,
                      gint            y,
@@ -7168,7 +7166,7 @@ set_destination_row (GtkTreeView    *tree_view,
       return FALSE; /* no longer a drop site */
     }
 
-  *target = gtk_drag_dest_find_target (widget, context,
+  *target = gtk_drag_dest_find_target (widget, drop,
                                        gtk_drag_dest_get_target_list (widget));
   if (*target == NULL)
     {
@@ -7540,12 +7538,10 @@ gtk_tree_view_drag_leave (GtkWidget *widget,
 
 
 static gboolean
-gtk_tree_view_drag_motion (GtkWidget        *widget,
-                           GdkDragContext   *context,
-			   /* coordinates relative to the widget */
-                           gint              x,
-                           gint              y,
-                           guint             time)
+gtk_tree_view_drag_motion (GtkWidget *widget,
+                           GdkDrop   *drop,
+                           gint       x,
+                           gint       y)
 {
   gboolean empty;
   GtkTreePath *path = NULL;
@@ -7556,7 +7552,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  if (!set_destination_row (tree_view, context, x, y, &suggested_action, &target))
+  if (!set_destination_row (tree_view, drop, x, y, &suggested_action, &target))
     return FALSE;
 
   tree_view->priv->event_last_x = x;
@@ -7570,7 +7566,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
   if (path == NULL && !empty)
     {
       /* Can't drop here. */
-      gdk_drag_status (context, 0, time);
+      gdk_drop_status (drop, 0);
     }
   else
     {
@@ -7592,13 +7588,13 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
           /* Request data so we can use the source row when
            * determining whether to accept the drop
            */
-          set_status_pending (GDK_DROP (context), suggested_action);
-          gtk_drag_get_data (widget, context, target, time);
+          set_status_pending (drop, suggested_action);
+          gtk_drag_get_data (widget, drop, target);
         }
       else
         {
-          set_status_pending (GDK_DROP (context), 0);
-          gdk_drag_status (context, suggested_action, time);
+          set_status_pending (drop, 0);
+          gdk_drop_status (drop, suggested_action);
         }
     }
 
@@ -7610,12 +7606,10 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 
 
 static gboolean
-gtk_tree_view_drag_drop (GtkWidget        *widget,
-                         GdkDragContext   *context,
-			 /* coordinates relative to the widget */
-                         gint              x,
-                         gint              y,
-                         guint             time)
+gtk_tree_view_drag_drop (GtkWidget *widget,
+                         GdkDrop   *drop,
+                         gint       x,
+                         gint       y)
 {
   GtkTreeView *tree_view;
   GtkTreePath *path;
@@ -7641,7 +7635,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag_drop"))
     return FALSE;
 
-  if (!set_destination_row (tree_view, context, x, y, &suggested_action, &target))
+  if (!set_destination_row (tree_view, drop, x, y, &suggested_action, &target))
     return FALSE;
 
   path = get_logical_dest_row (tree_view, &path_down_mode, &drop_append_mode);
@@ -7651,8 +7645,8 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
       /* in case a motion had requested drag data, change things so we
        * treat drag data receives as a drop.
        */
-      set_status_pending (GDK_DROP (context), 0);
-      set_dest_row (GDK_DROP (context), model, path,
+      set_status_pending (drop, 0);
+      set_dest_row (drop, model, path,
                     path_down_mode, tree_view->priv->empty_view_drop,
                     drop_append_mode);
     }
@@ -7667,7 +7661,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
 
   if (target != NULL)
     {
-      gtk_drag_get_data (widget, context, target, time);
+      gtk_drag_get_data (widget, drop, target);
       return TRUE;
     }
   else
