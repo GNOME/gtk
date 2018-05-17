@@ -41,7 +41,6 @@ void
 gdk_profiler_start (void)
 {
   char *filename;
-  SpCaptureCounter counter;
 
   running = TRUE;
 
