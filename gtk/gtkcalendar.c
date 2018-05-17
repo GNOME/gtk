@@ -315,17 +315,15 @@ static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
                                                  GdkDrop          *drop,
                                                  GtkSelectionData *selection_data);
 static gboolean gtk_calendar_drag_motion        (GtkWidget        *widget,
-                                                 GdkDragContext   *context,
+                                                 GdkDrop          *drop,
                                                  gint              x,
-                                                 gint              y,
-                                                 guint             time);
+                                                 gint              y);
 static void     gtk_calendar_drag_leave         (GtkWidget        *widget,
                                                  GdkDrop          *drop);
 static gboolean gtk_calendar_drag_drop          (GtkWidget        *widget,
-                                                 GdkDragContext   *context,
+                                                 GdkDrop          *drop,
                                                  gint              x,
-                                                 gint              y,
-                                                 guint             time);
+                                                 gint              y);
 
 
 static void calendar_start_spinning (GtkCalendar *calendar,
@@ -2952,10 +2950,9 @@ gtk_calendar_drag_leave (GtkWidget *widget,
 
 static gboolean
 gtk_calendar_drag_motion (GtkWidget      *widget,
-                          GdkDragContext *context,
+                          GdkDrop        *drop,
                           gint            x,
-                          gint            y,
-                          guint           time)
+                          gint            y)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
   GdkAtom target;
@@ -2966,13 +2963,13 @@ gtk_calendar_drag_motion (GtkWidget      *widget,
       gtk_drag_highlight (widget);
     }
 
-  target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target == NULL || gdk_drag_context_get_suggested_action (context) == 0)
-    gdk_drag_status (context, 0, time);
-  else if (get_status_pending (GDK_DROP (context)) == 0)
+  target = gtk_drag_dest_find_target (widget, drop, NULL);
+  if (target == NULL || gdk_drop_get_actions (drop) == 0)
+    gdk_drop_status (drop, 0);
+  else if (get_status_pending (drop) == 0)
     {
-      set_status_pending (GDK_DROP (context), gdk_drag_context_get_suggested_action (context));
-      gtk_drag_get_data (widget, context, target, time);
+      set_status_pending (drop, gdk_drop_get_actions (drop));
+      gtk_drag_get_data (widget, drop, target);
     }
 
   return TRUE;
@@ -2980,19 +2977,16 @@ gtk_calendar_drag_motion (GtkWidget      *widget,
 
 static gboolean
 gtk_calendar_drag_drop (GtkWidget      *widget,
-                        GdkDragContext *context,
+                        GdkDrop        *drop,
                         gint            x,
-                        gint            y,
-                        guint           time)
+                        gint            y)
 {
   GdkAtom target;
 
-  target = gtk_drag_dest_find_target (widget, context, NULL);
+  target = gtk_drag_dest_find_target (widget, drop, NULL);
   if (target != NULL)
     {
-      gtk_drag_get_data (widget, context,
-                         target,
-                         time);
+      gtk_drag_get_data (widget, drop, target);
       return TRUE;
     }
 
