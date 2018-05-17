@@ -102,8 +102,9 @@ gdk_profiler_add_mark (gint64      start,
 }
 
 guint
-gdk_profiler_define_counter (const char *name,
-                             const char *description)
+define_counter (const char *name,
+                const char *description,
+                int         type)
 {
   SpCaptureCounter counter;
 
@@ -111,7 +112,7 @@ gdk_profiler_define_counter (const char *name,
     return 0;
 
   counter.id = (guint) sp_capture_writer_request_counter (writer, 1);
-  counter.type = SP_CAPTURE_COUNTER_DOUBLE;
+  counter.type = type;
   counter.value.vdbl = 0;
   g_strlcpy (counter.category, "gtk", sizeof counter.category);
   g_strlcpy (counter.name, name, sizeof counter.name);
@@ -125,6 +126,20 @@ gdk_profiler_define_counter (const char *name,
                                      1);
 
   return counter.id;
+}
+
+guint
+gdk_profiler_define_counter (const char *name,
+                             const char *description)
+{
+  define_counter (name, description, SP_CAPTURE_COUNTER_DOUBLE);
+}
+
+guint
+gdk_profiler_define_int_counter (const char *name,
+                                 const char *description)
+{
+  define_counter (name, description, SP_CAPTURE_COUNTER_INT64);
 }
 
 void
@@ -144,3 +159,22 @@ gdk_profiler_set_counter (guint  id,
                                   &id, &value, 1);
 }
 
+void
+gdk_profiler_set_int_counter (guint  id,
+                              gint64 time,
+                              gint64 val)
+{
+  
+}
+
+  SpCaptureCounterValue value;
+
+  if (!running)
+    return;
+
+  value.v64 = val;
+  sp_capture_writer_set_counters (writer,
+                                  time,
+                                  -1, getpid (),
+                                  &id, &value, 1);
+}
