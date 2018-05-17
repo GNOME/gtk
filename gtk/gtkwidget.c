@@ -1830,10 +1830,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-motion:
    * @widget: the object which received the signal
-   * @context: the drag context
+   * @drop: the #GdkDrop
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
-   * @time: the timestamp of the motion event
    *
    * The ::drag-motion signal is emitted on the drop site when the user
    * moves the cursor over the widget during a drag. The signal handler
@@ -1858,11 +1857,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * the drop site with gtk_drag_highlight().
    * |[<!-- language="C" -->
    * static void
-   * drag_motion (GtkWidget      *widget,
-   *              GdkDragContext *context,
-   *              gint            x,
-   *              gint            y,
-   *              guint           time)
+   * drag_motion (GtkWidget *widget,
+   *              GdkDrop   *drop,
+   *              gint       x,
+   *              gint       y,
    * {
    *   GdkAtom target;
    *
@@ -1874,14 +1872,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *      gtk_drag_highlight (widget);
    *    }
    *
-   *   target = gtk_drag_dest_find_target (widget, context, NULL);
+   *   target = gtk_drag_dest_find_target (widget, drop, NULL);
    *   if (target == NULL)
-   *     gdk_drag_status (context, 0, time);
+   *     gdk_drop_status (drop, 0);
    *   else
    *    {
    *      private_data->pending_status
-   *         = gdk_drag_context_get_suggested_action (context);
-   *      gtk_drag_get_data (widget, context, target, time);
+   *         = gdk_drop_get_actions (drop);
+   *      gtk_drag_get_data (widget, drop, target);
    *    }
    *
    *   return TRUE;
@@ -1889,12 +1887,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * static void
    * drag_data_received (GtkWidget        *widget,
-   *                     GdkDragContext   *context,
-   *                     gint              x,
-   *                     gint              y,
-   *                     GtkSelectionData *selection_data,
-   *                     guint             info,
-   *                     guint             time)
+   *                     GdkDrop          *drop,
+   *                     GtkSelectionData *selection_data)
    * {
    *   PrivateData *private_data = GET_PRIVATE_DATA (widget);
    *
@@ -1909,11 +1903,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str))
-   *        gdk_drag_status (context, 0, time);
+   *        gdk_drop_status (drop, 0);
    *      else
-   *        gdk_drag_status (context,
-   *                         private_data->suggested_action,
-   *                         time);
+   *        gdk_drag_status (drop, GDK_ACTION_ALL);
    *    }
    *   else
    *    {
@@ -1930,20 +1922,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_motion),
 		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
-		  G_TYPE_BOOLEAN, 4,
-		  GDK_TYPE_DRAG_CONTEXT,
+		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT,
+		  G_TYPE_BOOLEAN, 3,
+		  GDK_TYPE_DROP,
 		  G_TYPE_INT,
-		  G_TYPE_INT,
-		  G_TYPE_UINT);
+		  G_TYPE_INT);
 
   /**
    * GtkWidget::drag-drop:
    * @widget: the object which received the signal
-   * @context: the drag context
+   * @drop: the #GdkDrop
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
-   * @time: the timestamp of the motion event
    *
    * The ::drag-drop signal is emitted on the drop site when the user drops
    * the data onto the widget. The signal handler must determine whether
@@ -1964,12 +1954,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_drop),
 		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
-		  G_TYPE_BOOLEAN, 4,
-		  GDK_TYPE_DRAG_CONTEXT,
+		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT,
+		  G_TYPE_BOOLEAN, 3,
+		  GDK_TYPE_DROP,
 		  G_TYPE_INT,
-		  G_TYPE_INT,
-		  G_TYPE_UINT);
+		  G_TYPE_INT);
 
   /**
    * GtkWidget::drag-data-get:

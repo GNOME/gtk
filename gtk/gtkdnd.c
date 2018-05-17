@@ -154,10 +154,9 @@ static void     set_icon_helper (GdkDragContext    *context,
  ********************/
 
 typedef struct {
-  GdkDragContext *context;
+  GdkDrop *drop;
   GtkWidget *widget;
   const char *mime_type;
-  guint time;
 } GtkDragGetData;
 
 static void
@@ -185,7 +184,7 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
               size >= 0)
             g_signal_emit_by_name (data->widget,
                                    "drag-data-received",
-                                   data->context,
+                                   data->drop,
                                    &sdata);
         }
     }
@@ -193,20 +192,30 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
     {
       g_signal_emit_by_name (data->widget,
                              "drag-data-received",
-                             data->context,
+                             data->drop,
                              &sdata);
     }
   
   if (site && site->flags & GTK_DEST_DEFAULT_DROP)
     {
+      GdkDragAction action = site->actions & gdk_drop_get_actions (data->drop);
 
-      gdk_drag_finish (data->context, 
-                       size > 0,
-                       data->time);
+      if (size == 0)
+        action = 0;
+
+      if (!gdk_drag_action_is_unique (action))
+        {
+          if (action & GDK_ACTION_COPY)
+            action = GDK_ACTION_COPY;
+          else if (action & GDK_ACTION_MOVE)
+            action = GDK_ACTION_MOVE;
+        }
+
+      gdk_drop_finish (data->drop, action); 
     }
   
   g_object_unref (data->widget);
-  g_object_unref (data->context);
+  g_object_unref (data->drop);
   g_slice_free (GtkDragGetData, data);
 }
 
@@ -263,7 +272,7 @@ gtk_drag_get_data_got_stream (GObject      *source,
  * gtk_drag_get_data: (method)
  * @widget: the widget that will receive the
  *   #GtkWidget::drag-data-received signal
- * @context: the drag context
+ * @drop: the #GdkDrop
  * @target: the target (form of the data) to retrieve
  * @time_: a timestamp for retrieving the data. This will
  *   generally be the time received in a #GtkWidget::drag-motion
@@ -279,23 +288,21 @@ gtk_drag_get_data_got_stream (GObject      *source,
  * drops.
  */
 void
-gtk_drag_get_data (GtkWidget      *widget,
-                   GdkDragContext *context,
-                   GdkAtom         target,
-                   guint32         time_)
+gtk_drag_get_data (GtkWidget *widget,
+                   GdkDrop   *drop,
+                   GdkAtom    target)
 {
   GtkDragGetData *data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (GDK_IS_DROP (drop));
 
   data = g_slice_new0 (GtkDragGetData);
   data->widget = g_object_ref (widget);
-  data->context = g_object_ref (context);
+  data->drop = g_object_ref (drop);
   data->mime_type = target;
-  data->time = time_;
 
-  gdk_drop_read_async (GDK_DROP (context),
+  gdk_drop_read_async (drop,
                        (const gchar *[2]) { target, NULL },
                        G_PRIORITY_DEFAULT,
                        NULL,
@@ -682,7 +689,7 @@ gtk_drag_dest_motion (GtkWidget      *widget,
             }
         }
 
-      if (action && gtk_drag_dest_find_target (widget, context, NULL))
+      if (action && gtk_drag_dest_find_target (widget, GDK_DROP (context), NULL))
         {
           if (!site->have_drag)
             {
@@ -702,7 +709,7 @@ gtk_drag_dest_motion (GtkWidget      *widget,
     }
 
   g_signal_emit_by_name (widget, "drag-motion",
-                         context, x, y, time, &retval);
+                         context, x, y, &retval);
 
   return (site->flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
 }
@@ -726,7 +733,7 @@ gtk_drag_dest_drop (GtkWidget      *widget,
 
   if (site->flags & GTK_DEST_DEFAULT_DROP)
     {
-      GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
+      GdkAtom target = gtk_drag_dest_find_target (widget, GDK_DROP (context), NULL);
 
       if (target == NULL)
         {
@@ -734,11 +741,11 @@ gtk_drag_dest_drop (GtkWidget      *widget,
           return TRUE;
         }
       else 
-        gtk_drag_get_data (widget, context, target, time);
+        gtk_drag_get_data (widget, GDK_DROP (context), target);
     }
 
   g_signal_emit_by_name (widget, "drag-drop",
-                         context, x, y, time, &retval);
+                         context, x, y, &retval);
 
   return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
 }
