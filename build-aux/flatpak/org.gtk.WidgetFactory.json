@@ -1,0 +1,45 @@
+{
+    "app-id": "org.gtk.WidgetFactory",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "master",
+    "sdk": "org.gnome.Sdk",
+    "command": "gtk3-widget-factory",
+    "tags": ["devel", "development", "nightly"],
+    "rename-desktop-file": "gtk3-widget-factory.desktop",
+    "rename-icon": "gtk3-widget-factory",
+    "finish-args": [
+        "--device=dri",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--talk-name=org.gtk.vfs", "--talk-name=org.gtk.vfs.*",
+        "--talk-name=ca.desrt.conf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig", "/share/pkgconfig",
+        "/share/aclocal",
+        "/man", "/share/man", "/share/gtk-doc",
+        "*.la", ".a",
+        "/lib/girepository-1.0",
+        "/share/gir-1.0",
+        "/share/doc"
+    ],
+    "modules": [
+        {
+            "name": "gtk",
+            "buildsystem": "autotools",
+            "builddir": true,
+            "config-opts": [
+                "--libdir=/app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "branch": "gtk-3-24",
+                    "url": "https://gitlab.gnome.org/GNOME/gtk.git"
+                }
+            ]
+        }
+    ]
+}
