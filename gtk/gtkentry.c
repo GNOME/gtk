@@ -437,15 +437,13 @@ static void   gtk_entry_display_changed      (GtkWidget        *widget,
 					      GdkDisplay       *old_display);
 
 static gboolean gtk_entry_drag_drop          (GtkWidget        *widget,
-                                              GdkDragContext   *context,
+                                              GdkDrop          *drop,
                                               gint              x,
-                                              gint              y,
-                                              guint             time);
+                                              gint              y);
 static gboolean gtk_entry_drag_motion        (GtkWidget        *widget,
-					      GdkDragContext   *context,
+                                              GdkDrop          *drop,
 					      gint              x,
-					      gint              y,
-					      guint             time);
+					      gint              y);
 static void     gtk_entry_drag_leave         (GtkWidget        *widget,
 					      GdkDrop          *drop);
 static void     gtk_entry_drag_data_received (GtkWidget        *widget,
@@ -8601,36 +8599,34 @@ gtk_entry_drag_leave (GtkWidget *widget,
 }
 
 static gboolean
-gtk_entry_drag_drop  (GtkWidget        *widget,
-		      GdkDragContext   *context,
-		      gint              x,
-		      gint              y,
-		      guint             time)
+gtk_entry_drag_drop (GtkWidget *widget,
+		     GdkDrop   *drop,
+		     gint       x,
+		     gint       y)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GdkAtom target = NULL;
 
   if (priv->editable)
-    target = gtk_drag_dest_find_target (widget, context, NULL);
+    target = gtk_drag_dest_find_target (widget, drop, NULL);
 
   if (target != NULL)
     {
       priv->drop_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
-      gtk_drag_get_data (widget, context, target, time);
+      gtk_drag_get_data (widget, drop, target);
     }
   else
-    gdk_drag_finish (context, FALSE, time);
+    gdk_drop_finish (drop, 0);
   
   return TRUE;
 }
 
 static gboolean
-gtk_entry_drag_motion (GtkWidget        *widget,
-		       GdkDragContext   *context,
-		       gint              x,
-		       gint              y,
-		       guint             time)
+gtk_entry_drag_motion (GtkWidget *widget,
+                       GdkDrop   *drop,
+                       gint       x,
+                       gint       y)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -8642,7 +8638,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
   if (priv->editable &&
-      gtk_drag_dest_find_target (widget, context, NULL) != NULL)
+      gtk_drag_dest_find_target (widget, drop, NULL) != NULL)
     {
       suggested_action = GDK_ACTION_COPY | GDK_ACTION_MOVE;
 
@@ -8666,7 +8662,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   if (show_placeholder_text (entry))
     priv->dnd_position = -1;
 
-  gdk_drag_status (context, suggested_action, time);
+  gdk_drop_status (drop, suggested_action);
   if (suggested_action == 0)
     gtk_drag_unhighlight (widget);
   else

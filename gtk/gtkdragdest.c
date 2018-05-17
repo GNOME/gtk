@@ -380,11 +380,11 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
 /**
  * gtk_drag_dest_find_target: (method)
  * @widget: drag destination widget
- * @context: drag context
+ * @drop: #GdkDrop
  * @target_list: (allow-none): list of droppable targets, or %NULL to use
  *    gtk_drag_dest_get_target_list (@widget).
  *
- * Looks for a match between the supported targets of @context and the
+ * Looks for a match between the supported targets of @drop and the
  * @dest_target_list, returning the first matching target, otherwise
  * returning %NULL. @dest_target_list should usually be the return
  * value from gtk_drag_dest_get_target_list(), but some widgets may
@@ -397,11 +397,11 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
  */
 const char *
 gtk_drag_dest_find_target (GtkWidget         *widget,
-                           GdkDragContext    *context,
+                           GdkDrop           *drop,
                            GdkContentFormats *target_list)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+  g_return_val_if_fail (GDK_IS_DROP (drop), NULL);
 
   if (target_list == NULL)
     target_list = gtk_drag_dest_get_target_list (widget);
@@ -410,6 +410,6 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
     return NULL;
 
   return gdk_content_formats_match_mime_type (target_list,
-                                              gdk_drag_context_get_formats (context));
+                                              gdk_drop_get_formats (drop));
 }
 
