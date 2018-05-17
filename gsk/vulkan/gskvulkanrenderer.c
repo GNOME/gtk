@@ -209,7 +209,15 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   gsk_profiler_push_samples (profiler);
 
   if (g_getenv ("GDK_TRACE"))
-    gdk_profiler_add_mark (start_time, cpu_time, "render", "");
+    {
+      gdk_profiler_add_mark (start_time, cpu_time, "render", "");
+      gdk_profiler_set_int_counter (texture_pixels_counter,
+                                    start_time + cpu_time,
+                                    gsk_profiler_counter_get (profiler, self->counters.texture_pixels);
+      gdk_profiler_set_int_counter (fallback_pixels_counter,
+                                    start_time + cpu_time,
+                                    gsk_profiler_counter_get (profiler, self->counters.fallback_pixels);
+    }
 #endif
 
   return texture;
@@ -271,6 +279,9 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   renderer_class->render_texture = gsk_vulkan_renderer_render_texture;
 }
 
+static guint texture_pixels_counter;
+static guint fallback_pixels_counter;
+
 static void
 gsk_vulkan_renderer_init (GskVulkanRenderer *self)
 {
@@ -289,6 +300,16 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SYNC))
     self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
+
+  if (g_getenv ("GDK_TRACE"))
+    {
+      if (texture_pixels_counter == 0)
+        {
+          texture_pixels_counter = gdk_profiler_define_int_counter ("texture-pixels", "Texture Pixels");
+          fallback_pixels_counter = gdk_profiler_define_int_counter ("fallback-pixels", "Fallback Pixels");
+        }
+    }
+
 #endif
 }
 
