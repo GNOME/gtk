@@ -29,7 +29,6 @@
 
 static SpCaptureWriter *writer = NULL;
 static gboolean running = FALSE;
-static guint fps_counter = 0;
 
 static void
 profiler_stop (void)
@@ -54,21 +53,6 @@ gdk_profiler_start (void)
   filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
   writer = sp_capture_writer_new (filename, 16*1024);
   g_free (filename);
-
-  fps_counter = (guint) sp_capture_writer_request_counter (writer, 1);
-  counter.id = fps_counter;
-  counter.type = SP_CAPTURE_COUNTER_DOUBLE;
-  counter.value.vdbl = 0;
-  g_strlcpy (counter.category, "gtk", sizeof counter.category);
-  g_strlcpy (counter.name, "fps", sizeof counter.name);
-  g_strlcpy (counter.description, "Frames per second", sizeof counter.name);
-
-  sp_capture_writer_define_counters (writer,
-                                     SP_CAPTURE_CURRENT_TIME,
-                                     -1,
-                                     getpid (),
-                                     &counter,
-                                     1);
 
   atexit (profiler_stop);
 }
