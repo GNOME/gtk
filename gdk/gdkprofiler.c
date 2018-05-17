@@ -38,10 +38,8 @@ profiler_stop (void)
 }
 
 void
-gdk_profiler_start (void)
+gdk_profiler_start (int fd)
 {
-  char *filename;
-
   running = TRUE;
 
   if (writer)
@@ -49,9 +47,16 @@ gdk_profiler_start (void)
 
   sp_clock_init ();
 
-  filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
-  writer = sp_capture_writer_new (filename, 16*1024);
-  g_free (filename);
+  if (fd == -1)
+    {
+      pchar *filename;
+
+      filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
+      writer = sp_capture_writer_new (filename, 16*1024);
+      g_free (filename);
+    }
+  else
+    writer = sp_capture_writer_new_from_fd (fd, 16*1024);
 
   atexit (profiler_stop);
 }

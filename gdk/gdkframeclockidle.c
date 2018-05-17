@@ -218,15 +218,9 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
   priv->frame_time = g_get_monotonic_time (); /* more sane than zero */
   priv->freeze_count = 0;
 
-  /* FIXME */
 #ifdef G_ENABLE_DEBUG
-  if (g_getenv ("GDK_TRACE"))
-    {
-      gdk_profiler_start ();
-
-      if (fps_counter == 0)
-        fps_counter = gdk_profiler_define_counter ("fps", "Frames per Second");
-    }
+  if (fps_counter == 0)
+    fps_counter = gdk_profiler_define_counter ("fps", "Frames per Second");
 #endif
 }
 
