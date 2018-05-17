@@ -28,13 +28,23 @@
 #include "gdkframeclockprivate.h"
 
 static SpCaptureWriter *writer = NULL;
-static int fps_counter;
+static gboolean running = FALSE;
+static int fps_counter = 0;
+
+static void
+profiler_stop (void)
+{
+  if (writer)
+    sp_capture_writer_unref (writer);
+}
 
 void
 gdk_profiler_start (void)
 {
   char *filename;
   SpCaptureCounter counter;
+
+  running = TRUE;
 
   if (writer)
     return;
@@ -60,30 +70,19 @@ gdk_profiler_start (void)
                                      &counter,
                                      1);
 
-  atexit (gdk_profiler_stop);
+  atexit (profiler_stop);
 }
 
 void
 gdk_profiler_stop (void)
 {
-  sp_capture_writer_unref (writer);
-  writer = NULL;
+  running = FALSE;
 }
 
 gboolean
 gdk_profiler_is_running (void)
 {
-  return writer != NULL;
-}
-
-static void
-add_mark (SpCaptureWriter *writer,
-          gint64           start,
-          guint64          duration,
-          const char      *name,
-          const char      *message)
-{
-  sp_capture_writer_add_mark (writer, start, 0, getpid (), duration, "gtk", name, message);
+  return running;
 }
 
 void
@@ -92,7 +91,14 @@ gdk_profiler_add_mark (gint64      start,
                        const char *name,
                        const char *message)
 {
-  sp_capture_writer_add_mark (writer, start, 0, getpid (), duration, "gtk", name, message);
+  if (!running)
+    return;
+
+  sp_capture_writer_add_mark (writer,
+                              start,
+                              -1, getpid (),
+                              duration,
+                              "gtk", name, message);
 }
 
 static gint64
@@ -172,16 +178,31 @@ gdk_profiler_add_frame (GdkFrameClock   *clock,
 {
   SpCaptureCounterValue value;
 
-  if (!writer)
+  if (!running)
     return;
 
-  add_mark (writer, timings->frame_time * 1000, (timings->frame_end_time - timings->frame_time) * 1000, "frame", "");
+  sp_capture_writer_add_mark (writer,
+                              timings->frame_time * 1000,
+                              -1, getpid (),
+                              (timings->frame_end_time - timings->frame_time) * 1000,
+                              "gtk", "frame", "");
   if (timings->layout_start_time != 0)
-    add_mark (writer, timings->layout_start_time * 1000, (timings->paint_start_time - timings->layout_start_time) * 1000, "layout", "");
+    sp_capture_writer_add_mark (writer,
+                                timings->layout_start_time * 1000,
+                                -1, getpid (),
+                                (timings->paint_start_time - timings->layout_start_time) * 1000,
+                                "gtk", "layout", "");
 
   if (timings->paint_start_time != 0)
-    add_mark (writer, timings->paint_start_time * 1000, (timings->frame_end_time - timings->paint_start_time) * 1000, "paint", "");
+    sp_capture_writer_add_mark (writer,
+                                timings->paint_start_time * 1000,
+                                -1, getpid (),
+                                (timings->frame_end_time - timings->paint_start_time) * 1000,
+                                "gtk", "paint", "");
 
   value.vdbl = frame_clock_get_fps (clock);
-  sp_capture_writer_set_counters (writer, timings->frame_end_time, -1, getpid (), &fps_counter, &value, 1);
+  sp_capture_writer_set_counters (writer,
+                                  timings->frame_end_time,
+                                  -1, getpid (),
+                                  &fps_counter, &value, 1);
 }
