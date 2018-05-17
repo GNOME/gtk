@@ -1077,6 +1077,8 @@ sp_capture_writer_set_counters (SpCaptureWriter             *self,
   if (!set)
     return FALSE;
 
+  memset (set, 0, len);
+
   sp_capture_writer_frame_init (&set->frame,
                                 len,
                                 cpu,
