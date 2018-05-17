@@ -49,7 +49,7 @@ gdk_profiler_start (int fd)
 
   if (fd == -1)
     {
-      pchar *filename;
+      gchar *filename;
 
       filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
       writer = sp_capture_writer_new (filename, 16*1024);
