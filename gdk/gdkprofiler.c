@@ -206,3 +206,47 @@ gdk_profiler_add_frame (GdkFrameClock   *clock,
                                   -1, getpid (),
                                   &fps_counter, &value, 1);
 }
+
+guint
+gdk_profiler_define_counter (const char *name,
+                             const char *description)
+{
+  SpCaptureCounter counter;
+
+  if (!writer)
+    return 0;
+
+  counter.id = (guint) sp_capture_writer_request_counter (writer, 1);
+  counter.type = SP_CAPTURE_COUNTER_DOUBLE;
+  counter.value.vdbl = 0;
+  g_strlcpy (counter.category, "gtk", sizeof counter.category);
+  g_strlcpy (counter.name, name, sizeof counter.name);
+  g_strlcpy (counter.description, description, sizeof counter.name);
+
+  sp_capture_writer_define_counters (writer,
+                                     SP_CAPTURE_CURRENT_TIME,
+                                     -1,
+                                     getpid (),
+                                     &counter,
+                                     1);
+
+  return counter.id;
+}
+
+void
+gdk_profiler_set_counter (guint  id,
+                          gint64 time,
+                          double val)
+{
+  SpCaptureCounterValue value;
+
+  if (!running)
+    return;
+
+  value.vdbl = val;
+  sp_capture_writer_set_counters (writer,
+                                  time,
+                                  -1, getpid (),
+                                  &id, &value, 1);
+}
+
