@@ -17,6 +17,7 @@
 #include "gskprivate.h"
 
 #include "gdk/gdkgltextureprivate.h"
+#include "gdk/gdkprofiler.h"
 
 #include <epoxy/gl.h>
 #include <cairo-ft.h>
