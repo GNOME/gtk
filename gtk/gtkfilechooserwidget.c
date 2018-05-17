@@ -1981,10 +1981,9 @@ file_list_drag_data_received_cb (GtkWidget        *widget,
 /* Don't do anything with the drag_drop signal */
 static gboolean
 file_list_drag_drop_cb (GtkWidget             *widget,
-                        GdkDragContext        *context,
+                        GdkDrop               *drop,
                         gint                   x,
                         gint                   y,
-                        guint                  time_,
                         GtkFileChooserWidget *impl)
 {
   g_signal_stop_emission_by_name (widget, "drag-drop");
@@ -2005,10 +2004,9 @@ file_list_drag_begin_cb (GtkWidget            *widget,
    dropping the dragged item onto a tree item */
 static gboolean
 file_list_drag_motion_cb (GtkWidget             *widget,
-                          GdkDragContext        *context,
+                          GdkDrop               *drop,
                           gint                   x,
                           gint                   y,
-                          guint                  time_,
                           GtkFileChooserWidget *impl)
 {
   g_signal_stop_emission_by_name (widget, "drag-motion");

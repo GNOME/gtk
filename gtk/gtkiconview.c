@@ -291,15 +291,13 @@ static void gtk_icon_view_drag_data_delete (GtkWidget        *widget,
 static void     gtk_icon_view_drag_leave         (GtkWidget        *widget,
                                                   GdkDrop          *drop);
 static gboolean gtk_icon_view_drag_motion        (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static gboolean gtk_icon_view_drag_drop          (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static void     gtk_icon_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDrop          *drop,
                                                   GtkSelectionData *selection_data);
@@ -5878,7 +5876,7 @@ drag_scroll_timeout (gpointer data)
 
 static gboolean
 set_destination (GtkIconView    *icon_view,
-		 GdkDragContext *context,
+		 GdkDrop        *drop,
 		 gint            x,
 		 gint            y,
 		 GdkDragAction  *suggested_action,
@@ -5911,7 +5909,7 @@ set_destination (GtkIconView    *icon_view,
       return FALSE; /* no longer a drop site */
     }
 
-  *target = gtk_drag_dest_find_target (widget, context,
+  *target = gtk_drag_dest_find_target (widget, drop,
                                        gtk_drag_dest_get_target_list (widget));
   if (*target == NULL)
     return FALSE;
@@ -5963,19 +5961,7 @@ set_destination (GtkIconView    *icon_view,
 out:
   if (can_drop)
     {
-      GtkWidget *source_widget;
-
-      *suggested_action = gdk_drag_context_get_suggested_action (context);
-      source_widget = gtk_drag_get_source_widget (context);
-
-      if (source_widget == widget)
-        {
-          /* Default to MOVE, unless the user has
-           * pressed ctrl or shift to affect available actions
-           */
-          if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
-            *suggested_action = GDK_ACTION_MOVE;
-        }
+      *suggested_action = GDK_ACTION_ALL;
 
       gtk_icon_view_set_drag_dest_item (GTK_ICON_VIEW (widget),
 					path, pos);
@@ -6232,11 +6218,10 @@ gtk_icon_view_drag_leave (GtkWidget *widget,
 }
 
 static gboolean 
-gtk_icon_view_drag_motion (GtkWidget      *widget,
-			   GdkDragContext *context,
-			   gint            x,
-			   gint            y,
-			   guint           time)
+gtk_icon_view_drag_motion (GtkWidget *widget,
+			   GdkDrop   *drop,
+			   gint       x,
+			   gint       y)
 {
   GtkTreePath *path = NULL;
   GtkIconViewDropPosition pos;
@@ -6247,7 +6232,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
 
   icon_view = GTK_ICON_VIEW (widget);
 
-  if (!set_destination (icon_view, context, x, y, &suggested_action, &target))
+  if (!set_destination (icon_view, drop, x, y, &suggested_action, &target))
     return FALSE;
 
   icon_view->priv->event_last_x = x;
@@ -6261,7 +6246,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
   if (path == NULL && !empty)
     {
       /* Can't drop here. */
-      gdk_drag_status (context, 0, time);
+      gdk_drop_status (drop, 0);
     }
   else
     {
@@ -6276,13 +6261,13 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
           /* Request data so we can use the source row when
            * determining whether to accept the drop
            */
-          set_status_pending (GDK_DROP (context), suggested_action);
-          gtk_drag_get_data (widget, context, target, time);
+          set_status_pending (drop, suggested_action);
+          gtk_drag_get_data (widget, drop, target);
         }
       else
         {
-          set_status_pending (GDK_DROP (context), 0);
-          gdk_drag_status (context, suggested_action, time);
+          set_status_pending (drop, 0);
+          gdk_drop_status (drop, suggested_action);
         }
     }
 
@@ -6293,11 +6278,10 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
 }
 
 static gboolean 
-gtk_icon_view_drag_drop (GtkWidget      *widget,
-			 GdkDragContext *context,
-			 gint            x,
-			 gint            y,
-			 guint           time)
+gtk_icon_view_drag_drop (GtkWidget *widget,
+			 GdkDrop   *drop,
+			 gint       x,
+			 gint       y)
 {
   GtkIconView *icon_view;
   GtkTreePath *path;
@@ -6317,7 +6301,7 @@ gtk_icon_view_drag_drop (GtkWidget      *widget,
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag-drop"))
     return FALSE;
 
-  if (!set_destination (icon_view, context, x, y, &suggested_action, &target))
+  if (!set_destination (icon_view, drop, x, y, &suggested_action, &target))
     return FALSE;
   
   path = get_logical_destination (icon_view, &drop_append_mode);
@@ -6327,8 +6311,8 @@ gtk_icon_view_drag_drop (GtkWidget      *widget,
       /* in case a motion had requested drag data, change things so we
        * treat drag data receives as a drop.
        */
-      set_status_pending (GDK_DROP (context), 0);
-      set_dest_row (GDK_DROP (context), model, path, 
+      set_status_pending (drop, 0);
+      set_dest_row (drop, model, path, 
 		    icon_view->priv->empty_view_drop, drop_append_mode);
     }
 
@@ -6340,11 +6324,37 @@ gtk_icon_view_drag_drop (GtkWidget      *widget,
 
   if (target != NULL)
     {
-      gtk_drag_get_data (widget, context, target, time);
+      gtk_drag_get_data (widget, drop, target);
       return TRUE;
     }
   else
     return FALSE;
+}
+
+static GdkDragAction
+gtk_icon_view_get_action (GtkWidget *treeview,
+                          GdkDrop   *drop)
+{
+  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
+  GdkDragAction actions;
+
+  actions = gdk_drop_get_actions (drop);
+
+  if (source_widget == treeview &&
+      actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_LINK)
+    return GDK_ACTION_LINK;
+
+  return 0;
 }
 
 static void
@@ -6353,7 +6363,6 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
 				  GtkSelectionData *selection_data)
 {
   GtkTreePath *path;
-  gboolean accepted = FALSE;
   GtkTreeModel *model;
   GtkIconView *icon_view;
   GtkTreePath *dest_row;
@@ -6412,13 +6421,16 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
 
   if (gtk_selection_data_get_length (selection_data) >= 0)
     {
-      if (gtk_tree_drag_dest_drag_data_received (GTK_TREE_DRAG_DEST (model),
-                                                 dest_row,
-                                                 selection_data))
-        accepted = TRUE;
+      suggested_action = gtk_icon_view_get_action (widget, drop);
+
+      if (suggested_action &&
+          !gtk_tree_drag_dest_drag_data_received (GTK_TREE_DRAG_DEST (model),
+                                                  dest_row,
+                                                  selection_data))
+        suggested_action = 0;
     }
 
-  gdk_drop_finish (drop, accepted ? suggested_action : 0);
+  gdk_drop_finish (drop, suggested_action);
 
   gtk_tree_path_free (dest_row);
 

@@ -317,15 +317,13 @@ struct _GtkWidgetClass
   void     (* drag_leave)          (GtkWidget          *widget,
                                     GdkDrop            *drop);
   gboolean (* drag_motion)         (GtkWidget          *widget,
-                                    GdkDragContext     *context,
+                                    GdkDrop            *drop,
                                     gint                x,
-                                    gint                y,
-                                    guint               time_);
+                                    gint                y);
   gboolean (* drag_drop)           (GtkWidget          *widget,
-                                    GdkDragContext     *context,
+                                    GdkDrop            *drop,
                                     gint                x,
-                                    gint                y,
-                                    guint               time_);
+                                    gint                y);
   void     (* drag_data_received)  (GtkWidget          *widget,
                                     GdkDrop            *drop,
                                     GtkSelectionData   *selection_data);
