@@ -39,6 +39,9 @@ typedef struct {
 } ProfileTimers;
 #endif
 
+static guint texture_pixels_counter;
+static guint fallback_pixels_counter;
+
 struct _GskVulkanRenderer
 {
   GskRenderer parent_instance;
@@ -213,10 +216,10 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
       gdk_profiler_add_mark (start_time, cpu_time, "render", "");
       gdk_profiler_set_int_counter (texture_pixels_counter,
                                     start_time + cpu_time,
-                                    gsk_profiler_counter_get (profiler, self->counters.texture_pixels);
+                                    gsk_profiler_counter_get (profiler, self->profile_counters.texture_pixels));
       gdk_profiler_set_int_counter (fallback_pixels_counter,
                                     start_time + cpu_time,
-                                    gsk_profiler_counter_get (profiler, self->counters.fallback_pixels);
+                                    gsk_profiler_counter_get (profiler, self->profile_counters.fallback_pixels));
     }
 #endif
 
@@ -278,9 +281,6 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   renderer_class->render = gsk_vulkan_renderer_render;
   renderer_class->render_texture = gsk_vulkan_renderer_render_texture;
 }
-
-static guint texture_pixels_counter;
-static guint fallback_pixels_counter;
 
 static void
 gsk_vulkan_renderer_init (GskVulkanRenderer *self)
