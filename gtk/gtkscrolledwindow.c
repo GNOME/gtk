@@ -1399,6 +1399,8 @@ scroll_history_finish (GtkScrolledWindow *sw,
   return TRUE;
 }
 
+static void uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window);
+
 static gboolean
 captured_event_cb (GtkWidget *widget,
                    GdkEvent  *event)
@@ -1416,7 +1418,14 @@ captured_event_cb (GtkWidget *widget,
 
   if (event->type == GDK_SCROLL)
     {
+      GtkWidget *scrollable_child = gtk_bin_get_child (GTK_BIN (widget));
+
       gtk_scrolled_window_cancel_deceleration (sw);
+
+      /* If a nested widget takes over the scroll, unset our scrolling cursor */
+      if (gtk_get_event_widget (event) != scrollable_child)
+        uninstall_scroll_cursor (sw);
+
       return GDK_EVENT_PROPAGATE;
     }
 
