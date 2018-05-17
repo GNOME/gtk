@@ -34,6 +34,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+#define BOX_SPACE 6
+
 typedef struct {
   GtkWidget *box;
   GtkWidget *heading;
@@ -107,7 +109,7 @@ scroll_to_section (GtkButton *button,
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   if (section->heading)
     gtk_widget_get_allocation (section->heading, &alloc);
-  gtk_adjustment_animate_to_value (adj, alloc.y);
+  gtk_adjustment_animate_to_value (adj, alloc.y - BOX_SPACE);
 }
 
 static void
@@ -455,7 +457,7 @@ adj_value_changed (GtkAdjustment *adj,
       else
         gtk_widget_get_allocation (section->box, &alloc);
 
-      if (value < alloc.y)
+      if (value < alloc.y - BOX_SPACE)
         break;
 
       select_section = section;
