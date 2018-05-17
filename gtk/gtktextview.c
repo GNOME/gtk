@@ -431,15 +431,13 @@ static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
 static void     gtk_text_view_drag_leave         (GtkWidget        *widget,
                                                   GdkDrop          *drop);
 static gboolean gtk_text_view_drag_motion        (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static gboolean gtk_text_view_drag_drop          (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDrop          *drop,
                                                   GtkSelectionData *selection_data);
@@ -7718,11 +7716,10 @@ gtk_text_view_drag_leave (GtkWidget *widget,
 }
 
 static gboolean
-gtk_text_view_drag_motion (GtkWidget        *widget,
-                           GdkDragContext   *context,
-                           gint              x,
-                           gint              y,
-                           guint             time)
+gtk_text_view_drag_motion (GtkWidget *widget,
+                           GdkDrop   *drop,
+                           gint       x,
+                           gint       y)
 {
   GtkTextIter newplace;
   GtkTextView *text_view;
@@ -7754,7 +7751,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
                                      &newplace,
                                      bx, by);  
 
-  target = gtk_drag_dest_find_target (widget, context,
+  target = gtk_drag_dest_find_target (widget, drop,
                                       gtk_drag_dest_get_target_list (widget));
 
   if (target == NULL)
@@ -7776,11 +7773,11 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   if (can_accept)
     {
       gtk_text_mark_set_visible (priv->dnd_mark, cursor_visible (text_view));
-      gdk_drag_status (context, GDK_ACTION_COPY | GDK_ACTION_MOVE, time);
+      gdk_drop_status (drop, GDK_ACTION_COPY | GDK_ACTION_MOVE);
     }
   else
     {
-      gdk_drag_status (context, 0, time);
+      gdk_drop_status (drop, 0);
       gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
     }
 
@@ -7805,11 +7802,10 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_text_view_drag_drop (GtkWidget        *widget,
-                         GdkDragContext   *context,
-                         gint              x,
-                         gint              y,
-                         guint             time)
+gtk_text_view_drag_drop (GtkWidget *widget,
+                         GdkDrop   *drop,
+                         gint       x,
+                         gint       y)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -7831,12 +7827,12 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
                                     priv->dnd_mark);
 
   if (gtk_text_iter_can_insert (&drop_point, priv->editable))
-    target = gtk_drag_dest_find_target (widget, context, NULL);
+    target = gtk_drag_dest_find_target (widget, drop, NULL);
 
   if (target != NULL)
-    gtk_drag_get_data (widget, context, target, time);
+    gtk_drag_get_data (widget, drop, target);
   else
-    gdk_drag_finish (context, FALSE, time);
+    gdk_drop_finish (drop, 0);
 
   return TRUE;
 }

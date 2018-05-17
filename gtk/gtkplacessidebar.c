@@ -1620,20 +1620,19 @@ update_possible_drop_targets (GtkPlacesSidebar *sidebar,
 
 static gboolean
 get_drag_data (GtkWidget      *list_box,
-               GdkDragContext *context,
-               GtkListBoxRow  *row,
-               guint           time)
+               GdkDrop        *drop,
+               GtkListBoxRow  *row)
 {
   GdkAtom target;
 
-  target = gtk_drag_dest_find_target (list_box, context, NULL);
+  target = gtk_drag_dest_find_target (list_box, drop, NULL);
 
   if (target == NULL)
     return FALSE;
 
   if (row)
-    g_object_set_data_full (G_OBJECT (context), "places-sidebar-row", g_object_ref (row), g_object_unref);
-  gtk_drag_get_data (list_box, context, target, time);
+    g_object_set_data_full (G_OBJECT (drop), "places-sidebar-row", g_object_ref (row), g_object_unref);
+  gtk_drag_get_data (list_box, drop, target);
 
   return TRUE;
 }
@@ -1766,14 +1765,12 @@ create_placeholder_row (GtkPlacesSidebar *sidebar)
 }
 
 static gboolean
-drag_motion_callback (GtkWidget      *widget,
-                      GdkDragContext *context,
-                      gint            x,
-                      gint            y,
-                      guint           time,
-                      gpointer        user_data)
+drag_motion_callback (GtkWidget *widget,
+                      GdkDrop   *drop,
+                      gint       x,
+                      gint       y,
+                      gpointer   user_data)
 {
-  GdkDrop *drop = GDK_DROP (context);
   gint action;
   GtkListBoxRow *row;
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
@@ -1790,7 +1787,7 @@ drag_motion_callback (GtkWidget      *widget,
 
   /* Nothing to do if no drag data */
   if (!sidebar->drag_data_received &&
-      !get_drag_data (sidebar->list_box, context, row, time))
+      !get_drag_data (sidebar->list_box, drop, row))
     goto out;
 
   /* Nothing to do if the target is not valid drop destination */
@@ -1896,7 +1893,7 @@ drag_motion_callback (GtkWidget      *widget,
 
   g_signal_stop_emission_by_name (sidebar->list_box, "drag-motion");
 
-  gdk_drag_status (context, action, time);
+  gdk_drop_status (drop, action);
 
   return TRUE;
 }
@@ -2144,12 +2141,11 @@ drag_leave_callback (GtkWidget *widget,
 }
 
 static gboolean
-drag_drop_callback (GtkWidget      *list_box,
-                    GdkDragContext *context,
-                    gint            x,
-                    gint            y,
-                    guint           time,
-                    gpointer        user_data)
+drag_drop_callback (GtkWidget *list_box,
+                    GdkDrop   *drop,
+                    gint       x,
+                    gint       y,
+                    gpointer   user_data)
 {
   gboolean retval = FALSE;
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
@@ -2157,7 +2153,7 @@ drag_drop_callback (GtkWidget      *list_box,
 
   row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (sidebar->list_box), y);
   sidebar->drop_occurred = TRUE;
-  retval = get_drag_data (sidebar->list_box, context, row, time);
+  retval = get_drag_data (sidebar->list_box, drop, row);
   g_signal_stop_emission_by_name (sidebar->list_box, "drag-drop");
 
   return retval;
