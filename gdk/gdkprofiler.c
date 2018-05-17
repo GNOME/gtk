@@ -101,7 +101,7 @@ gdk_profiler_add_mark (gint64      start,
                               "gtk", name, message);
 }
 
-guint
+static guint
 define_counter (const char *name,
                 const char *description,
                 int         type)
@@ -132,14 +132,14 @@ guint
 gdk_profiler_define_counter (const char *name,
                              const char *description)
 {
-  define_counter (name, description, SP_CAPTURE_COUNTER_DOUBLE);
+  return define_counter (name, description, SP_CAPTURE_COUNTER_DOUBLE);
 }
 
 guint
 gdk_profiler_define_int_counter (const char *name,
                                  const char *description)
 {
-  define_counter (name, description, SP_CAPTURE_COUNTER_INT64);
+  return define_counter (name, description, SP_CAPTURE_COUNTER_INT64);
 }
 
 void
@@ -164,9 +164,6 @@ gdk_profiler_set_int_counter (guint  id,
                               gint64 time,
                               gint64 val)
 {
-  
-}
-
   SpCaptureCounterValue value;
 
   if (!running)
