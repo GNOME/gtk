@@ -26,6 +26,7 @@
 
 #include "gdkversionmacros.h"
 
+#include "gdkprofiler.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
@@ -184,6 +185,9 @@ gdk_pre_parse (void)
       _gdk_debug_flags = g_parse_debug_string (debug_string,
                                               (GDebugKey *) gdk_debug_keys,
                                               G_N_ELEMENTS (gdk_debug_keys));
+
+    if (g_getenv ("GDK_TRACE"))
+      gdk_profiler_start (-1);
   }
 #endif  /* G_ENABLE_DEBUG */
 }
