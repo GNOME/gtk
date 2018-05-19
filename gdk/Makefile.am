@@ -175,7 +175,10 @@ gdk_c_sources = 				\
 	gdkselection.c				\
 	gdkvisual.c				\
 	gdkwindow.c				\
-	gdkwindowimpl.c
+	gdkwindowimpl.c				\
+	gdkprofiler.c				\
+	capture/sp-capture-writer.c		\
+	capture/sp-clock.c
 
 gdk_built_sources = 				\
 	gdkenumtypes.h				\
