@@ -6471,6 +6471,24 @@ gtk_event_controller_motion_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkeventcontrollerkey</FILE>
+<TITLE>GtkEventControlerKey</TITLE>
+GtkEventControllerKey
+gtk_event_controller_key_new
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_KEY
+GTK_EVENT_CONTROLLER_KEY
+GTK_EVENT_CONTROLLER_KEY_CLASS
+GTK_IS_EVENT_CONTROLLER_KEY
+GTK_IS_EVENT_CONTROLLER_KEY_CLASS
+GTK_EVENT_CONTROLLER_KEY_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_key_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgesturedrag</FILE>
 <TITLE>GtkGestureDrag</TITLE>
 GtkGestureDrag
