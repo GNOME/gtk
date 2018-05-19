@@ -8572,15 +8572,18 @@ gtk_widget_finalize (GObject *object)
 
   _gtk_size_request_cache_free (&priv->requests);
 
-  for (l = priv->event_controllers; l; l = l->next)
+  l = priv->event_controllers;
+  while (l)
     {
+      GList *next = l->next;
       GtkEventController *controller = l->data;
 
       if (controller)
         gtk_widget_remove_controller (widget, controller);
+
+      l = next;
     }
-  g_list_free (priv->event_controllers);
-  priv->event_controllers = NULL;
+  g_assert (priv->event_controllers == NULL);
 
   if (_gtk_widget_get_first_child (widget) != NULL)
     {
