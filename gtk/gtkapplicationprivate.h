@@ -127,6 +127,7 @@ typedef struct
 
   gchar           *menubar_path;
   guint            menubar_id;
+  guint            profiler_id;
 
   /* Session management... */
   GDBusProxy      *sm_proxy;
