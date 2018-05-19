@@ -1977,7 +1977,7 @@ main (int argc, char *argv[])
   };
   gint status;
 
-  app = gtk_application_new ("org.gtk.WidgetFactory", G_APPLICATION_NON_UNIQUE);
+  app = gtk_application_new ("org.gtk.WidgetFactory", 0);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
