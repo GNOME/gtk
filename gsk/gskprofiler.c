@@ -365,6 +365,19 @@ gsk_profiler_timer_get (GskProfiler *profiler,
   return timer->value;
 }
 
+gint64
+gsk_profiler_timer_get_start (GskProfiler *profiler,
+                              GQuark       timer_id)
+{
+  NamedTimer *timer;
+
+  timer = gsk_profiler_get_timer (profiler, timer_id);
+  if (timer == NULL)
+    return 0;
+
+  return timer->start_time;
+}
+
 void
 gsk_profiler_reset (GskProfiler *profiler)
 {
