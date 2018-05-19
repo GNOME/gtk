@@ -13,6 +13,7 @@
 #include "gskvulkanglyphcacheprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkprofiler.h"
 
 #include <graphene.h>
 
@@ -37,6 +38,9 @@ typedef struct {
   GQuark gpu_time;
 } ProfileTimers;
 #endif
+
+static guint texture_pixels_counter;
+static guint fallback_pixels_counter;
 
 struct _GskVulkanRenderer
 {
@@ -170,7 +174,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
-  gint64 cpu_time;
+  gint64 cpu_time, start_time;
 #endif
 
 #ifdef G_ENABLE_DEBUG
@@ -201,10 +205,22 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   gsk_vulkan_render_free (render);
 
 #ifdef G_ENABLE_DEBUG
+  start_time = gsk_profiler_timer_get_start (profiler, self->profile_timers.cpu_time);
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
 
   gsk_profiler_push_samples (profiler);
+
+  if (gdk_profiler_is_running ())
+    {
+      gdk_profiler_add_mark (start_time, cpu_time, "render", "");
+      gdk_profiler_set_int_counter (texture_pixels_counter,
+                                    start_time + cpu_time,
+                                    gsk_profiler_counter_get (profiler, self->profile_counters.texture_pixels));
+      gdk_profiler_set_int_counter (fallback_pixels_counter,
+                                    start_time + cpu_time,
+                                    gsk_profiler_counter_get (profiler, self->profile_counters.fallback_pixels));
+    }
 #endif
 
   return texture;
@@ -284,6 +300,13 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SYNC))
     self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
+
+  if (texture_pixels_counter == 0)
+    {
+      texture_pixels_counter = gdk_profiler_define_int_counter ("texture-pixels", "Texture Pixels");
+      fallback_pixels_counter = gdk_profiler_define_int_counter ("fallback-pixels", "Fallback Pixels");
+    }
+
 #endif
 }
 
