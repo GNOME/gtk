@@ -45,6 +45,9 @@ gdk_public_sources = files([
   'gdkvulkancontext.c',
   'gdksurface.c',
   'gdksurfaceimpl.c',
+  'gdkprofiler.c',
+  'capture/sp-capture-writer.c',
+  'capture/sp-clock.c'
 ])
 
 gdk_public_headers = files([
