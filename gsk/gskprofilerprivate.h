@@ -40,6 +40,8 @@ gint64          gsk_profiler_counter_get        (GskProfiler *profiler,
                                                  GQuark       counter_id);
 gint64          gsk_profiler_timer_get          (GskProfiler *profiler,
                                                  GQuark       timer_id);
+gint64          gsk_profiler_timer_get_start    (GskProfiler *profiler,
+                                                 GQuark       timer_id);
 
 void            gsk_profiler_reset              (GskProfiler *profiler);
 
