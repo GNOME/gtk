@@ -124,16 +124,19 @@ font_activated_cb (GtkFontChooser *fontchooser,
 }
 
 static gboolean
-gtk_font_chooser_dialog_key_press_event (GtkWidget   *dialog,
-                                         GdkEventKey *event)
+gtk_font_chooser_dialog_event (GtkWidget *dialog,
+                               GdkEvent  *event)
 {
   GtkFontChooserDialog *fdialog = GTK_FONT_CHOOSER_DIALOG (dialog);
   gboolean handled = FALSE;
 
-  handled = GTK_WIDGET_CLASS (gtk_font_chooser_dialog_parent_class)->key_press_event (dialog, event);
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  handled = GTK_WIDGET_CLASS (gtk_font_chooser_dialog_parent_class)->event (dialog, event);
 
   if (!handled)
-    handled = gtk_font_chooser_widget_handle_event (fdialog->priv->fontchooser, event);
+    handled = gtk_font_chooser_widget_handle_event (fdialog->priv->fontchooser, (GdkEventKey *)event);
 
   return handled;
 }
@@ -205,7 +208,7 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   gobject_class->get_property = gtk_font_chooser_dialog_get_property;
   gobject_class->set_property = gtk_font_chooser_dialog_set_property;
 
-  widget_class->key_press_event = gtk_font_chooser_dialog_key_press_event;
+  widget_class->event = gtk_font_chooser_dialog_event;
   widget_class->map = gtk_font_chooser_dialog_map;
 
   _gtk_font_chooser_install_properties (gobject_class);
