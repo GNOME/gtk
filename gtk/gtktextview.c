@@ -3497,7 +3497,7 @@ gtk_text_view_get_cursor_visible (GtkTextView *text_view)
  *
  * This function should be called in response to user input
  * (e.g. from derived classes that override the textview's
- * #GtkWidget::key-press-event handler).
+ * event handlers).
  */
 void
 gtk_text_view_reset_cursor_blink (GtkTextView *text_view)
@@ -8288,7 +8288,7 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   /* Keypress events are passed to input method even if cursor position is
    * not editable; so beep here if it's multi-key input sequence, input
-   * method will be reset in key-press-event handler.
+   * method will be reset in when the event is handled by GTK+.
    */
   gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
 

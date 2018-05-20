@@ -1703,17 +1703,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    * @event: the #GdkEvent which triggered this signal
    *
-   * The GTK+ main loop will emit three signals for each GDK event delivered
-   * to a widget: one generic ::event signal, another, more specific,
-   * signal that matches the type of event delivered (e.g.
-   * #GtkWidget::key-press-event) and finally a generic
-   * #GtkWidget::event-after signal.
+   * The GTK+ main loop will emit this signal for each GDK event delivered
+   * to a widget.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event
    * and to cancel the emission of the second specific ::event signal.
-   *   %FALSE to propagate the event further and to allow the emission of
-   *   the second signal. The ::event-after signal is emitted regardless of
-   *   the return value.
+   *   %FALSE to propagate the event further.
    */
   widget_signals[EVENT] =
     g_signal_new (I_("event"),

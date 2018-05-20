@@ -188,11 +188,8 @@ struct _GtkWidget
  * @focus:
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
- * @event: The GTK+ main loop will emit three signals for each GDK
- *   event delivered to a widget: one generic ::event signal, another,
- *   more specific, signal that matches the type of event delivered
- *   (e.g. "key-press-event") and finally a generic "event-after"
- *   signal.
+ * @event: The GTK+ main loop will emit this signal for each GDK
+ *   event delivered to a widget.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
  * @drag_begin: Signal emitted on the drag source when a drag is
