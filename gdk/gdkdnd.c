@@ -864,42 +864,6 @@ gdk_drag_get_cursor (GdkDragContext *context,
   return drag_cursors[i].cursor;
 }
 
-static void
-gdk_drag_context_commit_drag_status (GdkDragContext *context)
-{
-  GdkDragContextClass *context_class;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (!context->is_source);
-
-  context_class = GDK_DRAG_CONTEXT_GET_CLASS (context);
-
-  if (context_class->commit_drag_status)
-    context_class->commit_drag_status (context);
-}
-
-gboolean
-gdk_drag_context_handle_dest_event (GdkEvent *event)
-{
-  GdkDragContext *context = NULL;
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      context = event->dnd.context;
-      break;
-    default:
-      return FALSE;
-    }
-
-  if (!context)
-    return FALSE;
-
-  gdk_drag_context_commit_drag_status (context);
-  return TRUE;;
-}
-
 /**
  * gdk_drag_action_is_unique:
  * @action: a #GdkDragAction
