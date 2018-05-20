@@ -190,20 +190,26 @@ static void
 gdk_wayland_drag_context_commit_status (GdkWaylandDragContext *wayland_context)
 {
   GdkDisplay *display;
-  uint32_t dnd_actions, all_actions = 0;
+  uint32_t dnd_actions;
 
   display = gdk_drop_get_display (GDK_DROP (wayland_context));
 
   dnd_actions = gdk_to_wl_actions (wayland_context->selected_action);
 
-  if (dnd_actions != 0)
-    all_actions = WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY |
-      WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE |
-      WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
-
   if (GDK_WAYLAND_DISPLAY (display)->data_device_manager_version >=
       WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION)
-    wl_data_offer_set_actions (wayland_context->offer, all_actions, dnd_actions);
+    {
+      if (gdk_drag_action_is_unique (wayland_context->selected_action))
+        {
+          wl_data_offer_set_actions (wayland_context->offer, dnd_actions, dnd_actions);
+        }
+      else
+        {
+          wl_data_offer_set_actions (wayland_context->offer,
+                                     dnd_actions | WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK,
+                                     WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK);
+        }
+    }
 
   gdk_wayland_drop_context_set_status (wayland_context, wayland_context->selected_action != 0);
 }
@@ -227,6 +233,8 @@ gdk_wayland_drag_context_finish (GdkDrop       *drop,
   GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (drop);
   GdkDisplay *display = gdk_drop_get_display (drop);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  wayland_context->selected_action = action;
 
   if (action)
     {
