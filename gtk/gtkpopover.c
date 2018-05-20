@@ -1377,6 +1377,35 @@ gtk_popover_event (GtkWidget *widget,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    {
+      GtkWidget *toplevel, *focus;
+      guint keyval;
+
+      if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+        return GDK_EVENT_PROPAGATE;
+
+      if (keyval == GDK_KEY_Escape)
+        {
+          gtk_popover_popdown (GTK_POPOVER (widget));
+          return GDK_EVENT_STOP;
+        }
+
+      if (!priv->modal)
+       return GDK_EVENT_PROPAGATE;
+
+      toplevel = gtk_widget_get_toplevel (widget);
+
+      if (GTK_IS_WINDOW (toplevel))
+        {
+          focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+
+          if (focus && gtk_widget_is_ancestor (focus, widget))
+            return gtk_widget_event (focus, (GdkEvent*) event);
+        }
+
+      return GDK_EVENT_PROPAGATE;
+    }
+  else if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     priv->button_pressed = TRUE;
   else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
     {
@@ -1397,39 +1426,6 @@ gtk_popover_event (GtkWidget *widget,
           y < child_alloc.y ||
           y > child_alloc.y + child_alloc.height)
         gtk_popover_popdown (popover);
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-gtk_popover_key_press (GtkWidget   *widget,
-                       GdkEventKey *event)
-{
-  GtkWidget *toplevel, *focus;
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (GTK_POPOVER (widget));
-  guint keyval;
-
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-    return GDK_EVENT_PROPAGATE;
-
-  if (keyval == GDK_KEY_Escape)
-    {
-      gtk_popover_popdown (GTK_POPOVER (widget));
-      return GDK_EVENT_STOP;
-    }
-
-  if (!priv->modal)
-    return GDK_EVENT_PROPAGATE;
-
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-
-      if (focus && gtk_widget_is_ancestor (focus, widget))
-        return gtk_widget_event (focus, (GdkEvent*) event);
     }
 
   return GDK_EVENT_PROPAGATE;
@@ -1578,7 +1574,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
   widget_class->event = gtk_popover_event;
-  widget_class->key_press_event = gtk_popover_key_press;
   widget_class->grab_focus = gtk_popover_grab_focus;
   widget_class->focus = gtk_popover_focus;
   widget_class->show = gtk_popover_show;
