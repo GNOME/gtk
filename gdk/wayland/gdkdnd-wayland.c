@@ -161,20 +161,15 @@ gdk_wayland_drag_context_drag_drop (GdkDragContext *context,
 /* Destination side */
 
 static void
-gdk_wayland_drop_context_set_status (GdkDragContext *context,
-                                     gboolean        accepted)
+gdk_wayland_drop_context_set_status (GdkWaylandDragContext *context_wayland,
+                                     gboolean               accepted)
 {
-  GdkWaylandDragContext *context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
-
-  if (!context->dest_surface)
-    return;
-
   if (accepted)
     {
       const char *const *mimetypes;
       gsize i, n_mimetypes;
       
-      mimetypes = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mimetypes);
+      mimetypes = gdk_content_formats_get_mime_types (gdk_drop_get_formats (GDK_DROP (context_wayland)), &n_mimetypes);
       for (i = 0; i < n_mimetypes; i++)
         {
           if (mimetypes[i] != g_intern_static_string ("DELETE"))
@@ -192,13 +187,12 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
 }
 
 static void
-gdk_wayland_drag_context_commit_status (GdkDragContext *context)
+gdk_wayland_drag_context_commit_status (GdkWaylandDragContext *wayland_context)
 {
-  GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
   GdkDisplay *display;
   uint32_t dnd_actions, all_actions = 0;
 
-  display = gdk_device_get_display (gdk_drag_context_get_device (context));
+  display = gdk_drop_get_display (GDK_DROP (wayland_context));
 
   dnd_actions = gdk_to_wl_actions (wayland_context->selected_action);
 
@@ -211,7 +205,7 @@ gdk_wayland_drag_context_commit_status (GdkDragContext *context)
       WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION)
     wl_data_offer_set_actions (wayland_context->offer, all_actions, dnd_actions);
 
-  gdk_wayland_drop_context_set_status (context, wayland_context->selected_action != 0);
+  gdk_wayland_drop_context_set_status (wayland_context, wayland_context->selected_action != 0);
 }
 
 static void
@@ -222,6 +216,8 @@ gdk_wayland_drag_context_status (GdkDrop       *drop,
 
   wayland_context = GDK_WAYLAND_DRAG_CONTEXT (drop);
   wayland_context->selected_action = action;
+
+  gdk_wayland_drag_context_commit_status (wayland_context);
 }
 
 static void
@@ -234,7 +230,7 @@ gdk_wayland_drag_context_finish (GdkDrop       *drop,
 
   if (action)
     {
-      gdk_wayland_drag_context_commit_status (GDK_DRAG_CONTEXT (drop));
+      gdk_wayland_drag_context_commit_status (wayland_context);
 
       if (display_wayland->data_device_manager_version >=
           WL_DATA_OFFER_FINISH_SINCE_VERSION)
@@ -414,7 +410,6 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->action_changed = gdk_wayland_drag_context_action_changed;
   context_class->drop_performed = gdk_wayland_drag_context_drop_performed;
   context_class->cancel = gdk_wayland_drag_context_cancel;
-  context_class->commit_drag_status = gdk_wayland_drag_context_commit_status;
 }
 
 void
