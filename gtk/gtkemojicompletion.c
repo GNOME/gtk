@@ -301,10 +301,13 @@ move_active_variation (GtkEmojiCompletion *completion,
 
 static gboolean
 entry_key_press (GtkEntry           *entry,
-                 GdkEventKey        *event,
+                 GdkEvent           *event,
                  GtkEmojiCompletion *completion)
 {
   guint keyval;
+
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return FALSE;
 
   if (!gtk_widget_get_visible (GTK_WIDGET (completion)))
     return FALSE;
@@ -386,7 +389,7 @@ connect_signals (GtkEmojiCompletion *completion,
   completion->entry = entry;
 
   completion->changed_id = g_signal_connect (entry, "changed", G_CALLBACK (entry_changed), completion);
-  g_signal_connect (entry, "key-press-event", G_CALLBACK (entry_key_press), completion);
+  g_signal_connect (entry, "event", G_CALLBACK (entry_key_press), completion);
   g_signal_connect (entry, "notify::has-focus", G_CALLBACK (entry_focus_out), completion);
 }
 
