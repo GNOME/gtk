@@ -403,7 +403,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    *
    * Since: 2.14
    *
-   * Deprecated: 3.20: Use the standard CSS proeprty min-width.
+   * Deprecated: 3.20: Use the standard CSS property min-width.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("min-vertical-bar-width",
