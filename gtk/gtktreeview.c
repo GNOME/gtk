@@ -599,10 +599,6 @@ static void     gtk_tree_view_size_allocate        (GtkWidget           *widget,
                                                     int                  baseline);
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
-static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
-						    GdkEventKey      *event);
-static gboolean gtk_tree_view_key_release          (GtkWidget        *widget,
-						    GdkEventKey      *event);
 
 static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
 						    GtkWidget        *child);
@@ -815,8 +811,8 @@ static void     gtk_tree_view_search_scroll_event       (GtkWidget        *entry
 							 gdouble           dx,
                                                          gdouble           dy,
 							 GtkTreeView      *tree_view);
-static gboolean gtk_tree_view_search_key_press_event    (GtkWidget        *entry,
-							 GdkEventKey      *event,
+static gboolean gtk_tree_view_search_event              (GtkWidget        *entry,
+							 GdkEvent         *event,
 							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_move               (GtkWidget        *window,
 							 GtkTreeView      *tree_view,
@@ -972,8 +968,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->measure = gtk_tree_view_measure;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->snapshot = gtk_tree_view_snapshot;
-  widget_class->key_press_event = gtk_tree_view_key_press;
-  widget_class->key_release_event = gtk_tree_view_key_release;
   widget_class->event = gtk_tree_view_event;
   widget_class->drag_begin = gtk_tree_view_drag_begin;
   widget_class->drag_end = gtk_tree_view_drag_end;
@@ -2101,7 +2095,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
                                             G_CALLBACK (gtk_tree_view_search_init),
                                             tree_view);
       g_signal_handlers_disconnect_by_func (tree_view->priv->search_entry,
-                                            G_CALLBACK (gtk_tree_view_search_key_press_event),
+                                            G_CALLBACK (gtk_tree_view_search_event),
                                             tree_view);
 
       g_object_unref (tree_view->priv->search_entry);
@@ -5593,8 +5587,11 @@ gtk_tree_view_key_press (GtkWidget   *widget,
     }
 
   /* Chain up to the parent class.  It handles the keybindings. */
-  if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_press_event (widget, event))
-    return TRUE;
+  if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->event)
+    {
+      if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->event (widget, (GdkEvent *)event))
+        return TRUE;
+    }
 
   if (tree_view->priv->search_entry_avoid_unhandled_binding)
     {
@@ -5680,9 +5677,13 @@ gtk_tree_view_key_release (GtkWidget   *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
   if (tree_view->priv->rubber_band_status)
-    return TRUE;
+    return GDK_EVENT_STOP;
 
-  return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_release_event (widget, event);
+  /* Chain up to the parent class.  It handles the keybindings. */
+  if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->event)
+    return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->event (widget, (GdkEvent *)event);
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -5736,7 +5737,11 @@ gtk_tree_view_event (GtkWidget *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    return gtk_tree_view_key_press (widget, (GdkEventKey *)event);
+  else if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
+    return gtk_tree_view_key_release (widget, (GdkEventKey *)event);
+  else if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
     {
       gboolean focus_in;
 
@@ -10514,8 +10519,8 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   gtk_window_set_transient_for (GTK_WINDOW (tree_view->priv->search_window),
                                 GTK_WINDOW (toplevel));
 
-  g_signal_connect (tree_view->priv->search_window, "key-press-event",
-		    G_CALLBACK (gtk_tree_view_search_key_press_event),
+  g_signal_connect (tree_view->priv->search_window, "event",
+		    G_CALLBACK (gtk_tree_view_search_event),
 		    tree_view);
   gesture = gtk_gesture_multi_press_new ();
   g_signal_connect (gesture, "pressed",
@@ -13976,7 +13981,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 	  tree_view->priv->search_entry_changed_id = 0;
 	}
       g_signal_handlers_disconnect_by_func (tree_view->priv->search_entry,
-					    G_CALLBACK (gtk_tree_view_search_key_press_event),
+					    G_CALLBACK (gtk_tree_view_search_event),
 					    tree_view);
 
       g_object_unref (tree_view->priv->search_entry);
@@ -13999,8 +14004,8 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 			      tree_view);
 	}
       
-        g_signal_connect (tree_view->priv->search_entry, "key-press-event",
-		          G_CALLBACK (gtk_tree_view_search_key_press_event),
+        g_signal_connect (tree_view->priv->search_entry, "event",
+		          G_CALLBACK (gtk_tree_view_search_event),
 		          tree_view);
 
 	gtk_tree_view_search_init (tree_view->priv->search_entry, tree_view);
@@ -14260,9 +14265,9 @@ gtk_tree_view_search_scroll_event (GtkWidget   *widget,
 }
 
 static gboolean
-gtk_tree_view_search_key_press_event (GtkWidget *widget,
-				      GdkEventKey *event,
-				      GtkTreeView *tree_view)
+gtk_tree_view_search_event (GtkWidget   *widget,
+                            GdkEvent    *event,
+                            GtkTreeView *tree_view)
 {
   GdkModifierType default_accel;
   gboolean        retval = FALSE;
@@ -14271,8 +14276,11 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  if (!gdk_event_get_keyval (event, &keyval) ||
+      !gdk_event_get_state (event, &state))
     return GDK_EVENT_PROPAGATE;
 
   /* close window and cancel the search */
@@ -14280,7 +14288,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       && gtk_tree_view_search_key_cancels_search (keyval))
     {
       gtk_tree_view_search_window_hide (widget, tree_view,
-                                        gdk_event_get_device ((GdkEvent *) event));
+                                        gdk_event_get_device (event));
       return TRUE;
     }
 
