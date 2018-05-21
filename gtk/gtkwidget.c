@@ -483,8 +483,6 @@ enum {
   MOVE_FOCUS,
   KEYNAV_FAILED,
   EVENT,
-  KEY_PRESS_EVENT,
-  KEY_RELEASE_EVENT,
   DRAG_BEGIN,
   DRAG_END,
   DRAG_DATA_DELETE,
@@ -594,10 +592,6 @@ static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
-static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
-								 GdkEventKey      *event);
-static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
-								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
@@ -922,8 +916,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->event = NULL;
-  klass->key_press_event = gtk_widget_real_key_press_event;
-  klass->key_release_event = gtk_widget_real_key_release_event;
   klass->drag_begin = NULL;
   klass->drag_end = NULL;
   klass->drag_data_delete = NULL;
@@ -1720,61 +1712,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::key-press-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
-   *
-   * The ::key-press-event signal is emitted when a key is pressed. The signal
-   * emission will reoccur at the key-repeat rate when the key is kept pressed.
-   *
-   * To receive this signal, the #GdkSurface associated to the widget needs
-   * to enable the #GDK_KEY_PRESS_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[KEY_PRESS_EVENT] =
-    g_signal_new (I_("key-press-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, key_press_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[KEY_PRESS_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::key-release-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
-   *
-   * The ::key-release-event signal is emitted when a key is released.
-   *
-   * To receive this signal, the #GdkSurface associated to the widget needs
-   * to enable the #GDK_KEY_RELEASE_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[KEY_RELEASE_EVENT] =
-    g_signal_new (I_("key-release-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, key_release_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[KEY_RELEASE_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -5123,20 +5060,6 @@ gtk_widget_get_renderer (GtkWidget *widget)
   return NULL;
 }
 
-static gboolean
-gtk_widget_real_key_press_event (GtkWidget         *widget,
-				 GdkEventKey       *event)
-{
-  return FALSE;
-}
-
-static gboolean
-gtk_widget_real_key_release_event (GtkWidget         *widget,
-				   GdkEventKey       *event)
-{
-  return FALSE;
-}
-
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
 
@@ -5405,64 +5328,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 
   g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
   return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
-  if (!return_val)
-    {
-      gint signal_num;
-
-      switch (event->any.type)
-	{
-        case GDK_DRAG_ENTER:
-        case GDK_DRAG_LEAVE:
-        case GDK_DRAG_MOTION:
-        case GDK_DROP_START:
-        case GDK_EVENT_LAST:
-        case GDK_TOUCHPAD_SWIPE:
-        case GDK_TOUCHPAD_PINCH:
-        case GDK_PAD_BUTTON_PRESS:
-        case GDK_PAD_BUTTON_RELEASE:
-        case GDK_PAD_RING:
-        case GDK_PAD_STRIP:
-        case GDK_PAD_GROUP_MODE:
-	case GDK_PROXIMITY_IN:
-	case GDK_PROXIMITY_OUT:
-	case GDK_SCROLL:
-        case GDK_TOUCH_BEGIN:
-        case GDK_TOUCH_UPDATE:
-        case GDK_TOUCH_END:
-        case GDK_TOUCH_CANCEL:
-	case GDK_EXPOSE:
-	case GDK_DELETE:
-	case GDK_DESTROY:
-	case GDK_MAP:
-	case GDK_UNMAP:
-	case GDK_CONFIGURE:
-	case GDK_ENTER_NOTIFY:
-	case GDK_LEAVE_NOTIFY:
-	case GDK_GRAB_BROKEN:
-	case GDK_FOCUS_CHANGE:
-	case GDK_MOTION_NOTIFY:
-	case GDK_BUTTON_PRESS:
-	case GDK_BUTTON_RELEASE:
-	case GDK_NOTHING:
-	  signal_num = -1;
-	  break;
-	case GDK_KEY_PRESS:
-	  signal_num = KEY_PRESS_EVENT;
-	  break;
-	case GDK_KEY_RELEASE:
-	  signal_num = KEY_RELEASE_EVENT;
-	  break;
-	default:
-	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->any.type);
-	  signal_num = -1;
-	  break;
-	}
-      if (signal_num != -1)
-        {
-	  g_signal_emit (widget, widget_signals[signal_num], 0, event, &handled);
-          return_val |= handled;
-        }
-    }
 
   g_object_unref (widget);
 
