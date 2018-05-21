@@ -268,8 +268,6 @@ static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button)
 static gboolean gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
-static gint gtk_spin_button_key_release    (GtkWidget          *widget,
-                                            GdkEventKey        *event);
 
 static void gtk_spin_button_activate       (GtkEntry           *entry,
                                             gpointer            user_data);
@@ -320,7 +318,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->realize = gtk_spin_button_realize;
   widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->key_release_event = gtk_spin_button_key_release;
   widget_class->event = gtk_spin_button_event;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
@@ -1089,6 +1086,14 @@ gtk_spin_button_event (GtkWidget *widget,
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
+  if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
+    {
+      /* We only get a release at the end of a key repeat run, so reset the timer_step */
+      priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
+      priv->timer_calls = 0;
+
+      return GDK_EVENT_STOP;
+    }
   if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
     {
       gboolean focus_in;
@@ -1296,20 +1301,6 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
 
   if (gtk_adjustment_get_value (priv->adjustment) == old_value)
     gtk_widget_error_bell (GTK_WIDGET (spin));
-}
-
-static gint
-gtk_spin_button_key_release (GtkWidget   *widget,
-                             GdkEventKey *event)
-{
-  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin);
-
-  /* We only get a release at the end of a key repeat run, so reset the timer_step */
-  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
-  priv->timer_calls = 0;
-
-  return TRUE;
 }
 
 static void
