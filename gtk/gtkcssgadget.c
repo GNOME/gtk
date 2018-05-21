@@ -459,6 +459,14 @@ get_number (GtkCssStyle *style,
     return floor (d);
 }
 
+/* Special-case min-width|height to round upwards, to avoid underalloc by 1px */
+static int
+get_number_ceil (GtkCssStyle *style,
+                 guint        property)
+{
+  return ceil (_gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100));
+}
+
 static void
 get_box_margin (GtkCssStyle *style,
                 GtkBorder   *margin)
@@ -643,16 +651,16 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
       extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
       extra_opposite = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
       extra_baseline = margin.left + border.left + padding.left;
-      min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-      min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+      min_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+      min_for_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
     }
   else
     {
       extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
       extra_opposite = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
       extra_baseline = margin.top + border.top + padding.top;
-      min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-      min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+      min_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+      min_for_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_WIDTH);
     }
 
   if (for_size > -1)
