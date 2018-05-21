@@ -1281,6 +1281,12 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   GDK_DISPLAY_GET_CLASS (display)->notify_startup_complete (display, startup_id);
+
+  /* Clear the environment variable so that DESKTOP_STARTUP_ID
+   * won't be inherited by child processes and confuse things.
+   */
+  if (g_getenv ("DESKTOP_STARTUP_ID"))
+    g_unsetenv ("DESKTOP_STARTUP_ID");
 }
 
 void

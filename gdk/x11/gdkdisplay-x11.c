@@ -2160,11 +2160,6 @@ gdk_x11_display_make_default (GdkDisplay *display)
         g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
       else
         gdk_x11_display_set_startup_notification_id (display, startup_id);
-
-      /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.
-       */
-      g_unsetenv ("DESKTOP_STARTUP_ID");
     }
 }
 
