@@ -1962,7 +1962,7 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
  * Attaches @context to the given screen.
  *
  * The screen is used to add style information from “global” style
- * providers, such as the screens #GtkSettings instance.
+ * providers, such as the screen’s #GtkSettings instance.
  *
  * If you are using a #GtkStyleContext returned from
  * gtk_widget_get_style_context(), you do not need to
