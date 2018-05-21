@@ -824,11 +824,6 @@ gdk_wayland_display_make_default (GdkDisplay *display)
         g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
       else
         display_wayland->startup_notification_id = g_strdup (startup_id);
-
-      /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.
-       */
-      g_unsetenv ("DESKTOP_STARTUP_ID");
     }
 }
 
