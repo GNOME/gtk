@@ -776,9 +776,6 @@ gtk_dialog_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkDialog *dialog = GTK_DIALOG (widget);
 
-  if (gtk_window_get_transient_for (window) == NULL)
-    g_message ("GtkDialog mapped without a transient parent. This is discouraged.");
-
   GTK_WIDGET_CLASS (gtk_dialog_parent_class)->map (widget);
 
   focus = gtk_window_get_focus (window);
