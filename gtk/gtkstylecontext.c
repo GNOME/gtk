@@ -82,11 +82,8 @@
  *
  * If you are using the theming layer standalone, you will need to set a
  * widget path and a screen yourself to the created style context through
- * gtk_style_context_set_path() and gtk_style_context_set_screen(), as well
- * as updating the context yourself using gtk_style_context_invalidate()
- * whenever any of the conditions change, such as a change in the
- * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
- * widget. See the “Foreign drawing“ example in gtk3-demo.
+ * gtk_style_context_set_path() and possibly gtk_style_context_set_screen(). See
+ * the “Foreign drawing“ example in gtk3-demo.
  *
  * # Style Classes # {#gtkstylecontext-classes}
  *
