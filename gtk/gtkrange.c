@@ -959,8 +959,8 @@ should_invert_move (GtkRange       *range,
   if (move_orientation == priv->orientation)
     return should_invert (range);
 
-  /* H range/V move: Always invert, so down/up always dec/increase the value */
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+  /* H scale/V move: Always invert, so down/up always dec/increase the value */
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL && GTK_IS_SCALE (range))
     return TRUE;
 
   /* V range/H move: Left/right always dec/increase the value */
