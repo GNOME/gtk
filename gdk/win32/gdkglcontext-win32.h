@@ -86,6 +86,9 @@ gboolean
 _gdk_win32_gl_context_realize (GdkGLContext *context,
                                GError **error);
 
+void
+_gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_GL_CONTEXT__ */
