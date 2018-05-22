@@ -141,6 +141,35 @@ gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
     }
 }
 
+static gboolean
+_get_is_egl_force_redraw (GdkWindow *window)
+{
+  /* We only need to call gdk_window_invalidate_rect () if necessary */
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (window->gl_paint_context != NULL && gdk_gl_context_get_use_es (window->gl_paint_context))
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      return impl->egl_force_redraw_all;
+    }
+#endif
+  return FALSE;
+}
+
+static void
+_reset_egl_force_redraw (GdkWindow *window)
+{
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (window->gl_paint_context != NULL && gdk_gl_context_get_use_es (window->gl_paint_context))
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      if (impl->egl_force_redraw_all)
+        impl->egl_force_redraw_all = FALSE;
+    }
+#endif
+}
+
 void
 _gdk_win32_gl_context_end_frame (GdkGLContext *context,
                                  cairo_region_t *painted,
@@ -173,7 +202,6 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
             }
         }
 
-      /* EGL does not have do_blit_swap */
       if (context_win32->do_blit_swap)
         {
           glDrawBuffer(GL_FRONT);
@@ -193,6 +221,21 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
   else
     {
       EGLSurface egl_surface = _gdk_win32_window_get_egl_surface (window, context_win32->egl_config, FALSE);
+      gboolean force_egl_redraw_all = _get_is_egl_force_redraw (window);
+
+      if (context_win32->do_blit_swap && !force_egl_redraw_all)
+        gdk_gl_blit_region (window, painted);
+      else if (force_egl_redraw_all)
+        {
+          GdkRectangle rect = {0, 0, gdk_window_get_width (window), gdk_window_get_height (window)};
+
+          /* We need to do gdk_window_invalidate_rect() so that we don't get glitches after maximizing or
+           *  restoring or using aerosnap
+           */
+          gdk_window_invalidate_rect (window, &rect, TRUE);
+          _reset_egl_force_redraw (window);
+        }
+
       eglSwapBuffers (display->egl_disp, egl_surface);
     }
 #endif
@@ -214,7 +257,6 @@ _gdk_win32_window_invalidate_for_new_frame (GdkWindow *window,
   context_win32 = GDK_WIN32_GL_CONTEXT (window->gl_paint_context);
   context_win32->do_blit_swap = FALSE;
 
-  /* gdk_gl_context_has_framebuffer_blit() is for Desktop GL only ! */
   if (gdk_gl_context_has_framebuffer_blit (window->gl_paint_context) &&
       cairo_region_contains_rectangle (update_area, &whole_window) != CAIRO_REGION_OVERLAP_IN)
     {
@@ -1308,4 +1350,21 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
 #endif
 
   return TRUE;
+}
+
+void
+_gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window)
+{
+/* If we are using ANGLE, we need to force redraw of the whole Window and its child windows
+ *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
+ *  using gdk_window_invalidate_rect (), when we maximize or restore or use aerosnap
+ */
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (window->gl_paint_context != NULL && gdk_gl_context_get_use_es (window->gl_paint_context))
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      impl->egl_force_redraw_all = TRUE;
+    }
+#endif
 }
