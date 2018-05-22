@@ -225,7 +225,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
                                   const XEvent   *xevent)
 {
   GdkEventSource *event_source = (GdkEventSource *) x11_display->event_source;
-  GdkEvent *event = gdk_event_new (GDK_NOTHING);
+  GdkEvent *event;
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkDisplay *display = GDK_DISPLAY (x11_display);
   GdkEventTranslator *event_translator;
@@ -235,9 +235,9 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   gpointer cache;
 
   x11_screen = GDK_X11_DISPLAY (display)->screen;
-
   dpy = GDK_DISPLAY_XDISPLAY (display);
 
+  event = gdk_event_new (GDK_NOTHING);
   filter_surface = gdk_event_source_get_filter_surface (event_source, xevent,
                                                       &event_translator);
   if (filter_surface)
