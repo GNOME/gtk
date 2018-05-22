@@ -360,6 +360,7 @@ struct _GdkWindowImplWin32
 #ifdef GDK_WIN32_ENABLE_EGL
   EGLSurface egl_surface;
   EGLSurface egl_dummy_surface;
+  guint egl_force_redraw_all : 1;
 #endif
 };
 
