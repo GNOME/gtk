@@ -1701,6 +1701,8 @@ gdk_win32_window_move_resize (GdkWindow *window,
   window_impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   window_impl->inhibit_configure = TRUE;
 
+  _gdk_win32_window_invalidate_egl_framebuffer (window);
+
   /* We ignore changes to the window being moved or resized by the
      user, as we don't want to fight the user */
   if (GDK_WINDOW_HWND (window) == _modal_move_resize_window)
@@ -5275,6 +5277,8 @@ gdk_win32_window_maximize (GdkWindow *window)
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (window->state)));
 
+  _gdk_win32_window_invalidate_egl_framebuffer (window);
+
   if (GDK_WINDOW_IS_MAPPED (window))
     GtkShowWindow (window, SW_MAXIMIZE);
   else
@@ -5294,6 +5298,8 @@ gdk_win32_window_unmaximize (GdkWindow *window)
   GDK_NOTE (MISC, g_print ("gdk_window_unmaximize: %p: %s\n",
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (window->state)));
+
+  _gdk_win32_window_invalidate_egl_framebuffer (window);
 
   if (GDK_WINDOW_IS_MAPPED (window))
     GtkShowWindow (window, SW_RESTORE);
@@ -6034,6 +6040,8 @@ GtkShowWindow (GdkWindow *window,
     case SW_SHOWNA:
     case SW_SHOWNOACTIVATE:
     case SW_SHOWNORMAL:
+      _gdk_win32_window_invalidate_egl_framebuffer (window);
+
       if (IsWindowVisible (hwnd))
         break;
 
