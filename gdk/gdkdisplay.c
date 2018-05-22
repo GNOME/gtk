@@ -492,8 +492,6 @@ gdk_display_put_event_nocopy (GdkDisplay *display,
                               GdkEvent   *event)
 {
   _gdk_event_queue_append (display, event);
-  /* If the main loop is blocking in a different thread, wake it up */
-  g_main_context_wakeup (NULL);
 }
 
 /**
