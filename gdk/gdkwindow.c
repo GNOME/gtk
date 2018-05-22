@@ -4164,7 +4164,7 @@ static void
 gdk_window_process_updates_with_mode (GdkWindow     *window,
                                       int            recurse_mode)
 {
-  GPtrArray *list = g_ptr_array_new_with_free_func (g_object_unref);
+  GPtrArray *list;
   int i;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -4172,6 +4172,7 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  list = g_ptr_array_new_with_free_func (g_object_unref);
   find_impl_windows_to_update (list, window, recurse_mode);
 
   if (window->impl_window != window)
