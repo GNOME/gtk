@@ -653,7 +653,7 @@ gdk_event_get_scancode
 gdk_event_get_pointer_emulated
 gdk_event_get_crossing_detail
 gdk_event_get_crossing_mode
-gdk_event_get_drag_context
+gdk_event_get_drop
 gdk_event_get_focus_in
 gdk_event_get_grab_surface
 gdk_event_get_motion_history

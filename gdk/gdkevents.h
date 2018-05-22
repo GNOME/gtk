@@ -515,8 +515,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_is_sent       (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
-gboolean       gdk_event_get_drag_context (const GdkEvent  *event,
-                                           GdkDragContext **context);
+GdkDrop *      gdk_event_get_drop (const GdkEvent  *event);
 
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_crossing_mode (const GdkEvent  *event,

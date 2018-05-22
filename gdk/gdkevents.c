@@ -29,6 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdndprivate.h"
+#include "gdkdropprivate.h"
 #include "gdk-private.h"
 
 #include <string.h>
@@ -2072,17 +2073,15 @@ gdk_event_is_sent (const GdkEvent *event)
 }
 
 /**
- * gdk_event_get_drag_context:
+ * gdk_event_get_drop:
  * @event: a #GdkEvent
- * @context: (out) (transfer none): return location for the drag context
  *
- * Gets the drag context from a DND event.
+ * Gets the #GdkDrop from a DND event.
  *
- * Returns: %TRUE on success, otherwise %FALSE
+ * Returns: (transfer none) (nullable): the drop
  **/
-gboolean
-gdk_event_get_drag_context (const GdkEvent  *event,
-                            GdkDragContext **context)
+GdkDrop *
+gdk_event_get_drop (const GdkEvent *event)
 {
   if (!event)
     return FALSE;
@@ -2092,11 +2091,10 @@ gdk_event_get_drag_context (const GdkEvent  *event,
       event->any.type == GDK_DRAG_MOTION ||
       event->any.type == GDK_DROP_START)
     {
-      *context = event->dnd.context;
-      return TRUE;
+      return GDK_DROP (event->dnd.context);
     }
 
-  return FALSE;
+  return NULL;
 }
 
 /**
