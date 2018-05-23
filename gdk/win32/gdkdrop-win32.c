@@ -144,6 +144,7 @@ gdk_drop_context_new (GdkDisplay        *display,
   context_win32 = g_object_new (GDK_TYPE_WIN32_DROP_CONTEXT,
                                 "device", gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                                 "formats", formats,
+                                "surface", dest_surface,
                                 NULL);
 
   context = GDK_DRAG_CONTEXT (context_win32);
