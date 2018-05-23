@@ -1131,8 +1131,11 @@ data_offer_source_actions (void                 *data,
                                 gdk_wayland_actions_to_gdk_actions (source_actions),
                                 gdk_drag_context_get_suggested_action (drop_context));
 
-  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
-                                        GDK_CURRENT_TIME);
+  gdk_drop_emit_motion_event (GDK_DROP (seat->drop_context),
+                              FALSE,
+                              seat->pointer_info.surface_x,
+                              seat->pointer_info.surface_y,
+                              GDK_CURRENT_TIME);
 }
 
 static void
@@ -1159,8 +1162,11 @@ data_offer_action (void                 *data,
                                 gdk_drag_context_get_actions (drop_context),
                                 gdk_wayland_actions_to_gdk_actions (action));
 
-  _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
-                                        GDK_CURRENT_TIME);
+  gdk_drop_emit_motion_event (GDK_DROP (seat->drop_context),
+                              FALSE,
+                              seat->pointer_info.surface_x,
+                              seat->pointer_info.surface_y,
+                              GDK_CURRENT_TIME);
 }
 
 static const struct wl_data_offer_listener data_offer_listener = {
@@ -1248,14 +1254,11 @@ data_device_enter (void                  *data,
 
   _gdk_wayland_drag_context_set_source_surface (seat->drop_context, dnd_owner);
 
-  _gdk_wayland_drag_context_set_coords (seat->drop_context,
-                                        wl_fixed_to_double (x),
-                                        wl_fixed_to_double (y));
-
   gdk_wayland_seat_discard_pending_offer (seat);
 
-  _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_ENTER,
-                                        GDK_CURRENT_TIME);
+  gdk_drop_emit_enter_event (GDK_DROP (seat->drop_context),
+                             FALSE,
+                             GDK_CURRENT_TIME);
 }
 
 static void
@@ -1273,9 +1276,9 @@ data_device_leave (void                  *data,
   g_object_unref (seat->pointer_info.focus);
   seat->pointer_info.focus = NULL;
 
-  _gdk_wayland_drag_context_set_coords (seat->drop_context, -1, -1);
-  _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_LEAVE,
-                                        GDK_CURRENT_TIME);
+  gdk_drop_emit_leave_event (GDK_DROP (seat->drop_context),
+                             FALSE,
+                             GDK_CURRENT_TIME);
 
   g_clear_object (&seat->drop_context);
 }
@@ -1300,11 +1303,11 @@ data_device_motion (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
-  _gdk_wayland_drag_context_set_coords (seat->drop_context,
-                                        wl_fixed_to_double (x),
-                                        wl_fixed_to_double (y));
-  _gdk_wayland_drag_context_emit_event (seat->drop_context,
-                                        GDK_DRAG_MOTION, time);
+  gdk_drop_emit_motion_event (GDK_DROP (seat->drop_context),
+                              FALSE,
+                              seat->pointer_info.surface_x,
+                              seat->pointer_info.surface_y,
+                              time);
 }
 
 static void
@@ -1316,8 +1319,11 @@ data_device_drop (void                  *data,
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device drop, data device %p", data_device));
 
-  _gdk_wayland_drag_context_emit_event (seat->drop_context,
-                                        GDK_DROP_START, GDK_CURRENT_TIME);
+  gdk_drop_emit_drop_event (GDK_DROP (seat->drop_context),
+                            FALSE,
+                            seat->pointer_info.surface_x,
+                            seat->pointer_info.surface_y,
+                            GDK_CURRENT_TIME);
 }
 
 static void
