@@ -53,8 +53,6 @@ struct _GdkWaylandDragContext
   struct wl_data_offer *offer;
   GdkDragAction selected_action;
   uint32_t serial;
-  gdouble x;
-  gdouble y;
   gint hot_x;
   gint hot_y;
 };
@@ -93,42 +91,6 @@ gdk_wayland_drag_context_finalize (GObject *object)
 
   if (dnd_surface)
     gdk_surface_destroy (dnd_surface);
-}
-
-void
-_gdk_wayland_drag_context_emit_event (GdkDragContext *context,
-                                      GdkEventType    type,
-                                      guint32         time_)
-{
-  GdkSurface *surface;
-  GdkEvent *event;
-
-  switch ((guint) type)
-    {
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      break;
-    default:
-      return;
-    }
-
-  if (context->is_source)
-    surface = gdk_drag_context_get_source_surface (context);
-  else
-    surface = gdk_drop_get_surface (GDK_DROP (context));
-
-  event = gdk_event_new (type);
-  event->any.surface = g_object_ref (surface);
-  event->dnd.context = g_object_ref (context);
-  event->dnd.time = time_;
-  event->dnd.x_root = GDK_WAYLAND_DRAG_CONTEXT (context)->x;
-  event->dnd.y_root = GDK_WAYLAND_DRAG_CONTEXT (context)->y;
-  gdk_event_set_device (event, gdk_drag_context_get_device (context));
-
-  gdk_display_put_event (gdk_surface_get_display (surface), event);
-  g_object_unref (event);
 }
 
 static inline uint32_t
@@ -513,18 +475,6 @@ _gdk_wayland_drop_context_new (GdkDevice            *device,
   context_wayland->serial = serial;
 
   return context;
-}
-
-void
-_gdk_wayland_drag_context_set_coords (GdkDragContext *context,
-                                      gdouble         x,
-                                      gdouble         y)
-{
-  GdkWaylandDragContext *context_wayland;
-
-  context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
-  context_wayland->x = x;
-  context_wayland->y = y;
 }
 
 void
