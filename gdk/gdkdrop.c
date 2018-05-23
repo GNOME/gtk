@@ -20,15 +20,17 @@
 #include "config.h"
 
 #include "gdkdndprivate.h"
-#include "gdkdisplay.h"
-#include "gdksurface.h"
-#include "gdkintl.h"
+
 #include "gdkcontentformats.h"
 #include "gdkcontentprovider.h"
 #include "gdkcontentserializer.h"
 #include "gdkcursor.h"
+#include "gdkdisplay.h"
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
+#include "gdkinternals.h"
+#include "gdkintl.h"
+#include "gdksurface.h"
 
 typedef struct _GdkDropPrivate GdkDropPrivate;
 
@@ -566,5 +568,95 @@ gdk_drop_read_finish (GdkDrop       *self,
     {
       return GDK_DROP_GET_CLASS (self)->read_finish (self, out_mime_type, result, error);
     }
+}
+
+static void
+gdk_drop_do_emit_event (GdkEvent *event,
+                        gboolean  dont_queue)
+{
+  if (dont_queue)
+    {
+      _gdk_event_emit (event);
+      g_object_unref (event);
+    }
+  else
+    {
+      _gdk_event_queue_append (gdk_event_get_display (event), event);
+    }
+}
+void
+gdk_drop_emit_enter_event (GdkDrop  *self,
+                           gboolean  dont_queue,
+                           guint32   time)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_DRAG_ENTER);
+  event->any.surface = g_object_ref (priv->surface);
+  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.time = time;
+  gdk_event_set_device (event, priv->device);
+
+  gdk_drop_do_emit_event (event, dont_queue);
+}
+
+void
+gdk_drop_emit_motion_event (GdkDrop  *self,
+                            gboolean  dont_queue,
+                            double    x_root,
+                            double    y_root,
+                            guint32   time)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_DRAG_MOTION);
+  event->any.surface = g_object_ref (priv->surface);
+  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.time = time;
+  event->dnd.x_root = x_root;
+  event->dnd.y_root = y_root;
+  gdk_event_set_device (event, priv->device);
+
+  gdk_drop_do_emit_event (event, dont_queue);
+}
+
+void
+gdk_drop_emit_leave_event (GdkDrop  *self,
+                           gboolean  dont_queue,
+                           guint32   time)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_DRAG_LEAVE);
+  event->any.surface = g_object_ref (priv->surface);
+  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.time = time;
+  gdk_event_set_device (event, priv->device);
+
+  gdk_drop_do_emit_event (event, dont_queue);
+}
+
+void
+gdk_drop_emit_drop_event (GdkDrop  *self,
+                          gboolean  dont_queue,
+                          double    x_root,
+                          double    y_root,
+                          guint32   time)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_DROP_START);
+  event->any.surface = g_object_ref (priv->surface);
+  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.time = time;
+  event->dnd.x_root = x_root;
+  event->dnd.y_root = y_root;
+  gdk_event_set_device (event, priv->device);
+
+  gdk_drop_do_emit_event (event, dont_queue);
 }
 
