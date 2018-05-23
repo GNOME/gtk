@@ -23,7 +23,9 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 void     gdk_profiler_start      (int fd);
+GDK_AVAILABLE_IN_ALL
 void     gdk_profiler_stop       (void);
 gboolean gdk_profiler_is_running (void);
 void     gdk_profiler_add_mark   (gint64           start,
