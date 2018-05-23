@@ -1091,7 +1091,6 @@ insert_theme (GtkIconTheme *icon_theme,
 
       priv->dir_mtimes = g_list_prepend (priv->dir_mtimes, dir_mtime);
     }
-  priv->dir_mtimes = g_list_reverse (priv->dir_mtimes);
 
   theme_file = NULL;
   for (i = 0; i < priv->search_path_len && !theme_file; i++)
@@ -1316,7 +1315,7 @@ load_themes (GtkIconTheme *icon_theme)
       dir = icon_theme->priv->search_path[base];
 
       dir_mtime = g_slice_new (IconThemeDirMtime);
-      priv->dir_mtimes = g_list_append (priv->dir_mtimes, dir_mtime);
+      priv->dir_mtimes = g_list_prepend (priv->dir_mtimes, dir_mtime);
       
       dir_mtime->dir = g_strdup (dir);
       dir_mtime->mtime = 0;
@@ -1341,6 +1340,7 @@ load_themes (GtkIconTheme *icon_theme)
 
       g_dir_close (gdir);
     }
+  priv->dir_mtimes = g_list_reverse (priv->dir_mtimes);
 
   for (d = priv->resource_paths; d; d = d->next)
     {
