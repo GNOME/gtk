@@ -1815,6 +1815,7 @@ xdnd_enter_filter (const XEvent *xevent,
   context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
                               "device", gdk_seat_get_pointer (seat),
                               "formats", content_formats,
+                              "surface", event->any.surface,
                               NULL);
   context = (GdkDragContext *)context_x11;
 
