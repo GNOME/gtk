@@ -1242,14 +1242,12 @@ data_device_enter (void                  *data,
   seat->pending_builder = NULL;
   seat->pending_offer = NULL;
 
-  seat->drop_context = _gdk_wayland_drop_context_new (device, formats, offer);
+  seat->drop_context = _gdk_wayland_drop_context_new (device, formats, dest_surface, offer, serial);
 
   dnd_owner = seat->foreign_dnd_surface;
 
   _gdk_wayland_drag_context_set_source_surface (seat->drop_context, dnd_owner);
 
-  _gdk_wayland_drag_context_set_dest_surface (seat->drop_context,
-                                             dest_surface, serial);
   _gdk_wayland_drag_context_set_coords (seat->drop_context,
                                         wl_fixed_to_double (x),
                                         wl_fixed_to_double (y));
@@ -1278,7 +1276,6 @@ data_device_leave (void                  *data,
   _gdk_wayland_drag_context_set_coords (seat->drop_context, -1, -1);
   _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_LEAVE,
                                         GDK_CURRENT_TIME);
-  _gdk_wayland_drag_context_set_dest_surface (seat->drop_context, NULL, 0);
 
   g_clear_object (&seat->drop_context);
 }

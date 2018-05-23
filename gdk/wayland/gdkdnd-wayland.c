@@ -117,7 +117,7 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
   if (context->is_source)
     surface = gdk_drag_context_get_source_surface (context);
   else
-    surface = gdk_drag_context_get_dest_surface (context);
+    surface = gdk_drop_get_surface (GDK_DROP (context));
 
   event = gdk_event_new (type);
   event->any.surface = g_object_ref (surface);
@@ -494,7 +494,10 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 GdkDragContext *
 _gdk_wayland_drop_context_new (GdkDevice            *device,
                                GdkContentFormats    *formats,
-                               struct wl_data_offer *offer)
+                               GdkSurface           *surface,
+                               struct wl_data_offer *offer,
+                               uint32_t              serial)
+
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
@@ -502,10 +505,12 @@ _gdk_wayland_drop_context_new (GdkDevice            *device,
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
                                   "device", device,
                                   "formats", formats,
+                                  "surface", surface,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->is_source = FALSE;
   context_wayland->offer = offer;
+  context_wayland->serial = serial;
 
   return context;
 }
@@ -530,18 +535,6 @@ _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
     g_object_unref (context->source_surface);
 
   context->source_surface = surface ? g_object_ref (surface) : NULL;
-}
-
-void
-_gdk_wayland_drag_context_set_dest_surface (GdkDragContext *context,
-                                           GdkSurface      *dest_surface,
-                                           uint32_t        serial)
-{
-  if (context->dest_surface)
-    g_object_unref (context->dest_surface);
-
-  context->dest_surface = dest_surface ? g_object_ref (dest_surface) : NULL;
-  GDK_WAYLAND_DRAG_CONTEXT (context)->serial = serial;
 }
 
 GdkDragContext *

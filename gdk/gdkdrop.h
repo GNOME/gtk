@@ -41,6 +41,8 @@ GdkDisplay *            gdk_drop_get_display            (GdkDrop                
 GDK_AVAILABLE_IN_ALL
 GdkDevice *             gdk_drop_get_device             (GdkDrop                *self);
 GDK_AVAILABLE_IN_ALL
+GdkSurface *            gdk_drop_get_surface            (GdkDrop                *self);
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_drop_get_formats            (GdkDrop                *self);
 GDK_AVAILABLE_IN_ALL
 GdkDragAction           gdk_drop_get_actions            (GdkDrop                *self);

@@ -36,6 +36,7 @@ struct _GdkDropPrivate {
   GdkDevice *device;
   GdkDragContext *drag;
   GdkContentFormats *formats;
+  GdkSurface *surface;
   GdkDragAction actions;
 };
 
@@ -46,6 +47,7 @@ enum {
   PROP_DISPLAY,
   PROP_DRAG,
   PROP_FORMATS,
+  PROP_SURFACE,
   N_PROPERTIES
 };
 
@@ -118,6 +120,8 @@ gdk_drop_set_property (GObject      *gobject,
     case PROP_DEVICE:
       priv->device = g_value_dup_object (value);
       g_assert (priv->device != NULL);
+      if (priv->surface)
+        g_assert (gdk_surface_get_display (priv->surface) == gdk_device_get_display (priv->device));
       break;
 
     case PROP_DRAG:
@@ -128,6 +132,15 @@ gdk_drop_set_property (GObject      *gobject,
       priv->formats = g_value_dup_boxed (value);
 #ifdef DROP_SUBCLASS
       g_assert (priv->formats != NULL);
+#endif
+      break;
+
+    case PROP_SURFACE:
+      priv->surface = g_value_dup_object (value);
+#ifdef DROP_SUBCLASS
+      g_assert (priv->surface != NULL);
+      if (priv->device)
+        g_assert (gdk_surface_get_display (priv->surface) == gdk_device_get_display (priv->device));
 #endif
       break;
 
@@ -166,6 +179,10 @@ gdk_drop_get_property (GObject    *gobject,
 
     case PROP_FORMATS:
       g_value_set_boxed (value, priv->formats);
+      break;
+
+    case PROP_SURFACE:
+      g_value_set_object (value, priv->surface);
       break;
 
     default:
@@ -271,6 +288,22 @@ gdk_drop_class_init (GdkDropClass *klass)
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkDrop:surface:
+   *
+   * The #GdkSurface the drop happens on
+   */
+  properties[PROP_SURFACE] =
+    g_param_spec_object ("surface",
+                         "Surface",
+                         "The surface the drop is happening on",
+                         GDK_TYPE_SURFACE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
@@ -332,6 +365,24 @@ gdk_drop_get_formats (GdkDrop *self)
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
   return priv->formats;
+}
+
+/**
+ * gdk_drop_get_surface:
+ * @self: a #GdkDrop
+ *
+ * Returns the #GdkSurface performing the drop.
+ *
+ * Returns: (transfer none): The #GdkSurface performing the drop.
+ **/
+GdkSurface *
+gdk_drop_get_surface (GdkDrop *self)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DROP (self), NULL);
+
+  return priv->surface;
 }
 
 /**
