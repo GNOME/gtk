@@ -115,8 +115,10 @@ gdk_seat_default_grab (GdkSeat                *seat,
   GdkSeatDefaultPrivate *priv;
   guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
+  gboolean was_visible;
 
   priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  was_visible = gdk_window_is_visible (window);
 
   if (prepare_func)
     (prepare_func) (seat, window, prepare_func_data);
@@ -163,9 +165,11 @@ gdk_seat_default_grab (GdkSeat                *seat,
         {
           if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
             gdk_device_ungrab (priv->master_pointer, evtime);
-          gdk_window_hide (window);
         }
     }
+
+  if (status != GDK_GRAB_SUCCESS && !was_visible)
+    gdk_window_hide (window);
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
