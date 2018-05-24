@@ -163,7 +163,6 @@ gdk_seat_default_grab (GdkSeat                *seat,
         {
           if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
             gdk_device_ungrab (priv->master_pointer, evtime);
-          gdk_window_hide (window);
         }
     }
 
