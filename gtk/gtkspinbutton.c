@@ -385,7 +385,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                    PROP_CLIMB_RATE,
                                    g_param_spec_double ("climb-rate",
                                                         P_("Climb Rate"),
-                                                        P_("The acceleration rate when you hold down a button"),
+                                                        P_("The acceleration rate when you hold down a button or key"),
                                                         0.0, G_MAXDOUBLE, 0.0,
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1979,8 +1979,8 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
  * gtk_spin_button_new:
  * @adjustment: (allow-none): the #GtkAdjustment object that this spin
  *     button should use, or %NULL
- * @climb_rate: specifies how much the spin button changes when an arrow
- *     is clicked on
+ * @climb_rate: specifies by how much the rate of change in the value will
+ *     accelerate if you continue to hold down an up/down button or arrow key
  * @digits: the number of decimal places to display
  *
  * Creates a new #GtkSpinButton.
