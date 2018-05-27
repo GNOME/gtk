@@ -696,6 +696,7 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_TEXT_NODE:
     case GSK_TEXTURE_NODE:
     case GSK_COLOR_NODE:
+    case GSK_COLOR_MATRIX_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -898,8 +899,8 @@ render_color_matrix_node (GskGLRenderer       *self,
                           RenderOpBuilder     *builder,
                           const GskQuadVertex *vertex_data)
 {
-  const float min_x = node->bounds.origin.x;
-  const float min_y = node->bounds.origin.y;
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
   int texture_id;
