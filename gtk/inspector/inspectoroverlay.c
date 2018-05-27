@@ -23,12 +23,6 @@
 
 #include "gtkintl.h"
 
-typedef struct _GtkInspectorOverlayPrivate GtkInspectorOverlayPrivate;
-
-struct _GtkInspectorOverlayPrivate
-{
-};
-
 G_DEFINE_ABSTRACT_TYPE (GtkInspectorOverlay, gtk_inspector_overlay, G_TYPE_OBJECT)
 
 static void
