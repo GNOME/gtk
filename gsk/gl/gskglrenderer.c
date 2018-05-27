@@ -1602,8 +1602,6 @@ apply_color_op (const Program  *program,
                 const RenderOp *op)
 {
   OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
-  /* TODO: We use color.color_location here and this is right for all three of the programs above,
-   *       but that's just a coincidence. */
   glUniform4f (program->color.color_location,
                op->color.red, op->color.green, op->color.blue, op->color.alpha);
 }
