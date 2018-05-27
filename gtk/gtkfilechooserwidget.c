@@ -1414,9 +1414,6 @@ gtk_file_chooser_widget_event (GtkWidget *widget,
       return GDK_EVENT_STOP;
     }
 
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->event (widget, event))
-    return GDK_EVENT_STOP;
-
   return GDK_EVENT_PROPAGATE;
 }
 
