@@ -29,8 +29,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkX11Monitor GdkX11Monitor;
-
 struct _GdkX11Screen
 {
   GObject parent_instance;
