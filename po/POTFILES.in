@@ -344,7 +344,9 @@ gtk/inspector/visual.c
 gtk/inspector/visual.ui
 gtk/inspector/window.c
 gtk/inspector/window.ui
+gtk/open-type-layout.h
 gtk/paper_names_offsets.c
+gtk/script-names.c
 gtk/ui/gtkaboutdialog.ui
 gtk/ui/gtkappchooserdialog.ui
 gtk/ui/gtkappchooserwidget.ui
@@ -353,8 +355,8 @@ gtk/ui/gtkassistant.ui
 gtk/ui/gtkcolorchooserdialog.ui
 gtk/ui/gtkcoloreditor.ui
 gtk/ui/gtkdialog.ui
-gtk/ui/gtkfilechooserbutton.ui
 gtk/ui/gtkemojichooser.ui
+gtk/ui/gtkfilechooserbutton.ui
 gtk/ui/gtkfilechooserdialog.ui
 gtk/ui/gtkfilechooserwidget.ui
 gtk/ui/gtkfontbutton.ui
