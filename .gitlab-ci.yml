@@ -1,4 +1,4 @@
-image: registry.gitlab.gnome.org/gnome/gtk/gtk-3-22:v2
+image: registry.gitlab.gnome.org/gnome/gtk/gtk-3-24:v1
 
 stages:
   - build
