@@ -216,6 +216,19 @@ gdk_display_open_default (void)
   return display;
 }
 
+gboolean
+gdk_running_in_sandbox (void)
+{
+  char *path;
+  gboolean ret;
+
+  path = g_build_filename (g_get_user_runtime_dir (), "flatpak-info", NULL);
+  ret = g_file_test (path, G_FILE_TEST_EXISTS);
+  g_free (path);
+
+  return ret;
+}
+
 /**
  * SECTION:threads
  * @Short_description: Functions for using GDK in multi-threaded programs
@@ -266,3 +279,4 @@ gdk_display_open_default (void)
  * expensive tasks from worker threads, and will handle thread
  * management for you.
  */
+

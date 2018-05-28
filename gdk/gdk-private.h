@@ -39,5 +39,6 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             const char   *theme,
                                             int           size);
+gboolean gdk_running_in_sandbox (void);
 
 #endif /* __GDK__PRIVATE_H__ */
