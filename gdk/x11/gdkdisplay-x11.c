@@ -1555,7 +1555,6 @@ _gdk_x11_display_open (const gchar *display_name)
   gchar *argv[1];
 
   XClassHint *class_hint;
-  gulong pid;
   gint ignore;
   gint maj, min;
 
@@ -1726,11 +1725,15 @@ _gdk_x11_display_open (const gchar *display_name)
   if (gdk_sm_client_id)
     set_sm_client_id (display, gdk_sm_client_id);
 
-  pid = getpid ();
-  XChangeProperty (display_x11->xdisplay,
-		   display_x11->leader_window,
-		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PID"),
-		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
+  if (!gdk_running_in_sandbox ())
+    {
+      /* if sandboxed, we're likely in a pid namespace and would only confuse the wm with this */
+      pid_t pid = getpid ();
+      XChangeProperty (display_x11->xdisplay,
+                       display_x11->leader_window,
+                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PID"),
+                       XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
+    }
 
   /* We don't yet know a valid time. */
   display_x11->user_time = 0;
