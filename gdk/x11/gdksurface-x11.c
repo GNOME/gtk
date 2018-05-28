@@ -718,7 +718,6 @@ setup_toplevel_window (GdkSurface    *surface,
   Display *xdisplay = GDK_SURFACE_XDISPLAY (surface);
   XID xid = GDK_SURFACE_XID (surface);
   XSizeHints size_hints;
-  long pid;
   Window leader_window;
 
   set_wm_protocols (surface);
@@ -749,12 +748,16 @@ setup_toplevel_window (GdkSurface    *surface,
   /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
   XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
   
-  pid = getpid ();
-  XChangeProperty (xdisplay, xid,
-		   gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_PID"),
-		   XA_CARDINAL, 32,
-		   PropModeReplace,
-		   (guchar *)&pid, 1);
+  if (!gdk_running_in_sandbox ())
+    {
+      /* if sandboxed, we're likely in a pid namespace and would only confuse the wm with this */
+      pid_t pid = getpid ();
+      XChangeProperty (xdisplay, xid,
+                       gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_PID"),
+                       XA_CARDINAL, 32,
+                       PropModeReplace,
+                       (guchar *)&pid, 1);
+    }
 
   leader_window = GDK_X11_DISPLAY (x11_screen->display)->leader_window;
   if (!leader_window)
