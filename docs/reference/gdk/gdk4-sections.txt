@@ -627,7 +627,6 @@ GDK_BUTTON_SECONDARY
 <SUBSECTION>
 gdk_event_new
 gdk_event_copy
-gdk_event_free
 gdk_event_get_axes
 gdk_event_get_button
 gdk_event_get_click_count

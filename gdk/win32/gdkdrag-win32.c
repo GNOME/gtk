@@ -1781,7 +1781,7 @@ local_send_leave (GdkDragContext *context,
 
       GDK_NOTE (EVENTS, _gdk_win32_print_event (tmp_event));
       _gdk_display_put_event (gdk_device_get_display (gdk_drag_context_get_device (context)), tmp_event);
-      gdk_event_free (tmp_event);
+      g_object_unref (tmp_event);
     }
 }
 
@@ -1825,7 +1825,7 @@ local_send_motion (GdkDragContext *context,
 
       GDK_NOTE (EVENTS, _gdk_win32_print_event (tmp_event));
       _gdk_display_put_event (gdk_device_get_display (gdk_drag_context_get_device (context)), tmp_event);
-      gdk_event_free (tmp_event);
+      g_object_unref (tmp_event);
     }
 }
 
@@ -1861,7 +1861,7 @@ local_send_drop (GdkDragContext *context,
 
       GDK_NOTE (EVENTS, _gdk_win32_print_event (tmp_event));
       _gdk_display_put_event (gdk_device_get_display (gdk_drag_context_get_device (context)), tmp_event);
-      gdk_event_free (tmp_event);
+      g_object_unref (tmp_event);
     }
 
 }

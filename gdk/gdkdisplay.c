@@ -376,7 +376,7 @@ gdk_display_dispose (GObject *object)
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
-  g_list_free_full (display->queued_events, (GDestroyNotify) gdk_event_free);
+  g_list_free_full (display->queued_events, (GDestroyNotify) g_object_unref);
   display->queued_events = NULL;
   display->queued_tail = NULL;
 

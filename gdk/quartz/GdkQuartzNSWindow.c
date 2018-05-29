@@ -602,7 +602,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   _gdk_event_emit (event);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 
   return NSDragOperationNone;
 }
@@ -633,7 +633,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   _gdk_event_emit (event);
 
-  gdk_event_free (event);
+  g_object_unref (event);
   
   g_object_unref (current_context);
   current_context = NULL;
@@ -662,7 +662,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   _gdk_event_emit (event);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 
   return drag_action_to_drag_operation (current_context->action);
 }
@@ -690,7 +690,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   _gdk_event_emit (event);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 
   g_object_unref (current_context);
   current_context = NULL;
@@ -749,7 +749,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   _gdk_event_emit (event);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 
   g_object_unref (_gdk_quartz_drag_source_context);
   _gdk_quartz_drag_source_context = NULL;

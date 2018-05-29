@@ -1706,7 +1706,7 @@ gdk_surface_process_updates_recurse (GdkSurface *surface,
   event->expose.region = cairo_region_reference (expose_region);
 
   _gdk_event_emit (event);
-  gdk_event_free (event);
+  g_object_unref (event);
 }
 
 /* Process and remove any invalid area on the native surface by creating
@@ -4343,7 +4343,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
     {
       _gdk_event_queue_remove_link (display, event_link);
       g_list_free_1 (event_link);
-      gdk_event_free (event);
+      g_object_unref (event);
     }
 
   /* This does two things - first it sees if there are motions at the

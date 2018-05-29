@@ -119,7 +119,7 @@ day_selected_cb (GtkCalendar *calendar,
 
   gtk_widget_show (popover);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 }
 
 GtkWidget *

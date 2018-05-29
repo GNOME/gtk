@@ -343,7 +343,7 @@ dnd_event_emit (GdkEventType    type,
 
   GDK_NOTE (EVENTS, _gdk_win32_print_event (e));
   _gdk_event_emit (e);
-  gdk_event_free (e);
+  g_object_unref (e);
 }
 
 static GdkContentFormats *
@@ -833,12 +833,12 @@ gdk_dropfiles_filter (GdkWin32Display *display,
 
       GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
       _gdk_event_emit (event);
-      gdk_event_free (event);
+      g_object_unref (event);
 
       DragFinish (hdrop);
 
   gdk_display_put_event (display, event);
-  gdk_event_free (event);
+  g_object_unref (event);
 
   *ret_valp = 0;
 
@@ -1244,7 +1244,7 @@ _gdk_win32_local_send_enter (GdkDragContext *context,
 
   GDK_NOTE (EVENTS, _gdk_win32_print_event (tmp_event));
   _gdk_display_put_event (gdk_device_get_display (gdk_drag_context_get_device (context)), tmp_event);
-  gdk_event_free (tmp_event);
+  g_object_unref (tmp_event);
 }
 
 void

@@ -685,7 +685,7 @@ gdk_event_dispatch (GSource     *source,
     {
       _gdk_event_emit (event);
 
-      gdk_event_free (event);
+      g_object_unref (event);
     }
 
   return TRUE;

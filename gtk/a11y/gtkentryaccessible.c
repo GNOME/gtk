@@ -251,7 +251,7 @@ gtk_entry_icon_accessible_do_action (AtkAction *action,
   event->button.y = icon_area.y;
 
   g_signal_emit_by_name (widget, "icon-press", 0, icon->pos, event);
-  gdk_event_free (event);
+  g_object_unref (event);
   return TRUE;
 }
 

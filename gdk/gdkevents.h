@@ -377,8 +377,6 @@ GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_new                 (GdkEventType    type);
 GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_copy     		(const GdkEvent *event);
-GDK_AVAILABLE_IN_ALL
-void	  gdk_event_free     		(GdkEvent 	*event);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurface *gdk_event_get_surface       (const GdkEvent *event);

@@ -419,7 +419,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
             GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
         gdk_event_push_history (last_motion, pending_motions->data);
 
-      gdk_event_free (pending_motions->data);
+      g_object_unref (pending_motions->data);
       display->queued_events = g_list_delete_link (display->queued_events,
                                                    pending_motions);
       pending_motions = next;
@@ -692,20 +692,6 @@ gdk_event_copy (const GdkEvent *event)
   _gdk_display_event_data_copy (gdk_event_get_display (event), event, new_event);
 
   return new_event;
-}
-
-/**
- * gdk_event_free:
- * @event:  a #GdkEvent.
- *
- * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
- *
- * This is equivalent to g_object_unref().
- */
-void
-gdk_event_free (GdkEvent *event)
-{
-  g_object_unref (event);
 }
 
 void
