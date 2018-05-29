@@ -167,24 +167,18 @@ static GrabKey grab_keys[] = {
 static GdkSurfaceCache *gdk_surface_cache_ref   (GdkSurfaceCache *cache);
 static void            gdk_surface_cache_unref (GdkSurfaceCache *cache);
 
-static GdkFilterReturn xdnd_enter_filter    (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_leave_filter    (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_position_filter (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_status_filter   (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_finished_filter (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_drop_filter     (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
+static gboolean        xdnd_enter_filter    (GdkSurface   *surface,
+                                             const XEvent *xevent);
+static gboolean        xdnd_leave_filter    (GdkSurface   *surface,
+                                             const XEvent *xevent);
+static gboolean        xdnd_position_filter (GdkSurface   *surface,
+                                             const XEvent *xevent);
+static gboolean        xdnd_status_filter   (GdkSurface   *surface,
+                                             const XEvent *xevent);
+static gboolean        xdnd_finished_filter (GdkSurface   *surface,
+                                             const XEvent *xevent);
+static gboolean        xdnd_drop_filter     (GdkSurface   *surface,
+                                             const XEvent *xevent);
 
 static void   xdnd_manage_source_filter (GdkDragContext *context,
                                          GdkSurface      *surface,
@@ -200,7 +194,7 @@ static GSList *window_caches;
 
 static const struct {
   const char *atom_name;
-  GdkFilterFunc func;
+  gboolean (* func) (GdkSurface *surface, const XEvent *event);
 } xdnd_filters[] = {
   { "XdndEnter",                    xdnd_enter_filter },
   { "XdndLeave",                    xdnd_leave_filter },
@@ -1047,10 +1041,9 @@ xdnd_action_to_atom (GdkDisplay    *display,
 
 /* Source side */
 
-static GdkFilterReturn
-xdnd_status_filter (const XEvent *xevent,
-                    GdkEvent     *event,
-                    gpointer      data)
+static gboolean
+xdnd_status_filter (GdkSurface   *surface,
+                    const XEvent *xevent)
 {
   GdkDisplay *display;
   guint32 dest_surface = xevent->xclient.data.l[0];
@@ -1058,11 +1051,7 @@ xdnd_status_filter (const XEvent *xevent,
   Atom action = xevent->xclient.data.l[4];
   GdkDragContext *context;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = gdk_surface_get_display (event->any.surface);
+  display = gdk_surface_get_display (surface);
   context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -1091,24 +1080,19 @@ xdnd_status_filter (const XEvent *xevent,
         }
     }
 
-  return GDK_FILTER_REMOVE;
+  return TRUE;
 }
 
-static GdkFilterReturn
-xdnd_finished_filter (const XEvent *xevent,
-                      GdkEvent     *event,
-                      gpointer      data)
+static gboolean
+xdnd_finished_filter (GdkSurface   *surface,
+                      const XEvent *xevent)
 {
   GdkDisplay *display;
   guint32 dest_surface = xevent->xclient.data.l[0];
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = gdk_surface_get_display (event->any.surface);
+  display = gdk_surface_get_display (surface);
   context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -1128,7 +1112,7 @@ xdnd_finished_filter (const XEvent *xevent,
       g_object_unref (context);
     }
 
-  return GDK_FILTER_REMOVE;
+  return TRUE;
 }
 
 static void
@@ -1274,15 +1258,7 @@ xdnd_send_xevent (GdkX11DragContext *context_x11,
           if (gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name) ==
               event_send->xclient.message_type)
             {
-              GdkEvent *temp_event;
-
-              temp_event = gdk_event_new (GDK_NOTHING);
-              temp_event->any.surface = g_object_ref (surface);
-
-              if ((*xdnd_filters[i].func) (event_send, temp_event, NULL) == GDK_FILTER_TRANSLATE)
-                gdk_display_put_event (display, temp_event);
-
-              g_object_unref (temp_event);
+              (*xdnd_filters[i].func) (surface, event_send);
 
               return TRUE;
             }
@@ -1716,10 +1692,9 @@ xdnd_precache_atoms (GdkDisplay *display)
     }
 }
 
-static GdkFilterReturn
-xdnd_enter_filter (const XEvent *xevent,
-                   GdkEvent     *event,
-                   gpointer      cb_data)
+static gboolean
+xdnd_enter_filter (GdkSurface   *surface,
+                   const XEvent *xevent)
 {
   GdkDisplay *display;
   GdkX11Display *display_x11;
@@ -1738,15 +1713,11 @@ xdnd_enter_filter (const XEvent *xevent,
   gboolean get_types;
   gint version;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
   source_surface = xevent->xclient.data.l[0];
   get_types = ((xevent->xclient.data.l[1] & 1) != 0);
   version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
 
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
+  display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
   xdnd_precache_atoms (display);
@@ -1759,7 +1730,7 @@ xdnd_enter_filter (const XEvent *xevent,
     {
       /* Old source ignore */
       GDK_DISPLAY_NOTE (display, DND, g_message ("Ignored old XdndEnter message"));
-      return GDK_FILTER_REMOVE;
+      return TRUE;
     }
 
   if (display_x11->current_dest_drag != NULL)
@@ -1774,7 +1745,7 @@ xdnd_enter_filter (const XEvent *xevent,
   if (get_types)
     {
       gdk_x11_display_error_trap_push (display);
-      XGetWindowProperty (GDK_SURFACE_XDISPLAY (event->any.surface),
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
                           source_surface,
                           gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
                           0, 65536,
@@ -1786,7 +1757,7 @@ xdnd_enter_filter (const XEvent *xevent,
           if (data)
             XFree (data);
 
-          return GDK_FILTER_REMOVE;
+          return TRUE;
         }
 
       atoms = (Atom *)data;
@@ -1815,7 +1786,7 @@ xdnd_enter_filter (const XEvent *xevent,
   context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
                               "device", gdk_seat_get_pointer (seat),
                               "formats", content_formats,
-                              "surface", event->any.surface,
+                              "surface", surface,
                               NULL);
   context = (GdkDragContext *)context_x11;
 
@@ -1828,9 +1799,9 @@ xdnd_enter_filter (const XEvent *xevent,
   if (!context->source_surface)
     {
       g_object_unref (context);
-      return GDK_FILTER_REMOVE;
+      return TRUE;
     }
-  context->dest_surface = event->any.surface;
+  context->dest_surface = surface;
   g_object_ref (context->dest_surface);
   xdnd_manage_source_filter (context, context->source_surface, TRUE);
   xdnd_read_actions (context_x11);
@@ -1841,23 +1812,18 @@ xdnd_enter_filter (const XEvent *xevent,
 
   gdk_content_formats_unref (content_formats);
 
-  return GDK_FILTER_REMOVE;
+  return TRUE;
 }
 
-static GdkFilterReturn
-xdnd_leave_filter (const XEvent *xevent,
-                   GdkEvent     *event,
-                   gpointer      data)
+static gboolean
+xdnd_leave_filter (GdkSurface   *surface,
+                   const XEvent *xevent)
 {
   guint32 source_surface = xevent->xclient.data.l[0];
   GdkDisplay *display;
   GdkX11Display *display_x11;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
+  display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -1873,17 +1839,14 @@ xdnd_leave_filter (const XEvent *xevent,
       gdk_drop_emit_leave_event (GDK_DROP (display_x11->current_dest_drag), FALSE, GDK_CURRENT_TIME);
 
       g_clear_object (&display_x11->current_dest_drag);
-
-      return GDK_FILTER_REMOVE;
     }
-  else
-    return GDK_FILTER_REMOVE;
+
+  return TRUE;
 }
 
-static GdkFilterReturn
-xdnd_position_filter (const XEvent *xevent,
-                      GdkEvent     *event,
-                      gpointer      data)
+static gboolean
+xdnd_position_filter (GdkSurface   *surface,
+                      const XEvent *xevent)
 {
   GdkSurfaceImplX11 *impl;
   guint32 source_surface = xevent->xclient.data.l[0];
@@ -1897,11 +1860,7 @@ xdnd_position_filter (const XEvent *xevent,
   GdkX11DragContext *context_x11;
   GdkDragAction suggested_action;
 
-   if (!event->any.surface ||
-       gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-     return GDK_FILTER_CONTINUE;                        /* Not for us */
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
+  display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -1916,12 +1875,9 @@ xdnd_position_filter (const XEvent *xevent,
       (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_SURFACE_XID (context->source_surface) == source_surface))
     {
-      impl = GDK_SURFACE_IMPL_X11 (event->any.surface->impl);
+      impl = GDK_SURFACE_IMPL_X11 (gdk_drop_get_surface (GDK_DROP (context))->impl);
 
       context_x11 = GDK_X11_DRAG_CONTEXT (context);
-
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      g_object_ref (context);
 
       suggested_action = xdnd_action_from_atom (display, action);
       if (context_x11->xdnd_have_actions)
@@ -1937,17 +1893,14 @@ xdnd_position_filter (const XEvent *xevent,
       context_x11->last_y = y_root / impl->surface_scale;
 
       gdk_drop_emit_motion_event (GDK_DROP (context), FALSE, context_x11->last_x, context_x11->last_y, time);
-
-      return GDK_FILTER_REMOVE;
     }
 
-  return GDK_FILTER_REMOVE;
+  return TRUE;
 }
 
-static GdkFilterReturn
-xdnd_drop_filter (const XEvent *xevent,
-                  GdkEvent     *event,
-                  gpointer      data)
+static gboolean
+xdnd_drop_filter (GdkSurface   *surface,
+                  const XEvent *xevent)
 {
   guint32 source_surface = xevent->xclient.data.l[0];
   guint32 time = xevent->xclient.data.l[2];
@@ -1956,11 +1909,7 @@ xdnd_drop_filter (const XEvent *xevent,
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
+  display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -1980,11 +1929,9 @@ xdnd_drop_filter (const XEvent *xevent,
       gdk_x11_surface_set_user_time (gdk_drop_get_surface (GDK_DROP (context)), time);
 
       gdk_drop_emit_drop_event (GDK_DROP (context), FALSE, context_x11->last_x, context_x11->last_y, time);
-
-      return GDK_FILTER_REMOVE;
     }
 
-  return GDK_FILTER_REMOVE;
+  return TRUE;
 }
 
 GdkFilterReturn
@@ -2001,6 +1948,10 @@ _gdk_x11_dnd_filter (const XEvent *xevent,
   if (xevent->type != ClientMessage)
     return GDK_FILTER_CONTINUE;
 
+  if (!event->any.surface ||
+      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
+    return GDK_FILTER_CONTINUE; /* Not for us */
+
   display = GDK_SURFACE_DISPLAY (event->any.surface);
 
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
@@ -2008,7 +1959,10 @@ _gdk_x11_dnd_filter (const XEvent *xevent,
       if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name))
         continue;
 
-      return xdnd_filters[i].func (xevent, event, data);
+      if (xdnd_filters[i].func (event->any.surface, xevent))
+        return GDK_FILTER_REMOVE;
+      else
+        return GDK_FILTER_CONTINUE;
     }
 
   return GDK_FILTER_CONTINUE;
