@@ -870,13 +870,10 @@ _gdk_win32_print_event (const GdkEvent *event)
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      if (event->dnd.context != NULL)
-	g_print ("ctx:%p: %s %s src:%p dest:%p",
-		 event->dnd.context,
-		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG_CONTEXT (event->dnd.context)->protocol),
-		 event->dnd.context->is_source ? "SOURCE" : "DEST",
-		 event->dnd.context->source_surface == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->source_surface),
-		 event->dnd.context->dest_surface == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->dest_surface));
+      if (event->dnd.drop != NULL)
+	g_print ("ctx:%p: %s",
+		 event->dnd.drop,
+		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG_CONTEXT (event->dnd.drop)->protocol));
       break;
     case GDK_SCROLL:
       g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",

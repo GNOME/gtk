@@ -319,34 +319,6 @@ drop_effect_for_action (GdkDragAction action)
   return effect;
 }
 
-static void
-dnd_event_emit (GdkEventType    type,
-                GdkDragContext *context,
-                gint            pt_x,
-                gint            pt_y,
-                GdkSurface     *dnd_surface)
-{
-  GdkEvent *e;
-
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
-
-  e = gdk_event_new (type);
-
-  e->any.send_event = FALSE;
-  g_set_object (&e->dnd.context, context);
-  g_set_object (&e->any.surface, dnd_surface);
-  e->dnd.time = GDK_CURRENT_TIME;
-  e->dnd.x_root = pt_x;
-  e->dnd.y_root = pt_y;
-
-  gdk_event_set_device (e, gdk_drag_context_get_device (context));
-
-  GDK_NOTE (EVENTS, _gdk_win32_print_event (e));
-  _gdk_event_emit (e);
-  g_object_unref (e);
-}
-
 static GdkContentFormats *
 query_targets (LPDATAOBJECT  pDataObj,
                GArray       *format_target_map)
@@ -452,8 +424,8 @@ idroptarget_dragenter (LPDROPTARGET This,
   set_data_object (&ctx->data_object, pDataObj);
   pt_x = pt.x / context_win32->scale + _gdk_offset_x;
   pt_y = pt.y / context_win32->scale + _gdk_offset_y;
-  dnd_event_emit (GDK_DRAG_ENTER, context, pt_x, pt_y, context->dest_surface);
-  dnd_event_emit (GDK_DRAG_MOTION, context, pt_x, pt_y, context->dest_surface);
+  gdk_drop_emit_enter_event (GDK_DROP (context), TRUE, GDK_CURRENT_TIME);
+  gdk_drop_emit_motion_event (GDK_DROP (context), TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
   context_win32->last_key_state = grfKeyState;
   context_win32->last_x = pt_x;
   context_win32->last_y = pt_y;
@@ -495,7 +467,7 @@ idroptarget_dragover (LPDROPTARGET This,
       pt_y != context_win32->last_y ||
       grfKeyState != context_win32->last_key_state)
     {
-      dnd_event_emit (GDK_DRAG_MOTION, ctx->context, pt_x, pt_y, ctx->context->dest_surface);
+      gdk_drop_emit_motion_event (GDK_DROP (ctx->context), TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
       context_win32->last_key_state = grfKeyState;
       context_win32->last_x = pt_x;
       context_win32->last_y = pt_y;
@@ -515,7 +487,7 @@ idroptarget_dragleave (LPDROPTARGET This)
 
   GDK_NOTE (DND, g_print ("idroptarget_dragleave %p S_OK\n", This));
 
-  dnd_event_emit (GDK_DRAG_LEAVE, ctx->context, 0, 0, ctx->context->dest_surface);
+  gdk_drop_emit_leave_event (GDK_DROP (ctx->context), TRUE, GDK_CURRENT_TIME);
 
   g_clear_object (&ctx->context);
   set_data_object (&ctx->data_object, NULL);
@@ -550,7 +522,7 @@ idroptarget_drop (LPDROPTARGET This,
                                 gdk_drag_context_get_actions (ctx->context),
                                 get_suggested_action (context_win32, grfKeyState));
 
-  dnd_event_emit (GDK_DROP_START, ctx->context, pt_x, pt_y, ctx->context->dest_surface);
+  gdk_drop_emit_drop_event (GDK_DROP (ctx->context), TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
 
   /* Notify OLE of copy or move */
   *pdwEffect = drop_effect_for_action (ctx->context->action);
@@ -715,7 +687,6 @@ gdk_dropfiles_filter (GdkWin32Display *display,
   GdkSurface *window;
   GdkDragContext *context;
   GdkWin32DropContext *context_win32;
-  GdkEvent *event;
   GString *result;
   HANDLE hdrop;
   POINT pt;
@@ -747,17 +718,6 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       hdrop = (HANDLE) msg->wParam;
       DragQueryPoint (hdrop, &pt);
       ClientToScreen (msg->hwnd, &pt);
-
-      event = gdk_event_new (GDK_DROP_START);
-
-      event->any.send_event = FALSE;
-      g_set_object (&event->dnd.context, context);
-      g_set_object (&event->any.surface, window);
-      gdk_event_set_display (event, GDK_DISPLAY (display));
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      event->dnd.x_root = pt.x / context_win32->scale + _gdk_offset_x;
-      event->dnd.y_root = pt.y / context_win32->scale + _gdk_offset_y;
-      event->dnd.time = _gdk_win32_get_next_tick (msg->time);
 
       nfiles = DragQueryFile (hdrop, 0xFFFFFFFF, NULL, 0);
 
@@ -837,14 +797,13 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       _gdk_dropfiles_store (result->str);
       g_string_free (result, FALSE);
 
-      GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
-      _gdk_event_emit (event);
-      g_object_unref (event);
+      gdk_drop_emit_drop_event (GDK_DROP (context),
+                                FALSE, 
+                                pt.x / context_win32->scale + _gdk_offset_x,
+                                pt.y / context_win32->scale + _gdk_offset_y,
+                                _gdk_win32_get_next_tick (msg->time));
 
       DragFinish (hdrop);
-
-  gdk_display_put_event (GDK_DISPLAY (display), event);
-  g_object_unref (event);
 
   *ret_valp = 0;
 
@@ -882,17 +841,6 @@ gdk_win32_drop_context_status (GdkDrop       *drop,
           _gdk_win32_drag_context_send_local_status_event (src_context, action);
         }
     }
-}
-
-static void
-_gdk_display_put_event (GdkDisplay *display,
-                        GdkEvent   *event)
-{
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
-
-  gdk_event_set_display (event, display);
-  gdk_display_put_event (display, event);
 }
 
 static void
@@ -1218,7 +1166,6 @@ void
 _gdk_win32_local_send_enter (GdkDragContext *context,
                              guint32         time)
 {
-  GdkEvent *tmp_event;
   GdkDragContext *new_context;
 
   GDK_NOTE (DND, g_print ("local_send_enter: context=%p current_dest_drag=%p\n",
@@ -1242,18 +1189,9 @@ _gdk_win32_local_send_enter (GdkDragContext *context,
                           gdk_surface_get_events (new_context->source_surface) |
                           GDK_PROPERTY_CHANGE_MASK);
 
-  tmp_event = gdk_event_new (GDK_DRAG_ENTER);
-  g_set_object (&tmp_event->any.surface, context->dest_surface);
-  tmp_event->any.send_event = FALSE;
-  g_set_object (&tmp_event->dnd.context, new_context);
-  tmp_event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
-  gdk_event_set_device (tmp_event, gdk_drag_context_get_device (context));
-
   current_dest_drag = new_context;
 
-  GDK_NOTE (EVENTS, _gdk_win32_print_event (tmp_event));
-  _gdk_display_put_event (gdk_device_get_display (gdk_drag_context_get_device (context)), tmp_event);
-  g_object_unref (tmp_event);
+  gdk_drop_emit_enter_event (GDK_DROP (new_context), FALSE, GDK_CURRENT_TIME);
 }
 
 void
