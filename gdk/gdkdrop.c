@@ -594,7 +594,7 @@ gdk_drop_emit_enter_event (GdkDrop  *self,
 
   event = gdk_event_new (GDK_DRAG_ENTER);
   event->any.surface = g_object_ref (priv->surface);
-  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
   gdk_event_set_device (event, priv->device);
 
@@ -613,7 +613,7 @@ gdk_drop_emit_motion_event (GdkDrop  *self,
 
   event = gdk_event_new (GDK_DRAG_MOTION);
   event->any.surface = g_object_ref (priv->surface);
-  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
   event->dnd.x_root = x_root;
   event->dnd.y_root = y_root;
@@ -632,7 +632,7 @@ gdk_drop_emit_leave_event (GdkDrop  *self,
 
   event = gdk_event_new (GDK_DRAG_LEAVE);
   event->any.surface = g_object_ref (priv->surface);
-  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
   gdk_event_set_device (event, priv->device);
 
@@ -651,7 +651,7 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
 
   event = gdk_event_new (GDK_DROP_START);
   event->any.surface = g_object_ref (priv->surface);
-  event->dnd.context = (GdkDragContext *) g_object_ref (self);
+  event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
   event->dnd.x_root = x_root;
   event->dnd.y_root = y_root;
