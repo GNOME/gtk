@@ -643,7 +643,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      g_object_ref (event->dnd.context);
+      g_object_ref (event->dnd.drop);
       break;
 
     case GDK_EXPOSE:
@@ -714,8 +714,7 @@ gdk_event_finalize (GObject *object)
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      if (event->dnd.context != NULL)
-        g_object_unref (event->dnd.context);
+      g_clear_object (&event->dnd.drop);
       break;
 
     case GDK_BUTTON_PRESS:
@@ -2077,7 +2076,7 @@ gdk_event_get_drop (const GdkEvent *event)
       event->any.type == GDK_DRAG_MOTION ||
       event->any.type == GDK_DROP_START)
     {
-      return GDK_DROP (event->dnd.context);
+      return event->dnd.drop;
     }
 
   return NULL;
