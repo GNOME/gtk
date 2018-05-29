@@ -1376,7 +1376,7 @@ gtk_popover_event (GtkWidget *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
     {
       GtkWidget *toplevel, *focus;
       guint keyval;
