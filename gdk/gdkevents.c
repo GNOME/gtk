@@ -694,7 +694,7 @@ gdk_event_copy (const GdkEvent *event)
   return new_event;
 }
 
-void
+static void
 gdk_event_finalize (GObject *object)
 {
   GdkEvent *event = GDK_EVENT (object);
