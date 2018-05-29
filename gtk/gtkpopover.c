@@ -1381,8 +1381,6 @@ gtk_popover_event (GtkWidget *widget,
       GtkWidget *toplevel, *focus;
       guint keyval;
 
-      priv->button_pressed = TRUE;
-
       if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
         return GDK_EVENT_PROPAGATE;
 
@@ -1407,6 +1405,8 @@ gtk_popover_event (GtkWidget *widget,
 
       return GDK_EVENT_PROPAGATE;
     }
+  else if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    priv->button_pressed = TRUE;
   else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
     {
       GtkAllocation child_alloc;
