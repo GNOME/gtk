@@ -1835,16 +1835,13 @@ xdnd_enter_filter (const XEvent *xevent,
   xdnd_manage_source_filter (context, context->source_surface, TRUE);
   xdnd_read_actions (context_x11);
 
-  event->any.type = GDK_DRAG_ENTER;
-  event->dnd.context = context;
-  gdk_event_set_device (event, gdk_drag_context_get_device (context));
-  g_object_ref (context);
-
   display_x11->current_dest_drag = context;
+
+  gdk_drop_emit_enter_event (GDK_DROP (context), FALSE, GDK_CURRENT_TIME);
 
   gdk_content_formats_unref (content_formats);
 
-  return GDK_FILTER_TRANSLATE;
+  return GDK_FILTER_REMOVE;
 }
 
 static GdkFilterReturn
@@ -1873,14 +1870,11 @@ xdnd_leave_filter (const XEvent *xevent,
       (GDK_X11_DRAG_CONTEXT (display_x11->current_dest_drag)->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_SURFACE_XID (display_x11->current_dest_drag->source_surface) == source_surface))
     {
-      event->any.type = GDK_DRAG_LEAVE;
-      /* Pass ownership of context to the event */
-      event->dnd.context = display_x11->current_dest_drag;
-      gdk_event_set_device (event, gdk_drag_context_get_device (event->dnd.context));
+      gdk_drop_emit_leave_event (GDK_DROP (display_x11->current_dest_drag), FALSE, GDK_CURRENT_TIME);
 
-      display_x11->current_dest_drag = NULL;
+      g_clear_object (&display_x11->current_dest_drag);
 
-      return GDK_FILTER_TRANSLATE;
+      return GDK_FILTER_REMOVE;
     }
   else
     return GDK_FILTER_REMOVE;
@@ -1926,12 +1920,8 @@ xdnd_position_filter (const XEvent *xevent,
 
       context_x11 = GDK_X11_DRAG_CONTEXT (context);
 
-      event->any.type = GDK_DRAG_MOTION;
-      event->dnd.context = context;
       gdk_event_set_device (event, gdk_drag_context_get_device (context));
       g_object_ref (context);
-
-      event->dnd.time = time;
 
       suggested_action = xdnd_action_from_atom (display, action);
       if (context_x11->xdnd_have_actions)
@@ -1943,13 +1933,12 @@ xdnd_position_filter (const XEvent *xevent,
                                       suggested_action,
                                       suggested_action);
 
-      event->dnd.x_root = x_root / impl->surface_scale;
-      event->dnd.y_root = y_root / impl->surface_scale;
-
       context_x11->last_x = x_root / impl->surface_scale;
       context_x11->last_y = y_root / impl->surface_scale;
 
-      return GDK_FILTER_TRANSLATE;
+      gdk_drop_emit_motion_event (GDK_DROP (context), FALSE, context_x11->last_x, context_x11->last_y, time);
+
+      return GDK_FILTER_REMOVE;
     }
 
   return GDK_FILTER_REMOVE;
@@ -1987,19 +1976,12 @@ xdnd_drop_filter (const XEvent *xevent,
       (GDK_SURFACE_XID (context->source_surface) == source_surface))
     {
       context_x11 = GDK_X11_DRAG_CONTEXT (context);
-      event->any.type = GDK_DROP_START;
 
-      event->dnd.context = context;
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      g_object_ref (context);
+      gdk_x11_surface_set_user_time (gdk_drop_get_surface (GDK_DROP (context)), time);
 
-      event->dnd.time = time;
-      event->dnd.x_root = context_x11->last_x;
-      event->dnd.y_root = context_x11->last_y;
+      gdk_drop_emit_drop_event (GDK_DROP (context), FALSE, context_x11->last_x, context_x11->last_y, time);
 
-      gdk_x11_surface_set_user_time (event->any.surface, time);
-
-      return GDK_FILTER_TRANSLATE;
+      return GDK_FILTER_REMOVE;
     }
 
   return GDK_FILTER_REMOVE;
