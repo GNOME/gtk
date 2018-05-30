@@ -451,31 +451,6 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
   return context;
 }
 
-
-GdkDragContext *
-_gdk_wayland_drop_context_new (GdkDevice            *device,
-                               GdkContentFormats    *formats,
-                               GdkSurface           *surface,
-                               struct wl_data_offer *offer,
-                               uint32_t              serial)
-
-{
-  GdkWaylandDragContext *context_wayland;
-  GdkDragContext *context;
-
-  context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
-                                  "device", device,
-                                  "formats", formats,
-                                  "surface", surface,
-                                  NULL);
-  context = GDK_DRAG_CONTEXT (context_wayland);
-  context->is_source = FALSE;
-  context_wayland->offer = offer;
-  context_wayland->serial = serial;
-
-  return context;
-}
-
 void
 _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                              GdkSurface      *surface)

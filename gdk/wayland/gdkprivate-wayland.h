@@ -104,11 +104,16 @@ GdkDragContext *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
 void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);
-GdkDragContext * _gdk_wayland_drop_context_new (GdkDevice             *device,
-                                                GdkContentFormats     *formats,
-                                                GdkSurface            *surface,
-                                                struct wl_data_offer  *offer,
-                                                uint32_t               serial);
+GdkDrop *        gdk_wayland_drop_new                      (GdkDevice             *device,
+                                                            GdkContentFormats     *formats,
+                                                            GdkSurface            *surface,
+                                                            struct wl_data_offer  *offer,
+                                                            uint32_t               serial);
+void             gdk_wayland_drop_set_source_actions       (GdkDrop               *drop,
+                                                            uint32_t               source_actions);
+void             gdk_wayland_drop_set_action               (GdkDrop               *drop,
+                                                            uint32_t               action);
+
 void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *surface);
 
