@@ -77,10 +77,7 @@ gdk_wayland_drag_context_finalize (GObject *object)
 
   contexts = g_list_remove (contexts, context);
 
-  if (context->is_source)
-    {
-      gdk_drag_context_set_cursor (context, NULL);
-    }
+  gdk_drag_context_set_cursor (context, NULL);
 
   g_clear_pointer (&wayland_context->data_source, (GDestroyNotify) wl_data_source_destroy);
   g_clear_pointer (&wayland_context->offer, (GDestroyNotify) wl_data_offer_destroy);
@@ -240,19 +237,157 @@ create_dnd_surface (GdkDisplay *display)
   return surface;
 }
 
+static inline GdkDragAction
+_wl_to_gdk_actions (uint32_t dnd_actions)
+{
+  GdkDragAction actions = 0;
+
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY)
+    actions |= GDK_ACTION_COPY;
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE)
+    actions |= GDK_ACTION_MOVE;
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
+    actions |= GDK_ACTION_ASK;
+
+  return actions;
+}
+
+static void
+data_source_target (void                  *data,
+                    struct wl_data_source *source,
+                    const char            *mime_type)
+{
+  GDK_NOTE (EVENTS,
+            g_message ("data source target, source = %p, mime_type = %s",
+                       source, mime_type));
+}
+
+static void
+gdk_wayland_drag_context_write_done (GObject      *context,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  GError *error = NULL;
+
+  if (!gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (context), result, &error))
+    {
+      GDK_DISPLAY_NOTE (gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context)), DND, g_message ("%p: failed to write stream: %s", context, error->message));
+      g_error_free (error);
+    }
+}
+
+static void
+data_source_send (void                  *data,
+                  struct wl_data_source *source,
+                  const char            *mime_type,
+                  int32_t                fd)
+{
+  GdkDragContext *context = data;
+  GOutputStream *stream;
+
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_message ("%p: data source send request for %s on fd %d\n",
+                    source, mime_type, fd));
+
+  //mime_type = gdk_intern_mime_type (mime_type);
+  mime_type = g_intern_string (mime_type);
+  stream = g_unix_output_stream_new (fd, TRUE);
+
+  gdk_drag_context_write_async (context,
+                                mime_type,
+                                stream,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                gdk_wayland_drag_context_write_done,
+                                context);
+  g_object_unref (stream);
+}
+
+static void
+data_source_cancelled (void                  *data,
+                       struct wl_data_source *source)
+{
+  GdkDragContext *context = data;
+
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), EVENTS,
+            g_message ("data source cancelled, source = %p", source));
+
+  gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
+}
+
+static void
+data_source_dnd_drop_performed (void                  *data,
+                                struct wl_data_source *source)
+{
+  GdkDragContext *context = data;
+
+  g_signal_emit_by_name (context, "drop-performed", GDK_CURRENT_TIME);
+}
+
+static void
+data_source_dnd_finished (void                  *data,
+                          struct wl_data_source *source)
+{
+  GdkDragContext *context = data;
+
+  g_signal_emit_by_name (context, "dnd-finished");
+}
+
+static void
+data_source_action (void                  *data,
+                    struct wl_data_source *source,
+                    uint32_t               action)
+{
+  GdkDragContext *context = data;
+
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), EVENTS,
+            g_message ("data source action, source = %p action=%x",
+                       source, action));
+
+  context->action = _wl_to_gdk_actions (action);
+  g_signal_emit_by_name (context, "action-changed", context->action);
+}
+
+static const struct wl_data_source_listener data_source_listener = {
+  data_source_target,
+  data_source_send,
+  data_source_cancelled,
+  data_source_dnd_drop_performed,
+  data_source_dnd_finished,
+  data_source_action,
+};
+
+static void
+gdk_wayland_drag_context_create_data_source (GdkDragContext *context)
+{
+  GdkWaylandDragContext *context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  const char *const *mimetypes;
+  gsize i, n_mimetypes;
+
+  context_wayland->data_source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
+  wl_data_source_add_listener (context_wayland->data_source,
+                               &data_source_listener,
+                               context);
+
+  mimetypes = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mimetypes);
+  for (i = 0; i < n_mimetypes; i++)
+    {
+      wl_data_source_offer (context_wayland->data_source, mimetypes[i]);
+    }
+}
+
 GdkDragContext *
 _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
-				GdkDevice          *device,
-	                        GdkContentProvider *content,
-                                GdkDragAction       actions,
-                                gint                dx,
-                                gint                dy)
+                                 GdkDevice          *device,
+                                 GdkContentProvider *content,
+                                 GdkDragAction       actions,
+                                 gint                dx,
+                                 gint                dy)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
   GdkWaylandDisplay *display_wayland;
-  const char *const *mimetypes;
-  gsize i, n_mimetypes;
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
 
@@ -266,13 +401,8 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 
   context_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
   context_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (context_wayland->dnd_surface);
-  context_wayland->data_source = gdk_wayland_selection_get_data_source (surface);
-
-  mimetypes = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mimetypes);
-  for (i = 0; i < n_mimetypes; i++)
-    {
-      wl_data_source_offer (context_wayland->data_source, mimetypes[i]);
-    }
+  
+  gdk_wayland_drag_context_create_data_source (context);
 
   if (display_wayland->data_device_manager_version >=
       WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
@@ -300,21 +430,5 @@ _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
     g_object_unref (context->source_surface);
 
   context->source_surface = surface ? g_object_ref (surface) : NULL;
-}
-
-GdkDragContext *
-gdk_wayland_drag_context_lookup_by_data_source (struct wl_data_source *source)
-{
-  GList *l;
-
-  for (l = contexts; l; l = l->next)
-    {
-      GdkWaylandDragContext *wayland_context = l->data;
-
-      if (wayland_context->data_source == source)
-        return l->data;
-    }
-
-  return NULL;
 }
 

@@ -117,8 +117,6 @@ void             gdk_wayland_drop_set_action               (GdkDrop             
 void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *surface);
 
-GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
-
 void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
                                               GdkSurface     *surface,
                                               GdkSurface     *real_parent,
@@ -184,14 +182,6 @@ cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *di
                                                            guint              scale);
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
-
-GdkWaylandSelection * gdk_wayland_display_get_selection (GdkDisplay *display);
-GdkWaylandSelection * gdk_wayland_selection_new (void);
-void gdk_wayland_selection_free (GdkWaylandSelection *selection);
-
-
-struct wl_data_source * gdk_wayland_selection_get_data_source (GdkSurface *owner);
-void gdk_wayland_selection_unset_data_source (GdkDisplay *display);
 
 EGLSurface gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
                                                EGLConfig config);
