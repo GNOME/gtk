@@ -246,7 +246,7 @@ struct _GdkWaylandSeat
   GdkClipboard *clipboard;
   GdkClipboard *primary_clipboard;
   struct wl_data_device *data_device;
-  GdkDragContext *drop_context;
+  GdkDrop *drop;
 
   /* Source/dest for non-local dnd */
   GdkSurface *foreign_dnd_surface;
@@ -1140,8 +1140,6 @@ data_offer_source_actions (void                 *data,
                            uint32_t              source_actions)
 {
   GdkWaylandSeat *seat = data;
-  GdkDragContext *drop_context;
-  GdkDevice *device;
 
   if (offer == seat->pending_offer)
     {
@@ -1149,16 +1147,12 @@ data_offer_source_actions (void                 *data,
       return;
     }
   
-  device = gdk_seat_get_pointer (GDK_SEAT (seat));
-  drop_context = gdk_wayland_device_get_drop_context (device);
-  if (drop_context == NULL)
+  if (seat->drop == NULL)
     return;
 
-  gdk_drag_context_set_actions (drop_context,
-                                gdk_wayland_actions_to_gdk_actions (source_actions),
-                                gdk_drag_context_get_suggested_action (drop_context));
+  gdk_wayland_drop_set_source_actions (seat->drop, source_actions);
 
-  gdk_drop_emit_motion_event (GDK_DROP (seat->drop_context),
+  gdk_drop_emit_motion_event (seat->drop,
                               FALSE,
                               seat->pointer_info.surface_x,
                               seat->pointer_info.surface_y,
@@ -1171,8 +1165,6 @@ data_offer_action (void                 *data,
                    uint32_t              action)
 {
   GdkWaylandSeat *seat = data;
-  GdkDragContext *drop_context;
-  GdkDevice *device;
 
   if (offer == seat->pending_offer)
     {
@@ -1180,16 +1172,12 @@ data_offer_action (void                 *data,
       return;
     }
   
-  device = gdk_seat_get_pointer (GDK_SEAT (seat));
-  drop_context = gdk_wayland_device_get_drop_context (device);
-  if (drop_context == NULL)
+  if (seat->drop == NULL)
     return;
 
-  gdk_drag_context_set_actions (drop_context,
-                                gdk_drag_context_get_actions (drop_context),
-                                gdk_wayland_actions_to_gdk_actions (action));
+  gdk_wayland_drop_set_action (seat->drop, action);
 
-  gdk_drop_emit_motion_event (GDK_DROP (seat->drop_context),
+  gdk_drop_emit_motion_event (seat->drop,
                               FALSE,
                               seat->pointer_info.surface_x,
                               seat->pointer_info.surface_y,
@@ -1235,7 +1223,7 @@ data_device_enter (void                  *data,
                    struct wl_data_offer  *offer)
 {
   GdkWaylandSeat *seat = data;
-  GdkSurface *dest_surface, *dnd_owner;
+  GdkSurface *dest_surface;
   GdkContentFormats *formats;
   GdkDevice *device;
 
@@ -1275,15 +1263,11 @@ data_device_enter (void                  *data,
   seat->pending_builder = NULL;
   seat->pending_offer = NULL;
 
-  seat->drop_context = _gdk_wayland_drop_context_new (device, formats, dest_surface, offer, serial);
-
-  dnd_owner = seat->foreign_dnd_surface;
-
-  _gdk_wayland_drag_context_set_source_surface (seat->drop_context, dnd_owner);
+  seat->drop = gdk_wayland_drop_new (device, formats, dest_surface, offer, serial);
 
   gdk_wayland_seat_discard_pending_offer (seat);
 
-  gdk_drop_emit_enter_event (GDK_DROP (seat->drop_context),
+  gdk_drop_emit_enter_event (seat->drop,
                              FALSE,
                              GDK_CURRENT_TIME);
 }
@@ -1297,17 +1281,17 @@ data_device_leave (void                  *data,
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device leave, data device %p", data_device));
 
-  if (seat->drop_context == NULL)
+  if (seat->drop == NULL)
     return;
 
   g_object_unref (seat->pointer_info.focus);
   seat->pointer_info.focus = NULL;
 
-  gdk_drop_emit_leave_event (GDK_DROP (seat->drop_context),
+  gdk_drop_emit_leave_event (seat->drop,
                              FALSE,
                              GDK_CURRENT_TIME);
 
-  g_clear_object (&seat->drop_context);
+  g_clear_object (&seat->drop);
 }
 
 static void
@@ -1323,14 +1307,14 @@ data_device_motion (void                  *data,
             g_message ("data device motion, data_device = %p, time = %d, x = %f, y = %f",
                        data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y)));
 
-  if (seat->drop_context == NULL)
+  if (seat->drop == NULL)
     return;
 
   /* Update pointer state, so device state queries work during DnD */
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
-  gdk_drop_emit_motion_event (GDK_DROP (seat->drop_context),
+  gdk_drop_emit_motion_event (seat->drop,
                               FALSE,
                               seat->pointer_info.surface_x,
                               seat->pointer_info.surface_y,
@@ -1346,7 +1330,7 @@ data_device_drop (void                  *data,
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device drop, data device %p", data_device));
 
-  gdk_drop_emit_drop_event (GDK_DROP (seat->drop_context),
+  gdk_drop_emit_drop_event (seat->drop,
                             FALSE,
                             seat->pointer_info.surface_x,
                             seat->pointer_info.surface_y,
@@ -4613,7 +4597,7 @@ gdk_wayland_seat_finalize (GObject *object)
   gdk_wayland_pointer_data_finalize (&seat->pointer_info);
   /* FIXME: destroy data_device */
   g_clear_object (&seat->keyboard_settings);
-  g_clear_object (&seat->drop_context);
+  g_clear_object (&seat->drop);
   g_clear_object (&seat->clipboard);
   g_clear_object (&seat->primary_clipboard);
   g_hash_table_destroy (seat->touches);
@@ -5194,14 +5178,6 @@ gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
   g_return_val_if_fail (GDK_IS_WAYLAND_SEAT (seat), NULL);
 
   return GDK_WAYLAND_SEAT (seat)->wl_seat;
-}
-
-GdkDragContext *
-gdk_wayland_device_get_drop_context (GdkDevice *device)
-{
-  GdkSeat *seat = gdk_device_get_seat (device);
-
-  return GDK_WAYLAND_SEAT (seat)->drop_context;
 }
 
 /**
