@@ -425,8 +425,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 
   context_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
   context_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (context_wayland->dnd_surface);
-  context_wayland->data_source =
-  gdk_wayland_selection_get_data_source (surface);
+  context_wayland->data_source = gdk_wayland_selection_get_data_source (surface);
 
   mimetypes = gdk_content_formats_get_mime_types (gdk_drag_context_get_formats (context), &n_mimetypes);
   for (i = 0; i < n_mimetypes; i++)
@@ -503,22 +502,3 @@ gdk_wayland_drag_context_lookup_by_data_source (struct wl_data_source *source)
   return NULL;
 }
 
-GdkDragContext *
-gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *surface)
-{
-  GList *l;
-
-  for (l = contexts; l; l = l->next)
-    {
-      if (surface == gdk_drag_context_get_source_surface (l->data))
-        return l->data;
-    }
-
-  return NULL;
-}
-
-struct wl_data_source *
-gdk_wayland_drag_context_get_data_source (GdkDragContext *context)
-{
-  return GDK_WAYLAND_DRAG_CONTEXT (context)->data_source;
-}
