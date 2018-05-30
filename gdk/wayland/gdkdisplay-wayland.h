@@ -139,8 +139,6 @@ struct _GdkWaylandDisplay
 
   struct xkb_context *xkb_context;
 
-  GdkWaylandSelection *selection;
-
   GPtrArray *monitors;
 
   gint64 last_bell_time_ms;
