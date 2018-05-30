@@ -113,8 +113,6 @@ void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *surface);
 
 GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
-GdkDragContext * gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *surface);
-struct wl_data_source * gdk_wayland_drag_context_get_data_source  (GdkDragContext *context);
 
 void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
                                               GdkSurface     *surface,
