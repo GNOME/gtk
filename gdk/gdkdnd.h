@@ -40,35 +40,6 @@ G_BEGIN_DECLS
 #define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
 
 /**
- * GdkDragAction:
- * @GDK_ACTION_COPY: Copy the data.
- * @GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
- *  it from the source using the DELETE target of the X selection protocol.
- * @GDK_ACTION_LINK: Add a link to the data. Note that this is only
- *  useful if source and destination agree on what it means.
- * @GDK_ACTION_ASK: Ask the user what to do with the data.
- *
- * Used in #GdkDragContext to indicate what the destination
- * should do with the dropped data.
- */
-typedef enum
-{
-  GDK_ACTION_COPY    = 1 << 0,
-  GDK_ACTION_MOVE    = 1 << 1,
-  GDK_ACTION_LINK    = 1 << 2,
-  GDK_ACTION_ASK     = 1 << 3
-} GdkDragAction;
-
-/**
- * GDK_ACTION_ALL:
- *
- * Defines all possible DND actions. This can be used in gdk_drop_status()
- * messages when any drop can be accepted or a more specific drop method
- * is not yet known.
- */
-#define GDK_ACTION_ALL (GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK)
-
-/**
  * GdkDragCancelReason:
  * @GDK_DRAG_CANCEL_NO_TARGET: There is no suitable drop target.
  * @GDK_DRAG_CANCEL_USER_CANCELLED: Drag cancelled by the user
