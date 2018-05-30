@@ -993,7 +993,7 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  *                         GdkEventSequence *sequence,
  *                         gpointer          user_data)
  * {
- *   gtk_gesture_set_sequence_state (first_gesture, sequence, GTK_EVENT_SEQUENCE_ACCEPTED);
+ *   gtk_gesture_set_sequence_state (first_gesture, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
  *   gtk_gesture_set_sequence_state (second_gesture, sequence, GTK_EVENT_SEQUENCE_DENIED);
  * }
  *
@@ -1002,7 +1002,7 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  *                          GdkEventSequence *sequence,
  *                          gpointer          user_data)
  * {
- *   if (gtk_gesture_get_sequence_state (first_gesture, sequence) == GTK_EVENT_SEQUENCE_ACCEPTED)
+ *   if (gtk_gesture_get_sequence_state (first_gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
  *     gtk_gesture_set_sequence_state (second_gesture, sequence, GTK_EVENT_SEQUENCE_DENIED);
  * }
  * ]|
@@ -1159,7 +1159,7 @@ gtk_gesture_get_last_updated_sequence (GtkGesture *gesture)
 /**
  * gtk_gesture_get_last_event:
  * @gesture: a #GtkGesture
- * @sequence: a #GdkEventSequence
+ * @sequence: (nullable): a #GdkEventSequence
  *
  * Returns the last event that was processed for @sequence.
  *
