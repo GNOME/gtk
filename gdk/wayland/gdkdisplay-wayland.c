@@ -666,8 +666,6 @@ _gdk_wayland_display_open (const gchar *display_name)
       return NULL;
     }
 
-  display_wayland->selection = gdk_wayland_selection_new ();
-
   gdk_display_emit_opened (display);
 
   return display;
@@ -691,12 +689,6 @@ gdk_wayland_display_dispose (GObject *object)
       g_source_destroy (display_wayland->event_source);
       g_source_unref (display_wayland->event_source);
       display_wayland->event_source = NULL;
-    }
-
-  if (display_wayland->selection)
-    {
-      gdk_wayland_selection_free (display_wayland->selection);
-      display_wayland->selection = NULL;
     }
 
   g_list_free_full (display_wayland->async_roundtrips, (GDestroyNotify) wl_callback_destroy);
@@ -1355,15 +1347,6 @@ _gdk_wayland_is_shm_surface (cairo_surface_t *surface)
 {
   return cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key) != NULL;
 }
-
-GdkWaylandSelection *
-gdk_wayland_display_get_selection (GdkDisplay *display)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  return display_wayland->selection;
-}
-
 
 typedef enum
 {
