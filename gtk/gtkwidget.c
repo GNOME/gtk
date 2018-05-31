@@ -292,7 +292,7 @@
  *
  * An example of a UI definition fragment specifying an accessible:
  * |[
- * <object class="GtkButton" id="label1"/>
+ * <object class="GtkLabel" id="label1"/>
  *   <property name="label">I am a Label for a Button</property>
  * </object>
  * <object class="GtkButton" id="button1">
