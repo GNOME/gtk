@@ -246,6 +246,7 @@ struct _GdkWaylandSeat
   GdkClipboard *clipboard;
   GdkClipboard *primary_clipboard;
   struct wl_data_device *data_device;
+  GdkDragContext *drag;
   GdkDrop *drop;
 
   /* Source/dest for non-local dnd */
@@ -1263,7 +1264,7 @@ data_device_enter (void                  *data,
   seat->pending_builder = NULL;
   seat->pending_offer = NULL;
 
-  seat->drop = gdk_wayland_drop_new (device, formats, dest_surface, offer, serial);
+  seat->drop = gdk_wayland_drop_new (device, seat->drag, formats, dest_surface, offer, serial);
 
   gdk_wayland_seat_discard_pending_offer (seat);
 
@@ -4597,6 +4598,7 @@ gdk_wayland_seat_finalize (GObject *object)
   gdk_wayland_pointer_data_finalize (&seat->pointer_info);
   /* FIXME: destroy data_device */
   g_clear_object (&seat->keyboard_settings);
+  g_clear_object (&seat->drag);
   g_clear_object (&seat->drop);
   g_clear_object (&seat->clipboard);
   g_clear_object (&seat->primary_clipboard);
@@ -5135,6 +5137,15 @@ gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
   gdk_wayland_device_set_surface_cursor (pointer,
                                         gdk_wayland_device_get_focus (pointer),
                                         NULL);
+}
+
+void
+gdk_wayland_seat_set_drag (GdkSeat        *seat,
+                           GdkDragContext *context)
+{
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+
+  g_set_object (&wayland_seat->drag, context);
 }
 
 struct wl_data_device *

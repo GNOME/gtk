@@ -193,6 +193,9 @@ gdk_wayland_drag_context_drop_done (GdkDragContext *context,
                                     gboolean        success)
 {
   GdkWaylandDragContext *context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+  GdkDevice *device = gdk_drag_context_get_device (context);
+
+  gdk_wayland_seat_set_drag (gdk_device_get_seat (device), context);
 
   if (success)
     {
@@ -387,9 +390,11 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
+  GdkSeat *seat;
   GdkWaylandDisplay *display_wayland;
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
+  seat = gdk_device_get_seat (device);
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
                                   "device", device,
@@ -411,13 +416,15 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
                                   gdk_to_wl_actions (actions));
     }
 
+  gdk_wayland_seat_set_drag (seat, context);
+
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
                              context_wayland->data_source,
                              gdk_wayland_surface_get_wl_surface (surface),
 			     context_wayland->dnd_wl_surface,
                              _gdk_wayland_display_get_serial (display_wayland));
 
-  gdk_seat_ungrab (gdk_device_get_seat (device));
+  gdk_seat_ungrab (seat);
 
   return context;
 }
