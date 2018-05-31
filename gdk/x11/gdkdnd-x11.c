@@ -436,7 +436,6 @@ gdk_x11_drag_context_finalize (GObject *object)
 
 static GdkDragContext *
 gdk_drag_context_find (GdkDisplay *display,
-                       gboolean    is_source,
                        Window      source_xid,
                        Window      dest_xid)
 {
@@ -460,7 +459,7 @@ gdk_drag_context_find (GdkDisplay *display,
                                   : GDK_SURFACE_XID (context->dest_surface))
                             : None;
 
-      if ((!context->is_source == !is_source) &&
+      if ((context->is_source) &&
           ((source_xid == None) || (context->source_surface &&
             (GDK_SURFACE_XID (context->source_surface) == source_xid))) &&
           ((dest_xid == None) || (context_dest_xid == dest_xid)))
@@ -1052,7 +1051,7 @@ xdnd_status_filter (GdkSurface   *surface,
   GdkDragContext *context;
 
   display = gdk_surface_get_display (surface);
-  context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_surface);
+  context = gdk_drag_context_find (display, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndStatus: dest_surface: %#x  action: %ld",
@@ -1093,7 +1092,7 @@ xdnd_finished_filter (GdkSurface   *surface,
   GdkX11DragContext *context_x11;
 
   display = gdk_surface_get_display (surface);
-  context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_surface);
+  context = gdk_drag_context_find (display, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndFinished: dest_surface: %#x", dest_surface));
@@ -1564,7 +1563,7 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
        */
       GdkDragContext *source_context;
 
-      source_context = gdk_drag_context_find (display, TRUE,
+      source_context = gdk_drag_context_find (display,
                                               GDK_SURFACE_XID (context->source_surface),
                                               GDK_SURFACE_XID (context->dest_surface));
 
@@ -2199,11 +2198,10 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
               GdkDisplay *display = GDK_SURFACE_DISPLAY (dest_surface);
               GdkDragContext *dest_context;
 
-              dest_context = gdk_drag_context_find (display, FALSE,
-                                                    GDK_SURFACE_XID (context->source_surface),
-                                                    GDK_SURFACE_XID (dest_surface));
+              dest_context = GDK_X11_DISPLAY (display)->current_dest_drag;
 
-              if (dest_context)
+              if (dest_context &&
+                  dest_context->dest_surface == dest_surface)
                 {
                   gdk_drag_context_set_actions (dest_context, possible_actions, suggested_action);
                   GDK_X11_DRAG_CONTEXT (dest_context)->xdnd_have_actions = TRUE;
