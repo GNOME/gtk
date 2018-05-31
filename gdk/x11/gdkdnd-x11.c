@@ -1699,6 +1699,7 @@ xdnd_enter_filter (GdkSurface   *surface,
   GdkX11Display *display_x11;
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
+  GdkDragContext *drag;
   GdkSeat *seat;
   gint i;
   Atom type;
@@ -1782,8 +1783,11 @@ xdnd_enter_filter (GdkSurface   *surface,
     print_target_list (content_formats);
 #endif /* G_ENABLE_DEBUG */
 
+  drag = gdk_drag_context_find (display, source_surface, GDK_SURFACE_XID (surface));
+
   context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
                               "device", gdk_seat_get_pointer (seat),
+                              "drag", drag,
                               "formats", content_formats,
                               "surface", surface,
                               NULL);
