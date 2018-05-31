@@ -30,6 +30,7 @@
 #include "gdkeventsprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
+#include "gdkpipeiostreamprivate.h"
 #include "gdksurface.h"
 
 typedef struct _GdkDropPrivate GdkDropPrivate;
@@ -71,6 +72,20 @@ gdk_drop_default_status (GdkDrop       *self,
 }
 
 static void
+gdk_drop_read_local_write_done (GObject      *drag,
+                                GAsyncResult *result,
+                                gpointer      stream)
+{
+  /* we don't care about the error, we just want to clean up */
+  gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (drag), result, NULL);
+
+  /* XXX: Do we need to close_async() here? */
+  g_output_stream_close (stream, NULL, NULL);
+
+  g_object_unref (stream);
+}
+
+static void
 gdk_drop_read_local_async (GdkDrop             *self,
                            GdkContentFormats   *formats,
                            int                  io_priority,
@@ -78,14 +93,53 @@ gdk_drop_read_local_async (GdkDrop             *self,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+  GdkContentFormats *content_formats;
+  const char *mime_type;
   GTask *task;
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_drop_read_local_async);
 
-  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                                 _("Reading not implemented."));
+  if (priv->drag == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                                     _("Drag'n'drop from other applications is not supported."));
+      g_object_unref (task);
+      return;
+    }
+
+  content_formats = gdk_content_provider_ref_formats (priv->drag->content);
+  content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
+  mime_type = gdk_content_formats_match_mime_type (content_formats, formats);
+
+  if (mime_type != NULL)
+    {
+      GOutputStream *output_stream;
+      GIOStream *stream;
+
+      stream = gdk_pipe_io_stream_new ();
+      output_stream = g_io_stream_get_output_stream (stream);
+      gdk_drag_context_write_async (priv->drag,
+                                    mime_type,
+                                    output_stream,
+                                    io_priority,
+                                    cancellable,
+                                    gdk_drop_read_local_write_done,
+                                    g_object_ref (output_stream));
+      g_task_set_task_data (task, (gpointer) mime_type, NULL);
+      g_task_return_pointer (task, g_object_ref (g_io_stream_get_input_stream (stream)), g_object_unref);
+
+      g_object_unref (stream);
+    }
+  else
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                                     _("No compatible formats to transfer contents."));
+    }
+
+  gdk_content_formats_unref (content_formats);
   g_object_unref (task);
 }
 
@@ -498,6 +552,36 @@ gdk_drop_finish (GdkDrop       *self,
   GDK_DROP_GET_CLASS (self)->finish (self, action);
 }
 
+static void
+gdk_drop_read_internal (GdkDrop             *self,
+                        GdkContentFormats   *formats,
+                        int                  io_priority,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  if (priv->drag)
+    {
+      gdk_drop_read_local_async (self,
+                                 formats,
+                                 io_priority,
+                                 cancellable,
+                                 callback,
+                                 user_data);
+    }
+  else
+    {
+      GDK_DROP_GET_CLASS (self)->read_async (self,
+                                             formats,
+                                             io_priority,
+                                             cancellable,
+                                             callback,
+                                             user_data);
+    }
+}
+
 /**
  * gdk_drop_read_async:
  * @self: a #GdkDrop
@@ -530,12 +614,7 @@ gdk_drop_read_async (GdkDrop             *self,
 
   formats = gdk_content_formats_new (mime_types, g_strv_length ((char **) mime_types));
 
-  GDK_DROP_GET_CLASS (self)->read_async (self,
-                                         formats,
-                                         io_priority,
-                                         cancellable,
-                                         callback,
-                                         user_data);
+  gdk_drop_read_internal (self, formats, io_priority, cancellable, callback, user_data);
 
   gdk_content_formats_unref (formats);
 }
