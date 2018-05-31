@@ -208,6 +208,7 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
     }
   
   g_object_unref (data->widget);
+  g_object_unref (data->context);
   g_slice_free (GtkDragGetData, data);
 }
 
@@ -292,7 +293,7 @@ gtk_drag_get_data (GtkWidget      *widget,
 
   data = g_slice_new0 (GtkDragGetData);
   data->widget = g_object_ref (widget);
-  data->context = context;
+  data->context = g_object_ref (context);
   data->mime_type = target;
   data->time = time_;
 
