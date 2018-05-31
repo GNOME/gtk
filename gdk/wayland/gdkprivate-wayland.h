@@ -105,6 +105,7 @@ void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);
 GdkDrop *        gdk_wayland_drop_new                      (GdkDevice             *device,
+                                                            GdkDragContext        *drag,
                                                             GdkContentFormats     *formats,
                                                             GdkSurface            *surface,
                                                             struct wl_data_offer  *offer,
@@ -192,6 +193,8 @@ struct gtk_surface1 * gdk_wayland_surface_get_gtk_surface (GdkSurface *surface);
 
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
+void gdk_wayland_seat_set_drag (GdkSeat        *seat,
+                                GdkDragContext *drag);
 
 struct wl_output *gdk_wayland_surface_get_wl_output (GdkSurface *surface);
 
