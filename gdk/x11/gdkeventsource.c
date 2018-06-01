@@ -36,8 +36,8 @@ static void     gdk_event_source_finalize (GSource     *source);
 
 static GQuark quark_needs_enter = 0;
 
-#define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+#define APPEARS_FOCUSED(toplevel)                           \
+  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 struct _GdkEventSource
 {
@@ -111,10 +111,10 @@ handle_focus_change (GdkEventCrossing *event)
   if (!event->focus || toplevel->has_focus_window)
     return;
 
-  had_focus = HAS_FOCUS (toplevel);
+  had_focus = APPEARS_FOCUSED (toplevel);
   toplevel->has_pointer_focus = focus_in;
 
-  if (HAS_FOCUS (toplevel) != had_focus)
+  if (APPEARS_FOCUSED (toplevel) != had_focus)
     {
       GdkEvent *focus_event;
 
