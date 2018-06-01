@@ -30,7 +30,7 @@
 
 
 #define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 static void    gdk_x11_device_manager_core_finalize    (GObject *object);
 static void    gdk_x11_device_manager_core_constructed (GObject *object);

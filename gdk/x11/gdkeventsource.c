@@ -33,7 +33,7 @@ static gboolean gdk_event_source_dispatch (GSource     *source,
 static void     gdk_event_source_finalize (GSource     *source);
 
 #define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 struct _GdkEventSource
 {
