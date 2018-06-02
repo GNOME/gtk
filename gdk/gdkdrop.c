@@ -21,6 +21,7 @@
 
 #include "gdkdndprivate.h"
 
+#include "gdkcontentdeserializer.h"
 #include "gdkcontentformats.h"
 #include "gdkcontentprovider.h"
 #include "gdkcontentserializer.h"
@@ -647,6 +648,247 @@ gdk_drop_read_finish (GdkDrop       *self,
     {
       return GDK_DROP_GET_CLASS (self)->read_finish (self, out_mime_type, result, error);
     }
+}
+
+static void
+gdk_drop_read_value_done (GObject      *source,
+                          GAsyncResult *result,
+                          gpointer      data)
+{
+  GTask *task = data;
+  GError *error = NULL;
+  GValue *value;
+
+  value = g_task_get_task_data (task);
+
+  if (!gdk_content_deserialize_finish (result, value, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, value, NULL);
+
+  g_object_unref (task);
+}
+
+static void
+gdk_drop_read_value_got_stream (GObject      *source,
+                                GAsyncResult *result,
+                                gpointer      data)
+{
+  GInputStream *stream;
+  GError *error = NULL;
+  GTask *task = data;
+  const char *mime_type;
+
+  stream = gdk_drop_read_finish (GDK_DROP (source), &mime_type, result, &error);
+  if (stream == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  gdk_content_deserialize_async (stream,
+                                 mime_type,
+                                 G_VALUE_TYPE (g_task_get_task_data (task)),
+                                 g_task_get_priority (task),
+                                 g_task_get_cancellable (task),
+                                 gdk_drop_read_value_done,
+                                 task);
+  g_object_unref (stream);
+}
+
+static void
+free_value (gpointer value)
+{
+  g_value_unset (value);
+  g_slice_free (GValue, value);
+}
+
+static void
+gdk_drop_read_value_internal (GdkDrop             *self,
+                              GType                type,
+                              gpointer             source_tag,
+                              int                  io_priority,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats;
+  GValue *value;
+  GTask *task;
+ 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, source_tag);
+  value = g_slice_new0 (GValue);
+  g_value_init (value, type);
+  g_task_set_task_data (task, value, free_value);
+
+  if (priv->drag)
+    {
+      GError *error = NULL;
+
+      if (gdk_content_provider_get_value (priv->drag->content, value, &error))
+        {
+          g_task_return_pointer (task, value, NULL);
+          g_object_unref (task);
+          return;
+        }
+      else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        {
+          g_task_return_error (task, error);
+          g_object_unref (task);
+          return;
+        }
+      else
+        {
+          /* fall through to regular stream transfer */
+          g_clear_error (&error);
+        }
+    }
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, type);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+  formats = gdk_content_formats_union_deserialize_mime_types (formats);
+
+  gdk_drop_read_internal (self,
+                          formats,
+                          io_priority,
+                          cancellable,
+                          gdk_drop_read_value_got_stream,
+                          task);
+
+  gdk_content_formats_unref (formats);
+}
+
+/**
+ * gdk_drop_read_value_async:
+ * @self: a #GdkDrop
+ * @type: a #GType to read
+ * @io_priority: the [I/O priority][io-priority]
+ *     of the request. 
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously request the drag operation's contents converted to the given
+ * @type. When the operation is finished @callback will be called. 
+ * You can then call gdk_drop_read_value_finish() to get the resulting
+ * #GValue.
+ *
+ * For local drag'n'drop operations that are available in the given #GType, the
+ * value will be copied directly. Otherwise, GDK will try to use
+ * gdk_content_deserialize_async() to convert the data.
+ **/
+void
+gdk_drop_read_value_async (GdkDrop             *self,
+                           GType                type,
+                           int                  io_priority,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_return_if_fail (GDK_IS_DROP (self));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  gdk_drop_read_value_internal (self,
+                                type,
+                                gdk_drop_read_value_async,
+                                io_priority,
+                                cancellable,
+                                callback,
+                                user_data);
+}
+
+/**
+ * gdk_drop_read_value_finish:
+ * @self: a #GdkDrop
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an async drop read started with
+ * gdk_drop_read_value_async().
+ *
+ * Returns: (transfer none): a #GValue containing the result.
+ **/
+const GValue *
+gdk_drop_read_value_finish (GdkDrop       *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drop_read_value_async, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+/**
+ * gdk_drop_read_text_async:
+ * @self: a #GdkDrop
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously request the drag operation's contents converted to a string.
+ * When the operation is finished @callback will be called. You can then
+ * call gdk_drop_read_text_finish() to get the result.
+ *
+ * This is a simple wrapper around gdk_drop_read_value_async(). Use
+ * that function or gdk_drop_read_async() directly if you need more
+ * control over the operation.
+ **/
+void
+gdk_drop_read_text_async (GdkDrop             *self,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  g_return_if_fail (GDK_IS_DROP (self));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  gdk_drop_read_value_internal (self,
+                                G_TYPE_STRING,
+                                gdk_drop_read_text_async,
+                                G_PRIORITY_DEFAULT,
+                                cancellable,
+                                callback,
+                                user_data);
+}
+
+/**
+ * gdk_drop_read_text_finish:
+ * @self: a #GdkDrop
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an asynchronous read started with
+ * gdk_drop_read_text_async().
+ *
+ * Returns: (transfer full) (nullable): a new string or %NULL on error.
+ **/
+char *
+gdk_drop_read_text_finish (GdkDrop       *self,
+                           GAsyncResult  *result,
+                           GError       **error)
+{
+  const GValue *value;
+
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drop_read_text_async, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  value = g_task_propagate_pointer (G_TASK (result), error);
+  if (!value)
+    return NULL;
+  
+  return g_value_dup_string (value);
 }
 
 static void
