@@ -71,6 +71,27 @@ GInputStream *          gdk_drop_read_finish            (GdkDrop                
                                                          const char            **out_mime_type,
                                                          GAsyncResult           *result,
                                                          GError                **error);
+GDK_AVAILABLE_IN_ALL
+void                    gdk_drop_read_value_async       (GdkDrop                *self,
+                                                         GType                   type,
+                                                         int                     io_priority,
+                                                         GCancellable           *cancellable,
+                                                         GAsyncReadyCallback     callback,
+                                                         gpointer                user_data);
+GDK_AVAILABLE_IN_ALL
+const GValue *          gdk_drop_read_value_finish      (GdkDrop                *self,
+                                                         GAsyncResult           *result,
+                                                         GError                **error);
+GDK_AVAILABLE_IN_ALL
+void                    gdk_drop_read_text_async        (GdkDrop                *drop,
+                                                         GCancellable           *cancellable,
+                                                         GAsyncReadyCallback     callback,
+                                                         gpointer                user_data);
+GDK_AVAILABLE_IN_ALL
+char *                  gdk_drop_read_text_finish       (GdkDrop                *drop,
+                                                         GAsyncResult           *result,
+                                                         GError                **error);
+
 
 G_END_DECLS
 
