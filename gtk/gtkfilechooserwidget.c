@@ -7481,6 +7481,17 @@ populate_model_with_recent_items (GtkFileChooserWidget *impl,
       GtkRecentInfo *info = l->data;
       GFile *file;
 
+      if (gtk_recent_info_get_private_hint (info))
+        {
+          const gchar *app_name = g_get_application_name();
+          gchar **recent_apps = gtk_recent_info_get_applications (info, NULL);
+
+          if (!g_strv_contains ((const char *const*) recent_apps, app_name))
+            continue;
+
+          g_strfreev (recent_apps);
+        }
+
       file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
       _gtk_file_system_model_add_and_query_file (priv->recent_model,
                                                  file,
