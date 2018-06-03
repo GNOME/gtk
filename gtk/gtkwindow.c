@@ -4569,7 +4569,8 @@ icon_from_list (GList *list,
     {
       texture = list->data;
       
-      if (gdk_texture_get_width (texture) <= size)
+      if (gdk_texture_get_width (texture) <= size &&
+          gdk_texture_get_height (texture) <= size)
         return g_object_ref (texture);
     }
 
