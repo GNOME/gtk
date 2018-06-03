@@ -210,9 +210,25 @@ measure_benchmark (Benchmark *b,
   benchmark_stop (b);
 }
 
+static void
+templates_benchmark (Benchmark *b,
+                     gsize      size,
+                     gpointer   user_data)
+{
+  guint i;
+  GtkWidget **widgets = g_malloc (sizeof (GtkWidget *)  * size);
 
+  /* Just load some widget using composite templates a bunch of times. */
 
+  benchmark_start (b);
+  for (i = 0; i < size; i ++)
+    {
+      widgets[i] = gtk_info_bar_new ();
+    }
+  benchmark_stop (b);
 
+  g_free (widgets);
+}
 
 int
 main (int argc, char **argv)
@@ -238,6 +254,7 @@ main (int argc, char **argv)
   benchmark_suite_add (&suite, "compute_bounds", 10000, compute_bounds_benchmark, NULL);
   benchmark_suite_add (&suite, "translate_coords", 1000, translate_coords_benchmark, NULL);
   benchmark_suite_add (&suite, "measure", 10000, measure_benchmark, NULL);
+  benchmark_suite_add (&suite, "templates", 10000, templates_benchmark, NULL);
 
   return benchmark_suite_run (&suite);
 }
