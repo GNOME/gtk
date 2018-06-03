@@ -13330,6 +13330,19 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   gtk_snapshot_offset (snapshot, -x, -y);
 }
 
+/**
+ * gtk_widget_set_focus_child:
+ * @widget: a #GtkWidget
+ * @child: (nullable): a direct child widget of @widget or %NULL
+ *   to unset the focus child of @widget
+ *
+ * Set @child as the current focus child of @widget. The previous
+ * focus child will be unset.
+ *
+ * This function is only suitable for widget implementations.
+ * If you want a certain widget to get the input focus, call
+ * gtk_widget_grab_focus() on it.
+*/
 void
 gtk_widget_set_focus_child (GtkWidget *widget,
                             GtkWidget *child)
@@ -13364,10 +13377,17 @@ gtk_widget_set_focus_child (GtkWidget *widget,
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_set_focus_child (GTK_CONTAINER (widget), child);
-
-  /* TODO: ??? */
 }
 
+/**
+ * gtk_widget_get_focus_child:
+ * @widget: a #GtkWidget
+ *
+ * Returns the current focus child of @widget.
+ *
+ * Returns: (nullable): The current focus child of @widget,
+ *   or %NULL in case the focus child is unset.
+ */
 GtkWidget *
 gtk_widget_get_focus_child (GtkWidget *widget)
 {
