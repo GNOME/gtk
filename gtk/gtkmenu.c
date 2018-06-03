@@ -602,7 +602,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * #GtkMenu:menu-type-hint.
    *
    * Since: 3.22
-   * Stability: Unstable
    */
   menu_signals[POPPED_UP] =
     g_signal_new_class_handler (I_("popped-up"),
@@ -770,7 +769,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * #GtkMenu:rect-anchor-dy, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
    *
    * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ANCHOR_HINTS,
@@ -799,7 +797,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * #GtkMenu:rect-anchor-dy, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
    *
    * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RECT_ANCHOR_DX,
@@ -826,7 +823,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * #GtkMenu:rect-anchor-dx, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
    *
    * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RECT_ANCHOR_DY,
@@ -853,7 +849,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and #GtkMenu::popped-up.
    *
    * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MENU_TYPE_HINT,
@@ -2213,7 +2208,6 @@ get_device_for_event (const GdkEvent *event)
  * #GtkMenu::popped-up signal to find out how it was actually positioned.
  *
  * Since: 3.22
- * Stability: Unstable
  */
 void
 gtk_menu_popup_at_rect (GtkMenu            *menu,
@@ -2299,7 +2293,6 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
  * #GtkMenu::popped-up signal to find out how it was actually positioned.
  *
  * Since: 3.22
- * Stability: Unstable
  */
 void
 gtk_menu_popup_at_widget (GtkMenu        *menu,
@@ -2381,7 +2374,6 @@ gtk_menu_popup_at_widget (GtkMenu        *menu,
  * out how it was actually positioned.
  *
  * Since: 3.22
- * Stability: Unstable
  */
 void
 gtk_menu_popup_at_pointer (GtkMenu        *menu,
