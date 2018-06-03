@@ -4576,7 +4576,8 @@ icon_from_list (GList *list,
   for (l = list; l; l = l->next)
     {
       pixbuf = list->data;
-      if (gdk_pixbuf_get_width (pixbuf) <= size)
+      if (gdk_pixbuf_get_width (pixbuf) <= size &&
+          gdk_pixbuf_get_height (pixbuf) <= size)
         {
           best = g_object_ref (pixbuf);
           break;
