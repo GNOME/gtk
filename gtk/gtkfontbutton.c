@@ -137,9 +137,8 @@ static void dialog_destroy                          (GtkWidget         *widget,
 static void gtk_font_button_label_use_font          (GtkFontButton     *gfs);
 static void gtk_font_button_update_font_info        (GtkFontButton     *gfs);
 
-static void        gtk_font_button_set_font_name (GtkFontButton *button,
-                                                  const char    *fontname);
-static const char *gtk_font_button_get_font_name (GtkFontButton *button);
+static void        font_button_set_font_name (GtkFontButton *button,
+                                              const char    *fontname);
 static void        gtk_font_button_set_level     (GtkFontButton       *font_button,
                                                   GtkFontChooserLevel  level);
 static void        gtk_font_button_set_language  (GtkFontButton *button,
@@ -1104,7 +1103,8 @@ gtk_font_button_clicked (GtkButton *button)
         gtk_font_chooser_set_font_map (font_dialog, priv->font_map);
       gtk_font_chooser_set_show_preview_entry (font_dialog, priv->show_preview_entry);
       gtk_font_chooser_set_level (GTK_FONT_CHOOSER (font_dialog), priv->level);
-      gtk_font_chooser_set_language (GTK_FONT_CHOOSER (font_dialog), priv->language);
+      gtk_font_chooser_set_language (GTK_FONT_CHOOSER (font_dialog), pango_language_to_string 
+(priv->language));
 
       if (priv->preview_text)
         {
@@ -1189,9 +1189,8 @@ response_cb (GtkDialog *dialog,
     g_object_ref (priv->font_face);
   priv->font_size = gtk_font_chooser_get_font_size (font_chooser);
   g_free (priv->font_features);
-  g_object_get (font_chooser, "font-features", &priv->font_features, NULL);
-  g_free (priv->language);
-  g_object_get (font_chooser, "language", &priv->language, NULL);
+  priv->font_features = gtk_font_chooser_get_font_features (font_chooser);
+  priv->language = pango_language_from_string (gtk_font_chooser_get_language (font_chooser));
 
   /* Set label font */
   gtk_font_button_update_font_info (font_button);

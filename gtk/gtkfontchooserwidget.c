@@ -221,7 +221,6 @@ static void     gtk_font_chooser_widget_cell_data_func         (GtkTreeViewColum
 static void selection_changed (GtkTreeSelection *selection,
                                GtkFontChooserWidget *fontchooser);
 static void update_font_features (GtkFontChooserWidget *fontchooser);
-static void update_language (GtkFontChooserWidget *fontchooser);
 
 
 static void                gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
@@ -1697,12 +1696,7 @@ find_language_and_script (GtkFontChooserWidget *fontchooser,
 
       for (k = 0; k < n_languages; k++)
         {
-          hb_language_t *l;
-          char buf[5], buf2[5];
-          hb_tag_to_string (languages[k], buf); buf[4] = '\0';
-          hb_tag_to_string (scripts[j], buf2); buf2[4] = '\0';
-          l = hb_ot_tag_to_language (languages[k]);
-          if (l == lang)
+          if (lang == hb_ot_tag_to_language (languages[k]))
             {
               *script_tag = scripts[j];
               *lang_tag = languages[k];
@@ -1962,6 +1956,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
   int i;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_show (group);
   gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
@@ -1987,6 +1982,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
+      gtk_widget_show (feat);
       set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
       g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
@@ -1999,10 +1995,12 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
 
       example = gtk_label_new ("");
+      gtk_widget_show (example);
       gtk_label_set_selectable (GTK_LABEL (example), TRUE);
       gtk_widget_set_halign (example, GTK_ALIGN_START);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_widget_show (box);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
       gtk_container_add (GTK_CONTAINER (box), feat);
       gtk_container_add (GTK_CONTAINER (box), example);
@@ -2034,6 +2032,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
   PangoAttrList *attrs;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_show (group);
   gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
@@ -2061,6 +2060,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
 
       feat = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (group_button),
                                                           name ? name : _("Default"));
+      gtk_widget_show (feat);
       if (group_button == NULL)
         group_button = feat;
 
@@ -2068,10 +2068,12 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       g_object_set_data (G_OBJECT (feat), "default", group_button);
 
       example = gtk_label_new ("");
+      gtk_widget_show (example);
       gtk_label_set_selectable (GTK_LABEL (example), TRUE);
       gtk_widget_set_halign (example, GTK_ALIGN_START);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_widget_show (box);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
       gtk_container_add (GTK_CONTAINER (box), feat);
       gtk_container_add (GTK_CONTAINER (box), example);
