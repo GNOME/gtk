@@ -136,6 +136,8 @@ struct _GdkDisplayClass
 
   void                       (*notify_startup_complete) (GdkDisplay  *display,
                                                          const gchar *startup_id);
+  const gchar *              (*get_startup_notification_id) (GdkDisplay  *display);
+
   void                       (*event_data_copy) (GdkDisplay     *display,
                                                  const GdkEvent *event,
                                                  GdkEvent       *new_event);
