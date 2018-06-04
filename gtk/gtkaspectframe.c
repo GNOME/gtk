@@ -58,8 +58,6 @@
 
 struct _GtkAspectFramePrivate
 {
-  GtkAllocation center_allocation;
-
   gboolean      obey_child;
   gfloat        xalign;
   gfloat        yalign;
