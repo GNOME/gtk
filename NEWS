@@ -1,3 +1,53 @@
+Overview of Changes in GTK+ 3.23.0
+==================================
+
+* Dependency bumps:
+ - Require libepoxy 1.4
+ - Require pango 1.41
+
+* New font chooser features:
+ - Allow setting OpenType font features
+ - Show examples for OpenType font features
+ - Allow selecting OpenType font variations
+ - Support levels of details for selection
+
+* New Emoji features:
+ - Support a completion popup for Emoji
+ - Drop Ctrl-Shift-e shortcut
+
+* Bugs fixed:
+ #85 widgetDragDestFindTarget introspection data does not show nullable...
+ #154 Documentation: Lifecycle of Editables inside GtkCellRenderers is no... 
+ #193 Document that GtkUIManager is deprecated by GtkBuilder
+ #199 MenuButton not notified when its Popover is destroyed, still access...
+ #292 GtkRanges should send ::change-value even if not realized
+ #450 Menu navigation triangle doesn't work anymore
+ #792 Focus events are not always matched
+ #898 emoji-chooser: search for flags doesn't work
+ #1053 Scroll cursor gets left behind if a child widget steals the scroll
+ #1059 -Wparentheses warnings in GTK+ headers when compiling C++ code with...
+ #1065 GtkScrollbar horizontal mouse wheel scroll direction is wrong
+ #1069 Thread 1 "glade" received signal SIGFPE, Arithmetic exception.
+ #1115 gtk icon theme searches system dirs before user dirs
+ 407242 GtkScale: Up/Down keys decrease/increase value, which is opposite...
+ 686109 gtk_print_context_get_hard_margins should return page size specif...
+ 765327 GtkPlug scaled to half the expected size on HiDPI screens
+ 772817 File Chooser: Path arrow button frames are reversed and detached ...
+ 775279 early calls to libepoxy cause all gtk3 programs to abort when the...
+ 786524 ocument GTK_OVERLAY_SCROLLING environment variable
+ 787867 OSX macports pango text size appears to vary between version 1.40...
+ 789215 GtkScrolledWindow and GtkIconView atk objects can cause a segfaul...
+ 791542 GDK 3 Selections documentation makes references to X
+ 791802 Fix direction value moves on scroll/keypress over RTL/inverted ra...
+
+* Translation updates:
+ Catalan
+ Finnish
+ Polish
+ Russian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.22.30
 ===================================
 
