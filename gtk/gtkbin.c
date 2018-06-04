@@ -39,10 +39,10 @@
 #include "gtkbin.h"
 
 
-struct _GtkBinPrivate
+typedef struct
 {
   GtkWidget *child;
-};
+} GtkBinPrivate;
 
 static void gtk_bin_add         (GtkContainer   *container,
 			         GtkWidget      *widget);
