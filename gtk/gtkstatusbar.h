@@ -43,15 +43,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkStatusbar              GtkStatusbar;
-typedef struct _GtkStatusbarPrivate       GtkStatusbarPrivate;
 typedef struct _GtkStatusbarClass         GtkStatusbarClass;
 
 struct _GtkStatusbar
 {
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkStatusbarPrivate *priv;
 };
 
 struct _GtkStatusbarClass
