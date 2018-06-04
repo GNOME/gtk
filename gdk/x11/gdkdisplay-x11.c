@@ -3042,6 +3042,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
+  display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_surface_impl = _gdk_x11_display_create_surface_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
