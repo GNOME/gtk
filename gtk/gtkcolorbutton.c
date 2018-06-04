@@ -62,7 +62,7 @@
  */
 
 
-struct _GtkColorButtonPrivate
+typedef struct
 {
   GtkWidget *button;
 
@@ -74,7 +74,7 @@ struct _GtkColorButtonPrivate
 
   guint use_alpha : 1;  /* Use alpha or not */
   guint show_editor : 1;
-};
+} GtkColorButtonPrivate;
 
 /* Properties */
 enum
@@ -283,7 +283,7 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
                                      guint32           time,
                                      GtkColorButton   *button)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   gint length;
   guint16 *dropped;
 
@@ -341,8 +341,9 @@ gtk_color_button_drag_begin (GtkWidget      *widget,
                              gpointer        data)
 {
   GtkColorButton *button = data;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  set_color_icon (context, &button->priv->rgba);
+  set_color_icon (context, &priv->rgba);
 }
 
 static void
@@ -352,7 +353,7 @@ gtk_color_button_drag_data_get (GtkWidget        *widget,
                                 guint             time,
                                 GtkColorButton   *button)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   guint16 dropped[4];
 
   dropped[0] = (guint16) (priv->rgba.red * 65535);
@@ -368,16 +369,13 @@ gtk_color_button_drag_data_get (GtkWidget        *widget,
 static void
 gtk_color_button_init (GtkColorButton *button)
 {
-  GtkColorButtonPrivate *priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   PangoLayout *layout;
   PangoRectangle rect;
   GtkStyleContext *context;
   GdkContentFormats *targets;
 
   gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
-
-  /* Create the widgets */
-  priv = button->priv = gtk_color_button_get_instance_private (button);
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
@@ -392,7 +390,7 @@ gtk_color_button_init (GtkColorButton *button)
 
   gtk_container_add (GTK_CONTAINER (priv->button), priv->swatch);
 
-  button->priv->title = g_strdup (_("Pick a Color")); /* default title */
+  priv->title = g_strdup (_("Pick a Color")); /* default title */
 
   /* Start with opaque black, alpha disabled */
   priv->rgba.red = 0;
@@ -428,7 +426,7 @@ static void
 gtk_color_button_finalize (GObject *object)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   if (priv->cs_dialog != NULL)
     gtk_widget_destroy (priv->cs_dialog);
@@ -478,8 +476,9 @@ dialog_destroy (GtkWidget *widget,
                 gpointer   data)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (data);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  button->priv->cs_dialog = NULL;
+  priv->cs_dialog = NULL;
 
   return FALSE;
 }
@@ -494,7 +493,7 @@ dialog_response (GtkDialog *dialog,
   else if (response == GTK_RESPONSE_OK)
     {
       GtkColorButton *button = GTK_COLOR_BUTTON (data);
-      GtkColorButtonPrivate *priv = button->priv;
+      GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &priv->rgba);
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
@@ -515,7 +514,7 @@ dialog_response (GtkDialog *dialog,
 static void
 ensure_dialog (GtkColorButton *button)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   GtkWidget *parent, *dialog;
 
   if (priv->cs_dialog != NULL)
@@ -547,7 +546,7 @@ gtk_color_button_clicked (GtkButton *b,
                           gpointer   user_data)
 {
   GtkColorButton *button = user_data;
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   /* if dialog already exists, make sure it's shown and raised */
   ensure_dialog (button);
@@ -565,12 +564,10 @@ static void
 gtk_color_button_set_rgba (GtkColorChooser *chooser,
                            const GdkRGBA   *rgba)
 {
-  GtkColorButtonPrivate *priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (GTK_COLOR_BUTTON (chooser));
 
   g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
-
-  priv = GTK_COLOR_BUTTON (chooser)->priv;
 
   priv->rgba = *rgba;
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
@@ -582,17 +579,19 @@ static void
 gtk_color_button_get_rgba (GtkColorChooser *chooser,
                            GdkRGBA        *rgba)
 {
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (GTK_COLOR_BUTTON (chooser));
+
   g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
 
-  *rgba = GTK_COLOR_BUTTON (chooser)->priv->rgba;
+  *rgba = priv->rgba;
 }
 
 static void
 set_use_alpha (GtkColorButton *button,
                gboolean        use_alpha)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   use_alpha = (use_alpha != FALSE);
 
@@ -617,7 +616,7 @@ void
 gtk_color_button_set_title (GtkColorButton *button,
                             const gchar    *title)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   gchar *old_title;
 
   g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
@@ -643,9 +642,11 @@ gtk_color_button_set_title (GtkColorButton *button,
 const gchar *
 gtk_color_button_get_title (GtkColorButton *button)
 {
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
   g_return_val_if_fail (GTK_IS_COLOR_BUTTON (button), NULL);
 
-  return button->priv->title;
+  return priv->title;
 }
 
 static void
@@ -655,6 +656,7 @@ gtk_color_button_set_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   switch (param_id)
     {
@@ -670,9 +672,9 @@ gtk_color_button_set_property (GObject      *object,
     case PROP_SHOW_EDITOR:
       {
         gboolean show_editor = g_value_get_boolean (value);
-        if (button->priv->show_editor != show_editor)
+        if (priv->show_editor != show_editor)
           {
-            button->priv->show_editor = show_editor;
+            priv->show_editor = show_editor;
             g_object_notify (object, "show-editor");
           }
       }
@@ -690,11 +692,12 @@ gtk_color_button_get_property (GObject    *object,
                                GParamSpec *pspec)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   switch (param_id)
     {
     case PROP_USE_ALPHA:
-      g_value_set_boolean (value, button->priv->use_alpha);
+      g_value_set_boolean (value, priv->use_alpha);
       break;
     case PROP_TITLE:
       g_value_set_string (value, gtk_color_button_get_title (button));
@@ -708,7 +711,7 @@ gtk_color_button_get_property (GObject    *object,
       }
       break;
     case PROP_SHOW_EDITOR:
-      g_value_set_boolean (value, button->priv->show_editor);
+      g_value_set_boolean (value, priv->show_editor);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -724,10 +727,11 @@ gtk_color_button_add_palette (GtkColorChooser *chooser,
                               GdkRGBA         *colors)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (chooser);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   ensure_dialog (button);
 
-  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
+  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (priv->cs_dialog),
                                  orientation, colors_per_line, n_colors, colors);
 }
 
