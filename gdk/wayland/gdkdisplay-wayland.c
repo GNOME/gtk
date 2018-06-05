@@ -866,6 +866,23 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
 }
 
 /**
+ * gdk_wayland_display_get_startup_notification_id:
+ * @display: (type GdkX11Display): a #GdkDisplay
+ *
+ * Gets the startup notification ID for a Wayland display, or %NULL
+ * if no ID has been defined.
+ *
+ * Returns: the startup notification ID for @display, or %NULL
+ *
+ * Since: 3.22
+ */
+const gchar *
+gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
+{
+  return GDK_WAYLAND_DISPLAY (display)->startup_notification_id;
+}
+
+/**
  * gdk_wayland_display_set_startup_notification_id:
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  * @startup_id: the startup notification ID (must be valid utf8)

@@ -41,6 +41,14 @@
 /* for the use of round() */
 #include "fallback-c89.c"
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
+
 /**
  * SECTION:gdkdisplay
  * @Short_description: Controls a set of monitors and their associated input devices
@@ -1281,6 +1289,39 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   GDK_DISPLAY_GET_CLASS (display)->notify_startup_complete (display, startup_id);
+}
+
+/**
+ * gdk_display_get_startup_notification_id:
+ * @display: (type GdkX11Display): a #GdkDisplay
+ *
+ * Gets the startup notification ID for a Wayland display, or %NULL
+ * if no ID has been defined.
+ *
+ * Returns: the startup notification ID for @display, or %NULL
+ *
+ * Since: 4.0
+ */
+const gchar *
+gdk_display_get_startup_notification_id (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  /* This is an unfortunate hack, but we need to pull the startup
+   * notification ID from the display also in remote instances of
+   * an application, where we can't rely on GtkApplicationImpl since
+   * the impl instance won't ever be created (no startup event).
+   */
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    return gdk_x11_display_get_startup_notification_id (display);
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    return gdk_wayland_display_get_startup_notification_id (display);
+#endif
+  return NULL;
 }
 
 void

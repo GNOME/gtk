@@ -91,9 +91,12 @@ GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);
+
 GDK_AVAILABLE_IN_ALL
 void     gdk_display_notify_startup_complete   (GdkDisplay    *display,
                                                 const gchar   *startup_id);
+GDK_AVAILABLE_IN_ALL
+const gchar * gdk_display_get_startup_notification_id (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
