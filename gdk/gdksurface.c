@@ -3055,8 +3055,6 @@ gdk_surface_move_resize (GdkSurface *surface,
  *
  * Connect to the #GdkSurface::moved-to-rect signal to find out how it was
  * actually positioned.
- *
- * Stability: Private
  */
 void
 gdk_surface_move_to_rect (GdkSurface          *surface,
