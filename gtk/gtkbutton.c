@@ -61,6 +61,7 @@
 #include "gtkcheckbutton.h"
 #include "gtkcontainerprivate.h"
 #include "gtkgesturemultipress.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -87,6 +88,7 @@ struct _GtkButtonPrivate
   GdkDevice             *grab_keyboard;
 
   GtkGesture            *gesture;
+  GtkEventController    *key_controller;
 
   guint                  activate_timeout;
 
@@ -136,7 +138,6 @@ static void gtk_button_get_property   (GObject            *object,
 static void gtk_button_display_changed (GtkWidget         *widget,
 				        GdkDisplay        *previous_display);
 static void gtk_button_unrealize (GtkWidget * widget);
-static gint gtk_button_event (GtkWidget * widget, GdkEvent * event);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
@@ -220,7 +221,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->measure = gtk_button_measure_;
   widget_class->display_changed = gtk_button_display_changed;
   widget_class->unrealize = gtk_button_unrealize;
-  widget_class->event = gtk_button_event;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
@@ -410,6 +410,31 @@ multipress_gesture_cancel_cb (GtkGesture       *gesture,
   gtk_button_do_release (button, FALSE);
 }
 
+static gboolean
+key_controller_key_pressed_cb (GtkEventControllerKey *controller,
+                               guint                  keyval,
+                               guint                  keycode,
+                               guint                  modifiers,
+                               GtkButton             *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  return priv->activate_timeout != 0;
+}
+
+static void
+key_controller_key_released_cb (GtkEventControllerKey *controller,
+                                guint                  keyval,
+                                guint                  keycode,
+                                guint                  modifiers,
+                                GtkButton             *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  if (priv->activate_timeout)
+    gtk_button_finish_activate (button, TRUE);
+}
+
 static void
 gtk_button_set_child_type (GtkButton *button, guint child_type)
 {
@@ -450,6 +475,11 @@ gtk_button_init (GtkButton *button)
   g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (priv->gesture));
+
+  priv->key_controller = gtk_event_controller_key_new ();
+  g_signal_connect (priv->key_controller, "key-pressed", G_CALLBACK (key_controller_key_pressed_cb), button);
+  g_signal_connect (priv->key_controller, "key-released", G_CALLBACK (key_controller_key_released_cb), button);
+  gtk_widget_add_controller (GTK_WIDGET (button), priv->key_controller);
 }
 
 static void
@@ -759,27 +789,6 @@ gtk_button_do_release (GtkButton *button,
 
       gtk_button_update_state (button);
     }
-}
-
-static gboolean
-gtk_button_event (GtkWidget *widget,
-                  GdkEvent  *event)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-
-  if (gdk_event_get_event_type (event) != GDK_KEY_RELEASE)
-    return GDK_EVENT_PROPAGATE;
-
-  if (priv->activate_timeout)
-    {
-      gtk_button_finish_activate (button, TRUE);
-      return GDK_EVENT_STOP;
-    }
-  else if (GTK_WIDGET_CLASS (gtk_button_parent_class)->event)
-    return GTK_WIDGET_CLASS (gtk_button_parent_class)->event (widget, event);
-  else
-    return GDK_EVENT_PROPAGATE;
 }
 
 static void
