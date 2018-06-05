@@ -34,7 +34,6 @@ struct _GtkWidgetAccessiblePrivate
 extern GtkWidget *_focus_widget;
 
 
-static gboolean gtk_widget_accessible_on_screen           (GtkWidget *widget);
 static gboolean gtk_widget_accessible_all_parents_visible (GtkWidget *widget);
 
 static void atk_component_interface_init (AtkComponentIface *iface);
@@ -726,7 +725,7 @@ atk_component_interface_init (AtkComponentIface *iface)
  * a GtkViewport and, if so, whether any part of the widget intersects
  * the visible rectangle of the GtkViewport.
  */
-static gboolean
+gboolean
 gtk_widget_accessible_on_screen (GtkWidget *widget)
 {
   GtkAllocation allocation;

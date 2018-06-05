@@ -491,6 +491,13 @@ gtk_icon_view_item_accessible_get_character_extents (AtkText      *text,
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return;
 
+  if (!gtk_icon_view_item_accessible_is_showing (item))
+    {
+      *x = G_MININT;
+      *y = G_MININT;
+      return;
+    }
+
 #if 0
   icon_view = GTK_ICON_VIEW (item->widget);
       /* FIXME we probably have to use GailTextCell to salvage this */

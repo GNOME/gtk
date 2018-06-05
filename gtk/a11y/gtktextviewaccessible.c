@@ -523,6 +523,13 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   if (widget == NULL)
     return;
 
+  if (!gtk_widget_accessible_on_screen (widget) || (!gtk_widget_is_drawable (widget)))
+    {
+      *x = G_MININT;
+      *y = G_MININT;
+      return;
+    }
+
   view = GTK_TEXT_VIEW (widget);
   buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);

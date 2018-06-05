@@ -964,6 +964,13 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   if (widget == NULL)
     return;
 
+  if (!gtk_widget_accessible_on_screen (widget) || (!gtk_widget_is_drawable (widget)))
+    {
+      *x = G_MININT;
+      *y = G_MININT;
+      return;
+    }
+
   entry = GTK_ENTRY (widget);
 
   gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);

@@ -59,6 +59,9 @@ struct _GtkWidgetAccessibleClass
 GDK_AVAILABLE_IN_ALL
 GType gtk_widget_accessible_get_type (void);
 
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_widget_accessible_on_screen (GtkWidget *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_ACCESSIBLE_H__ */
