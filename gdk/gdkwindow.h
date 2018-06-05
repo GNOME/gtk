@@ -550,6 +550,15 @@ void          gdk_window_move_resize           (GdkWindow     *window,
                                                 gint           y,
                                                 gint           width,
                                                 gint           height);
+
+GDK_AVAILABLE_IN_3_24
+void          gdk_window_move_to_rect          (GdkWindow          *window,
+                                                const GdkRectangle *rect,
+                                                GdkGravity          rect_anchor,
+                                                GdkGravity          window_anchor,
+                                                GdkAnchorHints      anchor_hints,
+                                                gint                rect_anchor_dx,
+                                                gint                rect_anchor_dy);
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_reparent              (GdkWindow     *window,
                                                 GdkWindow     *new_parent,

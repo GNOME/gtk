@@ -5274,13 +5274,13 @@ gtk_menu_position (GtkMenu  *menu,
     g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
                       menu);
 
-  GDK_PRIVATE_CALL (gdk_window_move_to_rect) (toplevel,
-                                              &rect,
-                                              rect_anchor,
-                                              menu_anchor,
-                                              anchor_hints,
-                                              rect_anchor_dx,
-                                              rect_anchor_dy);
+  gdk_window_move_to_rect (toplevel,
+                           &rect,
+                           rect_anchor,
+                           menu_anchor,
+                           anchor_hints,
+                           rect_anchor_dx,
+                           rect_anchor_dy);
 }
 
 static void
