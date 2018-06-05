@@ -11,6 +11,7 @@
 #include "puzzlepiece.h"
 
 static GtkWidget *window = NULL;
+static GtkWidget *frame = NULL;
 
 static gboolean solved = TRUE;
 static guint width = 6;
@@ -220,14 +221,14 @@ start_puzzle (GdkPaintable *puzzle)
   guint x, y;
 
   /* Remove the old grid (if there is one) */
-  grid = gtk_bin_get_child (GTK_BIN (window));
+  grid = gtk_bin_get_child (GTK_BIN (frame));
   if (grid)
-    gtk_container_remove (GTK_CONTAINER (window), grid);
+    gtk_container_remove (GTK_CONTAINER (frame), grid);
 
   /* Create a new grid */
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_container_add (GTK_CONTAINER (frame), grid);
 
   /* Add a key event controller so people can use the arrow
    * keys to move the puzzle */
@@ -280,16 +281,25 @@ do_sliding_puzzle (GtkWidget *do_widget)
 
   if (!window)
     {
+      GdkPixbuf *pixbuf;
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Sliding Puzzle");
-      gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
+      gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
+      pixbuf = gdk_pixbuf_new_from_resource ("/sliding_puzzle/portland-rose.jpg", NULL);
+
+      frame = gtk_aspect_frame_new (NULL, 0.5, 0.5, (float) gdk_pixbuf_get_height (pixbuf) / (float) gdk_pixbuf_get_width (pixbuf), FALSE);
+      gtk_container_add (GTK_CONTAINER (window), frame);
+
       /* Start a puzzle with a default image */
-      puzzle = GDK_PAINTABLE (gdk_texture_new_from_resource ("/sliding_puzzle/portland-rose.jpg"));
+      
+      puzzle = GDK_PAINTABLE (gdk_texture_new_for_pixbuf (pixbuf));
+      g_object_unref (pixbuf);
       start_puzzle (puzzle);
       g_object_unref (puzzle);
     }
