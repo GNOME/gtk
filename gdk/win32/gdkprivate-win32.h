@@ -202,8 +202,6 @@ void    _gdk_win32_adjust_client_rect   (GdkSurface *window,
 
 void    _gdk_selection_property_delete (GdkSurface *);
 
-void    _gdk_dropfiles_store (gchar *data);
-
 void       _gdk_push_modal_window   (GdkSurface *window);
 void       _gdk_remove_modal_window (GdkSurface *window);
 GdkSurface *_gdk_modal_current       (void);
@@ -424,6 +422,8 @@ void       _gdk_win32_display_create_surface_impl   (GdkDisplay    *display,
 
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *window);
+void _gdk_win32_surface_unregister_dnd (GdkSurface *window);
+
 GdkDragContext *_gdk_win32_surface_drag_begin (GdkSurface         *window,
                                                GdkDevice          *device,
                                                GdkContentProvider *content,
