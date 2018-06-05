@@ -1541,8 +1541,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   win32_clipdrop->GetUpdatedClipboardFormats = GetProcAddress (user32, "GetUpdatedClipboardFormats");
   FreeLibrary (user32);
 
-  win32_clipdrop->dnd_target_state = GDK_WIN32_DND_NONE;
-
   atoms = g_array_sized_new (FALSE, TRUE, sizeof (GdkAtom), GDK_WIN32_ATOM_INDEX_LAST);
   g_array_set_size (atoms, GDK_WIN32_ATOM_INDEX_LAST);
   cfs = g_array_sized_new (FALSE, TRUE, sizeof (UINT), GDK_WIN32_CF_INDEX_LAST);
@@ -1876,34 +1874,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   win32_clipdrop->dnd_thread_id = GPOINTER_TO_UINT (g_async_queue_pop (win32_clipdrop->dnd_queue));
 }
 
-void
-_gdk_dropfiles_store (gchar *data)
-{
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-
-/* FIXME: REMOVE ALL THAT STUFF
-  if (data != NULL)
-    {
-      g_assert (clipdrop->dropfiles_prop == NULL);
-
-      clipdrop->dropfiles_prop = g_new (GdkSelProp, 1);
-      clipdrop->dropfiles_prop->data = (guchar *) data;
-      clipdrop->dropfiles_prop->length = strlen (data) + 1;
-      clipdrop->dropfiles_prop->bitness = 8;
-      clipdrop->dropfiles_prop->target = _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_URI_LIST);
-    }
-  else
-    {
-      if (clipdrop->dropfiles_prop != NULL)
-	{
-	  g_free (clipdrop->dropfiles_prop->data);
-	  g_free (clipdrop->dropfiles_prop);
-	}
-      clipdrop->dropfiles_prop = NULL;
-    }
-*/
-}
-
 #define CLIPBOARD_IDLE_ABORT_TIME 30
 
 static const gchar *
@@ -1970,7 +1940,7 @@ _gdk_win32_get_clipboard_format_name (UINT      fmt,
         }
 
       /* If GetClipboardFormatNameW() used up all the space, it means that
-       * we probably need a bigger buffer, but cap this at 1 kilobyte.
+       * we probably need a bigger buffer, but cap this at 1 megabyte.
        */
       if (gcfn_result == 0 || registered_name_w_len > 1024 * 1024)
         {
@@ -1997,12 +1967,22 @@ _gdk_win32_get_clipboard_format_name (UINT      fmt,
 /* This turns an arbitrary string into a string that
  * *looks* like a mime/type, such as:
  * "application/x.windows.FOO_BAR" from "FOO_BAR".
+ * Does nothing for strings that already look like a mime/type
+ * (no spaces, one slash, with at least one char on each side of the slash).
  */
 const gchar *
 _gdk_win32_get_clipboard_format_name_as_interned_mimetype (gchar *w32format_name)
 {
   gchar *mime_type;
   const gchar *result;
+  gchar *space = strchr (w32format_name, ' ');
+  gchar *slash = strchr (w32format_name, '/');
+
+  if (space == NULL &&
+      slash > w32format_name &&
+      slash[1] != '\0' &&
+      strchr (&slash[1], '/') == NULL)
+    return g_intern_string (w32format_name);
 
   mime_type = g_strdup_printf ("application/x.windows.%s", w32format_name);
   result = g_intern_string (mime_type);
@@ -2061,15 +2041,16 @@ _gdk_win32_get_compatibility_contentformats_for_w32format (UINT w32format)
 
 /* Turn W32 format into a GDK content format and add it
  * to the array of W32 format <-> GDK content format pairs
- * and/or to a list of GDK content formats.
+ * and/or to a GDK contentformat builder.
  * Also add compatibility GDK content formats for that W32 format.
  * The added content format string is always interned.
- * Ensures that duplicates are not added.
+ * Ensures that duplicates are not added to the pairs array
+ * (builder already takes care of that for itself).
  */
 void
-_gdk_win32_add_w32format_to_pairs (UINT     w32format,
-                                   GArray  *array,
-                                   GList  **list)
+_gdk_win32_add_w32format_to_pairs (UINT                      w32format,
+                                   GArray                   *pairs,
+                                   GdkContentFormatsBuilder *builder)
 {
   gboolean predef;
   gchar *w32format_name = _gdk_win32_get_clipboard_format_name (w32format, &predef);
@@ -2084,47 +2065,45 @@ _gdk_win32_add_w32format_to_pairs (UINT     w32format,
       GDK_NOTE (DND, g_print ("Maybe add as-is format %s (%s) (0x%p)\n", w32format_name, interned_w32format_name, interned_w32format_name));
       g_free (w32format_name);
 
-      if (array && interned_w32format_name != 0)
+      if (pairs && interned_w32format_name != 0)
         {
-          for (j = 0; j < array->len; j++)
-            if (g_array_index (array, GdkWin32ContentFormatPair, j).contentformat == interned_w32format_name)
+          for (j = 0; j < pairs->len; j++)
+            if (g_array_index (pairs, GdkWin32ContentFormatPair, j).contentformat == interned_w32format_name)
               break;
-          if (j == array->len)
+          if (j == pairs->len)
             {
               pair.w32format = w32format;
               pair.contentformat = interned_w32format_name;
               pair.transmute = FALSE;
-              g_array_append_val (array, pair);
+              g_array_append_val (pairs, pair);
             }
         }
-
-      if (list && interned_w32format_name != 0 && g_list_find (*list, interned_w32format_name) == NULL)
-        *list = g_list_prepend (*list, interned_w32format_name);
+      if (builder != NULL && interned_w32format_name != 0)
+        gdk_content_formats_builder_add_mime_type (builder, interned_w32format_name);
     }
 
   comp_pairs = _gdk_win32_get_compatibility_contentformats_for_w32format (w32format);
 
- if (array && comp_pairs != NULL)
+ if (pairs != NULL && comp_pairs != NULL)
    for (i = 0; i < comp_pairs->len; i++)
      {
        pair = g_array_index (comp_pairs, GdkWin32ContentFormatPair, i);
 
-       for (j = 0; j < array->len; j++)
-         if (g_array_index (array, GdkWin32ContentFormatPair, j).contentformat == pair.contentformat &&
-             g_array_index (array, GdkWin32ContentFormatPair, j).w32format == pair.w32format)
+       for (j = 0; j < pairs->len; j++)
+         if (g_array_index (pairs, GdkWin32ContentFormatPair, j).contentformat == pair.contentformat &&
+             g_array_index (pairs, GdkWin32ContentFormatPair, j).w32format == pair.w32format)
            break;
 
-       if (j == array->len)
-         g_array_append_val (array, pair);
+       if (j == pairs->len)
+         g_array_append_val (pairs, pair);
      }
 
- if (list && comp_pairs != NULL)
+ if (builder != NULL && comp_pairs != NULL)
    for (i = 0; i < comp_pairs->len; i++)
      {
        pair = g_array_index (comp_pairs, GdkWin32ContentFormatPair, i);
 
-       if (g_list_find (*list, pair.contentformat) == NULL)
-         *list = g_list_prepend (*list, pair.contentformat);
+       gdk_content_formats_builder_add_mime_type (builder, pair.contentformat);
      }
 }
 
