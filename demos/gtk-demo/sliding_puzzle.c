@@ -274,6 +274,15 @@ start_puzzle (GdkPaintable *puzzle)
   shuffle_puzzle (grid);
 }
 
+static void
+reshuffle (void)
+{
+  GtkWidget *grid;
+
+  grid = gtk_bin_get_child (GTK_BIN (frame));
+  shuffle_puzzle (grid);
+}
+
 GtkWidget *
 do_sliding_puzzle (GtkWidget *do_widget)
 {
@@ -281,10 +290,19 @@ do_sliding_puzzle (GtkWidget *do_widget)
 
   if (!window)
     {
+      GtkWidget *header;
+      GtkWidget *restart;
+
+      restart = gtk_button_new_from_icon_name ("view-refresh-symbolic");
+      g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);
+      header = gtk_header_bar_new ();
+      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), restart);
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Sliding Puzzle");
+      gtk_window_set_titlebar (GTK_WINDOW (window), header);
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
