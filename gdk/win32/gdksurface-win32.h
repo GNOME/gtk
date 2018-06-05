@@ -216,6 +216,9 @@ struct _GdkW32DragMoveResizeContext
 
 typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
 
+/* defined in gdkdrop-win32.c */
+typedef struct _drop_target_context drop_target_context;
+
 struct _GdkSurfaceImplWin32
 {
   GdkSurfaceImpl parent_instance;
@@ -242,6 +245,15 @@ struct _GdkSurfaceImplWin32
   GdkGeometry hints;
 
   GdkEventMask native_event_mask;
+
+  /* Non-NULL for any window that is registered as a drop target.
+   * For OLE2 protocol only.
+   */
+  drop_target_context *drop_target;
+  /* Temporarily holds the GdkDrop currently associated with this window.
+   * For LOCAL protocol only.
+   */
+  GdkDrop             *drop;
 
   GdkSurfaceTypeHint type_hint;
 
