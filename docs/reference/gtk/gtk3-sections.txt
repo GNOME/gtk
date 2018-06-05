@@ -1665,6 +1665,11 @@ GtkFontFilterFunc
 gtk_font_chooser_set_filter_func
 gtk_font_chooser_set_font_map
 gtk_font_chooser_get_font_map
+gtk_font_chooser_set_level
+gtk_font_chooser_get_level
+gtk_font_chooser_get_font_features
+gtk_font_chooser_set_language
+gtk_font_chooser_get_language
 
 <SUBSECTION Standard>
 GtkFontChooserIface

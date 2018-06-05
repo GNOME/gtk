@@ -539,6 +539,8 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
  * @level: the desired level of granularity
  *
  * Sets the desired level of granularity for selecting fonts.
+ *
+ * Since: 3.24
  */
 void
 gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
@@ -556,6 +558,8 @@ gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
  * Returns the current level of granularity for selecting fonts.
  *
  * Returns: the current granularity level
+ *
+ * Since: 3.24
  */
 GtkFontChooserLevel
 gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
@@ -576,6 +580,8 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
  * Gets the currently-selected font features.
  *
  * Returns: the currently selected font features
+ *
+ * Since: 3.24
  */
 char *
 gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
@@ -596,6 +602,8 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
  * Gets the language that is used for font features.
  *
  * Returns: the currently selected language
+ *
+ * Since: 3.24
  */
 char *
 gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
@@ -615,6 +623,8 @@ gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
  * @language: a language
  *
  * Sets the language to use for font features.
+ *
+ * Since: 3.24
  */
 void
 gtk_font_chooser_set_language (GtkFontChooser *fontchooser,
