@@ -38,13 +38,12 @@ struct _GdkWin32DragContextUtilityData
 
 struct _GdkWin32DragContext
 {
-  GdkDragContext context;
+  GdkDragContext drag;
   GdkDragProtocol protocol;
   GdkSurface *ipc_window;
   GdkSurface *drag_surface;
   GdkCursor *cursor;
   GdkSeat *grab_seat;
-  GdkDragAction actions;
   GdkDragAction current_action;
 
   GdkWin32DragContextUtilityData util_data;
@@ -57,6 +56,7 @@ struct _GdkWin32DragContext
 
   guint drag_status : 4;             /* Current status of drag */
   guint drop_failed : 1;             /* Whether the drop was unsuccessful */
+  guint handle_events : 1;           /* Whether handle_event() should do anything */
 };
 
 struct _GdkWin32DragContextClass
@@ -64,51 +64,54 @@ struct _GdkWin32DragContextClass
   GdkDragContextClass parent_class;
 };
 
-struct _GdkWin32DropContext
-{
-  GdkDragContext context;
-  GdkDragProtocol protocol;
-  GdkDragAction actions;
-  GdkDragAction current_action;
 
-  guint scale;          /* Temporarily caches the HiDPI scale */
-  gint             last_x;         /* Coordinates from last event, in GDK space */
-  gint             last_y;
-  DWORD            last_key_state; /* Key state from last event */
+gpointer _gdk_win32_dnd_thread_main                      (gpointer         data);
 
-  /* Just like context->formats, but an array, and with format IDs
-   * stored inside.
-   */
-  GArray *droptarget_w32format_contentformat_map;
+GdkDragContext *_gdk_win32_find_drag_for_dest_surface    (GdkSurface      *dest_surface);
 
-  GdkWin32DragContext *local_source_context;
+void     _gdk_win32_drag_send_local_status_event         (GdkDragContext  *drag,
+                                                          GdkDragAction    action);
+void     _gdk_win32_local_send_enter                     (GdkDragContext  *drag,
+                                                          GdkSurface      *dest_surface,
+                                                          guint32          time);
 
-  guint drag_status : 4;             /* Current status of drag */
-  guint drop_failed : 1;             /* Whether the drop was unsuccessful */
-};
+GdkDragContext *_gdk_win32_drag_context_find             (GdkSurface      *source,
+                                                          GdkSurface      *dest);
+GdkDrop        *_gdk_win32_get_drop_for_dest_surface     (GdkSurface      *dest);
 
-struct _GdkWin32DropContextClass
-{
-  GdkDragContextClass parent_class;
-};
+void     _gdk_win32_drag_do_leave                        (GdkDragContext  *context,
+                                                          guint32          time);
 
-gpointer _gdk_win32_dnd_thread_main (gpointer data);
+gboolean _gdk_win32_local_drop_target_will_emit_motion (GdkDrop *drop,
+                                                        gint     x_root,
+                                                        gint     y_root,
+                                                        DWORD    grfKeyState);
 
-GdkDragContext *_gdk_win32_find_source_context_for_dest_surface  (GdkSurface      *dest_surface);
+void     _gdk_win32_local_drop_target_dragenter (GdkDragContext *drag,
+                                                 GdkSurface     *dest_surface,
+                                                 gint            x_root,
+                                                 gint            y_root,
+                                                 DWORD           grfKeyState,
+                                                 guint32         time_,
+                                                 GdkDragAction  *actions);
+void     _gdk_win32_local_drop_target_dragover  (GdkDrop        *drop,
+                                                 GdkDragContext *drag,
+                                                 gint            x_root,
+                                                 gint            y_root,
+                                                 DWORD           grfKeyState,
+                                                 guint32         time_,
+                                                 GdkDragAction  *actions);
+void     _gdk_win32_local_drop_target_dragleave (GdkDrop *drop,
+                                                 guint32  time_);
+void     _gdk_win32_local_drop_target_drop      (GdkDrop        *drop,
+                                                 GdkDragContext *drag,
+                                                 guint32         time_,
+                                                 GdkDragAction  *actions);
 
-void            _gdk_win32_drag_context_send_local_status_event (GdkDragContext *src_context,
-                                                                 GdkDragAction   action);
-void            _gdk_win32_local_send_enter                     (GdkDragContext *context,
-                                                                 guint32         time);
-
-GdkDragContext *_gdk_win32_drag_context_find                    (GdkSurface      *source,
-                                                                 GdkSurface      *dest);
-GdkDragContext *_gdk_win32_drop_context_find                    (GdkSurface      *source,
-                                                                 GdkSurface      *dest);
-
-
-void            _gdk_win32_drag_do_leave                        (GdkDragContext *context,
-                                                                 guint32         time);
+void     _gdk_win32_local_drag_give_feedback    (GdkDragContext *drag,
+                                                 GdkDragAction   actions);
+void     _gdk_win32_local_drag_context_drop_response (GdkDragContext *drag,
+                                                      GdkDragAction   action);
 
 
 G_END_DECLS
