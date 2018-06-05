@@ -386,6 +386,7 @@ gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
 gdk_window_scroll
+gdk_window_move_to_rect
 gdk_window_move_region
 gdk_window_flush
 gdk_window_has_native
