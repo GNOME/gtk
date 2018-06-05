@@ -85,8 +85,6 @@ struct _GtkButtonPrivate
 {
   GtkActionHelper       *action_helper;
 
-  GdkDevice             *grab_keyboard;
-
   GtkGesture            *gesture;
   GtkEventController    *key_controller;
 
@@ -822,15 +820,6 @@ gtk_real_button_activate (GtkButton *button)
 
   if (gtk_widget_get_realized (widget) && !priv->activate_timeout)
     {
-      /* bgo#626336 - Only grab if we have a device (from an event), not if we
-       * were activated programmatically when no event is available.
-       */
-      if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-	{
-          gtk_device_grab_add (widget, device, TRUE);
-          priv->grab_keyboard = device;
-	}
-
       priv->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT, button_activate_timeout, button);
       g_source_set_name_by_id (priv->activate_timeout, "[gtk+] button_activate_timeout");
       priv->button_down = TRUE;
@@ -847,13 +836,6 @@ gtk_button_finish_activate (GtkButton *button,
 
   g_source_remove (priv->activate_timeout);
   priv->activate_timeout = 0;
-
-  if (priv->grab_keyboard)
-    {
-      gdk_seat_ungrab (gdk_device_get_seat (priv->grab_keyboard));
-      gtk_device_grab_remove (widget, priv->grab_keyboard);
-      priv->grab_keyboard = NULL;
-    }
 
   priv->button_down = FALSE;
 
@@ -1070,9 +1052,7 @@ gtk_button_grab_notify (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->grab_notify (widget, was_grabbed);
 
-  if (priv->activate_timeout &&
-      priv->grab_keyboard &&
-      gtk_widget_device_is_shadowed (widget, priv->grab_keyboard))
+  if (was_grabbed && priv->activate_timeout)
     gtk_button_finish_activate (button, FALSE);
 
   if (!was_grabbed)
