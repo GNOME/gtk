@@ -17,7 +17,6 @@ gdk__private__ (void)
     gdk_display_set_rendering_mode,
     gdk_display_get_debug_updates,
     gdk_display_set_debug_updates,
-    gdk_window_move_to_rect
   };
 
   return &table;

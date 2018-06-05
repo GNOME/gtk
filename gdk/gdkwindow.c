@@ -6233,8 +6233,7 @@ gdk_window_move_resize (GdkWindow *window,
  * Connect to the #GdkWindow::moved-to-rect signal to find out how it was
  * actually positioned.
  *
- * Since: 3.22
- * Stability: Private
+ * Since: 3.24
  */
 void
 gdk_window_move_to_rect (GdkWindow          *window,
