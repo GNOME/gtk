@@ -77,7 +77,6 @@ entry_size_allocate_cb (GtkEntry            *entry,
 static void
 entry_icon_press_cb (GtkEntry             *entry,
                      GtkEntryIconPosition  icon_pos,
-                     GdkEvent             *event,
                      gpointer              user_data)
 {
   GtkWidget *popover = user_data;

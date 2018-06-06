@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 static void
-clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
+clear_pressed (GtkEntry *entry, gint icon, gpointer data)
 {
    if (icon == GTK_ENTRY_ICON_SECONDARY)
      gtk_entry_set_text (entry, "");

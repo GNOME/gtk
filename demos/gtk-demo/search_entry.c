@@ -151,11 +151,10 @@ create_search_menu (GtkWidget *entry)
 static void
 icon_press_cb (GtkEntry       *entry,
                gint            position,
-               GdkEventButton *event,
                gpointer        data)
 {
   if (position == GTK_ENTRY_ICON_PRIMARY)
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
 }
 
 static void
