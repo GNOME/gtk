@@ -210,38 +210,6 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
 }
 
 /**
- * gdk_drag_context_get_source_surface:
- * @context: a #GdkDragContext
- *
- * Returns the #GdkSurface where the DND operation started.
- *
- * Returns: (transfer none): a #GdkSurface
- **/
-GdkSurface *
-gdk_drag_context_get_source_surface (GdkDragContext *context)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
-
-  return context->source_surface;
-}
-
-/**
- * gdk_drag_context_get_dest_surface:
- * @context: a #GdkDragContext
- *
- * Returns the destination surface for the DND operation.
- *
- * Returns: (transfer none): a #GdkSurface
- **/
-GdkSurface *
-gdk_drag_context_get_dest_surface (GdkDragContext *context)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
-
-  return context->dest_surface;
-}
-
-/**
  * gdk_drag_context_get_device:
  * @context: a #GdkDragContext
  *
