@@ -268,12 +268,6 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (result == GDK_FILTER_CONTINUE)
     result = _gdk_x11_dnd_filter (xevent, event, NULL);
 
-  if (result == GDK_FILTER_CONTINUE && filter_surface)
-    {
-      gpointer context = g_object_get_data (G_OBJECT (filter_surface), "xdnd-source-context");
-      result = xdnd_source_surface_filter (xevent, event, context);
-    }
-
   if (result != GDK_FILTER_CONTINUE)
     {
       if (result == GDK_FILTER_REMOVE)
