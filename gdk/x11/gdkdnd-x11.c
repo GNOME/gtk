@@ -1583,29 +1583,23 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
  * to continually send actions. So we select on PropertyChangeMask
  * and add this filter.
  */
-GdkFilterReturn
-xdnd_source_surface_filter (const XEvent *xevent,
-                           GdkEvent     *event,
-                           gpointer      data)
+static gboolean
+xdnd_source_surface_filter (GdkDisplay   *display,
+                            const XEvent *xevent,
+                            gpointer      data)
 {
-  GdkX11DragContext *context_x11;
-  GdkDisplay *display;
-
-  if (!data)
-    return GDK_FILTER_CONTINUE;
+  GdkX11DragContext *context_x11 = data;
 
   context_x11 = data;
-  display = gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context_x11));
 
   if ((xevent->xany.type == PropertyNotify) &&
+      (xevent->xany.window == GDK_SURFACE_XID (GDK_DRAG_CONTEXT (context_x11)->source_surface)) &&
       (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList")))
     {
       xdnd_read_actions (context_x11);
-
-      return GDK_FILTER_REMOVE;
     }
 
-  return GDK_FILTER_CONTINUE;
+  return FALSE;
 }
 
 static void
@@ -1618,25 +1612,26 @@ xdnd_manage_source_filter (GdkDragContext *context,
     {
       GdkDisplay *display = gdk_drag_context_get_display (context);
 
-      gdk_x11_display_error_trap_push (display);
-
       if (add_filter)
         {
+          gdk_x11_display_error_trap_push (display);
           gdk_surface_set_events (surface,
-                                 gdk_surface_get_events (surface) |
-                                 GDK_PROPERTY_CHANGE_MASK);
-          g_object_set_data (G_OBJECT (surface), "xdnd-source-context", context);
+                                  gdk_surface_get_events (surface) |
+                                  GDK_PROPERTY_CHANGE_MASK);
+          gdk_x11_display_error_trap_pop_ignored (display);
+
+          g_signal_connect (display, "xevent", G_CALLBACK (xdnd_source_surface_filter), context);
         }
       else
         {
-          g_object_set_data (G_OBJECT (surface), "xdnd-source-context", NULL);
+          g_signal_handlers_disconnect_by_func (display,
+                                                xdnd_source_surface_filter,
+                                                context);
           /* Should we remove the GDK_PROPERTY_NOTIFY mask?
            * but we might want it for other reasons. (Like
            * INCR selection transactions).
            */
         }
-
-      gdk_x11_display_error_trap_pop_ignored (display);
     }
 }
 
