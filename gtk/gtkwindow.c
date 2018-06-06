@@ -42,6 +42,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturemultipress.h"
 #include "gtkgestureprivate.h"
@@ -278,6 +279,7 @@ struct _GtkWindowPrivate
 
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
+  GtkEventController *key_controller;
 
   GdkSurface *hardcoded_surface;
 
@@ -1951,6 +1953,13 @@ gtk_window_init (GtkWindow *window)
                     G_CALLBACK (device_removed_cb), window);
 
   _gtk_widget_set_captured_event_handler (widget, captured_event_cb);
+
+  priv->key_controller = gtk_event_controller_key_new ();
+  g_signal_connect_swapped (priv->key_controller, "focus-in",
+                            G_CALLBACK (gtk_window_focus_in), window);
+  g_signal_connect_swapped (priv->key_controller, "focus-out",
+                            G_CALLBACK (gtk_window_focus_out), window);
+  gtk_widget_add_controller (widget, priv->key_controller);
 }
 
 static void
@@ -7524,19 +7533,7 @@ gtk_window_event (GtkWidget *widget,
 
   event_type = gdk_event_get_event_type (event);
 
-  if (event_type == GDK_FOCUS_CHANGE)
-    {
-      gboolean focus_in;
-
-      gdk_event_get_focus_in (event, &focus_in);
-      if (focus_in)
-        gtk_window_focus_in (widget);
-      else
-        gtk_window_focus_out (widget);
-
-      return GDK_EVENT_PROPAGATE;
-    }
-  else if (event_type == GDK_DELETE)
+  if (event_type == GDK_DELETE)
     {
       if (gtk_window_emit_close_request (GTK_WINDOW (widget)))
         return GDK_EVENT_STOP;
