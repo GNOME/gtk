@@ -3082,7 +3082,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
         case GDK_KEY_KP_Enter:
         case GDK_KEY_KP_Space:
           if ((gdk_drag_context_get_selected_action (context) != 0) &&
-              (gdk_drag_context_get_dest_surface (context) != NULL))
+              (context->dest_surface != NULL))
             {
               g_signal_emit_by_name (context, "drop-performed",
                                      gdk_event_get_time ((GdkEvent *) event));
@@ -3170,7 +3170,7 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
 #endif
 
   if ((gdk_drag_context_get_selected_action (context) != 0) &&
-      (gdk_drag_context_get_dest_surface (context) != NULL))
+      (context->dest_surface != NULL))
     {
       g_signal_emit_by_name (context, "drop-performed",
                              gdk_event_get_time ((GdkEvent *) event));
