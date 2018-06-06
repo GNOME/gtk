@@ -2439,7 +2439,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *drag,
         case GDK_KEY_KP_Enter:
         case GDK_KEY_KP_Space:
           if ((gdk_drag_context_get_selected_action (drag) != 0) &&
-              (gdk_drag_context_get_dest_surface (drag) != NULL))
+              (drag->dest_surface != NULL))
             {
               g_signal_emit_by_name (drag, "drop-performed",
                                      gdk_event_get_time ((GdkEvent *) event));
