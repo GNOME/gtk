@@ -2079,6 +2079,8 @@ _gdk_win32_window_drag_begin (GdkWindow *window,
   context_win32->last_key_state = 0;
   API_CALL (GetKeyboardState, (kbd_state));
 
+  if (kbd_state[VK_MENU] & 0x80)
+    context_win32->last_key_state |= MK_ALT;
   if (kbd_state[VK_CONTROL] & 0x80)
     context_win32->last_key_state |= MK_CONTROL;
   if (kbd_state[VK_SHIFT] & 0x80)
