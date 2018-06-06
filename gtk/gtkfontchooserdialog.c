@@ -39,6 +39,7 @@
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"
 #include "gtkactionable.h"
+#include "gtkeventcontrollerkey.h"
 
 struct _GtkFontChooserDialogPrivate
 {
@@ -124,21 +125,15 @@ font_activated_cb (GtkFontChooser *fontchooser,
 }
 
 static gboolean
-gtk_font_chooser_dialog_event (GtkWidget *dialog,
-                               GdkEvent  *event)
+dialog_forward_key (GtkEventControllerKey *controller,
+                    guint                  keyval,
+                    guint                  keycode,
+                    GdkModifierType        modifiers,
+                    GtkWidget             *widget)
 {
-  GtkFontChooserDialog *fdialog = GTK_FONT_CHOOSER_DIALOG (dialog);
-  gboolean handled = FALSE;
+  GtkFontChooserDialog *fdialog = GTK_FONT_CHOOSER_DIALOG (widget);
 
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_PROPAGATE;
-
-  handled = GTK_WIDGET_CLASS (gtk_font_chooser_dialog_parent_class)->event (dialog, event);
-
-  if (!handled)
-    handled = gtk_font_chooser_widget_handle_event (fdialog->priv->fontchooser, (GdkEventKey *)event);
-
-  return handled;
+  return gtk_event_controller_key_forward (controller, fdialog->priv->fontchooser);
 }
 
 static void
@@ -208,7 +203,6 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   gobject_class->get_property = gtk_font_chooser_dialog_get_property;
   gobject_class->set_property = gtk_font_chooser_dialog_set_property;
 
-  widget_class->event = gtk_font_chooser_dialog_event;
   widget_class->map = gtk_font_chooser_dialog_map;
 
   _gtk_font_chooser_install_properties (gobject_class);
@@ -222,6 +216,7 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, select_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, cancel_button);
   gtk_widget_class_bind_template_callback (widget_class, font_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, dialog_forward_key);
 }
 
 static void
