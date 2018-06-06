@@ -202,11 +202,6 @@ _gdk_x11_dnd_filter (const XEvent *xevent,
                      GdkEvent     *event,
                      gpointer      data);
 
-GdkFilterReturn
-xdnd_source_surface_filter (const XEvent *xevent,
-                            GdkEvent     *event,
-                            gpointer      data);
-
 typedef struct _GdkSurfaceCache GdkSurfaceCache;
 
 GdkSurfaceCache *
