@@ -456,8 +456,6 @@ static void     gtk_file_chooser_widget_hierarchy_changed (GtkWidget          *w
 static void     gtk_file_chooser_widget_style_updated   (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_display_changed (GtkWidget            *widget,
                                                          GdkDisplay           *previous_display);
-static gboolean gtk_file_chooser_widget_event (GtkWidget            *widget,
-                                               GdkEvent             *event);
 
 static gboolean       gtk_file_chooser_widget_set_current_folder           (GtkFileChooser    *chooser,
                                                                             GFile             *folder,
@@ -1338,9 +1336,6 @@ key_press_cb (GtkEventController *controller,
         return GDK_EVENT_STOP;
     }
 
-  if (!gdk_event_get_state (event, &state))
-    return GDK_EVENT_PROPAGATE;
-
   if ((keyval == GDK_KEY_Return
        || keyval == GDK_KEY_ISO_Enter
        || keyval == GDK_KEY_KP_Enter
@@ -1382,18 +1377,18 @@ key_press_cb (GtkEventController *controller,
 }
 
 static gboolean
-gtk_file_chooser_widget_event (GtkWidget *widget,
-                               GdkEvent  *event)
+widget_key_press_cb (GtkEventController *controller,
+                     guint               keyval,
+                     guint               keycode,
+                     GdkModifierType     state,
+                     gpointer            data)
 {
-  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
+  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  guint keyval, state;
+  gboolean handled = FALSE;
+  GdkEvent *event;
 
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_PROPAGATE;
-
-  gdk_event_get_keyval (event, &keyval);
-  gdk_event_get_state (event, &state);
+  event = gtk_get_current_event ();
 
   if (should_trigger_location_entry (impl, keyval, state))
     {
@@ -1404,17 +1399,20 @@ gtk_file_chooser_widget_event (GtkWidget *widget,
 
           gdk_event_get_string (event, &string);
           location_popup_handler (impl, string);
-          return GDK_EVENT_STOP;
+          handled = TRUE;
         }
     }
-  else if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), event))
+  else if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *) event))
     {
       if (priv->operation_mode != OPERATION_MODE_SEARCH)
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
-      return GDK_EVENT_STOP;
+
+      handled = TRUE;
     }
 
-  return GDK_EVENT_PROPAGATE;
+  g_object_unref (event);
+
+  return handled;
 }
 
 /* Callback used from gtk_tree_selection_selected_foreach(); adds a bookmark for
@@ -7972,7 +7970,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_widget_hierarchy_changed;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->display_changed = gtk_file_chooser_widget_display_changed;
-  widget_class->event = gtk_file_chooser_widget_event;
   widget_class->measure = gtk_file_chooser_widget_measure;
   widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
 
@@ -8396,6 +8393,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, multi_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, key_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, widget_key_press_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 }
