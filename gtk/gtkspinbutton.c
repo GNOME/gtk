@@ -258,8 +258,6 @@ static void gtk_spin_button_measure (GtkWidget      *widget,
 static void gtk_spin_button_size_allocate  (GtkWidget           *widget,
                                             const GtkAllocation *allocation,
                                             int                  baseline);
-static gboolean gtk_spin_button_event      (GtkWidget          *widget,
-                                            GdkEvent           *event);
 static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
                                             gboolean            was_grabbed);
 static void gtk_spin_button_state_flags_changed  (GtkWidget     *widget,
@@ -318,7 +316,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->realize = gtk_spin_button_realize;
   widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->event = gtk_spin_button_event;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
 
@@ -820,6 +817,29 @@ button_released_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
+key_controller_key_released (GtkEventControllerKey *key,
+                             guint                  keyval,
+                             guint                  keycode,
+                             GdkModifierType        modifiers,
+                             GtkSpinButton         *spin_button)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
+  priv->timer_calls = 0;
+}
+
+static void
+key_controller_focus_out (GtkEventControllerKey *key,
+                          GtkSpinButton         *spin_button)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
+    gtk_spin_button_update (spin_button);
+}
+
+static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
@@ -900,6 +920,13 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 				                GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (scroll_controller_scroll), spin_button);
+  gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-released",
+                    G_CALLBACK (key_controller_key_released), spin_button);
+  g_signal_connect (controller, "focus-out",
+                    G_CALLBACK (key_controller_focus_out), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
 }
 
@@ -1077,38 +1104,6 @@ gtk_spin_button_size_allocate (GtkWidget           *widget,
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (GTK_SPIN_BUTTON (widget));
 
   gtk_widget_size_allocate (priv->box, allocation, baseline);
-}
-
-static gboolean
-gtk_spin_button_event (GtkWidget *widget,
-                       GdkEvent  *event)
-{
-  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
-
-  if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
-    {
-      /* We only get a release at the end of a key repeat run, so reset the timer_step */
-      priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
-      priv->timer_calls = 0;
-
-      return GDK_EVENT_STOP;
-    }
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
-    {
-      gboolean focus_in;
-
-      gdk_event_get_focus_in (event, &focus_in);
-      if (!focus_in)
-        {
-          if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
-            gtk_spin_button_update (spin_button);
-        }
-
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
