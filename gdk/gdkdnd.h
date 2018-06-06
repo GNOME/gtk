@@ -73,11 +73,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface       *gdk_drag_context_get_source_surface    (GdkDragContext *context);
-GDK_AVAILABLE_IN_ALL
-GdkSurface       *gdk_drag_context_get_dest_surface      (GdkDragContext *context);
-
-GDK_AVAILABLE_IN_ALL
 GdkDragAction     gdk_drag_action_is_unique            (GdkDragAction   action);
 
 /* Destination side */
