@@ -24,7 +24,7 @@
 
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
-#include "gtkentry.h"
+#include "gtkentryprivate.h"
 #include "gtkfilesystemmodel.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
@@ -86,8 +86,6 @@ static void     gtk_file_chooser_entry_dispose        (GObject          *object)
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_tab_handler    (GtkWidget        *widget,
                                                        GdkEvent         *event);
-static gboolean gtk_file_chooser_entry_event          (GtkWidget       *widget,
-                                                       GdkEvent        *event);
 
 #ifdef G_OS_WIN32
 static gint     insert_text_callback      (GtkFileChooserEntry *widget,
@@ -169,7 +167,6 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   gobject_class->dispatch_properties_changed = gtk_file_chooser_entry_dispatch_properties_changed;
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
-  widget_class->event = gtk_file_chooser_entry_event;
 
   signals[HIDE_ENTRY] =
     g_signal_new (I_("hide-entry"),
@@ -259,6 +256,13 @@ match_func (GtkEntryCompletion *compl,
 }
 
 static void
+chooser_entry_focus_out (GtkEventControllerKey *key_controller,
+                         GtkFileChooserEntry   *chooser_entry)
+{
+  set_complete_on_load (chooser_entry, FALSE);
+}
+
+static void
 _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
   GtkEntryCompletion *comp;
@@ -297,6 +301,10 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
    * runs before the handler installed by entrycompletion */
   g_signal_connect (chooser_entry, "event",
                     G_CALLBACK (gtk_file_chooser_entry_tab_handler), NULL);
+
+  g_signal_connect (gtk_entry_get_key_controller (GTK_ENTRY (chooser_entry)),
+		    "focus-out", G_CALLBACK (chooser_entry_focus_out),
+		    chooser_entry);
 
 #ifdef G_OS_WIN32
   g_signal_connect (chooser_entry, "insert-text",
@@ -541,27 +549,6 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
     start_explicit_completion (chooser_entry);
 
   return GDK_EVENT_STOP;
-}
-
-static gboolean
-gtk_file_chooser_entry_event (GtkWidget *widget,
-                              GdkEvent  *event)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
-
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
-    {
-      gboolean focus_in;
-
-      gdk_event_get_focus_in (event, &focus_in);
-
-      if (!focus_in)
-        set_complete_on_load (chooser_entry, FALSE);
-
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
