@@ -4822,12 +4822,12 @@ msgstr ""
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Formes de terminal nº2"
+msgstr "Formes de terminal núm. 2"
 
 #: gtk/open-type-layout.h:41
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Formes de terminal nº3"
+msgstr "Formes de terminal núm. 3"
 
 #: gtk/open-type-layout.h:42
 msgctxt "OpenType layout"
@@ -4988,7 +4988,7 @@ msgstr "Posicionament de la marca"
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr "Formes mitjanes nº2"
+msgstr "Formes mitjanes núm. 2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
@@ -6505,7 +6505,7 @@ msgstr "Mongol"
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Myanmar"
-msgstr "Màiamar"
+msgstr "Myanmar"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
@@ -7776,7 +7776,7 @@ msgstr "Tailandès-Lao"
 #: modules/input/imti-er.c:451
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Tigrinya-Eritreà (EZ+)"
+msgstr "Tigrinya-Eritrea (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:451
