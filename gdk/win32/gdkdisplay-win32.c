@@ -82,7 +82,12 @@ enum_monitor (HMONITOR hmonitor,
   gint *index = (gint *) data;
   GdkWin32Monitor *monitor;
 
-  g_assert (*index < _gdk_num_monitors);
+  if (*index >= _gdk_num_monitors)
+    {
+      (*index) += 1;
+
+      return TRUE;
+    }
 
   monitor = _gdk_monitors + *index;
 
@@ -126,14 +131,21 @@ _gdk_monitor_init (void)
 #ifdef HAVE_MONITOR_INFO
   gint i, index;
 
-  _gdk_num_monitors = 0;
+  /* In case something happens between monitor counting and monitor
+   * enumeration, repeat until the count matches up.
+   * enum_monitor is coded to ignore any monitors past _gdk_num_monitors.
+   */
+  do
+  {
+    _gdk_num_monitors = 0;
 
-  EnumDisplayMonitors (NULL, NULL, count_monitor, (LPARAM) &_gdk_num_monitors);
+    EnumDisplayMonitors (NULL, NULL, count_monitor, (LPARAM) &_gdk_num_monitors);
 
-  _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, _gdk_num_monitors);
+    _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, _gdk_num_monitors);
 
-  index = 0;
-  EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &index);
+    index = 0;
+    EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &index);
+  } while (index != _gdk_num_monitors);
 
   _gdk_offset_x = G_MININT;
   _gdk_offset_y = G_MININT;
