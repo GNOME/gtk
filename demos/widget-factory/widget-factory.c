@@ -353,7 +353,6 @@ update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 static void
 on_entry_icon_release (GtkEntry            *entry,
                        GtkEntryIconPosition icon_pos,
-                       GdkEvent            *event,
                        gpointer             user_data)
 {
   if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
