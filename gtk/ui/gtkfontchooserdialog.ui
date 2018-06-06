@@ -33,6 +33,12 @@
         <property name="can-default">1</property>
       </object>
     </child>
+    <child>
+      <object class="GtkEventControllerKey">
+        <signal name="key-pressed" handler="dialog_forward_key" swapped="no"/>
+        <signal name="key-released" handler="dialog_forward_key" swapped="no"/>
+      </object>
+    </child>
     <action-widgets>
       <action-widget response="cancel">cancel_button</action-widget>
       <action-widget response="ok" default="true">select_button</action-widget>
