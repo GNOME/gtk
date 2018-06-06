@@ -83,9 +83,6 @@ gdk_event_source_get_filter_surface (GdkEventSource      *event_source,
   surface = gdk_x11_surface_lookup_for_display (event_source->display,
                                               xevent->xany.window);
 
-  if (surface && !GDK_IS_SURFACE (surface))
-    surface = NULL;
-
   return surface;
 }
 
