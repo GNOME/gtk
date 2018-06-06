@@ -9578,3 +9578,11 @@ set_enable_emoji_completion (GtkEntry *entry,
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }
+
+GtkEventController *
+gtk_entry_get_key_controller (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  return priv->key_controller;
+}

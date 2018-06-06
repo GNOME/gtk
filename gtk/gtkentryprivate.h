@@ -97,6 +97,7 @@ void     gtk_entry_set_positions           (GtkEntry   *entry,
                                             int         current_pos,
                                             int         selection_bound);
 
+GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
 
 G_END_DECLS
 
