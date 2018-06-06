@@ -892,6 +892,9 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_font_chooser_widget_set_cell_size (fontchooser);
   gtk_font_chooser_widget_take_font_desc (fontchooser, NULL);
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry),
+                                           GTK_WIDGET (fontchooser));
 }
 
 /**
@@ -2529,17 +2532,6 @@ gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
   iface->set_filter_func = gtk_font_chooser_widget_set_filter_func;
   iface->set_font_map = gtk_font_chooser_widget_set_font_map;
   iface->get_font_map = gtk_font_chooser_widget_get_font_map;
-}
-
-gboolean
-gtk_font_chooser_widget_handle_event (GtkWidget   *widget,
-                                      GdkEventKey *key_event)
-{
-  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  GdkEvent *event = (GdkEvent *)key_event;
-
-  return gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), event);
 }
 
 GAction *
