@@ -1816,7 +1816,6 @@ out:
 static void
 on_address_entry_show_help_pressed (GtkPlacesView        *view,
                                     GtkEntryIconPosition  icon_pos,
-                                    GdkEvent             *event,
                                     GtkEntry             *entry)
 {
   GtkPlacesViewPrivate *priv;

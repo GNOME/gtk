@@ -284,12 +284,9 @@ struct _EntryIconInfo
   gchar *tooltip;
   guint nonactivatable : 1;
   guint in_drag        : 1;
-  guint pressed        : 1;
 
   GdkDragAction actions;
   GdkContentFormats *target_list;
-  GdkEventSequence *current_sequence;
-  GdkDevice *device;
 };
 
 struct _GtkEntryPasswordHint
@@ -418,8 +415,6 @@ static void   gtk_entry_size_allocate        (GtkWidget           *widget,
                                               int                  baseline);
 static void   gtk_entry_snapshot             (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
-static gboolean gtk_entry_event              (GtkWidget        *widget,
-                                              GdkEvent         *event);
 static void   gtk_entry_focus_in             (GtkWidget        *widget);
 static void   gtk_entry_focus_out            (GtkWidget        *widget);
 static void   gtk_entry_grab_focus           (GtkWidget        *widget);
@@ -594,8 +589,6 @@ static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							const GdkEvent *event);
 static gboolean     gtk_entry_mnemonic_activate        (GtkWidget      *widget,
 							gboolean        group_cycling);
-static void         gtk_entry_grab_notify              (GtkWidget      *widget,
-                                                        gboolean        was_grabbed);
 static void         gtk_entry_check_cursor_blink       (GtkEntry       *entry);
 static void         gtk_entry_pend_cursor_blink        (GtkEntry       *entry);
 static void         gtk_entry_reset_blink_time         (GtkEntry       *entry);
@@ -790,7 +783,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->measure = gtk_entry_measure;
   widget_class->size_allocate = gtk_entry_size_allocate;
   widget_class->snapshot = gtk_entry_snapshot;
-  widget_class->event = gtk_entry_event;
   widget_class->grab_focus = gtk_entry_grab_focus;
   widget_class->style_updated = gtk_entry_style_updated;
   widget_class->query_tooltip = gtk_entry_query_tooltip;
@@ -800,7 +792,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->state_flags_changed = gtk_entry_state_flags_changed;
   widget_class->display_changed = gtk_entry_display_changed;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
-  widget_class->grab_notify = gtk_entry_grab_notify;
 
   widget_class->drag_drop = gtk_entry_drag_drop;
   widget_class->drag_motion = gtk_entry_drag_motion;
@@ -1651,7 +1642,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::icon-press:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
-   * @event: (type Gdk.EventButton): the button press event
    *
    * The ::icon-press signal is emitted when an activatable icon
    * is clicked.
@@ -1662,16 +1652,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_OBJECT,
-                  G_TYPE_NONE, 2,
-                  GTK_TYPE_ENTRY_ICON_POSITION,
-                  GDK_TYPE_EVENT);
-  
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_ENTRY_ICON_POSITION);
+
   /**
    * GtkEntry::icon-release:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
-   * @event: (type Gdk.EventButton): the button release event
    *
    * The ::icon-release signal is emitted on the button release from a
    * mouse click over an activatable icon.
@@ -1682,10 +1670,9 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_OBJECT,
-                  G_TYPE_NONE, 2,
-                  GTK_TYPE_ENTRY_ICON_POSITION,
-                  GDK_TYPE_EVENT);
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_ENTRY_ICON_POSITION);
 
   /**
    * GtkEntry::preedit-changed:
@@ -2965,6 +2952,91 @@ update_node_ordering (GtkEntry *entry)
     gtk_css_node_insert_before (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
 }
 
+static GtkEntryIconPosition
+get_icon_position_from_controller (GtkEntry           *entry,
+                                   GtkEventController *controller)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+
+  if (priv->icons[GTK_ENTRY_ICON_PRIMARY] &&
+      priv->icons[GTK_ENTRY_ICON_PRIMARY]->widget == widget)
+    return GTK_ENTRY_ICON_PRIMARY;
+  else if (priv->icons[GTK_ENTRY_ICON_SECONDARY] &&
+           priv->icons[GTK_ENTRY_ICON_SECONDARY]->widget == widget)
+    return GTK_ENTRY_ICON_SECONDARY;
+
+  g_assert_not_reached ();
+  return -1;
+}
+
+static void
+icon_pressed_cb (GtkGestureMultiPress *gesture,
+                 gint                  n_press,
+                 gdouble               x,
+                 gdouble               y,
+                 GtkEntry             *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GtkEntryIconPosition pos;
+  EntryIconInfo *icon_info;
+
+  pos = get_icon_position_from_controller (entry, GTK_EVENT_CONTROLLER (gesture));
+  icon_info = priv->icons[pos];
+
+  if (!icon_info->nonactivatable)
+    g_signal_emit (entry, signals[ICON_PRESS], 0, pos);
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+icon_released_cb (GtkGestureMultiPress *gesture,
+                  gint                  n_press,
+                  gdouble               x,
+                  gdouble               y,
+                  GtkEntry             *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GtkEntryIconPosition pos;
+  EntryIconInfo *icon_info;
+
+  pos = get_icon_position_from_controller (entry, GTK_EVENT_CONTROLLER (gesture));
+  icon_info = priv->icons[pos];
+
+  if (!icon_info->nonactivatable)
+    g_signal_emit (entry, signals[ICON_RELEASE], 0, pos);
+}
+
+static void
+icon_drag_update_cb (GtkGestureDrag *gesture,
+                     gdouble         x,
+                     gdouble         y,
+                     GtkEntry       *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  gdouble start_x, start_y;
+  GtkEntryIconPosition pos;
+  EntryIconInfo *icon_info;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+  pos = get_icon_position_from_controller (entry, GTK_EVENT_CONTROLLER (gesture));
+  icon_info = priv->icons[pos];
+
+  if (icon_info->target_list != NULL &&
+      gtk_drag_check_threshold (icon_info->widget,
+                                start_x, start_y,
+                                x, y))
+    {
+      icon_info->in_drag = TRUE;
+      gtk_drag_begin_with_coordinates (GTK_WIDGET (entry),
+                                       gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                       icon_info->target_list,
+                                       icon_info->actions,
+                                       start_x, start_y);
+    }
+}
+
 static EntryIconInfo*
 construct_icon_info (GtkWidget            *widget,
                      GtkEntryIconPosition  icon_pos)
@@ -2972,6 +3044,7 @@ construct_icon_info (GtkWidget            *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
+  GtkGesture *drag, *press;
 
   g_return_val_if_fail (priv->icons[icon_pos] == NULL, NULL);
 
@@ -2984,6 +3057,20 @@ construct_icon_info (GtkWidget            *widget,
 
   update_icon_style (widget, icon_pos);
   update_node_ordering (entry);
+
+  press = gtk_gesture_multi_press_new ();
+  g_signal_connect (press, "pressed",
+                    G_CALLBACK (icon_pressed_cb), entry);
+  g_signal_connect (press, "released",
+                    G_CALLBACK (icon_released_cb), entry);
+  gtk_widget_add_controller (icon_info->widget, GTK_EVENT_CONTROLLER (press));
+
+  drag = gtk_gesture_drag_new ();
+  g_signal_connect (drag, "drag-update",
+                    G_CALLBACK (icon_drag_update_cb), entry);
+  gtk_widget_add_controller (icon_info->widget, GTK_EVENT_CONTROLLER (drag));
+
+  gtk_gesture_group (press, drag);
 
   return icon_info;
 }
@@ -3509,108 +3596,6 @@ gtk_entry_update_handles (GtkEntry          *entry,
   else
     gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_CURSOR,
                            cursor, 0, text_allocation.height);
-}
-
-static gboolean
-gtk_entry_event (GtkWidget *widget,
-                 GdkEvent  *event)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (GTK_ENTRY (widget));
-  EntryIconInfo *icon_info = NULL;
-  GdkEventSequence *sequence;
-  GdkDevice *device;
-  gdouble x, y;
-  gint i = 0;
-
-  if (!gdk_event_get_coords (event, &x, &y))
-    return GDK_EVENT_PROPAGATE;
-
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      if (priv->icons[i])
-        {
-          int icon_x, icon_y;
-          gtk_widget_translate_coordinates (widget, priv->icons[i]->widget,
-                                            x, y, &icon_x, &icon_y);
-          if (gtk_widget_contains (priv->icons[i]->widget, icon_x, icon_y))
-            {
-              icon_info = priv->icons[i];
-              break;
-            }
-        }
-    }
-
-  if (!icon_info)
-    return GDK_EVENT_PROPAGATE;
-
-  if (!gtk_widget_get_sensitive (icon_info->widget))
-    return GDK_EVENT_STOP;
-
-  sequence = gdk_event_get_event_sequence (event);
-  device = gdk_event_get_device (event);
-
-  switch ((guint) gdk_event_get_event_type (event))
-    {
-    case GDK_TOUCH_BEGIN:
-      if (icon_info->current_sequence)
-        break;
-
-      icon_info->current_sequence = sequence;
-      /* Fall through */
-    case GDK_BUTTON_PRESS:
-      priv->start_x = x;
-      priv->start_y = y;
-      icon_info->pressed = TRUE;
-      icon_info->device = device;
-
-      if (!icon_info->nonactivatable) {
-        g_signal_emit (widget, signals[ICON_PRESS], 0, i, event);
-      }
-
-      break;
-    case GDK_TOUCH_UPDATE:
-      if (icon_info->device != device ||
-          icon_info->current_sequence != sequence)
-        break;
-      /* Fall through */
-    case GDK_MOTION_NOTIFY:
-      if (icon_info->pressed &&
-          icon_info->target_list != NULL &&
-              gtk_drag_check_threshold (widget,
-                                        priv->start_x,
-                                        priv->start_y,
-                                        x, y))
-        {
-          icon_info->in_drag = TRUE;
-          gtk_drag_begin_with_coordinates (widget,
-                                           device,
-                                           icon_info->target_list,
-                                           icon_info->actions,
-                                           priv->start_x,
-                                           priv->start_y);
-        }
-
-      break;
-    case GDK_TOUCH_END:
-      if (icon_info->device != device ||
-          icon_info->current_sequence != sequence)
-        break;
-
-      icon_info->current_sequence = NULL;
-      /* Fall through */
-    case GDK_BUTTON_RELEASE:
-      icon_info->pressed = FALSE;
-      icon_info->device = NULL;
-
-      if (!icon_info->nonactivatable)
-        g_signal_emit (widget, signals[ICON_RELEASE], 0, i, event);
-
-      break;
-    default:
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  return GDK_EVENT_STOP;
 }
 
 static void
@@ -7683,8 +7668,6 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
     {
       gtk_widget_set_sensitive (icon_info->widget, sensitive);
 
-      icon_info->pressed = FALSE;
-
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
                                             ? PROP_SENSITIVE_PRIMARY
@@ -8166,35 +8149,6 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
 {
   gtk_widget_grab_focus (widget);
   return GDK_EVENT_STOP;
-}
-
-static void
-check_undo_icon_grab (GtkEntry      *entry,
-                      EntryIconInfo *info)
-{
-  if (!info->device ||
-      !gtk_widget_device_is_shadowed (GTK_WIDGET (entry), info->device))
-    return;
-
-  info->pressed = FALSE;
-  info->current_sequence = NULL;
-  info->device = NULL;
-}
-
-static void
-gtk_entry_grab_notify (GtkWidget *widget,
-                       gboolean   was_grabbed)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (GTK_ENTRY (widget));
-  gint i;
-
-  GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_notify (widget, was_grabbed);
-
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      if (priv->icons[i])
-        check_undo_icon_grab (GTK_ENTRY (widget), priv->icons[i]);
-    }
 }
 
 static void

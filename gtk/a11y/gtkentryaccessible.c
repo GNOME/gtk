@@ -221,8 +221,6 @@ gtk_entry_icon_accessible_do_action (AtkAction *action,
   GtkEntryIconAccessible *icon = (GtkEntryIconAccessible *)action;
   GtkWidget *widget;
   GtkEntry *gtk_entry;
-  GdkEvent *event;
-  GdkRectangle icon_area;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (icon->entry));
   if (widget == NULL)
@@ -240,18 +238,7 @@ gtk_entry_icon_accessible_do_action (AtkAction *action,
       !gtk_entry_get_icon_activatable (gtk_entry, icon->pos))
     return FALSE;
 
-  gtk_entry_get_icon_area (gtk_entry, icon->pos, &icon_area);
-
-  event = gdk_event_new (GDK_BUTTON_PRESS);
-  event->any.surface = g_object_ref (gtk_widget_get_surface (widget));
-  event->button.button = 1;
-  event->any.send_event = TRUE;
-  event->button.time = GDK_CURRENT_TIME;
-  event->button.x = icon_area.x;
-  event->button.y = icon_area.y;
-
-  g_signal_emit_by_name (widget, "icon-press", 0, icon->pos, event);
-  g_object_unref (event);
+  g_signal_emit_by_name (widget, "icon-press", 0, icon->pos);
   return TRUE;
 }
 
