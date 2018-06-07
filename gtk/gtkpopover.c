@@ -131,6 +131,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkpopoveraccessible.h"
 
@@ -266,12 +268,81 @@ node_style_changed_cb (GtkCssNode        *node,
     gtk_widget_queue_draw (widget);
 }
 
+static gboolean
+key_controller_key_pressed (GtkEventControllerKey *key,
+                            guint                  keyval,
+                            guint                  keycode,
+                            GdkModifierType        modifiers,
+                            GtkPopover            *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *toplevel, *focus;
+
+  if (keyval == GDK_KEY_Escape)
+    {
+      gtk_popover_popdown (popover);
+      return TRUE;
+    }
+
+  if (priv->modal)
+    {
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (popover));
+
+      if (GTK_IS_WINDOW (toplevel))
+        {
+          focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+
+          if (focus && gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
+            return gtk_event_controller_key_forward (key, focus);
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gesture_pressed (GtkGestureMultiPress *gesture,
+                 gint                  n_press,
+                 gdouble               x,
+                 gdouble               y,
+                 GtkPopover           *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->button_pressed = TRUE;
+}
+
+static void
+gesture_released (GtkGestureMultiPress *gesture,
+                  gint                  n_press,
+                  gdouble               x,
+                  gdouble               y,
+                  GtkPopover           *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkAllocation child_alloc;
+  GtkWidget *child;
+
+  if (!priv->button_pressed)
+    return;
+
+  child = gtk_bin_get_child (GTK_BIN (popover));
+  gtk_widget_get_allocation (child, &child_alloc);
+
+  if (x < child_alloc.x ||
+      x > child_alloc.x + child_alloc.width ||
+      y < child_alloc.y ||
+      y > child_alloc.y + child_alloc.height)
+    gtk_popover_popdown (popover);
+}
+
 static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget;
   GtkStyleContext *context;
+  GtkEventController *controller;
 
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_surface (widget, TRUE);
@@ -300,6 +371,18 @@ gtk_popover_init (GtkPopover *popover)
 
   context = gtk_widget_get_style_context (priv->contents_widget);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (key_controller_key_pressed), popover);
+  gtk_widget_add_controller (widget, controller);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  g_signal_connect (controller, "pressed",
+                    G_CALLBACK (gesture_pressed), popover);
+  g_signal_connect (controller, "released",
+                    G_CALLBACK (gesture_released), popover);
+  gtk_widget_add_controller (widget, controller);
 }
 
 static void
@@ -1369,68 +1452,6 @@ gtk_popover_size_allocate (GtkWidget           *widget,
     }
 }
 
-static gboolean
-gtk_popover_event (GtkWidget *widget,
-                   GdkEvent  *event)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
-    {
-      GtkWidget *toplevel, *focus;
-      guint keyval;
-
-      if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-        return GDK_EVENT_PROPAGATE;
-
-      if (keyval == GDK_KEY_Escape)
-        {
-          gtk_popover_popdown (GTK_POPOVER (widget));
-          return GDK_EVENT_STOP;
-        }
-
-      if (!priv->modal)
-       return GDK_EVENT_PROPAGATE;
-
-      toplevel = gtk_widget_get_toplevel (widget);
-
-      if (GTK_IS_WINDOW (toplevel))
-        {
-          focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-
-          if (focus && gtk_widget_is_ancestor (focus, widget))
-            return gtk_widget_event (focus, (GdkEvent*) event);
-        }
-
-      return GDK_EVENT_PROPAGATE;
-    }
-  else if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
-    priv->button_pressed = TRUE;
-  else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
-    {
-      GtkAllocation child_alloc;
-      GtkWidget *child;
-      gdouble x, y;
-
-      child = gtk_bin_get_child (GTK_BIN (widget));
-
-      if (!priv->button_pressed ||
-          !gdk_event_get_coords (event, &x, &y))
-        return GDK_EVENT_PROPAGATE;
-
-      gtk_widget_get_allocation (child, &child_alloc);
-
-      if (x < child_alloc.x ||
-          x > child_alloc.x + child_alloc.width ||
-          y < child_alloc.y ||
-          y > child_alloc.y + child_alloc.height)
-        gtk_popover_popdown (popover);
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 static void
 gtk_popover_grab_focus (GtkWidget *widget)
 {
@@ -1573,7 +1594,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
-  widget_class->event = gtk_popover_event;
   widget_class->grab_focus = gtk_popover_grab_focus;
   widget_class->focus = gtk_popover_focus;
   widget_class->show = gtk_popover_show;
