@@ -220,6 +220,68 @@ puzzle_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
+puzzle_button_pressed (GtkGestureMultiPress *gesture,
+                       int                   n_press,
+                       double                x,
+                       double                y,
+                       GtkWidget            *grid)
+{
+  GtkWidget *child;
+  int l, t, i;
+  int pos;
+
+  child = gtk_widget_pick (grid, x, y);
+
+  if (!child)
+    {
+      gtk_widget_error_bell (grid);
+      return;
+    }
+
+  gtk_container_child_get (GTK_CONTAINER (grid), child,
+                           "left-attach", &l,
+                           "top-attach", &t,
+                           NULL);
+
+  if (l == pos_x && t == pos_y)
+    {
+      gtk_widget_error_bell (grid);
+    }
+  else if (l == pos_x)
+    {
+      pos = pos_y;
+      for (i = t; i < pos; i++)
+        {
+          if (!move_puzzle (grid, 0, -1))
+            gtk_widget_error_bell (grid);
+        }
+      for (i = pos; i < t; i++)
+        {
+          if (!move_puzzle (grid, 0, 1))
+            gtk_widget_error_bell (grid);
+        }
+    }
+  else if (t == pos_y)
+    {
+      pos = pos_x;
+      for (i = l; i < pos; i++)
+        {
+          if (!move_puzzle (grid, -1, 0))
+            gtk_widget_error_bell (grid);
+        }
+      for (i = pos; i < l; i++)
+        {
+          if (!move_puzzle (grid, 1, 0))
+            gtk_widget_error_bell (grid);
+        }
+    }
+  else
+    {
+      gtk_widget_error_bell (grid);
+    }
+}
+
+static void
 start_puzzle (GdkPaintable *puzzle)
 {
   GtkWidget *image, *grid;
@@ -241,6 +303,12 @@ start_puzzle (GdkPaintable *puzzle)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (puzzle_key_pressed),
+                    grid);
+  gtk_widget_add_controller (GTK_WIDGET (grid), controller);
+
+  controller = gtk_gesture_multi_press_new ();
+  g_signal_connect (controller, "pressed",
+                    G_CALLBACK (puzzle_button_pressed),
                     grid);
   gtk_widget_add_controller (GTK_WIDGET (grid), controller);
 
