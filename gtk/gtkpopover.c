@@ -293,7 +293,13 @@ key_controller_key_pressed (GtkEventControllerKey *key,
           focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
 
           if (focus && gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
-            return gtk_event_controller_key_forward (key, focus);
+            {
+              if (gtk_event_controller_key_forward (key, focus))
+                return TRUE;
+            }
+
+          /* Piggyback on the toplevel to have it handle key navigation */
+          return gtk_event_controller_key_forward (key, toplevel);
         }
     }
 
