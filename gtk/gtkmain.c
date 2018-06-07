@@ -1788,9 +1788,13 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_DELETE:
       g_object_ref (event_widget);
-      if ((!gtk_window_group_get_current_grab (window_group) || gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget) &&
-          !gtk_widget_event (event_widget, event))
-        gtk_widget_destroy (event_widget);
+      if (!gtk_window_group_get_current_grab (window_group) ||
+          gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget)
+        {
+          if (!GTK_IS_WINDOW (event_widget) ||
+              !gtk_window_emit_close_request (GTK_WINDOW (event_widget)))
+            gtk_widget_destroy (event_widget);
+        }
       g_object_unref (event_widget);
       break;
 
@@ -1813,9 +1817,31 @@ gtk_main_do_event (GdkEvent *event)
         gtk_widget_render (event_widget, event->any.surface, event->expose.region);
       break;
 
-    case GDK_FOCUS_CHANGE:
-    case GDK_CONFIGURE:
     case GDK_MAP:
+      if (GTK_IS_WINDOW (event_widget) && !_gtk_widget_get_mapped (event_widget))
+        {
+          /* we should be be unmapped, but are getting a MapEvent, this may happen
+           * to toplevel XWindows if mapping was intercepted by a window manager
+           * and an unmap request occurred while the MapRequestEvent was still
+           * being handled. we work around this situation here by re-requesting
+           * the window being unmapped. more details can be found in:
+           *   http://bugzilla.gnome.org/show_bug.cgi?id=316180
+           */
+          gdk_surface_hide (_gtk_widget_get_surface (event_widget));
+        }
+      break;
+
+    case GDK_CONFIGURE:
+      if (GTK_IS_WINDOW (event_widget) &&
+          _gtk_widget_get_surface (event_widget) == event->any.surface)
+        {
+          gtk_window_configure (GTK_WINDOW (event_widget),
+                                event->configure.width,
+                                event->configure.height);
+        }
+
+      break;
+    case GDK_FOCUS_CHANGE:
     case GDK_UNMAP:
     case GDK_GRAB_BROKEN:
       if (!_gtk_widget_captured_event (event_widget, event))
