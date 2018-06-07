@@ -279,6 +279,7 @@ typedef struct
 
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
+  GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
 
   GdkSurface *hardcoded_surface;
@@ -1609,21 +1610,27 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
       event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
       event_widget = gtk_get_event_target (event);
 
-      /* Check whether the target widget should be left alone at handling
-       * the sequence, this is better done late to give room for gestures
-       * there to go denied.
-       *
-       * Besides claiming gestures, we must bail out too if there's gestures
-       * in the "none" state at this point, as those are still handling events
-       * and can potentially go claimed, and we don't want to stop the target
-       * widget from doing anything.
-       */
-      if (event_widget != GTK_WIDGET (window) &&
-          !gtk_widget_has_grab (event_widget) &&
-          _gtk_widget_consumes_motion (event_widget, sequence))
+      if (gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (gesture)) == GTK_PHASE_CAPTURE)
         {
-          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-          return;
+          const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+          GtkWidget *event_widget = gtk_get_event_target (event);
+
+          /* Check whether the target widget should be left alone at handling
+           * the sequence, this is better done late to give room for gestures
+           * there to go denied.
+           *
+           * Besides claiming gestures, we must bail out too if there's gestures
+           * in the "none" state at this point, as those are still handling events
+           * and can potentially go claimed, and we don't want to stop the target
+           * widget from doing anything.
+           */
+          if (event_widget != GTK_WIDGET (window) &&
+              !gtk_widget_has_grab (event_widget) &&
+              _gtk_widget_consumes_motion (event_widget, sequence))
+            {
+              gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+              return;
+            }
         }
 
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
@@ -1964,6 +1971,21 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_add_controller (widget, priv->key_controller);
 }
 
+static GtkGesture *
+create_drag_gesture (GtkWindow *window)
+{
+  GtkGesture *gesture;
+
+  gesture = gtk_gesture_drag_new ();
+  g_signal_connect (gesture, "drag-begin",
+                    G_CALLBACK (drag_gesture_begin_cb), window);
+  g_signal_connect (gesture, "drag-update",
+                    G_CALLBACK (drag_gesture_update_cb), window);
+  gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (gesture));
+
+  return gesture;
+}
+
 static void
 gtk_window_constructed (GObject *object)
 {
@@ -1977,19 +1999,18 @@ gtk_window_constructed (GObject *object)
       priv->multipress_gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                                  GTK_PHASE_NONE);
+                                                  GTK_PHASE_BUBBLE);
       g_signal_connect (priv->multipress_gesture, "pressed",
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
       gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
 
-      priv->drag_gesture = gtk_gesture_drag_new ();
+      priv->drag_gesture = create_drag_gesture (window);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
                                                   GTK_PHASE_CAPTURE);
-      g_signal_connect (priv->drag_gesture, "drag-begin",
-                        G_CALLBACK (drag_gesture_begin_cb), object);
-      g_signal_connect (priv->drag_gesture, "drag-update",
-                        G_CALLBACK (drag_gesture_update_cb), object);
-      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->drag_gesture));
+
+      priv->bubble_drag_gesture = create_drag_gesture (window);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->bubble_drag_gesture),
+                                                  GTK_PHASE_BUBBLE);
     }
 }
 
@@ -7439,86 +7460,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
 }
 
 static gboolean
-controller_handle_wm_event (GtkGesture     *gesture,
-                            const GdkEvent *event)
-{
-  GdkEventSequence *seq;
-  gboolean retval;
-
-  seq = gdk_event_get_event_sequence (event);
-  retval = gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (gesture),
-                                              event);
-
-  /* Reset immediately the gestures, here we don't get many guarantees
-   * about whether the target window event mask will be complete enough
-   * to keep gestures consistent, or whether any widget across the
-   * hierarchy will be inconsistent about event handler return values.
-   */
-  if (gtk_gesture_get_sequence_state (gesture, seq) == GTK_EVENT_SEQUENCE_DENIED)
-    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-
-  return retval;
-}
-
-static gboolean
-gtk_window_handle_wm_event (GtkWindow *window,
-                            GdkEvent  *event,
-                            gboolean   run_drag)
-{
-  GdkEventType event_type = gdk_event_get_event_type (event);
-  gboolean retval = GDK_EVENT_PROPAGATE;
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (event_type == GDK_BUTTON_PRESS || event_type == GDK_BUTTON_RELEASE ||
-      event_type == GDK_TOUCH_BEGIN || event_type == GDK_TOUCH_UPDATE ||
-      event_type == GDK_MOTION_NOTIFY || event_type == GDK_TOUCH_END)
-    {
-      if (run_drag && priv->drag_gesture)
-        retval |= controller_handle_wm_event (priv->drag_gesture,
-                                              (const GdkEvent*) event);
-
-      if (priv->multipress_gesture)
-        retval |= controller_handle_wm_event (priv->multipress_gesture,
-                                              (const GdkEvent*) event);
-    }
-
-  return retval;
-}
-
-gboolean
-_gtk_window_check_handle_wm_event (GdkEvent *event)
-{
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
-  GdkEventType event_type;
-
-  widget = gtk_get_event_widget (event);
-
-  if (!GTK_IS_WINDOW (widget))
-    widget = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (widget))
-    return GDK_EVENT_PROPAGATE;
-
-  priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
-
-  if (!priv->multipress_gesture)
-    return GDK_EVENT_PROPAGATE;
-
-  event_type = gdk_event_get_event_type (event);
-
-  if (event_type != GDK_BUTTON_PRESS && event_type != GDK_BUTTON_RELEASE &&
-      event_type != GDK_MOTION_NOTIFY && event_type != GDK_TOUCH_BEGIN &&
-      event_type != GDK_TOUCH_END && event_type != GDK_TOUCH_UPDATE)
-    return GDK_EVENT_PROPAGATE;
-
-  if (gtk_widget_event (widget, event))
-    return GDK_EVENT_STOP;
-
-  return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, TRUE);
-}
-
-static gboolean
 gtk_window_event (GtkWidget *widget,
                   GdkEvent  *event)
 {
@@ -7549,8 +7490,6 @@ gtk_window_event (GtkWidget *widget,
     {
       return gtk_window_configure_event (widget, event);
     }
-  else if (widget != gtk_get_event_target (event))
-    return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, FALSE);
 
   return GDK_EVENT_PROPAGATE;
 }
