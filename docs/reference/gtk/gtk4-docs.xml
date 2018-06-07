@@ -300,6 +300,7 @@
     <chapter id="Gestures">
       <title>Gestures and event handling</title>
       <xi:include href="xml/gtkeventcontroller.xml" />
+      <xi:include href="xml/gtkeventcontrollerkey.xml" />
       <xi:include href="xml/gtkeventcontrollerscroll.xml" />
       <xi:include href="xml/gtkeventcontrollermotion.xml" />
       <xi:include href="xml/gtkgesture.xml" />
