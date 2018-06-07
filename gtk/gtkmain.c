@@ -1712,19 +1712,6 @@ gtk_main_do_event (GdkEvent *event)
   if (!grab_widget)
     grab_widget = gtk_window_group_get_current_grab (window_group);
 
-  if (GTK_IS_WINDOW (event_widget) ||
-      (grab_widget && grab_widget != event_widget &&
-       !gtk_widget_is_ancestor (event_widget, grab_widget)))
-    {
-      /* Ignore event if we got a grab on another toplevel */
-      if (!grab_widget ||
-          gtk_widget_get_toplevel (event_widget) == gtk_widget_get_toplevel (grab_widget))
-        {
-          if (_gtk_window_check_handle_wm_event (event))
-            goto cleanup;
-        }
-    }
-
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
    * This is the key to implementing modality.
