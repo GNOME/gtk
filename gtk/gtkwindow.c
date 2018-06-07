@@ -429,11 +429,6 @@ static void gtk_window_size_allocate      (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
-static gboolean gtk_window_emit_close_request (GtkWindow *window);
-static gboolean gtk_window_configure_event (GtkWidget         *widget,
-					    GdkEvent          *event);
-static gboolean gtk_window_event          (GtkWidget         *widget,
-                                           GdkEvent          *event);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
 static void surface_state_changed         (GtkWidget          *widget);
@@ -805,7 +800,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
-  widget_class->event = gtk_window_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
@@ -1603,12 +1597,8 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
       GdkEventSequence *sequence;
       gdouble start_x, start_y;
       gint x_root, y_root;
-      const GdkEvent *event;
-      GtkWidget *event_widget;
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-      event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-      event_widget = gtk_get_event_target (event);
 
       if (gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (gesture)) == GTK_PHASE_CAPTURE)
         {
@@ -5922,7 +5912,7 @@ gtk_window_close_request (GtkWindow *window)
   return FALSE;
 }
 
-static gboolean
+gboolean
 gtk_window_emit_close_request (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -7204,21 +7194,19 @@ gtk_window_size_allocate (GtkWidget           *widget,
     gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
-static gboolean
-gtk_window_configure_event (GtkWidget *widget,
-			    GdkEvent  *event)
+gboolean
+gtk_window_configure (GtkWindow *window,
+                      guint      width,
+                      guint      height)
 {
   GtkAllocation allocation;
-  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWidget *widget = GTK_WIDGET (window);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   check_scale_changed (window);
 
   if (!_gtk_widget_is_toplevel (widget))
     return FALSE;
-
-  if (_gtk_widget_get_surface (widget) != event->any.surface)
-    return TRUE;
 
   /* If this is a gratuitous ConfigureNotify that's already
    * the same as our allocation, then we can fizzle it out.
@@ -7230,8 +7218,7 @@ gtk_window_configure_event (GtkWidget *widget,
    */
   _gtk_widget_get_allocation (widget, &allocation);
   if (priv->configure_request_count == 0 &&
-      (allocation.width == ((GdkEventConfigure *)event)->width &&
-       allocation.height == ((GdkEventConfigure *)event)->height))
+      (allocation.width == width && allocation.height == height))
     {
       return TRUE;
     }
@@ -7457,41 +7444,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
     }
 
   return GTK_WINDOW_REGION_CONTENT;
-}
-
-static gboolean
-gtk_window_event (GtkWidget *widget,
-                  GdkEvent  *event)
-{
-  GdkEventType event_type;
-
-  event_type = gdk_event_get_event_type (event);
-
-  if (event_type == GDK_DELETE)
-    {
-      if (gtk_window_emit_close_request (GTK_WINDOW (widget)))
-        return GDK_EVENT_STOP;
-    }
-  else if (event_type == GDK_MAP)
-    {
-      if (!_gtk_widget_get_mapped (widget))
-        {
-          /* we should be be unmapped, but are getting a MapEvent, this may happen
-           * to toplevel XWindows if mapping was intercepted by a window manager
-           * and an unmap request occoured while the MapRequestEvent was still
-           * being handled. we work around this situaiton here by re-requesting
-           * the window being unmapped. more details can be found in:
-           *   http://bugzilla.gnome.org/show_bug.cgi?id=316180
-           */
-          gdk_surface_hide (_gtk_widget_get_surface (widget));
-        }
-    }
-  else if (event_type == GDK_CONFIGURE)
-    {
-      return gtk_window_configure_event (widget, event);
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
