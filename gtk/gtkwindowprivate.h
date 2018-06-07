@@ -60,8 +60,6 @@ typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           gboolean        is_mnemonic,
                                           gpointer        data);
 
-gboolean _gtk_window_check_handle_wm_event (GdkEvent  *event);
-
 /* --- internal (GtkAcceleratable) --- */
 gboolean        _gtk_window_query_nonaccels     (GtkWindow      *window,
                                                  guint           accel_key,
