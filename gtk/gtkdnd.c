@@ -59,8 +59,6 @@
  */
 
 
-static GSList *source_widgets = NULL;
-
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
 typedef struct _GtkDragDestInfo GtkDragDestInfo;
 
@@ -323,22 +321,15 @@ gtk_drag_get_data (GtkWidget *widget,
 GtkWidget *
 gtk_drag_get_source_widget (GdkDragContext *context)
 {
-  GSList *tmp_list;
+  GtkDragSourceInfo *info;
 
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
   
-  tmp_list = source_widgets;
-  while (tmp_list)
-    {
-      GtkWidget *widget = tmp_list->data;
+  info = gtk_drag_get_source_info (context, FALSE);
+  if (info == NULL)
+    return NULL;
 
-      if (gtk_widget_get_surface (widget) == gdk_drag_context_get_source_surface (context))
-        return widget;
-
-      tmp_list = tmp_list->next;
-    }
-
-  return NULL;
+  return info->widget;
 }
 
 /**
@@ -910,8 +901,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
 
-  source_widgets = g_slist_prepend (source_widgets, widget);
-
   toplevel = gtk_widget_get_toplevel (widget);
   gtk_widget_translate_coordinates (widget, toplevel,
                                     x, y, &x, &y);
@@ -1332,7 +1321,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_signal_emit_by_name (info->widget, "drag-end", info->context);
 
   g_object_set_data (G_OBJECT (info->widget), I_("gtk-info"), NULL);
-  source_widgets = g_slist_remove (source_widgets, info->widget);
 
   g_clear_object (&info->widget);
 
