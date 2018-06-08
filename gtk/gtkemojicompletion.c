@@ -300,19 +300,14 @@ move_active_variation (GtkEmojiCompletion *completion,
 }
 
 static gboolean
-entry_key_press (GtkEntry           *entry,
-                 GdkEvent           *event,
-                 GtkEmojiCompletion *completion)
+entry_key_press (GtkEventControllerKey *key,
+                 guint                  keyval,
+                 guint                  keycode,
+                 GdkModifierType        modifiers,
+                 GtkEmojiCompletion    *completion)
 {
-  guint keyval;
-
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return FALSE;
-
   if (!gtk_widget_get_visible (GTK_WIDGET (completion)))
     return FALSE;
-
-  gdk_event_get_keyval ((GdkEvent*)event, &keyval);
 
   if (keyval == GDK_KEY_Escape)
     {
@@ -386,18 +381,25 @@ static void
 connect_signals (GtkEmojiCompletion *completion,
                  GtkEntry           *entry)
 {
+  GtkEventController *key_controller;
+
   completion->entry = entry;
+  key_controller = gtk_entry_get_key_controller (entry);
 
   completion->changed_id = g_signal_connect (entry, "changed", G_CALLBACK (entry_changed), completion);
-  g_signal_connect (entry, "event", G_CALLBACK (entry_key_press), completion);
+  g_signal_connect (key_controller, "key-pressed", G_CALLBACK (entry_key_press), completion);
   g_signal_connect (entry, "notify::has-focus", G_CALLBACK (entry_focus_out), completion);
 }
 
 static void
 disconnect_signals (GtkEmojiCompletion *completion)
 {
+  GtkEventController *key_controller;
+
+  key_controller = gtk_entry_get_key_controller (completion->entry);
+
   g_signal_handlers_disconnect_by_func (completion->entry, entry_changed, completion);
-  g_signal_handlers_disconnect_by_func (completion->entry, entry_key_press, completion);
+  g_signal_handlers_disconnect_by_func (key_controller, entry_key_press, completion);
   g_signal_handlers_disconnect_by_func (completion->entry, entry_focus_out, completion);
 
   completion->entry = NULL;
