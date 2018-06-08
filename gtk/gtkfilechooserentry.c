@@ -84,8 +84,11 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
-static gboolean gtk_file_chooser_entry_tab_handler    (GtkWidget        *widget,
-                                                       GdkEvent         *event);
+static gboolean gtk_file_chooser_entry_tab_handler    (GtkEventControllerKey *key,
+                                                       guint                  keyval,
+                                                       guint                  keycode,
+                                                       GdkModifierType        state,
+                                                       GtkFileChooserEntry   *chooser_entry);
 
 #ifdef G_OS_WIN32
 static gint     insert_text_callback      (GtkFileChooserEntry *widget,
@@ -265,6 +268,7 @@ chooser_entry_focus_out (GtkEventControllerKey *key_controller,
 static void
 _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
+  GtkEventController *controller;
   GtkEntryCompletion *comp;
   GtkCellRenderer *cell;
 
@@ -297,14 +301,18 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 
   gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);
   g_object_unref (comp);
-  /* NB: This needs to happen after the completion is set, so this handler
-   * runs before the handler installed by entrycompletion */
-  g_signal_connect (chooser_entry, "event",
-                    G_CALLBACK (gtk_file_chooser_entry_tab_handler), NULL);
 
-  g_signal_connect (gtk_entry_get_key_controller (GTK_ENTRY (chooser_entry)),
+  /* NB: This needs to happen after the completion is set, so this controller
+   * runs before the one installed by entrycompletion */
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller,
+                    "key-pressed",
+                    G_CALLBACK (gtk_file_chooser_entry_tab_handler),
+                    chooser_entry);
+  g_signal_connect (controller,
 		    "focus-out", G_CALLBACK (chooser_entry_focus_out),
 		    chooser_entry);
+  gtk_widget_add_controller (GTK_WIDGET (chooser_entry), controller);
 
 #ifdef G_OS_WIN32
   g_signal_connect (chooser_entry, "insert-text",
@@ -504,28 +512,19 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 }
 
 static gboolean
-gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
-				    GdkEvent  *event)
+gtk_file_chooser_entry_tab_handler (GtkEventControllerKey *key,
+                                    guint                  keyval,
+                                    guint                  keycode,
+                                    GdkModifierType        state,
+                                    GtkFileChooserEntry   *chooser_entry)
 {
-  GtkFileChooserEntry *chooser_entry;
-  GtkEditable *editable;
-  GdkModifierType state;
+  GtkEditable *editable = GTK_EDITABLE (chooser_entry);
   gint start, end;
-  guint keyval;
-
-  chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
-  editable = GTK_EDITABLE (widget);
-
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_PROPAGATE;
-
-  if (!gdk_event_get_keyval (event, &keyval))
-    return GDK_EVENT_PROPAGATE;
 
   if (keyval == GDK_KEY_Escape &&
       chooser_entry->eat_escape)
     {
-      g_signal_emit (widget, signals[HIDE_ENTRY], 0);
+      g_signal_emit (chooser_entry, signals[HIDE_ENTRY], 0);
       return GDK_EVENT_STOP;
     }
 
@@ -535,14 +534,13 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
   if (keyval != GDK_KEY_Tab)
     return GDK_EVENT_PROPAGATE;
 
-  if (gtk_get_current_event_state (&state) &&
-      (state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
     return GDK_EVENT_PROPAGATE;
 
   /* This is a bit evil -- it makes Tab never leave the entry. It basically
    * makes it 'safe' for people to hit. */
   gtk_editable_get_selection_bounds (editable, &start, &end);
-      
+
   if (start != end)
     gtk_editable_set_position (editable, MAX (start, end));
   else
