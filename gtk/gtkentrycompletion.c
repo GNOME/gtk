@@ -2448,9 +2448,10 @@ completion_insert_text_callback (GtkEntry           *entry,
 static void
 connect_completion_signals (GtkEntryCompletion *completion)
 {
+  GtkEntryCompletionPrivate *priv = completion->priv;
   GtkEventController *controller;
 
-  controller = gtk_event_controller_key_new ();
+  controller = priv->entry_key_controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
   g_signal_connect_swapped (controller, "focus-out",
@@ -2504,6 +2505,9 @@ unset_accessible_relation (GtkWidget *window,
 static void
 disconnect_completion_signals (GtkEntryCompletion *completion)
 {
+  gtk_widget_remove_controller (completion->priv->entry,
+                                completion->priv->entry_key_controller);
+
   if (completion->priv->changed_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->changed_id))
