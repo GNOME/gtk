@@ -81,6 +81,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkdebug.h"
 #include "gtkfilechoosererrorstackprivate.h"
+#include "gtkentryprivate.h"
 
 #include <cairo-gobject.h>
 
@@ -2534,17 +2535,16 @@ location_entry_create (GtkFileChooserWidget *impl)
 }
 
 static gboolean
-external_entry_event (GtkWidget            *entry,
-                      GdkEvent             *event,
-                      GtkFileChooserWidget *impl)
+forward_key (GtkEventControllerKey *key,
+             guint                  keyval,
+             guint                  keycode,
+             GdkModifierType        modifiers,
+             GtkFileChooserWidget  *impl)
 {
   /* Since the entry is not a descendent of the file chooser widget
    * in this case, we need to manually make our bindings apply.
    */
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_PROPAGATE;
-
-  return gtk_bindings_activate_event (G_OBJECT (impl), (GdkEventKey *)event);
+  return gtk_event_controller_key_forward (key, GTK_WIDGET (impl));
 }
 
 /* Creates the widgets specific to Save mode */
@@ -2569,8 +2569,9 @@ save_widgets_create (GtkFileChooserWidget *impl)
       priv->location_entry = priv->external_entry;
       location_entry_setup (impl);
 
-      g_signal_connect_after (priv->external_entry, "event",
-                              G_CALLBACK (external_entry_event), impl);
+      g_signal_connect_after (gtk_entry_get_key_controller (GTK_ENTRY (priv->external_entry)),
+                              "key-pressed",
+                              G_CALLBACK (forward_key), impl);
       return;
     }
 
@@ -2611,7 +2612,8 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
 
   if (priv->external_entry && priv->external_entry == priv->location_entry)
     {
-      g_signal_handlers_disconnect_by_func (priv->external_entry, external_entry_event, impl);
+      g_signal_handlers_disconnect_by_func (gtk_entry_get_key_controller (GTK_ENTRY (priv->external_entry)),
+                                            forward_key, impl);
 
       location_entry_disconnect (impl);
       priv->location_entry = NULL;
