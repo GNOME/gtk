@@ -2445,19 +2445,6 @@ completion_insert_text_callback (GtkEntry           *entry,
     }
 }
 
-static gboolean
-maybe_accept_completion (GtkEntry *entry,
-                         GdkEvent *event)
-{
-  gboolean focus_in;
-
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE &&
-      gdk_event_get_focus_in (event, &focus_in) && !focus_in)
-    accept_completion_callback (entry);
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 static void
 connect_completion_signals (GtkEntryCompletion *completion)
 {
@@ -2466,6 +2453,9 @@ connect_completion_signals (GtkEntryCompletion *completion)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
+  g_signal_connect_swapped (controller, "focus-out",
+                            G_CALLBACK (accept_completion_callback),
+                            completion->priv->entry);
   gtk_widget_add_controller (completion->priv->entry, controller);
 
   completion->priv->changed_id =
@@ -2479,8 +2469,6 @@ connect_completion_signals (GtkEntryCompletion *completion)
                       G_CALLBACK (clear_completion_callback), completion);
     g_signal_connect (completion->priv->entry, "activate",
                       G_CALLBACK (accept_completion_callback), completion);
-    g_signal_connect (completion->priv->entry, "event",
-                      G_CALLBACK (maybe_accept_completion), completion);
 }
 
 static void
@@ -2538,8 +2526,6 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
                                         G_CALLBACK (clear_completion_callback), completion);
   g_signal_handlers_disconnect_by_func (completion->priv->entry,
                                         G_CALLBACK (accept_completion_callback), completion);
-  g_signal_handlers_disconnect_by_func (completion->priv->entry,
-                                        G_CALLBACK (maybe_accept_completion), completion);
 }
 
 void
