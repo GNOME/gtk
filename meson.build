@@ -751,8 +751,16 @@ if get_option('documentation')
   subdir('docs/reference')
 endif
 
+# On Visual Studio builds, we normally only have cmd.exe consoles,
+# so use a .bat post-install script rather than .sh script
+if cc.get_id() == 'msvc'
+  post_install_script = 'build-aux\\meson\\post-install.bat'
+else
+  post_install_script = 'build-aux/meson/post-install.sh'
+endif
+
 # Keep this in sync with post-install.sh expected arguments
-meson.add_install_script('build-aux/meson/post-install.sh',
+meson.add_install_script(post_install_script,
                          gtk_api_version,
                          gtk_binary_version,
                          gtk_libdir,
