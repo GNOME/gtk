@@ -885,6 +885,20 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
 #endif
 
 /**
+ * gtk_is_initialized:
+ *
+ * Use this function to check if GTK+ has been initialized with gtk_init()
+ * or gtk_init_check().
+ *
+ * Returns: the initialization status
+ */
+gboolean
+gtk_is_initialized (void)
+{
+  return gtk_initialized;
+}
+
+/**
  * gtk_get_locale_direction:
  *
  * Get the direction of the current locale. This is the expected

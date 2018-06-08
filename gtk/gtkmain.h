@@ -78,6 +78,9 @@ void     gtk_init                 (void);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_init_check           (void);
 
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_is_initialized       (void);
+
 #ifdef G_OS_WIN32
 
 /* Variants that are used to check for correct struct packing
