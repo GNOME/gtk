@@ -140,6 +140,7 @@ static guint gtk_main_loop_level = 0;
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
+static GThread *initialized_thread = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
@@ -774,6 +775,8 @@ gtk_init_check (void)
   do_pre_parse_initialization ();
   do_post_parse_initialization ();
 
+  initialized_thread = g_thread_self ();
+
   ret = gdk_display_open_default () != NULL;
 
   if (ret && (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE))
@@ -897,6 +900,20 @@ gtk_is_initialized (void)
 {
   return gtk_initialized;
 }
+
+/**
+ * gtk_get_main_thread:
+ *
+ * Get the thread from which GTK+ was initialized.
+ *
+ * Returns: (transfer none): The #GThread initialized for GTK+, must not be freed
+ */
+GThread *
+gtk_get_main_thread (void)
+{
+  return initialized_thread;
+}
+
 
 /**
  * gtk_get_locale_direction:
