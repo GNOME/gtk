@@ -63,6 +63,8 @@
 #include "gtkmodelbutton.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturedrag.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -153,8 +155,6 @@ struct _GtkPlacesSidebar {
   gint drag_row_height;
   gint drag_row_x;
   gint drag_row_y;
-  gint drag_x;
-  gint drag_y;
   GtkWidget *row_placeholder;
   DropState drop_state;
 
@@ -285,9 +285,21 @@ static void  check_unmount_and_eject       (GMount   *mount,
                                             GDrive   *drive,
                                             gboolean *show_unmount,
                                             gboolean *show_eject);
-static gboolean on_row_event (GtkWidget     *widget,
-                              GdkEvent      *event,
-                              GtkSidebarRow *sidebar);
+static void on_row_pressed  (GtkGestureMultiPress *gesture,
+                             gint                  n_press,
+                             gdouble               x,
+                             gdouble               y,
+                             GtkSidebarRow        *row);
+static void on_row_released (GtkGestureMultiPress *gesture,
+                             gint                  n_press,
+                             gdouble               x,
+                             gdouble               y,
+                             GtkSidebarRow        *row);
+static void on_row_dragged  (GtkGestureDrag *gesture,
+                             gdouble         x,
+                             gdouble         y,
+                             GtkSidebarRow  *row);
+
 static void popup_menu_cb    (GtkSidebarRow   *row);
 static void long_press_cb    (GtkGesture      *gesture,
                               gdouble          x,
@@ -464,6 +476,7 @@ add_place (GtkPlacesSidebar            *sidebar,
   gboolean show_eject_button;
   GtkWidget *row;
   GtkWidget *eject_button;
+  GtkGesture *gesture;
 
   check_unmount_and_eject (mount, volume, drive,
                            &show_unmount, &show_eject);
@@ -496,8 +509,19 @@ add_place (GtkPlacesSidebar            *sidebar,
 
   g_signal_connect_swapped (eject_button, "clicked",
                             G_CALLBACK (eject_or_unmount_bookmark), row);
-  g_signal_connect (GTK_SIDEBAR_ROW (row), "event",
-                    G_CALLBACK (on_row_event), row);
+
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (on_row_pressed), row);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (on_row_released), row);
+  gtk_widget_add_controller (row, GTK_EVENT_CONTROLLER (gesture));
+
+  gesture = gtk_gesture_drag_new ();
+  g_signal_connect (gesture, "drag-update",
+                    G_CALLBACK (on_row_dragged), row);
+  gtk_widget_add_controller (row, GTK_EVENT_CONTROLLER (gesture));
 
   gtk_container_add (GTK_CONTAINER (sidebar->list_box), GTK_WIDGET (row));
 
@@ -1694,42 +1718,6 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 
   sidebar->dragging_over = FALSE;
   sidebar->drag_data_info = DND_UNKNOWN;
-}
-
-static gboolean
-sidebar_event_cb (GtkWidget *widget,
-                  GdkEvent  *event,
-                  gpointer   user_data)
-{
-  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  guint state;
-  double x, y;
-
-  if (gdk_event_get_event_type (event) != GDK_MOTION_NOTIFY)
-    return GDK_EVENT_PROPAGATE;
-
-  if (sidebar->drag_row == NULL || sidebar->dragging_over)
-    return GDK_EVENT_PROPAGATE;
-
-  if (!gdk_event_get_state (event, &state) ||
-      !(state & GDK_BUTTON1_MASK))
-    return GDK_EVENT_PROPAGATE;
-
-  gdk_event_get_coords ((GdkEvent *) event, &x, &y);
-
-  if (gtk_drag_check_threshold (widget,
-                                sidebar->drag_x, sidebar->drag_y,
-                                x, y))
-    {
-      sidebar->dragging_over = TRUE;
-
-      gtk_drag_begin_with_coordinates (widget,
-                                       gdk_event_get_device ((GdkEvent*) event),
-                                       sidebar->source_targets, GDK_ACTION_MOVE,
-                                       sidebar->drag_x, sidebar->drag_y);
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -3706,15 +3694,16 @@ on_row_activated (GtkListBox    *list_box,
   open_row (selected_row, 0);
 }
 
-static gboolean
-on_row_event (GtkWidget     *widget,
-              GdkEvent      *event,
-              GtkSidebarRow *row)
+static void
+on_row_pressed (GtkGestureMultiPress *gesture,
+                gint                  n_press,
+                gdouble               x,
+                gdouble               y,
+                GtkSidebarRow        *row)
 {
   GtkPlacesSidebar *sidebar;
   GtkPlacesSidebarSectionType section_type;
   GtkPlacesSidebarPlaceType row_type;
-  gdouble x, y;
 
   g_object_get (row,
                 "sidebar", &sidebar,
@@ -3722,54 +3711,95 @@ on_row_event (GtkWidget     *widget,
                 "place-type", &row_type,
                 NULL);
 
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+  if (section_type == SECTION_BOOKMARKS)
     {
-      if (section_type == SECTION_BOOKMARKS)
+      sidebar->drag_row = GTK_WIDGET (row);
+      sidebar->drag_row_x = (gint)x;
+      sidebar->drag_row_y = (gint)y;
+    }
+
+  g_object_unref (sidebar);
+}
+
+static void
+on_row_released (GtkGestureMultiPress *gesture,
+                 gint                  n_press,
+                 gdouble               x,
+                 gdouble               y,
+                 GtkSidebarRow        *row)
+{
+  GtkPlacesSidebar *sidebar;
+  GtkPlacesSidebarSectionType section_type;
+  GtkPlacesSidebarPlaceType row_type;
+  guint button, state;
+
+  g_object_get (row,
+                "sidebar", &sidebar,
+                "section_type", &section_type,
+                "place-type", &row_type,
+                NULL);
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  gtk_get_current_event_state (&state);
+
+  if (row)
+    {
+      if (button == 2)
         {
-          gdk_event_get_coords ((GdkEvent *) event, &x, &y);
-          sidebar->drag_row = GTK_WIDGET (row);
-          sidebar->drag_row_x = (gint)x;
-          sidebar->drag_row_y = (gint)y;
+          GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 
-          sidebar->drag_x = x;
-          sidebar->drag_y = y;
+          open_flags = (state & GDK_CONTROL_MASK) ?
+            GTK_PLACES_OPEN_NEW_WINDOW :
+            GTK_PLACES_OPEN_NEW_TAB;
+
+          open_row (GTK_SIDEBAR_ROW (row), open_flags);
+          gtk_gesture_set_state (GTK_GESTURE (gesture),
+                                 GTK_EVENT_SEQUENCE_CLAIMED);
         }
+      else if (button == 3)
+        {
+          if (row_type != PLACES_CONNECT_TO_SERVER)
+            show_row_popover (GTK_SIDEBAR_ROW (row));
+        }
+    }
+}
 
+static void
+on_row_dragged (GtkGestureDrag *gesture,
+                gdouble         x,
+                gdouble         y,
+                GtkSidebarRow  *row)
+{
+  GtkPlacesSidebar *sidebar;
+
+  g_object_get (row, "sidebar", &sidebar, NULL);
+
+  if (sidebar->drag_row == NULL || sidebar->dragging_over)
+    {
       g_object_unref (sidebar);
+      return;
     }
-  else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+
+  if (gtk_drag_check_threshold (GTK_WIDGET (row), 0, 0, x, y))
     {
-      gboolean ret = FALSE;
-      guint button, state;
+      gdouble start_x, start_y;
+      gint drag_x, drag_y;
 
-      if (row &&
-          gdk_event_get_button (event, &button) &&
-          gdk_event_get_state (event, &state))
-        {
-          if (button == 1)
-            ret = FALSE;
-          else if (button == 2)
-            {
-              GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
+      gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+      gtk_widget_translate_coordinates (GTK_WIDGET (row),
+                                        GTK_WIDGET (sidebar),
+                                        start_x, start_y,
+                                        &drag_x, &drag_y);
 
-              open_flags = (state & GDK_CONTROL_MASK) ?
-                            GTK_PLACES_OPEN_NEW_WINDOW :
-                            GTK_PLACES_OPEN_NEW_TAB;
+      sidebar->dragging_over = TRUE;
 
-              open_row (GTK_SIDEBAR_ROW (row), open_flags);
-              ret = TRUE;
-            }
-          else if (button == 3)
-            {
-              if (row_type != PLACES_CONNECT_TO_SERVER)
-                show_row_popover (GTK_SIDEBAR_ROW (row));
-            }
-        }
-
-      return ret;
+      gtk_drag_begin_with_coordinates (GTK_WIDGET (sidebar),
+                                       gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                       sidebar->source_targets, GDK_ACTION_MOVE,
+                                       drag_x, drag_y);
     }
 
-  return FALSE;
+  g_object_unref (sidebar);
 }
 
 static void
@@ -4064,8 +4094,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
   sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
 
-  g_signal_connect (sidebar->list_box, "event",
-                    G_CALLBACK (sidebar_event_cb), sidebar);
   g_signal_connect (sidebar->list_box, "drag-begin",
                     G_CALLBACK (drag_begin_callback), sidebar);
   g_signal_connect (sidebar->list_box, "drag-motion",
