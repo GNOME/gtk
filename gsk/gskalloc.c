@@ -24,7 +24,7 @@
 # define aligned_free(x) free (x)
 #endif
 
-/**
+/*
  * gsk_aligned_alloc:
  * @size: the size of the memory to allocate
  * @number: the multiples of @size to allocate
@@ -91,7 +91,7 @@ gsk_aligned_alloc (gsize size,
   return res;
 }
 
-/**
+/*
  * gsk_aligned_alloc0:
  * @size: the size of the memory to allocate
  * @number: the multiples of @size to allocate
@@ -117,7 +117,7 @@ gsk_aligned_alloc0 (gsize size,
   return mem;
 }
 
-/**
+/*
  * gsk_aligned_free:
  * @mem: the memory to deallocate
  *
