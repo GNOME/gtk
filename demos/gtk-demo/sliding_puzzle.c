@@ -56,9 +56,9 @@ move_puzzle (GtkWidget *grid,
   next = gtk_grid_get_child_at (GTK_GRID (grid), next_x, next_y);
 
   /* Move the displayed piece. */
-  piece = gtk_image_get_paintable (GTK_IMAGE (next));
-  gtk_image_set_from_paintable (GTK_IMAGE (pos), piece);
-  gtk_image_clear (GTK_IMAGE (next));
+  piece = gtk_picture_get_paintable (GTK_PICTURE (next));
+  gtk_picture_set_paintable (GTK_PICTURE (pos), piece);
+  gtk_picture_set_paintable (GTK_PICTURE (next), NULL);
 
   /* Update the current position */
   pos_x = next_x;
@@ -111,7 +111,7 @@ shuffle_puzzle (GtkWidget *grid)
 static gboolean
 check_solved (GtkWidget *grid)
 {
-  GtkWidget *image;
+  GtkWidget *picture;
   GdkPaintable *piece;
   guint x, y;
 
@@ -130,8 +130,8 @@ check_solved (GtkWidget *grid)
     {
       for (x = 0; x < width; x++)
         {
-          image = gtk_grid_get_child_at (GTK_GRID (grid), x, y);
-          piece = gtk_image_get_paintable (GTK_IMAGE (image));
+          picture = gtk_grid_get_child_at (GTK_GRID (grid), x, y);
+          piece = gtk_picture_get_paintable (GTK_PICTURE (picture));
 
           /* empty cell */
           if (piece == NULL)
@@ -149,14 +149,14 @@ check_solved (GtkWidget *grid)
 
   /* Fill the empty cell to show that we're done.
    */
-  image = gtk_grid_get_child_at (GTK_GRID (grid), 0, 0);
-  piece = gtk_image_get_paintable (GTK_IMAGE (image));
+  picture = gtk_grid_get_child_at (GTK_GRID (grid), 0, 0);
+  piece = gtk_picture_get_paintable (GTK_PICTURE (picture));
 
   piece = gtk_puzzle_piece_new (gtk_puzzle_piece_get_puzzle (GTK_PUZZLE_PIECE (piece)),
                                 pos_x, pos_y,
                                 width, height);
-  image = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
-  gtk_image_set_from_paintable (GTK_IMAGE (image), piece);
+  picture = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
+  gtk_picture_set_paintable (GTK_PICTURE (picture), piece);
 
   return TRUE;
 }
@@ -284,7 +284,7 @@ puzzle_button_pressed (GtkGestureMultiPress *gesture,
 static void
 start_puzzle (GdkPaintable *puzzle)
 {
-  GtkWidget *image, *grid;
+  GtkWidget *picture, *grid;
   GtkEventController *controller;
   guint x, y;
 
@@ -321,7 +321,7 @@ start_puzzle (GdkPaintable *puzzle)
   pos_x = width - 1;
   pos_y = height - 1;
 
-  /* add an image for every cell */
+  /* add a picture for every cell */
   for (y = 0; y < height; y++)
     {
       for (x = 0; x < width; x++)
@@ -335,11 +335,10 @@ start_puzzle (GdkPaintable *puzzle)
             piece = gtk_puzzle_piece_new (puzzle,
                                           x, y,
                                           width, height);
-          image = gtk_image_new_from_paintable (piece);
-          gtk_image_set_keep_aspect_ratio (GTK_IMAGE (image), FALSE);
-          gtk_image_set_can_shrink (GTK_IMAGE (image), TRUE);
+          picture = gtk_picture_new_for_paintable (piece);
+          gtk_picture_set_keep_aspect_ratio (GTK_PICTURE (picture), FALSE);
           gtk_grid_attach (GTK_GRID (grid),
-                           image,
+                           picture,
                            x, y,
                            1, 1);
         }
@@ -371,7 +370,7 @@ reconfigure (void)
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (rose_button)))
     puzzle = rose;
   else
-    puzzle= atom;
+    puzzle = atom;
 
   start_puzzle (puzzle); 
   popover = gtk_widget_get_ancestor (size_spin, GTK_TYPE_POPOVER);
