@@ -1,15 +1,15 @@
 /* Images
  *
- * GtkImage is used to display an image; the image can be in a number of formats.
- * Typically, you load an image into a GdkPixbuf, then display the pixbuf.
+ * GtkImage and GtkPicture are used to display an image; the image can be
+ * in a number of formats.
+ *
+ * GtkImage is the widget used to display icons or images that should be
+ * sized and styled like an icon, while GtkPicture is used for images
+ * that should be displayed as-is.
  *
  * This demo code shows some of the more obscure cases, in the simple
- * case a call to gtk_image_new_from_file() is all you need.
- *
- * If you want to put image data in your program as a C variable,
- * use the make-inline-pixbuf program that comes with GTK+.
- * This way you won't need to depend on loading external files, your
- * application binary can be self-contained.
+ * case a call to gtk_picture_new_for_file() or
+ * gtk_image_new_from_icon_name() is all you need.
  */
 
 #include <gtk/gtk.h>
@@ -27,9 +27,9 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
                                gpointer         data)
 {
   GdkPixbuf *pixbuf;
-  GtkWidget *image;
+  GtkWidget *picture;
 
-  image = GTK_WIDGET (data);
+  picture = GTK_WIDGET (data);
 
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
@@ -38,7 +38,7 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
    */
   gdk_pixbuf_fill (pixbuf, 0xaaaaaaff);
 
-  gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
 }
 
 static void
@@ -49,21 +49,21 @@ progressive_updated_callback (GdkPixbufLoader *loader,
                               gint                 height,
                               gpointer     data)
 {
-  GtkWidget *image;
+  GtkWidget *picture;
   GdkPixbuf *pixbuf;
 
-  image = GTK_WIDGET (data);
+  picture = GTK_WIDGET (data);
 
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-  gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
 }
 
 static gint
 progressive_timeout (gpointer data)
 {
-  GtkWidget *image;
+  GtkWidget *picture;
 
-  image = GTK_WIDGET (data);
+  picture = GTK_WIDGET (data);
 
   /* This shows off fully-paranoid error handling, so looks scary.
    * You could factor out the error handling code into a nice separate
@@ -241,10 +241,10 @@ progressive_timeout (gpointer data)
       pixbuf_loader = gdk_pixbuf_loader_new ();
 
       g_signal_connect (pixbuf_loader, "area-prepared",
-                        G_CALLBACK (progressive_prepared_callback), image);
+                        G_CALLBACK (progressive_prepared_callback), picture);
 
       g_signal_connect (pixbuf_loader, "area-updated",
-                        G_CALLBACK (progressive_updated_callback), image);
+                        G_CALLBACK (progressive_updated_callback), picture);
     }
 
   /* leave timeout installed */
@@ -252,7 +252,7 @@ progressive_timeout (gpointer data)
 }
 
 static void
-start_progressive_loading (GtkWidget *image)
+start_progressive_loading (GtkWidget *picture)
 {
   /* This is obviously totally contrived (we slow down loading
    * on purpose to show how incremental loading works).
@@ -261,7 +261,7 @@ start_progressive_loading (GtkWidget *image)
    * The timeout simply simulates a slow data source by inserting
    * pauses in the reading process.
    */
-  load_timeout = g_timeout_add (150, progressive_timeout, image);
+  load_timeout = g_timeout_add (150, progressive_timeout, picture);
   g_source_set_name_by_id (load_timeout, "[gtk+] progressive_timeout");
 }
 
@@ -323,6 +323,7 @@ do_images (GtkWidget *do_widget)
   GtkWidget *hbox;
   GtkWidget *base_vbox;
   GtkWidget *image;
+  GtkWidget *picture;
   GtkWidget *label;
   GtkWidget *button;
   GdkPaintable *paintable;
@@ -380,9 +381,9 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame);
 
-      image = gtk_image_new_from_resource ("/images/floppybuddy.gif");
+      picture = gtk_picture_new_for_resource ("/images/floppybuddy.gif");
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_container_add (GTK_CONTAINER (frame), picture);
 
       /* Symbolic icon */
 
@@ -422,10 +423,10 @@ do_images (GtkWidget *do_widget)
       /* Create an empty image for now; the progressive loader
        * will create the pixbuf and fill it in.
        */
-      image = gtk_image_new_from_pixbuf (NULL);
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      picture = gtk_picture_new ();
+      gtk_container_add (GTK_CONTAINER (frame), picture);
 
-      start_progressive_loading (image);
+      start_progressive_loading (picture);
 
       /* Video */
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
@@ -456,11 +457,10 @@ do_images (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), label);
 
       paintable = gtk_widget_paintable_new (do_widget);
-      image = gtk_image_new_from_paintable (paintable);
-      gtk_image_set_can_shrink (GTK_IMAGE (image), TRUE);
-      gtk_widget_set_size_request (image, 100, 100);
-      gtk_widget_set_valign (image, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (vbox), image);
+      picture = gtk_picture_new_for_paintable (paintable);
+      gtk_widget_set_size_request (picture, 100, 100);
+      gtk_widget_set_valign (picture, GTK_ALIGN_START);
+      gtk_container_add (GTK_CONTAINER (vbox), picture);
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
