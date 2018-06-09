@@ -393,11 +393,12 @@ gtk_video_new_for_file (GFile *file)
 
 /**
  * gtk_video_new_for_filename:
- * @filename: (allow-none): filename to play back
+ * @filename: (allow-none) (type filename): filename to play back
  *
  * Creates a #GtkVideo to play back the given @filename.
  *
  * This is a utility function that calls gtk_video_new_for_file(),
+ * See that function for details.
  *
  * Returns: a new #GtkVideo
  **/

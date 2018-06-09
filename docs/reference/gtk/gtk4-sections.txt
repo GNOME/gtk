@@ -2050,6 +2050,40 @@ gtk_paned_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkpicture</FILE>
+<TITLE>GtkPicture</TITLE>
+GtkPicture
+gtk_picture_new
+gtk_picture_new_for_paintable
+gtk_picture_new_for_pixbuf
+gtk_picture_new_for_file
+gtk_picture_new_for_filename
+gtk_picture_new_for_resource
+gtk_picture_set_paintable
+gtk_picture_get_paintable
+gtk_picture_set_pixbuf
+gtk_picture_set_file
+gtk_picture_get_file
+gtk_picture_set_filename
+gtk_picture_set_resource
+gtk_picture_set_keep_aspect_ratio
+gtk_picture_get_keep_aspect_ratio
+gtk_picture_set_can_shrink
+gtk_picture_get_can_shrink
+gtk_picture_set_alternative_text
+gtk_picture_get_alternative_text
+<SUBSECTION Standard>
+GTK_PICTURE
+GTK_IS_PICTURE
+GTK_TYPE_PICTURE
+GTK_PICTURE_CLASS
+GTK_IS_PICTURE_CLASS
+GTK_PICTURE_GET_CLASS
+<SUBSECTION Private>
+gtk_picture_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkprogressbar</FILE>
 <TITLE>GtkProgressBar</TITLE>
 GtkProgressBar

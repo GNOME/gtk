@@ -31,6 +31,7 @@ a11y_sources = files([
   'gtknotebookaccessible.c',
   'gtknotebookpageaccessible.c',
   'gtkpanedaccessible.c',
+  'gtkpictureaccessible.c',
   'gtkpopoveraccessible.c',
   'gtkprogressbaraccessible.c',
   'gtkradiobuttonaccessible.c',

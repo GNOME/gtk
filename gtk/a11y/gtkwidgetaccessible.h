@@ -37,6 +37,8 @@ typedef struct _GtkWidgetAccessible        GtkWidgetAccessible;
 typedef struct _GtkWidgetAccessibleClass   GtkWidgetAccessibleClass;
 typedef struct _GtkWidgetAccessiblePrivate GtkWidgetAccessiblePrivate;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidgetAccessible, g_object_unref)
+
 struct _GtkWidgetAccessible
 {
   GtkAccessible parent;
