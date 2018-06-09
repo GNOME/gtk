@@ -26,6 +26,7 @@
 #include "gtkintl.h"
 #include "gtkmediacontrols.h"
 #include "gtkmediafile.h"
+#include "gtkpicture.h"
 #include "gtkrevealer.h"
 
 /**
@@ -48,7 +49,7 @@ struct _GtkVideo
   GtkMediaStream *media_stream;
 
   GtkWidget *box;
-  GtkWidget *video_image;
+  GtkWidget *video_picture;
   GtkWidget *overlay_icon;
   GtkWidget *controls_revealer;
   GtkWidget *controls;
@@ -326,7 +327,7 @@ gtk_video_class_init (GtkVideoClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkvideo.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, box);
-  gtk_widget_class_bind_template_child (widget_class, GtkVideo, video_image);
+  gtk_widget_class_bind_template_child (widget_class, GtkVideo, video_picture);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, overlay_icon);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
@@ -595,7 +596,7 @@ gtk_video_set_media_stream (GtkVideo       *self,
     }
 
   gtk_media_controls_set_media_stream (GTK_MEDIA_CONTROLS (self->controls), stream);
-  gtk_image_set_from_paintable (GTK_IMAGE (self->video_image), GDK_PAINTABLE (stream));
+  gtk_picture_set_paintable (GTK_PICTURE (self->video_picture), GDK_PAINTABLE (stream));
 
   gtk_video_update_all (self);
 

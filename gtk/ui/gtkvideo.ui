@@ -5,9 +5,7 @@
     <child>
       <object class="GtkOverlay" id="box">
         <child>
-          <object class="GtkImage" id="video_image">
-            <property name="can-shrink">1</property>
-          </object>
+          <object class="GtkPicture" id="video_picture" />
         </child>
         <child type="overlay">
           <object class="GtkImage" id="overlay_icon">
