@@ -13,11 +13,9 @@
 
 static GtkWidget *window = NULL;
 static GtkWidget *frame = NULL;
+static GtkWidget *choices = NULL;
 static GtkWidget *size_spin = NULL;
-static GtkWidget *rose_button = NULL;
 static GdkPaintable *puzzle = NULL;
-static GdkPaintable *rose = NULL;
-static GdkPaintable *atom = NULL;
 
 static gboolean solved = TRUE;
 static guint width = 3;
@@ -365,18 +363,40 @@ reconfigure (void)
 {
   GtkWidget *popover;
   GtkWidget *grid;
+  GtkWidget *child;
+  GtkWidget *image;
+  GList *selected;
 
   width = height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (size_spin));
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (rose_button)))
-    puzzle = rose;
+
+  selected = gtk_flow_box_get_selected_children (GTK_FLOW_BOX (choices));
+  if (selected == NULL)
+    child = gtk_widget_get_first_child (choices);
   else
-    puzzle = atom;
+    {
+      child = selected->data;
+      g_list_free (selected);
+    }
+  image = gtk_bin_get_child (GTK_BIN (child));
+  puzzle = gtk_image_get_paintable (GTK_IMAGE (image));
 
   start_puzzle (puzzle); 
   popover = gtk_widget_get_ancestor (size_spin, GTK_TYPE_POPOVER);
   gtk_popover_popdown (GTK_POPOVER (popover));
   grid = gtk_bin_get_child (GTK_BIN (frame));
   gtk_widget_grab_focus (grid);
+}
+
+static void
+add_choice (GtkWidget    *choices,
+            GdkPaintable *paintable)
+{
+  GtkWidget *icon;
+
+  icon = gtk_image_new_from_paintable (paintable);
+  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
+
+  gtk_container_add (GTK_CONTAINER (choices), icon);
 }
 
 GtkWidget *
@@ -390,23 +410,29 @@ do_sliding_puzzle (GtkWidget *do_widget)
       GtkWidget *popover;
       GtkWidget *tweaks;
       GtkWidget *apply;
-      GtkWidget *button;
       GtkWidget *label;
+      GtkWidget *sw;
+      GtkMediaStream *media;
 
-      puzzle = rose = GDK_PAINTABLE (gdk_texture_new_from_resource ("/sliding_puzzle/portland-rose.jpg"));
-      atom = gtk_nuclear_animation_new ();
+      puzzle = GDK_PAINTABLE (gdk_texture_new_from_resource ("/sliding_puzzle/portland-rose.jpg"));
 
       tweaks = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (tweaks), 10);
       gtk_grid_set_column_spacing (GTK_GRID (tweaks), 10);
       g_object_set (tweaks, "margin", 10, NULL);
 
-      rose_button = button = gtk_radio_button_new_with_label (NULL, "Rose");
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      gtk_grid_attach (GTK_GRID (tweaks), button, 0, 0, 1, 1);
-
-      button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (button), "Danger");
-      gtk_grid_attach (GTK_GRID (tweaks), button, 1, 0, 1, 1);
+      choices = gtk_flow_box_new ();
+      gtk_style_context_add_class (gtk_widget_get_style_context (choices), GTK_STYLE_CLASS_VIEW);
+      add_choice (choices, puzzle);
+      add_choice (choices, gtk_nuclear_animation_new ());
+      media = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
+      gtk_media_stream_set_loop (media, TRUE);
+      gtk_media_stream_set_muted (media, TRUE);
+      gtk_media_stream_play (media);
+      add_choice (choices, GDK_PAINTABLE (media));
+      sw = gtk_scrolled_window_new (NULL, NULL);
+      gtk_container_add (GTK_CONTAINER (sw), choices);
+      gtk_grid_attach (GTK_GRID (tweaks), sw, 0, 0, 2, 1);
 
       label = gtk_label_new ("Size");
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
