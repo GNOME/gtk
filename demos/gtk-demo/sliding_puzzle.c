@@ -306,7 +306,7 @@ start_puzzle (GdkPaintable *puzzle)
                     grid);
   gtk_widget_add_controller (GTK_WIDGET (grid), controller);
 
-  controller = gtk_gesture_multi_press_new ();
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
   g_signal_connect (controller, "pressed",
                     G_CALLBACK (puzzle_button_pressed),
                     grid);
@@ -391,14 +391,11 @@ do_sliding_puzzle (GtkWidget *do_widget)
       GtkWidget *popover;
       GtkWidget *tweaks;
       GtkWidget *apply;
-      GtkWidget *image;
       GtkWidget *button;
       GtkWidget *label;
 
-      rose = GDK_PAINTABLE (gdk_texture_new_from_resource ("/sliding_puzzle/portland-rose.jpg"));
+      puzzle = rose = GDK_PAINTABLE (gdk_texture_new_from_resource ("/sliding_puzzle/portland-rose.jpg"));
       atom = gtk_nuclear_animation_new ();
-
-      puzzle = rose;
 
       tweaks = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (tweaks), 10);
@@ -409,11 +406,11 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_grid_attach (GTK_GRID (tweaks), button, 0, 0, 1, 1);
 
-      button = gtk_radio_button_new_with_label_from_widget (button, "Danger");
+      button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (button), "Danger");
       gtk_grid_attach (GTK_GRID (tweaks), button, 1, 0, 1, 1);
 
       label = gtk_label_new ("Size");
-      gtk_label_set_xalign (label, 0.0);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_grid_attach (GTK_GRID (tweaks), label, 0, 1, 1, 1);
       size_spin = gtk_spin_button_new_with_range (2, 10, 1);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (size_spin), width);
@@ -423,14 +420,17 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_widget_set_halign (apply, GTK_ALIGN_END);
       gtk_grid_attach (GTK_GRID (tweaks), apply, 1, 2, 1, 1);
       g_signal_connect (apply, "clicked", G_CALLBACK (reconfigure), NULL);
+
       popover = gtk_popover_new (NULL);
       gtk_popover_set_modal (GTK_POPOVER (popover), TRUE);
       gtk_container_add (GTK_CONTAINER (popover), tweaks);
-      restart = gtk_button_new_from_icon_name ("view-refresh-symbolic");
-      g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);
+
       tweak = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (tweak), popover);
-      gtk_button_set_icon_name (tweak, "emblem-system-symbolic");
+      gtk_button_set_icon_name (GTK_BUTTON (tweak), "emblem-system-symbolic");
+
+      restart = gtk_button_new_from_icon_name ("view-refresh-symbolic");
+      g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);
 
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
