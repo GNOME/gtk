@@ -1251,10 +1251,7 @@ gtk_image_measure (GtkWidget      *widget,
   GtkImagePrivate *priv = gtk_image_get_instance_private (GTK_IMAGE (widget));
   float baseline_align;
 
-  gtk_icon_helper_measure (priv->icon_helper,
-                           orientation,
-                           for_size,
-                           minimum, natural);
+  *minimum = *natural = gtk_icon_helper_get_size (priv->icon_helper);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -1372,5 +1369,5 @@ gtk_image_get_image_size (GtkImage *image,
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
-  _gtk_icon_helper_get_size (priv->icon_helper, width, height);
+  *width = *height = gtk_icon_helper_get_size (priv->icon_helper);
 }
