@@ -305,3 +305,13 @@
 #mesondefine HAVE_PANGOFT
 
 #mesondefine ISO_CODES_PREFIX
+
+#mesondefine MALLOC_IS_ALIGNED16
+
+#mesondefine HAVE_POSIX_MEMALIGN
+
+#mesondefine HAVE_MEMALIGN
+
+#mesondefine HAVE_ALIGNED_ALLOC
+
+#mesondefine HAVE__ALIGNED_MALLOC
