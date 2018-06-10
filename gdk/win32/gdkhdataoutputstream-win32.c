@@ -341,7 +341,6 @@ gdk_win32_hdata_output_stream_class_init (GdkWin32HDataOutputStreamClass *klass)
 static void
 gdk_win32_hdata_output_stream_init (GdkWin32HDataOutputStream *stream)
 {
-  GdkWin32HDataOutputStreamPrivate *priv = gdk_win32_hdata_output_stream_get_instance_private (stream);
 }
 
 GOutputStream *
