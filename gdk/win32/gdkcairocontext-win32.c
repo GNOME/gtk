@@ -232,8 +232,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                   cairo_region_t *painted,
-                                   cairo_region_t *damage)
+                                   cairo_region_t *painted)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface;
