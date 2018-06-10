@@ -1028,7 +1028,7 @@ process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
   stream = g_memory_input_stream_new_from_data (data, data_len, g_free);
   g_object_set_data (stream, "gdk-clipboard-stream-contenttype", pair->contentformat);
 
-  GDK_NOTE (CLIPBOARD, g_printerr ("%s: reading clipboard data from a %lu-byte buffer\n",
+  GDK_NOTE (CLIPBOARD, g_printerr ("reading clipboard data from a %" G_GSIZE_FORMAT "-byte buffer\n",
                                    data_len));
   send_input_stream (retr->parent.item_type,
                      retr->parent.opaque_task,

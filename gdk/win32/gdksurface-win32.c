@@ -1929,7 +1929,7 @@ gdk_win32_surface_get_geometry (GdkSurface *window,
       if (height)
 	*height = (rect.bottom - rect.top) / impl->surface_scale;
 
-      GDK_NOTE (MISC, g_print ("gdk_win32_surface_get_geometry: %p: %ldx%ld@%+ld%\n",
+      GDK_NOTE (MISC, g_print ("gdk_win32_surface_get_geometry: %p: %ldx%ld@%+ld%+ld\n",
 			       GDK_SURFACE_HWND (window),
 			       (rect.right - rect.left) / impl->surface_scale,
 			       (rect.bottom - rect.top) / impl->surface_scale,
@@ -2019,7 +2019,7 @@ gdk_win32_surface_get_frame_extents (GdkSurface    *window,
   rect->x = r.left / impl->surface_scale + _gdk_offset_x;
   rect->y = r.top / impl->surface_scale + _gdk_offset_y;
 
-  GDK_NOTE (MISC, g_print ("gdk_surface_get_frame_extents: %p: %ldx%ld@%+ld%+ld\n",
+  GDK_NOTE (MISC, g_print ("gdk_surface_get_frame_extents: %p: %dx%d@%+d%+d\n",
                            GDK_SURFACE_HWND (window),
                            rect->width,
                            rect->height,
