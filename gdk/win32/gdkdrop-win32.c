@@ -435,10 +435,11 @@ idroptarget_dragenter (LPDROPTARGET This,
                                    */
                                   source_context ? source_context->source_surface : NULL,
                                   ctx->dest_surface,
-                                  query_targets (pDataObj, context_win32->droptarget_w32format_contentformat_map),
+                                  query_targets (pDataObj, NULL),
                                   GDK_ACTION_DEFAULT | GDK_ACTION_COPY | GDK_ACTION_MOVE,
                                   GDK_DRAG_PROTO_OLE2);
   context_win32 = GDK_WIN32_DROP_CONTEXT (context);
+  gdk_content_formats_unref (query_targets (pDataObj, context_win32->droptarget_w32format_contentformat_map));
   g_array_set_size (context_win32->droptarget_w32format_contentformat_map, 0);
   g_set_object (&context_win32->local_source_context, GDK_WIN32_DRAG_CONTEXT (source_context));
 
@@ -526,7 +527,6 @@ idroptarget_drop (LPDROPTARGET This,
 {
   target_drag_context *ctx = (target_drag_context *) This;
   GdkWin32DropContext *context_win32 = GDK_WIN32_DROP_CONTEXT (ctx->context);
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   gint pt_x = pt.x / context_win32->scale + _gdk_offset_x;
   gint pt_y = pt.y / context_win32->scale + _gdk_offset_y;
 
@@ -747,7 +747,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       event->any.send_event = FALSE;
       g_set_object (&event->dnd.context, context);
       g_set_object (&event->any.surface, window);
-      gdk_event_set_display (event, display);
+      gdk_event_set_display (event, GDK_DISPLAY (display));
       gdk_event_set_device (event, gdk_drag_context_get_device (context));
       event->dnd.x_root = pt.x / context_win32->scale + _gdk_offset_x;
       event->dnd.y_root = pt.y / context_win32->scale + _gdk_offset_y;
@@ -837,7 +837,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
 
       DragFinish (hdrop);
 
-  gdk_display_put_event (display, event);
+  gdk_display_put_event (GDK_DISPLAY (display), event);
   g_object_unref (event);
 
   *ret_valp = 0;
@@ -895,7 +895,6 @@ gdk_win32_drop_context_drop_finish (GdkDragContext *context,
                  guint32         time)
 {
   GdkDragContext *src_context;
-  GdkEvent *tmp_event;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
   g_return_if_fail (context != NULL);
@@ -973,7 +972,7 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
        * whether the window (widget) in question actually accepts files
        * (in gtk, data of type text/uri-list) or not.
        */
-      gdk_win32_display_add_filter (gdk_display_get_default (), gdk_dropfiles_filter, NULL);
+      gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_display_get_default ()), gdk_dropfiles_filter, NULL);
       DragAcceptFiles (GDK_SURFACE_HWND (window), TRUE);
     }
   else

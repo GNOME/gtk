@@ -895,6 +895,10 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
       break;
     case DPI_STATUS_FAILED:
       g_warning ("Failed to enable HiDPI support.");
+      break;
+    case DPI_STATUS_PENDING:
+      g_assert_not_reached ();
+      break;
     }
 }
 

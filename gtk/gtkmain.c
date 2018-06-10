@@ -432,6 +432,8 @@ enum_locale_proc (LPTSTR locale)
                     case MAKELANGID (LANG_SERBIAN, 0x07):
                       /* Serbian in Bosnia and Herzegovina, Cyrillic */
                       return TRUE;
+                    default:
+                      break;
                     }
                 }
               else if (strcmp (script_to_check, "Cyrl") == 0)
@@ -447,6 +449,8 @@ enum_locale_proc (LPTSTR locale)
                     case MAKELANGID (LANG_SERBIAN, 0x06):
                       /* Serbian in Bosnia and Herzegovina, Latin */
                       return TRUE;
+                    default:
+                      break;
                     }
                 }
             }
@@ -522,7 +526,7 @@ setlocale_initialization (void)
                    */
                   if (strcmp (iso3166_to_check, "CS") == 0 ||
                       strcmp (iso3166_to_check, "YU") == 0)
-                    iso3166_to_check = "SP";
+                    iso3166_to_check = (char *) "SP";
                 }
               else
                 {
@@ -531,7 +535,7 @@ setlocale_initialization (void)
                     *script_to_check++ = '\0';
                   /* LANG_SERBIAN == LANG_CROATIAN, recognize just "sr" */
                   if (strcmp (iso639_to_check, "sr") == 0)
-                    iso3166_to_check = "SP";
+                    iso3166_to_check = (char *) "SP";
                 }
 
               EnumSystemLocales (enum_locale_proc, LCID_SUPPORTED);

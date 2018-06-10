@@ -914,7 +914,6 @@ process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
   UINT fmt, fmt_to_use;
   HANDLE hdata;
   GdkWin32ContentFormatPair *pair;
-  gpointer ptr;
   guchar *data;
   gsize   data_len;
   GInputStream *stream;
@@ -1026,9 +1025,9 @@ process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
     }
 
   stream = g_memory_input_stream_new_from_data (data, data_len, g_free);
-  g_object_set_data (stream, "gdk-clipboard-stream-contenttype", pair->contentformat);
+  g_object_set_data (G_OBJECT (stream), "gdk-clipboard-stream-contenttype", (gpointer) pair->contentformat);
 
-  GDK_NOTE (CLIPBOARD, g_printerr ("%s: reading clipboard data from a %lu-byte buffer\n",
+  GDK_NOTE (CLIPBOARD, g_printerr ("reading clipboard data from a %" G_GSIZE_FORMAT "-byte buffer\n",
                                    data_len));
   send_input_stream (retr->parent.item_type,
                      retr->parent.opaque_task,
@@ -1619,7 +1618,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 	win32_clipdrop->n_known_pixbuf_formats++;
     }
 
-  win32_clipdrop->known_pixbuf_formats = g_new (gchar *, win32_clipdrop->n_known_pixbuf_formats);
+  win32_clipdrop->known_pixbuf_formats = g_new (const gchar *, win32_clipdrop->n_known_pixbuf_formats);
 
   i = 0;
   for (rover = pixbuf_formats; rover != NULL; rover = rover->next)
@@ -1655,7 +1654,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = CF_TEXT;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 3);
@@ -1672,7 +1671,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.transmute = TRUE;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
@@ -1692,7 +1691,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = CF_DIB;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
@@ -1712,7 +1711,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = CF_DIB;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
@@ -1726,7 +1725,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.transmute = TRUE;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
 /* Not implemented, but definitely possible
@@ -1879,8 +1878,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 void
 _gdk_dropfiles_store (gchar *data)
 {
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-
 /* FIXME: REMOVE ALL THAT STUFF
   if (data != NULL)
     {
@@ -2099,7 +2096,7 @@ _gdk_win32_add_w32format_to_pairs (UINT     w32format,
         }
 
       if (list && interned_w32format_name != 0 && g_list_find (*list, interned_w32format_name) == NULL)
-        *list = g_list_prepend (*list, interned_w32format_name);
+        *list = g_list_prepend (*list, (gpointer) interned_w32format_name);
     }
 
   comp_pairs = _gdk_win32_get_compatibility_contentformats_for_w32format (w32format);
@@ -2124,7 +2121,7 @@ _gdk_win32_add_w32format_to_pairs (UINT     w32format,
        pair = g_array_index (comp_pairs, GdkWin32ContentFormatPair, i);
 
        if (g_list_find (*list, pair.contentformat) == NULL)
-         *list = g_list_prepend (*list, pair.contentformat);
+         *list = g_list_prepend (*list, (gpointer) pair.contentformat);
      }
 }
 
@@ -2629,7 +2626,7 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
                                    gsize        *set_data_length)
 {
   const guchar *data;
-  gint          length;
+  SIZE_T        length;
 
   /* FIXME: error reporting */
 
@@ -2683,58 +2680,13 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
   return TRUE;
 }
 
-static void
-transmute_selection_format (UINT          from_format,
-                            GdkAtom       to_target,
-                            const guchar *data,
-                            gint          length,
-                            guchar      **set_data,
-                            gint         *set_data_length)
-{
-  if ((to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_PNG) &&
-       from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_PNG)) ||
-      (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_JPEG) &&
-       from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_JFIF)) ||
-      (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_GIF) &&
-       from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_GIF)))
-    {
-      /* No transmutation needed */
-      *set_data = g_memdup (data, length);
-      *set_data_length = length;
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
-           from_format == CF_UNICODETEXT)
-    {
-      transmute_cf_unicodetext_to_utf8_string (data, length, set_data, set_data_length, NULL);
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
-           from_format == CF_TEXT)
-    {
-      transmute_cf_text_to_utf8_string (data, length, set_data, set_data_length, NULL);
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_BMP) &&
-           (from_format == CF_DIB || from_format == CF_DIBV5))
-    {
-      transmute_cf_dib_to_image_bmp (data, length, set_data, set_data_length, NULL);
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_URI_LIST) &&
-           from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_CFSTR_SHELLIDLIST))
-    {
-      transmute_cf_shell_id_list_to_text_uri_list (data, length, set_data, set_data_length, NULL);
-    }
-  else
-    {
-      g_warning ("Don't know how to transmute format 0x%x to target 0x%p", from_format, to_target);
-    }
-}
-
 gboolean
 _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
                                     UINT           to_w32format,
                                     const guchar  *data,
                                     gint           length,
                                     guchar       **set_data,
-                                    gint          *set_data_length)
+                                    gsize         *set_data_length)
 {
   if ((from_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_PNG) &&
        to_w32format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_PNG)) ||
@@ -2782,110 +2734,6 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
     }
 
   return TRUE;
-}
-
-static GdkAtom
-convert_clipboard_selection_to_targets_target (GdkSurface *requestor)
-{
-  gint fmt;
-  int i;
-  int format_count = CountClipboardFormats ();
-  GArray *targets = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), format_count);
-/* FIXME: REMOVE ALL THAT STUFF
-  for (fmt = 0; 0 != (fmt = EnumClipboardFormats (fmt)); )
-    _gdk_win32_add_format_to_targets (fmt, targets, NULL);
-*/
-  GDK_NOTE (DND, {
-      g_print ("... ");
-      for (i = 0; i < targets->len; i++)
-        {
-          const char *atom_name = (const char *)g_array_index (targets, GdkWin32ContentFormatPair, i).contentformat;
-
-          g_print ("%s", atom_name);
-          if (i < targets->len - 1)
-            g_print (", ");
-        }
-      g_print ("\n");
-    });
-
-  if (targets->len > 0)
-    {
-      gint len = targets->len;
-      GdkAtom *targets_only = g_new0 (GdkAtom, len);
-
-      for (i = 0; i < targets->len; i++)
-        targets_only[i] = g_array_index (targets, GdkWin32ContentFormatPair, i).contentformat;
-
-      g_array_free (targets, TRUE);
-/* FIXME: REMOVE ALL THAT STUFF
-      selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
-                                32, (guchar *) targets_only,
-                                len * sizeof (GdkAtom));
-*/
-      return _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_GDK_SELECTION);
-    }
-  else
-    {
-      g_array_free (targets, TRUE);
-      return NULL;
-    }
-}
-
-/* It's hard to say whether implementing this actually is of any use
- * on the Win32 platform? gtk calls only
- * gdk_text_property_to_utf8_list_for_display().
- */
-gint
-gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
-					    GdkAtom       encoding,
-					    gint          format,
-					    const guchar *text,
-					    gint          length,
-					    gchar      ***list)
-{
-  gchar *result;
-  const gchar *charset;
-  gchar *source_charset;
-
-  GDK_NOTE (DND, {
-      const char *enc_name = (const char *)encoding;
-
-      g_print ("gdk_text_property_to_text_list_for_display: %s %d %.20s %d\n",
-	       enc_name, format, text, length);
-    });
-
-  if (!list)
-    return 0;
-
-  if (encoding == g_intern_static_string ("STRING"))
-    source_charset = g_strdup ("ISO-8859-1");
-  else if (encoding == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8))
-    source_charset = g_strdup ("UTF-8");
-  else
-    source_charset = g_strdup ((const char *)encoding);
-
-  g_get_charset (&charset);
-
-  result = g_convert ((const gchar *) text, length, charset, source_charset,
-		      NULL, NULL, NULL);
-  g_free (source_charset);
-
-  if (!result)
-    return 0;
-
-  *list = g_new (gchar *, 1);
-  **list = result;
-
-  return 1;
-}
-
-void
-gdk_free_text_list (gchar **list)
-{
-  g_return_if_fail (list != NULL);
-
-  g_free (*list);
-  g_free (list);
 }
 
 static gint
@@ -3185,10 +3033,10 @@ clipboard_store_hdata_ready (GObject      *clipboard,
     {
       GdkWin32ClipboardStorePrepElement *el = &g_array_index (prep->elements, GdkWin32ClipboardStorePrepElement, i);
 
-      if (el->stream == stream)
+      if (el->stream == G_OUTPUT_STREAM (stream))
         {
-          g_output_stream_close (G_OUTPUT_STREAM (el->stream), NULL, NULL);
-          el->handle = gdk_win32_hdata_output_stream_get_handle (el->stream, NULL);
+          g_output_stream_close (el->stream, NULL, NULL);
+          el->handle = gdk_win32_hdata_output_stream_get_handle (GDK_WIN32_HDATA_OUTPUT_STREAM (el->stream), NULL);
           g_object_unref (el->stream);
           el->stream = NULL;
         }
@@ -3222,10 +3070,9 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
 {
   GArray *pairs; /* of GdkWin32ContentFormatPair */
   const char * const *mime_types;
-  gint n_mime_types;
-  gint i, offset;
+  gsize n_mime_types;
+  gsize i;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-  GArray *streams;
   GdkWin32ClipboardStorePrep *prep;
 
   g_assert (clipdrop->clipboard_window != NULL);
@@ -3272,7 +3119,7 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
       GdkWin32ClipboardStorePrepElement *el = &g_array_index (prep->elements, GdkWin32ClipboardStorePrepElement, i);
       GdkWin32ClipboardHDataPrepAndStream *prep_and_stream = g_new0 (GdkWin32ClipboardHDataPrepAndStream, 1);
       prep_and_stream->prep = prep;
-      prep_and_stream->stream = el->stream;
+      prep_and_stream->stream = GDK_WIN32_HDATA_OUTPUT_STREAM (el->stream);
 
       gdk_clipboard_write_async (GDK_CLIPBOARD (cb),
                                  el->contentformat,

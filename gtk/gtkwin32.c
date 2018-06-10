@@ -53,6 +53,8 @@ DllMain (HINSTANCE hinstDLL,
       gtk_dll = (HMODULE) hinstDLL;
       _gdk_dll_hinstance = hinstDLL;
       break;
+    default:
+      break;
     }
 
   return TRUE;

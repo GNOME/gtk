@@ -196,7 +196,7 @@ gdk_win32_hdata_output_stream_close (GOutputStream  *output_stream,
   if (priv->pair.transmute)
     {
       guchar *transmuted_data = NULL;
-      gint    transmuted_data_length;
+      gsize   transmuted_data_length;
 
       if (priv->handle_is_buffer)
         {
@@ -341,7 +341,6 @@ gdk_win32_hdata_output_stream_class_init (GdkWin32HDataOutputStreamClass *klass)
 static void
 gdk_win32_hdata_output_stream_init (GdkWin32HDataOutputStream *stream)
 {
-  GdkWin32HDataOutputStreamPrivate *priv = gdk_win32_hdata_output_stream_get_instance_private (stream);
 }
 
 GOutputStream *

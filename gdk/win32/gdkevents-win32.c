@@ -361,7 +361,7 @@ low_level_keystroke_handler (WPARAM message,
 
   if (message == WM_KEYDOWN)
     last_keydown = kbdhook->vkCode;
-  else if (message = WM_KEYUP && last_keydown == kbdhook->vkCode)
+  else if (message == WM_KEYUP && last_keydown == kbdhook->vkCode)
     last_keydown = 0;
 
   return 0;
@@ -769,7 +769,6 @@ void
 _gdk_win32_print_event (const GdkEvent *event)
 {
   gchar *escaped, *kvname;
-  const char *selection_name, *target_name, *property_name;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
   switch (event->any.type)
@@ -1029,7 +1028,6 @@ apply_message_filters (GdkDisplay *display,
                        GList     **filters)
 {
   GdkWin32MessageFilterReturn result = GDK_WIN32_MESSAGE_FILTER_CONTINUE;
-  GList *node;
   GList *tmp_list;
 
   tmp_list = *filters;
@@ -1045,7 +1043,7 @@ apply_message_filters (GdkDisplay *display,
         }
 
       filter->ref_count++;
-      result = filter->function (display, msg, ret_valp, filter->data);
+      result = filter->function (GDK_WIN32_DISPLAY (display), msg, ret_valp, filter->data);
 
       /* get the next node after running the function since the
          function may add or remove a next node */
@@ -1757,13 +1755,10 @@ static void
 handle_dpi_changed (GdkSurface *window,
                     MSG       *msg)
 {
-  HWND hwnd = GDK_SURFACE_HWND (window);
   GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   GdkDisplay *display = gdk_display_get_default ();
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
-  GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   RECT *rect = (RECT *)msg->lParam;
-  GdkEvent *event;
   guint old_scale = impl->surface_scale;
 
   /* MSDN for WM_DPICHANGED: dpi_x == dpi_y here, so LOWORD (msg->wParam) == HIWORD (msg->wParam) */
@@ -2036,15 +2031,12 @@ handle_wm_sysmenu (GdkSurface *window, MSG *msg, gint *ret_valp)
 {
   GdkSurfaceImplWin32 *impl;
   LONG_PTR style, tmp_style;
-  gboolean maximized, minimized;
   LONG_PTR additional_styles;
 
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   style = GetWindowLongPtr (msg->hwnd, GWL_STYLE);
 
-  maximized = IsZoomed (msg->hwnd) || (style & WS_MAXIMIZE);
-  minimized = IsIconic (msg->hwnd) || (style & WS_MINIMIZE);
   additional_styles = 0;
 
   if (!(style & WS_SYSMENU))
@@ -2252,16 +2244,11 @@ gdk_event_translate (MSG  *msg,
   GdkSurface *grab_window = NULL;
 
   gint button;
-  GdkAtom target;
 
   gchar buf[256];
   gboolean return_val = FALSE;
 
   int i;
-
-  GdkWin32Clipdrop *clipdrop = NULL;
-
-  STGMEDIUM *property_change_data;
 
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
@@ -2269,7 +2256,7 @@ gdk_event_translate (MSG  *msg,
   if (win32_display->filters)
     {
       /* Apply display filters */
-      GdkWin32MessageFilterReturn result = apply_message_filters (win32_display, msg, ret_valp, &win32_display->filters);
+      GdkWin32MessageFilterReturn result = apply_message_filters (display, msg, ret_valp, &win32_display->filters);
 
       if (result == GDK_WIN32_MESSAGE_FILTER_REMOVE)
 	return TRUE;

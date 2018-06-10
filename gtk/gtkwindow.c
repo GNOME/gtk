@@ -1873,7 +1873,9 @@ gtk_window_init (GtkWindow *window)
   GtkWidget *widget;
   GtkCssNode *widget_node;
   GdkSeat *seat;
+#ifdef GDK_WINDOWING_X11
   GdkContentFormats *targets;
+#endif
 
   widget = GTK_WIDGET (window);
 

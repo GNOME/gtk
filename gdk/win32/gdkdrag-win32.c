@@ -2047,6 +2047,8 @@ gdk_win32_drag_context_find_surface (GdkDragContext  *context,
 
   EnumWindows (find_window_enum_proc, (LPARAM) &a);
 
+  *protocol = GDK_DRAG_PROTO_NONE;
+
   if (a.result == NULL)
     dest_surface = NULL;
   else
