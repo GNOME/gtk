@@ -439,11 +439,6 @@ GdkSurface *gdk_win32_display_get_root_window (GdkDisplay *display);
 
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const gchar *display_name);
-GdkAtom _gdk_win32_display_manager_atom_intern (GdkDisplayManager *manager,
-                                                const gchar *atom_name,
-                                                gint         only_if_exists);
-gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
-                                                 GdkAtom            atom);
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkSurface *window);
 
