@@ -2626,7 +2626,7 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
                                    gsize        *set_data_length)
 {
   const guchar *data;
-  gint          length;
+  SIZE_T        length;
 
   /* FIXME: error reporting */
 
@@ -2678,51 +2678,6 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
   GlobalUnlock (hdata);
 
   return TRUE;
-}
-
-static void
-transmute_selection_format (UINT          from_format,
-                            GdkAtom       to_target,
-                            const guchar *data,
-                            gint          length,
-                            guchar      **set_data,
-                            gint         *set_data_length)
-{
-  if ((to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_PNG) &&
-       from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_PNG)) ||
-      (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_JPEG) &&
-       from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_JFIF)) ||
-      (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_GIF) &&
-       from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_GIF)))
-    {
-      /* No transmutation needed */
-      *set_data = g_memdup (data, length);
-      *set_data_length = length;
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
-           from_format == CF_UNICODETEXT)
-    {
-      transmute_cf_unicodetext_to_utf8_string (data, length, set_data, set_data_length, NULL);
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
-           from_format == CF_TEXT)
-    {
-      transmute_cf_text_to_utf8_string (data, length, set_data, set_data_length, NULL);
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_BMP) &&
-           (from_format == CF_DIB || from_format == CF_DIBV5))
-    {
-      transmute_cf_dib_to_image_bmp (data, length, set_data, set_data_length, NULL);
-    }
-  else if (to_target == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_URI_LIST) &&
-           from_format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_CFSTR_SHELLIDLIST))
-    {
-      transmute_cf_shell_id_list_to_text_uri_list (data, length, set_data, set_data_length, NULL);
-    }
-  else
-    {
-      g_warning ("Don't know how to transmute format 0x%x to target 0x%p", from_format, to_target);
-    }
 }
 
 gboolean
@@ -3218,8 +3173,8 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
 {
   GArray *pairs; /* of GdkWin32ContentFormatPair */
   const char * const *mime_types;
-  gint n_mime_types;
-  gint i;
+  gsize n_mime_types;
+  gsize i;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   GdkWin32ClipboardStorePrep *prep;
 
