@@ -2035,23 +2035,6 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 }
 
 static void
-gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
-                                 const graphene_rect_t *viewport)
-{
-  const int width = ceilf (viewport->size.width);
-  const int height = ceilf (viewport->size.height);
-
-  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("glViewport(0, 0, %d, %d) [scale:%d]",
-                             width,
-                             height,
-                             self->scale_factor));
-
-  glViewport (0, 0, width, height);
-}
-
-
-
-static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
   int removed_textures;
@@ -2561,7 +2544,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gsk_gl_renderer_resize_viewport (self, viewport);
+  glViewport (0, 0, ceilf (viewport->size.width), ceilf (viewport->size.height));
   gsk_gl_renderer_setup_render_mode (self);
   gsk_gl_renderer_clear (self);
 
