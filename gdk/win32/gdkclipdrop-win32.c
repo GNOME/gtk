@@ -2686,7 +2686,7 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
                                     const guchar  *data,
                                     gint           length,
                                     guchar       **set_data,
-                                    gint          *set_data_length)
+                                    gsize         *set_data_length)
 {
   if ((from_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_PNG) &&
        to_w32format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_PNG)) ||

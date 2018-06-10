@@ -196,7 +196,7 @@ gdk_win32_hdata_output_stream_close (GOutputStream  *output_stream,
   if (priv->pair.transmute)
     {
       guchar *transmuted_data = NULL;
-      gint    transmuted_data_length;
+      gsize   transmuted_data_length;
 
       if (priv->handle_is_buffer)
         {
