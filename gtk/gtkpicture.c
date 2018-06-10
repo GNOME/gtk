@@ -947,7 +947,7 @@ gtk_picture_set_alternative_text (GtkPicture *self,
 {
   g_return_if_fail (GTK_IS_PICTURE (self));
 
-  if (g_str_equal (self->alternative_text, alternative_text))
+  if (g_strcmp0 (self->alternative_text, alternative_text) == 0)
     return;
 
   g_free (self->alternative_text);
