@@ -444,7 +444,7 @@ draw_device_info (GtkWidget        *widget,
       g_string_append_printf (string, "\nTool: %s", tool_type);
 
       if (serial != 0)
-        g_string_append_printf (string, ", Serial: %lx", serial);
+        g_string_append_printf (string, ", Serial: %" G_GUINT64_MODIFIER "x", serial);
     }
 
   cairo_move_to (cr, 10, *y);

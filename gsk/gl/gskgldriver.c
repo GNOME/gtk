@@ -217,9 +217,9 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
 
 #ifdef G_ENABLE_DEBUG
   GSK_NOTE (OPENGL,
-            g_message ("Textures created: %ld\n"
-                     " Textures reused: %ld\n"
-                     " Surface uploads: %ld",
+            g_message ("Textures created: %" G_GINT64_FORMAT "\n"
+                     " Textures reused: %" G_GINT64_FORMAT "\n"
+                     " Surface uploads: %" G_GINT64_FORMAT,
                      gsk_profiler_counter_get (self->profiler, self->counters.created_textures),
                      gsk_profiler_counter_get (self->profiler, self->counters.reused_textures),
                      gsk_profiler_counter_get (self->profiler, self->counters.surface_uploads)));
