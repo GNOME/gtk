@@ -1026,7 +1026,7 @@ process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
     }
 
   stream = g_memory_input_stream_new_from_data (data, data_len, g_free);
-  g_object_set_data (stream, "gdk-clipboard-stream-contenttype", pair->contentformat);
+  g_object_set_data (G_OBJECT (stream), "gdk-clipboard-stream-contenttype", (gpointer) pair->contentformat);
 
   GDK_NOTE (CLIPBOARD, g_printerr ("reading clipboard data from a %" G_GSIZE_FORMAT "-byte buffer\n",
                                    data_len));
@@ -1619,7 +1619,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 	win32_clipdrop->n_known_pixbuf_formats++;
     }
 
-  win32_clipdrop->known_pixbuf_formats = g_new (gchar *, win32_clipdrop->n_known_pixbuf_formats);
+  win32_clipdrop->known_pixbuf_formats = g_new (const gchar *, win32_clipdrop->n_known_pixbuf_formats);
 
   i = 0;
   for (rover = pixbuf_formats; rover != NULL; rover = rover->next)
@@ -1655,7 +1655,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = CF_TEXT;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 3);
@@ -1672,7 +1672,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.transmute = TRUE;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
@@ -1692,7 +1692,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = CF_DIB;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
@@ -1712,7 +1712,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = CF_DIB;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
   comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
@@ -1726,7 +1726,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.transmute = TRUE;
   g_array_append_val (comp, fmt);
 
-  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, fmt.contentformat, comp);
+  g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
 /* Not implemented, but definitely possible
@@ -2099,7 +2099,7 @@ _gdk_win32_add_w32format_to_pairs (UINT     w32format,
         }
 
       if (list && interned_w32format_name != 0 && g_list_find (*list, interned_w32format_name) == NULL)
-        *list = g_list_prepend (*list, interned_w32format_name);
+        *list = g_list_prepend (*list, (gpointer) interned_w32format_name);
     }
 
   comp_pairs = _gdk_win32_get_compatibility_contentformats_for_w32format (w32format);
@@ -2124,7 +2124,7 @@ _gdk_win32_add_w32format_to_pairs (UINT     w32format,
        pair = g_array_index (comp_pairs, GdkWin32ContentFormatPair, i);
 
        if (g_list_find (*list, pair.contentformat) == NULL)
-         *list = g_list_prepend (*list, pair.contentformat);
+         *list = g_list_prepend (*list, (gpointer) pair.contentformat);
      }
 }
 
@@ -3184,10 +3184,10 @@ clipboard_store_hdata_ready (GObject      *clipboard,
     {
       GdkWin32ClipboardStorePrepElement *el = &g_array_index (prep->elements, GdkWin32ClipboardStorePrepElement, i);
 
-      if (el->stream == stream)
+      if (el->stream == G_OUTPUT_STREAM (stream))
         {
-          g_output_stream_close (G_OUTPUT_STREAM (el->stream), NULL, NULL);
-          el->handle = gdk_win32_hdata_output_stream_get_handle (el->stream, NULL);
+          g_output_stream_close (el->stream, NULL, NULL);
+          el->handle = gdk_win32_hdata_output_stream_get_handle (GDK_WIN32_HDATA_OUTPUT_STREAM (el->stream), NULL);
           g_object_unref (el->stream);
           el->stream = NULL;
         }
@@ -3270,7 +3270,7 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
       GdkWin32ClipboardStorePrepElement *el = &g_array_index (prep->elements, GdkWin32ClipboardStorePrepElement, i);
       GdkWin32ClipboardHDataPrepAndStream *prep_and_stream = g_new0 (GdkWin32ClipboardHDataPrepAndStream, 1);
       prep_and_stream->prep = prep;
-      prep_and_stream->stream = el->stream;
+      prep_and_stream->stream = GDK_WIN32_HDATA_OUTPUT_STREAM (el->stream);
 
       gdk_clipboard_write_async (GDK_CLIPBOARD (cb),
                                  el->contentformat,
