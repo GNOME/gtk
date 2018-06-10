@@ -193,7 +193,7 @@ gdk_win32_clipboard_store_async (GdkClipboard        *clipboard,
   formats = gdk_content_provider_ref_storable_formats (content);
   formats = gdk_content_formats_union_serialize_mime_types (formats);
 
-  if (!_gdk_win32_store_clipboard_contentformats (cb, store_task, formats))
+  if (!_gdk_win32_store_clipboard_contentformats (clipboard, store_task, formats))
     {
       GDK_NOTE (CLIPBOARD, g_printerr ("clipdrop says there's nothing to store: SUCCESS!\n"));
       g_task_return_boolean (store_task, TRUE);

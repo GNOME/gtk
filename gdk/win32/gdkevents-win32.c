@@ -1043,7 +1043,7 @@ apply_message_filters (GdkDisplay *display,
         }
 
       filter->ref_count++;
-      result = filter->function (display, msg, ret_valp, filter->data);
+      result = filter->function (GDK_WIN32_DISPLAY (display), msg, ret_valp, filter->data);
 
       /* get the next node after running the function since the
          function may add or remove a next node */
@@ -2256,7 +2256,7 @@ gdk_event_translate (MSG  *msg,
   if (win32_display->filters)
     {
       /* Apply display filters */
-      GdkWin32MessageFilterReturn result = apply_message_filters (win32_display, msg, ret_valp, &win32_display->filters);
+      GdkWin32MessageFilterReturn result = apply_message_filters (display, msg, ret_valp, &win32_display->filters);
 
       if (result == GDK_WIN32_MESSAGE_FILTER_REMOVE)
 	return TRUE;

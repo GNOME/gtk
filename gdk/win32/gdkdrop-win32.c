@@ -746,7 +746,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       event->any.send_event = FALSE;
       g_set_object (&event->dnd.context, context);
       g_set_object (&event->any.surface, window);
-      gdk_event_set_display (event, display);
+      gdk_event_set_display (event, GDK_DISPLAY (display));
       gdk_event_set_device (event, gdk_drag_context_get_device (context));
       event->dnd.x_root = pt.x / context_win32->scale + _gdk_offset_x;
       event->dnd.y_root = pt.y / context_win32->scale + _gdk_offset_y;
@@ -836,7 +836,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
 
       DragFinish (hdrop);
 
-  gdk_display_put_event (display, event);
+  gdk_display_put_event (GDK_DISPLAY (display), event);
   g_object_unref (event);
 
   *ret_valp = 0;
@@ -971,7 +971,7 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
        * whether the window (widget) in question actually accepts files
        * (in gtk, data of type text/uri-list) or not.
        */
-      gdk_win32_display_add_filter (gdk_display_get_default (), gdk_dropfiles_filter, NULL);
+      gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_display_get_default ()), gdk_dropfiles_filter, NULL);
       DragAcceptFiles (GDK_SURFACE_HWND (window), TRUE);
     }
   else
