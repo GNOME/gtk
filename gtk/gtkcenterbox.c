@@ -536,22 +536,6 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
 }
 
 static void
-gtk_center_box_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  GtkCenterBox *self = GTK_CENTER_BOX (widget);
-
-  if (self->start_widget)
-    gtk_widget_snapshot_child (widget, self->start_widget, snapshot);
-
-  if (self->center_widget)
-    gtk_widget_snapshot_child (widget, self->center_widget, snapshot);
-
-  if (self->end_widget)
-    gtk_widget_snapshot_child (widget, self->end_widget, snapshot);
-}
-
-static void
 update_css_node_order (GtkCenterBox *self)
 {
   GtkCssNode *parent;
@@ -703,7 +687,6 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
   widget_class->measure = gtk_center_box_measure;
   widget_class->size_allocate = gtk_center_box_size_allocate;
-  widget_class->snapshot = gtk_center_box_snapshot;
   widget_class->direction_changed = gtk_center_box_direction_changed;
   widget_class->get_request_mode = gtk_center_box_get_request_mode;
 
