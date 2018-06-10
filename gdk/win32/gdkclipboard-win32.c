@@ -171,7 +171,6 @@ gdk_win32_clipboard_store_async (GdkClipboard        *clipboard,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  GdkWin32Clipboard *cb = GDK_WIN32_CLIPBOARD (clipboard);
   GdkContentProvider *content;
   GdkContentFormats *formats;
   GTask *store_task;

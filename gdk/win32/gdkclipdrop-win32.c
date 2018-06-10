@@ -914,7 +914,6 @@ process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
   UINT fmt, fmt_to_use;
   HANDLE hdata;
   GdkWin32ContentFormatPair *pair;
-  gpointer ptr;
   guchar *data;
   gsize   data_len;
   GInputStream *stream;
@@ -1879,8 +1878,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 void
 _gdk_dropfiles_store (gchar *data)
 {
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-
 /* FIXME: REMOVE ALL THAT STUFF
   if (data != NULL)
     {
