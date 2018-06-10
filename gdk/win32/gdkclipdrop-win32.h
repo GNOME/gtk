@@ -254,7 +254,7 @@ gboolean _gdk_win32_transmute_contentformat                        (const gchar 
                                                                     const guchar      *data,
                                                                     gint               length,
                                                                     guchar           **set_data,
-                                                                    gint              *set_data_length);
+                                                                    gsize             *set_data_length);
 
 gboolean _gdk_win32_transmute_windows_data                         (UINT          from_w32format,
                                                                     const gchar  *to_contentformat,
