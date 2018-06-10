@@ -98,9 +98,10 @@
  * the separator with name separator. The subnode gets a .wide style
  * class when the paned is supposed to be wide.
  *
- * In horizontal orientation, the nodes of the children are always arranged
- * from left to right. So :first-child will always select the leftmost child,
- * regardless of text direction.
+ * In horizontal orientation, the nodes are arranged based on the text
+ * direction, so in left-to-right mode, :first-child will select the
+ * leftmost child, while it will select the rightmost child in
+ * RTL layouts.
  *
  * ## Creating a paned widget with minimum sizes.
  *
@@ -218,8 +219,6 @@ static void     gtk_paned_size_allocate         (GtkWidget           *widget,
                                                  const GtkAllocation *allocation,
                                                  int                  baseline);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
-static void     gtk_paned_direction_changed     (GtkWidget        *widget,
-                                                 GtkTextDirection  previous_direction);
 static void     gtk_paned_snapshot              (GtkWidget        *widget,
 						 GtkSnapshot      *snapshot);
 static gboolean gtk_paned_focus                 (GtkWidget        *widget,
@@ -372,7 +371,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->snapshot = gtk_paned_snapshot;
   widget_class->focus = gtk_paned_focus;
-  widget_class->direction_changed = gtk_paned_direction_changed;
   widget_class->pick = gtk_paned_pick;
 
   container_class->add = gtk_paned_add;
@@ -1575,17 +1573,6 @@ gtk_paned_focus (GtkWidget        *widget,
   return retval;
 }
 
-static void
-gtk_paned_direction_changed (GtkWidget        *widget,
-                             GtkTextDirection  previous_direction)
-{
-  GtkPaned *paned = GTK_PANED (widget);
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
-}
-
 /**
  * gtk_paned_new:
  * @orientation: the paned’s orientation.
@@ -1660,10 +1647,7 @@ gtk_paned_pack1 (GtkPaned  *paned,
       priv->child1_resize = resize;
       priv->child1_shrink = shrink;
 
-      if (gtk_widget_get_direction (GTK_WIDGET (paned)) == GTK_TEXT_DIR_RTL)
-        gtk_widget_insert_after (child, GTK_WIDGET (paned), priv->handle_widget);
-      else
-        gtk_widget_insert_before (child, GTK_WIDGET (paned), priv->handle_widget);
+      gtk_widget_insert_before (child, GTK_WIDGET (paned), priv->handle_widget);
     }
 }
 
@@ -1693,10 +1677,7 @@ gtk_paned_pack2 (GtkPaned  *paned,
       priv->child2_resize = resize;
       priv->child2_shrink = shrink;
 
-      if (gtk_widget_get_direction (GTK_WIDGET (paned)) == GTK_TEXT_DIR_RTL)
-        gtk_widget_insert_before (child, GTK_WIDGET (paned), priv->handle_widget);
-      else
-        gtk_widget_insert_after (child, GTK_WIDGET (paned), priv->handle_widget);
+      gtk_widget_insert_after (child, GTK_WIDGET (paned), priv->handle_widget);
     }
 }
 
