@@ -526,7 +526,6 @@ idroptarget_drop (LPDROPTARGET This,
 {
   target_drag_context *ctx = (target_drag_context *) This;
   GdkWin32DropContext *context_win32 = GDK_WIN32_DROP_CONTEXT (ctx->context);
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   gint pt_x = pt.x / context_win32->scale + _gdk_offset_x;
   gint pt_y = pt.y / context_win32->scale + _gdk_offset_y;
 
@@ -895,7 +894,6 @@ gdk_win32_drop_context_drop_finish (GdkDragContext *context,
                  guint32         time)
 {
   GdkDragContext *src_context;
-  GdkEvent *tmp_event;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
   g_return_if_fail (context != NULL);

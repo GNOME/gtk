@@ -119,7 +119,6 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   GdkDeviceWintab *device_wintab;
   POINT point;
   HWND hwnd, hwndc;
-  GdkSurfaceImplWin32 *impl;
   int scale;
 
   device_wintab = GDK_DEVICE_WINTAB (device);
@@ -231,15 +230,12 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   gint root_x, root_y;
   gdouble temp_x, temp_y;
   gint i;
-  GdkDisplay *display;
 
   device = GDK_DEVICE (device_wintab);
   impl_surface = _gdk_surface_get_impl_surface (window);
   temp_x = temp_y = 0;
 
   gdk_surface_get_origin (impl_surface, &root_x, &root_y);
-
-  display = gdk_device_get_display (device);
 
   for (i = 0; i < gdk_device_get_n_axes (device); i++)
     {

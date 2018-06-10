@@ -1050,7 +1050,6 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
         if (msg->lParam & GCS_RESULTSTR)
           {
             gsize len;
-            gchar *utf8str = NULL;
             GError *error = NULL;
 
             len = ImmGetCompositionStringW (himc, GCS_RESULTSTR, NULL, 0);

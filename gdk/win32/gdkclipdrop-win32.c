@@ -2787,7 +2787,6 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
 static GdkAtom
 convert_clipboard_selection_to_targets_target (GdkSurface *requestor)
 {
-  gint fmt;
   int i;
   int format_count = CountClipboardFormats ();
   GArray *targets = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), format_count);
@@ -3223,9 +3222,8 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
   GArray *pairs; /* of GdkWin32ContentFormatPair */
   const char * const *mime_types;
   gint n_mime_types;
-  gint i, offset;
+  gint i;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-  GArray *streams;
   GdkWin32ClipboardStorePrep *prep;
 
   g_assert (clipdrop->clipboard_window != NULL);
