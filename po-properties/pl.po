@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-27 05:52+0000\n"
-"PO-Revision-Date: 2018-05-27 07:57+0200\n"
+"POT-Creation-Date: 2018-06-10 13:25+0000\n"
+"PO-Revision-Date: 2018-06-10 15:35+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -678,36 +678,36 @@ msgstr "Wyświetlanie paska menu"
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "Określa, czy okno ma wyświetlać pasek manu na górze okna"
 
-#: gtk/gtkaspectframe.c:111 gtk/gtkwidget.c:1132
+#: gtk/gtkaspectframe.c:109 gtk/gtkwidget.c:1132
 msgid "Horizontal Alignment"
 msgstr "Wyrównanie poziome"
 
-#: gtk/gtkaspectframe.c:112
+#: gtk/gtkaspectframe.c:110
 msgid "X alignment of the child"
 msgstr "Poziome wyrównanie elementu potomnego"
 
-#: gtk/gtkaspectframe.c:118 gtk/gtkwidget.c:1145
+#: gtk/gtkaspectframe.c:116 gtk/gtkwidget.c:1145
 msgid "Vertical Alignment"
 msgstr "Wyrównanie pionowe"
 
-#: gtk/gtkaspectframe.c:119
+#: gtk/gtkaspectframe.c:117
 msgid "Y alignment of the child"
 msgstr "Pionowe wyrównanie elementu potomnego"
 
-#: gtk/gtkaspectframe.c:125
+#: gtk/gtkaspectframe.c:123
 msgid "Ratio"
 msgstr "Proporcje"
 
-#: gtk/gtkaspectframe.c:126
+#: gtk/gtkaspectframe.c:124
 msgid "Aspect ratio if obey_child is FALSE"
 msgstr ""
 "Współczynnik proporcji używany, jeśli „Decyzja potomka” ma wartość fałsz"
 
-#: gtk/gtkaspectframe.c:132
+#: gtk/gtkaspectframe.c:130
 msgid "Obey child"
 msgstr "Decyzja potomka"
 
-#: gtk/gtkaspectframe.c:133
+#: gtk/gtkaspectframe.c:131
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr ""
 "Wymusza dopasowanie współczynnika proporcji do ramki elementu potomnego"
@@ -837,7 +837,7 @@ msgstr "Uwypuklenie krawędzi"
 msgid "The border relief style"
 msgstr "Styl uwypuklenia krawędzi"
 
-#: gtk/gtkbutton.c:258 gtk/gtkcellrendererpixbuf.c:200 gtk/gtkimage.c:212
+#: gtk/gtkbutton.c:258 gtk/gtkcellrendererpixbuf.c:200 gtk/gtkimage.c:207
 #: gtk/gtkprinter.c:170 gtk/gtkwindow.c:960
 msgid "Icon Name"
 msgstr "Nazwa ikony"
@@ -1242,16 +1242,16 @@ msgstr "Rozmiar ikon"
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "Wartość GtkIconSize, która określa rozmiar rysowanej ikony"
 
-#: gtk/gtkcellrendererpixbuf.c:201 gtk/gtkimage.c:213
+#: gtk/gtkcellrendererpixbuf.c:201 gtk/gtkimage.c:208
 msgid "The name of the icon from the icon theme"
 msgstr "Nazwa ikony z motywu ikon"
 
-#: gtk/gtkcellrendererpixbuf.c:215 gtk/gtkimage.c:226 gtk/gtkmodelbutton.c:942
+#: gtk/gtkcellrendererpixbuf.c:215 gtk/gtkimage.c:221 gtk/gtkmodelbutton.c:942
 #: gtk/gtkshortcutsshortcut.c:585 gtk/gtkwindow.c:917
 msgid "Icon"
 msgstr "Ikona"
 
-#: gtk/gtkcellrendererpixbuf.c:216 gtk/gtkimage.c:227
+#: gtk/gtkcellrendererpixbuf.c:216 gtk/gtkimage.c:222
 msgid "The GIcon being displayed"
 msgstr "Wyświetlana ikona GIcon"
 
@@ -2757,11 +2757,11 @@ msgstr "Etykieta anulowania"
 msgid "The label on the cancel button"
 msgstr "Etykieta przycisku anulowania"
 
-#: gtk/gtkfilechooserwidget.c:8328 gtk/gtkfilechooserwidget.c:8329
+#: gtk/gtkfilechooserwidget.c:8325 gtk/gtkfilechooserwidget.c:8326
 msgid "Search mode"
 msgstr "Tryb wyszukiwania"
 
-#: gtk/gtkfilechooserwidget.c:8335 gtk/gtkfilechooserwidget.c:8336
+#: gtk/gtkfilechooserwidget.c:8332 gtk/gtkfilechooserwidget.c:8333
 #: gtk/gtkheaderbar.c:1882 gtk/gtkshortcutsshortcut.c:626
 msgid "Subtitle"
 msgstr "Podtytuł"
@@ -3255,77 +3255,61 @@ msgstr "Dopełnienie elementu"
 msgid "Padding around icon view items"
 msgstr "Dopełnienie dookoła elementów widoku ikon"
 
-#: gtk/gtkimage.c:169
+#: gtk/gtkimage.c:164 gtk/gtkpicture.c:309
 msgid "Paintable"
 msgstr "Powierzchnia rysowania"
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:165
 msgid "A GdkPaintable to display"
 msgstr "Obiekt GdkPaintable do wyświetlenia"
 
-#: gtk/gtkimage.c:176 gtk/gtkrecentmanager.c:282
+#: gtk/gtkimage.c:171 gtk/gtkrecentmanager.c:282
 msgid "Filename"
 msgstr "Nazwa pliku"
 
-#: gtk/gtkimage.c:177
+#: gtk/gtkimage.c:172
 msgid "Filename to load and display"
 msgstr "Nazwa pliku do wczytania i wyświetlenia"
 
-#: gtk/gtkimage.c:183
+#: gtk/gtkimage.c:178
 msgid "Icon size"
 msgstr "Rozmiar ikony"
 
-#: gtk/gtkimage.c:184
+#: gtk/gtkimage.c:179
 msgid "Symbolic size to use for icon set or named icon"
 msgstr "Symboliczny rozmiar używany przy zbiorze ikon lub nazwanej ikonie"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:193
 msgid "Pixel size"
 msgstr "Rozmiar w pikselach"
 
-#: gtk/gtkimage.c:199
+#: gtk/gtkimage.c:194
 msgid "Pixel size to use for named icon"
 msgstr "Rozmiar w pikselach używany przy nazwanych ikonach"
 
-#: gtk/gtkimage.c:238
+#: gtk/gtkimage.c:233
 msgid "Resource"
 msgstr "Zasób"
 
-#: gtk/gtkimage.c:239
+#: gtk/gtkimage.c:234
 msgid "The resource path being displayed"
 msgstr "Wyświetlana ścieżka zasobu"
 
-#: gtk/gtkimage.c:245
+#: gtk/gtkimage.c:240
 msgid "Storage type"
 msgstr "Sposób zapisu"
 
-#: gtk/gtkimage.c:246
+#: gtk/gtkimage.c:241
 msgid "The representation being used for image data"
 msgstr "Sposób zapisu danych obrazu"
 
-#: gtk/gtkimage.c:261
+#: gtk/gtkimage.c:256
 msgid "Use Fallback"
 msgstr "Użycie zapasowych nazw ikon"
 
-#: gtk/gtkimage.c:262
+#: gtk/gtkimage.c:257
 msgid "Whether to use icon names fallback"
 msgstr "Określa, czy używać zapasowych nazw ikon"
-
-#: gtk/gtkimage.c:274
-msgid "Keep aspect ratio"
-msgstr "Utrzymywanie proporcji"
-
-#: gtk/gtkimage.c:275
-msgid "Render contents respecting the aspect ratio"
-msgstr "Rysowanie zawartości utrzymując proporcje"
-
-#: gtk/gtkimage.c:286
-msgid "Can shrink"
-msgstr "Może być zmniejszanie"
-
-#: gtk/gtkimage.c:287
-msgid "Allow image to be smaller than contents"
-msgstr "Obraz może być mniejszy niż zawartość"
 
 #: gtk/gtkinfobar.c:329 gtk/gtkmessagedialog.c:175
 msgid "Message Type"
@@ -3604,7 +3588,7 @@ msgstr "przybliżenie"
 msgid "resize"
 msgstr "zmiana rozmiaru"
 
-#: gtk/gtkmediacontrols.c:269 gtk/gtkvideo.c:320
+#: gtk/gtkmediacontrols.c:269 gtk/gtkvideo.c:321
 msgid "Media Stream"
 msgstr "Strumień multimedialny"
 
@@ -3612,7 +3596,7 @@ msgstr "Strumień multimedialny"
 msgid "The media stream managed"
 msgstr "Zarządzany strumień multimedialny"
 
-#: gtk/gtkmediafile.c:161 gtk/gtkvideo.c:296
+#: gtk/gtkmediafile.c:161 gtk/gtkpicture.c:321 gtk/gtkvideo.c:297
 msgid "File"
 msgstr "Plik"
 
@@ -3704,7 +3688,7 @@ msgstr "Przewijanie"
 msgid "Set while a seek is in progress"
 msgstr "Ustawiane w trakcie przewijania"
 
-#: gtk/gtkmediastream.c:421 gtk/gtkvideo.c:308
+#: gtk/gtkmediastream.c:421 gtk/gtkvideo.c:309
 msgid "Loop"
 msgstr "Powtarzanie"
 
@@ -4295,6 +4279,38 @@ msgstr "Zmniejszanie"
 #: gtk/gtkpaned.c:482
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Określa, czy element potomny może być mniejszy od swoich wymagań"
+
+#: gtk/gtkpicture.c:310
+msgid "The GdkPaintable to display"
+msgstr "Obiekt GdkPaintable do wyświetlenia"
+
+#: gtk/gtkpicture.c:322
+msgid "File to load and display"
+msgstr "Plik do wczytania i wyświetlenia"
+
+#: gtk/gtkpicture.c:333
+msgid "Alternative text"
+msgstr "Alternatywny tekst"
+
+#: gtk/gtkpicture.c:334
+msgid "The alternative textual description"
+msgstr "Alternatywny opis tekstowy"
+
+#: gtk/gtkpicture.c:346
+msgid "Keep aspect ratio"
+msgstr "Utrzymywanie proporcji"
+
+#: gtk/gtkpicture.c:347
+msgid "Render contents respecting the aspect ratio"
+msgstr "Rysowanie zawartości utrzymując proporcje"
+
+#: gtk/gtkpicture.c:358
+msgid "Can shrink"
+msgstr "Może być zmniejszane"
+
+#: gtk/gtkpicture.c:359
+msgid "Allow self to be smaller than contents"
+msgstr "Może być mniejsze niż zawartość"
 
 #: gtk/gtkplacessidebar.c:4651
 msgid "Location to Select"
@@ -6746,23 +6762,23 @@ msgstr ""
 "Logiczny identyfikator kolumny porządkowania, kiedy zostanie wybrana do "
 "porządkowania"
 
-#: gtk/gtkvideo.c:284
+#: gtk/gtkvideo.c:285
 msgid "Autoplay"
 msgstr "Automatyczne odtwarzanie"
 
-#: gtk/gtkvideo.c:285
+#: gtk/gtkvideo.c:286
 msgid "If playback should begin automatically"
 msgstr "Czy odtwarzanie ma się zacząć automatycznie"
 
-#: gtk/gtkvideo.c:297
+#: gtk/gtkvideo.c:298
 msgid "The video file played back"
 msgstr "Odtwarzany plik wideo"
 
-#: gtk/gtkvideo.c:309
+#: gtk/gtkvideo.c:310
 msgid "If new media streams should be set to loop"
 msgstr "Czy nowe strumienie multimedialne mają być ustawione na powtarzanie"
 
-#: gtk/gtkvideo.c:321
+#: gtk/gtkvideo.c:322
 msgid "The media stream played"
 msgstr "Odtwarzany strumień multimedialny"
 
