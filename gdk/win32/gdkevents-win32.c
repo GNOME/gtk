@@ -361,7 +361,7 @@ low_level_keystroke_handler (WPARAM message,
 
   if (message == WM_KEYDOWN)
     last_keydown = kbdhook->vkCode;
-  else if (message = WM_KEYUP && last_keydown == kbdhook->vkCode)
+  else if (message == WM_KEYUP && last_keydown == kbdhook->vkCode)
     last_keydown = 0;
 
   return 0;
