@@ -4097,7 +4097,7 @@ tablet_pad_group_handle_buttons (void                           *data,
   uint32_t *p;
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
-            g_message ("tablet pad group handle buttons, pad group = %p, n_buttons = %ld",
+            g_message ("tablet pad group handle buttons, pad group = %p, n_buttons = %" G_GSIZE_FORMAT,
                        wp_tablet_pad_group, buttons->size));
 
   wl_array_for_each (p, buttons)

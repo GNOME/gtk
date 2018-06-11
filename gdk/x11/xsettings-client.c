@@ -138,7 +138,7 @@ notify_changes (GdkX11Screen *x11_screen,
 #define return_if_fail_bytes(buffer, n_bytes) G_STMT_START{ \
   if (BYTES_LEFT (buffer) < (n_bytes)) \
     { \
-      g_warning ("Invalid XSETTINGS property (read off end: Expected %u bytes, only %ld left", \
+      g_warning ("Invalid XSETTINGS property (read off end: Expected %u bytes, only %"G_GSIZE_FORMAT" left", \
                  (n_bytes), BYTES_LEFT (buffer)); \
       return FALSE; \
     } \
@@ -273,7 +273,7 @@ parse_settings (unsigned char *data,
       !fetch_card32 (&buffer, &n_entries))
     goto out;
 
-  GDK_NOTE (SETTINGS, g_message ("reading %u settings (serial %u byte order %u)", n_entries, serial, buffer.byte_order));
+  GDK_NOTE (SETTINGS, g_message ("reading %lu settings (serial %lu byte order %u)", n_entries, serial, buffer.byte_order));
 
   for (i = 0; i < n_entries; i++)
     {
