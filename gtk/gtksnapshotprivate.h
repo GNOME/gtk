@@ -89,7 +89,9 @@ struct _GtkSnapshotState {
       char *message;
     } debug;
   } data;
-};
+} GRAPHENE_ALIGN16;
+
+G_STATIC_ASSERT (sizeof (GtkSnapshotState) % 16 == 0);
 
 /* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
  * so that we don't need to typecast between them.
