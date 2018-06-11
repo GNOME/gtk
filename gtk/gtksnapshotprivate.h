@@ -40,6 +40,7 @@ typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
                                                     GskRenderNode   **nodes,
                                                     guint             n_nodes);
 
+GRAPHENE_ALIGN16
 struct _GtkSnapshotState {
   guint                  start_node_index;
   guint                  n_nodes;
@@ -90,6 +91,8 @@ struct _GtkSnapshotState {
     } debug;
   } data;
 };
+
+G_STATIC_ASSERT (sizeof (GtkSnapshotState) % 16 == 0);
 
 /* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
  * so that we don't need to typecast between them.

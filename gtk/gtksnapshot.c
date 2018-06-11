@@ -67,8 +67,6 @@ gtk_snapshot_state_array_new (void)
 {
   GtkRealSnapshotStateArray *array;
 
-  g_return_val_if_fail (sizeof (GtkSnapshotState) % 16 == 0, NULL);
-
   array = g_slice_new (GtkRealSnapshotStateArray);
 
   array->data      = NULL;
