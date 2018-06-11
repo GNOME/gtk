@@ -846,7 +846,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    *
    * Clip the overlay child widget so as to fit the parent
    */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
+  gtk_container_class_install_child_property (container_class, CHILD_PROP_CLIP_OVERLAY,
                                               g_param_spec_boolean ("clip-overlay",
                                                                     P_("Clip Overlay"),
                                                                     P_("Clip the overlay child widget so as to fit the parent"),
