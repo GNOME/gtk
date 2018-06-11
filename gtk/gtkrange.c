@@ -3061,7 +3061,17 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
   page_increment = gtk_adjustment_get_page_increment (adjustment);
 
   if (GTK_IS_SCROLLBAR (range))
-    scroll_unit = pow (page_size, 2.0 / 3.0);
+    {
+      gdouble pow_unit = pow (page_size, 2.0 / 3.0);
+
+      /* for very small page sizes of < 1.0, the effect of pow() is
+       * the opposite of what's intended and the scroll steps become
+       * unusably large, make sure we never get a scroll_unit larger
+       * than page_size / 2.0, which used to be the default before the
+       * pow() magic was introduced.
+       */
+      scroll_unit = MIN (pow_unit, page_size / 2.0);
+    }
   else
     scroll_unit = page_increment;
 

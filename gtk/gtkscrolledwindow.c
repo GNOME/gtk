@@ -1296,6 +1296,7 @@ get_scroll_unit (GtkScrolledWindow *sw,
   GtkRange *scrollbar;
   GtkAdjustment *adj;
   gdouble page_size;
+  gdouble pow_unit;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     scrollbar = GTK_RANGE (priv->hscrollbar);
@@ -1307,7 +1308,10 @@ get_scroll_unit (GtkScrolledWindow *sw,
 
   adj = gtk_range_get_adjustment (scrollbar);
   page_size = gtk_adjustment_get_page_size (adj);
-  scroll_unit = pow (page_size, 2.0 / 3.0);
+
+  /* see comment in _gtk_range_get_wheel_delta() */
+  pow_unit = pow (page_size, 2.0 / 3.0);
+  scroll_unit = MIN (pow_unit, page_size / 2.0);
 #else
   scroll_unit = 1;
 #endif
