@@ -66,6 +66,7 @@ struct _GtkOverlayChild
 {
   guint pass_through : 1;
   guint measure : 1;
+  guint clip_overlay : 1;
   double blur;
 };
 
@@ -80,7 +81,8 @@ enum
   CHILD_PROP_PASS_THROUGH,
   CHILD_PROP_MEASURE,
   CHILD_PROP_BLUR,
-  CHILD_PROP_INDEX
+  CHILD_PROP_INDEX,
+  CHILD_PROP_CLIP_OVERLAY
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -574,6 +576,17 @@ gtk_overlay_set_child_property (GtkContainer *container,
 				     child,
 				     g_value_get_int (value));
       break;
+    case CHILD_PROP_CLIP_OVERLAY:
+      if (child_info)
+	{
+	  if (g_value_get_boolean (value) != child_info->clip_overlay)
+	    {
+	      child_info->clip_overlay = g_value_get_boolean (value);
+	      gtk_container_child_notify (container, child, "clip-overlay");
+              gtk_widget_queue_resize (GTK_WIDGET (overlay));
+	    }
+	}
+      break;
 
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -637,10 +650,41 @@ gtk_overlay_get_child_property (GtkContainer *container,
 
       g_value_set_int (value, pos);
       break;
+    case CHILD_PROP_CLIP_OVERLAY:
+      if (child_info)
+	g_value_set_boolean (value, child_info->clip_overlay);
+      else
+	g_value_set_boolean (value, FALSE);
+      break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
     }
+}
+
+static void
+gtk_overlay_snapshot_child (GtkWidget   *overlay,
+                            GtkWidget   *child,
+                            GtkSnapshot *snapshot)
+{
+  graphene_rect_t bounds;
+  gboolean clip_set;
+
+  clip_set = gtk_overlay_get_clip_overlay (GTK_OVERLAY (overlay), child);
+
+  if (!clip_set)
+    {
+      gtk_widget_snapshot_child (overlay, child, snapshot);
+      return;
+    }
+
+  graphene_rect_init (&bounds, 0, 0,
+                      gtk_widget_get_width (overlay),
+                      gtk_widget_get_height (overlay));
+
+  gtk_snapshot_push_clip (snapshot, &bounds);
+  gtk_widget_snapshot_child (overlay, child, snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
@@ -702,7 +746,12 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 
   if (clip == NULL)
     {
-      GTK_WIDGET_CLASS (gtk_overlay_parent_class)->snapshot (widget, snapshot);
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          gtk_overlay_snapshot_child (widget, child, snapshot);
+        }
       return;
     }
 
@@ -725,7 +774,7 @@ gtk_overlay_snapshot (GtkWidget   *widget,
        child = _gtk_widget_get_next_sibling (child))
     {
       if (child != main_widget)
-        gtk_widget_snapshot_child (widget, child, snapshot);
+        gtk_overlay_snapshot_child (widget, child, snapshot);
     }
 
   gsk_render_node_unref (main_widget_node);
@@ -792,6 +841,18 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 								P_("The index of the overlay in the parent, -1 for the main child"),
 								-1, G_MAXINT, 0,
 								GTK_PARAM_READWRITE));
+  /**
+   * GtkOverlay:clip-overlay:
+   *
+   * Clip the overlay child widget so as to fit the parent
+   */
+  gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
+                                              g_param_spec_boolean ("clip-overlay",
+                                                                    P_("Clip Overlay"),
+                                                                    P_("Clip the overlay child widget so as to fit the parent"),
+                                                                    FALSE,
+                                                                    GTK_PARAM_READWRITE));
+
 
   /**
    * GtkOverlay::get-child-position:
@@ -1013,4 +1074,52 @@ gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
 			   NULL);
 
   return measure;
+}
+
+/**
+ * gtk_overlay_set_clip_overlay:
+ * @overlay: a #GtkOverlay
+ * @widget: an overlay child of #GtkOverlay
+ * @clip_overlay: whether the child should be clipped
+ *
+ * Convenience function to set the value of the #GtkOverlay:clip-overlay
+ * child property for @widget.
+ */
+void
+gtk_overlay_set_clip_overlay (GtkOverlay *overlay,
+                              GtkWidget  *widget,
+                              gboolean    clip_overlay)
+{
+  g_return_if_fail (GTK_IS_OVERLAY (overlay));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_container_child_set (GTK_CONTAINER (overlay), widget,
+			   "clip-overlay", clip_overlay,
+			   NULL);
+}
+
+/**
+ * gtk_overlay_get_overlay_clip_overlay:
+ * @overlay: a #GtkOverlay
+ * @widget: an overlay child of #GtkOverlay
+ *
+ * Convenience function to get the value of the #GtkOverlay:clip-overlay
+ * child property for @widget.
+ *
+ * Returns: whether the widget is clipped within the parent.
+ */
+gboolean
+gtk_overlay_get_clip_overlay (GtkOverlay *overlay,
+                              GtkWidget  *widget)
+{
+  gboolean clip_overlay;
+
+  g_return_val_if_fail (GTK_IS_OVERLAY (overlay), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  gtk_container_child_get (GTK_CONTAINER (overlay), widget,
+			   "clip-overlay", &clip_overlay,
+			   NULL);
+
+  return clip_overlay;
 }
