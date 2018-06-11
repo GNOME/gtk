@@ -446,7 +446,7 @@ file_write (GIOChannel   *source,
     }
 
   GTK_NOTE (PRINTING,
-            g_print ("FILE Backend: Writting %lu byte chunk to target file\n", bytes_read));
+            g_print ("FILE Backend: Writting %"G_GSIZE_FORMAT" byte chunk to target file\n", bytes_read));
 
   return TRUE;
 }
