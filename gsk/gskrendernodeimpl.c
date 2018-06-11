@@ -72,9 +72,10 @@ struct _GskColorNode
   GdkRGBA color;
 };
 
-static void
+static gsize
 gsk_color_node_finalize (GskRenderNode *node)
 {
+  return 0;
 }
 
 static void
@@ -199,9 +200,12 @@ struct _GskLinearGradientNode
   GskColorStop stops[];
 };
 
-static void
+static gsize
 gsk_linear_gradient_node_finalize (GskRenderNode *node)
 {
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return self->n_stops * sizeof (GskColorStop);
 }
 
 static void
@@ -508,9 +512,10 @@ struct _GskBorderNode
   GdkRGBA border_color[4];
 };
 
-static void
+static gsize
 gsk_border_node_finalize (GskRenderNode *node)
 {
+  return 0;
 }
 
 static void
@@ -755,12 +760,14 @@ struct _GskTextureNode
   GdkTexture *texture;
 };
 
-static void
+static gsize
 gsk_texture_node_finalize (GskRenderNode *node)
 {
   GskTextureNode *self = (GskTextureNode *) node;
 
   g_object_unref (self->texture);
+
+  return 0;
 }
 
 static void
@@ -948,9 +955,10 @@ struct _GskInsetShadowNode
   float blur_radius;
 };
 
-static void
+static gsize
 gsk_inset_shadow_node_finalize (GskRenderNode *node)
 {
+  return 0;
 }
 
 static gboolean
@@ -1533,9 +1541,10 @@ struct _GskOutsetShadowNode
   float blur_radius;
 };
 
-static void
+static gsize
 gsk_outset_shadow_node_finalize (GskRenderNode *node)
 {
+  return 0;
 }
 
 static void
@@ -1858,13 +1867,15 @@ struct _GskCairoNode
   cairo_surface_t *surface;
 };
 
-static void
+static gsize
 gsk_cairo_node_finalize (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;
 
   if (self->surface)
     cairo_surface_destroy (self->surface);
+
+  return 0;
 }
 
 static void
@@ -2123,7 +2134,7 @@ struct _GskContainerNode
   GskRenderNode *children[];
 };
 
-static void
+static gsize
 gsk_container_node_finalize (GskRenderNode *node)
 {
   GskContainerNode *container = (GskContainerNode *) node;
@@ -2131,6 +2142,8 @@ gsk_container_node_finalize (GskRenderNode *node)
 
   for (i = 0; i < container->n_children; i++)
     gsk_render_node_unref (container->children[i]);
+
+  return container->n_children * sizeof (GskRenderNode *);
 }
 
 static void
@@ -2389,12 +2402,14 @@ struct _GskTransformNode
   graphene_matrix_t transform;
 };
 
-static void
+static gsize
 gsk_transform_node_finalize (GskRenderNode *node)
 {
   GskTransformNode *self = (GskTransformNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -2565,12 +2580,14 @@ struct _GskOffsetNode
   double y_offset;
 };
 
-static void
+static gsize
 gsk_offset_node_finalize (GskRenderNode *node)
 {
   GskOffsetNode *self = (GskOffsetNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -2764,13 +2781,15 @@ struct _GskDebugNode
   char *message;
 };
 
-static void
+static gsize
 gsk_debug_node_finalize (GskRenderNode *node)
 {
   GskDebugNode *self = (GskDebugNode *) node;
 
   gsk_render_node_unref (self->child);
   g_free (self->message);
+
+  return 0;
 }
 
 static void
@@ -2935,12 +2954,14 @@ struct _GskOpacityNode
   double opacity;
 };
 
-static void
+static gsize
 gsk_opacity_node_finalize (GskRenderNode *node)
 {
   GskOpacityNode *self = (GskOpacityNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -3103,12 +3124,14 @@ struct _GskColorMatrixNode
   graphene_vec4_t color_offset;
 };
 
-static void
+static gsize
 gsk_color_matrix_node_finalize (GskRenderNode *node)
 {
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -3356,12 +3379,14 @@ struct _GskRepeatNode
   graphene_rect_t child_bounds;
 };
 
-static void
+static gsize
 gsk_repeat_node_finalize (GskRenderNode *node)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -3527,12 +3552,14 @@ struct _GskClipNode
   graphene_rect_t clip;
 };
 
-static void
+static gsize
 gsk_clip_node_finalize (GskRenderNode *node)
 {
   GskClipNode *self = (GskClipNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -3701,12 +3728,14 @@ struct _GskRoundedClipNode
   GskRoundedRect clip;
 };
 
-static void
+static gsize
 gsk_rounded_clip_node_finalize (GskRenderNode *node)
 {
   GskRoundedClipNode *self = (GskRoundedClipNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void
@@ -3890,12 +3919,14 @@ struct _GskShadowNode
   GskShadow shadows[];
 };
 
-static void
+static gsize
 gsk_shadow_node_finalize (GskRenderNode *node)
 {
   GskShadowNode *self = (GskShadowNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return self->n_shadows * sizeof (GskShadow);
 }
 
 static void
@@ -4220,13 +4251,15 @@ gsk_blend_mode_to_cairo_operator (GskBlendMode blend_mode)
     }
 }
 
-static void
+static gsize
 gsk_blend_node_finalize (GskRenderNode *node)
 {
   GskBlendNode *self = (GskBlendNode *) node;
 
   gsk_render_node_unref (self->bottom);
   gsk_render_node_unref (self->top);
+
+  return 0;
 }
 
 static void
@@ -4408,13 +4441,15 @@ struct _GskCrossFadeNode
   double         progress;
 };
 
-static void
+static gsize
 gsk_cross_fade_node_finalize (GskRenderNode *node)
 {
   GskCrossFadeNode *self = (GskCrossFadeNode *) node;
 
   gsk_render_node_unref (self->start);
   gsk_render_node_unref (self->end);
+
+  return 0;
 }
 
 static void
@@ -4603,12 +4638,14 @@ struct _GskTextNode
   PangoGlyphInfo glyphs[];
 };
 
-static void
+static gsize
 gsk_text_node_finalize (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
   g_object_unref (self->font);
+
+  return self->num_glyphs * sizeof (PangoGlyphInfo);
 }
 
 #ifndef STACK_BUFFER_SIZE
@@ -4937,12 +4974,14 @@ struct _GskBlurNode
   double radius;
 };
 
-static void
+static gsize
 gsk_blur_node_finalize (GskRenderNode *node)
 {
   GskBlurNode *self = (GskBlurNode *) node;
 
   gsk_render_node_unref (self->child);
+
+  return 0;
 }
 
 static void

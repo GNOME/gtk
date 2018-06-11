@@ -25,7 +25,7 @@ struct _GskRenderNodeClass
   gsize struct_size;
   const char *type_name;
 
-  void            (* finalize)    (GskRenderNode  *node);
+  gsize           (* finalize)    (GskRenderNode  *node);
   void            (* draw)        (GskRenderNode  *node,
                                    cairo_t        *cr);
   gboolean        (* can_diff)    (GskRenderNode  *node1,
