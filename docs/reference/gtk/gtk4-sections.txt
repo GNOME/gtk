@@ -6017,6 +6017,8 @@ gtk_overlay_get_overlay_pass_through
 gtk_overlay_set_overlay_pass_through
 gtk_overlay_get_measure_overlay
 gtk_overlay_set_measure_overlay
+gtk_overlay_get_clip_overlay
+gtk_overlay_set_clip_overlay
 
 <SUBSECTION Standard>
 GTK_TYPE_OVERLAY
