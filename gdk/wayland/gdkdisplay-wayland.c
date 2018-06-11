@@ -54,6 +54,8 @@
 
 #include "wm-button-layout-translation.h"
 
+#include "gdk/gdk-private.h"
+
 /**
  * SECTION:wayland_interaction
  * @Short_description: Wayland backend-specific functions
@@ -817,19 +819,9 @@ gdk_wayland_display_make_default (GdkDisplay *display)
   g_free (display_wayland->startup_notification_id);
   display_wayland->startup_notification_id = NULL;
 
-  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id && *startup_id != '\0')
-    {
-      if (!g_utf8_validate (startup_id, -1, NULL))
-        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
-      else
-        display_wayland->startup_notification_id = g_strdup (startup_id);
-
-      /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.
-       */
-      g_unsetenv ("DESKTOP_STARTUP_ID");
-    }
+  startup_id = GDK_PRIVATE_CALL (gdk_get_startup_notification_id ());
+  if (startup_id)
+    display_wayland->startup_notification_id = g_strdup (startup_id);
 }
 
 static gboolean
