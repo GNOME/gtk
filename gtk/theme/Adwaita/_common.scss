@@ -4420,6 +4420,12 @@ cursor-handle {
   background-image: none;
   box-shadow: none;
   border-style: none;
+  min-width: 20px;
+  min-height: 24px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 
   @each $s,$as in ('',''),
                   (':hover','-hover'),
@@ -4428,14 +4434,12 @@ cursor-handle {
       $_url: 'assets/text-select-start#{$as}#{$asset_suffix}';
       -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
                                     url('#{$_url}@2.png'));
-      padding-left: 10px;
     }
 
     &.bottom#{$s}:dir(ltr), &.top#{$s}:dir(rtl) {
       $_url: 'assets/text-select-end#{$as}#{$asset_suffix}';
       -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
                                     url('#{$_url}@2.png'));
-      padding-right: 10px;
     }
 
     &.insertion-cursor#{$s}:dir(ltr), &.insertion-cursor#{$s}:dir(rtl) {
