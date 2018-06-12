@@ -10606,6 +10606,7 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
 
   data->rect = *rect;
   data->pos = pos;
+  gtk_widget_queue_resize (popover);
 }
 
 void
