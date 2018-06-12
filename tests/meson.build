@@ -113,6 +113,7 @@ gtk_tests = [
   ['testrevealer'],
   ['testrevealer2'],
   ['testtitlebar'],
+  ['testtreelistmodel'],
   ['testsplitheaders'],
   ['teststackedheaders'],
   ['testactionbar'],
