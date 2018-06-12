@@ -34,6 +34,7 @@
 #include "gtktreeview.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkgesturedrag.h"
 
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
@@ -86,9 +87,15 @@ static void gtk_tree_view_column_create_button                 (GtkTreeViewColum
 static void gtk_tree_view_column_update_button                 (GtkTreeViewColumn       *tree_column);
 
 /* Button signal handlers */
-static gint gtk_tree_view_column_button_event                  (GtkWidget               *widget,
-								GdkEvent                *event,
-								gpointer                 data);
+static void column_button_drag_begin  (GtkGestureDrag    *gesture,
+                                       gdouble            x,
+                                       gdouble            y,
+                                       GtkTreeViewColumn *column);
+static void column_button_drag_update (GtkGestureDrag    *gesture,
+                                       gdouble            offset_x,
+                                       gdouble            offset_y,
+                                       GtkTreeViewColumn *column);
+
 static void gtk_tree_view_column_button_clicked                (GtkWidget               *widget,
 								gpointer                 data);
 static gboolean gtk_tree_view_column_mnemonic_activate         (GtkWidget *widget,
@@ -810,6 +817,7 @@ static void
 gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 {
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
+  GtkEventController *controller;
   GtkWidget *child;
   GtkWidget *hbox;
 
@@ -818,12 +826,17 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   priv->button = gtk_button_new ();
   g_object_ref_sink (priv->button);
 
-  g_signal_connect (priv->button, "event",
-		    G_CALLBACK (gtk_tree_view_column_button_event),
-		    tree_column);
   g_signal_connect (priv->button, "clicked",
 		    G_CALLBACK (gtk_tree_view_column_button_clicked),
 		    tree_column);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+  g_signal_connect (controller, "drag-begin",
+                    G_CALLBACK (column_button_drag_begin), tree_column);
+  g_signal_connect (controller, "drag-update",
+                    G_CALLBACK (column_button_drag_update), tree_column);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (priv->button, controller);
 
   priv->frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_NONE);
@@ -1008,62 +1021,43 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 /* Button signal handlers
  */
 
-static gint
-gtk_tree_view_column_button_event (GtkWidget *widget,
-				   GdkEvent  *event,
-				   gpointer   data)
+static void
+column_button_drag_begin (GtkGestureDrag    *gesture,
+                          gdouble            x,
+                          gdouble            y,
+                          GtkTreeViewColumn *column)
 {
-  GtkTreeViewColumn        *column = (GtkTreeViewColumn *) data;
-  GtkTreeViewColumnPrivate *priv   = column->priv;
-  GdkEventType              event_type;
-  guint button;
-  gdouble x, y;
+  GtkTreeViewColumnPrivate *priv = column->priv;
 
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  event_type = gdk_event_get_event_type (event);
-  gdk_event_get_button (event, &button);
-  gdk_event_get_coords (event, &x, &y);
-
-  if (event_type == GDK_BUTTON_PRESS &&
-      priv->reorderable &&
-      button == GDK_BUTTON_PRIMARY)
+#if 0
+  if (!priv->reorderable)
     {
-      priv->maybe_reordered = TRUE;
-      priv->drag_x = x;
-      priv->drag_y = y;
-      gtk_widget_grab_focus (widget);
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_DENIED);
+      return;
     }
+#endif
 
-  if (event_type == GDK_BUTTON_RELEASE ||
-      event_type == GDK_LEAVE_NOTIFY)
-    priv->maybe_reordered = FALSE;
-  
-  if (event_type == GDK_MOTION_NOTIFY &&
-      priv->maybe_reordered &&
-      gtk_drag_check_threshold (widget, priv->drag_x, priv->drag_y, (gint) x, (gint) y))
-    {
-      priv->maybe_reordered = FALSE;
-      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (priv->tree_view), column,
-                                        gdk_event_get_device (event));
-      return TRUE;
-    }
-
-  if (priv->clickable == FALSE)
-    {
-      switch ((guint) event_type)
-	{
-	case GDK_BUTTON_PRESS:
-	case GDK_BUTTON_RELEASE:
-          return GDK_EVENT_STOP;
-	default:
-          return GDK_EVENT_PROPAGATE;
-	}
-    }
-
-  return GDK_EVENT_PROPAGATE;
+  priv->drag_x = x;
+  priv->drag_y = y;
+  gtk_widget_grab_focus (priv->button);
 }
 
+static void
+column_button_drag_update (GtkGestureDrag    *gesture,
+                           gdouble            offset_x,
+                           gdouble            offset_y,
+                           GtkTreeViewColumn *column)
+{
+  GtkTreeViewColumnPrivate *priv = column->priv;
+
+  if (gtk_drag_check_threshold (priv->button, 0, 0, offset_x, offset_y))
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (priv->tree_view), column,
+                                        gtk_gesture_get_device (GTK_GESTURE (gesture)));
+    }
+}
 
 static void
 gtk_tree_view_column_button_clicked (GtkWidget *widget, gpointer data)
@@ -2400,6 +2394,8 @@ gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
 				 GtkWidget         *widget)
 {
   GtkTreeViewColumnPrivate *priv;
+
+  g_print ("WTFFFF SET WIDGETETTTT\n");
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
