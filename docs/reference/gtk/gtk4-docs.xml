@@ -41,6 +41,11 @@
       <xi:include href="visual_index.xml" />
     </chapter>
 
+    <chapter id="Lists">
+      <title>GListModel support</title>
+      <xi:include href="xml/gtktreelistmodel.xml" />
+    </chapter>
+
     <chapter id="Application">
       <title>Application support</title>
       <xi:include href="xml/gtkapplication.xml" />
