@@ -120,7 +120,7 @@
     here</ulink>.</para>
 
     <para>Finally the window size is set using gtk_window_set_default_size and
-    the window is then shown by GTK via gtk_widget_show_all().</para>
+    the window is then shown by GTK via gtk_widget_show().</para>
 
     <para>When you exit the window, by for example pressing the X,
     the g_application_run() in the main loop returns with a number
