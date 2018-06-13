@@ -56,7 +56,7 @@ gtk_compose_list_element_free (GtkComposeData *compose_data, gpointer data)
 static gboolean
 is_codepoint (const gchar *str)
 {
-  int i;
+  gsize i;
 
   /* 'U' is not code point but 'U00C0' is code point */
   if (str[0] == '\0' || str[0] != 'U' || str[1] == '\0')
@@ -137,8 +137,8 @@ parse_compose_sequence (GtkComposeData *compose_data,
                         const gchar    *line)
 {
   gchar **words = g_strsplit (seq, "<", -1);
-  int i;
-  int n = 0;
+  gsize i;
+  gsize n = 0;
 
   if (g_strv_length (words) < 2)
     {
@@ -252,7 +252,7 @@ gtk_compose_list_parse_file (const gchar *compose_file)
   gsize length = 0;
   GError *error = NULL;
   GList *compose_list = NULL;
-  int i;
+  gsize i;
 
   if (!g_file_get_contents (compose_file, &contents, &length, &error))
     {
@@ -280,8 +280,8 @@ gtk_compose_list_check_duplicated (GList *compose_list)
   for (list = compose_list; list != NULL; list = list->next)
     {
       static guint16 keysyms[GTK_MAX_COMPOSE_LEN + 1];
-      int i;
-      int n_compose = 0;
+      gsize i;
+      gsize n_compose = 0;
       gboolean compose_finish;
       gunichar output_char;
 
@@ -340,7 +340,7 @@ gtk_compose_list_check_uint16 (GList *compose_list)
 
   for (list = compose_list; list != NULL; list = list->next)
     {
-      int i;
+      gsize i;
 
       compose_data = list->data;
       for (i = 0; i < GTK_MAX_COMPOSE_LEN; i++)
@@ -372,13 +372,13 @@ gtk_compose_list_check_uint16 (GList *compose_list)
 
 static GList *
 gtk_compose_list_format_for_gtk (GList *compose_list,
-                                 int   *p_max_compose_len,
-                                 int   *p_n_index_stride)
+                                 gsize *p_max_compose_len,
+                                 gsize   *p_n_index_stride)
 {
   GList *list;
   GtkComposeData *compose_data;
-  int max_compose_len = 0;
-  int i;
+  gsize max_compose_len = 0;
+  gsize i;
   gunichar codepoint;
 
   for (list = compose_list; list != NULL; list = list->next)
@@ -422,8 +422,8 @@ gtk_compose_data_compare (gpointer a,
 {
   GtkComposeData *compose_data_a = a;
   GtkComposeData *compose_data_b = b;
-  int max_compose_len = GPOINTER_TO_INT (data);
-  int i;
+  gsize max_compose_len = GPOINTER_TO_SIZE (data);
+  gsize i;
   for (i = 0; i < max_compose_len; i++)
     {
       gunichar code_a = compose_data_a->sequence[i];
@@ -438,13 +438,13 @@ gtk_compose_data_compare (gpointer a,
 
 static void
 gtk_compose_list_print (GList *compose_list,
-                        int    max_compose_len,
-                        int    n_index_stride)
+                        gsize  max_compose_len,
+                        gsize  n_index_stride)
 {
   GList *list;
-  int i, j;
+  gsize i, j;
   GtkComposeData *compose_data;
-  int total_size = 0;
+  gsize total_size = 0;
   gunichar upper;
   gunichar lower;
   const gchar *comment;
@@ -487,13 +487,13 @@ gtk_compose_list_print (GList *compose_list,
       total_size += n_index_stride;
     }
 
-  g_printerr ("TOTAL_SIZE: %d\nMAX_COMPOSE_LEN: %d\nN_INDEX_STRIDE: %d\n",
+  g_printerr ("TOTAL_SIZE: %"G_GSIZE_FORMAT"\nMAX_COMPOSE_LEN: %"G_GSIZE_FORMAT"\nN_INDEX_STRIDE: %"G_GSIZE_FORMAT"\n",
               total_size, max_compose_len, n_index_stride);
 }
 
 /* Implemented from g_str_hash() */
 static guint32
-gtk_compose_table_data_hash (gconstpointer v, int length)
+gtk_compose_table_data_hash (gconstpointer v, gsize length)
 {
   const guint16 *p, *head;
   unsigned char c;
@@ -745,13 +745,13 @@ out_save_cache:
 
 static GtkComposeTable *
 gtk_compose_table_new_with_list (GList   *compose_list,
-                                 int      max_compose_len,
-                                 int      n_index_stride,
+                                 gsize    max_compose_len,
+                                 gsize    n_index_stride,
                                  guint32  hash)
 {
   guint length;
   guint n = 0;
-  int i, j;
+  gsize i, j;
   guint16 *gtk_compose_seqs = NULL;
   GList *list;
   GtkComposeData *compose_data;
@@ -794,8 +794,8 @@ gtk_compose_table_new_with_file (const gchar *compose_file)
 {
   GList *compose_list = NULL;
   GtkComposeTable *compose_table;
-  int max_compose_len = 0;
-  int n_index_stride = 0;
+  gsize max_compose_len = 0;
+  gsize n_index_stride = 0;
 
   g_assert (compose_file != NULL);
 
@@ -809,7 +809,7 @@ gtk_compose_table_new_with_file (const gchar *compose_file)
                                                   &n_index_stride);
   compose_list = g_list_sort_with_data (compose_list,
                                         (GCompareDataFunc) gtk_compose_data_compare,
-                                        GINT_TO_POINTER (max_compose_len));
+                                        GSIZE_TO_POINTER (max_compose_len));
   if (compose_list == NULL)
     {
       g_warning ("compose file %s does not include any keys besides keys in en-us compose file", compose_file);
@@ -830,14 +830,14 @@ gtk_compose_table_new_with_file (const gchar *compose_file)
 GSList *
 gtk_compose_table_list_add_array (GSList        *compose_tables,
                                   const guint16 *data,
-                                  gint           max_seq_len,
-                                  gint           n_seqs)
+                                  gsize          max_seq_len,
+                                  gsize          n_seqs)
 {
   guint32 hash;
   GtkComposeTable *compose_table;
-  int n_index_stride = max_seq_len + 2;
-  int length = n_index_stride * n_seqs;
-  int i;
+  gsize n_index_stride = max_seq_len + 2;
+  gsize length = n_index_stride * n_seqs;
+  gsize i;
   guint16 *gtk_compose_seqs = NULL;
 
   g_return_val_if_fail (data != NULL, compose_tables);
