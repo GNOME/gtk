@@ -2331,38 +2331,57 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
 /* Destination side */
 
 static void
+gdk_x11_drop_do_nothing (Window   window,
+                         gboolean success,
+                         gpointer data)
+{
+  GdkDisplay *display = data;
+
+  if (!success)
+    {
+      GDK_DISPLAY_NOTE (display, DND,
+                g_message ("Send event to %lx failed",
+                           window));
+    }
+}
+
+static void
 gdk_x11_drag_context_status (GdkDrop       *drop,
                              GdkDragAction  actions)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (drop);
-  GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
+  GdkDragAction possible_actions;
   XEvent xev;
   GdkDisplay *display;
 
   display = gdk_drag_context_get_display (context);
 
   context->action = actions;
+  possible_actions = actions & gdk_drop_get_actions (drop);
 
-  if (context_x11->protocol == GDK_DRAG_PROTO_XDND)
+  xev.xclient.type = ClientMessage;
+  xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
+  xev.xclient.format = 32;
+  xev.xclient.window = GDK_SURFACE_XID (context->source_surface);
+
+  xev.xclient.data.l[0] = GDK_SURFACE_XID (context->dest_surface);
+  xev.xclient.data.l[1] = (possible_actions != 0) ? (2 | 1) : 0;
+  xev.xclient.data.l[2] = 0;
+  xev.xclient.data.l[3] = 0;
+  xev.xclient.data.l[4] = xdnd_action_to_atom (display, possible_actions);
+
+  if (gdk_drop_get_drag (drop))
     {
-      GdkDragAction possible_actions = actions & gdk_drop_get_actions (drop);
-
-      xev.xclient.type = ClientMessage;
-      xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
-      xev.xclient.format = 32;
-      xev.xclient.window = GDK_SURFACE_XID (context->source_surface);
-
-      xev.xclient.data.l[0] = GDK_SURFACE_XID (context->dest_surface);
-      xev.xclient.data.l[1] = (possible_actions != 0) ? (2 | 1) : 0;
-      xev.xclient.data.l[2] = 0;
-      xev.xclient.data.l[3] = 0;
-      xev.xclient.data.l[4] = xdnd_action_to_atom (display, possible_actions);
-      if (!xdnd_send_xevent (context_x11, context->source_surface, &xev))
-        {
-          GDK_DISPLAY_NOTE (display, DND,
-                    g_message ("Send event to %lx failed",
-                               GDK_SURFACE_XID (context->source_surface)));
-        }
+      xdnd_status_filter (context->source_surface, &xev);
+    }
+  else
+    {
+      _gdk_x11_send_client_message_async (display,
+                                          GDK_SURFACE_XID (context->source_surface),
+                                          FALSE, 0,
+                                          &xev.xclient,
+                                          gdk_x11_drop_do_nothing,
+                                          display);
     }
 }
 
@@ -2406,11 +2425,18 @@ gdk_x11_drag_context_finish (GdkDrop       *drop,
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
 
-      if (!xdnd_send_xevent (GDK_X11_DRAG_CONTEXT (context), context->source_surface, &xev))
+      if (gdk_drop_get_drag (drop))
         {
-          GDK_DISPLAY_NOTE (display, DND,
-                    g_message ("Send event to %lx failed",
-                               GDK_SURFACE_XID (context->source_surface)));
+          xdnd_finished_filter (context->source_surface, &xev);
+        }
+      else
+        {
+          _gdk_x11_send_client_message_async (display,
+                                              GDK_SURFACE_XID (context->source_surface),
+                                              FALSE, 0,
+                                              &xev.xclient,
+                                              gdk_x11_drop_do_nothing,
+                                              display);
         }
     }
 }
