@@ -27,7 +27,7 @@ typedef struct _GtkSnapshotStateArray GtkSnapshotStateArray;
 
 /* This is a stripped-down copy of GArray tailored specifically
  * for GtkSnapshotState and guaranteed to be aligned to 16 byte
- * bounaries.
+ * boundaries.
  */
 struct _GtkSnapshotStateArray
 {
