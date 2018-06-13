@@ -87,7 +87,7 @@ struct _GdkX11Display
   gboolean trusted_client;
 
   /* drag and drop information */
-  GdkDragContext *current_dest_drag;
+  GdkDrop *current_drop;
 
   /* Mapping to/from virtual atoms */
   GHashTable *atom_from_virtual;
