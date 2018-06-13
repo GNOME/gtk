@@ -173,10 +173,6 @@ static gboolean        xdnd_leave_filter    (GdkSurface   *surface,
                                              const XEvent *xevent);
 static gboolean        xdnd_position_filter (GdkSurface   *surface,
                                              const XEvent *xevent);
-static gboolean        xdnd_status_filter   (GdkSurface   *surface,
-                                             const XEvent *xevent);
-static gboolean        xdnd_finished_filter (GdkSurface   *surface,
-                                             const XEvent *xevent);
 static gboolean        xdnd_drop_filter     (GdkSurface   *surface,
                                              const XEvent *xevent);
 
@@ -199,8 +195,6 @@ static const struct {
   { "XdndEnter",                    xdnd_enter_filter },
   { "XdndLeave",                    xdnd_leave_filter },
   { "XdndPosition",                 xdnd_position_filter },
-  { "XdndStatus",                   xdnd_status_filter },
-  { "XdndFinished",                 xdnd_finished_filter },
   { "XdndDrop",                     xdnd_drop_filter },
 };
 
@@ -1041,16 +1035,14 @@ xdnd_action_to_atom (GdkDisplay    *display,
 /* Source side */
 
 static gboolean
-xdnd_status_filter (GdkSurface   *surface,
+xdnd_status_filter (GdkDisplay   *display,
                     const XEvent *xevent)
 {
-  GdkDisplay *display;
   guint32 dest_surface = xevent->xclient.data.l[0];
   guint32 flags = xevent->xclient.data.l[1];
   Atom action = xevent->xclient.data.l[4];
   GdkDragContext *context;
 
-  display = gdk_surface_get_display (surface);
   context = gdk_drag_context_find (display, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -1083,15 +1075,13 @@ xdnd_status_filter (GdkSurface   *surface,
 }
 
 static gboolean
-xdnd_finished_filter (GdkSurface   *surface,
+xdnd_finished_filter (GdkDisplay   *display,
                       const XEvent *xevent)
 {
-  GdkDisplay *display;
   guint32 dest_surface = xevent->xclient.data.l[0];
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
 
-  display = gdk_surface_get_display (surface);
   context = gdk_drag_context_find (display, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
@@ -2372,7 +2362,7 @@ gdk_x11_drag_context_status (GdkDrop       *drop,
 
   if (gdk_drop_get_drag (drop))
     {
-      xdnd_status_filter (context->source_surface, &xev);
+      xdnd_status_filter (display, &xev);
     }
   else
     {
@@ -2427,7 +2417,7 @@ gdk_x11_drag_context_finish (GdkDrop       *drop,
 
       if (gdk_drop_get_drag (drop))
         {
-          xdnd_finished_filter (context->source_surface, &xev);
+          xdnd_finished_filter (display, &xev);
         }
       else
         {
@@ -2586,6 +2576,14 @@ gdk_x11_drag_context_xevent (GdkDisplay   *display,
                                                  context);
         return TRUE;
       }
+
+    case ClientMessage:
+      if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus"))
+        return xdnd_status_filter (display, xevent);
+      else if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "XdndFinished"))
+        return xdnd_finished_filter (display, xevent);
+      else
+        return FALSE;
 
     default:
       return FALSE;
