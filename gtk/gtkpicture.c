@@ -312,7 +312,7 @@ gtk_picture_class_init (GtkPictureClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPicture:paintable:
+   * GtkPicture:file:
    *
    * The #GFile that is displayed or %NULL if none.
    */
