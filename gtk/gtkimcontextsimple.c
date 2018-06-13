@@ -1463,10 +1463,11 @@ gtk_im_context_simple_set_client_widget  (GtkIMContext *context,
 void
 gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 				 guint16            *data,
-				 gint                max_seq_len,
-				 gint                n_seqs)
+				 gsize               max_seq_len,
+				 gsize               n_seqs)
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
+  g_return_if_fail (max_seq_len <= GTK_MAX_COMPOSE_LEN);
 
   G_LOCK (global_tables);
 
