@@ -49,9 +49,6 @@ struct _GdkBroadwayDisplay
   /* Keyboard related information */
   GdkKeymap *keymap;
 
-  /* drag and drop information */
-  GdkDragContext *current_dest_drag;
-
   GdkBroadwayServer *server;
 
   gpointer move_resize_data;
