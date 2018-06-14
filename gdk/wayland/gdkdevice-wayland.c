@@ -34,6 +34,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicepadprivate.h"
 #include "gdkdevicetoolprivate.h"
+#include "gdkdropprivate.h"
 #include "gdkprimary-wayland.h"
 #include "gdkseatprivate.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
