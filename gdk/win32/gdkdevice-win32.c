@@ -280,13 +280,6 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
 }
 
 static void
-gdk_device_win32_select_surface_events (GdkDevice    *device,
-                                       GdkSurface    *window,
-                                       GdkEventMask  event_mask)
-{
-}
-
-static void
 gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
@@ -299,7 +292,6 @@ gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
   device_class->grab = gdk_device_win32_grab;
   device_class->ungrab = gdk_device_win32_ungrab;
   device_class->surface_at_position = _gdk_device_win32_surface_at_position;
-  device_class->select_surface_events = gdk_device_win32_select_surface_events;
 }
 
 static void

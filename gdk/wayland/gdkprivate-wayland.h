@@ -121,7 +121,6 @@ void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
 void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
                                               GdkSurface     *surface,
                                               GdkSurface     *real_parent,
-                                              GdkEventMask   event_mask,
                                               GdkSurfaceAttr *attributes);
 
 gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,

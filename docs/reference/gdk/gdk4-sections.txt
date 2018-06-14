@@ -282,8 +282,6 @@ gdk_surface_get_toplevel
 gdk_surface_get_children
 gdk_surface_get_children_with_user_data
 gdk_surface_peek_children
-gdk_surface_get_events
-gdk_surface_set_events
 gdk_surface_set_icon_name
 gdk_surface_set_transient_for
 gdk_surface_set_role
@@ -301,8 +299,6 @@ gdk_surface_get_support_multidevice
 gdk_surface_set_support_multidevice
 gdk_surface_get_device_cursor
 gdk_surface_set_device_cursor
-gdk_surface_get_device_events
-gdk_surface_set_device_events
 
 <SUBSECTION>
 gdk_surface_coords_from_parent
