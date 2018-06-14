@@ -75,16 +75,6 @@ GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context)
 GDK_AVAILABLE_IN_ALL
 GdkDragAction     gdk_drag_action_is_unique            (GdkDragAction   action);
 
-/* Destination side */
-GDK_AVAILABLE_IN_ALL
-void             gdk_drag_status        (GdkDragContext   *context,
-                                         GdkDragAction     action,
-                                         guint32           time_);
-GDK_AVAILABLE_IN_ALL
-void             gdk_drag_finish        (GdkDragContext   *context,
-                                         gboolean          success,
-                                         guint32           time_);
-
 /* Source side */
 
 GDK_AVAILABLE_IN_ALL

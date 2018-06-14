@@ -484,26 +484,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
-/**
- * gdk_drag_status:
- * @context: a #GdkDragContext
- * @action: the selected action which will be taken when a drop happens,
- *    or 0 to indicate that a drop will not be accepted
- * @time_: the timestamp for this operation
- *
- * Selects one of the actions offered by the drag source.
- *
- * This function is called by the drag destination in response to
- * gdk_drag_motion() called by the drag source.
- */
-void
-gdk_drag_status (GdkDragContext *context,
-                 GdkDragAction   action,
-                 guint32         time_)
-{
-  gdk_drop_status (GDK_DROP (context), action);
-}
-
 /*
  * gdk_drag_abort:
  * @context: a #GdkDragContext
@@ -538,29 +518,6 @@ gdk_drag_drop (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
   GDK_DRAG_CONTEXT_GET_CLASS (context)->drag_drop (context, time_);
-}
-
-/**
- * gdk_drag_finish:
- * @context: a #GdkDragContext
- * @success: %TRUE if the data was successfully received
- * @time_: the timestamp for this operation
- *
- * Ends the drag operation after a drop.
- *
- * This function is called by the drag destination.
- */
-void
-gdk_drag_finish (GdkDragContext *context,
-                 gboolean        success,
-                 guint32         time_)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  if (success)
-    gdk_drop_finish (GDK_DROP (context), gdk_drag_context_get_selected_action (context));
-  else
-    gdk_drop_finish (GDK_DROP (context), 0);
 }
 
 static void
