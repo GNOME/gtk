@@ -35,16 +35,12 @@
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
 
-#define DROP_SUBCLASS 1
-
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 struct _GdkDragContextPrivate 
 {
-#ifndef DROP_SUBCLASS
   GdkDisplay *display;
   GdkDevice *device;
-#endif
   GdkContentFormats *formats;
   GdkDragAction actions;
   GdkDragAction suggested_action;
@@ -65,11 +61,9 @@ static struct {
 enum {
   PROP_0,
   PROP_CONTENT,
-#ifndef DROP_SUBCLASS
   PROP_DEVICE,
   PROP_DISPLAY,
   PROP_FORMATS,
-#endif
   N_PROPERTIES
 };
 
@@ -85,7 +79,7 @@ static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 static GList *contexts = NULL;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GdkDragContext, gdk_drag_context, GDK_TYPE_DROP)
+G_DEFINE_TYPE_WITH_PRIVATE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT)
 
 /**
  * SECTION:dnd
@@ -121,15 +115,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GdkDragContext, gdk_drag_context, GDK_TYPE_DROP)
 GdkDisplay *
 gdk_drag_context_get_display (GdkDragContext *context)
 {
-#ifdef DROP_SUBCLASS
-  return gdk_drop_get_display (GDK_DROP (context));
-#else
   GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
   return priv->display;
-#endif
 }
 
 /**
@@ -147,12 +137,6 @@ gdk_drag_context_get_formats (GdkDragContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-#ifdef DROP_SUBCLASS
-  GdkContentFormats *formats = gdk_drop_get_formats (GDK_DROP (context));
-
-  if (formats)
-    return formats;
-#endif
   return priv->formats;
 }
 
@@ -220,15 +204,11 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
 GdkDevice *
 gdk_drag_context_get_device (GdkDragContext *context)
 {
-#ifdef DROP_SUBCLASS
-  return gdk_drop_get_device (GDK_DROP (context));
-#else
   GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
   return priv->device;
-#endif
 }
 
 static void
@@ -257,7 +237,6 @@ gdk_drag_context_set_property (GObject      *gobject,
         }
       break;
 
-#ifndef DROP_SUBCLASS
     case PROP_DEVICE:
       priv->device = g_value_dup_object (value);
       g_assert (priv->device != NULL);
@@ -280,7 +259,6 @@ gdk_drag_context_set_property (GObject      *gobject,
           g_assert (priv->formats != NULL);
         }
       break;
-#endif
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
@@ -295,9 +273,7 @@ gdk_drag_context_get_property (GObject    *gobject,
                                GParamSpec *pspec)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (gobject);
-#ifndef DROP_SUBCLASS
   GdkDragContextPrivate *priv = gdk_drag_context_get_instance_private (context);
-#endif
 
   switch (prop_id)
     {
@@ -305,7 +281,6 @@ gdk_drag_context_get_property (GObject    *gobject,
       g_value_set_object (value, context->content);
       break;
 
-#ifndef DROP_SUBCLASS
     case PROP_DEVICE:
       g_value_set_object (value, priv->device);
       break;
@@ -317,7 +292,6 @@ gdk_drag_context_get_property (GObject    *gobject,
     case PROP_FORMATS:
       g_value_set_boxed (value, priv->formats);
       break;
-#endif
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
@@ -370,7 +344,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
 
-#ifndef DROP_SUBCLASS
   /**
    * GdkDragContext:device:
    *
@@ -414,7 +387,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
-#endif
 
   /**
    * GdkDragContext::cancel:
@@ -648,11 +620,6 @@ gdk_drag_context_set_actions (GdkDragContext *context,
 
   priv->actions = actions;
   priv->suggested_action = suggested_action;
-
-  if (suggested_action & GDK_ACTION_ASK)
-    gdk_drop_set_actions (GDK_DROP (context), actions & GDK_ACTION_ALL);
-  else
-    gdk_drop_set_actions (GDK_DROP (context), suggested_action);
 }
 
 /**
