@@ -29,24 +29,24 @@ typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 struct _GtkComposeTable
 {
   guint16 *data;
-  gsize max_seq_len;
-  gsize n_seqs;
+  gint max_seq_len;
+  gint n_seqs;
   guint32 id;
 };
 
 struct _GtkComposeTableCompact
 {
   const guint16 *data;
-  gsize max_seq_len;
-  gsize n_index_size;
-  gsize n_index_stride;
+  gint max_seq_len;
+  gint n_index_size;
+  gint n_index_stride;
 };
 
 GtkComposeTable * gtk_compose_table_new_with_file (const gchar   *compose_file);
 GSList *gtk_compose_table_list_add_array          (GSList        *compose_tables,
                                                    const guint16 *data,
-                                                   gsize          max_seq_len,
-                                                   gsize          n_seqs);
+                                                   gint           max_seq_len,
+                                                   gint           n_seqs);
 GSList *gtk_compose_table_list_add_file           (GSList        *compose_tables,
                                                    const gchar   *compose_file);
 
