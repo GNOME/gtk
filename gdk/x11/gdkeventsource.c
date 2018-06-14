@@ -265,8 +265,9 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (result == GDK_FILTER_CONTINUE)
     result = _gdk_wm_protocols_filter (xevent, event, NULL);
 
-  if (result == GDK_FILTER_CONTINUE)
-    result = _gdk_x11_dnd_filter (xevent, event, NULL);
+  if (result == GDK_FILTER_CONTINUE &&
+      gdk_x11_drop_filter (event->any.surface, xevent))
+    result = GDK_FILTER_REMOVE;
 
   if (result != GDK_FILTER_CONTINUE)
     {
