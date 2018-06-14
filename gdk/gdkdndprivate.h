@@ -20,8 +20,6 @@
 
 #include "gdkdnd.h"
 
-#include "gdkdropprivate.h"
-
 G_BEGIN_DECLS
 
 
@@ -33,7 +31,7 @@ typedef struct _GdkDragContextClass GdkDragContextClass;
 
 
 struct _GdkDragContextClass {
-  GdkDropClass parent_class;
+  GObjectClass parent_class;
 
   void        (*drag_abort)    (GdkDragContext  *context,
                                 guint32          time_);
@@ -61,7 +59,7 @@ struct _GdkDragContextClass {
 };
 
 struct _GdkDragContext {
-  GdkDrop parent_instance;
+  GObject parent_instance;
 
   /*< private >*/
   gboolean is_source;

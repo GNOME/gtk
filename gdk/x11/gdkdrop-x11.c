@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gdkx11dnd.h"
+#include "gdkdropprivate.h"
 
 #include "gdk-private.h"
 #include "gdkasync.h"
