@@ -26,6 +26,7 @@ activate_cb (GtkApplication *app,
   gtk_widget_show (window);
 
   search_bar = gtk_search_bar_new ();
+  gtk_widget_set_valign (search_bar, GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (window), search_bar);
   gtk_widget_show (search_bar);
 
