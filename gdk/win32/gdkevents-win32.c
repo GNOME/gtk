@@ -1375,100 +1375,6 @@ synthesize_crossing_events (GdkDisplay                 *display,
     }
 }
 
-/* The check_extended flag controls whether to check if the windows want
- * events from extended input devices and if the message should be skipped
- * because an extended input device is active
- */
-static gboolean
-propagate (GdkSurface  **window,
-	   MSG         *msg,
-	   GdkSurface   *grab_window,
-	   gboolean     grab_owner_events,
-	   gint	        grab_mask,
-	   gboolean   (*doesnt_want_it) (gint mask,
-					 MSG *msg))
-{
-  if (grab_window != NULL && !grab_owner_events)
-    {
-      /* Event source is grabbed with owner_events FALSE */
-
-      if ((*doesnt_want_it) (grab_mask, msg))
-	{
-	  GDK_NOTE (EVENTS, g_print (" (grabber doesn't want it)"));
-	  return FALSE;
-	}
-      else
-	{
-	  GDK_NOTE (EVENTS, g_print (" (to grabber)"));
-	  g_set_object (window, grab_window);
-	  return TRUE;
-	}
-    }
-
-  /* If we come here, we know that if grab_window != NULL then
-   * grab_owner_events is TRUE
-   */
-  while (TRUE)
-    {
-      if ((*doesnt_want_it) ((*window)->event_mask, msg))
-	{
-	  /* Owner doesn't want it, propagate to parent. */
-	  GdkSurface *parent = gdk_surface_get_parent (*window);
-	  if (parent == NULL)
-	    {
-	      /* No parent; check if grabbed */
-	      if (grab_window != NULL)
-		{
-		  /* Event source is grabbed with owner_events TRUE */
-
-		  if ((*doesnt_want_it) (grab_mask, msg))
-		    {
-		      /* Grabber doesn't want it either */
-		      GDK_NOTE (EVENTS, g_print (" (grabber doesn't want it)"));
-		      return FALSE;
-		    }
-		  else
-		    {
-		      /* Grabbed! */
-		      GDK_NOTE (EVENTS, g_print (" (to grabber)"));
-		      g_set_object (window, grab_window);
-		      return TRUE;
-		    }
-		}
-	      else
-		{
-		  GDK_NOTE (EVENTS, g_print (" (undelivered)"));
-		  return FALSE;
-		}
-	    }
-	  else
-	    {
-	      g_set_object (window, parent);
-	      /* The only branch where we actually continue the loop */
-	    }
-	}
-      else
-	return TRUE;
-    }
-}
-
-static gboolean
-doesnt_want_key (gint mask,
-		 MSG *msg)
-{
-  return (((msg->message == WM_KEYUP || msg->message == WM_SYSKEYUP) &&
-	   !(mask & GDK_KEY_RELEASE_MASK)) ||
-	  ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN) &&
-	   !(mask & GDK_KEY_PRESS_MASK)));
-}
-
-static gboolean
-doesnt_want_char (gint mask,
-		  MSG *msg)
-{
-  return !(mask & (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK));
-}
-
 /* Acquires actual client area size of the underlying native window.
  * Rectangle is in GDK screen coordinates (_gdk_offset_* is added).
  * Returns FALSE if configure events should be inhibited,
@@ -1512,6 +1418,7 @@ _gdk_win32_do_emit_configure_event (GdkSurface *window,
                                     RECT       rect)
 {
   GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkEvent *event;
 
   impl->unscaled_width = rect.right - rect.left;
   impl->unscaled_height = rect.bottom - rect.top;
@@ -1522,20 +1429,17 @@ _gdk_win32_do_emit_configure_event (GdkSurface *window,
 
   _gdk_surface_update_size (window);
 
-  if (window->event_mask & GDK_STRUCTURE_MASK)
-    {
-      GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
+  event = gdk_event_new (GDK_CONFIGURE);
 
-      event->any.surface = window;
+  event->any.surface = window;
 
-      event->configure.width = window->width;
-      event->configure.height = window->height;
+  event->configure.width = window->width;
+  event->configure.height = window->height;
 
-      event->configure.x = window->x;
-      event->configure.y = window->y;
+  event->configure.x = window->x;
+  event->configure.y = window->y;
 
-      _gdk_win32_append_event (event);
-    }
+  _gdk_win32_append_event (event);
 }
 
 void
@@ -2367,14 +2271,6 @@ gdk_event_translate (MSG  *msg,
            ((HIWORD(msg->lParam) & KF_REPEAT) >= 1))
         break;
 
-      if (keyboard_grab &&
-          !propagate (&window, msg,
-		      keyboard_grab->surface,
-		      keyboard_grab->owner_events,
-		      GDK_ALL_EVENTS_MASK,
-		      doesnt_want_key))
-	break;
-
       if (GDK_SURFACE_DESTROYED (window))
 	break;
 
@@ -2568,14 +2464,6 @@ gdk_event_translate (MSG  *msg,
       if (!(msg->lParam & GCS_RESULTSTR))
 	break;
 
-      if (keyboard_grab &&
-          !propagate (&window, msg,
-		      keyboard_grab->surface,
-		      keyboard_grab->owner_events,
-		      GDK_ALL_EVENTS_MASK,
-		      doesnt_want_char))
-	break;
-
       if (GDK_SURFACE_DESTROYED (window))
 	break;
 
@@ -2590,29 +2478,23 @@ gdk_event_translate (MSG  *msg,
 
       for (i = 0; i < ccount; i++)
 	{
-	  if (window->event_mask & GDK_KEY_PRESS_MASK)
-	    {
-	      /* Build a key press event */
-	      event = gdk_event_new (GDK_KEY_PRESS);
-	      event->any.surface = window;
-	      gdk_event_set_device (event, device_manager_win32->core_keyboard);
-	      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
-	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
+          /* Build a key press event */
+          event = gdk_event_new (GDK_KEY_PRESS);
+          event->any.surface = window;
+          gdk_event_set_device (event, device_manager_win32->core_keyboard);
+          gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+          build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
-	      _gdk_win32_append_event (event);
-	    }
+          _gdk_win32_append_event (event);
 
-	  if (window->event_mask & GDK_KEY_RELEASE_MASK)
-	    {
-	      /* Build a key release event.  */
-	      event = gdk_event_new (GDK_KEY_RELEASE);
-	      event->any.surface = window;
-	      gdk_event_set_device (event, device_manager_win32->core_keyboard);
-	      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
-	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
+          /* Build a key release event.  */
+          event = gdk_event_new (GDK_KEY_RELEASE);
+          event->any.surface = window;
+          gdk_event_set_device (event, device_manager_win32->core_keyboard);
+          gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+          build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
-	      _gdk_win32_append_event (event);
-	    }
+          _gdk_win32_append_event (event);
 	}
       return_val = TRUE;
       break;
@@ -3020,9 +2902,6 @@ gdk_event_translate (MSG  *msg,
     case WM_SETFOCUS:
       if (keyboard_grab != NULL &&
 	  !keyboard_grab->owner_events)
-	break;
-
-      if (!(window->event_mask & GDK_FOCUS_CHANGE_MASK))
 	break;
 
       if (GDK_SURFACE_DESTROYED (window))

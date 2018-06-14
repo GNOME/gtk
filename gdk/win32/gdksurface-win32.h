@@ -244,8 +244,6 @@ struct _GdkSurfaceImplWin32
   gint hint_flags;
   GdkGeometry hints;
 
-  GdkEventMask native_event_mask;
-
   /* Non-NULL for any window that is registered as a drop target.
    * For OLE2 protocol only.
    */

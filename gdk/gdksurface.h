@@ -686,19 +686,6 @@ GList *       gdk_surface_get_children_with_user_data (GdkSurface *surface,
                                                        gpointer   user_data);
 
 GDK_AVAILABLE_IN_ALL
-GdkEventMask  gdk_surface_get_events     (GdkSurface      *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_events     (GdkSurface      *surface,
-                                          GdkEventMask     event_mask);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_device_events (GdkSurface    *surface,
-                                             GdkDevice    *device,
-                                             GdkEventMask  event_mask);
-GDK_AVAILABLE_IN_ALL
-GdkEventMask  gdk_surface_get_device_events (GdkSurface    *surface,
-                                             GdkDevice    *device);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_list   (GdkSurface       *surface,
                                            GList           *surfaces);
 GDK_AVAILABLE_IN_ALL

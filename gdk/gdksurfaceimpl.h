@@ -76,10 +76,6 @@ struct _GdkSurfaceImplClass
                                          gint             rect_anchor_dx,
                                          gint             rect_anchor_dy);
 
-  GdkEventMask (* get_events)           (GdkSurface       *surface);
-  void         (* set_events)           (GdkSurface       *surface,
-                                         GdkEventMask     event_mask);
-
   void         (* get_geometry)         (GdkSurface       *surface,
                                          gint            *x,
                                          gint            *y,

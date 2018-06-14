@@ -321,9 +321,6 @@ seat_removed_cb (GdkDisplay *display,
 
   surface->devices_inside = g_list_remove (surface->devices_inside, device);
   g_hash_table_remove (surface->device_cursor, device);
-
-  if (surface->device_events)
-    g_hash_table_remove (surface->device_events, device);
 }
 
 static void
@@ -368,9 +365,6 @@ gdk_surface_finalize (GObject *object)
 
   if (surface->device_cursor)
     g_hash_table_destroy (surface->device_cursor);
-
-  if (surface->device_events)
-    g_hash_table_destroy (surface->device_events);
 
   if (surface->devices_inside)
     g_list_free (surface->devices_inside);
@@ -601,45 +595,6 @@ _gdk_surface_update_size (GdkSurface *surface)
   recompute_visible_regions (surface, FALSE);
 }
 
-static GdkEventMask
-get_native_device_event_mask (GdkSurface *private,
-                              GdkDevice *device)
-{
-  GdkEventMask event_mask;
-
-  if (device)
-    event_mask = GPOINTER_TO_INT (g_hash_table_lookup (private->device_events, device));
-  else
-    event_mask = private->event_mask;
-
-  if (private->surface_type == GDK_SURFACE_FOREIGN)
-    return event_mask;
-  else
-    {
-      GdkEventMask mask;
-
-      mask = private->event_mask;
-
-      /* We need thse for all native surfaces so we can
-         emulate events on children: */
-      mask |=
-        GDK_EXPOSURE_MASK |
-        GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-        GDK_TOUCH_MASK |
-        GDK_POINTER_MOTION_MASK |
-        GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-        GDK_SCROLL_MASK;
-
-      return mask;
-    }
-}
-
-static GdkEventMask
-get_native_event_mask (GdkSurface *private)
-{
-  return get_native_device_event_mask (private, NULL);
-}
-
 GdkSurface*
 gdk_surface_new (GdkDisplay    *display,
                  GdkSurface     *parent,
@@ -647,7 +602,6 @@ gdk_surface_new (GdkDisplay    *display,
 {
   GdkSurface *surface;
   gboolean native;
-  GdkEventMask event_mask;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
@@ -714,8 +668,6 @@ gdk_surface_new (GdkDisplay    *display,
       return NULL;
     }
 
-  surface->event_mask = GDK_ALL_EVENTS_MASK;
-
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       surface->input_only = FALSE;
@@ -745,10 +697,8 @@ gdk_surface_new (GdkDisplay    *display,
 
   if (native)
     {
-      event_mask = get_native_event_mask (surface);
-
       /* Create the impl */
-      _gdk_display_create_surface_impl (display, surface, parent, event_mask, attributes);
+      gdk_display_create_surface_impl (display, surface, parent, attributes);
       surface->impl_surface = surface;
     }
   else
@@ -2345,10 +2295,9 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 
   if (!was_mapped && !gdk_surface_has_impl (surface))
     {
-      if (surface->event_mask & GDK_STRUCTURE_MASK)
-        _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
+      _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
 
-      if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+      if (surface->parent)
         _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
     }
 
@@ -2656,10 +2605,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (was_mapped && !gdk_surface_has_impl (surface))
     {
-      if (surface->event_mask & GDK_STRUCTURE_MASK)
-        _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
+      _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
 
-      if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+      if (surface->parent)
         _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
     }
 
@@ -2697,10 +2645,9 @@ gdk_surface_withdraw (GdkSurface *surface)
 
       if (was_mapped)
         {
-          if (surface->event_mask & GDK_STRUCTURE_MASK)
-            _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
+          _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
 
-          if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+          if (surface->parent)
             _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
         }
 
@@ -2710,140 +2657,6 @@ gdk_surface_withdraw (GdkSurface *surface)
 
       recompute_visible_regions (surface, FALSE);
     }
-}
-
-/**
- * gdk_surface_set_events:
- * @surface: a #GdkSurface
- * @event_mask: event mask for @surface
- *
- * The event mask for a surface determines which events will be reported
- * for that surface from all master input devices. For example, an event mask
- * including #GDK_BUTTON_PRESS_MASK means the surface should report button
- * press events. The event mask is the bitwise OR of values from the
- * #GdkEventMask enumeration.
- *
- * See the [input handling overview][event-masks] for details.
- **/
-void
-gdk_surface_set_events (GdkSurface       *surface,
-                        GdkEventMask     event_mask)
-{
-  GdkSurfaceImplClass *impl_class;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  surface->event_mask = event_mask;
-
-  if (gdk_surface_has_impl (surface))
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->set_events (surface,
-                              get_native_event_mask (surface));
-    }
-
-}
-
-/**
- * gdk_surface_get_events:
- * @surface: a #GdkSurface
- *
- * Gets the event mask for @surface for all master input devices. See
- * gdk_surface_set_events().
- *
- * Returns: event mask for @surface
- **/
-GdkEventMask
-gdk_surface_get_events (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
-
-  if (surface->destroyed)
-    return 0;
-
-  return surface->event_mask;
-}
-
-/**
- * gdk_surface_set_device_events:
- * @surface: a #GdkSurface
- * @device: #GdkDevice to enable events for.
- * @event_mask: event mask for @surface
- *
- * Sets the event mask for a given device (Normally a floating device, not
- * attached to any visible pointer) to @surface. For example, an event mask
- * including #GDK_BUTTON_PRESS_MASK means the surface should report button
- * press events. The event mask is the bitwise OR of values from the
- * #GdkEventMask enumeration.
- *
- * See the [input handling overview][event-masks] for details.
- **/
-void
-gdk_surface_set_device_events (GdkSurface    *surface,
-                               GdkDevice    *device,
-                               GdkEventMask  event_mask)
-{
-  GdkEventMask device_mask;
-  GdkSurface *native;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (G_UNLIKELY (!surface->device_events))
-    surface->device_events = g_hash_table_new (NULL, NULL);
-
-  if (event_mask == 0)
-    {
-      /* FIXME: unsetting events on a master device
-       * would restore surface->event_mask
-       */
-      g_hash_table_remove (surface->device_events, device);
-    }
-  else
-    g_hash_table_insert (surface->device_events, device,
-                         GINT_TO_POINTER (event_mask));
-
-  native = gdk_surface_get_toplevel (surface);
-
-  device_mask = get_native_device_event_mask (surface, device);
-  GDK_DEVICE_GET_CLASS (device)->select_surface_events (device, native, device_mask);
-}
-
-/**
- * gdk_surface_get_device_events:
- * @surface: a #GdkSurface.
- * @device: a #GdkDevice.
- *
- * Returns the event mask for @surface corresponding to an specific device.
- *
- * Returns: device event mask for @surface
- **/
-GdkEventMask
-gdk_surface_get_device_events (GdkSurface *surface,
-                               GdkDevice *device)
-{
-  GdkEventMask mask;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 0;
-
-  if (!surface->device_events)
-    return 0;
-
-  mask = GPOINTER_TO_INT (g_hash_table_lookup (surface->device_events, device));
-
-  /* FIXME: device could be controlled by surface->event_mask */
-
-  return mask;
 }
 
 static void

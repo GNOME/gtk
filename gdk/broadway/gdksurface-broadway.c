@@ -207,7 +207,6 @@ void
 _gdk_broadway_display_create_surface_impl (GdkDisplay    *display,
                                            GdkSurface     *surface,
                                            GdkSurface     *real_parent,
-                                           GdkEventMask   event_mask,
                                            GdkSurfaceAttr *attributes)
 {
   GdkSurfaceImplBroadway *impl;
@@ -323,10 +322,9 @@ gdk_surface_broadway_show (GdkSurface *surface,
   impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
   impl->visible = TRUE;
 
-  if (surface->event_mask & GDK_STRUCTURE_MASK)
-    _gdk_make_event (GDK_SURFACE (surface), GDK_MAP, NULL, FALSE);
+  _gdk_make_event (GDK_SURFACE (surface), GDK_MAP, NULL, FALSE);
 
-  if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+  if (surface->parent)
     _gdk_make_event (GDK_SURFACE (surface), GDK_MAP, NULL, FALSE);
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
@@ -344,10 +342,9 @@ gdk_surface_broadway_hide (GdkSurface *surface)
   impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
   impl->visible = FALSE;
 
-  if (surface->event_mask & GDK_STRUCTURE_MASK)
-    _gdk_make_event (GDK_SURFACE (surface), GDK_UNMAP, NULL, FALSE);
+  _gdk_make_event (GDK_SURFACE (surface), GDK_UNMAP, NULL, FALSE);
 
-  if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+  if (surface->parent)
     _gdk_make_event (GDK_SURFACE (surface), GDK_UNMAP, NULL, FALSE);
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
@@ -618,24 +615,6 @@ gdk_surface_broadway_get_device_state (GdkSurface       *surface,
                                               NULL, NULL,
                                               x, y, mask);
   return child != NULL;
-}
-
-static GdkEventMask
-gdk_surface_broadway_get_events (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 0;
-
-  return 0;
-}
-
-static void
-gdk_surface_broadway_set_events (GdkSurface    *surface,
-                                 GdkEventMask  event_mask)
-{
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-    }
 }
 
 static void
@@ -1359,8 +1338,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->show = gdk_surface_broadway_show;
   impl_class->hide = gdk_surface_broadway_hide;
   impl_class->withdraw = gdk_surface_broadway_withdraw;
-  impl_class->set_events = gdk_surface_broadway_set_events;
-  impl_class->get_events = gdk_surface_broadway_get_events;
   impl_class->raise = gdk_surface_broadway_raise;
   impl_class->lower = gdk_surface_broadway_lower;
   impl_class->restack_toplevel = gdk_surface_broadway_restack_toplevel;
