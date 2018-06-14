@@ -536,7 +536,6 @@ void
 _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
 				       GdkSurface     *window,
 				       GdkSurface     *real_parent,
-				       GdkEventMask   event_mask,
 				       GdkSurfaceAttr *attributes)
 {
   HWND hwndNew;
@@ -658,8 +657,6 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
   title = get_default_title ();
   if (!title || !*title)
     title = "";
-
-  impl->native_event_mask = GDK_STRUCTURE_MASK | event_mask;
 
   if (impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY)
     dwExStyle |= WS_EX_TOOLWINDOW;
@@ -795,7 +792,6 @@ gdk_win32_surface_foreign_new_for_display (GdkDisplay *display,
   window->height = (impl->unscaled_height + impl->surface_scale - 1) / impl->surface_scale;
   window->surface_type = GDK_SURFACE_FOREIGN;
   window->destroyed = FALSE;
-  window->event_mask = GDK_ALL_EVENTS_MASK; /* XXX */
   if (IsWindowVisible ((HWND) anid))
     window->state &= (~GDK_SURFACE_STATE_WITHDRAWN);
   else
@@ -2047,34 +2043,6 @@ gdk_display_warp_device (GdkDisplay *display,
   g_return_if_fail (display == gdk_device_get_display (device));
 
   GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
-}
-
-static GdkEventMask
-gdk_win32_surface_get_events (GdkSurface *window)
-{
-  GdkSurfaceImplWin32 *impl;
-
-  if (GDK_SURFACE_DESTROYED (window))
-    return 0;
-
-  impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-
-  return impl->native_event_mask;
-}
-
-static void
-gdk_win32_surface_set_events (GdkSurface   *window,
-			     GdkEventMask event_mask)
-{
-  GdkSurfaceImplWin32 *impl;
-
-  impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-
-  /* gdk_surface_new() always sets the GDK_STRUCTURE_MASK, so better
-   * set it here, too. Not that I know or remember why it is
-   * necessary, will have to test some day.
-   */
-  impl->native_event_mask = GDK_STRUCTURE_MASK | event_mask;
 }
 
 static void
@@ -5054,7 +5022,6 @@ gdk_win32_surface_set_skip_taskbar_hint (GdkSurface *window,
 		  wa.surface_type = GDK_SURFACE_TEMP;
 		  wa.wclass = GDK_INPUT_OUTPUT;
 		  wa.width = wa.height = 1;
-		  wa.event_mask = 0;
 		  owner = gdk_surface_new_internal (NULL, &wa, 0, TRUE);
 		}
 #endif
@@ -5433,8 +5400,6 @@ gdk_surface_impl_win32_class_init (GdkSurfaceImplWin32Class *klass)
   impl_class->show = gdk_win32_surface_show;
   impl_class->hide = gdk_win32_surface_hide;
   impl_class->withdraw = gdk_win32_surface_withdraw;
-  impl_class->set_events = gdk_win32_surface_set_events;
-  impl_class->get_events = gdk_win32_surface_get_events;
   impl_class->raise = gdk_win32_surface_raise;
   impl_class->lower = gdk_win32_surface_lower;
   impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;

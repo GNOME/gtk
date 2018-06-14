@@ -150,7 +150,6 @@ struct _GdkSurface
   gint x;
   gint y;
 
-  GdkEventMask event_mask;
   guint8 surface_type;
 
   guint8 resize_count;
@@ -206,7 +205,6 @@ struct _GdkSurface
   cairo_region_t *input_shape;
 
   GList *devices_inside;
-  GHashTable *device_events;
 
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 

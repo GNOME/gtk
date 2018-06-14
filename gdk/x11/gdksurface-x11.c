@@ -821,10 +821,9 @@ connect_frame_clock (GdkSurface *surface)
 
 void
 _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
-                                     GdkSurface     *surface,
-                                     GdkSurface     *real_parent,
-                                     GdkEventMask   event_mask,
-                                     GdkSurfaceAttr *attributes)
+                                      GdkSurface     *surface,
+                                      GdkSurface     *real_parent,
+                                      GdkSurfaceAttr *attributes)
 {
   GdkSurfaceImplX11 *impl;
   GdkX11Screen *x11_screen;
@@ -980,27 +979,12 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
     }
 
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                      GDK_SURFACE_XID (surface), event_mask,
+                                      GDK_SURFACE_XID (surface), GDK_ALL_EVENTS_MASK,
                                       StructureNotifyMask | PropertyChangeMask);
 
   connect_frame_clock (surface);
 
   gdk_surface_freeze_toplevel_updates (surface);
-}
-
-static GdkEventMask
-x_event_mask_to_gdk_event_mask (long mask)
-{
-  GdkEventMask event_mask = 0;
-  int i;
-
-  for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
-    {
-      if (mask & _gdk_x11_event_mask_table[i])
-	event_mask |= 1 << (i + 1);
-    }
-
-  return event_mask;
 }
 
 /**
@@ -1082,8 +1066,6 @@ gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,
   win->height = attrs.height  / impl->surface_scale;
   win->surface_type = GDK_SURFACE_FOREIGN;
   win->destroyed = FALSE;
-
-  win->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
 
   if (attrs.map_state == IsUnmapped)
     win->state = GDK_SURFACE_STATE_WITHDRAWN;
@@ -2682,48 +2664,6 @@ gdk_surface_x11_get_device_state (GdkSurface       *surface,
                                               NULL, NULL,
                                               x, y, mask);
   return child != NULL;
-}
-
-static GdkEventMask
-gdk_surface_x11_get_events (GdkSurface *surface)
-{
-  XWindowAttributes attrs;
-  GdkEventMask event_mask;
-  GdkEventMask filtered;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 0;
-  else
-    {
-      XGetWindowAttributes (GDK_SURFACE_XDISPLAY (surface),
-			    GDK_SURFACE_XID (surface),
-			    &attrs);
-      event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
-      /* if property change was filtered out before, keep it filtered out */
-      filtered = GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK;
-      surface->event_mask = event_mask & ((surface->event_mask & filtered) | ~filtered);
-
-      return event_mask;
-    }
-}
-static void
-gdk_surface_x11_set_events (GdkSurface    *surface,
-                           GdkEventMask  event_mask)
-{
-  long xevent_mask = 0;
-  
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      GdkX11Display *display_x11;
-
-      if (GDK_SURFACE_XID (surface) != GDK_SURFACE_XROOTWIN (surface))
-        xevent_mask = StructureNotifyMask | PropertyChangeMask;
-
-      display_x11 = GDK_X11_DISPLAY (gdk_surface_get_display (surface));
-      gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                          GDK_SURFACE_XID (surface), event_mask,
-                                          xevent_mask);
-    }
 }
 
 static void 
@@ -4826,8 +4766,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->show = gdk_surface_x11_show;
   impl_class->hide = gdk_surface_x11_hide;
   impl_class->withdraw = gdk_surface_x11_withdraw;
-  impl_class->set_events = gdk_surface_x11_set_events;
-  impl_class->get_events = gdk_surface_x11_get_events;
   impl_class->raise = gdk_surface_x11_raise;
   impl_class->lower = gdk_surface_x11_lower;
   impl_class->restack_toplevel = gdk_surface_x11_restack_toplevel;
