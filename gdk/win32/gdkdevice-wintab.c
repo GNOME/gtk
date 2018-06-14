@@ -211,13 +211,6 @@ gdk_device_wintab_surface_at_position (GdkDevice       *device,
   return NULL;
 }
 
-static void
-gdk_device_wintab_select_surface_events (GdkDevice    *device,
-                                        GdkSurface    *window,
-                                        GdkEventMask  event_mask)
-{
-}
-
 void
 _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                    GdkSurface       *window,
@@ -303,7 +296,6 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
   device_class->grab = gdk_device_wintab_grab;
   device_class->ungrab = gdk_device_wintab_ungrab;
   device_class->surface_at_position = gdk_device_wintab_surface_at_position;
-  device_class->select_surface_events = gdk_device_wintab_select_surface_events;
 }
 
 static void

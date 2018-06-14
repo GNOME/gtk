@@ -65,7 +65,6 @@ void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
 void       _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
                                                    GdkSurface     *window,
                                                    GdkSurface     *real_parent,
-                                                   GdkEventMask   event_mask,
                                                    GdkSurfaceAttr *attributes);
 
 /* Display methods - keymap */

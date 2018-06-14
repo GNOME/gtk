@@ -61,9 +61,6 @@ static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *de
                                                              gdouble         *win_y,
                                                              GdkModifierType *mask,
                                                              gboolean         get_toplevel);
-static void      gdk_broadway_device_select_surface_events (GdkDevice       *device,
-                                                            GdkSurface       *surface,
-                                                            GdkEventMask     event_mask);
 
 
 G_DEFINE_TYPE (GdkBroadwayDevice, gdk_broadway_device, GDK_TYPE_DEVICE)
@@ -81,7 +78,6 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
   device_class->grab = gdk_broadway_device_grab;
   device_class->ungrab = gdk_broadway_device_ungrab;
   device_class->surface_at_position = gdk_broadway_device_surface_at_position;
-  device_class->select_surface_events = gdk_broadway_device_select_surface_events;
 }
 
 static void
@@ -325,9 +321,3 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
   return surface;
 }
 
-static void
-gdk_broadway_device_select_surface_events (GdkDevice    *device,
-                                           GdkSurface    *surface,
-                                           GdkEventMask  event_mask)
-{
-}
