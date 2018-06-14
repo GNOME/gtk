@@ -179,11 +179,11 @@ get_current_desktop (GdkX11Screen *screen)
   return workspace;
 }
 
-void
-gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
-                              GdkRectangle *area)
+static gboolean
+get_work_area (GdkX11Screen *x11_screen,
+               Atom          workarea,
+               GdkRectangle *area)
 {
-  Atom            workarea;
   Atom            type;
   Window          win;
   int             format;
@@ -197,21 +197,6 @@ gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
   Display        *display;
 
   display = GDK_SCREEN_XDISPLAY (x11_screen);
-  workarea = XInternAtom (display, "_NET_WORKAREA", True);
-
-  /* Defaults in case of error */
-  area->x = 0;
-  area->y = 0;
-  area->width = WidthOfScreen (x11_screen->xscreen);
-  area->height = HeightOfScreen (x11_screen->xscreen);
-
-  if (!gdk_x11_screen_supports_net_wm_hint (x11_screen,
-                                            g_intern_static_string ("_NET_WORKAREA")))
-    return;
-
-  if (workarea == None)
-    return;
-
   win = XRootWindow (display, gdk_x11_screen_get_screen_number (x11_screen));
   result = XGetWindowProperty (display,
                                win,
@@ -247,9 +232,39 @@ gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
   area->width /= x11_screen->surface_scale;
   area->height /= x11_screen->surface_scale;
 
+  return TRUE;
+
 out:
   if (ret_workarea)
     XFree (ret_workarea);
+
+  return FALSE;
+}
+
+void
+gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
+                              GdkRectangle *area)
+{
+  Display *display;
+  Atom workarea;
+
+  display = GDK_SCREEN_XDISPLAY (x11_screen);
+  workarea = XInternAtom (display, "_NET_WORKAREA", True);
+
+  /* Defaults in case of error */
+  area->x = 0;
+  area->y = 0;
+  area->width = WidthOfScreen (x11_screen->xscreen);
+  area->height = HeightOfScreen (x11_screen->xscreen);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (x11_screen,
+                                            g_intern_static_string ("_NET_WORKAREA")))
+    return;
+
+  if (workarea == None)
+    return;
+
+  get_work_area (x11_screen, workarea, area);
 }
 
 /**
