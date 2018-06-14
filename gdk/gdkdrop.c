@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gdkdndprivate.h"
+#include "gdkdropprivate.h"
 
 #include "gdkcontentdeserializer.h"
 #include "gdkcontentformats.h"
@@ -187,18 +187,14 @@ gdk_drop_set_property (GObject      *gobject,
 
     case PROP_FORMATS:
       priv->formats = g_value_dup_boxed (value);
-#ifdef DROP_SUBCLASS
       g_assert (priv->formats != NULL);
-#endif
       break;
 
     case PROP_SURFACE:
       priv->surface = g_value_dup_object (value);
-#ifdef DROP_SUBCLASS
       g_assert (priv->surface != NULL);
       if (priv->device)
         g_assert (gdk_surface_get_display (priv->surface) == gdk_device_get_display (priv->device));
-#endif
       break;
 
     default:

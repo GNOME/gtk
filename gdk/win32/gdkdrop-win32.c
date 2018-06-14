@@ -39,6 +39,8 @@
 /* For C-style COM wrapper macros */
 #define COBJMACROS
 
+#include "gdkdropprivate.h"
+
 #include "gdkdnd.h"
 #include "gdkproperty.h"
 #include "gdkinternals.h"
@@ -46,7 +48,6 @@
 #include "gdkwin32.h"
 #include "gdkwin32dnd.h"
 #include "gdkdisplayprivate.h"
-#include "gdk/gdkdndprivate.h"
 #include "gdkwin32dnd-private.h"
 #include "gdkdisplay-win32.h"
 #include "gdkdeviceprivate.h"
