@@ -1036,52 +1036,16 @@ gdk_input_other_event (GdkDisplay *display,
           if (!(translated_buttons & button_mask))
             {
               event->any.type = GDK_BUTTON_RELEASE;
-              masktest = GDK_BUTTON_RELEASE_MASK;
             }
           else
             {
               event->any.type = GDK_BUTTON_PRESS;
-              masktest = GDK_BUTTON_PRESS_MASK;
             }
           source_device->button_state ^= button_mask;
         }
       else
         {
           event->any.type = GDK_MOTION_NOTIFY;
-          masktest = GDK_POINTER_MOTION_MASK;
-          if (source_device->button_state & (1 << 0))
-            masktest |= GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK;
-          if (source_device->button_state & (1 << 1))
-            masktest |= GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK;
-          if (source_device->button_state & (1 << 2))
-            masktest |= GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK;
-        }
-
-      /* Now we can check if the window wants the event, and
-       * propagate if necessary.
-       */
-      while ((gdk_surface_get_device_events (window, GDK_DEVICE (source_device)) & masktest) == 0 &&
-	     (gdk_device_get_device_type (GDK_DEVICE (source_device)) == GDK_DEVICE_TYPE_SLAVE &&
-	      (gdk_surface_get_events (window) & masktest) == 0))
-        {
-          GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
-
-          if (window->parent == NULL)
-            return FALSE;
-
-          impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-          pt.x = x * impl->surface_scale;
-          pt.y = y * impl->surface_scale;
-          ClientToScreen (GDK_SURFACE_HWND (window), &pt);
-          g_object_unref (window);
-          window = window->parent;
-          impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-          g_object_ref (window);
-          ScreenToClient (GDK_SURFACE_HWND (window), &pt);
-          x = pt.x / impl->surface_scale;
-          y = pt.y / impl->surface_scale;
-          GDK_NOTE (EVENTS_OR_INPUT, g_print ("... propagating to %p %+d%+d\n",
-                                              GDK_SURFACE_HWND (window), x, y));
         }
 
       event->any.surface = window;

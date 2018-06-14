@@ -731,7 +731,6 @@ void
 _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
                                         GdkSurface     *window,
                                         GdkSurface     *real_parent,
-                                        GdkEventMask   event_mask,
                                         GdkSurfaceAttr *attributes)
 {
   GdkSurfaceImplQuartz *impl;
@@ -1613,22 +1612,6 @@ gdk_surface_quartz_get_device_state (GdkSurface       *window,
   return gdk_surface_quartz_get_device_state_helper (window,
                                                     device,
                                                     x, y, mask) != NULL;
-}
-
-static GdkEventMask
-gdk_surface_quartz_get_events (GdkSurface *window)
-{
-  if (GDK_SURFACE_DESTROYED (window))
-    return 0;
-  else
-    return window->event_mask;
-}
-
-static void
-gdk_surface_quartz_set_events (GdkSurface       *window,
-                              GdkEventMask     event_mask)
-{
-  /* The mask is set in the common code. */
 }
 
 static void
@@ -2746,8 +2729,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->show = gdk_surface_quartz_show;
   impl_class->hide = gdk_surface_quartz_hide;
   impl_class->withdraw = gdk_surface_quartz_withdraw;
-  impl_class->set_events = gdk_surface_quartz_set_events;
-  impl_class->get_events = gdk_surface_quartz_get_events;
   impl_class->raise = gdk_surface_quartz_raise;
   impl_class->lower = gdk_surface_quartz_lower;
   impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;

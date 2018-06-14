@@ -866,13 +866,6 @@ gdk_wayland_device_surface_at_position (GdkDevice       *device,
 }
 
 static void
-gdk_wayland_device_select_surface_events (GdkDevice    *device,
-                                         GdkSurface    *surface,
-                                         GdkEventMask  event_mask)
-{
-}
-
-static void
 gdk_wayland_device_class_init (GdkWaylandDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
@@ -885,7 +878,6 @@ gdk_wayland_device_class_init (GdkWaylandDeviceClass *klass)
   device_class->grab = gdk_wayland_device_grab;
   device_class->ungrab = gdk_wayland_device_ungrab;
   device_class->surface_at_position = gdk_wayland_device_surface_at_position;
-  device_class->select_surface_events = gdk_wayland_device_select_surface_events;
 }
 
 static void
