@@ -234,12 +234,12 @@ get_current_desktop (GdkScreen *screen)
   return workspace;
 }
 
-void
-gdk_x11_screen_get_work_area (GdkScreen    *screen,
-                              GdkRectangle *area)
+static gboolean
+get_work_area (GdkScreen    *screen,
+               Atom          workarea,
+               GdkRectangle *area)
 {
   GdkX11Screen   *x11_screen = GDK_X11_SCREEN (screen);
-  Atom            workarea;
   Atom            type;
   Window          win;
   int             format;
@@ -255,20 +255,6 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
 
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
   disp_screen = GDK_SCREEN_XNUMBER (screen);
-  workarea = XInternAtom (display, "_NET_WORKAREA", True);
-
-  /* Defaults in case of error */
-  area->x = 0;
-  area->y = 0;
-  area->width = gdk_x11_screen_get_width (screen);
-  area->height = gdk_x11_screen_get_height (screen);
-
-  if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
-    return;
-
-  if (workarea == None)
-    return;
 
   win = XRootWindow (display, disp_screen);
   result = XGetWindowProperty (display,
@@ -305,9 +291,39 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   area->width /= x11_screen->window_scale;
   area->height /= x11_screen->window_scale;
 
+  return TRUE;
+
 out:
   if (ret_workarea)
     XFree (ret_workarea);
+
+  return FALSE;
+}
+
+void
+gdk_x11_screen_get_work_area (GdkScreen    *screen,
+                              GdkRectangle *area)
+{
+  Display *display;
+  Atom workarea;
+
+  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
+  workarea = XInternAtom (display, "_NET_WORKAREA", True);
+
+  /* Defaults in case of error */
+  area->x = 0;
+  area->y = 0;
+  area->width = gdk_x11_screen_get_width (screen);
+  area->height = gdk_x11_screen_get_height (screen);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
+    return;
+
+  if (workarea == None)
+    return;
+
+  get_work_area (screen, workarea, area);
 }
 
 static GdkVisual *
