@@ -104,9 +104,6 @@ static GdkSurface * gdk_x11_device_xi2_surface_at_position (GdkDevice       *dev
                                                           gdouble         *win_y,
                                                           GdkModifierType *mask,
                                                           gboolean         get_toplevel);
-static void  gdk_x11_device_xi2_select_surface_events (GdkDevice    *device,
-                                                      GdkSurface    *surface,
-                                                      GdkEventMask  event_mask);
 
 
 enum {
@@ -131,7 +128,6 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
   device_class->grab = gdk_x11_device_xi2_grab;
   device_class->ungrab = gdk_x11_device_xi2_ungrab;
   device_class->surface_at_position = gdk_x11_device_xi2_surface_at_position;
-  device_class->select_surface_events = gdk_x11_device_xi2_select_surface_events;
 
   g_object_class_install_property (object_class,
                                    PROP_DEVICE_ID,
@@ -666,31 +662,6 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
 
 
   return surface;
-}
-
-static void
-gdk_x11_device_xi2_select_surface_events (GdkDevice    *device,
-                                         GdkSurface    *surface,
-                                         GdkEventMask  event_mask)
-{
-  GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
-  GdkX11DeviceManagerXI2 *device_manager_xi2;
-  GdkDisplay *display;
-  XIEventMask evmask;
-
-  display = gdk_device_get_display (device);
-  device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (GDK_X11_DISPLAY (display)->device_manager);
-
-  evmask.deviceid = device_xi2->device_id;
-  evmask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
-                                                          event_mask,
-                                                          &evmask.mask_len);
-
-  XISelectEvents (GDK_SURFACE_XDISPLAY (surface),
-                  GDK_SURFACE_XID (surface),
-                  &evmask, 1);
-
-  g_free (evmask.mask);
 }
 
 guchar *
