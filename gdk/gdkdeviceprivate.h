@@ -112,9 +112,6 @@ struct _GdkDeviceClass
                                         double          *win_y,
                                         GdkModifierType *mask,
                                         gboolean         get_toplevel);
-  void (* select_surface_events)       (GdkDevice       *device,
-                                        GdkSurface       *surface,
-                                        GdkEventMask     event_mask);
 };
 
 void  _gdk_device_set_associated_device (GdkDevice *device,

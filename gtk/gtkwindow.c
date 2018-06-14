@@ -7598,13 +7598,7 @@ do_focus_change (GtkWidget *widget,
       GdkEvent *fevent;
       GdkSurface *surface;
 
-      /* Skip non-master keyboards that haven't
-       * selected for events from this surface
-       */
       surface = _gtk_widget_get_surface (widget);
-      if (gdk_device_get_device_type (dev) != GDK_DEVICE_TYPE_MASTER &&
-          surface && !gdk_surface_get_device_events (surface, dev))
-        continue;
 
       fevent = gdk_event_new (GDK_FOCUS_CHANGE);
       gdk_event_set_display (fevent, gtk_widget_get_display (widget));
