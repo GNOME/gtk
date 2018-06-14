@@ -58,7 +58,7 @@ struct _GdkX11Drop
 {
   GdkDrop parent_instance;
 
-  GdkSurface *source_surface;
+  Window source_window;
 
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
@@ -79,6 +79,9 @@ struct _GdkX11DropClass
 
 /* Forward declarations */
 
+static gboolean        xdnd_source_surface_filter  (GdkDisplay   *display,
+                                                    const XEvent *xevent,
+                                                    gpointer      data);
 static gboolean        xdnd_enter_filter    (GdkSurface   *surface,
                                              const XEvent *xevent);
 static gboolean        xdnd_leave_filter    (GdkSurface   *surface,
@@ -87,10 +90,6 @@ static gboolean        xdnd_position_filter (GdkSurface   *surface,
                                              const XEvent *xevent);
 static gboolean        xdnd_drop_filter     (GdkSurface   *surface,
                                              const XEvent *xevent);
-
-static void   xdnd_manage_source_filter     (GdkDrop      *drop,
-                                             GdkSurface   *surface,
-                                             gboolean      add_filter);
 
 static const struct {
   const char *atom_name;
@@ -238,9 +237,15 @@ gdk_x11_drop_finalize (GObject *object)
 {
   GdkX11Drop *drop_x11 = GDK_X11_DROP (object);
 
-  if (drop_x11->source_surface)
+  if (gdk_drop_get_drag (GDK_DROP (drop_x11)) == NULL)
     {
-      xdnd_manage_source_filter (GDK_DROP (drop_x11), drop_x11->source_surface, FALSE);
+      g_signal_handlers_disconnect_by_func (gdk_drop_get_display (GDK_DROP (drop_x11)),
+                                            xdnd_source_surface_filter,
+                                            drop_x11);
+      /* Should we remove the GDK_PROPERTY_NOTIFY mask?
+       * but we might want it for other reasons. (Like
+       * INCR selection transactions).
+       */
     }
 
   G_OBJECT_CLASS (gdk_x11_drop_parent_class)->finalize (object);
@@ -350,7 +355,7 @@ xdnd_read_actions (GdkX11Drop *drop_x11)
 
       gdk_x11_display_error_trap_push (display);
       if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-                              GDK_SURFACE_XID (drop_x11->source_surface),
+                              drop_x11->source_window,
                               gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
                               0, 65536,
                               False, XA_ATOM, &type, &format, &nitems,
@@ -415,46 +420,13 @@ xdnd_source_surface_filter (GdkDisplay   *display,
   GdkX11Drop *drop_x11 = data;
 
   if ((xevent->xany.type == PropertyNotify) &&
-      (xevent->xany.window == GDK_SURFACE_XID (drop_x11->source_surface)) &&
+      (xevent->xany.window == drop_x11->source_window) &&
       (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList")))
     {
       xdnd_read_actions (drop_x11);
     }
 
   return FALSE;
-}
-
-static void
-xdnd_manage_source_filter (GdkDrop    *drop,
-                           GdkSurface *surface,
-                           gboolean    add_filter)
-{
-  if (!GDK_SURFACE_DESTROYED (surface) &&
-      gdk_surface_get_surface_type (surface) == GDK_SURFACE_FOREIGN)
-    {
-      GdkDisplay *display = gdk_drop_get_display (drop);
-
-      if (add_filter)
-        {
-          gdk_x11_display_error_trap_push (display);
-          gdk_surface_set_events (surface,
-                                  gdk_surface_get_events (surface) |
-                                  GDK_PROPERTY_CHANGE_MASK);
-          gdk_x11_display_error_trap_pop_ignored (display);
-
-          g_signal_connect (display, "xevent", G_CALLBACK (xdnd_source_surface_filter), drop);
-        }
-      else
-        {
-          g_signal_handlers_disconnect_by_func (display,
-                                                xdnd_source_surface_filter,
-                                                drop);
-          /* Should we remove the GDK_PROPERTY_NOTIFY mask?
-           * but we might want it for other reasons. (Like
-           * INCR selection transactions).
-           */
-        }
-    }
 }
 
 static void
@@ -506,11 +478,11 @@ xdnd_enter_filter (GdkSurface   *surface,
   Atom *atoms;
   GdkContentFormats *content_formats;
   GPtrArray *formats;
-  guint32 source_surface;
+  Window source_window;
   gboolean get_types;
   gint version;
 
-  source_surface = xevent->xclient.data.l[0];
+  source_window = xevent->xclient.data.l[0];
   get_types = ((xevent->xclient.data.l[1] & 1) != 0);
   version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
 
@@ -520,8 +492,8 @@ xdnd_enter_filter (GdkSurface   *surface,
   xdnd_precache_atoms (display);
 
   GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndEnter: source_surface: %#x, version: %#x",
-                       source_surface, version));
+            g_message ("XdndEnter: source_window: %#lx, version: %#x",
+                       source_window, version));
 
   if (version < 3)
     {
@@ -539,7 +511,7 @@ xdnd_enter_filter (GdkSurface   *surface,
     {
       gdk_x11_display_error_trap_push (display);
       XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-                          source_surface,
+                          source_window,
                           gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
                           0, 65536,
                           False, XA_ATOM, &type, &format, &nitems,
@@ -576,7 +548,7 @@ xdnd_enter_filter (GdkSurface   *surface,
     print_target_list (content_formats);
 #endif /* G_ENABLE_DEBUG */
 
-  drag = gdk_x11_drag_context_find (display, source_surface, GDK_SURFACE_XID (surface));
+  drag = gdk_x11_drag_context_find (display, source_window, GDK_SURFACE_XID (surface));
 
   drop_x11 = g_object_new (GDK_TYPE_X11_DROP,
                               "device", gdk_seat_get_pointer (seat),
@@ -590,13 +562,22 @@ xdnd_enter_filter (GdkSurface   *surface,
 
   /* FIXME: Should extend DnD protocol to have device info */
 
-  drop_x11->source_surface = gdk_x11_surface_foreign_new_for_display (display, source_surface);
-  if (!drop_x11->source_surface)
+  drop_x11->source_window = source_window;
+  if (drag == NULL)
     {
-      g_object_unref (drop);
-      return TRUE;
+      Display *xdisplay = gdk_x11_display_get_xdisplay (display);
+      XWindowAttributes attrs;
+
+      gdk_x11_display_error_trap_push (display);
+      XGetWindowAttributes (xdisplay, source_window, &attrs);
+      if (!(attrs.your_event_mask & PropertyChangeMask))
+        {
+          XSelectInput (xdisplay, source_window, attrs.your_event_mask | PropertyChangeMask);
+        }
+      gdk_x11_display_error_trap_pop_ignored (display);
+
+      g_signal_connect (display, "xevent", G_CALLBACK (xdnd_source_surface_filter), drop);
     }
-  xdnd_manage_source_filter (drop, drop_x11->source_surface, TRUE);
   xdnd_read_actions (drop_x11);
 
   display_x11->current_drop = drop;
@@ -612,7 +593,7 @@ static gboolean
 xdnd_leave_filter (GdkSurface   *surface,
                    const XEvent *xevent)
 {
-  guint32 source_surface = xevent->xclient.data.l[0];
+  Window source_window = xevent->xclient.data.l[0];
   GdkDisplay *display;
   GdkX11Display *display_x11;
 
@@ -620,13 +601,13 @@ xdnd_leave_filter (GdkSurface   *surface,
   display_x11 = GDK_X11_DISPLAY (display);
 
   GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndLeave: source_surface: %#x",
-                       source_surface));
+            g_message ("XdndLeave: source_window: %#lx",
+                       source_window));
 
   xdnd_precache_atoms (display);
 
   if ((display_x11->current_drop != NULL) &&
-      (GDK_SURFACE_XID (GDK_X11_DROP (display_x11->current_drop)->source_surface) == source_surface))
+      (GDK_X11_DROP (display_x11->current_drop)->source_window == source_window))
     {
       gdk_drop_emit_leave_event (display_x11->current_drop, FALSE, GDK_CURRENT_TIME);
 
@@ -641,7 +622,7 @@ xdnd_position_filter (GdkSurface   *surface,
                       const XEvent *xevent)
 {
   GdkSurfaceImplX11 *impl;
-  guint32 source_surface = xevent->xclient.data.l[0];
+  Window source_window = xevent->xclient.data.l[0];
   gint16 x_root = xevent->xclient.data.l[2] >> 16;
   gint16 y_root = xevent->xclient.data.l[2] & 0xffff;
   guint32 time = xevent->xclient.data.l[3];
@@ -655,8 +636,8 @@ xdnd_position_filter (GdkSurface   *surface,
   display_x11 = GDK_X11_DISPLAY (display);
 
   GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndPosition: source_surface: %#x position: (%d, %d)  time: %d  action: %ld",
-                       source_surface, x_root, y_root, time, action));
+            g_message ("XdndPosition: source_window: %#lx position: (%d, %d)  time: %d  action: %ld",
+                       source_window, x_root, y_root, time, action));
 
   xdnd_precache_atoms (display);
 
@@ -664,7 +645,7 @@ xdnd_position_filter (GdkSurface   *surface,
   drop_x11 = GDK_X11_DROP (drop);
 
   if ((drop != NULL) &&
-      (GDK_SURFACE_XID (drop_x11->source_surface) == source_surface))
+      (drop_x11->source_window == source_window))
     {
       impl = GDK_SURFACE_IMPL_X11 (gdk_drop_get_surface (drop)->impl);
 
@@ -684,7 +665,7 @@ static gboolean
 xdnd_drop_filter (GdkSurface   *surface,
                   const XEvent *xevent)
 {
-  guint32 source_surface = xevent->xclient.data.l[0];
+  Window source_window = xevent->xclient.data.l[0];
   guint32 time = xevent->xclient.data.l[2];
   GdkDisplay *display;
   GdkX11Display *display_x11;
@@ -695,8 +676,8 @@ xdnd_drop_filter (GdkSurface   *surface,
   display_x11 = GDK_X11_DISPLAY (display);
 
   GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndDrop: source_surface: %#x  time: %d",
-                       source_surface, time));
+            g_message ("XdndDrop: source_window: %#lx  time: %d",
+                       source_window, time));
 
   xdnd_precache_atoms (display);
 
@@ -704,7 +685,7 @@ xdnd_drop_filter (GdkSurface   *surface,
   drop_x11 = GDK_X11_DROP (drop);
 
   if ((drop != NULL) &&
-      (GDK_SURFACE_XID (drop_x11->source_surface) == source_surface))
+      (drop_x11->source_window == source_window))
     {
       gdk_x11_surface_set_user_time (gdk_drop_get_surface (drop), time);
 
@@ -780,7 +761,7 @@ gdk_x11_drop_status (GdkDrop       *drop,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
   xev.xclient.format = 32;
-  xev.xclient.window = GDK_SURFACE_XID (drop_x11->source_surface);
+  xev.xclient.window = drop_x11->source_window;
 
   xev.xclient.data.l[0] = GDK_SURFACE_XID (gdk_drop_get_surface (drop));
   xev.xclient.data.l[1] = (possible_actions != 0) ? (2 | 1) : 0;
@@ -795,7 +776,7 @@ gdk_x11_drop_status (GdkDrop       *drop,
   else
     {
       _gdk_x11_send_client_message_async (display,
-                                          GDK_SURFACE_XID (drop_x11->source_surface),
+                                          drop_x11->source_window,
                                           FALSE, 0,
                                           &xev.xclient,
                                           gdk_x11_drop_do_nothing,
@@ -817,7 +798,7 @@ gdk_x11_drop_finish (GdkDrop       *drop,
                          gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection"),
                          gdk_x11_get_xatom_by_name_for_display (display, "DELETE"),
                          gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION"),
-                         GDK_SURFACE_XID (drop_x11->source_surface),
+                         drop_x11->source_window,
                          GDK_X11_DROP (drop)->timestamp);
       /* XXX: Do we need to wait for a reply here before sending the next message? */
     }
@@ -825,7 +806,7 @@ gdk_x11_drop_finish (GdkDrop       *drop,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndFinished");
   xev.xclient.format = 32;
-  xev.xclient.window = GDK_SURFACE_XID (drop_x11->source_surface);
+  xev.xclient.window = drop_x11->source_window;
 
   xev.xclient.data.l[0] = GDK_SURFACE_XID (gdk_drop_get_surface (drop));
   if (action != 0)
@@ -848,7 +829,7 @@ gdk_x11_drop_finish (GdkDrop       *drop,
   else
     {
       _gdk_x11_send_client_message_async (display,
-                                          GDK_SURFACE_XID (drop_x11->source_surface),
+                                          drop_x11->source_window,
                                           FALSE, 0,
                                           &xev.xclient,
                                           gdk_x11_drop_do_nothing,
