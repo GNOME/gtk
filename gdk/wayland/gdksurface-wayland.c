@@ -556,7 +556,6 @@ void
 _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
                                           GdkSurface     *surface,
                                           GdkSurface     *real_parent,
-                                          GdkEventMask    event_mask,
                                           GdkSurfaceAttr *attributes)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -2824,22 +2823,6 @@ gdk_surface_wayland_withdraw (GdkSurface *surface)
 }
 
 static void
-gdk_surface_wayland_set_events (GdkSurface   *surface,
-                                GdkEventMask  event_mask)
-{
-  GDK_SURFACE (surface)->event_mask = event_mask;
-}
-
-static GdkEventMask
-gdk_surface_wayland_get_events (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 0;
-  else
-    return GDK_SURFACE (surface)->event_mask;
-}
-
-static void
 gdk_surface_wayland_raise (GdkSurface *surface)
 {
 }
@@ -4039,8 +4022,6 @@ _gdk_surface_impl_wayland_class_init (GdkSurfaceImplWaylandClass *klass)
   impl_class->show = gdk_wayland_surface_show;
   impl_class->hide = gdk_wayland_surface_hide;
   impl_class->withdraw = gdk_surface_wayland_withdraw;
-  impl_class->set_events = gdk_surface_wayland_set_events;
-  impl_class->get_events = gdk_surface_wayland_get_events;
   impl_class->raise = gdk_surface_wayland_raise;
   impl_class->lower = gdk_surface_wayland_lower;
   impl_class->restack_toplevel = gdk_surface_wayland_restack_toplevel;

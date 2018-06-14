@@ -1311,17 +1311,15 @@ _gdk_display_event_data_free (GdkDisplay *display,
 }
 
 void
-_gdk_display_create_surface_impl (GdkDisplay       *display,
-                                 GdkSurface        *surface,
-                                 GdkSurface        *real_parent,
-                                 GdkEventMask      event_mask,
-                                 GdkSurfaceAttr    *attributes)
+gdk_display_create_surface_impl (GdkDisplay       *display,
+                                 GdkSurface       *surface,
+                                 GdkSurface       *real_parent,
+                                 GdkSurfaceAttr   *attributes)
 {
   GDK_DISPLAY_GET_CLASS (display)->create_surface_impl (display,
-                                                       surface,
-                                                       real_parent,
-                                                       event_mask,
-                                                       attributes);
+                                                        surface,
+                                                        real_parent,
+                                                        attributes);
 }
 
 GdkSurface *
