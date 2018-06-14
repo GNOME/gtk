@@ -204,6 +204,7 @@ void            gdk_x11_drag_context_handle_status              (GdkDisplay     
                                                                  const XEvent           *xevent);
 void            gdk_x11_drag_context_handle_finished            (GdkDisplay             *display,
                                                                  const XEvent           *xevent);
+void            gdk_x11_drop_read_actions                       (GdkDrop                *drop);
 gboolean        gdk_x11_drop_filter                             (GdkSurface             *surface,
                                                                  const XEvent           *xevent);
 

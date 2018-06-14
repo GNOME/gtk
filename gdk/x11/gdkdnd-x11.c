@@ -1720,16 +1720,12 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
           else if (context->dest_surface == dest_surface)
             {
               GdkDisplay *display = GDK_SURFACE_DISPLAY (dest_surface);
-              GdkDragContext *dest_context;
+              GdkDrop *drop;
 
-              dest_context = GDK_DRAG_CONTEXT (GDK_X11_DISPLAY (display)->current_drop);
+              drop = GDK_X11_DISPLAY (display)->current_drop;
 
-              if (dest_context &&
-                  dest_context->dest_surface == dest_surface)
-                {
-                  gdk_drag_context_set_actions (dest_context, possible_actions, suggested_action);
-                  GDK_X11_DRAG_CONTEXT (dest_context)->xdnd_have_actions = TRUE;
-                }
+              if (drop && gdk_drop_get_surface (drop) == dest_surface)
+                gdk_x11_drop_read_actions (drop);
             }
         }
     }

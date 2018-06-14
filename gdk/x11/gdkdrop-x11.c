@@ -331,10 +331,10 @@ gdk_x11_drop_update_actions (GdkX11Drop *drop_x11)
   gdk_drop_set_actions (GDK_DROP (drop_x11), actions);
 }
 
-static void
-xdnd_read_actions (GdkX11Drop *drop_x11)
+void
+gdk_x11_drop_read_actions (GdkDrop *drop)
 {
-  GdkDrop *drop = GDK_DROP (drop_x11);
+  GdkX11Drop *drop_x11 = GDK_X11_DROP (drop);
   GdkDisplay *display = gdk_drop_get_display (drop);
   GdkDragContext *drag;
   GdkDragAction actions = GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK;
@@ -423,7 +423,7 @@ xdnd_source_surface_filter (GdkDisplay   *display,
       (xevent->xany.window == drop_x11->source_window) &&
       (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList")))
     {
-      xdnd_read_actions (drop_x11);
+      gdk_x11_drop_read_actions (GDK_DROP (drop_x11));
     }
 
   return FALSE;
@@ -578,7 +578,7 @@ xdnd_enter_filter (GdkSurface   *surface,
 
       g_signal_connect (display, "xevent", G_CALLBACK (xdnd_source_surface_filter), drop);
     }
-  xdnd_read_actions (drop_x11);
+  gdk_x11_drop_read_actions (drop);
 
   display_x11->current_drop = drop;
 
