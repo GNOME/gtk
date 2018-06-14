@@ -241,6 +241,81 @@ out:
   return FALSE;
 }
 
+static int
+get_monitor_num (GdkX11Screen *x11_screen,
+                 GdkMonitor   *monitor)
+{
+#ifdef HAVE_XFREE_XINERAMA
+  XineramaScreenInfo *x_monitors;
+  int x_n_monitors;
+  GdkRectangle geometry;
+  int monitor_num;
+  int i;
+
+  if (!XineramaIsActive (x11_screen->xdisplay))
+    return -1;
+
+  x_monitors = XineramaQueryScreens (x11_screen->xdisplay, &x_n_monitors);
+  if (x_n_monitors <= 0 || x_monitors == NULL)
+    {
+      if (x_monitors)
+        XFree (x_monitors);
+
+      return -1;
+    }
+
+  gdk_monitor_get_geometry (monitor, &geometry);
+  monitor_num = -1;
+
+  for (i = 0; i < x_n_monitors; i++)
+    {
+      if (x_monitors[i].x_org != geometry.x ||
+          x_monitors[i].y_org != geometry.y ||
+          x_monitors[i].width != geometry.width ||
+          x_monitors[i].height != geometry.height)
+        continue;
+
+      monitor_num = i;
+      break;
+    }
+
+  XFree (x_monitors);
+  return monitor_num;
+#else
+  return -1;
+#endif
+}
+
+gboolean
+_gdk_x11_screen_get_monitor_work_area (GdkX11Screen *x11_screen,
+                                       GdkMonitor   *monitor,
+                                       GdkRectangle *area)
+{
+  Display *display;
+  int monitor_num;
+  gchar *workarea_name;
+  Atom workarea;
+
+  display = GDK_SCREEN_XDISPLAY (x11_screen);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (x11_screen,
+                                            g_intern_static_string ("_NET_WORKAREA_Mn")))
+    return FALSE;
+
+  monitor_num = get_monitor_num (x11_screen, monitor);
+  if (monitor_num < 0)
+    return FALSE;
+
+  workarea_name = g_strdup_printf ("_NET_WORKAREA_M%d", monitor_num);
+  workarea = XInternAtom (display, workarea_name, True);
+  g_free (workarea_name);
+
+  if (workarea == None)
+    return FALSE;
+
+  return get_work_area (x11_screen, workarea, area);
+}
+
 void
 gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
                               GdkRectangle *area)
