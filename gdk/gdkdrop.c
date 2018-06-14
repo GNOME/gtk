@@ -57,7 +57,7 @@ enum {
 
 static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
 
 /**
  * GdkDrop:
