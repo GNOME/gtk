@@ -274,8 +274,7 @@ gdk_x11_drag_context_find (GdkDisplay *display,
       context = (GdkDragContext *)tmp_list->data;
       context_x11 = (GdkX11DragContext *)context;
 
-      if ((context->source_surface && gdk_surface_get_display (context->source_surface) != display) ||
-          (context->dest_surface && gdk_surface_get_display (context->dest_surface) != display))
+      if (gdk_drag_context_get_display (context) != display)
         continue;
 
       context_dest_xid = context->dest_surface
