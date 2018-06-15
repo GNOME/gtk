@@ -121,6 +121,7 @@ struct _GdkX11DragContext
   gint hot_y;
 
   Window dest_xid;             /* The last window we looked up */
+  Window proxy_xid;            /* The proxy window for dest_xid (or dest_xid if no proxying happens) */
   Window drop_xid;             /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set  : 1; /* Whether we've already set XdndTypeList */
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
@@ -184,13 +185,13 @@ gdk_x11_drag_context_init (GdkX11DragContext *context)
 }
 
 static void        gdk_x11_drag_context_finalize (GObject *object);
-static GdkSurface * gdk_x11_drag_context_find_surface (GdkDragContext  *context,
+static Window      gdk_x11_drag_context_find_surface (GdkDragContext  *context,
                                                      GdkSurface       *drag_surface,
                                                      gint             x_root,
                                                      gint             y_root,
                                                      GdkDragProtocol *protocol);
 static gboolean    gdk_x11_drag_context_drag_motion (GdkDragContext  *context,
-                                                     GdkSurface       *dest_surface,
+                                                     Window           proxy_xid,
                                                      GdkDragProtocol  protocol,
                                                      gint             x_root,
                                                      gint             y_root,
@@ -277,10 +278,10 @@ gdk_x11_drag_context_find (GdkDisplay *display,
       if (gdk_drag_context_get_display (context) != display)
         continue;
 
-      context_dest_xid = context->dest_surface
+      context_dest_xid = context_x11->proxy_xid
                             ? (context_x11->drop_xid
                                   ? context_x11->drop_xid
-                                  : GDK_SURFACE_XID (context->dest_surface))
+                                  : context_x11->proxy_xid)
                             : None;
 
       if ((context->is_source) &&
@@ -996,7 +997,9 @@ send_client_message_async_cb (Window   window,
                               gboolean success,
                               gpointer data)
 {
+  GdkX11DragContext *context_x11 = data;
   GdkDragContext *context = data;
+
   GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND,
             g_message ("Got async callback for #%lx, success = %d",
                        window, success));
@@ -1005,13 +1008,9 @@ send_client_message_async_cb (Window   window,
    * so we don't end up blocking for a timeout
    */
   if (!success &&
-      context->dest_surface &&
-      window == GDK_SURFACE_XID (context->dest_surface))
+      window == context_x11->proxy_xid)
     {
-      GdkX11DragContext *context_x11 = data;
-
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
+      context_x11->proxy_xid = None;
       context->action = 0;
       if (context->action != context_x11->current_action)
         {
@@ -1041,31 +1040,29 @@ send_client_message_async (GdkDragContext      *context,
 
 static void
 xdnd_send_xevent (GdkX11DragContext *context_x11,
-                  GdkSurface        *surface,
                   XEvent            *event_send)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   GdkDisplay *display = gdk_drag_context_get_display (context);
-  Window xwindow;
+  GdkSurface *surface;
   glong event_mask;
 
   g_assert (event_send->xany.type == ClientMessage);
 
   /* We short-circuit messages to ourselves */
-  if (gdk_surface_get_surface_type (surface) != GDK_SURFACE_FOREIGN)
+  surface = gdk_x11_surface_lookup_for_display (display, context_x11->proxy_xid);
+  if (surface)
     {
       if (gdk_x11_drop_filter (surface, event_send))
         return;
     }
 
-  xwindow = GDK_SURFACE_XID (surface);
-
-  if (_gdk_x11_display_is_root_window (display, xwindow))
+  if (_gdk_x11_display_is_root_window (display, context_x11->proxy_xid))
     event_mask = ButtonPressMask;
   else
     event_mask = 0;
 
-  send_client_message_async (context, xwindow, event_mask,
+  send_client_message_async (context, context_x11->proxy_xid, event_mask,
                              &event_send->xclient);
 }
 
@@ -1083,7 +1080,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = (context_x11->version << 24); /* version */
   xev.xclient.data.l[2] = 0;
@@ -1109,7 +1106,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
         }
     }
 
-  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
+  xdnd_send_xevent (context_x11, &xev);
 }
 
 static void
@@ -1124,14 +1121,14 @@ xdnd_send_leave (GdkX11DragContext *context_x11)
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
+  xdnd_send_xevent (context_x11, &xev);
 }
 
 static void
@@ -1147,14 +1144,14 @@ xdnd_send_drop (GdkX11DragContext *context_x11,
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = time;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
+  xdnd_send_xevent (context_x11, &xev);
 }
 
 static void
@@ -1173,14 +1170,14 @@ xdnd_send_motion (GdkX11DragContext *context_x11,
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
   xev.xclient.data.l[3] = time;
   xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
 
-  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
+  xdnd_send_xevent (context_x11, &xev);
   context_x11->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
 }
 
@@ -1316,9 +1313,7 @@ static void
 gdk_drag_do_leave (GdkX11DragContext *context_x11,
                    guint32            time)
 {
-  GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-
-  if (context->dest_surface)
+  if (context_x11->proxy_xid)
     {
       switch (context_x11->protocol)
         {
@@ -1331,8 +1326,7 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
           break;
         }
 
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
+      context_x11->proxy_xid = None;
     }
 }
 
@@ -1417,7 +1411,7 @@ drag_context_find_window_cache (GdkX11DragContext *context_x11,
   return context_x11->cache;
 }
 
-static GdkSurface *
+static Window
 gdk_x11_drag_context_find_surface (GdkDragContext  *context,
                                    GdkSurface       *drag_surface,
                                    gint             x_root,
@@ -1429,7 +1423,7 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
   GdkSurfaceCache *window_cache;
   GdkDisplay *display;
   Window dest;
-  GdkSurface *dest_surface;
+  Window proxy;
 
   display = gdk_drag_context_get_display (context);
   screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (display)->screen);
@@ -1444,7 +1438,6 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
 
   if (context_x11->dest_xid != dest)
     {
-      Window recipient;
       context_x11->dest_xid = dest;
 
       /* Check if new destination accepts drags, and which protocol */
@@ -1455,25 +1448,18 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
        * two are passed explicitly, the third implicitly through
        * protocol->dest_xid.
        */
-      recipient = _gdk_x11_display_get_drag_protocol (display,
-                                                      dest,
-                                                      protocol,
-                                                      &context_x11->version);
-
-      if (recipient != None)
-        dest_surface = gdk_x11_surface_foreign_new_for_display (display, recipient);
-      else
-        dest_surface = NULL;
+      proxy = _gdk_x11_display_get_drag_protocol (display,
+                                                  dest,
+                                                  protocol,
+                                                  &context_x11->version);
     }
   else
     {
-      dest_surface = context->dest_surface;
-      if (dest_surface)
-        g_object_ref (dest_surface);
+      proxy = dest;
       *protocol = context_x11->protocol;
     }
 
-  return dest_surface;
+  return proxy;
 }
 
 static void
@@ -1491,7 +1477,7 @@ move_drag_surface (GdkDragContext *context,
 
 static gboolean
 gdk_x11_drag_context_drag_motion (GdkDragContext *context,
-                                  GdkSurface      *dest_surface,
+                                  Window          proxy_xid,
                                   GdkDragProtocol protocol,
                                   gint            x_root,
                                   gint            y_root,
@@ -1500,7 +1486,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                                   guint32         time)
 {
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
-  GdkSurfaceImplX11 *impl;
 
   if (context_x11->drag_surface)
     move_drag_surface (context, x_root, y_root);
@@ -1517,12 +1502,12 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
        * gdk_drag_find_window(). This happens, e.g.
        * when GTK+ is proxying DND events to embedded windows.
        */
-      if (dest_surface)
+      if (proxy_xid)
         {
-          GdkDisplay *display = GDK_SURFACE_DISPLAY (dest_surface);
+          GdkDisplay *display = gdk_drag_context_get_display (context);
 
           xdnd_check_dest (display,
-                           GDK_SURFACE_XID (dest_surface),
+                           proxy_xid,
                            &context_x11->version);
         }
     }
@@ -1532,19 +1517,19 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
    */
   if (protocol == GDK_DRAG_PROTO_XDND && context_x11->xdnd_actions != gdk_drag_context_get_actions (context))
     {
-      if (dest_surface)
+      if (proxy_xid)
         {
-          GdkDisplay *display = GDK_SURFACE_DISPLAY (dest_surface);
+          GdkDisplay *display = gdk_drag_context_get_display (context);
           GdkDrop *drop = GDK_X11_DISPLAY (display)->current_drop;
 
-          if (drop && gdk_drop_get_surface (drop) == dest_surface)
+          if (drop && GDK_SURFACE_XID (gdk_drop_get_surface (drop)) == proxy_xid)
             gdk_x11_drop_read_actions (drop);
           else
             xdnd_set_actions (context_x11);
         }
     }
 
-  if (context->dest_surface != dest_surface)
+  if (context_x11->proxy_xid != proxy_xid)
     {
       /* Send a leave to the last destination */
       gdk_drag_do_leave (context_x11, time);
@@ -1552,11 +1537,10 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
       /* Check if new destination accepts drags, and which protocol */
 
-      if (dest_surface)
+      if (proxy_xid)
         {
-          context->dest_surface = dest_surface;
+          context_x11->proxy_xid = proxy_xid;
           context_x11->drop_xid = context_x11->dest_xid;
-          g_object_ref (context->dest_surface);
           context_x11->protocol = protocol;
 
           switch (protocol)
@@ -1573,7 +1557,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
         }
       else
         {
-          context->dest_surface = NULL;
+          context_x11->proxy_xid = None;
           context_x11->drop_xid = None;
           context->action = 0;
         }
@@ -1593,16 +1577,17 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
   context_x11->last_x = x_root;
   context_x11->last_y = y_root;
 
-  if (context->dest_surface)
+  if (context_x11->proxy_xid)
     {
-      impl = GDK_SURFACE_IMPL_X11 (context->dest_surface->impl);
+      GdkDisplay *display = gdk_drag_context_get_display (context);
+      GdkX11Screen *screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (display)->screen);
 
       if (context_x11->drag_status == GDK_DRAG_STATUS_DRAG)
         {
           switch (context_x11->protocol)
             {
             case GDK_DRAG_PROTO_XDND:
-              xdnd_send_motion (context_x11, x_root * impl->surface_scale, y_root * impl->surface_scale, suggested_action, time);
+              xdnd_send_motion (context_x11, x_root * screen_x11->surface_scale, y_root * screen_x11->surface_scale, suggested_action, time);
               break;
 
             case GDK_DRAG_PROTO_ROOTWIN:
@@ -1651,7 +1636,7 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
 {
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
 
-  if (context->dest_surface)
+  if (context_x11->proxy_xid)
     {
       switch (context_x11->protocol)
         {
@@ -2286,17 +2271,17 @@ gdk_drag_update (GdkDragContext  *context,
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkDragAction action, possible_actions;
-  GdkSurface *dest_surface;
   GdkDragProtocol protocol;
+  Window proxy;
 
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_context->actions,
                                 &action, &possible_actions);
 
-  dest_surface = gdk_x11_drag_context_find_surface (context,
-                                                    x11_context->drag_surface,
-                                                    x_root, y_root, &protocol);
+  proxy = gdk_x11_drag_context_find_surface (context,
+                                             x11_context->drag_surface,
+                                             x_root, y_root, &protocol);
 
-  gdk_x11_drag_context_drag_motion (context, dest_surface, protocol, x_root, y_root,
+  gdk_x11_drag_context_drag_motion (context, proxy, protocol, x_root, y_root,
                                     action, possible_actions, evtime);
 }
 
@@ -2341,7 +2326,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
         case GDK_KEY_KP_Enter:
         case GDK_KEY_KP_Space:
           if ((gdk_drag_context_get_selected_action (context) != 0) &&
-              (context->dest_surface != NULL))
+              (x11_context->proxy_xid != None))
             {
               g_signal_emit_by_name (context, "drop-performed",
                                      gdk_event_get_time ((GdkEvent *) event));
@@ -2422,6 +2407,8 @@ static gboolean
 gdk_dnd_handle_button_event (GdkDragContext       *context,
                              const GdkEventButton *event)
 {
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
 #if 0
   /* FIXME: Check the button matches */
   if (event->button != x11_context->button)
@@ -2429,7 +2416,7 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
 #endif
 
   if ((gdk_drag_context_get_selected_action (context) != 0) &&
-      (context->dest_surface != NULL))
+      (x11_context->proxy_xid != None))
     {
       g_signal_emit_by_name (context, "drop-performed",
                              gdk_event_get_time ((GdkEvent *) event));
