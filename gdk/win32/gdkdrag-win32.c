@@ -1741,7 +1741,6 @@ _gdk_win32_surface_drag_begin (GdkSurface         *window,
   drag_win32 = GDK_WIN32_DRAG_CONTEXT (drag);
 
   g_set_object (&drag->source_surface, window);
-  drag->is_source = TRUE;
 
   GDK_NOTE (DND, g_print ("_gdk_win32_surface_drag_begin\n"));
 
@@ -2549,8 +2548,6 @@ gdk_win32_drag_context_handle_event (GdkDragContext *drag,
 {
   GdkWin32DragContext *drag_win32 = GDK_WIN32_DRAG_CONTEXT (drag);
 
-  if (!drag->is_source)
-    return FALSE;
   if (!drag_win32->grab_seat)
     return FALSE;
   if (!drag_win32->handle_events)

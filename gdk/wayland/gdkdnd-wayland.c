@@ -402,7 +402,6 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->source_surface = g_object_ref (surface);
-  context->is_source = TRUE;
 
   context_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
   context_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (context_wayland->dnd_surface);
