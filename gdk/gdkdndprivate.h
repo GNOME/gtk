@@ -63,7 +63,6 @@ struct _GdkDragContext {
 
   /*< private >*/
   GdkSurface *source_surface;
-  GdkSurface *dest_surface;
   GdkSurface *drag_surface;
 
   GdkContentProvider *content;
