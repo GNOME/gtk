@@ -1040,7 +1040,7 @@ send_client_message_async (GdkDragContext      *context,
                                       send_client_message_async_cb, context);
 }
 
-static gboolean
+static void
 xdnd_send_xevent (GdkX11DragContext *context_x11,
                   GdkSurface        *surface,
                   XEvent            *event_send)
@@ -1056,7 +1056,7 @@ xdnd_send_xevent (GdkX11DragContext *context_x11,
   if (gdk_surface_get_surface_type (surface) != GDK_SURFACE_FOREIGN)
     {
       if (gdk_x11_drop_filter (surface, event_send))
-        return TRUE;
+        return;
     }
 
   xwindow = GDK_SURFACE_XID (surface);
@@ -1068,8 +1068,6 @@ xdnd_send_xevent (GdkX11DragContext *context_x11,
 
   send_client_message_async (context, xwindow, event_mask,
                              &event_send->xclient);
-
-  return TRUE;
 }
 
 static void
@@ -1112,14 +1110,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
         }
     }
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
 }
 
 static void
@@ -1141,14 +1132,7 @@ xdnd_send_leave (GdkX11DragContext *context_x11)
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
 }
 
 static void
@@ -1171,14 +1155,7 @@ xdnd_send_drop (GdkX11DragContext *context_x11,
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
 }
 
 static void
@@ -1204,14 +1181,7 @@ xdnd_send_motion (GdkX11DragContext *context_x11,
   xev.xclient.data.l[3] = time;
   xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, context->dest_surface, &xev);
   context_x11->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
 }
 
