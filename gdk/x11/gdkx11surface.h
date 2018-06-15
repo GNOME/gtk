@@ -102,9 +102,6 @@ GDK_AVAILABLE_IN_ALL
 guint32       gdk_x11_get_server_time  (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface  *gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,
-                                                      Window      window);
-GDK_AVAILABLE_IN_ALL
 GdkSurface  *gdk_x11_surface_lookup_for_display      (GdkDisplay *display,
                                                       Window      window);
 
