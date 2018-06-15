@@ -284,8 +284,7 @@ gdk_x11_drag_context_find (GdkDisplay *display,
                                   : context_x11->proxy_xid)
                             : None;
 
-      if ((context->is_source) &&
-          ((source_xid == None) || (context->source_surface &&
+      if (((source_xid == None) || (context->source_surface &&
             (GDK_SURFACE_XID (context->source_surface) == source_xid))) &&
           ((dest_xid == None) || (context_dest_xid == dest_xid)))
         return context;
@@ -2114,8 +2113,6 @@ _gdk_x11_surface_drag_begin (GdkSurface          *surface,
                                              NULL);
   x11_context = GDK_X11_DRAG_CONTEXT (context);
 
-  context->is_source = TRUE;
-
   g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_drag_context_xevent), context);
 
   precache_target_list (context);
@@ -2433,8 +2430,6 @@ gdk_x11_drag_context_handle_event (GdkDragContext *context,
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
 
-  if (!context->is_source)
-    return FALSE;
   if (!x11_context->grab_seat)
     return FALSE;
 
