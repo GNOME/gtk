@@ -313,9 +313,6 @@ gdk_drag_context_finalize (GObject *object)
   if (context->source_surface)
     g_object_unref (context->source_surface);
 
-  if (context->dest_surface)
-    g_object_unref (context->dest_surface);
-
   G_OBJECT_CLASS (gdk_drag_context_parent_class)->finalize (object);
 }
 
