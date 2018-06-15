@@ -727,9 +727,6 @@ gdk_drag_context_handle_source_event (GdkEvent *event)
     {
       context = l->data;
 
-      if (!context->is_source)
-        continue;
-
       if (!GDK_DRAG_CONTEXT_GET_CLASS (context)->handle_event)
         continue;
 
