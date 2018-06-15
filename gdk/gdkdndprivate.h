@@ -62,7 +62,6 @@ struct _GdkDragContext {
   GObject parent_instance;
 
   /*< private >*/
-  gboolean is_source;
   GdkSurface *source_surface;
   GdkSurface *dest_surface;
   GdkSurface *drag_surface;
