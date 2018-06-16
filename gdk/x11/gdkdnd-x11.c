@@ -2325,8 +2325,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
           if ((gdk_drag_context_get_selected_action (context) != 0) &&
               (x11_context->proxy_xid != None))
             {
-              g_signal_emit_by_name (context, "drop-performed",
-                                     gdk_event_get_time ((GdkEvent *) event));
+              g_signal_emit_by_name (context, "drop-performed");
             }
           else
             gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_NO_TARGET);
@@ -2415,8 +2414,7 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
   if ((gdk_drag_context_get_selected_action (context) != 0) &&
       (x11_context->proxy_xid != None))
     {
-      g_signal_emit_by_name (context, "drop-performed",
-                             gdk_event_get_time ((GdkEvent *) event));
+      g_signal_emit_by_name (context, "drop-performed");
     }
   else
     gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_NO_TARGET);

@@ -118,20 +118,16 @@ static GtkDragSourceInfo *gtk_drag_get_source_info   (GdkDragContext *context,
                                                       gboolean        create);
 static void               gtk_drag_clear_source_info (GdkDragContext *context);
 
-static void gtk_drag_drop                      (GtkDragSourceInfo *info,
-                                                guint32            time);
+static void gtk_drag_drop                      (GtkDragSourceInfo *info);
 static void gtk_drag_drop_finished             (GtkDragSourceInfo *info,
-                                                GtkDragResult      result,
-                                                guint              time);
+                                                GtkDragResult      result);
 static void gtk_drag_cancel_internal           (GtkDragSourceInfo *info,
-                                                GtkDragResult      result,
-                                                guint32            time);
+                                                GtkDragResult      result);
 
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 
 static void gtk_drag_context_drop_performed_cb (GdkDragContext    *context,
-                                                guint              time,
                                                 GtkDragSourceInfo *info);
 static void gtk_drag_context_cancel_cb         (GdkDragContext      *context,
                                                 GdkDragCancelReason  reason,
@@ -1244,8 +1240,7 @@ gtk_drag_set_icon_default (GdkDragContext *context)
 /* Clean up from the drag, and display snapback, if necessary. */
 static void
 gtk_drag_drop_finished (GtkDragSourceInfo *info,
-                        GtkDragResult      result,
-                        guint              time)
+                        GtkDragResult      result)
 {
   gboolean success;
 
@@ -1260,8 +1255,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 }
 
 static void
-gtk_drag_drop (GtkDragSourceInfo *info, 
-               guint32            time)
+gtk_drag_drop (GtkDragSourceInfo *info)
 {
   if (info->icon_window)
     gtk_widget_hide (info->icon_window);
@@ -1341,18 +1335,16 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
  */
 static void
 gtk_drag_cancel_internal (GtkDragSourceInfo *info,
-                          GtkDragResult      result,
-                          guint32            time)
+                          GtkDragResult      result)
 {
-  gtk_drag_drop_finished (info, result, time);
+  gtk_drag_drop_finished (info, result);
 }
 
 static void
 gtk_drag_context_drop_performed_cb (GdkDragContext    *context,
-                                    guint32            time_,
                                     GtkDragSourceInfo *info)
 {
-  gtk_drag_drop (info, time_);
+  gtk_drag_drop (info);
 }
 
 static void
@@ -1375,7 +1367,7 @@ gtk_drag_context_cancel_cb (GdkDragContext      *context,
       result = GTK_DRAG_RESULT_ERROR;
       break;
     }
-  gtk_drag_cancel_internal (info, result, GDK_CURRENT_TIME);
+  gtk_drag_cancel_internal (info, result);
 }
 
 static void
@@ -1396,10 +1388,9 @@ static gboolean
 gtk_drag_abort_timeout (gpointer data)
 {
   GtkDragSourceInfo *info = data;
-  guint32 time = GDK_CURRENT_TIME;
 
   info->drop_timeout = 0;
-  gtk_drag_drop_finished (info, GTK_DRAG_RESULT_TIMEOUT_EXPIRED, time);
+  gtk_drag_drop_finished (info, GTK_DRAG_RESULT_TIMEOUT_EXPIRED);
   
   return G_SOURCE_REMOVE;
 }
@@ -1461,5 +1452,5 @@ gtk_drag_cancel (GdkDragContext *context)
 
   info = gtk_drag_get_source_info (context, FALSE);
   if (info != NULL)
-    gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_ERROR, gtk_get_current_event_time ());
+    gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_ERROR);
 }

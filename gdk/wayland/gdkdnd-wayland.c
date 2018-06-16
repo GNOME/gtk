@@ -323,7 +323,7 @@ data_source_dnd_drop_performed (void                  *data,
 {
   GdkDragContext *context = data;
 
-  g_signal_emit_by_name (context, "drop-performed", GDK_CURRENT_TIME);
+  g_signal_emit_by_name (context, "drop-performed");
 }
 
 static void
