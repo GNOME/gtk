@@ -56,6 +56,24 @@
 #define JOB_STATUS_COMPLETE 0x1000
 #endif
 
+/* Forward declarations */
+GtkPrintOperationResult
+gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
+					gboolean          *do_print);
+GtkPrintOperationResult
+gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
+				     GtkWindow         *parent,
+				     gboolean          *do_print);
+UINT_PTR CALLBACK
+run_mainloop_hook (HWND hdlg,
+		   UINT uiMsg,
+		   WPARAM wParam,
+		   LPARAM lParam);
+void
+win32_start_page (GtkPrintOperation *op,
+		  GtkPrintContext *print_context,
+		  GtkPageSetup *page_setup);
+
 typedef struct {
   HDC hdc;
   HGLOBAL devmode;
