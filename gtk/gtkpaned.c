@@ -129,8 +129,7 @@ enum {
   CHILD2
 };
 
-typedef struct _GtkPanedPrivate GtkPanedPrivate;
-struct _GtkPanedPrivate
+typedef struct
 {
   GtkPaned       *first_paned;
   GtkWidget      *child1;
@@ -161,16 +160,19 @@ struct _GtkPanedPrivate
   guint         child2_shrink : 1;
   guint         position_set  : 1;
   guint         panning       : 1;
-};
+} GtkPanedPrivate;
 
 enum {
   PROP_0,
-  PROP_ORIENTATION,
   PROP_POSITION,
   PROP_POSITION_SET,
   PROP_MIN_POSITION,
   PROP_MAX_POSITION,
-  PROP_WIDE_HANDLE
+  PROP_WIDE_HANDLE,
+  LAST_PROP,
+
+  /* GtkOrientable */
+  PROP_ORIENTATION,
 };
 
 enum {
@@ -266,7 +268,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER,
                                                 NULL))
 
 static guint signals[LAST_SIGNAL] = { 0 };
-
+static GParamSpec *paned_props[LAST_PROP] = { NULL, };
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -388,25 +390,20 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_class->accept_position = gtk_paned_accept_position;
   paned_class->cancel_position = gtk_paned_cancel_position;
 
-  g_object_class_override_property (object_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
 
-  g_object_class_install_property (object_class,
-                                   PROP_POSITION,
-                                   g_param_spec_int ("position",
-                                                     P_("Position"),
-                                                     P_("Position of paned separator in pixels (0 means all the way to the left/top)"),
-                                                     0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  paned_props[PROP_POSITION] =
+    g_param_spec_int ("position",
+                      P_("Position"),
+                      P_("Position of paned separator in pixels (0 means all the way to the left/top)"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-                                   PROP_POSITION_SET,
-                                   g_param_spec_boolean ("position-set",
-                                                         P_("Position Set"),
-                                                         P_("TRUE if the Position property should be used"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  paned_props[PROP_POSITION_SET] =
+    g_param_spec_boolean ("position-set",
+                          P_("Position Set"),
+                          P_("TRUE if the Position property should be used"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:min-position:
@@ -415,13 +412,12 @@ gtk_paned_class_init (GtkPanedClass *class)
    * This property is derived from the size and shrinkability
    * of the widget's children.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MIN_POSITION,
-                                   g_param_spec_int ("min-position",
-                                                     P_("Minimal Position"),
-                                                     P_("Smallest possible value for the “position” property"),
-                                                     0, G_MAXINT, 0,
-                                                     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+  paned_props[PROP_MIN_POSITION] =
+    g_param_spec_int ("min-position",
+                      P_("Minimal Position"),
+                      P_("Smallest possible value for the “position” property"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:max-position:
@@ -430,13 +426,12 @@ gtk_paned_class_init (GtkPanedClass *class)
    * This property is derived from the size and shrinkability
    * of the widget's children.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MAX_POSITION,
-                                   g_param_spec_int ("max-position",
-                                                     P_("Maximal Position"),
-                                                     P_("Largest possible value for the “position” property"),
-                                                     0, G_MAXINT, G_MAXINT,
-                                                     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+  paned_props[PROP_MAX_POSITION] =
+    g_param_spec_int ("max-position",
+                      P_("Maximal Position"),
+                      P_("Largest possible value for the “position” property"),
+                      0, G_MAXINT, G_MAXINT,
+                      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:wide-handle:
@@ -445,13 +440,19 @@ gtk_paned_class_init (GtkPanedClass *class)
    * to provide stronger visual separation (e.g. because it separates
    * between two notebooks, whose tab rows would otherwise merge visually).
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WIDE_HANDLE,
-                                   g_param_spec_boolean ("wide-handle",
-                                                         P_("Wide Handle"),
-                                                         P_("Whether the paned should have a prominent handle"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  paned_props[PROP_WIDE_HANDLE] =
+    g_param_spec_boolean ("wide-handle",
+                          P_("Wide Handle"),
+                          P_("Whether the paned should have a prominent handle"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, paned_props);
+
+  g_object_class_override_property (object_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
+
 
   /**
    * GtkPaned:resize:
@@ -1784,11 +1785,11 @@ gtk_paned_set_position (GtkPaned *paned,
        */
 
       if (!priv->position_set)
-        g_object_notify (G_OBJECT (paned), "position-set");
+        g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_POSITION_SET]);
 
       if (priv->child1_size != position)
         {
-          g_object_notify (G_OBJECT (paned), "position");
+          g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_POSITION]);
           gtk_widget_queue_allocate (GTK_WIDGET (paned));
         }
 
@@ -1798,7 +1799,7 @@ gtk_paned_set_position (GtkPaned *paned,
   else
     {
       if (priv->position_set)
-        g_object_notify (G_OBJECT (paned), "position-set");
+        g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_POSITION_SET]);
 
       priv->position_set = FALSE;
     }
@@ -1875,11 +1876,11 @@ gtk_paned_calc_position (GtkPaned *paned,
 
   g_object_freeze_notify (G_OBJECT (paned));
   if (priv->child1_size != old_position)
-    g_object_notify (G_OBJECT (paned), "position");
+    g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_POSITION]);
   if (priv->min_position != old_min_position)
-    g_object_notify (G_OBJECT (paned), "min-position");
+    g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_MIN_POSITION]);
   if (priv->max_position != old_max_position)
-    g_object_notify (G_OBJECT (paned), "max-position");
+    g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_MAX_POSITION]);
   g_object_thaw_notify (G_OBJECT (paned));
 
   priv->last_allocation = allocation;
@@ -2519,7 +2520,7 @@ gtk_paned_set_wide_handle (GtkPaned *paned,
         gtk_style_context_remove_class (gtk_widget_get_style_context (priv->handle_widget),
                                         GTK_STYLE_CLASS_WIDE);
 
-      g_object_notify (G_OBJECT (paned), "wide-handle");
+      g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_WIDE_HANDLE]);
     }
 }
 
