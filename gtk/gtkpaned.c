@@ -1369,8 +1369,6 @@ static void
 gtk_paned_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (GTK_PANED (widget));
-
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
                               0, 0,
@@ -1378,15 +1376,8 @@ gtk_paned_snapshot (GtkWidget   *widget,
                               gtk_widget_get_height (widget)
                           ));
 
-  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
-      priv->child2 && gtk_widget_get_visible (priv->child2))
-    gtk_widget_snapshot_child (widget, priv->handle_widget, snapshot);
 
-  if (priv->child1 && gtk_widget_get_visible (priv->child1))
-    gtk_widget_snapshot_child (widget, priv->child1, snapshot);
-
-  if (priv->child2 && gtk_widget_get_visible (priv->child2))
-    gtk_widget_snapshot_child (widget, priv->child2, snapshot);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->snapshot (widget, snapshot);
 
   gtk_snapshot_pop (snapshot);
 }
