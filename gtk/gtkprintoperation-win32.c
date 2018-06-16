@@ -757,7 +757,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_DEFAULTSOURCE)
     {
-      char *source;
+      const char *source;
       switch (devmode->dmDefaultSource)
 	{
 	default:
@@ -857,7 +857,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_MEDIATYPE)
     {
-      char *media_type;
+      const char *media_type;
       switch (devmode->dmMediaType)
 	{
 	default:
@@ -877,7 +877,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_DITHERTYPE)
     {
-      char *dither;
+      const char *dither;
       switch (devmode->dmDitherType)
 	{
 	default:
