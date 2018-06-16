@@ -200,6 +200,8 @@ gdk_drop_new (GdkDisplay        *display,
 /* Gets the GdkDrop that corresponds to a particular GdkSurface.
  * Will be NULL for surfaces that are not registered as drop targets,
  * or for surfaces that are currently not under the drag cursor.
+ * This function is only used for local DnD, where we do have
+ * a real GdkSurface that corresponds to the HWND under cursor.
  */
 GdkDrop *
 _gdk_win32_get_drop_for_dest_surface (GdkSurface *dest)
@@ -532,7 +534,10 @@ idroptarget_dragenter (LPDROPTARGET This,
   /* Try to find the GdkDragContext object for this DnD operation,
    * if it originated in our own application.
    */
-  drag = _gdk_win32_find_drag_for_dest_surface (ctx->surface);
+  drag = NULL;
+
+  if (ctx->surface)
+    drag = _gdk_win32_find_drag_for_dest_window (GDK_SURFACE_HWND (ctx->surface));
 
   display = gdk_surface_get_display (ctx->surface);
   drop = gdk_drop_new (display,
