@@ -45,6 +45,11 @@ extern HINSTANCE _gdk_dll_hinstance;
 BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
          DWORD     fdwReason,
+         LPVOID    lpvReserved);
+
+BOOL WINAPI
+DllMain (HINSTANCE hinstDLL,
+         DWORD     fdwReason,
          LPVOID    lpvReserved)
 {
   switch (fdwReason)
