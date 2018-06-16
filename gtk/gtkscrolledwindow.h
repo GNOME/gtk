@@ -43,14 +43,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkScrolledWindow              GtkScrolledWindow;
-typedef struct _GtkScrolledWindowPrivate       GtkScrolledWindowPrivate;
 typedef struct _GtkScrolledWindowClass         GtkScrolledWindowClass;
 
 struct _GtkScrolledWindow
 {
-  GtkBin container;
-
-  GtkScrolledWindowPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**
