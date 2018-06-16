@@ -282,8 +282,7 @@ static void gtk_icon_view_drag_end         (GtkWidget        *widget,
                                             GdkDragContext   *context);
 static void gtk_icon_view_drag_data_get    (GtkWidget        *widget,
                                             GdkDragContext   *context,
-                                            GtkSelectionData *selection_data,
-                                            guint             time);
+                                            GtkSelectionData *selection_data);
 static void gtk_icon_view_drag_data_delete (GtkWidget        *widget,
                                             GdkDragContext   *context);
 
@@ -6128,8 +6127,7 @@ gtk_icon_view_drag_end (GtkWidget      *widget,
 static void 
 gtk_icon_view_drag_data_get (GtkWidget        *widget,
 			     GdkDragContext   *context,
-			     GtkSelectionData *selection_data,
-			     guint             time)
+			     GtkSelectionData *selection_data)
 {
   GtkIconView *icon_view;
   GtkTreeModel *model;

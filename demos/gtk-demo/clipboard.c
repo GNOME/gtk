@@ -138,7 +138,6 @@ drag_data_get (GtkWidget        *widget,
                GdkDragContext   *context,
                GtkSelectionData *selection_data,
                guint             info,
-               guint             time,
                gpointer          data)
 {
   GdkPaintable *paintable;
