@@ -404,8 +404,7 @@ static gboolean gtk_notebook_drag_drop       (GtkWidget        *widget,
                                               gint              y);
 static void gtk_notebook_drag_data_get       (GtkWidget        *widget,
                                               GdkDragContext   *context,
-                                              GtkSelectionData *data,
-                                              guint             time);
+                                              GtkSelectionData *data);
 static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
                                               GdkDrop          *drop,
                                               GtkSelectionData *data);
@@ -3250,8 +3249,7 @@ do_detach_tab (GtkNotebook *from,
 static void
 gtk_notebook_drag_data_get (GtkWidget        *widget,
                             GdkDragContext   *context,
-                            GtkSelectionData *data,
-                            guint             time)
+                            GtkSelectionData *data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;

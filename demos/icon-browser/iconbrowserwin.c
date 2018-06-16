@@ -379,7 +379,6 @@ get_image_data (GtkWidget        *widget,
                 GdkDragContext   *context,
                 GtkSelectionData *selection,
                 guint             target_info,
-                guint             time,
                 gpointer          data)
 {
   GtkWidget *image;
@@ -402,7 +401,6 @@ get_scalable_image_data (GtkWidget        *widget,
                          GdkDragContext   *context,
                          GtkSelectionData *selection,
                          guint             target_info,
-                         guint             time,
                          gpointer          data)
 {
   gchar *uris[2];

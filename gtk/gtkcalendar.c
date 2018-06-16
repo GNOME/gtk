@@ -309,8 +309,7 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
 
 static void     gtk_calendar_drag_data_get      (GtkWidget        *widget,
                                                  GdkDragContext   *context,
-                                                 GtkSelectionData *selection_data,
-                                                 guint             time);
+                                                 GtkSelectionData *selection_data);
 static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
                                                  GdkDrop          *drop,
                                                  GtkSelectionData *selection_data);
@@ -2902,8 +2901,7 @@ gtk_calendar_grab_notify (GtkWidget *widget,
 static void
 gtk_calendar_drag_data_get (GtkWidget        *widget,
                             GdkDragContext   *context,
-                            GtkSelectionData *selection_data,
-                            guint             time)
+                            GtkSelectionData *selection_data)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;

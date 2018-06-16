@@ -420,7 +420,6 @@ void
 source_drag_data_get  (GtkWidget          *widget,
 		       GdkDragContext     *context,
 		       GtkSelectionData   *selection_data,
-		       guint               time,
 		       gpointer            data)
 {
   if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("application/x-rootwindow-drop"))

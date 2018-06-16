@@ -451,8 +451,7 @@ static void     gtk_entry_drag_data_received (GtkWidget        *widget,
 					      GtkSelectionData *selection_data);
 static void     gtk_entry_drag_data_get      (GtkWidget        *widget,
 					      GdkDragContext   *context,
-					      GtkSelectionData *selection_data,
-					      guint             time);
+					      GtkSelectionData *selection_data);
 static void     gtk_entry_drag_data_delete   (GtkWidget        *widget,
 					      GdkDragContext   *context);
 static void     gtk_entry_drag_begin         (GtkWidget        *widget,
@@ -8748,8 +8747,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 static void
 gtk_entry_drag_data_get (GtkWidget        *widget,
 			 GdkDragContext   *context,
-			 GtkSelectionData *selection_data,
-			 guint             time)
+			 GtkSelectionData *selection_data)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

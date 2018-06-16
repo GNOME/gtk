@@ -272,9 +272,6 @@ gtk_drag_get_data_got_stream (GObject      *source,
  *   #GtkWidget::drag-data-received signal
  * @drop: the #GdkDrop
  * @target: the target (form of the data) to retrieve
- * @time_: a timestamp for retrieving the data. This will
- *   generally be the time received in a #GtkWidget::drag-motion
- *   or #GtkWidget::drag-drop signal
  *
  * Gets the data associated with a drag. When the data
  * is received or the retrieval fails, GTK+ will emit a
@@ -816,8 +813,7 @@ gtk_drag_content_write_mime_type_async (GdkContentProvider  *provider,
   
   g_signal_emit_by_name (content->widget, "drag-data-get",
                          content->context,
-                         &sdata,
-                         content->time);
+                         &sdata);
 
   if (sdata.length == -1)
     {
@@ -894,9 +890,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkDragContext *context;
   int dx, dy;
   GtkDragContent *content;
-  guint32 time;
-
-  time = gtk_get_current_event_time ();
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
@@ -914,7 +907,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   content = g_object_new (GTK_TYPE_DRAG_CONTENT, NULL);
   content->widget = g_object_ref (widget);
   content->formats = gdk_content_formats_ref (target_list);
-  content->time = time;
 
   context = gdk_drag_begin (gtk_widget_get_surface (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (context == NULL)
