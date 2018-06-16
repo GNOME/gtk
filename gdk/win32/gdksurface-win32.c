@@ -401,7 +401,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
   wcl.lpfnWndProc = _gdk_win32_surface_procedure;
   wcl.cbClsExtra = 0;
   wcl.cbWndExtra = 0;
-  wcl.hInstance = _gdk_app_hmodule;
+  wcl.hInstance = _gdk_dll_hinstance;
   wcl.hIcon = 0;
   wcl.hIconSm = 0;
 
@@ -410,7 +410,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
     {
       gchar sLoc [MAX_PATH+1];
 
-      if (0 != GetModuleFileName (_gdk_app_hmodule, sLoc, MAX_PATH))
+      if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
         {
           ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
 
@@ -682,7 +682,7 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
 			     window_width, window_height,
 			     hparent,
 			     NULL,
-			     _gdk_app_hmodule,
+			     _gdk_dll_hinstance,
 			     window);
   if (GDK_SURFACE_HWND (window) != hwndNew)
     {
@@ -3176,7 +3176,7 @@ RegisterGdkDumbClass ()
   wcl.lpfnWndProc = DefWindowProcW;
   wcl.cbClsExtra = 0;
   wcl.cbWndExtra = 0;
-  wcl.hInstance = _gdk_app_hmodule;
+  wcl.hInstance = _gdk_dll_hinstance;
   wcl.hIcon = 0;
   wcl.hIconSm = 0;
   wcl.lpszMenuName = NULL;
@@ -3217,7 +3217,7 @@ ensure_snap_indicator_exists (GdkW32DragMoveResizeContext *context)
                                 0, 0,
                                 NULL,
                                 NULL,
-                                _gdk_app_hmodule,
+                                _gdk_dll_hinstance,
                                 NULL);
 
       context->shape_indicator = handle;
