@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 #define GTK_BUILDER_ERROR                (gtk_builder_error_quark ())
 
 typedef struct _GtkBuilderClass   GtkBuilderClass;
-typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
 
 /**
  * GtkBuilderError:
@@ -93,14 +92,12 @@ GQuark gtk_builder_error_quark (void);
 struct _GtkBuilder
 {
   GObject parent_instance;
-
-  GtkBuilderPrivate *priv;
 };
 
 struct _GtkBuilderClass
 {
   GObjectClass parent_class;
-  
+
   GType (* get_type_from_name) (GtkBuilder *builder,
                                 const char *type_name);
 
