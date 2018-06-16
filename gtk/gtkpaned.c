@@ -1329,26 +1329,19 @@ gtk_paned_size_allocate (GtkWidget           *widget,
     }
   else
     {
-      GtkAllocation child_allocation;
-
-      child_allocation.x = allocation->x;
-      child_allocation.y = allocation->y;
-      child_allocation.width = allocation->width;
-      child_allocation.height = allocation->height;
-
       if (priv->child1 && gtk_widget_get_visible (priv->child1))
         {
           gtk_paned_set_child_visible (paned, CHILD1, TRUE);
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
 
-          gtk_widget_size_allocate (priv->child1, &child_allocation, -1);
+          gtk_widget_size_allocate (priv->child1, allocation, -1);
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
           gtk_paned_set_child_visible (paned, CHILD1, FALSE);
           gtk_paned_set_child_visible (paned, CHILD2, TRUE);
 
-          gtk_widget_size_allocate (priv->child2, &child_allocation, -1);
+          gtk_widget_size_allocate (priv->child2, allocation, -1);
         }
       else
         {
