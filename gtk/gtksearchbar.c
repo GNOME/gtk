@@ -742,7 +742,7 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
 
       priv->capture_widget_controller = gtk_event_controller_key_new ();
       gtk_event_controller_set_propagation_phase (priv->capture_widget_controller,
-                                                  GTK_PHASE_CAPTURE);
+                                                  GTK_PHASE_BUBBLE);
       g_signal_connect (priv->capture_widget_controller, "key-pressed",
                         G_CALLBACK (capture_widget_key_handled), bar);
       g_signal_connect (priv->capture_widget_controller, "key-released",
