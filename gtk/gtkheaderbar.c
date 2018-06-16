@@ -273,7 +273,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *widget = GTK_WIDGET (bar), *toplevel;
   GtkWindow *window;
-  GtkTextDirection direction;
   gchar *layout_desc;
   gchar **tokens, **t;
   gint i, j;
@@ -303,8 +302,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
   if (!priv->show_title_buttons)
     return;
-
-  direction = gtk_widget_get_direction (widget);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-shell-shows-app-menu", &shown_by_shell,
@@ -475,21 +472,10 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           if (i == 1)
             gtk_box_reorder_child (GTK_BOX (box), separator, 0);
 
-          if ((direction == GTK_TEXT_DIR_LTR && i == 0) ||
-              (direction == GTK_TEXT_DIR_RTL && i == 1))
-            {
-              gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LEFT);
-              gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (bar)),
-                                         gtk_widget_get_css_node (box),
-                                         NULL);
-            }
+          if (i == 0)
+            gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LEFT);
           else
-            {
-              gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_RIGHT);
-              gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (bar)),
-                                          gtk_widget_get_css_node (box),
-                                          NULL);
-            }
+            gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_RIGHT);
 
           gtk_widget_set_parent (box, GTK_WIDGET (bar));
 
@@ -529,7 +515,7 @@ gtk_header_bar_reorder_css_node (GtkHeaderBar *bar,
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *previous_widget;
   GList *l;
-  
+
   if (pack_type == GTK_PACK_START)
     previous_widget = priv->titlebar_start_box;
   else
@@ -546,8 +532,7 @@ gtk_header_bar_reorder_css_node (GtkHeaderBar *bar,
         previous_widget = iter->widget;
     }
 
-  if ((pack_type == GTK_PACK_START)
-      ^ (gtk_widget_get_direction (GTK_WIDGET (bar)) == GTK_TEXT_DIR_LTR))
+  if ((pack_type == GTK_PACK_START))
     gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (bar)),
                                gtk_widget_get_css_node (widget),
                                previous_widget ? gtk_widget_get_css_node (previous_widget) : NULL);
@@ -1821,15 +1806,6 @@ gtk_header_bar_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
-gtk_header_bar_direction_changed (GtkWidget        *widget,
-                                  GtkTextDirection  previous_direction)
-{
-  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->direction_changed (widget, previous_direction);
-
-  gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
-}
-
-static void
 gtk_header_bar_class_init (GtkHeaderBarClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -1846,7 +1822,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
   widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;
-  widget_class->direction_changed = gtk_header_bar_direction_changed;
 
   container_class->add = gtk_header_bar_add;
   container_class->remove = gtk_header_bar_remove;
