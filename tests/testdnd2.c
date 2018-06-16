@@ -155,7 +155,6 @@ void
 image_drag_data_get (GtkWidget        *widget,
                      GdkDragContext   *context,
                      GtkSelectionData *selection_data,
-                     guint             time,
                      gpointer          data)
 {
   GdkPaintable *paintable;
@@ -312,7 +311,6 @@ void
 spinner_drag_data_get (GtkWidget        *widget,
                        GdkDragContext   *context,
                        GtkSelectionData *selection_data,
-                       guint             time,
                        gpointer          data)
 {
   g_print ("GtkWidget::drag-data-get\n");
