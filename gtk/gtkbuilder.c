@@ -1061,9 +1061,9 @@ gtk_builder_new (void)
  * was leaked leading up to the reported failure. The only reasonable
  * thing to do when an error is detected is to call g_error().
  *
- * Returns: A positive value on success, 0 if an error occurred
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_from_file (GtkBuilder   *builder,
                            const gchar  *filename,
                            GError      **error)
@@ -1082,7 +1082,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
   g_free (priv->filename);
@@ -1100,10 +1100,10 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1125,9 +1125,9 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
- * Returns: A positive value on success, 0 if an error occurred
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_objects_from_file (GtkBuilder   *builder,
                                    const gchar  *filename,
                                    gchar       **object_ids,
@@ -1166,10 +1166,10 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 
@@ -1190,7 +1190,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  *
  * Returns: A positive value on success, 0 if an error occurred
  */
-guint
+gboolean
 gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GtkWidget    *widget,
                                   GType         template_type,
@@ -1224,10 +1224,10 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1249,9 +1249,9 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * call.  The only reasonable thing to do when an error is detected is
  * to call g_error().
  *
- * Returns: A positive value on success, 0 if an error occurred
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_from_resource (GtkBuilder   *builder,
                                const gchar  *resource_path,
                                GError      **error)
@@ -1298,10 +1298,10 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1323,9 +1323,9 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
- * Returns: A positive value on success, 0 if an error occurred
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
                                        const gchar  *resource_path,
                                        gchar       **object_ids,
@@ -1348,7 +1348,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
   if (data == NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
   g_free (priv->filename);
@@ -1373,10 +1373,10 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1399,9 +1399,9 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * call.  The only reasonable thing to do when an error is detected is
  * to call g_error().
  *
- * Returns: A positive value on success, 0 if an error occurred
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_from_string (GtkBuilder   *builder,
                              const gchar  *buffer,
                              gsize         length,
@@ -1428,10 +1428,10 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1453,9 +1453,9 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
- * Returns: A positive value on success, 0 if an error occurred
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_objects_from_string (GtkBuilder   *builder,
                                      const gchar  *buffer,
                                      gsize         length,
@@ -1485,10 +1485,10 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
