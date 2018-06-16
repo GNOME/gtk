@@ -161,7 +161,7 @@ _gtk_get_libdir (void)
       gchar *slash = strrchr (root, '\\');
       if (slash != NULL &&
           g_ascii_strcasecmp (slash + 1, ".libs") == 0)
-        gtk_libdir = GTK_LIBDIR;
+        gtk_libdir = g_strdup (GTK_LIBDIR);
       else
         gtk_libdir = g_build_filename (root, "lib", NULL);
       g_free (root);
