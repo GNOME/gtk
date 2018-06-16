@@ -299,8 +299,7 @@ struct _GtkWidgetClass
                                     GdkDragContext     *context);
   void     (* drag_data_get)       (GtkWidget          *widget,
                                     GdkDragContext     *context,
-                                    GtkSelectionData   *selection_data,
-                                    guint               time_);
+                                    GtkSelectionData   *selection_data);
   void     (* drag_data_delete)    (GtkWidget          *widget,
                                     GdkDragContext     *context);
 

@@ -34,7 +34,6 @@ void
 drag_data_get  (GtkWidget        *widget,
 		GdkDragContext   *context,
 		GtkSelectionData *selection_data,
-		guint             time,
 		gpointer          data)
 {
   GtkWidget *image = GTK_WIDGET (data);

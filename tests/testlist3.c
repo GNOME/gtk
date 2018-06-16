@@ -29,7 +29,6 @@ void
 drag_data_get (GtkWidget        *widget,
                GdkDragContext   *context,
                GtkSelectionData *selection_data,
-               guint             time,
                gpointer          data)
 {
   gtk_selection_data_set (selection_data,
