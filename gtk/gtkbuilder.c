@@ -1546,7 +1546,7 @@ gtk_builder_get_objects (GtkBuilder *builder)
 /**
  * gtk_builder_set_translation_domain:
  * @builder: a #GtkBuilder
- * @domain: (allow-none): the translation domain or %NULL
+ * @domain: (nullable): the translation domain or %NULL
  *
  * Sets the translation domain of @builder.
  * See #GtkBuilder:translation-domain.
@@ -1573,8 +1573,9 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  *
  * Gets the translation domain of @builder.
  *
- * Returns: the translation domain. This string is owned
- * by the builder object and must not be modified or freed.
+ * Returns: (transfer none) (nullable): the translation domain or %NULL
+ *   in case it was never set or explicitly unset via gtk_builder_set_translation_domain().
+ *   This string is owned by the builder object and must not be modified or freed.
  **/
 const gchar *
 gtk_builder_get_translation_domain (GtkBuilder *builder)
