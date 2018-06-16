@@ -422,8 +422,7 @@ static void gtk_text_view_drag_end         (GtkWidget        *widget,
                                             GdkDragContext   *context);
 static void gtk_text_view_drag_data_get    (GtkWidget        *widget,
                                             GdkDragContext   *context,
-                                            GtkSelectionData *selection_data,
-                                            guint             time);
+                                            GtkSelectionData *selection_data);
 static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
                                             GdkDragContext   *context);
 
@@ -7651,8 +7650,7 @@ gtk_text_view_drag_end (GtkWidget        *widget,
 static void
 gtk_text_view_drag_data_get (GtkWidget        *widget,
                              GdkDragContext   *context,
-                             GtkSelectionData *selection_data,
-                             guint             time)
+                             GtkSelectionData *selection_data)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);

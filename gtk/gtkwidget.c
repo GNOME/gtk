@@ -1967,7 +1967,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @data: the #GtkSelectionData to be filled with the dragged data
    * @info: the info that has been registered with the target in the
    *        #GtkTargetList
-   * @time: the timestamp at which the data was requested
    *
    * The ::drag-data-get signal is emitted on the drag source when the drop
    * site requests the data which is dragged. It is the responsibility of
@@ -1981,11 +1980,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_get),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_BOXED_UINT,
-		  G_TYPE_NONE, 3,
+		  _gtk_marshal_VOID__OBJECT_BOXED,
+		  G_TYPE_NONE, 2,
 		  GDK_TYPE_DRAG_CONTEXT,
-		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT);
+		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::drag-data-received:
