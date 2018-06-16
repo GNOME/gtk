@@ -1186,12 +1186,11 @@ static void
 flip_child (const GtkAllocation *allocation,
             GtkAllocation       *child_pos)
 {
-  gint x, width;
+  int width;
 
-  x = allocation->x;
   width = allocation->width;
 
-  child_pos->x = 2 * x + width - child_pos->x - child_pos->width;
+  child_pos->x = width - child_pos->x - child_pos->width;
 }
 
 static void
@@ -1257,8 +1256,8 @@ gtk_paned_size_allocate (GtkWidget           *widget,
 
           child1_allocation.height = child2_allocation.height = allocation->height;
           child1_allocation.width = MAX (1, priv->child1_size);
-          child1_allocation.x = allocation->x;
-          child1_allocation.y = child2_allocation.y = allocation->y;
+          child1_allocation.x = 0;
+          child1_allocation.y = child2_allocation.y = 0;
 
           child2_allocation.x = child1_allocation.x + priv->child1_size + handle_size;
           child2_allocation.width = MAX (1, allocation->width - priv->child1_size - handle_size);
@@ -1309,8 +1308,8 @@ gtk_paned_size_allocate (GtkWidget           *widget,
 
           child1_allocation.width = child2_allocation.width = allocation->width;
           child1_allocation.height = MAX (1, priv->child1_size);
-          child1_allocation.x = child2_allocation.x = allocation->x;
-          child1_allocation.y = allocation->y;
+          child1_allocation.x = child2_allocation.x = 0;
+          child1_allocation.y = 0;
 
           child2_allocation.y = child1_allocation.y + priv->child1_size + handle_size;
           child2_allocation.height = MAX (1, allocation->height - child2_allocation.y);
