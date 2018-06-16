@@ -1,16 +1,5 @@
 #include <gtk/gtk.h>
 
-static gboolean
-window_key_pressed (GtkEventController *controller,
-                    guint               keyval,
-                    guint               keycode,
-                    GdkModifierType     state,
-                    GtkSearchBar       *search_bar)
-{
-  return gtk_search_bar_handle_event (search_bar,
-                                      gtk_get_current_event ());
-}
-
 static void
 activate_cb (GtkApplication *app,
     gpointer user_data)
