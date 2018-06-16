@@ -2158,9 +2158,7 @@ gdk_win32_surface_set_icon_list (GdkSurface *window,
 
   /* Create the icons */
   big_hicon = _gdk_win32_texture_to_hicon (big_texture);
-  g_object_unref (big_texture);
   small_hicon = _gdk_win32_texture_to_hicon (small_texture);
-  g_object_unref (small_texture);
 
   /* Set the icons */
   SendMessageW (GDK_SURFACE_HWND (window), WM_SETICON, ICON_BIG,
