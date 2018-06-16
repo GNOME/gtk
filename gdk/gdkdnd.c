@@ -404,7 +404,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   /**
    * GdkDragContext::drop-performed:
    * @context: The object on which the signal is emitted
-   * @time: the time at which the drop happened.
    *
    * The drag and drop operation was performed on an accepting client.
    */
@@ -414,8 +413,8 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, drop_performed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__INT,
-                  G_TYPE_NONE, 1, G_TYPE_INT);
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   /**
    * GdkDragContext::dnd-finished:
