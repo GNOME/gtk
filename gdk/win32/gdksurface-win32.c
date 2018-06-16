@@ -754,68 +754,6 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
                     window);
 }
 
-GdkSurface *
-gdk_win32_surface_foreign_new_for_display (GdkDisplay *display,
-                                          HWND        anid)
-{
-  GdkSurface *window;
-  GdkSurfaceImplWin32 *impl;
-
-  HANDLE parent;
-  RECT rect;
-  POINT point;
-
-  if ((window = gdk_win32_surface_lookup_for_display (display, anid)) != NULL)
-    return g_object_ref (window);
-
-  window = _gdk_display_create_surface (display);
-  window->impl = g_object_new (GDK_TYPE_SURFACE_IMPL_WIN32, NULL);
-  window->impl_surface = window;
-  impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-  impl->wrapper = window;
-  parent = GetParent (anid);
-
-  /* Always treat foreigns as toplevels */
-  window->parent = NULL;
-
-  GetClientRect ((HWND) anid, &rect);
-  point.x = rect.left;
-  point.y = rect.right;
-  ClientToScreen ((HWND) anid, &point);
-  if (parent != GetDesktopWindow ())
-    ScreenToClient (parent, &point);
-  window->x = point.x / impl->surface_scale;
-  window->y = point.y / impl->surface_scale;
-  impl->unscaled_width = rect.right - rect.left;
-  impl->unscaled_height = rect.bottom - rect.top;
-  window->width = (impl->unscaled_width + impl->surface_scale - 1) / impl->surface_scale;
-  window->height = (impl->unscaled_height + impl->surface_scale - 1) / impl->surface_scale;
-  window->surface_type = GDK_SURFACE_FOREIGN;
-  window->destroyed = FALSE;
-  if (IsWindowVisible ((HWND) anid))
-    window->state &= (~GDK_SURFACE_STATE_WITHDRAWN);
-  else
-    window->state |= GDK_SURFACE_STATE_WITHDRAWN;
-  if (GetWindowLong ((HWND)anid, GWL_EXSTYLE) & WS_EX_TOPMOST)
-    window->state |= GDK_SURFACE_STATE_ABOVE;
-  else
-    window->state &= (~GDK_SURFACE_STATE_ABOVE);
-  window->state &= (~GDK_SURFACE_STATE_BELOW);
-  window->viewable = TRUE;
-
-  GDK_SURFACE_HWND (window) = anid;
-
-  g_object_ref (window);
-  gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (window), window);
-
-  GDK_NOTE (MISC, g_print ("gdk_win32_surface_foreign_new_for_display: %p: %s@%+d%+d\n",
-			   (HWND) anid,
-			   _gdk_win32_surface_description (window),
-			   window->x, window->y));
-
-  return window;
-}
-
 static void
 gdk_win32_surface_destroy (GdkSurface *window,
 			  gboolean   recursing,

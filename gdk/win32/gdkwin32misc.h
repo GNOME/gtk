@@ -82,9 +82,6 @@ GDK_AVAILABLE_IN_ALL
 HGDIOBJ       gdk_win32_surface_get_handle (GdkSurface *window);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_win32_surface_foreign_new_for_display (GdkDisplay *display,
-                                                          HWND        anid);
-GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
                                                      HWND        anid);
 
