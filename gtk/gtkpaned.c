@@ -1226,7 +1226,6 @@ gtk_paned_size_allocate (GtkWidget           *widget,
     {
       GtkAllocation child1_allocation;
       GtkAllocation child2_allocation;
-      GdkRectangle old_handle_pos;
       gint handle_size;
 
       gtk_widget_measure (priv->handle_widget,
@@ -1234,8 +1233,6 @@ gtk_paned_size_allocate (GtkWidget           *widget,
                           -1,
                           NULL, &handle_size,
                           NULL, NULL);
-
-      old_handle_pos = priv->handle_pos;
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
@@ -1327,19 +1324,7 @@ gtk_paned_size_allocate (GtkWidget           *widget,
         }
 
       gtk_widget_size_allocate (priv->handle_widget, &priv->handle_pos, -1);
-
-      if (gtk_widget_get_mapped (widget) &&
-          (old_handle_pos.x != priv->handle_pos.x ||
-           old_handle_pos.y != priv->handle_pos.y ||
-           old_handle_pos.width != priv->handle_pos.width ||
-           old_handle_pos.height != priv->handle_pos.height))
-        {
-          gtk_widget_queue_draw (widget);
-        }
-
-
       gtk_widget_size_allocate (priv->child1, &child1_allocation, -1);
-
       gtk_widget_size_allocate (priv->child2, &child2_allocation, -1);
     }
   else
