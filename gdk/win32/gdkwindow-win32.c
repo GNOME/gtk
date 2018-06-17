@@ -1812,7 +1812,7 @@ gdk_win32_window_raise (GdkWindow *window)
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
         API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOPMOST,
 	                         0, 0, 0, 0,
-				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
+				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
       else if (window->accept_focus)
         /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
          * fail when for example dragging a window belonging to a different
