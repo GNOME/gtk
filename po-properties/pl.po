@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-10 13:25+0000\n"
-"PO-Revision-Date: 2018-06-10 15:35+0200\n"
+"POT-Creation-Date: 2018-06-16 08:21+0000\n"
+"PO-Revision-Date: 2018-06-17 17:21+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -417,7 +417,7 @@ msgstr "Widżet skrótu"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widżet monitorowana zmian skrótów"
 
-#: gtk/gtkaccellabel.c:240 gtk/gtkbutton.c:236 gtk/gtkexpander.c:279
+#: gtk/gtkaccellabel.c:240 gtk/gtkbutton.c:228 gtk/gtkexpander.c:279
 #: gtk/gtkframe.c:167 gtk/gtklabel.c:757 gtk/gtkmenuitem.c:633
 #: gtk/gtktoolbutton.c:212
 msgid "Label"
@@ -427,12 +427,12 @@ msgstr "Etykieta"
 msgid "The text displayed next to the accelerator"
 msgstr "Tekst wyświetlany obok skrótu"
 
-#: gtk/gtkaccellabel.c:247 gtk/gtkbutton.c:243 gtk/gtkexpander.c:287
+#: gtk/gtkaccellabel.c:247 gtk/gtkbutton.c:235 gtk/gtkexpander.c:287
 #: gtk/gtklabel.c:778 gtk/gtkmenuitem.c:645 gtk/gtktoolbutton.c:219
 msgid "Use underline"
 msgstr "Użycie podkreślenia"
 
-#: gtk/gtkaccellabel.c:248 gtk/gtkbutton.c:244 gtk/gtkexpander.c:288
+#: gtk/gtkaccellabel.c:248 gtk/gtkbutton.c:236 gtk/gtkexpander.c:288
 #: gtk/gtklabel.c:779 gtk/gtkmenuitem.c:646
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -803,11 +803,11 @@ msgstr "Jednorodny"
 msgid "Whether the children should all be the same size"
 msgstr "Określa, czy wszystkie elementy potomne mają być tego samego rozmiaru"
 
-#: gtk/gtkbox.c:234 gtk/gtkcenterbox.c:714
+#: gtk/gtkbox.c:234 gtk/gtkcenterbox.c:697
 msgid "Baseline position"
 msgstr "Położenie linii bazowej"
 
-#: gtk/gtkbox.c:235 gtk/gtkcenterbox.c:715
+#: gtk/gtkbox.c:235 gtk/gtkcenterbox.c:698
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr ""
@@ -822,27 +822,27 @@ msgstr "Domena tłumaczenia"
 msgid "The translation domain used by gettext"
 msgstr "Domena tłumaczenia używana przez gettext"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:229
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
 "Tekst etykiety wewnątrz przycisku, jeśli przycisk zawiera widżet etykiety"
 
-#: gtk/gtkbutton.c:250
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Uwypuklenie krawędzi"
 
-#: gtk/gtkbutton.c:251
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Styl uwypuklenia krawędzi"
 
-#: gtk/gtkbutton.c:258 gtk/gtkcellrendererpixbuf.c:200 gtk/gtkimage.c:207
+#: gtk/gtkbutton.c:250 gtk/gtkcellrendererpixbuf.c:200 gtk/gtkimage.c:207
 #: gtk/gtkprinter.c:170 gtk/gtkwindow.c:960
 msgid "Icon Name"
 msgstr "Nazwa ikony"
 
-#: gtk/gtkbutton.c:259
+#: gtk/gtkbutton.c:251
 msgid "The name of the icon used to automatically populate the button"
 msgstr "Nazwa ikony używanej do automatycznego wypełnienia przycisku"
 
@@ -1198,7 +1198,7 @@ msgstr "Kolumna tekstowa"
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolumna w modelu źródłowym danych, z której pobierane są napisy"
 
-#: gtk/gtkcellrenderercombo.c:161 gtk/gtkcombobox.c:773
+#: gtk/gtkcellrenderercombo.c:161 gtk/gtkcombobox.c:772
 msgid "Has Entry"
 msgstr "Ma wejście"
 
@@ -1572,7 +1572,7 @@ msgstr ""
 "Sposób łamania ciągu tekstowego na wiersze w przypadku, gdy obiekt rysujący "
 "komórki nie ma miejsca na wyświetlenie go całego"
 
-#: gtk/gtkcellrenderertext.c:514 gtk/gtkcombobox.c:654
+#: gtk/gtkcellrenderertext.c:514 gtk/gtkcombobox.c:653
 msgid "Wrap width"
 msgstr "Szerokość zawijania"
 
@@ -1915,75 +1915,75 @@ msgstr "Ma menu"
 msgid "Whether the swatch should offer customization"
 msgstr "Określa, czy próbkę można dostosowywać"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:639
 msgid "ComboBox model"
 msgstr "Model listy rozwijanej"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:640
 msgid "The model for the combo box"
 msgstr "Model dla pola rozwijanego"
 
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:654
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Szerokość zawijania przy układaniu elementów w siatce"
 
-#: gtk/gtkcombobox.c:673 gtk/gtktreemenu.c:312
+#: gtk/gtkcombobox.c:672 gtk/gtktreemenu.c:312
 msgid "Row span column"
 msgstr "Kolumna odstępów rzędowych"
 
-#: gtk/gtkcombobox.c:674 gtk/gtktreemenu.c:313
+#: gtk/gtkcombobox.c:673 gtk/gtktreemenu.c:313
 msgid "TreeModel column containing the row span values"
 msgstr "Kolumna drzewiasta zawierająca wartości odstępów rzędowych"
 
-#: gtk/gtkcombobox.c:693 gtk/gtktreemenu.c:331
+#: gtk/gtkcombobox.c:692 gtk/gtktreemenu.c:331
 msgid "Column span column"
 msgstr "Kolumna odstępów kolumnowych"
 
-#: gtk/gtkcombobox.c:694 gtk/gtktreemenu.c:332
+#: gtk/gtkcombobox.c:693 gtk/gtktreemenu.c:332
 msgid "TreeModel column containing the column span values"
 msgstr "Kolumna drzewiasta zawierająca wartości odstępów kolumnowych"
 
-#: gtk/gtkcombobox.c:713
+#: gtk/gtkcombobox.c:712
 msgid "Active item"
 msgstr "Aktywny element"
 
-#: gtk/gtkcombobox.c:714
+#: gtk/gtkcombobox.c:713
 msgid "The item which is currently active"
 msgstr "Obecnie aktywny element"
 
-#: gtk/gtkcombobox.c:729 gtk/gtkentry.c:886
+#: gtk/gtkcombobox.c:728 gtk/gtkentry.c:886
 msgid "Has Frame"
 msgstr "Ma ramkę"
 
-#: gtk/gtkcombobox.c:730
+#: gtk/gtkcombobox.c:729
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Określa, czy pole rozwijane rysuje ramkę wokół potomka"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:743
 msgid "Popup shown"
 msgstr "Wyświetlono menu wyskakujące"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:744
 msgid "Whether the combo’s dropdown is shown"
 msgstr "Określa, czy zostało wyświetlone rozwinięcie listy rozwijanej"
 
-#: gtk/gtkcombobox.c:759
+#: gtk/gtkcombobox.c:758
 msgid "Button Sensitivity"
 msgstr "Czułość przycisku"
 
-#: gtk/gtkcombobox.c:760
+#: gtk/gtkcombobox.c:759
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Określa, czy przycisk rozwijany jest aktywny przy pustym modelu"
 
-#: gtk/gtkcombobox.c:774
+#: gtk/gtkcombobox.c:773
 msgid "Whether combo box has an entry"
 msgstr "Określa, czy pole rozwijane ma wejście"
 
-#: gtk/gtkcombobox.c:787
+#: gtk/gtkcombobox.c:786
 msgid "Entry Text Column"
 msgstr "Kolumna wprowadzania tekstu"
 
-#: gtk/gtkcombobox.c:788
+#: gtk/gtkcombobox.c:787
 msgid ""
 "The column in the combo box’s model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -1991,11 +1991,11 @@ msgstr ""
 "Kolumna w modelu pola rozwijanego do powiązania z ciągiem z wejścia, jeśli "
 "lista została utworzona z wartością #GtkComboBox:has-entry = %TRUE"
 
-#: gtk/gtkcombobox.c:803
+#: gtk/gtkcombobox.c:802
 msgid "ID Column"
 msgstr "Kolumna identyfikatora"
 
-#: gtk/gtkcombobox.c:804
+#: gtk/gtkcombobox.c:803
 msgid ""
 "The column in the combo box’s model that provides string IDs for the values "
 "in the model"
@@ -2003,19 +2003,19 @@ msgstr ""
 "Kolumna w modelu pola rozwijanego dostarczająca identyfikatory napisów dla "
 "wartości w kolumnie"
 
-#: gtk/gtkcombobox.c:817
+#: gtk/gtkcombobox.c:816
 msgid "Active id"
 msgstr "Aktywny identyfikator"
 
-#: gtk/gtkcombobox.c:818
+#: gtk/gtkcombobox.c:817
 msgid "The value of the id column for the active row"
 msgstr "Wartość kolumny identyfikatora dla aktywnego rzędu"
 
-#: gtk/gtkcombobox.c:832
+#: gtk/gtkcombobox.c:831
 msgid "Popup Fixed Width"
 msgstr "Stała szerokość menu wyskakującego"
 
-#: gtk/gtkcombobox.c:833
+#: gtk/gtkcombobox.c:832
 msgid ""
 "Whether the popup’s width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -4173,38 +4173,46 @@ msgstr "Określa, czy karta może być odłączana"
 msgid "The orientation of the orientable"
 msgstr "Ułożenie elementu orientowalnego"
 
-#: gtk/gtkoverlay.c:759
+#: gtk/gtkoverlay.c:808
 msgid "Pass Through"
 msgstr "Przejście"
 
-#: gtk/gtkoverlay.c:759
+#: gtk/gtkoverlay.c:808
 msgid "Pass through input, does not affect main child"
 msgstr "Wejście przejścia, nie ma wpływu na główny element potomny"
 
-#: gtk/gtkoverlay.c:771
+#: gtk/gtkoverlay.c:820
 msgid "Measure"
 msgstr "Mierzenie"
 
-#: gtk/gtkoverlay.c:771
+#: gtk/gtkoverlay.c:820
 msgid "Include in size measurement"
 msgstr "Dołączenie w mierzeniu rozmiaru"
 
-#: gtk/gtkoverlay.c:781
+#: gtk/gtkoverlay.c:830
 msgid "Blur Radius"
 msgstr "Promień rozmycia"
 
-#: gtk/gtkoverlay.c:781
+#: gtk/gtkoverlay.c:830
 msgid "Apply a blur to the content behind this child"
 msgstr "Zastosowanie rozmycia do zawartości za tym elementem potomnym"
 
-#: gtk/gtkoverlay.c:791
+#: gtk/gtkoverlay.c:840
 msgid "Index"
 msgstr "Indeks"
 
-#: gtk/gtkoverlay.c:792
+#: gtk/gtkoverlay.c:841
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr ""
 "Indeks nakładki w elemencie nadrzędnym, -1 oznacza główny element potomny"
+
+#: gtk/gtkoverlay.c:851
+msgid "Clip Overlay"
+msgstr "Przycięcie nakładki"
+
+#: gtk/gtkoverlay.c:852
+msgid "Clip the overlay child widget so as to fit the parent"
+msgstr "Przycięcie widżetu potomnego nakładki tak, aby pasował nadrzędny"
 
 #: gtk/gtkpadcontroller.c:369
 msgid "Action group"
