@@ -1701,7 +1701,7 @@ ensure_stacking_on_unminimize (MSG *msg)
 		g_print (" restacking %p above %p",
 			 msg->hwnd, lowest_transient));
       SetWindowPos (msg->hwnd, lowest_transient, 0, 0, 0, 0,
-		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
     }
 }
 
@@ -1782,7 +1782,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
       impl->transient_owner != NULL)
     {
       SetWindowPos (msg->hwnd, HWND_TOP, 0, 0, 0, 0,
-		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
       return;
     }
 
@@ -1824,7 +1824,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
 		    g_print (" restacking %p above %p",
 			     msg->hwnd, rover));
 	  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
-			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
           break;
 	}
     }
