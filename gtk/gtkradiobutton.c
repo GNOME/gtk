@@ -129,10 +129,10 @@
  */
 
 
-struct _GtkRadioButtonPrivate
+typedef struct
 {
   GSList *group;
-};
+} GtkRadioButtonPrivate;
 
 enum {
   PROP_0,
@@ -220,11 +220,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
-  GtkRadioButtonPrivate *priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GtkCssNode *css_node;
-
-  radio_button->priv = gtk_radio_button_get_instance_private (radio_button);
-  priv = radio_button->priv;
 
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
 
@@ -295,7 +292,7 @@ void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList         *group)
 {
-  GtkRadioButtonPrivate *priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
 
@@ -303,8 +300,6 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 
   if (g_slist_find (group, radio_button))
     return;
-
-  priv = radio_button->priv;
 
   if (priv->group)
     {
@@ -316,13 +311,12 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 	old_group_singleton = g_object_ref (priv->group->data);
 
       for (slist = priv->group; slist; slist = slist->next)
-	{
-	  GtkRadioButton *tmp_button;
-	  
-	  tmp_button = slist->data;
+        {
+          GtkRadioButton *tmp_button = slist->data;
+          GtkRadioButtonPrivate *tmp_priv = gtk_radio_button_get_instance_private (tmp_button);
 
-	  tmp_button->priv->group = priv->group;
-	}
+          tmp_priv->group = priv->group;
+        }
     }
   
   if (group && !group->next)
@@ -335,13 +329,12 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
       GSList *slist;
       
       for (slist = group; slist; slist = slist->next)
-	{
-	  GtkRadioButton *tmp_button;
-	  
-	  tmp_button = slist->data;
+        {
+          GtkRadioButton *tmp_button = slist->data;
+          GtkRadioButtonPrivate *tmp_priv = gtk_radio_button_get_instance_private (tmp_button);
 
-	  tmp_button->priv->group = priv->group;
-	}
+          tmp_priv->group = priv->group;
+        }
     }
 
   g_object_ref (radio_button);
@@ -572,9 +565,11 @@ gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_memb
 GSList*
 gtk_radio_button_get_group (GtkRadioButton *radio_button)
 {
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
+
   g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button), NULL);
 
-  return radio_button->priv->group;
+  return priv->group;
 }
 
 
@@ -583,8 +578,7 @@ gtk_radio_button_destroy (GtkWidget *widget)
 {
   GtkWidget *old_group_singleton = NULL;
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
-  GtkRadioButtonPrivate *priv = radio_button->priv;
-  GtkRadioButton *tmp_button;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GSList *tmp_list;
   gboolean was_in_group;
 
@@ -598,10 +592,12 @@ gtk_radio_button_destroy (GtkWidget *widget)
 
   while (tmp_list)
     {
-      tmp_button = tmp_list->data;
+      GtkRadioButton *tmp_button = tmp_list->data;
+      GtkRadioButtonPrivate *tmp_priv = gtk_radio_button_get_instance_private (tmp_button);
+
       tmp_list = tmp_list->next;
 
-      tmp_button->priv->group = priv->group;
+      tmp_priv->group = priv->group;
     }
 
   /* this button is no longer in the group */
@@ -620,7 +616,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 			GtkDirectionType   direction)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
-  GtkRadioButtonPrivate *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GSList *tmp_slist;
 
   /* Radio buttons with draw_indicator unset focus "normally", since
@@ -712,7 +708,7 @@ static void
 gtk_radio_button_clicked (GtkButton *button)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (button);
-  GtkRadioButtonPrivate *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
   GSList *tmp_list;
