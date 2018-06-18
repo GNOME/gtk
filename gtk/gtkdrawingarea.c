@@ -60,9 +60,6 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * elements. It’s essentially a blank widget; you can draw on it. After
  * creating a drawing area, the application may want to connect to:
  *
- * - Mouse and button press signals to respond to input from
- *   the user.
- *
  * - The #GtkWidget::realize signal to take any necessary actions
  *   when the widget is instantiated on a particular display.
  *   (Create GDK resources in response to this signal.)
@@ -76,10 +73,6 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * The following code portion demonstrates using a drawing
  * area to display a circle in the normal widget foreground
  * color.
- *
- * Note that GDK automatically clears the exposed area before causing a
- * redraw, and that drawing is implicitly clipped to the exposed
- * area.
  *
  * ## Simple GtkDrawingArea usage
  *
@@ -436,7 +429,7 @@ gtk_drawing_area_get_content_height (GtkDrawingArea *self)
  * function.
  *
  * If what you are drawing does change, call gtk_widget_queue_draw() on the
- * drawing area. This will call a redraw and will call @draw_func again.
+ * drawing area. This will cause a redraw and will call @draw_func again.
  */
 void
 gtk_drawing_area_set_draw_func (GtkDrawingArea         *self,
