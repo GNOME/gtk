@@ -40,7 +40,9 @@ typedef struct _GtkCellRendererAccelClass         GtkCellRendererAccelClass;
 /**
  * GtkCellRendererAccelMode:
  * @GTK_CELL_RENDERER_ACCEL_MODE_GTK: GTK+ accelerators mode
- * @GTK_CELL_RENDERER_ACCEL_MODE_OTHER: Other accelerator mode
+ * @GTK_CELL_RENDERER_ACCEL_MODE_OTHER: Plane accelerator mode
+ * @GTK_CELL_RENDERER_ACCEL_MODE_DOUBLE_MODIFIER: Accept modifer x modifier keys. E.g. Contrl-Shift or Shift-Alt keys
+ * @GTK_CELL_RENDERER_ACCEL_MODE_SINGLE_MODIFIER: Accept single modifier keys. E.g. Shift or Alt keys
  *
  * Determines if the edited accelerators are GTK+ accelerators. If
  * they are, consumed modifiers are suppressed, only accelerators
@@ -50,7 +52,9 @@ typedef struct _GtkCellRendererAccelClass         GtkCellRendererAccelClass;
 typedef enum
 {
   GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-  GTK_CELL_RENDERER_ACCEL_MODE_OTHER
+  GTK_CELL_RENDERER_ACCEL_MODE_OTHER,
+  GTK_CELL_RENDERER_ACCEL_MODE_DOUBLE_MODIFIER,
+  GTK_CELL_RENDERER_ACCEL_MODE_SINGLE_MODIFIER
 } GtkCellRendererAccelMode;
 
 
