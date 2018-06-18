@@ -885,10 +885,19 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
     {
       class = InputOutput;
 
-      xattributes.background_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
+      if (gdk_display_is_rgba (display))
+        {
+          xattributes.background_pixel = 0;
+          xattributes_mask |= CWBackPixel;
+        }
+      else
+        {
+          xattributes.background_pixmap = None;
+          xattributes_mask |= CWBackPixmap;
+        }
 
       xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
-      xattributes_mask |= CWBorderPixel | CWBackPixel;
+      xattributes_mask |= CWBorderPixel;
 
       xattributes.bit_gravity = NorthWestGravity;
       xattributes_mask |= CWBitGravity;
