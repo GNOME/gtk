@@ -46,21 +46,21 @@
  *   GtkWidget *widget;
  *   widget = gtk_picture_new_for_filename ("myfile.png");
  * ]|
- * If the file isn’t loaded successfully, the self will contain a
+ * If the file isn’t loaded successfully, the picture will contain a
  * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
- * for example by displaying an error message, then load the self with
+ * for example by displaying an error message, then load the image with
  * gdk_texture_new_for_file(), then create the #GtkPicture with
  * gtk_picture_new_for_paintable().
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. See the documentation of #GResource for details.
- * In this case, the #GtkPicture:resource, gtk_picture_new_for_resource() and
+ * In this case, the #GtkPicture:resource property, gtk_picture_new_for_resource() and
  * gtk_picture_set_resource() should be used.
  *
  * # CSS nodes
  *
- * GtkPicture has a single CSS node with the name image.
+ * GtkPicture has a single CSS node with the name picture.
  */
 
 enum
@@ -76,7 +76,7 @@ enum
 
 struct _GtkPicture
 {
-  GtkWidget widget;
+  GtkWidget parent_instance;
 
   GdkPaintable *paintable;
   GFile *file;
@@ -237,7 +237,7 @@ gtk_picture_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_picture_get_property (GObject     *object,
                           guint        prop_id,
                           GValue      *value,
@@ -377,10 +377,10 @@ gtk_picture_init (GtkPicture *self)
 
 /**
  * gtk_picture_new:
- * 
+ *
  * Creates a new empty #GtkPicture widget.
- * 
- * Returns: a newly created #GtkPicture widget. 
+ *
+ * Returns: a newly created #GtkPicture widget.
  **/
 GtkWidget*
 gtk_picture_new (void)
@@ -390,7 +390,7 @@ gtk_picture_new (void)
 
 /**
  * gtk_picture_new_for_paintable:
- * @paintable: (allow-none): a #GdkPaintable, or %NULL
+ * @paintable: (nullable): a #GdkPaintable, or %NULL
  *
  * Creates a new #GtkPicture displaying @paintable.
  *
@@ -411,7 +411,7 @@ gtk_picture_new_for_paintable (GdkPaintable *paintable)
 
 /**
  * gtk_picture_new_for_pixbuf:
- * @pixbuf: (allow-none): a #GdkPixbuf, or %NULL
+ * @pixbuf: (nullable): a #GdkPixbuf, or %NULL
  *
  * Creates a new #GtkPicture displaying @pixbuf.
  *
@@ -445,7 +445,7 @@ gtk_picture_new_for_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_picture_new_for_file:
- * @file: (allow-none): a #GFile
+ * @file: (nullable): a #GFile
  * 
  * Creates a new #GtkPicture displaying the given @file. If the file
  * isn’t found or can’t be loaded, the resulting #GtkPicture be empty.
@@ -468,9 +468,9 @@ gtk_picture_new_for_file (GFile *file)
 
 /**
  * gtk_picture_new_for_filename:
- * @filename: (type filename) (allow-none): a filename
- * 
- * Creates a new #GtkPicture displaying the file @filename. 
+ * @filename: (type filename) (nullable): a filename
+ *
+ * Creates a new #GtkPicture displaying the file @filename.
  *
  * This is a utility function that calls gtk_picture_new_for_file().
  * See that function for details.
@@ -478,7 +478,7 @@ gtk_picture_new_for_file (GFile *file)
  * Returns: a new #GtkPicture
  **/
 GtkWidget*
-gtk_picture_new_for_filename (const gchar *filename)
+gtk_picture_new_for_filename (const char *filename)
 {
   GtkWidget *result;
   GFile *file;
@@ -498,11 +498,11 @@ gtk_picture_new_for_filename (const gchar *filename)
 
 /**
  * gtk_picture_new_for_resource:
- * @resource_path: (allow-none): resource path to play back
- * 
- * Creates a new #GtkPicture displaying the file @filename. 
+ * @resource_path: (nullable): resource path to play back
  *
- * This is a utility function that calls gtk_picture_new_for_file(),
+ * Creates a new #GtkPicture displaying the file @filename.
+ *
+ * This is a utility function that calls gtk_picture_new_for_file().
  * See that function for details.
  *
  * Returns: a new #GtkPicture
@@ -599,7 +599,7 @@ load_scalable_with_loader (GFile *file,
   scaler = gtk_scaler_new (result, loader_data.scale_factor);
   g_object_unref (result);
   result = scaler;
-  
+
 out2:
   g_bytes_unref (bytes);
 out1:
@@ -611,7 +611,7 @@ out1:
 /**
  * gtk_picture_set_file:
  * @self: a #GtkPicture
- * @file: (allow-none): a %GFile or %NULL
+ * @file: (nullable): a %GFile or %NULL
  *
  * Makes @self load and display @file.
  *
@@ -630,7 +630,7 @@ gtk_picture_set_file (GtkPicture *self,
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
-  
+
   g_set_object (&self->file, file);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
 
@@ -662,11 +662,11 @@ gtk_picture_get_file (GtkPicture *self)
 /**
  * gtk_picture_set_filename:
  * @self: a #GtkPicture
- * @filename: (allow-none): the filename to play
+ * @filename: (nullable): the filename to play
  *
  * Makes @self load and display the given @filename.
  *
- * This is a utility function that calls gtk_picture_set_file(),
+ * This is a utility function that calls gtk_picture_set_file().
  **/
 void
 gtk_picture_set_filename (GtkPicture *self,
@@ -690,7 +690,7 @@ gtk_picture_set_filename (GtkPicture *self,
 /**
  * gtk_picture_set_resource:
  * @self: a #GtkPicture
- * @resource_path: (allow-none): the resource to set
+ * @resource_path: (nullable): the resource to set
  *
  * Makes @self load and display the resource at the given
  * @resource_path.
@@ -731,7 +731,7 @@ gtk_picture_set_resource (GtkPicture *self,
 /**
  * gtk_picture_set_pixbuf:
  * @self: a #GtkPicture
- * @pixbuf: (allow-none): a #GdkPixbuf or %NULL
+ * @pixbuf: (nullable): a #GdkPixbuf or %NULL
  *
  * See gtk_picture_new_for_pixbuf() for details.
  *
@@ -823,7 +823,7 @@ gtk_picture_set_paintable (GtkPicture   *self,
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
-  
+
   g_object_thaw_notify (G_OBJECT (self));
 }
 
@@ -832,7 +832,7 @@ gtk_picture_set_paintable (GtkPicture   *self,
  * @self: a #GtkPicture
  *
  * Gets the #GdkPaintable being displayed by the #GtkPicture.
- * 
+ *
  * Returns: (nullable) (transfer none): the displayed paintable, or %NULL if
  *   the picture is empty
  **/
@@ -919,7 +919,7 @@ gtk_picture_set_can_shrink (GtkPicture *self,
  *
  * Gets the value set via gtk_picture_set_can_shrink().
  *
- * Returns: %TRUE if the self can be made smaller than its contents
+ * Returns: %TRUE if the picture can be made smaller than its contents
  **/
 gboolean
 gtk_picture_get_can_shrink (GtkPicture *self)
@@ -932,7 +932,7 @@ gtk_picture_get_can_shrink (GtkPicture *self)
 /**
  * gtk_picture_set_alternative_text:
  * @self: a #GtkPicture
- * @alternative_text: (allow-none): a textual description of the contents
+ * @alternative_text: (nullable): a textual description of the contents
  *
  * Sets an alternative textual description for the picture contents.
  * It is equivalent to the "alt" attribute for images on websites.
