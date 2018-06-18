@@ -100,9 +100,6 @@ typedef enum {
 
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
 
-/* Icon size for if we can't get it from the theme */
-#define FALLBACK_ICON_SIZE 16
-
 typedef struct _ButtonData ButtonData;
 
 struct _ButtonData
