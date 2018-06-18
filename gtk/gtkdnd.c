@@ -911,7 +911,7 @@ gtk_drag_content_init (GtkDragContent *content)
 {
 }
 
-/* Like gtk_drag_begin(), but also takes a GtkIconHelper
+/* Like gtk_drag_begin(), but also takes a GtkImageDefinition
  * so that we can set the icon from the source site information
  */
 GdkDragContext *
