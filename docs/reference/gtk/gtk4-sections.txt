@@ -4865,7 +4865,6 @@ gtk_style_context_get_parent
 gtk_style_context_get_path
 gtk_style_context_get_property
 gtk_style_context_get_display
-gtk_style_context_get_frame_clock
 gtk_style_context_get_state
 gtk_style_context_get_valist
 gtk_style_context_get_section
@@ -4888,7 +4887,6 @@ gtk_style_context_remove_class
 gtk_style_context_has_class
 gtk_style_context_list_classes
 gtk_style_context_set_display
-gtk_style_context_set_frame_clock
 gtk_style_context_set_state
 gtk_style_context_set_scale
 gtk_style_context_get_scale

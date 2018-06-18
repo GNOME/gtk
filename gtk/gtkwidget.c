@@ -3656,9 +3656,6 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
     }
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
-
-  if (priv->context)
-    gtk_style_context_set_frame_clock (priv->context, frame_clock);
 }
 
 static void
@@ -3681,9 +3678,6 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
       priv->clock_tick_id = 0;
       gdk_frame_clock_end_updating (frame_clock);
     }
-
-  if (priv->context)
-    gtk_style_context_set_frame_clock (priv->context, NULL);
 }
 
 /**
@@ -12208,7 +12202,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
   if (G_UNLIKELY (priv->context == NULL))
     {
       GdkDisplay *display;
-      GdkFrameClock *frame_clock;
 
       priv->context = gtk_style_context_new_for_node (priv->cssnode);
 
@@ -12219,10 +12212,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
       display = _gtk_widget_get_display (widget);
       if (display)
         gtk_style_context_set_display (priv->context, display);
-
-      frame_clock = gtk_widget_get_frame_clock (widget);
-      if (frame_clock)
-        gtk_style_context_set_frame_clock (priv->context, frame_clock);
 
       if (priv->parent)
         gtk_style_context_set_parent (priv->context,
