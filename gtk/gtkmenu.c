@@ -5207,15 +5207,15 @@ gtk_menu_position (GtkMenu  *menu,
       gtk_widget_get_allocation (priv->widget, &rect);
       text_direction = gtk_widget_get_direction (priv->widget);
     }
-  else if (!priv->position_func)
+  else
     {
       GtkWidget *attach_widget;
       GdkDevice *grab_device;
 
       /*
-       * One of the legacy gtk_menu_popup*() functions were used to popup but
-       * without a custom positioning function, so make an attempt to let the
-       * backend do the position constraining when required conditions are met.
+       * One of the legacy gtk_menu_popup*() functions were used to popup,
+       * so make an attempt to let the backend do the position
+       * constraining when required conditions are met.
        */
 
       grab_device = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
@@ -5231,6 +5231,27 @@ gtk_menu_position (GtkMenu  *menu,
           rect_window = gtk_widget_get_window (attach_widget);
           gdk_window_get_device_position (rect_window, grab_device,
                                           &rect.x, &rect.y, NULL);
+
+          if (priv->position_func)
+            {
+              /*
+               * Translate the window coordinates into root coordinates,
+               * call the position function, then translate back.
+               */
+              gint origin_x, origin_y;
+              gint x, y;
+
+              gdk_window_get_origin (rect_window, &origin_x, &origin_y);
+
+              x = origin_x + rect.x;
+              y = origin_y + rect.y;
+              priv->initially_pushed_in = FALSE;
+              (* priv->position_func) (menu, &x, &y, &priv->initially_pushed_in,
+                                       priv->position_func_data);
+              rect.x = x - origin_x;
+              rect.y = y - origin_y;
+            }
+
           text_direction = gtk_widget_get_direction (attach_widget);
           rect_anchor = GDK_GRAVITY_SOUTH_EAST;
           menu_anchor = GDK_GRAVITY_NORTH_WEST;
