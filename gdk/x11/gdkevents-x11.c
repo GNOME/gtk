@@ -621,8 +621,8 @@ gdk_check_wm_state_changed (GdkWindow *window)
     do_net_wm_state_changes (window);
 }
 
-#define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+#define APPEARS_FOCUSED(toplevel)                           \
+  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 static void
 generate_focus_event (GdkWindow *window,
@@ -1344,11 +1344,11 @@ gdk_event_translate (GdkDisplay *display,
 
 	  if (xevent->xcrossing.focus && !toplevel->has_focus_window)
 	    {
-	      gboolean had_focus = HAS_FOCUS (toplevel);
+	      gboolean had_focus = APPEARS_FOCUSED (toplevel);
 	      
 	      toplevel->has_pointer_focus = TRUE;
 	      
-	      if (HAS_FOCUS (toplevel) != had_focus)
+	      if (APPEARS_FOCUSED (toplevel) != had_focus)
 		generate_focus_event (window, TRUE);
 	    }
 	}
@@ -1441,11 +1441,11 @@ gdk_event_translate (GdkDisplay *display,
 
 	  if (xevent->xcrossing.focus && !toplevel->has_focus_window)
 	    {
-	      gboolean had_focus = HAS_FOCUS (toplevel);
+	      gboolean had_focus = APPEARS_FOCUSED (toplevel);
 	      
 	      toplevel->has_pointer_focus = FALSE;
 	      
-	      if (HAS_FOCUS (toplevel) != had_focus)
+	      if (APPEARS_FOCUSED (toplevel) != had_focus)
 		generate_focus_event (window, FALSE);
 	    }
 	}
@@ -1523,7 +1523,7 @@ gdk_event_translate (GdkDisplay *display,
       
       if (toplevel)
 	{
-	  gboolean had_focus = HAS_FOCUS (toplevel);
+	  gboolean had_focus = APPEARS_FOCUSED (toplevel);
 	  
 	  switch (xevent->xfocus.detail)
 	    {
@@ -1569,7 +1569,7 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	    }
 
-	  if (HAS_FOCUS (toplevel) != had_focus)
+	  if (APPEARS_FOCUSED (toplevel) != had_focus)
 	    generate_focus_event (window, TRUE);
 	}
       break;
@@ -1582,7 +1582,7 @@ gdk_event_translate (GdkDisplay *display,
       
       if (toplevel)
 	{
-	  gboolean had_focus = HAS_FOCUS (toplevel);
+	  gboolean had_focus = APPEARS_FOCUSED (toplevel);
 	    
 	  switch (xevent->xfocus.detail)
 	    {
@@ -1620,7 +1620,7 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	    }
 
-	  if (HAS_FOCUS (toplevel) != had_focus)
+	  if (APPEARS_FOCUSED (toplevel) != had_focus)
 	    generate_focus_event (window, FALSE);
 	}
       break;
