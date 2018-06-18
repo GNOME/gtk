@@ -43,7 +43,6 @@ G_BEGIN_DECLS
 #define GTK_IS_WINDOW_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW))
 #define GTK_WINDOW_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
-typedef struct _GtkWindowPrivate      GtkWindowPrivate;
 typedef struct _GtkWindowClass        GtkWindowClass;
 typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
 typedef struct _GtkWindowGroup        GtkWindowGroup;
@@ -52,9 +51,7 @@ typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
 
 struct _GtkWindow
 {
-  GtkBin bin;
-
-  GtkWindowPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**
@@ -185,17 +182,17 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_transient_for        (GtkWindow           *window, 
+void       gtk_window_set_transient_for        (GtkWindow           *window,
 						GtkWindow           *parent);
 GDK_AVAILABLE_IN_ALL
 GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_attached_to          (GtkWindow           *window, 
+void       gtk_window_set_attached_to          (GtkWindow           *window,
                                                 GtkWidget           *attach_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_type_hint            (GtkWindow           *window, 
+void       gtk_window_set_type_hint            (GtkWindow           *window,
 						GdkSurfaceTypeHint    hint);
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
