@@ -47,16 +47,14 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFontButton        GtkFontButton;
 typedef struct _GtkFontButtonClass   GtkFontButtonClass;
-typedef struct _GtkFontButtonPrivate GtkFontButtonPrivate;
 
-struct _GtkFontButton {
+struct _GtkFontButton
+{
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkFontButtonPrivate *priv;
 };
 
-struct _GtkFontButtonClass {
+struct _GtkFontButtonClass
+{
   GtkWidgetClass parent_class;
 
   /* font_set signal is emitted when font is chosen */
