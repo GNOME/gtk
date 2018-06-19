@@ -171,7 +171,6 @@ gdk_rgba_get_type
 <FILE>gdksurface</FILE>
 GdkSurface
 GdkSurfaceType
-GdkSurfaceClass
 GdkSurfaceHints
 GdkGeometry
 GdkGravity
