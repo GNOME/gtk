@@ -1210,6 +1210,9 @@ open_shared_memory (void)
 
       if (force_shm_open)
         {
+#if defined (__FreeBSD__)
+          ret = shm_open (SHM_ANON, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
+#else
           char name[NAME_MAX - 1] = "";
 
           sprintf (name, "/gdk-wayland-%x", g_random_int ());
@@ -1220,6 +1223,7 @@ open_shared_memory (void)
             shm_unlink (name);
           else if (errno == EEXIST)
             continue;
+#endif
         }
     }
   while (ret < 0 && errno == EINTR);
