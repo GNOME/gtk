@@ -30,6 +30,7 @@
 #include "gtkimageprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkpicture.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtktooltipprivate.h"
@@ -1129,11 +1130,11 @@ gtk_drag_set_icon_definition (GdkDragContext     *context,
  * @hot_x: the X offset of the hotspot within the icon
  * @hot_y: the Y offset of the hotspot within the icon
  *
- * Sets @texture as the icon for a given drag. GTK+ retains
+ * Sets @paintable as the icon for a given drag. GTK+ retains
  * references for the arguments, and will release them when
  * they are no longer needed.
  *
- * To position the texture relative to the mouse, its top
+ * To position the @paintable relative to the mouse, its top
  * left will be positioned @hot_x, @hot_y pixels from the
  * mouse cursor.
  */
@@ -1148,7 +1149,8 @@ gtk_drag_set_icon_paintable (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (GDK_IS_PAINTABLE (paintable));
 
-  widget = gtk_image_new_from_paintable (paintable);
+  widget = gtk_picture_new_for_paintable (paintable);
+  gtk_picture_set_can_shrink (GTK_PICTURE (widget), FALSE);
 
   gtk_drag_set_icon_widget_internal (context, widget, hot_x, hot_y, TRUE);
 }
