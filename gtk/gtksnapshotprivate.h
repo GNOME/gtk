@@ -23,17 +23,6 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
-typedef struct _GtkSnapshotStateArray GtkSnapshotStateArray;
-
-/* This is a stripped-down copy of GArray tailored specifically
- * for GtkSnapshotState and guaranteed to be aligned to 16 byte
- * boundaries.
- */
-struct _GtkSnapshotStateArray
-{
-  GtkSnapshotState *data;
-  guint len;
-};
 
 typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
                                                     GtkSnapshotState *state,
@@ -99,7 +88,7 @@ struct _GtkSnapshotState {
 struct _GdkSnapshot {
   GObject                parent_instance; /* it's really GdkSnapshot, but don't tell anyone! */
 
-  GtkSnapshotStateArray *state_stack;
+  GArray                *state_stack;
   GPtrArray             *nodes;
 };
 
