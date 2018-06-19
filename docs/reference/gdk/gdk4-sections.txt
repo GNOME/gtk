@@ -694,7 +694,7 @@ gdk_event_get_type
 
 <SECTION>
 <FILE>gdkpaintable</FILE>
-<TITLE>GdkPaintable/TITLE>
+<TITLE>GdkPaintable</TITLE>
 GdkPaintable
 GdkPaintableFlags
 gdk_paintable_get_current_image
