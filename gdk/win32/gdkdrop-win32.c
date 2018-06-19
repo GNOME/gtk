@@ -121,7 +121,7 @@ struct _drop_target_context
   gint                            ref_count;
 
   /* The drop object we create when a drag enters our surface.
-   * The drop objóct is destroyed when the drag leaves.
+   * The drop object is destroyed when the drag leaves.
    */
   GdkDrop                        *drop;
   /* We get this at the object at creation time and keep
