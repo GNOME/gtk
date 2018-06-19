@@ -42,7 +42,6 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
-#include "gskallocprivate.h"
 
 #include <graphene-gobject.h>
 
@@ -67,7 +66,7 @@ gsk_render_node_finalize (GskRenderNode *self)
 {
   self->node_class->finalize (self);
 
-  gsk_aligned_free (self);
+  g_free (self);
 }
 
 /*< private >
@@ -84,7 +83,7 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
   g_return_val_if_fail (node_class != NULL, NULL);
   g_return_val_if_fail (node_class->node_type != GSK_NOT_A_RENDER_NODE, NULL);
 
-  self = gsk_aligned_alloc0 (node_class->struct_size + extra_size, 1, 16);
+  self = g_malloc0 (node_class->struct_size + extra_size);
 
   self->node_class = node_class;
 
