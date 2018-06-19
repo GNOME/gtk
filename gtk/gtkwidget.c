@@ -2523,11 +2523,19 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 {
   GtkWidget *event_widget, *next_child, *parent;
   GdkEvent *press;
+  gdouble x, y;
 
   event_widget = gtk_get_event_target ((GdkEvent *) event);
 
   if (event_widget == widget)
     return;
+
+  gdk_event_get_coords (event, &x, &y);
+  gtk_widget_translate_coordinatesf (event_widget,
+                                     gtk_widget_get_toplevel (event_widget),
+                                     x, y,
+                                     &x, &y);
+  gdk_event_set_coords (event, x, y);
 
   if (event->any.type == GDK_TOUCH_BEGIN ||
       event->any.type == GDK_TOUCH_UPDATE ||
