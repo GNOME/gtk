@@ -345,9 +345,10 @@ entry_key_press (GtkEntry           *entry,
 
   if (keyval == GDK_KEY_Tab)
     {
+      guint offset;
       show_variations (completion, completion->active, FALSE);
 
-      guint offset = completion->offset + MAX_ROWS;
+      offset = completion->offset + MAX_ROWS;
       if (offset >= completion->n_matches)
         offset = 0;
       populate_completion (completion, completion->text, offset);
@@ -658,12 +659,13 @@ long_pressed_cb (GtkGesture *gesture,
 static void
 gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 {
-  g_autoptr(GBytes) bytes = NULL;
+  GBytes *bytes = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (completion));
 
   bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
   completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+  g_bytes_unref (bytes);
 
   completion->long_press = gtk_gesture_long_press_new (completion->list);
   g_signal_connect (completion->long_press, "pressed", G_CALLBACK (long_pressed_cb), completion);
