@@ -761,7 +761,7 @@ gdk_drag_get_cursor (GdkDragContext *context,
  *
  * Returns: %TRUE if exactly one action was given
  **/
-GdkDragAction
+gboolean
 gdk_drag_action_is_unique (GdkDragAction action)
 {
   return (action & (action - 1)) == 0;
