@@ -604,7 +604,7 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
             }
           else
             {
-              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY],
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY],
                                       "");
             }
         }
