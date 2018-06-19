@@ -698,9 +698,6 @@ gtk_gesture_handle_event (GtkEventController *controller,
     {
       gboolean was_claimed;
 
-      was_claimed =
-        gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED;
-
       if (_gtk_gesture_update_point (gesture, event, FALSE))
         {
           if (was_recognized &&
@@ -709,6 +706,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
           _gtk_gesture_remove_point (gesture, event);
         }
+
+      was_claimed =
+        gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED;
 
       return was_claimed && was_recognized;
     }
