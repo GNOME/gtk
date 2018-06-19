@@ -1115,9 +1115,19 @@ gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
   graphene_rect_t bounds;
 
   node = gtk_snapshot_to_node (snapshot);
-  gsk_render_node_get_bounds (node, &bounds);
+  if (size)
+    {
+      graphene_size_init_from_size (&bounds.size, size);
+    }
+  else
+    {
+      gsk_render_node_get_bounds (node, &bounds);
+      bounds.size.width += bounds.origin.x;
+      bounds.size.height += bounds.origin.y;
+    }
   bounds.origin.x = 0;
   bounds.origin.y = 0;
+
   paintable = gtk_render_node_paintable_new (node, &bounds);
   gsk_render_node_unref (node);
 
