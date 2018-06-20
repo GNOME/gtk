@@ -316,8 +316,12 @@ query_callback (GObject      *object,
 
   _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (tracker), hits);
   _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
+
   g_list_free (hits);
+  for (i = 0; i < n; i++)
+    g_object_unref (hit[i].file);
   g_free (hit);
+
   g_variant_unref (reply);
   g_variant_unref (r);
 
