@@ -1246,7 +1246,7 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
 
 /**
  * gtk_info_bar_set_revealed:
- * @info_bar: a #GtkActionBar
+ * @info_bar: a #GtkInfoBar
  * @revealed: The new value of the property
  *
  * Sets the GtkInfoBar:revealed property to @revealed. This will cause
