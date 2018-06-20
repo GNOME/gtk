@@ -215,6 +215,9 @@ entry {
         border-color: transparent;
         border-radius: 0;
         box-shadow: none;
+
+        // Dodge transparency in selected treeview row, else bg & fg end up same
+        treeview &:focus { background-color: $base_color; }
       }
     }
 
@@ -928,7 +931,6 @@ button:link, button:visited {
  * GtkSpinButton *
  *****************/
 spinbutton {
-   
   &:not(.vertical) {
     // in this horizontal configuration, the whole spinbutton
     // behaves as the entry, so we extend the entry styling
@@ -938,7 +940,6 @@ spinbutton {
     border-color: $borders_color;
     box-shadow: none;
     padding: 0;
-    
  
     entry {
       min-width: 28px;
