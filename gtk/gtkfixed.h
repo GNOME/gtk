@@ -43,16 +43,12 @@ G_BEGIN_DECLS
 #define GTK_FIXED_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FIXED, GtkFixedClass))
 
 typedef struct _GtkFixed              GtkFixed;
-typedef struct _GtkFixedPrivate       GtkFixedPrivate;
 typedef struct _GtkFixedClass         GtkFixedClass;
 typedef struct _GtkFixedChild         GtkFixedChild;
 
 struct _GtkFixed
 {
-  GtkContainer container;
-
-  /*< private >*/
-  GtkFixedPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 struct _GtkFixedClass
