@@ -240,15 +240,6 @@ gtk_stack_combo_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_stack_combo_snapshot (GtkWidget   *widget,
-                          GtkSnapshot *snapshot)
-{
-  GtkStackCombo *self = GTK_STACK_COMBO (widget);
-
-  gtk_widget_snapshot_child (widget, GTK_WIDGET (self->combo), snapshot);
-}
-
-static void
 gtk_stack_combo_size_allocate (GtkWidget           *widget,
                                const GtkAllocation *allocation,
                                int                  baseline)
@@ -269,7 +260,6 @@ gtk_stack_combo_class_init (GtkStackComboClass *class)
 
   widget_class->measure = gtk_stack_combo_measure;
   widget_class->size_allocate = gtk_stack_combo_size_allocate;
-  widget_class->snapshot = gtk_stack_combo_snapshot;
 
   g_object_class_install_property (object_class,
                                    PROP_STACK,

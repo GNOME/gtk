@@ -7935,16 +7935,6 @@ gtk_file_chooser_widget_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_file_chooser_widget_snapshot (GtkWidget   *widget,
-                                  GtkSnapshot *snapshot)
-{
-  GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
-
-  gtk_widget_snapshot_child (widget, priv->box, snapshot);
-}
-
-static void
 gtk_file_chooser_widget_size_allocate (GtkWidget           *widget,
                                        const GtkAllocation *allocation,
                                        int                  baseline)
@@ -7985,7 +7975,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->event = gtk_file_chooser_widget_event;
   widget_class->measure = gtk_file_chooser_widget_measure;
   widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
-  widget_class->snapshot = gtk_file_chooser_widget_snapshot;
 
   /*
    * Signals

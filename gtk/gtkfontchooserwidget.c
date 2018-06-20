@@ -647,16 +647,6 @@ gtk_font_chooser_widget_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_font_chooser_widget_snapshot (GtkWidget   *widget,
-                                  GtkSnapshot *snapshot)
-{
-  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
-  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
-
-  gtk_widget_snapshot_child (widget, priv->stack, snapshot);
-}
-
-static void
 gtk_font_chooser_widget_size_allocate (GtkWidget           *widget,
                                        const GtkAllocation *allocation,
                                        int                  baseline)
@@ -697,7 +687,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   widget_class->display_changed = gtk_font_chooser_widget_display_changed;
   widget_class->measure = gtk_font_chooser_widget_measure;
   widget_class->size_allocate = gtk_font_chooser_widget_size_allocate;
-  widget_class->snapshot = gtk_font_chooser_widget_snapshot;
   widget_class->map = gtk_font_chooser_widget_map;
 
   gobject_class->finalize = gtk_font_chooser_widget_finalize;

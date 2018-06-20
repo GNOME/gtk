@@ -369,8 +369,6 @@ static void gtk_notebook_measure (GtkWidget      *widget,
 static void gtk_notebook_size_allocate       (GtkWidget           *widget,
                                               const GtkAllocation *allocation,
                                               int                  baseline);
-static void gtk_notebook_snapshot            (GtkWidget        *widget,
-                                              GtkSnapshot      *snapshot);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
 static void gtk_notebook_motion              (GtkEventController *controller,
                                               double              x,
@@ -666,7 +664,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->measure = gtk_notebook_measure;
   widget_class->size_allocate = gtk_notebook_size_allocate;
-  widget_class->snapshot = gtk_notebook_snapshot;
   widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
@@ -2044,16 +2041,6 @@ gtk_notebook_size_allocate (GtkWidget           *widget,
   GtkNotebookPrivate *priv = notebook->priv;
 
   gtk_widget_size_allocate (priv->box, allocation, -1);
-}
-
-static void
-gtk_notebook_snapshot (GtkWidget   *widget,
-                       GtkSnapshot *snapshot)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  gtk_widget_snapshot_child (widget, priv->box, snapshot);
 }
 
 static gboolean

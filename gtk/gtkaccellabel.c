@@ -35,7 +35,6 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
@@ -148,8 +147,7 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  GParamSpec         *pspec);
 static void         gtk_accel_label_destroy      (GtkWidget          *widget);
 static void         gtk_accel_label_finalize     (GObject            *object);
-static void         gtk_accel_label_snapshot     (GtkWidget          *widget,
-                                                  GtkSnapshot        *snapshot);
+
 static void gtk_accel_label_measure (GtkWidget      *widget,
                                      GtkOrientation  orientation,
                                      int             for_size,
@@ -184,7 +182,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   widget_class->measure = gtk_accel_label_measure;
   widget_class->size_allocate = gtk_accel_label_size_allocate;
-  widget_class->snapshot = gtk_accel_label_snapshot;
   widget_class->destroy = gtk_accel_label_destroy;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
@@ -440,16 +437,6 @@ gtk_accel_label_measure (GtkWidget      *widget,
   gtk_widget_measure (priv->box, orientation, for_size,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_accel_label_snapshot (GtkWidget   *widget,
-                          GtkSnapshot *snapshot)
-{
-  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
-  gtk_widget_snapshot_child (widget, priv->box, snapshot);
 }
 
 static void

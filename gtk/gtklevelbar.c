@@ -372,16 +372,6 @@ gtk_level_bar_render_trough (GtkGizmo    *gizmo,
 }
 
 static void
-gtk_level_bar_snapshot (GtkWidget   *widget,
-                        GtkSnapshot *snapshot)
-{
-  GtkLevelBar *self = GTK_LEVEL_BAR (widget);
-  GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (self);
-
-  gtk_widget_snapshot_child (widget, priv->trough_widget, snapshot);
-}
-
-static void
 gtk_level_bar_measure_trough (GtkGizmo       *gizmo,
                               GtkOrientation  orientation,
                               int             for_size,
@@ -954,7 +944,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   oclass->set_property = gtk_level_bar_set_property;
   oclass->finalize = gtk_level_bar_finalize;
 
-  wclass->snapshot = gtk_level_bar_snapshot;
   wclass->size_allocate = gtk_level_bar_size_allocate;
   wclass->measure = gtk_level_bar_measure;
   wclass->direction_changed = gtk_level_bar_direction_changed;
