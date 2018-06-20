@@ -432,13 +432,11 @@ button.circular:hover:not(:checked):not(:active):not(:disabled):not(:backdrop) {
 
 toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton:backdrop > button.flat, .linked:not(.vertical) > spinbutton:not(.vertical), .linked:not(.vertical) > entry, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, filechooser .path-bar.linked > button, .linked > combobox > box > button.combo:dir(ltr), .linked > combobox > box > button.combo:dir(rtl) { border-radius: 0; border-right-style: none; }
 
-.linked:not(.vertical) > spinbutton:first-child:not(.vertical), .linked:not(.vertical) > entry:first-child, .inline-toolbar button:first-child, .linked > button:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > box > button.combo, filechooser .path-bar.linked > button:dir(ltr):first-child, filechooser .path-bar.linked > button:dir(rtl):last-child { border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-style: none; }
+.linked:not(.vertical) > spinbutton:dir(ltr):first-child:not(.vertical), .linked:not(.vertical) > entry:dir(ltr):first-child, .inline-toolbar button:dir(ltr):first-child, .linked > button:dir(ltr):first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat:dir(ltr), toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat:dir(ltr), combobox.linked button:dir(ltr):nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > box > button.combo:dir(ltr), filechooser .path-bar.linked > button:dir(ltr):first-child, .linked:not(.vertical) > spinbutton:dir(rtl):last-child:not(.vertical), .linked:not(.vertical) > entry:dir(rtl):last-child, .inline-toolbar button:dir(rtl):last-child, .linked > button:dir(rtl):last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat:dir(rtl), toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat:dir(rtl), .linked:not(.vertical) > combobox:last-child > box > button.combo:dir(rtl), filechooser .path-bar.linked > button:dir(rtl):last-child { border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-style: none; }
 
-.linked:not(.vertical) > spinbutton:last-child:not(.vertical), .linked:not(.vertical) > entry:last-child, .inline-toolbar button:last-child, .linked > button:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat, combobox.linked button:nth-child(2):dir(ltr), .linked:not(.vertical) > combobox:last-child > box > button.combo, filechooser .path-bar.linked > button:dir(ltr):last-child, filechooser .path-bar.linked > button:dir(rtl):first-child { border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-right-style: solid; }
+.linked:not(.vertical) > spinbutton:dir(ltr):last-child:not(.vertical), .linked:not(.vertical) > entry:dir(ltr):last-child, .inline-toolbar button:dir(ltr):last-child, .linked > button:dir(ltr):last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat:dir(ltr), toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat:dir(ltr), combobox.linked button:dir(ltr):nth-child(2), .linked:not(.vertical) > combobox:last-child > box > button.combo:dir(ltr), filechooser .path-bar.linked > button:dir(ltr):last-child, .linked:not(.vertical) > spinbutton:dir(rtl):first-child:not(.vertical), .linked:not(.vertical) > entry:dir(rtl):first-child, .inline-toolbar button:dir(rtl):first-child, .linked > button:dir(rtl):first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat:dir(rtl), toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat:dir(rtl), combobox.linked button:dir(rtl):nth-child(2), .linked:not(.vertical) > combobox:first-child > box > button.combo:dir(rtl), filechooser .path-bar.linked > button:dir(rtl):first-child { border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-right-style: solid; }
 
-.linked:not(.vertical) > spinbutton:only-child:not(.vertical), .linked:not(.vertical) > entry:only-child, .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat, .linked:not(.vertical) > combobox:only-child > box > button.combo { border-radius: 3px; border-style: solid; }
-
-filechooser .path-bar.linked > button:only-child { border-radius: 3px; border-style: solid; }
+.linked:not(.vertical) > spinbutton:only-child:not(.vertical), .linked:not(.vertical) > entry:only-child, .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat, .linked:not(.vertical) > combobox:only-child > box > button.combo, filechooser .path-bar.linked > button:only-child { border-radius: 3px; border-style: solid; }
 
 .linked.vertical > spinbutton:not(.vertical), .linked.vertical > entry, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > box > button.combo { border-style: solid solid none solid; border-radius: 0; }
 
@@ -1963,9 +1961,15 @@ button.emoji-section:hover label { opacity: 0.775; }
 
 button.emoji-section:checked label { opacity: 1; }
 
-.emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
+popover.emoji-picker .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
-.emoji :hover { background: #215d9c; }
+popover.emoji-picker .emoji :hover { background: #215d9c; }
+
+popover.emoji-completion arrow { border: none; background: none; }
+
+popover.emoji-completion contents row box { border-spacing: 10px; padding: 2px 10px; }
+
+popover.emoji-completion .emoji:hover { background-color: #3f4649; }
 
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*
