@@ -33,4 +33,6 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             int           size);
 gboolean gdk_running_in_sandbox (void);
 
+const gchar *   gdk_get_startup_notification_id (void);
+
 #endif /* __GDK__PRIVATE_H__ */

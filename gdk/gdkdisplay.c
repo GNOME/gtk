@@ -1281,6 +1281,28 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
   GDK_DISPLAY_GET_CLASS (display)->notify_startup_complete (display, startup_id);
 }
 
+/**
+ * gdk_display_get_startup_notification_id:
+ * @display: (type GdkX11Display): a #GdkDisplay
+ *
+ * Gets the startup notification ID for a Wayland display, or %NULL
+ * if no ID has been defined.
+ *
+ * Returns: the startup notification ID for @display, or %NULL
+ *
+ * Since: 4.0
+ */
+const gchar *
+gdk_display_get_startup_notification_id (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->get_startup_notification_id == NULL)
+    return NULL;
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_startup_notification_id (display);
+}
+
 void
 _gdk_display_pause_events (GdkDisplay *display)
 {

@@ -2156,19 +2156,9 @@ gdk_x11_display_make_default (GdkDisplay *display)
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = NULL;
 
-  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id && *startup_id != '\0')
-    {
-      if (!g_utf8_validate (startup_id, -1, NULL))
-        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
-      else
-        gdk_x11_display_set_startup_notification_id (display, startup_id);
-
-      /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.
-       */
-      g_unsetenv ("DESKTOP_STARTUP_ID");
-    }
+  startup_id = gdk_get_startup_notification_id ();
+  if (startup_id)
+    gdk_x11_display_set_startup_notification_id (display, startup_id);
 }
 
 static void
@@ -3055,6 +3045,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
+  display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_surface_impl = _gdk_x11_display_create_surface_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
