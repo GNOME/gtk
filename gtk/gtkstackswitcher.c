@@ -67,7 +67,6 @@ struct _GtkStackSwitcherPrivate
 {
   GtkStack *stack;
   GHashTable *buttons;
-  GtkIconSize icon_size;
   gboolean in_child_changed;
   GtkWidget *switch_button;
   guint switch_timer;
@@ -75,7 +74,6 @@ struct _GtkStackSwitcherPrivate
 
 enum {
   PROP_0,
-  PROP_ICON_SIZE,
   PROP_STACK
 };
 
@@ -91,7 +89,6 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 
   priv = gtk_stack_switcher_get_instance_private (switcher);
 
-  priv->icon_size = GTK_ICON_SIZE_INHERIT;
   priv->stack = NULL;
   priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 
@@ -124,8 +121,7 @@ on_button_clicked (GtkWidget        *widget,
 static void
 rebuild_child (GtkWidget   *self,
                const gchar *icon_name,
-               const gchar *title,
-               gint         icon_size)
+               const gchar *title)
 {
   GtkStyleContext *context;
   GtkWidget *button_child;
@@ -198,7 +194,7 @@ update_button (GtkStackSwitcher *self,
                            "icon-name", &icon_name,
                            NULL);
 
-  rebuild_child (button, icon_name, title, priv->icon_size);
+  rebuild_child (button, icon_name, title);
 
   gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL || icon_name != NULL));
 
@@ -550,30 +546,6 @@ gtk_stack_switcher_get_stack (GtkStackSwitcher *switcher)
 }
 
 static void
-gtk_stack_switcher_set_icon_size (GtkStackSwitcher *switcher,
-                                  GtkIconSize       icon_size)
-{
-  GtkStackSwitcherPrivate *priv;
-
-  g_return_if_fail (GTK_IS_STACK_SWITCHER (switcher));
-
-  priv = gtk_stack_switcher_get_instance_private (switcher);
-
-  if (icon_size != priv->icon_size)
-    {
-      priv->icon_size = icon_size;
-
-      if (priv->stack != NULL)
-        {
-          clear_switcher (switcher);
-          populate_switcher (switcher);
-        }
-
-      g_object_notify (G_OBJECT (switcher), "icon-size");
-    }
-}
-
-static void
 gtk_stack_switcher_get_property (GObject      *object,
                                  guint         prop_id,
                                  GValue       *value,
@@ -585,10 +557,6 @@ gtk_stack_switcher_get_property (GObject      *object,
   priv = gtk_stack_switcher_get_instance_private (switcher);
   switch (prop_id)
     {
-    case PROP_ICON_SIZE:
-      g_value_set_enum (value, priv->icon_size);
-      break;
-
     case PROP_STACK:
       g_value_set_object (value, priv->stack);
       break;
@@ -609,10 +577,6 @@ gtk_stack_switcher_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ICON_SIZE:
-      gtk_stack_switcher_set_icon_size (switcher, g_value_get_enum (value));
-      break;
-
     case PROP_STACK:
       gtk_stack_switcher_set_stack (switcher, g_value_get_object (value));
       break;
@@ -660,20 +624,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 
   widget_class->drag_motion = gtk_stack_switcher_drag_motion;
   widget_class->drag_leave = gtk_stack_switcher_drag_leave;
-  /**
-   * GtkStackSwitcher:icon-size:
-   *
-   * Use the "icon-size" property to change the size of the image displayed
-   * when a #GtkStackSwitcher is displaying icons.
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_ICON_SIZE,
-                                   g_param_spec_enum ("icon-size",
-                                                      P_("Icon Size"),
-                                                      P_("Symbolic size to use for named icon"),
-                                                      GTK_TYPE_ICON_SIZE,
-                                                      GTK_ICON_SIZE_INHERIT,
-                                                      G_PARAM_EXPLICIT_NOTIFY | GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_STACK,
