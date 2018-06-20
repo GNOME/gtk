@@ -50,15 +50,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* A handful of containers inside GTK+ are cheating and widgets
- * inside internal structure as direct children for the purpose
- * of forall().
- */
-#define SPECIAL_CONTAINER(x) (GTK_IS_ASSISTANT (x) || \
-                              GTK_IS_POPOVER_MENU (x) || \
-                              GTK_IS_SHORTCUTS_SECTION (x) || \
-                              GTK_IS_SHORTCUTS_WINDOW (x))
-
 /**
  * SECTION:gtkcontainer
  * @Short_description: Base class for widgets which contain other widgets
@@ -457,15 +448,6 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
   GObjectNotifyQueue *nqueue;
-
-  if (SPECIAL_CONTAINER (container))
-    {
-      /* This can happen with internal children of complex widgets.
-       * Silently ignore the child properties in this case. We explicitly
-       * allow it for GtkAssistant, since that is how it works.
-       */
-      return;
-    }
 
   pspec = gtk_container_class_find_child_property (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
