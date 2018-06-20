@@ -1,6 +1,8 @@
 #include "config.h"
 #include <glib.h>
 #include <glib/gi18n-lib.h>
+
+#if defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
 #include <hb-ot.h>
 
 #include "script-names.h"
@@ -182,3 +184,4 @@ get_script_name_for_tag (guint32 tag)
 
   return NULL;
 }
+#endif
