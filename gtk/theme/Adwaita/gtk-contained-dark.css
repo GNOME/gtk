@@ -1930,9 +1930,15 @@ button.emoji-section:hover label { opacity: 0.775; }
 
 button.emoji-section:checked label { opacity: 1; }
 
-.emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
+popover.emoji-picker .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
-.emoji :hover { background: #215d9c; }
+popover.emoji-picker .emoji :hover { background: #215d9c; }
+
+popover.emoji-completion arrow { border: none; background: none; }
+
+popover.emoji-completion contents row box { border-spacing: 10px; padding: 2px 10px; }
+
+popover.emoji-completion .emoji:hover { background: #3f4649; }
 
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*
