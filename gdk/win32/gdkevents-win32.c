@@ -51,6 +51,7 @@
 #include "gdkmonitorprivate.h"
 #include "gdkwin32.h"
 #include "gdkkeysyms.h"
+#include "gdkglcontext-win32.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wintab.h"
@@ -92,8 +93,6 @@
 /*
  * Private function declarations
  */
-
-extern void _gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window);
 
 #define SYNAPSIS_ICON_WINDOW_CLASS "SynTrackCursorWindowClass"
 
@@ -3341,6 +3340,8 @@ gdk_event_translate (MSG  *msg,
           if (impl->maximizing)
             {
               MINMAXINFO our_mmi;
+
+              _gdk_win32_window_invalidate_egl_framebuffer (window);
 
               if (_gdk_win32_window_fill_min_max_info (window, &our_mmi))
                 {
