@@ -19,7 +19,7 @@
 
 #include "gtkfishbowl.h"
 
-#include <math.h>
+#include "gtk/fallback-c89.c"
 
 typedef struct _GtkFishbowlPrivate       GtkFishbowlPrivate;
 typedef struct _GtkFishbowlChild         GtkFishbowlChild;
