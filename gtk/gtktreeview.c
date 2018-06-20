@@ -5822,6 +5822,7 @@ validate_row (GtkTreeView *tree_view,
   gint depth = gtk_tree_path_get_depth (path);
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
+  gboolean got_separator_height = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   gint expander_size;
 
@@ -5883,7 +5884,12 @@ validate_row (GtkTreeView *tree_view,
 
       if (is_separator)
         {
-          height = get_separator_height (tree_view);
+          /* Avoid wading thru CSS just to get the same size for every column */
+          if (!got_separator_height)
+            {
+              height = get_separator_height (tree_view);
+              got_separator_height = TRUE;
+            }
         }
       else
         {
