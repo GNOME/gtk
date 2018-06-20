@@ -15,6 +15,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+
+#if defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
 #include <hb-ot.h>
 
 #include "language-names.h"
@@ -237,3 +239,4 @@ get_language_name_for_tag (guint32 tag)
 
   return get_language_name (pango_language_from_string (s));
 }
+#endif
