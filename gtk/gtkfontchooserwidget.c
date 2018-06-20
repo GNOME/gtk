@@ -862,7 +862,9 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
+#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
   gtk_font_chooser_widget_populate_features (fontchooser);
+#endif
   gtk_font_chooser_widget_set_cell_size (fontchooser);
   gtk_font_chooser_widget_take_font_desc (fontchooser, NULL);
 }
