@@ -576,7 +576,7 @@ treeview.view:backdrop { color: #000; border-left-color: gray; border-top: #fff;
 
 treeview.view.dnd { border-style: solid none; border-width: 1px; border-color: black; }
 
-treeview.view.expander { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); color: #4d4d4d; }
+treeview.view.expander { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); color: #4d4d4d; }
 
 treeview.view.expander:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 

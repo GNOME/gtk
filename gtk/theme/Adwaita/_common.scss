@@ -1783,6 +1783,9 @@ treeview.view {
   }
 
   &.expander {
+    // GtkTreeView uses the larger of the expander’s min-width and min-height
+    min-width: 16px;
+    min-height: 16px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
 
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
