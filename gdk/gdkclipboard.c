@@ -612,21 +612,21 @@ gdk_clipboard_read_internal (GdkClipboard        *clipboard,
 
   if (priv->local)
     {
-      return gdk_clipboard_read_local_async (clipboard,
-                                             formats,
-                                             io_priority,
-                                             cancellable,
-                                             callback,
-                                             user_data);
+      gdk_clipboard_read_local_async (clipboard,
+                                      formats,
+                                      io_priority,
+                                      cancellable,
+                                      callback,
+                                      user_data);
     }
   else
     {
-      return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_async (clipboard,
-                                                              formats,
-                                                              io_priority,
-                                                              cancellable,
-                                                              callback,
-                                                              user_data);
+      GDK_CLIPBOARD_GET_CLASS (clipboard)->read_async (clipboard,
+                                                       formats,
+                                                       io_priority,
+                                                       cancellable,
+                                                       callback,
+                                                       user_data);
     }
 }
 

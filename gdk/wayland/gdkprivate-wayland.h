@@ -104,32 +104,23 @@ GdkDragContext *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
 void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);
-GdkDragContext * _gdk_wayland_drop_context_new (GdkDevice             *device,
-                                                GdkContentFormats     *formats,
-                                                struct wl_data_offer  *offer);
+GdkDrop *        gdk_wayland_drop_new                      (GdkDevice             *device,
+                                                            GdkDragContext        *drag,
+                                                            GdkContentFormats     *formats,
+                                                            GdkSurface            *surface,
+                                                            struct wl_data_offer  *offer,
+                                                            uint32_t               serial);
+void             gdk_wayland_drop_set_source_actions       (GdkDrop               *drop,
+                                                            uint32_t               source_actions);
+void             gdk_wayland_drop_set_action               (GdkDrop               *drop,
+                                                            uint32_t               action);
+
 void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *surface);
-void _gdk_wayland_drag_context_set_dest_surface (GdkDragContext *context,
-                                                 GdkSurface      *dest_surface,
-                                                 uint32_t        serial);
-void _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
-                                           GdkEventType    type,
-                                           guint32         time_);
-void _gdk_wayland_drag_context_set_coords (GdkDragContext *context,
-                                           gdouble         x,
-                                           gdouble         y);
-
-void gdk_wayland_drag_context_set_action (GdkDragContext *context,
-                                          GdkDragAction   action);
-
-GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
-GdkDragContext * gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *surface);
-struct wl_data_source * gdk_wayland_drag_context_get_data_source  (GdkDragContext *context);
 
 void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
                                               GdkSurface     *surface,
                                               GdkSurface     *real_parent,
-                                              GdkEventMask   event_mask,
                                               GdkSurfaceAttr *attributes);
 
 gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
@@ -192,14 +183,6 @@ cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *di
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
 
-GdkWaylandSelection * gdk_wayland_display_get_selection (GdkDisplay *display);
-GdkWaylandSelection * gdk_wayland_selection_new (void);
-void gdk_wayland_selection_free (GdkWaylandSelection *selection);
-
-
-struct wl_data_source * gdk_wayland_selection_get_data_source (GdkSurface *owner);
-void gdk_wayland_selection_unset_data_source (GdkDisplay *display);
-
 EGLSurface gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
                                                EGLConfig config);
 EGLSurface gdk_wayland_surface_get_dummy_egl_surface (GdkSurface *surface,
@@ -209,6 +192,8 @@ struct gtk_surface1 * gdk_wayland_surface_get_gtk_surface (GdkSurface *surface);
 
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
+void gdk_wayland_seat_set_drag (GdkSeat        *seat,
+                                GdkDragContext *drag);
 
 struct wl_output *gdk_wayland_surface_get_wl_output (GdkSurface *surface);
 

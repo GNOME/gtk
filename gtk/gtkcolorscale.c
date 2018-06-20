@@ -32,11 +32,11 @@
 
 #include <math.h>
 
-struct _GtkColorScalePrivate
+typedef struct
 {
   GdkRGBA color;
   GtkColorScaleType type;
-};
+} GtkColorScalePrivate;
 
 enum
 {
@@ -59,12 +59,13 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                  int             width,
                                  int             height)
 {
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
   GtkWidget *widget = GTK_WIDGET (scale);
 
   if (width <= 1 || height <= 1)
     return;
 
-  if (scale->priv->type == GTK_COLOR_SCALE_HUE)
+  if (priv->type == GTK_COLOR_SCALE_HUE)
     {
       GdkTexture *texture;
       gint stride;
@@ -104,7 +105,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                    &GRAPHENE_RECT_INIT(x, y, width, height));
       g_object_unref (texture);
     }
-  else if (scale->priv->type == GTK_COLOR_SCALE_ALPHA)
+  else if (priv->type == GTK_COLOR_SCALE_ALPHA)
     {
       cairo_t *cr;
       graphene_point_t start, end;
@@ -143,8 +144,8 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
 
       cairo_destroy (cr);
 
-      color = &scale->priv->color;
-      
+      color = &priv->color;
+
       gtk_snapshot_append_linear_gradient (snapshot,
                                            &GRAPHENE_RECT_INIT(x, y, width, height),
                                            &start,
@@ -162,8 +163,6 @@ gtk_color_scale_init (GtkColorScale *scale)
 {
   GtkStyleContext *context;
   GtkGesture *gesture;
-
-  scale->priv = gtk_color_scale_get_instance_private (scale);
 
   gesture = gtk_gesture_long_press_new ();
   g_signal_connect (gesture, "pressed",
@@ -183,11 +182,12 @@ scale_get_property (GObject    *object,
                     GParamSpec *pspec)
 {
   GtkColorScale *scale = GTK_COLOR_SCALE (object);
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
 
   switch (prop_id)
     {
     case PROP_SCALE_TYPE:
-      g_value_set_int (value, scale->priv->type);
+      g_value_set_int (value, priv->type);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -199,9 +199,10 @@ static void
 scale_set_type (GtkColorScale     *scale,
                 GtkColorScaleType  type)
 {
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
   AtkObject *atk_obj;
 
-  scale->priv->type = type;
+  priv->type = type;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (scale));
   if (GTK_IS_ACCESSIBLE (atk_obj))
@@ -262,7 +263,9 @@ void
 gtk_color_scale_set_rgba (GtkColorScale *scale,
                           const GdkRGBA *color)
 {
-  scale->priv->color = *color;
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
+
+  priv->color = *color;
   gtk_widget_queue_draw (GTK_WIDGET (scale));
 }
 

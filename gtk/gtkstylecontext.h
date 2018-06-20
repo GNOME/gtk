@@ -1019,12 +1019,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay *gtk_style_context_get_display (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
-                                                  GdkFrameClock   *frame_clock);
-GDK_AVAILABLE_IN_ALL
-GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
-
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
                                          const gchar     *color_name,
                                          GdkRGBA         *color);

@@ -1503,10 +1503,6 @@ gtk_image_set_pixel_size
 gtk_image_get_pixel_size
 gtk_image_set_icon_size
 gtk_image_get_icon_size
-gtk_image_set_keep_aspect_ratio
-gtk_image_get_keep_aspect_ratio
-gtk_image_set_can_shrink
-gtk_image_get_can_shrink
 <SUBSECTION Standard>
 GTK_IMAGE
 GTK_IS_IMAGE
@@ -2047,6 +2043,40 @@ GTK_PANED_GET_CLASS
 <SUBSECTION Private>
 GtkPanedPrivate
 gtk_paned_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkpicture</FILE>
+<TITLE>GtkPicture</TITLE>
+GtkPicture
+gtk_picture_new
+gtk_picture_new_for_paintable
+gtk_picture_new_for_pixbuf
+gtk_picture_new_for_file
+gtk_picture_new_for_filename
+gtk_picture_new_for_resource
+gtk_picture_set_paintable
+gtk_picture_get_paintable
+gtk_picture_set_pixbuf
+gtk_picture_set_file
+gtk_picture_get_file
+gtk_picture_set_filename
+gtk_picture_set_resource
+gtk_picture_set_keep_aspect_ratio
+gtk_picture_get_keep_aspect_ratio
+gtk_picture_set_can_shrink
+gtk_picture_get_can_shrink
+gtk_picture_set_alternative_text
+gtk_picture_get_alternative_text
+<SUBSECTION Standard>
+GTK_PICTURE
+GTK_IS_PICTURE
+GTK_TYPE_PICTURE
+GTK_PICTURE_CLASS
+GTK_IS_PICTURE_CLASS
+GTK_PICTURE_GET_CLASS
+<SUBSECTION Private>
+gtk_picture_get_type
 </SECTION>
 
 <SECTION>
@@ -4334,6 +4364,7 @@ gtk_widget_get_can_focus
 gtk_widget_set_can_focus
 gtk_widget_get_focus_on_click
 gtk_widget_set_focus_on_click
+gtk_widget_set_focus_child
 gtk_widget_get_has_surface
 gtk_widget_set_has_surface
 gtk_widget_get_sensitive
@@ -4834,7 +4865,6 @@ gtk_style_context_get_parent
 gtk_style_context_get_path
 gtk_style_context_get_property
 gtk_style_context_get_display
-gtk_style_context_get_frame_clock
 gtk_style_context_get_state
 gtk_style_context_get_valist
 gtk_style_context_get_section
@@ -4857,7 +4887,6 @@ gtk_style_context_remove_class
 gtk_style_context_has_class
 gtk_style_context_list_classes
 gtk_style_context_set_display
-gtk_style_context_set_frame_clock
 gtk_style_context_set_state
 gtk_style_context_set_scale
 gtk_style_context_get_scale
@@ -4995,7 +5024,6 @@ gtk_drag_dest_add_image_targets
 gtk_drag_dest_add_uri_targets
 gtk_drag_dest_set_track_motion
 gtk_drag_dest_get_track_motion
-gtk_drag_finish
 gtk_drag_get_data
 gtk_drag_get_source_widget
 gtk_drag_highlight
@@ -5986,6 +6014,8 @@ gtk_overlay_get_overlay_pass_through
 gtk_overlay_set_overlay_pass_through
 gtk_overlay_get_measure_overlay
 gtk_overlay_set_measure_overlay
+gtk_overlay_get_clip_overlay
+gtk_overlay_set_clip_overlay
 
 <SUBSECTION Standard>
 GTK_TYPE_OVERLAY

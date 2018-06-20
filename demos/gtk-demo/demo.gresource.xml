@@ -105,15 +105,20 @@
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
   </gresource>
-  <gresource prefix="/stack">
-    <file>stack.ui</file>
-  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
     <file>shortcuts-gedit.ui</file>
     <file>shortcuts-clocks.ui</file>
     <file>shortcuts-boxes.ui</file>
+  </gresource>
+  <gresource prefix="/sliding_puzzle">
+    <file>puzzlepiece.c</file>
+    <file>puzzlepiece.h</file>
+    <file>portland-rose.jpg</file>
+  </gresource>
+  <gresource prefix="/stack">
+    <file>stack.ui</file>
   </gresource>
   <gresource prefix="/revealer">
     <file>revealer.ui</file>
@@ -198,6 +203,7 @@
     <file>shortcuts.c</file>
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
+    <file>sliding_puzzle.c</file>
     <file>stack.c</file>
     <file>spinbutton.c</file>
     <file>spinner.c</file>

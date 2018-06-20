@@ -437,26 +437,21 @@ static void   gtk_entry_display_changed      (GtkWidget        *widget,
 					      GdkDisplay       *old_display);
 
 static gboolean gtk_entry_drag_drop          (GtkWidget        *widget,
-                                              GdkDragContext   *context,
+                                              GdkDrop          *drop,
                                               gint              x,
-                                              gint              y,
-                                              guint             time);
+                                              gint              y);
 static gboolean gtk_entry_drag_motion        (GtkWidget        *widget,
-					      GdkDragContext   *context,
+                                              GdkDrop          *drop,
 					      gint              x,
-					      gint              y,
-					      guint             time);
+					      gint              y);
 static void     gtk_entry_drag_leave         (GtkWidget        *widget,
-					      GdkDragContext   *context,
-					      guint             time);
+					      GdkDrop          *drop);
 static void     gtk_entry_drag_data_received (GtkWidget        *widget,
-					      GdkDragContext   *context,
-					      GtkSelectionData *selection_data,
-					      guint             time);
+					      GdkDrop          *drop,
+					      GtkSelectionData *selection_data);
 static void     gtk_entry_drag_data_get      (GtkWidget        *widget,
 					      GdkDragContext   *context,
-					      GtkSelectionData *selection_data,
-					      guint             time);
+					      GtkSelectionData *selection_data);
 static void     gtk_entry_drag_data_delete   (GtkWidget        *widget,
 					      GdkDragContext   *context);
 static void     gtk_entry_drag_begin         (GtkWidget        *widget,
@@ -4432,14 +4427,17 @@ gtk_cell_editable_entry_activated (GtkEntry *entry, gpointer data)
 }
 
 static gboolean
-gtk_cell_editable_key_press_event (GtkEntry    *entry,
-				   GdkEventKey *key_event,
-				   gpointer     data)
+gtk_cell_editable_event (GtkEntry *entry,
+                         GdkEvent *event,
+                         gpointer  data)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   guint keyval;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) key_event, &keyval))
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  if (!gdk_event_get_keyval (event, &keyval))
     return GDK_EVENT_PROPAGATE;
 
   if (keyval == GDK_KEY_Escape)
@@ -4469,8 +4467,8 @@ gtk_entry_start_editing (GtkCellEditable *cell_editable,
 {
   g_signal_connect (cell_editable, "activate",
 		    G_CALLBACK (gtk_cell_editable_entry_activated), NULL);
-  g_signal_connect (cell_editable, "key-press-event",
-		    G_CALLBACK (gtk_cell_editable_key_press_event), NULL);
+  g_signal_connect (cell_editable, "event",
+		    G_CALLBACK (gtk_cell_editable_event), NULL);
 }
 
 static void
@@ -8588,9 +8586,8 @@ gtk_entry_drag_end (GtkWidget      *widget,
 }
 
 static void
-gtk_entry_drag_leave (GtkWidget        *widget,
-		      GdkDragContext   *context,
-		      guint             time)
+gtk_entry_drag_leave (GtkWidget *widget,
+		      GdkDrop   *drop)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -8601,40 +8598,37 @@ gtk_entry_drag_leave (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_entry_drag_drop  (GtkWidget        *widget,
-		      GdkDragContext   *context,
-		      gint              x,
-		      gint              y,
-		      guint             time)
+gtk_entry_drag_drop (GtkWidget *widget,
+		     GdkDrop   *drop,
+		     gint       x,
+		     gint       y)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GdkAtom target = NULL;
 
   if (priv->editable)
-    target = gtk_drag_dest_find_target (widget, context, NULL);
+    target = gtk_drag_dest_find_target (widget, drop, NULL);
 
   if (target != NULL)
     {
       priv->drop_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
-      gtk_drag_get_data (widget, context, target, time);
+      gtk_drag_get_data (widget, drop, target);
     }
   else
-    gtk_drag_finish (context, FALSE, time);
+    gdk_drop_finish (drop, 0);
   
   return TRUE;
 }
 
 static gboolean
-gtk_entry_drag_motion (GtkWidget        *widget,
-		       GdkDragContext   *context,
-		       gint              x,
-		       gint              y,
-		       guint             time)
+gtk_entry_drag_motion (GtkWidget *widget,
+                       GdkDrop   *drop,
+                       gint       x,
+                       gint       y)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  GtkWidget *source_widget;
   GdkDragAction suggested_action;
   gint new_position, old_position;
   gint sel1, sel2;
@@ -8643,30 +8637,17 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
   if (priv->editable &&
-      gtk_drag_dest_find_target (widget, context, NULL) != NULL)
+      gtk_drag_dest_find_target (widget, drop, NULL) != NULL)
     {
-      source_widget = gtk_drag_get_source_widget (context);
-      suggested_action = gdk_drag_context_get_suggested_action (context);
+      suggested_action = GDK_ACTION_COPY | GDK_ACTION_MOVE;
 
       if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &sel1, &sel2) ||
           new_position < sel1 || new_position > sel2)
         {
-          if (source_widget == widget)
-	    {
-	      /* Default to MOVE, unless the user has
-	       * pressed ctrl or alt to affect available actions
-	       */
-	      if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
-	        suggested_action = GDK_ACTION_MOVE;
-	    }
-
           priv->dnd_position = new_position;
         }
       else
         {
-          if (source_widget == widget)
-	    suggested_action = 0;	/* Can't drop in selection where drag started */
-
           priv->dnd_position = -1;
         }
     }
@@ -8680,7 +8661,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   if (show_placeholder_text (entry))
     priv->dnd_position = -1;
 
-  gdk_drag_status (context, suggested_action, time);
+  gdk_drop_status (drop, suggested_action);
   if (suggested_action == 0)
     gtk_drag_unhighlight (widget);
   else
@@ -8692,20 +8673,45 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   return TRUE;
 }
 
+static GdkDragAction
+gtk_entry_get_action (GtkEntry *entry,
+                      GdkDrop  *drop)
+{
+  GtkWidget *widget = GTK_WIDGET (entry);
+  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
+  GdkDragAction actions;
+
+  actions = gdk_drop_get_actions (drop);
+
+  if (source_widget == widget &&
+      actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  return 0;
+}
+
 static void
 gtk_entry_drag_data_received (GtkWidget        *widget,
-			      GdkDragContext   *context,
-			      GtkSelectionData *selection_data,
-			      guint             time)
+			      GdkDrop          *drop,
+			      GtkSelectionData *selection_data)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GtkEditable *editable = GTK_EDITABLE (widget);
+  GdkDragAction action;
   gchar *str;
 
   str = (gchar *) gtk_selection_data_get_text (selection_data);
+  action = gtk_entry_get_action (entry, drop);
 
-  if (str && priv->editable)
+  if (action && str && priv->editable)
     {
       gint sel1, sel2;
       gint length = -1;
@@ -8727,12 +8733,12 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
           end_change (entry);
 	}
       
-      gtk_drag_finish (context, TRUE, time);
+      gdk_drop_finish (drop, action);
     }
   else
     {
       /* Drag and drop didn't happen! */
-      gtk_drag_finish (context, FALSE, time);
+      gdk_drop_finish (drop, 0);
     }
 
   g_free (str);
@@ -8741,8 +8747,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 static void
 gtk_entry_drag_data_get (GtkWidget        *widget,
 			 GdkDragContext   *context,
-			 GtkSelectionData *selection_data,
-			 guint             time)
+			 GtkSelectionData *selection_data)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

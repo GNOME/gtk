@@ -65,14 +65,7 @@ GtkImageDefinition *gtk_icon_helper_get_definition (GtkIconHelper *self);
 const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
 GtkSizeRequestMode gtk_icon_helper_get_request_mode (GtkIconHelper *self);
-void gtk_icon_helper_measure (GtkIconHelper *self,
-                              GtkOrientation orientation,
-                              int            for_size,
-                              int           *minimum,
-                              int           *natural);
-void _gtk_icon_helper_get_size (GtkIconHelper *self,
-                                gint *width_out,
-                                gint *height_out);
+int gtk_icon_helper_get_size (GtkIconHelper *self);
 
 gboolean _gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self);
 void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,

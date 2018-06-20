@@ -291,11 +291,10 @@ gtk_stack_switcher_switch_timeout (gpointer data)
 }
 
 static gboolean
-gtk_stack_switcher_drag_motion (GtkWidget      *widget,
-                                GdkDragContext *context,
-                                gint            x,
-                                gint            y,
-                                guint           time)
+gtk_stack_switcher_drag_motion (GtkWidget *widget,
+                                GdkDrop   *drop,
+                                gint       x,
+                                gint       y)
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
   GtkStackSwitcherPrivate *priv;
@@ -335,9 +334,8 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
 }
 
 static void
-gtk_stack_switcher_drag_leave (GtkWidget      *widget,
-                               GdkDragContext *context,
-                               guint           time)
+gtk_stack_switcher_drag_leave (GtkWidget *widget,
+                               GdkDrop   *drop)
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
 

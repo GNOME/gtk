@@ -86,9 +86,6 @@ struct _GtkImagePrivate
 
   gchar                *filename;       /* Only used with GTK_IMAGE_SURFACE */
   gchar                *resource_path;  /* Only used with GTK_IMAGE_SURFACE */
-
-  guint keep_aspect_ratio : 1;
-  guint can_shrink : 1;
 };
 
 
@@ -127,8 +124,6 @@ enum
   PROP_GICON,
   PROP_RESOURCE,
   PROP_USE_FALLBACK,
-  PROP_KEEP_ASPECT_RATIO,
-  PROP_CAN_SHRINK,
   NUM_PROPERTIES
 };
 
@@ -263,31 +258,6 @@ gtk_image_class_init (GtkImageClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  /**
-   * GtkImage:keep-aspect-ratio:
-   *
-   * Whether the GtkImage will render its contents trying to preserve the aspect
-   * ratio of the contents.
-   */
-  image_props[PROP_KEEP_ASPECT_RATIO] =
-      g_param_spec_boolean ("keep-aspect-ratio",
-                            P_("Keep aspect ratio"),
-                            P_("Render contents respecting the aspect ratio"),
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkImage:can-shrink
-   *
-   * If the #GtkImage can be made smaller than the image it contains.
-   */
-  image_props[PROP_CAN_SHRINK] =
-      g_param_spec_boolean ("can-shrink",
-                            P_("Can shrink"),
-                            P_("Allow image to be smaller than contents"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, image_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
@@ -304,7 +274,6 @@ gtk_image_init (GtkImage *image)
   gtk_widget_set_has_surface (GTK_WIDGET (image), FALSE);
 
   priv->icon_helper = gtk_icon_helper_new (widget_node, GTK_WIDGET (image));
-  priv->keep_aspect_ratio = TRUE;
 }
 
 static void
@@ -361,14 +330,6 @@ gtk_image_set_property (GObject      *object,
         g_object_notify_by_pspec (object, pspec);
       break;
 
-    case PROP_KEEP_ASPECT_RATIO:
-      gtk_image_set_keep_aspect_ratio (image, g_value_get_boolean (value));
-      break;
-
-    case PROP_CAN_SHRINK:
-      gtk_image_set_can_shrink (image, g_value_get_boolean (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -409,12 +370,6 @@ gtk_image_get_property (GObject     *object,
       break;
     case PROP_USE_FALLBACK:
       g_value_set_boolean (value, _gtk_icon_helper_get_use_fallback (priv->icon_helper));
-      break;
-    case PROP_KEEP_ASPECT_RATIO:
-      g_value_set_boolean (value, priv->keep_aspect_ratio);
-      break;
-    case PROP_CAN_SHRINK:
-      g_value_set_boolean (value, priv->can_shrink);
       break;
     case PROP_STORAGE_TYPE:
       g_value_set_enum (value, _gtk_icon_helper_get_storage_type (priv->icon_helper));
@@ -1148,7 +1103,7 @@ gtk_image_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_height (widget);
   ratio = gdk_paintable_get_intrinsic_aspect_ratio (GDK_PAINTABLE (priv->icon_helper));
 
-  if (!priv->keep_aspect_ratio || ratio == 0)
+  if (ratio == 0)
     {
       gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, width, height);
     }
@@ -1296,13 +1251,7 @@ gtk_image_measure (GtkWidget      *widget,
   GtkImagePrivate *priv = gtk_image_get_instance_private (GTK_IMAGE (widget));
   float baseline_align;
 
-  gtk_icon_helper_measure (priv->icon_helper,
-                           orientation,
-                           for_size,
-                           minimum, natural);
-
-  if (priv->can_shrink)
-    *minimum = 0;
+  *minimum = *natural = gtk_icon_helper_get_size (priv->icon_helper);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -1413,99 +1362,6 @@ gtk_image_get_icon_size (GtkImage *image)
   return priv->icon_size;
 }
 
-/**
- * gtk_image_set_keep_aspect_ratio:
- * @image: a #GtkImage
- * @keep_aspect_ratio: whether to keep aspect ratio
- *
- * If set to %TRUE, the @image will render its contents according to
- * their aspect ratio. That means that empty space may show up at the
- * top/bottom or left/right of @image.
- *
- * If set to %FALSE or if the contents provide no aspect ratio, the
- * contents will be stretched over the image's whole area.
- */
-void
-gtk_image_set_keep_aspect_ratio (GtkImage *image,
-                                 gboolean  keep_aspect_ratio)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  if (priv->keep_aspect_ratio == keep_aspect_ratio)
-    return;
-
-  priv->keep_aspect_ratio = keep_aspect_ratio;
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_KEEP_ASPECT_RATIO]);
-}
-
-/**
- * gtk_image_get_keep_aspect_ratio:
- * @image: a #GtkImage
- *
- * Gets the value set via gtk_image_set_keep_aspect_ratio().
- *
- * Returns: %TRUE if the image tries to keep the contents' aspect ratio
- **/
-gboolean
-gtk_image_get_keep_aspect_ratio (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_val_if_fail (GTK_IS_IMAGE (image), TRUE);
-
-  return priv->keep_aspect_ratio;
-}
-
-/**
- * gtk_image_set_can_shrink:
- * @image: a #GtkImage
- * @can_shrink: if the @image can be made smaller than its contents
- *
- * If set to %TRUE, the @image can be made smaller than its contents.
- * The contents will be scaled down when rendering.
- *
- * If you want to still force a minimum size manually, consider using
- * gtk_widget_set_size_request().
- *
- * Also of note is that a similar function for growing does not exist
- * because the grow behavior can be controlled via
- * gtk_widget_set_halign() and gtk_widget_set_valign().
- */
-void
-gtk_image_set_can_shrink (GtkImage *image,
-                          gboolean  can_shrink)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  if (priv->can_shrink == can_shrink)
-    return;
-
-  priv->can_shrink = can_shrink;
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_CAN_SHRINK]);
-}
-
-/**
- * gtk_image_get_can_shrink:
- * @image: a #GtkImage
- *
- * Gets the value set via gtk_image_set_can_shrink().
- *
- * Returns: %TRUE if the image can be made smaller than its contents
- **/
-gboolean
-gtk_image_get_can_shrink (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_val_if_fail (GTK_IS_IMAGE (image), FALSE);
-
-  return priv->can_shrink;
-}
-
 void
 gtk_image_get_image_size (GtkImage *image,
                           int      *width,
@@ -1513,5 +1369,5 @@ gtk_image_get_image_size (GtkImage *image,
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
-  _gtk_icon_helper_get_size (priv->icon_helper, width, height);
+  *width = *height = gtk_icon_helper_get_size (priv->icon_helper);
 }

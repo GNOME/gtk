@@ -202,6 +202,8 @@ gtk_public_sources = files([
   'gtkcssprovider.c',
   'gtkcsssection.c',
   'gtkdialog.c',
+  'gtkdnd.c',
+  'gtkdragdest.c',
   'gtkdragsource.c',
   'gtkdrawingarea.c',
   'gtkeditable.c',
@@ -284,6 +286,7 @@ gtk_public_sources = files([
   'gtkpagesetup.c',
   'gtkpaned.c',
   'gtkpapersize.c',
+  'gtkpicture.c',
   'gtkpopover.c',
   'gtkpopovermenu.c',
   'gtkprintcontext.c',
@@ -519,6 +522,7 @@ gtk_public_headers = files([
   'gtkpagesetup.h',
   'gtkpaned.h',
   'gtkpapersize.h',
+  'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
   'gtkprintcontext.h',
@@ -769,17 +773,6 @@ gtk_use_wayland_or_x11_c_sources = files([
   'gtkapplication-dbus.c'
 ])
 
-if quartz_enabled
-  dnd_sources = files([
-    'gtkdnd-quartz.c',
-  ])
-else
-  dnd_sources = files([
-    'gtkdnd.c',
-    'gtkdragdest.c',
-  ])
-endif
-
 gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated',
                                    'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
@@ -846,7 +839,6 @@ gtk_gen_headers = [
 gtk_sources += [
   gtk_dbus_src,
   gtk_deprecated_sources,
-  dnd_sources,
   inspector_sources,
   a11y_sources,
   gtkresources,
@@ -1043,7 +1035,6 @@ if build_gir
   gtk_introspection_sources = [
     gtk_public_headers,
     gtk_public_sources,
-    dnd_sources,
     a11y_headers,
     a11y_sources,
     gtktypebuiltins_h,

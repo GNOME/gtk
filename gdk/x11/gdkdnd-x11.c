@@ -104,8 +104,6 @@ struct _GdkX11DragContext
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
   gulong timestamp;            /* Timestamp we claimed the DND selection with */
-  GdkDragAction old_action;    /* The last action we sent to the source */
-  GdkDragAction old_actions;   /* The last actions we sent to the source */
   GdkDragAction xdnd_actions;  /* What is currently set in XdndActionList */
   guint version;               /* Xdnd protocol version */
 
@@ -123,9 +121,9 @@ struct _GdkX11DragContext
   gint hot_y;
 
   Window dest_xid;             /* The last window we looked up */
+  Window proxy_xid;            /* The proxy window for dest_xid (or dest_xid if no proxying happens) */
   Window drop_xid;             /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set  : 1; /* Whether we've already set XdndTypeList */
-  guint xdnd_actions_set  : 1; /* Whether we've already set XdndActionList */
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
   guint drag_status       : 4; /* current status of drag */
   guint drop_failed       : 1; /* Whether the drop was unsuccessful */
@@ -170,29 +168,6 @@ static GrabKey grab_keys[] = {
 static GdkSurfaceCache *gdk_surface_cache_ref   (GdkSurfaceCache *cache);
 static void            gdk_surface_cache_unref (GdkSurfaceCache *cache);
 
-static GdkFilterReturn xdnd_enter_filter    (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_leave_filter    (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_position_filter (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_status_filter   (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_finished_filter (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-static GdkFilterReturn xdnd_drop_filter     (const XEvent *xevent,
-                                             GdkEvent     *event,
-                                             gpointer      data);
-
-static void   xdnd_manage_source_filter (GdkDragContext *context,
-                                         GdkSurface      *surface,
-                                         gboolean        add_filter);
-
 gboolean gdk_x11_drag_context_handle_event (GdkDragContext *context,
                                             const GdkEvent *event);
 void     gdk_x11_drag_context_action_changed (GdkDragContext *context,
@@ -200,19 +175,6 @@ void     gdk_x11_drag_context_action_changed (GdkDragContext *context,
 
 static GList *contexts;
 static GSList *window_caches;
-
-static const struct {
-  const char *atom_name;
-  GdkFilterFunc func;
-} xdnd_filters[] = {
-  { "XdndEnter",                    xdnd_enter_filter },
-  { "XdndLeave",                    xdnd_leave_filter },
-  { "XdndPosition",                 xdnd_position_filter },
-  { "XdndStatus",                   xdnd_status_filter },
-  { "XdndFinished",                 xdnd_finished_filter },
-  { "XdndDrop",                     xdnd_drop_filter },
-};
-
 
 G_DEFINE_TYPE (GdkX11DragContext, gdk_x11_drag_context, GDK_TYPE_DRAG_CONTEXT)
 
@@ -223,28 +185,22 @@ gdk_x11_drag_context_init (GdkX11DragContext *context)
 }
 
 static void        gdk_x11_drag_context_finalize (GObject *object);
-static GdkSurface * gdk_x11_drag_context_find_surface (GdkDragContext  *context,
+static Window      gdk_x11_drag_context_find_surface (GdkDragContext  *context,
                                                      GdkSurface       *drag_surface,
                                                      gint             x_root,
                                                      gint             y_root,
                                                      GdkDragProtocol *protocol);
 static gboolean    gdk_x11_drag_context_drag_motion (GdkDragContext  *context,
-                                                     GdkSurface       *dest_surface,
+                                                     Window           proxy_xid,
                                                      GdkDragProtocol  protocol,
                                                      gint             x_root,
                                                      gint             y_root,
                                                      GdkDragAction    suggested_action,
                                                      GdkDragAction    possible_actions,
                                                      guint32          time);
-static void        gdk_x11_drag_context_drag_status (GdkDragContext  *context,
-                                                     GdkDragAction    action,
-                                                     guint32          time_);
 static void        gdk_x11_drag_context_drag_abort  (GdkDragContext  *context,
                                                      guint32          time_);
 static void        gdk_x11_drag_context_drag_drop   (GdkDragContext  *context,
-                                                     guint32          time_);
-static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
-                                                     gboolean         success,
                                                      guint32          time_);
 static GdkSurface * gdk_x11_drag_context_get_drag_surface (GdkDragContext *context);
 static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
@@ -260,135 +216,6 @@ static void        gdk_x11_drag_context_drop_performed (GdkDragContext *context,
                                                         guint32         time);
 
 static void
-gdk_x11_drag_context_read_got_stream (GObject      *source,
-                                      GAsyncResult *res,
-                                      gpointer      data)
-{
-  GTask *task = data;
-  GError *error = NULL;
-  GInputStream *stream;
-  const char *type;
-  int format;
-  
-  stream = gdk_x11_selection_input_stream_new_finish (res, &type, &format, &error);
-  if (stream == NULL)
-    {
-      GSList *targets, *next;
-      
-      targets = g_task_get_task_data (task);
-      next = targets->next;
-      if (next)
-        {
-          GdkDragContext *context = GDK_DRAG_CONTEXT (g_task_get_source_object (task));
-
-          GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("reading %s failed, trying %s next\n",
-                                     (char *) targets->data, (char *) next->data));
-          targets->next = NULL;
-          g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
-          gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
-                                                    "XdndSelection",
-                                                    next->data,
-                                                    CurrentTime,
-                                                    g_task_get_priority (task),
-                                                    g_task_get_cancellable (task),
-                                                    gdk_x11_drag_context_read_got_stream,
-                                                    task);
-          g_error_free (error);
-          return;
-        }
-
-      g_task_return_error (task, error);
-    }
-  else
-    {
-      const char *mime_type = ((GSList *) g_task_get_task_data (task))->data;
-#if 0
-      gsize i;
-
-      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
-        {
-          if (g_str_equal (mime_type, special_targets[i].x_target))
-            {
-              g_assert (special_targets[i].mime_type != NULL);
-
-              GDK_DISPLAY_NOTE (CLIPBOARD, g_printerr ("%s: reading with converter from %s to %s\n",
-                                              cb->selection, mime_type, special_targets[i].mime_type));
-              mime_type = g_intern_string (special_targets[i].mime_type);
-              g_task_set_task_data (task, g_slist_prepend (NULL, (gpointer) mime_type), (GDestroyNotify) g_slist_free);
-              stream = special_targets[i].convert (cb, stream, type, format);
-              break;
-            }
-        }
-#endif
-
-      GDK_NOTE (DND, g_printerr ("reading DND as %s now\n",
-                                mime_type));
-      g_task_return_pointer (task, stream, g_object_unref);
-    }
-
-  g_object_unref (task);
-}
-
-static void
-gdk_x11_drag_context_read_async (GdkDragContext      *context,
-                                 GdkContentFormats   *formats,
-                                 int                  io_priority,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
-{
-  GSList *targets;
-  GTask *task;
-
-  task = g_task_new (context, cancellable, callback, user_data);
-  g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, gdk_x11_drag_context_read_async);
-
-  targets = gdk_x11_clipboard_formats_to_targets (formats);
-  g_task_set_task_data (task, targets, (GDestroyNotify) g_slist_free);
-  if (targets == NULL)
-    {
-      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                               _("No compatible transfer format found"));
-      return;
-    }
-
-  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("new read for %s (%u other options)\n",
-                            (char *) targets->data, g_slist_length (targets->next)));
-  gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
-                                            "XdndSelection",
-                                            targets->data,
-                                            CurrentTime,
-                                            io_priority,
-                                            cancellable,
-                                            gdk_x11_drag_context_read_got_stream,
-                                            task);
-}
-
-static GInputStream *
-gdk_x11_drag_context_read_finish (GdkDragContext  *context,
-                                  const char     **out_mime_type,
-                                  GAsyncResult    *result,
-                                  GError         **error)
-{
-  GTask *task;
-
-  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (context)), NULL);
-  task = G_TASK (result);
-  g_return_val_if_fail (g_task_get_source_tag (task) == gdk_x11_drag_context_read_async, NULL);
-
-  if (out_mime_type)
-    {
-      GSList *targets;
-
-      targets = g_task_get_task_data (task);
-      *out_mime_type = targets ? targets->data : NULL;
-    }
-
-  return g_task_propagate_pointer (task, error);
-}
-
-static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -396,12 +223,8 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 
   object_class->finalize = gdk_x11_drag_context_finalize;
 
-  context_class->drag_status = gdk_x11_drag_context_drag_status;
   context_class->drag_abort = gdk_x11_drag_context_drag_abort;
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
-  context_class->drop_finish = gdk_x11_drag_context_drop_finish;
-  context_class->read_async = gdk_x11_drag_context_read_async;
-  context_class->read_finish = gdk_x11_drag_context_read_finish;
   context_class->get_drag_surface = gdk_x11_drag_context_get_drag_surface;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
   context_class->drop_done = gdk_x11_drag_context_drop_done;
@@ -418,12 +241,6 @@ gdk_x11_drag_context_finalize (GObject *object)
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (object);
   GdkSurface *drag_surface, *ipc_surface;
-
-  if (context->source_surface)
-    {
-      if ((x11_context->protocol == GDK_DRAG_PROTO_XDND) && !context->is_source)
-        xdnd_manage_source_filter (context, context->source_surface, FALSE);
-    }
 
   if (x11_context->cache)
     gdk_surface_cache_unref (x11_context->cache);
@@ -443,11 +260,10 @@ gdk_x11_drag_context_finalize (GObject *object)
 
 /* Drag Contexts */
 
-static GdkDragContext *
-gdk_drag_context_find (GdkDisplay *display,
-                       gboolean    is_source,
-                       Window      source_xid,
-                       Window      dest_xid)
+GdkDragContext *
+gdk_x11_drag_context_find (GdkDisplay *display,
+                           Window      source_xid,
+                           Window      dest_xid)
 {
   GList *tmp_list;
   GdkDragContext *context;
@@ -459,18 +275,16 @@ gdk_drag_context_find (GdkDisplay *display,
       context = (GdkDragContext *)tmp_list->data;
       context_x11 = (GdkX11DragContext *)context;
 
-      if ((context->source_surface && gdk_surface_get_display (context->source_surface) != display) ||
-          (context->dest_surface && gdk_surface_get_display (context->dest_surface) != display))
+      if (gdk_drag_context_get_display (context) != display)
         continue;
 
-      context_dest_xid = context->dest_surface
+      context_dest_xid = context_x11->proxy_xid
                             ? (context_x11->drop_xid
                                   ? context_x11->drop_xid
-                                  : GDK_SURFACE_XID (context->dest_surface))
+                                  : context_x11->proxy_xid)
                             : None;
 
-      if ((!context->is_source == !is_source) &&
-          ((source_xid == None) || (context->source_surface &&
+      if (((source_xid == None) || (context->source_surface &&
             (GDK_SURFACE_XID (context->source_surface) == source_xid))) &&
           ((dest_xid == None) || (context_dest_xid == dest_xid)))
         return context;
@@ -766,8 +580,8 @@ gdk_surface_cache_new (GdkDisplay *display)
     {
       cow = XCompositeGetOverlayWindow (xdisplay, xroot_window);
       gdk_surface_cache_add (result, cow, 0, 0,
-			    WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen) * GDK_X11_SCREEN (screen)->surface_scale,
-			    HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen) * GDK_X11_SCREEN (screen)->surface_scale,
+			    WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen),
+			    HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen),
 			    TRUE);
       XCompositeReleaseOverlayWindow (xdisplay, xroot_window);
     }
@@ -987,16 +801,6 @@ get_client_window_at_coords (GdkSurfaceCache *cache,
     return GDK_DISPLAY_XROOTWIN (display);
 }
 
-#ifdef G_ENABLE_DEBUG
-static void
-print_target_list (GdkContentFormats *formats)
-{
-  gchar *name = gdk_content_formats_to_string (formats);
-  g_message ("DND formats: %s", name);
-  g_free (name);
-}
-#endif /* G_ENABLE_DEBUG */
-
 /*************************************************************
  ***************************** XDND **************************
  *************************************************************/
@@ -1050,23 +854,16 @@ xdnd_action_to_atom (GdkDisplay    *display,
 
 /* Source side */
 
-static GdkFilterReturn
-xdnd_status_filter (const XEvent *xevent,
-                    GdkEvent     *event,
-                    gpointer      data)
+void
+gdk_x11_drag_context_handle_status (GdkDisplay   *display,
+                                    const XEvent *xevent)
 {
-  GdkDisplay *display;
   guint32 dest_surface = xevent->xclient.data.l[0];
   guint32 flags = xevent->xclient.data.l[1];
   Atom action = xevent->xclient.data.l[4];
   GdkDragContext *context;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = gdk_surface_get_display (event->any.surface);
-  context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_surface);
+  context = gdk_x11_drag_context_find (display, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndStatus: dest_surface: %#x  action: %ld",
@@ -1093,26 +890,17 @@ xdnd_status_filter (const XEvent *xevent,
           g_signal_emit_by_name (context, "action-changed", action);
         }
     }
-
-  return GDK_FILTER_REMOVE;
 }
 
-static GdkFilterReturn
-xdnd_finished_filter (const XEvent *xevent,
-                      GdkEvent     *event,
-                      gpointer      data)
+void
+gdk_x11_drag_context_handle_finished (GdkDisplay   *display,
+                                      const XEvent *xevent)
 {
-  GdkDisplay *display;
   guint32 dest_surface = xevent->xclient.data.l[0];
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
 
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = gdk_surface_get_display (event->any.surface);
-  context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_surface);
+  context = gdk_x11_drag_context_find (display, xevent->xclient.window, dest_surface);
 
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndFinished: dest_surface: %#x", dest_surface));
@@ -1130,8 +918,6 @@ xdnd_finished_filter (const XEvent *xevent,
 
       g_object_unref (context);
     }
-
-  return GDK_FILTER_REMOVE;
 }
 
 static void
@@ -1169,7 +955,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
   guint actions;
   GdkDisplay *display = gdk_drag_context_get_display (context);
 
-  actions = context->actions;
+  actions = gdk_drag_context_get_actions (context);
   n_atoms = 0;
   for (i = 0; i < xdnd_n_actions; i++)
     {
@@ -1182,7 +968,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
 
   atomlist = g_new (Atom, n_atoms);
 
-  actions = context->actions;
+  actions = gdk_drag_context_get_actions (context);
   n_atoms = 0;
   for (i = 0; i < xdnd_n_actions; i++)
     {
@@ -1202,8 +988,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
 
   g_free (atomlist);
 
-  context_x11->xdnd_actions_set = TRUE;
-  context_x11->xdnd_actions = context->actions;
+  context_x11->xdnd_actions = gdk_drag_context_get_actions (context);
 }
 
 static void
@@ -1211,7 +996,9 @@ send_client_message_async_cb (Window   window,
                               gboolean success,
                               gpointer data)
 {
+  GdkX11DragContext *context_x11 = data;
   GdkDragContext *context = data;
+
   GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND,
             g_message ("Got async callback for #%lx, success = %d",
                        window, success));
@@ -1220,13 +1007,9 @@ send_client_message_async_cb (Window   window,
    * so we don't end up blocking for a timeout
    */
   if (!success &&
-      context->dest_surface &&
-      window == GDK_SURFACE_XID (context->dest_surface))
+      window == context_x11->proxy_xid)
     {
-      GdkX11DragContext *context_x11 = data;
-
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
+      context_x11->proxy_xid = None;
       context->action = 0;
       if (context->action != context_x11->current_action)
         {
@@ -1242,7 +1025,6 @@ send_client_message_async_cb (Window   window,
 static void
 send_client_message_async (GdkDragContext      *context,
                            Window               window,
-                           gboolean             propagate,
                            glong                event_mask,
                            XClientMessageEvent *event_send)
 {
@@ -1251,59 +1033,36 @@ send_client_message_async (GdkDragContext      *context,
   g_object_ref (context);
 
   _gdk_x11_send_client_message_async (display, window,
-                                      propagate, event_mask, event_send,
+                                      FALSE, event_mask, event_send,
                                       send_client_message_async_cb, context);
 }
 
-static gboolean
+static void
 xdnd_send_xevent (GdkX11DragContext *context_x11,
-                  GdkSurface         *surface,
-                  gboolean           propagate,
                   XEvent            *event_send)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   GdkDisplay *display = gdk_drag_context_get_display (context);
-  Window xwindow;
+  GdkSurface *surface;
   glong event_mask;
 
   g_assert (event_send->xany.type == ClientMessage);
 
   /* We short-circuit messages to ourselves */
-  if (gdk_surface_get_surface_type (surface) != GDK_SURFACE_FOREIGN)
+  surface = gdk_x11_surface_lookup_for_display (display, context_x11->proxy_xid);
+  if (surface)
     {
-      gint i;
-
-      for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
-        {
-          if (gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name) ==
-              event_send->xclient.message_type)
-            {
-              GdkEvent *temp_event;
-
-              temp_event = gdk_event_new (GDK_NOTHING);
-              temp_event->any.surface = g_object_ref (surface);
-
-              if ((*xdnd_filters[i].func) (event_send, temp_event, NULL) == GDK_FILTER_TRANSLATE)
-                gdk_display_put_event (display, temp_event);
-
-              g_object_unref (temp_event);
-
-              return TRUE;
-            }
-        }
+      if (gdk_x11_drop_filter (surface, event_send))
+        return;
     }
 
-  xwindow = GDK_SURFACE_XID (surface);
-
-  if (_gdk_x11_display_is_root_window (display, xwindow))
+  if (_gdk_x11_display_is_root_window (display, context_x11->proxy_xid))
     event_mask = ButtonPressMask;
   else
     event_mask = 0;
 
-  send_client_message_async (context, xwindow, propagate, event_mask,
+  send_client_message_async (context, context_x11->proxy_xid, event_mask,
                              &event_send->xclient);
-
-  return TRUE;
 }
 
 static void
@@ -1320,7 +1079,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = (context_x11->version << 24); /* version */
   xev.xclient.data.l[2] = 0;
@@ -1346,14 +1105,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
         }
     }
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, FALSE, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, &xev);
 }
 
 static void
@@ -1368,21 +1120,14 @@ xdnd_send_leave (GdkX11DragContext *context_x11)
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, FALSE, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, &xev);
 }
 
 static void
@@ -1398,21 +1143,14 @@ xdnd_send_drop (GdkX11DragContext *context_x11,
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = time;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, FALSE, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, &xev);
 }
 
 static void
@@ -1431,21 +1169,14 @@ xdnd_send_motion (GdkX11DragContext *context_x11,
   xev.xclient.format = 32;
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
-                           : GDK_SURFACE_XID (context->dest_surface);
+                           : context_x11->proxy_xid;
   xev.xclient.data.l[0] = GDK_SURFACE_XID (context_x11->ipc_surface);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
   xev.xclient.data.l[3] = time;
   xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
 
-  if (!xdnd_send_xevent (context_x11, context->dest_surface, FALSE, &xev))
-    {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           GDK_SURFACE_XID (context->dest_surface)));
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
-    }
+  xdnd_send_xevent (context_x11, &xev);
   context_x11->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
 }
 
@@ -1525,148 +1256,6 @@ xdnd_check_dest (GdkDisplay *display,
 /* Target side */
 
 static void
-xdnd_read_actions (GdkX11DragContext *context_x11)
-{
-  GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-  GdkDisplay *display = gdk_drag_context_get_display (context);
-  Atom type;
-  int format;
-  gulong nitems, after;
-  guchar *data;
-  Atom *atoms;
-  gint i;
-
-  context_x11->xdnd_have_actions = FALSE;
-
-  if (gdk_surface_get_surface_type (context->source_surface) == GDK_SURFACE_FOREIGN)
-    {
-      /* Get the XdndActionList, if set */
-
-      gdk_x11_display_error_trap_push (display);
-      if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-                              GDK_SURFACE_XID (context->source_surface),
-                              gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
-                              0, 65536,
-                              False, XA_ATOM, &type, &format, &nitems,
-                              &after, &data) == Success &&
-          type == XA_ATOM)
-        {
-          atoms = (Atom *)data;
-
-          context->actions = 0;
-
-          for (i = 0; i < nitems; i++)
-            context->actions |= xdnd_action_from_atom (display, atoms[i]);
-
-          context_x11->xdnd_have_actions = TRUE;
-
-#ifdef G_ENABLE_DEBUG
-          if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
-            {
-              GString *action_str = g_string_new (NULL);
-              if (context->actions & GDK_ACTION_MOVE)
-                g_string_append(action_str, "MOVE ");
-              if (context->actions & GDK_ACTION_COPY)
-                g_string_append(action_str, "COPY ");
-              if (context->actions & GDK_ACTION_LINK)
-                g_string_append(action_str, "LINK ");
-              if (context->actions & GDK_ACTION_ASK)
-                g_string_append(action_str, "ASK ");
-
-              g_message("Xdnd actions = %s", action_str->str);
-              g_string_free (action_str, TRUE);
-            }
-#endif /* G_ENABLE_DEBUG */
-
-        }
-
-      if (data)
-        XFree (data);
-
-      gdk_x11_display_error_trap_pop_ignored (display);
-    }
-  else
-    {
-      /* Local drag
-       */
-      GdkDragContext *source_context;
-
-      source_context = gdk_drag_context_find (display, TRUE,
-                                              GDK_SURFACE_XID (context->source_surface),
-                                              GDK_SURFACE_XID (context->dest_surface));
-
-      if (source_context)
-        {
-          context->actions = source_context->actions;
-          context_x11->xdnd_have_actions = TRUE;
-        }
-    }
-}
-
-/* We have to make sure that the XdndActionList we keep internally
- * is up to date with the XdndActionList on the source window
- * because we get no notification, because Xdnd wasn’t meant
- * to continually send actions. So we select on PropertyChangeMask
- * and add this filter.
- */
-GdkFilterReturn
-xdnd_source_surface_filter (const XEvent *xevent,
-                           GdkEvent     *event,
-                           gpointer      data)
-{
-  GdkX11DragContext *context_x11;
-  GdkDisplay *display;
-
-  if (!data)
-    return GDK_FILTER_CONTINUE;
-
-  context_x11 = data;
-  display = gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context_x11));
-
-  if ((xevent->xany.type == PropertyNotify) &&
-      (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList")))
-    {
-      xdnd_read_actions (context_x11);
-
-      return GDK_FILTER_REMOVE;
-    }
-
-  return GDK_FILTER_CONTINUE;
-}
-
-static void
-xdnd_manage_source_filter (GdkDragContext *context,
-                           GdkSurface      *surface,
-                           gboolean        add_filter)
-{
-  if (!GDK_SURFACE_DESTROYED (surface) &&
-      gdk_surface_get_surface_type (surface) == GDK_SURFACE_FOREIGN)
-    {
-      GdkDisplay *display = gdk_drag_context_get_display (context);
-
-      gdk_x11_display_error_trap_push (display);
-
-      if (add_filter)
-        {
-          gdk_surface_set_events (surface,
-                                 gdk_surface_get_events (surface) |
-                                 GDK_PROPERTY_CHANGE_MASK);
-          g_object_set_data (G_OBJECT (surface), "xdnd-source-context", context);
-        }
-      else
-        {
-          g_object_set_data (G_OBJECT (surface), "xdnd-source-context", NULL);
-          /* Should we remove the GDK_PROPERTY_NOTIFY mask?
-           * but we might want it for other reasons. (Like
-           * INCR selection transactions).
-           */
-        }
-
-      gdk_x11_display_error_trap_pop_ignored (display);
-    }
-}
-
-static void
 base_precache_atoms (GdkDisplay *display)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -1717,324 +1306,13 @@ xdnd_precache_atoms (GdkDisplay *display)
     }
 }
 
-static GdkFilterReturn
-xdnd_enter_filter (const XEvent *xevent,
-                   GdkEvent     *event,
-                   gpointer      cb_data)
-{
-  GdkDisplay *display;
-  GdkX11Display *display_x11;
-  GdkDragContext *context;
-  GdkX11DragContext *context_x11;
-  GdkSeat *seat;
-  gint i;
-  Atom type;
-  int format;
-  gulong nitems, after;
-  guchar *data;
-  Atom *atoms;
-  GdkContentFormats *content_formats;
-  GPtrArray *formats;
-  guint32 source_surface;
-  gboolean get_types;
-  gint version;
-
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  source_surface = xevent->xclient.data.l[0];
-  get_types = ((xevent->xclient.data.l[1] & 1) != 0);
-  version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  xdnd_precache_atoms (display);
-
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndEnter: source_surface: %#x, version: %#x",
-                       source_surface, version));
-
-  if (version < 3)
-    {
-      /* Old source ignore */
-      GDK_DISPLAY_NOTE (display, DND, g_message ("Ignored old XdndEnter message"));
-      return GDK_FILTER_REMOVE;
-    }
-
-  if (display_x11->current_dest_drag != NULL)
-    {
-      g_object_unref (display_x11->current_dest_drag);
-      display_x11->current_dest_drag = NULL;
-    }
-
-  seat = gdk_display_get_default_seat (display);
-
-  formats = g_ptr_array_new ();
-  if (get_types)
-    {
-      gdk_x11_display_error_trap_push (display);
-      XGetWindowProperty (GDK_SURFACE_XDISPLAY (event->any.surface),
-                          source_surface,
-                          gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
-                          0, 65536,
-                          False, XA_ATOM, &type, &format, &nitems,
-                          &after, &data);
-
-      if (gdk_x11_display_error_trap_pop (display) || (format != 32) || (type != XA_ATOM))
-        {
-          if (data)
-            XFree (data);
-
-          return GDK_FILTER_REMOVE;
-        }
-
-      atoms = (Atom *)data;
-      for (i = 0; i < nitems; i++)
-        g_ptr_array_add (formats, 
-                         (gpointer) gdk_x11_get_xatom_name_for_display (display, atoms[i]));
-
-      XFree (atoms);
-    }
-  else
-    {
-      for (i = 0; i < 3; i++)
-        if (xevent->xclient.data.l[2 + i])
-          g_ptr_array_add (formats, 
-                           (gpointer) gdk_x11_get_xatom_name_for_display (display,
-                                                                          xevent->xclient.data.l[2 + i]));
-    }
-  content_formats = gdk_content_formats_new ((const char **) formats->pdata, formats->len);
-  g_ptr_array_unref (formats);
-
-#ifdef G_ENABLE_DEBUG
-  if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
-    print_target_list (content_formats);
-#endif /* G_ENABLE_DEBUG */
-
-  context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
-                              "device", gdk_seat_get_pointer (seat),
-                              "formats", content_formats,
-                              NULL);
-  context = (GdkDragContext *)context_x11;
-
-  context_x11->protocol = GDK_DRAG_PROTO_XDND;
-  context_x11->version = version;
-
-  /* FIXME: Should extend DnD protocol to have device info */
-
-  context->source_surface = gdk_x11_surface_foreign_new_for_display (display, source_surface);
-  if (!context->source_surface)
-    {
-      g_object_unref (context);
-      return GDK_FILTER_REMOVE;
-    }
-  context->dest_surface = event->any.surface;
-  g_object_ref (context->dest_surface);
-  xdnd_manage_source_filter (context, context->source_surface, TRUE);
-  xdnd_read_actions (context_x11);
-
-  event->any.type = GDK_DRAG_ENTER;
-  event->dnd.context = context;
-  gdk_event_set_device (event, gdk_drag_context_get_device (context));
-  g_object_ref (context);
-
-  display_x11->current_dest_drag = context;
-
-  gdk_content_formats_unref (content_formats);
-
-  return GDK_FILTER_TRANSLATE;
-}
-
-static GdkFilterReturn
-xdnd_leave_filter (const XEvent *xevent,
-                   GdkEvent     *event,
-                   gpointer      data)
-{
-  guint32 source_surface = xevent->xclient.data.l[0];
-  GdkDisplay *display;
-  GdkX11Display *display_x11;
-
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndLeave: source_surface: %#x",
-                       source_surface));
-
-  xdnd_precache_atoms (display);
-
-  if ((display_x11->current_dest_drag != NULL) &&
-      (GDK_X11_DRAG_CONTEXT (display_x11->current_dest_drag)->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_SURFACE_XID (display_x11->current_dest_drag->source_surface) == source_surface))
-    {
-      event->any.type = GDK_DRAG_LEAVE;
-      /* Pass ownership of context to the event */
-      event->dnd.context = display_x11->current_dest_drag;
-      gdk_event_set_device (event, gdk_drag_context_get_device (event->dnd.context));
-
-      display_x11->current_dest_drag = NULL;
-
-      return GDK_FILTER_TRANSLATE;
-    }
-  else
-    return GDK_FILTER_REMOVE;
-}
-
-static GdkFilterReturn
-xdnd_position_filter (const XEvent *xevent,
-                      GdkEvent     *event,
-                      gpointer      data)
-{
-  GdkSurfaceImplX11 *impl;
-  guint32 source_surface = xevent->xclient.data.l[0];
-  gint16 x_root = xevent->xclient.data.l[2] >> 16;
-  gint16 y_root = xevent->xclient.data.l[2] & 0xffff;
-  guint32 time = xevent->xclient.data.l[3];
-  Atom action = xevent->xclient.data.l[4];
-  GdkDisplay *display;
-  GdkX11Display *display_x11;
-  GdkDragContext *context;
-  GdkX11DragContext *context_x11;
-
-   if (!event->any.surface ||
-       gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-     return GDK_FILTER_CONTINUE;                        /* Not for us */
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndPosition: source_surface: %#x position: (%d, %d)  time: %d  action: %ld",
-                       source_surface, x_root, y_root, time, action));
-
-  xdnd_precache_atoms (display);
-
-  context = display_x11->current_dest_drag;
-
-  if ((context != NULL) &&
-      (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_SURFACE_XID (context->source_surface) == source_surface))
-    {
-      impl = GDK_SURFACE_IMPL_X11 (event->any.surface->impl);
-
-      context_x11 = GDK_X11_DRAG_CONTEXT (context);
-
-      event->any.type = GDK_DRAG_MOTION;
-      event->dnd.context = context;
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      g_object_ref (context);
-
-      event->dnd.time = time;
-
-      context->suggested_action = xdnd_action_from_atom (display, action);
-
-      if (!context_x11->xdnd_have_actions)
-        context->actions = context->suggested_action;
-
-      event->dnd.x_root = x_root / impl->surface_scale;
-      event->dnd.y_root = y_root / impl->surface_scale;
-
-      context_x11->last_x = x_root / impl->surface_scale;
-      context_x11->last_y = y_root / impl->surface_scale;
-
-      return GDK_FILTER_TRANSLATE;
-    }
-
-  return GDK_FILTER_REMOVE;
-}
-
-static GdkFilterReturn
-xdnd_drop_filter (const XEvent *xevent,
-                  GdkEvent     *event,
-                  gpointer      data)
-{
-  guint32 source_surface = xevent->xclient.data.l[0];
-  guint32 time = xevent->xclient.data.l[2];
-  GdkDisplay *display;
-  GdkX11Display *display_x11;
-  GdkDragContext *context;
-  GdkX11DragContext *context_x11;
-
-  if (!event->any.surface ||
-      gdk_surface_get_surface_type (event->any.surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE;                 /* Not for us */
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndDrop: source_surface: %#x  time: %d",
-                       source_surface, time));
-
-  xdnd_precache_atoms (display);
-
-  context = display_x11->current_dest_drag;
-
-  if ((context != NULL) &&
-      (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_SURFACE_XID (context->source_surface) == source_surface))
-    {
-      context_x11 = GDK_X11_DRAG_CONTEXT (context);
-      event->any.type = GDK_DROP_START;
-
-      event->dnd.context = context;
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      g_object_ref (context);
-
-      event->dnd.time = time;
-      event->dnd.x_root = context_x11->last_x;
-      event->dnd.y_root = context_x11->last_y;
-
-      gdk_x11_surface_set_user_time (event->any.surface, time);
-
-      return GDK_FILTER_TRANSLATE;
-    }
-
-  return GDK_FILTER_REMOVE;
-}
-
-GdkFilterReturn
-_gdk_x11_dnd_filter (const XEvent *xevent,
-                     GdkEvent     *event,
-                     gpointer      data)
-{
-  GdkDisplay *display;
-  int i;
-
-  if (!GDK_IS_X11_SURFACE (event->any.surface))
-    return GDK_FILTER_CONTINUE;
-
-  if (xevent->type != ClientMessage)
-    return GDK_FILTER_CONTINUE;
-
-  display = GDK_SURFACE_DISPLAY (event->any.surface);
-
-  for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
-    {
-      if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name))
-        continue;
-
-      return xdnd_filters[i].func (xevent, event, data);
-    }
-
-  return GDK_FILTER_CONTINUE;
-}
-
 /* Source side */
 
 static void
 gdk_drag_do_leave (GdkX11DragContext *context_x11,
                    guint32            time)
 {
-  GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-
-  if (context->dest_surface)
+  if (context_x11->proxy_xid)
     {
       switch (context_x11->protocol)
         {
@@ -2047,8 +1325,7 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
           break;
         }
 
-      g_object_unref (context->dest_surface);
-      context->dest_surface = NULL;
+      context_x11->proxy_xid = None;
     }
 }
 
@@ -2133,7 +1410,7 @@ drag_context_find_window_cache (GdkX11DragContext *context_x11,
   return context_x11->cache;
 }
 
-static GdkSurface *
+static Window
 gdk_x11_drag_context_find_surface (GdkDragContext  *context,
                                    GdkSurface       *drag_surface,
                                    gint             x_root,
@@ -2145,7 +1422,7 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
   GdkSurfaceCache *window_cache;
   GdkDisplay *display;
   Window dest;
-  GdkSurface *dest_surface;
+  Window proxy;
 
   display = gdk_drag_context_get_display (context);
   screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (display)->screen);
@@ -2160,7 +1437,6 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
 
   if (context_x11->dest_xid != dest)
     {
-      Window recipient;
       context_x11->dest_xid = dest;
 
       /* Check if new destination accepts drags, and which protocol */
@@ -2171,25 +1447,18 @@ gdk_x11_drag_context_find_surface (GdkDragContext  *context,
        * two are passed explicitly, the third implicitly through
        * protocol->dest_xid.
        */
-      recipient = _gdk_x11_display_get_drag_protocol (display,
-                                                      dest,
-                                                      protocol,
-                                                      &context_x11->version);
-
-      if (recipient != None)
-        dest_surface = gdk_x11_surface_foreign_new_for_display (display, recipient);
-      else
-        dest_surface = NULL;
+      proxy = _gdk_x11_display_get_drag_protocol (display,
+                                                  dest,
+                                                  protocol,
+                                                  &context_x11->version);
     }
   else
     {
-      dest_surface = context->dest_surface;
-      if (dest_surface)
-        g_object_ref (dest_surface);
+      proxy = dest;
       *protocol = context_x11->protocol;
     }
 
-  return dest_surface;
+  return proxy;
 }
 
 static void
@@ -2207,7 +1476,7 @@ move_drag_surface (GdkDragContext *context,
 
 static gboolean
 gdk_x11_drag_context_drag_motion (GdkDragContext *context,
-                                  GdkSurface      *dest_surface,
+                                  Window          proxy_xid,
                                   GdkDragProtocol protocol,
                                   gint            x_root,
                                   gint            y_root,
@@ -2216,16 +1485,11 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                                   guint32         time)
 {
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
-  GdkSurfaceImplX11 *impl;
 
   if (context_x11->drag_surface)
     move_drag_surface (context, x_root, y_root);
 
-  context_x11->old_actions = context->actions;
-  context->actions = possible_actions;
-
-  if (context_x11->old_actions != possible_actions)
-    context_x11->xdnd_actions_set = FALSE;
+  gdk_drag_context_set_actions (context, possible_actions, suggested_action);
 
   if (protocol == GDK_DRAG_PROTO_XDND && context_x11->version == 0)
     {
@@ -2237,12 +1501,12 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
        * gdk_drag_find_window(). This happens, e.g.
        * when GTK+ is proxying DND events to embedded windows.
        */
-      if (dest_surface)
+      if (proxy_xid)
         {
-          GdkDisplay *display = GDK_SURFACE_DISPLAY (dest_surface);
+          GdkDisplay *display = gdk_drag_context_get_display (context);
 
           xdnd_check_dest (display,
-                           GDK_SURFACE_XID (dest_surface),
+                           proxy_xid,
                            &context_x11->version);
         }
     }
@@ -2250,31 +1514,21 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
   /* When we have a Xdnd target, make sure our XdndActionList
    * matches the current actions;
    */
-  if (protocol == GDK_DRAG_PROTO_XDND && !context_x11->xdnd_actions_set)
+  if (protocol == GDK_DRAG_PROTO_XDND && context_x11->xdnd_actions != gdk_drag_context_get_actions (context))
     {
-      if (dest_surface)
+      if (proxy_xid)
         {
-          if (gdk_surface_get_surface_type (dest_surface) == GDK_SURFACE_FOREIGN)
+          GdkDisplay *display = gdk_drag_context_get_display (context);
+          GdkDrop *drop = GDK_X11_DISPLAY (display)->current_drop;
+
+          if (drop && GDK_SURFACE_XID (gdk_drop_get_surface (drop)) == proxy_xid)
+            gdk_x11_drop_read_actions (drop);
+          else
             xdnd_set_actions (context_x11);
-          else if (context->dest_surface == dest_surface)
-            {
-              GdkDisplay *display = GDK_SURFACE_DISPLAY (dest_surface);
-              GdkDragContext *dest_context;
-
-              dest_context = gdk_drag_context_find (display, FALSE,
-                                                    GDK_SURFACE_XID (context->source_surface),
-                                                    GDK_SURFACE_XID (dest_surface));
-
-              if (dest_context)
-                {
-                  dest_context->actions = context->actions;
-                  GDK_X11_DRAG_CONTEXT (dest_context)->xdnd_have_actions = TRUE;
-                }
-            }
         }
     }
 
-  if (context->dest_surface != dest_surface)
+  if (context_x11->proxy_xid != proxy_xid)
     {
       /* Send a leave to the last destination */
       gdk_drag_do_leave (context_x11, time);
@@ -2282,11 +1536,10 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
       /* Check if new destination accepts drags, and which protocol */
 
-      if (dest_surface)
+      if (proxy_xid)
         {
-          context->dest_surface = dest_surface;
+          context_x11->proxy_xid = proxy_xid;
           context_x11->drop_xid = context_x11->dest_xid;
-          g_object_ref (context->dest_surface);
           context_x11->protocol = protocol;
 
           switch (protocol)
@@ -2300,13 +1553,10 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
             default:
               break;
             }
-          context_x11->old_action = suggested_action;
-          context->suggested_action = suggested_action;
-          context_x11->old_actions = possible_actions;
         }
       else
         {
-          context->dest_surface = NULL;
+          context_x11->proxy_xid = None;
           context_x11->drop_xid = None;
           context->action = 0;
         }
@@ -2320,27 +1570,23 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
           g_signal_emit_by_name (context, "action-changed", context->action);
         }
     }
-  else
-    {
-      context_x11->old_action = context->suggested_action;
-      context->suggested_action = suggested_action;
-    }
 
   /* Send a drag-motion event */
 
   context_x11->last_x = x_root;
   context_x11->last_y = y_root;
 
-  if (context->dest_surface)
+  if (context_x11->proxy_xid)
     {
-      impl = GDK_SURFACE_IMPL_X11 (context->dest_surface->impl);
+      GdkDisplay *display = gdk_drag_context_get_display (context);
+      GdkX11Screen *screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (display)->screen);
 
       if (context_x11->drag_status == GDK_DRAG_STATUS_DRAG)
         {
           switch (context_x11->protocol)
             {
             case GDK_DRAG_PROTO_XDND:
-              xdnd_send_motion (context_x11, x_root * impl->surface_scale, y_root * impl->surface_scale, suggested_action, time);
+              xdnd_send_motion (context_x11, x_root * screen_x11->surface_scale, y_root * screen_x11->surface_scale, suggested_action, time);
               break;
 
             case GDK_DRAG_PROTO_ROOTWIN:
@@ -2351,7 +1597,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
                     gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
-                  context->action = context->suggested_action;
+                  context->action = gdk_drag_context_get_suggested_action (context);
                 else
                   context->action = 0;
 
@@ -2389,7 +1635,7 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
 {
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
 
-  if (context->dest_surface)
+  if (context_x11->proxy_xid)
     {
       switch (context_x11->protocol)
         {
@@ -2411,92 +1657,6 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
 }
 
 /* Destination side */
-
-static void
-gdk_x11_drag_context_drag_status (GdkDragContext *context,
-                                  GdkDragAction   action,
-                                  guint32         time_)
-{
-  GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
-  XEvent xev;
-  GdkDisplay *display;
-
-  display = gdk_drag_context_get_display (context);
-
-  context->action = action;
-
-  if (context_x11->protocol == GDK_DRAG_PROTO_XDND)
-    {
-      xev.xclient.type = ClientMessage;
-      xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
-      xev.xclient.format = 32;
-      xev.xclient.window = GDK_SURFACE_XID (context->source_surface);
-
-      xev.xclient.data.l[0] = GDK_SURFACE_XID (context->dest_surface);
-      xev.xclient.data.l[1] = (action != 0) ? (2 | 1) : 0;
-      xev.xclient.data.l[2] = 0;
-      xev.xclient.data.l[3] = 0;
-      xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
-      if (!xdnd_send_xevent (context_x11, context->source_surface, FALSE, &xev))
-        {
-          GDK_DISPLAY_NOTE (display, DND,
-                    g_message ("Send event to %lx failed",
-                               GDK_SURFACE_XID (context->source_surface)));
-        }
-    }
-
-  context_x11->old_action = action;
-}
-
-static void
-gdk_x11_drag_context_drop_finish (GdkDragContext *context,
-                                  gboolean        success,
-                                  guint32         time)
-{
-  if (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND)
-    {
-      GdkDisplay *display = gdk_drag_context_get_display (context);
-      XEvent xev;
-
-      if (success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
-        {
-          XConvertSelection (GDK_DISPLAY_XDISPLAY (display),
-                             gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection"),
-                             gdk_x11_get_xatom_by_name_for_display (display, "DELETE"),
-                             gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION"),
-                             GDK_SURFACE_XID (context->source_surface),
-                             time);
-          /* XXX: Do we need to wait for a reply here before sending the next message? */
-        }
-
-      xev.xclient.type = ClientMessage;
-      xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndFinished");
-      xev.xclient.format = 32;
-      xev.xclient.window = GDK_SURFACE_XID (context->source_surface);
-
-      xev.xclient.data.l[0] = GDK_SURFACE_XID (context->dest_surface);
-      if (success)
-        {
-          xev.xclient.data.l[1] = 1;
-          xev.xclient.data.l[2] = xdnd_action_to_atom (display,
-                                                       context->action);
-        }
-      else
-        {
-          xev.xclient.data.l[1] = 0;
-          xev.xclient.data.l[2] = None;
-        }
-      xev.xclient.data.l[3] = 0;
-      xev.xclient.data.l[4] = 0;
-
-      if (!xdnd_send_xevent (GDK_X11_DRAG_CONTEXT (context), context->source_surface, FALSE, &xev))
-        {
-          GDK_DISPLAY_NOTE (display, DND,
-                    g_message ("Send event to %lx failed",
-                               GDK_SURFACE_XID (context->source_surface)));
-        }
-    }
-}
 
 void
 _gdk_x11_surface_register_dnd (GdkSurface *surface)
@@ -2643,6 +1803,15 @@ gdk_x11_drag_context_xevent (GdkDisplay   *display,
                                                  context);
         return TRUE;
       }
+
+    case ClientMessage:
+      if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus"))
+        gdk_x11_drag_context_handle_status (display, xevent);
+      else if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "XdndFinished"))
+        gdk_x11_drag_context_handle_finished (display, xevent);
+      else
+        return FALSE;
+      return TRUE;
 
     default:
       return FALSE;
@@ -2944,8 +2113,6 @@ _gdk_x11_surface_drag_begin (GdkSurface          *surface,
                                              NULL);
   x11_context = GDK_X11_DRAG_CONTEXT (context);
 
-  context->is_source = TRUE;
-
   g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_drag_context_xevent), context);
 
   precache_target_list (context);
@@ -3101,17 +2268,17 @@ gdk_drag_update (GdkDragContext  *context,
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkDragAction action, possible_actions;
-  GdkSurface *dest_surface;
   GdkDragProtocol protocol;
+  Window proxy;
 
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_context->actions,
                                 &action, &possible_actions);
 
-  dest_surface = gdk_x11_drag_context_find_surface (context,
-                                                    x11_context->drag_surface,
-                                                    x_root, y_root, &protocol);
+  proxy = gdk_x11_drag_context_find_surface (context,
+                                             x11_context->drag_surface,
+                                             x_root, y_root, &protocol);
 
-  gdk_x11_drag_context_drag_motion (context, dest_surface, protocol, x_root, y_root,
+  gdk_x11_drag_context_drag_motion (context, proxy, protocol, x_root, y_root,
                                     action, possible_actions, evtime);
 }
 
@@ -3156,10 +2323,9 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
         case GDK_KEY_KP_Enter:
         case GDK_KEY_KP_Space:
           if ((gdk_drag_context_get_selected_action (context) != 0) &&
-              (gdk_drag_context_get_dest_surface (context) != NULL))
+              (x11_context->proxy_xid != None))
             {
-              g_signal_emit_by_name (context, "drop-performed",
-                                     gdk_event_get_time ((GdkEvent *) event));
+              g_signal_emit_by_name (context, "drop-performed");
             }
           else
             gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_NO_TARGET);
@@ -3237,6 +2403,8 @@ static gboolean
 gdk_dnd_handle_button_event (GdkDragContext       *context,
                              const GdkEventButton *event)
 {
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
 #if 0
   /* FIXME: Check the button matches */
   if (event->button != x11_context->button)
@@ -3244,10 +2412,9 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
 #endif
 
   if ((gdk_drag_context_get_selected_action (context) != 0) &&
-      (gdk_drag_context_get_dest_surface (context) != NULL))
+      (x11_context->proxy_xid != None))
     {
-      g_signal_emit_by_name (context, "drop-performed",
-                             gdk_event_get_time ((GdkEvent *) event));
+      g_signal_emit_by_name (context, "drop-performed");
     }
   else
     gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_NO_TARGET);
@@ -3261,8 +2428,6 @@ gdk_x11_drag_context_handle_event (GdkDragContext *context,
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
 
-  if (!context->is_source)
-    return FALSE;
   if (!x11_context->grab_seat)
     return FALSE;
 

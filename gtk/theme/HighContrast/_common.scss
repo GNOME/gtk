@@ -757,21 +757,8 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-right-style: solid;
 }
 
-// .linked assumes Box, which reverses nodes in RTL, so 1st child is always left
+// 1st/last child are at text start/end
 %linked {
-  @extend %linked_middle;
-
-  &:first-child { @extend %linked_left; }
-  &:last-child { @extend %linked_right; }
-
-  &:only-child {
-    border-radius: 3px;
-    border-style: solid;
-  }
-}
-
-// Other widgets use widget child order, so 1st/last child are at text start/end
-%linked_flippable {
   @extend %linked_middle;
 
   &:dir(ltr) {
@@ -1319,7 +1306,7 @@ headerbar {
 // can’t simply remove .linked from the widget as that might break other themes.
 // Note also we select on filechooser to avoid interfering with NautilusPathBar.
 filechooser .path-bar.linked > button {
-  @extend %linked_flippable;
+  @extend %linked;
 }
 
 .path-bar button {

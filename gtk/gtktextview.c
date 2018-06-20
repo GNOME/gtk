@@ -422,29 +422,24 @@ static void gtk_text_view_drag_end         (GtkWidget        *widget,
                                             GdkDragContext   *context);
 static void gtk_text_view_drag_data_get    (GtkWidget        *widget,
                                             GdkDragContext   *context,
-                                            GtkSelectionData *selection_data,
-                                            guint             time);
+                                            GtkSelectionData *selection_data);
 static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
                                             GdkDragContext   *context);
 
 /* Target side drag signals */
 static void     gtk_text_view_drag_leave         (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
-                                                  guint             time);
+                                                  GdkDrop          *drop);
 static gboolean gtk_text_view_drag_motion        (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static gboolean gtk_text_view_drag_drop          (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
+                                                  GdkDrop          *drop,
                                                   gint              x,
-                                                  gint              y,
-                                                  guint             time);
+                                                  gint              y);
 static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
-                                                  GdkDragContext   *context,
-                                                  GtkSelectionData *selection_data,
-                                                  guint             time);
+                                                  GdkDrop          *drop,
+                                                  GtkSelectionData *selection_data);
 
 static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
 
@@ -7655,8 +7650,7 @@ gtk_text_view_drag_end (GtkWidget        *widget,
 static void
 gtk_text_view_drag_data_get (GtkWidget        *widget,
                              GdkDragContext   *context,
-                             GtkSelectionData *selection_data,
-                             guint             time)
+                             GtkSelectionData *selection_data)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
@@ -7698,9 +7692,8 @@ gtk_text_view_drag_data_delete (GtkWidget        *widget,
 }
 
 static void
-gtk_text_view_drag_leave (GtkWidget        *widget,
-                          GdkDragContext   *context,
-                          guint             time)
+gtk_text_view_drag_leave (GtkWidget *widget,
+                          GdkDrop   *drop)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -7721,11 +7714,10 @@ gtk_text_view_drag_leave (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_text_view_drag_motion (GtkWidget        *widget,
-                           GdkDragContext   *context,
-                           gint              x,
-                           gint              y,
-                           guint             time)
+gtk_text_view_drag_motion (GtkWidget *widget,
+                           GdkDrop   *drop,
+                           gint       x,
+                           gint       y)
 {
   GtkTextIter newplace;
   GtkTextView *text_view;
@@ -7735,7 +7727,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GdkRectangle target_rect;
   gint bx, by;
   GdkAtom target;
-  GdkDragAction suggested_action = 0;
+  gboolean can_accept = FALSE;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -7757,7 +7749,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
                                      &newplace,
                                      bx, by);  
 
-  target = gtk_drag_dest_find_target (widget, context,
+  target = gtk_drag_dest_find_target (widget, drop,
                                       gtk_drag_dest_get_target_list (widget));
 
   if (target == NULL)
@@ -7773,37 +7765,17 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     }
   else
     {      
-      if (gtk_text_iter_can_insert (&newplace, priv->editable))
-        {
-          GtkWidget *source_widget;
-          
-          suggested_action = gdk_drag_context_get_suggested_action (context);
-          
-          source_widget = gtk_drag_get_source_widget (context);
-          
-          if (source_widget == widget)
-            {
-              /* Default to MOVE, unless the user has
-               * pressed ctrl or alt to affect available actions
-               */
-              if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
-                suggested_action = GDK_ACTION_MOVE;
-            }
-        }
-      else
-        {
-          /* Can't drop here. */
-        }
+      can_accept = gtk_text_iter_can_insert (&newplace, priv->editable);
     }
 
-  if (suggested_action != 0)
+  if (can_accept)
     {
       gtk_text_mark_set_visible (priv->dnd_mark, cursor_visible (text_view));
-      gdk_drag_status (context, suggested_action, time);
+      gdk_drop_status (drop, GDK_ACTION_COPY | GDK_ACTION_MOVE);
     }
   else
     {
-      gdk_drag_status (context, 0, time);
+      gdk_drop_status (drop, 0);
       gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
     }
 
@@ -7828,11 +7800,10 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_text_view_drag_drop (GtkWidget        *widget,
-                         GdkDragContext   *context,
-                         gint              x,
-                         gint              y,
-                         guint             time)
+gtk_text_view_drag_drop (GtkWidget *widget,
+                         GdkDrop   *drop,
+                         gint       x,
+                         gint       y)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -7854,12 +7825,12 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
                                     priv->dnd_mark);
 
   if (gtk_text_iter_can_insert (&drop_point, priv->editable))
-    target = gtk_drag_dest_find_target (widget, context, NULL);
+    target = gtk_drag_dest_find_target (widget, drop, NULL);
 
   if (target != NULL)
-    gtk_drag_get_data (widget, context, target, time);
+    gtk_drag_get_data (widget, drop, target);
   else
-    gtk_drag_finish (context, FALSE, time);
+    gdk_drop_finish (drop, 0);
 
   return TRUE;
 }
@@ -7886,17 +7857,39 @@ insert_text_data (GtkTextView      *text_view,
     }
 }
 
+static GdkDragAction
+gtk_text_view_get_action (GtkWidget *textview,
+                          GdkDrop   *drop)
+{
+  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
+  GdkDragAction actions;
+
+  actions = gdk_drop_get_actions (drop);
+
+  if (source_widget == textview &&
+      actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  return 0;
+}
+
 static void
 gtk_text_view_drag_data_received (GtkWidget        *widget,
-                                  GdkDragContext   *context,
-                                  GtkSelectionData *selection_data,
-                                  guint             time)
+                                  GdkDrop          *drop,
+                                  GtkSelectionData *selection_data)
 {
   GtkTextIter drop_point;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  gboolean success = FALSE;
   GtkTextBuffer *buffer = NULL;
+  GdkDragAction action = 0;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -7913,7 +7906,9 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   if (!gtk_text_iter_can_insert (&drop_point, priv->editable))
     goto done;
 
-  success = TRUE;
+  action = gtk_text_view_get_action (widget, drop);
+  if (action == 0)
+    goto done;
 
   gtk_text_buffer_begin_user_action (buffer);
 
@@ -7965,9 +7960,9 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     insert_text_data (text_view, &drop_point, selection_data);
 
  done:
-  gtk_drag_finish (context, success, time);
+  gdk_drop_finish (drop, action);
 
-  if (success)
+  if (action)
     {
       gtk_text_buffer_get_iter_at_mark (buffer,
                                         &drop_point,

@@ -138,7 +138,6 @@ drag_data_get (GtkWidget        *widget,
                GdkDragContext   *context,
                GtkSelectionData *selection_data,
                guint             info,
-               guint             time,
                gpointer          data)
 {
   GdkPaintable *paintable;
@@ -150,9 +149,8 @@ drag_data_get (GtkWidget        *widget,
 
 static void
 drag_data_received (GtkWidget        *widget,
-                    GdkDragContext   *context,
+                    GdkDrop          *drop,
                     GtkSelectionData *selection_data,
-                    guint32           time,
                     gpointer          data)
 {
   if (gtk_selection_data_get_length (selection_data) > 0)

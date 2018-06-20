@@ -56,6 +56,24 @@
 #define JOB_STATUS_COMPLETE 0x1000
 #endif
 
+/* Forward declarations */
+GtkPrintOperationResult
+gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
+					gboolean          *do_print);
+GtkPrintOperationResult
+gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
+				     GtkWindow         *parent,
+				     gboolean          *do_print);
+UINT_PTR CALLBACK
+run_mainloop_hook (HWND hdlg,
+		   UINT uiMsg,
+		   WPARAM wParam,
+		   LPARAM lParam);
+void
+win32_start_page (GtkPrintOperation *op,
+		  GtkPrintContext *print_context,
+		  GtkPageSetup *page_setup);
+
 typedef struct {
   HDC hdc;
   HGLOBAL devmode;
@@ -739,7 +757,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_DEFAULTSOURCE)
     {
-      char *source;
+      const char *source;
       switch (devmode->dmDefaultSource)
 	{
 	default:
@@ -839,7 +857,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_MEDIATYPE)
     {
-      char *media_type;
+      const char *media_type;
       switch (devmode->dmMediaType)
 	{
 	default:
@@ -859,7 +877,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_DITHERTYPE)
     {
-      char *dither;
+      const char *dither;
       switch (devmode->dmDitherType)
 	{
 	default:
@@ -1402,10 +1420,6 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
        */
       if (message == WM_SIZE)
         {
-          GtkAllocation alloc;
-          alloc.width = LOWORD (lparam);
-          alloc.height = HIWORD (lparam);
-
           gtk_widget_queue_resize (op_win32->embed_widget);
         }
 

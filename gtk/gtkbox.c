@@ -68,10 +68,6 @@
  * # CSS nodes
  *
  * GtkBox uses a single CSS node with name box.
- *
- * In horizontal orientation, the nodes of the children are always arranged
- * from left to right. So :first-child will always select the leftmost child,
- * regardless of text direction.
  */
 
 #include "config.h"
@@ -145,9 +141,6 @@ static void gtk_box_size_allocate         (GtkWidget              *widget,
                                            const GtkAllocation    *allocation,
                                            int                     baseline);
 
-static void gtk_box_direction_changed  (GtkWidget        *widget,
-                                        GtkTextDirection  previous_direction);
-
 static void gtk_box_set_property       (GObject        *object,
                                         guint           prop_id,
                                         const GValue   *value,
@@ -201,7 +194,6 @@ gtk_box_class_init (GtkBoxClass *class)
 
   widget_class->size_allocate = gtk_box_size_allocate;
   widget_class->measure = gtk_box_measure;
-  widget_class->direction_changed = gtk_box_direction_changed;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -852,9 +844,6 @@ gtk_box_update_child_css_position (GtkBox      *box,
     }
 
   reverse = child_info->pack == GTK_PACK_END;
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-      _gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
-    reverse = !reverse;
 
   if (reverse)
     gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (box)),
@@ -864,17 +853,6 @@ gtk_box_update_child_css_position (GtkBox      *box,
     gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
                                gtk_widget_get_css_node (child_info->widget),
                                prev ? gtk_widget_get_css_node (prev->widget) : NULL);
-}
-
-static void
-gtk_box_direction_changed (GtkWidget        *widget,
-                           GtkTextDirection  previous_direction)
-{
-  GtkBox *box = GTK_BOX (widget);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
 }
 
 static void

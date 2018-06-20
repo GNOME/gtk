@@ -20,14 +20,6 @@ void            gdk_surface_thaw_toplevel_updates        (GdkSurface *surface);
 
 gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
-void            gdk_surface_move_to_rect        (GdkSurface          *surface,
-                                                 const GdkRectangle *rect,
-                                                 GdkGravity          rect_anchor,
-                                                 GdkGravity          surface_anchor,
-                                                 GdkAnchorHints      anchor_hints,
-                                                 gint                rect_anchor_dx,
-                                                 gint                rect_anchor_dy);
-
 GObject *       gdk_event_get_user_data         (const GdkEvent *event);
 
 guint32         gdk_display_get_last_seen_time  (GdkDisplay *display);
@@ -39,6 +31,7 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             const char   *theme,
                                             int           size);
+gboolean gdk_running_in_sandbox (void);
 
 const gchar *   gdk_get_startup_notification_id (void);
 

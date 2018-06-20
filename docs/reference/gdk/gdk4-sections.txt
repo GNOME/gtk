@@ -171,7 +171,6 @@ gdk_rgba_get_type
 <FILE>gdksurface</FILE>
 GdkSurface
 GdkSurfaceType
-GdkSurfaceClass
 GdkSurfaceHints
 GdkGeometry
 GdkGravity
@@ -282,8 +281,6 @@ gdk_surface_get_toplevel
 gdk_surface_get_children
 gdk_surface_get_children_with_user_data
 gdk_surface_peek_children
-gdk_surface_get_events
-gdk_surface_set_events
 gdk_surface_set_icon_name
 gdk_surface_set_transient_for
 gdk_surface_set_role
@@ -301,8 +298,6 @@ gdk_surface_get_support_multidevice
 gdk_surface_set_support_multidevice
 gdk_surface_get_device_cursor
 gdk_surface_set_device_cursor
-gdk_surface_get_device_events
-gdk_surface_set_device_events
 
 <SUBSECTION>
 gdk_surface_coords_from_parent
@@ -627,7 +622,6 @@ GDK_BUTTON_SECONDARY
 <SUBSECTION>
 gdk_event_new
 gdk_event_copy
-gdk_event_free
 gdk_event_get_axes
 gdk_event_get_button
 gdk_event_get_click_count
@@ -653,7 +647,7 @@ gdk_event_get_scancode
 gdk_event_get_pointer_emulated
 gdk_event_get_crossing_detail
 gdk_event_get_crossing_mode
-gdk_event_get_drag_context
+gdk_event_get_drop
 gdk_event_get_focus_in
 gdk_event_get_grab_surface
 gdk_event_get_motion_history
@@ -699,7 +693,7 @@ gdk_event_get_type
 
 <SECTION>
 <FILE>gdkpaintable</FILE>
-<TITLE>GdkPaintable/TITLE>
+<TITLE>GdkPaintable</TITLE>
 GdkPaintable
 GdkPaintableFlags
 gdk_paintable_get_current_image
@@ -784,9 +778,8 @@ GdkDragContext
 GdkDragCancelReason
 gdk_drag_drop_done
 gdk_drag_begin
-gdk_drop_finish
 GdkDragAction
-gdk_drag_status
+GDK_ACTION_ALL
 
 gdk_drag_context_get_display
 gdk_drag_context_get_actions
@@ -794,10 +787,11 @@ gdk_drag_context_get_suggested_action
 gdk_drag_context_get_selected_action
 gdk_drag_context_get_formats
 gdk_drag_context_get_device
-gdk_drag_context_get_source_surface
-gdk_drag_context_get_dest_surface
 gdk_drag_context_get_drag_surface
 gdk_drag_context_set_hotspot
+
+<SUBSECTION>
+gdk_drag_action_is_unique
 
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT
@@ -854,7 +848,6 @@ gdk_x11_screen_lookup_visual
 gdk_x11_screen_supports_net_wm_hint
 gdk_x11_screen_get_number_of_desktops
 gdk_x11_screen_get_current_desktop
-gdk_x11_surface_foreign_new_for_display
 gdk_x11_surface_lookup_for_display
 gdk_x11_surface_get_xid
 gdk_x11_surface_set_theme_variant

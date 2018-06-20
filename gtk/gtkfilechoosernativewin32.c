@@ -345,7 +345,7 @@ filechooser_win32_thread_done (gpointer _data)
   if (!data->skip_response)
     {
       g_slist_free_full (self->custom_files, g_object_unref);
-      self->custom_files = data->files;
+      self->custom_files = g_slist_reverse(data->files);
       data->files = NULL;
 
       _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (data->self),

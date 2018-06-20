@@ -32,13 +32,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkColorScale         GtkColorScale;
 typedef struct _GtkColorScaleClass    GtkColorScaleClass;
-typedef struct _GtkColorScalePrivate  GtkColorScalePrivate;
 
 struct _GtkColorScale
 {
   GtkScale parent_instance;
-
-  GtkColorScalePrivate *priv;
 };
 
 struct _GtkColorScaleClass

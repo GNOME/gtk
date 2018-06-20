@@ -376,7 +376,7 @@ gdk_display_dispose (GObject *object)
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
-  g_list_free_full (display->queued_events, (GDestroyNotify) gdk_event_free);
+  g_list_free_full (display->queued_events, (GDestroyNotify) g_object_unref);
   display->queued_events = NULL;
   display->queued_tail = NULL;
 
@@ -492,8 +492,6 @@ gdk_display_put_event_nocopy (GdkDisplay *display,
                               GdkEvent   *event)
 {
   _gdk_event_queue_append (display, event);
-  /* If the main loop is blocking in a different thread, wake it up */
-  g_main_context_wakeup (NULL);
 }
 
 /**
@@ -1335,17 +1333,15 @@ _gdk_display_event_data_free (GdkDisplay *display,
 }
 
 void
-_gdk_display_create_surface_impl (GdkDisplay       *display,
-                                 GdkSurface        *surface,
-                                 GdkSurface        *real_parent,
-                                 GdkEventMask      event_mask,
-                                 GdkSurfaceAttr    *attributes)
+gdk_display_create_surface_impl (GdkDisplay       *display,
+                                 GdkSurface       *surface,
+                                 GdkSurface       *real_parent,
+                                 GdkSurfaceAttr   *attributes)
 {
   GDK_DISPLAY_GET_CLASS (display)->create_surface_impl (display,
-                                                       surface,
-                                                       real_parent,
-                                                       event_mask,
-                                                       attributes);
+                                                        surface,
+                                                        real_parent,
+                                                        attributes);
 }
 
 GdkSurface *

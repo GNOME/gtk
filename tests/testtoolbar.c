@@ -293,8 +293,10 @@ bold_toggled (GtkToggleToolButton *button)
 }
 
 static gboolean
-toolbar_drag_drop (GtkWidget *widget, GdkDragContext *context,
-		   gint x, gint y, guint time, GtkWidget *label)
+toolbar_drag_drop (GtkWidget *widget,
+                   GdkDrop   *drop,
+		   gint x, gint y,
+                   GtkWidget *label)
 {
   gchar buf[32];
 
@@ -375,12 +377,12 @@ popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
 static GtkToolItem *drag_item = NULL;
 
 static gboolean
-toolbar_drag_motion (GtkToolbar     *toolbar,
-		     GdkDragContext *context,
-		     gint            x,
-		     gint            y,
-		     guint           time,
-		     gpointer        null)
+toolbar_drag_motion (GtkToolbar *toolbar,
+		     GdkDrop    *drop,
+		     gint        x,
+		     gint        y,
+		     guint       time,
+		     gpointer    null)
 {
   gint index;
   
@@ -390,7 +392,7 @@ toolbar_drag_motion (GtkToolbar     *toolbar,
       g_object_ref_sink (g_object_ref (drag_item));
     }
   
-  gdk_drag_status (context, GDK_ACTION_MOVE, time);
+  gdk_drop_status (drop, GDK_ACTION_MOVE);
 
   index = gtk_toolbar_get_drop_index (toolbar, x, y);
   
@@ -400,10 +402,9 @@ toolbar_drag_motion (GtkToolbar     *toolbar,
 }
 
 static void
-toolbar_drag_leave (GtkToolbar     *toolbar,
-		    GdkDragContext *context,
-		    guint           time,
-		    gpointer	    null)
+toolbar_drag_leave (GtkToolbar *toolbar,
+		    GdkDrop    *drop,
+		    gpointer    null)
 {
   if (drag_item)
     {

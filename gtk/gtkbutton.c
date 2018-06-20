@@ -136,7 +136,7 @@ static void gtk_button_get_property   (GObject            *object,
 static void gtk_button_display_changed (GtkWidget         *widget,
 				        GdkDisplay        *previous_display);
 static void gtk_button_unrealize (GtkWidget * widget);
-static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
+static gint gtk_button_event (GtkWidget * widget, GdkEvent * event);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
@@ -152,13 +152,6 @@ static void gtk_button_do_release      (GtkButton             *button,
 
 static void gtk_button_actionable_iface_init     (GtkActionableInterface *iface);
 
-static void gtk_button_measure_ (GtkWidget      *widget,
-                                 GtkOrientation  orientation,
-                                 int             for_size,
-                                 int            *minimum,
-                                 int            *natural,
-                                 int            *minimum_baseline,
-                                 int            *natural_baseline);
 static void gtk_button_set_child_type (GtkButton *button, guint child_type);
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
@@ -217,10 +210,9 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
-  widget_class->measure = gtk_button_measure_;
   widget_class->display_changed = gtk_button_display_changed;
   widget_class->unrealize = gtk_button_unrealize;
-  widget_class->key_release_event = gtk_button_key_release;
+  widget_class->event = gtk_button_event;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
@@ -762,21 +754,24 @@ gtk_button_do_release (GtkButton *button,
 }
 
 static gboolean
-gtk_button_key_release (GtkWidget   *widget,
-			GdkEventKey *event)
+gtk_button_event (GtkWidget *widget,
+                  GdkEvent  *event)
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
+  if (gdk_event_get_event_type (event) != GDK_KEY_RELEASE)
+    return GDK_EVENT_PROPAGATE;
+
   if (priv->activate_timeout)
     {
       gtk_button_finish_activate (button, TRUE);
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
-  else if (GTK_WIDGET_CLASS (gtk_button_parent_class)->key_release_event)
-    return GTK_WIDGET_CLASS (gtk_button_parent_class)->key_release_event (widget, event);
+  else if (GTK_WIDGET_CLASS (gtk_button_parent_class)->event)
+    return GTK_WIDGET_CLASS (gtk_button_parent_class)->event (widget, event);
   else
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -849,27 +844,6 @@ gtk_button_finish_activate (GtkButton *button,
 
   if (do_it)
     gtk_button_clicked (button);
-}
-
-static void
-gtk_button_measure_ (GtkWidget      *widget,
-                     GtkOrientation  orientation,
-                     int             for_size,
-                     int            *minimum,
-                     int            *natural,
-                     int            *minimum_baseline,
-                     int            *natural_baseline)
-{
-  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (child && gtk_widget_get_visible (child))
-    {
-       gtk_widget_measure (child,
-                           orientation,
-                           for_size,
-                           minimum, natural,
-                           minimum_baseline, natural_baseline);
-    }
 }
 
 /**

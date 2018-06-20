@@ -36,8 +36,8 @@ static void     gdk_event_source_finalize (GSource     *source);
 
 static GQuark quark_needs_enter = 0;
 
-#define HAS_FOCUS(toplevel)                           \
-  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+#define APPEARS_FOCUSED(toplevel)                           \
+  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 struct _GdkEventSource
 {
@@ -83,9 +83,6 @@ gdk_event_source_get_filter_surface (GdkEventSource      *event_source,
   surface = gdk_x11_surface_lookup_for_display (event_source->display,
                                               xevent->xany.window);
 
-  if (surface && !GDK_IS_SURFACE (surface))
-    surface = NULL;
-
   return surface;
 }
 
@@ -111,10 +108,10 @@ handle_focus_change (GdkEventCrossing *event)
   if (!event->focus || toplevel->has_focus_window)
     return;
 
-  had_focus = HAS_FOCUS (toplevel);
+  had_focus = APPEARS_FOCUSED (toplevel);
   toplevel->has_pointer_focus = focus_in;
 
-  if (HAS_FOCUS (toplevel) != had_focus)
+  if (APPEARS_FOCUSED (toplevel) != had_focus)
     {
       GdkEvent *focus_event;
 
@@ -228,7 +225,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
                                   const XEvent   *xevent)
 {
   GdkEventSource *event_source = (GdkEventSource *) x11_display->event_source;
-  GdkEvent *event = gdk_event_new (GDK_NOTHING);
+  GdkEvent *event;
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkDisplay *display = GDK_DISPLAY (x11_display);
   GdkEventTranslator *event_translator;
@@ -238,9 +235,9 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   gpointer cache;
 
   x11_screen = GDK_X11_DISPLAY (display)->screen;
-
   dpy = GDK_DISPLAY_XDISPLAY (display);
 
+  event = gdk_event_new (GDK_NOTHING);
   filter_surface = gdk_event_source_get_filter_surface (event_source, xevent,
                                                       &event_translator);
   if (filter_surface)
@@ -268,14 +265,9 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (result == GDK_FILTER_CONTINUE)
     result = _gdk_wm_protocols_filter (xevent, event, NULL);
 
-  if (result == GDK_FILTER_CONTINUE)
-    result = _gdk_x11_dnd_filter (xevent, event, NULL);
-
-  if (result == GDK_FILTER_CONTINUE && filter_surface)
-    {
-      gpointer context = g_object_get_data (G_OBJECT (filter_surface), "xdnd-source-context");
-      result = xdnd_source_surface_filter (xevent, event, context);
-    }
+  if (result == GDK_FILTER_CONTINUE &&
+      gdk_x11_drop_filter (event->any.surface, xevent))
+    result = GDK_FILTER_REMOVE;
 
   if (result != GDK_FILTER_CONTINUE)
     {

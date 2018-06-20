@@ -87,16 +87,22 @@ images = [
   'images/zoom_out_cursor.png',
 ]
 
+src_dir = [ gdkinc ]
+
+if x11_enabled
+  src_dir += [ gdkx11_inc ]
+endif
+
+if wayland_enabled
+  src_dir += [ gdkwayland_inc ]
+endif
+
 configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
 
 gnome.gtkdoc('gdk4',
              mode: 'none',
              main_xml: 'gdk4-docs.xml',
-             src_dir: [
-               gdkinc,
-               gdkx11_inc,
-               gdkwayland_inc,
-	     ],
+             src_dir: src_dir,
              dependencies: libgtk_dep,
              gobject_typesfile: join_paths(meson.current_source_dir(), 'gdk4.types'),
              scan_args: [

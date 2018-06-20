@@ -45,6 +45,7 @@ meson \
     -Denable-x11-backend=false \
     -Denable-wayland-backend=false \
     -Denable-win32-backend=true \
+    -Dvulkan=no \
     _build
 unset CCACHE_DISABLE
 

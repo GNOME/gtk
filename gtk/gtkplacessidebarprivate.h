@@ -103,7 +103,7 @@ GFile *            gtk_places_sidebar_get_nth_bookmark           (GtkPlacesSideb
                                                                   gint                n);
 void               gtk_places_sidebar_set_drop_targets_visible   (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            visible,
-                                                                  GdkDragContext     *context);
+                                                                  GdkDrop            *drop);
 gboolean           gtk_places_sidebar_get_show_trash             (GtkPlacesSidebar   *sidebar);
 void               gtk_places_sidebar_set_show_trash             (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_trash);

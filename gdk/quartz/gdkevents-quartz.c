@@ -1726,7 +1726,7 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
         {
 	  _gdk_event_queue_remove_link (display, node);
 	  g_list_free_1 (node);
-	  gdk_event_free (event);
+	  g_object_unref (event);
 
           [NSApp sendEvent:nsevent];
         }

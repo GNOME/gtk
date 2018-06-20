@@ -185,7 +185,6 @@ void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
 void       _gdk_x11_display_create_surface_impl     (GdkDisplay    *display,
                                                      GdkSurface     *window,
                                                      GdkSurface     *real_parent,
-                                                     GdkEventMask   event_mask,
                                                      GdkSurfaceAttr *attributes);
 GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 
@@ -197,15 +196,16 @@ Atom _gdk_x11_get_xatom_for_display_printf         (GdkDisplay    *display,
                                                     const gchar   *format,
                                                     ...) G_GNUC_PRINTF (2, 3);
 
-GdkFilterReturn
-_gdk_x11_dnd_filter (const XEvent *xevent,
-                     GdkEvent     *event,
-                     gpointer      data);
-
-GdkFilterReturn
-xdnd_source_surface_filter (const XEvent *xevent,
-                            GdkEvent     *event,
-                            gpointer      data);
+GdkDragContext *gdk_x11_drag_context_find                       (GdkDisplay             *display,
+                                                                 Window                  source_xid,
+                                                                 Window                  dest_xid);
+void            gdk_x11_drag_context_handle_status              (GdkDisplay             *display,
+                                                                 const XEvent           *xevent);
+void            gdk_x11_drag_context_handle_finished            (GdkDisplay             *display,
+                                                                 const XEvent           *xevent);
+void            gdk_x11_drop_read_actions                       (GdkDrop                *drop);
+gboolean        gdk_x11_drop_filter                             (GdkSurface             *surface,
+                                                                 const XEvent           *xevent);
 
 typedef struct _GdkSurfaceCache GdkSurfaceCache;
 

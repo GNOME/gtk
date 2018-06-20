@@ -59,7 +59,6 @@ gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
 {
   if (!IsIconic (GDK_SURFACE_HWND (surface)))
     {
-      GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
       GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
 
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
@@ -122,11 +121,8 @@ static cairo_surface_t *
 create_cairo_surface_for_surface (GdkSurface *surface,
                                   int         scale)
 {
-  GdkDisplay *display;
   cairo_surface_t *cairo_surface;
   HDC hdc;
-
-  display = gdk_surface_get_display (surface);
 
   hdc = GetDC (GDK_SURFACE_HWND (surface));
   if (!hdc)
@@ -146,9 +142,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
                                      cairo_region_t *region)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
-  GdkRectangle clip_box;
   GdkSurface *surface;
-  double sx, sy;
   GdkSurfaceImplWin32 *impl;
   int scale;
   cairo_t *cr;
@@ -238,18 +232,14 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                   cairo_region_t *painted,
-                                   cairo_region_t *damage)
+                                   cairo_region_t *painted)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface;
   gint scale;
-  GdkSurfaceImplWin32 *impl;
 
   surface = gdk_draw_context_get_surface (draw_context);
   scale = gdk_surface_get_scale_factor (surface);
-
-  impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
 
   /* The code to resize double-buffered windows immediately
    * before blitting the buffer contents onto them used

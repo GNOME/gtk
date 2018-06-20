@@ -454,6 +454,8 @@ check_win32_special_cases (GtkIMContextSimple    *context_simple,
 	  value = 0x00B4; break;
 	case GDK_KEY_dead_diaeresis:
 	  value = 0x00A8; break;
+        default:
+          break;
 	}
       if (value > 0)
 	{
@@ -1262,6 +1264,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               return TRUE;
             case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
               return TRUE;
+            default:
+              g_assert_not_reached ();
+              break;
             }
         }
 #endif

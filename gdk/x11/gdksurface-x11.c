@@ -718,7 +718,6 @@ setup_toplevel_window (GdkSurface    *surface,
   Display *xdisplay = GDK_SURFACE_XDISPLAY (surface);
   XID xid = GDK_SURFACE_XID (surface);
   XSizeHints size_hints;
-  long pid;
   Window leader_window;
 
   set_wm_protocols (surface);
@@ -749,12 +748,16 @@ setup_toplevel_window (GdkSurface    *surface,
   /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
   XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
   
-  pid = getpid ();
-  XChangeProperty (xdisplay, xid,
-		   gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_PID"),
-		   XA_CARDINAL, 32,
-		   PropModeReplace,
-		   (guchar *)&pid, 1);
+  if (!gdk_running_in_sandbox ())
+    {
+      /* if sandboxed, we're likely in a pid namespace and would only confuse the wm with this */
+      pid_t pid = getpid ();
+      XChangeProperty (xdisplay, xid,
+                       gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_PID"),
+                       XA_CARDINAL, 32,
+                       PropModeReplace,
+                       (guchar *)&pid, 1);
+    }
 
   leader_window = GDK_X11_DISPLAY (x11_screen->display)->leader_window;
   if (!leader_window)
@@ -818,10 +821,9 @@ connect_frame_clock (GdkSurface *surface)
 
 void
 _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
-                                     GdkSurface     *surface,
-                                     GdkSurface     *real_parent,
-                                     GdkEventMask   event_mask,
-                                     GdkSurfaceAttr *attributes)
+                                      GdkSurface     *surface,
+                                      GdkSurface     *real_parent,
+                                      GdkSurfaceAttr *attributes)
 {
   GdkSurfaceImplX11 *impl;
   GdkX11Screen *x11_screen;
@@ -883,10 +885,19 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
     {
       class = InputOutput;
 
-      xattributes.background_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
+      if (gdk_display_is_rgba (display))
+        {
+          xattributes.background_pixel = 0;
+          xattributes_mask |= CWBackPixel;
+        }
+      else
+        {
+          xattributes.background_pixmap = None;
+          xattributes_mask |= CWBackPixmap;
+        }
 
       xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
-      xattributes_mask |= CWBorderPixel | CWBackPixel;
+      xattributes_mask |= CWBorderPixel;
 
       xattributes.bit_gravity = NorthWestGravity;
       xattributes_mask |= CWBitGravity;
@@ -977,124 +988,12 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
     }
 
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                      GDK_SURFACE_XID (surface), event_mask,
+                                      GDK_SURFACE_XID (surface), GDK_ALL_EVENTS_MASK,
                                       StructureNotifyMask | PropertyChangeMask);
 
   connect_frame_clock (surface);
 
   gdk_surface_freeze_toplevel_updates (surface);
-}
-
-static GdkEventMask
-x_event_mask_to_gdk_event_mask (long mask)
-{
-  GdkEventMask event_mask = 0;
-  int i;
-
-  for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
-    {
-      if (mask & _gdk_x11_event_mask_table[i])
-	event_mask |= 1 << (i + 1);
-    }
-
-  return event_mask;
-}
-
-/**
- * gdk_x11_surface_foreign_new_for_display:
- * @display: (type GdkX11Display): the #GdkDisplay where the window handle comes from.
- * @window: an Xlib Window
- *
- * Wraps a native window in a #GdkSurface. The function will try to
- * look up the window using gdk_x11_surface_lookup_for_display() first.
- * If it does not find it there, it will create a new window.
- *
- * This may fail if the window has been destroyed. If the window
- * was already known to GDK, a new reference to the existing
- * #GdkSurface is returned.
- *
- * Returns: (transfer full): a #GdkSurface wrapper for the native
- *   window, or %NULL if the window has been destroyed. The wrapper
- *   will be newly created, if one doesn’t exist already.
- */
-GdkSurface *
-gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,
-                                        Window      window)
-{
-  GdkX11Screen *screen;
-  GdkSurface *win;
-  GdkSurfaceImplX11 *impl;
-  GdkX11Display *display_x11;
-  XWindowAttributes attrs;
-  Window root, parent;
-  Window *children = NULL;
-  guint nchildren;
-  gboolean result;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  if ((win = gdk_x11_surface_lookup_for_display (display, window)) != NULL)
-    return g_object_ref (win);
-
-  gdk_x11_display_error_trap_push (display);
-  result = XGetWindowAttributes (display_x11->xdisplay, window, &attrs);
-  if (gdk_x11_display_error_trap_pop (display) || !result)
-    return NULL;
-
-  /* FIXME: This is pretty expensive.
-   * Maybe the caller should supply the parent
-   */
-  gdk_x11_display_error_trap_push (display);
-  result = XQueryTree (display_x11->xdisplay, window, &root, &parent, &children, &nchildren);
-  if (gdk_x11_display_error_trap_pop (display) || !result)
-    return NULL;
-
-  if (children)
-    XFree (children);
-
-  screen = _gdk_x11_display_screen_for_xrootwin (display, root);
-  if (screen == NULL)
-    return NULL;
-
-  win = _gdk_display_create_surface (display);
-  win->impl = g_object_new (GDK_TYPE_SURFACE_IMPL_X11, NULL);
-  win->impl_surface = win;
-
-  impl = GDK_SURFACE_IMPL_X11 (win->impl);
-  impl->wrapper = win;
-  impl->surface_scale = GDK_X11_SCREEN (screen)->surface_scale;
-
-  /* Always treat foreigns as toplevels */
-  win->parent = NULL;
-
-  impl->xid = window;
-
-  win->x = attrs.x / impl->surface_scale;
-  win->y = attrs.y / impl->surface_scale;
-  impl->unscaled_width = attrs.width;
-  impl->unscaled_height = attrs.height;
-  win->width = attrs.width / impl->surface_scale;
-  win->height = attrs.height  / impl->surface_scale;
-  win->surface_type = GDK_SURFACE_FOREIGN;
-  win->destroyed = FALSE;
-
-  win->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
-
-  if (attrs.map_state == IsUnmapped)
-    win->state = GDK_SURFACE_STATE_WITHDRAWN;
-  else
-    win->state = 0;
-  win->viewable = TRUE;
-
-  g_object_ref (win);
-  _gdk_x11_display_add_window (display, &GDK_SURFACE_XID (win), win);
-
-  /* Update the clip region, etc */
-  _gdk_surface_update_size (win);
-
-  return win;
 }
 
 static void
@@ -2679,48 +2578,6 @@ gdk_surface_x11_get_device_state (GdkSurface       *surface,
                                               NULL, NULL,
                                               x, y, mask);
   return child != NULL;
-}
-
-static GdkEventMask
-gdk_surface_x11_get_events (GdkSurface *surface)
-{
-  XWindowAttributes attrs;
-  GdkEventMask event_mask;
-  GdkEventMask filtered;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 0;
-  else
-    {
-      XGetWindowAttributes (GDK_SURFACE_XDISPLAY (surface),
-			    GDK_SURFACE_XID (surface),
-			    &attrs);
-      event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
-      /* if property change was filtered out before, keep it filtered out */
-      filtered = GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK;
-      surface->event_mask = event_mask & ((surface->event_mask & filtered) | ~filtered);
-
-      return event_mask;
-    }
-}
-static void
-gdk_surface_x11_set_events (GdkSurface    *surface,
-                           GdkEventMask  event_mask)
-{
-  long xevent_mask = 0;
-  
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      GdkX11Display *display_x11;
-
-      if (GDK_SURFACE_XID (surface) != GDK_SURFACE_XROOTWIN (surface))
-        xevent_mask = StructureNotifyMask | PropertyChangeMask;
-
-      display_x11 = GDK_X11_DISPLAY (gdk_surface_get_display (surface));
-      gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                          GDK_SURFACE_XID (surface), event_mask,
-                                          xevent_mask);
-    }
 }
 
 static void 
@@ -4823,8 +4680,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->show = gdk_surface_x11_show;
   impl_class->hide = gdk_surface_x11_hide;
   impl_class->withdraw = gdk_surface_x11_withdraw;
-  impl_class->set_events = gdk_surface_x11_set_events;
-  impl_class->get_events = gdk_surface_x11_get_events;
   impl_class->raise = gdk_surface_x11_raise;
   impl_class->lower = gdk_surface_x11_lower;
   impl_class->restack_toplevel = gdk_surface_x11_restack_toplevel;

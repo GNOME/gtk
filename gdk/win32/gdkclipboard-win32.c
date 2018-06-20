@@ -149,8 +149,6 @@ gdk_win32_clipboard_claim_remote (GdkWin32Clipboard *cb)
 static void
 gdk_win32_clipboard_finalize (GObject *object)
 {
-  GdkWin32Clipboard *cb = GDK_WIN32_CLIPBOARD (object);
-
   G_OBJECT_CLASS (gdk_win32_clipboard_parent_class)->finalize (object);
 }
 
@@ -173,7 +171,6 @@ gdk_win32_clipboard_store_async (GdkClipboard        *clipboard,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  GdkWin32Clipboard *cb = GDK_WIN32_CLIPBOARD (clipboard);
   GdkContentProvider *content;
   GdkContentFormats *formats;
   GTask *store_task;
@@ -195,7 +192,7 @@ gdk_win32_clipboard_store_async (GdkClipboard        *clipboard,
   formats = gdk_content_provider_ref_storable_formats (content);
   formats = gdk_content_formats_union_serialize_mime_types (formats);
 
-  if (!_gdk_win32_store_clipboard_contentformats (cb, store_task, formats))
+  if (!_gdk_win32_store_clipboard_contentformats (clipboard, store_task, formats))
     {
       GDK_NOTE (CLIPBOARD, g_printerr ("clipdrop says there's nothing to store: SUCCESS!\n"));
       g_task_return_boolean (store_task, TRUE);
@@ -224,10 +221,7 @@ gdk_win32_clipboard_read_async (GdkClipboard        *clipboard,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  GdkWin32Clipboard *cb = GDK_WIN32_CLIPBOARD (clipboard);
-  GSList *targets;
   GTask *task;
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);

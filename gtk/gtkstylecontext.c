@@ -73,11 +73,8 @@
  *
  * If you are using the theming layer standalone, you will need to set a
  * widget path and a display yourself to the created style context through
- * gtk_style_context_set_path() and gtk_style_context_set_display(), as well
- * as updating the context yourself using gtk_style_context_invalidate()
- * whenever any of the conditions change, such as a change in the
- * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
- * widget. See the “Foreign drawing“ example in gtk3-demo.
+ * gtk_style_context_set_path() and possibly gtk_style_context_set_display().
+ * See the “Foreign drawing“ example in gtk4-demo.
  *
  * # Style Classes # {#gtkstylecontext-classes}
  *
@@ -126,8 +123,6 @@ struct _GtkStyleContextPrivate
   GtkCssNode *cssnode;
   GSList *saved_nodes;
 
-  GdkFrameClock *frame_clock;
-
   GtkCssStyleChange *invalidating_context;
 };
 typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
@@ -135,7 +130,6 @@ typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 enum {
   PROP_0,
   PROP_DISPLAY,
-  PROP_FRAME_CLOCK,
   PROP_PARENT,
   LAST_PROP
 };
@@ -213,13 +207,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                            P_("Display"),
                            P_("The associated GdkDisplay"),
                            GDK_TYPE_DISPLAY,
-                           GTK_PARAM_READWRITE);
-
-  properties[PROP_FRAME_CLOCK] =
-      g_param_spec_object ("paint-clock",
-                           P_("FrameClock"),
-                           P_("The associated GdkFrameClock"),
-                           GDK_TYPE_FRAME_CLOCK,
                            GTK_PARAM_READWRITE);
 
   /**
@@ -347,9 +334,6 @@ gtk_style_context_impl_set_property (GObject      *object,
     case PROP_DISPLAY:
       gtk_style_context_set_display (context, g_value_get_object (value));
       break;
-    case PROP_FRAME_CLOCK:
-      gtk_style_context_set_frame_clock (context, g_value_get_object (value));
-      break;
     case PROP_PARENT:
       gtk_style_context_set_parent (context, g_value_get_object (value));
       break;
@@ -372,9 +356,6 @@ gtk_style_context_impl_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, priv->display);
-      break;
-    case PROP_FRAME_CLOCK:
-      g_value_set_object (value, priv->frame_clock);
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -1345,51 +1326,6 @@ gtk_style_context_get_display (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   return priv->display;
-}
-
-/**
- * gtk_style_context_set_frame_clock:
- * @context: a #GdkFrameClock
- * @frame_clock: a #GdkFrameClock
- *
- * Attaches @context to the given frame clock.
- *
- * The frame clock is used for the timing of animations.
- *
- * If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to
- * call this yourself.
- **/
-void
-gtk_style_context_set_frame_clock (GtkStyleContext *context,
-                                   GdkFrameClock   *frame_clock)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (frame_clock == NULL || GDK_IS_FRAME_CLOCK (frame_clock));
-
-  if (g_set_object (&priv->frame_clock, frame_clock))
-    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_FRAME_CLOCK]);
-}
-
-/**
- * gtk_style_context_get_frame_clock:
- * @context: a #GtkStyleContext
- *
- * Returns the #GdkFrameClock to which @context is attached.
- *
- * Returns: (nullable) (transfer none): a #GdkFrameClock, or %NULL
- *  if @context does not have an attached frame clock.
- **/
-GdkFrameClock *
-gtk_style_context_get_frame_clock (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return priv->frame_clock;
 }
 
 gboolean

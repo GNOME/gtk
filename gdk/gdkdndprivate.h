@@ -33,26 +33,10 @@ typedef struct _GdkDragContextClass GdkDragContextClass;
 struct _GdkDragContextClass {
   GObjectClass parent_class;
 
-  void        (*drag_status)   (GdkDragContext  *context,
-                                GdkDragAction    action,
-                                guint32          time_);
   void        (*drag_abort)    (GdkDragContext  *context,
                                 guint32          time_);
   void        (*drag_drop)     (GdkDragContext  *context,
                                 guint32          time_);
-  void        (*drop_finish)   (GdkDragContext  *context,
-                                gboolean         success,
-                                guint32          time_);
-  void                  (* read_async)                          (GdkDragContext         *context,
-                                                                 GdkContentFormats      *formats,
-                                                                 int                     io_priority,
-                                                                 GCancellable           *cancellable,
-                                                                 GAsyncReadyCallback     callback,
-                                                                 gpointer                user_data);
-  GInputStream *        (* read_finish)                         (GdkDragContext         *context,
-                                                                 const char            **out_mime_type,
-                                                                 GAsyncResult           *result,
-                                                                 GError                **error);
   GdkSurface*  (*get_drag_surface) (GdkDragContext *context);
   void        (*set_hotspot)   (GdkDragContext  *context,
                                 gint             hot_x,
@@ -72,22 +56,16 @@ struct _GdkDragContextClass {
                                  const GdkEvent  *event);
   void        (*action_changed) (GdkDragContext  *context,
                                  GdkDragAction    action);
-
-  void        (*commit_drag_status) (GdkDragContext  *context);
 };
 
 struct _GdkDragContext {
   GObject parent_instance;
 
   /*< private >*/
-  gboolean is_source;
   GdkSurface *source_surface;
-  GdkSurface *dest_surface;
   GdkSurface *drag_surface;
 
   GdkContentProvider *content;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
   GdkDragAction action;
 
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
@@ -95,10 +73,13 @@ struct _GdkDragContext {
 
 void     gdk_drag_context_set_cursor          (GdkDragContext *context,
                                                GdkCursor      *cursor);
+void     gdk_drag_context_set_actions         (GdkDragContext *context,
+                                               GdkDragAction   actions,
+                                               GdkDragAction   suggested_action);
+
 void     gdk_drag_context_cancel              (GdkDragContext      *context,
                                                GdkDragCancelReason  reason);
 gboolean gdk_drag_context_handle_source_event (GdkEvent *event);
-gboolean gdk_drag_context_handle_dest_event   (GdkEvent *event);
 GdkCursor * gdk_drag_get_cursor               (GdkDragContext *context,
                                                GdkDragAction   action);
 

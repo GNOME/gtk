@@ -85,7 +85,7 @@ static void     gtk_file_chooser_entry_finalize       (GObject          *object)
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_tab_handler    (GtkWidget        *widget,
-                                                       GdkEventKey      *event);
+                                                       GdkEvent         *event);
 static gboolean gtk_file_chooser_entry_event          (GtkWidget       *widget,
                                                        GdkEvent        *event);
 
@@ -295,7 +295,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   g_object_unref (comp);
   /* NB: This needs to happen after the completion is set, so this handler
    * runs before the handler installed by entrycompletion */
-  g_signal_connect (chooser_entry, "key-press-event",
+  g_signal_connect (chooser_entry, "event",
                     G_CALLBACK (gtk_file_chooser_entry_tab_handler), NULL);
 
 #ifdef G_OS_WIN32
@@ -497,7 +497,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 
 static gboolean
 gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
-				    GdkEventKey *event)
+				    GdkEvent  *event)
 {
   GtkFileChooserEntry *chooser_entry;
   GtkEditable *editable;
@@ -508,25 +508,28 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
   chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  if (!gdk_event_get_keyval (event, &keyval))
     return GDK_EVENT_PROPAGATE;
 
   if (keyval == GDK_KEY_Escape &&
       chooser_entry->eat_escape)
     {
       g_signal_emit (widget, signals[HIDE_ENTRY], 0);
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
   if (!chooser_entry->eat_tabs)
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   if (keyval != GDK_KEY_Tab)
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   if (gtk_get_current_event_state (&state) &&
       (state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   /* This is a bit evil -- it makes Tab never leave the entry. It basically
    * makes it 'safe' for people to hit. */
@@ -537,7 +540,7 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
   else
     start_explicit_completion (chooser_entry);
 
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static gboolean

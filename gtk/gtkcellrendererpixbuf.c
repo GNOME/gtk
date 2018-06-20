@@ -408,8 +408,8 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
-  gint pixbuf_width  = 0;
-  gint pixbuf_height = 0;
+  gint pixbuf_width;
+  gint pixbuf_height;
   gint calc_width;
   gint calc_height;
   gint xpad, ypad;
@@ -422,9 +422,16 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   gtk_icon_size_set_style_classes (gtk_style_context_get_node (context), priv->icon_size);
   icon_helper = create_icon_helper (cellpixbuf, widget);
 
-  if (!_gtk_icon_helper_get_is_empty (icon_helper))
-    _gtk_icon_helper_get_size (icon_helper, 
-                               &pixbuf_width, &pixbuf_height);
+  if (_gtk_icon_helper_get_is_empty (icon_helper))
+    pixbuf_width = pixbuf_height = 0;
+  else if (gtk_image_definition_get_paintable (priv->image_def))
+    {
+      GdkPaintable *paintable = gtk_image_definition_get_paintable (priv->image_def);
+      pixbuf_width = gdk_paintable_get_intrinsic_width (paintable);
+      pixbuf_height = gdk_paintable_get_intrinsic_height (paintable);
+    }
+  else
+    pixbuf_width = pixbuf_height = gtk_icon_helper_get_size (icon_helper); 
 
   g_object_unref (icon_helper);
   gtk_style_context_restore (context);

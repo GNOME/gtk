@@ -877,21 +877,6 @@ gtk_css_node_insert_before (GtkCssNode *parent,
                            next_sibling ? next_sibling->previous_sibling : parent->last_child);
 }
 
-void
-gtk_css_node_reverse_children (GtkCssNode *cssnode)
-{
-  GtkCssNode *end;
-
-  end = cssnode->last_child;
-  while (cssnode->first_child != end)
-    {
-      gtk_css_node_reposition (cssnode->first_child,
-                               cssnode,
-                               end);
-    }
-
-}
-
 GtkCssNode *
 gtk_css_node_get_parent (GtkCssNode *cssnode)
 {

@@ -41,13 +41,8 @@ G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_get_data (GtkWidget      *widget,
-			GdkDragContext *context,
-			GdkAtom         target,
-			guint32         time_);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_finish   (GdkDragContext *context,
-			gboolean        success,
-			guint32         time_);
+			GdkDrop        *drop,
+			GdkAtom         target);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_drag_get_source_widget (GdkDragContext *context);

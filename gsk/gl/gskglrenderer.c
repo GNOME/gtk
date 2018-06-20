@@ -201,15 +201,13 @@ color_matrix_modifies_alpha (GskRenderNode *node)
   const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
   const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
   graphene_vec4_t row3;
-  graphene_vec4_t id_row3;
 
   if (graphene_vec4_get_w (offset) != 0.0f)
     return TRUE;
 
-  graphene_vec4_init (&id_row3, 0, 0, 0, 1);
   graphene_matrix_get_row (matrix, 3, &row3);
 
-  return !graphene_vec4_equal (&id_row3, &row3);
+  return !graphene_vec4_equal (graphene_vec4_w_axis (), &row3);
 }
 
 static inline void
@@ -696,6 +694,7 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_TEXT_NODE:
     case GSK_TEXTURE_NODE:
     case GSK_COLOR_NODE:
+    case GSK_COLOR_MATRIX_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -898,8 +897,8 @@ render_color_matrix_node (GskGLRenderer       *self,
                           RenderOpBuilder     *builder,
                           const GskQuadVertex *vertex_data)
 {
-  const float min_x = node->bounds.origin.x;
-  const float min_y = node->bounds.origin.y;
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
   int texture_id;
@@ -1601,8 +1600,6 @@ apply_color_op (const Program  *program,
                 const RenderOp *op)
 {
   OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
-  /* TODO: We use color.color_location here and this is right for all three of the programs above,
-   *       but that's just a coincidence. */
   glUniform4f (program->color.color_location,
                op->color.red, op->color.green, op->color.blue, op->color.alpha);
 }
@@ -2036,23 +2033,6 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
   g_clear_object (&self->gl_context);
 }
-
-static void
-gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
-                                 const graphene_rect_t *viewport)
-{
-  const int width = ceilf (viewport->size.width);
-  const int height = ceilf (viewport->size.height);
-
-  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("glViewport(0, 0, %d, %d) [scale:%d]",
-                             width,
-                             height,
-                             self->scale_factor));
-
-  glViewport (0, 0, width, height);
-}
-
-
 
 static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
@@ -2564,7 +2544,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gsk_gl_renderer_resize_viewport (self, viewport);
+  glViewport (0, 0, ceilf (viewport->size.width), ceilf (viewport->size.height));
   gsk_gl_renderer_setup_render_mode (self);
   gsk_gl_renderer_clear (self);
 

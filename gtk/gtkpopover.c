@@ -82,7 +82,7 @@
  *
  * The contents child node always gets the .background style class and it
  * gets the .menu style class if the popover is menu-like (e.g. #GtkPopoverMenu
- * or created using gtk_popover_new_from_model().
+ * or created using gtk_popover_new_from_model()).
  *
  * Particular uses of GtkPopover, such as touch selection popups
  * or magnifiers in #GtkEntry or #GtkTextView get style classes
@@ -1376,7 +1376,7 @@ gtk_popover_event (GtkWidget *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
     {
       GtkWidget *toplevel, *focus;
       guint keyval;

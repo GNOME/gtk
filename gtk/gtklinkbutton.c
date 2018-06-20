@@ -109,7 +109,6 @@ static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
 static void gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection,
-					      guint             _time,
 					      gpointer          user_data);
 static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                                   gint          x,
@@ -436,7 +435,6 @@ static void
 gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 				  GdkDragContext   *context,
 				  GtkSelectionData *selection,
-				  guint             _time,
 				  gpointer          user_data)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);

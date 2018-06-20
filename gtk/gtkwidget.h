@@ -190,8 +190,6 @@ struct _GtkWidget
  * @keynav_failed: Signal emitted if keyboard navigation fails.
  * @event: The GTK+ main loop will emit this signal for each GDK
  *   event delivered to a widget.
- * @key_press_event: Signal emitted when a key is pressed.
- * @key_release_event: Signal is emitted when a key is released.
  * @drag_begin: Signal emitted on the drag source when a drag is
  *   started.
  * @drag_end: Signal emitted on the drag source when a drag is
@@ -293,10 +291,6 @@ struct _GtkWidgetClass
   /* events */
   gboolean (* event)                    (GtkWidget           *widget,
                                          GdkEvent            *event);
-  gboolean (* key_press_event)          (GtkWidget           *widget,
-                                         GdkEventKey         *event);
-  gboolean (* key_release_event)        (GtkWidget           *widget,
-                                         GdkEventKey         *event);
 
   /* Source side drag signals */
   void     (* drag_begin)          (GtkWidget         *widget,
@@ -305,29 +299,24 @@ struct _GtkWidgetClass
                                     GdkDragContext     *context);
   void     (* drag_data_get)       (GtkWidget          *widget,
                                     GdkDragContext     *context,
-                                    GtkSelectionData   *selection_data,
-                                    guint               time_);
+                                    GtkSelectionData   *selection_data);
   void     (* drag_data_delete)    (GtkWidget          *widget,
                                     GdkDragContext     *context);
 
   /* Target side drag signals */
   void     (* drag_leave)          (GtkWidget          *widget,
-                                    GdkDragContext     *context,
-                                    guint               time_);
+                                    GdkDrop            *drop);
   gboolean (* drag_motion)         (GtkWidget          *widget,
-                                    GdkDragContext     *context,
+                                    GdkDrop            *drop,
                                     gint                x,
-                                    gint                y,
-                                    guint               time_);
+                                    gint                y);
   gboolean (* drag_drop)           (GtkWidget          *widget,
-                                    GdkDragContext     *context,
+                                    GdkDrop            *drop,
                                     gint                x,
-                                    gint                y,
-                                    guint               time_);
+                                    gint                y);
   void     (* drag_data_received)  (GtkWidget          *widget,
-                                    GdkDragContext     *context,
-                                    GtkSelectionData   *selection_data,
-                                    guint               time_);
+                                    GdkDrop            *drop,
+                                    GtkSelectionData   *selection_data);
   gboolean (* drag_failed)         (GtkWidget          *widget,
                                     GdkDragContext     *context,
                                     GtkDragResult       result);

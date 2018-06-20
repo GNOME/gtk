@@ -46,11 +46,11 @@
  * widget changes.
  *
  * You can of course use a GtkWidgetPaintable everywhere a
- * #GdkPaintable is allowed, including using it on a #GtkImage (or one
- * of its parents) that it was set on itself via gtk_image_set_from_paintable().
+ * #GdkPaintable is allowed, including using it on a #GtkPicture (or one
+ * of its parents) that it was set on itself via gtk_picture_set_paintable().
  * The paintable will take care of recursion when this happens. If you do
- * this however, make sure to set the #GtkImage:can-shrink property
- * to %TRUE or you might end up with an infinitely growing image.
+ * this however, ensure the #GtkPicture:can-shrink property is set to
+ * %TRUE or you might end up with an infinitely growing widget.
  */
 struct _GtkWidgetPaintable
 {

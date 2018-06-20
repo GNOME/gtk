@@ -430,7 +430,7 @@ struct _GdkEventGrabBroken {
  *   %GDK_DRAG_MOTION or %GDK_DROP_START)
  * @surface: the surface which received the event.
  * @send_event: %TRUE if the event was sent explicitly.
- * @context: the #GdkDragContext for the current DND operation.
+ * @drop: the #GdkDrop for the current DND operation.
  * @time: the time of the event in milliseconds.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen, only set for %GDK_DRAG_MOTION and %GDK_DROP_START.
@@ -441,7 +441,7 @@ struct _GdkEventGrabBroken {
  */
 struct _GdkEventDND {
   GdkEventAny any;
-  GdkDragContext *context;
+  GdkDrop *drop;
 
   guint32 time;
   gshort x_root, y_root;

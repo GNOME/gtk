@@ -6,6 +6,7 @@ gdk_wayland_sources = files([
   'gdkdevice-wayland.c',
   'gdkdisplay-wayland.c',
   'gdkdnd-wayland.c',
+  'gdkdrop-wayland.c',
   'gdkeventsource.c',
   'gdkglcontext-wayland.c',
   'gdkkeys-wayland.c',

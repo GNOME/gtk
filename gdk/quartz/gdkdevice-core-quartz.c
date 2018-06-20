@@ -76,9 +76,6 @@ static GdkSurface * gdk_quartz_device_core_surface_at_position (GdkDevice       
                                                               gdouble         *win_y,
                                                               GdkModifierType *mask,
                                                               gboolean         get_toplevel);
-static void      gdk_quartz_device_core_select_surface_events (GdkDevice       *device,
-                                                              GdkSurface       *window,
-                                                              GdkEventMask     event_mask);
 
 
 G_DEFINE_TYPE (GdkQuartzDeviceCore, gdk_quartz_device_core, GDK_TYPE_DEVICE)
@@ -96,7 +93,6 @@ gdk_quartz_device_core_class_init (GdkQuartzDeviceCoreClass *klass)
   device_class->grab = gdk_quartz_device_core_grab;
   device_class->ungrab = gdk_quartz_device_core_ungrab;
   device_class->surface_at_position = gdk_quartz_device_core_surface_at_position;
-  device_class->select_surface_events = gdk_quartz_device_core_select_surface_events;
 }
 
 static void
@@ -349,10 +345,3 @@ gdk_quartz_device_core_surface_at_position (GdkDevice       *device,
   return found_window;
 }
 
-static void
-gdk_quartz_device_core_select_surface_events (GdkDevice    *device,
-                                             GdkSurface    *window,
-                                             GdkEventMask  event_mask)
-{
-  /* The mask is set in the common code. */
-}

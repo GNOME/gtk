@@ -12,6 +12,7 @@ gdk/gdkdisplay.c
 gdk/gdkdisplaymanager.c
 gdk/gdkdnd.c
 gdk/gdkdrawcontext.c
+gdk/gdkdrop.c
 gdk/gdkevents.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
@@ -21,6 +22,7 @@ gdk/keyname-table.h
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkclipboard-wayland.c
 gdk/wayland/gdkdnd-wayland.c
+gdk/wayland/gdkdrop-wayland.c
 gdk/wayland/gdkglcontext-wayland.c
 gdk/wayland/gdkprimary-wayland.c
 gdk/win32/gdkclipdrop-win32.c
@@ -34,6 +36,7 @@ gdk/x11/gdkclipboard-x11.c
 gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkdevice-xi2.c
 gdk/x11/gdkdnd-x11.c
+gdk/x11/gdkdrop-x11.c
 gdk/x11/gdkglcontext-x11.c
 gdk/x11/gdkmain-x11.c
 gdk/x11/gdkselectioninputstream-x11.c
@@ -120,7 +123,6 @@ gtk/gtkcssstyleproperty.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
 gtk/gtkdnd.c
-gtk/gtkdnd-quartz.c
 gtk/gtkdragdest.c
 gtk/gtkdragsource.c
 gtk/gtkdrawingarea.c
@@ -215,6 +217,7 @@ gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
 gtk/gtkpapersize.c
 gtk/gtkpathbar.c
+gtk/gtkpicture.c
 gtk/gtkplacessidebar.c
 gtk/gtkplacesview.c
 gtk/gtkplacesviewrow.c

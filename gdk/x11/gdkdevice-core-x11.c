@@ -77,9 +77,6 @@ static GdkSurface * gdk_x11_device_core_surface_at_position (GdkDevice       *de
                                                            gdouble         *win_y,
                                                            GdkModifierType *mask,
                                                            gboolean         get_toplevel);
-static void      gdk_x11_device_core_select_surface_events (GdkDevice       *device,
-                                                           GdkSurface       *surface,
-                                                           GdkEventMask     event_mask);
 
 G_DEFINE_TYPE (GdkX11DeviceCore, gdk_x11_device_core, GDK_TYPE_DEVICE)
 
@@ -96,7 +93,6 @@ gdk_x11_device_core_class_init (GdkX11DeviceCoreClass *klass)
   device_class->grab = gdk_x11_device_core_grab;
   device_class->ungrab = gdk_x11_device_core_ungrab;
   device_class->surface_at_position = gdk_x11_device_core_surface_at_position;
-  device_class->select_surface_events = gdk_x11_device_core_select_surface_events;
 }
 
 static void
@@ -564,51 +560,3 @@ gdk_x11_device_core_surface_at_position (GdkDevice       *device,
   return surface;
 }
 
-static void
-gdk_x11_device_core_select_surface_events (GdkDevice    *device,
-                                          GdkSurface    *surface,
-                                          GdkEventMask  event_mask)
-{
-  GdkEventMask filter_mask, surface_mask;
-  guint xmask = 0;
-  gint i;
-
-  surface_mask = gdk_surface_get_events (surface);
-  filter_mask = GDK_POINTER_MOTION_MASK
-                | GDK_BUTTON_MOTION_MASK
-                | GDK_BUTTON1_MOTION_MASK
-                | GDK_BUTTON2_MOTION_MASK
-                | GDK_BUTTON3_MOTION_MASK
-                | GDK_BUTTON_PRESS_MASK
-                | GDK_BUTTON_RELEASE_MASK
-                | GDK_KEY_PRESS_MASK
-                | GDK_KEY_RELEASE_MASK
-                | GDK_ENTER_NOTIFY_MASK
-                | GDK_LEAVE_NOTIFY_MASK
-                | GDK_FOCUS_CHANGE_MASK
-                | GDK_PROXIMITY_IN_MASK
-                | GDK_PROXIMITY_OUT_MASK
-                | GDK_SCROLL_MASK;
-
-  /* Filter out non-device events */
-  event_mask &= filter_mask;
-
-  /* Unset device events on surface mask */
-  surface_mask &= ~filter_mask;
-
-  /* Combine masks */
-  event_mask |= surface_mask;
-
-  for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
-    {
-      if (event_mask & (1 << (i + 1)))
-        xmask |= _gdk_x11_event_mask_table[i];
-    }
-
-  if (GDK_SURFACE_XID (surface) != GDK_SURFACE_XROOTWIN (surface))
-    xmask |= StructureNotifyMask | PropertyChangeMask;
-
-  XSelectInput (GDK_SURFACE_XDISPLAY (surface),
-                GDK_SURFACE_XID (surface),
-                xmask);
-}

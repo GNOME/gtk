@@ -24,7 +24,6 @@ static void
 drag_data_get_cb (GtkWidget        *widget,
                   GdkDragContext   *context,
                   GtkSelectionData *data,
-                  guint             time,
                   gpointer          user_data)
 {
   gint pos;

@@ -179,41 +179,6 @@
     </para>
   </refsect2>
 
-  <refsect2 id="event-masks">
-    <title>Event masks</title>
-
-    <para>
-      Each widget instance has a basic event mask and another per input device,
-      which determine the types of input event it receives. Each event mask set
-      on a widget is added to the corresponding (basic or per-device) event mask
-      for the widget’s #GdkSurface, and all child #GdkSurfaces.
-    </para>
-
-    <para>
-      Filtering events against event masks happens inside #GdkSurface, which
-      exposes event masks to the windowing system to reduce the number of events
-      GDK receives from it. On receiving an event, it is filtered against the
-      #GdkSurface’s mask for the input device, if set. Otherwise, it is filtered
-      against the #GdkSurface’s basic event mask.
-    </para>
-
-    <para>
-      This means that widgets must add to the event mask for each event type
-      they expect to receive, using gtk_widget_set_events() or
-      gtk_widget_add_events() to preserve the existing mask. Widgets which are
-      aware of floating devices should use gtk_widget_set_device_events() or
-      gtk_widget_add_device_events(), and must explicitly enable the device
-      using gtk_widget_set_device_enabled(). See the #GdkDeviceManager
-      documentation for more information.
-    </para>
-
-    <para>
-      All standard widgets set the event mask for all events they expect to
-      receive, and it is not necessary to modify this. Masks should be set when
-      implementing a new widget.
-    </para>
-  </refsect2>
-
   <refsect2>
     <title>Touch events</title>
 

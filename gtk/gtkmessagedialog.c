@@ -98,7 +98,7 @@
  * the message area as an internal child with the name “message_area”.
  */
 
-struct _GtkMessageDialogPrivate
+typedef struct
 {
   GtkWidget     *label;
   GtkWidget     *message_area; /* vbox for the primary and secondary labels, and any extra content from the caller */
@@ -107,7 +107,7 @@ struct _GtkMessageDialogPrivate
   guint          has_primary_markup : 1;
   guint          has_secondary_text : 1;
   guint          message_type       : 3;
-};
+} GtkMessageDialogPrivate;
 
 static void gtk_message_dialog_constructed  (GObject          *object);
 static void gtk_message_dialog_set_property (GObject          *object,
@@ -268,13 +268,10 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
-  GtkMessageDialogPrivate *priv;
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
   GtkWidget *action_area;
   GtkSettings *settings;
   gboolean use_caret;
-
-  dialog->priv = gtk_message_dialog_get_instance_private (dialog);
-  priv = dialog->priv;
 
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
@@ -295,7 +292,7 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 static void
 setup_primary_label_font (GtkMessageDialog *dialog)
 {
-  GtkMessageDialogPrivate *priv = dialog->priv;
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
 
   if (!priv->has_primary_markup)
     {
@@ -327,7 +324,7 @@ static void
 setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
-  GtkMessageDialogPrivate *priv = dialog->priv;
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
   const gchar *name = NULL;
   AtkObject *atk_obj;
 
@@ -426,7 +423,7 @@ gtk_message_dialog_set_property (GObject      *object,
 				 GParamSpec   *pspec)
 {
   GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (object);
-  GtkMessageDialogPrivate *priv = dialog->priv;
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
 
   switch (prop_id)
     {
@@ -496,7 +493,7 @@ gtk_message_dialog_get_property (GObject     *object,
 				 GParamSpec  *pspec)
 {
   GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (object);
-  GtkMessageDialogPrivate *priv = dialog->priv;
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
 
   switch (prop_id)
     {
@@ -572,18 +569,19 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
   if (message_format)
     {
+      GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private ((GtkMessageDialog*)dialog);
       va_start (args, message_format);
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->priv->label), msg);
+      gtk_label_set_text (GTK_LABEL (priv->label), msg);
 
       g_free (msg);
     }
 
   if (parent != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (widget), GTK_WINDOW (parent));
-  
+
   if (flags & GTK_DIALOG_MODAL)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
@@ -672,11 +670,9 @@ void
 gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
                                const gchar      *str)
 {
-  GtkMessageDialogPrivate *priv;
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
 
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
-
-  priv = message_dialog->priv;
 
   priv->has_primary_markup = TRUE;
   gtk_label_set_markup (GTK_LABEL (priv->label), str);
@@ -696,13 +692,11 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
                                           const gchar      *message_format,
                                           ...)
 {
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
   va_list args;
   gchar *msg = NULL;
-  GtkMessageDialogPrivate *priv;
 
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
-
-  priv = message_dialog->priv;
 
   if (message_format)
     {
@@ -756,13 +750,11 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
                                             const gchar      *message_format,
                                             ...)
 {
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
   va_list args;
   gchar *msg = NULL;
-  GtkMessageDialogPrivate *priv;
 
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
-
-  priv = message_dialog->priv;
 
   if (message_format)
     {
@@ -802,9 +794,11 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
 GtkWidget *
 gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)
 {
+  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
+
   g_return_val_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog), NULL);
 
-  return message_dialog->priv->message_area;
+  return priv->message_area;
 }
 
 static void

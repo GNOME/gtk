@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 #define GTK_BUILDER_ERROR                (gtk_builder_error_quark ())
 
 typedef struct _GtkBuilderClass   GtkBuilderClass;
-typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
 
 /**
  * GtkBuilderError:
@@ -93,14 +92,12 @@ GQuark gtk_builder_error_quark (void);
 struct _GtkBuilder
 {
   GObject parent_instance;
-
-  GtkBuilderPrivate *priv;
 };
 
 struct _GtkBuilderClass
 {
   GObjectClass parent_class;
-  
+
   GType (* get_type_from_name) (GtkBuilder *builder,
                                 const char *type_name);
 
@@ -121,30 +118,30 @@ GDK_AVAILABLE_IN_ALL
 GtkBuilder*  gtk_builder_new                     (void);
 
 GDK_AVAILABLE_IN_ALL
-guint        gtk_builder_add_from_file           (GtkBuilder    *builder,
+gboolean     gtk_builder_add_from_file           (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
-guint        gtk_builder_add_from_resource       (GtkBuilder    *builder,
+gboolean     gtk_builder_add_from_resource       (GtkBuilder    *builder,
                                                   const gchar   *resource_path,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
-guint        gtk_builder_add_from_string         (GtkBuilder    *builder,
+gboolean     gtk_builder_add_from_string         (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
-guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
+gboolean     gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   gchar        **object_ids,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
-guint        gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
+gboolean     gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
                                                   const gchar   *resource_path,
                                                   gchar        **object_ids,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
-guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
+gboolean     gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   gchar        **object_ids,
@@ -227,9 +224,10 @@ GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
   g_warning ("'%s' is not a valid child type of '%s'", type, g_type_name (G_OBJECT_TYPE (object)))
 
 GDK_AVAILABLE_IN_ALL
-guint     gtk_builder_extend_with_template  (GtkBuilder    *builder,
+gboolean  gtk_builder_extend_with_template  (GtkBuilder    *builder,
                                              GtkWidget     *widget,
-                                             GType          template_type,                                                          const gchar   *buffer,
+                                             GType          template_type,
+                                             const gchar   *buffer,
                                              gsize          length,
                                              GError       **error);
 

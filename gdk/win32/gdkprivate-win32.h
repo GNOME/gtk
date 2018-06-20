@@ -202,8 +202,6 @@ void    _gdk_win32_adjust_client_rect   (GdkSurface *window,
 
 void    _gdk_selection_property_delete (GdkSurface *);
 
-void    _gdk_dropfiles_store (gchar *data);
-
 void       _gdk_push_modal_window   (GdkSurface *window);
 void       _gdk_remove_modal_window (GdkSurface *window);
 GdkSurface *_gdk_modal_current       (void);
@@ -419,11 +417,12 @@ GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 void       _gdk_win32_display_create_surface_impl   (GdkDisplay    *display,
                                                      GdkSurface     *window,
                                                      GdkSurface     *real_parent,
-                                                     GdkEventMask   event_mask,
                                                      GdkSurfaceAttr *attributes);
 
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *window);
+void _gdk_win32_surface_unregister_dnd (GdkSurface *window);
+
 GdkDragContext *_gdk_win32_surface_drag_begin (GdkSurface         *window,
                                                GdkDevice          *device,
                                                GdkContentProvider *content,
@@ -439,11 +438,6 @@ GdkSurface *gdk_win32_display_get_root_window (GdkDisplay *display);
 
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const gchar *display_name);
-GdkAtom _gdk_win32_display_manager_atom_intern (GdkDisplayManager *manager,
-                                                const gchar *atom_name,
-                                                gint         only_if_exists);
-gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
-                                                 GdkAtom            atom);
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkSurface *window);
 

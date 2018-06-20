@@ -146,7 +146,6 @@ struct _GdkDisplayClass
   void                       (*create_surface_impl) (GdkDisplay    *display,
                                                      GdkSurface     *surface,
                                                      GdkSurface     *real_parent,
-                                                     GdkEventMask   event_mask,
                                                      GdkSurfaceAttr *attributes);
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
@@ -233,10 +232,9 @@ void                _gdk_display_event_data_copy      (GdkDisplay       *display
                                                        GdkEvent         *new_event);
 void                _gdk_display_event_data_free      (GdkDisplay       *display,
                                                        GdkEvent         *event);
-void                _gdk_display_create_surface_impl  (GdkDisplay       *display,
+void                gdk_display_create_surface_impl   (GdkDisplay       *display,
                                                        GdkSurface        *surface,
                                                        GdkSurface        *real_parent,
-                                                       GdkEventMask      event_mask,
                                                        GdkSurfaceAttr    *attributes);
 GdkSurface *         _gdk_display_create_surface      (GdkDisplay       *display);
 

@@ -219,7 +219,6 @@ struct _GtkNotebookPrivate
   guint          show_tabs          : 1;
   guint          scrollable         : 1;
   guint          tab_pos            : 2;
-  guint          tabs_reversed      : 1;
   guint          rootwindow_drop    : 1;
 };
 
@@ -393,28 +392,21 @@ static gboolean gtk_notebook_drag_failed     (GtkWidget        *widget,
                                               GdkDragContext   *context,
                                               GtkDragResult     result);
 static gboolean gtk_notebook_drag_motion     (GtkWidget        *widget,
-                                              GdkDragContext   *context,
+                                              GdkDrop          *drop,
                                               gint              x,
-                                              gint              y,
-                                              guint             time);
+                                              gint              y);
 static void gtk_notebook_drag_leave          (GtkWidget        *widget,
-                                              GdkDragContext   *context,
-                                              guint             time);
+                                              GdkDrop          *drop);
 static gboolean gtk_notebook_drag_drop       (GtkWidget        *widget,
-                                              GdkDragContext   *context,
+                                              GdkDrop          *drop,
                                               gint              x,
-                                              gint              y,
-                                              guint             time);
+                                              gint              y);
 static void gtk_notebook_drag_data_get       (GtkWidget        *widget,
                                               GdkDragContext   *context,
-                                              GtkSelectionData *data,
-                                              guint             time);
+                                              GtkSelectionData *data);
 static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
-                                              GdkDragContext   *context,
-                                              GtkSelectionData *data,
-                                              guint             time);
-static void gtk_notebook_direction_changed   (GtkWidget        *widget,
-                                              GtkTextDirection  previous_direction);
+                                              GdkDrop          *drop,
+                                              GtkSelectionData *data);
 
 /*** GtkContainer Methods ***/
 static void gtk_notebook_set_child_property  (GtkContainer     *container,
@@ -688,7 +680,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->drag_data_received = gtk_notebook_drag_data_received;
   widget_class->drag_failed = gtk_notebook_drag_failed;
   widget_class->compute_expand = gtk_notebook_compute_expand;
-  widget_class->direction_changed = gtk_notebook_direction_changed;
 
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
@@ -1072,11 +1063,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->operation = DRAG_OPERATION_NONE;
   priv->detached_tab = NULL;
   priv->has_scrolled = FALSE;
-
-  if (gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL)
-    priv->tabs_reversed = TRUE;
-  else
-    priv->tabs_reversed = FALSE;
 
   targets = gdk_content_formats_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
   gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
@@ -1630,32 +1616,6 @@ gtk_notebook_dispose (GObject *object)
     }
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->dispose (object);
-}
-
-static void
-update_node_ordering (GtkNotebook *notebook)
-{
-  GtkNotebookPrivate *priv = notebook->priv;
-  gboolean reverse_tabs;
-
-  reverse_tabs = (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM) &&
-                 gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL;
-
-  if ((reverse_tabs && !priv->tabs_reversed) ||
-      (!reverse_tabs && priv->tabs_reversed))
-    {
-      gtk_css_node_reverse_children (gtk_widget_get_css_node (priv->tabs_widget));
-      priv->tabs_reversed = reverse_tabs;
-    }
-}
-
-static void
-gtk_notebook_direction_changed (GtkWidget        *widget,
-                                GtkTextDirection  previous_dir)
-{
-  update_node_ordering (GTK_NOTEBOOK (widget));
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->direction_changed (widget, previous_dir);
 }
 
 static gboolean
@@ -3055,11 +3015,10 @@ gtk_notebook_switch_tab_timeout (gpointer data)
 }
 
 static gboolean
-gtk_notebook_drag_motion (GtkWidget      *widget,
-                          GdkDragContext *context,
-                          gint            x,
-                          gint            y,
-                          guint           time)
+gtk_notebook_drag_motion (GtkWidget *widget,
+                          GdkDrop   *drop,
+                          gint       x,
+                          gint       y)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
@@ -3074,14 +3033,14 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
     {
       priv->click_child = arrow;
       gtk_notebook_set_scroll_timer (notebook);
-      gdk_drag_status (context, 0, time);
+      gdk_drop_status (drop, 0);
 
       retval = TRUE;
       goto out;
     }
 
   stop_scrolling (notebook);
-  target = gtk_drag_dest_find_target (widget, context, NULL);
+  target = gtk_drag_dest_find_target (widget, drop, NULL);
   tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
   if (target == tab_target)
@@ -3092,7 +3051,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
       retval = TRUE;
 
-      source = GTK_NOTEBOOK (gtk_drag_get_source_widget (context));
+      source = GTK_NOTEBOOK (gtk_drag_get_source_widget (gdk_drop_get_drag (drop)));
       g_assert (source->priv->cur_page != NULL);
       source_child = source->priv->cur_page->child;
 
@@ -3103,14 +3062,14 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
           !(widget == source_child ||
             gtk_widget_is_ancestor (widget, source_child)))
         {
-          gdk_drag_status (context, GDK_ACTION_MOVE, time);
+          gdk_drop_status (drop, GDK_ACTION_MOVE);
           goto out;
         }
       else
         {
           /* it's a tab, but doesn't share
            * ID with this notebook */
-          gdk_drag_status (context, 0, time);
+          gdk_drop_status (drop, 0);
         }
     }
 
@@ -3144,9 +3103,8 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 }
 
 static void
-gtk_notebook_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time)
+gtk_notebook_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
@@ -3155,23 +3113,22 @@ gtk_notebook_drag_leave (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_notebook_drag_drop (GtkWidget        *widget,
-                        GdkDragContext   *context,
-                        gint              x,
-                        gint              y,
-                        guint             time)
+gtk_notebook_drag_drop (GtkWidget *widget,
+                        GdkDrop   *drop,
+                        gint       x,
+                        gint       y)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GdkAtom target, tab_target;
 
-  target = gtk_drag_dest_find_target (widget, context, NULL);
+  target = gtk_drag_dest_find_target (widget, drop, NULL);
   tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
   if (target == tab_target)
     {
       notebook->priv->mouse_x = x;
       notebook->priv->mouse_y = y;
-      gtk_drag_get_data (widget, context, target, time);
+      gtk_drag_get_data (widget, drop, target);
       return TRUE;
     }
 
@@ -3257,8 +3214,7 @@ do_detach_tab (GtkNotebook *from,
 static void
 gtk_notebook_drag_data_get (GtkWidget        *widget,
                             GdkDragContext   *context,
-                            GtkSelectionData *data,
-                            guint             time)
+                            GtkSelectionData *data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
@@ -3283,27 +3239,29 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 
 static void
 gtk_notebook_drag_data_received (GtkWidget        *widget,
-                                 GdkDragContext   *context,
-                                 GtkSelectionData *data,
-                                 guint             time)
+                                 GdkDrop          *drop,
+                                 GtkSelectionData *data)
 {
   GtkNotebook *notebook;
+  GdkDragContext *drag;
   GtkWidget *source_widget;
   GtkWidget **child;
 
   notebook = GTK_NOTEBOOK (widget);
-  source_widget = gtk_drag_get_source_widget (context);
+  drag = gdk_drop_get_drag (drop);
+  source_widget = gtk_drag_get_source_widget (drag);
 
   if (source_widget &&
+      (gdk_drop_get_actions (drop) & GDK_ACTION_MOVE) &&
       gtk_selection_data_get_target (data) == g_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       child = (void*) gtk_selection_data_get_data (data);
 
       do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child);
-      gtk_drag_finish (context, TRUE, time);
+      gdk_drop_finish (drop, GDK_ACTION_MOVE);
     }
   else
-    gtk_drag_finish (context, FALSE, time);
+    gdk_drop_finish (drop, 0);
 }
 
 /* Private GtkContainer Methods :
@@ -4008,18 +3966,12 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   else
   sibling = priv->arrow_widget[ARROW_RIGHT_AFTER];
 
-  if (priv->tabs_reversed)
-    gtk_css_node_reverse_children (gtk_widget_get_css_node (priv->tabs_widget));
-
   page->tab_widget = gtk_gizmo_new ("tab",
                                     measure_tab,
                                     allocate_tab,
                                     NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, priv->tabs_widget, sibling);
-
-  if (priv->tabs_reversed)
-    gtk_css_node_reverse_children (gtk_widget_get_css_node (priv->tabs_widget));
 
   if (!tab_label)
     page->default_tab = TRUE;
@@ -6289,8 +6241,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       g_assert_not_reached ();
       break;
     }
-
-  update_node_ordering (notebook);
 }
 
 /**

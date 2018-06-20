@@ -45,6 +45,11 @@ extern HINSTANCE _gdk_dll_hinstance;
 BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
          DWORD     fdwReason,
+         LPVOID    lpvReserved);
+
+BOOL WINAPI
+DllMain (HINSTANCE hinstDLL,
+         DWORD     fdwReason,
          LPVOID    lpvReserved)
 {
   switch (fdwReason)
@@ -52,6 +57,8 @@ DllMain (HINSTANCE hinstDLL,
     case DLL_PROCESS_ATTACH:
       gtk_dll = (HMODULE) hinstDLL;
       _gdk_dll_hinstance = hinstDLL;
+      break;
+    default:
       break;
     }
 
@@ -154,7 +161,7 @@ _gtk_get_libdir (void)
       gchar *slash = strrchr (root, '\\');
       if (slash != NULL &&
           g_ascii_strcasecmp (slash + 1, ".libs") == 0)
-        gtk_libdir = GTK_LIBDIR;
+        gtk_libdir = g_strdup (GTK_LIBDIR);
       else
         gtk_libdir = g_build_filename (root, "lib", NULL);
       g_free (root);

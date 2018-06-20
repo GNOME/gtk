@@ -29,6 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdndprivate.h"
+#include "gdkdropprivate.h"
 #include "gdk-private.h"
 
 #include <string.h>
@@ -169,9 +170,6 @@ _gdk_event_emit (GdkEvent *event)
 
   if (_gdk_event_func)
     (*_gdk_event_func) (event, _gdk_event_data);
-
-  if (gdk_drag_context_handle_dest_event (event))
-    return;
 }
 
 /*********************************************
@@ -419,7 +417,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
             GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
         gdk_event_push_history (last_motion, pending_motions->data);
 
-      gdk_event_free (pending_motions->data);
+      g_object_unref (pending_motions->data);
       display->queued_events = g_list_delete_link (display->queued_events,
                                                    pending_motions);
       pending_motions = next;
@@ -645,7 +643,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      g_object_ref (event->dnd.context);
+      g_object_ref (event->dnd.drop);
       break;
 
     case GDK_EXPOSE:
@@ -694,21 +692,7 @@ gdk_event_copy (const GdkEvent *event)
   return new_event;
 }
 
-/**
- * gdk_event_free:
- * @event:  a #GdkEvent.
- *
- * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
- *
- * This is equivalent to g_object_unref().
- */
-void
-gdk_event_free (GdkEvent *event)
-{
-  g_object_unref (event);
-}
-
-void
+static void
 gdk_event_finalize (GObject *object)
 {
   GdkEvent *event = GDK_EVENT (object);
@@ -730,8 +714,7 @@ gdk_event_finalize (GObject *object)
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      if (event->dnd.context != NULL)
-        g_object_unref (event->dnd.context);
+      g_clear_object (&event->dnd.drop);
       break;
 
     case GDK_BUTTON_PRESS:
@@ -2075,17 +2058,15 @@ gdk_event_is_sent (const GdkEvent *event)
 }
 
 /**
- * gdk_event_get_drag_context:
+ * gdk_event_get_drop:
  * @event: a #GdkEvent
- * @context: (out) (transfer none): return location for the drag context
  *
- * Gets the drag context from a DND event.
+ * Gets the #GdkDrop from a DND event.
  *
- * Returns: %TRUE on success, otherwise %FALSE
+ * Returns: (transfer none) (nullable): the drop
  **/
-gboolean
-gdk_event_get_drag_context (const GdkEvent  *event,
-                            GdkDragContext **context)
+GdkDrop *
+gdk_event_get_drop (const GdkEvent *event)
 {
   if (!event)
     return FALSE;
@@ -2095,11 +2076,10 @@ gdk_event_get_drag_context (const GdkEvent  *event,
       event->any.type == GDK_DRAG_MOTION ||
       event->any.type == GDK_DROP_START)
     {
-      *context = event->dnd.context;
-      return TRUE;
+      return event->dnd.drop;
     }
 
-  return FALSE;
+  return NULL;
 }
 
 /**

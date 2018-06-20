@@ -44,9 +44,9 @@
  *
  * GtkCenterBox uses a single CSS node with the name “box”,
  *
- * In horizontal orientation, the nodes of the children are always arranged
- * from left to right. So :first-child will always select the leftmost child,
- * regardless of text direction.
+ * The first child of the #GtkCenterBox will be allocated depending on the
+ * text direction, i.e. in left-to-right layouts it will be allocated on the
+ * left and in right-to-left layouts on the right.
  *
  * In vertical orientation, the nodes of the children are arranged from top to
  * bottom.
@@ -535,55 +535,6 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
     }
 }
 
-static void
-gtk_center_box_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  GtkCenterBox *self = GTK_CENTER_BOX (widget);
-
-  if (self->start_widget)
-    gtk_widget_snapshot_child (widget, self->start_widget, snapshot);
-
-  if (self->center_widget)
-    gtk_widget_snapshot_child (widget, self->center_widget, snapshot);
-
-  if (self->end_widget)
-    gtk_widget_snapshot_child (widget, self->end_widget, snapshot);
-}
-
-static void
-update_css_node_order (GtkCenterBox *self)
-{
-  GtkCssNode *parent;
-  GtkCssNode *first;
-  GtkCssNode *last;
-
-  parent = gtk_widget_get_css_node (GTK_WIDGET (self));
-
-  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR)
-    {
-      first = self->start_widget ? gtk_widget_get_css_node (self->start_widget) : NULL;
-      last = self->end_widget ? gtk_widget_get_css_node (self->end_widget) : NULL;
-    }
-  else
-    {
-      first = self->end_widget ? gtk_widget_get_css_node (self->end_widget) : NULL;
-      last = self->start_widget ? gtk_widget_get_css_node (self->start_widget) : NULL;
-    }
-
-  if (first)
-    gtk_css_node_insert_after (parent, first, NULL);
-  if (last)
-    gtk_css_node_insert_before (parent, last, NULL);
-}
-
-static void
-gtk_center_box_direction_changed (GtkWidget        *widget,
-                                  GtkTextDirection  previous_direction)
-{
-  update_css_node_order (GTK_CENTER_BOX (widget));
-}
-
 static GtkSizeRequestMode
 gtk_center_box_get_request_mode (GtkWidget *widget)
 {
@@ -703,8 +654,6 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
   widget_class->measure = gtk_center_box_measure;
   widget_class->size_allocate = gtk_center_box_size_allocate;
-  widget_class->snapshot = gtk_center_box_snapshot;
-  widget_class->direction_changed = gtk_center_box_direction_changed;
   widget_class->get_request_mode = gtk_center_box_get_request_mode;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
@@ -764,9 +713,7 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 
   self->start_widget = child;
   if (child)
-    gtk_widget_set_parent (child, GTK_WIDGET (self));
-
-  update_css_node_order (self);
+    gtk_widget_insert_after (child, GTK_WIDGET (self), NULL);
 }
 
 /**
@@ -785,9 +732,7 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 
   self->center_widget = child;
   if (child)
-    gtk_widget_set_parent (child, GTK_WIDGET (self));
-
-  update_css_node_order (self);
+    gtk_widget_insert_after (child, GTK_WIDGET (self), self->start_widget);
 }
 
 /**
@@ -806,9 +751,7 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
 
   self->end_widget = child;
   if (child)
-    gtk_widget_set_parent (child, GTK_WIDGET (self));
-
-  update_css_node_order (self);
+    gtk_widget_insert_before (child, GTK_WIDGET (self), NULL);
 }
 
 /**

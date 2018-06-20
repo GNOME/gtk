@@ -2314,7 +2314,7 @@ populate_credits_page (GtkAboutDialog *about)
     }
 
   if (priv->artists != NULL)
-    add_credits_section (about, GTK_GRID (priv->credits_grid), &row, _("Artwork by"), priv->artists);
+    add_credits_section (about, GTK_GRID (priv->credits_grid), &row, _("Design by"), priv->artists);
 
   if (priv->credit_sections != NULL)
     {

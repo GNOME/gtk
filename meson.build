@@ -640,6 +640,132 @@ if cloudproviders_enabled
   endif
 endif
 
+graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
+graphene_has_gcc = graphene_dep.get_pkgconfig_variable('graphene_has_gcc') == '1'
+
+malloc_is_aligned = false
+
+if not meson.is_cross_build() or meson.has_exe_wrapper()
+  malloc_test = cc.run ('''
+  #include <malloc.h>
+  #include <stdio.h>
+
+  #define COUNT 100
+  #define is_aligned(POINTER, BYTE_COUNT) \
+    (((uintptr_t)(const void *)(POINTER)) % (BYTE_COUNT) == 0)
+  int
+  main (int argc, char *argv[])
+  {
+    void **pointers;
+    int i, a, min_a;
+    FILE *f;
+    int wrote;
+    pointers = malloc (sizeof (void *) * COUNT);
+    for (i = 0, min_a = 128; i < COUNT; i++, pointers++)
+    {
+      *pointers = malloc (sizeof (void *));
+      for (a = 1; a <= 128; a = a * 2)
+      {
+        if (!is_aligned (*pointers, a))
+        {
+          a = a / 2;
+          break;
+        }
+      }
+      if (a > 128)
+        a = 128;
+      if (a < min_a)
+        min_a = a;
+    }
+    wrote = fprintf (stderr, "%d", min_a);
+    if (wrote <= 0)
+      return 1;
+    return 0;
+  }
+  ''')
+
+  if not malloc_test.compiled() or malloc_test.returncode() != 0
+    message ('malloc() alignment test failed, assuming unaligned malloc()')
+  elif malloc_test.stderr().to_int() >= 16
+    malloc_is_aligned = true
+    cdata.set('MALLOC_IS_ALIGNED16', 1)
+  endif
+else
+  # TODO: more reasinable cross-compiling defaults?
+  message ('cross-compiling, assuming unaligned malloc()')
+endif
+
+if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+    no_builtin_args = cc.get_supported_arguments(['-fno-builtin'])
+else
+    no_builtin_args = []
+endif
+
+# Check that posix_memalign() is not a builtin
+have_posix_memalign = cc.links('''#include <stdlib.h>
+                                  int main (int argc, char ** argv) {
+                                    void *p;
+                                    return posix_memalign (&p, 16, argc);
+                                  }
+                               ''',
+                               args : no_builtin_args,
+                               name : 'posix_memalign() is not a builtin')
+if have_posix_memalign
+  cdata.set('HAVE_POSIX_MEMALIGN', 1)
+endif
+
+# Check that memalign() is not a builtin
+have_memalign = cc.links('''#include <malloc.h>
+                            int main (int argc, char ** argv) {
+                              return memalign (16, argc);
+                            }
+                         ''',
+                         args : no_builtin_args,
+                         name : 'memalign() is not a builtin')
+if have_memalign
+  cdata.set('HAVE_MEMALIGN', 1)
+endif
+
+# Check that aligned_alloc() is not a builtin
+have_aligned_alloc = cc.links('''#include <stdlib.h>
+                                 int main (int argc, char ** argv) {
+                                   return aligned_alloc (16, argc);
+                                 }
+                              ''',
+                              args : no_builtin_args,
+                              name : 'aligned_alloc() is not a builtin')
+  if have_aligned_alloc
+  cdata.set('HAVE_ALIGNED_ALLOC', 1)
+endif
+
+# Check that _aligned_malloc() is not a builtin
+have__aligned_malloc = cc.links('''#include <malloc.h>
+                                   int main (int argc, char ** argv) {
+                                     return _aligned_malloc (argc, 16);
+                                   }
+                                ''',
+                                args : no_builtin_args,
+                                name : '_aligned_malloc() is not a builtin')
+if have__aligned_malloc
+  cdata.set('HAVE__ALIGNED_MALLOC', 1)
+endif
+
+if graphene_has_sse2 or graphene_has_gcc
+  message('Need aligned memory due to the use of SSE2 or GCC vector instructions')
+
+  if os_win32 and cc.get_id() == 'gcc'
+    add_global_arguments(['-mstackrealign'], language: 'c')
+  endif
+
+  if (not malloc_is_aligned and
+      not have_posix_memalign and
+      not have_memalign and
+      not have_aligned_alloc and
+      not have__aligned_malloc)
+    error('Failed to find any means of allocating aligned memory')
+  endif
+
+endif
 
 subdir('gdk')
 subdir('gsk')

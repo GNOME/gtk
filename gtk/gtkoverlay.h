@@ -99,6 +99,13 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_set_measure_overlay (GtkOverlay *overlay,
 					    GtkWidget  *widget,
 					    gboolean    measure);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_overlay_get_clip_overlay    (GtkOverlay *overlay,
+                                            GtkWidget  *widget);
+GDK_AVAILABLE_IN_ALL
+void       gtk_overlay_set_clip_overlay    (GtkOverlay *overlay,
+                                            GtkWidget  *widget,
+                                            gboolean    clip_overlay);
 
 G_END_DECLS
 

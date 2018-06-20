@@ -56,9 +56,4 @@ gdk_win32_display_manager_class_init (GdkWin32DisplayManagerClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = gdk_win32_display_manager_finalize;
-
-#if 0
-  manager_class->atom_intern = _gdk_win32_display_manager_atom_intern;
-  manager_class->get_atom_name = _gdk_win32_display_manager_get_atom_name;
-#endif
 }

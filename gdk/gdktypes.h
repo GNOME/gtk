@@ -124,6 +124,7 @@ typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkTexture            GdkTexture;
 typedef struct _GdkDevice             GdkDevice;
 typedef struct _GdkDragContext        GdkDragContext;
+typedef struct _GdkDrop               GdkDrop;
 
 typedef struct _GdkClipboard          GdkClipboard;
 typedef struct _GdkDisplayManager     GdkDisplayManager;
@@ -574,6 +575,35 @@ typedef enum
   GDK_AXIS_FLAG_ROTATION = 1 << GDK_AXIS_ROTATION,
   GDK_AXIS_FLAG_SLIDER   = 1 << GDK_AXIS_SLIDER,
 } GdkAxisFlags;
+
+/**
+ * GdkDragAction:
+ * @GDK_ACTION_COPY: Copy the data.
+ * @GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
+ *  it from the source using the DELETE target of the X selection protocol.
+ * @GDK_ACTION_LINK: Add a link to the data. Note that this is only
+ *  useful if source and destination agree on what it means.
+ * @GDK_ACTION_ASK: Ask the user what to do with the data.
+ *
+ * Used in #GdkDragContext to indicate what the destination
+ * should do with the dropped data.
+ */
+typedef enum
+{
+  GDK_ACTION_COPY    = 1 << 0,
+  GDK_ACTION_MOVE    = 1 << 1,
+  GDK_ACTION_LINK    = 1 << 2,
+  GDK_ACTION_ASK     = 1 << 3
+} GdkDragAction;
+
+/**
+ * GDK_ACTION_ALL:
+ *
+ * Defines all possible DND actions. This can be used in gdk_drop_status()
+ * messages when any drop can be accepted or a more specific drop method
+ * is not yet known.
+ */
+#define GDK_ACTION_ALL (GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK)
 
 G_END_DECLS
 

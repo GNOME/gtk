@@ -46,7 +46,6 @@ _gdk_quartz_surface_drag_begin (GdkSurface *window,
   _gdk_quartz_drag_source_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT,
                                                   "device", device,
                                                   NULL);
-  _gdk_quartz_drag_source_context->is_source = TRUE;
 
   _gdk_quartz_drag_source_context->source_surface = window;
   g_object_ref (window);
@@ -66,22 +65,6 @@ gdk_quartz_drag_context_drag_drop (GdkDragContext *context,
 static void
 gdk_quartz_drag_context_drag_abort (GdkDragContext *context,
                                     guint32         time)
-{
-  /* FIXME: Implement */
-}
-
-static void
-gdk_quartz_drag_context_drag_status (GdkDragContext *context,
-                                     GdkDragAction   action,
-                                     guint32         time)
-{
-  context->action = action;
-}
-
-static void
-gdk_quartz_drag_context_drop_finish (GdkDragContext *context,
-                                     gboolean        success,
-                                     guint32         time)
 {
   /* FIXME: Implement */
 }
@@ -117,8 +100,6 @@ gdk_quartz_drag_context_class_init (GdkQuartzDragContextClass *klass)
 
   object_class->finalize = gdk_quartz_drag_context_finalize;
 
-  context_class->drag_status = gdk_quartz_drag_context_drag_status;
   context_class->drag_abort = gdk_quartz_drag_context_drag_abort;
   context_class->drag_drop = gdk_quartz_drag_context_drag_drop;
-  context_class->drop_finish = gdk_quartz_drag_context_drop_finish;
 }

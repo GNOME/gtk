@@ -61,7 +61,7 @@ point_press (PointState *point,
 
   gtk_main_do_event (ev);
 
-  gdk_event_free (ev);
+  g_object_unref (ev);
 
   point->widget = widget;
 }
@@ -114,7 +114,7 @@ point_update (PointState *point,
 
   gtk_main_do_event (ev);
 
-  gdk_event_free (ev);
+  g_object_unref (ev);
 }
 
 static void
@@ -168,7 +168,7 @@ point_release (PointState *point,
 
   gtk_main_do_event (ev);
 
-  gdk_event_free (ev);
+  g_object_unref (ev);
 }
 
 static const gchar *

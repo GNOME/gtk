@@ -33,50 +33,6 @@
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
 
-GdkAtom
-_gdk_win32_display_manager_atom_intern (GdkDisplayManager *manager,
-					const gchar *atom_name,
-					gint         only_if_exists)
-{
-  ATOM win32_atom;
-  GdkAtom retval;
-  static GHashTable *atom_hash = NULL;
-
-  if (!atom_hash)
-    atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-  retval = g_hash_table_lookup (atom_hash, atom_name);
-  if (!retval)
-    {
-      win32_atom = GlobalAddAtom (atom_name);
-      retval = GUINT_TO_POINTER ((guint) win32_atom);
-
-      g_hash_table_insert (atom_hash,
-			   g_strdup (atom_name),
-			   retval);
-    }
-
-  return retval;
-}
-
-gchar *
-_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
-					  GdkAtom            atom)
-{
-  ATOM win32_atom;
-  gchar name[256];
-
-  if (NULL == atom) return g_strdup ("<none>");
-
-  win32_atom = GPOINTER_TO_UINT (atom);
-
-  if (win32_atom < 0xC000)
-    return g_strdup_printf ("#%p", atom);
-  else if (GlobalGetAtomName (win32_atom, name, sizeof (name)) == 0)
-    return NULL;
-  return g_strdup (name);
-}
-
 /*
   For reference, from gdk/x11/gdksettings.c:
 

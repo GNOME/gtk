@@ -51,7 +51,7 @@ _gdk_x11_event_translator_translate (GdkEventTranslator *translator,
   if ((iface->translate_event) (translator, display, event, xevent))
     return event;
 
-  gdk_event_free (event);
+  g_object_unref (event);
 
   return NULL;
 }

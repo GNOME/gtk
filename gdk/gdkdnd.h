@@ -40,31 +40,6 @@ G_BEGIN_DECLS
 #define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
 
 /**
- * GdkDragAction:
- * @GDK_ACTION_DEFAULT: Means nothing, and should not be used.
- * @GDK_ACTION_COPY: Copy the data.
- * @GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
- *  it from the source using the DELETE target of the X selection protocol.
- * @GDK_ACTION_LINK: Add a link to the data. Note that this is only
- *  useful if source and destination agree on what it means.
- * @GDK_ACTION_PRIVATE: Special action which tells the source that the
- *  destination will do something that the source doesn’t understand.
- * @GDK_ACTION_ASK: Ask the user what to do with the data.
- *
- * Used in #GdkDragContext to indicate what the destination
- * should do with the dropped data.
- */
-typedef enum
-{
-  GDK_ACTION_DEFAULT = 1 << 0,
-  GDK_ACTION_COPY    = 1 << 1,
-  GDK_ACTION_MOVE    = 1 << 2,
-  GDK_ACTION_LINK    = 1 << 3,
-  GDK_ACTION_PRIVATE = 1 << 4,
-  GDK_ACTION_ASK     = 1 << 5
-} GdkDragAction;
-
-/**
  * GdkDragCancelReason:
  * @GDK_DRAG_CANCEL_NO_TARGET: There is no suitable drop target.
  * @GDK_DRAG_CANCEL_USER_CANCELLED: Drag cancelled by the user
@@ -98,32 +73,7 @@ GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface       *gdk_drag_context_get_source_surface    (GdkDragContext *context);
-GDK_AVAILABLE_IN_ALL
-GdkSurface       *gdk_drag_context_get_dest_surface      (GdkDragContext *context);
-
-/* Destination side */
-GDK_AVAILABLE_IN_ALL
-void             gdk_drag_status        (GdkDragContext   *context,
-                                         GdkDragAction     action,
-                                         guint32           time_);
-GDK_AVAILABLE_IN_ALL
-void             gdk_drop_finish        (GdkDragContext   *context,
-                                         gboolean          success,
-                                         guint32           time_);
-
-GDK_AVAILABLE_IN_ALL
-void                    gdk_drop_read_async             (GdkDragContext        *context,
-                                                         const char           **mime_types,
-                                                         int                    io_priority,
-                                                         GCancellable          *cancellable,
-                                                         GAsyncReadyCallback    callback,
-                                                         gpointer               user_data);
-GDK_AVAILABLE_IN_ALL
-GInputStream *          gdk_drop_read_finish            (GdkDragContext        *context,
-                                                         const char           **out_mime_type,
-                                                         GAsyncResult          *result,
-                                                         GError               **error);
+gboolean         gdk_drag_action_is_unique            (GdkDragAction   action);
 
 /* Source side */
 

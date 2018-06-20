@@ -486,6 +486,15 @@ void          gdk_surface_move_resize           (GdkSurface     *surface,
                                                  gint           width,
                                                  gint           height);
 GDK_AVAILABLE_IN_ALL
+void          gdk_surface_move_to_rect          (GdkSurface         *surface,
+                                                 const GdkRectangle *rect,
+                                                 GdkGravity          rect_anchor,
+                                                 GdkGravity          surface_anchor,
+                                                 GdkAnchorHints      anchor_hints,
+                                                 gint                rect_anchor_dx,
+                                                 gint                rect_anchor_dy);
+
+GDK_AVAILABLE_IN_ALL
 void          gdk_surface_raise                 (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_lower                 (GdkSurface     *surface);
@@ -675,19 +684,6 @@ GList *       gdk_surface_peek_children   (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 GList *       gdk_surface_get_children_with_user_data (GdkSurface *surface,
                                                        gpointer   user_data);
-
-GDK_AVAILABLE_IN_ALL
-GdkEventMask  gdk_surface_get_events     (GdkSurface      *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_events     (GdkSurface      *surface,
-                                          GdkEventMask     event_mask);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_device_events (GdkSurface    *surface,
-                                             GdkDevice    *device,
-                                             GdkEventMask  event_mask);
-GDK_AVAILABLE_IN_ALL
-GdkEventMask  gdk_surface_get_device_events (GdkSurface    *surface,
-                                             GdkDevice    *device);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_list   (GdkSurface       *surface,

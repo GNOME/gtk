@@ -477,8 +477,7 @@ static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 					     guint              last_key);
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDragContext    *context,
-					     GtkSelectionData  *selection_data,
-					     guint              time);
+					     GtkSelectionData  *selection_data);
 
 static void     gtk_label_buildable_interface_init     (GtkBuildableIface *iface);
 static gboolean gtk_label_buildable_custom_tag_start   (GtkBuildable     *buildable,
@@ -5171,8 +5170,7 @@ gtk_label_set_selection_text (GtkLabel         *label,
 static void
 gtk_label_drag_data_get (GtkWidget        *widget,
 			 GdkDragContext   *context,
-			 GtkSelectionData *selection_data,
-			 guint             time)
+			 GtkSelectionData *selection_data)
 {
   gtk_label_set_selection_text (GTK_LABEL (widget), selection_data);
 }
