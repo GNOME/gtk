@@ -2583,26 +2583,6 @@ gtk_list_box_prepend (GtkListBox *box,
   gtk_list_box_insert (box, child, 0);
 }
 
-static void
-gtk_list_box_insert_css_node (GtkListBox    *box,
-                              GtkWidget     *child,
-                              GSequenceIter *iter)
-{
-  GSequenceIter *prev_iter;
-  GtkCssNode *sibling;
-
-  prev_iter = g_sequence_iter_prev (iter);
-
-  if (prev_iter != iter)
-    sibling = gtk_widget_get_css_node (g_sequence_get (prev_iter));
-  else
-    sibling = NULL;
-
-  gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                             gtk_widget_get_css_node (child),
-                             sibling);
-}
-
 /**
  * gtk_list_box_insert:
  * @box: a #GtkListBox
@@ -2623,6 +2603,7 @@ gtk_list_box_insert (GtkListBox *box,
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkListBoxRow *row;
+  GSequenceIter *prev = NULL;
   GSequenceIter *iter = NULL;
 
   g_return_if_fail (GTK_IS_LIST_BOX (box));
@@ -2651,10 +2632,11 @@ gtk_list_box_insert (GtkListBox *box,
       iter = g_sequence_insert_before (current_iter, row);
     }
 
-  gtk_list_box_insert_css_node (box, GTK_WIDGET (row), iter);
-
   ROW_PRIV (row)->iter = iter;
-  gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (box));
+  prev = g_sequence_iter_prev (iter);
+  gtk_widget_insert_after (GTK_WIDGET (row), GTK_WIDGET (box),
+                           prev != iter ? g_sequence_get (prev) : NULL);
+
   gtk_widget_set_child_visible (GTK_WIDGET (row), TRUE);
   ROW_PRIV (row)->visible = gtk_widget_get_visible (GTK_WIDGET (row));
   if (ROW_PRIV (row)->visible)
