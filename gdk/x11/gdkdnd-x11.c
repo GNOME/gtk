@@ -886,8 +886,8 @@ gdk_x11_drag_context_handle_status (GdkDisplay   *display,
 
       if (context->action != context_x11->current_action)
         {
-          context_x11->current_action = action;
-          g_signal_emit_by_name (context, "action-changed", action);
+          context_x11->current_action = context->action;
+          g_signal_emit_by_name (context, "action-changed", context->action);
         }
     }
 }
