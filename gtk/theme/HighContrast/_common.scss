@@ -214,10 +214,10 @@ entry {
         border-color: transparent;
         border-radius: 0;
         box-shadow: none;
-
-        // Dodge transparency in selected treeview row, else bg & fg end up same
-        treeview &:focus { background-color: $base_color; }
       }
+
+      // Dodge transparency in selected treeview row, else bg & fg end up same
+      treeview &:focus { background-color: $base_color; }
     }
 
     &:focus { @include entry(focus); }
