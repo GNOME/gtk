@@ -537,7 +537,7 @@ add_emoji (GtkWidget          *list,
   child = gtk_list_box_row_new ();
   gtk_widget_show (child);
   gtk_widget_set_focus_on_click (child, FALSE);
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_show (box);
   gtk_container_add (GTK_CONTAINER (child), box);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
