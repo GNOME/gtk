@@ -592,7 +592,10 @@ gtk_private_h_sources =		\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
-	gdkpixbufutilsprivate.h
+	gdkpixbufutilsprivate.h	\
+	language-names.h	\
+	open-type-layout.h	\
+	script-names.h
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources = 		\
