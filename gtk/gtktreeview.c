@@ -262,9 +262,7 @@ typedef enum {
 #define TREE_WINDOW_Y_TO_RBTREE_Y(tree_view,y) ((y) + tree_view->priv->dy)
 #define RBTREE_Y_TO_TREE_WINDOW_Y(tree_view,y) ((y) - tree_view->priv->dy)
 
-/* Size of the expander arrow */
-#define _TREE_VIEW_EXPANDER_SIZE 16
-/* Vertical separator width. Must be an eben number. */
+/* Vertical separator width. Must be an even number. */
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
 /* Horizontal separator width. Must be an even number.  */
 #define _TREE_VIEW_HORIZONTAL_SEPARATOR 4
@@ -2712,7 +2710,26 @@ row_is_separator (GtkTreeView *tree_view,
 static int
 gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
 {
-  return _TREE_VIEW_EXPANDER_SIZE + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
+  GtkStyleContext *context;
+  GtkCssStyle *style;
+  int min_width;
+  int min_height;
+  int expander_size;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+
+  style = gtk_style_context_lookup_style (context);
+  min_width = _gtk_css_number_value_get
+    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MIN_WIDTH), 100);
+  min_height = _gtk_css_number_value_get
+    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MIN_HEIGHT), 100);
+
+  gtk_style_context_restore (context);
+
+  expander_size = MAX (min_width, min_height);
+  return expander_size + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
 }
 
 static void
