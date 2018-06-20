@@ -434,7 +434,7 @@ get_text (GVariant *emoji_data,
           gsize     length)
 {
   GVariant *codes;
-  int i;
+  gsize i;
   char *p;
 
   p = text;
