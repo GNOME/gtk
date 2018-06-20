@@ -49,17 +49,13 @@ G_BEGIN_DECLS
 #define GTK_INFO_BAR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INFO_BAR, GtkInfoBarClass))
 
 
-typedef struct _GtkInfoBarPrivate GtkInfoBarPrivate;
 typedef struct _GtkInfoBarClass GtkInfoBarClass;
 typedef struct _GtkInfoBar GtkInfoBar;
 
 
 struct _GtkInfoBar
 {
-  GtkBox parent;
-
-  /*< private > */
-  GtkInfoBarPrivate *priv;
+  GtkBox parent_instance;
 };
 
 
