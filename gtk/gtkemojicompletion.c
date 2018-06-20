@@ -431,7 +431,7 @@ static gboolean
 has_variations (GVariant *emoji_data)
 {
   GVariant *codes;
-  int i;
+  gsize i;
   gboolean has_variations;
 
   has_variations = FALSE;
@@ -587,8 +587,8 @@ populate_completion (GtkEmojiCompletion *completion,
                      guint                offset)
 {
   GList *children, *l;
-  int n_matches;
-  int n_added;
+  guint n_matches;
+  guint n_added;
   GVariantIter iter;
   GVariant *item;
 
