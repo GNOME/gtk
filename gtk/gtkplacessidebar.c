@@ -1326,62 +1326,62 @@ update_places (GtkPlacesSidebar *sidebar)
   /* add loop and device-mapper devices*/
   volumes = g_volume_monitor_get_volumes (sidebar->volume_monitor);
   for (l = volumes; l != NULL; l = l->next)
-  {
-    volume = l->data;
-
-    drive = g_volume_get_drive (volume);
-    if (drive != NULL)
     {
-      g_object_unref (volume);
-      g_object_unref (drive);
-      continue;
-    }
+      volume = l->data;
 
-    identifier = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
+      drive = g_volume_get_drive (volume);
+      if (drive != NULL)
+        {
+          g_object_unref (volume);
+          g_object_unref (drive);
+          continue;
+        }
 
-    if (identifier == NULL ||
-        (!g_str_has_prefix (identifier, "/dev/loop") &&
-         !g_str_has_prefix (identifier, "/dev/dm")))
-    {
+      identifier = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
+
+      if (identifier == NULL ||
+          (!g_str_has_prefix (identifier, "/dev/loop") &&
+           !g_str_has_prefix (identifier, "/dev/dm")))
+        {
+          g_free (identifier);
+          continue;
+        }
       g_free (identifier);
-      continue;
-    }
-    g_free (identifier);
 
-    mount = g_volume_get_mount (volume);
-    if (mount != NULL)
-    {
-      char *mount_uri;
-      start_icon = g_mount_get_symbolic_icon (mount);
-      root = g_mount_get_default_location (mount);
-      mount_uri = g_file_get_uri (root);
-      tooltip = g_file_get_parse_name (root);
-      name = g_mount_get_name (mount);
-      add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                 SECTION_MOUNTS,
-                 name, start_icon, NULL, mount_uri,
-                 NULL, volume, mount, NULL, 0, tooltip);
-      g_object_unref (mount);
-      g_object_unref (root);
-      g_object_unref (start_icon);
-      g_free (name);
-      g_free (tooltip);
-      g_free (mount_uri);
+      mount = g_volume_get_mount (volume);
+      if (mount != NULL)
+        {
+          char *mount_uri;
+          start_icon = g_mount_get_symbolic_icon (mount);
+          root = g_mount_get_default_location (mount);
+          mount_uri = g_file_get_uri (root);
+          tooltip = g_file_get_parse_name (root);
+          name = g_mount_get_name (mount);
+          add_place (sidebar, PLACES_MOUNTED_VOLUME,
+                     SECTION_MOUNTS,
+                     name, start_icon, NULL, mount_uri,
+                     NULL, volume, mount, NULL, 0, tooltip);
+          g_object_unref (mount);
+          g_object_unref (root);
+          g_object_unref (start_icon);
+          g_free (name);
+          g_free (tooltip);
+          g_free (mount_uri);
+        }
+      else
+        {
+          /* see comment above in why we add an icon for an unmounted mountable volume */
+          start_icon = g_volume_get_symbolic_icon (volume);
+          name = g_volume_get_name (volume);
+          add_place (sidebar, PLACES_MOUNTED_VOLUME,
+                     SECTION_MOUNTS,
+                     name, start_icon, NULL, NULL,
+                     NULL, volume, NULL, NULL, 0, name);
+          g_object_unref (start_icon);
+          g_free (name);
+        }
+      g_object_unref (volume);
     }
-    else
-    {
-      /* see comment above in why we add an icon for an unmounted mountable volume */
-      start_icon = g_volume_get_symbolic_icon (volume);
-      name = g_volume_get_name (volume);
-      add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                 SECTION_MOUNTS,
-                 name, start_icon, NULL, NULL,
-                 NULL, volume, NULL, NULL, 0, name);
-      g_object_unref (start_icon);
-      g_free (name);
-    }
-    g_object_unref (volume);
-  }
   g_list_free (volumes);
 
   /* file system root */
