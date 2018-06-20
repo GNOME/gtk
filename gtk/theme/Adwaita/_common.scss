@@ -4573,7 +4573,8 @@ popover.emoji-completion arrow {
 }
 
 popover.emoji-completion contents row box {
-  border-spacing: 10px;
+  // FIXME: needs redone in a GTK+ 3 compatible way
+  //border-spacing: 10px;
   padding: 2px 10px;
 }
 
