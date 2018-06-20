@@ -2493,6 +2493,8 @@ gtk_info_bar_get_action_area
 gtk_info_bar_get_content_area
 gtk_info_bar_get_show_close_button
 gtk_info_bar_set_show_close_button
+gtk_info_bar_get_revealed
+gtk_info_bar_set_revealed
 
 <SUBSECTION Standard>
 GTK_TYPE_INFO_BAR
