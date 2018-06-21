@@ -823,7 +823,6 @@ static void
 gtk_button_finish_activate (GtkButton *button,
 			    gboolean   do_it)
 {
-  GtkWidget *widget = GTK_WIDGET (button);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   g_source_remove (priv->activate_timeout);
