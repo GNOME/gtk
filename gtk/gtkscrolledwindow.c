@@ -1376,6 +1376,36 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
 }
 
 static void
+gtk_scrolled_window_update_scrollbar_visibility_flags (GtkScrolledWindow *scrolled_window,
+                                                       GtkWidget         *scrollbar)
+{
+  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  GtkAdjustment *adjustment;
+
+  if (scrollbar == NULL)
+    return;
+
+  adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
+
+  if (scrollbar == priv->hscrollbar)
+    {
+      if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
+        {
+          priv->hscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
+                                      gtk_adjustment_get_page_size (adjustment));
+        }
+    }
+  else if (scrollbar == priv->vscrollbar)
+    {
+      if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
+        {
+          priv->vscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
+                                      gtk_adjustment_get_page_size (adjustment));
+        }
+    }
+}
+
+static void
 gtk_scrolled_window_size_allocate (GtkWidget           *widget,
                                    const GtkAllocation *allocation,
                                    int                  baseline)
@@ -1560,20 +1590,21 @@ gtk_scrolled_window_size_allocate (GtkWidget           *widget,
 	{
 	  previous_hvis = priv->hscrollbar_visible;
 	  previous_vvis = priv->vscrollbar_visible;
+
 	  gtk_scrolled_window_allocate_child (scrolled_window, allocation);
 
-	  /* Explicitly force scrollbar visibility checks.
-	   *
-	   * Since we make a guess above, the child might not decide to update the adjustments
-	   * if they logically did not change since the last configuration
-	   */
-	  if (priv->hscrollbar)
-	    gtk_scrolled_window_adjustment_changed
-              (gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar)), scrolled_window);
+          /* Explicitly force scrollbar visibility checks.
+           *
+           * Since we make a guess above, the child might not decide to update the adjustments
+           * if they logically did not change since the last configuration
+           *
+           * These will update priv->hscrollbar_visible and priv->vscrollbar_visible.
+           */
+          gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window,
+                                                                 priv->hscrollbar);
 
-	  if (priv->vscrollbar)
-	    gtk_scrolled_window_adjustment_changed
-              (gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar)), scrolled_window);
+          gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window,
+                                                                 priv->vscrollbar);
 
 	  /* If, after the first iteration, the hscrollbar and the
 	   * vscrollbar flip visiblity... or if one of the scrollbars flip
@@ -3377,12 +3408,11 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	{
 	  gboolean visible;
 
-	  visible = priv->hscrollbar_visible;
-	  priv->hscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
-				      gtk_adjustment_get_page_size (adjustment));
+          visible = priv->hscrollbar_visible;
+          gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window, priv->hscrollbar);
 
-	  if (priv->hscrollbar_visible != visible)
-	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+          if (priv->hscrollbar_visible != visible)
+            gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 	}
     }
   else if (adjustment == gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar)))
@@ -3391,12 +3421,11 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	{
 	  gboolean visible;
 
-	  visible = priv->vscrollbar_visible;
-	  priv->vscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
-			              gtk_adjustment_get_page_size (adjustment));
+          visible = priv->vscrollbar_visible;
+          gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window, priv->vscrollbar);
 
-	  if (priv->vscrollbar_visible != visible)
-	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+          if (priv->vscrollbar_visible != visible)
+            gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 	}
     }
 }
