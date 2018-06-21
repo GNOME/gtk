@@ -552,7 +552,7 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 .path-bar button image { padding-top: 1px; }
 
 /************** Tree Views * */
-treeview.view { -GtkTreeView-grid-line-width: 1; -GtkTreeView-grid-line-pattern: ''; -GtkTreeView-tree-line-width: 1; -GtkTreeView-tree-line-pattern: ''; -GtkTreeView-expander-size: 16; border-left-color: gray; border-top-color: #fff; }
+treeview.view { -GtkTreeView-grid-line-width: 1; -GtkTreeView-grid-line-pattern: ''; -GtkTreeView-tree-line-width: 1; -GtkTreeView-tree-line-pattern: ''; -GtkTreeView-expander-size: 24px; border-left-color: gray; border-top-color: #fff; }
 
 treeview.view:selected { border-radius: 0; }
 
