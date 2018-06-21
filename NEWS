@@ -15,6 +15,12 @@ Overview of Changes in GTK+ 3.23.0
  - Support a completion popup for Emoji
  - Drop Ctrl-Shift-e shortcut
 
+* Other new apis:
+ - gdk_window_move_to_rect
+
+* Wayland:
+ - Use anonymous shared memory on FreeBSD
+
 * Bugs fixed:
  #85 widgetDragDestFindTarget introspection data does not show nullable...
  #154 Documentation: Lifecycle of Editables inside GtkCellRenderers is no... 
@@ -24,15 +30,26 @@ Overview of Changes in GTK+ 3.23.0
  #450 Menu navigation triangle doesn't work anymore
  #792 Focus events are not always matched
  #898 emoji-chooser: search for flags doesn't work
+ #997 gdk: Make gdk_window_move_to_rect public
  #1053 Scroll cursor gets left behind if a child widget steals the scroll
  #1059 -Wparentheses warnings in GTK+ headers when compiling C++ code with...
  #1065 GtkScrollbar horizontal mouse wheel scroll direction is wrong
  #1069 Thread 1 "glade" received signal SIGFPE, Arithmetic exception.
+ #1088 CssGadget: Round px values up for min-width|height
  #1115 gtk icon theme searches system dirs before user dirs
+ #1134 x11: Always set None pixmap for no background
+ #1160 a11y/entry: Fix copy-pasteo re 2ndary icon tooltip
+ #1165 InfoBar: Fix wrong type in copy-pasted param doc
+ #1166 EmojiCompletion: Use Box:spacing instead of CSS
+ !125 HC: Avoid same BG/FG colors in flat treeview entry
+ !157 wayland: Implement 'gtk-fontconfig-timestamp' & 'gtk-modules'
+ !181 W32: Don't forget to check VK_MENU and set MK_ALT
+ !206 searchenginetracker: Don't leak the hits' GFiles
  407242 GtkScale: Up/Down keys decrease/increase value, which is opposite...
  686109 gtk_print_context_get_hard_margins should return page size specif...
  765327 GtkPlug scaled to half the expected size on HiDPI screens
  772817 File Chooser: Path arrow button frames are reversed and detached ...
+ 773299 gtk/language-names.c: Fix build on non-GCC/CLang
  775279 early calls to libepoxy cause all gtk3 programs to abort when the...
  786524 ocument GTK_OVERLAY_SCROLLING environment variable
  787867 OSX macports pango text size appears to vary between version 1.40...
