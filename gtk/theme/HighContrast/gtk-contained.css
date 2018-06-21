@@ -552,7 +552,7 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 .path-bar button image { padding-top: 1px; }
 
 /************** Tree Views * */
-treeview.view { -GtkTreeView-grid-line-width: 1; -GtkTreeView-grid-line-pattern: ''; -GtkTreeView-tree-line-width: 1; -GtkTreeView-tree-line-pattern: ''; -GtkTreeView-expander-size: 16; border-left-color: gray; border-top-color: #fff; }
+treeview.view { -GtkTreeView-grid-line-width: 1; -GtkTreeView-grid-line-pattern: ''; -GtkTreeView-tree-line-width: 1; -GtkTreeView-tree-line-pattern: ''; -GtkTreeView-expander-size: 24; border-left-color: gray; border-top-color: #fff; }
 
 treeview.view:selected { border-radius: 0; }
 
@@ -1246,7 +1246,7 @@ row:hover, row.activatable:hover { transition: none; }
 .app-notification border, .app-notification.frame border { border-width: 0; }
 
 /************* Expanders * */
-expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander title > arrow { min-width: 24px; min-height: 24px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
 expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
