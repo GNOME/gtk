@@ -1368,8 +1368,8 @@ treeview.view {
 
   &.expander {
     // GtkTreeView uses the larger of the expander’s min-width and min-height
-    min-width: 16px;
-    min-height: 16px;
+    min-width: 24px;
+    min-height: 24px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
     color: mix($fg_color, $base_color, 70%);
@@ -2785,8 +2785,8 @@ row.activatable {
 
 expander {
   title > arrow {
-    min-width: 16px;
-    min-height: 16px;
+    min-width: 24px;
+    min-height: 24px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
 

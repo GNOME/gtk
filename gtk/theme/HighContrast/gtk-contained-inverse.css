@@ -572,7 +572,7 @@ treeview.view:backdrop { color: #fff; border-left-color: gray; border-top: #000;
 
 treeview.view.dnd { border-style: solid none; border-width: 1px; border-color: #eeeeee; }
 
-treeview.view.expander { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); color: #b8b8b8; }
+treeview.view.expander { min-width: 24px; min-height: 24px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); color: #b8b8b8; }
 
 treeview.view.expander:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
@@ -1242,7 +1242,7 @@ row:hover, row.activatable:hover { transition: none; }
 .app-notification border, .app-notification.frame border { border-width: 0; }
 
 /************* Expanders * */
-expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander title > arrow { min-width: 24px; min-height: 24px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
 expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
