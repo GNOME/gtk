@@ -3870,10 +3870,13 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+#if 0
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
   gtk_widget_set_alloc_needed (widget);
+#endif
+  gtk_widget_queue_resize (widget);
 }
 
 static inline gboolean
@@ -3959,8 +3962,10 @@ void
 gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+#if 0
   gtk_widget_queue_resize_internal (widget);
+#endif
+  gtk_widget_queue_resize (widget);
 }
 
 /**
