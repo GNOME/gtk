@@ -189,6 +189,23 @@ void                    gtk_print_operation_set_embed_page_setup   (GtkPrintOper
 gboolean                gtk_print_operation_get_embed_page_setup   (GtkPrintOperation  *op);
 gint                    gtk_print_operation_get_n_pages_to_print   (GtkPrintOperation  *op);
 
+/**
+ * gtk_print_run_page_setup_dialog:
+ * @parent: (allow-none): transient parent
+ * @page_setup: (allow-none): an existing #GtkPageSetup
+ * @settings: a #GtkPrintSettings
+ *
+ * Runs a page setup dialog, letting the user modify the values from
+ * @page_setup. If the user cancels the dialog, the returned #GtkPageSetup
+ * is identical to the passed in @page_setup, otherwise it contains the 
+ * modifications done in the dialog.
+ *
+ * Note that this function may use a recursive mainloop to show the page
+ * setup dialog. See gtk_print_run_page_setup_dialog_async() if this is 
+ * a problem.
+ * 
+ * Returns: (transfer full): a new #GtkPageSetup
+ */
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
 								    GtkPageSetup       *page_setup,
 								    GtkPrintSettings   *settings);
@@ -196,6 +213,21 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 typedef void  (* GtkPageSetupDoneFunc) (GtkPageSetup *page_setup,
 					gpointer      data);
 
+/**
+ * gtk_print_run_page_setup_dialog_async:
+ * @parent: (allow-none): transient parent, or %NULL
+ * @page_setup: (allow-none): an existing #GtkPageSetup, or %NULL
+ * @settings: a #GtkPrintSettings
+ * @done_cb: (scope async): a function to call when the user saves
+ *           the modified page setup
+ * @data: user data to pass to @done_cb
+ * 
+ * Runs a page setup dialog, letting the user modify the values from @page_setup. 
+ *
+ * In contrast to gtk_print_run_page_setup_dialog(), this function  returns after 
+ * showing the page setup dialog on platforms that support this, and calls @done_cb 
+ * from a signal handler for the ::response signal of the dialog.
+ */
 void                    gtk_print_run_page_setup_dialog_async      (GtkWindow            *parent,
 								    GtkPageSetup         *page_setup,
 								    GtkPrintSettings     *settings,

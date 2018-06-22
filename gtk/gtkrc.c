@@ -2229,6 +2229,10 @@ gtk_rc_add_class_style (GtkRcStyle  *rc_style,
   context->rc_sets_class = gtk_rc_add_rc_sets (context->rc_sets_class, rc_style, pattern, GTK_PATH_CLASS);
 }
 
+/**
+ * gtk_rc_scanner_new: (skip)
+ *
+ */
 GScanner*
 gtk_rc_scanner_new (void)
 {

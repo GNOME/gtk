@@ -1643,6 +1643,11 @@ gtk_settings_install_property (GParamSpec *pspec)
   settings_install_property_parser (klass, pspec, parser);
 }
 
+/**
+ * gtk_settings_install_property_parser:
+ * @pspec: the #GParamSpec for the property
+ * @parser: (scope call):
+ */
 void
 gtk_settings_install_property_parser (GParamSpec          *pspec,
 				      GtkRcPropertyParser  parser)

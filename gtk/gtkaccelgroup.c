@@ -369,7 +369,7 @@ gtk_accel_groups_from_object (GObject *object)
 /**
  * gtk_accel_group_find:
  * @accel_group: a #GtkAccelGroup
- * @find_func: a function to filter the entries of @accel_group with
+ * @find_func (scope call): a function to filter the entries of @accel_group with
  * @data: data to pass to @find_func
  * @returns: (transfer none): the key of the first entry passing
  *    @find_func. The key is owned by GTK+ and must not be freed.
@@ -805,8 +805,8 @@ _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
  * @accel_group:      the accelerator group to query
  * @accel_key:        key value of the accelerator
  * @accel_mods:       modifier combination of the accelerator
- * @n_entries: (allow-none):        location to return the number of entries found, or %NULL
- * @returns: (allow-none):          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
+ * @n_entries: (out) (optional):        location to return the number of entries found, or %NULL
+ * @returns: (nullable) (transfer none) (array length=n_entries):          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
  *
  * Queries an accelerator group for all entries matching @accel_key and 
  * @accel_mods.

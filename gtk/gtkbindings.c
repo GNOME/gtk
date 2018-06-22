@@ -563,7 +563,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
 }
 
 /**
- * gtk_binding_set_new:
+ * gtk_binding_set_new: (skip)
  * @set_name: unique name of this binding set
  *
  * GTK+ maintains a global list of binding sets. Each binding set has
@@ -593,7 +593,7 @@ gtk_binding_set_new (const gchar *set_name)
 }
 
 /**
- * gtk_binding_set_by_class:
+ * gtk_binding_set_by_class: (skip)
  * @object_class: a valid #GtkObject class
  *
  * This function returns the binding set named after the type name of

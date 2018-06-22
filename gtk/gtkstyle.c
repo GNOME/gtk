@@ -697,7 +697,7 @@ gtk_style_new (void)
 }
 
 /**
- * gtk_style_attach:
+ * gtk_style_attach: (skip)
  * @style: a #GtkStyle.
  * @window: a #GdkWindow.
  *

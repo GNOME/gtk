@@ -1181,13 +1181,13 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
 }
 
 /**
- * gtk_action_group_add_radio_actions:
+ * gtk_action_group_add_radio_actions: (skip)
  * @action_group: the action group
  * @entries: an array of radio action descriptions
  * @n_entries: the number of entries
  * @value: the value of the action to activate initially, or -1 if
  *   no action should be activated
- * @on_change: the callback to connect to the changed signal
+ * @on_change: (scope async): the callback to connect to the changed signal
  * @user_data: data to pass to the action callbacks
  * 
  * This is a convenience routine to create a group of radio actions and

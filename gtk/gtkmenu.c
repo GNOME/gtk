@@ -1151,6 +1151,22 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
     }
 }
 
+/**
+ * gtk_menu_attach_to_widget:
+ * @menu: a #GtkMenu
+ * @attach_widget: the #GtkWidget that the menu will be attached to
+ * @detacher: (scope async)(allow-none): the user supplied callback function
+ *             that will be called when the menu calls gtk_menu_detach()
+ *
+ * Attaches the menu to the widget and provides a callback function
+ * that will be invoked when the menu calls gtk_menu_detach() during
+ * its destruction.
+ *
+ * If the menu is attached to the widget then it will be destroyed
+ * when the widget is destroyed, as if it was a child widget.
+ * An attached menu will also move between screens correctly if the
+ * widgets moves between screens.
+ */
 void
 gtk_menu_attach_to_widget (GtkMenu	       *menu,
 			   GtkWidget	       *attach_widget,
@@ -1390,7 +1406,7 @@ popup_grab_on_window (GdkWindow *window,
  * @menu: a #GtkMenu.
  * @parent_menu_shell: (allow-none): the menu shell containing the triggering menu item, or %NULL
  * @parent_menu_item: (allow-none): the menu item whose activation triggered the popup, or %NULL
- * @func: (allow-none): a user supplied function used to position the menu, or %NULL
+ * @func: (scope sync) (allow-none): a user supplied function used to position the menu, or %NULL
  * @data: (allow-none): user supplied data to be passed to @func.
  * @button: the mouse button which was pressed to initiate the event.
  * @activate_time: the time at which the activation event occurred.

@@ -14035,7 +14035,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
 }
 
 /**
- * gtk_tree_view_get_search_equal_func:
+ * gtk_tree_view_get_search_equal_func: (skip)
  * @tree_view: A #GtkTreeView
  *
  * Returns the compare function currently in use.
@@ -14202,7 +14202,7 @@ gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view
 }
 
 /**
- * gtk_tree_view_get_search_position_func:
+ * gtk_tree_view_get_search_position_func: (skip)
  * @tree_view: A #GtkTreeView
  *
  * Returns the positioning function currently in use.
@@ -15097,7 +15097,7 @@ gtk_tree_view_is_rubber_banding_active (GtkTreeView *tree_view)
 }
 
 /**
- * gtk_tree_view_get_row_separator_func:
+ * gtk_tree_view_get_row_separator_func: (skip)
  * @tree_view: a #GtkTreeView
  * 
  * Returns the current row separator function.

@@ -568,8 +568,8 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
  * @targets:    array containing information about the available forms for the
  *              clipboard data
  * @n_targets:  number of elements in @targets
- * @get_func:   function to call to get the actual clipboard data
- * @clear_func: when the clipboard contents are set again, this function will
+ * @get_func: (scope async): function to call to get the actual clipboard data
+ * @clear_func: (scope async): when the clipboard contents are set again, this function will
  *              be called, and @get_func will not be subsequently called.
  * @user_data:  user data to pass to @get_func and @clear_func.
  * 
@@ -604,8 +604,8 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
  * @targets:    array containing information about the available forms for the
  *              clipboard data
  * @n_targets:  number of elements in @targets
- * @get_func:   function to call to get the actual clipboard data
- * @clear_func: when the clipboard contents are set again, this function will
+ * @get_func: (scope async): function to call to get the actual clipboard data
+ * @clear_func: (scope async): when the clipboard contents are set again, this function will
  *              be called, and @get_func will not be subsequently called.
  * @owner:      an object that "owns" the data. This object will be passed
  *              to the callbacks when called. 
@@ -877,7 +877,7 @@ selection_received (GtkWidget            *widget,
  * @clipboard: a #GtkClipboard
  * @target:    an atom representing the form into which the clipboard
  *             owner should convert the selection.
- * @callback:  A function to call when the results are received
+ * @callback: (scope async): A function to call when the results are received
  *             (or the retrieval fails). If the retrieval fails
  *             the length field of @selection_data will be
  *             negative.
@@ -958,7 +958,7 @@ request_text_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_text:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the text is received,
+ * @callback: (scope async): a function to call when the text is received,
  *             or the retrieval fails. (It will always be called
  *             one way or the other.)
  * @user_data: user data to pass to @callback.
@@ -1023,7 +1023,7 @@ request_rich_text_received_func (GtkClipboard     *clipboard,
  * gtk_clipboard_request_rich_text:
  * @clipboard: a #GtkClipboard
  * @buffer:    a #GtkTextBuffer
- * @callback:  a function to call when the text is received,
+ * @callback: (scope async): a function to call when the text is received,
  *             or the retrieval fails. (It will always be called
  *             one way or the other.)
  * @user_data: user data to pass to @callback.
@@ -1115,7 +1115,7 @@ request_image_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_image:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the image is received,
+ * @callback: (scope async): a function to call when the image is received,
  *             or the retrieval fails. (It will always be called
  *             one way or the other.)
  * @user_data: user data to pass to @callback.
@@ -1170,7 +1170,7 @@ request_uris_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_uris:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the URIs are received,
+ * @callback: (scope async): a function to call when the URIs are received,
  *             or the retrieval fails. (It will always be called
  *             one way or the other.)
  * @user_data: user data to pass to @callback.
@@ -1224,7 +1224,7 @@ request_targets_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_targets:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the targets are received,
+ * @callback: (scope async): a function to call when the targets are received,
  *             or the retrieval fails. (It will always be called
  *             one way or the other.)
  * @user_data: user data to pass to @callback.

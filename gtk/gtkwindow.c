@@ -3388,7 +3388,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
 /**
  * gtk_window_set_icon_list:
  * @window: a #GtkWindow
- * @list: list of #GdkPixbuf
+ * @list: (element-type GdkPixbuf): list of #GdkPixbuf
  *
  * Sets up the icon representing a #GtkWindow. The icon is used when
  * the window is minimized (also known as iconified).  Some window

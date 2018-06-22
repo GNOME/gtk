@@ -410,7 +410,7 @@ gtk_radio_action_get_group (GtkRadioAction *action)
 /**
  * gtk_radio_action_set_group:
  * @action: the action object
- * @group: a list representing a radio group
+ * @group: (element-type GtkRadioAction): a list representing a radio group
  *
  * Sets the radio group for the radio action object.
  *

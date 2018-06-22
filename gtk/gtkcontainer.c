@@ -1481,7 +1481,7 @@ gtk_container_resize_children (GtkContainer *container)
 /**
  * gtk_container_forall:
  * @container: a #GtkContainer
- * @callback: a callback
+ * @callback: (scope call) (closure callback_data): a callback
  * @callback_data: callback user data
  * 
  * Invokes @callback on each child of @container, including children

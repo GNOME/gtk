@@ -5255,7 +5255,7 @@ gtk_widget_intersect (GtkWidget	         *widget,
 }
 
 /**
- * gtk_widget_region_intersect:
+ * gtk_widget_region_intersect: (skip)
  * @widget: a #GtkWidget
  * @region: a #GdkRegion, in the same coordinate system as 
  *          @widget->allocation. That is, relative to @widget->window
@@ -9649,7 +9649,7 @@ expose_window (GdkWindow *window)
  *
  * The returned pixmap can be %NULL, if the resulting @clip_area was empty.
  *
- * Return value: #GdkPixmap snapshot of the widget
+ * Return value: (transfer full): #GdkPixmap snapshot of the widget
  * 
  * Since: 2.14
  **/
@@ -9796,7 +9796,7 @@ gtk_widget_get_snapshot (GtkWidget    *widget,
  */
 
 /**
- * gtk_widget_class_install_style_property_parser:
+ * gtk_widget_class_install_style_property_parser: (skip)
  * @klass: a #GtkWidgetClass
  * @pspec: the #GParamSpec for the style property
  * @parser: the parser for the style property

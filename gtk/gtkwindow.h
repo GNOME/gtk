@@ -419,6 +419,17 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint       height,
 						gint      *new_width,
 						gint      *new_height);
+/**
+ * gtk_window_group_get_current_current_grab:
+ * @window_group: a #GtkWindowGroup
+ *
+ * Gets the current grab widget of the given group,
+ * see gtk_grab_add().
+ *
+ * Returns: (transfer none): the current grab widget of the group
+ *
+ * Since: 2.22
+ */
 GtkWidget      *gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
