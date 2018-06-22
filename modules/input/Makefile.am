@@ -191,7 +191,7 @@ WAYLAND_MODULE = im-wayland.la
 endif
 endif
 
-multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
+multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-3.0"\"
 im_multipress_la_CPPFLAGS = $(AM_CPPFLAGS) $(multipress_defs)
 libstatic_im_multipress_la_CPPFLAGS = $(im_multipress_la_CPPFLAGS)
 im_multipress_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)

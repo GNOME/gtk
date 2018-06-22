@@ -14,7 +14,7 @@ LDADDS = \
 	$(top_builddir)/gtk/libgtk-3.la	\
 	$(GTK_DEP_LIBS)
 
-backenddir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/printbackends
+backenddir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/printbackends
 
 backend_LTLIBRARIES = libprintbackend-papi.la
 
