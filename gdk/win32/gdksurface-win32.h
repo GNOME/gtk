@@ -32,6 +32,10 @@
 
 #include <windows.h>
 
+#ifdef GDK_WIN32_ENABLE_EGL
+# include <epoxy/egl.h>
+#endif
+
 G_BEGIN_DECLS
 
 /* Window implementation for Win32
@@ -353,6 +357,12 @@ struct _GdkSurfaceImplWin32
   gint surface_scale;
   gint unscaled_width;
   gint unscaled_height;
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  EGLSurface egl_surface;
+  EGLSurface egl_dummy_surface;
+  guint egl_force_redraw_all : 1;
+#endif
 };
 
 struct _GdkSurfaceImplWin32Class
@@ -383,6 +393,11 @@ void  _gdk_win32_update_layered_window_from_cache (GdkSurface *window,
                                                    gboolean    do_resize,
                                                    gboolean    do_paint);
 
+#ifdef GDK_WIN32_ENABLE_EGL
+EGLSurface _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
+                                               EGLConfig   config,
+                                               gboolean    is_dummy);
+#endif
 
 G_END_DECLS
 
