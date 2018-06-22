@@ -2810,8 +2810,8 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
   gboolean removable = FALSE;
+  gboolean have_name = FALSE;
   gchar *name = NULL;
-  gchar *tip;
   
   if (shortcuts_get_selected (impl, &iter))
     {
@@ -2820,6 +2820,13 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
                           SHORTCUTS_COL_NAME, &name,
                           -1);
       gtk_widget_set_sensitive (impl->browse_shortcuts_remove_button, removable);
+
+      have_name = name != NULL && name[0] != '\0';
+    }
+
+  if (have_name)
+    {
+      char *tip;
 
       if (removable)
         tip = g_strdup_printf (_("Remove the bookmark '%s'"), name);
