@@ -355,7 +355,6 @@ content_files = [
   'input-handling.xml',
   'migrating-2to4.xml',
   'migrating-3to4.xml',
-  'mir.xml',
   'osx.sgml',
   'other_software.sgml',
   'overview.xml',
