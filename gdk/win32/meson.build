@@ -43,6 +43,12 @@ gdk_win32_public_headers = files([
 
 install_headers(gdk_win32_public_headers, 'gdkwin32.h', subdir: 'gtk-4.0/gdk/win32/')
 
+GDK_WIN32_EGL_CFLAGS = []
+
+if win32_has_egl
+  GDK_WIN32_EGL_CFLAGS = ['-DGDK_WIN32_ENABLE_EGL']
+endif
+
 gdk_win32_deps = [ # FIXME
     pangowin32_dep
 ]
@@ -50,5 +56,5 @@ gdk_win32_deps = [ # FIXME
 libgdk_win32 = static_library('gdk-win32',
   gdk_win32_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
-  c_args: ['-DGTK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DINSIDE_GDK_WIN32'],
+  c_args: ['-DGTK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DINSIDE_GDK_WIN32'] + GDK_WIN32_EGL_CFLAGS,
   dependencies: [gdk_deps, gdk_win32_deps])
