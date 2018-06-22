@@ -7461,7 +7461,7 @@ recent_idle_cleanup (gpointer data)
 }
 
 static gboolean
-recent_item_is_private(GtkRecentInfo *info)
+recent_item_is_private (GtkRecentInfo *info)
 {
   gboolean is_private = FALSE;
 
