@@ -143,12 +143,15 @@
  */
 
 
+#define MAX_RESIZE_ITERATIONS 2
+
 struct _GtkContainerPrivate
 {
   guint resize_handler;
 
   guint has_focus_chain    : 1;
   guint restyle_pending    : 1;
+  guint last_resize_iteration : 1;
 };
 
 enum {
@@ -1538,7 +1541,18 @@ gtk_container_needs_idle_sizer (GtkContainer *container)
   if (priv->restyle_pending)
     return TRUE;
 
-  return gtk_widget_needs_allocate (GTK_WIDGET (container));
+  if (GTK_IS_WINDOW (container))
+    return gtk_window_get_resize_widgets (GTK_WINDOW (container))->len > 0;
+
+  return FALSE;
+}
+
+gboolean
+gtk_container_in_last_resize_iteration (GtkContainer *container)
+{
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
+
+  return priv->last_resize_iteration;
 }
 
 static void
@@ -1547,42 +1561,71 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because both style_updated and size_allocate functions often change
-   * styles and so could cause infinite loops in this function.
-   *
-   * It's important to note that even an invalid style context returns
-   * sane values. So the result of an invalid style context will never be
-   * a program crash, but only a wrong layout or rendering.
-   */
-  if (priv->restyle_pending)
+  if (GTK_IS_WINDOW (container))
     {
-      priv->restyle_pending = FALSE;
-      gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
+      GPtrArray *resize_widgets = gtk_window_get_resize_widgets (GTK_WINDOW (container));
+      static int k;
+      guint resize_iteration;
+
+#if 0
+      g_message ("=== %d", k++);
+#endif
+
+      for (resize_iteration = 0; resize_iteration < MAX_RESIZE_ITERATIONS; resize_iteration ++)
+        {
+          const gboolean last_iteration = (resize_iteration == MAX_RESIZE_ITERATIONS - 1);
+          guint i, p;
+
+          priv->last_resize_iteration = last_iteration;
+
+          /* We validate the style contexts in a single loop before even trying
+           * to handle resizes instead of doing validations inline.
+           * This is mostly necessary for compatibility reasons with old code,
+           * because both style_updated and size_allocate functions often change
+           * styles and so could cause infinite loops in this function.
+           *
+           * It's important to note that even an invalid style context returns
+           * sane values. So the result of an invalid style context will never be
+           * a program crash, but only a wrong layout or rendering.
+           */
+          if (priv->restyle_pending)
+            {
+              priv->restyle_pending = FALSE;
+              gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
+            }
+
+          for (i = 0, p = resize_widgets->len; i < p; i ++)
+            {
+              GtkWidget *w = g_ptr_array_index (resize_widgets, i);
+#if 0
+              g_message ("    (%d): %s %s %p", resize_iteration, G_OBJECT_TYPE_NAME (w),
+                         gtk_css_node_get_name (gtk_widget_get_css_node (w)), w);
+#endif
+              gtk_widget_invalidate_size (w);
+            }
+
+          g_ptr_array_remove_range (resize_widgets, 0, p);
+
+          /* queue_resize could have been adding an extra idle function while
+           * the queue still got processed. we better just ignore such case
+           * than trying to explicitly work around them with some extra flags,
+           * since it doesn't cause any actual harm.
+           */
+          if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
+            {
+              gtk_container_check_resize (container);
+            }
+        }
+
+      /* Ignore all resize widgets after the last iteration */
+      g_ptr_array_remove_range (resize_widgets, 0, resize_widgets->len);
     }
 
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
-    {
-      gtk_container_check_resize (container);
-    }
-
-  if (!gtk_container_needs_idle_sizer (container))
-    {
-      gtk_container_stop_idle_sizer (container);
-    }
-  else
-    {
-      gdk_frame_clock_request_phase (clock,
-                                     GDK_FRAME_CLOCK_PHASE_LAYOUT);
-    }
+  /* Unconditionally stop the idle sizer, since we are at worst already
+   * MAX_RESIZE_ITERATIONS into resize territory and we don't want to
+   * go any further. */
+  gtk_container_stop_idle_sizer (container);
+  priv->last_resize_iteration = FALSE;
 }
 
 void

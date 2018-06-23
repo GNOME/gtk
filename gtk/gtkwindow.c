@@ -289,6 +289,8 @@ typedef struct
   GskRenderer *renderer;
 
   GList *foci;
+
+  GPtrArray *resize_widgets;
 } GtkWindowPrivate;
 
 #ifdef GDK_WINDOWING_X11
@@ -1919,6 +1921,8 @@ gtk_window_init (GtkWindow *window)
   priv->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
   gtk_window_update_debugging ();
+
+  priv->resize_widgets = g_ptr_array_new ();
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
@@ -11302,4 +11306,51 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
       if (device)
         break;
     }
+}
+
+void
+gtk_window_add_resize_widget (GtkWindow *window,
+                              GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_assert (gtk_widget_get_toplevel (widget) == (GtkWidget *)window);
+
+  /* XXX LEAK */
+  g_ptr_array_add (priv->resize_widgets, g_object_ref (widget));
+
+  gtk_container_start_idle_sizer (GTK_CONTAINER (window));
+}
+
+void
+gtk_window_remove_resize_widget (GtkWindow *window,
+                                 GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  guint i, p;
+
+  g_assert (gtk_widget_get_toplevel (widget) == (GtkWidget *)window);
+
+  for (i = 0, p = priv->resize_widgets->len; i < p; i ++)
+    {
+      GtkWidget *w = g_ptr_array_index (priv->resize_widgets, i);
+
+      if (w == widget)
+        {
+          g_ptr_array_remove_index_fast (priv->resize_widgets, i);
+          i --;
+          p --;
+        }
+    }
+
+  if (p == 0)
+    gtk_container_stop_idle_sizer (GTK_CONTAINER (window));
+}
+
+GPtrArray *
+gtk_window_get_resize_widgets (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->resize_widgets;
 }

@@ -31,6 +31,7 @@ void      gtk_container_stop_idle_sizer         (GtkContainer     *container);
 void      gtk_container_start_idle_sizer        (GtkContainer     *container);
 void      gtk_container_set_focus_child         (GtkContainer     *container,
                                                  GtkWidget        *child);
+gboolean  gtk_container_in_last_resize_iteration (GtkContainer    *container);
 
 
 G_END_DECLS

@@ -336,10 +336,7 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
                                                             GtkGesture            *gesture,
                                                             GdkEventSequence      *sequence,
                                                             GtkEventSequenceState  state);
-
-
-
-
+void              gtk_widget_invalidate_size               (GtkWidget             *widget);
 
 /* inline getters */
 
