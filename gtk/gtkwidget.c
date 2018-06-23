@@ -3925,6 +3925,15 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
     }
 }
 
+void
+gtk_widget_invalidate_size (GtkWidget *widget)
+{
+  if (_gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+
+  gtk_widget_queue_resize_internal (widget);
+}
+
 /**
  * gtk_widget_queue_resize:
  * @widget: a #GtkWidget
@@ -3943,12 +3952,33 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
+  GtkWidget *toplevel;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+#if 0
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
   gtk_widget_queue_resize_internal (widget);
+#endif
+
+  toplevel = _gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      if (gtk_container_in_last_resize_iteration (GTK_CONTAINER (toplevel)))
+        g_warning ("Queueing a resize on %s %s %p inside the last resize iteration. "
+                   "This should not happen. The resize request will be ignored.",
+                   G_OBJECT_TYPE_NAME (widget),
+                   gtk_css_node_get_name (gtk_widget_get_css_node (widget)), widget);
+      else
+        gtk_window_add_resize_widget (GTK_WINDOW (toplevel), widget);
+
+      widget->priv->resize_needed = TRUE;
+      widget->priv->alloc_needed = TRUE;
+      gtk_widget_ensure_resize (widget);
+      gtk_widget_invalidate_paintable_size (widget);
+    }
 }
 
 /**
