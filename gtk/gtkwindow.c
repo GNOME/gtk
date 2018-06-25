@@ -7489,8 +7489,12 @@ gtk_window_realize (GtkWidget *widget)
     gdk_window_set_decorations (gdk_window, 0);
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (priv->client_decorated && GDK_IS_WAYLAND_WINDOW (gdk_window))
-    gdk_wayland_window_announce_csd (gdk_window);
+  if (GDK_IS_WAYLAND_WINDOW (gdk_window)) {
+    if (priv->client_decorated)
+        gdk_wayland_window_announce_csd (gdk_window);
+    else
+        gdk_wayland_window_announce_ssd (gdk_window);
+  }
 #endif
 
   if (!priv->deletable)
