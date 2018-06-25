@@ -222,8 +222,7 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
       do {
         window = gdk_win32_handle_table_lookup (hwnd);
 
-        if (window != NULL &&
-            GDK_SURFACE_TYPE (window) != GDK_SURFACE_FOREIGN)
+        if (window != NULL)
           break;
 
         screen_to_client (hwnd, screen_pt, &client_pt);

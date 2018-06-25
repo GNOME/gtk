@@ -1355,7 +1355,7 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
 
   /* Check for a local drag */
   surface = gdk_x11_surface_lookup_for_display (display, xid);
-  if (surface && gdk_surface_get_surface_type (surface) != GDK_SURFACE_FOREIGN)
+  if (surface)
     {
       if (g_object_get_data (G_OBJECT (surface), "gdk-dnd-registered") != NULL)
         {

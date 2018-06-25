@@ -631,8 +631,7 @@ get_current_toplevel (GdkDisplay      *display,
   pointer_surface = _gdk_device_surface_at_position (device, &x, &y, &state, TRUE);
 
   if (pointer_surface != NULL &&
-      (GDK_SURFACE_DESTROYED (pointer_surface) ||
-       GDK_SURFACE_TYPE (pointer_surface) == GDK_SURFACE_FOREIGN))
+      GDK_SURFACE_DESTROYED (pointer_surface))
     pointer_surface = NULL;
 
   *x_out = round (x);

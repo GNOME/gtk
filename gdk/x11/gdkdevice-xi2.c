@@ -624,8 +624,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
         break;
 
       if (get_toplevel && last != root &&
-          (surface = gdk_x11_surface_lookup_for_display (display, last)) != NULL &&
-          GDK_SURFACE_TYPE (surface) != GDK_SURFACE_FOREIGN)
+          (surface = gdk_x11_surface_lookup_for_display (display, last)) != NULL)
         {
           xwindow = last;
           break;

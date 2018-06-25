@@ -333,16 +333,8 @@ gdk_surface_finalize (GObject *object)
 
   if (!GDK_SURFACE_DESTROYED (surface))
     {
-      if (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_FOREIGN)
-        {
-          g_warning ("losing last reference to undestroyed surface");
-          _gdk_surface_destroy (surface, FALSE);
-        }
-      else
-        /* We use TRUE here, to keep us from actually calling
-         * XDestroyWindow() on the window
-         */
-        _gdk_surface_destroy (surface, TRUE);
+      g_warning ("losing last reference to undestroyed surface");
+      _gdk_surface_destroy (surface, FALSE);
     }
 
   if (surface->impl)
@@ -656,12 +648,6 @@ gdk_surface_new (GdkDisplay    *display,
 #endif
       break;
     case GDK_SURFACE_CHILD:
-      if (GDK_SURFACE_TYPE (parent) == GDK_SURFACE_FOREIGN)
-        {
-          g_warning (G_STRLOC "Child surfaces must not be created as children of\n"
-                     "a surface of type GDK_SURFACE_FOREIGN");
-          return NULL;
-        }
       break;
     default:
       g_warning (G_STRLOC "cannot make surfaces of type %d", surface->surface_type);
@@ -897,81 +883,69 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_CHILD:
     case GDK_SURFACE_TEMP:
-    case GDK_SURFACE_FOREIGN:
     case GDK_SURFACE_SUBSURFACE:
-      if (surface->surface_type == GDK_SURFACE_FOREIGN && !foreign_destroy)
+      if (surface->parent)
         {
+          if (surface->parent->children)
+            surface->parent->children = g_list_remove_link (surface->parent->children, &surface->children_list_node);
+
+          if (!recursing &&
+              GDK_SURFACE_IS_MAPPED (surface))
+            {
+              recompute_visible_regions (surface, FALSE);
+              gdk_surface_invalidate_in_parent (surface);
+            }
         }
+
+      if (surface->gl_paint_context)
+        {
+          /* Make sure to destroy if current */
+          g_object_run_dispose (G_OBJECT (surface->gl_paint_context));
+          g_object_unref (surface->gl_paint_context);
+          surface->gl_paint_context = NULL;
+        }
+
+      if (surface->frame_clock)
+        {
+          g_object_run_dispose (G_OBJECT (surface->frame_clock));
+          gdk_surface_set_frame_clock (surface, NULL);
+        }
+
+      tmp = surface->children;
+      surface->children = NULL;
+      /* No need to free children list, its all made up of in-struct nodes */
+
+      while (tmp)
+        {
+          temp_surface = tmp->data;
+          tmp = tmp->next;
+
+          if (temp_surface)
+            _gdk_surface_destroy_hierarchy (temp_surface,
+                                           TRUE,
+                                           recursing_native || gdk_surface_has_impl (surface),
+                                           foreign_destroy);
+        }
+
+      _gdk_surface_clear_update_area (surface);
+
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+
+      if (gdk_surface_has_impl (surface))
+        impl_class->destroy (surface, recursing_native, foreign_destroy);
       else
         {
-          if (surface->parent)
-            {
-              if (surface->parent->children)
-                surface->parent->children = g_list_remove_link (surface->parent->children, &surface->children_list_node);
-
-              if (!recursing &&
-                  GDK_SURFACE_IS_MAPPED (surface))
-                {
-                  recompute_visible_regions (surface, FALSE);
-                  gdk_surface_invalidate_in_parent (surface);
-                }
-            }
-
-          if (surface->gl_paint_context)
-            {
-              /* Make sure to destroy if current */
-              g_object_run_dispose (G_OBJECT (surface->gl_paint_context));
-              g_object_unref (surface->gl_paint_context);
-              surface->gl_paint_context = NULL;
-            }
-
-          if (surface->frame_clock)
-            {
-              g_object_run_dispose (G_OBJECT (surface->frame_clock));
-              gdk_surface_set_frame_clock (surface, NULL);
-            }
-
-          if (surface->surface_type == GDK_SURFACE_FOREIGN)
-            g_assert (surface->children == NULL);
-          else
-            {
-              tmp = surface->children;
-              surface->children = NULL;
-              /* No need to free children list, its all made up of in-struct nodes */
-
-              while (tmp)
-                {
-                  temp_surface = tmp->data;
-                  tmp = tmp->next;
-
-                  if (temp_surface)
-                    _gdk_surface_destroy_hierarchy (temp_surface,
-                                                   TRUE,
-                                                   recursing_native || gdk_surface_has_impl (surface),
-                                                   foreign_destroy);
-                }
-            }
-
-          _gdk_surface_clear_update_area (surface);
-
-          impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-          if (gdk_surface_has_impl (surface))
-            impl_class->destroy (surface, recursing_native, foreign_destroy);
-          else
-            {
-              /* hide to make sure we repaint and break grabs */
-              gdk_surface_hide (surface);
-            }
-
-          surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
-          surface->parent = NULL;
-          surface->destroyed = TRUE;
-
-          surface_remove_from_pointer_info (surface, display);
-
-          g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+          /* hide to make sure we repaint and break grabs */
+          gdk_surface_hide (surface);
         }
+
+      surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
+      surface->parent = NULL;
+      surface->destroyed = TRUE;
+
+      surface_remove_from_pointer_info (surface, display);
+
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
       break;
     }
 }
@@ -2235,10 +2209,8 @@ _gdk_surface_update_viewable (GdkSurface *surface)
 {
   gboolean viewable;
 
-  if (surface->surface_type == GDK_SURFACE_FOREIGN)
-    viewable = TRUE;
-  else if (gdk_surface_is_toplevel (surface) ||
-           surface->parent->viewable)
+  if (gdk_surface_is_toplevel (surface) ||
+      surface->parent->viewable)
     viewable = GDK_SURFACE_IS_MAPPED (surface);
   else
     viewable = FALSE;
@@ -2899,24 +2871,19 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
                                  GdkDevice *device,
                                  GdkCursor *cursor)
 {
+  GdkPointerSurfaceInfo *pointer_info;
+  GdkDisplay *display;
+
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   g_assert (gdk_surface_get_display (surface) == gdk_device_get_display (device));
 
-  if (surface->surface_type == GDK_SURFACE_FOREIGN)
-    GDK_DEVICE_GET_CLASS (device)->set_surface_cursor (device, surface, cursor);
-  else
-    {
-      GdkPointerSurfaceInfo *pointer_info;
-      GdkDisplay *display;
+  display = gdk_surface_get_display (surface);
+  pointer_info = _gdk_display_get_pointer_info (display, device);
 
-      display = gdk_surface_get_display (surface);
-      pointer_info = _gdk_display_get_pointer_info (display, device);
-
-      if (_gdk_surface_event_parent_of (surface, pointer_info->surface_under_pointer))
-        update_cursor (display, device);
-    }
+  if (_gdk_surface_event_parent_of (surface, pointer_info->surface_under_pointer))
+    update_cursor (display, device);
 }
 
 /**
@@ -5525,7 +5492,6 @@ gdk_surface_set_state (GdkSurface      *surface,
     case GDK_SURFACE_TEMP: /* ? */
       g_object_notify (G_OBJECT (surface), "state");
       break;
-    case GDK_SURFACE_FOREIGN:
     case GDK_SURFACE_CHILD:
     default:
       break;

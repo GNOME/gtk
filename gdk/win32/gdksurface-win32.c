@@ -126,9 +126,6 @@ static void     gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
 static gboolean _gdk_surface_get_functions (GdkSurface         *window,
                                            GdkWMFunction     *functions);
 
-#define SURFACE_IS_TOPLEVEL(window)		   \
-  (GDK_SURFACE_TYPE (window) != GDK_SURFACE_FOREIGN)
-
 struct _GdkWin32Surface {
   GdkSurface parent;
 };
@@ -595,22 +592,14 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
 	  /* The common code warns for this case. */
 	  hparent = GetDesktopWindow ();
 	}
-      /* Children of foreign windows aren't toplevel windows */
-      if (real_parent != NULL && GDK_SURFACE_TYPE (real_parent) == GDK_SURFACE_FOREIGN)
-	{
-	  dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN;
-	}
+      /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
+      if (window->surface_type == GDK_SURFACE_TOPLEVEL)
+        dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       else
-	{
-	  /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
-	  if (window->surface_type == GDK_SURFACE_TOPLEVEL)
-	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-	  else
-	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+        dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
 
-	  offset_x = _gdk_offset_x;
-	  offset_y = _gdk_offset_y;
-	}
+      offset_x = _gdk_offset_x;
+      offset_y = _gdk_offset_y;
       break;
 
     case GDK_SURFACE_TEMP:
@@ -645,8 +634,8 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
       x = y = CW_USEDEFAULT;
     }
   else
-	  {
-      /* TEMP, FOREIGN: Put these where requested */
+    {
+      /* TEMP: Put these where requested */
       x = real_x;
       y = real_y;
     }
@@ -810,9 +799,8 @@ gdk_win32_surface_destroy_notify (GdkSurface *window)
 
   if (!GDK_SURFACE_DESTROYED (window))
     {
-      if (GDK_SURFACE_TYPE (window) != GDK_SURFACE_FOREIGN)
-	g_warning ("window %p unexpectedly destroyed",
-		   GDK_SURFACE_HWND (window));
+      g_warning ("window %p unexpectedly destroyed",
+                 GDK_SURFACE_HWND (window));
 
       _gdk_surface_destroy (window, TRUE);
     }
@@ -1380,8 +1368,7 @@ gdk_win32_surface_move_resize (GdkSurface *window,
  out:
   surface_impl->inhibit_configure = FALSE;
 
-  if (SURFACE_IS_TOPLEVEL (window))
-    _gdk_win32_emit_configure_event (window);
+  _gdk_win32_emit_configure_event (window);
 }
 
 static void
@@ -2173,10 +2160,6 @@ _gdk_win32_surface_lacks_wm_decorations (GdkSurface *window)
   gboolean has_any_decorations;
 
   if (GDK_SURFACE_DESTROYED (window))
-    return FALSE;
-
-  /* only toplevels can be layered */
-  if (!SURFACE_IS_TOPLEVEL (window))
     return FALSE;
 
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
@@ -5048,7 +5031,7 @@ gdk_win32_surface_set_opacity (GdkSurface *window,
 
   g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (!SURFACE_IS_TOPLEVEL (window) || GDK_SURFACE_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (opacity < 0)

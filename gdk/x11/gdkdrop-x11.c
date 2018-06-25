@@ -709,9 +709,6 @@ gdk_x11_drop_filter (GdkSurface   *surface,
   if (xevent->type != ClientMessage)
     return GDK_FILTER_CONTINUE;
 
-  if (gdk_surface_get_surface_type (surface) == GDK_SURFACE_FOREIGN)
-    return GDK_FILTER_CONTINUE; /* Not for us */
-
   display = GDK_SURFACE_DISPLAY (surface);
 
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
