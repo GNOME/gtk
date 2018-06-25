@@ -27,8 +27,8 @@ Overview of Changes in GTK+ 3.94.0
 * Applications can now create their own GtkSnapshot objects for
   intermediate rendering.
 
-* Widget event signals have been replaced by event controller, and
-  some new event controllers have been introduced for this:
+* Widget event signals have been replaced by event controllers,
+  and some new event controllers have been introduced for this:
   GtkEventControllerMotion
   GtkEventControllerKey
   GtkGestureStylus
@@ -67,6 +67,10 @@ Overview of Changes in GTK+ 3.94.0
   gtk_widget_show_now
   gtk_widget_draw
   gtk_render_icon_surface
+
+* Incomplete transitions:
+  The ::event signal is not still there, but it will be removed
+  The DND apis are not finalized yet
 
 * Translation updates:
  Croatian
