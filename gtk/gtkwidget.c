@@ -231,7 +231,7 @@
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
  *
- * Since 3.10 GTK+ also supports baseline vertical alignment of widgets. This
+ * GTK+ also supports baseline vertical alignment of widgets. This
  * means that widgets are positioned such that the typographical baseline of
  * widgets in the same row are aligned. This happens if a widget supports baselines,
  * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a widget

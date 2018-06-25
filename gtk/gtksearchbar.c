@@ -710,8 +710,6 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  *
  * If key events are handled by the search bar, the bar will
  * be shown, and the entry populated with the entered text.
- *
- * Since: 3.94
  **/
 void
 gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
@@ -758,8 +756,6 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
  * Gets the widget that @bar is capturing key events from.
  *
  * Returns: (transfer none): The key capture widget.
- *
- * Since: 3.94
  **/
 GtkWidget *
 gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)

@@ -51,7 +51,7 @@ G_BEGIN_DECLS
  *     or top
  * @GTK_ALIGN_CENTER: center natural width of widget inside the
  *     allocation
- * @GTK_ALIGN_BASELINE: align the widget according to the baseline. Since 3.10.
+ * @GTK_ALIGN_BASELINE: align the widget according to the baseline
  *
  * Controls how a widget deals with extra space in a single (x or y)
  * dimension.
@@ -85,7 +85,7 @@ typedef enum
  * @GTK_ARROW_DOWN: Represents a downward pointing arrow.
  * @GTK_ARROW_LEFT: Represents a left pointing arrow.
  * @GTK_ARROW_RIGHT: Represents a right pointing arrow.
- * @GTK_ARROW_NONE: No arrow. Since 2.10.
+ * @GTK_ARROW_NONE: No arrow.
  *
  * Used to indicate the direction in which an arrow should point.
  */
@@ -912,9 +912,9 @@ typedef enum
  *     first word of each sentence
  * @GTK_INPUT_HINT_INHIBIT_OSK: Suggest to not show an onscreen keyboard
  *     (e.g for a calculator that already has all the keys).
- * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical. Since 3.18
- * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support. Since 3.22.20
- * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support. Since 3.22.20
+ * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical
+ * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support
+ * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support
  *
  * Describes hints that might be taken into account by input methods
  * or applications. Note that input methods may already tailor their

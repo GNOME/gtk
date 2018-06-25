@@ -539,8 +539,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    *
    * The text that will be displayed in the #GtkCellRenderer if
    * #GtkCellRendererText:editable is %TRUE and the cell is empty.
-   *
-   * Since 3.6
    */
   text_cell_renderer_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",

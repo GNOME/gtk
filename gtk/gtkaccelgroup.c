@@ -694,8 +694,6 @@ gtk_accel_group_connect_by_path (GtkAccelGroup *accel_group,
  * Removes an accelerator previously installed through
  * gtk_accel_group_connect().
  *
- * Since 2.20 @closure can be %NULL.
- *
  * Returns: %TRUE if the closure was found and got disconnected
  */
 gboolean

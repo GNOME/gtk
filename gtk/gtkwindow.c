@@ -9934,8 +9934,6 @@ gtk_window_get_group (GtkWindow *window)
  * Returns whether @window has an explicit window group.
  *
  * Returns: %TRUE if @window has an explicit window group.
- *
- * Since 2.22
  **/
 gboolean
 gtk_window_has_group (GtkWindow *window)

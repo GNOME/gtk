@@ -135,8 +135,6 @@ gtk_gesture_stylus_init (GtkGestureStylus *gesture)
  * Creates a new #GtkGestureStylus.
  *
  * Returns: a newly created stylus gesture
- *
- * Since: 3.94
  **/
 GtkGesture *
 gtk_gesture_stylus_new (void)

@@ -809,7 +809,7 @@ gtk_init_check (void)
  * your program to fall back to a textual interface you want to
  * call gtk_init_check() instead.
  *
- * Since 2.18, GTK+ calls `signal (SIGPIPE, SIG_IGN)`
+ * GTK+ calls `signal (SIGPIPE, SIG_IGN)`
  * during initialization, to ignore SIGPIPE signals, since these are
  * almost never wanted in graphical applications. If you do need to
  * handle SIGPIPE for some reason, reset the handler after gtk_init(),

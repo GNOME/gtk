@@ -112,17 +112,17 @@ struct _GtkIconThemeClass
  * @GTK_ICON_LOOKUP_GENERIC_FALLBACK: Try to shorten icon name at '-'
  *   characters before looking at inherited themes. This flag is only
  *   supported in functions that take a single icon name. For more general
- *   fallback, see gtk_icon_theme_choose_icon(). Since 2.12.
+ *   fallback, see gtk_icon_theme_choose_icon()
  * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
- *   requested size. Since 2.14.
+ *   requested size
  * @GTK_ICON_LOOKUP_FORCE_REGULAR: Try to always load regular icons, even
- *   when symbolic icon names are given. Since 3.14.
+ *   when symbolic icon names are given
  * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Try to always load symbolic icons, even
- *   when regular icon names are given. Since 3.14.
+ *   when regular icon names are given
  * @GTK_ICON_LOOKUP_DIR_LTR: Try to load a variant of the icon for left-to-right
- *   text direction. Since 3.14.
+ *   text direction
  * @GTK_ICON_LOOKUP_DIR_RTL: Try to load a variant of the icon for right-to-left
- *   text direction. Since 3.14.
+ *   text direction
  * 
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */

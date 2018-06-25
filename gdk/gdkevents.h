@@ -67,8 +67,6 @@ G_BEGIN_DECLS
  *
  * Use this macro as the return value for continuing the propagation of
  * an event handler.
- *
- * Since: 3.4
  */
 #define GDK_EVENT_PROPAGATE     (FALSE)
 
@@ -77,8 +75,6 @@ G_BEGIN_DECLS
  *
  * Use this macro as the return value for stopping the propagation of
  * an event handler.
- *
- * Since: 3.4
  */
 #define GDK_EVENT_STOP          (TRUE)
 
@@ -87,8 +83,6 @@ G_BEGIN_DECLS
  *
  * The primary button. This is typically the left mouse button, or the
  * right button in a left-handed setup.
- *
- * Since: 3.4
  */
 #define GDK_BUTTON_PRIMARY      (1)
 
@@ -96,8 +90,6 @@ G_BEGIN_DECLS
  * GDK_BUTTON_MIDDLE:
  *
  * The middle button.
- *
- * Since: 3.4
  */
 #define GDK_BUTTON_MIDDLE       (2)
 
@@ -106,8 +98,6 @@ G_BEGIN_DECLS
  *
  * The secondary button. This is typically the right mouse button, or the
  * left button in a left-handed setup.
- *
- * Since: 3.4
  */
 #define GDK_BUTTON_SECONDARY    (3)
 
@@ -291,7 +281,7 @@ typedef enum
  * @GDK_SCROLL_LEFT: the surface is scrolled to the left.
  * @GDK_SCROLL_RIGHT: the surface is scrolled to the right.
  * @GDK_SCROLL_SMOOTH: the scrolling is determined by the delta values
- *   in scroll events. See gdk_event_get_scroll_deltas(). Since: 3.4
+ *   in scroll events. See gdk_event_get_scroll_deltas()
  *
  * Specifies the direction for scroll events.
  */

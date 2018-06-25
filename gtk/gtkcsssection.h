@@ -41,7 +41,7 @@ G_BEGIN_DECLS
  *   a CSS variable.
  * @GTK_CSS_SECTION_VALUE: The section defines the value of a CSS declaration.
  * @GTK_CSS_SECTION_KEYFRAMES: The section defines keyframes. See [CSS
- *   Animations](http://dev.w3.org/csswg/css3-animations/#keyframes) for details. Since 3.6
+ *   Animations](http://dev.w3.org/csswg/css3-animations/#keyframes) for details
  *
  * The different types of sections indicate parts of a CSS document as
  * parsed by GTK’s CSS parser. They are oriented towards the

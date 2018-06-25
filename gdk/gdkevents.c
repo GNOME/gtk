@@ -2504,8 +2504,6 @@ gdk_event_get_axes (GdkEvent  *event,
  *
  * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
  *   of time and coordinates
- *
- * Since: 3.94
  */
 GList *
 gdk_event_get_motion_history (const GdkEvent *event)

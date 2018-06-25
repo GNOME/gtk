@@ -47,8 +47,6 @@ G_BEGIN_DECLS
  * @GDK_SEAT_CAPABILITY_ALL: The union of all capabilities
  *
  * Flags describing the seat capabilities.
- *
- * Since: 3.20
  */
 typedef enum {
   GDK_SEAT_CAPABILITY_NONE          = 0,
@@ -71,8 +69,6 @@ typedef enum {
  * grabbed. A typical action would be ensuring the surface is
  * visible, although there's room for other initialization
  * actions.
- *
- * Since: 3.20
  */
 typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
                                          GdkSurface *surface,

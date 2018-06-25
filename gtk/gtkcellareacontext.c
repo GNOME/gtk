@@ -356,8 +356,6 @@ gtk_cell_area_context_get_area (GtkCellAreaContext *context)
  * in the allocated width necessitates a recalculation
  * of all the displayed row heights using
  * gtk_cell_area_get_preferred_height_for_width().
- *
- * Since 3.0
  */
 void
 gtk_cell_area_context_reset (GtkCellAreaContext *context)
@@ -385,8 +383,6 @@ gtk_cell_area_context_reset (GtkCellAreaContext *context)
  * and vertical orientations producing a homogeneous effect of the
  * rows. This is generally the case for #GtkTreeView when
  * #GtkTreeView:fixed-height-mode is enabled.
- *
- * Since 3.0
  */
 void
 gtk_cell_area_context_allocate (GtkCellAreaContext *context,

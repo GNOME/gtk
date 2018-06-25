@@ -1252,7 +1252,7 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
  * size for all its children. If it isn't, the stack
  * may change size when a different child becomes visible.
  *
- * Since 3.16, homogeneity can be controlled separately
+ * Homogeneity can be controlled separately
  * for horizontal and vertical size, with the
  * #GtkStack:hhomogeneous and #GtkStack:vhomogeneous.
  */

@@ -196,9 +196,9 @@ typedef enum
  * @GDK_MODIFIER_RESERVED_23_MASK: A reserved bit flag; do not use in your own code
  * @GDK_MODIFIER_RESERVED_24_MASK: A reserved bit flag; do not use in your own code
  * @GDK_MODIFIER_RESERVED_25_MASK: A reserved bit flag; do not use in your own code
- * @GDK_SUPER_MASK: the Super modifier. Since 2.10
- * @GDK_HYPER_MASK: the Hyper modifier. Since 2.10
- * @GDK_META_MASK: the Meta modifier. Since 2.10
+ * @GDK_SUPER_MASK: the Super modifier
+ * @GDK_HYPER_MASK: the Hyper modifier
+ * @GDK_META_MASK: the Meta modifier
  * @GDK_MODIFIER_RESERVED_29_MASK: A reserved bit flag; do not use in your own code
  * @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate
  *  between (keyval, modifiers) pairs from key press and release events.
@@ -210,7 +210,7 @@ typedef enum
  *
  * Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
  *
- * Since 2.10, GDK recognizes which of the Meta, Super or Hyper keys are mapped
+ * GDK recognizes which of the Meta, Super or Hyper keys are mapped
  * to Mod2 - Mod5, and indicates this by setting %GDK_SUPER_MASK,
  * %GDK_HYPER_MASK or %GDK_META_MASK in the state field of key events.
  *
@@ -299,8 +299,6 @@ typedef enum
  * invoking menu shortcuts (accelerators), whereas on Apple computers
  * it’s the Command key (which correspond to %GDK_CONTROL_MASK and
  * %GDK_MOD2_MASK, respectively).
- *
- * Since: 3.4
  **/
 typedef enum
 {
@@ -322,7 +320,7 @@ typedef enum
  * @GDK_GRAB_NOT_VIEWABLE: the grab surface or the @confine_to surface are not
  *  viewable.
  * @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.
- * @GDK_GRAB_FAILED: the grab failed for some other reason. Since 3.16
+ * @GDK_GRAB_FAILED: the grab failed for some other reason
  *
  * Returned by gdk_device_grab() to indicate success or the reason for the
  * failure of the grab attempt.
@@ -371,13 +369,12 @@ typedef enum
  * @GDK_PROPERTY_CHANGE_MASK: receive property change events
  * @GDK_PROXIMITY_IN_MASK: receive proximity in events
  * @GDK_PROXIMITY_OUT_MASK: receive proximity out events
- * @GDK_SUBSTRUCTURE_MASK: receive events about surface configuration changes of
- *   child surfaces
+ * @GDK_SUBSTRUCTURE_MASK: receive events about surface configuration changes of child surfaces
  * @GDK_SCROLL_MASK: receive scroll events
- * @GDK_TOUCH_MASK: receive touch events. Since 3.4
- * @GDK_SMOOTH_SCROLL_MASK: receive smooth scrolling events. Since 3.4
-   @GDK_TOUCHPAD_GESTURE_MASK: receive touchpad gesture events. Since 3.18
- * @GDK_TABLET_PAD_MASK: receive tablet pad events. Since 3.22
+ * @GDK_TOUCH_MASK: receive touch events
+ * @GDK_SMOOTH_SCROLL_MASK: receive smooth scrolling events
+   @GDK_TOUCHPAD_GESTURE_MASK: receive touchpad gesture events
+ * @GDK_TABLET_PAD_MASK: receive tablet pad events
  * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
  *
  * A set of bit-flags to indicate which events a surface is to receive.
@@ -386,11 +383,6 @@ typedef enum
  *
  * See the [input handling overview][chap-input-handling] for details of
  * [event masks][event-masks] and [event propagation][event-propagation].
- *
- * Since GTK 3.8, motion events are already compressed by default, independent
- * of this mechanism. This compression can be disabled with
- * gdk_surface_set_event_compression(). See the documentation of that function
- * for details.
  *
  * If %GDK_TOUCH_MASK is enabled, the surface will receive touch events
  * from touch-enabled devices. Those will come as sequences of #GdkEventTouch
@@ -432,12 +424,10 @@ typedef enum
  * @GDK_GL_ERROR_NOT_AVAILABLE: OpenGL support is not available
  * @GDK_GL_ERROR_UNSUPPORTED_FORMAT: The requested visual format is not supported
  * @GDK_GL_ERROR_UNSUPPORTED_PROFILE: The requested profile is not supported
- * @GDK_GL_ERROR_COMPILATION_FAILED: The shader compilation failed (available since 3.22)
- * @GDK_GL_ERROR_LINK_FAILED: The shader linking failed (available since 3.22)
+ * @GDK_GL_ERROR_COMPILATION_FAILED: The shader compilation failed
+ * @GDK_GL_ERROR_LINK_FAILED: The shader linking failed
  *
  * Error enumeration for #GdkGLContext.
- *
- * Since: 3.16
  */
 typedef enum {
   GDK_GL_ERROR_NOT_AVAILABLE,
@@ -454,8 +444,6 @@ typedef enum {
  * @GDK_VULKAN_ERROR_NOT_AVAILABLE: Vulkan support is not available on this Surface
  *
  * Error enumeration for #GdkVulkanContext.
- *
- * Since: 3.90
  */
 typedef enum {
   GDK_VULKAN_ERROR_UNSUPPORTED,
@@ -519,9 +507,9 @@ typedef enum
  * @GDK_AXIS_XTILT: the axis is used for x tilt information.
  * @GDK_AXIS_YTILT: the axis is used for y tilt information.
  * @GDK_AXIS_WHEEL: the axis is used for wheel information.
- * @GDK_AXIS_DISTANCE: the axis is used for pen/tablet distance information. (Since: 3.22)
- * @GDK_AXIS_ROTATION: the axis is used for pen rotation information. (Since: 3.22)
- * @GDK_AXIS_SLIDER: the axis is used for pen slider information. (Since: 3.22)
+ * @GDK_AXIS_DISTANCE: the axis is used for pen/tablet distance information
+ * @GDK_AXIS_ROTATION: the axis is used for pen rotation information
+ * @GDK_AXIS_SLIDER: the axis is used for pen slider information
  * @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
  *
  * An enumeration describing the way in which a device
@@ -560,8 +548,6 @@ typedef enum
  * @GDK_AXIS_FLAG_SLIDER: Slider axis is present
  *
  * Flags describing the current capabilities of a device/tool.
- *
- * Since: 3.22
  */
 typedef enum
 {

@@ -1288,8 +1288,6 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
  * if no ID has been defined.
  *
  * Returns: the startup notification ID for @display, or %NULL
- *
- * Since: 4.0
  */
 const gchar *
 gdk_display_get_startup_notification_id (GdkDisplay *display)

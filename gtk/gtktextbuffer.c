@@ -3054,7 +3054,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
  *
  * Before the 3.20 version, it was not allowed to pass an invalid location.
  *
- * Since the 3.20 version, if @line_number is greater than the number of lines
+ * If @line_number is greater than the number of lines
  * in the @buffer, the end iterator is returned. And if @char_offset is off the
  * end of the line, the iterator at the end of the line is returned.
  **/
@@ -3098,9 +3098,7 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
  * @byte_index must be the start of a UTF-8 character. Note bytes, not
  * characters; UTF-8 may encode one character as multiple bytes.
  *
- * Before the 3.20 version, it was not allowed to pass an invalid location.
- *
- * Since the 3.20 version, if @line_number is greater than the number of lines
+ * If @line_number is greater than the number of lines
  * in the @buffer, the end iterator is returned. And if @byte_index is off the
  * end of the line, the iterator at the end of the line is returned.
  **/

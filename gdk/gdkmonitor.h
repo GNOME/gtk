@@ -50,8 +50,6 @@ typedef struct _GdkMonitorClass GdkMonitorClass;
  *
  * This enumeration describes how the red, green and blue components
  * of physical pixels on an output device are laid out.
- *
- * Since: 3.22
  */
 typedef enum {
   GDK_SUBPIXEL_LAYOUT_UNKNOWN,

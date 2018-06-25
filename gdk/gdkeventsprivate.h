@@ -276,7 +276,7 @@ struct _GdkEventScroll
  * @hardware_keycode: the raw code of the key that was pressed or released.
  * @group: the keyboard group.
  * @is_modifier: a flag that indicates if @hardware_keycode is mapped to a
- *   modifier. Since 2.10
+ *   modifier
  *
  * Describes a key press or key release event.
  */
@@ -414,8 +414,6 @@ struct _GdkEventProximity
  * is unmapped), or if the same application grabs the pointer or keyboard
  * again. Note that implicit grabs (which are initiated by button presses)
  * can also cause #GdkEventGrabBroken events.
- *
- * Since: 2.8
  */
 struct _GdkEventGrabBroken {
   GdkEventAny any;
@@ -536,8 +534,6 @@ struct _GdkEventTouchpadPinch {
  *   device may have different current modes.
  *
  * Generated during %GDK_SOURCE_TABLET_PAD button presses and releases.
- *
- * Since: 3.22
  */
 struct _GdkEventPadButton {
   GdkEventAny any;
@@ -562,8 +558,6 @@ struct _GdkEventPadButton {
  * @value: The current value for the given axis.
  *
  * Generated during %GDK_SOURCE_TABLET_PAD interaction with tactile sensors.
- *
- * Since: 3.22
  */
 struct _GdkEventPadAxis {
   GdkEventAny any;
@@ -587,8 +581,6 @@ struct _GdkEventPadAxis {
  *   device may have different current modes.
  *
  * Generated during %GDK_SOURCE_TABLET_PAD mode switches in a group.
- *
- * Since: 3.22
  */
 struct _GdkEventPadGroupMode {
   GdkEventAny any;

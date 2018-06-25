@@ -228,7 +228,7 @@
  *
  * # Links
  *
- * Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
+ * GTK+ supports markup for clickable hyperlinks in addition
  * to regular Pango markup. The markup for links is borrowed from HTML,
  * using the `<a>` with “href“, “title“ and “class“ attributes. GTK+ renders links
  * similar to the way they appear in web browsers, with colored, underlined

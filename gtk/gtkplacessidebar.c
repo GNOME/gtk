@@ -4448,7 +4448,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * emitted) every time the user activates the contextual menu.
    *
    * Before 3.18, the @container always was a #GtkMenu, and you were expected
-   * to add your items as #GtkMenuItems. Since 3.18, the popup may be implemented
+   * to add your items as #GtkMenuItems. The popup may be implemented
    * as a #GtkPopover, in which case @container will be something else, e.g. a
    * #GtkBox, to which you may add #GtkModelButtons or other widgets, such as
    * #GtkEntries, #GtkSpinButtons, etc. If your application can deal with this

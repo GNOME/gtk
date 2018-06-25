@@ -48,8 +48,6 @@
  * @GSK_OFFSET_NODE: A node that renders its child after applying a 2D translation
  *
  * The type of a node determines what the node is rendering.
- *
- * Since: 3.90
  **/
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
@@ -89,8 +87,6 @@ typedef enum {
  *
  * The actual implementation of each filter is deferred to the
  * rendering pipeline.
- *
- * Since: 3.90
  */
 typedef enum {
   GSK_SCALING_FILTER_LINEAR,
@@ -122,8 +118,6 @@ typedef enum {
  *
  * The implementation of each blend mode is deferred to the
  * rendering pipeline.
- *
- * Since: 3.90
  */
 typedef enum {
   GSK_BLEND_MODE_DEFAULT = 0,

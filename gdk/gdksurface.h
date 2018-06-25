@@ -47,7 +47,7 @@ typedef struct _GdkGeometry          GdkGeometry;
  *  #GtkMenu)
  * @GDK_SURFACE_SUBSURFACE: subsurface; This surface is visually
  *  tied to a toplevel, and is moved/stacked with it. Currently this window
- *  type is only implemented in Wayland. Since 3.14
+ *  type is only implemented in Wayland
  *
  * Describes the kind of surface.
  */
@@ -215,9 +215,6 @@ typedef enum
  *
  * In general, when multiple flags are set, flipping should take precedence over
  * sliding, which should take precedence over resizing.
- *
- * Since: 3.22
- * Stability: Unstable
  */
 typedef enum
 {
@@ -264,8 +261,6 @@ typedef enum
  *
  * Indicates which monitor (in a multi-head setup) a surface should span over
  * when in fullscreen mode.
- *
- * Since: 3.8
  **/
 typedef enum
 {
@@ -375,16 +370,15 @@ struct _GdkGeometry
  * @GDK_SURFACE_STATE_ABOVE: the surface is kept above other surfaces.
  * @GDK_SURFACE_STATE_BELOW: the surface is kept below other surfaces.
  * @GDK_SURFACE_STATE_FOCUSED: the surface is presented as focused (with active decorations).
- * @GDK_SURFACE_STATE_TILED: the surface is in a tiled state, Since 3.10. Since 3.91.2, this
- *                          is deprecated in favor of per-edge information.
- * @GDK_SURFACE_STATE_TOP_TILED: whether the top edge is tiled, Since 3.91.2
- * @GDK_SURFACE_STATE_TOP_RESIZABLE: whether the top edge is resizable, Since 3.91.2
- * @GDK_SURFACE_STATE_RIGHT_TILED: whether the right edge is tiled, Since 3.91.2
- * @GDK_SURFACE_STATE_RIGHT_RESIZABLE: whether the right edge is resizable, Since 3.91.2
- * @GDK_SURFACE_STATE_BOTTOM_TILED: whether the bottom edge is tiled, Since 3.91.2
- * @GDK_SURFACE_STATE_BOTTOM_RESIZABLE: whether the bottom edge is resizable, Since 3.91.2
- * @GDK_SURFACE_STATE_LEFT_TILED: whether the left edge is tiled, Since 3.91.2
- * @GDK_SURFACE_STATE_LEFT_RESIZABLE: whether the left edge is resizable, Since 3.91.2
+ * @GDK_SURFACE_STATE_TILED: the surface is in a tiled state. Deprecated
+ * @GDK_SURFACE_STATE_TOP_TILED: whether the top edge is tiled
+ * @GDK_SURFACE_STATE_TOP_RESIZABLE: whether the top edge is resizable
+ * @GDK_SURFACE_STATE_RIGHT_TILED: whether the right edge is tiled
+ * @GDK_SURFACE_STATE_RIGHT_RESIZABLE: whether the right edge is resizable
+ * @GDK_SURFACE_STATE_BOTTOM_TILED: whether the bottom edge is tiled
+ * @GDK_SURFACE_STATE_BOTTOM_RESIZABLE: whether the bottom edge is resizable
+ * @GDK_SURFACE_STATE_LEFT_TILED: whether the left edge is tiled
+ * @GDK_SURFACE_STATE_LEFT_RESIZABLE: whether the left edge is resizable
  *
  * Specifies the state of a toplevel surface.
  */

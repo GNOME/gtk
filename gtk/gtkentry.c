@@ -99,12 +99,12 @@
  * In this mode, entered text is displayed using a “invisible” character.
  * By default, GTK+ picks the best invisible character that is available
  * in the current font, but it can be changed with
- * gtk_entry_set_invisible_char(). Since 2.16, GTK+ displays a warning
+ * gtk_entry_set_invisible_char(). GTK+ displays a warning
  * when Caps Lock or input methods might interfere with entering text in
  * a password entry. The warning can be turned off with the
  * #GtkEntry:caps-lock-warning property.
  *
- * Since 2.16, GtkEntry has the ability to display progress or activity
+ * GtkEntry has the ability to display progress or activity
  * information behind the text. To make an entry display such information,
  * use gtk_entry_set_progress_fraction() or gtk_entry_set_progress_pulse_step().
  *

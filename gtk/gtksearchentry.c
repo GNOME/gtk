@@ -490,8 +490,6 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  * If the entry is part of a #GtkSearchBar, it is preferable
  * to call gtk_search_bar_set_key_capture_widget() instead, which
  * will reveal the entry in addition to triggering the search entry.
- *
- * Since: 3.94
  **/
 void
 gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
@@ -535,8 +533,6 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
  * Gets the widget that @entry is capturing key events from.
  *
  * Returns: (transfer none): The key capture widget.
- *
- * Since: 3.94
  **/
 GtkWidget *
 gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
