@@ -108,8 +108,7 @@ snapshot_window_native (GdkSurface *window,
       XWindowAttributes attrs;
 
       if (gdk_surface_get_surface_type (window) == GDK_SURFACE_TOPLEVEL ||
-          gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP ||
-          gdk_surface_get_surface_type (window) == GDK_SURFACE_FOREIGN)
+          gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP)
         {
           /* give the WM/server some time to sync. They need it.
            * Also, do use popups instead of toplevels in your tests
