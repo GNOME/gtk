@@ -491,8 +491,13 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
   GTK_IM_CONTEXT_CLASS (parent_class)->get_preedit_string (context, str, attrs, cursor_pos);
 
   /* If the parent implementation returns a len>0 string, go with it */
-  if (str && *str && **str)
-    return;
+  if (str && *str)
+    {
+      if (**str)
+        return;
+
+      g_free (*str);
+    }
 
   preedit_str =
     context_wayland->preedit.text ? context_wayland->preedit.text : "";
