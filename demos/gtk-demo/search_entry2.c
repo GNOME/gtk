@@ -26,17 +26,6 @@ changed_cb (GtkEditable *editable)
   g_message ("changed: %s", text);
 }
 
-static gboolean
-window_event_cb (GtkWidget    *widget,
-                 GdkEvent     *event,
-                 GtkSearchBar *bar)
-{
-  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
-    return gtk_search_bar_handle_event (bar, event);
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 static void
 search_changed (GtkSearchEntry *entry,
                 GtkLabel       *label)
@@ -102,7 +91,7 @@ do_search_entry2 (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), searchbar);
 
       /* Hook the search bar to key presses */
-      g_signal_connect (window, "event", G_CALLBACK (window_event_cb), searchbar);
+      gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (searchbar), window);
 
       /* Help */
       label = gtk_label_new ("Start Typing to search");
