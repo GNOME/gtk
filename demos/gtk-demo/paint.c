@@ -3,7 +3,15 @@
  * Demonstrates practical handling of drawing tablets in a real world
  * usecase.
  */
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
+
+enum {
+  COLOR_SET,
+  N_SIGNALS
+};
+
+static guint area_signals[N_SIGNALS] = { 0, };
 
 typedef struct
 {
@@ -11,6 +19,8 @@ typedef struct
   cairo_surface_t *surface;
   cairo_t *cr;
   GdkRGBA draw_color;
+  GtkPadController *pad_controller;
+  gdouble brush_size;
 } DrawingArea;
 
 typedef struct
@@ -18,7 +28,29 @@ typedef struct
   GtkWidgetClass parent_class;
 } DrawingAreaClass;
 
+static GtkPadActionEntry pad_actions[] = {
+  { GTK_PAD_ACTION_BUTTON, 1, -1, N_("Black"), "pad.black" },
+  { GTK_PAD_ACTION_BUTTON, 2, -1, N_("Pink"), "pad.pink" },
+  { GTK_PAD_ACTION_BUTTON, 3, -1, N_("Green"), "pad.green" },
+  { GTK_PAD_ACTION_BUTTON, 4, -1, N_("Red"), "pad.red" },
+  { GTK_PAD_ACTION_BUTTON, 5, -1, N_("Purple"), "pad.purple" },
+  { GTK_PAD_ACTION_BUTTON, 6, -1, N_("Orange"), "pad.orange" },
+  { GTK_PAD_ACTION_STRIP, -1, -1, N_("Brush size"), "pad.brush_size" },
+};
+
+static const gchar *pad_colors[] = {
+  "black",
+  "pink",
+  "green",
+  "red",
+  "purple",
+  "orange"
+};
+
 G_DEFINE_TYPE (DrawingArea, drawing_area, GTK_TYPE_WIDGET)
+
+static void drawing_area_set_color (DrawingArea *area,
+                                    GdkRGBA     *color);
 
 static void
 drawing_area_ensure_surface (DrawingArea *area,
@@ -116,6 +148,82 @@ drawing_area_snapshot (GtkWidget   *widget,
 }
 
 static void
+on_pad_button_activate (GSimpleAction *action,
+                        GVariant      *parameter,
+                        DrawingArea   *area)
+{
+  const gchar *color = g_object_get_data (G_OBJECT (action), "color");
+  GdkRGBA rgba;
+
+  gdk_rgba_parse (&rgba, color);
+  drawing_area_set_color (area, &rgba);
+}
+
+static void
+on_pad_knob_change (GSimpleAction *action,
+                    GVariant      *parameter,
+                    DrawingArea   *area)
+{
+  gdouble value = g_variant_get_double (parameter);
+
+  area->brush_size = value;
+}
+
+static void
+drawing_area_hierarchy_changed (GtkWidget *widget,
+                                GtkWidget *previous_toplevel)
+{
+  DrawingArea *area = (DrawingArea *) widget;
+  GSimpleActionGroup *action_group;
+  GSimpleAction *action;
+  GtkWidget *toplevel;
+  gint i;
+
+  if (previous_toplevel && area->pad_controller)
+    {
+      gtk_widget_remove_controller (previous_toplevel,
+                                    GTK_EVENT_CONTROLLER (area->pad_controller));
+      area->pad_controller = NULL;
+    }
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (area));
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
+  action_group = g_simple_action_group_new ();
+  area->pad_controller = gtk_pad_controller_new (G_ACTION_GROUP (action_group),
+                                                 NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (pad_actions); i++)
+    {
+      if (pad_actions[i].type == GTK_PAD_ACTION_BUTTON)
+        {
+          action = g_simple_action_new (pad_actions[i].action_name, NULL);
+          g_object_set_data (G_OBJECT (action), "color",
+                             (gpointer) pad_colors[i]);
+          g_signal_connect (action, "activate",
+                            G_CALLBACK (on_pad_button_activate), area);
+        }
+      else
+        {
+          action = g_simple_action_new_stateful (pad_actions[i].action_name,
+                                                 G_VARIANT_TYPE_DOUBLE, NULL);
+          g_signal_connect (action, "activate",
+                            G_CALLBACK (on_pad_knob_change), area);
+        }
+
+      g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (action));
+      g_object_unref (action);
+    }
+
+  gtk_pad_controller_set_action_entries (area->pad_controller, pad_actions,
+                                         G_N_ELEMENTS (pad_actions));
+
+  gtk_widget_add_controller (toplevel,
+                             GTK_EVENT_CONTROLLER (area->pad_controller));
+}
+
+static void
 drawing_area_class_init (DrawingAreaClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -124,6 +232,14 @@ drawing_area_class_init (DrawingAreaClass *klass)
   widget_class->snapshot = drawing_area_snapshot;
   widget_class->map = drawing_area_map;
   widget_class->unmap = drawing_area_unmap;
+  widget_class->hierarchy_changed = drawing_area_hierarchy_changed;
+
+  area_signals[COLOR_SET] =
+    g_signal_new ("color-set",
+                  G_TYPE_FROM_CLASS (widget_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, GDK_TYPE_RGBA);
 }
 
 static void
@@ -135,20 +251,18 @@ drawing_area_apply_stroke (DrawingArea   *area,
 {
   if (gdk_device_tool_get_tool_type (tool) == GDK_DEVICE_TOOL_TYPE_ERASER)
     {
-      cairo_set_line_width (area->cr, 10 * pressure);
+      cairo_set_line_width (area->cr, 10 * pressure * area->brush_size);
       cairo_set_operator (area->cr, CAIRO_OPERATOR_DEST_OUT);
     }
   else
     {
-      cairo_set_line_width (area->cr, 4 * pressure);
+      cairo_set_line_width (area->cr, 4 * pressure * area->brush_size);
       cairo_set_operator (area->cr, CAIRO_OPERATOR_SATURATE);
     }
 
   cairo_set_source_rgba (area->cr, area->draw_color.red,
                          area->draw_color.green, area->draw_color.blue,
                          area->draw_color.alpha * pressure);
-
-  //cairo_set_source_rgba (area->cr, 0, 0, 0, pressure);
 
   cairo_line_to (area->cr, x, y);
   cairo_stroke (area->cr);
@@ -225,11 +339,15 @@ drawing_area_new (void)
   return g_object_new (drawing_area_get_type (), NULL);
 }
 
-void
+static void
 drawing_area_set_color (DrawingArea *area,
                         GdkRGBA     *color)
 {
+  if (gdk_rgba_equal (&area->draw_color, color))
+    return;
+
   area->draw_color = *color;
+  g_signal_emit (area, area_signals[COLOR_SET], 0, &area->draw_color);
 }
 
 static void
@@ -240,6 +358,14 @@ color_button_color_set (GtkColorButton *button,
 
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &color);
   drawing_area_set_color (draw_area, &color);
+}
+
+static void
+drawing_area_color_set (DrawingArea    *area,
+                        GdkRGBA        *color,
+                        GtkColorButton *button)
+{
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), color);
 }
 
 GtkWidget *
@@ -263,6 +389,8 @@ do_paint (GtkWidget *toplevel)
       colorbutton = gtk_color_button_new ();
       g_signal_connect (colorbutton, "color-set",
                         G_CALLBACK (color_button_color_set), draw_area);
+      g_signal_connect (draw_area, "color-set",
+                        G_CALLBACK (drawing_area_color_set), colorbutton);
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (colorbutton),
                                   &(GdkRGBA) { 0, 0, 0, 1 });
 
