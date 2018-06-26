@@ -39,6 +39,7 @@
 #include "gtktogglebutton.h"
 #include "gtktreemenu.h"
 #include "gtktypebuiltins.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkcomboboxaccessible.h"
 
@@ -275,9 +276,11 @@ static void     gtk_combo_box_menu_activate        (GtkWidget        *menu,
                                                     const gchar      *path,
                                                     GtkComboBox      *combo_box);
 static void     gtk_combo_box_update_sensitivity   (GtkComboBox      *combo_box);
-static gboolean gtk_combo_box_menu_event           (GtkWidget        *widget,
-                                                    GdkEvent         *event,
-                                                    gpointer          data);
+static gboolean gtk_combo_box_menu_key (GtkEventControllerKey *key,
+                                        guint                  keyval,
+                                        guint                  keycode,
+                                        GdkModifierType        modifiers,
+                                        GtkComboBox           *combo_box);
 static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box);
 
 /* cell layout */
@@ -843,7 +846,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, popup_widget);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_activate);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_event);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_key);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_show);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_hide);
 
@@ -1931,21 +1934,26 @@ gtk_combo_box_model_row_changed (GtkTreeModel     *model,
 }
 
 static gboolean
-gtk_combo_box_menu_event (GtkWidget *widget,
-                          GdkEvent  *event,
-                          gpointer   data)
+gtk_combo_box_menu_key (GtkEventControllerKey *key,
+                        guint                  keyval,
+                        guint                  keycode,
+                        GdkModifierType        modifiers,
+                        GtkComboBox           *combo_box)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
+  GtkWidget *widget;
+  GdkEvent *event;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
+  event = gtk_get_current_event ();
 
   if (!gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
     {
-      /* The menu hasn't managed the
-       * event, forward it to the combobox
-       */
-      return gtk_bindings_activate_event (G_OBJECT (combo_box), (GdkEventKey *)event);
+      gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
     }
 
-  return GDK_EVENT_PROPAGATE;
+  g_object_unref (event);
+
+  return TRUE;
 }
 
 /*
