@@ -77,7 +77,7 @@ typedef struct
 
   GList *extra_pages;
 
-  gboolean grabbed;
+  GdkSeat *grab_seat;
 
   GtkInspectorOverlay *flash_overlay;
   gint flash_count;
