@@ -165,8 +165,6 @@ gesture_get_current_event (GtkGestureStylus *gesture)
  * signals.
  *
  * Returns: #TRUE if there is a current value for the axis
- *
- * Since: 3.94
  **/
 gboolean
 gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,

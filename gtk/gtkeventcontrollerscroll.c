@@ -55,8 +55,6 @@
  * #GtkEventControllerScroll::decelerate signal, emitted at the end of scrolling
  * with two X/Y velocity arguments that are consistent with the motion that
  * was received.
- *
- * This object was added in 3.93.
  **/
 #include "config.h"
 
