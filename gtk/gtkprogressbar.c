@@ -1226,7 +1226,10 @@ tick_cb (GtkWidget     *widget,
   priv->last_iteration = iteration;
 
   if (current_iterations > 3 * pulse_iterations)
-    return G_SOURCE_CONTINUE;
+    {
+      priv->pulse1 = 0;
+      return G_SOURCE_CONTINUE;
+    }
 
   /* advance the block */
   if (priv->activity_dir == 0)
