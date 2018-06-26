@@ -2515,7 +2515,6 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
                                      gtk_widget_get_toplevel (event_widget),
                                      x, y,
                                      &x, &y);
-  gdk_event_set_coords (event, x, y);
 
   if (event->any.type == GDK_TOUCH_BEGIN ||
       event->any.type == GDK_TOUCH_UPDATE ||
@@ -2535,8 +2534,6 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
       press = gdk_event_new (GDK_BUTTON_PRESS);
       press->any.surface = g_object_ref (event->any.surface);
       press->button.time = event->motion.time;
-      press->button.x = event->motion.x;
-      press->button.y = event->motion.y;
       press->button.x_root = event->motion.x_root;
       press->button.y_root = event->motion.y_root;
       press->button.state = event->motion.state;
@@ -2562,6 +2559,8 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
     }
   else
     return;
+
+  gdk_event_set_coords (press, x, y);
 
   press->any.send_event = TRUE;
   next_child = event_widget;
