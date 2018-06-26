@@ -329,34 +329,15 @@ item_cb (GtkWidget *menuitem,
 }
 
 static void
-do_popup_menu (GtkWidget *icon_list,
-	       GdkEvent  *event)
+do_popup_menu (GtkWidget   *icon_list,
+               GtkTreePath *path)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (icon_list);
   GtkWidget *menu;
   GtkWidget *menuitem;
-  GtkTreePath *path = NULL;
   guint button, event_time;
   ItemData *data;
   GList *list;
-
-  if (event)
-    {
-      double x, y;
-
-      gdk_event_get_coords (event, &x, &y);
-      path = gtk_icon_view_get_path_at_pos (icon_view, x, y);
-    }
-  else
-    {
-      list = gtk_icon_view_get_selected_items (icon_view);
-
-      if (list)
-        {
-          path = (GtkTreePath*)list->data;
-          g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
-        }
-    }
 
   if (!path)
     return;
@@ -373,41 +354,43 @@ do_popup_menu (GtkWidget *icon_list,
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   g_signal_connect (menuitem, "activate", G_CALLBACK (item_cb), data);
 
-  if (event)
-    {
-      gdk_event_get_button (event, &button);
-      event_time = gdk_event_get_time (event);
-    }
-  else
-    {
-      button = 0;
-      event_time = gtk_get_current_event_time ();
-    }
-
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
-                  button, event_time);
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                  GDK_BUTTON_SECONDARY,
+                  gtk_get_current_event_time ());
 }
-	
 
-static gboolean
-event_handler (GtkWidget *widget, 
-               GdkEvent  *event)
+static void
+press_handler (GtkGestureMultiPress *gesture,
+               guint                 n_press,
+               gdouble               x,
+               gdouble               y,
+               GtkWidget            *widget)
 {
-  /* Ignore double-clicks and triple-clicks */
-  if (gdk_event_triggers_context_menu (event) &&
-      gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
-    {
-      do_popup_menu (widget, event);
-      return TRUE;
-    }
+  GtkTreePath *path = NULL;
 
-  return FALSE;
+  /* Ignore double-clicks and triple-clicks */
+  if (n_press > 1)
+    return;
+
+  path = gtk_icon_view_get_path_at_pos (GTK_ICON_VIEW (widget), x, y);
+  do_popup_menu (widget, path);
 }
 
 static gboolean
 popup_menu_handler (GtkWidget *widget)
 {
-  do_popup_menu (widget, NULL);
+  GtkTreePath *path = NULL;
+  GList *list;
+
+  list = gtk_icon_view_get_selected_items (GTK_ICON_VIEW (widget));
+
+  if (list)
+    {
+      path = (GtkTreePath*)list->data;
+      g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
+    }
+
+  do_popup_menu (widget, path);
   return TRUE;
 }
 
@@ -426,6 +409,7 @@ main (gint argc, gchar **argv)
   GtkCellRenderer *cell;
   GtkTreeViewColumn *tvc;
   GdkContentFormats *targets;
+  GtkGesture *gesture;
   
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -454,8 +438,13 @@ main (gint argc, gchar **argv)
   tvc = gtk_tree_view_column_new ();
   gtk_tree_view_append_column (GTK_TREE_VIEW (tv), tvc);
 
-  g_signal_connect_after (icon_list, "event",
-			  G_CALLBACK (event_handler), NULL);
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
+                                 GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (press_handler), icon_list);
+  gtk_widget_add_controller (icon_list, GTK_EVENT_CONTROLLER (gesture));
+
   g_signal_connect (icon_list, "selection_changed",
 		    G_CALLBACK (selection_changed), NULL);
   g_signal_connect (icon_list, "popup_menu",
