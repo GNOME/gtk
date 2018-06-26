@@ -17,6 +17,16 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
+/**
+ * SECTION:gtkeventcontrollerkey
+ * @Short_description: Event controller for key events
+ * @Title: GtkEventControllerKey
+ * @See_also: #GtkEventController
+ *
+ * #GtkEventControllerKey is an event controller meant for situations
+ * where you need access to key events.
+ **/
+
 #include "config.h"
 
 #include "gtkintl.h"

@@ -6502,7 +6502,7 @@ gtk_event_controller_motion_get_type
 
 <SECTION>
 <FILE>gtkeventcontrollerkey</FILE>
-<TITLE>GtkEventControlerKey</TITLE>
+<TITLE>GtkEventControllerKey</TITLE>
 GtkEventControllerKey
 gtk_event_controller_key_new
 
