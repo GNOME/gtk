@@ -43,6 +43,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturemultipress.h"
 #include "gtkgestureprivate.h"
@@ -1833,23 +1834,18 @@ edge_under_coordinates (GtkWindow     *window,
   return TRUE;
 }
 
-static gboolean
-captured_event_cb (GtkWidget *widget,
-                   GdkEvent  *event)
+static void
+gtk_window_capture_motion (GtkWidget *widget,
+                           gdouble    x,
+                           gdouble    y)
 {
   GdkCursor *cursor = NULL;
-  gdouble x, y;
   gint i;
   const gchar *cursor_names[8] = {
     "nw-resize", "n-resize", "ne-resize",
     "w-resize",               "e-resize",
     "sw-resize", "s-resize", "se-resize"
   };
-
-  if (gdk_event_get_event_type (event) != GDK_MOTION_NOTIFY)
-    return GDK_EVENT_PROPAGATE;
-  if (!gdk_event_get_coords (event, &x, &y))
-    return GDK_EVENT_PROPAGATE;
 
   for (i = 0; i < 8; i++)
     {
@@ -1864,8 +1860,6 @@ captured_event_cb (GtkWidget *widget,
 
   if (cursor)
     g_object_unref (cursor);
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -1875,6 +1869,7 @@ gtk_window_init (GtkWindow *window)
   GtkWidget *widget;
   GtkCssNode *widget_node;
   GdkSeat *seat;
+  GtkEventController *motion_controller;
 #ifdef GDK_WINDOWING_X11
   GdkContentFormats *targets;
 #endif
@@ -1951,7 +1946,12 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect (seat, "device-removed",
                     G_CALLBACK (device_removed_cb), window);
 
-  _gtk_widget_set_captured_event_handler (widget, captured_event_cb);
+  motion_controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_phase (motion_controller,
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect_swapped (motion_controller, "motion",
+                            G_CALLBACK (gtk_window_capture_motion), window);
+  gtk_widget_add_controller (widget, motion_controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (priv->key_controller, "focus-in",
