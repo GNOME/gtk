@@ -518,14 +518,6 @@ test_type (gconstpointer data)
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkComboBox"))
         continue;
 
-      /* Deprecated, not getting fixed */
-      if (g_str_equal (g_type_name (pspec->owner_type), "GtkAction"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_CONTAINER) &&
-	  g_str_equal (pspec->name, "resize-mode"))
-        continue;
-
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_COLOR_BUTTON) &&
 	  g_str_equal (pspec->name, "alpha"))
         continue;
@@ -537,19 +529,6 @@ test_type (gconstpointer data)
 
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU) &&
 	  g_str_equal (pspec->name, "tearoff-state"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET) &&
-	  g_str_equal (pspec->name, "double-buffered"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_WINDOW) &&
-	  g_str_equal (pspec->name, "has-resize-grip"))
-        continue;
-
-      /* Can only be set on window widgets */
-      if (pspec->owner_type == GTK_TYPE_WIDGET &&
-          g_str_equal (pspec->name, "events"))
         continue;
 
       /* Can only be set on unmapped windows */
@@ -593,10 +572,6 @@ test_type (gconstpointer data)
 
       if (pspec->owner_type == GTK_TYPE_TEXT_VIEW &&
           g_str_equal (pspec->name, "im-module"))
-        continue;
-
-      if (pspec->owner_type == GTK_TYPE_TOOLBAR &&
-          g_str_equal (pspec->name, "icon-size"))
         continue;
 
       if (pspec->owner_type == GTK_TYPE_TREE_SELECTION &&
