@@ -509,13 +509,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "draw-indicator"))
         continue;
 
-      /* Really a bug in the way GtkButton and its subclasses interact:
-       * setting label etc on a subclass destroys the content, breaking
-       * e.g. GtkColorButton pretty badly
-       */
-      if (type == GTK_TYPE_COLOR_BUTTON && pspec->owner_type == GTK_TYPE_BUTTON)
-        continue;
-
       /* Too many special cases involving -set properties */
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkCellRendererText") ||
           g_str_equal (g_type_name (pspec->owner_type), "GtkTextTag"))
