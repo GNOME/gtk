@@ -90,6 +90,7 @@ gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext   
 gboolean                gdk_gl_context_has_framebuffer_blit     (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_frame_terminator     (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
+gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
 
 G_END_DECLS
 
