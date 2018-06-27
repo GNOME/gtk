@@ -1282,7 +1282,7 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
 
 /**
  * gdk_display_get_startup_notification_id:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: a #GdkDisplay
  *
  * Gets the startup notification ID for a Wayland display, or %NULL
  * if no ID has been defined.
