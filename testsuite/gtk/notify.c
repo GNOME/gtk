@@ -505,10 +505,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "page"))
         continue;
 
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_TOGGLE_BUTTON) &&
-	  g_str_equal (pspec->name, "draw-indicator"))
-        continue;
-
       /* Too many special cases involving -set properties */
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkCellRendererText") ||
           g_str_equal (g_type_name (pspec->owner_type), "GtkTextTag"))
@@ -516,19 +512,6 @@ test_type (gconstpointer data)
 
       /* Most things assume a model is set */
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkComboBox"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_COLOR_BUTTON) &&
-	  g_str_equal (pspec->name, "alpha"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_CELL_RENDERER_PIXBUF) &&
-	  (g_str_equal (pspec->name, "stock-id") ||
-           g_str_equal (pspec->name, "stock-size")))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU) &&
-	  g_str_equal (pspec->name, "tearoff-state"))
         continue;
 
       /* Can only be set on unmapped windows */
@@ -605,10 +588,6 @@ test_type (gconstpointer data)
 
       if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER) &&
 	  g_str_equal (pspec->name, "font"))
-	continue;
-
-      if (g_type_is_a (type, GTK_TYPE_FONT_BUTTON) &&
-	  g_str_equal (pspec->name, "font-name"))
 	continue;
 
       /* these depend on the min-content- properties in a way that breaks our test */
