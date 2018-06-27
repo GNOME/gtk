@@ -509,10 +509,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "draw-indicator"))
         continue;
 
-      if (g_str_equal (g_type_name (type), "GtkRecentChooserMenu") &&
-	  g_str_equal (pspec->name, "select-multiple"))
-        continue;
-
       /* Really a bug in the way GtkButton and its subclasses interact:
        * setting label etc on a subclass destroys the content, breaking
        * e.g. GtkColorButton pretty badly
