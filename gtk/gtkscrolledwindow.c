@@ -1052,17 +1052,16 @@ indicator_set_over (Indicator *indicator,
 }
 
 static gboolean
-event_close_to_indicator (GtkScrolledWindow *sw,
-                          Indicator         *indicator,
-                          GdkEvent          *event)
+coords_close_to_indicator (GtkScrolledWindow *sw,
+                           Indicator         *indicator,
+                           gdouble            x,
+                           gdouble            y)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   graphene_rect_t indicator_bounds;
-  gdouble x, y;
   gint distance;
 
   gtk_widget_compute_bounds (indicator->scrollbar, GTK_WIDGET (sw), &indicator_bounds);
-  gdk_event_get_coords (event, &x, &y);
 
   if (indicator->over)
     distance = INDICATOR_FAR_DISTANCE;
@@ -1099,25 +1098,18 @@ enable_over_timeout_cb (gpointer user_data)
 static gboolean
 check_update_scrollbar_proximity (GtkScrolledWindow *sw,
                                   Indicator         *indicator,
-                                  GdkEvent          *event)
+                                  GtkWidget         *target,
+                                  gdouble            x,
+                                  gdouble            y)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   gboolean indicator_close, on_scrollbar, on_other_scrollbar;
-  GtkWidget *event_target;
-  GtkWidget *event_target_ancestor;
-  GdkEventType event_type;
 
-  event_target = gtk_get_event_target (event);
-  event_target_ancestor = gtk_widget_get_ancestor (event_target, GTK_TYPE_SCROLLBAR);
-  event_type = gdk_event_get_event_type (event);
-
-  indicator_close = event_close_to_indicator (sw, indicator, event);
-  on_scrollbar = (event_target_ancestor == indicator->scrollbar &&
-                  event_type != GDK_LEAVE_NOTIFY);
+  indicator_close = coords_close_to_indicator (sw, indicator, x, y);
+  on_scrollbar = (target == indicator->scrollbar);
   on_other_scrollbar = (!on_scrollbar &&
-                        event_type != GDK_LEAVE_NOTIFY &&
-                        (event_target_ancestor == priv->hindicator.scrollbar ||
-                         event_target_ancestor == priv->vindicator.scrollbar));
+                        (target == priv->hindicator.scrollbar ||
+                         target == priv->vindicator.scrollbar));
 
   if (indicator->over_timeout_id)
     {
@@ -1173,83 +1165,64 @@ captured_event_cb (GtkWidget *widget,
                    GdkEvent  *event)
 {
   GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
-  GdkInputSource input_source;
-  GdkDevice *source_device;
-  GtkWidget *event_target;
-  GtkWidget *event_target_ancestor;
-  gboolean on_scrollbar;
-  GdkEventType event_type;
-  guint state;
-  GdkCrossingMode mode;
 
-  source_device = gdk_event_get_source_device (event);
-  event_type = gdk_event_get_event_type (event);
-
-  if (event_type == GDK_SCROLL)
-    {
-      gtk_scrolled_window_cancel_deceleration (sw);
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  if (!priv->use_indicators)
-    return GDK_EVENT_PROPAGATE;
-
-  if (event_type != GDK_MOTION_NOTIFY &&
-      event_type != GDK_LEAVE_NOTIFY)
-    return GDK_EVENT_PROPAGATE;
-
-  input_source = gdk_device_get_source (source_device);
-
-  if (input_source == GDK_SOURCE_KEYBOARD ||
-      input_source == GDK_SOURCE_TOUCHSCREEN)
-    return GDK_EVENT_PROPAGATE;
-
-  event_target = gtk_get_event_target (event);
-  event_target_ancestor = gtk_widget_get_ancestor (event_target, GTK_TYPE_SCROLLBAR);
-  on_scrollbar = (event_target_ancestor == priv->hindicator.scrollbar ||
-                  event_target_ancestor == priv->vindicator.scrollbar);
-  gdk_event_get_crossing_mode (event, &mode);
-
-  if (event_type == GDK_MOTION_NOTIFY)
-    {
-      if (priv->hscrollbar_visible)
-        indicator_start_fade (&priv->hindicator, 1.0);
-      if (priv->vscrollbar_visible)
-        indicator_start_fade (&priv->vindicator, 1.0);
-
-      gdk_event_get_state (event, &state);
-
-      if (!on_scrollbar &&
-           (state &
-            (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
-        {
-          indicator_set_over (&priv->hindicator, FALSE);
-          indicator_set_over (&priv->vindicator, FALSE);
-        }
-      else if (input_source == GDK_SOURCE_PEN ||
-               input_source == GDK_SOURCE_ERASER ||
-               input_source == GDK_SOURCE_TRACKPOINT)
-        {
-          indicator_set_over (&priv->hindicator, TRUE);
-          indicator_set_over (&priv->vindicator, TRUE);
-        }
-      else
-        {
-          if (!check_update_scrollbar_proximity (sw, &priv->vindicator, event))
-            check_update_scrollbar_proximity (sw, &priv->hindicator, event);
-          else
-            indicator_set_over (&priv->hindicator, FALSE);
-        }
-    }
-  else if (event_type == GDK_LEAVE_NOTIFY && on_scrollbar &&
-           mode == GDK_CROSSING_UNGRAB)
-    {
-      check_update_scrollbar_proximity (sw, &priv->vindicator, event);
-      check_update_scrollbar_proximity (sw, &priv->hindicator, event);
-    }
+  if (gdk_event_get_event_type (event) == GDK_SCROLL)
+    gtk_scrolled_window_cancel_deceleration (sw);
 
   return GDK_EVENT_PROPAGATE;
+}
+
+static void
+captured_motion (GtkScrolledWindow *sw,
+                 gdouble            x,
+                 gdouble            y)
+{
+  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
+  GdkDevice *source_device;
+  GdkInputSource input_source;
+  GdkModifierType state;
+  GdkEvent *event;
+
+  if (!priv->use_indicators)
+    return;
+
+  event = gtk_get_current_event ();
+  source_device = gdk_event_get_source_device (event);
+  input_source = gdk_device_get_source (source_device);
+
+  if (priv->hscrollbar_visible)
+    indicator_start_fade (&priv->hindicator, 1.0);
+  if (priv->vscrollbar_visible)
+    indicator_start_fade (&priv->vindicator, 1.0);
+
+  gdk_event_get_state (event, &state);
+
+  if (!gtk_get_event_target_with_type (event, GTK_TYPE_SCROLLBAR) &&
+      (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
+    {
+      indicator_set_over (&priv->hindicator, FALSE);
+      indicator_set_over (&priv->vindicator, FALSE);
+    }
+  else if (input_source == GDK_SOURCE_PEN ||
+           input_source == GDK_SOURCE_ERASER ||
+           input_source == GDK_SOURCE_TRACKPOINT)
+    {
+      indicator_set_over (&priv->hindicator, TRUE);
+      indicator_set_over (&priv->vindicator, TRUE);
+    }
+  else
+    {
+      GtkWidget *target;
+
+      target = gtk_get_event_target_with_type (event, GTK_TYPE_SCROLLBAR);
+
+      if (!check_update_scrollbar_proximity (sw, &priv->vindicator, target, x, y))
+        check_update_scrollbar_proximity (sw, &priv->hindicator, target, x, y);
+      else
+        indicator_set_over (&priv->hindicator, FALSE);
+    }
+
+  g_object_unref (event);
 }
 
 static gboolean
@@ -1977,6 +1950,12 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
 
   _gtk_widget_set_captured_event_handler (widget, captured_event_cb);
+
+  controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  g_signal_connect_swapped (controller, "motion",
+                            G_CALLBACK (captured_motion), scrolled_window);
+  gtk_widget_add_controller (widget, controller);
 
   widget_node = gtk_widget_get_css_node (widget);
   for (i = 0; i < 4; i++)
