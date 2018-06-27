@@ -13159,6 +13159,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkBorder margin, border, padding;
   GtkSnapshot *snapshot;
 
+  opacity = priv->alpha / 255.0;
+  if (opacity <= 0.0)
+    return NULL;
+
   snapshot = gtk_snapshot_new ();
 
   _gtk_widget_get_allocation (widget, &allocation);
@@ -13174,7 +13178,6 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
-  opacity = priv->alpha / 255.0;
 
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
@@ -13223,7 +13226,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  double opacity;
 
   if (!_gtk_widget_is_drawable (widget))
     return;
@@ -13233,10 +13235,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
       g_warning ("Trying to snapshot %s %p without a current allocation", G_OBJECT_TYPE_NAME (widget), widget);
       return;
     }
-
-  opacity = priv->alpha / 255.0;
-  if (opacity <= 0.0)
-    return;
 
   if (priv->draw_needed)
     {
