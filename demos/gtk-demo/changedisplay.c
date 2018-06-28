@@ -87,14 +87,14 @@ find_toplevel_at_pointer (GdkDisplay *display)
   return widget ? gtk_widget_get_toplevel (widget) : NULL;
 }
 
-static gboolean
-release_event_cb (GtkWidget *widget,
-                  GdkEvent  *event,
-                  gboolean  *clicked)
+static void
+released_cb (GtkGestureMultiPress *gesture,
+             guint                 n_press,
+             gdouble               x,
+             gdouble               y,
+             gboolean             *clicked)
 {
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
-    *clicked = TRUE;
-  return TRUE;
+  *clicked = TRUE;
 }
 
 /* Asks the user to click on a window, then waits for them click
@@ -132,10 +132,12 @@ query_for_toplevel (GdkDisplay *display,
                      GDK_SEAT_CAPABILITY_ALL_POINTING,
                      FALSE, cursor, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
     {
+      GtkGesture *gesture = gtk_gesture_multi_press_new ();
       gboolean clicked = FALSE;
 
-      g_signal_connect (popup, "event",
-                        G_CALLBACK (release_event_cb), &clicked);
+      g_signal_connect (gesture, "released",
+                        G_CALLBACK (released_cb), &clicked);
+      gtk_widget_add_controller (popup, GTK_EVENT_CONTROLLER (gesture));
 
       /* Process events until clicked is set by our button release event handler.
        * We pass in may_block=TRUE since we want to wait if there
@@ -143,6 +145,8 @@ query_for_toplevel (GdkDisplay *display,
        */
       while (!clicked)
         g_main_context_iteration (NULL, TRUE);
+
+      gdk_seat_ungrab (gdk_device_get_seat (device));
 
       toplevel = find_toplevel_at_pointer (display);
       if (toplevel == popup)
