@@ -4,24 +4,18 @@
 GtkAdjustment *adjustment;
 int cursor_x, cursor_y;
 
-static gboolean
-event_cb (GtkWidget *window,
-          GdkEvent  *event)
+static void
+motion_cb (GtkEventControllerMotion *motion,
+           gdouble                   x,
+           gdouble                   y,
+           GtkWidget                *widget)
 {
-  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY &&
-      gdk_event_get_surface (event) == gtk_widget_get_surface (window))
-    {
-      gdouble x, y;
-      float processing_ms = gtk_adjustment_get_value (adjustment);
-      g_usleep (processing_ms * 1000);
+  float processing_ms = gtk_adjustment_get_value (adjustment);
+  g_usleep (processing_ms * 1000);
 
-      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-      cursor_x = x;
-      cursor_y = y;
-      gtk_widget_queue_draw (window);
-    }
-
-  return GDK_EVENT_PROPAGATE;
+  cursor_x = x;
+  cursor_y = y;
+  gtk_widget_queue_draw (widget);
 }
 
 static void
@@ -48,6 +42,7 @@ main (int argc, char **argv)
   GtkWidget *label;
   GtkWidget *scale;
   GtkWidget *da;
+  GtkEventController *controller;
 
   gtk_init ();
 
@@ -69,9 +64,12 @@ main (int argc, char **argv)
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
   gtk_widget_set_vexpand (da, TRUE);
   gtk_box_pack_end (GTK_BOX (vbox), da);
-  
-  g_signal_connect (window, "event",
-                    G_CALLBACK (event_cb), NULL);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion",
+                    G_CALLBACK (motion_cb), da);
+  gtk_widget_add_controller (da, controller);
+
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
