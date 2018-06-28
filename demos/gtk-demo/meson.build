@@ -79,9 +79,11 @@ gtkdemo_deps = [ libgtk_dep, ]
 
 extra_demo_sources = files(['main.c', 'gtkfishbowl.c', 'fontplane.c', 'gtkgears.c', 'puzzlepiece.c'])
 
-if harfbuzz_dep.found() and pangoft_dep.found()
+if build_with_harfbuzz
   demos += files('font_features.c')
-  extra_demo_sources += files(['script-names.c', 'language-names.c'])
+  if pangoft_dep.found()
+    extra_demo_sources += files(['script-names.c', 'language-names.c'])
+  endif
   gtkdemo_deps += [ harfbuzz_dep, ]
 endif
 
@@ -105,7 +107,7 @@ executable('gtk4-demo',
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
-           gui_app: true,
+#           gui_app: true,
            link_args: extra_demo_ldflags,
            install: true)
 

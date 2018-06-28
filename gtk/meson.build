@@ -864,12 +864,15 @@ gtk_deps = [
   graphene_dep,
 ]
 
-if harfbuzz_dep.found() and pangoft_dep.found()
-  gtk_deps += [ harfbuzz_dep, pangoft_dep ]
-  gtk_sources += files([
-  'language-names.c',
-  'script-names.c',
-  ])
+if build_with_harfbuzz
+  gtk_deps += [ harfbuzz_dep ]
+  if pangoft_dep.found()
+    gtk_deps += [ pangoft_dep ]
+    gtk_sources += files([
+    'language-names.c',
+    'script-names.c',
+    ])
+  endif
 endif
 
 if x11_enabled
@@ -890,7 +893,7 @@ endif
 
 if win32_enabled
   gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
-  gtk_deps += [ giowin32_dep, pangowin32_dep ]
+  gtk_deps += [ giowin32_dep, pangowin32_dep, dwrite_dep ]
 
   gtk_deps += [cc.find_library('advapi32'),
                cc.find_library('comctl32'),

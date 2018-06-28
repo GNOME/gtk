@@ -313,6 +313,7 @@ gobject_dep    = dependency('gobject-2.0', version: glib_req,
 if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
                             fallback : ['glib', 'libgio_dep'])
+  dwrite_dep = cc.find_library('dwrite', required : true)
 endif
 if os_unix
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
@@ -456,7 +457,15 @@ if cc.get_id() == 'msvc'
   endif
 endif
 
-cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
+build_with_harfbuzz = false
+
+if pangoft_dep.found()
+  build_with_harfbuzz = true
+elif os_win32 and harfbuzz_dep.found()
+  build_with_harfbuzz = cc.has_header_symbol('hb-ft.h', 'hb_ft_face_create', dependencies : harfbuzz_dep)
+endif
+
+cdata.set('HAVE_HARFBUZZ', build_with_harfbuzz)
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 atk_pkgs = ['atk']
