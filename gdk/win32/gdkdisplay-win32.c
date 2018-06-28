@@ -38,6 +38,10 @@
 
 #include <dwmapi.h>
 
+#ifdef HAVE_HARFBUZZ
+# include <initguid.h>
+#endif
+
 static int debug_indent = 0;
 
 /**
@@ -691,6 +695,16 @@ gdk_win32_display_dispose (GObject *object)
         }
     }
 
+#ifdef HAVE_HARFBUZZ
+  if (display_win32->ft_lib != NULL)
+    FT_Done_FreeType (display_win32->ft_lib);
+
+  if (display_win32->dwrite_gdi_interop != NULL)
+    IDWriteGdiInterop_Release (display_win32->dwrite_gdi_interop);
+
+  if (display_win32->dwrite_factory != NULL)
+    IDWriteFactory_Release (display_win32->dwrite_factory);
+#endif
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->dispose (object);
 }
 
@@ -1084,6 +1098,49 @@ gdk_win32_display_get_last_seen_time (GdkDisplay *display)
 {
   return GetMessageTime ();
 }
+
+#ifdef HAVE_HARFBUZZ
+IDWriteGdiInterop *gdk_win32_display_get_dwrite_gdi_interop (GdkDisplay *display)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  HRESULT hr = S_OK;
+
+  if (display_win32->dwrite_factory == NULL)
+    hr = DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED,
+                              &IID_IDWriteFactory,
+                              (IUnknown **) &display_win32->dwrite_factory);
+
+  if (SUCCEEDED (hr) && display_win32->dwrite_gdi_interop == NULL)
+    hr = IDWriteFactory_GetGdiInterop (display_win32->dwrite_factory,
+                                       &display_win32->dwrite_gdi_interop);
+
+  if (FAILED (hr))
+    {
+      g_critical ("Failed to initialize DirectWrite, font tweaking will likely not work!");
+      display_win32->dwrite_factory = NULL;
+      display_win32->dwrite_gdi_interop = NULL;
+    }
+
+  return display_win32->dwrite_gdi_interop;
+}
+
+FT_Library gdk_win32_display_get_ft_lib (GdkDisplay *display)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  FT_Error ft_err = FT_Err_Ok;
+
+  if (display_win32->ft_lib == NULL)
+    ft_err = FT_Init_FreeType (&display_win32->ft_lib);
+
+  if (ft_err != FT_Err_Ok)
+    {
+      g_critical ("Failed to initialize FreeType, font tweaking will likely not work!");
+      display_win32->ft_lib = NULL;
+    }
+
+  return (display_win32->ft_lib);
+}
+#endif
 
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)

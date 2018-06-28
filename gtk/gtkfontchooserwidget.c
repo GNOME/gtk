@@ -56,15 +56,41 @@
 #include "gtkgesturemultipress.h"
 #include "gtkeventcontrollerscroll.h"
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
-#include <hb.h>
-#include <hb-ot.h>
-#include <hb-ft.h>
-#include <freetype/freetype.h>
-#include <freetype/ftmm.h>
-#include "language-names.h"
-#include "script-names.h"
+#if defined(HAVE_HARFBUZZ)
+# if defined GDK_WINDOWING_WIN32
+#  define _WIN32_WINNT 0x0600
+#  define WIN32_LEAN_AND_MEAN
+#  define COBJMACROS
+#  include <windows.h>
+#  include <initguid.h>
+#  include "gdk/win32/dwrite_c.h"
+#  include "gdk/win32/gdkwin32.h"
+
+#  include <pango/pangowin32.h>
+extern GType _pango_win32_font_get_type (void) G_GNUC_CONST;
+
+#  define PANGO_TYPE_WIN32_FONT            (_pango_win32_font_get_type ())
+#  define PANGO_WIN32_FONT(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_WIN32_FONT, PangoWin32Font))
+#  define PANGO_WIN32_FONT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+#  define PANGO_WIN32_IS_FONT(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_WIN32_FONT))
+#  define PANGO_WIN32_IS_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_WIN32_FONT))
+#  define PANGO_WIN32_FONT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+# endif
+# if defined(HAVE_PANGOFT)
+#  include <pango/pangofc-font.h>
+# endif
+
+# include <hb.h>
+# include <hb-ot.h>
+# include <hb-ft.h>
+# include <freetype/freetype.h>
+# include <freetype/ftmm.h>
+
+# ifdef HAVE_PANGOFT
+#  include "language-names.h"
+#  include "script-names.h"
+# endif
+
 #endif
 
 #include "open-type-layout.h"
@@ -773,7 +799,7 @@ change_tweak (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
 
 typedef struct {
   guint32 tag;
@@ -821,6 +847,516 @@ axis_free (gpointer v)
   g_free (a);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+
+/* if we are using native Windows (PangoWin32), use DirectWrite */
+static BOOL CALLBACK
+get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
+{
+  wchar_t *langname_w = NULL;
+  wchar_t *locale_abbrev_w = NULL;
+  gchar *langname, *locale_abbrev, *locale, *p;
+  gint i;
+  hb_language_t lang;
+  GHashTable *ht_scripts_langs = (GHashTable *)param;
+
+  gint langname_size, locale_abbrev_size;
+  langname_size = GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, 0);
+  if (langname_size == 0)
+    return FALSE;
+
+  langname_w = g_new0 (wchar_t, langname_size);
+
+  if (langname_size == 0)
+    return FALSE;
+
+  GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, langname_size);
+  langname = g_utf16_to_utf8 (langname_w, -1, NULL, NULL, NULL);
+  locale = g_utf16_to_utf8 (locale_w, -1, NULL, NULL, NULL);
+  p = strchr (locale, '-');
+  lang = hb_language_from_string (locale, p ? p - locale : -1);
+  if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
+    g_hash_table_insert (ht_scripts_langs, lang, langname);
+
+  /* track 3-letter language codes as well */
+  locale_abbrev_size = GetLocaleInfoEx (locale_w, LOCALE_SABBREVLANGNAME, locale_abbrev_w, 0);
+  if (locale_abbrev_size > 0)
+    {
+      locale_abbrev_w = g_new0 (wchar_t, locale_abbrev_size);
+      GetLocaleInfoEx (locale_w, LOCALE_SABBREVLANGNAME, locale_abbrev_w, locale_abbrev_size);
+
+	  locale_abbrev = g_utf16_to_utf8 (locale_abbrev_w, -1, NULL, NULL, NULL);
+      lang = hb_language_from_string (locale_abbrev, -1);
+      if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
+        g_hash_table_insert (ht_scripts_langs, lang, langname);
+
+      g_free (locale_abbrev);
+      g_free (locale_abbrev_w);
+    }
+
+  g_free (locale);
+  g_free (langname_w);
+
+  return TRUE;
+}
+
+_GDK_EXTERN GHashTable *
+gtk_font_chooser_widget_get_win32_locales (void)
+{
+  static GHashTable *ht_langtag_locales = NULL;
+  static volatile gsize inited = 0;
+
+  if (g_once_init_enter (&inited))
+    {
+      gchar *locales, *script;
+      ht_langtag_locales = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
+      EnumSystemLocalesEx (&get_win32_all_locales_scripts, LOCALE_ALL, (LPARAM)ht_langtag_locales, NULL);
+      g_once_init_leave (&inited, 1);
+    }
+
+  return ht_langtag_locales;
+}
+
+
+_GDK_EXTERN IDWriteFont *
+gtk_font_chooser_widget_dwrite_font_from_pango_font (GtkWidget* widget,
+                                                     PangoFont *pango_font)
+{
+  IDWriteFont *dwrite_font = NULL;
+
+  /* If we are using PangoWin32, we need to turn the LOGFONTW to a IDWriteFont */
+  if (PANGO_WIN32_IS_FONT (pango_font))
+    {
+      /* first acquire the LOGFONTW from the pango_font that we are using, so that we can feed it into DirectWrite */
+      LOGFONTW *logfont = pango_win32_font_logfontw (pango_font);
+      GdkDisplay *display = gtk_widget_get_display (widget);
+	  HRESULT hr = S_OK;
+      gboolean succeeded = TRUE;
+
+      IDWriteGdiInterop *dwrite_gdi_interop = NULL;
+
+      dwrite_gdi_interop = gdk_win32_display_get_dwrite_gdi_interop (display);
+
+      if (dwrite_gdi_interop == NULL)
+        {
+          g_critical ("Failed to initialize DirectWrite.  Font tweaking will likely not work!");
+          succeeded = FALSE;
+        }
+
+      if (FAILED (IDWriteGdiInterop_CreateFontFromLOGFONT (dwrite_gdi_interop,
+                                                           logfont,
+                                                           &dwrite_font)))
+        {
+          g_warning ("Could not acquire DirectWrite Font from LOGFONTW!");
+          succeeded = FALSE;
+        }
+
+      if (!succeeded)
+        dwrite_font = NULL;
+    }
+
+  return dwrite_font;
+}
+
+#endif /* GDK_WINDOWING_WIN32 */
+
+_GDK_EXTERN FT_Face
+gtk_font_chooser_widget_get_ft_face_from_pango_font (GtkWidget* widget,
+                                                     PangoFont *pango_font,
+                                                     FT_Byte *font_file_data)
+{
+  FT_Face ft_face;
+
+#ifdef HAVE_PANGOFT
+  /* If we are using PangoFT2, just get the FT_Face using pango_fc_font_lock_face() */
+  if (PANGO_IS_FC_FONT (pango_font))
+    ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+  /* If we are using PangoWin32, we need to turn the LOGFONTW to a FT_Face */
+  if (PANGO_WIN32_IS_FONT (pango_font))
+    {
+      /* first acquire the LOGFONTW from the pango_font that we are using, so that we can feed it into DirectWrite */
+      LOGFONTW *logfont = pango_win32_font_logfontw (pango_font);
+      GdkDisplay *display = gtk_widget_get_display (widget);
+	  HRESULT hr = S_OK;
+
+      IDWriteFont *dwrite_font = NULL;
+      IDWriteFontFace *dwrite_font_face = NULL;
+      IDWriteFontFile *dwrite_font_file = NULL;
+      IDWriteFontFileLoader *dwrite_font_file_loader = NULL;
+      IDWriteFontFileStream *dwrite_font_file_stream = NULL;
+      IDWriteLocalizedStrings *lstrings = NULL;
+
+      /*
+      IDWriteTextFormat *text_format = NULL;
+      IDWriteFontFamily *family = NULL;
+      DWRITE_FONT_WEIGHT font_weight;
+      DWRITE_FONT_STYLE font_style;
+      DWRITE_FONT_STRETCH font_stretch; */
+      void *dwrite_ref_key;
+      FT_Library ft_lib;
+      FT_Error ft_err;
+
+      BOOL property_found = FALSE;
+      UINT32 count, i, size, dwrite_ref_key_size;
+      UINT64 font_file_size;
+      const void *font_fragment_start;
+      void *font_fragment_ctx;
+      gboolean succeeded = TRUE;
+      gboolean release_fragment_ctx = FALSE;
+	  gchar *font_name = NULL;
+      wchar_t *wstr = NULL;
+
+      /*
+      wchar_t *family_name = NULL;
+      wchar_t locale[LOCALE_NAME_MAX_LENGTH];
+      wchar_t *font_file_path = NULL;
+      gchar *str = NULL;
+      UINT32 nlangs = 0;*/
+
+      ft_lib = gdk_win32_display_get_ft_lib (display);
+
+      if (ft_lib == NULL)
+        {
+          g_critical ("Failed to initialize FreeType.  Font tweaking will likely not work!");
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      dwrite_font = gtk_font_chooser_widget_dwrite_font_from_pango_font (widget, pango_font);
+
+      if (dwrite_font == NULL)
+        {
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+      /*
+      font_weight = IDWriteFont_GetWeight (dwrite_font);
+      font_style = IDWriteFont_GetStyle (dwrite_font);
+      font_stretch = IDWriteFont_GetStretch (dwrite_font); */
+
+      hr = IDWriteFont_GetInformationalStrings (dwrite_font,
+                                                DWRITE_INFORMATIONAL_STRING_FULL_NAME,
+                                                &lstrings,
+                                                &property_found);
+
+      if (SUCCEEDED (hr) && property_found)
+        {
+          if (SUCCEEDED (IDWriteLocalizedStrings_GetStringLength (lstrings, 0, &size)))
+            {
+              wstr = g_new0 (wchar_t, size + 1);
+              IDWriteLocalizedStrings_GetString (lstrings, 0, wstr, size + 1);
+              font_name = g_utf16_to_utf8 (wstr, -1, NULL, NULL, NULL);
+              g_free (wstr);
+              IDWriteLocalizedStrings_Release (lstrings);
+            }
+        }
+
+      if (SUCCEEDED (hr) && !property_found)
+        g_print ("Could not find full name of logfont %p!\n", logfont);
+
+      if (FAILED (IDWriteFont_CreateFontFace (dwrite_font,
+                                              &dwrite_font_face)))
+        {
+          g_warning ("Could not create Font Face for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      if (FAILED (IDWriteFontFace_GetFiles (dwrite_font_face, &size, NULL)) ||
+          FAILED (IDWriteFontFace_GetFiles (dwrite_font_face, &size, &dwrite_font_file)))
+        {
+          g_warning ("Could not obtain files from Font Face for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      if (FAILED (IDWriteFontFile_GetReferenceKey (dwrite_font_file,
+                                                   &dwrite_ref_key,
+                                                   &dwrite_ref_key_size)))
+        {
+          g_warning ("Could not obtain reference key from Font Face for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      if (FAILED (IDWriteFontFile_GetLoader (dwrite_font_file, &dwrite_font_file_loader)))
+        {
+          g_warning ("Could not obtain loader from Font Face for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      if (FAILED (IDWriteFontFileLoader_CreateStreamFromKey (dwrite_font_file_loader,
+                                                             dwrite_ref_key,
+                                                             dwrite_ref_key_size,
+                                                             &dwrite_font_file_stream)))
+        {
+          g_warning ("Could not obtain Font Face file stream for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      if (FAILED (IDWriteFontFileStream_GetFileSize (dwrite_font_file_stream, &font_file_size)))
+        {
+          g_warning ("Could not acquire font file size for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+      if (FAILED (IDWriteFontFileStream_ReadFileFragment (dwrite_font_file_stream,
+                                                          &font_fragment_start,
+                                                          0,
+                                                          font_file_size,
+                                                          &font_fragment_ctx)))
+        {
+          g_warning ("Could not acquire raw font data for font for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+      else
+        release_fragment_ctx = TRUE;
+
+      font_file_data = g_new0 (FT_Byte, font_file_size);
+      memcpy (font_file_data, font_fragment_start, (size_t) font_file_size);
+      ft_err = FT_New_Memory_Face (ft_lib, font_file_data, font_file_size, 0, &ft_face);
+
+      if (ft_err != FT_Err_Ok)
+        {
+          g_warning ("Unable to obtain FreeType Face for font %s", font_name);
+          succeeded = FALSE;
+          goto dwrite_fail;
+        }
+
+dwrite_fail:
+      if (release_fragment_ctx)
+        IDWriteFontFileStream_ReleaseFileFragment (dwrite_font_file_stream, &font_fragment_ctx);
+      if (dwrite_font_file_stream != NULL)
+        IDWriteFontFileStream_Release (dwrite_font_file_stream);
+      if (dwrite_font_file_loader != NULL)
+        IDWriteFontFileLoader_Release (dwrite_font_file_loader);
+      if (dwrite_font_file != NULL)
+        IDWriteFontFile_Release (dwrite_font_file);
+      if (dwrite_font_face != NULL)
+        IDWriteFontFace_Release (dwrite_font_face);
+      if (font_name != NULL)
+        g_free (font_name);
+      if (dwrite_font != NULL)
+        IDWriteFont_Release (dwrite_font);
+
+      g_free (logfont);
+
+      if (!succeeded)
+        ft_face = NULL;
+#if 0
+      /* Use FreeType & HarfBuzz for now */
+      hr = IDWriteFont_GetInformationalStrings (dwrite_font,
+                                                DWRITE_INFORMATIONAL_STRING_FULL_NAME,
+                                                &lstrings,
+                                                &property_found);
+
+      if (SUCCEEDED (hr) && property_found)
+        {
+          count = IDWriteLocalizedStrings_GetCount (lstrings);
+          g_print ("DWRITE_INFORMATIONAL_STRING_FULL_NAME strings: %d\n", count);
+
+          for (i = 0; i < count; i++)
+            {
+              hr = IDWriteLocalizedStrings_GetStringLength (lstrings, i, &size);
+              if (SUCCEEDED (hr))
+                {
+                  wstr = g_new0 (wchar_t, size + 1);
+                  hr = IDWriteLocalizedStrings_GetString (lstrings, i, wstr, size + 1);
+                  str = g_utf16_to_utf8 (wstr, -1, NULL, NULL, NULL);
+                  g_print ("index[%d]: %s\n", i, str);
+                  g_free (str);
+                  g_free (wstr);
+                }
+              else
+                break;
+            }
+        }
+
+      if (SUCCEEDED (hr) && !property_found)
+        g_print ("Could not find full name of font!\n");
+
+      if (FAILED (hr))
+        {
+          g_warning ("Failed to acquire full name of font!\n");
+          return;
+        }
+
+      if (SUCCEEDED (hr) && property_found)
+        IDWriteLocalizedStrings_Release (lstrings);
+
+      /* Get the family of the font to get the locales/languages that it supports */
+      if (SUCCEEDED (hr))
+        hr = IDWriteFont_GetFontFamily (dwrite_font, &family);
+
+      if (SUCCEEDED (hr))
+        hr = IDWriteFontFamily_GetFamilyNames (family, &lstrings);
+
+      if (SUCCEEDED (hr))
+        nlangs = IDWriteLocalizedStrings_GetCount (lstrings);
+
+      IDWriteLocalizedStrings_GetLocaleName (lstrings, 0, locale, LOCALE_NAME_MAX_LENGTH);
+      wstr = g_new0 (wchar_t, LOCALE_NAME_MAX_LENGTH);
+
+      for (i = 0; i < nlangs; i++)
+        {
+          IDWriteLocalizedStrings_GetLocaleName (lstrings, i, wstr, LOCALE_NAME_MAX_LENGTH);
+
+          if (SUCCEEDED (hr))
+            {
+               wchar_t *disp_strw = NULL;
+               LCTYPE disp_type = g_win32_check_windows_version (6, 1, 0, G_WIN32_OS_ANY) ?
+                                  LOCALE_SLOCALIZEDDISPLAYNAME :
+                                  LOCALE_SLOCALIZEDLANGUAGENAME;
+               size = GetLocaleInfoEx (wstr, disp_type, disp_strw, 0);
+               if (size != 0)
+                 disp_strw = g_new0 (wchar_t, size);
+               if ((size != 0 && GetLocaleInfoEx (wstr, disp_type, disp_strw, size)) != 0)
+                 {
+                   gchar *localestr = g_utf16_to_utf8 (wstr, -1, NULL, NULL, NULL);
+                   gchar *disp_str = g_utf16_to_utf8 (disp_strw, size - 1, NULL, NULL, NULL);
+                   g_print ("locale %d: %s\n", i, localestr);
+                   g_free (disp_strw);
+                   g_free (localestr);
+                   g_free (disp_str);
+                 }
+               else
+                 {
+                   g_print ("Uh-oh, we could not acquire the localized locale name, %d\n", GetLastError ());
+                   return;
+                 }
+             }
+           else
+             {
+                g_warning ("Unable to acquire font locale with DirectWrite\n");
+                return;
+             }
+         }
+      g_free (wstr);
+
+      if (SUCCEEDED (hr))
+        hr = IDWriteFont_GetInformationalStrings (dwrite_font,
+                                                  DWRITE_INFORMATIONAL_STRING_WIN32_FAMILY_NAMES,
+                                                  &lstrings,
+                                                  &property_found);
+
+      if (SUCCEEDED (hr))
+        {
+          if (property_found)
+            {
+              count = IDWriteLocalizedStrings_GetCount (lstrings);
+              g_print ("DWRITE_INFORMATIONAL_STRING_WIN32_FAMILY_NAMES strings: %d\n", count);
+
+              hr = IDWriteLocalizedStrings_GetStringLength (lstrings, 0, &size);
+              if (SUCCEEDED (hr))
+                {
+                  family_name = g_new0 (wchar_t, size + 1);
+                  hr = IDWriteLocalizedStrings_GetString (lstrings, 0, family_name, size + 1);
+                  str = g_utf16_to_utf8 (family_name, -1, NULL, NULL, NULL);
+                  g_print ("Win32 Family Name: %s\n", str);
+                  g_free (str);
+                  IDWriteLocalizedStrings_Release (lstrings);
+                }
+            }
+          else
+            g_print ("Could not find language/script tag of font!\n");
+        }
+
+	  if (FAILED (hr))
+        {
+          g_warning ("Failed to acquire the supported script/language tags!\n");
+          if (family_name != NULL)
+            g_free (family_name);
+          return;
+        }
+
+      if (SUCCEEDED (hr))
+        hr = IDWriteFont_GetInformationalStrings (dwrite_font,
+                                                  DWRITE_INFORMATIONAL_STRING_SUPPORTED_SCRIPT_LANGUAGE_TAG,
+                                                  &lstrings,
+                                                  &property_found);
+
+      if (SUCCEEDED (hr))
+        {
+          if (property_found)
+            {
+              count = IDWriteLocalizedStrings_GetCount (lstrings);
+              g_print ("DWRITE_INFORMATIONAL_STRING_SUPPORTED_SCRIPT_LANGUAGE_TAG strings: %d\n", count);
+              for (i = 0; i < count; i++)
+                {
+                  hr = IDWriteLocalizedStrings_GetStringLength (lstrings, i, &size);
+                  if (SUCCEEDED (hr))
+                    {
+                      gchar * localestr = NULL;
+
+                      wstr = g_new0 (wchar_t, size + 1);
+                      hr = IDWriteLocalizedStrings_GetString (lstrings, i, wstr, size + 1);
+                      str = g_utf16_to_utf8 (wstr, -1, NULL, NULL, NULL);
+                      g_print ("index[%d]: %s\n", i, str);
+                      g_free (str);
+                      g_free (wstr);
+                    }
+                  else
+                    break;
+                }
+
+              IDWriteLocalizedStrings_Release (lstrings);
+            }
+          else
+            g_print ("Could not find language/script tag of font!\n");
+        }
+      else
+        {
+          g_warning ("Failed to acquire the supported script/language tags!\n");
+          return;
+        }
+
+      hr = IDWriteFactory_CreateTextFormat (priv->dwrite_factory,
+                                            family_name,
+                                            NULL,
+                                            font_weight,
+                                            font_style,
+                                            font_stretch,
+                                            72.0f,
+                                            locale,
+                                            &text_format);
+
+      g_print ("Text format: %s\n", SUCCEEDED (hr) ? "yes" : "no");
+      if (family_name != NULL)
+        g_free (family_name);
+
+      IDWriteTextFormat_Release (text_format);
+      IDWriteFontFamily_Release (family);
+#endif /* if 0 */
+    }
+#endif
+
+  return ft_face;
+}
+
+_GDK_EXTERN void
+gtk_font_chooser_widget_release_ft_face (PangoFont *pango_font,
+                                         FT_Face    ft_face,
+                                         FT_Byte   *font_file_data)
+{
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (PANGO_WIN32_IS_FONT (pango_font))
+    {
+      FT_Done_Face (ft_face);
+      g_free (font_file_data);
+    }
+#endif
+}
 #endif
 
 static void
@@ -835,7 +1371,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
   priv->axes = g_hash_table_new_full (axis_hash, axis_equal, NULL, axis_free);
 #endif
 
@@ -875,7 +1411,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
   gtk_font_chooser_widget_populate_features (fontchooser);
 #endif
 
@@ -1465,7 +2001,7 @@ gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
     }
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
 
 /* OpenType variations */
 
@@ -1616,9 +2152,11 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
+ 
   FT_Face ft_face;
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
+  FT_Byte *font_file_data = NULL;
   gboolean has_axis = FALSE;
 
   if (priv->updating_variations)
@@ -1632,7 +2170,10 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+
+  ft_face = gtk_font_chooser_widget_get_ft_face_from_pango_font (GTK_WIDGET (fontchooser),
+                                                                 pango_font,
+                                                                 font_file_data);
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -1664,7 +2205,8 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  gtk_font_chooser_widget_release_ft_face (pango_font, ft_face, font_file_data);
+
   g_object_unref (pango_font);
 
   return has_axis;
@@ -2132,6 +2674,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
   FT_Face ft_face;
+  FT_Byte *font_file_data = NULL;
+
   hb_font_t *hb_font;
   hb_tag_t script_tag;
   hb_tag_t lang_tag;
@@ -2153,7 +2697,10 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+
+  ft_face = gtk_font_chooser_widget_get_ft_face_from_pango_font (GTK_WIDGET (fontchooser),
+                                                                 pango_font,
+                                                                 font_file_data);
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   if (hb_font)
@@ -2213,7 +2760,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_font_destroy (hb_font);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  gtk_font_chooser_widget_release_ft_face (pango_font, ft_face, font_file_data);
+
   g_object_unref (pango_font);
 
   return has_feature;
@@ -2313,7 +2861,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
       gtk_font_chooser_widget_update_marks (fontchooser);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
       if (gtk_font_chooser_widget_update_font_features (fontchooser))
         has_tweak = TRUE;
       if (gtk_font_chooser_widget_update_font_variations (fontchooser))

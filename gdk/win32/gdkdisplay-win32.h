@@ -25,6 +25,12 @@
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
 
+#ifdef HAVE_HARFBUZZ
+# define COBJMACROS
+# include <hb-ft.h>
+# include "dwrite_c.h"
+#endif
+
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
   PROCESS_DPI_UNAWARE = 0,
@@ -113,6 +119,12 @@ struct _GdkWin32Display
 
   /* Message filters */
   GList *filters;
+
+#ifdef HAVE_HARFBUZZ
+  IDWriteFactory *dwrite_factory;
+  IDWriteGdiInterop *dwrite_gdi_interop;
+  FT_Library ft_lib;
+#endif
 };
 
 struct _GdkWin32DisplayClass

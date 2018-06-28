@@ -11,20 +11,53 @@
  * axes are also offered for customization.
  */
 
+#include "config.h"
+
+#define GTK_DEMO_FONT_FEATURES
+
 #include <gtk/gtk.h>
-#include <pango/pangofc-font.h>
+
+#ifdef HAVE_PANGOFT
+# include <pango/pangofc-font.h>
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <pango/pangowin32.h>
+
+extern GType _pango_win32_font_get_type (void) G_GNUC_CONST;
+
+#define PANGO_TYPE_WIN32_FONT            (_pango_win32_font_get_type ())
+#define PANGO_WIN32_FONT(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_WIN32_FONT, PangoWin32Font))
+#define PANGO_WIN32_FONT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+#define PANGO_WIN32_IS_FONT(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_WIN32_FONT))
+#define PANGO_WIN32_IS_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_WIN32_FONT))
+#define PANGO_WIN32_FONT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+#endif
+
 #include <hb.h>
 #include <hb-ot.h>
+
 #include <hb-ft.h>
 #include <freetype/ftmm.h>
 #include <freetype/ftsnames.h>
 #include <freetype/ttnameid.h>
+
 #include <glib/gi18n.h>
 
 #include "open-type-layout.h"
 #include "fontplane.h"
 #include "script-names.h"
 #include "language-names.h"
+
+#ifdef GDK_WINDOWING_WIN32
+
+extern FT_Face gtk_font_chooser_widget_get_ft_face_from_pango_font (GtkWidget *widget, PangoFont *pango_font, FT_Byte *font_file_data);
+extern void gtk_font_chooser_widget_release_ft_face (PangoFont *pango_font, FT_Face ft_face, FT_Byte *font_file_data);
+extern GHashTable *gtk_font_chooser_widget_get_win32_locales (void);
+
+#endif
 
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
@@ -439,12 +472,12 @@ typedef struct {
   hb_tag_t lang_tag;
   unsigned int script_index;
   unsigned int lang_index;
-} TagPair;
+} TagPairHB;
 
 static guint
 tag_pair_hash (gconstpointer data)
 {
-  const TagPair *pair = data;
+  const TagPairHB *pair = data;
 
   return pair->script_tag + pair->lang_tag;
 }
@@ -452,8 +485,8 @@ tag_pair_hash (gconstpointer data)
 static gboolean
 tag_pair_equal (gconstpointer a, gconstpointer b)
 {
-  const TagPair *pair_a = a;
-  const TagPair *pair_b = b;
+  const TagPairHB *pair_a = a;
+  const TagPairHB *pair_b = b;
 
   return pair_a->script_tag == pair_b->script_tag && pair_a->lang_tag == pair_b->lang_tag;
 }
@@ -484,15 +517,19 @@ update_script_combo (void)
   GtkListStore *store;
   hb_font_t *hb_font;
   gint i, j, k;
-  FT_Face ft_face;
   PangoFont *pango_font;
   GHashTable *tags;
   GHashTableIter iter;
-  TagPair *pair;
   char *lang;
   hb_tag_t active;
   GtkTreeIter active_iter;
   gboolean have_active = FALSE;
+  gboolean use_pango_fc = FALSE;
+  gboolean use_pango_win32 = FALSE;
+
+  FT_Face ft_face;
+  FT_Byte *font_file_data = NULL;
+  TagPairHB *pair;
 
   lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (font));
   active = hb_ot_tag_from_language (hb_language_from_string (lang, -1));
@@ -501,12 +538,15 @@ update_script_combo (void)
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
   pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+
+  ft_face = gtk_font_chooser_widget_get_ft_face_from_pango_font (GTK_WIDGET (font),
+                                                                 pango_font,
+                                                                 font_file_data);
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
 
-  pair = g_new (TagPair, 1);
+  pair = g_new (TagPairHB, 1);
   pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
   pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
   g_hash_table_add (tags, pair);
@@ -528,11 +568,10 @@ update_script_combo (void)
             {
               hb_tag_t languages[80];
               unsigned int language_count = G_N_ELEMENTS (languages);
-
               hb_ot_layout_script_get_language_tags (hb_face, tables[i], j, 0, &language_count, languages);
               for (k = 0; k < language_count; k++)
                 {
-                  pair = g_new (TagPair, 1);
+                  pair = g_new (TagPairHB, 1);
                   pair->script_tag = scripts[j];
                   pair->lang_tag = languages[k];
                   pair->script_index = j;
@@ -545,7 +584,8 @@ update_script_combo (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  gtk_font_chooser_widget_release_ft_face (pango_font, ft_face, font_file_data);
+
   g_object_unref (pango_font);
 
   g_hash_table_iter_init (&iter, tags);
@@ -557,9 +597,19 @@ update_script_combo (void)
 
       if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
         langname = NC_("Language", "Default");
+
       else
         {
+#ifdef GDK_WINDOWING_WIN32
+          GHashTable *ht_win32_languages = NULL;
+          hb_language_t lang;
+
+          ht_win32_languages = gtk_font_chooser_widget_get_win32_locales ();
+          lang = hb_ot_tag_to_language (pair->lang_tag);
+          langname = g_hash_table_lookup (ht_win32_languages, lang);
+#else
           langname = get_language_name_for_tag (pair->lang_tag);
+#endif
           if (!langname)
             {
               hb_tag_to_string (pair->lang_tag, langbuf);
@@ -603,9 +653,10 @@ update_features (void)
   GtkTreeIter iter;
   guint script_index, lang_index;
   PangoFont *pango_font;
-  FT_Face ft_face;
   hb_font_t *hb_font;
   GList *l;
+  FT_Face ft_face;
+  FT_Byte *font_file_data = NULL;
 
   for (l = feature_items; l; l = l->next)
     {
@@ -628,7 +679,10 @@ update_features (void)
                       -1);
 
   pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+
+  ft_face = gtk_font_chooser_widget_get_ft_face_from_pango_font (GTK_WIDGET (font),
+                                                                 pango_font,
+                                                                 font_file_data);
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   if (hb_font)
@@ -715,7 +769,7 @@ update_features (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  gtk_font_chooser_widget_release_ft_face (pango_font, ft_face, font_file_data);
   g_object_unref (pango_font);
 }
 
@@ -1516,9 +1570,11 @@ update_font_variations (void)
 {
   GtkWidget *child, *next;
   PangoFont *pango_font;
+
   FT_Face ft_face;
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
+  FT_Byte *font_file_data = NULL;
 
   child = gtk_widget_get_first_child (variations_grid);
   while (child != NULL)
@@ -1534,7 +1590,11 @@ update_font_variations (void)
   g_hash_table_remove_all (instances);
 
   pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+
+  
+  ft_face = gtk_font_chooser_widget_get_ft_face_from_pango_font (GTK_WIDGET (font),
+                                                                 pango_font,
+                                                                 font_file_data);
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -1588,7 +1648,7 @@ update_font_variations (void)
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  gtk_font_chooser_widget_release_ft_face (pango_font, ft_face, font_file_data);
   g_object_unref (pango_font);
 }
 
