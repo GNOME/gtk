@@ -2938,11 +2938,13 @@ gdk_wayland_window_map (GdkWindow *window)
       else
         {
           gdk_wayland_window_create_xdg_toplevel (window);
+          gdk_wayland_window_announce_decoration_mode (window);
         }
     }
   else
     {
       gdk_wayland_window_create_xdg_toplevel (window);
+      gdk_wayland_window_announce_decoration_mode (window);
     }
 
   impl->mapped = TRUE;
