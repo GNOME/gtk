@@ -3108,6 +3108,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           impl->application.was_set = FALSE;
         }
 
+      if (impl->display_server.server_decoration)
+        {
+          org_kde_kwin_server_decoration_destroy (impl->display_server.server_decoration);
+          impl->display_server.server_decoration = NULL;
+        }
+
       wl_surface_destroy (impl->display_server.wl_surface);
       impl->display_server.wl_surface = NULL;
 
