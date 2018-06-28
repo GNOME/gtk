@@ -259,6 +259,7 @@ static void calculate_moved_to_rect_result (GdkWindow    *window,
 
 static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
 static void gdk_wayland_window_unexport (GdkWindow *window);
+static void gdk_wayland_window_announce_decoration_mode (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -2069,6 +2070,21 @@ window_anchor_to_gravity_legacy (GdkGravity rect_anchor)
 }
 
 static void
+kwin_server_decoration_mode_set (void *data, struct org_kde_kwin_server_decoration *org_kde_kwin_server_decoration, uint32_t mode)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if ((mode == ORG_KDE_KWIN_SERVER_DECORATION_MODE_SERVER && impl->using_csd) ||
+        (mode == ORG_KDE_KWIN_SERVER_DECORATION_MODE_CLIENT && !impl->using_csd))
+    gdk_wayland_window_announce_decoration_mode (window);
+}
+
+static const struct org_kde_kwin_server_decoration_listener kwin_server_decoration_listener = {
+  kwin_server_decoration_mode_set
+};
+
+static void
 gdk_wayland_window_announce_decoration_mode (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
@@ -2077,9 +2093,15 @@ gdk_wayland_window_announce_decoration_mode (GdkWindow *window)
   if (!display_wayland->server_decoration_manager)
     return;
   if (!impl->display_server.server_decoration)
-    impl->display_server.server_decoration =
-      org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                                                       impl->display_server.wl_surface);
+    {
+      impl->display_server.server_decoration =
+        org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
+                                                                                         impl->display_server.wl_surface);
+      org_kde_kwin_server_decoration_add_listener (impl->display_server.server_decoration,
+                                                                                &kwin_server_decoration_listener,
+                                                                                window);
+  }
+
   if (impl->display_server.server_decoration)
     {
       if (impl->using_csd)
