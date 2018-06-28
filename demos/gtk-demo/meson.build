@@ -105,7 +105,7 @@ executable('gtk4-demo',
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
-           gui_app: true,
+#           gui_app: true,
            link_args: extra_demo_ldflags,
            install: true)
 
