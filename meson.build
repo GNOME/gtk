@@ -313,6 +313,7 @@ gobject_dep    = dependency('gobject-2.0', version: glib_req,
 if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
                             fallback : ['glib', 'libgio_dep'])
+  dwrite_dep = cc.find_library('dwrite', required : true)
 endif
 if os_unix
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
