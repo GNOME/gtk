@@ -99,6 +99,24 @@ void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
 #endif
 
+#if defined (HAVE_HARFBUZZ) && \
+    (defined (INSIDE_GDK_WIN32) || defined (GDK_COMPILATION) || \
+     defined (GTK_COMPILATION) || defined (GTK_DEMO_FONT_FEATURES))
+
+/* For internal GTK use only */
+#define COBJMACROS
+#include "dwrite_c.h"
+#include <hb-ft.h>
+
+GDK_AVAILABLE_IN_ALL
+IDWriteFont *gdk_win32_get_dwrite_font_from_pango_font (GdkDisplay *display,
+                                                        PangoFont  *pango_font);
+
+GDK_AVAILABLE_IN_ALL
+FT_Face gdk_win32_get_ft_face_from_pango_font (GdkDisplay *display,
+                                               PangoFont  *pango_font);
+
+#endif
 G_END_DECLS
 
 #endif /* __GDK_WIN32_MISC_H__ */
