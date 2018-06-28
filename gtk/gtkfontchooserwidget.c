@@ -56,15 +56,33 @@
 #include "gtkgesturemultipress.h"
 #include "gtkeventcontrollerscroll.h"
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
-#include <hb.h>
-#include <hb-ot.h>
-#include <hb-ft.h>
-#include <freetype/freetype.h>
-#include <freetype/ftmm.h>
-#include "language-names.h"
-#include "script-names.h"
+#if defined(HAVE_HARFBUZZ)
+# if defined GDK_WINDOWING_WIN32
+#  include <pango/pangowin32.h>
+# endif
+# if defined(HAVE_PANGOFT)
+#  include <pango/pangofc-font.h>
+# endif
+
+# include <hb.h>
+# include <hb-ot.h>
+
+# if defined(HAVE_PANGOFT)
+#  include <hb-ft.h>
+#  include <freetype/freetype.h>
+#  include <freetype/ftmm.h>
+#  include "language-names.h"
+#  include "script-names.h"
+# endif
+
+# if defined GDK_WINDOWING_WIN32
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
+#  include <initguid.h>
+
+#  include "dwrite_c.h"
+#  include <hb-uniscribe.h>
+# endif
 #endif
 
 #include "open-type-layout.h"
@@ -773,7 +791,9 @@ change_tweak (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
+
+#ifdef HAVE_PANGOFT
 
 typedef struct {
   guint32 tag;
@@ -820,13 +840,32 @@ axis_free (gpointer v)
 
   g_free (a);
 }
+#endif
 
+#ifdef GDK_WINDOWING_WIN32
+static IDWriteFactory *
+get_dwrite_factory (void)
+{
+  HRESULT hr = S_OK;
+  IDWriteFactory *dwrite_factory = NULL;
+
+  hr = DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED,
+                            &IID_IDWriteFactory,
+                            (IUnknown **) &dwrite_factory);
+
+  return SUCCEEDED (hr) ? dwrite_factory : NULL;
+}
+#endif
 #endif
 
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv;
+
+#ifdef GDK_WINDOWING_WIN32
+  IDWriteFactory *dwrite_factory = NULL;
+#endif
 
   fontchooser->priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   priv = fontchooser->priv;
@@ -835,8 +874,13 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
+# ifdef HAVE_PANGOFT
   priv->axes = g_hash_table_new_full (axis_hash, axis_equal, NULL, axis_free);
+# endif
+# ifdef GDK_WINDOWING_WIN32
+  dwrite_factory = get_dwrite_factory ();
+# endif
 #endif
 
   /* Default preview string  */
@@ -875,7 +919,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
   gtk_font_chooser_widget_populate_features (fontchooser);
 #endif
 
@@ -1465,12 +1509,13 @@ gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
     }
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
 
 /* OpenType variations */
 
 #define FixedToFloat(f) (((float)(f))/65536.0)
 
+#ifdef HAVE_PANGOFT
 static void
 add_font_variations (GtkFontChooserWidget *fontchooser,
                      GString              *s)
@@ -1610,12 +1655,15 @@ add_axis (GtkFontChooserWidget *fontchooser,
 
   return TRUE;
 }
+#endif
 
 static gboolean
 gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
+ 
+#ifdef HAVE_PANGOFT
   FT_Face ft_face;
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
@@ -1665,6 +1713,8 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
     }
 
   pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   return has_axis;
@@ -1839,6 +1889,8 @@ find_affected_text (hb_tag_t   feature_tag,
                                               glyphs_output);
 
           hb_font = hb_font_create (hb_face);
+
+#ifdef HAVE_PANGOFT
           hb_ft_font_set_funcs (hb_font);
 
           gid = -1;
@@ -1861,6 +1913,7 @@ find_affected_text (hb_tag_t   feature_tag,
           }
           hb_set_destroy (glyphs_input);
           hb_font_destroy (hb_font);
+#endif
         }
     }
 
@@ -2131,7 +2184,11 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
+
+#ifdef HAVE_PANGOFT
   FT_Face ft_face;
+#endif
+
   hb_font_t *hb_font;
   hb_tag_t script_tag;
   hb_tag_t lang_tag;
@@ -2153,6 +2210,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
+
+#ifdef HAVE_PANGOFT
   ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
   hb_font = hb_ft_font_create (ft_face, NULL);
 
@@ -2214,6 +2273,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
     }
 
   pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   return has_feature;
@@ -2313,7 +2374,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
       gtk_font_chooser_widget_update_marks (fontchooser);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
       if (gtk_font_chooser_widget_update_font_features (fontchooser))
         has_tweak = TRUE;
       if (gtk_font_chooser_widget_update_font_variations (fontchooser))
