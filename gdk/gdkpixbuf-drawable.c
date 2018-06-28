@@ -24,7 +24,7 @@
 
 #include "gdkpixbuf.h"
 
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -32,13 +32,13 @@
 /**
  * SECTION:pixbufs
  * @Short_description: Functions for obtaining pixbufs
- * @Title: Pixbufs
+ * @Title: GdkPixbuf Interaction
  *
  * Pixbufs are client-side images. For details on how to create
  * and manipulate pixbufs, see the #GdkPixbuf API documentation.
  *
  * The functions described here allow to obtain pixbufs from
- * #GdkWindows and cairo surfaces.
+ * #GdkSurfaces and cairo surfaces.
  */
 
 static cairo_format_t

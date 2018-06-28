@@ -24,9 +24,8 @@
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 
 #include <epoxy/egl.h>
 
@@ -47,7 +46,7 @@ struct _GdkWaylandGLContextClass
 };
 
 gboolean        gdk_wayland_display_init_gl                         (GdkDisplay        *display);
-GdkGLContext *  gdk_wayland_window_create_gl_context                (GdkWindow         *window,
+GdkGLContext *  gdk_wayland_surface_create_gl_context                (GdkSurface         *surface,
 								     gboolean           attach,
                                                                      GdkGLContext      *share,
                                                                      GError           **error);

@@ -1,16 +1,10 @@
 <SECTION>
 <FILE>GskRenderer</FILE>
-gsk_renderer_new_for_window
-gsk_renderer_set_viewport
-gsk_renderer_get_viewport
-gsk_renderer_set_scale_factor
-gsk_renderer_get_scale_factor
-gsk_renderer_get_window
+gsk_renderer_new_for_surface
+gsk_renderer_get_surface
 gsk_renderer_get_display
 gsk_renderer_realize
 gsk_renderer_unrealize
-gsk_renderer_begin_draw_frame
-gsk_renderer_end_draw_frame
 gsk_renderer_render
 gsk_renderer_render_texture
 <SUBSECTION Standard>
@@ -35,9 +29,6 @@ gsk_render_node_serialize
 gsk_render_node_deserialize
 gsk_render_node_write_to_file
 GskScalingFilter
-gsk_render_node_set_scaling_filters
-gsk_render_node_set_name
-gsk_render_node_get_name
 gsk_render_node_get_bounds
 
 <SUBSECTION Nodes>
@@ -77,6 +68,10 @@ gsk_container_node_get_child
 gsk_transform_node_new
 gsk_transform_node_get_child
 gsk_transform_node_peek_transform
+gsk_offset_node_new
+gsk_offset_node_get_child
+gsk_offset_node_get_x_offset
+gsk_offset_node_get_y_offset
 gsk_opacity_node_new
 gsk_opacity_node_get_child
 gsk_opacity_node_get_opacity
@@ -115,6 +110,9 @@ gsk_text_node_get_y
 gsk_blur_node_new
 gsk_blur_node_get_child
 gsk_blur_node_get_radius
+gsk_debug_node_new
+gsk_debug_node_get_child
+gsk_debug_node_get_message
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE
@@ -128,21 +126,6 @@ GSK_TYPE_BLEND_MODE
 gsk_serialization_error_quark
 GSK_SERIALIZATION_ERROR
 GSK_TYPE_SERIALIZATION_ERROR
-</SECTION>
-
-<SECTION>
-<FILE>GskTexture</FILE>
-gsk_texture_new_for_data
-gsk_texture_new_for_surface
-gsk_texture_new_for_pixbuf
-gsk_texture_get_width
-gsk_texture_get_height
-gsk_texture_download
-<SUBSECTION Standard>
-GskTexture
-gsk_texture_get_type
-GSK_TYPE_TEXTURE
-GSK_IS_TEXTURE
 </SECTION>
 
 <SECTION>

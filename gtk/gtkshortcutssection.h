@@ -19,8 +19,11 @@
 #ifndef __GTK_SHORTCUTS_SECTION_H__
 #define __GTK_SHORTCUTS_SECTION_H__
 
-#include <gtk/gtkbox.h>
-#include <gtk/gtkshortcutsgroup.h>
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -35,7 +38,7 @@ G_BEGIN_DECLS
 typedef struct _GtkShortcutsSection      GtkShortcutsSection;
 typedef struct _GtkShortcutsSectionClass GtkShortcutsSectionClass;
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GType        gtk_shortcuts_section_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

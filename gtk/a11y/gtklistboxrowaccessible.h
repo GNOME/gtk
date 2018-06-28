@@ -22,7 +22,6 @@
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
 #include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
@@ -47,7 +46,7 @@ struct _GtkListBoxRowAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GType gtk_list_box_row_accessible_get_type (void);
 
 G_END_DECLS

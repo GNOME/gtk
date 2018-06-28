@@ -60,9 +60,6 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * elements. It’s essentially a blank widget; you can draw on it. After
  * creating a drawing area, the application may want to connect to:
  *
- * - Mouse and button press signals to respond to input from
- *   the user.
- *
  * - The #GtkWidget::realize signal to take any necessary actions
  *   when the widget is instantiated on a particular display.
  *   (Create GDK resources in response to this signal.)
@@ -76,10 +73,6 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * The following code portion demonstrates using a drawing
  * area to display a circle in the normal widget foreground
  * color.
- *
- * Note that GDK automatically clears the exposed area before causing a
- * redraw, and that drawing is implicitly clipped to the exposed
- * area.
  *
  * ## Simple GtkDrawingArea usage
  *
@@ -242,14 +235,15 @@ gtk_drawing_area_snapshot (GtkWidget   *widget,
   if (!priv->draw_func)
     return;
 
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
+
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (
                                       0, 0,
                                       width, height
-                                  ),
-                                  "DrawingAreaContents");
+                                  ));
   priv->draw_func (self,
                    cr,
                    width, height,
@@ -274,8 +268,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
    * GtkDrawingArea:content-width
    *
    * The content width. See gtk_drawing_area_set_content_width() for details.
-   *
-   * Since: 3.90
    */
   props[PROP_CONTENT_WIDTH] =
     g_param_spec_int ("content-width",
@@ -288,8 +280,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
    * GtkDrawingArea:content-height
    *
    * The content height. See gtk_drawing_area_set_content_height() for details.
-   *
-   * Since: 3.90
    */
   props[PROP_CONTENT_HEIGHT] =
     g_param_spec_int ("content-height",
@@ -306,7 +296,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 static void
 gtk_drawing_area_init (GtkDrawingArea *darea)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (darea), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (darea), FALSE);
 }
 
 /**
@@ -334,8 +324,6 @@ gtk_drawing_area_new (void)
  * that.
  *
  * If the width is set to 0 (the default), the drawing area may disappear.
- *
- * Since: 3.90
  **/
 void
 gtk_drawing_area_set_content_width (GtkDrawingArea *self,
@@ -362,8 +350,6 @@ gtk_drawing_area_set_content_width (GtkDrawingArea *self,
  * Retrieves the value previously set via gtk_drawing_area_set_content_width().
  *
  * Returns: The width requested for content of the drawing area
- *
- * Since: 3.90
  **/
 int
 gtk_drawing_area_get_content_width (GtkDrawingArea *self)
@@ -387,8 +373,6 @@ gtk_drawing_area_get_content_width (GtkDrawingArea *self)
  * that.
  *
  * If the height is set to 0 (the default), the drawing area may disappear.
- *
- * Since: 3.90
  **/
 void
 gtk_drawing_area_set_content_height (GtkDrawingArea *self,
@@ -415,8 +399,6 @@ gtk_drawing_area_set_content_height (GtkDrawingArea *self,
  * Retrieves the value previously set via gtk_drawing_area_set_content_height().
  *
  * Returns: The height requested for content of the drawing area
- *
- * Since: 3.90
  **/
 int
 gtk_drawing_area_get_content_height (GtkDrawingArea *self)
@@ -447,9 +429,7 @@ gtk_drawing_area_get_content_height (GtkDrawingArea *self)
  * function.
  *
  * If what you are drawing does change, call gtk_widget_queue_draw() on the
- * drawing area. This will call a redraw and will call @draw_func again.
- *
- * Since: 3.90
+ * drawing area. This will cause a redraw and will call @draw_func again.
  */
 void
 gtk_drawing_area_set_draw_func (GtkDrawingArea         *self,

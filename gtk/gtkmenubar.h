@@ -71,7 +71,7 @@ GDK_AVAILABLE_IN_ALL
 GType      gtk_menu_bar_get_type        (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_bar_new             (void);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_bar_new_from_model  (GMenuModel *model);
 
 GDK_AVAILABLE_IN_ALL

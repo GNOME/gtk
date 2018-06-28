@@ -660,8 +660,6 @@ gtk_tree_path_new_from_string (const gchar *path)
  * Creates a new path with @first_index and @varargs as indices.
  *
  * Returns: A newly created #GtkTreePath-struct
- *
- * Since: 2.2
  */
 GtkTreePath *
 gtk_tree_path_new_from_indices (gint first_index,
@@ -695,8 +693,6 @@ gtk_tree_path_new_from_indices (gint first_index,
  * Creates a new path with the given @indices array of @length.
  *
  * Returns: A newly created #GtkTreePath-struct
- *
- * Since: 3.12
  */
 GtkTreePath *
 gtk_tree_path_new_from_indicesv (gint *indices,
@@ -886,8 +882,6 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  *
  * Returns: (array length=depth) (transfer none): The current
  *     indices, or %NULL
- *
- * Since: 3.0
  */
 gint *
 gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
@@ -1316,8 +1310,6 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  *
  * Returns: a newly-allocated string.
  *     Must be freed with g_free().
- *
- * Since: 2.2
  */
 gchar *
 gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
@@ -1482,8 +1474,6 @@ gtk_tree_model_iter_previous_default (GtkTreeModel *tree_model,
  * set to be invalid.
  *
  * Returns: %TRUE if @iter has been changed to the previous node
- *
- * Since: 3.0
  */
 gboolean
 gtk_tree_model_iter_previous (GtkTreeModel *tree_model,
@@ -1948,8 +1938,6 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
  *
  * This should be called by models when their rows have been
  * reordered.
- *
- * Since: 3.10
  */
 void
 gtk_tree_model_rows_reordered_with_length (GtkTreeModel *tree_model,
@@ -2426,8 +2414,6 @@ gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
  * Returns the model that the row reference is monitoring.
  *
  * Returns: (transfer none): the model
- *
- * Since: 2.8
  */
 GtkTreeModel *
 gtk_tree_row_reference_get_model (GtkTreeRowReference *reference)
@@ -2463,8 +2449,6 @@ gtk_tree_row_reference_valid (GtkTreeRowReference *reference)
  * Copies a #GtkTreeRowReference.
  *
  * Returns: a copy of @reference
- *
- * Since: 2.2
  */
 GtkTreeRowReference *
 gtk_tree_row_reference_copy (GtkTreeRowReference *reference)

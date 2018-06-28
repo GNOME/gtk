@@ -44,15 +44,11 @@ G_BEGIN_DECLS
 #define GTK_FRAME_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FRAME, GtkFrameClass))
 
 typedef struct _GtkFrame              GtkFrame;
-typedef struct _GtkFramePrivate       GtkFramePrivate;
 typedef struct _GtkFrameClass         GtkFrameClass;
 
 struct _GtkFrame
 {
-  GtkBin bin;
-
-  /*< private >*/
-  GtkFramePrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**
@@ -97,12 +93,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_frame_get_label_widget (GtkFrame      *frame);
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_align  (GtkFrame      *frame,
-				       gfloat         xalign,
-				       gfloat         yalign);
+				       gfloat         xalign);
 GDK_AVAILABLE_IN_ALL
-void       gtk_frame_get_label_align  (GtkFrame      *frame,
-				       gfloat        *xalign,
-				       gfloat        *yalign);
+gfloat     gtk_frame_get_label_align  (GtkFrame      *frame);
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_shadow_type  (GtkFrame      *frame,
 				       GtkShadowType  type);

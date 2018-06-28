@@ -31,6 +31,9 @@ struct _GtkEventControllerClass
 {
   GObjectClass parent_class;
 
+  void     (* set_widget)   (GtkEventController *controller,
+                             GtkWidget          *widget);
+  void     (* unset_widget) (GtkEventController *controller);
   gboolean (* handle_event) (GtkEventController *controller,
                              const GdkEvent     *event);
   void     (* reset)        (GtkEventController *controller);

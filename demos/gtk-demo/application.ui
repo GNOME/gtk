@@ -7,35 +7,29 @@
     <property name="icon-name">document-open</property>
     <child>
       <object class="GtkGrid">
-        <property name="visible">1</property>
         <child>
           <object class="GtkToolbar">
-            <property name="visible">1</property>
             <property name="hexpand">1</property>
             <style>
               <class name="primary-toolbar"/>
             </style>
             <child>
               <object class="GtkMenuToolButton" id="menutool">
-                <property name="visible">1</property>
                 <property name="icon-name">document-open</property>
               </object>
             </child>
             <child>
               <object class="GtkToolButton">
-                <property name="visible">1</property>
                 <property name="icon-name">application-exit</property>
                 <property name="action-name">app.quit</property>
               </object>
             </child>
             <child>
               <object class="GtkSeparatorToolItem">
-                <property name="visible">1</property>
               </object>
             </child>
             <child>
               <object class="GtkToolButton">
-                <property name="visible">1</property>
                 <property name="icon-name">applications-other</property>
                 <property name="action-name">win.logo</property>
               </object>
@@ -54,7 +48,6 @@
               <object class="GtkBox" id="content_area">
                 <child>
                   <object class="GtkLabel" id="message">
-                    <property name="visible">1</property>
                     <property name="hexpand">1</property>
                   </object>
                 </child>
@@ -64,10 +57,9 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkButton">
-                    <property name="visible">1</property>
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">_OK</property>
-                    <property name="use_underline">1</property>
+                    <property name="use-underline">1</property>
                     <signal name="clicked" handler="clicked_cb"/>
                   </object>
                 </child>
@@ -81,11 +73,9 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="visible">1</property>
             <property name="shadow-type">in</property>
             <child>
               <object class="GtkTextView">
-                <property name="visible">1</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
                 <property name="buffer">buffer</property>
@@ -100,7 +90,6 @@
         <child>
           <object class="GtkStatusbar" id="status">
             <property name="hexpand">1</property>
-            <property name="visible">1</property>
           </object>
           <packing>
             <property name="left-attach">0</property>

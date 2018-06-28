@@ -29,7 +29,7 @@ gtk_cell_accessible_parent_get_type (void)
     {
       GType g_define_type_id =
         g_type_register_static_simple (G_TYPE_INTERFACE,
-                                       "GtkCellAccessibleParent",
+                                       g_intern_static_string ("GtkCellAccessibleParent"),
                                        sizeof (GtkCellAccessibleParentIface),
                                        NULL,
                                        0,

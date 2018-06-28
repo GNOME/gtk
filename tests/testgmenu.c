@@ -103,9 +103,9 @@ get_model (void)
   gtk_builder_add_from_string (builder, menu_markup, -1, &error);
   g_assert_no_error (error);
 
-  menu = g_object_ref (gtk_builder_get_object (builder, "edit-menu"));
+  menu = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "edit-menu")));
 
-  section = g_object_ref (gtk_builder_get_object (builder, "size-placeholder"));
+  section = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "size-placeholder")));
   g_object_unref (builder);
 
   for (i = 0.5; i <= 2.0; i += 0.5)
@@ -597,15 +597,6 @@ create_add_remove_buttons (GActionGroup *group,
 #define BUS_NAME "org.gtk.TestMenus"
 #define OBJ_PATH "/org/gtk/TestMenus"
 
-static gboolean
-on_delete_event (GtkWidget   *widget,
-		 GdkEvent    *event,
-		 gpointer     user_data)
-{
-  gtk_main_quit ();
-  return TRUE;
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -639,7 +630,7 @@ main (int argc, char *argv[])
     }
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "delete-event", G_CALLBACK(on_delete_event), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (window), box);
 

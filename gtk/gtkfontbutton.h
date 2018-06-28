@@ -47,16 +47,14 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFontButton        GtkFontButton;
 typedef struct _GtkFontButtonClass   GtkFontButtonClass;
-typedef struct _GtkFontButtonPrivate GtkFontButtonPrivate;
 
-struct _GtkFontButton {
+struct _GtkFontButton
+{
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkFontButtonPrivate *priv;
 };
 
-struct _GtkFontButtonClass {
+struct _GtkFontButtonClass
+{
   GtkWidgetClass parent_class;
 
   /* font_set signal is emitted when font is chosen */
@@ -92,21 +90,6 @@ gboolean              gtk_font_button_get_use_size   (GtkFontButton *font_button
 GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_use_size   (GtkFontButton *font_button,
                                                       gboolean       use_size);
-GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_font_button_get_font_name  (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_font_button_set_font_name  (GtkFontButton *font_button,
-                                                      const gchar   *fontname);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_font_button_get_show_style (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_font_button_set_show_style (GtkFontButton *font_button,
-                                                      gboolean       show_style);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_font_button_get_show_size  (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_font_button_set_show_size  (GtkFontButton *font_button,
-                                                      gboolean       show_size);
 
 G_END_DECLS
 

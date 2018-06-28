@@ -330,14 +330,6 @@ widget_populate_popup_cb (GtkAppChooserWidget *widget,
     }
 }
 
-static gboolean
-key_press_event_cb (GtkWidget    *widget,
-                    GdkEvent     *event,
-                    GtkSearchBar *bar)
-{
-  return gtk_search_bar_handle_event (bar, event);
-}
-
 static void
 construct_appchooser_widget (GtkAppChooserDialog *self)
 {
@@ -372,8 +364,9 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
 
   _gtk_app_chooser_widget_set_search_entry (GTK_APP_CHOOSER_WIDGET (self->priv->app_chooser_widget),
                                             GTK_ENTRY (self->priv->search_entry));
-  g_signal_connect (self, "key-press-event",
-                    G_CALLBACK (key_press_event_cb), self->priv->search_bar);
+
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (self->priv->search_bar),
+                                         GTK_WIDGET (self));
 }
 
 static void
@@ -487,7 +480,7 @@ setup_search (GtkAppChooserDialog *self)
 
       button = gtk_toggle_button_new ();
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-      image = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_icon_name ("edit-find-symbolic");
       gtk_widget_show (image);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
@@ -539,6 +532,7 @@ gtk_app_chooser_dialog_finalize (GObject *object)
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
 
   g_free (self->priv->content_type);
+  g_free (self->priv->heading);
 
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->finalize (object);
 }
@@ -646,7 +640,8 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
                                P_("Heading"),
                                P_("The text to show at the top of the dialog"),
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+                               G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
 
   /* Bind class to template
@@ -704,8 +699,6 @@ set_parent_and_flags (GtkWidget      *dialog,
  * to allow the user to select an application for it.
  *
  * Returns: a newly created #GtkAppChooserDialog
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_app_chooser_dialog_new (GtkWindow      *parent,
@@ -735,8 +728,6 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
  * to allow the user to select an application for it.
  *
  * Returns: a newly created #GtkAppChooserDialog
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
@@ -763,8 +754,6 @@ gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
  * Returns the #GtkAppChooserWidget of this dialog.
  *
  * Returns: (transfer none): the #GtkAppChooserWidget of @self
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)

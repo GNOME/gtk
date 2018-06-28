@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gdk/x11/gdkx11screen.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -54,8 +55,26 @@ GDK_AVAILABLE_IN_ALL
 GType      gdk_x11_display_get_type            (void);
 
 GDK_AVAILABLE_IN_ALL
-Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
+GdkDisplay *  gdk_x11_display_open        (const char  *display_name);
 
+GDK_AVAILABLE_IN_ALL
+Display *     gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
+Screen *      gdk_x11_display_get_xscreen      (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
+Window        gdk_x11_display_get_xrootwindow  (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
+Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
+                                                GdkCursor   *cursor);
+
+/**
+ * GDK_DISPLAY_XDISPLAY:
+ * @display: a #GdkDisplay
+ *
+ * Returns the display of a #GdkDisplay.
+ *
+ * Returns: an Xlib Display*
+ */
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
 GDK_AVAILABLE_IN_ALL
@@ -66,6 +85,9 @@ const gchar * gdk_x11_display_get_startup_notification_id         (GdkDisplay *d
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
                                                                    const gchar *startup_id);
+GDK_AVAILABLE_IN_ALL
+void          gdk_x11_display_set_program_class                   (GdkDisplay  *display,
+                                                                   const char  *program_class);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
@@ -81,13 +103,16 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
 GDK_AVAILABLE_IN_ALL
+GdkX11Screen *gdk_x11_display_get_screen (GdkDisplay *display);
+
+GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_3_10
-void        gdk_x11_display_set_window_scale (GdkDisplay *display,
-                                              gint scale);
+GDK_AVAILABLE_IN_ALL
+void        gdk_x11_display_set_surface_scale (GdkDisplay *display,
+                                               gint scale);
 
 GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);

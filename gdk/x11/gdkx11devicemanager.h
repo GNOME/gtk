@@ -23,15 +23,19 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gdk/x11/gdkx11devicemanager-core.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_3_2
-GdkDevice * gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
-                                           gint              device_id);
+GDK_AVAILABLE_IN_ALL
+GdkDevice * gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
+                                           gint                     device_id);
+GDK_AVAILABLE_IN_ALL
+void         gdk_disable_multidevice (void);
+
 
 G_END_DECLS
 

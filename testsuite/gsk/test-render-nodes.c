@@ -134,7 +134,7 @@ cairo (void)
   cairo_t *cr;
 
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 600));
-  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  cr = gsk_cairo_node_get_draw_context (node);
 
   cairo_set_source_rgb (cr, 1, 0, 0);
   cairo_rectangle (cr, 0, 0, 200, 200);
@@ -159,7 +159,7 @@ cairo2 (void)
   int i, j;
 
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 200));
-  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  cr = gsk_cairo_node_get_draw_context (node);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
 
@@ -263,7 +263,7 @@ ducky (void)
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0,
                                                   gdk_pixbuf_get_width (pixbuf),
                                                   gdk_pixbuf_get_height (pixbuf)));
-  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  cr = gsk_cairo_node_get_draw_context (node);
   gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
   cairo_paint (cr);
   cairo_destroy (cr);
@@ -443,6 +443,154 @@ opacity (void)
   return container;
 }
 
+#define N 5
+
+static GskRenderNode *
+color_matrix1 (void)
+{
+  GskRenderNode *container_node;
+  GskRenderNode *cairo_node = cairo ();
+  GskRenderNode *n;
+  GskRenderNode *child_nodes[N];
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
+  graphene_matrix_t transform;
+  float cairo_width = 150;
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (cairo_node, &bounds);
+  cairo_width = bounds.size.width;
+
+  /* First a cairo node inside a color matrix node, where the color matrix node doesn't do anything. */
+  graphene_matrix_init_identity (&matrix);
+  offset = *graphene_vec4_zero ();
+  child_nodes[0] = gsk_color_matrix_node_new (cairo_node, &matrix, &offset);
+
+  /* Now a color matrix node that actually does something. Inside a transform node. */
+  offset = *graphene_vec4_zero ();
+  graphene_matrix_init_scale (&matrix, 0.3, 0.3, 0.3); /* Should make the node darker */
+  n = gsk_color_matrix_node_new (cairo_node, &matrix, &offset);
+  graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (cairo_width, 0, 0));
+  child_nodes[1] = gsk_transform_node_new (n, &transform);
+
+  /* Same as above, but this time we stuff the transform node in the color matrix node, and not vice versa */
+  offset = *graphene_vec4_zero ();
+  graphene_matrix_init_scale (&matrix, 0.3, 0.3, 0.3);
+  graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (2 * cairo_width, 0, 0));
+  n = gsk_transform_node_new (cairo_node, &transform);
+  child_nodes[2] = gsk_color_matrix_node_new (n, &matrix, &offset);
+
+  /* Color matrix inside color matrix, one reversing the other's effect */
+  {
+    graphene_matrix_t inner_matrix;
+    graphene_vec4_t inner_offset = *graphene_vec4_zero ();
+    GskRenderNode *inner_color_matrix_node;
+
+    graphene_matrix_init_scale (&inner_matrix, 0.5, 0.5, 0.5);
+    inner_color_matrix_node = gsk_color_matrix_node_new (cairo_node, &inner_matrix, &inner_offset);
+
+    graphene_matrix_init_scale (&matrix, 2, 2, 2);
+    n = gsk_color_matrix_node_new (inner_color_matrix_node, &matrix, &offset);
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (3 * cairo_width, 0, 0));
+    child_nodes[3] = gsk_transform_node_new (n, &transform);
+  }
+
+  /* Color matrix in color matrix in transform */
+  {
+    graphene_matrix_t inner_matrix;
+    graphene_vec4_t inner_offset = *graphene_vec4_zero ();
+    GskRenderNode *inner_color_matrix_node;
+
+    graphene_matrix_init_scale (&inner_matrix, 0.5, 0.5, 0.5);
+    inner_color_matrix_node = gsk_color_matrix_node_new (cairo_node, &inner_matrix, &inner_offset);
+
+    graphene_matrix_init_scale (&matrix, 2, 2, 2);
+    offset = *graphene_vec4_zero ();
+    n = gsk_color_matrix_node_new (inner_color_matrix_node, &matrix, &offset);
+    graphene_matrix_init_scale (&transform, 1, 1, 1);
+    graphene_matrix_rotate_z (&transform, 350);
+    graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (4 * cairo_width, 0, 0));
+
+    child_nodes[4] = gsk_transform_node_new (n, &transform);
+  }
+
+  container_node = gsk_container_node_new (child_nodes, N);
+
+  return container_node;
+}
+
+#undef N
+
+static GskRenderNode *
+transformed_clip (void)
+{
+  GskRenderNode *container_node;
+  GskRenderNode *transform_node;
+  GskRenderNode *clip_node;
+  GskRenderNode *nodes[4];
+  graphene_matrix_t transform;
+
+  {
+    clip_node = gsk_clip_node_new (ducky (),
+                                   &GRAPHENE_RECT_INIT (0, 0, 200, 500));
+
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (180, 0, 0));
+    nodes[0] = gsk_transform_node_new (clip_node, &transform);
+  }
+
+  {
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (0, 200, 0));
+    transform_node = gsk_transform_node_new (ducky (), &transform);
+
+    nodes[1] = gsk_clip_node_new (transform_node,
+                                  &GRAPHENE_RECT_INIT (0, 0, 500, 250));
+  }
+
+  {
+    graphene_vec3_t axis_vec;
+
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (150, 200, 0));
+    transform_node = gsk_transform_node_new (ducky (), &transform);
+    clip_node = gsk_clip_node_new (transform_node,
+                                   &GRAPHENE_RECT_INIT (150, 200, 91, 100));
+
+    graphene_vec3_init (&axis_vec, 0, 0, 1);
+    graphene_matrix_init_rotate (&transform, 20, &axis_vec);
+    /*graphene_matrix_init_identity (&transform);*/
+    nodes[2] = gsk_transform_node_new (clip_node, &transform);
+
+
+
+    /*GskColorStop *color_stops = g_newa (GskColorStop, 2);*/
+    /*graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (300, 200, 0));*/
+
+    /*color_stops[0] = (GskColorStop){ 0.0f, (GdkRGBA){1, 0, 0, 1}};*/
+    /*color_stops[1] = (GskColorStop){ 1.0f, (GdkRGBA){0, 0, 1, 1}};*/
+    /*clip_node = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 300, 200),*/
+                                              /*&(graphene_point_t) {150, 0},*/
+                                              /*&(graphene_point_t) {150, 200},*/
+                                              /*color_stops,*/
+                                              /*2);*/
+
+    /*nodes[2] = gsk_transform_node_new (clip_node, &transform);*/
+  }
+
+  {
+    graphene_vec3_t axis_vec;
+
+    graphene_vec3_init (&axis_vec, 0, 0, 1);
+    graphene_matrix_init_rotate (&transform, 20, &axis_vec);
+    graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (350, 200, 0));
+    transform_node = gsk_transform_node_new (ducky (), &transform);
+    nodes[3] = gsk_clip_node_new (transform_node,
+                                   &GRAPHENE_RECT_INIT (350, 200, 91, 100));
+  }
+
+  container_node = gsk_container_node_new (nodes, 4);
+
+  return container_node;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
@@ -456,6 +604,8 @@ static const struct {
   { "cross-fades.node", cross_fades },
   { "transform.node", transform },
   { "opacity.node", opacity },
+  { "color-matrix1.node", color_matrix1},
+  { "transformed-clip.node", transformed_clip}
 };
 
 /*** test setup ***/
@@ -520,8 +670,8 @@ load_node_file (GFile *file, gboolean generate)
   GBytes *bytes;
   GskRenderNode *node;
   GskRenderer *renderer;
-  GdkWindow *window;
-  GskTexture *texture = NULL;
+  GdkSurface *window;
+  GdkTexture *texture = NULL;
   cairo_surface_t *surface;
   char *png_file;
   cairo_surface_t *ref_surface;
@@ -549,14 +699,14 @@ load_node_file (GFile *file, gboolean generate)
       return;
     }
 
-  window = gdk_window_new_toplevel (gdk_display_get_default(), 0, 10 , 10);
-  renderer = gsk_renderer_new_for_window (window);
+  window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
+  renderer = gsk_renderer_new_for_surface (window);
   texture = gsk_renderer_render_texture (renderer, node, NULL);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gsk_texture_get_width (texture),
-                                        gsk_texture_get_height (texture));
-  gsk_texture_download (texture,
+                                        gdk_texture_get_width (texture),
+                                        gdk_texture_get_height (texture));
+  gdk_texture_download (texture,
                         cairo_image_surface_get_data (surface),
                         cairo_image_surface_get_stride (surface));
   cairo_surface_mark_dirty (surface);
@@ -572,8 +722,9 @@ load_node_file (GFile *file, gboolean generate)
 
   g_object_unref (texture);
   g_object_unref (window);
+  gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
-  gdk_window_destroy (window);
+  gdk_surface_destroy (window);
 
   gsk_render_node_unref (node);
 
@@ -708,6 +859,7 @@ generate (const char *name)
 {
   int i;
   GError *error = NULL;
+  gboolean wrote_file = FALSE;
 
   for (i = 0; i < G_N_ELEMENTS (functions); i++)
     {
@@ -728,9 +880,13 @@ generate (const char *name)
             }
 
           gsk_render_node_unref (node);
+          wrote_file = TRUE;
           break;
         }
     }
+
+  if (!wrote_file)
+    g_warning ("Could not generate %s", name);
 }
 
 int

@@ -139,6 +139,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_EASE = {
   gtk_css_value_ease_compute,
   gtk_css_value_ease_equal,
   gtk_css_value_ease_transition,
+  NULL,
+  NULL,
   gtk_css_value_ease_print
 };
 

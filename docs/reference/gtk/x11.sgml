@@ -86,19 +86,6 @@ The X11 GDK backend can be influenced with some additional environment variables
   </para>
 </formalpara>
 
-<formalpara>
-  <title><envar>GDK_DPI_SCALE</envar></title>
-
-  <para>
-    This can be useful when using scale-aware GTK+ applications together
-    with scale-unaware applications on a high-dpi display. In that case,
-    the font resolution can be doubled to make scale-unaware applications
-    readable, and <envar>GDK_DPI_SCALE=0.5</envar> can be set to compensate
-    for that in GTK+ applications which are already scaled by setting
-    <envar>GDK_SCALE=2</envar>.
-  </para>
-</formalpara>
-
 </refsect2>
 
 </refsect1>

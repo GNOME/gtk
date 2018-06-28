@@ -25,16 +25,14 @@ gtk_gizmo_measure (GtkWidget      *widget,
 static void
 gtk_gizmo_size_allocate (GtkWidget           *widget,
                          const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
+                         int                  baseline)
 {
   GtkGizmo *self = GTK_GIZMO (widget);
 
   if (self->allocate_func)
     self->allocate_func (self,
                          allocation,
-                         baseline,
-                         out_clip);
+                         baseline);
 }
 
 static void
@@ -84,7 +82,7 @@ gtk_gizmo_class_init (GtkGizmoClass *klass)
 static void
 gtk_gizmo_init (GtkGizmo *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 GtkWidget *

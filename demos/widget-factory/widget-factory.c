@@ -64,7 +64,7 @@ get_idle (gpointer data)
   GtkApplication *app = gtk_window_get_application (GTK_WINDOW (window));
 
   gtk_widget_set_sensitive (window, TRUE);
-  gdk_window_set_cursor (gtk_widget_get_window (window), NULL);
+  gdk_surface_set_cursor (gtk_widget_get_surface (window), NULL);
   g_application_unmark_busy (G_APPLICATION (app));
 
   return G_SOURCE_REMOVE;
@@ -80,8 +80,8 @@ get_busy (GSimpleAction *action,
   GtkApplication *app = gtk_window_get_application (GTK_WINDOW (window));
 
   g_application_mark_busy (G_APPLICATION (app));
-  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (window), "wait");
-  gdk_window_set_cursor (gtk_widget_get_window (window), cursor);
+  cursor = gdk_cursor_new_from_name ("wait", NULL);
+  gdk_surface_set_cursor (gtk_widget_get_surface (window), cursor);
   g_object_unref (cursor);
   g_timeout_add (5000, get_idle, window);
 
@@ -353,7 +353,6 @@ update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 static void
 on_entry_icon_release (GtkEntry            *entry,
                        GtkEntryIconPosition icon_pos,
-                       GdkEvent            *event,
                        gpointer             user_data)
 {
   if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
@@ -1082,7 +1081,7 @@ set_accel (GtkApplication *app, GtkWidget *widget)
 typedef struct
 {
   GtkTextView tv;
-  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
 } MyTextView;
 
 typedef GtkTextViewClass MyTextViewClass;
@@ -1101,10 +1100,10 @@ my_tv_draw_layer (GtkTextView      *widget,
 {
   MyTextView *tv = (MyTextView *)widget;
 
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->surface)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->pixbuf)
     {
       cairo_save (cr);
-      cairo_set_source_surface (cr, tv->surface, 0.0, 0.0);
+      gdk_cairo_set_source_pixbuf (cr, tv->pixbuf, 0.0, 0.0);
       cairo_paint_with_alpha (cr, 0.333);
       cairo_restore (cr);
     }
@@ -1115,8 +1114,7 @@ my_tv_finalize (GObject *object)
 {
   MyTextView *tv = (MyTextView *)object;
 
-  if (tv->surface)
-    cairo_surface_destroy (tv->surface);
+  g_clear_object (&tv->pixbuf);
 
   G_OBJECT_CLASS (my_text_view_parent_class)->finalize (object);
 }
@@ -1134,28 +1132,20 @@ my_text_view_class_init (MyTextViewClass *class)
 static void
 my_text_view_set_background (MyTextView *tv, const gchar *filename)
 {
-  GdkPixbuf *pixbuf;
   GError *error = NULL;
 
-  if (tv->surface)
-    cairo_surface_destroy (tv->surface);
-
-  tv->surface = NULL;
+  g_clear_object (&tv->pixbuf);
 
   if (filename == NULL)
     return;
 
-  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+  tv->pixbuf = gdk_pixbuf_new_from_file (filename, &error);
   if (error)
     {
       g_warning ("%s", error->message);
       g_error_free (error);
       return;
     }
-
-  tv->surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
-
-  g_object_unref (pixbuf);
 
   gtk_widget_queue_draw (GTK_WIDGET (tv));
 }
@@ -1232,10 +1222,10 @@ static void
 handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 {
   GtkTextBuffer *buffer;
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
   const gchar *id;
 
-  clipboard = gtk_widget_get_clipboard (textview, GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_clipboard (textview);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
 
@@ -1250,13 +1240,13 @@ handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 }
 
 static void
-clipboard_owner_change (GtkClipboard *clipboard, GdkEvent *event, GtkWidget *button)
+clipboard_formats_notify (GdkClipboard *clipboard, GdkEvent *event, GtkWidget *button)
 {
   const gchar *id;
   gboolean has_text;
 
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
-  has_text = gtk_clipboard_wait_is_text_available (clipboard);
+  has_text = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_TEXT_BUFFER);
 
   if (strcmp (id, "pastebutton") == 0)
     gtk_widget_set_sensitive (button, has_text);
@@ -1278,8 +1268,13 @@ textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *butt
 }
 
 static gboolean
-osd_frame_button_press (GtkWidget *frame, GdkEventButton *event, gpointer data)
+osd_frame_pressed (GtkGestureMultiPress *gesture,
+                   int                   press,
+                   double                x,
+                   double                y,
+                   gpointer              data)
 {
+  GtkWidget *frame = data;
   GtkWidget *osd;
   gboolean visible;
 
@@ -1523,17 +1518,17 @@ g_test_permission_class_init (GTestPermissionClass *class)
   permission_class->release_finish = release_finish;
 }
 
-static int icon_sizes[] = {0, 1, 2, 3, 4, 5, 6};
-
 static void
-update_buttons (GtkWidget *iv, int pos)
+update_buttons (GtkWidget *iv, GtkIconSize size)
 {
   GtkWidget *button;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "increase_button"));
-  gtk_widget_set_sensitive (button, pos + 1 < G_N_ELEMENTS (icon_sizes));
+  gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_LARGE);
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "decrease_button"));
-  gtk_widget_set_sensitive (button, pos > 0);
+  gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_NORMAL);
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "reset_button"));
+  gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_INHERIT);
 }
 
 static void
@@ -1541,17 +1536,14 @@ increase_icon_size (GtkWidget *iv)
 {
   GList *cells;
   GtkCellRendererPixbuf *cell;
-  GtkIconSize size;
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_get (cell, "stock-size", &size, NULL);
-  size = MIN (size + 1, G_N_ELEMENTS (icon_sizes) - 1);
-  g_object_set (cell, "stock-size", size, NULL);
+  g_object_set (cell, "icon-size", GTK_ICON_SIZE_LARGE, NULL);
 
-  update_buttons (iv, size);
+  update_buttons (iv, GTK_ICON_SIZE_LARGE);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1561,17 +1553,14 @@ decrease_icon_size (GtkWidget *iv)
 {
   GList *cells;
   GtkCellRendererPixbuf *cell;
-  GtkIconSize size;
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_get (cell, "stock-size", &size, NULL);
-  size  = MAX (size - 1, 1);
-  g_object_set (cell, "stock-size", size, NULL);
+  g_object_set (cell, "icon-size", GTK_ICON_SIZE_NORMAL, NULL);
 
-  update_buttons (iv, size);
+  update_buttons (iv, GTK_ICON_SIZE_NORMAL);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1586,9 +1575,9 @@ reset_icon_size (GtkWidget *iv)
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_set (cell, "stock-size", 2, NULL);
+  g_object_set (cell, "icon-size", GTK_ICON_SIZE_INHERIT, NULL);
 
-  update_buttons (iv, 2);
+  update_buttons (iv, GTK_ICON_SIZE_INHERIT);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1674,13 +1663,13 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_page_combo_changed", (GCallback)on_page_combo_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_from_changed", (GCallback)on_range_from_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_to_changed", (GCallback)on_range_to_changed);
-  gtk_builder_add_callback_symbol (builder, "osd_frame_button_press", (GCallback)osd_frame_button_press);
   gtk_builder_add_callback_symbol (builder, "tab_close_cb", (GCallback)tab_close_cb);
   gtk_builder_add_callback_symbol (builder, "increase_icon_size", (GCallback)increase_icon_size);
   gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
   gtk_builder_add_callback_symbol (builder, "scale_format_value", (GCallback)scale_format_value);
   gtk_builder_add_callback_symbol (builder, "scale_format_value_blank", (GCallback)scale_format_value_blank);
+  gtk_builder_add_callback_symbol (builder, "osd_frame_pressed", (GCallback)osd_frame_pressed);
 
   gtk_builder_connect_signals (builder, NULL);
 
@@ -1843,8 +1832,8 @@ activate (GApplication *app)
                     G_CALLBACK (textbuffer_notify_selection), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "pastebutton");
   g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
-  g_signal_connect_object (gtk_widget_get_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
-                           G_CALLBACK (clipboard_owner_change), widget, 0);
+  g_signal_connect_object (gtk_widget_get_clipboard (widget2), "notify::formats",
+                           G_CALLBACK (clipboard_formats_notify), widget, 0);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "totem_like_osd");
@@ -1888,6 +1877,9 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "increase_button", widget2);
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "decrease_button");
   g_object_set_data (G_OBJECT (widget), "decrease_button", widget2);
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "reset_button");
+  g_object_set_data (G_OBJECT (widget), "reset_button", widget2);
+  reset_icon_size (widget);
 
   adj = (GtkAdjustment *)gtk_builder_get_object (builder, "adjustment3");
   widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar1");

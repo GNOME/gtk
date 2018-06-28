@@ -42,13 +42,11 @@ void            gtk_tooltip_window_set_label_markup             (GtkTooltipWindo
 void            gtk_tooltip_window_set_label_text               (GtkTooltipWindow *window,
                                                                  const char       *text);
 void            gtk_tooltip_window_set_image_icon               (GtkTooltipWindow *window,
-                                                                 GdkPixbuf        *pixbuf);
+                                                                 GdkPaintable     *paintable);
 void            gtk_tooltip_window_set_image_icon_from_name     (GtkTooltipWindow *window,
-                                                                 const char       *icon_name,
-                                                                 GtkIconSize       icon_size);
+                                                                 const char       *icon_name);
 void            gtk_tooltip_window_set_image_icon_from_gicon    (GtkTooltipWindow *window,
-                                                                 GIcon            *gicon,
-                                                                 GtkIconSize       icon_size);
+                                                                 GIcon            *gicon);
 void            gtk_tooltip_window_set_custom_widget            (GtkTooltipWindow *window,
                                                                  GtkWidget        *custom_widget);
 

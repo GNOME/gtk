@@ -27,14 +27,14 @@ G_BEGIN_DECLS
 
 struct _GdkQuartzDeviceManagerCore
 {
-  GdkDeviceManager parent_object;
+  GObject parent_object;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
 };
 
 struct _GdkQuartzDeviceManagerCoreClass
 {
-  GdkDeviceManagerClass parent_class;
+  GObjectClass parent_class;
 };
 
 G_END_DECLS

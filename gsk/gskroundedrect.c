@@ -90,8 +90,6 @@ gsk_rounded_rect_normalize_in_place (GskRoundedRect *self)
  * before returning.
  *
  * Returns: (transfer none): the initialized rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_init (GskRoundedRect        *self,
@@ -123,8 +121,6 @@ gsk_rounded_rect_init (GskRoundedRect        *self,
  * make sure the source is normalized.
  *
  * Returns: (transfer none): the initialized rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_init_copy (GskRoundedRect       *self,
@@ -166,8 +162,6 @@ gsk_rounded_rect_init_from_rect (GskRoundedRect        *self,
  * and ensure that the corner values are positive and the corners do not overlap.
  *
  * Returns: (transfer none): the normalized rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_normalize (GskRoundedRect *self)
@@ -188,8 +182,6 @@ gsk_rounded_rect_normalize (GskRoundedRect *self)
  * The size and corners of the rectangle are unchanged.
  *
  * Returns: (transfer none): the offset rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_offset (GskRoundedRect *self,
@@ -362,7 +354,7 @@ gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
     return FALSE;
 
   if (self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width > point->x &&
-      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height > point->y &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height < point->y &&
       !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_LEFT],
                                 &GRAPHENE_POINT_INIT (
                                     self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width - point->x,
@@ -371,7 +363,7 @@ gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
     return FALSE;
 
   if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width < point->x &&
-      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height > point->y &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height < point->y &&
       !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_RIGHT],
                                 &GRAPHENE_POINT_INIT (
                                     self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width - point->x,
@@ -530,3 +522,16 @@ gsk_rounded_rect_to_float (const GskRoundedRect *self,
     }
 }
 
+gboolean
+gsk_rounded_rect_equal (gconstpointer rect1,
+                        gconstpointer rect2)
+{
+  const GskRoundedRect *self1 = rect1;
+  const GskRoundedRect *self2 = rect2;
+
+  return graphene_rect_equal (&self1->bounds, &self2->bounds)
+      && graphene_size_equal (&self1->corner[0], &self2->corner[0])
+      && graphene_size_equal (&self1->corner[1], &self2->corner[1])
+      && graphene_size_equal (&self1->corner[2], &self2->corner[2])
+      && graphene_size_equal (&self1->corner[3], &self2->corner[3]);
+}

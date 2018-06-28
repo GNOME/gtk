@@ -1,5 +1,5 @@
 project('gtk+', 'c',
-        version: '3.93.0',
+        version: '3.94.0',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1',
@@ -7,12 +7,12 @@ project('gtk+', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.42.1',
+        meson_version : '>= 0.43.0',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
-glib_minor_req = 53
-glib_micro_req = 7
+glib_minor_req = 55
+glib_micro_req = 0
 
 if glib_minor_req.is_odd()
   glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req - 1)
@@ -27,18 +27,16 @@ else
 endif
 
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
-pango_req          = '>= 1.37.3'
+pango_req          = '>= 1.41.0'
 atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
-wayland_proto_req  = '>= 1.9'
-wayland_req        = '>= 1.9.91'
-mirclient_req      = '>= 0.22.0'
-mircookie_req      = '>= 0.17.0'
+wayland_proto_req  = '>= 1.12'
+wayland_req        = '>= 1.14.91'
 graphene_req       = '>= 1.5.1'
 epoxy_req          = '>= 1.4'
-cloudproviders_req = '>= 0.2.0'
+cloudproviders_req = '>= 0.2.5'
 xkbcommon_req      = '>= 0.2.0'
 
 gnome = import('gnome')
@@ -63,15 +61,13 @@ add_project_arguments('-D_GNU_SOURCE', language: 'c')
 
 gtk_debug_cflags = []
 buildtype = get_option('buildtype')
-if buildtype == 'debugoptimized' or buildtype == 'debug'
+if buildtype.startswith('debug')
   gtk_debug_cflags += '-DG_ENABLE_DEBUG'
   if buildtype == 'debug'
     gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
-  else
-    gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS'
   endif
-else
-  gtk_debug_cflags += [ '-DG_DISABLE_ASSERT', '-DG_DISABLE_CAST_CHECKS', '-DG_DISABLE_CHECKS', ]
+elif buildtype == 'release'
+  gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS'
 endif
 
 add_project_arguments(gtk_debug_cflags, language: 'c')
@@ -89,31 +85,42 @@ gtk_soversion = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_inter
 
 gtk_api_version = '4.0'
 
-x11_enabled            = get_option('enable-x11-backend')
-wayland_enabled        = get_option('enable-wayland-backend')
-broadway_enabled       = get_option('enable-broadway-backend')
-mir_enabled            = get_option('enable-mir-backend')
-quartz_enabled         = get_option('enable-quartz-backend')
-win32_enabled          = get_option('enable-win32-backend')
-cloudproviders_enabled = get_option('enable-cloudproviders')
+x11_enabled            = get_option('x11-backend')
+wayland_enabled        = get_option('wayland-backend')
+broadway_enabled       = get_option('broadway-backend')
+quartz_enabled         = get_option('quartz-backend')
+win32_enabled          = get_option('win32-backend')
 
 os_unix   = false
 os_linux  = false
 os_win32  = false
 os_darwin = false
 
-if host_machine.system().contains('darwin')
+# Some windowing system backends depend on the platform we're
+# building for, so we need to ensure they are disabled; in other
+# cases, they are the only windowing system available, so we need
+# to ensure they are enabled
+if host_machine.system() == 'darwin'
   os_darwin = true
 elif host_machine.system() == 'windows'
   os_win32 = true
-  win32_enabled = true
-  x11_enabled = false
-  wayland_enabled = false
-elif host_machine.system().contains('linux')
+elif host_machine.system() == 'linux'
   os_linux = true
 endif
-
 os_unix = not os_win32
+
+if os_darwin
+  wayland_enabled = false
+else
+  quartz_enabled = false
+endif
+
+if os_win32
+  wayland_enabled = false
+  x11_enabled = false
+else
+  win32_enabled = false
+endif
 
 gtk_prefix = get_option('prefix')
 gtk_includedir = join_paths(gtk_prefix, get_option('includedir'))
@@ -123,6 +130,7 @@ gtk_localedir = join_paths(gtk_prefix, get_option('localedir'))
 gtk_sysconfdir = join_paths(gtk_prefix, get_option('sysconfdir'))
 gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
 gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
+gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
 
 cc = meson.get_compiler('c')
 
@@ -141,9 +149,11 @@ cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
 
 check_headers = [
   'crt/externs.h',
+  'dev/evdev/input.h',
   'dlfcn.h',
   'ftw.h',
   'inttypes.h',
+  'linux/input.h',
   'linux/memfd.h',
   'locale.h',
   'memory.h',
@@ -258,16 +268,11 @@ else
   test_cflags = []
 endif
 
-common_cflags = []
-foreach cflag: test_cflags
-  if cc.has_argument(cflag)
-    common_cflags += [ cflag ]
-  endif
-endforeach
+common_cflags = cc.get_supported_arguments(test_cflags)
 
 # Symbol visibility
 if get_option('default_library') != 'static'
-  if host_machine.system() == 'windows'
+  if os_win32
     cdata.set('DLL_EXPORT', true)
     cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
     if cc.get_id() != 'msvc'
@@ -281,16 +286,16 @@ endif
 
 common_ldflags = []
 
-if host_machine.system() == 'linux'
+if os_unix and not os_darwin
   foreach ldflag: [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
-    if cc.has_argument(ldflag)
+    if cc.links('int main () { return 0; }', name: ldflag, args: ldflag)
       common_ldflags += [ ldflag ]
     endif
   endforeach
 endif
 
 # Maintain compatibility with autotools
-if host_machine.system() == 'darwin'
+if os_darwin
   common_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
 endif
 
@@ -305,10 +310,11 @@ glib_dep       = dependency('glib-2.0', version: glib_req,
                             fallback : ['glib', 'libglib_dep'])
 gobject_dep    = dependency('gobject-2.0', version: glib_req,
                             fallback : ['glib', 'libgobject_dep'])
-if host_machine.system() == 'windows'
+if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
                             fallback : ['glib', 'libgio_dep'])
-else
+endif
+if os_unix
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
                             fallback : ['glib', 'libgio_dep'])
 endif
@@ -319,10 +325,45 @@ cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.g
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 
-if wayland_enabled or x11_enabled
+# Require PangoFT2 if on X11 or wayland
+require_pangoft2 = wayland_enabled or x11_enabled
+
+if require_pangoft2
   pangoft_dep  = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
 else
   pangoft_dep  = dependency('pangoft2', required: false)
+endif
+
+if pangoft_dep.found()
+  # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
+  # We get the dependency itself from pango, but pango doesn't care
+  # about ft2 version, so an extra check is needed.
+  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2)
+
+  # Fallback case: Look for the FreeType2 headers and library manually when its .pc
+  # file is not available, such as on Visual Studio
+  if not ft2_dep.found()
+    ft2lib = ft2_dep
+    if cc.has_header('ft2build.h')
+      ft2_libnames = ['freetype', 'freetypemt']
+      foreach lib: ft2_libnames
+        if not ft2_dep.found()
+          ft2lib = cc.find_library(lib)
+          # If the FreeType2 library is found, check for FT_Get_Var_Design_Coordinates()
+          if ft2lib.found()
+            if cc.has_function('FT_Get_Var_Design_Coordinates', dependencies: ft2lib)
+              ft2_dep = ft2lib
+            endif
+          endif
+        endif
+      endforeach
+    endif
+  endif
+endif
+
+if win32_enabled
+  # for GTK_IM_CONTEXT_IME
+  pangowin32_dep  = dependency('pangowin32')
 endif
 
 pangocairo_dep = dependency('pangocairo', version: cairo_req,
@@ -336,14 +377,22 @@ harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
+iso_codes_dep  = dependency('iso-codes', required: false)
 
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
 
-if host_machine.system() == 'windows'
+if os_win32
   platform_gio_dep = giowin32_dep
-else
+endif
+if os_unix
   platform_gio_dep = giounix_dep
+endif
+
+if iso_codes_dep.found()
+  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+else
+  cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
 endif
 
 backend_immodules = []
@@ -354,7 +403,7 @@ cairo_backends = []
 foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
                    ['cairo-win32', cairo_req, win32_enabled],
                    ['cairo-quartz', cairo_req, quartz_enabled],
-                   ['cairo', cairo_req, broadway_enabled or wayland_enabled or mir_enabled], ]
+                   ['cairo', cairo_req, broadway_enabled or wayland_enabled], ]
  backend_enabled = backend.get(2)
  cairo_backend_req = backend.get(1)
  cairo_backend = backend.get(0)
@@ -401,11 +450,14 @@ if cc.get_id() == 'msvc'
 
   # Fallback for HarfBuzz
   if not harfbuzz_dep.found()
-    if cc.has_header('harfbuzz/hb.h')
+    if cc.has_header('hb.h')
       harfbuzz_dep = cc.find_library('harfbuzz', required : false)
     endif
   endif
 endif
+
+cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
+cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 atk_pkgs = ['atk']
 
@@ -415,6 +467,7 @@ if wayland_enabled
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
   wlcursordep    = dependency('wayland-cursor', version: wayland_req)
   wlegldep       = dependency('wayland-egl')
+  backend_immodules += ['wayland']
 
   wayland_pkgs = [
     'wayland-client', wayland_req,
@@ -493,7 +546,7 @@ if x11_enabled
     endif
   endif
 
-  enable_xinerama = get_option('enable-xinerama')
+  enable_xinerama = get_option('xinerama')
   if enable_xinerama != 'no'
     want_xinerama = enable_xinerama == 'yes'
     xinerama_dep = dependency('xinerama', required: want_xinerama)
@@ -509,19 +562,6 @@ if x11_enabled
   cdata.set('HAVE_RANDR15', xrandr15_dep.found())
 endif
 
-mir_pkgs = []
-if mir_enabled
-  mirclient_dep = dependency('mirclient', version: mirclient_req)
-  mircookie_dep = dependency('mircookie', version: mircookie_req)
-  libcontent_hub_glib_dep = dependency('libcontenthub-glib')
-
-  mir_pkgs = [
-    'mirclient', mirclient_req,
-    'mircookie', mircookie_req,
-    'libcontent-hub-glib',
-  ]
-endif
-
 if broadway_enabled
   pc_gdk_extra_libs += ['-lz']
   backend_immodules += ['broadway']
@@ -532,9 +572,15 @@ if quartz_enabled
   backend_immodules += ['quartz']
 endif
 
+extra_demo_ldflags = []
 if win32_enabled
   pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32']
-  if cc.get_id() != 'msvc'
+  if cc.get_id() == 'msvc'
+    # Since the demo programs are now built as pure GUI programs, we
+    # need to pass in /entry:mainCRTStartup so that they will properly
+    # link on Visual Studio builds
+    extra_demo_ldflags = ['/entry:mainCRTStartup']
+  else
     pc_gdk_extra_libs += ['-Wl,-luuid']
   endif
   pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
@@ -549,34 +595,42 @@ if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
 endif
 
-if host_machine.system() != 'windows'
+if os_unix
   cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
 endif
 
 # Check for Vulkan support
 # TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
 have_vulkan = false
-vulkan_lib = []
+vulkan_pkg_found = false
+vulkan_dep = []
 
-if cc.get_id() == 'msvc'
-  vulkan_libname = 'vulkan-1'
+enable_vulkan = get_option('vulkan')
+if enable_vulkan == 'no'
+  message('Vulkan support explicitly disabled')
 else
-  vulkan_libname = 'vulkan'
-endif
-
-enable_vulkan = get_option('enable-vulkan')
-if enable_vulkan != 'no'
-  vulkan_lib = cc.find_library(vulkan_libname, required: false)
-  if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_lib) and cc.has_header('vulkan/vulkan.h')
+  vulkan_dep = dependency('vulkan', required: false)
+  if vulkan_dep.found()
     have_vulkan = true
-    pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
-  elif enable_vulkan == 'yes'
+    vulkan_pkg_found = true
+  else
+    if cc.get_id() == 'msvc'
+      vulkan_libname = 'vulkan-1'
+    else
+      vulkan_libname = 'vulkan'
+    endif
+    vulkan_dep = cc.find_library(vulkan_libname, required: false)
+    if vulkan_dep.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_dep) and cc.has_header('vulkan/vulkan.h')
+      have_vulkan = true
+      pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
+    endif
+  endif
+  if enable_vulkan == 'yes' and not have_vulkan
     error('Vulkan support not found, but was explicitly requested.')
   endif
-else
-  message('Vulkan support explicitly disabled')
 endif
 
+cloudproviders_enabled = get_option('cloudproviders')
 if cloudproviders_enabled
   cloudproviders_dep = dependency('cloudproviders', required: true)
   if cloudproviders_dep.found()
@@ -586,17 +640,145 @@ if cloudproviders_enabled
   endif
 endif
 
-subdir('modules/input')
+graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
+graphene_has_gcc = graphene_dep.get_pkgconfig_variable('graphene_has_gcc') == '1'
+
+malloc_is_aligned = false
+
+if not meson.is_cross_build() or meson.has_exe_wrapper()
+  malloc_test = cc.run ('''
+  #include <malloc.h>
+  #include <stdio.h>
+
+  #define COUNT 100
+  #define is_aligned(POINTER, BYTE_COUNT) \
+    (((uintptr_t)(const void *)(POINTER)) % (BYTE_COUNT) == 0)
+  int
+  main (int argc, char *argv[])
+  {
+    void **pointers;
+    int i, a, min_a;
+    FILE *f;
+    int wrote;
+    pointers = malloc (sizeof (void *) * COUNT);
+    for (i = 0, min_a = 128; i < COUNT; i++, pointers++)
+    {
+      *pointers = malloc (sizeof (void *));
+      for (a = 1; a <= 128; a = a * 2)
+      {
+        if (!is_aligned (*pointers, a))
+        {
+          a = a / 2;
+          break;
+        }
+      }
+      if (a > 128)
+        a = 128;
+      if (a < min_a)
+        min_a = a;
+    }
+    wrote = fprintf (stderr, "%d", min_a);
+    if (wrote <= 0)
+      return 1;
+    return 0;
+  }
+  ''')
+
+  if not malloc_test.compiled() or malloc_test.returncode() != 0
+    message ('malloc() alignment test failed, assuming unaligned malloc()')
+  elif malloc_test.stderr().to_int() >= 16
+    malloc_is_aligned = true
+    cdata.set('MALLOC_IS_ALIGNED16', 1)
+  endif
+else
+  # TODO: more reasinable cross-compiling defaults?
+  message ('cross-compiling, assuming unaligned malloc()')
+endif
+
+if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+    no_builtin_args = cc.get_supported_arguments(['-fno-builtin'])
+else
+    no_builtin_args = []
+endif
+
+# Check that posix_memalign() is not a builtin
+have_posix_memalign = cc.links('''#include <stdlib.h>
+                                  int main (int argc, char ** argv) {
+                                    void *p;
+                                    return posix_memalign (&p, 16, argc);
+                                  }
+                               ''',
+                               args : no_builtin_args,
+                               name : 'posix_memalign() is not a builtin')
+if have_posix_memalign
+  cdata.set('HAVE_POSIX_MEMALIGN', 1)
+endif
+
+# Check that memalign() is not a builtin
+have_memalign = cc.links('''#include <malloc.h>
+                            int main (int argc, char ** argv) {
+                              return memalign (16, argc);
+                            }
+                         ''',
+                         args : no_builtin_args,
+                         name : 'memalign() is not a builtin')
+if have_memalign
+  cdata.set('HAVE_MEMALIGN', 1)
+endif
+
+# Check that aligned_alloc() is not a builtin
+have_aligned_alloc = cc.links('''#include <stdlib.h>
+                                 int main (int argc, char ** argv) {
+                                   return aligned_alloc (16, argc);
+                                 }
+                              ''',
+                              args : no_builtin_args,
+                              name : 'aligned_alloc() is not a builtin')
+  if have_aligned_alloc
+  cdata.set('HAVE_ALIGNED_ALLOC', 1)
+endif
+
+# Check that _aligned_malloc() is not a builtin
+have__aligned_malloc = cc.links('''#include <malloc.h>
+                                   int main (int argc, char ** argv) {
+                                     return _aligned_malloc (argc, 16);
+                                   }
+                                ''',
+                                args : no_builtin_args,
+                                name : '_aligned_malloc() is not a builtin')
+if have__aligned_malloc
+  cdata.set('HAVE__ALIGNED_MALLOC', 1)
+endif
+
+if graphene_has_sse2 or graphene_has_gcc
+  message('Need aligned memory due to the use of SSE2 or GCC vector instructions')
+
+  if os_win32 and cc.get_id() == 'gcc'
+    add_global_arguments(['-mstackrealign'], language: 'c')
+  endif
+
+  if (not malloc_is_aligned and
+      not have_posix_memalign and
+      not have_memalign and
+      not have_aligned_alloc and
+      not have__aligned_malloc)
+    error('Failed to find any means of allocating aligned memory')
+  endif
+
+endif
+
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('modules')
+if get_option('demos')
+  subdir('demos')
+endif
 if get_option('build-tests')
   subdir('tests')
   subdir('testsuite')
 endif
-if get_option('demos')
-  subdir('demos')
+if get_option('build-examples')
   subdir('examples')
 endif
 
@@ -630,6 +812,10 @@ if cairogobj_pkg_found
   gdk_packages += ' '.join([ ' cairo-gobject', cairo_req ])
 endif
 
+if vulkan_pkg_found
+  gdk_packages += 'vulkan'
+endif
+
 pkgconf.set('GDK_PACKAGES', gdk_packages)
 pkgconf.set('GSK_PACKAGES',
             ' '.join([ 'graphene-gobject-1.0', graphene_req ]))
@@ -643,7 +829,7 @@ pc_gdk_extra_libs += cairo_libs
 gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
 pkgconf.set('GDK_PRIVATE_PACKAGES',
             ' '.join([ gio_pkgname, glib_req,
-                       'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + mir_pkgs + cairo_backends))
+                       'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + cairo_backends))
 pkgconf.set('GSK_PRIVATE_PACKAGES', '') # all already in GDK_PRIVATE_PACKAGES
 pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
 pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(atk_pkgs + pangoft2_pkgs))
@@ -661,7 +847,7 @@ pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 pkgs = [ 'gtk+-4.0.pc' ]
 
 pkg_targets = ''
-foreach backend: [ 'broadway', 'mir', 'quartz', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk+-@0@-4.0.pc'.format(backend)]
     pkg_targets += ' ' + backend
@@ -676,7 +862,7 @@ foreach pkg: pkgs
                  install_dir: pkg_install_dir)
 endforeach
 
-if host_machine.system() != 'windows'
+if os_unix
   configure_file(input: 'gtk+-unix-print-4.0.pc.in',
                  output: 'gtk+-unix-print-4.0.pc',
                  configuration: pkgconf,
@@ -691,16 +877,30 @@ if get_option('documentation')
   subdir('docs/reference')
 endif
 
+# Keep this in sync with post-install.sh expected arguments
+meson.add_install_script('build-aux/meson/post-install.sh',
+                         gtk_api_version,
+                         gtk_binary_version,
+                         gtk_libdir,
+                         gtk_datadir)
+
 summary = [
   '',
   '------',
   'GTK+ @0@ (@1@)'.format(gtk_version, gtk_api_version),
   '',
-  '  Enabled backends: @0@'.format(pkg_targets.strip()),
+  '  Display backends: @0@'.format(pkg_targets.strip()),
+  '    Print backends: @0@'.format(' '.join(print_backends)),
+  '    Media backends: @0@'.format(' '.join(media_backends)),
   '    Vulkan support: @0@'.format(have_vulkan),
-  '             Tests: @0@'.format(get_option('build-tests')),
+  '     Cloud support: @0@'.format(get_option('cloudproviders')),
+  '    Colord support: @0@'.format(get_option('colord')),
+  '     Introspection: @0@'.format(get_option('introspection')),
   '     Documentation: @0@'.format(get_option('documentation')),
+  '       Build tests: @0@'.format(get_option('build-tests')),
+  '     Install tests: @0@'.format(get_option('install-tests')),
   '             Demos: @0@'.format(get_option('demos')),
+  '          Examples: @0@'.format(get_option('build-examples')),
   'Directories:',
   '            prefix: @0@'.format(gtk_prefix),
   '        includedir: @0@'.format(gtk_includedir),
@@ -711,10 +911,3 @@ summary = [
 ]
 
 message('\n'.join(summary))
-
-# Keep this in sync with post-install.sh expected arguments
-meson.add_install_script('build-aux/meson/post-install.sh',
-                         gtk_api_version,
-                         gtk_binary_version,
-                         gtk_libdir,
-                         gtk_datadir)

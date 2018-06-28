@@ -48,7 +48,7 @@ struct _GtkPopoverAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GType gtk_popover_accessible_get_type (void);
 
 G_END_DECLS

@@ -20,21 +20,13 @@
 #include "gtkimagedefinitionprivate.h"
 
 typedef struct _GtkImageDefinitionEmpty GtkImageDefinitionEmpty;
-typedef struct _GtkImageDefinitionStock GtkImageDefinitionStock;
 typedef struct _GtkImageDefinitionIconName GtkImageDefinitionIconName;
 typedef struct _GtkImageDefinitionGIcon GtkImageDefinitionGIcon;
-typedef struct _GtkImageDefinitionSurface GtkImageDefinitionSurface;
+typedef struct _GtkImageDefinitionPaintable GtkImageDefinitionPaintable;
 
 struct _GtkImageDefinitionEmpty {
   GtkImageType type;
   gint ref_count;
-};
-
-struct _GtkImageDefinitionStock {
-  GtkImageType type;
-  gint ref_count;
-
-  char *id;
 };
 
 struct _GtkImageDefinitionIconName {
@@ -51,21 +43,20 @@ struct _GtkImageDefinitionGIcon {
   GIcon *gicon;
 };
 
-struct _GtkImageDefinitionSurface {
+struct _GtkImageDefinitionPaintable {
   GtkImageType type;
   gint ref_count;
 
-  cairo_surface_t *surface;
+  GdkPaintable *paintable;
 };
 
 union _GtkImageDefinition
 {
   GtkImageType type;
   GtkImageDefinitionEmpty empty;
-  GtkImageDefinitionStock stock;
   GtkImageDefinitionIconName icon_name;
   GtkImageDefinitionGIcon gicon;
-  GtkImageDefinitionSurface surface;
+  GtkImageDefinitionPaintable paintable;
 };
 
 GtkImageDefinition *
@@ -81,10 +72,9 @@ gtk_image_definition_alloc (GtkImageType type)
 {
   static gsize sizes[] = {
     sizeof (GtkImageDefinitionEmpty),
-    sizeof (GtkImageDefinitionStock),
     sizeof (GtkImageDefinitionIconName),
     sizeof (GtkImageDefinitionGIcon),
-    sizeof (GtkImageDefinitionSurface)
+    sizeof (GtkImageDefinitionPaintable)
   };
   GtkImageDefinition *def;
 
@@ -126,15 +116,15 @@ gtk_image_definition_new_gicon (GIcon *gicon)
 }
 
 GtkImageDefinition *
-gtk_image_definition_new_surface (cairo_surface_t *surface)
+gtk_image_definition_new_paintable (GdkPaintable *paintable)
 {
   GtkImageDefinition *def;
 
-  if (surface == NULL)
+  if (paintable == NULL)
     return NULL;
 
-  def = gtk_image_definition_alloc (GTK_IMAGE_SURFACE);
-  def->surface.surface = cairo_surface_reference (surface);
+  def = gtk_image_definition_alloc (GTK_IMAGE_PAINTABLE);
+  def->paintable.paintable = g_object_ref (paintable);
 
   return def;
 }
@@ -161,8 +151,8 @@ gtk_image_definition_unref (GtkImageDefinition *def)
     case GTK_IMAGE_EMPTY:
       g_assert_not_reached ();
       break;
-    case GTK_IMAGE_SURFACE:
-      cairo_surface_destroy (def->surface.surface);
+    case GTK_IMAGE_PAINTABLE:
+      g_object_unref (def->paintable.paintable);
       break;
     case GTK_IMAGE_ICON_NAME:
       g_free (def->icon_name.icon_name);
@@ -189,7 +179,7 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
     default:
       g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_SURFACE:
+    case GTK_IMAGE_PAINTABLE:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       return 1;
@@ -214,11 +204,12 @@ gtk_image_definition_get_gicon (const GtkImageDefinition *def)
   return def->gicon.gicon;
 }
 
-cairo_surface_t *
-gtk_image_definition_get_surface (const GtkImageDefinition *def)
+GdkPaintable *
+gtk_image_definition_get_paintable (const GtkImageDefinition *def)
 {
-  if (def->type != GTK_IMAGE_SURFACE)
+  if (def->type != GTK_IMAGE_PAINTABLE)
     return NULL;
 
-  return def->surface.surface;
+  return def->paintable.paintable;
 }
+

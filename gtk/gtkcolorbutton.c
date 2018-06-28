@@ -31,7 +31,6 @@
 #include "gtkcolorbutton.h"
 
 #include "gtkbutton.h"
-#include "gtkmain.h"
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
@@ -39,9 +38,11 @@
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtksnapshot.h"
 
 
 /**
@@ -61,7 +62,7 @@
  */
 
 
-struct _GtkColorButtonPrivate
+typedef struct
 {
   GtkWidget *button;
 
@@ -73,7 +74,7 @@ struct _GtkColorButtonPrivate
 
   guint use_alpha : 1;  /* Use alpha or not */
   guint show_editor : 1;
-};
+} GtkColorButtonPrivate;
 
 /* Properties */
 enum
@@ -114,24 +115,18 @@ static void gtk_color_button_drag_begin    (GtkWidget        *widget,
 static void gtk_color_button_drag_data_get (GtkWidget        *widget,
                                             GdkDragContext   *context,
                                             GtkSelectionData *selection_data,
-                                            guint             info,
-                                            guint             time,
                                             GtkColorButton   *button);
 
 /* target side drag signals */
 static void gtk_color_button_drag_data_received (GtkWidget        *widget,
-                                                 GdkDragContext   *context,
-                                                 gint              x,
-                                                 gint              y,
+                                                 GdkDrop          *drop,
                                                  GtkSelectionData *selection_data,
-                                                 guint             info,
-                                                 guint32           time,
                                                  GtkColorButton   *button);
 
 
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
-static const GtkTargetEntry drop_types[] = { { (char *) "application/x-color", 0, 0 } };
+static const char *drop_types[] = { "application/x-color" };
 
 static void gtk_color_button_iface_init (GtkColorChooserInterface *iface);
 
@@ -170,13 +165,12 @@ gtk_color_button_snapshot (GtkWidget   *widget,
 static void
 gtk_color_button_size_allocate (GtkWidget           *widget,
                                 const GtkAllocation *allocation,
-                                int                  baseline,
-                                GtkAllocation       *out_clip)
+                                int                  baseline)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (widget);
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  gtk_widget_size_allocate (priv->button, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->button, allocation, baseline);
 }
 
 static void
@@ -203,8 +197,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * If this property is set to %TRUE, the color swatch on the button is
    * rendered against a checkerboard background to show its opacity and
    * the opacity slider is displayed in the color selection dialog.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_ALPHA,
@@ -217,8 +209,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * GtkColorButton:title:
    *
    * The title of the color selection dialog
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
@@ -232,8 +222,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * GtkColorButton:rgba:
    *
    * The RGBA color.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RGBA,
@@ -255,8 +243,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * Note that this signal is only emitted when the user
    * changes the color. If you need to react to programmatic color changes
    * as well, use the notify::color signal.
-   *
-   * Since: 2.4
    */
   color_button_signals[COLOR_SET] = g_signal_new (I_("color-set"),
                                                   G_TYPE_FROM_CLASS (gobject_class),
@@ -275,8 +261,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * This property should be used in cases where the palette
    * in the editor would be redundant, such as when the color
    * button is already part of a palette.
-   *
-   * Since: 3.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_EDITOR,
@@ -288,15 +272,11 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 
 static void
 gtk_color_button_drag_data_received (GtkWidget        *widget,
-                                     GdkDragContext   *context,
-                                     gint              x,
-                                     gint              y,
+                                     GdkDrop          *drop,
                                      GtkSelectionData *selection_data,
-                                     guint             info,
-                                     guint32           time,
                                      GtkColorButton   *button)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   gint length;
   guint16 *dropped;
 
@@ -335,19 +315,17 @@ static void
 set_color_icon (GdkDragContext *context,
                 const GdkRGBA  *rgba)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  GtkSnapshot *snapshot;
+  GdkPaintable *paintable;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, 48, 32);
-  cr = cairo_create (surface);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_append_color (snapshot,
+                             rgba,
+                             &GRAPHENE_RECT_INIT(0, 0, 48, 32));
+  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
-  gdk_cairo_set_source_rgba (cr, rgba);
-  cairo_paint (cr);
-
-  gtk_drag_set_icon_surface (context, surface);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  gtk_drag_set_icon_paintable (context, paintable, 0, 0);
+  g_object_unref (paintable);
 }
 
 static void
@@ -356,19 +334,18 @@ gtk_color_button_drag_begin (GtkWidget      *widget,
                              gpointer        data)
 {
   GtkColorButton *button = data;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  set_color_icon (context, &button->priv->rgba);
+  set_color_icon (context, &priv->rgba);
 }
 
 static void
 gtk_color_button_drag_data_get (GtkWidget        *widget,
                                 GdkDragContext   *context,
                                 GtkSelectionData *selection_data,
-                                guint             info,
-                                guint             time,
                                 GtkColorButton   *button)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   guint16 dropped[4];
 
   dropped[0] = (guint16) (priv->rgba.red * 65535);
@@ -384,15 +361,13 @@ gtk_color_button_drag_data_get (GtkWidget        *widget,
 static void
 gtk_color_button_init (GtkColorButton *button)
 {
-  GtkColorButtonPrivate *priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   PangoLayout *layout;
   PangoRectangle rect;
   GtkStyleContext *context;
+  GdkContentFormats *targets;
 
-  gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
-
-  /* Create the widgets */
-  priv = button->priv = gtk_color_button_get_instance_private (button);
+  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
@@ -407,7 +382,7 @@ gtk_color_button_init (GtkColorButton *button)
 
   gtk_container_add (GTK_CONTAINER (priv->button), priv->swatch);
 
-  button->priv->title = g_strdup (_("Pick a Color")); /* default title */
+  priv->title = g_strdup (_("Pick a Color")); /* default title */
 
   /* Start with opaque black, alpha disabled */
   priv->rgba.red = 0;
@@ -416,15 +391,18 @@ gtk_color_button_init (GtkColorButton *button)
   priv->rgba.alpha = 1;
   priv->use_alpha = FALSE;
 
+  targets = gdk_content_formats_new (drop_types, G_N_ELEMENTS (drop_types));
   gtk_drag_dest_set (priv->button,
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
-                     drop_types, 1, GDK_ACTION_COPY);
+                     targets,
+                     GDK_ACTION_COPY);
   gtk_drag_source_set (priv->button,
                        GDK_BUTTON1_MASK|GDK_BUTTON3_MASK,
-                       drop_types, 1,
+                       targets,
                        GDK_ACTION_COPY);
+  gdk_content_formats_unref (targets);
   g_signal_connect (priv->button, "drag-begin",
                     G_CALLBACK (gtk_color_button_drag_begin), button);
   g_signal_connect (priv->button, "drag-data-received",
@@ -440,7 +418,7 @@ static void
 gtk_color_button_finalize (GObject *object)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   if (priv->cs_dialog != NULL)
     gtk_widget_destroy (priv->cs_dialog);
@@ -464,8 +442,6 @@ gtk_color_button_finalize (GObject *object)
  * color when the user finishes.
  *
  * Returns: a new color button
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_color_button_new (void)
@@ -480,8 +456,6 @@ gtk_color_button_new (void)
  * Creates a new color button.
  *
  * Returns: a new color button
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
@@ -490,22 +464,13 @@ gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
 }
 
 static gboolean
-dialog_delete_event (GtkWidget *dialog,
-                     GdkEvent  *event,
-                     gpointer   user_data)
-{
-  g_signal_emit_by_name (dialog, "response", GTK_RESPONSE_CANCEL);
-
-  return TRUE;
-}
-
-static gboolean
 dialog_destroy (GtkWidget *widget,
                 gpointer   data)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (data);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  button->priv->cs_dialog = NULL;
+  priv->cs_dialog = NULL;
 
   return FALSE;
 }
@@ -520,7 +485,7 @@ dialog_response (GtkDialog *dialog,
   else if (response == GTK_RESPONSE_OK)
     {
       GtkColorButton *button = GTK_COLOR_BUTTON (data);
-      GtkColorButtonPrivate *priv = button->priv;
+      GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &priv->rgba);
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
@@ -541,7 +506,7 @@ dialog_response (GtkDialog *dialog,
 static void
 ensure_dialog (GtkColorButton *button)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   GtkWidget *parent, *dialog;
 
   if (priv->cs_dialog != NULL)
@@ -550,6 +515,7 @@ ensure_dialog (GtkColorButton *button)
   parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
 
   priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (priv->title, NULL);
+  gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
   if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
   {
@@ -564,8 +530,6 @@ ensure_dialog (GtkColorButton *button)
                     G_CALLBACK (dialog_response), button);
   g_signal_connect (dialog, "destroy",
                     G_CALLBACK (dialog_destroy), button);
-  g_signal_connect (dialog, "delete-event",
-                    G_CALLBACK (dialog_delete_event), button);
 }
 
 
@@ -574,7 +538,7 @@ gtk_color_button_clicked (GtkButton *b,
                           gpointer   user_data)
 {
   GtkColorButton *button = user_data;
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   /* if dialog already exists, make sure it's shown and raised */
   ensure_dialog (button);
@@ -592,12 +556,10 @@ static void
 gtk_color_button_set_rgba (GtkColorChooser *chooser,
                            const GdkRGBA   *rgba)
 {
-  GtkColorButtonPrivate *priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (GTK_COLOR_BUTTON (chooser));
 
   g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
-
-  priv = GTK_COLOR_BUTTON (chooser)->priv;
 
   priv->rgba = *rgba;
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
@@ -609,17 +571,19 @@ static void
 gtk_color_button_get_rgba (GtkColorChooser *chooser,
                            GdkRGBA        *rgba)
 {
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (GTK_COLOR_BUTTON (chooser));
+
   g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
 
-  *rgba = GTK_COLOR_BUTTON (chooser)->priv->rgba;
+  *rgba = priv->rgba;
 }
 
 static void
 set_use_alpha (GtkColorButton *button,
                gboolean        use_alpha)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   use_alpha = (use_alpha != FALSE);
 
@@ -639,14 +603,12 @@ set_use_alpha (GtkColorButton *button,
  * @title: String containing new window title
  *
  * Sets the title for the color selection dialog.
- *
- * Since: 2.4
  */
 void
 gtk_color_button_set_title (GtkColorButton *button,
                             const gchar    *title)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   gchar *old_title;
 
   g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
@@ -668,15 +630,15 @@ gtk_color_button_set_title (GtkColorButton *button,
  * Gets the title of the color selection dialog.
  *
  * Returns: An internal string, do not free the return value
- *
- * Since: 2.4
  */
 const gchar *
 gtk_color_button_get_title (GtkColorButton *button)
 {
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
   g_return_val_if_fail (GTK_IS_COLOR_BUTTON (button), NULL);
 
-  return button->priv->title;
+  return priv->title;
 }
 
 static void
@@ -686,6 +648,7 @@ gtk_color_button_set_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   switch (param_id)
     {
@@ -701,9 +664,9 @@ gtk_color_button_set_property (GObject      *object,
     case PROP_SHOW_EDITOR:
       {
         gboolean show_editor = g_value_get_boolean (value);
-        if (button->priv->show_editor != show_editor)
+        if (priv->show_editor != show_editor)
           {
-            button->priv->show_editor = show_editor;
+            priv->show_editor = show_editor;
             g_object_notify (object, "show-editor");
           }
       }
@@ -721,11 +684,12 @@ gtk_color_button_get_property (GObject    *object,
                                GParamSpec *pspec)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   switch (param_id)
     {
     case PROP_USE_ALPHA:
-      g_value_set_boolean (value, button->priv->use_alpha);
+      g_value_set_boolean (value, priv->use_alpha);
       break;
     case PROP_TITLE:
       g_value_set_string (value, gtk_color_button_get_title (button));
@@ -739,7 +703,7 @@ gtk_color_button_get_property (GObject    *object,
       }
       break;
     case PROP_SHOW_EDITOR:
-      g_value_set_boolean (value, button->priv->show_editor);
+      g_value_set_boolean (value, priv->show_editor);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -755,10 +719,11 @@ gtk_color_button_add_palette (GtkColorChooser *chooser,
                               GdkRGBA         *colors)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (chooser);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   ensure_dialog (button);
 
-  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
+  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (priv->cs_dialog),
                                  orientation, colors_per_line, n_colors, colors);
 }
 

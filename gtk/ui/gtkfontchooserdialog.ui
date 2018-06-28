@@ -11,7 +11,6 @@
         <property name="margin">5</property>
         <child>
           <object class="GtkFontChooserWidget" id="fontchooser">
-            <property name="visible">1</property>
             <property name="vexpand">1</property>
             <signal name="font-activated" handler="font_activated_cb" swapped="no"/>
           </object>
@@ -23,22 +22,26 @@
     </child>
     <child type="action">
       <object class="GtkButton" id="cancel_button">
-        <property name="visible">1</property>
         <property name="use-underline">1</property>
         <property name="label" translatable="yes">_Cancel</property>
       </object>
     </child>
     <child type="action">
-      <object class="GtkButton" id="ok_button">
-        <property name="visible">1</property>
+      <object class="GtkButton" id="select_button">
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
         <property name="can-default">1</property>
       </object>
     </child>
+    <child>
+      <object class="GtkEventControllerKey">
+        <signal name="key-pressed" handler="dialog_forward_key" swapped="no"/>
+        <signal name="key-released" handler="dialog_forward_key" swapped="no"/>
+      </object>
+    </child>
     <action-widgets>
       <action-widget response="cancel">cancel_button</action-widget>
-      <action-widget response="ok" default="true">ok_button</action-widget>
+      <action-widget response="ok" default="true">select_button</action-widget>
     </action-widgets>
   </template>
 </interface>

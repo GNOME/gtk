@@ -45,6 +45,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 
 #ifdef NEED_XIPROTO_H_FOR_XREPLY
 #include <X11/extensions/XIproto.h>
@@ -173,7 +174,7 @@ send_event_handler (Display *dpy,
       if (state->callback)
         {
           guint id;
-          id = gdk_threads_add_idle (callback_idle, state);
+          id = g_idle_add (callback_idle, state);
           g_source_set_name_by_id (id, "[gtk+] callback_idle");
         }
 
@@ -709,7 +710,7 @@ roundtrip_handler (Display *dpy,
       if (state->callback)
         {
           guint id;
-          id = gdk_threads_add_idle (roundtrip_callback_idle, state);
+          id = g_idle_add (roundtrip_callback_idle, state);
           g_source_set_name_by_id (id, "[gtk+] roundtrip_callback_idle");
         }
 

@@ -20,11 +20,14 @@
 
 #include "visual.h"
 
+#include "fpsoverlay.h"
+#include "updatesoverlay.h"
+#include "window.h"
+
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkcomboboxtext.h"
 #include "gtkcssproviderprivate.h"
-#include "gtkdebugupdatesprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
@@ -65,8 +68,6 @@ struct _GtkInspectorVisualPrivate
   GtkAdjustment *cursor_size_adjustment;
 
   GtkWidget *debug_box;
-  GtkWidget *rendering_mode_combo;
-  GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
   GtkWidget *touchscreen_switch;
@@ -74,10 +75,12 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *gl_box;
   GtkWidget *gl_combo;
   GtkWidget *software_gl_switch;
-  GtkWidget *software_surface_switch;
   GtkWidget *texture_rectangle_switch;
 
   GtkAdjustment *focus_adjustment;
+
+  GtkInspectorOverlay *fps_overlay;
+  GtkInspectorOverlay *updates_overlay;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
@@ -224,22 +227,73 @@ font_scale_entry_activated (GtkEntry           *entry,
 }
 
 static void
-updates_activate (GtkSwitch *sw)
+fps_activate (GtkSwitch          *sw,
+              GParamSpec         *pspec,
+              GtkInspectorVisual *vis)
 {
-  gboolean updates;
+  GtkInspectorVisualPrivate *priv = vis->priv;
+  GtkInspectorWindow *iw;
+  gboolean fps;
 
-  updates = gtk_switch_get_active (sw);
-  gtk_debug_updates_set_enabled_for_display (gdk_display_get_default (), updates);
+  fps = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (fps)
+    {
+      if (priv->fps_overlay == NULL)
+        {
+          priv->fps_overlay = gtk_fps_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->fps_overlay);
+          g_object_unref (priv->fps_overlay);
+        }
+    }
+  else
+    {
+      if (priv->fps_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, priv->fps_overlay);
+          priv->fps_overlay = NULL;
+        }
+    }
+
   redraw_everything ();
 }
 
 static void
-init_updates (GtkInspectorVisual *vis)
+updates_activate (GtkSwitch          *sw,
+                  GParamSpec         *pspec,
+                  GtkInspectorVisual *vis)
 {
-  gboolean updates = FALSE;
+  GtkInspectorVisualPrivate *priv = vis->priv;
+  GtkInspectorWindow *iw;
+  gboolean updates;
 
-  updates = gtk_debug_updates_get_enabled_for_display (gdk_display_get_default ());
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->updates_switch), updates);
+  updates = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (updates)
+    {
+      if (priv->updates_overlay == NULL)
+        {
+          priv->updates_overlay = gtk_updates_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->updates_overlay);
+          g_object_unref (priv->updates_overlay);
+        }
+    }
+  else
+    {
+      if (priv->updates_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, priv->updates_overlay);
+          priv->updates_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
 }
 
 static void
@@ -548,7 +602,7 @@ init_cursor_size (GtkInspectorVisual *vis)
 
   g_object_get (gtk_settings_get_default (), "gtk-cursor-theme-size", &size, NULL);
   if (size == 0)
-    size = gdk_display_get_default_cursor_size (gdk_display_get_default ());
+    size = 32;
 
   gtk_adjustment_set_value (vis->priv->scale_adjustment, (gdouble)size);
   g_signal_connect (vis->priv->cursor_size_adjustment, "value-changed",
@@ -559,7 +613,7 @@ static void
 init_font (GtkInspectorVisual *vis)
 {
   g_object_bind_property (gtk_settings_get_default (), "gtk-font-name",
-                          vis->priv->font_button, "font-name",
+                          vis->priv->font_button, "font",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
 
@@ -585,7 +639,7 @@ scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 
   scale = gtk_adjustment_get_value (adjustment);
   display = gdk_display_get_default ();
-  gdk_x11_display_set_window_scale (display, scale);
+  gdk_x11_display_set_surface_scale (display, scale);
 }
 #endif
 
@@ -759,89 +813,52 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
 static void
 init_gl (GtkInspectorVisual *vis)
 {
-  GdkGLFlags flags;
+  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
 
-  flags = gdk_gl_get_flags ();
-
-  if (flags & GDK_GL_ALWAYS)
-    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "always");
-  else if (flags & GDK_GL_DISABLE)
+  if (flags & GDK_DEBUG_GL_DISABLE)
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "disable");
   else
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "maybe");
   gtk_widget_set_sensitive (vis->priv->gl_combo, FALSE);
   gtk_widget_set_tooltip_text (vis->priv->gl_combo,
-                               _("Not settable at runtime.\nUse GDK_GL=always or GDK_GL=disable instead"));
+                               _("Not settable at runtime.\nUse GDK_DEBUG=gl-disable instead"));
 
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch),
-                         flags & GDK_GL_SOFTWARE_DRAW_GL);
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_surface_switch),
-                         flags & GDK_GL_SOFTWARE_DRAW_SURFACE);
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch),
-                         flags & GDK_GL_TEXTURE_RECTANGLE);
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch), flags & GDK_DEBUG_GL_TEXTURE_RECT);
 
-  if (flags & GDK_GL_DISABLE)
+  if (flags & GDK_DEBUG_GL_DISABLE)
     {
       gtk_widget_set_sensitive (vis->priv->software_gl_switch, FALSE);
-      gtk_widget_set_sensitive (vis->priv->software_surface_switch, FALSE);
       gtk_widget_set_sensitive (vis->priv->texture_rectangle_switch, FALSE);
       gtk_widget_set_tooltip_text (vis->priv->software_gl_switch, _("GL rendering is disabled"));
-      gtk_widget_set_tooltip_text (vis->priv->software_surface_switch, _("GL rendering is disabled"));
       gtk_widget_set_tooltip_text (vis->priv->texture_rectangle_switch, _("GL rendering is disabled"));
     }
 }
 
 static void
-init_rendering_mode (GtkInspectorVisual *vis)
+update_gl_flag (GtkSwitch     *sw,
+                GdkDebugFlags  flag)
 {
-  GdkRenderingMode mode;
-
-  mode = gdk_display_get_rendering_mode (gdk_display_get_default ());
-  gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->rendering_mode_combo), mode);
-}
-
-static void
-rendering_mode_changed (GtkComboBox        *c,
-                        GtkInspectorVisual *vis)
-{
-  GdkRenderingMode mode;
-
-  mode = gtk_combo_box_get_active (c);
-  gdk_display_set_rendering_mode (gdk_display_get_default (), mode);
-}
-
-static void
-update_gl_flag (GtkSwitch  *sw,
-                GdkGLFlags  flag)
-{
-  GdkGLFlags flags;
-
-  flags = gdk_gl_get_flags ();
+  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
 
   if (gtk_switch_get_active (sw))
     flags |= flag;
   else
     flags &= ~flag;
 
-  gdk_gl_set_flags (flags);
+  gdk_display_set_debug_flags (gdk_display_get_default (), flags);
 }
 
 static void
 software_gl_activate (GtkSwitch *sw)
 {
-  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW_GL);
-}
-
-static void
-software_surface_activate (GtkSwitch *sw)
-{
-  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW_SURFACE);
+  update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE);
 }
 
 static void
 texture_rectangle_activate (GtkSwitch *sw)
 {
-  update_gl_flag (sw, GDK_GL_TEXTURE_RECTANGLE);
+  update_gl_flag (sw, GDK_DEBUG_GL_TEXTURE_RECT);
 }
 
 static void
@@ -858,8 +875,6 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_font (vis);
   init_font_scale (vis);
   init_scale (vis);
-  init_rendering_mode (vis);
-  init_updates (vis);
   init_animation (vis);
   init_slowdown (vis);
   init_touchscreen (vis);
@@ -891,8 +906,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   object_class->constructed = gtk_inspector_visual_constructed;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, rendering_mode_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
@@ -914,19 +927,17 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_surface_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, texture_rectangle_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
+  gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
-  gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
-  gtk_widget_class_bind_template_callback (widget_class, software_surface_activate);
   gtk_widget_class_bind_template_callback (widget_class, texture_rectangle_activate);
 }
 

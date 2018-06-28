@@ -22,12 +22,22 @@
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__
 
+#include "gdkwin32screen.h"
+#include "gdkwin32cursor.h"
+
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
   PROCESS_DPI_UNAWARE = 0,
   PROCESS_SYSTEM_DPI_AWARE = 1,
   PROCESS_PER_MONITOR_DPI_AWARE = 2
 } GdkWin32ProcessDpiAwareness;
+
+typedef enum _GdkWin32MonitorDpiType { 
+  MDT_EFFECTIVE_DPI  = 0,
+  MDT_ANGULAR_DPI    = 1,
+  MDT_RAW_DPI        = 2,
+  MDT_DEFAULT        = MDT_EFFECTIVE_DPI
+} GdkWin32MonitorDpiType;
 
 /* APIs from shcore.dll */
 typedef HRESULT (WINAPI *funcSetProcessDpiAwareness) (GdkWin32ProcessDpiAwareness value);
@@ -59,20 +69,17 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
-  GdkScreen *screen;
+  GdkWin32Screen *screen;
 
   Win32CursorTheme *cursor_theme;
   gchar *cursor_theme_name;
   int cursor_theme_size;
-  GHashTable *cursor_cache;
 
   HWND hwnd;
-  HWND clipboard_hwnd;
 
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
   guint gl_version;
-  HDC gl_hdc;
   HWND gl_hwnd;
 
   GPtrArray *monitors;
@@ -87,10 +94,25 @@ struct _GdkWin32Display
   guint have_at_least_win81 : 1;
   GdkWin32ProcessDpiAwareness dpi_aware_type;
   guint has_fixed_scale : 1;
-  guint window_scale;
+  guint surface_scale;
 
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
+  
+  /* Cursor Items (GdkCursor->GdkWin32HCursor) */
+  GHashTable *cursors;
+  /* The cursor that is used by current grab (if any) */
+  GdkWin32HCursor *grab_cursor;
+  /* HCURSOR -> GdkWin32HCursorTableEntry */
+  GHashTable *cursor_reftable;
+  /* ID of the idle callback scheduled to destroy cursors */
+  guint idle_cursor_destructor_id;
+
+  /* A list of cursor handles slated for destruction. */
+  GList *cursors_for_destruction;
+
+  /* Message filters */
+  GList *filters;
 };
 
 struct _GdkWin32DisplayClass
@@ -108,5 +130,15 @@ guint      _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_d
                                                         HMONITOR         hmonitor,
                                                         HWND             hwnd,
                                                         gint             *dpi);
+
+typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
+
+struct _GdkWin32MessageFilter
+{
+  GdkWin32MessageFilterFunc function;
+  gpointer data;
+  gboolean removed;
+  guint ref_count;
+};
 
 #endif /* __GDK_DISPLAY__WIN32_H__ */

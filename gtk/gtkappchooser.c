@@ -86,8 +86,6 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
  * Returns the current value of the #GtkAppChooser:content-type property.
  *
  * Returns: the content type of @self. Free with g_free()
- *
- * Since: 3.0
  */
 gchar *
 gtk_app_chooser_get_content_type (GtkAppChooser *self)
@@ -111,8 +109,6 @@ gtk_app_chooser_get_content_type (GtkAppChooser *self)
  *
  * Returns: (nullable) (transfer full): a #GAppInfo for the currently selected
  *     application, or %NULL if none is selected. Free with g_object_unref()
- *
- * Since: 3.0
  */
 GAppInfo *
 gtk_app_chooser_get_app_info (GtkAppChooser *self)
@@ -125,8 +121,6 @@ gtk_app_chooser_get_app_info (GtkAppChooser *self)
  * @self: a #GtkAppChooser
  *
  * Reloads the list of applications.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_refresh (GtkAppChooser *self)

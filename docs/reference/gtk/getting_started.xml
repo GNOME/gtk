@@ -50,7 +50,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-0 example-0.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-0 example-0.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
 
@@ -120,7 +120,7 @@
     here</ulink>.</para>
 
     <para>Finally the window size is set using gtk_window_set_default_size and
-    the window is then shown by GTK via gtk_widget_show_all().</para>
+    the window is then shown by GTK via gtk_widget_show().</para>
 
     <para>When you exit the window, by for example pressing the X,
     the g_application_run() in the main loop returns with a number
@@ -160,7 +160,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-1 example-1.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-1 example-1.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
   </section>
@@ -238,7 +238,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-2 example-2.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-2 example-2.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
   </section>
@@ -264,7 +264,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-3 example-3.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
 
@@ -333,7 +333,7 @@
 
     <para>The full, buildable sources for these examples can be found
     in the examples/ directory of the GTK+ source distribution, or
-    <ulink url="https://git.gnome.org/browse/gtk+/tree/examples">online</ulink> in the GTK+ git repository.
+    <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples">online</ulink> in the GTK+ git repository.
     You can build each example separately by using make with the <filename>Makefile.example</filename>
     file. For more information, see the <filename>README</filename> included in the
     examples directory.</para>
@@ -450,13 +450,13 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
  ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application2/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application2/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>You may have noticed that we used the <literal>_from_resource(<!-- -->)</literal> variant
-      of the function that sets a template. Now we need to use GLib's resource
-      functionality to include the ui file in the binary. This is commonly
-      done by listing all resources in a .gresource.xml file, such as this:
+      of the function that sets a template. Now we need to use <ulink url="https://developer.gnome.org/gio/stable/GResource.html">GLib's resource functionality</ulink>
+      to include the ui file in the binary. This is commonly done by listing
+      all resources in a .gresource.xml file, such as this:
       </para>
 
       <informalexample>
@@ -488,23 +488,28 @@ example_app_window_class_init (ExampleAppWindowClass *class)
       <para>In this step, we make our application show the content of
       all the files that it is given on the commandline.</para>
 
-      <para>To this end, we add a private struct to our application
+      <para>To this end, we add a member to the struct in application
       window subclass and keep a reference to the #GtkStack there.
-      The gtk_widget_class_bind_template_child_private() function
+      The first member of the struct should be the parent type from
+      which the class is derived. Here, ExampleAppWindow is derived
+      from GtkApplicationWindow.
+      The gtk_widget_class_bind_template_child() function
       arranges things so that after instantiating the template, the
-      @stack member of the private struct will point to the widget of
+      @stack member of the struct will point to the widget of
       the same name from the template.</para>
 
       <informalexample>
         <programlisting><![CDATA[
 ...
 
-struct _ExampleAppWindowPrivate
+struct _ExampleAppWindow
 {
+  GtkApplicationWindow parent;
+
   GtkWidget *stack;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE (ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
 ...
 
@@ -513,12 +518,12 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 {
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
 }
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application3/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application3/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Now we revisit the example_app_window_open() function that
@@ -533,25 +538,21 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  ExampleAppWindowPrivate *priv;
   gchar *basename;
   GtkWidget *scrolled, *view;
   gchar *contents;
   gsize length;
 
-  priv = example_app_window_get_instance_private (win);
   basename = g_file_get_basename (file);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_show (scrolled);
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();
   gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
-  gtk_widget_show (view);
   gtk_container_add (GTK_CONTAINER (scrolled), view);
-  gtk_stack_add_titled (GTK_STACK (priv->stack), scrolled, basename, basename);
+  gtk_stack_add_titled (GTK_STACK (win->stack), scrolled, basename, basename);
 
   if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL))
     {
@@ -567,7 +568,7 @@ example_app_window_open (ExampleAppWindow *win,
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application3/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application3/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Note that we did not have to touch the stack switcher
@@ -665,7 +666,7 @@ example_app_class_init (ExampleAppClass *class)
 
 ...
         </programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application4/exampleapp.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application4/exampleapp.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Our preferences menu item does not do anything yet,
@@ -718,20 +719,17 @@ example_app_class_init (ExampleAppClass *class)
 static void
 example_app_window_init (ExampleAppWindow *win)
 {
-  ExampleAppWindowPrivate *priv;
-
-  priv = example_app_window_get_instance_private (win);
   gtk_widget_init_template (GTK_WIDGET (win));
-  priv->settings = g_settings_new ("org.gtk.exampleapp");
+  win->settings = g_settings_new ("org.gtk.exampleapp");
 
-  g_settings_bind (priv->settings, "transition",
-                   priv->stack, "transition-type",
+  g_settings_bind (win->settings, "transition",
+                   win->stack, "transition-type",
                    G_SETTINGS_BIND_DEFAULT);
 }
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application5/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application5/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>The code to connect the font setting is a little more involved,
@@ -780,7 +778,7 @@ preferences_activated (GSimpleAction *action,
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application6/exampleapp.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application6/exampleapp.c">full source</ulink>)</para>
       </informalexample>
 
       <para>After all this work, our application can now show
@@ -823,7 +821,6 @@ static void
 search_text_changed (GtkEntry         *entry,
                      ExampleAppWindow *win)
 {
-  ExampleAppWindowPrivate *priv;
   const gchar *text;
   GtkWidget *tab;
   GtkWidget *view;
@@ -835,9 +832,7 @@ search_text_changed (GtkEntry         *entry,
   if (text[0] == '\0')
     return;
 
-  priv = example_app_window_get_instance_private (win);
-
-  tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
   view = gtk_bin_get_child (GTK_BIN (tab));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
@@ -866,7 +861,7 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application7/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application7/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>With the search bar, our application now looks like this:</para>
@@ -926,7 +921,7 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application8/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application8/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>What our application looks like now:</para>
@@ -978,23 +973,23 @@ example_app_window_init (ExampleAppWindow *win)
 {
   ...
 
-  action = (GAction*) g_property_action_new ("show-lines", priv->lines, "visible");
+  action = (GAction*) g_property_action_new ("show-lines", win->lines, "visible");
   g_action_map_add_action (G_ACTION_MAP (win), action);
   g_object_unref (action);
 
-  g_object_bind_property (priv->lines, "visible",
-                          priv->lines_label, "visible",
+  g_object_bind_property (win->lines, "visible",
+                          win->lines_label, "visible",
                           G_BINDING_DEFAULT);
 }
 
 ...
         </programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application9/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application9/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>We also need a function that counts the lines of the currently
       active tab, and updates the @lines label. See the
-      <ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application9/exampleappwin.c">full source</ulink>
+      <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application9/exampleappwin.c">full source</ulink>
       if you are interested in the details.</para>
 
       <para>This brings our example application to this appearance:</para>
@@ -1078,7 +1073,7 @@ example_app_window_init (ExampleAppWindow *win)
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-4 example-4.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-4 example-4.c `pkg-config --libs gtk+-4.0`</literal>
       </literallayout>
     </para>
   </section>

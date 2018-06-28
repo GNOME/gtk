@@ -37,8 +37,6 @@
  *
  * The #GtkColorChooserDialog widget is a dialog for choosing
  * a color. It implements the #GtkColorChooser interface.
- *
- * Since: 3.4
  */
 
 struct _GtkColorChooserDialogPrivate
@@ -262,8 +260,6 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  * Creates a new #GtkColorChooserDialog.
  *
  * Returns: a new #GtkColorChooserDialog
- *
- * Since: 3.4
  */
 GtkWidget *
 gtk_color_chooser_dialog_new (const gchar *title,

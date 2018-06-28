@@ -38,12 +38,6 @@ main (int argc, char *argv[])
   gtk_widget_set_size_request (gears, 70, 50);
   gtk_fixed_put (GTK_FIXED (fixed), gears, 60, 100);
 
-  gears = gtk_gears_new ();
-  gtk_gl_area_set_has_alpha (GTK_GL_AREA (gears), TRUE);
-  gtk_widget_set_size_request (gears, 70, 50);
-  gtk_fixed_put (GTK_FIXED (fixed), gears, 120, 100);
-
-
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));
   gtk_widget_set_size_request (spinner, 50, 50);
@@ -63,12 +57,6 @@ main (int argc, char *argv[])
   gears = gtk_gears_new ();
   gtk_widget_set_size_request (gears, 70, 50);
   gtk_fixed_put (GTK_FIXED (fixed), gears, 60, 130);
-
-  gears = gtk_gears_new ();
-  gtk_gl_area_set_has_alpha (GTK_GL_AREA (gears), TRUE);
-  gtk_widget_set_size_request (gears, 70, 50);
-  gtk_fixed_put (GTK_FIXED (fixed), gears, 120, 130);
-
 
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));

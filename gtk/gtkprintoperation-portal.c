@@ -268,11 +268,7 @@ portal_end_run (GtkPrintOperation *op,
     {
       g_object_ref (op);
       if (!op_portal->file_written)
-        {
-          gdk_threads_leave ();
-          g_main_loop_run (op_portal->loop);
-          gdk_threads_enter ();
-        }
+        g_main_loop_run (op_portal->loop);
       g_object_unref (op);
     }
 }
@@ -644,9 +640,7 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
 
   call_prepare_print (op, portal);
 
-  gdk_threads_leave ();
   g_main_loop_run (portal->loop);
-  gdk_threads_enter ();
 
   *do_print = portal->do_print;
   result = portal->result;

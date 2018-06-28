@@ -42,9 +42,7 @@ create_dark_popup (GtkWidget *parent)
   gtk_window_set_decorated (GTK_WINDOW (popup), FALSE);
   gtk_widget_set_size_request (popup, 100, 100);
   gtk_window_set_resizable (GTK_WINDOW (popup), FALSE);
-
-  g_signal_connect (popup, "delete-event",
-                    G_CALLBACK (gtk_true), NULL);
+  gtk_window_set_hide_on_close (GTK_WINDOW (popup), TRUE);
 
   gtk_container_add (GTK_CONTAINER (popup), button);
   g_signal_connect (button, "toggled",

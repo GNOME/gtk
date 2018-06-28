@@ -43,22 +43,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkWidgetAccessible, gtk_widget_accessible, GTK_TYPE_AC
                          G_ADD_PRIVATE (GtkWidgetAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
-/* Translate GtkWidget::focus-in/out-event to AtkObject::focus-event */
-static gboolean
-focus_cb (GtkWidget     *widget,
-          GdkEventFocus *event)
-{
-  AtkObject *obj;
-  gboolean in;
-
-  obj = gtk_widget_get_accessible (widget);
-
-  gdk_event_get_focus_in ((GdkEvent *)event, &in);
-  g_signal_emit_by_name (obj, "focus-event", in);
-
-  return FALSE;
-}
-
 /* Translate GtkWidget property change notification to the notify_gtk vfunc */
 static void
 notify_cb (GObject    *obj,
@@ -105,18 +89,6 @@ map_cb (GtkWidget *widget)
 }
 
 static void
-gtk_widget_accessible_focus_event (AtkObject *obj,
-                                   gboolean   focus_in)
-{
-  AtkObject *focus_obj;
-
-  focus_obj = g_object_get_data (G_OBJECT (obj), "gail-focus-object");
-  if (focus_obj == NULL)
-    focus_obj = obj;
-  atk_object_notify_state_change (focus_obj, ATK_STATE_FOCUSED, focus_in);
-}
-
-static void
 gtk_widget_accessible_update_tooltip (GtkWidgetAccessible *accessible,
                                       GtkWidget *widget)
 {
@@ -134,8 +106,6 @@ gtk_widget_accessible_initialize (AtkObject *obj,
 
   widget = GTK_WIDGET (data);
 
-  g_signal_connect_after (widget, "focus-in-event", G_CALLBACK (focus_cb), NULL);
-  g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (focus_cb), NULL);
   g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), NULL);
   g_signal_connect (widget, "size-allocate", G_CALLBACK (size_allocate_cb), NULL);
   g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
@@ -372,14 +342,8 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
             atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
         }
 
-      if (gtk_widget_has_focus (widget) && (widget == _focus_widget))
-        {
-          AtkObject *focus_obj;
-
-          focus_obj = g_object_get_data (G_OBJECT (accessible), "gail-focus-object");
-          if (focus_obj == NULL)
-            atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
-        }
+      if (gtk_widget_has_focus (widget))
+        atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
 
       if (gtk_widget_has_default (widget))
         atk_state_set_add_state (state_set, ATK_STATE_DEFAULT);
@@ -470,15 +434,17 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
   gboolean value;
 
   if (g_strcmp0 (pspec->name, "has-focus") == 0)
-    /*
-     * We use focus-in-event and focus-out-event signals to catch
-     * focus changes so we ignore this.
-     */
-    return;
+    {
+      state = ATK_STATE_FOCUSED;
+      value = gtk_widget_has_focus (widget);
+    }
   else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
     {
       gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
                                             widget);
+
+      if (atk_obj->description == NULL)
+        g_object_notify (G_OBJECT (atk_obj), "accessible-description");
       return;
     }
   else if (g_strcmp0 (pspec->name, "visible") == 0)
@@ -546,7 +512,6 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
   class->get_index_in_parent = gtk_widget_accessible_get_index_in_parent;
   class->initialize = gtk_widget_accessible_initialize;
   class->get_attributes = gtk_widget_accessible_get_attributes;
-  class->focus_event = gtk_widget_accessible_focus_event;
 }
 
 static void
@@ -563,8 +528,8 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
                                    gint           *height,
                                    AtkCoordType    coord_type)
 {
-  GdkWindow *window;
-  gint x_window, y_window;
+  GdkSurface *surface;
+  gint x_surface, y_surface;
   gint x_toplevel, y_toplevel;
   GtkWidget *widget;
   GtkAllocation allocation;
@@ -587,22 +552,22 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      window = gtk_widget_get_parent_window (widget);
+      surface = gtk_widget_get_parent_surface (widget);
     }
   else
     {
       *x = 0;
       *y = 0;
-      window = gtk_widget_get_window (widget);
+      surface = gtk_widget_get_surface (widget);
     }
-  gdk_window_get_origin (window, &x_window, &y_window);
-  *x += x_window;
-  *y += y_window;
+  gdk_surface_get_origin (surface, &x_surface, &y_surface);
+  *x += x_surface;
+  *y += y_surface;
 
   if (coord_type == ATK_XY_WINDOW)
     {
-      window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
-      gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
+      surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
+      gdk_surface_get_origin (surface, &x_toplevel, &y_toplevel);
 
       *x -= x_toplevel;
       *y -= y_toplevel;
@@ -636,7 +601,7 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
     {
 #ifdef GDK_WINDOWING_X11
       gtk_window_present_with_time (GTK_WINDOW (toplevel),
-      gdk_x11_get_server_time (gtk_widget_get_window (widget)));
+      gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
 #else
       gtk_window_present (GTK_WINDOW (toplevel));
 #endif
@@ -664,9 +629,9 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
   if (coord_type == ATK_XY_WINDOW)
     {
       gint x_current, y_current;
-      GdkWindow *window = gtk_widget_get_window (widget);
+      GdkSurface *surface = gtk_widget_get_surface (widget);
 
-      gdk_window_get_origin (window, &x_current, &y_current);
+      gdk_surface_get_origin (surface, &x_current, &y_current);
       x_current += x;
       y_current += y;
       if (x_current < 0 || y_current < 0)
@@ -704,9 +669,9 @@ gtk_widget_accessible_set_position (AtkComponent *component,
       if (coord_type == ATK_XY_WINDOW)
         {
           gint x_current, y_current;
-          GdkWindow *window = gtk_widget_get_window (widget);
+          GdkSurface *surface = gtk_widget_get_surface (widget);
 
-          gdk_window_get_origin (window, &x_current, &y_current);
+          gdk_surface_get_origin (surface, &x_current, &y_current);
           x_current += x;
           y_current += y;
           if (x_current < 0 || y_current < 0)

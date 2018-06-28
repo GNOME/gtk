@@ -51,14 +51,30 @@ static GParamSpec *properties[LAST_PROP] = { NULL, };
 struct _GtkEventControllerPrivate
 {
   GtkWidget *widget;
-  guint evmask;
   GtkPropagationPhase phase;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
 
+static void
+gtk_event_controller_set_widget (GtkEventController *self,
+                                 GtkWidget          *widget)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
+
+  priv->widget = widget;
+}
+
+static void
+gtk_event_controller_unset_widget (GtkEventController *self)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
+
+  priv->widget = NULL;
+}
+
 static gboolean
-gtk_event_controller_handle_event_default (GtkEventController *controller,
+gtk_event_controller_handle_event_default (GtkEventController *self,
                                            const GdkEvent     *event)
 {
   return FALSE;
@@ -70,19 +86,12 @@ gtk_event_controller_set_property (GObject      *object,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-  GtkEventControllerPrivate *priv;
-
-  priv = gtk_event_controller_get_instance_private (GTK_EVENT_CONTROLLER (object));
+  GtkEventController *self = GTK_EVENT_CONTROLLER (object);
 
   switch (prop_id)
     {
-    case PROP_WIDGET:
-      priv->widget = g_value_get_object (value);
-      if (priv->widget)
-        g_object_add_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
-      break;
     case PROP_PROPAGATION_PHASE:
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (object),
+      gtk_event_controller_set_propagation_phase (self,
                                                   g_value_get_enum (value));
       break;
     default:
@@ -96,9 +105,8 @@ gtk_event_controller_get_property (GObject    *object,
                                    GValue     *value,
                                    GParamSpec *pspec)
 {
-  GtkEventControllerPrivate *priv;
-
-  priv = gtk_event_controller_get_instance_private (GTK_EVENT_CONTROLLER (object));
+  GtkEventController *self = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -114,67 +122,33 @@ gtk_event_controller_get_property (GObject    *object,
 }
 
 static void
-gtk_event_controller_constructed (GObject *object)
-{
-  GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
-  GtkEventControllerPrivate *priv;
-
-  G_OBJECT_CLASS (gtk_event_controller_parent_class)->constructed (object);
-
-  priv = gtk_event_controller_get_instance_private (controller);
-  if (priv->widget)
-    _gtk_widget_add_controller (priv->widget, controller);
-}
-
-static void
-gtk_event_controller_dispose (GObject *object)
-{
-  GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
-  GtkEventControllerPrivate *priv;
-
-  priv = gtk_event_controller_get_instance_private (controller);
-  if (priv->widget)
-    {
-      _gtk_widget_remove_controller (priv->widget, controller);
-      g_object_remove_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
-      priv->widget = NULL;
-    }
-
-  G_OBJECT_CLASS (gtk_event_controller_parent_class)->dispose (object);
-}
-
-static void
 gtk_event_controller_class_init (GtkEventControllerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  klass->set_widget = gtk_event_controller_set_widget;
+  klass->unset_widget = gtk_event_controller_unset_widget;
   klass->filter_event = gtk_event_controller_handle_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
 
   object_class->set_property = gtk_event_controller_set_property;
   object_class->get_property = gtk_event_controller_get_property;
-  object_class->constructed = gtk_event_controller_constructed;
-  object_class->dispose = gtk_event_controller_dispose;
 
   /**
    * GtkEventController:widget:
    *
    * The widget receiving the #GdkEvents that the controller will handle.
-   *
-   * Since: 3.14
    */
   properties[PROP_WIDGET] =
       g_param_spec_object ("widget",
                            P_("Widget"),
                            P_("Widget the gesture relates to"),
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
+                           GTK_PARAM_READABLE);
   /**
    * GtkEventController:propagation-phase:
    *
    * The propagation phase at which this controller will handle events.
-   *
-   * Since: 3.14
    */
   properties[PROP_PROPAGATION_PHASE] =
       g_param_spec_enum ("propagation-phase",
@@ -206,8 +180,6 @@ gtk_event_controller_init (GtkEventController *controller)
  *
  * Returns: %TRUE if the event was potentially useful to trigger the
  *          controller action
- *
- * Since: 3.14
  **/
 gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
@@ -241,8 +213,6 @@ gtk_event_controller_handle_event (GtkEventController *controller,
  * Returns the #GtkWidget this controller relates to.
  *
  * Returns: (transfer none): a #GtkWidget
- *
- * Since: 3.14
  **/
 GtkWidget *
 gtk_event_controller_get_widget (GtkEventController *controller)
@@ -263,8 +233,6 @@ gtk_event_controller_get_widget (GtkEventController *controller)
  * Resets the @controller to a clean state. Every interaction
  * the controller did through gtk_event_controll_handle_event()
  * will be dropped at this point.
- *
- * Since: 3.14
  **/
 void
 gtk_event_controller_reset (GtkEventController *controller)
@@ -286,8 +254,6 @@ gtk_event_controller_reset (GtkEventController *controller)
  * Gets the propagation phase at which @controller handles events.
  *
  * Returns: the propagation phase
- *
- * Since: 3.14
  **/
 GtkPropagationPhase
 gtk_event_controller_get_propagation_phase (GtkEventController *controller)
@@ -311,8 +277,6 @@ gtk_event_controller_get_propagation_phase (GtkEventController *controller)
  * If @phase is %GTK_PHASE_NONE, no automatic event handling will be
  * performed, but other additional gesture maintenance will. In that phase,
  * the events can be managed by calling gtk_event_controller_handle_event().
- *
- * Since: 3.14
  **/
 void
 gtk_event_controller_set_propagation_phase (GtkEventController  *controller,

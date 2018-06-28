@@ -35,6 +35,9 @@ typedef struct _GdkGLContextClass       GdkGLContextClass;
 struct _GdkGLContext
 {
   GdkDrawContext parent_instance;
+
+  /* We store the old drawn areas to support buffer-age optimizations */
+  cairo_region_t *old_updated_area[2];
 };
 
 struct _GdkGLContextClass

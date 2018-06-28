@@ -53,17 +53,21 @@
 
 #include "gtkswitch.h"
 
-#include "gtkintl.h"
-#include "gtkprivate.h"
-#include "gtkwidget.h"
-#include "gtkmarshalers.h"
 #include "gtkactionable.h"
-#include "a11y/gtkswitchaccessible.h"
-#include "gtkactionhelper.h"
-#include "gtkwidgetprivate.h"
+#include "gtkactionhelperprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturepan.h"
+#include "gtkgesturesingle.h"
+#include "gtkgizmoprivate.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtkgizmoprivate.h"
+#include "gtkwidgetprivate.h"
+
+#include "a11y/gtkswitchaccessible.h"
 
 #include "fallback-c89.c"
 
@@ -184,16 +188,16 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                        GtkSwitch            *sw)
 {
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
-  GtkAllocation allocation;
+  graphene_rect_t switch_bounds;
 
-  gtk_widget_get_outer_allocation (GTK_WIDGET (sw), &allocation);
+  gtk_widget_compute_bounds (GTK_WIDGET (sw), GTK_WIDGET (sw), &switch_bounds);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If the press didn't happen in the draggable handle,
    * cancel the pan gesture right away
    */
-  if ((priv->is_active && x <= allocation.width / 2.0) ||
-      (!priv->is_active && x > allocation.width / 2.0))
+  if ((priv->is_active && x <= switch_bounds.size.width / 2.0) ||
+      (!priv->is_active && x > switch_bounds.size.width / 2.0))
     gtk_gesture_set_state (priv->pan_gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
@@ -205,13 +209,10 @@ gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
                                         GtkSwitch            *sw)
 {
   GdkEventSequence *sequence;
-  GdkRectangle own_alloc;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  gtk_widget_get_own_allocation (GTK_WIDGET (sw), &own_alloc);
-
-  if (gdk_rectangle_contains_point (&own_alloc, x, y) &&
+  if (gtk_widget_contains (GTK_WIDGET (sw), x, y) &&
       gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     gtk_switch_begin_toggle_animation (sw);
 }
@@ -224,15 +225,14 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
 {
   GtkWidget *widget = GTK_WIDGET (sw);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
-  gint width;
-  int height;
+  int width;
+
+  width = gtk_widget_get_width (widget);
 
   if (direction == GTK_PAN_DIRECTION_LEFT)
     offset = -offset;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
-  gtk_widget_get_content_size (widget, &width, &height);
 
   if (priv->is_active)
     offset += width / 2;
@@ -318,12 +318,10 @@ gtk_switch_measure (GtkWidget      *widget,
 static void
 gtk_switch_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
+                          int                  baseline)
 {
   GtkSwitch *self = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
-  GtkAllocation child_clip;
   GtkAllocation child_alloc;
   GtkAllocation slider_alloc;
   int min;
@@ -333,9 +331,7 @@ gtk_switch_size_allocate (GtkWidget           *widget,
   slider_alloc.width = allocation->width / 2;
   slider_alloc.height = allocation->height;
 
-  gtk_widget_size_allocate (priv->slider, &slider_alloc, -1, &child_clip);
-  gtk_widget_get_clip (priv->slider, &child_clip);
-  gdk_rectangle_union (out_clip, &child_clip, out_clip);
+  gtk_widget_size_allocate (priv->slider, &slider_alloc, -1);
 
 
   /* Center ON label in left half */
@@ -345,8 +341,7 @@ gtk_switch_size_allocate (GtkWidget           *widget,
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (allocation->height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (priv->on_label, &child_alloc, -1, &child_clip);
-  gdk_rectangle_union (out_clip, &child_clip, out_clip);
+  gtk_widget_size_allocate (priv->on_label, &child_alloc, -1);
 
   /* Center OFF label in right half */
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
@@ -355,8 +350,7 @@ gtk_switch_size_allocate (GtkWidget           *widget,
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (allocation->height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (priv->off_label, &child_alloc, -1, &child_clip);
-  gdk_rectangle_union (out_clip, &child_clip, out_clip);
+  gtk_widget_size_allocate (priv->off_label, &child_alloc, -1);
 }
 
 static void
@@ -481,9 +475,6 @@ gtk_switch_dispose (GObject *object)
 
   g_clear_object (&priv->action_helper);
 
-  g_clear_object (&priv->pan_gesture);
-  g_clear_object (&priv->multipress_gesture);
-
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
 
@@ -537,8 +528,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    *
    * The backend state that is controlled by the switch. 
    * See #GtkSwitch::state-set for details.
-   *
-   * Since: 3.14
    */
   switch_props[PROP_STATE] =
     g_param_spec_boolean ("state",
@@ -599,8 +588,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    * position of the switch.
    *
    * Returns: %TRUE to stop the signal emission
-   *
-   * Since: 3.14
    */
   signals[STATE_SET] =
     g_signal_new (I_("state-set"),
@@ -618,7 +605,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SWITCH_ACCESSIBLE);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOGGLE_BUTTON);
 
-  gtk_widget_class_set_css_name (widget_class, "switch");
+  gtk_widget_class_set_css_name (widget_class, I_("switch"));
 }
 
 static void
@@ -627,10 +614,10 @@ gtk_switch_init (GtkSwitch *self)
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
   GtkGesture *gesture;
 
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
-  gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pressed",
@@ -639,10 +626,10 @@ gtk_switch_init (GtkSwitch *self)
                     G_CALLBACK (gtk_switch_multipress_gesture_released), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->multipress_gesture = gesture;
 
-  gesture = gtk_gesture_pan_new (GTK_WIDGET (self),
-                                 GTK_ORIENTATION_HORIZONTAL);
+  gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pan",
@@ -651,6 +638,7 @@ gtk_switch_init (GtkSwitch *self)
                     G_CALLBACK (gtk_switch_pan_gesture_drag_end), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
   /* Translators: if the "on" state label requires more than three
@@ -676,8 +664,6 @@ gtk_switch_init (GtkSwitch *self)
  * Creates a new #GtkSwitch widget.
  *
  * Returns: the newly created #GtkSwitch instance
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_switch_new (void)
@@ -691,8 +677,6 @@ gtk_switch_new (void)
  * @is_active: %TRUE if @sw should be active, and %FALSE otherwise
  *
  * Changes the state of @sw to the desired one.
- *
- * Since: 3.0
  */
 void
 gtk_switch_set_active (GtkSwitch *sw,
@@ -736,8 +720,6 @@ gtk_switch_set_active (GtkSwitch *sw,
  * Gets whether the #GtkSwitch is in its “on” or “off” state.
  *
  * Returns: %TRUE if the #GtkSwitch is active, and %FALSE otherwise
- *
- * Since: 3.0
  */
 gboolean
 gtk_switch_get_active (GtkSwitch *sw)
@@ -761,8 +743,6 @@ gtk_switch_get_active (GtkSwitch *sw)
  * called from a #GtkSwitch::state-set signal handler.
  *
  * See #GtkSwitch::state-set for details.
- *
- * Since: 3.14
  */
 void
 gtk_switch_set_state (GtkSwitch *sw,
@@ -799,8 +779,6 @@ gtk_switch_set_state (GtkSwitch *sw,
  * Gets the underlying state of the #GtkSwitch.
  *
  * Returns: the underlying state
- *
- * Since: 3.14
  */
 gboolean
 gtk_switch_get_state (GtkSwitch *sw)

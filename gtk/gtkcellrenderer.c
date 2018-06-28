@@ -16,12 +16,16 @@
  */
 
 #include "config.h"
+
 #include "gtkcellrenderer.h"
+
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gtktreeprivate.h"
+#include "gtktypebuiltins.h"
+
 #include "a11y/gtkrenderercellaccessible.h"
 
 
@@ -29,7 +33,7 @@
  * SECTION:gtkcellrenderer
  * @Short_description: An object for rendering a single cell
  * @Title: GtkCellRenderer
- * @See_also: #GtkCellRendererText, #GtkCellRendererPixbuf, #GtkCellRendererToggle
+ * @See_also: #GtkCellEditable
  *
  * The #GtkCellRenderer is a base class of a set of objects used for
  * rendering a cell to a #cairo_t.  These objects are used primarily by
@@ -56,7 +60,8 @@
  * “activatable” like #GtkCellRendererToggle,
  * which toggles when it gets activated by a mouse click, or it can be
  * “editable” like #GtkCellRendererText, which
- * allows the user to edit the text using a #GtkEntry.
+ * allows the user to edit the text using a widget implementing the
+ * #GtkCellEditable interface, e.g. #GtkEntry.
  * To make a cell renderer activatable or editable, you have to
  * implement the #GtkCellRendererClass.activate or
  * #GtkCellRendererClass.start_editing virtual functions, respectively.
@@ -220,8 +225,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * editing when the user presses Escape. 
    *
    * See also: gtk_cell_renderer_stop_editing().
-   *
-   * Since: 2.4
    */
   cell_renderer_signals[EDITING_CANCELED] =
     g_signal_new (I_("editing-canceled"),
@@ -242,6 +245,9 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * The intended use of this signal is to do special setup
    * on @editable, e.g. adding a #GtkEntryCompletion or setting
    * up additional columns in a #GtkComboBox.
+   *
+   * See gtk_cell_editable_start_editing() for information on the lifecycle of
+   * the @editable and a way to do setup that doesn’t depend on the @renderer.
    *
    * Note that GTK+ doesn't guarantee that cell renderers will
    * continue to use the same kind of widget for editing in future
@@ -264,8 +270,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    *     }
    * }
    * ]|
-   *
-   * Since: 2.6
    */
   cell_renderer_signals[EDITING_STARTED] =
     g_signal_new (I_("editing-started"),
@@ -391,8 +395,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * GtkCellRenderer:cell-background-rgba:
    *
    * Cell background as a #GdkRGBA
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND_RGBA,
@@ -685,8 +687,6 @@ set_cell_bg_color (GtkCellRenderer *cell,
  * blank space around the cell, and also the area containing the tree expander;
  * so the @background_area rectangles for all cells tile to cover the entire
  * @window.
- *
- * Since: 3.90
  **/
 void
 gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
@@ -707,6 +707,8 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
 
   selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
 
+  gtk_snapshot_push_debug (snapshot, "%s", G_OBJECT_TYPE_NAME (cell));
+
   if (priv->cell_background_set && !selected)
     {
       gtk_snapshot_append_color (snapshot,
@@ -714,16 +716,14 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
                                  &GRAPHENE_RECT_INIT (
                                      background_area->x, background_area->y,
                                      background_area->width, background_area->height
-                                 ),
-                                 "CellBackground");
+                                 ));
     }
 
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
                               background_area->x, background_area->y,
                               background_area->width, background_area->height
-                          ),
-                          "CellClip");
+                          ));
 
   context = gtk_widget_get_style_context (widget);
 
@@ -740,6 +740,7 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
                                                 cell_area,
                                                 flags);
   gtk_style_context_restore (context);
+  gtk_snapshot_pop (snapshot);
   gtk_snapshot_pop (snapshot);
 }
 
@@ -801,9 +802,11 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
  * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
  *
- * Passes an activate event to the cell renderer for possible processing.
+ * Starts editing the contents of this @cell, through a new #GtkCellEditable
+ * widget created by the #GtkCellRendererClass.start_editing virtual function.
  *
- * Returns: (nullable) (transfer none): A new #GtkCellEditable, or %NULL
+ * Returns: (nullable) (transfer none): A new #GtkCellEditable for editing this
+ *   @cell, or %NULL if editing is not possible
  **/
 GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
@@ -922,8 +925,6 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  * @yalign: the y alignment of the cell renderer
  *
  * Sets the renderer’s alignment within its available space.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
@@ -965,8 +966,6 @@ gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
  * @yalign: (out) (allow-none): location to fill in with the y alignment of the cell, or %NULL
  *
  * Fills in @xalign and @yalign with the appropriate values of @cell.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
@@ -992,8 +991,6 @@ gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
  * @ypad: the y padding of the cell renderer
  *
  * Sets the renderer’s padding.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
@@ -1034,8 +1031,6 @@ gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
  * @ypad: (out) (allow-none): location to fill in with the y padding of the cell, or %NULL
  *
  * Fills in @xpad and @ypad with the appropriate values of @cell.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_get_padding (GtkCellRenderer *cell,
@@ -1060,8 +1055,6 @@ gtk_cell_renderer_get_padding (GtkCellRenderer *cell,
  * @visible: the visibility of the cell
  *
  * Sets the cell renderer’s visibility.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
@@ -1087,8 +1080,6 @@ gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
  * Returns the cell renderer’s visibility.
  *
  * Returns: %TRUE if the cell renderer is visible
- *
- * Since: 2.18
  */
 gboolean
 gtk_cell_renderer_get_visible (GtkCellRenderer *cell)
@@ -1104,8 +1095,6 @@ gtk_cell_renderer_get_visible (GtkCellRenderer *cell)
  * @sensitive: the sensitivity of the cell
  *
  * Sets the cell renderer’s sensitivity.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_set_sensitive (GtkCellRenderer *cell,
@@ -1131,8 +1120,6 @@ gtk_cell_renderer_set_sensitive (GtkCellRenderer *cell,
  * Returns the cell renderer’s sensitivity.
  *
  * Returns: %TRUE if the cell renderer is sensitive
- *
- * Since: 2.18
  */
 gboolean
 gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
@@ -1150,8 +1137,6 @@ gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
  * Checks whether the cell renderer can do something when activated.
  *
  * Returns: %TRUE if the cell renderer can do anything when activated
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_renderer_is_activatable (GtkCellRenderer *cell)
@@ -1180,8 +1165,6 @@ gtk_cell_renderer_is_activatable (GtkCellRenderer *cell)
  * This function should be called by cell renderer implementations 
  * in response to the #GtkCellEditable::editing-done signal of 
  * #GtkCellEditable.
- *
- * Since: 2.6
  **/
 void
 gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
@@ -1395,8 +1378,6 @@ _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
  * or a width-for-height layout.
  *
  * Returns: The #GtkSizeRequestMode preferred by this renderer.
- *
- * Since: 3.0
  */
 GtkSizeRequestMode
 gtk_cell_renderer_get_request_mode (GtkCellRenderer *cell)
@@ -1414,8 +1395,6 @@ gtk_cell_renderer_get_request_mode (GtkCellRenderer *cell)
  * @natural_size: (out) (allow-none): location to store the natural size, or %NULL
  *
  * Retreives a renderer’s natural size when rendered to @widget.
- *
- * Since: 3.0
  */
 void
 gtk_cell_renderer_get_preferred_width (GtkCellRenderer *cell,
@@ -1462,8 +1441,6 @@ gtk_cell_renderer_get_preferred_width (GtkCellRenderer *cell,
  * @natural_size: (out) (allow-none): location to store the natural size, or %NULL
  *
  * Retreives a renderer’s natural size when rendered to @widget.
- *
- * Since: 3.0
  */
 void
 gtk_cell_renderer_get_preferred_height (GtkCellRenderer *cell,
@@ -1512,8 +1489,6 @@ gtk_cell_renderer_get_preferred_height (GtkCellRenderer *cell,
  *
  * Retreives a cell renderers’s minimum and natural width if it were rendered to 
  * @widget with the specified @height.
- *
- * Since: 3.0
  */
 void
 gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer *cell,
@@ -1562,8 +1537,6 @@ gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer *cell,
  *
  * Retreives a cell renderers’s minimum and natural height if it were rendered to 
  * @widget with the specified @width.
- *
- * Since: 3.0
  */
 void
 gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer *cell,
@@ -1611,8 +1584,6 @@ gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer *cell,
  *
  * Retrieves the minimum and natural size of a cell taking
  * into account the widget’s preference for height-for-width management.
- *
- * Since: 3.0
  */
 void
 gtk_cell_renderer_get_preferred_size (GtkCellRenderer *cell,
@@ -1674,8 +1645,6 @@ gtk_cell_renderer_get_preferred_size (GtkCellRenderer *cell,
  *
  * Gets the aligned area used by @cell inside @cell_area. Used for finding
  * the appropriate edit and focus rectangle.
- *
- * Since: 3.0
  */
 void
 gtk_cell_renderer_get_aligned_area (GtkCellRenderer      *cell,
@@ -1711,8 +1680,6 @@ gtk_cell_renderer_get_aligned_area (GtkCellRenderer      *cell,
  * the given #GtkCellRendererState.
  *
  * Returns: the widget state flags applying to @cell
- *
- * Since: 3.0
  **/
 GtkStateFlags
 gtk_cell_renderer_get_state (GtkCellRenderer      *cell,

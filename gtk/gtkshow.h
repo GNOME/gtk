@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_show_uri_on_window (GtkWindow   *parent,
                                  const char  *uri,
                                  guint32      timestamp,

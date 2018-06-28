@@ -69,8 +69,8 @@ gtk_spinner_accessible_image_get_size (AtkImage *image,
       return;
     }
 
-  *width = gtk_widget_get_allocated_width (widget);
-  *height = gtk_widget_get_allocated_height (widget);
+  *width = gtk_widget_get_width (widget);
+  *height = gtk_widget_get_height (widget);
 }
 
 static void

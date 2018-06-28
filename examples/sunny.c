@@ -17,7 +17,7 @@ new_window (GApplication *app,
   header = gtk_header_bar_new ();
   gtk_widget_show (header);
   gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Sunny");
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
   overlay = gtk_overlay_new ();

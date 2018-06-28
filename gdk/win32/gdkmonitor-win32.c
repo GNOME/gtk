@@ -33,6 +33,8 @@
 
 #include "config.h"
 
+#include "gdkprivate-win32.h"
+#include "gdkdisplay-win32.h"
 #include "gdkmonitor-win32.h"
 
 #include <glib.h>
@@ -681,19 +683,49 @@ enum_monitor (HMONITOR hmonitor,
           /* This is the reason this function exists. This data is not available
            * via other functions.
            */
-          scale = gdk_monitor_get_scale_factor (mon);
+          rect.x = monitor_info.rcWork.left;
+          rect.y = monitor_info.rcWork.top;
+          rect.width = (monitor_info.rcWork.right - monitor_info.rcWork.left);
+          rect.height = (monitor_info.rcWork.bottom - monitor_info.rcWork.top);
+          /* This is temporary, scale will be applied below */
+          w32mon->work_rect = rect;
+
+          if (data->display->has_fixed_scale)
+            scale = data->display->surface_scale;
+          else
+            {
+              /* First acquire the scale using the current screen */
+              scale = _gdk_win32_display_get_monitor_scale_factor (data->display, NULL, NULL, NULL);
+
+              /* acquire the scale using the monitor which the window is nearest on Windows 8.1+ */
+              if (data->display->have_at_least_win81)
+                {
+                  HMONITOR hmonitor;
+                  POINT pt;
+
+                  /* Not subtracting _gdk_offset_x and _gdk_offset_y because they will only
+                   * be added later on, in _gdk_win32_display_get_monitor_list().
+                   */
+                  pt.x = w32mon->work_rect.x + w32mon->work_rect.width / 2;
+                  pt.y = w32mon->work_rect.y + w32mon->work_rect.height / 2;
+                  hmonitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
+                  scale = _gdk_win32_display_get_monitor_scale_factor (data->display, hmonitor, NULL, NULL);
+                }
+            }
+
+          gdk_monitor_set_scale_factor (mon, scale);
+          /* Now apply the scale to the work rectangle */
+          w32mon->work_rect.x /= scale;
+          w32mon->work_rect.y /= scale;
+          w32mon->work_rect.width /= scale;
+          w32mon->work_rect.height /= scale;
+
           rect.x = monitor_info.rcMonitor.left / scale;
           rect.y = monitor_info.rcMonitor.top / scale;
           rect.width = (monitor_info.rcMonitor.right - monitor_info.rcMonitor.left) / scale;
           rect.height = (monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top) / scale;
           gdk_monitor_set_position (mon, rect.x, rect.y);
           gdk_monitor_set_size (mon, rect.width, rect.height);
-
-          rect.x = monitor_info.rcWork.left / scale;
-          rect.y = monitor_info.rcWork.top / scale;
-          rect.width = (monitor_info.rcWork.right - monitor_info.rcWork.left) / scale;
-          rect.height = (monitor_info.rcWork.bottom - monitor_info.rcWork.top) / scale;
-          w32mon->work_rect = rect;
 
           if (monitor_info.dwFlags & MONITORINFOF_PRIMARY && i != 0)
             {
@@ -722,6 +754,22 @@ enum_monitor (HMONITOR hmonitor,
   return TRUE;
 }
 
+static void
+prune_monitors (EnumMonitorData *data)
+{
+  gint i;
+
+  for (i = 0; i < data->monitors->len; i++)
+    {
+      GdkWin32Monitor *m;
+
+      m = g_ptr_array_index (data->monitors, i);
+
+      if (m->remove)
+        g_ptr_array_remove_index (data->monitors, i--);
+    }
+}
+
 GPtrArray *
 _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
 {
@@ -743,6 +791,18 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
 
   EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &data);
 
+  prune_monitors (&data);
+
+  if (data.monitors->len == 0 && data.have_monitor_devices)
+    {
+      /* We thought we had monitors, but enumeration eventually failed, and
+       * we have none. Try again, this time making stuff up as we go.
+       */
+      data.have_monitor_devices = FALSE;
+      EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &data);
+      prune_monitors (&data);
+    }
+
   _gdk_offset_x = G_MININT;
   _gdk_offset_y = G_MININT;
 
@@ -752,12 +812,6 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
       GdkRectangle rect;
 
       m = g_ptr_array_index (data.monitors, i);
-
-      if (m->remove)
-        {
-          g_ptr_array_remove_index (data.monitors, i);
-          continue;
-        }
 
       /* Calculate offset */
       gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);

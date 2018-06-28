@@ -106,7 +106,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   invisible->priv = gtk_invisible_get_instance_private (invisible);
   priv = invisible->priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (invisible), TRUE);
+  gtk_widget_set_has_surface (GTK_WIDGET (invisible), TRUE);
   _gtk_widget_set_is_toplevel (GTK_WIDGET (invisible), TRUE);
 
   g_object_ref_sink (invisible);
@@ -138,8 +138,6 @@ gtk_invisible_destroy (GtkWidget *widget)
  * Creates a new #GtkInvisible object for a specified display.
  *
  * Returns: a newly created #GtkInvisible object
- *
- * Since: 3.94
  **/
 GtkWidget* 
 gtk_invisible_new_for_display (GdkDisplay *display)
@@ -168,8 +166,6 @@ gtk_invisible_new (void)
  * @display: a #GdkDisplay.
  *
  * Sets the #GdkDisplay where the #GtkInvisible object will be displayed.
- *
- * Since: 3.94
  **/ 
 void
 gtk_invisible_set_display (GtkInvisible *invisible,
@@ -212,8 +208,6 @@ gtk_invisible_set_display (GtkInvisible *invisible,
  * Returns the #GdkDisplay object associated with @invisible
  *
  * Returns: (transfer none): the associated #GdkDisplay.
- *
- * Since: 3.94
  **/
 GdkDisplay *
 gtk_invisible_get_display (GtkInvisible *invisible)
@@ -226,13 +220,13 @@ gtk_invisible_get_display (GtkInvisible *invisible)
 static void
 gtk_invisible_realize (GtkWidget *widget)
 {
-  GdkWindow *window;
+  GdkSurface *surface;
 
-  gtk_widget_set_realized (widget, TRUE);
+  surface = gdk_surface_new_temp (gtk_widget_get_display (widget));
+  gtk_widget_set_surface (widget, surface);
+  gtk_widget_register_surface (widget, surface);
 
-  window = gdk_window_new_temp (gtk_widget_get_display (widget));
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
+  GTK_WIDGET_CLASS (gtk_invisible_parent_class)->realize (widget);
 }
 
 static void

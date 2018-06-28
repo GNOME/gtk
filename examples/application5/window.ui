@@ -7,14 +7,11 @@
     <property name="default-height">400</property>
     <child>
       <object class="GtkBox" id="content_box">
-        <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkHeaderBar" id="header">
-            <property name="visible">True</property>
             <child type="title">
               <object class="GtkStackSwitcher" id="tabs">
-                <property name="visible">True</property>
                 <property name="stack">stack</property>
               </object>
             </child>
@@ -22,7 +19,6 @@
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="visible">True</property>
           </object>
         </child>
       </object>

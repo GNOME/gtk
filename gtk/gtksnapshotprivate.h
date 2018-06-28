@@ -27,15 +27,12 @@ typedef struct _GtkSnapshotState GtkSnapshotState;
 typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
                                                     GtkSnapshotState *state,
                                                     GskRenderNode   **nodes,
-                                                    guint             n_nodes,
-                                                    const char       *name);
+                                                    guint             n_nodes);
 
 struct _GtkSnapshotState {
-  char                  *name;
   guint                  start_node_index;
   guint                  n_nodes;
 
-  cairo_region_t        *clip_region;
   int                    translate_x;
   int                    translate_y;
 
@@ -77,25 +74,30 @@ struct _GtkSnapshotState {
       double progress;
       GskRenderNode *start_node;
     } cross_fade;
+    struct {
+      char *message;
+    } debug;
   } data;
 };
 
-struct _GtkSnapshot {
-  gboolean               record_names;
-  GskRenderer           *renderer;
+/* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
+ * so that we don't need to typecast between them.
+ * After all, the GdkSnapshot only exist so poor language bindings don't trip. Hardcore
+ * C code can just blatantly ignore such layering violations with a typedef.
+ */
+struct _GdkSnapshot {
+  GObject                parent_instance; /* it's really GdkSnapshot, but don't tell anyone! */
+
   GArray                *state_stack;
   GPtrArray             *nodes;
 };
 
-void            gtk_snapshot_init               (GtkSnapshot             *state,
-                                                 GskRenderer             *renderer,
-                                                 gboolean                 record_names,
-                                                 const cairo_region_t    *clip,
-                                                 const char              *name,
-                                                 ...) G_GNUC_PRINTF (5, 6);
-GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
+struct _GtkSnapshotClass {
+  GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
+};
 
-GskRenderer *   gtk_snapshot_get_renderer       (const GtkSnapshot       *snapshot);
+void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
+                                                                 GskRenderNode          *node);
 
 G_END_DECLS
 

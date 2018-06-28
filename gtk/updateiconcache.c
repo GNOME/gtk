@@ -39,7 +39,7 @@
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <glib/gi18n.h>
-#include "gtkiconcachevalidator.h"
+#include "gtkiconcachevalidatorprivate.h"
 
 static gboolean force_update = FALSE;
 static gboolean ignore_theme_index = FALSE;
@@ -47,11 +47,6 @@ static gboolean quiet = FALSE;
 static gboolean index_only = TRUE;
 static gboolean validate = FALSE;
 static gchar *var_name = (gchar *) "-";
-
-/* Quite ugly - if we just add the c file to the
- * list of sources in Makefile.am, libtool complains.
- */
-#include "gtkiconcachevalidator.c"
 
 #define CACHE_NAME "icon-theme.cache"
 
@@ -75,7 +70,7 @@ static GStatBuf cache_dir_stat;
 static gboolean cache_up_to_date;
 
 static int check_dir_mtime (const char        *dir,
-                            const GStatBuf    *sb,
+                            const struct stat *sb,
                             int                tf)
 {
   if (tf != FTW_NS && sb->st_mtime > cache_dir_stat.st_mtime)
@@ -1427,7 +1422,7 @@ validate_file (const gchar *file)
   info.n_directories = 0;
   info.flags = CHECK_OFFSETS|CHECK_STRINGS|CHECK_PIXBUFS;
 
-  if (!_gtk_icon_cache_validate (&info))
+  if (!gtk_icon_cache_validate (&info))
     {
       g_mapped_file_unref (map);
       return FALSE;

@@ -44,15 +44,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkRadioButton              GtkRadioButton;
-typedef struct _GtkRadioButtonPrivate       GtkRadioButtonPrivate;
 typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
 
 struct _GtkRadioButton
 {
-  GtkCheckButton check_button;
-
-  /*< private >*/
-  GtkRadioButtonPrivate *priv;
+  GtkCheckButton parent_instance;
 };
 
 struct _GtkRadioButtonClass

@@ -2,10 +2,151 @@ subdir('deprecated')
 subdir('a11y')
 subdir('inspector')
 
-gtk_public_sources = files([
+gtk_cargs = [
+  '-DGTK_COMPILATION',
+  '-DG_LOG_DOMAIN="Gtk"',
+  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
+  '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
+  '-DGTK_HOST="@0@"'.format(host_machine.system()),
+  '-DGTK_DATA_PREFIX="@0@"'.format(gtk_prefix),
+]
+
+# List of sources that do not contain public API, and should not be
+# introspected
+gtk_private_sources = files([
   'fallback-c89.c',
   'fnmatch.c',
   'gdkpixbufutils.c',
+  'gtkactionhelper.c',
+  'gtkactionmuxer.c',
+  'gtkactionobservable.c',
+  'gtkactionobserver.c',
+  'gtkallocatedbitmask.c',
+  'gtkapplicationaccels.c',
+  'gtkapplicationimpl.c',
+  'gtkbookmarksmanager.c',
+  'gtkbuilder-menus.c',
+  'gtkbuilderparser.c',
+  'gtkcellareaboxcontext.c',
+  'gtkcoloreditor.c',
+  'gtkcolorplane.c',
+  'gtkcolorscale.c',
+  'gtkcolorswatch.c',
+  'gtkcssanimatedstyle.c',
+  'gtkcssanimation.c',
+  'gtkcssarrayvalue.c',
+  'gtkcssbgsizevalue.c',
+  'gtkcssbordervalue.c',
+  'gtkcsscalcvalue.c',
+  'gtkcsscolorvalue.c',
+  'gtkcsscornervalue.c',
+  'gtkcssdimensionvalue.c',
+  'gtkcssdynamic.c',
+  'gtkcsseasevalue.c',
+  'gtkcssenumvalue.c',
+  'gtkcssfiltervalue.c',
+  'gtkcssfontfeaturesvalue.c',
+  'gtkcssfontvariationsvalue.c',
+  'gtkcssiconthemevalue.c',
+  'gtkcssimage.c',
+  'gtkcssimagebuiltin.c',
+  'gtkcssimagecrossfade.c',
+  'gtkcssimagefallback.c',
+  'gtkcssimageicontheme.c',
+  'gtkcssimageinvalid.c',
+  'gtkcssimagelinear.c',
+  'gtkcssimagepaintable.c',
+  'gtkcssimageradial.c',
+  'gtkcssimagerecolor.c',
+  'gtkcssimagescaled.c',
+  'gtkcssimageurl.c',
+  'gtkcssimagevalue.c',
+  'gtkcssimagewin32.c',
+  'gtkcssinheritvalue.c',
+  'gtkcssinitialvalue.c',
+  'gtkcsskeyframes.c',
+  'gtkcsslookup.c',
+  'gtkcssmatcher.c',
+  'gtkcssnode.c',
+  'gtkcssnodedeclaration.c',
+  'gtkcssnodestylecache.c',
+  'gtkcssnumbervalue.c',
+  'gtkcsspalettevalue.c',
+  'gtkcssparser.c',
+  'gtkcsspathnode.c',
+  'gtkcsspositionvalue.c',
+  'gtkcssrepeatvalue.c',
+  'gtkcssrgbavalue.c',
+  'gtkcssselector.c',
+  'gtkcssshadowsvalue.c',
+  'gtkcssshadowvalue.c',
+  'gtkcssshorthandproperty.c',
+  'gtkcssshorthandpropertyimpl.c',
+  'gtkcssstaticstyle.c',
+  'gtkcssstringvalue.c',
+  'gtkcssstyle.c',
+  'gtkcssstylechange.c',
+  'gtkcssstyleproperty.c',
+  'gtkcssstylepropertyimpl.c',
+  'gtkcsstransformvalue.c',
+  'gtkcsstransientnode.c',
+  'gtkcsstransition.c',
+  'gtkcsstypes.c',
+  'gtkcssunsetvalue.c',
+  'gtkcssvalue.c',
+  'gtkcsswidgetnode.c',
+  'gtkcsswin32sizevalue.c',
+  'gtkeventcontrollerlegacy.c',
+  'gtkfilechooserembed.c',
+  'gtkfilechooserentry.c',
+  'gtkfilechoosererrorstack.c',
+  'gtkfilechoosernativeportal.c',
+  'gtkfilechooserutils.c',
+  'gtkfilesystem.c',
+  'gtkfilesystemmodel.c',
+  'gtkgizmo.c',
+  'gtkgladecatalog.c',
+  'gtkhsla.c',
+  'gtkicon.c',
+  'gtkiconcache.c',
+  'gtkiconcachevalidator.c',
+  'gtkiconhelper.c',
+  'gtkkineticscrolling.c',
+  'gtkkeyhash.c',
+  'gtkmagnifier.c',
+  'gtkmenusectionbox.c',
+  'gtkmenutracker.c',
+  'gtkmenutrackeritem.c',
+  'gtkmnemonichash.c',
+  'gtkpango.c',
+  'gskpango.c',
+  'gtkpathbar.c',
+  'gtkplacessidebar.c',
+  'gtkplacesview.c',
+  'gtkplacesviewrow.c',
+  'gtkpointerfocus.c',
+  'gtkprintutils.c',
+  'gtkprivate.c',
+  'gtkprogresstracker.c',
+  'gtkquery.c',
+  'gtkscaler.c',
+  'gtksearchengine.c',
+  'gtksearchenginemodel.c',
+  'gtksearchenginesimple.c',
+  'gtksizerequestcache.c',
+  'gtkstyleanimation.c',
+  'gtkstylecascade.c',
+  'gtkstyleproperty.c',
+  'gtktextbtree.c',
+  'gtktrashmonitor.c',
+  'gtktreedatalist.c',
+  'gtkwin32draw.c',
+  'gtkwin32theme.c',
+  'gtkwin32theme.c',
+])
+
+# List of files that contain public API, and should be introspected
+gtk_public_sources = files([
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
   'gtkaccellabel.c',
@@ -13,37 +154,26 @@ gtk_public_sources = files([
   'gtkaccessible.c',
   'gtkactionable.c',
   'gtkactionbar.c',
-  'gtkactionhelper.c',
-  'gtkactionmuxer.c',
-  'gtkactionobservable.c',
-  'gtkactionobserver.c',
   'gtkadjustment.c',
-  'gtkallocatedbitmask.c',
   'gtkappchooser.c',
   'gtkappchooserbutton.c',
   'gtkappchooserdialog.c',
   'gtkappchooserwidget.c',
   'gtkapplication.c',
-  'gtkapplicationaccels.c',
-  'gtkapplicationimpl.c',
   'gtkapplicationwindow.c',
   'gtkaspectframe.c',
   'gtkassistant.c',
   'gtkbbox.c',
   'gtkbin.c',
   'gtkbindings.c',
-  'gtkbookmarksmanager.c',
   'gtkborder.c',
   'gtkbox.c',
   'gtkbuildable.c',
-  'gtkbuilder-menus.c',
   'gtkbuilder.c',
-  'gtkbuilderparser.c',
   'gtkbutton.c',
   'gtkcalendar.c',
   'gtkcellarea.c',
   'gtkcellareabox.c',
-  'gtkcellareaboxcontext.c',
   'gtkcellareacontext.c',
   'gtkcelleditable.c',
   'gtkcelllayout.c',
@@ -64,104 +194,36 @@ gtk_public_sources = files([
   'gtkcolorchooser.c',
   'gtkcolorchooserdialog.c',
   'gtkcolorchooserwidget.c',
-  'gtkcoloreditor.c',
-  'gtkcolorplane.c',
-  'gtkcolorscale.c',
-  'gtkcolorswatch.c',
   'gtkcolorutils.c',
   'gtkcombobox.c',
   'gtkcomboboxtext.c',
   'gtkcomposetable.c',
   'gtkcontainer.c',
-  'gtkcssanimatedstyle.c',
-  'gtkcssanimation.c',
-  'gtkcssarrayvalue.c',
-  'gtkcssbgsizevalue.c',
-  'gtkcssbordervalue.c',
-  'gtkcsscalcvalue.c',
-  'gtkcsscolorvalue.c',
-  'gtkcsscornervalue.c',
-  'gtkcssdimensionvalue.c',
-  'gtkcsseasevalue.c',
-  'gtkcssenumvalue.c',
-  'gtkcssfiltervalue.c',
-  'gtkcssiconthemevalue.c',
-  'gtkcssimage.c',
-  'gtkcssimagebuiltin.c',
-  'gtkcssimagecrossfade.c',
-  'gtkcssimagefallback.c',
-  'gtkcssimageicontheme.c',
-  'gtkcssimagelinear.c',
-  'gtkcssimageradial.c',
-  'gtkcssimagerecolor.c',
-  'gtkcssimagescaled.c',
-  'gtkcssimagesurface.c',
-  'gtkcssimageurl.c',
-  'gtkcssimagevalue.c',
-  'gtkcssimagewin32.c',
-  'gtkcssinheritvalue.c',
-  'gtkcssinitialvalue.c',
-  'gtkcsskeyframes.c',
-  'gtkcsslookup.c',
-  'gtkcssmatcher.c',
-  'gtkcssnode.c',
-  'gtkcssnodedeclaration.c',
-  'gtkcssnodestylecache.c',
-  'gtkcssnumbervalue.c',
-  'gtkcsspalettevalue.c',
-  'gtkcssparser.c',
-  'gtkcsspathnode.c',
-  'gtkcsspositionvalue.c',
   'gtkcssprovider.c',
-  'gtkcssrepeatvalue.c',
-  'gtkcssrgbavalue.c',
   'gtkcsssection.c',
-  'gtkcssselector.c',
-  'gtkcssshadowsvalue.c',
-  'gtkcssshadowvalue.c',
-  'gtkcssshorthandproperty.c',
-  'gtkcssshorthandpropertyimpl.c',
-  'gtkcssstaticstyle.c',
-  'gtkcssstringvalue.c',
-  'gtkcssstyle.c',
-  'gtkcssstylechange.c',
-  'gtkcssstylefuncs.c',
-  'gtkcssstyleproperty.c',
-  'gtkcssstylepropertyimpl.c',
-  'gtkcsstransformvalue.c',
-  'gtkcsstransientnode.c',
-  'gtkcsstransition.c',
-  'gtkcsstypes.c',
-  'gtkcssunsetvalue.c',
-  'gtkcssvalue.c',
-  'gtkcsswidgetnode.c',
-  'gtkcsswin32sizevalue.c',
-  'gtkdebugupdates.c',
   'gtkdialog.c',
+  'gtkdnd.c',
+  'gtkdragdest.c',
   'gtkdragsource.c',
   'gtkdrawingarea.c',
   'gtkeditable.c',
   'gtkemojichooser.c',
+  'gtkemojicompletion.c',
   'gtkentry.c',
   'gtkentrybuffer.c',
   'gtkentrycompletion.c',
   'gtkeventcontroller.c',
+  'gtkeventcontrollerkey.c',
   'gtkeventcontrollerlegacy.c',
+  'gtkeventcontrollermotion.c',
   'gtkeventcontrollerscroll.c',
   'gtkexpander.c',
   'gtkfilechooser.c',
   'gtkfilechooserbutton.c',
   'gtkfilechooserdialog.c',
-  'gtkfilechooserembed.c',
-  'gtkfilechooserentry.c',
-  'gtkfilechoosererrorstack.c',
   'gtkfilechoosernative.c',
-  'gtkfilechoosernativeportal.c',
-  'gtkfilechooserutils.c',
   'gtkfilechooserwidget.c',
   'gtkfilefilter.c',
-  'gtkfilesystem.c',
-  'gtkfilesystemmodel.c',
   'gtkfixed.c',
   'gtkflowbox.c',
   'gtkfontbutton.c',
@@ -177,18 +239,12 @@ gtk_public_sources = files([
   'gtkgesturepan.c',
   'gtkgesturerotate.c',
   'gtkgesturesingle.c',
+  'gtkgesturestylus.c',
   'gtkgestureswipe.c',
   'gtkgesturezoom.c',
-  'gtkgizmo.c',
-  'gtkgladecatalog.c',
   'gtkglarea.c',
   'gtkgrid.c',
   'gtkheaderbar.c',
-  'gtkhsla.c',
-  'gtkicon.c',
-  'gtkiconcache.c',
-  'gtkiconcachevalidator.c',
-  'gtkiconhelper.c',
   'gtkicontheme.c',
   'gtkiconview.c',
   'gtkimage.c',
@@ -199,8 +255,6 @@ gtk_public_sources = files([
   'gtkimmulticontext.c',
   'gtkinfobar.c',
   'gtkinvisible.c',
-  'gtkkeyhash.c',
-  'gtkkineticscrolling.c',
   'gtklabel.c',
   'gtklayout.c',
   'gtklevelbar.c',
@@ -208,66 +262,49 @@ gtk_public_sources = files([
   'gtklistbox.c',
   'gtkliststore.c',
   'gtklockbutton.c',
-  'gtkmagnifier.c',
   'gtkmain.c',
+  'gtkmediacontrols.c',
+  'gtkmediafile.c',
+  'gtkmediastream.c',
   'gtkmenu.c',
   'gtkmenubar.c',
   'gtkmenubutton.c',
   'gtkmenuitem.c',
-  'gtkmenusectionbox.c',
   'gtkmenushell.c',
   'gtkmenutoolbutton.c',
-  'gtkmenutracker.c',
-  'gtkmenutrackeritem.c',
   'gtkmessagedialog.c',
-  'gtkmnemonichash.c',
   'gtkmodelbutton.c',
   'gtkmodelmenuitem.c',
   'gtkmodules.c',
   'gtkmountoperation.c',
   'gtknativedialog.c',
+  'gtknomediafile.c',
   'gtknotebook.c',
   'gtkorientable.c',
   'gtkoverlay.c',
   'gtkpadcontroller.c',
   'gtkpagesetup.c',
   'gtkpaned.c',
-  'gtkpango.c',
-  'gskpango.c',
   'gtkpapersize.c',
-  'gtkpathbar.c',
-  'gtkplacessidebar.c',
-  'gtkplacesview.c',
-  'gtkplacesviewrow.c',
-  'gtkpointerfocus.c',
+  'gtkpicture.c',
   'gtkpopover.c',
   'gtkpopovermenu.c',
   'gtkprintcontext.c',
   'gtkprintoperation.c',
   'gtkprintoperationpreview.c',
   'gtkprintsettings.c',
-  'gtkprintutils.c',
-  'gtkprivate.c',
   'gtkprogressbar.c',
-  'gtkprogresstracker.c',
-  'gtkquery.c',
   'gtkradiobutton.c',
   'gtkradiomenuitem.c',
   'gtkradiotoolbutton.c',
   'gtkrange.c',
   'gtkrbtree.c',
-  'gtkrecentchooser.c',
-  'gtkrecentchooserdefault.c',
-  'gtkrecentchooserdialog.c',
-  'gtkrecentchoosermenu.c',
-  'gtkrecentchooserutils.c',
-  'gtkrecentchooserwidget.c',
-  'gtkrecentfilter.c',
   'gtkrecentmanager.c',
   'gtkrender.c',
   'gtkrenderbackground.c',
   'gtkrenderborder.c',
   'gtkrendericon.c',
+  'gtkrendernodepaintable.c',
   'gtkrevealer.c',
   'gtkroundedbox.c',
   'gtkscale.c',
@@ -276,9 +313,6 @@ gtk_public_sources = files([
   'gtkscrollbar.c',
   'gtkscrolledwindow.c',
   'gtksearchbar.c',
-  'gtksearchengine.c',
-  'gtksearchenginemodel.c',
-  'gtksearchenginesimple.c',
   'gtksearchentry.c',
   'gtkselection.c',
   'gtkseparator.c',
@@ -294,7 +328,6 @@ gtk_public_sources = files([
   'gtksidebarrow.c',
   'gtksizegroup.c',
   'gtksizerequest.c',
-  'gtksizerequestcache.c',
   'gtkspinbutton.c',
   'gtksnapshot.c',
   'gtkspinner.c',
@@ -302,18 +335,12 @@ gtk_public_sources = files([
   'gtkstacksidebar.c',
   'gtkstackswitcher.c',
   'gtkstatusbar.c',
-  'gtkstyleanimation.c',
-  'gtkstylecascade.c',
   'gtkstylecontext.c',
-  'gtkstyleproperty.c',
   'gtkstyleprovider.c',
   'gtkswitch.c',
   'gtktestutils.c',
   'gtktextattributes.c',
-  'gtktextbtree.c',
   'gtktextbuffer.c',
-  'gtktextbufferrichtext.c',
-  'gtktextbufferserialize.c',
   'gtktextchild.c',
   'gtktextdisplay.c',
   'gtktexthandle.c',
@@ -331,13 +358,9 @@ gtk_public_sources = files([
   'gtktoolbar.c',
   'gtktoolbutton.c',
   'gtktoolitem.c',
-  'gtktoolitemgroup.c',
-  'gtktoolpalette.c',
   'gtktoolshell.c',
   'gtktooltip.c',
   'gtktooltipwindow.c',
-  'gtktrashmonitor.c',
-  'gtktreedatalist.c',
   'gtktreednd.c',
   'gtktreemenu.c',
   'gtktreemodel.c',
@@ -349,14 +372,13 @@ gtk_public_sources = files([
   'gtktreeview.c',
   'gtktreeviewcolumn.c',
   'gtkutils.c',
+  'gtkvideo.c',
   'gtkviewport.c',
   'gtkvolumebutton.c',
   'gtkwidget.c',
   'gtkwidgetfocus.c',
+  'gtkwidgetpaintable.c',
   'gtkwidgetpath.c',
-  'gtkwin32draw.c',
-  'gtkwin32theme.c',
-  'gtkwin32theme.c',
   'gtkwindow.c',
   'gtkwindowgroup.c',
 ])
@@ -365,11 +387,6 @@ gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
   'gtktexthandleprivate.h',
   'gtkeventcontrollerlegacyprivate.h',
-])
-
-gtk_private_headers = gtk_private_type_headers + files([
-  'gtkrbtree.h',
-  'gtkrecentchooserutils.h',
 ])
 
 gtk_public_headers = files([
@@ -416,7 +433,6 @@ gtk_public_headers = files([
   'gtkcellview.h',
   'gtkcheckbutton.h',
   'gtkcheckmenuitem.h',
-  'gtkclipboard.h',
   'gtkcolorbutton.h',
   'gtkcolorchooser.h',
   'gtkcolorchooserdialog.h',
@@ -439,7 +455,9 @@ gtk_public_headers = files([
   'gtkentrycompletion.h',
   'gtkenums.h',
   'gtkeventcontroller.h',
+  'gtkeventcontrollerkey.h',
   'gtkeventcontrollerscroll.h',
+  'gtkeventcontrollermotion.h',
   'gtkexpander.h',
   'gtkfilechooser.h',
   'gtkfilechooserbutton.h',
@@ -461,6 +479,7 @@ gtk_public_headers = files([
   'gtkgesturepan.h',
   'gtkgesturerotate.h',
   'gtkgesturesingle.h',
+  'gtkgesturestylus.h',
   'gtkgestureswipe.h',
   'gtkgesturezoom.h',
   'gtkglarea.h',
@@ -470,7 +489,6 @@ gtk_public_headers = files([
   'gtkiconview.h',
   'gtkimage.h',
   'gtkimcontext.h',
-  'gtkimcontextinfo.h',
   'gtkimcontextsimple.h',
   'gtkimmodule.h',
   'gtkimmulticontext.h',
@@ -484,6 +502,9 @@ gtk_public_headers = files([
   'gtkliststore.h',
   'gtklockbutton.h',
   'gtkmain.h',
+  'gtkmediacontrols.h',
+  'gtkmediafile.h',
+  'gtkmediastream.h',
   'gtkmenu.h',
   'gtkmenubar.h',
   'gtkmenubutton.h',
@@ -492,7 +513,6 @@ gtk_public_headers = files([
   'gtkmenutoolbutton.h',
   'gtkmessagedialog.h',
   'gtkmodelbutton.h',
-  'gtkmodules.h',
   'gtkmountoperation.h',
   'gtknativedialog.h',
   'gtknotebook.h',
@@ -502,7 +522,7 @@ gtk_public_headers = files([
   'gtkpagesetup.h',
   'gtkpaned.h',
   'gtkpapersize.h',
-  'gtkplacessidebar.h',
+  'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
   'gtkprintcontext.h',
@@ -514,11 +534,6 @@ gtk_public_headers = files([
   'gtkradiomenuitem.h',
   'gtkradiotoolbutton.h',
   'gtkrange.h',
-  'gtkrecentchooser.h',
-  'gtkrecentchooserdialog.h',
-  'gtkrecentchoosermenu.h',
-  'gtkrecentchooserwidget.h',
-  'gtkrecentfilter.h',
   'gtkrecentmanager.h',
   'gtkrender.h',
   'gtkrevealer.h',
@@ -554,9 +569,7 @@ gtk_public_headers = files([
   'gtkswitch.h',
   'gtktestutils.h',
   'gtktextbuffer.h',
-  'gtktextbufferrichtext.h',
   'gtktextchild.h',
-  'gtktextdisplay.h',
   'gtktextiter.h',
   'gtktextmark.h',
   'gtktexttag.h',
@@ -567,8 +580,6 @@ gtk_public_headers = files([
   'gtktoolbar.h',
   'gtktoolbutton.h',
   'gtktoolitem.h',
-  'gtktoolitemgroup.h',
-  'gtktoolpalette.h',
   'gtktoolshell.h',
   'gtktooltip.h',
   'gtktreednd.h',
@@ -581,9 +592,11 @@ gtk_public_headers = files([
   'gtktreeview.h',
   'gtktreeviewcolumn.h',
   'gtktypes.h',
+  'gtkvideo.h',
   'gtkviewport.h',
   'gtkvolumebutton.h',
   'gtkwidget.h',
+  'gtkwidgetpaintable.h',
   'gtkwidgetpath.h',
   'gtkwindow.h',
   'gtkwindowgroup.h',
@@ -594,7 +607,48 @@ gtk_public_headers = files([
 
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 
-gtk_sources = gtk_public_sources
+gtk_sources = gtk_public_sources + gtk_private_sources
+
+proto_sources = [
+  ['gtk-text-input', 'stable', ],
+]
+
+im_wayland_sources = files('gtkimcontextwayland.c')
+
+foreach p: proto_sources
+  proto_name = p.get(0)
+  proto_stability = p.get(1)
+
+  if proto_stability == 'stable'
+    output_base = proto_name
+    input = '@0@.xml'.format(proto_name)
+  else
+    proto_version = p.get(2)
+    output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
+    input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+  endif
+
+  if wayland_enabled
+    # wayland_scanner is defined in gdk/wayland/meson.build
+    im_wayland_sources += custom_target('@0@ client header'.format(output_base),
+                                        input: input,
+                                        output: '@0@-client-protocol.h'.format(output_base),
+                                        command: [
+                                          wayland_scanner,
+                                          'client-header',
+                                          '@INPUT@', '@OUTPUT@',
+                                        ])
+
+    im_wayland_sources += custom_target('@0@ source'.format(output_base),
+                                        input: input,
+                                        output: '@0@-protocol.c'.format(output_base),
+                                        command: [
+                                          wayland_scanner,
+                                          'private-code',
+                                          '@INPUT@', '@OUTPUT@',
+                                        ])
+  endif
+endforeach
 
 if os_unix
   gtk_unix_print_headers = [
@@ -607,7 +661,7 @@ if os_unix
   ]
   install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk')
 
-  gtk_sources += files([
+  gtk_unix_print_sources = files([
     'gtkcustompaperunixdialog.c',
     'gtkpagesetupunixdialog.c',
     'gtkprintbackend.c',
@@ -621,15 +675,20 @@ if os_unix
     'gtkprintunixdialog.c',
     'gtksearchenginetracker.c',
   ])
+
+  gtk_sources += gtk_unix_print_sources
 endif
 
 if os_win32
-  gtk_sources += [
+  gtk_win32_print_sources = files([
     'gtkprint-win32.c',
     'gtkprintoperation-win32.c',
     'gtkfilechoosernativewin32.c',
     'gtkwin32.c',
-  ]
+  ])
+
+  gtk_sources += gtk_win32_print_sources
+  gtk_sources += ['gtkimcontextime.c']
 
   if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
     cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
@@ -638,10 +697,12 @@ endif
 
 if x11_enabled
   gtk_sources += ['gtkapplication-x11.c', 'gtkmountoperation-x11.c']
+  gtk_sources += ['gtkimcontextxim.c']
 endif
 
 if wayland_enabled
   gtk_sources += ['gtkapplication-wayland.c']
+  gtk_sources += im_wayland_sources
 endif
 
 if x11_enabled or wayland_enabled
@@ -653,14 +714,16 @@ if win32_enabled
 endif
 
 if quartz_enabled
-  gtk_sources += [
+  gtk_sources += files([
     'gtksearchenginequartz.c',
     'gtkmountoperation-stub.c',
     'gtkapplication-quartz.c',
     'gtkapplication-quartz-menu.c',
     'gtkfilechoosernativequartz.c',
     'gtkquartz.c',
-  ]
+  ])
+  gtk_sources += ['gtkimcontextquartz.c']
+
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
@@ -710,19 +773,6 @@ gtk_use_wayland_or_x11_c_sources = files([
   'gtkapplication-dbus.c'
 ])
 
-if quartz_enabled
-  dnd_sources = files([
-    'gtkclipboard-quartz.c',
-    'gtkdnd-quartz.c',
-  ])
-else
-  dnd_sources = files([
-    'gtkclipboard.c',
-    'gtkdnd.c',
-    'gtkdragdest.c',
-  ])
-endif
-
 gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated',
                                    'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
@@ -758,7 +808,6 @@ typefuncs = custom_target('gtktypefuncs.inc',
                           input: gdk_headers +
                             gtk_public_headers +
                             gtk_deprecated_headers +
-                            gtk_private_headers +
                             [ gtktypebuiltins_h, ] +
                             [ gdkenum_h, gskenum_h, ],
                           command: [
@@ -780,15 +829,6 @@ gtkversion = configure_file(input: 'gtkversion.h.in',
                             configuration: gtkversion_cdata,
                             install_dir: join_paths(gtk_includedir, 'gtk-4.0/gtk'))
 
-gtk_cargs = [
-  '-DGTK_COMPILATION',
-  '-DG_LOG_DOMAIN="Gtk"',
-  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-  '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
-  '-DGTK_HOST="@0@"'.format(host_machine.system()),
-  '-DGTK_DATA_PREFIX="@0@"'.format(gtk_prefix),
-]
-
 gtk_gen_headers = [
   gtkmarshal_h,
   gtktypebuiltins_h,
@@ -799,7 +839,6 @@ gtk_gen_headers = [
 gtk_sources += [
   gtk_dbus_src,
   gtk_deprecated_sources,
-  dnd_sources,
   inspector_sources,
   a11y_sources,
   gtkresources,
@@ -825,6 +864,14 @@ gtk_deps = [
   graphene_dep,
 ]
 
+if harfbuzz_dep.found() and pangoft_dep.found()
+  gtk_deps += [ harfbuzz_dep, pangoft_dep ]
+  gtk_sources += files([
+  'language-names.c',
+  'script-names.c',
+  ])
+endif
+
 if x11_enabled
   x11_data_prefix = dependency('x11').get_pkgconfig_variable('prefix')
 
@@ -837,9 +884,14 @@ if wayland_enabled
   gtk_sources += gtk_wayland_sources
 endif
 
+if broadway_enabled
+  gtk_sources += ['gtkimcontextbroadway.c']
+endif
+
 if win32_enabled
   gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
-  gtk_deps += [ giowin32_dep ]
+  gtk_deps += [ giowin32_dep, pangowin32_dep ]
+
   gtk_deps += [cc.find_library('advapi32'),
                cc.find_library('comctl32'),
                cc.find_library('dwmapi'),
@@ -860,6 +912,10 @@ if cloudproviders_enabled
   gtk_deps += cloudproviders_dep
 endif
 
+# Unconditional. If libintl isn't found,
+# the object just does nothing being in the deplist
+gtk_deps += libintl_dep
+
 gtk_settings_schemas = [
   'org.gtk.Settings.FileChooser.gschema.xml',
   'org.gtk.Settings.ColorChooser.gschema.xml',
@@ -867,7 +923,9 @@ gtk_settings_schemas = [
   'org.gtk.Settings.Debug.gschema.xml',
 ]
 install_data(gtk_settings_schemas, install_dir: gtk_schemasdir)
-gnome.compile_schemas()
+gnome.compile_schemas(depend_files: files(gtk_settings_schemas),
+                      build_by_default: true)
+gtk_schema_build_dir = meson.current_build_dir()
 
 # Check for more things
 if cc.has_header('langinfo.h')
@@ -879,39 +937,6 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
-# Input methods
-
-gen_headers = [ gtk_gen_headers, gsk_gen_headers, gdk_gen_headers, ]
-
-included_input_modules = []
-foreach m: inc_im_method_defs       # populated in modules/input/meson.build
-  im_name = m[0]
-  im_srcs = m[1]
-  im_args = m[2]
-  im_libs = m[3]
-
-  included_input_modules += static_library('im-@0@'.format(im_name),
-                                           im_srcs, gen_headers,
-                                           c_args: im_args,
-                                           include_directories: [confinc, gdkinc, gtkinc],
-                                           dependencies: gtk_deps + im_libs)
-endforeach
-
-foreach m: dyn_im_method_defs       # populated in modules/input/meson.build
-  im_name = m[0]
-  im_srcs = m[1]
-  im_args = m[2]
-  im_libs = m[3]
-
-  shared_module('im-@0@'.format(im_name), im_srcs, gen_headers,
-                c_args: im_args,
-                include_directories: [confinc, gdkinc, gtkinc],
-                dependencies: gtk_deps + im_libs,
-                name_prefix: '', # we want im-foo.so not libim-foo.so
-                install_dir: immodules_install_dir,
-                install: true)
-endforeach
-
 # Library
 libgtk = shared_library('gtk-4',
                         soversion: gtk_soversion,
@@ -920,7 +945,6 @@ libgtk = shared_library('gtk-4',
                         include_directories: [confinc, gdkinc, gskinc, gtkinc],
                         dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
                         link_with: [libgdk, libgsk, ],
-                        link_whole: included_input_modules,
                         link_args: common_ldflags,
                         install: true)
 
@@ -932,6 +956,23 @@ if build_gir
     '--quiet',
   ]
 
+  # We may build some of the dependencies as sub-projects; this means
+  # that we need to depend on the built introspection data, instead of
+  # the installed one
+  gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', ]
+
+  if pixbuf_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('gdk-pixbuf').get_variable('gdkpixbuf_gir').get(0)
+  else
+    gdk_gir_inc += 'GdkPixbuf-2.0'
+  endif
+
+  if pango_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('pango').get_variable('pango_gir').get(0)
+  else
+    gdk_gir_inc += 'Pango-1.0'
+  endif
+
   gdk_gir = gnome.generate_gir(libgtk,
                                sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],
                                namespace: 'Gdk',
@@ -939,10 +980,10 @@ if build_gir
                                identifier_prefix: 'Gdk',
                                symbol_prefix: 'gdk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'cairo-1.0', ],
+                               includes: gdk_gir_inc,
+                               header: 'gdk/gdk.h',
                                install: true,
                                extra_args: gir_args + [
-                                 '--c-include=gdk/gdk.h',
                                  '-DGDK_COMPILATION',
                                ])
   gdk_gir_dep = declare_dependency(sources: gdk_gir)
@@ -956,16 +997,21 @@ if build_gir
                                      identifier_prefix: 'Gdk',
                                      symbol_prefix: 'gdk',
                                      export_packages: 'gtk+-x11-4.0',
-                                     includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'xlib-2.0', ],
+                                     includes: [ gdk_gir[0], 'xlib-2.0', ],
                                      install: true,
                                      dependencies: gdk_gir_dep,
-                                     extra_args: [
-                                       '--quiet',
-                                       '--c-include=gdk/gdkx.h',
-                                       '--include-uninstalled=./gtk/Gdk-4.0.gir',
+                                     header: 'gdk/gdkx.h',
+                                     extra_args: gir_args + [
                                        '-DGDK_COMPILATION',
                                      ])
     gtk_dep_sources += gdk_x11_gir
+  endif
+
+  gsk_gir_inc = [ gdk_gir[0], ]
+  if graphene_dep.type_name() == 'internal'
+    gsk_gir_inc += subproject('graphene').get_variable('graphene_gir').get(0)
+  else
+    gsk_gir_inc += 'Graphene-1.0'
   endif
 
   gsk_gir = gnome.generate_gir(libgtk,
@@ -975,37 +1021,48 @@ if build_gir
                                identifier_prefix: 'Gsk',
                                symbol_prefix: 'gsk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Graphene-1.0', 'Gdk-4.0' ],
+                               includes: gsk_gir_inc,
+                               header: 'gsk/gsk.h',
                                install: true,
                                dependencies: [gdk_gir_dep, graphene_dep],
                                extra_args: gir_args + [
-                                 '--c-include=gsk/gsk.h',
-                                 '--include-uninstalled=./gtk/Gdk-4.0.gir',
                                  '-DGSK_COMPILATION',
                                ])
-  gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep], sources: gsk_gir)
+  gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep],
+                                   sources: gsk_gir)
   gtk_dep_sources += gsk_gir
 
+  gtk_introspection_sources = [
+    gtk_public_headers,
+    gtk_public_sources,
+    a11y_headers,
+    a11y_sources,
+    gtktypebuiltins_h,
+    gtkversion,
+  ]
+
+  if os_unix
+    gtk_introspection_sources += gtk_unix_print_sources
+  endif
+
+  if os_win32
+    gtk_introspection_sources += gtk_win32_print_sources
+  endif
 
   gtk_gir = gnome.generate_gir(libgtk,
-                               sources: gtk_public_headers + gtk_public_sources + dnd_sources + a11y_headers + a11y_sources + [
-                                 gtktypebuiltins_h,
-                                 gtkversion,
-                               ],
+                               sources: gtk_introspection_sources,
                                namespace: 'Gtk',
                                nsversion: gtk_api_version,
                                identifier_prefix: 'Gtk',
                                symbol_prefix: 'gtk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Atk-1.0', ],
+                               includes: [ gdk_gir[0], gsk_gir[0], 'Atk-1.0', ],
+                               header: 'gtk/gtk.h',
                                install: true,
                                dependencies: gsk_gir_dep,
                                extra_args: gir_args + [
-                                 '--c-include=gtk/gtk.h',
-                                 '--include-uninstalled=./gtk/Gdk-4.0.gir',
-                                 '--include-uninstalled=./gtk/Gsk-4.0.gir',
-                                 '-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API',
                                  '-DGTK_COMPILATION',
+                                 '--c-include=gtk/gtk-a11y.h',
                                ])
   gtk_dep_sources += gtk_gir
 endif
@@ -1020,9 +1077,8 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
 gtk_tools = [
   ['gtk4-query-settings', ['gtk-query-settings.c']],
   ['gtk4-builder-tool', ['gtk-builder-tool.c']],
-  ['gtk4-update-icon-cache', ['updateiconcache.c']],
-  ['gtk4-encode-symbolic-svg', ['encodesymbolic.c']],
-  ['gtk4-query-immodules', ['queryimmodules.c', 'gtkutils.c']],
+  ['gtk4-update-icon-cache', ['updateiconcache.c', 'gtkiconcachevalidator.c']],
+  ['gtk4-encode-symbolic-svg', ['encodesymbolic.c', 'gdkpixbufutils.c']],
 ]
 
 if os_unix

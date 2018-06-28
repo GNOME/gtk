@@ -74,8 +74,6 @@ gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
    * GtkRadioToolButton:group:
    *
    * Sets a new group for a radio tool button.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (object_class,
 				   PROP_GROUP,
@@ -133,8 +131,6 @@ gtk_radio_tool_button_set_property (GObject         *object,
  * Creates a new #GtkRadioToolButton, adding it to @group.
  * 
  * Returns: The new #GtkRadioToolButton
- * 
- * Since: 2.4
  **/
 GtkToolItem *
 gtk_radio_tool_button_new (GSList *group)
@@ -156,8 +152,6 @@ gtk_radio_tool_button_new (GSList *group)
  * Creates a new #GtkRadioToolButton adding it to the same group as @gruup
  *
  * Returns: (transfer none): The new #GtkRadioToolButton
- *
- * Since: 2.4
  **/
 GtkToolItem *
 gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
@@ -185,8 +179,6 @@ get_radio_button (GtkRadioToolButton *button)
  * Returns the radio button group @button belongs to.
  *
  * Returns: (transfer none) (element-type GtkRadioButton): The group @button belongs to.
- *
- * Since: 2.4
  */
 GSList *
 gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
@@ -202,8 +194,6 @@ gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
  * @group: (element-type GtkRadioButton) (allow-none): an existing radio button group, or %NULL
  * 
  * Adds @button to @group, removing it from the group it belonged to before.
- * 
- * Since: 2.4
  **/
 void
 gtk_radio_tool_button_set_group (GtkRadioToolButton *button,

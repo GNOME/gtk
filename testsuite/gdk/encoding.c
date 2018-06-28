@@ -20,7 +20,7 @@ test_to_text_list (void)
       gchar **list;
       gint n;
 
-      encoding = gdk_atom_intern ("UTF8_STRING", FALSE);
+      encoding = g_intern_string ("UTF8_STRING");
       format = 8;
       text = (const guchar*)"abcdef \304\201 \304\205\0ABCDEF \304\200 \304\204";
       length = 25;

@@ -52,6 +52,7 @@
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkdialogprivate.h"
+#include "gtkgesturemultipress.h"
 
 #include <glib/gprintf.h>
 
@@ -549,8 +550,8 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_box_pack_start (GTK_BOX (content_area), hbox);
 
-  icon = gtk_image_new_from_icon_name ("dialog-password",
-                                       GTK_ICON_SIZE_DIALOG);
+  icon = gtk_image_new_from_icon_name ("dialog-password");
+  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
 
   gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (icon, GTK_ALIGN_START);
@@ -1061,19 +1062,19 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
 {
   gchar *command_line;
   gchar *name;
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   gchar *markup;
   GtkTreeIter iter;
 
   name = NULL;
-  pixbuf = NULL;
+  texture = NULL;
   command_line = NULL;
   _gtk_mount_operation_lookup_info (lookup_context,
                                     pid,
                                     24,
                                     &name,
                                     &command_line,
-                                    &pixbuf);
+                                    &texture);
 
   if (name == NULL)
     name = g_strdup_printf (_("Unknown Application (PID %d)"), (int) (gssize) pid);
@@ -1081,17 +1082,17 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
   if (command_line == NULL)
     command_line = g_strdup ("");
 
-  if (pixbuf == NULL)
+  if (texture == NULL)
     {
       GtkIconTheme *theme;
+      GtkIconInfo *info;
+
       theme = gtk_css_icon_theme_value_get_icon_theme
         (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (mount_operation->priv->dialog)),
                                            GTK_CSS_PROPERTY_ICON_THEME));
-      pixbuf = gtk_icon_theme_load_icon (theme,
-                                         "application-x-executable",
-                                         24,
-                                         0,
-                                         NULL);
+      info = gtk_icon_theme_lookup_icon (theme, "application-x-executable", 24, 0);
+      texture = gtk_icon_info_load_texture (info);
+      g_object_unref (info);
     }
 
   markup = g_strdup_printf ("<b>%s</b>\n"
@@ -1101,13 +1102,13 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
 
   gtk_list_store_append (list_store, &iter);
   gtk_list_store_set (list_store, &iter,
-                      0, pixbuf,
+                      0, texture,
                       1, markup,
                       2, pid,
                       -1);
 
-  if (pixbuf != NULL)
-    g_object_unref (pixbuf);
+  if (texture != NULL)
+    g_object_unref (texture);
   g_free (markup);
   g_free (name);
   g_free (command_line);
@@ -1340,22 +1341,22 @@ on_popup_menu_for_process_tree_view (GtkWidget *widget,
   return do_popup_menu_for_process_tree_view (widget, NULL, op);
 }
 
-static gboolean
-on_button_press_event_for_process_tree_view (GtkWidget      *widget,
-                                             GdkEventButton *event,
-                                             gpointer        user_data)
+static void
+multi_press_cb (GtkGesture *gesture,
+                int         n_press,
+                double      x,
+                double      y,
+                gpointer    user_data)
 {
   GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
-  gboolean ret;
+  const GdkEvent *event;
+  GdkEventSequence *sequence;
+  GtkWidget *widget;
 
-  ret = FALSE;
-
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
-    {
-      ret = do_popup_menu_for_process_tree_view (widget, (GdkEvent *) event, op);
-    }
-
-  return ret;
+  sequence = gtk_gesture_get_last_updated_sequence (gesture);
+  event = gtk_gesture_get_last_event (gesture, sequence);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  do_popup_menu_for_process_tree_view (widget, event, op);
 }
 
 static GtkWidget *
@@ -1378,6 +1379,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   GtkListStore *list_store;
   gchar *s;
   gboolean use_header;
+  GtkGesture *gesture;
 
   priv = op->priv;
 
@@ -1415,7 +1417,8 @@ create_show_processes_dialog (GtkMountOperation *op,
   gtk_box_pack_start (GTK_BOX (vbox), label);
 
   /* First count the items in the list then
-   * add the buttons in reverse order */
+   * add the buttons in reverse order
+   */
 
   while (choices[len] != NULL)
     len++;
@@ -1433,16 +1436,13 @@ create_show_processes_dialog (GtkMountOperation *op,
     gtk_window_set_display (GTK_WINDOW (dialog), priv->display);
 
   tree_view = gtk_tree_view_new ();
-  /* TODO: should use EM's when gtk+ RI patches land */
-  gtk_widget_set_size_request (tree_view,
-                               300,
-                               120);
+  gtk_widget_set_size_request (tree_view, 300, 120);
 
   column = gtk_tree_view_column_new ();
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-                                       "pixbuf", 0,
+                                       "texture", 0,
                                        NULL);
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer,
@@ -1469,12 +1469,15 @@ create_show_processes_dialog (GtkMountOperation *op,
   g_signal_connect (tree_view, "popup-menu",
                     G_CALLBACK (on_popup_menu_for_process_tree_view),
                     op);
-  g_signal_connect (tree_view, "button-press-event",
-                    G_CALLBACK (on_button_press_event_for_process_tree_view),
-                    op);
+
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (multi_press_cb), op);
+  gtk_widget_add_controller (tree_view, GTK_EVENT_CONTROLLER (gesture));
 
   list_store = gtk_list_store_new (3,
-                                   GDK_TYPE_PIXBUF,
+                                   GDK_TYPE_TEXTURE,
                                    G_TYPE_STRING,
                                    G_TYPE_INT);
 
@@ -1644,8 +1647,6 @@ gtk_mount_operation_aborted (GMountOperation *op)
  * Creates a new #GtkMountOperation
  *
  * Returns: a new #GtkMountOperation
- *
- * Since: 2.14
  */
 GMountOperation *
 gtk_mount_operation_new (GtkWindow *parent)
@@ -1666,8 +1667,6 @@ gtk_mount_operation_new (GtkWindow *parent)
  * a window.
  *
  * Returns: %TRUE if @op is currently displaying a window
- *
- * Since: 2.14
  */
 gboolean
 gtk_mount_operation_is_showing (GtkMountOperation *op)
@@ -1684,8 +1683,6 @@ gtk_mount_operation_is_showing (GtkMountOperation *op)
  *
  * Sets the transient parent for windows shown by the
  * #GtkMountOperation.
- *
- * Since: 2.14
  */
 void
 gtk_mount_operation_set_parent (GtkMountOperation *op,
@@ -1730,8 +1727,6 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
  * Gets the transient parent used by the #GtkMountOperation
  *
  * Returns: (transfer none): the transient parent for windows shown by @op
- *
- * Since: 2.14
  */
 GtkWindow *
 gtk_mount_operation_get_parent (GtkMountOperation *op)
@@ -1747,8 +1742,6 @@ gtk_mount_operation_get_parent (GtkMountOperation *op)
  * @display: a #Gdk
  *
  * Sets the display to show windows of the #GtkMountOperation on.
- *
- * Since: 3.94
  */
 void
 gtk_mount_operation_set_display (GtkMountOperation *op,
@@ -1783,8 +1776,6 @@ gtk_mount_operation_set_display (GtkMountOperation *op,
  * will be shown.
  *
  * Returns: (transfer none): the display on which windows of @op are shown
- *
- * Since: 3.94
  */
 GdkDisplay *
 gtk_mount_operation_get_display (GtkMountOperation *op)

@@ -57,12 +57,12 @@ list_ignore_properties (gboolean buglist)
     { "GtkWidget",              "parent",               NULL, },                        /* needs working parent widget */
     { "GtkCList",               "selection-mode",       (void*) GTK_SELECTION_NONE, },
     { "GtkWidget",              "has-default",          (void*) TRUE, },                /* conflicts with toplevel-less widgets */
-    { "GtkWidget",              "screen",               NULL, },
-    { "GtkWindow",              "type-hint",            (void*) GDK_WINDOW_TYPE_HINT_DND, }, /* conflicts with ::visible=TRUE */
+    { "GtkWidget",              "display",              (void*) MATCH_ANY_VALUE },
+    { "GtkWindow",              "type-hint",            (void*) GDK_SURFACE_TYPE_HINT_DND, }, /* conflicts with ::visible=TRUE */
     { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
     { "GtkColorButton",         "color",                (void*) NULL, },                /* not a valid boxed color */
     { "GtkInputDialog",         "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
-    { "GtkInvisible",           "screen",               (void*) MATCH_ANY_VALUE },      /* cannot create GdkScreen */
+    { "GtkInvisible",           "display",              (void*) MATCH_ANY_VALUE },      /* cannot create GdkScreen */
     { "GtkMessageDialog",       "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkColorSelectionDialog","has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkColorSelection",      "child",                NULL, },
@@ -76,11 +76,9 @@ list_ignore_properties (gboolean buglist)
     { "GtkFileChooserDialog",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkMenu",                "accel-path",           (void*) MATCH_ANY_VALUE },      /* has odd restrictions in the setter */
     { "GtkMenuItem",            "accel-path",           (void*) MATCH_ANY_VALUE },      /* has odd restrictions in the setter */
-    { "GtkRecentChooserMenu",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkTextView",            "overwrite",            (void*) MATCH_ANY_VALUE },      /* needs text buffer */
-    { "GtkToolbar",             "icon-size",            (void*) GTK_ICON_SIZE_INVALID },
     { "GtkTreeView",            "expander-column",      (void*) MATCH_ANY_VALUE },      /* assertion list != NULL */
-    { "GtkWindow",              "screen",               (void*) MATCH_ANY_VALUE },      /* cannot create GdkScreen */
+    { "GtkWindow",              "display",              (void*) MATCH_ANY_VALUE },
     { NULL, NULL, NULL }
   };
   /* properties suspected to be Gdk/Gtk+ bugs */
@@ -324,17 +322,12 @@ main (int   argc,
 {
   const GType *otypes;
   guint i;
-  gchar *schema_dir;
 
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* initialize test program */
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types ();
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* install a property test for each widget type */
   otypes = gtk_test_list_all_types (NULL);
@@ -348,6 +341,5 @@ main (int   argc,
         g_free (testpath);
       }
 
-  g_free (schema_dir);
   return g_test_run ();
 }

@@ -33,13 +33,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkLockButton        GtkLockButton;
 typedef struct _GtkLockButtonClass   GtkLockButtonClass;
-typedef struct _GtkLockButtonPrivate GtkLockButtonPrivate;
 
 struct _GtkLockButton
 {
-  GtkButton parent;
-
-  GtkLockButtonPrivate *priv;
+  GtkButton parent_instance;
 };
 
 /**
@@ -62,13 +59,13 @@ struct _GtkLockButtonClass
   void (*reserved7) (void);
 };
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GType        gtk_lock_button_get_type       (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_lock_button_new            (GPermission   *permission);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GPermission *gtk_lock_button_get_permission (GtkLockButton *button);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void         gtk_lock_button_set_permission (GtkLockButton *button,
                                              GPermission   *permission);
 

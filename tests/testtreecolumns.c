@@ -703,8 +703,8 @@ selection_changed (GtkTreeSelection *selection, GtkWidget *button)
     gtk_widget_set_sensitive (button, FALSE);
 }
 
-static GtkTargetEntry row_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0}
+static const char *row_targets[] = {
+  "GTK_TREE_MODEL_ROW"
 };
 
 int
@@ -718,6 +718,7 @@ main (int argc, char *argv[])
   GtkCellRenderer *cell;
   GtkWidget *swindow;
   GtkTreeModel *sample_model;
+  GdkContentFormats *targets;
   gint i;
 
   gtk_init ();
@@ -863,36 +864,31 @@ main (int argc, char *argv[])
 
 
   /* Drag and Drop */
+  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (left_tree_view),
 					  GDK_BUTTON1_MASK,
-					  row_targets,
-					  G_N_ELEMENTS (row_targets),
+                                          targets,
 					  GDK_ACTION_MOVE);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (left_tree_view),
-					row_targets,
-					G_N_ELEMENTS (row_targets),
+					targets,
 					GDK_ACTION_MOVE);
 
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (top_right_tree_view),
 					  GDK_BUTTON1_MASK,
-					  row_targets,
-					  G_N_ELEMENTS (row_targets),
+					  targets,
 					  GDK_ACTION_MOVE);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (top_right_tree_view),
-					row_targets,
-					G_N_ELEMENTS (row_targets),
+					targets,
 					GDK_ACTION_MOVE);
 
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (bottom_right_tree_view),
 					  GDK_BUTTON1_MASK,
-					  row_targets,
-					  G_N_ELEMENTS (row_targets),
+					  targets,
 					  GDK_ACTION_MOVE);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (bottom_right_tree_view),
-					row_targets,
-					G_N_ELEMENTS (row_targets),
+					targets,
 					GDK_ACTION_MOVE);
-
+  gdk_content_formats_unref (targets);
 
   gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 

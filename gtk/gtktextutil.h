@@ -38,10 +38,10 @@ void _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *me
                                                    GtkTextUtilCharChosenFunc  func,
                                                    gpointer                   data);
 
-cairo_surface_t * _gtk_text_util_create_drag_icon (GtkWidget     *widget,
+GdkPaintable *    gtk_text_util_create_drag_icon  (GtkWidget     *widget,
                                                    gchar         *text,
                                                    gsize          len);
-cairo_surface_t * _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
+GdkPaintable *    gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                                    GtkTextBuffer *buffer,
                                                    GtkTextIter   *start,
                                                    GtkTextIter   *end);

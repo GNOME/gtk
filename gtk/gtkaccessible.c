@@ -167,8 +167,6 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
  * It is the caller’s responsibility to ensure that when @widget
  * is destroyed, the widget is unset by calling this function
  * again with @widget set to %NULL.
- *
- * Since: 2.22
  */
 void
 gtk_accessible_set_widget (GtkAccessible *accessible,
@@ -206,8 +204,6 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
  *
  * Returns: (nullable) (transfer none): pointer to the #GtkWidget
  *     corresponding to the #GtkAccessible, or %NULL.
- *
- * Since: 2.22
  */
 GtkWidget*
 gtk_accessible_get_widget (GtkAccessible *accessible)

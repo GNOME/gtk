@@ -44,6 +44,8 @@ count_notify (GObject *obj, GParamSpec *pspec, NotifyData *data)
 static void
 check_property (GObject *instance, GParamSpec *pspec)
 {
+  g_test_message ("Checking %s:%s", G_OBJECT_TYPE_NAME (instance), pspec->name);
+
   if (G_TYPE_IS_ENUM (pspec->value_type))
     {
       GEnumClass *class;
@@ -368,7 +370,6 @@ test_type (gconstpointer data)
   /* These can't be freely constructed/destroyed */
   if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
-      g_type_is_a (type, GDK_TYPE_DRAWING_CONTEXT) ||
 #ifdef G_OS_UNIX
       g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
 #endif
@@ -388,8 +389,10 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_BUTTON) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_WIDGET) ||
-      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_NATIVE) ||
-      g_type_is_a (type, GTK_TYPE_PLACES_SIDEBAR))
+      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_NATIVE))
+    return;
+
+  if (g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
     return;
 
   /* These rely on a d-bus session bus */
@@ -399,15 +402,34 @@ test_type (gconstpointer data)
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
-    instance = g_object_ref (gtk_settings_get_default ());
-  else if (g_type_is_a (type, GDK_TYPE_WINDOW))
+    instance = G_OBJECT (g_object_ref (gtk_settings_get_default ()));
+  else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = g_object_ref (gdk_window_new_popup (gdk_display_get_default (),
-                                                     0,
-                                                     &(GdkRectangle) { 0, 0, 100, 100 }));
+      instance = G_OBJECT (g_object_ref (gdk_surface_new_popup (display,
+                                                               &(GdkRectangle) { 0, 0, 100, 100 })));
     }
   else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
     instance = g_object_new (type, "display", display, NULL);
+  else if (g_str_equal (g_type_name (type), "GdkClipboard"))
+    instance = g_object_new (type, "display", display, NULL);
+  else if (g_str_equal (g_type_name (type), "GdkDragContext"))
+    {
+      GdkContentFormats *formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
+      instance = g_object_new (type,
+                               "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())),
+                               "formats", formats,
+                               NULL);
+      gdk_content_formats_unref (formats);
+    }
+  else if (g_str_equal (g_type_name (type), "GdkDrop"))
+    {
+      GdkContentFormats *formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
+      instance = g_object_new (type,
+                               "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())),
+                               "formats", formats,
+                               NULL);
+      gdk_content_formats_unref (formats);
+    }
   else
     instance = g_object_new (type, NULL);
 
@@ -483,21 +505,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "page"))
         continue;
 
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_TOGGLE_BUTTON) &&
-	  g_str_equal (pspec->name, "draw-indicator"))
-        continue;
-
-      if (g_str_equal (g_type_name (type), "GtkRecentChooserMenu") &&
-	  g_str_equal (pspec->name, "select-multiple"))
-        continue;
-
-      /* Really a bug in the way GtkButton and its subclasses interact:
-       * setting label etc on a subclass destroys the content, breaking
-       * e.g. GtkColorButton pretty badly
-       */
-      if (type == GTK_TYPE_COLOR_BUTTON && pspec->owner_type == GTK_TYPE_BUTTON)
-        continue;
-
       /* Too many special cases involving -set properties */
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkCellRendererText") ||
           g_str_equal (g_type_name (pspec->owner_type), "GtkTextTag"))
@@ -505,42 +512,6 @@ test_type (gconstpointer data)
 
       /* Most things assume a model is set */
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkComboBox"))
-        continue;
-
-      /* Deprecated, not getting fixed */
-      if (g_str_equal (g_type_name (pspec->owner_type), "GtkAction"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_CONTAINER) &&
-	  g_str_equal (pspec->name, "resize-mode"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_COLOR_BUTTON) &&
-	  g_str_equal (pspec->name, "alpha"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_CELL_RENDERER_PIXBUF) &&
-	  (g_str_equal (pspec->name, "follow-state") ||
-	   g_str_equal (pspec->name, "stock-id") ||
-           g_str_equal (pspec->name, "stock-size") ||
-           g_str_equal (pspec->name, "stock-detail")))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU) &&
-	  g_str_equal (pspec->name, "tearoff-state"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET) &&
-	  g_str_equal (pspec->name, "double-buffered"))
-        continue;
-
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_WINDOW) &&
-	  g_str_equal (pspec->name, "has-resize-grip"))
-        continue;
-
-      /* Can only be set on window widgets */
-      if (pspec->owner_type == GTK_TYPE_WIDGET &&
-          g_str_equal (pspec->name, "events"))
         continue;
 
       /* Can only be set on unmapped windows */
@@ -586,10 +557,6 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "im-module"))
         continue;
 
-      if (pspec->owner_type == GTK_TYPE_TOOLBAR &&
-          g_str_equal (pspec->name, "icon-size"))
-        continue;
-
       if (pspec->owner_type == GTK_TYPE_TREE_SELECTION &&
           g_str_equal (pspec->name, "mode")) /* requires a treeview */
         continue;
@@ -623,10 +590,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "font"))
 	continue;
 
-      if (g_type_is_a (type, GTK_TYPE_FONT_BUTTON) &&
-	  g_str_equal (pspec->name, "font-name"))
-	continue;
-
       /* these depend on the min-content- properties in a way that breaks our test */
       if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
 	  (g_str_equal (pspec->name, "max-content-width") ||
@@ -640,8 +603,8 @@ test_type (gconstpointer data)
     }
   g_free (pspecs);
 
-  if (g_type_is_a (type, GDK_TYPE_WINDOW))
-    gdk_window_destroy (GDK_WINDOW (instance));
+  if (g_type_is_a (type, GDK_TYPE_SURFACE))
+    gdk_surface_destroy (GDK_SURFACE (instance));
   else
     g_object_unref (instance);
 
@@ -653,15 +616,10 @@ main (int argc, char **argv)
 {
   const GType *otypes;
   guint i;
-  gchar *schema_dir;
   gint result;
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
@@ -674,8 +632,6 @@ main (int argc, char **argv)
     }
 
   result = g_test_run ();
-
-  g_free (schema_dir);
 
   return result;
 }

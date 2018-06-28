@@ -16,28 +16,10 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    button3
-      "unknown"
-      parent: grid1
-      index: 0
-      state: enabled sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-    button2
-      "unknown"
-      parent: grid1
-      index: 1
-      state: enabled sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
     button1
       "combo box"
       parent: grid1
-      index: 2
+      index: 0
       state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -57,3 +39,21 @@ window1
         layer: popup
         alpha: 1
         <AtkSelection>
+    button2
+      "unknown"
+      parent: grid1
+      index: 1
+      state: enabled sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+    button3
+      "unknown"
+      parent: grid1
+      index: 2
+      state: enabled sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1

@@ -38,7 +38,6 @@ gtk_cell_renderer_toggle_get_type
 gtk_cell_view_get_type
 gtk_check_button_get_type
 gtk_check_menu_item_get_type
-gtk_clipboard_get_type
 gtk_color_button_get_type
 gtk_color_chooser_get_type
 gtk_color_chooser_dialog_get_type
@@ -54,6 +53,9 @@ gtk_entry_buffer_get_type
 gtk_entry_completion_get_type
 gtk_entry_get_type
 gtk_event_controller_get_type
+gtk_event_controller_key_get_type
+gtk_event_controller_motion_get_type
+gtk_event_controller_scroll_get_type
 gtk_expander_get_type
 gtk_file_chooser_button_get_type
 gtk_file_chooser_dialog_get_type
@@ -75,6 +77,7 @@ gtk_gesture_multi_press_get_type
 gtk_gesture_pan_get_type
 gtk_gesture_rotate_get_type
 gtk_gesture_single_get_type
+gtk_gesture_stylus_get_type
 gtk_gesture_swipe_get_type
 gtk_gesture_zoom_get_type
 gtk_gl_area_get_type
@@ -95,6 +98,9 @@ gtk_list_store_get_type
 gtk_list_box_get_type
 gtk_list_box_row_get_type
 gtk_lock_button_get_type
+gtk_media_controls_get_type
+gtk_media_file_get_type
+gtk_media_stream_get_type
 gtk_menu_bar_get_type
 gtk_menu_button_get_type
 gtk_menu_get_type
@@ -112,7 +118,6 @@ gtk_page_setup_get_type
 @DISABLE_ON_W32@gtk_page_setup_unix_dialog_get_type
 gtk_paned_get_type
 gtk_paper_size_get_type
-gtk_places_sidebar_get_type
 gtk_popover_get_type
 gtk_popover_menu_get_type
 @DISABLE_ON_W32@gtk_printer_get_type
@@ -127,10 +132,6 @@ gtk_radio_button_get_type
 gtk_radio_menu_item_get_type
 gtk_radio_tool_button_get_type
 gtk_range_get_type
-gtk_recent_chooser_get_type
-gtk_recent_chooser_dialog_get_type
-gtk_recent_chooser_menu_get_type
-gtk_recent_chooser_widget_get_type
 gtk_recent_manager_get_type
 gtk_revealer_get_type
 gtk_scale_button_get_type
@@ -150,6 +151,7 @@ gtk_shortcuts_section_get_type
 gtk_shortcuts_group_get_type
 gtk_shortcuts_shortcut_get_type
 gtk_size_group_get_type
+gtk_snapshot_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type
@@ -172,8 +174,6 @@ gtk_toggle_tool_button_get_type
 gtk_toolbar_get_type
 gtk_tool_button_get_type
 gtk_tool_item_get_type
-gtk_tool_item_group_get_type
-gtk_tool_palette_get_type
 gtk_tree_drag_dest_get_type
 gtk_tree_drag_source_get_type
 gtk_tree_model_filter_get_type
@@ -184,6 +184,7 @@ gtk_tree_sortable_get_type
 gtk_tree_store_get_type
 gtk_tree_view_column_get_type
 gtk_tree_view_get_type
+gtk_video_get_type
 gtk_viewport_get_type
 gtk_volume_button_get_type
 gtk_widget_get_type

@@ -4,25 +4,18 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="orientation">horizontal</property>
         <property name="spacing">6</property>
         <property name="margin">6</property>
         <child>
           <object class="GtkToggleButton" id="show_button">
-            <property name="visible">True</property>
             <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Show data</property>
             <property name="icon-name">view-refresh-symbolic</property>
             <signal name="toggled" handler="toggle_show"/>
           </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="object_title">
-            <property name="visible">True</property>
             <property name="hexpand">1</property>
             <property name="halign">center</property>
           </object>
@@ -31,13 +24,10 @@
     </child>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="expand">True</property>
-        <property name="hscrollbar-policy">automatic</property>
+        <property name="expand">1</property>
         <property name="vscrollbar-policy">always</property>
         <child>
-          <object class= "GtkTreeView" id="view">
-            <property name="visible">True</property>
+          <object class="GtkTreeView" id="view">
           </object>
         </child>
       </object>

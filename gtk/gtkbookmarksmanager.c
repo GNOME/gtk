@@ -73,7 +73,11 @@ get_bookmarks_file (void)
   GFile *file;
   gchar *filename;
 
-  filename = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "bookmarks", NULL);
+  /* Use gtk-3.0's bookmarks file as the format didn't change.
+   * Add the 3.0 file format to get_legacy_bookmarks_file() when
+   * the format does change.
+   */
+  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "bookmarks", NULL);
   file = g_file_new_for_path (filename);
   g_free (filename);
 
@@ -201,10 +205,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_DELETED:
       g_slist_free_full (manager->bookmarks, _gtk_bookmark_free);
       manager->bookmarks = read_bookmarks (file);
-
-      gdk_threads_enter ();
       notify_changed (manager);
-      gdk_threads_leave ();
       break;
 
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:

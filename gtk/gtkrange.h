@@ -49,9 +49,7 @@ typedef struct _GtkRangeClass         GtkRangeClass;
 
 struct _GtkRange
 {
-  GtkWidget widget;
-
-  GtkRangePrivate *priv;
+  GtkWidget parent_instance;
 };
 
 struct _GtkRangeClass

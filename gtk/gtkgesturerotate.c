@@ -236,8 +236,6 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
    *
    * This signal is emitted when the angle between both tracked points
    * changes.
-   *
-   * Since: 3.14
    */
   signals[ANGLE_CHANGED] =
     g_signal_new (I_("angle-changed"),
@@ -250,22 +248,16 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
 
 /**
  * gtk_gesture_rotate_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes 2-touch
  * rotation gestures.
  *
  * Returns: a newly created #GtkGestureRotate
- *
- * Since: 3.14
  **/
 GtkGesture *
-gtk_gesture_rotate_new (GtkWidget *widget)
+gtk_gesture_rotate_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_ROTATE,
-                       "widget", widget,
                        NULL);
 }
 
@@ -278,8 +270,6 @@ gtk_gesture_rotate_new (GtkWidget *widget)
  * not active, 0 is returned.
  *
  * Returns: the angle delta in radians
- *
- * Since: 3.14
  **/
 gdouble
 gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture)

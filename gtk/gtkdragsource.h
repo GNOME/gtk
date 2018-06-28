@@ -40,18 +40,17 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set  (GtkWidget            *widget,
 			   GdkModifierType       start_button_mask,
-			   const GtkTargetEntry *targets,
-			   gint                  n_targets,
+			   GdkContentFormats    *targets,
 			   GdkDragAction         actions);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_unset (GtkWidget        *widget);
 
 GDK_AVAILABLE_IN_ALL
-GtkTargetList* gtk_drag_source_get_target_list (GtkWidget     *widget);
+GdkContentFormats *     gtk_drag_source_get_target_list (GtkWidget         *widget);
 GDK_AVAILABLE_IN_ALL
-void           gtk_drag_source_set_target_list (GtkWidget     *widget,
-                                                GtkTargetList *target_list);
+void                    gtk_drag_source_set_target_list (GtkWidget         *widget,
+                                                         GdkContentFormats *target_list);
 GDK_AVAILABLE_IN_ALL
 void           gtk_drag_source_add_text_targets  (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
@@ -60,17 +59,14 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_drag_source_set_icon_pixbuf  (GtkWidget       *widget,
-				       GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_3_94
-void gtk_drag_source_set_icon_surface (GtkWidget       *widget,
-                                       cairo_surface_t *surface);
-GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_name    (GtkWidget       *widget,
 				       const gchar     *icon_name);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_gicon   (GtkWidget       *widget,
 				       GIcon           *icon);
+GDK_AVAILABLE_IN_ALL
+void gtk_drag_source_set_icon_paintable (GtkWidget       *widget,
+				         GdkPaintable    *paintable);
 
 
 G_END_DECLS

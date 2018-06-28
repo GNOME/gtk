@@ -53,16 +53,16 @@ clicked_icon (GtkTreeView  *tv,
 }
 
 static gboolean
-release_event (GtkTreeView    *tv,
-               GdkEventButton *event)
+release_event (GtkTreeView *tv,
+               GdkEvent    *event)
 {
   GtkTreePath *path;
   gdouble x, y;
 
-  if (gdk_event_get_event_type ((GdkEvent *)event) != GDK_BUTTON_RELEASE)
+  if (gdk_event_get_event_type (event) != GDK_BUTTON_RELEASE)
     return TRUE;
 
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+  gdk_event_get_coords (event, &x, &y);
   if (clicked_icon (tv, x, y, &path))
     {
       GtkTreeModel *model;
@@ -131,7 +131,7 @@ int main (int argc, char *argv[])
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tv), GTK_TREE_MODEL (store));
 
-  g_signal_connect (tv, "button-release-event",
+  g_signal_connect (tv, "event",
                     G_CALLBACK (release_event), NULL);
 
   gtk_widget_show (window);

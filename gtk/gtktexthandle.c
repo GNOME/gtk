@@ -23,6 +23,8 @@
 #include "gtkwindowprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkgizmoprivate.h"
+#include "gtkrendericonprivate.h"
 #include "gtkintl.h"
 
 #include <gtk/gtk.h>
@@ -93,30 +95,6 @@ _gtk_text_handle_get_size (GtkTextHandle         *handle,
                          NULL);
 }
 
-static void
-_gtk_text_handle_draw (GtkTextHandle         *handle,
-                       cairo_t               *cr,
-                       GtkTextHandlePosition  pos)
-{
-  GtkTextHandlePrivate *priv;
-  HandleWindow *handle_window;
-  GtkStyleContext *context;
-  gint width, height;
-
-  priv = handle->priv;
-  handle_window = &priv->windows[pos];
-
-  context = gtk_widget_get_style_context (handle_window->widget);
-  _gtk_text_handle_get_size (handle, pos, &width, &height);
-
-  cairo_save (cr);
-  cairo_translate (cr, handle_window->border.left, handle_window->border.top);
-
-  gtk_render_handle (context, cr, 0, 0, width, height);
-
-  cairo_restore (cr);
-}
-
 static gint
 _text_handle_pos_from_widget (GtkTextHandle *handle,
                               GtkWidget     *widget)
@@ -129,28 +107,6 @@ _text_handle_pos_from_widget (GtkTextHandle *handle,
     return GTK_TEXT_HANDLE_POSITION_SELECTION_END;
   else
     return -1;
-}
-
-static gboolean
-gtk_text_handle_widget_draw (GtkWidget     *widget,
-                             cairo_t       *cr,
-                             GtkTextHandle *handle)
-{
-  gint pos;
-
-  pos = _text_handle_pos_from_widget (handle, widget);
-
-  if (pos < 0)
-    return FALSE;
-
-#if 0
-  /* Show the invisible border */
-  cairo_set_source_rgba (cr, 1, 0, 0, 0.5);
-  cairo_paint (cr);
-#endif
-
-  _gtk_text_handle_draw (handle, cr, pos);
-  return TRUE;
 }
 
 static void
@@ -181,101 +137,86 @@ gtk_text_handle_unset_state (GtkTextHandle *handle,
   gtk_widget_queue_draw (priv->windows[pos].widget);
 }
 
-static gboolean
-gtk_text_handle_widget_event (GtkWidget     *widget,
-                              GdkEvent      *event,
-                              GtkTextHandle *handle)
+static void
+handle_drag_begin (GtkGestureDrag *gesture,
+                   gdouble         x,
+                   gdouble         y,
+                   GtkTextHandle  *handle)
 {
-  GtkTextHandlePrivate *priv;
-  GdkEventType event_type;
-  gdouble event_x, event_y;
-  guint state;
+  GtkTextHandlePrivate *priv = handle->priv;
+  GtkWidget *widget;
   gint pos;
-  GdkCrossingMode mode;
 
-  priv = handle->priv;
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   pos = _text_handle_pos_from_widget (handle, widget);
 
-  if (pos < 0)
-    return FALSE;
+  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
+      priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+    x -= gtk_widget_get_width (widget) / 2;
+  else if ((pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
+            priv->windows[pos].dir == GTK_TEXT_DIR_RTL) ||
+           (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START &&
+            priv->windows[pos].dir != GTK_TEXT_DIR_RTL))
+    x -= gtk_widget_get_width (widget);
 
-  event_type = gdk_event_get_event_type (event);
-  gdk_event_get_coords (event, &event_x, &event_y);
-  gdk_event_get_crossing_mode (event, &mode);
+  y += priv->windows[pos].border.top / 2;
 
-  if (event_type == GDK_BUTTON_PRESS)
-    {
-      priv->windows[pos].dx = event_x;
-      priv->windows[pos].dy = event_y;
-      priv->windows[pos].dragged = TRUE;
-      gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
-      g_signal_emit (handle, signals[DRAG_STARTED], 0, pos);
-    }
-  else if (event_type == GDK_BUTTON_RELEASE)
-    {
-      g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
-      priv->windows[pos].dragged = FALSE;
-      gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
-    }
-  else if (event_type == GDK_ENTER_NOTIFY)
-    gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
-  else if (event_type == GDK_LEAVE_NOTIFY)
-    {
-      if (!priv->windows[pos].dragged &&
-          (mode == GDK_CROSSING_NORMAL ||
-           mode == GDK_CROSSING_UNGRAB))
-        gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
-    }
-  else if (event_type == GDK_MOTION_NOTIFY &&
-           gdk_event_get_state (event, &state) &&
-           state & GDK_BUTTON1_MASK &&
-           priv->windows[pos].dragged)
-    {
-      gint x, y, handle_width, handle_height;
-      cairo_rectangle_int_t rect;
-      GtkAllocation allocation;
-      GtkWidget *window;
-
-      window = gtk_widget_get_parent (priv->windows[pos].widget);
-      gtk_widget_get_allocation (priv->windows[pos].widget, &allocation);
-      _gtk_text_handle_get_size (handle, pos, &handle_width, &handle_height);
-
-      _gtk_window_get_popover_position (GTK_WINDOW (window),
-                                        priv->windows[pos].widget,
-                                        NULL, &rect);
-
-      x = rect.x + event_x - priv->windows[pos].dx;
-      y = rect.y + event_y - priv->windows[pos].dy +
-        priv->windows[pos].border.top / 2;
-
-      if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
-          priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-        x += handle_width / 2;
-      else if ((pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
-                priv->windows[pos].dir == GTK_TEXT_DIR_RTL) ||
-               (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START &&
-                priv->windows[pos].dir != GTK_TEXT_DIR_RTL))
-        x += handle_width;
-
-      gtk_widget_translate_coordinates (window, priv->parent, x, y, &x, &y);
-      g_signal_emit (handle, signals[HANDLE_DRAGGED], 0, pos, x, y);
-    }
-
-  return TRUE;
+  priv->windows[pos].dx = x;
+  priv->windows[pos].dy = y;
+  priv->windows[pos].dragged = TRUE;
+  gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
+  g_signal_emit (handle, signals[DRAG_STARTED], 0, pos);
 }
 
 static void
-gtk_text_handle_widget_style_updated (GtkWidget     *widget,
-                                      GtkTextHandle *handle)
+handle_drag_update (GtkGestureDrag *gesture,
+                    gdouble         offset_x,
+                    gdouble         offset_y,
+                    GtkTextHandle  *handle)
 {
-  GtkTextHandlePrivate *priv;
+  GtkTextHandlePrivate *priv = handle->priv;
+  gdouble start_x, start_y;
+  gint pos, x, y;
 
-  priv = handle->priv;
-  gtk_style_context_set_parent (gtk_widget_get_style_context (widget),
-                                gtk_widget_get_style_context (priv->parent));
+  pos = _text_handle_pos_from_widget (handle,
+                                      gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
-  _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
+  gtk_widget_translate_coordinates (priv->windows[pos].widget, priv->parent,
+                                    start_x + offset_x - priv->windows[pos].dx,
+                                    start_y + offset_y - priv->windows[pos].dy,
+                                    &x, &y);
+  g_signal_emit (handle, signals[HANDLE_DRAGGED], 0, pos, x, y);
+}
+
+static void
+handle_drag_end (GtkGestureDrag *gesture,
+                 gdouble         offset_x,
+                 gdouble         offset_y,
+                 GtkTextHandle  *handle)
+{
+  GtkTextHandlePrivate *priv = handle->priv;
+  gint pos;
+
+  pos = _text_handle_pos_from_widget (handle,
+                                      gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
+  g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
+  priv->windows[pos].dragged = FALSE;
+  gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
+}
+
+static gboolean
+snapshot_func (GtkGizmo    *gizmo,
+               GtkSnapshot *snapshot)
+{
+  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (gizmo)));
+
+  gtk_css_style_snapshot_icon (style,
+                               snapshot,
+                               gtk_widget_get_width (GTK_WIDGET (gizmo)),
+                               gtk_widget_get_height (GTK_WIDGET (gizmo)),
+                               GTK_CSS_IMAGE_BUILTIN_HANDLE);
+  return TRUE;
 }
 
 static GtkWidget *
@@ -290,18 +231,21 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
     {
       GtkWidget *widget, *window;
       GtkStyleContext *context;
+      GtkEventController *controller;
 
-      widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      widget = gtk_gizmo_new (I_("cursor-handle"),
+                              NULL, NULL, snapshot_func);
 
       gtk_widget_set_direction (widget, priv->windows[pos].dir);
 
-      g_signal_connect (widget, "draw",
-                        G_CALLBACK (gtk_text_handle_widget_draw), handle);
-      g_signal_connect (widget, "event",
-                        G_CALLBACK (gtk_text_handle_widget_event), handle);
-      g_signal_connect (widget, "style-updated",
-                        G_CALLBACK (gtk_text_handle_widget_style_updated),
-                        handle);
+      controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+      g_signal_connect (controller, "drag-begin",
+                        G_CALLBACK (handle_drag_begin), handle);
+      g_signal_connect (controller, "drag-update",
+                        G_CALLBACK (handle_drag_update), handle);
+      g_signal_connect (controller, "drag-end",
+                        G_CALLBACK (handle_drag_end), handle);
+      gtk_widget_add_controller (widget, controller);
 
       priv->windows[pos].widget = g_object_ref_sink (widget);
       window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
@@ -309,7 +253,6 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_set_parent (context, gtk_widget_get_style_context (priv->parent));
-      gtk_css_node_set_name (gtk_widget_get_css_node (widget), I_("cursor-handle"));
       if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
         {
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);

@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "gtkcssimagefallbackprivate.h"
-#include "gtkcssimagesurfaceprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 
@@ -79,7 +78,7 @@ gtk_css_image_fallback_snapshot (GtkCssImage *image,
       else
         color = &red;
 
-      gtk_snapshot_append_color (snapshot, color, &GRAPHENE_RECT_INIT (0, 0, width, height), "image() Fallback Color");
+      gtk_snapshot_append_color (snapshot, color, &GRAPHENE_RECT_INIT (0, 0, width, height));
     }
   else
     gtk_css_image_snapshot (fallback->images[fallback->used], snapshot, width, height);
@@ -154,10 +153,7 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
                                                     style,
                                                     parent_style);
 
-          /* Assume that failing to load an image leaves a 0x0 surface image */
-          if (GTK_IS_CSS_IMAGE_SURFACE (copy->images[i]) &&
-              _gtk_css_image_get_width (copy->images[i]) == 0 &&
-              _gtk_css_image_get_height (copy->images[i]) == 0)
+          if (gtk_css_image_is_invalid (copy->images[i]))
             continue;
 
           if (copy->used < 0)
@@ -176,7 +172,7 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
       return GTK_CSS_IMAGE (copy);
     }
   else
-    return g_object_ref (fallback);
+    return GTK_CSS_IMAGE (g_object_ref (fallback));
 }
 
 static gboolean

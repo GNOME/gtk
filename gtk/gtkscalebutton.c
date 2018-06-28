@@ -36,25 +36,31 @@
 
 #include "gtkscalebutton.h"
 
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkbuttonprivate.h"
+#include "gtkimage.h"
+#include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
+#include "gtkgesture.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
+#include "gtkrangeprivate.h"
 #include "gtkscale.h"
-#include "gtkbox.h"
+#include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkintl.h"
+
 #include "a11y/gtkscalebuttonaccessible.h"
+
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * SECTION:gtkscalebutton
@@ -106,17 +112,18 @@ struct _GtkScaleButtonPrivate
   GtkWidget *image;
   GtkWidget *active_button;
 
-  GtkIconSize size;
   GtkOrientation orientation;
   GtkOrientation applied_orientation;
+
+  guint autoscroll_timeout;
+  GtkScrollType autoscroll_step;
+  gboolean autoscrolling;
 
   guint click_id;
 
   gchar **icon_list;
 
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
-
-  GtkEventController *scroll_controller;
 };
 
 static void     gtk_scale_button_constructed    (GObject             *object);
@@ -135,12 +142,6 @@ static void gtk_scale_button_set_orientation_private (GtkScaleButton *button,
 static void     gtk_scale_button_clicked        (GtkButton           *button);
 static void     gtk_scale_button_popup          (GtkWidget           *widget);
 static void     gtk_scale_button_popdown        (GtkWidget           *widget);
-static gboolean cb_button_press			(GtkWidget           *widget,
-						 GdkEventButton      *event,
-						 gpointer             user_data);
-static gboolean cb_button_release		(GtkWidget           *widget,
-						 GdkEventButton      *event,
-						 gpointer             user_data);
 static void     cb_button_clicked               (GtkWidget           *button,
                                                  gpointer             user_data);
 static void     gtk_scale_button_update_icon    (GtkScaleButton      *button);
@@ -186,8 +187,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * #GtkOrientable interface which has its own @orientation
    * property. However we redefine the property here in order to
    * override its default horizontal orientation.
-   *
-   * Since: 2.14
    **/
   g_object_class_override_property (gobject_class,
 				    PROP_ORIENTATION,
@@ -202,15 +201,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							G_MAXDOUBLE,
 							0,
 							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  g_object_class_install_property (gobject_class,
-				   PROP_SIZE,
-				   g_param_spec_enum ("size",
-						      P_("Icon size"),
-						      P_("The icon size"),
-						      GTK_TYPE_ICON_SIZE,
-						      GTK_ICON_SIZE_SMALL_TOOLBAR,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -238,8 +228,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * It is recommended to use at least 3 icons so that the
    * #GtkScaleButton reflects the current value of the scale
    * better for the users.
-   *
-   * Since: 2.12
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ICONS,
@@ -256,8 +244,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * The ::value-changed signal is emitted when the value field has
    * changed.
-   *
-   * Since: 2.12
    */
   signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
@@ -277,8 +263,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * which gets emitted to popup the scale widget.
    *
    * The default bindings for this signal are Space, Enter and Return.
-   *
-   * Since: 2.12
    */
   signals[POPUP] =
     g_signal_new_class_handler (I_("popup"),
@@ -298,8 +282,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * which gets emitted to popdown the scale widget.
    *
    * The default binding for this signal is Escape.
-   *
-   * Since: 2.12
    */
   signals[POPDOWN] =
     g_signal_new_class_handler (I_("popdown"),
@@ -338,14 +320,44 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, scale);
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, image);
 
-  gtk_widget_class_bind_template_callback (widget_class, cb_button_press);
-  gtk_widget_class_bind_template_callback (widget_class, cb_button_release);
   gtk_widget_class_bind_template_callback (widget_class, cb_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, cb_scale_value_changed);
   gtk_widget_class_bind_template_callback (widget_class, cb_popup_mapped);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "button");
+  gtk_widget_class_set_css_name (widget_class, I_("button"));
+}
+
+static gboolean
+start_autoscroll (gpointer data)
+{
+  GtkScaleButton *button = data;
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  gtk_range_start_autoscroll (GTK_RANGE (priv->scale), priv->autoscroll_step);
+
+  priv->autoscrolling = TRUE;
+  priv->autoscroll_timeout = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+button_pressed_cb (GtkGesture     *gesture,
+                   int             n_press,
+                   double          x,
+                   double          y,
+                   GtkScaleButton *button)
+{
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  if (widget == priv->plus_button)
+    priv->autoscroll_step = GTK_SCROLL_PAGE_FORWARD;
+  else
+    priv->autoscroll_step = GTK_SCROLL_PAGE_BACKWARD;
+  priv->autoscroll_timeout = g_timeout_add (200, start_autoscroll, button);
 }
 
 static void
@@ -353,6 +365,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
   GtkStyleContext *context;
+  GtkEventController *controller;
 
   button->priv = priv = gtk_scale_button_get_instance_private (button);
 
@@ -371,24 +384,26 @@ gtk_scale_button_init (GtkScaleButton *button)
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_add_class (context, "scale");
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (button),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_scale_button_scroll_controller_scroll),
                     button);
+  gtk_widget_add_controller (GTK_WIDGET (button), controller);
+
+  g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->plus_button)),
+                    "pressed", G_CALLBACK (button_pressed_cb), button);
+  g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->minus_button)),
+                    "pressed", G_CALLBACK (button_pressed_cb), button);
 }
 
 static void
 gtk_scale_button_constructed (GObject *object)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
-  GtkScaleButtonPrivate *priv = button->priv;
 
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->constructed (object);
 
   /* set button text and size */
-  priv->size = GTK_ICON_SIZE_SMALL_TOOLBAR;
   gtk_scale_button_update_icon (button);
 }
 
@@ -407,14 +422,6 @@ gtk_scale_button_set_property (GObject       *object,
       break;
     case PROP_VALUE:
       gtk_scale_button_set_value (button, g_value_get_double (value));
-      break;
-    case PROP_SIZE:
-      if (button->priv->size != g_value_get_enum (value))
-        {
-          button->priv->size = g_value_get_enum (value);
-          gtk_scale_button_update_icon (button);
-          g_object_notify_by_pspec (object, pspec);
-        }
       break;
     case PROP_ADJUSTMENT:
       gtk_scale_button_set_adjustment (button, g_value_get_object (value));
@@ -446,9 +453,6 @@ gtk_scale_button_get_property (GObject     *object,
     case PROP_VALUE:
       g_value_set_double (value, gtk_scale_button_get_value (button));
       break;
-    case PROP_SIZE:
-      g_value_set_enum (value, priv->size);
-      break;
     case PROP_ADJUSTMENT:
       g_value_set_object (value, gtk_scale_button_get_adjustment (button));
       break;
@@ -479,7 +483,8 @@ gtk_scale_button_finalize (GObject *object)
       priv->adjustment = NULL;
     }
 
-  g_object_unref (priv->scroll_controller);
+  if (priv->autoscroll_timeout)
+    g_source_remove (priv->autoscroll_timeout);
 
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->finalize (object);
 }
@@ -507,7 +512,6 @@ gtk_scale_button_dispose (GObject *object)
 
 /**
  * gtk_scale_button_new:
- * @size: (type int): a stock icon size (#GtkIconSize)
  * @min: the minimum value of the scale (usually 0)
  * @max: the maximum value of the scale (usually 100)
  * @step: the stepping of value when a scroll-wheel event,
@@ -520,12 +524,9 @@ gtk_scale_button_dispose (GObject *object)
  * a stepping of @step.
  *
  * Returns: a new #GtkScaleButton
- *
- * Since: 2.12
  */
 GtkWidget *
-gtk_scale_button_new (GtkIconSize   size,
-		      gdouble       min,
+gtk_scale_button_new (gdouble       min,
 		      gdouble       max,
 		      gdouble       step,
 		      const gchar **icons)
@@ -538,7 +539,6 @@ gtk_scale_button_new (GtkIconSize   size,
   button = g_object_new (GTK_TYPE_SCALE_BUTTON,
                          "adjustment", adjustment,
                          "icons", icons,
-                         "size", size,
                          NULL);
 
   return GTK_WIDGET (button);
@@ -551,8 +551,6 @@ gtk_scale_button_new (GtkIconSize   size,
  * Gets the current value of the scale button.
  *
  * Returns: current value of the scale button
- *
- * Since: 2.12
  */
 gdouble
 gtk_scale_button_get_value (GtkScaleButton * button)
@@ -575,8 +573,6 @@ gtk_scale_button_get_value (GtkScaleButton * button)
  * the minimum or maximum range values, it will be clamped to fit
  * inside them. The scale button emits the #GtkScaleButton::value-changed
  * signal if the value changes.
- *
- * Since: 2.12
  */
 void
 gtk_scale_button_set_value (GtkScaleButton *button,
@@ -599,8 +595,6 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  *
  * Sets the icons to be used by the scale button.
  * For details, see the #GtkScaleButton:icons property.
- *
- * Since: 2.12
  */
 void
 gtk_scale_button_set_icons (GtkScaleButton  *button,
@@ -629,8 +623,6 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
  * See gtk_range_get_adjustment() for details.
  *
  * Returns: (transfer none): the adjustment associated with the scale
- *
- * Since: 2.12
  */
 GtkAdjustment*
 gtk_scale_button_get_adjustment	(GtkScaleButton *button)
@@ -648,8 +640,6 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
  * Sets the #GtkAdjustment to be used as a model
  * for the #GtkScaleButton’s scale.
  * See gtk_range_set_adjustment() for details.
- *
- * Since: 2.12
  */
 void
 gtk_scale_button_set_adjustment	(GtkScaleButton *button,
@@ -682,8 +672,6 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
  * Retrieves the plus button of the #GtkScaleButton.
  *
  * Returns: (transfer none) (type Gtk.Button): the plus button of the #GtkScaleButton as a #GtkButton
- *
- * Since: 2.14
  */
 GtkWidget *
 gtk_scale_button_get_plus_button (GtkScaleButton *button)
@@ -700,8 +688,6 @@ gtk_scale_button_get_plus_button (GtkScaleButton *button)
  * Retrieves the minus button of the #GtkScaleButton.
  *
  * Returns: (transfer none) (type Gtk.Button): the minus button of the #GtkScaleButton as a #GtkButton
- *
- * Since: 2.14
  */
 GtkWidget *
 gtk_scale_button_get_minus_button (GtkScaleButton *button)
@@ -718,8 +704,6 @@ gtk_scale_button_get_minus_button (GtkScaleButton *button)
  * Retrieves the popup of the #GtkScaleButton.
  *
  * Returns: (transfer none): the popup of the #GtkScaleButton
- *
- * Since: 2.14
  */
 GtkWidget *
 gtk_scale_button_get_popup (GtkScaleButton *button)
@@ -891,69 +875,6 @@ button_click (GtkScaleButton *button,
   return can_continue;
 }
 
-static gboolean
-cb_button_timeout (gpointer user_data)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
-  GtkScaleButtonPrivate *priv = button->priv;
-  gboolean res;
-
-  if (priv->click_id == 0)
-    return G_SOURCE_REMOVE;
-
-  res = button_click (button, priv->active_button);
-  if (!res)
-    {
-      g_source_remove (priv->click_id);
-      priv->click_id = 0;
-    }
-
-  return res;
-}
-
-static gboolean
-cb_button_press (GtkWidget      *widget,
-		 GdkEventButton *event,
-		 gpointer        user_data)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
-  GtkScaleButtonPrivate *priv = button->priv;
-  gint double_click_time;
-
-  if (priv->click_id != 0)
-    g_source_remove (priv->click_id);
-
-  priv->active_button = widget;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-double-click-time", &double_click_time,
-                NULL);
-  priv->click_id = gdk_threads_add_timeout (double_click_time,
-                                            cb_button_timeout,
-                                            button);
-  g_source_set_name_by_id (priv->click_id, "[gtk+] cb_button_timeout");
-  cb_button_timeout (button);
-
-  return TRUE;
-}
-
-static gboolean
-cb_button_release (GtkWidget      *widget,
-		   GdkEventButton *event,
-		   gpointer        user_data)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
-  GtkScaleButtonPrivate *priv = button->priv;
-
-  if (priv->click_id != 0)
-    {
-      g_source_remove (priv->click_id);
-      priv->click_id = 0;
-    }
-
-  return TRUE;
-}
-
 static void
 cb_button_clicked (GtkWidget *widget,
                    gpointer   user_data)
@@ -961,8 +882,18 @@ cb_button_clicked (GtkWidget *widget,
   GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
   GtkScaleButtonPrivate *priv = button->priv;
 
-  if (priv->click_id != 0)
-    return;
+  if (priv->autoscroll_timeout)
+    {
+      g_source_remove (priv->autoscroll_timeout);
+      priv->autoscroll_timeout = 0;
+    }
+
+  if (priv->autoscrolling)
+    {
+      gtk_range_stop_autoscroll (GTK_RANGE (priv->scale));
+      priv->autoscrolling = FALSE;
+      return;
+    }
 
   button_click (button, widget);
 }
@@ -978,9 +909,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 
   if (!priv->icon_list || priv->icon_list[0][0] == '\0')
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                    "image-missing",
-                                    priv->size);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image), "image-missing");
       return;
     }
 
@@ -989,9 +918,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   /* The 1-icon special case */
   if (num_icons == 1)
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                    priv->icon_list[0],
-                                    priv->size);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image), priv->icon_list[0]);
       return;
     }
 
@@ -1009,9 +936,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
       else
         name = priv->icon_list[1];
 
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                    name,
-                                    priv->size);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image), name);
       return;
     }
 
@@ -1034,9 +959,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
       name = priv->icon_list[i];
     }
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                name,
-                                priv->size);
+  gtk_image_set_from_icon_name (GTK_IMAGE (priv->image), name);
 }
 
 static void

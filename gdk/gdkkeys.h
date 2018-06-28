@@ -81,9 +81,7 @@ GDK_AVAILABLE_IN_ALL
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkKeymap* gdk_keymap_get_default     (void);
-GDK_AVAILABLE_IN_ALL
-GdkKeymap* gdk_keymap_get_for_display (GdkDisplay *display);
+GdkDisplay *   gdk_keymap_get_display              (GdkKeymap           *keymap);
 
 GDK_AVAILABLE_IN_ALL
 guint          gdk_keymap_lookup_key               (GdkKeymap           *keymap,
@@ -117,9 +115,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap);
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_keymap_get_num_lock_state       (GdkKeymap           *keymap);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_keymap_get_scroll_lock_state    (GdkKeymap           *keymap);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 guint          gdk_keymap_get_modifier_state       (GdkKeymap           *keymap);
 GDK_AVAILABLE_IN_ALL
 void           gdk_keymap_add_virtual_modifiers    (GdkKeymap           *keymap,
@@ -127,7 +125,7 @@ void           gdk_keymap_add_virtual_modifiers    (GdkKeymap           *keymap,
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_keymap_map_virtual_modifiers    (GdkKeymap           *keymap,
                                                     GdkModifierType     *state);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GdkModifierType gdk_keymap_get_modifier_mask       (GdkKeymap           *keymap,
                                                     GdkModifierIntent    intent);
 

@@ -25,7 +25,7 @@
 
 #include "gtk/gtkcssparserprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
-#include "gtk/gtksnapshotprivate.h"
+#include "gtk/gtksnapshot.h"
 
 G_BEGIN_DECLS
 
@@ -71,14 +71,17 @@ struct _GtkCssImageClass
                                                     double                      progress);
 
   /* draw to 0,0 with the given width and height */
-  void         (* draw)                            (GtkCssImage                *image,
-                                                    cairo_t                    *cr,
-                                                    double                      width,
-                                                    double                      height);
   void         (* snapshot)                        (GtkCssImage                *image,
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
+  /* is this image to be considered invalid (see https://drafts.csswg.org/css-images-4/#invalid-image for details) */
+  gboolean     (* is_invalid)                      (GtkCssImage                *image);
+  /* does this image change based on timestamp? (optional) */
+  gboolean     (* is_dynamic)                      (GtkCssImage                *image);
+  /* get image for given timestamp or @image when not dynamic (optional) */
+  GtkCssImage *(* get_dynamic_image)               (GtkCssImage                *image,
+                                                    gint64                      monotonic_time);
   /* parse CSS, return TRUE on success */
   gboolean     (* parse)                           (GtkCssImage                *image,
                                                     GtkCssParser               *parser);
@@ -116,6 +119,10 @@ void           gtk_css_image_snapshot              (GtkCssImage                *
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
+gboolean       gtk_css_image_is_invalid            (GtkCssImage                *image);
+gboolean       gtk_css_image_is_dynamic            (GtkCssImage                *image);
+GtkCssImage *  gtk_css_image_get_dynamic_image     (GtkCssImage                *image,
+                                                    gint64                      monotonic_time);
 void           _gtk_css_image_print                (GtkCssImage                *image,
                                                     GString                    *string);
 

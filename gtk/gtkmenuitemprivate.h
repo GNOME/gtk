@@ -19,8 +19,9 @@
 #define __GTK_MENU_ITEM_PRIVATE_H__
 
 #include <gtk/gtkmenuitem.h>
-#include <gtk/gtkactionhelper.h>
+#include <gtk/gtkactionhelperprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
+#include <gtk/gtkeventcontrollermotion.h>
 
 G_BEGIN_DECLS
 
@@ -33,11 +34,12 @@ struct _GtkMenuItemPrivate
 
   guint timer;
 
-  gchar  *accel_path;
+  const char *accel_path;
 
   GtkActionHelper *action_helper;
 
   GtkWidget *arrow_widget;
+  GtkEventController *motion_controller;
 
   guint submenu_placement      : 1;
   guint submenu_direction      : 1;

@@ -150,10 +150,10 @@ void     gtk_label_set_max_width_chars    	  (GtkLabel         *label,
 					  	   gint              n_chars);
 GDK_AVAILABLE_IN_ALL
 gint     gtk_label_get_max_width_chars  	  (GtkLabel         *label);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_lines                      (GtkLabel         *label,
                                                    gint              lines);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gint     gtk_label_get_lines                      (GtkLabel         *label);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_pattern                    (GtkLabel         *label,
@@ -203,18 +203,18 @@ void         gtk_label_set_track_visited_links  (GtkLabel *label,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_xalign (GtkLabel *label,
                                    gfloat    xalign);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gfloat       gtk_label_get_xalign (GtkLabel *label);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_yalign (GtkLabel *label,
                                    gfloat    yalign);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gfloat       gtk_label_get_yalign (GtkLabel *label);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)

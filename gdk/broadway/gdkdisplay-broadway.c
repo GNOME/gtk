@@ -24,14 +24,15 @@
 
 #include "gdkdisplay-broadway.h"
 
+#include "gdkcairocontext-broadway.h"
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
-#include "gdkscreen.h"
-#include "gdkscreen-broadway.h"
 #include "gdkmonitor-broadway.h"
+#include "gdkseatdefaultprivate.h"
+#include "gdkdevice-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdevicemanager-broadway.h"
+#include <gdk/gdktextureprivate.h>
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -73,29 +74,98 @@ gdk_event_init (GdkDisplay *display)
   broadway_display->event_source = _gdk_broadway_event_source_new (display);
 }
 
+void
+_gdk_broadway_display_size_changed (GdkDisplay                      *display,
+                                    BroadwayInputScreenResizeNotify *msg)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+  GdkMonitor *monitor;
+  GdkRectangle size;
+  GList *toplevels, *l;
+
+  monitor = broadway_display->monitor;
+  gdk_monitor_get_geometry (monitor, &size);
+
+  if (msg->width == size.width && msg->height == size.height)
+    return;
+
+  gdk_monitor_set_size (monitor, msg->width, msg->height);
+  gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
+
+  toplevels =  broadway_display->toplevels;
+  for (l = toplevels; l != NULL; l = l->next)
+    {
+      GdkSurfaceImplBroadway *toplevel_impl = l->data;
+
+      if (toplevel_impl->maximized)
+        gdk_surface_move_resize (toplevel_impl->wrapper, 0, 0, msg->width, msg->height);
+    }
+}
+
+static GdkDevice *
+create_core_pointer (GdkDisplay       *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
+                       "name", "Core Pointer",
+                       "type", GDK_DEVICE_TYPE_MASTER,
+                       "input-source", GDK_SOURCE_MOUSE,
+                       "input-mode", GDK_MODE_SCREEN,
+                       "has-cursor", TRUE,
+                       "display", display,
+                       NULL);
+}
+
+static GdkDevice *
+create_core_keyboard (GdkDisplay       *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
+                       "name", "Core Keyboard",
+                       "type", GDK_DEVICE_TYPE_MASTER,
+                       "input-source", GDK_SOURCE_KEYBOARD,
+                       "input-mode", GDK_MODE_SCREEN,
+                       "has-cursor", FALSE,
+                       "display", display,
+                       NULL);
+}
+
+static GdkDevice *
+create_touchscreen (GdkDisplay       *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
+                       "name", "Touchscreen",
+                       "type", GDK_DEVICE_TYPE_SLAVE,
+                       "input-source", GDK_SOURCE_TOUCHSCREEN,
+                       "input-mode", GDK_MODE_SCREEN,
+                       "has-cursor", FALSE,
+                       "display", display,
+                       NULL);
+}
+
 GdkDisplay *
 _gdk_broadway_display_open (const gchar *display_name)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
   GError *error = NULL;
+  GdkSeat *seat;
 
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  /* initialize the display's screens */
-  broadway_display->screens = g_new (GdkScreen *, 1);
-  broadway_display->screens[0] = _gdk_broadway_screen_new (display, 0);
+  broadway_display->core_pointer = create_core_pointer (display);
+  broadway_display->core_keyboard = create_core_keyboard (display);
+  broadway_display->touchscreen = create_touchscreen (display);
 
-  /* We need to initialize events after we have the screen
-   * structures in places
-   */
-  _gdk_broadway_screen_events_init (broadway_display->screens[0]);
+  _gdk_device_set_associated_device (broadway_display->core_pointer, broadway_display->core_keyboard);
+  _gdk_device_set_associated_device (broadway_display->core_keyboard, broadway_display->core_pointer);
+  _gdk_device_set_associated_device (broadway_display->touchscreen, broadway_display->core_pointer);
+  _gdk_device_add_slave (broadway_display->core_pointer, broadway_display->touchscreen);
 
-  /*set the default screen */
-  broadway_display->default_screen = broadway_display->screens[0];
-
-  display->device_manager = _gdk_broadway_device_manager_new (display);
+  seat = gdk_seat_default_new_for_master_pair (broadway_display->core_pointer,
+                                               broadway_display->core_keyboard);
+  gdk_display_add_seat (display, seat);
+  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), broadway_display->touchscreen);
+  g_object_unref (seat);
 
   gdk_event_init (display);
 
@@ -107,7 +177,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   broadway_display->server = _gdk_broadway_server_new (display_name, &error);
   if (broadway_display->server == NULL)
     {
-      g_printerr ("Unable to init server: %s\n", error->message);
+      g_printerr ("Unable to init Broadway server: %s\n", error->message);
       g_error_free (error);
       return NULL;
     }
@@ -123,14 +193,6 @@ gdk_broadway_display_get_name (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return (gchar *) "Broadway";
-}
-
-static GdkScreen *
-gdk_broadway_display_get_default_screen (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_BROADWAY_DISPLAY (display)->default_screen;
 }
 
 static void
@@ -165,7 +227,7 @@ gdk_broadway_display_has_pending (GdkDisplay *display)
   return FALSE;
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_broadway_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -177,8 +239,6 @@ static void
 gdk_broadway_display_dispose (GObject *object)
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (object);
-
-  _gdk_screen_close (broadway_display->screens[0]);
 
   if (broadway_display->event_source)
     {
@@ -201,10 +261,6 @@ gdk_broadway_display_finalize (GObject *object)
 
   _gdk_broadway_cursor_display_finalize (GDK_DISPLAY(broadway_display));
 
-  /* Free all GdkScreens */
-  g_object_unref (broadway_display->screens[0]);
-  g_free (broadway_display->screens);
-
   g_object_unref (broadway_display->monitor);
 
   G_OBJECT_CLASS (gdk_broadway_display_parent_class)->finalize (object);
@@ -213,35 +269,6 @@ gdk_broadway_display_finalize (GObject *object)
 static void
 gdk_broadway_display_notify_startup_complete (GdkDisplay  *display,
 					      const gchar *startup_id)
-{
-}
-
-static gboolean
-gdk_broadway_display_supports_selection_notification (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-static gboolean
-gdk_broadway_display_request_selection_notification (GdkDisplay *display,
-						     GdkAtom     selection)
-
-{
-    return FALSE;
-}
-
-static gboolean
-gdk_broadway_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-static void
-gdk_broadway_display_store_clipboard (GdkDisplay    *display,
-				      GdkWindow     *clipboard_window,
-				      guint32        time_,
-				      const GdkAtom *targets,
-				      gint           n_targets)
 {
 }
 
@@ -316,6 +343,49 @@ gdk_broadway_display_get_setting (GdkDisplay *display,
   return FALSE;
 }
 
+static guint32
+gdk_broadway_display_get_last_seen_time (GdkDisplay *display)
+{
+  return _gdk_broadway_server_get_last_seen_time (GDK_BROADWAY_DISPLAY (display)->server);
+}
+
+typedef struct {
+  int id;
+  GdkDisplay *display;
+  GList *textures;
+} BroadwayTextureData;
+
+static void
+broadway_texture_data_free (BroadwayTextureData *data)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (data->display);
+
+  gdk_broadway_server_release_texture (broadway_display->server, data->id);
+  g_object_unref (data->display);
+  g_free (data);
+}
+
+guint32
+gdk_broadway_display_ensure_texture (GdkDisplay *display,
+                                     GdkTexture *texture)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+  BroadwayTextureData *data;
+
+  data = g_object_get_data (G_OBJECT (texture), "broadway-data");
+  if (data == NULL)
+    {
+      guint32 id = gdk_broadway_server_upload_texture (broadway_display->server, texture);
+
+      data = g_new0 (BroadwayTextureData, 1);
+      data->id = id;
+      data->display = g_object_ref (display);
+      g_object_set_data_full (G_OBJECT (texture), "broadway-data", data, (GDestroyNotify)broadway_texture_data_free);
+    }
+
+  return data->id;
+}
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {
@@ -325,39 +395,23 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   object_class->dispose = gdk_broadway_display_dispose;
   object_class->finalize = gdk_broadway_display_finalize;
 
-  display_class->window_type = GDK_TYPE_BROADWAY_WINDOW;
+  display_class->surface_type = GDK_TYPE_BROADWAY_SURFACE;
+  display_class->cairo_context_type = GDK_TYPE_BROADWAY_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_broadway_display_get_name;
-  display_class->get_default_screen = gdk_broadway_display_get_default_screen;
   display_class->beep = gdk_broadway_display_beep;
   display_class->sync = gdk_broadway_display_sync;
   display_class->flush = gdk_broadway_display_flush;
   display_class->has_pending = gdk_broadway_display_has_pending;
   display_class->queue_events = _gdk_broadway_display_queue_events;
   display_class->get_default_group = gdk_broadway_display_get_default_group;
-  display_class->supports_selection_notification = gdk_broadway_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_broadway_display_request_selection_notification;
-  display_class->supports_clipboard_persistence = gdk_broadway_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_broadway_display_store_clipboard;
   display_class->supports_shapes = gdk_broadway_display_supports_shapes;
   display_class->supports_input_shapes = gdk_broadway_display_supports_input_shapes;
-  display_class->get_cursor_for_type = _gdk_broadway_display_get_cursor_for_type;
-  display_class->get_cursor_for_name = _gdk_broadway_display_get_cursor_for_name;
-  display_class->get_cursor_for_surface = _gdk_broadway_display_get_cursor_for_surface;
-  display_class->get_default_cursor_size = _gdk_broadway_display_get_default_cursor_size;
-  display_class->get_maximal_cursor_size = _gdk_broadway_display_get_maximal_cursor_size;
-  display_class->supports_cursor_alpha = _gdk_broadway_display_supports_cursor_alpha;
-  display_class->supports_cursor_color = _gdk_broadway_display_supports_cursor_color;
 
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
-  display_class->create_window_impl = _gdk_broadway_display_create_window_impl;
+  display_class->create_surface_impl = _gdk_broadway_display_create_surface_impl;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
-  display_class->get_selection_owner = _gdk_broadway_display_get_selection_owner;
-  display_class->set_selection_owner = _gdk_broadway_display_set_selection_owner;
-  display_class->send_selection_notify = _gdk_broadway_display_send_selection_notify;
-  display_class->get_selection_property = _gdk_broadway_display_get_selection_property;
-  display_class->convert_selection = _gdk_broadway_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_broadway_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_broadway_display_utf8_to_string_target;
 
@@ -365,5 +419,5 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->get_monitor = gdk_broadway_display_get_monitor;
   display_class->get_primary_monitor = gdk_broadway_display_get_primary_monitor;
   display_class->get_setting = gdk_broadway_display_get_setting;
+  display_class->get_last_seen_time = gdk_broadway_display_get_last_seen_time;
 }
-

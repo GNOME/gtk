@@ -14,6 +14,7 @@ executable('gtk4-icon-browser',
            dependencies: libgtk_dep,
            include_directories: confinc,
            gui_app: true,
+           link_args: extra_demo_ldflags,
            install: true)
 
 install_data('gtk4-icon-browser.desktop', install_dir: gtk_applicationsdir)

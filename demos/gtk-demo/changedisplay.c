@@ -68,19 +68,19 @@ enum
 static GtkWidget *
 find_toplevel_at_pointer (GdkDisplay *display)
 {
-  GdkWindow *pointer_window;
+  GdkSurface *pointer_window;
   GtkWidget *widget = NULL;
 
-  pointer_window = gdk_device_get_window_at_position (gtk_get_current_event_device (),
+  pointer_window = gdk_device_get_surface_at_position (gtk_get_current_event_device (),
                                                       NULL, NULL);
 
-  /* The user data field of a GdkWindow is used to store a pointer
+  /* The user data field of a GdkSurface is used to store a pointer
    * to the widget that created it.
    */
   if (pointer_window)
     {
       gpointer widget_ptr;
-      gdk_window_get_user_data (pointer_window, &widget_ptr);
+      gdk_surface_get_user_data (pointer_window, &widget_ptr);
       widget = widget_ptr;
     }
 
@@ -88,11 +88,12 @@ find_toplevel_at_pointer (GdkDisplay *display)
 }
 
 static gboolean
-button_release_event_cb (GtkWidget       *widget,
-                         GdkEventButton  *event,
-                         gboolean        *clicked)
+release_event_cb (GtkWidget *widget,
+                  GdkEvent  *event,
+                  gboolean  *clicked)
 {
-  *clicked = TRUE;
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+    *clicked = TRUE;
   return TRUE;
 }
 
@@ -123,20 +124,20 @@ query_for_toplevel (GdkDisplay *display,
   gtk_container_add (GTK_CONTAINER (frame), label);
 
   gtk_widget_show (popup);
-  cursor = gdk_cursor_new_from_name (display, "crosshair");
+  cursor = gdk_cursor_new_from_name ("crosshair", NULL);
   device = gtk_get_current_event_device ();
 
   if (gdk_seat_grab (gdk_device_get_seat (device),
-                     gtk_widget_get_window (popup),
+                     gtk_widget_get_surface (popup),
                      GDK_SEAT_CAPABILITY_ALL_POINTING,
                      FALSE, cursor, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
     {
       gboolean clicked = FALSE;
 
-      g_signal_connect (popup, "button-release-event",
-                        G_CALLBACK (button_release_event_cb), &clicked);
+      g_signal_connect (popup, "event",
+                        G_CALLBACK (release_event_cb), &clicked);
 
-      /* Process events until clicked is set by button_release_event_cb.
+      /* Process events until clicked is set by our button release event handler.
        * We pass in may_block=TRUE since we want to wait if there
        * are no events currently.
        */
@@ -150,7 +151,6 @@ query_for_toplevel (GdkDisplay *display,
 
   g_object_unref (cursor);
   gtk_widget_destroy (popup);
-  gdk_flush ();                 /* Really release the grab */
 
   return toplevel;
 }

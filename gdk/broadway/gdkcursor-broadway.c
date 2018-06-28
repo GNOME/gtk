@@ -34,49 +34,6 @@
 #include "gdkprivate-broadway.h"
 #include "gdkdisplay-broadway.h"
 
-#include <string.h>
-#include <errno.h>
-
-struct _GdkBroadwayCursor
-{
-  GdkCursor cursor;
-};
-
-struct _GdkBroadwayCursorClass
-{
-  GdkCursorClass cursor_class;
-};
-
-/*** GdkBroadwayCursor ***/
-
-G_DEFINE_TYPE (GdkBroadwayCursor, gdk_broadway_cursor, GDK_TYPE_CURSOR)
-
-static cairo_surface_t * gdk_broadway_cursor_get_surface (GdkCursor *cursor,
-							  gdouble   *x_hot,
-							  gdouble   *y_hot);
-
-static void
-gdk_broadway_cursor_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gdk_broadway_cursor_parent_class)->finalize (object);
-}
-
-static void
-gdk_broadway_cursor_class_init (GdkBroadwayCursorClass *xcursor_class)
-{
-  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (xcursor_class);
-  GObjectClass *object_class = G_OBJECT_CLASS (xcursor_class);
-
-  object_class->finalize = gdk_broadway_cursor_finalize;
-
-  cursor_class->get_surface = gdk_broadway_cursor_get_surface;
-}
-
-static void
-gdk_broadway_cursor_init (GdkBroadwayCursor *cursor)
-{
-}
-
 /* Called by gdk_display_broadway_finalize to flush any cached cursors
  * for a dead display.
  */
@@ -85,103 +42,8 @@ _gdk_broadway_cursor_display_finalize (GdkDisplay *display)
 {
 }
 
-GdkCursor*
-_gdk_broadway_display_get_cursor_for_type (GdkDisplay    *display,
-					   GdkCursorType  cursor_type)
-{
-  GdkBroadwayCursor *private;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  private = g_object_new (GDK_TYPE_BROADWAY_CURSOR,
-                          "cursor-type", cursor_type,
-                          "display", display,
-			  NULL);
-
-  return GDK_CURSOR (private);
-}
-
-static cairo_surface_t *
-gdk_broadway_cursor_get_surface (GdkCursor *cursor,
-				 gdouble *x_hot,
-				 gdouble *y_hot)
-{
-  g_return_val_if_fail (cursor != NULL, NULL);
-
-  return NULL;
-}
-
 void
 _gdk_broadway_cursor_update_theme (GdkCursor *cursor)
 {
   g_return_if_fail (cursor != NULL);
-}
-
-GdkCursor *
-_gdk_broadway_display_get_cursor_for_surface (GdkDisplay *display,
-					      cairo_surface_t *surface,
-					      gdouble     x,
-					      gdouble     y)
-{
-  GdkBroadwayCursor *private;
-  GdkCursor *cursor;
-
-  private = g_object_new (GDK_TYPE_BROADWAY_CURSOR, 
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
-                          "display", display,
-                          NULL);
-  cursor = (GdkCursor *) private;
-
-  return cursor;
-}
-
-GdkCursor*
-_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
-					   const gchar *name)
-{
-  GdkBroadwayCursor *private;
-
-  private = g_object_new (GDK_TYPE_BROADWAY_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
-                          "display", display,
-                          NULL);
-
-  return GDK_CURSOR (private);
-}
-
-gboolean
-_gdk_broadway_display_supports_cursor_alpha (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return TRUE;
-}
-
-gboolean
-_gdk_broadway_display_supports_cursor_color (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return TRUE;
-}
-
-void
-_gdk_broadway_display_get_default_cursor_size (GdkDisplay *display,
-					       guint      *width,
-					       guint      *height)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
-  *width = *height = 20;
-}
-
-void
-_gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
-					       guint       *width,
-					       guint       *height)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
-  *width = 128;
-  *height = 128;
 }

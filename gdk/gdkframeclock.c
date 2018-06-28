@@ -67,6 +67,13 @@
  * they will stay exactly synchronized.
  */
 
+/**
+ * GdkFrameClock:
+ *
+ * The GdkFrameClock struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 enum {
   FLUSH_EVENTS,
   BEFORE_PAINT,
@@ -258,7 +265,6 @@ gdk_frame_clock_init (GdkFrameClock *clock)
  * the actual previous frame time, or if that’s too old, an updated
  * time.
  *
- * Since: 3.8
  * Returns: a timestamp in microseconds, in the timescale of
  *  of g_get_monotonic_time().
  */
@@ -285,8 +291,6 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
  * you should use gdk_frame_clock_begin_updating() instead, since
  * this allows GTK+ to adjust system parameters to get maximally
  * smooth animations.
- *
- * Since: 3.8
  */
 void
 gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
@@ -307,8 +311,6 @@ gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
  * This function may be called multiple times and frames will be
  * requested until gdk_frame_clock_end_updating() is called the same
  * number of times.
- *
- * Since: 3.8
  */
 void
 gdk_frame_clock_begin_updating (GdkFrameClock *frame_clock)
@@ -324,8 +326,6 @@ gdk_frame_clock_begin_updating (GdkFrameClock *frame_clock)
  *
  * Stops updates for an animation. See the documentation for
  * gdk_frame_clock_begin_updating().
- *
- * Since: 3.8
  */
 void
 gdk_frame_clock_end_updating (GdkFrameClock *frame_clock)
@@ -362,7 +362,6 @@ _gdk_frame_clock_thaw (GdkFrameClock *clock)
  * Returns: inside frame processing, the value of the frame counter
  *  for the current frame. Outside of frame processing, the frame
  *   counter for the last frame.
- * Since: 3.8
  */
 gint64
 gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
@@ -390,7 +389,6 @@ gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
  * Returns: the frame counter value for the oldest frame
  *  that is available in the internal frame history of the
  *  #GdkFrameClock.
- * Since: 3.8
  */
 gint64
 gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
@@ -445,7 +443,6 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
  * Returns: (nullable): the #GdkFrameTimings object for the specified
  *  frame, or %NULL if it is not available. See
  *  gdk_frame_clock_get_history_start().
- * Since: 3.8
  */
 GdkFrameTimings *
 gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
@@ -477,9 +474,8 @@ gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
  *
  * Returns: (nullable): the #GdkFrameTimings for the frame currently
  *  being processed, or even no frame is being processed, for the
- *  previous frame. Before any frames have been procesed, returns
+ *  previous frame. Before any frames have been processed, returns
  *  %NULL.
- * Since: 3.8
  */
 GdkFrameTimings *
 gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
@@ -541,10 +537,10 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
  * gdk_frame_clock_get_refresh_info:
  * @frame_clock: a #GdkFrameClock
  * @base_time: base time for determining a presentaton time
- * @refresh_interval_return: a location to store the determined refresh
- *  interval, or %NULL. A default refresh interval of 1/60th of
- *  a second will be stored if no history is present.
- * @presentation_time_return: a location to store the next
+ * @refresh_interval_return: (out) (optional): a location to store the
+ * determined refresh interval, or %NULL. A default refresh interval of
+ * 1/60th of a second will be stored if no history is present.
+ * @presentation_time_return: (out): a location to store the next
  *  candidate presentation time after the given base time.
  *  0 will be will be stored if no history is present.
  *
@@ -553,8 +549,6 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
  * presentation times are separated by the refresh interval,
  * predicts a presentation time that is a multiple of the refresh
  * interval after the last presentation time, and later than @base_time.
- *
- * Since: 3.8
  */
 void
 gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,

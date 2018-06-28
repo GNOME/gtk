@@ -136,7 +136,7 @@ prepare_callback (GtkWidget *widget, GtkWidget *page)
     {
       gtk_assistant_set_page_complete (GTK_ASSISTANT (widget), page, FALSE);
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (page), 0.0);
-      gdk_threads_add_timeout (300, (GSourceFunc) progress_timeout, widget);
+      g_timeout_add (300, (GSourceFunc) progress_timeout, widget);
     }
   else
     g_print ("prepare: %d\n", gtk_assistant_get_current_page (GTK_ASSISTANT (widget)));
@@ -703,11 +703,9 @@ main (int argc, gchar *argv[])
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
-		    G_CALLBACK (gtk_main_quit), NULL);
-  g_signal_connect (G_OBJECT (window), "delete-event",
-		    G_CALLBACK (gtk_false), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (window), box);

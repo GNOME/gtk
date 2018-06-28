@@ -111,7 +111,7 @@ selection_mode_enter (GtkButton *button, GtkBuilder *builder)
   titlestack = GTK_WIDGET (gtk_builder_get_object (builder, "titlestack"));
  
   gtk_style_context_add_class (gtk_widget_get_style_context (header), "selection-mode");
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), FALSE);
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
   gtk_widget_hide (headerbutton);
   gtk_widget_hide (selectbutton);
   gtk_widget_show (cancelbutton);
@@ -140,7 +140,7 @@ selection_mode_leave (GtkButton *button, GtkBuilder *builder)
   titlestack = GTK_WIDGET (gtk_builder_get_object (builder, "titlestack"));
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (header), "selection-mode");
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
   gtk_widget_show (headerbutton);
   gtk_widget_show (selectbutton);
   gtk_widget_hide (cancelbutton);

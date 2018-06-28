@@ -1,10 +1,18 @@
-gsk_private_source_shaders = [
+gsk_private_gl_shaders = [
   'resources/glsl/blend.fs.glsl',
   'resources/glsl/blend.vs.glsl',
   'resources/glsl/blit.fs.glsl',
   'resources/glsl/blit.vs.glsl',
   'resources/glsl/color.fs.glsl',
-  'resources/glsl/color.vs.glsl',
+  'resources/glsl/coloring.fs.glsl',
+  'resources/glsl/color_matrix.fs.glsl',
+  'resources/glsl/linear_gradient.fs.glsl',
+  'resources/glsl/blur.fs.glsl',
+  'resources/glsl/inset_shadow.fs.glsl',
+  'resources/glsl/outset_shadow.fs.glsl',
+  'resources/glsl/unblurred_outset_shadow.fs.glsl',
+  'resources/glsl/border.fs.glsl',
+  'resources/glsl/cross_fade.fs.glsl',
   'resources/glsl/es2_common.fs.glsl',
   'resources/glsl/es2_common.vs.glsl',
   'resources/glsl/gl3_common.fs.glsl',
@@ -14,23 +22,26 @@ gsk_private_source_shaders = [
 ]
 
 gsk_public_sources = files([
+  'gskdiff.c',
   'gskrenderer.c',
   'gskrendernode.c',
   'gskrendernodeimpl.c',
-  'gskroundedrect.c',
-  'gsktexture.c',
+  'gskroundedrect.c'
 ])
 
 gsk_private_sources = files([
   'gskcairoblur.c',
   'gskcairorenderer.c',
   'gskdebug.c',
-  'gskgldriver.c',
-  'gskglprofiler.c',
-  'gskglrenderer.c',
   'gskprivate.c',
   'gskprofiler.c',
-  'gskshaderbuilder.c',
+  'gl/gskshaderbuilder.c',
+  'gl/gskglprofiler.c',
+  'gl/gskglrenderer.c',
+  'gl/gskglglyphcache.c',
+  'gl/gskglimage.c',
+  'gl/gskgldriver.c',
+  'gl/gskglrenderops.c'
 ])
 
 gsk_public_headers = files([
@@ -38,8 +49,8 @@ gsk_public_headers = files([
   'gskrenderer.h',
   'gskrendernode.h',
   'gskroundedrect.h',
-  'gsktexture.h',
   'gsktypes.h',
+  'gsk-autocleanup.h'
 ])
 
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
@@ -54,40 +65,46 @@ gsk_private_vulkan_compiled_shaders_deps = []
 
 if have_vulkan
   gsk_private_sources += files([
-    'gskvulkanblendmodepipeline.c',
-    'gskvulkanblurpipeline.c',
-    'gskvulkanborderpipeline.c',
-    'gskvulkanboxshadowpipeline.c',
-    'gskvulkanbuffer.c',
-    'gskvulkanclip.c',
-    'gskvulkancolorpipeline.c',
-    'gskvulkancolortextpipeline.c',
-    'gskvulkancrossfadepipeline.c',
-    'gskvulkancommandpool.c',
-    'gskvulkaneffectpipeline.c',
-    'gskvulkanglyphcache.c',
-    'gskvulkanlineargradientpipeline.c',
-    'gskvulkanimage.c',
-    'gskvulkantextpipeline.c',
-    'gskvulkantexturepipeline.c',
-    'gskvulkanmemory.c',
-    'gskvulkanpipeline.c',
-    'gskvulkanpushconstants.c',
-    'gskvulkanrender.c',
-    'gskvulkanrenderer.c',
-    'gskvulkanrenderpass.c',
-    'gskvulkanshader.c',
+    'vulkan/gskvulkanblendmodepipeline.c',
+    'vulkan/gskvulkanblurpipeline.c',
+    'vulkan/gskvulkanborderpipeline.c',
+    'vulkan/gskvulkanboxshadowpipeline.c',
+    'vulkan/gskvulkanbuffer.c',
+    'vulkan/gskvulkanclip.c',
+    'vulkan/gskvulkancolorpipeline.c',
+    'vulkan/gskvulkancolortextpipeline.c',
+    'vulkan/gskvulkancrossfadepipeline.c',
+    'vulkan/gskvulkancommandpool.c',
+    'vulkan/gskvulkaneffectpipeline.c',
+    'vulkan/gskvulkanglyphcache.c',
+    'vulkan/gskvulkanlineargradientpipeline.c',
+    'vulkan/gskvulkanimage.c',
+    'vulkan/gskvulkantextpipeline.c',
+    'vulkan/gskvulkantexturepipeline.c',
+    'vulkan/gskvulkanmemory.c',
+    'vulkan/gskvulkanpipeline.c',
+    'vulkan/gskvulkanpushconstants.c',
+    'vulkan/gskvulkanrender.c',
+    'vulkan/gskvulkanrenderer.c',
+    'vulkan/gskvulkanrenderpass.c',
+    'vulkan/gskvulkanshader.c',
   ])
 
   subdir('resources/vulkan')
 endif # have_vulkan
+
+if get_variable('broadway_enabled')
+  gsk_private_sources += files([
+    'gskbroadwayrenderer.c',
+  ])
+endif
 
 gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
                                    input: 'gen-gsk-gresources-xml.py',
                                    command: [
                                      find_program('gen-gsk-gresources-xml.py'),
                                      '@OUTPUT@',
-                                     gsk_private_source_shaders,
+                                     gsk_private_gl_shaders,
                                      gsk_private_vulkan_compiled_shaders,
                                      gsk_private_vulkan_shaders
                                    ])

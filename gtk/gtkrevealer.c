@@ -99,8 +99,7 @@ static void     gtk_revealer_real_add                            (GtkContainer  
                                                                   GtkWidget     *child);
 static void     gtk_revealer_real_size_allocate                  (GtkWidget           *widget,
                                                                   const GtkAllocation *allocation,
-                                                                  int                  baseline,
-                                                                  GtkAllocation       *out_clip);
+                                                                  int                  baseline);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -123,7 +122,7 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->current_pos = 0.0;
   priv->target_pos = 0.0;
 
-  gtk_widget_set_has_window ((GtkWidget*) revealer, FALSE);
+  gtk_widget_set_has_surface ((GtkWidget*) revealer, FALSE);
 }
 
 static void
@@ -258,11 +257,11 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           P_("Child Revealed"),
                           P_("Whether the child is revealed and the animation target reached"),
                           FALSE,
-                          G_PARAM_READABLE);
+                          GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
-  gtk_widget_class_set_css_name (widget_class, "revealer");
+  gtk_widget_class_set_css_name (widget_class, I_("revealer"));
 }
 
 /**
@@ -271,8 +270,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
  * Creates a new #GtkRevealer.
  *
  * Returns: a newly created #GtkRevealer
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_revealer_new (void)
@@ -368,8 +365,7 @@ gtk_revealer_real_add (GtkContainer *container,
 static void
 gtk_revealer_real_size_allocate (GtkWidget           *widget,
                                  const GtkAllocation *allocation,
-                                 int                  baseline,
-                                 GtkAllocation       *out_clip)
+                                 int                  baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkWidget *child;
@@ -380,7 +376,7 @@ gtk_revealer_real_size_allocate (GtkWidget           *widget,
       GtkAllocation child_allocation;
 
       gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
-      gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
+      gtk_widget_size_allocate (child, &child_allocation, -1);
     }
 }
 
@@ -497,8 +493,6 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
  *
  * The transition will be animated with the current
  * transition type of @revealer.
- *
- * Since: 3.10
  */
 void
 gtk_revealer_set_reveal_child (GtkRevealer *revealer,
@@ -525,8 +519,6 @@ gtk_revealer_set_reveal_child (GtkRevealer *revealer,
  * use gtk_revealer_get_child_revealed().
  *
  * Returns: %TRUE if the child is revealed.
- *
- * Since: 3.10
  */
 gboolean
 gtk_revealer_get_reveal_child (GtkRevealer *revealer)
@@ -546,8 +538,6 @@ gtk_revealer_get_reveal_child (GtkRevealer *revealer)
  * the transition to the revealed state is completed.
  *
  * Returns: %TRUE if the child is fully revealed
- *
- * Since: 3.10
  */
 gboolean
 gtk_revealer_get_child_revealed (GtkRevealer *revealer)
@@ -645,10 +635,9 @@ gtk_revealer_snapshot (GtkWidget   *widget,
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(
                                   0, 0,
-                                  gtk_widget_get_allocated_width (widget),
-                                  gtk_widget_get_allocated_height (widget)
-                              ),
-                              "RevealerClip");
+                                  gtk_widget_get_width (widget),
+                                  gtk_widget_get_height (widget)
+                              ));
       gtk_widget_snapshot_child (widget, child, snapshot);
       gtk_snapshot_pop (snapshot);
     }
@@ -662,8 +651,6 @@ gtk_revealer_snapshot (GtkWidget   *widget,
  * transitions will take.
  *
  * Returns: the transition duration
- *
- * Since: 3.10
  */
 guint
 gtk_revealer_get_transition_duration (GtkRevealer *revealer)
@@ -681,8 +668,6 @@ gtk_revealer_get_transition_duration (GtkRevealer *revealer)
  * @duration: the new duration, in milliseconds
  *
  * Sets the duration that transitions will take.
- *
- * Since: 3.10
  */
 void
 gtk_revealer_set_transition_duration (GtkRevealer *revealer,
@@ -707,8 +692,6 @@ gtk_revealer_set_transition_duration (GtkRevealer *revealer,
  * for transitions in @revealer.
  *
  * Returns: the current transition type of @revealer
- *
- * Since: 3.10
  */
 GtkRevealerTransitionType
 gtk_revealer_get_transition_type (GtkRevealer *revealer)
@@ -728,8 +711,6 @@ gtk_revealer_get_transition_type (GtkRevealer *revealer)
  * Sets the type of animation that will be used for
  * transitions in @revealer. Available types include
  * various kinds of fades and slides.
- *
- * Since: 3.10
  */
 void
 gtk_revealer_set_transition_type (GtkRevealer               *revealer,

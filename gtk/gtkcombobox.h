@@ -37,14 +37,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkComboBox        GtkComboBox;
 typedef struct _GtkComboBoxClass   GtkComboBoxClass;
-typedef struct _GtkComboBoxPrivate GtkComboBoxPrivate;
 
 struct _GtkComboBox
 {
   GtkBin parent_instance;
-
-  /*< private >*/
-  GtkComboBoxPrivate *priv;
 };
 
 /**

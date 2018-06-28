@@ -16,13 +16,6 @@ struct _GskRenderNode
 
   volatile int ref_count;
 
-  /* Use for debugging */
-  char *name;
-
-  /* Scaling filters */
-  GskScalingFilter min_filter;
-  GskScalingFilter mag_filter;
-
   graphene_rect_t bounds;
 };
 
@@ -35,6 +28,11 @@ struct _GskRenderNodeClass
   void            (* finalize)    (GskRenderNode  *node);
   void            (* draw)        (GskRenderNode  *node,
                                    cairo_t        *cr);
+  gboolean        (* can_diff)    (GskRenderNode  *node1,
+                                   GskRenderNode  *node2);
+  void            (* diff)        (GskRenderNode  *node1,
+                                   GskRenderNode  *node2,
+                                   cairo_region_t *region);
   GVariant *      (* serialize)   (GskRenderNode  *node);
   GskRenderNode * (* deserialize) (GVariant       *variant,
                                    GError        **error);
@@ -43,6 +41,15 @@ struct _GskRenderNodeClass
 GskRenderNode * gsk_render_node_new              (const GskRenderNodeClass  *node_class,
                                                   gsize                      extra_size);
 
+gboolean        gsk_render_node_can_diff         (GskRenderNode             *node1,
+                                                  GskRenderNode             *node2);
+void            gsk_render_node_diff             (GskRenderNode             *node1,
+                                                  GskRenderNode             *node2,
+                                                  cairo_region_t            *region);
+void            gsk_render_node_diff_impossible  (GskRenderNode             *node1,
+                                                  GskRenderNode             *node2,
+                                                  cairo_region_t            *region);
+
 GVariant *      gsk_render_node_serialize_node   (GskRenderNode             *node);
 GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType          type,
                                                   GVariant                  *variant,
@@ -50,6 +57,14 @@ GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType          typ
 
 GskRenderNode * gsk_cairo_node_new_for_surface   (const graphene_rect_t    *bounds,
                                                   cairo_surface_t          *surface);
+
+GskRenderNode * gsk_text_node_new_with_bounds     (PangoFont                *font,
+                                                   PangoGlyphString         *glyphs,
+                                                   const GdkRGBA            *color,
+                                                   double                    x,
+                                                   double                    y,
+                                                   const graphene_rect_t    *bounds);
+
 
 G_END_DECLS
 

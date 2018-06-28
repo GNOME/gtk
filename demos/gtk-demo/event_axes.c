@@ -444,7 +444,7 @@ draw_device_info (GtkWidget        *widget,
       g_string_append_printf (string, "\nTool: %s", tool_type);
 
       if (serial != 0)
-        g_string_append_printf (string, ", Serial: %lx", serial);
+        g_string_append_printf (string, ", Serial: %" G_GINT64_MODIFIER "x", serial);
     }
 
   cairo_move_to (cr, 10, *y);
@@ -581,8 +581,7 @@ init_pad_controller (GtkWidget *window,
   gint i;
 
   action_group = g_simple_action_group_new ();
-  pad_controller = gtk_pad_controller_new (GTK_WINDOW (window),
-                                           G_ACTION_GROUP (action_group),
+  pad_controller = gtk_pad_controller_new (G_ACTION_GROUP (action_group),
                                            NULL);
 
   for (i = 0; i < G_N_ELEMENTS (pad_actions); i++)
@@ -607,8 +606,7 @@ init_pad_controller (GtkWidget *window,
 
   gtk_pad_controller_set_action_entries (pad_controller, pad_actions,
                                          G_N_ELEMENTS (pad_actions));
-  g_object_set_data_full (G_OBJECT (window), "pad-controller",
-                          pad_controller, g_object_unref);
+  gtk_widget_add_controller (window, GTK_EVENT_CONTROLLER (pad_controller));
 
   g_object_unref (action_group);
 }

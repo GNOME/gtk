@@ -17,39 +17,43 @@ clear_surface (void)
 }
 
 /* Create a new surface of the appropriate size to store our scribbles */
-static gboolean
-configure_event_cb (GtkWidget         *widget,
-                    GdkEventConfigure *event,
-                    gpointer           data)
+static void
+size_allocate_cb (GtkWidget     *widget,
+                  GtkAllocation *alloc,
+                  int            baseline,
+                  gpointer       data)
 {
   if (surface)
-    cairo_surface_destroy (surface);
+    {
+      cairo_surface_destroy (surface);
+      surface = NULL;
+    }
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               gtk_widget_get_allocated_width (widget),
-                                               gtk_widget_get_allocated_height (widget));
+  if (gtk_widget_get_surface (widget))
+    {
+      surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
+                                                   CAIRO_CONTENT_COLOR,
+                                                   gtk_widget_get_width (widget),
+                                                   gtk_widget_get_height (widget));
 
-  /* Initialize the surface to white */
-  clear_surface ();
-
-  /* We've handled the configure event, no need for further processing. */
-  return TRUE;
+      /* Initialize the surface to white */
+      clear_surface ();
+    }
 }
 
-/* Redraw the screen from the surface. Note that the ::draw
- * signal receives a ready-to-be-used cairo_t that is already
+/* Redraw the screen from the surface. Note that the draw
+ * callback receives a ready-to-be-used cairo_t that is already
  * clipped to only draw the exposed areas of the widget
  */
-static gboolean
-draw_cb (GtkWidget *widget,
-         cairo_t   *cr,
-         gpointer   data)
+static void
+draw_cb (GtkDrawingArea *drawing_area,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 {
   cairo_set_source_surface (cr, surface, 0, 0);
   cairo_paint (cr);
-
-  return FALSE;
 }
 
 /* Draw a rectangle on the surface at the given position */
@@ -68,68 +72,52 @@ draw_brush (GtkWidget *widget,
 
   cairo_destroy (cr);
 
-  /* Now invalidate the affected region of the drawing area. */
-  gtk_widget_queue_draw_area (widget, x - 3, y - 3, 6, 6);
+  /* Now invalidate the drawing area. */
+  gtk_widget_queue_draw (widget);
 }
 
-/* Handle button press events by either drawing a rectangle
- * or clearing the surface, depending on which button was pressed.
- * The ::button-press signal handler receives a GdkEventButton
- * struct which contains this information.
- */
-static gboolean
-button_press_event_cb (GtkWidget      *widget,
-                       GdkEventButton *event,
-                       gpointer        data)
+static double start_x;
+static double start_y;
+
+static void
+drag_begin (GtkGestureDrag *gesture,
+            double          x,
+            double          y,
+            GtkWidget      *area)
 {
-  guint button;
-  double x, y;
+  start_x = x;
+  start_y = y;
 
-  /* paranoia check, in case we haven't gotten a configure event */
-  if (surface == NULL)
-    return FALSE;
-
-  gdk_event_get_button ((GdkEvent *)event, &button);
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-
-  if (button == GDK_BUTTON_PRIMARY)
-    {
-      draw_brush (widget, x, y);
-    }
-  else if (button == GDK_BUTTON_SECONDARY)
-    {
-      clear_surface ();
-      gtk_widget_queue_draw (widget);
-    }
-
-  /* We've handled the event, stop processing */
-  return TRUE;
+  draw_brush (area, x, y);
 }
 
-/* Handle motion events by continuing to draw if button 1 is
- * still held down. The ::motion-notify signal handler receives
- * a GdkEventMotion struct which contains this information.
- */
-static gboolean
-motion_notify_event_cb (GtkWidget      *widget,
-                        GdkEventMotion *event,
-                        gpointer        data)
+static void
+drag_update (GtkGestureDrag *gesture,
+             double          x,
+             double          y,
+             GtkWidget      *area)
 {
-  double x, y;
-  GdkModifierType state;
+  draw_brush (area, start_x + x, start_y + y);
+}
 
-  /* paranoia check, in case we haven't gotten a configure event */
-  if (surface == NULL)
-    return FALSE;
+static void
+drag_end (GtkGestureDrag *gesture,
+          double          x,
+          double          y,
+          GtkWidget      *area)
+{
+  draw_brush (area, start_x + x, start_y + y);
+}
 
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-
-  if (state & GDK_BUTTON1_MASK)
-    draw_brush (widget, x, y);
-
-  /* We've handled it, stop processing */
-  return TRUE;
+static void
+pressed (GtkGestureMultiPress *gesture,
+         int                   n_press,
+         double                x,
+         double                y,
+         GtkWidget            *area)
+{
+  clear_surface ();
+  gtk_widget_queue_draw (area);
 }
 
 static void
@@ -146,6 +134,8 @@ activate (GtkApplication *app,
   GtkWidget *window;
   GtkWidget *frame;
   GtkWidget *drawing_area;
+  GtkGesture *drag;
+  GtkGesture *press;
 
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
@@ -162,17 +152,23 @@ activate (GtkApplication *app,
 
   gtk_container_add (GTK_CONTAINER (frame), drawing_area);
 
-  /* Signals used to handle the backing surface */
-  g_signal_connect (drawing_area, "draw",
-                    G_CALLBACK (draw_cb), NULL);
-  g_signal_connect (drawing_area,"configure-event",
-                    G_CALLBACK (configure_event_cb), NULL);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw_cb, NULL, NULL);
 
-  /* Event signals */
-  g_signal_connect (drawing_area, "motion-notify-event",
-                    G_CALLBACK (motion_notify_event_cb), NULL);
-  g_signal_connect (drawing_area, "button-press-event",
-                    G_CALLBACK (button_press_event_cb), NULL);
+  g_signal_connect_after (drawing_area, "size-allocate",
+                          G_CALLBACK (size_allocate_cb), NULL);
+
+  drag = gtk_gesture_drag_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
+  gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (drag));
+  g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), drawing_area);
+  g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), drawing_area);
+  g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), drawing_area);
+
+  press = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (press), GDK_BUTTON_SECONDARY);
+  gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (press));
+
+  g_signal_connect (press, "pressed", G_CALLBACK (pressed), drawing_area);
 
   gtk_widget_show (window);
 }

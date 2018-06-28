@@ -1,10 +1,23 @@
+all_print_backends = [
+  'cups',
+  'cloudprint',
+]
+
+enabled_print_backends = get_option('print-backends').split(',')
+
+if enabled_print_backends.contains('none')
+  enabled_print_backends = []
+elif enabled_print_backends.contains('all')
+  enabled_print_backends = all_print_backends
+endif
+
+# The 'file' print backend cannot be disabled
 print_backends = ['file']
 
 # Checks to see if we should compile with CUPS backend for GTK+
-enable_cups = get_option('enable-cups-print-backend')
-if enable_cups != 'no'
-  want_cups = enable_cups == 'yes'
-  #cups_config = find_program('cups-config', required : want_cups)
+enable_cups = enabled_print_backends.contains('cups')
+if enable_cups
+  #cups_config = find_program('cups-config', required : true)
   #if cups_config.found()
   # FIXME: eek, see configure.ac (we're just not going to support non-standar prefix for now)
   #endif
@@ -22,38 +35,25 @@ if enable_cups != 'no'
         cdata.set('HAVE_HTTP_AUTHSTRING', 1,
           description :'Define if cups http_t authstring field is accessible')
       endif
-      libcups = cc.find_library('cups', required : want_cups)
+      libcups = cc.find_library('cups', required : true)
       if libcups.found() and cc.has_function('httpGetAuthString', dependencies : libcups)
         cdata.set('HAVE_HTTPGETAUTHSTRING', 1)
       endif
 
       print_backends += ['cups']
-    elif want_cups
+    else
       error('Need CUPS version >= 1.2')
     endif
-  elif want_cups
+  else
     error('Cannot find CUPS headers in default prefix.')
   endif
 endif
 
-# Checks to see if we should compile with PAPI backend for GTK+
-enable_papi = get_option('enable-papi-print-backend')
-if enable_papi != 'no'
-  want_papi = enable_papi == 'yes'
-  libpapi = cc.find_library('libpapi', required : false)
-  if libpapi.found() and cc.has_function('papiServiceCreate', args : '-lpapi')
-    print_backends += ['papi']
-  elif want_papi
-    error('Cannot find libpapi.')
-  endif
-endif
-
 # Checks to see if we should compile with cloudprint backend for GTK+
-enable_cloudprint = get_option('enable-cloudprint-print-backend')
-if enable_cloudprint != 'no'
-  want_cloudprint = enable_cloudprint == 'yes'
-  rest_dep = dependency('rest-0.7', required : want_cloudprint)
-  json_glib_dep = dependency('json-glib-1.0', required : want_cloudprint)
+enable_cloudprint = enabled_print_backends.contains('cloudprint')
+if enable_cloudprint
+  rest_dep = dependency('rest-0.7', required : true)
+  json_glib_dep = dependency('json-glib-1.0', required : true)
   if rest_dep.found() and json_glib_dep.found()
     print_backends += ['cloudprint']
   endif
@@ -72,21 +72,69 @@ if os_unix
   endif
 endif
 
-if get_option('enable-test-print-backend') == 'yes'
-  print_backends += ['test']
-endif
-
-if not print_backends.contains('papi') and not print_backends.contains('cups')
+# Automatic fall-back to the lpr backend
+if not print_backends.contains('cups')
   print_backends += ['lpr']
 endif
 
 printbackends_subdir = 'gtk-4.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
 
-message('Print backends: ' + ' '.join(print_backends))
-
 cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
 
-foreach print_backend : print_backends
-  subdir(print_backend)
-endforeach
+
+enable_colord = get_option('colord')
+if enable_colord != 'no'
+  want_colord = enable_colord == 'yes'
+  colord_dep = dependency('colord', version: '>= 0.1.9', required: want_colord)
+  cdata.set('HAVE_COLORD', colord_dep.found())
+else
+  colord_dep = []
+endif
+
+printbackends_args = [
+  '-DGTK_COMPILATION',
+  '-DGTK_DISABLE_DEPRECATION_WARNINGS',
+  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
+]
+
+if print_backends.contains('cups')
+  shared_module('printbackend-cups',
+                'gtkprintbackendcups.c',
+                'gtkprintercups.c',
+                'gtkcupsutils.c',
+                'gtkcupssecretsutils.c',
+                c_args: printbackends_args,
+                dependencies: [libgtk_dep, libcups, colord_dep],
+                install_dir: printbackends_install_dir,
+                install : true)
+endif
+
+if print_backends.contains('cloudprint')
+  shared_module('printbackend-cloudprint',
+                'gtkprintbackendcloudprint.c',
+                'gtkprintercloudprint.c',
+                'gtkcloudprintaccount.c',
+                c_args: printbackends_args,
+                dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
+                install_dir: printbackends_install_dir,
+                install : true)
+endif
+
+if print_backends.contains('file')
+  shared_module('printbackend-file',
+                'gtkprintbackendfile.c',
+                c_args: printbackends_args,
+                dependencies: libgtk_dep,
+                install_dir: printbackends_install_dir,
+                install : true)
+endif
+
+if print_backends.contains('lpr')
+  shared_module('printbackend-lpr',
+                'gtkprintbackendlpr.c',
+                c_args: printbackends_args,
+                dependencies: libgtk_dep,
+                install_dir: printbackends_install_dir,
+                install : true)
+endif

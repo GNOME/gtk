@@ -194,10 +194,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gtk_icon_view_get_visible_range (GtkIconView      *icon_view,
 						GtkTreePath     **start_path,
 						GtkTreePath     **end_path);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_view_set_activate_on_single_click (GtkIconView  *icon_view,
                                                            gboolean      single);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_icon_view_get_activate_on_single_click (GtkIconView  *icon_view);
 
 GDK_AVAILABLE_IN_ALL
@@ -253,13 +253,11 @@ void             gtk_icon_view_scroll_to_path     (GtkIconView            *icon_
 GDK_AVAILABLE_IN_ALL
 void                   gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 							       GdkModifierType           start_button_mask,
-							       const GtkTargetEntry     *targets,
-							       gint                      n_targets,
+							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_icon_view_enable_model_drag_dest   (GtkIconView              *icon_view,
-							       const GtkTargetEntry     *targets,
-							       gint                      n_targets,
+							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_icon_view_unset_model_drag_source  (GtkIconView              *icon_view);
@@ -288,10 +286,10 @@ gboolean               gtk_icon_view_get_dest_item_at_pos     (GtkIconView      
 							       GtkTreePath             **path,
 							       GtkIconViewDropPosition  *pos);
 GDK_AVAILABLE_IN_ALL
-cairo_surface_t       *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
+GdkPaintable          *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
 							       GtkTreePath              *path);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_icon_view_get_cell_rect                          (GtkIconView     *icon_view,
 							       GtkTreePath     *path,
 							       GtkCellRenderer *cell,

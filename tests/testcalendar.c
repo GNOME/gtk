@@ -260,7 +260,7 @@ void calendar_select_font (GtkWidget    *button,
           gtk_style_context_add_provider (gtk_widget_get_style_context (calendar->window), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
           g_object_set_data_full (G_OBJECT (calendar->window), "css-provider", provider, g_object_unref);
         }
-      font = gtk_font_button_get_font_name (GTK_FONT_BUTTON (button));
+      font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (button));
       data = g_strdup_printf ("GtkCalendar { font: %s; }", font);
       gtk_css_provider_load_from_data (provider, data, -1);
       g_free (data);
@@ -445,13 +445,9 @@ create_calendar(void)
     calendar_data.settings[i] = 0;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "GtkCalendar Example");
-  g_signal_connect (window, "destroy",
-		    G_CALLBACK (gtk_main_quit),
-		    NULL);
-  g_signal_connect (window, "delete-event",
-		    G_CALLBACK (gtk_false),
-		    NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
 
@@ -499,8 +495,7 @@ create_calendar(void)
   size = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   context = gtk_widget_get_style_context (calendar);
-  gtk_style_context_get (context, GTK_STATE_FLAG_NORMAL,
-			 GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
+  gtk_style_context_get (context, GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
   font = pango_font_description_to_string (font_desc);
   button = gtk_font_button_new_with_font (font);
   g_free (font);

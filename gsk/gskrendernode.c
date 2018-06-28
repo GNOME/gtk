@@ -42,7 +42,6 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
-#include "gsktexture.h"
 
 #include <graphene-gobject.h>
 
@@ -54,8 +53,6 @@
  * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref)
  *
  * The `GskRenderNode` structure contains only private data.
- *
- * Since: 3.90
  */
 
 G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
@@ -68,8 +65,6 @@ static void
 gsk_render_node_finalize (GskRenderNode *self)
 {
   self->node_class->finalize (self);
-
-  g_clear_pointer (&self->name, g_free);
 
   g_free (self);
 }
@@ -94,9 +89,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
 
   self->ref_count = 1;
 
-  self->min_filter = GSK_SCALING_FILTER_NEAREST;
-  self->mag_filter = GSK_SCALING_FILTER_NEAREST;
-
   return self;
 }
 
@@ -107,8 +99,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
  * Acquires a reference on the given #GskRenderNode.
  *
  * Returns: (transfer none): the #GskRenderNode with an additional reference
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_ref (GskRenderNode *node)
@@ -128,8 +118,6 @@ gsk_render_node_ref (GskRenderNode *node)
  *
  * If the reference was the last, the resources associated to the @node are
  * freed.
- *
- * Since: 3.90
  */
 void
 gsk_render_node_unref (GskRenderNode *node)
@@ -147,8 +135,6 @@ gsk_render_node_unref (GskRenderNode *node)
  * Returns the type of the @node.
  *
  * Returns: the type of the #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNodeType
 gsk_render_node_get_node_type (GskRenderNode *node)
@@ -165,8 +151,6 @@ gsk_render_node_get_node_type (GskRenderNode *node)
  *
  * Retrieves the boundaries of the @node. The node will not draw outside
  * of its boundaries.
- *
- * Since: 3.90
  */
 void
 gsk_render_node_get_bounds (GskRenderNode   *node,
@@ -179,71 +163,6 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
 }
 
 /**
- * gsk_render_node_set_scaling_filters:
- * @node: a #GskRenderNode
- * @min_filter: the filter for scaling down
- * @mag_filter: the filter for scaling up
- *
- * Sets filters to be used when a node must be scaled up
- * or down.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_scaling_filters (GskRenderNode    *node,
-                                     GskScalingFilter  min_filter,
-                                     GskScalingFilter  mag_filter)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-
-  if (node->min_filter != min_filter)
-    node->min_filter = min_filter;
-  if (node->mag_filter != mag_filter)
-    node->mag_filter = mag_filter;
-}
-
-/**
- * gsk_render_node_set_name:
- * @node: a #GskRenderNode
- * @name: (nullable): a name for the node
- *
- * Sets the name of the node.
- *
- * A name is generally useful for debugging purposes.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_name (GskRenderNode *node,
-                          const char    *name)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-
-  g_free (node->name);
-  node->name = g_strdup (name);
-}
-
-/**
- * gsk_render_node_get_name:
- * @node: a #GskRenderNode
- *
- * Retrieves the name previously set via gsk_render_node_set_name().
- * If no name has been set, %NULL is returned.
- *
- * Returns: (nullable): The name previously set via
- *     gsk_render_node_set_name() or %NULL
- *
- * Since: 3.90
- **/
-const char *
-gsk_render_node_get_name (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-
-  return node->name;
-}
-
-/**
  * gsk_render_node_draw:
  * @node: a #GskRenderNode
  * @cr: cairo context to draw to
@@ -252,7 +171,7 @@ gsk_render_node_get_name (GskRenderNode *node)
  *
  * Typically, you'll use this function to implement fallback rendering
  * of #GskRenderNodes on an intermediate Cairo context, instead of using
- * the drawing context associated to a #GdkWindow's rendering buffer.
+ * the drawing context associated to a #GdkSurface's rendering buffer.
  *
  * For advanced nodes that cannot be supported using Cairo, in particular
  * for nodes doing 3D operations, this function may fail.
@@ -267,23 +186,25 @@ gsk_render_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-  if (!GSK_RENDER_MODE_CHECK (GEOMETRY))
+#ifdef G_ENABLE_DEBUG
+  if (!GSK_DEBUG_CHECK (GEOMETRY))
     {
-      GSK_NOTE (CAIRO, g_print ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }\n",
+      GSK_NOTE (CAIRO, g_message ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }",
                                 node->bounds.origin.x, node->bounds.origin.y,
                                 node->bounds.size.width, node->bounds.size.height));
 
       cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height);
       cairo_clip (cr);
     }
+#endif
 
-  GSK_NOTE (CAIRO, g_print ("Rendering node %s[%p]\n",
-                            node->name ? node->name : node->node_class->type_name,
-                            node));
+  GSK_NOTE (CAIRO, g_message ("Rendering node %s[%p]",
+                            node->node_class->type_name, node));
 
   node->node_class->draw (node, cr);
 
-  if (GSK_RENDER_MODE_CHECK (GEOMETRY))
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (GEOMETRY))
     {
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
       cairo_rectangle (cr, node->bounds.origin.x - 1, node->bounds.origin.y - 1,
@@ -292,16 +213,97 @@ gsk_render_node_draw (GskRenderNode *node,
       cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
       cairo_stroke (cr);
     }
+#endif
 
   cairo_restore (cr);
 
   if (cairo_status (cr))
     {
-      g_warning ("drawing failure for render node %s '%s': %s",
+      g_warning ("drawing failure for render node %s: %s",
                  node->node_class->type_name,
-                 gsk_render_node_get_name (node),
                  cairo_status_to_string (cairo_status (cr)));
     }
+}
+
+/*
+ * gsk_render_node_can_diff:
+ * @node1: a #GskRenderNode
+ * @node2: the #GskRenderNode to compare with
+ *
+ * Checks if 2 render nodes can be expected to be compared via
+ * gsk_render_node_diff(). The node diffing algorithm uses this function
+ * to match up similar nodes to compare when trying to minimze the
+ * resulting region.
+ *
+ * Nodes of different type always return %FALSE here.
+ *
+ * Returns: %TRUE if @node1 and @node2 can be expected to be compared
+ **/
+gboolean
+gsk_render_node_can_diff (GskRenderNode *node1,
+                          GskRenderNode *node2)
+{
+  if (node1 == node2)
+    return TRUE;
+
+  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+    return FALSE;
+
+  return node1->node_class->can_diff (node1, node2);
+}
+
+static void
+rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
+                              const graphene_rect_t *graphene)
+{
+  cairo->x = floorf (graphene->origin.x);
+  cairo->y = floorf (graphene->origin.y);
+  cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
+  cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
+}
+
+void
+gsk_render_node_diff_impossible (GskRenderNode  *node1,
+                                 GskRenderNode  *node2,
+                                 cairo_region_t *region)
+{
+  cairo_rectangle_int_t rect;
+
+  rectangle_init_from_graphene (&rect, &node1->bounds);
+  cairo_region_union_rectangle (region, &rect);
+  rectangle_init_from_graphene (&rect, &node2->bounds);
+  cairo_region_union_rectangle (region, &rect);
+}
+
+/**
+ * gsk_render_node_diff:
+ * @node1: a #GskRenderNode
+ * @node2: the #GskRenderNode to compare with
+ * @region: a #cairo_region_t to add the differences to
+ *
+ * Compares @node1 and @node2 trying to compute the minimal region of changes.
+ * In the worst case, this is the union of the bounds of @node1 and @node2.
+ *
+ * This function is used to compute the area that needs to be redrawn when
+ * the previous contents were drawn by @node1 and the new contents should
+ * correspond to @node2. As such, it is important that this comparison is
+ * faster than the time it takes to actually do the redraw.
+ *
+ * Note that the passed in @region may already contain previous results from
+ * previous node comparisons, so this function call will only add to it.
+ **/
+void
+gsk_render_node_diff (GskRenderNode  *node1,
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
+{
+  if (node1 == node2)
+    return;
+
+  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+    return gsk_render_node_diff_impossible (node1, node2, region);
+
+  return node1->node_class->diff (node1, node2, region);
 }
 
 #define GSK_RENDER_NODE_SERIALIZATION_VERSION 0

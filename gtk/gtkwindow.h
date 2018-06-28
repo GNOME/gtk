@@ -43,7 +43,6 @@ G_BEGIN_DECLS
 #define GTK_IS_WINDOW_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW))
 #define GTK_WINDOW_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
-typedef struct _GtkWindowPrivate      GtkWindowPrivate;
 typedef struct _GtkWindowClass        GtkWindowClass;
 typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
 typedef struct _GtkWindowGroup        GtkWindowGroup;
@@ -52,9 +51,7 @@ typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
 
 struct _GtkWindow
 {
-  GtkBin bin;
-
-  GtkWindowPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**
@@ -66,7 +63,8 @@ struct _GtkWindow
  * @keys_changed: Signal gets emitted when the set of accelerators or
  *   mnemonics that are associated with window changes.
  * @enable_debugging: Class handler for the #GtkWindow::enable-debugging
- *   keybinding signal. Since: 3.14
+ *   keybinding signal.
+ * @close_request: Class handler for the #GtkWindow::close-request signal.
  */
 struct _GtkWindowClass
 {
@@ -84,6 +82,7 @@ struct _GtkWindowClass
   void	   (* keys_changed)     (GtkWindow *window);
   gboolean (* enable_debugging) (GtkWindow *window,
                                  gboolean   toggle);
+  gboolean (* close_request)    (GtkWindow *window);
 
   /*< private >*/
 
@@ -105,8 +104,8 @@ struct _GtkWindowClass
  * #GTK_WINDOW_POPUP are ignored by the window manager; window manager
  * keybindings won’t work on them, the window manager won’t decorate the
  * window with a frame, many GTK+ features that rely on the window
- * manager will not work (e.g. resize grips and
- * maximization/minimization). #GTK_WINDOW_POPUP is used to implement
+ * manager will not work (e.g. maximization/minimization).
+ * #GTK_WINDOW_POPUP is used to implement
  * widgets such as #GtkMenu or tooltips that you normally don’t think of
  * as windows per se. Nearly all windows should be #GTK_WINDOW_TOPLEVEL.
  * In particular, do not use #GTK_WINDOW_POPUP just to turn off
@@ -183,20 +182,20 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_transient_for        (GtkWindow           *window, 
+void       gtk_window_set_transient_for        (GtkWindow           *window,
 						GtkWindow           *parent);
 GDK_AVAILABLE_IN_ALL
 GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
-GDK_AVAILABLE_IN_3_4
-void       gtk_window_set_attached_to          (GtkWindow           *window, 
+GDK_AVAILABLE_IN_ALL
+void       gtk_window_set_attached_to          (GtkWindow           *window,
                                                 GtkWidget           *attach_widget);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_type_hint            (GtkWindow           *window, 
-						GdkWindowTypeHint    hint);
+void       gtk_window_set_type_hint            (GtkWindow           *window,
+						GdkSurfaceTypeHint    hint);
 GDK_AVAILABLE_IN_ALL
-GdkWindowTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
+GdkSurfaceTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_skip_taskbar_hint    (GtkWindow           *window,
                                                 gboolean             setting);
@@ -228,14 +227,19 @@ void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
+void       gtk_window_set_hide_on_close        (GtkWindow           *window,
+                                                gboolean             setting);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_window_get_hide_on_close        (GtkWindow           *window);
+GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_mnemonics_visible    (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_mnemonics_visible    (GtkWindow           *window);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus_visible        (GtkWindow           *window,
                                                 gboolean             setting);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_focus_visible        (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
@@ -250,7 +254,7 @@ void       gtk_window_set_gravity              (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void	   gtk_window_set_display              (GtkWindow	    *window,
 						GdkDisplay          *display);
 
@@ -275,7 +279,7 @@ GDK_AVAILABLE_IN_ALL
 GList*     gtk_window_get_icon_list                (GtkWindow  *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_icon                     (GtkWindow  *window,
-                                                    cairo_surface_t  *icon);
+                                                    GdkTexture *icon);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_icon_name                (GtkWindow   *window,
 						    const gchar *name);
@@ -284,7 +288,7 @@ gboolean   gtk_window_set_icon_from_file           (GtkWindow   *window,
 						    const gchar *filename,
 						    GError     **err);
 GDK_AVAILABLE_IN_ALL
-cairo_surface_t * gtk_window_get_icon              (GtkWindow  *window);
+GdkTexture *  gtk_window_get_icon                  (GtkWindow  *window);
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_icon_name             (GtkWindow  *window);
 GDK_AVAILABLE_IN_ALL
@@ -292,7 +296,7 @@ void       gtk_window_set_default_icon_list        (GList      *list);
 GDK_AVAILABLE_IN_ALL
 GList*     gtk_window_get_default_icon_list        (void);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default_icon             (cairo_surface_t  *icon);
+void       gtk_window_set_default_icon             (GdkTexture  *icon);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_default_icon_name        (const gchar *name);
 GDK_AVAILABLE_IN_ALL
@@ -362,11 +366,10 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_fullscreen    (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unfullscreen  (GtkWindow *window);
-GDK_AVAILABLE_IN_3_18
-void     gtk_window_fullscreen_on_monitor(GtkWindow *window,
-                                          GdkScreen *screen,
-                                          gint monitor);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
+void     gtk_window_fullscreen_on_monitor (GtkWindow  *window,
+                                           GdkMonitor *monitor);
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_close         (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
@@ -375,7 +378,7 @@ void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_resize_drag (GtkWindow     *window,
-                                   GdkWindowEdge  edge,
+                                   GdkSurfaceEdge  edge,
                                    gint           button,
                                    gint           root_x,
                                    gint           root_y,
@@ -430,16 +433,16 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_window_set_application      (GtkWindow          *window,
                                                  GtkApplication     *application);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_titlebar           (GtkWindow    *window,
                                             GtkWidget    *titlebar);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_titlebar         (GtkWindow    *window);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_is_maximized           (GtkWindow    *window);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_interactive_debugging (gboolean enable);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)

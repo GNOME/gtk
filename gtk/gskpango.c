@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gsk/gsk.h"
+#include "gsk/gskrendernodeprivate.h"
 #include "gskpango.h"
 #include "gtksnapshotprivate.h"
 
@@ -115,22 +116,37 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   int x_offset, y_offset;
   GskRenderNode *node;
   GdkRGBA color;
+  graphene_rect_t node_bounds;
+  PangoRectangle ink_rect;
+
+  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+  pango_extents_to_pixels (&ink_rect, NULL);
+
+  /* Don't create empty nodes */
+  if (ink_rect.width == 0 || ink_rect.height == 0)
+    return;
+
+  graphene_rect_init (&node_bounds,
+                      (float)x/PANGO_SCALE,
+                      (float)y/PANGO_SCALE + ink_rect.y,
+                      ink_rect.x + ink_rect.width,
+                      ink_rect.height);
 
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
+  graphene_rect_offset (&node_bounds, x_offset, y_offset);
+
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
-  node = gsk_text_node_new (font, glyphs, &color, x_offset + (double)x/PANGO_SCALE, y_offset + (double)y/PANGO_SCALE);
+  node = gsk_text_node_new_with_bounds (font,
+                                        glyphs,
+                                        &color,
+                                        x_offset + (double)x/PANGO_SCALE,
+                                        y_offset + (double)y/PANGO_SCALE,
+                                        &node_bounds);
   if (node == NULL)
     return;
 
-  if (crenderer->snapshot->record_names)
-    {
-      char name[64];
-      snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
-      gsk_render_node_set_name (node, name);
-    }
-
-  gtk_snapshot_append_node (crenderer->snapshot, node);
+  gtk_snapshot_append_node_internal (crenderer->snapshot, node);
   gsk_render_node_unref (node);
 }
 
@@ -175,7 +191,7 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
                       (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
                       (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
 
-  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds, "DrawRectangle");
+  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds);
 }
 
 static void
@@ -192,7 +208,7 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
   cairo_t *cr;
   gdouble x, y;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawTrapezoid");
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
   set_color (crenderer, part, cr);
 
@@ -295,7 +311,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   cairo_t *cr;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawTrapezoid");
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
   set_color (crenderer, PANGO_RENDER_PART_UNDERLINE, cr);
 
@@ -324,7 +340,7 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
   double base_x = (double)x / PANGO_SCALE;
   double base_y = (double)y / PANGO_SCALE;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawShape");
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
   layout = pango_renderer_get_layout (renderer);
   if (!layout)
@@ -402,12 +418,20 @@ release_renderer (GskPangoRenderer *renderer)
     g_object_unref (renderer);
 }
 
-/* convenience wrappers using the default renderer */
-
+/**
+ * gtk_snapshot_append_layout:
+ * @snapshot: a #GtkSnapshot
+ * @layout: the #PangoLayout to render
+ * @color: the foreground color to render the layout in
+ *
+ * Creates render nodes for rendering @layout in the given foregound @color
+ * and appends them to the current node of @snapshot without changing the
+ * current node.
+ **/
 void
-gsk_pango_show_layout (GtkSnapshot   *snapshot,
-                       const GdkRGBA *fg_color,
-                       PangoLayout   *layout)
+gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
+                            PangoLayout   *layout,
+                            const GdkRGBA *color)
 {
   GskPangoRenderer *crenderer;
   PangoRectangle ink_rect;
@@ -418,7 +442,7 @@ gsk_pango_show_layout (GtkSnapshot   *snapshot,
   crenderer = acquire_renderer ();
 
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = *fg_color;
+  crenderer->fg_color = *color;
 
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
   graphene_rect_init (&crenderer->bounds, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);

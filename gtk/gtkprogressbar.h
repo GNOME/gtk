@@ -42,15 +42,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkProgressBar              GtkProgressBar;
-typedef struct _GtkProgressBarPrivate       GtkProgressBarPrivate;
 typedef struct _GtkProgressBarClass         GtkProgressBarClass;
 
 struct _GtkProgressBar
 {
-  GtkWidget parent;
-
-  /*< private >*/
-  GtkProgressBarPrivate *priv;
+  GtkWidget parent_instance;
 };
 
 struct _GtkProgressBarClass

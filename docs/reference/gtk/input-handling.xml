@@ -91,7 +91,7 @@
     <title>Event propagation</title>
 
     <para>
-      For widgets which have a #GdkWindow set, events are received from the
+      For widgets which have a #GdkSurface set, events are received from the
       windowing system and passed to gtk_main_do_event(). See its documentation
       for details of what it does: compression of enter/leave events,
       identification of the widget receiving the event, pushing the event onto a
@@ -101,11 +101,11 @@
 
     <para>
       When a GDK backend produces an input event, it is tied to a #GdkDevice and
-      a #GdkWindow, which in turn represents a windowing system surface in the
+      a #GdkSurface, which in turn represents a windowing system surface in the
       backend. If a widget has grabbed the current input device, or all input
       devices, the event is propagated to that #GtkWidget. Otherwise, it is
-      propagated to the the #GtkWidget which called gtk_widget_register_window()
-      on the #GdkWindow receiving the event.
+      propagated to the the #GtkWidget which called gtk_widget_register_surface()
+      on the #GdkSurface receiving the event.
     </para>
 
     <para>
@@ -113,7 +113,7 @@
       specific input device (gtk_device_grab_add()), is sent events in
       preference to a global grab (gtk_grab_add()). Input grabs only have effect
       within the #GtkWindowGroup containing the #GtkWidget which registered the
-      event’s #GdkWindow. If this #GtkWidget is a child of the grab widget, the
+      event’s #GdkSurface. If this #GtkWidget is a child of the grab widget, the
       event is propagated to the child — this is the basis for propagating
       events within modal dialogs.
     </para>
@@ -151,11 +151,9 @@
     </para>
 
     <para>
-      Next, the #GtkWidget::event signal is emitted, then the appropriate signal
-      for the event in question, for example #GtkWidget::motion-notify-event.
+      Next, the #GtkWidget::event signal is emitted.
       Handling these signals was the primary way to handle input in GTK+ widgets
-      before gestures were introduced. If the widget is realized, the
-      #GtkWidget::event-after signal is emitted. The signals are emitted from
+      before gestures were introduced. The signal is emitted from
       the target widget up to the top-level, as part of the “bubble” phase.
     </para>
 
@@ -178,41 +176,6 @@
       If gestures are used, this may happen when the widget tells the gesture
       to claim the event touch sequence (or the pointer events) for its own. See the
       "gesture states" section below to know more of the latter.
-    </para>
-  </refsect2>
-
-  <refsect2 id="event-masks">
-    <title>Event masks</title>
-
-    <para>
-      Each widget instance has a basic event mask and another per input device,
-      which determine the types of input event it receives. Each event mask set
-      on a widget is added to the corresponding (basic or per-device) event mask
-      for the widget’s #GdkWindow, and all child #GdkWindows.
-    </para>
-
-    <para>
-      Filtering events against event masks happens inside #GdkWindow, which
-      exposes event masks to the windowing system to reduce the number of events
-      GDK receives from it. On receiving an event, it is filtered against the
-      #GdkWindow’s mask for the input device, if set. Otherwise, it is filtered
-      against the #GdkWindow’s basic event mask.
-    </para>
-
-    <para>
-      This means that widgets must add to the event mask for each event type
-      they expect to receive, using gtk_widget_set_events() or
-      gtk_widget_add_events() to preserve the existing mask. Widgets which are
-      aware of floating devices should use gtk_widget_set_device_events() or
-      gtk_widget_add_device_events(), and must explicitly enable the device
-      using gtk_widget_set_device_enabled(). See the #GdkDeviceManager
-      documentation for more information.
-    </para>
-
-    <para>
-      All standard widgets set the event mask for all events they expect to
-      receive, and it is not necessary to modify this. Masks should be set when
-      implementing a new widget.
     </para>
   </refsect2>
 

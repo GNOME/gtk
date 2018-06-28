@@ -106,10 +106,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_IT
 static void
 gtk_check_menu_item_size_allocate (GtkWidget           *widget,
                                    const GtkAllocation *allocation,
-                                   int                  baseline,
-                                   GtkAllocation       *out_clip)
+                                   int                  baseline)
 {
-  GtkAllocation child_clip;
   GtkAllocation indicator_alloc;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
@@ -117,8 +115,7 @@ gtk_check_menu_item_size_allocate (GtkWidget           *widget,
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate (widget,
                                                                       allocation,
-                                                                      baseline,
-                                                                      out_clip);
+                                                                      baseline);
 
   gtk_widget_measure (priv->indicator_widget,
                       GTK_ORIENTATION_HORIZONTAL,
@@ -142,9 +139,7 @@ gtk_check_menu_item_size_allocate (GtkWidget           *widget,
 
   gtk_widget_size_allocate (priv->indicator_widget,
                             &indicator_alloc,
-                            baseline,
-                            &child_clip);
-  gdk_rectangle_union (out_clip, &child_clip, out_clip);
+                            baseline);
 }
 
 static void
@@ -225,7 +220,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "menuitem");
+  gtk_widget_class_set_css_name (widget_class, I_("menuitem"));
 }
 
 /**
@@ -421,8 +416,6 @@ gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
  * @draw_as_radio: whether @check_menu_item is drawn like a #GtkRadioMenuItem
  *
  * Sets whether @check_menu_item is drawn like a #GtkRadioMenuItem
- *
- * Since: 2.4
  **/
 void
 gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
@@ -459,8 +452,6 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
  * Returns whether @check_menu_item looks like a #GtkRadioMenuItem
  * 
  * Returns: Whether @check_menu_item looks like a #GtkRadioMenuItem
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)
@@ -533,7 +524,7 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
       child = gtk_widget_get_last_child (widget);
 
       if (child != priv->indicator_widget)
-        gtk_widget_insert_before (widget, priv->indicator_widget, NULL);
+        gtk_widget_insert_before (priv->indicator_widget, widget, NULL);
     }
   else
     {
@@ -543,7 +534,7 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
       child = gtk_widget_get_first_child (widget);
 
       if (child != priv->indicator_widget)
-        gtk_widget_insert_after (widget, priv->indicator_widget, NULL);
+        gtk_widget_insert_after (priv->indicator_widget, widget, NULL);
     }
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->direction_changed (widget, previous_dir);

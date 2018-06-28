@@ -4,6 +4,7 @@ test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
 test_env.set('REFTEST_MODULE_DIR', meson.current_build_dir())
 test_env.set('GTK_IM_MODULE', 'gtk-im-context-simple')
 test_env.set('GSETTINGS_BACKEND', 'memory')
+test_env.set('GSETTINGS_SCHEMA_DIR', gtk_schema_build_dir)
 test_env.set('G_ENABLE_DIAGNOSTIC', '0')
 
 gtk_reftest_cargs = ['-DGDK_DISABLE_DEPRECATED', '-DGTK_DISABLE_DEPRECATED']
@@ -36,11 +37,6 @@ tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir
 #    output : '@0@.test'.format(t),
 #    configuration : tcdata)
 #endforeach
-
-# FIXME: schemas from gtk+ dir?
-# $(top_srcdir)/gtk/org.gtk.Settings.ColorChooser.gschema.xml
-# $(top_srcdir)/gtk/org.gtk.Settings.FileChooser.gschema.xml
-# gnome.compile_schemas()
 
 gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
   c_args : gtk_reftest_cargs,

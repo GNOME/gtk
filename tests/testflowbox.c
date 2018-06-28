@@ -169,7 +169,8 @@ populate_flowbox_images (GtkFlowBox *flowbox)
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_widget_set_hexpand (widget, TRUE);
 
-      image = gtk_image_new_from_icon_name ("face-wink", GTK_ICON_SIZE_DIALOG);
+      image = gtk_image_new_from_icon_name ("face-wink");
+      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
       gtk_widget_set_hexpand (image, TRUE);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
 
@@ -634,8 +635,7 @@ main (int argc, char *argv[])
 
   window = create_window ();
 
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), window);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show (window);
 

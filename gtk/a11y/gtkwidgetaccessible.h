@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <gtk/gtkaccessible.h>
 
 G_BEGIN_DECLS
 
@@ -36,6 +36,8 @@ G_BEGIN_DECLS
 typedef struct _GtkWidgetAccessible        GtkWidgetAccessible;
 typedef struct _GtkWidgetAccessibleClass   GtkWidgetAccessibleClass;
 typedef struct _GtkWidgetAccessiblePrivate GtkWidgetAccessiblePrivate;
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidgetAccessible, g_object_unref)
 
 struct _GtkWidgetAccessible
 {

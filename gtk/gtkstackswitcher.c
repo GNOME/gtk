@@ -27,6 +27,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtkimage.h"
 
 /**
  * SECTION:gtkstackswitcher
@@ -65,7 +67,6 @@ struct _GtkStackSwitcherPrivate
 {
   GtkStack *stack;
   GHashTable *buttons;
-  gint icon_size;
   gboolean in_child_changed;
   GtkWidget *switch_button;
   guint switch_timer;
@@ -73,7 +74,6 @@ struct _GtkStackSwitcherPrivate
 
 enum {
   PROP_0,
-  PROP_ICON_SIZE,
   PROP_STACK
 };
 
@@ -85,11 +85,10 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   GtkStyleContext *context;
   GtkStackSwitcherPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (switcher), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (switcher), FALSE);
 
   priv = gtk_stack_switcher_get_instance_private (switcher);
 
-  priv->icon_size = GTK_ICON_SIZE_MENU;
   priv->stack = NULL;
   priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 
@@ -99,7 +98,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (switcher), GTK_ORIENTATION_HORIZONTAL);
 
-  gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0, 0);
+  gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (switcher), TRUE);
 }
 
@@ -122,8 +121,7 @@ on_button_clicked (GtkWidget        *widget,
 static void
 rebuild_child (GtkWidget   *self,
                const gchar *icon_name,
-               const gchar *title,
-               gint         icon_size)
+               const gchar *title)
 {
   GtkStyleContext *context;
   GtkWidget *button_child;
@@ -137,7 +135,7 @@ rebuild_child (GtkWidget   *self,
 
   if (icon_name != NULL)
     {
-      button_child = gtk_image_new_from_icon_name (icon_name, icon_size);
+      button_child = gtk_image_new_from_icon_name (icon_name);
       if (title != NULL)
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), title);
 
@@ -196,7 +194,7 @@ update_button (GtkStackSwitcher *self,
                            "icon-name", &icon_name,
                            NULL);
 
-  rebuild_child (button, icon_name, title, priv->icon_size);
+  rebuild_child (button, icon_name, title);
 
   gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL || icon_name != NULL));
 
@@ -289,11 +287,10 @@ gtk_stack_switcher_switch_timeout (gpointer data)
 }
 
 static gboolean
-gtk_stack_switcher_drag_motion (GtkWidget      *widget,
-                                GdkDragContext *context,
-                                gint            x,
-                                gint            y,
-                                guint           time)
+gtk_stack_switcher_drag_motion (GtkWidget *widget,
+                                GdkDrop   *drop,
+                                gint       x,
+                                gint       y)
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
   GtkStackSwitcherPrivate *priv;
@@ -308,10 +305,7 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
   g_hash_table_iter_init (&iter, priv->buttons);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
-      GdkRectangle allocation;
-
-      gtk_widget_get_outer_allocation (GTK_WIDGET (value), &allocation);
-      if (gdk_rectangle_contains_point (&allocation, (int)x, (int)y))
+      if (gtk_widget_contains (GTK_WIDGET (value), x, y))
         {
           button = GTK_WIDGET (value);
           retval = TRUE;
@@ -326,9 +320,9 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
 
   if (button && !priv->switch_timer)
     {
-      priv->switch_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND,
-                                                    gtk_stack_switcher_switch_timeout,
-                                                    self);
+      priv->switch_timer = g_timeout_add (TIMEOUT_EXPAND,
+                                          gtk_stack_switcher_switch_timeout,
+                                          self);
       g_source_set_name_by_id (priv->switch_timer, "[gtk+] gtk_stack_switcher_switch_timeout");
     }
 
@@ -336,9 +330,8 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
 }
 
 static void
-gtk_stack_switcher_drag_leave (GtkWidget      *widget,
-                               GdkDragContext *context,
-                               guint           time)
+gtk_stack_switcher_drag_leave (GtkWidget *widget,
+                               GdkDrop   *drop)
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
 
@@ -499,8 +492,6 @@ connect_stack_signals (GtkStackSwitcher *switcher)
  * @stack: (allow-none): a #GtkStack
  *
  * Sets the stack to control.
- *
- * Since: 3.10
  */
 void
 gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
@@ -543,8 +534,6 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
  *
  * Returns: (nullable) (transfer none): the stack, or %NULL if
  *    none has been set explicitly.
- *
- * Since: 3.10
  */
 GtkStack *
 gtk_stack_switcher_get_stack (GtkStackSwitcher *switcher)
@@ -554,30 +543,6 @@ gtk_stack_switcher_get_stack (GtkStackSwitcher *switcher)
 
   priv = gtk_stack_switcher_get_instance_private (switcher);
   return priv->stack;
-}
-
-static void
-gtk_stack_switcher_set_icon_size (GtkStackSwitcher *switcher,
-                                  gint              icon_size)
-{
-  GtkStackSwitcherPrivate *priv;
-
-  g_return_if_fail (GTK_IS_STACK_SWITCHER (switcher));
-
-  priv = gtk_stack_switcher_get_instance_private (switcher);
-
-  if (icon_size != priv->icon_size)
-    {
-      priv->icon_size = icon_size;
-
-      if (priv->stack != NULL)
-        {
-          clear_switcher (switcher);
-          populate_switcher (switcher);
-        }
-
-      g_object_notify (G_OBJECT (switcher), "icon-size");
-    }
 }
 
 static void
@@ -592,10 +557,6 @@ gtk_stack_switcher_get_property (GObject      *object,
   priv = gtk_stack_switcher_get_instance_private (switcher);
   switch (prop_id)
     {
-    case PROP_ICON_SIZE:
-      g_value_set_int (value, priv->icon_size);
-      break;
-
     case PROP_STACK:
       g_value_set_object (value, priv->stack);
       break;
@@ -616,10 +577,6 @@ gtk_stack_switcher_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ICON_SIZE:
-      gtk_stack_switcher_set_icon_size (switcher, g_value_get_int (value));
-      break;
-
     case PROP_STACK:
       gtk_stack_switcher_set_stack (switcher, g_value_get_object (value));
       break;
@@ -667,22 +624,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 
   widget_class->drag_motion = gtk_stack_switcher_drag_motion;
   widget_class->drag_leave = gtk_stack_switcher_drag_leave;
-  /**
-   * GtkStackSwitcher:icon-size:
-   *
-   * Use the "icon-size" property to change the size of the image displayed
-   * when a #GtkStackSwitcher is displaying icons.
-   *
-   * Since: 3.20
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_ICON_SIZE,
-                                   g_param_spec_int ("icon-size",
-                                                     P_("Icon Size"),
-                                                     P_("Symbolic size to use for named icon"),
-                                                     0, G_MAXINT,
-                                                     GTK_ICON_SIZE_MENU,
-                                                     G_PARAM_EXPLICIT_NOTIFY | GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_STACK,
@@ -693,7 +634,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
 
-  gtk_widget_class_set_css_name (widget_class, "stackswitcher");
+  gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
 }
 
 /**
@@ -702,8 +643,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
  * Create a new #GtkStackSwitcher.
  *
  * Returns: a new #GtkStackSwitcher.
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_stack_switcher_new (void)

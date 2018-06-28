@@ -102,17 +102,10 @@ static int	    gdk_x_error			 (Display     *display,
 static int	    gdk_x_io_error		 (Display     *display);
 
 void
-_gdk_x11_windowing_init (void)
+_gdk_x11_surfaceing_init (void)
 {
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
-
-  gdk_window_add_filter (NULL,
-                         _gdk_wm_protocols_filter,
-                         NULL);
-  gdk_window_add_filter (NULL,
-                         _gdk_x11_dnd_filter,
-                         NULL);
 }
 
 GdkGrabStatus
@@ -137,20 +130,20 @@ _gdk_x11_convert_grab_status (gint status)
 }
 
 /*
- * _gdk_x11_window_grab_check_unmap:
- * @window: a #GdkWindow
+ * _gdk_x11_surface_grab_check_unmap:
+ * @surface: a #GdkSurface
  * @serial: serial from Unmap event (or from NextRequest(display)
  *   if the unmap is being done by this client.)
  *
  * Checks to see if an unmap request or event causes the current
- * grab window to become not viewable, and if so, clear the
+ * grab surface to become not viewable, and if so, clear the
  * the pointer we keep to it.
  **/
 void
-_gdk_x11_window_grab_check_unmap (GdkWindow *window,
+_gdk_x11_surface_grab_check_unmap (GdkSurface *surface,
                                   gulong     serial)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
   GList *devices, *d;
 
@@ -160,24 +153,24 @@ _gdk_x11_window_grab_check_unmap (GdkWindow *window,
   devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
   devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
-  /* End all grabs on the newly hidden window */
+  /* End all grabs on the newly hidden surface */
   for (d = devices; d; d = d->next)
-    _gdk_display_end_device_grab (display, d->data, serial, window, TRUE);
+    _gdk_display_end_device_grab (display, d->data, serial, surface, TRUE);
 
   g_list_free (devices);
 }
 
 /*
- * _gdk_x11_window_grab_check_destroy:
- * @window: a #GdkWindow
+ * _gdk_x11_surface_grab_check_destroy:
+ * @surface: a #GdkSurface
  * 
- * Checks to see if window is the current grab window, and if
- * so, clear the current grab window.
+ * Checks to see if surface is the current grab surface, and if
+ * so, clear the current grab surface.
  **/
 void
-_gdk_x11_window_grab_check_destroy (GdkWindow *window)
+_gdk_x11_surface_grab_check_destroy (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
   GdkDeviceGrabInfo *grab;
   GList *devices, *d;
@@ -190,10 +183,10 @@ _gdk_x11_window_grab_check_destroy (GdkWindow *window)
 
   for (d = devices; d; d = d->next)
     {
-      /* Make sure there is no lasting grab in this native window */
+      /* Make sure there is no lasting grab in this native surface */
       grab = _gdk_display_get_last_device_grab (display, d->data);
 
-      if (grab && grab->native_window == window)
+      if (grab && grab->native_surface == surface)
         {
           /* We don't know the actual serial to end, but it
              doesn't really matter as this only happens
@@ -242,14 +235,14 @@ gdk_x_io_error (Display *display)
                  "most likely the X server was shut down or you killed/destroyed\n"
                  "the application.\n",
                  g_get_prgname (),
-                 display ? DisplayString (display) : gdk_get_display_arg_name ());
+                 display ? DisplayString (display) : NULL);
     }
   else
     {
       g_message ("%s: Fatal IO error %d (%s) on X server %s.\n",
                  g_get_prgname (),
                  errno, g_strerror (errno),
-                 display ? DisplayString (display) : gdk_get_display_arg_name ());
+                 display ? DisplayString (display) : NULL);
     }
 
   _exit (1);
@@ -387,74 +380,4 @@ _gdk_x11_region_get_xrectangles (const cairo_region_t *region,
 
   *n_rects = n;
   *rects = rectangles;
-}
-
-/**
- * gdk_x11_grab_server:
- * 
- * Call gdk_x11_display_grab() on the default display. 
- * To ungrab the server again, use gdk_x11_ungrab_server(). 
- *
- * gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
- **/ 
-void
-gdk_x11_grab_server (void)
-{
-  gdk_x11_display_grab (gdk_display_get_default ());
-}
-
-/**
- * gdk_x11_ungrab_server:
- *
- * Ungrab the default display after it has been grabbed with 
- * gdk_x11_grab_server(). 
- **/
-void
-gdk_x11_ungrab_server (void)
-{
-  gdk_x11_display_ungrab (gdk_display_get_default ());
-}
-
-/**
- * gdk_x11_get_default_screen:
- * 
- * Gets the default GTK+ screen number.
- * 
- * Returns: returns the screen number specified by
- *   the --display command line option or the DISPLAY environment
- *   variable when gdk_init() calls XOpenDisplay().
- **/
-gint
-gdk_x11_get_default_screen (void)
-{
-  return gdk_x11_screen_get_screen_number (gdk_screen_get_default ());
-}
-
-/**
- * gdk_x11_get_default_root_xwindow:
- * 
- * Gets the root window of the default screen 
- * (see gdk_x11_get_default_screen()).  
- * 
- * Returns: an Xlib Window.
- **/
-Window
-gdk_x11_get_default_root_xwindow (void)
-{
-  return GDK_SCREEN_XROOTWIN (gdk_screen_get_default ());
-}
-
-/**
- * gdk_x11_get_default_xdisplay:
- * 
- * Gets the default GTK+ display.
- * 
- * Returns: (transfer none): the Xlib Display* for
- * the display specified in the `--display` command
- * line option or the `DISPLAY` environment variable.
- **/
-Display *
-gdk_x11_get_default_xdisplay (void)
-{
-  return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
 }

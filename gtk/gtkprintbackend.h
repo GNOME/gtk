@@ -133,12 +133,20 @@ struct _GtkPrintBackendClass
                                                               gchar              **auth_info,
                                                               gboolean             store_auth_info);
 
+  gboolean              (*printer_get_hard_margins_for_paper_size) (GtkPrinter    *printer,
+								    GtkPaperSize  *paper_size,
+								    gdouble       *top,
+								    gdouble       *bottom,
+								    gdouble       *left,
+								    gdouble       *right);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
+
+#define GTK_PRINT_BACKEND_EXTENSION_POINT_NAME "gtk-print-backend"
 
 GDK_AVAILABLE_IN_ALL
 GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;
@@ -221,6 +229,8 @@ gboolean    gtk_printer_set_description       (GtkPrinter      *printer,
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_state_message     (GtkPrinter      *printer,
 					       const gchar     *message);
+
+void        gtk_print_backends_init (void);
 
 
 G_END_DECLS

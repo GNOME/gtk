@@ -61,15 +61,15 @@ main (int argc, char *argv[])
   entry = (GtkWidget *)gtk_builder_get_object (builder, "layout-entry");
   g_object_bind_property (settings, "gtk-decoration-layout",
                           entry, "text",
-                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);                      
+                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   check = (GtkWidget *)gtk_builder_get_object (builder, "decorations");
   header = (GtkWidget *)gtk_builder_get_object (builder, "sidebar-header");
-  g_object_bind_property (check, "active", 
-                          header, "show-close-button",
-			  G_BINDING_DEFAULT);                      
+  g_object_bind_property (check, "active",
+                          header, "show-title-buttons",
+			  G_BINDING_DEFAULT);
   header = (GtkWidget *)gtk_builder_get_object (builder, "main-header");
-  g_object_bind_property (check, "active", 
-                          header, "show-close-button",
+  g_object_bind_property (check, "active",
+                          header, "show-title-buttons",
 			  G_BINDING_DEFAULT);                      
   gtk_window_present (GTK_WINDOW (win));
 

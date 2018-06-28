@@ -32,6 +32,7 @@
 #include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtktooltip.h"
+#include "gtkprivate.h"
 
 
 /**
@@ -159,8 +160,6 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
    * if the symbolic icons are not available in your installed
    * theme, then the normal (potentially colorful) icons will
    * be used.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SYMBOLIC,
@@ -168,7 +167,7 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
                                                          P_("Use symbolic icons"),
                                                          P_("Whether to use symbolic icons"),
                                                          TRUE,
-                                                         G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /* Bind class to template
    */
@@ -197,8 +196,6 @@ gtk_volume_button_init (GtkVolumeButton *button)
  * the functions from #GtkScaleButton.
  *
  * Returns: a new #GtkVolumeButton
- *
- * Since: 2.12
  */
 GtkWidget *
 gtk_volume_button_new (void)

@@ -51,7 +51,7 @@
  * value.  As a result, if the object is modified, it is up to the
  * application writer to call gtk_tree_model_row_changed() to emit the
  * #GtkTreeModel::row_changed signal.  This most commonly affects lists with
- * #GdkPixbufs stored.
+ * #GdkTextures stored.
  *
  * An example for creating a simple list store:
  * |[<!-- language="C" -->
@@ -406,8 +406,8 @@ iter_is_valid (GtkTreeIter  *iter,
  * are supported.
  *
  * As an example, `gtk_list_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF);` will create a new #GtkListStore with three columns, of type
- * int, string and #GdkPixbuf respectively.
+ * GDK_TYPE_TEXTURE);` will create a new #GtkListStore with three columns, of type
+ * int, string and #GdkTexture, respectively.
  *
  * Returns: a new #GtkListStore
  */
@@ -1073,8 +1073,6 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
  * varargs. This function is mainly intended for 
  * language-bindings and in case the number of columns to
  * change is not known until run-time.
- *
- * Since: 2.12
  */
 void
 gtk_list_store_set_valuesv (GtkListStore *list_store,
@@ -1445,8 +1443,6 @@ gtk_list_store_clear (GtkListStore *list_store)
  * Checks if the given iter is a valid iter for this #GtkListStore.
  *
  * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
- *
- * Since: 2.2
  **/
 gboolean
 gtk_list_store_iter_is_valid (GtkListStore *list_store,
@@ -1680,8 +1676,6 @@ gtk_list_store_reorder_func (GSequenceIter *a,
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
  * this function only works with unsorted stores.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_reorder (GtkListStore *store,
@@ -1774,8 +1768,6 @@ generate_order (GSequence *seq,
  *
  * Swaps @a and @b in @store. Note that this function only works with
  * unsorted stores.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_swap (GtkListStore *store,
@@ -1843,8 +1835,6 @@ gtk_list_store_move_to (GtkListStore *store,
  * Moves @iter in @store to the position before @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
  * will be moved to the end of the list.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_move_before (GtkListStore *store,
@@ -1876,8 +1866,6 @@ gtk_list_store_move_before (GtkListStore *store,
  * Moves @iter in @store to the position after @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
  * will be moved to the start of the list.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_move_after (GtkListStore *store,
@@ -2164,8 +2152,17 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * `gtk_list_store_insert_with_values (list_store, iter, position...)`
  * has the same effect as calling
  * |[<!-- language="C" -->
- * gtk_list_store_insert (list_store, iter, position);
- * gtk_list_store_set (list_store, iter, ...);
+ * static void
+ * insert_value (GtkListStore *list_store,
+ *               GtkTreeIter  *iter,
+ *               int           position)
+ * {
+ *   gtk_list_store_insert (list_store, iter, position);
+ *   gtk_list_store_set (list_store,
+ *                       iter
+ *                       // ...
+ *                       );
+ * }
  * ]|
  * with the difference that the former will only emit a row_inserted signal,
  * while the latter will emit row_inserted, row_changed and, if the list store
@@ -2173,8 +2170,6 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * repeatedly can affect the performance of the program,
  * gtk_list_store_insert_with_values() should generally be preferred when
  * inserting rows in a sorted list store.
- *
- * Since: 2.6
  */
 void
 gtk_list_store_insert_with_values (GtkListStore *list_store,
@@ -2250,8 +2245,6 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
  * takes the columns and values as two arrays, instead of
  * varargs. This function is mainly intended for 
  * language-bindings.
- *
- * Since: 2.6
  */
 void
 gtk_list_store_insert_with_valuesv (GtkListStore *list_store,

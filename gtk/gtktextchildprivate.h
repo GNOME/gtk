@@ -54,14 +54,14 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkTextPixbuf GtkTextPixbuf;
+typedef struct _GtkTextTexture GtkTextTexture;
 
-struct _GtkTextPixbuf
+struct _GtkTextTexture
 {
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
 };
 
-GtkTextLineSegment *_gtk_pixbuf_segment_new (GdkPixbuf *pixbuf);
+GtkTextLineSegment *_gtk_texture_segment_new (GdkTexture *texture);
 
 typedef struct _GtkTextChildBody GtkTextChildBody;
 

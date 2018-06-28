@@ -37,9 +37,15 @@ typedef struct _GtkCssImageRecolorClass      GtkCssImageRecolorClass;
 
 struct _GtkCssImageRecolor
 {
-  GtkCssImageUrl parent;
+  GtkCssImage parent;
 
+  GFile *file;
   GtkCssValue *palette;
+  GdkTexture *texture;
+  GdkRGBA color;
+  GdkRGBA success;
+  GdkRGBA warning;
+  GdkRGBA error;
 };
 
 struct _GtkCssImageRecolorClass

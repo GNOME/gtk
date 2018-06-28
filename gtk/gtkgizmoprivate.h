@@ -23,8 +23,7 @@ typedef void    (* GtkGizmoMeasureFunc)   (GtkGizmo       *gizmo,
                                            int            *natural_baseline);
 typedef void    (* GtkGizmoAllocateFunc)  (GtkGizmo            *gizmo,
                                            const GtkAllocation *allocation,
-                                           int                  baseline,
-                                           GtkAllocation       *out_clip);
+                                           int                  baseline);
 typedef gboolean (* GtkGizmoSnapshotFunc) (GtkGizmo    *gizmo,
                                            GtkSnapshot *snapshot);
 

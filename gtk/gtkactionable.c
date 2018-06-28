@@ -42,8 +42,6 @@
  * the “win.” or “app.” prefix that are associated with the #GtkApplicationWindow
  * or #GtkApplication, but other action groups that are added with
  * gtk_widget_insert_action_group() will be consulted as well.
- *
- * Since: 3.4
  **/
 
 /**
@@ -87,8 +85,6 @@ gtk_actionable_default_init (GtkActionableInterface *iface)
  * See gtk_actionable_set_action_name() for more information.
  *
  * Returns: (nullable): the action name, or %NULL if none is set
- *
- * Since: 3.4
  **/
 const gchar *
 gtk_actionable_get_action_name (GtkActionable *actionable)
@@ -115,8 +111,6 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
  * containing #GtkApplicationWindow or its associated #GtkApplication,
  * respectively.  This is the same form used for actions in the #GMenu
  * associated with the window.
- *
- * Since: 3.4
  **/
 void
 gtk_actionable_set_action_name (GtkActionable *actionable,
@@ -137,8 +131,6 @@ gtk_actionable_set_action_name (GtkActionable *actionable,
  * See gtk_actionable_set_action_target_value() for more information.
  *
  * Returns: (transfer none): the current target value
- *
- * Since: 3.4
  **/
 GVariant *
 gtk_actionable_get_action_target_value (GtkActionable *actionable)
@@ -169,12 +161,10 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  * will be associated with the same action, but with a different target
  * value for that action.  Clicking on a particular button will activate
  * the action with the target of that button, which will typically cause
- * the action’s state to change to that value.  Since the action’s state
+ * the action’s state to change to that value. Since the action’s state
  * is now equal to the target value of the button, the button will now
  * be rendered as active (and the other buttons, with different targets,
  * rendered inactive).
- *
- * Since: 3.4
  **/
 void
 gtk_actionable_set_action_target_value (GtkActionable *actionable,
@@ -201,8 +191,6 @@ gtk_actionable_set_action_target_value (GtkActionable *actionable,
  * If you are setting a string-valued target and want to set the action
  * name at the same time, you can use
  * gtk_actionable_set_detailed_action_name ().
- *
- * Since: 3.4
  **/
 void
 gtk_actionable_set_action_target (GtkActionable *actionable,
@@ -232,8 +220,6 @@ gtk_actionable_set_action_target (GtkActionable *actionable,
  * @detailed_action_name must be of the form `"action::target"` where
  * `action` is the action name and `target` is the string to use
  * as the target.)
- *
- * Since: 3.4
  **/
 void
 gtk_actionable_set_detailed_action_name (GtkActionable *actionable,

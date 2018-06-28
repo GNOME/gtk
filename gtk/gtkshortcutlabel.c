@@ -469,8 +469,6 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
    *
    * The accelerator that @self displays. See #GtkShortcutsShortcut:accelerator
    * for the accepted syntax.
-   *
-   * Since: 3.22
    */
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", P_("Accelerator"), P_("Accelerator"),
@@ -481,8 +479,6 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
    * GtkShortcutLabel:disabled-text:
    *
    * The text that is displayed when no accelerator is set.
-   *
-   * Since: 3.22
    */
   properties[PROP_DISABLED_TEXT] =
     g_param_spec_string ("disabled-text", P_("Disabled text"), P_("Disabled text"),
@@ -508,8 +504,6 @@ gtk_shortcut_label_init (GtkShortcutLabel *self)
  * Creates a new #GtkShortcutLabel with @accelerator set.
  *
  * Returns: (transfer full): a newly-allocated #GtkShortcutLabel
- *
- * Since: 3.22
  */
 GtkWidget *
 gtk_shortcut_label_new (const gchar *accelerator)
@@ -526,8 +520,6 @@ gtk_shortcut_label_new (const gchar *accelerator)
  * Retrieves the current accelerator of @self.
  *
  * Returns: (transfer none)(nullable): the current accelerator.
- *
- * Since: 3.22
  */
 const gchar *
 gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
@@ -543,8 +535,6 @@ gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
  * @accelerator: the new accelerator
  *
  * Sets the accelerator to be displayed by @self.
- *
- * Since: 3.22
  */
 void
 gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
@@ -569,8 +559,6 @@ gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
  *
  * Returns: (transfer none)(nullable): the current text displayed when no
  * accelerator is set.
- *
- * Since: 3.22
  */
 const gchar *
 gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
@@ -586,8 +574,6 @@ gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
  * @disabled_text: the text to be displayed when no accelerator is set
  *
  * Sets the text to be displayed by @self when no accelerator is set.
- *
- * Since: 3.22
  */
 void
 gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,

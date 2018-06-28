@@ -17,6 +17,12 @@
 #define LARGE_WIDTH 240
 #define LARGE_HEIGHT 240
 
+static gboolean
+focus_handled (void)
+{
+  return TRUE;
+}
+
 static WidgetInfo *
 new_widget_info (const char *name,
 		 GtkWidget  *widget,
@@ -42,7 +48,7 @@ new_widget_info (const char *name,
     }
   info->no_focus = TRUE;
 
-  g_signal_connect (info->window, "focus", G_CALLBACK (gtk_true), NULL);
+  g_signal_connect (info->window, "focus", G_CALLBACK (focus_handled), NULL);
 
   switch (size)
     {
@@ -144,7 +150,7 @@ create_menu_button (void)
 
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
   gtk_container_add (GTK_CONTAINER (widget), image);
   menu = gtk_menu_new ();
   gtk_menu_button_set_popup (GTK_MENU_BUTTON (widget), menu);
@@ -425,10 +431,10 @@ create_action_bar (void)
 
   widget = gtk_action_bar_new ();
 
-  button = gtk_button_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_MENU);
+  button = gtk_button_new_from_icon_name ("object-select-symbolic");
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (widget), button);
-  button = gtk_button_new_from_icon_name ("call-start-symbolic", GTK_ICON_SIZE_MENU);
+  button = gtk_button_new_from_icon_name ("call-start-symbolic");
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (widget), button);
   g_object_set (gtk_widget_get_parent (button), "margin", 6, "spacing", 6, NULL);
@@ -438,25 +444,6 @@ create_action_bar (void)
   gtk_container_add (GTK_CONTAINER (box), widget);
 
   info = new_widget_info ("action-bar", box, SMALL);
-
-  return info;
-}
-
-static WidgetInfo *
-create_recent_chooser_dialog (void)
-{
-  WidgetInfo *info;
-  GtkWidget *widget;
-
-  widget = gtk_recent_chooser_dialog_new ("Recent Chooser Dialog",
-					  NULL,
-					  "Cancel", GTK_RESPONSE_CANCEL,
-					  "Open", GTK_RESPONSE_ACCEPT,
-					  NULL); 
-  gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
-  
-  info = new_widget_info ("recentchooserdialog", widget, ASIS);
-  info->include_decorations = TRUE;
 
   return info;
 }
@@ -814,40 +801,6 @@ create_toolbar (void)
 }
 
 static WidgetInfo *
-create_toolpalette (void)
-{
-  GtkWidget *widget, *group;
-  GtkToolItem *item;
-
-  widget = gtk_tool_palette_new ();
-  group = gtk_tool_item_group_new ("Tools");
-  gtk_container_add (GTK_CONTAINER (widget), group);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "help-about");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "folder");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-
-  group = gtk_tool_item_group_new ("More tools");
-  gtk_container_add (GTK_CONTAINER (widget), group);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-cut");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-find");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-properties");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-
-  return new_widget_info ("toolpalette", widget, MEDIUM);
-}
-
-static WidgetInfo *
 create_menubar (void)
 {
   GtkWidget *widget, *vbox, *item;
@@ -1074,8 +1027,8 @@ create_image (void)
   GtkWidget *widget;
   GtkWidget *vbox;
 
-  widget = gtk_image_new_from_icon_name ("applications-graphics",
-                                         GTK_ICON_SIZE_DIALOG);
+  widget = gtk_image_new_from_icon_name ("applications-graphics");
+  gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_LARGE);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
@@ -1237,29 +1190,10 @@ create_headerbar (void)
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (bar), "(subtitle)");
   gtk_window_set_titlebar (GTK_WINDOW (window), bar);
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
 
   return new_widget_info ("headerbar", window, ASIS);
-}
-
-static WidgetInfo *
-create_placessidebar (void)
-{
-  GtkWidget *bar;
-  GtkWidget *vbox;
-
-  bar = gtk_places_sidebar_new ();
-  gtk_widget_set_size_request (bar, 150, 300);
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_widget_set_halign (bar, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (bar, GTK_ALIGN_CENTER);
-
-  gtk_box_pack_start (GTK_BOX (vbox), bar);
-  gtk_box_pack_start (GTK_BOX (vbox),
-                      gtk_label_new ("Places Sidebar"));
-
-  return new_widget_info ("placessidebar", vbox, ASIS);
 }
 
 static WidgetInfo *
@@ -1485,10 +1419,8 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_list_box());
   retval = g_list_prepend (retval, create_flow_box());
   retval = g_list_prepend (retval, create_headerbar ());
-  retval = g_list_prepend (retval, create_placessidebar ());
   retval = g_list_prepend (retval, create_stack ());
   retval = g_list_prepend (retval, create_stack_switcher ());
-  retval = g_list_prepend (retval, create_toolpalette ());
   retval = g_list_prepend (retval, create_spinner ());
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());
@@ -1525,7 +1457,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_window ());
   retval = g_list_prepend (retval, create_filesel ());
   retval = g_list_prepend (retval, create_assistant ());
-  retval = g_list_prepend (retval, create_recent_chooser_dialog ());
   retval = g_list_prepend (retval, create_page_setup_dialog ());
   retval = g_list_prepend (retval, create_print_dialog ());
   retval = g_list_prepend (retval, create_volume_button ());

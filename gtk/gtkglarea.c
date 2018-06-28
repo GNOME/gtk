@@ -27,6 +27,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrender.h"
+#include "gtksnapshot.h"
 
 #include <epoxy/gl.h>
 
@@ -142,6 +143,13 @@
  */
 
 typedef struct {
+  guint id;
+  int width;
+  int height;
+  GdkTexture *holder;
+} Texture;
+
+typedef struct {
   GdkGLContext *context;
   GError *error;
 
@@ -150,11 +158,10 @@ typedef struct {
   int required_gl_version;
 
   guint frame_buffer;
-  guint render_buffer;
-  guint texture;
   guint depth_stencil_buffer;
+  Texture *texture;
+  GList *textures;
 
-  gboolean has_alpha;
   gboolean has_depth_buffer;
   gboolean has_stencil_buffer;
 
@@ -168,7 +175,6 @@ enum {
   PROP_0,
 
   PROP_CONTEXT,
-  PROP_HAS_ALPHA,
   PROP_HAS_DEPTH_BUFFER,
   PROP_HAS_STENCIL_BUFFER,
   PROP_USE_ES,
@@ -189,21 +195,11 @@ enum {
 };
 
 static void gtk_gl_area_allocate_buffers (GtkGLArea *area);
+static void gtk_gl_area_allocate_texture (GtkGLArea *area);
 
 static guint area_signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkGLArea, gtk_gl_area, GTK_TYPE_WIDGET)
-
-static void
-gtk_gl_area_dispose (GObject *gobject)
-{
-  GtkGLArea *area = GTK_GL_AREA (gobject);
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_clear_object (&priv->context);
-
-  G_OBJECT_CLASS (gtk_gl_area_parent_class)->dispose (gobject);
-}
 
 static void
 gtk_gl_area_set_property (GObject      *gobject,
@@ -217,10 +213,6 @@ gtk_gl_area_set_property (GObject      *gobject,
     {
     case PROP_AUTO_RENDER:
       gtk_gl_area_set_auto_render (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_HAS_ALPHA:
-      gtk_gl_area_set_has_alpha (self, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_DEPTH_BUFFER:
@@ -252,10 +244,6 @@ gtk_gl_area_get_property (GObject    *gobject,
     {
     case PROP_AUTO_RENDER:
       g_value_set_boolean (value, priv->auto_render);
-      break;
-
-    case PROP_HAS_ALPHA:
-      g_value_set_boolean (value, priv->has_alpha);
       break;
 
     case PROP_HAS_DEPTH_BUFFER:
@@ -324,7 +312,7 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
   GError *error = NULL;
   GdkGLContext *context;
 
-  context = gdk_window_create_gl_context (gtk_widget_get_window (widget), &error);
+  context = gdk_surface_create_gl_context (gtk_widget_get_surface (widget), &error);
   if (error != NULL)
     {
       gtk_gl_area_set_error (area, error);
@@ -377,33 +365,6 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
 
   glGenFramebuffersEXT (1, &priv->frame_buffer);
 
-  if (priv->has_alpha)
-    {
-      /* For alpha we use textures as that is required for blending to work */
-      if (priv->texture == 0)
-        glGenTextures (1, &priv->texture);
-
-      /* Delete old render buffer if any */
-      if (priv->render_buffer != 0)
-        {
-          glDeleteRenderbuffersEXT(1, &priv->render_buffer);
-          priv->render_buffer = 0;
-        }
-    }
-  else
-    {
-    /* For non-alpha we use render buffers so we can blit instead of texture the result */
-      if (priv->render_buffer == 0)
-        glGenRenderbuffersEXT (1, &priv->render_buffer);
-
-      /* Delete old texture if any */
-      if (priv->texture != 0)
-        {
-          glDeleteTextures(1, &priv->texture);
-          priv->texture = 0;
-        }
-    }
-
   if ((priv->has_depth_buffer || priv->has_stencil_buffer))
     {
       if (priv->depth_stencil_buffer == 0)
@@ -417,6 +378,71 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
     }
 
   gtk_gl_area_allocate_buffers (area);
+}
+
+static void
+delete_one_texture (gpointer data)
+{
+  Texture *texture = data;
+
+  if (texture->holder)
+    gdk_gl_texture_release (GDK_GL_TEXTURE (texture->holder));
+
+  if (texture->id != 0)
+    {
+      glDeleteTextures (1, &texture->id);
+      texture->id = 0;
+    }
+
+  g_free (texture);
+}
+
+static void
+gtk_gl_area_ensure_texture (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+  GtkWidget *widget = GTK_WIDGET (area);
+
+  gtk_widget_realize (widget);
+
+  if (priv->context == NULL)
+    return;
+
+  if (priv->texture == NULL)
+    {
+      GList *l, *link;
+
+      l = priv->textures;
+      while (l)
+        {
+          Texture *texture = l->data;
+          link = l;
+          l = l->next;
+
+          if (texture->holder)
+            continue;
+
+          priv->textures = g_list_delete_link (priv->textures, link);
+
+          if (priv->texture == NULL)
+            priv->texture = texture;
+          else
+            delete_one_texture (texture);
+        }
+    }
+
+  if (priv->texture == NULL)
+    {
+      priv->texture = g_new (Texture, 1);
+
+      priv->texture->width = 0;
+      priv->texture->height = 0;
+      priv->texture->holder = NULL;
+
+      glGenTextures (1, &priv->texture->id);
+    }
+
+  gtk_gl_area_allocate_texture (area);
 }
 
 /*
@@ -433,28 +459,8 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
     return;
 
   scale = gtk_widget_get_scale_factor (widget);
-  width = gtk_widget_get_allocated_width (widget) * scale;
-  height = gtk_widget_get_allocated_height (widget) * scale;
-
-  if (priv->texture)
-    {
-      glBindTexture (GL_TEXTURE_2D, priv->texture);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-      if (gdk_gl_context_get_use_es (priv->context))
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-      else
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-    }
-
-  if (priv->render_buffer)
-    {
-      glBindRenderbuffer (GL_RENDERBUFFER, priv->render_buffer);
-      glRenderbufferStorage (GL_RENDERBUFFER, GL_RGB8, width, height);
-    }
+  width = gtk_widget_get_width (widget) * scale;
+  height = gtk_widget_get_height (widget) * scale;
 
   if (priv->has_depth_buffer || priv->has_stencil_buffer)
     {
@@ -468,6 +474,44 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
   priv->needs_render = TRUE;
 }
 
+static void
+gtk_gl_area_allocate_texture (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+  GtkWidget *widget = GTK_WIDGET (area);
+  int scale, width, height;
+
+  if (priv->context == NULL)
+    return;
+
+  if (priv->texture == NULL)
+    return;
+
+  g_assert (priv->texture->holder == NULL);
+
+  scale = gtk_widget_get_scale_factor (widget);
+  width = gtk_widget_get_width (widget) * scale;
+  height = gtk_widget_get_height (widget) * scale;
+
+  if (priv->texture->width != width ||
+      priv->texture->height != height)
+    {
+      glBindTexture (GL_TEXTURE_2D, priv->texture->id);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+      if (gdk_gl_context_get_use_es (priv->context))
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      else
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+      priv->texture->width = width;
+      priv->texture->height = height;
+    }
+}
+
 /**
  * gtk_gl_area_attach_buffers:
  * @area: a #GtkGLArea
@@ -479,8 +523,6 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
  * This function is automatically called before emitting the
  * #GtkGLArea::render signal, and doesn't normally need to be called
  * by application code.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_attach_buffers (GtkGLArea *area)
@@ -494,6 +536,11 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
 
   gtk_gl_area_make_current (area);
 
+  if (priv->texture == NULL)
+    gtk_gl_area_ensure_texture (area);
+  else if (priv->needs_resize)
+    gtk_gl_area_allocate_texture (area);
+
   if (!priv->have_buffers)
     gtk_gl_area_ensure_buffers (area);
   else if (priv->needs_resize)
@@ -501,12 +548,9 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
 
   glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, priv->frame_buffer);
 
-  if (priv->texture)
+  if (priv->texture != NULL)
     glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                            GL_TEXTURE_2D, priv->texture, 0);
-  else if (priv->render_buffer)
-    glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                  GL_RENDERBUFFER_EXT, priv->render_buffer);
+                            GL_TEXTURE_2D, priv->texture->id, 0);
 
   if (priv->depth_stencil_buffer)
     {
@@ -529,18 +573,6 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 
   priv->have_buffers = FALSE;
 
-  if (priv->render_buffer != 0)
-    {
-      glDeleteRenderbuffersEXT (1, &priv->render_buffer);
-      priv->render_buffer = 0;
-    }
-
-  if (priv->texture != 0)
-    {
-      glDeleteTextures(1, &priv->texture);
-      priv->texture = 0;
-    }
-
   if (priv->depth_stencil_buffer != 0)
     {
       glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
@@ -556,6 +588,25 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 }
 
 static void
+gtk_gl_area_delete_textures (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  if (priv->texture)
+    {
+      delete_one_texture (priv->texture);
+      priv->texture = NULL;
+    }
+
+  /* FIXME: we need to explicitly release all outstanding
+   * textures here, otherwise release_texture will get called
+   * later and access freed memory.
+   */
+  g_list_free_full (priv->textures, delete_one_texture);
+  priv->textures = NULL;
+}
+
+static void
 gtk_gl_area_unrealize (GtkWidget *widget)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
@@ -563,11 +614,9 @@ gtk_gl_area_unrealize (GtkWidget *widget)
 
   if (priv->context != NULL)
     {
-      if (priv->have_buffers)
-        {
-          gtk_gl_area_make_current (area);
-          gtk_gl_area_delete_buffers (area);
-        }
+      gtk_gl_area_make_current (area);
+      gtk_gl_area_delete_buffers (area);
+      gtk_gl_area_delete_textures (area);
 
       /* Make sure to unset the context if current */
       if (priv->context == gdk_gl_context_get_current ())
@@ -583,23 +632,22 @@ gtk_gl_area_unrealize (GtkWidget *widget)
 static void
 gtk_gl_area_size_allocate (GtkWidget           *widget,
                            const GtkAllocation *allocation,
-                           int                  baseline,
-                           GtkAllocation       *out_clip)
+                           int                  baseline)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
-  GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation, baseline, out_clip);
+  GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation, baseline);
 
   if (gtk_widget_get_realized (widget))
     priv->needs_resize = TRUE;
 }
 
 static void
-gtk_gl_area_draw_error_screen (GtkGLArea *area,
-                               cairo_t   *cr,
-                               gint       width,
-                               gint       height)
+gtk_gl_area_draw_error_screen (GtkGLArea   *area,
+                               GtkSnapshot *snapshot,
+                               gint         width,
+                               gint         height)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   PangoLayout *layout;
@@ -610,17 +658,25 @@ gtk_gl_area_draw_error_screen (GtkGLArea *area,
   pango_layout_set_width (layout, width * PANGO_SCALE);
   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
   pango_layout_get_pixel_size (layout, NULL, &layout_height);
-  gtk_render_layout (gtk_widget_get_style_context (GTK_WIDGET (area)),
-                     cr,
-                     0, (height - layout_height) / 2,
-                     layout);
+
+  gtk_snapshot_render_layout (snapshot,
+                              gtk_widget_get_style_context (GTK_WIDGET (area)),
+                              0, (height - layout_height) / 2,
+                              layout);
 
   g_object_unref (layout);
 }
 
-static gboolean
-gtk_gl_area_draw (GtkWidget *widget,
-                  cairo_t   *cr)
+static void
+release_texture (gpointer data)
+{
+  Texture *texture = data;
+  texture->holder = NULL;
+}
+
+static void
+gtk_gl_area_snapshot (GtkWidget   *widget,
+                      GtkSnapshot *snapshot)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
@@ -628,17 +684,24 @@ gtk_gl_area_draw (GtkWidget *widget,
   int w, h, scale;
   GLenum status;
 
+  scale = gtk_widget_get_scale_factor (widget);
+  w = gtk_widget_get_width (widget) * scale;
+  h = gtk_widget_get_height (widget) * scale;
+
+  if (w == 0 || h == 0)
+    return;
+
   if (priv->error != NULL)
     {
       gtk_gl_area_draw_error_screen (area,
-                                     cr,
-                                     gtk_widget_get_allocated_width (widget),
-                                     gtk_widget_get_allocated_height (widget));
-      return FALSE;
+                                     snapshot,
+                                     gtk_widget_get_width (widget),
+                                     gtk_widget_get_height (widget));
+      return;
     }
 
   if (priv->context == NULL)
-    return FALSE;
+    return;
 
   gtk_gl_area_make_current (area);
 
@@ -649,13 +712,11 @@ gtk_gl_area_draw (GtkWidget *widget,
  else
    glDisable (GL_DEPTH_TEST);
 
-  scale = gtk_widget_get_scale_factor (widget);
-  w = gtk_widget_get_allocated_width (widget) * scale;
-  h = gtk_widget_get_allocated_height (widget) * scale;
-
   status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
   if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
     {
+      Texture *texture;
+
       if (priv->needs_render || priv->auto_render)
         {
           if (priv->needs_resize)
@@ -669,19 +730,28 @@ gtk_gl_area_draw (GtkWidget *widget,
 
       priv->needs_render = FALSE;
 
-      gdk_cairo_draw_from_gl (cr,
-                              gtk_widget_get_window (widget),
-                              priv->texture ? priv->texture : priv->render_buffer,
-                              priv->texture ? GL_TEXTURE : GL_RENDERBUFFER,
-                              scale, 0, 0, w, h);
-      gtk_gl_area_make_current (area);
+      texture = priv->texture;
+      priv->texture = NULL;
+      priv->textures = g_list_prepend (priv->textures, texture);
+
+      texture->holder = gdk_gl_texture_new (priv->context,
+                                            texture->id,
+                                            texture->width,
+                                            texture->height,
+                                            release_texture, texture);
+
+      gtk_snapshot_append_texture (snapshot,
+                                   texture->holder,
+                                   &GRAPHENE_RECT_INIT (0, 0,
+                                                        gtk_widget_get_width (widget),
+                                                        gtk_widget_get_height (widget)));
+
+      g_object_unref (texture->holder);
     }
   else
     {
-      g_warning ("fb setup not supported");
+      g_warning ("fb setup not supported (%x)", status);
     }
-
-  return TRUE;
 }
 
 static gboolean
@@ -708,7 +778,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   widget_class->realize = gtk_gl_area_realize;
   widget_class->unrealize = gtk_gl_area_unrealize;
   widget_class->size_allocate = gtk_gl_area_size_allocate;
-  widget_class->draw = gtk_gl_area_draw;
+  widget_class->snapshot = gtk_gl_area_snapshot;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 
@@ -720,8 +790,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * The #GtkGLArea widget is responsible for creating the #GdkGLContext
    * instance. If you need to render with other kinds of buffers (stencil,
    * depth, etc), use render buffers.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -743,8 +811,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * In order to force a rendering gtk_gl_area_queue_render() must be called.
    * This mode is useful when the scene changes seldomly, but takes a long time
    * to redraw.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_AUTO_RENDER] =
     g_param_spec_boolean ("auto-render",
@@ -756,33 +822,10 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:has-alpha:
-   *
-   * If set to %TRUE the buffer allocated by the widget will have an alpha channel
-   * component, and when rendering to the window the result will be composited over
-   * whatever is below the widget.
-   *
-   * If set to %FALSE there will be no alpha channel, and the buffer will fully
-   * replace anything below the widget.
-   *
-   * Since: 3.16
-   */
-  obj_props[PROP_HAS_ALPHA] =
-    g_param_spec_boolean ("has-alpha",
-                          P_("Has alpha"),
-                          P_("Whether the color buffer has an alpha component"),
-                          FALSE,
-                          GTK_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS |
-                          G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkGLArea:has-depth-buffer:
    *
    * If set to %TRUE the widget will allocate and enable a depth buffer for the
    * target framebuffer.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_HAS_DEPTH_BUFFER] =
     g_param_spec_boolean ("has-depth-buffer",
@@ -798,8 +841,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * If set to %TRUE the widget will allocate and enable a stencil buffer for the
    * target framebuffer.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_HAS_STENCIL_BUFFER] =
     g_param_spec_boolean ("has-stencil-buffer",
@@ -817,8 +858,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * OpenGL ES instead of OpenGL.
    *
    * See also: gdk_gl_context_set_use_es()
-   *
-   * Since: 3.22
    */
   obj_props[PROP_USE_ES] =
     g_param_spec_boolean ("use-es",
@@ -831,7 +870,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
 
   gobject_class->set_property = gtk_gl_area_set_property;
   gobject_class->get_property = gtk_gl_area_get_property;
-  gobject_class->dispose = gtk_gl_area_dispose;
   gobject_class->notify = gtk_gl_area_notify;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_props);
@@ -849,8 +887,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    *   %FALSE to propagate the event further.
-   *
-   * Since: 3.16
    */
   area_signals[RENDER] =
     g_signal_new (I_("render"),
@@ -877,8 +913,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * is emitted.
    *
    * The default handler sets up the GL viewport.
-   *
-   * Since: 3.16
    */
   area_signals[RESIZE] =
     g_signal_new (I_("resize"),
@@ -906,8 +940,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * Returns: (transfer full): a newly created #GdkGLContext;
    *     the #GtkGLArea widget will take ownership of the returned value.
-   *
-   * Since: 3.16
    */
   area_signals[CREATE_CONTEXT] =
     g_signal_new (I_("create-context"),
@@ -924,7 +956,7 @@ gtk_gl_area_init (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
-  gtk_widget_set_has_window (GTK_WIDGET (area), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (area), FALSE);
 
   priv->auto_render = TRUE;
   priv->needs_render = TRUE;
@@ -936,9 +968,7 @@ gtk_gl_area_init (GtkGLArea *area)
  *
  * Creates a new #GtkGLArea widget.
  *
- * Returns: (transfer full): the newly created #GtkGLArea
- *
- * Since: 3.16
+ * Returns: a new #GtkGLArea
  */
 GtkWidget *
 gtk_gl_area_new (void)
@@ -954,8 +984,6 @@ gtk_gl_area_new (void)
  * Sets an error on the area which will be shown instead of the
  * GL rendering. This is useful in the #GtkGLArea::create-context
  * signal if GL context creation fails.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_error (GtkGLArea    *area,
@@ -977,8 +1005,6 @@ gtk_gl_area_set_error (GtkGLArea    *area,
  * Gets the current error set on the @area.
  *
  * Returns: (nullable) (transfer none): the #GError or %NULL
- *
- * Since: 3.16
  */
 GError *
 gtk_gl_area_get_error (GtkGLArea *area)
@@ -999,8 +1025,6 @@ gtk_gl_area_get_error (GtkGLArea *area)
  *
  * You should check the capabilities of the #GdkGLContext before drawing
  * with either API.
- *
- * Since: 3.22
  */
 void
 gtk_gl_area_set_use_es (GtkGLArea *area,
@@ -1029,8 +1053,6 @@ gtk_gl_area_set_use_es (GtkGLArea *area,
  *
  * Returns: %TRUE if the #GtkGLArea should create an OpenGL ES context
  *   and %FALSE otherwise
- *
- * Since: 3.22
  */
 gboolean
 gtk_gl_area_get_use_es (GtkGLArea *area)
@@ -1052,8 +1074,6 @@ gtk_gl_area_get_use_es (GtkGLArea *area)
  * for the widget.
  *
  * This function must be called before the area has been realized.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_required_version (GtkGLArea *area,
@@ -1076,8 +1096,6 @@ gtk_gl_area_set_required_version (GtkGLArea *area,
  *
  * Retrieves the required version of OpenGL set
  * using gtk_gl_area_set_required_version().
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_get_required_version (GtkGLArea *area,
@@ -1095,68 +1113,12 @@ gtk_gl_area_get_required_version (GtkGLArea *area,
 }
 
 /**
- * gtk_gl_area_get_has_alpha:
- * @area: a #GtkGLArea
- *
- * Returns whether the area has an alpha component.
- *
- * Returns: %TRUE if the @area has an alpha component, %FALSE otherwise
- *
- * Since: 3.16
- */
-gboolean
-gtk_gl_area_get_has_alpha (GtkGLArea *area)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
-
-  return priv->has_alpha;
-}
-
-/**
- * gtk_gl_area_set_has_alpha:
- * @area: a #GtkGLArea
- * @has_alpha: %TRUE to add an alpha component
- *
- * If @has_alpha is %TRUE the buffer allocated by the widget will have
- * an alpha channel component, and when rendering to the window the
- * result will be composited over whatever is below the widget.
- *
- * If @has_alpha is %FALSE there will be no alpha channel, and the
- * buffer will fully replace anything below the widget.
- *
- * Since: 3.16
- */
-void
-gtk_gl_area_set_has_alpha (GtkGLArea *area,
-                           gboolean   has_alpha)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_return_if_fail (GTK_IS_GL_AREA (area));
-
-  has_alpha = !!has_alpha;
-
-  if (priv->has_alpha != has_alpha)
-    {
-      priv->has_alpha = has_alpha;
-
-      g_object_notify (G_OBJECT (area), "has-alpha");
-
-      gtk_gl_area_delete_buffers (area);
-    }
-}
-
-/**
  * gtk_gl_area_get_has_depth_buffer:
  * @area: a #GtkGLArea
  *
  * Returns whether the area has a depth buffer.
  *
  * Returns: %TRUE if the @area has a depth buffer, %FALSE otherwise
- *
- * Since: 3.16
  */
 gboolean
 gtk_gl_area_get_has_depth_buffer (GtkGLArea *area)
@@ -1176,8 +1138,6 @@ gtk_gl_area_get_has_depth_buffer (GtkGLArea *area)
  * If @has_depth_buffer is %TRUE the widget will allocate and
  * enable a depth buffer for the target framebuffer. Otherwise
  * there will be none.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
@@ -1206,8 +1166,6 @@ gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
  * Returns whether the area has a stencil buffer.
  *
  * Returns: %TRUE if the @area has a stencil buffer, %FALSE otherwise
- *
- * Since: 3.16
  */
 gboolean
 gtk_gl_area_get_has_stencil_buffer (GtkGLArea *area)
@@ -1227,8 +1185,6 @@ gtk_gl_area_get_has_stencil_buffer (GtkGLArea *area)
  * If @has_stencil_buffer is %TRUE the widget will allocate and
  * enable a stencil buffer for the target framebuffer. Otherwise
  * there will be none.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
@@ -1261,8 +1217,6 @@ gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
  * This is only needed when the gtk_gl_area_set_auto_render() has
  * been called with a %FALSE value. The default behaviour is to
  * emit #GtkGLArea::render on each draw.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_queue_render (GtkGLArea *area)
@@ -1284,8 +1238,6 @@ gtk_gl_area_queue_render (GtkGLArea *area)
  * Returns whether the area is in auto render mode or not.
  *
  * Returns: %TRUE if the @area is auto rendering, %FALSE otherwise
- *
- * Since: 3.16
  */
 gboolean
 gtk_gl_area_get_auto_render (GtkGLArea *area)
@@ -1311,8 +1263,6 @@ gtk_gl_area_get_auto_render (GtkGLArea *area)
  * unless the window is resized. In order to force a rendering
  * gtk_gl_area_queue_render() must be called. This mode is useful when
  * the scene changes seldomly, but takes a long time to redraw.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_auto_render (GtkGLArea *area,
@@ -1342,8 +1292,6 @@ gtk_gl_area_set_auto_render (GtkGLArea *area,
  * Retrieves the #GdkGLContext used by @area.
  *
  * Returns: (transfer none): the #GdkGLContext
- *
- * Since: 3.16
  */
 GdkGLContext *
 gtk_gl_area_get_context (GtkGLArea *area)
@@ -1365,20 +1313,14 @@ gtk_gl_area_get_context (GtkGLArea *area)
  * This function is automatically called before emitting the
  * #GtkGLArea::render signal, and doesn't normally need to be called
  * by application code.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_make_current (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_GL_AREA (area));
-
-  widget = GTK_WIDGET (area);
-
-  g_return_if_fail (gtk_widget_get_realized (widget));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (area)));
 
   if (priv->context != NULL)
     gdk_gl_context_make_current (priv->context);

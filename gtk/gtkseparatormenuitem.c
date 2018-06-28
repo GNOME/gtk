@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include "gtkseparatormenuitem.h"
+#include "gtkintl.h"
 
 #include "gtkstylecontext.h"
 
@@ -44,13 +45,22 @@
 
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
 
+
+static const char *
+gtk_separator_menu_item_get_label (GtkMenuItem *item)
+{
+  return "";
+}
+
 static void
 gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 {
   GTK_CONTAINER_CLASS (class)->child_type = NULL;
 
+  GTK_MENU_ITEM_CLASS (class)->get_label = gtk_separator_menu_item_get_label;
+
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_SEPARATOR);
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "separator");
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("separator"));
 }
 
 static void

@@ -73,10 +73,10 @@ typedef enum
  * @GDK_MODE_DISABLED: the device is disabled and will not report any events.
  * @GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space
  *                   maps to the entire screen.
- * @GDK_MODE_WINDOW: the device is enabled. The device’s coordinate space
- *                   is mapped to a single window. The manner in which this window
+ * @GDK_MODE_SURFACE: the device is enabled. The device’s coordinate space
+ *                   is mapped to a single surface. The manner in which this surface
  *                   is chosen is undefined, but it will typically be the same
- *                   way in which the focus window for key events is determined.
+ *                   way in which the focus surface for key events is determined.
  *
  * An enumeration that describes the mode of an input device.
  */
@@ -84,7 +84,7 @@ typedef enum
 {
   GDK_MODE_DISABLED,
   GDK_MODE_SCREEN,
-  GDK_MODE_WINDOW
+  GDK_MODE_SURFACE
 } GdkInputMode;
 
 /**
@@ -93,10 +93,9 @@ typedef enum
  *                          be an associated focus indicator on the screen.
  * @GDK_DEVICE_TYPE_SLAVE: Device is a slave (or physical) device.
  * @GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to
- *                            any virtual device.
+ *                            any seat.
  *
- * Indicates the device type. See [above][GdkDeviceManager.description]
- * for more information about the meaning of these device types.
+ * Indicates the device type.
  */
 typedef enum {
   GDK_DEVICE_TYPE_MASTER,
@@ -164,34 +163,32 @@ void           gdk_device_set_axis_use  (GdkDevice         *device,
 
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_state    (GdkDevice         *device,
-                                  GdkWindow         *window,
+                                  GdkSurface         *surface,
                                   gdouble           *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_position (GdkDevice         *device,
-                                  GdkScreen        **screen,
                                   gint              *x,
                                   gint              *y);
 GDK_AVAILABLE_IN_ALL
-GdkWindow *
-         gdk_device_get_window_at_position
+GdkSurface *
+         gdk_device_get_surface_at_position
                                  (GdkDevice         *device,
                                   gint              *win_x,
                                   gint              *win_y);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_position_double (GdkDevice         *device,
-                                         GdkScreen        **screen,
                                          gdouble           *x,
                                          gdouble           *y);
-GDK_AVAILABLE_IN_3_10
-GdkWindow *
-         gdk_device_get_window_at_position_double
+GDK_AVAILABLE_IN_ALL
+GdkSurface *
+         gdk_device_get_surface_at_position_double
                                  (GdkDevice         *device,
                                   gdouble           *win_x,
                                   gdouble           *win_y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_history  (GdkDevice         *device,
-                                  GdkWindow         *window,
+                                  GdkSurface         *surface,
                                   guint32            start,
                                   guint32            stop,
                                   GdkTimeCoord    ***events,
@@ -226,37 +223,36 @@ GList *      gdk_device_list_slave_devices    (GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
-GDK_DEPRECATED_IN_3_20_FOR(gdk_seat_grab)
+GDK_DEPRECATED_FOR(gdk_seat_grab)
 GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
-                                      GdkWindow        *window,
+                                      GdkSurface        *surface,
                                       GdkGrabOwnership  grab_ownership,
                                       gboolean          owner_events,
                                       GdkEventMask      event_mask,
                                       GdkCursor        *cursor,
                                       guint32           time_);
 
-GDK_DEPRECATED_IN_3_20_FOR(gdk_seat_ungrab)
+GDK_DEPRECATED_FOR(gdk_seat_ungrab)
 void          gdk_device_ungrab      (GdkDevice        *device,
                                       guint32           time_);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_device_warp        (GdkDevice        *device,
-                                      GdkScreen        *screen,
                                       gint              x,
                                       gint              y);
 
-GDK_AVAILABLE_IN_3_12
-GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+GdkSurface *gdk_device_get_last_event_surface (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_product_id      (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkAxisFlags gdk_device_get_axes            (GdkDevice *device);
 
 G_END_DECLS

@@ -638,6 +638,7 @@ fill_buffer (GtkTextBuffer *buffer)
   GtkTextIter iter;
   GtkTextIter iter2;
   GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   int i;
 
   color.red = 0.0;
@@ -675,8 +676,9 @@ fill_buffer (GtkTextBuffer *buffer)
                               NULL);
 
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
 
-  g_assert (pixbuf != NULL);
+  g_assert (texture != NULL);
 
   for (i = 0; i < 10; i++)
     {
@@ -684,11 +686,11 @@ fill_buffer (GtkTextBuffer *buffer)
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 1);
 
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
 
       str = g_strdup_printf ("%d Hello World!\nwoo woo woo woo woo woo woo woo\n",
                             i);
@@ -704,20 +706,20 @@ fill_buffer (GtkTextBuffer *buffer)
                               "Spanish (Espa\303\261ol) \302\241Hola! / French (Fran\303\247ais) Bonjour, Salut / German (Deutsch S\303\274d) Gr\303\274\303\237 Gott (testing Latin-1 chars encoded in UTF8)\nThai (we can't display this, just making sure we don't crash)  (\340\270\240\340\270\262\340\270\251\340\270\262\340\271\204\340\270\227\340\270\242)  \340\270\252\340\270\247\340\270\261\340\270\252\340\270\224\340\270\265\340\270\204\340\270\243\340\270\261\340\270\232, \340\270\252\340\270\247\340\270\261\340\270\252\340\270\224\340\270\265\340\270\204\340\271\210\340\270\260\n",
                               -1);
 
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 4);
 
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 7);
 
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 8);
 
-      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_texture (buffer, &iter, texture);
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 8);
       iter2 = iter;
@@ -787,6 +789,7 @@ fill_buffer (GtkTextBuffer *buffer)
   gtk_text_buffer_apply_tag (buffer, tag, &iter, &iter2);  
 
   g_object_unref (pixbuf);
+  g_object_unref (texture);
 }
 
 
@@ -1360,15 +1363,28 @@ check_buffer_contents (GtkTextBuffer *buffer,
 }
 
 static void
+wait_for_changed (GtkTextBuffer *buffer)
+{
+  GMainLoop *loop;
+  gulong id;
+
+  loop = g_main_loop_new (NULL, FALSE);
+  id = g_signal_connect_swapped (buffer, "changed", G_CALLBACK (g_main_loop_quit), loop);
+  g_main_loop_run (loop);
+  g_signal_handler_disconnect (buffer, id);
+  g_main_loop_unref (loop);
+}
+
+static void
 test_clipboard (void)
 {
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
   GtkTextBuffer *buffer;
   GtkTextIter start;
   GtkTextIter end;
   GtkTextTag *tag;
 
-  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+  clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, "abcdef", -1);
@@ -1383,6 +1399,8 @@ test_clipboard (void)
 
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, &end, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "defabc");
 
   /* Simple copy & paste */
@@ -1393,6 +1411,8 @@ test_clipboard (void)
 
   gtk_text_buffer_get_start_iter (buffer, &start);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, &start, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "abcdefabc");
 
   /* Replace the selection when pasting */
@@ -1407,6 +1427,8 @@ test_clipboard (void)
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_select_range (buffer, &start, &end);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "abcabc");
 
   /* Copy & paste text with tags.
@@ -1425,6 +1447,8 @@ test_clipboard (void)
   gtk_text_buffer_select_range (buffer, &start, &end);
   gtk_text_buffer_copy_clipboard (buffer, clipboard);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "abcdef");
 
   gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);

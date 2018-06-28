@@ -78,8 +78,7 @@
 
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
                                                   const GtkAllocation *allocation,
-                                                  int                  baseline,
-                                                  GtkAllocation       *out_clip);
+                                                  int                  baseline);
 
 typedef struct {
   GtkWidget *indicator_widget;
@@ -279,6 +278,9 @@ gtk_check_button_direction_changed (GtkWidget        *widget,
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
 
+  if (!priv->indicator_widget)
+    return;
+
   if (previous_direction == GTK_TEXT_DIR_LTR)
     {
       /* Now RTL -> Move the indicator to the right */
@@ -328,7 +330,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
-  gtk_widget_class_set_css_name (widget_class, "checkbutton");
+  gtk_widget_class_set_css_name (widget_class, I_("checkbutton"));
 }
 
 static void
@@ -439,12 +441,10 @@ gtk_check_button_new_with_mnemonic (const gchar *label)
 static void
 gtk_check_button_size_allocate (GtkWidget           *widget,
                                 const GtkAllocation *allocation,
-                                int                  baseline,
-                                GtkAllocation       *out_clip)
+                                int                  baseline)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
   GtkAllocation child_alloc = { 0 };
-  GdkRectangle child_clip;
   GtkWidget *child;
   gboolean is_rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   int x = 0;
@@ -468,8 +468,7 @@ gtk_check_button_size_allocate (GtkWidget           *widget,
           child_alloc.x = allocation->x;
         }
 
-      gtk_widget_size_allocate (priv->indicator_widget, &child_alloc, baseline, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (priv->indicator_widget, &child_alloc, baseline);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -480,8 +479,7 @@ gtk_check_button_size_allocate (GtkWidget           *widget,
       child_alloc.width = allocation->width - child_alloc.width; /* Indicator width */
       child_alloc.height = allocation->height;
 
-      gtk_widget_size_allocate (child, &child_alloc, baseline, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (child, &child_alloc, baseline);
     }
 }
 
@@ -562,8 +560,10 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
 
   inconsistent = !!inconsistent;
-  if (inconsistent != priv->inconsistent)
+  if (priv->inconsistent != inconsistent)
     {
+      priv->inconsistent = inconsistent;
+
       if (inconsistent)
         gtk_widget_set_state_flags (GTK_WIDGET (check_button), GTK_STATE_FLAG_INCONSISTENT, FALSE);
       else

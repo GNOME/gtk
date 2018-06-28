@@ -159,7 +159,7 @@ void                    gtk_tree_view_column_set_sizing          (GtkTreeViewCol
 								  GtkTreeViewColumnSizing  type);
 GDK_AVAILABLE_IN_ALL
 GtkTreeViewColumnSizing gtk_tree_view_column_get_sizing          (GtkTreeViewColumn       *tree_column);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gint                    gtk_tree_view_column_get_x_offset        (GtkTreeViewColumn       *tree_column);
 GDK_AVAILABLE_IN_ALL
 gint                    gtk_tree_view_column_get_width           (GtkTreeViewColumn       *tree_column);

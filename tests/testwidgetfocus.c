@@ -47,6 +47,10 @@ const char *css =
 "  background-color: white;"
 "  box-shadow: none;"
 "}"
+"focuswidget button:focus(visible) {"
+"  outline-width: 4px;"
+"  outline-color: yellow;"
+"}"
 "focuswidget button:hover {"
 "  background-color: black;"
 "  color: white;"
@@ -59,8 +63,8 @@ const char *css =
 struct _GtkFocusWidget
 {
   GtkWidget parent_instance;
-  int mouse_x;
-  int mouse_y;
+  double mouse_x;
+  double mouse_y;
 
   union {
     struct {
@@ -86,8 +90,7 @@ G_DEFINE_TYPE(GtkFocusWidget, gtk_focus_widget, GTK_TYPE_WIDGET)
 static void
 gtk_focus_widget_size_allocate (GtkWidget           *widget,
                                 const GtkAllocation *allocation,
-                                int                  baseline,
-                                GtkAllocation       *out_clip)
+                                int                  baseline)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
   int child_width  = (allocation->width)  / 2;
@@ -99,19 +102,19 @@ gtk_focus_widget_size_allocate (GtkWidget           *widget,
   child_alloc.width = child_width;
   child_alloc.height = child_height;
 
-  gtk_widget_size_allocate (self->child1, &child_alloc, -1, out_clip);
+  gtk_widget_size_allocate (self->child1, &child_alloc, -1);
 
   child_alloc.x += child_width;
 
-  gtk_widget_size_allocate (self->child2, &child_alloc, -1, out_clip);
+  gtk_widget_size_allocate (self->child2, &child_alloc, -1);
 
   child_alloc.y += child_height;
 
-  gtk_widget_size_allocate (self->child4, &child_alloc, -1, out_clip);
+  gtk_widget_size_allocate (self->child4, &child_alloc, -1);
 
   child_alloc.x -= child_width;
 
-  gtk_widget_size_allocate (self->child3, &child_alloc, -1, out_clip);
+  gtk_widget_size_allocate (self->child3, &child_alloc, -1);
 }
 
 static void
@@ -171,8 +174,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
       bounds.size.height = alloc.height;
       gtk_snapshot_append_color (snapshot,
                                  &black,
-                                 &bounds,
-                                 "Crosshair 1");
+                                 &bounds);
 
       bounds.origin.x = -30;
       bounds.origin.y = self->mouse_y;
@@ -180,11 +182,10 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
       bounds.size.height = 1;
       gtk_snapshot_append_color (snapshot,
                                  &black,
-                                 &bounds,
-                                 "Crosshair 2");
+                                 &bounds);
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
-      text = g_strdup_printf ("%d×%d", self->mouse_x, self->mouse_y);
+      text = g_strdup_printf ("%.2f×%.2f", self->mouse_x, self->mouse_y);
       pango_layout_set_text (layout, text, -1);
 
       gtk_snapshot_render_layout (snapshot,
@@ -199,18 +200,21 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
 }
 
 static gboolean
-gtk_focus_widget_motion_notify_event (GtkWidget *widget,
-                                      GdkEventMotion *event)
+gtk_focus_widget_event (GtkWidget *widget,
+                        GdkEvent  *event)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
-  gdouble x, y;
+  double x, y;
 
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
+    {
+      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
 
-  self->mouse_x = x;
-  self->mouse_y = y;
+      self->mouse_x = x;
+      self->mouse_y = y;
 
-  gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw (widget);
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -231,7 +235,7 @@ gtk_focus_widget_finalize (GObject *object)
 static void
 gtk_focus_widget_init (GtkFocusWidget *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->child1 = gtk_button_new_with_label ("1");
   gtk_widget_set_parent (self->child1, GTK_WIDGET (self));
@@ -257,7 +261,7 @@ gtk_focus_widget_class_init (GtkFocusWidgetClass *klass)
   widget_class->snapshot = gtk_focus_widget_snapshot;
   widget_class->measure = gtk_focus_widget_measure;
   widget_class->size_allocate = gtk_focus_widget_size_allocate;
-  widget_class->motion_notify_event = gtk_focus_widget_motion_notify_event;
+  widget_class->event = gtk_focus_widget_event;
 
   gtk_widget_class_set_css_name (widget_class, "focuswidget");
 }
@@ -283,7 +287,7 @@ main()
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
 
   gtk_container_add (GTK_CONTAINER (window), widget);
-  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show (window);
 

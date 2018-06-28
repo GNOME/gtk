@@ -36,6 +36,13 @@
  * that belong to a user.
  */
 
+/**
+ * GdkSeat:
+ *
+ * The GdkSeat struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 typedef struct _GdkSeatPrivate GdkSeatPrivate;
 
 struct _GdkSeatPrivate
@@ -115,8 +122,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * The ::device-added signal is emitted when a new input
    * device is related to this seat.
-   *
-   * Since: 3.20
    */
   signals [DEVICE_ADDED] =
     g_signal_new (g_intern_static_string ("device-added"),
@@ -135,8 +140,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * The ::device-removed signal is emitted when an
    * input device is removed (e.g. unplugged).
-   *
-   * Since: 3.20
    */
   signals [DEVICE_REMOVED] =
     g_signal_new (g_intern_static_string ("device-removed"),
@@ -159,8 +162,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * will emit the #GdkDevice::tool-changed signal accordingly.
    *
    * A same tool may be used by several devices.
-   *
-   * Since: 3.22
    */
   signals [TOOL_ADDED] =
     g_signal_new (g_intern_static_string ("tool-added"),
@@ -178,8 +179,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * This signal is emitted whenever a tool is no longer known
    * to this @seat.
-   *
-   * Since: 3.22
    */
   signals [TOOL_REMOVED] =
     g_signal_new (g_intern_static_string ("tool-removed"),
@@ -194,8 +193,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * GdkSeat:display:
    *
    * #GdkDisplay of this seat.
-   *
-   * Since: 3.20
    */
   props[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -221,8 +218,6 @@ gdk_seat_init (GdkSeat *seat)
  * Returns the capabilities this #GdkSeat currently has.
  *
  * Returns: the seat capabilities
- *
- * Since: 3.20
  **/
 GdkSeatCapabilities
 gdk_seat_get_capabilities (GdkSeat *seat)
@@ -238,28 +233,28 @@ gdk_seat_get_capabilities (GdkSeat *seat)
 /**
  * gdk_seat_grab:
  * @seat: a #GdkSeat
- * @window: the #GdkWindow which will own the grab
+ * @surface: the #GdkSurface which will own the grab
  * @capabilities: capabilities that will be grabbed
  * @owner_events: if %FALSE then all device events are reported with respect to
- *                @window and are only reported if selected by @event_mask. If
+ *                @surface and are only reported if selected by @event_mask. If
  *                %TRUE then pointer events for this application are reported
  *                as normal, but pointer events outside this application are
- *                reported with respect to @window and only if selected by
+ *                reported with respect to @surface and only if selected by
  *                @event_mask. In either mode, unreported events are discarded.
  * @cursor: (nullable): the cursor to display while the grab is active. If
  *          this is %NULL then the normal cursors are used for
- *          @window and its descendants, and the cursor for @window is used
+ *          @surface and its descendants, and the cursor for @surface is used
  *          elsewhere.
  * @event: (nullable): the event that is triggering the grab, or %NULL if none
  *         is available.
  * @prepare_func: (nullable) (scope call) (closure prepare_func_data): function to
- *                prepare the window to be grabbed, it can be %NULL if @window is
+ *                prepare the surface to be grabbed, it can be %NULL if @surface is
  *                visible before this call.
  * @prepare_func_data: user data to pass to @prepare_func
  *
  * Grabs the seat so that all events corresponding to the given @capabilities
  * are passed to this application until the seat is ungrabbed with gdk_seat_ungrab(),
- * or the window becomes hidden. This overrides any previous grab on the
+ * or the surface becomes hidden. This overrides any previous grab on the
  * seat by this client.
  *
  * As a rule of thumb, if a grab is desired over %GDK_SEAT_CAPABILITY_POINTER,
@@ -272,10 +267,10 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * events corresponding to the given capabilities. For example in GTK+ this
  * is used for Drag and Drop operations, popup menus and such.
  *
- * Note that if the event mask of a #GdkWindow has selected both button press
+ * Note that if the event mask of a #GdkSurface has selected both button press
  * and button release events, or touch begin and touch end, then a press event
  * will cause an automatic grab until the button is released, equivalent to a
- * grab on the window with @owner_events set to %TRUE. This is done because most
+ * grab on the surface with @owner_events set to %TRUE. This is done because most
  * applications expect to receive paired press and release events.
  *
  * If you set up anything at the time you take the grab that needs to be
@@ -283,12 +278,10 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * events that are emitted when the grab ends unvoluntarily.
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
- *
- * Since: 3.20
  **/
 GdkGrabStatus
 gdk_seat_grab (GdkSeat                *seat,
-               GdkWindow              *window,
+               GdkSurface              *surface,
                GdkSeatCapabilities     capabilities,
                gboolean                owner_events,
                GdkCursor              *cursor,
@@ -299,14 +292,14 @@ gdk_seat_grab (GdkSeat                *seat,
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), GDK_GRAB_FAILED);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
 
   capabilities &= GDK_SEAT_CAPABILITY_ALL;
   g_return_val_if_fail (capabilities != GDK_SEAT_CAPABILITY_NONE, GDK_GRAB_FAILED);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
 
-  return seat_class->grab (seat, window, capabilities, owner_events, cursor,
+  return seat_class->grab (seat, surface, capabilities, owner_events, cursor,
                            event, prepare_func, prepare_func_data);
 }
 
@@ -315,8 +308,6 @@ gdk_seat_grab (GdkSeat                *seat,
  * @seat: a #GdkSeat
  *
  * Releases a grab added through gdk_seat_grab().
- *
- * Since: 3.20
  **/
 void
 gdk_seat_ungrab (GdkSeat *seat)
@@ -339,8 +330,6 @@ gdk_seat_ungrab (GdkSeat *seat)
  * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
  *          The list must be freed with g_list_free(), the elements are owned
  *          by GDK and must not be freed.
- *
- * Since: 3.20
  **/
 GList *
 gdk_seat_get_slaves (GdkSeat             *seat,
@@ -362,8 +351,6 @@ gdk_seat_get_slaves (GdkSeat             *seat,
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with pointer
  *          capabilities. This object is owned by GTK+ and must not be freed.
- *
- * Since: 3.20
  **/
 GdkDevice *
 gdk_seat_get_pointer (GdkSeat *seat)
@@ -384,8 +371,6 @@ gdk_seat_get_pointer (GdkSeat *seat)
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with keyboard
  *          capabilities. This object is owned by GTK+ and must not be freed.
- *
- * Since: 3.20
  **/
 GdkDevice *
 gdk_seat_get_keyboard (GdkSeat *seat)
@@ -457,4 +442,28 @@ gdk_seat_get_tool (GdkSeat *seat,
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
   return seat_class->get_tool (seat, serial);
+}
+
+/**
+ * gdk_seat_get_master_pointers:
+ * @seat: The #GdkSeat
+ * @capabilities: Queried capabilities
+ *
+ * Returns all master pointers with the given capabilities driven by this @seat.
+ * On most backends this function will return a list with a single element (meaning
+ * that all input devices drive the same onscreen cursor).
+ *
+ * In other backends where there can possibly be multiple foci (eg. wayland),
+ * this function will return all master #GdkDevices that represent these.
+ *
+ * Returns: (transfer container) (element-type GdkDevice): A list
+ * of master pointing devices
+ */
+GList *
+gdk_seat_get_master_pointers (GdkSeat             *seat,
+                              GdkSeatCapabilities  capabilities)
+{
+  g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
+
+  return GDK_SEAT_GET_CLASS (seat)->get_master_pointers (seat, capabilities);
 }

@@ -28,19 +28,19 @@
 
 #include "gdkinternals.h"
 #include "gdkwaylanddisplay.h"
-#include "gdkwaylandwindow.h"
+#include "gdkwaylandsurface.h"
 #include "gdkprivate-wayland.h"
 
 G_DEFINE_TYPE (GdkWaylandVulkanContext, gdk_wayland_vulkan_context, GDK_TYPE_VULKAN_CONTEXT)
 
 static VkResult
 gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
-                                           VkSurfaceKHR     *surface)
+                                           VkSurfaceKHR     *vr_surface)
 {
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
-  /* This is necessary so that Vulkan sees the Window.
+  /* This is necessary so that Vulkan sees the Surface.
    * Usually, vkCreateXlibSurfaceKHR() will not cause a problem to happen as
    * it just creates resources, but futher calls with the resulting surface
    * do cause issues.
@@ -53,22 +53,22 @@ gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
                                                        NULL,
                                                        0,
                                                        gdk_wayland_display_get_wl_display (display),
-                                                       gdk_wayland_window_get_wl_surface (window)
+                                                       gdk_wayland_surface_get_wl_surface (surface)
                                                    },
                                                    NULL,
-                                                   surface);
+                                                   vr_surface);
 }
 
 static void
 gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
-                                      cairo_region_t *painted,
-                                      cairo_region_t *damage)
+                                      cairo_region_t *painted)
 {
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted, damage);
+  gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
 
-  gdk_wayland_window_sync (window);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted);
 }
 
 static void

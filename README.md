@@ -1,6 +1,8 @@
 GTK+ — The GTK toolkit
 ======================
 
+[![Build Status](https://gitlab.gnome.org/GNOME/gtk/badges/master/build.svg)](https://gitlab.gnome.org/GNOME/gtk/pipelines)
+
 General information
 -------------------
 
@@ -34,8 +36,8 @@ Building and installing
 
 In order to build GTK+ you will need:
 
-  - a C99 compatible compiler
-  - Python 3
+  - [a C99 compatible compiler](https://wiki.gnome.org/Projects/GLib/CompilerRequirements)
+  - [Python 3](https://www.python.org/)
   - [Meson](http://mesonbuild.com)
   - [Ninja](https://ninja-build.org)
 
@@ -59,10 +61,10 @@ If you are building the X11 backend, you will also need:
     - xrender
     - xi
     - xext
-    - xfixes (optional)
-    - xcursor (optional)
-    - xdamage (optional)
-    - xcomposite (optional)
+    - xfixes
+    - xcursor
+    - xdamage
+    - xcomposite
   - [atk-bridge-2.0](https://download.gnome.org/sources/at-spi2-atk)
 
 If you are building the Wayland backend, you will also need:
@@ -105,8 +107,7 @@ Or [online](https://developer.gnome.org/gtk4/stable/gtk-building.html)
 How to report bugs
 ------------------
 
-Bugs should be reported to the GNOME [bug tracking system](https://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b).
-You will need an account for yourself.
+Bugs should be reported on the [issues page](https://gitlab.gnome.org/GNOME/gtk/issues/new).
 
 In the bug report please include:
 
@@ -121,35 +122,18 @@ In the bug report please include:
 
 * How to reproduce the bug.
 
-  If you can reproduce it with one of the test programs that are built
-  in the tests/ subdirectory, that will be most convenient.  Otherwise,
-  please include a short test program that exhibits the behavior.
-  As a last resort, you can also provide a pointer to a larger piece
-  of software that can be downloaded.
+  If you can reproduce it with one of the demo applications that are
+  built in the demos/ subdirectory, on one of the test programs that
+  are built in the tests/ subdirectory, that will be most convenient.
+  Otherwise, please include a short test program that exhibits the
+  behavior. As a last resort, you can also provide a pointer to a
+  larger piece of software that can be downloaded.
 
 * If the bug was a crash, the exact text that was printed out
   when the crash occurred.
 
 * Further information such as stack traces may be useful, but
   is not necessary.
-
-
-Contributing
-------------
-
-Patches should also be submitted to the bug tracking system. If the patch
-fixes an existing bug, add the patch as an attachment to that bug report;
-otherwise, enter a new bug report that describes the patch, and attach the
-patch to that bug report.
-
-Patches should be in Git-formatted form. You should use `git format-patch`
-to generate them. We recommend using [git-bz](http://git.fishsoup.net/man/git-bz.html).
-
-For more information on the recommended workflow, please read
-[this wiki page](https://wiki.gnome.org/Git/WorkingWithPatches).
-
-Please, follow the `CODING_STYLE` document in order to conform to GTK+'s
-coding style when submitting a code contribution.
 
 Release notes
 -------------

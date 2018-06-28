@@ -122,8 +122,6 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
  * 
  * Note that this function requires a suitable cairo context to 
  * be associated with the print context. 
- *
- * Since: 2.10 
  */
 void    
 gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
@@ -142,8 +140,6 @@ gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
  * Ends a preview. 
  *
  * This function must be called to finish a custom print preview.
- *
- * Since: 2.10
  */
 void
 gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview)
@@ -162,8 +158,6 @@ gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview)
  * have been selected for printing.
  * 
  * Returns: %TRUE if the page has been selected for printing
- *
- * Since: 2.10
  */
 gboolean
 gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,

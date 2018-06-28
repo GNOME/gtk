@@ -5,8 +5,8 @@
 #include <gtk/gtk.h>
 
 /* Drag 'n Drop */
-static GtkTargetEntry target_table[] = {
-  { "text/uri-list", 0, 0 },
+static const char *target_table[] = {
+  "text/uri-list"
 };
 
 typedef struct
@@ -94,13 +94,9 @@ get_icon (GtkWidget *image, const gchar *name, gint size)
 static void
 set_image (GtkWidget *image, const gchar *name, gint size)
 {
-  GdkPixbuf *pixbuf;
-
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), name, 1);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
-  pixbuf = get_icon (image, name, size);
-  gtk_drag_source_set_icon_pixbuf (image, pixbuf);
-  g_object_unref (pixbuf);
+  gtk_drag_source_set_icon_name (image, name);
 }
 
 static void
@@ -290,23 +286,26 @@ populate (IconBrowserWindow *win)
 }
 
 static gboolean
-key_press_event_cb (GtkWidget *widget,
-                    GdkEvent  *event,
-                    gpointer   data)
+key_event_cb (GtkEventController *controller,
+              guint               keyval,
+              guint               keycode,
+              GdkModifierType     state,
+              gpointer            data)
 {
   IconBrowserWindow *win = data;
 
-  return gtk_search_bar_handle_event (GTK_SEARCH_BAR (win->searchbar), event);
+  return gtk_search_bar_handle_event (GTK_SEARCH_BAR (win->searchbar),
+                                      gtk_get_current_event ());
 }
 
 static void
 copy_to_clipboard (GtkButton         *button,
                    IconBrowserWindow *win)
 {
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
 
-  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
-  gtk_clipboard_set_text (clipboard, gtk_window_get_title (GTK_WINDOW (win->details)), -1);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (win));
+  gdk_clipboard_set_text (clipboard, gtk_window_get_title (GTK_WINDOW (win->details)));
 }
 
 static gboolean
@@ -380,7 +379,6 @@ get_image_data (GtkWidget        *widget,
                 GdkDragContext   *context,
                 GtkSelectionData *selection,
                 guint             target_info,
-                guint             time,
                 gpointer          data)
 {
   GtkWidget *image;
@@ -390,7 +388,7 @@ get_image_data (GtkWidget        *widget,
 
   image = gtk_bin_get_child (GTK_BIN (widget));
 
-  gtk_image_get_icon_name (GTK_IMAGE (image), &name, NULL);
+  name = gtk_image_get_icon_name (GTK_IMAGE (image));
   size = gtk_image_get_pixel_size (GTK_IMAGE (image));
 
   pixbuf = get_icon (image, name, size);
@@ -403,7 +401,6 @@ get_scalable_image_data (GtkWidget        *widget,
                          GdkDragContext   *context,
                          GtkSelectionData *selection,
                          guint             target_info,
-                         guint             time,
                          gpointer          data)
 {
   gchar *uris[2];
@@ -413,7 +410,7 @@ get_scalable_image_data (GtkWidget        *widget,
   const gchar *name;
 
   image = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_image_get_icon_name (GTK_IMAGE (image), &name, NULL);
+  name = gtk_image_get_icon_name (GTK_IMAGE (image));
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, -1, 0);
   file = g_file_new_for_path (gtk_icon_info_get_filename (info));
@@ -430,7 +427,7 @@ get_scalable_image_data (GtkWidget        *widget,
 static void
 setup_image_dnd (GtkWidget *image)
 {
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   gtk_drag_source_add_image_targets (image);
   g_signal_connect (image, "drag-data-get", G_CALLBACK (get_image_data), NULL);
 }
@@ -439,11 +436,14 @@ static void
 setup_scalable_image_dnd (GtkWidget *image)
 {
   GtkWidget *parent;
+  GdkContentFormats *targets;
 
   parent = gtk_widget_get_parent (image);
+  targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
   gtk_drag_source_set (parent, GDK_BUTTON1_MASK,
-                       target_table, G_N_ELEMENTS (target_table),
+                       targets,
                        GDK_ACTION_COPY);
+  gdk_content_formats_unref (targets);
 
   g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_scalable_image_data), NULL);
 }
@@ -451,29 +451,25 @@ setup_scalable_image_dnd (GtkWidget *image)
 static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
-  GtkTargetList *list;
-  GtkTargetEntry *targets;
-  gint n_targets;
+  GdkContentFormats *list;
+  GtkEventController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
-  list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (list, 0);
-  targets = gtk_target_table_new_from_list (list, &n_targets);
-  gtk_target_list_unref (list);
-
+  list = gdk_content_formats_new (NULL, 0);
+  list = gtk_content_formats_add_text_targets (list);
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
                                           GDK_BUTTON1_MASK,
-                                          targets, n_targets,
+                                          list,
                                           GDK_ACTION_COPY);
-
-  gtk_target_table_free (targets, n_targets);
+  gdk_content_formats_unref (list);
 
   setup_image_dnd (win->image1);
   setup_image_dnd (win->image2);
   setup_image_dnd (win->image3);
   setup_image_dnd (win->image4);
   setup_image_dnd (win->image5);
+  setup_image_dnd (win->image6);
   setup_scalable_image_dnd (win->image6);
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, context_free);
@@ -486,12 +482,30 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
 
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_event_cb), win);
+  gtk_widget_add_controller (GTK_WIDGET (win), controller);
+
   populate (win);
+}
+
+static void
+icon_browser_window_finalize (GObject *object)
+{
+  IconBrowserWindow *win = ICON_BROWSER_WINDOW (object);
+
+  g_hash_table_unref (win->contexts);
+
+  G_OBJECT_CLASS (icon_browser_window_parent_class)->finalize (object);
 }
 
 static void
 icon_browser_window_class_init (IconBrowserWindowClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = icon_browser_window_finalize;
+
   g_type_ensure (ICON_STORE_TYPE);
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
@@ -522,7 +536,6 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), item_activated);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selected_context_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), symbolic_toggled);
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), key_press_event_cb);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), copy_to_clipboard);
 }
 

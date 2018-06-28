@@ -19,15 +19,32 @@
 #include "config.h"
 
 #include "gtkshortcutswindowprivate.h"
+
+#include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkgrid.h"
+#include "gtkheaderbar.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtklistbox.h"
+#include "gtkmenubutton.h"
+#include "gtkpopover.h"
+#include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
+#include "gtksearchbar.h"
+#include "gtksearchentry.h"
 #include "gtkshortcutssection.h"
 #include "gtkshortcutsgroup.h"
 #include "gtkshortcutsshortcutprivate.h"
-#include "gtksearchbar.h"
-#include "gtksearchentry.h"
+#include "gtksizegroup.h"
+#include "gtkstack.h"
+#include "gtktogglebutton.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 
 /**
  * SECTION:gtkshortcutswindow
@@ -839,14 +856,16 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 }
 
 static gboolean
-window_key_press_event_cb (GtkWidget *window,
-                           GdkEvent  *event,
-                           gpointer   data)
+window_key_pressed (GtkEventController *controller,
+                    guint               keyval,
+                    guint               keycode,
+                    GdkModifierType     state,
+                    gpointer            data)
 {
-  GtkShortcutsWindow *self = GTK_SHORTCUTS_WINDOW (window);
+  GtkShortcutsWindow *self = GTK_SHORTCUTS_WINDOW (gtk_event_controller_get_widget (controller));
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
-  return gtk_search_bar_handle_event (priv->search_bar, event);
+  return gtk_search_bar_handle_event (priv->search_bar, gtk_get_current_event ());
 }
 
 static void
@@ -861,12 +880,15 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkWidget *label;
   GtkWidget *empty;
   PangoAttrList *attributes;
+  GtkEventController *controller;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
-  gtk_window_set_type_hint (GTK_WINDOW (self), GDK_WINDOW_TYPE_HINT_DIALOG);
+  gtk_window_set_type_hint (GTK_WINDOW (self), GDK_SURFACE_TYPE_HINT_DIALOG);
 
-  g_signal_connect (self, "key-press-event",
-                    G_CALLBACK (window_key_press_event_cb), NULL);
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (window_key_pressed), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   priv->keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   priv->search_items_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -875,7 +897,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   priv->search_image_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   priv->header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
-                                   "show-close-button", TRUE,
+                                   "show-title-buttons", TRUE,
                                    NULL);
   gtk_window_set_titlebar (GTK_WINDOW (self), GTK_WIDGET (priv->header_bar));
 
@@ -934,8 +956,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                    NULL);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
 
-  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic",
-                                        GTK_ICON_SIZE_BUTTON);
+  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,

@@ -204,6 +204,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOWS = {
   gtk_css_value_shadows_compute,
   gtk_css_value_shadows_equal,
   gtk_css_value_shadows_transition,
+  NULL,
+  NULL,
   gtk_css_value_shadows_print
 };
 
@@ -415,7 +417,7 @@ gtk_css_shadows_value_push_snapshot (const GtkCssValue *value,
     {
       GskShadow *shadows = g_newa (GskShadow, value->len);
       gtk_css_shadows_value_get_shadows (value, shadows);
-      gtk_snapshot_push_shadow (snapshot, shadows, value->len, "Shadow<%u>", value->len);
+      gtk_snapshot_push_shadow (snapshot, shadows, value->len);
     }
 
   return need_shadow;

@@ -47,8 +47,6 @@ typedef struct _GdkDeviceTool GdkDeviceTool;
  *
  * Indicates the specific type of tool being used being a tablet. Such as an
  * airbrush, pencil, etc.
- *
- * Since: 3.22
  */
 typedef enum {
   GDK_DEVICE_TOOL_TYPE_UNKNOWN,
@@ -61,16 +59,16 @@ typedef enum {
   GDK_DEVICE_TOOL_TYPE_LENS,
 } GdkDeviceToolType;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType gdk_device_tool_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 guint64 gdk_device_tool_get_serial (GdkDeviceTool *tool);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 guint64 gdk_device_tool_get_hardware_id (GdkDeviceTool *tool);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkDeviceToolType gdk_device_tool_get_tool_type (GdkDeviceTool *tool);
 
 G_END_DECLS

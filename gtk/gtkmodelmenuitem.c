@@ -22,6 +22,7 @@
 #include "gtkmodelmenuitem.h"
 
 #include "gtkaccellabel.h"
+#include "gtklabel.h"
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
@@ -188,7 +189,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
     {
       GtkWidget *image;
 
-      image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_gicon (icon);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
       gtk_container_add (GTK_CONTAINER (child), image);
       gtk_box_reorder_child (GTK_BOX (child), image, 0);
@@ -213,7 +214,7 @@ gtk_model_menu_item_get_icon (GtkModelMenuItem *item)
         {
           if (GTK_IS_IMAGE (l->data))
             {
-              gtk_image_get_gicon (GTK_IMAGE (l->data), &icon, NULL);
+              icon = gtk_image_get_gicon (GTK_IMAGE (l->data));
               break;
             }
         }

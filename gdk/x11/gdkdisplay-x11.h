@@ -24,9 +24,12 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
+#include "gdkx11devicemanager.h"
+#include "gdkx11display.h"
+#include "gdkx11screen.h"
+#include "gdkprivate-x11.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -38,8 +41,10 @@ struct _GdkX11Display
 {
   GdkDisplay parent_instance;
   Display *xdisplay;
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   GList *screens;
+  GList *toplevels;
+  GdkX11DeviceManagerCore *device_manager;
 
   GSource *event_source;
 
@@ -82,15 +87,16 @@ struct _GdkX11Display
   gboolean trusted_client;
 
   /* drag and drop information */
-  GdkDragContext *current_dest_drag;
+  GdkDrop *current_drop;
 
   /* Mapping to/from virtual atoms */
   GHashTable *atom_from_virtual;
   GHashTable *atom_to_virtual;
 
   /* Session Management leader window see ICCCM */
+  char *program_class;
   Window leader_window;
-  GdkWindow *leader_gdk_window;
+  GdkSurface *leader_gdk_surface;
   gboolean leader_window_title_set;
 
   /* List of functions to go from extension event => X window */
@@ -99,11 +105,14 @@ struct _GdkX11Display
   /* X ID hashtable */
   GHashTable *xid_ht;
 
-  /* translation queue */
-  GQueue *translate_queue;
+  /* streams reading selections */
+  GSList *streams;
 
-  /* input GdkWindow list */
-  GList *input_windows;
+  /* input GdkSurface list */
+  GList *input_surfaces;
+
+  /* GdkCursor => XCursor */
+  GHashTable *cursors;
 
   GPtrArray *monitors;
   int primary_monitor;
@@ -156,16 +165,22 @@ struct _GdkX11Display
 struct _GdkX11DisplayClass
 {
   GdkDisplayClass parent_class;
+
+  gboolean              (* xevent)                              (GdkX11Display          *display,
+                                                                 const XEvent           *event);
 };
 
-GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
-                                                 Window       xrootwin);
-void       _gdk_x11_display_error_event         (GdkDisplay  *display,
-                                                 XErrorEvent *error);
+GdkX11Screen *  _gdk_x11_display_screen_for_xrootwin            (GdkDisplay             *display,
+                                                                 Window                  xrootwin);
+void            _gdk_x11_display_error_event                    (GdkDisplay             *display,
+                                                                 XErrorEvent            *error);
+gsize           gdk_x11_display_get_max_request_size            (GdkDisplay             *display);
+gboolean        gdk_x11_display_request_selection_notification  (GdkDisplay             *display,
+                                                                 const char             *selection);
 
-GdkFilterReturn _gdk_wm_protocols_filter        (GdkXEvent   *xev,
-                                                 GdkEvent    *event,
-                                                 gpointer     data);
+GdkFilterReturn _gdk_wm_protocols_filter        (const XEvent   *xevent,
+                                                 GdkEvent       *event,
+                                                 gpointer        data);
 
 G_END_DECLS
 

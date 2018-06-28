@@ -303,7 +303,6 @@
   <template class="GtkPlacesView" parent="GtkBox">
     <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
-    <signal name="key-press-event" handler="on_key_press_event" object="GtkPlacesView" swapped="no"/>
     <child>
       <object class="GtkStack" id="stack">
         <property name="vhomogeneous">0</property>

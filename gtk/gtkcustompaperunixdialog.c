@@ -392,8 +392,6 @@ gtk_custom_paper_unix_dialog_finalize (GObject *object)
  * Creates a new custom paper dialog.
  *
  * Returns: the new #GtkCustomPaperUnixDialog
- *
- * Since: 2.18
  */
 GtkWidget *
 _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
@@ -1003,7 +1001,7 @@ toolbutton_new (GtkCustomPaperUnixDialog *dialog,
   GtkWidget *image;
 
   item = gtk_tool_button_new (NULL, NULL);
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  image = gtk_image_new_from_gicon (icon);
   gtk_widget_show (image);
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
 
@@ -1074,7 +1072,6 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (treeview);
 
   toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
 
   context = gtk_widget_get_style_context (toolbar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);

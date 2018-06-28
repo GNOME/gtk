@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 struct _GtkSelectionData
 {
   /*< private >*/
-  GdkAtom       selection;
   GdkAtom       target;
   GdkAtom       type;
   gint          format;
@@ -46,24 +45,6 @@ struct _GtkSelectionData
   gint          length;
   GdkDisplay   *display;
 };
-
-struct _GtkTargetList
-{
-  /*< private >*/
-  GList *list;
-  guint ref_count;
-};
-
-gboolean _gtk_selection_clear           (GtkWidget         *widget,
-                                         GdkEventSelection *event);
-gboolean _gtk_selection_request         (GtkWidget         *widget,
-                                         GdkEventSelection *event);
-gboolean _gtk_selection_incr_event      (GdkWindow         *window,
-                                         GdkEventProperty  *event);
-gboolean _gtk_selection_notify          (GtkWidget         *widget,
-                                         GdkEventSelection *event);
-gboolean _gtk_selection_property_notify (GtkWidget         *widget,
-                                         GdkEventProperty  *event);
 
 G_END_DECLS
 

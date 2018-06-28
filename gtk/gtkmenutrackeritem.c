@@ -20,10 +20,9 @@
 #include "config.h"
 
 #include "gtkmenutrackeritem.h"
-#include "gtkactionmuxer.h"
+#include "gtkactionmuxerprivate.h"
 #include "gtkdebug.h"
-
-#include "gtkactionmuxer.h"
+#include "gtkintl.h"
 
 #include <string.h>
 
@@ -141,7 +140,7 @@ gtk_menu_tracker_item_role_get_type (void)
       };
       GType type;
 
-      type = g_enum_register_static ("GtkMenuTrackerItemRole", values);
+      type = g_enum_register_static (I_("GtkMenuTrackerItemRole"), values);
 
       g_once_init_leave (&gtk_menu_tracker_item_role_type, type);
     }

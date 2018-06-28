@@ -20,49 +20,8 @@
 
 #include "config.h"
 
-#include "gdkselection.h"
 #include "gdkproperty.h"
 #include "gdkquartz.h"
-
-gboolean
-_gdk_quartz_display_set_selection_owner (GdkDisplay *display,
-                                         GdkWindow  *owner,
-                                         GdkAtom     selection,
-                                         guint32     time,
-                                         gint        send_event)
-{
-  /* FIXME: Implement */
-  return TRUE;
-}
-
-GdkWindow*
-_gdk_quartz_display_get_selection_owner (GdkDisplay *display,
-                                         GdkAtom     selection)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
-void
-_gdk_quartz_display_convert_selection (GdkDisplay *display,
-                                       GdkWindow  *requestor,
-                                       GdkAtom     selection,
-                                       GdkAtom     target,
-                                       guint32     time)
-{
-  /* FIXME: Implement */
-}
-
-gint
-_gdk_quartz_display_get_selection_property (GdkDisplay *display,
-                                            GdkWindow  *requestor,
-                                            guchar    **data,
-                                            GdkAtom    *ret_type,
-                                            gint       *ret_format)
-{
-  /* FIXME: Implement */
-  return 0;
-}
 
 gchar *
 _gdk_quartz_display_utf8_to_string_target (GdkDisplay  *display,
@@ -150,20 +109,17 @@ _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
 
-  if (encoding == GDK_TARGET_STRING)
+  if (encoding == g_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
-  else if (encoding == gdk_atom_intern_static_string ("UTF8_STRING"))
+  else if (encoding == g_intern_static_string ("UTF8_STRING"))
     {
       return make_list ((gchar *)text, length, FALSE, list);
     }
   else
     {
-      gchar *enc_name = gdk_atom_name (encoding);
-
-      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled", enc_name);
-      g_free (enc_name);
+      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled", (const char *)encoding);
 
       if (list)
 	*list = NULL;
@@ -176,15 +132,15 @@ GdkAtom
 gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
 {
   if ([type isEqualToString:NSStringPboardType])
-    return gdk_atom_intern_static_string ("UTF8_STRING");
+    return g_intern_static_string ("UTF8_STRING");
   else if ([type isEqualToString:NSTIFFPboardType])
-    return gdk_atom_intern_static_string ("image/tiff");
+    return g_intern_static_string ("image/tiff");
   else if ([type isEqualToString:NSColorPboardType])
-    return gdk_atom_intern_static_string ("application/x-color");
+    return g_intern_static_string ("application/x-color");
   else if ([type isEqualToString:NSURLPboardType])
-    return gdk_atom_intern_static_string ("text/uri-list");
+    return g_intern_static_string ("text/uri-list");
   else
-    return gdk_atom_intern ([type UTF8String], FALSE);
+    return g_intern_string ([type UTF8String]);
 }
 
 NSString *
@@ -205,9 +161,8 @@ gdk_quartz_target_to_pasteboard_type_libgtk_only (const char *target)
 NSString *
 gdk_quartz_atom_to_pasteboard_type_libgtk_only (GdkAtom atom)
 {
-  gchar *target = gdk_atom_name (atom);
+  const char *target = (const char *)atom;
   NSString *ret = gdk_quartz_target_to_pasteboard_type_libgtk_only (target);
-  g_free (target);
 
   return ret;
 }

@@ -59,6 +59,7 @@
                       "insert-at-cursor" (" ") };
   bind "<alt>KP_Space" { "delete-from-cursor" (whitespace, 1)
                          "insert-at-cursor" (" ")  };
+  bind "<alt>BackSpace" { "delete-from-cursor" (word-ends, -1) };
   /*
    * Some non-Emacs keybindings people are attached to
    */

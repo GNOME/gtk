@@ -23,7 +23,6 @@
 #include <AppKit/AppKit.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkprivate.h>
 
 G_BEGIN_DECLS
 
@@ -60,8 +59,11 @@ typedef enum
 GDK_AVAILABLE_IN_ALL
 GdkOSXVersion gdk_quartz_osx_version (void);
 
+GDK_AVAILABLE_IN_ALL
 GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);
+GDK_AVAILABLE_IN_ALL
 NSString *gdk_quartz_target_to_pasteboard_type_libgtk_only      (const gchar    *target);
+GDK_AVAILABLE_IN_ALL
 NSString *gdk_quartz_atom_to_pasteboard_type_libgtk_only        (GdkAtom         atom);
 
 G_END_DECLS
@@ -78,7 +80,7 @@ G_END_DECLS
 #include <gdk/quartz/gdkquartzmonitor.h>
 #include <gdk/quartz/gdkquartzscreen.h>
 #include <gdk/quartz/gdkquartzutils.h>
-#include <gdk/quartz/gdkquartzwindow.h>
+#include <gdk/quartz/gdkquartzsurface.h>
 
 #undef __GDKQUARTZ_H_INSIDE__
 

@@ -56,8 +56,8 @@
 #include <gtk/a11y/gtkmenushellaccessible.h>
 #include <gtk/a11y/gtknotebookaccessible.h>
 #include <gtk/a11y/gtknotebookpageaccessible.h>
-#include <gtk/a11y/gtkpopoveraccessible.h>
 #include <gtk/a11y/gtkpanedaccessible.h>
+#include <gtk/a11y/gtkpopoveraccessible.h>
 #include <gtk/a11y/gtkprogressbaraccessible.h>
 #include <gtk/a11y/gtkradiobuttonaccessible.h>
 #include <gtk/a11y/gtkradiomenuitemaccessible.h>
@@ -68,6 +68,7 @@
 #include <gtk/a11y/gtkscrolledwindowaccessible.h>
 #include <gtk/a11y/gtkspinbuttonaccessible.h>
 #include <gtk/a11y/gtkspinneraccessible.h>
+#include <gtk/a11y/gtkstackaccessible.h>
 #include <gtk/a11y/gtkstatusbaraccessible.h>
 #include <gtk/a11y/gtkswitchaccessible.h>
 #include <gtk/a11y/gtktextcellaccessible.h>

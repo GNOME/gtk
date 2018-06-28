@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdkversionmacros.h"
-#include "gdkmain.h"
 
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -131,48 +130,59 @@ static int gdk_initialized = 0;                     /* 1 if the library is initi
                                                      * 0 otherwise.
                                                      */
 
-static gchar  *gdk_progclass = NULL;
-static gboolean gdk_progclass_overridden;
-
-static GMutex gdk_threads_mutex;
-
-static GCallback gdk_threads_lock = NULL;
-static GCallback gdk_threads_unlock = NULL;
-
-static const GDebugKey gdk_gl_keys[] = {
-  { "disable",               GDK_GL_DISABLE },
-  { "always",                GDK_GL_ALWAYS },
-  { "software-draw",         GDK_GL_SOFTWARE_DRAW_GL | GDK_GL_SOFTWARE_DRAW_SURFACE} ,
-  { "software-draw-gl",      GDK_GL_SOFTWARE_DRAW_GL },
-  { "software-draw-surface", GDK_GL_SOFTWARE_DRAW_SURFACE },
-  { "texture-rectangle",     GDK_GL_TEXTURE_RECTANGLE },
-  { "legacy",                GDK_GL_LEGACY },
-  { "gles",                  GDK_GL_GLES },
-};
-
-static const GDebugKey gdk_vulkan_keys[] = {
-  { "disable",               GDK_VULKAN_DISABLE },
-  { "validate",              GDK_VULKAN_VALIDATE },
-};
-
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
-  { "events",        GDK_DEBUG_EVENTS },
-  { "misc",          GDK_DEBUG_MISC },
-  { "dnd",           GDK_DEBUG_DND },
-  { "xim",           GDK_DEBUG_XIM },
-  { "nograbs",       GDK_DEBUG_NOGRABS },
-  { "input",         GDK_DEBUG_INPUT },
-  { "cursor",        GDK_DEBUG_CURSOR },
-  { "multihead",     GDK_DEBUG_MULTIHEAD },
-  { "xinerama",      GDK_DEBUG_XINERAMA },
-  { "eventloop",     GDK_DEBUG_EVENTLOOP },
-  { "frames",        GDK_DEBUG_FRAMES },
-  { "settings",      GDK_DEBUG_SETTINGS },
-  { "opengl",        GDK_DEBUG_OPENGL },
-  { "vulkan",        GDK_DEBUG_VULKAN }
+  { "misc",            GDK_DEBUG_MISC },
+  { "events",          GDK_DEBUG_EVENTS },
+  { "dnd",             GDK_DEBUG_DND },
+  { "input",           GDK_DEBUG_INPUT },
+  { "eventloop",       GDK_DEBUG_EVENTLOOP },
+  { "frames",          GDK_DEBUG_FRAMES },
+  { "settings",        GDK_DEBUG_SETTINGS },
+  { "opengl",          GDK_DEBUG_OPENGL },
+  { "vulkan",          GDK_DEBUG_VULKAN },
+  { "selection",       GDK_DEBUG_SELECTION },
+  { "clipboard",       GDK_DEBUG_CLIPBOARD },
+  { "nograbs",         GDK_DEBUG_NOGRABS },
+  { "gl-disable",      GDK_DEBUG_GL_DISABLE },
+  { "gl-software",     GDK_DEBUG_GL_SOFTWARE },
+  { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT },
+  { "gl-legacy",       GDK_DEBUG_GL_LEGACY },
+  { "gl-gles",         GDK_DEBUG_GL_GLES },
+  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
+  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE }
 };
 #endif
+
+
+#ifdef G_HAS_CONSTRUCTORS
+#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_desktop_startup_notification_id)
+#endif
+G_DEFINE_CONSTRUCTOR(stash_desktop_startup_notification_id)
+#endif
+
+static gchar *startup_notification_id = NULL;
+
+static void
+stash_desktop_startup_notification_id (void)
+{
+  const char *desktop_startup_id;
+
+  desktop_startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+  if (desktop_startup_id && *desktop_startup_id != '\0')
+    {
+      if (!g_utf8_validate (desktop_startup_id, -1, NULL))
+        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
+      else
+        startup_notification_id = g_strdup (desktop_startup_id ? desktop_startup_id : "");
+    }
+
+  /* Clear the environment variable so it won't be inherited by
+   * child processes and confuse things.
+   */
+  g_unsetenv ("DESKTOP_STARTUP_ID");
+}
 
 static gpointer
 register_resources (gpointer dummy G_GNUC_UNUSED)
@@ -193,20 +203,10 @@ gdk_ensure_resources (void)
 void
 gdk_pre_parse (void)
 {
-  const char *rendering_mode;
-  const gchar *gl_string, *vulkan_string;
-
   gdk_initialized = TRUE;
 
   gdk_ensure_resources ();
 
-  /* We set the fallback program class here, rather than lazily in
-   * gdk_get_program_class, since we don't want -name to override it.
-   */
-  gdk_progclass = g_strdup (g_get_prgname ());
-  if (gdk_progclass && gdk_progclass[0])
-    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
-  
 #ifdef G_ENABLE_DEBUG
   {
     gchar *debug_string = getenv("GDK_DEBUG");
@@ -217,49 +217,9 @@ gdk_pre_parse (void)
   }
 #endif  /* G_ENABLE_DEBUG */
 
-  gl_string = getenv("GDK_GL");
-  if (gl_string != NULL)
-    _gdk_gl_flags = g_parse_debug_string (gl_string,
-                                          (GDebugKey *) gdk_gl_keys,
-                                          G_N_ELEMENTS (gdk_gl_keys));
-
-  vulkan_string = getenv("GDK_VULKAN");
-  if (vulkan_string != NULL)
-    _gdk_vulkan_flags = g_parse_debug_string (vulkan_string,
-                                              (GDebugKey *) gdk_vulkan_keys,
-                                              G_N_ELEMENTS (gdk_vulkan_keys));
-
-  rendering_mode = g_getenv ("GDK_RENDERING");
-  if (rendering_mode)
-    {
-      if (g_str_equal (rendering_mode, "similar"))
-        _gdk_rendering_mode = GDK_RENDERING_MODE_SIMILAR;
-      else if (g_str_equal (rendering_mode, "image"))
-        _gdk_rendering_mode = GDK_RENDERING_MODE_IMAGE;
-      else if (g_str_equal (rendering_mode, "recording"))
-        _gdk_rendering_mode = GDK_RENDERING_MODE_RECORDING;
-    }
-}
-
-/**
- * gdk_get_display_arg_name:
- *
- * Gets the display name specified in the command line arguments passed
- * to gdk_init() or gdk_parse_args(), if any.
- *
- * Returns: (nullable): the display name, if specified explicitly,
- *   otherwise %NULL this string is owned by GTK+ and must not be
- *   modified or freed.
- *
- * Since: 2.2
- */
-const gchar *
-gdk_get_display_arg_name (void)
-{
-  if (!_gdk_display_arg_name)
-    _gdk_display_arg_name = g_strdup (_gdk_display_name);
-
-   return _gdk_display_arg_name;
+#ifndef G_HAS_CONSTRUCTORS
+  stash_desktop_startup_notification_id ();
+#endif
 }
 
 /*< private >
@@ -285,9 +245,38 @@ gdk_display_open_default (void)
   if (display)
     return display;
 
-  display = gdk_display_open (gdk_get_display_arg_name ());
+  display = gdk_display_open (NULL);
 
   return display;
+}
+
+/*< private >
+ *
+ * gdk_get_startup_notification_id
+ *
+ * Returns the original value of the DESKTOP_STARTUP_ID environment
+ * variable if it was defined and valid, or %NULL otherwise.
+ *
+ * Returns: (nullable) (transfer none): the original value of the
+ *   DESKTOP_STARTUP_ID environment variable, or %NULL.
+ */
+const gchar *
+gdk_get_startup_notification_id (void)
+{
+  return startup_notification_id;
+}
+
+gboolean
+gdk_running_in_sandbox (void)
+{
+  char *path;
+  gboolean ret;
+
+  path = g_build_filename (g_get_user_runtime_dir (), "flatpak-info", NULL);
+  ret = g_file_test (path, G_FILE_TEST_EXISTS);
+  g_free (path);
+
+  return ret;
 }
 
 /**
@@ -311,7 +300,7 @@ gdk_display_open_default (void)
  * emitted in the main thread.
  *
  * You can schedule work in the main thread safely from other threads
- * by using gdk_threads_add_idle() and gdk_threads_add_timeout():
+ * by using g_main_context_invoke(), g_idle_add(), and g_timeout_add():
  *
  * |[<!-- language="C" -->
  * static void
@@ -319,7 +308,7 @@ gdk_display_open_default (void)
  * {
  *   ExpensiveData *expensive_data = do_expensive_computation ();
  *
- *   gdk_threads_add_idle (got_value, expensive_data);
+ *   g_main_context_invoke (NULL, got_value, expensive_data);
  * }
  *
  * static gboolean
@@ -335,463 +324,9 @@ gdk_display_open_default (void)
  * }
  * ]|
  *
- * You should use gdk_threads_add_idle() and gdk_threads_add_timeout()
- * instead of g_idle_add() and g_timeout_add() since libraries not under
- * your control might be using the deprecated GDK locking mechanism.
- * If you are sure that none of the code in your application and libraries
- * use the deprecated gdk_threads_enter() or gdk_threads_leave() methods,
- * then you can safely use g_idle_add() and g_timeout_add().
- *
  * For more information on this "worker thread" pattern, you should
  * also look at #GTask, which gives you high-level tools to perform
  * expensive tasks from worker threads, and will handle thread
  * management for you.
  */
 
-
-/**
- * gdk_threads_enter:
- *
- * This function marks the beginning of a critical section in which
- * GDK and GTK+ functions can be called safely and without causing race
- * conditions. Only one thread at a time can be in such a critial
- * section.
- *
- * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
- *     thread
- */
-void
-gdk_threads_enter (void)
-{
-  if (gdk_threads_lock)
-    (*gdk_threads_lock) ();
-}
-
-/**
- * gdk_threads_leave:
- *
- * Leaves a critical region begun with gdk_threads_enter().
- *
- * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
- *     thread
- */
-void
-gdk_threads_leave (void)
-{
-  if (gdk_threads_unlock)
-    (*gdk_threads_unlock) ();
-}
-
-static void
-gdk_threads_impl_lock (void)
-{
-  g_mutex_lock (&gdk_threads_mutex);
-}
-
-static void
-gdk_threads_impl_unlock (void)
-{
-  /* we need a trylock() here because trying to unlock a mutex
-   * that hasn't been locked yet is:
-   *
-   *  a) not portable
-   *  b) fail on GLib ≥ 2.41
-   *
-   * trylock() will either succeed because nothing is holding the
-   * GDK mutex, and will be unlocked right afterwards; or it's
-   * going to fail because the mutex is locked already, in which
-   * case we unlock it as expected.
-   *
-   * this is needed in the case somebody called gdk_threads_init()
-   * without calling gdk_threads_enter() before calling gtk_main().
-   * in theory, we could just say that this is undefined behaviour,
-   * but our documentation has always been *less* than explicit as
-   * to what the behaviour should actually be.
-   *
-   * see bug: https://bugzilla.gnome.org/show_bug.cgi?id=735428
-   */
-  g_mutex_trylock (&gdk_threads_mutex);
-  g_mutex_unlock (&gdk_threads_mutex);
-}
-
-/**
- * gdk_threads_init:
- *
- * Initializes GDK so that it can be used from multiple threads
- * in conjunction with gdk_threads_enter() and gdk_threads_leave().
- *
- * This call must be made before any use of the main loop from
- * GTK+; to be safe, call it before gtk_init().
- *
- * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
- *     thread
- */
-void
-gdk_threads_init (void)
-{
-  if (!gdk_threads_lock)
-    gdk_threads_lock = gdk_threads_impl_lock;
-  if (!gdk_threads_unlock)
-    gdk_threads_unlock = gdk_threads_impl_unlock;
-}
-
-static gboolean
-gdk_threads_dispatch (gpointer data)
-{
-  GdkThreadsDispatch *dispatch = data;
-  gboolean ret = FALSE;
-
-  gdk_threads_enter ();
-
-  if (!g_source_is_destroyed (g_main_current_source ()))
-    ret = dispatch->func (dispatch->data);
-
-  gdk_threads_leave ();
-
-  return ret;
-}
-
-static void
-gdk_threads_dispatch_free (gpointer data)
-{
-  GdkThreadsDispatch *dispatch = data;
-
-  if (dispatch->destroy && dispatch->data)
-    dispatch->destroy (dispatch->data);
-
-  g_slice_free (GdkThreadsDispatch, data);
-}
-
-
-/**
- * gdk_threads_add_idle_full: (rename-to gdk_threads_add_idle)
- * @priority: the priority of the idle source. Typically this will be in the
- *            range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE
- * @function: function to call
- * @data:     data to pass to @function
- * @notify: (allow-none):   function to call when the idle is removed, or %NULL
- *
- * Adds a function to be called whenever there are no higher priority
- * events pending.  If the function returns %FALSE it is automatically
- * removed from the list of event sources and will not be called again.
- *
- * This variant of g_idle_add_full() calls @function with the GDK lock
- * held. It can be thought of a MT-safe version for GTK+ widgets for the
- * following use case, where you have to worry about idle_callback()
- * running in thread A and accessing @self after it has been finalized
- * in thread B:
- *
- * |[<!-- language="C" -->
- * static gboolean
- * idle_callback (gpointer data)
- * {
- *    // gdk_threads_enter(); would be needed for g_idle_add()
- *
- *    SomeWidget *self = data;
- *    // do stuff with self
- *
- *    self->idle_id = 0;
- *
- *    // gdk_threads_leave(); would be needed for g_idle_add()
- *    return FALSE;
- * }
- *
- * static void
- * some_widget_do_stuff_later (SomeWidget *self)
- * {
- *    self->idle_id = gdk_threads_add_idle (idle_callback, self)
- *    // using g_idle_add() here would require thread protection in the callback
- * }
- *
- * static void
- * some_widget_finalize (GObject *object)
- * {
- *    SomeWidget *self = SOME_WIDGET (object);
- *    if (self->idle_id)
- *      g_source_remove (self->idle_id);
- *    G_OBJECT_CLASS (parent_class)->finalize (object);
- * }
- * ]|
- *
- * Returns: the ID (greater than 0) of the event source.
- *
- * Since: 2.12
- */
-guint
-gdk_threads_add_idle_full (gint           priority,
-                           GSourceFunc    function,
-                           gpointer       data,
-                           GDestroyNotify notify)
-{
-  GdkThreadsDispatch *dispatch;
-
-  g_return_val_if_fail (function != NULL, 0);
-
-  dispatch = g_slice_new (GdkThreadsDispatch);
-  dispatch->func = function;
-  dispatch->data = data;
-  dispatch->destroy = notify;
-
-  return g_idle_add_full (priority,
-                          gdk_threads_dispatch,
-                          dispatch,
-                          gdk_threads_dispatch_free);
-}
-
-/**
- * gdk_threads_add_idle: (skip)
- * @function: function to call
- * @data:     data to pass to @function
- *
- * A wrapper for the common usage of gdk_threads_add_idle_full() 
- * assigning the default priority, #G_PRIORITY_DEFAULT_IDLE.
- *
- * See gdk_threads_add_idle_full().
- *
- * Returns: the ID (greater than 0) of the event source.
- * 
- * Since: 2.12
- */
-guint
-gdk_threads_add_idle (GSourceFunc    function,
-                      gpointer       data)
-{
-  return gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE,
-                                    function, data, NULL);
-}
-
-
-/**
- * gdk_threads_add_timeout_full: (rename-to gdk_threads_add_timeout)
- * @priority: the priority of the timeout source. Typically this will be in the
- *            range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE.
- * @interval: the time between calls to the function, in milliseconds
- *             (1/1000ths of a second)
- * @function: function to call
- * @data:     data to pass to @function
- * @notify: (allow-none):   function to call when the timeout is removed, or %NULL
- *
- * Sets a function to be called at regular intervals holding the GDK lock,
- * with the given priority.  The function is called repeatedly until it 
- * returns %FALSE, at which point the timeout is automatically destroyed 
- * and the function will not be called again.  The @notify function is
- * called when the timeout is destroyed.  The first call to the
- * function will be at the end of the first @interval.
- *
- * Note that timeout functions may be delayed, due to the processing of other
- * event sources. Thus they should not be relied on for precise timing.
- * After each call to the timeout function, the time of the next
- * timeout is recalculated based on the current time and the given interval
- * (it does not try to “catch up” time lost in delays).
- *
- * This variant of g_timeout_add_full() can be thought of a MT-safe version 
- * for GTK+ widgets for the following use case:
- *
- * |[<!-- language="C" -->
- * static gboolean timeout_callback (gpointer data)
- * {
- *    SomeWidget *self = data;
- *    
- *    // do stuff with self
- *    
- *    self->timeout_id = 0;
- *    
- *    return G_SOURCE_REMOVE;
- * }
- *  
- * static void some_widget_do_stuff_later (SomeWidget *self)
- * {
- *    self->timeout_id = g_timeout_add (timeout_callback, self)
- * }
- *  
- * static void some_widget_finalize (GObject *object)
- * {
- *    SomeWidget *self = SOME_WIDGET (object);
- *    
- *    if (self->timeout_id)
- *      g_source_remove (self->timeout_id);
- *    
- *    G_OBJECT_CLASS (parent_class)->finalize (object);
- * }
- * ]|
- *
- * Returns: the ID (greater than 0) of the event source.
- * 
- * Since: 2.12
- */
-guint
-gdk_threads_add_timeout_full (gint           priority,
-                              guint          interval,
-                              GSourceFunc    function,
-                              gpointer       data,
-                              GDestroyNotify notify)
-{
-  GdkThreadsDispatch *dispatch;
-
-  g_return_val_if_fail (function != NULL, 0);
-
-  dispatch = g_slice_new (GdkThreadsDispatch);
-  dispatch->func = function;
-  dispatch->data = data;
-  dispatch->destroy = notify;
-
-  return g_timeout_add_full (priority, 
-                             interval,
-                             gdk_threads_dispatch, 
-                             dispatch, 
-                             gdk_threads_dispatch_free);
-}
-
-/**
- * gdk_threads_add_timeout: (skip)
- * @interval: the time between calls to the function, in milliseconds
- *             (1/1000ths of a second)
- * @function: function to call
- * @data:     data to pass to @function
- *
- * A wrapper for the common usage of gdk_threads_add_timeout_full() 
- * assigning the default priority, #G_PRIORITY_DEFAULT.
- *
- * See gdk_threads_add_timeout_full().
- * 
- * Returns: the ID (greater than 0) of the event source.
- *
- * Since: 2.12
- */
-guint
-gdk_threads_add_timeout (guint       interval,
-                         GSourceFunc function,
-                         gpointer    data)
-{
-  return gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT,
-                                       interval, function, data, NULL);
-}
-
-
-/**
- * gdk_threads_add_timeout_seconds_full: (rename-to gdk_threads_add_timeout_seconds)
- * @priority: the priority of the timeout source. Typically this will be in the
- *            range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE.
- * @interval: the time between calls to the function, in seconds
- * @function: function to call
- * @data:     data to pass to @function
- * @notify: (allow-none): function to call when the timeout is removed, or %NULL
- *
- * A variant of gdk_threads_add_timeout_full() with second-granularity.
- * See g_timeout_add_seconds_full() for a discussion of why it is
- * a good idea to use this function if you don’t need finer granularity.
- *
- * Returns: the ID (greater than 0) of the event source.
- * 
- * Since: 2.14
- */
-guint
-gdk_threads_add_timeout_seconds_full (gint           priority,
-                                      guint          interval,
-                                      GSourceFunc    function,
-                                      gpointer       data,
-                                      GDestroyNotify notify)
-{
-  GdkThreadsDispatch *dispatch;
-
-  g_return_val_if_fail (function != NULL, 0);
-
-  dispatch = g_slice_new (GdkThreadsDispatch);
-  dispatch->func = function;
-  dispatch->data = data;
-  dispatch->destroy = notify;
-
-  return g_timeout_add_seconds_full (priority, 
-                                     interval,
-                                     gdk_threads_dispatch, 
-                                     dispatch, 
-                                     gdk_threads_dispatch_free);
-}
-
-/**
- * gdk_threads_add_timeout_seconds: (skip)
- * @interval: the time between calls to the function, in seconds
- * @function: function to call
- * @data:     data to pass to @function
- *
- * A wrapper for the common usage of gdk_threads_add_timeout_seconds_full() 
- * assigning the default priority, #G_PRIORITY_DEFAULT.
- *
- * For details, see gdk_threads_add_timeout_full().
- * 
- * Returns: the ID (greater than 0) of the event source.
- *
- * Since: 2.14
- */
-guint
-gdk_threads_add_timeout_seconds (guint       interval,
-                                 GSourceFunc function,
-                                 gpointer    data)
-{
-  return gdk_threads_add_timeout_seconds_full (G_PRIORITY_DEFAULT,
-                                               interval, function, data, NULL);
-}
-
-/**
- * gdk_get_program_class:
- *
- * Gets the program class. Unless the program class has explicitly
- * been set with gdk_set_program_class() or with the `--class`
- * commandline option, the default value is the program name (determined
- * with g_get_prgname()) with the first character converted to uppercase.
- *
- * Returns: the program class.
- */
-const char *
-gdk_get_program_class (void)
-{
-  if (gdk_progclass)
-    return gdk_progclass;
-
-  return "GTK+ Application";
-}
-
-/**
- * gdk_set_program_class:
- * @program_class: a string.
- *
- * Sets the program class. The X11 backend uses the program class to set
- * the class name part of the `WM_CLASS` property on
- * toplevel windows; see the ICCCM.
- *
- * The program class can still be overridden with the --class command
- * line option.
- */
-void
-gdk_set_program_class (const char *program_class)
-{
-  if (gdk_progclass_overridden)
-    return;
-
-  g_free (gdk_progclass);
-
-  gdk_progclass = g_strdup (program_class);
-}
-
-/**
- * gdk_disable_multidevice:
- *
- * Disables multidevice support in GDK. This call must happen prior
- * to gdk_display_open(), gtk_init() or
- * gtk_init_check() in order to take effect.
- *
- * Most common GTK+ applications won’t ever need to call this. Only
- * applications that do mixed GDK/Xlib calls could want to disable
- * multidevice support if such Xlib code deals with input devices in
- * any way and doesn’t observe the presence of XInput 2.
- *
- * Since: 3.0
- */
-void
-gdk_disable_multidevice (void)
-{
-  if (gdk_initialized)
-    return;
-
-  _gdk_disable_multidevice = TRUE;
-}

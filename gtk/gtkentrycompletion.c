@@ -83,6 +83,8 @@
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkgesturemultipress.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
@@ -139,25 +141,15 @@ static void     gtk_entry_completion_dispose             (GObject      *object);
 static gboolean gtk_entry_completion_visible_func        (GtkTreeModel       *model,
                                                           GtkTreeIter        *iter,
                                                           gpointer            data);
-static gboolean gtk_entry_completion_popup_key_event     (GtkWidget          *widget,
-                                                          GdkEventKey        *event,
+static void     gtk_entry_completion_list_activated      (GtkTreeView        *treeview,
+                                                          GtkTreePath        *path,
+                                                          GtkTreeViewColumn  *column,
                                                           gpointer            user_data);
-static gboolean gtk_entry_completion_popup_button_press  (GtkWidget          *widget,
-                                                          GdkEventButton     *event,
-                                                          gpointer            user_data);
-static gboolean gtk_entry_completion_list_button_press   (GtkWidget          *widget,
-                                                          GdkEventButton     *event,
-                                                          gpointer            user_data);
-static gboolean gtk_entry_completion_action_button_press (GtkWidget          *widget,
-                                                          GdkEventButton     *event,
+static void     gtk_entry_completion_action_activated    (GtkTreeView        *treeview,
+                                                          GtkTreePath        *path,
+                                                          GtkTreeViewColumn  *column,
                                                           gpointer            user_data);
 static void     gtk_entry_completion_selection_changed   (GtkTreeSelection   *selection,
-                                                          gpointer            data);
-static gboolean gtk_entry_completion_list_enter_notify   (GtkWidget          *widget,
-                                                          GdkEventCrossing   *event,
-                                                          gpointer            data);
-static gboolean gtk_entry_completion_list_motion_notify  (GtkWidget          *widget,
-                                                          GdkEventMotion     *event,
                                                           gpointer            data);
 static void     gtk_entry_completion_insert_action       (GtkEntryCompletion *completion,
                                                           gint                index,
@@ -234,8 +226,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * next '/'.
    *
    * Returns: %TRUE if the signal has been handled
-   *
-   * Since: 2.6
    */
   entry_completion_signals[INSERT_PREFIX] =
     g_signal_new (I_("insert-prefix"),
@@ -262,8 +252,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * gtk_entry_completion_set_model().
    *
    * Returns: %TRUE if the signal has been handled
-   *
-   * Since: 2.4
    */
   entry_completion_signals[MATCH_SELECTED] =
     g_signal_new (I_("match-selected"),
@@ -291,8 +279,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * gtk_entry_completion_set_model().
    *
    * Returns: %TRUE if the signal has been handled
-   *
-   * Since: 2.12
    */
   entry_completion_signals[CURSOR_ON_MATCH] =
     g_signal_new (I_("cursor-on-match"),
@@ -313,8 +299,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * number of rows in completion_complete method.
    * (In other words when GtkEntryCompletion is out of
    *  suggestions)
-   *
-   * Since: 3.14
    */
   entry_completion_signals[NO_MATCHES] =
     g_signal_new (I_("no-matches"),
@@ -331,8 +315,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * @index: the index of the activated action
    *
    * Gets emitted when an action is activated.
-   *
-   * Since: 2.4
    */
   entry_completion_signals[ACTION_ACTIVATED] =
     g_signal_new (I_("action-activated"),
@@ -363,8 +345,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * The column of the model containing the strings.
    * Note that the strings must be UTF-8.
-   *
-   * Since: 2.6
    */
   entry_completion_props[PROP_TEXT_COLUMN] =
     g_param_spec_int ("text-column",
@@ -380,8 +360,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * should be inserted automatically in the entry. Note that this
    * requires text-column to be set, even if you are using a custom
    * match function.
-   *
-   * Since: 2.6
    **/
   entry_completion_props[PROP_INLINE_COMPLETION] =
       g_param_spec_boolean ("inline-completion",
@@ -395,8 +373,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * Determines whether the possible completions should be
    * shown in a popup window.
-   *
-   * Since: 2.6
    **/
   entry_completion_props[PROP_POPUP_COMPLETION] =
       g_param_spec_boolean ("popup-completion",
@@ -410,8 +386,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * Determines whether the completions popup window will be
    * resized to the width of the entry.
-   *
-   * Since: 2.8
    */
   entry_completion_props[PROP_POPUP_SET_WIDTH] =
       g_param_spec_boolean ("popup-set-width",
@@ -427,8 +401,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * for a single possible completion. You probably want to set
    * this to %FALSE if you are using
    * [inline completion][GtkEntryCompletion--inline-completion].
-   *
-   * Since: 2.8
    */
   entry_completion_props[PROP_POPUP_SINGLE_MATCH] =
       g_param_spec_boolean ("popup-single-match",
@@ -442,8 +414,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * Determines whether the possible completions on the popup
    * will appear in the entry as you navigate through them.
-   *
-   * Since: 2.12
    */
   entry_completion_props[PROP_INLINE_SELECTION] =
       g_param_spec_boolean ("inline-selection",
@@ -460,8 +430,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * If no area is specified when creating the entry completion with
    * gtk_entry_completion_new_with_area() a horizontally oriented
    * #GtkCellAreaBox will be used.
-   *
-   * Since: 3.0
    */
   entry_completion_props[PROP_CELL_AREA] =
       g_param_spec_object ("cell-area",
@@ -520,6 +488,18 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->filter_model = NULL;
 }
 
+static gboolean
+propagate_to_entry (GtkEventControllerKey *key,
+                    guint                  keyval,
+                    guint                  keycode,
+                    GdkModifierType        modifiers,
+                    GtkEntryCompletion    *completion)
+{
+  GtkEntryCompletionPrivate *priv = completion->priv;
+
+  return gtk_event_controller_key_forward (key, priv->entry);
+}
+
 static void
 gtk_entry_completion_constructed (GObject *object)
 {
@@ -528,6 +508,7 @@ gtk_entry_completion_constructed (GObject *object)
   GtkCellRenderer           *cell;
   GtkTreeSelection          *sel;
   GtkWidget                 *popup_frame;
+  GtkEventController        *controller;
 
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->constructed (object);
 
@@ -539,18 +520,13 @@ gtk_entry_completion_constructed (GObject *object)
 
   /* completions */
   priv->tree_view = gtk_tree_view_new ();
-  g_signal_connect (priv->tree_view, "button-press-event",
-                    G_CALLBACK (gtk_entry_completion_list_button_press),
-                    completion);
-  g_signal_connect (priv->tree_view, "enter-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_enter_notify),
-                    completion);
-  g_signal_connect (priv->tree_view, "motion-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_motion_notify),
+  g_signal_connect (priv->tree_view, "row-activated",
+                    G_CALLBACK (gtk_entry_completion_list_activated),
                     completion);
 
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
+  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->tree_view), TRUE);
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->tree_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
@@ -580,17 +556,12 @@ gtk_entry_completion_constructed (GObject *object)
   priv->action_view =
     gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->actions));
   g_object_ref_sink (priv->action_view);
-  g_signal_connect (priv->action_view, "button-press-event",
-                    G_CALLBACK (gtk_entry_completion_action_button_press),
-                    completion);
-  g_signal_connect (priv->action_view, "enter-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_enter_notify),
-                    completion);
-  g_signal_connect (priv->action_view, "motion-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_motion_notify),
+  g_signal_connect (priv->action_view, "row-activated",
+                    G_CALLBACK (gtk_entry_completion_action_activated),
                     completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
+  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->action_view), TRUE);
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->action_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
@@ -609,17 +580,20 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
-                            GDK_WINDOW_TYPE_HINT_COMBO);
+                            GDK_SURFACE_TYPE_HINT_COMBO);
 
-  g_signal_connect (priv->popup_window, "key-press-event",
-                    G_CALLBACK (gtk_entry_completion_popup_key_event),
-                    completion);
-  g_signal_connect (priv->popup_window, "key-release-event",
-                    G_CALLBACK (gtk_entry_completion_popup_key_event),
-                    completion);
-  g_signal_connect (priv->popup_window, "button-press-event",
-                    G_CALLBACK (gtk_entry_completion_popup_button_press),
-                    completion);
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (propagate_to_entry), completion);
+  g_signal_connect (controller, "key-released",
+                    G_CALLBACK (propagate_to_entry), completion);
+  gtk_widget_add_controller (priv->popup_window, controller);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  g_signal_connect_swapped (controller, "released",
+                            G_CALLBACK (_gtk_entry_completion_popdown),
+                            completion);
+  gtk_widget_add_controller (priv->popup_window, controller);
 
   popup_frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (popup_frame),
@@ -911,109 +885,48 @@ gtk_entry_completion_visible_func (GtkTreeModel *model,
   return ret;
 }
 
-static gboolean
-gtk_entry_completion_popup_key_event (GtkWidget   *widget,
-                                      GdkEventKey *event,
-                                      gpointer     user_data)
+static void
+gtk_entry_completion_list_activated (GtkTreeView       *treeview,
+                                     GtkTreePath       *path,
+                                     GtkTreeViewColumn *column,
+                                     gpointer           user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+  GtkTreeIter iter;
+  gboolean entry_set;
+  GtkTreeModel *model;
+  GtkTreeIter child_iter;
 
-  if (!gtk_widget_get_mapped (completion->priv->popup_window))
-    return FALSE;
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (completion->priv->filter_model), &iter, path);
+  gtk_tree_model_filter_convert_iter_to_child_iter (completion->priv->filter_model,
+                                                    &child_iter,
+                                                    &iter);
+  model = gtk_tree_model_filter_get_model (completion->priv->filter_model);
 
-  /* propagate event to the entry */
-  gtk_widget_event (completion->priv->entry, (GdkEvent *)event);
+  g_signal_handler_block (completion->priv->entry,
+                          completion->priv->changed_id);
+  g_signal_emit (completion, entry_completion_signals[MATCH_SELECTED],
+                 0, model, &child_iter, &entry_set);
+  g_signal_handler_unblock (completion->priv->entry,
+                            completion->priv->changed_id);
 
-  return TRUE;
-}
-
-static gboolean
-gtk_entry_completion_popup_button_press (GtkWidget      *widget,
-                                         GdkEventButton *event,
-                                         gpointer        user_data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-
-  if (!gtk_widget_get_mapped (completion->priv->popup_window))
-    return FALSE;
-
-  /* if we come here, it's usually time to popdown */
   _gtk_entry_completion_popdown (completion);
-
-  return TRUE;
 }
 
-static gboolean
-gtk_entry_completion_list_button_press (GtkWidget      *widget,
-                                        GdkEventButton *event,
-                                        gpointer        user_data)
+static void
+gtk_entry_completion_action_activated (GtkTreeView       *treeview,
+                                       GtkTreePath       *path,
+                                       GtkTreeViewColumn *column,
+                                       gpointer           user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  GtkTreePath *path = NULL;
-  gdouble x, y;
-
-  if (!gtk_widget_get_mapped (completion->priv->popup_window) ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return FALSE;
-
-  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                     x, y, &path, NULL, NULL, NULL))
-    {
-      GtkTreeIter iter;
-      gboolean entry_set;
-      GtkTreeModel *model;
-      GtkTreeIter child_iter;
-
-      gtk_tree_model_get_iter (GTK_TREE_MODEL (completion->priv->filter_model),
-                               &iter, path);
-      gtk_tree_path_free (path);
-      gtk_tree_model_filter_convert_iter_to_child_iter (completion->priv->filter_model,
-                                                        &child_iter,
-                                                        &iter);
-      model = gtk_tree_model_filter_get_model (completion->priv->filter_model);
-
-      g_signal_handler_block (completion->priv->entry,
-                              completion->priv->changed_id);
-      g_signal_emit (completion, entry_completion_signals[MATCH_SELECTED],
-                     0, model, &child_iter, &entry_set);
-      g_signal_handler_unblock (completion->priv->entry,
-                                completion->priv->changed_id);
-
-      _gtk_entry_completion_popdown (completion);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_entry_completion_action_button_press (GtkWidget      *widget,
-                                          GdkEventButton *event,
-                                          gpointer        user_data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  GtkTreePath *path = NULL;
-  gdouble x, y;
-
-  if (!gtk_widget_get_mapped (completion->priv->popup_window) ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return FALSE;
 
   gtk_entry_reset_im_context (GTK_ENTRY (completion->priv->entry));
 
-  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                     x, y, &path, NULL, NULL, NULL))
-    {
-      g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
-                     0, gtk_tree_path_get_indices (path)[0]);
-      gtk_tree_path_free (path);
+  g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
+                 0, gtk_tree_path_get_indices (path)[0]);
 
-      _gtk_entry_completion_popdown (completion);
-      return TRUE;
-    }
-
-  return FALSE;
+  _gtk_entry_completion_popdown (completion);
 }
 
 static void
@@ -1070,8 +983,6 @@ gtk_entry_completion_selection_changed (GtkTreeSelection *selection,
  * Creates a new #GtkEntryCompletion object.
  *
  * Returns: A newly created #GtkEntryCompletion object
- *
- * Since: 2.4
  */
 GtkEntryCompletion *
 gtk_entry_completion_new (void)
@@ -1092,8 +1003,6 @@ gtk_entry_completion_new (void)
  * #GtkTreeViewColumn for the drop-down menu.
  *
  * Returns: A newly created #GtkEntryCompletion object
- *
- * Since: 3.0
  */
 GtkEntryCompletion *
 gtk_entry_completion_new_with_area (GtkCellArea *area)
@@ -1112,8 +1021,6 @@ gtk_entry_completion_new_with_area (GtkCellArea *area)
  * Gets the entry @completion has been attached to.
  *
  * Returns: (transfer none): The entry @completion has been attached to
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
@@ -1131,8 +1038,6 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
  * Sets the model for a #GtkEntryCompletion. If @completion already has
  * a model set, it will remove it before setting the new model.
  * If model is %NULL, then it will unset the model.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_set_model (GtkEntryCompletion *completion,
@@ -1177,8 +1082,6 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
  *
  * Returns: (nullable) (transfer none): A #GtkTreeModel, or %NULL if none
  *     is currently being used
- *
- * Since: 2.4
  */
 GtkTreeModel *
 gtk_entry_completion_get_model (GtkEntryCompletion *completion)
@@ -1201,8 +1104,6 @@ gtk_entry_completion_get_model (GtkEntryCompletion *completion)
  * Sets the match function for @completion to be @func. The match function
  * is used to determine if a row should or should not be in the completion
  * list.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_set_match_func (GtkEntryCompletion          *completion,
@@ -1229,8 +1130,6 @@ gtk_entry_completion_set_match_func (GtkEntryCompletion          *completion,
  * @length. This is useful for long lists, where completing using a small
  * key takes a lot of time and will come up with meaningless results anyway
  * (ie, a too large dataset).
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
@@ -1255,8 +1154,6 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
  * Returns the minimum key length as set for @completion.
  *
  * Returns: The currently used minimum key length
- *
- * Since: 2.4
  */
 gint
 gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion *completion)
@@ -1273,8 +1170,6 @@ gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion *completion)
  * Requests a completion operation, or in other words a refiltering of the
  * current list with completions, using the current key. The completion list
  * view will be updated accordingly.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_complete (GtkEntryCompletion *completion)
@@ -1344,8 +1239,6 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
  *
  * Note that @index_ is a relative position in the list of actions and
  * the position of an action can change when deleting a different action.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
@@ -1366,8 +1259,6 @@ gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
  *
  * Inserts an action in @completion’s action item list at position @index_
  * with markup @markup.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
@@ -1389,8 +1280,6 @@ gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
  *
  * Note that @index_ is a relative position and the position of an
  * action may have changed since it was inserted.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
@@ -1420,8 +1309,6 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * column. If you need to set the text column, but don't want the cell
  * renderer, use g_object_set() to set the #GtkEntryCompletion:text-column
  * property directly.
- *
- * Since: 2.4
  */
 void
 gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
@@ -1454,8 +1341,6 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
  * Returns the column in the model of @completion to get strings from.
  *
  * Returns: the column containing the strings
- *
- * Since: 2.6
  */
 gint
 gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
@@ -1467,29 +1352,6 @@ gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
 
 /* private */
 
-static gboolean
-gtk_entry_completion_list_enter_notify (GtkWidget        *widget,
-                                        GdkEventCrossing *event,
-                                        gpointer          data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
-
-  return completion->priv->ignore_enter;
-}
-
-static gboolean
-gtk_entry_completion_list_motion_notify (GtkWidget      *widget,
-                                         GdkEventMotion *event,
-                                         gpointer        data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
-
-  completion->priv->ignore_enter = FALSE;
-
-  return FALSE;
-}
-
-
 /* some nasty size requisition */
 void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
@@ -1500,7 +1362,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle area;
-  GdkWindow *window;
+  GdkSurface *surface;
   GtkRequisition popup_req;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
@@ -1510,19 +1372,19 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkTreeViewColumn *action_column;
   gint action_height;
 
-  window = gtk_widget_get_window (completion->priv->entry);
+  surface = gtk_widget_get_surface (completion->priv->entry);
 
-  if (!window)
+  if (!surface)
     return;
 
   if (!completion->priv->filter_model)
     return;
 
-  gtk_widget_get_window_allocation (completion->priv->entry, &allocation);
+  gtk_widget_get_surface_allocation (completion->priv->entry, &allocation);
   gtk_widget_get_preferred_size (completion->priv->entry,
                                  &entry_req, NULL);
 
-  gdk_window_get_origin (window, &x, &y);
+  gdk_surface_get_origin (surface, &x, &y);
   x += allocation.x;
   y += allocation.y + (allocation.height - entry_req.height) / 2;
 
@@ -1543,7 +1405,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_realize (completion->priv->tree_view);
 
   display = gtk_widget_get_display (GTK_WIDGET (completion->priv->entry));
-  monitor = gdk_display_get_monitor_at_window (display, window);
+  monitor = gdk_display_get_monitor_at_surface (display, surface);
   gdk_monitor_get_workarea (monitor, &area);
 
   if (height == 0)
@@ -1606,7 +1468,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
 static void
 prepare_popup_func (GdkSeat   *seat,
-                    GdkWindow *window,
+                    GdkSurface *surface,
                     gpointer   user_data)
 {
   GtkEntryCompletion *completion = user_data;
@@ -1637,14 +1499,10 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (completion->priv->has_grab)
     return;
 
-  completion->priv->ignore_enter = TRUE;
-
   gtk_widget_show (completion->priv->vbox);
 
   /* default on no match */
   completion->priv->current_selected = -1;
-
-  _gtk_entry_completion_resize_popup (completion);
 
   toplevel = gtk_widget_get_toplevel (completion->priv->entry);
   if (GTK_IS_WINDOW (toplevel))
@@ -1657,12 +1515,15 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   gtk_window_set_display (GTK_WINDOW (completion->priv->popup_window),
                           gtk_widget_get_display (completion->priv->entry));
+  gtk_widget_realize (completion->priv->popup_window);
+
+  _gtk_entry_completion_resize_popup (completion);
 
   if (completion->priv->device)
     {
       gtk_grab_add (completion->priv->popup_window);
       gdk_seat_grab (gdk_device_get_seat (completion->priv->device),
-                     gtk_widget_get_window (completion->priv->popup_window),
+                     gtk_widget_get_surface (completion->priv->popup_window),
                      GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TOUCH,
                      TRUE, NULL, NULL,
                      prepare_popup_func, completion);
@@ -1676,8 +1537,6 @@ _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
 {
   if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return;
-
-  completion->priv->ignore_enter = FALSE;
 
   if (completion->priv->has_grab)
     {
@@ -1729,8 +1588,6 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
  *
  * Returns: (nullable) (transfer full): The common prefix all rows starting with
  *   @key or %NULL if no row matches @key.
- *
- * Since: 3.4
  **/
 gchar *
 gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion,
@@ -1834,8 +1691,6 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
  * the completion or %NULL if there’s no completion ongoing.
  *
  * Returns: the prefix for the current completion
- *
- * Since: 2.12
  */
 const gchar*
 gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion)
@@ -1898,8 +1753,6 @@ gtk_entry_completion_insert_completion (GtkEntryCompletion *completion,
  * @completion: a #GtkEntryCompletion
  *
  * Requests a prefix insertion.
- *
- * Since: 2.6
  */
 void
 gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
@@ -1933,8 +1786,6 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
  *
  * Sets whether the common prefix of the possible completions should
  * be automatically inserted in the entry.
- *
- * Since: 2.6
  */
 void
 gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
@@ -1960,8 +1811,6 @@ gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
  * be automatically inserted in the entry.
  *
  * Returns: %TRUE if inline completion is turned on
- *
- * Since: 2.6
  */
 gboolean
 gtk_entry_completion_get_inline_completion (GtkEntryCompletion *completion)
@@ -1977,8 +1826,6 @@ gtk_entry_completion_get_inline_completion (GtkEntryCompletion *completion)
  * @popup_completion: %TRUE to do popup completion
  *
  * Sets whether the completions should be presented in a popup window.
- *
- * Since: 2.6
  */
 void
 gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
@@ -2004,8 +1851,6 @@ gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
  * Returns whether the completions should be presented in a popup window.
  *
  * Returns: %TRUE if popup completion is turned on
- *
- * Since: 2.6
  */
 gboolean
 gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion)
@@ -2022,8 +1867,6 @@ gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion)
  *
  * Sets whether the completion popup window will be resized to be the same
  * width as the entry.
- *
- * Since: 2.8
  */
 void
 gtk_entry_completion_set_popup_set_width (GtkEntryCompletion *completion,
@@ -2050,8 +1893,6 @@ gtk_entry_completion_set_popup_set_width (GtkEntryCompletion *completion,
  *
  * Returns: %TRUE if the popup window will be resized to the width of
  *   the entry
- *
- * Since: 2.8
  */
 gboolean
 gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
@@ -2071,8 +1912,6 @@ gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
  * Sets whether the completion popup window will appear even if there is
  * only a single match. You may want to set this to %FALSE if you
  * are using [inline completion][GtkEntryCompletion--inline-completion].
- *
- * Since: 2.8
  */
 void
 gtk_entry_completion_set_popup_single_match (GtkEntryCompletion *completion,
@@ -2099,8 +1938,6 @@ gtk_entry_completion_set_popup_single_match (GtkEntryCompletion *completion,
  *
  * Returns: %TRUE if the popup window will appear regardless of the
  *    number of matches
- *
- * Since: 2.8
  */
 gboolean
 gtk_entry_completion_get_popup_single_match (GtkEntryCompletion *completion)
@@ -2117,8 +1954,6 @@ gtk_entry_completion_get_popup_single_match (GtkEntryCompletion *completion)
  *
  * Sets whether it is possible to cycle through the possible completions
  * inside the entry.
- *
- * Since: 2.12
  */
 void
 gtk_entry_completion_set_inline_selection (GtkEntryCompletion *completion,
@@ -2143,8 +1978,6 @@ gtk_entry_completion_set_inline_selection (GtkEntryCompletion *completion,
  * Returns %TRUE if inline-selection mode is turned on.
  *
  * Returns: %TRUE if inline-selection mode is on
- *
- * Since: 2.12
  */
 gboolean
 gtk_entry_completion_get_inline_selection (GtkEntryCompletion *completion)
@@ -2217,16 +2050,17 @@ keyval_is_cursor_move (guint keyval)
 }
 
 static gboolean
-gtk_entry_completion_key_press (GtkWidget   *widget,
-                                GdkEventKey *event,
-                                gpointer     user_data)
+gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
+                                  guint                  keyval,
+                                  guint                  keycode,
+                                  GdkModifierType        state,
+                                  gpointer               user_data)
 {
   gint matches, actions = 0;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  guint keyval;
+  GtkWidget *widget = completion->priv->entry;
 
-  if (!completion->priv->popup_completion ||
-      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+  if (!completion->priv->popup_completion)
     return FALSE;
 
   if (keyval == GDK_KEY_Return ||
@@ -2542,7 +2376,7 @@ gtk_entry_completion_changed (GtkWidget *widget,
     completion->priv->device = device;
 
   completion->priv->completion_timeout =
-    gdk_threads_add_timeout (COMPLETION_TIMEOUT,
+    g_timeout_add (COMPLETION_TIMEOUT,
                    gtk_entry_completion_timeout,
                    completion);
   g_source_set_name_by_id (completion->priv->completion_timeout, "[gtk+] gtk_entry_completion_timeout");
@@ -2614,11 +2448,20 @@ completion_insert_text_callback (GtkEntry           *entry,
 static void
 connect_completion_signals (GtkEntryCompletion *completion)
 {
+  GtkEntryCompletionPrivate *priv = completion->priv;
+  GtkEventController *controller;
+
+  controller = priv->entry_key_controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (gtk_entry_completion_key_pressed), completion);
+  g_signal_connect_swapped (controller, "focus-out",
+                            G_CALLBACK (accept_completion_callback),
+                            completion->priv->entry);
+  gtk_widget_add_controller (completion->priv->entry, controller);
+
   completion->priv->changed_id =
     g_signal_connect (completion->priv->entry, "changed",
                       G_CALLBACK (gtk_entry_completion_changed), completion);
-  g_signal_connect (completion->priv->entry, "key-press-event",
-                    G_CALLBACK (gtk_entry_completion_key_press), completion);
 
     completion->priv->insert_text_id =
       g_signal_connect (completion->priv->entry, "insert-text",
@@ -2626,8 +2469,6 @@ connect_completion_signals (GtkEntryCompletion *completion)
     g_signal_connect (completion->priv->entry, "notify",
                       G_CALLBACK (clear_completion_callback), completion);
     g_signal_connect (completion->priv->entry, "activate",
-                      G_CALLBACK (accept_completion_callback), completion);
-    g_signal_connect (completion->priv->entry, "focus-out-event",
                       G_CALLBACK (accept_completion_callback), completion);
 }
 
@@ -2664,6 +2505,9 @@ unset_accessible_relation (GtkWidget *window,
 static void
 disconnect_completion_signals (GtkEntryCompletion *completion)
 {
+  gtk_widget_remove_controller (completion->priv->entry,
+                                completion->priv->entry_key_controller);
+
   if (completion->priv->changed_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->changed_id))
@@ -2672,8 +2516,6 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
                                    completion->priv->changed_id);
       completion->priv->changed_id = 0;
     }
-  g_signal_handlers_disconnect_by_func (completion->priv->entry,
-                                        G_CALLBACK (gtk_entry_completion_key_press), completion);
   if (completion->priv->insert_text_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->insert_text_id))

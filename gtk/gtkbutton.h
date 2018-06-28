@@ -31,8 +31,6 @@
 #endif
 
 #include <gtk/gtkbin.h>
-#include <gtk/gtkimage.h>
-
 
 G_BEGIN_DECLS
 
@@ -50,9 +48,7 @@ typedef struct _GtkButtonClass        GtkButtonClass;
 struct _GtkButton
 {
   /*< private >*/
-  GtkBin bin;
-
-  GtkButtonPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**
@@ -88,9 +84,8 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new               (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
-GDK_AVAILABLE_IN_3_10
-GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name,
-					      GtkIconSize     size);
+GDK_AVAILABLE_IN_ALL
+GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
 GDK_AVAILABLE_IN_ALL
@@ -112,10 +107,10 @@ void                  gtk_button_set_use_underline  (GtkButton      *button,
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_use_underline  (GtkButton      *button);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_icon_name      (GtkButton      *button,
                                                      const char     *icon_name);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 const char *          gtk_button_get_icon_name      (GtkButton      *button);
 
 

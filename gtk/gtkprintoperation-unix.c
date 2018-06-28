@@ -202,7 +202,6 @@ shell_command_substitute_file (const gchar *cmd,
   return g_string_free (final, FALSE);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
                                          cairo_surface_t   *surface,
@@ -343,7 +342,6 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   g_free (data);
   g_free (settings_filename);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 unix_finish_send  (GtkPrintJob  *job,
@@ -392,11 +390,7 @@ unix_end_run (GtkPrintOperation *op,
     {
       g_object_ref (op);
       if (!op_unix->data_sent)
-	{
-	  gdk_threads_leave ();  
-	  g_main_loop_run (op_unix->loop);
-	  gdk_threads_enter ();  
-	}
+	g_main_loop_run (op_unix->loop);
       g_main_loop_unref (op_unix->loop);
       op_unix->loop = NULL;
       g_object_unref (op);
@@ -537,7 +531,8 @@ finish_print (PrintResponseData *rdata,
 
       if (gtk_print_settings_get_number_up (settings) < 2)
         {
-	  if (printer && gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
+	  if (printer && (gtk_printer_get_hard_margins_for_paper_size (printer, gtk_page_setup_get_paper_size (page_setup), &top, &bottom, &left, &right) ||
+			  gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right)))
 	    _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
 	}
       else
@@ -883,10 +878,7 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
       find_printer (printer_name,
 		    (GFunc) found_printer, &rdata);
 
-      gdk_threads_leave ();  
       g_main_loop_run (rdata.loop);
-      gdk_threads_enter ();  
-
       g_main_loop_unref (rdata.loop);
       rdata.loop = NULL;
     }
@@ -970,8 +962,6 @@ get_page_setup_dialog (GtkWindow        *parent,
  * a problem.
  * 
  * Returns: (transfer full): a new #GtkPageSetup
- *
- * Since: 2.10
  */
 GtkPageSetup *
 gtk_print_run_page_setup_dialog (GtkWindow        *parent,
@@ -1013,8 +1003,6 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
  * In contrast to gtk_print_run_page_setup_dialog(), this function  returns after 
  * showing the page setup dialog on platforms that support this, and calls @done_cb 
  * from a signal handler for the ::response signal of the dialog.
- *
- * Since: 2.10
  */
 void
 gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,

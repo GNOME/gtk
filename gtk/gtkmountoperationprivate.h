@@ -40,7 +40,7 @@ gboolean _gtk_mount_operation_lookup_info         (GtkMountOperationLookupContex
                                                    gint                            size_pixels,
                                                    gchar                         **out_name,
                                                    gchar                         **out_command_line,
-                                                   GdkPixbuf                     **out_pixbuf);
+                                                   GdkTexture                    **out_texture);
 
 void     _gtk_mount_operation_lookup_context_free (GtkMountOperationLookupContext *context);
 

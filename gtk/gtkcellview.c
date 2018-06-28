@@ -67,8 +67,7 @@ static void        gtk_cell_view_finalize                 (GObject          *obj
 static void        gtk_cell_view_dispose                  (GObject          *object);
 static void        gtk_cell_view_size_allocate            (GtkWidget           *widget,
                                                            const GtkAllocation *allocation,
-                                                           int                  baseline,
-                                                           GtkAllocation       *out_clip);
+                                                           int                  baseline);
 static void        gtk_cell_view_snapshot                 (GtkWidget        *widget,
                                                            GtkSnapshot      *snapshot);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
@@ -266,14 +265,26 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							  FALSE,
 							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  gtk_widget_class_set_css_name (widget_class, "cellview");
+  gtk_widget_class_set_css_name (widget_class, I_("cellview"));
+}
+
+static void
+gtk_cell_view_buildable_add_child (GtkBuildable *buildable,
+                                   GtkBuilder   *builder,
+                                   GObject      *child,
+                                   const gchar  *type)
+{
+  if (GTK_IS_CELL_RENDERER (child))
+    _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_cell_view_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = _gtk_cell_layout_buildable_add_child;
+  iface->add_child = gtk_cell_view_buildable_add_child;
   iface->custom_tag_start = gtk_cell_view_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_cell_view_buildable_custom_tag_end;
 }
@@ -419,7 +430,7 @@ gtk_cell_view_init (GtkCellView *cellview)
   cellview->priv = gtk_cell_view_get_instance_private (cellview);
   cellview->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (cellview), FALSE);
 }
 
 static void
@@ -461,8 +472,7 @@ gtk_cell_view_dispose (GObject *object)
 static void
 gtk_cell_view_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkCellView *cellview;
   GtkCellViewPrivate *priv;
@@ -657,7 +667,8 @@ gtk_cell_view_snapshot (GtkWidget   *widget,
   /* render cells */
   area.x = 0;
   area.y = 0;
-  gtk_widget_get_content_size (widget, &area.width, &area.height);
+  area.width = gtk_widget_get_width (widget);
+  area.height = gtk_widget_get_height (widget);
 
   /* set cell data (if available) */
   if (cellview->priv->displayed_row)
@@ -802,8 +813,6 @@ row_changed_cb (GtkTreeModel         *model,
  * Creates a new #GtkCellView widget.
  *
  * Returns: A newly created #GtkCellView widget.
- *
- * Since: 2.6
  */
 GtkWidget *
 gtk_cell_view_new (void)
@@ -830,8 +839,6 @@ gtk_cell_view_new (void)
  * possible.
  *
  * Returns: A newly created #GtkCellView widget.
- *
- * Since: 2.6
  */
 GtkWidget *
 gtk_cell_view_new_with_context (GtkCellArea        *area,
@@ -854,8 +861,6 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  * to it, and makes it show @text.
  *
  * Returns: A newly created #GtkCellView widget.
- *
- * Since: 2.6
  */
 GtkWidget *
 gtk_cell_view_new_with_text (const gchar *text)
@@ -887,8 +892,6 @@ gtk_cell_view_new_with_text (const gchar *text)
  * marked up with the [Pango text markup language][PangoMarkupFormat].
  *
  * Returns: A newly created #GtkCellView widget.
- *
- * Since: 2.6
  */
 GtkWidget *
 gtk_cell_view_new_with_markup (const gchar *markup)
@@ -912,18 +915,16 @@ gtk_cell_view_new_with_markup (const gchar *markup)
 }
 
 /**
- * gtk_cell_view_new_with_pixbuf:
- * @pixbuf: the image to display in the cell view
+ * gtk_cell_view_new_with_texture:
+ * @texture: the image to display in the cell view
  *
  * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf
- * to it, and makes it show @pixbuf.
+ * to it, and makes it show @texture.
  *
  * Returns: A newly created #GtkCellView widget.
- *
- * Since: 2.6
  */
 GtkWidget *
-gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
+gtk_cell_view_new_with_texture (GdkTexture *texture)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;
@@ -935,9 +936,9 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
 			      renderer, TRUE);
 
-  g_value_init (&value, GDK_TYPE_PIXBUF);
-  g_value_set_object (&value, pixbuf);
-  gtk_cell_view_set_value (cellview, renderer, "pixbuf", &value);
+  g_value_init (&value, GDK_TYPE_TEXTURE);
+  g_value_set_object (&value, texture);
+  gtk_cell_view_set_value (cellview, renderer, "texture", &value);
   g_value_unset (&value);
 
   return GTK_WIDGET (cellview);
@@ -952,8 +953,6 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
  * 
  * Sets a property of a cell renderer of @cell_view, and
  * makes sure the display of @cell_view is updated.
- *
- * Since: 2.6
  */
 static void
 gtk_cell_view_set_value (GtkCellView     *cell_view,
@@ -976,8 +975,6 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
  * Sets the model for @cell_view.  If @cell_view already has a model
  * set, it will remove it before setting the new model.  If @model is
  * %NULL, then it will unset the old model.
- *
- * Since: 2.6
  */
 void
 gtk_cell_view_set_model (GtkCellView  *cell_view,
@@ -1019,8 +1016,6 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
  * returned.
  *
  * Returns: (nullable) (transfer none): a #GtkTreeModel used or %NULL
- *
- * Since: 2.16
  **/
 GtkTreeModel *
 gtk_cell_view_get_model (GtkCellView *cell_view)
@@ -1041,8 +1036,6 @@ gtk_cell_view_get_model (GtkCellView *cell_view)
  * this is not normally a desired result, but may be
  * a needed intermediate state if say, the model for
  * the #GtkCellView becomes temporarily empty.
- *
- * Since: 2.6
  **/
 void
 gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
@@ -1076,8 +1069,6 @@ gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
  * %NULL is returned.
  *
  * Returns: (nullable) (transfer full): the currently displayed row or %NULL
- *
- * Since: 2.6
  */
 GtkTreePath *
 gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
@@ -1099,8 +1090,6 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  *
  * Returns: whether @cell_view draws all of its
  * cells in a sensitive state
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
@@ -1123,8 +1112,6 @@ gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
  * cells in a sensitive state, this is used by #GtkComboBox menus
  * to ensure that rows with insensitive cells that contain
  * children appear sensitive in the parent menu item.
- *
- * Since: 3.0
  */
 void
 gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
@@ -1153,8 +1140,6 @@ gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
  *
  * Returns: whether @cell_view requests space to fit
  * the entire #GtkTreeModel.
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
@@ -1178,8 +1163,6 @@ gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
  * This is used by #GtkComboBox to ensure that the cell view displayed on
  * the combo box’s button always gets enough space and does not resize
  * when selection changes.
- *
- * Since: 3.0
  */
 void
 gtk_cell_view_set_fit_model (GtkCellView *cell_view,

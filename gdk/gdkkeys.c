@@ -36,11 +36,8 @@
  * @Title: Key Values
  *
  * Key values are the codes which are sent whenever a key is pressed or released.
- * They appear in the #GdkEventKey.keyval field of the
- * #GdkEventKey structure, which is passed to signal handlers for the
- * #GtkWidget::key-press-event and #GtkWidget::key-release-event signals.
- * The complete list of key values can be found in the
- * `gdk/gdkkeysyms.h` header file.
+ * They appear in the #GdkEventKey.keyval field of the #GdkEventKey structure.
+ * The complete list of key values can be found in the `gdk/gdkkeysyms.h` header file.
  *
  * Key values are regularly updated from the upstream X.org X11 implementation,
  * so new values are added regularly. They will be prefixed with GDK_KEY_ rather
@@ -59,11 +56,10 @@
  *
  * # Groups # {#key-group-explanation}
  *
- * One #GdkKeymap object exists for each user display. gdk_keymap_get_default()
- * returns the #GdkKeymap for the default display; to obtain keymaps for other
- * displays, use gdk_keymap_get_for_display(). A keymap
- * is a mapping from #GdkKeymapKey to key values. You can think of a #GdkKeymapKey
- * as a representation of a symbol printed on a physical keyboard key. That is, it
+ * One #GdkKeymap object exists for each user display. To obtain keymaps for
+ * a display, use gdk_display_get_keymap(). A keymap is a mapping from
+ * #GdkKeymapKey to key values. You can think of a #GdkKeymapKey as a
+ * representation of a symbol printed on a physical keyboard key. That is, it
  * contains three pieces of information. First, it contains the hardware keycode;
  * this is an identifying number for a physical key. Second, it contains the
  * “level” of the key. The level indicates which symbol on the
@@ -99,6 +95,11 @@
  * gdk_keymap_translate_keyboard_state() just to get the keyval.
  */
 
+enum {
+  PROP_0,
+  PROP_DISPLAY,
+  LAST_PROP
+};
 
 enum {
   DIRECTION_CHANGED,
@@ -107,30 +108,76 @@ enum {
   LAST_SIGNAL
 };
 
+static GParamSpec *props[LAST_PROP] = { NULL, };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GdkModifierType gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
                                                           GdkModifierIntent  intent);
 
-
-static guint signals[LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT)
+
+static void
+gdk_keymap_get_property (GObject    *object,
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
+{
+  GdkKeymap *keymap = GDK_KEYMAP (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_value_set_object (value, keymap->display);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gdk_keymap_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GdkKeymap *keymap = GDK_KEYMAP (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      keymap->display = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
 static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gdk_keymap_get_property;
+  object_class->set_property = gdk_keymap_set_property;
+
   klass->get_modifier_mask = gdk_keymap_real_get_modifier_mask;
+
+  props[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         "Display",
+                         "The display of the keymap",
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GdkKeymap::direction-changed:
    * @keymap: the object on which the signal is emitted
    *
-   * The ::direction-changed signal gets emitted when the direction of
-   * the keymap changes.
-   *
-   * Since: 2.0
+   * The ::direction-changed signal gets emitted when the direction
+   * of the keymap changes. See gdk_keymap_get_direction().
    */
   signals[DIRECTION_CHANGED] =
     g_signal_new (g_intern_static_string ("direction-changed"),
@@ -147,8 +194,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    *
    * The ::keys-changed signal is emitted when the mapping represented by
    * @keymap changes.
-   *
-   * Since: 2.2
    */
   signals[KEYS_CHANGED] =
     g_signal_new (g_intern_static_string ("keys-changed"),
@@ -167,11 +212,9 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * The ::state-changed signal is emitted when the state of the
    * keyboard changes, e.g when Caps Lock is turned on or off.
    * See gdk_keymap_get_caps_lock_state().
-   *
-   * Since: 2.16
    */
   signals[STATE_CHANGED] =
-    g_signal_new (g_intern_static_string ("state_changed"),
+    g_signal_new (g_intern_static_string ("state-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkKeymapClass, state_changed),
@@ -184,6 +227,22 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 static void
 gdk_keymap_init (GdkKeymap *keymap)
 {
+}
+
+/**
+ * gdk_keymap_get_display:
+ * @keymap: a #GdkKeymap
+ *
+ * Retrieves the #GdkDisplay associated to the @keymap.
+ *
+ * Returns: (transfer none): a #GdkDisplay
+ */
+GdkDisplay *
+gdk_keymap_get_display (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), NULL);
+
+  return keymap->display;
 }
 
 /* Other key-handling stuff
@@ -272,23 +331,12 @@ gdk_keyval_is_lower (guint keyval)
 }
 
 /**
- * gdk_keymap_get_default:
- *
- * Returns the #GdkKeymap attached to the default display.
- *
- * Returns: (transfer none): the #GdkKeymap attached to the default display.
- */
-GdkKeymap*
-gdk_keymap_get_default (void)
-{
-  return gdk_keymap_get_for_display (gdk_display_get_default ());
-}
-
-/**
  * gdk_keymap_get_direction:
  * @keymap: a #GdkKeymap
  *
  * Returns the direction of effective layout of the keymap.
+ * The direction of a layout is the direction of the majority of its
+ * symbols. See pango_unichar_direction().
  *
  * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
  *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
@@ -310,8 +358,6 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
  * languages are in use.
  *
  * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
- *
- * Since: 2.12
  **/
 gboolean
 gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
@@ -328,8 +374,6 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
  * Returns whether the Caps Lock modifer is locked.
  *
  * Returns: %TRUE if Caps Lock is on
- *
- * Since: 2.16
  */
 gboolean
 gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
@@ -346,8 +390,6 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
  * Returns whether the Num Lock modifer is locked.
  *
  * Returns: %TRUE if Num Lock is on
- *
- * Since: 3.0
  */
 gboolean
 gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
@@ -364,8 +406,6 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
  * Returns whether the Scroll Lock modifer is locked.
  *
  * Returns: %TRUE if Scroll Lock is on
- *
- * Since: 3.18
  */
 gboolean
 gdk_keymap_get_scroll_lock_state (GdkKeymap *keymap)
@@ -382,8 +422,6 @@ gdk_keymap_get_scroll_lock_state (GdkKeymap *keymap)
  * Returns the current modifier state.
  *
  * Returns: the current modifier state.
- *
- * Since: 3.4
  */
 guint
 gdk_keymap_get_modifier_state (GdkKeymap *keymap)
@@ -589,8 +627,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
  *
  * This function is useful when matching key events against
  * accelerators.
- *
- * Since: 2.20
  */
 void
 gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
@@ -617,8 +653,6 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
  *     same non-virtual modifier. Note that %FALSE is also returned
  *     if a virtual modifier is mapped to a non-virtual modifier that
  *     was already set in @state.
- *
- * Since: 2.20
  */
 gboolean
 gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
@@ -678,8 +712,6 @@ gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
  * expected result.
  *
  * Returns: the modifier mask used for @intent.
- *
- * Since: 3.4
  **/
 GdkModifierType
 gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,

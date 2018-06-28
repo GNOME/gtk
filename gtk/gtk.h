@@ -71,7 +71,6 @@
 #include <gtk/gtkcenterbox.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkclipboard.h>
 #include <gtk/gtkcolorbutton.h>
 #include <gtk/gtkcolorchooser.h>
 #include <gtk/gtkcolorchooserdialog.h>
@@ -94,6 +93,8 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventcontroller.h>
+#include <gtk/gtkeventcontrollerkey.h>
+#include <gtk/gtkeventcontrollermotion.h>
 #include <gtk/gtkeventcontrollerscroll.h>
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkfixed.h>
@@ -116,6 +117,7 @@
 #include <gtk/gtkgesturepan.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgesturesingle.h>
+#include <gtk/gtkgesturestylus.h>
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkglarea.h>
@@ -125,7 +127,6 @@
 #include <gtk/gtkiconview.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimcontext.h>
-#include <gtk/gtkimcontextinfo.h>
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
@@ -138,6 +139,9 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtklockbutton.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkmediacontrols.h>
+#include <gtk/gtkmediafile.h>
+#include <gtk/gtkmediastream.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenubutton.h>
@@ -146,7 +150,6 @@
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmodelbutton.h>
-#include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknativedialog.h>
 #include <gtk/gtknotebook.h>
@@ -156,7 +159,7 @@
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>
-#include <gtk/gtkplacessidebar.h>
+#include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopovermenu.h>
 #include <gtk/gtkprintcontext.h>
@@ -168,11 +171,6 @@
 #include <gtk/gtkradiomenuitem.h>
 #include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
-#include <gtk/gtkrecentchooser.h>
-#include <gtk/gtkrecentchooserdialog.h>
-#include <gtk/gtkrecentchoosermenu.h>
-#include <gtk/gtkrecentchooserwidget.h>
-#include <gtk/gtkrecentfilter.h>
 #include <gtk/gtkrecentmanager.h>
 #include <gtk/gtkrender.h>
 #include <gtk/gtkrevealer.h>
@@ -207,7 +205,6 @@
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextbufferrichtext.h>
 #include <gtk/gtktextchild.h>
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextmark.h>
@@ -219,8 +216,6 @@
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtktoolbutton.h>
 #include <gtk/gtktoolitem.h>
-#include <gtk/gtktoolitemgroup.h>
-#include <gtk/gtktoolpalette.h>
 #include <gtk/gtktoolshell.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
@@ -236,9 +231,11 @@
 #include <gtk/gtktypebuiltins.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkversion.h>
+#include <gtk/gtkvideo.h>
 #include <gtk/gtkviewport.h>
 #include <gtk/gtkvolumebutton.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkwidgetpaintable.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkwindowgroup.h>

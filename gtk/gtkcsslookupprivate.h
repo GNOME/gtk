@@ -38,8 +38,9 @@ struct _GtkCssLookup {
   GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
 };
 
-GtkCssLookup *          _gtk_css_lookup_new                     (const GtkBitmask           *relevant);
-void                    _gtk_css_lookup_free                    (GtkCssLookup               *lookup);
+void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup,
+                                                                 const GtkBitmask           *relevant);
+void                    _gtk_css_lookup_destroy                 (GtkCssLookup               *lookup);
 
 static inline const GtkBitmask *_gtk_css_lookup_get_missing     (const GtkCssLookup         *lookup);
 gboolean                _gtk_css_lookup_is_missing              (const GtkCssLookup         *lookup,

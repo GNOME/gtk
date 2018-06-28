@@ -191,9 +191,7 @@ static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
                                                   const gchar  *first_button_text,
                                                   va_list       args);
 
-static gboolean  gtk_dialog_delete_event_handler (GtkWidget    *widget,
-                                                  GdkEventAny  *event,
-                                                  gpointer      user_data);
+static gboolean  gtk_dialog_close_request        (GtkWindow    *window);
 static void      gtk_dialog_map                  (GtkWidget    *widget);
 
 static void      gtk_dialog_close                (GtkDialog    *dialog);
@@ -366,7 +364,7 @@ apply_response_for_header_bar (GtkDialog *dialog,
                            NULL);
 
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
-    gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (priv->headerbar), FALSE);
+    gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->headerbar), FALSE);
 }
 
 static void
@@ -511,10 +509,12 @@ gtk_dialog_class_init (GtkDialogClass *class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
+  GtkWindowClass *window_class;
   GtkBindingSet *binding_set;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
+  window_class = GTK_WINDOW_CLASS (class);
 
   gobject_class->constructed  = gtk_dialog_constructed;
   gobject_class->set_property = gtk_dialog_set_property;
@@ -522,6 +522,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->finalize = gtk_dialog_finalize;
 
   widget_class->map = gtk_dialog_map;
+
+  window_class->close_request = gtk_dialog_close_request;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
 
@@ -574,8 +576,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
    *
    * For technical reasons, this property is declared as an integer
    * property, but you should only set it to %TRUE or %FALSE.
-   *
-   * Since: 3.12
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_HEADER_BAR,
@@ -595,9 +595,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, headerbar);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_dialog_delete_event_handler);
 
-  gtk_widget_class_set_css_name (widget_class, "dialog");
+  gtk_widget_class_set_css_name (widget_class, I_("dialog"));
 }
 
 static void
@@ -623,15 +622,12 @@ gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 }
 
 static gboolean
-gtk_dialog_delete_event_handler (GtkWidget   *widget,
-                                 GdkEventAny *event,
-                                 gpointer     user_data)
+gtk_dialog_close_request (GtkWindow *window)
 {
-  /* emit response signal */
-  gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_DELETE_EVENT);
+  /* emit response signal, this will shut down the loop if we are in gtk_dialog_run */
+  gtk_dialog_response (GTK_DIALOG (window), GTK_RESPONSE_DELETE_EVENT);
 
-  /* Do the destroy by default */
-  return FALSE;
+  return GTK_WINDOW_CLASS (gtk_dialog_parent_class)->close_request (window);
 }
 
 static GList *
@@ -783,7 +779,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the #GtkDialog::response signal with the corresponding
- * response ID. If a #GtkDialog receives the #GtkWidget::delete-event signal,
+ * response ID. If a #GtkDialog receives a delete event,
  * it will emit ::response with a response ID of #GTK_RESPONSE_DELETE_EVENT.
  * However, destroying a dialog does not emit the ::response signal;
  * so be careful relying on ::response when using the
@@ -792,6 +788,7 @@ gtk_dialog_new_empty (const gchar     *title,
  *
  * Here’s a simple example:
  * |[<!-- language="C" -->
+ *  GtkWidget *main_app_window; // Window the dialog should show up on
  *  GtkWidget *dialog;
  *  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
  *  dialog = gtk_dialog_new_with_buttons ("My dialog",
@@ -1118,18 +1115,6 @@ run_response_handler (GtkDialog *dialog,
   shutdown_loop (ri);
 }
 
-static gint
-run_delete_handler (GtkDialog *dialog,
-                    GdkEventAny *event,
-                    gpointer data)
-{
-  RunInfo *ri = data;
-
-  shutdown_loop (ri);
-
-  return TRUE; /* Do not destroy */
-}
-
 static void
 run_destroy_handler (GtkDialog *dialog, gpointer data)
 {
@@ -1154,8 +1139,8 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * gtk_widget_show() on the dialog for you. Note that you still
  * need to show any children of the dialog yourself.
  *
- * During gtk_dialog_run(), the default behavior of #GtkWidget::delete-event
- * is disabled; if the dialog receives ::delete_event, it will not be
+ * During gtk_dialog_run(), the default behavior of delete events
+ * is disabled; if the dialog receives a delete event, it will not be
  * destroyed as windows usually are, and gtk_dialog_run() will return
  * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog
  * will be modal. You can force gtk_dialog_run() to return at any time by
@@ -1168,14 +1153,17 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *
  * Typical usage of this function might be:
  * |[<!-- language="C" -->
- *   gint result = gtk_dialog_run (GTK_DIALOG (dialog));
+ *   GtkWidget *dialog = gtk_dialog_new ();
+ *   // Set up dialog...
+ *
+ *   int result = gtk_dialog_run (GTK_DIALOG (dialog));
  *   switch (result)
  *     {
  *       case GTK_RESPONSE_ACCEPT:
- *          do_application_specific_something ();
+ *          // do_application_specific_something ();
  *          break;
  *       default:
- *          do_nothing_since_dialog_was_cancelled ();
+ *          // do_nothing_since_dialog_was_cancelled ();
  *          break;
  *     }
  *   gtk_widget_destroy (dialog);
@@ -1194,18 +1182,19 @@ gtk_dialog_run (GtkDialog *dialog)
 {
   RunInfo ri = { NULL, GTK_RESPONSE_NONE, NULL, FALSE };
   gboolean was_modal;
+  gboolean was_hide_on_close;
   gulong response_handler;
   gulong unmap_handler;
   gulong destroy_handler;
-  gulong delete_handler;
 
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), -1);
 
   g_object_ref (dialog);
 
   was_modal = gtk_window_get_modal (GTK_WINDOW (dialog));
-  if (!was_modal)
-    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  was_hide_on_close = gtk_window_get_hide_on_close (GTK_WINDOW (dialog));
+  gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
   if (!gtk_widget_get_visible (GTK_WIDGET (dialog)))
     gtk_widget_show (GTK_WIDGET (dialog));
@@ -1222,12 +1211,6 @@ gtk_dialog_run (GtkDialog *dialog)
                       G_CALLBACK (run_unmap_handler),
                       &ri);
 
-  delete_handler =
-    g_signal_connect (dialog,
-                      "delete-event",
-                      G_CALLBACK (run_delete_handler),
-                      &ri);
-
   destroy_handler =
     g_signal_connect (dialog,
                       "destroy",
@@ -1235,23 +1218,18 @@ gtk_dialog_run (GtkDialog *dialog)
                       &ri);
 
   ri.loop = g_main_loop_new (NULL, FALSE);
-
-  gdk_threads_leave ();
   g_main_loop_run (ri.loop);
-  gdk_threads_enter ();
-
   g_main_loop_unref (ri.loop);
 
   ri.loop = NULL;
 
   if (!ri.destroyed)
     {
-      if (!was_modal)
-        gtk_window_set_modal (GTK_WINDOW(dialog), FALSE);
+      gtk_window_set_modal (GTK_WINDOW (dialog), was_modal);
+      gtk_window_set_hide_on_close (GTK_WINDOW (dialog), was_hide_on_close);
 
       g_signal_handler_disconnect (dialog, response_handler);
       g_signal_handler_disconnect (dialog, unmap_handler);
-      g_signal_handler_disconnect (dialog, delete_handler);
       g_signal_handler_disconnect (dialog, destroy_handler);
     }
 
@@ -1270,8 +1248,6 @@ gtk_dialog_run (GtkDialog *dialog)
  *
  * Returns: (nullable) (transfer none): the @widget button that uses the given
  *     @response_id, or %NULL.
- *
- * Since: 2.20
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,
@@ -1314,8 +1290,6 @@ gtk_dialog_get_widget_for_response (GtkDialog *dialog,
  *
  * Returns: the response id of @widget, or %GTK_RESPONSE_NONE
  *  if @widget doesn’t have a response id set.
- *
- * Since: 2.8
  */
 gint
 gtk_dialog_get_response_for_widget (GtkDialog *dialog,
@@ -1586,7 +1560,7 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   GtkDialogPrivate *priv = dialog->priv;
 
   if (type == NULL)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+    parent_buildable_iface->add_child (buildable, builder, child, type);
   else if (g_str_equal (type, "titlebar"))
     {
       priv->headerbar = GTK_WIDGET (child);
@@ -1615,8 +1589,6 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  * #GtkDialog:use-header-bar property is %TRUE.
  *
  * Returns: (transfer none): the header bar
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_dialog_get_header_bar (GtkDialog *dialog)
@@ -1633,8 +1605,6 @@ gtk_dialog_get_header_bar (GtkDialog *dialog)
  * Returns the content area of @dialog.
  *
  * Returns: (type Gtk.Box) (transfer none): the content area #GtkBox.
- *
- * Since: 2.14
  **/
 GtkWidget *
 gtk_dialog_get_content_area (GtkDialog *dialog)

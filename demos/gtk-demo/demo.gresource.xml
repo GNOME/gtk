@@ -57,6 +57,7 @@
     <file>reset.css</file>
   </gresource>
   <gresource prefix="/cursors">
+    <file>cursors.ui</file>
     <file>alias_cursor.png</file>
     <file>all_scroll_cursor.png</file>
     <file>cell_cursor.png</file>
@@ -67,6 +68,7 @@
     <file>default_cursor.png</file>
     <file>e_resize_cursor.png</file>
     <file>ew_resize_cursor.png</file>
+    <file>gtk_logo_cursor.png</file>
     <file>grabbing_cursor.png</file>
     <file>grab_cursor.png</file>
     <file>hand_cursor.png</file>
@@ -103,9 +105,6 @@
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
   </gresource>
-  <gresource prefix="/stack">
-    <file>stack.ui</file>
-  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
@@ -113,12 +112,21 @@
     <file>shortcuts-clocks.ui</file>
     <file>shortcuts-boxes.ui</file>
   </gresource>
+  <gresource prefix="/sliding_puzzle">
+    <file>puzzlepiece.c</file>
+    <file>puzzlepiece.h</file>
+    <file>portland-rose.jpg</file>
+  </gresource>
+  <gresource prefix="/stack">
+    <file>stack.ui</file>
+  </gresource>
   <gresource prefix="/revealer">
     <file>revealer.ui</file>
   </gresource>
   <gresource prefix="/images">
     <file>alphatest.png</file>
     <file>floppybuddy.gif</file>
+    <file>gtk-logo.webm</file>
   </gresource>
   <gresource prefix="/pixbufs">
     <file>apple-red.png</file>
@@ -149,6 +157,7 @@
     <file>cursors.c</file>
     <file>dialog.c</file>
     <file>drawingarea.c</file>
+    <file>dnd.c</file>
     <file>editable_cells.c</file>
     <file>entry_buffer.c</file>
     <file>entry_completion.c</file>
@@ -156,10 +165,10 @@
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
-    <file>widgetbowl.c</file>
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
+    <file>fontplane.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>headerbar.c</file>
@@ -176,7 +185,11 @@
     <file>modelbutton.c</file>
     <file>overlay.c</file>
     <file>overlay2.c</file>
+    <file>paint.c</file>
     <file>pagesetup.c</file>
+    <file>paintable.c</file>
+    <file>paintable_animated.c</file>
+    <file>paintable_mediastream.c</file>
     <file>panes.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>
@@ -190,6 +203,7 @@
     <file>shortcuts.c</file>
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
+    <file>sliding_puzzle.c</file>
     <file>stack.c</file>
     <file>spinbutton.c</file>
     <file>spinner.c</file>
@@ -197,10 +211,10 @@
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
-    <file>toolpalette.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
     <file>textmask.c</file>
+    <file>video_player.c</file>
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>
@@ -221,6 +235,7 @@
   </gresource>
   <gresource prefix="/font_features">
     <file>font-features.ui</file>
+    <file>fontplane.c</file>
   </gresource>
   <gresource prefix="/spinbutton">
     <file>spinbutton.ui</file>
@@ -243,5 +258,8 @@
   </gresource>
   <gresource prefix="/modelbutton">
     <file>modelbutton.ui</file>
+  </gresource>
+  <gresource prefix="/dnd">
+    <file>dnd.css</file>
   </gresource>
 </gresources>

@@ -109,7 +109,7 @@ do_action (GtkBuilder *builder, const gchar *action, GString *string)
           GObject *o;
 
           o = gtk_builder_get_object (builder, parts[1]);
-          gtk_widget_show_now (GTK_WIDGET (o));
+          gtk_widget_show (GTK_WIDGET (o));
         }
       else if (strcmp (parts[0], "focus") == 0)
         {

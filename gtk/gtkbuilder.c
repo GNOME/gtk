@@ -238,7 +238,7 @@ enum {
 
 static GParamSpec *builder_props[LAST_PROP];
 
-struct _GtkBuilderPrivate
+typedef struct
 {
   gchar *domain;
   GHashTable *objects;
@@ -250,7 +250,7 @@ struct _GtkBuilderPrivate
   gchar *resource_prefix;
   GType template_type;
   GtkApplication *application;
-};
+} GtkBuilderPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
 
@@ -274,8 +274,6 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * have been marked as translatable in interface descriptions.
   * If the translation domain is %NULL, #GtkBuilder uses gettext(),
   * otherwise g_dgettext().
-  *
-  * Since: 2.12
   */
   builder_props[PROP_TRANSLATION_DOMAIN] =
       g_param_spec_string ("translation-domain",
@@ -290,10 +288,12 @@ gtk_builder_class_init (GtkBuilderClass *klass)
 static void
 gtk_builder_init (GtkBuilder *builder)
 {
-  builder->priv = gtk_builder_get_instance_private (builder);
-  builder->priv->domain = NULL;
-  builder->priv->objects = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                  g_free, g_object_unref);
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  priv = gtk_builder_get_instance_private (builder);
+  priv->domain = NULL;
+  priv->objects = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                         g_free, g_object_unref);
 }
 
 
@@ -304,7 +304,7 @@ gtk_builder_init (GtkBuilder *builder)
 static void
 gtk_builder_finalize (GObject *object)
 {
-  GtkBuilderPrivate *priv = GTK_BUILDER (object)->priv;
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (GTK_BUILDER (object));
 
   g_free (priv->domain);
   g_free (priv->filename);
@@ -345,11 +345,12 @@ gtk_builder_get_property (GObject    *object,
                           GParamSpec *pspec)
 {
   GtkBuilder *builder = GTK_BUILDER (object);
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
   switch (prop_id)
     {
     case PROP_TRANSLATION_DOMAIN:
-      g_value_set_string (value, builder->priv->domain);
+      g_value_set_string (value, priv->domain);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -513,6 +514,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
                             ObjectProperties  **parameters,
                             ObjectProperties  **filtered_parameters)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
   DelayedProperty *property;
   GError *error = NULL;
@@ -530,9 +532,11 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
 
       if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
-          GObject *object = g_hash_table_lookup (builder->priv->objects,
+          GObject *object = g_hash_table_lookup (priv->objects,
                                                  prop->text->str);
 
           if (object)
@@ -556,8 +560,8 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
               property->value = g_strdup (prop->text->str);
               property->line = prop->line;
               property->col = prop->col;
-              builder->priv->delayed_properties =
-                g_slist_prepend (builder->priv->delayed_properties, property);
+              priv->delayed_properties = g_slist_prepend (priv->delayed_properties,
+                                                          property);
               continue;
             }
         }
@@ -655,8 +659,10 @@ _gtk_builder_add_object (GtkBuilder  *builder,
                          const gchar *id,
                          GObject     *object)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   object_set_name (object, id);
-  g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
+  g_hash_table_insert (priv->objects, g_strdup (id), g_object_ref (object));
 }
 
 static void
@@ -664,6 +670,7 @@ gtk_builder_take_bindings (GtkBuilder *builder,
                            GObject    *target,
                            GSList     *bindings)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
 
   for (l = bindings; l; l = l->next)
@@ -672,7 +679,7 @@ gtk_builder_take_bindings (GtkBuilder *builder,
       info->target = target;
     }
 
-  builder->priv->bindings = g_slist_concat (builder->priv->bindings, bindings);
+  priv->bindings = g_slist_concat (priv->bindings, bindings);
 }
 
 GObject *
@@ -680,6 +687,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
                         ObjectInfo  *info,
                         GError     **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   ObjectProperties *parameters, *construct_parameters;
   GObject *obj;
   int i;
@@ -690,15 +698,15 @@ _gtk_builder_construct (GtkBuilder  *builder,
 
   g_assert (info->type != G_TYPE_INVALID);
 
-  if (builder->priv->template_type != 0 &&
-      g_type_is_a (info->type, builder->priv->template_type))
+  if (priv->template_type != 0 &&
+      g_type_is_a (info->type, priv->template_type))
     {
       g_set_error (error,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED,
                    "Refused to build object of type '%s' because it "
                    "conforms to the template type '%s', avoiding infinite recursion.",
-                   g_type_name (info->type), g_type_name (builder->priv->template_type));
+                   g_type_name (info->type), g_type_name (priv->template_type));
       return NULL;
     }
 
@@ -731,7 +739,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
     {
       GObject *constructor;
 
-      constructor = g_hash_table_lookup (builder->priv->objects, info->constructor);
+      constructor = g_hash_table_lookup (priv->objects, info->constructor);
       if (constructor == NULL)
         {
           g_set_error (error,
@@ -810,7 +818,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
       else
         g_object_set_property (obj, name, value);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents (value);
@@ -874,7 +882,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
       else
         g_object_set_property (info->object, name, value);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents (value);
@@ -929,13 +937,16 @@ void
 _gtk_builder_add_signals (GtkBuilder *builder,
                           GSList     *signals)
 {
-  builder->priv->signals = g_slist_concat (builder->priv->signals,
-                                           g_slist_copy (signals));
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  priv->signals = g_slist_concat (priv->signals,
+                                  g_slist_copy (signals));
 }
 
 static void
 gtk_builder_apply_delayed_properties (GtkBuilder *builder)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l, *props;
 
   /* take the list over from the builder->priv.
@@ -943,15 +954,15 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
    * g_slist_reverse does not copy the list, so the list now
    * belongs to us (and we free it at the end of this function).
    */
-  props = g_slist_reverse (builder->priv->delayed_properties);
-  builder->priv->delayed_properties = NULL;
+  props = g_slist_reverse (priv->delayed_properties);
+  priv->delayed_properties = NULL;
 
   for (l = props; l; l = l->next)
     {
       DelayedProperty *property = l->data;
       GObject *object, *obj;
 
-      object = g_hash_table_lookup (builder->priv->objects, property->object);
+      object = g_hash_table_lookup (priv->objects, property->object);
       g_assert (object != NULL);
 
       obj = _gtk_builder_lookup_object (builder, property->value, property->line, property->col);
@@ -979,9 +990,10 @@ free_binding_info (gpointer data,
 static inline void
 gtk_builder_create_bindings (GtkBuilder *builder)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
 
-  for (l = builder->priv->bindings; l; l = l->next)
+  for (l = priv->bindings; l; l = l->next)
     {
       BindingInfo *info = l->data;
       GObject *source;
@@ -995,8 +1007,8 @@ gtk_builder_create_bindings (GtkBuilder *builder)
       free_binding_info (info, NULL);
     }
 
-  g_slist_free (builder->priv->bindings);
-  builder->priv->bindings = NULL;
+  g_slist_free (priv->bindings);
+  priv->bindings = NULL;
 }
 
 void
@@ -1020,8 +1032,6 @@ _gtk_builder_finish (GtkBuilder *builder)
  * gtk_builder_new_from_resource() or gtk_builder_new_from_string().
  *
  * Returns: a new (empty) #GtkBuilder object
- *
- * Since: 2.12
  **/
 GtkBuilder *
 gtk_builder_new (void)
@@ -1051,15 +1061,14 @@ gtk_builder_new (void)
  * was leaked leading up to the reported failure. The only reasonable
  * thing to do when an error is detected is to call g_error().
  *
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.12
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_from_file (GtkBuilder   *builder,
                            const gchar  *filename,
                            GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gchar *buffer;
   gsize length;
   GError *tmp_error;
@@ -1073,13 +1082,13 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (filename);
-  builder->priv->resource_prefix = NULL;
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (filename);
+  priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
@@ -1091,10 +1100,10 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1116,16 +1125,15 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.14
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_objects_from_file (GtkBuilder   *builder,
                                    const gchar  *filename,
                                    gchar       **object_ids,
                                    GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gchar *buffer;
   gsize length;
   GError *tmp_error;
@@ -1143,10 +1151,10 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
       return 0;
     }
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (filename);
-  builder->priv->resource_prefix = NULL;
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (filename);
+  priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
@@ -1158,10 +1166,10 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 
@@ -1182,7 +1190,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  *
  * Returns: A positive value on success, 0 if an error occurred
  */
-guint
+gboolean
 gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GtkWidget    *widget,
                                   GType         template_type,
@@ -1190,6 +1198,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   gsize         length,
                                   GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GError *tmp_error;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
@@ -1200,11 +1209,11 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
 
   tmp_error = NULL;
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
-  builder->priv->resource_prefix = NULL;
-  builder->priv->template_type = template_type;
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (".");
+  priv->resource_prefix = NULL;
+  priv->template_type = template_type;
 
   gtk_builder_expose_object (builder, g_type_name (template_type), G_OBJECT (widget));
   _gtk_builder_parser_parse_buffer (builder, "<input>",
@@ -1215,10 +1224,10 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1240,15 +1249,14 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * call.  The only reasonable thing to do when an error is detected is
  * to call g_error().
  *
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 3.4
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_from_resource (GtkBuilder   *builder,
                                const gchar  *resource_path,
                                GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GError *tmp_error;
   GBytes *data;
   char *filename_for_errors;
@@ -1267,17 +1275,15 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
       return 0;
     }
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (".");
 
   slash = strrchr (resource_path, '/');
   if (slash != NULL)
-    builder->priv->resource_prefix =
-      g_strndup (resource_path, slash - resource_path + 1);
+    priv->resource_prefix = g_strndup (resource_path, slash - resource_path + 1);
   else
-    builder->priv->resource_prefix =
-      g_strdup ("/");
+    priv->resource_prefix = g_strdup ("/");
 
   filename_for_errors = g_strconcat ("<resource>", resource_path, NULL);
 
@@ -1292,10 +1298,10 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1317,16 +1323,15 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 3.4
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
                                        const gchar  *resource_path,
                                        gchar       **object_ids,
                                        GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GError *tmp_error;
   GBytes *data;
   char *filename_for_errors;
@@ -1343,20 +1348,18 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
   if (data == NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (".");
 
   slash = strrchr (resource_path, '/');
   if (slash != NULL)
-    builder->priv->resource_prefix =
-      g_strndup (resource_path, slash - resource_path + 1);
+    priv->resource_prefix = g_strndup (resource_path, slash - resource_path + 1);
   else
-    builder->priv->resource_prefix =
-      g_strdup ("/");
+    priv->resource_prefix = g_strdup ("/");
 
   filename_for_errors = g_strconcat ("<resource>", resource_path, NULL);
 
@@ -1370,10 +1373,10 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1396,16 +1399,15 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * call.  The only reasonable thing to do when an error is detected is
  * to call g_error().
  *
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.12
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_from_string (GtkBuilder   *builder,
                              const gchar  *buffer,
                              gsize         length,
                              GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GError *tmp_error;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
@@ -1414,10 +1416,10 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 
   tmp_error = NULL;
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
-  builder->priv->resource_prefix = NULL;
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (".");
+  priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
                                     buffer, length,
@@ -1426,10 +1428,10 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1451,17 +1453,16 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.14
+ * Returns: %TRUE on success, %FALSE if an error occurred
  **/
-guint
+gboolean
 gtk_builder_add_objects_from_string (GtkBuilder   *builder,
                                      const gchar  *buffer,
                                      gsize         length,
                                      gchar       **object_ids,
                                      GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GError *tmp_error;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
@@ -1471,10 +1472,10 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
 
   tmp_error = NULL;
 
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
-  builder->priv->resource_prefix = NULL;
+  g_free (priv->filename);
+  g_free (priv->resource_prefix);
+  priv->filename = g_strdup (".");
+  priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
                                     buffer, length,
@@ -1484,10 +1485,10 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
-      return 0;
+      return FALSE;
     }
 
-  return 1;
+  return TRUE;
 }
 
 /**
@@ -1500,17 +1501,17 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  *
  * Returns: (nullable) (transfer none): the object named @name or %NULL if
  *    it could not be found in the object tree.
- *
- * Since: 2.12
  **/
 GObject *
 gtk_builder_get_object (GtkBuilder  *builder,
                         const gchar *name)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  return g_hash_table_lookup (builder->priv->objects, name);
+  return g_hash_table_lookup (priv->objects, name);
 }
 
 /**
@@ -1524,19 +1525,18 @@ gtk_builder_get_object (GtkBuilder  *builder,
  * Returns: (element-type GObject) (transfer container): a newly-allocated #GSList containing all the objects
  *   constructed by the #GtkBuilder instance. It should be freed by
  *   g_slist_free()
- *
- * Since: 2.12
  **/
 GSList *
 gtk_builder_get_objects (GtkBuilder *builder)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *objects = NULL;
   GObject *object;
   GHashTableIter iter;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
-  g_hash_table_iter_init (&iter, builder->priv->objects);
+  g_hash_table_iter_init (&iter, priv->objects);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&object))
     objects = g_slist_prepend (objects, object);
 
@@ -1546,24 +1546,23 @@ gtk_builder_get_objects (GtkBuilder *builder)
 /**
  * gtk_builder_set_translation_domain:
  * @builder: a #GtkBuilder
- * @domain: (allow-none): the translation domain or %NULL
+ * @domain: (nullable): the translation domain or %NULL
  *
  * Sets the translation domain of @builder.
  * See #GtkBuilder:translation-domain.
- *
- * Since: 2.12
  **/
 void
 gtk_builder_set_translation_domain (GtkBuilder  *builder,
                                     const gchar *domain)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gchar *new_domain;
 
   g_return_if_fail (GTK_IS_BUILDER (builder));
 
   new_domain = g_strdup (domain);
-  g_free (builder->priv->domain);
-  builder->priv->domain = new_domain;
+  g_free (priv->domain);
+  priv->domain = new_domain;
 
   g_object_notify_by_pspec (G_OBJECT (builder), builder_props[PROP_TRANSLATION_DOMAIN]);
 }
@@ -1574,17 +1573,18 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  *
  * Gets the translation domain of @builder.
  *
- * Returns: the translation domain. This string is owned
- * by the builder object and must not be modified or freed.
- *
- * Since: 2.12
+ * Returns: (transfer none) (nullable): the translation domain or %NULL
+ *   in case it was never set or explicitly unset via gtk_builder_set_translation_domain().
+ *   This string is owned by the builder object and must not be modified or freed.
  **/
 const gchar *
 gtk_builder_get_translation_domain (GtkBuilder *builder)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
-  return builder->priv->domain;
+  return priv->domain;
 }
 
 /**
@@ -1595,20 +1595,20 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  *
  * Add @object to the @builder object pool so it can be referenced just like any
  * other object built by builder.
- *
- * Since: 3.8
  **/
 void
 gtk_builder_expose_object (GtkBuilder    *builder,
                            const gchar   *name,
                            GObject       *object)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (name && name[0]);
-  g_return_if_fail (!g_hash_table_contains (builder->priv->objects, name));
+  g_return_if_fail (!g_hash_table_contains (priv->objects, name));
 
   object_set_name (object, name);
-  g_hash_table_insert (builder->priv->objects,
+  g_hash_table_insert (priv->objects,
                        g_strdup (name),
                        g_object_ref (object));
 }
@@ -1681,8 +1681,6 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * On Linux and Unices, this is not necessary; applications should instead
  * be compiled with the -Wl,--export-dynamic CFLAGS, and linked against
  * gmodule-export-2.0.
- *
- * Since: 2.12
  **/
 void
 gtk_builder_connect_signals (GtkBuilder *builder,
@@ -1722,8 +1720,6 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * could be useful where the programmer wants more control over the signal
  * connection process. Note that this function can only be called once,
  * subsequent calls will do nothing.
- *
- * Since: 2.12
  */
 
 /**
@@ -1735,14 +1731,13 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * This function can be thought of the interpreted language binding
  * version of gtk_builder_connect_signals(), except that it does not
  * require GModule to function correctly.
- *
- * Since: 2.12
  */
 void
 gtk_builder_connect_signals_full (GtkBuilder            *builder,
                                   GtkBuilderConnectFunc  func,
                                   gpointer               user_data)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
   GObject *object;
   GObject *connect_object;
@@ -1751,11 +1746,11 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (func != NULL);
 
-  if (!builder->priv->signals)
+  if (!priv->signals)
     return;
 
-  builder->priv->signals = g_slist_reverse (builder->priv->signals);
-  for (l = builder->priv->signals; l; l = l->next)
+  priv->signals = g_slist_reverse (priv->signals);
+  for (l = priv->signals; l; l = l->next)
     {
       SignalInfo *signal = (SignalInfo*)l->data;
       const gchar *signal_name;
@@ -1765,15 +1760,14 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
 
       signal_name = g_signal_name (signal->id);
 
-      object = g_hash_table_lookup (builder->priv->objects,
-                                    signal->object_name);
+      object = g_hash_table_lookup (priv->objects, signal->object_name);
       g_assert (object != NULL);
 
       connect_object = NULL;
 
       if (signal->connect_object_name)
         {
-          connect_object = g_hash_table_lookup (builder->priv->objects,
+          connect_object = g_hash_table_lookup (priv->objects,
                                                 signal->connect_object_name);
           if (!connect_object)
               g_warning ("Could not lookup object %s on signal %s of object %s",
@@ -1795,8 +1789,8 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
             connect_object, signal->flags, user_data);
     }
 
-  g_slist_free_full (builder->priv->signals, (GDestroyNotify)_free_signal_info);
-  builder->priv->signals = NULL;
+  g_slist_free_full (priv->signals, (GDestroyNotify)_free_signal_info);
+  priv->signals = NULL;
 
   if (detailed_id)
     g_string_free (detailed_id, TRUE);
@@ -1823,8 +1817,6 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * #GError from the #GTK_BUILDER_ERROR domain.
  *
  * Returns: %TRUE on success
- *
- * Since: 2.12
  */
 gboolean
 gtk_builder_value_from_string (GtkBuilder   *builder,
@@ -1900,8 +1892,6 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
  * #GError from the #GTK_BUILDER_ERROR domain.
  *
  * Returns: %TRUE on success
- *
- * Since: 2.12
  */
 gboolean
 gtk_builder_value_from_string_type (GtkBuilder   *builder,
@@ -1910,6 +1900,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
                                     GValue       *value,
                                     GError      **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gboolean ret = TRUE;
 
   g_return_val_if_fail (string != NULL, FALSE);
@@ -2084,21 +2075,34 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       break;
     case G_TYPE_OBJECT:
     case G_TYPE_INTERFACE:
-      if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
+      if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF) ||
+          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) || 
+          G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
         {
           gchar *filename;
           GError *tmp_error = NULL;
           GdkPixbuf *pixbuf = NULL;
+          GObject *object;
 
-          if (g_hash_table_contains (builder->priv->objects, string))
+          object = g_hash_table_lookup (priv->objects, string);
+
+          if (object)
             {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Could not load image '%s': "
-                           " '%s' is already used as object id",
-                           string, string);
-              return FALSE;
+              if (g_type_is_a (G_OBJECT_TYPE (object), G_VALUE_TYPE (value)))
+                {
+                  g_value_set_object (value, object);
+                  return TRUE;
+                }
+              else
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "Could not load image '%s': "
+                               " '%s' is already used as object id for a %s",
+                               string, string, G_OBJECT_TYPE_NAME (object));
+                  return FALSE;
+                }
             }
 
           filename = _gtk_builder_get_resource_path (builder, string);
@@ -2136,7 +2140,17 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
           if (pixbuf)
             {
-              g_value_set_object (value, pixbuf);
+              if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE) ||
+                  G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
+                {
+                  GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
+                  g_value_set_object (value, texture);
+                  g_object_unref (texture);
+                }
+              else
+                {
+                  g_value_set_object (value, pixbuf);
+                }
               g_object_unref (G_OBJECT (pixbuf));
             }
 
@@ -2148,7 +2162,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         {
           GFile *file;
 
-          if (g_hash_table_contains (builder->priv->objects, string))
+          if (g_hash_table_contains (priv->objects, string))
             {
               g_set_error (error,
                            GTK_BUILDER_ERROR,
@@ -2409,8 +2423,6 @@ error:
  *
  * Returns: the #GType found for @type_name or #G_TYPE_INVALID
  *   if no type was found
- *
- * Since: 2.12
  */
 GType
 gtk_builder_get_type_from_name (GtkBuilder  *builder,
@@ -2438,30 +2450,33 @@ gtk_builder_error_quark (void)
 gchar *
 _gtk_builder_get_resource_path (GtkBuilder *builder, const gchar *string)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   if (g_str_has_prefix (string, "resource:///"))
     return g_uri_unescape_string (string + 11, "/");
 
   if (g_path_is_absolute (string) ||
-      builder->priv->resource_prefix == NULL)
+      priv->resource_prefix == NULL)
     return NULL;
 
-  return g_build_path ("/", builder->priv->resource_prefix, string, NULL);
+  return g_build_path ("/", priv->resource_prefix, string, NULL);
 }
 
 gchar *
 _gtk_builder_get_absolute_filename (GtkBuilder  *builder,
                                     const gchar *string)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gchar *filename;
   gchar *dirname = NULL;
 
   if (g_path_is_absolute (string))
     return g_strdup (string);
 
-  if (builder->priv->filename &&
-      strcmp (builder->priv->filename, ".") != 0)
+  if (priv->filename &&
+      strcmp (priv->filename, ".") != 0)
     {
-      dirname = g_path_get_dirname (builder->priv->filename);
+      dirname = g_path_get_dirname (priv->filename);
 
       if (strcmp (dirname, ".") == 0)
         {
@@ -2481,7 +2496,9 @@ _gtk_builder_get_absolute_filename (GtkBuilder  *builder,
 GType
 _gtk_builder_get_template_type (GtkBuilder *builder)
 {
-  return builder->priv->template_type;
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  return priv->template_type;
 }
 
 /**
@@ -2496,23 +2513,23 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  * for any callback symbols that are added. Using this method allows for better
  * encapsulation as it does not require that callback symbols be declared in
  * the global namespace.
- *
- * Since: 3.10
  */
 void
 gtk_builder_add_callback_symbol (GtkBuilder  *builder,
                                  const gchar *callback_name,
                                  GCallback    callback_symbol)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (callback_name && callback_name[0]);
   g_return_if_fail (callback_symbol != NULL);
 
-  if (!builder->priv->callbacks)
-    builder->priv->callbacks = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                      g_free, NULL);
+  if (!priv->callbacks)
+    priv->callbacks = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                             g_free, NULL);
 
-  g_hash_table_insert (builder->priv->callbacks, g_strdup (callback_name), callback_symbol);
+  g_hash_table_insert (priv->callbacks, g_strdup (callback_name), callback_symbol);
 }
 
 /**
@@ -2524,8 +2541,6 @@ gtk_builder_add_callback_symbol (GtkBuilder  *builder,
  *
  * A convenience function to add many callbacks instead of calling
  * gtk_builder_add_callback_symbol() for each symbol.
- *
- * Since: 3.10
  */
 void
 gtk_builder_add_callback_symbols (GtkBuilder  *builder,
@@ -2573,20 +2588,20 @@ gtk_builder_add_callback_symbols (GtkBuilder  *builder,
  * using gtk_builder_connect_signals_full()
  *
  * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
- *
- * Since: 3.10
  */
 GCallback
 gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
                                     const gchar *callback_name)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
   g_return_val_if_fail (callback_name && callback_name[0], NULL);
 
-  if (!builder->priv->callbacks)
+  if (!priv->callbacks)
     return NULL;
 
-  return g_hash_table_lookup (builder->priv->callbacks, callback_name);
+  return g_hash_table_lookup (priv->callbacks, callback_name);
 }
 
 /**
@@ -2601,8 +2616,6 @@ gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
  * user interface descriptions that are shipped as part of your program.
  *
  * Returns: a #GtkBuilder containing the described interface
- *
- * Since: 3.10
  **/
 GtkBuilder *
 gtk_builder_new_from_file (const gchar *filename)
@@ -2628,8 +2641,6 @@ gtk_builder_new_from_file (const gchar *filename)
  * description, then the program will be aborted.
  *
  * Returns: a #GtkBuilder containing the described interface
- *
- * Since: 3.10
  **/
 GtkBuilder *
 gtk_builder_new_from_resource (const gchar *resource_path)
@@ -2660,8 +2671,6 @@ gtk_builder_new_from_resource (const gchar *resource_path)
  * from untrusted sources.
  *
  * Returns: a #GtkBuilder containing the interface described by @string
- *
- * Since: 3.10
  **/
 GtkBuilder *
 gtk_builder_new_from_string (const gchar *string,
@@ -2686,20 +2695,20 @@ gtk_builder_new_from_string (const gchar *string,
  *
  * You only need this function if there is more than one #GApplication
  * in your process. @application cannot be %NULL.
- *
- * Since: 3.10
  **/
 void
 gtk_builder_set_application (GtkBuilder     *builder,
                              GtkApplication *application)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  if (builder->priv->application)
-    g_object_unref (builder->priv->application);
+  if (priv->application)
+    g_object_unref (priv->application);
 
-  builder->priv->application = g_object_ref (application);
+  priv->application = g_object_ref (application);
 }
 
 /**
@@ -2717,24 +2726,24 @@ gtk_builder_set_application (GtkBuilder     *builder,
  *
  * Returns: (nullable) (transfer none): the application being used by the builder,
  *     or %NULL
- *
- * Since: 3.10
  **/
 GtkApplication *
 gtk_builder_get_application (GtkBuilder *builder)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
-  if (!builder->priv->application)
+  if (!priv->application)
     {
       GApplication *application;
 
       application = g_application_get_default ();
       if (application && GTK_IS_APPLICATION (application))
-        builder->priv->application = g_object_ref (GTK_APPLICATION (application));
+        priv->application = g_object_ref (GTK_APPLICATION (application));
     }
 
-  return builder->priv->application;
+  return priv->application;
 }
 
 /*< private >
@@ -2756,10 +2765,11 @@ _gtk_builder_prefix_error (GtkBuilder           *builder,
                            GMarkupParseContext  *context,
                            GError              **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gint line, col;
 
   g_markup_parse_context_get_position (context, &line, &col);
-  g_prefix_error (error, "%s:%d:%d ", builder->priv->filename, line, col);
+  g_prefix_error (error, "%s:%d:%d ", priv->filename, line, col);
 }
 
 /*< private >
@@ -2782,6 +2792,7 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
                                   const gchar          *element_name,
                                   GError              **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gint line, col;
 
   g_markup_parse_context_get_position (context, &line, &col);
@@ -2789,7 +2800,7 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_UNHANDLED_TAG,
                "%s:%d:%d Unsupported tag for %s: <%s>",
-               builder->priv->filename, line, col,
+               priv->filename, line, col,
                object, element_name);
 }
 
@@ -2813,6 +2824,7 @@ _gtk_builder_check_parent (GtkBuilder           *builder,
                            const gchar          *parent_name,
                            GError              **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   const GSList *stack;
   gint line, col;
   const gchar *parent;
@@ -2832,7 +2844,7 @@ _gtk_builder_check_parent (GtkBuilder           *builder,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_INVALID_TAG,
                "%s:%d:%d Can't use <%s> here",
-               builder->priv->filename, line, col, element);
+               priv->filename, line, col, element);
 
   return FALSE;
 }
@@ -2858,10 +2870,11 @@ _gtk_builder_lookup_object (GtkBuilder  *builder,
                             gint         line,
                             gint         col)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GObject *obj;
   GError *error = NULL;
 
-  obj = g_hash_table_lookup (builder->priv->objects, name);
+  obj = g_hash_table_lookup (priv->objects, name);
   error = (GError *) g_object_get_data (G_OBJECT (builder), "lookup-error");
 
   if (!obj && !error)
@@ -2869,7 +2882,7 @@ _gtk_builder_lookup_object (GtkBuilder  *builder,
       g_set_error (&error,
                    GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ID,
                    "%s:%d:%d Object with ID %s not found",
-                   builder->priv->filename, line, col, name);
+                   priv->filename, line, col, name);
       g_object_set_data_full (G_OBJECT (builder), "lookup-error",
                               error, (GDestroyNotify)g_error_free);
     }

@@ -92,12 +92,12 @@ gtk_scrolled_window_accessible_initialize (AtkObject *obj,
 
   window = GTK_SCROLLED_WINDOW (data);
 
-  g_signal_connect_data (gtk_scrolled_window_get_hscrollbar (window), "notify::visible",
-                         G_CALLBACK (visibility_changed),
-                         obj, NULL, FALSE);
-  g_signal_connect_data (gtk_scrolled_window_get_vscrollbar (window), "notify::visible",
-                         G_CALLBACK (visibility_changed),
-                         obj, NULL, FALSE);
+  g_signal_connect_object (gtk_scrolled_window_get_hscrollbar (window), "notify::visible",
+                           G_CALLBACK (visibility_changed),
+                           obj, 0);
+  g_signal_connect_object (gtk_scrolled_window_get_vscrollbar (window), "notify::visible",
+                           G_CALLBACK (visibility_changed),
+                           obj, 0);
 
   obj->role = ATK_ROLE_SCROLL_PANE;
 }

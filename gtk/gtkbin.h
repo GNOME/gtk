@@ -43,12 +43,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkBin              GtkBin;
-typedef struct _GtkBinPrivate       GtkBinPrivate;
 typedef struct _GtkBinClass         GtkBinClass;
 
 struct _GtkBin
 {
-  GtkContainer container;
+  GtkContainer parent_instance;
 };
 
 /**

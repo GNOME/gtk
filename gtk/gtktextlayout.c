@@ -75,10 +75,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "config.h"
 #include "gtkmarshalers.h"
-#include "gtktextlayout.h"
+#include "gtktextlayoutprivate.h"
 #include "gtktextbtree.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
@@ -1533,7 +1532,7 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 
   if (!klass.type)
     klass.type = gtk_text_attr_appearance_type =
-      pango_attr_type_register ("GtkTextAttrAppearance");
+      pango_attr_type_register (I_("GtkTextAttrAppearance"));
 
   result = g_slice_new (GtkTextAttrAppearance);
   result->attr.klass = &klass;
@@ -1687,20 +1686,20 @@ add_text_attrs (GtkTextLayout      *layout,
 }
 
 static void
-add_pixbuf_attrs (GtkTextLayout      *layout,
-                  GtkTextLineDisplay *display,
-                  GtkTextAttributes  *style,
-                  GtkTextLineSegment *seg,
-                  PangoAttrList      *attrs,
-                  gint                start)
+add_texture_attrs (GtkTextLayout      *layout,
+                   GtkTextLineDisplay *display,
+                   GtkTextAttributes  *style,
+                   GtkTextLineSegment *seg,
+                   PangoAttrList      *attrs,
+                   gint                start)
 {
   PangoAttribute *attr;
   PangoRectangle logical_rect;
-  GtkTextPixbuf *pixbuf = &seg->body.pixbuf;
+  GtkTextTexture *texture = &seg->body.texture;
   gint width, height;
 
-  width = gdk_pixbuf_get_width (pixbuf->pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf->pixbuf);
+  width = gdk_texture_get_width (texture->texture);
+  height = gdk_texture_get_height (texture->texture);
 
   logical_rect.x = 0;
   logical_rect.y = -height * PANGO_SCALE;
@@ -1708,7 +1707,7 @@ add_pixbuf_attrs (GtkTextLayout      *layout,
   logical_rect.height = height * PANGO_SCALE;
 
   attr = pango_attr_shape_new_with_data (&logical_rect, &logical_rect,
-					 pixbuf->pixbuf, NULL, NULL);
+					 texture->texture, NULL, NULL);
   attr->start_index = start;
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
@@ -2121,7 +2120,7 @@ update_text_display_cursors (GtkTextLayout      *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_pixbuf_type ||
+          seg->type == &gtk_text_texture_type ||
           seg->type == &gtk_text_child_type)
         {
           gtk_text_layout_get_iter_at_line (layout, &iter, line,
@@ -2300,11 +2299,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
    */
   if (totally_invisible_line (layout, line, &iter))
     {
-      if (display->direction == GTK_TEXT_DIR_RTL)
-	display->layout = pango_layout_new (layout->rtl_context);
-      else
-	display->layout = pango_layout_new (layout->ltr_context);
-      
+      display->layout = pango_layout_new (layout->ltr_context);
       return display;
     }
 
@@ -2337,14 +2332,14 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_pixbuf_type ||
+          seg->type == &gtk_text_texture_type ||
           seg->type == &gtk_text_child_type)
         {
           style = get_style (layout, tags);
 	  initial_toggle_segments = FALSE;
 
           /* We have to delay setting the paragraph values until we
-           * hit the first pixbuf or text segment because toggles at
+           * hit the first texture or text segment because toggles at
            * the beginning of the paragraph should affect the
            * paragraph-global values
            */
@@ -2418,15 +2413,15 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   add_text_attrs (layout, style, bytes, attrs,
                                   layout_byte_offset - bytes, size_only);
                 }
-              else if (seg->type == &gtk_text_pixbuf_type)
+              else if (seg->type == &gtk_text_texture_type)
                 {
                   add_generic_attrs (layout,
                                      &style->appearance,
                                      seg->byte_count,
                                      attrs, layout_byte_offset,
                                      size_only, FALSE);
-                  add_pixbuf_attrs (layout, display, style,
-                                    seg, attrs, layout_byte_offset);
+                  add_texture_attrs (layout, display, style,
+                                     seg, attrs, layout_byte_offset);
                   memcpy (text + layout_byte_offset, _gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
@@ -2822,8 +2817,8 @@ gtk_text_layout_get_iter_at_position (GtkTextLayout *layout,
  * gtk_text_layout_get_cursor_locations:
  * @layout: a #GtkTextLayout
  * @iter: a #GtkTextIter
- * @strong_pos: (allow-none): location to store the strong cursor position (may be %NULL)
- * @weak_pos: (allow-none): location to store the weak cursor position (may be %NULL)
+ * @strong_pos: (out) (optional): location to store the strong cursor position, or %NULL
+ * @weak_pos: (out) (optional): location to store the weak cursor position, or %NULL
  *
  * Given an iterator within a text layout, determine the positions of the
  * strong and weak cursors if the insertion point is at that

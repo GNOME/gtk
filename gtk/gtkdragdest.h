@@ -40,18 +40,18 @@ G_BEGIN_DECLS
 /**
  * GtkDestDefaults:
  * @GTK_DEST_DEFAULT_MOTION: If set for a widget, GTK+, during a drag over this
- *   widget will check if the drag matches this widget’s list of possible targets
+ *   widget will check if the drag matches this widget’s list of possible formats
  *   and actions.
  *   GTK+ will then call gdk_drag_status() as appropriate.
  * @GTK_DEST_DEFAULT_HIGHLIGHT: If set for a widget, GTK+ will draw a highlight on
  *   this widget as long as a drag is over this widget and the widget drag format
  *   and action are acceptable.
  * @GTK_DEST_DEFAULT_DROP: If set for a widget, when a drop occurs, GTK+ will
- *   will check if the drag matches this widget’s list of possible targets and
+ *   will check if the drag matches this widget’s list of possible formats and
  *   actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget.
- *   Whether or not the drop is successful, GTK+ will call gtk_drag_finish(). If
+ *   Whether or not the drop is successful, GTK+ will call gdk_drag_finish(). If
  *   the action was a move, then if the drag was successful, then %TRUE will be
- *   passed for the @delete parameter to gtk_drag_finish().
+ *   passed for the @delete parameter to gdk_drag_finish().
  * @GTK_DEST_DEFAULT_ALL: If set, specifies that all default actions should
  *   be taken.
  *
@@ -69,22 +69,21 @@ typedef enum {
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_dest_set   (GtkWidget            *widget,
                           GtkDestDefaults       flags,
-                          const GtkTargetEntry *targets,
-                          gint                  n_targets,
+                          GdkContentFormats    *targets,
                           GdkDragAction         actions);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_dest_unset (GtkWidget          *widget);
 
 GDK_AVAILABLE_IN_ALL
-GdkAtom        gtk_drag_dest_find_target     (GtkWidget      *widget,
-                                              GdkDragContext *context,
-                                              GtkTargetList  *target_list);
+const char *            gtk_drag_dest_find_target       (GtkWidget              *widget,
+                                                         GdkDrop                *drop,
+                                                         GdkContentFormats      *target_list);
 GDK_AVAILABLE_IN_ALL
-GtkTargetList* gtk_drag_dest_get_target_list (GtkWidget      *widget);
+GdkContentFormats*      gtk_drag_dest_get_target_list   (GtkWidget              *widget);
 GDK_AVAILABLE_IN_ALL
 void           gtk_drag_dest_set_target_list (GtkWidget      *widget,
-                                              GtkTargetList  *target_list);
+                                              GdkContentFormats  *target_list);
 GDK_AVAILABLE_IN_ALL
 void           gtk_drag_dest_add_text_targets  (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL

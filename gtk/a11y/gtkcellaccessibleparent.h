@@ -111,7 +111,7 @@ void     gtk_cell_accessible_parent_activate         (GtkCellAccessibleParent *p
 GDK_AVAILABLE_IN_ALL
 void     gtk_cell_accessible_parent_edit             (GtkCellAccessibleParent *parent,
                                                       GtkCellAccessible       *cell);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void     gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
                                                       GtkCellAccessible       *cell,
                                                       AtkRelationSet          *relationset);

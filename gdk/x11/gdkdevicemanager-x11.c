@@ -24,6 +24,7 @@
 #endif
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 
 /* Defines for VCP/VCK, to be used too
  * for the core protocol device manager
@@ -31,7 +32,9 @@
 #define VIRTUAL_CORE_POINTER_ID 2
 #define VIRTUAL_CORE_KEYBOARD_ID 3
 
-GdkDeviceManager *
+static gboolean _gdk_disable_multidevice = FALSE;
+
+GdkX11DeviceManagerCore *
 _gdk_x11_device_manager_new (GdkDisplay *display)
 {
   if (!g_getenv ("GDK_CORE_DEVICE_EVENTS"))
@@ -55,7 +58,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
             {
               GdkX11DeviceManagerXI2 *device_manager_xi2;
 
-              GDK_NOTE (INPUT, g_message ("Creating XI2 device manager"));
+              GDK_DISPLAY_NOTE (display, INPUT, g_message ("Creating XI2 device manager"));
 
               device_manager_xi2 = g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI2,
                                                  "display", display,
@@ -64,13 +67,13 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
                                                  "minor", minor,
                                                  NULL);
 
-              return GDK_DEVICE_MANAGER (device_manager_xi2);
+              return GDK_X11_DEVICE_MANAGER_CORE (device_manager_xi2);
             }
         }
 #endif /* XINPUT_2 */
     }
 
-  GDK_NOTE (INPUT, g_message ("Creating core device manager"));
+  GDK_DISPLAY_NOTE (display, INPUT, g_message ("Creating core device manager"));
 
   return g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_CORE,
                        "display", display,
@@ -86,16 +89,14 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
  *
  * Returns: (transfer none) (allow-none) (type GdkX11DeviceCore): The #GdkDevice wrapping the device ID,
  *          or %NULL if the given ID doesn’t currently represent a device.
- *
- * Since: 3.2
  **/
 GdkDevice *
-gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
-			       gint              device_id)
+gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
+			       gint                     device_id)
 {
   GdkDevice *device = NULL;
 
-  g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
+  g_return_val_if_fail (GDK_IS_X11_DEVICE_MANAGER_CORE (device_manager), NULL);
 
 #ifdef XINPUT_2
   if (GDK_IS_X11_DEVICE_MANAGER_XI2 (device_manager))
@@ -131,8 +132,6 @@ gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
  * > those managed via XInput 1.x), will return 0.
  *
  * Returns: the XInput2 device ID.
- *
- * Since: 3.2
  **/
 gint
 gdk_x11_device_get_id (GdkDevice *device)
@@ -155,4 +154,22 @@ gdk_x11_device_get_id (GdkDevice *device)
       }
 
   return device_id;
+}
+
+/**
+ * gdk_disable_multidevice:
+ *
+ * Disables multidevice support in GDKs X11 backend. This call must happen prior
+ * to gdk_display_open(), gtk_init() or gtk_init_check() in order to
+ * take effect.
+ *
+ * Most common GTK+ applications won’t ever need to call this. Only
+ * applications that do mixed GDK/Xlib calls could want to disable
+ * multidevice support if such Xlib code deals with input devices in
+ * any way and doesn’t observe the presence of XInput 2.
+ */
+void
+gdk_disable_multidevice (void)
+{
+  _gdk_disable_multidevice = TRUE;
 }

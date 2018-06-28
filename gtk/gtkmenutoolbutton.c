@@ -327,8 +327,6 @@ gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface *iface)
  * @label as label.
  *
  * Returns: the new #GtkMenuToolButton
- *
- * Since: 2.6
  **/
 GtkToolItem *
 gtk_menu_tool_button_new (GtkWidget   *icon_widget,
@@ -361,8 +359,6 @@ _show_menu_emit (gpointer user_data)
  *
  * Sets the #GtkMenu that is popped up when the user clicks on the arrow.
  * If @menu is NULL, the arrow button becomes insensitive.
- *
- * Since: 2.6
  **/
 void
 gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
@@ -391,8 +387,6 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
  *
  * Returns: (transfer none): the #GtkMenu associated
  *     with #GtkMenuToolButton
- *
- * Since: 2.6
  **/
 GtkWidget *
 gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
@@ -416,8 +410,6 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
  * Sets the tooltip text to be used as tooltip for the arrow button which
  * pops up the menu.  See gtk_tool_item_set_tooltip_text() for setting a tooltip
  * on the whole #GtkMenuToolButton.
- *
- * Since: 2.12
  **/
 void
 gtk_menu_tool_button_set_arrow_tooltip_text (GtkMenuToolButton *button,
@@ -436,8 +428,6 @@ gtk_menu_tool_button_set_arrow_tooltip_text (GtkMenuToolButton *button,
  * Sets the tooltip markup text to be used as tooltip for the arrow button
  * which pops up the menu.  See gtk_tool_item_set_tooltip_text() for setting
  * a tooltip on the whole #GtkMenuToolButton.
- *
- * Since: 2.12
  **/
 void
 gtk_menu_tool_button_set_arrow_tooltip_markup (GtkMenuToolButton *button,

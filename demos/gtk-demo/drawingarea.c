@@ -4,8 +4,8 @@
  * of various kinds.
  *
  * This demo has two drawing areas. The checkerboard area shows
- * how you can just draw something; all you have to do is write
- * a signal handler for expose_event, as shown here.
+ * how you can just draw something; all you have to do is set a function
+ * via gtk_drawing_area_set_draw_func(), as shown here.
  *
  * The "scribble" area is a bit more advanced, and shows how to handle
  * events such as button presses and mouse motion. Click the mouse
@@ -23,16 +23,14 @@ static cairo_surface_t *surface = NULL;
 static void
 create_surface (GtkWidget *widget)
 {
-  GtkAllocation allocation;
   cairo_t *cr;
 
   if (surface)
     cairo_surface_destroy (surface);
 
-  gtk_widget_get_allocation (widget, &allocation);
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        allocation.width,
-                                        allocation.height);
+                                        gtk_widget_get_width (widget),
+                                        gtk_widget_get_height (widget));
 
   /* Initialize the surface to white */
   cr = cairo_create (surface);
@@ -71,8 +69,8 @@ draw_brush (GtkWidget *widget,
   cairo_t *cr;
 
   if (surface == NULL ||
-      cairo_image_surface_get_width (surface) != gtk_widget_get_allocated_width (widget) ||
-      cairo_image_surface_get_height (surface) != gtk_widget_get_allocated_height (widget))
+      cairo_image_surface_get_width (surface) != gtk_widget_get_width (widget) ||
+      cairo_image_surface_get_height (surface) != gtk_widget_get_height (widget))
     create_surface (widget);
 
   update_rect.x = x - 3;
@@ -88,45 +86,41 @@ draw_brush (GtkWidget *widget,
 
   cairo_destroy (cr);
 
-  gtk_widget_queue_draw_area (widget, update_rect.x, update_rect.y, update_rect.width, update_rect.height);
+  gtk_widget_queue_draw (widget);
 }
 
-static gboolean
-scribble_button_press_event (GtkWidget      *widget,
-                             GdkEventButton *event,
-                             gpointer        data)
+static double start_x;
+static double start_y;
+
+static void
+drag_begin (GtkGestureDrag *gesture,
+            double          x,
+            double          y,
+            GtkWidget      *area)
 {
-  double x, y;
-  guint button;
+  start_x = x;
+  start_y = y;
 
-  gdk_event_get_button ((GdkEvent *)event, &button);
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-
-  if (button == GDK_BUTTON_PRIMARY)
-    draw_brush (widget, x, y);
-
-  /* We've handled the event, stop processing */
-  return TRUE;
+  draw_brush (area, x, y);
 }
 
-static gboolean
-scribble_motion_notify_event (GtkWidget      *widget,
-                              GdkEventMotion *event,
-                              gpointer        data)
+static void
+drag_update (GtkGestureDrag *gesture,
+             double          x,
+             double          y,
+             GtkWidget      *area)
 {
-  double x, y;
-  GdkModifierType state;
-
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-
-  if (state & GDK_BUTTON1_MASK)
-    draw_brush (widget, x, y);
-
-  /* We've handled it, stop processing */
-  return TRUE;
+  draw_brush (area, start_x + x, start_y + y);
 }
 
+static void
+drag_end (GtkGestureDrag *gesture,
+          double          x,
+          double          y,
+          GtkWidget      *area)
+{
+  draw_brush (area, start_x + x, start_y + y);
+}
 
 static void
 checkerboard_draw (GtkDrawingArea *da,
@@ -143,7 +137,7 @@ checkerboard_draw (GtkDrawingArea *da,
   /* At the start of a draw handler, a clip region has been set on
    * the Cairo context, and the contents have been cleared to the
    * widget's background color. The docs for
-   * gdk_window_begin_paint_region() give more details on how this
+   * gdk_surface_begin_paint_region() give more details on how this
    * works.
    */
 
@@ -191,6 +185,7 @@ do_drawingarea (GtkWidget *do_widget)
   GtkWidget *vbox;
   GtkWidget *da;
   GtkWidget *label;
+  GtkGesture *drag;
 
   if (!window)
     {
@@ -249,11 +244,14 @@ do_drawingarea (GtkWidget *do_widget)
       g_signal_connect (da, "size-allocate",
                         G_CALLBACK (scribble_size_allocate), NULL);
 
-      /* Event signals */
-      g_signal_connect (da, "motion-notify-event",
-                        G_CALLBACK (scribble_motion_notify_event), NULL);
-      g_signal_connect (da, "button-press-event",
-                        G_CALLBACK (scribble_button_press_event), NULL);
+      drag = gtk_gesture_drag_new ();
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
+      gtk_widget_add_controller (da, GTK_EVENT_CONTROLLER (drag));
+
+      g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), da);
+      g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), da);
+      g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), da);
+
     }
 
   if (!gtk_widget_get_visible (window))

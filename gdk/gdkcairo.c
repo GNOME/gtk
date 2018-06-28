@@ -33,9 +33,9 @@
  * can be used with GDK. GTK+ does all of its drawing using cairo.
  *
  * GDK does not wrap the cairo API, instead it allows to create cairo
- * contexts which can be used to draw on #GdkWindows. Additional
+ * contexts which can be used to draw on #GdkSurfaces. Additional
  * functions allow use #GdkRectangles with cairo and to use #GdkRGBAs,
- * #GdkPixbufs and #GdkWindows as sources for drawing operations.
+ * #GdkPixbufs and #GdkSurfaces as sources for drawing operations.
  */
 
 
@@ -84,8 +84,6 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
  * @rgba: a #GdkRGBA
  *
  * Sets the specified #GdkRGBA as the source color of @cr.
- *
- * Since: 3.0
  */
 void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
@@ -107,8 +105,6 @@ gdk_cairo_set_source_rgba (cairo_t       *cr,
  * @rectangle: a #GdkRectangle
  *
  * Adds the given rectangle to the current path of @cr.
- *
- * Since: 2.8
  */
 void
 gdk_cairo_rectangle (cairo_t            *cr,
@@ -128,8 +124,6 @@ gdk_cairo_rectangle (cairo_t            *cr,
  * @region: a #cairo_region_t
  *
  * Adds the given region to the current path of @cr.
- *
- * Since: 2.8
  */
 void
 gdk_cairo_region (cairo_t              *cr,
@@ -244,48 +238,6 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 }
 
 /**
- * gdk_cairo_surface_create_from_pixbuf:
- * @pixbuf: a #GdkPixbuf
- * @scale: the scale of the new surface, or 0 to use same as @window
- * @for_window: (allow-none): The window this will be drawn to, or %NULL
- *
- * Creates an image surface with the same contents as
- * the pixbuf.
- *
- * Returns: a new cairo surface, must be freed with cairo_surface_destroy()
- *
- * Since: 3.10
- */
-cairo_surface_t *
-gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
-                                      int              scale,
-                                      GdkWindow       *for_window)
-{
-  cairo_format_t format;
-  cairo_surface_t *surface;
-
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-  g_return_val_if_fail (scale >= 0, NULL);
-  g_return_val_if_fail (for_window == NULL || GDK_IS_WINDOW (for_window), NULL);
-
-  if (gdk_pixbuf_get_n_channels (pixbuf) == 3)
-    format = CAIRO_FORMAT_RGB24;
-  else
-    format = CAIRO_FORMAT_ARGB32;
-
-  surface =
-     gdk_window_create_similar_image_surface (for_window,
-					      format,
-                                              gdk_pixbuf_get_width (pixbuf),
-                                              gdk_pixbuf_get_height (pixbuf),
-					      scale);
-
-  gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
-
-  return surface;
-}
-
-/**
  * gdk_cairo_set_source_pixbuf:
  * @cr: a cairo context
  * @pixbuf: a #GdkPixbuf
@@ -296,8 +248,6 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
  *
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
  * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.
- *
- * Since: 2.8
  */
 void
 gdk_cairo_set_source_pixbuf (cairo_t         *cr,

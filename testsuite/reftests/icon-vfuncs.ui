@@ -109,7 +109,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="icon_name">pan-down-symbolic</property>
-            <property name="icon_size">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
           </object>

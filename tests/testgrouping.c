@@ -110,8 +110,7 @@ main (int argc, char **argv)
   model = create_model ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "delete_event",
-		    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 320, 480);
 
   sw = gtk_scrolled_window_new (NULL, NULL);

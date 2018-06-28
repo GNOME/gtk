@@ -21,11 +21,9 @@
 
 #include <gobject/gvaluecollector.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <cairo-gobject.h>
 #include <math.h>
 
 #include "gtkcssparserprivate.h"
-#include "gtkcssstylefuncsprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkintl.h"
@@ -45,6 +43,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcssfontfeaturesvalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
@@ -59,6 +58,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
+#include "gtkcssfontvariationsvalueprivate.h"
 #include "gtktypebuiltins.h"
 
 /*** REGISTRATION ***/
@@ -391,6 +391,16 @@ parse_css_fill_mode (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+icon_size_parse (GtkCssStyleProperty *property,
+		 GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser, 
+                                      GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_POSITIVE_ONLY);
+}
+
+static GtkCssValue *
 icon_palette_parse (GtkCssStyleProperty *property,
 		    GtkCssParser        *parser)
 {
@@ -648,6 +658,20 @@ parse_font_variant_east_asian (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_feature_settings (GtkCssStyleProperty *property,
+                             GtkCssParser        *parser)
+{
+  return gtk_css_font_features_value_parse (parser);
+}
+
+static GtkCssValue *
+parse_font_variation_settings (GtkCssStyleProperty *property,
+                               GtkCssParser        *parser)
+{
+  return gtk_css_font_variations_value_parse (parser);
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -717,33 +741,6 @@ css_image_value_parse_with_builtin (GtkCssStyleProperty *property,
   return css_image_value_parse (property, parser);
 }
 
-static void
-css_image_value_query (GtkCssStyleProperty *property,
-                       const GtkCssValue   *css_value,
-                       GValue              *value)
-{
-  GtkCssImage *image = _gtk_css_image_value_get_image (css_value);
-  cairo_pattern_t *pattern;
-  cairo_surface_t *surface;
-  cairo_matrix_t matrix;
-
-  g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
-
-  if (image != NULL)
-    {
-      double width, height;
-
-      /* the 100, 100 is rather random */
-      _gtk_css_image_get_concrete_size (image, 0, 0, 100, 100, &width, &height);
-      surface = _gtk_css_image_get_surface (image, NULL, width, height);
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_matrix_init_scale (&matrix, width, height);
-      cairo_pattern_set_matrix (pattern, &matrix);
-      cairo_surface_destroy (surface);
-      g_value_take_boxed (value, pattern);
-    }
-}
-
 static GtkCssValue *
 background_image_value_parse_one (GtkCssParser *parser)
 {
@@ -755,14 +752,6 @@ background_image_value_parse (GtkCssStyleProperty *property,
                               GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, background_image_value_parse_one);
-}
-
-static void
-background_image_value_query (GtkCssStyleProperty *property,
-                              const GtkCssValue   *css_value,
-                              GValue              *value)
-{
-  css_image_value_query (property, _gtk_css_array_value_get_nth (css_value, 0), value);
 }
 
 static GtkCssValue *
@@ -1184,7 +1173,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT_CLIP,
+                                          GTK_CSS_AFFECTS_TEXT_CONTENT,
                                           shadow_value_parse,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
@@ -1515,11 +1504,11 @@ _gtk_css_style_property_init_properties (void)
                                                                                                           GTK_CSS_REPEAT_STYLE_REPEAT)));
   gtk_css_style_property_register        ("background-image",
                                           GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
-                                          CAIRO_GOBJECT_TYPE_PATTERN,
+                                          G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_image_value_parse,
-                                          background_image_value_query,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_image_value_new (NULL)));
 
   gtk_css_style_property_register        ("background-blend-mode",
@@ -1533,11 +1522,11 @@ _gtk_css_style_property_init_properties (void)
 
   gtk_css_style_property_register        ("border-image-source",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,
-                                          CAIRO_GOBJECT_TYPE_PATTERN,
+                                          G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           css_image_value_parse,
-                                          css_image_value_query,
+                                          NULL,
                                           _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("border-image-repeat",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT,
@@ -1580,6 +1569,14 @@ _gtk_css_style_property_init_properties (void)
                                           css_image_value_parse_with_builtin,
                                           NULL,
                                           _gtk_css_image_value_new (gtk_css_image_builtin_new ()));
+  gtk_css_style_property_register        ("-gtk-icon-size",
+                                          GTK_CSS_PROPERTY_ICON_SIZE,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
+                                          icon_size_parse,
+                                          NULL,
+                                          _gtk_css_number_value_new (16, GTK_CSS_PX));
   gtk_css_style_property_register        ("-gtk-icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
                                           G_TYPE_NONE,
@@ -1783,4 +1780,20 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           _gtk_css_color_value_new_current_color ());
+  gtk_css_style_property_register        ("font-feature-settings",
+                                          GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
+                                          parse_font_feature_settings,
+                                          NULL,
+                                          gtk_css_font_features_value_new_default ());
+  gtk_css_style_property_register        ("font-variation-settings",
+                                          GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
+                                          parse_font_variation_settings,
+                                          NULL,
+                                          gtk_css_font_variations_value_new_default ());
 }

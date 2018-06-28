@@ -16,18 +16,22 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
 
 #include "resource-list.h"
 
+#include "treewalk.h"
+
+#include "gtkbutton.h"
 #include "gtklabel.h"
-#include "gtkstack.h"
-#include "gtktextbuffer.h"
-#include "gtktreestore.h"
-#include "gtktreeselection.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
-#include "treewalk.h"
+#include "gtkstack.h"
+#include "gtktextbuffer.h"
+#include "gtktreeselection.h"
+#include "gtktreestore.h"
+#include "gtkeventcontrollerkey.h"
+
+#include <glib/gi18n-lib.h>
 
 enum
 {
@@ -391,15 +395,13 @@ move_search_to_row (GtkInspectorResourceList *sl,
 }
 
 static gboolean
-key_press_event (GtkWidget                *window,
-                 GdkEvent                 *event,
-                 GtkInspectorResourceList *sl)
+key_pressed (GtkEventController       *controller,
+             guint                     keyval,
+             guint                     keycode,
+             GdkModifierType           state,
+             GtkInspectorResourceList *sl)
 {
-  guint keyval, state;
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)) &&
-      gdk_event_get_keyval (event, &keyval) &&
-      gdk_event_get_state (event, &state))
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
     {
       GdkModifierType default_accel;
       gboolean search_started;
@@ -462,21 +464,40 @@ key_press_event (GtkWidget                *window,
 
           return GDK_EVENT_STOP;
         }
-
-      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar), event);
     }
-  else
-    return GDK_EVENT_PROPAGATE;
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+destroy_controller (GtkEventController *controller)
+{
+  gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
 }
 
 static void
 on_hierarchy_changed (GtkWidget *widget,
                       GtkWidget *previous_toplevel)
 {
+  GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (widget);
+  GtkEventController *controller;
+  GtkWidget *toplevel;
+
   if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
-  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
-                    G_CALLBACK (key_press_event), widget);
+    g_object_set_data (G_OBJECT (previous_toplevel), "resource-controller", NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
+  controller = gtk_event_controller_key_new ();
+  g_object_set_data_full (G_OBJECT (toplevel), "resource-controller", controller, (GDestroyNotify)destroy_controller);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
+  gtk_widget_add_controller (toplevel, controller);
+
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar),
+                                         toplevel);
 }
 
 static void

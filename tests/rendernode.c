@@ -114,11 +114,11 @@ main(int argc, char **argv)
   else
     {
       GskRenderer *renderer;
-      GdkWindow *window;
-      GskTexture *texture = NULL;
+      GdkSurface *window;
+      GdkTexture *texture = NULL;
 
-      window = gdk_window_new_toplevel (gdk_display_get_default(), 0, 10 , 10);
-      renderer = gsk_renderer_new_for_window (window);
+      window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
+      renderer = gsk_renderer_new_for_surface (window);
 
       for (run = 0; run < runs; run++)
         {
@@ -132,12 +132,13 @@ main(int argc, char **argv)
         }
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                            gsk_texture_get_width (texture),
-                                            gsk_texture_get_height (texture));
-      gsk_texture_download (texture,
+                                            gdk_texture_get_width (texture),
+                                            gdk_texture_get_height (texture));
+      gdk_texture_download (texture,
                             cairo_image_surface_get_data (surface),
                             cairo_image_surface_get_stride (surface));
       cairo_surface_mark_dirty (surface);
+      gsk_renderer_unrealize (renderer);
       g_object_unref (texture);
       g_object_unref (window);
       g_object_unref (renderer);

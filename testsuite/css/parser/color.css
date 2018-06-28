@@ -37,29 +37,37 @@ i {
 }
 
 j {
-  color: #012345;
+  color: #0123;
 }
 
 k {
-  color: lighter(red);
+  color: #012345;
 }
 
 l {
-  color: darker(red);
+  color: #FFEEDDCC;
 }
 
 m {
-  color: shade(green,0.5);
+  color: lighter(red);
 }
 
 n {
-  color: alpha(green,0.5);
+  color: darker(red);
 }
 
 o {
-  color: mix(red,blue,0.25);
+  color: shade(green,0.5);
 }
 
 p {
+  color: alpha(green,0.5);
+}
+
+q {
+  color: mix(red,blue,0.25);
+}
+
+r {
   color: @mygreen;
 }

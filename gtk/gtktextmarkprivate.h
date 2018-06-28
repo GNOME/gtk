@@ -26,7 +26,7 @@
 #define __GTK_TEXT_MARK_PRIVATE_H__
 
 #include <gtk/gtktexttypes.h>
-#include <gtk/gtktextlayout.h>
+#include "gtktextlayoutprivate.h"
 
 G_BEGIN_DECLS
 

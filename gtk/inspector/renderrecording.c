@@ -28,7 +28,6 @@ gtk_inspector_render_recording_finalize (GObject *object)
   GtkInspectorRenderRecording *recording = GTK_INSPECTOR_RENDER_RECORDING (object);
 
   g_clear_pointer (&recording->clip_region, cairo_region_destroy);
-  g_clear_pointer (&recording->render_region, cairo_region_destroy);
   g_clear_pointer (&recording->node, gsk_render_node_unref);
   g_clear_pointer (&recording->profiler_info, g_free);
 
@@ -65,7 +64,6 @@ gtk_inspector_render_recording_new (gint64                timestamp,
                                     GskProfiler          *profiler,
                                     const GdkRectangle   *area,
                                     const cairo_region_t *clip_region,
-                                    const cairo_region_t *render_region,
                                     GskRenderNode        *node)
 {
   GtkInspectorRenderRecording *recording;
@@ -77,7 +75,6 @@ gtk_inspector_render_recording_new (gint64                timestamp,
   collect_profiler_info (recording, profiler);
   recording->area = *area;
   recording->clip_region = cairo_region_copy (clip_region);
-  recording->render_region = cairo_region_copy (render_region);
   recording->node = gsk_render_node_ref (node);
 
   return GTK_INSPECTOR_RECORDING (recording);
@@ -93,12 +90,6 @@ const cairo_region_t *
 gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording *recording)
 {
   return recording->clip_region;
-}
-
-const cairo_region_t *
-gtk_inspector_render_recording_get_render_region (GtkInspectorRenderRecording *recording)
-{
-  return recording->render_region;
 }
 
 const cairo_rectangle_int_t *

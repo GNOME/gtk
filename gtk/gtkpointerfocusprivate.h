@@ -18,7 +18,7 @@
 #ifndef _GTK_POINTER_FOCUS_PRIVATE_H_
 #define _GTK_POINTER_FOCUS_PRIVATE_H_
 
-#include <gtk/gtk.h>
+#include <gtk/gtktypes.h>
 
 typedef struct _GtkPointerFocus GtkPointerFocus;
 

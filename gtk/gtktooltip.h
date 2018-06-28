@@ -43,15 +43,13 @@ void gtk_tooltip_set_text                (GtkTooltip         *tooltip,
                                           const gchar        *text);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon                (GtkTooltip         *tooltip,
-                                          GdkPixbuf          *pixbuf);
+                                          GdkPaintable       *paintable);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon_from_icon_name (GtkTooltip         *tooltip,
-				          const gchar        *icon_name,
-				          GtkIconSize         size);
+				          const gchar        *icon_name);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon_from_gicon     (GtkTooltip         *tooltip,
-					  GIcon              *gicon,
-					  GtkIconSize         size);
+					  GIcon              *gicon);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_custom	         (GtkTooltip         *tooltip,
                                           GtkWidget          *custom_widget);

@@ -28,7 +28,6 @@
 
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
-#include "gtkselectionprivate.h"
 #include "gtkintl.h"
 
 
@@ -38,7 +37,7 @@ gtk_drag_dest_realized (GtkWidget *widget)
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
   if (gtk_widget_is_toplevel (toplevel))
-    gdk_window_register_dnd (gtk_widget_get_window (toplevel));
+    gdk_surface_register_dnd (gtk_widget_get_surface (toplevel));
 }
 
 static void
@@ -48,7 +47,7 @@ gtk_drag_dest_hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
   if (gtk_widget_is_toplevel (toplevel) && gtk_widget_get_realized (toplevel))
-    gdk_window_register_dnd (gtk_widget_get_window (toplevel));
+    gdk_surface_register_dnd (gtk_widget_get_surface (toplevel));
 }
 
 static void
@@ -57,7 +56,7 @@ gtk_drag_dest_site_destroy (gpointer data)
   GtkDragDestSite *site = data;
 
   if (site->target_list)
-    gtk_target_list_unref (site->target_list);
+    gdk_content_formats_unref (site->target_list);
 
   g_slice_free (GtkDragDestSite, site);
 }
@@ -97,11 +96,9 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * gtk_drag_dest_set: (method)
  * @widget: a #GtkWidget
  * @flags: which types of default drag behavior to use
- * @targets: (allow-none) (array length=n_targets): a pointer to an array of
- *     #GtkTargetEntrys indicating the drop types that this @widget will
+ * @targets: (allow-none): the drop types that this @widget will
  *     accept, or %NULL. Later you can access the list with
  *     gtk_drag_dest_get_target_list() and gtk_drag_dest_find_target().
- * @n_targets: the number of entries in @targets
  * @actions: a bitmask of possible actions for a drop onto this @widget.
  *
  * Sets a widget as a potential drop destination, and adds default behaviors.
@@ -118,7 +115,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * behaviors described by @flags make some assumptions, that can conflict
  * with your own signal handlers. For instance #GTK_DEST_DEFAULT_DROP causes
  * invokations of gdk_drag_status() in the context of #GtkWidget::drag-motion,
- * and invokations of gtk_drag_finish() in #GtkWidget::drag-data-received.
+ * and invokations of gdk_drag_finish() in #GtkWidget::drag-data-received.
  * Especially the later is dramatic, when your own #GtkWidget::drag-motion
  * handler calls gtk_drag_get_data() to inspect the dragged data.
  *
@@ -135,7 +132,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * {
 *   GdkModifierType mask;
  *
- *   gdk_window_get_pointer (gtk_widget_get_window (widget),
+ *   gdk_surface_get_pointer (gtk_widget_get_surface (widget),
  *                           NULL, NULL, &mask);
  *   if (mask & GDK_CONTROL_MASK)
  *     gdk_drag_status (context, GDK_ACTION_COPY, time);
@@ -145,11 +142,10 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * ]|
  */
 void
-gtk_drag_dest_set (GtkWidget            *widget,
-                   GtkDestDefaults       flags,
-                   const GtkTargetEntry *targets,
-                   gint                  n_targets,
-                   GdkDragAction         actions)
+gtk_drag_dest_set (GtkWidget         *widget,
+                   GtkDestDefaults    flags,
+                   GdkContentFormats *targets,
+                   GdkDragAction      actions)
 {
   GtkDragDestSite *site;
 
@@ -160,7 +156,7 @@ gtk_drag_dest_set (GtkWidget            *widget,
   site->flags = flags;
   site->have_drag = FALSE;
   if (targets)
-    site->target_list = gtk_target_list_new (targets, n_targets);
+    site->target_list = gdk_content_formats_ref (targets);
   else
     site->target_list = NULL;
   site->actions = actions;
@@ -205,9 +201,9 @@ gtk_drag_dest_unset (GtkWidget *widget)
  * Returns the list of targets this widget can accept from
  * drag-and-drop.
  *
- * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (nullable) (transfer none): the #GdkContentFormats, or %NULL if none
  */
-GtkTargetList *
+GdkContentFormats *
 gtk_drag_dest_get_target_list (GtkWidget *widget)
 {
   GtkDragDestSite *site;
@@ -230,7 +226,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
  */
 void
 gtk_drag_dest_set_target_list (GtkWidget     *widget,
-                               GtkTargetList *target_list)
+                               GdkContentFormats *target_list)
 {
   GtkDragDestSite *site;
 
@@ -246,10 +242,10 @@ gtk_drag_dest_set_target_list (GtkWidget     *widget,
     }
 
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
 
   if (site->target_list)
-    gtk_target_list_unref (site->target_list);
+    gdk_content_formats_unref (site->target_list);
 
   site->target_list = target_list;
 }
@@ -263,22 +259,20 @@ gtk_drag_dest_set_target_list (GtkWidget     *widget,
  * are added with @info = 0. If you need another value,
  * use gtk_target_list_add_text_targets() and
  * gtk_drag_dest_set_target_list().
- *
- * Since: 2.6
  */
 void
 gtk_drag_dest_add_text_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (target_list, 0);
+    target_list = gdk_content_formats_new (NULL, 0);
+  target_list = gtk_content_formats_add_text_targets (target_list);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -290,22 +284,20 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
  * are added with @info = 0. If you need another value,
  * use gtk_target_list_add_image_targets() and
  * gtk_drag_dest_set_target_list().
- *
- * Since: 2.6
  */
 void
 gtk_drag_dest_add_image_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (target_list, 0, FALSE);
+    target_list = gdk_content_formats_new (NULL, 0);
+  target_list = gtk_content_formats_add_image_targets (target_list, FALSE);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -317,22 +309,20 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
  * are added with @info = 0. If you need another value,
  * use gtk_target_list_add_uri_targets() and
  * gtk_drag_dest_set_target_list().
- *
- * Since: 2.6
  */
 void
 gtk_drag_dest_add_uri_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_uri_targets (target_list, 0);
+    target_list = gdk_content_formats_new (NULL, 0);
+  target_list = gtk_content_formats_add_uri_targets (target_list);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -346,8 +336,6 @@ gtk_drag_dest_add_uri_targets (GtkWidget *widget)
  *
  * This may be used when a widget wants to do generic
  * actions regardless of the targets that the source offers.
- *
- * Since: 2.10
  */
 void
 gtk_drag_dest_set_track_motion (GtkWidget *widget,
@@ -373,8 +361,6 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
  *
  * Returns: %TRUE if the widget always emits
  *   #GtkWidget::drag-motion events
- *
- * Since: 2.10
  */
 gboolean
 gtk_drag_dest_get_track_motion (GtkWidget *widget)
@@ -394,62 +380,36 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
 /**
  * gtk_drag_dest_find_target: (method)
  * @widget: drag destination widget
- * @context: drag context
+ * @drop: #GdkDrop
  * @target_list: (allow-none): list of droppable targets, or %NULL to use
  *    gtk_drag_dest_get_target_list (@widget).
  *
- * Looks for a match between the supported targets of @context and the
+ * Looks for a match between the supported targets of @drop and the
  * @dest_target_list, returning the first matching target, otherwise
- * returning %GDK_NONE. @dest_target_list should usually be the return
+ * returning %NULL. @dest_target_list should usually be the return
  * value from gtk_drag_dest_get_target_list(), but some widgets may
  * have different valid targets for different parts of the widget; in
  * that case, they will have to implement a drag_motion handler that
  * passes the correct target list to this function.
  *
- * Returns: (transfer none): first target that the source offers
- *     and the dest can accept, or %GDK_NONE
+ * Returns: (transfer none) (nullable): first target that the source offers
+ *     and the dest can accept, or %NULL
  */
-GdkAtom
-gtk_drag_dest_find_target (GtkWidget      *widget,
-                           GdkDragContext *context,
-                           GtkTargetList  *target_list)
+const char *
+gtk_drag_dest_find_target (GtkWidget         *widget,
+                           GdkDrop           *drop,
+                           GdkContentFormats *target_list)
 {
-  GList *tmp_target;
-  GList *tmp_source = NULL;
-  GtkWidget *source_widget;
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GDK_IS_DROP (drop), NULL);
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
-
-  source_widget = gtk_drag_get_source_widget (context);
   if (target_list == NULL)
     target_list = gtk_drag_dest_get_target_list (widget);
 
   if (target_list == NULL)
-    return GDK_NONE;
+    return NULL;
 
-  tmp_target = target_list->list;
-  while (tmp_target)
-    {
-      GtkTargetPair *pair = tmp_target->data;
-      tmp_source = gdk_drag_context_list_targets (context);
-      while (tmp_source)
-        {
-          if (tmp_source->data == GUINT_TO_POINTER (pair->target))
-            {
-              if ((!(pair->flags & GTK_TARGET_SAME_APP) || source_widget) &&
-                  (!(pair->flags & GTK_TARGET_SAME_WIDGET) || (source_widget == widget)) &&
-                  (!(pair->flags & GTK_TARGET_OTHER_APP) || !source_widget) &&
-                  (!(pair->flags & GTK_TARGET_OTHER_WIDGET) || (source_widget != widget)))
-                return pair->target;
-              else
-                break;
-            }
-          tmp_source = tmp_source->next;
-        }
-      tmp_target = tmp_target->next;
-    }
-
-  return GDK_NONE;
+  return gdk_content_formats_match_mime_type (target_list,
+                                              gdk_drop_get_formats (drop));
 }
 

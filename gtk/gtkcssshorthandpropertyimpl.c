@@ -37,7 +37,6 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
-#include "gtkcssstylefuncsprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtktypebuiltins.h"
 

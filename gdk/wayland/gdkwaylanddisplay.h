@@ -49,15 +49,21 @@ GDK_AVAILABLE_IN_ALL
 struct wl_display      *gdk_wayland_display_get_wl_display      (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 struct wl_compositor   *gdk_wayland_display_get_wl_compositor   (GdkDisplay *display);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
                                                                  const gchar *theme,
                                                                  gint         size);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
+const gchar *           gdk_wayland_display_get_startup_notification_id (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 void                    gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
                                                                          const char *startup_id);
 
 gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *display,
+								 const gchar *global);
 
 G_END_DECLS
 

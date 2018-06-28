@@ -99,6 +99,9 @@ gtk_css_widget_node_validate (GtkCssNode *node)
   if (widget_node->widget == NULL)
     return;
 
+  if (node->style == widget_node->last_updated_style)
+    return;
+
   style = gtk_css_node_get_style (node);
 
   gtk_css_style_change_init (&change, widget_node->last_updated_style, style);

@@ -32,13 +32,11 @@
 
 #include <math.h>
 
-struct _GtkColorScalePrivate
+typedef struct
 {
   GdkRGBA color;
   GtkColorScaleType type;
-
-  GtkGesture *long_press_gesture;
-};
+} GtkColorScalePrivate;
 
 enum
 {
@@ -61,65 +59,75 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                  int             width,
                                  int             height)
 {
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
   GtkWidget *widget = GTK_WIDGET (scale);
-  cairo_t *cr;
 
   if (width <= 1 || height <= 1)
     return;
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT(x, y, width, height),
-                                  "ColorScaleTrough");
-  cairo_translate (cr, x, y);
-
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+  if (priv->type == GTK_COLOR_SCALE_HUE)
     {
-      cairo_translate (cr, width, 0);
-      cairo_scale (cr, -1, 1);
-    }
-
-  if (scale->priv->type == GTK_COLOR_SCALE_HUE)
-    {
+      GdkTexture *texture;
       gint stride;
-      cairo_surface_t *tmp;
-      guint red, green, blue;
-      guint32 *data, *p;
+      GBytes *bytes;
+      guchar *data, *p;
       gdouble h;
       gdouble r, g, b;
       gdouble f;
       int hue_x, hue_y;
 
-      stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
-
-      data = g_malloc (height * stride);
+      stride = width * 3;
+      data = g_malloc (width * height * 3);
 
       f = 1.0 / (height - 1);
       for (hue_y = 0; hue_y < height; hue_y++)
         {
           h = CLAMP (hue_y * f, 0.0, 1.0);
-          p = data + hue_y * (stride / 4);
-          for (hue_x = 0; hue_x < width; hue_x++)
+          p = data + hue_y * stride;
+          for (hue_x = 0; hue_x < stride; hue_x += 3)
             {
               gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
-              red = CLAMP (r * 255, 0, 255);
-              green = CLAMP (g * 255, 0, 255);
-              blue = CLAMP (b * 255, 0, 255);
-              p[hue_x] = (red << 16) | (green << 8) | blue;
+              p[hue_x + 0] = CLAMP (r * 255, 0, 255);
+              p[hue_x + 1] = CLAMP (g * 255, 0, 255);
+              p[hue_x + 2] = CLAMP (b * 255, 0, 255);
             }
         }
 
-      tmp = cairo_image_surface_create_for_data ((guchar *)data, CAIRO_FORMAT_RGB24,
-                                                 width, height, stride);
+      bytes = g_bytes_new_take (data, width * height * 3);
+      texture = gdk_memory_texture_new (width, height,
+                                        GDK_MEMORY_R8G8B8,
+                                        bytes,
+                                        stride);
+      g_bytes_unref (bytes);
 
-      cairo_set_source_surface (cr, tmp, 0, 0);
-      cairo_paint (cr);
-
-      cairo_surface_destroy (tmp);
-      g_free (data);
+      gtk_snapshot_append_texture (snapshot,
+                                   texture,
+                                   &GRAPHENE_RECT_INIT(x, y, width, height));
+      g_object_unref (texture);
     }
-  else if (scale->priv->type == GTK_COLOR_SCALE_ALPHA)
+  else if (priv->type == GTK_COLOR_SCALE_ALPHA)
     {
+      cairo_t *cr;
+      graphene_point_t start, end;
+
+      cr = gtk_snapshot_append_cairo (snapshot,
+                                      &GRAPHENE_RECT_INIT(x, y, width, height));
+      cairo_translate (cr, x, y);
+
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
+          gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        {
+          cairo_translate (cr, width, 0);
+          cairo_scale (cr, -1, 1);
+          graphene_point_init (&start, x + width, y);
+          graphene_point_init (&end, x, y);
+        }
+      else
+        {
+          graphene_point_init (&start, x, y);
+          graphene_point_init (&end, x + width, y);
+        }
+
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
       GdkRGBA *color;
@@ -134,44 +142,37 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       cairo_mask (cr, pattern);
       cairo_pattern_destroy (pattern);
 
-      color = &scale->priv->color;
+      cairo_destroy (cr);
 
-      pattern = cairo_pattern_create_linear (0, 0, width, 0);
-      cairo_pattern_add_color_stop_rgba (pattern, 0, color->red, color->green, color->blue, 0);
-      cairo_pattern_add_color_stop_rgba (pattern, width, color->red, color->green, color->blue, 1);
-      cairo_set_source (cr, pattern);
-      cairo_paint (cr);
-      cairo_pattern_destroy (pattern);
+      color = &priv->color;
+
+      gtk_snapshot_append_linear_gradient (snapshot,
+                                           &GRAPHENE_RECT_INIT(x, y, width, height),
+                                           &start,
+                                           &end,
+                                           (GskColorStop[2]) {
+                                               { 0, { color->red, color->green, color->blue, 0 } },
+                                               { 1, { color->red, color->green, color->blue, 1 } },
+                                           },
+                                           2);
     }
-
-  cairo_destroy (cr);
 }
 
 static void
 gtk_color_scale_init (GtkColorScale *scale)
 {
   GtkStyleContext *context;
+  GtkGesture *gesture;
 
-  scale->priv = gtk_color_scale_get_instance_private (scale);
-
-  scale->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (scale));
-  g_signal_connect (scale->priv->long_press_gesture, "pressed",
+  gesture = gtk_gesture_long_press_new ();
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (hold_action), scale);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_TARGET);
+  gtk_widget_add_controller (GTK_WIDGET (scale), GTK_EVENT_CONTROLLER (gesture));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_add_class (context, "color");
-}
-
-static void
-scale_finalize (GObject *object)
-{
-  GtkColorScale *scale = GTK_COLOR_SCALE (object);
-
-  g_clear_object (&scale->priv->long_press_gesture);
-
-  G_OBJECT_CLASS (gtk_color_scale_parent_class)->finalize (object);
 }
 
 static void
@@ -181,11 +182,12 @@ scale_get_property (GObject    *object,
                     GParamSpec *pspec)
 {
   GtkColorScale *scale = GTK_COLOR_SCALE (object);
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
 
   switch (prop_id)
     {
     case PROP_SCALE_TYPE:
-      g_value_set_int (value, scale->priv->type);
+      g_value_set_int (value, priv->type);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -197,9 +199,10 @@ static void
 scale_set_type (GtkColorScale     *scale,
                 GtkColorScaleType  type)
 {
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
   AtkObject *atk_obj;
 
-  scale->priv->type = type;
+  priv->type = type;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (scale));
   if (GTK_IS_ACCESSIBLE (atk_obj))
@@ -247,7 +250,6 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->finalize = scale_finalize;
   object_class->get_property = scale_get_property;
   object_class->set_property = scale_set_property;
 
@@ -261,7 +263,9 @@ void
 gtk_color_scale_set_rgba (GtkColorScale *scale,
                           const GdkRGBA *color)
 {
-  scale->priv->color = *color;
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
+
+  priv->color = *color;
   gtk_widget_queue_draw (GTK_WIDGET (scale));
 }
 

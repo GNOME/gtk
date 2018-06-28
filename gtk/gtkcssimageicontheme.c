@@ -46,9 +46,10 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    double       height)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-  GskTexture *texture;
+  GdkTexture *texture;
   double texture_width, texture_height;
   gint size;
+  gboolean symbolic;
 
   size = floor (MIN (width, height));
   if (size <= 0)
@@ -58,12 +59,11 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       icon_theme->cached_texture != NULL)
     {
       texture = icon_theme->cached_texture;
+      symbolic = icon_theme->cached_symbolic;
     }
   else
     {
-      GError *error = NULL;
       GtkIconInfo *icon_info;
-      GdkPixbuf *pixbuf;
 
       icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme->icon_theme,
                                                         icon_theme->name,
@@ -71,37 +71,48 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                                         icon_theme->scale,
                                                         GTK_ICON_LOOKUP_USE_BUILTIN);
       if (icon_info == NULL)
-        {
-          /* XXX: render missing icon image here? */
-          return;
-        }
+        icon_info = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
+                                                "image-missing",
+                                                size,
+                                                GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-      pixbuf = gtk_icon_info_load_symbolic (icon_info,
-                                            &icon_theme->color,
-                                            &icon_theme->success,
-                                            &icon_theme->warning,
-                                            &icon_theme->error,
-                                            NULL,
-                                            &error);
-      if (pixbuf == NULL)
-        {
-          /* XXX: render missing icon image here? */
-          g_error_free (error);
-          return;
-        }
+      g_assert (icon_info != NULL);
 
-      texture = gsk_texture_new_for_pixbuf (pixbuf);
+      symbolic = gtk_icon_info_is_symbolic (icon_info);
+      texture = gtk_icon_info_load_texture (icon_info);
 
       g_clear_object (&icon_theme->cached_texture);
+
       icon_theme->cached_size = size;
       icon_theme->cached_texture = texture;
+      icon_theme->cached_symbolic = symbolic;
 
-      g_object_unref (pixbuf);
       g_object_unref (icon_info);
     }
 
-  texture_width = (double) gsk_texture_get_width (texture) / icon_theme->scale;
-  texture_height = (double) gsk_texture_get_height (texture) / icon_theme->scale;
+  texture_width = (double) gdk_texture_get_width (texture) / icon_theme->scale;
+  texture_height = (double) gdk_texture_get_height (texture) / icon_theme->scale;
+
+  if (symbolic)
+    {
+      graphene_matrix_t matrix;
+      graphene_vec4_t offset;
+      GdkRGBA fg = icon_theme->color;
+      GdkRGBA sc = icon_theme->success;
+      GdkRGBA wc = icon_theme->warning;
+      GdkRGBA ec = icon_theme->error;
+
+      graphene_matrix_init_from_float (&matrix,
+          (float[16]) {
+                       sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
+                       wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
+                       ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
+                       0, 0, 0, fg.alpha
+                      });
+      graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
+
+      gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
+    }
 
   gtk_snapshot_append_texture (snapshot,
                                texture,
@@ -110,8 +121,9 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    (height - texture_height) / 2.0,
                                    texture_width,
                                    texture_height
-                               ),
-                               "CssImageIconTheme<%s@%d>", icon_theme->name, icon_theme->scale);
+                               ));
+  if (symbolic)
+    gtk_snapshot_pop (snapshot);
 }
 
 

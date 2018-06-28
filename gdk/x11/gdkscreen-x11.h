@@ -22,29 +22,25 @@
 #ifndef __GDK_X11_SCREEN__
 #define __GDK_X11_SCREEN__
 
-#include "gdkscreenprivate.h"
 #include "gdkx11screen.h"
-#include "gdkvisual.h"
+#include "gdkvisual-x11.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
 G_BEGIN_DECLS
-  
-typedef struct _GdkX11Monitor GdkX11Monitor;
 
 struct _GdkX11Screen
 {
-  GdkScreen parent_instance;
+  GObject parent_instance;
 
   GdkDisplay *display;
   Display *xdisplay;
   Screen *xscreen;
   Window xroot_window;
-  GdkWindow *root_window;
   gint screen_num;
 
-  gint window_scale;
-  gboolean fixed_window_scale;
+  gint surface_scale;
+  gboolean fixed_surface_scale;
 
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
@@ -59,7 +55,7 @@ struct _GdkX11Screen
   char *window_manager_name;
 
   /* X Settings */
-  GdkWindow *xsettings_manager_window;
+  Window xsettings_manager_window;
   Atom xsettings_selection_atom;
   GHashTable *xsettings; /* string of GDK settings name => GValue */
 
@@ -77,13 +73,13 @@ struct _GdkX11Screen
 
   /* Visual Part */
   gint nvisuals;
-  GdkVisual **visuals;
-  GdkVisual *system_visual;
+  GdkX11Visual **visuals;
+  GdkX11Visual *system_visual;
   gint available_depths[7];
   GdkVisualType available_types[6];
   gint16 navailable_depths;
   gint16 navailable_types;
-  GdkVisual *rgba_visual;
+  GdkX11Visual *rgba_visual;
 
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];
@@ -91,32 +87,39 @@ struct _GdkX11Screen
 
 struct _GdkX11ScreenClass
 {
-  GdkScreenClass parent_class;
+  GObjectClass parent_class;
 
   void (* window_manager_changed) (GdkX11Screen *x11_screen);
 };
 
 GType       _gdk_x11_screen_get_type (void);
-GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
-				      gint	  screen_number,
-                                      gboolean    setup_display);
+GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
+                                             gint          screen_number,
+                                             gboolean      setup_display);
 
-void _gdk_x11_screen_update_visuals_for_gl  (GdkScreen *screen);
-void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
-void _gdk_x11_screen_size_changed           (GdkScreen *screen,
-					     XEvent    *event);
-void _gdk_x11_screen_get_edge_monitors      (GdkScreen *screen,
-					     gint      *top,
-					     gint      *bottom,
-					     gint      *left,
-					     gint      *right);
-void _gdk_x11_screen_set_window_scale       (GdkX11Screen *x11_screen,
-					     int        scale);
-void gdk_x11_screen_get_work_area           (GdkScreen    *screen,
+void _gdk_x11_screen_update_visuals_for_gl  (GdkX11Screen *screen);
+void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
+void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
+                                             const XEvent *event);
+void _gdk_x11_screen_get_edge_monitors      (GdkX11Screen *screen,
+                                             gint         *top,
+                                             gint         *bottom,
+                                             gint         *left,
+                                             gint         *right);
+void _gdk_x11_screen_set_surface_scale      (GdkX11Screen *x11_screen,
+                                             int           scale);
+void gdk_x11_screen_get_work_area           (GdkX11Screen *screen,
                                              GdkRectangle *area);
-gboolean gdk_x11_screen_get_setting         (GdkScreen    *screen,
+gboolean gdk_x11_screen_get_setting         (GdkX11Screen *screen,
                                              const char   *name,
                                              GValue       *value);
+gboolean
+_gdk_x11_screen_get_xft_setting             (GdkX11Screen *screen,
+                                             const char   *name,
+                                             GValue       *value);
+
+void _gdk_x11_screen_init_visuals           (GdkX11Screen *screen,
+                                             gboolean      setup_display);
 
 G_END_DECLS
 

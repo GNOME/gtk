@@ -1218,8 +1218,7 @@ parse_simple_selector (GtkCssParser   *parser,
   name = _gtk_css_parser_try_ident (parser, FALSE);
   if (name)
     {
-      selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
-                                       selector);
+      selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME, selector);
       selector->name.name = g_intern_string (name);
       g_free (name);
       parsed_something = TRUE;

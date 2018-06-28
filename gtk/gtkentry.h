@@ -58,8 +58,6 @@ G_BEGIN_DECLS
  * @GTK_ENTRY_ICON_SECONDARY: At the end of the entry (depending on the text direction).
  *
  * Specifies the side of the entry at which an icon is placed.
- *
- * Since: 2.16
  */
 typedef enum
 {
@@ -75,8 +73,6 @@ struct _GtkEntry
 {
   /*< private >*/
   GtkWidget  parent_instance;
-
-  GtkEntryPrivate *priv;
 };
 
 /**
@@ -107,6 +103,7 @@ struct _GtkEntry
  *   the current selection if one exists.
  * @toggle_overwrite: Class handler for the #GtkEntry::toggle-overwrite signal.
  *   The default implementation toggles overwrite mode and blinks the cursor.
+ * @insert_emoji: Class handler for the #GtkEntry::insert-emoji signal.
  *
  * Class structure for #GtkEntry. All virtual functions have a default
  * implementation. Derived classes may set the virtual function pointers for the
@@ -139,6 +136,7 @@ struct _GtkEntryClass
   void (* copy_clipboard)     (GtkEntry             *entry);
   void (* paste_clipboard)    (GtkEntry             *entry);
   void (* toggle_overwrite)   (GtkEntry             *entry);
+  void (* insert_emoji)       (GtkEntry             *entry);
 
   /*< private >*/
 
@@ -149,7 +147,6 @@ struct _GtkEntryClass
   void (*_gtk_reserved4)      (void);
   void (*_gtk_reserved5)      (void);
   void (*_gtk_reserved6)      (void);
-  void (*_gtk_reserved7)      (void);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -212,10 +209,10 @@ void       gtk_entry_set_width_chars            (GtkEntry      *entry,
 GDK_AVAILABLE_IN_ALL
 gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_max_width_chars        (GtkEntry      *entry,
                                                  gint           n_chars);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gint       gtk_entry_get_max_width_chars        (GtkEntry      *entry);
 
 /* Somewhat more convenient than the GtkEditable generic functions
@@ -252,14 +249,6 @@ GDK_AVAILABLE_IN_ALL
 gint       gtk_entry_text_index_to_layout_index (GtkEntry      *entry,
                                                  gint           text_index);
 
-/* For scrolling cursor appropriately
- */
-GDK_AVAILABLE_IN_ALL
-void           gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
-                                                 GtkAdjustment *adjustment);
-GDK_AVAILABLE_IN_ALL
-GtkAdjustment* gtk_entry_get_cursor_hadjustment (GtkEntry      *entry);
-
 /* Progress API
  */
 GDK_AVAILABLE_IN_ALL
@@ -276,17 +265,17 @@ gdouble        gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_progress_pulse          (GtkEntry     *entry);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 const gchar*   gtk_entry_get_placeholder_text    (GtkEntry             *entry);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_placeholder_text    (GtkEntry             *entry,
                                                   const gchar          *text);
 /* Setting and managing icons
  */
-GDK_AVAILABLE_IN_3_94
-void           gtk_entry_set_icon_from_surface           (GtkEntry             *entry,
+GDK_AVAILABLE_IN_ALL
+void           gtk_entry_set_icon_from_paintable         (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  cairo_surface_t      *surface);
+							  GdkPaintable         *paintable);
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_icon_name         (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
@@ -296,10 +285,10 @@ void           gtk_entry_set_icon_from_gicon             (GtkEntry             *
 							  GtkEntryIconPosition  icon_pos,
 							  GIcon                *icon);
 GDK_AVAILABLE_IN_ALL
-GtkImageType gtk_entry_get_icon_storage_type             (GtkEntry             *entry,
+GtkImageType   gtk_entry_get_icon_storage_type           (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
-GDK_AVAILABLE_IN_3_94
-cairo_surface_t*gtk_entry_get_icon_surface               (GtkEntry             *entry,
+GDK_AVAILABLE_IN_ALL
+GdkPaintable * gtk_entry_get_icon_paintable              (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 const gchar* gtk_entry_get_icon_name                     (GtkEntry             *entry,
@@ -342,7 +331,7 @@ gchar *      gtk_entry_get_icon_tooltip_markup           (GtkEntry             *
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_set_icon_drag_source              (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  GtkTargetList        *target_list,
+							  GdkContentFormats    *formats,
 							  GdkDragAction         actions);
 GDK_AVAILABLE_IN_ALL
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
@@ -357,32 +346,32 @@ gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *
 GDK_AVAILABLE_IN_ALL
 void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void            gtk_entry_set_input_purpose                  (GtkEntry             *entry,
                                                               GtkInputPurpose       purpose);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkInputPurpose gtk_entry_get_input_purpose                  (GtkEntry             *entry);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void            gtk_entry_set_input_hints                    (GtkEntry             *entry,
                                                               GtkInputHints         hints);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkInputHints   gtk_entry_get_input_hints                    (GtkEntry             *entry);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void            gtk_entry_set_attributes                     (GtkEntry             *entry,
                                                               PangoAttrList        *attrs);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 PangoAttrList  *gtk_entry_get_attributes                     (GtkEntry             *entry);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void            gtk_entry_set_tabs                           (GtkEntry             *entry,
                                                               PangoTabArray        *tabs);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 PangoTabArray  *gtk_entry_get_tabs                           (GtkEntry             *entry);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void           gtk_entry_grab_focus_without_selecting        (GtkEntry             *entry);
 
 G_END_DECLS

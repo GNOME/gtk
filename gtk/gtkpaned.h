@@ -43,14 +43,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPaned        GtkPaned;
 typedef struct _GtkPanedClass   GtkPanedClass;
-typedef struct _GtkPanedPrivate GtkPanedPrivate;
 
 struct _GtkPaned
 {
-  GtkContainer container;
-
-  /*< private >*/
-  GtkPanedPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 struct _GtkPanedClass
@@ -107,10 +103,10 @@ GtkWidget * gtk_paned_get_child1   (GtkPaned       *paned);
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_paned_get_child2   (GtkPaned       *paned);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void        gtk_paned_set_wide_handle (GtkPaned    *paned,
                                        gboolean     wide);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_paned_get_wide_handle (GtkPaned    *paned);
 
 

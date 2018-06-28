@@ -53,7 +53,6 @@ gdk_wayland_monitor_class_init (GdkWaylandMonitorClass *class)
  * Returns the Wayland wl_output of a #GdkMonitor.
  *
  * Returns: (transfer none): a Wayland wl_output
- * Since: 3.22
  */
 struct wl_output *
 gdk_wayland_monitor_get_wl_output (GdkMonitor *monitor)

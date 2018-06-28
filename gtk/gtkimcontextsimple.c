@@ -20,7 +20,7 @@
 #include <gdk/gdk.h>
 
 #ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
 #include <wayland/gdkwayland.h>
@@ -40,6 +40,7 @@
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkcomposetable.h"
+#include "gtkimmoduleprivate.h"
 
 #include "gtkimcontextsimpleprivate.h"
 #include "gtkimcontextsimpleseqs.h"
@@ -65,57 +66,15 @@
  * by typing Ctrl-Shift-u, followed by a hexadecimal Unicode codepoint.
  * For example, Ctrl-Shift-u 1 2 3 Enter yields U+0123 LATIN SMALL LETTER
  * G WITH CEDILLA, i.e. ģ.
- *
- * ## Emoji
- *
- * GtkIMContextSimple also supports entry of Emoji by their name.
- * This works by first typing Ctrl-Shift-e, followed by an Emoji name.
- *
- * The following names are supported:
- * - :-) 🙂
- * - 8-) 😍
- * - <3 ❤
- * - kiss 💋
- * - grin 😁
- * - joy 😂
- * - :-* 😚
- * - xD 😆
- * - like 👍
- * - dislike 👎
- * - up 👆
- * - v ✌
- * - ok 👌
- * - B-) 😎
- * - ;-) 😉
- * - ;-P 😜
- * - :-p 😋
- * - 3( 😔
- * - :-( 😞
- * - :] 😏
- * - :'( 😢
- * - :_( 😭
- * - :(( 😩
- * - :o 😨
- * - :| 😐
- * - 3-) 😌
- * - >( 😠
- * - >(( 😡
- * - O:) 😇
- * - ;o 😰
- * - 8| 😳
- * - 8o 😲
- * - :X 😷
- * - }:) 😈
  */
 
 struct _GtkIMContextSimplePrivate
 {
-  guint16        compose_buffer[MAX(GTK_MAX_COMPOSE_LEN + 1, 9)];
+  guint16        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
   gunichar       tentative_match;
   gint           tentative_match_len;
 
   guint          in_hex_sequence : 1;
-  guint          in_emoji_sequence : 1;
   guint          modifiers_dropped : 1;
 };
 
@@ -164,7 +123,13 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 static void     gtk_im_context_simple_set_client_widget  (GtkIMContext             *context,
                                                           GtkWidget                *widget);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT)
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT,
+                         G_ADD_PRIVATE (GtkIMContextSimple)
+                         gtk_im_module_ensure_extension_point ();
+                         g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "gtk-im-context-simple",
+                                                         10))
 
 static void
 gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
@@ -184,7 +149,7 @@ get_x11_compose_file_dir (void)
 {
   gchar* compose_file_dir;
 
-#if defined (GDK_WINDOWING_X11) || defined (GDK_WINDOWING_WAYLAND)
+#if defined (GDK_WINDOWING_X11)
   compose_file_dir = g_strdup (X11_DATA_PREFIX "/share/X11/locale");
 #else
   compose_file_dir = g_build_filename (_gtk_get_datadir (), "X11", "locale", NULL);
@@ -339,10 +304,9 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
-  if (priv->tentative_match || priv->in_hex_sequence || priv->in_emoji_sequence)
+  if (priv->tentative_match || priv->in_hex_sequence)
     {
       priv->in_hex_sequence = FALSE;
-      priv->in_emoji_sequence = FALSE;
       priv->tentative_match = 0;
       priv->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -490,6 +454,8 @@ check_win32_special_cases (GtkIMContextSimple    *context_simple,
 	  value = 0x00B4; break;
 	case GDK_KEY_dead_diaeresis:
 	  value = 0x00A8; break;
+        default:
+          break;
 	}
       if (value > 0)
 	{
@@ -910,114 +876,10 @@ check_hex (GtkIMContextSimple *context_simple,
   return TRUE;
 }
 
-typedef struct {
-  const char *name;
-  gunichar ch;
-} EmojiItem;
-
-static EmojiItem emoji[] = {
-  { ":-)",     0x1f642 },
-  { "8-)",     0x1f60d },
-  { "<3",      0x02764 },
-  { "kiss",    0x1f48b },
-  { "grin",    0x1f601 },
-  { "joy",     0x1f602 },
-  { ":-*",     0x1f61a },
-  { "xD",      0x1f606 },
-  { "like",    0x1f44d },
-  { "dislike", 0x1f44e },
-  { "up",      0x1f446 },
-  { "v",       0x0270c },
-  { "ok",      0x1f44c },
-  { "B-)",     0x1f60e },
-  { ":-D",     0x1f603 },
-  { ";-)",     0x1f609 },
-  { ";-P",     0x1f61c },
-  { ":-p",     0x1f60b },
-  { "3(",      0x1f614 },
-  { ":-(",     0x1f61e },
-  { ":]",      0x1f60f },
-  { ":'(",     0x1f622 },
-  { ":_(",     0x1f62d },
-  { ":((",     0x1f629 },
-  { ":o",      0x1f628 },
-  { ":|",      0x1f610 },
-  { "3-)",     0x1f60c },
-  { ">(",      0x1f620 },
-  { ">((",     0x1f621 },
-  { "O:)",     0x1f607 },
-  { ";o",      0x1f630 },
-  { "8|",      0x1f633 },
-  { "8o",      0x1f632 },
-  { ":X",      0x1f637 },
-  { "}:)",     0x1f608 },
-  { NULL, 0 }
-};
-
-static gboolean
-check_emoji (GtkIMContextSimple *context_simple,
-             gint                n_compose)
-{
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GString *str;
-  gint i;
-  gchar buf[7];
-  char *lower;
-  gboolean has_completion;
-
-  priv->tentative_match = 0;
-  priv->tentative_match_len = 0;
-
-  str = g_string_new (NULL);
-
-  i = 0;
-  while (i < n_compose)
-    {
-      gunichar ch;
-
-      ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
-
-      if (ch == 0)
-        return FALSE;
-
-      buf[g_unichar_to_utf8 (ch, buf)] = '\0';
-
-      g_string_append (str, buf);
-
-      ++i;
-    }
-
-  lower = g_utf8_strdown (str->str, str->len);
-
-  has_completion = FALSE;
-  for (i = 0; emoji[i].name; i++)
-    {
-      if (strcmp (str->str, emoji[i].name) == 0 ||
-          strcmp (lower, emoji[i].name) == 0)
-        {
-          priv->tentative_match = emoji[i].ch;
-          priv->tentative_match_len = n_compose;
-          break;
-        }
-
-      if (!has_completion &&
-          (g_str_has_prefix (emoji[i].name, str->str) ||
-           g_str_has_prefix (emoji[i].name, lower)))
-        {
-          has_completion = TRUE;
-        }
-    }
-
-  g_string_free (str, TRUE);
-  g_free (lower);
-
-  return priv->tentative_match != 0 || has_completion;
-}
-
 static void
-beep_window (GdkWindow *window)
+beep_surface (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   gboolean   beep;
 
   g_object_get (gtk_settings_get_for_display (display),
@@ -1025,7 +887,7 @@ beep_window (GdkWindow *window)
                 NULL);
 
   if (beep)
-    gdk_window_beep (window);
+    gdk_surface_beep (surface);
 }
 
 static gboolean
@@ -1057,7 +919,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
           gdk_event_set_keyval (tmp_event, priv->compose_buffer[len + i]);
 	  
 	  gtk_im_context_filter_keypress (context, (GdkEventKey *)tmp_event);
-	  gdk_event_free (tmp_event);
+	  g_object_unref (tmp_event);
 	}
 
       return gtk_im_context_filter_keypress (context, event);
@@ -1067,7 +929,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  beep_window (gdk_event_get_window ((GdkEvent *) event));
+	  beep_surface (gdk_event_get_surface ((GdkEvent *) event));
 	  return TRUE;
 	}
   
@@ -1095,8 +957,8 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
+  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
+  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
@@ -1140,34 +1002,24 @@ canonical_hex_keyval (GdkEventKey *event)
     return 0;
 }
 
-static guint
-canonical_emoji_keyval (GdkEventKey *event)
-{
-  guint keyval;
-  gdk_event_get_keyval ((GdkEvent *) event, &keyval);
-
-  return keyval;
-}
-
 static gboolean
 gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 				       GdkEventKey  *event)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;
   gboolean have_hex_mods;
   gboolean is_hex_start;
-  gboolean is_end;
-  gboolean is_emoji_start;
+  gboolean is_hex_end;
   gboolean is_backspace;
   gboolean is_escape;
   guint hex_keyval;
-  guint emoji_keyval;
   int i;
   gboolean compose_finish;
   gboolean compose_match;
@@ -1183,11 +1035,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
   if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
     {
-      if ((keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
+      if (priv->in_hex_sequence &&
+          (keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
 	   keyval == GDK_KEY_Shift_L || keyval == GDK_KEY_Shift_R))
 	{
-          if ((priv->in_hex_sequence || priv->in_emoji_sequence) &&
-	      priv->tentative_match &&
+          if (priv->tentative_match &&
 	      g_unichar_validate (priv->tentative_match))
 	    {
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
@@ -1195,8 +1047,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
 	      return TRUE;
 	    }
-	  else if (priv->in_emoji_sequence ||
-                   (priv->in_hex_sequence && n_compose == 0))
+	  else if (n_compose == 0)
 	    {
 	      priv->modifiers_dropped = TRUE;
 
@@ -1205,11 +1056,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  else if (priv->in_hex_sequence)
 	    {
 	      /* invalid hex sequence */
-	      beep_window (window);
+	      beep_surface (surface);
 
 	      priv->tentative_match = 0;
 	      priv->in_hex_sequence = FALSE;
-	      priv->in_emoji_sequence = FALSE;
 	      priv->compose_buffer[0] = 0;
 
 	      g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -1227,25 +1077,22 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (keyval == gtk_compose_ignore[i])
       return FALSE;
 
-  hex_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
-                                               GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+  hex_mod_mask = gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
   hex_mod_mask |= GDK_SHIFT_MASK;
 
-  if ((priv->in_hex_sequence || priv->in_emoji_sequence) && priv->modifiers_dropped)
+  if (priv->in_hex_sequence && priv->modifiers_dropped)
     have_hex_mods = TRUE;
   else
     have_hex_mods = (state & (hex_mod_mask)) == hex_mod_mask;
   is_hex_start = keyval == GDK_KEY_U;
-  is_emoji_start = (keyval == GDK_KEY_E) && !priv->in_hex_sequence;
-  is_end = (keyval == GDK_KEY_space ||
-            keyval == GDK_KEY_KP_Space ||
-            keyval == GDK_KEY_Return ||
-	    keyval == GDK_KEY_ISO_Enter ||
-	    keyval == GDK_KEY_KP_Enter);
+  is_hex_end = (keyval == GDK_KEY_space ||
+                keyval == GDK_KEY_KP_Space ||
+                keyval == GDK_KEY_Return ||
+                keyval == GDK_KEY_ISO_Enter ||
+                keyval == GDK_KEY_KP_Enter);
   is_backspace = keyval == GDK_KEY_BackSpace;
   is_escape = keyval == GDK_KEY_Escape;
   hex_keyval = canonical_hex_keyval (event);
-  emoji_keyval = canonical_emoji_keyval (event);
 
   /* If we are already in a non-hex sequence, or
    * this keystroke is not hex modifiers + hex digit, don't filter
@@ -1255,20 +1102,17 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
    * ISO_Level3_Switch.
    */
   if (!have_hex_mods ||
-      (n_compose > 0 && !priv->in_hex_sequence && !priv->in_emoji_sequence) ||
-      (n_compose == 0 && !priv->in_hex_sequence && !priv->in_emoji_sequence &&
-       !is_hex_start && !is_emoji_start) ||
+      (n_compose > 0 && !priv->in_hex_sequence) ||
+      (n_compose == 0 && !priv->in_hex_sequence && !is_hex_start) ||
       (priv->in_hex_sequence && !hex_keyval &&
-       !is_hex_start && !is_end && !is_escape && !is_backspace))
+       !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
       GdkModifierType no_text_input_mask;
 
-      no_text_input_mask =
-        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
-                                      GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+      no_text_input_mask = gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
       if (state & no_text_input_mask ||
-	  ((priv->in_hex_sequence || priv->in_emoji_sequence) && priv->modifiers_dropped &&
+	  (priv->in_hex_sequence && priv->modifiers_dropped &&
 	   (keyval == GDK_KEY_Return ||
 	    keyval == GDK_KEY_ISO_Enter ||
 	    keyval == GDK_KEY_KP_Enter)))
@@ -1278,21 +1122,17 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   
   /* Handle backspace */
-  if ((priv->in_hex_sequence || priv->in_emoji_sequence) && have_hex_mods && is_backspace)
+  if (priv->in_hex_sequence && have_hex_mods && is_backspace)
     {
       if (n_compose > 0)
 	{
 	  n_compose--;
 	  priv->compose_buffer[n_compose] = 0;
-          if (priv->in_hex_sequence)
-            check_hex (context_simple, n_compose);
-          else if (priv->in_emoji_sequence)
-            check_emoji (context_simple, n_compose);
+          check_hex (context_simple, n_compose);
 	}
       else
 	{
 	  priv->in_hex_sequence = FALSE;
-	  priv->in_emoji_sequence = FALSE;
 	}
 
       g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -1316,7 +1156,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	{
 	  /* invalid hex sequence */
 	  if (n_compose > 0)
-	    beep_window (window);
+	    beep_surface (surface);
 
 	  priv->tentative_match = 0;
 	  priv->in_hex_sequence = FALSE;
@@ -1338,20 +1178,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
   
-  /* Check for emoji sequence start */
-  if (!priv->in_emoji_sequence && have_hex_mods && is_emoji_start)
-    {
-      priv->compose_buffer[0] = 0;
-      priv->in_emoji_sequence = TRUE;
-      priv->modifiers_dropped = FALSE;
-      priv->tentative_match = 0;
-
-      g_signal_emit_by_name (context_simple, "preedit-start");
-      g_signal_emit_by_name (context_simple, "preedit-changed");
-  
-      return TRUE;
-    }
-  
   /* Then, check for compose sequences */
   if (priv->in_hex_sequence)
     {
@@ -1362,52 +1188,25 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  gtk_im_context_simple_reset (context);
 	  return TRUE;
 	}
-      else if (!is_end)
+      else if (!is_hex_end)
 	{
 	  /* non-hex character in hex sequence */
-	  beep_window (window);
+	  beep_surface (surface);
 	  return TRUE;
 	}
-    }
-  else if (priv->in_emoji_sequence)
-    {
-      if (emoji_keyval)
-        priv->compose_buffer[n_compose++] = emoji_keyval;
-      else if (is_escape)
-        {
-	  gtk_im_context_simple_reset (context);
-	  return TRUE;
-        }
-      else
-        {
-	  beep_window (window);
-	  return TRUE;
-        }
     }
   else
     priv->compose_buffer[n_compose++] = keyval;
 
-  if (n_compose == MAX(GTK_MAX_COMPOSE_LEN + 1, 9))
-    {
-      beep_window (window);
-      priv->tentative_match = 0;
-      priv->in_hex_sequence = FALSE;
-      priv->in_emoji_sequence = FALSE;
-      priv->compose_buffer[0] = 0;
-      g_signal_emit_by_name (context_simple, "preedit-changed");
-
-      return TRUE;
-    }
-
   priv->compose_buffer[n_compose] = 0;
 
-  if (priv->in_hex_sequence || priv->in_emoji_sequence)
+  if (priv->in_hex_sequence)
     {
       /* If the modifiers are still held down, consider the sequence again */
       if (have_hex_mods)
         {
           /* space or return ends the sequence, and we eat the key */
-          if (n_compose > 0 && is_end)
+          if (n_compose > 0 && is_hex_end)
             {
 	      if (priv->tentative_match &&
 		  g_unichar_validate (priv->tentative_match))
@@ -1418,21 +1217,19 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      else
 		{
 		  /* invalid hex sequence */
-		  beep_window (window);
+		  beep_surface (surface);
 
 		  priv->tentative_match = 0;
 		  priv->in_hex_sequence = FALSE;
-		  priv->in_emoji_sequence = FALSE;
 		  priv->compose_buffer[0] = 0;
 		}
             }
-          else if ((priv->in_hex_sequence && !check_hex (context_simple, n_compose)) ||
-                   (priv->in_emoji_sequence && !check_emoji (context_simple, n_compose)))
-	    beep_window (window);
+          else if (!check_hex (context_simple, n_compose))
+	    beep_surface (surface);
 
 	  g_signal_emit_by_name (context_simple, "preedit-changed");
 
-	  if (!priv->in_hex_sequence && !priv->in_emoji_sequence)
+	  if (!priv->in_hex_sequence)
 	    g_signal_emit_by_name (context_simple, "preedit-end");
 
 	  return TRUE;
@@ -1443,28 +1240,34 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       gboolean success = FALSE;
 
 #ifdef GDK_WINDOWING_WIN32
-      guint16  output[2];
-      gsize    output_size = 2;
-
-      switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
-                                              priv->compose_buffer,
-                                              n_compose,
-                                              output, &output_size))
+      if (GDK_IS_WIN32_DISPLAY (display))
         {
-        case GDK_WIN32_KEYMAP_MATCH_NONE:
-          break;
-        case GDK_WIN32_KEYMAP_MATCH_EXACT:
-        case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
-          for (i = 0; i < output_size; i++)
+          guint16  output[2];
+          gsize    output_size = 2;
+
+          switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (keymap),
+                                                  priv->compose_buffer,
+                                                  n_compose,
+                                                  output, &output_size))
             {
-              output_char = gdk_keyval_to_unicode (output[i]);
-              gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
-                                                 output_char);
+            case GDK_WIN32_KEYMAP_MATCH_NONE:
+              break;
+            case GDK_WIN32_KEYMAP_MATCH_EXACT:
+            case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
+              for (i = 0; i < output_size; i++)
+                {
+                  output_char = gdk_keyval_to_unicode (output[i]);
+                  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                                     output_char);
+                }
+              priv->compose_buffer[0] = 0;
+              return TRUE;
+            case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
+              return TRUE;
+            default:
+              g_assert_not_reached ();
+              break;
             }
-          priv->compose_buffer[0] = 0;
-          return TRUE;
-        case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
-          return TRUE;
         }
 #endif
 
@@ -1553,10 +1356,9 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 
   priv->compose_buffer[0] = 0;
 
-  if (priv->tentative_match || priv->in_hex_sequence || priv->in_emoji_sequence)
+  if (priv->tentative_match || priv->in_hex_sequence)
     {
       priv->in_hex_sequence = FALSE;
-      priv->in_emoji_sequence = FALSE;
       priv->tentative_match = 0;
       priv->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -1575,11 +1377,11 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
   char outbuf[37]; /* up to 6 hex digits */
   int len = 0;
 
-  if (priv->in_hex_sequence || priv->in_emoji_sequence)
+  if (priv->in_hex_sequence)
     {
       int hexchars = 0;
          
-      outbuf[0] = priv->in_hex_sequence ? 'u' : 'e';
+      outbuf[0] = 'u';
       len = 1;
 
       while (priv->compose_buffer[hexchars] != 0)
@@ -1680,8 +1482,6 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
  * @compose_file: The path of compose file
  *
  * Adds an additional table from the X11 compose file.
- *
- * Since: 3.20
  */
 void
 gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,

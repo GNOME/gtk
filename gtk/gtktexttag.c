@@ -83,11 +83,6 @@
 #include "gtktypebuiltins.h"
 
 enum {
-  EVENT,
-  LAST_SIGNAL
-};
-
-enum {
   PROP_0,
   /* Construct args */
   PROP_NAME,
@@ -180,8 +175,6 @@ static void gtk_text_tag_get_property (GObject         *object,
                                        GValue          *value,
                                        GParamSpec      *pspec);
 
-static guint signals[LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkTextTag, gtk_text_tag, G_TYPE_OBJECT)
 
 static void
@@ -217,8 +210,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:background-rgba:
    *
    * Background color as a #GdkRGBA.
-   *
-   * Since: 3.2
    */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_RGBA,
@@ -248,8 +239,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:foreground-rgba:
    *
    * Foreground color as a #GdkRGBA.
-   *
-   * Since: 3.2
    */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_RGBA,
@@ -501,8 +490,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * If #GtkTextTag:underline is set to %PANGO_UNDERLINE_ERROR, an alternate
    * color may be applied instead of the foreground. Setting this property
    * will always override those defaults.
-   *
-   * Since: 3.16
    */
   g_object_class_install_property (object_class,
                                    PROP_UNDERLINE_RGBA,
@@ -517,8 +504,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * This property modifies the color of strikeouts. If not set, strikeouts
    * will use the forground color.
-   *
-   * Since: 3.16
    */
   g_object_class_install_property (object_class,
                                    PROP_STRIKETHROUGH_RGBA,
@@ -554,8 +539,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Note that there may still be problems with the support for invisible 
    * text, in particular when navigating programmatically inside a buffer
    * containing invisible segments. 
-   *
-   * Since: 2.8
    */
   g_object_class_install_property (object_class,
                                    PROP_INVISIBLE,
@@ -569,8 +552,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:paragraph-background:
    *
    * The paragraph background color as a string.
-   *
-   * Since: 2.8
    */
   g_object_class_install_property (object_class,
                                    PROP_PARAGRAPH_BACKGROUND,
@@ -584,8 +565,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:paragraph-background-rgba:
    *
    * The paragraph background color as a #GdkRGBA.
-   *
-   * Since: 3.2
    */
   g_object_class_install_property (object_class,
                                    PROP_PARAGRAPH_BACKGROUND_RGBA,
@@ -602,8 +581,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * When set to %TRUE, other fonts will be substituted
    * where the current font is missing glyphs.
-   *
-   * Since: 3.16
    */
   g_object_class_install_property (object_class,
                                    PROP_FALLBACK,
@@ -617,8 +594,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:letter-spacing:
    *
    * Extra spacing between graphemes, in Pango units.
-   *
-   * Since: 3.16
    */
   g_object_class_install_property (object_class,
                                    PROP_LETTER_SPACING,
@@ -632,8 +607,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:font-features:
    *
    * OpenType font features, as a string.
-   *
-   * Since: 3.18
    */
   g_object_class_install_property (object_class,
                                    PROP_FONT_FEATURES,
@@ -651,8 +624,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * When set to %TRUE the margins of this tag are added to the margins 
    * of any other non-accumulative margins present. When set to %FALSE 
    * the margins override one another (the default).
-   *
-   * Since: 2.12
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCUMULATIVE_MARGIN,
@@ -758,8 +729,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:underline-rgba-set:
    *
    * If the #GtkTextTag:underline-rgba property has been set.
-   *
-   * Since: 3.16
    */
   ADD_SET_PROP ("underline-rgba-set", PROP_UNDERLINE_RGBA_SET,
                 P_("Underline RGBA set"),
@@ -769,8 +738,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:strikethrough-rgba-set:
    *
    * If the #GtkTextTag:strikethrough-rgba property has been set.
-   *
-   * Since: 3.16
    */
   ADD_SET_PROP ("strikethrough-rgba-set", PROP_STRIKETHROUGH_RGBA_SET,
                 P_("Strikethrough RGBA set"),
@@ -803,35 +770,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("font-features-set", PROP_FONT_FEATURES_SET,
                 P_("Font features set"),
                 P_("Whether this tag affects font features"));
-
-  /**
-   * GtkTextTag::event:
-   * @tag: the #GtkTextTag on which the signal is emitted
-   * @object: the object the event was fired from (typically a #GtkTextView)
-   * @event: the event which triggered the signal
-   * @iter: a #GtkTextIter pointing at the location the event occurred
-   *
-   * The ::event signal is emitted when an event occurs on a region of the
-   * buffer marked with this tag.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the
-   * event. %FALSE to propagate the event further.
-   */
-  signals[EVENT] =
-    g_signal_new (I_("event"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkTextTagClass, event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
-                  G_TYPE_BOOLEAN,
-                  3,
-                  G_TYPE_OBJECT,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  GTK_TYPE_TEXT_ITER);
-  g_signal_set_va_marshaller (signals[EVENT],
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              _gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXEDv);
 }
 
 static void
@@ -2066,40 +2004,6 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
 }
 
 /**
- * gtk_text_tag_event:
- * @tag: a #GtkTextTag
- * @event_object: object that received the event, such as a widget
- * @event: the event
- * @iter: location where the event was received
- * 
- * Emits the “event” signal on the #GtkTextTag.
- * 
- * Returns: result of signal emission (whether the event was handled)
- **/
-gboolean
-gtk_text_tag_event (GtkTextTag        *tag,
-                    GObject           *event_object,
-                    GdkEvent          *event,
-                    const GtkTextIter *iter)
-{
-  gboolean retval = FALSE;
-
-  g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
-  g_return_val_if_fail (G_IS_OBJECT (event_object), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  g_signal_emit (tag,
-                 signals[EVENT],
-                 0,
-                 event_object,
-                 event,
-                 iter,
-                 &retval);
-
-  return retval;
-}
-
-/**
  * gtk_text_tag_changed:
  * @tag: a #GtkTextTag.
  * @size_changed: whether the change affects the #GtkTextView layout.
@@ -2109,8 +2013,6 @@ gtk_text_tag_event (GtkTextTag        *tag,
  *
  * The signal is already emitted when setting a #GtkTextTag property. This
  * function is useful for a #GtkTextTag subclass.
- *
- * Since: 3.20
  */
 void
 gtk_text_tag_changed (GtkTextTag *tag,

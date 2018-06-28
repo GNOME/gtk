@@ -70,8 +70,6 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * Horizontal #GtkAdjustment of the scrollable widget. This adjustment is
    * shared between the scrollable widget and its parent.
-   *
-   * Since: 3.0
    */
   pspec = g_param_spec_object ("hadjustment",
                                P_("Horizontal adjustment"),
@@ -87,8 +85,6 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * Verical #GtkAdjustment of the scrollable widget. This adjustment is shared
    * between the scrollable widget and its parent.
-   *
-   * Since: 3.0
    */
   pspec = g_param_spec_object ("vadjustment",
                                P_("Vertical adjustment"),
@@ -104,8 +100,6 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * Determines whether horizontal scrolling should start once the scrollable
    * widget is allocated less than its minimum width or less than its natural width.
-   *
-   * Since: 3.0
    */
   pspec = g_param_spec_enum ("hscroll-policy",
 			     P_("Horizontal Scrollable Policy"),
@@ -120,8 +114,6 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * Determines whether vertical scrolling should start once the scrollable
    * widget is allocated less than its minimum height or less than its natural height.
-   *
-   * Since: 3.0
    */
   pspec = g_param_spec_enum ("vscroll-policy",
 			     P_("Vertical Scrollable Policy"),
@@ -139,8 +131,6 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
  * Retrieves the #GtkAdjustment used for horizontal scrolling.
  *
  * Returns: (transfer none): horizontal #GtkAdjustment.
- *
- * Since: 3.0
  **/
 GtkAdjustment *
 gtk_scrollable_get_hadjustment (GtkScrollable *scrollable)
@@ -167,8 +157,6 @@ gtk_scrollable_get_hadjustment (GtkScrollable *scrollable)
  * @hadjustment: (allow-none): a #GtkAdjustment
  *
  * Sets the horizontal adjustment of the #GtkScrollable.
- *
- * Since: 3.0
  **/
 void
 gtk_scrollable_set_hadjustment (GtkScrollable *scrollable,
@@ -187,8 +175,6 @@ gtk_scrollable_set_hadjustment (GtkScrollable *scrollable,
  * Retrieves the #GtkAdjustment used for vertical scrolling.
  *
  * Returns: (transfer none): vertical #GtkAdjustment.
- *
- * Since: 3.0
  **/
 GtkAdjustment *
 gtk_scrollable_get_vadjustment (GtkScrollable *scrollable)
@@ -215,8 +201,6 @@ gtk_scrollable_get_vadjustment (GtkScrollable *scrollable)
  * @vadjustment: (allow-none): a #GtkAdjustment
  *
  * Sets the vertical adjustment of the #GtkScrollable.
- *
- * Since: 3.0
  **/
 void
 gtk_scrollable_set_vadjustment (GtkScrollable *scrollable,
@@ -236,8 +220,6 @@ gtk_scrollable_set_vadjustment (GtkScrollable *scrollable,
  * Gets the horizontal #GtkScrollablePolicy.
  *
  * Returns: The horizontal #GtkScrollablePolicy.
- *
- * Since: 3.0
  **/
 GtkScrollablePolicy
 gtk_scrollable_get_hscroll_policy (GtkScrollable *scrollable)
@@ -259,8 +241,6 @@ gtk_scrollable_get_hscroll_policy (GtkScrollable *scrollable)
  * Sets the #GtkScrollablePolicy to determine whether
  * horizontal scrolling should start below the minimum width or
  * below the natural width.
- *
- * Since: 3.0
  **/
 void
 gtk_scrollable_set_hscroll_policy (GtkScrollable       *scrollable,
@@ -278,8 +258,6 @@ gtk_scrollable_set_hscroll_policy (GtkScrollable       *scrollable,
  * Gets the vertical #GtkScrollablePolicy.
  *
  * Returns: The vertical #GtkScrollablePolicy.
- *
- * Since: 3.0
  **/
 GtkScrollablePolicy
 gtk_scrollable_get_vscroll_policy (GtkScrollable *scrollable)
@@ -301,8 +279,6 @@ gtk_scrollable_get_vscroll_policy (GtkScrollable *scrollable)
  * Sets the #GtkScrollablePolicy to determine whether
  * vertical scrolling should start below the minimum height or
  * below the natural height.
- *
- * Since: 3.0
  **/
 void
 gtk_scrollable_set_vscroll_policy (GtkScrollable       *scrollable,
@@ -325,8 +301,6 @@ gtk_scrollable_set_vscroll_policy (GtkScrollable       *scrollable,
  * at the right position.
  *
  * Returns: %TRUE if @border has been set
- *
- * Since: 3.16
  */
 gboolean
 gtk_scrollable_get_border (GtkScrollable *scrollable,

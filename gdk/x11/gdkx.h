@@ -33,7 +33,6 @@
 #define __GDKX_H_INSIDE__
 
 #include <gdk/x11/gdkx11applaunchcontext.h>
-#include <gdk/x11/gdkx11cursor.h>
 #include <gdk/x11/gdkx11device.h>
 #include <gdk/x11/gdkx11device-core.h>
 #include <gdk/x11/gdkx11device-xi2.h>
@@ -49,8 +48,7 @@
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11selection.h>
 #include <gdk/x11/gdkx11utils.h>
-#include <gdk/x11/gdkx11visual.h>
-#include <gdk/x11/gdkx11window.h>
+#include <gdk/x11/gdkx11surface.h>
 
 #include <gdk/x11/gdkx-autocleanups.h>
 

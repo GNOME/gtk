@@ -39,8 +39,8 @@
  * @Short_description: Groups of global keyboard accelerators for an
  *     entire GtkWindow
  * @Title: Accelerator Groups
- * @See_also:gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
- * gtk_item_factory_new(), gtk_label_new_with_mnemonic()
+ * @See_also: gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
+ * gtk_label_new_with_mnemonic()
  *
  * A #GtkAccelGroup represents a group of keyboard accelerators,
  * typically attached to a toplevel #GtkWindow (with
@@ -252,8 +252,6 @@ gtk_accel_group_new (void)
  *
  * Returns: %TRUE if there are 1 or more locks on the @accel_group,
  *     %FALSE otherwise.
- *
- * Since: 2.14
  */
 gboolean
 gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
@@ -271,8 +269,6 @@ gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
  * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc.
  *
  * Returns: the modifier mask for this accel group.
- *
- * Since: 2.14
  */
 GdkModifierType
 gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)
@@ -697,8 +693,6 @@ gtk_accel_group_connect_by_path (GtkAccelGroup *accel_group,
  *
  * Removes an accelerator previously installed through
  * gtk_accel_group_connect().
- *
- * Since 2.20 @closure can be %NULL.
  *
  * Returns: %TRUE if the closure was found and got disconnected
  */
@@ -1188,8 +1182,6 @@ is_keycode (const gchar *string)
  *
  * If the parse fails, @accelerator_key, @accelerator_mods and
  * @accelerator_codes will be set to 0 (zero).
- *
- * Since: 3.4
  */
 void
 gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
@@ -1361,10 +1353,11 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 
           if (keyval && accelerator_codes != NULL)
             {
+              GdkKeymap *keymap = gdk_display_get_keymap (gdk_display_get_default ());
               GdkKeymapKey *keys;
               gint n_keys, i, j;
 
-              if (!gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (), keyval, &keys, &n_keys))
+              if (!gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
                 {
                   /* Not in keymap */
                   error = TRUE;
@@ -1468,8 +1461,6 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * should use gtk_accelerator_parse() instead.
  *
  * Returns: a newly allocated accelerator name.
- *
- * Since: 3.4
  */
 gchar *
 gtk_accelerator_name_with_keycode (GdkDisplay      *display,
@@ -1482,7 +1473,7 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
   if (display == NULL)
     display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
-  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accelerator_mods);
+  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (display), &accelerator_mods);
   gtk_name = gtk_accelerator_name (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
@@ -1655,8 +1646,6 @@ gtk_accelerator_name (guint           accelerator_key,
  * should use gtk_accelerator_parse() instead.
  *
  * Returns: a newly-allocated string representing the accelerator.
- *
- * Since: 3.4
  */
 gchar *
 gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
@@ -1669,7 +1658,7 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
   if (display == NULL)
     display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
-  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accelerator_mods);
+  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (display), &accelerator_mods);
   gtk_label = gtk_accelerator_get_label (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
@@ -1692,8 +1681,6 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
  * which can be used to represent the accelerator to the user.
  *
  * Returns: a newly-allocated string representing the accelerator.
- *
- * Since: 2.6
  */
 gchar*
 gtk_accelerator_get_label (guint           accelerator_key,
@@ -1758,7 +1745,7 @@ gtk_accelerator_get_default_mod_mask (void)
         return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK;
 
       default_accel_mod_mask =
-          gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+          gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
 				        GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
     }
 

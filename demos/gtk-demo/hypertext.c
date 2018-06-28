@@ -105,14 +105,14 @@ follow_if_link (GtkWidget   *text_view,
 /* Links can be activated by pressing Enter.
  */
 static gboolean
-key_press_event (GtkWidget *text_view,
-                 GdkEventKey *event)
+key_pressed (GtkEventController *controller,
+             guint               keyval,
+             guint               keycode,
+             GdkModifierType     modifiers,
+             GtkWidget          *text_view)
 {
   GtkTextIter iter;
   GtkTextBuffer *buffer;
-  guint keyval;
-
-  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
 
   switch (keyval)
     {
@@ -128,14 +128,18 @@ key_press_event (GtkWidget *text_view,
         break;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
+
+static void set_cursor_if_appropriate (GtkTextView *text_view,
+                                       gint         x,
+                                       gint         y);
 
 /* Links can also be activated by clicking or tapping.
  */
 static gboolean
-event_after (GtkWidget *text_view,
-             GdkEvent  *ev)
+event_cb (GtkWidget *text_view,
+          GdkEvent  *ev)
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
@@ -145,6 +149,11 @@ event_after (GtkWidget *text_view,
 
   type = gdk_event_get_event_type (ev);
 
+  gdk_event_get_coords (ev, &ex, &ey);
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         ex, ey, &x, &y);
+
   if (type == GDK_BUTTON_RELEASE)
     {
       guint button;
@@ -153,13 +162,16 @@ event_after (GtkWidget *text_view,
       if (button != GDK_BUTTON_PRIMARY)
         return FALSE;
     }
+  else if (type == GDK_MOTION_NOTIFY)
+    {
+      set_cursor_if_appropriate (GTK_TEXT_VIEW (text_view), x, y);
+      return FALSE;
+    }
   else if (type == GDK_TOUCH_END)
     {
     }
   else
     return FALSE;
-
-  gdk_event_get_coords (ev, &ex, &ey);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 
@@ -168,10 +180,6 @@ event_after (GtkWidget *text_view,
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
     return FALSE;
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         ex, ey, &x, &y);
-
   if (gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y))
     follow_if_link (text_view, &iter);
 
@@ -179,8 +187,6 @@ event_after (GtkWidget *text_view,
 }
 
 static gboolean hovering_over_link = FALSE;
-static GdkCursor *hand_cursor = NULL;
-static GdkCursor *regular_cursor = NULL;
 
 /* Looks at all tags covering the position (x, y) in the text view,
  * and if one of them is a link, change the cursor to the "hands" cursor
@@ -216,32 +222,13 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
       hovering_over_link = hovering;
 
       if (hovering_over_link)
-        gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), hand_cursor);
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "pointer");
       else
-        gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), regular_cursor);
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
     }
 
   if (tags)
     g_slist_free (tags);
-}
-
-/* Update the cursor image if the pointer moved.
- */
-static gboolean
-motion_notify_event (GtkWidget      *text_view,
-                     GdkEventMotion *event)
-{
-  gdouble ex, ey;
-  gint x, y;
-
-  gdk_event_get_coords ((GdkEvent *)event, &ex, &ey);
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         ex, ey, &x, &y);
-
-  set_cursor_if_appropriate (GTK_TEXT_VIEW (text_view), x, y);
-
-  return FALSE;
 }
 
 GtkWidget *
@@ -254,11 +241,7 @@ do_hypertext (GtkWidget *do_widget)
       GtkWidget *view;
       GtkWidget *sw;
       GtkTextBuffer *buffer;
-      GdkDisplay *display;
-
-      display = gtk_widget_get_display (do_widget);
-      hand_cursor = gdk_cursor_new_from_name (display, "pointer");
-      regular_cursor = gdk_cursor_new_from_name (display, "text");
+      GtkEventController *controller;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
@@ -273,12 +256,11 @@ do_hypertext (GtkWidget *do_widget)
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
-      g_signal_connect (view, "key-press-event",
-                        G_CALLBACK (key_press_event), NULL);
-      g_signal_connect (view, "event-after",
-                        G_CALLBACK (event_after), NULL);
-      g_signal_connect (view, "motion-notify-event",
-                        G_CALLBACK (motion_notify_event), NULL);
+      controller = gtk_event_controller_key_new ();
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), view);
+      gtk_widget_add_controller (view, controller);
+      g_signal_connect (view, "event",
+                        G_CALLBACK (event_cb), NULL);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 

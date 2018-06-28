@@ -68,7 +68,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextViewAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkToggleButtonAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkToplevelAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeViewAccessible, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidgetAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindowAccessible, g_object_unref)
 
 #endif

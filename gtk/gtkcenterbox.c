@@ -44,9 +44,9 @@
  *
  * GtkCenterBox uses a single CSS node with the name “box”,
  *
- * In horizontal orientation, the nodes of the children are always arranged
- * from left to right. So :first-child will always select the leftmost child,
- * regardless of text direction.
+ * The first child of the #GtkCenterBox will be allocated depending on the
+ * text direction, i.e. in left-to-right layouts it will be allocated on the
+ * left and in right-to-left layouts on the right.
  *
  * In vertical orientation, the nodes of the children are arranged from top to
  * bottom.
@@ -88,6 +88,8 @@ enum {
   PROP_ORIENTATION
 };
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void gtk_center_box_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkCenterBox, gtk_center_box, GTK_TYPE_WIDGET,
@@ -107,12 +109,14 @@ gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
   else if (g_strcmp0 (type, "end") == 0)
     gtk_center_box_set_end_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_CENTER_BOX (buildable), type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_center_box_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_center_box_buildable_add_child;
 }
 
@@ -384,12 +388,10 @@ gtk_center_box_measure (GtkWidget      *widget,
 static void
 gtk_center_box_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip)
+                              int                  baseline)
 {
   GtkCenterBox *self = GTK_CENTER_BOX (widget);
   GtkAllocation child_allocation;
-  GtkAllocation child_clip;
   GtkWidget *child[3];
   int child_size[3];
   int child_pos[3];
@@ -529,58 +531,8 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
           child_allocation.height = child_size[i];
         }
 
-      gtk_widget_size_allocate (child[i], &child_allocation, allocation->y + baseline, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (child[i], &child_allocation, allocation->y + baseline);
     }
-}
-
-static void
-gtk_center_box_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  GtkCenterBox *self = GTK_CENTER_BOX (widget);
-
-  if (self->start_widget)
-    gtk_widget_snapshot_child (widget, self->start_widget, snapshot);
-
-  if (self->center_widget)
-    gtk_widget_snapshot_child (widget, self->center_widget, snapshot);
-
-  if (self->end_widget)
-    gtk_widget_snapshot_child (widget, self->end_widget, snapshot);
-}
-
-static void
-update_css_node_order (GtkCenterBox *self)
-{
-  GtkCssNode *parent;
-  GtkCssNode *first;
-  GtkCssNode *last;
-
-  parent = gtk_widget_get_css_node (GTK_WIDGET (self));
-
-  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR)
-    {
-      first = self->start_widget ? gtk_widget_get_css_node (self->start_widget) : NULL;
-      last = self->end_widget ? gtk_widget_get_css_node (self->end_widget) : NULL;
-    }
-  else
-    {
-      first = self->end_widget ? gtk_widget_get_css_node (self->end_widget) : NULL;
-      last = self->start_widget ? gtk_widget_get_css_node (self->start_widget) : NULL;
-    }
-
-  if (first)
-    gtk_css_node_insert_after (parent, first, NULL);
-  if (last)
-    gtk_css_node_insert_before (parent, last, NULL);
-}
-
-static void
-gtk_center_box_direction_changed (GtkWidget        *widget,
-                                  GtkTextDirection  previous_direction)
-{
-  update_css_node_order (GTK_CENTER_BOX (widget));
 }
 
 static GtkSizeRequestMode
@@ -702,8 +654,6 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
   widget_class->measure = gtk_center_box_measure;
   widget_class->size_allocate = gtk_center_box_size_allocate;
-  widget_class->snapshot = gtk_center_box_snapshot;
-  widget_class->direction_changed = gtk_center_box_direction_changed;
   widget_class->get_request_mode = gtk_center_box_get_request_mode;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
@@ -718,13 +668,13 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
-  gtk_widget_class_set_css_name (widget_class, "box");
+  gtk_widget_class_set_css_name (widget_class, I_("box"));
 }
 
 static void
 gtk_center_box_init (GtkCenterBox *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->start_widget = NULL;
   self->center_widget = NULL;
@@ -740,8 +690,6 @@ gtk_center_box_init (GtkCenterBox *self)
  * Creates a new #GtkCenterBox.
  *
  * Returns: the new #GtkCenterBox.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_new (void)
@@ -755,8 +703,6 @@ gtk_center_box_new (void)
  * @child: (nullable): the new start widget, or %NULL
  *
  * Sets the start widget. To remove the existing start widget, pass %NULL.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_start_widget (GtkCenterBox *self,
@@ -767,9 +713,7 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 
   self->start_widget = child;
   if (child)
-    gtk_widget_set_parent (child, GTK_WIDGET (self));
-
-  update_css_node_order (self);
+    gtk_widget_insert_after (child, GTK_WIDGET (self), NULL);
 }
 
 /**
@@ -778,8 +722,6 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
  * @child: (nullable): the new center widget, or %NULL
  *
  * Sets the center widget. To remove the existing center widget, pas %NULL.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_center_widget (GtkCenterBox *self,
@@ -790,9 +732,7 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 
   self->center_widget = child;
   if (child)
-    gtk_widget_set_parent (child, GTK_WIDGET (self));
-
-  update_css_node_order (self);
+    gtk_widget_insert_after (child, GTK_WIDGET (self), self->start_widget);
 }
 
 /**
@@ -801,8 +741,6 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
  * @child: (nullable): the new end widget, or %NULL
  *
  * Sets the end widget. To remove the existing end widget, pass %NULL.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_end_widget (GtkCenterBox *self,
@@ -813,9 +751,7 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
 
   self->end_widget = child;
   if (child)
-    gtk_widget_set_parent (child, GTK_WIDGET (self));
-
-  update_css_node_order (self);
+    gtk_widget_insert_before (child, GTK_WIDGET (self), NULL);
 }
 
 /**
@@ -825,8 +761,6 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
  * Gets the start widget, or %NULL if there is none.
  *
  * Returns: (transfer none) (nullable): the start widget.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_get_start_widget (GtkCenterBox *self)
@@ -841,8 +775,6 @@ gtk_center_box_get_start_widget (GtkCenterBox *self)
  * Gets the center widget, or %NULL if there is none.
  *
  * Returns: (transfer none) (nullable): the center widget.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_get_center_widget (GtkCenterBox *self)
@@ -857,8 +789,6 @@ gtk_center_box_get_center_widget (GtkCenterBox *self)
  * Gets the end widget, or %NULL if there is none.
  *
  * Returns: (transfer none) (nullable): the end widget.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_get_end_widget (GtkCenterBox *self)
@@ -878,8 +808,6 @@ gtk_center_box_get_end_widget (GtkCenterBox *self)
  * requested, and the baseline is not allocated by the parent then
  * @position is used to allocate the baseline wrt. the extra space
  * available.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_baseline_position (GtkCenterBox        *self,
@@ -902,8 +830,6 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
  * Gets the value set by gtk_center_box_set_baseline_position().
  *
  * Returns: the baseline position
- *
- * Since: 3.92
  */
 GtkBaselinePosition
 gtk_center_box_get_baseline_position (GtkCenterBox *self)

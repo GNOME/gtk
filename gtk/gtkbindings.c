@@ -833,8 +833,6 @@ gtk_binding_entry_clear_internal (GtkBindingSet  *binding_set,
  * Install a binding on @binding_set which causes key lookups
  * to be aborted, to prevent bindings from lower priority sets
  * to be activated.
- *
- * Since: 2.12
  */
 void
 gtk_binding_entry_skip (GtkBindingSet  *binding_set,
@@ -1391,8 +1389,6 @@ create_signal_scanner (void)
  *
  * Returns: %G_TOKEN_NONE if the signal was successfully parsed and added,
  *     the expected token otherwise
- *
- * Since: 3.0
  */
 GTokenType
 gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
@@ -1554,7 +1550,7 @@ gtk_bindings_activate (GObject         *object,
   modifiers = modifiers & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK;
 
   display = gtk_widget_get_display (GTK_WIDGET (object));
-  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
+  key_hash = binding_key_hash_for_keymap (gdk_display_get_keymap (display));
 
   entries = _gtk_key_hash_lookup_keyval (key_hash, keyval, modifiers);
 
@@ -1574,8 +1570,6 @@ gtk_bindings_activate (GObject         *object,
  * @event, and if one was found, activate it.
  *
  * Returns: %TRUE if a matching key binding was found
- *
- * Since: 2.4
  */
 gboolean
 gtk_bindings_activate_event (GObject     *object,
@@ -1593,7 +1587,7 @@ gtk_bindings_activate_event (GObject     *object,
     return FALSE;
 
   display = gtk_widget_get_display (GTK_WIDGET (object));
-  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
+  key_hash = binding_key_hash_for_keymap (gdk_display_get_keymap (display));
 
   gdk_event_get_keycode ((GdkEvent *)event, &keycode);
   gdk_event_get_state ((GdkEvent *)event, &state);

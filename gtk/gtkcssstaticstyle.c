@@ -33,6 +33,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"
@@ -158,7 +159,7 @@ gtk_css_static_style_get_default (void)
       default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (settings),
                                                         NULL,
                                                         NULL);
-      g_object_set_data_full (G_OBJECT (settings), "gtk-default-style",
+      g_object_set_data_full (G_OBJECT (settings), I_("gtk-default-style"),
                               default_style, clear_default_style);
     }
 
@@ -171,27 +172,27 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
                                   GtkCssStyle         *parent)
 {
   GtkCssStaticStyle *result;
-  GtkCssLookup *lookup;
+  GtkCssLookup lookup;
   GtkCssChange change = GTK_CSS_CHANGE_ANY_SELF | GTK_CSS_CHANGE_ANY_SIBLING | GTK_CSS_CHANGE_ANY_PARENT;
 
-  lookup = _gtk_css_lookup_new (NULL);
+  _gtk_css_lookup_init (&lookup, NULL);
 
   if (matcher)
     gtk_style_provider_lookup (provider,
                                matcher,
-                               lookup,
+                               &lookup,
                                &change);
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
   result->change = change;
 
-  _gtk_css_lookup_resolve (lookup,
+  _gtk_css_lookup_resolve (&lookup,
                            provider,
                            result,
                            parent);
 
-  _gtk_css_lookup_free (lookup);
+  _gtk_css_lookup_destroy (&lookup);
 
   return GTK_CSS_STYLE (result);
 }

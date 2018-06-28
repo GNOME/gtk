@@ -16,17 +16,23 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
 
 #include "statistics.h"
 
 #include "graphdata.h"
-#include "gtkstack.h"
-#include "gtktreeview.h"
-#include "gtkcellrenderertext.h"
+
 #include "gtkcelllayout.h"
-#include "gtksearchbar.h"
+#include "gtkcellrenderertext.h"
 #include "gtklabel.h"
+#include "gtksearchbar.h"
+#include "gtkstack.h"
+#include "gtktogglebutton.h"
+#include "gtktreeselection.h"
+#include "gtktreeview.h"
+#include "gtkeventcontrollerkey.h"
+#include "gtkmain.h"
+
+#include <glib/gi18n-lib.h>
 
 enum
 {
@@ -151,9 +157,7 @@ toggle_record (GtkToggleButton        *button,
 
   if (gtk_toggle_button_get_active (button))
     {
-      sl->priv->update_source_id = gdk_threads_add_timeout_seconds (1,
-                                                                    update_type_counts,
-                                                                    sl);
+      sl->priv->update_source_id = g_timeout_add_seconds (1, update_type_counts, sl);
       update_type_counts (sl);
     }
   else
@@ -248,15 +252,13 @@ type_data_free (gpointer data)
 }
 
 static gboolean
-key_press_event (GtkWidget              *window,
-                 GdkEvent               *event,
-                 GtkInspectorStatistics *sl)
+key_pressed (GtkEventController     *controller,
+             guint                   keyval,
+             guint                   keycode,
+             GdkModifierType         state,
+             GtkInspectorStatistics *sl)
 {
-  guint keyval, state;
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)) &&
-      gdk_event_get_keyval (event, &keyval) &&
-      gdk_event_get_state (event, &state))
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
     {
       if (keyval == GDK_KEY_Return ||
           keyval == GDK_KEY_ISO_Enter ||
@@ -276,14 +278,10 @@ key_press_event (GtkWidget              *window,
 
               return GDK_EVENT_STOP;
             }
-          else
-            return GDK_EVENT_PROPAGATE;
         }
-
-      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar), event);
     }
-  else
-    return GDK_EVENT_PROPAGATE;
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -323,13 +321,34 @@ match_row (GtkTreeModel *model,
 }
 
 static void
+destroy_controller (GtkEventController *controller)
+{
+  gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
+}
+
+static void
 hierarchy_changed (GtkWidget *widget,
                    GtkWidget *previous_toplevel)
 {
+  GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (widget);
+  GtkEventController *controller;
+  GtkWidget *toplevel;
+
   if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
-  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
-                    G_CALLBACK (key_press_event), widget);
+    g_object_set_data (G_OBJECT (previous_toplevel), "statistics-controller", NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
+  controller = gtk_event_controller_key_new ();
+  g_object_set_data_full (G_OBJECT (toplevel), "statistics-controller", controller, (GDestroyNotify)destroy_controller);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
+  gtk_widget_add_controller (toplevel, controller);
+
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar),
+                                         toplevel);
 }
 
 static void

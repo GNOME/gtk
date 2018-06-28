@@ -90,7 +90,7 @@
         <link linkend="GdkEvent"><structname>GdkEvent</structname></link>
         structures and sends them on to the GTK layer.  In turn, the GTK layer
         finds the widget that corresponds to a particular
-        <classname>GdkWindow</classname> and emits the corresponding event
+        <classname>GdkSurface</classname> and emits the corresponding event
         signals on that widget.
       </para>
 
@@ -207,17 +207,17 @@
         
       <para>
         Normally, there is only a single cairo context which is used in
-        the entire repaint, rather than one per GdkWindow. This means you
+        the entire repaint, rather than one per GdkSurface. This means you
         have to respect (and not reset) existing clip and transformations
         set on it.
       </para>
 
       <para>
-        Most widgets, including those that create their own GdkWindows have
+        Most widgets, including those that create their own GdkSurfaces have
         a transparent background, so they draw on top of whatever widgets
         are below them. This was not the case in GTK+ 2 where the theme set
         the background of most widgets to the default background color. (In
-        fact, transparent GdkWindows used to be impossible.)
+        fact, transparent GdkSurfaces used to be impossible.)
       </para>
 
       <para>
@@ -263,10 +263,10 @@
     <para>
       Two basic functions in GDK form the core of the double-buffering
       mechanism:  <link
-      linkend="gdk_window_begin_paint_region"><function>gdk_window_begin_paint_region()</function></link>
+      linkend="gdk_surface_begin_paint_region"><function>gdk_surface_begin_paint_region()</function></link>
       and <link
-      linkend="gdk_window_end_paint"><function>gdk_window_end_paint()</function></link>.
-      The first function tells a <classname>GdkWindow</classname> to
+      linkend="gdk_surface_end_paint"><function>gdk_surface_end_paint()</function></link>.
+      The first function tells a <classname>GdkSurface</classname> to
       create a temporary off-screen buffer for drawing.  All
       subsequent drawing operations to this window get automatically
       redirected to that buffer.  The second function actually paints
@@ -278,16 +278,16 @@
 
       <para>
 	It would be inconvenient for all widgets to call
-	<function>gdk_window_begin_paint_region()</function> and
-	<function>gdk_window_end_paint()</function> at the beginning
+	<function>gdk_surface_begin_paint_region()</function> and
+	<function>gdk_surface_end_paint()</function> at the beginning
 	and end of their draw handlers.
       </para>
 
       <para>
 	To make this easier, GTK+ normally calls
-        <function>gdk_window_begin_paint_region()</function>
+        <function>gdk_surface_begin_paint_region()</function>
         before emitting the #GtkWidget::draw signal, and
-	then it calls <function>gdk_window_end_paint()</function>
+	then it calls <function>gdk_surface_end_paint()</function>
 	after the signal has been emitted. This is convenient for
 	most widgets, as they do not need to worry about creating
 	their own temporary drawing buffers or about calling those
@@ -335,8 +335,8 @@ my_widget_init (MyWidget *widget)
       <para>
 	Even if you turn off double buffering on a widget, you
 	can still call
-	<function>gdk_window_begin_paint_region()</function> and
-	<function>gdk_window_end_paint()</function> by hand to use
+	<function>gdk_surface_begin_paint_region()</function> and
+	<function>gdk_surface_end_paint()</function> by hand to use
 	temporary drawing buffers.
       </para>
     </refsect2>

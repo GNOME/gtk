@@ -28,7 +28,7 @@
 
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 
 G_DEFINE_TYPE (GdkX11VulkanContext, gdk_x11_vulkan_context, GDK_TYPE_VULKAN_CONTEXT)
 
@@ -36,7 +36,7 @@ static VkResult
 gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
                                        VkSurfaceKHR     *surface)
 {
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
   /* This is necessary so that Vulkan sees the Window.
@@ -52,16 +52,30 @@ gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
                                                    NULL,
                                                    0,
                                                    gdk_x11_display_get_xdisplay (display),
-                                                   gdk_x11_window_get_xid (window)
+                                                   gdk_x11_surface_get_xid (window)
                                                },
                                                NULL,
                                                surface);
 }
 
 static void
+gdk_x11_vulkan_context_end_frame (GdkDrawContext *context,
+                                  cairo_region_t *painted)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+
+  gdk_x11_surface_pre_damage (surface);
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_vulkan_context_parent_class)->end_frame (context, painted);
+}
+
+static void
 gdk_x11_vulkan_context_class_init (GdkX11VulkanContextClass *klass)
 {
   GdkVulkanContextClass *context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+
+  draw_context_class->end_frame = gdk_x11_vulkan_context_end_frame;
 
   context_class->create_surface = gdk_x11_vulkan_context_create_surface;
 }

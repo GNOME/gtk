@@ -29,26 +29,57 @@
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
 
+#include <Windows.h>
 #include <gdk/gdk.h>
+#include <gdk/win32/gdkwin32display.h>
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_WIN32_CURSOR              (gdk_win32_cursor_get_type ())
-#define GDK_WIN32_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_CURSOR, GdkWin32Cursor))
-#define GDK_WIN32_CURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_CURSOR, GdkWin32CursorClass))
-#define GDK_IS_WIN32_CURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_CURSOR))
-#define GDK_IS_WIN32_CURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_CURSOR))
-#define GDK_WIN32_CURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_CURSOR, GdkWin32CursorClass))
+typedef struct _GdkWin32HCursor GdkWin32HCursor;
+typedef struct _GdkWin32HCursorClass GdkWin32HCursorClass;
 
-#ifdef GDK_COMPILATION
-typedef struct _GdkWin32Cursor GdkWin32Cursor;
-#else
-typedef GdkCursor GdkWin32Cursor;
-#endif
-typedef struct _GdkWin32CursorClass GdkWin32CursorClass;
+#define GDK_TYPE_WIN32_HCURSOR              (gdk_win32_hcursor_get_type())
+#define GDK_WIN32_HCURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_HCURSOR, GdkWin32HCursor))
+#define GDK_WIN32_HCURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_HCURSOR, GdkWin32HCursorClass))
+#define GDK_IS_WIN32_HCURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_HCURSOR))
+#define GDK_IS_WIN32_HCURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_HCURSOR))
+#define GDK_WIN32_HCURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_HCURSOR, GdkWin32HCursorClass))
 
 GDK_AVAILABLE_IN_ALL
-GType    gdk_win32_cursor_get_type          (void);
+GType            gdk_win32_hcursor_get_type            (void);
+
+struct _GdkWin32HCursorFake
+{
+  GObject          parent_instance;
+  HCURSOR          readonly_handle;
+};
+
+#define gdk_win32_hcursor_get_handle_fast(x) (((struct _GdkWin32HCursorFake *) x)->readonly_handle)
+
+#if defined (GDK_COMPILATION)
+#define          gdk_win32_hcursor_get_handle gdk_win32_hcursor_get_handle_fast
+#else
+GDK_AVAILABLE_IN_ALL
+HCURSOR          gdk_win32_hcursor_get_handle          (GdkWin32HCursor *cursor);
+#endif
+
+GDK_AVAILABLE_IN_ALL
+GdkWin32HCursor *gdk_win32_hcursor_new                 (GdkWin32Display *display,
+                                                        HCURSOR          handle,
+                                                        gboolean         destroyable);
+
+GDK_AVAILABLE_IN_ALL
+GdkWin32HCursor *gdk_win32_display_get_win32hcursor    (GdkWin32Display *display,
+                                                        GdkCursor       *cursor);
+
+GDK_AVAILABLE_IN_ALL
+void             _gdk_win32_display_hcursor_ref        (GdkWin32Display *display,
+                                                        HCURSOR          handle,
+                                                        gboolean         destroyable);
+
+GDK_AVAILABLE_IN_ALL
+void             _gdk_win32_display_hcursor_unref      (GdkWin32Display *display,
+                                                        HCURSOR          handle);
 
 G_END_DECLS
 

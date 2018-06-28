@@ -358,7 +358,7 @@ gtk_center_box_get_center_widget
 gtk_center_box_get_end_widget
 gtk_center_box_set_baseline_position
 gtk_center_box_get_baseline_position
-<PRIVATE>
+<SUBSECTION Private>
 GTK_TYPE_CENTER_BOX
 GTK_CENTER_BOX
 GTK_CENTER_BOX_CLASS
@@ -902,8 +902,6 @@ gtk_entry_set_attributes
 gtk_entry_get_attributes
 gtk_entry_set_completion
 gtk_entry_get_completion
-gtk_entry_set_cursor_hadjustment
-gtk_entry_get_cursor_hadjustment
 gtk_entry_set_progress_fraction
 gtk_entry_get_progress_fraction
 gtk_entry_set_progress_pulse_step
@@ -914,11 +912,11 @@ gtk_entry_reset_im_context
 gtk_entry_set_tabs
 gtk_entry_get_tabs
 GtkEntryIconPosition
-gtk_entry_set_icon_from_surface
+gtk_entry_set_icon_from_paintable
 gtk_entry_set_icon_from_icon_name
 gtk_entry_set_icon_from_gicon
 gtk_entry_get_icon_storage_type
-gtk_entry_get_icon_surface
+gtk_entry_get_icon_paintable
 gtk_entry_get_icon_name
 gtk_entry_get_icon_gicon
 gtk_entry_set_icon_activatable
@@ -1046,8 +1044,6 @@ gtk_expander_set_use_markup
 gtk_expander_get_use_markup
 gtk_expander_set_label_widget
 gtk_expander_get_label_widget
-gtk_expander_set_label_fill
-gtk_expander_get_label_fill
 gtk_expander_set_resize_toplevel
 gtk_expander_get_resize_toplevel
 <SUBSECTION Standard>
@@ -1274,12 +1270,6 @@ gtk_fixed_get_type
 GtkFontButton
 gtk_font_button_new
 gtk_font_button_new_with_font
-gtk_font_button_set_font_name
-gtk_font_button_get_font_name
-gtk_font_button_set_show_style
-gtk_font_button_get_show_style
-gtk_font_button_set_show_size
-gtk_font_button_get_show_size
 gtk_font_button_set_use_font
 gtk_font_button_get_use_font
 gtk_font_button_set_use_size
@@ -1309,10 +1299,15 @@ gtk_font_chooser_get_font
 gtk_font_chooser_set_font
 gtk_font_chooser_get_font_desc
 gtk_font_chooser_set_font_desc
+gtk_font_chooser_get_font_features
+gtk_font_chooser_set_language
 gtk_font_chooser_get_preview_text
 gtk_font_chooser_set_preview_text
 gtk_font_chooser_get_show_preview_entry
 gtk_font_chooser_set_show_preview_entry
+GtkFontChooserLevel
+gtk_font_chooser_get_level
+gtk_font_chooser_set_level
 GtkFontFilterFunc
 gtk_font_chooser_set_filter_func
 gtk_font_chooser_set_font_map
@@ -1486,26 +1481,28 @@ GtkIconViewPrivate
 <TITLE>GtkImage</TITLE>
 GtkImage
 GtkImageType
-gtk_image_get_surface
-gtk_image_get_icon_name
-gtk_image_get_gicon
-gtk_image_get_storage_type
+gtk_image_new
 gtk_image_new_from_file
+gtk_image_new_from_resource
 gtk_image_new_from_pixbuf
+gtk_image_new_from_paintable
 gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
-gtk_image_new_from_resource
-gtk_image_new_from_surface
+gtk_image_clear
 gtk_image_set_from_file
+gtk_image_set_from_resource
 gtk_image_set_from_pixbuf
+gtk_image_set_from_paintable
 gtk_image_set_from_icon_name
 gtk_image_set_from_gicon
-gtk_image_set_from_resource
-gtk_image_set_from_surface
-gtk_image_clear
-gtk_image_new
+gtk_image_get_storage_type
+gtk_image_get_paintable
+gtk_image_get_icon_name
+gtk_image_get_gicon
 gtk_image_set_pixel_size
 gtk_image_get_pixel_size
+gtk_image_set_icon_size
+gtk_image_get_icon_size
 <SUBSECTION Standard>
 GTK_IMAGE
 GTK_IS_IMAGE
@@ -1527,7 +1524,6 @@ GtkImageGIconData
 <TITLE>GtkIMContext</TITLE>
 GtkIMContext
 GtkIMContextClass
-GtkIMContextInfo
 gtk_im_context_get_preedit_string
 gtk_im_context_filter_keypress
 gtk_im_context_focus_in
@@ -1593,9 +1589,6 @@ GtkIMMulticontextPrivate
 <TITLE>GtkInvisible</TITLE>
 GtkInvisible
 gtk_invisible_new
-gtk_invisible_new_for_screen
-gtk_invisible_set_screen
-gtk_invisible_get_screen
 <SUBSECTION Standard>
 GTK_INVISIBLE
 GTK_IS_INVISIBLE
@@ -2053,41 +2046,37 @@ gtk_paned_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkplacessidebar</FILE>
-<TITLE>GtkPlacesSidebar</TITLE>
-GtkPlacesSidebar
-GtkPlacesOpenFlags
-gtk_places_sidebar_new
-gtk_places_sidebar_set_open_flags
-gtk_places_sidebar_get_open_flags
-gtk_places_sidebar_set_location
-gtk_places_sidebar_get_location
-gtk_places_sidebar_set_show_recent
-gtk_places_sidebar_get_show_recent
-gtk_places_sidebar_set_show_desktop
-gtk_places_sidebar_get_show_desktop
-gtk_places_sidebar_add_shortcut
-gtk_places_sidebar_remove_shortcut
-gtk_places_sidebar_list_shortcuts
-gtk_places_sidebar_get_nth_bookmark
-gtk_places_sidebar_get_local_only
-gtk_places_sidebar_set_local_only
-gtk_places_sidebar_get_show_enter_location
-gtk_places_sidebar_set_show_enter_location
-gtk_places_sidebar_get_show_trash
-gtk_places_sidebar_set_show_trash
-gtk_places_sidebar_get_show_other_locations
-gtk_places_sidebar_set_show_other_locations
-gtk_places_sidebar_set_drop_targets_visible
+<FILE>gtkpicture</FILE>
+<TITLE>GtkPicture</TITLE>
+GtkPicture
+gtk_picture_new
+gtk_picture_new_for_paintable
+gtk_picture_new_for_pixbuf
+gtk_picture_new_for_file
+gtk_picture_new_for_filename
+gtk_picture_new_for_resource
+gtk_picture_set_paintable
+gtk_picture_get_paintable
+gtk_picture_set_pixbuf
+gtk_picture_set_file
+gtk_picture_get_file
+gtk_picture_set_filename
+gtk_picture_set_resource
+gtk_picture_set_keep_aspect_ratio
+gtk_picture_get_keep_aspect_ratio
+gtk_picture_set_can_shrink
+gtk_picture_get_can_shrink
+gtk_picture_set_alternative_text
+gtk_picture_get_alternative_text
 <SUBSECTION Standard>
-GTK_PLACES_SIDEBAR
-GTK_IS_PLACES_SIDEBAR
-GTK_TYPE_PLACES_SIDEBAR
-GTK_PLACES_SIDEBAR_CLASS
-GTK_IS_PLACES_SIDEBAR_CLASS
-GTK_PLACES_SIDEBAR_GET_CLASS
+GTK_PICTURE
+GTK_IS_PICTURE
+GTK_TYPE_PICTURE
+GTK_PICTURE_CLASS
+GTK_IS_PICTURE_CLASS
+GTK_PICTURE_GET_CLASS
 <SUBSECTION Private>
-gtk_places_sidebar_get_type
+gtk_picture_get_type
 </SECTION>
 
 <SECTION>
@@ -2212,143 +2201,6 @@ GTK_RANGE_GET_CLASS
 <SUBSECTION Private>
 gtk_range_get_type
 GtkRangePrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtkrecentchooser</FILE>
-<TITLE>GtkRecentChooser</TITLE>
-GtkRecentChooser
-GtkRecentChooserIface
-GTK_RECENT_CHOOSER_ERROR
-GtkRecentChooserError
-gtk_recent_chooser_set_show_private
-gtk_recent_chooser_get_show_private
-gtk_recent_chooser_set_show_not_found
-gtk_recent_chooser_get_show_not_found
-gtk_recent_chooser_set_show_icons
-gtk_recent_chooser_get_show_icons
-gtk_recent_chooser_set_select_multiple
-gtk_recent_chooser_get_select_multiple
-gtk_recent_chooser_set_local_only
-gtk_recent_chooser_get_local_only
-gtk_recent_chooser_set_limit
-gtk_recent_chooser_get_limit
-gtk_recent_chooser_set_show_tips
-gtk_recent_chooser_get_show_tips
-GtkRecentSortType
-gtk_recent_chooser_set_sort_type
-gtk_recent_chooser_get_sort_type
-GtkRecentSortFunc
-gtk_recent_chooser_set_sort_func
-gtk_recent_chooser_set_current_uri
-gtk_recent_chooser_get_current_uri
-gtk_recent_chooser_get_current_item
-gtk_recent_chooser_select_uri
-gtk_recent_chooser_unselect_uri
-gtk_recent_chooser_select_all
-gtk_recent_chooser_unselect_all
-gtk_recent_chooser_get_items
-gtk_recent_chooser_get_uris
-gtk_recent_chooser_add_filter
-gtk_recent_chooser_remove_filter
-gtk_recent_chooser_list_filters
-gtk_recent_chooser_set_filter
-gtk_recent_chooser_get_filter
-<SUBSECTION Standard>
-GTK_RECENT_CHOOSER
-GTK_IS_RECENT_CHOOSER
-GTK_TYPE_RECENT_CHOOSER
-GTK_RECENT_CHOOSER_GET_IFACE
-<SUBSECTION Private>
-gtk_recent_chooser_get_type
-gtk_recent_chooser_error_quark
-</SECTION>
-
-<SECTION>
-<FILE>gtkrecentchooserdialog</FILE>
-<TITLE>GtkRecentChooserDialog</TITLE>
-GtkRecentChooserDialog
-gtk_recent_chooser_dialog_new
-gtk_recent_chooser_dialog_new_for_manager
-<SUBSECTION Standard>
-GTK_RECENT_CHOOSER_DIALOG
-GTK_IS_RECENT_CHOOSER_DIALOG
-GTK_TYPE_RECENT_CHOOSER_DIALOG
-GTK_RECENT_CHOOSER_DIALOG_CLASS
-GTK_IS_RECENT_CHOOSER_DIALOG_CLASS
-GTK_RECENT_CHOOSER_DIALOG_GET_CLASS
-
-<SUBSECTION Private>
-gtk_recent_chooser_dialog_get_type
-GtkRecentChooserDialogPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtkrecentchoosermenu</FILE>
-<TITLE>GtkRecentChooserMenu</TITLE>
-GtkRecentChooserMenu
-gtk_recent_chooser_menu_new
-gtk_recent_chooser_menu_new_for_manager
-gtk_recent_chooser_menu_get_show_numbers
-gtk_recent_chooser_menu_set_show_numbers
-<SUBSECTION Standard>
-GTK_RECENT_CHOOSER_MENU
-GTK_IS_RECENT_CHOOSER_MENU
-GTK_TYPE_RECENT_CHOOSER_MENU
-GTK_RECENT_CHOOSER_MENU_CLASS
-GTK_IS_RECENT_CHOOSER_MENU_CLASS
-GTK_RECENT_CHOOSER_MENU_GET_CLASS
-
-<SUBSECTION Private>
-gtk_recent_chooser_menu_get_type
-GtkRecentChooserMenuPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtkrecentchooserwidget</FILE>
-<TITLE>GtkRecentChooserWidget</TITLE>
-GtkRecentChooserWidget
-gtk_recent_chooser_widget_new
-gtk_recent_chooser_widget_new_for_manager
-<SUBSECTION Standard>
-GTK_RECENT_CHOOSER_WIDGET
-GTK_IS_RECENT_CHOOSER_WIDGET
-GTK_TYPE_RECENT_CHOOSER_WIDGET
-GTK_RECENT_CHOOSER_WIDGET_CLASS
-GTK_IS_RECENT_CHOOSER_WIDGET_CLASS
-GTK_RECENT_CHOOSER_WIDGET_GET_CLASS
-
-<SUBSECTION Private>
-gtk_recent_chooser_widget_get_type
-GtkRecentChooserWidgetPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtkrecentfilter</FILE>
-<TITLE>GtkRecentFilter</TITLE>
-GtkRecentFilter
-GtkRecentFilterInfo
-GtkRecentFilterFlags
-GtkRecentFilterFunc
-gtk_recent_filter_new
-gtk_recent_filter_get_name
-gtk_recent_filter_set_name
-gtk_recent_filter_add_mime_type
-gtk_recent_filter_add_pattern
-gtk_recent_filter_add_pixbuf_formats
-gtk_recent_filter_add_application
-gtk_recent_filter_add_group
-gtk_recent_filter_add_age
-gtk_recent_filter_add_custom
-gtk_recent_filter_get_needed
-gtk_recent_filter_filter
-<SUBSECTION Standard>
-GTK_RECENT_FILTER
-GTK_IS_RECENT_FILTER
-GTK_TYPE_RECENT_FILTER
-
-<SUBSECTION Private>
-gtk_recent_filter_get_type
 </SECTION>
 
 <SECTION>
@@ -2573,6 +2425,8 @@ gtk_search_bar_set_search_mode
 gtk_search_bar_get_show_close_button
 gtk_search_bar_set_show_close_button
 gtk_search_bar_handle_event
+gtk_search_bar_set_key_capture_widget
+gtk_search_bar_get_key_capture_widget
 <SUBSECTION Standard>
 GTK_TYPE_SEARCH_BAR
 GTK_SEARCH_BAR
@@ -2590,6 +2444,8 @@ gtk_search_bar_get_type
 GtkSearchEntry
 gtk_search_entry_new
 gtk_search_entry_handle_event
+gtk_search_entry_set_key_capture_widget
+gtk_search_entry_get_key_capture_widget
 <SUBSECTION Standard>
 GTK_TYPE_SEARCH_ENTRY
 GTK_SEARCH_ENTRY
@@ -2837,7 +2693,7 @@ gtk_text_buffer_backspace
 gtk_text_buffer_set_text
 gtk_text_buffer_get_text
 gtk_text_buffer_get_slice
-gtk_text_buffer_insert_pixbuf
+gtk_text_buffer_insert_texture
 gtk_text_buffer_insert_child_anchor
 gtk_text_buffer_create_child_anchor
 gtk_text_buffer_create_mark
@@ -2879,25 +2735,6 @@ gtk_text_buffer_end_user_action
 gtk_text_buffer_add_selection_clipboard
 gtk_text_buffer_remove_selection_clipboard
 
-<SUBSECTION Serialization>
-GtkTextBufferTargetInfo
-GtkTextBufferDeserializeFunc
-gtk_text_buffer_deserialize
-gtk_text_buffer_deserialize_get_can_create_tags
-gtk_text_buffer_deserialize_set_can_create_tags
-gtk_text_buffer_get_copy_target_list
-gtk_text_buffer_get_deserialize_formats
-gtk_text_buffer_get_paste_target_list
-gtk_text_buffer_get_serialize_formats
-gtk_text_buffer_register_deserialize_format
-gtk_text_buffer_register_deserialize_tagset
-gtk_text_buffer_register_serialize_format
-gtk_text_buffer_register_serialize_tagset
-GtkTextBufferSerializeFunc
-gtk_text_buffer_serialize
-gtk_text_buffer_unregister_deserialize_format
-gtk_text_buffer_unregister_serialize_format
-
 <SUBSECTION Standard>
 GTK_TEXT_BUFFER
 GTK_IS_TEXT_BUFFER
@@ -2929,7 +2766,7 @@ gtk_text_iter_get_slice
 gtk_text_iter_get_text
 gtk_text_iter_get_visible_slice
 gtk_text_iter_get_visible_text
-gtk_text_iter_get_pixbuf
+gtk_text_iter_get_texture
 gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
 gtk_text_iter_get_child_anchor
@@ -3041,7 +2878,6 @@ GtkTextTag
 gtk_text_tag_new
 gtk_text_tag_get_priority
 gtk_text_tag_set_priority
-gtk_text_tag_event
 gtk_text_tag_changed
 <SUBSECTION Standard>
 GTK_TEXT_TAG
@@ -3103,10 +2939,8 @@ gtk_text_view_get_line_at_y
 gtk_text_view_get_line_yrange
 gtk_text_view_get_iter_at_location
 gtk_text_view_get_iter_at_position
-gtk_text_view_buffer_to_window_coords
+gtk_text_view_buffer_to_surface_coords
 gtk_text_view_window_to_buffer_coords
-gtk_text_view_get_window
-gtk_text_view_get_window_type
 gtk_text_view_set_border_window_size
 gtk_text_view_get_border_window_size
 gtk_text_view_forward_display_line
@@ -3212,7 +3046,6 @@ GtkToggleButtonPrivate
 GtkToolShell
 GtkToolShellIface
 gtk_tool_shell_get_ellipsize_mode
-gtk_tool_shell_get_icon_size
 gtk_tool_shell_get_orientation
 gtk_tool_shell_get_style
 gtk_tool_shell_get_text_alignment
@@ -3242,13 +3075,10 @@ gtk_toolbar_get_nth_item
 gtk_toolbar_get_drop_index
 gtk_toolbar_set_drop_highlight_item
 gtk_toolbar_set_show_arrow
-gtk_toolbar_unset_icon_size
 gtk_toolbar_get_show_arrow
 gtk_toolbar_get_style
-gtk_toolbar_get_icon_size
 
 gtk_toolbar_set_style
-gtk_toolbar_set_icon_size
 gtk_toolbar_unset_style
 
 <SUBSECTION Standard>
@@ -3282,7 +3112,6 @@ gtk_tool_item_get_visible_vertical
 gtk_tool_item_set_is_important
 gtk_tool_item_get_is_important
 gtk_tool_item_get_ellipsize_mode
-gtk_tool_item_get_icon_size
 gtk_tool_item_get_orientation
 gtk_tool_item_get_toolbar_style
 gtk_tool_item_get_text_alignment
@@ -3424,81 +3253,6 @@ GTK_TOGGLE_TOOL_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_toggle_tool_button_get_type
 GtkToggleToolButtonPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtktoolitemgroup</FILE>
-<TITLE>GtkToolItemGroup</TITLE>
-GtkToolItemGroup
-GtkToolItemGroupClass
-gtk_tool_item_group_get_collapsed
-gtk_tool_item_group_get_drop_item
-gtk_tool_item_group_get_ellipsize
-gtk_tool_item_group_get_item_position
-gtk_tool_item_group_get_n_items
-gtk_tool_item_group_get_label
-gtk_tool_item_group_get_label_widget
-gtk_tool_item_group_get_nth_item
-gtk_tool_item_group_get_header_relief
-gtk_tool_item_group_insert
-gtk_tool_item_group_new
-gtk_tool_item_group_set_collapsed
-gtk_tool_item_group_set_ellipsize
-gtk_tool_item_group_set_item_position
-gtk_tool_item_group_set_label
-gtk_tool_item_group_set_label_widget
-gtk_tool_item_group_set_header_relief
-
-<SUBSECTION Standard>
-GTK_TOOL_ITEM_GROUP
-GTK_IS_TOOL_ITEM_GROUP
-GTK_TYPE_TOOL_ITEM_GROUP
-GTK_TOOL_ITEM_GROUP_CLASS
-GTK_IS_TOOL_ITEM_GROUP_CLASS
-GTK_TOOL_ITEM_GROUP_GET_CLASS
-
-<SUBSECTION Private>
-GtkToolItemGroupPrivate
-gtk_tool_item_group_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtktoolpalette</FILE>
-<TITLE>GtkToolPalette</TITLE>
-GtkToolPalette
-GtkToolPaletteClass
-gtk_tool_palette_new
-gtk_tool_palette_get_exclusive
-gtk_tool_palette_set_exclusive
-gtk_tool_palette_get_expand
-gtk_tool_palette_set_expand
-gtk_tool_palette_get_group_position
-gtk_tool_palette_set_group_position
-gtk_tool_palette_get_icon_size
-gtk_tool_palette_set_icon_size
-gtk_tool_palette_unset_icon_size
-gtk_tool_palette_get_style
-gtk_tool_palette_set_style
-gtk_tool_palette_unset_style
-gtk_tool_palette_add_drag_dest
-gtk_tool_palette_get_drag_item
-gtk_tool_palette_get_drag_target_group
-gtk_tool_palette_get_drag_target_item
-gtk_tool_palette_get_drop_group
-gtk_tool_palette_get_drop_item
-GtkToolPaletteDragTargets
-gtk_tool_palette_set_drag_source
-
-<SUBSECTION Standard>
-GTK_TOOL_PALETTE
-GTK_IS_TOOL_PALETTE
-GTK_TYPE_TOOL_PALETTE
-GTK_TOOL_PALETTE_CLASS
-GTK_IS_TOOL_PALETTE_CLASS
-GTK_TOOL_PALETTE_GET_CLASS
-<SUBSECTION Private>
-gtk_tool_palette_get_type
-GtkToolPalettePrivate
 </SECTION>
 
 <SECTION>
@@ -3986,7 +3740,7 @@ gtk_cell_view_new
 gtk_cell_view_new_with_context
 gtk_cell_view_new_with_text
 gtk_cell_view_new_with_markup
-gtk_cell_view_new_with_pixbuf
+gtk_cell_view_new_with_texture
 gtk_cell_view_set_model
 gtk_cell_view_get_model
 gtk_cell_view_set_displayed_row
@@ -4445,7 +4199,11 @@ gtk_volume_button_get_type
 <FILE>gtksnapshot</FILE>
 <TITLE>GtkSnapshot</TITLE>
 GtkSnapshot
-gtk_snapshot_push
+gtk_snapshot_new
+gtk_snapshot_to_node
+gtk_snapshot_to_paintable
+gtk_snapshot_free_to_node
+gtk_snapshot_free_to_paintable
 gtk_snapshot_push_transform
 gtk_snapshot_push_opacity
 gtk_snapshot_push_color_matrix
@@ -4461,13 +4219,30 @@ gtk_snapshot_append_node
 gtk_snapshot_append_cairo
 gtk_snapshot_append_texture
 gtk_snapshot_append_color
-gtk_snapshot_clips_rect
+gtk_snapshot_append_layout
 gtk_snapshot_render_background
 gtk_snapshot_render_frame
 gtk_snapshot_render_focus
 gtk_snapshot_render_layout
 gtk_snapshot_render_insertion_cursor
-gtk_snapshot_render_icon
+</SECTION>
+
+<SECTION>
+<FILE>gtkwidgetpaintable</FILE>
+<TITLE>GtkWidgetPaintable</TITLE>
+gtk_widget_paintable_new
+gtk_widget_paintable_get_widget
+gtk_widget_paintable_set_widget
+
+<SUBSECTION Standard>
+GTK_WIDGET_PAINTABLE
+GTK_IS_WIDGET_PAINTABLE
+GTK_TYPE_WIDGET_PAINTABLE
+GTK_WIDGET_PAINTABLE_CLASS
+GTK_IS_WIDGET_PAINTABLE_CLASS
+GTK_WIDGET_PAINTABLE_GET_CLASS
+<SUBSECTION Private>
+gtk_widget_paintable_get_type
 </SECTION>
 
 <SECTION>
@@ -4484,13 +4259,11 @@ gtk_widget_in_destruction
 gtk_widget_destroyed
 gtk_widget_unparent
 gtk_widget_show
-gtk_widget_show_now
 gtk_widget_hide
 gtk_widget_map
 gtk_widget_unmap
 gtk_widget_realize
 gtk_widget_unrealize
-gtk_widget_draw
 gtk_widget_queue_draw
 gtk_widget_queue_resize
 gtk_widget_queue_resize_no_redraw
@@ -4516,21 +4289,19 @@ gtk_widget_set_name
 gtk_widget_get_name
 gtk_widget_set_sensitive
 gtk_widget_set_parent
-gtk_widget_set_parent_window
-gtk_widget_get_parent_window
-gtk_widget_set_device_enabled
-gtk_widget_get_device_enabled
+gtk_widget_set_parent_surface
+gtk_widget_get_parent_surface
 gtk_widget_get_toplevel
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
-gtk_widget_hide_on_delete
+gtk_widget_add_controller
+gtk_widget_remove_controller
 gtk_widget_set_direction
 GtkTextDirection
 gtk_widget_get_direction
 gtk_widget_set_default_direction
 gtk_widget_get_default_direction
-gtk_widget_shape_combine_region
 gtk_widget_input_shape_combine_region
 gtk_widget_create_pango_context
 gtk_widget_get_pango_context
@@ -4539,8 +4310,9 @@ gtk_widget_get_font_options
 gtk_widget_set_font_map
 gtk_widget_get_font_map
 gtk_widget_create_pango_layout
-gtk_widget_queue_draw_area
-gtk_widget_queue_draw_region
+gtk_widget_get_cursor
+gtk_widget_set_cursor
+gtk_widget_set_cursor_from_name
 gtk_widget_mnemonic_activate
 gtk_widget_send_focus_change
 gtk_widget_class_set_accessible_type
@@ -4553,6 +4325,7 @@ gtk_widget_get_child_visible
 gtk_widget_get_parent
 gtk_widget_get_settings
 gtk_widget_get_clipboard
+gtk_widget_get_primary_clipboard
 gtk_widget_get_display
 gtk_widget_get_size_request
 gtk_widget_set_child_visible
@@ -4572,23 +4345,28 @@ gtk_widget_set_tooltip_window
 gtk_widget_get_has_tooltip
 gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
-gtk_widget_get_window
-gtk_widget_register_window
-gtk_widget_unregister_window
+gtk_widget_get_surface
+gtk_widget_register_surface
+gtk_widget_unregister_surface
 gtk_widget_get_allocated_width
 gtk_widget_get_allocated_height
 gtk_widget_get_allocation
 gtk_widget_get_allocated_baseline
 gtk_widget_get_allocated_size
-gtk_widget_get_clip
+gtk_widget_get_width
+gtk_widget_get_height
+gtk_widget_compute_bounds
+gtk_widget_contains
+gtk_widget_pick
 gtk_widget_get_can_default
 gtk_widget_set_can_default
 gtk_widget_get_can_focus
 gtk_widget_set_can_focus
 gtk_widget_get_focus_on_click
 gtk_widget_set_focus_on_click
-gtk_widget_get_has_window
-gtk_widget_set_has_window
+gtk_widget_set_focus_child
+gtk_widget_get_has_surface
+gtk_widget_set_has_surface
 gtk_widget_get_sensitive
 gtk_widget_is_sensitive
 gtk_widget_get_visible
@@ -4603,12 +4381,11 @@ gtk_widget_has_visible_focus
 gtk_widget_has_grab
 gtk_widget_is_drawable
 gtk_widget_is_toplevel
-gtk_widget_set_window
+gtk_widget_set_surface
 gtk_widget_set_receives_default
 gtk_widget_get_receives_default
 gtk_widget_set_support_multidevice
 gtk_widget_get_support_multidevice
-gtk_widget_set_realized
 gtk_widget_get_realized
 gtk_widget_get_mapped
 gtk_widget_device_is_shadowed
@@ -4720,6 +4497,8 @@ gtk_window_set_modal
 gtk_window_set_default_size
 gtk_window_set_gravity
 gtk_window_get_gravity
+gtk_window_set_hide_on_close
+gtk_window_get_hide_on_close
 GtkWindowPosition
 gtk_window_set_position
 gtk_window_set_transient_for
@@ -4869,13 +4648,6 @@ gtk_main_iteration
 gtk_main_iteration_do
 gtk_main_do_event
 
-GtkModuleInitFunc
-GtkModuleDisplayInitFunc
-
-<SUBSECTION>
-gtk_true
-gtk_false
-
 <SUBSECTION>
 gtk_grab_add
 gtk_grab_get_current
@@ -4969,7 +4741,6 @@ gtk_widget_path_get_type
 <SECTION>
 <FILE>gtkstyleprovider</FILE>
 <TITLE>GtkStyleProvider</TITLE>
-GtkStyleProviderIface
 GtkStyleProvider
 GTK_STYLE_PROVIDER_PRIORITY_FALLBACK
 GTK_STYLE_PROVIDER_PRIORITY_THEME
@@ -5094,7 +4865,6 @@ gtk_style_context_get_parent
 gtk_style_context_get_path
 gtk_style_context_get_property
 gtk_style_context_get_display
-gtk_style_context_get_frame_clock
 gtk_style_context_get_state
 gtk_style_context_get_valist
 gtk_style_context_get_section
@@ -5117,7 +4887,6 @@ gtk_style_context_remove_class
 gtk_style_context_has_class
 gtk_style_context_list_classes
 gtk_style_context_set_display
-gtk_style_context_set_frame_clock
 gtk_style_context_set_state
 gtk_style_context_set_scale
 gtk_style_context_get_scale
@@ -5145,7 +4914,6 @@ gtk_render_line
 gtk_render_option
 gtk_render_slider
 gtk_render_activity
-gtk_render_icon_surface
 gtk_render_icon
 gtk_render_insertion_cursor
 
@@ -5209,46 +4977,19 @@ gtk_css_section_get_type
 <FILE>gtkselection</FILE>
 <TITLE>Selections</TITLE>
 GtkSelectionData
-GtkTargetEntry
-GtkTargetList
-GtkTargetPair
-gtk_target_entry_new
-gtk_target_entry_copy
-gtk_target_entry_free
-gtk_target_list_new
-gtk_target_list_ref
-gtk_target_list_unref
-gtk_target_list_add
-gtk_target_list_add_table
-gtk_target_list_add_text_targets
-gtk_target_list_add_image_targets
-gtk_target_list_add_uri_targets
-gtk_target_list_add_rich_text_targets
-gtk_target_list_remove
-gtk_target_list_find
-gtk_target_table_free
-gtk_target_table_new_from_list
-gtk_selection_owner_set
-gtk_selection_owner_set_for_display
-gtk_selection_add_target
-gtk_selection_add_targets
-gtk_selection_clear_targets
-gtk_selection_convert
 gtk_selection_data_set
 gtk_selection_data_set_text
 gtk_selection_data_get_text
 gtk_selection_data_set_pixbuf
 gtk_selection_data_get_pixbuf
-gtk_selection_data_set_surface
-gtk_selection_data_get_surface
+gtk_selection_data_set_texture
+gtk_selection_data_get_texture
 gtk_selection_data_set_uris
 gtk_selection_data_get_uris
 gtk_selection_data_get_targets
 gtk_selection_data_targets_include_image
 gtk_selection_data_targets_include_text
 gtk_selection_data_targets_include_uri
-gtk_selection_data_targets_include_rich_text
-gtk_selection_data_get_selection
 gtk_selection_data_get_data
 gtk_selection_data_get_length
 gtk_selection_data_get_data_with_length
@@ -5259,76 +5000,18 @@ gtk_selection_data_get_target
 gtk_targets_include_image
 gtk_targets_include_text
 gtk_targets_include_uri
-gtk_targets_include_rich_text
-gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
 <SUBSECTION Standard>
 GTK_TYPE_SELECTION_DATA
-GTK_TYPE_TARGET_LIST
 <SUBSECTION Private>
 gtk_selection_data_get_type
-gtk_target_list_get_type
-gtk_target_entry_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkclipboard</FILE>
-<TITLE>Clipboards</TITLE>
-GtkClipboard
-GtkClipboardReceivedFunc
-GtkClipboardTextReceivedFunc
-GtkClipboardImageReceivedFunc
-GtkClipboardTargetsReceivedFunc
-GtkClipboardRichTextReceivedFunc
-GtkClipboardURIReceivedFunc
-GtkClipboardGetFunc
-GtkClipboardClearFunc
-gtk_clipboard_get
-gtk_clipboard_get_for_display
-gtk_clipboard_get_display
-gtk_clipboard_get_default
-gtk_clipboard_set_with_data
-gtk_clipboard_set_with_owner
-gtk_clipboard_get_owner
-gtk_clipboard_clear
-gtk_clipboard_set_text
-gtk_clipboard_set_image
-gtk_clipboard_set_surface
-gtk_clipboard_request_contents
-gtk_clipboard_request_text
-gtk_clipboard_request_image
-gtk_clipboard_request_targets
-gtk_clipboard_request_rich_text
-gtk_clipboard_request_uris
-gtk_clipboard_wait_for_contents
-gtk_clipboard_wait_for_text
-gtk_clipboard_wait_for_image
-gtk_clipboard_wait_for_surface
-gtk_clipboard_wait_for_rich_text
-gtk_clipboard_wait_for_uris
-gtk_clipboard_wait_is_text_available
-gtk_clipboard_wait_is_image_available
-gtk_clipboard_wait_is_rich_text_available
-gtk_clipboard_wait_is_uris_available
-gtk_clipboard_wait_for_targets
-gtk_clipboard_wait_is_target_available
-gtk_clipboard_set_can_store
-gtk_clipboard_store
-gtk_clipboard_get_selection
-<SUBSECTION Standard>
-GTK_CLIPBOARD
-GTK_TYPE_CLIPBOARD
-GTK_IS_CLIPBOARD
-<SUBSECTION Private>
-gtk_clipboard_get_type
 </SECTION>
 
 <SECTION>
 <FILE>gtkdnd</FILE>
 <TITLE>Drag and Drop</TITLE>
 GtkDestDefaults
-GtkTargetFlags
 GtkDragResult
 <SUBSECTION Destination Side>
 gtk_drag_dest_set
@@ -5341,7 +5024,6 @@ gtk_drag_dest_add_image_targets
 gtk_drag_dest_add_uri_targets
 gtk_drag_dest_set_track_motion
 gtk_drag_dest_get_track_motion
-gtk_drag_finish
 gtk_drag_get_data
 gtk_drag_get_source_widget
 gtk_drag_highlight
@@ -5350,16 +5032,15 @@ gtk_drag_unhighlight
 gtk_drag_begin_with_coordinates
 gtk_drag_cancel
 gtk_drag_set_icon_widget
-gtk_drag_set_icon_surface
+gtk_drag_set_icon_paintable
 gtk_drag_set_icon_name
 gtk_drag_set_icon_gicon
 gtk_drag_set_icon_default
 gtk_drag_check_threshold
 gtk_drag_source_set
-gtk_drag_source_set_icon_pixbuf
-gtk_drag_source_set_icon_surface
 gtk_drag_source_set_icon_name
 gtk_drag_source_set_icon_gicon
+gtk_drag_source_set_icon_paintable
 gtk_drag_source_unset
 gtk_drag_source_set_target_list
 gtk_drag_source_get_target_list
@@ -5407,6 +5088,7 @@ GtkShadowType
 GtkStateFlags
 GtkToolbarStyle
 GtkSortType
+GtkIconSize
 
 </SECTION>
 
@@ -5438,8 +5120,6 @@ gtk_icon_theme_lookup_by_gicon
 gtk_icon_theme_lookup_by_gicon_for_scale
 gtk_icon_theme_load_icon
 gtk_icon_theme_load_icon_for_scale
-gtk_icon_theme_load_surface
-gtk_icon_theme_load_texture
 gtk_icon_theme_list_contexts
 gtk_icon_theme_list_icons
 gtk_icon_theme_get_icon_sizes
@@ -5450,7 +5130,7 @@ gtk_icon_info_get_base_size
 gtk_icon_info_get_base_scale
 gtk_icon_info_get_filename
 gtk_icon_info_load_icon
-gtk_icon_info_load_surface
+gtk_icon_info_load_texture
 gtk_icon_info_load_icon_async
 gtk_icon_info_load_icon_finish
 gtk_icon_info_load_symbolic
@@ -5619,6 +5299,7 @@ gtk_printer_request_details
 gtk_printer_get_capabilities
 gtk_printer_get_default_page_size
 gtk_printer_get_hard_margins
+gtk_printer_get_hard_margins_for_paper_size
 GtkPrinterFunc
 gtk_enumerate_printers
 
@@ -6047,7 +5728,6 @@ gtk_application_get_active_window
 GtkApplicationInhibitFlags
 gtk_application_inhibit
 gtk_application_uninhibit
-gtk_application_is_inhibited
 
 <SUBSECTION>
 gtk_application_prefers_app_menu
@@ -6332,6 +6012,10 @@ gtk_overlay_add_overlay
 gtk_overlay_reorder_overlay
 gtk_overlay_get_overlay_pass_through
 gtk_overlay_set_overlay_pass_through
+gtk_overlay_get_measure_overlay
+gtk_overlay_set_measure_overlay
+gtk_overlay_get_clip_overlay
+gtk_overlay_set_clip_overlay
 
 <SUBSECTION Standard>
 GTK_TYPE_OVERLAY
@@ -6445,8 +6129,8 @@ gtk_header_bar_set_custom_title
 gtk_header_bar_get_custom_title
 gtk_header_bar_pack_start
 gtk_header_bar_pack_end
-gtk_header_bar_set_show_close_button
-gtk_header_bar_get_show_close_button
+gtk_header_bar_set_show_title_buttons
+gtk_header_bar_get_show_title_buttons
 gtk_header_bar_set_decoration_layout
 gtk_header_bar_get_decoration_layout
 
@@ -6778,6 +6462,63 @@ gtk_gesture_single_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkeventcontrollerscroll</FILE>
+<TITLE>GtkEventControlerScroll</TITLE>
+GtkEventControllerScroll
+GtkEventControllerScrollFlags
+gtk_event_controller_scroll_new
+gtk_event_controller_scroll_set_flags
+gtk_event_controller_scroll_get_flags
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_SCROLL
+GTK_EVENT_CONTROLLER_SCROLL
+GTK_EVENT_CONTROLLER_SCROLL_CLASS
+GTK_IS_EVENT_CONTROLLER_SCROLL
+GTK_IS_EVENT_CONTROLLER_SCROLL_CLASS
+GTK_EVENT_CONTROLLER_SCROLL_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_scroll_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkeventcontrollermotion</FILE>
+<TITLE>GtkEventControlerMotion</TITLE>
+GtkEventControllerMotion
+gtk_event_controller_motion_new
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_MOTION
+GTK_EVENT_CONTROLLER_MOTION
+GTK_EVENT_CONTROLLER_MOTION_CLASS
+GTK_IS_EVENT_CONTROLLER_MOTION
+GTK_IS_EVENT_CONTROLLER_MOTION_CLASS
+GTK_EVENT_CONTROLLER_MOTION_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_motion_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkeventcontrollerkey</FILE>
+<TITLE>GtkEventControllerKey</TITLE>
+GtkEventControllerKey
+gtk_event_controller_key_new
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_KEY
+GTK_EVENT_CONTROLLER_KEY
+GTK_EVENT_CONTROLLER_KEY_CLASS
+GTK_IS_EVENT_CONTROLLER_KEY
+GTK_IS_EVENT_CONTROLLER_KEY_CLASS
+GTK_EVENT_CONTROLLER_KEY_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_key_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgesturedrag</FILE>
 <TITLE>GtkGestureDrag</TITLE>
 GtkGestureDrag
@@ -6936,14 +6677,38 @@ gtk_pad_controller_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkgesturestylus</FILE>
+<TITLE>GtkGestureStylus</TITLE>
+GtkGestureStylus
+
+gtk_gesture_stylus_new
+gtk_gesture_stylus_get_axis
+gtk_gesture_stylus_get_axes
+gtk_gesture_stylus_get_backlog
+gtk_gesture_stylus_get_device_tool
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_STYLUS
+GTK_GESTURE_STYLUS
+GTK_GESTURE_STYLUS_CLASS
+GTK_IS_GESTURE_STYLUS
+GTK_IS_GESTURE_STYLUS_CLASS
+GTK_GESTURE_STYLUS_GET_CLASS
+GtkGestureStylusClass
+
+<SUBSECTION Private>
+gtk_gesture_stylus_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkstacksidebar</FILE>
 GtkStackSidebar
-GtkStackSidebarClass
 gtk_stack_sidebar_new
 gtk_stack_sidebar_set_stack
 gtk_stack_sidebar_get_stack
 
 <SUBSECTION Standard>
+GtkStackSidebarClass
 GTK_TYPE_STACK_SIDEBAR
 GTK_STACK_SIDEBAR
 GTK_STACK_SIDEBAR_CLASS
@@ -6968,8 +6733,6 @@ gtk_gl_area_attach_buffers
 gtk_gl_area_set_error
 gtk_gl_area_get_error
 <SUBSECTION>
-gtk_gl_area_set_has_alpha
-gtk_gl_area_get_has_alpha
 gtk_gl_area_set_has_depth_buffer
 gtk_gl_area_get_has_depth_buffer
 gtk_gl_area_set_has_stencil_buffer
@@ -7075,4 +6838,103 @@ GTK_SHORTCUT_LABEL_CLASS
 GTK_SHORTCUT_LABEL_GET_CLASS
 GTK_IS_SHORTCUT_LABEL
 GTK_IS_SHORTCUT_LABEL_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtkvideo</FILE>
+GtkVideo
+gtk_video_new
+gtk_video_new_for_media_stream
+gtk_video_new_for_file
+gtk_video_new_for_filename
+gtk_video_new_for_resource
+gtk_video_get_media_stream
+gtk_video_set_media_stream
+gtk_video_get_file
+gtk_video_set_file
+gtk_video_set_filename
+gtk_video_set_resource
+gtk_video_get_autoplay
+gtk_video_set_autoplay
+gtk_video_get_loop
+gtk_video_set_loop
+
+<SUBSECTION Private>
+gtk_video_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkmediacontrols</FILE>
+GtkMediaControls
+gtk_media_controls_new
+gtk_media_controls_get_media_stream
+gtk_media_controls_set_media_stream
+
+<SUBSECTION Private>
+gtk_media_controls_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkmediafile</FILE>
+GtkMediaFile
+gtk_media_file_new
+gtk_media_file_new_for_filename
+gtk_media_file_new_for_resource
+gtk_media_file_new_for_file
+gtk_media_file_new_for_input_stream
+gtk_media_file_clear
+gtk_media_file_set_filename
+gtk_media_file_set_resource
+gtk_media_file_set_file
+gtk_media_file_get_file
+gtk_media_file_set_input_stream
+gtk_media_file_get_input_stream
+
+<SUBSECTION Private>
+GTK_TYPE_MEDIA_FILE
+gtk_media_file_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkmediastream</FILE>
+GtkMediaStream
+GtkMediaStreamClass
+
+gtk_media_stream_is_prepared
+gtk_media_stream_get_error
+gtk_media_stream_has_audio
+gtk_media_stream_has_video
+gtk_media_stream_play
+gtk_media_stream_pause
+gtk_media_stream_get_playing
+gtk_media_stream_set_playing
+gtk_media_stream_get_ended
+gtk_media_stream_get_timestamp
+gtk_media_stream_get_duration
+gtk_media_stream_is_seekable
+gtk_media_stream_is_seeking
+gtk_media_stream_seek
+gtk_media_stream_get_loop
+gtk_media_stream_set_loop
+gtk_media_stream_get_muted
+gtk_media_stream_set_muted
+gtk_media_stream_get_volume
+gtk_media_stream_set_volume
+gtk_media_stream_realize
+gtk_media_stream_unrealize
+
+<SUBSECTION>
+gtk_media_stream_prepared
+gtk_media_stream_unprepared
+gtk_media_stream_update
+gtk_media_stream_ended
+gtk_media_stream_seek_success
+gtk_media_stream_seek_failed
+gtk_media_stream_gerror
+gtk_media_stream_error
+gtk_media_stream_error_valist
+
+<SUBSECTION Private>
+GTK_TYPE_MEDIA_STREAM
+gtk_media_stream_get_type
 </SECTION>

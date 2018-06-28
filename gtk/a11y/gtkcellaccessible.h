@@ -23,7 +23,7 @@
 #endif
 
 #include <atk/atk.h>
-#include <gtk/gtk.h>
+#include <gtk/gtkaccessible.h>
 
 G_BEGIN_DECLS
 

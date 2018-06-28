@@ -2865,27 +2865,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkRecentChooserWidget" id="recentchooser1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="limit">20</property>
-          </object>
-          <packing>
-            <property name="position">10</property>
-          </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel" id="label12">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">GtkRecentChooserDefault</property>
-          </object>
-          <packing>
-            <property name="position">10</property>
-            <property name="tab_fill">False</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkColorButton" id="colorselection1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>

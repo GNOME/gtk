@@ -48,6 +48,9 @@ GType     gdk_quartz_drag_context_get_type (void);
 GDK_AVAILABLE_IN_ALL
 id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
 
+GDK_AVAILABLE_IN_ALL
+GdkDragContext *gdk_quartz_drag_source_context_libgtk_only (void);
+
 G_END_DECLS
 
 #endif /* __GDK_QUARTZ_DRAG_CONTEXT_H__ */

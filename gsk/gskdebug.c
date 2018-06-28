@@ -2,34 +2,30 @@
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gsk_debug_keys[] = {
-  { "rendernode", GSK_DEBUG_RENDER_NODE },
   { "renderer", GSK_DEBUG_RENDERER },
   { "cairo", GSK_DEBUG_CAIRO },
   { "opengl", GSK_DEBUG_OPENGL },
   { "shaders", GSK_DEBUG_SHADERS },
-  { "transforms", GSK_DEBUG_TRANSFORMS },
   { "surface", GSK_DEBUG_SURFACE },
   { "vulkan", GSK_DEBUG_VULKAN },
   { "fallback", GSK_DEBUG_FALLBACK },
-  { "glyphcache", GSK_DEBUG_GLYPH_CACHE }
+  { "glyphcache", GSK_DEBUG_GLYPH_CACHE },
+  { "diff", GSK_DEBUG_DIFF },
+  { "geometry", GSK_DEBUG_GEOMETRY },
+  { "full-redraw", GSK_DEBUG_FULL_REDRAW},
+  { "sync", GSK_DEBUG_SYNC },
+  { "vulkan-staging-image", GSK_DEBUG_VULKAN_STAGING_IMAGE },
+  { "vulkan-staging-buffer", GSK_DEBUG_VULKAN_STAGING_BUFFER }
 };
 #endif
 
-static const GDebugKey gsk_rendering_keys[] = {
-  { "geometry", GSK_RENDERING_MODE_GEOMETRY },
-  { "shaders", GSK_RENDERING_MODE_SHADERS },
-  { "sync", GSK_RENDERING_MODE_SYNC },
-  { "full-redraw", GSK_RENDERING_MODE_FULL_REDRAW},
-  { "staging-image", GSK_RENDERING_MODE_STAGING_IMAGE },
-  { "staging-buffer", GSK_RENDERING_MODE_STAGING_BUFFER }
-};
+static guint gsk_debug_flags;
 
-gboolean
-gsk_check_debug_flags (GskDebugFlags flags)
+static void
+init_debug_flags (void)
 {
 #ifdef G_ENABLE_DEBUG
   static volatile gsize gsk_debug_flags__set;
-  static guint gsk_debug_flags;
 
   if (g_once_init_enter (&gsk_debug_flags__set))
     {
@@ -41,29 +37,26 @@ gsk_check_debug_flags (GskDebugFlags flags)
 
       g_once_init_leave (&gsk_debug_flags__set, TRUE);
     }
-
-  return (gsk_debug_flags & flags) != 0;
-#else
-  return FALSE;
 #endif
 }
 
 gboolean
-gsk_check_rendering_flags (GskRenderingMode flags)
+gsk_check_debug_flags (GskDebugFlags flags)
 {
-  static volatile gsize gsk_rendering_flags__set;
-  static guint gsk_rendering_flags;
+  init_debug_flags ();
+  return (gsk_debug_flags & flags) != 0;
+}
 
-  if (g_once_init_enter (&gsk_rendering_flags__set))
-    {
-      const char *env = g_getenv ("GSK_RENDERING_MODE");
+GskDebugFlags
+gsk_get_debug_flags (void)
+{
+  init_debug_flags ();
+  return gsk_debug_flags;
+}
 
-      gsk_rendering_flags = g_parse_debug_string (env,
-                                                  (GDebugKey *) gsk_rendering_keys,
-                                                  G_N_ELEMENTS (gsk_rendering_keys));
-
-      g_once_init_leave (&gsk_rendering_flags__set, TRUE);
-    }
-
-  return (gsk_rendering_flags & flags) != 0;
+void
+gsk_set_debug_flags (GskDebugFlags flags)
+{
+  init_debug_flags ();
+  gsk_debug_flags = flags;
 }

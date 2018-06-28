@@ -27,6 +27,7 @@
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 
 /**
@@ -95,7 +96,7 @@ struct _GtkCellRendererAccelPrivate
   guint accel_key;
   guint keycode;
 
-  GdkDevice *grab_pointer;
+  GdkSeat *grab_seat;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT)
@@ -113,6 +114,16 @@ gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)
 }
 
 static void
+gtk_cell_renderer_accel_dispose (GObject *object)
+{
+  GtkCellRendererAccelPrivate *priv = GTK_CELL_RENDERER_ACCEL (object)->priv;
+
+  g_clear_object (&priv->sizing_label);
+
+  G_OBJECT_CLASS (gtk_cell_renderer_accel_parent_class)->dispose (object);
+}
+
+static void
 gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 {
   GObjectClass *object_class;
@@ -123,6 +134,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 
   object_class->set_property = gtk_cell_renderer_accel_set_property;
   object_class->get_property = gtk_cell_renderer_accel_get_property;
+  object_class->dispose = gtk_cell_renderer_accel_dispose;
 
   cell_renderer_class->get_preferred_width = gtk_cell_renderer_accel_get_preferred_width;
   cell_renderer_class->start_editing = gtk_cell_renderer_accel_start_editing;
@@ -131,8 +143,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * GtkCellRendererAccel:accel-key:
    *
    * The keyval of the accelerator.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_KEY,
@@ -148,8 +158,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * GtkCellRendererAccel:accel-mods:
    *
    * The modifier mask of the accelerator.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODS,
@@ -166,8 +174,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * The hardware keycode of the accelerator. Note that the hardware keycode is
    * only relevant if the key does not have a keyval. Normally, the keyboard
    * configuration should assign keyvals to all keys.
-   *
-   * Since: 2.10
    */ 
   g_object_class_install_property (object_class,
                                    PROP_KEYCODE,
@@ -186,8 +192,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * they are, consumed modifiers are suppressed, only accelerators
    * accepted by GTK+ are allowed, and the accelerators are rendered
    * in the same way as they are in menus.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODE,
@@ -207,8 +211,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * @hardware_keycode: the keycode of the new accelerator
    *
    * Gets emitted when the user has selected a new accelerator.
-   *
-   * Since: 2.10
    */
   signals[ACCEL_EDITED] = g_signal_new (I_("accel-edited"),
                                         GTK_TYPE_CELL_RENDERER_ACCEL,
@@ -228,8 +230,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * @path_string: the path identifying the row of the edited cell
    *
    * Gets emitted when the user has removed the accelerator.
-   *
-   * Since: 2.10
    */
   signals[ACCEL_CLEARED] = g_signal_new (I_("accel-cleared"),
                                          GTK_TYPE_CELL_RENDERER_ACCEL,
@@ -248,8 +248,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
  * Creates a new #GtkCellRendererAccel.
  * 
  * Returns: the new cell renderer
- *
- * Since: 2.10
  */
 GtkCellRenderer *
 gtk_cell_renderer_accel_new (void)
@@ -410,7 +408,10 @@ gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer *cell,
   GtkRequisition min_req, nat_req;
 
   if (priv->sizing_label == NULL)
-    priv->sizing_label = gtk_label_new (_("New accelerator…"));
+    {
+      priv->sizing_label = gtk_label_new (_("New accelerator…"));
+      g_object_ref_sink (priv->sizing_label);
+    }
 
   gtk_widget_get_preferred_size (priv->sizing_label, &min_req, &nat_req);
 
@@ -439,8 +440,8 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *label;
   GtkWidget *editable;
   gboolean is_editable;
-  GdkDevice *device, *pointer;
-  GdkWindow *window;
+  GdkSeat *seat = NULL;
+  GdkSurface *surface;
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   accel = GTK_CELL_RENDERER_ACCEL (cell);
@@ -451,27 +452,28 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (!is_editable)
     return NULL;
 
-  window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+  surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
 
   if (event)
-    device = gdk_event_get_device (event);
+    seat = gdk_event_get_seat (event);
   else
-    device = gtk_get_current_event_device ();
+    {
+      GdkDevice *device;
 
-  if (!device || !window)
+      device = gtk_get_current_event_device ();
+      if (device)
+        seat = gdk_device_get_seat (device);
+    }
+
+  if (!seat || !surface)
     return NULL;
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    pointer = gdk_device_get_associated_device (device);
-  else
-    pointer = device;
-
-  if (gdk_seat_grab (gdk_device_get_seat (pointer), window,
+  if (gdk_seat_grab (seat, surface,
                      GDK_SEAT_CAPABILITY_ALL, FALSE,
                      NULL, event, NULL, NULL) != GDK_GRAB_SUCCESS)
     return NULL;
 
-  priv->grab_pointer = pointer;
+  priv->grab_seat = seat;
 
   editable = gtk_cell_editable_widget_new (cell, priv->accel_mode, path);
 
@@ -498,10 +500,10 @@ gtk_cell_renderer_accel_ungrab (GtkCellRendererAccel *accel)
 {
   GtkCellRendererAccelPrivate *priv = accel->priv;
 
-  if (priv->grab_pointer)
+  if (priv->grab_seat)
     {
-      gdk_seat_ungrab (gdk_device_get_seat (priv->grab_pointer));
-      priv->grab_pointer = NULL;
+      gdk_seat_ungrab (priv->grab_seat);
+      priv->grab_seat = NULL;
     }
 }
 
@@ -546,32 +548,32 @@ gtk_cell_editable_widget_cell_editable_init (GtkCellEditableIface *iface)
 }
 
 static gboolean
-gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
-                                          GdkEventKey *event)
+key_controller_modifiers (GtkEventControllerKey *key,
+                          GdkModifierType        state,
+                          GtkWidget             *widget)
+{
+  /* Ignore modifiers */
+  return TRUE;
+}
+
+static gboolean
+key_controller_key_pressed (GtkEventControllerKey *key,
+                            guint                  keyval,
+                            guint                  keycode,
+                            GdkModifierType        state,
+                            GtkWidget             *widget)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)widget;
   GdkModifierType accel_mods = 0;
   guint accel_key;
-  guint keyval = 0;
   gboolean edited;
   gboolean cleared;
   GdkModifierType consumed_modifiers;
   GdkDisplay *display;
-  gboolean is_modifier = FALSE;
-  guint16 keycode = 0;
   guint group = 0;
-  GdkModifierType state = 0;
 
   display = gtk_widget_get_display (widget);
-
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
-  gdk_event_get_keycode ((GdkEvent *)event, &keycode);
-  gdk_event_get_key_group ((GdkEvent *)event, &group);
-  gdk_event_get_key_is_modifier ((GdkEvent *)event, &is_modifier);
-
-  if (is_modifier)
-    return TRUE;
+  group = gtk_event_controller_key_get_group (key);
 
   edited = FALSE;
   cleared = FALSE;
@@ -589,7 +591,7 @@ gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
     }
   else
     {
-      _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
+      _gtk_translate_keyboard_accel_state (gdk_display_get_keymap (display),
                                            keycode,
                                            state,
                                            gtk_accelerator_get_default_mod_mask (),
@@ -730,7 +732,6 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
   object_class->set_property = gtk_cell_editable_widget_set_property;
   object_class->get_property = gtk_cell_editable_widget_get_property;
 
-  widget_class->key_press_event = gtk_cell_editable_widget_key_press_event;
   widget_class->unrealize = gtk_cell_editable_widget_unrealize;
 
   g_object_class_override_property (object_class,
@@ -747,13 +748,25 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
       g_param_spec_string ("path", NULL, NULL,
                            NULL, GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (widget_class, "acceleditor");
+  gtk_widget_class_set_css_name (widget_class, I_("acceleditor"));
 }
 
 static void
 gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
 {
-  gtk_widget_set_can_focus (GTK_WIDGET (box), TRUE);
+  GtkWidget *widget = GTK_WIDGET (box);
+  GtkEventController *controller;
+
+  gtk_widget_set_can_focus (widget, TRUE);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (key_controller_key_pressed), box);
+  g_signal_connect (controller, "modifiers",
+                    G_CALLBACK (key_controller_modifiers), box);
+  gtk_widget_add_controller (widget, controller);
+
+  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static GtkWidget *

@@ -363,10 +363,10 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
       GdkDisplay *display;
       GdkModifierType no_text_input_mask;
 
-      display = gdk_window_get_display (gdk_event_get_window ((GdkEvent *) event));
+      display = gdk_surface_get_display (gdk_event_get_surface ((GdkEvent *) event));
 
       no_text_input_mask =
-        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+        gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                       GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
       if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_PRESS &&
@@ -555,8 +555,6 @@ gtk_im_multicontext_delete_surrounding_cb (GtkIMContext      *slave,
  * Gets the id of the currently active slave of the @context.
  *
  * Returns: the id of the currently active slave
- *
- * Since: 2.16
  */
 const char *
 gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
@@ -575,8 +573,6 @@ gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
  *
  * This causes the currently active slave of @context to be
  * replaced by the slave corresponding to the new context id.
- *
- * Since: 2.16
  */
 void
 gtk_im_multicontext_set_context_id (GtkIMMulticontext *context,

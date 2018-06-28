@@ -59,9 +59,10 @@
  * int
  * main (int argc, char **argv)
  * {
+ *  GtkWidget *mainwin;
  *   // Initialize i18n support with bindtextdomain(), etc.
  *
- *   ...
+ *   // ...
  *
  *   // Initialize the widget set
  *   gtk_init ();
@@ -71,7 +72,7 @@
  *
  *   // Set up our GUI elements
  *
- *   ...
+ *   // ...
  *
  *   // Show the application window
  *   gtk_widget_show (mainwin);
@@ -114,23 +115,22 @@
 
 #include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
-#include "gtkclipboardprivate.h"
 #include "gtkdebug.h"
-#include "gtkdebugupdatesprivate.h"
 #include "gtkdndprivate.h"
 #include "gtkmain.h"
+#include "gtkmediafileprivate.h"
 #include "gtkmenu.h"
-#include "gtkmodules.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
-#include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtktooltipprivate.h"
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtkprintbackend.h"
+#include "gtkimmodule.h"
 
 #include "a11y/gtkaccessibility.h"
 
@@ -140,6 +140,7 @@ static guint gtk_main_loop_level = 0;
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
+static GThread *initialized_thread = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
@@ -154,12 +155,9 @@ DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
-  { "misc", GTK_DEBUG_MISC },
   { "text", GTK_DEBUG_TEXT },
   { "tree", GTK_DEBUG_TREE },
-  { "updates", GTK_DEBUG_UPDATES },
   { "keybindings", GTK_DEBUG_KEYBINDINGS },
-  { "multihead", GTK_DEBUG_MULTIHEAD },
   { "modules", GTK_DEBUG_MODULES },
   { "geometry", GTK_DEBUG_GEOMETRY },
   { "icontheme", GTK_DEBUG_ICONTHEME },
@@ -189,8 +187,6 @@ static const GDebugKey gtk_debug_keys[] = {
  * have included when compiling your code.
  *
  * Returns: the major version number of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_major_version (void)
@@ -210,8 +206,6 @@ gtk_get_major_version (void)
  * GTK+ headers you have included when compiling your code.
  *
  * Returns: the minor version number of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_minor_version (void)
@@ -231,8 +225,6 @@ gtk_get_minor_version (void)
  * GTK+ headers you have included when compiling your code.
  *
  * Returns: the micro version number of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_micro_version (void)
@@ -249,8 +241,6 @@ gtk_get_micro_version (void)
  * worry about it.
  *
  * Returns: the binary age of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_binary_age (void)
@@ -267,8 +257,6 @@ gtk_get_binary_age (void)
  * worry about it.
  *
  * Returns: the interface age of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_interface_age (void)
@@ -396,8 +384,6 @@ gtk_disable_setlocale (void)
 #undef gtk_init_check
 #endif
 
-static GString *gtk_modules_string = NULL;
-
 #ifdef G_OS_WIN32
 
 static char *iso639_to_check = NULL;
@@ -446,6 +432,8 @@ enum_locale_proc (LPTSTR locale)
                     case MAKELANGID (LANG_SERBIAN, 0x07):
                       /* Serbian in Bosnia and Herzegovina, Cyrillic */
                       return TRUE;
+                    default:
+                      break;
                     }
                 }
               else if (strcmp (script_to_check, "Cyrl") == 0)
@@ -461,6 +449,8 @@ enum_locale_proc (LPTSTR locale)
                     case MAKELANGID (LANG_SERBIAN, 0x06):
                       /* Serbian in Bosnia and Herzegovina, Latin */
                       return TRUE;
+                    default:
+                      break;
                     }
                 }
             }
@@ -536,7 +526,7 @@ setlocale_initialization (void)
                    */
                   if (strcmp (iso3166_to_check, "CS") == 0 ||
                       strcmp (iso3166_to_check, "YU") == 0)
-                    iso3166_to_check = "SP";
+                    iso3166_to_check = (char *) "SP";
                 }
               else
                 {
@@ -545,7 +535,7 @@ setlocale_initialization (void)
                     *script_to_check++ = '\0';
                   /* LANG_SERBIAN == LANG_CROATIAN, recognize just "sr" */
                   if (strcmp (iso639_to_check, "sr") == 0)
-                    iso3166_to_check = "SP";
+                    iso3166_to_check = (char *) "SP";
                 }
 
               EnumSystemLocales (enum_locale_proc, LCID_SUPPORTED);
@@ -559,6 +549,34 @@ setlocale_initialization (void)
         g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
 #endif
     }
+}
+
+/* Return TRUE if module_to_check causes version conflicts.
+ * If module_to_check is NULL, check the main module.
+ */
+static gboolean
+_gtk_module_has_mixed_deps (GModule *module_to_check)
+{
+  GModule *module;
+  gpointer func;
+  gboolean result;
+
+  if (!module_to_check)
+    module = g_module_open (NULL, 0);
+  else
+    module = module_to_check;
+
+  if (g_module_symbol (module, "gtk_progress_get_type", &func))
+    result = TRUE;
+  else if (g_module_symbol (module, "gtk_misc_get_type", &func))
+    result = TRUE;
+  else
+    result = FALSE;
+
+  if (!module_to_check)
+    g_module_close (module);
+
+  return result;
 }
 
 static void
@@ -589,21 +607,6 @@ do_pre_parse_initialization (void)
     }
 #endif  /* G_ENABLE_DEBUG */
 
-  env_string = g_getenv ("GTK3_MODULES");
-  if (env_string)
-    gtk_modules_string = g_string_new (env_string);
-
-  env_string = g_getenv ("GTK_MODULES");
-  if (env_string)
-    {
-      if (gtk_modules_string)
-        g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
-      else
-        gtk_modules_string = g_string_new (NULL);
-
-      g_string_append (gtk_modules_string, env_string);
-    }
-
   env_string = g_getenv ("GTK_SLOWDOWN");
   if (env_string)
     {
@@ -630,8 +633,13 @@ gettext_initialization (void)
 static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
-  _gtk_accessibility_init ();
   debug_flags[0].display = gdk_display_get_default ();
+#ifdef G_OS_UNIX
+  gtk_print_backends_init ();
+#endif
+  gtk_im_modules_init ();
+  gtk_media_file_extension_init ();
+  _gtk_accessibility_init ();
 }
 
 static void
@@ -648,9 +656,6 @@ do_post_parse_initialization (void)
   signal (SIGPIPE, SIG_IGN);
 #endif
 
-  if (debug_flags[0].flags & GTK_DEBUG_UPDATES)
-    gtk_debug_updates_set_enabled (TRUE);
-
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
   gsk_ensure_resources ();
@@ -660,19 +665,9 @@ do_post_parse_initialization (void)
 
   gtk_initialized = TRUE;
 
-  if (gtk_modules_string)
-    {
-      _gtk_modules_init (NULL, NULL, gtk_modules_string->str);
-      g_string_free (gtk_modules_string, TRUE);
-    }
-  else
-    {
-      _gtk_modules_init (NULL, NULL, NULL);
-    }
-
   display_manager = gdk_display_manager_get ();
   if (gdk_display_manager_get_default_display (display_manager) != NULL)
-    _gtk_accessibility_init ();
+    default_display_notify_cb (display_manager);
 
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),
@@ -784,9 +779,11 @@ gtk_init_check (void)
   do_pre_parse_initialization ();
   do_post_parse_initialization ();
 
+  initialized_thread = g_thread_self ();
+
   ret = gdk_display_open_default () != NULL;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
+  if (ret && (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE))
     gtk_window_set_interactive_debugging (TRUE);
 
   return ret;
@@ -812,7 +809,7 @@ gtk_init_check (void)
  * your program to fall back to a textual interface you want to
  * call gtk_init_check() instead.
  *
- * Since 2.18, GTK+ calls `signal (SIGPIPE, SIG_IGN)`
+ * GTK+ calls `signal (SIGPIPE, SIG_IGN)`
  * during initialization, to ignore SIGPIPE signals, since these are
  * almost never wanted in graphical applications. If you do need to
  * handle SIGPIPE for some reason, reset the handler after gtk_init(),
@@ -824,7 +821,7 @@ gtk_init (void)
 {
   if (!gtk_init_check ())
     {
-      const char *display_name_arg = gdk_get_display_arg_name ();
+      const char *display_name_arg = NULL;
       if (display_name_arg == NULL)
         display_name_arg = getenv ("DISPLAY");
       g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : "");
@@ -895,6 +892,34 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
 #endif
 
 /**
+ * gtk_is_initialized:
+ *
+ * Use this function to check if GTK+ has been initialized with gtk_init()
+ * or gtk_init_check().
+ *
+ * Returns: the initialization status
+ */
+gboolean
+gtk_is_initialized (void)
+{
+  return gtk_initialized;
+}
+
+/**
+ * gtk_get_main_thread:
+ *
+ * Get the thread from which GTK+ was initialized.
+ *
+ * Returns: (transfer none): The #GThread initialized for GTK+, must not be freed
+ */
+GThread *
+gtk_get_main_thread (void)
+{
+  return initialized_thread;
+}
+
+
+/**
  * gtk_get_locale_direction:
  *
  * Get the direction of the current locale. This is the expected
@@ -920,8 +945,6 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
  * ]|
  *
  * Returns: the #GtkTextDirection of the current locale
- *
- * Since: 3.12
  */
 GtkTextDirection
 gtk_get_locale_direction (void)
@@ -982,12 +1005,7 @@ gtk_main (void)
   main_loops = g_slist_prepend (main_loops, loop);
 
   if (g_main_loop_is_running (main_loops->data))
-    {
-      gdk_threads_leave ();
-      g_main_loop_run (loop);
-      gdk_threads_enter ();
-      gdk_flush ();
-    }
+    g_main_loop_run (loop);
 
   main_loops = g_slist_remove (main_loops, loop);
 
@@ -996,15 +1014,80 @@ gtk_main (void)
   gtk_main_loop_level--;
 
   if (gtk_main_loop_level == 0)
+    gtk_main_sync ();
+}
+
+typedef struct {
+  GMainLoop *store_loop;
+  guint n_clipboards;
+} ClipboardStore;
+
+static void
+clipboard_store_finished (GObject      *source,
+                          GAsyncResult *result,
+                          gpointer      data)
+{
+  ClipboardStore *store;
+  GError *error = NULL;
+
+  if (!gdk_clipboard_store_finish (GDK_CLIPBOARD (source), result, &error))
     {
-      /* Keep this section in sync with gtk_application_shutdown() */
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_error_free (error);
+          return;
+        }
 
-      /* Try storing all clipboard data we have */
-      _gtk_clipboard_store_all ();
-
-      /* Synchronize the recent manager singleton */
-      _gtk_recent_manager_sync ();
+      g_error_free (error);
     }
+
+  store = data;
+  store->n_clipboards--;
+  if (store->n_clipboards == 0)
+    g_main_loop_quit (store->store_loop);
+}
+
+void
+gtk_main_sync (void)
+{
+  ClipboardStore store = { NULL, };
+  GSList *displays, *l;
+  GCancellable *cancel;
+  guint store_timeout;
+  
+  /* Try storing all clipboard data we have */
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  cancel = g_cancellable_new ();
+
+  for (l = displays; l; l = l->next)
+    {
+      GdkDisplay *display = l->data;
+      GdkClipboard *clipboard = gdk_display_get_clipboard (display);
+
+      gdk_clipboard_store_async (clipboard,
+                                 G_PRIORITY_HIGH,
+                                 cancel,
+                                 clipboard_store_finished,
+                                 &store);
+      store.n_clipboards++;
+    }
+  g_slist_free (displays);
+
+  store.store_loop = g_main_loop_new (NULL, TRUE);
+  store_timeout = g_timeout_add_seconds (10, (GSourceFunc) g_main_loop_quit, store.store_loop);
+  g_source_set_name_by_id (store_timeout, "[gtk+] gtk_main_sync clipboard store timeout");
+
+  if (g_main_loop_is_running (store.store_loop))
+    g_main_loop_run (store.store_loop);
+  
+  g_cancellable_cancel (cancel);
+  g_object_unref (cancel);
+  g_source_remove (store_timeout);
+  g_main_loop_unref (store.store_loop);
+  store.store_loop = NULL;
+  
+  /* Synchronize the recent manager singleton */
+  _gtk_recent_manager_sync ();
 }
 
 /**
@@ -1059,13 +1142,7 @@ gtk_main_quit (void)
 gboolean
 gtk_events_pending (void)
 {
-  gboolean result;
-
-  gdk_threads_leave ();
-  result = g_main_context_pending (NULL);
-  gdk_threads_enter ();
-
-  return result;
+  return g_main_context_pending (NULL);
 }
 
 /**
@@ -1084,9 +1161,7 @@ gtk_events_pending (void)
 gboolean
 gtk_main_iteration (void)
 {
-  gdk_threads_leave ();
   g_main_context_iteration (NULL, TRUE);
-  gdk_threads_enter ();
 
   if (main_loops)
     return !g_main_loop_is_running (main_loops->data);
@@ -1108,9 +1183,7 @@ gtk_main_iteration (void)
 gboolean
 gtk_main_iteration_do (gboolean blocking)
 {
-  gdk_threads_leave ();
   g_main_context_iteration (NULL, blocking);
-  gdk_threads_enter ();
 
   if (main_loops)
     return !g_main_loop_is_running (main_loops->data);
@@ -1119,62 +1192,62 @@ gtk_main_iteration_do (gboolean blocking)
 }
 
 static void
-rewrite_events_translate (GdkWindow *old_window,
-                          GdkWindow *new_window,
+rewrite_events_translate (GdkSurface *old_surface,
+                          GdkSurface *new_surface,
                           gdouble   *x,
                           gdouble   *y)
 {
   gint old_origin_x, old_origin_y;
   gint new_origin_x, new_origin_y;
 
-  gdk_window_get_origin (old_window, &old_origin_x, &old_origin_y);
-  gdk_window_get_origin (new_window, &new_origin_x, &new_origin_y);
+  gdk_surface_get_origin (old_surface, &old_origin_x, &old_origin_y);
+  gdk_surface_get_origin (new_surface, &new_origin_x, &new_origin_y);
 
   *x += old_origin_x - new_origin_x;
   *y += old_origin_y - new_origin_y;
 }
 
 static GdkEvent *
-rewrite_event_for_window (GdkEvent  *event,
-                          GdkWindow *new_window)
+rewrite_event_for_surface (GdkEvent  *event,
+			   GdkSurface *new_surface)
 {
   event = gdk_event_copy (event);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->scroll.x, &event->scroll.y);
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->button.x, &event->button.y);
       break;
     case GDK_MOTION_NOTIFY:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->motion.x, &event->motion.y);
       break;
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->touch.x, &event->touch.y);
       break;
     case GDK_TOUCHPAD_SWIPE:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->touchpad_swipe.x,
                                 &event->touchpad_swipe.y);
       break;
     case GDK_TOUCHPAD_PINCH:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->touchpad_pinch.x,
                                 &event->touchpad_pinch.y);
       break;
@@ -1188,15 +1261,15 @@ rewrite_event_for_window (GdkEvent  *event,
       return event;
     }
 
-  g_object_unref (event->any.window);
-  event->any.window = g_object_ref (new_window);
+  g_object_unref (event->any.surface);
+  event->any.surface = g_object_ref (new_surface);
 
   return event;
 }
 
 /* If there is a pointer or keyboard grab in effect with owner_events = TRUE,
  * then what X11 does is deliver the event normally if it was going to this
- * client, otherwise, delivers it in terms of the grab window. This function
+ * client, otherwise, delivers it in terms of the grab surface. This function
  * rewrites events to the effect that events going to the same window group
  * are delivered normally, otherwise, the event is delivered in terms of the
  * grab window.
@@ -1204,14 +1277,14 @@ rewrite_event_for_window (GdkEvent  *event,
 static GdkEvent *
 rewrite_event_for_grabs (GdkEvent *event)
 {
-  GdkWindow *grab_window;
+  GdkSurface *grab_surface;
   GtkWidget *event_widget, *grab_widget;
   gpointer grab_widget_ptr;
   gboolean owner_events;
   GdkDisplay *display;
   GdkDevice *device;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
@@ -1227,10 +1300,10 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
-      display = gdk_window_get_display (event->any.window);
+      display = gdk_surface_get_display (event->any.surface);
       device = gdk_event_get_device (event);
 
-      if (!gdk_device_grab_info (display, device, &grab_window, &owner_events) ||
+      if (!gdk_device_grab_info (display, device, &grab_surface, &owner_events) ||
           !owner_events)
         return NULL;
       break;
@@ -1239,12 +1312,12 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  gdk_window_get_user_data (grab_window, &grab_widget_ptr);
+  gdk_surface_get_user_data (grab_surface, &grab_widget_ptr);
   grab_widget = grab_widget_ptr;
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
-    return rewrite_event_for_window (event, grab_window);
+    return rewrite_event_for_surface (event, grab_surface);
   else
     return NULL;
 }
@@ -1333,9 +1406,9 @@ synth_crossing (GtkWidget       *widget,
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
-  event->any.window = g_object_ref (gtk_widget_get_window (toplevel));
+  event->any.surface = g_object_ref (gtk_widget_get_surface (toplevel));
   if (other_widget)
-    event->crossing.subwindow = g_object_ref (gtk_widget_get_window (other_widget));
+    event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (other_widget));
 
   if (enter)
     gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
@@ -1349,7 +1422,7 @@ synth_crossing (GtkWidget       *widget,
   event->crossing.detail = notify_type;
 
   gtk_widget_event (widget, event);
-  gdk_event_free (event);
+  g_object_unref (event);
 }
 
 static GtkWidget *
@@ -1444,7 +1517,7 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
 static gboolean
 is_pointing_event (GdkEvent *event)
 {
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
     case GDK_ENTER_NOTIFY:
@@ -1488,7 +1561,7 @@ handle_pointing_event (GdkEvent *event)
 
   sequence = gdk_event_get_event_sequence (event);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
@@ -1498,7 +1571,7 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
 
-      if (event->type == GDK_LEAVE_NOTIFY)
+      if (event->any.type == GDK_LEAVE_NOTIFY)
         gtk_synthesize_crossing_events (toplevel, old_target, NULL,
                                         event, event->crossing.mode);
       break;
@@ -1509,10 +1582,12 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
-      target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
+      target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+      if (target == NULL)
+        target = GTK_WIDGET (toplevel);
       old_target = update_pointer_focus_state (toplevel, event, target);
 
-      if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
+      if (event->any.type == GDK_MOTION_NOTIFY || event->any.type == GDK_ENTER_NOTIFY)
         {
           if (!gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device,
                                                               sequence))
@@ -1524,7 +1599,7 @@ handle_pointing_event (GdkEvent *event)
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
 
-      if (event->type == GDK_TOUCH_BEGIN)
+      if (event->any.type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1538,13 +1613,15 @@ handle_pointing_event (GdkEvent *event)
                                                                  device,
                                                                  sequence);
       gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
-                                         event->type == GDK_BUTTON_PRESS ?
+                                         event->any.type == GDK_BUTTON_PRESS ?
                                          target : NULL);
 
-      if (event->type == GDK_BUTTON_RELEASE)
+      if (event->any.type == GDK_BUTTON_RELEASE)
         {
           old_target = target;
-          target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
+          target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+          if (target == NULL)
+            target = GTK_WIDGET (toplevel);
           gtk_synthesize_crossing_events (toplevel, old_target, target, event,
                                           GDK_CROSSING_UNGRAB);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
@@ -1613,33 +1690,15 @@ gtk_main_do_event (GdkEvent *event)
   GdkDevice *device;
   GList *tmp_list;
 
-  if (event->type == GDK_OWNER_CHANGE)
-    {
-      _gtk_clipboard_handle_event (&event->owner_change);
-      return;
-    }
-
   /* Find the widget which got the event. We store the widget
-   * in the user_data field of GdkWindow's. Ignore the event
+   * in the user_data field of GdkSurface's. Ignore the event
    * if we don't have a widget for it, except for GDK_PROPERTY_NOTIFY
    * events which are handled specially. Though this happens rarely,
-   * bogus events can occur for e.g. destroyed GdkWindows.
+   * bogus events can occur for e.g. destroyed GdkSurfaces.
    */
   event_widget = gtk_get_event_widget (event);
   if (!event_widget)
-    {
-      /* To handle selection INCR transactions, we select
-       * PropertyNotify events on the requestor window and create
-       * a corresponding (fake) GdkWindow so that events get here.
-       * There won't be a widget though, so we have to handle
-       * them specially
-       */
-      if (event->type == GDK_PROPERTY_NOTIFY)
-        _gtk_selection_incr_event (event->any.window,
-                                   &event->property);
-
-      return;
-    }
+    return;
 
   /* If pointer or keyboard grabs are in effect, munge the events
    * so that each window group looks like a separate app.
@@ -1658,9 +1717,25 @@ gtk_main_do_event (GdkEvent *event)
 
   if (is_pointing_event (event))
     event_widget = handle_pointing_event (event);
+  else if (GTK_IS_WINDOW (event_widget) &&
+           (event->any.type == GDK_KEY_PRESS ||
+            event->any.type == GDK_KEY_RELEASE))
+    {
+      GtkWidget *focus_widget;
+
+      if (event->any.type == GDK_KEY_PRESS &&
+          gtk_window_activate_key (GTK_WINDOW (event_widget), (GdkEventKey *) event))
+        goto cleanup;
+
+      focus_widget = gtk_window_get_focus (GTK_WINDOW (event_widget));
+      if (focus_widget)
+        event_widget = focus_widget;
+    }
 
   if (!event_widget)
     goto cleanup;
+
+  gdk_event_set_user_data (event, G_OBJECT (event_widget));
 
   window_group = gtk_main_get_window_group (event_widget);
   device = gdk_event_get_device (event);
@@ -1672,25 +1747,12 @@ gtk_main_do_event (GdkEvent *event)
   if (!grab_widget)
     grab_widget = gtk_window_group_get_current_grab (window_group);
 
-  if (GTK_IS_WINDOW (event_widget) ||
-      (grab_widget && grab_widget != event_widget &&
-       !gtk_widget_is_ancestor (event_widget, grab_widget)))
-    {
-      /* Ignore event if we got a grab on another toplevel */
-      if (!grab_widget ||
-          gtk_widget_get_toplevel (event_widget) == gtk_widget_get_toplevel (grab_widget))
-        {
-          if (_gtk_window_check_handle_wm_event (event))
-            goto cleanup;
-        }
-    }
-
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
    * This is the key to implementing modality.
    */
   if (!grab_widget ||
-      ((gtk_widget_is_sensitive (event_widget) || event->type == GDK_SCROLL) &&
+      ((gtk_widget_is_sensitive (event_widget) || event->any.type == GDK_SCROLL) &&
        gtk_widget_is_ancestor (event_widget, grab_widget)))
     grab_widget = event_widget;
 
@@ -1701,8 +1763,6 @@ gtk_main_do_event (GdkEvent *event)
    */
   if (check_event_in_child_popover (event_widget, grab_widget))
     grab_widget = event_widget;
-
-  gdk_event_set_user_data (event, G_OBJECT (event_widget));
 
   /* If the widget receiving events is actually blocked by another
    * device GTK+ grab
@@ -1721,16 +1781,20 @@ gtk_main_do_event (GdkEvent *event)
    * Drag events are also not redirected, since it isn't
    * clear what the semantics of that would be.
    */
-  switch (event->type)
+  switch (event->any.type)
     {
     case GDK_NOTHING:
       break;
 
     case GDK_DELETE:
       g_object_ref (event_widget);
-      if ((!gtk_window_group_get_current_grab (window_group) || gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget) &&
-          !gtk_widget_event (event_widget, event))
-        gtk_widget_destroy (event_widget);
+      if (!gtk_window_group_get_current_grab (window_group) ||
+          gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget)
+        {
+          if (!GTK_IS_WINDOW (event_widget) ||
+              !gtk_window_emit_close_request (GTK_WINDOW (event_widget)))
+            gtk_widget_destroy (event_widget);
+        }
       g_object_unref (event_widget);
       break;
 
@@ -1749,23 +1813,37 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_EXPOSE:
-      if (event->any.window)
-        gtk_widget_render (event_widget, event->any.window, event->expose.region);
+      if (event->any.surface)
+        gtk_widget_render (event_widget, event->any.surface, event->expose.region);
       break;
 
-    case GDK_PROPERTY_NOTIFY:
-    case GDK_FOCUS_CHANGE:
-    case GDK_CONFIGURE:
     case GDK_MAP:
+      if (GTK_IS_WINDOW (event_widget) && !_gtk_widget_get_mapped (event_widget))
+        {
+          /* we should be be unmapped, but are getting a MapEvent, this may happen
+           * to toplevel XWindows if mapping was intercepted by a window manager
+           * and an unmap request occurred while the MapRequestEvent was still
+           * being handled. we work around this situation here by re-requesting
+           * the window being unmapped. more details can be found in:
+           *   http://bugzilla.gnome.org/show_bug.cgi?id=316180
+           */
+          gdk_surface_hide (_gtk_widget_get_surface (event_widget));
+        }
+      break;
+
+    case GDK_CONFIGURE:
+      if (GTK_IS_WINDOW (event_widget) &&
+          _gtk_widget_get_surface (event_widget) == event->any.surface)
+        {
+          gtk_window_configure (GTK_WINDOW (event_widget),
+                                event->configure.width,
+                                event->configure.height);
+        }
+
+      break;
+    case GDK_FOCUS_CHANGE:
     case GDK_UNMAP:
-    case GDK_SELECTION_CLEAR:
-    case GDK_SELECTION_REQUEST:
-    case GDK_SELECTION_NOTIFY:
-    case GDK_CLIENT_EVENT:
-    case GDK_VISIBILITY_NOTIFY:
-    case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:
-    case GDK_DAMAGE:
       if (!_gtk_widget_captured_event (event_widget, event))
         gtk_widget_event (event_widget, event);
       break;
@@ -1792,7 +1870,7 @@ gtk_main_do_event (GdkEvent *event)
           gboolean mnemonics_visible;
           GtkWidget *window;
 
-          mnemonics_visible = (event->type == GDK_KEY_PRESS);
+          mnemonics_visible = (event->any.type == GDK_KEY_PRESS);
 
           window = gtk_widget_get_toplevel (grab_widget);
           if (GTK_IS_WINDOW (window))
@@ -1829,32 +1907,27 @@ gtk_main_do_event (GdkEvent *event)
       /* Crossing event propagation happens during picking */
       break;
 
-    case GDK_DRAG_STATUS:
-    case GDK_DROP_FINISHED:
-      _gtk_drag_source_handle_event (event_widget, event);
-      break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       _gtk_drag_dest_handle_event (event_widget, event);
       break;
-    case GDK_OWNER_CHANGE:
     case GDK_EVENT_LAST:
     default:
       g_assert_not_reached ();
       break;
     }
 
-  if (event->type == GDK_ENTER_NOTIFY
-      || event->type == GDK_LEAVE_NOTIFY
-      || event->type == GDK_BUTTON_PRESS
-      || event->type == GDK_KEY_PRESS
-      || event->type == GDK_DRAG_ENTER
-      || event->type == GDK_GRAB_BROKEN
-      || event->type == GDK_MOTION_NOTIFY
-      || event->type == GDK_TOUCH_UPDATE
-      || event->type == GDK_SCROLL)
+  if (event->any.type == GDK_ENTER_NOTIFY
+      || event->any.type == GDK_LEAVE_NOTIFY
+      || event->any.type == GDK_BUTTON_PRESS
+      || event->any.type == GDK_KEY_PRESS
+      || event->any.type == GDK_DRAG_ENTER
+      || event->any.type == GDK_GRAB_BROKEN
+      || event->any.type == GDK_MOTION_NOTIFY
+      || event->any.type == GDK_TOUCH_UPDATE
+      || event->any.type == GDK_SCROLL)
     {
       _gtk_tooltip_handle_event (event);
     }
@@ -1865,74 +1938,7 @@ gtk_main_do_event (GdkEvent *event)
   g_list_free_1 (tmp_list);
 
   if (rewritten_event)
-    gdk_event_free (rewritten_event);
-}
-
-/**
- * gtk_true:
- *
- * All this function does it to return %TRUE.
- *
- * This can be useful for example if you want to inhibit the deletion
- * of a window. Of course you should not do this as the user expects
- * a reaction from clicking the close icon of the window...
- *
- * ## A persistent window
- *
- * |[<!-- language="C" -->
- * #include <gtk/gtk.h>
- *
- * int
- * main (int argc, char **argv)
- * {
- *   GtkWidget *win, *but;
- *   const char *text = "Close yourself. I mean it!";
- *
- *   gtk_init (&argc, &argv);
- *
- *   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *   g_signal_connect (win,
- *                     "delete-event",
- *                     G_CALLBACK (gtk_true),
- *                     NULL);
- *   g_signal_connect (win, "destroy",
- *                     G_CALLBACK (gtk_main_quit),
- *                     NULL);
- *
- *   but = gtk_button_new_with_label (text);
- *   g_signal_connect_swapped (but, "clicked",
- *                             G_CALLBACK (gtk_object_destroy),
- *                             win);
- *   gtk_container_add (GTK_CONTAINER (win), but);
- *
- *   gtk_widget_show (win);
- *
- *   gtk_main ();
- *
- *   return 0;
- * }
- * ]|
- *
- * Returns: %TRUE
- */
-gboolean
-gtk_true (void)
-{
-  return TRUE;
-}
-
-/**
- * gtk_false:
- *
- * Analogical to gtk_true(), this function does nothing
- * but always returns %FALSE.
- *
- * Returns: %FALSE
- */
-gboolean
-gtk_false (void)
-{
-  return FALSE;
+    g_object_unref (rewritten_event);
 }
 
 static GtkWindowGroup *
@@ -1956,7 +1962,7 @@ typedef struct
   gboolean   was_grabbed;
   gboolean   is_grabbed;
   gboolean   from_grab;
-  GList     *notified_windows;
+  GList     *notified_surfaces;
   GdkDevice *device;
 } GrabNotifyInfo;
 
@@ -1970,46 +1976,46 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
   while (devices)
     {
       GdkDevice *device = devices->data;
-      GdkWindow *from_window, *to_window;
+      GdkSurface *from_surface, *to_surface;
 
       /* Do not propagate events more than once to
-       * the same windows if non-multidevice aware.
+       * the same surfaces if non-multidevice aware.
        */
       if (!from)
-        from_window = NULL;
+        from_surface = NULL;
       else
         {
-          from_window = _gtk_widget_get_device_window (from, device);
+          from_surface = _gtk_widget_get_device_surface (from, device);
 
-          if (from_window &&
-              !gdk_window_get_support_multidevice (from_window) &&
-              g_list_find (info->notified_windows, from_window))
-            from_window = NULL;
+          if (from_surface &&
+              !gdk_surface_get_support_multidevice (from_surface) &&
+              g_list_find (info->notified_surfaces, from_surface))
+            from_surface = NULL;
         }
 
       if (!to)
-        to_window = NULL;
+        to_surface = NULL;
       else
         {
-          to_window = _gtk_widget_get_device_window (to, device);
+          to_surface = _gtk_widget_get_device_surface (to, device);
 
-          if (to_window &&
-              !gdk_window_get_support_multidevice (to_window) &&
-              g_list_find (info->notified_windows, to_window))
-            to_window = NULL;
+          if (to_surface &&
+              !gdk_surface_get_support_multidevice (to_surface) &&
+              g_list_find (info->notified_surfaces, to_surface))
+            to_surface = NULL;
         }
 
-      if (from_window || to_window)
+      if (from_surface || to_surface)
         {
-          _gtk_widget_synthesize_crossing ((from_window) ? from : NULL,
-                                           (to_window) ? to : NULL,
+          _gtk_widget_synthesize_crossing ((from_surface) ? from : NULL,
+                                           (to_surface) ? to : NULL,
                                            device, mode);
 
-          if (from_window)
-            info->notified_windows = g_list_prepend (info->notified_windows, from_window);
+          if (from_surface)
+            info->notified_surfaces = g_list_prepend (info->notified_surfaces, from_surface);
 
-          if (to_window)
-            info->notified_windows = g_list_prepend (info->notified_windows, to_window);
+          if (to_surface)
+            info->notified_surfaces = g_list_prepend (info->notified_surfaces, to_surface);
         }
 
       devices = devices->next;
@@ -2048,7 +2054,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     }
 
   if (info->device &&
-      _gtk_widget_get_device_window (child, info->device))
+      _gtk_widget_get_device_surface (child, info->device))
     {
       /* Device specified and is on widget */
       devices = g_list_prepend (NULL, info->device);
@@ -2122,7 +2128,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       g_object_unref (toplevel);
     }
 
-  g_list_free (info.notified_windows);
+  g_list_free (info.notified_surfaces);
   g_object_unref (group);
 }
 
@@ -2222,8 +2228,6 @@ gtk_grab_remove (GtkWidget *widget)
  * associated pointer or keyboard (if any) are delivered to @widget.
  * If the @block_others parameter is %TRUE, any other devices will be
  * unable to interact with @widget during the grab.
- *
- * Since: 3.0
  */
 void
 gtk_device_grab_add (GtkWidget *widget,
@@ -2254,8 +2258,6 @@ gtk_device_grab_add (GtkWidget *widget,
  *
  * You have to pair calls to gtk_device_grab_add() and
  * gtk_device_grab_remove().
- *
- * Since: 3.0
  */
 void
 gtk_device_grab_remove (GtkWidget *widget,
@@ -2277,21 +2279,21 @@ gtk_device_grab_remove (GtkWidget *widget,
 /**
  * gtk_get_current_event:
  *
- * Obtains a copy of the event currently being processed by GTK+.
+ * Obtains a reference of the event currently being processed by GTK+.
  *
  * For example, if you are handling a #GtkButton::clicked signal,
  * the current event will be the #GdkEventButton that triggered
  * the ::clicked signal.
  *
- * Returns: (transfer full) (nullable): a copy of the current event, or
+ * Returns: (transfer full) (nullable): a reference of the current event, or
  *     %NULL if there is no current event. The returned event must be
- *     freed with gdk_event_free().
+ *     freed with g_object_unref().
  */
 GdkEvent*
 gtk_get_current_event (void)
 {
   if (current_events)
-    return gdk_event_copy (current_events->data);
+    return g_object_ref (current_events->data);
   else
     return NULL;
 }
@@ -2374,10 +2376,10 @@ gtk_get_event_widget (const GdkEvent *event)
   gpointer widget_ptr;
 
   widget = NULL;
-  if (event && event->any.window &&
-      (event->type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
+  if (event && event->any.surface &&
+      (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.surface)))
     {
-      gdk_window_get_user_data (event->any.window, &widget_ptr);
+      gdk_surface_get_user_data (event->any.surface, &widget_ptr);
       widget = widget_ptr;
     }
 
@@ -2393,8 +2395,6 @@ gtk_get_event_widget (const GdkEvent *event)
  * receiver of the event.
  *
  * Returns: (transfer none) (nullable): the target widget, or %NULL
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_get_event_target (const GdkEvent *event)
@@ -2413,8 +2413,6 @@ gtk_get_event_target (const GdkEvent *event)
  *
  * Returns: (transfer none) (nullable): the widget in the target stack
  * with the given type, or %NULL
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_get_event_target_with_type (GdkEvent *event,
@@ -2452,7 +2450,7 @@ propagate_event_up (GtkWidget *widget,
        * event
        */
       if (!gtk_widget_is_sensitive (widget))
-        handled_event = event->type != GDK_SCROLL;
+        handled_event = event->any.type != GDK_SCROLL;
       else
         handled_event = gtk_widget_event (widget, event);
 
@@ -2502,7 +2500,7 @@ propagate_event_down (GtkWidget *widget,
           /* stop propagating on SCROLL, but don't handle the event, so it
            * can propagate up again and reach its handling widget
            */
-          if (event->type == GDK_SCROLL)
+          if (event->any.type == GDK_SCROLL)
             break;
           else
             handled_event = TRUE;
@@ -2515,59 +2513,14 @@ propagate_event_down (GtkWidget *widget,
   return handled_event;
 }
 
-static gboolean
-propagate_event (GtkWidget *widget,
-                 GdkEvent  *event,
-                 gboolean   captured,
-                 GtkWidget *topmost)
-{
-  gboolean handled_event = FALSE;
-  gboolean (* propagate_func) (GtkWidget *widget, const GdkEvent *event);
-
-  propagate_func = captured ? _gtk_widget_captured_event : gtk_widget_event;
-
-  if (event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-    {
-      /* Only send key events within Window widgets to the Window
-       * The Window widget will in turn pass the
-       * key event on to the currently focused widget
-       * for that window.
-       */
-      GtkWidget *window;
-
-      window = gtk_widget_get_toplevel (widget);
-      if (GTK_IS_WINDOW (window))
-        {
-          g_object_ref (widget);
-          /* If there is a grab within the window, give the grab widget
-           * a first crack at the key event
-           */
-          if (widget != window && gtk_widget_has_grab (widget))
-            handled_event = propagate_func (widget, event);
-
-          if (!handled_event &&
-              gtk_widget_is_sensitive (window))
-            handled_event = propagate_func (window, event);
-
-          g_object_unref (widget);
-          return handled_event;
-        }
-    }
-
-  /* Other events get propagated up/down the widget tree */
-  return captured ?
-    propagate_event_down (widget, event, topmost) :
-    propagate_event_up (widget, event, topmost);
-}
-
 void
 gtk_propagate_event_internal (GtkWidget *widget,
                               GdkEvent  *event,
                               GtkWidget *topmost)
 {
   /* Propagate the event down and up */
-  if (!propagate_event (widget, event, TRUE, topmost))
-    propagate_event (widget, event, FALSE, topmost);
+  if (!propagate_event_down (widget, event, topmost))
+    propagate_event_up (widget, event, topmost);
 }
 
 /**
@@ -2617,27 +2570,4 @@ gtk_propagate_event (GtkWidget *widget,
     topmost = gtk_window_group_get_current_grab (window_group);
 
   gtk_propagate_event_internal (widget, event, topmost);
-}
-
-GtkWidget *
-_gtk_toplevel_pick (GtkWindow *toplevel,
-                    gdouble    x,
-                    gdouble    y,
-                    gdouble   *x_out,
-                    gdouble   *y_out)
-{
-  GtkWidget *target = NULL, *widget = GTK_WIDGET (toplevel);
-
-  while (widget)
-    {
-      target = widget;
-      widget = GTK_WIDGET_GET_CLASS (target)->pick (widget, x, y, &x, &y);
-    }
-
-  if (x_out)
-    *x_out = x;
-  if (y_out)
-    *y_out = y;
-
-  return target;
 }

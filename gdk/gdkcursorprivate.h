@@ -40,17 +40,21 @@ struct _GdkCursor
   GObject parent_instance;
 
   GdkDisplay *display;
-  GdkCursorType type;
+  GdkCursor *fallback;
+  char *name;
+  GdkTexture *texture;
+  int hotspot_x;
+  int hotspot_y;
 };
 
 struct _GdkCursorClass
 {
   GObjectClass parent_class;
-
-  cairo_surface_t * (* get_surface) (GdkCursor *cursor,
-				     gdouble   *x_hot,
-				     gdouble   *y_hot);
 };
+
+guint                   gdk_cursor_hash                         (gconstpointer          pointer);
+gboolean                gdk_cursor_equal                        (gconstpointer          a,
+                                                                 gconstpointer          b);
 
 G_END_DECLS
 

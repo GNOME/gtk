@@ -33,6 +33,7 @@
 #include "gtklabel.h"
 #include "gtkspinbutton.h"
 #include "gtkstylecontext.h"
+#include "gtkeventcontrollerkey.h"
 
 #include <math.h>
 
@@ -126,13 +127,13 @@ entry_apply (GtkWidget      *entry,
   g_free (text);
 }
 
-static gboolean
-entry_focus_out (GtkWidget      *entry,
-                 GdkEventFocus  *event,
-                 GtkColorEditor *editor)
+static void
+entry_focus_changed (GtkWidget      *entry,
+                     GParamSpec     *pspec,
+                     GtkColorEditor *editor)
 {
-  entry_apply (entry, editor);
-  return FALSE;
+  if (!gtk_widget_has_focus (entry))
+    entry_apply (entry, editor);
 }
 
 static void
@@ -227,14 +228,13 @@ popup_edit (GtkWidget      *widget,
 }
 
 static gboolean
-popup_key_press (GtkWidget      *popup,
-                 GdkEventKey    *event,
-                 GtkColorEditor *editor)
+popup_key_pressed (GtkEventController *controller,
+                   guint               keyval,
+                   guint               keycode,
+                   GdkModifierType     state,
+                   GtkColorEditor     *editor)
 {
-  guint keyval;
-
-  if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-      keyval == GDK_KEY_Escape)
+  if (keyval == GDK_KEY_Escape)
     {
       dismiss_current_popup (editor);
       return TRUE;
@@ -269,7 +269,7 @@ get_child_position (GtkOverlay     *overlay,
       if (gtk_widget_get_direction (GTK_WIDGET (overlay)) == GTK_TEXT_DIR_RTL)
         allocation->x = 0;
       else
-        allocation->x = gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width;
+        allocation->x = gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width;
     }
   else if (widget == editor->priv->h_popup)
     {
@@ -300,8 +300,8 @@ get_child_position (GtkOverlay     *overlay,
   else
     return FALSE;
 
-  allocation->x = CLAMP (allocation->x, 0, gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width);
-  allocation->y = CLAMP (allocation->y, 0, gtk_widget_get_allocated_height (GTK_WIDGET (overlay)) - req.height);
+  allocation->x = CLAMP (allocation->x, 0, gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width);
+  allocation->y = CLAMP (allocation->y, 0, gtk_widget_get_height (GTK_WIDGET (overlay)) - req.height);
 
   return TRUE;
 }
@@ -340,6 +340,8 @@ scaled_adjustment (GtkAdjustment *a,
 static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
+  GtkEventController *controller;
+
   editor->priv = gtk_color_editor_get_instance_private (editor);
   editor->priv->use_alpha = TRUE;
 
@@ -368,6 +370,19 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->sv_popup);
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->h_popup);
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->a_popup);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  gtk_widget_add_controller (editor->priv->h_entry, controller);
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  gtk_widget_add_controller (editor->priv->s_entry, controller);
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  gtk_widget_add_controller (editor->priv->v_entry, controller);
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  gtk_widget_add_controller (editor->priv->a_entry, controller);
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (editor->priv->swatch), "activatable");
 }
@@ -482,12 +497,11 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_adj);
 
   gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
-  gtk_widget_class_bind_template_callback (widget_class, popup_key_press);
   gtk_widget_class_bind_template_callback (widget_class, dismiss_current_popup);
   gtk_widget_class_bind_template_callback (widget_class, get_child_position);
   gtk_widget_class_bind_template_callback (widget_class, entry_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, entry_apply);
-  gtk_widget_class_bind_template_callback (widget_class, entry_focus_out);
+  gtk_widget_class_bind_template_callback (widget_class, entry_focus_changed);
   gtk_widget_class_bind_template_callback (widget_class, popup_edit);
 }
 

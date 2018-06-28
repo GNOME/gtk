@@ -19,18 +19,18 @@
 #ifndef __GTK_DND_PRIVATE_H__
 #define __GTK_DND_PRIVATE_H__
 
+#include "gtkdnd.h"
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtkdragdest.h>
-
+#include "gtkdragdest.h"
 #include "gtkimagedefinitionprivate.h"
+#include "gtkselection.h"
+#include "gtkwidget.h"
 
 typedef struct _GtkDragDestSite GtkDragDestSite;
 struct _GtkDragDestSite
 {
   GtkDestDefaults    flags;
-  GtkTargetList     *target_list;
+  GdkContentFormats *target_list;
   GdkDragAction      actions;
   guint              do_proxy     : 1;
   guint              proxy_coords : 1;
@@ -41,19 +41,16 @@ struct _GtkDragDestSite
 G_BEGIN_DECLS
 
 GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
+                                                         GdkDevice              *device,
                                                          GtkImageDefinition     *icon,
-                                                         GtkTargetList          *target_list,
+                                                         GdkContentFormats      *target_list,
                                                          GdkDragAction           actions,
-                                                         gint                    button,
-                                                         const GdkEvent         *event,
                                                          int                     x,
                                                          int                     y);
 void                    gtk_drag_set_icon_definition    (GdkDragContext         *context,
                                                          GtkImageDefinition     *def,
                                                          gint                    hot_x,
                                                          gint                    hot_y);
-void                    _gtk_drag_source_handle_event   (GtkWidget              *widget,
-                                                         GdkEvent               *event);
 void                    _gtk_drag_dest_handle_event     (GtkWidget              *toplevel,
 				                         GdkEvent               *event);
 

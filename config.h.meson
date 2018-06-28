@@ -41,6 +41,9 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #mesondefine HAVE_DLFCN_H
 
+/* Have the ffmpeg library */
+#mesondefine HAVE_FFMPEG
+
 /* Define to 1 if you have the <ftw.h> header file. */
 #mesondefine HAVE_FTW_H
 
@@ -52,6 +55,9 @@
 
 /* Define if gio-unix is available */
 #mesondefine HAVE_GIO_UNIX
+
+/* Define if GStreamer support is available */
+#mesondefine HAVE_GSTREAMER
 
 /* Define to 1 if you have the `httpGetAuthString' function. */
 #mesondefine HAVE_HTTPGETAUTHSTRING
@@ -280,6 +286,10 @@
 /* Define to 1 if linux/memfd.h exists */
 #mesondefine HAVE_LINUX_MEMFD_H
 
+#mesondefine HAVE_LINUX_INPUT_H
+
+#mesondefine HAVE_DEV_EVDEV_INPUT_H
+
 #mesondefine GTK_SYSCONFDIR
 
 #mesondefine GTK_LOCALEDIR
@@ -289,3 +299,19 @@
 #mesondefine GTK_LIBDIR
 
 #mesondefine GTK_PRINT_BACKENDS
+
+#mesondefine HAVE_HARFBUZZ
+
+#mesondefine HAVE_PANGOFT
+
+#mesondefine ISO_CODES_PREFIX
+
+#mesondefine MALLOC_IS_ALIGNED16
+
+#mesondefine HAVE_POSIX_MEMALIGN
+
+#mesondefine HAVE_MEMALIGN
+
+#mesondefine HAVE_ALIGNED_ALLOC
+
+#mesondefine HAVE__ALIGNED_MALLOC

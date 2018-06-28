@@ -1,7 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
- * GtkAccelLabel: GtkLabel with accelerator monitoring facilities.
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
@@ -32,7 +31,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtklabel.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -46,7 +45,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAccelLabel	     GtkAccelLabel;
 typedef struct _GtkAccelLabelClass   GtkAccelLabelClass;
-typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 
 /**
  * GtkAccelLabel:
@@ -57,15 +55,12 @@ typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 struct _GtkAccelLabel
 {
   GtkWidget parent_instance;
-  GtkAccelLabelPrivate *priv;
 };
 
 struct _GtkAccelLabelClass
 {
   GtkWidgetClass parent_class;
 
-  gchar		*signal_quote1;
-  gchar		*signal_quote2;
   gchar		*mod_name_shift;
   gchar		*mod_name_control;
   gchar		*mod_name_alt;
@@ -95,27 +90,27 @@ void	   gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 					      GClosure	    *accel_closure);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_accel_label_set_accel         (GtkAccelLabel   *accel_label,
                                               guint            accelerator_key,
                                               GdkModifierType  accelerator_mods);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void       gtk_accel_label_get_accel         (GtkAccelLabel   *accel_label,
                                               guint           *accelerator_key,
                                               GdkModifierType *accelerator_mods);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void      gtk_accel_label_set_label          (GtkAccelLabel   *accel_label,
                                               const char      *text);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 const char * gtk_accel_label_get_label       (GtkAccelLabel   *accel_label);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void      gtk_accel_label_set_use_underline  (GtkAccelLabel   *accel_label,
                                               gboolean         setting);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean  gtk_accel_label_get_use_underline  (GtkAccelLabel   *accel_label);
 
 

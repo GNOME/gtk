@@ -45,9 +45,9 @@ G_BEGIN_DECLS
  *   the printer in Postscript format
  * @GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a preview
  * @GTK_PRINT_CAPABILITY_NUMBER_UP: Print dialog will offer printing multiple
- *   pages per sheet. Since 2.12
+ *   pages per sheet
  * @GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT: Print dialog will allow to rearrange
- *   pages when printing multiple pages per sheet. Since 2.14
+ *   pages when printing multiple pages per sheet
  *
  * An enum for specifying which features the print dialog should offer.
  * If neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor
@@ -164,6 +164,12 @@ gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *pr
                                                             gdouble          *bottom,
                                                             gdouble          *left,
                                                             gdouble          *right);
+gboolean                 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter       *printer,
+								      GtkPaperSize     *paper_size,
+								      gdouble          *top,
+								      gdouble          *bottom,
+								      gdouble          *left,
+								      gdouble          *right);
 
 /**
  * GtkPrinterFunc:
@@ -175,8 +181,6 @@ gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *pr
  * a reference to it after the function has returned.
  *
  * Returns: %TRUE to stop the enumeration, %FALSE to continue
- *
- * Since: 2.10
  */
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);

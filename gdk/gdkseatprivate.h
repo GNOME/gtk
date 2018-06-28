@@ -42,7 +42,7 @@ struct _GdkSeatClass
   GdkSeatCapabilities (*get_capabilities) (GdkSeat *seat);
 
   GdkGrabStatus (* grab)   (GdkSeat                *seat,
-                            GdkWindow              *window,
+                            GdkSurface              *surface,
                             GdkSeatCapabilities     capabilities,
                             gboolean                owner_events,
                             GdkCursor              *cursor,
@@ -58,6 +58,8 @@ struct _GdkSeatClass
 
   GdkDeviceTool * (* get_tool) (GdkSeat *seat,
                                 guint64  serial);
+  GList *     (* get_master_pointers) (GdkSeat             *seat,
+                                       GdkSeatCapabilities  capabilities);
 };
 
 void gdk_seat_device_added   (GdkSeat   *seat,

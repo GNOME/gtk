@@ -22,7 +22,6 @@
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
 #include <gtk/a11y/gtkmenushellaccessible.h>
 
 G_BEGIN_DECLS

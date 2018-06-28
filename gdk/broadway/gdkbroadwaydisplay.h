@@ -43,9 +43,9 @@ typedef struct _GdkBroadwayDisplayClass GdkBroadwayDisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_broadway_display_get_type            (void);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void                    gdk_broadway_display_show_keyboard       (GdkBroadwayDisplay *display);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void                    gdk_broadway_display_hide_keyboard       (GdkBroadwayDisplay *display);
 
 G_END_DECLS

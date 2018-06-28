@@ -18,12 +18,14 @@
 #ifndef __GTK_ENTRY_PRIVATE_H__
 #define __GTK_ENTRY_PRIVATE_H__
 
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktreemodelfilter.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkentrycompletion.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkspinbutton.h>
+#include "gtkentry.h"
+
+#include "gtkentrycompletion.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkliststore.h"
+#include "gtktreemodelfilter.h"
+#include "gtktreeviewcolumn.h"
+#include "gtkeventcontrollerkey.h"
 
 G_BEGIN_DECLS
 
@@ -46,6 +48,8 @@ struct _GtkEntryCompletionPrivate
 
   gchar *case_normalized_key;
 
+  GtkEventController *entry_key_controller;
+
   /* only used by GtkEntry when attached: */
   GtkWidget *popup_window;
   GtkWidget *vbox;
@@ -59,7 +63,6 @@ struct _GtkEntryCompletionPrivate
   gint current_selected;
 
   guint first_sel_changed : 1;
-  guint ignore_enter      : 1;
   guint has_completion    : 1;
   guint inline_completion : 1;
   guint popup_completion  : 1;
@@ -87,6 +90,14 @@ gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
 void     _gtk_entry_grab_focus             (GtkEntry  *entry,
                                             gboolean   select_all);
+
+void     gtk_entry_enter_text              (GtkEntry   *entry,
+                                            const char *text);
+void     gtk_entry_set_positions           (GtkEntry   *entry,
+                                            int         current_pos,
+                                            int         selection_bound);
+
+GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
 
 G_END_DECLS
 

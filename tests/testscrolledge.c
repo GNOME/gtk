@@ -108,8 +108,6 @@ main (int argc, char *argv[])
   g_object_set (popup, "margin", 40, NULL);
   label = gtk_label_new ("Getting more rows...");
   spinner = gtk_spinner_new ();
-  gtk_widget_show (spinner);
-  gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (popup), label);
   gtk_container_add (GTK_CONTAINER (popup), spinner);
 

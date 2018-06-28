@@ -51,7 +51,7 @@ G_BEGIN_DECLS
  *     or top
  * @GTK_ALIGN_CENTER: center natural width of widget inside the
  *     allocation
- * @GTK_ALIGN_BASELINE: align the widget according to the baseline. Since 3.10.
+ * @GTK_ALIGN_BASELINE: align the widget according to the baseline
  *
  * Controls how a widget deals with extra space in a single (x or y)
  * dimension.
@@ -85,7 +85,7 @@ typedef enum
  * @GTK_ARROW_DOWN: Represents a downward pointing arrow.
  * @GTK_ARROW_LEFT: Represents a left pointing arrow.
  * @GTK_ARROW_RIGHT: Represents a right pointing arrow.
- * @GTK_ARROW_NONE: No arrow. Since 2.10.
+ * @GTK_ARROW_NONE: No arrow.
  *
  * Used to indicate the direction in which an arrow should point.
  */
@@ -110,8 +110,6 @@ typedef enum
  * requested height of the baseline-aligned children then it can use a
  * #GtkBaselinePosition to select where to put the baseline inside the
  * extra availible space.
- *
- * Since: 3.10
  */
 typedef enum
 {
@@ -175,25 +173,24 @@ typedef enum
 
 /**
  * GtkIconSize:
- * @GTK_ICON_SIZE_INVALID: Invalid size.
- * @GTK_ICON_SIZE_MENU: Size appropriate for menus (16px).
- * @GTK_ICON_SIZE_SMALL_TOOLBAR: Size appropriate for small toolbars (16px).
- * @GTK_ICON_SIZE_LARGE_TOOLBAR: Size appropriate for large toolbars (24px)
- * @GTK_ICON_SIZE_BUTTON: Size appropriate for buttons (16px)
- * @GTK_ICON_SIZE_DND: Size appropriate for drag and drop (32px)
- * @GTK_ICON_SIZE_DIALOG: Size appropriate for dialogs (48px)
+ * @GTK_ICON_SIZE_INHERIT: Keep the size of the parent element
+ * @GTK_ICON_SIZE_NORMAL: Size similar to text size
+ * @GTK_ICON_SIZE_LARGE: Large size, for example in an icon view
  *
- * Built-in stock icon sizes.
+ * Built-in icon sizes.
+ *
+ * Icon sizes default to being inherited. Where they cannot be
+ * inherited, text size is the default.
+ *
+ * All widgets which use GtkIconSize set the normal-icons or large-icons
+ * style classes correspondingly, and let themes determine the actual size
+ * to be used with the -gtk-icon-size CSS property.
  */
 typedef enum
 {
-  GTK_ICON_SIZE_INVALID,
-  GTK_ICON_SIZE_MENU,
-  GTK_ICON_SIZE_SMALL_TOOLBAR,
-  GTK_ICON_SIZE_LARGE_TOOLBAR,
-  GTK_ICON_SIZE_BUTTON,
-  GTK_ICON_SIZE_DND,
-  GTK_ICON_SIZE_DIALOG
+  GTK_ICON_SIZE_INHERIT,
+  GTK_ICON_SIZE_NORMAL,
+  GTK_ICON_SIZE_LARGE
 } GtkIconSize;
 
 /**
@@ -772,21 +769,21 @@ typedef enum
 
 /**
  * GtkStateFlags:
- * @GTK_STATE_FLAG_NORMAL: State during normal operation.
- * @GTK_STATE_FLAG_ACTIVE: Widget is active.
- * @GTK_STATE_FLAG_PRELIGHT: Widget has a mouse pointer over it.
- * @GTK_STATE_FLAG_SELECTED: Widget is selected.
- * @GTK_STATE_FLAG_INSENSITIVE: Widget is insensitive.
- * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
- * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
- * @GTK_STATE_FLAG_BACKDROP: Widget is in a background toplevel window.
- * @GTK_STATE_FLAG_DIR_LTR: Widget is in left-to-right text direction. Since 3.8
- * @GTK_STATE_FLAG_DIR_RTL: Widget is in right-to-left text direction. Since 3.8
- * @GTK_STATE_FLAG_LINK: Widget is a link. Since 3.12
- * @GTK_STATE_FLAG_VISITED: The location the widget points to has already been visited. Since 3.12
- * @GTK_STATE_FLAG_CHECKED: Widget is checked. Since 3.14
- * @GTK_STATE_FLAG_DROP_ACTIVE: Widget is highlighted as a drop target for DND. Since 3.20
- * @GTK_STATE_FLAG_FOCUS_VISIBLE: Widget has the visible focus. Since: 3.92
+ * @GTK_STATE_FLAG_NORMAL: State during normal operation
+ * @GTK_STATE_FLAG_ACTIVE: Widget is active
+ * @GTK_STATE_FLAG_PRELIGHT: Widget has a mouse pointer over it
+ * @GTK_STATE_FLAG_SELECTED: Widget is selected
+ * @GTK_STATE_FLAG_INSENSITIVE: Widget is insensitive
+ * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent
+ * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus
+ * @GTK_STATE_FLAG_BACKDROP: Widget is in a background toplevel window
+ * @GTK_STATE_FLAG_DIR_LTR: Widget is in left-to-right text direction
+ * @GTK_STATE_FLAG_DIR_RTL: Widget is in right-to-left text direction
+ * @GTK_STATE_FLAG_LINK: Widget is a link
+ * @GTK_STATE_FLAG_VISITED: The location the widget points to has already been visited
+ * @GTK_STATE_FLAG_CHECKED: Widget is checked
+ * @GTK_STATE_FLAG_DROP_ACTIVE: Widget is highlighted as a drop target for DND
+ * @GTK_STATE_FLAG_FOCUS_VISIBLE: Widget has the visible focus
  *
  * Describes a widget state. Widget states are used to match the widget
  * against CSS pseudo-classes. Note that GTK extends the regular CSS
@@ -847,8 +844,6 @@ typedef enum {
  * Describes how #GtkLevelBar contents should be rendered.
  * Note that this enumeration could be extended with additional modes
  * in the future.
- *
- * Since: 3.6
  */
 typedef enum {
   GTK_LEVEL_BAR_MODE_CONTINUOUS,
@@ -888,8 +883,6 @@ G_END_DECLS
  *
  * This enumeration may be extended in the future; input methods should
  * interpret unknown values as “free form”.
- *
- * Since: 3.6
  */
 typedef enum
 {
@@ -919,9 +912,9 @@ typedef enum
  *     first word of each sentence
  * @GTK_INPUT_HINT_INHIBIT_OSK: Suggest to not show an onscreen keyboard
  *     (e.g for a calculator that already has all the keys).
- * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical. Since 3.18
- * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support. Since 3.22.20
- * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support. Since 3.22.20
+ * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical
+ * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support
+ * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support
  *
  * Describes hints that might be taken into account by input methods
  * or applications. Note that input methods may already tailor their
@@ -932,8 +925,6 @@ typedef enum
  *
  * This enumeration may be extended in the future; input methods should
  * ignore unknown values.
- *
- * Since: 3.6
  */
 typedef enum
 {
@@ -969,8 +960,6 @@ typedef enum
  *   grab broken handlers for controllers in this phase to be run.
  *
  * Describes the stage at which events are fed into a #GtkEventController.
- *
- * Since: 3.14
  */
 typedef enum
 {
@@ -987,8 +976,6 @@ typedef enum
  * @GTK_EVENT_SEQUENCE_DENIED: The sequence is denied.
  *
  * Describes the state of a #GdkEventSequence in a #GtkGesture.
- *
- * Since: 3.14
  */
 typedef enum
 {
@@ -1005,8 +992,6 @@ typedef enum
  * @GTK_PAN_DIRECTION_DOWN: panned downwards
  *
  * Describes the panning direction of a #GtkGesturePan
- *
- * Since: 3.14
  */
 typedef enum
 {
@@ -1025,8 +1010,6 @@ typedef enum
  *
  * Describes constraints to positioning of popovers. More values
  * may be added to this enumeration in the future.
- *
- * Since: 3.20
  */
 typedef enum
 {
@@ -1034,5 +1017,11 @@ typedef enum
   GTK_POPOVER_CONSTRAINT_WINDOW
 } GtkPopoverConstraint;
 
+
+typedef enum {
+  GTK_PLACES_OPEN_NORMAL     = 1 << 0,
+  GTK_PLACES_OPEN_NEW_TAB    = 1 << 1,
+  GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
+} GtkPlacesOpenFlags;
 
 #endif /* __GTK_ENUMS_H__ */

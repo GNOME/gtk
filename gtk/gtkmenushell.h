@@ -124,7 +124,7 @@ GtkWidget *gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_menu_shell_get_parent_shell  (GtkMenuShell *menu_shell);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_shell_bind_model   (GtkMenuShell *menu_shell,
                                         GMenuModel   *model,
                                         const gchar  *action_namespace,

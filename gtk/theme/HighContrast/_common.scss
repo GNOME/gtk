@@ -6,8 +6,6 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 * {
   padding: 0;
-  -GtkToolButton-icon-spacing: 4;
-  -GtkTextView-error-underline-color: $error_color;
   -gtk-icon-style: symbolic; //force symbolic style icons
 
   // The size for scrollbars. The slider is 2px smaller, but we keep it
@@ -15,15 +13,10 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   // slider. The stepper button is larger in both directions, the slider
   // only in the width
 
-  -GtkScrolledWindow-scrollbar-spacing: 0;
+  outline-style: none;
+}
 
-  -GtkToolItemGroup-expander-size: 11;
-
-  -GtkTreeView-horizontal-separator: 4;
-
-  -GtkDialog-button-spacing: 4;
-  -GtkDialog-action-area-border: 0;
-
+*:focus(visible) {
   // We use the outline properties to signal the focus properties
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
@@ -33,9 +26,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   outline-offset: -4px;
   outline-width: 2px;
   -gtk-outline-radius: 2px;
-
 }
-
 
 /***************
  * Base States *
@@ -86,6 +77,14 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background-color: $selected_bg_color;
     color: $selected_fg_color;
   }
+}
+
+.normal-icons {
+  -gtk-icon-size: 16px;
+}
+
+.large-icons {
+  -gtk-icon-size: 32px;
 }
 
 .view {
@@ -208,13 +207,17 @@ entry {
     }
 
     &.flat {
-      &:focus, & {
+      &:focus, &:backdrop, &:disabled, & {
         min-height: 0;
         padding: 2px;
         background-image: none;
         border-color: transparent;
         border-radius: 0;
+        box-shadow: none;
       }
+
+      // Dodge transparency in selected treeview row, else bg & fg end up same
+      treeview &:focus { background-color: $base_color; }
     }
 
     &:focus { @include entry(focus); }
@@ -373,7 +376,7 @@ button {
     &:backdrop {
       @include button(backdrop);
 
-      -gtk-icon-effect: none;
+      -gtk-icon-filter: none;
 
       &:active,
       &:checked { @include button(backdrop-active); }
@@ -741,18 +744,34 @@ toolbar.inline-toolbar toolbutton:backdrop {
   border-right-style: none;
 }
 
-%linked {
-  @extend %linked_middle;
-
-  &:first-child {
+%linked_left {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-  }
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-style: none;
+}
 
-  &:last-child {
+%linked_right {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     border-right-style: solid;
+}
+
+// 1st/last child are at text start/end
+%linked {
+  @extend %linked_middle;
+
+  &:dir(ltr) {
+    &:first-child { @extend %linked_left; }
+    &:last-child { @extend %linked_right; }
+  }
+
+  &:dir(rtl) {
+    &:first-child { @extend %linked_right; }
+    &:last-child { @extend %linked_left; }
   }
 
   &:only-child {
@@ -882,7 +901,6 @@ button:link, button:visited {
  * GtkSpinButton *
  *****************/
 spinbutton {
-   
   &:not(.vertical) {
     // in this horizontal configuration, the whole spinbutton
     // behaves as the entry, so we extend the entry styling
@@ -892,7 +910,6 @@ spinbutton {
     border-color: $borders_color;
     box-shadow: none;
     padding: 0;
-    
  
     entry {
       min-width: 28px;
@@ -1307,11 +1324,6 @@ headerbar {
  * Tree Views *
  **************/
 treeview.view {
-  -GtkTreeView-grid-line-width: 1;
-  -GtkTreeView-grid-line-pattern: '';
-  -GtkTreeView-tree-line-width: 1;
-  -GtkTreeView-tree-line-pattern: '';
-  -GtkTreeView-expander-size: 16;
 
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
@@ -1803,12 +1815,6 @@ notebook {
 scrollbar {
   $_slider_min_length: 40px;
 
-  // disable steppers
-  @at-root * {
-    -GtkScrollbar-has-backward-stepper: false;
-    -GtkScrollbar-has-forward-stepper: false;
-  }
-
   background-color: $scrollbar_bg_color;
   transition: 300ms $ease-out-quad;
 
@@ -2082,6 +2088,7 @@ radio {
   min-width: 14px;
   border: 1px solid;
   -gtk-icon-source: none;
+  -gtk-icon-size: 14px;
 
   @include button(normal);
 
@@ -2591,6 +2598,7 @@ levelbar {
   }
 }
 
+
 // catch all extend :)
 
 %selected_items {
@@ -2598,6 +2606,9 @@ levelbar {
   color: $selected_fg_color;
   &:backdrop { background-color: $borders_color; color: $selected_fg_color; }
 }
+
+.monospace { font-family: monospace; }
+
 
 /**********
  * frames *
@@ -2770,13 +2781,19 @@ row.activatable {
  *************/
 
 expander {
-  & arrow {
+  title > arrow {
     min-width: 16px;
     min-height: 16px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
-    &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
+
+    &:disabled { color: $insensitive_fg_color; }
+
     &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+  }
+
+  title:hover > arrow {
+    color: lighten($fg_color,30%); //only lightens the arrow
   }
 }
 

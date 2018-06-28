@@ -39,34 +39,34 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureSingle GtkGestureSingle;
 typedef struct _GtkGestureSingleClass GtkGestureSingleClass;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GType       gtk_gesture_single_get_type       (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_single_get_touch_only (GtkGestureSingle *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void        gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
                                                gboolean          touch_only);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_single_get_exclusive  (GtkGestureSingle *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void        gtk_gesture_single_set_exclusive  (GtkGestureSingle *gesture,
                                                gboolean          exclusive);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 guint       gtk_gesture_single_get_button     (GtkGestureSingle *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void        gtk_gesture_single_set_button     (GtkGestureSingle *gesture,
                                                guint             button);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 guint       gtk_gesture_single_get_current_button
                                               (GtkGestureSingle *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GdkEventSequence * gtk_gesture_single_get_current_sequence
                                               (GtkGestureSingle *gesture);
 

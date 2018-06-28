@@ -163,7 +163,7 @@ GDK_AVAILABLE_IN_ALL
 void         gtk_container_class_install_child_property (GtkContainerClass *cclass,
 							 guint		    property_id,
 							 GParamSpec	   *pspec);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_class_install_child_properties (GtkContainerClass *cclass,
                                                            guint              n_pspecs,
                                                            GParamSpec       **pspecs);
@@ -209,12 +209,12 @@ void	     gtk_container_child_get_property		(GtkContainer	   *container,
 							 const gchar	   *property_name,
 	                                                 GValue		   *value);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void gtk_container_child_notify (GtkContainer *container,
                                  GtkWidget    *child,
                                  const gchar  *child_property);
 
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void gtk_container_child_notify_by_pspec (GtkContainer *container,
                                           GtkWidget    *child,
                                           GParamSpec   *pspec);

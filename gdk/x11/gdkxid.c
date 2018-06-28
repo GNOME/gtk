@@ -44,7 +44,7 @@ gdk_xid_equal (XID *a, XID *b)
 void
 _gdk_x11_display_add_window (GdkDisplay *display,
                              XID        *xid,
-                             GdkWindow  *data)
+                             GdkSurface  *data)
 {
   GdkX11Display *display_x11;
 
@@ -61,6 +61,9 @@ _gdk_x11_display_add_window (GdkDisplay *display,
     g_warning ("XID collision, trouble ahead");
 
   g_hash_table_insert (display_x11->xid_ht, xid, data);
+
+  if (gdk_surface_get_parent (GDK_SURFACE (data)) == NULL)
+    display_x11->toplevels = g_list_prepend (display_x11->toplevels, data);
 }
 
 void
@@ -68,34 +71,39 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
                                 XID         xid)
 {
   GdkX11Display *display_x11;
+  GdkSurface *surface;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_x11 = GDK_X11_DISPLAY (display);
 
-  if (display_x11->xid_ht)
-    g_hash_table_remove (display_x11->xid_ht, &xid);
+  if (!display_x11->xid_ht)
+    return;
+
+  surface = g_hash_table_lookup (display_x11->xid_ht, &xid);
+  if (surface && gdk_surface_get_parent (surface) == NULL)
+    display_x11->toplevels = g_list_remove (display_x11->toplevels, surface);
+
+  g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
 /**
- * gdk_x11_window_lookup_for_display:
+ * gdk_x11_surface_lookup_for_display:
  * @display: (type GdkX11Display): the #GdkDisplay corresponding to the
  *           window handle
  * @window: an Xlib Window
  *
- * Looks up the #GdkWindow that wraps the given native window handle.
+ * Looks up the #GdkSurface that wraps the given native window handle.
  *
- * Returns: (transfer none) (type GdkX11Window): the #GdkWindow wrapper for the native
+ * Returns: (transfer none) (type GdkX11Surface): the #GdkSurface wrapper for the native
  *    window, or %NULL if there is none.
- *
- * Since: 2.24
  */
-GdkWindow *
-gdk_x11_window_lookup_for_display (GdkDisplay *display,
+GdkSurface *
+gdk_x11_surface_lookup_for_display (GdkDisplay *display,
                                    Window      window)
 {
   GdkX11Display *display_x11;
-  GdkWindow *data = NULL;
+  GdkSurface *data = NULL;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 

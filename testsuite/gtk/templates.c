@@ -48,10 +48,10 @@ test_dialog_override_property (void)
   GtkWidget *dialog;
 
   dialog = g_object_new (GTK_TYPE_DIALOG,
-			 "type-hint", GDK_WINDOW_TYPE_HINT_UTILITY,
+			 "type-hint", GDK_SURFACE_TYPE_HINT_UTILITY,
 			 NULL);
   g_assert (GTK_IS_DIALOG (dialog));
-  g_assert (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_WINDOW_TYPE_HINT_UTILITY);
+  g_assert (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_SURFACE_TYPE_HINT_UTILITY);
 
   gtk_widget_destroy (dialog);
 }
@@ -117,8 +117,7 @@ test_scale_button_basic (void)
 {
   GtkWidget *widget;
 
-  widget = gtk_scale_button_new (GTK_ICON_SIZE_MENU,
-				 0, 100, 10, NULL);
+  widget = gtk_scale_button_new (0, 100, 10, NULL);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
   gtk_widget_destroy (widget);
 }
@@ -304,16 +303,6 @@ test_font_chooser_dialog_basic (void)
   gtk_widget_destroy (widget);
 }
 
-static void
-test_recent_chooser_widget_basic (void)
-{
-  GtkWidget *widget;
-
-  widget = gtk_recent_chooser_widget_new ();
-  g_assert (GTK_IS_RECENT_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
-}
-
 #ifdef HAVE_UNIX_PRINT_WIDGETS
 static void
 test_page_setup_unix_dialog_basic (void)
@@ -339,18 +328,12 @@ test_print_unix_dialog_basic (void)
 int
 main (int argc, char **argv)
 {
-  gchar *schema_dir;
-
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* initialize test program */
   gtk_test_init (&argc, &argv);
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* This environment variable cooperates with gtk_widget_destroy()
    * to assert that all automated compoenents are properly finalized
@@ -379,14 +362,11 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkFontButton/Basic", test_font_button_basic);
   g_test_add_func ("/Template/GtkFontChooserWidget/Basic", test_font_chooser_widget_basic);
   g_test_add_func ("/Template/GtkFontChooserDialog/Basic", test_font_chooser_dialog_basic);
-  g_test_add_func ("/Template/GtkRecentChooserWidget/Basic", test_recent_chooser_widget_basic);
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
   g_test_add_func ("/Template/UnixPrint/GtkPageSetupUnixDialog/Basic", test_page_setup_unix_dialog_basic);
   g_test_add_func ("/Template/UnixPrint/GtkPrintUnixDialog/Basic", test_print_unix_dialog_basic);
 #endif
-
-  g_free (schema_dir);
 
   return g_test_run();
 }

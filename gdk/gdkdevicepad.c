@@ -42,6 +42,13 @@
  *
  */
 
+/**
+ * GdkDevicePad:
+ *
+ * The GdkDevicePad struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 #include "config.h"
 
 #include "gdkdevicepad.h"
@@ -65,8 +72,6 @@ gdk_device_pad_default_init (GdkDevicePadInterface *pad)
  * current mode.
  *
  * Returns: The number of button/ring/strip groups in the pad.
- *
- * Since: 3.22
  **/
 gint
 gdk_device_pad_get_n_groups (GdkDevicePad *pad)
@@ -86,8 +91,6 @@ gdk_device_pad_get_n_groups (GdkDevicePad *pad)
  * Returns the number of modes that @group may have.
  *
  * Returns: The number of modes available in @group.
- *
- * Since: 3.22
  **/
 gint
 gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
@@ -109,8 +112,6 @@ gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
  * Returns the number of features a tablet pad has.
  *
  * Returns: The amount of elements of type @feature that this pad has.
- *
- * Since: 3.22
  **/
 gint
 gdk_device_pad_get_n_features (GdkDevicePad        *pad,
@@ -133,8 +134,6 @@ gdk_device_pad_get_n_features (GdkDevicePad        *pad,
  * or -1 if feature/index do not exist in @pad.
  *
  * Returns: The group number of the queried pad feature.
- *
- * Since: 3.22
  **/
 gint
 gdk_device_pad_get_feature_group (GdkDevicePad        *pad,

@@ -24,46 +24,44 @@ drag_begin (GtkWidget      *widget,
 	    gpointer        data)
 {
   GtkWidget *image = GTK_WIDGET (data);
+  GdkPaintable *paintable;
 
-  cairo_surface_t *surface = gtk_image_get_surface (GTK_IMAGE (image));
-  cairo_surface_set_device_offset (surface, -2, -2);
-  gtk_drag_set_icon_surface (context, surface);
+  paintable = gtk_image_get_paintable (GTK_IMAGE (image));
+  gtk_drag_set_icon_paintable (context, paintable, -2, -2);
 }
 
 void  
 drag_data_get  (GtkWidget        *widget,
 		GdkDragContext   *context,
 		GtkSelectionData *selection_data,
-		guint             info,
-		guint             time,
 		gpointer          data)
 {
   GtkWidget *image = GTK_WIDGET (data);
+  GdkPaintable *paintable;
 
-  cairo_surface_t *surface = gtk_image_get_surface (GTK_IMAGE (image));
-
-  gtk_selection_data_set_surface (selection_data, surface);
+  paintable = gtk_image_get_paintable (GTK_IMAGE (image));
+  if (GDK_IS_TEXTURE (paintable))
+    gtk_selection_data_set_texture (selection_data, GDK_TEXTURE (paintable));
 }
 
 static void
 drag_data_received (GtkWidget        *widget,
 		    GdkDragContext   *context,
-		    gint              x,
-		    gint              y,
 		    GtkSelectionData *selection_data,
 		    guint             info,
 		    guint32           time,
 		    gpointer          data)
 {
   GtkWidget *image = GTK_WIDGET (data);
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
   if (gtk_selection_data_get_length (selection_data) < 0)
     return;
 
-  surface = gtk_selection_data_get_surface (selection_data);
+  texture = gtk_selection_data_get_texture (selection_data);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (texture));
 
-  gtk_image_set_from_surface (GTK_IMAGE (image), surface);
+  g_object_unref (texture);
 }
 
 static gboolean
@@ -80,9 +78,10 @@ main (int argc, char **argv)
   GtkWidget *window, *grid;
   GtkWidget *label, *image;
   GtkIconTheme *theme;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
   gchar *icon_name = "help-browser";
   gchar *anim_filename = NULL;
+  GtkIconInfo *icon_info;
   GIcon *icon;
   GFile *file;
 
@@ -110,12 +109,15 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   theme = gtk_icon_theme_get_default ();
-  surface = gtk_icon_theme_load_surface (theme, icon_name, 48, gtk_widget_get_scale_factor (window), gtk_widget_get_window (window), 0, NULL);
-  image = gtk_image_new_from_surface (surface);
+  icon_info = gtk_icon_theme_lookup_icon_for_scale (theme, icon_name, 48, gtk_widget_get_scale_factor (window), GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+  texture = gtk_icon_info_load_texture (icon_info);
+  g_object_unref (icon_info);
+  image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
+  g_object_unref (texture);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 1, 1, 1);
 
   gtk_drag_source_set (image, GDK_BUTTON1_MASK, 
-		       NULL, 0,
+		       NULL,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_image_targets (image);
   g_signal_connect (image, "drag_begin", G_CALLBACK (drag_begin), image);
@@ -125,28 +127,32 @@ main (int argc, char **argv)
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
-                     NULL, 0, GDK_ACTION_COPY);
+                     NULL, GDK_ACTION_COPY);
   gtk_drag_dest_add_image_targets (image);
   g_signal_connect (image, "drag_data_received",
 		    G_CALLBACK (drag_data_received), image);
 
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name (icon_name);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 4, 1, 1);
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name (icon_name);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 4, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_GICON");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 5, 1, 1);
   icon = g_themed_icon_new_with_default_fallbacks ("folder-remote");
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_gicon (icon);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   g_object_unref (icon);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 5, 1, 1);
   file = g_file_new_for_path ("apple-red.png");
   icon = g_file_icon_new (file);
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_gicon (icon);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   g_object_unref (icon);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 5, 1, 1);

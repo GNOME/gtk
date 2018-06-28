@@ -122,7 +122,7 @@ void                gtk_entry_completion_set_minimum_key_length (GtkEntryComplet
                                                                  gint                         length);
 GDK_AVAILABLE_IN_ALL
 gint                gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion          *completion);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gchar *             gtk_entry_completion_compute_prefix         (GtkEntryCompletion          *completion,
                                                                  const char                  *key);
 GDK_AVAILABLE_IN_ALL

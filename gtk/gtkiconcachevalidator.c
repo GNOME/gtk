@@ -15,7 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "config.h"
-#include "gtkiconcachevalidator.h"
+#include "gtkiconcachevalidatorprivate.h"
 
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
@@ -369,7 +369,7 @@ check_hash (CacheInfo *info,
 }
 
 /**
- * _gtk_icon_cache_validate:
+ * gtk_icon_cache_validate:
  * @info: a CacheInfo structure
  *
  * Validates the icon cache passed in the @cache and
@@ -383,7 +383,7 @@ check_hash (CacheInfo *info,
  * Returns: %TRUE if the cache is valid
  */
 gboolean
-_gtk_icon_cache_validate (CacheInfo *info)
+gtk_icon_cache_validate (CacheInfo *info)
 {
   guint32 hash_offset;
   guint32 directory_list_offset;

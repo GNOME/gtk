@@ -33,8 +33,6 @@
  *
  * Returns: (transfer full): a newly allocated #GtkBorder-struct.
  *  Free with gtk_border_free()
- *
- * Since: 2.14
  */
 GtkBorder *
 gtk_border_new (void)

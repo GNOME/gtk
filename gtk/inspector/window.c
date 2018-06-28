@@ -49,8 +49,11 @@
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkmodulesprivate.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtkprivate.h"
+#include "gdk-private.h"
+#include "gskrendererprivate.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -202,8 +205,7 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
 
       if (use_picker)
         {
-          button = gtk_button_new_from_icon_name ("find-location-symbolic",
-                                                  GTK_ICON_SIZE_MENU);
+          button = gtk_button_new_from_icon_name ("find-location-symbolic");
           gtk_widget_set_focus_on_click (button, FALSE);
           gtk_widget_set_halign (button, GTK_ALIGN_START);
           gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -243,12 +245,24 @@ object_details_changed (GtkWidget          *combo,
 }
 
 static void
+gtk_inspector_window_realize (GtkWidget *widget)
+{
+  GskRenderer *renderer;
+
+  GTK_WIDGET_CLASS (gtk_inspector_window_parent_class)->realize (widget);
+
+  renderer = gtk_window_get_renderer (GTK_WINDOW (widget));
+  gsk_renderer_set_debug_flags (renderer, 0);
+}
+
+static void
 gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gtk_inspector_window_constructed;
+  widget_class->realize = gtk_inspector_window_realize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
@@ -286,8 +300,8 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
 }
 
-static GdkScreen *
-get_inspector_screen (void)
+static GdkDisplay *
+get_inspector_display (void)
 {
   static GdkDisplay *display = NULL;
 
@@ -322,20 +336,47 @@ get_inspector_screen (void)
 
       g_object_set_data_full (G_OBJECT (display), "gsk-renderer",
                               g_strdup (name), g_free);
+
+      gdk_display_set_debug_flags (display, 0);
+      gtk_set_display_debug_flags (display, 0);
     }
 
   if (!display)
     display = gdk_display_get_default ();
 
-  return gdk_display_get_default_screen (display);
+  return display;
 }
 
 GtkWidget *
 gtk_inspector_window_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW,
-                                   "screen", get_inspector_screen (),
+                                   "display", get_inspector_display (),
                                    NULL));
+}
+
+void
+gtk_inspector_window_add_overlay (GtkInspectorWindow  *iw,
+                                  GtkInspectorOverlay *overlay)
+{
+  iw->overlays = g_list_prepend (iw->overlays, g_object_ref (overlay));
+
+  gtk_inspector_overlay_queue_draw (overlay);
+}
+
+void
+gtk_inspector_window_remove_overlay (GtkInspectorWindow  *iw,
+                                     GtkInspectorOverlay *overlay)
+{
+  GList *item;
+
+  item = g_list_find (iw->overlays, overlay);
+  if (item == NULL)
+    return;
+
+  gtk_inspector_overlay_queue_draw (overlay);
+
+  iw->overlays = g_list_delete_link (iw->overlays, item);
 }
 
 void
@@ -352,31 +393,48 @@ gtk_inspector_window_get_for_display (GdkDisplay *display)
   return g_object_get_data (G_OBJECT (display), "-gtk-inspector");
 }
 
-void
-gtk_inspector_record_render (GtkWidget            *widget,
-                             GskRenderer          *renderer,
-                             GdkWindow            *window,
-                             const cairo_region_t *region,
-                             GdkDrawingContext    *context,
-                             GskRenderNode        *node)
+GskRenderNode *
+gtk_inspector_prepare_render (GtkWidget            *widget,
+                              GskRenderer          *renderer,
+                              GdkSurface           *surface,
+                              const cairo_region_t *region,
+                              GskRenderNode        *node)
 {
   GtkInspectorWindow *iw;
 
   iw = gtk_inspector_window_get_for_display (gtk_widget_get_display (widget));
   if (iw == NULL)
-    return;
+    return node;
 
   /* sanity check for single-display GDK backends */
   if (GTK_WIDGET (iw) == widget)
-    return;
+    return node;
 
   gtk_inspector_recorder_record_render (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
                                         widget,
                                         renderer,
-                                        window,
+                                        surface,
                                         region,
-                                        context,
                                         node);
+
+  if (iw->overlays)
+    {
+      GtkSnapshot *snapshot;
+      GList *l;
+
+      snapshot = gtk_snapshot_new ();
+      gtk_snapshot_append_node (snapshot, node);
+
+      for (l = iw->overlays; l; l = l->next)
+        {
+          gtk_inspector_overlay_snapshot (l->data, snapshot, node, widget);
+        }
+
+      gsk_render_node_unref (node);
+      node = gtk_snapshot_free_to_node (snapshot);
+    }
+
+  return node;
 }
 
 gboolean

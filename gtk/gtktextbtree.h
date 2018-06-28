@@ -68,8 +68,8 @@ void _gtk_text_btree_delete        (GtkTextIter *start,
 void _gtk_text_btree_insert        (GtkTextIter *iter,
                                     const gchar *text,
                                     gint         len);
-void _gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
-                                    GdkPixbuf   *pixbuf);
+void _gtk_text_btree_insert_texture (GtkTextIter *iter,
+                                     GdkTexture  *texture);
 
 void _gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
                                           GtkTextChildAnchor *anchor);

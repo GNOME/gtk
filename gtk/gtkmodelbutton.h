@@ -50,10 +50,10 @@ typedef enum {
   GTK_BUTTON_ROLE_RADIO
 } GtkButtonRole;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GType       gtk_model_button_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_model_button_new      (void);
 
 G_END_DECLS

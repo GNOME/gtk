@@ -122,13 +122,12 @@ gtk_scrollbar_measure (GtkWidget      *widget,
 static void
 gtk_scrollbar_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkScrollbar *self = GTK_SCROLLBAR (widget);
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
 
-  gtk_widget_size_allocate (priv->box, allocation, -1, out_clip);
+  gtk_widget_size_allocate (priv->box, allocation, -1);
 }
 
 static void
@@ -230,7 +229,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SCROLL_BAR);
-  gtk_widget_class_set_css_name (widget_class, "scrollbar");
+  gtk_widget_class_set_css_name (widget_class, I_("scrollbar"));
 }
 
 static gboolean
@@ -248,7 +247,7 @@ gtk_scrollbar_init (GtkScrollbar *self)
 {
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
 
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
@@ -271,8 +270,6 @@ gtk_scrollbar_init (GtkScrollbar *self)
  * Creates a new scrollbar with the given orientation.
  *
  * Returns:  the new #GtkScrollbar.
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_scrollbar_new (GtkOrientation  orientation,
@@ -325,44 +322,4 @@ gtk_scrollbar_get_adjustment (GtkScrollbar  *self)
   g_return_val_if_fail (GTK_IS_SCROLLBAR (self), NULL);
 
   return gtk_range_get_adjustment (GTK_RANGE (priv->range));
-}
-
-double
-gtk_scrollbar_get_wheel_delta (GtkScrollbar         *self,
-                               const GdkEventScroll *event)
-{
-  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
-  GtkAdjustment *adjustment;
-  gdouble dx, dy;
-  gdouble delta = 0;
-  gdouble page_size;
-  gdouble scroll_unit;
-  GdkScrollDirection direction;
-
-  adjustment = gtk_scrollbar_get_adjustment (self);
-  page_size = gtk_adjustment_get_page_size (adjustment);
-
-  scroll_unit = pow (page_size, 2.0 / 3.0);
-
-  if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
-    {
-#ifdef GDK_WINDOWING_QUARTZ
-      scroll_unit = 1;
-#endif
-
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        delta = - (dx ? dx : dy) * scroll_unit;
-      else
-        delta = dy * scroll_unit;
-    }
-  else if (gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
-    {
-      if (direction == GDK_SCROLL_UP ||
-          direction == GDK_SCROLL_LEFT)
-        delta = - scroll_unit;
-      else
-        delta = scroll_unit;
-    }
-
-  return delta;
 }

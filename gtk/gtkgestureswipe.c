@@ -50,7 +50,8 @@ typedef struct _EventData EventData;
 struct _EventData
 {
   guint32 evtime;
-  GdkPoint point;
+  int x;
+  int y;
 };
 
 struct _GtkGestureSwipePrivate
@@ -140,8 +141,8 @@ gtk_gesture_swipe_update (GtkGesture       *gesture,
   _gtk_gesture_get_last_update_time (gesture, sequence, &new.evtime);
   gtk_gesture_get_point (gesture, sequence, &x, &y);
 
-  new.point.x = x;
-  new.point.y = y;
+  new.x = x;
+  new.y = y;
 
   _gtk_gesture_swipe_clear_backlog (swipe, new.evtime);
   g_array_append_val (priv->events, new);
@@ -172,8 +173,8 @@ _gtk_gesture_swipe_calculate_velocity (GtkGestureSwipe *gesture,
   end = &g_array_index (priv->events, EventData, priv->events->len - 1);
 
   diff_time = end->evtime - start->evtime;
-  diff_x = end->point.x - start->point.x;
-  diff_y = end->point.y - start->point.y;
+  diff_x = end->x - start->x;
+  diff_y = end->y - start->y;
 
   if (diff_time == 0)
     return;
@@ -230,8 +231,6 @@ gtk_gesture_swipe_class_init (GtkGestureSwipeClass *klass)
    *
    * This signal is emitted when the recognized gesture is finished, velocity
    * and direction are a product of previously recorded events.
-   *
-   * Since: 3.14
    */
   signals[SWIPE] =
     g_signal_new (I_("swipe"),
@@ -253,21 +252,15 @@ gtk_gesture_swipe_init (GtkGestureSwipe *gesture)
 
 /**
  * gtk_gesture_swipe_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes swipes.
  *
  * Returns: a newly created #GtkGestureSwipe
- *
- * Since: 3.14
  **/
 GtkGesture *
-gtk_gesture_swipe_new (GtkWidget *widget)
+gtk_gesture_swipe_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_SWIPE,
-                       "widget", widget,
                        NULL);
 }
 
@@ -282,8 +275,6 @@ gtk_gesture_swipe_new (GtkWidget *widget)
  * last event(s) processed.
  *
  * Returns: whether velocity could be calculated
- *
- * Since: 3.14
  **/
 gboolean
 gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,

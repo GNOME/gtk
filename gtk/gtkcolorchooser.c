@@ -36,8 +36,6 @@
  *
  * In GTK+, the main widgets that implement this interface are
  * #GtkColorChooserWidget, #GtkColorChooserDialog and #GtkColorButton.
- *
- * Since: 3.4
  */
 
 enum
@@ -59,8 +57,6 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    * The ::rgba property contains the currently selected color,
    * as a #GdkRGBA struct. The property can be set to change
    * the current selection programmatically.
-   *
-   * Since: 3.4
    */
   g_object_interface_install_property (iface,
       g_param_spec_boxed ("rgba",
@@ -79,8 +75,6 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    *
    * Implementations are expected to show alpha by rendering the color
    * over a non-uniform background (like a checkerboard pattern).
-   *
-   * Since: 3.4
    */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("use-alpha",
@@ -98,8 +92,6 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    * This usually happens when the user clicks a color swatch,
    * or a color is selected and the user presses one of the keys
    * Space, Shift+Space, Return or Enter.
-   *
-   * Since: 3.4
    */
   signals[COLOR_ACTIVATED] =
     g_signal_new (I_("color-activated"),
@@ -125,8 +117,6 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
  * @color: (out): a #GdkRGBA to fill in with the current color
  *
  * Gets the currently-selected color.
- *
- * Since: 3.4
  */
 void
 gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
@@ -143,8 +133,6 @@ gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
  * @color: the new color
  *
  * Sets the color.
- *
- * Since: 3.4
  */
 void
 gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
@@ -164,8 +152,6 @@ gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
  *
  * Returns: %TRUE if the color chooser uses the alpha channel,
  *     %FALSE if not
- *
- * Since: 3.4
  */
 gboolean
 gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
@@ -185,8 +171,6 @@ gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
  * @use_alpha: %TRUE if color chooser should use alpha channel, %FALSE if not
  *
  * Sets whether or not the color chooser should use the alpha channel.
- *
- * Since: 3.4
  */
 void
 gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
@@ -224,8 +208,6 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  * from the color chooser.
  *
  * If @colors is %NULL, removes all previously added palettes.
- *
- * Since: 3.4
  */
 void
 gtk_color_chooser_add_palette (GtkColorChooser *chooser,

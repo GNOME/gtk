@@ -9,6 +9,7 @@ executable('gtk4-widget-factory',
            dependencies: libgtk_dep,
            include_directories: confinc,
            gui_app: true,
+           link_args: extra_demo_ldflags,
            install: true)
 
 # desktop file
@@ -24,3 +25,6 @@ foreach icon_size : ['16x16', '22x22', '24x24', '32x32', '48x48', '256x256', ]
   install_data('data/@0@/gtk4-widget-factory-symbolic.symbolic.png'.format(icon_size),
                install_dir: icons_dir)
 endforeach
+
+# appdata
+install_data('org.gtk.WidgetFactory.appdata.xml', install_dir: gtk_appdatadir)

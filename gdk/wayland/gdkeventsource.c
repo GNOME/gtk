@@ -115,18 +115,14 @@ gdk_event_source_dispatch (GSource     *base,
   GdkDisplay *display = source->display;
   GdkEvent *event;
 
-  gdk_threads_enter ();
-
   event = gdk_display_get_event (display);
 
   if (event)
     {
       _gdk_event_emit (event);
 
-      gdk_event_free (event);
+      g_object_unref (event);
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

@@ -53,8 +53,6 @@ struct _GtkLinkButton
 {
   /*< private >*/
   GtkButton parent_instance;
-
-  GtkLinkButtonPrivate *priv;
 };
 
 /**

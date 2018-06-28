@@ -22,7 +22,6 @@
 #ifndef __GI_SCANNER__
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11AppLaunchContext, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Cursor, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11DeviceCore, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11DeviceManagerCore, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11DeviceManagerXI2, g_object_unref)
@@ -32,7 +31,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11DragContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11GLContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Keymap, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Screen, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Visual, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Window, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Surface, g_object_unref)
 
 #endif

@@ -32,6 +32,7 @@
 #include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
+#include "gtkcssfontfeaturesvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkstyleanimationprivate.h"
@@ -238,6 +239,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssFontVariantNumeric numeric;
   GtkCssFontVariantEastAsian east_asian;
   GString *s;
+  char *settings;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TEXT_DECORATION_LINE));
@@ -422,6 +424,14 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
         append_separated (s, "pwid 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_RUBY)
         append_separated (s, "ruby 1");
+    }
+
+  value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS);
+  settings = gtk_css_font_features_value_get_features (value);
+  if (settings)
+    {
+      append_separated (s, settings);
+      g_free (settings);
     }
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));

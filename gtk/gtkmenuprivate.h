@@ -45,7 +45,7 @@ struct _GtkMenuPrivate
   GtkWidget *old_active_menu_item;
 
   GtkAccelGroup *accel_group;
-  gchar         *accel_path;
+  const char    *accel_path;
 
   GtkMenuPositionFunc position_func;
   gpointer            position_func_data;
@@ -53,7 +53,7 @@ struct _GtkMenuPrivate
   gint                position_x;
   gint                position_y;
 
-  GdkWindow         *rect_window;
+  GdkSurface         *rect_surface;
   GdkRectangle       rect;
   GtkWidget         *widget;
   GdkGravity         rect_anchor;
@@ -61,7 +61,7 @@ struct _GtkMenuPrivate
   GdkAnchorHints     anchor_hints;
   gint               rect_anchor_dx;
   gint               rect_anchor_dy;
-  GdkWindowTypeHint  menu_type_hint;
+  GdkSurfaceTypeHint  menu_type_hint;
 
   guint toggle_size;
   guint accel_size;
@@ -75,8 +75,7 @@ struct _GtkMenuPrivate
   GtkWidget *top_arrow_widget;
   GtkWidget *bottom_arrow_widget;
 
-  GtkGesture *click_gesture;
-  GtkEventController *scroll_controller;
+  GtkEventController *key_controller;
 
   gint scroll_offset;
   gint saved_scroll_offset;

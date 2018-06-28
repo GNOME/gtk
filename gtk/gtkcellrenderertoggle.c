@@ -16,16 +16,20 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
+
 #include "gtkcellrenderertoggle.h"
+
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktreeprivate.h"
+
 #include "a11y/gtkbooleancellaccessible.h"
 
+#include <stdlib.h>
 
 /**
  * SECTION:gtkcellrenderertoggle
@@ -419,8 +423,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
                           &GRAPHENE_RECT_INIT (
                              cell_area->x, cell_area->y,
                              cell_area->width, cell_area->height
-                          ),
-                          "CellToggleClip");
+                          ));
 
   context = gtk_cell_renderer_toggle_save_context (cell, widget);
   gtk_style_context_set_state (context, state);
@@ -575,8 +578,6 @@ gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
  * gtk_cell_renderer_toggle_set_activatable().
  *
  * Returns: %TRUE if the cell renderer is activatable.
- *
- * Since: 2.18
  **/
 gboolean
 gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
@@ -592,8 +593,6 @@ gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
  * @setting: the value to set.
  *
  * Makes the cell renderer activatable.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,

@@ -697,6 +697,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_FILTER = {
   gtk_css_value_filter_compute,
   gtk_css_value_filter_equal,
   gtk_css_value_filter_transition,
+  NULL,
+  NULL,
   gtk_css_value_filter_print
 };
 
@@ -873,15 +875,14 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
       if (i < j)
         gtk_snapshot_push_color_matrix (snapshot,
                                         &matrix,
-                                        &offset,
-                                        "CssFilter ColorMatrix<%d-%d>", i, j);
+                                        &offset);
 
       if (j < filter->n_filters)
         {
           if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
             {
               radius = _gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
-              gtk_snapshot_push_blur (snapshot, radius, "CssFilter Blur<%d, radius %g>", j, radius);
+              gtk_snapshot_push_blur (snapshot, radius);
             }
           else
             g_warning ("Don't know how to handle filter type %d", filter->filters[j].type);

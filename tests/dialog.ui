@@ -34,7 +34,6 @@
             <child>
               <object class="GtkImage" id="back_icon">
                 <property name="visible">True</property>
-                <property name="icon_size">1</property>
               </object>
             </child>
           </object>

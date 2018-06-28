@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_NATIVE_DIALOG             (gtk_native_dialog_get_type ())
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (GtkNativeDialog, gtk_native_dialog, GTK, NATIVE_DIALOG, GObject)
 
 struct _GtkNativeDialogClass
@@ -49,31 +49,31 @@ struct _GtkNativeDialogClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_native_dialog_show (GtkNativeDialog *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_native_dialog_hide (GtkNativeDialog *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_native_dialog_destroy (GtkNativeDialog *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_native_dialog_get_visible (GtkNativeDialog *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_native_dialog_set_modal (GtkNativeDialog *self,
                                                    gboolean modal);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_native_dialog_get_modal (GtkNativeDialog *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_native_dialog_set_title (GtkNativeDialog *self,
                                                    const char *title);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 const char *          gtk_native_dialog_get_title (GtkNativeDialog *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
                                                            GtkWindow *parent);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GtkWindow *           gtk_native_dialog_get_transient_for (GtkNativeDialog *self);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gint                  gtk_native_dialog_run (GtkNativeDialog *self);
 
 G_END_DECLS

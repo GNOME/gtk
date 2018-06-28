@@ -21,7 +21,6 @@
 #include <gio/gio.h>
 
 #include "gdkmonitor-broadway.h"
-#include "gdkscreen-broadway.h"
 
 
 G_DEFINE_TYPE (GdkBroadwayMonitor, gdk_broadway_monitor, GDK_TYPE_MONITOR)

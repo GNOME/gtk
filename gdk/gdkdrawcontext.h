@@ -34,13 +34,23 @@ G_BEGIN_DECLS
 #define GDK_DRAW_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_DRAW_CONTEXT, GdkDrawContext))
 #define GDK_IS_DRAW_CONTEXT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_DRAW_CONTEXT))
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GType gdk_draw_context_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_90
-GdkDisplay *            gdk_draw_context_get_display              (GdkDrawContext  *context);
-GDK_AVAILABLE_IN_3_90
-GdkWindow *             gdk_draw_context_get_window               (GdkDrawContext  *context);
+GDK_AVAILABLE_IN_ALL
+GdkDisplay *            gdk_draw_context_get_display            (GdkDrawContext         *context);
+GDK_AVAILABLE_IN_ALL
+GdkSurface *            gdk_draw_context_get_surface            (GdkDrawContext         *context);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_draw_context_begin_frame            (GdkDrawContext         *context,
+                                                                 const cairo_region_t   *region);
+GDK_AVAILABLE_IN_ALL
+void                    gdk_draw_context_end_frame              (GdkDrawContext         *context);
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_draw_context_is_in_frame            (GdkDrawContext         *context);
+GDK_AVAILABLE_IN_ALL
+const cairo_region_t *  gdk_draw_context_get_frame_region       (GdkDrawContext         *context);
 
 G_END_DECLS
 

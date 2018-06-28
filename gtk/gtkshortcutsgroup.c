@@ -20,12 +20,13 @@
 
 #include "gtkshortcutsgroup.h"
 
-#include "gtkshortcutsshortcut.h"
+#include "gtkbox.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
-#include "gtksizegroup.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkshortcutsshortcut.h"
+#include "gtksizegroup.h"
 
 /**
  * SECTION:gtkshortcutsgroup
@@ -362,7 +363,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gtk_widget_class_set_css_name (widget_class, "shortcuts-group");
+  gtk_widget_class_set_css_name (widget_class, I_("shortcuts-group"));
 }
 
 static void

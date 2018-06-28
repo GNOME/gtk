@@ -37,8 +37,7 @@ combo_changed_cb (GtkComboBox *cb,
   if (app_info == NULL)
     return;
 
-  gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_app_info_get_icon (app_info),
-                            GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_app_info_get_icon (app_info));
   gtk_label_set_text (GTK_LABEL (sel_name), g_app_info_get_display_name (app_info));
 
   g_object_unref (app_info);
@@ -49,8 +48,7 @@ special_item_activated_cb (GtkAppChooserButton *b,
                            const gchar *item_name,
                            gpointer user_data)
 {
-  gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"),
-                            GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"));
   gtk_label_set_text (GTK_LABEL (sel_name), "Special Item");
 }
 
@@ -128,8 +126,7 @@ main (int argc,
 #endif
   gtk_widget_show (toplevel);
 
-  g_signal_connect (toplevel, "delete-event",
-                    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (toplevel, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_main ();
 

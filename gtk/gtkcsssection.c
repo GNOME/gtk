@@ -97,8 +97,6 @@ _gtk_css_section_end (GtkCssSection *section)
  * Increments the reference count on @section.
  *
  * Returns: @section itself.
- *
- * Since: 3.2
  **/
 GtkCssSection *
 gtk_css_section_ref (GtkCssSection *section)
@@ -116,8 +114,6 @@ gtk_css_section_ref (GtkCssSection *section)
  *
  * Decrements the reference count on @section, freeing the
  * structure if the reference count reaches 0.
- *
- * Since: 3.2
  **/
 void
 gtk_css_section_unref (GtkCssSection *section)
@@ -143,8 +139,6 @@ gtk_css_section_unref (GtkCssSection *section)
  * Gets the type of information that @section describes.
  *
  * Returns: the type of @section
- *
- * Since: 3.2
  **/
 GtkCssSectionType
 gtk_css_section_get_section_type (const GtkCssSection *section)
@@ -167,8 +161,6 @@ gtk_css_section_get_section_type (const GtkCssSection *section)
  * a different file.
  *
  * Returns: (nullable) (transfer none): the parent section or %NULL if none
- *
- * Since: 3.2
  **/
 GtkCssSection *
 gtk_css_section_get_parent (const GtkCssSection *section)
@@ -188,8 +180,6 @@ gtk_css_section_get_parent (const GtkCssSection *section)
  *
  * Returns: (transfer none): the #GFile that @section was parsed from
  *     or %NULL if @section was parsed from other data
- *
- * Since: 3.2
  **/
 GFile *
 gtk_css_section_get_file (const GtkCssSection *section)
@@ -208,8 +198,6 @@ gtk_css_section_get_file (const GtkCssSection *section)
  * will return 0.
  *
  * Returns: the line number
- *
- * Since: 3.2
  **/
 guint
 gtk_css_section_get_start_line (const GtkCssSection *section)
@@ -227,8 +215,6 @@ gtk_css_section_get_start_line (const GtkCssSection *section)
  * returned via gtk_css_section_get_start_line().
  *
  * Returns: the offset in bytes from the start of the line.
- *
- * Since: 3.2
  **/
 guint
 gtk_css_section_get_start_position (const GtkCssSection *section)
@@ -253,8 +239,6 @@ gtk_css_section_get_start_position (const GtkCssSection *section)
  * successfully.
  *
  * Returns: the line number
- *
- * Since: 3.2
  **/
 guint
 gtk_css_section_get_end_line (const GtkCssSection *section)
@@ -281,8 +265,6 @@ gtk_css_section_get_end_line (const GtkCssSection *section)
  * successfully.
  *
  * Returns: the offset in bytes from the start of the line.
- *
- * Since: 3.2
  **/
 guint
 gtk_css_section_get_end_position (const GtkCssSection *section)

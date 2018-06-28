@@ -58,8 +58,7 @@ static void
 entry_size_allocate_cb (GtkEntry            *entry,
                         const GtkAllocation *allocation,
                         int                  baseline,
-                        GtkAllocation       *out_clip,
-                        gpointer       user_data)
+                        gpointer             user_data)
 {
   GtkEntryIconPosition popover_pos;
   GtkPopover *popover = user_data;
@@ -78,7 +77,6 @@ entry_size_allocate_cb (GtkEntry            *entry,
 static void
 entry_icon_press_cb (GtkEntry             *entry,
                      GtkEntryIconPosition  icon_pos,
-                     GdkEvent             *event,
                      gpointer              user_data)
 {
   GtkWidget *popover = user_data;
@@ -97,10 +95,8 @@ day_selected_cb (GtkCalendar *calendar,
                  gpointer     user_data)
 {
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation;
   GtkWidget *popover;
   GdkEvent *event;
-  GdkWindow *window;
   gdouble x, y;
 
   event = gtk_get_current_event ();
@@ -108,12 +104,11 @@ day_selected_cb (GtkCalendar *calendar,
   if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS)
     return;
 
-  window = gdk_event_get_window (event);
   gdk_event_get_coords (event, &x, &y);
-  gdk_window_coords_to_parent (window, x, y, &x, &y);
-  gtk_widget_get_allocation (GTK_WIDGET (calendar), &allocation);
-  rect.x = x - allocation.x;
-  rect.y = y - allocation.y;
+  gtk_widget_translate_coordinates (gtk_get_event_widget (event),
+                                    GTK_WIDGET (calendar),
+                                    x, y,
+                                    &rect.x, &rect.y);
   rect.width = rect.height = 1;
 
   popover = create_popover (GTK_WIDGET (calendar),
@@ -123,7 +118,7 @@ day_selected_cb (GtkCalendar *calendar,
 
   gtk_widget_show (popover);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 }
 
 GtkWidget *

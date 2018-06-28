@@ -70,8 +70,6 @@ struct _GtkShortcutsSection
 
   gboolean          has_filtered_group;
   gboolean          need_reflow;
-
-  GtkGesture       *pan_gesture;
 };
 
 struct _GtkShortcutsSectionClass
@@ -232,7 +230,6 @@ gtk_shortcuts_section_finalize (GObject *object)
   g_clear_pointer (&self->name, g_free);
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->view_name, g_free);
-  g_clear_object (&self->pan_gesture);
 
   G_OBJECT_CLASS (gtk_shortcuts_section_parent_class)->finalize (object);
 }
@@ -411,12 +408,14 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                                 GDK_KEY_Page_Down, GDK_CONTROL_MASK,
                                 "change-current-page", 1,
                                 G_TYPE_INT, 1);
-  gtk_widget_class_set_css_name (widget_class, "shortcuts-section");
+  gtk_widget_class_set_css_name (widget_class, I_("shortcuts-section"));
 }
 
 static void
 gtk_shortcuts_section_init (GtkShortcutsSection *self)
 {
+  GtkGesture *gesture;
+
   self->max_height = 15;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
@@ -454,9 +453,10 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_box_pack_end (GTK_BOX (self->footer), self->show_all);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 
-  self->pan_gesture = gtk_gesture_pan_new (GTK_WIDGET (self->stack), GTK_ORIENTATION_HORIZONTAL);
-  g_signal_connect (self->pan_gesture, "pan",
+  gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
+  g_signal_connect (gesture, "pan",
                     G_CALLBACK (gtk_shortcuts_section_pan_gesture_pan), self);
+  gtk_widget_add_controller (GTK_WIDGET (self->stack), GTK_EVENT_CONTROLLER (gesture));
 }
 
 static void

@@ -53,9 +53,9 @@
  *
  * A Cocoa coordinate is always relative to the origin of the monitor
  * coordinate space.  Such coordinates are mapped to their respective
- * position in the GdkScreen root window (_gdk_quartz_window_xy_to_gdk_xy)
- * and vice versa (_gdk_quartz_window_gdk_xy_to_xy).  Both functions can
- * be found in gdkwindow-quartz.c.  Note that Cocoa coordinates can have
+ * position in the GdkScreen root window (_gdk_quartz_surface_xy_to_gdk_xy)
+ * and vice versa (_gdk_quartz_surface_gdk_xy_to_xy).  Both functions can
+ * be found in gdksurface-quartz.c.  Note that Cocoa coordinates can have
  * negative values (in case a monitor is located left or below of screen 0),
  * but GDK coordinates can *not*!
  */
@@ -70,21 +70,17 @@ static void display_reconfiguration_callback (CGDirectDisplayID            displ
 
 static gint get_mm_from_pixels (NSScreen *screen, int pixels);
 
-G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, GDK_TYPE_SCREEN);
+G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, G_TYPE_OBJECT);
 
 static void
-gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
+gdk_quartz_screen_init (GdkQuartzScreen *screen)
 {
-  GdkScreen *screen = GDK_SCREEN (quartz_screen);
   NSDictionary *dd = [[[NSScreen screens] objectAtIndex:0] deviceDescription];
   NSSize size = [[dd valueForKey:NSDeviceResolution] sizeValue];
 
-  _gdk_screen_set_resolution (screen, size.width);
+  gdk_quartz_screen_calculate_layout (screen);
 
-  gdk_quartz_screen_calculate_layout (quartz_screen);
-
-  CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
-                                            screen);
+  CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback, screen);
 
   quartz_screen->emit_monitors_changed = FALSE;
 }
@@ -100,8 +96,7 @@ gdk_quartz_screen_dispose (GObject *object)
       screen->screen_changed_id = 0;
     }
 
-  CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback,
-                                          screen);
+  CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback, screen);
 
   G_OBJECT_CLASS (gdk_quartz_screen_parent_class)->dispose (object);
 }
@@ -123,7 +118,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
   NSArray *array;
   int i;
   int max_x, max_y;
-  GdkDisplay *display = gdk_screen_get_display (GDK_SCREEN (screen));
+  GdkDisplay *display = screen->display;
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (display);
 
   g_ptr_array_free (display_quartz->monitors, TRUE);
@@ -194,7 +189,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
 }
 
 void
-_gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
+_gdk_quartz_screen_update_window_sizes (GdkQuartzScreen *screen)
 {
   GList *windows, *list;
 
@@ -206,34 +201,22 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
    * This data is updated when the monitor configuration is changed.
    */
 
-  /* FIXME: At some point, fetch the root window from GdkScreen.  But
-   * on OS X will we only have a single root window anyway.
-   */
   _gdk_root->x = 0;
   _gdk_root->y = 0;
   _gdk_root->abs_x = 0;
   _gdk_root->abs_y = 0;
 
-  windows = gdk_screen_get_toplevel_windows (screen);
-
+  windows = get_toplevels ();
   for (list = windows; list; list = list->next)
-    _gdk_quartz_window_update_position (list->data);
-
-  g_list_free (windows);
+    _gdk_quartz_surface_update_position (list->data);
 }
 
 static void
 process_display_reconfiguration (GdkQuartzScreen *screen)
 {
-  gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
+  gdk_quartz_screen_calculate_layout (screen);
 
   _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
-
-  if (screen->emit_monitors_changed)
-    {
-      g_signal_emit_by_name (screen, "monitors-changed");
-      screen->emit_monitors_changed = FALSE;
-    }
 }
 
 static gboolean
@@ -279,23 +262,10 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
        */
       if (!screen->screen_changed_id)
         {
-          screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
-                                                            screen);
+          screen->screen_changed_id = g_idle_add (screen_changed_idle, screen);
           g_source_set_name_by_id (screen->screen_changed_id, "[gtk+] screen_changed_idle");
         }
     }
-}
-
-static GdkDisplay *
-gdk_quartz_screen_get_display (GdkScreen *screen)
-{
-  return _gdk_display;
-}
-
-static GdkWindow *
-gdk_quartz_screen_get_root_window (GdkScreen *screen)
-{
-  return _gdk_root;
 }
 
 static gint
@@ -312,11 +282,7 @@ static void
 gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
 
   object_class->dispose = gdk_quartz_screen_dispose;
   object_class->finalize = gdk_quartz_screen_finalize;
-
-  screen_class->get_display = gdk_quartz_screen_get_display;
-  screen_class->get_root_window = gdk_quartz_screen_get_root_window;
 }

@@ -62,7 +62,6 @@ parse_command_line (int *argc, char ***argv)
 {
   GError *error = NULL;
   GOptionContext *context;
-  char *schema_dir;
 
   context = g_option_context_new ("- run GTK reftests");
   g_option_context_add_main_entries (context, test_args, NULL);
@@ -75,11 +74,6 @@ parse_command_line (int *argc, char ***argv)
     }
 
   gtk_test_init (argc, argv);
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
-  g_free (schema_dir);
 
   if (g_strcmp0 (arg_direction, "rtl") == 0)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

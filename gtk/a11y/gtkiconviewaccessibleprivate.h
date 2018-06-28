@@ -20,6 +20,8 @@
 
 #include <gtk/a11y/gtkiconviewaccessible.h>
 
+#include <gtk/gtkiconview.h>
+
 G_BEGIN_DECLS
 
 void _gtk_icon_view_accessible_adjustment_changed  (GtkIconView *icon_view);

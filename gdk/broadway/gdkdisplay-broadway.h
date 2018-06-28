@@ -26,9 +26,8 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 #include "gdkbroadway-server.h"
 #include "gdkmonitorprivate.h"
 
@@ -37,25 +36,26 @@ G_BEGIN_DECLS
 struct _GdkBroadwayDisplay
 {
   GdkDisplay parent_instance;
-  GdkScreen *default_screen;
-  GdkScreen **screens;
 
   GHashTable *id_ht;
   GList *toplevels;
+
+  GdkDevice *core_pointer;
+  GdkDevice *core_keyboard;
+  GdkDevice *touchscreen;
 
   GSource *event_source;
 
   /* Keyboard related information */
   GdkKeymap *keymap;
 
-  /* drag and drop information */
-  GdkDragContext *current_dest_drag;
-
   GdkBroadwayServer *server;
 
   gpointer move_resize_data;
 
   GdkMonitor *monitor;
+
+  GHashTable *texture_cache;
 };
 
 struct _GdkBroadwayDisplayClass

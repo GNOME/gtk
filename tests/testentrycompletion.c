@@ -233,7 +233,7 @@ animation_timer (GtkEntryCompletion *completion)
 	{
 	  g_print ("removing model!\n");
 
-	  old_store = g_object_ref (gtk_entry_completion_get_model (completion));
+	  old_store = g_object_ref (store);
 	  gtk_entry_completion_set_model (completion, NULL);
 	}
       else
@@ -299,7 +299,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "delete_event", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -389,7 +389,7 @@ main (int argc, char *argv[])
   gtk_entry_completion_set_text_column (completion, 0);
 
   /* Fill the completion dynamically */
-  gdk_threads_add_timeout (1000, (GSourceFunc) animation_timer, completion);
+  g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
   /* Fourth entry */
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Model-less entry completion"));

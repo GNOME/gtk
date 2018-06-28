@@ -19,7 +19,7 @@
 #include <string.h>
 #include "gtktreeselection.h"
 #include "gtktreeprivate.h"
-#include "gtkrbtree.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -123,8 +123,6 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
    *
    * Selection mode.
    * See gtk_tree_selection_set_mode() for more information on this property.
-   *
-   * Since: 3.2
    */
   properties[PROP_MODE] = g_param_spec_enum ("mode",
                                              P_("Mode"),
@@ -414,8 +412,6 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
  * Returns the current selection function.
  *
  * Returns: The function.
- *
- * Since: 2.14
  **/
 GtkTreeSelectionFunc
 gtk_tree_selection_get_select_function (GtkTreeSelection *selection)
@@ -547,8 +543,6 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * ]|
  *
  * Returns: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
- *
- * Since: 2.2
  **/
 GList *
 gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
@@ -668,8 +662,6 @@ gtk_tree_selection_count_selected_rows_helper (GtkRBTree *tree,
  * Returns the number of rows that have been selected in @tree.
  *
  * Returns: The number of rows selected.
- * 
- * Since: 2.2
  **/
 gint
 gtk_tree_selection_count_selected_rows (GtkTreeSelection *selection)
@@ -1409,8 +1401,6 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
  *
  * Unselects a range of nodes, determined by @start_path and @end_path
  * inclusive.
- *
- * Since: 2.2
  **/
 void
 gtk_tree_selection_unselect_range (GtkTreeSelection *selection,
@@ -1640,7 +1630,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
           _gtk_tree_view_accessible_remove_state (priv->tree_view, tree, node, GTK_CELL_RENDERER_SELECTED);
         }
 
-      _gtk_tree_view_queue_draw_node (priv->tree_view, tree, node, NULL);
+      gtk_widget_queue_draw (GTK_WIDGET (priv->tree_view));
 
       return TRUE;
     }

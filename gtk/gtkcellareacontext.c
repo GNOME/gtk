@@ -106,8 +106,6 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * GtkCellAreaContext:area:
    *
    * The #GtkCellArea this context was created by
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_CELL_AREA,
@@ -123,18 +121,14 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The minimum width for the #GtkCellArea in this context
    * for all #GtkTreeModel rows that this context was requested
    * for using gtk_cell_area_get_preferred_width().
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_WIDTH,
                                    g_param_spec_int ("minimum-width",
                                                      P_("Minimum Width"),
                                                      P_("Minimum cached width"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkCellAreaContext:natural-width:
@@ -142,18 +136,14 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The natural width for the #GtkCellArea in this context
    * for all #GtkTreeModel rows that this context was requested
    * for using gtk_cell_area_get_preferred_width().
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_NAT_WIDTH,
                                    g_param_spec_int ("natural-width",
                                                      P_("Minimum Width"),
                                                      P_("Minimum cached width"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkCellAreaContext:minimum-height:
@@ -161,18 +151,14 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The minimum height for the #GtkCellArea in this context
    * for all #GtkTreeModel rows that this context was requested
    * for using gtk_cell_area_get_preferred_height().
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_HEIGHT,
                                    g_param_spec_int ("minimum-height",
                                                      P_("Minimum Height"),
                                                      P_("Minimum cached height"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkCellAreaContext:natural-height:
@@ -180,18 +166,14 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The natural height for the #GtkCellArea in this context
    * for all #GtkTreeModel rows that this context was requested
    * for using gtk_cell_area_get_preferred_height().
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_NAT_HEIGHT,
                                    g_param_spec_int ("natural-height",
                                                      P_("Minimum Height"),
                                                      P_("Minimum cached height"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 }
 
 /*************************************************************
@@ -335,8 +317,6 @@ gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
  * compute a proper allocation.
  *
  * Returns: (transfer none): the #GtkCellArea this context was created by.
- *
- * Since: 3.0
  */
 GtkCellArea *
 gtk_cell_area_context_get_area (GtkCellAreaContext *context)
@@ -376,8 +356,6 @@ gtk_cell_area_context_get_area (GtkCellAreaContext *context)
  * in the allocated width necessitates a recalculation
  * of all the displayed row heights using
  * gtk_cell_area_get_preferred_height_for_width().
- *
- * Since 3.0
  */
 void
 gtk_cell_area_context_reset (GtkCellAreaContext *context)
@@ -405,8 +383,6 @@ gtk_cell_area_context_reset (GtkCellAreaContext *context)
  * and vertical orientations producing a homogeneous effect of the
  * rows. This is generally the case for #GtkTreeView when
  * #GtkTreeView:fixed-height-mode is enabled.
- *
- * Since 3.0
  */
 void
 gtk_cell_area_context_allocate (GtkCellAreaContext *context,
@@ -431,8 +407,6 @@ gtk_cell_area_context_allocate (GtkCellAreaContext *context,
  *
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a #GtkCellArea, the returned values are 0.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
@@ -465,8 +439,6 @@ gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
  *
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a #GtkCellArea, the returned values are 0.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
@@ -500,8 +472,6 @@ gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
  *
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a #GtkCellArea, the returned values are -1.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_get_preferred_height_for_width (GtkCellAreaContext *context,
@@ -532,8 +502,6 @@ gtk_cell_area_context_get_preferred_height_for_width (GtkCellAreaContext *contex
  *
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a #GtkCellArea, the returned values are -1.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *context,
@@ -561,8 +529,6 @@ gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *contex
  * If the context was not allocated in width or height, or if the
  * context was recently reset with gtk_cell_area_context_reset(),
  * the returned value will be -1.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_get_allocation (GtkCellAreaContext *context,
@@ -595,8 +561,6 @@ gtk_cell_area_context_get_allocation (GtkCellAreaContext *context,
  * the request process over a series of #GtkTreeModel rows to
  * progressively push the requested width over a series of
  * gtk_cell_area_get_preferred_width() requests.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
@@ -641,8 +605,6 @@ gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
  * the request process over a series of #GtkTreeModel rows to
  * progressively push the requested height over a series of
  * gtk_cell_area_get_preferred_height() requests.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_context_push_preferred_height (GtkCellAreaContext *context,

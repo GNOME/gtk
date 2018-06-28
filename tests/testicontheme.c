@@ -122,8 +122,7 @@ main (int argc, char *argv[])
       gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
       g_object_unref (pixbuf);
       gtk_container_add (GTK_CONTAINER (window), image);
-      g_signal_connect (window, "delete-event",
-                        G_CALLBACK (gtk_main_quit), window);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
       
       gtk_main ();
@@ -149,8 +148,7 @@ main (int argc, char *argv[])
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       image = gtk_image_new ();
       gtk_container_add (GTK_CONTAINER (window), image);
-      g_signal_connect (window, "delete-event",
-                        G_CALLBACK (gtk_main_quit), window);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
 
       info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, flags);

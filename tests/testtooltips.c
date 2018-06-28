@@ -64,8 +64,7 @@ query_tooltip_cb (GtkWidget  *widget,
 		  gpointer    data)
 {
   gtk_tooltip_set_markup (tooltip, gtk_button_get_label (GTK_BUTTON (widget)));
-  gtk_tooltip_set_icon_from_icon_name (tooltip, "edit-delete",
-                                       GTK_ICON_SIZE_MENU);
+  gtk_tooltip_set_icon_from_icon_name (tooltip, "edit-delete");
 
   return TRUE;
 }
@@ -299,8 +298,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Tooltips test");
-  g_signal_connect (window, "delete_event",
-		    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), box);
@@ -365,7 +363,7 @@ main (int argc, char *argv[])
 
   gtk_widget_set_tooltip_window (button, GTK_WINDOW (tooltip_window));
   gtk_window_set_type_hint (GTK_WINDOW (tooltip_window),
-                            GDK_WINDOW_TYPE_HINT_TOOLTIP);
+                            GDK_SURFACE_TYPE_HINT_TOOLTIP);
   gtk_window_set_transient_for (GTK_WINDOW (tooltip_window),
                                 GTK_WINDOW (window));
 

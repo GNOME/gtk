@@ -40,6 +40,10 @@
 #include <gtk/gtk.h>
 #define GTK_COMPILATION
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
+#endif
+
 /**
  * SECTION:gtktesting
  * @Short_description: Utilities for testing GTK+ applications
@@ -60,14 +64,11 @@
  *
  * It will in turn call g_test_init() and gtk_init() to properly
  * initialize the testing framework and graphical toolkit. It’ll 
- * also set the program’s locale to “C” and prevent loading of rc 
- * files and Gtk+ modules. This is done to make tets program
- * environments as deterministic as possible.
+ * also set the program’s locale to “C”. This is done to make test
+ * program environments as deterministic as possible.
  *
  * Like gtk_init() and g_test_init(), any known arguments will be
  * processed and stripped from @argc and @argv.
- *
- * Since: 2.14
  **/
 void
 gtk_test_init (int    *argcp,
@@ -75,16 +76,6 @@ gtk_test_init (int    *argcp,
                ...)
 {
   g_test_init (argcp, argvp, NULL);
-  /* - enter C locale
-   * - call g_test_init();
-   * - call gtk_init();
-   * - prevent RC files from loading;
-   * - prevent Gtk modules from loading;
-   * - supply mock object for GtkSettings
-   * FUTURE TODO:
-   * - this function could install a mock object around GtkSettings
-   */
-  g_setenv ("GTK_MODULES", "", TRUE);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
   g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
@@ -94,7 +85,9 @@ gtk_test_init (int    *argcp,
    * send events that GTK+ understands if XI2 is
    * disabled, bummer.
    */
+#ifdef GDK_WINDOWING_X11
   gdk_disable_multidevice ();
+#endif
 
   gtk_init ();
 }
@@ -120,8 +113,6 @@ quit_main_loop_callback (GtkWidget     *widget,
  * This function is intended to be used for syncing with actions that
  * depend on @widget relayouting or on interaction with the display
  * server.
- *
- * Since: 3.10
  **/
 void
 gtk_test_widget_wait_for_draw (GtkWidget *widget)
@@ -152,8 +143,6 @@ static guint  n_all_registered_types = 0;
  *
  * Returns: (array length=n_types zero-terminated=1) (transfer none):
  *    0-terminated array of type ids
- *
- * Since: 2.14
  */
 const GType*
 gtk_test_list_all_types (guint *n_types)
@@ -169,8 +158,6 @@ gtk_test_list_all_types (guint *n_types)
  * Force registration of all core Gtk+ and Gdk object types.
  * This allowes to refer to any of those object types via
  * g_type_from_name() after calling this function.
- *
- * Since: 2.14
  **/
 void
 gtk_test_register_all_types (void)

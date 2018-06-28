@@ -25,7 +25,7 @@
 
 static gboolean
 _cairo_surface_extents (cairo_surface_t *surface,
-                            GdkRectangle *extents)
+			GdkRectangle *extents)
 {
   double x1, x2, y1, y2;
   cairo_t *cr;
@@ -184,7 +184,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
   selection_data->target = target;
   if (!selection_data->display)
     selection_data->display = gdk_display_get_default ();
-  if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
+  if (target == g_intern_static_string ("UTF8_STRING"))
     {
       NSString *s = [pasteboard stringForType:NSStringPboardType];
 
@@ -197,7 +197,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
                                   (guchar *)utf8_string, strlen (utf8_string));
 	}
     }
-  else if (target == gdk_atom_intern_static_string ("application/x-color"))
+  else if (target == g_intern_static_string ("application/x-color"))
     {
       NSColor *nscolor = [[NSColor colorFromPasteboard:pasteboard]
                           colorUsingColorSpaceName:NSDeviceRGBColorSpace];
@@ -213,7 +213,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 
       gtk_selection_data_set (selection_data, target, 16, (guchar *)color, 8);
     }
-  else if (target == gdk_atom_intern_static_string ("text/uri-list"))
+  else if (target == g_intern_static_string ("text/uri-list"))
     {
       if ([[pasteboard types] containsObject:NSFilenamesPboardType])
         {
@@ -222,7 +222,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
            int n_files = [files count];
            int i;
 
-           selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
+           selection_data->target = g_intern_static_string ("text/uri-list");
 
            uris = (gchar **) g_malloc (sizeof (gchar*) * (n_files + 1));
            for (i = 0; i < n_files; ++i)
@@ -242,7 +242,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
           gchar *uris[2];
           NSURL *url = [NSURL URLFromPasteboard:pasteboard];
 
-          selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
+          selection_data->target = g_intern_static_string ("text/uri-list");
 
           uris[0] = (gchar *) [[url description] UTF8String];
 
@@ -253,16 +253,14 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
   else
     {
       NSData *data;
-      gchar *name;
+      const char *name;
 
-      name = gdk_atom_name (target);
+      name = (const char *)target;
 
       if (strcmp (name, "image/tiff") == 0)
 	data = [pasteboard dataForType:NSTIFFPboardType];
       else
 	data = [pasteboard dataForType:[NSString stringWithUTF8String:name]];
-
-      g_free (name);
 
       if (data)
 	{

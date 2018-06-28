@@ -43,15 +43,11 @@ G_BEGIN_DECLS
 #define GTK_MESSAGE_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogClass))
 
 typedef struct _GtkMessageDialog              GtkMessageDialog;
-typedef struct _GtkMessageDialogPrivate       GtkMessageDialogPrivate;
 typedef struct _GtkMessageDialogClass         GtkMessageDialogClass;
 
 struct _GtkMessageDialog
 {
   GtkDialog parent_instance;
-
-  /*< private >*/
-  GtkMessageDialogPrivate *priv;
 };
 
 struct _GtkMessageDialogClass

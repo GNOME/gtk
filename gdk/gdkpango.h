@@ -27,9 +27,6 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_3_22
-PangoContext *gdk_pango_context_get_for_display (GdkDisplay *display);
-
 /* Get a clip region to draw only part of a layout or
  * line. index_ranges contains alternating range starts/stops. The
  * region is the region which contains the given ranges, i.e. if you

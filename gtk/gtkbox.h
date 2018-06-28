@@ -93,10 +93,10 @@ void        gtk_box_set_spacing         (GtkBox         *box,
                                          gint            spacing);
 GDK_AVAILABLE_IN_ALL
 gint        gtk_box_get_spacing         (GtkBox         *box);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_baseline_position (GtkBox             *box,
 					   GtkBaselinePosition position);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
 
 GDK_AVAILABLE_IN_ALL

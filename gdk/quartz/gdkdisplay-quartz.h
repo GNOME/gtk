@@ -22,9 +22,8 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 
 G_BEGIN_DECLS
 
@@ -51,14 +50,6 @@ void       _gdk_quartz_display_event_data_free (GdkDisplay     *display,
                                                 GdkEvent       *event);
 
 /* Display methods - cursor */
-GdkCursor *_gdk_quartz_display_get_cursor_for_type     (GdkDisplay      *display,
-                                                        GdkCursorType    type);
-GdkCursor *_gdk_quartz_display_get_cursor_for_name     (GdkDisplay      *display,
-                                                        const gchar     *name);
-GdkCursor *_gdk_quartz_display_get_cursor_for_surface  (GdkDisplay      *display,
-                                                        cairo_surface_t *surface,
-                                                        gdouble          x,
-                                                        gdouble          y);
 gboolean   _gdk_quartz_display_supports_cursor_alpha   (GdkDisplay    *display);
 gboolean   _gdk_quartz_display_supports_cursor_color   (GdkDisplay    *display);
 void       _gdk_quartz_display_get_default_cursor_size (GdkDisplay *display,
@@ -71,34 +62,14 @@ void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
 /* Display methods - window */
 void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
 void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
-void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
-                                                   GdkWindow     *window,
-                                                   GdkWindow     *real_parent,
-                                                   GdkScreen     *screen,
-                                                   GdkEventMask   event_mask,
-                                                   GdkWindowAttr *attributes);
+void       _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
+                                                   GdkSurface     *window,
+                                                   GdkSurface     *real_parent,
+                                                   GdkSurfaceAttr *attributes);
 
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
-/* Display methods - selection */
-gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
-                                                     GdkWindow  *owner,
-                                                     GdkAtom     selection,
-                                                     guint32     time,
-                                                     gboolean    send_event);
-GdkWindow * _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
-                                                     GdkAtom     selection);
-gint        _gdk_quartz_display_get_selection_property (GdkDisplay     *display,
-                                                        GdkWindow      *requestor,
-                                                        guchar        **data,
-                                                        GdkAtom        *ret_type,
-                                                        gint           *ret_format);
-void        _gdk_quartz_display_convert_selection      (GdkDisplay     *display,
-                                                        GdkWindow      *requestor,
-                                                        GdkAtom         selection,
-                                                        GdkAtom         target,
-                                                        guint32         time);
 gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *display,
                                                             GdkAtom         encoding,
                                                             gint            format,
@@ -107,16 +78,7 @@ gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *disp
                                                             gchar        ***list);
 gchar *     _gdk_quartz_display_utf8_to_string_target      (GdkDisplay     *displayt,
                                                             const gchar    *str);
-/*
-GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
-                                                 Window       xrootwin);
-void       _gdk_x11_display_error_event         (GdkDisplay  *display,
-                                                 XErrorEvent *error);
 
-GdkFilterReturn _gdk_wm_protocols_filter        (GdkXEvent   *xev,
-                                                 GdkEvent    *event,
-                                                 gpointer     data);
-*/
 G_END_DECLS
 
 #endif  /* __GDK_QUARTZ_DISPLAY__ */

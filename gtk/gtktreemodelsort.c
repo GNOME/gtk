@@ -1684,6 +1684,9 @@ gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable *sortable,
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)sortable;
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
 
+  if (priv->sort_column_id == sort_column_id && priv->order == order)
+    return;
+
   if (sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
     {
       if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
@@ -1699,17 +1702,6 @@ gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable *sortable,
         }
       else
         g_return_if_fail (priv->default_sort_func != NULL);
-
-      if (priv->sort_column_id == sort_column_id)
-        {
-          if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
-	    {
-	      if (priv->order == order)
-	        return;
-	    }
-          else
-	    return;
-        }
     }
 
   priv->sort_column_id = sort_column_id;
@@ -1768,7 +1760,7 @@ gtk_tree_model_sort_has_default_sort_func (GtkTreeSortable *sortable)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)sortable;
 
-  return (tree_model_sort->priv->default_sort_func != NULL);
+  return (tree_model_sort->priv->default_sort_func != NO_SORT_FUNC);
 }
 
 /* DragSource interface */
@@ -2774,8 +2766,6 @@ gtk_tree_model_sort_iter_is_valid_helper (GtkTreeIter *iter,
  * Checks if the given iter is a valid iter for this #GtkTreeModelSort.
  *
  * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
- *
- * Since: 2.2
  **/
 gboolean
 gtk_tree_model_sort_iter_is_valid (GtkTreeModelSort *tree_model_sort,

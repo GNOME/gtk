@@ -57,27 +57,27 @@ struct _GtkActionBarClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GType        gtk_action_bar_get_type          (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_action_bar_new               (void);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_action_bar_get_center_widget (GtkActionBar *action_bar);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
                                                GtkWidget    *center_widget);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_bar_pack_start        (GtkActionBar *action_bar,
                                                GtkWidget    *child);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_bar_pack_end          (GtkActionBar *action_bar,
                                                GtkWidget    *child);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void        gtk_action_bar_set_revealed       (GtkActionBar *action_bar,
                                                gboolean      revealed);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_action_bar_get_revealed       (GtkActionBar *action_bar);
 
 

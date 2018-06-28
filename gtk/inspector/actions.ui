@@ -14,16 +14,13 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
         <property name="hscrollbar-policy">never</property>
-        <property name="vscrollbar-policy">automatic</property>
         <child>
-          <object class= "GtkTreeView">
-            <property name="visible">True</property>
+          <object class="GtkTreeView">
             <property name="model">model</property>
-            <property name="enable-search">False</property>
-            <property name="activate-on-single-click">True</property>
+            <property name="enable-search">0</property>
+            <property name="activate-on-single-click">1</property>
             <signal name="row-activated" handler="row_activated"/>
             <child>
               <object class="GtkTreeViewColumn">

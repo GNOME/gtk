@@ -55,8 +55,8 @@ gchar *tabs4 [] = {
   NULL
 };
 
-static const GtkTargetEntry button_targets[] = {
-  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+static const char *button_targets[] = {
+  "GTK_NOTEBOOK_TAB"
 };
 
 static GtkNotebook*
@@ -96,28 +96,14 @@ on_notebook_drag_begin (GtkWidget      *widget,
                         GdkDragContext *context,
                         gpointer        data)
 {
-  cairo_surface_t *surface;
   guint page_num;
 
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
 
   if (page_num > 2)
-    {
-      GtkIconTheme *icon_theme;
-      int width;
-
-      icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
-      gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, NULL);
-      surface = gtk_icon_theme_load_surface (icon_theme,
-                                             (page_num % 2) ? "help-browser" : "process-stop",
-                                             width,
-                                             1, NULL,
-                                             GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                             NULL);
-
-      gtk_drag_set_icon_surface (context, surface);
-      cairo_surface_destroy (surface);
-    }
+    gtk_drag_set_icon_name (context,
+                            (page_num % 2) ? "help-browser" : "process-stop",
+                            0, 0);
 }
 
 static gboolean
@@ -136,12 +122,8 @@ remove_in_idle (gpointer data)
 
 static void
 on_button_drag_data_received (GtkWidget        *widget,
-                              GdkDragContext   *context,
-                              gint              x,
-                              gint              y,
+                              GdkDrop          *drop,
                               GtkSelectionData *data,
-                              guint             info,
-                              guint             time,
                               gpointer          user_data)
 {
   GtkWidget **child;
@@ -159,7 +141,6 @@ action_clicked_cb (GtkWidget *button,
 
   page = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (page), "Addition");
-  gtk_widget_show (page);
 
   title = gtk_label_new ("Addition");
 
@@ -179,9 +160,8 @@ create_notebook (gchar           **labels,
   gtk_widget_set_vexpand (notebook, TRUE);
   gtk_widget_set_hexpand (notebook, TRUE);
 
-  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic");
   g_signal_connect (action_widget, "clicked", G_CALLBACK (action_clicked_cb), notebook);
-  gtk_widget_show (action_widget);
   gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), action_widget, GTK_PACK_END);
 
   g_signal_connect (notebook, "create-window",
@@ -223,9 +203,8 @@ create_notebook_non_dragable_content (gchar           **labels,
   gtk_widget_set_vexpand (notebook, TRUE);
   gtk_widget_set_hexpand (notebook, TRUE);
 
-  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic");
   g_signal_connect (action_widget, "clicked", G_CALLBACK (action_clicked_cb), notebook);
-  gtk_widget_show (action_widget);
   gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), action_widget, GTK_PACK_END);
 
   g_signal_connect (notebook, "create-window",
@@ -301,15 +280,17 @@ create_notebook_with_notebooks (gchar           **labels,
 static GtkWidget*
 create_trash_button (void)
 {
+  GdkContentFormats *targets;
   GtkWidget *button;
 
   button = gtk_button_new_with_mnemonic ("_Delete");
 
+  targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
   gtk_drag_dest_set (button,
                      GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-                     button_targets,
-                     G_N_ELEMENTS (button_targets),
+                     targets,
                      GDK_ACTION_MOVE);
+  gdk_content_formats_unref (targets);
 
   g_signal_connect_after (G_OBJECT (button), "drag-data-received",
                           G_CALLBACK (on_button_drag_data_received), NULL);
@@ -349,7 +330,7 @@ main (gint argc, gchar *argv[])
   gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
-  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show (window);
 

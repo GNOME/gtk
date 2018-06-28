@@ -74,13 +74,7 @@ struct _GtkLayoutPrivate
   guint vscroll_policy : 1;
 
   /* Properties */
-
-  GdkVisibilityState visibility;
-
   GList *children;
-
-  gint scroll_x;
-  gint scroll_y;
 
   guint freeze_count;
 };
@@ -116,7 +110,6 @@ static void gtk_layout_set_property       (GObject        *object,
                                            const GValue   *value,
                                            GParamSpec     *pspec);
 static void gtk_layout_finalize           (GObject        *object);
-static void gtk_layout_map                (GtkWidget      *widget);
 static void gtk_layout_measure (GtkWidget *widget,
                                 GtkOrientation  orientation,
                                 int             for_size,
@@ -126,8 +119,7 @@ static void gtk_layout_measure (GtkWidget *widget,
                                 int            *natural_baseline);
 static void gtk_layout_size_allocate      (GtkWidget          *widget,
                                            const GtkAllocation *allocation,
-                                           int                 baseline,
-                                           GtkAllocation      *out_clip);
+                                           int                 baseline);
 static void gtk_layout_add                (GtkContainer   *container,
 					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
@@ -145,8 +137,6 @@ static void gtk_layout_get_child_property (GtkContainer   *container,
                                            guint           property_id,
                                            GValue         *value,
                                            GParamSpec     *pspec);
-static void gtk_layout_allocate_child     (GtkLayout      *layout,
-                                           GtkLayoutChild *child);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
                                            GtkLayout      *layout);
 
@@ -558,7 +548,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
 						     G_MAXINT,
 						     100,
 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  widget_class->map = gtk_layout_map;
   widget_class->measure = gtk_layout_measure;
   widget_class->size_allocate = gtk_layout_size_allocate;
 
@@ -704,7 +693,7 @@ gtk_layout_init (GtkLayout *layout)
 {
   GtkLayoutPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (layout), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (layout), FALSE);
 
   layout->priv = gtk_layout_get_instance_private (layout);
   priv = layout->priv;
@@ -717,34 +706,7 @@ gtk_layout_init (GtkLayout *layout)
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
 
-  priv->scroll_x = 0;
-  priv->scroll_y = 0;
-  priv->visibility = GDK_VISIBILITY_PARTIAL;
-
   priv->freeze_count = 0;
-}
-
-static void
-gtk_layout_map (GtkWidget *widget)
-{
-  GtkLayout *layout = GTK_LAYOUT (widget);
-  GtkLayoutPrivate *priv = layout->priv;
-  GList *tmp_list;
-
-  GTK_WIDGET_CLASS (gtk_layout_parent_class)->map (widget);
-
-  tmp_list = priv->children;
-  while (tmp_list)
-    {
-      GtkLayoutChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if (gtk_widget_get_visible (child->widget))
-	{
-	  if (!gtk_widget_get_mapped (child->widget))
-	    gtk_widget_map (child->widget);
-	}
-    }
 }
 
 static void
@@ -763,21 +725,38 @@ gtk_layout_measure (GtkWidget *widget,
 static void
 gtk_layout_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
+                          int                  baseline)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
   GList *tmp_list;
+  int scroll_x = 0;
+  int scroll_y = 0;
 
   tmp_list = priv->children;
+
+  if (priv->hadjustment)
+    scroll_x = - gtk_adjustment_get_value (priv->hadjustment);
+
+  if (priv->vadjustment)
+    scroll_y = - gtk_adjustment_get_value (priv->vadjustment);
 
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
+      GtkAllocation allocation;
+      GtkRequisition requisition;
+
       tmp_list = tmp_list->next;
 
-      gtk_layout_allocate_child (layout, child);
+      allocation.x = child->x + scroll_x;
+      allocation.y = child->y + scroll_y;
+
+      gtk_widget_get_preferred_size (child->widget, &requisition, NULL);
+      allocation.width = requisition.width;
+      allocation.height = requisition.height;
+
+      gtk_widget_size_allocate (child->widget, &allocation, -1);
     }
 
   gtk_layout_set_hadjustment_values (layout);
@@ -839,27 +818,6 @@ gtk_layout_forall (GtkContainer *container,
 
       (* callback) (child->widget, callback_data);
     }
-}
-
-/* Operations on children
- */
-
-static void
-gtk_layout_allocate_child (GtkLayout      *layout,
-			   GtkLayoutChild *child)
-{
-  GtkAllocation allocation;
-  GtkRequisition requisition;
-  GtkAllocation child_clip;
-
-  allocation.x = child->x;
-  allocation.y = child->y;
-
-  gtk_widget_get_preferred_size (child->widget, &requisition, NULL);
-  allocation.width = requisition.width;
-  allocation.height = requisition.height;
-
-  gtk_widget_size_allocate (child->widget, &allocation, -1, &child_clip);
 }
 
 /* Callbacks */

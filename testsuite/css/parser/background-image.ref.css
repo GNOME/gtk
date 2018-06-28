@@ -71,5 +71,5 @@ r {
 }
 
 s {
-  background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),linear-gradient(rgb(255,255,0), rgb(0,0,255)));
+  background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),1,linear-gradient(rgb(255,255,0), rgb(0,0,255)),2);
 }

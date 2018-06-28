@@ -34,8 +34,6 @@
 #include "gtkprintutils.h"
 
 #include "gtkspinbutton.h"
-#include "gtkcellrendererpixbuf.h"
-#include "gtkcellrenderertext.h"
 #include "gtkimage.h"
 #include "gtktreeselection.h"
 #include "gtknotebook.h"
@@ -134,7 +132,6 @@ static void     gtk_print_unix_dialog_get_property (GObject            *object,
                                                     guint               prop_id,
                                                     GValue             *value,
                                                     GParamSpec         *pspec);
-static void     gtk_print_unix_dialog_style_updated (GtkWidget          *widget);
 static void     unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
 static void     selected_printer_changed           (GtkTreeSelection   *selection,
                                                     GtkPrintUnixDialog *dialog);
@@ -406,7 +403,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
-  widget_class->style_updated = gtk_print_unix_dialog_style_updated;
   widget_class->destroy = gtk_print_unix_dialog_destroy;
 
   g_object_class_install_property (object_class,
@@ -559,7 +555,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, update_number_up_layout);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
 
-  gtk_widget_class_set_css_name (widget_class, "printdialog");
+  gtk_widget_class_set_css_name (widget_class, I_("printdialog"));
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */
@@ -581,8 +577,6 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
 {
   GtkWidget *widget;
   GtkWindow *toplevel;
-  GdkDisplay *display;
-  GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (dialog));
   widget = GTK_WIDGET (toplevel);
@@ -590,18 +584,10 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
   if (!toplevel || !gtk_widget_get_realized (widget))
     return;
 
-  display = gtk_widget_get_display (widget);
-
   if (busy)
-    cursor = gdk_cursor_new_from_name (display, "progress");
+    gtk_widget_set_cursor_from_name (widget, "progress");
   else
-    cursor = NULL;
-
-  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
-  gdk_display_flush (display);
-
-  if (cursor)
-    g_object_unref (cursor);
+    gtk_widget_set_cursor (widget, NULL);
 }
 
 /* This function handles error messages before printing.
@@ -792,7 +778,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
                                       page_name_func, NULL, NULL);
 
   /* Preview drawing area has no window */
-  gtk_widget_set_has_window (priv->page_layout_preview, FALSE);
+  gtk_widget_set_has_surface (priv->page_layout_preview, FALSE);
 
   /* Load backends */
   load_print_backends (dialog);
@@ -1949,8 +1935,7 @@ schedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
   if (priv->mark_conflicts_id != 0)
     return;
 
-  priv->mark_conflicts_id = gdk_threads_add_idle (mark_conflicts_callback,
-                                        dialog);
+  priv->mark_conflicts_id = g_idle_add (mark_conflicts_callback, dialog);
   g_source_set_name_by_id (priv->mark_conflicts_id, "[gtk+] mark_conflicts_callback");
 }
 
@@ -2310,23 +2295,6 @@ draw_collate (GtkDrawingArea *da,
       paint_page (widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
       paint_page (widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
     }
-}
-
-static void
-gtk_print_unix_dialog_style_updated (GtkWidget *widget)
-{
-  GtkPrintUnixDialog *dialog = (GtkPrintUnixDialog *)widget;
-  GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  gint size;
-  gfloat scale;
-
-  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_updated (widget);
-
-  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
-  scale = size / 48.0;
-
-  gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (priv->collate_image), (50 + 20) * scale);
-  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (priv->collate_image), (15 + 26) * scale);
 }
 
 static void
@@ -3406,8 +3374,6 @@ page_name_func (GtkCellLayout   *cell_layout,
  * Creates a new #GtkPrintUnixDialog.
  *
  * Returns: a new #GtkPrintUnixDialog
- *
- * Since: 2.10
  */
 GtkWidget *
 gtk_print_unix_dialog_new (const gchar *title,
@@ -3430,8 +3396,6 @@ gtk_print_unix_dialog_new (const gchar *title,
  * Gets the currently selected printer.
  *
  * Returns: (transfer none): the currently selected printer
- *
- * Since: 2.10
  */
 GtkPrinter *
 gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
@@ -3447,8 +3411,6 @@ gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
  * @page_setup: a #GtkPageSetup
  *
  * Sets the page setup of the #GtkPrintUnixDialog.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
@@ -3479,8 +3441,6 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
  * Gets the page setup that is used by the #GtkPrintUnixDialog.
  *
  * Returns: (transfer none): the page setup of @dialog.
- *
- * Since: 2.10
  */
 GtkPageSetup *
 gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
@@ -3497,8 +3457,6 @@ gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
  * Gets the page setup that is used by the #GtkPrintUnixDialog.
  *
  * Returns: whether a page setup was set by user.
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
@@ -3515,8 +3473,6 @@ gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
  *
  * Sets the current page number. If @current_page is not -1, this enables
  * the current page choice for the range of pages to print.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
@@ -3546,8 +3502,6 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
  * Gets the current page of the #GtkPrintUnixDialog.
  *
  * Returns: the current page of @dialog
- *
- * Since: 2.10
  */
 gint
 gtk_print_unix_dialog_get_current_page (GtkPrintUnixDialog *dialog)
@@ -3611,8 +3565,6 @@ set_active_printer (GtkPrintUnixDialog *dialog,
  * Sets the #GtkPrintSettings for the #GtkPrintUnixDialog. Typically,
  * this is used to restore saved print settings from a previous print
  * operation before the print dialog is shown.
- *
- * Since: 2.10
  **/
 void
 gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
@@ -3678,8 +3630,6 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
  * if don’t want to keep it.
  *
  * Returns: a new #GtkPrintSettings object with the values from @dialog
- *
- * Since: 2.10
  */
 GtkPrintSettings *
 gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
@@ -3746,8 +3696,6 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
  * @tab_label: the widget to use as tab label
  *
  * Adds a custom tab to the print dialog.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
@@ -3770,8 +3718,6 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
  * you pass #GTK_PRINT_CAPABILITY_SCALE. If you don’t pass that, then
  * the dialog will only let you select the scale if the printing
  * system automatically handles scaling.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
@@ -3806,8 +3752,6 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
  * Gets the value of #GtkPrintUnixDialog:manual-capabilities property.
  *
  * Returns: the printing capabilities
- *
- * Since: 2.18
  */
 GtkPrintCapabilities
 gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
@@ -3823,8 +3767,6 @@ gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
  * @support_selection: %TRUE to allow print selection
  *
  * Sets whether the print dialog allows user to print a selection.
- *
- * Since: 2.18
  */
 void
 gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
@@ -3866,8 +3808,6 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
  * Gets the value of #GtkPrintUnixDialog:support-selection property.
  *
  * Returns: whether the application supports print of selection
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
@@ -3883,8 +3823,6 @@ gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
  * @has_selection: %TRUE indicates that a selection exists
  *
  * Sets whether a selection exists.
- *
- * Since: 2.18
  */
 void
 gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
@@ -3920,8 +3858,6 @@ gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
  * Gets the value of #GtkPrintUnixDialog:has-selection property.
  *
  * Returns: whether there is a selection
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
@@ -3937,8 +3873,6 @@ gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
  * @embed: embed page setup selection
  *
  * Embed page size combo box and orientation combo box into page setup page.
- *
- * Since: 2.18
  */
 void
 gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
@@ -3988,8 +3922,6 @@ gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
  * Gets the value of #GtkPrintUnixDialog:embed-page-setup property.
  *
  * Returns: whether there is a selection
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_embed_page_setup (GtkPrintUnixDialog *dialog)

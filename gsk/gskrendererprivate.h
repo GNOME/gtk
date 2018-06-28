@@ -21,6 +21,7 @@
 
 #include "gskrenderer.h"
 #include "gskprofilerprivate.h"
+#include "gskdebugprivate.h"
 
 G_BEGIN_DECLS
 
@@ -37,37 +38,28 @@ struct _GskRendererClass
 {
   GObjectClass parent_class;
 
-  gboolean (* realize) (GskRenderer *renderer,
-                        GdkWindow *window,
-                        GError **error);
-  void (* unrealize) (GskRenderer *renderer);
+  gboolean             (* realize)                              (GskRenderer            *renderer,
+                                                                 GdkSurface             *surface,
+                                                                 GError                **error);
+  void                 (* unrealize)                            (GskRenderer            *renderer);
 
-  GskTexture * (* render_texture) (GskRenderer           *renderer,
-                                   GskRenderNode         *root,
-                                   const graphene_rect_t *viewport);
-  GdkDrawingContext * (* begin_draw_frame) (GskRenderer *renderer,
-                                            const cairo_region_t *region);
-  void (* end_draw_frame) (GskRenderer *renderer,
-                           GdkDrawingContext *context);
-  void (* render) (GskRenderer *renderer,
-                   GskRenderNode *root);
-
-  cairo_surface_t * (* create_cairo_surface) (GskRenderer *renderer,
-                                              cairo_format_t,
-                                              int width,
-                                              int height);
+  GdkTexture *         (* render_texture)                       (GskRenderer            *renderer,
+                                                                 GskRenderNode          *root,
+                                                                 const graphene_rect_t  *viewport);
+  void                 (* render)                               (GskRenderer            *renderer,
+                                                                 GskRenderNode          *root,
+                                                                 const cairo_region_t   *invalid);
 };
 
-gboolean gsk_renderer_is_realized (GskRenderer *renderer);
+gboolean                gsk_renderer_is_realized                (GskRenderer    *renderer);
 
 GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer    *renderer);
-GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer    *renderer);
-cairo_surface_t *       gsk_renderer_create_cairo_surface       (GskRenderer    *renderer,
-                                                                 cairo_format_t  format,
-                                                                 int             width,
-                                                                 int             height);
 
 GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);
+
+GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer    *renderer);
+void                    gsk_renderer_set_debug_flags            (GskRenderer    *renderer,
+                                                                 GskDebugFlags   flags);
 
 G_END_DECLS
 

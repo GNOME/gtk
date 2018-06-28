@@ -18,7 +18,7 @@
 #ifndef __GDK_PIXBUF_UTILS_PRIVATE_H__
 #define __GDK_PIXBUF_UTILS_PRIVATE_H__
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -30,6 +30,32 @@ GdkPixbuf *_gdk_pixbuf_new_from_resource_scaled (const gchar   *resource_path,
                                                  gdouble        scale,
                                                  GError       **error);
 
+GdkPixbuf *gtk_make_symbolic_pixbuf_from_data     (const char    *data,
+                                                   gsize          len,
+                                                   int            width,
+                                                   int            height,
+                                                   double         scale,
+                                                   GError       **error);
+GdkPixbuf *gtk_make_symbolic_pixbuf_from_file     (GFile         *file,
+                                                   int            width,
+                                                   int            height,
+                                                   double         scale,
+                                                   GError       **error);
+GdkPixbuf *gtk_make_symbolic_pixbuf_from_resource (const char    *path,
+                                                   int            width,
+                                                   int            height,
+                                                   double         scale,
+                                                   GError       **error);
+GdkTexture *gtk_make_symbolic_texture_from_file     (GFile         *file,
+                                                     int            width,
+                                                     int            height,
+                                                     double         scale,
+                                                     GError       **error);
+GdkTexture *gtk_make_symbolic_texture_from_resource (const char    *path,
+                                                     int            width,
+                                                     int            height,
+                                                     double         scale,
+                                                   GError       **error);
 G_END_DECLS
 
 #endif  /* __GDK_PIXBUF_UTILS_PRIVATE_H__ */

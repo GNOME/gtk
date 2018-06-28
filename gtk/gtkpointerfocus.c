@@ -15,6 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include "gtkpointerfocusprivate.h"
 #include "gtkprivate.h"
 
@@ -133,7 +135,8 @@ gtk_pointer_focus_repick_target (GtkPointerFocus *focus)
 {
   GtkWidget *target;
 
-  target = _gtk_toplevel_pick (focus->toplevel, focus->x, focus->y,
-                               NULL, NULL);
+  target = gtk_widget_pick (GTK_WIDGET (focus->toplevel), focus->x, focus->y);
+  if (target == NULL)
+    target = GTK_WIDGET (focus->toplevel);
   gtk_pointer_focus_set_target (focus, target);
 }

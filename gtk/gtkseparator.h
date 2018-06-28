@@ -44,14 +44,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkSeparator              GtkSeparator;
-typedef struct _GtkSeparatorPrivate       GtkSeparatorPrivate;
 typedef struct _GtkSeparatorClass         GtkSeparatorClass;
 
 struct _GtkSeparator
 {
-  GtkWidget widget;
-
-  GtkSeparatorPrivate *priv;
+  GtkWidget parent_instance;
 };
 
 struct _GtkSeparatorClass

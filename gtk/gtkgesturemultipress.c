@@ -60,6 +60,7 @@ enum {
   PRESSED,
   RELEASED,
   STOPPED,
+  UNPAIRED_RELEASE,
   LAST_SIGNAL
 };
 
@@ -150,9 +151,7 @@ _gtk_gesture_multi_press_update_timeout (GtkGestureMultiPress *gesture)
   settings = gtk_widget_get_settings (widget);
   g_object_get (settings, "gtk-double-click-time", &double_click_time, NULL);
 
-  priv->double_click_timeout_id = gdk_threads_add_timeout (double_click_time,
-                                                           _double_click_timeout_cb,
-                                                           gesture);
+  priv->double_click_timeout_id = g_timeout_add (double_click_time, _double_click_timeout_cb, gesture);
   g_source_set_name_by_id (priv->double_click_timeout_id, "[gtk+] _double_click_timeout_cb");
 }
 
@@ -275,13 +274,18 @@ gtk_gesture_multi_press_end (GtkGesture       *gesture,
   GtkGestureMultiPressPrivate *priv;
   GdkEventSequence *current;
   gdouble x, y;
+  gboolean interpreted;
+  GtkEventSequenceState state;
 
   multi_press = GTK_GESTURE_MULTI_PRESS (gesture);
   priv = gtk_gesture_multi_press_get_instance_private (multi_press);
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  gtk_gesture_get_point (gesture, current, &x, &y);
+  interpreted = gtk_gesture_get_point (gesture, current, &x, &y);
+  state = gtk_gesture_get_sequence_state (gesture, current);
 
-  g_signal_emit (gesture, signals[RELEASED], 0, priv->n_release, x, y);
+  if (state != GTK_EVENT_SEQUENCE_DENIED && interpreted)
+    g_signal_emit (gesture, signals[RELEASED], 0, priv->n_release, x, y);
+
   priv->n_release = 0;
 }
 
@@ -300,6 +304,35 @@ gtk_gesture_multi_press_reset (GtkEventController *controller)
   GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_multi_press_parent_class)->reset (controller);
 }
 
+static gboolean
+gtk_gesture_multi_press_handle_event (GtkEventController *controller,
+                                      const GdkEvent     *event)
+{
+  GtkEventControllerClass *parent_controller;
+  GtkGestureMultiPressPrivate *priv;
+  GdkEventSequence *sequence;
+  guint button;
+  gdouble x, y;
+
+  priv = gtk_gesture_multi_press_get_instance_private (GTK_GESTURE_MULTI_PRESS (controller));
+  parent_controller = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_multi_press_parent_class);
+  sequence = gdk_event_get_event_sequence (event);
+
+  if (priv->n_presses == 0 &&
+      !gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence) &&
+      (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE ||
+       gdk_event_get_event_type (event) == GDK_TOUCH_END))
+    {
+      if (!gdk_event_get_button (event, &button))
+        button = 0;
+      gdk_event_get_coords (event, &x, &y);
+      g_signal_emit (controller, signals[UNPAIRED_RELEASE], 0,
+                     x, y, button, sequence);
+    }
+
+  return parent_controller->handle_event (controller, event);
+}
+
 static void
 gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
 {
@@ -316,6 +349,7 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
   gesture_class->cancel = gtk_gesture_multi_press_cancel;
 
   controller_class->reset = gtk_gesture_multi_press_reset;
+  controller_class->handle_event = gtk_gesture_multi_press_handle_event;
 
   /**
    * GtkGestureMultiPress::pressed:
@@ -325,8 +359,6 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
    * @y: The Y coordinate, in widget allocation coordinates
    *
    * This signal is emitted whenever a button or touch press happens.
-   *
-   * Since: 3.14
    */
   signals[PRESSED] =
     g_signal_new (I_("pressed"),
@@ -348,8 +380,6 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
    * will report the number of press that is paired to this event, note
    * that #GtkGestureMultiPress::stopped may have been emitted between the
    * press and its release, @n_press will only start over at the next press.
-   *
-   * Since: 3.14
    */
   signals[RELEASED] =
     g_signal_new (I_("released"),
@@ -365,8 +395,6 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
    *
    * This signal is emitted whenever any time/distance threshold has
    * been exceeded.
-   *
-   * Since: 3.14
    */
   signals[STOPPED] =
     g_signal_new (I_("stopped"),
@@ -375,6 +403,29 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   G_STRUCT_OFFSET (GtkGestureMultiPressClass, stopped),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkGestureMultiPress::unpaired-release
+   * @gesture: the object which received the signal
+   * @x: X coordinate of the event
+   * @y: Y coordinate of the event
+   * @button: Button being released
+   * @sequence: Sequence being released
+   *
+   * This signal is emitted whenever the gesture receives a release
+   * event that had no previous corresponding press. Due to implicit
+   * grabs, this can only happen on situations where input is grabbed
+   * elsewhere mid-press or the pressed widget voluntarily relinquishes
+   * its implicit grab.
+   */
+  signals[UNPAIRED_RELEASE] =
+    g_signal_new (I_("unpaired-release"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_DOUBLE, G_TYPE_DOUBLE,
+                  G_TYPE_UINT, GDK_TYPE_EVENT_SEQUENCE);
 }
 
 static void
@@ -384,22 +435,16 @@ gtk_gesture_multi_press_init (GtkGestureMultiPress *gesture)
 
 /**
  * gtk_gesture_multi_press_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes single and multiple
  * presses.
  *
  * Returns: a newly created #GtkGestureMultiPress
- *
- * Since: 3.14
  **/
 GtkGesture *
-gtk_gesture_multi_press_new (GtkWidget *widget)
+gtk_gesture_multi_press_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_MULTI_PRESS,
-                       "widget", widget,
                        NULL);
 }
 
@@ -411,14 +456,12 @@ gtk_gesture_multi_press_new (GtkWidget *widget)
  * If @rect is non-%NULL, the press area will be checked to be
  * confined within the rectangle, otherwise the button count
  * will be reset so the press is seen as being the first one.
- * If @rect is #NULL, the area will be reset to an unrestricted
+ * If @rect is %NULL, the area will be reset to an unrestricted
  * state.
  *
  * Note: The rectangle is only used to determine whether any
  * non-first click falls within the expected area. This is not
  * akin to an input shape.
- *
- * Since: 3.14
  **/
 void
 gtk_gesture_multi_press_set_area (GtkGestureMultiPress *gesture,
@@ -450,8 +493,6 @@ gtk_gesture_multi_press_set_area (GtkGestureMultiPress *gesture,
  * details on what the press area represents.
  *
  * Returns: %TRUE if @rect was filled with the press area
- *
- * Since: 3.14
  **/
 gboolean
 gtk_gesture_multi_press_get_area (GtkGestureMultiPress *gesture,

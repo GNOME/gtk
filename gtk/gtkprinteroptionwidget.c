@@ -896,7 +896,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       break;
     }
 
-  priv->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_MENU);
+  priv->image = gtk_image_new_from_icon_name ("dialog-warning");
   gtk_box_pack_start (GTK_BOX (widget), priv->image);
 }
 

@@ -28,6 +28,7 @@
  */
 #ifdef GTK_COMPILATION
 #include "gtkbutton.h"
+#include "gtkgesture.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -193,6 +194,16 @@ measure_available_space (GtkPlacesViewRow *row)
 }
 
 static void
+pressed_cb (GtkGesture       *gesture,
+            int               n_pressed,
+            double            x,
+            double            y,
+            GtkPlacesViewRow *row)
+{
+  g_signal_emit_by_name (row, "popup-menu", 0);
+}
+
+static void
 gtk_places_view_row_finalize (GObject *object)
 {
   GtkPlacesViewRow *self = GTK_PLACES_VIEW_ROW (object);
@@ -214,16 +225,13 @@ gtk_places_view_row_get_property (GObject    *object,
                                   GParamSpec *pspec)
 {
   GtkPlacesViewRow *self;
-  GIcon *icon;
 
   self = GTK_PLACES_VIEW_ROW (object);
-  icon = NULL;
 
   switch (prop_id)
     {
     case PROP_ICON:
-      gtk_image_get_gicon (self->icon_image, &icon, NULL);
-      g_value_set_object (value, icon);
+      g_value_set_object (value, gtk_image_get_gicon (self->icon_image));
       break;
 
     case PROP_NAME:
@@ -266,9 +274,7 @@ gtk_places_view_row_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ICON:
-      gtk_image_set_from_gicon (self->icon_image,
-                                g_value_get_object (value),
-                                GTK_ICON_SIZE_LARGE_TOOLBAR);
+      gtk_image_set_from_gicon (self->icon_image, g_value_get_object (value));
       break;
 
     case PROP_NAME:
@@ -383,6 +389,8 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, icon_image);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, name_label);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, path_label);
+
+  gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
 }
 
 static void
@@ -443,10 +451,12 @@ gtk_places_view_row_set_busy (GtkPlacesViewRow *row,
     {
       gtk_stack_set_visible_child (row->mount_stack, GTK_WIDGET (row->busy_spinner));
       gtk_widget_set_child_visible (GTK_WIDGET (row->mount_stack), TRUE);
+      gtk_spinner_start (row->busy_spinner);
     }
   else
     {
       gtk_widget_set_child_visible (GTK_WIDGET (row->mount_stack), FALSE);
+      gtk_spinner_stop (row->busy_spinner);
     }
 }
 
@@ -466,7 +476,7 @@ gtk_places_view_row_set_is_network (GtkPlacesViewRow *row,
     {
       row->is_network = is_network;
 
-      gtk_image_set_from_icon_name (row->eject_icon, "media-eject-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (row->eject_icon, "media-eject-symbolic");
       gtk_widget_set_tooltip_text (GTK_WIDGET (row->eject_button), is_network ? _("Disconnect") : _("Unmount"));
     }
 }

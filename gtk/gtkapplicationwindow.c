@@ -547,7 +547,8 @@ gtk_application_window_measure (GtkWidget *widget,
           GtkBorder border = {0};
           int menubar_height = 0;
 
-          gtk_widget_measure (priv->menubar, orientation, for_size, &menubar_height, NULL, NULL, NULL);
+          gtk_widget_measure (priv->menubar, GTK_ORIENTATION_VERTICAL,
+                              for_size, &menubar_height, NULL, NULL, NULL);
 
           GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
                                                                            orientation,
@@ -592,8 +593,7 @@ gtk_application_window_measure (GtkWidget *widget,
 static void
 gtk_application_window_real_size_allocate (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
-                                           int                  baseline,
-                                           GtkAllocation       *out_clip)
+                                           int                  baseline)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
 
@@ -612,19 +612,18 @@ gtk_application_window_real_size_allocate (GtkWidget           *widget,
                           &menubar_height, NULL, NULL, NULL);
 
       menubar_allocation.height = menubar_height;
-      gtk_widget_size_allocate  (window->priv->menubar, &menubar_allocation, baseline, out_clip);
+      gtk_widget_size_allocate  (window->priv->menubar, &menubar_allocation, baseline);
 
       child_allocation.y += menubar_height;
       child_allocation.height -= menubar_height;
       child = gtk_bin_get_child (GTK_BIN (window));
       if (child != NULL && gtk_widget_get_visible (child))
-        gtk_widget_size_allocate (child, &child_allocation, baseline, out_clip);
+        gtk_widget_size_allocate (child, &child_allocation, baseline);
     }
   else
     GTK_WIDGET_CLASS (gtk_application_window_parent_class)->size_allocate (widget,
                                                                            allocation,
-                                                                           baseline,
-                                                                           out_clip);
+                                                                           baseline);
 }
 
 static void
@@ -845,8 +844,6 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
  * Creates a new #GtkApplicationWindow.
  *
  * Returns: a newly created #GtkApplicationWindow
- *
- * Since: 3.4
  */
 GtkWidget *
 gtk_application_window_new (GtkApplication *application)
@@ -866,8 +863,6 @@ gtk_application_window_new (GtkApplication *application)
  * and menubar as needed.
  *
  * Returns: %TRUE if @window will display a menubar when needed
- *
- * Since: 3.4
  */
 gboolean
 gtk_application_window_get_show_menubar (GtkApplicationWindow *window)
@@ -882,8 +877,6 @@ gtk_application_window_get_show_menubar (GtkApplicationWindow *window)
  *
  * Sets whether the window will display a menubar for the app menu
  * and menubar as needed.
- *
- * Since: 3.4
  */
 void
 gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
@@ -912,8 +905,6 @@ gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
  *
  * Returns: the unique ID for @window, or `0` if the window
  *   has not yet been added to a #GtkApplication
- *
- * Since: 3.6
  */
 guint
 gtk_application_window_get_id (GtkApplicationWindow *window)
@@ -952,8 +943,6 @@ show_help_overlay (GSimpleAction *action,
  * it.
  *
  * @window takes resposibility for destroying @help_overlay.
- *
- * Since: 3.20
  */
 void
 gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
@@ -970,11 +959,9 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
     return;
 
   gtk_window_set_modal (GTK_WINDOW (help_overlay), TRUE);
+  gtk_window_set_hide_on_close (GTK_WINDOW (help_overlay), TRUE);
   gtk_window_set_transient_for (GTK_WINDOW (help_overlay), GTK_WINDOW (window));
   gtk_shortcuts_window_set_window (help_overlay, GTK_WINDOW (window));
-
-  g_signal_connect (help_overlay, "delete-event",
-                    G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
   if (!g_action_map_lookup_action (G_ACTION_MAP (window->priv->actions), "show-help-overlay"))
     {
@@ -996,8 +983,6 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
  * a prior call to gtk_application_window_set_help_overlay().
  *
  * Returns: (transfer none) (nullable): the help overlay associated with @window, or %NULL
- *
- * Since: 3.20
  */
 GtkShortcutsWindow *
 gtk_application_window_get_help_overlay (GtkApplicationWindow *window)

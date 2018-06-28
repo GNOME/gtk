@@ -41,17 +41,6 @@ static GOptionEntry entries[] = {
 
 static gchar *gtk_src_dir = NULL;
 
-static gboolean
-delete_event_cb (GtkWidget *editor,
-		 gint       response,
-		 gpointer   user_data)
-{
-  gtk_widget_hide (editor);
-
-  return TRUE;
-}
-
-
 static void
 print_selected_path_clicked_cb (GtkWidget *button,
 				gpointer   user_data)
@@ -122,6 +111,7 @@ tests_button_clicked_cb (GtkButton *real_button,
       GtkWidget *box, *button;
 
       tests = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_hide_on_close (GTK_WINDOW (tests), TRUE);
       gtk_window_set_title (GTK_WINDOW (tests),
 			    "Tests - TestFileChooserButton");
       gtk_window_set_transient_for (GTK_WINDOW (tests),
@@ -155,7 +145,6 @@ tests_button_clicked_cb (GtkButton *real_button,
       gtk_box_pack_start (GTK_BOX (box), button);
       gtk_widget_show (button);
 
-      g_signal_connect (tests, "delete-event", G_CALLBACK (delete_event_cb), NULL);
       g_object_set_data (user_data, "tests-dialog", tests);
     }
 

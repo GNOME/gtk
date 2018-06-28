@@ -358,8 +358,6 @@ gtk_cell_layout_default_get_cells (GtkCellLayout *cell_layout)
  * is divided evenly between cells for which @expand is %TRUE.
  *
  * Note that reusing the same cell renderer is not supported.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_pack_start (GtkCellLayout   *cell_layout,
@@ -383,8 +381,6 @@ gtk_cell_layout_pack_start (GtkCellLayout   *cell_layout,
  * divided evenly between cells for which @expand is %TRUE.
  *
  * Note that reusing the same cell renderer is not supported.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_pack_end (GtkCellLayout   *cell_layout,
@@ -403,8 +399,6 @@ gtk_cell_layout_pack_end (GtkCellLayout   *cell_layout,
  *
  * Unsets all the mappings on all renderers on @cell_layout and
  * removes all renderers from @cell_layout.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_clear (GtkCellLayout *cell_layout)
@@ -447,8 +441,6 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
  * The attributes should be in attribute/column order, as in
  * gtk_cell_layout_add_attribute(). All existing attributes are
  * removed, and replaced with the new attributes.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
@@ -478,8 +470,6 @@ gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
  * @attribute is the parameter on @cell to be set from the value. So for
  * example if column 2 of the model contains strings, you could have the
  * “text” attribute of a #GtkCellRendererText get its values from column 2.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
@@ -510,8 +500,6 @@ gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
  * cell renderer(s) as appropriate.
  *
  * @func may be %NULL to remove a previously set function.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
@@ -534,8 +522,6 @@ gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
  *
  * Clears all existing attributes previously set with
  * gtk_cell_layout_set_attributes().
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
@@ -557,8 +543,6 @@ gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
  *
  * Note that @cell has already to be packed into @cell_layout
  * for this to function properly.
- *
- * Since: 2.4
  */
 void
 gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
@@ -581,8 +565,6 @@ gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
  *     a list of cell renderers. The list, but not the renderers has
  *     been newly allocated and should be freed with g_list_free()
  *     when no longer needed.
- *
- * Since: 2.12
  */
 GList *
 gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
@@ -602,8 +584,6 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
  *
  * Returns: (transfer none) (nullable): the cell area used by @cell_layout,
  * or %NULL in case no cell area is used.
- *
- * Since: 3.0
  */
 GtkCellArea *
 gtk_cell_layout_get_area (GtkCellLayout *cell_layout)

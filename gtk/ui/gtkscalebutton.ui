@@ -32,8 +32,6 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="icon-name">list-add-symbolic</property>
-            <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="cb_button_release" swapped="no"/>
             <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
         </child>
@@ -59,8 +57,6 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="icon-name">list-remove-symbolic</property>
-            <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="cb_button_release" swapped="no"/>
             <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
           <packing>

@@ -147,8 +147,7 @@ tick_callback (GtkWidget     *widget,
 }
 
 static gboolean
-on_map_event (GtkWidget	  *widget,
-              GdkEventAny *event)
+on_map (GtkWidget *widget)
 {
   gtk_widget_add_tick_callback (window, tick_callback, NULL, NULL);
 
@@ -200,8 +199,8 @@ main(int argc, char **argv)
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
-  g_signal_connect (window, "map-event",
-                    G_CALLBACK (on_map_event), NULL);
+  g_signal_connect (window, "map",
+                    G_CALLBACK (on_map), NULL);
   on_frame (0.);
 
   display = gtk_widget_get_display (window);

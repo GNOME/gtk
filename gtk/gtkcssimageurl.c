@@ -22,7 +22,9 @@
 #include <string.h>
 
 #include "gtkcssimageurlprivate.h"
-#include "gtkcssimagesurfaceprivate.h"
+
+#include "gtkcssimageinvalidprivate.h"
+#include "gtkcssimagepaintableprivate.h"
 #include "gtkstyleproviderprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
@@ -31,9 +33,8 @@ static GtkCssImage *
 gtk_css_image_url_load_image (GtkCssImageUrl  *url,
                               GError         **error)
 {
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   GError *local_error = NULL;
-  GFileInputStream *input;
 
   if (url->loaded_image)
     return url->loaded_image;
@@ -46,25 +47,17 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
       char *uri = g_file_get_uri (url->file);
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
-      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &local_error);
+      texture = gdk_texture_new_from_resource (resource_path);
+
       g_free (resource_path);
       g_free (uri);
     }
   else
     {
-      input = g_file_read (url->file, NULL, &local_error);
-      if (input != NULL)
-	{
-          pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &local_error);
-          g_object_unref (input);
-	}
-      else
-        {
-          pixbuf = NULL;
-        }
+      texture = gdk_texture_new_from_file (url->file, &local_error);
     }
 
-  if (pixbuf == NULL)
+  if (texture == NULL)
     {
       if (error)
         {
@@ -75,16 +68,18 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
                        GTK_CSS_PROVIDER_ERROR,
                        GTK_CSS_PROVIDER_ERROR_FAILED,
                        "Error loading image '%s': %s", uri, local_error->message);
-          g_error_free (local_error);
           g_free (uri);
        }
-
-      url->loaded_image = gtk_css_image_surface_new (NULL);
-      return url->loaded_image;
+      
+      url->loaded_image = gtk_css_image_invalid_new ();
+    }
+  else
+    {
+      url->loaded_image = gtk_css_image_paintable_new (GDK_PAINTABLE (texture), GDK_PAINTABLE (texture));
+      g_object_unref (texture);
     }
 
-  url->loaded_image = gtk_css_image_surface_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+  g_clear_error (&local_error);
 
   return url->loaded_image;
 }
@@ -147,6 +142,24 @@ gtk_css_image_url_compute (GtkCssImage      *image,
 }
 
 static gboolean
+gtk_css_image_url_equal (GtkCssImage *image1,
+                         GtkCssImage *image2)
+{
+  GtkCssImageUrl *url1 = GTK_CSS_IMAGE_URL (image1);
+  GtkCssImageUrl *url2 = GTK_CSS_IMAGE_URL (image2);
+
+  return g_file_equal (url1->file, url2->file);
+}
+
+static gboolean
+gtk_css_image_url_is_invalid (GtkCssImage *image)
+{
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+
+  return gtk_css_image_is_invalid (gtk_css_image_url_load_image (url, NULL));
+}
+
+static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
 {
@@ -192,6 +205,8 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->snapshot = gtk_css_image_url_snapshot;
   image_class->parse = gtk_css_image_url_parse;
   image_class->print = gtk_css_image_url_print;
+  image_class->equal = gtk_css_image_url_equal;
+  image_class->is_invalid = gtk_css_image_url_is_invalid;
 
   object_class->dispose = gtk_css_image_url_dispose;
 }

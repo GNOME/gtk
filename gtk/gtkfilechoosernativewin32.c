@@ -345,7 +345,7 @@ filechooser_win32_thread_done (gpointer _data)
   if (!data->skip_response)
     {
       g_slist_free_full (self->custom_files, g_object_unref);
-      self->custom_files = data->files;
+      self->custom_files = g_slist_reverse(data->files);
       data->files = NULL;
 
       _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (data->self),
@@ -789,7 +789,7 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   if (transient_for)
     {
       gtk_widget_realize (GTK_WIDGET (transient_for));
-      data->parent = gdk_win32_window_get_handle (gtk_widget_get_window (GTK_WIDGET (transient_for)));
+      data->parent = gdk_win32_surface_get_handle (gtk_widget_get_surface (GTK_WIDGET (transient_for)));
 
       if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
         data->modal = TRUE;

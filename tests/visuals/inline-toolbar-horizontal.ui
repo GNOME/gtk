@@ -13,7 +13,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="icon_size">1</property>
             <style>
               <class name="inline-toolbar"/>
             </style>

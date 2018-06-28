@@ -21,16 +21,16 @@
 #include "gtksidebarrowprivate.h"
 /* For section and place type enums */
 #include "gtkplacessidebarprivate.h"
-#include "gtkplacessidebar.h"
 #include "gtkwidget.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkstylecontext.h"
 #include "gtkrevealer.h"
 #include "gtkselection.h"
+#include "gtkintl.h"
 
 #ifdef HAVE_CLOUDPROVIDERS
-#include <cloudproviders/cloudprovideraccount.h>
+#include <cloudproviders/cloudprovidersaccount.h>
 #endif
 
 struct _GtkSidebarRow
@@ -52,7 +52,7 @@ struct _GtkSidebarRow
   GDrive *drive;
   GVolume *volume;
   GMount *mount;
-  GObject *cloud_provider;
+  GObject *cloud_provider_account;
   gboolean placeholder;
   GtkPlacesSidebar *sidebar;
   GtkWidget *revealer;
@@ -76,12 +76,57 @@ enum
   PROP_DRIVE,
   PROP_VOLUME,
   PROP_MOUNT,
-  PROP_CLOUD_PROVIDER,
+  PROP_CLOUD_PROVIDER_ACCOUNT,
   PROP_PLACEHOLDER,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
+
+#ifdef HAVE_CLOUDPROVIDERS
+
+static void
+cloud_row_update (GtkSidebarRow *self)
+{
+  CloudProvidersAccount *account;
+  GIcon *end_icon;
+  gint provider_status;
+
+  account = CLOUD_PROVIDERS_ACCOUNT (self->cloud_provider_account);
+  provider_status = cloud_providers_account_get_status (account);
+  switch (provider_status)
+    {
+      case CLOUD_PROVIDERS_ACCOUNT_STATUS_IDLE:
+        end_icon = NULL;
+        break;
+
+      case CLOUD_PROVIDERS_ACCOUNT_STATUS_SYNCING:
+        end_icon = g_themed_icon_new ("emblem-synchronizing-symbolic");
+        break;
+
+      case CLOUD_PROVIDERS_ACCOUNT_STATUS_ERROR:
+        end_icon = g_themed_icon_new ("dialog-warning-symbolic");
+        break;
+
+      default:
+        return;
+    }
+
+  g_object_set (self,
+                "label", cloud_providers_account_get_name (account),
+                NULL);
+  g_object_set (self,
+                "tooltip", cloud_providers_account_get_status_details (account),
+                NULL);
+  g_object_set (self,
+                "end-icon", end_icon,
+                NULL);
+
+  if (end_icon != NULL)
+    g_object_unref (end_icon);
+}
+
+#endif
 
 static void
 gtk_sidebar_row_get_property (GObject    *object,
@@ -145,8 +190,8 @@ gtk_sidebar_row_get_property (GObject    *object,
       g_value_set_object (value, self->mount);
       break;
 
-    case PROP_CLOUD_PROVIDER:
-      g_value_set_object (value, self->cloud_provider);
+    case PROP_CLOUD_PROVIDER_ACCOUNT:
+      g_value_set_object (value, self->cloud_provider_account);
       break;
 
     case PROP_PLACEHOLDER:
@@ -179,10 +224,8 @@ gtk_sidebar_row_set_property (GObject      *object,
         object = g_value_get_object (value);
         if (object != NULL)
           {
-            self->start_icon = g_object_ref (object);
-            gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget),
-                                      self->start_icon,
-                                      GTK_ICON_SIZE_MENU);
+            self->start_icon = G_ICON (g_object_ref (object));
+            gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon);
           }
         else
           {
@@ -197,10 +240,8 @@ gtk_sidebar_row_set_property (GObject      *object,
         object = g_value_get_object (value);
         if (object != NULL)
           {
-            self->end_icon = g_object_ref (object);
-            gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget),
-                                      self->end_icon,
-                                      GTK_ICON_SIZE_MENU);
+            self->end_icon = G_ICON (g_object_ref (object));
+            gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon);
             gtk_widget_show (self->end_icon_widget);
           }
         else
@@ -265,9 +306,22 @@ gtk_sidebar_row_set_property (GObject      *object,
       g_set_object (&self->mount, g_value_get_object (value));
       break;
 
-    case PROP_CLOUD_PROVIDER:
+    case PROP_CLOUD_PROVIDER_ACCOUNT:
 #ifdef HAVE_CLOUDPROVIDERS
-      g_set_object (&self->cloud_provider, g_value_get_object (value));
+      if (self->cloud_provider_account != NULL)
+        g_signal_handlers_disconnect_by_data (self->cloud_provider_account, self);
+
+      self->cloud_provider_account = g_value_dup_object (value);
+
+      if (self->cloud_provider_account != NULL)
+        {
+          g_signal_connect_swapped (self->cloud_provider_account, "notify::name",
+                                    G_CALLBACK (cloud_row_update), self);
+          g_signal_connect_swapped (self->cloud_provider_account, "notify::status",
+                                    G_CALLBACK (cloud_row_update), self);
+          g_signal_connect_swapped (self->cloud_provider_account, "notify::status-details",
+                                    G_CALLBACK (cloud_row_update), self);
+        }
 #endif
       break;
 
@@ -291,7 +345,7 @@ gtk_sidebar_row_set_property (GObject      *object,
             g_clear_object (&self->drive);
             g_clear_object (&self->volume);
             g_clear_object (&self->mount);
-            g_clear_object (&self->cloud_provider);
+            g_clear_object (&self->cloud_provider_account);
 
             gtk_container_foreach (GTK_CONTAINER (self),
                                    (GtkCallback) gtk_widget_destroy,
@@ -353,8 +407,7 @@ gtk_sidebar_row_set_start_icon (GtkSidebarRow *self,
     {
       g_set_object (&self->start_icon, icon);
       if (self->start_icon != NULL)
-        gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon,
-                                  GTK_ICON_SIZE_MENU);
+        gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon);
       else
         gtk_image_clear (GTK_IMAGE (self->start_icon_widget));
 
@@ -372,8 +425,7 @@ gtk_sidebar_row_set_end_icon (GtkSidebarRow *self,
     {
       g_set_object (&self->end_icon, icon);
       if (self->end_icon != NULL)
-        gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon,
-                                  GTK_ICON_SIZE_MENU);
+        gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon);
       else
         if (self->end_icon_widget != NULL)
           gtk_image_clear (GTK_IMAGE (self->end_icon_widget));
@@ -398,7 +450,11 @@ gtk_sidebar_row_finalize (GObject *object)
   g_clear_object (&self->drive);
   g_clear_object (&self->volume);
   g_clear_object (&self->mount);
-  g_clear_object (&self->cloud_provider);
+#ifdef HAVE_CLOUDPROVIDERS
+  if (self->cloud_provider_account != NULL)
+    g_signal_handlers_disconnect_by_data (self->cloud_provider_account, self);
+  g_clear_object (&self->cloud_provider_account);
+#endif
 
   G_OBJECT_CLASS (gtk_sidebar_row_parent_class)->finalize (object);
 }
@@ -530,10 +586,10 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_CLOUD_PROVIDER] =
-    g_param_spec_object ("cloud-provider",
-                         "CloudProviderAccount",
-                         "CloudProviderAccount",
+  properties [PROP_CLOUD_PROVIDER_ACCOUNT] =
+    g_param_spec_object ("cloud-provider-account",
+                         "CloudProvidersAccount",
+                         "CloudProvidersAccount",
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
@@ -559,7 +615,7 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, revealer);
 
   gtk_widget_class_bind_template_callback (widget_class, on_child_revealed);
-  gtk_widget_class_set_css_name (widget_class, "row");
+  gtk_widget_class_set_css_name (widget_class, I_("row"));
 }
 
 GtkSidebarRow*
@@ -579,7 +635,7 @@ gtk_sidebar_row_clone (GtkSidebarRow *self)
                       "drive", self->drive,
                       "volume", self->volume,
                       "mount", self->mount,
-                      "cloud-provider", self->cloud_provider,
+                      "cloud-provider-account", self->cloud_provider_account,
                       NULL);
 }
 

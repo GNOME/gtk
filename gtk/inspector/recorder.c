@@ -16,8 +16,6 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
-#include <cairo-gobject.h>
 
 #include "recorder.h"
 
@@ -32,9 +30,10 @@
 #include <gtk/gtktreeview.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
-#include <gsk/gsktextureprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 
+#include <glib/gi18n-lib.h>
+#include <gdk/gdktextureprivate.h>
 #include "gtk/gtkdebug.h"
 
 #include "gtktreemodelrendernode.h"
@@ -106,8 +105,6 @@ recordings_list_row_selected (GtkListBox           *box,
                                             gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                             gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      gtk_render_node_view_set_render_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
-                                              gtk_inspector_render_recording_get_render_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_viewport (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                          gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_tree_model_render_node_set_root_node (GTK_TREE_MODEL_RENDER_NODE (priv->render_node_model),
@@ -120,24 +117,9 @@ recordings_list_row_selected (GtkListBox           *box,
     }
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (priv->render_node_tree));
-}
 
-static void
-render_node_list_get_value (GtkTreeModelRenderNode *model,
-                            GskRenderNode          *node,
-                            int                     column,
-                            GValue                 *value)
-{
-  switch (column)
-    {
-    case COLUMN_NODE_NAME:
-      g_value_set_string (value, gsk_render_node_get_name (node));
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
+  if (recording)
+    g_object_unref (recording);
 }
 
 static const char *
@@ -151,6 +133,8 @@ node_type_name (GskRenderNodeType type)
       return "Unknown";
     case GSK_CONTAINER_NODE:
       return "Container";
+    case GSK_DEBUG_NODE:
+      return "Debug";
     case GSK_CAIRO_NODE:
       return "Cairo";
     case GSK_COLOR_NODE:
@@ -169,6 +153,8 @@ node_type_name (GskRenderNodeType type)
       return "Outset Shadow";
     case GSK_TRANSFORM_NODE:
       return "Transform";
+    case GSK_OFFSET_NODE:
+      return "Offset";
     case GSK_OPACITY_NODE:
       return "Opacity";
     case GSK_COLOR_MATRIX_NODE:
@@ -192,27 +178,109 @@ node_type_name (GskRenderNodeType type)
     }
 }
 
-static cairo_surface_t *
-get_color_surface (const GdkRGBA *color)
+static char *
+node_name (GskRenderNode *node)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+    case GSK_CONTAINER_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_TRANSFORM_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_BLUR_NODE:
+      return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 30, 30);
-  cr = cairo_create (surface);
-  gdk_cairo_set_source_rgba (cr, color);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+    case GSK_OFFSET_NODE:
+      return g_strdup_printf ("Offset %g, %g", gsk_offset_node_get_x_offset (node), gsk_offset_node_get_y_offset (node));
 
-  return surface;
+    case GSK_DEBUG_NODE:
+      return g_strdup (gsk_debug_node_get_message (node));
+
+    case GSK_COLOR_NODE:
+      return gdk_rgba_to_string (gsk_color_node_peek_color (node));
+
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        return g_strdup_printf ("%dx%d Texture", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+      }
+    }
 }
 
-static cairo_surface_t *
-get_linear_gradient_surface (gsize n_stops, const GskColorStop *stops)
+static void
+render_node_list_get_value (GtkTreeModelRenderNode *model,
+                            GskRenderNode          *node,
+                            int                     column,
+                            GValue                 *value)
+{
+  switch (column)
+    {
+    case COLUMN_NODE_NAME:
+      g_value_take_string (value, node_name (node));
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
+static GdkTexture *
+get_color_texture (const GdkRGBA *color)
+{
+  GdkTexture *texture;
+  guchar pixel[4];
+  guchar *data;
+  GBytes *bytes;
+  gint width = 30;
+  gint height = 30;
+  gint i;
+
+  pixel[0] = round (color->red * 255);
+  pixel[1] = round (color->green * 255);
+  pixel[2] = round (color->blue * 255);
+  pixel[3] = round (color->alpha * 255);
+
+  data = g_malloc (4 * width * height);
+  for (i = 0; i < width * height; i++)
+    {
+      memcpy (data + 4 * i, pixel, 4);
+    }
+
+  bytes = g_bytes_new_take (data, 4 * width * height);
+  texture = gdk_memory_texture_new (width,
+                                    height,
+                                    GDK_MEMORY_R8G8B8A8,
+                                    bytes,
+                                    width * 4);
+  g_bytes_unref (bytes);
+
+  return texture;
+}
+
+static GdkTexture *
+get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
   cairo_pattern_t *pattern;
+  GdkTexture *texture;
   int i;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 90, 30);
@@ -235,7 +303,10 @@ get_linear_gradient_surface (gsize n_stops, const GskColorStop *stops)
   cairo_fill (cr);
   cairo_destroy (cr);
 
-  return surface;
+  texture = gdk_texture_new_for_surface (surface);
+  cairo_surface_destroy (surface);
+
+  return texture;
 }
 
 static void
@@ -257,18 +328,18 @@ add_color_row (GtkListStore  *store,
                const GdkRGBA *color)
 {
   char *text;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
   text = gdk_rgba_to_string (color);
-  surface = get_color_surface (color);
+  texture = get_color_texture (color);
   gtk_list_store_insert_with_values (store, NULL, -1,
                                      0, name,
                                      1, text,
                                      2, TRUE,
-                                     3, surface,
+                                     3, texture,
                                      -1);
   g_free (text);
-  cairo_surface_destroy (surface);
+  g_object_unref (texture);
 }
 
 static void
@@ -304,36 +375,53 @@ populate_render_node_properties (GtkListStore  *store,
 
   switch (gsk_render_node_get_node_type (node))
     {
-    case GSK_TEXTURE_NODE:
     case GSK_CAIRO_NODE:
       {
-        const char *text;
-        cairo_surface_t *surface;
+        GdkTexture *texture;
+        cairo_surface_t *drawn_surface;
+        cairo_t *cr;
         gboolean show_inline;
 
-        if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
-          {
-            GskTexture *texture;
+        drawn_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                    ceilf (node->bounds.size.width),
+                                                    ceilf (node->bounds.size.height));
+        cr = cairo_create (drawn_surface);
+        cairo_save (cr);
+        cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+        gsk_render_node_draw (node, cr);
+        cairo_restore (cr);
 
-            text = "Texture";
-            texture = gsk_texture_node_get_texture (node);
-            surface = gsk_texture_download_surface (texture);
-          }
-        else
-          {
-            text = "Surface";
-            surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (node);
-          }
+        cairo_destroy (cr);
 
-        show_inline = cairo_image_surface_get_height (surface) <= 40 &&
-                      cairo_image_surface_get_width (surface) <= 100;
+        texture = gdk_texture_new_for_surface (drawn_surface);
+        cairo_surface_destroy (drawn_surface);
+
+        show_inline = gdk_texture_get_height (texture) <= 40 &&
+                      gdk_texture_get_width (texture) <= 100;
 
         gtk_list_store_insert_with_values (store, NULL, -1,
-                                             0, text,
-                                             1, show_inline ? "" : "Yes (click to show)",
-                                             2, show_inline,
-                                             3, surface,
-                                             -1);
+                                           0, "Surface",
+                                           1, show_inline ? "" : "Yes (click to show)",
+                                           2, show_inline,
+                                           3, texture,
+                                           -1);
+      }
+      break;
+
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = g_object_ref (gsk_texture_node_get_texture (node));
+        gboolean show_inline;
+
+        show_inline = gdk_texture_get_height (texture) <= 40 &&
+                      gdk_texture_get_width (texture) <= 100;
+
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Texture",
+                                           1, show_inline ? "" : "Yes (click to show)",
+                                           2, show_inline,
+                                           3, texture,
+                                           -1);
       }
       break;
 
@@ -350,7 +438,7 @@ populate_render_node_properties (GtkListStore  *store,
         const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
         int i;
         GString *s;
-        cairo_surface_t *surface;
+        GdkTexture *texture;
 
         tmp = g_strdup_printf ("%.2f %.2f ⟶ %.2f %.2f", start->x, start->y, end->x, end->y);
         add_text_row (store, "Direction", tmp);
@@ -364,15 +452,15 @@ populate_render_node_properties (GtkListStore  *store,
             g_free (tmp);
           }
 
-        surface = get_linear_gradient_surface (n_stops, stops);
+        texture = get_linear_gradient_texture (n_stops, stops);
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Color Stops",
                                            1, s->str,
                                            2, TRUE,
-                                           3, surface,
+                                           3, texture,
                                            -1);
         g_string_free (s, TRUE);
-        cairo_surface_destroy (surface);
+        g_object_unref (texture);
       }
       break;
 
@@ -417,21 +505,21 @@ populate_render_node_properties (GtkListStore  *store,
 
         for (i = 0; i < 4; i++)
           {
-            cairo_surface_t *surface;
+            GdkTexture *texture;
             char *text;
 
-            surface = get_color_surface (&colors[i]);
+            texture = get_color_texture (&colors[i]);
             text = gdk_rgba_to_string (&colors[i]);
             tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
             gtk_list_store_insert_with_values (store, NULL, -1,
                                                0, name[i],
                                                1, tmp,
                                                2, TRUE,
-                                               3, surface,
+                                               3, texture,
                                                -1);
             g_free (text);
             g_free (tmp);
-            cairo_surface_destroy (surface);
+            g_object_unref (texture);
           }
       }
       break;
@@ -577,6 +665,22 @@ populate_render_node_properties (GtkListStore  *store,
                                clip->bounds.origin.y);
         add_text_row (store, "Clip", tmp);
         g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[0].width, clip->corner[0].height);
+        add_text_row (store, "Top Left Corner Size", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[1].width, clip->corner[1].height);
+        add_text_row (store, "Top Right Corner Size", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[2].width, clip->corner[2].height);
+        add_text_row (store, "Bottom Right Corner Size", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[3].width, clip->corner[3].height);
+        add_text_row (store, "Bottom Left Corner Size", tmp);
+        g_free (tmp);
       }
       break;
 
@@ -584,6 +688,10 @@ populate_render_node_properties (GtkListStore  *store,
       tmp = g_strdup_printf ("%d", gsk_container_node_get_n_children (node));
       add_text_row (store, "Children", tmp);
       g_free (tmp);
+      break;
+
+    case GSK_DEBUG_NODE:
+      add_text_row (store, "Message", gsk_debug_node_get_message (node));
       break;
 
     case GSK_SHADOW_NODE:
@@ -611,6 +719,11 @@ populate_render_node_properties (GtkListStore  *store,
             g_free (label);
           }
       }
+      break;
+
+    case GSK_OFFSET_NODE:
+      add_float_row (store, "x offset", gsk_offset_node_get_x_offset (node));
+      add_float_row (store, "y offset", gsk_offset_node_get_y_offset (node));
       break;
 
     case GSK_NOT_A_RENDER_NODE:
@@ -691,7 +804,7 @@ render_node_save (GtkButton            *button,
   GskRenderNode *node;
   GtkTreeIter iter;
   GtkWidget *dialog;
-  char *filename;
+  char *filename, *nodename;
 
   if (!gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->render_node_tree)), NULL, &iter))
     return;
@@ -704,8 +817,9 @@ render_node_save (GtkButton            *button,
                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         _("_Save"), GTK_RESPONSE_ACCEPT,
                                         NULL);
-  filename = g_strdup_printf ("%s.node", gsk_render_node_get_name (node) ? gsk_render_node_get_name (node)
-                                                                         : node_type_name (gsk_render_node_get_node_type (node)));
+  nodename = node_name (node);
+  filename = g_strdup_printf ("%s.node", nodename);
+  g_free (nodename);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
   g_free (filename);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
@@ -756,6 +870,8 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
         {
           GtkInspectorRecording *r = g_list_model_get_item (priv->recordings, i);
+
+          g_object_unref (r);
 
           if (r == recording)
             break;
@@ -823,7 +939,7 @@ node_property_activated (GtkTreeView *tv,
   GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GtkTreeIter iter;
   GdkRectangle rect;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
   gboolean visible;
   GtkWidget *popover;
   GtkWidget *image;
@@ -831,25 +947,25 @@ node_property_activated (GtkTreeView *tv,
   gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->render_node_properties), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (priv->render_node_properties), &iter,
                       2, &visible,
-                      3, &surface,
+                      3, &texture,
                       -1);
   gtk_tree_view_get_cell_area (tv, path, col, &rect);
   gtk_tree_view_convert_bin_window_to_widget_coords (tv, rect.x, rect.y, &rect.x, &rect.y);
 
-  if (surface == NULL || visible)
+  if (texture == NULL || visible)
     return;
 
   popover = gtk_popover_new (GTK_WIDGET (tv));
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
 
-  image = gtk_image_new_from_surface (surface);
+  image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
   g_object_set (image, "margin", 20, NULL);
   gtk_container_add (GTK_CONTAINER (popover), image);
   gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
 
-  cairo_surface_destroy (surface);
+  g_object_unref (texture);
 }
 
 static void
@@ -960,7 +1076,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->render_node_tree), priv->render_node_model);
   g_object_unref (priv->render_node_model);
 
-  priv->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, CAIRO_GOBJECT_TYPE_SURFACE));
+  priv->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, GDK_TYPE_TEXTURE));
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->node_property_tree), priv->render_node_properties);
   g_object_unref (priv->render_node_properties);
 }
@@ -1024,32 +1140,27 @@ void
 gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       GtkWidget            *widget,
                                       GskRenderer          *renderer,
-                                      GdkWindow            *window,
+                                      GdkSurface           *surface,
                                       const cairo_region_t *region,
-                                      GdkDrawingContext    *context,
                                       GskRenderNode        *node)
 {
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
-  cairo_region_t *clip;
 
   if (!gtk_inspector_recorder_is_recording (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
-  clip = gdk_drawing_context_get_clip (context);
 
   recording = gtk_inspector_render_recording_new (gdk_frame_clock_get_frame_time (frame_clock),
                                                   gsk_renderer_get_profiler (renderer),
                                                   &(GdkRectangle) { 0, 0,
-                                                    gdk_window_get_width (window),
-                                                    gdk_window_get_height (window) },
+                                                    gdk_surface_get_width (surface),
+                                                    gdk_surface_get_height (surface) },
                                                   region,
-                                                  clip,
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
-  cairo_region_destroy (clip);
 }
 
 void

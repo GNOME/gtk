@@ -41,7 +41,7 @@ G_BEGIN_DECLS
  *   a CSS variable.
  * @GTK_CSS_SECTION_VALUE: The section defines the value of a CSS declaration.
  * @GTK_CSS_SECTION_KEYFRAMES: The section defines keyframes. See [CSS
- *   Animations](http://dev.w3.org/csswg/css3-animations/#keyframes) for details. Since 3.6
+ *   Animations](http://dev.w3.org/csswg/css3-animations/#keyframes) for details
  *
  * The different types of sections indicate parts of a CSS document as
  * parsed by GTK’s CSS parser. They are oriented towards the
@@ -50,8 +50,6 @@ G_BEGIN_DECLS
  *
  * More types might be added in the future as the parser incorporates
  * more features.
- *
- * Since: 3.2
  */
 typedef enum
 {
@@ -72,32 +70,30 @@ typedef enum
  * Defines a part of a CSS document. Because sections are nested into
  * one another, you can use gtk_css_section_get_parent() to get the
  * containing region.
- *
- * Since: 3.2
  */
 typedef struct _GtkCssSection GtkCssSection;
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GType              gtk_css_section_get_type            (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GtkCssSection *    gtk_css_section_ref                 (GtkCssSection        *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void               gtk_css_section_unref               (GtkCssSection        *section);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GtkCssSectionType  gtk_css_section_get_section_type    (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GtkCssSection *    gtk_css_section_get_parent          (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GFile *            gtk_css_section_get_file            (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 guint              gtk_css_section_get_start_line      (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 guint              gtk_css_section_get_start_position  (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 guint              gtk_css_section_get_end_line        (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 guint              gtk_css_section_get_end_position    (const GtkCssSection  *section);
 
 G_END_DECLS

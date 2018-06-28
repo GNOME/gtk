@@ -68,14 +68,11 @@ GType       gtk_scrollbar_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_scrollbar_new      (GtkOrientation  orientation,
                                     GtkAdjustment  *adjustment);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
                                              GtkAdjustment *adjustment);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_scrollbar_get_adjustment (GtkScrollbar  *self);
-GDK_AVAILABLE_IN_3_92
-double         gtk_scrollbar_get_wheel_delta (GtkScrollbar         *self,
-                                              const GdkEventScroll *event);
 
 G_END_DECLS
 

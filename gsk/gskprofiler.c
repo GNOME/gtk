@@ -503,7 +503,7 @@ gsk_profiler_append_timers (GskProfiler *profiler,
       if (timer->n_samples > 1)
         {
           timer->avg_value = timer->avg_value / timer->n_samples;
-          g_string_append_printf (buffer, " Min: %.2f Avg: %.2f Max: %.2f (%ld samples)",
+          g_string_append_printf (buffer, " Min: %.2f Avg: %.2f Max: %.2f (%" G_GINT64_FORMAT " samples)",
                                   (double) timer->min_value / scale,
                                   (double) timer->avg_value / scale,
                                   (double) timer->max_value / scale,

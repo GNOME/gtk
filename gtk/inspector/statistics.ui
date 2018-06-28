@@ -17,18 +17,14 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkStack" id="stack">
-        <property name="visible">True</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkSearchBar" id="search_bar">
-                <property name="visible">True</property>
-                <property name="show-close-button">True</property>
+                <property name="show-close-button">1</property>
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
-                    <property name="visible">True</property>
                     <property name="max-width-chars">40</property>
                   </object>
                 </child>
@@ -36,19 +32,14 @@
             </child>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="expand">True</property>
-                <property name="hscrollbar-policy">automatic</property>
+                <property name="expand">1</property>
                 <property name="vscrollbar-policy">always</property>
                 <child>
                   <object class="GtkTreeView" id="view">
-                    <property name="visible">True</property>
                     <property name="model">model</property>
                     <property name="search-column">1</property>
-                    <property name="enable-search">True</property>
                     <child>
                       <object class="GtkTreeViewColumn">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">1</property>
                         <property name="title" translatable="yes">Type</property>
                         <child>
@@ -63,7 +54,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_self1">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">2</property>
                         <property name="title" translatable="yes">Self 1</property>
                         <child>
@@ -75,7 +65,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_cumulative1">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">3</property>
                         <property name="title" translatable="yes">Cumulative 1</property>
                         <child>
@@ -87,7 +76,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_self2">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">4</property>
                         <property name="title" translatable="yes">Self 2</property>
                         <child>
@@ -99,7 +87,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_cumulative2">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">5</property>
                         <property name="title" translatable="yes">Cumulative 2</property>
                         <child>
@@ -111,7 +98,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_self_graph">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">4</property>
                         <property name="title" translatable="yes">Self</property>
                         <child>
@@ -128,7 +114,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_cumulative_graph">
-                        <property name="visible">True</property>
                         <property name="sort-column-id">5</property>
                         <property name="title" translatable="yes">Cumulative</property>
                         <child>
@@ -154,14 +139,12 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>
               <object class="GtkLabel" id="excuse">
-                <property name="visible">True</property>
-                <property name="selectable">True</property>
+                <property name="selectable">1</property>
                 <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>
               </object>
             </child>

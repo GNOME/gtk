@@ -110,13 +110,11 @@ gtk_spinner_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  int width, height;
-
-  gtk_widget_get_content_size (widget, &width, &height);
 
   gtk_css_style_snapshot_icon (style,
                                snapshot,
-                               width, height,
+                               gtk_widget_get_width (widget),
+                               gtk_widget_get_height (widget),
                                GTK_CSS_IMAGE_BUILTIN_SPINNER);
 }
 
@@ -194,8 +192,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   /* GtkSpinner:active:
    *
    * Whether the spinner is active
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
@@ -206,13 +202,13 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPINNER_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "spinner");
+  gtk_widget_class_set_css_name (widget_class, I_("spinner"));
 }
 
 static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (spinner), FALSE);
 }
 
 /**
@@ -221,8 +217,6 @@ gtk_spinner_init (GtkSpinner *spinner)
  * Returns a new spinner widget. Not yet started.
  *
  * Returns: a new #GtkSpinner
- *
- * Since: 2.20
  */
 GtkWidget *
 gtk_spinner_new (void)
@@ -235,8 +229,6 @@ gtk_spinner_new (void)
  * @spinner: a #GtkSpinner
  *
  * Starts the animation of the spinner.
- *
- * Since: 2.20
  */
 void
 gtk_spinner_start (GtkSpinner *spinner)
@@ -251,8 +243,6 @@ gtk_spinner_start (GtkSpinner *spinner)
  * @spinner: a #GtkSpinner
  *
  * Stops the animation of the spinner.
- *
- * Since: 2.20
  */
 void
 gtk_spinner_stop (GtkSpinner *spinner)

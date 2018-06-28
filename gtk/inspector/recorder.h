@@ -54,9 +54,8 @@ void            gtk_inspector_recorder_set_debug_nodes          (GtkInspectorRec
 void            gtk_inspector_recorder_record_render            (GtkInspectorRecorder   *recorder,
                                                                  GtkWidget              *widget,
                                                                  GskRenderer            *renderer,
-                                                                 GdkWindow              *window,
+                                                                 GdkSurface             *surface,
                                                                  const cairo_region_t   *region,
-                                                                 GdkDrawingContext      *context,
                                                                  GskRenderNode          *node);
 
 G_END_DECLS

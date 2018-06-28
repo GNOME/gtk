@@ -50,10 +50,7 @@ typedef struct _GtkViewportClass         GtkViewportClass;
 
 struct _GtkViewport
 {
-  GtkBin bin;
-
-  /*< private >*/
-  GtkViewportPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**

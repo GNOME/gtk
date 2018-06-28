@@ -32,21 +32,28 @@
  * SECTION:gdkdevice
  * @Short_description: Object representing an input device
  * @Title: GdkDevice
- * @See_also: #GdkDeviceManager
+ * @See_also: #GdkSeat
  *
  * The #GdkDevice object represents a single input device, such
  * as a keyboard, a mouse, a touchpad, etc.
  *
- * See the #GdkDeviceManager documentation for more information
+ * See the #GdkSeat documentation for more information
  * about the various kinds of master and slave devices, and their
  * relationships.
+ */
+
+/**
+ * GdkDevice:
+ *
+ * The GdkDevice struct contains only private fields and
+ * should not be accessed directly.
  */
 
 typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo
 {
-  GdkAtom label;
+  char *label;
   GdkAxisUse use;
 
   gdouble min_axis;
@@ -82,7 +89,6 @@ G_DEFINE_ABSTRACT_TYPE (GdkDevice, gdk_device, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_DISPLAY,
-  PROP_DEVICE_MANAGER,
   PROP_NAME,
   PROP_ASSOCIATED_DEVICE,
   PROP_TYPE,
@@ -115,37 +121,18 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:display:
    *
    * The #GdkDisplay the #GdkDevice pertains to.
-   *
-   * Since: 3.0
    */
   device_props[PROP_DISPLAY] =
       g_param_spec_object ("display",
                            P_("Device Display"),
                            P_("Display which the device belongs to"),
                            GDK_TYPE_DISPLAY,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                           G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  /**
-   * GdkDevice:device-manager:
-   *
-   * The #GdkDeviceManager the #GdkDevice pertains to.
-   *
-   * Since: 3.0
-   */
-  device_props[PROP_DEVICE_MANAGER] =
-      g_param_spec_object ("device-manager",
-                           P_("Device manager"),
-                           P_("Device manager which the device belongs to"),
-                           GDK_TYPE_DEVICE_MANAGER,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                           G_PARAM_STATIC_STRINGS);
   /**
    * GdkDevice:name:
    *
    * The device name.
-   *
-   * Since: 3.0
    */
   device_props[PROP_NAME] =
       g_param_spec_string ("name",
@@ -158,8 +145,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:type:
    *
    * Device role in the device manager.
-   *
-   * Since: 3.0
    */
   device_props[PROP_TYPE] =
       g_param_spec_enum ("type",
@@ -175,8 +160,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Associated pointer or keyboard with this device, if any. Devices of type #GDK_DEVICE_TYPE_MASTER
    * always come in keyboard/pointer pairs. Other device types will have a %NULL associated device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_ASSOCIATED_DEVICE] =
       g_param_spec_object ("associated-device",
@@ -189,8 +172,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:input-source:
    *
    * Source type for the device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_INPUT_SOURCE] =
       g_param_spec_enum ("input-source",
@@ -205,8 +186,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:input-mode:
    *
    * Input mode for the device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_INPUT_MODE] =
       g_param_spec_enum ("input-mode",
@@ -221,8 +200,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Whether the device is represented by a cursor on the screen. Devices of type
    * %GDK_DEVICE_TYPE_MASTER will have %TRUE here.
-   *
-   * Since: 3.0
    */
   device_props[PROP_HAS_CURSOR] =
       g_param_spec_boolean ("has-cursor",
@@ -236,8 +213,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:n-axes:
    *
    * Number of axes in the device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_N_AXES] =
       g_param_spec_uint ("n-axes",
@@ -251,8 +226,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:vendor-id:
    *
    * Vendor ID of this device, see gdk_device_get_vendor_id().
-   *
-   * Since: 3.16
    */
   device_props[PROP_VENDOR_ID] =
       g_param_spec_string ("vendor-id",
@@ -266,8 +239,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:product-id:
    *
    * Product ID of this device, see gdk_device_get_product_id().
-   *
-   * Since: 3.16
    */
   device_props[PROP_PRODUCT_ID] =
       g_param_spec_string ("product-id",
@@ -281,8 +252,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:seat:
    *
    * #GdkSeat of this device.
-   *
-   * Since: 3.20
    */
   device_props[PROP_SEAT] =
       g_param_spec_object ("seat",
@@ -298,8 +267,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * The maximal number of concurrent touches on a touch device.
    * Will be 0 if the device is not a touch device or if the number
    * of touches is unknown.
-   *
-   * Since: 3.20
    */
   device_props[PROP_NUM_TOUCHES] =
       g_param_spec_uint ("num-touches",
@@ -313,8 +280,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:axes:
    *
    * The axes currently available for this device.
-   *
-   * Since: 3.22
    */
   device_props[PROP_AXES] =
     g_param_spec_flags ("axes",
@@ -359,8 +324,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * The ::tool-changed signal is emitted on pen/eraser
    * #GdkDevices whenever tools enter or leave proximity.
-   *
-   * Since: 3.22
    */
   signals[TOOL_CHANGED] =
     g_signal_new (g_intern_static_string ("tool-changed"),
@@ -372,9 +335,18 @@ gdk_device_class_init (GdkDeviceClass *klass)
 }
 
 static void
+gdk_device_axis_info_clear (gpointer data)
+{
+  GdkAxisInfo *info = data;
+
+  g_free (info->label);
+}
+
+static void
 gdk_device_init (GdkDevice *device)
 {
   device->axes = g_array_new (FALSE, TRUE, sizeof (GdkAxisInfo));
+  g_array_set_clear_func (device->axes, gdk_device_axis_info_clear);
 }
 
 static void
@@ -434,9 +406,6 @@ gdk_device_set_property (GObject      *object,
     case PROP_DISPLAY:
       device->display = g_value_get_object (value);
       break;
-    case PROP_DEVICE_MANAGER:
-      device->manager = g_value_get_object (value);
-      break;
     case PROP_NAME:
       g_free (device->name);
 
@@ -484,9 +453,6 @@ gdk_device_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, device->display);
-      break;
-    case PROP_DEVICE_MANAGER:
-      g_value_set_object (value, device->manager);
       break;
     case PROP_ASSOCIATED_DEVICE:
       g_value_set_object (value, device->associated);
@@ -536,37 +502,35 @@ gdk_device_get_property (GObject    *object,
 /**
  * gdk_device_get_state: (skip)
  * @device: a #GdkDevice.
- * @window: a #GdkWindow.
+ * @surface: a #GdkSurface.
  * @axes: (nullable) (array): an array of doubles to store the values of
  * the axes of @device in, or %NULL.
  * @mask: (optional) (out): location to store the modifiers, or %NULL.
  *
- * Gets the current state of a pointer device relative to @window. As a slave
+ * Gets the current state of a pointer device relative to @surface. As a slave
  * device’s coordinates are those of its master pointer, this
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them. See gdk_device_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
-                      GdkWindow       *window,
+                      GdkSurface       *surface,
                       gdouble         *axes,
                       GdkModifierType *mask)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   if (GDK_DEVICE_GET_CLASS (device)->get_state)
-    GDK_DEVICE_GET_CLASS (device)->get_state (device, window, axes, mask);
+    GDK_DEVICE_GET_CLASS (device)->get_state (device, surface, axes, mask);
 }
 
 /**
  * gdk_device_get_position_double:
  * @device: pointer device to query status about.
- * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
- *          the @device is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
@@ -574,18 +538,14 @@ gdk_device_get_state (GdkDevice       *device,
  * coordinates are those of its master pointer, this function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them. See gdk_device_grab().
- *
- * Since: 3.10
  **/
 void
 gdk_device_get_position_double (GdkDevice        *device,
-                                GdkScreen       **screen,
                                 gdouble          *x,
                                 gdouble          *y)
 {
   GdkDisplay *display;
   gdouble tmp_x, tmp_y;
-  GdkScreen *default_screen;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
@@ -595,16 +555,12 @@ gdk_device_get_position_double (GdkDevice        *device,
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (display, device));
 
-  default_screen = gdk_display_get_default_screen (display);
-
   _gdk_device_query_state (device,
                            NULL,
                            NULL,
                            &tmp_x, &tmp_y,
                            NULL, NULL, NULL);
 
-  if (screen)
-    *screen = default_screen;
   if (x)
     *x = tmp_x;
   if (y)
@@ -614,8 +570,6 @@ gdk_device_get_position_double (GdkDevice        *device,
 /**
  * gdk_device_get_position:
  * @device: pointer device to query status about.
- * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
- *          the @device is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
@@ -623,18 +577,15 @@ gdk_device_get_position_double (GdkDevice        *device,
  * coordinates are those of its master pointer, This function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
- *
- * Since: 3.0
  **/
 void
-gdk_device_get_position (GdkDevice        *device,
-                         GdkScreen       **screen,
-                         gint             *x,
-                         gint             *y)
+gdk_device_get_position (GdkDevice *device,
+                         gint      *x,
+                         gint      *y)
 {
   gdouble tmp_x, tmp_y;
 
-  gdk_device_get_position_double (device, screen, &tmp_x, &tmp_y);
+  gdk_device_get_position_double (device, &tmp_x, &tmp_y);
   if (x)
     *x = round (tmp_x);
   if (y)
@@ -643,45 +594,43 @@ gdk_device_get_position (GdkDevice        *device,
 
 
 /**
- * gdk_device_get_window_at_position_double:
+ * gdk_device_get_surface_at_position_double:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the window origin, or %NULL.
+ *         relative to the surface origin, or %NULL.
  * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the window origin, or %NULL.
+ *         relative to the surface origin, or %NULL.
  *
- * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y in
- * double precision. Returns %NULL if the window tree under @device is not known to GDK (for example,
+ * Obtains the surface underneath @device, returning the location of the device in @win_x and @win_y in
+ * double precision. Returns %NULL if the surface tree under @device is not known to GDK (for example,
  * belongs to another application).
  *
  * As a slave device coordinates are those of its master pointer, This
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Returns: (nullable) (transfer none): the #GdkWindow under the
+ * Returns: (nullable) (transfer none): the #GdkSurface under the
  *   device position, or %NULL.
- *
- * Since: 3.0
  **/
-GdkWindow *
-gdk_device_get_window_at_position_double (GdkDevice  *device,
+GdkSurface *
+gdk_device_get_surface_at_position_double (GdkDevice  *device,
                                           gdouble    *win_x,
                                           gdouble    *win_y)
 {
   gdouble tmp_x, tmp_y;
-  GdkWindow *window;
+  GdkSurface *surface;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
   g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                         gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
-  window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
+  surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
-  /* This might need corrections, as the native window returned
+  /* This might need corrections, as the native surface returned
      may contain client side children */
-  if (window)
-    window = _gdk_window_find_descendant_at (window,
+  if (surface)
+    surface = _gdk_surface_find_descendant_at (surface,
                                              tmp_x, tmp_y,
                                              &tmp_x, &tmp_y);
 
@@ -690,52 +639,50 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
   if (win_y)
     *win_y = tmp_y;
 
-  return window;
+  return surface;
 }
 
 /**
- * gdk_device_get_window_at_position:
+ * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the window origin, or %NULL.
+ *         relative to the surface origin, or %NULL.
  * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the window origin, or %NULL.
+ *         relative to the surface origin, or %NULL.
  *
- * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
- * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
+ * Obtains the surface underneath @device, returning the location of the device in @win_x and @win_y. Returns
+ * %NULL if the surface tree under @device is not known to GDK (for example, belongs to another application).
  *
  * As a slave device coordinates are those of its master pointer, This
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Returns: (nullable) (transfer none): the #GdkWindow under the
+ * Returns: (nullable) (transfer none): the #GdkSurface under the
  * device position, or %NULL.
- *
- * Since: 3.0
  **/
-GdkWindow *
-gdk_device_get_window_at_position (GdkDevice  *device,
+GdkSurface *
+gdk_device_get_surface_at_position (GdkDevice  *device,
                                    gint       *win_x,
                                    gint       *win_y)
 {
   gdouble tmp_x, tmp_y;
-  GdkWindow *window;
+  GdkSurface *surface;
 
-  window =
-    gdk_device_get_window_at_position_double (device, &tmp_x, &tmp_y);
+  surface =
+    gdk_device_get_surface_at_position_double (device, &tmp_x, &tmp_y);
 
   if (win_x)
     *win_x = round (tmp_x);
   if (win_y)
     *win_y = round (tmp_y);
 
-  return window;
+  return surface;
 }
 
 /**
  * gdk_device_get_history: (skip)
  * @device: a #GdkDevice
- * @window: the window with respect to which which the event coordinates will be reported
+ * @surface: the surface with respect to which which the event coordinates will be reported
  * @start: starting timestamp for range of events to return
  * @stop: ending timestamp for the range of events to return
  * @events: (array length=n_events) (out) (transfer full) (optional):
@@ -751,7 +698,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  * be returned. (This is not distinguishable from the case where
  * motion history is supported and no events were found.)
  *
- * Note that there is also gdk_window_set_event_compression() to get
+ * Note that there is also gdk_surface_set_event_compression() to get
  * more motion events delivered directly, independent of the windowing
  * system.
  *
@@ -760,7 +707,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  **/
 gboolean
 gdk_device_get_history (GdkDevice      *device,
-                        GdkWindow      *window,
+                        GdkSurface      *surface,
                         guint32         start,
                         guint32         stop,
                         GdkTimeCoord ***events,
@@ -768,7 +715,7 @@ gdk_device_get_history (GdkDevice      *device,
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
 
   if (n_events)
     *n_events = 0;
@@ -776,13 +723,13 @@ gdk_device_get_history (GdkDevice      *device,
   if (events)
     *events = NULL;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
   if (!GDK_DEVICE_GET_CLASS (device)->get_history)
     return FALSE;
 
-  return GDK_DEVICE_GET_CLASS (device)->get_history (device, window,
+  return GDK_DEVICE_GET_CLASS (device)->get_history (device, surface,
                                                      start, stop,
                                                      events, n_events);
 }
@@ -826,8 +773,6 @@ gdk_device_free_history (GdkTimeCoord **events,
  * Determines the name of the device.
  *
  * Returns: a name
- *
- * Since: 2.20
  **/
 const gchar *
 gdk_device_get_name (GdkDevice *device)
@@ -845,8 +790,6 @@ gdk_device_get_name (GdkDevice *device)
  * This is not meaningful for keyboard devices, which don't have a pointer.
  *
  * Returns: %TRUE if the pointer follows device motion
- *
- * Since: 2.20
  **/
 gboolean
 gdk_device_get_has_cursor (GdkDevice *device)
@@ -863,8 +806,6 @@ gdk_device_get_has_cursor (GdkDevice *device)
  * Determines the type of the device.
  *
  * Returns: a #GdkInputSource
- *
- * Since: 2.20
  **/
 GdkInputSource
 gdk_device_get_source (GdkDevice *device)
@@ -881,8 +822,6 @@ gdk_device_get_source (GdkDevice *device)
  * Determines the mode of the device.
  *
  * Returns: a #GdkInputSource
- *
- * Since: 2.20
  **/
 GdkInputMode
 gdk_device_get_mode (GdkDevice *device)
@@ -899,7 +838,7 @@ gdk_device_get_mode (GdkDevice *device)
  *
  * Sets a the mode of an input device. The mode controls if the
  * device is active and whether the device’s range is mapped to the
- * entire screen or to a single window.
+ * entire screen or to a single surface.
  *
  * Note: This is only meaningful for floating devices, master devices (and
  * slaves connected to these) drive the pointer cursor, which is not limited
@@ -933,8 +872,6 @@ gdk_device_set_mode (GdkDevice    *device,
  * Returns the number of keys the device currently has.
  *
  * Returns: the number of keys.
- *
- * Since: 2.24
  **/
 gint
 gdk_device_get_n_keys (GdkDevice *device)
@@ -955,8 +892,6 @@ gdk_device_get_n_keys (GdkDevice *device)
  * and fill in @keyval and @modifiers with the keyval settings.
  *
  * Returns: %TRUE if keyval is set for @index.
- *
- * Since: 2.20
  **/
 gboolean
 gdk_device_get_key (GdkDevice       *device,
@@ -1011,8 +946,6 @@ gdk_device_set_key (GdkDevice      *device,
  * Returns the axis use for @index_.
  *
  * Returns: a #GdkAxisUse specifying how the axis is used.
- *
- * Since: 2.20
  **/
 GdkAxisUse
 gdk_device_get_axis_use (GdkDevice *device,
@@ -1078,8 +1011,6 @@ gdk_device_set_axis_use (GdkDevice   *device,
  *
  * Returns: (transfer none): a #GdkDisplay. This memory is owned
  *          by GTK+, and must not be freed or unreffed.
- *
- * Since: 3.0
  **/
 GdkDisplay *
 gdk_device_get_display (GdkDevice *device)
@@ -1105,8 +1036,6 @@ gdk_device_get_display (GdkDevice *device)
  *
  * Returns: (nullable) (transfer none): The associated device, or
  *   %NULL
- *
- * Since: 3.0
  **/
 GdkDevice *
 gdk_device_get_associated_device (GdkDevice *device)
@@ -1213,8 +1142,6 @@ _gdk_device_remove_slave (GdkDevice *device,
  * Returns the device type for @device.
  *
  * Returns: the #GdkDeviceType for @device.
- *
- * Since: 3.0
  **/
 GdkDeviceType
 gdk_device_get_device_type (GdkDevice *device)
@@ -1231,8 +1158,6 @@ gdk_device_get_device_type (GdkDevice *device)
  * Returns the number of axes the device currently has.
  *
  * Returns: the number of axes.
- *
- * Since: 3.0
  **/
 gint
 gdk_device_get_n_axes (GdkDevice *device)
@@ -1251,9 +1176,7 @@ gdk_device_get_n_axes (GdkDevice *device)
  * the axes that @device currently has.
  *
  * Returns: (transfer container) (element-type GdkAtom):
- *     A #GList of #GdkAtoms, free with g_list_free().
- *
- * Since: 3.0
+ *     A #GList of strings, free with g_list_free().
  **/
 GList *
 gdk_device_list_axes (GdkDevice *device)
@@ -1269,7 +1192,7 @@ gdk_device_list_axes (GdkDevice *device)
       GdkAxisInfo axis_info;
 
       axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-      axes = g_list_prepend (axes, GDK_ATOM_TO_POINTER (axis_info.label));
+      axes = g_list_prepend (axes, axis_info.label);
     }
 
   return g_list_reverse (axes);
@@ -1279,7 +1202,7 @@ gdk_device_list_axes (GdkDevice *device)
  * gdk_device_get_axis_value: (skip)
  * @device: a pointer #GdkDevice.
  * @axes: (array): pointer to an array of axes
- * @axis_label: #GdkAtom with the axis label.
+ * @axis_label: name of the label
  * @value: (out): location to store the found value.
  *
  * Interprets an array of double as axis values for a given device,
@@ -1287,14 +1210,12 @@ gdk_device_list_axes (GdkDevice *device)
  * by gdk_device_list_axes()
  *
  * Returns: %TRUE if the given axis use was found, otherwise %FALSE.
- *
- * Since: 3.0
  **/
 gboolean
-gdk_device_get_axis_value (GdkDevice *device,
-                           gdouble   *axes,
-                           GdkAtom    axis_label,
-                           gdouble   *value)
+gdk_device_get_axis_value (GdkDevice  *device,
+                           gdouble    *axes,
+                           const char *axis_label,
+                           gdouble    *value)
 {
   gint i;
 
@@ -1310,7 +1231,7 @@ gdk_device_get_axis_value (GdkDevice *device,
 
       axis_info = g_array_index (device->axes, GdkAxisInfo, i);
 
-      if (axis_info.label != axis_label)
+      if (!g_str_equal (axis_info.label, axis_label))
         continue;
 
       if (value)
@@ -1388,21 +1309,21 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  * gdk_device_grab:
  * @device: a #GdkDevice. To get the device you can use gtk_get_current_event_device()
  *   or gdk_event_get_device() if the grab is in reaction to an event. Also, you can use
- *   gdk_device_manager_get_client_pointer() but only in code that isn’t triggered by a
+ *   gdk_seat_get_pointer() but only in code that isn’t triggered by a
  *   #GdkEvent and there aren’t other means to get a meaningful #GdkDevice to operate on.
- * @window: the #GdkWindow which will own the grab (the grab window)
+ * @surface: the #GdkSurface which will own the grab (the grab surface)
  * @grab_ownership: specifies the grab ownership.
  * @owner_events: if %FALSE then all device events are reported with respect to
- *                @window and are only reported if selected by @event_mask. If
+ *                @surface and are only reported if selected by @event_mask. If
  *                %TRUE then pointer events for this application are reported
  *                as normal, but pointer events outside this application are
- *                reported with respect to @window and only if selected by
+ *                reported with respect to @surface and only if selected by
  *                @event_mask. In either mode, unreported events are discarded.
  * @event_mask: specifies the event mask, which is used in accordance with
  *              @owner_events.
  * @cursor: (allow-none): the cursor to display while the grab is active if the device is
  *          a pointer. If this is %NULL then the normal cursors are used for
- *          @window and its descendants, and the cursor for @window is used
+ *          @surface and its descendants, and the cursor for @surface is used
  *          elsewhere.
  * @time_: the timestamp of the event which led to this pointer grab. This
  *         usually comes from the #GdkEvent struct, though %GDK_CURRENT_TIME
@@ -1410,10 +1331,10 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *
  * Grabs the device so that all events coming from this device are passed to
  * this application until the device is ungrabbed with gdk_device_ungrab(),
- * or the window becomes unviewable. This overrides any previous grab on the device
+ * or the surface becomes unviewable. This overrides any previous grab on the device
  * by this client.
  *
- * Note that @device and @window need to be on the same display.
+ * Note that @device and @surface need to be on the same display.
  *
  * Device grabs are used for operations which need complete control over the
  * given device events (either pointer or keyboard). For example in GTK+ this
@@ -1423,7 +1344,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  * and button release events, then a button press event will cause an automatic
  * pointer grab until the button is released. X does this automatically since
  * most applications expect to receive button press and release events in pairs.
- * It is equivalent to a pointer grab on the window with @owner_events set to
+ * It is equivalent to a pointer grab on the surface with @owner_events set to
  * %TRUE.
  *
  * If you set up anything at the time you take the grab that needs to be
@@ -1432,13 +1353,11 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
  *
- * Since: 3.0
- *
- * Deprecated: 3.20. Use gdk_seat_grab() instead.
+ * Deprecated: Use gdk_seat_grab() instead.
  **/
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
-                 GdkWindow        *window,
+                 GdkSurface        *surface,
                  GdkGrabOwnership  grab_ownership,
                  gboolean          owner_events,
                  GdkEventMask      event_mask,
@@ -1446,15 +1365,15 @@ gdk_device_grab (GdkDevice        *device,
                  guint32           time_)
 {
   GdkGrabStatus res;
-  GdkWindow *native;
+  GdkSurface *native;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
-  g_return_val_if_fail (gdk_window_get_display (window) == gdk_device_get_display (device), GDK_GRAB_FAILED);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
+  g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
-  native = gdk_window_get_toplevel (window);
+  native = gdk_surface_get_toplevel (surface);
 
-  if (native == NULL || GDK_WINDOW_DESTROYED (native))
+  if (native == NULL || GDK_SURFACE_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
 
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
@@ -1470,12 +1389,12 @@ gdk_device_grab (GdkDevice        *device,
       GdkDisplay *display;
       gulong serial;
 
-      display = gdk_window_get_display (window);
+      display = gdk_surface_get_display (surface);
       serial = _gdk_display_get_next_serial (display);
 
       _gdk_display_add_device_grab (display,
                                     device,
-                                    window,
+                                    surface,
                                     native,
                                     grab_ownership,
                                     owner_events,
@@ -1495,8 +1414,6 @@ gdk_device_grab (GdkDevice        *device,
  *
  * Release any grab on @device.
  *
- * Since: 3.0
- *
  * Deprecated: 3.20. Use gdk_seat_ungrab() instead.
  */
 void
@@ -1511,13 +1428,12 @@ gdk_device_ungrab (GdkDevice  *device,
 /**
  * gdk_device_warp:
  * @device: the device to warp.
- * @screen: the screen to warp @device to.
  * @x: the X coordinate of the destination.
  * @y: the Y coordinate of the destination.
  *
- * Warps @device in @display to the point @x,@y on
- * the screen @screen, unless the device is confined
- * to a window by a grab, in which case it will be moved
+ * Warps @device in @display to the point @x,@y,
+ * unless the device is confined to a surface by a grab,
+ * in which case it will be moved
  * as far as allowed by the grab. Warping the pointer
  * creates events as if the user had moved the mouse
  * instantaneously to the destination.
@@ -1526,20 +1442,15 @@ gdk_device_ungrab (GdkDevice  *device,
  * control of the user. This function was added to cover
  * some rare use cases like keyboard navigation support
  * for the color picker in the #GtkColorSelectionDialog.
- *
- * Since: 3.0
  **/
 void
 gdk_device_warp (GdkDevice  *device,
-                 GdkScreen  *screen,
                  gint        x,
                  gint        y)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (gdk_device_get_display (device) == gdk_screen_get_display (screen));
 
-  GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
+  GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
 }
 
 /* Private API */
@@ -1559,7 +1470,7 @@ _gdk_device_reset_axes (GdkDevice *device)
 
 guint
 _gdk_device_add_axis (GdkDevice   *device,
-                      GdkAtom      label_atom,
+                      const char  *label_name,
                       GdkAxisUse   use,
                       gdouble      min_value,
                       gdouble      max_value,
@@ -1569,7 +1480,7 @@ _gdk_device_add_axis (GdkDevice   *device,
   guint pos;
 
   axis_info.use = use;
-  axis_info.label = label_atom;
+  axis_info.label = g_strdup (label_name);
   axis_info.min_value = min_value;
   axis_info.max_value = max_value;
   axis_info.resolution = resolution;
@@ -1606,7 +1517,7 @@ _gdk_device_add_axis (GdkDevice   *device,
 void
 _gdk_device_get_axis_info (GdkDevice   *device,
 			   guint        index_,
-			   GdkAtom      *label_atom,
+			   const char **label_name,
 			   GdkAxisUse   *use,
 			   gdouble      *min_value,
 			   gdouble      *max_value,
@@ -1619,7 +1530,7 @@ _gdk_device_get_axis_info (GdkDevice   *device,
 
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
 
-  *label_atom = info->label;
+  *label_name = info->label;
   *use = info->use;
   *min_value = info->min_value;
   *max_value = info->max_value;
@@ -1655,8 +1566,8 @@ find_axis_info (GArray     *array,
 }
 
 gboolean
-_gdk_device_translate_window_coord (GdkDevice *device,
-                                    GdkWindow *window,
+_gdk_device_translate_surface_coord (GdkDevice *device,
+                                    GdkSurface *surface,
                                     guint      index_,
                                     gdouble    value,
                                     gdouble   *axis_value)
@@ -1669,7 +1580,7 @@ _gdk_device_translate_window_coord (GdkDevice *device,
   gdouble x_min, y_min;
   gdouble x_resolution, y_resolution;
   gdouble device_aspect;
-  gint window_width, window_height;
+  gint surface_width, surface_height;
 
   if (index_ >= device->axes->len)
     return FALSE;
@@ -1697,8 +1608,8 @@ _gdk_device_translate_window_coord (GdkDevice *device,
   x_min = axis_info_x->min_value;
   y_min = axis_info_y->min_value;
 
-  window_width = gdk_window_get_width (window);
-  window_height = gdk_window_get_height (window);
+  surface_width = gdk_surface_get_width (surface);
+  surface_height = gdk_surface_get_height (surface);
 
   x_resolution = axis_info_x->resolution;
   y_resolution = axis_info_y->resolution;
@@ -1722,23 +1633,23 @@ _gdk_device_translate_window_coord (GdkDevice *device,
   device_aspect = (device_height * y_resolution) /
     (device_width * x_resolution);
 
-  if (device_aspect * window_width >= window_height)
+  if (device_aspect * surface_width >= surface_height)
     {
-      /* device taller than window */
-      x_scale = window_width / device_width;
+      /* device taller than surface */
+      x_scale = surface_width / device_width;
       y_scale = (x_scale * x_resolution) / y_resolution;
 
       x_offset = 0;
-      y_offset = - (device_height * y_scale - window_height) / 2;
+      y_offset = - (device_height * y_scale - surface_height) / 2;
     }
   else
     {
-      /* window taller than device */
-      y_scale = window_height / device_height;
+      /* surface taller than device */
+      y_scale = surface_height / device_height;
       x_scale = (y_scale * y_resolution) / x_resolution;
 
       y_offset = 0;
-      x_offset = - (device_width * x_scale - window_width) / 2;
+      x_offset = - (device_width * x_scale - surface_width) / 2;
     }
 
   if (axis_value)
@@ -1754,9 +1665,9 @@ _gdk_device_translate_window_coord (GdkDevice *device,
 
 gboolean
 _gdk_device_translate_screen_coord (GdkDevice *device,
-                                    GdkWindow *window,
-                                    gdouble    window_root_x,
-                                    gdouble    window_root_y,
+                                    GdkSurface *surface,
+                                    gdouble    surface_root_x,
+                                    gdouble    surface_root_y,
                                     gdouble    screen_width,
                                     gdouble    screen_height,
                                     guint      index_,
@@ -1787,7 +1698,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - window_root_x - window->abs_x;
+      offset = - surface_root_x - surface->abs_x;
     }
   else
     {
@@ -1796,7 +1707,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - window_root_y - window->abs_y;
+      offset = - surface_root_y - surface->abs_y;
     }
 
   if (axis_value)
@@ -1835,8 +1746,8 @@ _gdk_device_translate_axis (GdkDevice *device,
 
 void
 _gdk_device_query_state (GdkDevice        *device,
-                         GdkWindow        *window,
-                         GdkWindow       **child_window,
+                         GdkSurface        *surface,
+                         GdkSurface       **child_surface,
                          gdouble          *root_x,
                          gdouble          *root_y,
                          gdouble          *win_x,
@@ -1844,8 +1755,8 @@ _gdk_device_query_state (GdkDevice        *device,
                          GdkModifierType  *mask)
 {
   GDK_DEVICE_GET_CLASS (device)->query_state (device,
-                                              window,
-                                              child_window,
+                                              surface,
+                                              child_surface,
                                               root_x,
                                               root_y,
                                               win_x,
@@ -1853,14 +1764,14 @@ _gdk_device_query_state (GdkDevice        *device,
                                               mask);
 }
 
-GdkWindow *
-_gdk_device_window_at_position (GdkDevice        *device,
+GdkSurface *
+_gdk_device_surface_at_position (GdkDevice        *device,
                                 gdouble          *win_x,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask,
                                 gboolean          get_toplevel)
 {
-  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device,
+  return GDK_DEVICE_GET_CLASS (device)->surface_at_position (device,
                                                             win_x,
                                                             win_y,
                                                             mask,
@@ -1868,24 +1779,22 @@ _gdk_device_window_at_position (GdkDevice        *device,
 }
 
 /**
- * gdk_device_get_last_event_window:
+ * gdk_device_get_last_event_surface:
  * @device: a #GdkDevice, with a source other than %GDK_SOURCE_KEYBOARD
  *
- * Gets information about which window the given pointer device is in, based on events
+ * Gets information about which surface the given pointer device is in, based on events
  * that have been received so far from the display server. If another application
  * has a pointer grab, or this application has a grab with owner_events = %FALSE,
  * %NULL may be returned even if the pointer is physically over one of this
- * application's windows.
+ * application's surfaces.
  *
- * Returns: (transfer none) (allow-none): the last window the device
- *
- * Since: 3.12
+ * Returns: (transfer none) (allow-none): the last surface the device
  */
-GdkWindow *
-gdk_device_get_last_event_window (GdkDevice *device)
+GdkSurface *
+gdk_device_get_last_event_surface (GdkDevice *device)
 {
   GdkDisplay *display;
-  GdkPointerWindowInfo *info;
+  GdkPointerSurfaceInfo *info;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
@@ -1893,7 +1802,7 @@ gdk_device_get_last_event_window (GdkDevice *device)
   display = gdk_device_get_display (device);
   info = _gdk_display_get_pointer_info (display, device);
 
-  return info->window_under_pointer;
+  return info->surface_under_pointer;
 }
 
 /**
@@ -1928,8 +1837,6 @@ gdk_device_get_last_event_window (GdkDevice *device)
  * ]|
  *
  * Returns: (nullable): the vendor ID, or %NULL
- *
- * Since: 3.16
  */
 const gchar *
 gdk_device_get_vendor_id (GdkDevice *device)
@@ -1949,8 +1856,6 @@ gdk_device_get_vendor_id (GdkDevice *device)
  * it. See gdk_device_get_vendor_id() for more information.
  *
  * Returns: (nullable): the product ID, or %NULL
- *
- * Since: 3.16
  */
 const gchar *
 gdk_device_get_product_id (GdkDevice *device)
@@ -1983,8 +1888,6 @@ gdk_device_set_seat (GdkDevice *device,
  *
  * Returns: (transfer none): A #GdkSeat. This memory is owned by GTK+ and
  *          must not be freed.
- *
- * Since: 3.20
  **/
 GdkSeat *
 gdk_device_get_seat (GdkDevice *device)
@@ -1999,8 +1902,6 @@ gdk_device_get_seat (GdkDevice *device)
  * @device: a #GdkDevice
  *
  * Returns the axes currently available on the device.
- *
- * Since: 3.22
  **/
 GdkAxisFlags
 gdk_device_get_axes (GdkDevice *device)

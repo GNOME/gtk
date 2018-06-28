@@ -49,13 +49,9 @@ G_BEGIN_DECLS
 
 typedef struct _GtkColorButton          GtkColorButton;
 typedef struct _GtkColorButtonClass     GtkColorButtonClass;
-typedef struct _GtkColorButtonPrivate   GtkColorButtonPrivate;
 
 struct _GtkColorButton {
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkColorButtonPrivate *priv;
 };
 
 struct _GtkColorButtonClass {

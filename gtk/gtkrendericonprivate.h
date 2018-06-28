@@ -47,12 +47,12 @@ void    gtk_css_style_render_icon_surface       (GtkCssStyle            *style,
                                                  cairo_surface_t        *surface,
                                                  double                  x,
                                                  double                  y);
-void    gtk_css_style_snapshot_icon_texture     (GtkCssStyle            *style,
+void    gtk_css_style_snapshot_icon_paintable   (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,
-                                                 GskTexture             *texture,
-                                                 double                  texture_scale,
-                                                 graphene_matrix_t *     color_matrix,
-                                                 graphene_vec4_t *       color_offset);
+                                                 GdkPaintable           *paintable,
+                                                 double                  width,
+                                                 double                  height,
+                                                 gboolean                recolor);
 
 void    gtk_css_style_render_icon_get_extents   (GtkCssStyle            *style,
                                                  GdkRectangle           *extents,

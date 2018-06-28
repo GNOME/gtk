@@ -27,6 +27,7 @@
 #include "gtkprivate.h"
 #include "gtkspinbutton.h"
 #include "gtkentry.h"
+#include "gtkeventcontrollerkey.h"
 
 
 /**
@@ -69,6 +70,12 @@ static void gtk_cell_renderer_spin_set_property (GObject      *object,
 						 const GValue *value,
 						 GParamSpec   *spec);
 
+static gboolean gtk_cell_renderer_spin_key_pressed (GtkEventControllerKey *controller,
+                                                    guint                  keyval,
+                                                    guint                  keycode,
+                                                    GdkModifierType        state,
+                                                    GtkWidget             *widget);
+
 static GtkCellEditable * gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
 							       GdkEvent            *event,
 							       GtkWidget           *widget,
@@ -105,8 +112,6 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    *
    * The adjustment that holds the value of the spinbutton. 
    * This must be non-%NULL for the cell renderer to be editable.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
 				   PROP_ADJUSTMENT,
@@ -121,8 +126,6 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    * GtkCellRendererSpin:climb-rate:
    *
    * The acceleration rate when you hold down a button.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
 				   PROP_CLIMB_RATE,
@@ -135,8 +138,6 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    * GtkCellRendererSpin:digits:
    *
    * The number of decimal places to display.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
 				   PROP_DIGITS,
@@ -227,7 +228,8 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
 	}
 
       if (obj)
-	priv->adjustment = g_object_ref_sink (obj);
+	priv->adjustment = GTK_ADJUSTMENT (g_object_ref_sink (obj));
+
       break;
     case PROP_CLIMB_RATE:
       priv->climb_rate = g_value_get_double (value);
@@ -245,21 +247,24 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
     }
 }
 
-static gboolean
-gtk_cell_renderer_spin_focus_out_event (GtkWidget *widget,
-					GdkEvent  *event,
-					gpointer   data)
+static void
+gtk_cell_renderer_spin_focus_changed (GtkWidget  *widget,
+                                      GParamSpec *pspec,
+                                      gpointer    data)
 {
   const gchar *path;
   const gchar *new_text;
   gboolean canceled;
+
+  if (gtk_widget_has_focus (widget))
+    return;
 
   g_object_get (widget,
                 "editing-canceled", &canceled,
                 NULL);
 
   g_signal_handlers_disconnect_by_func (widget,
-					gtk_cell_renderer_spin_focus_out_event,
+					gtk_cell_renderer_spin_focus_changed,
 					data);
 
   gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
@@ -271,21 +276,15 @@ gtk_cell_renderer_spin_focus_out_event (GtkWidget *widget,
       new_text = gtk_entry_get_text (GTK_ENTRY (widget));
       g_signal_emit_by_name (data, "edited", path, new_text);
     }
-  
-  return FALSE;
 }
 
 static gboolean
-gtk_cell_renderer_spin_key_press_event (GtkWidget   *widget,
-					GdkEventKey *event,
-					gpointer     data)
+gtk_cell_renderer_spin_key_pressed (GtkEventControllerKey *controller,
+                                    guint                  keyval,
+                                    guint                  keycode,
+                                    GdkModifierType        state,
+                                    GtkWidget             *widget)
 {
-  guint state, keyval;
-
-  if (!gdk_event_get_state ((GdkEvent *) event, &state) ||
-      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-    return GDK_EVENT_PROPAGATE;
-
   if (state == 0)
     {
       if (keyval == GDK_KEY_Up)
@@ -314,6 +313,7 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 {
   GtkCellRendererSpinPrivate *priv;
   GtkCellRendererText *cell_text;
+  GtkEventController *key_controller;
   GtkWidget *spin;
   gboolean editable;
   gchar *text;
@@ -339,14 +339,17 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
       g_free (text);
     }
 
+  key_controller = gtk_event_controller_key_new ();
+  g_signal_connect (key_controller, "key-pressed",
+                    G_CALLBACK (gtk_cell_renderer_spin_key_pressed),
+                    spin);
+  gtk_widget_add_controller (spin, key_controller);
+
   g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);
 
-  g_signal_connect (G_OBJECT (spin), "focus-out-event",
-		    G_CALLBACK (gtk_cell_renderer_spin_focus_out_event),
-		    cell);
-  g_signal_connect (G_OBJECT (spin), "key-press-event",
-		    G_CALLBACK (gtk_cell_renderer_spin_key_press_event),
+  g_signal_connect (G_OBJECT (spin), "notify::has-focus",
+		    G_CALLBACK (gtk_cell_renderer_spin_focus_changed),
 		    cell);
 
   gtk_widget_show (spin);
@@ -360,8 +363,6 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
  * Creates a new #GtkCellRendererSpin. 
  *
  * Returns: a new #GtkCellRendererSpin
- *
- * Since: 2.10
  */
 GtkCellRenderer *
 gtk_cell_renderer_spin_new (void)

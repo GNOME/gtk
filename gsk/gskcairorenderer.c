@@ -5,7 +5,7 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gsktextureprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #ifdef G_ENABLE_DEBUG
 typedef struct {
@@ -17,6 +17,8 @@ typedef struct {
 struct _GskCairoRenderer
 {
   GskRenderer parent_instance;
+
+  GdkCairoContext *cairo_context;
 
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
@@ -32,16 +34,22 @@ G_DEFINE_TYPE (GskCairoRenderer, gsk_cairo_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
 gsk_cairo_renderer_realize (GskRenderer  *renderer,
-                            GdkWindow    *window,
+                            GdkSurface   *surface,
                             GError      **error)
 {
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
+
+  self->cairo_context = gdk_surface_create_cairo_context (surface);
+
   return TRUE;
 }
 
 static void
 gsk_cairo_renderer_unrealize (GskRenderer *renderer)
 {
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
 
+  g_clear_object (&self->cairo_context);
 }
 
 static void
@@ -70,12 +78,12 @@ gsk_cairo_renderer_do_render (GskRenderer   *renderer,
 #endif
 }
 
-static GskTexture *
+static GdkTexture *
 gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
                                    GskRenderNode         *root,
                                    const graphene_rect_t *viewport)
 {
-  GskTexture *texture;
+  GdkTexture *texture;
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -88,42 +96,47 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
 
   cairo_destroy (cr);
 
-  texture = gsk_texture_new_for_surface (surface);
+  texture = gdk_texture_new_for_surface (surface);
   cairo_surface_destroy (surface);
 
   return texture;
 }
 
 static void
-gsk_cairo_renderer_render (GskRenderer   *renderer,
-                           GskRenderNode *root)
+gsk_cairo_renderer_render (GskRenderer          *renderer,
+                           GskRenderNode        *root,
+                           const cairo_region_t *region)
 {
-  GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
-  graphene_rect_t viewport;
-
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   cairo_t *cr;
 
-  cr = gdk_drawing_context_get_cairo_context (context);
+  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->cairo_context),
+                                region);
+  cr = gdk_cairo_context_cairo_create (self->cairo_context);
 
   g_return_if_fail (cr != NULL);
 
-  gsk_renderer_get_viewport (renderer, &viewport);
-
-  if (GSK_RENDER_MODE_CHECK (GEOMETRY))
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (renderer, GEOMETRY))
     {
+      GdkSurface *surface = gsk_renderer_get_surface (renderer);
+
       cairo_save (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
       cairo_rectangle (cr,
-                       viewport.origin.x,
-                       viewport.origin.y,
-                       viewport.size.width,
-                       viewport.size.height);
+                       0, 0,
+                       gdk_surface_get_width (surface), gdk_surface_get_height (surface));
       cairo_set_source_rgba (cr, 0, 0, 0.85, 0.5);
       cairo_stroke (cr);
       cairo_restore (cr);
     }
+#endif
 
   gsk_cairo_renderer_do_render (renderer, cr, root);
+
+  cairo_destroy (cr);
+
+  gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->cairo_context));
 }
 
 static void

@@ -128,7 +128,7 @@ gtk_search_engine_model_start (GtkSearchEngine *engine)
   if (model->query == NULL)
     return;
 
-  model->idle = gdk_threads_add_idle (do_search, engine);
+  model->idle = g_idle_add (do_search, engine);
   g_source_set_name_by_id (model->idle, "[gtk+] gtk_search_engine_model_start");
 }
 

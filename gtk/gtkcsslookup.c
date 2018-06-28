@@ -24,12 +24,11 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 
-GtkCssLookup *
-_gtk_css_lookup_new (const GtkBitmask *relevant)
+void
+_gtk_css_lookup_init (GtkCssLookup     *lookup,
+                      const GtkBitmask *relevant)
 {
-  GtkCssLookup *lookup;
-
-  lookup = g_malloc0 (sizeof (GtkCssLookup));
+  memset (lookup, 0, sizeof (*lookup));
 
   if (relevant)
     {
@@ -40,17 +39,12 @@ _gtk_css_lookup_new (const GtkBitmask *relevant)
       lookup->missing = _gtk_bitmask_new ();
       lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, GTK_CSS_PROPERTY_N_PROPERTIES);
     }
-
-  return lookup;
 }
 
 void
-_gtk_css_lookup_free (GtkCssLookup *lookup)
+_gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
-  gtk_internal_return_if_fail (lookup != NULL);
-
   _gtk_bitmask_free (lookup->missing);
-  g_free (lookup);
 }
 
 gboolean

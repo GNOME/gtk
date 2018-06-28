@@ -99,8 +99,7 @@ static void gtk_button_box_measure           (GtkWidget         *widget,
                                               int               *natural_baseline);
 static void gtk_button_box_size_allocate      (GtkWidget           *widget,
                                                const GtkAllocation *allocation,
-                                               int                  baseline,
-                                               GtkAllocation       *out_clip);
+                                               int                  baseline);
 static void gtk_button_box_remove             (GtkContainer      *container,
                                                GtkWidget         *widget);
 static void gtk_button_box_set_child_property (GtkContainer      *container,
@@ -172,7 +171,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                                     FALSE,
                                                                     GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (widget_class, "buttonbox");
+  gtk_widget_class_set_css_name (widget_class, I_("buttonbox"));
 }
 
 static void
@@ -344,8 +343,6 @@ gtk_button_box_get_layout (GtkButtonBox *widget)
  * Returns whether @child should appear in a secondary group of children.
  *
  * Returns: whether @child should appear in a secondary group of children.
- *
- * Since: 2.4
  **/
 gboolean
 gtk_button_box_get_child_secondary (GtkButtonBox *widget,
@@ -747,8 +744,7 @@ gtk_button_box_measure (GtkWidget      *widget,
 static void
 gtk_button_box_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip)
+                              int                  baseline)
 {
   GtkButtonBox *bbox = GTK_BUTTON_BOX (widget);
   GtkButtonBoxPrivate *priv = bbox->priv;
@@ -776,14 +772,12 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
   gint baseline_height;
   gint child_baseline;
   gint i;
-  GdkRectangle child_clip;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
     {
       GTK_WIDGET_CLASS (gtk_button_box_parent_class)->size_allocate (widget,
                                                                      allocation,
-                                                                     baseline,
-                                                                     out_clip);
+                                                                     baseline);
       return;
     }
 
@@ -1037,8 +1031,7 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
                 }
             }
 
-          gtk_widget_size_allocate (child, &child_allocation, child_baseline, &child_clip);
-          gdk_rectangle_union (out_clip, &child_clip, out_clip);
+          gtk_widget_size_allocate (child, &child_allocation, child_baseline);
           i++;
         }
     }
@@ -1056,8 +1049,6 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
  * Creates a new #GtkButtonBox.
  *
  * Returns: a new #GtkButtonBox.
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_button_box_new (GtkOrientation orientation)
@@ -1076,8 +1067,6 @@ gtk_button_box_new (GtkOrientation orientation)
  * sizing.
  *
  * Returns: %TRUE if the child is not subject to homogenous sizing
- *
- * Since: 3.2
  */
 gboolean
 gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
@@ -1096,8 +1085,6 @@ gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
  * @non_homogeneous: the new value
  *
  * Sets whether the child is exempted from homogeous sizing.
- *
- * Since: 3.2
  */
 void
 gtk_button_box_set_child_non_homogeneous (GtkButtonBox *widget,

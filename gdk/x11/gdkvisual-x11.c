@@ -24,26 +24,19 @@
 
 #include "config.h"
 
-#include "gdkvisualprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkvisual-x11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-struct _GdkX11Visual
-{
-  GdkVisual visual;
-
-  Visual *xvisual;
-};
-
 struct _GdkX11VisualClass
 {
-  GdkVisualClass visual_class;
+  GObjectClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkX11Visual, gdk_x11_visual, GDK_TYPE_VISUAL)
+G_DEFINE_TYPE (GdkX11Visual, gdk_x11_visual, G_TYPE_OBJECT)
 
 static void
 gdk_x11_visual_init (GdkX11Visual *x11_visual)
@@ -56,8 +49,8 @@ gdk_x11_visual_class_init (GdkX11VisualClass *class)
 }
 
 void
-_gdk_x11_screen_init_visuals (GdkScreen *screen,
-                              gboolean   setup_display)
+_gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
+                              gboolean      setup_display)
 {
   static const gint possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
@@ -70,24 +63,20 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
       GDK_VISUAL_STATIC_GRAY
     };
 
-  GdkX11Screen *x11_screen;
   XVisualInfo *visual_list;
   XVisualInfo visual_template;
-  GdkVisual *temp_visual;
+  GdkX11Visual *temp_visual;
   Visual *default_xvisual;
-  GdkVisual **visuals;
+  GdkX11Visual **visuals;
   int nxvisuals;
   int nvisuals;
   int i, j;
-
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  x11_screen = GDK_X11_SCREEN (screen);
 
   nxvisuals = 0;
   visual_template.screen = x11_screen->screen_num;
   visual_list = XGetVisualInfo (x11_screen->xdisplay, VisualScreenMask, &visual_template, &nxvisuals);
 
-  visuals = g_new (GdkVisual *, nxvisuals);
+  visuals = g_new (GdkX11Visual *, nxvisuals);
   for (i = 0; i < nxvisuals; i++)
     visuals[i] = g_object_new (GDK_TYPE_X11_VISUAL, NULL);
 
@@ -96,8 +85,6 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
     {
-      visuals[nvisuals]->screen = screen;
-
       if (visual_list[i].depth >= 1)
 	{
 #ifdef __cplusplus
@@ -209,7 +196,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GDK_DEBUG_CHECK (MISC))
+  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), MISC))
     {
       static const gchar *const visual_names[] =
       {
@@ -264,7 +251,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
   /* If GL is available we want to pick better default/rgba visuals,
      as we care about glx details such as alpha/depth/stencil depth,
      stereo and double buffering */
-  _gdk_x11_screen_update_visuals_for_gl (screen);
+  _gdk_x11_screen_update_visuals_for_gl (x11_screen);
 
   if (setup_display)
     {
@@ -277,7 +264,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
                                       RootWindow (x11_screen->xdisplay, x11_screen->screen_num),
                                       xvisual,
                                       AllocNone);
-          gdk_display_setup_window_visual (gdk_screen_get_display (screen),
+          gdk_display_setup_window_visual (GDK_SCREEN_DISPLAY (x11_screen),
                                            x11_screen->rgba_visual->depth,
                                            GDK_X11_VISUAL (x11_screen->rgba_visual)->xvisual,
                                            colormap,
@@ -285,7 +272,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
         }
       else
         {
-          gdk_display_setup_window_visual (gdk_screen_get_display (screen),
+          gdk_display_setup_window_visual (GDK_SCREEN_DISPLAY (x11_screen),
                                            DefaultDepth (x11_screen->xdisplay, x11_screen->screen_num),
                                            DefaultVisual (x11_screen->xdisplay, x11_screen->screen_num),
                                            DefaultColormap (x11_screen->xdisplay, x11_screen->screen_num),
@@ -296,24 +283,19 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
 
 /**
  * gdk_x11_screen_lookup_visual:
- * @screen: (type GdkX11Screen): a #GdkScreen.
+ * @screen: a #GdkX11Screen.
  * @xvisualid: an X Visual ID.
  *
  * Looks up the #GdkVisual for a particular screen and X Visual ID.
  *
  * Returns: (transfer none) (type GdkX11Visual): the #GdkVisual (owned by the screen
  *   object), or %NULL if the visual ID wasn’t found.
- *
- * Since: 2.2
  */
-GdkVisual *
-gdk_x11_screen_lookup_visual (GdkScreen *screen,
+GdkX11Visual *
+gdk_x11_screen_lookup_visual (GdkX11Screen *x11_screen,
                               VisualID   xvisualid)
 {
   int i;
-  GdkX11Screen *x11_screen;
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  x11_screen = GDK_X11_SCREEN (screen);
 
   for (i = 0; i < x11_screen->nvisuals; i++)
     if (xvisualid == GDK_X11_VISUAL (x11_screen->visuals[i])->xvisual->visualid)
@@ -331,9 +313,9 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
  * Returns: (transfer none): an Xlib Visual*.
  **/
 Visual *
-gdk_x11_visual_get_xvisual (GdkVisual *visual)
+gdk_x11_visual_get_xvisual (GdkX11Visual *visual)
 {
-  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
+  g_return_val_if_fail (GDK_IS_X11_VISUAL (visual), NULL);
 
   return GDK_X11_VISUAL (visual)->xvisual;
 }

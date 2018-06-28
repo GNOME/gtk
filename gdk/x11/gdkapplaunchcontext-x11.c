@@ -22,9 +22,9 @@
 
 #include "gdkx11applaunchcontext.h"
 #include "gdkapplaunchcontextprivate.h"
-#include "gdkscreen.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 
 #include <glib.h>
 #include <gio/gdesktopappinfo.h>
@@ -225,8 +225,8 @@ startup_timeout (void *data)
 
 
 static void
-add_startup_timeout (GdkScreen  *screen,
-                     const char *startup_id)
+add_startup_timeout (GdkX11Screen *screen,
+                     const char   *startup_id)
 {
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
@@ -244,7 +244,7 @@ add_startup_timeout (GdkScreen  *screen,
     }
 
   sn_data = g_new (StartupNotificationData, 1);
-  sn_data->display = g_object_ref (gdk_screen_get_display (screen));
+  sn_data->display = g_object_ref (GDK_SCREEN_DISPLAY (screen));
   sn_data->startup_id = g_strdup (startup_id);
   g_get_current_time (&sn_data->time);
 
@@ -265,7 +265,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
 {
   static int sequence = 0;
   GdkDisplay *display;
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   int files_count;
   char *description;
   char *icon_name;
@@ -282,7 +282,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
   ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
   display = ctx->display;
-  screen = gdk_display_get_default_screen (ctx->display);
+  screen = GDK_X11_DISPLAY (display)->screen;
 
   fileinfo = NULL;
 
@@ -392,14 +392,14 @@ gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
                                           const gchar       *startup_notify_id)
 {
   GdkAppLaunchContext *ctx;
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
   GSList *l;
 
   ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
-  screen = gdk_display_get_default_screen (ctx->display);
+  screen = GDK_X11_DISPLAY (ctx->display)->screen;
 
   data = g_object_get_data (G_OBJECT (screen), "appinfo-startup-data");
 

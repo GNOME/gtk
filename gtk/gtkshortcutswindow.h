@@ -19,6 +19,10 @@
 #ifndef __GTK_SHORTCUTS_WINDOW_H__
 #define __GTK_SHORTCUTS_WINDOW_H__
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
@@ -48,7 +52,7 @@ struct _GtkShortcutsWindowClass
   void (*search) (GtkShortcutsWindow *self);
 };
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GType gtk_shortcuts_window_get_type (void) G_GNUC_CONST;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkShortcutsWindow, g_object_unref)

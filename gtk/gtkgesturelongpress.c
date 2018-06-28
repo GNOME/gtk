@@ -107,7 +107,7 @@ _gtk_gesture_long_press_timeout (gpointer user_data)
   priv->triggered = TRUE;
   g_signal_emit (gesture, signals[PRESSED], 0, x, y);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -142,7 +142,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
 
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);
-  priv->timeout_id = gdk_threads_add_timeout (delay, _gtk_gesture_long_press_timeout, gesture);
+  priv->timeout_id = g_timeout_add (delay, _gtk_gesture_long_press_timeout, gesture);
   g_source_set_name_by_id (priv->timeout_id, "[gtk+] _gtk_gesture_long_press_timeout");
 }
 
@@ -297,8 +297,6 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    *
    * This signal is emitted whenever a press goes unmoved/unreleased longer than
    * what the GTK+ defaults tell.
-   *
-   * Since: 3.14
    */
   signals[PRESSED] =
     g_signal_new (I_("pressed"),
@@ -313,8 +311,6 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    *
    * This signal is emitted whenever a press moved too far, or was released
    * before #GtkGestureLongPress::pressed happened.
-   *
-   * Since: 3.14
    */
   signals[CANCELLED] =
     g_signal_new (I_("cancelled"),
@@ -327,20 +323,14 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
 
 /**
  * gtk_gesture_long_press_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes long presses.
  *
  * Returns: a newly created #GtkGestureLongPress
- *
- * Since: 3.14
  **/
 GtkGesture *
-gtk_gesture_long_press_new (GtkWidget *widget)
+gtk_gesture_long_press_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_LONG_PRESS,
-                       "widget", widget,
                        NULL);
 }

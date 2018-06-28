@@ -48,6 +48,7 @@
 #include "gtkstylecontext.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
+#include "gtkeventcontrollerkey.h"
 #include "treewalk.h"
 
 enum
@@ -123,6 +124,14 @@ static GObject *
 object_tree_widget_get_parent (GObject *object)
 {
   return G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object)));
+}
+
+static GObject *
+object_tree_menu_get_parent (GObject *object)
+{
+  GtkWidget *w = gtk_menu_get_attach_widget (GTK_MENU (object));
+
+  return w ? G_OBJECT (w) : NULL;
 }
 
 static gboolean
@@ -441,6 +450,12 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     object_tree_widget_get_sensitive
   },
   {
+    gtk_menu_get_type,
+    object_tree_menu_get_parent,
+    object_tree_widget_forall,
+    object_tree_widget_get_sensitive
+  },
+  {
     gtk_widget_get_type,
     object_tree_widget_get_parent,
     object_tree_widget_forall,
@@ -700,15 +715,13 @@ move_search_to_row (GtkInspectorObjectTree *wt,
 }
 
 static gboolean
-key_press_event (GtkWidget              *window,
-                 GdkEvent               *event,
-                 GtkInspectorObjectTree *wt)
+key_pressed (GtkEventController     *controller,
+             guint                   keyval,
+             guint                   keycode,
+             GdkModifierType         state,
+             GtkInspectorObjectTree *wt)
 {
-  guint keyval, state;
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (wt)) &&
-      gdk_event_get_keyval (event, &keyval) &&
-      gdk_event_get_state (event, &state))
+  if (gtk_widget_get_mapped (GTK_WIDGET (wt)))
     {
       GdkModifierType default_accel;
       gboolean search_started;
@@ -771,21 +784,40 @@ key_press_event (GtkWidget              *window,
 
           return GDK_EVENT_STOP;
         }
-
-      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (wt->priv->search_bar), event);
     }
-  else
-    return GDK_EVENT_PROPAGATE;
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+destroy_controller (GtkEventController *controller)
+{
+  gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
 }
 
 static void
 on_hierarchy_changed (GtkWidget *widget,
                       GtkWidget *previous_toplevel)
 {
+  GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (widget);
+  GtkEventController *controller;
+  GtkWidget *toplevel;
+
   if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
-  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
-                    G_CALLBACK (key_press_event), widget);
+    g_object_set_data (G_OBJECT (previous_toplevel), "object-controller", NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
+  controller = gtk_event_controller_key_new ();
+  g_object_set_data_full (G_OBJECT (toplevel), "object-controller", controller, (GDestroyNotify)destroy_controller);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
+  gtk_widget_add_controller (toplevel, controller);
+
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (wt->priv->search_bar),
+                                         toplevel);
 }
 
 static void

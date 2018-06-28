@@ -19,19 +19,20 @@ place_popup (GtkWidget *parent,
   gint width, height;
   gdouble x, y;
 
-  gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
-  gdk_event_get_root_coords (event, &x, &y);
-  gtk_window_move (GTK_WINDOW (popup),
-                   (int) x - width / 2,
-                   (int) y - height / 2);
+  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
+    {
+      gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
+      gdk_event_get_root_coords (event, &x, &y);
+      gtk_window_move (GTK_WINDOW (popup),
+                       (int) x - width / 2,
+                       (int) y - height / 2);
+    }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
-on_map_event (GtkWidget *parent,
-              GdkEvent  *event,
-              gpointer   data)
+on_map (GtkWidget *parent)
 {
   GtkWidget *popup, *da;
 
@@ -42,7 +43,7 @@ on_map_event (GtkWidget *parent,
 
   gtk_widget_set_size_request (GTK_WIDGET (popup), 20, 20);
   gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
-  g_signal_connect (parent, "motion-notify-event", G_CALLBACK (place_popup), popup);
+  g_signal_connect (parent, "event", G_CALLBACK (place_popup), popup);
 
   gtk_widget_show (popup);
 
@@ -59,7 +60,7 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
-  g_signal_connect (window, "map-event", G_CALLBACK (on_map_event), NULL);
+  g_signal_connect (window, "map", G_CALLBACK (on_map), NULL);
 
   gtk_widget_show (window);
 

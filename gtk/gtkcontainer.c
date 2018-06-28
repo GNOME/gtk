@@ -26,42 +26,29 @@
 
 #include "gtkcontainerprivate.h"
 
-#include <stdarg.h>
-#include <string.h>
-#include <stdlib.h>
+#include "gtkadjustment.h"
+#include "gtkassistant.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
+#include "gtkintl.h"
+#include "gtkpopovermenu.h"
+#include "gtkprivate.h"
+#include "gtkmarshalers.h"
+#include "gtkshortcutssection.h"
+#include "gtkshortcutswindow.h"
+#include "gtksizerequest.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindow.h"
+
+#include "a11y/gtkcontaineraccessibleprivate.h"
 
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
-
-#include "gtkadjustment.h"
-#include "gtkbuildable.h"
-#include "gtkbuilderprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkprivate.h"
-#include "gtkmain.h"
-#include "gtkmarshalers.h"
-#include "gtksizerequest.h"
-#include "gtksizerequestcacheprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
-#include "gtkassistant.h"
-#include "gtkintl.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkwidgetpath.h"
-#include "a11y/gtkcontaineraccessible.h"
-#include "a11y/gtkcontaineraccessibleprivate.h"
-#include "gtkpopovermenu.h"
-#include "gtkshortcutswindow.h"
-
-
-/* A handful of containers inside GTK+ are cheating and widgets
- * inside internal structure as direct children for the purpose
- * of forall().
- */
-#define SPECIAL_CONTAINER(x) (GTK_IS_ASSISTANT (x) || \
-                              GTK_IS_POPOVER_MENU (x) || \
-                              GTK_IS_SHORTCUTS_SECTION (x) || \
-                              GTK_IS_SHORTCUTS_WINDOW (x))
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * SECTION:gtkcontainer
@@ -100,122 +87,6 @@
  * in the #GtkWidgetClass.destroy() implementation.
  * See more about implementing custom widgets at https://wiki.gnome.org/HowDoI/CustomWidgets
  *
- * # Height for width geometry management
- *
- * GTK+ uses a height-for-width (and width-for-height) geometry management system.
- * Height-for-width means that a widget can change how much vertical space it needs,
- * depending on the amount of horizontal space that it is given (and similar for
- * width-for-height).
- *
- * There are some things to keep in mind when implementing container widgets
- * that make use of GTK+’s height for width geometry management system. First,
- * it’s important to note that a container must prioritize one of its
- * dimensions, that is to say that a widget or container can only have a
- * #GtkSizeRequestMode that is %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
- * %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT. However, every widget and container
- * must be able to respond to the APIs for both dimensions, i.e. even if a
- * widget has a request mode that is height-for-width, it is possible that
- * its parent will request its sizes using the width-for-height APIs.
- *
- * To ensure that everything works properly, here are some guidelines to follow
- * when implementing height-for-width (or width-for-height) containers.
- *
- * Each request mode involves 2 virtual methods. Height-for-width apis run
- * through gtk_widget_get_preferred_width() and then through gtk_widget_get_preferred_height_for_width().
- * When handling requests in the opposite #GtkSizeRequestMode it is important that
- * every widget request at least enough space to display all of its content at all times.
- *
- * When gtk_widget_get_preferred_height() is called on a container that is height-for-width,
- * the container must return the height for its minimum width. This is easily achieved by
- * simply calling the reverse apis implemented for itself as follows:
- *
- * |[<!-- language="C" -->
- * static void
- * foo_container_get_preferred_height (GtkWidget *widget,
- *                                     gint *min_height,
- *                                     gint *nat_height)
- * {
- *    if (i_am_in_height_for_width_mode)
- *      {
- *        gint min_width;
- *
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
- *                                                            &min_width,
- *                                                            NULL);
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width
- *                                                           (widget,
- *                                                            min_width,
- *                                                            min_height,
- *                                                            nat_height);
- *      }
- *    else
- *      {
- *        ... many containers support both request modes, execute the
- *        real width-for-height request here by returning the
- *        collective heights of all widgets that are stacked
- *        vertically (or whatever is appropriate for this container)
- *        ...
- *      }
- * }
- * ]|
- *
- * Similarly, when gtk_widget_get_preferred_width_for_height() is called for a container or widget
- * that is height-for-width, it then only needs to return the base minimum width like so:
- *
- * |[<!-- language="C" -->
- * static void
- * foo_container_get_preferred_width_for_height (GtkWidget *widget,
- *                                               gint for_height,
- *                                               gint *min_width,
- *                                               gint *nat_width)
- * {
- *    if (i_am_in_height_for_width_mode)
- *      {
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
- *                                                            min_width,
- *                                                            nat_width);
- *      }
- *    else
- *      {
- *        ... execute the real width-for-height request here based on
- *        the required width of the children collectively if the
- *        container were to be allocated the said height ...
- *      }
- * }
- * ]|
- *
- * Height for width requests are generally implemented in terms of a virtual allocation
- * of widgets in the input orientation. Assuming an height-for-width request mode, a container
- * would implement the get_preferred_height_for_width() virtual function by first calling
- * gtk_widget_get_preferred_width() for each of its children.
- *
- * For each potential group of children that are lined up horizontally, the values returned by
- * gtk_widget_get_preferred_width() should be collected in an array of #GtkRequestedSize structures.
- * Any child spacing should be removed from the input @for_width and then the collective size should be
- * allocated using the gtk_distribute_natural_allocation() convenience function.
- *
- * The container will then move on to request the preferred height for each child by using
- * gtk_widget_get_preferred_height_for_width() and using the sizes stored in the #GtkRequestedSize array.
- *
- * To allocate a height-for-width container, it’s again important
- * to consider that a container must prioritize one dimension over the other. So if
- * a container is a height-for-width container it must first allocate all widgets horizontally
- * using a #GtkRequestedSize array and gtk_distribute_natural_allocation() and then add any
- * extra space (if and where appropriate) for the widget to expand.
- *
- * After adding all the expand space, the container assumes it was allocated sufficient
- * height to fit all of its content. At this time, the container must use the total horizontal sizes
- * of each widget to request the height-for-width of each of its children and store the requests in a
- * #GtkRequestedSize array for any widgets that stack vertically (for tabular containers this can
- * be generalized into the heights and widths of rows and columns).
- * The vertical space must then again be distributed using gtk_distribute_natural_allocation()
- * while this time considering the allocated height of the widget minus any vertical spacing
- * that the container adds. Then vertical expand space should be added where appropriate and available
- * and the container should go on to actually allocating the child widgets.
- *
- * See [GtkWidget’s geometry management section][geometry-management]
- * to learn more about implementing height-for-width geometry management for widgets.
- *
  * # Child properties
  *
  * GtkContainer introduces child properties.
@@ -242,11 +113,11 @@
  * a <packing> element for children, which can contain multiple <property>
  * elements that specify child properties for the child.
  * 
- * Since 2.16, child properties can also be marked as translatable using
+ * Child properties can also be marked as translatable using
  * the same “translatable”, “comments” and “context” attributes that are used
  * for regular properties.
  *
- * Since 3.16, containers can have a <focus-chain> element containing multiple
+ * Containers can have a <focus-chain> element containing multiple
  * <widget> elements, one for each child that should be added to the focus
  * chain. The ”name” attribute gives the id of the widget.
  *
@@ -274,12 +145,10 @@
 
 struct _GtkContainerPrivate
 {
-  GdkFrameClock *resize_clock;
   guint resize_handler;
 
   guint has_focus_chain    : 1;
   guint restyle_pending    : 1;
-  guint request_mode       : 2;
 };
 
 enum {
@@ -313,9 +182,6 @@ static gboolean gtk_container_focus                (GtkWidget         *widget,
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
                                                     GtkWidget         *widget);
 
-static gboolean gtk_container_focus_move           (GtkContainer      *container,
-                                                    GList             *children,
-                                                    GtkDirectionType   direction);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
@@ -352,7 +218,7 @@ static GQuark                hadjustment_key_id;
 static GQuark                quark_focus_chain;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static gint                  GtkContainer_private_offset;
-static GtkWidgetClass       *parent_class = NULL;
+static GtkWidgetClass       *gtk_container_parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
 extern GObjectNotifyContext *_gtk_widget_child_property_notify_context;
 static GtkBuildableIface    *parent_buildable_iface;
@@ -440,7 +306,7 @@ gtk_container_class_init (GtkContainerClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  parent_class = g_type_class_peek_parent (class);
+  gtk_container_parent_class = g_type_class_peek_parent (class);
 
   vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
@@ -517,18 +383,22 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
                                    GObject       *child,
                                    const gchar   *type)
 {
-  if (type)
+  if (GTK_IS_WIDGET (child) &&
+      _gtk_widget_get_parent (GTK_WIDGET (child)) == NULL)
     {
-      GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
-    }
-  else if (GTK_IS_WIDGET (child) &&
-           _gtk_widget_get_parent (GTK_WIDGET (child)) == NULL)
-    {
-      gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+      if (type)
+        {
+          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+        }
+      else
+        {
+          gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+        }
     }
   else
-    g_warning ("Cannot add an object of type %s to a container of type %s",
-               g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static inline void
@@ -578,15 +448,6 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
   GObjectNotifyQueue *nqueue;
-
-  if (SPECIAL_CONTAINER (container))
-    {
-      /* This can happen with internal children of complex widgets.
-       * Silently ignore the child properties in this case. We explicitly
-       * allow it for GtkAssistant, since that is how it works.
-       */
-      return;
-    }
 
   pspec = gtk_container_class_find_child_property (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
@@ -972,8 +833,6 @@ gtk_container_child_type (GtkContainer *container)
  * This is an analogue of g_object_notify() for child properties.
  *
  * Also see gtk_widget_child_notify().
- *
- * Since: 3.2
  */
 void
 gtk_container_child_notify (GtkContainer *container,
@@ -1031,8 +890,6 @@ gtk_container_child_notify (GtkContainer *container,
  * @pspec on the child.
  *
  * This is an analogue of g_object_notify_by_pspec() for child properties.
- *
- * Since: 3.18
  */
 void
 gtk_container_child_notify_by_pspec (GtkContainer *container,
@@ -1473,8 +1330,6 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  *     child properties
  *
  * Installs child properties on a container class.
- *
- * Since: 3.18
  */
 void
 gtk_container_class_install_child_properties (GtkContainerClass  *cclass,
@@ -1594,7 +1449,7 @@ gtk_container_destroy (GtkWidget *widget)
 
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
-  GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+  GTK_WIDGET_CLASS (gtk_container_parent_class)->destroy (widget);
 }
 
 /**
@@ -1721,7 +1576,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
 
   if (!gtk_container_needs_idle_sizer (container))
     {
-      _gtk_container_stop_idle_sizer (container);
+      gtk_container_stop_idle_sizer (container);
     }
   else
     {
@@ -1730,7 +1585,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
     }
 }
 
-static void
+void
 gtk_container_start_idle_sizer (GtkContainer *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
@@ -1739,11 +1594,13 @@ gtk_container_start_idle_sizer (GtkContainer *container)
   if (priv->resize_handler != 0)
     return;
 
+  if (!gtk_container_needs_idle_sizer (container))
+    return;
+
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));
   if (clock == NULL)
     return;
 
-  priv->resize_clock = clock;
   priv->resize_handler = g_signal_connect (clock, "layout",
                                            G_CALLBACK (gtk_container_idle_sizer), container);
   gdk_frame_clock_request_phase (clock,
@@ -1751,32 +1608,16 @@ gtk_container_start_idle_sizer (GtkContainer *container)
 }
 
 void
-_gtk_container_stop_idle_sizer (GtkContainer *container)
+gtk_container_stop_idle_sizer (GtkContainer *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   if (priv->resize_handler == 0)
     return;
 
-  g_signal_handler_disconnect (priv->resize_clock,
+  g_signal_handler_disconnect (gtk_widget_get_frame_clock (GTK_WIDGET (container)),
                                priv->resize_handler);
   priv->resize_handler = 0;
-  priv->resize_clock = NULL;
-}
-
-void
-gtk_container_queue_resize_handler (GtkContainer *container)
-{
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (container);
-
-  if (_gtk_widget_get_visible (widget) &&
-      gtk_widget_needs_allocate (widget) &&
-      _gtk_widget_is_toplevel (widget))
-    {
-      gtk_container_start_idle_sizer (container);
-    }
 }
 
 void
@@ -1789,15 +1630,8 @@ _gtk_container_queue_restyle (GtkContainer *container)
   if (priv->restyle_pending)
     return;
 
-  gtk_container_start_idle_sizer (container);
   priv->restyle_pending = TRUE;
-}
-
-void
-_gtk_container_maybe_start_idle_sizer (GtkContainer *container)
-{
-  if (gtk_container_needs_idle_sizer (container))
-    gtk_container_start_idle_sizer (container);
+  gtk_container_start_idle_sizer (container);
 }
 
 void
@@ -1820,7 +1654,6 @@ gtk_container_real_check_resize (GtkContainer *container)
     {
       if (!_gtk_widget_is_toplevel (widget))
         {
-          GtkAllocation clip;
           gtk_widget_get_preferred_size (widget, &requisition, NULL);
           gtk_widget_get_allocated_size (widget, &allocation, &baseline);
 
@@ -1828,7 +1661,7 @@ gtk_container_real_check_resize (GtkContainer *container)
             allocation.width = requisition.width;
           if (allocation.height < requisition.height)
             allocation.height = requisition.height;
-          gtk_widget_size_allocate (widget, &allocation, baseline, &clip);
+          gtk_widget_size_allocate (widget, &allocation, baseline);
         }
       else
         gtk_widget_queue_resize (widget);
@@ -1839,45 +1672,38 @@ gtk_container_real_check_resize (GtkContainer *container)
     }
 }
 
-typedef struct {
-  gint hfw;
-  gint wfh;
-} RequestModeCount;
-
-static void
-count_request_modes (GtkWidget        *widget,
-		     RequestModeCount *count)
-{
-  GtkSizeRequestMode mode = gtk_widget_get_request_mode (widget);
-
-  switch (mode)
-    {
-    case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
-      count->hfw++;
-      break;
-    case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
-      count->wfh++;
-      break;
-    case GTK_SIZE_REQUEST_CONSTANT_SIZE:
-    default:
-      break;
-    }
-}
-
 static GtkSizeRequestMode 
 gtk_container_get_request_mode (GtkWidget *widget)
 {
-  GtkContainer *container = GTK_CONTAINER (widget);
-  RequestModeCount count = { 0, 0 };
+  GtkWidget *w;
+  int wfh = 0, hfw = 0;
 
-  gtk_container_forall (container, (GtkCallback)count_request_modes, &count);
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
 
-  if (!count.hfw && !count.wfh)
+      switch (mode)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw ++;
+          break;
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh ++;
+          break;
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+  if (hfw == 0 && wfh == 0)
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
   else
-    return count.wfh > count.hfw ? 
+    return wfh > hfw ?
         GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
-	GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 /**
@@ -1986,51 +1812,36 @@ gtk_container_get_children (GtkContainer *container)
   return g_list_reverse (children);
 }
 
-typedef struct {
-  gboolean hexpand;
-  gboolean vexpand;
-} ComputeExpandData;
-
 static void
-gtk_container_compute_expand_callback (GtkWidget *widget,
-                                       gpointer   client_data)
+gtk_container_compute_expand (GtkWidget *widget,
+                              gboolean  *hexpand_p,
+                              gboolean  *vexpand_p)
 {
-  ComputeExpandData *data = client_data;
+  GtkWidget *w;
+  gboolean hexpand = FALSE;
+  gboolean vexpand = FALSE;
 
-  /* note that we don't get_expand on the child if we already know we
-   * have to expand, so we only recurse into children until we find
-   * one that expands and then we basically don't do any more
-   * work. This means that we can leave some children in a
-   * need_compute_expand state, which is fine, as long as GtkWidget
-   * doesn't rely on an invariant that "if a child has
-   * need_compute_expand, its parents also do"
-   *
-   * gtk_widget_compute_expand() always returns FALSE if the
-   * child is !visible so that's taken care of.
-   */
-  data->hexpand = data->hexpand ||
-    gtk_widget_compute_expand (widget, GTK_ORIENTATION_HORIZONTAL);
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      /* note that we don't get_expand on the child if we already know we
+       * have to expand, so we only recurse into children until we find
+       * one that expands and then we basically don't do any more
+       * work. This means that we can leave some children in a
+       * need_compute_expand state, which is fine, as long as GtkWidget
+       * doesn't rely on an invariant that "if a child has
+       * need_compute_expand, its parents also do"
+       *
+       * gtk_widget_compute_expand() always returns FALSE if the
+       * child is !visible so that's taken care of.
+       */
+      hexpand = hexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = vexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_VERTICAL);
+    }
 
-  data->vexpand = data->vexpand ||
-    gtk_widget_compute_expand (widget, GTK_ORIENTATION_VERTICAL);
-}
-
-static void
-gtk_container_compute_expand (GtkWidget         *widget,
-                              gboolean          *hexpand_p,
-                              gboolean          *vexpand_p)
-{
-  ComputeExpandData data;
-
-  data.hexpand = FALSE;
-  data.vexpand = FALSE;
-
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        gtk_container_compute_expand_callback,
-                        &data);
-
-  *hexpand_p = data.hexpand;
-  *vexpand_p = data.vexpand;
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
 }
 
 static void
@@ -2045,7 +1856,6 @@ gtk_container_real_set_focus_child (GtkContainer *container,
     {
       GtkAdjustment *hadj;
       GtkAdjustment *vadj;
-      GtkAllocation allocation;
       gint x, y;
 
       hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
@@ -2053,6 +1863,7 @@ gtk_container_real_set_focus_child (GtkContainer *container,
       if (hadj || vadj)
         {
           GtkWidget *child = focus_child;
+          graphene_rect_t child_bounds;
 
           while (gtk_widget_get_focus_child (child))
             child = gtk_widget_get_focus_child (child);
@@ -2061,13 +1872,13 @@ gtk_container_real_set_focus_child (GtkContainer *container,
                                                  0, 0, &x, &y))
             return;
 
-          gtk_widget_get_outer_allocation (child, &allocation);
+          gtk_widget_compute_bounds (child, child, &child_bounds);
 
           if (vadj)
-            gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
+            gtk_adjustment_clamp_page (vadj, y, y + child_bounds.size.height);
 
           if (hadj)
-            gtk_adjustment_clamp_page (hadj, x, x + allocation.width);
+            gtk_adjustment_clamp_page (hadj, x, x + child_bounds.size.width);
         }
     }
 }
@@ -2076,20 +1887,6 @@ static GList*
 get_focus_chain (GtkContainer *container)
 {
   return g_object_get_qdata (G_OBJECT (container), quark_focus_chain);
-}
-
-/* same as gtk_container_get_children, except it includes internals
- */
-static GList *
-gtk_container_get_all_children (GtkContainer *container)
-{
-  GList *children = NULL;
-
-  gtk_container_forall (container,
-                         gtk_container_children_callback,
-                         &children);
-
-  return children;
 }
 
 static GtkWidgetPath *
@@ -2106,14 +1903,28 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
   return path;
 }
 
+/* Utility function, equivalent to g_list_reverse */
+static void
+reverse_ptr_array (GPtrArray *arr)
+{
+  int i;
+
+  for (i = 0; i < arr->len / 2; i ++)
+    {
+      void *a = g_ptr_array_index (arr, i);
+      void *b = g_ptr_array_index (arr, arr->len - 1 - i);
+
+      arr->pdata[i] = b;
+      arr->pdata[arr->len - 1 - i] = a;
+    }
+}
+
 static gboolean
 gtk_container_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
   GtkContainerPrivate *priv;
-  GList *children;
-  GList *sorted_children;
-  gint return_val;
+  gint return_val = FALSE;
   GtkContainer *container;
 
   g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
@@ -2121,523 +1932,43 @@ gtk_container_focus (GtkWidget        *widget,
   container = GTK_CONTAINER (widget);
   priv = gtk_container_get_instance_private (container);
 
-  return_val = FALSE;
-
-  if (gtk_widget_get_can_focus (widget))
+  if (!priv->has_focus_chain)
     {
-      if (!gtk_widget_has_focus (widget))
-        {
-          gtk_widget_grab_focus (widget);
-          return_val = TRUE;
-        }
+      return_val = GTK_WIDGET_CLASS (gtk_container_parent_class)->focus (widget, direction);
     }
   else
     {
-      /* Get a list of the containers children, allowing focus
-       * chain to override.
-       */
-      if (priv->has_focus_chain)
-        children = g_list_copy (get_focus_chain (container));
-      else
-        children = gtk_container_get_all_children (container);
+      GList *focus_chain;
+      GList *l;
+      GPtrArray *child_array;
 
-      if (priv->has_focus_chain &&
-          (direction == GTK_DIR_TAB_FORWARD ||
-           direction == GTK_DIR_TAB_BACKWARD))
+      /* Here we compute the next focus child based on the focus chain set on @container.
+       * If we move via TAB, we consider the focus chain widgets in the order given to us (or in reverse).
+       * If UP/DOWN/LEFT/RIGHT are used, we sort the focus chain like normal, using their allocation. */
+      focus_chain = get_focus_chain (container);
+      child_array = g_ptr_array_sized_new (g_list_length (focus_chain));
+
+      for (l = focus_chain; l; l = l->next)
+        g_ptr_array_add (child_array, l->data);
+
+      if (direction == GTK_DIR_TAB_BACKWARD)
         {
-          sorted_children = g_list_copy (children);
-
-          if (direction == GTK_DIR_TAB_BACKWARD)
-            sorted_children = g_list_reverse (sorted_children);
+          /* Reverse order for gtk_widget_focus_move to consider */
+          reverse_ptr_array (child_array);
         }
-      else
-        sorted_children = _gtk_container_focus_sort (container, children, direction, NULL);
+      else if (direction != GTK_DIR_TAB_FORWARD)
+        {
+          /* Nothing to be done. We don't sort the children, and we don't reverse them either. */
+          gtk_widget_focus_sort (widget, direction, child_array);
+        }
 
-      return_val = gtk_container_focus_move (container, sorted_children, direction);
+      return_val = gtk_widget_focus_move (widget, direction, child_array);
 
-      g_list_free (sorted_children);
-      g_list_free (children);
+      g_ptr_array_free (child_array, TRUE);
     }
 
   return return_val;
 }
-
-static gint
-tab_compare (gconstpointer a,
-             gconstpointer b,
-             gpointer      data)
-{
-  GtkAllocation child1_allocation, child2_allocation;
-  const GtkWidget *child1 = a;
-  const GtkWidget *child2 = b;
-  GtkTextDirection text_direction = GPOINTER_TO_INT (data);
-  gint y1, y2;
-
-  _gtk_widget_get_allocation ((GtkWidget *) child1, &child1_allocation);
-  _gtk_widget_get_allocation ((GtkWidget *) child2, &child2_allocation);
-
-  y1 = child1_allocation.y + child1_allocation.height / 2;
-  y2 = child2_allocation.y + child2_allocation.height / 2;
-
-  if (y1 == y2)
-    {
-      gint x1 = child1_allocation.x + child1_allocation.width / 2;
-      gint x2 = child2_allocation.x + child2_allocation.width / 2;
-
-      if (text_direction == GTK_TEXT_DIR_RTL)
-        return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
-      else
-        return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
-    }
-  else
-    return (y1 < y2) ? -1 : 1;
-}
-
-static GList *
-gtk_container_focus_sort_tab (GtkContainer     *container,
-                              GList            *children,
-                              GtkDirectionType  direction,
-                              GtkWidget        *old_focus)
-{
-  GtkTextDirection text_direction = _gtk_widget_get_direction (GTK_WIDGET (container));
-  children = g_list_sort_with_data (children, tab_compare, GINT_TO_POINTER (text_direction));
-
-  /* if we are going backwards then reverse the order
-   *  of the children.
-   */
-  if (direction == GTK_DIR_TAB_BACKWARD)
-    children = g_list_reverse (children);
-
-  return children;
-}
-
-/* Get coordinates of @widget's allocation with respect to
- * allocation of @container.
- */
-static gboolean
-get_allocation_coords (GtkContainer  *container,
-                       GtkWidget     *widget,
-                       GdkRectangle  *allocation)
-{
-  gtk_widget_get_allocation (widget, allocation);
-
-  return gtk_widget_translate_coordinates (widget, GTK_WIDGET (container),
-                                           0, 0, &allocation->x, &allocation->y);
-}
-
-/* Look for a child in @children that is intermediate between
- * the focus widget and container. This widget, if it exists,
- * acts as the starting widget for focus navigation.
- */
-static GtkWidget *
-find_old_focus (GtkContainer *container,
-                GList        *children)
-{
-  GList *tmp_list = children;
-  while (tmp_list)
-    {
-      GtkWidget *child = tmp_list->data;
-      GtkWidget *widget = child;
-
-      while (widget && widget != (GtkWidget *)container)
-        {
-          GtkWidget *parent;
-
-          parent = _gtk_widget_get_parent (widget);
-
-          if (parent && (gtk_widget_get_focus_child (parent) != widget))
-            goto next;
-
-          widget = parent;
-        }
-
-      return child;
-
-    next:
-      tmp_list = tmp_list->next;
-    }
-
-  return NULL;
-}
-
-static gboolean
-old_focus_coords (GtkContainer *container,
-                  GdkRectangle *old_focus_rect)
-{
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
-  GtkWidget *old_focus;
-
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      old_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-      if (old_focus)
-        return get_allocation_coords (container, old_focus, old_focus_rect);
-    }
-
-  return FALSE;
-}
-
-typedef struct _CompareInfo CompareInfo;
-
-struct _CompareInfo
-{
-  GtkContainer *container;
-  gint x;
-  gint y;
-  gboolean reverse;
-};
-
-static gint
-up_down_compare (gconstpointer a,
-                 gconstpointer b,
-                 gpointer      data)
-{
-  GdkRectangle allocation1;
-  GdkRectangle allocation2;
-  CompareInfo *compare = data;
-  gint y1, y2;
-
-  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
-  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
-
-  y1 = allocation1.y + allocation1.height / 2;
-  y2 = allocation2.y + allocation2.height / 2;
-
-  if (y1 == y2)
-    {
-      gint x1 = abs (allocation1.x + allocation1.width / 2 - compare->x);
-      gint x2 = abs (allocation2.x + allocation2.width / 2 - compare->x);
-
-      if (compare->reverse)
-        return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
-      else
-        return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
-    }
-  else
-    return (y1 < y2) ? -1 : 1;
-}
-
-static GList *
-gtk_container_focus_sort_up_down (GtkContainer     *container,
-                                  GList            *children,
-                                  GtkDirectionType  direction,
-                                  GtkWidget        *old_focus)
-{
-  CompareInfo compare;
-  GList *tmp_list;
-  GdkRectangle old_allocation;
-
-  compare.container = container;
-  compare.reverse = (direction == GTK_DIR_UP);
-
-  if (!old_focus)
-      old_focus = find_old_focus (container, children);
-
-  if (old_focus && get_allocation_coords (container, old_focus, &old_allocation))
-    {
-      gint compare_x1;
-      gint compare_x2;
-      gint compare_y;
-
-      /* Delete widgets from list that don't match minimum criteria */
-
-      compare_x1 = old_allocation.x;
-      compare_x2 = old_allocation.x + old_allocation.width;
-
-      if (direction == GTK_DIR_UP)
-        compare_y = old_allocation.y;
-      else
-        compare_y = old_allocation.y + old_allocation.height;
-
-      tmp_list = children;
-      while (tmp_list)
-        {
-          GtkWidget *child = tmp_list->data;
-          GList *next = tmp_list->next;
-          gint child_x1, child_x2;
-          GdkRectangle child_allocation;
-
-          if (child != old_focus)
-            {
-              if (get_allocation_coords (container, child, &child_allocation))
-                {
-                  child_x1 = child_allocation.x;
-                  child_x2 = child_allocation.x + child_allocation.width;
-
-                  if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
-                      (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
-                      (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
-                    {
-                      children = g_list_delete_link (children, tmp_list);
-                    }
-                }
-              else
-                children = g_list_delete_link (children, tmp_list);
-            }
-
-          tmp_list = next;
-        }
-
-      compare.x = (compare_x1 + compare_x2) / 2;
-      compare.y = old_allocation.y + old_allocation.height / 2;
-    }
-  else
-    {
-      /* No old focus widget, need to figure out starting x,y some other way
-       */
-      GtkAllocation allocation;
-      GtkWidget *widget = GTK_WIDGET (container);
-      GdkRectangle old_focus_rect;
-
-      _gtk_widget_get_allocation (widget, &allocation);
-
-      if (old_focus_coords (container, &old_focus_rect))
-        {
-          compare.x = old_focus_rect.x + old_focus_rect.width / 2;
-        }
-      else
-        {
-          if (!_gtk_widget_get_has_window (widget))
-            compare.x = allocation.x + allocation.width / 2;
-          else
-            compare.x = allocation.width / 2;
-        }
-
-      if (!_gtk_widget_get_has_window (widget))
-        compare.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
-      else
-        compare.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;
-    }
-
-  children = g_list_sort_with_data (children, up_down_compare, &compare);
-
-  if (compare.reverse)
-    children = g_list_reverse (children);
-
-  return children;
-}
-
-static gint
-left_right_compare (gconstpointer a,
-                    gconstpointer b,
-                    gpointer      data)
-{
-  GdkRectangle allocation1;
-  GdkRectangle allocation2;
-  CompareInfo *compare = data;
-  gint x1, x2;
-
-  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
-  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
-
-  x1 = allocation1.x + allocation1.width / 2;
-  x2 = allocation2.x + allocation2.width / 2;
-
-  if (x1 == x2)
-    {
-      gint y1 = abs (allocation1.y + allocation1.height / 2 - compare->y);
-      gint y2 = abs (allocation2.y + allocation2.height / 2 - compare->y);
-
-      if (compare->reverse)
-        return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
-      else
-        return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
-    }
-  else
-    return (x1 < x2) ? -1 : 1;
-}
-
-static GList *
-gtk_container_focus_sort_left_right (GtkContainer     *container,
-                                     GList            *children,
-                                     GtkDirectionType  direction,
-                                     GtkWidget        *old_focus)
-{
-  CompareInfo compare;
-  GList *tmp_list;
-  GdkRectangle old_allocation;
-
-  compare.container = container;
-  compare.reverse = (direction == GTK_DIR_LEFT);
-
-  if (!old_focus)
-    old_focus = find_old_focus (container, children);
-
-  if (old_focus && get_allocation_coords (container, old_focus, &old_allocation))
-    {
-      gint compare_y1;
-      gint compare_y2;
-      gint compare_x;
-
-      /* Delete widgets from list that don't match minimum criteria */
-
-      compare_y1 = old_allocation.y;
-      compare_y2 = old_allocation.y + old_allocation.height;
-
-      if (direction == GTK_DIR_LEFT)
-        compare_x = old_allocation.x;
-      else
-        compare_x = old_allocation.x + old_allocation.width;
-
-      tmp_list = children;
-      while (tmp_list)
-        {
-          GtkWidget *child = tmp_list->data;
-          GList *next = tmp_list->next;
-          gint child_y1, child_y2;
-          GdkRectangle child_allocation;
-
-          if (child != old_focus)
-            {
-              if (get_allocation_coords (container, child, &child_allocation))
-                {
-                  child_y1 = child_allocation.y;
-                  child_y2 = child_allocation.y + child_allocation.height;
-
-                  if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
-                      (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
-                      (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
-                    {
-                      children = g_list_delete_link (children, tmp_list);
-                    }
-                }
-              else
-                children = g_list_delete_link (children, tmp_list);
-            }
-
-          tmp_list = next;
-        }
-
-      compare.y = (compare_y1 + compare_y2) / 2;
-      compare.x = old_allocation.x + old_allocation.width / 2;
-    }
-  else
-    {
-      /* No old focus widget, need to figure out starting x,y some other way
-       */
-      GtkAllocation allocation;
-      GtkWidget *widget = GTK_WIDGET (container);
-      GdkRectangle old_focus_rect;
-
-      _gtk_widget_get_allocation (widget, &allocation);
-
-      if (old_focus_coords (container, &old_focus_rect))
-        {
-          compare.y = old_focus_rect.y + old_focus_rect.height / 2;
-        }
-      else
-        {
-          if (!_gtk_widget_get_has_window (widget))
-            compare.y = allocation.y + allocation.height / 2;
-          else
-            compare.y = allocation.height / 2;
-        }
-
-      if (!_gtk_widget_get_has_window (widget))
-        compare.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
-      else
-        compare.x = (direction == GTK_DIR_RIGHT) ? 0 : allocation.width;
-    }
-
-  children = g_list_sort_with_data (children, left_right_compare, &compare);
-
-  if (compare.reverse)
-    children = g_list_reverse (children);
-
-  return children;
-}
-
-/**
- * gtk_container_focus_sort:
- * @container: a #GtkContainer
- * @children:  a list of descendents of @container (they don't
- *             have to be direct children)
- * @direction: focus direction
- * @old_focus: (allow-none): widget to use for the starting position, or %NULL
- *             to determine this automatically.
- *             (Note, this argument isn’t used for GTK_DIR_TAB_*,
- *              which is the only @direction we use currently,
- *              so perhaps this argument should be removed)
- *
- * Sorts @children in the correct order for focusing with
- * direction type @direction.
- *
- * Returns: a copy of @children, sorted in correct focusing order,
- *   with children that aren’t suitable for focusing in this direction
- *   removed.
- **/
-GList *
-_gtk_container_focus_sort (GtkContainer     *container,
-                           GList            *children,
-                           GtkDirectionType  direction,
-                           GtkWidget        *old_focus)
-{
-  GList *visible_children = NULL;
-
-  while (children)
-    {
-      if (_gtk_widget_get_realized (children->data))
-        visible_children = g_list_prepend (visible_children, children->data);
-      children = children->next;
-    }
-
-  switch (direction)
-    {
-    case GTK_DIR_TAB_FORWARD:
-    case GTK_DIR_TAB_BACKWARD:
-      return gtk_container_focus_sort_tab (container, visible_children, direction, old_focus);
-    case GTK_DIR_UP:
-    case GTK_DIR_DOWN:
-      return gtk_container_focus_sort_up_down (container, visible_children, direction, old_focus);
-    case GTK_DIR_LEFT:
-    case GTK_DIR_RIGHT:
-      return gtk_container_focus_sort_left_right (container, visible_children, direction, old_focus);
-    default:
-      g_assert_not_reached ();
-      return NULL;
-    }
-}
-
-static gboolean
-gtk_container_focus_move (GtkContainer     *container,
-                          GList            *children,
-                          GtkDirectionType  direction)
-{
-  GtkWidget *focus_child;
-  GtkWidget *child;
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
-
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (!child)
-        continue;
-
-      if (focus_child)
-        {
-          if (focus_child == child)
-            {
-              focus_child = NULL;
-
-                if (gtk_widget_child_focus (child, direction))
-                  return TRUE;
-            }
-        }
-      else if (_gtk_widget_is_drawable (child) &&
-               gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
-        {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 
 static void
 gtk_container_children_callback (GtkWidget *widget,

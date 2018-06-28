@@ -22,7 +22,7 @@
 #include "gtkcssimageprivate.h"
 
 #include "gtkcssstyleprivate.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"
@@ -96,43 +96,23 @@ gtk_css_image_real_transition (GtkCssImage *start,
     return _gtk_css_image_cross_fade_new (start, end, progress);
 }
 
-static void
-gtk_css_image_real_draw (GtkCssImage *image,
-                         cairo_t     *cr,
-                         double       width,
-                         double       height)
+static gboolean
+gtk_css_image_real_is_invalid (GtkCssImage *image)
 {
-  GtkSnapshot snapshot;
-  GskRenderNode *node;
-  cairo_region_t *clip;
-
-  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
-  gtk_snapshot_init (&snapshot, NULL, FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
-  gtk_css_image_snapshot (image, &snapshot, width, height);
-  node = gtk_snapshot_finish (&snapshot);
-
-  if (node != NULL)
-    {
-      gsk_render_node_draw (node, cr);
-      gsk_render_node_unref (node);
-    }
-
-  cairo_region_destroy (clip);
+  return FALSE;
 }
 
-static void
-gtk_css_image_real_snapshot (GtkCssImage *image,
-                             GtkSnapshot *snapshot,
-                             double       width,
-                             double       height)
+static gboolean
+gtk_css_image_real_is_dynamic (GtkCssImage *image)
 {
-  cairo_t *cr;
+  return FALSE;
+}
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                  "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
-  _gtk_css_image_draw (image, cr, width, height);
-  cairo_destroy (cr);
+static GtkCssImage *
+gtk_css_image_real_get_dynamic_image (GtkCssImage *image,
+                                      gint64       monotonic_time)
+{
+  return g_object_ref (image);
 }
 
 static void
@@ -144,8 +124,9 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
-  klass->draw = gtk_css_image_real_draw;
-  klass->snapshot = gtk_css_image_real_snapshot;
+  klass->is_invalid = gtk_css_image_real_is_invalid;
+  klass->is_dynamic = gtk_css_image_real_is_dynamic;
+  klass->get_dynamic_image = gtk_css_image_real_get_dynamic_image;
 }
 
 static void
@@ -260,7 +241,8 @@ _gtk_css_image_draw (GtkCssImage        *image,
                      double              width,
                      double              height)
 {
-  GtkCssImageClass *klass;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
 
   g_return_if_fail (GTK_IS_CSS_IMAGE (image));
   g_return_if_fail (cr != NULL);
@@ -269,9 +251,15 @@ _gtk_css_image_draw (GtkCssImage        *image,
 
   cairo_save (cr);
 
-  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+  snapshot = gtk_snapshot_new ();
+  gtk_css_image_snapshot (image, snapshot, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
 
-  klass->draw (image, cr, width, height);
+  if (node != NULL)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
 
   cairo_restore (cr);
 }
@@ -292,6 +280,43 @@ gtk_css_image_snapshot (GtkCssImage *image,
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   klass->snapshot (image, snapshot, width, height);
+}
+
+gboolean
+gtk_css_image_is_invalid (GtkCssImage *image)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->is_invalid (image);
+}
+
+gboolean
+gtk_css_image_is_dynamic (GtkCssImage *image)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->is_dynamic (image);
+}
+
+GtkCssImage *
+gtk_css_image_get_dynamic_image (GtkCssImage *image,
+                                 gint64       monotonic_time)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->get_dynamic_image (image, monotonic_time);
 }
 
 void

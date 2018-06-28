@@ -49,22 +49,26 @@
 /* ---------------------------------------------------------------------------------------------------- */
 /* these functions are based on code from libwnck (LGPLv2) */
 
-static gboolean get_window_list   (Display   *xdisplay,
+static gboolean get_window_list   (GdkDisplay *display,
+                                   Display   *xdisplay,
                                    Window     xwindow,
                                    Atom       atom,
                                    Window   **windows,
                                    int       *len);
 
-static char*    get_utf8_property (Display   *xdisplay,
+static char*    get_utf8_property (GdkDisplay *display,
+                                   Display   *xdisplay,
                                    Window     xwindow,
                                    Atom       atom);
 
-static gboolean get_cardinal      (Display   *xdisplay,
+static gboolean get_cardinal      (GdkDisplay *display,
+                                   Display   *xdisplay,
                                    Window     xwindow,
                                    Atom       atom,
                                    int       *val);
 
-static gboolean read_rgb_icon     (Display   *xdisplay,
+static gboolean read_rgb_icon     (GdkDisplay *display,
+                                   Display   *xdisplay,
                                    Window     xwindow,
                                    int        ideal_width,
                                    int        ideal_height,
@@ -74,7 +78,8 @@ static gboolean read_rgb_icon     (Display   *xdisplay,
 
 
 static gboolean
-get_cardinal (Display *xdisplay,
+get_cardinal (GdkDisplay *display,
+              Display *xdisplay,
               Window   xwindow,
               Atom     atom,
               int     *val)
@@ -88,7 +93,7 @@ get_cardinal (Display *xdisplay,
 
   *val = 0;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
                                xwindow,
@@ -97,7 +102,7 @@ get_cardinal (Display *xdisplay,
                                False, XA_CARDINAL, &type, &format, &nitems,
                                &bytes_after, (void*)&num);
   XSync (xdisplay, False);
-  err = gdk_error_trap_pop ();
+  err = gdk_x11_display_error_trap_pop (display);
 
   if (err != Success ||
       result != Success)
@@ -117,7 +122,8 @@ get_cardinal (Display *xdisplay,
 }
 
 static char*
-get_utf8_property (Display *xdisplay,
+get_utf8_property (GdkDisplay *display,
+                   Display *xdisplay,
                    Window   xwindow,
                    Atom     atom)
 {
@@ -130,9 +136,9 @@ get_utf8_property (Display *xdisplay,
   char *retval;
   Atom utf8_string;
 
-  utf8_string = gdk_x11_get_xatom_by_name ("UTF8_STRING");
+  utf8_string = gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING");
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   val = NULL;
   result = XGetWindowProperty (xdisplay,
@@ -143,7 +149,7 @@ get_utf8_property (Display *xdisplay,
                                &type, &format, &nitems,
                                &bytes_after, (guchar **)&val);
   XSync (xdisplay, False);
-  err = gdk_error_trap_pop ();
+  err = gdk_x11_display_error_trap_pop (display);
 
   if (err != Success ||
       result != Success)
@@ -161,7 +167,7 @@ get_utf8_property (Display *xdisplay,
   if (!g_utf8_validate (val, nitems, NULL))
     {
       g_warning ("Property %s contained invalid UTF-8",
-                 gdk_x11_get_xatom_name (atom));
+                 gdk_x11_get_xatom_name_for_display (display, atom));
       XFree (val);
       return NULL;
     }
@@ -336,7 +342,8 @@ argbdata_to_pixdata (gulong  *argb_data,
 }
 
 static gboolean
-read_rgb_icon (Display   *xdisplay,
+read_rgb_icon (GdkDisplay *display,
+               Display   *xdisplay,
                Window     xwindow,
                int        ideal_width,
                int        ideal_height,
@@ -353,18 +360,18 @@ read_rgb_icon (Display   *xdisplay,
   gulong *best;
   int w, h;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   data = NULL;
   result = XGetWindowProperty (xdisplay,
                                xwindow,
-                               gdk_x11_get_xatom_by_name ("_NET_WM_ICON"),
+                               gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON"),
                                0, G_MAXLONG,
                                False, XA_CARDINAL, &type, &format, &nitems,
                                &bytes_after, (void*)&data);
 
   XSync (xdisplay, False);
-  err = gdk_error_trap_pop ();
+  err = gdk_x11_display_error_trap_pop (display);
 
   if (err != Success ||
       result != Success)
@@ -400,7 +407,7 @@ free_pixels (guchar *pixels, gpointer data)
   g_free (pixels);
 }
 
-static GdkPixbuf*
+static GdkTexture *
 scaled_from_pixdata (guchar *pixdata,
                      int     w,
                      int     h,
@@ -409,6 +416,7 @@ scaled_from_pixdata (guchar *pixdata,
 {
   GdkPixbuf *src;
   GdkPixbuf *dest;
+  GdkTexture *ret;
 
   src = gdk_pixbuf_new_from_data (pixdata,
                                   GDK_COLORSPACE_RGB,
@@ -453,11 +461,16 @@ scaled_from_pixdata (guchar *pixdata,
       dest = src;
     }
 
-  return dest;
+  ret = gdk_texture_new_for_pixbuf (dest);
+
+  g_object_unref (dest);
+
+  return ret;
 }
 
 static gboolean
-get_window_list (Display  *xdisplay,
+get_window_list (GdkDisplay *display,
+                 Display  *xdisplay,
                  Window    xwindow,
                  Atom      atom,
                  Window  **windows,
@@ -473,7 +486,7 @@ get_window_list (Display  *xdisplay,
   *windows = NULL;
   *len = 0;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
                                xwindow,
@@ -482,7 +495,7 @@ get_window_list (Display  *xdisplay,
                                False, XA_WINDOW, &type, &format, &nitems,
                                &bytes_after, (void*)&data);
   XSync (xdisplay, False);
-  err = gdk_error_trap_pop ();
+  err = gdk_x11_display_error_trap_pop (display);
 
   if (err != Success ||
       result != Success)
@@ -532,8 +545,9 @@ _gtk_mount_operation_lookup_context_get (GdkDisplay *display)
 
   mapping = NULL;
   mapping_length = 0;
-  get_window_list (GDK_DISPLAY_XDISPLAY (context->display),
-                   GDK_ROOT_WINDOW(),
+  get_window_list (context->display,
+                   gdk_x11_display_get_xdisplay (context->display),
+                   gdk_x11_display_get_xrootwindow (context->display),
                    gdk_x11_get_xatom_by_name_for_display (context->display,
                                                           "_NET_CLIENT_LIST"),
                    &mapping,
@@ -542,7 +556,8 @@ _gtk_mount_operation_lookup_context_get (GdkDisplay *display)
     {
       gint pid;
 
-      if (!get_cardinal (GDK_DISPLAY_XDISPLAY (context->display),
+      if (!get_cardinal (context->display,
+                         GDK_DISPLAY_XDISPLAY (context->display),
                          mapping[n],
                          gdk_x11_get_xatom_by_name_for_display (context->display,
                                                                 "_NET_WM_PID"),
@@ -883,12 +898,14 @@ get_name_for_window_with_pid (GtkMountOperationLookupContext *context,
 
   if (window != None)
     {
-      ret = get_utf8_property (GDK_DISPLAY_XDISPLAY (context->display),
+      ret = get_utf8_property (context->display,
+                               GDK_DISPLAY_XDISPLAY (context->display),
                                window,
                                gdk_x11_get_xatom_by_name_for_display (context->display,
                                                                       "_NET_WM_NAME"));
       if (ret == NULL)
-        ret = get_utf8_property (GDK_DISPLAY_XDISPLAY (context->display),
+        ret = get_utf8_property (context->display,
+                                 GDK_DISPLAY_XDISPLAY (context->display),
                                  window, gdk_x11_get_xatom_by_name_for_display (context->display,
                                                                                 "_NET_WM_ICON_NAME"));
     }
@@ -898,13 +915,13 @@ get_name_for_window_with_pid (GtkMountOperationLookupContext *context,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static GdkPixbuf *
-get_pixbuf_for_window_with_pid (GtkMountOperationLookupContext *context,
-                                GPid                            pid,
-                                gint                            size_pixels)
+static GdkTexture *
+get_texture_for_window_with_pid (GtkMountOperationLookupContext *context,
+                                 GPid                            pid,
+                                 gint                            size_pixels)
 {
   Window window;
-  GdkPixbuf *ret;
+  GdkTexture *ret;
 
   ret = NULL;
 
@@ -931,13 +948,15 @@ get_pixbuf_for_window_with_pid (GtkMountOperationLookupContext *context,
       gint    height;
       guchar *pixdata;
 
-      if (read_rgb_icon (GDK_DISPLAY_XDISPLAY (context->display),
+      if (read_rgb_icon (context->display,
+                         GDK_DISPLAY_XDISPLAY (context->display),
                          window,
                          size_pixels, size_pixels,
                          &width, &height,
                          &pixdata))
         {
           /* steals pixdata */
+
           ret = scaled_from_pixdata (pixdata,
                                      width, height,
                                      size_pixels, size_pixels);
@@ -966,11 +985,11 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
                                   gint                            size_pixels,
                                   gchar                         **out_name,
                                   gchar                         **out_command_line,
-                                  GdkPixbuf                     **out_pixbuf)
+                                  GdkTexture                    **out_texture)
 {
   g_return_val_if_fail (out_name != NULL && *out_name == NULL, FALSE);
   g_return_val_if_fail (out_command_line != NULL && *out_command_line == NULL, FALSE);
-  g_return_val_if_fail (out_pixbuf != NULL && *out_pixbuf == NULL, FALSE);
+  g_return_val_if_fail (out_texture != NULL && *out_texture == NULL, FALSE);
 
   /* We perform two different lookups for name and icon size.. this is
    * because we want the name from the window with WINDOWID and this
@@ -985,7 +1004,7 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
 
   *out_name = get_name_for_window_with_pid (context, pid);
 
-  *out_pixbuf = get_pixbuf_for_window_with_pid (context, pid, size_pixels);
+  *out_texture = get_texture_for_window_with_pid (context, pid, size_pixels);
 
   /* if we didn't manage to find the name via X, fall back to the basename
    * of the first element of the command line and, for maximum geek-comfort,

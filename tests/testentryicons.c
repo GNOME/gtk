@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 static void
-clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
+clear_pressed (GtkEntry *entry, gint icon, gpointer data)
 {
    if (icon == GTK_ENTRY_ICON_SECONDARY)
      gtk_entry_set_text (entry, "");
@@ -24,8 +24,6 @@ static void
 drag_data_get_cb (GtkWidget        *widget,
                   GdkDragContext   *context,
                   GtkSelectionData *data,
-                  guint             info,
-                  guint             time,
                   gpointer          user_data)
 {
   gint pos;
@@ -80,21 +78,39 @@ set_gicon (GtkWidget *button,
 }
 
 static void
-set_surface (GtkWidget *button,
+set_texture (GtkWidget *button,
              GtkEntry  *entry)
 {
-  GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
-      pixbuf = gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/inspector/logo.png", NULL);
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, gtk_widget_get_window (button));
-      g_object_unref (pixbuf);
-
-      gtk_entry_set_icon_from_surface (entry, GTK_ENTRY_ICON_SECONDARY, surface);
-      cairo_surface_destroy (surface);
+      texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/inspector/logo.png");
+      gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, GDK_PAINTABLE (texture));
+      g_object_unref (texture);
     }
+}
+
+static const char cssdata[] =
+".entry-frame:not(:focus) { "
+"  border: 2px solid alpha(gray,0.3);"
+"}"
+".entry-frame:focus { "
+"  border: 2px solid red;"
+"}"
+".entry-frame entry { "
+"  border: none; "
+"  box-shadow: none; "
+"}";
+
+static void
+icon_pressed_cb (GtkGesture *gesture,
+                 int         n_press,
+                 double      x,
+                 double      y,
+                 gpointer    data)
+{
+  g_print ("You clicked me!\n");
 }
 
 int
@@ -105,12 +121,13 @@ main (int argc, char **argv)
   GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *box;
+  GtkWidget *image;
   GtkWidget *button1;
   GtkWidget *button2;
   GtkWidget *button3;
   GtkWidget *button4;
   GIcon *icon;
-  GtkTargetList *tlist;
+  GdkContentFormats *tlist;
 
   gtk_init ();
 
@@ -124,6 +141,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  g_object_set (grid, "margin", 10, NULL);
 
   /*
    * Open File - Sets the icon using a GIcon
@@ -171,8 +189,8 @@ main (int argc, char **argv)
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
-  tlist = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (tlist, 0);
+  tlist = gdk_content_formats_new (NULL, 0);
+  tlist = gtk_content_formats_add_text_targets (tlist);
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   tlist, GDK_ACTION_COPY); 
@@ -180,7 +198,7 @@ main (int argc, char **argv)
                           G_CALLBACK (drag_begin_cb), NULL);
   g_signal_connect (entry, "drag-data-get", 
                     G_CALLBACK (drag_data_get_cb), NULL);
-  gtk_target_list_unref (tlist);
+  gdk_content_formats_unref (tlist);
 
   /*
    * Search - Uses a helper function
@@ -273,10 +291,10 @@ main (int argc, char **argv)
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button3), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button3, "toggled", G_CALLBACK (set_gicon), entry);
   gtk_container_add (GTK_CONTAINER (box), button3);
-  button4 = gtk_radio_button_new_with_label (NULL, "Surface");
+  button4 = gtk_radio_button_new_with_label (NULL, "Texture");
   gtk_widget_set_valign (button4, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button4), GTK_RADIO_BUTTON (button1));
-  g_signal_connect (button4, "toggled", G_CALLBACK (set_surface), entry);
+  g_signal_connect (button4, "toggled", G_CALLBACK (set_texture), entry);
   gtk_container_add (GTK_CONTAINER (box), button4);
 
   label = gtk_label_new ("Emoji:");
@@ -288,8 +306,34 @@ main (int argc, char **argv)
   g_object_set (entry, "show-emoji-icon", TRUE, NULL);
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 6, 1, 1);
-  gtk_widget_show (window);
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "view");
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "entry-frame");
+  gtk_widget_set_cursor_from_name (box, "text");
+  entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_container_add (GTK_CONTAINER (box), entry);
+  image = gtk_image_new_from_icon_name ("edit-find-symbolic");
+  gtk_widget_set_cursor_from_name (image, "default");
+  g_object_set (image, "margin", 6, NULL);
+  gtk_widget_set_tooltip_text (image, "Click me");
+
+  GtkGesture *gesture;
+  gesture = gtk_gesture_multi_press_new ();
+  g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
+  gtk_container_add (GTK_CONTAINER (box), image);
+  image = gtk_image_new_from_icon_name ("document-save-symbolic");
+  g_object_set (image, "margin", 6, NULL);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
+
+  GtkCssProvider *provider;
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, cssdata, -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
+  gtk_widget_show (window);
   gtk_main();
 
   return 0;

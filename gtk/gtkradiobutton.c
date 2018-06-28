@@ -26,8 +26,7 @@
 
 #include "gtkradiobutton.h"
 
-#include "gtkcontainerprivate.h"
-#include "gtkbuttonprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtktogglebuttonprivate.h"
 #include "gtkcheckbuttonprivate.h"
 #include "gtklabel.h"
@@ -114,8 +113,8 @@
  *                                                          "I’m the second radio button.");
  *
  *    // Pack them into a box, then show all the widgets
- *    gtk_box_pack_start (GTK_BOX (box), radio1, TRUE, TRUE, 2);
- *    gtk_box_pack_start (GTK_BOX (box), radio2, TRUE, TRUE, 2);
+ *    gtk_box_pack_start (GTK_BOX (box), radio1);
+ *    gtk_box_pack_start (GTK_BOX (box), radio2);
  *    gtk_container_add (GTK_CONTAINER (window), box);
  *    gtk_widget_show (window);
  *    return;
@@ -130,10 +129,10 @@
  */
 
 
-struct _GtkRadioButtonPrivate
+typedef struct
 {
   GSList *group;
-};
+} GtkRadioButtonPrivate;
 
 enum {
   PROP_0,
@@ -205,8 +204,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
    * vice-versa, and when a button is moved from one group of 2 or
    * more buttons to a different one, but not when the composition
    * of the group that a button belongs to changes.
-   *
-   * Since: 2.4
    */
   group_changed_signal = g_signal_new (I_("group-changed"),
 				       G_OBJECT_CLASS_TYPE (gobject_class),
@@ -217,17 +214,14 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 				       G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_BUTTON_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "radiobutton");
+  gtk_widget_class_set_css_name (widget_class, I_("radiobutton"));
 }
 
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
-  GtkRadioButtonPrivate *priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GtkCssNode *css_node;
-
-  radio_button->priv = gtk_radio_button_get_instance_private (radio_button);
-  priv = radio_button->priv;
 
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
 
@@ -298,7 +292,7 @@ void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList         *group)
 {
-  GtkRadioButtonPrivate *priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
 
@@ -306,8 +300,6 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 
   if (g_slist_find (group, radio_button))
     return;
-
-  priv = radio_button->priv;
 
   if (priv->group)
     {
@@ -319,13 +311,12 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 	old_group_singleton = g_object_ref (priv->group->data);
 
       for (slist = priv->group; slist; slist = slist->next)
-	{
-	  GtkRadioButton *tmp_button;
-	  
-	  tmp_button = slist->data;
+        {
+          GtkRadioButton *tmp_button = slist->data;
+          GtkRadioButtonPrivate *tmp_priv = gtk_radio_button_get_instance_private (tmp_button);
 
-	  tmp_button->priv->group = priv->group;
-	}
+          tmp_priv->group = priv->group;
+        }
     }
   
   if (group && !group->next)
@@ -338,13 +329,12 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
       GSList *slist;
       
       for (slist = group; slist; slist = slist->next)
-	{
-	  GtkRadioButton *tmp_button;
-	  
-	  tmp_button = slist->data;
+        {
+          GtkRadioButton *tmp_button = slist->data;
+          GtkRadioButtonPrivate *tmp_priv = gtk_radio_button_get_instance_private (tmp_button);
 
-	  tmp_button->priv->group = priv->group;
-	}
+          tmp_priv->group = priv->group;
+        }
     }
 
   g_object_ref (radio_button);
@@ -383,16 +373,14 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
  *   GtkRadioButton *radio_button;
  *   GtkRadioButton *last_button;
  *
- *   while ( ...more buttons to add... )
+ *   while (some_condition)
  *     {
- *        radio_button = gtk_radio_button_new (...);
+ *        radio_button = gtk_radio_button_new (NULL);
  *
  *        gtk_radio_button_join_group (radio_button, last_button);
  *        last_button = radio_button;
  *     }
  * ]|
- *
- * Since: 3.0
  */
 void
 gtk_radio_button_join_group (GtkRadioButton *radio_button, 
@@ -577,9 +565,11 @@ gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_memb
 GSList*
 gtk_radio_button_get_group (GtkRadioButton *radio_button)
 {
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
+
   g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button), NULL);
 
-  return radio_button->priv->group;
+  return priv->group;
 }
 
 
@@ -588,8 +578,7 @@ gtk_radio_button_destroy (GtkWidget *widget)
 {
   GtkWidget *old_group_singleton = NULL;
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
-  GtkRadioButtonPrivate *priv = radio_button->priv;
-  GtkRadioButton *tmp_button;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GSList *tmp_list;
   gboolean was_in_group;
 
@@ -603,10 +592,12 @@ gtk_radio_button_destroy (GtkWidget *widget)
 
   while (tmp_list)
     {
-      tmp_button = tmp_list->data;
+      GtkRadioButton *tmp_button = tmp_list->data;
+      GtkRadioButtonPrivate *tmp_priv = gtk_radio_button_get_instance_private (tmp_button);
+
       tmp_list = tmp_list->next;
 
-      tmp_button->priv->group = priv->group;
+      tmp_priv->group = priv->group;
     }
 
   /* this button is no longer in the group */
@@ -625,7 +616,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 			GtkDirectionType   direction)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
-  GtkRadioButtonPrivate *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GSList *tmp_slist;
 
   /* Radio buttons with draw_indicator unset focus "normally", since
@@ -636,68 +627,55 @@ gtk_radio_button_focus (GtkWidget         *widget,
 
   if (gtk_widget_is_focus (widget))
     {
-      GList *children, *focus_list, *tmp_list;
-      GtkWidget *toplevel;
+      GPtrArray *child_array;
       GtkWidget *new_focus = NULL;
       GSList *l;
+      guint index;
+      gboolean found;
+      guint i;
 
       if (direction == GTK_DIR_TAB_FORWARD ||
           direction == GTK_DIR_TAB_BACKWARD)
         return FALSE;
 
-      toplevel = gtk_widget_get_toplevel (widget);
-      children = NULL;
+      child_array = g_ptr_array_sized_new (g_slist_length (priv->group));
       for (l = priv->group; l; l = l->next)
-        children = g_list_prepend (children, l->data);
+        g_ptr_array_add (child_array, l->data);
 
-      focus_list = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), children, direction, widget);
-      tmp_list = g_list_find (focus_list, widget);
+      gtk_widget_focus_sort (widget, direction, child_array);
+      found = g_ptr_array_find (child_array, widget, &index);
 
-      if (tmp_list)
-	{
-	  tmp_list = tmp_list->next;
+      if (found)
+        {
+          /* Start at the *next* widget in the list */
+          if (index < child_array->len - 1)
+            index ++;
+        }
+      else
+        {
+          /* Search from the start of the list */
+          index = 0;
+        }
 
-	  while (tmp_list)
-	    {
-	      GtkWidget *child = tmp_list->data;
+      for (i = index; i < child_array->len; i ++)
+        {
+          GtkWidget *child = g_ptr_array_index (child_array, i);
 
-	      if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
-		{
-		  new_focus = child;
-		  break;
-		}
+          if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
+            {
+              new_focus = child;
+              break;
+            }
+        }
 
-	      tmp_list = tmp_list->next;
-	    }
-	}
-
-      if (!new_focus)
-	{
-	  tmp_list = focus_list;
-
-	  while (tmp_list)
-	    {
-	      GtkWidget *child = tmp_list->data;
-
-	      if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
-		{
-		  new_focus = child;
-		  break;
-		}
-
-	      tmp_list = tmp_list->next;
-	    }
-	}
-
-      g_list_free (focus_list);
-      g_list_free (children);
 
       if (new_focus)
-	{
-	  gtk_widget_grab_focus (new_focus);
-
+        {
+          gtk_widget_grab_focus (new_focus);
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
-	}
+        }
+
+      g_ptr_array_free (child_array, TRUE);
 
       return TRUE;
     }
@@ -730,7 +708,7 @@ static void
 gtk_radio_button_clicked (GtkButton *button)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (button);
-  GtkRadioButtonPrivate *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
   GSList *tmp_list;

@@ -29,7 +29,8 @@
 
 G_BEGIN_DECLS
 
-gboolean gtk_search_entry_is_keynav_event (GdkEvent *event);
+gboolean gtk_search_entry_is_keynav (guint           keyval,
+                                     GdkModifierType state);
 
 G_END_DECLS
 

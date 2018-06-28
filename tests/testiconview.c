@@ -329,10 +329,10 @@ item_cb (GtkWidget *menuitem,
 }
 
 static void
-do_popup_menu (GtkWidget      *icon_list, 
-	       GdkEventButton *event)
+do_popup_menu (GtkWidget *icon_list,
+	       GdkEvent  *event)
 {
-  GtkIconView *icon_view = GTK_ICON_VIEW (icon_list); 
+  GtkIconView *icon_view = GTK_ICON_VIEW (icon_list);
   GtkWidget *menu;
   GtkWidget *menuitem;
   GtkTreePath *path = NULL;
@@ -344,7 +344,7 @@ do_popup_menu (GtkWidget      *icon_list,
     {
       double x, y;
 
-      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+      gdk_event_get_coords (event, &x, &y);
       path = gtk_icon_view_get_path_at_pos (icon_view, x, y);
     }
   else
@@ -375,8 +375,8 @@ do_popup_menu (GtkWidget      *icon_list,
 
   if (event)
     {
-      gdk_event_get_button ((GdkEvent*)event, &button);
-      event_time = gdk_event_get_time ((GdkEvent *)event);
+      gdk_event_get_button (event, &button);
+      event_time = gdk_event_get_time (event);
     }
   else
     {
@@ -390,12 +390,12 @@ do_popup_menu (GtkWidget      *icon_list,
 	
 
 static gboolean
-button_press_event_handler (GtkWidget      *widget, 
-			    GdkEventButton *event)
+event_handler (GtkWidget *widget, 
+               GdkEvent  *event)
 {
   /* Ignore double-clicks and triple-clicks */
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
-      gdk_event_get_event_type ((GdkEvent*)event) == GDK_BUTTON_PRESS)
+  if (gdk_event_triggers_context_menu (event) &&
+      gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     {
       do_popup_menu (widget, event);
       return TRUE;
@@ -411,8 +411,8 @@ popup_menu_handler (GtkWidget *widget)
   return TRUE;
 }
 
-static const GtkTargetEntry item_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0 }
+static const char *item_targets[] = {
+  "GTK_TREE_MODEL_ROW"
 };
 	
 gint
@@ -425,6 +425,7 @@ main (gint argc, gchar **argv)
   GtkTreeModel *model;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *tvc;
+  GdkContentFormats *targets;
   
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -453,8 +454,8 @@ main (gint argc, gchar **argv)
   tvc = gtk_tree_view_column_new ();
   gtk_tree_view_append_column (GTK_TREE_VIEW (tv), tvc);
 
-  g_signal_connect_after (icon_list, "button_press_event",
-			  G_CALLBACK (button_press_event_handler), NULL);
+  g_signal_connect_after (icon_list, "event",
+			  G_CALLBACK (event_handler), NULL);
   g_signal_connect (icon_list, "selection_changed",
 		    G_CALLBACK (selection_changed), NULL);
   g_signal_connect (icon_list, "popup_menu",
@@ -484,9 +485,6 @@ main (gint argc, gchar **argv)
 
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_list), cell, FALSE);
-  g_object_set (cell, 
-		"follow-state", TRUE, 
-		NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_list),
 				  cell, "pixbuf", 0, NULL);
 
@@ -512,9 +510,6 @@ main (gint argc, gchar **argv)
 
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (tvc), cell, FALSE);
-  g_object_set (cell, 
-		"follow-state", TRUE, 
-		NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tvc),
 				  cell, "pixbuf", 0, NULL);
 
@@ -527,26 +522,23 @@ main (gint argc, gchar **argv)
 #endif
   /* Allow DND between the icon view and the tree view */
   
+  targets = gdk_content_formats_new (item_targets, G_N_ELEMENTS (item_targets));
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (icon_list),
 					  GDK_BUTTON1_MASK,
-					  item_targets,
-					  G_N_ELEMENTS (item_targets),
+                                          targets,
 					  GDK_ACTION_MOVE);
   gtk_icon_view_enable_model_drag_dest (GTK_ICON_VIEW (icon_list),
-					item_targets,
-					G_N_ELEMENTS (item_targets),
+                                        targets,
 					GDK_ACTION_MOVE);
 
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
 					  GDK_BUTTON1_MASK,
-					  item_targets,
-					  G_N_ELEMENTS (item_targets),
+                                          targets,
 					  GDK_ACTION_MOVE);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tv),
-					item_targets,
-					G_N_ELEMENTS (item_targets),
+                                        targets,
 					GDK_ACTION_MOVE);
-
+  gdk_content_formats_unref (targets);
 			      
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);

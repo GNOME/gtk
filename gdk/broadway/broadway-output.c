@@ -7,6 +7,8 @@
 
 #include "broadway-output.h"
 
+//#define DEBUG_NODE_SENDING
+
 /************************************************************************
  *                Basic I/O primitives                                  *
  ************************************************************************/
@@ -20,8 +22,8 @@ struct BroadwayOutput {
 
 static void
 broadway_output_send_cmd (BroadwayOutput *output,
-			  gboolean fin, BroadwayWSOpCode code,
-			  const void *buf, gsize count)
+                          gboolean fin, BroadwayWSOpCode code,
+                          const void *buf, gsize count)
 {
   gboolean mask = FALSE;
   guchar header[16];
@@ -100,7 +102,7 @@ broadway_output_get_next_serial (BroadwayOutput *output)
 
 void
 broadway_output_set_next_serial (BroadwayOutput *output,
-				 guint32 serial)
+                                 guint32 serial)
 {
   output->serial = serial;
 }
@@ -155,6 +157,19 @@ append_uint32 (BroadwayOutput *output, guint32 v)
 }
 
 static void
+patch_uint32 (BroadwayOutput *output, guint32 v, gsize offset)
+{
+  guint8 *buf;
+
+  buf = (guint8 *)output->buf->str + offset;
+  buf[0] = (v >> 0) & 0xff;
+  buf[1] = (v >> 8) & 0xff;
+  buf[2] = (v >> 16) & 0xff;
+  buf[3] = (v >> 24) & 0xff;
+}
+
+
+static void
 write_header(BroadwayOutput *output, char op)
 {
   append_char (output, op);
@@ -163,8 +178,8 @@ write_header(BroadwayOutput *output, char op)
 
 void
 broadway_output_grab_pointer (BroadwayOutput *output,
-			      int id,
-			      gboolean owner_event)
+                              int id,
+                              gboolean owner_event)
 {
   write_header (output, BROADWAY_OP_GRAB_POINTER);
   append_uint16 (output, id);
@@ -184,8 +199,8 @@ broadway_output_ungrab_pointer (BroadwayOutput *output)
 
 void
 broadway_output_new_surface(BroadwayOutput *output,
-			    int id, int x, int y, int w, int h,
-			    gboolean is_temp)
+                            int id, int x, int y, int w, int h,
+                            gboolean is_temp)
 {
   write_header (output, BROADWAY_OP_NEW_SURFACE);
   append_uint16 (output, id);
@@ -238,6 +253,16 @@ broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 }
 
 void
+broadway_output_roundtrip (BroadwayOutput *output,
+                           int             id,
+                           guint32         tag)
+{
+  write_header (output, BROADWAY_OP_ROUNDTRIP);
+  append_uint16 (output, id);
+  append_uint32 (output, tag);
+}
+
+void
 broadway_output_set_show_keyboard (BroadwayOutput *output,
                                    gboolean show)
 {
@@ -247,13 +272,13 @@ broadway_output_set_show_keyboard (BroadwayOutput *output,
 
 void
 broadway_output_move_resize_surface (BroadwayOutput *output,
-				     int             id,
-				     gboolean        has_pos,
-				     int             x,
-				     int             y,
-				     gboolean        has_size,
-				     int             w,
-				     int             h)
+                                     int             id,
+                                     gboolean        has_pos,
+                                     int             x,
+                                     int             y,
+                                     gboolean        has_size,
+                                     int             w,
+                                     int             h)
 {
   int val;
 
@@ -278,55 +303,136 @@ broadway_output_move_resize_surface (BroadwayOutput *output,
 
 void
 broadway_output_set_transient_for (BroadwayOutput *output,
-				   int             id,
-				   int             parent_id)
+                                   int             id,
+                                   int             parent_id)
 {
   write_header (output, BROADWAY_OP_SET_TRANSIENT_FOR);
   append_uint16 (output, id);
   append_uint16 (output, parent_id);
 }
 
-void
-broadway_output_put_buffer (BroadwayOutput *output,
-                            int             id,
-                            BroadwayBuffer *prev_buffer,
-                            BroadwayBuffer *buffer)
+static gint append_node_depth = -1;
+
+static void
+append_type (BroadwayOutput *output, guint32 type, BroadwayNode *node)
 {
-  gsize len;
-  int w, h;
-  GZlibCompressor *compressor;
-  GOutputStream *out, *out_mem;
-  GString *encoded;
+#ifdef DEBUG_NODE_SENDING
+  g_print ("%*s%s", append_node_depth*2, "", broadway_node_type_names[type]);
+  if (type == BROADWAY_NODE_TEXTURE)
+    g_print (" %u", node->data[4]);
+  g_print ("\n");
+#endif
 
-  write_header (output, BROADWAY_OP_PUT_BUFFER);
+  append_uint32 (output, type);
+}
 
-  w = broadway_buffer_get_width (buffer);
-  h = broadway_buffer_get_height (buffer);
+
+/***********************************
+ * This outputs the tree to the client, while at the same time diffing
+ * against the old tree.  This allows us to avoid sending certain
+ * parts.
+ *
+ * Reusing existing dom nodes are problematic because doing so
+ * automatically inherits all their children.  There are two cases
+ * where we do this:
+ *
+ * If the entire sub tree is identical we emit a KEEP_ALL node which
+ * just reuses the entire old dom subtree.
+ *
+ * If a the node is unchanged (but some descendant may have changed),
+ * and all parents are also unchanged, then we can just avoid
+ * changing the dom node at all, and we emit a KEEP_THIS node.
+ *
+ ***********************************/
+static void
+append_node (BroadwayOutput *output,
+             BroadwayNode   *node,
+             BroadwayNode   *old_node,
+             gboolean        all_parents_are_kept)
+{
+  guint32 i;
+
+  append_node_depth++;
+
+  if (old_node != NULL && broadway_node_equal (node, old_node))
+    {
+      if (broadway_node_deep_equal (node, old_node))
+        {
+          append_type (output, BROADWAY_NODE_KEEP_ALL, node);
+          goto out;
+        }
+
+      if (all_parents_are_kept)
+        {
+          append_type (output, BROADWAY_NODE_KEEP_THIS, node);
+          append_uint32 (output, node->n_children);
+          for (i = 0; i < node->n_children; i++)
+            append_node (output, node->children[i],
+                         i < old_node->n_children ? old_node->children[i] : NULL,
+                         TRUE);
+
+          goto out;
+        }
+    }
+
+  append_type (output, node->type, node);
+  for (i = 0; i < node->n_data; i++)
+    append_uint32 (output, node->data[i]);
+  for (i = 0; i < node->n_children; i++)
+    append_node (output,
+                 node->children[i],
+                 (old_node != NULL && i < old_node->n_children) ? old_node->children[i] : NULL,
+                 FALSE);
+
+ out:
+  append_node_depth--;
+}
+
+void
+broadway_output_surface_set_nodes (BroadwayOutput *output,
+                                   int             id,
+                                   BroadwayNode   *root,
+                                   BroadwayNode   *old_root)
+{
+  gsize size_pos, start, end;
+
+  /* Early return if nothing changed */
+  if (old_root != NULL &&
+      broadway_node_deep_equal (root, old_root))
+    return;
+
+  write_header (output, BROADWAY_OP_SET_NODES);
 
   append_uint16 (output, id);
-  append_uint16 (output, w);
-  append_uint16 (output, h);
 
-  encoded = g_string_new ("");
-  broadway_buffer_encode (buffer, prev_buffer, encoded);
+  size_pos = output->buf->len;
+  append_uint32 (output, 0);
 
-  compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, -1);
-  out_mem = g_memory_output_stream_new_resizable ();
-  out = g_converter_output_stream_new (out_mem, G_CONVERTER (compressor));
-  g_object_unref (compressor);
+  start = output->buf->len;
+#ifdef DEBUG_NODE_SENDING
+  g_print ("====== node tree for %d =======\n", id);
+#endif
+  append_node (output, root, old_root, TRUE);
+  end = output->buf->len;
+  patch_uint32 (output, (end - start) / 4, size_pos);
+}
 
-  if (!g_output_stream_write_all (out, encoded->str, encoded->len,
-                                  NULL, NULL, NULL) ||
-      !g_output_stream_close (out, NULL, NULL))
-    g_warning ("compression failed");
+void
+broadway_output_upload_texture (BroadwayOutput *output,
+                                guint32 id,
+                                GBytes *texture)
+{
+  gsize len = g_bytes_get_size (texture);
+  write_header (output, BROADWAY_OP_UPLOAD_TEXTURE);
+  append_uint32 (output, id);
+  append_uint32 (output, (guint32)len);
+  g_string_append_len (output->buf, g_bytes_get_data (texture, NULL), len);
+}
 
-
-  len = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out_mem));
-  append_uint32 (output, len);
-
-  g_string_append_len (output->buf, g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (out_mem)), len);
-
-  g_string_free (encoded, TRUE);
-  g_object_unref (out);
-  g_object_unref (out_mem);
+void
+broadway_output_release_texture (BroadwayOutput *output,
+                                 guint32 id)
+{
+  write_header (output, BROADWAY_OP_RELEASE_TEXTURE);
+  append_uint32 (output, id);
 }

@@ -25,28 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ICON           (gtk_icon_get_type ())
-#define GTK_ICON(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_ICON, GtkIcon))
-#define GTK_ICON_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_ICON, GtkIconClass))
-#define GTK_IS_ICON(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_ICON))
-#define GTK_IS_ICON_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_ICON))
-#define GTK_ICON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON, GtkIconClass))
+#define GTK_TYPE_ICON (gtk_icon_get_type ())
 
-typedef struct _GtkIcon           GtkIcon;
-typedef struct _GtkIconClass      GtkIconClass;
-
-struct _GtkIcon
-{
-  GtkWidget parent;
-  GtkCssImageBuiltinType image;
-};
-
-struct _GtkIconClass
-{
-  GtkWidgetClass  parent_class;
-};
-
-GType        gtk_icon_get_type               (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GtkIcon, gtk_icon, GTK, ICON, GtkWidget)
 
 GtkWidget *  gtk_icon_new                    (const char *css_name);
 

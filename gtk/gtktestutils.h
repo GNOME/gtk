@@ -37,7 +37,7 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_test_register_all_types     (void);
 GDK_AVAILABLE_IN_ALL
 const GType*    gtk_test_list_all_types         (guint          *n_types);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void            gtk_test_widget_wait_for_draw   (GtkWidget      *widget);
 
 G_END_DECLS

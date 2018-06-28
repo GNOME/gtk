@@ -73,8 +73,7 @@ main (int argc, char *argv[])
 
   gtk_widget_show (window);
 
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   g_signal_connect (fontchooser, "notify::font",
                     G_CALLBACK (notify_font_cb), NULL);
   g_signal_connect (fontchooser, "notify::preview-text",

@@ -19,17 +19,18 @@
 
 #include "gtkcellrenderertext.h"
 
-#include <stdlib.h>
-
 #include "gtkeditable.h"
 #include "gtkentry.h"
-#include "gtksizerequest.h"
-#include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtksizerequest.h"
+#include "gtksnapshot.h"
 #include "gtktreeprivate.h"
+
 #include "a11y/gtktextcellaccessible.h"
 
+#include <stdlib.h>
 
 /**
  * SECTION:gtkcellrenderertext
@@ -287,8 +288,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * GtkCellRendererText:background-rgba:
    *
    * Background color as a #GdkRGBA
-   *
-   * Since: 3.0
    */
   text_cell_renderer_props[PROP_BACKGROUND_RGBA] =
       g_param_spec_boxed ("background-rgba",
@@ -307,8 +306,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * GtkCellRendererText:foreground-rgba:
    *
    * Foreground color as a #GdkRGBA
-   *
-   * Since: 3.0
    */
   text_cell_renderer_props[PROP_FOREGROUND_RGBA] =
       g_param_spec_boxed ("foreground-rgba",
@@ -442,8 +439,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * does not have enough room to display the entire string. Setting it to
    * %PANGO_ELLIPSIZE_NONE turns off ellipsizing. See the wrap-width property
    * for another way of making the text fit into a given width.
-   *
-   * Since: 2.6
    */
   text_cell_renderer_props[PROP_ELLIPSIZE] =
       g_param_spec_enum ("ellipsize",
@@ -461,8 +456,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * The desired width of the cell, in characters. If this property is set to
    * -1, the width will be calculated automatically, otherwise the cell will
    * request either 3 characters or the property value, whichever is greater.
-   *
-   * Since: 2.6
    **/
   text_cell_renderer_props[PROP_WIDTH_CHARS] =
       g_param_spec_int ("width-chars",
@@ -483,8 +476,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * cell should not receive any greater allocation unless it is
    * set to expand in its #GtkCellLayout and all of the cell's siblings
    * have received their natural width.
-   *
-   * Since: 3.0
    **/
   text_cell_renderer_props[PROP_MAX_WIDTH_CHARS] =
       g_param_spec_int ("max-width-chars",
@@ -500,8 +491,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Specifies how to break the string into multiple lines, if the cell
    * renderer does not have enough room to display the entire string.
    * This property has no effect unless the wrap-width property is set.
-   *
-   * Since: 2.8
    */
   text_cell_renderer_props[PROP_WRAP_MODE] =
       g_param_spec_enum ("wrap-mode",
@@ -519,8 +508,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Specifies the minimum width at which the text is wrapped. The wrap-mode property can
    * be used to influence at what character positions the line breaks can be placed.
    * Setting wrap-width to -1 turns wrapping off.
-   *
-   * Since: 2.8
    */
   text_cell_renderer_props[PROP_WRAP_WIDTH] =
       g_param_spec_int ("wrap-width",
@@ -538,8 +525,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Note that this property describes how to align the lines of text in
    * case there are several of them. The "xalign" property of #GtkCellRenderer,
    * on the other hand, sets the horizontal alignment of the whole text.
-   *
-   * Since: 2.10
    */
   text_cell_renderer_props[PROP_ALIGN] =
       g_param_spec_enum ("alignment",
@@ -554,8 +539,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    *
    * The text that will be displayed in the #GtkCellRenderer if
    * #GtkCellRendererText:editable is %TRUE and the cell is empty.
-   *
-   * Since 3.6
    */
   text_cell_renderer_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
@@ -1745,8 +1728,7 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
                                  &GRAPHENE_RECT_INIT(
                                      background_area->x, background_area->y,
                                      background_area->width, background_area->height
-                                 ),
-                                 "CellTextBackground");
+                                 ));
     }
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -1764,8 +1746,7 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
                           &GRAPHENE_RECT_INIT(
                               cell_area->x, cell_area->y,
                               cell_area->width, cell_area->height
-                          ),
-                          "CellTextClip");
+                          ));
 
   gtk_snapshot_render_layout (snapshot, context,
                               cell_area->x + x_offset + xpad,
@@ -1850,8 +1831,7 @@ gtk_cell_renderer_text_popup_unmap (GtkMenu *menu,
   if (priv->entry_menu_popdown_timeout)
     return;
 
-  priv->entry_menu_popdown_timeout = gdk_threads_add_timeout (500, popdown_timeout,
-                                                    data);
+  priv->entry_menu_popdown_timeout = g_timeout_add (500, popdown_timeout, data);
   g_source_set_name_by_id (priv->entry_menu_popdown_timeout, "[gtk+] popdown_timeout");
 }
 
@@ -1876,26 +1856,26 @@ gtk_cell_renderer_text_populate_popup (GtkEntry *entry,
                     G_CALLBACK (gtk_cell_renderer_text_popup_unmap), data);
 }
 
-static gboolean
-gtk_cell_renderer_text_focus_out_event (GtkWidget *entry,
-		                        GdkEvent  *event,
-					gpointer   data)
+static void
+gtk_cell_renderer_text_focus_changed (GtkWidget  *entry,
+                                      GParamSpec *pspec,
+                                      gpointer    data)
 {
   GtkCellRendererTextPrivate *priv;
 
   priv = GTK_CELL_RENDERER_TEXT (data)->priv;
 
+  if (gtk_widget_has_focus (entry))
+    return;
+
   if (priv->in_entry_menu)
-    return FALSE;
+    return;
 
   g_object_set (entry,
                 "editing-canceled", TRUE,
                 NULL);
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
-
-  /* entry needs focus-out-event */
-  return FALSE;
 }
 
 static GtkCellEditable *
@@ -1944,8 +1924,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 		    "editing-done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
-  priv->focus_out_id = g_signal_connect_after (priv->entry, "focus-out-event",
-					       G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
+  priv->focus_out_id = g_signal_connect_after (priv->entry, "notify::has-focus",
+					       G_CALLBACK (gtk_cell_renderer_text_focus_changed),
 					       celltext);
   priv->populate_popup_id =
     g_signal_connect (priv->entry, "populate-popup",

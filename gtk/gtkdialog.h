@@ -40,7 +40,7 @@ G_BEGIN_DECLS
  * @GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its
  *     parent is destroyed, see gtk_window_set_destroy_with_parent()
  * @GTK_DIALOG_USE_HEADER_BAR: Create dialog with actions in header
- *     bar instead of action area. Since 3.12.
+ *     bar instead of action area
  *
  * Flags used to influence dialog construction.
  */
@@ -190,7 +190,7 @@ gint gtk_dialog_run                (GtkDialog *dialog);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_header_bar   (GtkDialog *dialog);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDialog, g_object_unref)

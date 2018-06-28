@@ -21,7 +21,7 @@
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
-#include <gtk/gtkrbtree.h>
+#include <gtk/gtkrbtreeprivate.h>
 
 G_BEGIN_DECLS
 
@@ -51,10 +51,6 @@ gboolean     _gtk_tree_view_get_cursor_node           (GtkTreeView       *tree_v
 						       GtkRBNode        **node);
 GtkTreePath *_gtk_tree_path_new_from_rbtree           (GtkRBTree         *tree,
 						       GtkRBNode         *node);
-void         _gtk_tree_view_queue_draw_node           (GtkTreeView       *tree_view,
-						       GtkRBTree         *tree,
-						       GtkRBNode         *node,
-						       const GdkRectangle *clip_rect);
 
 void         _gtk_tree_view_add_editable              (GtkTreeView       *tree_view,
                                                        GtkTreeViewColumn *column,
@@ -69,7 +65,6 @@ void       _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view,
 						       gboolean     install_handler);
 void         _gtk_tree_view_column_autosize           (GtkTreeView       *tree_view,
 						       GtkTreeViewColumn *column);
-gint         _gtk_tree_view_get_header_height         (GtkTreeView       *tree_view);
 
 void         _gtk_tree_view_get_row_separator_func    (GtkTreeView                 *tree_view,
 						       GtkTreeViewRowSeparatorFunc *func,
@@ -99,7 +94,8 @@ void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 gint _gtk_tree_view_column_request_width    (GtkTreeViewColumn *tree_column);
 void _gtk_tree_view_column_allocate         (GtkTreeViewColumn *tree_column,
 					     int                x_offset,
-					     int                width);
+					     int                width,
+					     int                height);
 void _gtk_tree_view_column_unset_model      (GtkTreeViewColumn *column,
 					     GtkTreeModel      *old_model);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);

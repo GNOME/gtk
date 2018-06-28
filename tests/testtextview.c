@@ -24,7 +24,7 @@ static void my_text_view_draw_layer (GtkTextView       *textview,
 				     GtkTextViewLayer   layer,
 				     cairo_t           *cr)
 {
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
     draw_background (GTK_WIDGET (textview), cr);
 }
 
@@ -213,11 +213,6 @@ main (int argc, char **argv)
 
   create_tags (buffer);
   anchor = insert_text (buffer);
-
-  gtk_widget_show (button);
-  gtk_widget_show (button2);
-  gtk_widget_show (textview);
-  gtk_widget_show (sw);
 
   gtk_container_add (GTK_CONTAINER (window), sw);
   gtk_container_add (GTK_CONTAINER (sw), textview);

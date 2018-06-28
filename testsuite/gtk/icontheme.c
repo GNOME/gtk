@@ -18,6 +18,7 @@ get_test_icontheme (gboolean force_reload)
 
   icon_theme = gtk_icon_theme_new ();
   gtk_icon_theme_set_custom_theme (icon_theme, "icons");
+  gtk_icon_theme_set_display (icon_theme, gdk_display_get_default ());
   current_dir = g_test_get_dir (G_TEST_DIST);
   gtk_icon_theme_set_search_path (icon_theme, &current_dir, 1);
 

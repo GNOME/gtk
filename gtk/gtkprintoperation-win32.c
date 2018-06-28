@@ -56,6 +56,24 @@
 #define JOB_STATUS_COMPLETE 0x1000
 #endif
 
+/* Forward declarations */
+GtkPrintOperationResult
+gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
+					gboolean          *do_print);
+GtkPrintOperationResult
+gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
+				     GtkWindow         *parent,
+				     gboolean          *do_print);
+UINT_PTR CALLBACK
+run_mainloop_hook (HWND hdlg,
+		   UINT uiMsg,
+		   WPARAM wParam,
+		   LPARAM lParam);
+void
+win32_start_page (GtkPrintOperation *op,
+		  GtkPrintContext *print_context,
+		  GtkPageSetup *page_setup);
+
 typedef struct {
   HDC hdc;
   HGLOBAL devmode;
@@ -517,7 +535,7 @@ win32_poll_status_timeout (GtkPrintOperation *op)
   win32_poll_status (op);
 
   if (!gtk_print_operation_is_finished (op)) {
-    op_win32->timeout_id = gdk_threads_add_timeout (STATUS_POLLING_TIME,
+    op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
 					  (GSourceFunc)win32_poll_status_timeout,
 					  op);
     g_source_set_name_by_id (op_win32->timeout_id, "[gtk+] win32_poll_status_timeout");
@@ -561,7 +579,7 @@ win32_end_run (GtkPrintOperation *op,
     {
       op_win32->printerHandle = printerHandle;
       win32_poll_status (op);
-      op_win32->timeout_id = gdk_threads_add_timeout (STATUS_POLLING_TIME,
+      op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
 					    (GSourceFunc)win32_poll_status_timeout,
 					    op);
       g_source_set_name_by_id (op_win32->timeout_id, "[gtk+] win32_poll_status_timeout");
@@ -659,7 +677,7 @@ static HWND
 get_parent_hwnd (GtkWidget *widget)
 {
   gtk_widget_realize (widget);
-  return gdk_win32_window_get_handle (gtk_widget_get_window (widget));
+  return gdk_win32_surface_get_handle (gtk_widget_get_surface (widget));
 }
 
 static void
@@ -739,7 +757,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_DEFAULTSOURCE)
     {
-      char *source;
+      const char *source;
       switch (devmode->dmDefaultSource)
 	{
 	default:
@@ -839,7 +857,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_MEDIATYPE)
     {
-      char *media_type;
+      const char *media_type;
       switch (devmode->dmMediaType)
 	{
 	default:
@@ -859,7 +877,7 @@ devmode_to_settings (GtkPrintSettings *settings,
   
   if (devmode->dmFields & DM_DITHERTYPE)
     {
-      char *dither;
+      const char *dither;
       switch (devmode->dmDitherType)
 	{
 	default:
@@ -1343,7 +1361,7 @@ plug_grab_notify (GtkWidget        *widget,
 		  gboolean          was_grabbed,
 		  GtkPrintOperation *op)
 {
-  EnableWindow (GetAncestor (GDK_WINDOW_HWND (gtk_widget_get_window (widget)), GA_ROOT),
+  EnableWindow (GetAncestor (GDK_SURFACE_HWND (gtk_widget_get_surface (widget)), GA_ROOT),
 		was_grabbed);
 }
 
@@ -1371,7 +1389,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
       gtk_widget_show (op->priv->custom_widget);
       gtk_widget_show (plug);
-      gdk_window_focus (gtk_widget_get_window (plug), GDK_CURRENT_TIME);
+      gdk_surface_focus (gtk_widget_get_surface (plug), GDK_CURRENT_TIME);
 
       /* This dialog is modal, so we grab the embed widget */
       gtk_grab_add (plug);
@@ -1402,10 +1420,6 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
        */
       if (message == WM_SIZE)
         {
-          GtkAllocation alloc;
-          alloc.width = LOWORD (lparam);
-          alloc.height = HIWORD (lparam);
-
           gtk_widget_queue_resize (op_win32->embed_widget);
         }
 

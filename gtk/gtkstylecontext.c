@@ -73,11 +73,8 @@
  *
  * If you are using the theming layer standalone, you will need to set a
  * widget path and a display yourself to the created style context through
- * gtk_style_context_set_path() and gtk_style_context_set_display(), as well
- * as updating the context yourself using gtk_style_context_invalidate()
- * whenever any of the conditions change, such as a change in the
- * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
- * widget. See the “Foreign drawing“ example in gtk3-demo.
+ * gtk_style_context_set_path() and possibly gtk_style_context_set_display().
+ * See the “Foreign drawing“ example in gtk4-demo.
  *
  * # Style Classes # {#gtkstylecontext-classes}
  *
@@ -126,8 +123,6 @@ struct _GtkStyleContextPrivate
   GtkCssNode *cssnode;
   GSList *saved_nodes;
 
-  GdkFrameClock *frame_clock;
-
   GtkCssStyleChange *invalidating_context;
 };
 typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
@@ -135,7 +130,6 @@ typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 enum {
   PROP_0,
   PROP_DISPLAY,
-  PROP_FRAME_CLOCK,
   PROP_PARENT,
   LAST_PROP
 };
@@ -170,7 +164,11 @@ gtk_style_context_real_changed (GtkStyleContext *context)
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
   if (GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    _gtk_widget_style_context_invalidated (gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode)));
+    {
+      GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode));
+      if (widget != NULL)
+        _gtk_widget_style_context_invalidated (widget);
+    }
 }
 
 static void
@@ -194,8 +192,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
    * #GtkWidget::style-updated signal/vfunc might be more convenient to use.
    *
    * This signal is useful when using the theming layer standalone.
-   *
-   * Since: 3.0
    */
   signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -210,14 +206,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
       g_param_spec_object ("display",
                            P_("Display"),
                            P_("The associated GdkDisplay"),
-                           GDK_TYPE_SCREEN,
-                           GTK_PARAM_READWRITE);
-
-  properties[PROP_FRAME_CLOCK] =
-      g_param_spec_object ("paint-clock",
-                           P_("FrameClock"),
-                           P_("The associated GdkFrameClock"),
-                           GDK_TYPE_FRAME_CLOCK,
+                           GDK_TYPE_DISPLAY,
                            GTK_PARAM_READWRITE);
 
   /**
@@ -225,8 +214,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
    *
    * Sets or gets the style context’s parent. See gtk_style_context_set_parent()
    * for details.
-   *
-   * Since: 3.4
    */
   properties[PROP_PARENT] =
       g_param_spec_object ("parent",
@@ -347,9 +334,6 @@ gtk_style_context_impl_set_property (GObject      *object,
     case PROP_DISPLAY:
       gtk_style_context_set_display (context, g_value_get_object (value));
       break;
-    case PROP_FRAME_CLOCK:
-      gtk_style_context_set_frame_clock (context, g_value_get_object (value));
-      break;
     case PROP_PARENT:
       gtk_style_context_set_parent (context, g_value_get_object (value));
       break;
@@ -372,9 +356,6 @@ gtk_style_context_impl_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, priv->display);
-      break;
-    case PROP_FRAME_CLOCK:
-      g_value_set_object (value, priv->frame_clock);
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -505,8 +486,6 @@ gtk_style_context_new_for_node (GtkCssNode *node)
  * Note: If both priorities are the same, a #GtkStyleProvider
  * added through this function takes precedence over another added
  * through gtk_style_context_add_provider_for_display().
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_add_provider (GtkStyleContext  *context,
@@ -542,8 +521,6 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
  * @provider: a #GtkStyleProvider
  *
  * Removes @provider from the style providers list in @context.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_remove_provider (GtkStyleContext  *context,
@@ -570,8 +547,6 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
  * style, it will both redraw and recompute any cached information about
  * its appearance. As an example, it is used when the color scheme changes
  * in the related #GtkSettings object.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_reset_widgets (GdkDisplay *display)
@@ -611,8 +586,6 @@ gtk_style_context_reset_widgets (GdkDisplay *display)
  * Note: If both priorities are the same, A #GtkStyleProvider
  * added through gtk_style_context_add_provider() takes precedence
  * over another added through this function.
- *
- * Since: 3.94
  **/
 void
 gtk_style_context_add_provider_for_display (GdkDisplay       *display,
@@ -635,8 +608,6 @@ gtk_style_context_add_provider_for_display (GdkDisplay       *display,
  * @provider: a #GtkStyleProvider
  *
  * Removes @provider from the global style providers list in @display.
- *
- * Since: 3.94
  **/
 void
 gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
@@ -713,8 +684,6 @@ gtk_style_context_query_func (guint    id,
  *
  * When @value is no longer needed, g_value_unset() must be called
  * to free any allocated memory.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_get_property (GtkStyleContext *context,
@@ -749,6 +718,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
 /**
  * gtk_style_context_get_valist:
  * @context: a #GtkStyleContext
+ * @first_property_name: Name of the first property
  * @args: va_list of property name/return location pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a given state.
@@ -760,18 +730,18 @@ gtk_style_context_get_property (GtkStyleContext *context,
  * memory in the appropriate manner for the type. For example, by calling
  * g_free() or g_object_unref(). Non-pointer-valued properties, such as
  * integers, are returned by value and do not need to be freed.
- *
- * Since: 3.0
  */
 void
 gtk_style_context_get_valist (GtkStyleContext *context,
+                              const char      *first_property_name,
                               va_list          args)
 {
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (first_property_name != NULL);
 
-  property_name = va_arg (args, const gchar *);
+  property_name = first_property_name;
 
   while (property_name)
     {
@@ -799,6 +769,7 @@ gtk_style_context_get_valist (GtkStyleContext *context,
 /**
  * gtk_style_context_get:
  * @context: a #GtkStyleContext
+ * @first_property_name: Name of the first property
  * @...: property name /return value pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a
@@ -811,19 +782,19 @@ gtk_style_context_get_valist (GtkStyleContext *context,
  * memory in the appropriate manner for the type. For example, by calling
  * g_free() or g_object_unref(). Non-pointer-valued properties, such as
  * integers, are returned by value and do not need to be freed.
- *
- * Since: 3.0
  */
 void
 gtk_style_context_get (GtkStyleContext *context,
+                       const char      *first_property_name,
                        ...)
 {
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (first_property_name != NULL);
 
-  va_start (args, context);
-  gtk_style_context_get_valist (context, args);
+  va_start (args, first_property_name);
+  gtk_style_context_get_valist (context, first_property_name, args);
   va_end (args);
 }
 
@@ -869,8 +840,6 @@ gtk_style_context_get_id (GtkStyleContext *context)
  * @flags: state to represent
  *
  * Sets the state to be used for style matching.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_set_state (GtkStyleContext *context,
@@ -895,8 +864,6 @@ gtk_style_context_set_state (GtkStyleContext *context,
  * gtk_widget_get_state_flags().
  *
  * Returns: the state flags
- *
- * Since: 3.0
  **/
 GtkStateFlags
 gtk_style_context_get_state (GtkStyleContext *context)
@@ -914,8 +881,6 @@ gtk_style_context_get_state (GtkStyleContext *context)
  * @scale: scale
  *
  * Sets the scale to use when getting image assets for the style.
- *
- * Since: 3.10
  **/
 void
 gtk_style_context_set_scale (GtkStyleContext *context,
@@ -949,8 +914,6 @@ gtk_style_context_set_scale (GtkStyleContext *context,
  * Returns the scale used for assets.
  *
  * Returns: the scale
- *
- * Since: 3.10
  **/
 gint
 gtk_style_context_get_scale (GtkStyleContext *context)
@@ -974,8 +937,6 @@ gtk_style_context_get_scale (GtkStyleContext *context)
  * If you are using a #GtkStyleContext returned from
  * gtk_widget_get_style_context(), you do not need to call
  * this yourself.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_set_path (GtkStyleContext *context,
@@ -1013,8 +974,6 @@ gtk_style_context_set_path (GtkStyleContext *context,
  * Returns the widget path used for style matching.
  *
  * Returns: (transfer none): A #GtkWidgetPath
- *
- * Since: 3.0
  **/
 const GtkWidgetPath *
 gtk_style_context_get_path (GtkStyleContext *context)
@@ -1034,8 +993,6 @@ gtk_style_context_get_path (GtkStyleContext *context)
  *
  * If you are using a #GtkStyleContext returned from
  * gtk_widget_get_style_context(), the parent will be set for you.
- *
- * Since: 3.4
  **/
 void
 gtk_style_context_set_parent (GtkStyleContext *context,
@@ -1078,8 +1035,6 @@ gtk_style_context_set_parent (GtkStyleContext *context,
  * See that function for details.
  *
  * Returns: (nullable) (transfer none): the parent context or %NULL
- *
- * Since: 3.4
  **/
 GtkStyleContext *
 gtk_style_context_get_parent (GtkStyleContext *context)
@@ -1154,8 +1109,6 @@ gtk_style_context_save_named (GtkStyleContext *context,
  *
  * The matching call to gtk_style_context_restore() must be done
  * before GTK returns to the main loop.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_save (GtkStyleContext *context)
@@ -1171,8 +1124,6 @@ gtk_style_context_save (GtkStyleContext *context)
  *
  * Restores @context state to a previous stage.
  * See gtk_style_context_save().
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_restore (GtkStyleContext *context)
@@ -1211,8 +1162,6 @@ gtk_style_context_restore (GtkStyleContext *context)
  * |[ <!-- language="CSS" -->
  * .search { ... }
  * ]|
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_add_class (GtkStyleContext *context,
@@ -1235,8 +1184,6 @@ gtk_style_context_add_class (GtkStyleContext *context,
  * @class_name: class name to remove
  *
  * Removes @class_name from @context.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_remove_class (GtkStyleContext *context,
@@ -1264,8 +1211,6 @@ gtk_style_context_remove_class (GtkStyleContext *context,
  * given class name.
  *
  * Returns: %TRUE if @context has @class_name defined
- *
- * Since: 3.0
  **/
 gboolean
 gtk_style_context_has_class (GtkStyleContext *context,
@@ -1294,8 +1239,6 @@ gtk_style_context_has_class (GtkStyleContext *context,
  *          strings with the currently defined classes. The contents
  *          of the list are owned by GTK+, but you must free the list
  *          itself with g_list_free() when you are done with it.
- *
- * Since: 3.0
  **/
 GList *
 gtk_style_context_list_classes (GtkStyleContext *context)
@@ -1336,8 +1279,6 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
  * If you are using a #GtkStyleContext returned from
  * gtk_widget_get_style_context(), you do not need to
  * call this yourself.
- *
- * Since: 3.94
  **/
 void
 gtk_style_context_set_display (GtkStyleContext *context,
@@ -1376,8 +1317,6 @@ gtk_style_context_set_display (GtkStyleContext *context,
  * Returns the #GdkDisplay to which @context is attached.
  *
  * Returns: (transfer none): a #GdkDisplay.
- *
- * Since: 3.94
  **/
 GdkDisplay *
 gtk_style_context_get_display (GtkStyleContext *context)
@@ -1387,55 +1326,6 @@ gtk_style_context_get_display (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   return priv->display;
-}
-
-/**
- * gtk_style_context_set_frame_clock:
- * @context: a #GdkFrameClock
- * @frame_clock: a #GdkFrameClock
- *
- * Attaches @context to the given frame clock.
- *
- * The frame clock is used for the timing of animations.
- *
- * If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to
- * call this yourself.
- *
- * Since: 3.8
- **/
-void
-gtk_style_context_set_frame_clock (GtkStyleContext *context,
-                                   GdkFrameClock   *frame_clock)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (frame_clock == NULL || GDK_IS_FRAME_CLOCK (frame_clock));
-
-  if (g_set_object (&priv->frame_clock, frame_clock))
-    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_FRAME_CLOCK]);
-}
-
-/**
- * gtk_style_context_get_frame_clock:
- * @context: a #GtkStyleContext
- *
- * Returns the #GdkFrameClock to which @context is attached.
- *
- * Returns: (nullable) (transfer none): a #GdkFrameClock, or %NULL
- *  if @context does not have an attached frame clock.
- *
- * Since: 3.8
- **/
-GdkFrameClock *
-gtk_style_context_get_frame_clock (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return priv->frame_clock;
 }
 
 gboolean
@@ -1524,8 +1414,6 @@ gtk_style_context_validate (GtkStyleContext  *context,
  *
  * See gtk_style_context_get_property() and
  * #GTK_STYLE_PROPERTY_COLOR for details.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_get_color (GtkStyleContext *context,
@@ -1560,8 +1448,6 @@ gtk_style_context_get_color (GtkStyleContext *context,
  * achieve this result is to use gtk_render_background() instead, along with CSS
  * style classes to modify the color to be rendered.
  *
- * Since: 3.0
- *
  * Deprecated: 3.16: Use gtk_render_background() instead.
  **/
 void
@@ -1587,8 +1473,6 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
  * @color: (out): return value for the border color
  *
  * Gets the border color for a given state.
- *
- * Since: 3.0
  *
  * Deprecated: 3.16: Use gtk_render_frame() instead.
  **/
@@ -1618,8 +1502,6 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
  *
  * See gtk_style_context_get_property() and
  * #GTK_STYLE_PROPERTY_BORDER_WIDTH for details.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_get_border (GtkStyleContext *context,
@@ -1652,8 +1534,6 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * Gets the padding for a given state as a #GtkBorder.
  * See gtk_style_context_get() and #GTK_STYLE_PROPERTY_PADDING
  * for details.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_get_padding (GtkStyleContext *context,
@@ -1686,8 +1566,6 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * Gets the margin for a given state as a #GtkBorder.
  * See gtk_style_property_get() and #GTK_STYLE_PROPERTY_MARGIN
  * for details.
- *
- * Since: 3.0
  **/
 void
 gtk_style_context_get_margin (GtkStyleContext *context,
@@ -1753,10 +1631,6 @@ draw_insertion_cursor (GtkStyleContext *context,
 
   _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
   gdk_cairo_set_source_rgba (cr, is_primary ? &primary_color : &secondary_color);
-
-  /* When changing the shape or size of the cursor here,
-   * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
-   */
 
   stem_width = height * CURSOR_ASPECT_RATIO + 1;
 
@@ -1849,17 +1723,39 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            PangoDirection   direction,
                            gboolean         draw_arrow)
 {
-  graphene_rect_t bounds;
-  cairo_t *cr;
-  
-  get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &bounds,
-                                  "%s Cursor", is_primary ? "Primary" : "Secondary");
+  if (draw_arrow)
+    {
+      cairo_t *cr;
+      graphene_rect_t bounds;
 
-  draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
+      get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
+      cr = gtk_snapshot_append_cairo (snapshot, &bounds);
 
-  cairo_destroy (cr);
+      draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
+
+      cairo_destroy (cr);
+    }
+  else
+    {
+      GdkRGBA primary_color;
+      GdkRGBA secondary_color;
+      int stem_width;
+      int offset;
+
+      _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
+
+      stem_width = height * CURSOR_ASPECT_RATIO + 1;
+
+      /* put (stem_width % 2) on the proper side of the cursor */
+      if (direction == PANGO_DIRECTION_LTR)
+        offset = stem_width / 2;
+      else
+        offset = stem_width - stem_width / 2;
+
+      gtk_snapshot_append_color (snapshot,
+                                 is_primary ? &primary_color : &secondary_color,
+                                 &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
+    }
 }
 
 /**
@@ -1873,8 +1769,6 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
  * @direction: the #PangoDirection of the text
  *
  * Draws a text caret on @cr at the specified index of @layout.
- *
- * Since: 3.4
  **/
 void
 gtk_render_insertion_cursor (GtkStyleContext *context,
@@ -1901,7 +1795,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                 "gtk-split-cursor", &split_cursor,
                 NULL);
 
-  keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (priv->display));
+  keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
@@ -1958,8 +1852,6 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
  * @direction: the #PangoDirection of the text
  *
  * Draws a text caret using @snapshot at the specified index of @layout.
- *
- * Since: 3.90
  **/
 void
 gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
@@ -1986,7 +1878,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
                 "gtk-split-cursor", &split_cursor,
                 NULL);
 
-  keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (priv->display));
+  keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
@@ -2144,6 +2036,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * GtkStyleContextPrintFlags:
+ * @GTK_STYLE_CONTEXT_PRINT_NONE: Default value.
  * @GTK_STYLE_CONTEXT_PRINT_RECURSE: Print the entire tree of
  *     CSS nodes starting at the style context's node
  * @GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE: Show the values of the
@@ -2170,8 +2063,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * the format of the returned string, it may change.
  *
  * Returns: a newly allocated string representing @context
- *
- * Since: 3.20
  */
 char *
 gtk_style_context_to_string (GtkStyleContext           *context,

@@ -21,6 +21,9 @@
 
 #include "graphdata.h"
 
+#include "gtksnapshot.h"
+#include "gtkstylecontext.h"
+
 enum {
   PROP_0,
   PROP_DATA,
@@ -199,8 +202,7 @@ gtk_cell_renderer_graph_snapshot (GtkCellRenderer      *cell,
                                   &GRAPHENE_RECT_INIT (
                                       background_area->x, background_area->y,
                                       background_area->width, background_area->height
-                                  ),
-                                  "CellGraph");
+                                  ));
 
   cairo_set_line_width (cr, 1.0);
 

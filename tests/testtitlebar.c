@@ -148,7 +148,7 @@ activate (GApplication *gapp)
   label = gtk_label_new ("Decorations");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   check = gtk_check_button_new ();
-  g_object_bind_property (header, "show-close-button",
+  g_object_bind_property (header, "show-title-buttons",
                           check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);

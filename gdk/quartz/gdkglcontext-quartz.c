@@ -27,7 +27,7 @@
 #include "gdkintl.h"
 
 GdkGLContext *
-gdk_quartz_window_create_gl_context (GdkWindow     *window,
+gdk_quartz_surface_create_gl_context (GdkSurface     *window,
                                      gboolean       attached,
                                      GdkGLContext  *share,
                                      GError       **error)

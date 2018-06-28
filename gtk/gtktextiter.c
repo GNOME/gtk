@@ -22,7 +22,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "config.h"
 #include "gtktextiter.h"
 #include "gtktextbtree.h"
@@ -174,7 +173,7 @@ gtk_text_iter_make_surreal (const GtkTextIter *_iter)
       _gtk_text_btree_get_chars_changed_stamp (iter->tree))
     {
       g_warning ("Invalid text buffer iterator: either the iterator "
-                 "is uninitialized, or the characters/pixbufs/widgets "
+                 "is uninitialized, or the characters/textures/widgets "
                  "in the buffer have been modified since the iterator "
                  "was created.\nYou must use marks, character numbers, "
                  "or line numbers to preserve a position across buffer "
@@ -453,8 +452,6 @@ gtk_text_iter_free (GtkTextIter *iter)
  * is not useful in applications, because iterators can be assigned
  * with `GtkTextIter i = j;`. The
  * function is used by language bindings.
- *
- * Since: 3.2
  **/
 void
 gtk_text_iter_assign (GtkTextIter       *iter,
@@ -897,7 +894,7 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
  * such as images.  Because images are encoded in the slice, byte and
  * character offsets in the returned array will correspond to byte
  * offsets in the text buffer. Note that 0xFFFC can occur in normal
- * text as well, so it is not a reliable indicator that a pixbuf or
+ * text as well, so it is not a reliable indicator that a texture or
  * widget is in the buffer.
  *
  * Returns: (transfer full): slice of text from the buffer
@@ -991,17 +988,16 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
 }
 
 /**
- * gtk_text_iter_get_pixbuf:
+ * gtk_text_iter_get_texture:
  * @iter: an iterator
  *
- * If the element at @iter is a pixbuf, the pixbuf is returned
- * (with no new reference count added). Otherwise,
- * %NULL is returned.
+ * If the element at @iter is a texture, the texture is returned
+ * (with no new reference count added). Otherwise, %NULL is returned.
  *
- * Returns: (transfer none): the pixbuf at @iter
+ * Returns: (transfer none): the texture at @iter
  **/
-GdkPixbuf*
-gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
+GdkTexture *
+gtk_text_iter_get_texture (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
@@ -1014,10 +1010,10 @@ gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  if (real->segment->type != &gtk_text_pixbuf_type)
+  if (real->segment->type != &gtk_text_texture_type)
     return NULL;
   else
-    return real->segment->body.pixbuf.pixbuf;
+    return real->segment->body.texture.texture;
 }
 
 /**
@@ -1168,7 +1164,6 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
  * parameters.
  *
  * Returns: whether @iter is the start of a range tagged with @tag
- * Since: 3.20
  **/
 gboolean
 gtk_text_iter_starts_tag (const GtkTextIter *iter,
@@ -2447,7 +2442,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
  * @iter: a #GtkTextIter
  * @count: number of chars to move
  *
- * Moves forward by @count text characters (pixbufs, widgets,
+ * Moves forward by @count text characters (textures, widgets,
  * etc. do not count as characters for this). Equivalent to moving
  * through the results of gtk_text_iter_get_text(), rather than
  * gtk_text_iter_get_slice().
@@ -2468,7 +2463,7 @@ gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
  * @iter: a #GtkTextIter
  * @count: number of chars to move
  *
- * Moves backward by @count text characters (pixbufs, widgets,
+ * Moves backward by @count text characters (textures, widgets,
  * etc. do not count as characters for this). Equivalent to moving
  * through the results of gtk_text_iter_get_text(), rather than
  * gtk_text_iter_get_slice().
@@ -2712,8 +2707,6 @@ gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
  * already at the end of the buffer.
  *
  * Returns: whether @iter can be dereferenced
- * 
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_forward_visible_line (GtkTextIter *iter)
@@ -2752,8 +2745,6 @@ gtk_text_iter_forward_visible_line (GtkTextIter *iter)
  * every iteration, if your first iteration is on line 0.)
  *
  * Returns: whether @iter moved
- *
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_backward_visible_line (GtkTextIter *iter)
@@ -2793,8 +2784,6 @@ gtk_text_iter_backward_visible_line (GtkTextIter *iter)
  * moves backward by 0 - @count lines.
  *
  * Returns: whether @iter moved and is dereferenceable
- * 
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
@@ -2833,8 +2822,6 @@ gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
  * moves forward by 0 - @count lines.
  *
  * Returns: whether @iter moved and is dereferenceable
- *
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_backward_visible_lines (GtkTextIter *iter,
@@ -3299,8 +3286,6 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
  * algorithms).
  * 
  * Returns: %TRUE if @iter moved and is not the end iterator 
- *
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
@@ -3319,8 +3304,6 @@ gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
  * algorithms).
  * 
  * Returns: %TRUE if @iter moved and is not the end iterator 
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
@@ -3336,8 +3319,6 @@ gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
  * Calls gtk_text_iter_forward_visible_word_end() up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator 
- *
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
@@ -3356,8 +3337,6 @@ gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
  * Calls gtk_text_iter_backward_visible_word_start() up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator 
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_word_starts (GtkTextIter *iter,
@@ -3693,8 +3672,6 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
  * gtk_text_iter_forward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
@@ -3710,8 +3687,6 @@ gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
  * gtk_text_iter_backward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
@@ -3728,8 +3703,6 @@ gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
  * gtk_text_iter_forward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
@@ -3749,8 +3722,6 @@ gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
  * gtk_text_iter_backward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_cursor_positions (GtkTextIter *iter,

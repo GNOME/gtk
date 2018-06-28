@@ -1,13 +1,8 @@
 #include <gtk/gtk.h>
 
-enum
+static const char *row_targets[] =
 {
-  TARGET_GTK_TREE_MODEL_ROW
-};
-
-static GtkTargetEntry row_targets[] =
-{
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, TARGET_GTK_TREE_MODEL_ROW }
+  "GTK_TREE_MODEL_ROW"
 };
 
 static void
@@ -26,12 +21,12 @@ kinetic_scrolling (void)
   GtkCellRenderer *renderer;
   GtkListStore *store;
   GtkWidget *textview;
+  GdkContentFormats *targets;
   gint i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
-  g_signal_connect (window, "delete_event",
-                    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   grid = gtk_grid_new ();
 
@@ -75,15 +70,15 @@ kinetic_scrolling (void)
   gtk_widget_show (swindow);
 
   treeview = gtk_tree_view_new ();
+  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (treeview),
                                           GDK_BUTTON1_MASK,
-                                          row_targets,
-                                          G_N_ELEMENTS (row_targets),
+                                          targets,
                                           GDK_ACTION_MOVE | GDK_ACTION_COPY);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (treeview),
-                                        row_targets,
-                                        G_N_ELEMENTS (row_targets),
+                                        targets,
                                         GDK_ACTION_MOVE | GDK_ACTION_COPY);
+  gdk_content_formats_unref (targets);
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "editable", TRUE, NULL);

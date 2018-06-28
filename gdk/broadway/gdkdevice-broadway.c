@@ -20,51 +20,47 @@
 
 #include "gdkdevice-broadway.h"
 
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkprivate-broadway.h"
 
 static gboolean gdk_broadway_device_get_history (GdkDevice      *device,
-						 GdkWindow      *window,
-						 guint32         start,
-						 guint32         stop,
-						 GdkTimeCoord ***events,
-						 gint           *n_events);
+                                                 GdkSurface      *surface,
+                                                 guint32         start,
+                                                 guint32         stop,
+                                                 GdkTimeCoord ***events,
+                                                 gint           *n_events);
 static void gdk_broadway_device_get_state (GdkDevice       *device,
-					   GdkWindow       *window,
-					   gdouble         *axes,
-					   GdkModifierType *mask);
-static void gdk_broadway_device_set_window_cursor (GdkDevice *device,
-						   GdkWindow *window,
-						   GdkCursor *cursor);
+                                           GdkSurface       *surface,
+                                           gdouble         *axes,
+                                           GdkModifierType *mask);
+static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
+                                                    GdkSurface *surface,
+                                                    GdkCursor *cursor);
 static void gdk_broadway_device_warp (GdkDevice *device,
-				      GdkScreen *screen,
-				      gdouble    x,
-				      gdouble    y);
+                                      gdouble    x,
+                                      gdouble    y);
 static void gdk_broadway_device_query_state (GdkDevice        *device,
-                                             GdkWindow        *window,
-                                             GdkWindow       **child_window,
+                                             GdkSurface        *surface,
+                                             GdkSurface       **child_surface,
                                              gdouble          *root_x,
                                              gdouble          *root_y,
                                              gdouble          *win_x,
                                              gdouble          *win_y,
                                              GdkModifierType  *mask);
 static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
-						 GdkWindow     *window,
-						 gboolean       owner_events,
-						 GdkEventMask   event_mask,
-						 GdkWindow     *confine_to,
-						 GdkCursor     *cursor,
-						 guint32        time_);
+                                                 GdkSurface     *surface,
+                                                 gboolean       owner_events,
+                                                 GdkEventMask   event_mask,
+                                                 GdkSurface     *confine_to,
+                                                 GdkCursor     *cursor,
+                                                 guint32        time_);
 static void          gdk_broadway_device_ungrab (GdkDevice     *device,
-						 guint32        time_);
-static GdkWindow * gdk_broadway_device_window_at_position (GdkDevice       *device,
-							   gdouble         *win_x,
-							   gdouble         *win_y,
-							   GdkModifierType *mask,
-							   gboolean         get_toplevel);
-static void      gdk_broadway_device_select_window_events (GdkDevice       *device,
-							   GdkWindow       *window,
-							   GdkEventMask     event_mask);
+                                                 guint32        time_);
+static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *device,
+                                                             gdouble         *win_x,
+                                                             gdouble         *win_y,
+                                                             GdkModifierType *mask,
+                                                             gboolean         get_toplevel);
 
 
 G_DEFINE_TYPE (GdkBroadwayDevice, gdk_broadway_device, GDK_TYPE_DEVICE)
@@ -76,13 +72,12 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
 
   device_class->get_history = gdk_broadway_device_get_history;
   device_class->get_state = gdk_broadway_device_get_state;
-  device_class->set_window_cursor = gdk_broadway_device_set_window_cursor;
+  device_class->set_surface_cursor = gdk_broadway_device_set_surface_cursor;
   device_class->warp = gdk_broadway_device_warp;
   device_class->query_state = gdk_broadway_device_query_state;
   device_class->grab = gdk_broadway_device_grab;
   device_class->ungrab = gdk_broadway_device_ungrab;
-  device_class->window_at_position = gdk_broadway_device_window_at_position;
-  device_class->select_window_events = gdk_broadway_device_select_window_events;
+  device_class->surface_at_position = gdk_broadway_device_surface_at_position;
 }
 
 static void
@@ -92,30 +87,30 @@ gdk_broadway_device_init (GdkBroadwayDevice *device_core)
 
   device = GDK_DEVICE (device_core);
 
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
+  _gdk_device_add_axis (device, NULL, GDK_AXIS_X, 0, 0, 1);
+  _gdk_device_add_axis (device, NULL, GDK_AXIS_Y, 0, 0, 1);
 }
 
 static gboolean
 gdk_broadway_device_get_history (GdkDevice      *device,
-				 GdkWindow      *window,
-				 guint32         start,
-				 guint32         stop,
-				 GdkTimeCoord ***events,
-				 gint           *n_events)
+                                 GdkSurface      *surface,
+                                 guint32         start,
+                                 guint32         stop,
+                                 GdkTimeCoord ***events,
+                                 gint           *n_events)
 {
   return FALSE;
 }
 
 static void
 gdk_broadway_device_get_state (GdkDevice       *device,
-			       GdkWindow       *window,
-			       gdouble         *axes,
-			       GdkModifierType *mask)
+                               GdkSurface       *surface,
+                               gdouble         *axes,
+                               GdkModifierType *mask)
 {
   gdouble x, y;
 
-  gdk_window_get_device_position_double (window, device, &x, &y, mask);
+  gdk_surface_get_device_position_double (surface, device, &x, &y, mask);
 
   if (axes)
     {
@@ -125,29 +120,28 @@ gdk_broadway_device_get_state (GdkDevice       *device,
 }
 
 static void
-gdk_broadway_device_set_window_cursor (GdkDevice *device,
-				       GdkWindow *window,
-				       GdkCursor *cursor)
+gdk_broadway_device_set_surface_cursor (GdkDevice *device,
+                                        GdkSurface *surface,
+                                        GdkCursor *cursor)
 {
 }
 
 static void
 gdk_broadway_device_warp (GdkDevice *device,
-			  GdkScreen *screen,
-			  gdouble    x,
-			  gdouble    y)
+                          gdouble    x,
+                          gdouble    y)
 {
 }
 
 static void
 gdk_broadway_device_query_state (GdkDevice        *device,
-				 GdkWindow        *window,
-				 GdkWindow       **child_window,
-				 gdouble          *root_x,
-				 gdouble          *root_y,
-				 gdouble          *win_x,
-				 gdouble          *win_y,
-				 GdkModifierType  *mask)
+                                 GdkSurface        *surface,
+                                 GdkSurface       **child_surface,
+                                 gdouble          *root_x,
+                                 gdouble          *root_y,
+                                 gdouble          *win_x,
+                                 gdouble          *win_y,
+                                 GdkModifierType  *mask)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
@@ -162,10 +156,10 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
   _gdk_broadway_server_query_mouse (broadway_display->server,
-				    &mouse_toplevel_id,
-				    &device_root_x,
-				    &device_root_y,
-				    &mask32);
+                                    &mouse_toplevel_id,
+                                    &device_root_x,
+                                    &device_root_y,
+                                    &mask32);
 
   if (root_x)
     *root_x = device_root_x;
@@ -177,40 +171,25 @@ gdk_broadway_device_query_state (GdkDevice        *device,
     *win_y = device_root_y;
   if (mask)
     *mask = mask32;
-  if (child_window)
+  if (child_surface)
     {
-      GdkWindowImplBroadway *impl;
-      GdkWindow *toplevel;
-      GdkWindow *mouse_toplevel;
-
-      if (window == NULL)
-        window = gdk_get_default_root_window ();
-
-      impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-      toplevel = impl->wrapper;
+      GdkSurface *mouse_toplevel;
 
       mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
-      if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
-	{
-	  *child_window = mouse_toplevel;
-	  if (*child_window == NULL)
-	    *child_window = toplevel;
-	}
+      if (surface == NULL)
+        *child_surface = mouse_toplevel;
       else
-	{
-	  /* No native children */
-	  *child_window = toplevel;
-	}
+        *child_surface = NULL;
     }
 
   return;
 }
 
 void
-_gdk_broadway_window_grab_check_unmap (GdkWindow *window,
-				       gulong     serial)
+_gdk_broadway_surface_grab_check_unmap (GdkSurface *surface,
+                                        gulong     serial)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
   GList *devices, *d;
 
@@ -220,18 +199,18 @@ _gdk_broadway_window_grab_check_unmap (GdkWindow *window,
   devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
   devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
-  /* End all grabs on the newly hidden window */
+  /* End all grabs on the newly hidden surface */
   for (d = devices; d; d = d->next)
-    _gdk_display_end_device_grab (display, d->data, serial, window, TRUE);
+    _gdk_display_end_device_grab (display, d->data, serial, surface, TRUE);
 
   g_list_free (devices);
 }
 
 
 void
-_gdk_broadway_window_grab_check_destroy (GdkWindow *window)
+_gdk_broadway_surface_grab_check_destroy (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
   GdkDeviceGrabInfo *grab;
   GList *devices, *d;
@@ -244,14 +223,14 @@ _gdk_broadway_window_grab_check_destroy (GdkWindow *window)
 
   for (d = devices; d; d = d->next)
     {
-      /* Make sure there is no lasting grab in this native window */
+      /* Make sure there is no lasting grab in this native surface */
       grab = _gdk_display_get_last_device_grab (display, d->data);
 
-      if (grab && grab->native_window == window)
-	{
-	  grab->serial_end = grab->serial_start;
-	  grab->implicit_ungrab = TRUE;
-	}
+      if (grab && grab->native_surface == surface)
+        {
+          grab->serial_end = grab->serial_start;
+          grab->implicit_ungrab = TRUE;
+        }
 
     }
 
@@ -261,12 +240,12 @@ _gdk_broadway_window_grab_check_destroy (GdkWindow *window)
 
 static GdkGrabStatus
 gdk_broadway_device_grab (GdkDevice    *device,
-			  GdkWindow    *window,
-			  gboolean      owner_events,
-			  GdkEventMask  event_mask,
-			  GdkWindow    *confine_to,
-			  GdkCursor    *cursor,
-			  guint32       time_)
+                          GdkSurface    *surface,
+                          gboolean      owner_events,
+                          GdkEventMask  event_mask,
+                          GdkSurface    *confine_to,
+                          GdkCursor    *cursor,
+                          guint32       time_)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
@@ -283,10 +262,10 @@ gdk_broadway_device_grab (GdkDevice    *device,
     {
       /* Device is a pointer */
       return _gdk_broadway_server_grab_pointer (broadway_display->server,
-						GDK_WINDOW_IMPL_BROADWAY (window->impl)->id,
-						owner_events,
-						event_mask,
-						time_);
+                                                GDK_SURFACE_IMPL_BROADWAY (surface->impl)->id,
+                                                owner_events,
+                                                event_mask,
+                                                time_);
     }
 }
 
@@ -297,7 +276,7 @@ gdk_broadway_device_grab (GdkDevice    *device,
 
 static void
 gdk_broadway_device_ungrab (GdkDevice *device,
-			    guint32    time_)
+                            guint32    time_)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
@@ -317,39 +296,28 @@ gdk_broadway_device_ungrab (GdkDevice *device,
       serial = _gdk_broadway_server_ungrab_pointer (broadway_display->server, time_);
 
       if (serial != 0)
-	{
-	  grab = _gdk_display_get_last_device_grab (display, device);
-	  if (grab &&
-	      (time_ == GDK_CURRENT_TIME ||
-	       grab->time == GDK_CURRENT_TIME ||
-	       !TIME_IS_LATER (grab->time, time_)))
-	    grab->serial_end = serial;
-	}
+        {
+          grab = _gdk_display_get_last_device_grab (display, device);
+          if (grab &&
+              (time_ == GDK_CURRENT_TIME ||
+               grab->time == GDK_CURRENT_TIME ||
+               !TIME_IS_LATER (grab->time, time_)))
+            grab->serial_end = serial;
+        }
     }
 }
 
-static GdkWindow *
-gdk_broadway_device_window_at_position (GdkDevice       *device,
-					gdouble         *win_x,
-					gdouble         *win_y,
-					GdkModifierType *mask,
-					gboolean         get_toplevel)
+static GdkSurface *
+gdk_broadway_device_surface_at_position (GdkDevice       *device,
+                                         gdouble         *win_x,
+                                         gdouble         *win_y,
+                                         GdkModifierType *mask,
+                                         gboolean         get_toplevel)
 {
-  GdkScreen *screen;
-  GdkWindow *root_window;
-  GdkWindow *window;
+  GdkSurface *surface;
 
-  screen = gdk_display_get_default_screen (gdk_device_get_display (device));
-  root_window = gdk_screen_get_root_window (screen);
+  gdk_broadway_device_query_state (device, NULL, &surface, NULL, NULL, win_x, win_y, mask);
 
-  gdk_broadway_device_query_state (device, root_window, &window, NULL, NULL, win_x, win_y, mask);
-
-  return window;
+  return surface;
 }
 
-static void
-gdk_broadway_device_select_window_events (GdkDevice    *device,
-					  GdkWindow    *window,
-					  GdkEventMask  event_mask)
-{
-}

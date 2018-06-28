@@ -18,12 +18,13 @@
 
 #include "config.h"
 #include "gdktypes.h"
-#include "gdkprivate.h"
 #include "gdkquartz.h"
+#include "gdkscreen-quartz.h"
 
 GdkDisplay *_gdk_display = NULL;
-GdkScreen *_gdk_screen = NULL;
-GdkWindow *_gdk_root = NULL;
+GdkQuartzScreen *_gdk_screen = NULL;
+GdkSurface *_gdk_root = NULL;
+GdkDeviceManager *_gdk_device_manager = NULL;
 
 GdkOSXVersion
 gdk_quartz_osx_version (void)

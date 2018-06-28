@@ -1,5 +1,9 @@
-uniform vec4 uColor;
+uniform vec4 u_color;
 
 void main() {
-  setOutputColor(uColor);
+  vec4 color = u_color;
+
+  // Pre-multiply alpha
+  color.rgb *= color.a;
+  setOutputColor(color * u_alpha);
 }

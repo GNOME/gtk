@@ -19,7 +19,11 @@
 #ifndef GTK_SHORTCUTS_SHORTCUT_H
 #define GTK_SHORTCUTS_SHORTCUT_H
 
-#include <gtk/gtk.h>
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -55,14 +59,12 @@ typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
  *   The shortcut is a gesture. The #GtkShortcutsShortcut:icon property will be
  *   used.
  * @GTK_SHORTCUT_GESTURE_SWIPE_LEFT:
- *   The shortcut is a swipe gesture. GTK+ provides an icon and subtitle. Since 3.90
+ *   The shortcut is a swipe gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE_SWIPE_RIGHT:
- *   The shortcut is a swipe gesture. GTK+ provides an icon and subtitle. Since 3.90
+ *   The shortcut is a swipe gesture. GTK+ provides an icon and subtitle.
  *
  * GtkShortcutType specifies the kind of shortcut that is being described.
  * More values may be added to this enumeration over time.
- *
- * Since: 3.20
  */
 typedef enum {
   GTK_SHORTCUT_ACCELERATOR,
@@ -77,7 +79,7 @@ typedef enum {
   GTK_SHORTCUT_GESTURE_SWIPE_RIGHT
 } GtkShortcutType;
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GType        gtk_shortcuts_shortcut_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

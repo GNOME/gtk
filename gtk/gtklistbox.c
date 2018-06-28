@@ -17,22 +17,30 @@
 
 #include "config.h"
 
-#include "gtkadjustmentprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
-#include "gtkwidget.h"
+
+#include "gtkactionhelperprivate.h"
+#include "gtkadjustmentprivate.h"
+#include "gtkbindings.h"
+#include "gtkbuildable.h"
+#include "gtkcontainerprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkdnd.h"
+#include "gtkgesturemultipress.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkscrollable.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
+
+#include "a11y/gtklistboxaccessibleprivate.h"
+#include "a11y/gtklistboxrowaccessible.h"
 
 #include <float.h>
 #include <math.h>
 #include <string.h>
-
-#include "a11y/gtklistboxaccessibleprivate.h"
-#include "a11y/gtklistboxrowaccessible.h"
 
 /**
  * SECTION:gtklistbox
@@ -104,8 +112,7 @@ typedef struct
   GtkWidget *scrollable_parent;
   GtkAdjustment *adjustment;
   gboolean activate_single_click;
-
-  GtkGesture *multipress_gesture;
+  gboolean accept_unpaired_release;
 
   /* DnD */
   GtkListBoxRow *drag_highlighted_row;
@@ -122,6 +129,7 @@ typedef struct
 {
   GSequenceIter *iter;
   GtkWidget *header;
+  GtkActionHelper *action_helper;
   gint y;
   gint height;
   guint visible     :1;
@@ -151,6 +159,7 @@ enum {
   PROP_0,
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
+  PROP_ACCEPT_UNPAIRED_RELEASE,
   LAST_PROPERTY
 };
 
@@ -158,19 +167,30 @@ enum {
   ROW_PROP_0,
   ROW_PROP_ACTIVATABLE,
   ROW_PROP_SELECTABLE,
-  LAST_ROW_PROPERTY
+
+  /* actionable properties */
+  ROW_PROP_ACTION_NAME,
+  ROW_PROP_ACTION_TARGET,
+
+  LAST_ROW_PROPERTY = ROW_PROP_ACTION_NAME
 };
 
 #define BOX_PRIV(box) ((GtkListBoxPrivate*)gtk_list_box_get_instance_private ((GtkListBox*)(box)))
 #define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
 
-static void     gtk_list_box_buildable_interface_init     (GtkBuildableIface *iface);
+static GtkBuildableIface *parent_buildable_iface;
+
+static void     gtk_list_box_buildable_interface_init   (GtkBuildableIface *iface);
+
+static void     gtk_list_box_row_actionable_iface_init  (GtkActionableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkListBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_list_box_buildable_interface_init))
-G_DEFINE_TYPE_WITH_PRIVATE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_CODE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkListBoxRow)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_list_box_row_actionable_iface_init))
 
 static void                 gtk_list_box_apply_filter_all             (GtkListBox          *box);
 static void                 gtk_list_box_update_header                (GtkListBox          *box,
@@ -208,11 +228,9 @@ static GType                gtk_list_box_child_type                   (GtkContai
 static GtkSizeRequestMode   gtk_list_box_get_request_mode             (GtkWidget           *widget);
 static void                 gtk_list_box_size_allocate                (GtkWidget           *widget,
                                                                        const GtkAllocation *allocation,
-                                                                       int                  baseline,
-                                                                       GtkAllocation       *out_clip);
+                                                                       int                  baseline);
 static void                 gtk_list_box_drag_leave                   (GtkWidget           *widget,
-                                                                       GdkDragContext      *context,
-                                                                       guint                time_);
+                                                                       GdkDrop             *drop);
 static void                 gtk_list_box_activate_cursor_row          (GtkListBox          *box);
 static void                 gtk_list_box_toggle_cursor_row            (GtkListBox          *box);
 static void                 gtk_list_box_move_cursor                  (GtkListBox          *box,
@@ -232,6 +250,8 @@ static void                 gtk_list_box_select_all_between             (GtkList
                                                                          gboolean             modify);
 static gboolean             gtk_list_box_unselect_all_internal          (GtkListBox          *box);
 static void                 gtk_list_box_selected_rows_changed          (GtkListBox          *box);
+static void                 gtk_list_box_set_accept_unpaired_release    (GtkListBox          *box,
+                                                                         gboolean             accept);
 
 static void gtk_list_box_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
                                                       guint                 n_press,
@@ -242,6 +262,14 @@ static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gest
                                                       guint                 n_press,
                                                       gdouble               x,
                                                       gdouble               y,
+                                                      GtkListBox           *box);
+static void gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
+                                                      gdouble               x,
+                                                      gdouble               y,
+                                                      guint                 button,
+                                                      GdkEventSequence     *sequence,
+                                                      GtkListBox           *box);
+static void gtk_list_box_multipress_gesture_stopped  (GtkGestureMultiPress *gesture,
                                                       GtkListBox           *box);
 
 static void gtk_list_box_update_row_styles (GtkListBox    *box);
@@ -277,8 +305,6 @@ static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
  * Creates a new #GtkListBox container.
  *
  * Returns: a new #GtkListBox
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_new (void)
@@ -302,6 +328,9 @@ gtk_list_box_get_property (GObject    *obj,
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       g_value_set_boolean (value, priv->activate_single_click);
       break;
+    case PROP_ACCEPT_UNPAIRED_RELEASE:
+      g_value_set_boolean (value, priv->accept_unpaired_release);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -324,6 +353,9 @@ gtk_list_box_set_property (GObject      *obj,
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       gtk_list_box_set_activate_on_single_click (box, g_value_get_boolean (value));
       break;
+    case PROP_ACCEPT_UNPAIRED_RELEASE:
+      gtk_list_box_set_accept_unpaired_release (box, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -344,7 +376,6 @@ gtk_list_box_finalize (GObject *obj)
 
   g_clear_object (&priv->adjustment);
   g_clear_object (&priv->drag_highlighted_row);
-  g_clear_object (&priv->multipress_gesture);
 
   g_sequence_free (priv->children);
   g_hash_table_unref (priv->header_hash);
@@ -407,6 +438,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_ACCEPT_UNPAIRED_RELEASE] =
+    g_param_spec_boolean ("accept-unpaired-release",
+                          P_("Accept unpaired release"),
+                          P_("Accept unpaired release"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
   /**
@@ -420,8 +458,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * When the @box is using #GTK_SELECTION_MULTIPLE, this signal will not
    * give you the full picture of selection changes, and you should use
    * the #GtkListBox::selected-rows-changed signal instead.
-   *
-   * Since: 3.10
    */
   signals[ROW_SELECTED] =
     g_signal_new (I_("row-selected"),
@@ -439,8 +475,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    *
    * The ::selected-rows-changed signal is emitted when the
    * set of selected rows changes.
-   *
-   * Since: 3.14
    */
   signals[SELECTED_ROWS_CHANGED] = g_signal_new (I_("selected-rows-changed"),
                                                  GTK_TYPE_LIST_BOX,
@@ -459,8 +493,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * mode permits it.
    *
    * The default bindings for this signal is Ctrl-a.
-   *
-   * Since: 3.14
    */
   signals[SELECT_ALL] = g_signal_new (I_("select-all"),
                                       GTK_TYPE_LIST_BOX,
@@ -479,8 +511,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * mode permits it.
    *
    * The default bindings for this signal is Ctrl-Shift-a.
-   *
-   * Since: 3.14
    */
   signals[UNSELECT_ALL] = g_signal_new (I_("unselect-all"),
                                         GTK_TYPE_LIST_BOX,
@@ -496,8 +526,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * @row: the activated row
    *
    * The ::row-activated signal is emitted when a row has been activated by the user.
-   *
-   * Since: 3.10
    */
   signals[ROW_ACTIVATED] =
     g_signal_new (I_("row-activated"),
@@ -572,7 +600,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "unselect-all", 0);
 
-  gtk_widget_class_set_css_name (widget_class, "list");
+  gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
 
 static void
@@ -580,26 +608,31 @@ gtk_list_box_init (GtkListBox *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *widget = GTK_WIDGET (box);
+  GtkGesture *gesture;
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->activate_single_click = TRUE;
 
   priv->children = g_sequence_new (NULL);
   priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_PRIMARY);
-  g_signal_connect (priv->multipress_gesture, "pressed",
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
-  g_signal_connect (priv->multipress_gesture, "released",
+  g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
-
+  g_signal_connect (gesture, "stopped",
+                    G_CALLBACK (gtk_list_box_multipress_gesture_stopped), box);
+  g_signal_connect (gesture, "unpaired-release",
+                    G_CALLBACK (gtk_list_box_multipress_unpaired_release), box);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect (box, "notify::parent", G_CALLBACK (gtk_list_box_parent_cb), NULL);
 }
@@ -615,8 +648,6 @@ gtk_list_box_init (GtkListBox *box)
  * find all selected rows.
  *
  * Returns: (transfer none): the selected row
- *
- * Since: 3.10
  */
 GtkListBoxRow *
 gtk_list_box_get_selected_row (GtkListBox *box)
@@ -636,8 +667,6 @@ gtk_list_box_get_selected_row (GtkListBox *box)
  * list, %NULL is returned.
  *
  * Returns: (transfer none) (nullable): the child #GtkWidget or %NULL
- *
- * Since: 3.10
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_index (GtkListBox *box,
@@ -680,8 +709,6 @@ row_y_cmp_func (gconstpointer a,
  *
  * Returns: (transfer none) (nullable): the row or %NULL
  *   in case no row exists for the given y coordinate.
- *
- * Since: 3.10
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_y (GtkListBox *box,
@@ -708,8 +735,6 @@ gtk_list_box_get_row_at_y (GtkListBox *box,
  * @row: (allow-none): The row to select or %NULL
  *
  * Make @row the currently selected row.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_select_row (GtkListBox    *box,
@@ -732,15 +757,13 @@ gtk_list_box_select_row (GtkListBox    *box,
     }
 }
 
-/**   
+/**
  * gtk_list_box_unselect_row:
  * @box: a #GtkListBox
  * @row: the row to unselected
  *
  * Unselects a single row of @box, if the selection mode allows it.
- *
- * Since: 3.14
- */                       
+ */
 void
 gtk_list_box_unselect_row (GtkListBox    *box,
                            GtkListBoxRow *row)
@@ -756,8 +779,6 @@ gtk_list_box_unselect_row (GtkListBox    *box,
  * @box: a #GtkListBox
  *
  * Select all children of @box, if the selection mode allows it.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_select_all (GtkListBox *box)
@@ -779,8 +800,6 @@ gtk_list_box_select_all (GtkListBox *box)
  * @box: a #GtkListBox
  *
  * Unselect all children of @box, if the selection mode allows it.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_unselect_all (GtkListBox *box)
@@ -815,8 +834,6 @@ gtk_list_box_selected_rows_changed (GtkListBox *box)
  *
  * A function used by gtk_list_box_selected_foreach().
  * It will be called on every selected child of the @box.
- *
- * Since: 3.14
  */
 
 /**
@@ -828,8 +845,6 @@ gtk_list_box_selected_rows_changed (GtkListBox *box)
  * Calls a function for each selected child.
  *
  * Note that the selection cannot be modified from within this function.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_selected_foreach (GtkListBox            *box,
@@ -860,8 +875,6 @@ gtk_list_box_selected_foreach (GtkListBox            *box,
  * Returns: (element-type GtkListBoxRow) (transfer container):
  *     A #GList containing the #GtkWidget for each selected child.
  *     Free with g_list_free() when done.
- *
- * Since: 3.14
  */
 GList *
 gtk_list_box_get_selected_rows (GtkListBox *box)
@@ -891,8 +904,6 @@ gtk_list_box_get_selected_rows (GtkListBox *box)
  *
  * Sets the placeholder widget that is shown in the list when
  * it doesn't display any visible children.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_placeholder (GtkListBox *box,
@@ -932,8 +943,6 @@ gtk_list_box_set_placeholder (GtkListBox *box,
  * a #GtkScrolledWindow the adjustment from that will
  * be picked up automatically, so there is no need
  * to manually do that.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_adjustment (GtkListBox    *box,
@@ -959,8 +968,6 @@ gtk_list_box_set_adjustment (GtkListBox    *box,
  * for vertical scrolling.
  *
  * Returns: (transfer none): the adjustment
- *
- * Since: 3.10
  */
 GtkAdjustment *
 gtk_list_box_get_adjustment (GtkListBox *box)
@@ -1020,8 +1027,6 @@ gtk_list_box_parent_cb (GObject    *object,
  *
  * Sets how selection works in the listbox.
  * See #GtkSelectionMode for details.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_selection_mode (GtkListBox       *box,
@@ -1059,8 +1064,6 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
  * Gets the selection mode of the listbox.
  *
  * Returns: a #GtkSelectionMode
- *
- * Since: 3.10
  */
 GtkSelectionMode
 gtk_list_box_get_selection_mode (GtkListBox *box)
@@ -1087,8 +1090,6 @@ gtk_list_box_get_selection_mode (GtkListBox *box)
  *
  * Note that using a filter function is incompatible with using a model
  * (see gtk_list_box_bind_model()).
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_filter_func (GtkListBox           *box,
@@ -1137,8 +1138,6 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
  * the row before changes (either by gtk_list_box_row_changed() on the previous row, or when
  * the previous row becomes a different row). It is also called for all rows when
  * gtk_list_box_invalidate_headers() is called.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_header_func (GtkListBox                 *box,
@@ -1168,8 +1167,6 @@ gtk_list_box_set_header_func (GtkListBox                 *box,
  * to an external factor. For instance, this would be used
  * if the filter function just looked for a specific search
  * string and the entry with the search string has changed.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_invalidate_filter (GtkListBox *box)
@@ -1219,8 +1216,6 @@ gtk_list_box_css_node_foreach (gpointer data,
  * Update the sorting for all rows. Call this when result
  * of the sort function on the @box is changed due
  * to an external factor.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_invalidate_sort (GtkListBox *box)
@@ -1261,8 +1256,6 @@ gtk_list_box_do_reseparate (GtkListBox *box)
  * Update the separators for all rows. Call this when result
  * of the header function on the @box is changed due
  * to an external factor.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_invalidate_headers (GtkListBox *box)
@@ -1291,8 +1284,6 @@ gtk_list_box_invalidate_headers (GtkListBox *box)
  *
  * Note that using a sort function is incompatible with using a model
  * (see gtk_list_box_bind_model()).
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_sort_func (GtkListBox         *box,
@@ -1352,8 +1343,6 @@ gtk_list_box_got_row_changed (GtkListBox    *box,
  *
  * If @single is %TRUE, rows will be activated when you click on them,
  * otherwise you need to double-click.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_activate_on_single_click (GtkListBox *box,
@@ -1378,8 +1367,6 @@ gtk_list_box_set_activate_on_single_click (GtkListBox *box,
  * Returns whether rows activate on single clicks.
  *
  * Returns: %TRUE if rows are activated on single click, %FALSE otherwise
- *
- * Since: 3.10
  */
 gboolean
 gtk_list_box_get_activate_on_single_click (GtkListBox *box)
@@ -1389,6 +1376,17 @@ gtk_list_box_get_activate_on_single_click (GtkListBox *box)
   return BOX_PRIV (box)->activate_single_click;
 }
 
+void
+gtk_list_box_set_accept_unpaired_release (GtkListBox *box,
+                                          gboolean    accept)
+{
+  if (BOX_PRIV (box)->accept_unpaired_release == accept)
+    return;
+
+  BOX_PRIV (box)->accept_unpaired_release = accept;
+
+  g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_ACCEPT_UNPAIRED_RELEASE]);
+}
 
 static void
 gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
@@ -1404,9 +1402,9 @@ gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
   display = gdk_display_get_default ();
   if (display)
     {
-      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                       GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                       GDK_MODIFIER_INTENT_MODIFY_SELECTION);
     }
 
@@ -1439,22 +1437,22 @@ ensure_row_visible (GtkListBox    *box,
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *header;
   gint y, height;
-  GtkAllocation allocation;
+  graphene_rect_t rect;
 
   if (!priv->adjustment)
     return;
 
-  gtk_widget_get_outer_allocation (GTK_WIDGET (row), &allocation);
-  y = allocation.y;
-  height = allocation.height;
+  gtk_widget_compute_bounds (GTK_WIDGET (row), GTK_WIDGET (box), &rect);
+  y = rect.origin.y;
+  height = rect.size.height;
 
   /* If the row has a header, we want to ensure that it is visible as well. */
   header = ROW_PRIV (row)->header;
   if (GTK_IS_WIDGET (header) && gtk_widget_is_drawable (header))
     {
-      gtk_widget_get_outer_allocation (header, &allocation);
-      y = allocation.y;
-      height += allocation.height;
+      gtk_widget_compute_bounds (header, GTK_WIDGET (box), &rect);
+      y = rect.origin.y;
+      height += rect.size.height;
     }
 
   gtk_adjustment_clamp_page (priv->adjustment, y, y + height);
@@ -1703,7 +1701,14 @@ static void
 gtk_list_box_activate (GtkListBox    *box,
                        GtkListBoxRow *row)
 {
-  if (gtk_list_box_row_get_activatable (row))
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  if (!gtk_list_box_row_get_activatable (row))
+    return;
+
+  if (priv->action_helper)
+    gtk_action_helper_activate (priv->action_helper);
+  else
     g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
 }
 
@@ -1770,6 +1775,26 @@ get_current_selection_modifiers (GtkWidget *widget,
 }
 
 static void
+gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
+                                          gdouble               x,
+                                          gdouble               y,
+                                          guint                 button,
+                                          GdkEventSequence     *sequence,
+                                          GtkListBox           *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GtkListBoxRow *row;
+
+  if (!priv->activate_single_click || !priv->accept_unpaired_release)
+    return;
+
+  row = gtk_list_box_get_row_at_y (box, y);
+
+  if (row)
+    gtk_list_box_select_and_activate (box, row);
+}
+
+static void
 gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
                                           guint                 n_press,
                                           gdouble               x,
@@ -1816,12 +1841,25 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 
   if (priv->active_row)
     {
-      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                    GTK_STATE_FLAG_ACTIVE);
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
       priv->active_row = NULL;
     }
 
   g_object_unref (box);
+}
+
+static void
+gtk_list_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
+                                         GtkListBox           *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+  if (priv->active_row)
+    {
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
+      priv->active_row = NULL;
+      gtk_widget_queue_draw (GTK_WIDGET (box));
+    }
 }
 
 static void
@@ -2460,11 +2498,9 @@ gtk_list_box_measure (GtkWidget     *widget,
 static void
 gtk_list_box_size_allocate (GtkWidget           *widget,
                             const GtkAllocation *allocation,
-                            int                  baseline,
-                            GtkAllocation       *out_clip)
+                            int                  baseline)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  GtkAllocation child_clip;
   GtkAllocation child_allocation;
   GtkAllocation header_allocation;
   GtkListBoxRow *row;
@@ -2489,8 +2525,7 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
                           &child_min, NULL, NULL, NULL);
       header_allocation.height = allocation->height;
       header_allocation.y = child_allocation.y;
-      gtk_widget_size_allocate (priv->placeholder, &header_allocation, -1, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (priv->placeholder, &header_allocation, -1);
       child_allocation.y += child_min;
     }
 
@@ -2515,9 +2550,7 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header,
                                     &header_allocation,
-                                    -1,
-                                    &child_clip);
-          gdk_rectangle_union (out_clip, &child_clip, out_clip);
+                                    -1);
           child_allocation.y += child_min;
         }
 
@@ -2529,8 +2562,7 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
       child_allocation.height = child_min;
 
       ROW_PRIV (row)->height = child_allocation.height;
-      gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation, -1, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation, -1);
       child_allocation.y += child_min;
     }
 }
@@ -2543,34 +2575,12 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
  * Prepend a widget to the list. If a sort function is set, the widget will
  * actually be inserted at the calculated position and this function has the
  * same effect of gtk_container_add().
- *
- * Since: 3.10
  */
 void
 gtk_list_box_prepend (GtkListBox *box,
                       GtkWidget  *child)
 {
   gtk_list_box_insert (box, child, 0);
-}
-
-static void
-gtk_list_box_insert_css_node (GtkListBox    *box,
-                              GtkWidget     *child,
-                              GSequenceIter *iter)
-{
-  GSequenceIter *prev_iter;
-  GtkCssNode *sibling;
-
-  prev_iter = g_sequence_iter_prev (iter);
-
-  if (prev_iter != iter)
-    sibling = gtk_widget_get_css_node (g_sequence_get (prev_iter));
-  else
-    sibling = NULL;
-
-  gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                             gtk_widget_get_css_node (child),
-                             sibling);
 }
 
 /**
@@ -2585,8 +2595,6 @@ gtk_list_box_insert_css_node (GtkListBox    *box,
  *
  * If @position is -1, or larger than the total number of items in the
  * @box, then the @child will be appended to the end.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_insert (GtkListBox *box,
@@ -2595,6 +2603,7 @@ gtk_list_box_insert (GtkListBox *box,
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkListBoxRow *row;
+  GSequenceIter *prev = NULL;
   GSequenceIter *iter = NULL;
 
   g_return_if_fail (GTK_IS_LIST_BOX (box));
@@ -2623,10 +2632,11 @@ gtk_list_box_insert (GtkListBox *box,
       iter = g_sequence_insert_before (current_iter, row);
     }
 
-  gtk_list_box_insert_css_node (box, GTK_WIDGET (row), iter);
-
   ROW_PRIV (row)->iter = iter;
-  gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (box));
+  prev = g_sequence_iter_prev (iter);
+  gtk_widget_insert_after (GTK_WIDGET (row), GTK_WIDGET (box),
+                           prev != iter ? g_sequence_get (prev) : NULL);
+
   gtk_widget_set_child_visible (GTK_WIDGET (row), TRUE);
   ROW_PRIV (row)->visible = gtk_widget_get_visible (GTK_WIDGET (row));
   if (ROW_PRIV (row)->visible)
@@ -2647,8 +2657,6 @@ gtk_list_box_insert (GtkListBox *box,
  *
  * If a row has previously been highlighted via gtk_list_box_drag_highlight_row()
  * it will have the highlight removed.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_drag_unhighlight_row (GtkListBox *box)
@@ -2675,8 +2683,6 @@ gtk_list_box_drag_unhighlight_row (GtkListBox *box)
  *
  * The row will also be unhighlighted when the widget gets
  * a drag leave event.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_drag_highlight_row (GtkListBox    *box,
@@ -2696,9 +2702,8 @@ gtk_list_box_drag_highlight_row (GtkListBox    *box,
 }
 
 static void
-gtk_list_box_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time_)
+gtk_list_box_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   gtk_list_box_drag_unhighlight_row (GTK_LIST_BOX (widget));
 }
@@ -2779,7 +2784,7 @@ gtk_list_box_move_cursor (GtkListBox      *box,
       if (priv->cursor_row != NULL)
         {
           start_y = ROW_PRIV (priv->cursor_row)->y;
-          height = gtk_widget_get_allocated_height (GTK_WIDGET (box));
+          height = gtk_widget_get_height (GTK_WIDGET (box));
           end_y = CLAMP (start_y + page_size * count, 0, height - 1);
           row = gtk_list_box_get_row_at_y (box, end_y);
 
@@ -2788,17 +2793,20 @@ gtk_list_box_move_cursor (GtkListBox      *box,
               GSequenceIter *cursor_iter;
               GSequenceIter *next_iter;
 
-              /* A NULL row should only happen when the list box didn't
-               * have enough rows to fill its height and the user made
-               * a page movement down, so the count must be positive */
-              g_assert (count > 0);
-
-              cursor_iter = ROW_PRIV (priv->cursor_row)->iter;
-              next_iter = gtk_list_box_get_last_visible (box, cursor_iter);
-
-              if (next_iter)
+              if (count > 0)
                 {
-                  row = g_sequence_get (next_iter);
+                  cursor_iter = ROW_PRIV (priv->cursor_row)->iter;
+                  next_iter = gtk_list_box_get_last_visible (box, cursor_iter);
+
+                  if (next_iter)
+                    {
+                      row = g_sequence_get (next_iter);
+                      end_y = ROW_PRIV (row)->y;
+                    }
+                }
+              else
+                {
+                  row = gtk_list_box_get_row_at_index (box, 0);
                   end_y = ROW_PRIV (row)->y;
                 }
             }
@@ -2861,8 +2869,6 @@ gtk_list_box_move_cursor (GtkListBox      *box,
  * Creates a new #GtkListBoxRow, to be used as a child of a #GtkListBox.
  *
  * Returns: a new #GtkListBoxRow
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_row_new (void)
@@ -2914,7 +2920,7 @@ gtk_list_box_row_focus (GtkWidget        *widget,
   else if (gtk_widget_get_focus_child (widget) != NULL)
     {
       /* Child has focus, always navigate inside it first */
-      if (gtk_widget_child_focus (child, direction))
+      if (gtk_widget_child_focus (gtk_widget_get_focus_child (widget), direction))
         return TRUE;
 
       /* If exiting child container to the left, select row  */
@@ -2997,8 +3003,6 @@ gtk_list_box_row_hide (GtkWidget *widget)
  * row functions into the row widgets themselves. Another alternative
  * is to call gtk_list_box_invalidate_sort() on any model change,
  * but that is more expensive.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_row_changed (GtkListBoxRow *row)
@@ -3021,8 +3025,6 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
  * set already, and if so to update the state of it.
  *
  * Returns: (transfer none) (nullable): the current header, or %NULL if none
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_row_get_header (GtkListBoxRow *row)
@@ -3040,8 +3042,6 @@ gtk_list_box_row_get_header (GtkListBoxRow *row)
  * Sets the current header of the @row. This is only allowed to be called
  * from a #GtkListBoxUpdateHeaderFunc. It will replace any existing
  * header in the row, and be shown in front of the row in the listbox.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_row_set_header (GtkListBoxRow *row,
@@ -3070,8 +3070,6 @@ gtk_list_box_row_set_header (GtkListBoxRow *row,
  * Gets the current index of the @row in its #GtkListBox container.
  *
  * Returns: the index of the @row, or -1 if the @row is not in a listbox
- *
- * Since: 3.10
  */
 gint
 gtk_list_box_row_get_index (GtkListBoxRow *row)
@@ -3096,8 +3094,6 @@ gtk_list_box_row_get_index (GtkListBoxRow *row)
  * #GtkListBox container.
  *
  * Returns: %TRUE if @row is selected
- *
- * Since: 3.14
  */
 gboolean
 gtk_list_box_row_is_selected (GtkListBoxRow *row)
@@ -3148,8 +3144,6 @@ gtk_list_box_update_row_styles (GtkListBox *box)
  * @activatable: %TRUE to mark the row as activatable
  *
  * Set the #GtkListBoxRow:activatable property for this row.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_row_set_activatable (GtkListBoxRow *row,
@@ -3176,8 +3170,6 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
  * for this row.
  *
  * Returns: %TRUE if the row is activatable
- *
- * Since: 3.14
  */
 gboolean
 gtk_list_box_row_get_activatable (GtkListBoxRow *row)
@@ -3193,8 +3185,6 @@ gtk_list_box_row_get_activatable (GtkListBoxRow *row)
  * @selectable: %TRUE to mark the row as selectable
  *
  * Set the #GtkListBoxRow:selectable property for this row.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_row_set_selectable (GtkListBoxRow *row,
@@ -3224,8 +3214,6 @@ gtk_list_box_row_set_selectable (GtkListBoxRow *row,
  * for this row.
  *
  * Returns: %TRUE if the row is selectable
- *
- * Since: 3.14
  */
 gboolean
 gtk_list_box_row_get_selectable (GtkListBoxRow *row)
@@ -3233,6 +3221,32 @@ gtk_list_box_row_get_selectable (GtkListBoxRow *row)
   g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), TRUE);
 
   return ROW_PRIV (row)->selectable;
+}
+
+static void
+gtk_list_box_row_set_action_name (GtkActionable *actionable,
+                                  const gchar   *action_name)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
+
+  gtk_action_helper_set_action_name (priv->action_helper, action_name);
+}
+
+static void
+gtk_list_box_row_set_action_target_value (GtkActionable *actionable,
+                                          GVariant      *action_target)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
+
+  gtk_action_helper_set_action_target_value (priv->action_helper, action_target);
 }
 
 static void
@@ -3250,6 +3264,12 @@ gtk_list_box_row_get_property (GObject    *obj,
       break;
     case ROW_PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_list_box_row_get_selectable (row));
+      break;
+    case ROW_PROP_ACTION_NAME:
+      g_value_set_string (value, gtk_action_helper_get_action_name (ROW_PRIV (row)->action_helper));
+      break;
+    case ROW_PROP_ACTION_TARGET:
+      g_value_set_variant (value, gtk_action_helper_get_action_target_value (ROW_PRIV (row)->action_helper));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -3273,10 +3293,41 @@ gtk_list_box_row_set_property (GObject      *obj,
     case ROW_PROP_SELECTABLE:
       gtk_list_box_row_set_selectable (row, g_value_get_boolean (value));
       break;
+    case ROW_PROP_ACTION_NAME:
+      gtk_list_box_row_set_action_name (GTK_ACTIONABLE (row), g_value_get_string (value));
+      break;
+    case ROW_PROP_ACTION_TARGET:
+      gtk_list_box_row_set_action_target_value (GTK_ACTIONABLE (row), g_value_get_variant (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
     }
+}
+
+static const gchar *
+gtk_list_box_row_get_action_name (GtkActionable *actionable)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+
+  return gtk_action_helper_get_action_name (ROW_PRIV (row)->action_helper);
+}
+
+static GVariant *
+gtk_list_box_row_get_action_target_value (GtkActionable *actionable)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+
+  return gtk_action_helper_get_action_target_value (ROW_PRIV (row)->action_helper);
+}
+
+static void
+gtk_list_box_row_actionable_iface_init (GtkActionableInterface *iface)
+{
+  iface->get_action_name = gtk_list_box_row_get_action_name;
+  iface->set_action_name = gtk_list_box_row_set_action_name;
+  iface->get_action_target_value = gtk_list_box_row_get_action_target_value;
+  iface->set_action_target_value = gtk_list_box_row_set_action_target_value;
 }
 
 static void
@@ -3285,6 +3336,17 @@ gtk_list_box_row_finalize (GObject *obj)
   g_clear_object (&ROW_PRIV (GTK_LIST_BOX_ROW (obj))->header);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->finalize (obj);
+}
+
+static void
+gtk_list_box_row_dispose (GObject *object)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (object);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  g_clear_object (&priv->action_helper);
+
+  G_OBJECT_CLASS (gtk_list_box_row_parent_class)->dispose (object);
 }
 
 static void
@@ -3312,6 +3374,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   object_class->get_property = gtk_list_box_row_get_property;
   object_class->set_property = gtk_list_box_row_set_property;
   object_class->finalize = gtk_list_box_row_finalize;
+  object_class->dispose = gtk_list_box_row_dispose;
 
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
@@ -3320,6 +3383,14 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   klass->activate = gtk_list_box_row_activate;
 
+  /**
+   * GtkListBoxRow::activate:
+   *
+   * This is a keybinding signal, which will cause this row to be activated.
+   *
+   * If you want to be notified when the user activates a row (by key or not),
+   * use the #GtkListBox::row-activated signal on the row’s parent #GtkListBox.
+   */
   row_signals[ROW__ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -3336,8 +3407,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    *
    * The property determines whether the #GtkListBox::row-activated
    * signal will be emitted for this row.
-   *
-   * Since: 3.14
    */
   row_properties[ROW_PROP_ACTIVATABLE] =
     g_param_spec_boolean ("activatable",
@@ -3350,8 +3419,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    * GtkListBoxRow:selectable:
    *
    * The property determines whether this row can be selected.
-   *
-   * Since: 3.14
    */
   row_properties[ROW_PROP_SELECTABLE] =
     g_param_spec_boolean ("selectable",
@@ -3362,7 +3429,10 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 
-  gtk_widget_class_set_css_name (widget_class, "row");
+  g_object_class_override_property (object_class, ROW_PROP_ACTION_NAME, "action-name");
+  g_object_class_override_property (object_class, ROW_PROP_ACTION_TARGET, "action-target");
+
+  gtk_widget_class_set_css_name (widget_class, I_("row"));
 }
 
 static void
@@ -3385,15 +3455,15 @@ gtk_list_box_buildable_add_child (GtkBuildable *buildable,
 {
   if (type && strcmp (type, "placeholder") == 0)
     gtk_list_box_set_placeholder (GTK_LIST_BOX (buildable), GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_list_box_buildable_interface_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_list_box_buildable_add_child;
 }
 
@@ -3477,8 +3547,6 @@ gtk_list_box_check_model_compat (GtkListBox *box)
  * Note that using a model is incompatible with the filtering and sorting
  * functionality in GtkListBox. When using a model, filtering and sorting
  * should be implemented by the model.
- *
- * Since: 3.16
  */
 void
 gtk_list_box_bind_model (GtkListBox                 *box,

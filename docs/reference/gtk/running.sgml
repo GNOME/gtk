@@ -20,104 +20,6 @@ How to run and debug your GTK+ application
 <title>Running and debugging GTK+ Applications</title>
 
 <refsect2>
-<title>Common commandline options</title>
-
-<para>
-All GTK+ applications support a number of standard commandline
-options. These are removed from <literal>argv</literal> by gtk_init().
-Modules may parse and remove further options. The
-<link linkend="x11-cmdline">X11</link> and
-<link linkend="win32-cmdline">Windows</link> GDK backends parse
-some additional commandline options.
-</para>
-
-<formalpara>
-<title><systemitem>--gtk-module <replaceable>module</replaceable></systemitem></title>
-
-<para>
-A list of modules to load in addition to those specified in the
-<envar>GTK3_MODULES</envar> environment variable and the
-<literal>gtk-modules</literal> setting.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--g-fatal-warnings</systemitem></title>
-
-<para>
-Make GTK+ abort on all warnings. This is useful to stop on the first
-warning in a debugger, if your application is printing multiple
-warnings.  It's almost always best to start debugging with the first
-warning that occurs.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gtk-debug <replaceable>options</replaceable></systemitem></title>
-
-<para>
-A list of <link linkend="GTK-Debug-Options">debug options</link>
-to turn on in addition to those specified in the <envar>GTK_DEBUG</envar>
-environment variable. This option is not available if GTK+ has been
-configured with <option>--enable-debug=no</option>.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gtk-no-debug <replaceable>options</replaceable></systemitem></title>
-
-<para>
-A list of <link linkend="GTK-Debug-Options">debug options</link>
-to turn off. This option is only available if GTK+ has been configured with
-<option>--enable-debug=yes</option>.
-</para>
-</formalpara>
-
-<para>
-The following options are really used by GDK, not by GTK+, but we
-list them here for completeness nevertheless.
-</para>
-
-<formalpara>
-<title><systemitem>--class <replaceable>class</replaceable></systemitem></title>
-
-<para>
-Sets the program class; see gdk_set_program_class().
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--name <replaceable>name</replaceable></systemitem></title>
-
-<para>
-Sets the program name.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gdk-debug <replaceable>options</replaceable></systemitem></title>
-
-<para>
-A list of <link linkend="GDK-Debug-Options">debug options</link>
-to turn on in addition to those specified in the <envar>GDK_DEBUG</envar>
-environment variable. This option is only available if GTK+ has been
-configured with <option>--enable-debug=yes</option>.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gdk-no-debug <replaceable>options</replaceable></systemitem></title>
-
-<para>
-A list of <link linkend="GDK-Debug-Options">debug options</link>
-to turn off. This option is only available if GTK+ has been configured with
-<option>--enable-debug=yes</option>.
-</para>
-</formalpara>
-
-</refsect2>
-
-<refsect2>
 <title>Environment variables</title>
 
 <para>
@@ -143,10 +45,6 @@ additional environment variables.
       <listitem><para>Actions and menu models</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>baselines</term>
-      <listitem><para>Show baselines</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>builder</term>
       <listitem><para>GtkBuilder support</para></listitem>
     </varlistentry>
@@ -159,24 +57,12 @@ additional environment variables.
       <listitem><para>Icon themes</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>interactive</term>
-      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link></para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>keybindings</term>
       <listitem><para>Keybindings</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>misc</term>
-      <listitem><para>Miscellaneous information</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>modules</term>
       <listitem><para>Loading of modules</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>no-css-cache</term>
-      <listitem><para>Bypass caching for CSS style properties</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>printing</term>
@@ -191,12 +77,27 @@ additional environment variables.
       <listitem><para>Text widget internals</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>tree</term>
+      <listitem><para>Tree widget internals</para></listitem>
+    </varlistentry>
+  </variablelist>
+  A number of keys are influencing behavior instead of just logging:
+  <variablelist>
+    <varlistentry>
+      <term>interactive</term>
+      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link></para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>no-css-cache</term>
+      <listitem><para>Bypass caching for CSS style properties</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>touchscreen</term>
       <listitem><para>Pretend the pointer is a touchscreen device</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>tree</term>
-      <listitem><para>Tree widget internals</para></listitem>
+      <term>baselines</term>
+      <listitem><para>Show baselines</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>updates</term>
@@ -221,36 +122,13 @@ additional environment variables.
   </para>
 </formalpara>
 
-<formalpara>
-  <title><envar>GTK3_MODULES</envar></title>
-
-  <para>
-    A list of modules to load. Note that GTK+ also allows to specify modules to load via a commandline option (<option>--gtk-module</option>) and with the <literal>gtk-modules</literal> setting.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><envar>GTK_MODULES</envar></title>
-
-  <para>
-    A list of modules to load in addition to the ones in the <envar>GTK3_MODULES</envar> variable.
-  </para>
-  <warning>
-    Note that this environment variable is read by GTK+ 2.x too,
-    which may not have the same set of modules available for loading.
-    Use <envar>GTK3_MODULES</envar> for modules that are only compatible
-    with GTK+ 3.
-  </warning>
-</formalpara>
-
 <formalpara id="gtk-path">
   <title><envar>GTK_PATH</envar></title>
 
   <para>
     Specifies a list of directories to search when GTK+ is looking for
-    dynamically loaded objects such as the modules specified by
-    <envar>GTK_MODULES</envar>, theme engines, input method
-    modules, file system backends and print backends. If the path to
+    dynamically loaded objects such as input method
+    modules and print backends. If the path to
     the dynamically loaded object is given as an absolute path name,
     then GTK+ loads it directly.
     Otherwise, GTK+ goes in turn through the directories in <envar>GTK_PATH</envar>,
@@ -284,10 +162,10 @@ additional environment variables.
     Linux and Unix, and the ';' character on Windows.
   </para>
   <warning>
-    Note that this environment variable is read by GTK+ 2.x too, which
-    makes it unsuitable for setting it system-wide (or session-wide),
-    since doing so will cause either GTK+ 2.x applications or GTK+ 3
-    applications to see incompatible modules.
+    Note that this environment variable is read by GTK+ 2.x and GTK+ 3.x too,
+    which makes it unsuitable for setting it system-wide (or session-wide),
+    since doing so will cause applications using different GTK+ versions
+    to see incompatible modules.
   </warning>
 </formalpara>
 
@@ -303,27 +181,6 @@ additional environment variables.
     This also can be a colon-separated list of input-methods, which
     GTK+ will try in turn until it finds one available on the system.
   </para>
-</formalpara>
-
-<formalpara id="gtk-im-module-file">
-  <title><envar>GTK_IM_MODULE_FILE</envar></title>
-
-  <para>
-    Specifies the file listing the IM modules to load. This environment
-    variable the default value
-    <filename><replaceable>libdir</replaceable>/gtk-4.0/4.0.0/immodules.cache</filename>
-    (<replaceable>libdir</replaceable> has the same meaning here as explained for <envar>GTK_PATH</envar>).
-  </para>
-  <para>
-    The <filename>immodules.cache</filename> file is generated by the
-    <command>gtk-query-immodules-3.0</command> utility.
-  </para>
-  <warning>
-    Note that this environment variable is read by GTK+ 2.x too, which
-    makes it unsuitable for setting it system-wide (or session-wide),
-    since doing so will cause either GTK+ 2.x applications or GTK+ 3
-    applications to see the wrong list of IM modules.
-  </warning>
 </formalpara>
 
 <formalpara>
@@ -393,14 +250,6 @@ nevertheless.
       <listitem><para>Information about cursor objects (only win32)</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>dnd</term>
-      <listitem><para>Information about drag-and-drop</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>draw</term>
-      <listitem><para>Information about drawing operations (only win32)</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>eventloop</term>
       <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
     </varlistentry>
@@ -409,60 +258,146 @@ nevertheless.
       <listitem><para>Miscellaneous information</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>nogl</term>
-      <listitem><para>Turn off OpenGL. GDK will behave as if OpenGL support was not available.</para></listitem>
+      <term>frames</term>
+      <listitem><para>Information about the frame clock</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>settings</term>
+      <listitem><para>Information about xsettings</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>selection</term>
+      <listitem><para>Information about selections</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>clipboard</term>
+      <listitem><para>Information about clipboards</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>dnd</term>
+      <listitem><para>Information about drag-and-drop</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>opengl</term>
+      <listitem><para>Information about OpenGL</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan</term>
+      <listitem><para>Information about Vulkan</para></listitem>
+    </varlistentry>
+  </variablelist>
+  A number of options affect behavior instead of logging:
+  <variablelist>
     <varlistentry>
       <term>nograbs</term>
       <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>xinerama</term>
-      <listitem><para>Simulate a multi-monitor setup</para></listitem>
+      <term>gl-disable</term>
+      <listitem><para>Disable OpenGL support</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>xim</term>
-      <listitem><para>Information about XIM support</para></listitem>
+      <term>gl-software</term>
+      <listitem><para>Force OpenGL software rendering</para></listitem>
     </varlistentry>
-
+    <varlistentry>
+      <term>gl-texture-rect</term>
+      <listitem><para>Use the OpenGL texture rectangle extension, if available</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-legacy</term>
+      <listitem><para>Use a legacy OpenGL context</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-gles</term>
+      <listitem><para>Use a GLES OpenGL context</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-disable</term>
+      <listitem><para>Disable Vulkan support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-validate</term>
+      <listitem><para>Load the Vulkan validation layer, if available</para></listitem>
+    </varlistentry>
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
-  debug options.
+  debug options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported debug options.
   </para>
 </formalpara>
 
-<formalpara>
-  <title><envar>GDK_RENDERING</envar></title>
+<formalpara id="GSK-Debug-Options">
+  <title><envar>GSK_DEBUG</envar></title>
 
   <para>
-    If set, selects the way how GDK creates similar surfaces. This affects both the
-    functionality of the function gdk_window_create_similar_surface() as well as the
-    way GDK creates backing surfaces for double buffering. The following values can
-    be used:
-    <variablelist>
-
-      <varlistentry>
-        <term>similar</term>
-        <listitem><para>Create similar surfaces to the window in use. This is the
-          default behavior when the variable is not set.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>image</term>
-        <listitem><para>Always create image surfaces. This essentially turns off
-          all hardware acceleration inside GTK.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>recording</term>
-        <listitem><para>Always create recording surfaces. This causes bare rendering
-          to the backend without the creation of intermediate surfaces (Pixmaps in X)
-          and will likely cause flicker.</para></listitem>
-      </varlistentry>
-
-    </variablelist>
-    All other values will be ignored and fall back to the default behavior. More
-    values might be added in the future. 
+  If GTK+ has been configured with <option>--enable-debug=yes</option>,
+  this variable can be set to a list of debug options, which cause GSK
+  to print out different types of debugging information.
+  <variablelist>
+    <varlistentry>
+      <term>renderer</term>
+      <listitem><para>General renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>cairo</term>
+      <listitem><para>cairo renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>opengl</term>
+      <listitem><para>OpenGL renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>shaders</term>
+      <listitem><para>Shaders</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>ssurface</term>
+      <listitem><para>Surfaces</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan</term>
+      <listitem><para>Vulkan renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>fallback</term>
+      <listitem><para>Information about fallbacks</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>glyphcache</term>
+      <listitem><para>Information about glyph caching</para></listitem>
+    </varlistentry>
+  </variablelist>
+  A number of options affect behavior instead of logging:
+  <variablelist>
+    <varlistentry>
+      <term>diff</term>
+      <listitem><para>Show differences</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>geometry</term>
+      <listitem><para>Show borders</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>full-redraw</term>
+      <listitem><para>Force full redraws for every frame</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>sync</term>
+      <listitem><para>Sync after each frame</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-staging-image</term>
+      <listitem><para>Use a staging image for Vulkan texture upload</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-staging-buffer</term>
+      <listitem><para>Use a staging buffer for Vulkan texture upload</para></listitem>
+    </varlistentry>
+  </variablelist>
+  The special value <literal>all</literal> can be used to turn on all
+  debug options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported debug options.
   </para>
 </formalpara>
 
@@ -511,6 +446,55 @@ nevertheless.
     a *, which means: try all remaining backends. The special value "help" can
     be used to make GDK print out a list of all available backends.
     For more information about selecting backends, see the gdk_display_manager_get() function.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_VULKAN_DEVICE</envar></title>
+
+  <para>
+    This variable can be set to the index of a Vulkan device to override the
+    default selection of the device that is used for Vulkan rendering.
+    The special value <literal>list</literal> can be used to obtain a list
+    of all Vulkan devices.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GSK_RENDERER</envar></title>
+
+  <para>
+    If set, selects the GSK renderer to use. The following renderers can
+    be selected, provided they are included in the GTK library you are using
+    and the GDK backend supports them:
+    <variablelist>
+
+      <varlistentry>
+        <term>help</term>
+        <listitem><para>Prints information about available options</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>broadway</term>
+        <listitem><para>Selects the Broadway-backend specific renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>cairo</term>
+        <listitem><para>Selects the fallback Cairo renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>gl</term>
+        <listitem><para>Selects the default OpenGL renderer</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>vulkan</term>
+        <listitem><para>Selects the Vulkan renderer</para></listitem>
+      </varlistentry>
+
+    </variablelist>
   </para>
 </formalpara>
 

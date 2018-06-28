@@ -27,7 +27,7 @@
  * A #GtkExpander allows the user to hide or show its child by clicking
  * on an expander triangle similar to the triangles used in a #GtkTreeView.
  *
- * Normally you use an expander as you would use any other descendant
+ * Normally you use an expander as you would use a descendant
  * of #GtkBin; you create the child widget and use gtk_container_add()
  * to add it to the expander. When the expander is toggled, it will take
  * care of showing and hiding the child automatically.
@@ -43,12 +43,6 @@
  * connection as follows:
  *
  * |[<!-- language="C" -->
- * expander = gtk_expander_new_with_mnemonic ("_More Options");
- * g_signal_connect (expander, "notify::expanded",
- *                   G_CALLBACK (expander_callback), NULL);
- *
- * ...
- *
  * static void
  * expander_callback (GObject    *object,
  *                    GParamSpec *param_spec,
@@ -66,6 +60,16 @@
  *     {
  *       // Hide or destroy widgets
  *     }
+ * }
+ *
+ * static void
+ * create_expander (void)
+ * {
+ *   GtkWidget *expander = gtk_expander_new_with_mnemonic ("_More Options");
+ *   g_signal_connect (expander, "notify::expanded",
+ *                     G_CALLBACK (expander_callback), NULL);
+ *
+ *   // ...
  * }
  * ]|
  *
@@ -92,10 +96,11 @@
  *
  * |[<!-- language="plain" -->
  * expander
- * ├── title
- * │   ├── arrow
- * │   ╰── <label widget>
- * ╰── <child>
+ * ╰── box
+ *     ├── title
+ *     │   ├── arrow
+ *     │   ╰── <label widget>
+ *     ╰── <child>
  * ]|
  *
  * GtkExpander has three CSS nodes, the main node with the name expander,
@@ -105,24 +110,27 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include "gtkexpander.h"
 
-#include "gtklabel.h"
+#include "gtkbox.h"
 #include "gtkbuildable.h"
-#include "gtkcontainer.h"
+#include "gtkcontainerprivate.h"
+#include "gtkdnd.h"
+#include "gtkdragdest.h"
+#include "gtkiconprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturesingle.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkdnd.h"
-#include "a11y/gtkexpanderaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
-#include "gtkiconprivate.h"
 
+#include "a11y/gtkexpanderaccessible.h"
+
+#include <string.h>
 
 #define TIMEOUT_EXPAND 500
 
@@ -134,10 +142,10 @@ enum
   PROP_USE_UNDERLINE,
   PROP_USE_MARKUP,
   PROP_LABEL_WIDGET,
-  PROP_LABEL_FILL,
   PROP_RESIZE_TOPLEVEL
 };
 
+typedef struct _GtkExpanderPrivate GtkExpanderPrivate;
 struct _GtkExpanderPrivate
 {
   GtkWidget        *label_widget;
@@ -147,17 +155,12 @@ struct _GtkExpanderPrivate
   GtkWidget        *arrow_widget;
   GtkWidget        *child;
 
-  GtkGesture       *multipress_gesture;
-
   guint             expand_timer;
 
   guint             expanded        : 1;
   guint             use_underline   : 1;
   guint             use_markup      : 1;
-  guint             prelight        : 1;
-  guint             label_fill      : 1;
   guint             resize_toplevel : 1;
-  guint             pressed_in_title : 1;
 };
 
 static void gtk_expander_set_property (GObject          *object,
@@ -172,22 +175,15 @@ static void gtk_expander_get_property (GObject          *object,
 static void     gtk_expander_destroy        (GtkWidget        *widget);
 static void     gtk_expander_size_allocate  (GtkWidget           *widget,
                                              const GtkAllocation *allocation,
-                                             int                  baseline,
-                                             GtkAllocation       *out_clip);
-static gboolean gtk_expander_enter_notify   (GtkWidget        *widget,
-                                             GdkEventCrossing *event);
-static gboolean gtk_expander_leave_notify   (GtkWidget        *widget,
-                                             GdkEventCrossing *event);
+                                             int                  baseline);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
-                                             GdkDragContext   *context,
+                                             GdkDrop          *drop,
                                              gint              x,
-                                             gint              y,
-                                             guint             time);
+                                             gint              y);
 static void     gtk_expander_drag_leave     (GtkWidget        *widget,
-                                             GdkDragContext   *context,
-                                             guint             time);
+                                             GdkDrop          *drop);
 
 static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
@@ -213,15 +209,8 @@ static void gtk_expander_measure (GtkWidget      *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
-static void gtk_expander_state_flags_changed (GtkWidget        *widget,
-                                              GtkStateFlags     previous_state);
 
 /* Gestures */
-static void     gesture_multipress_pressed_cb  (GtkGestureMultiPress *gesture,
-                                                gint                  n_press,
-                                                gdouble               x,
-                                                gdouble               y,
-                                                GtkExpander          *expander);
 static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
                                                 gint                  n_press,
                                                 gdouble               x,
@@ -263,13 +252,10 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   widget_class->destroy              = gtk_expander_destroy;
   widget_class->size_allocate        = gtk_expander_size_allocate;
-  widget_class->enter_notify_event   = gtk_expander_enter_notify;
-  widget_class->leave_notify_event   = gtk_expander_leave_notify;
   widget_class->focus                = gtk_expander_focus;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
   widget_class->measure              = gtk_expander_measure;
-  widget_class->state_flags_changed  = gtk_expander_state_flags_changed;
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
@@ -317,21 +303,11 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL_FILL,
-                                   g_param_spec_boolean ("label-fill",
-                                                         P_("Label fill"),
-                                                         P_("Whether the label widget should fill all available horizontal space"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
-
   /**
    * GtkExpander:resize-toplevel:
    *
    * When this property is %TRUE, the expander will resize the toplevel
    * widget containing the expander upon expanding and collapsing.
-   *
-   * Since: 3.2
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_TOPLEVEL,
@@ -351,18 +327,17 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "expander");
+  gtk_widget_class_set_css_name (widget_class, I_("expander"));
 }
 
 static void
 gtk_expander_init (GtkExpander *expander)
 {
-  GtkExpanderPrivate *priv;
-
-  expander->priv = priv = gtk_expander_get_instance_private (expander);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+  GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
-  gtk_widget_set_has_window (GTK_WIDGET (expander), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (expander), FALSE);
 
   priv->label_widget = NULL;
   priv->child = NULL;
@@ -370,8 +345,6 @@ gtk_expander_init (GtkExpander *expander)
   priv->expanded = FALSE;
   priv->use_underline = FALSE;
   priv->use_markup = FALSE;
-  priv->prelight = FALSE;
-  priv->label_fill = FALSE;
   priv->expand_timer = 0;
   priv->resize_toplevel = 0;
 
@@ -388,21 +361,22 @@ gtk_expander_init (GtkExpander *expander)
                                GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
 
-  gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
+  gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (expander));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_PRIMARY);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (gesture_multipress_pressed_cb), expander);
-  g_signal_connect (priv->multipress_gesture, "released",
+  g_signal_connect (gesture, "released",
                     G_CALLBACK (gesture_multipress_released_cb), expander);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (GTK_WIDGET (priv->title_widget), GTK_EVENT_CONTROLLER (gesture));
 }
+
+static GtkBuildableIface *parent_buildable_iface;
 
 static void
 gtk_expander_buildable_add_child (GtkBuildable  *buildable,
@@ -410,17 +384,17 @@ gtk_expander_buildable_add_child (GtkBuildable  *buildable,
                                   GObject       *child,
                                   const gchar   *type)
 {
-  if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
-  else if (strcmp (type, "label") == 0)
+  if (g_strcmp0 (type, "label") == 0)
     gtk_expander_set_label_widget (GTK_EXPANDER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_EXPANDER (buildable), type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_expander_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_expander_buildable_add_child;
 }
 
@@ -449,9 +423,6 @@ gtk_expander_set_property (GObject      *object,
     case PROP_LABEL_WIDGET:
       gtk_expander_set_label_widget (expander, g_value_get_object (value));
       break;
-    case PROP_LABEL_FILL:
-      gtk_expander_set_label_fill (expander, g_value_get_boolean (value));
-      break;
     case PROP_RESIZE_TOPLEVEL:
       gtk_expander_set_resize_toplevel (expander, g_value_get_boolean (value));
       break;
@@ -468,7 +439,7 @@ gtk_expander_get_property (GObject    *object,
                            GParamSpec *pspec)
 {
   GtkExpander *expander = GTK_EXPANDER (object);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   switch (prop_id)
     {
@@ -489,9 +460,6 @@ gtk_expander_get_property (GObject    *object,
                           priv->label_widget ?
                           G_OBJECT (priv->label_widget) : NULL);
       break;
-    case PROP_LABEL_FILL:
-      g_value_set_boolean (value, priv->label_fill);
-      break;
     case PROP_RESIZE_TOPLEVEL:
       g_value_set_boolean (value, gtk_expander_get_resize_toplevel (expander));
       break;
@@ -504,7 +472,7 @@ gtk_expander_get_property (GObject    *object,
 static void
 gtk_expander_destroy (GtkWidget *widget)
 {
-  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (widget));
 
   if (priv->expand_timer)
     {
@@ -521,39 +489,17 @@ gtk_expander_destroy (GtkWidget *widget)
       priv->arrow_widget = NULL;
     }
 
-  g_clear_object (&priv->multipress_gesture);
-
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
 }
 
 static void
 gtk_expander_size_allocate (GtkWidget           *widget,
                             const GtkAllocation *allocation,
-                            int                  baseline,
-                            GtkAllocation       *out_clip)
+                            int                  baseline)
 {
-  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
-  gtk_widget_size_allocate (priv->box, allocation, baseline, out_clip);
-}
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (widget));
 
-static void
-gesture_multipress_pressed_cb (GtkGestureMultiPress *gesture,
-                               gint                  n_press,
-                               gdouble               x,
-                               gdouble               y,
-                               GtkExpander          *expander)
-{
-  GtkExpanderPrivate *priv = expander->priv;
-  GtkAllocation title_allocation;
-
-  gtk_widget_get_own_allocation (priv->title_widget, &title_allocation);
-  gtk_widget_translate_coordinates (priv->title_widget, GTK_WIDGET (expander),
-                                    title_allocation.x, title_allocation.y,
-                                    &title_allocation.x, &title_allocation.y);
-  /* Coordinates are in the widget coordinate system, so transform
-   * the title_allocation to it.
-   */
-  priv->pressed_in_title = gdk_rectangle_contains_point (&title_allocation, x, y);
+  gtk_widget_size_allocate (priv->box, allocation, baseline);
 }
 
 static void
@@ -563,94 +509,14 @@ gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
                                 gdouble               y,
                                 GtkExpander          *expander)
 {
-  if (expander->priv->pressed_in_title)
-    gtk_widget_activate (GTK_WIDGET (expander));
-}
-
-static void
-update_node_state (GtkExpander *expander)
-{
-  GtkExpanderPrivate *priv = expander->priv;
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (expander));
-
-  if (priv->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-  else
-    state &= ~GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_widget_set_state_flags (priv->title_widget, state, TRUE);
-
-  if (priv->expanded)
-    state |= GTK_STATE_FLAG_CHECKED;
-  else
-    state &= ~GTK_STATE_FLAG_CHECKED;
-
-  gtk_widget_set_state_flags (priv->arrow_widget, state, TRUE);
-}
-
-static void
-gtk_expander_state_flags_changed (GtkWidget     *widget,
-                                  GtkStateFlags  previous_state)
-{
-  update_node_state (GTK_EXPANDER (widget));
-
-  GTK_WIDGET_CLASS (gtk_expander_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static gboolean
-gtk_expander_enter_notify (GtkWidget        *widget,
-                           GdkEventCrossing *event)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GdkNotifyType detail;
-
-  gdk_event_get_crossing_detail ((GdkEvent *)event, &detail);
-
-  if (detail != GDK_NOTIFY_INFERIOR)
-    {
-      expander->priv->prelight = TRUE;
-
-      update_node_state (expander);
-
-      if (expander->priv->label_widget)
-        gtk_widget_set_state_flags (expander->priv->label_widget,
-                                    GTK_STATE_FLAG_PRELIGHT,
-                                    FALSE);
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_expander_leave_notify (GtkWidget        *widget,
-                           GdkEventCrossing *event)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GdkNotifyType detail;
-
-  gdk_event_get_crossing_detail ((GdkEvent *)event, &detail);
-
-  if (detail != GDK_NOTIFY_INFERIOR)
-    {
-      expander->priv->prelight = FALSE;
-
-      update_node_state (expander);
-
-      if (expander->priv->label_widget)
-        gtk_widget_unset_state_flags (expander->priv->label_widget,
-                                      GTK_STATE_FLAG_PRELIGHT);
-    }
-
-  return FALSE;
+  gtk_widget_activate (GTK_WIDGET (expander));
 }
 
 static gboolean
 expand_timeout (gpointer data)
 {
   GtkExpander *expander = GTK_EXPANDER (data);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   priv->expand_timer = 0;
   gtk_expander_set_expanded (expander, TRUE);
@@ -659,18 +525,17 @@ expand_timeout (gpointer data)
 }
 
 static gboolean
-gtk_expander_drag_motion (GtkWidget        *widget,
-                          GdkDragContext   *context,
-                          gint              x,
-                          gint              y,
-                          guint             time)
+gtk_expander_drag_motion (GtkWidget *widget,
+                          GdkDrop   *drop,
+                          gint       x,
+                          gint       y)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (!priv->expanded && !priv->expand_timer)
     {
-      priv->expand_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
+      priv->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
       g_source_set_name_by_id (priv->expand_timer, "[gtk+] expand_timeout");
     }
 
@@ -678,12 +543,11 @@ gtk_expander_drag_motion (GtkWidget        *widget,
 }
 
 static void
-gtk_expander_drag_leave (GtkWidget      *widget,
-                         GdkDragContext *context,
-                         guint           time)
+gtk_expander_drag_leave (GtkWidget *widget,
+                         GdkDrop   *drop)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (priv->expand_timer)
     {
@@ -719,19 +583,21 @@ focus_in_site (GtkExpander      *expander,
                FocusSite         site,
                GtkDirectionType  direction)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   switch (site)
     {
     case FOCUS_WIDGET:
       gtk_widget_grab_focus (GTK_WIDGET (expander));
       return TRUE;
     case FOCUS_LABEL:
-      if (expander->priv->label_widget)
-        return gtk_widget_child_focus (expander->priv->label_widget, direction);
+      if (priv->label_widget)
+        return gtk_widget_child_focus (priv->label_widget, direction);
       else
         return FALSE;
     case FOCUS_CHILD:
       {
-        GtkWidget *child = expander->priv->child;
+        GtkWidget *child = priv->child;
 
         if (child && gtk_widget_get_child_visible (child))
           return gtk_widget_child_focus (child, direction);
@@ -829,7 +695,7 @@ get_next_site (GtkExpander      *expander,
 static void
 gtk_expander_resize_toplevel (GtkExpander *expander)
 {
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkWidget *child = priv->child;
 
   if (child && priv->resize_toplevel &&
@@ -837,31 +703,24 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (expander));
 
-      if (toplevel && gtk_widget_get_realized (toplevel))
+      if (toplevel && GTK_IS_WINDOW (toplevel) &&
+          gtk_widget_get_realized (toplevel))
         {
-          GtkAllocation toplevel_allocation;
-          GtkAllocation child_allocation;
+          int toplevel_width, toplevel_height;
+          int child_height;
 
-          gtk_widget_get_allocation (toplevel, &toplevel_allocation);
-          gtk_widget_get_allocation (child, &child_allocation);
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1,
+                              &child_height, NULL, NULL, NULL);
+          gtk_window_get_size (GTK_WINDOW (toplevel), &toplevel_width, &toplevel_height);
 
           if (priv->expanded)
-            {
-              GtkRequisition child_requisition;
-
-              gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, child_allocation.width,
-                                  &child_requisition.height, NULL, NULL, NULL);
-
-              toplevel_allocation.height += child_requisition.height;
-            }
+            toplevel_height += child_height;
           else
-            {
-              toplevel_allocation.height -= child_allocation.height;
-            }
+            toplevel_height -= child_height;
 
           gtk_window_resize (GTK_WINDOW (toplevel),
-                             toplevel_allocation.width,
-                             toplevel_allocation.height);
+                             toplevel_width,
+                             toplevel_height);
         }
     }
 }
@@ -871,6 +730,7 @@ gtk_expander_focus (GtkWidget        *widget,
                     GtkDirectionType  direction)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (!focus_current_site (expander, direction))
     {
@@ -881,7 +741,7 @@ gtk_expander_focus (GtkWidget        *widget,
       widget_is_focus = gtk_widget_is_focus (widget);
       old_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (widget));
 
-      if (old_focus_child && old_focus_child == expander->priv->label_widget)
+      if (old_focus_child && old_focus_child == priv->label_widget)
         site = FOCUS_LABEL;
       else if (old_focus_child)
         site = FOCUS_CHILD;
@@ -906,6 +766,18 @@ gtk_expander_add (GtkContainer *container,
 {
   GtkExpander *expander = GTK_EXPANDER (container);
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  if (priv->child != NULL)
+    {
+      g_warning ("Attempting to add a widget with type %s to a %s, "
+                 "but a %s can only contain one widget at a time; "
+                 "it already contains a widget of type %s",
+                 g_type_name (G_OBJECT_TYPE (widget)),
+                 g_type_name (G_OBJECT_TYPE (container)),
+                 g_type_name (G_OBJECT_TYPE (container)),
+                 g_type_name (G_OBJECT_TYPE (priv->child)));
+      return;
+    }
 
   if (priv->expanded)
     {
@@ -946,7 +818,9 @@ gtk_expander_remove (GtkContainer *container,
 static void
 gtk_expander_activate (GtkExpander *expander)
 {
-  gtk_expander_set_expanded (expander, !expander->priv->expanded);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  gtk_expander_set_expanded (expander, !priv->expanded);
 }
 
 static void
@@ -975,8 +849,6 @@ gtk_expander_measure (GtkWidget      *widget,
  * Creates a new expander using @label as the text of the label.
  *
  * Returns: a new #GtkExpander widget.
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_expander_new (const gchar *label)
@@ -997,8 +869,6 @@ gtk_expander_new (const gchar *label)
  * Pressing Alt and that key activates the button.
  *
  * Returns: a new #GtkExpander widget.
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_expander_new_with_mnemonic (const gchar *label)
@@ -1017,19 +887,15 @@ gtk_expander_new_with_mnemonic (const gchar *label)
  * Sets the state of the expander. Set to %TRUE, if you want
  * the child widget to be revealed, and %FALSE if you want the
  * child widget to be hidden.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_expanded (GtkExpander *expander,
                            gboolean     expanded)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
 
   expanded = expanded != FALSE;
 
@@ -1038,7 +904,10 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   priv->expanded = expanded;
 
-  update_node_state (expander);
+  if (priv->expanded)
+    gtk_widget_set_state_flags (priv->arrow_widget, GTK_STATE_FLAG_CHECKED, FALSE);
+  else
+    gtk_widget_unset_state_flags (priv->arrow_widget, GTK_STATE_FLAG_CHECKED);
 
   child = priv->child;
 
@@ -1070,15 +939,15 @@ gtk_expander_set_expanded (GtkExpander *expander,
  * See gtk_expander_set_expanded().
  *
  * Returns: the current state of the expander
- *
- * Since: 2.4
  */
 gboolean
 gtk_expander_get_expanded (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->expanded;
+  return priv->expanded;
 }
 
 /**
@@ -1089,13 +958,13 @@ gtk_expander_get_expanded (GtkExpander *expander)
  * Sets the text of the label of the expander to @label.
  *
  * This will also clear any previously set labels.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_label (GtkExpander *expander,
                         const gchar *label)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_if_fail (GTK_IS_EXPANDER (expander));
 
   if (!label)
@@ -1107,8 +976,8 @@ gtk_expander_set_label (GtkExpander *expander,
       GtkWidget *child;
 
       child = gtk_label_new (label);
-      gtk_label_set_use_underline (GTK_LABEL (child), expander->priv->use_underline);
-      gtk_label_set_use_markup (GTK_LABEL (child), expander->priv->use_markup);
+      gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
+      gtk_label_set_use_markup (GTK_LABEL (child), priv->use_markup);
       gtk_widget_show (child);
 
       gtk_expander_set_label_widget (expander, child);
@@ -1135,17 +1004,13 @@ gtk_expander_set_label (GtkExpander *expander,
  *
  * Returns: (nullable): The text of the label widget. This string is owned
  *     by the widget and must not be modified or freed.
- *
- * Since: 2.4
  */
 const gchar *
 gtk_expander_get_label (GtkExpander *expander)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);
-
-  priv = expander->priv;
 
   if (GTK_IS_LABEL (priv->label_widget))
     return gtk_label_get_label (GTK_LABEL (priv->label_widget));
@@ -1160,18 +1025,14 @@ gtk_expander_get_label (GtkExpander *expander)
  *
  * If true, an underline in the text of the expander label indicates
  * the next character should be used for the mnemonic accelerator key.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_use_underline (GtkExpander *expander,
                                 gboolean     use_underline)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
 
   use_underline = use_underline != FALSE;
 
@@ -1195,15 +1056,15 @@ gtk_expander_set_use_underline (GtkExpander *expander,
  *
  * Returns: %TRUE if an embedded underline in the expander
  *     label indicates the mnemonic accelerator keys
- *
- * Since: 2.4
  */
 gboolean
 gtk_expander_get_use_underline (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->use_underline;
+  return priv->use_underline;
 }
 
 /**
@@ -1214,18 +1075,14 @@ gtk_expander_get_use_underline (GtkExpander *expander)
  * Sets whether the text of the label contains markup in
  * [Pango’s text markup language][PangoMarkupFormat].
  * See gtk_label_set_markup().
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_use_markup (GtkExpander *expander,
                              gboolean     use_markup)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
 
   use_markup = use_markup != FALSE;
 
@@ -1249,15 +1106,15 @@ gtk_expander_set_use_markup (GtkExpander *expander,
  * See gtk_expander_set_use_markup().
  *
  * Returns: %TRUE if the label’s text will be parsed for markup
- *
- * Since: 2.4
  */
 gboolean
 gtk_expander_get_use_markup (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->use_markup;
+  return priv->use_markup;
 }
 
 /**
@@ -1267,21 +1124,17 @@ gtk_expander_get_use_markup (GtkExpander *expander)
  *
  * Set the label widget for the expander. This is the widget
  * that will appear embedded alongside the expander arrow.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_label_widget (GtkExpander *expander,
                                GtkWidget   *label_widget)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
   g_return_if_fail (label_widget == NULL || gtk_widget_get_parent (label_widget) == NULL);
-
-  priv = expander->priv;
 
   if (priv->label_widget == label_widget)
     return;
@@ -1297,9 +1150,6 @@ gtk_expander_set_label_widget (GtkExpander *expander,
   if (label_widget)
     {
       priv->label_widget = label_widget;
-
-      if (priv->prelight)
-        gtk_widget_set_state_flags (label_widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
       gtk_container_add (GTK_CONTAINER (priv->title_widget), label_widget);
     }
@@ -1322,69 +1172,15 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  *
  * Returns: (nullable) (transfer none): the label widget,
  *     or %NULL if there is none
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_expander_get_label_widget (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);
 
-  return expander->priv->label_widget;
-}
-
-/**
- * gtk_expander_set_label_fill:
- * @expander: a #GtkExpander
- * @label_fill: %TRUE if the label should should fill
- *     all available horizontal space
- *
- * Sets whether the label widget should fill all available
- * horizontal space allocated to @expander.
- *
- * Since: 2.22
- */
-void
-gtk_expander_set_label_fill (GtkExpander *expander,
-                             gboolean     label_fill)
-{
-  GtkExpanderPrivate *priv;
-
-  g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
-
-  label_fill = label_fill != FALSE;
-
-  if (priv->label_fill != label_fill)
-    {
-      priv->label_fill = label_fill;
-
-      if (priv->label_widget != NULL)
-        gtk_widget_queue_resize (GTK_WIDGET (expander));
-
-      g_object_notify (G_OBJECT (expander), "label-fill");
-    }
-}
-
-/**
- * gtk_expander_get_label_fill:
- * @expander: a #GtkExpander
- *
- * Returns whether the label widget will fill all available
- * horizontal space allocated to @expander.
- *
- * Returns: %TRUE if the label widget will fill all
- *     available horizontal space
- *
- * Since: 2.22
- */
-gboolean
-gtk_expander_get_label_fill (GtkExpander *expander)
-{
-  g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
-
-  return expander->priv->label_fill;
+  return priv->label_widget;
 }
 
 /**
@@ -1394,18 +1190,18 @@ gtk_expander_get_label_fill (GtkExpander *expander)
  *
  * Sets whether the expander will resize the toplevel widget
  * containing the expander upon resizing and collpasing.
- *
- * Since: 3.2
  */
 void
 gtk_expander_set_resize_toplevel (GtkExpander *expander,
                                   gboolean     resize_toplevel)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_if_fail (GTK_IS_EXPANDER (expander));
 
-  if (expander->priv->resize_toplevel != resize_toplevel)
+  if (priv->resize_toplevel != resize_toplevel)
     {
-      expander->priv->resize_toplevel = resize_toplevel ? TRUE : FALSE;
+      priv->resize_toplevel = resize_toplevel ? TRUE : FALSE;
       g_object_notify (G_OBJECT (expander), "resize-toplevel");
     }
 }
@@ -1418,13 +1214,13 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
  * containing the expander upon resizing and collpasing.
  *
  * Returns: the “resize toplevel” setting.
- *
- * Since: 3.2
  */
 gboolean
 gtk_expander_get_resize_toplevel (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->resize_toplevel;
+  return priv->resize_toplevel;
 }

@@ -55,15 +55,6 @@ increase_level (gpointer data)
   return G_SOURCE_CONTINUE;
 }
 
-static gboolean
-window_delete_event (GtkWidget *widget,
-                     GdkEvent *event,
-                     gpointer _data)
-{
-  gtk_main_quit ();
-  return FALSE;
-}
-
 static void
 toggle (GtkSwitch *sw, GParamSpec *pspec, GtkLevelBar *bar)
 {
@@ -102,8 +93,7 @@ main (int argc, char *argv[])
 
   gtk_widget_show (window);
 
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (window_delete_event), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   g_timeout_add (100, increase_level, bar);
   gtk_main ();

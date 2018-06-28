@@ -32,6 +32,7 @@
 #include "general.h"
 #include "gestures.h"
 #include "graphdata.h"
+#include "logs.h"
 #include "magnifier.h"
 #include "menu.h"
 #include "misc-info.h"
@@ -68,6 +69,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_DATA_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_GESTURES);
+  g_type_ensure (GTK_TYPE_INSPECTOR_LOGS);
   g_type_ensure (GTK_TYPE_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MENU);

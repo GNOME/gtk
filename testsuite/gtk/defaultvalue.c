@@ -77,7 +77,6 @@ test_type (gconstpointer data)
   /* These can't be freely constructed/destroyed */
   if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
-      g_type_is_a (type, GDK_TYPE_DRAWING_CONTEXT) ||
 #ifdef G_OS_UNIX
       g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
 #endif
@@ -104,9 +103,9 @@ test_type (gconstpointer data)
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
     instance = g_object_ref (gtk_settings_get_default ());
-  else if (g_type_is_a (type, GDK_TYPE_WINDOW))
+  else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = g_object_ref (gdk_window_new_popup (gdk_display_get_default (),
+      instance = g_object_ref (gdk_surface_new_popup (gdk_display_get_default (),
                                                      0,
                                                      &(GdkRectangle) { 0, 0, 100, 100 }));
     }
@@ -274,7 +273,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_STYLE_CONTEXT) &&
-           strcmp (pspec->name, "screen") == 0)
+           strcmp (pspec->name, "display") == 0)
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_BUFFER) &&
@@ -317,7 +316,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_WIDGET) &&
 	  (strcmp (pspec->name, "name") == 0 ||
-	   strcmp (pspec->name, "screen") == 0 ||
+	   strcmp (pspec->name, "display") == 0 ||
 	   strcmp (pspec->name, "style") == 0))
 	continue;
 
@@ -354,8 +353,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
   g_free (pspecs);
 
-  if (g_type_is_a (type, GDK_TYPE_WINDOW))
-    gdk_window_destroy (GDK_WINDOW (instance));
+  if (g_type_is_a (type, GDK_TYPE_SURFACE))
+    gdk_surface_destroy (GDK_SURFACE (instance));
   else
     g_object_unref (instance);
 
@@ -367,7 +366,6 @@ main (int argc, char **argv)
 {
   const GType *otypes;
   guint i;
-  gchar *schema_dir;
   GTestDBus *bus;
   GMainLoop *loop;
   gint result;
@@ -379,10 +377,6 @@ main (int argc, char **argv)
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* Create one test bus for all tests, as we have a lot of very small
    * and quick tests.
@@ -418,7 +412,6 @@ main (int argc, char **argv)
 
   g_test_dbus_down (bus);
   g_object_unref (bus);
-  g_free (schema_dir);
 
   return result;
 }

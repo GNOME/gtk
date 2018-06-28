@@ -72,11 +72,11 @@ _gtk_size_request_cache_clear (SizeRequestCache *cache)
 void
 _gtk_size_request_cache_commit (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
-                                gint              for_size,
-                                gint              minimum_size,
-                                gint              natural_size,
-				gint              minimum_baseline,
-				gint              natural_baseline)
+                                int               for_size,
+                                int               minimum_size,
+                                int               natural_size,
+                                int               minimum_baseline,
+                                int               natural_baseline)
 {
   guint         i, n_sizes;
 
@@ -115,9 +115,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      SizeRequestX **cached_sizes;
+      SizeRequestX **cached_sizes = cache->requests_x;
       SizeRequestX  *cached_size;
-      cached_sizes = cache->requests_x;
 
       for (i = 0; i < n_sizes; i++)
 	{
@@ -158,9 +157,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
     }
   else
     {
-      SizeRequestY **cached_sizes;
+      SizeRequestY **cached_sizes = cache->requests_y;
       SizeRequestY  *cached_size;
-      cached_sizes = cache->requests_y;
 
       for (i = 0; i < n_sizes; i++)
 	{
@@ -213,15 +211,15 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 gboolean
 _gtk_size_request_cache_lookup (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
-                                gint              for_size,
-                                gint             *minimum,
-                                gint             *natural,
-				gint             *minimum_baseline,
-				gint             *natural_baseline)
+                                int               for_size,
+                                int              *minimum,
+                                int              *natural,
+                                int              *minimum_baseline,
+                                int              *natural_baseline)
 {
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      CachedSizeX *result = NULL;
+      const CachedSizeX *result = NULL;
 
       if (for_size < 0)
 	{
@@ -235,7 +233,7 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
 	  /* Search for an already cached size */
 	  for (i = 0; i < cache->flags[orientation].n_cached_requests; i++)
 	    {
-	      SizeRequestX *cur = cache->requests_x[i];
+              const SizeRequestX *cur = cache->requests_x[i];
 
 	      if (cur->lower_for_size <= for_size &&
 		  cur->upper_for_size >= for_size)
@@ -259,7 +257,7 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
     }
   else
     {
-      CachedSizeY *result = NULL;
+      const CachedSizeY *result = NULL;
 
       if (for_size < 0)
 	{
@@ -273,7 +271,7 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
 	  /* Search for an already cached size */
 	  for (i = 0; i < cache->flags[orientation].n_cached_requests; i++)
 	    {
-	      SizeRequestY *cur = cache->requests_y[i];
+              const SizeRequestY *cur = cache->requests_y[i];
 
 	      if (cur->lower_for_size <= for_size &&
 		  cur->upper_for_size >= for_size)

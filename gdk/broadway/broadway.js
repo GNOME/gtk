@@ -2,13 +2,14 @@
 var logDiv = null;
 function log(str) {
     if (!logDiv) {
-	logDiv = document.createElement('div');
-	document.body.appendChild(logDiv);
-	logDiv.style["position"] = "absolute";
-	logDiv.style["right"] = "0px";
+        logDiv = document.createElement('pre');
+        document.body.appendChild(logDiv);
+        logDiv.style["position"] = "absolute";
+        logDiv.style["right"] = "0px";
+        logDiv.style["font-size"] = "small";
     }
-    logDiv.appendChild(document.createTextNode(str));
-    logDiv.appendChild(document.createElement('br'));
+    logDiv.insertBefore(document.createElement('br'), logDiv.firstChild);
+    logDiv.insertBefore(document.createTextNode(str), logDiv.firstChild);
 }
 
 function getStackTrace()
@@ -16,44 +17,44 @@ function getStackTrace()
     var callstack = [];
     var isCallstackPopulated = false;
     try {
-	i.dont.exist+=0;
+        i.dont.exist+=0;
     } catch(e) {
-	if (e.stack) { // Firefox
-	    var lines = e.stack.split("\n");
-	    for (var i=0, len=lines.length; i<len; i++) {
-		if (lines[i].match(/^\s*[A-Za-z0-9\-_\$]+\(/)) {
-		    callstack.push(lines[i]);
-		}
-	    }
-	    // Remove call to getStackTrace()
-	    callstack.shift();
-	    isCallstackPopulated = true;
-	} else if (window.opera && e.message) { // Opera
-	    var lines = e.message.split("\n");
-	    for (var i=0, len=lines.length; i<len; i++) {
-		if (lines[i].match(/^\s*[A-Za-z0-9\-_\$]+\(/)) {
-		    var entry = lines[i];
-		    // Append next line also since it has the file info
-		    if (lines[i+1]) {
-			entry += " at " + lines[i+1];
-			i++;
-		    }
-		    callstack.push(entry);
-		}
-	    }
-	    // Remove call to getStackTrace()
-	    callstack.shift();
-	    isCallstackPopulated = true;
-	}
+        if (e.stack) { // Firefox
+            var lines = e.stack.split("\n");
+            for (var i=0, len=lines.length; i<len; i++) {
+                if (lines[i].match(/^\s*[A-Za-z0-9\-_\$]+\(/)) {
+                    callstack.push(lines[i]);
+                }
+            }
+            // Remove call to getStackTrace()
+            callstack.shift();
+            isCallstackPopulated = true;
+        } else if (window.opera && e.message) { // Opera
+            var lines = e.message.split("\n");
+            for (var i=0, len=lines.length; i<len; i++) {
+                if (lines[i].match(/^\s*[A-Za-z0-9\-_\$]+\(/)) {
+                    var entry = lines[i];
+                    // Append next line also since it has the file info
+                    if (lines[i+1]) {
+                        entry += " at " + lines[i+1];
+                        i++;
+                    }
+                    callstack.push(entry);
+                }
+            }
+            // Remove call to getStackTrace()
+            callstack.shift();
+            isCallstackPopulated = true;
+        }
     }
     if (!isCallstackPopulated) { //IE and Safari
-	var currentFunction = arguments.callee.caller;
-	while (currentFunction) {
-	    var fn = currentFunction.toString();
-	    var fname = fn.substring(fn.indexOf("function") + 8, fn.indexOf("(")) || "anonymous";
-	    callstack.push(fname);
-	    currentFunction = currentFunction.caller;
-	}
+        var currentFunction = arguments.callee.caller;
+        while (currentFunction) {
+            var fn = currentFunction.toString();
+            var fname = fn.substring(fn.indexOf("function") + 8, fn.indexOf("(")) || "anonymous";
+            callstack.push(fname);
+            currentFunction = currentFunction.caller;
+        }
     }
     return callstack;
 }
@@ -62,32 +63,13 @@ function logStackTrace(len) {
     var callstack = getStackTrace();
     var end = callstack.length;
     if (len > 0)
-	end = Math.min(len + 1, end);
+        end = Math.min(len + 1, end);
     for (var i = 1; i < end; i++)
-	log(callstack[i]);
-}
-
-function resizeCanvas(canvas, w, h)
-{
-    /* Canvas resize clears the data, so we need to save it first */
-    var tmpCanvas = canvas.ownerDocument.createElement("canvas");
-    tmpCanvas.width = canvas.width;
-    tmpCanvas.height = canvas.height;
-    var tmpContext = tmpCanvas.getContext("2d");
-    tmpContext.globalCompositeOperation = "copy";
-    tmpContext.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
-    canvas.width = w;
-    canvas.height = h;
-
-    var context = canvas.getContext("2d");
-
-    context.globalCompositeOperation = "copy";
-    context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+        log(callstack[i]);
 }
 
 var grab = new Object();
-grab.window = null;
+grab.surface = null;
 grab.ownerEvents = false;
 grab.implicit = false;
 var keyDownList = [];
@@ -96,9 +78,10 @@ var lastX = 0;
 var lastY = 0;
 var lastState;
 var lastTimeStamp = 0;
-var realWindowWithMouse = 0;
-var windowWithMouse = 0;
+var realSurfaceWithMouse = 0;
+var surfaceWithMouse = 0;
 var surfaces = {};
+var textures = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
 var inputSocket = null;
@@ -133,15 +116,15 @@ var GDK_RELEASE_MASK  = 1 << 30;
 
 function getButtonMask (button) {
     if (button == 1)
-	return GDK_BUTTON1_MASK;
+        return GDK_BUTTON1_MASK;
     if (button == 2)
-	return GDK_BUTTON2_MASK;
+        return GDK_BUTTON2_MASK;
     if (button == 3)
-	return GDK_BUTTON3_MASK;
+        return GDK_BUTTON3_MASK;
     if (button == 4)
-	return GDK_BUTTON4_MASK;
+        return GDK_BUTTON4_MASK;
     if (button == 5)
-	return GDK_BUTTON5_MASK;
+        return GDK_BUTTON5_MASK;
     return 0;
 }
 
@@ -159,25 +142,19 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.visible = false;
     surface.imageData = null;
 
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    canvas.surface = surface;
-    surface.canvas = canvas;
-    var toplevelElement;
+    var div = document.createElement('div');
+    div.surface = surface;
+    surface.div = div;
 
-    toplevelElement = canvas;
-    document.body.appendChild(canvas);
+    document.body.appendChild(div);
 
-    surface.toplevelElement = toplevelElement;
-    toplevelElement.style["position"] = "absolute";
-    /* This positioning isn't strictly right for apps in another topwindow,
-     * but that will be fixed up when showing. */
-    toplevelElement.style["left"] = surface.x + "px";
-    toplevelElement.style["top"] = surface.y + "px";
-    toplevelElement.style["display"] = "inline";
-
-    toplevelElement.style["visibility"] = "hidden";
+    div.style["position"] = "absolute";
+    div.style["left"] = surface.x + "px";
+    div.style["top"] = surface.y + "px";
+    div.style["width"] = surface.width + "px";
+    div.style["height"] = surface.height + "px";
+    div.style["display"] = "block";
+    div.style["visibility"] = "hidden";
 
     surfaces[id] = surface;
     stackingOrder.push(surface);
@@ -190,33 +167,30 @@ function cmdShowSurface(id)
     var surface = surfaces[id];
 
     if (surface.visible)
-	return;
+        return;
     surface.visible = true;
 
     var xOffset = surface.x;
     var yOffset = surface.y;
 
-    surface.toplevelElement.style["left"] = xOffset + "px";
-    surface.toplevelElement.style["top"] = yOffset + "px";
-    surface.toplevelElement.style["visibility"] = "visible";
+    surface.div.style["left"] = xOffset + "px";
+    surface.div.style["top"] = yOffset + "px";
+    surface.div.style["visibility"] = "visible";
 
-    restackWindows();
+    restackSurfaces();
 }
 
 function cmdHideSurface(id)
 {
-    if (grab.window == id)
-	doUngrab();
+    if (grab.surface == id)
+        doUngrab();
 
     var surface = surfaces[id];
-
     if (!surface.visible)
-	return;
+        return;
     surface.visible = false;
 
-    var element = surface.toplevelElement;
-
-    element.style["visibility"] = "hidden";
+    surface.div.style["visibility"] = "hidden";
 }
 
 function cmdSetTransientFor(id, parentId)
@@ -224,22 +198,22 @@ function cmdSetTransientFor(id, parentId)
     var surface = surfaces[id];
 
     if (surface.transientParent == parentId)
-	return;
+        return;
 
     surface.transientParent = parentId;
     if (parentId != 0 && surfaces[parentId]) {
-	moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
+        moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
     }
 
     if (surface.visible) {
-	restackWindows();
+        restackSurfaces();
     }
 }
 
-function restackWindows() {
+function restackSurfaces() {
     for (var i = 0; i < stackingOrder.length; i++) {
-	var surface = stackingOrder[i];
-	surface.toplevelElement.style.zIndex = i;
+        var surface = stackingOrder[i];
+        surface.div.style.zIndex = i;
     }
 }
 
@@ -247,57 +221,61 @@ function moveToHelper(surface, position) {
     var i = stackingOrder.indexOf(surface);
     stackingOrder.splice(i, 1);
     if (position != undefined)
-	stackingOrder.splice(position, 0, surface);
+        stackingOrder.splice(position, 0, surface);
     else
-	stackingOrder.push(surface);
+        stackingOrder.push(surface);
 
     for (var cid in surfaces) {
-	var child = surfaces[cid];
-	if (child.transientParent == surface.id)
-	    moveToHelper(child, stackingOrder.indexOf(surface) + 1);
+        var child = surfaces[cid];
+        if (child.transientParent == surface.id)
+            moveToHelper(child, stackingOrder.indexOf(surface) + 1);
     }
 }
 
 function cmdDeleteSurface(id)
 {
-    if (grab.window == id)
-	doUngrab();
+    if (grab.surface == id)
+        doUngrab();
 
     var surface = surfaces[id];
     var i = stackingOrder.indexOf(surface);
     if (i >= 0)
-	stackingOrder.splice(i, 1);
-    var canvas = surface.canvas;
-    canvas.parentNode.removeChild(canvas);
+        stackingOrder.splice(i, 1);
+    var div = surface.div;
+    div.parentNode.removeChild(div);
     delete surfaces[id];
+}
+
+function cmdRoundtrip(id, tag)
+{
+    sendInput("F", [id, tag]);
 }
 
 function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 {
     var surface = surfaces[id];
     if (has_pos) {
-	surface.positioned = true;
-	surface.x = x;
-	surface.y = y;
-    }
-    if (has_size) {
-	surface.width = w;
-	surface.height = h;
+        surface.positioned = true;
+        surface.x = x;
+        surface.y = y;
     }
 
-    if (has_size)
-	resizeCanvas(surface.canvas, w, h);
+    if (has_size) {
+        surface.width = w;
+        surface.height = h;
+
+        surface.div.style["width"] = surface.width + "px";
+        surface.div.style["height"] = surface.height + "px";
+    }
 
     if (surface.visible) {
-	if (has_pos) {
-	    var xOffset = surface.x;
-	    var yOffset = surface.y;
+        if (has_pos) {
+            var xOffset = surface.x;
+            var yOffset = surface.y;
 
-	    var element = surface.canvas;
-
-	    element.style["left"] = xOffset + "px";
-	    element.style["top"] = yOffset + "px";
-	}
+            surface.div.style["left"] = xOffset + "px";
+            surface.div.style["top"] = yOffset + "px";
+        }
     }
 
     sendConfigureNotify(surface);
@@ -308,7 +286,7 @@ function cmdRaiseSurface(id)
     var surface = surfaces[id];
 
     moveToHelper(surface);
-    restackWindows();
+    restackSurfaces();
 }
 
 function cmdLowerSurface(id)
@@ -316,216 +294,431 @@ function cmdLowerSurface(id)
     var surface = surfaces[id];
 
     moveToHelper(surface, 0);
-    restackWindows();
+    restackSurfaces();
 }
 
-function copyRect(src, srcX, srcY, dest, destX, destY, width, height)
+function SwapNodes(node_data, div) {
+    this.node_data = node_data;
+    this.node_data_signed = new Int32Array(node_data);
+    this.data_pos = 0;
+    this.div = div;
+    this.outstanding = 1;
+}
+
+SwapNodes.prototype.decode_uint32 = function() {
+    return this.node_data[this.data_pos++];
+}
+
+SwapNodes.prototype.decode_int32 = function() {
+    return this.node_data_signed[this.data_pos++];
+}
+
+SwapNodes.prototype.decode_color = function() {
+    var rgba = this.decode_uint32();
+    var a = (rgba >> 24) & 0xff;
+    var r = (rgba >> 16) & 0xff;
+    var g = (rgba >> 8) & 0xff;
+    var b = (rgba >> 0) & 0xff;
+    var c;
+    if (a == 0)
+        c = "rgb(" + r + "," + g + "," + b + ")";
+    else
+        c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
+    return c;
+}
+
+SwapNodes.prototype.decode_float = function() {
+    return this.decode_int32() / 256.0;
+}
+
+SwapNodes.prototype.decode_size = function() {
+    var s = new Object();
+    s.width = this.decode_float ();
+    s.height = this.decode_float ();
+    return s;
+}
+
+SwapNodes.prototype.decode_point = function() {
+    var p = new Object();
+    p.x = this.decode_float ();
+    p.y = this.decode_float ();
+    return p;
+}
+
+SwapNodes.prototype.decode_rect = function() {
+    var r = new Object();
+    r.x = this.decode_float ();
+    r.y = this.decode_float ();
+    r.width = this.decode_float ();
+    r.height = this.decode_float ();
+    return r;
+}
+
+SwapNodes.prototype.decode_irect = function() {
+    var r = new Object();
+    r.x = this.decode_int32 ();
+    r.y = this.decode_int32 ();
+    r.width = this.decode_int32 ();
+    r.height = this.decode_int32 ();
+    return r;
+}
+
+SwapNodes.prototype.decode_rounded_rect = function() {
+    var r = new Object();
+    r.bounds = this.decode_rect();
+    r.sizes = [];
+    for (var i = 0; i < 4; i++)
+        r.sizes[i] = this.decode_size();
+    return r;
+}
+
+SwapNodes.prototype.decode_color_stop = function() {
+    var s = new Object();
+    s.offset = this.decode_float ();
+    s.color = this.decode_color ();
+    return s;
+}
+
+SwapNodes.prototype.decode_color_stops = function() {
+    var stops = [];
+    var len = this.decode_uint32();
+    for (var i = 0; i < len; i++)
+        stops[i] = this.decode_color_stop();
+    return stops;
+}
+
+function args() {
+    var argsLength = arguments.length;
+    var strings = [];
+    for (var i = 0; i < argsLength; ++i)
+        strings[i] = arguments[i];
+
+    return strings.join(" ");
+}
+
+function px(x) {
+    return x + "px";
+}
+
+function set_rect_style (div, rect) {
+    div.style["left"] = px(rect.x);
+    div.style["top"] = px(rect.y);
+    div.style["width"] = px(rect.width);
+    div.style["height"] = px(rect.height);
+}
+
+function set_rrect_style (div, rrect) {
+    set_rect_style(div, rrect.bounds);
+    div.style["border-top-left-radius"] = args(px(rrect.sizes[0].width), px(rrect.sizes[0].height));
+    div.style["border-top-right-radius"] = args(px(rrect.sizes[1].width), px(rrect.sizes[1].height));
+    div.style["border-bottom-right-radius"] = args(px(rrect.sizes[2].width), px(rrect.sizes[2].height));
+    div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
+}
+
+SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 {
-    // Clip to src
-    if (srcX + width > src.width)
-        width = src.width - srcX;
-    if (srcY + height > src.height)
-        height = src.height - srcY;
+    var type = this.decode_uint32();
+    var newNode = null;
 
-    // Clip to dest
-    if (destX + width > dest.width)
-        width = dest.width - destX;
-    if (destY + height > dest.height)
-        height = dest.height - destY;
-
-    var srcRect = src.width * 4 * srcY + srcX * 4;
-    var destRect = dest.width * 4 * destY + destX * 4;
-
-    for (var i = 0; i < height; i++) {
-        var line = src.data.subarray(srcRect, srcRect + width *4);
-        dest.data.set(line, destRect);
-        srcRect += src.width * 4;
-        destRect += dest.width * 4;
+    // We need to dup this because as we reuse children the original order is lost
+    var oldChildren = [];
+    if (oldNode) {
+        for (var i = 0; i < oldNode.children.length; i++)
+            oldChildren[i] = oldNode.children[i];
     }
-}
 
+    switch (type)
+    {
+        /* Leaf nodes */
 
-function markRun(dest, start, length, r, g, b)
-{
-    for (var i = start; i < start + length * 4; i += 4) {
-        dest[i+0] = dest[i+0] / 2 | 0 + r;
-        dest[i+1] = dest[i+1] / 2 | 0 + g;
-        dest[i+2] = dest[i+2] / 2 | 0 + b;
-    }
-}
-
-function markRect(src, srcX, srcY, dest, destX, destY, width, height, r, g, b)
-{
-    // Clip to src
-    if (srcX + width > src.width)
-        width = src.width - srcX;
-    if (srcY + height > src.height)
-        height = src.height - srcY;
-
-    // Clip to dest
-    if (destX + width > dest.width)
-        width = dest.width - destX;
-    if (destY + height > dest.height)
-        height = dest.height - destY;
-
-    var destRect = dest.width * 4 * destY + destX * 4;
-
-    for (var i = 0; i < height; i++) {
-        if (i == 0 || i == height-1)
-            markRun(dest.data, destRect, width, 0, 0, 0);
-        else {
-            markRun(dest.data, destRect, 1, 0 ,0, 0);
-            markRun(dest.data, destRect+4, width-2, r, g, b);
-            markRun(dest.data, destRect+4*width-4, 1, 0, 0, 0);
+        case 0:  // TEXTURE
+        {
+            var rect = this.decode_rect();
+            var texture_id = this.decode_uint32();
+            var image = new Image();
+            image.width = rect.width;
+            image.height = rect.height;
+            image.style["position"] = "absolute";
+            set_rect_style(image, rect);
+            var texture_url = textures[texture_id];
+            image.src = texture_url;
+            newNode = image;
         }
-        destRect += dest.width * 4;
-    }
-}
+        break;
 
-function decodeBuffer(context, oldData, w, h, data, debug)
-{
-    var i, j;
-    var imageData = context.createImageData(w, h);
+    case 2:  // COLOR
+        {
+            var rect = this.decode_rect();
+            var c = this.decode_color ();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rect_style(div, rect);
+            div.style["background-color"] = c;
+            newNode = div;
+        }
+        break;
 
-    if (oldData != null) {
-        // Copy old frame into new buffer
-        copyRect(oldData, 0, 0, imageData, 0, 0, oldData.width, oldData.height);
-    }
+    case 3:  // BORDER
+        {
+            var rrect = this.decode_rounded_rect();
+            var border_widths = [];
+            for (var i = 0; i < 4; i++)
+                border_widths[i] = this.decode_float();
+            var border_colors = [];
+            for (var i = 0; i < 4; i++)
+                border_colors[i] = this.decode_color();
 
-    var src = 0;
-    var dest = 0;
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            rrect.bounds.width -= border_widths[1] + border_widths[3];
+            rrect.bounds.height -= border_widths[0] + border_widths[2];
+            set_rrect_style(div, rrect);
+            div.style["border-style"] = "solid";
+            div.style["border-top-color"] = border_colors[0];
+            div.style["border-top-width"] = px(border_widths[0]);
+            div.style["border-right-color"] = border_colors[1];
+            div.style["border-right-width"] = px(border_widths[1]);
+            div.style["border-bottom-color"] = border_colors[2];
+            div.style["border-bottom-width"] = px(border_widths[2]);
+            div.style["border-left-color"] = border_colors[3];
+            div.style["border-left-width"] = px(border_widths[3]);
+            newNode = div;
+        }
+        break;
 
-    while (src < data.length)  {
-        var b = data[src++];
-        var g = data[src++];
-        var r = data[src++];
-        var alpha = data[src++];
-        var len, start;
+    case 4:  // OUTSET_SHADOW
+        {
+            var rrect = this.decode_rounded_rect();
+            var color = this.decode_color();
+            var dx = this.decode_float();
+            var dy = this.decode_float();
+            var spread = this.decode_float();
+            var blur = this.decode_float();
 
-        if (alpha != 0) {
-            // Regular data is red
-            if (debug) {
-                r = r / 2 | 0 + 128;
-                g = g / 2 | 0;
-                b = r / 2 | 0;
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect);
+            div.style["box-shadow"] = args(px(dx), px(dy), px(blur), px(spread), color);
+            newNode = div;
+        }
+        break;
+
+    case 5:  // INSET_SHADOW
+        {
+            var rrect = this.decode_rounded_rect();
+            var color = this.decode_color();
+            var dx = this.decode_float();
+            var dy = this.decode_float();
+            var spread = this.decode_float();
+            var blur = this.decode_float();
+
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect);
+            div.style["box-shadow"] = args("inset", px(dx), px(dy), px(blur), px(spread), color);
+            newNode = div;
+        }
+        break;
+
+
+    case 7:  // LINEAR_GRADIENT
+        {
+            var rect = this.decode_rect();
+            var start = this.decode_point ();
+            var end = this.decode_point ();
+            var stops = this.decode_color_stops ();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rect_style(div, rect);
+
+            // direction:
+            var dx = end.x - start.x;
+            var dy = end.y - start.y;
+
+            // Angle in css coords (clockwise degrees, up = 0), note that y goes downwards so we have to invert
+            var angle = Math.atan2(dx, -dy) * 180.0 / Math.PI;
+
+            // Figure out which corner has offset == 0 in css
+            var start_corner_x, start_corner_y;
+            if (dx >= 0) // going right
+                start_corner_x = rect.x;
+            else
+                start_corner_x = rect.x + rect.width;
+            if (dy >= 0) // going down
+                start_corner_y = rect.y;
+            else
+                start_corner_y = rect.y + rect.height;
+
+            /* project start corner on the line */
+            var l2 = dx*dx + dy*dy;
+            var l = Math.sqrt(l2);
+            var offset = ((start_corner_x - start.x) * dx  + (start_corner_y - start.y) * dy) / l2;
+
+            var gradient = "linear-gradient(" + angle + "deg";
+            for (var i = 0; i < stops.length; i++) {
+                var stop = stops[i];
+                gradient = gradient + ", " + stop.color + " " + px(stop.offset * l - offset);
+            }
+            gradient = gradient + ")";
+
+            div.style["background-image"] = gradient;
+            newNode = div;
+        }
+        break;
+
+
+    /* Bin nodes */
+
+    case 10:  // CLIP
+        {
+            var rect = this.decode_rect();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rect_style(div, rect);
+            div.style["overflow"] = "hidden";
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case 6:  // ROUNDED_CLIP
+        {
+            var rrect = this.decode_rounded_rect();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect);
+            div.style["overflow"] = "hidden";
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case 9:  // OPACITY
+        {
+            var opacity = this.decode_float();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            div.style["left"] = px(0);
+            div.style["top"] = px(0);
+            div.style["opacity"] = opacity;
+
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case 8:  // SHADOW
+        {
+            var len = this.decode_uint32();
+            var filters = "";
+            for (var i = 0; i < len; i++) {
+                var color = this.decode_color();
+                var dx = this.decode_float();
+                var dy = this.decode_float();
+                var blur = this.decode_float();
+                filters = filters + "drop-shadow(" + args (px(dx), px(dy), px(blur), color) + ")";
+            }
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            div.style["left"] = px(0);
+            div.style["top"] = px(0);
+            div.style["filter"] = filters;
+
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+   /* Generic nodes */
+
+    case 1: // CONTAINER
+        {
+            var div = document.createElement('div');
+            var len = this.decode_uint32();
+            for (var i = 0; i < len; i++) {
+                this.insertNode(div, -1, oldChildren[i]);
+            }
+            newNode = div;
+        }
+        break;
+
+    case 11:  // KEEP_ALL
+        {
+            if (!oldNode)
+                alert("KEEP_ALL with no oldNode");
+
+            if (oldNode.parentNode != parent)
+                newNode = oldNode;
+            else
+                newNode = null;
+        }
+        break;
+
+    case 12:  // KEEP_THIS
+        {
+            if (!oldNode)
+                alert("KEEP_THIS with no oldNode ");
+
+            /* We only get keep-this if all parents were kept, check this */
+            if (oldNode.parentNode != parent)
+                alert("Got KEEP_THIS for non-kept parent");
+
+            var len = this.decode_uint32();
+            var i;
+
+            for (i = 0; i < len; i++) {
+                this.insertNode(oldNode, i,
+                                oldChildren[i]);
             }
 
-            imageData.data[dest++] = r;
-            imageData.data[dest++] = g;
-            imageData.data[dest++] = b;
-            imageData.data[dest++] = alpha;
-        } else {
-            var cmd = r & 0xf0;
-            switch (cmd) {
-            case 0x00: // Transparent pixel
-                //log("Got transparent");
-                imageData.data[dest++] = 0;
-                imageData.data[dest++] = 0;
-                imageData.data[dest++] = 0;
-                imageData.data[dest++] = 0;
-                break;
+            /* Remove children that are after the new length */
+            for (i = oldChildren.length - 1; i > len - 1; i--)
+                oldNode.removeChild(oldChildren[i]);
 
-            case 0x10: // Delta 0 run
-                len = (r & 0xf) << 16 | g << 8 | b;
-                //log("Got delta0, len: " + len);
-                dest += len * 4;
-                break;
-
-            case 0x20: // Block reference
-                var blockid = (r & 0xf) << 16 | g << 8 | b;
-
-                var block_stride = (oldData.width + 32 - 1) / 32 | 0;
-                var srcY = (blockid / block_stride | 0) * 32;
-                var srcX = (blockid % block_stride | 0) * 32;
-
-                b = data[src++];
-                g = data[src++];
-                r = data[src++];
-                alpha = data[src++];
-
-                var destX = alpha << 8 | r;
-                var destY = g << 8 | b;
-
-                copyRect(oldData, srcX, srcY, imageData, destX, destY, 32, 32);
-                if (debug) // blocks are green
-                    markRect(oldData, srcX, srcY, imageData, destX, destY, 32, 32, 0x00, 128, 0x00);
-
-                //log("Got block, id: " + blockid +  "(" + srcX +"," + srcY + ") at " + destX + "," + destY);
-
-                break;
-
-            case 0x30: // Color run
-                len = (r & 0xf) << 16 | g << 8 | b;
-                //log("Got color run, len: " + len);
-
-                b = data[src++];
-                g = data[src++];
-                r = data[src++];
-                alpha = data[src++];
-
-                start = dest;
-
-                for (i = 0; i < len; i++) {
-                    imageData.data[dest++] = r;
-                    imageData.data[dest++] = g;
-                    imageData.data[dest++] = b;
-                    imageData.data[dest++] = alpha;
-                }
-
-                if (debug) // Color runs are blue
-                    markRun(imageData.data, start, len, 0x00, 0x00, 128);
-
-                break;
-
-            case 0x40: // Delta run
-                len = (r & 0xf) << 16 | g << 8 | b;
-                //log("Got delta run, len: " + len);
-
-                b = data[src++];
-                g = data[src++];
-                r = data[src++];
-                alpha = data[src++];
-
-                start = dest;
-
-                for (i = 0; i < len; i++) {
-                    imageData.data[dest] = (imageData.data[dest] + r) & 0xff;
-                    dest++;
-                    imageData.data[dest] = (imageData.data[dest] + g) & 0xff;
-                    dest++;
-                    imageData.data[dest] = (imageData.data[dest] + b) & 0xff;
-                    dest++;
-                    imageData.data[dest] = (imageData.data[dest] + alpha) & 0xff;
-                    dest++;
-                }
-                if (debug) // Delta runs are violet
-                    markRun(imageData.data, start, len, 0xff, 0x00, 0xff);
-                break;
-
-            default:
-                alert("Unknown buffer commend " + cmd);
-            }
+            /* NOTE: No need to modify the parent, we're keeping this node as is */
+            newNode = null;
         }
+        break;
+
+    default:
+        alert("Unexpected node type " + type);
     }
 
-    return imageData;
+    if (newNode) {
+        if (posInParent >= 0 && parent.children[posInParent])
+            parent.replaceChild(newNode, parent.children[posInParent]);
+        else
+            parent.appendChild(newNode);
+    }
 }
 
-function cmdPutBuffer(id, w, h, compressed)
+function cmdSurfaceSetNodes(id, node_data)
 {
     var surface = surfaces[id];
-    var context = surface.canvas.getContext("2d");
+    surface.node_data = node_data;
 
-    var inflate = new Zlib.RawInflate(compressed);
-    var data = inflate.decompress();
+    var div = surface.div;
 
-    var imageData = decodeBuffer (context, surface.imageData, w, h, data, debugDecoding);
-    context.putImageData(imageData, 0, 0);
+    /* We use a secondary div so that we can remove all previous children in one go */
 
-    if (debugDecoding)
-        imageData = decodeBuffer (context, surface.imageData, w, h, data, false);
+    var swap = new SwapNodes (node_data, div);
+    swap.insertNode(div, 0, div.firstChild);
+    if (swap.data_pos != node_data.length)
+        alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
+}
 
-    surface.imageData = imageData;
+function cmdUploadTexture(id, data)
+{
+    var blob = new Blob([data],{type: "image/png"});
+    var url = window.URL.createObjectURL(blob);
+    textures[id] = url;
+}
+
+function cmdReleaseTexture(id)
+{
+    var url = textures[id];
+    window.URL.revokeObjectURL(url);
+    delete textures[id];
 }
 
 function cmdGrabPointer(id, ownerEvents)
@@ -537,8 +730,8 @@ function cmdGrabPointer(id, ownerEvents)
 function cmdUngrabPointer()
 {
     sendInput ("u", []);
-    if (grab.window)
-	doUngrab();
+    if (grab.surface)
+        doUngrab();
 }
 
 var active = false;
@@ -550,99 +743,118 @@ function handleCommands(cmd)
     }
 
     while (cmd.pos < cmd.length) {
-	var id, x, y, w, h, q;
-	var command = cmd.get_char();
-	lastSerial = cmd.get_32();
-	switch (command) {
-	case 'D':
-	    alert ("disconnected");
-	    inputSocket = null;
-	    break;
-
-	case 's': // create new surface
-	    id = cmd.get_16();
-	    x = cmd.get_16s();
-	    y = cmd.get_16s();
-	    w = cmd.get_16();
-	    h = cmd.get_16();
-	    var isTemp = cmd.get_bool();
-	    cmdCreateSurface(id, x, y, w, h, isTemp);
-	    break;
-
-	case 'S': // Show a surface
-	    id = cmd.get_16();
-	    cmdShowSurface(id);
-	    break;
-
-	case 'H': // Hide a surface
-	    id = cmd.get_16();
-	    cmdHideSurface(id);
-	    break;
-
-	case 'p': // Set transient parent
-	    id = cmd.get_16();
-	    var parentId = cmd.get_16();
-	    cmdSetTransientFor(id, parentId);
-	    break;
-
-	case 'd': // Delete surface
-	    id = cmd.get_16();
-	    cmdDeleteSurface(id);
-	    break;
-
-	case 'm': // Move a surface
-	    id = cmd.get_16();
-	    var ops = cmd.get_flags();
-	    var has_pos = ops & 1;
-	    if (has_pos) {
-		x = cmd.get_16s();
-		y = cmd.get_16s();
-	    }
-	    var has_size = ops & 2;
-	    if (has_size) {
-		w = cmd.get_16();
-		h = cmd.get_16();
-	    }
-	    cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
-	    break;
-
-	case 'r': // Raise a surface
-	    id = cmd.get_16();
-	    cmdRaiseSurface(id);
-	    break;
-
-	case 'R': // Lower a surface
-	    id = cmd.get_16();
-	    cmdLowerSurface(id);
-	    break;
-
-	case 'b': // Put image buffer
-	    id = cmd.get_16();
-	    w = cmd.get_16();
-	    h = cmd.get_16();
-            var data = cmd.get_data();
-            cmdPutBuffer(id, w, h, data);
+        var id, x, y, w, h, q;
+        var command = cmd.get_char();
+        lastSerial = cmd.get_32();
+        switch (command) {
+        case 'D':
+            alert ("disconnected");
+            inputSocket = null;
             break;
 
-	case 'g': // Grab
-	    id = cmd.get_16();
-	    var ownerEvents = cmd.get_bool ();
+        case 's': // create new surface
+            id = cmd.get_16();
+            x = cmd.get_16s();
+            y = cmd.get_16s();
+            w = cmd.get_16();
+            h = cmd.get_16();
+            var isTemp = cmd.get_bool();
+            cmdCreateSurface(id, x, y, w, h, isTemp);
+            break;
 
-	    cmdGrabPointer(id, ownerEvents);
-	    break;
+        case 'S': // Show a surface
+            id = cmd.get_16();
+            cmdShowSurface(id);
+            break;
 
-	case 'u': // Ungrab
-	    cmdUngrabPointer();
-	    break;
+        case 'H': // Hide a surface
+            id = cmd.get_16();
+            cmdHideSurface(id);
+            break;
+
+        case 'p': // Set transient parent
+            id = cmd.get_16();
+            var parentId = cmd.get_16();
+            cmdSetTransientFor(id, parentId);
+            break;
+
+        case 'd': // Delete surface
+            id = cmd.get_16();
+            cmdDeleteSurface(id);
+            break;
+
+        case 'F': // RoundTrip
+            id = cmd.get_16();
+            var tag = cmd.get_32();
+            cmdRoundtrip(id, tag);
+            break;
+
+        case 'm': // Move a surface
+            id = cmd.get_16();
+            var ops = cmd.get_flags();
+            var has_pos = ops & 1;
+            if (has_pos) {
+                x = cmd.get_16s();
+                y = cmd.get_16s();
+            }
+            var has_size = ops & 2;
+            if (has_size) {
+                w = cmd.get_16();
+                h = cmd.get_16();
+            }
+            cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
+            break;
+
+        case 'r': // Raise a surface
+            id = cmd.get_16();
+            cmdRaiseSurface(id);
+            break;
+
+        case 'R': // Lower a surface
+            id = cmd.get_16();
+            cmdLowerSurface(id);
+            break;
+
+        case 't': // Upload texture
+            id = cmd.get_32();
+            var data = cmd.get_data();
+            cmdUploadTexture(id, data);
+            break;
+
+        case 'T': // Release texture
+            id = cmd.get_32();
+            cmdReleaseTexture(id);
+            break;
+
+        case 'n': // Set nodes
+            id = cmd.get_16();
+            var len = cmd.get_32();
+            var node_data = new Uint32Array(len);
+            for (var i = 0; i < len; i++)
+                node_data[i] = cmd.get_32();
+
+            cmdSurfaceSetNodes(id, node_data);
+            break;
+
+        case 'g': // Grab
+            id = cmd.get_16();
+            var ownerEvents = cmd.get_bool ();
+
+            cmdGrabPointer(id, ownerEvents);
+            break;
+
+        case 'u': // Ungrab
+            cmdUngrabPointer();
+            break;
 
         case 'k': // show keyboard
             showKeyboard = cmd.get_16() != 0;
             showKeyboardChanged = true;
             break;
 
-	default:
-	    alert("Unknown op " + command);
-	}
+        default:
+            alert("Unknown op " + command);
+        }
     }
     return true;
 }
@@ -650,11 +862,11 @@ function handleCommands(cmd)
 function handleOutstanding()
 {
     while (outstandingCommands.length > 0) {
-	var cmd = outstandingCommands.shift();
-	if (!handleCommands(cmd)) {
-	    outstandingCommands.unshift(cmd);
-	    return;
-	}
+        var cmd = outstandingCommands.shift();
+        if (!handleCommands(cmd)) {
+            outstandingCommands.unshift(cmd);
+            return;
+        }
     }
 }
 
@@ -676,24 +888,24 @@ BinCommands.prototype.get_flags = function() {
 }
 BinCommands.prototype.get_16 = function() {
     var v =
-	this.u8[this.pos] +
-	(this.u8[this.pos+1] << 8);
+        this.u8[this.pos] +
+        (this.u8[this.pos+1] << 8);
     this.pos = this.pos + 2;
     return v;
 };
 BinCommands.prototype.get_16s = function() {
     var v = this.get_16 ();
     if (v > 32767)
-	return v - 65536;
+        return v - 65536;
     else
-	return v;
+        return v;
 };
 BinCommands.prototype.get_32 = function() {
     var v =
-	this.u8[this.pos] +
-	(this.u8[this.pos+1] << 8) +
-	(this.u8[this.pos+2] << 16) +
-	(this.u8[this.pos+3] << 24);
+        this.u8[this.pos] +
+        (this.u8[this.pos+1] << 8) +
+        (this.u8[this.pos+2] << 16) +
+        (this.u8[this.pos+3] << 24);
     this.pos = this.pos + 4;
     return v;
 };
@@ -709,15 +921,19 @@ function handleMessage(message)
     var cmd = new BinCommands(message);
     outstandingCommands.push(cmd);
     if (outstandingCommands.length == 1) {
-	handleOutstanding();
+        handleOutstanding();
     }
 }
 
 function getSurfaceId(ev) {
-    var surface = ev.target.surface;
-    if (surface != undefined)
-	return surface.id;
-    return 0;
+    var target = ev.target;
+    while (target.surface == undefined) {
+        if (target == document)
+            return 0;
+        target = target.parentNode;
+    }
+
+    return target.surface.id;
 }
 
 function sendInput(cmd, args)
@@ -743,9 +959,9 @@ function getPositionsFromAbsCoord(absX, absY, relativeId) {
     res.winX = absX;
     res.winY = absY;
     if (relativeId != 0) {
-	var surface = surfaces[relativeId];
-	res.winX = res.winX - surface.x;
-	res.winY = res.winY - surface.y;
+        var surface = surfaces[relativeId];
+        res.winX = res.winX - surface.x;
+        res.winY = res.winY - surface.y;
     }
 
     return res;
@@ -764,11 +980,11 @@ function getPositionsFromEvent(ev, relativeId) {
 }
 
 function getEffectiveEventTarget (id) {
-    if (grab.window != null) {
-	if (!grab.ownerEvents)
-	    return grab.window;
-	if (id == 0)
-	    return grab.window;
+    if (grab.surface != null) {
+        if (!grab.ownerEvents)
+            return grab.surface;
+        if (id == 0)
+            return grab.surface;
     }
     return id;
 }
@@ -786,11 +1002,11 @@ function updateKeyboardStatus() {
 function updateForEvent(ev) {
     lastState &= ~(GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK);
     if (ev.shiftKey)
-	lastState |= GDK_SHIFT_MASK;
+        lastState |= GDK_SHIFT_MASK;
     if (ev.ctrlKey)
-	lastState |= GDK_CONTROL_MASK;
+        lastState |= GDK_CONTROL_MASK;
     if (ev.altKey)
-	lastState |= GDK_MOD1_MASK;
+        lastState |= GDK_MOD1_MASK;
 
     lastTimeStamp = ev.timeStamp;
 }
@@ -800,19 +1016,19 @@ function onMouseMove (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    sendInput ("m", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    sendInput ("m", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
 }
 
 function onMouseOver (ev) {
     updateForEvent(ev);
 
     var id = getSurfaceId(ev);
-    realWindowWithMouse = id;
+    realSurfaceWithMouse = id;
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    windowWithMouse = id;
-    if (windowWithMouse != 0) {
-	sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+    surfaceWithMouse = id;
+    if (surfaceWithMouse != 0) {
+        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
 }
 
@@ -824,44 +1040,44 @@ function onMouseOut (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-	sendInput ("l", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+        sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
-    realWindowWithMouse = 0;
-    windowWithMouse = 0;
+    realSurfaceWithMouse = 0;
+    surfaceWithMouse = 0;
 }
 
 function doGrab(id, ownerEvents, implicit) {
     var pos;
 
-    if (windowWithMouse != id) {
-	if (windowWithMouse != 0) {
-	    pos = getPositionsFromAbsCoord(lastX, lastY, windowWithMouse);
-	    sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
-	}
-	pos = getPositionsFromAbsCoord(lastX, lastY, id);
-	sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
-	windowWithMouse = id;
+    if (surfaceWithMouse != id) {
+        if (surfaceWithMouse != 0) {
+            pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
+            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+        }
+        pos = getPositionsFromAbsCoord(lastX, lastY, id);
+        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+        surfaceWithMouse = id;
     }
 
-    grab.window = id;
+    grab.surface = id;
     grab.ownerEvents = ownerEvents;
     grab.implicit = implicit;
 }
 
 function doUngrab() {
     var pos;
-    if (realWindowWithMouse != windowWithMouse) {
-	if (windowWithMouse != 0) {
-	    pos = getPositionsFromAbsCoord(lastX, lastY, windowWithMouse);
-	    sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
-	}
-	if (realWindowWithMouse != 0) {
-	    pos = getPositionsFromAbsCoord(lastX, lastY, realWindowWithMouse);
-	    sendInput ("e", [realWindowWithMouse, realWindowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
-	}
-	windowWithMouse = realWindowWithMouse;
+    if (realSurfaceWithMouse != surfaceWithMouse) {
+        if (surfaceWithMouse != 0) {
+            pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
+            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+        }
+        if (realSurfaceWithMouse != 0) {
+            pos = getPositionsFromAbsCoord(lastX, lastY, realSurfaceWithMouse);
+            sendInput ("e", [realSurfaceWithMouse, realSurfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+        }
+        surfaceWithMouse = realSurfaceWithMouse;
     }
-    grab.window = null;
+    grab.surface = null;
 }
 
 function onMouseDown (ev) {
@@ -872,9 +1088,9 @@ function onMouseDown (ev) {
     id = getEffectiveEventTarget (id);
 
     var pos = getPositionsFromEvent(ev, id);
-    if (grab.window == null)
-	doGrab (id, false, true);
-    sendInput ("b", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    if (grab.surface == null)
+        doGrab (id, false, true);
+    sendInput ("b", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
     return false;
 }
 
@@ -886,10 +1102,10 @@ function onMouseUp (ev) {
     id = getEffectiveEventTarget (evId);
     var pos = getPositionsFromEvent(ev, id);
 
-    sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput ("B", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
-    if (grab.window != null && grab.implicit)
-	doUngrab();
+    if (grab.surface != null && grab.implicit)
+        doUngrab();
 
     return false;
 }
@@ -2202,7 +2418,7 @@ var specialKeyTable = {
 
 function getEventKeySym(ev) {
     if (typeof ev.which !== "undefined" && ev.which > 0)
-	return ev.which;
+        return ev.which;
     return ev.keyCode;
 }
 
@@ -2213,19 +2429,19 @@ function getEventKeySym(ev) {
 // translated keysym.
 function getKeysymSpecial(ev) {
     if (ev.keyCode in specialKeyTable) {
-	var r = specialKeyTable[ev.keyCode];
-	var flags = 0;
-	if (typeof r != 'number') {
-	    flags = r[1];
-	    r = r[0];
-	}
-	if (ev.type === 'keydown' || flags & ON_KEYDOWN)
-	    return r;
+        var r = specialKeyTable[ev.keyCode];
+        var flags = 0;
+        if (typeof r != 'number') {
+            flags = r[1];
+            r = r[0];
+        }
+        if (ev.type === 'keydown' || flags & ON_KEYDOWN)
+            return r;
     }
     // If we don't hold alt or ctrl, then we should be safe to pass
     // on to keypressed and look at the translated data
     if (!ev.ctrlKey && !ev.altKey)
-	return null;
+        return null;
 
     var keysym = getEventKeySym(ev);
 
@@ -2235,9 +2451,9 @@ function getKeysymSpecial(ev) {
     case 187 : keysym = 61; break; // = (IE)
     case 188 : keysym = 44; break; // , (Mozilla, IE)
     case 109 : // - (Mozilla, Opera)
-	if (true /* TODO: check if browser is firefox or opera */)
-	    keysym = 45;
-	break;
+        if (true /* TODO: check if browser is firefox or opera */)
+            keysym = 45;
+        break;
     case 189 : keysym = 45; break; // - (IE)
     case 190 : keysym = 46; break; // . (Mozilla, IE)
     case 191 : keysym = 47; break; // / (Mozilla, IE)
@@ -2250,49 +2466,49 @@ function getKeysymSpecial(ev) {
 
     /* Remap shifted and unshifted keys */
     if (!!ev.shiftKey) {
-	switch (keysym) {
-	case 48 : keysym = 41 ; break; // ) (shifted 0)
-	case 49 : keysym = 33 ; break; // ! (shifted 1)
-	case 50 : keysym = 64 ; break; // @ (shifted 2)
-	case 51 : keysym = 35 ; break; // # (shifted 3)
-	case 52 : keysym = 36 ; break; // $ (shifted 4)
-	case 53 : keysym = 37 ; break; // % (shifted 5)
-	case 54 : keysym = 94 ; break; // ^ (shifted 6)
-	case 55 : keysym = 38 ; break; // & (shifted 7)
-	case 56 : keysym = 42 ; break; // * (shifted 8)
-	case 57 : keysym = 40 ; break; // ( (shifted 9)
-	case 59 : keysym = 58 ; break; // : (shifted `)
-	case 61 : keysym = 43 ; break; // + (shifted ;)
-	case 44 : keysym = 60 ; break; // < (shifted ,)
-	case 45 : keysym = 95 ; break; // _ (shifted -)
-	case 46 : keysym = 62 ; break; // > (shifted .)
-	case 47 : keysym = 63 ; break; // ? (shifted /)
-	case 96 : keysym = 126; break; // ~ (shifted `)
-	case 91 : keysym = 123; break; // { (shifted [)
-	case 92 : keysym = 124; break; // | (shifted \)
-	case 93 : keysym = 125; break; // } (shifted ])
-	case 39 : keysym = 34 ; break; // " (shifted ')
-	}
+        switch (keysym) {
+        case 48 : keysym = 41 ; break; // ) (shifted 0)
+        case 49 : keysym = 33 ; break; // ! (shifted 1)
+        case 50 : keysym = 64 ; break; // @ (shifted 2)
+        case 51 : keysym = 35 ; break; // # (shifted 3)
+        case 52 : keysym = 36 ; break; // $ (shifted 4)
+        case 53 : keysym = 37 ; break; // % (shifted 5)
+        case 54 : keysym = 94 ; break; // ^ (shifted 6)
+        case 55 : keysym = 38 ; break; // & (shifted 7)
+        case 56 : keysym = 42 ; break; // * (shifted 8)
+        case 57 : keysym = 40 ; break; // ( (shifted 9)
+        case 59 : keysym = 58 ; break; // : (shifted `)
+        case 61 : keysym = 43 ; break; // + (shifted ;)
+        case 44 : keysym = 60 ; break; // < (shifted ,)
+        case 45 : keysym = 95 ; break; // _ (shifted -)
+        case 46 : keysym = 62 ; break; // > (shifted .)
+        case 47 : keysym = 63 ; break; // ? (shifted /)
+        case 96 : keysym = 126; break; // ~ (shifted `)
+        case 91 : keysym = 123; break; // { (shifted [)
+        case 92 : keysym = 124; break; // | (shifted \)
+        case 93 : keysym = 125; break; // } (shifted ])
+        case 39 : keysym = 34 ; break; // " (shifted ')
+        }
     } else if ((keysym >= 65) && (keysym <=90)) {
-	/* Remap unshifted A-Z */
-	keysym += 32;
+        /* Remap unshifted A-Z */
+        keysym += 32;
     } else if (ev.keyLocation === 3) {
-	// numpad keys
-	switch (keysym) {
-	case 96 : keysym = 48; break; // 0
-	case 97 : keysym = 49; break; // 1
-	case 98 : keysym = 50; break; // 2
-	case 99 : keysym = 51; break; // 3
-	case 100: keysym = 52; break; // 4
-	case 101: keysym = 53; break; // 5
-	case 102: keysym = 54; break; // 6
-	case 103: keysym = 55; break; // 7
-	case 104: keysym = 56; break; // 8
-	case 105: keysym = 57; break; // 9
-	case 109: keysym = 45; break; // -
-	case 110: keysym = 46; break; // .
-	case 111: keysym = 47; break; // /
-	}
+        // numpad keys
+        switch (keysym) {
+        case 96 : keysym = 48; break; // 0
+        case 97 : keysym = 49; break; // 1
+        case 98 : keysym = 50; break; // 2
+        case 99 : keysym = 51; break; // 3
+        case 100: keysym = 52; break; // 4
+        case 101: keysym = 53; break; // 5
+        case 102: keysym = 54; break; // 6
+        case 103: keysym = 55; break; // 7
+        case 104: keysym = 56; break; // 8
+        case 105: keysym = 57; break; // 9
+        case 109: keysym = 45; break; // -
+        case 110: keysym = 46; break; // .
+        case 111: keysym = 47; break; // /
+        }
     }
 
     return keysym;
@@ -2305,10 +2521,10 @@ function getKeysym(ev) {
     keysym = getEventKeySym(ev);
 
     if ((keysym > 255) && (keysym < 0xFF00)) {
-	// Map Unicode outside Latin 1 to gdk keysyms
-	keysym = unicodeTable[keysym];
-	if (typeof keysym === 'undefined')
-	    keysym = 0;
+        // Map Unicode outside Latin 1 to gdk keysyms
+        keysym = unicodeTable[keysym];
+        if (typeof keysym === 'undefined')
+            keysym = 0;
     }
 
     return keysym;
@@ -2316,11 +2532,11 @@ function getKeysym(ev) {
 
 function copyKeyEvent(ev) {
     var members = ['type', 'keyCode', 'charCode', 'which',
-		   'altKey', 'ctrlKey', 'shiftKey',
-		   'keyLocation', 'keyIdentifier'], i, obj = {};
+                   'altKey', 'ctrlKey', 'shiftKey',
+                   'keyLocation', 'keyIdentifier'], i, obj = {};
     for (i = 0; i < members.length; i++) {
-	if (typeof ev[members[i]] !== "undefined")
-	    obj[members[i]] = ev[members[i]];
+        if (typeof ev[members[i]] !== "undefined")
+            obj[members[i]] = ev[members[i]];
     }
     return obj;
 }
@@ -2332,13 +2548,13 @@ function pushKeyEvent(fev) {
 function getKeyEvent(keyCode, pop) {
     var i, fev = null;
     for (i = keyDownList.length-1; i >= 0; i--) {
-	if (keyDownList[i].keyCode === keyCode) {
-	    if ((typeof pop !== "undefined") && pop)
-		fev = keyDownList.splice(i, 1)[0];
-	    else
-		fev = keyDownList[i];
-	    break;
-	}
+        if (keyDownList[i].keyCode === keyCode) {
+            if ((typeof pop !== "undefined") && pop)
+                fev = keyDownList.splice(i, 1)[0];
+            else
+                fev = keyDownList[i];
+            break;
+        }
     }
     return fev;
 }
@@ -2346,10 +2562,10 @@ function getKeyEvent(keyCode, pop) {
 function ignoreKeyEvent(ev) {
     // Blarg. Some keys have a different keyCode on keyDown vs keyUp
     if (ev.keyCode === 229) {
-	// French AZERTY keyboard dead key.
-	// Lame thing is that the respective keyUp is 219 so we can't
-	// properly ignore the keyUp event
-	return true;
+        // French AZERTY keyboard dead key.
+        // Lame thing is that the respective keyUp is 219 so we can't
+        // properly ignore the keyUp event
+        return true;
     }
     return false;
 }
@@ -2363,22 +2579,22 @@ function handleKeyDown(e) {
     // Save keysym decoding for use in keyUp
     fev.keysym = keysym;
     if (keysym) {
-	// If it is a key or key combination that might trigger
-	// browser behaviors or it has no corresponding keyPress
-	// event, then send it immediately
-	if (!ignoreKeyEvent(ev))
-	    sendInput("k", [keysym, lastState]);
-	suppress = true;
+        // If it is a key or key combination that might trigger
+        // browser behaviors or it has no corresponding keyPress
+        // event, then send it immediately
+        if (!ignoreKeyEvent(ev))
+            sendInput("k", [keysym, lastState]);
+        suppress = true;
     }
 
     if (! ignoreKeyEvent(ev)) {
-	// Add it to the list of depressed keys
-	pushKeyEvent(fev);
+        // Add it to the list of depressed keys
+        pushKeyEvent(fev);
     }
 
     if (suppress) {
-	// Suppress bubbling/default actions
-	return cancelEvent(ev);
+        // Suppress bubbling/default actions
+        return cancelEvent(ev);
     }
 
     // Allow the event to bubble and become a keyPress event which
@@ -2390,13 +2606,13 @@ function handleKeyPress(e) {
     var ev = (e ? e : window.event), kdlen = keyDownList.length, keysym = null;
 
     if (((ev.which !== "undefined") && (ev.which === 0)) ||
-	getKeysymSpecial(ev)) {
-	// Firefox and Opera generate a keyPress event even if keyDown
-	// is suppressed. But the keys we want to suppress will have
-	// either:
-	// - the which attribute set to 0
-	// - getKeysymSpecial() will identify it
-	return cancelEvent(ev);
+        getKeysymSpecial(ev)) {
+        // Firefox and Opera generate a keyPress event even if keyDown
+        // is suppressed. But the keys we want to suppress will have
+        // either:
+        // - the which attribute set to 0
+        // - getKeysymSpecial() will identify it
+        return cancelEvent(ev);
     }
 
     keysym = getKeysym(ev);
@@ -2405,14 +2621,14 @@ function handleKeyPress(e) {
     // that the keyUp event will be able to have the character code
     // translation available.
     if (kdlen > 0) {
-	keyDownList[kdlen-1].keysym = keysym;
+        keyDownList[kdlen-1].keysym = keysym;
     } else {
-	//log("keyDownList empty when keyPress triggered");
+        //log("keyDownList empty when keyPress triggered");
     }
 
     // Send the translated keysym
     if (keysym > 0)
-	sendInput ("k", [keysym, lastState]);
+        sendInput ("k", [keysym, lastState]);
 
     // Stop keypress events just in case
     return cancelEvent(ev);
@@ -2424,14 +2640,14 @@ function handleKeyUp(e) {
     fev = getKeyEvent(ev.keyCode, true);
 
     if (fev)
-	keysym = fev.keysym;
+        keysym = fev.keysym;
     else {
-	//log("Key event (keyCode = " + ev.keyCode + ") not found on keyDownList");
-	keysym = 0;
+        //log("Key event (keyCode = " + ev.keyCode + ") not found on keyDownList");
+        keysym = 0;
     }
 
     if (keysym > 0)
-	sendInput ("K", [keysym, lastState]);
+        sendInput ("K", [keysym, lastState]);
     return cancelEvent(ev);
 }
 
@@ -2454,9 +2670,9 @@ function cancelEvent(ev)
 {
     ev = ev ? ev : window.event;
     if (ev.stopPropagation)
-	ev.stopPropagation();
+        ev.stopPropagation();
     if (ev.preventDefault)
-	ev.preventDefault();
+        ev.preventDefault();
     ev.cancelBubble = true;
     ev.cancel = true;
     ev.returnValue = false;
@@ -2474,8 +2690,8 @@ function onMouseWheel(ev)
     var offset = ev.detail ? ev.detail : -ev.wheelDelta;
     var dir = 0;
     if (offset > 0)
-	dir = 1;
-    sendInput ("s", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
+        dir = 1;
+    sendInput ("s", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
 
     return cancelEvent(ev);
 }
@@ -2498,13 +2714,13 @@ function onTouchStart(ev) {
             firstTouchDownId = touch.identifier;
             isEmulated = 1;
 
-            if (realWindowWithMouse != origId || id != windowWithMouse) {
+            if (realSurfaceWithMouse != origId || id != surfaceWithMouse) {
                 if (id != 0) {
-                    sendInput ("l", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                    sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
                 }
 
-                windowWithMouse = id;
-                realWindowWithMouse = origId;
+                surfaceWithMouse = id;
+                realSurfaceWithMouse = origId;
 
                 sendInput ("e", [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
             }
@@ -2590,10 +2806,10 @@ function start()
     w = window.innerWidth;
     h = window.innerHeight;
     window.onresize = function(ev) {
-	var w, h;
-	w = window.innerWidth;
-	h = window.innerHeight;
-	sendInput ("d", [w, h]);
+        var w, h;
+        w = window.innerWidth;
+        h = window.innerHeight;
+        sendInput ("d", [w, h]);
     };
     sendInput ("d", [w, h]);
 }
@@ -2603,7 +2819,7 @@ function connect()
     var url = window.location.toString();
     var query_string = url.split("?");
     if (query_string.length > 1) {
-	var params = query_string[1].split("&");
+        var params = query_string[1].split("&");
 
         for (var i=0; i<params.length; i++) {
             var pair = params[i].split("=");
@@ -2618,15 +2834,15 @@ function connect()
     ws.binaryType = "arraybuffer";
 
     ws.onopen = function() {
-	inputSocket = ws;
+        inputSocket = ws;
     };
     ws.onclose = function() {
-	if (inputSocket != null)
-	    alert ("disconnected");
-	inputSocket = null;
+        if (inputSocket != null)
+            alert ("disconnected");
+        inputSocket = null;
     };
     ws.onmessage = function(event) {
-	handleMessage(event.data);
+        handleMessage(event.data);
     };
 
     var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );

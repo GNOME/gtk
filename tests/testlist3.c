@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
-static GtkTargetEntry entries[] = {
-  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP, 0 }
+static const char *entries[] = {
+  "GTK_LIST_BOX_ROW"
 };
 
 static void
@@ -11,25 +11,17 @@ drag_begin (GtkWidget      *widget,
 {
   GtkWidget *row;
   GtkAllocation alloc;
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  GdkPaintable *paintable;
   int x, y;
 
   row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
   gtk_widget_get_allocation (row, &alloc);
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
-  cr = cairo_create (surface);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (row), "during-dnd");
-  gtk_widget_draw (row, cr);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "during-dnd");
-
+  paintable = gtk_widget_paintable_new (row);
   gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
-  cairo_surface_set_device_offset (surface, -x, -y);
-  gtk_drag_set_icon_surface (context, surface);
+  gtk_drag_set_icon_paintable (context, paintable, -x, -y);
 
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  g_object_unref (paintable);
 }
 
 
@@ -37,12 +29,10 @@ void
 drag_data_get (GtkWidget        *widget,
                GdkDragContext   *context,
                GtkSelectionData *selection_data,
-               guint             info,
-               guint             time,
                gpointer          data)
 {
   gtk_selection_data_set (selection_data,
-                          gdk_atom_intern_static_string ("GTK_LIST_BOX_ROW"),
+                          g_intern_static_string ("GTK_LIST_BOX_ROW"),
                           32,
                           (const guchar *)&widget,
                           sizeof (gpointer));
@@ -51,12 +41,8 @@ drag_data_get (GtkWidget        *widget,
 
 static void
 drag_data_received (GtkWidget        *widget,
-                    GdkDragContext   *context,
-                    gint              x,
-                    gint              y,
+                    GdkDrop          *drop,
                     GtkSelectionData *selection_data,
-                    guint             info,
-                    guint32           time,
                     gpointer          data)
 {
   GtkWidget *target;
@@ -83,9 +69,10 @@ static GtkWidget *
 create_row (const gchar *text)
 {
   GtkWidget *row, *box, *label, *image;
+  GdkContentFormats *targets;
 
   row = gtk_list_box_row_new (); 
-  image = gtk_image_new_from_icon_name ("open-menu-symbolic", 1);
+  image = gtk_image_new_from_icon_name ("open-menu-symbolic");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
@@ -94,12 +81,16 @@ create_row (const gchar *text)
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), image);
 
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
+  targets = gdk_content_formats_new (entries, 1);
+
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, targets, GDK_ACTION_MOVE);
   g_signal_connect (image, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (image, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
 
-  gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, entries, 1, GDK_ACTION_MOVE);
+  gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_MOVE);
   g_signal_connect (row, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+
+  gdk_content_formats_unref (targets);
 
   return row;
 }

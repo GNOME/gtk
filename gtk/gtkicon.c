@@ -21,6 +21,8 @@
 #include "config.h"
 
 #include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkiconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkrendericonprivate.h"
@@ -30,6 +32,13 @@
  * It should be used whenever builtin-icon functionality is desired
  * but a widget is needed for other reasons.
  */
+
+struct _GtkIcon
+{
+  GtkWidget parent;
+
+  GtkCssImageBuiltinType image;
+};
 
 G_DEFINE_TYPE (GtkIcon, gtk_icon, GTK_TYPE_WIDGET)
 
@@ -41,7 +50,8 @@ gtk_icon_snapshot (GtkWidget   *widget,
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   int width, height;
 
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (width > 0 && height > 0)
     gtk_css_style_snapshot_icon (style,
@@ -51,17 +61,33 @@ gtk_icon_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_icon_measure (GtkWidget      *widget,
+                  GtkOrientation  orientation,
+                  int             for_size,
+                  int            *minimum,
+                  int            *natural,
+                  int            *minimum_baseline,
+                  int            *natural_baseline)
+{
+  GtkCssValue *icon_size;
+
+  icon_size = _gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_ICON_SIZE);
+  *minimum = *natural = _gtk_css_number_value_get (icon_size, 100);
+}
+
+static void
 gtk_icon_class_init (GtkIconClass *klass)
 {
   GtkWidgetClass *wclass = GTK_WIDGET_CLASS (klass);
 
   wclass->snapshot = gtk_icon_snapshot;
+  wclass->measure = gtk_icon_measure;
 }
 
 static void
 gtk_icon_init (GtkIcon *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   self->image = GTK_CSS_IMAGE_BUILTIN_NONE;
 }
 

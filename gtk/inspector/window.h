@@ -26,6 +26,8 @@
 
 #include <gtk/gtkwindow.h>
 
+#include "inspectoroverlay.h"
+
 #define GTK_TYPE_INSPECTOR_WINDOW            (gtk_inspector_window_get_type())
 #define GTK_INSPECTOR_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_WINDOW, GtkInspectorWindow))
 #define GTK_INSPECTOR_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_WINDOW, GtkInspectorWindowClass))
@@ -72,14 +74,16 @@ typedef struct
 
   GtkWidget *invisible;
   GtkWidget *selected_widget;
-  GtkWidget *flash_widget;
 
   GList *extra_pages;
 
   gboolean grabbed;
 
+  GtkInspectorOverlay *flash_overlay;
   gint flash_count;
   gint flash_cnx;
+
+  GList *overlays;
 
 } GtkInspectorWindow;
 
@@ -96,23 +100,25 @@ GtkWidget *gtk_inspector_window_new         (void);
 
 void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
                                              GtkWidget          *widget);
-void       gtk_inspector_start_highlight    (GtkWidget          *widget);
-void       gtk_inspector_stop_highlight     (GtkWidget          *widget);
 
 void       gtk_inspector_on_inspect         (GtkWidget          *widget,
                                              GtkInspectorWindow *iw);
 
-void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw);
+void                    gtk_inspector_window_add_overlay                        (GtkInspectorWindow     *iw,
+                                                                                 GtkInspectorOverlay    *overlay);
+void                    gtk_inspector_window_remove_overlay                     (GtkInspectorWindow     *iw,
+                                                                                 GtkInspectorOverlay    *overlay);
 
-void       gtk_inspector_window_rescan     (GtkWidget          *iw);
+void                    gtk_inspector_window_select_widget_under_pointer        (GtkInspectorWindow     *iw);
 
-gboolean   gtk_inspector_is_recording      (GtkWidget          *widget);
-void       gtk_inspector_record_render     (GtkWidget          *widget,
-                                            GskRenderer        *renderer,
-                                            GdkWindow          *window,
-                                            const cairo_region_t *region,
-                                            GdkDrawingContext  *context,
-                                            GskRenderNode      *node);
+void                    gtk_inspector_window_rescan                             (GtkWidget              *iw);
+
+gboolean                gtk_inspector_is_recording                              (GtkWidget              *widget);
+GskRenderNode *         gtk_inspector_prepare_render                            (GtkWidget              *widget,
+                                                                                 GskRenderer            *renderer,
+                                                                                 GdkSurface             *surface,
+                                                                                 const cairo_region_t   *region,
+                                                                                 GskRenderNode          *node);
 
 G_END_DECLS
 

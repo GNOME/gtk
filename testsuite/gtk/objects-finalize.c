@@ -20,7 +20,7 @@
 #include <string.h>
 
 #ifdef GDK_WINDOWING_X11
-# include <gdk/gdkx.h>
+# include <gdk/x11/gdkx.h>
 #endif
 
 
@@ -52,7 +52,20 @@ test_finalize_object (gconstpointer data)
   GType test_type = GPOINTER_TO_SIZE (data);
   GObject *object;
 
-  object = g_object_new (test_type, NULL);
+  if (g_str_equal (g_type_name (test_type), "GdkClipboard"))
+    object = g_object_new (test_type, "display", gdk_display_get_default (), NULL);
+  else if (g_str_equal (g_type_name (test_type), "GdkDragContext") ||
+           g_str_equal (g_type_name (test_type), "GdkDrop"))
+    {
+      GdkContentFormats *formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
+      object = g_object_new (test_type,
+                             "device", gdk_seat_get_pointer (gdk_display_get_default_seat (gdk_display_get_default ())),
+                             "formats", formats,
+                             NULL);
+      gdk_content_formats_unref (formats);
+    }
+  else
+    object = g_object_new (test_type, NULL);
   g_assert (G_IS_OBJECT (object));
 
   /* Make sure we have the only reference */
@@ -78,7 +91,6 @@ main (int argc, char **argv)
 {
   const GType *all_types;
   guint n_types = 0, i;
-  gchar *schema_dir;
   GTestDBus *bus;
   gint result;
 
@@ -89,10 +101,6 @@ main (int argc, char **argv)
   /* initialize test program */
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types ();
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* Create one test bus for all tests, as we have a lot of very small
    * and quick tests.
@@ -108,8 +116,7 @@ main (int argc, char **argv)
 	  G_TYPE_IS_INSTANTIATABLE (all_types[i]) &&
 	  !G_TYPE_IS_ABSTRACT (all_types[i]) &&
 #ifdef GDK_WINDOWING_X11
-	  all_types[i] != GDK_TYPE_X11_WINDOW &&
-	  all_types[i] != GDK_TYPE_X11_CURSOR &&
+	  all_types[i] != GDK_TYPE_X11_SURFACE &&
 	  all_types[i] != GDK_TYPE_X11_SCREEN &&
 	  all_types[i] != GDK_TYPE_X11_DISPLAY &&
 	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_CORE &&
@@ -118,7 +125,6 @@ main (int argc, char **argv)
 #endif
 	  /* Not allowed to finalize a GdkPixbufLoader without calling gdk_pixbuf_loader_close() */
 	  all_types[i] != GDK_TYPE_PIXBUF_LOADER &&
-	  all_types[i] != GDK_TYPE_DRAWING_CONTEXT &&
 	  all_types[i] != gdk_pixbuf_simple_anim_iter_get_type())
 	{
 	  gchar *test_path = g_strdup_printf ("/FinalizeObject/%s", g_type_name (all_types[i]));
@@ -133,7 +139,6 @@ main (int argc, char **argv)
 
   g_test_dbus_down (bus);
   g_object_unref (bus);
-  g_free (schema_dir);
 
   return result;
 }

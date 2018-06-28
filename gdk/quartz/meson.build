@@ -2,6 +2,7 @@
 gdk_quartz_sources = files([
   'GdkQuartzView.c',
   'GdkQuartzNSWindow.c',
+  'gdkcairocontext-quartz.c',
   'gdkcursor-quartz.c',
   'gdkdevice-core-quartz.c',
   'gdkdevicemanager-core-quartz.c',
@@ -13,11 +14,10 @@ gdk_quartz_sources = files([
   'gdkglcontext-quartz.c',
   'gdkglobals-quartz.c',
   'gdkkeys-quartz.c',
-  'gdkproperty-quartz.c',
   'gdkscreen-quartz.c',
   'gdkselection-quartz.c',
   'gdkutils-quartz.c',
-  'gdkwindow-quartz.c',
+  'gdksurface-quartz.c',
 ])
 
 gdk_quartz_public_headers = files([
@@ -30,7 +30,7 @@ gdk_quartz_public_headers = files([
   'gdkquartzkeys.h',
   'gdkquartzscreen.h',
   'gdkquartzutils.h',
-  'gdkquartzwindow.h',
+  'gdkquartzsurface.h',
 ])
 
 install_headers(gdk_quartz_public_headers, subdir: 'gtk-4.0/gdk/quartz/')

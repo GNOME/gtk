@@ -23,15 +23,15 @@
 
 #include "gdkprivate-quartz.h"
 #include "gdkquartzscreen.h"
-#include "gdkquartzwindow.h"
+#include "gdkquartzsurface.h"
 #include "gdkquartzdisplay.h"
 #include "gdkquartzdevicemanager-core.h"
-#include "gdkscreen.h"
 #include "gdkmonitorprivate.h"
 #include "gdkdisplay-quartz.h"
+#include "gdkcairocontext-quartz.h"
 
 
-static GdkWindow *
+static GdkSurface *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -59,11 +59,11 @@ _gdk_quartz_display_open (const gchar *display_name)
   [NSApplication sharedApplication];
 
   _gdk_display = g_object_new (gdk_quartz_display_get_type (), NULL);
-  _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
+  _gdk_device_manager = _gdk_device_manager_new (_gdk_display);
 
   _gdk_screen = g_object_new (gdk_quartz_screen_get_type (), NULL);
 
-  _gdk_quartz_window_init_windowing (_gdk_display, _gdk_screen);
+  _gdk_quartz_surface_init_windowing (_gdk_display);
 
   _gdk_quartz_events_init ();
 
@@ -92,12 +92,6 @@ gdk_quartz_display_get_name (GdkDisplay *display)
   return display_name;
 }
 
-static GdkScreen *
-gdk_quartz_display_get_default_screen (GdkDisplay *display)
-{
-  return _gdk_screen;
-}
-
 static void
 gdk_quartz_display_beep (GdkDisplay *display)
 {
@@ -119,31 +113,6 @@ gdk_quartz_display_flush (GdkDisplay *display)
 }
 
 static gboolean
-gdk_quartz_display_supports_selection_notification (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static gboolean
-gdk_quartz_display_request_selection_notification (GdkDisplay *display,
-                                                   GdkAtom     selection)
-
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static gboolean
-gdk_quartz_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static gboolean
 gdk_quartz_display_supports_shapes (GdkDisplay *display)
 {
   /* FIXME: Implement */
@@ -155,16 +124,6 @@ gdk_quartz_display_supports_input_shapes (GdkDisplay *display)
 {
   /* FIXME: Implement */
   return FALSE;
-}
-
-static void
-gdk_quartz_display_store_clipboard (GdkDisplay    *display,
-                                    GdkWindow     *clipboard_window,
-                                    guint32        time_,
-                                    const GdkAtom *targets,
-                                    gint           n_targets)
-{
-  /* FIXME: Implement */
 }
 
 static gulong
@@ -214,7 +173,7 @@ gdk_quartz_display_get_setting (GdkDisplay  *display,
                                 const gchar *name,
                                 GValue      *value)
 {
-  return _gdk_quartz_screen_get_setting (_gdk_screen, name, value);
+  return _gdk_quartz_get_setting (name, value);
 }
 
 
@@ -257,25 +216,18 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   object_class->finalize = gdk_quartz_display_finalize;
   object_class->dispose = gdk_quartz_display_dispose;
 
-  display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
+  display_class->surface_type = GDK_TYPE_QUARTZ_SURFACE;
+  display_class->cairo_context_type = GDK_TYPE_QUARTZ_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_quartz_display_get_name;
-  display_class->get_default_screen = gdk_quartz_display_get_default_screen;
   display_class->beep = gdk_quartz_display_beep;
   display_class->sync = gdk_quartz_display_sync;
   display_class->flush = gdk_quartz_display_flush;
   display_class->queue_events = _gdk_quartz_display_queue_events;
   display_class->has_pending = _gdk_quartz_display_has_pending;
   display_class->get_default_group = gdk_quartz_display_get_default_group;
-  display_class->supports_selection_notification = gdk_quartz_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_quartz_display_request_selection_notification;
-  display_class->supports_clipboard_persistence = gdk_quartz_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_quartz_display_store_clipboard;
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
-  display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
-  display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
-  display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;
   display_class->get_default_cursor_size = _gdk_quartz_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = _gdk_quartz_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_quartz_display_supports_cursor_alpha;
@@ -285,12 +237,8 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->notify_startup_complete = gdk_quartz_display_notify_startup_complete;
   display_class->event_data_copy = _gdk_quartz_display_event_data_copy;
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
-  display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
+  display_class->create_surface_impl = _gdk_quartz_display_create_surface_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
-  display_class->get_selection_owner = _gdk_quartz_display_get_selection_owner;
-  display_class->set_selection_owner = _gdk_quartz_display_set_selection_owner;
-  display_class->get_selection_property = _gdk_quartz_display_get_selection_property;
-  display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;

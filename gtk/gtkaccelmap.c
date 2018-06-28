@@ -946,8 +946,6 @@ _gtk_accel_map_remove_group (const gchar   *accel_path,
  * locking the #GtkAccelGroup containing them. For runtime accelerator
  * changes to be possible, both the accelerator path and its #GtkAccelGroup
  * have to be unlocked. 
- *
- * Since: 2.4
  **/
 void 
 gtk_accel_map_lock_path (const gchar *accel_path)
@@ -973,8 +971,6 @@ gtk_accel_map_lock_path (const gchar *accel_path)
  * 
  * Undoes the last call to gtk_accel_map_lock_path() on this @accel_path.
  * Refer to gtk_accel_map_lock_path() for information about accelerator path locking.
- *
- * Since: 2.4
  **/
 void 
 gtk_accel_map_unlock_path (const gchar *accel_path)
@@ -1006,8 +1002,6 @@ gtk_accel_map_class_init (GtkAccelMapClass *accel_map_class)
    * The path is also used as the detail for the signal,
    * so it is possible to connect to
    * changed::`accel_path`.
-   *
-   * Since: 2.4
    */
   accel_map_signals[CHANGED] = g_signal_new (I_("changed"),
 					     G_TYPE_FROM_CLASS (accel_map_class),
@@ -1035,8 +1029,6 @@ static GtkAccelMap *accel_map;
  * other accelerator map functions.
  * 
  * Returns: (transfer none): the global #GtkAccelMap object
- *
- * Since: 2.4
  **/
 GtkAccelMap *
 gtk_accel_map_get (void)

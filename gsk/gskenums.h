@@ -31,7 +31,7 @@
  * @GSK_LINEAR_GRADIENT_NODE: A node drawing a linear gradient
  * @GSK_REPEATING_LINEAR_GRADIENT_NODE: A node drawing a repeating linear gradient
  * @GSK_BORDER_NODE: A node stroking a border around an area
- * @GSK_TEXTURE_NODE: A node drawing a #GskTexture
+ * @GSK_TEXTURE_NODE: A node drawing a #GdkTexture
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
  * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a matrix transform
@@ -45,10 +45,9 @@
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  * @GSK_TEXT_NODE: A node containing a glyph string
  * @GSK_BLUR_NODE: A node that applies a blur
+ * @GSK_OFFSET_NODE: A node that renders its child after applying a 2D translation
  *
  * The type of a node determines what the node is rendering.
- *
- * Since: 3.90
  **/
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
@@ -71,7 +70,9 @@ typedef enum {
   GSK_BLEND_NODE,
   GSK_CROSS_FADE_NODE,
   GSK_TEXT_NODE,
-  GSK_BLUR_NODE
+  GSK_BLUR_NODE,
+  GSK_OFFSET_NODE,
+  GSK_DEBUG_NODE
 } GskRenderNodeType;
 
 /**
@@ -86,8 +87,6 @@ typedef enum {
  *
  * The actual implementation of each filter is deferred to the
  * rendering pipeline.
- *
- * Since: 3.90
  */
 typedef enum {
   GSK_SCALING_FILTER_LINEAR,
@@ -119,8 +118,6 @@ typedef enum {
  *
  * The implementation of each blend mode is deferred to the
  * rendering pipeline.
- *
- * Since: 3.90
  */
 typedef enum {
   GSK_BLEND_MODE_DEFAULT = 0,

@@ -35,7 +35,7 @@ point_press (PointState *point,
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_BUTTON_PRESS);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
       ev->button.time = GDK_CURRENT_TIME;
       ev->button.x = point->x;
       ev->button.y = point->y;
@@ -47,7 +47,7 @@ point_press (PointState *point,
   else
     {
       ev = gdk_event_new (GDK_TOUCH_BEGIN);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = point->x;
       ev->touch.y = point->y;
@@ -61,7 +61,7 @@ point_press (PointState *point,
 
   gtk_main_do_event (ev);
 
-  gdk_event_free (ev);
+  g_object_unref (ev);
 
   point->widget = widget;
 }
@@ -87,7 +87,7 @@ point_update (PointState *point,
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_MOTION_NOTIFY);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
       ev->button.time = GDK_CURRENT_TIME;
       ev->motion.x = x;
       ev->motion.y = y;
@@ -99,7 +99,7 @@ point_update (PointState *point,
         return;
 
       ev = gdk_event_new (GDK_TOUCH_UPDATE);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = x;
       ev->touch.y = y;
@@ -114,7 +114,7 @@ point_update (PointState *point,
 
   gtk_main_do_event (ev);
 
-  gdk_event_free (ev);
+  g_object_unref (ev);
 }
 
 static void
@@ -142,7 +142,7 @@ point_release (PointState *point,
         return;
 
       ev = gdk_event_new (GDK_BUTTON_RELEASE);
-      ev->any.window = g_object_ref (gtk_widget_get_window (point->widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_surface (point->widget));
       ev->button.time = GDK_CURRENT_TIME;
       ev->button.x = point->x;
       ev->button.y = point->y;
@@ -153,7 +153,7 @@ point_release (PointState *point,
   else
     {
       ev = gdk_event_new (GDK_TOUCH_END);
-      ev->any.window = g_object_ref (gtk_widget_get_window (point->widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_surface (point->widget));
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = point->x;
       ev->touch.y = point->y;
@@ -168,7 +168,7 @@ point_release (PointState *point,
 
   gtk_main_do_event (ev);
 
-  gdk_event_free (ev);
+  g_object_unref (ev);
 }
 
 static const gchar *
@@ -203,15 +203,20 @@ typedef struct {
 } LegacyData;
 
 static gboolean
-legacy_cb (GtkWidget *w, GdkEventButton *button, gpointer data)
+legacy_cb (GtkWidget *w, GdkEvent *button, gpointer data)
 {
-  LegacyData *ld = data;
+  if (gdk_event_get_event_type (button) == GDK_BUTTON_PRESS)
+    {
+      LegacyData *ld = data;
 
-  if (ld->str->len > 0)
-    g_string_append (ld->str, ", ");
-  g_string_append_printf (ld->str, "legacy %s", gtk_widget_get_name (w));
+      if (ld->str->len > 0)
+        g_string_append (ld->str, ", ");
+      g_string_append_printf (ld->str, "legacy %s", gtk_widget_get_name (w));
 
-  return ld->exit;
+      return ld->exit;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 typedef struct {
@@ -326,10 +331,11 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
   data->str = str;
   data->state = state;
 
-  g = gtk_gesture_multi_press_new (w);
+  g = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (g), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (g), 1);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
+  gtk_widget_add_controller (w, GTK_EVENT_CONTROLLER (g));
 
   g_object_set_data (G_OBJECT (g), "name", (gpointer)name);
 
@@ -351,8 +357,9 @@ add_mt_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GStr
   data->str = str;
   data->state = state;
 
-  g = gtk_gesture_rotate_new (w);
+  g = gtk_gesture_rotate_new ();
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
+  gtk_widget_add_controller (w, GTK_EVENT_CONTROLLER (g));
 
   g_object_set_data (G_OBJECT (g), "name", (gpointer)name);
 
@@ -372,7 +379,7 @@ add_legacy (GtkWidget *w, GString *str, gboolean exit)
   data = g_new (LegacyData, 1);
   data->str = str;
   data->exit = exit;
-  g_signal_connect (w, "button-press-event", G_CALLBACK (legacy_cb), data);
+  g_signal_connect (w, "event", G_CALLBACK (legacy_cb), data);
 }
 
 static void

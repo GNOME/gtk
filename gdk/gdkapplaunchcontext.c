@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include "gdkapplaunchcontextprivate.h"
-#include "gdkscreen.h"
+#include "gdkdisplay.h"
 #include "gdkintl.h"
 
 
@@ -52,6 +52,12 @@
  * ]|
  */
 
+/**
+ * GdkAppLaunchContext:
+ *
+ * The GdkAppLaunchContext struct contains only private fields
+ * and should not be accessed directly.
+ */
 
 static void    gdk_app_launch_context_finalize    (GObject           *object);
 static gchar * gdk_app_launch_context_get_display (GAppLaunchContext *context,
@@ -180,8 +186,6 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
  * When the workspace is not specified or @desktop is set to -1,
  * it is up to the window manager to pick one, typically it will
  * be the current workspace.
- *
- * Since: 2.14
  */
 void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
@@ -204,8 +208,6 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
  * focus to the newly launched application when the user is busy
  * typing in another window. This is also known as 'focus stealing
  * prevention'.
- *
- * Since: 2.14
  */
 void
 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
@@ -228,8 +230,6 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
  * notification.
  *
  * See also gdk_app_launch_context_set_icon_name().
- *
- * Since: 2.14
  */
 void
 gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
@@ -261,8 +261,6 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
  * If neither @icon or @icon_name is set, the icon is taken from either
  * the file that is passed to launched application or from the #GAppInfo
  * for the launched application itself.
- *
- * Since: 2.14
  */
 void
 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,

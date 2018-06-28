@@ -63,8 +63,8 @@ get_model (void)
   return GTK_TREE_MODEL (model);
 }
 
-static GtkTargetEntry entries[] = {
-  { "text/plain", 0, 0 }
+static const char *entries[] = {
+  "text/plain"
 };
 
 static GtkWidget *
@@ -73,6 +73,7 @@ get_dragsource (void)
   GtkTreeView *tv;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
+  GdkContentFormats *targets;
 
   tv = (GtkTreeView*) gtk_tree_view_new ();
   renderer = gtk_cell_renderer_text_new ();
@@ -80,18 +81,18 @@ get_dragsource (void)
   gtk_tree_view_append_column (tv, column);
 
   gtk_tree_view_set_model (tv, get_model ());
-  gtk_tree_view_enable_model_drag_source (tv, GDK_BUTTON1_MASK, entries, G_N_ELEMENTS (entries), GDK_ACTION_COPY);
+  targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
+  gtk_tree_view_enable_model_drag_source (tv, GDK_BUTTON1_MASK, targets, GDK_ACTION_COPY);
+  gdk_content_formats_unref (targets);
 
   return GTK_WIDGET (tv);
 }
 
 static void
-data_received (GtkWidget *widget,
-               GdkDragContext *context,
-               gint x, gint y,
-               GtkSelectionData *selda,
-               guint info, guint time,
-               gpointer dada)
+drag_data_received (GtkWidget *widget,
+                    GdkDrop *drop,
+                    GtkSelectionData *selda,
+                    gpointer dada)
 {
   gchar *text;
 
@@ -104,10 +105,13 @@ static GtkWidget *
 get_droptarget (void)
 {
   GtkWidget *label;
+  GdkContentFormats *targets;
 
   label = gtk_label_new ("Drop here");
-  gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, entries, G_N_ELEMENTS (entries), GDK_ACTION_COPY);
-  g_signal_connect (label, "drag-data-received", G_CALLBACK (data_received), NULL);
+  targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
+  gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
+  g_signal_connect (label, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+  gdk_content_formats_unref (targets);
 
   return label;
 }

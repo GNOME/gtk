@@ -49,17 +49,13 @@ G_BEGIN_DECLS
 #define GTK_INFO_BAR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INFO_BAR, GtkInfoBarClass))
 
 
-typedef struct _GtkInfoBarPrivate GtkInfoBarPrivate;
 typedef struct _GtkInfoBarClass GtkInfoBarClass;
 typedef struct _GtkInfoBar GtkInfoBar;
 
 
 struct _GtkInfoBar
 {
-  GtkBox parent;
-
-  /*< private > */
-  GtkInfoBarPrivate *priv;
+  GtkBox parent_instance;
 };
 
 
@@ -124,16 +120,16 @@ void           gtk_info_bar_set_message_type       (GtkInfoBar     *info_bar,
 GDK_AVAILABLE_IN_ALL
 GtkMessageType gtk_info_bar_get_message_type       (GtkInfoBar     *info_bar);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_show_close_button  (GtkInfoBar     *info_bar,
                                                     gboolean        setting);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_info_bar_get_show_close_button  (GtkInfoBar     *info_bar);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_revealed           (GtkInfoBar     *info_bar,
                                                     gboolean        revealed);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_info_bar_get_revealed           (GtkInfoBar     *info_bar);
 
 G_END_DECLS

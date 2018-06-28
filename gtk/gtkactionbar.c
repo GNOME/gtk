@@ -271,11 +271,10 @@ gtk_action_bar_snapshot (GtkWidget   *widget,
 static void
 gtk_action_bar_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip)
+                              int                  baseline)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-  gtk_widget_size_allocate (priv->revealer, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->revealer, allocation, baseline);
 }
 
 static void
@@ -402,7 +401,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
-  gtk_widget_class_set_css_name (widget_class, "actionbar");
+  gtk_widget_class_set_css_name (widget_class, I_("actionbar"));
 }
 
 static void
@@ -411,7 +410,7 @@ gtk_action_bar_init (GtkActionBar *action_bar)
   GtkWidget *widget = GTK_WIDGET (action_bar);
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
 
   priv->revealer = gtk_revealer_new ();
   gtk_widget_set_parent (priv->revealer, widget);
@@ -429,6 +428,8 @@ gtk_action_bar_init (GtkActionBar *action_bar)
   gtk_container_add (GTK_CONTAINER (priv->revealer), priv->center_box);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
@@ -439,13 +440,9 @@ gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
 
   if (type && strcmp (type, "center") == 0)
     gtk_action_bar_set_center_widget (action_bar, GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (action_bar, type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
-
-static GtkBuildableIface *parent_buildable_iface;
 
 static void
 gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface)
@@ -461,8 +458,6 @@ gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface)
  *
  * Adds @child to @action_bar, packed with reference to the
  * start of the @action_bar.
- *
- * Since: 3.12
  */
 void
 gtk_action_bar_pack_start (GtkActionBar *action_bar,
@@ -480,8 +475,6 @@ gtk_action_bar_pack_start (GtkActionBar *action_bar,
  *
  * Adds @child to @action_bar, packed with reference to the
  * end of the @action_bar.
- *
- * Since: 3.12
  */
 void
 gtk_action_bar_pack_end (GtkActionBar *action_bar,
@@ -498,8 +491,6 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
  * @center_widget: (allow-none): a widget to use for the center
  *
  * Sets the center widget for the #GtkActionBar.
- *
- * Since: 3.12
  */
 void
 gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
@@ -517,8 +508,6 @@ gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
  * Retrieves the center bar widget of the bar.
  *
  * Returns: (transfer none) (nullable): the center #GtkWidget or %NULL.
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
@@ -536,8 +525,6 @@ gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
  * Creates a new #GtkActionBar widget.
  *
  * Returns: a new #GtkActionBar
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_action_bar_new (void)
@@ -556,8 +543,6 @@ gtk_action_bar_new (void)
  *
  * Note: this does not show or hide @action_bar in the #GtkWidget:visible sense,
  * so revealing has no effect if #GtkWidget:visible is %FALSE.
- *
- * Since: 3.90
  */
 void
 gtk_action_bar_set_revealed (GtkActionBar *action_bar,
@@ -579,9 +564,9 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
  * gtk_action_bar_get_revealed:
  * @action_bar: a #GtkActionBar
  *
- * Returns: the current value of the #GtkActionBar:revealed property.
+ * Gets the value of the #GtkActionBar:revealed property.
  *
- * Since: 3.90
+ * Returns: the current value of the #GtkActionBar:revealed property.
  */
 gboolean
 gtk_action_bar_get_revealed (GtkActionBar *action_bar)

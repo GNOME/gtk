@@ -28,11 +28,13 @@
 #include "config.h"
 
 #include "gtkcellrendererspinner.h"
-#include "gtkicontheme.h"
+#include "gtkiconhelperprivate.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 
 #include <math.h>
 
@@ -66,7 +68,7 @@ struct _GtkCellRendererSpinnerPrivate
 {
   gboolean active;
   guint pulse;
-  GtkIconSize icon_size, old_icon_size;
+  GtkIconSize icon_size;
   gint size;
 };
 
@@ -110,8 +112,6 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
   /* GtkCellRendererSpinner:active:
    *
    * Whether the spinner is active (ie. shown) in the cell
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
@@ -129,8 +129,6 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    *
    * By default, the #GtkSpinner widget draws one full cycle of the animation,
    * consisting of 12 frames, in 750 milliseconds.
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
@@ -144,15 +142,13 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    * GtkCellRendererSpinner:size:
    *
    * The #GtkIconSize value that specifies the size of the rendered spinner.
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_SIZE,
                                    g_param_spec_enum ("size",
                                                       P_("Size"),
                                                       P_("The GtkIconSize value that specifies the size of the rendered spinner"),
-                                                      GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_MENU,
+                                                      GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_INHERIT,
                                                       G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 }
@@ -162,8 +158,7 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 {
   cell->priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   cell->priv->pulse = 0;
-  cell->priv->old_icon_size = GTK_ICON_SIZE_INVALID;
-  cell->priv->icon_size = GTK_ICON_SIZE_MENU;
+  cell->priv->icon_size = GTK_ICON_SIZE_INHERIT;
 }
 
 /**
@@ -173,8 +168,6 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
  * activity.
  *
  * Returns: a new #GtkCellRenderer
- *
- * Since: 2.20
  */
 GtkCellRenderer *
 gtk_cell_renderer_spinner_new (void)
@@ -187,15 +180,20 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
                                        GtkWidget              *widget)
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkStyleContext *context;
+  GtkCssNode *node;
+  GtkCssStyle *style;
 
-  if (priv->old_icon_size == priv->icon_size)
-    return;
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
 
-  if (!gtk_icon_size_lookup (priv->icon_size, &priv->size, NULL))
-    {
-      g_warning ("Invalid icon size %u", priv->icon_size);
-      priv->size = 24;
-    }
+  gtk_style_context_add_class (context, "spinner");
+  node = gtk_style_context_get_node (context);
+  gtk_icon_size_set_style_classes (node, priv->icon_size);
+  style = gtk_css_node_get_style (node);
+  priv->size = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
+
+  gtk_style_context_restore (context);
 }
 
 static void
@@ -251,7 +249,6 @@ gtk_cell_renderer_spinner_set_property (GObject      *object,
       case PROP_SIZE:
         if (priv->icon_size != g_value_get_enum (value))
           {
-            priv->old_icon_size = priv->icon_size;
             priv->icon_size = g_value_get_enum (value);
             g_object_notify (object, "size");
           }
@@ -421,8 +418,7 @@ gtk_cell_renderer_spinner_snapshot (GtkCellRenderer      *cellr,
                                   &GRAPHENE_RECT_INIT (
                                       cell_area->x, cell_area->y,
                                       cell_area->width, cell_area->height
-                                  ),
-                                  "CellSpinner");
+                                  ));
 
   gtk_paint_spinner (gtk_widget_get_style_context (widget),
                      cr,
