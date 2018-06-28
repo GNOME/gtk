@@ -56,15 +56,41 @@
 #include "gtkgesturemultipress.h"
 #include "gtkeventcontrollerscroll.h"
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
-#include <hb.h>
-#include <hb-ot.h>
-#include <hb-ft.h>
-#include <freetype/freetype.h>
-#include <freetype/ftmm.h>
-#include "language-names.h"
-#include "script-names.h"
+#if defined(HAVE_HARFBUZZ)
+# if defined GDK_WINDOWING_WIN32
+#  define _WIN32_WINNT 0x0600
+#  define WIN32_LEAN_AND_MEAN
+#  define COBJMACROS
+#  include <windows.h>
+#  include <initguid.h>
+#  include "gdk/win32/dwrite_c.h"
+#  include "gdk/win32/gdkwin32.h"
+
+#  include <pango/pangowin32.h>
+extern GType _pango_win32_font_get_type (void) G_GNUC_CONST;
+
+#  define PANGO_TYPE_WIN32_FONT            (_pango_win32_font_get_type ())
+#  define PANGO_WIN32_FONT(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_WIN32_FONT, PangoWin32Font))
+#  define PANGO_WIN32_FONT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+#  define PANGO_WIN32_IS_FONT(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_WIN32_FONT))
+#  define PANGO_WIN32_IS_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_WIN32_FONT))
+#  define PANGO_WIN32_FONT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+# endif
+# if defined(HAVE_PANGOFT)
+#  include <pango/pangofc-font.h>
+# endif
+
+# include <hb.h>
+# include <hb-ot.h>
+# include <hb-ft.h>
+# include <freetype/freetype.h>
+# include <freetype/ftmm.h>
+
+# ifdef HAVE_PANGOFT
+#  include "language-names.h"
+#  include "script-names.h"
+# endif
+
 #endif
 
 #include "open-type-layout.h"
@@ -819,6 +845,78 @@ axis_free (gpointer v)
   g_free (a);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+
+/* if we are using native Windows (PangoWin32), use DirectWrite */
+static BOOL CALLBACK
+get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
+{
+  wchar_t *langname_w = NULL;
+  wchar_t *locale_abbrev_w = NULL;
+  gchar *langname, *locale_abbrev, *locale, *p;
+  gint i;
+  hb_language_t lang;
+  GHashTable *ht_scripts_langs = (GHashTable *)param;
+
+  gint langname_size, locale_abbrev_size;
+  langname_size = GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, 0);
+  if (langname_size == 0)
+    return FALSE;
+
+  langname_w = g_new0 (wchar_t, langname_size);
+
+  if (langname_size == 0)
+    return FALSE;
+
+  GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, langname_size);
+  langname = g_utf16_to_utf8 (langname_w, -1, NULL, NULL, NULL);
+  locale = g_utf16_to_utf8 (locale_w, -1, NULL, NULL, NULL);
+  p = strchr (locale, '-');
+  lang = hb_language_from_string (locale, p ? p - locale : -1);
+  if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
+    g_hash_table_insert (ht_scripts_langs, lang, langname);
+
+  /* track 3-letter ISO639-2/3 language codes as well */
+  locale_abbrev_size = GetLocaleInfoEx (locale_w, LOCALE_SABBREVLANGNAME, locale_abbrev_w, 0);
+  if (locale_abbrev_size > 0)
+    {
+      locale_abbrev_w = g_new0 (wchar_t, locale_abbrev_size);
+      GetLocaleInfoEx (locale_w, LOCALE_SABBREVLANGNAME, locale_abbrev_w, locale_abbrev_size);
+
+	  locale_abbrev = g_utf16_to_utf8 (locale_abbrev_w, -1, NULL, NULL, NULL);
+      lang = hb_language_from_string (locale_abbrev, -1);
+      if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
+        g_hash_table_insert (ht_scripts_langs, lang, langname);
+
+      g_free (locale_abbrev);
+      g_free (locale_abbrev_w);
+    }
+
+  g_free (locale);
+  g_free (langname_w);
+
+  return TRUE;
+}
+
+_GDK_EXTERN GHashTable *
+gtk_font_chooser_widget_get_win32_locales (void)
+{
+  static GHashTable *ht_langtag_locales = NULL;
+  static volatile gsize inited = 0;
+
+  if (g_once_init_enter (&inited))
+    {
+      gchar *locales, *script;
+      ht_langtag_locales = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
+      EnumSystemLocalesEx (&get_win32_all_locales_scripts, LOCALE_ALL, (LPARAM)ht_langtag_locales, NULL);
+      g_once_init_leave (&inited, 1);
+    }
+
+  return ht_langtag_locales;
+}
+
+#endif /* GDK_WINDOWING_WIN32 */
+
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
@@ -869,7 +967,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
   gtk_font_chooser_widget_populate_features (fontchooser);
 #endif
 
@@ -1458,7 +1556,7 @@ gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
     }
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
 
 /* OpenType variations */
 
@@ -1609,9 +1707,11 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
+ 
   FT_Face ft_face;
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
+  FT_Byte *font_file_data = NULL;
   gboolean has_axis = FALSE;
 
   if (priv->updating_variations)
@@ -1625,7 +1725,16 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (PANGO_WIN32_IS_FONT (pango_font))
+    ft_face = gdk_win32_get_ft_face_from_pango_font (gtk_widget_get_display (GTK_WIDGET (fontchooser)),
+                                                     pango_font);
+#endif
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -1657,7 +1766,11 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   return has_axis;
@@ -2125,6 +2238,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
   FT_Face ft_face;
+  FT_Byte *font_file_data = NULL;
+
   hb_font_t *hb_font;
   hb_tag_t script_tag;
   hb_tag_t lang_tag;
@@ -2146,7 +2261,17 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (PANGO_WIN32_IS_FONT (pango_font))
+    ft_face = gdk_win32_get_ft_face_from_pango_font (gtk_widget_get_display (GTK_WIDGET (fontchooser)),
+                                                     pango_font);
+#endif
+
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   if (hb_font)
@@ -2206,7 +2331,11 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_font_destroy (hb_font);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   return has_feature;
@@ -2306,7 +2435,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
       gtk_font_chooser_widget_update_marks (fontchooser);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
       if (gtk_font_chooser_widget_update_font_features (fontchooser))
         has_tweak = TRUE;
       if (gtk_font_chooser_widget_update_font_variations (fontchooser))
