@@ -2106,10 +2106,10 @@ gdk_wayland_window_announce_decoration_mode (GdkWindow *window)
     {
       if (impl->using_csd)
         org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
+                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MODE_CLIENT);
       else
         org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
+                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MODE_SERVER);
     }
 }
 
