@@ -11,20 +11,66 @@
  * axes are also offered for customization.
  */
 
+#include "config.h"
+
 #include <gtk/gtk.h>
-#include <pango/pangofc-font.h>
+
+#ifdef HAVE_PANGOFT
+# include <pango/pangofc-font.h>
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <pango/pangowin32.h>
+
+extern GType _pango_win32_font_get_type (void) G_GNUC_CONST;
+
+#define PANGO_TYPE_WIN32_FONT            (_pango_win32_font_get_type ())
+#define PANGO_WIN32_FONT(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_WIN32_FONT, PangoWin32Font))
+#define PANGO_WIN32_FONT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+#define PANGO_WIN32_IS_FONT(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_WIN32_FONT))
+#define PANGO_WIN32_IS_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_WIN32_FONT))
+#define PANGO_WIN32_FONT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_WIN32_FONT, PangoWin32FontClass))
+#endif
+
 #include <hb.h>
 #include <hb-ot.h>
-#include <hb-ft.h>
-#include <freetype/ftmm.h>
-#include <freetype/ftsnames.h>
-#include <freetype/ttnameid.h>
+
+#ifdef HAVE_PANGOFT
+# include <hb-ft.h>
+# include <freetype/ftmm.h>
+# include <freetype/ftsnames.h>
+# include <freetype/ttnameid.h>
+#endif
+
 #include <glib/gi18n.h>
 
 #include "open-type-layout.h"
 #include "fontplane.h"
 #include "script-names.h"
 #include "language-names.h"
+
+#ifdef GDK_WINDOWING_WIN32
+
+#define COBJMACROS
+
+#include <initguid.h>
+#include "dwrite_c.h"
+
+static IDWriteFactory *
+get_dwrite_factory (void)
+{
+  HRESULT hr = S_OK;
+  IDWriteFactory *dwrite_factory = NULL;
+
+  hr = DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED,
+                            &IID_IDWriteFactory,
+                            (IUnknown **) &dwrite_factory);
+
+  return SUCCEEDED (hr) ? dwrite_factory : NULL;
+}
+#endif
 
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
@@ -501,51 +547,94 @@ update_script_combo (void)
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
   pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
-  hb_font = hb_ft_font_create (ft_face, NULL);
 
-  tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
-
-  pair = g_new (TagPair, 1);
-  pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
-  pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
-  g_hash_table_add (tags, pair);
-
-  if (hb_font)
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
     {
-      hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
-      hb_face_t *hb_face;
+      ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+      hb_font = hb_ft_font_create (ft_face, NULL);
 
-      hb_face = hb_font_get_face (hb_font);
+      tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
 
-      for (i= 0; i < 2; i++)
+      pair = g_new (TagPair, 1);
+      pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
+      pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
+      g_hash_table_add (tags, pair);
+
+      if (hb_font)
         {
-          hb_tag_t scripts[80];
-          unsigned int script_count = G_N_ELEMENTS (scripts);
+          hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
+          hb_face_t *hb_face;
 
-          hb_ot_layout_table_get_script_tags (hb_face, tables[i], 0, &script_count, scripts);
-          for (j = 0; j < script_count; j++)
+          hb_face = hb_font_get_face (hb_font);
+
+          for (i= 0; i < 2; i++)
             {
-              hb_tag_t languages[80];
-              unsigned int language_count = G_N_ELEMENTS (languages);
+              hb_tag_t scripts[80];
+              unsigned int script_count = G_N_ELEMENTS (scripts);
 
-              hb_ot_layout_script_get_language_tags (hb_face, tables[i], j, 0, &language_count, languages);
-              for (k = 0; k < language_count; k++)
+              hb_ot_layout_table_get_script_tags (hb_face, tables[i], 0, &script_count, scripts);
+              for (j = 0; j < script_count; j++)
                 {
-                  pair = g_new (TagPair, 1);
-                  pair->script_tag = scripts[j];
-                  pair->lang_tag = languages[k];
-                  pair->script_index = j;
-                  pair->lang_index = k;
-                  g_hash_table_add (tags, pair);
+                  hb_tag_t languages[80];
+                  unsigned int language_count = G_N_ELEMENTS (languages);
+
+                  hb_ot_layout_script_get_language_tags (hb_face, tables[i], j, 0, &language_count, languages);
+                  for (k = 0; k < language_count; k++)
+                    {
+                      pair = g_new (TagPair, 1);
+                      pair->script_tag = scripts[j];
+                      pair->lang_tag = languages[k];
+                      pair->script_index = j;
+                      pair->lang_index = k;
+                      g_hash_table_add (tags, pair);
+                    }
                 }
             }
+
+          hb_face_destroy (hb_face);
         }
 
-      hb_face_destroy (hb_face);
+      pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
     }
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  else if (PANGO_WIN32_IS_FONT (pango_font))
+    {
+      LOGFONTW *logfont = pango_win32_font_logfontw (pango_font);
+	  HRESULT hr = S_OK;
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+      IDWriteFactory *dwrite_factory = NULL;
+	  IDWriteGdiInterop *gdi_interop = NULL;
+	  IDWriteFont *dwrite_font = NULL;
+
+      hr = DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED,
+                                &IID_IDWriteFactory,
+                                (IUnknown **) &dwrite_factory);
+	  if (!SUCCEEDED (hr))
+	    goto dwrite_init_fail;
+
+	  hr = IDWriteFactory_GetGdiInterop (dwrite_factory, &gdi_interop);
+
+	  if (!SUCCEEDED (hr))
+	    goto dwrite_init_fail;
+
+      hr = IDWriteGdiInterop_CreateFontFromLOGFONT (gdi_interop, logfont, &dwrite_font);
+
+	  if (!SUCCEEDED (hr))
+	    goto dwrite_init_fail;
+
+dwrite_init_fail:
+      if (!SUCCEEDED (hr))
+	    {
+	      g_warning ("DirectWrite initialization failed!");
+          return;
+        }
+      else
+        g_print ("moving on 0x%X, lang: %s\n", DWRITE_FONT_FEATURE_TAG_GLYPH_COMPOSITION_DECOMPOSITION, lang);
+    }
+#endif
+
   g_object_unref (pango_font);
 
   g_hash_table_iter_init (&iter, tags);
@@ -628,6 +717,7 @@ update_features (void)
                       -1);
 
   pango_font = get_pango_font ();
+  if (PANGO_IS_FC_FONT (pango_font)){
   ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
   hb_font = hb_ft_font_create (ft_face, NULL);
 
@@ -715,7 +805,15 @@ update_features (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));}
+
+#ifdef GDK_WINDOWING_WIN32
+  else if (PANGO_WIN32_IS_FONT (pango_font))
+    {
+      LOGFONTW *logfont = pango_win32_font_logfontw (pango_font);
+	  g_print ("logfontw 2!\n");
+    }
+#endif
   g_object_unref (pango_font);
 }
 
@@ -1534,6 +1632,7 @@ update_font_variations (void)
   g_hash_table_remove_all (instances);
 
   pango_font = get_pango_font ();
+  if (PANGO_IS_FC_FONT (pango_font)){
   ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
@@ -1588,7 +1687,14 @@ update_font_variations (void)
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));}
+#ifdef GDK_WINDOWING_WIN32
+  else if (PANGO_WIN32_IS_FONT (pango_font))
+    {
+      LOGFONTW *logfont = pango_win32_font_logfontw (pango_font);
+	  g_print ("logfontw 3!\n");
+    }
+#endif
   g_object_unref (pango_font);
 }
 

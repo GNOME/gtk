@@ -880,6 +880,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 # endif
 # ifdef GDK_WINDOWING_WIN32
   dwrite_factory = get_dwrite_factory ();
+  g_print ("%s!\n", dwrite_factory  != NULL ? "yes" : "boo");
 # endif
 #endif
 
@@ -1680,6 +1681,8 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
+
+  if (PANGO_IS_FC_FONT (pango_font)) {
   ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
@@ -1712,7 +1715,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));}
 #endif
 
   g_object_unref (pango_font);
@@ -2212,6 +2215,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
                                         priv->font_desc);
 
 #ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font)) {
   ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
   hb_font = hb_ft_font_create (ft_face, NULL);
 
@@ -2272,7 +2276,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_font_destroy (hb_font);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));}
 #endif
 
   g_object_unref (pango_font);
