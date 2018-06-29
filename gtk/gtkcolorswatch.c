@@ -157,7 +157,7 @@ swatch_snapshot (GtkWidget   *widget,
 
 
 static void
-drag_set_color_icon (GdkDragContext *context,
+drag_set_color_icon (GdkDrag        *drag,
                      const GdkRGBA  *color)
 {
   GtkSnapshot *snapshot;
@@ -169,24 +169,24 @@ drag_set_color_icon (GdkDragContext *context,
                              &GRAPHENE_RECT_INIT(0, 0, 48, 32));
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
-  gtk_drag_set_icon_paintable (context, paintable, 4, 4);
+  gtk_drag_set_icon_paintable (drag, paintable, 4, 4);
   g_object_unref (paintable);
 }
 
 static void
 swatch_drag_begin (GtkWidget      *widget,
-                   GdkDragContext *context)
+                   GdkDrag        *drag)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   GdkRGBA color;
 
   gtk_color_swatch_get_rgba (swatch, &color);
-  drag_set_color_icon (context, &color);
+  drag_set_color_icon (drag, &color);
 }
 
 static void
 swatch_drag_data_get (GtkWidget        *widget,
-                      GdkDragContext   *context,
+                      GdkDrag          *drag,
                       GtkSelectionData *selection_data)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);

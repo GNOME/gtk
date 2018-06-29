@@ -476,7 +476,7 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 					     guint              last_key);
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
-					     GdkDragContext    *context,
+					     GdkDrag           *drag,
 					     GtkSelectionData  *selection_data);
 
 static void     gtk_label_buildable_interface_init     (GtkBuildableIface *iface);
@@ -4576,7 +4576,7 @@ connect_mnemonics_visible_notify (GtkLabel *label)
 
 static void
 drag_begin_cb (GtkWidget      *widget,
-               GdkDragContext *context,
+               GdkDrag        *drag,
                gpointer        data)
 {
   GtkLabel *label = GTK_LABEL (widget);
@@ -4612,12 +4612,12 @@ drag_begin_cb (GtkWidget      *widget,
 
   if (paintable)
     {
-      gtk_drag_set_icon_paintable (context, paintable, 0, 0);
+      gtk_drag_set_icon_paintable (drag, paintable, 0, 0);
       g_object_unref (paintable);
     }
   else
     {
-      gtk_drag_set_icon_default (context);
+      gtk_drag_set_icon_default (drag);
     }
 }
 
@@ -5169,7 +5169,7 @@ gtk_label_set_selection_text (GtkLabel         *label,
 
 static void
 gtk_label_drag_data_get (GtkWidget        *widget,
-			 GdkDragContext   *context,
+			 GdkDrag          *drag,
 			 GtkSelectionData *selection_data)
 {
   gtk_label_set_selection_text (GTK_LABEL (widget), selection_data);

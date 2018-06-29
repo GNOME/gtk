@@ -95,7 +95,7 @@ void            gdk_wayland_surface_attach_image           (GdkSurface          
                                                             const cairo_region_t *damage);
 
 void            _gdk_wayland_surface_register_dnd          (GdkSurface *surface);
-GdkDragContext *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
+GdkDrag        *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
                                                             GdkDevice *device,
                                                             GdkContentProvider *content,
                                                             GdkDragAction actions,
@@ -105,7 +105,7 @@ void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);
 GdkDrop *        gdk_wayland_drop_new                      (GdkDevice             *device,
-                                                            GdkDragContext        *drag,
+                                                            GdkDrag               *drag,
                                                             GdkContentFormats     *formats,
                                                             GdkSurface            *surface,
                                                             struct wl_data_offer  *offer,
@@ -115,13 +115,13 @@ void             gdk_wayland_drop_set_source_actions       (GdkDrop             
 void             gdk_wayland_drop_set_action               (GdkDrop               *drop,
                                                             uint32_t               action);
 
-void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
-                                                  GdkSurface      *surface);
+void _gdk_wayland_drag_set_source_surface (GdkDrag    *drag,
+                                           GdkSurface *surface);
 
-void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
-                                              GdkSurface     *surface,
-                                              GdkSurface     *real_parent,
-                                              GdkSurfaceAttr *attributes);
+void _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
+                                               GdkSurface     *surface,
+                                               GdkSurface     *real_parent,
+                                               GdkSurfaceAttr *attributes);
 
 gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                              GdkAtom        encoding,
@@ -147,7 +147,7 @@ struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_devic
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                        struct wl_data_source *source);
 
-GdkDragContext * gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
+GdkDrag* gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
 
 void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,
                                           GdkEventSequence *sequence);
@@ -193,7 +193,7 @@ struct gtk_surface1 * gdk_wayland_surface_get_gtk_surface (GdkSurface *surface);
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
 void gdk_wayland_seat_set_drag (GdkSeat        *seat,
-                                GdkDragContext *drag);
+                                GdkDrag *drag);
 
 struct wl_output *gdk_wayland_surface_get_wl_output (GdkSurface *surface);
 

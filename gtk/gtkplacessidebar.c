@@ -203,7 +203,7 @@ struct _GtkPlacesSidebarClass {
                                       const gchar        *primary,
                                       const gchar        *secondary);
   GdkDragAction (* drag_action_requested)  (GtkPlacesSidebar   *sidebar,
-                                      GdkDragContext     *context,
+                                      GdkDrag            *drag,
                                       GFile              *dest_file,
                                       GList              *source_file_list);
   GdkDragAction (* drag_action_ask)  (GtkPlacesSidebar   *sidebar,
@@ -1722,7 +1722,7 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 
 static void
 drag_begin_callback (GtkWidget      *widget,
-                     GdkDragContext *context,
+                     GdkDrag        *drag,
                      gpointer        user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
@@ -1738,7 +1738,7 @@ drag_begin_callback (GtkWidget      *widget,
 
   gtk_widget_set_opacity (drag_widget, 0.8);
 
-  gtk_drag_set_icon_widget (context,
+  gtk_drag_set_icon_widget (drag,
                             drag_widget,
                             sidebar->drag_row_x,
                             sidebar->drag_row_y);
@@ -1951,7 +1951,7 @@ drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
 
 static void
 drag_data_get_callback (GtkWidget        *widget,
-                        GdkDragContext   *context,
+                        GdkDrag          *drag,
                         GtkSelectionData *data,
                         gpointer          user_data)
 {
@@ -2085,7 +2085,7 @@ out:
 
 static void
 drag_end_callback (GtkWidget      *widget,
-                   GdkDragContext *context,
+                   GdkDrag        *drag,
                    gpointer        user_data)
 {
   stop_drop_feedback (GTK_PLACES_SIDEBAR (user_data));

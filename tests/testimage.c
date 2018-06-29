@@ -20,19 +20,19 @@
 
 static void
 drag_begin (GtkWidget      *widget,
-	    GdkDragContext *context,
+	    GdkDrag        *drag,
 	    gpointer        data)
 {
   GtkWidget *image = GTK_WIDGET (data);
   GdkPaintable *paintable;
 
   paintable = gtk_image_get_paintable (GTK_IMAGE (image));
-  gtk_drag_set_icon_paintable (context, paintable, -2, -2);
+  gtk_drag_set_icon_paintable (drag, paintable, -2, -2);
 }
 
 void  
 drag_data_get  (GtkWidget        *widget,
-		GdkDragContext   *context,
+		GdkDrag          *drag,
 		GtkSelectionData *selection_data,
 		gpointer          data)
 {
@@ -46,7 +46,7 @@ drag_data_get  (GtkWidget        *widget,
 
 static void
 drag_data_received (GtkWidget        *widget,
-		    GdkDragContext   *context,
+		    GdkDrag          *drag,
 		    GtkSelectionData *selection_data,
 		    guint             info,
 		    guint32           time,

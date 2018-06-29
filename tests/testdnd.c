@@ -314,7 +314,7 @@ target_drag_motion	   (GtkWidget	       *widget,
 			    gint                y)
 {
   GtkWidget *source_widget;
-  GdkDragContext *drag;
+  GdkDrag *drag;
   char *s;
 
   if (!have_drag)
@@ -418,7 +418,7 @@ label_drag_data_received  (GtkWidget          *widget,
 
 void  
 source_drag_data_get  (GtkWidget          *widget,
-		       GdkDragContext     *context,
+		       GdkDrag            *drag,
 		       GtkSelectionData   *selection_data,
 		       gpointer            data)
 {
@@ -565,7 +565,7 @@ popsite_leave	   (GtkWidget	       *widget,
 
 void  
 source_drag_data_delete  (GtkWidget          *widget,
-			  GdkDragContext     *context,
+			  GdkDrag            *drag,
 			  gpointer            data)
 {
   g_print ("Delete the data!\n");

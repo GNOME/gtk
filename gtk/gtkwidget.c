@@ -1743,7 +1743,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-begin:
    * @widget: the object which received the signal
-   * @context: the drag context
+   * @context: the drag context 
    *
    * The ::drag-begin signal is emitted on the drag source when a drag is
    * started. A typical reason to connect to this signal is to set up a
@@ -1761,7 +1761,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DRAG_CONTEXT);
+		  GDK_TYPE_DRAG);
 
   /**
    * GtkWidget::drag-end:
@@ -1780,7 +1780,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DRAG_CONTEXT);
+		  GDK_TYPE_DRAG);
 
   /**
    * GtkWidget::drag-data-delete:
@@ -1800,7 +1800,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DRAG_CONTEXT);
+		  GDK_TYPE_DRAG);
 
   /**
    * GtkWidget::drag-failed:
@@ -1824,7 +1824,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__OBJECT_ENUM,
 		  G_TYPE_BOOLEAN, 2,
-		  GDK_TYPE_DRAG_CONTEXT,
+		  GDK_TYPE_DRAG,
 		  GTK_TYPE_DRAG_RESULT);
 
   /**
@@ -1982,7 +1982,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT_BOXED,
 		  G_TYPE_NONE, 2,
-		  GDK_TYPE_DRAG_CONTEXT,
+		  GDK_TYPE_DRAG,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**

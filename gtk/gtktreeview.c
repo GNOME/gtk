@@ -618,14 +618,14 @@ static void     gtk_tree_view_forall               (GtkContainer     *container,
 
 /* Source side drag signals */
 static void gtk_tree_view_drag_begin       (GtkWidget        *widget,
-                                            GdkDragContext   *context);
+                                            GdkDrag          *drag);
 static void gtk_tree_view_drag_end         (GtkWidget        *widget,
-                                            GdkDragContext   *context);
+                                            GdkDrag          *drag);
 static void gtk_tree_view_drag_data_get    (GtkWidget        *widget,
-                                            GdkDragContext   *context,
+                                            GdkDrag          *drag,
                                             GtkSelectionData *selection_data);
 static void gtk_tree_view_drag_data_delete (GtkWidget        *widget,
-                                            GdkDragContext   *context);
+                                            GdkDrag          *drag);
 
 /* Target side drag signals */
 static void     gtk_tree_view_drag_leave         (GtkWidget        *widget,
@@ -6817,21 +6817,21 @@ _gtk_tree_view_column_autosize (GtkTreeView *tree_view,
 /* Drag-and-drop */
 
 static void
-set_source_row (GdkDragContext *context,
+set_source_row (GdkDrag        *drag,
                 GtkTreeModel   *model,
                 GtkTreePath    *source_row)
 {
-  g_object_set_data_full (G_OBJECT (context),
+  g_object_set_data_full (G_OBJECT (drag),
                           I_("gtk-tree-view-source-row"),
                           source_row ? gtk_tree_row_reference_new (model, source_row) : NULL,
                           (GDestroyNotify) (source_row ? gtk_tree_row_reference_free : NULL));
 }
 
 static GtkTreePath*
-get_source_row (GdkDragContext *context)
+get_source_row (GdkDrag *drag)
 {
   GtkTreeRowReference *ref =
-    g_object_get_data (G_OBJECT (context), "gtk-tree-view-source-row");
+    g_object_get_data (G_OBJECT (drag), "gtk-tree-view-source-row");
 
   if (ref)
     return gtk_tree_row_reference_get_path (ref);
@@ -7304,7 +7304,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
   gdouble start_x, start_y, offset_x, offset_y;
-  GdkDragContext *context;
+  GdkDrag *drag;
   TreeViewDragInfo *di;
   GtkTreePath *path = NULL;
   gint button;
@@ -7361,13 +7361,13 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
   gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->drag_gesture),
                          GTK_EVENT_SEQUENCE_CLAIMED);
 
-  context = gtk_drag_begin_with_coordinates (widget,
-                                             gtk_gesture_get_device (GTK_GESTURE (tree_view->priv->drag_gesture)),
-                                             gtk_drag_source_get_target_list (widget),
-                                             di->source_actions,
-                                             start_x, start_y);
+  drag = gtk_drag_begin_with_coordinates (widget,
+                                          gtk_gesture_get_device (GTK_GESTURE (tree_view->priv->drag_gesture)),
+                                          gtk_drag_source_get_target_list (widget),
+                                          di->source_actions,
+                                          start_x, start_y);
 
-  set_source_row (context, model, path);
+  set_source_row (drag, model, path);
 
  out:
   if (path)
@@ -7379,7 +7379,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 
 static void
 gtk_tree_view_drag_begin (GtkWidget      *widget,
-                          GdkDragContext *context)
+                          GdkDrag        *drag)
 {
   GtkTreeView *tree_view;
   GtkTreePath *path = NULL;
@@ -7412,10 +7412,9 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
   if (!path)
     return;
 
-  row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
-                                                path);
+  row_pix = gtk_tree_view_create_row_drag_icon (tree_view, path);
 
-  gtk_drag_set_icon_paintable (context, row_pix, tree_view->priv->press_start_x + 1, 1);
+  gtk_drag_set_icon_paintable (drag, row_pix, tree_view->priv->press_start_x + 1, 1);
 
   g_object_unref (row_pix);
   gtk_tree_path_free (path);
@@ -7423,7 +7422,7 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
 
 static void
 gtk_tree_view_drag_end (GtkWidget      *widget,
-                        GdkDragContext *context)
+                        GdkDrag        *drag)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
@@ -7434,7 +7433,7 @@ gtk_tree_view_drag_end (GtkWidget      *widget,
 /* Default signal implementations for the drag signals */
 static void
 gtk_tree_view_drag_data_get (GtkWidget        *widget,
-                             GdkDragContext   *context,
+                             GdkDrag          *drag,
                              GtkSelectionData *selection_data)
 {
   GtkTreeView *tree_view;
@@ -7454,7 +7453,7 @@ gtk_tree_view_drag_data_get (GtkWidget        *widget,
   if (di == NULL)
     return;
 
-  source_row = get_source_row (context);
+  source_row = get_source_row (drag);
 
   if (source_row == NULL)
     return;
@@ -7485,7 +7484,7 @@ gtk_tree_view_drag_data_get (GtkWidget        *widget,
 
 static void
 gtk_tree_view_drag_data_delete (GtkWidget      *widget,
-                                GdkDragContext *context)
+                                GdkDrag        *drag)
 {
   TreeViewDragInfo *di;
   GtkTreeModel *model;
@@ -7503,17 +7502,16 @@ gtk_tree_view_drag_data_delete (GtkWidget      *widget,
   if (di == NULL)
     return;
 
-  source_row = get_source_row (context);
+  source_row = get_source_row (drag);
 
   if (source_row == NULL)
     return;
 
-  gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (model),
-                                         source_row);
+  gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (model), source_row);
 
   gtk_tree_path_free (source_row);
 
-  set_source_row (context, NULL, NULL);
+  set_source_row (drag, NULL, NULL);
 }
 
 static void
@@ -7670,7 +7668,7 @@ static GdkDragAction
 gtk_tree_view_get_action (GtkWidget *treeview,
                           GdkDrop   *drop)
 {
-  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
   GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
   GdkDragAction actions;
 

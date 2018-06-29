@@ -35,9 +35,9 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_DRAG_CONTEXT              (gdk_drag_context_get_type ())
-#define GDK_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG_CONTEXT, GdkDragContext))
-#define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
+#define GDK_TYPE_DRAG              (gdk_drag_get_type ())
+#define GDK_DRAG(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG, GdkDrag))
+#define GDK_IS_DRAG(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG))
 
 /**
  * GdkDragCancelReason:
@@ -45,7 +45,7 @@ G_BEGIN_DECLS
  * @GDK_DRAG_CANCEL_USER_CANCELLED: Drag cancelled by the user
  * @GDK_DRAG_CANCEL_ERROR: Unspecified error.
  *
- * Used in #GdkDragContext to the reason of a cancelled DND operation.
+ * Used in #GdkDrag to the reason of a cancelled DND operation.
  */
 typedef enum {
   GDK_DRAG_CANCEL_NO_TARGET,
@@ -54,46 +54,44 @@ typedef enum {
 } GdkDragCancelReason;
 
 GDK_AVAILABLE_IN_ALL
-GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
+GType            gdk_drag_get_type             (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkDisplay *     gdk_drag_context_get_display          (GdkDragContext *context);
+GdkDisplay *     gdk_drag_get_display          (GdkDrag *drag);
 GDK_AVAILABLE_IN_ALL
-GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
+GdkDevice *      gdk_drag_get_device           (GdkDrag *drag);
 
 GDK_AVAILABLE_IN_ALL
-GdkContentFormats *gdk_drag_context_get_formats        (GdkDragContext *context);
+GdkContentFormats *gdk_drag_get_formats        (GdkDrag *drag);
 GDK_AVAILABLE_IN_ALL
-GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
+GdkDragAction    gdk_drag_get_actions          (GdkDrag *drag);
 GDK_AVAILABLE_IN_ALL
-GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
+GdkDragAction    gdk_drag_get_suggested_action (GdkDrag *drag);
 GDK_AVAILABLE_IN_ALL
-GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
+GdkDragAction    gdk_drag_get_selected_action  (GdkDrag *drag);
 
 GDK_AVAILABLE_IN_ALL
-gboolean         gdk_drag_action_is_unique            (GdkDragAction   action);
-
-/* Source side */
+gboolean         gdk_drag_action_is_unique     (GdkDragAction   action);
 
 GDK_AVAILABLE_IN_ALL
-GdkDragContext *        gdk_drag_begin                  (GdkSurface              *surface,
-                                                         GdkDevice              *device,
-                                                         GdkContentProvider     *content,
-                                                         GdkDragAction           actions,
-                                                         gint                    dx,
-                                                         gint                    dy);
+GdkDrag *        gdk_drag_begin                (GdkSurface         *surface,
+                                                GdkDevice          *device,
+                                                GdkContentProvider *content,
+                                                GdkDragAction       actions,
+                                                gint                dx,
+                                                gint                dy);
 
 GDK_AVAILABLE_IN_ALL
-void            gdk_drag_drop_done   (GdkDragContext *context,
-                                      gboolean        success);
+void            gdk_drag_drop_done   (GdkDrag  *drag,
+                                      gboolean  success);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface      *gdk_drag_context_get_drag_surface (GdkDragContext *context);
+GdkSurface      *gdk_drag_get_drag_surface (GdkDrag *drag);
 
 GDK_AVAILABLE_IN_ALL
-void            gdk_drag_context_set_hotspot (GdkDragContext *context,
-                                              gint            hot_x,
-                                              gint            hot_y);
+void            gdk_drag_set_hotspot (GdkDrag *drag,
+                                      gint     hot_x,
+                                      gint     hot_y);
 
 G_END_DECLS
 

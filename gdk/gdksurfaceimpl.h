@@ -193,7 +193,7 @@ struct _GdkSurfaceImplClass
                                          gdouble    opacity);
   void         (* destroy_notify)       (GdkSurface *surface);
   void         (* register_dnd)         (GdkSurface *surface);
-  GdkDragContext * (*drag_begin)        (GdkSurface        *surface,
+  GdkDrag * (*drag_begin)               (GdkSurface        *surface,
                                          GdkDevice        *device,
                                          GdkContentProvider*content,
                                          GdkDragAction     actions,

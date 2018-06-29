@@ -196,16 +196,16 @@ Atom _gdk_x11_get_xatom_for_display_printf         (GdkDisplay    *display,
                                                     const gchar   *format,
                                                     ...) G_GNUC_PRINTF (2, 3);
 
-GdkDragContext *gdk_x11_drag_context_find                       (GdkDisplay             *display,
-                                                                 Window                  source_xid,
-                                                                 Window                  dest_xid);
-void            gdk_x11_drag_context_handle_status              (GdkDisplay             *display,
-                                                                 const XEvent           *xevent);
-void            gdk_x11_drag_context_handle_finished            (GdkDisplay             *display,
-                                                                 const XEvent           *xevent);
-void            gdk_x11_drop_read_actions                       (GdkDrop                *drop);
-gboolean        gdk_x11_drop_filter                             (GdkSurface             *surface,
-                                                                 const XEvent           *xevent);
+GdkDrag        *gdk_x11_drag_find                       (GdkDisplay             *display,
+                                                         Window                  source_xid,
+                                                         Window                  dest_xid);
+void            gdk_x11_drag_handle_status              (GdkDisplay             *display,
+                                                         const XEvent           *xevent);
+void            gdk_x11_drag_handle_finished            (GdkDisplay             *display,
+                                                         const XEvent           *xevent);
+void            gdk_x11_drop_read_actions               (GdkDrop                *drop);
+gboolean        gdk_x11_drop_filter                     (GdkSurface             *surface,
+                                                         const XEvent           *xevent);
 
 typedef struct _GdkSurfaceCache GdkSurfaceCache;
 
@@ -225,7 +225,7 @@ void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 void _gdk_x11_surface_register_dnd (GdkSurface *window);
 
-GdkDragContext * _gdk_x11_surface_drag_begin (GdkSurface          *window,
+GdkDrag        * _gdk_x11_surface_drag_begin (GdkSurface          *window,
                                               GdkDevice          *device,
                                               GdkContentProvider *content,
                                               GdkDragAction       actions,

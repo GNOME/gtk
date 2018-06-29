@@ -417,14 +417,14 @@ static GtkTextBuffer* gtk_text_view_create_buffer (GtkTextView   *text_view);
 
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
-                                            GdkDragContext   *context);
+                                            GdkDrag          *drag);
 static void gtk_text_view_drag_end         (GtkWidget        *widget,
-                                            GdkDragContext   *context);
+                                            GdkDrag          *drag);
 static void gtk_text_view_drag_data_get    (GtkWidget        *widget,
-                                            GdkDragContext   *context,
+                                            GdkDrag          *drag,
                                             GtkSelectionData *selection_data);
 static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
-                                            GdkDragContext   *context);
+                                            GdkDrag          *drag);
 
 /* Target side drag signals */
 static void     gtk_text_view_drag_leave         (GtkWidget        *widget,
@@ -7585,7 +7585,7 @@ gtk_text_view_im_context_filter_keypress (GtkTextView  *text_view,
 
 static void
 drag_begin_cb (GtkWidget      *widget,
-               GdkDragContext *context,
+               GdkDrag        *drag,
                gpointer        data)
 {
   GtkTextView     *text_view = GTK_TEXT_VIEW (widget);
@@ -7601,12 +7601,12 @@ drag_begin_cb (GtkWidget      *widget,
 
   if (paintable)
     {
-      gtk_drag_set_icon_paintable (context, paintable, 0, 0);
+      gtk_drag_set_icon_paintable (drag, paintable, 0, 0);
       g_object_unref (paintable);
     }
   else
     {
-      gtk_drag_set_icon_default (context);
+      gtk_drag_set_icon_default (drag);
     }
 }
 
@@ -7632,14 +7632,14 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
 static void
 gtk_text_view_drag_begin (GtkWidget        *widget,
-                          GdkDragContext   *context)
+                          GdkDrag          *drag)
 {
   /* do nothing */
 }
 
 static void
 gtk_text_view_drag_end (GtkWidget        *widget,
-                        GdkDragContext   *context)
+                        GdkDrag          *drag)
 {
   GtkTextView *text_view;
 
@@ -7649,7 +7649,7 @@ gtk_text_view_drag_end (GtkWidget        *widget,
 
 static void
 gtk_text_view_drag_data_get (GtkWidget        *widget,
-                             GdkDragContext   *context,
+                             GdkDrag          *drag,
                              GtkSelectionData *selection_data)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
@@ -7685,7 +7685,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
 
 static void
 gtk_text_view_drag_data_delete (GtkWidget        *widget,
-                                GdkDragContext   *context)
+                                GdkDrag          *drag)
 {
   gtk_text_buffer_delete_selection (GTK_TEXT_VIEW (widget)->priv->buffer,
                                     TRUE, GTK_TEXT_VIEW (widget)->priv->editable);
@@ -7861,7 +7861,7 @@ static GdkDragAction
 gtk_text_view_get_action (GtkWidget *textview,
                           GdkDrop   *drop)
 {
-  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
   GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
   GdkDragAction actions;
 

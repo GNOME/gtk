@@ -5140,10 +5140,10 @@ gdk_surface_register_dnd (GdkSurface *surface)
  *
  * This function is called by the drag source.
  *
- * Returns: (transfer full) (nullable): a newly created #GdkDragContext or
+ * Returns: (transfer full) (nullable): a newly created #GdkDrag or
  *     %NULL on error.
  */
-GdkDragContext *
+GdkDrag *
 gdk_drag_begin (GdkSurface          *surface,
                 GdkDevice          *device,
                 GdkContentProvider *content,
