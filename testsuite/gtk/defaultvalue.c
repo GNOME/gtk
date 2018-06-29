@@ -232,10 +232,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
            strcmp (pspec->name, "cell-area-context") == 0))
 	continue;
 
-      if (g_type_is_a (type, GTK_TYPE_FONT_SELECTION) &&
-	  strcmp (pspec->name, "font") == 0)
-	continue;
-
       if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
@@ -384,14 +380,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	  if ((pspec->flags & G_PARAM_READABLE) == 0)
 	    continue;
 
-          if (g_type_is_a (type, GTK_TYPE_BUTTON) &&
-              strcmp (pspec->name, "default-border") == 0)
-            continue;
-
           if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
-              (strcmp (pspec->name, "resize-grip-width") == 0 ||
-               strcmp (pspec->name, "resize-grip-height") == 0 ||
-               strcmp (pspec->name, "decoration-button-layout") == 0))
+              strcmp (pspec->name, "decoration-button-layout") == 0)
             continue;
 
 	  g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
