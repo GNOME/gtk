@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 #define GTK_IS_GESTURE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GESTURE))
 #define GTK_GESTURE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GESTURE, GtkGestureClass))
 
-typedef struct _GtkGesture GtkGesture;
 typedef struct _GtkGestureClass GtkGestureClass;
 
 GDK_AVAILABLE_IN_ALL
