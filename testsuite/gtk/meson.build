@@ -17,6 +17,7 @@ tests = [
   ['cellarea'],
   ['check-icon-names'],
   ['cssprovider'],
+  ['defaultvalue'],
   ['entry'],
   ['firefox-stylecontext'],
   ['floating'],
