@@ -1283,7 +1283,7 @@ find_button_type (GtkPathBar  *path_bar,
 
 static void
 button_drag_data_get_cb (GtkWidget        *widget,
-                         GdkDragContext   *context,
+                         GdkDrag          *drag,
                          GtkSelectionData *selection_data,
                          gpointer          data)
 {

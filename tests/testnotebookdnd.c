@@ -93,7 +93,7 @@ on_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpoi
 
 static void
 on_notebook_drag_begin (GtkWidget      *widget,
-                        GdkDragContext *context,
+                        GdkDrag        *drag,
                         gpointer        data)
 {
   guint page_num;
@@ -101,7 +101,7 @@ on_notebook_drag_begin (GtkWidget      *widget,
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
 
   if (page_num > 2)
-    gtk_drag_set_icon_name (context,
+    gtk_drag_set_icon_name (drag,
                             (page_num % 2) ? "help-browser" : "process-stop",
                             0, 0);
 }

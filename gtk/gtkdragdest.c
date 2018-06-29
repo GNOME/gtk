@@ -125,7 +125,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * |[<!-- language="C" -->
  * static void
  * drag_motion (GtkWidget *widget,
- *              GdkDragContext *context,
+ *              GdkDrag *drag,
  *              gint x,
  *              gint y,
  *              guint time)

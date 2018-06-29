@@ -376,7 +376,7 @@ search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *w
 
 static void
 get_image_data (GtkWidget        *widget,
-                GdkDragContext   *context,
+                GdkDrag          *drag,
                 GtkSelectionData *selection,
                 guint             target_info,
                 gpointer          data)
@@ -398,7 +398,7 @@ get_image_data (GtkWidget        *widget,
 
 static void
 get_scalable_image_data (GtkWidget        *widget,
-                         GdkDragContext   *context,
+                         GdkDrag          *drag,
                          GtkSelectionData *selection,
                          guint             target_info,
                          gpointer          data)

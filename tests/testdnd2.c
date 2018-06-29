@@ -39,7 +39,7 @@ enum {
 
 static void
 image_drag_begin (GtkWidget      *widget,
-                  GdkDragContext *context,
+                  GdkDrag        *drag,
                   gpointer        data)
 {
   GdkPaintable *paintable;
@@ -65,7 +65,7 @@ image_drag_begin (GtkWidget      *widget,
       hot_y = size;
       break;
     }
-  gtk_drag_set_icon_paintable (context, paintable, hot_x, hot_y);
+  gtk_drag_set_icon_paintable (drag, paintable, hot_x, hot_y);
   g_object_unref (paintable);
 }
 
@@ -80,7 +80,9 @@ drag_widget_destroyed (GtkWidget *image, gpointer data)
 }
 
 static void
-window_drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
+window_drag_end (GtkWidget *widget,
+                 GdkDrag   *drag,
+                 gpointer   data)
 {
   GtkWidget *window = data;
 
@@ -90,7 +92,7 @@ window_drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
 
 static void
 window_drag_begin (GtkWidget      *widget,
-                   GdkDragContext *context,
+                   GdkDrag        *drag,
                    gpointer        data)
 {
   GdkPaintable *paintable;
@@ -114,7 +116,7 @@ window_drag_begin (GtkWidget      *widget,
   else
     g_print ("reusing drag widget\n");
 
-  gtk_drag_set_icon_widget (context, image, 0, 0);
+  gtk_drag_set_icon_widget (drag, image, 0, 0);
 
   if (hotspot == CENTER)
     g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), image);
@@ -153,7 +155,7 @@ update_dest_target_list (GtkWidget *image)
 
 void
 image_drag_data_get (GtkWidget        *widget,
-                     GdkDragContext   *context,
+                     GdkDrag          *drag,
                      GtkSelectionData *selection_data,
                      gpointer          data)
 {
@@ -264,7 +266,7 @@ make_image2 (const gchar *icon_name, int hotspot)
 
 static void
 spinner_drag_begin (GtkWidget      *widget,
-                    GdkDragContext *context,
+                    GdkDrag        *drag,
                     gpointer        data)
 {
   GtkWidget *spinner;
@@ -274,25 +276,25 @@ spinner_drag_begin (GtkWidget      *widget,
                           "visible", TRUE,
                           "active",  TRUE,
                           NULL);
-  gtk_drag_set_icon_widget (context, spinner, 0, 0);
-  g_object_set_data (G_OBJECT (context), "spinner", spinner);
+  gtk_drag_set_icon_widget (drag, spinner, 0, 0);
+  g_object_set_data (G_OBJECT (drag), "spinner", spinner);
 }
 
 static void
 spinner_drag_end (GtkWidget      *widget,
-                  GdkDragContext *context,
+                  GdkDrag        *drag,
                   gpointer        data)
 {
   GtkWidget *spinner;
 
   g_print ("GtkWidget::drag-end\n");
-  spinner = g_object_get_data (G_OBJECT (context), "spinner");
+  spinner = g_object_get_data (G_OBJECT (drag), "spinner");
   gtk_widget_destroy (spinner);
 }
 
 static gboolean
 spinner_drag_failed (GtkWidget      *widget,
-                     GdkDragContext *context,
+                     GdkDrag        *drag,
                      GtkDragResult   result,
                      gpointer        data)
 {
@@ -309,7 +311,7 @@ spinner_drag_failed (GtkWidget      *widget,
 
 void
 spinner_drag_data_get (GtkWidget        *widget,
-                       GdkDragContext   *context,
+                       GdkDrag          *drag,
                        GtkSelectionData *selection_data,
                        gpointer          data)
 {

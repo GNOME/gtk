@@ -165,7 +165,7 @@ gdk_event_class_init (GdkEventClass *klass)
 void
 _gdk_event_emit (GdkEvent *event)
 {
-  if (gdk_drag_context_handle_source_event (event))
+  if (gdk_drag_handle_source_event (event))
     return;
 
   if (_gdk_event_func)

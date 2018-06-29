@@ -10,19 +10,19 @@ clear_pressed (GtkEntry *entry, gint icon, gpointer data)
 
 static void
 drag_begin_cb (GtkWidget      *widget,
-               GdkDragContext *context,
+               GdkDrag        *drag,
                gpointer        user_data)
 {
   gint pos;
 
   pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
   if (pos != -1)
-    gtk_drag_set_icon_name (context, "dialog-information", 2, 2);
+    gtk_drag_set_icon_name (drag, "dialog-information", 2, 2);
 }
 
 static void
 drag_data_get_cb (GtkWidget        *widget,
-                  GdkDragContext   *context,
+                  GdkDrag          *drag,
                   GtkSelectionData *data,
                   gpointer          user_data)
 {

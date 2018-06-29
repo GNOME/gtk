@@ -293,15 +293,15 @@ struct _GtkWidgetClass
                                          GdkEvent            *event);
 
   /* Source side drag signals */
-  void     (* drag_begin)          (GtkWidget         *widget,
-                                    GdkDragContext     *context);
+  void     (* drag_begin)          (GtkWidget          *widget,
+                                    GdkDrag            *drag);
   void     (* drag_end)            (GtkWidget          *widget,
-                                    GdkDragContext     *context);
+                                    GdkDrag            *drag);
   void     (* drag_data_get)       (GtkWidget          *widget,
-                                    GdkDragContext     *context,
+                                    GdkDrag            *drag,
                                     GtkSelectionData   *selection_data);
   void     (* drag_data_delete)    (GtkWidget          *widget,
-                                    GdkDragContext     *context);
+                                    GdkDrag            *drag);
 
   /* Target side drag signals */
   void     (* drag_leave)          (GtkWidget          *widget,
@@ -318,7 +318,7 @@ struct _GtkWidgetClass
                                     GdkDrop            *drop,
                                     GtkSelectionData   *selection_data);
   gboolean (* drag_failed)         (GtkWidget          *widget,
-                                    GdkDragContext     *context,
+                                    GdkDrag            *drag,
                                     GtkDragResult       result);
 
   /* Signals used only for keybindings */
