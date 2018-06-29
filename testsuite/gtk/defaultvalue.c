@@ -378,7 +378,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (g_type_is_a (type, GTK_TYPE_WIDGET))
     {
-      g_object_set (gtk_settings_get_default (), "gtk-theme-name", "Raleigh", NULL);
+      g_object_set (gtk_settings_get_default (), "gtk-theme-name", "Adwaita", NULL);
       pspecs = gtk_widget_class_list_style_properties (GTK_WIDGET_CLASS (klass), &n_pspecs);
 
       for (i = 0; i < n_pspecs; ++i)
@@ -391,6 +391,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 	  if ((pspec->flags & G_PARAM_READABLE) == 0)
 	    continue;
+
+          /* These are overridden by Adwaita */
+          if (g_type_is_a (type, GTK_TYPE_DIALOG) &&
+              (strcmp (pspec->name, "action-area-border") == 0 ||
+               strcmp (pspec->name, "button-spacing") == 0))
+            continue;
 
           /* This is desktop-dependent */
           if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
