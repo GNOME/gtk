@@ -7467,7 +7467,7 @@ recent_item_is_private (GtkRecentInfo *info)
 
   if (gtk_recent_info_get_private_hint (info))
     {
-      const gchar *app_name = g_get_application_name();
+      const gchar *app_name = g_get_application_name ();
       gchar **recent_apps = gtk_recent_info_get_applications (info, NULL);
       is_private = !g_strv_contains ((const char *const*) recent_apps,
                                      app_name);
@@ -7498,7 +7498,7 @@ populate_model_with_recent_items (GtkFileChooserWidget *impl,
       GtkRecentInfo *info = l->data;
       GFile *file;
 
-      if (recent_item_is_private(info))
+      if (recent_item_is_private (info))
         continue;
 
       file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
