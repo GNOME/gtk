@@ -41,4 +41,6 @@ struct _GdkWaylandSeatClass
 
 GType gdk_wayland_seat_get_type (void) G_GNUC_CONST;
 
+void gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat);
+
 #endif /* __GDK_WAYLAND_SEAT_H__ */

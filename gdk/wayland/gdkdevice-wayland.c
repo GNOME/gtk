@@ -4516,6 +4516,12 @@ pointer_surface_update_scale (GdkDevice *device)
   gdk_wayland_device_update_surface_cursor (device);
 }
 
+void
+gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat)
+{
+  pointer_surface_update_scale (seat->master_pointer);
+}
+
 static void
 pointer_surface_enter (void              *data,
                        struct wl_surface *wl_surface,
