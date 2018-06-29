@@ -310,6 +310,9 @@ struct _GdkWaylandDeviceManagerClass
   GdkDeviceManagerClass parent_class;
 };
 
+static void
+pointer_surface_update_scale (GdkDevice *device);
+
 static void deliver_key_event (GdkWaylandSeat       *seat,
                                uint32_t              time_,
                                uint32_t              key,
@@ -4502,9 +4505,17 @@ static const struct zwp_tablet_seat_v2_listener tablet_seat_listener = {
 };
 
 static void
+on_monitors_changed (GdkScreen      *screen,
+                     GdkWaylandSeat *seat)
+{
+  pointer_surface_update_scale (seat->master_pointer);
+}
+
+static void
 init_devices (GdkWaylandSeat *seat)
 {
   GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   /* pointer */
   seat->master_pointer = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
@@ -4523,6 +4534,9 @@ init_devices (GdkWaylandSeat *seat)
   device_manager->devices =
     g_list_prepend (device_manager->devices, seat->master_pointer);
   g_signal_emit_by_name (device_manager, "device-added", seat->master_pointer);
+
+  g_signal_connect (display->screen, "monitors-changed",
+                    G_CALLBACK (on_monitors_changed), seat);
 
   /* keyboard */
   seat->master_keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
