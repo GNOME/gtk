@@ -232,6 +232,15 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
            strcmp (pspec->name, "cell-area-context") == 0))
 	continue;
 
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+      /* This is set in init() */
+      if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER_WIDGET) &&
+          strcmp (pspec->name, "tweak-action") == 0)
+        continue;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
@@ -380,6 +389,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	  if ((pspec->flags & G_PARAM_READABLE) == 0)
 	    continue;
 
+          /* This is desktop-dependent */
           if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
               strcmp (pspec->name, "decoration-button-layout") == 0)
             continue;
