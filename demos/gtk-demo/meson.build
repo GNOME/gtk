@@ -29,6 +29,7 @@ demos = files([
   'foreigndrawing.c',
   'gestures.c',
   'glarea.c',
+  'gtk4_lightning_talks.c',
   'headerbar.c',
   'hypertext.c',
   'iconview.c',
