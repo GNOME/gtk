@@ -381,6 +381,7 @@ gtk_public_sources = files([
   'gtkwidgetpath.c',
   'gtkwindow.c',
   'gtkwindowgroup.c',
+  'gtkzoom.c',
 ])
 
 gtk_private_type_headers = files([
@@ -600,6 +601,7 @@ gtk_public_headers = files([
   'gtkwidgetpath.h',
   'gtkwindow.h',
   'gtkwindowgroup.h',
+  'gtkzoom.h',
   'gtk-a11y.h',
   'gtk-autocleanups.h',
   'gtk.h',

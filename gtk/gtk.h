@@ -239,6 +239,7 @@
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkwindowgroup.h>
+#include <gtk/gtkzoom.h>
 
 #include <gtk/gtk-autocleanups.h>
 
