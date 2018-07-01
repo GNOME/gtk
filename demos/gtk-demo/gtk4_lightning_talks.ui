@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkAdjustment" id="slides_adjustment">
+    <property name="lower">1</property>
+    <property name="upper">10</property>
+    <property name="value">1</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkNuclearMediaStream" id="nuclear-mediastream">
+    <property name="loop">1</property>
+    <property name="playing">1</property>
+  </object>
+  <object class="GtkTextBuffer" id="text-paintable">
+    <property name="text">void   gdk_paintable_snapshot                   (GdkPaintable *paintable,
+                                                 GdkSnapshot  *snapshot,
+                                                 double        width,
+                                                 double        height);
+
+int    gdk_paintable_get_intrinsic_width        (GdkPaintable *paintable);
+int    gdk_paintable_get_intrinsic_height       (GdkPaintable *paintable);
+double gdk_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable);
+
+/* for implementations only */
+void   gdk_paintable_invalidate_contents        (GdkPaintable *paintable);
+void   gdk_paintable_invalidate_size            (GdkPaintable *paintable);</property>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">GTK4 lightning talks</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="">
+        <property name="show-title-buttons">1</property>
+        <child>
+          <object class="GtkSpinButton" id="spinner">
+            <property name="width-chars">2</property>
+            <property name="adjustment">slides_adjustment</property>
+            <property name="climb-rate">1</property>
+            <property name="numeric">1</property>
+            <property name="wrap">1</property>
+            <signal name="value-changed" handler="switch_to_slide" object="slides" swapped="no"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="slides">
+        <property name="hhomogeneous">1</property>
+        <property name="vhomogeneous">1</property>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GTK4 lightning talks</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GdkWindow
+=>
+GdkSurface</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GtkWidgets are visible by default</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Everything is gestures now</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GtkVideo</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkGrid">
+            <property name="row-homogeneous">1</property>
+            <property name="column-homogeneous">1</property>
+            <child>
+              <object class="GtkVideo">
+                <property name="file">file:///home/lvs/incredibles2.mp4</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVideo">
+                <property name="loop">1</property>
+                <property name="autoplay">1</property>
+                <property name="file">resource:///images/gtk-logo.webm</property>
+                <property name="valign">center</property>
+                <property name="halign">center</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPicture">
+                <property name="paintable">nuclear-mediastream</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="homogeneous">1</property>
+                <child>
+                  <object class="GtkZoom">
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">GtkMediaControls</property>
+                        <property name="justify">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMediaControls">
+                    <property name="media-stream">nuclear-mediastream</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GtkPicture</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GdkTexture</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">GdkPaintable</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkTextView">
+                <property name="buffer">text-paintable</property>
+                <property name="monospace">1</property>
+                <property name="width-request">600</property>
+                <property name="height-request">250</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkZoom">
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes"></property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </object>
+</interface>
