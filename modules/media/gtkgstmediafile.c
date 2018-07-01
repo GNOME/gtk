@@ -245,6 +245,9 @@ gtk_gst_media_file_play (GtkMediaStream *stream)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (stream);
 
+  if (self->player == NULL)
+    return FALSE;
+
   gst_player_play (self->player);
 
   return TRUE;

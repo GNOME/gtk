@@ -656,6 +656,9 @@ gtk_ff_media_file_play (GtkMediaStream *stream)
 {
   GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (stream);
 
+  if (video->format_ctx == NULL)
+    return FALSE;
+
   if (!gtk_media_stream_is_prepared (stream))
     return TRUE;
 
