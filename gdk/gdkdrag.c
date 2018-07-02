@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 #include "gdkdisplay.h"
 #include "gdksurface.h"
 #include "gdkintl.h"

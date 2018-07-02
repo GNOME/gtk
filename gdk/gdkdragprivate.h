@@ -18,7 +18,7 @@
 #ifndef __GDK_DND_PRIVATE_H__
 #define __GDK_DND_PRIVATE_H__
 
-#include "gdkdnd.h"
+#include "gdkdrag.h"
 
 G_BEGIN_DECLS
 

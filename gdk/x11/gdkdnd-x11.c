@@ -32,7 +32,7 @@
 #include "gdkclipboard-x11.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-x11.h"
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkproperty.h"

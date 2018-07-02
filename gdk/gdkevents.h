@@ -31,7 +31,7 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkdnd.h>
+#include <gdk/gdkdrag.h>
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicetool.h>
 
