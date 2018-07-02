@@ -1166,6 +1166,8 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * If %TRUE, XML tags in the text of the button are interpreted as by
    * pango_parse_markup() to format the enclosed spans of text. If %FALSE, the
    * text will be displayed verbatim.
+   *
+   * Since: 3.24
    */
   properties[PROP_USE_MARKUP] =
     g_param_spec_boolean ("use-markup",
