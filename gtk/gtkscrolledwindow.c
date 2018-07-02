@@ -726,7 +726,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * keybinding. The #GtkWidget::move-focus signal is emitted with
    * @direction_type on this scrolled window’s toplevel parent in the
    * container hierarchy. The default bindings for this signal are
-   * `Tab + Ctrl` and `Tab + Ctrl + Shift`.
+   * `Ctrl + Tab` to move forward and `Ctrl + Shift + Tab` to move backward.
    */
   signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),
