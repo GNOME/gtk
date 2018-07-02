@@ -1072,7 +1072,7 @@ maybe_emit_action_changed (GdkWin32Drag        *drag_win32,
   if (actions != drag_win32->current_action)
     {
       drag_win32->current_action = actions;
-      g_signal_emit_by_name (GDK_DRAG (drag_win32), "action-changed", actions);
+      gdk_drag_set_action (GDK_DRAG (drag_win32), actions);
     }
 }
 

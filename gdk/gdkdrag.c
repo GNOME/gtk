@@ -64,6 +64,7 @@ enum {
   PROP_DEVICE,
   PROP_DISPLAY,
   PROP_FORMATS,
+  PROP_ACTION,
   N_PROPERTIES
 };
 
@@ -71,7 +72,6 @@ enum {
   CANCEL,
   DROP_PERFORMED,
   DND_FINISHED,
-  ACTION_CHANGED,
   N_SIGNALS
 };
 
@@ -260,6 +260,13 @@ gdk_drag_set_property (GObject      *gobject,
         }
       break;
 
+    case PROP_ACTION:
+      {
+        GdkDragAction action = g_value_get_flags (value);
+        gdk_drag_set_action (drag, action);
+      }
+    break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -291,6 +298,10 @@ gdk_drag_get_property (GObject    *gobject,
 
     case PROP_FORMATS:
       g_value_set_boxed (value, priv->formats);
+      break;
+
+    case PROP_ACTION:
+      g_value_set_flags (value, drag->action);
       break;
 
     default:
@@ -384,6 +395,16 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_ACTION] =
+    g_param_spec_flags ("action",
+                        "Action",
+                        "The currently selected action",
+                        GDK_TYPE_DRAG_ACTION,
+                        0,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GdkDrag::cancel:
    * @drag: The object on which the signal is emitted
@@ -431,22 +452,6 @@ gdk_drag_class_init (GdkDragClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  /**
-   * GdkDrag::action-changed:
-   * @drag: The object on which the signal is emitted
-   * @action: The action currently chosen
-   *
-   * A new action is being chosen for the drag operation.
-   */
-  signals[ACTION_CHANGED] =
-    g_signal_new (g_intern_static_string ("action-changed"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkDragClass, action_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__FLAGS,
-                  G_TYPE_NONE, 1, GDK_TYPE_DRAG_ACTION);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
@@ -615,6 +620,23 @@ gdk_drag_set_actions (GdkDrag       *drag,
 
   priv->actions = actions;
   priv->suggested_action = suggested_action;
+}
+
+void
+gdk_drag_set_action (GdkDrag       *drag,
+                     GdkDragAction  action)
+{
+  GdkCursor *cursor;
+
+  if (drag->action == action)
+    return;
+
+  drag->action = action;
+
+  cursor = gdk_drag_get_cursor (drag, action);
+  gdk_drag_set_cursor (drag, cursor);
+
+  g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTION]);
 }
 
 /**
