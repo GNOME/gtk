@@ -59,7 +59,7 @@
 #include "gdkwin32dnd-private.h"
 #include "gdkdisplay-win32.h"
 //#include "gdkselection-win32.h"
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 
 #include <windowsx.h>
 
