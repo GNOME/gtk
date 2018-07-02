@@ -166,12 +166,32 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
   object_class->finalize = gtk_event_controller_finalize;
   controller_class->handle_event = gtk_event_controller_key_handle_event;
 
+  /**
+   * GtkEventControllerKey::key-pressed:
+   * @controller: the object which received the signal.
+   * @keyval: the pressed key.
+   * @keycode: the raw code of the pressed key.
+   * @state: the bitmask, representing the state of modifier keys and pointer buttons. See #GdkModifierType.
+   *
+   * This signal is emitted whenever a key is pressed.
+   *
+   * Returns: %TRUE if the key press was handled, %FALSE otherwise.
+   */
   signals[KEY_PRESSED] =
     g_signal_new (I_("key-pressed"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, _gtk_boolean_handled_accumulator, NULL, NULL,
                   G_TYPE_BOOLEAN, 3, G_TYPE_UINT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
+  /**
+   * GtkEventControllerKey::key-released:
+   * @controller: the object which received the signal.
+   * @keyval: the released key.
+   * @keycode: the raw code of the released key.
+   * @state: the bitmask, representing the state of modifier keys and pointer buttons. See #GdkModifierType.
+   *
+   * This signal is emitted whenever a key is released.
+   */
   signals[KEY_RELEASED] =
     g_signal_new (I_("key-released"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
