@@ -423,12 +423,12 @@ void       _gdk_win32_display_create_surface_impl   (GdkDisplay    *display,
 void _gdk_win32_surface_register_dnd (GdkSurface *window);
 void _gdk_win32_surface_unregister_dnd (GdkSurface *window);
 
-GdkDragContext *_gdk_win32_surface_drag_begin (GdkSurface         *window,
-                                               GdkDevice          *device,
-                                               GdkContentProvider *content,
-                                               GdkDragAction       actions,
-                                               gint                x_root,
-                                               gint                y_root);
+GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *window,
+                                        GdkDevice          *device,
+                                        GdkContentProvider *content,
+                                        GdkDragAction       actions,
+                                        gint                x_root,
+                                        gint                y_root);
 
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
