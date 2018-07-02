@@ -50,7 +50,7 @@ GdkContentFormats *     gdk_drop_get_formats            (GdkDrop                
 GDK_AVAILABLE_IN_ALL
 GdkDragAction           gdk_drop_get_actions            (GdkDrop                *self);
 GDK_AVAILABLE_IN_ALL
-GdkDragContext *        gdk_drop_get_drag               (GdkDrop                *self);
+GdkDrag *               gdk_drop_get_drag               (GdkDrop                *self);
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_status                 (GdkDrop                *self,

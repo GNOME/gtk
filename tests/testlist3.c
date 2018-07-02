@@ -6,7 +6,7 @@ static const char *entries[] = {
 
 static void
 drag_begin (GtkWidget      *widget,
-            GdkDragContext *context,
+            GdkDrag        *drag,
             gpointer        data)
 {
   GtkWidget *row;
@@ -19,7 +19,7 @@ drag_begin (GtkWidget      *widget,
 
   paintable = gtk_widget_paintable_new (row);
   gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
-  gtk_drag_set_icon_paintable (context, paintable, -x, -y);
+  gtk_drag_set_icon_paintable (drag, paintable, -x, -y);
 
   g_object_unref (paintable);
 }
@@ -27,7 +27,7 @@ drag_begin (GtkWidget      *widget,
 
 void
 drag_data_get (GtkWidget        *widget,
-               GdkDragContext   *context,
+               GdkDrag          *drag,
                GtkSelectionData *selection_data,
                gpointer          data)
 {

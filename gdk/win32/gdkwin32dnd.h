@@ -26,23 +26,23 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_WIN32_DRAG_CONTEXT              (gdk_win32_drag_context_get_type ())
-#define GDK_WIN32_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_DRAG_CONTEXT, GdkWin32DragContext))
-#define GDK_WIN32_DRAG_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_DRAG_CONTEXT, GdkWin32DragContextClass))
-#define GDK_IS_WIN32_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_DRAG_CONTEXT))
-#define GDK_IS_WIN32_DRAG_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_DRAG_CONTEXT))
-#define GDK_WIN32_DRAG_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_DRAG_CONTEXT, GdkWin32DragContextClass))
+#define GDK_TYPE_WIN32_DRAG              (gdk_win32_drag_get_type ())
+#define GDK_WIN32_DRAG(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_DRAG, GdkWin32Drag))
+#define GDK_WIN32_DRAG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_DRAG, GdkWin32DragClass))
+#define GDK_IS_WIN32_DRAG(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_DRAG))
+#define GDK_IS_WIN32_DRAG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_DRAG))
+#define GDK_WIN32_DRAG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_DRAG, GdkWin32DragClass))
 
 #ifdef GDK_COMPILATION
-typedef struct _GdkWin32DragContext GdkWin32DragContext;
+typedef struct _GdkWin32Drag GdkWin32Drag;
 #else
-typedef GdkDragContext GdkWin32DragContext;
+typedef GdkDrag GdkWin32Drag;
 #endif
-typedef struct _GdkWin32DragContextClass GdkWin32DragContextClass;
+typedef struct _GdkWin32DragClass GdkWin32DragClass;
 
 GDK_AVAILABLE_IN_ALL
-GType    gdk_win32_drag_context_get_type (void);
+GType    gdk_win32_drag_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_WIN32_DRAG_CONTEXT_H__ */
+#endif /* __GDK_WIN32_DRAG_H__ */

@@ -32,7 +32,7 @@
 #include "gdkclipboard-x11.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-x11.h"
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkproperty.h"
@@ -336,7 +336,7 @@ gdk_x11_drop_read_actions (GdkDrop *drop)
 {
   GdkX11Drop *drop_x11 = GDK_X11_DROP (drop);
   GdkDisplay *display = gdk_drop_get_display (drop);
-  GdkDragContext *drag;
+  GdkDrag *drag;
   GdkDragAction actions = GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK;
   Atom type;
   int format;
@@ -398,7 +398,7 @@ gdk_x11_drop_read_actions (GdkDrop *drop)
     }
   else
     {
-      actions = gdk_drag_context_get_actions (drag);
+      actions = gdk_drag_get_actions (drag);
       drop_x11->xdnd_have_actions = TRUE;
     }
 
@@ -468,7 +468,7 @@ xdnd_enter_filter (GdkSurface   *surface,
   GdkX11Display *display_x11;
   GdkDrop *drop;
   GdkX11Drop *drop_x11;
-  GdkDragContext *drag;
+  GdkDrag *drag;
   GdkSeat *seat;
   gint i;
   Atom type;
@@ -548,7 +548,7 @@ xdnd_enter_filter (GdkSurface   *surface,
     print_target_list (content_formats);
 #endif /* G_ENABLE_DEBUG */
 
-  drag = gdk_x11_drag_context_find (display, source_window, GDK_SURFACE_XID (surface));
+  drag = gdk_x11_drag_find (display, source_window, GDK_SURFACE_XID (surface));
 
   drop_x11 = g_object_new (GDK_TYPE_X11_DROP,
                               "device", gdk_seat_get_pointer (seat),
@@ -768,7 +768,7 @@ gdk_x11_drop_status (GdkDrop       *drop,
 
   if (gdk_drop_get_drag (drop))
     {
-      gdk_x11_drag_context_handle_status (display, &xev);
+      gdk_x11_drag_handle_status (display, &xev);
     }
   else
     {
@@ -821,7 +821,7 @@ gdk_x11_drop_finish (GdkDrop       *drop,
 
   if (gdk_drop_get_drag (drop))
     {
-      gdk_x11_drag_context_handle_status (display, &xev);
+      gdk_x11_drag_handle_status (display, &xev);
     }
   else
     {
@@ -849,7 +849,7 @@ gdk_x11_drop_class_init (GdkX11DropClass *klass)
 }
 
 static void
-gdk_x11_drop_init (GdkX11Drop *context)
+gdk_x11_drop_init (GdkX11Drop *drag)
 {
 }
 

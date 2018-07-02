@@ -445,14 +445,14 @@ static void     gtk_entry_drag_data_received (GtkWidget        *widget,
 					      GdkDrop          *drop,
 					      GtkSelectionData *selection_data);
 static void     gtk_entry_drag_data_get      (GtkWidget        *widget,
-					      GdkDragContext   *context,
+					      GdkDrag          *drag,
 					      GtkSelectionData *selection_data);
 static void     gtk_entry_drag_data_delete   (GtkWidget        *widget,
-					      GdkDragContext   *context);
+					      GdkDrag          *drag);
 static void     gtk_entry_drag_begin         (GtkWidget        *widget,
-                                              GdkDragContext   *context);
+                                              GdkDrag          *drag);
 static void     gtk_entry_drag_end           (GtkWidget        *widget,
-                                              GdkDragContext   *context);
+                                              GdkDrag          *drag);
 
 
 /* GtkEditable method implementations
@@ -8478,7 +8478,7 @@ gtk_entry_selection_bubble_popup_set (GtkEntry *entry)
 
 static void
 gtk_entry_drag_begin (GtkWidget      *widget,
-                      GdkDragContext *context)
+                      GdkDrag        *drag)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -8493,7 +8493,7 @@ gtk_entry_drag_begin (GtkWidget      *widget,
         {
           if (icon_info->in_drag) 
             {
-              gtk_drag_set_icon_definition (context,
+              gtk_drag_set_icon_definition (drag,
                                             gtk_image_get_definition (GTK_IMAGE (icon_info->widget)),
                                             -2, -2);
               return;
@@ -8511,7 +8511,7 @@ gtk_entry_drag_begin (GtkWidget      *widget,
       paintable = gtk_text_util_create_drag_icon (widget, text, -1);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-      gtk_drag_set_icon_paintable (context,
+      gtk_drag_set_icon_paintable (drag,
                                    paintable,
                                    priv->drag_start_x - ranges[0],
                                    priv->drag_start_y);
@@ -8524,7 +8524,7 @@ gtk_entry_drag_begin (GtkWidget      *widget,
 
 static void
 gtk_entry_drag_end (GtkWidget      *widget,
-                    GdkDragContext *context)
+                    GdkDrag        *drag)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -8632,7 +8632,7 @@ gtk_entry_get_action (GtkEntry *entry,
                       GdkDrop  *drop)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
-  GdkDragContext *drag = gdk_drop_get_drag (drop);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
   GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
   GdkDragAction actions;
 
@@ -8700,7 +8700,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 
 static void
 gtk_entry_drag_data_get (GtkWidget        *widget,
-			 GdkDragContext   *context,
+			 GdkDrag          *drag,
 			 GtkSelectionData *selection_data)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -8734,7 +8734,7 @@ gtk_entry_drag_data_get (GtkWidget        *widget,
 
 static void
 gtk_entry_drag_data_delete (GtkWidget      *widget,
-			    GdkDragContext *context)
+			    GdkDrag        *drag)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

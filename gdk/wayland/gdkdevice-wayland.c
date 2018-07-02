@@ -247,7 +247,7 @@ struct _GdkWaylandSeat
   GdkClipboard *clipboard;
   GdkClipboard *primary_clipboard;
   struct wl_data_device *data_device;
-  GdkDragContext *drag;
+  GdkDrag *drag;
   GdkDrop *drop;
 
   /* Source/dest for non-local dnd */
@@ -5139,12 +5139,12 @@ gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
 }
 
 void
-gdk_wayland_seat_set_drag (GdkSeat        *seat,
-                           GdkDragContext *context)
+gdk_wayland_seat_set_drag (GdkSeat *seat,
+                           GdkDrag *drag)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
 
-  g_set_object (&wayland_seat->drag, context);
+  g_set_object (&wayland_seat->drag, drag);
 }
 
 struct wl_data_device *

@@ -308,7 +308,7 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
                                              GtkTooltip       *tooltip);
 
 static void     gtk_calendar_drag_data_get      (GtkWidget        *widget,
-                                                 GdkDragContext   *context,
+                                                 GdkDrag          *drag, 
                                                  GtkSelectionData *selection_data);
 static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
                                                  GdkDrop          *drop,
@@ -2660,7 +2660,7 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   GtkWidget *widget = data;
   GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
   gdouble start_x, start_y;
-  GdkDragContext *context;
+  GdkDrag *drag;
   GdkContentFormats *targets;
 
   if (!priv->in_drag)
@@ -2675,15 +2675,15 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
 
   targets = gdk_content_formats_new (NULL, 0);
   targets = gtk_content_formats_add_text_targets (targets);
-  context = gtk_drag_begin_with_coordinates (widget,
-                                             gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                             targets, GDK_ACTION_COPY,
-                                             start_x, start_y);
+  drag = gtk_drag_begin_with_coordinates (widget,
+                                          gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                          targets, GDK_ACTION_COPY,
+                                          start_x, start_y);
 
   priv->in_drag = 0;
   gdk_content_formats_unref (targets);
 
-  gtk_drag_set_icon_default (context);
+  gtk_drag_set_icon_default (drag);
 }
 
 static void
@@ -2900,7 +2900,7 @@ gtk_calendar_grab_notify (GtkWidget *widget,
 
 static void
 gtk_calendar_drag_data_get (GtkWidget        *widget,
-                            GdkDragContext   *context,
+                            GdkDrag          *drag,
                             GtkSelectionData *selection_data)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);

@@ -38,7 +38,7 @@ typedef struct _GdkDropPrivate GdkDropPrivate;
 
 struct _GdkDropPrivate {
   GdkDevice *device;
-  GdkDragContext *drag;
+  GdkDrag *drag;
   GdkContentFormats *formats;
   GdkSurface *surface;
   GdkDragAction actions;
@@ -78,7 +78,7 @@ gdk_drop_read_local_write_done (GObject      *drag,
                                 gpointer      stream)
 {
   /* we don't care about the error, we just want to clean up */
-  gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (drag), result, NULL);
+  gdk_drag_write_finish (GDK_DRAG (drag), result, NULL);
 
   /* XXX: Do we need to close_async() here? */
   g_output_stream_close (stream, NULL, NULL);
@@ -122,7 +122,7 @@ gdk_drop_read_local_async (GdkDrop             *self,
 
       stream = gdk_pipe_io_stream_new ();
       output_stream = g_io_stream_get_output_stream (stream);
-      gdk_drag_context_write_async (priv->drag,
+      gdk_drag_write_async (priv->drag,
                                     mime_type,
                                     output_stream,
                                     io_priority,
@@ -321,7 +321,7 @@ gdk_drop_class_init (GdkDropClass *klass)
     g_param_spec_object ("drag",
                          "Drag",
                          "The drag that initiated this drop",
-                         GDK_TYPE_DRAG_CONTEXT,
+                         GDK_TYPE_DRAG,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS |
@@ -492,7 +492,7 @@ gdk_drop_set_actions (GdkDrop       *self,
  *
  * Returns: (transfer none) (nullable): the corresponding #GdkDrag
  **/
-GdkDragContext *
+GdkDrag *
 gdk_drop_get_drag (GdkDrop *self)
 {
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);

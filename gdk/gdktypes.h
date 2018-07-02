@@ -123,7 +123,7 @@ typedef struct _GdkContentProvider    GdkContentProvider;
 typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkTexture            GdkTexture;
 typedef struct _GdkDevice             GdkDevice;
-typedef struct _GdkDragContext        GdkDragContext;
+typedef struct _GdkDrag               GdkDrag;
 typedef struct _GdkDrop               GdkDrop;
 
 typedef struct _GdkClipboard          GdkClipboard;
@@ -571,7 +571,7 @@ typedef enum
  *  useful if source and destination agree on what it means.
  * @GDK_ACTION_ASK: Ask the user what to do with the data.
  *
- * Used in #GdkDragContext to indicate what the destination
+ * Used in #GdkDrag to indicate what the destination
  * should do with the dropped data.
  */
 typedef enum

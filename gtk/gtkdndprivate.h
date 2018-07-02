@@ -40,14 +40,14 @@ struct _GtkDragDestSite
 
 G_BEGIN_DECLS
 
-GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
+GdkDrag *               gtk_drag_begin_internal         (GtkWidget              *widget,
                                                          GdkDevice              *device,
                                                          GtkImageDefinition     *icon,
                                                          GdkContentFormats      *target_list,
                                                          GdkDragAction           actions,
                                                          int                     x,
                                                          int                     y);
-void                    gtk_drag_set_icon_definition    (GdkDragContext         *context,
+void                    gtk_drag_set_icon_definition    (GdkDrag                *drag,
                                                          GtkImageDefinition     *def,
                                                          gint                    hot_x,
                                                          gint                    hot_y);

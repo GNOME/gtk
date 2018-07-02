@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 
 #include "gdkinternals.h"
 #include "gdkproperty.h"
@@ -34,56 +34,56 @@
 
 #include <string.h>
 
-#define GDK_TYPE_BROADWAY_DRAG_CONTEXT              (gdk_broadway_drag_context_get_type ())
-#define GDK_BROADWAY_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_DRAG_CONTEXT, GdkBroadwayDragContext))
-#define GDK_BROADWAY_DRAG_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_DRAG_CONTEXT, GdkBroadwayDragContextClass))
-#define GDK_IS_BROADWAY_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_DRAG_CONTEXT))
-#define GDK_IS_BROADWAY_DRAG_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_DRAG_CONTEXT))
-#define GDK_BROADWAY_DRAG_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_DRAG_CONTEXT, GdkBroadwayDragContextClass))
+#define GDK_TYPE_BROADWAY_DRAG              (gdk_broadway_drag_get_type ())
+#define GDK_BROADWAY_DRAG(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_DRAG, GdkBroadwayDrag))
+#define GDK_BROADWAY_DRAG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_DRAG, GdkBroadwayDragClass))
+#define GDK_IS_BROADWAY_DRAG(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_DRAG))
+#define GDK_IS_BROADWAY_DRAG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_DRAG))
+#define GDK_BROADWAY_DRAG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_DRAG, GdkBroadwayDragClass))
 
 #ifdef GDK_COMPILATION
-typedef struct _GdkBroadwayDragContext GdkBroadwayDragContext;
+typedef struct _GdkBroadwayDrag GdkBroadwayDrag;
 #else
-typedef GdkDragContext GdkBroadwayDragContext;
+typedef GdkDrag GdkBroadwayDrag;
 #endif
-typedef struct _GdkBroadwayDragContextClass GdkBroadwayDragContextClass;
+typedef struct _GdkBroadwayDragClass GdkBroadwayDragClass;
 
-GType     gdk_broadway_drag_context_get_type (void);
+GType     gdk_broadway_drag_get_type (void);
 
-struct _GdkBroadwayDragContext {
-  GdkDragContext context;
+struct _GdkBroadwayDrag {
+  GdkDrag context;
 };
 
-struct _GdkBroadwayDragContextClass
+struct _GdkBroadwayDragClass
 {
-  GdkDragContextClass parent_class;
+  GdkDragClass parent_class;
 };
 
-static void gdk_broadway_drag_context_finalize (GObject *object);
+static void gdk_broadway_drag_finalize (GObject *object);
 
 static GList *contexts;
 
-G_DEFINE_TYPE (GdkBroadwayDragContext, gdk_broadway_drag_context, GDK_TYPE_DRAG_CONTEXT)
+G_DEFINE_TYPE (GdkBroadwayDrag, gdk_broadway_drag, GDK_TYPE_DRAG)
 
 static void
-gdk_broadway_drag_context_init (GdkBroadwayDragContext *dragcontext)
+gdk_broadway_drag_init (GdkBroadwayDrag *dragcontext)
 {
   contexts = g_list_prepend (contexts, dragcontext);
 }
 
 static void
-gdk_broadway_drag_context_finalize (GObject *object)
+gdk_broadway_drag_finalize (GObject *object)
 {
-  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDrag *context = GDK_DRAG (object);
 
   contexts = g_list_remove (contexts, context);
 
-  G_OBJECT_CLASS (gdk_broadway_drag_context_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_broadway_drag_parent_class)->finalize (object);
 }
 
 /* Drag Contexts */
 
-GdkDragContext *
+GdkDrag *
 _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
                                   GdkDevice          *device,
                                   GdkContentProvider *content,
@@ -91,12 +91,12 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
                                   gint                dx,
                                   gint                dy)
 {
-  GdkDragContext *new_context;
+  GdkDrag *new_context;
 
   g_return_val_if_fail (surface != NULL, NULL);
   g_return_val_if_fail (GDK_SURFACE_IS_BROADWAY (surface), NULL);
 
-  new_context = g_object_new (GDK_TYPE_BROADWAY_DRAG_CONTEXT,
+  new_context = g_object_new (GDK_TYPE_BROADWAY_DRAG,
                               "device", device,
                               "content", content,
                               NULL);
@@ -105,14 +105,14 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
 }
 
 static void
-gdk_broadway_drag_context_drag_drop (GdkDragContext *context,
+gdk_broadway_drag_drag_drop (GdkDrag *context,
                                      guint32         time)
 {
   g_return_if_fail (context != NULL);
 }
 
 static void
-gdk_broadway_drag_context_drag_abort (GdkDragContext *context,
+gdk_broadway_drag_drag_abort (GdkDrag *context,
                                       guint32         time)
 {
   g_return_if_fail (context != NULL);
@@ -129,13 +129,13 @@ _gdk_broadway_display_init_dnd (GdkDisplay *display)
 }
 
 static void
-gdk_broadway_drag_context_class_init (GdkBroadwayDragContextClass *klass)
+gdk_broadway_drag_class_init (GdkBroadwayDragClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkDragContextClass *context_class = GDK_DRAG_CONTEXT_CLASS (klass);
+  GdkDragClass *context_class = GDK_DRAG_CLASS (klass);
 
-  object_class->finalize = gdk_broadway_drag_context_finalize;
+  object_class->finalize = gdk_broadway_drag_finalize;
 
-  context_class->drag_abort = gdk_broadway_drag_context_drag_abort;
-  context_class->drag_drop = gdk_broadway_drag_context_drag_drop;
+  context_class->drag_abort = gdk_broadway_drag_drag_abort;
+  context_class->drag_drop = gdk_broadway_drag_drag_drop;
 }

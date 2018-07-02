@@ -120,7 +120,7 @@ get_image_paintable (GtkImage *image)
 
 static void
 drag_begin (GtkWidget      *widget,
-            GdkDragContext *context,
+            GdkDrag        *drag,
             gpointer        data)
 {
   GdkPaintable *paintable;
@@ -128,14 +128,14 @@ drag_begin (GtkWidget      *widget,
   paintable = get_image_paintable (GTK_IMAGE (widget));
   if (paintable)
     {
-      gtk_drag_set_icon_paintable (context, paintable, -2, -2);
+      gtk_drag_set_icon_paintable (drag, paintable, -2, -2);
       g_object_unref (paintable);
     }
 }
 
 void
 drag_data_get (GtkWidget        *widget,
-               GdkDragContext   *context,
+               GdkDrag          *drag,
                GtkSelectionData *selection_data,
                guint             info,
                gpointer          data)

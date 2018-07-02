@@ -46,7 +46,7 @@ void gdk_broadway_surface_set_nodes (GdkSurface *surface,
                                      GPtrArray *node_textures);
 
 void     _gdk_broadway_surface_register_dnd       (GdkSurface      *surface);
-GdkDragContext * _gdk_broadway_surface_drag_begin (GdkSurface          *surface,
+GdkDrag * _gdk_broadway_surface_drag_begin        (GdkSurface          *surface,
                                                    GdkDevice          *device,
                                                    GdkContentProvider *content,
                                                    GdkDragAction       actions,

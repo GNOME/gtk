@@ -110,10 +110,10 @@ static void gtk_color_button_clicked       (GtkButton        *button,
 
 /* source side drag signals */
 static void gtk_color_button_drag_begin    (GtkWidget        *widget,
-                                            GdkDragContext   *context,
+                                            GdkDrag          *drag,
                                             gpointer          data);
 static void gtk_color_button_drag_data_get (GtkWidget        *widget,
-                                            GdkDragContext   *context,
+                                            GdkDrag          *drag,
                                             GtkSelectionData *selection_data,
                                             GtkColorButton   *button);
 
@@ -312,7 +312,7 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
 }
 
 static void
-set_color_icon (GdkDragContext *context,
+set_color_icon (GdkDrag        *drag,
                 const GdkRGBA  *rgba)
 {
   GtkSnapshot *snapshot;
@@ -324,24 +324,24 @@ set_color_icon (GdkDragContext *context,
                              &GRAPHENE_RECT_INIT(0, 0, 48, 32));
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
-  gtk_drag_set_icon_paintable (context, paintable, 0, 0);
+  gtk_drag_set_icon_paintable (drag, paintable, 0, 0);
   g_object_unref (paintable);
 }
 
 static void
 gtk_color_button_drag_begin (GtkWidget      *widget,
-                             GdkDragContext *context,
+                             GdkDrag        *drag,
                              gpointer        data)
 {
   GtkColorButton *button = data;
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  set_color_icon (context, &priv->rgba);
+  set_color_icon (drag, &priv->rgba);
 }
 
 static void
 gtk_color_button_drag_data_get (GtkWidget        *widget,
-                                GdkDragContext   *context,
+                                GdkDrag          *drag,
                                 GtkSelectionData *selection_data,
                                 GtkColorButton   *button)
 {

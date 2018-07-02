@@ -261,7 +261,7 @@ gdk_wayland_drop_init (GdkWaylandDrop *drop)
 
 GdkDrop *
 gdk_wayland_drop_new (GdkDevice            *device,
-                      GdkDragContext       *drag,
+                      GdkDrag              *drag,
                       GdkContentFormats    *formats,
                       GdkSurface           *surface,
                       struct wl_data_offer *offer,
