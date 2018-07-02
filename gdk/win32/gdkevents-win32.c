@@ -59,7 +59,7 @@
 #include "gdkwin32dnd-private.h"
 #include "gdkdisplay-win32.h"
 //#include "gdkselection-win32.h"
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 
 #include <windowsx.h>
 
@@ -873,7 +873,7 @@ _gdk_win32_print_event (const GdkEvent *event)
       if (event->dnd.drop != NULL)
 	g_print ("ctx:%p: %s",
 		 event->dnd.drop,
-		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG_CONTEXT (event->dnd.drop)->protocol));
+		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG (event->dnd.drop)->protocol));
       break;
     case GDK_SCROLL:
       g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
