@@ -745,7 +745,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:propagate-natural-width:
    *
    * Whether the natural width of the child should be calculated and propagated
-   * through the scrolled windows requested natural width.
+   * through the scrolled window’s requested natural width.
    *
    * This is useful in cases where an attempt should be made to allocate exactly
    * enough space for the natural size of the child.
@@ -763,7 +763,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:propagate-natural-height:
    *
    * Whether the natural height of the child should be calculated and propagated
-   * through the scrolled windows requested natural height.
+   * through the scrolled window’s requested natural height.
    *
    * This is useful in cases where an attempt should be made to allocate exactly
    * enough space for the natural size of the child.
@@ -790,7 +790,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * [keybinding signal][GtkBindingSignal]
    * which gets emitted when a keybinding that scrolls is pressed.
    * The horizontal or vertical adjustment is updated which triggers a
-   * signal that the scrolled windows child may listen to and scroll itself.
+   * signal that the scrolled window’s child may listen to and scroll itself.
    */
   signals[SCROLL_CHILD] =
     g_signal_new (I_("scroll-child"),
@@ -813,7 +813,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * [keybinding signal][GtkBindingSignal] which gets
    * emitted when focus is moved away from the scrolled window by a
    * keybinding. The #GtkWidget::move-focus signal is emitted with
-   * @direction_type on this scrolled windows toplevel parent in the
+   * @direction_type on this scrolled window’s toplevel parent in the
    * container hierarchy. The default bindings for this signal are
    * `Tab + Ctrl` and `Tab + Ctrl + Shift`.
    */
@@ -4822,7 +4822,7 @@ gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window)
  * @propagate: whether to propagate natural width
  *
  * Sets whether the natural width of the child should be calculated and propagated
- * through the scrolled windows requested natural width.
+ * through the scrolled window’s requested natural width.
  *
  * Since: 3.22
  */
@@ -4851,7 +4851,7 @@ gtk_scrolled_window_set_propagate_natural_width (GtkScrolledWindow *scrolled_win
  * @scrolled_window: a #GtkScrolledWindow
  *
  * Reports whether the natural width of the child will be calculated and propagated
- * through the scrolled windows requested natural width.
+ * through the scrolled window’s requested natural width.
  *
  * Returns: whether natural width propagation is enabled.
  *
@@ -4871,7 +4871,7 @@ gtk_scrolled_window_get_propagate_natural_width (GtkScrolledWindow *scrolled_win
  * @propagate: whether to propagate natural height
  *
  * Sets whether the natural height of the child should be calculated and propagated
- * through the scrolled windows requested natural height.
+ * through the scrolled window’s requested natural height.
  *
  * Since: 3.22
  */
@@ -4900,7 +4900,7 @@ gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_wi
  * @scrolled_window: a #GtkScrolledWindow
  *
  * Reports whether the natural height of the child will be calculated and propagated
- * through the scrolled windows requested natural height.
+ * through the scrolled window’s requested natural height.
  *
  * Returns: whether natural height propagation is enabled.
  *
