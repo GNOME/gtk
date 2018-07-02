@@ -51,7 +51,6 @@ struct _GdkWaylandDrag
   struct wl_surface *dnd_wl_surface;
   struct wl_data_source *data_source;
   struct wl_data_offer *offer;
-  GdkDragAction selected_action;
   uint32_t serial;
   gint hot_x;
   gint hot_y;
