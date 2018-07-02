@@ -170,8 +170,6 @@ static void            gdk_surface_cache_unref (GdkSurfaceCache *cache);
 
 gboolean gdk_x11_drag_handle_event   (GdkDrag        *drag,
                                       const GdkEvent *event);
-void     gdk_x11_drag_action_changed (GdkDrag        *drag,
-                                      GdkDragAction   action);
 
 static GList *drags;
 static GSList *window_caches;
@@ -232,7 +230,6 @@ gdk_x11_drag_class_init (GdkX11DragClass *klass)
   drag_class->cancel = gdk_x11_drag_cancel;
   drag_class->drop_performed = gdk_x11_drag_drop_performed;
   drag_class->handle_event = gdk_x11_drag_handle_event;
-  drag_class->action_changed = gdk_x11_drag_action_changed;
 }
 
 static void
@@ -882,13 +879,10 @@ gdk_x11_drag_handle_status (GdkDisplay   *display,
           action = 0;
         }
 
-      drag->action = xdnd_action_from_atom (display, action);
+      gdk_drag_set_action (drag, xdnd_action_from_atom (display, action));
 
       if (drag->action != drag_x11->current_action)
-        {
-          drag_x11->current_action = drag->action;
-          g_signal_emit_by_name (drag, "action-changed", drag->action);
-        }
+        drag_x11->current_action = drag->action;
     }
 }
 
@@ -1010,12 +1004,9 @@ send_client_message_async_cb (Window   window,
       window == drag_x11->proxy_xid)
     {
       drag_x11->proxy_xid = None;
-      drag->action = 0;
+      gdk_drag_set_action (drag, 0);
       if (drag->action != drag_x11->current_action)
-        {
-          drag_x11->current_action = 0;
-          g_signal_emit_by_name (drag, "action-changed", 0);
-        }
+        drag_x11->current_action = 0;
       drag_x11->drag_status = GDK_DRAG_STATUS_DRAG;
     }
 
@@ -1558,17 +1549,14 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
         {
           drag_x11->proxy_xid = None;
           drag_x11->drop_xid = None;
-          drag->action = 0;
+          gdk_drag_set_action (drag, 0);
         }
 
       /* Push a status event, to let the client know that
        * the drag changed
        */
       if (drag->action != drag_x11->current_action)
-        {
-          drag_x11->current_action = drag->action;
-          g_signal_emit_by_name (drag, "action-changed", drag->action);
-        }
+        drag_x11->current_action = drag->action;
     }
 
   /* Send a drag-motion event */
@@ -1597,15 +1585,12 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
                     gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
-                  drag->action = gdk_drag_get_suggested_action (drag);
+                  gdk_drag_set_action (drag, gdk_drag_get_suggested_action (drag));
                 else
-                  drag->action = 0;
+                  gdk_drag_set_action (drag, 0);
 
                 if (drag->action != drag_x11->current_action)
-                  {
-                    drag_x11->current_action = drag->action;
-                    g_signal_emit_by_name (drag, "action-changed", drag->action);
-                  }
+                  drag_x11->current_action = drag->action;
               }
               break;
             case GDK_DRAG_PROTO_NONE:
@@ -2447,14 +2432,4 @@ gdk_x11_drag_handle_event (GdkDrag        *drag,
     }
 
   return FALSE;
-}
-
-void
-gdk_x11_drag_action_changed (GdkDrag       *drag,
-                             GdkDragAction  action)
-{ 
-  GdkCursor *cursor;
-
-  cursor = gdk_drag_get_cursor (drag, action);
-  gdk_drag_set_cursor (drag, cursor);
 }

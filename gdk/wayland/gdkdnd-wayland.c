@@ -164,16 +164,6 @@ gdk_wayland_drag_set_cursor (GdkDrag   *drag,
 }
 
 static void
-gdk_wayland_drag_action_changed (GdkDrag       *drag,
-                                 GdkDragAction  action)
-{
-  GdkCursor *cursor;
-
-  cursor = gdk_drag_get_cursor (drag, action);
-  gdk_drag_set_cursor (drag, cursor);
-}
-
-static void
 gdk_wayland_drag_drop_performed (GdkDrag *drag,
                                  guint32  time_)
 {
@@ -217,7 +207,6 @@ gdk_wayland_drag_class_init (GdkWaylandDragClass *klass)
   drag_class->set_hotspot = gdk_wayland_drag_set_hotspot;
   drag_class->drop_done = gdk_wayland_drag_drop_done;
   drag_class->set_cursor = gdk_wayland_drag_set_cursor;
-  drag_class->action_changed = gdk_wayland_drag_action_changed;
   drag_class->drop_performed = gdk_wayland_drag_drop_performed;
   drag_class->cancel = gdk_wayland_drag_cancel;
 }
@@ -345,8 +334,7 @@ data_source_action (void                  *data,
             g_message ("data source action, source = %p action=%x",
                        source, action));
 
-  drag->action = _wl_to_gdk_actions (action);
-  g_signal_emit_by_name (drag, "action-changed", drag->action);
+  gdk_drag_set_action (drag, _wl_to_gdk_actions (action));
 }
 
 static const struct wl_data_source_listener data_source_listener = {
