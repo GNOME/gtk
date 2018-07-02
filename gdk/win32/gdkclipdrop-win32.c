@@ -280,7 +280,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #include "gdkclipboard-win32.h"
 #include "gdkclipdrop-win32.h"
 #include "gdkhdataoutputstream-win32.h"
-#include "gdk/gdkdndprivate.h"
+#include "gdk/gdkdragprivate.h"
 #include "gdkwin32dnd.h"
 #include "gdkwin32dnd-private.h"
 #include "gdkwin32.h"
