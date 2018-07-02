@@ -3393,8 +3393,6 @@ progressbar {
 
   trough { @extend %scale_trough; }
 
-  &:backdrop trough { @extend %scale_trough:backdrop; } // looks like states are not passed to the trough component here
-
   progress {
     @extend %scale_highlight;
 
@@ -3420,8 +3418,6 @@ progressbar {
       border-bottom-left-radius: 2px;
     }
   }
-
-  &:backdrop progress { @extend %scale_highlight:backdrop; } // states not passed here as well
 
   &.osd { // progressbar.osd used for epiphany page loading progress
     min-width: 3px;

@@ -1197,9 +1197,9 @@ scale trough, scale fill, progressbar trough { border: 1px solid #b6b6b3; border
 
 scale trough:disabled, scale fill:disabled, progressbar trough:disabled { background-color: #f1f1f1; }
 
-scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough { background-color: #dadad8; border-color: #c0c0bd; transition: 200ms ease-out; }
+scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop { background-color: #dadad8; border-color: #c0c0bd; transition: 200ms ease-out; }
 
-scale trough:backdrop:disabled, scale fill:backdrop:disabled, progressbar trough:backdrop:disabled, progressbar:backdrop trough:disabled { background-color: #f1f1f1; }
+scale trough:backdrop:disabled, scale fill:backdrop:disabled, progressbar trough:backdrop:disabled { background-color: #f1f1f1; }
 
 row:selected scale trough:disabled, scale row:selected trough:disabled, row:selected scale fill:disabled, scale row:selected fill:disabled, row:selected progressbar trough:disabled, progressbar row:selected trough:disabled, row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough { border-color: #184472; }
 
@@ -1211,9 +1211,9 @@ scale highlight, progressbar progress { border: 1px solid #184472; border-radius
 
 scale highlight:disabled, progressbar progress:disabled { background-color: transparent; border-color: transparent; }
 
-scale highlight:backdrop, progressbar progress:backdrop, progressbar:backdrop progress { border-color: #4a90d9; }
+scale highlight:backdrop, progressbar progress:backdrop { border-color: #4a90d9; }
 
-scale highlight:backdrop:disabled, progressbar progress:backdrop:disabled, progressbar:backdrop progress:disabled { background-color: transparent; border-color: transparent; }
+scale highlight:backdrop:disabled, progressbar progress:backdrop:disabled { background-color: transparent; border-color: transparent; }
 
 row:selected scale highlight:disabled, scale row:selected highlight:disabled, row:selected progressbar progress:disabled, progressbar row:selected progress:disabled, row:selected scale highlight, scale row:selected highlight, row:selected progressbar progress, progressbar row:selected progress { border-color: #184472; }
 
