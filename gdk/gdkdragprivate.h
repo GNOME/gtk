@@ -54,8 +54,6 @@ struct _GdkDragClass {
 
   gboolean    (*handle_event)   (GdkDrag  *drag,
                                  const GdkEvent  *event);
-  void        (*action_changed) (GdkDrag  *drag,
-                                 GdkDragAction    action);
 };
 
 struct _GdkDrag {
@@ -76,6 +74,8 @@ void     gdk_drag_set_cursor          (GdkDrag        *drag,
 void     gdk_drag_set_actions         (GdkDrag        *drag,
                                        GdkDragAction   actions,
                                        GdkDragAction   suggested_action);
+void     gdk_drag_set_action          (GdkDrag        *drag,
+                                       GdkDragAction   action);
 
 void     gdk_drag_cancel              (GdkDrag        *drag,
                                        GdkDragCancelReason  reason);
