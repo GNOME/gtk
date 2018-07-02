@@ -744,7 +744,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * @pos: edge side that was hit
    *
    * The ::edge-overshot signal is emitted whenever user initiated scrolling
-   * makes the scrolledwindow firmly surpass (ie. with some edge resistance)
+   * makes the scrolled window firmly surpass (i.e. with some edge resistance)
    * the lower or upper limits defined by the adjustment in that orientation.
    *
    * A similar behavior without edge resistance is provided by the
@@ -767,7 +767,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * @pos: edge side that was reached
    *
    * The ::edge-reached signal is emitted whenever user-initiated scrolling
-   * makes the scrolledwindow exactly reaches the lower or upper limits
+   * makes the scrolled window exactly reach the lower or upper limits
    * defined by the adjustment in that orientation.
    *
    * A similar behavior with edge resistance is provided by the
