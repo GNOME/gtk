@@ -774,38 +774,60 @@ gdk_cursor_get_type
 <SECTION>
 <TITLE>Drag and Drop</TITLE>
 <FILE>dnd</FILE>
-GdkDragContext
+GdkDrag
+GdkDrop
 GdkDragCancelReason
 gdk_drag_drop_done
 gdk_drag_begin
 GdkDragAction
 GDK_ACTION_ALL
 
-gdk_drag_context_get_display
-gdk_drag_context_get_actions
-gdk_drag_context_get_suggested_action
-gdk_drag_context_get_selected_action
-gdk_drag_context_get_formats
-gdk_drag_context_get_device
-gdk_drag_context_get_drag_surface
-gdk_drag_context_set_hotspot
+gdk_drag_get_display
+gdk_drag_get_actions
+gdk_drag_get_suggested_action
+gdk_drag_get_selected_action
+gdk_drag_get_formats
+gdk_drag_get_device
+gdk_drag_get_drag_surface
+gdk_drag_set_hotspot
 
 <SUBSECTION>
 gdk_drag_action_is_unique
 
+<SUBSECTION>
+gdk_drop_get_display
+gdk_drop_get_device
+gdk_drop_get_surface
+gdk_drop_get_formats
+gdk_drop_get_actions
+gdk_drop_get_drag
+gdk_drop_status
+gdk_drop_finish
+gdk_drop_read_async
+gdk_drop_read_finish
+gdk_drop_read_value_async
+gdk_drop_read_value_finish
+gdk_drop_read_text_async
+gdk_drop_read_text_finish
+
 <SUBSECTION Standard>
-GDK_DRAG_CONTEXT
-GDK_TYPE_DRAG_CONTEXT
-GDK_IS_DRAG_CONTEXT
-GDK_DRAG_CONTEXT_CLASS
-GDK_DRAG_CONTEXT_GET_CLASS
-GDK_IS_DRAG_CONTEXT_CLASS
+GDK_DRAG
+GDK_TYPE_DRAG
+GDK_IS_DRAG
+GDK_DRAG_CLASS
+GDK_DRAG_GET_CLASS
+GDK_IS_DRAG_CLASS
 GDK_TYPE_DRAG_ACTION
 GDK_TYPE_DRAG_PROTOCOL
+GDK_TYPE_DROP
+GDK_DROP
+GDK_IS_DROP
 
 <SUBSECTION Private>
-GdkDragContextClass
-gdk_drag_context_get_type
+GdkDragClass
+gdk_drag_get_type
+GdkDropClass
+gdk_drop_get_type
 </SECTION>
 
 <SECTION>
