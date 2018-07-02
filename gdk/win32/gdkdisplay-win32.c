@@ -31,6 +31,10 @@
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
 
+#ifdef GDK_WIN32_ENABLE_EGL
+# include <epoxy/egl.h>
+#endif
+
 static int debug_indent = 0;
 
 static GdkMonitor *
@@ -824,6 +828,14 @@ gdk_win32_display_dispose (GObject *object)
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
   _gdk_screen_close (display_win32->screen);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (display_win32->egl_disp != EGL_NO_DISPLAY)
+    {
+      eglTerminate (display_win32->egl_disp);
+      display_win32->egl_disp = EGL_NO_DISPLAY;
+    }
+#endif
 
   if (display_win32->hwnd != NULL)
     {
