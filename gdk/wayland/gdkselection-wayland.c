@@ -28,7 +28,6 @@
 #include "gdkprivate-wayland.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkcontentformatsprivate.h"
-#include "gdkdndprivate.h"
 #include "gdkproperty.h"
 
 #include <string.h>

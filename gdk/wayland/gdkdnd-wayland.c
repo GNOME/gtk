@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 
 #include "gdkinternals.h"
 #include "gdkproperty.h"

@@ -28,7 +28,7 @@
 #include "gdkeventsprivate.h"
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
-#include "gdkdndprivate.h"
+#include "gdkdragprivate.h"
 #include "gdkdropprivate.h"
 #include "gdk-private.h"
 

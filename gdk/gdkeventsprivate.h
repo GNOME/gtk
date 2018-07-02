@@ -26,7 +26,7 @@
 #define __GDK_EVENTS_PRIVATE_H__
 
 #include <gdk/gdktypes.h>
-#include <gdk/gdkdnd.h>
+#include <gdk/gdkdrag.h>
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicetool.h>
 
