@@ -34,7 +34,9 @@
 #include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkentryprivate.h"
+#include "gtkeditable.h"
+#include "gtkentry.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkgesturemultipress.h"
@@ -222,6 +224,7 @@ enum {
   PROP_WIDTH_CHARS,
   PROP_MAX_WIDTH_CHARS,
   PROP_TEXT,
+  NUM_SPINBUTTON_PROPS,
   PROP_ORIENTATION,
 };
 
@@ -289,6 +292,7 @@ static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
 
 
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
+static GParamSpec *spinbutton_props[NUM_SPINBUTTON_PROPS] = {NULL, };
 
 G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkSpinButton)
@@ -323,97 +327,87 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   class->output = NULL;
   class->change_value = gtk_spin_button_real_change_value;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ADJUSTMENT,
-                                   g_param_spec_object ("adjustment",
-                                                        P_("Adjustment"),
-                                                        P_("The adjustment that holds the value of the spin button"),
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_READWRITE));
+  spinbutton_props[PROP_ADJUSTMENT] =
+    g_param_spec_object ("adjustment",
+                         P_("Adjustment"),
+                         P_("The adjustment that holds the value of the spin button"),
+                         GTK_TYPE_ADJUSTMENT,
+                         GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_CLIMB_RATE,
-                                   g_param_spec_double ("climb-rate",
-                                                        P_("Climb Rate"),
-                                                        P_("The acceleration rate when you hold down a button or key"),
-                                                        0.0, G_MAXDOUBLE, 0.0,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_CLIMB_RATE] =
+    g_param_spec_double ("climb-rate",
+                         P_("Climb Rate"),
+                         P_("The acceleration rate when you hold down a button or key"),
+                         0.0, G_MAXDOUBLE, 0.0,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_DIGITS,
-                                   g_param_spec_uint ("digits",
-                                                      P_("Digits"),
-                                                      P_("The number of decimal places to display"),
-                                                      0, MAX_DIGITS, 0,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_DIGITS] =
+    g_param_spec_uint ("digits",
+                       P_("Digits"),
+                       P_("The number of decimal places to display"),
+                       0, MAX_DIGITS, 0,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_SNAP_TO_TICKS,
-                                   g_param_spec_boolean ("snap-to-ticks",
-                                                         P_("Snap to Ticks"),
-                                                         P_("Whether erroneous values are automatically changed to a spin button’s nearest step increment"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_SNAP_TO_TICKS] =
+    g_param_spec_boolean ("snap-to-ticks",
+                          P_("Snap to Ticks"),
+                          P_("Whether erroneous values are automatically changed to a spin button’s nearest step increment"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_NUMERIC,
-                                   g_param_spec_boolean ("numeric",
-                                                         P_("Numeric"),
-                                                         P_("Whether non-numeric characters should be ignored"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_NUMERIC] =
+    g_param_spec_boolean ("numeric",
+                          P_("Numeric"),
+                          P_("Whether non-numeric characters should be ignored"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_WRAP,
-                                   g_param_spec_boolean ("wrap",
-                                                         P_("Wrap"),
-                                                         P_("Whether a spin button should wrap upon reaching its limits"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_WRAP] =
+    g_param_spec_boolean ("wrap",
+                          P_("Wrap"),
+                          P_("Whether a spin button should wrap upon reaching its limits"),
+                          FALSE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_UPDATE_POLICY,
-                                   g_param_spec_enum ("update-policy",
-                                                      P_("Update Policy"),
-                                                      P_("Whether the spin button should update always, or only when the value is legal"),
-                                                      GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
-                                                      GTK_UPDATE_ALWAYS,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_UPDATE_POLICY] =
+    g_param_spec_enum ("update-policy",
+                       P_("Update Policy"),
+                       P_("Whether the spin button should update always, or only when the value is legal"),
+                       GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
+                       GTK_UPDATE_ALWAYS,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_VALUE,
-                                   g_param_spec_double ("value",
-                                                        P_("Value"),
-                                                        P_("Reads the current value, or sets a new value"),
-                                                        -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_VALUE] =
+    g_param_spec_double ("value",
+                         P_("Value"),
+                         P_("Reads the current value, or sets a new value"),
+                         -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_WIDTH_CHARS,
-                                   g_param_spec_int ("width-chars",
-                                                     P_("Width in chars"),
-                                                     P_("Number of characters to leave space for in the entry"),
-                                                     -1, G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_WIDTH_CHARS] =
+    g_param_spec_int ("width-chars",
+                      P_("Width in chars"),
+                      P_("Number of characters to leave space for in the entry"),
+                      -1, G_MAXINT,
+                      0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_MAX_WIDTH_CHARS,
-                                   g_param_spec_int ("max-width-chars",
-                                                     P_("Maximum width in characters"),
-                                                     P_("The desired maximum width of the entry, in characters"),
-                                                     -1, G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_MAX_WIDTH_CHARS] =
+    g_param_spec_int ("max-width-chars",
+                      P_("Maximum width in characters"),
+                      P_("The desired maximum width of the entry, in characters"),
+                      -1, G_MAXINT,
+                      0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_TEXT,
-                                   g_param_spec_string ("text",
-                                   P_("Text"),
-                                   P_("The contents of the entry"),
-                                   "0",  /* Default value of the default adjustment */
-                                   GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  spinbutton_props[PROP_TEXT] =
+    g_param_spec_string ("text",
+                         P_("Text"),
+                         P_("The contents of the entry"),
+                         "0",  /* Default value of the default adjustment */
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  g_object_class_install_properties (gobject_class, NUM_SPINBUTTON_PROPS, spinbutton_props);
   g_object_class_override_property (gobject_class,
                                     PROP_ORIENTATION,
                                     "orientation");
@@ -1195,7 +1189,7 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
   update_buttons_sensitivity (spin_button);
   gtk_widget_queue_draw (GTK_WIDGET (spin_button));
 
-  g_object_notify (G_OBJECT (spin_button), "value");
+  g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_VALUE]);
 }
 
 static void
@@ -1564,20 +1558,20 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
                         spin_button);
       priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
 
-      g_object_notify (G_OBJECT (spin_button), "adjustment");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_ADJUSTMENT]);
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));
     }
 
   if (priv->digits != digits)
     {
       priv->digits = digits;
-      g_object_notify (G_OBJECT (spin_button), "digits");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_DIGITS]);
     }
 
   if (priv->climb_rate != climb_rate)
     {
       priv->climb_rate = climb_rate;
-      g_object_notify (G_OBJECT (spin_button), "climb-rate");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_CLIMB_RATE]);
     }
 
   g_object_thaw_notify (G_OBJECT (spin_button));
@@ -1725,7 +1719,7 @@ gtk_spin_button_set_digits (GtkSpinButton *spin_button,
     {
       priv->digits = digits;
       gtk_spin_button_value_changed (priv->adjustment, spin_button);
-      g_object_notify (G_OBJECT (spin_button), "digits");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_DIGITS]);
 
       /* since lower/upper may have changed */
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));
@@ -1944,7 +1938,7 @@ gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
   if (priv->update_policy != policy)
     {
       priv->update_policy = policy;
-      g_object_notify (G_OBJECT (spin_button), "update-policy");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_UPDATE_POLICY]);
     }
 }
 
@@ -1987,8 +1981,8 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
 
   if (priv->numeric != numeric)
     {
-       priv->numeric = numeric;
-       g_object_notify (G_OBJECT (spin_button), "numeric");
+      priv->numeric = numeric;
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_NUMERIC]);
     }
 }
 
@@ -2032,10 +2026,10 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
 
   if (priv->wrap != wrap)
     {
-       priv->wrap = wrap;
-       g_object_notify (G_OBJECT (spin_button), "wrap");
+      priv->wrap = wrap;
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_WRAP]);
 
-       update_buttons_sensitivity (spin_button);
+      update_buttons_sensitivity (spin_button);
     }
 }
 
@@ -2085,7 +2079,7 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
       if (new_val && gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
         gtk_spin_button_update (spin_button);
 
-      g_object_notify (G_OBJECT (spin_button), "snap-to-ticks");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_SNAP_TO_TICKS]);
     }
 }
 
@@ -2271,7 +2265,7 @@ gtk_spin_button_set_text (GtkSpinButton *spin_button,
 
   gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
 
-  g_object_notify (G_OBJECT (spin_button), "text");
+  g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_TEXT]);
 }
 
 /**
@@ -2316,7 +2310,7 @@ gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
   if (max_width_chars != gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry)))
     {
       gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), max_width_chars);
-      g_object_notify (G_OBJECT (spin_button), "max-width-chars");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_MAX_WIDTH_CHARS]);
     }
 }
 
@@ -2359,6 +2353,6 @@ gtk_spin_button_set_width_chars (GtkSpinButton *spin_button,
   if (width_chars != gtk_entry_get_width_chars (GTK_ENTRY (priv->entry)))
     {
       gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), width_chars);
-      g_object_notify (G_OBJECT (spin_button), "width-chars");
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_WIDTH_CHARS]);
     }
 }
