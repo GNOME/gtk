@@ -124,7 +124,7 @@ gdk_wayland_drag_init (GdkWaylandDrag *drag_wayland)
   drag = GDK_DRAG (drag_wayland);
   drags = g_list_prepend (drags, drag);
 
-  gdk_drag_set_action (drag, GDK_ACTION_COPY);
+  gdk_drag_set_selected_action (drag, GDK_ACTION_COPY);
 }
 
 static GdkSurface *
@@ -335,7 +335,7 @@ data_source_action (void                  *data,
             g_message ("data source action, source = %p action=%x",
                        source, action));
 
-  gdk_drag_set_action (drag, _wl_to_gdk_actions (action));
+  gdk_drag_set_selected_action (drag, _wl_to_gdk_actions (action));
 }
 
 static const struct wl_data_source_listener data_source_listener = {
