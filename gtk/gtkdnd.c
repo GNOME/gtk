@@ -961,17 +961,13 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 }
 
 /**
- * gtk_drag_begin_with_coordinates: (method)
+ * gtk_drag_begin: (method)
  * @widget: the source widget
- * @device: (nullable): the device that starts the drag or %NULL to use the default
- *    pointer.
- * @targets: The targets (data formats) in which the
- *    source can provide the data
+ * @device: (nullable): the device that starts the drag or %NULL to use the default pointer
+ * @targets: The targets (data formats) in which the source can provide the data
  * @actions: A bitmask of the allowed drag actions for this drag
- * @x: The initial x coordinate to start dragging from, in the coordinate space
- *    of @widget.
- * @y: The initial y coordinate to start dragging from, in the coordinate space
- *    of @widget.
+ * @x: The initial x coordinate to start dragging from, in the coordinate space of @widget.
+ * @y: The initial y coordinate to start dragging from, in the coordinate space of @widget.
  *
  * Initiates a drag on the source side. The function only needs to be used
  * when the application is starting drags itself, and is not needed when
@@ -980,12 +976,12 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * Returns: (transfer none): the context for this drag
  */
 GdkDrag *
-gtk_drag_begin_with_coordinates (GtkWidget         *widget,
-                                 GdkDevice         *device,
-                                 GdkContentFormats *targets,
-                                 GdkDragAction      actions,
-                                 gint               x,
-                                 gint               y)
+gtk_drag_begin (GtkWidget         *widget,
+                GdkDevice         *device,
+                GdkContentFormats *targets,
+                GdkDragAction      actions,
+                gint               x,
+                gint               y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (device == NULL || GDK_IS_DEVICE (device), NULL);
@@ -1411,14 +1407,14 @@ gtk_drag_check_threshold (GtkWidget *widget,
 
 /**
  * gtk_drag_cancel:
- * @drag: a drag context, as e.g. returned by gtk_drag_begin_with_coordinates()
+ * @drag: a drag context, as e.g. returned by gtk_drag_begin()
  *
  * Cancels an ongoing drag operation on the source side.
  *
  * If you want to be able to cancel a drag operation in this way,
  * you need to keep a pointer to the drag context, either from an
- * explicit call to gtk_drag_begin_with_coordinates(), or by
- * connecting to #GtkWidget::drag-begin.
+ * explicit call to gtk_drag_begin(), or by connecting to
+ * #GtkWidget::drag-begin.
  *
  * If @context does not refer to an ongoing drag operation, this
  * function does nothing.
