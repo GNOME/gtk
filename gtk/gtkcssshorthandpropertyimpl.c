@@ -1080,12 +1080,10 @@ pack_border_radius (GtkCssShorthandProperty *shorthand,
                     GtkStyleQueryFunc        query_func,
                     gpointer                 query_data)
 {
-  GtkCssStyleProperty *prop;
   GtkCssValue *v;
   int i = 0;
 
-  prop = GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("border-top-left-radius"));
-  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
+  v = (* query_func) (GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS, query_data);
   if (v)
     i = _gtk_css_corner_value_get_x (v, 100);
 
@@ -1104,26 +1102,26 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   description = pango_font_description_new ();
 
-  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-family"))), query_data);
+  v = (* query_func) (GTK_CSS_PROPERTY_FONT_FAMILY, query_data);
   if (v)
     {
       /* xxx: Can we set all the families here somehow? */
       pango_font_description_set_family (description, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
     }
 
-  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-size"))), query_data);
+  v = (* query_func) (GTK_CSS_PROPERTY_FONT_SIZE, query_data);
   if (v)
     pango_font_description_set_absolute_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
 
-  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-style"))), query_data);
+  v = (* query_func) (GTK_CSS_PROPERTY_FONT_STYLE, query_data);
   if (v)
     pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
 
-  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-weight"))), query_data);
+  v = (* query_func) (GTK_CSS_PROPERTY_FONT_WEIGHT, query_data);
   if (v)
     pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
 
-  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-stretch"))), query_data);
+  v = (* query_func) (GTK_CSS_PROPERTY_FONT_STRETCH, query_data);
   if (v)
     pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
 
