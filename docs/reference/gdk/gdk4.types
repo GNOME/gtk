@@ -9,7 +9,8 @@ gdk_device_pad_get_type
 gdk_device_tool_get_type
 gdk_display_get_type
 gdk_display_manager_get_type
-gdk_drag_context_get_type
+gdk_drag_get_type
+gdk_drop_get_type
 gdk_event_get_type
 gdk_frame_clock_get_type
 gdk_gl_context_get_type
