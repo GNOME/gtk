@@ -53,7 +53,8 @@ enum {
   PROP_DEVICE,
   PROP_DISPLAY,
   PROP_FORMATS,
-  PROP_ACTION,
+  PROP_SELECTED_ACTION,
+  PROP_ACTIONS,
   N_PROPERTIES
 };
 
@@ -238,10 +239,10 @@ gdk_drag_set_property (GObject      *gobject,
         }
       break;
 
-    case PROP_ACTION:
+    case PROP_SELECTED_ACTION:
       {
         GdkDragAction action = g_value_get_flags (value);
-        gdk_drag_set_action (drag, action);
+        gdk_drag_set_selected_action (drag, action);
       }
     break;
 
@@ -277,7 +278,7 @@ gdk_drag_get_property (GObject    *gobject,
       g_value_set_boxed (value, drag->formats);
       break;
 
-    case PROP_ACTION:
+    case PROP_SELECTED_ACTION:
       g_value_set_flags (value, drag->selected_action);
       break;
 
@@ -371,9 +372,9 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 
-  properties[PROP_ACTION] =
-    g_param_spec_flags ("action",
-                        "Action",
+  properties[PROP_SELECTED_ACTION] =
+    g_param_spec_flags ("selected-action",
+                        "Selected action",
                         "The currently selected action",
                         GDK_TYPE_DRAG_ACTION,
                         0,
@@ -597,8 +598,8 @@ gdk_drag_set_actions (GdkDrag       *drag,
 }
 
 void
-gdk_drag_set_action (GdkDrag       *drag,
-                     GdkDragAction  action)
+gdk_drag_set_selected_action (GdkDrag       *drag,
+                              GdkDragAction  action)
 {
   GdkCursor *cursor;
 
@@ -610,7 +611,7 @@ gdk_drag_set_action (GdkDrag       *drag,
   cursor = gdk_drag_get_cursor (drag, action);
   gdk_drag_set_cursor (drag, cursor);
 
-  g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTION]);
+  g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_SELECTED_ACTION]);
 }
 
 /**
