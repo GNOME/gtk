@@ -80,7 +80,7 @@ void     gdk_drag_set_cursor          (GdkDrag        *drag,
 void     gdk_drag_set_actions         (GdkDrag        *drag,
                                        GdkDragAction   actions,
                                        GdkDragAction   suggested_action);
-void     gdk_drag_set_action          (GdkDrag        *drag,
+void     gdk_drag_set_selected_action (GdkDrag        *drag,
                                        GdkDragAction   action);
 
 void     gdk_drag_cancel              (GdkDrag        *drag,

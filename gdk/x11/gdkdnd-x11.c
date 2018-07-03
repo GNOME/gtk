@@ -879,7 +879,7 @@ gdk_x11_drag_handle_status (GdkDisplay   *display,
           action = 0;
         }
 
-      gdk_drag_set_action (drag, xdnd_action_from_atom (display, action));
+      gdk_drag_set_selected_action (drag, xdnd_action_from_atom (display, action));
       drag_x11->current_action = action;
     }
 }
@@ -1002,7 +1002,7 @@ send_client_message_async_cb (Window   window,
       window == drag_x11->proxy_xid)
     {
       drag_x11->proxy_xid = None;
-      gdk_drag_set_action (drag, 0);
+      gdk_drag_set_selected_action (drag, 0);
       drag_x11->current_action = 0;
       drag_x11->drag_status = GDK_DRAG_STATUS_DRAG;
     }
@@ -1546,7 +1546,7 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
         {
           drag_x11->proxy_xid = None;
           drag_x11->drop_xid = None;
-          gdk_drag_set_action (drag, 0);
+          gdk_drag_set_selected_action (drag, 0);
         }
 
       /* Push a status event, to let the client know that
@@ -1581,9 +1581,9 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
                     gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
-                  gdk_drag_set_action (drag, gdk_drag_get_suggested_action (drag));
+                  gdk_drag_set_selected_action (drag, gdk_drag_get_suggested_action (drag));
                 else
-                  gdk_drag_set_action (drag, 0);
+                  gdk_drag_set_selected_action (drag, 0);
 
                 drag_x11->current_action = gdk_drag_get_selected_action (drag);
               }
