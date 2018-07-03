@@ -63,8 +63,14 @@ struct _GdkDrag {
   GdkSurface *source_surface;
   GdkSurface *drag_surface;
 
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkContentFormats *formats;
   GdkContentProvider *content;
-  GdkDragAction action;
+
+  GdkDragAction actions;
+  GdkDragAction selected_action;
+  GdkDragAction suggested_action;
 
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
