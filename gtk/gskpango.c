@@ -127,10 +127,10 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
     return;
 
   graphene_rect_init (&node_bounds,
-                      (float)x/PANGO_SCALE,
-                      (float)y/PANGO_SCALE + ink_rect.y,
-                      ink_rect.x + ink_rect.width,
-                      ink_rect.height);
+                      (float)x/PANGO_SCALE - 1.0,
+                      (float)y/PANGO_SCALE + ink_rect.y - 1.0,
+                      ink_rect.x + ink_rect.width + 2.0,
+                      ink_rect.height + 2.0);
 
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
   graphene_rect_offset (&node_bounds, x_offset, y_offset);
