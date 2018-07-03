@@ -35,17 +35,6 @@
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
 
-typedef struct _GdkDragPrivate GdkDragPrivate;
-
-struct _GdkDragPrivate 
-{
-  GdkDisplay *display;
-  GdkDevice *device;
-  GdkContentFormats *formats;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-};
-
 static struct {
   GdkDragAction action;
   const gchar  *name;
@@ -79,7 +68,7 @@ static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 static GList *drags = NULL;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 
 /**
  * SECTION:dnd
@@ -115,11 +104,9 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 GdkDisplay *
 gdk_drag_get_display (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return priv->display;
+  return drag->display;
 }
 
 /**
@@ -133,11 +120,9 @@ gdk_drag_get_display (GdkDrag *drag)
 GdkContentFormats *
 gdk_drag_get_formats (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return priv->formats;
+  return drag->formats;
 }
 
 /**
@@ -152,11 +137,9 @@ gdk_drag_get_formats (GdkDrag *drag)
 GdkDragAction
 gdk_drag_get_actions (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return priv->actions;
+  return drag->actions;
 }
 
 /**
@@ -170,11 +153,9 @@ gdk_drag_get_actions (GdkDrag *drag)
 GdkDragAction
 gdk_drag_get_suggested_action (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return priv->suggested_action;
+  return drag->suggested_action;
 }
 
 /**
@@ -190,7 +171,7 @@ gdk_drag_get_selected_action (GdkDrag *drag)
 {
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return drag->action;
+  return drag->selected_action;
 }
 
 /**
@@ -204,11 +185,9 @@ gdk_drag_get_selected_action (GdkDrag *drag)
 GdkDevice *
 gdk_drag_get_device (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return priv->device;
+  return drag->device;
 }
 
 static void
@@ -224,7 +203,6 @@ gdk_drag_set_property (GObject      *gobject,
                        GParamSpec   *pspec)
 {
   GdkDrag *drag = GDK_DRAG (gobject);
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   switch (prop_id)
     {
@@ -232,31 +210,31 @@ gdk_drag_set_property (GObject      *gobject,
       drag->content = g_value_dup_object (value);
       if (drag->content)
         {
-          g_assert (priv->formats == NULL);
-          priv->formats = gdk_content_provider_ref_formats (drag->content);
+          g_assert (drag->formats == NULL);
+          drag->formats = gdk_content_provider_ref_formats (drag->content);
         }
       break;
 
     case PROP_DEVICE:
-      priv->device = g_value_dup_object (value);
-      g_assert (priv->device != NULL);
-      priv->display = gdk_device_get_display (priv->device);
+      drag->device = g_value_dup_object (value);
+      g_assert (drag->device != NULL);
+      drag->display = gdk_device_get_display (drag->device);
       break;
 
     case PROP_FORMATS:
-      if (priv->formats)
+      if (drag->formats)
         {
           GdkContentFormats *override = g_value_dup_boxed (value);
           if (override)
             {
-              gdk_content_formats_unref (priv->formats);
-              priv->formats = override;
+              gdk_content_formats_unref (drag->formats);
+              drag->formats = override;
             }
         }
       else
         {
-          priv->formats = g_value_dup_boxed (value);
-          g_assert (priv->formats != NULL);
+          drag->formats = g_value_dup_boxed (value);
+          g_assert (drag->formats != NULL);
         }
       break;
 
@@ -280,7 +258,6 @@ gdk_drag_get_property (GObject    *gobject,
                        GParamSpec *pspec)
 {
   GdkDrag *drag = GDK_DRAG (gobject);
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   switch (prop_id)
     {
@@ -289,19 +266,19 @@ gdk_drag_get_property (GObject    *gobject,
       break;
 
     case PROP_DEVICE:
-      g_value_set_object (value, priv->device);
+      g_value_set_object (value, drag->device);
       break;
 
     case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
+      g_value_set_object (value, drag->display);
       break;
 
     case PROP_FORMATS:
-      g_value_set_boxed (value, priv->formats);
+      g_value_set_boxed (value, drag->formats);
       break;
 
     case PROP_ACTION:
-      g_value_set_flags (value, drag->action);
+      g_value_set_flags (value, drag->selected_action);
       break;
 
     default:
@@ -314,12 +291,11 @@ static void
 gdk_drag_finalize (GObject *object)
 {
   GdkDrag *drag = GDK_DRAG (object);
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   drags = g_list_remove (drags, drag);
 
   g_clear_object (&drag->content);
-  g_clear_pointer (&priv->formats, gdk_content_formats_unref);
+  g_clear_pointer (&drag->formats, gdk_content_formats_unref);
 
   if (drag->source_surface)
     g_object_unref (drag->source_surface);
@@ -616,10 +592,8 @@ gdk_drag_set_actions (GdkDrag       *drag,
                       GdkDragAction  actions,
                       GdkDragAction  suggested_action)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
-  priv->actions = actions;
-  priv->suggested_action = suggested_action;
+  drag->actions = actions;
+  drag->suggested_action = suggested_action;
 }
 
 void
@@ -628,10 +602,10 @@ gdk_drag_set_action (GdkDrag       *drag,
 {
   GdkCursor *cursor;
 
-  if (drag->action == action)
+  if (drag->selected_action == action)
     return;
 
-  drag->action = action;
+  drag->selected_action = action;
 
   cursor = gdk_drag_get_cursor (drag, action);
   gdk_drag_set_cursor (drag, cursor);
