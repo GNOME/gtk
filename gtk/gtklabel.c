@@ -4722,12 +4722,12 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
 
           g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
-	  gtk_drag_begin_with_coordinates (widget,
-                                           gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                           target_list,
-                                           GDK_ACTION_COPY,
-                                           info->drag_start_x,
-                                           info->drag_start_y);
+	  gtk_drag_begin (widget,
+                          gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                          target_list,
+                          GDK_ACTION_COPY,
+                          info->drag_start_x,
+                          info->drag_start_y);
 
 	  info->in_drag = FALSE;
 
