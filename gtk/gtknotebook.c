@@ -2654,10 +2654,10 @@ gtk_notebook_motion (GtkEventController *controller,
     {
       priv->detached_tab = priv->cur_page;
 
-      gtk_drag_begin_with_coordinates (widget,
-                                       gtk_get_current_event_device (),
-                                       priv->source_targets, GDK_ACTION_MOVE,
-                                       priv->drag_begin_x, priv->drag_begin_y);
+      gtk_drag_begin (widget,
+                      gtk_get_current_event_device (),
+                      priv->source_targets, GDK_ACTION_MOVE,
+                      priv->drag_begin_x, priv->drag_begin_y);
       return;
     }
 
