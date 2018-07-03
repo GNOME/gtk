@@ -34,6 +34,12 @@ typedef struct _GdkDropClass GdkDropClass;
 
 struct _GdkDrop {
   GObject parent_instance;
+
+  GdkDevice *device;
+  GdkDrag *drag;
+  GdkContentFormats *formats;
+  GdkSurface *surface;
+  GdkDragAction actions;
 };
 
 struct _GdkDropClass {
