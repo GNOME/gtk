@@ -1444,7 +1444,11 @@ scale.color.fine-tune.vertical:dir(rtl) slider { margin-right: -15px; margin-lef
 /***************** Progress bars * */
 progressbar { font-size: smaller; color: rgba(238, 238, 236, 0.4); }
 
+progressbar.horizontal trough { min-width: 150px; }
+
 progressbar.horizontal trough, progressbar.horizontal progress { min-height: 2px; }
+
+progressbar.vertical trough { min-height: 80px; }
 
 progressbar.vertical trough, progressbar.vertical progress { min-width: 2px; }
 

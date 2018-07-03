@@ -2499,11 +2499,15 @@ progressbar {
 
   // moving bit
   &.horizontal {
+    trough { min-width: 150px; }
     trough, progress { min-height: 2px; }
   }
+
   &.vertical {
+    trough { min-height: 80px; }
     trough, progress { min-width: 2px; }
   }
+
   & progress {
     border-width: 1px;
     border-style: solid;

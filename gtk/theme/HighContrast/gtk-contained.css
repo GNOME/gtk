@@ -1111,7 +1111,11 @@ progressbar trough:backdrop { border-color: #8d8d8d; background-color: #d7d7d7; 
 
 progressbar.osd trough { background-color: transparent; box-shadow: none; border-width: 0; }
 
+progressbar.horizontal trough { min-width: 150px; }
+
 progressbar.horizontal trough, progressbar.horizontal progress { min-height: 2px; }
+
+progressbar.vertical trough { min-height: 80px; }
 
 progressbar.vertical trough, progressbar.vertical progress { min-width: 2px; }
 
