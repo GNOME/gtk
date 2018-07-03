@@ -10,7 +10,7 @@ gdk/gdkcursor.c
 gdk/gdkdevice.c
 gdk/gdkdisplay.c
 gdk/gdkdisplaymanager.c
-gdk/gdkdnd.c
+gdk/gdkdrag.c
 gdk/gdkdrawcontext.c
 gdk/gdkdrop.c
 gdk/gdkevents.c
