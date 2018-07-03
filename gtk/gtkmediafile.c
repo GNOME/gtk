@@ -183,7 +183,7 @@ gtk_media_file_init (GtkMediaFile *self)
 {
 }
 
-static GType
+GType
 gtk_media_file_get_impl_type (void)
 {
   static GType impl_type = G_TYPE_NONE;
