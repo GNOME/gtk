@@ -145,6 +145,7 @@ struct _GdkWindowImplWayland
   unsigned int pending_buffer_attached : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
+  unsigned int using_csd : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
   GdkWindow *popup_parent;
@@ -258,6 +259,7 @@ static void calculate_moved_to_rect_result (GdkWindow    *window,
 
 static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
 static void gdk_wayland_window_unexport (GdkWindow *window);
+static void gdk_wayland_window_announce_decoration_mode (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -387,6 +389,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gdk_screen_get_n_monitors (screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+  impl->using_csd = TRUE;
 
   /* logical 1x1 fake buffer */
   impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
@@ -691,6 +695,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   window->impl = GDK_WINDOW_IMPL (impl);
   impl->wrapper = GDK_WINDOW (window);
   impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
+  impl->using_csd = TRUE;
 
   if (window->width > 65535)
     {
@@ -2064,19 +2069,68 @@ window_anchor_to_gravity_legacy (GdkGravity rect_anchor)
     }
 }
 
-void
-gdk_wayland_window_announce_csd (GdkWindow *window)
+static void
+kwin_server_decoration_mode_set (void *data, struct org_kde_kwin_server_decoration *org_kde_kwin_server_decoration, uint32_t mode)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if ((mode == ORG_KDE_KWIN_SERVER_DECORATION_MODE_SERVER && impl->using_csd) ||
+        (mode == ORG_KDE_KWIN_SERVER_DECORATION_MODE_CLIENT && !impl->using_csd))
+    gdk_wayland_window_announce_decoration_mode (window);
+}
+
+static const struct org_kde_kwin_server_decoration_listener kwin_server_decoration_listener = {
+  kwin_server_decoration_mode_set
+};
+
+static void
+gdk_wayland_window_announce_decoration_mode (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (!display_wayland->server_decoration_manager)
     return;
-  impl->display_server.server_decoration =
-    org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                  impl->display_server.wl_surface);
+  if (!impl->display_server.server_decoration)
+    {
+      impl->display_server.server_decoration =
+        org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
+                                                                                         impl->display_server.wl_surface);
+      org_kde_kwin_server_decoration_add_listener (impl->display_server.server_decoration,
+                                                                                &kwin_server_decoration_listener,
+                                                                                window);
+  }
+
   if (impl->display_server.server_decoration)
-    org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
+    {
+      if (impl->using_csd)
+        org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
+                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MODE_CLIENT);
+      else
+        org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
+                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MODE_SERVER);
+    }
+}
+
+void
+gdk_wayland_window_announce_csd (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->using_csd = TRUE;
+  if (impl->mapped)
+    gdk_wayland_window_announce_decoration_mode (window);
+}
+
+void
+gdk_wayland_window_announce_ssd (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->using_csd = FALSE;
+  if (impl->mapped)
+    gdk_wayland_window_announce_decoration_mode (window);
 }
 
 static GdkWindow *
@@ -2906,11 +2960,13 @@ gdk_wayland_window_map (GdkWindow *window)
       else
         {
           gdk_wayland_window_create_xdg_toplevel (window);
+          gdk_wayland_window_announce_decoration_mode (window);
         }
     }
   else
     {
       gdk_wayland_window_create_xdg_toplevel (window);
+      gdk_wayland_window_announce_decoration_mode (window);
     }
 
   impl->mapped = TRUE;
@@ -3072,6 +3128,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           gtk_surface1_destroy (impl->display_server.gtk_surface);
           impl->display_server.gtk_surface = NULL;
           impl->application.was_set = FALSE;
+        }
+
+      if (impl->display_server.server_decoration)
+        {
+          org_kde_kwin_server_decoration_release (impl->display_server.server_decoration);
+          impl->display_server.server_decoration = NULL;
         }
 
       wl_surface_destroy (impl->display_server.wl_surface);
