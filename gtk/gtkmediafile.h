@@ -50,6 +50,9 @@ struct _GtkMediaFileClass
 };
 
 GDK_AVAILABLE_IN_ALL
+GType                   gtk_media_file_get_impl_type            (void);
+
+GDK_AVAILABLE_IN_ALL
 GtkMediaStream *        gtk_media_file_new                      (void);
 GDK_AVAILABLE_IN_ALL
 GtkMediaStream *        gtk_media_file_new_for_filename         (const char     *filename);
