@@ -410,6 +410,9 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 			     drag_wayland->dnd_wl_surface,
                              _gdk_wayland_display_get_serial (display_wayland));
 
+  cursor = gdk_drag_get_cursor (drag, gdk_drag_get_action (drag));
+  gdk_drag_set_cursor (drag, cursor);
+
   gdk_seat_ungrab (seat);
 
   return drag;
