@@ -2675,10 +2675,10 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
 
   targets = gdk_content_formats_new (NULL, 0);
   targets = gtk_content_formats_add_text_targets (targets);
-  drag = gtk_drag_begin_with_coordinates (widget,
-                                          gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                          targets, GDK_ACTION_COPY,
-                                          start_x, start_y);
+  drag = gtk_drag_begin (widget,
+                         gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                         targets, GDK_ACTION_COPY,
+                         start_x, start_y);
 
   priv->in_drag = 0;
   gdk_content_formats_unref (targets);

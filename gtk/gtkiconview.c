@@ -6064,12 +6064,12 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
 
   retval = TRUE;
 
-  drag = gtk_drag_begin_with_coordinates (widget,
-                                          device,
-                                          gtk_drag_source_get_target_list (widget),
-                                          icon_view->priv->source_actions,
-                                          icon_view->priv->press_start_x,
-                                          icon_view->priv->press_start_y);
+  drag = gtk_drag_begin (widget,
+                         device,
+                         gtk_drag_source_get_target_list (widget),
+                         icon_view->priv->source_actions,
+                         icon_view->priv->press_start_x,
+                         icon_view->priv->press_start_y);
 
   set_source_row (drag, model, path);
 
