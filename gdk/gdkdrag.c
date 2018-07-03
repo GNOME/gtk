@@ -246,6 +246,13 @@ gdk_drag_set_property (GObject      *gobject,
       }
     break;
 
+    case PROP_ACTIONS:
+      {
+        GdkDragAction actions = g_value_get_flags (value);
+        gdk_drag_set_actions (drag, actions, drag->suggested_action);
+      }
+    break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -280,6 +287,10 @@ gdk_drag_get_property (GObject    *gobject,
 
     case PROP_SELECTED_ACTION:
       g_value_set_flags (value, drag->selected_action);
+      break;
+
+    case PROP_ACTIONS:
+      g_value_set_flags (value, drag->actions);
       break;
 
     default:
@@ -382,6 +393,15 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_ACTIONS] =
+    g_param_spec_flags ("actions",
+                        "Actions",
+                        "The possible actions",
+                        GDK_TYPE_DRAG_ACTION,
+                        0,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GdkDrag::cancel:
    * @drag: The object on which the signal is emitted
@@ -593,8 +613,14 @@ gdk_drag_set_actions (GdkDrag       *drag,
                       GdkDragAction  actions,
                       GdkDragAction  suggested_action)
 {
-  drag->actions = actions;
   drag->suggested_action = suggested_action;
+
+  if (drag->actions == actions)
+    return;
+
+  drag->actions = actions;
+
+  g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTIONS]);
 }
 
 void
