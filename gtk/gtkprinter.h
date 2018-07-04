@@ -164,6 +164,7 @@ gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *pr
                                                             gdouble          *bottom,
                                                             gdouble          *left,
                                                             gdouble          *right);
+GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter       *printer,
 								      GtkPaperSize     *paper_size,
 								      gdouble          *top,
