@@ -130,8 +130,7 @@ gdk_drag_get_formats (GdkDrag *drag)
  * gdk_drag_get_actions:
  * @drag: a #GdkDrag
  *
- * Determines the bitmask of actions proposed by the source if
- * gdk_drag_get_suggested_action() returns %GDK_ACTION_ASK.
+ * Determines the bitmask of possible actions proposed by the source.
  *
  * Returns: the #GdkDragAction flags
  **/
@@ -141,22 +140,6 @@ gdk_drag_get_actions (GdkDrag *drag)
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
   return drag->actions;
-}
-
-/**
- * gdk_drag_get_suggested_action:
- * @drag: a #GdkDrag
- *
- * Determines the suggested drag action of the GdkDrag object.
- *
- * Returns: a #GdkDragAction value
- **/
-GdkDragAction
-gdk_drag_get_suggested_action (GdkDrag *drag)
-{
-  g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
-
-  return drag->suggested_action;
 }
 
 /**
@@ -618,13 +601,6 @@ gdk_drag_set_actions (GdkDrag       *drag,
   drag->actions = actions;
 
   g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTIONS]);
-}
-
-void
-gdk_drag_set_suggested_action (GdkDrag       *drag,
-                               GdkDragAction  suggested_action)
-{
-  drag->suggested_action = suggested_action;
 }
 
 void

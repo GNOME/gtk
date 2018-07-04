@@ -66,8 +66,6 @@ GdkContentFormats *gdk_drag_get_formats        (GdkDrag *drag);
 GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_get_actions          (GdkDrag *drag);
 GDK_AVAILABLE_IN_ALL
-GdkDragAction    gdk_drag_get_suggested_action (GdkDrag *drag);
-GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_get_selected_action  (GdkDrag *drag);
 
 GDK_AVAILABLE_IN_ALL
