@@ -70,7 +70,6 @@ struct _GdkDrag {
 
   GdkDragAction actions;
   GdkDragAction selected_action;
-  GdkDragAction suggested_action;
 
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
@@ -79,8 +78,6 @@ void     gdk_drag_set_cursor          (GdkDrag        *drag,
                                        GdkCursor      *cursor);
 void     gdk_drag_set_actions         (GdkDrag        *drag,
                                        GdkDragAction   actions);
-void     gdk_drag_set_suggested_action (GdkDrag       *drag,
-                                       GdkDragAction   suggested_action);
 void     gdk_drag_set_selected_action (GdkDrag        *drag,
                                        GdkDragAction   action);
 

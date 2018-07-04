@@ -1478,7 +1478,6 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
     move_drag_surface (drag, x_root, y_root);
 
   gdk_drag_set_actions (drag, possible_actions);
-  gdk_drag_set_suggested_action (drag, suggested_action);
 
   if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->version == 0)
     {
@@ -1582,7 +1581,7 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
                     gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
-                  gdk_drag_set_selected_action (drag, gdk_drag_get_suggested_action (drag));
+                  gdk_drag_set_selected_action (drag, suggested_action);
                 else
                   gdk_drag_set_selected_action (drag, 0);
 
@@ -2248,19 +2247,20 @@ gdk_drag_update (GdkDrag         *drag,
                  guint32          evtime)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkDragAction action, possible_actions;
+  GdkDragAction suggested_action;
+  GdkDragAction possible_actions;
   GdkDragProtocol protocol;
   Window proxy;
 
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_drag->actions,
-                                &action, &possible_actions);
+                                &suggested_action, &possible_actions);
 
   proxy = gdk_x11_drag_find_surface (drag,
-                                             x11_drag->drag_surface,
-                                             x_root, y_root, &protocol);
+                                     x11_drag->drag_surface,
+                                     x_root, y_root, &protocol);
 
   gdk_x11_drag_drag_motion (drag, proxy, protocol, x_root, y_root,
-                                    action, possible_actions, evtime);
+                            suggested_action, possible_actions, evtime);
 }
 
 static gboolean
