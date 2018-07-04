@@ -250,9 +250,6 @@ struct _GdkWaylandSeat
   GdkDrag *drag;
   GdkDrop *drop;
 
-  /* Source/dest for non-local dnd */
-  GdkSurface *foreign_dnd_surface;
-
   /* Some tracking on gesture events */
   guint gesture_n_fingers;
   gdouble gesture_scale;
@@ -4562,12 +4559,6 @@ static const struct wl_surface_listener pointer_surface_listener = {
   pointer_surface_leave
 };
 
-static GdkSurface *
-create_foreign_dnd_surface (GdkDisplay *display)
-{
-  return gdk_surface_new_popup (display, &(GdkRectangle) { 0, 0, 1, 1 });
-}
-
 static void
 gdk_wayland_pointer_data_finalize (GdkWaylandPointerData *pointer)
 {
@@ -4602,7 +4593,6 @@ gdk_wayland_seat_finalize (GObject *object)
   g_clear_object (&seat->clipboard);
   g_clear_object (&seat->primary_clipboard);
   g_hash_table_destroy (seat->touches);
-  gdk_surface_destroy (seat->foreign_dnd_surface);
   zwp_tablet_seat_v2_destroy (seat->wp_tablet_seat);
   stop_key_repeat (seat);
 
@@ -4944,7 +4934,6 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
   seat->keymap = _gdk_wayland_keymap_new (display);
   seat->display = display;
   seat->touches = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_free);
-  seat->foreign_dnd_surface = create_foreign_dnd_surface (display);
   seat->wl_seat = wl_seat;
 
   wl_seat_add_listener (seat->wl_seat, &seat_listener, seat);
