@@ -249,7 +249,7 @@ gdk_drag_set_property (GObject      *gobject,
     case PROP_ACTIONS:
       {
         GdkDragAction actions = g_value_get_flags (value);
-        gdk_drag_set_actions (drag, actions, drag->suggested_action);
+        gdk_drag_set_actions (drag, actions);
       }
     break;
 
@@ -610,17 +610,21 @@ gdk_drag_write_finish (GdkDrag       *drag,
 
 void
 gdk_drag_set_actions (GdkDrag       *drag,
-                      GdkDragAction  actions,
-                      GdkDragAction  suggested_action)
+                      GdkDragAction  actions)
 {
-  drag->suggested_action = suggested_action;
-
   if (drag->actions == actions)
     return;
 
   drag->actions = actions;
 
   g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTIONS]);
+}
+
+void
+gdk_drag_set_suggested_action (GdkDrag       *drag,
+                               GdkDragAction  suggested_action)
+{
+  drag->suggested_action = suggested_action;
 }
 
 void

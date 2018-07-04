@@ -1477,7 +1477,8 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
   if (drag_x11->drag_surface)
     move_drag_surface (drag, x_root, y_root);
 
-  gdk_drag_set_actions (drag, possible_actions, suggested_action);
+  gdk_drag_set_actions (drag, possible_actions);
+  gdk_drag_set_suggested_action (drag, suggested_action);
 
   if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->version == 0)
     {
