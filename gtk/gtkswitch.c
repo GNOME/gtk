@@ -181,6 +181,18 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
 }
 
 static void
+gtk_switch_set_slider_state_active (GtkSwitch *sw,
+                                    gboolean   active)
+{
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
+
+  if (active)
+    gtk_widget_set_state_flags (priv->slider, GTK_STATE_FLAG_ACTIVE, FALSE);
+  else
+    gtk_widget_unset_state_flags (priv->slider, GTK_STATE_FLAG_ACTIVE);
+}
+
+static void
 gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                        gint                  n_press,
                                        gdouble               x,
@@ -199,6 +211,8 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   if ((priv->is_active && x <= switch_bounds.size.width / 2.0) ||
       (!priv->is_active && x > switch_bounds.size.width / 2.0))
     gtk_gesture_set_state (priv->pan_gesture, GTK_EVENT_SEQUENCE_DENIED);
+  else
+    gtk_switch_set_slider_state_active (sw, TRUE);
 }
 
 static void
@@ -210,6 +224,7 @@ gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
 {
   GdkEventSequence *sequence;
 
+  gtk_switch_set_slider_state_active (sw, FALSE);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   if (gtk_widget_contains (GTK_WIDGET (sw), x, y) &&
@@ -242,6 +257,7 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   priv->handle_pos = CLAMP (offset, 0, 1.0);
 
   /* we need to redraw the handle */
+  gtk_switch_set_slider_state_active (sw, TRUE);
   gtk_widget_queue_allocate (widget);
 }
 
@@ -270,6 +286,7 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
     return;
 
   priv->handle_pos = active ? 1.0 : 0.0;
+  gtk_switch_set_slider_state_active (sw, FALSE);
   gtk_switch_set_active (sw, active);
   gtk_widget_queue_allocate (GTK_WIDGET (sw));
 }
