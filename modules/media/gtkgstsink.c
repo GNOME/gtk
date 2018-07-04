@@ -131,6 +131,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
                                     gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (&frame)),
                                     bytes,
                                     frame.info.stride[0]);
+  g_bytes_unref (bytes);
   gst_video_frame_unmap (&frame);
 
   return texture;
