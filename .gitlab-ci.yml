@@ -44,7 +44,7 @@ msys2-mingw32:
   <<: *mingw-defaults
 
 .flatpak-defaults: &flatpak-defaults
-  image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+  image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
   stage: flatpak
   artifacts:
     paths:
