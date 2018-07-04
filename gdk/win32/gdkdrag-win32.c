@@ -806,7 +806,7 @@ gdk_drag_new (GdkDisplay         *display,
   else
     drag_win32->scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, NULL);
 
-  gdk_drag_set_selected_actions (drag, actions, actions);
+  gdk_drag_set_actions (drag, actions);
   drag_win32->protocol = protocol;
 
   return drag;
@@ -1088,7 +1088,6 @@ _gdk_win32_local_drag_give_feedback (GdkDrag        *drag,
   GDK_NOTE (DND, g_print ("_gdk_win32_local_drag_give_feedback: 0x%p\n",
                           drag));
 
-  drag->action = actions;
   maybe_emit_action_changed (drag_win32, actions);
 }
 
@@ -1107,8 +1106,7 @@ give_feedback (gpointer user_data)
       GDK_NOTE (DND, g_print ("gdk_dnd_handle_drag_status: 0x%p\n",
                               drag));
 
-      drag->action = action_for_drop_effect (feedback->received_drop_effect);
-      maybe_emit_action_changed (drag_win32, drag->action);
+      maybe_emit_action_changed (drag_win32, action_for_drop_effect (feedback->received_drop_effect));
     }
 
   free_queue_item (&feedback->base);
