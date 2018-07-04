@@ -64,7 +64,6 @@ GdkPaintable *_gtk_icon_helper_peek_paintable (GtkIconHelper *self);
 GtkImageDefinition *gtk_icon_helper_get_definition (GtkIconHelper *self);
 const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
-GtkSizeRequestMode gtk_icon_helper_get_request_mode (GtkIconHelper *self);
 int gtk_icon_helper_get_size (GtkIconHelper *self);
 
 gboolean _gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self);
