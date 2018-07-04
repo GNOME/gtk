@@ -123,6 +123,8 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
 
   *symbolic = gtk_icon_info_is_symbolic (info);
   paintable = GDK_PAINTABLE (gtk_icon_info_load_texture (info));
+  g_object_unref (info);
+
   if (paintable && scale != 1)
     {
       GdkPaintable *orig = paintable;
