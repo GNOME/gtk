@@ -2561,8 +2561,8 @@ struct _GskOffsetNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
-  double x_offset;
-  double y_offset;
+  float x_offset;
+  float y_offset;
 };
 
 static void
@@ -2694,8 +2694,8 @@ static const GskRenderNodeClass GSK_OFFSET_NODE_CLASS = {
  */
 GskRenderNode *
 gsk_offset_node_new (GskRenderNode *child,
-                     double         x_offset,
-                     double         y_offset)
+                     float          x_offset,
+                     float          y_offset)
 {
   GskOffsetNode *self;
 
@@ -2732,7 +2732,7 @@ gsk_offset_node_get_child (GskRenderNode *node)
   return self->child;
 }
 
-double
+float
 gsk_offset_node_get_x_offset (GskRenderNode *node)
 {
   GskOffsetNode *self = (GskOffsetNode *) node;
@@ -2742,7 +2742,7 @@ gsk_offset_node_get_x_offset (GskRenderNode *node)
   return self->x_offset;
 }
 
-double
+float
 gsk_offset_node_get_y_offset (GskRenderNode *node)
 {
   GskOffsetNode *self = (GskOffsetNode *) node;

@@ -205,14 +205,14 @@ const graphene_matrix_t *
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_offset_node_new                     (GskRenderNode            *child,
-                                                                 double                    x_offset,
-                                                                 double                    y_offset);
+                                                                 float                     x_offset,
+                                                                 float                     y_offset);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_offset_node_get_child               (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-double                  gsk_offset_node_get_x_offset            (GskRenderNode            *node);
+float                   gsk_offset_node_get_x_offset            (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-double                  gsk_offset_node_get_y_offset            (GskRenderNode            *node);
+float                   gsk_offset_node_get_y_offset            (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
