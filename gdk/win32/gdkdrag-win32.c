@@ -1923,12 +1923,11 @@ gdk_win32_local_drag_motion (GdkDrag         *drag,
   actions = gdk_drag_get_actions (drag);
 
   GDK_NOTE (DND, g_print ("gdk_win32_local_drag_motion: @ %+d:%+d possible=%s\n"
-                          " dest=%p (current %p) drop=%p drag=%p:{actions=%s,suggested=%s,action=%s}\n",
+                          " dest=%p (current %p) drop=%p drag=%p:{actions=%s,action=%s}\n",
                           x_root, y_root,
                           _gdk_win32_drag_action_to_string (possible_actions),
                           dest_window, drag_win32->dest_window, drop, drag,
                           _gdk_win32_drag_action_to_string (actions),
-                          _gdk_win32_drag_action_to_string (gdk_drag_get_suggested_action (drag)),
                           _gdk_win32_drag_action_to_string (drag->action)));
 
   if (drag_win32->dest_window != dest_window)
@@ -1970,11 +1969,10 @@ gdk_win32_local_drag_motion (GdkDrag         *drag,
     }
 
   GDK_NOTE (DND, g_print (" returning %s\n"
-                          " drag=%p:{actions=%s,suggested=%s,action=%s}\n",
+                          " drag=%p:{actions=%s,action=%s}\n",
                           (drop != NULL && drag_win32->drag_status == GDK_DRAG_STATUS_DRAG) ? "TRUE" : "FALSE",
                           drag,
                           _gdk_win32_drag_action_to_string (gdk_drag_get_actions (drag)),
-                          _gdk_win32_drag_action_to_string (gdk_drag_get_suggested_action (drag)),
                           _gdk_win32_drag_action_to_string (drag->action)));
   return (drop != NULL && drag_win32->drag_status == GDK_DRAG_STATUS_DRAG);
 }
