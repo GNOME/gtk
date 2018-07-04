@@ -806,7 +806,7 @@ gdk_drag_new (GdkDisplay         *display,
   else
     drag_win32->scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, NULL);
 
-  gdk_drag_set_selected_actions (drag, actions, actions);
+  gdk_drag_set_actions (drag, actions);
   drag_win32->protocol = protocol;
 
   return drag;
