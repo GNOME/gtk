@@ -75,8 +75,6 @@ struct _GtkLayoutPrivate
 
   /* Properties */
   GList *children;
-
-  guint freeze_count;
 };
 
 struct _GtkLayoutChild {
@@ -138,7 +136,7 @@ static void gtk_layout_get_child_property (GtkContainer   *container,
                                            GValue         *value,
                                            GParamSpec     *pspec);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
-                                           GtkLayout      *layout);
+                                           GtkWidget      *widget);
 
 static void gtk_layout_set_hadjustment_values (GtkLayout      *layout);
 static void gtk_layout_set_vadjustment_values (GtkLayout      *layout);
@@ -705,8 +703,6 @@ gtk_layout_init (GtkLayout *layout)
 
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
-
-  priv->freeze_count = 0;
 }
 
 static void
@@ -824,12 +820,7 @@ gtk_layout_forall (GtkContainer *container,
 
 static void
 gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
-			       GtkLayout     *layout)
+                               GtkWidget     *layout)
 {
-  GtkLayoutPrivate *priv = layout->priv;
-
-  if (priv->freeze_count)
-    return;
-
-  gtk_widget_queue_allocate (GTK_WIDGET (layout));
+  gtk_widget_queue_allocate (layout);
 }
