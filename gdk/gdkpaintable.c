@@ -643,8 +643,8 @@ gdk_paintable_new_empty (int intrinsic_width,
 {
   GdkEmptyPaintable *result;
 
-  g_return_val_if_fail (intrinsic_width < 0, NULL);
-  g_return_val_if_fail (intrinsic_height < 0, NULL);
+  g_return_val_if_fail (intrinsic_width >= 0, NULL);
+  g_return_val_if_fail (intrinsic_height >= 0, NULL);
 
   result = g_object_new (GDK_TYPE_EMPTY_PAINTABLE, NULL);
 
