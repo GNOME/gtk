@@ -3794,26 +3794,13 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 }
 
 static void
-gtk_widget_invalidate_paintable_contents (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GSList *l;
-
-  if (!_gtk_widget_is_drawable (widget))
-    return;
-
-  for (l = priv->paintables; l; l = l->next)
-    gtk_widget_paintable_invalidate_contents (l->data);
-}
-
-static void
-gtk_widget_invalidate_paintable_size (GtkWidget *widget)
+gtk_widget_update_paintables (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *l;
 
   for (l = priv->paintables; l; l = l->next)
-    gtk_widget_paintable_invalidate_size (l->data);
+    gtk_widget_paintable_update_image (l->data);
 }
 
 /**
@@ -3842,7 +3829,6 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      gtk_widget_invalidate_paintable_contents (widget);
       if (_gtk_widget_get_has_surface (widget) &&
           _gtk_widget_get_realized (widget))
         gdk_surface_queue_expose (gtk_widget_get_surface (widget));
@@ -3910,8 +3896,6 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
         gtk_widget_queue_resize_internal (widgets->data);
       }
   }
-
-  gtk_widget_invalidate_paintable_size (widget);
 
   if (_gtk_widget_get_visible (widget))
     {
@@ -4298,7 +4282,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   priv->alloc_needed = FALSE;
   priv->alloc_needed_on_child = FALSE;
 
-  gtk_widget_invalidate_paintable_size (widget);
+  gtk_widget_update_paintables (widget);
 
 check_clip:
   if (size_changed || baseline_changed)
@@ -6330,7 +6314,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       priv->allocation.height = 0;
       memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
       priv->allocated_size_baseline = 0;
-      gtk_widget_invalidate_paintable_size (widget);
+      gtk_widget_update_paintables (widget);
     }
 }
 
@@ -8606,7 +8590,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
           gtk_widget_unmap (child);
         }
 
-      gtk_widget_invalidate_paintable_contents (widget);
+      gtk_widget_update_paintables (widget);
 
       gtk_widget_unset_state_flags (widget,
                                     GTK_STATE_FLAG_PRELIGHT |
@@ -13157,6 +13141,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
       priv->render_node = render_node;
 
       priv->draw_needed = FALSE;
+
+      gtk_widget_update_paintables (widget);
     }
 
   if (priv->render_node)
