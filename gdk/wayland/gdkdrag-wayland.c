@@ -105,12 +105,6 @@ gdk_to_wl_actions (GdkDragAction action)
 }
 
 static void
-gdk_wayland_drag_drag_abort (GdkDrag *drag,
-                             guint32  time)
-{
-}
-
-static void
 gdk_wayland_drag_drag_drop (GdkDrag *drag,
                             guint32  time)
 {
@@ -202,7 +196,6 @@ gdk_wayland_drag_class_init (GdkWaylandDragClass *klass)
 
   object_class->finalize = gdk_wayland_drag_finalize;
 
-  drag_class->drag_abort = gdk_wayland_drag_drag_abort;
   drag_class->drag_drop = gdk_wayland_drag_drag_drop;
   drag_class->get_drag_surface = gdk_wayland_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_wayland_drag_set_hotspot;

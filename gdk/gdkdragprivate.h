@@ -33,8 +33,6 @@ typedef struct _GdkDragClass GdkDragClass;
 struct _GdkDragClass {
   GObjectClass parent_class;
 
-  void        (*drag_abort)    (GdkDrag  *drag,
-                                guint32          time_);
   void        (*drag_drop)     (GdkDrag  *drag,
                                 guint32          time_);
   GdkSurface*  (*get_drag_surface) (GdkDrag *drag);
@@ -87,8 +85,6 @@ gboolean gdk_drag_handle_source_event (GdkEvent       *event);
 GdkCursor * gdk_drag_get_cursor       (GdkDrag        *drag,
                                        GdkDragAction   action);
 
-void     gdk_drag_abort               (GdkDrag        *drag,
-                                       guint32         time_);
 void     gdk_drag_drop                (GdkDrag        *drag,
                                        guint32         time_);
 
