@@ -2,7 +2,7 @@
 <interface>
   <object class="GtkAdjustment" id="slides_adjustment">
     <property name="lower">1</property>
-    <property name="upper">28</property>
+    <property name="upper">29</property>
     <property name="value">1</property>
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
@@ -12,6 +12,9 @@
     <property name="playing">1</property>
   </object>
   <object class="GtkNuclearIcon" id="nuclear-paintable">
+  </object>
+  <object class="GtkWidgetPaintable" id="widget-paintable">
+    <property name="widget">window</property>
   </object>
   <object class="GtkMediaFile" type-func="gtk_media_file_get_impl_type" id="gtk-logo">
     <property name="file">resource:///images/gtk-logo.webm</property>
@@ -770,6 +773,64 @@ GdkSurface</property>
                 <property name="label" translatable="yes">GdkPaintable</property>
                 <property name="justify">center</property>
               </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkGrid">
+            <property name="row-homogeneous">1</property>
+            <child>
+              <object class="GtkZoom">
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">GdkPaintable</property>
+                    <property name="hexpand">1</property>
+                    <property name="justify">center</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPicture">
+                <property name="file">resource:///css_multiplebgs/brick.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPicture">
+                <property name="paintable">nuclear-paintable</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPicture">
+                <property name="paintable">gtk-logo</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPicture">
+                <property name="paintable">widget-paintable</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
             </child>
           </object>
         </child>
