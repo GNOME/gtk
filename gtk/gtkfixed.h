@@ -44,7 +44,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFixed              GtkFixed;
 typedef struct _GtkFixedClass         GtkFixedClass;
-typedef struct _GtkFixedChild         GtkFixedChild;
 
 struct _GtkFixed
 {
@@ -61,14 +60,6 @@ struct _GtkFixedClass
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
 };
-
-struct _GtkFixedChild
-{
-  GtkWidget *widget;
-  gint x;
-  gint y;
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_fixed_get_type          (void) G_GNUC_CONST;
