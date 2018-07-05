@@ -437,24 +437,6 @@ gdk_drag_class_init (GdkDragClass *klass)
 }
 
 /*
- * gdk_drag_abort:
- * @drag: a #GdkDrag
- * @time_: the timestamp for this operation
- *
- * Aborts a drag without dropping.
- *
- * This function is called by the drag source.
- */
-void
-gdk_drag_abort (GdkDrag *drag,
-                guint32  time_)
-{
-  g_return_if_fail (GDK_IS_DRAG (drag));
-
-  GDK_DRAG_GET_CLASS (drag)->drag_abort (drag, time_);
-}
-
-/*
  * gdk_drag_drop:
  * @drag: a #GdkDrag
  * @time_: the timestamp for this operation
