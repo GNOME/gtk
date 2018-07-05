@@ -96,7 +96,8 @@
  *                       gtk_bin_get_child (GTK_BIN (scrolled_window)));
  * ]|
  *
- * Unless #GtkScrolledWindow:policy is GTK_POLICY_NEVER or GTK_POLICY_EXTERNAL,
+ * Unless #GtkScrolledWindow:hscrolbar-policy and #GtkScrolledWindow:vscrollbar-policy
+ * are GTK_POLICY_NEVER or GTK_POLICY_EXTERNAL,
  * GtkScrolledWindow adds internal #GtkScrollbar widgets around its child. The
  * scroll position of the child, and if applicable the scrollbars, is controlled
  * by the #GtkScrolledWindow:hadjustment and #GtkScrolledWindow:vadjustment

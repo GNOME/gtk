@@ -766,7 +766,7 @@ gtk_do_render_handle (GtkStyleContext *context,
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders a handle (as in #GtkHandleBox, #GtkPaned and
+ * Renders a handle (as in #GtkPaned and
  * #GtkWindow’s resize grip), in the rectangle
  * determined by @x, @y, @width, @height.
  *

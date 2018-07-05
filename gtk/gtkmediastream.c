@@ -651,7 +651,7 @@ gtk_media_stream_get_timestamp (GtkMediaStream *self)
 
 /**
  * gtk_media_stream_get_duration:
- * @self: a #GtkmediaStream
+ * @self: a #GtkMediaStream
  *
  * Gets the duration of the stream. If the duration is not known,
  * 0 will be returned.

@@ -50,13 +50,13 @@
  * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
- * gdk_texture_new_for_file(), then create the #GtkPicture with
+ * gdk_texture_new_from_file(), then create the #GtkPicture with
  * gtk_picture_new_for_paintable().
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. See the documentation of #GResource for details.
- * In this case, the #GtkPicture:resource property, gtk_picture_new_for_resource() and
- * gtk_picture_set_resource() should be used.
+ * In this case, gtk_picture_new_for_resource() and gtk_picture_set_resource()
+ * should be used.
  *
  * # CSS nodes
  *
