@@ -592,8 +592,20 @@ endif
 # doing the same check as glib. We can't check that by linking to glib because
 # it might be a subproject and hence not built yet.
 libintl_dep = cc.find_library('intl', required : false)
-if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
-  cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+if libintl_dep.found()
+  if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
+    cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+  endif
+else
+  # Don't use subproject('proxy-libintl').get_variable('intl_dep') because that
+  # makes the dependency unconditional. This way, people have the option of
+  # either not providing the subproject or disabling it entirely with
+  # --wrap-mode=nodownload or nofallback.
+  libintl_dep = dependency('', required : false,
+                           fallback: ['proxy-libintl', 'intl_dep'])
+  if libintl_dep.found()
+    cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+  endif
 endif
 
 if os_unix
