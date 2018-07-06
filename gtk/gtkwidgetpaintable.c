@@ -58,7 +58,7 @@ struct _GtkWidgetPaintable
   GObject parent_instance;
 
   GtkWidget *widget;
-  guint loop_tracker;
+  guint snapshot_count;
 
   GdkPaintable *current_image;          /* the image that we are presenting */
   GdkPaintable *pending_image;          /* the image that we should be presenting */
@@ -87,7 +87,29 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (paintable);
 
-  gdk_paintable_snapshot (self->current_image, snapshot, width, height);
+  if (self->snapshot_count > 2)
+    return;
+  else if (self->snapshot_count > 0)
+    {
+      graphene_matrix_t transform;
+
+      gtk_snapshot_push_clip (snapshot,
+                              &GRAPHENE_RECT_INIT(0, 0, width, height));
+      graphene_matrix_init_scale (&transform,
+                                  width / gtk_widget_get_allocated_width (self->widget),
+                                  height / gtk_widget_get_allocated_height (self->widget),
+                                  1.0);
+      gtk_snapshot_push_transform (snapshot, &transform);
+
+      gtk_widget_snapshot (self->widget, snapshot);
+
+      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
+  else
+    {
+      gdk_paintable_snapshot (self->current_image, snapshot, width, height);
+    }
 }
 
 static GdkPaintable *
@@ -366,3 +388,16 @@ gtk_widget_paintable_update_image (GtkWidgetPaintable *self)
   g_set_object (&self->pending_image, pending_image);
   g_object_unref (pending_image);
 }
+
+void
+gtk_widget_paintable_push_snapshot_count (GtkWidgetPaintable *self)
+{
+  self->snapshot_count++;
+}
+
+void
+gtk_widget_paintable_pop_snapshot_count (GtkWidgetPaintable *self)
+{
+  self->snapshot_count--;
+}
+
