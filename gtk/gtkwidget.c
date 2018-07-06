@@ -3803,6 +3803,26 @@ gtk_widget_update_paintables (GtkWidget *widget)
     gtk_widget_paintable_update_image (l->data);
 }
 
+static void
+gtk_widget_push_paintables (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  for (l = priv->paintables; l; l = l->next)
+    gtk_widget_paintable_push_snapshot_count (l->data);
+}
+
+static void
+gtk_widget_pop_paintables (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  for (l = priv->paintables; l; l = l->next)
+    gtk_widget_paintable_pop_snapshot_count (l->data);
+}
+
 /**
  * gtk_widget_queue_draw:
  * @widget: a #GtkWidget
@@ -13134,6 +13154,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
     {
       GskRenderNode *render_node;
 
+      gtk_widget_push_paintables (widget);
+
       render_node = gtk_widget_create_render_node (widget, snapshot);
       /* This can happen when nested drawing happens and a widget contains itself
        * or when we replace a clipped area */
@@ -13142,6 +13164,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
       priv->draw_needed = FALSE;
 
+      gtk_widget_pop_paintables (widget);
       gtk_widget_update_paintables (widget);
     }
 
