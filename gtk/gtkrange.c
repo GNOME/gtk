@@ -102,9 +102,6 @@ struct _GtkRangePrivate
   guint slider_size_fixed      : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
 
-  /* The range has an origin, should be drawn differently. Used by GtkScale */
-  guint has_origin             : 1;
-
   /* Whether we're doing fine adjustment */
   guint zoom                   : 1;
 
@@ -542,7 +539,6 @@ gtk_range_init (GtkRange *range)
   priv->inverted = FALSE;
   priv->flippable = FALSE;
   priv->round_digits = -1;
-  priv->has_origin = FALSE;
   priv->show_fill_level = FALSE;
   priv->restrict_to_fill_level = TRUE;
   priv->fill_level = G_MAXDOUBLE;
@@ -1452,7 +1448,7 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
       gtk_widget_size_allocate (priv->fill_widget, &fill_alloc, -1);
     }
 
-  if (priv->has_origin)
+  if (priv->highlight_widget)
     {
       GtkAllocation highlight_alloc;
       int min, nat;
@@ -1684,7 +1680,7 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
       gtk_adjustment_get_lower (priv->adjustment) != 0)
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->fill_widget, snapshot);
 
-  if (priv->has_origin)
+  if (priv->highlight_widget)
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->highlight_widget, snapshot);
 
   gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->slider_widget, snapshot);
@@ -2845,8 +2841,6 @@ _gtk_range_set_has_origin (GtkRange *range,
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  priv->has_origin = has_origin;
-
   if (has_origin)
     {
       priv->highlight_widget = gtk_gizmo_new ("highlight", NULL, NULL, NULL);
@@ -2864,9 +2858,9 @@ _gtk_range_set_has_origin (GtkRange *range,
 gboolean
 _gtk_range_get_has_origin (GtkRange *range)
 {
-
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  return priv->has_origin;
+
+  return priv->highlight_widget != NULL;
 }
 
 void
