@@ -145,7 +145,7 @@ enum {
 
 static GParamSpec *gtk_application_props[NUM_PROPERTIES];
 
-struct _GtkApplicationPrivate
+typedef struct
 {
   GtkApplicationImpl *impl;
   GtkApplicationAccels *accels;
@@ -160,7 +160,7 @@ struct _GtkApplicationPrivate
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
-};
+} GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
@@ -169,7 +169,7 @@ gtk_application_window_active_cb (GtkWindow      *window,
                                   GParamSpec     *pspec,
                                   GtkApplication *application)
 {
-  GtkApplicationPrivate *priv = application->priv;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GList *link;
 
   if (!gtk_window_is_active (window))
@@ -183,8 +183,8 @@ gtk_application_window_active_cb (GtkWindow      *window,
       priv->windows = g_list_concat (link, priv->windows);
     }
 
-  if (application->priv->impl)
-    gtk_application_impl_active_window_changed (application->priv->impl, window);
+  if (priv->impl)
+    gtk_application_impl_active_window_changed (priv->impl, window);
 
   g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
 }
@@ -192,6 +192,7 @@ gtk_application_window_active_cb (GtkWindow      *window,
 static void
 gtk_application_load_resources (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   const gchar *base_path;
 
   base_path = g_application_get_resource_base_path (G_APPLICATION (application));
@@ -223,15 +224,15 @@ gtk_application_load_resources (GtkApplication *application)
       menuspath = g_strconcat (base_path, "/gtk/menus-traditional.ui", NULL);
 
     if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
-      application->priv->menus_builder = gtk_builder_new_from_resource (menuspath);
+      priv->menus_builder = gtk_builder_new_from_resource (menuspath);
     g_free (menuspath);
 
     /* If we didn't get the specific file, fall back. */
-    if (application->priv->menus_builder == NULL)
+    if (priv->menus_builder == NULL)
       {
         menuspath = g_strconcat (base_path, "/gtk/menus.ui", NULL);
         if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
-          application->priv->menus_builder = gtk_builder_new_from_resource (menuspath);
+          priv->menus_builder = gtk_builder_new_from_resource (menuspath);
         g_free (menuspath);
       }
 
@@ -241,22 +242,22 @@ gtk_application_load_resources (GtkApplication *application)
       {
         GError *error = NULL;
 
-        if (application->priv->menus_builder == NULL)
-          application->priv->menus_builder = gtk_builder_new ();
+        if (priv->menus_builder == NULL)
+          priv->menus_builder = gtk_builder_new ();
 
-        if (!gtk_builder_add_from_resource (application->priv->menus_builder, menuspath, &error))
+        if (!gtk_builder_add_from_resource (priv->menus_builder, menuspath, &error))
           g_error ("failed to load menus-common.ui: %s", error->message);
       }
     g_free (menuspath);
 
-    if (application->priv->menus_builder)
+    if (priv->menus_builder)
       {
         GObject *menu;
 
-        menu = gtk_builder_get_object (application->priv->menus_builder, "app-menu");
+        menu = gtk_builder_get_object (priv->menus_builder, "app-menu");
         if (menu != NULL && G_IS_MENU_MODEL (menu))
           gtk_application_set_app_menu (application, G_MENU_MODEL (menu));
-        menu = gtk_builder_get_object (application->priv->menus_builder, "menubar");
+        menu = gtk_builder_get_object (priv->menus_builder, "menubar");
         if (menu != NULL && G_IS_MENU_MODEL (menu))
           gtk_application_set_menubar (application, G_MENU_MODEL (menu));
       }
@@ -271,7 +272,7 @@ gtk_application_load_resources (GtkApplication *application)
       {
         const gchar * const accels[] = { "<Primary>F1", "<Primary>question", NULL };
 
-        application->priv->help_overlay_path = path;
+        priv->help_overlay_path = path;
         gtk_application_set_accels_for_action (application, "win.show-help-overlay", accels);
       }
     else
@@ -286,15 +287,16 @@ static void
 gtk_application_startup (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   G_APPLICATION_CLASS (gtk_application_parent_class)->startup (g_application);
 
-  gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
+  gtk_action_muxer_insert (priv->muxer, "app", G_ACTION_GROUP (application));
 
   gtk_init ();
 
-  application->priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
-  gtk_application_impl_startup (application->priv->impl, application->priv->register_session);
+  priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
+  gtk_application_impl_startup (priv->impl, priv->register_session);
 
   gtk_application_load_resources (application);
 }
@@ -303,14 +305,15 @@ static void
 gtk_application_shutdown (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  if (application->priv->impl == NULL)
+  if (priv->impl == NULL)
     return;
 
-  gtk_application_impl_shutdown (application->priv->impl);
-  g_clear_object (&application->priv->impl);
+  gtk_application_impl_shutdown (priv->impl);
+  g_clear_object (&priv->impl);
 
-  gtk_action_muxer_remove (application->priv->muxer, "app");
+  gtk_action_muxer_remove (priv->muxer, "app");
 
   gtk_main_sync ();
 
@@ -355,8 +358,9 @@ gtk_application_before_emit (GApplication *g_application,
                              GVariant     *platform_data)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  gtk_application_impl_before_emit (application->priv->impl, platform_data);
+  gtk_application_impl_before_emit (priv->impl, platform_data);
 }
 
 static void
@@ -379,18 +383,20 @@ gtk_application_after_emit (GApplication *application,
 static void
 gtk_application_init (GtkApplication *application)
 {
-  application->priv = gtk_application_get_instance_private (application);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  application->priv->muxer = gtk_action_muxer_new ();
+  priv = gtk_application_get_instance_private (application);
 
-  application->priv->accels = gtk_application_accels_new ();
+  priv->muxer = gtk_action_muxer_new ();
+
+  priv->accels = gtk_application_accels_new ();
 }
 
 static void
 gtk_application_window_added (GtkApplication *application,
                               GtkWindow      *window)
 {
-  GtkApplicationPrivate *priv = application->priv;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   if (GTK_IS_APPLICATION_WINDOW (window))
     {
@@ -428,7 +434,7 @@ static void
 gtk_application_window_removed (GtkApplication *application,
                                 GtkWindow      *window)
 {
-  GtkApplicationPrivate *priv = application->priv;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   gpointer old_active;
 
   old_active = priv->windows;
@@ -520,11 +526,12 @@ gtk_application_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   GtkApplication *application = GTK_APPLICATION (object);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   switch (prop_id)
     {
     case PROP_REGISTER_SESSION:
-      g_value_set_boolean (value, application->priv->register_session);
+      g_value_set_boolean (value, priv->register_session);
       break;
 
     case PROP_APP_MENU:
@@ -552,11 +559,12 @@ gtk_application_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkApplication *application = GTK_APPLICATION (object);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   switch (prop_id)
     {
     case PROP_REGISTER_SESSION:
-      application->priv->register_session = g_value_get_boolean (value);
+      priv->register_session = g_value_get_boolean (value);
       break;
 
     case PROP_APP_MENU:
@@ -577,14 +585,15 @@ static void
 gtk_application_finalize (GObject *object)
 {
   GtkApplication *application = GTK_APPLICATION (object);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  g_clear_object (&application->priv->menus_builder);
-  g_clear_object (&application->priv->app_menu);
-  g_clear_object (&application->priv->menubar);
-  g_clear_object (&application->priv->muxer);
-  g_clear_object (&application->priv->accels);
+  g_clear_object (&priv->menus_builder);
+  g_clear_object (&priv->app_menu);
+  g_clear_object (&priv->menubar);
+  g_clear_object (&priv->muxer);
+  g_clear_object (&priv->accels);
 
-  g_free (application->priv->help_overlay_path);
+  g_free (priv->help_overlay_path);
 
   G_OBJECT_CLASS (gtk_application_parent_class)->finalize (object);
 }
@@ -745,6 +754,8 @@ void
 gtk_application_add_window (GtkApplication *application,
                             GtkWindow      *window)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -755,7 +766,7 @@ gtk_application_add_window (GtkApplication *application,
       return;
     }
 
-  if (!g_list_find (application->priv->windows, window))
+  if (!g_list_find (priv->windows, window))
     g_signal_emit (application,
                    gtk_application_signals[WINDOW_ADDED], 0, window);
 }
@@ -778,10 +789,12 @@ void
 gtk_application_remove_window (GtkApplication *application,
                                GtkWindow      *window)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (g_list_find (application->priv->windows, window))
+  if (g_list_find (priv->windows, window))
     g_signal_emit (application,
                    gtk_application_signals[WINDOW_REMOVED], 0, window);
 }
@@ -805,9 +818,11 @@ gtk_application_remove_window (GtkApplication *application,
 GList *
 gtk_application_get_windows (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  return application->priv->windows;
+  return priv->windows;
 }
 
 /**
@@ -827,11 +842,12 @@ GtkWindow *
 gtk_application_get_window_by_id (GtkApplication *application,
                                   guint           id)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GList *l;
 
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  for (l = application->priv->windows; l != NULL; l = l->next) 
+  for (l = priv->windows; l != NULL; l = l->next) 
     {
       if (GTK_IS_APPLICATION_WINDOW (l->data) &&
           gtk_application_window_get_id (GTK_APPLICATION_WINDOW (l->data)) == id)
@@ -858,17 +874,20 @@ gtk_application_get_window_by_id (GtkApplication *application,
 GtkWindow *
 gtk_application_get_active_window (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  return application->priv->windows ? application->priv->windows->data : NULL;
+  return priv->windows ? priv->windows->data : NULL;
 }
 
 static void
 gtk_application_update_accels (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GList *l;
 
-  for (l = application->priv->windows; l != NULL; l = l->next)
+  for (l = priv->windows; l != NULL; l = l->next)
     _gtk_window_notify_keys_changed (l->data);
 }
 
@@ -916,10 +935,12 @@ gtk_application_update_accels (GtkApplication *application)
 gboolean
 gtk_application_prefers_app_menu (GtkApplication *application)
 {
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
-  g_return_val_if_fail (application->priv->impl != NULL, FALSE);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  return gtk_application_impl_prefers_app_menu (application->priv->impl);
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
+  g_return_val_if_fail (priv->impl != NULL, FALSE);
+
+  return gtk_application_impl_prefers_app_menu (priv->impl);
 }
 
 /**
@@ -949,17 +970,19 @@ void
 gtk_application_set_app_menu (GtkApplication *application,
                               GMenuModel     *app_menu)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
   g_return_if_fail (app_menu == NULL || G_IS_MENU_MODEL (app_menu));
 
-  if (g_set_object (&application->priv->app_menu, app_menu))
+  if (g_set_object (&priv->app_menu, app_menu))
     {
       if (app_menu)
         extract_accels_from_menu (app_menu, application);
 
-      gtk_application_impl_set_app_menu (application->priv->impl, app_menu);
+      gtk_application_impl_set_app_menu (priv->impl, app_menu);
 
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_APP_MENU]);
     }
@@ -978,9 +1001,11 @@ gtk_application_set_app_menu (GtkApplication *application,
 GMenuModel *
 gtk_application_get_app_menu (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  return application->priv->app_menu;
+  return priv->app_menu;
 }
 
 /**
@@ -1011,17 +1036,19 @@ void
 gtk_application_set_menubar (GtkApplication *application,
                              GMenuModel     *menubar)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
   g_return_if_fail (menubar == NULL || G_IS_MENU_MODEL (menubar));
 
-  if (g_set_object (&application->priv->menubar, menubar))
+  if (g_set_object (&priv->menubar, menubar))
     {
       if (menubar)
         extract_accels_from_menu (menubar, application);
 
-      gtk_application_impl_set_menubar (application->priv->impl, menubar);
+      gtk_application_impl_set_menubar (priv->impl, menubar);
 
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_MENUBAR]);
     }
@@ -1039,9 +1066,11 @@ gtk_application_set_menubar (GtkApplication *application,
 GMenuModel *
 gtk_application_get_menubar (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  return application->priv->menubar;
+  return priv->menubar;
 }
 
 /**
@@ -1098,11 +1127,13 @@ gtk_application_inhibit (GtkApplication             *application,
                          GtkApplicationInhibitFlags  flags,
                          const gchar                *reason)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), 0);
   g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), 0);
   g_return_val_if_fail (window == NULL || GTK_IS_WINDOW (window), 0);
 
-  return gtk_application_impl_inhibit (application->priv->impl, window, flags, reason);
+  return gtk_application_impl_inhibit (priv->impl, window, flags, reason);
 }
 
 /**
@@ -1117,30 +1148,33 @@ void
 gtk_application_uninhibit (GtkApplication *application,
                            guint           cookie)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
   g_return_if_fail (cookie > 0);
 
-  gtk_application_impl_uninhibit (application->priv->impl, cookie);
+  gtk_application_impl_uninhibit (priv->impl, cookie);
 }
 
 GtkActionMuxer *
 gtk_application_get_parent_muxer_for_window (GtkWindow *window)
 {
-  GtkApplication *application;
-
-  application = gtk_window_get_application (window);
+  GtkApplication *application = gtk_window_get_application (window);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   if (!application)
     return NULL;
 
-  return application->priv->muxer;
+  return priv->muxer;
 }
 
 GtkApplicationAccels *
 gtk_application_get_application_accels (GtkApplication *application)
 {
-  return application->priv->accels;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  return priv->accels;
 }
 
 /**
@@ -1156,9 +1190,11 @@ gtk_application_get_application_accels (GtkApplication *application)
 gchar **
 gtk_application_list_action_descriptions (GtkApplication *application)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  return gtk_application_accels_list_action_descriptions (application->priv->accels);
+  return gtk_application_accels_list_action_descriptions (priv->accels);
 }
 
 /**
@@ -1184,18 +1220,19 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
                                        const gchar         *detailed_action_name,
                                        const gchar * const *accels)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   gchar *action_and_target;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (detailed_action_name != NULL);
   g_return_if_fail (accels != NULL);
 
-  gtk_application_accels_set_accels_for_action (application->priv->accels,
+  gtk_application_accels_set_accels_for_action (priv->accels,
                                                 detailed_action_name,
                                                 accels);
 
   action_and_target = gtk_normalise_detailed_action_name (detailed_action_name);
-  gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, accels[0]);
+  gtk_action_muxer_set_primary_accel (priv->muxer, action_and_target, accels[0]);
   g_free (action_and_target);
 
   gtk_application_update_accels (application);
@@ -1217,10 +1254,12 @@ gchar **
 gtk_application_get_accels_for_action (GtkApplication *application,
                                        const gchar    *detailed_action_name)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
   g_return_val_if_fail (detailed_action_name != NULL, NULL);
 
-  return gtk_application_accels_get_accels_for_action (application->priv->accels,
+  return gtk_application_accels_get_accels_for_action (priv->accels,
                                                        detailed_action_name);
 }
 
@@ -1251,18 +1290,22 @@ gchar **
 gtk_application_get_actions_for_accel (GtkApplication *application,
                                        const gchar    *accel)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
   g_return_val_if_fail (accel != NULL, NULL);
 
-  return gtk_application_accels_get_actions_for_accel (application->priv->accels, accel);
+  return gtk_application_accels_get_actions_for_accel (priv->accels, accel);
 }
 
 GtkActionMuxer *
 gtk_application_get_action_muxer (GtkApplication *application)
 {
-  g_assert (application->priv->muxer);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  return application->priv->muxer;
+  g_assert (priv->muxer);
+
+  return priv->muxer;
 }
 
 void
@@ -1270,23 +1313,29 @@ gtk_application_insert_action_group (GtkApplication *application,
                                      const gchar    *name,
                                      GActionGroup   *action_group)
 {
-  gtk_action_muxer_insert (application->priv->muxer, name, action_group);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  gtk_action_muxer_insert (priv->muxer, name, action_group);
 }
 
 void
 gtk_application_handle_window_realize (GtkApplication *application,
                                        GtkWindow      *window)
 {
-  if (application->priv->impl)
-    gtk_application_impl_handle_window_realize (application->priv->impl, window);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  if (priv->impl)
+    gtk_application_impl_handle_window_realize (priv->impl, window);
 }
 
 void
 gtk_application_handle_window_map (GtkApplication *application,
                                    GtkWindow      *window)
 {
-  if (application->priv->impl)
-    gtk_application_impl_handle_window_map (application->priv->impl, window);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  if (priv->impl)
+    gtk_application_impl_handle_window_map (priv->impl, window);
 }
 
 /**
@@ -1305,15 +1354,16 @@ GMenu *
 gtk_application_get_menu_by_id (GtkApplication *application,
                                 const gchar    *id)
 {
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GObject *object;
 
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
   g_return_val_if_fail (id != NULL, NULL);
 
-  if (!application->priv->menus_builder)
+  if (!priv->menus_builder)
     return NULL;
 
-  object = gtk_builder_get_object (application->priv->menus_builder, id);
+  object = gtk_builder_get_object (priv->menus_builder, id);
 
   if (!object || !G_IS_MENU (object))
     return NULL;

@@ -38,14 +38,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkApplication        GtkApplication;
 typedef struct _GtkApplicationClass   GtkApplicationClass;
-typedef struct _GtkApplicationPrivate GtkApplicationPrivate;
 
 struct _GtkApplication
 {
-  GApplication parent;
-
-  /*< private >*/
-  GtkApplicationPrivate *priv;
+  GApplication parent_instance;
 };
 
 /**
