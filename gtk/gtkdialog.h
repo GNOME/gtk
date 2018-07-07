@@ -95,7 +95,6 @@ typedef enum
 
 
 typedef struct _GtkDialog              GtkDialog;
-typedef struct _GtkDialogPrivate       GtkDialogPrivate;
 typedef struct _GtkDialogClass         GtkDialogClass;
 
 /**
@@ -106,10 +105,7 @@ typedef struct _GtkDialogClass         GtkDialogClass;
  */
 struct _GtkDialog
 {
-  GtkWindow window;
-
-  /*< private >*/
-  GtkDialogPrivate *priv;
+  GtkWindow parent_instance;
 };
 
 /**

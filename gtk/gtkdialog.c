@@ -168,7 +168,7 @@
  * ]|
  */
 
-struct _GtkDialogPrivate
+typedef struct
 {
   GtkWidget *vbox;
   GtkWidget *headerbar;
@@ -178,7 +178,7 @@ struct _GtkDialogPrivate
 
   gint use_header_bar;
   gboolean constructed;
-};
+} GtkDialogPrivate;
 
 typedef struct _ResponseData ResponseData;
 
@@ -239,7 +239,7 @@ static void
 set_use_header_bar (GtkDialog *dialog,
                     gint       use_header_bar)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   if (use_header_bar == -1)
     return;
@@ -251,7 +251,7 @@ set_use_header_bar (GtkDialog *dialog,
 void
 gtk_dialog_set_use_header_bar_from_setting (GtkDialog *dialog)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   g_assert (!priv->constructed);
 
@@ -287,7 +287,7 @@ gtk_dialog_get_property (GObject      *object,
                          GParamSpec   *pspec)
 {
   GtkDialog *dialog = GTK_DIALOG (object);
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   switch (prop_id)
     {
@@ -349,7 +349,7 @@ apply_response_for_header_bar (GtkDialog *dialog,
                                GtkWidget *child,
                                gint       response_id)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
   GtkPackType pack;
 
   g_assert (gtk_widget_get_parent (child) == priv->headerbar);
@@ -372,7 +372,7 @@ add_to_header_bar (GtkDialog *dialog,
                    GtkWidget *child,
                    gint       response_id)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (priv->headerbar), child);
@@ -386,7 +386,7 @@ apply_response_for_action_area (GtkDialog *dialog,
                                 GtkWidget *child,
                                 gint       response_id)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   g_assert (gtk_widget_get_parent (child) == priv->action_area);
 
@@ -399,7 +399,7 @@ add_to_action_area (GtkDialog *dialog,
                     GtkWidget *child,
                     gint       response_id)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (priv->action_area), child);
@@ -409,7 +409,7 @@ add_to_action_area (GtkDialog *dialog,
 static void
 update_suggested_action (GtkDialog *dialog)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   if (priv->use_header_bar)
     {
@@ -435,7 +435,7 @@ add_cb (GtkContainer *container,
         GtkWidget    *widget,
         GtkDialog    *dialog)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   if (priv->use_header_bar)
     g_warning ("Content added to the action area of a dialog using header bars");
@@ -447,7 +447,7 @@ static void
 gtk_dialog_constructed (GObject *object)
 {
   GtkDialog *dialog = GTK_DIALOG (object);
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   G_OBJECT_CLASS (gtk_dialog_parent_class)->constructed (object);
 
@@ -498,8 +498,9 @@ static void
 gtk_dialog_finalize (GObject *obj)
 {
   GtkDialog *dialog = GTK_DIALOG (obj);
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
-  g_object_unref (dialog->priv->size_group);
+  g_object_unref (priv->size_group);
 
   G_OBJECT_CLASS (gtk_dialog_parent_class)->finalize (obj);
 }
@@ -602,10 +603,12 @@ gtk_dialog_class_init (GtkDialogClass *class)
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
-  dialog->priv = gtk_dialog_get_instance_private (dialog);
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
-  dialog->priv->use_header_bar = -1;
-  dialog->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  priv = gtk_dialog_get_instance_private (dialog);
+
+  priv->use_header_bar = -1;
+  priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
 }
@@ -633,7 +636,7 @@ gtk_dialog_close_request (GtkWindow *window)
 static GList *
 get_action_children (GtkDialog *dialog)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
   GList *children;
 
   if (priv->constructed && priv->use_header_bar)
@@ -870,7 +873,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
                               GtkWidget *child,
                               gint       response_id)
 {
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -1031,6 +1034,7 @@ void
 gtk_dialog_set_default_response (GtkDialog *dialog,
                                  gint       response_id)
 {
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
   GList *children;
   GList *tmp_list;
 
@@ -1052,7 +1056,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
 
   g_list_free (children);
 
-  if (dialog->priv->use_header_bar)
+  if (priv->use_header_bar)
     update_suggested_action (dialog);
 }
 
@@ -1478,7 +1482,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 				      gpointer      user_data)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
   GSList *l;
   SubParserData *data;
   GObject *object;
@@ -1557,7 +1561,7 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
                                 const gchar   *type)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
-  GtkDialogPrivate *priv = dialog->priv;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   if (type == NULL)
     parent_buildable_iface->add_child (buildable, builder, child, type);
@@ -1575,9 +1579,11 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
 GtkWidget *
 gtk_dialog_get_action_area (GtkDialog *dialog)
 {
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  return dialog->priv->action_area;
+  return priv->action_area;
 }
 
 /**
@@ -1593,9 +1599,11 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
 GtkWidget *
 gtk_dialog_get_header_bar (GtkDialog *dialog)
 {
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  return dialog->priv->headerbar;
+  return priv->headerbar;
 }
 
 /**
@@ -1609,7 +1617,9 @@ gtk_dialog_get_header_bar (GtkDialog *dialog)
 GtkWidget *
 gtk_dialog_get_content_area (GtkDialog *dialog)
 {
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  return dialog->priv->vbox;
+  return priv->vbox;
 }
