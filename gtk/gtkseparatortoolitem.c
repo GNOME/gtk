@@ -49,11 +49,6 @@
 
 #define MENU_ID "gtk-separator-tool-item-menu-id"
 
-typedef struct
-{
-  guint draw : 1;
-} GtkSeparatorToolItemPrivate;
-
 enum {
   PROP_0,
   PROP_DRAW
@@ -71,7 +66,7 @@ static void     gtk_separator_tool_item_get_property      (GObject              
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
                                                            GtkWidget                 *child);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
+G_DEFINE_TYPE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
 
 static void
 gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
@@ -107,11 +102,9 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
-  GtkSeparatorToolItemPrivate *priv = gtk_separator_tool_item_get_instance_private (separator_item);
   GtkWidget *widget;
 
   widget = GTK_WIDGET (separator_item);
-  priv->draw = TRUE;
 
   gtk_widget_set_has_surface (widget, FALSE);
 }
@@ -203,11 +196,13 @@ gtk_separator_tool_item_new (void)
 gboolean
 gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 {
-  GtkSeparatorToolItemPrivate *priv = gtk_separator_tool_item_get_instance_private (item);
+  GtkStyleContext *context;
 
   g_return_val_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item), FALSE);
 
-  return priv->draw;
+  context = gtk_widget_get_style_context (GTK_WIDGET (item));
+
+  return !gtk_style_context_has_class (context, "invisible");
 }
 
 /**
@@ -223,22 +218,19 @@ void
 gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
                                   gboolean              draw)
 {
-  GtkSeparatorToolItemPrivate *priv = gtk_separator_tool_item_get_instance_private (item);
-
   g_return_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item));
 
-  draw = draw != FALSE;
+  draw = !!draw;
 
-  if (draw != priv->draw)
-    {
-      priv->draw = draw;
-      if (draw)
-        gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (item)),
-                                        "invisible");
-      else
-        gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (item)),
-                                     "invisible");
+  if (draw == gtk_separator_tool_item_get_draw (item))
+    return;
 
-      g_object_notify (G_OBJECT (item), "draw");
-    }
+  if (draw)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (item)),
+                                    "invisible");
+  else
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (item)),
+                                 "invisible");
+
+  g_object_notify (G_OBJECT (item), "draw");
 }
