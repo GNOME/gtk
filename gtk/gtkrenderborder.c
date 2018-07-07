@@ -856,18 +856,6 @@ snapshot_border (GtkSnapshot    *snapshot,
   snapshot_frame_fill (snapshot, border_box, border_width, colors, hidden_side);
 }
 
-gboolean
-gtk_css_style_render_has_border (GtkCssStyle *style)
-{
-  if (_gtk_css_image_value_get_image (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE)))
-    return TRUE;
-
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100) > 0
-      || _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100) > 0
-      || _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100) > 0
-      || _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100) > 0;
-}
-
 void
 gtk_css_style_render_border (GtkCssStyle *style,
                              cairo_t     *cr,
@@ -983,25 +971,6 @@ gtk_css_style_snapshot_border (GtkCssStyle *style,
 }
 
 gboolean
-gtk_css_style_render_border_get_clip (GtkCssStyle  *style,
-                                      gdouble       x,
-                                      gdouble       y,
-                                      gdouble       width,
-                                      gdouble       height,
-                                      GdkRectangle *out_clip)
-{
-  if (!gtk_css_style_render_has_border (style))
-    return FALSE;
-
-  out_clip->x = floor (x);
-  out_clip->y = floor (y);
-  out_clip->width = ceil (x + width) - out_clip->x;
-  out_clip->height = ceil (y + height) - out_clip->y;
-
-  return TRUE;
-}
-
-gboolean
 gtk_css_style_render_has_outline (GtkCssStyle *style)
 {
   return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100) > 0;
@@ -1108,27 +1077,4 @@ gtk_css_style_snapshot_outline (GtkCssStyle *style,
 
       snapshot_border (snapshot, &border_box, border_width, colors, border_style);
     }
-}
-
-gboolean
-gtk_css_style_render_outline_get_clip (GtkCssStyle  *style,
-                                       gdouble       x,
-                                       gdouble       y,
-                                       gdouble       width,
-                                       gdouble       height,
-                                       GdkRectangle *out_clip)
-{
-  cairo_rectangle_t rect;
-
-  if (!gtk_css_style_render_has_outline (style))
-    return FALSE;
-
-  compute_outline_rect (style, x, y, width, height, &rect);
-
-  out_clip->x = floor (rect.x);
-  out_clip->y = floor (rect.y);
-  out_clip->width = ceil (rect.x + rect.width) - out_clip->x;
-  out_clip->height = ceil (rect.y + rect.height) - out_clip->y;
-
-  return TRUE;
 }
