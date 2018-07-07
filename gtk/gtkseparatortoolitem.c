@@ -49,10 +49,10 @@
 
 #define MENU_ID "gtk-separator-tool-item-menu-id"
 
-struct _GtkSeparatorToolItemPrivate
+typedef struct
 {
   guint draw : 1;
-};
+} GtkSeparatorToolItemPrivate;
 
 enum {
   PROP_0,
@@ -107,11 +107,10 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
-  GtkSeparatorToolItemPrivate *priv;
+  GtkSeparatorToolItemPrivate *priv = gtk_separator_tool_item_get_instance_private (separator_item);
   GtkWidget *widget;
 
   widget = GTK_WIDGET (separator_item);
-  priv = separator_item->priv = gtk_separator_tool_item_get_instance_private (separator_item);
   priv->draw = TRUE;
 
   gtk_widget_set_has_surface (widget, FALSE);
@@ -204,9 +203,11 @@ gtk_separator_tool_item_new (void)
 gboolean
 gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 {
+  GtkSeparatorToolItemPrivate *priv = gtk_separator_tool_item_get_instance_private (item);
+
   g_return_val_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item), FALSE);
-  
-  return item->priv->draw;
+
+  return priv->draw;
 }
 
 /**
@@ -222,13 +223,15 @@ void
 gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
                                   gboolean              draw)
 {
+  GtkSeparatorToolItemPrivate *priv = gtk_separator_tool_item_get_instance_private (item);
+
   g_return_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item));
 
   draw = draw != FALSE;
 
-  if (draw != item->priv->draw)
+  if (draw != priv->draw)
     {
-      item->priv->draw = draw;
+      priv->draw = draw;
       if (draw)
         gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (item)),
                                         "invisible");

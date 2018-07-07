@@ -37,14 +37,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSeparatorToolItem        GtkSeparatorToolItem;
 typedef struct _GtkSeparatorToolItemClass   GtkSeparatorToolItemClass;
-typedef struct _GtkSeparatorToolItemPrivate GtkSeparatorToolItemPrivate;
 
 struct _GtkSeparatorToolItem
 {
-  GtkToolItem parent;
-
-  /*< private >*/
-  GtkSeparatorToolItemPrivate *priv;
+  GtkToolItem parent_instance;
 };
 
 /**
