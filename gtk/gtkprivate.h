@@ -120,10 +120,11 @@ gboolean        gtk_simulate_touchscreen (void);
 void  gtk_set_display_debug_flags (GdkDisplay *display,
                                    guint       flags);
 guint gtk_get_display_debug_flags (GdkDisplay *display);
+gboolean gtk_get_any_display_debug_flag_set (void);
 
 #ifdef G_ENABLE_DEBUG
 
-#define GTK_DISPLAY_DEBUG_CHECK(display,type) G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type)
+#define GTK_DISPLAY_DEBUG_CHECK(display,type) (gtk_get_any_display_debug_flag_set () && G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type))
 #define GTK_DISPLAY_NOTE(display,type,action) \
   G_STMT_START { \
   if (GTK_DISPLAY_DEBUG_CHECK (display,type)) { action; }; \
