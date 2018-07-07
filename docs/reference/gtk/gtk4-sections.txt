@@ -4912,7 +4912,6 @@ gtk_render_handle
 gtk_render_layout
 gtk_render_line
 gtk_render_option
-gtk_render_slider
 gtk_render_activity
 gtk_render_icon
 gtk_render_insertion_cursor

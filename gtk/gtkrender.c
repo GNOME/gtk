@@ -551,63 +551,6 @@ gtk_render_line (GtkStyleContext *context,
 }
 
 static void
-gtk_do_render_slider (GtkStyleContext *context,
-                      cairo_t         *cr,
-                      gdouble          x,
-                      gdouble          y,
-                      gdouble          width,
-                      gdouble          height,
-                      GtkOrientation   orientation)
-{
-  GtkCssStyle *style;
-
-  style = gtk_style_context_lookup_style (context);
-
-  gtk_css_style_render_background (style,
-                                   cr,
-                                   x, y, width, height);
-  gtk_css_style_render_border (style,
-                               cr,
-                               x, y, width, height);
-}
-
-/**
- * gtk_render_slider:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
- * @x: X origin of the rectangle
- * @y: Y origin of the rectangle
- * @width: rectangle width
- * @height: rectangle height
- * @orientation: orientation of the slider
- *
- * Renders a slider (as in #GtkScale) in the rectangle defined by @x, @y,
- * @width, @height. @orientation defines whether the slider is vertical
- * or horizontal.
- *
- * Typical slider rendering:
- *
- * ![](sliders.png)
- **/
-void
-gtk_render_slider (GtkStyleContext *context,
-                   cairo_t         *cr,
-                   gdouble          x,
-                   gdouble          y,
-                   gdouble          width,
-                   gdouble          height,
-                   GtkOrientation   orientation)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (cr != NULL);
-
-  if (width <= 0 || height <= 0)
-    return;
-
-  gtk_do_render_slider (context, cr, x, y, width, height, orientation);
-}
-
-static void
 gtk_css_style_render_frame_gap (GtkCssStyle     *style,
                                 cairo_t         *cr,
                                 gdouble          x,
