@@ -32,14 +32,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkColorSwatch        GtkColorSwatch;
 typedef struct _GtkColorSwatchClass   GtkColorSwatchClass;
-typedef struct _GtkColorSwatchPrivate GtkColorSwatchPrivate;
 
 struct _GtkColorSwatch
 {
-  GtkWidget parent;
-
-  /*< private >*/
-  GtkColorSwatchPrivate *priv;
+  GtkWidget parent_instance;
 };
 
 struct _GtkColorSwatchClass
