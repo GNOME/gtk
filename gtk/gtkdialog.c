@@ -51,14 +51,14 @@
  * SECTION:gtkdialog
  * @Short_description: Create popup windows
  * @Title: GtkDialog
- * @See_also: #GtkVBox, #GtkWindow, #GtkButton
+ * @See_also: #GtkBox, #GtkWindow, #GtkButton
  *
  * Dialog boxes are a convenient way to prompt the user for a small amount
  * of input, e.g. to display a message, ask a question, or anything else
  * that does not require extensive effort on the user’s part.
  *
  * GTK+ treats a dialog as a window split vertically. The top section is a
- * #GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
+ * #GtkBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
  * be packed. The bottom area is known as the
  * “action area”. This is generally used for
  * packing buttons into the dialog which may perform functions such as
