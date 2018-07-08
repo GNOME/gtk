@@ -448,8 +448,8 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
  * gsk_renderer_render:
  * @renderer: a #GskRenderer
  * @root: a #GskRenderNode
- * @region: the #cairo_region_t that must be redrawn or %NULL for the whole
- *     window
+ * @region: (nullable): the #cairo_region_t that must be redrawn or %NULL
+ *     for the whole window
  *
  * Renders the scene graph, described by a tree of #GskRenderNode instances,
  * ensuring that the given @region gets redrawn.
