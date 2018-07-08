@@ -51,14 +51,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkScaleButton        GtkScaleButton;
 typedef struct _GtkScaleButtonClass   GtkScaleButtonClass;
-typedef struct _GtkScaleButtonPrivate GtkScaleButtonPrivate;
 
 struct _GtkScaleButton
 {
-  GtkButton parent;
-
-  /*< private >*/
-  GtkScaleButtonPrivate *priv;
+  GtkButton parent_instance;
 };
 
 struct _GtkScaleButtonClass
