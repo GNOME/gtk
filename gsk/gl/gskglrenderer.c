@@ -13,6 +13,7 @@
 #include "gskglglyphcacheprivate.h"
 #include "gskglrenderopsprivate.h"
 #include "gskcairoblurprivate.h"
+#include "gskglshadowcacheprivate.h"
 
 #include "gskprivate.h"
 
@@ -52,7 +53,6 @@
                 program_ptr->uniform_basename ## _location =  \
                               glGetUniformLocation(program_ptr->id, "u_" #uniform_basename);\
               }G_STMT_END
-
 
 static void G_GNUC_UNUSED
 print_render_node_tree (GskRenderNode *root, int level)
@@ -266,6 +266,7 @@ struct _GskGLRenderer
   GArray *render_ops;
 
   GskGLGlyphCache glyph_cache;
+  GskGLShadowCache shadow_cache;
 
 #ifdef G_ENABLE_DEBUG
   struct {
@@ -1077,6 +1078,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
   int prev_render_target;
   int texture_id, render_target;
   int blurred_texture_id, blurred_render_target;
+  int cached_tid;
 
   /* offset_outline is the minimal outline we need to draw the given drop shadow,
    * enlarged by the spread and offset by the blur radius. */
@@ -1098,77 +1100,92 @@ render_outset_shadow_node (GskGLRenderer       *self,
   texture_width = offset_outline.bounds.size.width   + blur_extra;
   texture_height = offset_outline.bounds.size.height + blur_extra;
 
-  texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
-  render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, FALSE, FALSE);
+  cached_tid = gsk_gl_shadow_cache_get_texture_id (&self->shadow_cache,
+                                                   self->gl_driver,
+                                                   &offset_outline,
+                                                   blur_radius);
+  if (cached_tid == 0)
+    {
+      texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
+      render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, FALSE, FALSE);
 
 
-  graphene_matrix_init_ortho (&item_proj,
-                              0, texture_width, 0, texture_height,
-                              ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-  graphene_matrix_scale (&item_proj, 1, -1, 1);
-  graphene_matrix_init_identity (&identity);
+      graphene_matrix_init_ortho (&item_proj,
+                                  0, texture_width, 0, texture_height,
+                                  ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+      graphene_matrix_scale (&item_proj, 1, -1, 1);
+      graphene_matrix_init_identity (&identity);
 
-  prev_render_target = ops_set_render_target (builder, render_target);
-  op.op = OP_CLEAR;
-  ops_add (builder, &op);
-  prev_projection = ops_set_projection (builder, &item_proj);
-  prev_modelview = ops_set_modelview (builder, &identity);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
+      prev_render_target = ops_set_render_target (builder, render_target);
+      op.op = OP_CLEAR;
+      ops_add (builder, &op);
+      prev_projection = ops_set_projection (builder, &item_proj);
+      prev_modelview = ops_set_modelview (builder, &identity);
+      prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
-  /* Draw outline */
-  ops_set_program (builder, &self->color_program);
-  prev_clip = ops_set_clip (builder, &offset_outline);
-  ops_set_color (builder, gsk_outset_shadow_node_peek_color (node));
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { 0,                            }, { 0, 1 }, },
-    { { 0,             texture_height }, { 0, 0 }, },
-    { { texture_width,                }, { 1, 1 }, },
+      /* Draw outline */
+      ops_set_program (builder, &self->color_program);
+      prev_clip = ops_set_clip (builder, &offset_outline);
+      ops_set_color (builder, gsk_outset_shadow_node_peek_color (node));
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { 0,                            }, { 0, 1 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width,                }, { 1, 1 }, },
 
-    { { texture_width, texture_height }, { 1, 0 }, },
-    { { 0,             texture_height }, { 0, 0 }, },
-    { { texture_width,                }, { 1, 1 }, },
-  });
+        { { texture_width, texture_height }, { 1, 0 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width,                }, { 1, 1 }, },
+      });
 
-  blurred_texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, blurred_texture_id);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, blurred_texture_id);
-  blurred_render_target = gsk_gl_driver_create_render_target (self->gl_driver, blurred_texture_id, TRUE, TRUE);
+      blurred_texture_id = gsk_gl_driver_create_permanent_texture (self->gl_driver, texture_width, texture_height);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, blurred_texture_id);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, blurred_texture_id);
+      blurred_render_target = gsk_gl_driver_create_render_target (self->gl_driver, blurred_texture_id, TRUE, TRUE);
 
-  ops_set_render_target (builder, blurred_render_target);
-  op.op = OP_CLEAR;
-  ops_add (builder, &op);
+      ops_set_render_target (builder, blurred_render_target);
+      op.op = OP_CLEAR;
+      ops_add (builder, &op);
 
-  gsk_rounded_rect_init_from_rect (&blit_clip,
-                                   &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height), 0.0f);
+      gsk_rounded_rect_init_from_rect (&blit_clip,
+                                       &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height), 0.0f);
 
-  ops_set_program (builder, &self->blur_program);
-  op.op = OP_CHANGE_BLUR;
-  op.blur.size.width = texture_width;
-  op.blur.size.height = texture_height;
-  op.blur.radius = blur_radius;
-  ops_add (builder, &op);
+      ops_set_program (builder, &self->blur_program);
+      op.op = OP_CHANGE_BLUR;
+      op.blur.size.width = texture_width;
+      op.blur.size.height = texture_height;
+      op.blur.radius = blur_radius;
+      ops_add (builder, &op);
 
-  ops_set_clip (builder, &blit_clip);
-  ops_set_texture (builder, texture_id);
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { 0,             0              }, { 0, 1 }, },
-    { { 0,             texture_height }, { 0, 0 }, },
-    { { texture_width, 0              }, { 1, 1 }, },
+      ops_set_clip (builder, &blit_clip);
+      ops_set_texture (builder, texture_id);
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { 0,             0              }, { 0, 1 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
 
-    { { texture_width, texture_height }, { 1, 0 }, },
-    { { 0,             texture_height }, { 0, 0 }, },
-    { { texture_width, 0              }, { 1, 1 }, },
-  });
+        { { texture_width, texture_height }, { 1, 0 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+      });
 
 
-  ops_set_clip (builder, &prev_clip);
+      ops_set_clip (builder, &prev_clip);
+      ops_set_viewport (builder, &prev_viewport);
+      ops_set_modelview (builder, &prev_modelview);
+      ops_set_projection (builder, &prev_projection);
+      ops_set_render_target (builder, prev_render_target);
 
-  ops_set_viewport (builder, &prev_viewport);
-  ops_set_modelview (builder, &prev_modelview);
-  ops_set_projection (builder, &prev_projection);
-  ops_set_render_target (builder, prev_render_target);
+      gsk_gl_shadow_cache_commit (&self->shadow_cache,
+                                  &offset_outline,
+                                  blur_radius,
+                                  blurred_texture_id);
+    }
+  else
+    {
+      blurred_texture_id = cached_tid;
+    }
 
   ops_set_program (builder, &self->outset_shadow_program);
   ops_set_texture (builder, blurred_texture_id);
@@ -1393,8 +1410,6 @@ render_outset_shadow_node (GskGLRenderer       *self,
       }
 
   }
-
-  ops_set_clip (builder, &prev_clip);
 }
 
 static inline void
@@ -2006,6 +2021,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
     return FALSE;
 
   gsk_gl_glyph_cache_init (&self->glyph_cache, renderer, self->gl_driver);
+  gsk_gl_shadow_cache_init (&self->shadow_cache);
 
   return TRUE;
 }
@@ -2030,6 +2046,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
     glDeleteProgram (self->programs[i].id);
 
   gsk_gl_glyph_cache_free (&self->glyph_cache);
+  gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
 
   g_clear_object (&self->gl_profiler);
   g_clear_object (&self->gl_driver);
@@ -2524,6 +2541,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
+  gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
   memset (&render_op_builder, 0, sizeof (render_op_builder));
   render_op_builder.renderer = self;
