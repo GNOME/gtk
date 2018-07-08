@@ -48,15 +48,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkLayout              GtkLayout;
-typedef struct _GtkLayoutPrivate       GtkLayoutPrivate;
 typedef struct _GtkLayoutClass         GtkLayoutClass;
 
 struct _GtkLayout
 {
-  GtkContainer container;
-
-  /*< private >*/
-  GtkLayoutPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 struct _GtkLayoutClass
