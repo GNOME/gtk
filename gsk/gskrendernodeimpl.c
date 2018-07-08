@@ -3565,7 +3565,7 @@ gsk_clip_node_diff (GskRenderNode  *node1,
     {
       cairo_region_t *sub;
       cairo_rectangle_int_t clip_rect;
-      
+
       sub = cairo_region_create();
       gsk_render_node_diff (self1->child, self2->child, sub);
       rectangle_init_from_graphene (&clip_rect, &self1->clip);
@@ -3573,8 +3573,10 @@ gsk_clip_node_diff (GskRenderNode  *node1,
       cairo_region_union (region, sub);
       cairo_region_destroy (sub);
     }
-
-  gsk_render_node_diff_impossible (node1, node2, region);
+  else
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+    }
 }
 
 #define GSK_CLIP_NODE_VARIANT_TYPE "(dddduv)"
@@ -3737,7 +3739,7 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
     {
       cairo_region_t *sub;
       cairo_rectangle_int_t clip_rect;
-      
+
       sub = cairo_region_create();
       gsk_render_node_diff (self1->child, self2->child, sub);
       rectangle_init_from_graphene (&clip_rect, &self1->clip.bounds);
@@ -3745,8 +3747,10 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
       cairo_region_union (region, sub);
       cairo_region_destroy (sub);
     }
-
-  gsk_render_node_diff_impossible (node1, node2, region);
+  else
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+    }
 }
 
 #define GSK_ROUNDED_CLIP_NODE_VARIANT_TYPE "(dddddddddddduv)"
@@ -4262,8 +4266,10 @@ gsk_blend_node_diff (GskRenderNode  *node1,
       gsk_render_node_diff (self1->top, self2->top, region);
       gsk_render_node_diff (self1->bottom, self2->bottom, region);
     }
-
-  gsk_render_node_diff_impossible (node1, node2, region);
+  else
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+    }
 }
 
 #define GSK_BLEND_NODE_VARIANT_TYPE "(uvuvu)"
