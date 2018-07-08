@@ -6464,7 +6464,7 @@ gtk_gesture_single_get_type
 
 <SECTION>
 <FILE>gtkeventcontrollerscroll</FILE>
-<TITLE>GtkEventControlerScroll</TITLE>
+<TITLE>GtkEventControllerScroll</TITLE>
 GtkEventControllerScroll
 GtkEventControllerScrollFlags
 gtk_event_controller_scroll_new
@@ -6485,7 +6485,7 @@ gtk_event_controller_scroll_get_type
 
 <SECTION>
 <FILE>gtkeventcontrollermotion</FILE>
-<TITLE>GtkEventControlerMotion</TITLE>
+<TITLE>GtkEventControllerMotion</TITLE>
 GtkEventControllerMotion
 gtk_event_controller_motion_new
 
