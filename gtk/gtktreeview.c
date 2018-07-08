@@ -4538,6 +4538,8 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 			    GtkSnapshot *snapshot)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
+  const int x_scroll_offset = - gtk_adjustment_get_value (priv->hadjustment);
   GtkTreePath *path;
   GtkRBTree *tree;
   GList *list;
@@ -4658,7 +4660,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 
       max_height = gtk_tree_view_get_row_height (tree_view, node);
 
-      cell_offset = 0;
+      cell_offset = x_scroll_offset;
 
       background_area.y = y_offset + clip.y;
       background_area.height = max_height;
@@ -4731,7 +4733,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
           else
             flags &= ~GTK_CELL_RENDERER_EXPANDED;
 
-	  background_area.x = cell_offset;
+          background_area.x = cell_offset;
 	  background_area.width = width;
 
           cell_area = background_area;
@@ -4767,6 +4769,9 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 	      cell_offset += gtk_tree_view_column_get_width (column);
 	      continue;
 	    }
+
+          background_area.x -= x_scroll_offset;
+          cell_area.x -= x_scroll_offset;
 
 	  gtk_tree_view_column_cell_set_cell_data (column,
 						   tree_view->priv->model,
