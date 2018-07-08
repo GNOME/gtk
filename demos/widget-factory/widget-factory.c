@@ -966,8 +966,8 @@ background_loaded_cb (GObject      *source,
       return;
     }
 
-  child = gtk_image_new_from_pixbuf (pixbuf);
-  gtk_widget_show (child);
+  child = gtk_picture_new_for_pixbuf (pixbuf);
+  gtk_widget_set_size_request (child, 110, 70);
   gtk_flow_box_insert (GTK_FLOW_BOX (bd->flowbox), child, -1);
   child = gtk_widget_get_parent (child);
   g_object_set_data_full (G_OBJECT (child), "filename", bd->filename, g_free);
@@ -995,8 +995,7 @@ populate_flowbox (GtkWidget *flowbox)
 
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 110, 70);
   gdk_pixbuf_fill (pixbuf, 0xffffffff);
-  child = gtk_image_new_from_pixbuf (pixbuf);
-  gtk_widget_show (child);
+  child = gtk_picture_new_for_pixbuf (pixbuf);
   gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
 
   location = "/usr/share/backgrounds/gnome";
