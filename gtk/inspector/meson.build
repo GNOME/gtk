@@ -16,6 +16,7 @@ inspector_sources = files(
   'init.c',
   'inspect-button.c',
   'inspectoroverlay.c',
+  'layoutoverlay.c',
   'logs.c',
   'magnifier.c',
   'menu.c',
