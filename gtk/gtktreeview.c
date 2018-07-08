@@ -2369,7 +2369,9 @@ gtk_tree_view_calculate_width_before_expander (GtkTreeView *tree_view)
 static void
 gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 {
-  GtkTreeView *tree_view;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
+  const int x_offset = - gtk_adjustment_get_value (priv->hadjustment);
   GList *list, *first_column, *last_column;
   GtkTreeViewColumn *column;
   gint widget_width, width = 0;
@@ -2378,8 +2380,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
   gint number_of_expand_columns = 0;
   gboolean rtl;
   gboolean update_expand;
-  
-  tree_view = GTK_TREE_VIEW (widget);
 
   for (last_column = g_list_last (tree_view->priv->columns);
        last_column &&
@@ -2490,9 +2490,11 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 	column_width += extra_for_last;
 
       if (rtl)
-        _gtk_tree_view_column_allocate (column, widget_width - width - column_width, column_width, tree_view->priv->header_height);
+        _gtk_tree_view_column_allocate (column, widget_width - width - column_width + x_offset,
+                                        column_width, tree_view->priv->header_height);
       else
-        _gtk_tree_view_column_allocate (column, width, column_width, tree_view->priv->header_height);
+        _gtk_tree_view_column_allocate (column, width + x_offset,
+                                        column_width, tree_view->priv->header_height);
 
       width += column_width;
     }
@@ -10680,7 +10682,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
         }
     }
 
-  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+  gtk_widget_queue_allocate (GTK_WIDGET (tree_view));
 }
 
 
