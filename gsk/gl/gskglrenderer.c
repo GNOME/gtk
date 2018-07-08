@@ -385,8 +385,8 @@ render_text_node (GskGLRenderer   *self,
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
-  int x = gsk_text_node_get_x (node) + builder->dx;
-  int y = gsk_text_node_get_y (node) + builder->dy;
+  float x = gsk_text_node_get_x (node) + builder->dx;
+  float y = gsk_text_node_get_y (node) + builder->dy;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && font_has_color_glyphs (font))
@@ -405,7 +405,7 @@ render_text_node (GskGLRenderer   *self,
     {
       const PangoGlyphInfo *gi = &glyphs[i];
       const GskGLCachedGlyph *glyph;
-      int glyph_x, glyph_y, glyph_w, glyph_h;
+      float glyph_x, glyph_y, glyph_w, glyph_h;
       float tx, ty, tx2, ty2;
       double cx;
       double cy;
