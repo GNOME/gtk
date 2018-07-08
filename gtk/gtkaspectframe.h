@@ -43,15 +43,11 @@ G_BEGIN_DECLS
 #define GTK_ASPECT_FRAME_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
 
 typedef struct _GtkAspectFrame              GtkAspectFrame;
-typedef struct _GtkAspectFramePrivate       GtkAspectFramePrivate;
 typedef struct _GtkAspectFrameClass         GtkAspectFrameClass;
 
 struct _GtkAspectFrame
 {
-  GtkFrame frame;
-
-  /*< private >*/
-  GtkAspectFramePrivate *priv;
+  GtkFrame parent_instance;
 };
 
 /**
