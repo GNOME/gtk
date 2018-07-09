@@ -1368,7 +1368,7 @@ treeview.view {
   -GtkTreeView-grid-line-pattern: '';
   -GtkTreeView-tree-line-width: 1;
   -GtkTreeView-tree-line-pattern: '';
-  -GtkTreeView-expander-size: 16;
+  -GtkTreeView-expander-size: 24;
 
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
@@ -2832,8 +2832,8 @@ row.activatable {
 
 expander {
   title > arrow {
-    min-width: 16px;
-    min-height: 16px;
+    min-width: 24px;
+    min-height: 24px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
 
