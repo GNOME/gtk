@@ -295,6 +295,7 @@ start_puzzle (GdkPaintable *puzzle)
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
   gtk_container_add (GTK_CONTAINER (frame), grid);
+  gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
 
   /* Add a key event controller so people can use the arrow
    * keys to move the puzzle */
