@@ -5386,7 +5386,7 @@ draw_text (GtkWidget *widget,
 
 static void
 paint_border_window (GtkTextView     *text_view,
-                     cairo_t         *cr,
+                     GtkSnapshot     *snapshot,
                      GtkTextWindow   *text_window,
                      GtkStyleContext *context)
 {
@@ -5400,9 +5400,7 @@ paint_border_window (GtkTextView     *text_view,
 
   gtk_style_context_save_to_node (context, text_window->css_node);
 
-  cairo_save (cr);
-  gtk_render_background (context, cr, 0, 0, w, h);
-  cairo_restore (cr);
+  gtk_snapshot_render_background (snapshot, context, 0, 0, w, h);
 
   gtk_style_context_restore (context);
 }
@@ -5434,14 +5432,12 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 
   cairo_save (cr);
   draw_text (widget, cr); 
-  cairo_restore (cr);
-
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->left_window, context);
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->right_window, context);
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->top_window, context);
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->bottom_window, context);
-
   cairo_destroy (cr);
+
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->left_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->right_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->top_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->bottom_window, context);
 
   /* Propagate exposes to all unanchored children. 
    * Anchored children are handled in gtk_text_view_paint(). 
