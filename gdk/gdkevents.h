@@ -377,6 +377,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_state           (const GdkEvent  *event,
                                          GdkModifierType *state);
 GDK_AVAILABLE_IN_ALL
+void      gdk_event_set_state           (GdkEvent       *event,
+                                         GdkModifierType state);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);

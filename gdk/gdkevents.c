@@ -928,6 +928,81 @@ gdk_event_get_state (const GdkEvent  *event,
 }
 
 /**
+ * gdk_event_set_state:
+ * @event: (allow-none): a #GdkEvent or %NULL
+ * @state: state of @event
+ *
+ * If the event contains a “state” field, assigns it to that field in @state.
+ *
+ * Otherwise does nothing.
+ * @event may be %NULL, in which case it’s treated
+ * as if the event had no state field.
+ **/
+void
+gdk_event_set_state (GdkEvent       *event,
+                     GdkModifierType state)
+{
+  if (event)
+    switch (event->any.type)
+      {
+      case GDK_MOTION_NOTIFY:
+	event->motion.state = state;
+        break;
+      case GDK_BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+        event->button.state = state;
+        break;
+      case GDK_TOUCH_BEGIN:
+      case GDK_TOUCH_UPDATE:
+      case GDK_TOUCH_END:
+      case GDK_TOUCH_CANCEL:
+        event->touch.state = state;
+        break;
+      case GDK_TOUCHPAD_SWIPE:
+        event->touchpad_swipe.state = state;
+        break;
+      case GDK_TOUCHPAD_PINCH:
+        event->touchpad_pinch.state = state;
+        break;
+      case GDK_SCROLL:
+	event->scroll.state = state;
+        break;
+      case GDK_KEY_PRESS:
+      case GDK_KEY_RELEASE:
+	event->key.state = state;
+        break;
+      case GDK_ENTER_NOTIFY:
+      case GDK_LEAVE_NOTIFY:
+	event->crossing.state = state;
+        break;
+      case GDK_CONFIGURE:
+      case GDK_FOCUS_CHANGE:
+      case GDK_PROXIMITY_IN:
+      case GDK_PROXIMITY_OUT:
+      case GDK_DRAG_ENTER:
+      case GDK_DRAG_LEAVE:
+      case GDK_DRAG_MOTION:
+      case GDK_DROP_START:
+      case GDK_NOTHING:
+      case GDK_DELETE:
+      case GDK_DESTROY:
+      case GDK_EXPOSE:
+      case GDK_MAP:
+      case GDK_UNMAP:
+      case GDK_GRAB_BROKEN:
+      case GDK_PAD_BUTTON_PRESS:
+      case GDK_PAD_BUTTON_RELEASE:
+      case GDK_PAD_RING:
+      case GDK_PAD_STRIP:
+      case GDK_PAD_GROUP_MODE:
+      case GDK_EVENT_LAST:
+      default:
+        g_warning ("GdkEvent has no state with type %d", event->any.type);
+        break;
+      }
+}
+
+/**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
  * @x_win: (out) (optional): location to put event surface x coordinate
