@@ -61,12 +61,7 @@
  * the commonly available names that are shared with the CSS specification.
  * Other names may be available, depending on the platform in use.
  * Another option to create a cursor is to use gdk_cursor_new_from_texture()
- * and provide an image to use for the cursor. Depending on the #GdkDisplay
- * in use, the type of supported images may be limited. See
- * gdk_display_supports_cursor_alpha(),
- * gdk_display_supports_cursor_color(),
- * gdk_display_get_default_cursor_size() and
- * gdk_display_get_maximal_cursor_size() for the limitations that might apply.
+ * and provide an image to use for the cursor.
  *
  * To ease work with unsupported cursors, a fallback cursor can be provided.
  * If a #GdkSurface cannot use a cursor because of the reasons mentioned above,
@@ -345,18 +340,6 @@ gdk_cursor_new_from_name (const gchar *name,
  *     this one cannot be supported
  *
  * Creates a new cursor from a #GdkTexture.
- *
- * Not all GDK backends support RGBA cursors. If they are not
- * supported, a monochrome approximation will be displayed.
- * The functions gdk_display_supports_cursor_alpha() and
- * gdk_display_supports_cursor_color() can be used to determine
- * whether RGBA cursors are supported;
- * gdk_display_get_default_cursor_size() and
- * gdk_display_get_maximal_cursor_size() give information about
- * cursor sizes.
- *
- * On the X backend, support for RGBA cursors requires a
- * sufficently new version of the X Render extension.
  *
  * Returns: a new #GdkCursor.
  */

@@ -2917,7 +2917,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
  *
  * Note that @cursor must be for the same display as @surface.
  *
- * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_texture() to
+ * Use gdk_cursor_new_from_name() or gdk_cursor_new_from_texture() to
  * create the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR.
  * Passing %NULL for the @cursor argument to gdk_surface_set_cursor() means
  * that @surface will use the cursor of its parent surface. Most surfaces
@@ -3004,7 +3004,7 @@ gdk_surface_get_device_cursor (GdkSurface *surface,
  * @cursor: a #GdkCursor
  *
  * Sets a specific #GdkCursor for a given device when it gets inside @surface.
- * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_texture() to create
+ * Use gdk_cursor_new_fromm_name() or gdk_cursor_new_from_texture() to create
  * the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR. Passing
  * %NULL for the @cursor argument to gdk_surface_set_cursor() means that
  * @surface will use the cursor of its parent surface. Most surfaces should
