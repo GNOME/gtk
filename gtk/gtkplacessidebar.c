@@ -3793,10 +3793,10 @@ on_row_dragged (GtkGestureDrag *gesture,
 
       sidebar->dragging_over = TRUE;
 
-      gtk_drag_begin_with_coordinates (GTK_WIDGET (sidebar),
-                                       gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                       sidebar->source_targets, GDK_ACTION_MOVE,
-                                       drag_x, drag_y);
+      gtk_drag_begin (GTK_WIDGET (sidebar),
+                      gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                      sidebar->source_targets, GDK_ACTION_MOVE,
+                      drag_x, drag_y);
     }
 
   g_object_unref (sidebar);

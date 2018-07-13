@@ -33,8 +33,6 @@ typedef struct _GdkDragClass GdkDragClass;
 struct _GdkDragClass {
   GObjectClass parent_class;
 
-  void        (*drag_abort)    (GdkDrag  *drag,
-                                guint32          time_);
   void        (*drag_drop)     (GdkDrag  *drag,
                                 guint32          time_);
   GdkSurface*  (*get_drag_surface) (GdkDrag *drag);
@@ -54,8 +52,6 @@ struct _GdkDragClass {
 
   gboolean    (*handle_event)   (GdkDrag  *drag,
                                  const GdkEvent  *event);
-  void        (*action_changed) (GdkDrag  *drag,
-                                 GdkDragAction    action);
 };
 
 struct _GdkDrag {
@@ -65,8 +61,13 @@ struct _GdkDrag {
   GdkSurface *source_surface;
   GdkSurface *drag_surface;
 
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkContentFormats *formats;
   GdkContentProvider *content;
-  GdkDragAction action;
+
+  GdkDragAction actions;
+  GdkDragAction selected_action;
 
   guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
@@ -74,8 +75,9 @@ struct _GdkDrag {
 void     gdk_drag_set_cursor          (GdkDrag        *drag,
                                        GdkCursor      *cursor);
 void     gdk_drag_set_actions         (GdkDrag        *drag,
-                                       GdkDragAction   actions,
-                                       GdkDragAction   suggested_action);
+                                       GdkDragAction   actions);
+void     gdk_drag_set_selected_action (GdkDrag        *drag,
+                                       GdkDragAction   action);
 
 void     gdk_drag_cancel              (GdkDrag        *drag,
                                        GdkDragCancelReason  reason);
@@ -83,8 +85,6 @@ gboolean gdk_drag_handle_source_event (GdkEvent       *event);
 GdkCursor * gdk_drag_get_cursor       (GdkDrag        *drag,
                                        GdkDragAction   action);
 
-void     gdk_drag_abort               (GdkDrag        *drag,
-                                       guint32         time_);
 void     gdk_drag_drop                (GdkDrag        *drag,
                                        guint32         time_);
 

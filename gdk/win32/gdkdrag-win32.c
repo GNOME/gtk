@@ -806,7 +806,7 @@ gdk_drag_new (GdkDisplay         *display,
   else
     drag_win32->scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, NULL);
 
-  gdk_drag_set_actions (drag, actions, actions);
+  gdk_drag_set_actions (drag, actions);
   drag_win32->protocol = protocol;
 
   return drag;
@@ -1072,7 +1072,7 @@ maybe_emit_action_changed (GdkWin32Drag        *drag_win32,
   if (actions != drag_win32->current_action)
     {
       drag_win32->current_action = actions;
-      g_signal_emit_by_name (GDK_DRAG (drag_win32), "action-changed", actions);
+      gdk_drag_set_selected_action (GDK_DRAG (drag_win32), actions);
     }
 }
 
@@ -1088,7 +1088,6 @@ _gdk_win32_local_drag_give_feedback (GdkDrag        *drag,
   GDK_NOTE (DND, g_print ("_gdk_win32_local_drag_give_feedback: 0x%p\n",
                           drag));
 
-  drag->action = actions;
   maybe_emit_action_changed (drag_win32, actions);
 }
 
@@ -1107,8 +1106,7 @@ give_feedback (gpointer user_data)
       GDK_NOTE (DND, g_print ("gdk_dnd_handle_drag_status: 0x%p\n",
                               drag));
 
-      drag->action = action_for_drop_effect (feedback->received_drop_effect);
-      maybe_emit_action_changed (drag_win32, drag->action);
+      maybe_emit_action_changed (drag_win32, action_for_drop_effect (feedback->received_drop_effect));
     }
 
   free_queue_item (&feedback->base);
@@ -1923,13 +1921,12 @@ gdk_win32_local_drag_motion (GdkDrag         *drag,
   actions = gdk_drag_get_actions (drag);
 
   GDK_NOTE (DND, g_print ("gdk_win32_local_drag_motion: @ %+d:%+d possible=%s\n"
-                          " dest=%p (current %p) drop=%p drag=%p:{actions=%s,suggested=%s,action=%s}\n",
+                          " dest=%p (current %p) drop=%p drag=%p:{actions=%s,action=%s}\n",
                           x_root, y_root,
                           _gdk_win32_drag_action_to_string (possible_actions),
                           dest_window, drag_win32->dest_window, drop, drag,
                           _gdk_win32_drag_action_to_string (actions),
-                          _gdk_win32_drag_action_to_string (gdk_drag_get_suggested_action (drag)),
-                          _gdk_win32_drag_action_to_string (drag->action)));
+                          _gdk_win32_drag_action_to_string (gdk_drag_get_selected_action (drag))));
 
   if (drag_win32->dest_window != dest_window)
     {
@@ -1970,12 +1967,11 @@ gdk_win32_local_drag_motion (GdkDrag         *drag,
     }
 
   GDK_NOTE (DND, g_print (" returning %s\n"
-                          " drag=%p:{actions=%s,suggested=%s,action=%s}\n",
+                          " drag=%p:{actions=%s,action=%s}\n",
                           (drop != NULL && drag_win32->drag_status == GDK_DRAG_STATUS_DRAG) ? "TRUE" : "FALSE",
                           drag,
                           _gdk_win32_drag_action_to_string (gdk_drag_get_actions (drag)),
-                          _gdk_win32_drag_action_to_string (gdk_drag_get_suggested_action (drag)),
-                          _gdk_win32_drag_action_to_string (drag->action)));
+                          _gdk_win32_drag_action_to_string (gdk_drag_get_selected_action (drag))));
   return (drop != NULL && drag_win32->drag_status == GDK_DRAG_STATUS_DRAG);
 }
 
@@ -2026,31 +2022,6 @@ gdk_win32_drag_drop (GdkDrag *drag,
       gpointer ddd = g_hash_table_lookup (clipdrop->active_source_drags, drag);
 
       drag_win32->util_data.state = GDK_WIN32_DND_DROPPED;
-
-      if (ddd)
-        send_source_state_update (clipdrop, drag_win32, ddd);
-    }
-}
-
-static void
-gdk_win32_drag_abort (GdkDrag *drag,
-                           guint32  time_)
-{
-  GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
-
-  g_return_if_fail (drag != NULL);
-
-  GDK_NOTE (DND, g_print ("gdk_win32_drag_abort\n"));
-
-  if (drag_win32->protocol == GDK_DRAG_PROTO_OLE2)
-    {
-      gpointer ddd = g_hash_table_lookup (clipdrop->active_source_drags, drag);
-
-      drag_win32->util_data.state = GDK_WIN32_DND_NONE;
 
       if (ddd)
         send_source_state_update (clipdrop, drag_win32, ddd);
@@ -2558,16 +2529,6 @@ gdk_win32_drag_handle_event (GdkDrag        *drag,
   return FALSE;
 }
 
-void
-gdk_win32_drag_action_changed (GdkDrag       *drag,
-                               GdkDragAction  action)
-{
-  GdkCursor *cursor;
-
-  cursor = gdk_drag_get_cursor (drag, action);
-  gdk_drag_set_cursor (drag, cursor);
-}
-
 static GdkSurface *
 gdk_win32_drag_get_drag_surface (GdkDrag *drag)
 {
@@ -2603,7 +2564,6 @@ gdk_win32_drag_class_init (GdkWin32DragClass *klass)
 
   object_class->finalize = gdk_win32_drag_finalize;
 
-  drag_class->drag_abort = gdk_win32_drag_abort;
   drag_class->drag_drop = gdk_win32_drag_drop;
 
   drag_class->get_drag_surface = gdk_win32_drag_get_drag_surface;
@@ -2613,5 +2573,4 @@ gdk_win32_drag_class_init (GdkWin32DragClass *klass)
   drag_class->cancel = gdk_win32_drag_cancel;
   drag_class->drop_performed = gdk_win32_drag_drop_performed;
   drag_class->handle_event = gdk_win32_drag_handle_event;
-  drag_class->action_changed = gdk_win32_drag_action_changed;
 }

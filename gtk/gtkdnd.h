@@ -55,12 +55,12 @@ void gtk_drag_unhighlight (GtkWidget  *widget);
 /* Source side */
 
 GDK_AVAILABLE_IN_ALL
-GdkDrag *gtk_drag_begin_with_coordinates (GtkWidget         *widget,
-                                          GdkDevice         *device,
-                                          GdkContentFormats *targets,
-                                          GdkDragAction      actions,
-                                          gint               x,
-                                          gint               y);
+GdkDrag *gtk_drag_begin (GtkWidget         *widget,
+                         GdkDevice         *device,
+                         GdkContentFormats *targets,
+                         GdkDragAction      actions,
+                         gint               x,
+                         gint               y);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_cancel           (GdkDrag *drag);

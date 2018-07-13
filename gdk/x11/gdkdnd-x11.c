@@ -170,8 +170,6 @@ static void            gdk_surface_cache_unref (GdkSurfaceCache *cache);
 
 gboolean gdk_x11_drag_handle_event   (GdkDrag        *drag,
                                       const GdkEvent *event);
-void     gdk_x11_drag_action_changed (GdkDrag        *drag,
-                                      GdkDragAction   action);
 
 static GList *drags;
 static GSList *window_caches;
@@ -198,8 +196,6 @@ static gboolean    gdk_x11_drag_drag_motion  (GdkDrag         *drag,
                                               GdkDragAction    suggested_action,
                                               GdkDragAction    possible_actions,
                                               guint32          time);
-static void        gdk_x11_drag_drag_abort   (GdkDrag         *drag,
-                                              guint32          time_);
 static void        gdk_x11_drag_drag_drop    (GdkDrag         *drag,
                                               guint32          time_);
 static GdkSurface * gdk_x11_drag_get_drag_surface (GdkDrag    *drag);
@@ -223,7 +219,6 @@ gdk_x11_drag_class_init (GdkX11DragClass *klass)
 
   object_class->finalize = gdk_x11_drag_finalize;
 
-  drag_class->drag_abort = gdk_x11_drag_drag_abort;
   drag_class->drag_drop = gdk_x11_drag_drag_drop;
   drag_class->get_drag_surface = gdk_x11_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_x11_drag_set_hotspot;
@@ -232,7 +227,6 @@ gdk_x11_drag_class_init (GdkX11DragClass *klass)
   drag_class->cancel = gdk_x11_drag_cancel;
   drag_class->drop_performed = gdk_x11_drag_drop_performed;
   drag_class->handle_event = gdk_x11_drag_handle_event;
-  drag_class->action_changed = gdk_x11_drag_action_changed;
 }
 
 static void
@@ -882,13 +876,8 @@ gdk_x11_drag_handle_status (GdkDisplay   *display,
           action = 0;
         }
 
-      drag->action = xdnd_action_from_atom (display, action);
-
-      if (drag->action != drag_x11->current_action)
-        {
-          drag_x11->current_action = drag->action;
-          g_signal_emit_by_name (drag, "action-changed", drag->action);
-        }
+      gdk_drag_set_selected_action (drag, xdnd_action_from_atom (display, action));
+      drag_x11->current_action = action;
     }
 }
 
@@ -1010,12 +999,8 @@ send_client_message_async_cb (Window   window,
       window == drag_x11->proxy_xid)
     {
       drag_x11->proxy_xid = None;
-      drag->action = 0;
-      if (drag->action != drag_x11->current_action)
-        {
-          drag_x11->current_action = 0;
-          g_signal_emit_by_name (drag, "action-changed", 0);
-        }
+      gdk_drag_set_selected_action (drag, 0);
+      drag_x11->current_action = 0;
       drag_x11->drag_status = GDK_DRAG_STATUS_DRAG;
     }
 
@@ -1489,7 +1474,7 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
   if (drag_x11->drag_surface)
     move_drag_surface (drag, x_root, y_root);
 
-  gdk_drag_set_actions (drag, possible_actions, suggested_action);
+  gdk_drag_set_actions (drag, possible_actions);
 
   if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->version == 0)
     {
@@ -1558,17 +1543,13 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
         {
           drag_x11->proxy_xid = None;
           drag_x11->drop_xid = None;
-          drag->action = 0;
+          gdk_drag_set_selected_action (drag, 0);
         }
 
       /* Push a status event, to let the client know that
        * the drag changed
        */
-      if (drag->action != drag_x11->current_action)
-        {
-          drag_x11->current_action = drag->action;
-          g_signal_emit_by_name (drag, "action-changed", drag->action);
-        }
+      drag_x11->current_action = gdk_drag_get_selected_action (drag);
     }
 
   /* Send a drag-motion event */
@@ -1597,15 +1578,11 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||
                     gdk_content_formats_contain_mime_type (formats, "application/x-rootwin-drop"))
-                  drag->action = gdk_drag_get_suggested_action (drag);
+                  gdk_drag_set_selected_action (drag, suggested_action);
                 else
-                  drag->action = 0;
+                  gdk_drag_set_selected_action (drag, 0);
 
-                if (drag->action != drag_x11->current_action)
-                  {
-                    drag_x11->current_action = drag->action;
-                    g_signal_emit_by_name (drag, "action-changed", drag->action);
-                  }
+                drag_x11->current_action = gdk_drag_get_selected_action (drag);
               }
               break;
             case GDK_DRAG_PROTO_NONE:
@@ -1620,13 +1597,6 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
     }
 
   return FALSE;
-}
-
-static void
-gdk_x11_drag_drag_abort (GdkDrag *drag,
-                                 guint32         time)
-{
-  gdk_drag_do_leave (GDK_X11_DRAG (drag), time);
 }
 
 static void
@@ -2267,19 +2237,20 @@ gdk_drag_update (GdkDrag         *drag,
                  guint32          evtime)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkDragAction action, possible_actions;
+  GdkDragAction suggested_action;
+  GdkDragAction possible_actions;
   GdkDragProtocol protocol;
   Window proxy;
 
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_drag->actions,
-                                &action, &possible_actions);
+                                &suggested_action, &possible_actions);
 
   proxy = gdk_x11_drag_find_surface (drag,
-                                             x11_drag->drag_surface,
-                                             x_root, y_root, &protocol);
+                                     x11_drag->drag_surface,
+                                     x_root, y_root, &protocol);
 
   gdk_x11_drag_drag_motion (drag, proxy, protocol, x_root, y_root,
-                                    action, possible_actions, evtime);
+                            suggested_action, possible_actions, evtime);
 }
 
 static gboolean
@@ -2447,14 +2418,4 @@ gdk_x11_drag_handle_event (GdkDrag        *drag,
     }
 
   return FALSE;
-}
-
-void
-gdk_x11_drag_action_changed (GdkDrag       *drag,
-                             GdkDragAction  action)
-{ 
-  GdkCursor *cursor;
-
-  cursor = gdk_drag_get_cursor (drag, action);
-  gdk_drag_set_cursor (drag, cursor);
 }

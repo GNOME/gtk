@@ -35,17 +35,6 @@
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
 
-typedef struct _GdkDragPrivate GdkDragPrivate;
-
-struct _GdkDragPrivate 
-{
-  GdkDisplay *display;
-  GdkDevice *device;
-  GdkContentFormats *formats;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-};
-
 static struct {
   GdkDragAction action;
   const gchar  *name;
@@ -64,6 +53,8 @@ enum {
   PROP_DEVICE,
   PROP_DISPLAY,
   PROP_FORMATS,
+  PROP_SELECTED_ACTION,
+  PROP_ACTIONS,
   N_PROPERTIES
 };
 
@@ -71,7 +62,6 @@ enum {
   CANCEL,
   DROP_PERFORMED,
   DND_FINISHED,
-  ACTION_CHANGED,
   N_SIGNALS
 };
 
@@ -79,7 +69,7 @@ static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 static GList *drags = NULL;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 
 /**
  * SECTION:dnd
@@ -87,14 +77,17 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
  * @short_description: Functions for controlling drag and drop handling
  *
  * These functions provide a low level interface for drag and drop.
- * The X backend of GDK supports both the Xdnd and Motif drag and drop
- * protocols transparently, the Win32 backend supports the WM_DROPFILES
- * protocol.
  *
+ * The GdkDrag object represents the source side of an ongoing DND operation.
+ * It is created when a drag is started, and stays alive for duration of
+ * the DND operation.
+ *
+ * The GdkDrop object represents the target side of an ongoing DND operation.
+ * 
  * GTK+ provides a higher level abstraction based on top of these functions,
- * and so they are not normally needed in GTK+ applications.
- * See the [Drag and Drop][gtk3-Drag-and-Drop] section of
- * the GTK+ documentation for more information.
+ * and so they are not normally needed in GTK+ applications. See the
+ * [Drag and Drop][gtk4-Drag-and-Drop] section of the GTK+ documentation
+ * for more information.
  */
 
 /**
@@ -115,11 +108,9 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 GdkDisplay *
 gdk_drag_get_display (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return priv->display;
+  return drag->display;
 }
 
 /**
@@ -133,48 +124,25 @@ gdk_drag_get_display (GdkDrag *drag)
 GdkContentFormats *
 gdk_drag_get_formats (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return priv->formats;
+  return drag->formats;
 }
 
 /**
  * gdk_drag_get_actions:
  * @drag: a #GdkDrag
  *
- * Determines the bitmask of actions proposed by the source if
- * gdk_drag_get_suggested_action() returns %GDK_ACTION_ASK.
+ * Determines the bitmask of possible actions proposed by the source.
  *
  * Returns: the #GdkDragAction flags
  **/
 GdkDragAction
 gdk_drag_get_actions (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return priv->actions;
-}
-
-/**
- * gdk_drag_get_suggested_action:
- * @drag: a #GdkDrag
- *
- * Determines the suggested drag action of the GdkDrag object.
- *
- * Returns: a #GdkDragAction value
- **/
-GdkDragAction
-gdk_drag_get_suggested_action (GdkDrag *drag)
-{
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
-  g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
-
-  return priv->suggested_action;
+  return drag->actions;
 }
 
 /**
@@ -190,7 +158,7 @@ gdk_drag_get_selected_action (GdkDrag *drag)
 {
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return drag->action;
+  return drag->selected_action;
 }
 
 /**
@@ -204,11 +172,9 @@ gdk_drag_get_selected_action (GdkDrag *drag)
 GdkDevice *
 gdk_drag_get_device (GdkDrag *drag)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return priv->device;
+  return drag->device;
 }
 
 static void
@@ -224,7 +190,6 @@ gdk_drag_set_property (GObject      *gobject,
                        GParamSpec   *pspec)
 {
   GdkDrag *drag = GDK_DRAG (gobject);
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   switch (prop_id)
     {
@@ -232,33 +197,47 @@ gdk_drag_set_property (GObject      *gobject,
       drag->content = g_value_dup_object (value);
       if (drag->content)
         {
-          g_assert (priv->formats == NULL);
-          priv->formats = gdk_content_provider_ref_formats (drag->content);
+          g_assert (drag->formats == NULL);
+          drag->formats = gdk_content_provider_ref_formats (drag->content);
         }
       break;
 
     case PROP_DEVICE:
-      priv->device = g_value_dup_object (value);
-      g_assert (priv->device != NULL);
-      priv->display = gdk_device_get_display (priv->device);
+      drag->device = g_value_dup_object (value);
+      g_assert (drag->device != NULL);
+      drag->display = gdk_device_get_display (drag->device);
       break;
 
     case PROP_FORMATS:
-      if (priv->formats)
+      if (drag->formats)
         {
           GdkContentFormats *override = g_value_dup_boxed (value);
           if (override)
             {
-              gdk_content_formats_unref (priv->formats);
-              priv->formats = override;
+              gdk_content_formats_unref (drag->formats);
+              drag->formats = override;
             }
         }
       else
         {
-          priv->formats = g_value_dup_boxed (value);
-          g_assert (priv->formats != NULL);
+          drag->formats = g_value_dup_boxed (value);
+          g_assert (drag->formats != NULL);
         }
       break;
+
+    case PROP_SELECTED_ACTION:
+      {
+        GdkDragAction action = g_value_get_flags (value);
+        gdk_drag_set_selected_action (drag, action);
+      }
+    break;
+
+    case PROP_ACTIONS:
+      {
+        GdkDragAction actions = g_value_get_flags (value);
+        gdk_drag_set_actions (drag, actions);
+      }
+    break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
@@ -273,7 +252,6 @@ gdk_drag_get_property (GObject    *gobject,
                        GParamSpec *pspec)
 {
   GdkDrag *drag = GDK_DRAG (gobject);
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   switch (prop_id)
     {
@@ -282,15 +260,23 @@ gdk_drag_get_property (GObject    *gobject,
       break;
 
     case PROP_DEVICE:
-      g_value_set_object (value, priv->device);
+      g_value_set_object (value, drag->device);
       break;
 
     case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
+      g_value_set_object (value, drag->display);
       break;
 
     case PROP_FORMATS:
-      g_value_set_boxed (value, priv->formats);
+      g_value_set_boxed (value, drag->formats);
+      break;
+
+    case PROP_SELECTED_ACTION:
+      g_value_set_flags (value, drag->selected_action);
+      break;
+
+    case PROP_ACTIONS:
+      g_value_set_flags (value, drag->actions);
       break;
 
     default:
@@ -303,12 +289,11 @@ static void
 gdk_drag_finalize (GObject *object)
 {
   GdkDrag *drag = GDK_DRAG (object);
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   drags = g_list_remove (drags, drag);
 
   g_clear_object (&drag->content);
-  g_clear_pointer (&priv->formats, gdk_content_formats_unref);
+  g_clear_pointer (&drag->formats, gdk_content_formats_unref);
 
   if (drag->source_surface)
     g_object_unref (drag->source_surface);
@@ -384,6 +369,25 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_SELECTED_ACTION] =
+    g_param_spec_flags ("selected-action",
+                        "Selected action",
+                        "The currently selected action",
+                        GDK_TYPE_DRAG_ACTION,
+                        0,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_ACTIONS] =
+    g_param_spec_flags ("actions",
+                        "Actions",
+                        "The possible actions",
+                        GDK_TYPE_DRAG_ACTION,
+                        0,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GdkDrag::cancel:
    * @drag: The object on which the signal is emitted
@@ -432,41 +436,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
-  /**
-   * GdkDrag::action-changed:
-   * @drag: The object on which the signal is emitted
-   * @action: The action currently chosen
-   *
-   * A new action is being chosen for the drag operation.
-   */
-  signals[ACTION_CHANGED] =
-    g_signal_new (g_intern_static_string ("action-changed"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkDragClass, action_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__FLAGS,
-                  G_TYPE_NONE, 1, GDK_TYPE_DRAG_ACTION);
-
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
-}
-
-/*
- * gdk_drag_abort:
- * @drag: a #GdkDrag
- * @time_: the timestamp for this operation
- *
- * Aborts a drag without dropping.
- *
- * This function is called by the drag source.
- */
-void
-gdk_drag_abort (GdkDrag *drag,
-                guint32  time_)
-{
-  g_return_if_fail (GDK_IS_DRAG (drag));
-
-  GDK_DRAG_GET_CLASS (drag)->drag_abort (drag, time_);
 }
 
 /*
@@ -608,13 +578,31 @@ gdk_drag_write_finish (GdkDrag       *drag,
 
 void
 gdk_drag_set_actions (GdkDrag       *drag,
-                      GdkDragAction  actions,
-                      GdkDragAction  suggested_action)
+                      GdkDragAction  actions)
 {
-  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+  if (drag->actions == actions)
+    return;
 
-  priv->actions = actions;
-  priv->suggested_action = suggested_action;
+  drag->actions = actions;
+
+  g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTIONS]);
+}
+
+void
+gdk_drag_set_selected_action (GdkDrag       *drag,
+                              GdkDragAction  action)
+{
+  GdkCursor *cursor;
+
+  if (drag->selected_action == action)
+    return;
+
+  drag->selected_action = action;
+
+  cursor = gdk_drag_get_cursor (drag, action);
+  gdk_drag_set_cursor (drag, cursor);
+
+  g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_SELECTED_ACTION]);
 }
 
 /**

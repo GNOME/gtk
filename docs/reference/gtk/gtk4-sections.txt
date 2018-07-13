@@ -5012,6 +5012,7 @@ gtk_selection_data_get_type
 <TITLE>Drag and Drop</TITLE>
 GtkDestDefaults
 GtkDragResult
+
 <SUBSECTION Destination Side>
 gtk_drag_dest_set
 gtk_drag_dest_unset
@@ -5027,8 +5028,9 @@ gtk_drag_get_data
 gtk_drag_get_source_widget
 gtk_drag_highlight
 gtk_drag_unhighlight
+
 <SUBSECTION Source Side>
-gtk_drag_begin_with_coordinates
+gtk_drag_begin
 gtk_drag_cancel
 gtk_drag_set_icon_widget
 gtk_drag_set_icon_paintable

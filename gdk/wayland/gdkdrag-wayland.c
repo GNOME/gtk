@@ -51,7 +51,6 @@ struct _GdkWaylandDrag
   struct wl_surface *dnd_wl_surface;
   struct wl_data_source *data_source;
   struct wl_data_offer *offer;
-  GdkDragAction selected_action;
   uint32_t serial;
   gint hot_x;
   gint hot_y;
@@ -106,12 +105,6 @@ gdk_to_wl_actions (GdkDragAction action)
 }
 
 static void
-gdk_wayland_drag_drag_abort (GdkDrag *drag,
-                             guint32  time)
-{
-}
-
-static void
 gdk_wayland_drag_drag_drop (GdkDrag *drag,
                             guint32  time)
 {
@@ -125,7 +118,7 @@ gdk_wayland_drag_init (GdkWaylandDrag *drag_wayland)
   drag = GDK_DRAG (drag_wayland);
   drags = g_list_prepend (drags, drag);
 
-  drag->action = GDK_ACTION_COPY;
+  gdk_drag_set_selected_action (drag, GDK_ACTION_COPY);
 }
 
 static GdkSurface *
@@ -161,17 +154,8 @@ gdk_wayland_drag_set_cursor (GdkDrag   *drag,
 {
   GdkDevice *device = gdk_drag_get_device (drag);
 
-  gdk_wayland_seat_set_global_cursor (gdk_device_get_seat (device), cursor);
-}
-
-static void
-gdk_wayland_drag_action_changed (GdkDrag       *drag,
-                                 GdkDragAction  action)
-{
-  GdkCursor *cursor;
-
-  cursor = gdk_drag_get_cursor (drag, action);
-  gdk_drag_set_cursor (drag, cursor);
+  if (device != NULL)
+    gdk_wayland_seat_set_global_cursor (gdk_device_get_seat (device), cursor);
 }
 
 static void
@@ -212,13 +196,11 @@ gdk_wayland_drag_class_init (GdkWaylandDragClass *klass)
 
   object_class->finalize = gdk_wayland_drag_finalize;
 
-  drag_class->drag_abort = gdk_wayland_drag_drag_abort;
   drag_class->drag_drop = gdk_wayland_drag_drag_drop;
   drag_class->get_drag_surface = gdk_wayland_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_wayland_drag_set_hotspot;
   drag_class->drop_done = gdk_wayland_drag_drop_done;
   drag_class->set_cursor = gdk_wayland_drag_set_cursor;
-  drag_class->action_changed = gdk_wayland_drag_action_changed;
   drag_class->drop_performed = gdk_wayland_drag_drop_performed;
   drag_class->cancel = gdk_wayland_drag_cancel;
 }
@@ -346,8 +328,7 @@ data_source_action (void                  *data,
             g_message ("data source action, source = %p action=%x",
                        source, action));
 
-  drag->action = _wl_to_gdk_actions (action);
-  g_signal_emit_by_name (drag, "action-changed", drag->action);
+  gdk_drag_set_selected_action (drag, _wl_to_gdk_actions (action));
 }
 
 static const struct wl_data_source_listener data_source_listener = {
@@ -392,6 +373,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
   GdkDrag *drag;
   GdkSeat *seat;
   GdkWaylandDisplay *display_wayland;
+  GdkCursor *cursor;
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
   seat = gdk_device_get_seat (device);
@@ -422,6 +404,9 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
                              gdk_wayland_surface_get_wl_surface (surface),
 			     drag_wayland->dnd_wl_surface,
                              _gdk_wayland_display_get_serial (display_wayland));
+
+  cursor = gdk_drag_get_cursor (drag, gdk_drag_get_selected_action (drag));
+  gdk_drag_set_cursor (drag, cursor);
 
   gdk_seat_ungrab (seat);
 
