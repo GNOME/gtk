@@ -439,24 +439,6 @@ gdk_drag_class_init (GdkDragClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
-/*
- * gdk_drag_drop:
- * @drag: a #GdkDrag
- * @time_: the timestamp for this operation
- *
- * Drops on the current destination.
- *
- * This function is called by the drag source.
- */
-void
-gdk_drag_drop (GdkDrag *drag,
-               guint32  time_)
-{
-  g_return_if_fail (GDK_IS_DRAG (drag));
-
-  GDK_DRAG_GET_CLASS (drag)->drag_drop (drag, time_);
-}
-
 static void
 gdk_drag_write_done (GObject      *content,
                      GAsyncResult *result,

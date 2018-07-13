@@ -2287,7 +2287,8 @@ gdk_win32_drag_drop_performed (GdkDrag *drag,
   GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_performed: 0x%p %u\n",
                           drag,
                           time_));
-  gdk_drag_drop (drag, time_);
+
+  gdk_win32_drag_drop (drag, time_);
   gdk_drag_set_cursor (drag, NULL);
   drag_context_ungrab (drag);
 }
@@ -2563,8 +2564,6 @@ gdk_win32_drag_class_init (GdkWin32DragClass *klass)
   GdkDragClass *drag_class = GDK_DRAG_CLASS (klass);
 
   object_class->finalize = gdk_win32_drag_finalize;
-
-  drag_class->drag_drop = gdk_win32_drag_drop;
 
   drag_class->get_drag_surface = gdk_win32_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_win32_drag_set_hotspot;

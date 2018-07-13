@@ -104,13 +104,6 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
   return new_context;
 }
 
-static void
-gdk_broadway_drag_drag_drop (GdkDrag *context,
-                                     guint32         time)
-{
-  g_return_if_fail (context != NULL);
-}
-
 void
 _gdk_broadway_surface_register_dnd (GdkSurface      *surface)
 {
@@ -128,6 +121,4 @@ gdk_broadway_drag_class_init (GdkBroadwayDragClass *klass)
   GdkDragClass *context_class = GDK_DRAG_CLASS (klass);
 
   object_class->finalize = gdk_broadway_drag_finalize;
-
-  context_class->drag_drop = gdk_broadway_drag_drag_drop;
 }

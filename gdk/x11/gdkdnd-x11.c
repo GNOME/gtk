@@ -196,7 +196,7 @@ static gboolean    gdk_x11_drag_drag_motion  (GdkDrag         *drag,
                                               GdkDragAction    suggested_action,
                                               GdkDragAction    possible_actions,
                                               guint32          time);
-static void        gdk_x11_drag_drag_drop    (GdkDrag         *drag,
+static void        gdk_x11_drag_drop         (GdkDrag         *drag,
                                               guint32          time_);
 static GdkSurface * gdk_x11_drag_get_drag_surface (GdkDrag    *drag);
 static void        gdk_x11_drag_set_hotspot  (GdkDrag         *drag,
@@ -219,7 +219,6 @@ gdk_x11_drag_class_init (GdkX11DragClass *klass)
 
   object_class->finalize = gdk_x11_drag_finalize;
 
-  drag_class->drag_drop = gdk_x11_drag_drag_drop;
   drag_class->get_drag_surface = gdk_x11_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_x11_drag_set_hotspot;
   drag_class->drop_done = gdk_x11_drag_drop_done;
@@ -1600,8 +1599,8 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
 }
 
 static void
-gdk_x11_drag_drag_drop (GdkDrag *drag,
-                                guint32         time)
+gdk_x11_drag_drop (GdkDrag *drag,
+                   guint32  time)
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
@@ -2165,7 +2164,7 @@ static void
 gdk_x11_drag_drop_performed (GdkDrag *drag,
                              guint32  time_)
 {
-  gdk_drag_drop (drag, time_);
+  gdk_x11_drag_drop (drag, time_);
   drag_ungrab (drag);
 }
 
