@@ -21,7 +21,7 @@ gdk/gdksurface.c
 gdk/keyname-table.h
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkclipboard-wayland.c
-gdk/wayland/gdkdnd-wayland.c
+gdk/wayland/gdkdrag-wayland.c
 gdk/wayland/gdkdrop-wayland.c
 gdk/wayland/gdkglcontext-wayland.c
 gdk/wayland/gdkprimary-wayland.c
