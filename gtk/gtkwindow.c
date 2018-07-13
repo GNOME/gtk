@@ -6735,7 +6735,7 @@ subtract_corners_from_region (cairo_region_t        *region,
 
 static void
 update_opaque_region (GtkWindow           *window,
-                      GtkBorder           *border,
+                      const GtkBorder     *border,
                       const GtkAllocation *allocation)
 {
   GtkWidget *widget = GTK_WIDGET (window);
@@ -7825,11 +7825,24 @@ static void
 gtk_window_style_updated (GtkWidget *widget)
 {
   GtkCssStyleChange *change = gtk_style_context_get_change (gtk_widget_get_style_context (widget));
+  GtkWindow *window = GTK_WINDOW (widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->style_updated (widget);
 
+  if (!_gtk_widget_get_alloc_needed (widget) &&
+      (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_BACKGROUND_COLOR)))
+    {
+      GtkAllocation allocation;
+      GtkBorder window_border;
+
+      _gtk_widget_get_allocation (widget, &allocation);
+      get_shadow_width (window, &window_border);
+
+      update_opaque_region (window, &window_border, &allocation);
+    }
+
   if (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
-    update_themed_icon (GTK_WINDOW (widget));
+    update_themed_icon (window);
 }
 
 /**
