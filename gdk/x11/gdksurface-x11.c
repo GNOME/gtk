@@ -880,16 +880,8 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
     {
       class = InputOutput;
 
-      if (gdk_display_is_rgba (display))
-        {
-          xattributes.background_pixel = 0;
-          xattributes_mask |= CWBackPixel;
-        }
-      else
-        {
-          xattributes.background_pixmap = None;
-          xattributes_mask |= CWBackPixmap;
-        }
+      xattributes.background_pixmap = None;
+      xattributes_mask |= CWBackPixmap;
 
       xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
       xattributes_mask |= CWBorderPixel;
