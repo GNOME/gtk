@@ -40,25 +40,29 @@
 #include "fallback-c89.c"
 
 static void
-gtk_do_render_check (GtkStyleContext *context,
-                     cairo_t         *cr,
-                     gdouble          x,
-                     gdouble          y,
-                     gdouble          width,
-                     gdouble          height)
+gtk_do_render_icon (GtkStyleContext        *context,
+                    cairo_t                *cr,
+                    GtkCssImageBuiltinType  image_type,
+                    gdouble                 x,
+                    gdouble                 y,
+                    gdouble                 width,
+                    gdouble                 height)
 {
-  GtkStateFlags state;
-  GtkCssImageBuiltinType image_type;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
 
-  state = gtk_style_context_get_state (context);
-  if (state & GTK_STATE_FLAG_INCONSISTENT)
-    image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT;
-  else if (state & GTK_STATE_FLAG_CHECKED)
-    image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
-  else
-    image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
+  snapshot = gtk_snapshot_new ();
+  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot, width, height, image_type);
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node == NULL)
+    return;
 
-  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
+  cairo_save (cr);
+  cairo_translate (cr, x, y);
+  gsk_render_node_draw (node, cr);
+  cairo_restore (cr);
+
+  gsk_render_node_unref (node);
 }
 
 /**
@@ -88,35 +92,24 @@ gtk_render_check (GtkStyleContext *context,
                   gdouble          width,
                   gdouble          height)
 {
+  GtkStateFlags state;
+  GtkCssImageBuiltinType image_type;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   if (width <= 0 || height <= 0)
     return;
 
-  gtk_do_render_check (context, cr, x, y, width, height);
-}
-
-static void
-gtk_do_render_option (GtkStyleContext *context,
-                      cairo_t         *cr,
-                      gdouble          x,
-                      gdouble          y,
-                      gdouble          width,
-                      gdouble          height)
-{
-  GtkStateFlags state;
-  GtkCssImageBuiltinType image_type;
-
   state = gtk_style_context_get_state (context);
   if (state & GTK_STATE_FLAG_INCONSISTENT)
-    image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT;
+    image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT;
   else if (state & GTK_STATE_FLAG_CHECKED)
-    image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
+    image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
-  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
+  gtk_do_render_icon (context, cr, image_type, x, y, width, height);
 }
 
 /**
@@ -144,49 +137,24 @@ gtk_render_option (GtkStyleContext *context,
                    gdouble          width,
                    gdouble          height)
 {
+  GtkStateFlags state;
+  GtkCssImageBuiltinType image_type;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   if (width <= 0 || height <= 0)
     return;
 
-  gtk_do_render_option (context, cr, x, y, width, height);
-}
+  state = gtk_style_context_get_state (context);
+  if (state & GTK_STATE_FLAG_INCONSISTENT)
+    image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT;
+  else if (state & GTK_STATE_FLAG_CHECKED)
+    image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
+  else
+    image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
-static void
-gtk_do_render_arrow (GtkStyleContext *context,
-                     cairo_t         *cr,
-                     gdouble          angle,
-                     gdouble          x,
-                     gdouble          y,
-                     gdouble          size)
-{
-  GtkCssImageBuiltinType image_type;
-
-  /* map [0, 2 * pi) to [0, 4) */
-  angle = round (2 * angle / G_PI);
-
-  switch (((int) angle) & 3)
-  {
-  case 0:
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
-    break;
-  case 1:
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
-    break;
-  case 2:
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN;
-    break;
-  case 3:
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
-    break;
-  default:
-    g_assert_not_reached ();
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
-    break;
-  }
-
-  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, size, size, image_type);
+  gtk_do_render_icon (context, cr, image_type, x, y, width, height);
 }
 
 /**
@@ -212,13 +180,38 @@ gtk_render_arrow (GtkStyleContext *context,
                   gdouble          y,
                   gdouble          size)
 {
+  GtkCssImageBuiltinType image_type;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   if (size <= 0)
     return;
 
-  gtk_do_render_arrow (context, cr, angle, x, y, size);
+  /* map [0, 2 * pi) to [0, 4) */
+  angle = round (2 * angle / G_PI);
+
+  switch (((int) angle) & 3)
+  {
+  case 0:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
+    break;
+  case 1:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
+    break;
+  case 2:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN;
+    break;
+  case 3:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
+    break;
+  default:
+    g_assert_not_reached ();
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
+    break;
+  }
+
+  gtk_do_render_icon (context, cr, image_type, x, y, size, size);
 }
 
 /**
@@ -321,44 +314,6 @@ gtk_render_frame (GtkStyleContext *context,
                                x, y, width, height);
 }
 
-static void
-gtk_do_render_expander (GtkStyleContext *context,
-                        cairo_t         *cr,
-                        gdouble          x,
-                        gdouble          y,
-                        gdouble          width,
-                        gdouble          height)
-{
-  GtkCssImageBuiltinType image_type;
-  GtkStateFlags state;
-
-  state = gtk_style_context_get_state (context);
-  if (gtk_style_context_has_class (context, "horizontal"))
-    {
-      if (state & GTK_STATE_FLAG_DIR_RTL)
-        image_type = (state & GTK_STATE_FLAG_CHECKED)
-                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_RIGHT_EXPANDED
-                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_RIGHT;
-      else
-        image_type = (state & GTK_STATE_FLAG_CHECKED)
-                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT_EXPANDED
-                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT;
-    }
-  else
-    {
-      if (state & GTK_STATE_FLAG_DIR_RTL)
-        image_type = (state & GTK_STATE_FLAG_CHECKED)
-                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT_EXPANDED
-                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT;
-      else
-        image_type = (state & GTK_STATE_FLAG_CHECKED)
-                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT_EXPANDED
-                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT;
-    }
-
-  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
-}
-
 /**
  * gtk_render_expander:
  * @context: a #GtkStyleContext
@@ -384,13 +339,40 @@ gtk_render_expander (GtkStyleContext *context,
                      gdouble          width,
                      gdouble          height)
 {
+  GtkCssImageBuiltinType image_type;
+  GtkStateFlags state;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   if (width <= 0 || height <= 0)
     return;
 
-  gtk_do_render_expander (context, cr, x, y, width, height);
+  state = gtk_style_context_get_state (context);
+  if (gtk_style_context_has_class (context, "horizontal"))
+    {
+      if (state & GTK_STATE_FLAG_DIR_RTL)
+        image_type = (state & GTK_STATE_FLAG_CHECKED)
+                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_RIGHT_EXPANDED
+                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_RIGHT;
+      else
+        image_type = (state & GTK_STATE_FLAG_CHECKED)
+                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT_EXPANDED
+                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT;
+    }
+  else
+    {
+      if (state & GTK_STATE_FLAG_DIR_RTL)
+        image_type = (state & GTK_STATE_FLAG_CHECKED)
+                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT_EXPANDED
+                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT;
+      else
+        image_type = (state & GTK_STATE_FLAG_CHECKED)
+                     ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT_EXPANDED
+                     : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT;
+    }
+
+  gtk_do_render_icon (context, cr, image_type, x, y, width, height);
 }
 
 /**
@@ -640,31 +622,6 @@ gtk_render_frame_gap (GtkStyleContext *context,
                                   xy0_gap, xy1_gap);
 }
 
-static void
-gtk_do_render_handle (GtkStyleContext *context,
-                      cairo_t         *cr,
-                      gdouble          x,
-                      gdouble          y,
-                      gdouble          width,
-                      gdouble          height)
-{
-  GtkCssImageBuiltinType type;
-
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
-
-  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
-    {
-      type = GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR;
-    }
-  else
-    {
-      type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
-    }
-
-  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, type);
-}
-
 /**
  * gtk_render_handle:
  * @context: a #GtkStyleContext
@@ -690,13 +647,27 @@ gtk_render_handle (GtkStyleContext *context,
                    gdouble          width,
                    gdouble          height)
 {
+  GtkCssImageBuiltinType type;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   if (width <= 0 || height <= 0)
     return;
 
-  gtk_do_render_handle (context, cr, x, y, width, height);
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
+
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
+    {
+      type = GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR;
+    }
+  else
+    {
+      type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
+    }
+
+  gtk_do_render_icon (context, cr, x, y, width, height, type);
 }
 
 /**
@@ -726,7 +697,7 @@ gtk_render_activity (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, GTK_CSS_IMAGE_BUILTIN_SPINNER);
+  gtk_do_render_icon (context, cr, x, y, width, height, GTK_CSS_IMAGE_BUILTIN_SPINNER);
 }
 
 /**

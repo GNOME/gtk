@@ -33,64 +33,6 @@
 #include <math.h>
 
 void
-gtk_css_style_render_icon (GtkCssStyle            *style,
-                           cairo_t                *cr,
-                           double                  x,
-                           double                  y,
-                           double                  width,
-                           double                  height,
-                           GtkCssImageBuiltinType  builtin_type)
-{
-  const GtkCssValue *shadows;
-  graphene_matrix_t graphene_matrix;
-  cairo_matrix_t matrix, transform_matrix, saved_matrix;
-  GtkCssImage *image;
-
-  g_return_if_fail (GTK_IS_CSS_STYLE (style));
-  g_return_if_fail (cr != NULL);
-
-  image = _gtk_css_image_value_get_image (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SOURCE));
-  if (image == NULL)
-    return;
-
-  cairo_get_matrix (cr, &saved_matrix);
-
-  shadows = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
-
-  cairo_translate (cr, x, y);
-
-  if (gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &graphene_matrix) &&
-      graphene_matrix_is_2d (&graphene_matrix))
-    {
-      graphene_matrix_to_2d (&graphene_matrix,
-                             &transform_matrix.xx, &transform_matrix.yx,
-                             &transform_matrix.xy, &transform_matrix.yy,
-                             &transform_matrix.x0, &transform_matrix.y0);
-      /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-      cairo_matrix_init_translate (&matrix, width / 2, height / 2);
-      cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
-      cairo_matrix_translate (&matrix, - width / 2, - height / 2);
-
-      if (_gtk_css_shadows_value_is_none (shadows))
-        {
-          cairo_transform (cr, &matrix);
-          gtk_css_image_builtin_draw (image, cr, width, height, builtin_type);
-        }
-      else
-        {
-          cairo_push_group (cr);
-          cairo_transform (cr, &matrix);
-          gtk_css_image_builtin_draw (image, cr, width, height, builtin_type);
-          cairo_pop_group_to_source (cr);
-          _gtk_css_shadows_value_paint_icon (shadows, cr);
-          cairo_paint (cr);
-        }
-    }
-
-  cairo_set_matrix (cr, &saved_matrix);
-}
-
-void
 gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              GtkSnapshot            *snapshot,
                              double                  width,
