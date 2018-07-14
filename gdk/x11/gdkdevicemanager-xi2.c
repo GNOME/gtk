@@ -1104,8 +1104,7 @@ translate_axes (GdkDevice       *device,
   gdouble *axes;
   gdouble *vals;
 
-  g_object_get (device, "n-axes", &n_axes, NULL);
-
+  n_axes = gdk_device_get_n_axes (device);
   axes = g_new0 (gdouble, n_axes);
   vals = valuators->values;
 
