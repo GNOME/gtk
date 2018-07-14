@@ -6,6 +6,11 @@ uniform float u_alpha;
 uniform int uBlendMode;
 uniform vec4 u_viewport;
 
+// In GtkSnapshot coordinates
+uniform vec4 u_clip;
+uniform vec4 u_clip_corner_widths;
+uniform vec4 u_clip_corner_heights;
+
 varying vec2 vUv;
 
 
@@ -82,5 +87,16 @@ vec4 Texture(sampler2D sampler, vec2 texCoords) {
 }
 
 void setOutputColor(vec4 color) {
-  gl_FragColor = color;
+  vec4 clipBounds = u_clip;
+  vec4 f = gl_FragCoord;
+
+  f.x += u_viewport.x;
+  f.y = (u_viewport.y + u_viewport.w) - f.y;
+
+  clipBounds.z = clipBounds.x + clipBounds.z;
+  clipBounds.w = clipBounds.y + clipBounds.w;
+
+  RoundedRect r = RoundedRect(clipBounds, u_clip_corner_widths, u_clip_corner_heights);
+
+  gl_FragColor = color * rounded_rect_coverage(r, f.xy);
 }
