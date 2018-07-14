@@ -665,6 +665,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 
+  /**
+   * GtkSettings:gtk-fontconfig-timestamp:
+   *
+   * The timestamp, in seconds, of the latest Fontconfig configuration
+   * update. On platforms relying on Fontconfig for fonts management,
+   * a property notification signal is emited when a change in
+   * configuration is detected, including font installation and removal.
+   * On platforms not using Fontconfig (macOS, Windows), the timestamp
+   * is always set to 0.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int64 ("gtk-fontconfig-timestamp",
                                                                  P_("Fontconfig configuration timestamp"),

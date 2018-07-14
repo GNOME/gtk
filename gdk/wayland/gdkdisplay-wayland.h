@@ -64,6 +64,10 @@ typedef struct {
         const gchar *hintstyle;
 } GsdXftSettings;
 
+typedef struct {
+  gint64  fontconfig_timestamp;
+} GsdExtSettings;
+
 typedef enum _GdkWaylandShellVariant
 {
   GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL,
@@ -77,6 +81,11 @@ struct _GdkWaylandDisplay
 
   GHashTable *settings;
   GsdXftSettings xft_settings;
+  GsdExtSettings dbus_settings;
+
+  GDBusProxy *dbus_proxy;
+  GCancellable *dbus_cancellable;
+  gulong dbus_setting_change_id;
 
   guint32    shell_capabilities;
 

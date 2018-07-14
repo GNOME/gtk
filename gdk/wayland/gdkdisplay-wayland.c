@@ -95,6 +95,9 @@
 #define GTK_SHELL1_VERSION       2
 #define OUTPUT_VERSION_WITH_DONE 2
 
+#define GTK_SETTINGS_DBUS_PATH "/org/gtk/Settings"
+#define GTK_SETTINGS_DBUS_NAME "org.gtk.Settings"
+
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
@@ -585,6 +588,76 @@ _gdk_wayland_display_prepare_cursor_themes (GdkWaylandDisplay *display_wayland)
   postpone_on_globals_closure (display_wayland, closure);
 }
 
+static void
+dbus_properties_change_cb (GDBusProxy         *proxy,
+                           GVariant           *changed_properties,
+                           const gchar* const *invalidated_properties,
+                           gpointer            user_data)
+{
+  GdkWaylandDisplay *display_wayland = user_data;
+  GVariant *value;
+  gint64 timestamp;
+
+  if (g_variant_n_children (changed_properties) <= 0)
+    return;
+
+  value = g_variant_lookup_value (changed_properties,
+                                  "FontconfigTimestamp",
+                                  G_VARIANT_TYPE_INT64);
+
+  if (value != NULL)
+    {
+      timestamp = g_variant_get_int64 (value);
+      timestamp = timestamp / G_TIME_SPAN_SECOND;
+
+      display_wayland->dbus_settings.fontconfig_timestamp = timestamp;
+
+      gdk_display_setting_changed (GDK_DISPLAY (display_wayland),
+                                   "gtk-fontconfig-timestamp");
+      g_variant_unref (value);
+    }
+}
+
+static void
+fontconfig_dbus_proxy_open_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  GdkWaylandDisplay *display_wayland = user_data;
+  GDBusProxy *proxy;
+  GVariant *value;
+  gint64 timestamp;
+
+  proxy = g_dbus_proxy_new_for_bus_finish (result, NULL);
+
+  if (proxy == NULL)
+    return;
+
+  display_wayland->dbus_proxy = proxy;
+  display_wayland->dbus_setting_change_id =
+    g_signal_connect (display_wayland->dbus_proxy,
+                      "g-properties-changed",
+                      G_CALLBACK (dbus_properties_change_cb),
+                      display_wayland);
+
+  value = g_dbus_proxy_get_cached_property (display_wayland->dbus_proxy,
+                                            "FontconfigTimestamp");
+
+  if (value && g_variant_is_of_type (value, G_VARIANT_TYPE_INT64))
+    {
+      timestamp = g_variant_get_int64 (value);
+      timestamp = timestamp / G_TIME_SPAN_SECOND;
+
+      display_wayland->dbus_settings.fontconfig_timestamp = timestamp;
+
+      gdk_display_setting_changed (GDK_DISPLAY (display_wayland),
+                                   "gtk-fontconfig-timestamp");
+    }
+
+  if (value != NULL)
+    g_variant_unref (value);
+}
+
 static void init_settings (GdkDisplay *display);
 
 GdkDisplay *
@@ -613,6 +686,16 @@ _gdk_wayland_display_open (const gchar *display_name)
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   display_wayland->wl_display = wl_display;
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
+  display_wayland->dbus_cancellable = g_cancellable_new ();
+  g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                            G_DBUS_PROXY_FLAGS_NONE,
+                            NULL,
+                            GTK_SETTINGS_DBUS_NAME,
+                            GTK_SETTINGS_DBUS_PATH,
+                            GTK_SETTINGS_DBUS_NAME,
+                            display_wayland->dbus_cancellable,
+                            fontconfig_dbus_proxy_open_cb,
+                            display_wayland);
 
   init_settings (display);
 
@@ -687,6 +770,15 @@ gdk_wayland_display_dispose (GObject *object)
 
   g_list_free_full (display_wayland->toplevels, destroy_toplevel);
 
+  if (display_wayland->dbus_proxy && display_wayland->dbus_setting_change_id > 0)
+    {
+      g_signal_handler_disconnect (display_wayland->dbus_proxy,
+                                   display_wayland->dbus_setting_change_id);
+      display_wayland->dbus_setting_change_id = 0;
+    }
+
+  g_cancellable_cancel (display_wayland->dbus_cancellable);
+
   if (display_wayland->event_source)
     {
       g_source_destroy (display_wayland->event_source);
@@ -714,6 +806,9 @@ gdk_wayland_display_finalize (GObject *object)
   guint i;
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
+
+  g_clear_object (&display_wayland->dbus_cancellable);
+  g_clear_object (&display_wayland->dbus_proxy);
 
   g_free (display_wayland->startup_notification_id);
   g_free (display_wayland->cursor_theme_name);
@@ -1806,20 +1901,23 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
                                  const char *name,
                                  GValue     *value)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   TranslationEntry *entry;
 
-  if (g_hash_table_size (GDK_WAYLAND_DISPLAY (display)->settings) == 0)
-    return FALSE;
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display_wayland), FALSE);
 
-  entry = find_translation_entry_by_setting (name);
-  if (entry != NULL)
+  if (g_hash_table_size (display_wayland->settings))
     {
-      if (strcmp (name, "gtk-decoration-layout") == 0)
-        set_decoration_layout_from_entry (display, entry, value);
-      else
-        set_value_from_entry (display, entry, value);
-      return TRUE;
-   }
+      entry = find_translation_entry_by_setting (name);
+      if (entry != NULL)
+        {
+          if (strcmp (name, "gtk-decoration-layout") == 0)
+            set_decoration_layout_from_entry (display, entry, value);
+          else
+            set_value_from_entry (display, entry, value);
+          return TRUE;
+       }
+    }
 
   if (strcmp (name, "gtk-shell-shows-app-menu") == 0)
     return set_capability_setting (display, value, GTK_SHELL1_CAPABILITY_GLOBAL_APP_MENU);
@@ -1833,6 +1931,12 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
   if (strcmp (name, "gtk-dialogs-use-header") == 0)
     {
       g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (strcmp (name, "gtk-fontconfig-timestamp") == 0)
+    {
+      g_value_set_int64 (value, display_wayland->dbus_settings.fontconfig_timestamp);
       return TRUE;
     }
 
