@@ -223,7 +223,7 @@ static void             adjustment_changed              (GtkAdjustment          
 
 /* Misc */
 
-static void             set_iter_nth_row                (GtkTreeView            *tree_view,
+static gboolean         set_iter_nth_row                (GtkTreeView            *tree_view,
                                                          GtkTreeIter            *iter,
                                                          gint                   row);
 static gint             get_row_from_tree_path          (GtkTreeView            *tree_view,
@@ -1466,8 +1466,10 @@ gail_tree_view_add_row_selection (AtkTable *table,
         }
       else
         { 
-          set_iter_nth_row (tree_view, &iter_to_row, row);
-          gtk_tree_selection_select_iter (selection, &iter_to_row);
+          if (set_iter_nth_row (tree_view, &iter_to_row, row))
+            gtk_tree_selection_select_iter (selection, &iter_to_row);
+          else
+            return FALSE;
         }
     }
 
@@ -3236,7 +3238,7 @@ update_cell_value (GailRendererCell *renderer_cell,
   return gail_renderer_cell_update_cache (renderer_cell, emit_change_signal);
 }
 
-static void 
+static gboolean 
 set_iter_nth_row (GtkTreeView *tree_view, 
                   GtkTreeIter *iter, 
                   gint        row)
@@ -3245,7 +3247,10 @@ set_iter_nth_row (GtkTreeView *tree_view,
   
   tree_model = gtk_tree_view_get_model (tree_view);
   gtk_tree_model_get_iter_first (tree_model, iter);
-  iter = return_iter_nth_row (tree_view, tree_model, iter, 0 , row);
+  if (return_iter_nth_row (tree_view, tree_model, iter, 0 , row) != NULL)
+    return TRUE;
+    
+  return FALSE;
 }
 
 static gint 
