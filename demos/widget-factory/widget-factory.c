@@ -1080,7 +1080,7 @@ set_accel (GtkApplication *app, GtkWidget *widget)
 typedef struct
 {
   GtkTextView tv;
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
 } MyTextView;
 
 typedef GtkTextViewClass MyTextViewClass;
@@ -1093,18 +1093,23 @@ my_text_view_init (MyTextView *tv)
 }
 
 static void
-my_tv_draw_layer (GtkTextView      *widget,
-                  GtkTextViewLayer  layer,
-                  cairo_t          *cr)
+my_tv_snapshot_layer (GtkTextView      *widget,
+                      GtkTextViewLayer  layer,
+                      GtkSnapshot      *snapshot)
 {
   MyTextView *tv = (MyTextView *)widget;
 
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->pixbuf)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->texture)
     {
-      cairo_save (cr);
-      gdk_cairo_set_source_pixbuf (cr, tv->pixbuf, 0.0, 0.0);
-      cairo_paint_with_alpha (cr, 0.333);
-      cairo_restore (cr);
+      gtk_snapshot_push_opacity (snapshot, 0.333);
+      gtk_snapshot_append_texture (snapshot,
+                                   tv->texture,
+                                   &GRAPHENE_RECT_INIT(
+                                     0, 0,
+                                     gdk_texture_get_width (tv->texture),
+                                     gdk_texture_get_height (tv->texture)
+                                   ));
+      gtk_snapshot_pop (snapshot);
     }
 }
 
@@ -1113,7 +1118,7 @@ my_tv_finalize (GObject *object)
 {
   MyTextView *tv = (MyTextView *)object;
 
-  g_clear_object (&tv->pixbuf);
+  g_clear_object (&tv->texture);
 
   G_OBJECT_CLASS (my_text_view_parent_class)->finalize (object);
 }
@@ -1125,20 +1130,24 @@ my_text_view_class_init (MyTextViewClass *class)
   GObjectClass *o_class = G_OBJECT_CLASS (class);
 
   o_class->finalize = my_tv_finalize;
-  tv_class->draw_layer = my_tv_draw_layer;
+  tv_class->snapshot_layer = my_tv_snapshot_layer;
 }
 
 static void
 my_text_view_set_background (MyTextView *tv, const gchar *filename)
 {
   GError *error = NULL;
+  GFile *file;
 
-  g_clear_object (&tv->pixbuf);
+  g_clear_object (&tv->texture);
 
   if (filename == NULL)
     return;
 
-  tv->pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+  file = g_file_new_for_path (filename);
+  tv->texture = gdk_texture_new_from_file (file, &error);
+  g_object_unref (file);
+
   if (error)
     {
       g_warning ("%s", error->message);

@@ -86,13 +86,14 @@ G_BEGIN_DECLS
 
 /* The drawable should be pre-initialized to your preferred background.
  * widget            - Widget to grab some style info from
- * cr                - Context to render to, matrix set so that (0, 0)
+ * snapshot          - Snapshot to render to, matrix set so that (0, 0)
  *                     is the top left of the layout
+ * clip              - visible area
  */
-GDK_AVAILABLE_IN_ALL
-void gtk_text_layout_draw (GtkTextLayout        *layout,
-                           GtkWidget            *widget,
-                           cairo_t              *cr);
+void gtk_text_layout_snapshot (GtkTextLayout        *layout,
+                               GtkWidget            *widget,
+                               GtkSnapshot          *snapshot,
+                               const GdkRectangle   *clip);
 
 
 G_END_DECLS

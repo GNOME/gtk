@@ -816,9 +816,10 @@ get_text_renderer (void)
 }
 
 void
-gtk_text_layout_draw (GtkTextLayout *layout,
-                      GtkWidget *widget,
-                      cairo_t *cr)
+gtk_text_layout_snapshot (GtkTextLayout      *layout,
+                          GtkWidget          *widget,
+                          GtkSnapshot        *snapshot,
+                          const GdkRectangle *clip)
 {
   GtkStyleContext *context;
   gint offset_y;
@@ -827,23 +828,22 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   gboolean have_selection;
   GSList *line_list;
   GSList *tmp_list;
-  GdkRectangle clip;
+  cairo_t *cr;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
   g_return_if_fail (layout->buffer != NULL);
-  g_return_if_fail (cr != NULL);
-
-  if (!gdk_cairo_get_clip_rectangle (cr, &clip))
-    return;
+  g_return_if_fail (snapshot != NULL);
 
   context = gtk_widget_get_style_context (widget);
 
-  line_list = gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &offset_y);
+  line_list = gtk_text_layout_get_lines (layout, clip->y, clip->y + clip->height, &offset_y);
 
   if (line_list == NULL)
     return; /* nothing on the screen */
 
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT(clip->x, clip->y, clip->width, clip->height));
   text_renderer = get_text_renderer ();
   text_renderer_begin (text_renderer, widget, cr);
 
@@ -933,4 +933,6 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   text_renderer_end (text_renderer);
 
   g_slist_free (line_list);
+
+  cairo_destroy (cr);
 }

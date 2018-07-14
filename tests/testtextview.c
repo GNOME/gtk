@@ -13,25 +13,25 @@ typedef struct {
 
 G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW);
 
-static void draw_background (GtkWidget *widget, cairo_t *cr);
+static void snapshot_background (GtkWidget *widget, GtkSnapshot *snapshot);
 
 static void
 my_text_view_init (MyTextView *text_view)
 {
 }
 
-static void my_text_view_draw_layer (GtkTextView       *textview,
-				     GtkTextViewLayer   layer,
-				     cairo_t           *cr)
+static void my_text_view_snapshot_layer (GtkTextView       *textview,
+                                         GtkTextViewLayer   layer,
+                                         GtkSnapshot       *snapshot)
 {
   if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
-    draw_background (GTK_WIDGET (textview), cr);
+    snapshot_background (GTK_WIDGET (textview), snapshot);
 }
 
 static void
 my_text_view_class_init (MyTextViewClass *klass)
 {
-  GTK_TEXT_VIEW_CLASS (klass)->draw_layer = my_text_view_draw_layer;
+  GTK_TEXT_VIEW_CLASS (klass)->snapshot_layer = my_text_view_snapshot_layer;
 }
 
 static void
@@ -142,51 +142,28 @@ insert_text (GtkTextBuffer *buffer)
 #define CHECK_DARK  (1.0 / 3.0)
 #define CHECK_LIGHT (2.0 / 3.0)
 
-static cairo_pattern_t *
-get_checkered (void)
-{
-  /* need to respect pixman's stride being a multiple of 4 */
-  static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
-                                   0x00, 0xFF, 0x00, 0x00 };
-  static cairo_surface_t *checkered = NULL;
-  cairo_pattern_t *pattern;
-
-  if (checkered == NULL)
-    {
-      checkered = cairo_image_surface_create_for_data (data,
-                                                       CAIRO_FORMAT_A8,
-                                                       2, 2, 4);
-    }
-
-  pattern = cairo_pattern_create_for_surface (checkered);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
-
-  return pattern;
-}
-
 static void
-draw_background (GtkWidget *widget, cairo_t *cr)
+snapshot_background (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
 {
   GdkRectangle visible_rect;
-  cairo_pattern_t *pat;
-
-  cairo_save (cr);
 
   gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (widget), &visible_rect);
-  cairo_translate (cr, -visible_rect.x, -visible_rect.y);
 
-  cairo_set_source_rgb (cr, CHECK_DARK, CHECK_DARK, CHECK_DARK);
-  cairo_paint (cr);
+  gtk_snapshot_append_color (snapshot,
+                             &(GdkRGBA) { CHECK_DARK, CHECK_DARK, CHECK_DARK, 1.0 },
+                             &GRAPHENE_RECT_INIT(visible_rect.x, visible_rect.y, visible_rect.width, visible_rect.height));
 
-  cairo_set_source_rgb (cr, CHECK_LIGHT, CHECK_LIGHT, CHECK_LIGHT);
-  cairo_scale (cr, CHECK_SIZE, CHECK_SIZE);
-
-  pat = get_checkered ();
-  cairo_mask (cr, pat);
-  cairo_pattern_destroy (pat);
-
-  cairo_restore (cr);
+  gtk_snapshot_push_repeat (snapshot,
+                            &GRAPHENE_RECT_INIT(visible_rect.x, visible_rect.y, visible_rect.width, visible_rect.height),
+                            &GRAPHENE_RECT_INIT(visible_rect.x, visible_rect.y, CHECK_SIZE * 2, CHECK_SIZE * 2));
+  gtk_snapshot_append_color (snapshot,
+                             &(GdkRGBA) { CHECK_LIGHT, CHECK_LIGHT, CHECK_LIGHT, 1.0 },
+                             &GRAPHENE_RECT_INIT(visible_rect.x, visible_rect.y, CHECK_SIZE, CHECK_SIZE));
+  gtk_snapshot_append_color (snapshot,
+                             &(GdkRGBA) { CHECK_LIGHT, CHECK_LIGHT, CHECK_LIGHT, 1.0 },
+                             &GRAPHENE_RECT_INIT(visible_rect.x + CHECK_SIZE, visible_rect.y + CHECK_SIZE, CHECK_SIZE, CHECK_SIZE));
+  gtk_snapshot_pop (snapshot);
 }
 
 int

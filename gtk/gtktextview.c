@@ -5303,8 +5303,8 @@ gtk_text_view_motion (GtkEventController *controller,
 }
 
 static void
-gtk_text_view_paint (GtkWidget      *widget,
-                     cairo_t        *cr)
+gtk_text_view_paint (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -5335,19 +5335,24 @@ gtk_text_view_paint (GtkWidget      *widget,
           area->width, area->height);
 #endif
 
-  cairo_save (cr);
-  cairo_translate (cr, -priv->xoffset, -priv->yoffset);
+  gtk_snapshot_offset (snapshot, -priv->xoffset, -priv->yoffset);
 
-  gtk_text_layout_draw (priv->layout,
-                        widget,
-                        cr);
+  gtk_text_layout_snapshot (priv->layout,
+                            widget,
+                            snapshot,
+                            &(GdkRectangle) {
+                              priv->xoffset,
+                              priv->yoffset,
+                              gtk_widget_get_width (widget),
+                              gtk_widget_get_height (widget)
+                            });
 
-  cairo_restore (cr);
+  gtk_snapshot_offset (snapshot, priv->xoffset, priv->yoffset);
 }
 
 static void
-draw_text (GtkWidget *widget,
-           cairo_t   *cr)
+draw_text (GtkWidget   *widget,
+           GtkSnapshot *snapshot)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
@@ -5355,32 +5360,30 @@ draw_text (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
-  gtk_render_background (context, cr,
-                         -priv->xoffset, -priv->yoffset - priv->top_margin,
-                         MAX (SCREEN_WIDTH (text_view), priv->width),
-                         MAX (SCREEN_HEIGHT (text_view), priv->height));
-  gtk_render_frame (context, cr,
-                    -priv->xoffset, -priv->yoffset - priv->top_margin,
-                    MAX (SCREEN_WIDTH (text_view), priv->width),
-                    MAX (SCREEN_HEIGHT (text_view), priv->height));
+  gtk_snapshot_render_background (snapshot, context,
+                                  -priv->xoffset, -priv->yoffset - priv->top_margin,
+                                  MAX (SCREEN_WIDTH (text_view), priv->width),
+                                  MAX (SCREEN_HEIGHT (text_view), priv->height));
+  gtk_snapshot_render_frame (snapshot, context,
+                             -priv->xoffset, -priv->yoffset - priv->top_margin,
+                             MAX (SCREEN_WIDTH (text_view), priv->width),
+                             MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_style_context_restore (context);
 
-  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
+  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
-      cairo_save (cr);
-      cairo_translate (cr, -priv->xoffset, -priv->yoffset);
-      GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, cr);
-      cairo_restore (cr);
+      gtk_snapshot_offset (snapshot, -priv->xoffset, -priv->yoffset);
+      GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, snapshot);
+      gtk_snapshot_offset (snapshot, priv->xoffset, priv->yoffset);
     }
 
-  gtk_text_view_paint (widget, cr);
+  gtk_text_view_paint (widget, snapshot);
 
-  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
+  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
-      cairo_save (cr);
-      cairo_translate (cr, -priv->xoffset, -priv->yoffset);
-      GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, cr);
-      cairo_restore (cr);
+      gtk_snapshot_offset (snapshot, -priv->xoffset, -priv->yoffset);
+      GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, snapshot);
+      gtk_snapshot_offset (snapshot, priv->xoffset, priv->yoffset);
     }
 }
 
@@ -5413,7 +5416,6 @@ gtk_text_view_snapshot (GtkWidget   *widget,
   GSList *tmp_list;
   GtkStyleContext *context;
   graphene_rect_t bounds;
-  cairo_t *cr;
 
   graphene_rect_init (&bounds,
                       0, 0,
@@ -5422,17 +5424,13 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_push_clip (snapshot, &bounds);
 
-  cr = gtk_snapshot_append_cairo (snapshot, &bounds);
-
   context = gtk_widget_get_style_context (widget);
 
   text_window_set_padding (GTK_TEXT_VIEW (widget), context);
 
   DV(g_print (">Exposed ("G_STRLOC")\n"));
 
-  cairo_save (cr);
-  draw_text (widget, cr); 
-  cairo_destroy (cr);
+  draw_text (widget, snapshot); 
 
   paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->left_window, context);
   paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->right_window, context);

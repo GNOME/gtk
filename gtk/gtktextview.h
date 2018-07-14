@@ -72,7 +72,7 @@ typedef enum
  * @GTK_TEXT_VIEW_LAYER_ABOVE_TEXT: The layer rendered above the text.
  *
  * Used to reference the layers of #GtkTextView for the purpose of customized
- * drawing with the ::draw_layer vfunc.
+ * drawing with the ::snapshot_layer vfunc.
  */
 typedef enum
 {
@@ -143,7 +143,7 @@ struct _GtkTextView
  * @create_buffer: The create_buffer vfunc is called to create a #GtkTextBuffer
  *   for the text view. The default implementation is to just call
  *   gtk_text_buffer_new().
- * @draw_layer: The draw_layer vfunc is called before and after the text
+ * @snapshot_layer: The snapshot_layer vfunc is called before and after the text
  *   view is drawing its own text. Applications can override this vfunc
  *   in a subclass to draw customized content underneath or above the
  *   text. In the %GTK_TEXT_VIEW_LAYER_BELOW_TEXT and %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
@@ -177,9 +177,9 @@ struct _GtkTextViewClass
   void (* paste_clipboard)       (GtkTextView      *text_view);
   void (* toggle_overwrite)      (GtkTextView      *text_view);
   GtkTextBuffer * (* create_buffer) (GtkTextView   *text_view);
-  void (* draw_layer)            (GtkTextView      *text_view,
+  void (* snapshot_layer)        (GtkTextView      *text_view,
 			          GtkTextViewLayer  layer,
-			          cairo_t          *cr);
+			          GtkSnapshot      *snapshot);
   gboolean (* extend_selection)  (GtkTextView            *text_view,
                                   GtkTextExtendSelection  granularity,
                                   const GtkTextIter      *location,

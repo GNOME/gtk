@@ -276,7 +276,6 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   GtkTextAttributes *style;
   PangoContext      *ltr_context, *rtl_context;
   GtkTextIter        iter;
-  cairo_t           *cr;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
@@ -333,12 +332,9 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
   snapshot = gtk_snapshot_new ();
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, layout_width, layout_height));
 
-  gtk_text_layout_draw (layout, widget, cr);
+  gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height });
 
-  cairo_destroy (cr);
   g_object_unref (layout);
   g_object_unref (new_buffer);
 
