@@ -29,7 +29,6 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkhslaprivate.h"
-#include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -238,14 +237,26 @@ gtk_render_background (GtkStyleContext *context,
                        gdouble          width,
                        gdouble          height)
 {
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   if (width <= 0 || height <= 0)
     return;
 
-  gtk_css_style_render_background (gtk_style_context_lookup_style (context),
-                                   cr, x, y, width, height);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_render_background (snapshot, context, x, y, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node == NULL)
+    return;
+
+  cairo_save (cr);
+  gsk_render_node_draw (node, cr);
+  cairo_restore (cr);
+
+  gsk_render_node_unref (node);
 }
 
 /**

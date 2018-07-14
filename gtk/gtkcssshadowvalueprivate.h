@@ -44,9 +44,6 @@ void            gtk_css_shadow_value_get_shadow       (const GtkCssValue        
 
 void            _gtk_css_shadow_value_paint_icon      (const GtkCssValue        *shadow,
 					               cairo_t                  *cr);
-void            _gtk_css_shadow_value_paint_box       (const GtkCssValue        *shadow,
-                                                       cairo_t                  *cr,
-                                                       const GskRoundedRect     *padding_box);
 
 void            gtk_css_shadow_value_snapshot_outset  (const GtkCssValue        *shadow,
                                                        GtkSnapshot              *snapshot,
