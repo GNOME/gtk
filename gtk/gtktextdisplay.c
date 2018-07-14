@@ -444,7 +444,7 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 					       g_object_ref (widget));
     }
   else
-    g_assert_not_reached (); /* not a pixbuf or widget */
+    g_assert_not_reached (); /* not a texture or widget */
 }
 
 static void
