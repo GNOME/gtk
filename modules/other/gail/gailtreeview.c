@@ -1467,10 +1467,7 @@ gail_tree_view_add_row_selection (AtkTable *table,
       else
         { 
           set_iter_nth_row (tree_view, &iter_to_row, row);
-          if (&iter_to_row != NULL)
-            gtk_tree_selection_select_iter (selection, &iter_to_row);
-          else
-            return FALSE;
+          gtk_tree_selection_select_iter (selection, &iter_to_row);
         }
     }
 
