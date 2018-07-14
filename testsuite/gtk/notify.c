@@ -412,7 +412,7 @@ test_type (gconstpointer data)
     instance = g_object_new (type, "display", display, NULL);
   else if (g_str_equal (g_type_name (type), "GdkClipboard"))
     instance = g_object_new (type, "display", display, NULL);
-  else if (g_str_equal (g_type_name (type), "GdkDragContext"))
+  else if (g_str_equal (g_type_name (type), "GdkDrag"))
     {
       GdkContentFormats *formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
       instance = g_object_new (type,
