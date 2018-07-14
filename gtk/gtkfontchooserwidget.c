@@ -132,7 +132,7 @@ struct _GtkFontChooserWidgetPrivate
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
 
-  guint last_fontconfig_timestamp;
+  gint64 last_fontconfig_timestamp;
 
   GtkFontChooserLevel level;
 
@@ -917,7 +917,7 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
   GtkListStore *list_store;
   gint n_families, i;
   PangoFontFamily **families;
-  guint fontconfig_timestamp;
+  gint64 fontconfig_timestamp;
   gboolean need_reload;
   PangoFontMap *font_map;
 

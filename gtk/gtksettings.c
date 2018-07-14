@@ -666,13 +666,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 
   result = settings_install_property_parser (class,
-                                             g_param_spec_uint ("gtk-fontconfig-timestamp",
-                                                                P_("Fontconfig configuration timestamp"),
-                                                                P_("Timestamp of current fontconfig configuration"),
-                                                                0, G_MAXUINT, 0,
-                                                                GTK_PARAM_READWRITE),
+                                             g_param_spec_int64 ("gtk-fontconfig-timestamp",
+                                                                 P_("Fontconfig configuration timestamp"),
+                                                                 P_("Timestamp of current Fontconfig configuration"),
+                                                                 0, G_MAXINT64, 0,
+                                                                 GTK_PARAM_READWRITE),
                                              NULL);
-
   g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
 
   /**
@@ -1481,7 +1480,9 @@ settings_install_property_parser (GtkSettingsClass   *class,
     case G_TYPE_UCHAR:
     case G_TYPE_CHAR:
     case G_TYPE_UINT:
+    case G_TYPE_UINT64:
     case G_TYPE_INT:
+    case G_TYPE_INT64:
     case G_TYPE_ULONG:
     case G_TYPE_LONG:
     case G_TYPE_FLOAT:
@@ -2143,10 +2144,10 @@ static gboolean
 settings_update_fontconfig (GtkSettings *settings)
 {
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
-  static guint    last_update_timestamp;
+  static gint64   last_update_timestamp;
   static gboolean last_update_needed;
 
-  guint timestamp;
+  gint64 timestamp;
 
   g_object_get (settings,
                 "gtk-fontconfig-timestamp", &timestamp,
