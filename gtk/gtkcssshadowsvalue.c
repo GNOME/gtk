@@ -288,21 +288,6 @@ gtk_css_shadows_value_get_shadows (const GtkCssValue  *shadows,
 }
 
 void
-_gtk_css_shadows_value_paint_layout (const GtkCssValue *shadows,
-                                     cairo_t           *cr,
-                                     PangoLayout       *layout)
-{
-  guint i;
-
-  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
-
-  for (i = 0; i < shadows->len; i++)
-    {
-      _gtk_css_shadow_value_paint_layout (shadows->values[i], cr, layout);
-    }
-}
-
-void
 _gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
                                    cairo_t           *cr)
 {

@@ -42,10 +42,6 @@ void            gtk_css_shadow_value_get_extents      (const GtkCssValue        
 void            gtk_css_shadow_value_get_shadow       (const GtkCssValue        *value,
                                                        GskShadow                *shadow);
 
-void            _gtk_css_shadow_value_paint_layout    (const GtkCssValue        *shadow,
-                                                       cairo_t                  *cr,
-                                                       PangoLayout              *layout);
-
 void            _gtk_css_shadow_value_paint_icon      (const GtkCssValue        *shadow,
 					               cairo_t                  *cr);
 void            _gtk_css_shadow_value_paint_box       (const GtkCssValue        *shadow,

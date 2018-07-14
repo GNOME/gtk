@@ -427,54 +427,6 @@ gtk_render_focus (GtkStyleContext *context,
                                 x, y, width, height);
 }
 
-static void
-prepare_context_for_layout (cairo_t *cr,
-                            gdouble x,
-                            gdouble y,
-                            PangoLayout *layout)
-{
-  const PangoMatrix *matrix;
-
-  matrix = pango_context_get_matrix (pango_layout_get_context (layout));
-
-  cairo_move_to (cr, x, y);
-
-  if (matrix)
-    {
-      cairo_matrix_t cairo_matrix;
-
-      cairo_matrix_init (&cairo_matrix,
-                         matrix->xx, matrix->yx,
-                         matrix->xy, matrix->yy,
-                         matrix->x0, matrix->y0);
-
-      cairo_transform (cr, &cairo_matrix);
-    }
-}
-
-static void
-gtk_do_render_layout (GtkStyleContext *context,
-                      cairo_t         *cr,
-                      gdouble          x,
-                      gdouble          y,
-                      PangoLayout     *layout)
-{
-  const GdkRGBA *fg_color;
-
-  cairo_save (cr);
-  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-
-  prepare_context_for_layout (cr, x, y, layout);
-
-  _gtk_css_shadows_value_paint_layout (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW),
-                                       cr, layout);
-
-  gdk_cairo_set_source_rgba (cr, fg_color);
-  pango_cairo_show_layout (cr, layout);
-
-  cairo_restore (cr);
-}
-
 /**
  * gtk_render_layout:
  * @context: a #GtkStyleContext
@@ -492,11 +444,24 @@ gtk_render_layout (GtkStyleContext *context,
                    gdouble          y,
                    PangoLayout     *layout)
 {
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
   g_return_if_fail (cr != NULL);
 
-  gtk_do_render_layout (context, cr, x, y, layout);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_render_layout (snapshot, context, x, y, layout); 
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node == NULL)
+    return;
+
+  cairo_save (cr);
+  gsk_render_node_draw (node, cr);
+  cairo_restore (cr);
+
+  gsk_render_node_unref (node);
 }
 
 static void

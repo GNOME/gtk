@@ -31,10 +31,6 @@
 
 G_BEGIN_DECLS
 
-void             _gtk_pango_fill_layout            (cairo_t         *cr,
-                                                    PangoLayout     *layout);
-
-
 AtkAttributeSet *_gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
                                                     PangoLayout     *layout);
 
