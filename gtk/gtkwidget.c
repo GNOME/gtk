@@ -5270,6 +5270,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
     case GDK_NOTHING:
     case GDK_DELETE:
     case GDK_DESTROY:
+    case GDK_CONFIGURE:
       return gtk_widget_emit_event_signals (widget, event);
     default:
       break;

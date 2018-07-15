@@ -111,6 +111,7 @@ typedef struct _GdkEventScroll      GdkEventScroll;
 typedef struct _GdkEventKey	    GdkEventKey;
 typedef struct _GdkEventFocus	    GdkEventFocus;
 typedef struct _GdkEventCrossing    GdkEventCrossing;
+typedef struct _GdkEventConfigure   GdkEventConfigure;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventSetting     GdkEventSetting;
@@ -151,6 +152,8 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  * @GDK_ENTER_NOTIFY: the pointer has entered the surface.
  * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
+ * @GDK_CONFIGURE: the size, position or stacking order of the surface has changed.
+ *   Note that GTK+ discards these events for %GDK_SURFACE_CHILD surfaces.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -206,6 +209,7 @@ typedef enum
   GDK_ENTER_NOTIFY,
   GDK_LEAVE_NOTIFY,
   GDK_FOCUS_CHANGE,
+  GDK_CONFIGURE,
   GDK_PROXIMITY_IN,
   GDK_PROXIMITY_OUT,
   GDK_DRAG_ENTER,

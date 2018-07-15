@@ -2639,7 +2639,6 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
 {
   cairo_region_t *old_region, *new_region;
   gboolean expose;
-  gboolean size_changed;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -2668,7 +2667,6 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
   /* Handle child surfaces */
 
   expose = FALSE;
-  size_changed = FALSE;
   old_region = NULL;
 
   if (gdk_surface_is_viewable (surface) &&
@@ -2694,16 +2692,8 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
     }
   if (!(width < 0 && height < 0))
     {
-      if (surface->width != width)
-        {
-          surface->width = width;
-          size_changed = TRUE;
-        }
-      if (surface->height != height)
-        {
-          surface->height = height;
-          size_changed = TRUE;
-        }
+      surface->width = width;
+      surface->height = height;
     }
 
   recompute_visible_regions (surface, FALSE);
@@ -2726,10 +2716,9 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
     }
-
-  if (size_changed)
-    g_signal_emit (surface, signals[SIZE_CHANGED], 0, width, height);
 }
+
+
 
 /**
  * gdk_surface_move:
@@ -3895,6 +3884,7 @@ _gdk_make_event (GdkSurface    *surface,
       break;
 
     case GDK_FOCUS_CHANGE:
+    case GDK_CONFIGURE:
     case GDK_DELETE:
     case GDK_DESTROY:
     default:

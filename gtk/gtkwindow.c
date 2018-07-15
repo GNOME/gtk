@@ -6869,7 +6869,6 @@ gtk_window_realize (GtkWidget *widget)
 
   gtk_widget_set_surface (widget, surface);
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
-  g_signal_connect_swapped (surface, "size-changed", G_CALLBACK (gtk_window_configure), widget);
   gtk_widget_register_surface (widget, surface);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
@@ -7007,9 +7006,6 @@ gtk_window_unrealize (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget),
                                         G_CALLBACK (surface_state_changed),
-                                        widget);
-  g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget),
-                                        G_CALLBACK (gtk_window_configure),
                                         widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
