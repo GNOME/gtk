@@ -414,11 +414,6 @@ gtk_widget_measure (GtkWidget        *widget,
                     int              *minimum_baseline,
                     int              *natural_baseline)
 {
-  GHashTable *widgets;
-  GHashTableIter iter;
-  gpointer key;
-  gint    min_result = 0, nat_result = 0;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (for_size >= -1);
   g_return_if_fail (orientation == GTK_ORIENTATION_HORIZONTAL ||
@@ -445,37 +440,44 @@ gtk_widget_measure (GtkWidget        *widget,
     {
       gtk_widget_query_size_for_orientation (widget, orientation, for_size, minimum, natural,
                                              minimum_baseline, natural_baseline);
-      return;
     }
-
-  widgets = _gtk_size_group_get_widget_peers (widget, orientation);
-
-  g_hash_table_iter_init (&iter, widgets);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
+  else
     {
-      GtkWidget *tmp_widget = key;
-      gint min_dimension, nat_dimension;
+      GHashTable *widgets;
+      GHashTableIter iter;
+      gpointer key;
+      int min_result = 0, nat_result = 0;
 
-      gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size, &min_dimension, &nat_dimension, NULL, NULL);
+      widgets = _gtk_size_group_get_widget_peers (widget, orientation);
 
-      min_result = MAX (min_result, min_dimension);
-      nat_result = MAX (nat_result, nat_dimension);
+      g_hash_table_iter_init (&iter, widgets);
+      while (g_hash_table_iter_next (&iter, &key, NULL))
+        {
+          GtkWidget *tmp_widget = key;
+          int min_dimension, nat_dimension;
+
+          gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size,
+                                                 &min_dimension, &nat_dimension, NULL, NULL);
+
+          min_result = MAX (min_result, min_dimension);
+          nat_result = MAX (nat_result, nat_dimension);
+        }
+
+      g_hash_table_destroy (widgets);
+
+      /* Baselines make no sense with sizegroups really */
+      if (minimum_baseline)
+        *minimum_baseline = -1;
+
+      if (natural_baseline)
+        *natural_baseline = -1;
+
+      if (minimum)
+        *minimum = min_result;
+
+      if (natural)
+        *natural = nat_result;
     }
-
-  g_hash_table_destroy (widgets);
-
-  /* Baselines make no sense with sizegroups really */
-  if (minimum_baseline)
-    *minimum_baseline = -1;
-
-  if (natural_baseline)
-    *natural_baseline = -1;
-
-  if (minimum)
-    *minimum = min_result;
-
-  if (natural)
-    *natural = nat_result;
 }
 
 /**
