@@ -702,19 +702,7 @@ gdk_wayland_surface_configure (GdkSurface *surface,
                                int         height,
                                int         scale)
 {
-  GdkDisplay *display;
-  GdkEvent *event;
-
   gdk_wayland_surface_update_size (surface, width, height, scale);
-
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->any.surface = g_object_ref (surface);
-  event->any.send_event = FALSE;
-  event->configure.width = width;
-  event->configure.height = height;
-
-  display = gdk_surface_get_display (surface);
-  _gdk_wayland_display_deliver_event (display, event);
 }
 
 static gboolean
