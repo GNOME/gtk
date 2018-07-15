@@ -322,10 +322,7 @@ gdk_surface_broadway_show (GdkSurface *surface,
   impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
   impl->visible = TRUE;
 
-  _gdk_make_event (GDK_SURFACE (surface), GDK_MAP, NULL, FALSE);
-
-  if (surface->parent)
-    _gdk_make_event (GDK_SURFACE (surface), GDK_MAP, NULL, FALSE);
+  /* FIXME: update state ? */
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
   if (_gdk_broadway_server_surface_show (broadway_display->server, impl->id))
@@ -342,10 +339,7 @@ gdk_surface_broadway_hide (GdkSurface *surface)
   impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
   impl->visible = FALSE;
 
-  _gdk_make_event (GDK_SURFACE (surface), GDK_UNMAP, NULL, FALSE);
-
-  if (surface->parent)
-    _gdk_make_event (GDK_SURFACE (surface), GDK_UNMAP, NULL, FALSE);
+  /* FIXME: update state ? */
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
 

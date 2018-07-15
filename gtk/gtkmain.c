@@ -1827,22 +1827,7 @@ gtk_main_do_event (GdkEvent *event)
         }
       break;
 
-    case GDK_MAP:
-      if (GTK_IS_WINDOW (event_widget) && !_gtk_widget_get_mapped (event_widget))
-        {
-          /* we should be be unmapped, but are getting a MapEvent, this may happen
-           * to toplevel XWindows if mapping was intercepted by a window manager
-           * and an unmap request occurred while the MapRequestEvent was still
-           * being handled. we work around this situation here by re-requesting
-           * the window being unmapped. more details can be found in:
-           *   http://bugzilla.gnome.org/show_bug.cgi?id=316180
-           */
-          gdk_surface_hide (_gtk_widget_get_surface (event_widget));
-        }
-      break;
-
     case GDK_FOCUS_CHANGE:
-    case GDK_UNMAP:
     case GDK_GRAB_BROKEN:
       if (!_gtk_widget_captured_event (event_widget, event))
         gtk_widget_event (event_widget, event);

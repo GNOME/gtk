@@ -848,9 +848,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("unmap notify:\t\twindow: %ld",
 			   xevent->xmap.window));
 
-      event->any.type = GDK_UNMAP;
-      event->any.surface = surface;
-
       if (surface && !is_substructure)
 	{
           /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
@@ -885,15 +882,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
         }
 
+      return_val = FALSE;
+
       break;
 
     case MapNotify:
       GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("map notify:\t\twindow: %ld",
 			   xevent->xmap.window));
-
-      event->any.type = GDK_MAP;
-      event->any.surface = surface;
 
       if (surface && !is_substructure)
 	{
@@ -906,6 +902,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  if (toplevel)
 	    gdk_surface_thaw_toplevel_updates (surface);
 	}
+
+      return_val = FALSE;
 
       break;
 

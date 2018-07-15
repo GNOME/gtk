@@ -107,6 +107,7 @@ enum {
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_STATE,
+  PROP_MAPPED,
   LAST_PROP
 };
 
@@ -272,6 +273,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                           P_("State"),
                           GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_MAPPED] =
+      g_param_spec_boolean ("mapped",
+                            P_("Mapped"),
+                            P_("Mapped"),
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -441,6 +449,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_STATE:
       g_value_set_flags (value, surface->state);
+      break;
+
+    case PROP_MAPPED:
+      g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
 
     default:
@@ -973,6 +985,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
       surface_remove_from_pointer_info (surface, display);
 
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
       break;
     }
 }
@@ -2270,6 +2283,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     {
       surface->state = 0;
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
     }
 
   did_show = _gdk_surface_update_viewable (surface);
@@ -2283,14 +2297,6 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     {
       impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
       impl_class->show (surface, !did_show ? was_mapped : TRUE);
-    }
-
-  if (!was_mapped && !gdk_surface_has_impl (surface))
-    {
-      _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
-
-      if (surface->parent)
-        _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
     }
 
   if (!was_mapped || did_raise)
@@ -2549,6 +2555,7 @@ gdk_surface_hide (GdkSurface *surface)
     {
       surface->state = GDK_SURFACE_STATE_WITHDRAWN;
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
     }
 
   if (was_mapped)
@@ -2595,14 +2602,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   recompute_visible_regions (surface, FALSE);
 
-  if (was_mapped && !gdk_surface_has_impl (surface))
-    {
-      _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-
-      if (surface->parent)
-        _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-    }
-
   /* Invalidate the rect */
   if (was_mapped)
     gdk_surface_invalidate_in_parent (surface);
@@ -2620,7 +2619,6 @@ void
 gdk_surface_withdraw (GdkSurface *surface)
 {
   GdkSurfaceImplClass *impl_class;
-  gboolean was_mapped;
   GdkGLContext *current_context;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
@@ -2628,20 +2626,10 @@ gdk_surface_withdraw (GdkSurface *surface)
   if (surface->destroyed)
     return;
 
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
   if (gdk_surface_has_impl (surface))
     {
       impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
       impl_class->withdraw (surface);
-
-      if (was_mapped)
-        {
-          _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-
-          if (surface->parent)
-            _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-        }
 
       current_context = gdk_gl_context_get_current ();
       if (current_context != NULL && gdk_gl_context_get_surface (current_context) == surface)
@@ -3939,8 +3927,6 @@ _gdk_make_event (GdkSurface    *surface,
       break;
 
     case GDK_FOCUS_CHANGE:
-    case GDK_MAP:
-    case GDK_UNMAP:
     case GDK_DELETE:
     case GDK_DESTROY:
     default:
@@ -5496,6 +5482,7 @@ void
 gdk_surface_set_state (GdkSurface      *surface,
                        GdkSurfaceState  new_state)
 {
+  gboolean was_mapped, mapped;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (new_state == surface->state)
@@ -5506,7 +5493,11 @@ gdk_surface_set_state (GdkSurface      *surface,
    * inconsistent state to the user.
    */
 
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
   surface->state = new_state;
+
+  mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   _gdk_surface_update_viewable (surface);
 
@@ -5519,12 +5510,15 @@ gdk_surface_set_state (GdkSurface      *surface,
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP: /* ? */
-      g_object_notify (G_OBJECT (surface), "state");
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
       break;
     case GDK_SURFACE_CHILD:
     default:
       break;
     }
+
+  if (was_mapped != mapped)
+    g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
 void

@@ -2628,8 +2628,6 @@ gdk_wayland_surface_show (GdkSurface *surface,
     gdk_wayland_surface_create_surface (surface);
 
   gdk_wayland_surface_map (surface);
-
-  _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
 }
 
 static void

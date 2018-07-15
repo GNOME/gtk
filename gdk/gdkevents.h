@@ -151,8 +151,6 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  * @GDK_ENTER_NOTIFY: the pointer has entered the surface.
  * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
- * @GDK_MAP: the surface has been mapped.
- * @GDK_UNMAP: the surface has been unmapped.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -208,8 +206,6 @@ typedef enum
   GDK_ENTER_NOTIFY,
   GDK_LEAVE_NOTIFY,
   GDK_FOCUS_CHANGE,
-  GDK_MAP,
-  GDK_UNMAP,
   GDK_PROXIMITY_IN,
   GDK_PROXIMITY_OUT,
   GDK_DRAG_ENTER,
