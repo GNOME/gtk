@@ -432,6 +432,7 @@ static gboolean gtk_window_close_request  (GtkWindow         *window);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
 static void surface_state_changed         (GtkWidget          *widget);
+static void surface_size_changed          (GtkWidget          *widget);
 static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
 static void gtk_window_check_resize       (GtkContainer      *container);
@@ -6869,6 +6870,8 @@ gtk_window_realize (GtkWidget *widget)
 
   gtk_widget_set_surface (widget, surface);
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect_swapped (surface, "notify::width", G_CALLBACK (surface_size_changed), widget);
+  g_signal_connect_swapped (surface, "notify::height", G_CALLBACK (surface_size_changed), widget);
   gtk_widget_register_surface (widget, surface);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
@@ -7006,6 +7009,9 @@ gtk_window_unrealize (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget),
                                         G_CALLBACK (surface_state_changed),
+                                        widget);
+  g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget),
+                                        G_CALLBACK (surface_size_changed),
                                         widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
@@ -7318,6 +7324,16 @@ surface_state_changed (GtkWidget *widget)
       update_window_buttons (window);
       gtk_widget_queue_resize (widget);
     }
+}
+
+static void
+surface_size_changed (GtkWidget *widget)
+{
+  GdkSurface *surface = _gtk_widget_get_surface (widget);
+
+  gtk_window_configure (GTK_WINDOW (widget),
+                        gdk_surface_get_width (surface),
+                        gdk_surface_get_height (surface));
 }
 
 /* the accel_key and accel_mods fields of the key have to be setup
