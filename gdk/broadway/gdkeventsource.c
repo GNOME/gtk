@@ -304,9 +304,16 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       {
         surface->x = message->configure_notify.x;
         surface->y = message->configure_notify.y;
-        surface->width = message->configure_notify.width;
-        surface->height = message->configure_notify.height;
-        g_signal_emit_by_name (surface, "size-changed", surface->width, surface->height);
+
+        event = gdk_event_new (GDK_CONFIGURE);
+        event->any.surface = g_object_ref (surface);
+        event->configure.x = message->configure_notify.x;
+        event->configure.y = message->configure_notify.y;
+        event->configure.width = message->configure_notify.width;
+        event->configure.height = message->configure_notify.height;
+
+        node = _gdk_event_queue_append (display, event);
+        _gdk_windowing_got_event (display, node, event, message->base.serial);
 
         if (surface->resize_count >= 1)
           {
