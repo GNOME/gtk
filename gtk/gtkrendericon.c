@@ -230,45 +230,6 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
 }
 
 void
-gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
-                                       GdkRectangle *extents,
-                                       gint          x,
-                                       gint          y,
-                                       gint          width,
-                                       gint          height)
-{
-  graphene_matrix_t transform_matrix, translate_matrix, matrix;
-  graphene_rect_t bounds;
-  GtkBorder border;
-
-  g_return_if_fail (GTK_IS_CSS_STYLE (style));
-  g_return_if_fail (extents != NULL);
-
-  extents->x = x;
-  extents->y = y;
-  extents->width = width;
-  extents->height = height;
-
-  if (!gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
-    return;
-
-  graphene_matrix_init_translate (&translate_matrix, &GRAPHENE_POINT3D_INIT(x + width / 2.0, y + height / 2.0, 0));
-  graphene_matrix_multiply (&transform_matrix, &translate_matrix, &matrix);
-  graphene_rect_init (&bounds,
-                      - width / 2.0, - height / 2.0,
-                      width, height);
-  /* need to round to full pixels */
-  graphene_matrix_transform_bounds (&matrix, &bounds, &bounds);
-
-  _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW), &border);
-
-  extents->x = floorf (bounds.origin.x) - border.left;
-  extents->y = floorf (bounds.origin.y) - border.top;
-  extents->width = ceilf (bounds.origin.x + bounds.size.width) - extents->x + border.right;
-  extents->height = ceilf (bounds.origin.y + bounds.size.height) - extents->y + border.bottom;
-}
-
-void
 gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
                                        GtkSnapshot  *snapshot,
                                        GdkPaintable *paintable,

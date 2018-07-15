@@ -1950,28 +1950,6 @@ gtk_style_context_get_change (GtkStyleContext *context)
   return priv->invalidating_context;
 }
 
-void
-_gtk_style_context_get_icon_extents (GtkStyleContext *context,
-                                     GdkRectangle    *extents,
-                                     gint             x,
-                                     gint             y,
-                                     gint             width,
-                                     gint             height)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (extents != NULL);
-
-  if (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)) == NULL)
-    {
-      extents->x = extents->y = extents->width = extents->height = 0;
-      return;
-    }
-
-  gtk_css_style_render_icon_get_extents (gtk_style_context_lookup_style (context),
-                                         extents,
-                                         x, y, width, height);
-}
-
 PangoAttrList *
 _gtk_style_context_get_pango_attributes (GtkStyleContext *context)
 {
