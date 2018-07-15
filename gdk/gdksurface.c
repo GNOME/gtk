@@ -97,6 +97,8 @@
 
 enum {
   MOVED_TO_RECT,
+  SIZE_CHANGED,
+  RENDER,
   LAST_SIGNAL
 };
 
@@ -105,6 +107,7 @@ enum {
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_STATE,
+  PROP_MAPPED,
   LAST_PROP
 };
 
@@ -271,6 +274,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                           GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_MAPPED] =
+      g_param_spec_boolean ("mapped",
+                            P_("Mapped"),
+                            P_("Mapped"),
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -310,6 +320,31 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_POINTER,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
+
+  signals[SIZE_CHANGED] =
+    g_signal_new (g_intern_static_string ("size-changed"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_INT,
+                  G_TYPE_INT);
+
+  signals[RENDER] =
+    g_signal_new (g_intern_static_string ("render"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  g_signal_accumulator_true_handled,
+                  NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  CAIRO_GOBJECT_TYPE_REGION);
 }
 
 static void
@@ -414,6 +449,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_STATE:
       g_value_set_flags (value, surface->state);
+      break;
+
+    case PROP_MAPPED:
+      g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
 
     default:
@@ -946,6 +985,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
       surface_remove_from_pointer_info (surface, display);
 
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
       break;
     }
 }
@@ -1617,20 +1657,13 @@ static void
 gdk_surface_process_updates_recurse (GdkSurface *surface,
                                      cairo_region_t *expose_region)
 {
-  GdkEvent *event;
+  gboolean handled;
 
   if (surface->destroyed)
     return;
 
   /* Paint the surface before the children, clipped to the surface region */
-
-  event = gdk_event_new (GDK_EXPOSE);
-  event->any.surface = g_object_ref (surface);
-  event->any.send_event = FALSE;
-  event->expose.region = cairo_region_reference (expose_region);
-
-  _gdk_event_emit (event);
-  g_object_unref (event);
+  g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
 }
 
 /* Process and remove any invalid area on the native surface by creating
@@ -2250,6 +2283,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     {
       surface->state = 0;
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
     }
 
   did_show = _gdk_surface_update_viewable (surface);
@@ -2263,14 +2297,6 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     {
       impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
       impl_class->show (surface, !did_show ? was_mapped : TRUE);
-    }
-
-  if (!was_mapped && !gdk_surface_has_impl (surface))
-    {
-      _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
-
-      if (surface->parent)
-        _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
     }
 
   if (!was_mapped || did_raise)
@@ -2308,7 +2334,7 @@ gdk_surface_show_unraised (GdkSurface *surface)
  * other surfaces with the same parent surface appear below @surface.
  * This is true whether or not the surfaces are visible.
  *
- * If @surface is a toplevel, the surface manager may choose to deny the
+ * If @surface is a toplevel, the window manager may choose to deny the
  * request to move the surface in the Z-order, gdk_surface_raise() only
  * requests the restack, does not guarantee it.
  */
@@ -2529,6 +2555,7 @@ gdk_surface_hide (GdkSurface *surface)
     {
       surface->state = GDK_SURFACE_STATE_WITHDRAWN;
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
     }
 
   if (was_mapped)
@@ -2575,60 +2602,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   recompute_visible_regions (surface, FALSE);
 
-  if (was_mapped && !gdk_surface_has_impl (surface))
-    {
-      _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-
-      if (surface->parent)
-        _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-    }
-
   /* Invalidate the rect */
   if (was_mapped)
     gdk_surface_invalidate_in_parent (surface);
-}
-
-/**
- * gdk_surface_withdraw:
- * @surface: a toplevel #GdkSurface
- *
- * Withdraws a surface (unmaps it and asks the surface manager to forget about it).
- * This function is not really useful as gdk_surface_hide() automatically
- * withdraws toplevel surfaces before hiding them.
- **/
-void
-gdk_surface_withdraw (GdkSurface *surface)
-{
-  GdkSurfaceImplClass *impl_class;
-  gboolean was_mapped;
-  GdkGLContext *current_context;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
-  if (gdk_surface_has_impl (surface))
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->withdraw (surface);
-
-      if (was_mapped)
-        {
-          _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-
-          if (surface->parent)
-            _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-        }
-
-      current_context = gdk_gl_context_get_current ();
-      if (current_context != NULL && gdk_gl_context_get_surface (current_context) == surface)
-        gdk_gl_context_clear_current ();
-
-      recompute_visible_regions (surface, FALSE);
-    }
 }
 
 static void
@@ -2663,6 +2639,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
 {
   cairo_region_t *old_region, *new_region;
   gboolean expose;
+  gboolean size_changed;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -2691,6 +2668,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
   /* Handle child surfaces */
 
   expose = FALSE;
+  size_changed = FALSE;
   old_region = NULL;
 
   if (gdk_surface_is_viewable (surface) &&
@@ -2716,8 +2694,16 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
     }
   if (!(width < 0 && height < 0))
     {
-      surface->width = width;
-      surface->height = height;
+      if (surface->width != width)
+        {
+          surface->width = width;
+          size_changed = TRUE;
+        }
+      if (surface->height != height)
+        {
+          surface->height = height;
+          size_changed = TRUE;
+        }
     }
 
   recompute_visible_regions (surface, FALSE);
@@ -2740,9 +2726,10 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
     }
+
+  if (size_changed)
+    g_signal_emit (surface, signals[SIZE_CHANGED], 0, width, height);
 }
-
-
 
 /**
  * gdk_surface_move:
@@ -3445,7 +3432,7 @@ gdk_surface_merge_child_input_shapes (GdkSurface *surface)
  * gdk_surface_get_modal_hint:
  * @surface: A toplevel #GdkSurface.
  *
- * Determines whether or not the surface manager is hinted that @surface
+ * Determines whether or not the window manager is hinted that @surface
  * has modal behaviour.
  *
  * Returns: whether or not the surface has the modal hint set.
@@ -3908,12 +3895,8 @@ _gdk_make_event (GdkSurface    *surface,
       break;
 
     case GDK_FOCUS_CHANGE:
-    case GDK_CONFIGURE:
-    case GDK_MAP:
-    case GDK_UNMAP:
     case GDK_DELETE:
     case GDK_DESTROY:
-    case GDK_EXPOSE:
     default:
       break;
     }
@@ -4427,7 +4410,7 @@ gdk_surface_set_transient_for (GdkSurface *surface,
  * @x: (out): return location for X position of surface frame
  * @y: (out): return location for Y position of surface frame
  *
- * Obtains the top-left corner of the surface manager frame in root
+ * Obtains the top-left corner of the window manager frame in root
  * surface coordinates.
  *
  **/
@@ -5467,6 +5450,7 @@ void
 gdk_surface_set_state (GdkSurface      *surface,
                        GdkSurfaceState  new_state)
 {
+  gboolean was_mapped, mapped;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (new_state == surface->state)
@@ -5477,7 +5461,11 @@ gdk_surface_set_state (GdkSurface      *surface,
    * inconsistent state to the user.
    */
 
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
   surface->state = new_state;
+
+  mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   _gdk_surface_update_viewable (surface);
 
@@ -5490,12 +5478,15 @@ gdk_surface_set_state (GdkSurface      *surface,
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP: /* ? */
-      g_object_notify (G_OBJECT (surface), "state");
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
       break;
     case GDK_SURFACE_CHILD:
     default:
       break;
     }
+
+  if (was_mapped != mapped)
+    g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
 void

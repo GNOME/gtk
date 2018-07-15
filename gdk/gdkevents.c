@@ -646,11 +646,6 @@ gdk_event_copy (const GdkEvent *event)
       g_object_ref (event->dnd.drop);
       break;
 
-    case GDK_EXPOSE:
-      if (event->expose.region)
-        new_event->expose.region = cairo_region_copy (event->expose.region);
-      break;
-
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
@@ -730,11 +725,6 @@ gdk_event_finalize (GObject *object)
       g_free (event->touch.axes);
       break;
 
-    case GDK_EXPOSE:
-      if (event->expose.region)
-	cairo_region_destroy (event->expose.region);
-      break;
-      
     case GDK_MOTION_NOTIFY:
       g_clear_object (&event->motion.tool);
       g_free (event->motion.axes);
@@ -827,14 +817,10 @@ gdk_event_get_time (const GdkEvent *event)
         return event->pad_axis.time;
       case GDK_PAD_GROUP_MODE:
         return event->pad_group_mode.time;
-      case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_DESTROY:
-      case GDK_EXPOSE:
-      case GDK_MAP:
-      case GDK_UNMAP:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
       default:
@@ -897,7 +883,6 @@ gdk_event_get_state (const GdkEvent  *event,
       case GDK_LEAVE_NOTIFY:
 	*state =  event->crossing.state;
         return TRUE;
-      case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
@@ -908,9 +893,6 @@ gdk_event_get_state (const GdkEvent  *event,
       case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_DESTROY:
-      case GDK_EXPOSE:
-      case GDK_MAP:
-      case GDK_UNMAP:
       case GDK_GRAB_BROKEN:
       case GDK_PAD_BUTTON_PRESS:
       case GDK_PAD_BUTTON_RELEASE:
@@ -949,10 +931,6 @@ gdk_event_get_coords (const GdkEvent *event,
 
   switch ((guint) event->any.type)
     {
-    case GDK_CONFIGURE:
-      x = event->configure.x;
-      y = event->configure.y;
-      break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       x = event->crossing.x;
@@ -1083,10 +1061,6 @@ gdk_event_set_coords (GdkEvent *event,
 
   switch ((guint) event->any.type)
     {
-    case GDK_CONFIGURE:
-      event->configure.x = x;
-      event->configure.y = y;
-      break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       event->crossing.x = x;

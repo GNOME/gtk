@@ -848,9 +848,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("unmap notify:\t\twindow: %ld",
 			   xevent->xmap.window));
 
-      event->any.type = GDK_UNMAP;
-      event->any.surface = surface;
-
       if (surface && !is_substructure)
 	{
           /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
@@ -885,15 +882,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
         }
 
+      return_val = FALSE;
+
       break;
 
     case MapNotify:
       GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("map notify:\t\twindow: %ld",
 			   xevent->xmap.window));
-
-      event->any.type = GDK_MAP;
-      event->any.surface = surface;
 
       if (surface && !is_substructure)
 	{
@@ -906,6 +902,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  if (toplevel)
 	    gdk_surface_thaw_toplevel_updates (surface);
 	}
+
+      return_val = FALSE;
 
       break;
 
@@ -960,11 +958,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	return_val = FALSE;
       else
 	{
-	  event->any.type = GDK_CONFIGURE;
-	  event->any.surface = surface;
-	  event->configure.width = (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
-	  event->configure.height = (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
+          int x, y, width, height;
 
+          x = 0;
+          y = 0;
+	  width = (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
+	  height = (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
 	      !GDK_SURFACE_DESTROYED (surface))
@@ -981,31 +980,34 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 &tx, &ty,
 					 &child_window))
 		{
-		  event->configure.x = tx / surface_impl->surface_scale;
-		  event->configure.y = ty / surface_impl->surface_scale;
+		  x = tx / surface_impl->surface_scale;
+		  y = ty / surface_impl->surface_scale;
 		}
 	      gdk_x11_display_error_trap_pop_ignored (display);
 	    }
 	  else
 	    {
-	      event->configure.x = xevent->xconfigure.x / surface_impl->surface_scale;
-	      event->configure.y = xevent->xconfigure.y / surface_impl->surface_scale;
+	      x = xevent->xconfigure.x / surface_impl->surface_scale;
+	      y = xevent->xconfigure.y / surface_impl->surface_scale;
 	    }
+
 	  if (!is_substructure)
 	    {
-	      surface->x = event->configure.x;
-	      surface->y = event->configure.y;
+	      surface->x = x;
+	      surface->y = y;
 
               if (surface_impl->unscaled_width != xevent->xconfigure.width ||
                   surface_impl->unscaled_height != xevent->xconfigure.height)
                 {
                   surface_impl->unscaled_width = xevent->xconfigure.width;
                   surface_impl->unscaled_height = xevent->xconfigure.height;
-                  surface->width = event->configure.width;
-                  surface->height = event->configure.height;
+                  surface->width = width;
+                  surface->height = height;
 
                   _gdk_surface_update_size (surface);
                   _gdk_x11_surface_update_size (surface_impl);
+
+                  g_signal_emit_by_name (surface, "size-changed", width, height);
                 }
 
 	      if (surface->resize_count >= 1)
@@ -1014,8 +1016,10 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
 		  if (surface->resize_count == 0)
 		    _gdk_x11_moveresize_configure_done (display, surface);
-		}
+                }
 	    }
+
+          return_val = FALSE;
         }
       break;
 

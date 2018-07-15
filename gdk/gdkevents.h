@@ -104,7 +104,6 @@ G_BEGIN_DECLS
 
 
 typedef struct _GdkEventAny	    GdkEventAny;
-typedef struct _GdkEventExpose	    GdkEventExpose;
 typedef struct _GdkEventMotion	    GdkEventMotion;
 typedef struct _GdkEventButton	    GdkEventButton;
 typedef struct _GdkEventTouch       GdkEventTouch;
@@ -112,7 +111,6 @@ typedef struct _GdkEventScroll      GdkEventScroll;
 typedef struct _GdkEventKey	    GdkEventKey;
 typedef struct _GdkEventFocus	    GdkEventFocus;
 typedef struct _GdkEventCrossing    GdkEventCrossing;
-typedef struct _GdkEventConfigure   GdkEventConfigure;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventSetting     GdkEventSetting;
@@ -145,8 +143,6 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  *   hidden or destroyed, usually when the user clicks on a special icon in the
  *   title bar.
  * @GDK_DESTROY: the surface has been destroyed.
- * @GDK_EXPOSE: all or part of the surface has become visible and needs to be
- *   redrawn.
  * @GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
  * @GDK_BUTTON_PRESS: a mouse button has been pressed.
  * @GDK_BUTTON_RELEASE: a mouse button has been released.
@@ -155,10 +151,6 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  * @GDK_ENTER_NOTIFY: the pointer has entered the surface.
  * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
- * @GDK_CONFIGURE: the size, position or stacking order of the surface has changed.
- *   Note that GTK+ discards these events for %GDK_SURFACE_CHILD surfaces.
- * @GDK_MAP: the surface has been mapped.
- * @GDK_UNMAP: the surface has been unmapped.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -206,7 +198,6 @@ typedef enum
   GDK_NOTHING,
   GDK_DELETE,
   GDK_DESTROY,
-  GDK_EXPOSE,
   GDK_MOTION_NOTIFY,
   GDK_BUTTON_PRESS,
   GDK_BUTTON_RELEASE,
@@ -215,9 +206,6 @@ typedef enum
   GDK_ENTER_NOTIFY,
   GDK_LEAVE_NOTIFY,
   GDK_FOCUS_CHANGE,
-  GDK_CONFIGURE,
-  GDK_MAP,
-  GDK_UNMAP,
   GDK_PROXIMITY_IN,
   GDK_PROXIMITY_OUT,
   GDK_DRAG_ENTER,

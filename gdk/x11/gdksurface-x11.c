@@ -1285,35 +1285,6 @@ gdk_surface_x11_show (GdkSurface *surface, gboolean already_mapped)
 }
 
 static void
-gdk_surface_x11_hide (GdkSurface *surface)
-{
-  /* We'll get the unmap notify eventually, and handle it then,
-   * but checking here makes things more consistent if we are
-   * just doing stuff ourself.
-   */
-  _gdk_x11_surface_grab_check_unmap (surface,
-                                    NextRequest (GDK_SURFACE_XDISPLAY (surface)));
-
-  /* You can't simply unmap toplevel surfaces. */
-  switch (surface->surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP: /* ? */
-      gdk_surface_withdraw (surface);
-      return;
-      
-    case GDK_SURFACE_CHILD:
-    default:
-      break;
-    }
-  
-  _gdk_surface_clear_update_area (surface);
-  
-  XUnmapWindow (GDK_SURFACE_XDISPLAY (surface),
-		GDK_SURFACE_XID (surface));
-}
-
-static void
 gdk_surface_x11_withdraw (GdkSurface *surface)
 {
   if (!surface->destroyed)
@@ -1328,6 +1299,35 @@ gdk_surface_x11_withdraw (GdkSurface *surface)
       XWithdrawWindow (GDK_SURFACE_XDISPLAY (surface),
                        GDK_SURFACE_XID (surface), 0);
     }
+}
+
+static void
+gdk_surface_x11_hide (GdkSurface *surface)
+{
+  /* We'll get the unmap notify eventually, and handle it then,
+   * but checking here makes things more consistent if we are
+   * just doing stuff ourself.
+   */
+  _gdk_x11_surface_grab_check_unmap (surface,
+                                    NextRequest (GDK_SURFACE_XDISPLAY (surface)));
+
+  /* You can't simply unmap toplevel surfaces. */
+  switch (surface->surface_type)
+    {
+    case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_TEMP: /* ? */
+      gdk_surface_x11_withdraw (surface);
+      return;
+      
+    case GDK_SURFACE_CHILD:
+    default:
+      break;
+    }
+  
+  _gdk_surface_clear_update_area (surface);
+  
+  XUnmapWindow (GDK_SURFACE_XDISPLAY (surface),
+		GDK_SURFACE_XID (surface));
 }
 
 static inline void
