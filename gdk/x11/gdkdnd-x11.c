@@ -240,7 +240,7 @@ gdk_x11_drag_finalize (GObject *object)
 
   drags = g_list_remove (drags, drag);
 
-  drag_surface = drag->drag_surface;
+  drag_surface = x11_drag->drag_surface;
   ipc_surface = x11_drag->ipc_surface;
 
   G_OBJECT_CLASS (gdk_x11_drag_parent_class)->finalize (object);
@@ -262,6 +262,8 @@ gdk_x11_drag_find (GdkDisplay *display,
   GdkDrag *drag;
   GdkX11Drag *drag_x11;
   Window drag_dest_xid;
+  GdkSurface *surface;
+  Window surface_xid;
 
   for (tmp_list = drags; tmp_list; tmp_list = tmp_list->next)
     {
@@ -271,14 +273,17 @@ gdk_x11_drag_find (GdkDisplay *display,
       if (gdk_drag_get_display (drag) != display)
         continue;
 
+      g_object_get (drag, "surface", &surface, NULL);
+      surface_xid = surface ? GDK_SURFACE_XID (surface) : None;
+      g_object_unref (surface);
+
       drag_dest_xid = drag_x11->proxy_xid
                             ? (drag_x11->drop_xid
                                   ? drag_x11->drop_xid
                                   : drag_x11->proxy_xid)
                             : None;
 
-      if (((source_xid == None) || (drag->source_surface &&
-            (GDK_SURFACE_XID (drag->source_surface) == source_xid))) &&
+      if (((source_xid == None) || (surface && (surface_xid == source_xid))) &&
           ((dest_xid == None) || (drag_dest_xid == dest_xid)))
         return drag;
     }
@@ -2073,13 +2078,17 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   GdkDisplay *display;
   int x_root, y_root;
   Atom xselection;
+  GdkSurface *ipc_surface;
 
   display = gdk_surface_get_display (surface);
 
+  ipc_surface = gdk_surface_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
+
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
-                                             "device", device,
-                                             "content", content,
-                                             NULL);
+                                   "device", device,
+                                   "content", content,
+                                   "surface", ipc_surface,
+                                   NULL);
   x11_drag = GDK_X11_DRAG (drag);
 
   g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_drag_xevent), drag);
@@ -2097,13 +2106,10 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   x11_drag->protocol = GDK_DRAG_PROTO_XDND;
   x11_drag->actions = actions;
-  x11_drag->ipc_surface = gdk_surface_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
+  x11_drag->ipc_surface = ipc_surface;
   if (gdk_surface_get_group (surface))
     gdk_surface_set_group (x11_drag->ipc_surface, surface);
   gdk_surface_show (x11_drag->ipc_surface);
-
-  drag->source_surface = x11_drag->ipc_surface;
-  g_object_ref (drag->source_surface);
 
   x11_drag->drag_surface = create_drag_surface (display);
 
