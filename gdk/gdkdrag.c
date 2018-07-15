@@ -69,7 +69,6 @@ typedef struct _GdkDragPrivate GdkDragPrivate;
 
 struct _GdkDragPrivate {
   GdkSurface *source_surface;
-  GdkSurface *drag_surface;
 
   GdkDisplay *display;
   GdkDevice *device;
