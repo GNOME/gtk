@@ -1074,10 +1074,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
   graphene_matrix_t prev_modelview;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
-  GskRoundedRect prev_clip, blit_clip;
-  int prev_render_target;
-  int texture_id, render_target;
-  int blurred_texture_id, blurred_render_target;
+  int blurred_texture_id;
   int cached_tid;
 
   /* offset_outline is the minimal outline we need to draw the given drop shadow,
@@ -1106,6 +1103,11 @@ render_outset_shadow_node (GskGLRenderer       *self,
                                                    blur_radius);
   if (cached_tid == 0)
     {
+      int texture_id, render_target;
+      int blurred_render_target;
+      int prev_render_target;
+      GskRoundedRect prev_clip, blit_clip;
+
       texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
       gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
