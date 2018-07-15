@@ -50,7 +50,7 @@ G_BEGIN_DECLS
  * @bounds: the bounds of the rectangle
  * @corner: the size of the 4 rounded corners
  *
- * A rectanglular region with rounded corners.
+ * A rectangular region with rounded corners.
  *
  * Application code should normalize rectangles using gsk_rounded_rect_normalize();
  * this function will ensure that the bounds of the rectanlge are normalized
