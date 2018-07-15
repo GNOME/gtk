@@ -11959,7 +11959,9 @@ _gtk_widget_remove_sizegroup (GtkWidget    *widget,
 GSList *
 _gtk_widget_get_sizegroups (GtkWidget    *widget)
 {
-  if (widget->priv->have_size_groups)
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->have_size_groups)
     return g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
 
   return NULL;
