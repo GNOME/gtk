@@ -6293,7 +6293,7 @@ gtk_window_unmap (GtkWidget *widget)
   surface = _gtk_widget_get_surface (widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
-  gdk_surface_withdraw (surface);
+  gdk_surface_hide (surface);
 
   while (priv->configure_request_count > 0)
     {
