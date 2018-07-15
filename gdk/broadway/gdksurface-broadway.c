@@ -397,8 +397,8 @@ gdk_surface_broadway_move_resize (GdkSurface *surface,
           impl->dirty = TRUE;
           impl->last_synced = FALSE;
 
-          surface->width = width;
-          surface->height = height;
+          g_object_freeze_notify (G_OBJECT (surface));
+          gdk_surface_set_size (surface, width, height);
         }
     }
 
@@ -412,6 +412,7 @@ gdk_surface_broadway_move_resize (GdkSurface *surface,
     {
       surface->resize_count++;
       _gdk_surface_update_size (surface);
+      g_object_thaw_notify (G_OBJECT (surface));
     }
 }
 

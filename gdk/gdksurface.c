@@ -105,6 +105,8 @@ enum {
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_STATE,
+  PROP_WIDTH,
+  PROP_HEIGHT,
   LAST_PROP
 };
 
@@ -271,6 +273,21 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                           GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_WIDTH] =
+      g_param_spec_int ("width",
+                        P_("Width"),
+                        P_("Width"),
+                        1, G_MAXINT, 1,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_HEIGHT] =
+      g_param_spec_int ("height",
+                        P_("Width"),
+                        P_("Width"),
+                        1, G_MAXINT, 1,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -414,6 +431,14 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_STATE:
       g_value_set_flags (value, surface->state);
+      break;
+
+    case PROP_WIDTH:
+      g_value_set_int (value, surface->width);
+      break;
+
+    case PROP_HEIGHT:
+      g_value_set_int (value, surface->height);
       break;
 
     default:
@@ -2652,6 +2677,26 @@ gdk_surface_move_resize_toplevel (GdkSurface *surface,
     recompute_visible_regions (surface, FALSE);
 }
 
+void
+gdk_surface_set_size (GdkSurface *surface,
+                      int         width,
+                      int         height)
+{
+  g_object_freeze_notify (G_OBJECT (surface));
+
+  if (surface->width != width)
+    {
+      surface->width = width;
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_WIDTH]);
+    }
+  if (surface->height != height)
+    {
+      surface->height = height;
+      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_HEIGHT]);
+    }
+
+  g_object_thaw_notify (G_OBJECT (surface));
+}
 
 static void
 gdk_surface_move_resize_internal (GdkSurface *surface,
@@ -2690,6 +2735,8 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
 
   /* Handle child surfaces */
 
+  g_object_freeze_notify (G_OBJECT (surface));
+
   expose = FALSE;
   old_region = NULL;
 
@@ -2715,10 +2762,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
       surface->y = y;
     }
   if (!(width < 0 && height < 0))
-    {
-      surface->width = width;
-      surface->height = height;
-    }
+    gdk_surface_set_size (surface, width, height);
 
   recompute_visible_regions (surface, FALSE);
 
@@ -2740,6 +2784,8 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
     }
+
+  g_object_thaw_notify (G_OBJECT (surface));
 }
 
 

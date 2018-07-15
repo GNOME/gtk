@@ -923,11 +923,9 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
       surface->height * impl->surface_scale > 32767)
     {
       g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
-
-      if (surface->width * impl->surface_scale > 32767)
-        surface->width = 32767 / impl->surface_scale;
-      if (surface->height  * impl->surface_scale > 32767)
-        surface->height = 32767 /  impl->surface_scale;
+      gdk_surface_set_size (surface,
+                            MIN (surface->width, 32767 / impl->surface_scale),
+                            MIN (surface->height, 32767 / impl->surface_scale));
     }
 
   impl->unscaled_width = surface->width * impl->surface_scale;
@@ -1371,9 +1369,10 @@ surface_x11_resize (GdkSurface *surface,
     {
       impl->unscaled_width = width * impl->surface_scale;
       impl->unscaled_height = height * impl->surface_scale;
-      surface->width = width;
-      surface->height = height;
+      g_object_freeze_notify (G_OBJECT (surface));
+      gdk_surface_set_size (surface, width, height);
       _gdk_x11_surface_update_size (GDK_SURFACE_IMPL_X11 (surface->impl));
+      g_object_thaw_notify (G_OBJECT (surface));
     }
   else
     {
@@ -1411,10 +1410,10 @@ surface_x11_move_resize (GdkSurface *surface,
 
       impl->unscaled_width = width * impl->surface_scale;
       impl->unscaled_height = height * impl->surface_scale;
-      surface->width = width;
-      surface->height = height;
-
+      g_object_freeze_notify (G_OBJECT (surface));
+      gdk_surface_set_size (surface, width, height);
       _gdk_x11_surface_update_size (GDK_SURFACE_IMPL_X11 (surface->impl));
+      g_object_thaw_notify (G_OBJECT (surface));
     }
   else
     {

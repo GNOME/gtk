@@ -306,8 +306,9 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
       (impl->scale == scale))
     return;
 
-  surface->width = width;
-  surface->height = height;
+  g_object_freeze_notify (G_OBJECT (surface));
+
+  gdk_surface_set_size (surface, width, height);
   impl->scale = scale;
 
   if (impl->display_server.egl_window)
@@ -316,6 +317,9 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
 
   gdk_surface_invalidate_rect (surface, NULL);
+  _gdk_surface_update_size (surface);
+
+  g_object_thaw_notify (G_OBJECT (surface));
 }
 
 static const gchar *
@@ -701,14 +705,13 @@ gdk_wayland_surface_configure (GdkSurface *surface,
   GdkDisplay *display;
   GdkEvent *event;
 
+  gdk_wayland_surface_update_size (surface, width, height, scale);
+
   event = gdk_event_new (GDK_CONFIGURE);
   event->any.surface = g_object_ref (surface);
   event->any.send_event = FALSE;
   event->configure.width = width;
   event->configure.height = height;
-
-  gdk_wayland_surface_update_size (surface, width, height, scale);
-  _gdk_surface_update_size (surface);
 
   display = gdk_surface_get_display (surface);
   _gdk_wayland_display_deliver_event (display, event);
