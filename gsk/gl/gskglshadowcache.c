@@ -9,9 +9,12 @@ typedef struct
 
 typedef struct
 {
+  GskRoundedRect outline;
+  float blur_radius;
+
   int texture_id;
   guint used : 1;
-} CacheValue;
+} CacheItem;
 
 static gboolean
 key_equal (const void *x,
@@ -20,21 +23,34 @@ key_equal (const void *x,
   const CacheKey *a = x;
   const CacheKey *b = y;
 
-  return memcmp (&a->outline, &b->outline, sizeof (GskRoundedRect)) == 0 &&
+  return graphene_size_equal (&a->outline.corner[0], &b->outline.corner[0]) &&
+         graphene_size_equal (&a->outline.corner[1], &b->outline.corner[1]) &&
+         graphene_size_equal (&a->outline.corner[2], &b->outline.corner[2]) &&
+         graphene_size_equal (&a->outline.corner[3], &b->outline.corner[3]) &&
+         graphene_rect_equal (&a->outline.bounds, &b->outline.bounds) &&
          a->blur_radius == b->blur_radius;
 }
 
 void
 gsk_gl_shadow_cache_init (GskGLShadowCache *self)
 {
-  self->textures = g_hash_table_new_full (g_direct_hash, key_equal, g_free, g_free);
+  self->textures = g_array_new (FALSE, TRUE, sizeof (CacheItem));
 }
 
 void
 gsk_gl_shadow_cache_free (GskGLShadowCache *self,
                           GskGLDriver      *gl_driver)
 {
-  g_hash_table_unref (self->textures);
+  guint i, p;
+
+  for (i = 0, p = self->textures->len; i < p; i ++)
+    {
+      const CacheItem *item = &g_array_index (self->textures, CacheItem, i);
+
+      gsk_gl_driver_destroy_texture (gl_driver, item->texture_id);
+    }
+
+  g_array_free (self->textures, TRUE);
   self->textures = NULL;
 }
 
@@ -42,26 +58,25 @@ void
 gsk_gl_shadow_cache_begin_frame (GskGLShadowCache *self,
                                  GskGLDriver      *gl_driver)
 {
-  GHashTableIter iter;
-  CacheKey *key;
-  CacheValue *value;
+  guint i, p;
 
   /* We remove all textures with used = FALSE since those have not been used in the
    * last frame. For all others, we reset the `used` value to FALSE instead and see
    * if they end up with TRUE in the next call to begin_frame. */
-
-  g_hash_table_iter_init (&iter, self->textures);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+  for (i = 0, p = self->textures->len; i < p; i ++)
     {
-      if (!value->used)
+      CacheItem *item = &g_array_index (self->textures, CacheItem, i);
+
+      if (!item->used)
         {
-          /* Remove */
-          gsk_gl_driver_destroy_texture (gl_driver, value->texture_id);
-          g_hash_table_iter_remove (&iter);
+          gsk_gl_driver_destroy_texture (gl_driver, item->texture_id);
+          g_array_remove_index_fast (self->textures, i);
+          p --;
+          i --;
         }
       else
         {
-          value->used = FALSE;
+          item->used = FALSE;
         }
     }
 }
@@ -76,24 +91,33 @@ gsk_gl_shadow_cache_get_texture_id (GskGLShadowCache     *self,
                                     const GskRoundedRect *shadow_rect,
                                     float                 blur_radius)
 {
-  CacheValue *value;
+  CacheItem *item= NULL;
+  guint i;
 
   g_assert (self != NULL);
   g_assert (gl_driver != NULL);
   g_assert (shadow_rect != NULL);
 
-  value = g_hash_table_lookup (self->textures,
-                               &(CacheKey){
-                                 *shadow_rect,
-                                 blur_radius
-                               });
+  for (i = 0; i < self->textures->len; i ++)
+    {
+      CacheItem *k = &g_array_index (self->textures, CacheItem, i);
 
-  if (value == NULL)
+      if (key_equal (&(CacheKey){*shadow_rect, blur_radius},
+                     &(CacheKey){k->outline, k->blur_radius}))
+        {
+          item = k;
+          break;
+        }
+    }
+
+  if (item == NULL)
     return 0;
 
-  value->used = TRUE;
+  item->used = TRUE;
 
-  return value->texture_id;
+  g_assert (item->texture_id != 0);
+
+  return item->texture_id;
 }
 
 void
@@ -102,20 +126,17 @@ gsk_gl_shadow_cache_commit (GskGLShadowCache     *self,
                             float                 blur_radius,
                             int                   texture_id)
 {
-  CacheKey *key;
-  CacheValue *value;
+  CacheItem *item;
 
   g_assert (self != NULL);
   g_assert (shadow_rect != NULL);
   g_assert (texture_id > 0);
 
-  key = g_new0 (CacheKey, 1);
-  key->outline = *shadow_rect;
-  key->blur_radius = blur_radius;
+  g_array_set_size (self->textures, self->textures->len + 1);
+  item = &g_array_index (self->textures, CacheItem, self->textures->len - 1);
 
-  value = g_new0 (CacheValue, 1);
-  value->used = TRUE;
-  value->texture_id = texture_id;
-
-  g_hash_table_insert (self->textures, key, value);
+  item->outline = *shadow_rect;
+  item->blur_radius = blur_radius;
+  item->used = TRUE;
+  item->texture_id = texture_id;
 }

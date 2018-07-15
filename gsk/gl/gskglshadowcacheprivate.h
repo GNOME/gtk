@@ -9,7 +9,7 @@
 
 typedef struct
 {
-  GHashTable *textures;
+  GArray *textures;
 } GskGLShadowCache;
 
 
