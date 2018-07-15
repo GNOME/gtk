@@ -34,6 +34,16 @@
 #include "gdkpipeiostreamprivate.h"
 #include "gdksurface.h"
 
+typedef struct _GdkDropPrivate GdkDropPrivate;
+
+struct _GdkDropPrivate {
+  GdkDevice *device;
+  GdkDrag *drag;
+  GdkContentFormats *formats;
+  GdkSurface *surface;
+  GdkDragAction actions;
+};
+
 enum {
   PROP_0,
   PROP_ACTIONS,
@@ -47,7 +57,7 @@ enum {
 
 static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_ABSTRACT_TYPE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
 
 /**
  * GdkDrop:
@@ -84,15 +94,17 @@ gdk_drop_read_local_async (GdkDrop             *self,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkContentFormats *content_formats;
   const char *mime_type;
   GTask *task;
+  GdkContentProvider *content;
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_drop_read_local_async);
 
-  if (self->drag == NULL)
+  if (priv->drag == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                      _("Drag'n'drop from other applications is not supported."));
@@ -100,7 +112,9 @@ gdk_drop_read_local_async (GdkDrop             *self,
       return;
     }
 
-  content_formats = gdk_content_provider_ref_formats (self->drag->content);
+  g_object_get (priv->drag, "content", &content, NULL);
+  content_formats = gdk_content_provider_ref_formats (content);
+  g_object_unref (content); 
   content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
   mime_type = gdk_content_formats_match_mime_type (content_formats, formats);
 
@@ -111,7 +125,7 @@ gdk_drop_read_local_async (GdkDrop             *self,
 
       stream = gdk_pipe_io_stream_new ();
       output_stream = g_io_stream_get_output_stream (stream);
-      gdk_drag_write_async (self->drag,
+      gdk_drag_write_async (priv->drag,
                                     mime_type,
                                     output_stream,
                                     io_priority,
@@ -155,6 +169,7 @@ gdk_drop_set_property (GObject      *gobject,
                        GParamSpec   *pspec)
 {
   GdkDrop *self = GDK_DROP (gobject);
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -163,26 +178,26 @@ gdk_drop_set_property (GObject      *gobject,
       break;
 
     case PROP_DEVICE:
-      self->device = g_value_dup_object (value);
-      g_assert (self->device != NULL);
-      if (self->surface)
-        g_assert (gdk_surface_get_display (self->surface) == gdk_device_get_display (self->device));
+      priv->device = g_value_dup_object (value);
+      g_assert (priv->device != NULL);
+      if (priv->surface)
+        g_assert (gdk_surface_get_display (priv->surface) == gdk_device_get_display (priv->device));
       break;
 
     case PROP_DRAG:
-      self->drag = g_value_dup_object (value);
+      priv->drag = g_value_dup_object (value);
       break;
 
     case PROP_FORMATS:
-      self->formats = g_value_dup_boxed (value);
-      g_assert (self->formats != NULL);
+      priv->formats = g_value_dup_boxed (value);
+      g_assert (priv->formats != NULL);
       break;
 
     case PROP_SURFACE:
-      self->surface = g_value_dup_object (value);
-      g_assert (self->surface != NULL);
-      if (self->device)
-        g_assert (gdk_surface_get_display (self->surface) == gdk_device_get_display (self->device));
+      priv->surface = g_value_dup_object (value);
+      g_assert (priv->surface != NULL);
+      if (priv->device)
+        g_assert (gdk_surface_get_display (priv->surface) == gdk_device_get_display (priv->device));
       break;
 
     default:
@@ -198,31 +213,32 @@ gdk_drop_get_property (GObject    *gobject,
                        GParamSpec *pspec)
 {
   GdkDrop *self = GDK_DROP (gobject);
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_ACTIONS:
-      g_value_set_flags (value, self->actions);
+      g_value_set_flags (value, priv->actions);
       break;
 
     case PROP_DEVICE:
-      g_value_set_object (value, self->device);
+      g_value_set_object (value, priv->device);
       break;
 
     case PROP_DISPLAY:
-      g_value_set_object (value, gdk_device_get_display (self->device));
+      g_value_set_object (value, gdk_device_get_display (priv->device));
       break;
 
     case PROP_DRAG:
-      g_value_set_object (value, self->drag);
+      g_value_set_object (value, priv->drag);
       break;
 
     case PROP_FORMATS:
-      g_value_set_boxed (value, self->formats);
+      g_value_set_boxed (value, priv->formats);
       break;
 
     case PROP_SURFACE:
-      g_value_set_object (value, self->surface);
+      g_value_set_object (value, priv->surface);
       break;
 
     default:
@@ -235,9 +251,10 @@ static void
 gdk_drop_finalize (GObject *object)
 {
   GdkDrop *self = GDK_DROP (object);
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
 
-  g_clear_object (&self->device);
-  g_clear_object (&self->drag);
+  g_clear_object (&priv->device);
+  g_clear_object (&priv->drag);
 
   G_OBJECT_CLASS (gdk_drop_parent_class)->finalize (object);
 }
@@ -362,9 +379,11 @@ gdk_drop_init (GdkDrop *self)
 GdkDisplay *
 gdk_drop_get_display (GdkDrop *self)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
-  return gdk_device_get_display (self->device);
+  return gdk_device_get_display (priv->device);
 }
 
 /**
@@ -378,9 +397,11 @@ gdk_drop_get_display (GdkDrop *self)
 GdkDevice *
 gdk_drop_get_device (GdkDrop *self)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
-  return self->device;
+  return priv->device;
 }
 
 /**
@@ -395,9 +416,11 @@ gdk_drop_get_device (GdkDrop *self)
 GdkContentFormats *
 gdk_drop_get_formats (GdkDrop *self)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
-  return self->formats;
+  return priv->formats;
 }
 
 /**
@@ -411,9 +434,11 @@ gdk_drop_get_formats (GdkDrop *self)
 GdkSurface *
 gdk_drop_get_surface (GdkDrop *self)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
 
-  return self->surface;
+  return priv->surface;
 }
 
 /**
@@ -435,22 +460,26 @@ gdk_drop_get_surface (GdkDrop *self)
 GdkDragAction
 gdk_drop_get_actions (GdkDrop *self)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_val_if_fail (GDK_IS_DROP (self), 0);
 
-  return self->actions;
+  return priv->actions;
 }
 
 void
 gdk_drop_set_actions (GdkDrop       *self,
                       GdkDragAction  actions)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_if_fail (GDK_IS_DROP (self));
   g_return_if_fail ((actions & GDK_ACTION_ASK) == 0);
 
-  if (self->actions == actions)
+  if (priv->actions == actions)
     return;
 
-  self->actions = actions;
+  priv->actions = actions;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIONS]);
 }
@@ -469,9 +498,11 @@ gdk_drop_set_actions (GdkDrop       *self,
 GdkDrag *
 gdk_drop_get_drag (GdkDrop *self)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
   g_return_val_if_fail (GDK_IS_DROP (self), 0);
 
-  return self->drag;
+  return priv->drag;
 }
 
 /**
@@ -529,7 +560,9 @@ gdk_drop_read_internal (GdkDrop             *self,
                         GAsyncReadyCallback  callback,
                         gpointer             user_data)
 {
-  if (self->drag)
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  if (priv->drag)
     {
       gdk_drop_read_local_async (self,
                                  formats,
@@ -678,6 +711,7 @@ gdk_drop_read_value_internal (GdkDrop             *self,
                               GAsyncReadyCallback  callback,
                               gpointer             user_data)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkContentFormatsBuilder *builder;
   GdkContentFormats *formats;
   GValue *value;
@@ -690,11 +724,19 @@ gdk_drop_read_value_internal (GdkDrop             *self,
   g_value_init (value, type);
   g_task_set_task_data (task, value, free_value);
 
-  if (self->drag)
+  if (priv->drag)
     {
       GError *error = NULL;
+      GdkContentProvider *content;
+      gboolean res;
 
-      if (gdk_content_provider_get_value (self->drag->content, value, &error))
+      g_object_get (priv->drag, "content", &content, NULL);
+
+      res = gdk_content_provider_get_value (content, value, &error);
+
+      g_object_unref (content);
+
+      if (res)
         {
           g_task_return_pointer (task, value, NULL);
           g_object_unref (task);
@@ -875,13 +917,14 @@ gdk_drop_emit_enter_event (GdkDrop  *self,
                            gboolean  dont_queue,
                            guint32   time)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DRAG_ENTER);
-  event->any.surface = g_object_ref (self->surface);
+  event->any.surface = g_object_ref (priv->surface);
   event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
-  gdk_event_set_device (event, self->device);
+  gdk_event_set_device (event, priv->device);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -893,15 +936,16 @@ gdk_drop_emit_motion_event (GdkDrop  *self,
                             double    y_root,
                             guint32   time)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DRAG_MOTION);
-  event->any.surface = g_object_ref (self->surface);
+  event->any.surface = g_object_ref (priv->surface);
   event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
   event->dnd.x_root = x_root;
   event->dnd.y_root = y_root;
-  gdk_event_set_device (event, self->device);
+  gdk_event_set_device (event, priv->device);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -911,13 +955,14 @@ gdk_drop_emit_leave_event (GdkDrop  *self,
                            gboolean  dont_queue,
                            guint32   time)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DRAG_LEAVE);
-  event->any.surface = g_object_ref (self->surface);
+  event->any.surface = g_object_ref (priv->surface);
   event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
-  gdk_event_set_device (event, self->device);
+  gdk_event_set_device (event, priv->device);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -929,15 +974,16 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
                           double    y_root,
                           guint32   time)
 {
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DROP_START);
-  event->any.surface = g_object_ref (self->surface);
+  event->any.surface = g_object_ref (priv->surface);
   event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
   event->dnd.x_root = x_root;
   event->dnd.y_root = y_root;
-  gdk_event_set_device (event, self->device);
+  gdk_event_set_device (event, priv->device);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }

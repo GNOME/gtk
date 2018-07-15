@@ -55,6 +55,7 @@ enum {
   PROP_FORMATS,
   PROP_SELECTED_ACTION,
   PROP_ACTIONS,
+  PROP_SURFACE,
   N_PROPERTIES
 };
 
@@ -65,11 +66,27 @@ enum {
   N_SIGNALS
 };
 
+typedef struct _GdkDragPrivate GdkDragPrivate;
+
+struct _GdkDragPrivate {
+  GdkSurface *surface;
+
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkContentFormats *formats;
+  GdkContentProvider *content;
+
+  GdkDragAction actions;
+  GdkDragAction selected_action;
+
+  guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
+};
+
 static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 static GList *drags = NULL;
 
-G_DEFINE_ABSTRACT_TYPE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 
 /**
  * SECTION:dnd
@@ -108,9 +125,11 @@ G_DEFINE_ABSTRACT_TYPE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 GdkDisplay *
 gdk_drag_get_display (GdkDrag *drag)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return drag->display;
+  return priv->display;
 }
 
 /**
@@ -124,9 +143,11 @@ gdk_drag_get_display (GdkDrag *drag)
 GdkContentFormats *
 gdk_drag_get_formats (GdkDrag *drag)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return drag->formats;
+  return priv->formats;
 }
 
 /**
@@ -140,9 +161,11 @@ gdk_drag_get_formats (GdkDrag *drag)
 GdkDragAction
 gdk_drag_get_actions (GdkDrag *drag)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return drag->actions;
+  return priv->actions;
 }
 
 /**
@@ -156,9 +179,11 @@ gdk_drag_get_actions (GdkDrag *drag)
 GdkDragAction
 gdk_drag_get_selected_action (GdkDrag *drag)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
   g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
 
-  return drag->selected_action;
+  return priv->selected_action;
 }
 
 /**
@@ -172,9 +197,11 @@ gdk_drag_get_selected_action (GdkDrag *drag)
 GdkDevice *
 gdk_drag_get_device (GdkDrag *drag)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  return drag->device;
+  return priv->device;
 }
 
 static void
@@ -190,38 +217,39 @@ gdk_drag_set_property (GObject      *gobject,
                        GParamSpec   *pspec)
 {
   GdkDrag *drag = GDK_DRAG (gobject);
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   switch (prop_id)
     {
     case PROP_CONTENT:
-      drag->content = g_value_dup_object (value);
-      if (drag->content)
+      priv->content = g_value_dup_object (value);
+      if (priv->content)
         {
-          g_assert (drag->formats == NULL);
-          drag->formats = gdk_content_provider_ref_formats (drag->content);
+          g_assert (priv->formats == NULL);
+          priv->formats = gdk_content_provider_ref_formats (priv->content);
         }
       break;
 
     case PROP_DEVICE:
-      drag->device = g_value_dup_object (value);
-      g_assert (drag->device != NULL);
-      drag->display = gdk_device_get_display (drag->device);
+      priv->device = g_value_dup_object (value);
+      g_assert (priv->device != NULL);
+      priv->display = gdk_device_get_display (priv->device);
       break;
 
     case PROP_FORMATS:
-      if (drag->formats)
+      if (priv->formats)
         {
           GdkContentFormats *override = g_value_dup_boxed (value);
           if (override)
             {
-              gdk_content_formats_unref (drag->formats);
-              drag->formats = override;
+              gdk_content_formats_unref (priv->formats);
+              priv->formats = override;
             }
         }
       else
         {
-          drag->formats = g_value_dup_boxed (value);
-          g_assert (drag->formats != NULL);
+          priv->formats = g_value_dup_boxed (value);
+          g_assert (priv->formats != NULL);
         }
       break;
 
@@ -239,6 +267,11 @@ gdk_drag_set_property (GObject      *gobject,
       }
     break;
 
+    case PROP_SURFACE:
+      priv->surface = g_value_dup_object (value);
+      g_assert (priv->surface != NULL);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -252,31 +285,36 @@ gdk_drag_get_property (GObject    *gobject,
                        GParamSpec *pspec)
 {
   GdkDrag *drag = GDK_DRAG (gobject);
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   switch (prop_id)
     {
     case PROP_CONTENT:
-      g_value_set_object (value, drag->content);
+      g_value_set_object (value, priv->content);
       break;
 
     case PROP_DEVICE:
-      g_value_set_object (value, drag->device);
+      g_value_set_object (value, priv->device);
       break;
 
     case PROP_DISPLAY:
-      g_value_set_object (value, drag->display);
+      g_value_set_object (value, priv->display);
       break;
 
     case PROP_FORMATS:
-      g_value_set_boxed (value, drag->formats);
+      g_value_set_boxed (value, priv->formats);
       break;
 
     case PROP_SELECTED_ACTION:
-      g_value_set_flags (value, drag->selected_action);
+      g_value_set_flags (value, priv->selected_action);
       break;
 
     case PROP_ACTIONS:
-      g_value_set_flags (value, drag->actions);
+      g_value_set_flags (value, priv->actions);
+      break;
+
+    case PROP_SURFACE:
+      g_value_set_object (value, priv->surface);
       break;
 
     default:
@@ -289,14 +327,14 @@ static void
 gdk_drag_finalize (GObject *object)
 {
   GdkDrag *drag = GDK_DRAG (object);
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
   drags = g_list_remove (drags, drag);
 
-  g_clear_object (&drag->content);
-  g_clear_pointer (&drag->formats, gdk_content_formats_unref);
+  g_clear_object (&priv->content);
+  g_clear_pointer (&priv->formats, gdk_content_formats_unref);
 
-  if (drag->source_surface)
-    g_object_unref (drag->source_surface);
+  g_clear_object (&priv->surface);
 
   G_OBJECT_CLASS (gdk_drag_parent_class)->finalize (object);
 }
@@ -388,6 +426,17 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SURFACE] =
+    g_param_spec_object ("surface",
+                         "Surface",
+                         "The surface where the drag originates",
+                         GDK_TYPE_SURFACE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GdkDrag::cancel:
    * @drag: The object on which the signal is emitted
@@ -439,24 +488,6 @@ gdk_drag_class_init (GdkDragClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
-/*
- * gdk_drag_drop:
- * @drag: a #GdkDrag
- * @time_: the timestamp for this operation
- *
- * Drops on the current destination.
- *
- * This function is called by the drag source.
- */
-void
-gdk_drag_drop (GdkDrag *drag,
-               guint32  time_)
-{
-  g_return_if_fail (GDK_IS_DRAG (drag));
-
-  GDK_DRAG_GET_CLASS (drag)->drag_drop (drag, time_);
-}
-
 static void
 gdk_drag_write_done (GObject      *content,
                      GAsyncResult *result,
@@ -496,12 +527,13 @@ gdk_drag_write_async (GdkDrag             *drag,
                       GAsyncReadyCallback  callback,
                       gpointer             user_data)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
   GdkContentFormats *formats, *mime_formats;
   GTask *task;
   GType gtype;
 
   g_return_if_fail (GDK_IS_DRAG (drag));
-  g_return_if_fail (drag->content);
+  g_return_if_fail (priv->content);
   g_return_if_fail (mime_type != NULL);
   g_return_if_fail (mime_type == g_intern_string (mime_type));
   g_return_if_fail (G_IS_OUTPUT_STREAM (stream));
@@ -512,10 +544,10 @@ gdk_drag_write_async (GdkDrag             *drag,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_drag_write_async);
 
-  formats = gdk_content_provider_ref_formats (drag->content);
+  formats = gdk_content_provider_ref_formats (priv->content);
   if (gdk_content_formats_contain_mime_type (formats, mime_type))
     {
-      gdk_content_provider_write_mime_type_async (drag->content,
+      gdk_content_provider_write_mime_type_async (priv->content,
                                                   mime_type,
                                                   stream,
                                                   io_priority,
@@ -537,7 +569,7 @@ gdk_drag_write_async (GdkDrag             *drag,
       g_assert (gtype != G_TYPE_INVALID);
       
       g_value_init (&value, gtype);
-      if (gdk_content_provider_get_value (drag->content, &value, &error))
+      if (gdk_content_provider_get_value (priv->content, &value, &error))
         {
           gdk_content_serialize_async (stream,
                                        mime_type,
@@ -580,10 +612,12 @@ void
 gdk_drag_set_actions (GdkDrag       *drag,
                       GdkDragAction  actions)
 {
-  if (drag->actions == actions)
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
+  if (priv->actions == actions)
     return;
 
-  drag->actions = actions;
+  priv->actions = actions;
 
   g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_ACTIONS]);
 }
@@ -592,12 +626,13 @@ void
 gdk_drag_set_selected_action (GdkDrag       *drag,
                               GdkDragAction  action)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
   GdkCursor *cursor;
 
-  if (drag->selected_action == action)
+  if (priv->selected_action == action)
     return;
 
-  drag->selected_action = action;
+  priv->selected_action = action;
 
   cursor = gdk_drag_get_cursor (drag, action);
   gdk_drag_set_cursor (drag, cursor);
@@ -670,12 +705,14 @@ void
 gdk_drag_drop_done (GdkDrag  *drag,
                     gboolean  success)
 {
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
   g_return_if_fail (GDK_IS_DRAG (drag));
 
-  if (drag->drop_done)
+  if (priv->drop_done)
     return;
 
-  drag->drop_done = TRUE;
+  priv->drop_done = TRUE;
 
   if (GDK_DRAG_GET_CLASS (drag)->drop_done)
     GDK_DRAG_GET_CLASS (drag)->drop_done (drag, success);

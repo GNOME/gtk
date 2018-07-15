@@ -33,8 +33,6 @@ typedef struct _GdkDragClass GdkDragClass;
 struct _GdkDragClass {
   GObjectClass parent_class;
 
-  void        (*drag_drop)     (GdkDrag  *drag,
-                                guint32          time_);
   GdkSurface*  (*get_drag_surface) (GdkDrag *drag);
   void        (*set_hotspot)   (GdkDrag  *drag,
                                 gint             hot_x,
@@ -56,20 +54,6 @@ struct _GdkDragClass {
 
 struct _GdkDrag {
   GObject parent_instance;
-
-  /*< private >*/
-  GdkSurface *source_surface;
-  GdkSurface *drag_surface;
-
-  GdkDisplay *display;
-  GdkDevice *device;
-  GdkContentFormats *formats;
-  GdkContentProvider *content;
-
-  GdkDragAction actions;
-  GdkDragAction selected_action;
-
-  guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
 
 void     gdk_drag_set_cursor          (GdkDrag        *drag,
@@ -84,9 +68,6 @@ void     gdk_drag_cancel              (GdkDrag        *drag,
 gboolean gdk_drag_handle_source_event (GdkEvent       *event);
 GdkCursor * gdk_drag_get_cursor       (GdkDrag        *drag,
                                        GdkDragAction   action);
-
-void     gdk_drag_drop                (GdkDrag        *drag,
-                                       guint32         time_);
 
 void     gdk_drag_write_async         (GdkDrag             *drag,
                                        const char          *mime_type,

@@ -105,12 +105,6 @@ gdk_to_wl_actions (GdkDragAction action)
 }
 
 static void
-gdk_wayland_drag_drag_drop (GdkDrag *drag,
-                            guint32  time)
-{
-}
-
-static void
 gdk_wayland_drag_init (GdkWaylandDrag *drag_wayland)
 {
   GdkDrag *drag;
@@ -196,7 +190,6 @@ gdk_wayland_drag_class_init (GdkWaylandDragClass *klass)
 
   object_class->finalize = gdk_wayland_drag_finalize;
 
-  drag_class->drag_drop = gdk_wayland_drag_drag_drop;
   drag_class->get_drag_surface = gdk_wayland_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_wayland_drag_set_hotspot;
   drag_class->drop_done = gdk_wayland_drag_drop_done;
@@ -362,7 +355,7 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
 }
 
 GdkDrag *
-_gdk_wayland_surface_drag_begin (GdkSurface          *surface,
+_gdk_wayland_surface_drag_begin (GdkSurface         *surface,
                                  GdkDevice          *device,
                                  GdkContentProvider *content,
                                  GdkDragAction       actions,
@@ -379,11 +372,13 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
   seat = gdk_device_get_seat (device);
 
   drag_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG,
+                               "surface", surface,
                                "device", device,
                                "content", content,
+                               "actions", actions,
                                NULL);
+
   drag = GDK_DRAG (drag_wayland);
-  drag->source_surface = g_object_ref (surface);
 
   drag_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
   drag_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (drag_wayland->dnd_surface);
@@ -412,14 +407,3 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 
   return drag;
 }
-
-void
-_gdk_wayland_drag_set_source_surface (GdkDrag    *drag,
-                                      GdkSurface *surface)
-{
-  if (drag->source_surface)
-    g_object_unref (drag->source_surface);
-
-  drag->source_surface = surface ? g_object_ref (surface) : NULL;
-}
-
