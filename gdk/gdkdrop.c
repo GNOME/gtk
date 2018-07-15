@@ -98,6 +98,7 @@ gdk_drop_read_local_async (GdkDrop             *self,
   GdkContentFormats *content_formats;
   const char *mime_type;
   GTask *task;
+  GdkContentProvider *content;
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
@@ -111,7 +112,9 @@ gdk_drop_read_local_async (GdkDrop             *self,
       return;
     }
 
-  content_formats = gdk_content_provider_ref_formats (priv->drag->content);
+  g_object_get (priv->drag, "content", &content, NULL);
+  content_formats = gdk_content_provider_ref_formats (content);
+  g_object_unref (content); 
   content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
   mime_type = gdk_content_formats_match_mime_type (content_formats, formats);
 
@@ -724,8 +727,16 @@ gdk_drop_read_value_internal (GdkDrop             *self,
   if (priv->drag)
     {
       GError *error = NULL;
+      GdkContentProvider *content;
+      gboolean res;
 
-      if (gdk_content_provider_get_value (priv->drag->content, value, &error))
+      g_object_get (priv->drag, "content", &content, NULL);
+
+      res = gdk_content_provider_get_value (content, value, &error);
+
+      g_object_unref (content);
+
+      if (res)
         {
           g_task_return_pointer (task, value, NULL);
           g_object_unref (task);
