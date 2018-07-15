@@ -785,6 +785,7 @@ gdk_win32_drag_finalize (GObject *object)
 
 static GdkDrag *
 gdk_drag_new (GdkDisplay         *display,
+              GdkSurface         *surface,
               GdkContentProvider *content,
               GdkDragAction       actions,
               GdkDevice          *device,
@@ -797,6 +798,8 @@ gdk_drag_new (GdkDisplay         *display,
   drag_win32 = g_object_new (GDK_TYPE_WIN32_DRAG,
                              "device", device,
                              "content", content,
+                             "surface", surface,
+                             "actions", actions,
                              NULL);
 
   drag = GDK_DRAG (drag_win32);
@@ -806,7 +809,6 @@ gdk_drag_new (GdkDisplay         *display,
   else
     drag_win32->scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, NULL);
 
-  gdk_drag_set_actions (drag, actions);
   drag_win32->protocol = protocol;
 
   return drag;
@@ -1590,18 +1592,23 @@ source_context_new (GdkDrag           *drag,
 {
   GdkWin32Drag *drag_win32;
   source_drag_context *result;
+  GdkSurface *surface;
 
   drag_win32 = GDK_WIN32_DRAG (drag);
+
+  g_object_get (drag, "surface", &surface, NULL);
 
   result = g_new0 (source_drag_context, 1);
   result->drag = g_object_ref (drag);
   result->ids.lpVtbl = &ids_vtbl;
   result->idsn.lpVtbl = &idsn_vtbl;
   result->ref_count = 1;
-  result->source_window_handle = GDK_SURFACE_HWND (drag->source_surface);
+  result->source_window_handle = GDK_SURFACE_HWND (surface);
   result->scale = drag_win32->scale;
   result->util_data.state = GDK_WIN32_DND_PENDING; /* Implicit */
   result->dest_window_handle = INVALID_HANDLE_VALUE;
+
+  g_object_unref (surface);
 
   GDK_NOTE (DND, g_print ("source_context_new: %p (drag %p)\n", result, result->drag));
 
@@ -1715,13 +1722,12 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
   g_return_val_if_fail (surface != NULL, NULL);
 
   drag = gdk_drag_new (gdk_surface_get_display (surface),
+                       surface,
                        content,
                        actions,
                        device,
                        use_ole2_dnd ? GDK_DRAG_PROTO_OLE2 : GDK_DRAG_PROTO_LOCAL);
   drag_win32 = GDK_WIN32_DRAG (drag);
-
-  g_set_object (&drag->source_surface, surface);
 
   GDK_NOTE (DND, g_print ("_gdk_win32_surface_drag_begin\n"));
 
