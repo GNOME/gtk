@@ -54,20 +54,6 @@ struct _GdkDragClass {
 
 struct _GdkDrag {
   GObject parent_instance;
-
-  /*< private >*/
-  GdkSurface *source_surface;
-  GdkSurface *drag_surface;
-
-  GdkDisplay *display;
-  GdkDevice *device;
-  GdkContentFormats *formats;
-  GdkContentProvider *content;
-
-  GdkDragAction actions;
-  GdkDragAction selected_action;
-
-  guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
 
 void     gdk_drag_set_cursor          (GdkDrag        *drag,
