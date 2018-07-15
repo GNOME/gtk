@@ -104,7 +104,6 @@ G_BEGIN_DECLS
 
 
 typedef struct _GdkEventAny	    GdkEventAny;
-typedef struct _GdkEventExpose	    GdkEventExpose;
 typedef struct _GdkEventMotion	    GdkEventMotion;
 typedef struct _GdkEventButton	    GdkEventButton;
 typedef struct _GdkEventTouch       GdkEventTouch;
@@ -144,8 +143,6 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  *   hidden or destroyed, usually when the user clicks on a special icon in the
  *   title bar.
  * @GDK_DESTROY: the surface has been destroyed.
- * @GDK_EXPOSE: all or part of the surface has become visible and needs to be
- *   redrawn.
  * @GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
  * @GDK_BUTTON_PRESS: a mouse button has been pressed.
  * @GDK_BUTTON_RELEASE: a mouse button has been released.
@@ -203,7 +200,6 @@ typedef enum
   GDK_NOTHING,
   GDK_DELETE,
   GDK_DESTROY,
-  GDK_EXPOSE,
   GDK_MOTION_NOTIFY,
   GDK_BUTTON_PRESS,
   GDK_BUTTON_RELEASE,
