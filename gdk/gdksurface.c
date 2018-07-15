@@ -2607,38 +2607,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     gdk_surface_invalidate_in_parent (surface);
 }
 
-/**
- * gdk_surface_withdraw:
- * @surface: a toplevel #GdkSurface
- *
- * Withdraws a surface (unmaps it and asks the surface manager to forget about it).
- * This function is not really useful as gdk_surface_hide() automatically
- * withdraws toplevel surfaces before hiding them.
- **/
-void
-gdk_surface_withdraw (GdkSurface *surface)
-{
-  GdkSurfaceImplClass *impl_class;
-  GdkGLContext *current_context;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  if (gdk_surface_has_impl (surface))
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->withdraw (surface);
-
-      current_context = gdk_gl_context_get_current ();
-      if (current_context != NULL && gdk_gl_context_get_surface (current_context) == surface)
-        gdk_gl_context_clear_current ();
-
-      recompute_visible_regions (surface, FALSE);
-    }
-}
-
 static void
 gdk_surface_move_resize_toplevel (GdkSurface *surface,
                                   gboolean   with_move,

@@ -1299,7 +1299,7 @@ gdk_surface_x11_hide (GdkSurface *surface)
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP: /* ? */
-      gdk_surface_withdraw (surface);
+      gdk_surface_x11_withdraw (surface);
       return;
       
     case GDK_SURFACE_CHILD:
