@@ -398,7 +398,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  *   position for the natural size, or %NULL
  *
  * Measures @widget in the orientation @orientation and for the given @for_size.
- * As an example, if @orientation is GTK_ORIENTATION_HORIZONTAL and @for_size is 300,
+ * As an example, if @orientation is %GTK_ORIENTATION_HORIZONTAL and @for_size is 300,
  * this functions will compute the minimum and natural width of @widget if
  * it is allocated at a height of 300 pixels.
  *
