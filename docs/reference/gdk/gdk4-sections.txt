@@ -193,7 +193,6 @@ gdk_surface_is_visible
 gdk_surface_is_viewable
 gdk_surface_is_input_only
 gdk_surface_get_state
-gdk_surface_withdraw
 gdk_surface_iconify
 gdk_surface_deiconify
 gdk_surface_stick
