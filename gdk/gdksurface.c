@@ -2334,7 +2334,7 @@ gdk_surface_show_unraised (GdkSurface *surface)
  * other surfaces with the same parent surface appear below @surface.
  * This is true whether or not the surfaces are visible.
  *
- * If @surface is a toplevel, the surface manager may choose to deny the
+ * If @surface is a toplevel, the window manager may choose to deny the
  * request to move the surface in the Z-order, gdk_surface_raise() only
  * requests the restack, does not guarantee it.
  */
@@ -3432,7 +3432,7 @@ gdk_surface_merge_child_input_shapes (GdkSurface *surface)
  * gdk_surface_get_modal_hint:
  * @surface: A toplevel #GdkSurface.
  *
- * Determines whether or not the surface manager is hinted that @surface
+ * Determines whether or not the window manager is hinted that @surface
  * has modal behaviour.
  *
  * Returns: whether or not the surface has the modal hint set.
@@ -4410,7 +4410,7 @@ gdk_surface_set_transient_for (GdkSurface *surface,
  * @x: (out): return location for X position of surface frame
  * @y: (out): return location for Y position of surface frame
  *
- * Obtains the top-left corner of the surface manager frame in root
+ * Obtains the top-left corner of the window manager frame in root
  * surface coordinates.
  *
  **/
