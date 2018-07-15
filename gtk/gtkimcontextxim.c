@@ -1603,6 +1603,7 @@ on_status_toplevel_configure (GtkWidget     *toplevel,
 			      GdkEvent      *event,
 			      StatusWindow  *status_window)
 {
+#if 0
   if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
     {
       GdkRectangle rect;
@@ -1625,6 +1626,7 @@ on_status_toplevel_configure (GtkWidget     *toplevel,
           gtk_window_move (GTK_WINDOW (status_window->window), rect.x, y);
         }
     }
+#endif
 
   return GDK_EVENT_PROPAGATE;
 }
