@@ -352,26 +352,6 @@ struct _GdkEventFocus
 };
 
 /*
- * GdkEventConfigure:
- * @type: the type of the event (%GDK_CONFIGURE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @x: the new x coordinate of the surface, relative to its parent.
- * @y: the new y coordinate of the surface, relative to its parent.
- * @width: the new width of the surface.
- * @height: the new height of the surface.
- *
- * Generated when a surface size or position has changed.
- */
-struct _GdkEventConfigure
-{
-  GdkEventAny any;
-  gint x, y;
-  gint width;
-  gint height;
-};
-
-/*
  * GdkEventProximity:
  * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
  * @surface: the surface which received the event.
@@ -601,7 +581,6 @@ struct _GdkEventPadGroupMode {
  * @key: a #GdkEventKey
  * @crossing: a #GdkEventCrossing
  * @focus_change: a #GdkEventFocus
- * @configure: a #GdkEventConfigure
  * @proximity: a #GdkEventProximity
  * @dnd: a #GdkEventDND
  * @grab_broken: a #GdkEventGrabBroken
@@ -653,7 +632,6 @@ union _GdkEvent
   GdkEventKey		    key;
   GdkEventCrossing	    crossing;
   GdkEventFocus		    focus_change;
-  GdkEventConfigure	    configure;
   GdkEventProximity	    proximity;
   GdkEventDND               dnd;
   GdkEventGrabBroken        grab_broken;

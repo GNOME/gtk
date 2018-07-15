@@ -827,7 +827,6 @@ gdk_event_get_time (const GdkEvent *event)
         return event->pad_axis.time;
       case GDK_PAD_GROUP_MODE:
         return event->pad_group_mode.time;
-      case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
       case GDK_DELETE:
@@ -897,7 +896,6 @@ gdk_event_get_state (const GdkEvent  *event,
       case GDK_LEAVE_NOTIFY:
 	*state =  event->crossing.state;
         return TRUE;
-      case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
@@ -949,10 +947,6 @@ gdk_event_get_coords (const GdkEvent *event,
 
   switch ((guint) event->any.type)
     {
-    case GDK_CONFIGURE:
-      x = event->configure.x;
-      y = event->configure.y;
-      break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       x = event->crossing.x;
@@ -1083,10 +1077,6 @@ gdk_event_set_coords (GdkEvent *event,
 
   switch ((guint) event->any.type)
     {
-    case GDK_CONFIGURE:
-      event->configure.x = x;
-      event->configure.y = y;
-      break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       event->crossing.x = x;
