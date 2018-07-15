@@ -11,7 +11,7 @@ gdk_x11_sources = files([
   'gdkdevicemanager-x11.c',
   'gdkdevicemanager-xi2.c',
   'gdkdisplay-x11.c',
-  'gdkdnd-x11.c',
+  'gdkdrag-x11.c',
   'gdkdrop-x11.c',
   'gdkeventsource.c',
   'gdkeventtranslator.c',
