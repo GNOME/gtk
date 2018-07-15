@@ -3954,7 +3954,6 @@ _gdk_make_event (GdkSurface    *surface,
       break;
 
     case GDK_FOCUS_CHANGE:
-    case GDK_CONFIGURE:
     case GDK_MAP:
     case GDK_UNMAP:
     case GDK_DELETE:

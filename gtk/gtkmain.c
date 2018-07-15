@@ -1846,9 +1846,6 @@ gtk_main_do_event (GdkEvent *event)
         }
       break;
 
-    case GDK_CONFIGURE:
-      break;
-
     case GDK_FOCUS_CHANGE:
     case GDK_UNMAP:
     case GDK_GRAB_BROKEN:
