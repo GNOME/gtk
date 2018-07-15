@@ -5091,14 +5091,6 @@ gtk_widget_event (GtkWidget       *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
-  if (event->any.type == GDK_EXPOSE)
-    {
-      g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
-		 "the same effect, call gdk_surface_invalidate_rect/region(), "
-		 "followed by gdk_surface_process_updates().");
-      return TRUE;
-    }
-
   return gtk_widget_event_internal (widget, event);
 }
 
@@ -5174,14 +5166,6 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
-  if (event->any.type == GDK_EXPOSE)
-    {
-      g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
-		 "the same effect, call gdk_surface_invalidate_rect/region(), "
-		 "followed by gdk_surface_process_updates().");
-      return TRUE;
-    }
-
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
@@ -5217,7 +5201,6 @@ event_surface_is_still_viewable (const GdkEvent *event)
    */
   switch ((guint) event->any.type)
     {
-    case GDK_EXPOSE:
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_PRESS:
     case GDK_KEY_PRESS:
@@ -5284,7 +5267,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
   /* Non input events get handled right away */
   switch ((guint) event->any.type)
     {
-    case GDK_EXPOSE:
     case GDK_NOTHING:
     case GDK_DELETE:
     case GDK_DESTROY:
@@ -11513,6 +11495,14 @@ gtk_widget_set_surface (GtkWidget *widget,
     }
 }
 
+static void
+surface_expose (GdkSurface     *surface,
+                cairo_region_t *region,
+                GtkWidget      *widget)
+{
+  gtk_widget_render (widget, surface, region);
+}
+
 /**
  * gtk_widget_register_surface:
  * @widget: a #GtkWidget
@@ -11540,6 +11530,8 @@ gtk_widget_register_surface (GtkWidget    *widget,
   g_assert (user_data == NULL);
 
   gdk_surface_set_user_data (surface, widget);
+
+  g_signal_connect (surface, "expose", G_CALLBACK (surface_expose), widget);
 }
 
 /**
@@ -11563,6 +11555,8 @@ gtk_widget_unregister_surface (GtkWidget    *widget,
   gdk_surface_get_user_data (surface, &user_data);
   g_assert (user_data == widget);
   gdk_surface_set_user_data (surface, NULL);
+
+  g_signal_handlers_disconnect_by_func (surface, surface_expose, widget);
 }
 
 /**

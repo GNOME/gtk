@@ -646,11 +646,6 @@ gdk_event_copy (const GdkEvent *event)
       g_object_ref (event->dnd.drop);
       break;
 
-    case GDK_EXPOSE:
-      if (event->expose.region)
-        new_event->expose.region = cairo_region_copy (event->expose.region);
-      break;
-
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
@@ -730,11 +725,6 @@ gdk_event_finalize (GObject *object)
       g_free (event->touch.axes);
       break;
 
-    case GDK_EXPOSE:
-      if (event->expose.region)
-	cairo_region_destroy (event->expose.region);
-      break;
-      
     case GDK_MOTION_NOTIFY:
       g_clear_object (&event->motion.tool);
       g_free (event->motion.axes);
@@ -832,7 +822,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_DESTROY:
-      case GDK_EXPOSE:
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_GRAB_BROKEN:
@@ -908,7 +897,6 @@ gdk_event_get_state (const GdkEvent  *event,
       case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_DESTROY:
-      case GDK_EXPOSE:
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_GRAB_BROKEN:

@@ -64,23 +64,6 @@ struct _GdkEventAny
 };
 
 /*
- * GdkEventExpose:
- * @type: the type of the event (%GDK_EXPOSE)
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @area: bounding box of @region.
- * @region: the region that needs to be redrawn.
- *
- * Generated when all or part of a surface becomes visible and needs to be
- * redrawn.
- */
-struct _GdkEventExpose
-{
-  GdkEventAny any;
-  cairo_region_t *region;
-};
-
-/*
  * GdkEventMotion:
  * @type: the type of the event.
  * @surface: the surface which received the event.
@@ -593,7 +576,6 @@ struct _GdkEventPadGroupMode {
  * GdkEvent:
  * @type: the #GdkEventType
  * @any: a #GdkEventAny
- * @expose: a #GdkEventExpose
  * @motion: a #GdkEventMotion
  * @button: a #GdkEventButton
  * @touch: a #GdkEventTouch
@@ -645,7 +627,6 @@ struct _GdkEventPadGroupMode {
 union _GdkEvent
 {
   GdkEventAny		    any;
-  GdkEventExpose	    expose;
   GdkEventMotion	    motion;
   GdkEventButton	    button;
   GdkEventTouch             touch;

@@ -1827,11 +1827,6 @@ gtk_main_do_event (GdkEvent *event)
         }
       break;
 
-    case GDK_EXPOSE:
-      if (event->any.surface)
-        gtk_widget_render (event_widget, event->any.surface, event->expose.region);
-      break;
-
     case GDK_MAP:
       if (GTK_IS_WINDOW (event_widget) && !_gtk_widget_get_mapped (event_widget))
         {

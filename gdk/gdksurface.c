@@ -97,6 +97,7 @@
 
 enum {
   MOVED_TO_RECT,
+  EXPOSE,
   LAST_SIGNAL
 };
 
@@ -310,6 +311,16 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_POINTER,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
+
+  signals[EXPOSE] =
+    g_signal_new (g_intern_static_string ("expose"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE, 1, CAIRO_GOBJECT_TYPE_REGION);
 }
 
 static void
@@ -1617,20 +1628,11 @@ static void
 gdk_surface_process_updates_recurse (GdkSurface *surface,
                                      cairo_region_t *expose_region)
 {
-  GdkEvent *event;
-
   if (surface->destroyed)
     return;
 
   /* Paint the surface before the children, clipped to the surface region */
-
-  event = gdk_event_new (GDK_EXPOSE);
-  event->any.surface = g_object_ref (surface);
-  event->any.send_event = FALSE;
-  event->expose.region = cairo_region_reference (expose_region);
-
-  _gdk_event_emit (event);
-  g_object_unref (event);
+  g_signal_emit (surface, signals[EXPOSE], 0, expose_region);
 }
 
 /* Process and remove any invalid area on the native surface by creating
@@ -3913,7 +3915,6 @@ _gdk_make_event (GdkSurface    *surface,
     case GDK_UNMAP:
     case GDK_DELETE:
     case GDK_DESTROY:
-    case GDK_EXPOSE:
     default:
       break;
     }
