@@ -109,9 +109,6 @@ typedef guint64 GtkCssChange;
  * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
  *   only affect elements that can be focused.
- * @GTK_CSS_AFFECTS_CLIP: Changes in this property may have an effect
- *   on the clipping area of the element. Changes in these properties
- *   should cause a reevaluation of the element's clip area.
  * @GTK_CSS_AFFECTS_SIZE: Changes in this property may have an effect
  *   on the allocated size of the element. Changes in these properties
  *   should cause a recomputation of the element's allocated size.
@@ -135,9 +132,8 @@ typedef enum {
   GTK_CSS_AFFECTS_ICON          = (1 << 7),
   GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 8),
   GTK_CSS_AFFECTS_OUTLINE       = (1 << 9),
-  GTK_CSS_AFFECTS_CLIP          = (1 << 10),
-  GTK_CSS_AFFECTS_SIZE          = (1 << 11),
-  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 12)
+  GTK_CSS_AFFECTS_SIZE          = (1 << 10),
+  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 11)
 } GtkCssAffects;
 
 #define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_CONTENT |       \
