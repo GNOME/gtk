@@ -564,29 +564,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   gtk_widget_get_surface_allocation (widget, &allocation);
 
-  /* We want to use subsurfaces for popovers, so they can extend outside
-   * the main window, but for that, we first need to have clean subsurface
-   * support that works with GSK.
-   */
-#if 0
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-
-      g_assert (GTK_IS_WINDOW (toplevel));
-
-      surface = gdk_wayland_surface_new_subsurface (gtk_widget_get_display (toplevel),
-						    &allocation);
-
-      gdk_surface_set_transient_for (surface,
-				     gtk_widget_get_surface (toplevel));
-    }
-  else
-#endif
-    {
-      surface = gdk_surface_new_child (gtk_widget_get_parent_surface (widget),
-				       &allocation);
-    }
+  surface = gdk_surface_new_child (gtk_widget_get_parent_surface (widget), &allocation);
 
   gtk_widget_set_surface (widget, surface);
   gtk_widget_register_surface (widget, surface);
