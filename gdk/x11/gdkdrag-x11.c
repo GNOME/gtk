@@ -2085,9 +2085,10 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   ipc_surface = gdk_surface_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
 
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
+                                   "surface", ipc_surface,
                                    "device", device,
                                    "content", content,
-                                   "surface", ipc_surface,
+                                   "actions", actions,
                                    NULL);
   x11_drag = GDK_X11_DRAG (drag);
 
