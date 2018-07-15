@@ -372,9 +372,10 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
   seat = gdk_device_get_seat (device);
 
   drag_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG,
+                               "surface", surface,
                                "device", device,
                                "content", content,
-                               "surface", surface,
+                               "actions", actions,
                                NULL);
 
   drag = GDK_DRAG (drag_wayland);
