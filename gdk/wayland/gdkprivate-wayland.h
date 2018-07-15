@@ -115,9 +115,6 @@ void             gdk_wayland_drop_set_source_actions       (GdkDrop             
 void             gdk_wayland_drop_set_action               (GdkDrop               *drop,
                                                             uint32_t               action);
 
-void _gdk_wayland_drag_set_source_surface (GdkDrag    *drag,
-                                           GdkSurface *surface);
-
 void _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
                                                GdkSurface     *surface,
                                                GdkSurface     *real_parent,

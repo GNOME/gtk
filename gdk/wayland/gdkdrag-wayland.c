@@ -355,7 +355,7 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
 }
 
 GdkDrag *
-_gdk_wayland_surface_drag_begin (GdkSurface          *surface,
+_gdk_wayland_surface_drag_begin (GdkSurface         *surface,
                                  GdkDevice          *device,
                                  GdkContentProvider *content,
                                  GdkDragAction       actions,
@@ -405,14 +405,3 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 
   return drag;
 }
-
-void
-_gdk_wayland_drag_set_source_surface (GdkDrag    *drag,
-                                      GdkSurface *surface)
-{
-  if (drag->source_surface)
-    g_object_unref (drag->source_surface);
-
-  drag->source_surface = surface ? g_object_ref (surface) : NULL;
-}
-
