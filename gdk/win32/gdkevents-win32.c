@@ -777,7 +777,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_NOTHING);
     CASE (GDK_DELETE);
     CASE (GDK_DESTROY);
-    CASE (GDK_EXPOSE);
     CASE (GDK_MOTION_NOTIFY);
     CASE (GDK_BUTTON_PRESS);
     CASE (GDK_BUTTON_RELEASE);
@@ -786,7 +785,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_ENTER_NOTIFY);
     CASE (GDK_LEAVE_NOTIFY);
     CASE (GDK_FOCUS_CHANGE);
-    CASE (GDK_CONFIGURE);
     CASE (GDK_MAP);
     CASE (GDK_UNMAP);
     CASE (GDK_PROXIMITY_IN);
@@ -807,8 +805,6 @@ _gdk_win32_print_event (const GdkEvent *event)
 
   switch (event->any.type)
     {
-    case GDK_EXPOSE:
-      break;
     case GDK_MOTION_NOTIFY:
       g_print ("(%.4g,%.4g) (%.4g,%.4g)",
 	       event->motion.x, event->motion.y,
@@ -860,11 +856,6 @@ _gdk_win32_print_event (const GdkEvent *event)
       break;
     case GDK_FOCUS_CHANGE:
       g_print ("%s", (event->focus_change.in ? "IN" : "OUT"));
-      break;
-    case GDK_CONFIGURE:
-      g_print ("x:%d y:%d w:%d h:%d",
-	       event->configure.x, event->configure.y,
-	       event->configure.width, event->configure.height);
       break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
@@ -1429,17 +1420,7 @@ _gdk_win32_do_emit_configure_event (GdkSurface *window,
 
   _gdk_surface_update_size (window);
 
-  event = gdk_event_new (GDK_CONFIGURE);
-
-  event->any.surface = window;
-
-  event->configure.width = window->width;
-  event->configure.height = window->height;
-
-  event->configure.x = window->x;
-  event->configure.y = window->y;
-
-  _gdk_win32_append_event (event);
+  g_signal_emit_by_name (window, "size-changed", window->width, window->height);
 }
 
 void
