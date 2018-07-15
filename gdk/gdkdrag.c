@@ -55,6 +55,7 @@ enum {
   PROP_FORMATS,
   PROP_SELECTED_ACTION,
   PROP_ACTIONS,
+  PROP_SURFACE,
   N_PROPERTIES
 };
 
@@ -68,7 +69,7 @@ enum {
 typedef struct _GdkDragPrivate GdkDragPrivate;
 
 struct _GdkDragPrivate {
-  GdkSurface *source_surface;
+  GdkSurface *surface;
 
   GdkDisplay *display;
   GdkDevice *device;
@@ -266,6 +267,11 @@ gdk_drag_set_property (GObject      *gobject,
       }
     break;
 
+    case PROP_SURFACE:
+      priv->surface = g_value_dup_object (value);
+      g_assert (priv->surface != NULL);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -307,6 +313,10 @@ gdk_drag_get_property (GObject    *gobject,
       g_value_set_flags (value, priv->actions);
       break;
 
+    case PROP_SURFACE:
+      g_value_set_object (value, priv->surface);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -324,8 +334,7 @@ gdk_drag_finalize (GObject *object)
   g_clear_object (&priv->content);
   g_clear_pointer (&priv->formats, gdk_content_formats_unref);
 
-  if (priv->source_surface)
-    g_object_unref (priv->source_surface);
+  g_clear_object (&priv->surface);
 
   G_OBJECT_CLASS (gdk_drag_parent_class)->finalize (object);
 }
@@ -417,6 +426,17 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SURFACE] =
+    g_param_spec_object ("surface",
+                         "Surface",
+                         "The surface where the drag originates",
+                         GDK_TYPE_SURFACE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GdkDrag::cancel:
    * @drag: The object on which the signal is emitted
