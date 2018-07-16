@@ -60,6 +60,8 @@
  **/
 #include "config.h"
 
+#include "math.h"
+
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkeventcontrollerprivate.h"
