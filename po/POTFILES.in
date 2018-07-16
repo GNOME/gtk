@@ -35,7 +35,7 @@ gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkclipboard-x11.c
 gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkdevice-xi2.c
-gdk/x11/gdkdnd-x11.c
+gdk/x11/gdkdrag-x11.c
 gdk/x11/gdkdrop-x11.c
 gdk/x11/gdkglcontext-x11.c
 gdk/x11/gdkmain-x11.c
