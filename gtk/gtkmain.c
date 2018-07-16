@@ -1827,17 +1827,6 @@ gtk_main_do_event (GdkEvent *event)
         }
       break;
 
-    case GDK_CONFIGURE:
-      if (GTK_IS_WINDOW (event_widget) &&
-          _gtk_widget_get_surface (event_widget) == event->any.surface)
-        {
-          gtk_window_configure (GTK_WINDOW (event_widget),
-                                event->configure.width,
-                                event->configure.height);
-        }
-
-      break;
-
     case GDK_FOCUS_CHANGE:
     case GDK_GRAB_BROKEN:
       if (!_gtk_widget_captured_event (event_widget, event))

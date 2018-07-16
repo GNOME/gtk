@@ -5486,3 +5486,16 @@ gdk_synthesize_surface_state (GdkSurface     *surface,
 {
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }
+
+gboolean
+gdk_surface_handle_event (GdkEvent *event)
+{
+  if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
+    {
+      g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
+                     event->configure.width, event->configure.height);
+      return TRUE;
+    }
+
+  return FALSE;
+}

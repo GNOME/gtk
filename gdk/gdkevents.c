@@ -168,6 +168,9 @@ _gdk_event_emit (GdkEvent *event)
   if (gdk_drag_handle_source_event (event))
     return;
 
+  if (gdk_surface_handle_event (event))
+    return;
+
   if (_gdk_event_func)
     (*_gdk_event_func) (event, _gdk_event_data);
 }

@@ -291,6 +291,8 @@ GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
 void gdk_surface_get_unscaled_size (GdkSurface *surface,
                                     int *unscaled_width,
                                     int *unscaled_height);
+gboolean gdk_surface_handle_event (GdkEvent       *event);
+
 
 /*****************************************
  * Interfaces provided by windowing code *
