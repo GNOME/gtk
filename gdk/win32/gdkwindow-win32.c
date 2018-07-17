@@ -2127,27 +2127,33 @@ gdk_win32_window_set_transient_for (GdkWindow *window,
       return;
     }
 
-  if (parent == NULL)
+  if (window_impl->transient_owner == parent)
+    return;
+
+  if (GDK_IS_WINDOW (window_impl->transient_owner))
     {
       GdkWindowImplWin32 *trans_impl = GDK_WINDOW_IMPL_WIN32 (window_impl->transient_owner->impl);
-      if (trans_impl->transient_children != NULL)
-        {
-          item = g_slist_find (trans_impl->transient_children, window);
-          item->data = NULL;
-          trans_impl->transient_children = g_slist_delete_link (trans_impl->transient_children, item);
-          trans_impl->num_transients--;
+      g_assert (trans_impl->transient_children);
 
-          if (!trans_impl->num_transients)
-            {
-              trans_impl->transient_children = NULL;
-            }
+      item = g_slist_find (trans_impl->transient_children, window);
+      g_assert (item);
+
+      item->data = NULL;
+      trans_impl->transient_children = g_slist_delete_link (trans_impl->transient_children, item);
+      trans_impl->num_transients--;
+
+      if (!trans_impl->num_transients)
+        {
+          trans_impl->transient_children = NULL;
         }
+
       g_object_unref (G_OBJECT (window_impl->transient_owner));
       g_object_unref (G_OBJECT (window));
 
       window_impl->transient_owner = NULL;
     }
-  else
+
+  if (parent)
     {
       parent_impl = GDK_WINDOW_IMPL_WIN32 (parent->impl);
 
