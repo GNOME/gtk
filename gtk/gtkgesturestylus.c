@@ -250,9 +250,9 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
  * @gesture: a #GtkGestureStylus
  *
  * Returns the #GdkDeviceTool currently driving input through this gesture.
- * This function must be called from either the #GtkGestureStylus:down,
- * #GtkGestureStylus:motion, #GtkGestureStylus:up or #GtkGestureStylus:proximity
- * signals.
+ * This function must be called from either the #GtkGestureStylus::down,
+ * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
+ * signal handlers.
  *
  * Returns: (nullable) (transfer none): The current stylus tool
  *
