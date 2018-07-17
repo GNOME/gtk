@@ -1991,12 +1991,12 @@ file_list_drag_drop_cb (GtkWidget             *widget,
 
 static void
 file_list_drag_begin_cb (GtkWidget            *widget,
-                         GdkDrop              *drop,
+                         GdkDrag              *context,
                          GtkFileChooserWidget *impl)
 {
   gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (impl->priv->places_sidebar),
                                                TRUE,
-                                               drop);
+                                               context);
 }
 
 /* Disable the normal tree drag motion handler, it makes it look like you're
@@ -2014,7 +2014,7 @@ file_list_drag_motion_cb (GtkWidget             *widget,
 
 static void
 file_list_drag_end_cb (GtkWidget      *widget,
-                       GdkDrop        *drop,
+                       GdkDrag        *context,
                        gpointer        user_data)
 {
   GtkFileChooserWidget *impl;
@@ -2022,7 +2022,7 @@ file_list_drag_end_cb (GtkWidget      *widget,
   impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (impl->priv->places_sidebar),
                                                FALSE,
-                                               drop);
+                                               context);
 }
 
 /* Sensitizes the "Copy file’s location" and other context menu items if there is actually
