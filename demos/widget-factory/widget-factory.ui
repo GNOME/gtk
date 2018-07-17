@@ -2227,6 +2227,9 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
+                                      <object class="GtkSeparatorToolItem"/>
+                                    </child>
+                                    <child>
                                       <object class="GtkToolButton">
                                         <property name="label" translatable="yes">Search</property>
                                         <property name="icon-name">edit-find</property>
