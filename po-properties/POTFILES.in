@@ -140,6 +140,9 @@ gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkeventcontroller.c
+gtk/gtkeventcontrollerkey.c
+gtk/gtkeventcontrollermotion.c
+gtk/gtkeventcontrollerscroll.c
 gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
 gtk/gtkfilechooser.c
@@ -167,6 +170,7 @@ gtk/gtkgesturemultipress.c
 gtk/gtkgesturepan.c
 gtk/gtkgesturerotate.c
 gtk/gtkgesturesingle.c
+gtk/gtkgesturestylus.c
 gtk/gtkgestureswipe.c
 gtk/gtkgesturezoom.c
 gtk/gtkglarea.c

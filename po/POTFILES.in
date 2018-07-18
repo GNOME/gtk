@@ -162,7 +162,6 @@ gtk/gtkfixed.c
 gtk/gtkflowbox.c
 gtk/gtkfontbutton.c
 gtk/gtkfontchooser.c
-gtk/gtkfontchooser.c
 gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
@@ -361,8 +360,8 @@ gtk/ui/gtkcolorchooserdialog.ui
 gtk/ui/gtkcoloreditor.ui
 gtk/ui/gtkdialog.ui
 gtk/ui/gtkemojichooser.ui
-gtk/ui/gtkfilechooserbutton.ui
 gtk/ui/gtkemojicompletion.ui
+gtk/ui/gtkfilechooserbutton.ui
 gtk/ui/gtkfilechooserdialog.ui
 gtk/ui/gtkfilechooserwidget.ui
 gtk/ui/gtkfontbutton.ui
