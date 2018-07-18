@@ -247,7 +247,7 @@ static void     gtk_menu_grab_notify       (GtkWidget        *widget,
 static gboolean gtk_menu_captured_event    (GtkWidget        *widget,
                                             GdkEvent         *event);
 
-static void     gtk_menu_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+static gboolean gtk_menu_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                    gdouble                   dx,
                                                    gdouble                   dy,
                                                    GtkMenu                  *menu);
@@ -3062,13 +3062,15 @@ gtk_menu_scroll_timeout (gpointer data)
   return TRUE;
 }
 
-static void
+static gboolean
 gtk_menu_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                    gdouble                   dx,
                                    gdouble                   dy,
                                    GtkMenu                  *menu)
 {
   gtk_menu_scroll_by (menu, dy * MENU_SCROLL_STEP2);
+
+  return GDK_EVENT_STOP;
 }
 
 static void
