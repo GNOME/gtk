@@ -29,7 +29,7 @@ Overview of Changes in GTK+ 3.23.1
 Overview of Changes in GTK+ 3.23.0
 ==================================
 
-* D	ependency bumps:
+* Dependency bumps:
  - Require libepoxy 1.4
  - Require pango 1.41
 
