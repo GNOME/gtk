@@ -1,7 +1,35 @@
+Overview of Changes in GTK+ 3.23.1
+==================================
+
+* Backported event controllers from GTK+ 4:
+ - GtkEventControllerScroll
+ - GtkEventControllerMotion
+ - GtkEventControllerKey
+ - GtkGestureStylus
+
+* Support markup in GtkModelButtons
+
+* Themes
+ - The Raleigh theme has been removed
+ - Expander size in HighContrast has been increased
+ 
+* Wayland
+ - Update cursor scale when needed
+ - Decoration negotiation protocol fixes
+
+* Windows
+ - Add an EGL renderer based on ANGLE
+
+* Translation updates:
+ - Brazilian Portuguese
+ - German
+ - Hungarian
+
+
 Overview of Changes in GTK+ 3.23.0
 ==================================
 
-* Dependency bumps:
+* D	ependency bumps:
  - Require libepoxy 1.4
  - Require pango 1.41
 
