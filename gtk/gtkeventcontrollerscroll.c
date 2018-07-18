@@ -56,7 +56,7 @@
  * with two X/Y velocity arguments that are consistent with the motion that
  * was received.
  *
- * This object was added in 3.93.
+ * This object was added in 3.24.
  **/
 #include "config.h"
 
@@ -367,7 +367,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    *
    * The flags affecting event controller behavior
    *
-   * Since: 3.93
+   * Since: 3.24
    **/
   pspecs[PROP_FLAGS] =
     g_param_spec_flags ("flags",
@@ -461,7 +461,7 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
  *
  * Returns: a new #GtkEventControllerScroll
  *
- * Since: 3.93
+ * Since: 3.24
  **/
 GtkEventController *
 gtk_event_controller_scroll_new (GtkWidget                     *widget,
@@ -482,7 +482,7 @@ gtk_event_controller_scroll_new (GtkWidget                     *widget,
  *
  * Sets the flags conditioning scroll controller behavior.
  *
- * Since: 3.93
+ * Since: 3.24
  **/
 void
 gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
@@ -505,7 +505,7 @@ gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
  *
  * Returns: the controller flags.
  *
- * Since: 3.93
+ * Since: 3.24
  **/
 GtkEventControllerScrollFlags
 gtk_event_controller_scroll_get_flags (GtkEventControllerScroll *scroll)

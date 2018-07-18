@@ -37,21 +37,21 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureStylus GtkGestureStylus;
 typedef struct _GtkGestureStylusClass GtkGestureStylusClass;
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_24
 GType             gtk_gesture_stylus_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_24
 GtkGesture *      gtk_gesture_stylus_new      (GtkWidget *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_24
 gboolean          gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
 					       GdkAxisUse        axis,
 					       gdouble          *value);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_24
 gboolean          gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
 					       GdkAxisUse         axes[],
 					       gdouble          **values);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_24
 GdkDeviceTool *   gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture);
 
 G_END_DECLS

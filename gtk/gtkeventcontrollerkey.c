@@ -232,7 +232,7 @@ gtk_event_controller_key_set_im_context (GtkEventControllerKey *controller,
  *
  * Returns: (transfer none): the IM context
  *
- * Since: 3.94
+ * Since: 3.24
  **/
 GtkIMContext *
 gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)

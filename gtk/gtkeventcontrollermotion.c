@@ -26,7 +26,7 @@
  * #GtkEventControllerMotion is an event controller meant for situations
  * where you need to track the position of the pointer.
  *
- * This object was added in 3.94.
+ * This object was added in 3.24.
  **/
 #include "config.h"
 
@@ -156,7 +156,7 @@ gtk_event_controller_motion_init (GtkEventControllerMotion *motion)
  *
  * Returns: a new #GtkEventControllerMotion
  *
- * Since: 3.94
+ * Since: 3.24
  **/
 GtkEventController *
 gtk_event_controller_motion_new (GtkWidget *widget)

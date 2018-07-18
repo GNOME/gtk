@@ -137,7 +137,7 @@ gtk_gesture_stylus_init (GtkGestureStylus *gesture)
  *
  * Returns: a newly created stylus gesture
  *
- * Since: 3.94
+ * Since: 3.24
  **/
 GtkGesture *
 gtk_gesture_stylus_new (GtkWidget *widget)
@@ -170,7 +170,7 @@ gesture_get_current_event (GtkGestureStylus *gesture)
  *
  * Returns: #TRUE if there is a current value for the axis
  *
- * Since: 3.94
+ * Since: 3.24
  **/
 gboolean
 gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
@@ -202,6 +202,8 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
  * signals.
  *
  * Returns: #TRUE if there is a current value for the axes
+ *
+ * Since: 3.24
  **/
 gboolean
 gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
@@ -253,6 +255,8 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
  * signals.
  *
  * Returns: (nullable) (transfer none): The current stylus tool
+ *
+ * Since: 3.24
  **/
 GdkDeviceTool *
 gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture)

@@ -51,7 +51,7 @@ typedef struct _GtkEventControllerScrollClass GtkEventControllerScrollClass;
  *
  * Describes the behavior of a #GtkEventControllerScroll.
  *
- * Since: 3.93
+ * Since: 3.24
  **/
 typedef enum {
   GTK_EVENT_CONTROLLER_SCROLL_NONE       = 0,
