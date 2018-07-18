@@ -338,10 +338,10 @@ static gint calendar_get_xsep          (GtkCalendar *calendar);
 static gint calendar_get_ysep          (GtkCalendar *calendar);
 static gint calendar_get_inner_border  (GtkCalendar *calendar);
 
-static void gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                   gdouble                   dx,
-                                                   gdouble                   dy,
-                                                   GtkWidget                *widget);
+static gboolean gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                       gdouble                   dx,
+                                                       gdouble                   dy,
+                                                       GtkWidget                *widget);
 
 static char    *default_abbreviated_dayname[7];
 static char    *default_monthname[12];
@@ -2684,7 +2684,7 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   gtk_drag_set_icon_default (drag);
 }
 
-static void
+static gboolean
 gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                        gdouble                   dx,
                                        gdouble                   dy,
@@ -2699,6 +2699,8 @@ gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
     calendar_set_month_prev (calendar);
   else if (dy > 0)
     calendar_set_month_next (calendar);
+
+  return GDK_EVENT_STOP;
 }
 
 

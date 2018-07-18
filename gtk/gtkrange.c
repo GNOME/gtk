@@ -235,7 +235,7 @@ static void          gtk_range_allocate_trough          (GtkGizmo            *gi
 static gboolean      gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
 
-static void          gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                          gdouble                   dx,
                                                          gdouble                   dy,
                                                          GtkRange                 *range);
@@ -2226,7 +2226,7 @@ stop_scrolling (GtkRange *range)
   remove_autoscroll (range);
 }
 
-static void
+static gboolean
 gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                     gdouble                   dx,
                                     gdouble                   dy,
@@ -2260,6 +2260,8 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
                  GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
                  &handled);
+
+  return GDK_EVENT_STOP;
 }
 
 static void

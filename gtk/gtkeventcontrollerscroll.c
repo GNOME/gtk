@@ -243,6 +243,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
   gdouble dx = 0, dy = 0;
+  gboolean handled = TRUE;
 
   if (gdk_event_get_event_type (event) != GDK_SCROLL)
     return FALSE;
@@ -324,7 +325,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   if (dx != 0 || dy != 0)
     {
-      g_signal_emit (controller, signals[SCROLL], 0, dx, dy);
+      g_signal_emit (controller, signals[SCROLL], 0, dx, dy, &handled);
 
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
         scroll_history_push (scroll, dx, dy, gdk_event_get_time (event));
@@ -344,7 +345,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
         }
     }
 
-  return TRUE;
+  return handled;
 }
 
 static void
@@ -394,14 +395,16 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    *
    * Signals that the widget should scroll by the
    * amount specified by @dx and @dy.
+   *
+   * Returns: %TRUE if the scroll event was handled, %FALSE otherwise.
    **/
   signals[SCROLL] =
     g_signal_new (I_("scroll"),
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
-                  G_SIGNAL_RUN_FIRST,
+                  G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-		  _gtk_marshal_VOID__DOUBLE_DOUBLE,
-                  G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+		  _gtk_marshal_BOOLEAN__DOUBLE_DOUBLE,
+                  G_TYPE_BOOLEAN, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   /**
    * GtkEventControllerScroll::scroll-end:
    * @controller: The object that received the signal
