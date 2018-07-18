@@ -150,7 +150,7 @@ static void     cb_scale_value_changed          (GtkRange            *range,
 static void     cb_popup_mapped                 (GtkWidget           *popup,
                                                  gpointer             user_data);
 
-static void     gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+static gboolean gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                            gdouble                   dx,
                                                            gdouble                   dy,
                                                            GtkScaleButton           *button);
@@ -766,7 +766,7 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
     }
 }
 
-static void
+static gboolean
 gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                            gdouble                   dx,
                                            gdouble                   dy,
@@ -784,6 +784,8 @@ gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
              gtk_adjustment_get_upper (adjustment));
 
   gtk_scale_button_set_value (button, d);
+
+  return TRUE;
 }
 
 /*

@@ -157,10 +157,10 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
 						   gboolean          current_dir);
 
-static void gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                   gdouble                   dx,
-                                                   gdouble                   dy,
-                                                   GtkPathBar               *path_bar);
+static gboolean gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                       gdouble                   dx,
+                                                       gdouble                   dy,
+                                                       GtkPathBar               *path_bar);
 
 static void
 add_cancellable (GtkPathBar   *path_bar,
@@ -728,7 +728,7 @@ gtk_path_bar_display_changed (GtkWidget  *widget,
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
 }
 
-static void
+static gboolean
 gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                        gdouble                   dx,
                                        gdouble                   dy,
@@ -738,6 +738,8 @@ gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
     gtk_path_bar_scroll_down (path_bar);
   else if (dy < 0)
     gtk_path_bar_scroll_up (path_bar);
+
+  return TRUE;
 }
 
 static void

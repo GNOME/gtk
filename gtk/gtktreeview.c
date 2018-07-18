@@ -800,7 +800,7 @@ static void     gtk_tree_view_search_pressed_cb         (GtkGesture       *gestu
                                                          double            x,
                                                          double            y,
 							 GtkTreeView      *tree_view);
-static void     gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
+static gboolean gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
 							 gdouble           dx,
                                                          gdouble           dy,
 							 GtkTreeView      *tree_view);
@@ -14251,7 +14251,7 @@ gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
   gtk_tree_view_search_window_hide (widget, tree_view, keyb_device);
 }
 
-static void
+static gboolean
 gtk_tree_view_search_scroll_event (GtkWidget   *widget,
                                    gdouble      dx,
                                    gdouble      dy,
@@ -14277,6 +14277,8 @@ gtk_tree_view_search_scroll_event (GtkWidget   *widget,
 		       tree_view);
       g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
     }
+
+  return TRUE;
 }
 
 static gboolean

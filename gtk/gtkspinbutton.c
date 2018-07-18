@@ -689,7 +689,7 @@ swipe_gesture_update (GtkGesture       *gesture,
   gtk_spin_button_real_spin (spin_button, -vel_y / 20);
 }
 
-static void
+static gboolean
 scroll_controller_scroll (GtkEventControllerScroll *Scroll,
 			  gdouble                   dx,
 			  gdouble                   dy,
@@ -701,6 +701,8 @@ scroll_controller_scroll (GtkEventControllerScroll *Scroll,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
   gtk_spin_button_real_spin (spin, -dy * gtk_adjustment_get_step_increment (priv->adjustment));
+
+  return TRUE;
 }
 
 static gboolean

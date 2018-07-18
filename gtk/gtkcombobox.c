@@ -248,7 +248,7 @@ static void     gtk_combo_box_real_move_active     (GtkComboBox      *combo_box,
 static void     gtk_combo_box_real_popup           (GtkComboBox      *combo_box);
 static gboolean gtk_combo_box_real_popdown         (GtkComboBox      *combo_box);
 
-static void     gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+static gboolean gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                         gdouble                   dx,
                                                         gdouble                   dy,
                                                         GtkComboBox              *combo_box);
@@ -1798,7 +1798,7 @@ tree_first (GtkComboBox  *combo,
   return search_data.set;
 }
 
-static void
+static gboolean
 gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                         gdouble                   dx,
                                         gdouble                   dy,
@@ -1810,7 +1810,7 @@ gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   GtkTreeIter new_iter;
 
   if (!gtk_combo_box_get_active_iter (combo_box, &iter))
-    return;
+    return FALSE;
 
   if (dy < 0)
     found = tree_prev (combo_box, priv->model, &iter, &new_iter);
@@ -1819,6 +1819,8 @@ gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
 
   if (found)
     gtk_combo_box_set_active_iter (combo_box, &new_iter);
+
+  return found;
 
 }
 
