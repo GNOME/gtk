@@ -94,6 +94,9 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkeventcontroller.h>
+#include <gtk/gtkeventcontrollerkey.h>
+#include <gtk/gtkeventcontrollermotion.h>
+#include <gtk/gtkeventcontrollerscroll.h>
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooser.h>
@@ -115,6 +118,7 @@
 #include <gtk/gtkgesturepan.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgesturesingle.h>
+#include <gtk/gtkgesturestylus.h>
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkglarea.h>

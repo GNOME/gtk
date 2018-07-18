@@ -192,6 +192,9 @@ gtk_public_h_sources = 		\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkeventcontroller.h	\
+	gtkeventcontrollerkey.h	\
+	gtkeventcontrollermotion.h	\
+	gtkeventcontrollerscroll.h	\
 	gtkexpander.h		\
 	gtkfilechooser.h	\
 	gtkfilechooserbutton.h	\
@@ -213,6 +216,7 @@ gtk_public_h_sources = 		\
 	gtkgesturepan.h		\
 	gtkgesturerotate.h	\
 	gtkgesturesingle.h	\
+	gtkgesturestylus.h	\
 	gtkgestureswipe.h	\
 	gtkgesturezoom.h	\
 	gtkglarea.h		\
@@ -491,6 +495,7 @@ gtk_private_h_sources =		\
 	gtkgesturepanprivate.h	\
 	gtkgesturerotateprivate.h	\
 	gtkgesturesingleprivate.h	\
+	gtkgesturestylusprivate.h	\
 	gtkgestureswipeprivate.h	\
 	gtkgesturezoomprivate.h	\
 	gtkheaderbarprivate.h	\
@@ -757,6 +762,9 @@ gtk_base_c_sources = 		\
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkeventcontroller.c	\
+	gtkeventcontrollerkey.c	\
+	gtkeventcontrollermotion.c	\
+	gtkeventcontrollerscroll.c	\
 	gtkexpander.c		\
 	gtkfilechooser.c	\
 	gtkfilechooserbutton.c	\
@@ -786,6 +794,7 @@ gtk_base_c_sources = 		\
 	gtkgesturepan.c		\
 	gtkgesturerotate.c	\
 	gtkgesturesingle.c	\
+	gtkgesturestylus.c	\
 	gtkgestureswipe.c	\
 	gtkgesturezoom.c	\
 	gtkglarea.c		\
