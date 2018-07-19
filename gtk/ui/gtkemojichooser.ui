@@ -198,6 +198,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="recent.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -208,6 +213,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="people.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -218,6 +228,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="body.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -228,6 +243,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="nature.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -238,6 +258,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="food.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -248,6 +273,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="travel.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -258,6 +288,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="activities.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -268,6 +303,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="objects.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -278,6 +318,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="symbols.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -288,6 +333,11 @@
                         <style>
                           <class name="emoji-section"/>
                         </style>
+                        <child>
+                          <object class="GtkImage" id="flags.icon">
+                            <property name="visible">1</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
