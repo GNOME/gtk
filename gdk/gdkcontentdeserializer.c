@@ -737,6 +737,8 @@ file_uri_deserializer_finish (GObject      *source,
       g_value_take_boxed (value, g_slist_reverse (l));
     }
   g_strfreev (uris);
+
+  gdk_content_deserializer_return_success (deserializer);
 }
 
 static void
