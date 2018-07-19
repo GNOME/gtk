@@ -373,7 +373,8 @@ add_emoji (GtkWidget    *box,
   pango_layout_get_extents (layout, &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
-  if (rect.width >= 1.5 * chooser->emoji_max_width)
+  if (pango_layout_get_unknown_glyphs_count (layout) > 0 ||
+      rect.width >= 1.5 * chooser->emoji_max_width)
     {
       gtk_widget_destroy (label);
       return;
@@ -610,7 +611,8 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   /* Get a reasonable maximum width for an emoji. We do this to
    * skip overly wide fallback rendering for certain emojis the
    * font does not contain and therefore end up being rendered
-   * as multiply glyphs. */
+   * as multiply glyphs.
+   */
   {
     PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (chooser), "🙂");
     PangoAttrList *attrs;
