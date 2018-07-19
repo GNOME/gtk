@@ -404,7 +404,7 @@ add_emoji (GtkWidget    *box,
   pango_layout_get_extents (layout, &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
-  if (rect.width >= 2 * chooser->emoji_max_width)
+  if (rect.width >= 1.5 * chooser->emoji_max_width)
     {
       gtk_widget_destroy (label);
       return;
