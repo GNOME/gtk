@@ -853,29 +853,6 @@ gtk_model_button_size_allocate (GtkWidget           *widget,
 }
 
 static void
-gtk_model_button_snapshot (GtkWidget   *widget,
-                           GtkSnapshot *snapshot)
-{
-  if (GTK_MODEL_BUTTON (widget)->iconic)
-    {
-      GTK_WIDGET_CLASS (gtk_model_button_parent_class)->snapshot (widget, snapshot);
-    }
-  else
-    {
-      GtkWidget *child;
-      GtkModelButton *button = GTK_MODEL_BUTTON (widget);
-
-      if (gtk_widget_get_visible (button->indicator_widget))
-        gtk_widget_snapshot_child (widget, button->indicator_widget, snapshot);
-
-      child = gtk_bin_get_child (GTK_BIN (widget));
-      if (child)
-        gtk_widget_snapshot_child (widget, child, snapshot);
-    }
-
-}
-
-static void
 gtk_model_button_destroy (GtkWidget *widget)
 {
   GtkModelButton *model_button = GTK_MODEL_BUTTON (widget);
@@ -931,7 +908,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 
   widget_class->measure = gtk_model_button_measure;
   widget_class->size_allocate = gtk_model_button_size_allocate;
-  widget_class->snapshot = gtk_model_button_snapshot;
   widget_class->destroy = gtk_model_button_destroy;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
