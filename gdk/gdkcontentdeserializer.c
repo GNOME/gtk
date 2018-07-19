@@ -716,8 +716,7 @@ file_uri_deserializer_finish (GObject      *source,
       return;
     }
 
-  str = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (
-            g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream))));
+  str = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (stream));
   uris = g_uri_list_extract_uris (str);
   g_free (str);
 
@@ -738,6 +737,8 @@ file_uri_deserializer_finish (GObject      *source,
       g_value_take_boxed (value, g_slist_reverse (l));
     }
   g_strfreev (uris);
+
+  gdk_content_deserializer_return_success (deserializer);
 }
 
 static void
