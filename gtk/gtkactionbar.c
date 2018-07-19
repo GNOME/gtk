@@ -259,21 +259,12 @@ gtk_action_bar_set_child_property (GtkContainer *container,
 }
 
 static void
-gtk_action_bar_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  GtkActionBar *self = GTK_ACTION_BAR (widget);
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (self);
-
-  gtk_widget_snapshot_child (GTK_WIDGET (self), priv->revealer, snapshot);
-}
-
-static void
 gtk_action_bar_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
                               int                  baseline)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
   gtk_widget_size_allocate (priv->revealer, allocation, baseline);
 }
 
@@ -364,7 +355,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   object_class->get_property = gtk_action_bar_get_property;
   object_class->finalize = gtk_action_bar_finalize;
 
-  widget_class->snapshot = gtk_action_bar_snapshot;
   widget_class->size_allocate = gtk_action_bar_size_allocate;
   widget_class->measure = gtk_action_bar_measure_;
   widget_class->destroy = gtk_action_bar_destroy;
