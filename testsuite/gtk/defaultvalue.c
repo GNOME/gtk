@@ -398,6 +398,27 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                strcmp (pspec->name, "button-spacing") == 0))
             continue;
 
+          if (g_type_is_a (type, GTK_TYPE_SCROLLBAR) &&
+              (strcmp (pspec->name, "has-backward-stepper") == 0 ||
+               strcmp (pspec->name, "has-forward-stepper") == 0))
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
+              strcmp (pspec->name, "scrollbar-spacing") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&
+              strcmp (pspec->name, "error-underline-color") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TOOL_BUTTON) &&
+              strcmp (pspec->name, "icon-spacing") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TOOL_ITEM_GROUP) &&
+              strcmp (pspec->name, "expander-size") == 0)
+            continue;
+
           /* This is desktop-dependent */
           if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
               strcmp (pspec->name, "decoration-button-layout") == 0)
