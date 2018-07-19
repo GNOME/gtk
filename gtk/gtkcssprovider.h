@@ -87,6 +87,7 @@ gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   const gchar     *path,
                                                   GError         **error);
 
+GDK_DEPRECATED_FOR(gtk_css_provider_new)
 GtkCssProvider * gtk_css_provider_get_default (void);
 
 GtkCssProvider * gtk_css_provider_get_named (const gchar *name,
