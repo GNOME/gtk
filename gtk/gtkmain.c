@@ -1796,7 +1796,7 @@ gtk_main_do_event (GdkEvent *event)
    * Drag events are also not redirected, since it isn't
    * clear what the semantics of that would be.
    */
-  switch (event->any.type)
+  switch ((guint)event->any.type)
     {
     case GDK_NOTHING:
       break;
