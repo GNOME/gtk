@@ -1265,6 +1265,7 @@ gdk_clipboard_get_type
 <SECTION>
 <FILE>gdkcontentprovider</FILE>
 GdkContentProvider
+GdkContentProviderClass
 gdk_content_provider_new_for_value
 gdk_content_provider_new_for_bytes
 gdk_content_provider_ref_formats
@@ -1280,7 +1281,6 @@ GDK_CONTENT_PROVIDER_CLASS
 GDK_CONTENT_PROVIDER_GET_CLASS
 GDK_IS_CONTENT_PROVIDER
 GDK_IS_CONTENT_PROVIDER_CLASS
-GdkContentProviderClass
 gdk_content_provider_get_type
 </SECTION>
 
