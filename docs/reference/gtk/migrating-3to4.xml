@@ -20,11 +20,11 @@
 
     <para>
       The steps outlined in the following sections assume that your
-      application is working with GTK+ 3.22, which is the final stable
+      application is working with GTK+ 3.24, which is the final stable
       release of GTK+ 3.x. It includes all the necessary APIs and tools
       to help you port your application to GTK+ 4. If you are still using
       an older version of GTK+ 3.x, you should first get your application
-      to build and work with the latest minor release in the 3.22 series.
+      to build and work with the latest minor release in the 3.24 series.
     </para>
 
     <section>
@@ -34,7 +34,7 @@
         widgets have been deprecated. These deprecations are clearly spelled
         out in the API reference, with hints about the recommended replacements.
         The API reference for GTK+ 3 also includes an
-        <ulink url="https://developer.gnome.org/gtk3/3.22/api-index-deprecated.html">index</ulink> of all deprecated symbols.
+        <ulink url="https://developer.gnome.org/gtk3/3.24/api-index-deprecated.html">index</ulink> of all deprecated symbols.
       </para>
       <para>
         To verify that your program does not use any deprecated symbols,
@@ -79,13 +79,13 @@
       <title>Review your window creation flags</title>
       <para>
         GTK+ 4 removes the GDK_WA_CURSOR flag. Instead, just use
-        gdk_surface_set_cursor() to set a cursor on the window after
+        gdk_window_set_cursor() to set a cursor on the window after
         creating it.
       </para>
       <para>
         GTK+ 4 also removes the GDK_WA_VISUAL flag, and always uses
         an RGBA visual for windows. To prepare your code for this,
-        use gdk_surface_set_visual (gdk_screen_get_rgba_visual ()) after
+        use gdk_window_set_visual (gdk_screen_get_rgba_visual ()) after
         creating your window.
       </para>
       <para>
@@ -166,6 +166,14 @@
         a GtkButton, and control its visibility like you would for any other
         widget. If you only want to add a named icon to a GtkButton, you can
         use gtk_button_set_icon_name().
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using GtkWidget event signals</title>
+      <para>
+        Event controllers and #GtkGestures replace event signals in GTK+ 4. They
+        have been backported to GTK+ 3.x so you can prepare for this change.
       </para>
     </section>
 
@@ -432,8 +440,7 @@
       <title>GtkWidget event signals are removed</title>
       <para>
         Event controllers and #GtkGestures have already been introduced in GTK+ 3 to handle
-        input for many cases. In GTK+ 4, even more are available, such as #GtkEventControllerScroll
-        and GtkEventControllerMotion, and the traditional widget signals for handling input,
+        input for many cases. In GTK+ 4, the traditional widget signals for handling input,
         such as #GtkWidget::motion-event or #GtkWidget::event have been removed.
       </para>
     </section>
