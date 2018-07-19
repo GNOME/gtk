@@ -109,9 +109,6 @@ void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provid
                                                       const gchar    *resource_path);
 
 GDK_AVAILABLE_IN_ALL
-GtkCssProvider * gtk_css_provider_get_default (void);
-
-GDK_AVAILABLE_IN_ALL
 GtkCssProvider * gtk_css_provider_get_named (const gchar *name,
                                              const gchar *variant);
 
