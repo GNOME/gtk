@@ -378,7 +378,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (g_type_is_a (type, GTK_TYPE_WIDGET))
     {
-      g_object_set (gtk_settings_get_default (), "gtk-theme-name", "Adwaita", NULL);
+      g_object_set (gtk_settings_get_default (), "gtk-theme-name", "Empty", NULL);
       pspecs = gtk_widget_class_list_style_properties (GTK_WIDGET_CLASS (klass), &n_pspecs);
 
       for (i = 0; i < n_pspecs; ++i)
@@ -396,6 +396,34 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           if (g_type_is_a (type, GTK_TYPE_DIALOG) &&
               (strcmp (pspec->name, "action-area-border") == 0 ||
                strcmp (pspec->name, "button-spacing") == 0))
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_SCROLLBAR) &&
+              (strcmp (pspec->name, "has-backward-stepper") == 0 ||
+               strcmp (pspec->name, "has-forward-stepper") == 0))
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
+              strcmp (pspec->name, "scrollbar-spacing") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&
+              strcmp (pspec->name, "error-underline-color") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TOOL_BUTTON) &&
+              strcmp (pspec->name, "icon-spacing") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TOOL_ITEM_GROUP) &&
+              strcmp (pspec->name, "expander-size") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_TREE_VIEW) &&
+              (strcmp (pspec->name, "expander-size") == 0 ||
+               strcmp (pspec->name, "grid-line-pattern") == 0 ||
+               strcmp (pspec->name, "horizontal-separator") == 0 ||
+               strcmp (pspec->name, "tree-line-pattern") == 0))
             continue;
 
           /* This is desktop-dependent */
