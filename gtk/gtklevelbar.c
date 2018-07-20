@@ -1440,7 +1440,7 @@ gtk_level_bar_get_offset_value (GtkLevelBar *self,
   GList *existing;
   GtkLevelBarOffset *offset = NULL;
 
-  g_return_val_if_fail (GTK_IS_LEVEL_BAR (self), 0.0);
+  g_return_val_if_fail (GTK_IS_LEVEL_BAR (self), FALSE);
 
   existing = g_list_find_custom (priv->offsets, name, offset_find_func);
   if (existing)
