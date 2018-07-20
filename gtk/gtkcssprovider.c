@@ -1972,6 +1972,8 @@ gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
  *
  * Returns: (transfer none): The provider used for fallback styling.
  *          This memory is owned by GTK+, and you must not free it.
+ *
+ * Deprecated: 3.24: Use gtk_css_provider_new() instead.
  **/
 GtkCssProvider *
 gtk_css_provider_get_default (void)

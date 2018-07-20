@@ -112,7 +112,7 @@ GDK_AVAILABLE_IN_3_16
 void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
                                                       const gchar    *resource_path);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_FOR(gtk_css_provider_new)
 GtkCssProvider * gtk_css_provider_get_default (void);
 
 GDK_AVAILABLE_IN_ALL
