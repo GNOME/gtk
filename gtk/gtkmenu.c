@@ -2580,7 +2580,7 @@ gtk_menu_size_allocate (GtkWidget           *widget,
               child_allocation.width = (r - l) * base_width;
               child_allocation.height = 0;
               child_allocation.x = l * base_width;
-              child_allocation.y = 0;
+              child_allocation.y = - priv->scroll_offset;
 
               for (i = 0; i < b; i++)
                 {
@@ -3726,6 +3726,7 @@ gtk_menu_scroll_to (GtkMenu *menu,
   gtk_css_node_set_state (bottom_arrow_node, priv->lower_arrow_state);
 
   priv->scroll_offset = offset;
+  gtk_widget_queue_allocate (GTK_WIDGET (menu));
 }
 
 static gboolean
