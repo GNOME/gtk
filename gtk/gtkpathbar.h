@@ -25,7 +25,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPathBar        GtkPathBar;
 typedef struct _GtkPathBarClass   GtkPathBarClass;
-typedef struct _GtkPathBarPrivate GtkPathBarPrivate;
 
 
 #define GTK_TYPE_PATH_BAR                 (gtk_path_bar_get_type ())
@@ -37,9 +36,7 @@ typedef struct _GtkPathBarPrivate GtkPathBarPrivate;
 
 struct _GtkPathBar
 {
-  GtkContainer parent;
-
-  GtkPathBarPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 struct _GtkPathBarClass
