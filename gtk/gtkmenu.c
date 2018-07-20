@@ -4475,14 +4475,10 @@ gtk_menu_move_current (GtkMenuShell         *menu_shell,
 static gint
 get_visible_size (GtkMenu *menu)
 {
-  GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (menu);
   GtkBorder arrow_border;
   gint menu_height;
 
-  gtk_widget_get_allocation (widget, &allocation);
-
-  menu_height = allocation.height;
+  menu_height = gtk_widget_get_height (GTK_WIDGET (menu));
 
   get_arrows_border (menu, &arrow_border);
   menu_height -= arrow_border.top;
