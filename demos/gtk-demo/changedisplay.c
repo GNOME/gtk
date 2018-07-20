@@ -151,7 +151,7 @@ query_for_toplevel (GdkScreen  *screen,
 
   g_object_unref (cursor);
   gtk_widget_destroy (popup);
-  gdk_flush ();                 /* Really release the grab */
+  gdk_display_flush (display);                 /* Really release the grab */
 
   return toplevel;
 }
