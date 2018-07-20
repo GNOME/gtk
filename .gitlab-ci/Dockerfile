@@ -1,6 +1,7 @@
 FROM fedora:28
 
 RUN dnf -y install \
+    hicolor-icon-theme \
     adwaita-icon-theme \
     atk-devel \
     at-spi2-atk-devel \
