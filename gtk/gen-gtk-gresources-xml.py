@@ -51,11 +51,6 @@ xml += '''
     <file>theme/win32/gtk.css</file>
 '''
 
-for f in get_files('cursor', '.png'):
-  xml += '    <file>cursor/{0}</file>\n'.format(f)
-
-xml += '\n'
-
 for f in get_files('gesture', '.symbolic.png'):
   xml += '    <file alias=\'icons/64x64/actions/{0}\'>gesture/{0}</file>\n'.format(f)
 
@@ -65,13 +60,6 @@ for f in get_files('ui', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>ui/{0}</file>\n'.format(f)
 
 xml += '\n'
-
-for s in ['16x16', '22x22', '24x24', '32x32', '48x48']:
-  for c in ['actions', 'status']:
-    icons_dir = 'icons/{0}/{1}'.format(s,c)
-    if os.path.exists(os.path.join(srcdir,icons_dir)):
-      for f in get_files(icons_dir, '.png'):
-        xml += '    <file>icons/{0}/{1}/{2}</file>\n'.format(s,c,f)
 
 for f in get_files('inspector', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>inspector/{0}</file>\n'.format(f)
