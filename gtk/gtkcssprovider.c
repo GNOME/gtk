@@ -1567,28 +1567,6 @@ gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
   g_object_unref (file);
 }
 
-/**
- * gtk_css_provider_get_default:
- *
- * Returns the provider containing the style settings used as a
- * fallback for all widgets.
- *
- * Returns: (transfer none): The provider used for fallback styling.
- *          This memory is owned by GTK+, and you must not free it.
- **/
-GtkCssProvider *
-gtk_css_provider_get_default (void)
-{
-  static GtkCssProvider *provider;
-
-  if (G_UNLIKELY (!provider))
-    {
-      provider = gtk_css_provider_new ();
-    }
-
-  return provider;
-}
-
 gchar *
 _gtk_get_theme_dir (void)
 {
