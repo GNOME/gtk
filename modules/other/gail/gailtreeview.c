@@ -223,7 +223,7 @@ static void             adjustment_changed              (GtkAdjustment          
 
 /* Misc */
 
-static void             set_iter_nth_row                (GtkTreeView            *tree_view,
+static gboolean         set_iter_nth_row                (GtkTreeView            *tree_view,
                                                          GtkTreeIter            *iter,
                                                          gint                   row);
 static gint             get_row_from_tree_path          (GtkTreeView            *tree_view,
@@ -1466,8 +1466,7 @@ gail_tree_view_add_row_selection (AtkTable *table,
         }
       else
         { 
-          set_iter_nth_row (tree_view, &iter_to_row, row);
-          if (&iter_to_row != NULL)
+          if (set_iter_nth_row (tree_view, &iter_to_row, row))
             gtk_tree_selection_select_iter (selection, &iter_to_row);
           else
             return FALSE;
@@ -3239,7 +3238,7 @@ update_cell_value (GailRendererCell *renderer_cell,
   return gail_renderer_cell_update_cache (renderer_cell, emit_change_signal);
 }
 
-static void 
+static gboolean 
 set_iter_nth_row (GtkTreeView *tree_view, 
                   GtkTreeIter *iter, 
                   gint        row)
@@ -3248,7 +3247,10 @@ set_iter_nth_row (GtkTreeView *tree_view,
   
   tree_model = gtk_tree_view_get_model (tree_view);
   gtk_tree_model_get_iter_first (tree_model, iter);
-  iter = return_iter_nth_row (tree_view, tree_model, iter, 0 , row);
+  if (return_iter_nth_row (tree_view, tree_model, iter, 0 , row) != NULL)
+    return TRUE;
+    
+  return FALSE;
 }
 
 static gint 
@@ -3986,7 +3988,6 @@ static void
 toggle_cell_toggled (GailCell *cell)
 {
   GailTreeViewCellInfo *cell_info;
-  GtkTreeView *tree_view;
   GtkTreePath *path;
   gchar *pathstring;
   GList *renderers, *cur_renderer;
@@ -4005,7 +4006,6 @@ toggle_cell_toggled (GailCell *cell)
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (parent)->widget);
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   gail_return_if_fail (path);
   pathstring = gtk_tree_path_to_string (path);
@@ -4043,13 +4043,11 @@ edit_cell (GailCell *cell)
   GtkTreeView *tree_view;
   GtkTreePath *path;
   AtkObject *parent;
-  gboolean is_container_cell = FALSE;
 
   editing = TRUE;
   parent = atk_object_get_parent (ATK_OBJECT (cell));
   if (GAIL_IS_CONTAINER_CELL (parent))
     {
-      is_container_cell = TRUE;
       parent = atk_object_get_parent (parent);
     }
 
@@ -4073,13 +4071,11 @@ activate_cell (GailCell *cell)
   GtkTreeView *tree_view;
   GtkTreePath *path;
   AtkObject *parent;
-  gboolean is_container_cell = FALSE;
 
   editing = TRUE;
   parent = atk_object_get_parent (ATK_OBJECT (cell));
   if (GAIL_IS_CONTAINER_CELL (parent))
     {
-      is_container_cell = TRUE;
       parent = atk_object_get_parent (parent);
     }
 
