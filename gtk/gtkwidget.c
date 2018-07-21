@@ -2830,6 +2830,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
       break;
     }
 
+  graphene_matrix_init_identity (&priv->transform);
+
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
    * we know the expand is already properly FALSE.
