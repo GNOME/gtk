@@ -12995,6 +12995,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  const gboolean needs_transform = !graphene_matrix_is_identity (&priv->transform);
   GtkCssValue *filter_value;
   double opacity;
   GtkCssStyle *style;
@@ -13013,6 +13014,9 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                            "RenderNode for %s %p @ %d x %d",
                            G_OBJECT_TYPE_NAME (widget), widget,
                            allocation.width, allocation.height);
+
+  if (needs_transform)
+    gtk_snapshot_push_transform (snapshot, &priv->transform);
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
@@ -13059,7 +13063,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   gtk_widget_maybe_add_debug_render_nodes (widget, snapshot);
 #endif
 
-  gtk_snapshot_pop (snapshot);
+  if (needs_transform)
+    gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_pop (snapshot); /* Debug */
 
   return gtk_snapshot_free_to_node (snapshot);
 }
