@@ -106,8 +106,8 @@ struct _GtkWidgetPrivate
   guint8 verifying_invariants_count;
 #endif
 
-  gint width;
-  gint height;
+  int width_request;
+  int height_request;
   GtkBorder margin;
 
   /* Animations and other things to update on clock ticks */

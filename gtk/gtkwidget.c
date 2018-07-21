@@ -2868,8 +2868,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->halign = GTK_ALIGN_FILL;
   priv->valign = GTK_ALIGN_FILL;
 
-  priv->width = -1;
-  priv->height = -1;
+  priv->width_request = -1;
+  priv->height_request = -1;
 
   _gtk_size_request_cache_init (&priv->requests);
 
@@ -7824,16 +7824,16 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
 
   g_object_freeze_notify (G_OBJECT (widget));
 
-  if (width > -2 && priv->width != width)
+  if (width > -2 && priv->width_request != width)
     {
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_WIDTH_REQUEST]);
-      priv->width = width;
+      priv->width_request = width;
       changed = TRUE;
     }
-  if (height > -2 && priv->height != height)
+  if (height > -2 && priv->height_request != height)
     {
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HEIGHT_REQUEST]);
-      priv->height = height;
+      priv->height_request = height;
       changed = TRUE;
     }
 
@@ -7919,10 +7919,10 @@ gtk_widget_get_size_request (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (width)
-    *width = priv->width;
+    *width = priv->width_request;
 
   if (height)
-    *height = priv->height;
+    *height = priv->height_request;
 }
 
 /*< private >
@@ -7937,7 +7937,7 @@ gtk_widget_has_size_request (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  return !(priv->width == -1 && priv->height == -1);
+  return !(priv->width_request == -1 && priv->height_request == -1);
 }
 
 /**
@@ -8675,10 +8675,10 @@ gtk_widget_adjust_size_request (GtkWidget      *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL && priv->width > 0)
-    *minimum_size = MAX (*minimum_size, priv->width);
-  else if (orientation == GTK_ORIENTATION_VERTICAL && priv->height > 0)
-    *minimum_size = MAX (*minimum_size, priv->height);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && priv->width_request > 0)
+    *minimum_size = MAX (*minimum_size, priv->width_request);
+  else if (orientation == GTK_ORIENTATION_VERTICAL && priv->height_request > 0)
+    *minimum_size = MAX (*minimum_size, priv->height_request);
 
   /* Fix it if set_size_request made natural size smaller than min size.
    * This would also silently fix broken widgets, but we warn about them
@@ -8705,7 +8705,7 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (priv->height >= 0)
+  if (priv->height_request >= 0)
     {
       /* No baseline support for explicitly set height */
       *minimum_baseline = -1;
