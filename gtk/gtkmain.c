@@ -1597,9 +1597,9 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
-      target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+      target = gtk_widget_pick (toplevel_widget, x, y);
       if (target == NULL)
-        target = GTK_WIDGET (toplevel);
+        target = toplevel_widget;
       old_target = update_pointer_focus_state (toplevel, event, target);
 
       if (event->any.type == GDK_MOTION_NOTIFY || event->any.type == GDK_ENTER_NOTIFY)
