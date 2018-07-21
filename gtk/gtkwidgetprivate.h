@@ -142,6 +142,8 @@ struct _GtkWidgetPrivate
   GtkAllocation allocation;
   gint allocated_baseline;
 
+  graphene_matrix_t transform;
+
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
