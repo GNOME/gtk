@@ -678,6 +678,7 @@ static void gtk_widget_update_input_shape (GtkWidget *widget);
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
 static void _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
                                                      GtkWidget *previous_toplevel);
+void gtk_widget_queue_compute_expand (GtkWidget *widget);
 
 
 /* --- variables --- */
