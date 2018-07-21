@@ -91,7 +91,7 @@ void            _gtk_size_request_cache_commit                  (SizeRequestCach
                                                                  int                     natural_size,
                                                                  int                     minimum_baseline,
                                                                  int                     natural_baseline);
-gboolean        _gtk_size_request_cache_lookup                  (SizeRequestCache       *cache,
+gboolean        _gtk_size_request_cache_lookup                  (const SizeRequestCache *cache,
                                                                  GtkOrientation          orientation,
                                                                  int                     for_size,
                                                                  int                    *minimum,
