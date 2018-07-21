@@ -10491,6 +10491,18 @@ gtk_window_present_with_time (GtkWindow *window,
 	    }
 	  else
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+	  if (GDK_IS_WAYLAND_WINDOW(gdk_window))
+	    {
+	      timestamp = gtk_get_current_event_time ();
+	      if (timestamp == GDK_CURRENT_TIME)
+		{
+		  /* Convert µsec to msec */
+		  timestamp = g_get_monotonic_time () / 1000;
+		}
+	    }
+	  else
+#endif
 	    timestamp = gtk_get_current_event_time ();
         }
 
