@@ -491,6 +491,14 @@ gdk_x11_clipboard_xevent (GdkDisplay   *display,
           if (sn->selection != cb->xselection)
             return FALSE;
 
+          if (sn->selection_timestamp < cb->timestamp)
+            {
+              GDK_DISPLAY_NOTE (display, CLIPBOARD,
+                        g_printerr ("%s: Ignoring XFixesSelectionNotify with too old timestamp (%lu vs %lu)\n",
+                                    cb->selection, sn->selection_timestamp, cb->timestamp));
+              return FALSE;
+            }
+
           if (sn->owner == GDK_X11_DISPLAY (display)->leader_window)
             {
               GDK_DISPLAY_NOTE (display, CLIPBOARD,
