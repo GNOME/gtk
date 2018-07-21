@@ -209,89 +209,92 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
  * the Clutter toolkit but has evolved for other GTK+ requirements.
  */
 gboolean
-_gtk_size_request_cache_lookup (SizeRequestCache *cache,
-                                GtkOrientation    orientation,
-                                int               for_size,
-                                int              *minimum,
-                                int              *natural,
-                                int              *minimum_baseline,
-                                int              *natural_baseline)
+_gtk_size_request_cache_lookup (const SizeRequestCache *cache,
+                                GtkOrientation          orientation,
+                                int                     for_size,
+                                int                    *minimum,
+                                int                    *natural,
+                                int                    *minimum_baseline,
+                                int                    *natural_baseline)
 {
+  guint i, p;
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      const CachedSizeX *result = NULL;
-
       if (for_size < 0)
-	{
-	  if (cache->flags[orientation].cached_size_valid)
-	    result = &cache->cached_size_x;
-	}
+        {
+          if (cache->flags[GTK_ORIENTATION_HORIZONTAL].cached_size_valid)
+            {
+              const CachedSizeX *result = &cache->cached_size_x;
+
+              *minimum = result->minimum_size;
+              *natural = result->natural_size;
+              return TRUE;
+            }
+
+          return FALSE;
+        }
       else
 	{
-	  guint i;
-
 	  /* Search for an already cached size */
-	  for (i = 0; i < cache->flags[orientation].n_cached_requests; i++)
-	    {
+          for (i = 0, p = cache->flags[GTK_ORIENTATION_HORIZONTAL].n_cached_requests; i < p; i++)
+            {
               const SizeRequestX *cur = cache->requests_x[i];
 
 	      if (cur->lower_for_size <= for_size &&
 		  cur->upper_for_size >= for_size)
 		{
-		  result = &cur->cached_size;
-		  break;
-		}
-	    }
-	}
+                  const CachedSizeX *result = &cur->cached_size;
 
-      if (result)
-	{
-	  *minimum = result->minimum_size;
-	  *natural = result->natural_size;
-	  *minimum_baseline = -1;
-	  *natural_baseline = -1;
-	  return TRUE;
+                  *minimum = result->minimum_size;
+                  *natural = result->natural_size;
+
+                  return TRUE;
+                }
+            }
+
+          return FALSE;
 	}
-      else
-	return FALSE;
     }
   else
     {
-      const CachedSizeY *result = NULL;
-
       if (for_size < 0)
-	{
-	  if (cache->flags[orientation].cached_size_valid)
-	    result = &cache->cached_size_y;
-	}
+        {
+          if (cache->flags[GTK_ORIENTATION_VERTICAL].cached_size_valid)
+            {
+              const CachedSizeY *result = &cache->cached_size_y;
+
+              *minimum = result->minimum_size;
+              *natural = result->natural_size;
+              *minimum_baseline = result->minimum_baseline;
+              *natural_baseline = result->natural_baseline;
+              return TRUE;
+            }
+
+          return FALSE;
+        }
       else
 	{
-	  guint i;
-
 	  /* Search for an already cached size */
-	  for (i = 0; i < cache->flags[orientation].n_cached_requests; i++)
-	    {
+          for (i = 0, p = cache->flags[GTK_ORIENTATION_VERTICAL].n_cached_requests; i < p; i++)
+            {
               const SizeRequestY *cur = cache->requests_y[i];
 
 	      if (cur->lower_for_size <= for_size &&
 		  cur->upper_for_size >= for_size)
 		{
-		  result = &cur->cached_size;
-		  break;
-		}
-	    }
-	}
+                  const CachedSizeY *result = &cur->cached_size;
 
-      if (result)
-	{
-	  *minimum = result->minimum_size;
-	  *natural = result->natural_size;
-	  *minimum_baseline = result->minimum_baseline;
-	  *natural_baseline = result->natural_baseline;
-	  return TRUE;
-	}
-      else
-	return FALSE;
+                  *minimum = result->minimum_size;
+                  *natural = result->natural_size;
+                  *minimum_baseline = result->minimum_baseline;
+                  *natural_baseline = result->natural_baseline;
+                  return TRUE;
+                }
+            }
+
+          return FALSE;
+        }
     }
 }
 
