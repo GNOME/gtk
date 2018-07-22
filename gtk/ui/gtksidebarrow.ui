@@ -71,6 +71,15 @@
                     </style>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkSpinner" id="busy_spinner">
+                    <property name="active">1</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-start">4px</property>
+                    <property name="no-show-all">1</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
