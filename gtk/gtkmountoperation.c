@@ -521,6 +521,7 @@ table_add_entry (GtkMountOperation *operation,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (label, FALSE);
+  gtk_widget_set_sensitive (label, FALSE);
   operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, label);
 
   entry = gtk_entry_new ();
@@ -661,6 +662,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       gtk_widget_set_halign (label, GTK_ALIGN_END);
       gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_widget_set_hexpand (label, FALSE);
+      gtk_widget_set_sensitive (label, FALSE);
       gtk_grid_attach (GTK_GRID (grid), label, 0, rows, 1, 1);
 
       anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -701,6 +703,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       volume_type_label = gtk_label_new (_("Volume type"));
       gtk_widget_set_halign (volume_type_label, GTK_ALIGN_END);
       gtk_widget_set_hexpand (volume_type_label, FALSE);
+      gtk_widget_set_sensitive (volume_type_label, FALSE);
       gtk_grid_attach (GTK_GRID (grid), volume_type_label, 0, rows, 1, 1);
       priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_label);
 
@@ -733,11 +736,8 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       GPasswordSave password_save;
 
       remember_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_grid_attach (GTK_GRID (grid), remember_box, 0, rows++, 2, 1);
+      gtk_grid_attach (GTK_GRID (grid), remember_box, 1, rows++, 1, 1);
       priv->user_widgets = g_list_prepend (priv->user_widgets, remember_box);
-
-      label = gtk_label_new ("");
-      gtk_container_add (GTK_CONTAINER (remember_box), label);
 
       password_save = g_mount_operation_get_password_save (G_MOUNT_OPERATION (operation));
       priv->password_save = password_save;
