@@ -28,6 +28,7 @@
 #include "gtkstylecontext.h"
 #include "gtkrevealer.h"
 #include "gtkselection.h"
+#include "gtkspinner.h"
 
 #ifdef HAVE_CLOUDPROVIDERS
 #include <cloudproviders/cloudprovidersaccount.h>
@@ -57,6 +58,7 @@ struct _GtkSidebarRow
   GtkPlacesSidebar *sidebar;
   GtkWidget *event_box;
   GtkWidget *revealer;
+  GtkWidget *busy_spinner;
 };
 
 G_DEFINE_TYPE (GtkSidebarRow, gtk_sidebar_row, GTK_TYPE_LIST_BOX_ROW)
@@ -621,6 +623,7 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, eject_button);
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, revealer);
+  gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, busy_spinner);
 
   gtk_widget_class_bind_template_callback (widget_class, on_child_revealed);
   gtk_widget_class_set_css_name (widget_class, "row");
@@ -657,4 +660,13 @@ GtkWidget*
 gtk_sidebar_row_get_event_box (GtkSidebarRow *self)
 {
   return self->event_box;
+}
+
+void
+gtk_sidebar_row_set_busy (GtkSidebarRow *row,
+                          gboolean       is_busy)
+{
+  g_return_if_fail (GTK_IS_SIDEBAR_ROW (row));
+
+  gtk_widget_set_visible (row->busy_spinner, is_busy);
 }
