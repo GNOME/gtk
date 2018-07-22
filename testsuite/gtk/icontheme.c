@@ -502,15 +502,6 @@ test_svg_size (void)
 }
 
 static void
-test_builtin (void)
-{
-  assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/16x16/actions/gtk-color-picker.png", 16);
-  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/24x24/actions/gtk-color-picker.png", 24);
-  assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/24x24/actions/gtk-color-picker.png", 24);
-  assert_icon_lookup_size ("gtk-color-picker", 30, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/24x24/actions/gtk-color-picker.png", 24);
-}
-
-static void
 test_size (void)
 {
   assert_icon_lookup_size ("size-test", 12, 0, "/icons/15/size-test.png", 15);
@@ -799,7 +790,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/symbolic-single-size", test_symbolic_single_size);
   g_test_add_func ("/icontheme/svg-size", test_svg_size);
   g_test_add_func ("/icontheme/size", test_size);
-  g_test_add_func ("/icontheme/builtin", test_builtin);
   g_test_add_func ("/icontheme/list", test_list);
   g_test_add_func ("/icontheme/async", test_async);
   g_test_add_func ("/icontheme/inherit", test_inherit);
