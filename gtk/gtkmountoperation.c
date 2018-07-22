@@ -25,6 +25,7 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <string.h>
 
 #include "gtkmountoperationprivate.h"
@@ -120,7 +121,10 @@ struct _GtkMountOperationPrivate {
   GtkWidget *username_entry;
   GtkWidget *domain_entry;
   GtkWidget *password_entry;
+  GtkWidget *pim_entry;
   GtkWidget *anonymous_toggle;
+  GtkWidget *tcrypt_hidden_toggle;
+  GtkWidget *tcrypt_system_toggle;
   GList *user_widgets;
 
   GAskPasswordFlags ask_flags;
@@ -347,6 +351,27 @@ pw_dialog_got_response (GtkDialog         *dialog,
           g_mount_operation_set_password (op, text);
         }
 
+      if (priv->pim_entry)
+        {
+          text = gtk_entry_get_text (GTK_ENTRY (priv->pim_entry));
+          if (text && strlen (text) > 0)
+            {
+              guint64 pim;
+              gchar *end = NULL;
+
+              errno = 0;
+              pim = g_ascii_strtoull (text, &end, 10);
+              if (errno == 0 && pim <= G_MAXUINT && end != text)
+                g_mount_operation_set_pim (op, (guint) pim);
+            }
+        }
+
+      if (priv->tcrypt_hidden_toggle && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->tcrypt_hidden_toggle)))
+        g_mount_operation_set_is_tcrypt_hidden_volume (op, TRUE);
+
+      if (priv->tcrypt_system_toggle && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->tcrypt_system_toggle)))
+        g_mount_operation_set_is_tcrypt_system_volume (op, TRUE);
+
       if (priv->ask_flags & G_ASK_PASSWORD_SAVING_SUPPORTED)
         g_mount_operation_set_password_save (op, priv->password_save);
 
@@ -375,6 +400,29 @@ entry_has_input (GtkWidget *entry_widget)
 }
 
 static gboolean
+pim_entry_is_valid (GtkWidget *entry_widget)
+{
+  const char *text;
+  gchar *end = NULL;
+  guint64 pim;
+
+  if (entry_widget == NULL)
+    return TRUE;
+
+  text = gtk_entry_get_text (GTK_ENTRY (entry_widget));
+  /* An empty PIM entry is OK */
+  if (text == NULL || text[0] == '\0')
+    return TRUE;
+
+  errno = 0;
+  pim = g_ascii_strtoull (text, &end, 10);
+  if (errno || pim > G_MAXUINT || end == text)
+    return FALSE;
+  else
+    return TRUE;
+}
+
+static gboolean
 pw_dialog_input_is_valid (GtkMountOperation *operation)
 {
   GtkMountOperationPrivate *priv = operation->priv;
@@ -387,7 +435,8 @@ pw_dialog_input_is_valid (GtkMountOperation *operation)
    * definitively needs a password.
    */
   is_valid = entry_has_input (priv->username_entry) &&
-             entry_has_input (priv->domain_entry);
+             entry_has_input (priv->domain_entry) &&
+             pim_entry_is_valid (priv->pim_entry);
 
   return is_valid;
 }
@@ -709,6 +758,31 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (remember_button_toggled), operation);
       gtk_box_pack_start (GTK_BOX (remember_box), choice, FALSE, FALSE, 0);
+    }
+
+  priv->pim_entry = NULL;
+  if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
+    {
+      GtkWidget *volume_type_label;
+      GtkWidget *volume_type_box;
+
+      volume_type_label = gtk_label_new (_("Volume type"));
+      gtk_widget_set_halign (volume_type_label, GTK_ALIGN_END);
+      gtk_widget_set_hexpand (volume_type_label, FALSE);
+      gtk_grid_attach (GTK_GRID (grid), volume_type_label, 0, rows, 1, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_label);
+
+      volume_type_box =  gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 1, rows++, 1, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
+
+      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden"));
+      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
+
+      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows system"));
+      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
+
+      priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
     }
 
   g_signal_connect (G_OBJECT (dialog), "response",
