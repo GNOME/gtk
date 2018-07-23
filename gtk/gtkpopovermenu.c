@@ -139,7 +139,6 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
   gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
-  gtk_widget_show (stack);
   gtk_container_add (GTK_CONTAINER (popover), stack);
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
@@ -172,8 +171,7 @@ gtk_popover_menu_add (GtkContainer *container,
 
   if (stack == NULL)
     {
-      gtk_widget_set_parent (child, GTK_WIDGET (container));
-      _gtk_bin_set_child (GTK_BIN (container), child);
+      GTK_CONTAINER_CLASS (gtk_popover_menu_parent_class)->add (container, child);
     }
   else
     {

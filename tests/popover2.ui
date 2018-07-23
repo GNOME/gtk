@@ -5,7 +5,6 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
-        <property name="margin">10</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
