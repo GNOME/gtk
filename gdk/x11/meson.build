@@ -70,7 +70,7 @@ gdk_x11_deps = [
   xinerama_dep,
 ]
 
-libgdk_x11 = static_library('gdk-x11',
+libgdk_x11 = static_library('gdk-x11', gdkmarshal_h,
                             gdk_x11_sources, gdkconfig, gdkenum_h,
                             include_directories: [ confinc, gdkinc, ],
                             c_args: [
