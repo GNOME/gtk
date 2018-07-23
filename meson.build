@@ -327,12 +327,8 @@ pango_dep      = dependency('pango', version: pango_req,
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
-
-if require_pangoft2
-  pangoft_dep  = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
-else
-  pangoft_dep  = dependency('pangoft2', required: false)
-endif
+pangoft_dep    = dependency('pangoft2', required: require_pangoft2,
+                            fallback : ['pango', 'libpangoft2_dep'])
 
 if pangoft_dep.found()
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
