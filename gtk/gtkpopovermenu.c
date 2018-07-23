@@ -171,8 +171,7 @@ gtk_popover_menu_add (GtkContainer *container,
 
   if (stack == NULL)
     {
-      gtk_widget_set_parent (child, GTK_WIDGET (container));
-      _gtk_bin_set_child (GTK_BIN (container), child);
+      GTK_CONTAINER_CLASS (gtk_popover_menu_parent_class)->add (container, child);
     }
   else
     {
