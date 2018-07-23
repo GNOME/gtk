@@ -640,8 +640,15 @@ if cloudproviders_enabled
   endif
 endif
 
-graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
-graphene_has_gcc = graphene_dep.get_pkgconfig_variable('graphene_has_gcc') == '1'
+graphene_dep_type = graphene_dep.type_name()
+if graphene_dep_type == 'pkgconfig'
+  graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
+  graphene_has_gcc = graphene_dep.get_pkgconfig_variable('graphene_has_gcc') == '1'
+else
+  graphene_simd = subproject('graphene').get_variable('graphene_simd')
+  graphene_has_sse2 = graphene_simd.contains('sse2')
+  graphene_has_gcc = graphene_simd.contains('gcc')
+endif
 
 malloc_is_aligned = false
 
