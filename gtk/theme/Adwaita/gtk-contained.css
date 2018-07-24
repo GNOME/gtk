@@ -694,7 +694,7 @@ window.tiled headerbar, window.tiled headerbar:first-child, window.tiled headerb
 
 window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
-.titlebar:not(headerbar) > separator { background-color: #b6b6b3; }
+.titlebar:not(headerbar) separator { background-color: #b6b6b3; }
 
 window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #d6dee7 8%, #e8e8e7 25%); color: rgba(46, 52, 54, 0.1); }
 
