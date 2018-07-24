@@ -757,6 +757,9 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
  * ![](frame-gap.png)
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.24: Use gtk_render_frame() instead. Themes can create gaps
+ *     by omitting borders via CSS.
  **/
 void
 gtk_render_frame_gap (GtkStyleContext *context,

@@ -110,7 +110,7 @@ void        gtk_render_slider      (GtkStyleContext     *context,
                                     gdouble              width,
                                     gdouble              height,
                                     GtkOrientation       orientation);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_24_FOR(gtk_render_frame)
 void        gtk_render_frame_gap   (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
