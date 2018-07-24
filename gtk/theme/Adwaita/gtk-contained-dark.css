@@ -684,7 +684,11 @@ window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack header
 
 window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
-.titlebar:not(headerbar) > separator { background-color: #1b1f20; }
+.titlebar:not(headerbar) separator { background-color: #1b1f20; }
+
+window.devel headerbar { background: transparent -gtk-icontheme("system-run-symbolic") 80% 0/128px 128px no-repeat, linear-gradient(to left, #2a4b6c 8%, #33393b 25%); color: rgba(238, 238, 236, 0.1); }
+
+window.devel headerbar label { color: #eeeeec; }
 
 /************ Pathbars * */
 .path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
