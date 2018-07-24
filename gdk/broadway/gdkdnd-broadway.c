@@ -118,7 +118,6 @@ static void
 gdk_broadway_drag_class_init (GdkBroadwayDragClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkDragClass *context_class = GDK_DRAG_CLASS (klass);
 
   object_class->finalize = gdk_broadway_drag_finalize;
 }
