@@ -629,17 +629,21 @@ gtk_render_icon (GtkStyleContext *context,
                  gdouble          x,
                  gdouble          y)
 {
-  cairo_surface_t *surface;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
 
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (cr != NULL);
+  snapshot = gtk_snapshot_new ();
+  gtk_css_style_snapshot_icon_paintable (gtk_style_context_lookup_style (context),
+                                         snapshot,
+                                         GDK_PAINTABLE (texture),
+                                         x, y,
+                                         FALSE);
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node == NULL)
+    return;
 
-  surface = gdk_texture_download_surface (texture);
-
-  gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
-                                     cr,
-                                     surface,
-                                     x, y);
-
-  cairo_surface_destroy (surface);
+  cairo_save (cr);
+  cairo_translate (cr, x, y);
+  gsk_render_node_draw (node, cr);
+  cairo_restore (cr);
 }
