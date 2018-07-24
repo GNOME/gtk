@@ -904,7 +904,7 @@ _GDK_EXTERN FT_Library
 get_win32_ft_library (void)
 {
   static FT_Library lib = NULL;
-  static volatile ft_win32_inited = 0;
+  static volatile gsize ft_win32_inited = 0;
 
   if (g_once_init_enter (&ft_win32_inited))
     {
