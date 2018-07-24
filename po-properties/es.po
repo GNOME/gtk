@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 17:17+0000\n"
+"POT-Creation-Date: 2018-07-23 10:11+0000\n"
 "PO-Revision-Date: 2018-07-23 11:59+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
@@ -28,9 +28,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139
-#: gdk/gdkdevicemanager.c:185 gdk/gdkglcontext.c:317 gdk/gdkseat.c:202
-#: gdk/gdkseat.c:203
+#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
+#: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Pantalla"
 
@@ -630,9 +629,9 @@ msgstr "Vista previa del texto"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "El texto que mostrar como demostración de la tipografía seleccionada"
 
-#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1245
-#: gtk/gtkentry.c:1001 gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177
-#: gtk/gtktoolbar.c:680 gtk/gtkviewport.c:408
+#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1245 gtk/gtkentry.c:1001
+#: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:680
+#: gtk/gtkviewport.c:408
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
@@ -658,7 +657,7 @@ msgid ""
 "handlebox"
 msgstr ""
 "Lado de la caja manipuladora que está alineada con el punto de anclaje para "
-"anclar la caja manejadora"
+"anclar la caja gestora"
 
 #: gtk/deprecated/gtkhandlebox.c:250
 msgid "Snap edge set"
@@ -681,7 +680,7 @@ msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
 msgstr ""
-"Una variable booleana indicando si el hijo del manejador de la caja está "
+"Una variable booleana indicando si el hijo del gestor de la caja está "
 "acoplado o desacoplado."
 
 #: gtk/deprecated/gtkimagemenuitem.c:226 gtk/gtkbutton.c:360
@@ -919,8 +918,7 @@ msgstr "Indica si el icono de la bandeja tiene un consejo"
 msgid "Tooltip Text"
 msgstr "Texto de la sugerencia"
 
-#: gtk/deprecated/gtkstatusicon.c:402 gtk/gtkwidget.c:1307
-#: gtk/gtkwidget.c:1331
+#: gtk/deprecated/gtkstatusicon.c:402 gtk/gtkwidget.c:1307 gtk/gtkwidget.c:1331
 msgid "The contents of the tooltip for this widget"
 msgstr "El contenido de las sugerencias para este widget"
 
@@ -2329,9 +2327,8 @@ msgstr "Seguir estado"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Indica si el pixbuf renderizado debe colorearse de acuerdo al estado"
 
-#: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:358
-#: gtk/gtkmodelbutton.c:1144 gtk/gtkshortcutsshortcut.c:550
-#: gtk/gtkwindow.c:838
+#: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:358 gtk/gtkmodelbutton.c:1144
+#: gtk/gtkshortcutsshortcut.c:550 gtk/gtkwindow.c:838
 msgid "Icon"
 msgstr "Icono"
 
@@ -3691,12 +3688,10 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Indica si se debe mostrar un icono para el emoticono"
 
 #: gtk/gtkentry.c:1544
-#| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "Activar completado de emoticonos"
 
 #: gtk/gtkentry.c:1545
-#| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "Indica si se deben sugerir reemplazos de emoticonos"
 
@@ -3824,7 +3819,6 @@ msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagación en la que se ejecuta el controlador"
 
 #: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
-#| msgid "Open Flags"
 msgid "Flags"
 msgstr "Opciones"
 
@@ -4171,22 +4165,18 @@ msgid "Whether the preview text entry is shown or not"
 msgstr "Indica si se muestra o no la vista previa de la entrada texto"
 
 #: gtk/gtkfontchooser.c:118
-#| msgid "Selection mode"
 msgid "Selection level"
 msgstr "Nivel de selección"
 
 #: gtk/gtkfontchooser.c:119
-#| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
 msgstr "Indica si se debe seleccionar la familia, el tipo o la tipografía"
 
 #: gtk/gtkfontchooser.c:137
-#| msgid "Font Features"
 msgid "Font features"
 msgstr "Características de la tipografía"
 
 #: gtk/gtkfontchooser.c:138
-#| msgid "Font features set"
 msgid "Font features as a string"
 msgstr "Características de la tipografía como cadena"
 
@@ -4195,7 +4185,6 @@ msgid "Language for which features have been selected"
 msgstr "Idioma para el que se han seleccionado las características"
 
 #: gtk/gtkfontchooserwidget.c:696
-#| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "La acción de ajustar"
 
@@ -5301,7 +5290,6 @@ msgid "The text"
 msgstr "El texto"
 
 #: gtk/gtkmodelbutton.c:1175
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
 msgstr "El texto del botón incluye marcado XML. Vea pango_parse_markup()"
 
@@ -7744,7 +7732,6 @@ msgid "Climb Rate"
 msgstr "Tasa de subida"
 
 #: gtk/gtkspinbutton.c:388
-#| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "La tasa de aceleración cuando mantiene pulsado un botón o una tecla"
 
