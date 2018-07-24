@@ -29,24 +29,12 @@
 
 G_BEGIN_DECLS
 
-void            gtk_css_style_render_border             (GtkCssStyle            *style,
-                                                         cairo_t                *cr,
-                                                         gdouble                 x,
-                                                         gdouble                 y,
-                                                         gdouble                 width,
-                                                         gdouble                 height);
 void            gtk_css_style_snapshot_border           (GtkCssStyle            *style,
                                                          GtkSnapshot            *snapshot,
                                                          gdouble                 width,
                                                          gdouble                 height);
 
 gboolean        gtk_css_style_render_has_outline        (GtkCssStyle            *style);
-void            gtk_css_style_render_outline            (GtkCssStyle            *style,
-                                                         cairo_t                *cr,
-                                                         gdouble                 x,
-                                                         gdouble                 y,
-                                                         gdouble                 width,
-                                                         gdouble                 height);
 void            gtk_css_style_snapshot_outline          (GtkCssStyle            *style,
                                                          GtkSnapshot            *snapshot,
                                                          gdouble                 width,
