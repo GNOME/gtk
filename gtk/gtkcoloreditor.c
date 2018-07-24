@@ -25,6 +25,7 @@
 #include "gtkcolorswatchprivate.h"
 #include "gtkcolorutils.h"
 #include "gtkgrid.h"
+#include "gtkbutton.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkentry.h"
@@ -338,6 +339,12 @@ scaled_adjustment (GtkAdjustment *a,
 }
 
 static void
+pick_color (GtkButton      *button,
+            GtkColorEditor *editor)
+{
+}
+
+static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
   GtkEventController *controller;
@@ -503,6 +510,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, entry_apply);
   gtk_widget_class_bind_template_callback (widget_class, entry_focus_changed);
   gtk_widget_class_bind_template_callback (widget_class, popup_edit);
+  gtk_widget_class_bind_template_callback (widget_class, pick_color);
 }
 
 static void
