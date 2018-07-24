@@ -692,7 +692,7 @@ window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack header
 
 window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
-.titlebar:not(headerbar) > separator { background-color: #252526; }
+.titlebar:not(headerbar) separator { background-color: #252526; }
 
 window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #3b4049 8%, #3f3e40 25%); color: rgba(238, 238, 236, 0.1); }
 
@@ -1472,9 +1472,9 @@ progressbar:backdrop { box-shadow: none; transition: 200ms ease-out; }
 
 progressbar progress { /* share most of scales' */ /* override insensitive that is specific to progress */ border-radius: 1.5px; }
 
-progressbar progress:disabled { background-color: #919494; border-color: #919494; }
+progressbar progress:disabled { background-color: #969696; border-color: #969696; }
 
-progressbar progress:backdrop:disabled { background-color: #566164; border-color: #566164; }
+progressbar progress:backdrop:disabled { background-color: #656466; border-color: #656466; }
 
 progressbar progress.left { border-top-left-radius: 2px; border-bottom-left-radius: 2px; }
 
