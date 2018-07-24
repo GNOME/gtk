@@ -58,6 +58,7 @@
 
 #if defined(HAVE_HARFBUZZ)
 # if defined GDK_WINDOWING_WIN32
+#  define _WIN32_WINNT 0x0600
 #  define WIN32_LEAN_AND_MEAN
 #  define COBJMACROS
 #  include <windows.h>
