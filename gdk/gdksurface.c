@@ -4098,7 +4098,7 @@ gdk_surface_create_similar_surface (GdkSurface *     surface,
  * @surface: a #GdkSurface
  * @timestamp: timestamp of the event triggering the surface focus
  *
- * Sets keyboard focus to @surface. In most cases, gtk_window_present()
+ * Sets keyboard focus to @surface. In most cases, gtk_window_present_with_time()
  * should be used on a #GtkWindow, rather than calling this function.
  *
  **/
@@ -4491,7 +4491,7 @@ gdk_surface_iconify (GdkSurface *surface)
  * Attempt to deiconify (unminimize) @surface. On X11 the window manager may
  * choose to ignore the request to deiconify. When using GTK,
  * use gtk_window_deiconify() instead of the #GdkSurface variant. Or better yet,
- * you probably want to use gtk_window_present(), which raises the surface, focuses it,
+ * you probably want to use gtk_window_present_with_time(), which raises the surface, focuses it,
  * unminimizes it, and puts it on the current desktop.
  *
  **/
