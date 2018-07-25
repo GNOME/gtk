@@ -2515,6 +2515,12 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
 
 }
 
+static guint32
+_gdk_x11_display_get_user_time (GdkDisplay *display)
+{
+  return GDK_X11_DISPLAY (display)->user_time;
+}
+
 /**
  * gdk_x11_display_get_user_time:
  * @display: (type GdkX11Display): a #GdkDisplay
@@ -2531,7 +2537,19 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
 guint32
 gdk_x11_display_get_user_time (GdkDisplay *display)
 {
-  return GDK_X11_DISPLAY (display)->user_time;
+  return _gdk_x11_display_get_user_time (display);
+}
+
+static void
+gdk_x11_display_update_user_time (GdkDisplay *display,
+                                  guint32     time_)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  if (time_ != GDK_CURRENT_TIME &&
+      (display_x11->user_time == GDK_CURRENT_TIME ||
+       XSERVER_TIME_IS_LATER (time_, display_x11->user_time)))
+    display_x11->user_time = time_;
 }
 
 static gboolean
@@ -3201,6 +3219,9 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
   display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
+
+  display_class->get_user_time = _gdk_x11_display_get_user_time;
+  display_class->update_user_time = gdk_x11_display_update_user_time;
 
   _gdk_x11_windowing_init ();
 }
