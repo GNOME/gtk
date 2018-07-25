@@ -141,6 +141,9 @@ struct _GdkWaylandDisplay
   guint have_egl_swap_buffers_with_damage : 1;
   guint have_egl_surfaceless_context : 1;
   EGLint egl_min_swap_interval;
+
+  /* Time of most recent user interaction. */
+  guint32 user_time;
 };
 
 struct _GdkWaylandDisplayClass
