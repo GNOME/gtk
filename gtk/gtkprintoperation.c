@@ -2955,7 +2955,9 @@ handle_progress_response (GtkWidget *dialog,
 static gboolean
 show_progress_timeout (PrintPagesData *data)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (data->progress));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   data->op->priv->show_progress_timeout_id = 0;
 

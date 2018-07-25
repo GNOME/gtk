@@ -735,8 +735,10 @@ gtk_print_operation_unix_run_dialog_async (GtkPrintOperation          *op,
 
       g_signal_connect (pd, "response", 
 			G_CALLBACK (handle_print_response), rdata);
-      
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (pd));
+      G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     {
@@ -1038,8 +1040,10 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
 
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (handle_page_setup_response), rdata);
- 
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (dialog));
+  G_GNUC_END_IGNORE_DEPRECATIONS
  }
 
 struct _PrinterFinder 

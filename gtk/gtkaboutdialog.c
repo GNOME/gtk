@@ -1003,7 +1003,9 @@ gtk_about_dialog_activate_link (GtkAboutDialog *about,
       g_signal_connect (dialog, "response",
                         G_CALLBACK (gtk_widget_destroy), NULL);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (dialog));
+      G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   return TRUE;
@@ -2436,7 +2438,9 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (dialog));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
