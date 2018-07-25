@@ -3335,7 +3335,9 @@ paper_size_changed (GtkComboBox        *combo_box,
           /* And show the custom paper dialog */
           custom_paper_dialog = _gtk_custom_paper_unix_dialog_new (GTK_WINDOW (dialog), _("Manage Custom Sizes"));
           g_signal_connect (custom_paper_dialog, "response", G_CALLBACK (custom_paper_dialog_response_cb), dialog);
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_window_present (GTK_WINDOW (custom_paper_dialog));
+          G_GNUC_END_IGNORE_DEPRECATIONS
 
           return;
         }

@@ -995,7 +995,9 @@ preview_file (const char *filename,
       g_object_unref (widget);
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (window));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_main ();
 
