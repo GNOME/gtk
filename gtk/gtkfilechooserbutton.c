@@ -2738,7 +2738,11 @@ open_dialog (GtkFileChooserButton *button)
 
   gtk_widget_set_sensitive (priv->combo_box, FALSE);
   if (priv->dialog)
-    gtk_window_present (GTK_WINDOW (priv->dialog));
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      gtk_window_present (GTK_WINDOW (priv->dialog));
+      G_GNUC_END_IGNORE_DEPRECATIONS
+    }
   else
     gtk_native_dialog_show (GTK_NATIVE_DIALOG (priv->native));
 }
