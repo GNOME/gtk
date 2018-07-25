@@ -384,8 +384,7 @@ do_popup_menu (GtkWidget *icon_list,
       event_time = gtk_get_current_event_time ();
     }
 
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
-                  button, event_time);
+  gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
 }
 	
 
