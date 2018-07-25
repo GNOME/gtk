@@ -679,8 +679,6 @@ gtk_combo_box_get_active_id
 gtk_combo_box_set_active_id
 gtk_combo_box_get_model
 gtk_combo_box_set_model
-gtk_combo_box_popup_for_device
-gtk_combo_box_popup
 gtk_combo_box_popdown
 gtk_combo_box_get_popup_accessible
 gtk_combo_box_get_row_separator_func
@@ -1724,8 +1722,6 @@ gtk_menu_attach
 gtk_menu_popup_at_rect
 gtk_menu_popup_at_widget
 gtk_menu_popup_at_pointer
-gtk_menu_popup_for_device
-gtk_menu_popup
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
 gtk_menu_set_accel_path

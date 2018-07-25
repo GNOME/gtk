@@ -62,40 +62,6 @@ typedef enum
 } GtkArrowPlacement;
 
 /**
- * GtkMenuPositionFunc:
- * @menu: a #GtkMenu.
- * @x: (inout): address of the #gint representing the horizontal
- *     position where the menu shall be drawn.
- * @y: (inout): address of the #gint representing the vertical position
- *     where the menu shall be drawn.  This is an output parameter.
- * @push_in: (out): This parameter controls how menus placed outside
- *     the monitor are handled.  If this is set to %TRUE and part of
- *     the menu is outside the monitor then GTK+ pushes the window
- *     into the visible area, effectively modifying the popup
- *     position.  Note that moving and possibly resizing the menu
- *     around will alter the scroll position to keep the menu items
- *     “in place”, i.e. at the same monitor position they would have
- *     been without resizing.  In practice, this behavior is only
- *     useful for combobox popups or option menus and cannot be used
- *     to simply confine a menu to monitor boundaries.  In that case,
- *     changing the scroll offset is not desirable.
- * @user_data: the data supplied by the user in the gtk_menu_popup()
- *     @data parameter.
- *
- * A user function supplied when calling gtk_menu_popup() which
- * controls the positioning of the menu when it is displayed.  The
- * function sets the @x and @y parameters to the coordinates where the
- * menu is to be drawn.  To make the menu appear on a different
- * monitor than the mouse pointer, gtk_menu_set_monitor() must be
- * called.
- */
-typedef void (*GtkMenuPositionFunc) (GtkMenu   *menu,
-				     gint      *x,
-				     gint      *y,
-				     gboolean  *push_in,
-				     gpointer	user_data);
-
-/**
  * GtkMenuDetachFunc:
  * @attach_widget: the #GtkWidget that the menu is being detached from.
  * @menu: the #GtkMenu being detached.
@@ -134,24 +100,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_new_from_model        (GMenuModel *model);
 
 /* Display the menu onscreen */
-GDK_AVAILABLE_IN_ALL
-void	   gtk_menu_popup		  (GtkMenu	       *menu,
-					   GtkWidget	       *parent_menu_shell,
-					   GtkWidget	       *parent_menu_item,
-					   GtkMenuPositionFunc	func,
-					   gpointer		data,
-					   guint		button,
-					   guint32		activate_time);
-GDK_AVAILABLE_IN_ALL
-void       gtk_menu_popup_for_device      (GtkMenu             *menu,
-                                           GdkDevice           *device,
-                                           GtkWidget           *parent_menu_shell,
-                                           GtkWidget           *parent_menu_item,
-                                           GtkMenuPositionFunc  func,
-                                           gpointer             data,
-                                           GDestroyNotify       destroy,
-                                           guint                button,
-                                           guint32              activate_time);
 GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_rect         (GtkMenu             *menu,
                                            GdkSurface          *rect_surface,
