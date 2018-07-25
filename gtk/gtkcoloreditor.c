@@ -62,6 +62,10 @@ struct _GtkColorEditorPrivate
   GtkAdjustment *v_adj;
   GtkAdjustment *a_adj;
 
+  GtkWidget *picker;
+  GDBusProxy *portal_proxy;
+  guint portal_signal_id;
+
   gint popup_position;
 
   guint text_changed : 1;
@@ -339,9 +343,124 @@ scaled_adjustment (GtkAdjustment *a,
 }
 
 static void
+portal_response_received (GDBusConnection *connection,
+                          const char      *sender_name,
+                          const char      *object_path,
+                          const char      *interface_name,
+                          const char      *signal_name,
+                          GVariant        *parameters,
+                          gpointer         user_data)
+{
+  GtkColorEditor *editor = user_data;
+  guint32 response;
+  GVariant *ret;
+
+  g_dbus_connection_signal_unsubscribe (connection, editor->priv->portal_signal_id);
+  editor->priv->portal_signal_id = 0;
+
+  g_variant_get (parameters, "(u@a{sv})", &response, &ret);
+
+  if (response == 0)
+    {
+      GdkRGBA color;
+
+      color.alpha = 1.0;
+      if (g_variant_lookup (ret, "color", "(ddd)", &color.red, &color.green, &color.blue))
+        gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (editor), &color);
+    }
+
+  g_variant_unref (ret);
+}
+
+static void
 pick_color (GtkButton      *button,
             GtkColorEditor *editor)
 {
+  GVariantBuilder options;
+  char *token;
+  GDBusConnection *connection;
+  char *sender;
+  char *handle;
+  int i;
+
+  connection = g_dbus_proxy_get_connection (editor->priv->portal_proxy);
+
+  token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
+  sender = g_strdup (g_dbus_connection_get_unique_name (connection) + 1);
+  for (i = 0; sender[i]; i++)
+    if (sender[i] == '.')
+      sender[i] = '_';
+
+  handle = g_strdup_printf ("/org/freedesktop/portal/desktop/request/%s/%s", sender, token);
+  editor->priv->portal_signal_id = g_dbus_connection_signal_subscribe (connection,
+                                                                       "org.freedesktop.portal.Desktop",
+                                                                       "org.freedesktop.portal.Request",
+                                                                       "Response",
+                                                                       handle,
+                                                                       NULL,
+                                                                       G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
+                                                                       portal_response_received,
+                                                                       editor,
+                                                                       NULL);
+  g_free (handle);
+
+  g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&options, "{sv}", "handle_token", g_variant_new_string (token));
+  g_free (token);
+
+  g_dbus_proxy_call (editor->priv->portal_proxy,
+                     "ScreenshotPixel",
+                     g_variant_new ("(sa{sv})", "", &options),
+                     0,
+                     -1,
+                     NULL,
+                     NULL,
+                     NULL);
+}
+
+static gboolean
+setup_portal_proxy (GtkColorEditor *editor)
+{
+  char *owner;
+  GVariant *ret;
+  guint version;
+  GError *error = NULL;
+
+  editor->priv->portal_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                              G_DBUS_PROXY_FLAGS_NONE,
+                                                              NULL,
+                                                              "org.freedesktop.portal.Desktop",
+                                                              "/org/freedesktop/portal/desktop",
+                                                              "org.freedesktop.portal.Screenshot",
+                                                              NULL,
+                                                              &error);
+
+  if (editor->priv->portal_proxy == NULL)
+    {
+      g_warning ("No screenshot portal: %s", error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  owner = g_dbus_proxy_get_name_owner (editor->priv->portal_proxy);
+  if (owner == NULL)
+    {
+      g_warning ("No screenshot portal: %s", error->message);
+      return FALSE;
+    }
+  g_free (owner);
+
+  ret = g_dbus_proxy_get_cached_property (editor->priv->portal_proxy, "version");
+  g_variant_get (ret, "u", &version);
+  g_variant_unref (ret);
+  if (version != 2)
+    {
+      g_warning ("Screenshot portal version: %u", version);
+      g_clear_object (&editor->priv->portal_proxy);
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 static void
@@ -392,6 +511,9 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_widget_add_controller (editor->priv->a_entry, controller);
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (editor->priv->swatch), "activatable");
+
+  if (!setup_portal_proxy (editor))
+    gtk_widget_hide (editor->priv->picker);
 }
 
 static void
@@ -400,6 +522,7 @@ gtk_color_editor_dispose (GObject *object)
   GtkColorEditor *editor = GTK_COLOR_EDITOR (object);
 
   dismiss_current_popup (editor);
+  g_clear_object (&editor->priv->portal_proxy);
 
   G_OBJECT_CLASS (gtk_color_editor_parent_class)->dispose (object);
 }
@@ -502,6 +625,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, s_adj);
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, v_adj);
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_adj);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, picker);
 
   gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
   gtk_widget_class_bind_template_callback (widget_class, dismiss_current_popup);
