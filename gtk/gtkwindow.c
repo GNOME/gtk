@@ -12740,7 +12740,9 @@ gtk_window_set_debugging (gboolean enable,
 
   if (enable)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (inspector_window));
+      G_GNUC_END_IGNORE_DEPRECATIONS
       if (dialog)
         gtk_widget_show (dialog);
 
