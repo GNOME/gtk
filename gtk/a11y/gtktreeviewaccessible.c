@@ -1177,7 +1177,9 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
           gtk_window_present_with_time (GTK_WINDOW (toplevel),
                                         gdk_x11_get_server_time (gtk_widget_get_window (widget)));
 #else
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_window_present (GTK_WINDOW (toplevel));
+          G_GNUC_END_IGNORE_DEPRECATIONS
 #endif
         }
 
