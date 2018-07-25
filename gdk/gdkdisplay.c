@@ -2748,3 +2748,44 @@ gdk_display_monitor_removed (GdkDisplay *display,
   g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
   gdk_monitor_invalidate (monitor);
 }
+
+/**
+ * gdk_display_get_user_time:
+ * @display: a #GdkDisplay
+ *
+ * Returns the timestamp of the last user interaction on
+ * @display. The timestamp is taken from events caused
+ * by user interaction such as key presses or pointer
+ * movements.
+ *
+ * Returns: the timestamp of the last user interaction
+ *
+ */
+guint32
+gdk_display_get_user_time (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_CURRENT_TIME);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->get_user_time)
+    return GDK_DISPLAY_GET_CLASS (display)->get_user_time (display);
+
+  return GDK_CURRENT_TIME;
+}
+
+/**
+ * gdk_display_update_user_time:
+ * @display: a #GdkDisplay
+ * @time_: a timestamp
+ *
+ * Updates the internal timestamp for the last user interaction
+ *
+ */
+void
+gdk_display_update_user_time (GdkDisplay       *display,
+                              guint32           time_)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  if (GDK_DISPLAY_GET_CLASS (display)->update_user_time)
+    return GDK_DISPLAY_GET_CLASS (display)->update_user_time (display, time_);
+}

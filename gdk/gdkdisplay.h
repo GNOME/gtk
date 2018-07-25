@@ -193,7 +193,11 @@ GdkMonitor * gdk_display_get_monitor_at_point  (GdkDisplay *display,
 GDK_AVAILABLE_IN_3_22
 GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *display,
                                                 GdkWindow  *window);
-
+GDK_AVAILABLE_IN_3_24
+guint32      gdk_display_get_user_time         (GdkDisplay *display);
+GDK_AVAILABLE_IN_3_24
+void         gdk_display_update_user_time      (GdkDisplay *display,
+                                                guint32     time_);
 
 G_END_DECLS
 

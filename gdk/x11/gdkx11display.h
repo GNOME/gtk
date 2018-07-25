@@ -58,7 +58,7 @@ Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_24_FOR(gdk_display_get_user_time)
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
