@@ -78,8 +78,8 @@ gdk_wayland_drag_finalize (GObject *object)
 
   gdk_drag_set_cursor (drag, NULL);
 
-  g_clear_pointer (&wayland_drag->data_source, (GDestroyNotify) wl_data_source_destroy);
-  g_clear_pointer (&wayland_drag->offer, (GDestroyNotify) wl_data_offer_destroy);
+  g_clear_pointer (&wayland_drag->data_source, wl_data_source_destroy);
+  g_clear_pointer (&wayland_drag->offer, wl_data_offer_destroy);
 
   dnd_surface = wayland_drag->dnd_surface;
 

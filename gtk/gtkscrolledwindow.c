@@ -3253,7 +3253,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       gtk_adjustment_set_value (hadjustment, position);
     }
   else if (data->hscrolling)
-    g_clear_pointer (&data->hscrolling, (GDestroyNotify) gtk_kinetic_scrolling_free);
+    g_clear_pointer (&data->hscrolling, gtk_kinetic_scrolling_free);
 
   if (data->vscrolling &&
       gtk_kinetic_scrolling_tick (data->vscrolling, elapsed, &position))
@@ -3262,7 +3262,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       gtk_adjustment_set_value (vadjustment, position);
     }
   else if (data->vscrolling)
-    g_clear_pointer (&data->vscrolling, (GDestroyNotify) gtk_kinetic_scrolling_free);
+    g_clear_pointer (&data->vscrolling, gtk_kinetic_scrolling_free);
 
   if (!data->hscrolling && !data->vscrolling)
     {

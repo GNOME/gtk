@@ -62,20 +62,20 @@ gdk_wayland_primary_discard_pending (GdkWaylandPrimary *cb)
       gdk_content_formats_unref (ignore);
       cb->pending_builder = NULL;
     }
-  g_clear_pointer (&cb->pending, (GDestroyNotify) gtk_primary_selection_offer_destroy);
+  g_clear_pointer (&cb->pending, gtk_primary_selection_offer_destroy);
 }
 
 static void
 gdk_wayland_primary_discard_offer (GdkWaylandPrimary *cb)
 {
   g_clear_pointer (&cb->offer_formats, gdk_content_formats_unref);
-  g_clear_pointer (&cb->offer, (GDestroyNotify) gtk_primary_selection_offer_destroy);
+  g_clear_pointer (&cb->offer, gtk_primary_selection_offer_destroy);
 }
 
 static void
 gdk_wayland_primary_discard_source (GdkWaylandPrimary *cb)
 {
-  g_clear_pointer (&cb->source, (GDestroyNotify) wl_data_source_destroy);
+  g_clear_pointer (&cb->source, gtk_primary_selection_source_destroy);
 }
 
 static void

@@ -69,7 +69,7 @@ gdk_wayland_drop_finalize (GObject *object)
 {
   GdkWaylandDrop *wayland_drop = GDK_WAYLAND_DROP (object);
 
-  g_clear_pointer (&wayland_drop->offer, (GDestroyNotify) wl_data_offer_destroy);
+  g_clear_pointer (&wayland_drop->offer, wl_data_offer_destroy);
 
   G_OBJECT_CLASS (gdk_wayland_drop_parent_class)->finalize (object);
 }

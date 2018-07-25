@@ -847,7 +847,7 @@ gtk_drag_content_finalize (GObject *object)
   GtkDragContent *content = GTK_DRAG_CONTENT (object);
 
   g_clear_object (&content->widget);
-  g_clear_pointer (&content->formats, (GDestroyNotify) gdk_content_formats_unref);
+  g_clear_pointer (&content->formats, gdk_content_formats_unref);
 
   G_OBJECT_CLASS (gtk_drag_content_parent_class)->finalize (object);
 }
