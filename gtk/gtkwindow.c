@@ -10429,23 +10429,11 @@ gtk_window_draw (GtkWidget *widget,
  * gtk_window_present:
  * @window: a #GtkWindow
  *
- * Presents a window to the user. This may mean raising the window
- * in the stacking order, deiconifying it, moving it to the current
- * desktop, and/or giving it the keyboard focus, possibly dependent
- * on the user’s platform, window manager, and preferences.
+ * Presents a window to the user. This function should not be used
+ * as when it is called, it is too late to gather a valid timestamp
+ * to allow focus stealing prevention to work correctly.
  *
- * If @window is hidden, this function calls gtk_widget_show()
- * as well.
- * 
- * This function should be used when the user tries to open a window
- * that’s already open. Say for example the preferences dialog is
- * currently open, and the user chooses Preferences from the menu
- * a second time; use gtk_window_present() to move the already-open dialog
- * where the user can see it.
- *
- * If you are calling this function in response to a user interaction,
- * it is preferable to use gtk_window_present_with_time().
- * 
+ * Deprecated: 3.24: Use gtk_window_present_with_time() instead.
  **/
 void
 gtk_window_present (GtkWindow *window)
@@ -10459,10 +10447,25 @@ gtk_window_present (GtkWindow *window)
  * @timestamp: the timestamp of the user interaction (typically a 
  *   button or key press event) which triggered this call
  *
- * Presents a window to the user in response to a user interaction.
- * If you need to present a window without a timestamp, use 
- * gtk_window_present(). See gtk_window_present() for details. 
- * 
+ * Presents a window to the user. This may mean raising the window
+ * in the stacking order, deiconifying it, moving it to the current
+ * desktop, and/or giving it the keyboard focus, possibly dependent
+ * on the user’s platform, window manager, and preferences.
+ *
+ * If @window is hidden, this function calls gtk_widget_show()
+ * as well.
+ *
+ * This function should be used when the user tries to open a window
+ * that’s already open. Say for example the preferences dialog is
+ * currently open, and the user chooses Preferences from the menu
+ * a second time; use gtk_window_present() to move the already-open dialog
+ * where the user can see it.
+ *
+ * Presents a window to the user in response to a user interaction. The
+ * timestamp should be gathered when the window was requested to be shown
+ * (when clicking a link for example), rather than once the window is
+ * ready to be shown.
+ *
  * Since: 2.8
  **/
 void

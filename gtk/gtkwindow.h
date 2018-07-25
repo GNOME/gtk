@@ -366,7 +366,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_propagate_key_event   (GtkWindow        *window,
 					   GdkEventKey      *event);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_24_FOR(gtk_window_present_with_time)
 void     gtk_window_present            (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_present_with_time  (GtkWindow *window,
