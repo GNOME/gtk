@@ -10275,7 +10275,7 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
  * @window: a #GdkWindow
  * @timestamp: timestamp of the event triggering the window focus
  *
- * Sets keyboard focus to @window. In most cases, gtk_window_present()
+ * Sets keyboard focus to @window. In most cases, gtk_window_present_with_time()
  * should be used on a #GtkWindow, rather than calling this function.
  *
  **/
@@ -10749,7 +10749,7 @@ gdk_window_iconify (GdkWindow *window)
  * Attempt to deiconify (unminimize) @window. On X11 the window manager may
  * choose to ignore the request to deiconify. When using GTK+,
  * use gtk_window_deiconify() instead of the #GdkWindow variant. Or better yet,
- * you probably want to use gtk_window_present(), which raises the window, focuses it,
+ * you probably want to use gtk_window_present_with_time(), which raises the window, focuses it,
  * unminimizes it, and puts it on the current desktop.
  *
  **/
