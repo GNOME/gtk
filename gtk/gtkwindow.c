@@ -1432,7 +1432,7 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                gdouble               y,
                                GtkWindow            *window)
 {
-  GtkWidget *event_widget, *widget;
+  GtkWidget *event_widget, *widget, *grab_widget;
   GdkEventSequence *sequence;
   GtkWindowRegion region;
   GtkWindowPrivate *priv;
@@ -1454,8 +1454,11 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
 
   region = get_active_region_type (window, (GdkEventAny*) event, x, y);
 
+  grab_widget = gtk_window_group_get_current_grab (gtk_window_get_group (window));
+
   if (gdk_display_device_is_grabbed (gtk_widget_get_display (widget),
-                                     gtk_gesture_get_device (GTK_GESTURE (gesture))))
+                                     gtk_gesture_get_device (GTK_GESTURE (gesture))) ||
+      (grab_widget && grab_widget != widget))
     {
       gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
       return;
