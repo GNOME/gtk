@@ -24,7 +24,9 @@
 #include "gtkcolorscaleprivate.h"
 #include "gtkcolorswatchprivate.h"
 #include "gtkcolorutils.h"
+#include "gtkcolorpickerprivate.h"
 #include "gtkgrid.h"
+#include "gtkbutton.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkentry.h"
@@ -60,6 +62,9 @@ struct _GtkColorEditorPrivate
   GtkAdjustment *s_adj;
   GtkAdjustment *v_adj;
   GtkAdjustment *a_adj;
+
+  GtkWidget *picker_button;
+  GtkColorPicker *picker;
 
   gint popup_position;
 
@@ -354,6 +359,36 @@ popup_draw (GtkWidget      *popup,
 }
 
 static void
+color_picked (GObject      *source,
+              GAsyncResult *res,
+              gpointer      data)
+{
+  GtkColorPicker *picker = GTK_COLOR_PICKER (source);
+  GtkColorEditor *editor = data;
+  GError *error = NULL;
+  GdkRGBA *color;
+
+  color = gtk_color_picker_pick_finish (picker, res, &error);
+  if (color == NULL)
+    {
+      g_warning ("Picking color failed: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (editor), color);
+      gdk_rgba_free (color);
+    }
+}
+
+static void
+pick_color (GtkButton      *button,
+            GtkColorEditor *editor)
+{
+  gtk_color_picker_pick (editor->priv->picker, color_picked, editor);
+}
+
+static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
   editor->priv = gtk_color_editor_get_instance_private (editor);
@@ -394,6 +429,10 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->a_popup);
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (editor->priv->swatch), "activatable");
+
+  editor->priv->picker = gtk_color_picker_new ();
+  if (editor->priv->picker == NULL)
+    gtk_widget_hide (editor->priv->picker_button);
 }
 
 static void
@@ -402,6 +441,7 @@ gtk_color_editor_dispose (GObject *object)
   GtkColorEditor *editor = GTK_COLOR_EDITOR (object);
 
   dismiss_current_popup (editor);
+  g_clear_object (&editor->priv->picker);
 
   G_OBJECT_CLASS (gtk_color_editor_parent_class)->dispose (object);
 }
@@ -504,6 +544,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, s_adj);
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, v_adj);
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_adj);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, picker_button);
 
   gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
   gtk_widget_class_bind_template_callback (widget_class, popup_draw);
@@ -514,6 +555,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, entry_apply);
   gtk_widget_class_bind_template_callback (widget_class, entry_focus_out);
   gtk_widget_class_bind_template_callback (widget_class, popup_edit);
+  gtk_widget_class_bind_template_callback (widget_class, pick_color);
 }
 
 static void

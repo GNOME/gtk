@@ -41,6 +41,27 @@
             <property name="row-spacing">12</property>
             <property name="column-spacing">12</property>
             <child>
+              <object class="GtkButton" id="picker_button">
+                <property name="visible">1</property>
+                <property name="no-show-all">1</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">1</property>
+                    <property name="icon-name">color-select-symbolic</property>
+                  </object>
+                </child>
+                <property name="tooltip-text" translatable="yes">Pick a color from the screen</property>
+                <signal name="clicked" handler="pick_color"/>
+                <style>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkColorSwatch" id="swatch">
                 <property name="visible">True</property>
                 <property name="name">editor-color-sample</property>
