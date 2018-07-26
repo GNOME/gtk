@@ -22,6 +22,7 @@
 
 #include "gdkx11applaunchcontext.h"
 #include "gdkapplaunchcontextprivate.h"
+
 #include "gdkscreen.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
@@ -344,7 +345,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
 
   timestamp = ctx->timestamp;
   if (timestamp == GDK_CURRENT_TIME)
-    timestamp = gdk_x11_display_get_user_time (display);
+    timestamp = gdk_display_get_user_time (display);
 
   screen_str = g_strdup_printf ("%d", gdk_x11_screen_get_number (screen));
   if (ctx->workspace > -1)

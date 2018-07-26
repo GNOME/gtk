@@ -39,6 +39,7 @@
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdk-private.h"
+#include "gdkdisplayprivate.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -3536,7 +3537,6 @@ gdk_x11_window_set_user_time (GdkWindow *window,
                               guint32    timestamp)
 {
   GdkDisplay *display;
-  GdkX11Display *display_x11;
   GdkToplevelX11 *toplevel;
   glong timestamp_long = (glong)timestamp;
   Window xid;
@@ -3546,7 +3546,6 @@ gdk_x11_window_set_user_time (GdkWindow *window,
     return;
 
   display = gdk_window_get_display (window);
-  display_x11 = GDK_X11_DISPLAY (display);
   toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (!toplevel)
@@ -3567,10 +3566,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
                    XA_CARDINAL, 32, PropModeReplace,
                    (guchar *)&timestamp_long, 1);
 
-  if (timestamp_long != GDK_CURRENT_TIME &&
-      (display_x11->user_time == GDK_CURRENT_TIME ||
-       XSERVER_TIME_IS_LATER (timestamp_long, display_x11->user_time)))
-    display_x11->user_time = timestamp_long;
+  gdk_display_update_user_time (display, timestamp_long);
 
   if (toplevel)
     toplevel->user_time = timestamp_long;
