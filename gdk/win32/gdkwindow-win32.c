@@ -1085,17 +1085,11 @@ gdk_win32_window_destroy (GdkWindow *window,
   _gdk_remove_modal_window (window);
 
   /* Remove all our transient children */
-  tmp = window_impl->transient_children;
-  while (tmp != NULL)
+  while (window_impl->transient_children != NULL)
     {
-      GdkWindow *child = tmp->data;
-      GdkWindowImplWin32 *child_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW (child)->impl);
-
-      child_impl->transient_owner = NULL;
-      tmp = tmp->next;
+      GdkWindow *child = window_impl->transient_children->data;
+      gdk_window_set_transient_for (child, NULL);
     }
-  g_slist_free (window_impl->transient_children);
-  window_impl->transient_children = NULL;
 
 #ifdef GDK_WIN32_ENABLE_EGL
   display = GDK_WIN32_DISPLAY (gdk_window_get_display (window));
@@ -1507,9 +1501,6 @@ gdk_win32_window_hide (GdkWindow *window)
 				 GDK_WINDOW_STATE_WITHDRAWN);
 
   _gdk_window_clear_update_area (window);
-
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
-    ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
   /* Use SetWindowPos to hide transparent windows so automatic redraws
    * in other windows can be suppressed.
