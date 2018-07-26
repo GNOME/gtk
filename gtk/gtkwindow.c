@@ -10489,17 +10489,10 @@ gtk_window_present_with_time (GtkWindow *window,
       /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
       if (timestamp == GDK_CURRENT_TIME)
         {
-#ifdef GDK_WINDOWING_X11
-	  if (GDK_IS_X11_WINDOW(gdk_window))
-	    {
-	      GdkDisplay *display;
+	  GdkDisplay *display;
 
-	      display = gtk_widget_get_display (widget);
-	      timestamp = gdk_x11_display_get_user_time (display);
-	    }
-	  else
-#endif
-	    timestamp = gtk_get_current_event_time ();
+	  display = gtk_widget_get_display (widget);
+	  timestamp = gdk_display_get_user_time (display);
         }
 
       gdk_window_focus (gdk_window, timestamp);
