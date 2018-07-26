@@ -1656,6 +1656,7 @@ pointer_handle_button (void              *data,
     return;
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (display, time);
 
   switch (button)
     {
@@ -1746,6 +1747,7 @@ pointer_handle_axis (void              *data,
   if (!seat->pointer_info.focus)
     return;
 
+  gdk_display_update_user_time (display, time);
   /* get the delta and convert it into the expected range */
   switch (axis)
     {
@@ -1832,6 +1834,7 @@ pointer_handle_axis_stop (void              *data,
     return;
 
   seat->pointer_info.time = time;
+  gdk_display_update_user_time (seat->display, time);
 
   switch (axis)
     {
@@ -2145,6 +2148,8 @@ deliver_key_event (GdkWaylandSeat *seat,
   guint delay, interval, timeout;
   gint64 begin_time, now;
 
+  gdk_display_update_user_time (seat->display, time_);
+
   begin_time = g_get_monotonic_time ();
 
   stop_key_repeat (seat);
@@ -2284,7 +2289,7 @@ keyboard_handle_key (void               *data,
   seat->repeat_count = 0;
   _gdk_wayland_display_update_serial (display, serial);
   deliver_key_event (data, time, key + 8, state_w, FALSE);
-
+  /* No need to update user_time here, we did it in deliver_key_event() */
 }
 
 static void
@@ -2452,6 +2457,7 @@ touch_handle_down (void              *data,
   GdkEvent *event;
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (seat->display, time);
 
   touch = gdk_wayland_seat_add_touch (seat, id, wl_surface);
   touch->x = wl_fixed_to_double (x);
@@ -2486,6 +2492,7 @@ touch_handle_up (void            *data,
   GdkEvent *event;
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (seat->display, time);
 
   touch = gdk_wayland_seat_get_touch (seat, id);
   event = _create_touch_event (seat, touch, GDK_TOUCH_END, time);
@@ -2512,6 +2519,8 @@ touch_handle_motion (void            *data,
   GdkWaylandSeat *seat = data;
   GdkWaylandTouchData *touch;
   GdkEvent *event;
+
+  gdk_display_update_user_time (seat->display, time);
 
   touch = gdk_wayland_seat_get_touch (seat, id);
   touch->x = wl_fixed_to_double (x);
@@ -2576,6 +2585,7 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
   if (!seat->pointer_info.focus)
     return;
 
+  gdk_display_update_user_time (seat->display, _time);
   seat->pointer_info.time = _time;
 
   event = gdk_event_new (GDK_TOUCHPAD_SWIPE);
@@ -2618,6 +2628,7 @@ gesture_swipe_begin (void                                *data,
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (seat->display, time);
 
   emit_gesture_swipe_event (seat,
                             GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
@@ -2634,6 +2645,7 @@ gesture_swipe_update (void                                *data,
 {
   GdkWaylandSeat *seat = data;
 
+  gdk_display_update_user_time (seat->display, time);
   emit_gesture_swipe_event (seat,
                             GDK_TOUCHPAD_GESTURE_PHASE_UPDATE,
                             time,
@@ -2654,6 +2666,7 @@ gesture_swipe_end (void                                *data,
   GdkTouchpadGesturePhase phase;
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (seat->display, time);
 
   phase = (cancelled) ?
     GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
@@ -2679,6 +2692,7 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
   if (!seat->pointer_info.focus)
     return;
 
+  gdk_display_update_user_time (seat->display, _time);
   seat->pointer_info.time = _time;
 
   event = gdk_event_new (GDK_TOUCHPAD_PINCH);
@@ -2723,6 +2737,8 @@ gesture_pinch_begin (void                                *data,
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (seat->display, time);
+
   emit_gesture_pinch_event (seat,
                             GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
                             time, fingers, 0, 0, 1, 0);
@@ -2740,6 +2756,7 @@ gesture_pinch_update (void                                *data,
 {
   GdkWaylandSeat *seat = data;
 
+  gdk_display_update_user_time (seat->display, time);
   emit_gesture_pinch_event (seat,
                             GDK_TOUCHPAD_GESTURE_PHASE_UPDATE, time,
                             seat->gesture_n_fingers,
@@ -2761,6 +2778,7 @@ gesture_pinch_end (void                                *data,
   GdkTouchpadGesturePhase phase;
 
   _gdk_wayland_display_update_serial (display, serial);
+  gdk_display_update_user_time (seat->display, time);
 
   phase = (cancelled) ?
     GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
@@ -3948,6 +3966,7 @@ tablet_tool_handle_frame (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkEvent *frame_event;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
 
   GDK_NOTE (EVENTS,
             g_message ("tablet frame, time %d", time));
@@ -3962,6 +3981,7 @@ tablet_tool_handle_frame (void                      *data,
 
   tablet->pointer_info.time = time;
   gdk_wayland_tablet_flush_frame_event (tablet, time);
+  gdk_display_update_user_time (seat->display, time);
 }
 
 static const struct zwp_tablet_tool_v2_listener tablet_tool_listener = {
@@ -4039,6 +4059,8 @@ tablet_pad_ring_handle_frame (void                          *data,
   GDK_NOTE (EVENTS,
             g_message ("tablet pad ring handle frame, ring = %p", wp_tablet_pad_ring));
 
+  gdk_display_update_user_time (seat->display, time);
+
   event = gdk_event_new (GDK_PAD_RING);
   g_set_object (&event->pad_axis.window, seat->keyboard_focus);
   event->pad_axis.time = time;
@@ -4114,6 +4136,8 @@ tablet_pad_strip_handle_frame (void                           *data,
   GDK_NOTE (EVENTS,
             g_message ("tablet pad strip handle frame, strip = %p",
                        wp_tablet_pad_strip));
+
+  gdk_display_update_user_time (seat->display, time);
 
   event = gdk_event_new (GDK_PAD_STRIP);
   g_set_object (&event->pad_axis.window, seat->keyboard_focus);
@@ -4235,6 +4259,8 @@ tablet_pad_group_handle_mode (void                           *data,
             g_message ("tablet pad group handle mode, pad group = %p, mode = %d",
                        wp_tablet_pad_group, mode));
 
+  gdk_display_update_user_time (seat->display, time);
+
   group->mode_switch_serial = serial;
   group->current_mode = mode;
   n_group = g_list_index (pad->mode_groups, group);
@@ -4353,6 +4379,8 @@ tablet_pad_handle_button (void                     *data,
   GDK_NOTE (EVENTS,
             g_message ("tablet pad handle button, pad = %p, button = %d, state = %d",
                        wp_tablet_pad, button, state));
+
+  gdk_display_update_user_time (seat->display, time);
 
   group = tablet_pad_lookup_button_group (pad, button);
   n_group = g_list_index (pad->mode_groups, group);
