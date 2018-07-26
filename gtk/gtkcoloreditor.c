@@ -409,7 +409,7 @@ pick_color (GtkButton      *button,
   g_free (token);
 
   g_dbus_proxy_call (editor->priv->portal_proxy,
-                     "ScreenshotPixel",
+                     "PickColor",
                      g_variant_new ("(sa{sv})", "", &options),
                      0,
                      -1,
