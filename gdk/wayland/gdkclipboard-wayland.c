@@ -52,13 +52,13 @@ static void
 gdk_wayland_clipboard_discard_offer (GdkWaylandClipboard *cb)
 {
   g_clear_pointer (&cb->offer_formats, gdk_content_formats_unref);
-  g_clear_pointer (&cb->offer, (GDestroyNotify) wl_data_offer_destroy);
+  g_clear_pointer (&cb->offer, wl_data_offer_destroy);
 }
 
 static void
 gdk_wayland_clipboard_discard_source (GdkWaylandClipboard *cb)
 {
-  g_clear_pointer (&cb->source, (GDestroyNotify) wl_data_source_destroy);
+  g_clear_pointer (&cb->source, wl_data_source_destroy);
 }
 
 static void

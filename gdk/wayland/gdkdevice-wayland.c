@@ -1087,7 +1087,7 @@ gdk_wayland_seat_discard_pending_offer (GdkWaylandSeat *seat)
       gdk_content_formats_unref (ignore);
       seat->pending_builder = NULL;
     }
-  g_clear_pointer (&seat->pending_offer, (GDestroyNotify) wl_data_offer_destroy);
+  g_clear_pointer (&seat->pending_offer, wl_data_offer_destroy);
   seat->pending_source_actions = 0;
   seat->pending_action = 0;
 }
