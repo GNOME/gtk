@@ -399,6 +399,7 @@ gtk_private_h_sources =		\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
 	gtkcolorpickerprivate.h	\
+	gtkcolorpickerportalprivate.h	\
 	gtkcolorplaneprivate.h	\
 	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
@@ -677,6 +678,7 @@ gtk_base_c_sources = 		\
 	gtkcolorchooserdialog.c	\
 	gtkcoloreditor.c	\
 	gtkcolorpicker.c	\
+	gtkcolorpickerportal.c	\
 	gtkcolorplane.c		\
 	gtkcolorscale.c		\
 	gtkcolorswatch.c	\
