@@ -901,12 +901,20 @@ gtk_deps = [
   graphene_dep,
 ]
 
-if harfbuzz_dep.found() and pangoft_dep.found()
-  gtk_deps += [ harfbuzz_dep, pangoft_dep ]
+if build_with_harfbuzz
   gtk_sources += files([
-  'language-names.c',
-  'script-names.c',
+    'gtkpangofontutils.c',
   ])
+  gtk_deps += [ harfbuzz_dep ]
+  if pangoft_dep.found()
+    gtk_deps += [ pangoft_dep ]
+    gtk_sources += files([
+    'language-names.c',
+    'script-names.c',
+    ])
+  elif add_freetype_lib
+    gtk_deps += [ ft2_dep ]
+  endif
 endif
 
 if x11_enabled
