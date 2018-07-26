@@ -2518,11 +2518,15 @@ gtk_window_set_startup_id (GtkWindow   *window,
 
       gdk_window = _gtk_widget_get_window (widget);
 
+      if (timestamp != GDK_CURRENT_TIME)
+        {
 #ifdef GDK_WINDOWING_X11
-      if (timestamp != GDK_CURRENT_TIME && GDK_IS_X11_WINDOW(gdk_window))
-	gdk_x11_window_set_user_time (gdk_window, timestamp);
+          if (GDK_IS_X11_WINDOW(gdk_window))
+            gdk_x11_window_set_user_time (gdk_window, timestamp);
 #endif
-
+          gdk_display_update_user_time (gdk_window_get_display (gdk_window),
+                                        timestamp);
+        }
       /* Here we differentiate real and "fake" startup notification IDs,
        * constructed on purpose just to pass interaction timestamp
        */
@@ -7524,25 +7528,29 @@ gtk_window_realize (GtkWidget *widget)
 
   if (priv->startup_id)
     {
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_WINDOW (gdk_window))
+      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+      if (timestamp != GDK_CURRENT_TIME)
         {
-          guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
-          if (timestamp != GDK_CURRENT_TIME)
+#ifdef GDK_WINDOWING_X11
+          if (GDK_IS_X11_WINDOW (gdk_window))
             gdk_x11_window_set_user_time (gdk_window, timestamp);
-        }
 #endif
+          gdk_display_update_user_time (gdk_window_get_display (gdk_window),
+                                        timestamp);
+        }
       if (!startup_id_is_fake (priv->startup_id))
         gdk_window_set_startup_id (gdk_window, priv->startup_id);
     }
 
-#ifdef GDK_WINDOWING_X11
   if (priv->initial_timestamp != GDK_CURRENT_TIME)
     {
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_WINDOW (gdk_window))
         gdk_x11_window_set_user_time (gdk_window, priv->initial_timestamp);
-    }
 #endif
+      gdk_display_update_user_time (gdk_window_get_display (gdk_window),
+                                    priv->initial_timestamp);
+    }
 
   child_allocation.x = 0;
   child_allocation.y = 0;
