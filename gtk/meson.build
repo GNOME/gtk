@@ -32,6 +32,7 @@ gtk_private_sources = files([
   'gtkcolorplane.c',
   'gtkcolorpicker.c',
   'gtkcolorpickerportal.c',
+  'gtkcolorpickershell.c',
   'gtkcolorscale.c',
   'gtkcolorswatch.c',
   'gtkcssanimatedstyle.c',
