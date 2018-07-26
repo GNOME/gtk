@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gtkcolorpickerprivate.h"
+#include "gtkcolorpickerportalprivate.h"
+#include "gtkprivate.h"
 #include <gio/gio.h>
 
 
@@ -48,6 +50,9 @@ gtk_color_picker_pick_finish (GtkColorPicker  *picker,
 GtkColorPicker *
 gtk_color_picker_new (void)
 {
-  return NULL;
+  if (gtk_should_use_portal ())
+    return gtk_color_picker_portal_new ();
+  else
+    return NULL;
 }
 
