@@ -8612,6 +8612,11 @@ gtk_window_focus (GtkWidget        *widget,
     {
       if (gtk_widget_child_focus (child, direction))
         return TRUE;
+      else if (priv->title_box != NULL &&
+               priv->title_box != child &&
+               gtk_widget_child_focus (priv->title_box, direction))
+        return TRUE;
+
     }
 
   return FALSE;
