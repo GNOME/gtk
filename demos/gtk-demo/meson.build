@@ -26,6 +26,7 @@ demos = files([
   'expander.c',
   'filtermodel.c',
   'fishbowl.c',
+  'fontrendering.c',
   'foreigndrawing.c',
   'gestures.c',
   'glarea.c',

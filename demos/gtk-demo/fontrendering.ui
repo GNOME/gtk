@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.94 -->
+  <object class="GtkAdjustment" id="scale_adj">
+    <property name="lower">0</property>
+    <property name="value">0</property>
+    <property name="upper">24</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">4</property>
+    <property name="page-size">0</property>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="default-width">600</property>
+    <property name="default-height">300</property>
+    <property name="title">Font rendering</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="margin-top">10</property>
+        <property name="row-spacing">10</property>
+        <property name="column-spacing">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-start">10</property>
+            <property name="label">Text</property>
+            <property name="xalign">1</property>
+            <style><class name="dim-label"/></style>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry">
+            <property name="text">Fonts render</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-start">10</property>
+            <property name="label">Font</property>
+            <property name="xalign">1</property>
+            <style><class name="dim-label"/></style>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFontButton" id="font_button">
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Hinting</property>
+            <property name="xalign">1</property>
+            <style><class name="dim-label"/></style>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="hinting">
+            <property name="active">0</property>
+            <property name="valign">center</property>
+            <items>
+              <item translatable="yes" id="none">None</item>
+              <item translatable="yes" id="slight">Slight</item>
+              <item translatable="yes" id="medium">Medium</item>
+              <item translatable="yes" id="full">Full</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="hint_metrics">
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Hint Metrics</property>
+                <style><class name="dim-label"/></style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="up_button">
+            <property name="icon-name">list-add-symbolic</property>
+            <style><class name="circular"/></style>
+          </object>
+          <packing>
+            <property name="left-attach">4</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="down_button">
+            <property name="icon-name">list-remove-symbolic</property>
+            <style><class name="circular"/></style>
+          </object>
+          <packing>
+            <property name="left-attach">4</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label"></property>
+            <property name="hexpand">1</property>
+          </object>
+          <packing>
+            <property name="left-attach">6</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <property name="propagate-natural-height">1</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkPicture" id="image">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="can-shrink">0</property>
+                <property name="keep-aspect-ratio">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+            <property name="width">7</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
