@@ -768,10 +768,26 @@ window1
               <AtkComponent>
               layer: widget
               alpha: 1
+              picker_button
+                "push button"
+                parent: grid
+                index: 0
+                description: Pick a color from the screen
+                state: enabled focusable sensitive has-tooltip
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkImage>
+                image size: 16 x 16
+                image description: (null)
+                <AtkAction>
+                action 0 name: click
+                action 0 description: Clicks the button
               swatch
                 "radio button"
                 parent: grid
-                index: 0
+                index: 1
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
@@ -787,7 +803,7 @@ window1
               entry
                 "text"
                 parent: grid
-                index: 1
+                index: 2
                 name: Color Name
                 state: editable enabled focusable sensitive single-line visible
                 toolkit: gtk
@@ -829,7 +845,7 @@ window1
               h_slider
                 "color chooser"
                 parent: grid
-                index: 2
+                index: 3
                 name: Hue
                 state: enabled focusable sensitive vertical visible
                 toolkit: gtk
@@ -843,7 +859,7 @@ window1
               a_slider
                 "color chooser"
                 parent: grid
-                index: 3
+                index: 4
                 name: Alpha
                 state: enabled focusable horizontal sensitive visible
                 toolkit: gtk
@@ -857,7 +873,7 @@ window1
               sv_plane
                 "color chooser"
                 parent: grid
-                index: 4
+                index: 5
                 name: Color Plane
                 state: enabled focusable sensitive visible
                 toolkit: gtk
