@@ -29,6 +29,7 @@ demos_base =					\
         filtermodel.c				\
 	fishbowl.c				\
 	foreigndrawing.c			\
+	fontrendering.c				\
 	gestures.c				\
 	glarea.c				\
 	headerbar.c				\

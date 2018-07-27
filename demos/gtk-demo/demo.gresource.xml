@@ -159,6 +159,7 @@
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
+    <file>fontrendering.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>headerbar.c</file>
@@ -242,5 +243,8 @@
   </gresource>
   <gresource prefix="/modelbutton">
     <file>modelbutton.ui</file>
+  </gresource>
+  <gresource prefix="/fontrendering">
+    <file>fontrendering.ui</file>
   </gresource>
 </gresources>
