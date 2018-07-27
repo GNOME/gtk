@@ -60,14 +60,14 @@ gtk_color_picker_shell_initable_init (GInitable     *initable,
 
   if (picker->shell_proxy == NULL)
     {
-      g_warning ("No shell screenshot proxy: %s", (*error)->message);
+      g_debug ("Failed to create shell screenshot proxy");
       return FALSE;
     }
 
   owner = g_dbus_proxy_get_name_owner (picker->shell_proxy);
   if (owner == NULL)
     {
-      g_warning ("No shell screenshot proxy");
+      g_debug ("org.gnome.Shell.Screenshot not provided");
       g_clear_object (&picker->shell_proxy);
       return FALSE;
     }

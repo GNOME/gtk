@@ -63,14 +63,14 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
 
   if (picker->portal_proxy == NULL)
     {
-      g_warning ("No screenshot portal: %s", (*error)->message);
+      g_debug ("No screenshot portal: %s", (*error)->message);
       return FALSE;
     }
 
  owner = g_dbus_proxy_get_name_owner (picker->portal_proxy);
   if (owner == NULL)
     {
-      g_warning ("No screenshot portal");
+      g_debug ("No screenshot portal");
       g_clear_object (&picker->portal_proxy);
       return FALSE;
     }
@@ -81,7 +81,7 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   g_variant_unref (ret);
   if (version != 2)
     {
-      g_warning ("Screenshot portal version: %u", version);
+      g_debug ("Screenshot portal version: %u", version);
       g_clear_object (&picker->portal_proxy);
       return FALSE;
     }
