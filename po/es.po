@@ -16,15 +16,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 17:31+0000\n"
-"PO-Revision-Date: 2018-07-23 12:07+0200\n"
+"POT-Creation-Date: 2018-07-25 11:24+0000\n"
+"PO-Revision-Date: 2018-07-27 13:27+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/broadway/gdkbroadway-server.c:130
@@ -61,11 +61,9 @@ msgid "Drag'n'drop from other applications is not supported."
 msgstr "No se soporta arrastrar y soltar desde otras aplicaciones."
 
 #: gdk/gdkdrop.c:143
-#, fuzzy
 #| msgid "No compatible formats to transfer clipboard contents."
 msgid "No compatible formats to transfer contents."
-msgstr ""
-"No hay formatos compatibles para transferir el contenido del portapapeles."
+msgstr "No hay formatos compatibles para transferir el contenido."
 
 #: gdk/gdksurface.c:1366
 msgid "GL support disabled via GDK_DEBUG"
@@ -462,7 +460,7 @@ msgstr "No implementado en OS X"
 
 #: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdrop-wayland.c:207
 #: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1285
-#: gdk/win32/gdkdrop-win32.c:1330 gdk/x11/gdkclipboard-x11.c:752
+#: gdk/win32/gdkdrop-win32.c:1330 gdk/x11/gdkclipboard-x11.c:760
 #: gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
 msgstr "No se ha encontrado un formato de transferencia compatible"
@@ -568,12 +566,16 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. La propiedad del "
+"portapapeles ha cambiado."
 
 #: gdk/win32/gdkclipdrop-win32.c:947
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. Los datos han cambiado "
+"antes de poder recuperarlos."
 
 #: gdk/win32/gdkclipdrop-win32.c:964
 #, c-format
@@ -586,6 +588,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
+"No se pueden obtener los datos del portapapeles. No se ha encontrado un "
+"formato de transferencia compatible."
 
 #: gdk/win32/gdkclipdrop-win32.c:999
 #, c-format
@@ -612,7 +616,7 @@ msgstr ""
 #: gdk/win32/gdkdrop-win32.c:1304
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
-msgstr ""
+msgstr "Superficie GDK 0x%p no registrada como objetivo para soltar"
 
 #: gdk/win32/gdkdrop-win32.c:1311
 #, c-format
@@ -627,7 +631,7 @@ msgstr ""
 #: gdk/win32/gdkdrop-win32.c:1381
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
-msgstr ""
+msgstr "Falló al transmutar los datos en formato DnD W32 0x%x a %p (%s)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
 #, fuzzy
@@ -646,16 +650,16 @@ msgstr "GlobalReAlloc() falló: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
-msgstr ""
+msgstr "El búfer se ha quedado sin espacio (su tamaño es fijo)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can't transmute a single handle"
-msgstr ""
+msgstr "No se puede transmutar un único manejador"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr ""
+msgstr "Falló al transmutar %zu bytes de datos de %s a %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
@@ -714,9 +718,9 @@ msgstr[1] "Abriendo %d elementos"
 
 #: gdk/x11/gdkclipboard-x11.c:436
 msgid "Clipboard manager could not store selection."
-msgstr ""
+msgstr "El gestor del portapapeles no pudo almacenar la selección."
 
-#: gdk/x11/gdkclipboard-x11.c:604
+#: gdk/x11/gdkclipboard-x11.c:612
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 
@@ -731,13 +735,11 @@ msgstr ""
 msgid "Format %s not supported"
 msgstr "Formato %s no soportado"
 
-#: gdk/x11/gdktextlistconverter-x11.c:65
-#: gdk/x11/gdktextlistconverter-x11.c:105
+#: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
 msgstr "No hay suficiente espacio en el destino"
 
-#: gdk/x11/gdktextlistconverter-x11.c:91
-#: gdk/x11/gdktextlistconverter-x11.c:138
+#: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:138
 msgid "Need complete input to do conversion"
 msgstr "Se debe completar la entrada para hacer la conversión"
 
@@ -882,18 +884,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410
-#: gtk/gtkwindow.c:8074
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8074
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433
-#: gtk/gtkwindow.c:8083
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8083
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433
-#: gtk/gtkwindow.c:8040
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8040
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1286,8 +1285,7 @@ msgstr "Salida a esta carpeta en lugar de a cwd"
 msgid "Invalid size %s\n"
 msgstr "Tamaño %s no válido\n"
 
-#: gtk/encodesymbolic.c:103 gtk/encodesymbolic.c:110
-#: gtk/gtk-builder-tool.c:673
+#: gtk/encodesymbolic.c:103 gtk/encodesymbolic.c:110 gtk/gtk-builder-tool.c:673
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "No se puede cargar el archivo: %s\n"
@@ -4114,7 +4112,6 @@ msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "La configuración está codificada en GTK_TEST_TOUCHSCREEN"
 
 #: gtk/inspector/visual.c:845
-#, fuzzy
 #| msgid ""
 #| "Not settable at runtime.\n"
 #| "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4123,7 +4120,7 @@ msgid ""
 "Use GDK_DEBUG=gl-disable instead"
 msgstr ""
 "No configurable en tiempo de ejecución.\n"
-"Use GDK_GL=always o GDK_GL=disable en su lugar"
+"Use GDK_DEBUG=gl-disable en su lugar"
 
 #: gtk/inspector/visual.c:854 gtk/inspector/visual.c:855
 msgid "GL rendering is disabled"
@@ -4350,11 +4347,10 @@ msgid "Above-base Substitutions"
 msgstr "Sustituciones sobre la base"
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
 #| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Autenticación"
+msgstr "Fracciones alternativas"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
