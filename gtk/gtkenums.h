@@ -464,7 +464,7 @@ typedef enum
  * Used to change the appearance of an outline typically provided by a #GtkFrame.
  *
  * Note that many themes do not differentiate the appearance of the
- * various shadow types: Either their is no visible shadow (@GTK_SHADOW_NONE),
+ * various shadow types: Either there is no visible shadow (@GTK_SHADOW_NONE),
  * or there is (any other value).
  */
 typedef enum
