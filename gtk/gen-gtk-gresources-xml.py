@@ -62,7 +62,7 @@ for f in get_files('ui', '.ui'):
 xml += '\n'
 
 for s in ['16x16', '24x24', '32x32', '48x48']:
-  for c in ['categories']:
+  for c in ['categories', 'status']:
     icons_dir = 'icons/{0}/{1}'.format(s,c)
     if os.path.exists(os.path.join(srcdir,icons_dir)):
       for f in get_files(icons_dir, '.png'):
