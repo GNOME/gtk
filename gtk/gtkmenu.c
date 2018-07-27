@@ -39,9 +39,9 @@
  * Other composite widgets such as the #GtkNotebook can pop up a
  * #GtkMenu as well.
  *
- * Applications can display a #GtkMenu as a popup menu by calling the
- * gtk_menu_popup() function.  The example below shows how an application
- * can pop up a menu when the 3rd mouse button is pressed.
+ * Applications can display a #GtkMenu as a popup menu by calling one of the
+ * gtk_menu_popup_*() function. The example below shows how an application can
+ * pop up a menu when the 3rd mouse button is pressed.
  *
  * ## Connecting the popup signal handler.
  *
@@ -50,22 +50,22 @@
  *   gesture = gtk_gesture_multi_press_new (window);
  *   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
  *                                  GDK_BUTTON_SECONDARY);
- *   g_signal_connect (gesture, "event", G_CALLBACK (my_popup_handler), menu);
+ *   g_signal_connect (gesture, "begin", G_CALLBACK (my_popup_handler), menu);
  * ]|
  *
  * ## Signal handler which displays a popup menu.
  *
  * |[<!-- language="C" -->
  * static void
- * my_popup_handler (GtkGesture *gesture,
- *                   guint       n_press,
- *                   double      x,
- *                   double      y,
- *                   gpointer    data)
+ * my_popup_handler (GtkGesture       *gesture,
+ *                   GdkEventSequence *sequence
+ *                   gpointer          data)
  * {
  *   GtkMenu *menu = data;
+ *   const GdkEvent *event;
  *
- *   gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, GDK_CURRENT_TIME);
+ *   event = gtk_gesture_get_last_event (gesture, sequence);
+ *   gtk_menu_popup_at_pointer (menu, event);
  * }
  * ]|
  *
@@ -1207,13 +1207,6 @@ gtk_menu_destroy (GtkWidget *widget)
 
   g_clear_pointer (&priv->heights, g_free);
 
-  if (priv->position_func_data_destroy)
-    {
-      priv->position_func_data_destroy (priv->position_func_data);
-      priv->position_func_data = NULL;
-      priv->position_func_data_destroy = NULL;
-    }
-
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->destroy (widget);
 }
 
@@ -1498,9 +1491,6 @@ gtk_menu_popup_internal (GtkMenu             *menu,
                          GdkDevice           *device,
                          GtkWidget           *parent_menu_shell,
                          GtkWidget           *parent_menu_item,
-                         GtkMenuPositionFunc  func,
-                         gpointer             data,
-                         GDestroyNotify       destroy,
                          guint                button,
                          guint32              activate_time)
 {
@@ -1658,9 +1648,6 @@ gtk_menu_popup_internal (GtkMenu             *menu,
                                   GTK_WINDOW (parent_toplevel));
 
   priv->parent_menu_item = parent_menu_item;
-  priv->position_func = func;
-  priv->position_func_data = data;
-  priv->position_func_data_destroy = destroy;
   menu_shell->priv->activate_time = activate_time;
 
   /* We need to show the menu here rather in the init function
@@ -1701,123 +1688,6 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
 
   _gtk_menu_shell_update_mnemonics (menu_shell);
-}
-
-/**
- * gtk_menu_popup_for_device:
- * @menu: a #GtkMenu
- * @device: (allow-none): a #GdkDevice
- * @parent_menu_shell: (allow-none): the menu shell containing the triggering
- *     menu item, or %NULL
- * @parent_menu_item: (allow-none): the menu item whose activation triggered
- *     the popup, or %NULL
- * @func: (allow-none): a user supplied function used to position the menu,
- *     or %NULL
- * @data: (allow-none): user supplied data to be passed to @func
- * @destroy: (allow-none): destroy notify for @data
- * @button: the mouse button which was pressed to initiate the event
- * @activate_time: the time at which the activation event occurred
- *
- * Displays a menu and makes it available for selection.
- *
- * Applications can use this function to display context-sensitive menus,
- * and will typically supply %NULL for the @parent_menu_shell,
- * @parent_menu_item, @func, @data and @destroy parameters. The default
- * menu positioning function will position the menu at the current position
- * of @device (or its corresponding pointer).
- *
- * The @button parameter should be the mouse button pressed to initiate
- * the menu popup. If the menu popup was initiated by something other than
- * a mouse button press, such as a mouse button release or a keypress,
- * @button should be 0.
- *
- * The @activate_time parameter is used to conflict-resolve initiation of
- * concurrent requests for mouse/keyboard grab requests. To function
- * properly, this needs to be the time stamp of the user event (such as
- * a mouse click or key press) that caused the initiation of the popup.
- * Only if no such event is available, gtk_get_current_event_time() can
- * be used instead.
- */
-void
-gtk_menu_popup_for_device (GtkMenu             *menu,
-                           GdkDevice           *device,
-                           GtkWidget           *parent_menu_shell,
-                           GtkWidget           *parent_menu_item,
-                           GtkMenuPositionFunc  func,
-                           gpointer             data,
-                           GDestroyNotify       destroy,
-                           guint                button,
-                           guint32              activate_time)
-{
-  GtkMenuPrivate *priv;
-
-  g_return_if_fail (GTK_IS_MENU (menu));
-
-  priv = menu->priv;
-  priv->rect_surface = NULL;
-  priv->widget = NULL;
-
-  gtk_menu_popup_internal (menu,
-                           device,
-                           parent_menu_shell,
-                           parent_menu_item,
-                           func,
-                           data,
-                           destroy,
-                           button,
-                           activate_time);
-}
-
-/**
- * gtk_menu_popup:
- * @menu: a #GtkMenu
- * @parent_menu_shell: (allow-none): the menu shell containing the
- *     triggering menu item, or %NULL
- * @parent_menu_item: (allow-none): the menu item whose activation
- *     triggered the popup, or %NULL
- * @func: (scope async) (allow-none): a user supplied function used to position
- *     the menu, or %NULL
- * @data: user supplied data to be passed to @func.
- * @button: the mouse button which was pressed to initiate the event.
- * @activate_time: the time at which the activation event occurred.
- *
- * Displays a menu and makes it available for selection.
- *
- * Applications can use this function to display context-sensitive
- * menus, and will typically supply %NULL for the @parent_menu_shell,
- * @parent_menu_item, @func and @data parameters. The default menu
- * positioning function will position the menu at the current mouse
- * cursor position.
- *
- * The @button parameter should be the mouse button pressed to initiate
- * the menu popup. If the menu popup was initiated by something other
- * than a mouse button press, such as a mouse button release or a keypress,
- * @button should be 0.
- *
- * The @activate_time parameter is used to conflict-resolve initiation
- * of concurrent requests for mouse/keyboard grab requests. To function
- * properly, this needs to be the timestamp of the user event (such as
- * a mouse click or key press) that caused the initiation of the popup.
- * Only if no such event is available, gtk_get_current_event_time() can
- * be used instead.
- */
-void
-gtk_menu_popup (GtkMenu             *menu,
-                GtkWidget           *parent_menu_shell,
-                GtkWidget           *parent_menu_item,
-                GtkMenuPositionFunc  func,
-                gpointer             data,
-                guint                button,
-                guint32              activate_time)
-{
-  g_return_if_fail (GTK_IS_MENU (menu));
-
-  gtk_menu_popup_for_device (menu,
-                             NULL,
-                             parent_menu_shell,
-                             parent_menu_item,
-                             func, data, NULL,
-                             button, activate_time);
 }
 
 static GdkDevice *
@@ -1924,9 +1794,6 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
                            device,
                            NULL,
                            NULL,
-                           NULL,
-                           NULL,
-                           NULL,
                            button,
                            activate_time);
 
@@ -2014,9 +1881,6 @@ gtk_menu_popup_at_widget (GtkMenu        *menu,
                            device,
                            parent_menu_shell,
                            parent_menu_item,
-                           NULL,
-                           NULL,
-                           NULL,
                            button,
                            activate_time);
 
@@ -2516,9 +2380,6 @@ gtk_menu_focus (GtkWidget       *widget,
   return FALSE;
 }
 
-/* See notes in gtk_menu_popup() for information
- * about the “grab transfer window”
- */
 static GdkSurface *
 menu_grab_transfer_surface_get (GtkMenu *menu)
 {
@@ -3713,231 +3574,6 @@ gtk_menu_deactivate (GtkMenuShell *menu_shell)
     gtk_menu_shell_deactivate (GTK_MENU_SHELL (parent));
 }
 
-static void
-gtk_menu_position_legacy (GtkMenu  *menu,
-                          gboolean  set_scroll_offset)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  GtkWidget *widget;
-  GtkRequisition requisition;
-  gint x, y;
-  gint scroll_offset;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-  gint monitor_num;
-  GdkDevice *pointer;
-  GtkBorder border;
-  gint i;
-
-  widget = GTK_WIDGET (menu);
-
-  display = gtk_widget_get_display (widget);
-  pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
-  gdk_device_get_position (pointer, &x, &y);
-
-  /* Realize so we have the proper width and height to figure out
-   * the right place to popup the menu.
-   */
-  gtk_widget_realize (priv->toplevel);
-
-  _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
-
-  requisition.width = gtk_widget_get_allocated_width (widget);
-  requisition.height = gtk_widget_get_allocated_height (widget);
-
-  monitor = gdk_display_get_monitor_at_point (display, x, y);
-  monitor_num = 0;
-  for (i = 0; ; i++)
-    {
-      GdkMonitor *m = gdk_display_get_monitor (display, i);
-
-      if (m == monitor)
-        {
-          monitor_num = i;
-          break;
-        }
-      if (m == NULL)
-        break;
-    }
-
-  priv->monitor_num = monitor_num;
-  priv->initially_pushed_in = FALSE;
-
-  /* Set the type hint here to allow custom position functions
-   * to set a different hint
-   */
-  if (!gtk_widget_get_visible (priv->toplevel))
-    gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), GDK_SURFACE_TYPE_HINT_POPUP_MENU);
-
-  if (priv->position_func)
-    {
-      (* priv->position_func) (menu, &x, &y, &priv->initially_pushed_in,
-                               priv->position_func_data);
-
-      if (priv->monitor_num < 0)
-        priv->monitor_num = monitor_num;
-
-      monitor = gdk_display_get_monitor (display, priv->monitor_num);
-      gdk_monitor_get_workarea (monitor, &workarea);
-    }
-  else
-    {
-      gint space_left, space_right, space_above, space_below;
-      gint needed_width;
-      gint needed_height;
-      gboolean rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
-
-      /* The placement of popup menus horizontally works like this (with
-       * RTL in parentheses)
-       *
-       * - If there is enough room to the right (left) of the mouse cursor,
-       *   position the menu there.
-       *
-       * - Otherwise, if if there is enough room to the left (right) of the
-       *   mouse cursor, position the menu there.
-       *
-       * - Otherwise if the menu is smaller than the monitor, position it
-       *   on the side of the mouse cursor that has the most space available
-       *
-       * - Otherwise (if there is simply not enough room for the menu on the
-       *   monitor), position it as far left (right) as possible.
-       *
-       * Positioning in the vertical direction is similar: first try below
-       * mouse cursor, then above.
-       */
-      monitor = gdk_display_get_monitor (display, priv->monitor_num);
-      gdk_monitor_get_workarea (monitor, &workarea);
-
-      space_left = x - workarea.x;
-      space_right = workarea.x + workarea.width - x - 1;
-      space_above = y - workarea.y;
-      space_below = workarea.y + workarea.height - y - 1;
-
-      /* Position horizontally. */
-
-      /* the amount of space we need to position the menu.
-       * Note the menu is offset "thickness" pixels
-       */
-      needed_width = requisition.width;
-
-      if (needed_width <= space_left ||
-          needed_width <= space_right)
-        {
-          if ((rtl  && needed_width <= space_left) ||
-              (!rtl && needed_width >  space_right))
-            {
-              /* position left */
-              x = x - requisition.width + 1;
-            }
-          else
-            {
-              /* position right */
-            }
-
-          /* x is clamped on-screen further down */
-        }
-      else if (requisition.width <= workarea.width)
-        {
-          /* the menu is too big to fit on either side of the mouse
-           * cursor, but smaller than the monitor. Position it on
-           * the side that has the most space
-           */
-          if (space_left > space_right)
-            {
-              /* left justify */
-              x = workarea.x;
-            }
-          else
-            {
-              /* right justify */
-              x = workarea.x + workarea.width - requisition.width;
-            }
-        }
-      else /* menu is simply too big for the monitor */
-        {
-          if (rtl)
-            {
-              /* right justify */
-              x = workarea.x + workarea.width - requisition.width;
-            }
-          else
-            {
-              /* left justify */
-              x = workarea.x;
-            }
-        }
-
-      /* Position vertically.
-       * The algorithm is the same as above, but simpler
-       * because we don't have to take RTL into account.
-       */
-      needed_height = requisition.height;
-
-      if (needed_height <= space_above ||
-          needed_height <= space_below)
-        {
-          if (needed_height > space_below)
-            y = y - requisition.height + 1;
-
-          y = CLAMP (y, workarea.y,
-                     workarea.y + workarea.height - requisition.height);
-        }
-      else if (needed_height > space_below && needed_height > space_above)
-        {
-          if (space_below >= space_above)
-            y = workarea.y + workarea.height - requisition.height;
-          else
-            y = workarea.y;
-        }
-      else
-        {
-          y = workarea.y;
-        }
-    }
-
-  scroll_offset = 0;
-
-  if (y + requisition.height > workarea.y + workarea.height)
-    {
-      if (priv->initially_pushed_in)
-        scroll_offset += (workarea.y + workarea.height) - requisition.height - y;
-      y = (workarea.y + workarea.height) - requisition.height;
-    }
-
-  if (y < workarea.y)
-    {
-      if (priv->initially_pushed_in)
-        scroll_offset += workarea.y - y;
-      y = workarea.y;
-    }
-
-  x = CLAMP (x, workarea.x, MAX (workarea.x, workarea.x + workarea.width - requisition.width));
-
-  x -= border.left;
-  y -= border.top;
-
-  if (GTK_MENU_SHELL (menu)->priv->active)
-    {
-      priv->have_position = TRUE;
-      priv->position_x = x;
-      priv->position_y = y;
-    }
-
-  if (scroll_offset != 0)
-    {
-      GtkBorder arrow_border;
-
-      get_arrows_border (menu, &arrow_border);
-      scroll_offset += arrow_border.top;
-    }
-
-  gtk_window_move (GTK_WINDOW (priv->toplevel), x, y);
-
-  if (set_scroll_offset)
-    priv->scroll_offset = scroll_offset;
-}
-
 static GdkGravity
 get_horizontally_flipped_anchor (GdkGravity anchor)
 {
@@ -4000,41 +3636,9 @@ gtk_menu_position (GtkMenu  *menu,
       gtk_widget_get_surface_allocation (priv->widget, &rect);
       text_direction = gtk_widget_get_direction (priv->widget);
     }
-  else if (!priv->position_func)
+  else
     {
-      GtkWidget *attach_widget;
-      GdkDevice *grab_device;
-
-      /*
-       * One of the legacy gtk_menu_popup*() functions were used to popup but
-       * without a custom positioning function, so make an attempt to let the
-       * backend do the position constraining when required conditions are met.
-       */
-
-      grab_device = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
-      attach_widget = gtk_menu_get_attach_widget (menu);
-
-      if (grab_device && attach_widget)
-        {
-          rect = (GdkRectangle) { 0, 0, 1, 1 };
-
-          rect_surface = gtk_widget_get_surface (attach_widget);
-          gdk_surface_get_device_position (rect_surface, grab_device,
-                                          &rect.x, &rect.y, NULL);
-          text_direction = gtk_widget_get_direction (attach_widget);
-          rect_anchor = GDK_GRAVITY_SOUTH_EAST;
-          menu_anchor = GDK_GRAVITY_NORTH_WEST;
-          anchor_hints = GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE | GDK_ANCHOR_RESIZE;
-          rect_anchor_dx = 0;
-          rect_anchor_dy = 0;
-          emulated_move_to_rect = TRUE;
-        }
-    }
-
-  if (!rect_surface)
-    {
-      gtk_menu_position_legacy (menu, set_scroll_offset);
-      return;
+      g_assert_not_reached ();
     }
 
   /* Realize so we have the proper width and height to figure out

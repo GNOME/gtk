@@ -47,9 +47,6 @@ struct _GtkMenuPrivate
   GtkAccelGroup *accel_group;
   const char    *accel_path;
 
-  GtkMenuPositionFunc position_func;
-  gpointer            position_func_data;
-  GDestroyNotify      position_func_data_destroy;
   gint                position_x;
   gint                position_y;
 
