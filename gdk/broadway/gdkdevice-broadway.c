@@ -299,11 +299,6 @@ gdk_broadway_device_grab (GdkDevice    *device,
     }
 }
 
-#define TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
 static void
 gdk_broadway_device_ungrab (GdkDevice *device,
 			    guint32    time_)
@@ -331,7 +326,7 @@ gdk_broadway_device_ungrab (GdkDevice *device,
 	  if (grab &&
 	      (time_ == GDK_CURRENT_TIME ||
 	       grab->time == GDK_CURRENT_TIME ||
-	       !TIME_IS_LATER (grab->time, time_)))
+	       !GDK_DISPLAY_TIME_IS_LATER (grab->time, time_)))
 	    grab->serial_end = serial;
 	}
     }

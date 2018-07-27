@@ -1035,11 +1035,6 @@ gdk_wayland_display_get_user_time (GdkDisplay *display)
   return GDK_WAYLAND_DISPLAY (display)->user_time;
 }
 
-#define TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
 static void
 gdk_wayland_display_update_user_time (GdkDisplay *display,
                                       guint32     time_)
@@ -1048,7 +1043,7 @@ gdk_wayland_display_update_user_time (GdkDisplay *display,
 
   if (time_ != GDK_CURRENT_TIME &&
       (display_wl->user_time == GDK_CURRENT_TIME ||
-       TIME_IS_LATER (time_, display_wl->user_time)))
+       GDK_DISPLAY_TIME_IS_LATER (time_, display_wl->user_time)))
     display_wl->user_time = time_;
 }
 

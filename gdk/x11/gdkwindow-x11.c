@@ -121,14 +121,6 @@ static void        gdk_window_impl_x11_finalize   (GObject            *object);
   (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
    GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
 
-/* Return whether time1 is considered later than time2 as far as xserver
- * time is concerned.  Accounts for wraparound.
- */
-#define XSERVER_TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
 struct _GdkX11Window {
   GdkWindow parent;
 };
@@ -1646,7 +1638,7 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
       
       if (toplevel->user_time != 0 &&
 	      display_x11->user_time != 0 &&
-	  XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
+	  GDK_DISPLAY_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
 	gdk_x11_window_set_user_time (window, display_x11->user_time);
     }
   

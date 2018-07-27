@@ -1922,11 +1922,6 @@ device_grab_update_callback (GdkDisplay *display,
                                    serial);
 }
 
-#define XSERVER_TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
 void
 _gdk_x11_display_update_grab_info (GdkDisplay *display,
                                    GdkDevice  *device,
@@ -1950,7 +1945,7 @@ _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
   if (grab &&
       (time == GDK_CURRENT_TIME ||
        grab->time == GDK_CURRENT_TIME ||
-       !XSERVER_TIME_IS_LATER (grab->time, time)))
+       !GDK_DISPLAY_TIME_IS_LATER (grab->time, time)))
     {
       grab->serial_end = serial;
       _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
@@ -2548,7 +2543,7 @@ gdk_x11_display_update_user_time (GdkDisplay *display,
 
   if (time_ != GDK_CURRENT_TIME &&
       (display_x11->user_time == GDK_CURRENT_TIME ||
-       XSERVER_TIME_IS_LATER (time_, display_x11->user_time)))
+       GDK_DISPLAY_TIME_IS_LATER (time_, display_x11->user_time)))
     display_x11->user_time = time_;
 }
 
