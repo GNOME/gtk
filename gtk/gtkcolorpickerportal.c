@@ -63,14 +63,14 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
 
   if (picker->portal_proxy == NULL)
     {
-      g_debug ("No screenshot portal: %s", (*error)->message);
+      g_debug ("Failed to create screnshot portal proxy");
       return FALSE;
     }
 
  owner = g_dbus_proxy_get_name_owner (picker->portal_proxy);
   if (owner == NULL)
     {
-      g_debug ("No screenshot portal");
+      g_debug ("org.freedesktop.portal.Screenshot not provided");
       g_clear_object (&picker->portal_proxy);
       return FALSE;
     }
