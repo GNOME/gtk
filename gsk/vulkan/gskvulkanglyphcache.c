@@ -115,6 +115,8 @@ gsk_vulkan_glyph_cache_class_init (GskVulkanGlyphCacheClass *klass)
 typedef struct {
   PangoFont *font;
   PangoGlyph glyph;
+  guint xshift;
+  guint yshift;
   guint scale; /* times 1024 */
 } GlyphCacheKey;
 
@@ -126,6 +128,8 @@ glyph_cache_equal (gconstpointer v1, gconstpointer v2)
 
   return key1->font == key2->font &&
          key1->glyph == key2->glyph &&
+         key1->xshift == key2->xshift &&
+         key1->yshift == key2->yshift &&
          key1->scale == key2->scale;
 }
 
@@ -134,7 +138,7 @@ glyph_cache_hash (gconstpointer v)
 {
   const GlyphCacheKey *key = v;
 
-  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ key->scale;
+  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ (key->xshift << 24) ^ (key->yshift << 26) ^ key->scale;
 }
 
 static void
@@ -267,10 +271,10 @@ render_glyph (Atlas          *atlas,
   gi.glyph = key->glyph;
   gi.geometry.width = value->draw_width * 1024;
   if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    gi.geometry.x_offset = 0;
+    gi.geometry.x_offset = key->xshift * 256;
   else
-    gi.geometry.x_offset = - value->draw_x * 1024;
-  gi.geometry.y_offset = - value->draw_y * 1024;
+    gi.geometry.x_offset = key->xshift * 256 - value->draw_x * 1024;
+  gi.geometry.y_offset = key->yshift * 256 - value->draw_y * 1024;
 
   glyphs.num_glyphs = 1;
   glyphs.glyphs = &gi;
@@ -328,18 +332,29 @@ gsk_vulkan_glyph_cache_new (GskRenderer      *renderer,
   return cache;
 }
 
+#define PHASE(x) ((x % PANGO_SCALE) * 4 / PANGO_SCALE)
+
 GskVulkanCachedGlyph *
 gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
                                gboolean             create,
                                PangoFont           *font,
                                PangoGlyph           glyph,
+                               int                  x,
+                               int                  y,
                                float                scale)
 {
   GlyphCacheKey lookup_key;
   GskVulkanCachedGlyph *value;
+  guint xshift;
+  guint yshift;
+
+  xshift = PHASE (x);
+  yshift = PHASE (y);
 
   lookup_key.font = font;
   lookup_key.glyph = glyph;
+  lookup_key.xshift = xshift;
+  lookup_key.yshift = yshift;
   lookup_key.scale = (guint)(scale * 1024);
 
   value = g_hash_table_lookup (cache->hash_table, &lookup_key);
@@ -374,6 +389,8 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
 
       key->font = g_object_ref (font);
       key->glyph = glyph;
+      key->xshift = xshift;
+      key->yshift = yshift;
       key->scale = (guint)(scale * 1024);
 
       if (ink_rect.width > 0 && ink_rect.height > 0)
