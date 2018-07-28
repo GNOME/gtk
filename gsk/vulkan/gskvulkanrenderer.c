@@ -147,7 +147,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
       data->renderer = NULL;
       gdk_texture_clear_render_data (data->texture);
     }
-  g_clear_pointer (&self->textures, (GDestroyNotify) g_slist_free);
+  g_clear_pointer (&self->textures, g_slist_free);
 
   g_clear_pointer (&self->render, gsk_vulkan_render_free);
 
