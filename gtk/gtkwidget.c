@@ -13633,3 +13633,12 @@ gtk_widget_get_height (GtkWidget *widget)
          border.top  - border.bottom -
          padding.top - padding.bottom;
 }
+
+void
+gtk_widget_set_transform (GtkWidget               *widget,
+                          const graphene_matrix_t *transform)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  graphene_matrix_init_from_matrix (&priv->transform, transform);
+}
