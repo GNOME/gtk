@@ -300,6 +300,9 @@ gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *icon_info
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
+GDK_AVAILABLE_IN_3_24
+GdkPixbuf *           gtk_icon_info_load_icon_thread_safe          (GtkIconInfo   *icon_info,
+                                                                    GError       **error);
 GDK_AVAILABLE_IN_3_10
 cairo_surface_t *     gtk_icon_info_load_surface       (GtkIconInfo   *icon_info,
 							GdkWindow     *for_window,
