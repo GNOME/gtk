@@ -1,4 +1,4 @@
-/* Pango/Font rendering
+/* Pango/Font Rendering
  *
  * Demonstrates variations in font rendering.
  */
@@ -82,7 +82,9 @@ update_image (void)
 
       pango_extents_to_pixels (&logical, NULL);
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width, logical.height);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            MAX(1,logical.width),
+                                            MAX(1,logical.height));
       cr = cairo_create (surface);
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
@@ -109,7 +111,9 @@ update_image (void)
       iter = pango_layout_get_iter (layout);
       run = pango_layout_iter_get_run (iter);
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width * 3 / 2, 4*logical.height);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            MAX(1, logical.width) * 3 / 2,
+                                            MAX(1, logical.height) * 4);
       cr = cairo_create (surface);
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
