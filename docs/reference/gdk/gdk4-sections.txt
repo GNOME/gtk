@@ -655,7 +655,6 @@ gdk_event_get_key_is_modifier
 gdk_event_get_pad_axis_value
 gdk_event_get_pad_button
 gdk_event_get_pad_group_mode
-gdk_event_get_string
 gdk_event_get_touch_emulating_pointer
 gdk_event_get_touchpad_angle_delta
 gdk_event_get_touchpad_deltas

@@ -1281,7 +1281,8 @@ key_is_left_or_right (const GdkEvent *event)
 static gboolean
 should_trigger_location_entry (GtkFileChooserWidget *impl,
                                guint                 keyval,
-                               GdkModifierType       state)
+                               GdkModifierType       state,
+                               const char          **string)
 {
   GdkModifierType no_text_input_mask;
 
@@ -1291,16 +1292,27 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
   no_text_input_mask =
     gtk_widget_get_modifier_mask (GTK_WIDGET (impl), GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
-  if ((keyval == GDK_KEY_slash
-       || keyval == GDK_KEY_KP_Divide
-       || keyval == GDK_KEY_period
-#ifdef G_OS_UNIX
-       || keyval == GDK_KEY_asciitilde
-#endif
-       ) && !(state & no_text_input_mask))
-    return TRUE;
+  if (state & no_text_input_mask)
+    return FALSE;
 
-  return FALSE;
+  switch (keyval)
+    {
+    case GDK_KEY_slash:
+    case GDK_KEY_KP_Divide:
+      *string = "/";
+      return TRUE;
+
+    case GDK_KEY_period:
+      *string = ".";
+      return TRUE;
+
+    case GDK_KEY_asciitilde:
+      *string = "~";
+      return TRUE;
+
+    default:
+      return FALSE;
+    }
 }
 
 /* Handles key press events on the file list, so that we can trap Enter to
@@ -1317,16 +1329,14 @@ key_press_cb (GtkEventController *controller,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   const GdkEvent *event;
+  const char *string;
 
   event = gtk_get_current_event ();
 
-  if (should_trigger_location_entry (impl, keyval, state) &&
+  if (should_trigger_location_entry (impl, keyval, state, &string) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     {
-      const char *string;
-
-      gdk_event_get_string ((GdkEvent *)event, &string);
       location_popup_handler (impl, string);
       return GDK_EVENT_STOP;
     }
@@ -1388,17 +1398,15 @@ widget_key_press_cb (GtkEventController *controller,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean handled = FALSE;
   GdkEvent *event;
+  const char *string;
 
   event = gtk_get_current_event ();
 
-  if (should_trigger_location_entry (impl, keyval, state))
+  if (should_trigger_location_entry (impl, keyval, state, &string))
     {
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
           priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
         {
-          const char *string;
-
-          gdk_event_get_string (event, &string);
           location_popup_handler (impl, string);
           handled = TRUE;
         }

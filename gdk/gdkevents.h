@@ -403,9 +403,6 @@ gboolean  gdk_event_get_key_is_modifier (const GdkEvent *event,
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_key_group       (const GdkEvent *event,
                                          guint          *group);
-GDK_AVAILABLE_IN_ALL
-gboolean  gdk_event_get_string          (const GdkEvent  *event,
-                                         const char     **string);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_event_get_scroll_direction (const GdkEvent *event,

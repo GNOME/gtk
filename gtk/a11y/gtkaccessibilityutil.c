@@ -116,13 +116,11 @@ atk_key_event_from_gdk_event_key (GdkEventKey       *key,
   GdkModifierType state;
   guint keyval;
   guint16 keycode;
-  const char *string;
 
   type = gdk_event_get_event_type ((GdkEvent *)key);
   gdk_event_get_state ((GdkEvent *)key, &state);
   gdk_event_get_keyval ((GdkEvent *)key, &keyval);
   gdk_event_get_keycode ((GdkEvent *)key, &keycode);
-  gdk_event_get_string ((GdkEvent *)key, &string);
 
   if (type == GDK_KEY_PRESS)
     event->type = ATK_KEY_EVENT_PRESS;
@@ -133,14 +131,8 @@ atk_key_event_from_gdk_event_key (GdkEventKey       *key,
 
   event->state = state;
   event->keyval = keyval;
-  if (string && string[0] &&
-      (state & GDK_CONTROL_MASK ||
-       g_unichar_isgraph (g_utf8_get_char (string))))
-    event->string = (char *) string;
-  else
-    event->string = gdk_keyval_name (keyval);
-
-  event->length = strlen (string);
+  event->string = gdk_keyval_name (keyval);
+  event->length = strlen (event->string);
   event->keycode = keycode;
   event->timestamp = gdk_event_get_time ((GdkEvent *)key);
 }

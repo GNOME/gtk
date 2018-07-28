@@ -1294,37 +1294,6 @@ gdk_event_get_key_group (const GdkEvent *event,
 }
 
 /**
- * gdk_event_get_string:
- * @event: a #GdkEvent
- * @string: (out) (transfer none): return location for the string
- *
- * Extracts a string from an event. The string is an
- * approximation of the keyval in a key event.
- *
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_string (const GdkEvent  *event,
-                      const char     **string)
-{
-  gboolean fetched = TRUE;
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      *string = event->key.string;
-      break;
-    default:
-      *string = NULL;
-      fetched = FALSE;
-      break;
-    }
-
-  return fetched;
-}
-
-/**
  * gdk_event_get_key_is_modifier:
  * @event: a #GdkEvent
  * @is_modifier: (out): return location for the value
