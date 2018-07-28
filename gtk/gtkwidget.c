@@ -819,11 +819,12 @@ gtk_widget_real_pick (GtkWidget *widget,
        child = _gtk_widget_get_prev_sibling (child))
     {
       GtkWidget *picked;
-      int dx, dy;
+      double dx, dy;
 
-      gtk_widget_get_origin_relative_to_parent (child, &dx, &dy);
+      gtk_widget_translate_coordinatesf (widget, child, x, y, &dx, &dy);
 
-      picked = gtk_widget_pick (child, x - dx, y - dy);
+      picked = gtk_widget_pick (child, dx, dy);
+
       if (picked)
         return picked;
     }
