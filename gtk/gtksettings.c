@@ -2062,7 +2062,7 @@ settings_update_font_options (GtkSettings *settings)
 
   priv->font_options = cairo_font_options_create ();
 
-  cairo_font_options_set_hint_metrics (priv->font_options, CAIRO_HINT_METRICS_ON);
+  cairo_font_options_set_hint_metrics (priv->font_options, CAIRO_HINT_METRICS_OFF);
 
   hint_style = CAIRO_HINT_STYLE_DEFAULT;
   if (hinting == 0)
