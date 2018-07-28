@@ -1471,8 +1471,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         _gdk_x11_keymap_add_virt_mods (keymap, &state);
         event->key.state |= state;
 
-        _gdk_x11_event_translate_keyboard_string (&event->key);
-
         if (ev->evtype == XI_KeyPress)
           set_user_time (event);
 

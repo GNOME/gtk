@@ -285,7 +285,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
         event->key.state = message->key.state;
         event->key.hardware_keycode = message->key.key;
         gdk_event_set_scancode (event, message->key.key);
-        event->key.length = 0;
         gdk_event_set_device (event, gdk_seat_get_keyboard (seat));
 
         node = _gdk_event_queue_append (display, event);

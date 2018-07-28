@@ -244,18 +244,6 @@ struct _GdkEventScroll
  * @keyval: the key that was pressed or released. See the
  *   `gdk/gdkkeysyms.h` header file for a
  *   complete list of GDK key codes.
- * @length: the length of @string.
- * @string: a string containing an approximation of the text that
- *   would result from this keypress. The only correct way to handle text
- *   input of text is using input methods (see #GtkIMContext), so this
- *   field is deprecated and should never be used.
- *   (gdk_unicode_to_keyval() provides a non-deprecated way of getting
- *   an approximate translation for a key.) The string is encoded in the
- *   encoding of the current locale (Note: this for backwards compatibility:
- *   strings in GTK+ and GDK are typically in UTF-8.) and NUL-terminated.
- *   In some cases, the translation of the key code will be a single
- *   NUL byte, in which case looking at @length is necessary to distinguish
- *   it from the an empty translation.
  * @hardware_keycode: the raw code of the key that was pressed or released.
  * @group: the keyboard group.
  * @is_modifier: a flag that indicates if @hardware_keycode is mapped to a
@@ -269,8 +257,6 @@ struct _GdkEventKey
   guint32 time;
   guint state;
   guint keyval;
-  gint length;
-  gchar *string;
   guint16 hardware_keycode;
   guint16 key_scancode;
   guint8 group;

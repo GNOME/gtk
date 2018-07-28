@@ -631,11 +631,6 @@ gdk_event_copy (const GdkEvent *event)
 
   switch ((guint) event->any.type)
     {
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      new_event->key.string = g_strdup (event->key.string);
-      break;
-
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.child_surface != NULL)
@@ -698,11 +693,6 @@ gdk_event_finalize (GObject *object)
 
   switch ((guint) event->any.type)
     {
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      g_free (event->key.string);
-      break;
-
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       g_clear_object (&event->crossing.child_surface);

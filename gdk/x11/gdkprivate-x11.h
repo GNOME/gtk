@@ -166,8 +166,6 @@ void     gdk_x11_device_xi2_store_axes          (GdkX11DeviceXI2 *device,
                                                  gint             n_axes);
 #endif
 
-void     _gdk_x11_event_translate_keyboard_string (GdkEventKey *event);
-
 GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
                                                 const gchar       *atom_name,
                                                 gboolean           copy_name);

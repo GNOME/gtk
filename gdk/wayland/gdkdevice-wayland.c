@@ -2009,73 +2009,6 @@ keyboard_handle_leave (void               *data,
 
 static gboolean keyboard_repeat (gpointer data);
 
-static void
-translate_keyboard_string (GdkEventKey *event)
-{
-  gunichar c = 0;
-  gchar buf[7];
-
-  /* Fill in event->string crudely, since various programs
-   * depend on it.
-   */
-  event->string = NULL;
-
-  if (event->keyval != GDK_KEY_VoidSymbol)
-    c = gdk_keyval_to_unicode (event->keyval);
-
-  if (c)
-    {
-      gsize bytes_written;
-      gint len;
-
-      /* Apply the control key - Taken from Xlib */
-      if (event->state & GDK_CONTROL_MASK)
-        {
-          if ((c >= '@' && c < '\177') || c == ' ')
-            c &= 0x1F;
-          else if (c == '2')
-            {
-              event->string = g_memdup ("\0\0", 2);
-              event->length = 1;
-              buf[0] = '\0';
-              return;
-            }
-          else if (c >= '3' && c <= '7')
-            c -= ('3' - '\033');
-          else if (c == '8')
-            c = '\177';
-          else if (c == '/')
-            c = '_' & 0x1F;
-        }
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-
-      event->string = g_locale_from_utf8 (buf, len,
-                                          NULL, &bytes_written,
-                                          NULL);
-      if (event->string)
-        event->length = bytes_written;
-    }
-  else if (event->keyval == GDK_KEY_Escape)
-    {
-      event->length = 1;
-      event->string = g_strdup ("\033");
-    }
-  else if (event->keyval == GDK_KEY_Return ||
-           event->keyval == GDK_KEY_KP_Enter)
-    {
-      event->length = 1;
-      event->string = g_strdup ("\r");
-    }
-
-  if (!event->string)
-    {
-      event->length = 0;
-      event->string = g_strdup ("");
-    }
-}
-
 static GSettings *
 get_keyboard_settings (GdkWaylandSeat *seat)
 {
@@ -2191,17 +2124,15 @@ deliver_key_event (GdkWaylandSeat *seat,
   event->key.keyval = sym;
   event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (keymap, key);
 
-  translate_keyboard_string (&event->key);
-
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("keyboard %s event%s, code %d, sym %d, "
-                       "string %s, mods 0x%x",
+                       "mods 0x%x",
                        (state ? "press" : "release"),
                        (from_key_repeat ? " (repeat)" : ""),
                        event->key.hardware_keycode, event->key.keyval,
-                       event->key.string, event->key.state));
+                       event->key.state));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
