@@ -28,6 +28,8 @@ typedef struct
 {
   PangoFont *font;
   PangoGlyph glyph;
+  guint xshift;
+  guint yshift;
   guint scale; /* times 1024 */
 } GlyphCacheKey;
 
@@ -120,6 +122,8 @@ glyph_cache_equal (gconstpointer v1, gconstpointer v2)
 
   return key1->font == key2->font &&
          key1->glyph == key2->glyph &&
+         key1->xshift == key2->xshift &&
+         key1->yshift == key2->yshift &&
          key1->scale == key2->scale;
 }
 
@@ -128,7 +132,7 @@ glyph_cache_hash (gconstpointer v)
 {
   const GlyphCacheKey *key = v;
 
-  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ key->scale;
+  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ (key->xshift << 24) ^ (key->yshift << 26) ^ key->scale;
 }
 
 static void
@@ -158,7 +162,7 @@ dirty_glyph_free (gpointer v)
 
 static void
 add_to_cache (GskGLGlyphCache  *cache,
-              GlyphCacheKey        *key,
+              GlyphCacheKey    *key,
               GskGLCachedGlyph *value)
 {
   GskGLGlyphAtlas *atlas;
@@ -262,10 +266,10 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   glyph_info.glyph = key->glyph;
   glyph_info.geometry.width = value->draw_width * 1024;
   if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    glyph_info.geometry.x_offset = 0;
+    glyph_info.geometry.x_offset = key->xshift * 256;
   else
-    glyph_info.geometry.x_offset = - value->draw_x * 1024;
-  glyph_info.geometry.y_offset = - value->draw_y * 1024;
+    glyph_info.geometry.x_offset = key->xshift * 256 - value->draw_x * 1024;
+  glyph_info.geometry.y_offset = key->yshift * 256 - value->draw_y * 1024;
 
   glyph_string.num_glyphs = 1;
   glyph_string.glyphs = &glyph_info;
@@ -308,19 +312,30 @@ upload_dirty_glyphs (GskGLGlyphCache *self,
   atlas->dirty_glyphs = NULL;
 }
 
+#define PHASE(x) ((x % PANGO_SCALE) * 4 / PANGO_SCALE)
+
 const GskGLCachedGlyph *
-gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
-                           gboolean         create,
-                           PangoFont       *font,
-                           PangoGlyph       glyph,
-                           float            scale)
+gsk_gl_glyph_cache_lookup (GskGLGlyphCache       *cache,
+                           gboolean               create,
+                           PangoFont             *font,
+                           const PangoGlyph       glyph,
+                           int                    x,
+                           int                    y,
+                           float                  scale)
 {
   GskGLCachedGlyph *value;
+  guint xshift;
+  guint yshift;
+  
+  xshift = PHASE (x);
+  yshift = PHASE (y);
 
   value = g_hash_table_lookup (cache->hash_table,
                                &(GlyphCacheKey) {
                                  .font = font,
                                  .glyph = glyph,
+                                 .xshift = xshift,
+                                 .yshift = yshift,
                                  .scale = (guint)(scale * 1024)
                                });
 
@@ -357,6 +372,8 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
 
       key->font = g_object_ref (font);
       key->glyph = glyph;
+      key->xshift = xshift;
+      key->yshift = yshift;
       key->scale = (guint)(scale * 1024);
 
       if (ink_rect.width > 0 && ink_rect.height > 0)

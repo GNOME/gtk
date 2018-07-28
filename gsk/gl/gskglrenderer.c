@@ -417,14 +417,16 @@ render_text_node (GskGLRenderer   *self,
                                          TRUE,
                                          (PangoFont *)font,
                                          gi->glyph,
+                                         x_position + gi->geometry.x_offset,
+                                         gi->geometry.y_offset,
                                          text_scale);
 
       /* e.g. whitespace */
       if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
         goto next;
 
-      cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-      cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+      cx = (x_position + gi->geometry.x_offset) / PANGO_SCALE;
+      cy = gi->geometry.y_offset / PANGO_SCALE;
 
       ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
                                                                     glyph)->texture_id);

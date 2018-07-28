@@ -56,7 +56,9 @@ GskGLImage *             gsk_gl_glyph_cache_get_glyph_image (GskGLGlyphCache    
 const GskGLCachedGlyph * gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              gboolean                create,
                                                              PangoFont              *font,
-                                                             PangoGlyph              glyph,
+                                                             const PangoGlyph        glyph,
+                                                             int                     x,
+                                                             int                     y,
                                                              float                   scale);
 
 #endif
