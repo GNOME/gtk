@@ -4106,6 +4106,19 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
   return icon_info->proxy_pixbuf;
 }
 
+GdkPixbuf *
+gtk_icon_info_load_icon_thread_safe (GtkIconInfo  *icon_info,
+                                     GError      **error)
+{
+  g_autoptr (GtkIconInfo) dup;
+
+  g_return_val_if_fail (icon_info != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  dup = icon_info_dup (icon_info);
+  return gtk_icon_info_load_icon (dup, error);
+}
+
 /**
  * gtk_icon_info_load_surface:
  * @icon_info: a #GtkIconInfo from gtk_icon_theme_lookup_icon()
