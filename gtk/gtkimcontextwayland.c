@@ -469,6 +469,9 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
   const char *preedit_str;
 
+  if (attrs)
+    *attrs = NULL;
+
   GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->get_preedit_string (context, str, attrs, cursor_pos);
 
   /* If the parent implementation returns a len>0 string, go with it */
@@ -490,7 +493,8 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
 
   if (attrs)
     {
-      *attrs = pango_attr_list_new ();
+      if (!*attrs)
+        *attrs = pango_attr_list_new ();
       pango_attr_list_insert (*attrs,
                               pango_attr_underline_new (PANGO_UNDERLINE_SINGLE));
     }
