@@ -4458,68 +4458,46 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   return TRUE;
 }
 
-/* This is the same as translate_coordinates, but it works on doubles.
- * We use this for event coordinates.
+/**
+ * gtk_widget_translate_coordinates:
+ * @src_widget:  a #GtkWidget
+ * @dest_widget: a #GtkWidget
+ * @src_x: X position relative to @src_widget
+ * @src_y: Y position relative to @src_widget
+ * @dest_x: (out) (optional): location to store X position relative to @dest_widget
+ * @dest_y: (out) (optional): location to store Y position relative to @dest_widget
  *
- * We should probably decide for only one of the 2 versions at some point */
+ * Translate coordinates relative to @src_widget’s allocation to coordinates
+ * relative to @dest_widget’s allocations. In order to perform this
+ * operation, both widget must share a common toplevel.
+ *
+ * Returns: %FALSE if @src_widget and @dest_widget have no common
+ *   ancestor. In this case, 0 is stored in
+ *   *@dest_x and *@dest_y. Otherwise %TRUE.
+ **/
 gboolean
-gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
-                                   GtkWidget  *dest_widget,
-                                   double      src_x,
-                                   double      src_y,
-                                   double     *dest_x,
-                                   double     *dest_y)
+gtk_widget_translate_coordinates (GtkWidget  *src_widget,
+                                  GtkWidget  *dest_widget,
+                                  int         src_x,
+                                  int         src_y,
+                                  int        *dest_x,
+                                  int        *dest_y)
 {
-  GtkWidget *ancestor;
-  GtkWidget *parent;
+  double dx, dy;
+  gboolean result;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
-
-  ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
-  if (!ancestor)
-    {
-      if (dest_x)
-        *dest_x = 0;
-      if (dest_y)
-        *dest_y = 0;
-      return FALSE;
-    }
-
-
-  parent = src_widget;
-  while (parent != ancestor)
-    {
-      int origin_x, origin_y;
-
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
-
-      src_x += origin_x;
-      src_y += origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
-
-  parent = dest_widget;
-  while (parent != ancestor)
-    {
-      int origin_x, origin_y;
-
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
-
-      src_x -= origin_x;
-      src_y -= origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
+  result = gtk_widget_translate_coordinatesf (src_widget,
+                                              dest_widget,
+                                              src_x, src_y,
+                                              &dx, &dy);
 
   if (dest_x)
-    *dest_x = src_x;
+    *dest_x = dx;
 
   if (dest_y)
-    *dest_y = src_y;
+    *dest_y = dy;
 
-  return TRUE;
+  return result;
 }
 
 static void
