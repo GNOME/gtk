@@ -1,4 +1,4 @@
-/* Pango/Font rendering
+/* Pango/Font Rendering
  *
  * Demonstrates variations in font rendering.
  */
@@ -13,10 +13,11 @@ static GtkWidget *hinting = NULL;
 static GtkWidget *hint_metrics = NULL;
 static GtkWidget *up_button = NULL;
 static GtkWidget *down_button = NULL;
+static GtkWidget *text_radio = NULL;
 
 static PangoContext *context;
 
-static int scale = 1;
+static int scale = 10;
 
 static void
 on_destroy (gpointer data)
@@ -70,25 +71,79 @@ update_image (void)
   pango_cairo_context_set_font_options (context, fopt);
   cairo_font_options_destroy (fopt);
 
-  layout = pango_layout_new (context);
-  pango_layout_set_text (layout, text, -1);
-  pango_layout_set_font_description (layout, desc);
-  pango_layout_get_extents (layout, &ink, &logical);
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (text_radio)))
+    {
+      layout = pango_layout_new (context);
+      pango_layout_set_font_description (layout, desc);
+      pango_layout_set_text (layout, text, -1);
+      pango_layout_get_extents (layout, &ink, &logical);
 
-  pango_extents_to_pixels (&logical, NULL);
+      pango_extents_to_pixels (&logical, NULL);
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width, logical.height);
-  cr = cairo_create (surface);
-  cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_paint (cr);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            MAX(1,logical.width),
+                                            MAX(1,logical.height));
+      cr = cairo_create (surface);
+      cairo_set_source_rgb (cr, 1, 1, 1);
+      cairo_paint (cr);
 
-  cairo_set_source_rgb (cr, 0, 0, 0);
-  pango_cairo_show_layout (cr, layout);
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      pango_cairo_show_layout (cr, layout);
 
-  cairo_destroy (cr);
+      cairo_destroy (cr);
+      g_object_unref (layout);
+    }
+  else
+    {
+      PangoLayoutIter *iter;
+      PangoGlyphItem *run;
+      PangoGlyphInfo *g;
+      int i, j;
 
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, logical.width, logical.height);
-  pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, logical.width * scale, logical.height * scale, GDK_INTERP_NEAREST);
+      layout = pango_layout_new (context);
+      pango_layout_set_font_description (layout, desc);
+      pango_layout_set_text (layout, "aaaa", -1);
+      pango_layout_get_extents (layout, &ink, &logical);
+      pango_extents_to_pixels (&logical, NULL);
+
+      iter = pango_layout_get_iter (layout);
+      run = pango_layout_iter_get_run (iter);
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            MAX(1, logical.width) * 3 / 2,
+                                            MAX(1, logical.height) * 4);
+      cr = cairo_create (surface);
+      cairo_set_source_rgb (cr, 1, 1, 1);
+      cairo_paint (cr);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      for (i = 0; i < 4; i++)
+        {
+          g = &(run->glyphs->glyphs[i]);
+          g->geometry.width = PANGO_UNITS_ROUND (g->geometry.width * 3 / 2);
+        }
+ 
+      for (j = 0; j < 4; j++)
+        {
+          for (i = 0; i < 4; i++)
+            {
+              g = &(run->glyphs->glyphs[i]);
+              g->geometry.x_offset = i * (PANGO_SCALE / 4);
+              g->geometry.y_offset = j * (PANGO_SCALE / 4);
+            }
+
+          cairo_move_to (cr, 0, j * logical.height);
+          pango_cairo_show_layout (cr, layout);
+        }
+
+      cairo_destroy (cr);
+      pango_layout_iter_free (iter);
+      g_object_unref (layout);
+    }
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
+  pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, gdk_pixbuf_get_width (pixbuf) * scale, gdk_pixbuf_get_height (pixbuf) * scale, GDK_INTERP_NEAREST);
+
   gtk_picture_set_pixbuf (GTK_PICTURE (image), pixbuf2);
 
   g_object_unref (pixbuf);
@@ -96,8 +151,6 @@ update_image (void)
 
   cairo_surface_destroy (surface);
   pango_font_description_free (desc);
-
-  
 }
 
 static void
@@ -145,6 +198,7 @@ do_fontrendering (GtkWidget *do_widget)
       image = GTK_WIDGET (gtk_builder_get_object (builder, "image"));
       hinting = GTK_WIDGET (gtk_builder_get_object (builder, "hinting"));
       hint_metrics = GTK_WIDGET (gtk_builder_get_object (builder, "hint_metrics"));
+      text_radio = GTK_WIDGET (gtk_builder_get_object (builder, "text_radio")); 
 
       g_signal_connect (up_button, "clicked", G_CALLBACK (scale_up), NULL);
       g_signal_connect (down_button, "clicked", G_CALLBACK (scale_down), NULL);
@@ -152,6 +206,7 @@ do_fontrendering (GtkWidget *do_widget)
       g_signal_connect (font_button, "notify::font-desc", G_CALLBACK (update_image), NULL);
       g_signal_connect (hinting, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (hint_metrics, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (text_radio, "notify::active", G_CALLBACK (update_image), NULL);
 
       update_image ();
     }
