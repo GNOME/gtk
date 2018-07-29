@@ -74,8 +74,6 @@ GtkWidget* gtk_invisible_new_for_display(GdkDisplay   *display);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_invisible_set_display	(GtkInvisible *invisible,
 					 GdkDisplay   *display);
-GDK_AVAILABLE_IN_ALL
-GdkDisplay*gtk_invisible_get_display	(GtkInvisible *invisible);
 
 G_END_DECLS
 
