@@ -124,6 +124,11 @@ struct _GtkWidgetPrivate
    */
   gchar *name;
 
+  /* The root this widget belongs to or %NULL if widget is not
+   * rooted or is a #GtkRoot itself.
+   */
+  GtkRoot *root;
+
   /* The list of attached windows to this widget.
    * We keep a list in order to call reset_style to all of them,
    * recursively.
