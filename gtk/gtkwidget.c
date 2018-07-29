@@ -4382,33 +4382,24 @@ gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
   *origin_y += margin.top + border.top + padding.top;
 }
 
-/**
- * gtk_widget_translate_coordinates:
- * @src_widget:  a #GtkWidget
- * @dest_widget: a #GtkWidget
- * @src_x: X position relative to @src_widget
- * @src_y: Y position relative to @src_widget
- * @dest_x: (out) (optional): location to store X position relative to @dest_widget
- * @dest_y: (out) (optional): location to store Y position relative to @dest_widget
+/* This is the same as translate_coordinates, but it works on doubles.
+ * We use this for event coordinates.
  *
- * Translate coordinates relative to @src_widget’s allocation to coordinates
- * relative to @dest_widget’s allocations. In order to perform this
- * operation, both widget must share a common toplevel.
- *
- * Returns: %FALSE if @src_widget and @dest_widget have no common
- *   ancestor. In this case, 0 is stored in
- *   *@dest_x and *@dest_y. Otherwise %TRUE.
- **/
+ * We should probably decide for only one of the 2 versions at some point */
 gboolean
-gtk_widget_translate_coordinates (GtkWidget  *src_widget,
-				  GtkWidget  *dest_widget,
-				  gint        src_x,
-				  gint        src_y,
-				  gint       *dest_x,
-				  gint       *dest_y)
+gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
+                                   GtkWidget  *dest_widget,
+                                   double      src_x,
+                                   double      src_y,
+                                   double     *dest_x,
+                                   double     *dest_y)
 {
   GtkWidget *ancestor;
   GtkWidget *parent;
+  int dest_depth;
+  GtkWidget **dest_path;
+  int i;
+  graphene_point_t src_point;
 
   g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
@@ -4423,38 +4414,63 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
       return FALSE;
     }
 
+  dest_depth = 0;
+  parent = dest_widget;
+  while (parent != ancestor)
+    {
+      parent = gtk_widget_get_parent (parent);
+      dest_depth ++;
+    }
+
+  dest_path = g_alloca (sizeof (GtkWidget *) * dest_depth);
+  parent = dest_widget;
+  i = 0;
+  while (parent != ancestor)
+    {
+      dest_path[dest_depth - 1 - i] = parent;
+      parent = gtk_widget_get_parent (parent);
+      i ++;
+    }
+
+  src_point.x = src_x;
+  src_point.y = src_y;
 
   parent = src_widget;
   while (parent != ancestor)
     {
+      graphene_matrix_t inv_transform;
       int origin_x, origin_y;
 
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_x += origin_x;
-      src_y += origin_y;
+      src_point.x += origin_x;
+      src_point.y += origin_y;
+
+      g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));
+      graphene_matrix_transform_point (&inv_transform, &src_point, &src_point);
 
       parent = _gtk_widget_get_parent (parent);
     }
 
-  parent = dest_widget;
-  while (parent != ancestor)
+  g_assert (parent == ancestor);
+
+  for (i = 0; i < dest_depth; i ++)
     {
       int origin_x, origin_y;
 
+      parent = dest_path[i];
+
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_x -= origin_x;
-      src_y -= origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
+      src_point.x -= origin_x;
+      src_point.y -= origin_y;
     }
 
   if (dest_x)
-    *dest_x = src_x;
+    *dest_x = src_point.x;
 
   if (dest_y)
-    *dest_y = src_y;
+    *dest_y = src_point.y;
 
   return TRUE;
 }
