@@ -4436,6 +4436,10 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
 {
   GtkWidget *ancestor;
   GtkWidget *parent;
+  int dest_depth;
+  GtkWidget **dest_path;
+  int i;
+  graphene_point_t src_point;
 
   g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
@@ -4450,38 +4454,63 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
       return FALSE;
     }
 
+  dest_depth = 0;
+  parent = dest_widget;
+  while (parent != ancestor)
+    {
+      parent = gtk_widget_get_parent (parent);
+      dest_depth ++;
+    }
+
+  dest_path = g_alloca (sizeof (GtkWidget *) * dest_depth);
+  parent = dest_widget;
+  i = 0;
+  while (parent != ancestor)
+    {
+      dest_path[dest_depth - 1 - i] = parent;
+      parent = gtk_widget_get_parent (parent);
+      i ++;
+    }
+
+  src_point.x = src_x;
+  src_point.y = src_y;
 
   parent = src_widget;
   while (parent != ancestor)
     {
+      graphene_matrix_t inv_transform;
       int origin_x, origin_y;
 
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_x += origin_x;
-      src_y += origin_y;
+      src_point.x += origin_x;
+      src_point.y += origin_y;
+
+      g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));
+      graphene_matrix_transform_point (&inv_transform, &src_point, &src_point);
 
       parent = _gtk_widget_get_parent (parent);
     }
 
-  parent = dest_widget;
-  while (parent != ancestor)
+  g_assert (parent == ancestor);
+
+  for (i = 0; i < dest_depth; i ++)
     {
       int origin_x, origin_y;
 
+      parent = dest_path[i];
+
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_x -= origin_x;
-      src_y -= origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
+      src_point.x -= origin_x;
+      src_point.y -= origin_y;
     }
 
   if (dest_x)
-    *dest_x = src_x;
+    *dest_x = src_point.x;
 
   if (dest_y)
-    *dest_y = src_y;
+    *dest_y = src_point.y;
 
   return TRUE;
 }
