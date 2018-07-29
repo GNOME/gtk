@@ -422,6 +422,12 @@ _gtk_widget_get_toplevel (GtkWidget *widget)
   return widget;
 }
 
+static inline GtkRoot *
+_gtk_widget_get_root (GtkWidget *widget)
+{
+  return widget->priv->root;
+}
+
 static inline GdkDisplay *
 _gtk_widget_get_display (GtkWidget *widget)
 {

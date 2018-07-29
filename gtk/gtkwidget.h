@@ -564,13 +564,16 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
                                                          GtkWidget    *parent);
 GDK_AVAILABLE_IN_ALL
-GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
+GtkWidget *           gtk_widget_get_parent             (GtkWidget    *widget);
+
+GDK_AVAILABLE_IN_ALL
+GtkRoot *             gtk_widget_get_root               (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_parent_surface     (GtkWidget    *widget,
                                                          GdkSurface    *parent_surface);
 GDK_AVAILABLE_IN_ALL
-GdkSurface           * gtk_widget_get_parent_surface    (GtkWidget    *widget);
+GdkSurface *          gtk_widget_get_parent_surface    (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
