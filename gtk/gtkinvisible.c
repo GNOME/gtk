@@ -71,9 +71,18 @@ static void gtk_invisible_get_property  (GObject           *object,
 					 GParamSpec        *pspec);
 static void gtk_invisible_constructed   (GObject           *object);
 
+static GdkDisplay *
+gtk_invisible_root_get_display (GtkRoot *root)
+{
+  GtkInvisible *invisible = GTK_INVISIBLE (root);
+
+  return invisible->priv->display;
+}
+
 static void
 gtk_invisible_root_interface_init (GtkRootInterface *iface)
 {
+  iface->get_display = gtk_invisible_root_get_display;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET,
@@ -208,22 +217,6 @@ gtk_invisible_set_display (GtkInvisible *invisible,
   
   if (was_realized)
     gtk_widget_realize (widget);
-}
-
-/**
- * gtk_invisible_get_display:
- * @invisible: a #GtkInvisible.
- *
- * Returns the #GdkDisplay object associated with @invisible
- *
- * Returns: (transfer none): the associated #GdkDisplay.
- **/
-GdkDisplay *
-gtk_invisible_get_display (GtkInvisible *invisible)
-{
-  g_return_val_if_fail (GTK_IS_INVISIBLE (invisible), NULL);
-
-  return invisible->priv->display;
 }
 
 static void
