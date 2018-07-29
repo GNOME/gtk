@@ -598,6 +598,8 @@ static void             gtk_widget_real_move_focus              (GtkWidget      
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
+static void             gtk_widget_root                         (GtkWidget        *widget);
+static void             gtk_widget_unroot                       (GtkWidget        *widget);
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
 static void             gtk_widget_verify_invariants            (GtkWidget        *widget);
 static void             gtk_widget_push_verify_invariants       (GtkWidget        *widget);
@@ -856,6 +858,18 @@ gtk_widget_real_grab_notify (GtkWidget *widget,
 }
 
 static void
+gtk_widget_real_root (GtkWidget *widget)
+{
+  gtk_widget_forall (widget, (GtkCallback) gtk_widget_root, NULL);
+}
+
+static void
+gtk_widget_real_unroot (GtkWidget *widget)
+{
+  gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
@@ -901,6 +915,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
+  klass->root = gtk_widget_real_root;
+  klass->unroot = gtk_widget_real_unroot;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->get_request_mode = gtk_widget_real_get_request_mode;
   klass->measure = gtk_widget_real_measure;
@@ -2879,6 +2895,9 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
+  if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
+    priv->root = (GtkRoot *) widget;
+
   gtk_widget_add_controller (widget, gtk_event_controller_legacy_new ());
 }
 
@@ -3007,6 +3026,42 @@ gtk_widget_new (GType        type,
   return widget;
 }
 
+static void
+gtk_widget_root (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  /* roots are rooted by default */
+  if (GTK_IS_ROOT (widget))
+    return;
+
+  g_assert (priv->root == NULL);
+  g_assert (!priv->realized);
+  g_assert (priv->parent);
+  g_assert (priv->parent->priv->root);
+
+  priv->root = priv->parent->priv->root;
+
+  GTK_WIDGET_GET_CLASS (widget)->root (widget);
+}
+
+static void
+gtk_widget_unroot (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  /* roots are rooted by default and cannot be unrooted */
+  if (GTK_IS_ROOT (widget))
+    return;
+
+  g_assert (priv->root);
+  g_assert (!priv->realized);
+
+  GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
+
+  priv->root = NULL;
+}
+
 /**
  * gtk_widget_unparent:
  * @widget: a #GtkWidget
@@ -3056,6 +3111,9 @@ gtk_widget_unparent (GtkWidget *widget)
 
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
+
+  if (priv->root)
+    gtk_widget_unroot (widget);
 
   /* If we are unanchoring the child, we save around the toplevel
    * to emit hierarchy changed
@@ -3110,10 +3168,9 @@ gtk_widget_unparent (GtkWidget *widget)
   _gtk_widget_update_parent_muxer (widget);
 
   if (toplevel)
-    {
-      _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
-      g_object_unref (toplevel);
-    }
+    _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
+
+  g_clear_object (&toplevel);
 
   /* Now that the parent pointer is nullified and the hierarchy-changed
    * already passed, go ahead and unset the parent window, if we are unparenting
@@ -6706,7 +6763,11 @@ gtk_widget_reposition_after (GtkWidget *widget,
   _gtk_widget_update_parent_muxer (widget);
 
   if (priv->parent->priv->anchored && prev_parent == NULL)
-    _gtk_widget_propagate_hierarchy_changed (widget, NULL);
+    {
+      _gtk_widget_propagate_hierarchy_changed (widget, NULL);
+    }
+  if (parent->priv->root && priv->root == NULL)
+    gtk_widget_root (widget);
 
   if (prev_parent == NULL)
     g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
