@@ -31,11 +31,10 @@
 #include "gtkcontainer.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontroller.h"
-#include "gtkroot.h"
+#include "gtkgesture.h"
+#include "gtkrootprivate.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkinvisible.h"
-#include "gtkgesture.h"
 
 G_BEGIN_DECLS
 
@@ -429,17 +428,12 @@ _gtk_widget_get_root (GtkWidget *widget)
 static inline GdkDisplay *
 _gtk_widget_get_display (GtkWidget *widget)
 {
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
+  GtkRoot *root = _gtk_widget_get_root (widget);
 
-  if (_gtk_widget_is_toplevel (toplevel))
-    {
-      if (GTK_IS_WINDOW (toplevel))
-        return gtk_window_get_display (GTK_WINDOW (toplevel));
-      else if (GTK_IS_INVISIBLE (toplevel))
-        return gtk_invisible_get_display (GTK_INVISIBLE (widget));
-    }
+  if (root == NULL)
+    return gdk_display_get_default ();
 
-  return gdk_display_get_default ();
+  return gtk_root_get_display (root);
 }
 
 static inline GtkStyleContext *

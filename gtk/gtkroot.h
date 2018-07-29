@@ -45,6 +45,7 @@ struct _GtkRootInterface
   GTypeInterface g_iface;
 
   /*< public >*/
+  GdkDisplay *          (* get_display)                 (GtkRoot                *self);
 };
 
 
