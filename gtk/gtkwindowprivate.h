@@ -121,8 +121,6 @@ GdkTexture *     gtk_window_get_icon_for_size (GtkWindow *window,
 void       gtk_window_set_hardcoded_surface (GtkWindow *window,
 					     GdkSurface *surface);
 
-GdkDisplay *gtk_window_get_display (GtkWindow *window);
-
 /* Exported handles */
 
 typedef void (*GtkWindowHandleExported)  (GtkWindow               *window,

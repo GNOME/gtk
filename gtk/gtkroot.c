@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkroot.h"
+#include "gtkrootprivate.h"
 
 /**
  * SECTION:root
@@ -37,8 +37,26 @@
 
 G_DEFINE_INTERFACE (GtkRoot, gtk_root, GTK_TYPE_WIDGET)
 
+static GdkDisplay *
+gtk_root_default_get_display (GtkRoot *self)
+{
+  return gdk_display_get_default ();
+}
+
 static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
+  iface->get_display = gtk_root_default_get_display;
+}
+
+GdkDisplay *
+gtk_root_get_display (GtkRoot *self)
+{
+  GtkRootInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  iface = GTK_ROOT_GET_IFACE (self);
+  return iface->get_display (self);
 }
 
