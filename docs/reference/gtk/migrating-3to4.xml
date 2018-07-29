@@ -320,6 +320,15 @@
     </section>
 
     <section>
+      <title>Adapt to GtkWidget's size allocation changes</title>
+      <para>
+        The #GtkWidget::size-allocate signal now takes the baseline as an
+        argument, so you no longer need to call gtk_widget_get_allocated_baseline()
+        to get it.
+      </para>
+    </section>
+
+    <section>
       <title>Switch to GtkWidget's children APIs</title>
       <para>
         Instead of the GtkContainer subclass, in GTK+ 4, any widget can
