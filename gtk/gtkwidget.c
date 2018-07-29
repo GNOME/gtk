@@ -505,6 +505,7 @@ enum {
   PROP_0,
   PROP_NAME,
   PROP_PARENT,
+  PROP_ROOT,
   PROP_WIDTH_REQUEST,
   PROP_HEIGHT_REQUEST,
   PROP_VISIBLE,
@@ -964,6 +965,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            P_("Parent widget"),
                            P_("The parent widget of this widget."),
                            GTK_TYPE_WIDGET,
+                           GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:root:
+   *
+   * The #GtkRoot widget of the widget tree containing this widget or %NULL if
+   * the widget is not contained in a root widget.
+   */
+  widget_props[PROP_ROOT] =
+      g_param_spec_object ("root",
+                           P_("Root widget"),
+                           P_("The root widget in the widget tree."),
+                           GTK_TYPE_ROOT,
                            GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_WIDTH_REQUEST] =
@@ -2393,6 +2407,9 @@ gtk_widget_get_property (GObject         *object,
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
       break;
+    case PROP_ROOT:
+      g_value_set_object (value, priv->root);
+      break;
     case PROP_WIDTH_REQUEST:
       {
         int w;
@@ -3045,6 +3062,8 @@ gtk_widget_root (GtkWidget *widget)
   priv->root = priv->parent->priv->root;
 
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
 }
 
 static void
@@ -3062,6 +3081,8 @@ gtk_widget_unroot (GtkWidget *widget)
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
   priv->root = NULL;
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
 }
 
 /**
@@ -6850,6 +6871,25 @@ gtk_widget_get_parent (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return priv->parent;
+}
+
+/**
+ * gtk_widget_get_root:
+ * @widget: a #GtkWidget
+ *
+ * Returns the #GtkRoot widget of @widget or %NULL if the widget is not contained
+ * inside a widget tree with a root widget.
+ *
+ * #GtkRoot widgets will return themselves here.
+ *
+ * Returns: (transfer none) (nullable): the root widget of @widget, or %NULL
+ **/
+GtkRoot *
+gtk_widget_get_root (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return _gtk_widget_get_root (widget);
 }
 
 static void
