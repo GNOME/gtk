@@ -2498,9 +2498,19 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
     }
 }
 
+static GdkDisplay *
+gtk_window_root_get_display (GtkRoot *root)
+{
+  GtkWindow *window = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->display;
+}
+
 static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
+  iface->get_display = gtk_window_root_get_display;
 }
 
 /**
@@ -9435,14 +9445,6 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
     gtk_window_set_theme_variant (window);
 }
 #endif
-
-GdkDisplay *
-gtk_window_get_display (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  return priv->display;
-}
 
 /**
  * gtk_window_is_active:
