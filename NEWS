@@ -1,3 +1,23 @@
+Overview of Changes in GTK+ 3.23.2
+==================================
+
+* Emoji chooser improvements
+ - Try harder to avoid fallback rendering
+ - Avoid hex boxes
+ - Use icons for sections
+
+* GtkPlacesSidebar now shows a spinner during mount operations
+
+* Bug fixes:
+ #628 TextView: spaces acting as non-breaking whitespace...
+
+* Translation updates:
+ - German
+ - Lithuanian
+ - Spanish
+ - Turkish
+
+
 Overview of Changes in GTK+ 3.23.1
 ==================================
 
