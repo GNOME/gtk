@@ -387,10 +387,9 @@ struct _GtkTreeViewPrivate
   guint scroll_timeout;
 
   /* Interactive Header reordering */
-  GdkSurface *drag_surface;
-  GdkSurface *drag_highlight_surface;
   GtkTreeViewColumn *drag_column;
   gint drag_column_x;
+  gint drag_column_y;
 
   /* Interactive Header Resizing */
   gint drag_pos;
@@ -2250,20 +2249,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->typeselect_flush_timeout = 0;
     }
 
-  if (priv->drag_surface)
-    {
-      gtk_widget_unregister_surface (widget, priv->drag_surface);
-      gdk_surface_destroy (priv->drag_surface);
-      priv->drag_surface = NULL;
-    }
-
-  if (priv->drag_highlight_surface)
-    {
-      gtk_widget_unregister_surface (widget, priv->drag_highlight_surface);
-      gdk_surface_destroy (priv->drag_highlight_surface);
-      priv->drag_highlight_surface = NULL;
-    }
-
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
 
@@ -2520,10 +2505,8 @@ gtk_tree_view_size_allocate_drag_column (GtkWidget *widget)
 
   button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
 
-  drag_allocation.x = 0;
-  drag_allocation.y = 0;
-  drag_allocation.width = gdk_surface_get_width (tree_view->priv->drag_surface);
-  drag_allocation.height = gdk_surface_get_height (tree_view->priv->drag_surface);
+  gtk_widget_get_allocation (button, &drag_allocation);
+  drag_allocation.x = tree_view->priv->drag_column_x;
   gtk_widget_size_allocate (button, &drag_allocation, -1);
 }
 
@@ -3199,18 +3182,12 @@ gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
 					 tree_view->priv->cur_reorder->left_column);
     }
   tree_view->priv->drag_column = NULL;
-  gtk_widget_unregister_surface (widget, tree_view->priv->drag_surface);
-  gdk_surface_destroy (tree_view->priv->drag_surface);
-  tree_view->priv->drag_surface = NULL;
 
   for (l = tree_view->priv->column_drag_info; l != NULL; l = l->next)
     g_slice_free (GtkTreeViewColumnReorder, l->data);
   g_list_free (tree_view->priv->column_drag_info);
   tree_view->priv->column_drag_info = NULL;
   tree_view->priv->cur_reorder = NULL;
-
-  if (tree_view->priv->drag_highlight_surface)
-    gdk_surface_hide (tree_view->priv->drag_highlight_surface);
 
   /* Reset our flags */
   tree_view->priv->drag_column_surface_state = DRAG_COLUMN_WINDOW_STATE_UNSET;
@@ -3556,248 +3533,6 @@ update_prelight (GtkTreeView *tree_view,
     prelight_or_select (tree_view, tree, node, x, y);
 }
 
-
-
-
-/* Our motion arrow is either a box (in the case of the original spot)
- * or an arrow.  It is expander_size wide.
- */
-/*
- * 11111111111111
- * 01111111111110
- * 00111111111100
- * 00011111111000
- * 00001111110000
- * 00000111100000
- * 00000111100000
- * 00000111100000
- * ~ ~ ~ ~ ~ ~ ~
- * 00000111100000
- * 00000111100000
- * 00000111100000
- * 00001111110000
- * 00011111111000
- * 00111111111100
- * 01111111111110
- * 11111111111111
- */
-
-static void
-gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
-{
-  GtkTreeViewColumnReorder *reorder = tree_view->priv->cur_reorder;
-  GtkWidget *widget = GTK_WIDGET (tree_view);
-  cairo_surface_t *mask_image;
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint arrow_type = DRAG_COLUMN_WINDOW_STATE_UNSET;
-  cairo_t *cr;
-
-  if (!reorder ||
-      reorder->left_column == tree_view->priv->drag_column ||
-      reorder->right_column == tree_view->priv->drag_column)
-    arrow_type = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
-  else if (reorder->left_column || reorder->right_column)
-    {
-      GtkAllocation left_allocation, right_allocation;
-      GdkRectangle visible_rect;
-      GtkWidget *button;
-
-      gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
-      if (reorder->left_column)
-        {
-	  button = gtk_tree_view_column_get_button (reorder->left_column);
-          gtk_widget_get_allocation (button, &left_allocation);
-          x = left_allocation.x + left_allocation.width;
-        }
-      else
-        {
-	  button = gtk_tree_view_column_get_button (reorder->right_column);
-          gtk_widget_get_allocation (button, &right_allocation);
-          x = right_allocation.x;
-        }
-
-      if (x < visible_rect.x)
-	arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT;
-      else if (x > visible_rect.x + visible_rect.width)
-	arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT;
-      else
-        arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW;
-    }
-
-  /* We want to draw the rectangle over the initial location. */
-  if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
-    {
-      if (tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
-	{
-          GtkAllocation drag_allocation;
-	  GtkWidget    *button;
-
-	  if (tree_view->priv->drag_highlight_surface)
-	    {
-	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
-	      gdk_surface_destroy (tree_view->priv->drag_highlight_surface);
-	    }
-
-	  button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
-          gtk_widget_get_allocation (button, &drag_allocation);
-	  width = drag_allocation.width;
-	  height = drag_allocation.height;
-	  tree_view->priv->drag_highlight_surface = gdk_surface_new_child (gtk_widget_get_surface (widget),
-                                                                         &(GdkRectangle){
-                                                                           tree_view->priv->drag_column_x,
-                                                                           0,
-                                                                           drag_allocation.width,
-                                                                           drag_allocation.height});
-	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
-
-	  tree_view->priv->drag_column_surface_state = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
-	}
-    }
-  else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW)
-    {
-      GtkAllocation button_allocation, allocation;
-      GtkWidget    *button;
-
-      width = gtk_tree_view_get_expander_size (tree_view);
-
-      /* Get x, y, width, height of arrow */
-      gtk_widget_get_allocation (widget, &allocation);
-      x = allocation.x;
-      y = allocation.y;
-
-      if (reorder->left_column)
-	{
-	  button = gtk_tree_view_column_get_button (reorder->left_column);
-          gtk_widget_get_allocation (button, &button_allocation);
-	  x += button_allocation.x + button_allocation.width - width/2;
-	  height = button_allocation.height;
-	}
-      else
-	{
-	  button = gtk_tree_view_column_get_button (reorder->right_column);
-          gtk_widget_get_allocation (button, &button_allocation);
-	  x += button_allocation.x - width/2;
-	  height = button_allocation.height;
-	}
-      y -= width/2; /* The arrow takes up only half the space */
-      height += width;
-
-      /* Create the new window */
-      if (tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ARROW)
-	{
-	  if (tree_view->priv->drag_highlight_surface)
-	    {
-	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
-	      gdk_surface_destroy (tree_view->priv->drag_highlight_surface);
-	    }
-
-	  tree_view->priv->drag_highlight_surface = gdk_surface_new_popup (gtk_widget_get_display (widget),
-                                                                         &(GdkRectangle) { x, y, width, height });
-	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
-
-	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
-
-          cr = cairo_create (mask_image);
-          cairo_move_to (cr, 0, 0);
-          cairo_line_to (cr, width, 0);
-          cairo_line_to (cr, width / 2., width / 2);
-          cairo_move_to (cr, 0, height);
-          cairo_line_to (cr, width, height);
-          cairo_line_to (cr, width / 2., height - width / 2.);
-          cairo_fill (cr);
-          cairo_destroy (cr);
-
-          cairo_surface_destroy (mask_image);
-	}
-
-      tree_view->priv->drag_column_surface_state = DRAG_COLUMN_WINDOW_STATE_ARROW;
-      gdk_surface_move (tree_view->priv->drag_highlight_surface, x, y);
-    }
-  else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT ||
-	   arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
-    {
-      GtkAllocation allocation;
-      GtkWidget    *button;
-      gint          expander_size;
-
-      expander_size = gtk_tree_view_get_expander_size (tree_view);
-
-      /* Get x, y, width, height of arrow */
-      width = expander_size/2; /* remember, the arrow only takes half the available width */
-      gtk_widget_get_allocation (widget, &allocation);
-      x = allocation.x;
-      y = allocation.y;
-      if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
-        {
-          x += gtk_widget_get_allocated_width (widget) - width;
-        }
-
-      if (reorder->left_column)
-        {
-	  button = gtk_tree_view_column_get_button (reorder->left_column);
-          height = gtk_widget_get_allocated_height (button);
-        }
-      else
-        {
-	  button = gtk_tree_view_column_get_button (reorder->right_column);
-          height = gtk_widget_get_allocated_height (button);
-        }
-
-      y -= expander_size;
-      height += 2 * expander_size;
-
-      /* Create the new window */
-      if (tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT &&
-	  tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
-	{
-	  if (tree_view->priv->drag_highlight_surface)
-	    {
-	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
-	      gdk_surface_destroy (tree_view->priv->drag_highlight_surface);
-	    }
-
-	  tree_view->priv->drag_highlight_surface = gdk_surface_new_popup (gtk_widget_get_display (widget),
-                                                                         &(GdkRectangle) { x, y, width, height });
-	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
-
-	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
-
-          cr = cairo_create (mask_image);
-          /* mirror if we're on the left */
-          if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT)
-            {
-              cairo_translate (cr, width, 0);
-              cairo_scale (cr, -1, 1);
-            }
-          cairo_move_to (cr, 0, 0);
-          cairo_line_to (cr, width, width);
-          cairo_line_to (cr, 0, expander_size);
-          cairo_move_to (cr, 0, height);
-          cairo_line_to (cr, width, height - width);
-          cairo_line_to (cr, 0, height - expander_size);
-          cairo_fill (cr);
-          cairo_destroy (cr);
-
-          cairo_surface_destroy (mask_image);
-	}
-
-      tree_view->priv->drag_column_surface_state = arrow_type;
-      gdk_surface_move (tree_view->priv->drag_highlight_surface, x, y);
-   }
-  else
-    {
-      g_warning (G_STRLOC"Invalid GtkTreeViewColumnReorder struct");
-      gdk_surface_hide (tree_view->priv->drag_highlight_surface);
-      return;
-    }
-
-  gdk_surface_show (tree_view->priv->drag_highlight_surface);
-  gdk_surface_raise (tree_view->priv->drag_highlight_surface);
-}
-
 static gboolean
 gtk_tree_view_motion_resize_column (GtkTreeView *tree_view,
                                     gdouble      x,
@@ -3842,7 +3577,6 @@ gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
     }
 
   tree_view->priv->cur_reorder = reorder;
-  gtk_tree_view_motion_draw_column_motion_arrow (tree_view);
 }
 
 static void
@@ -3924,25 +3658,22 @@ gtk_tree_view_motion_drag_column (GtkTreeView *tree_view,
 {
   GtkTreeViewColumn *column = tree_view->priv->drag_column;
   GtkWidget *button;
-  gint win_x, win_y;
   gint width, button_width;
 
   button = gtk_tree_view_column_get_button (column);
   x += gtk_adjustment_get_value (tree_view->priv->hadjustment);
 
   /* Handle moving the header */
-  gdk_surface_get_position (tree_view->priv->drag_surface, &win_x, &win_y);
   width = gtk_widget_get_allocated_width (GTK_WIDGET (tree_view));
   button_width = gtk_widget_get_allocated_width (button);
-  win_x = CLAMP (x - _gtk_tree_view_column_get_drag_x (column), 0,
-                 MAX (tree_view->priv->width, width) - button_width);
-  gdk_surface_move (tree_view->priv->drag_surface, win_x, win_y);
-  gdk_surface_raise (tree_view->priv->drag_surface);
+  tree_view->priv->drag_column_x = CLAMP (x - _gtk_tree_view_column_get_drag_x (column), 0,
+                                          MAX (tree_view->priv->width, width) - button_width);
 
   /* autoscroll, if needed */
   gtk_tree_view_horizontal_autoscroll (tree_view);
   /* Update the current reorder position and arrow; */
   gtk_tree_view_update_current_reorder (tree_view);
+  gtk_widget_queue_allocate (tree_view);
 
   return TRUE;
 }
@@ -5230,13 +4961,6 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
           gtk_widget_snapshot_child (widget,
                                      button, snapshot);
         }
-    }
-
-  if (tree_view->priv->drag_surface)
-    {
-      button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
-      gtk_widget_snapshot_child (widget,
-                                 button, snapshot);
     }
 
   gtk_style_context_restore (context);
@@ -9500,7 +9224,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
   g_return_if_fail (tree_view->priv->cur_reorder == NULL);
-  g_return_if_fail (tree_view->priv->drag_surface == NULL);
 
   gtk_tree_view_set_column_drag_info (tree_view, column);
 
@@ -9515,37 +9238,15 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gtk_widget_get_allocation (button, &button_allocation);
   button_allocation.y = 0;
 
-  tree_view->priv->drag_surface = gdk_surface_new_child (gtk_widget_get_surface (GTK_WIDGET (tree_view)),
-							 &button_allocation);
-  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_surface);
-
-  /* Kids, don't try this at home */
-  g_object_ref (button);
-  gtk_container_remove (GTK_CONTAINER (tree_view), button);
-  gtk_widget_set_parent_surface (button, tree_view->priv->drag_surface);
-  gtk_widget_set_parent (button, GTK_WIDGET (tree_view));
-  g_object_unref (button);
-
   gtk_widget_get_allocation (button, &button_allocation);
   tree_view->priv->drag_column_x = button_allocation.x;
-  allocation = button_allocation;
-  allocation.x = 0;
-  gtk_widget_size_allocate (button, &allocation, -1);
+  tree_view->priv->drag_column_y = button_allocation.y;
 
   tree_view->priv->drag_column = column;
-  gdk_surface_show (tree_view->priv->drag_surface);
 
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
   tree_view->priv->in_column_drag = TRUE;
-
-  /* Widget reparenting above unmaps and indirectly breaks
-   * the implicit grab, replace it with an active one.
-   */
-  gdk_seat_grab (gdk_device_get_seat (device),
-                 tree_view->priv->drag_surface,
-                 GDK_SEAT_CAPABILITY_ALL, FALSE,
-                 NULL, NULL, NULL, NULL);
 
   gtk_gesture_set_state (tree_view->priv->column_drag_gesture,
                          GTK_EVENT_SEQUENCE_CLAIMED);
