@@ -323,6 +323,7 @@ gtk_public_sources = files([
   'gtkseparatormenuitem.c',
   'gtkseparatortoolitem.c',
   'gtksettings.c',
+  'gtkshortcutcontroller.c',
   'gtkshortcutlabel.c',
   'gtkshortcutsgroup.c',
   'gtkshortcutssection.c',
