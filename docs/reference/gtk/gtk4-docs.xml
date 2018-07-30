@@ -342,6 +342,10 @@
       <xi:include href="xml/gtkpadcontroller.xml" />
     </chapter>
 
+    <chapter>
+      <title>Keyboard shortcuts</title>
+      <xi:include href="xml/gtkshortcutcontroller.xml" />
+    </chapter>
   </part>
 
   <part  id="gtkbase">
