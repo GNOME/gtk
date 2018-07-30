@@ -4505,7 +4505,7 @@ msgstr "hangul"
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr "formy džójó kandži"
+msgstr "formy hodžó kandži"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
