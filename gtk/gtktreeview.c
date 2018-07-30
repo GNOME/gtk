@@ -3659,7 +3659,7 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
     {
       offset = x - (visible_rect.x + visible_rect.width - SCROLL_EDGE_SIZE);
       if (offset < 0)
-	return TRUE;
+	return;
     }
   offset = offset/3;
 
