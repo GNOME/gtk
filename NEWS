@@ -6,14 +6,26 @@ Overview of Changes in GTK+ 3.23.2
  - Avoid hex boxes
  - Use icons for sections
 
+* Color chooser improvements
+ - Allow picking colors from the screen again. The current
+   implementation can use either the screnshot portal or
+   a recent gnome-shell API
+
 * GtkPlacesSidebar now shows a spinner during mount operations
+
+* Wayland
+ - Support both gtk-text-input and text-input-unstable-v3 as
+   input protocol
 
 * Bug fixes:
  #628 TextView: spaces acting as non-breaking whitespace...
+ !248 win32: Correct handling of transient state changes
+ !272 Replace gtk_text_input with text_input_unstable_v3 support
 
 * Translation updates:
  - German
  - Lithuanian
+ - Polish
  - Spanish
  - Turkish
 
