@@ -206,6 +206,7 @@ gtk_color_picker_portal_pick (GtkColorPicker      *cp,
                                                                  NULL);
 
   g_free (handle);
+  g_free (sender);
 
   g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&options, "{sv}", "handle_token", g_variant_new_string (token));
