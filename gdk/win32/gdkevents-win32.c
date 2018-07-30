@@ -738,8 +738,6 @@ build_wm_ime_composition_event (GdkEvent *event,
   build_key_event_state (event, key_state);
 
   event->key.hardware_keycode = 0; /* FIXME: What should it be? */
-  event->key.string = NULL;
-  event->key.length = 0;
   event->key.keyval = gdk_unicode_to_keyval (wc);
 }
 
@@ -768,7 +766,7 @@ print_event_state (guint state)
 void
 _gdk_win32_print_event (const GdkEvent *event)
 {
-  gchar *escaped, *kvname;
+  gchar *kvname;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
   switch (event->any.type)
@@ -819,17 +817,10 @@ _gdk_win32_print_event (const GdkEvent *event)
       break;
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      if (event->key.length == 0)
-	escaped = g_strdup ("");
-      else
-	escaped = g_strescape (event->key.string, NULL);
       kvname = gdk_keyval_name (event->key.keyval);
-      g_print ("%#.02x group:%d %s %d:\"%s\" ",
+      g_print ("%#.02x group:%d %s",
 	       event->key.hardware_keycode, event->key.group,
-	       (kvname ? kvname : "??"),
-	       event->key.length,
-	       escaped);
-      g_free (escaped);
+	       (kvname ? kvname : "??"));
       print_event_state (event->key.state);
       break;
     case GDK_ENTER_NOTIFY:
@@ -938,73 +929,6 @@ _gdk_win32_append_event (GdkEvent *event)
   _gdk_event_queue_append (display, event);
   GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 #endif
-}
-
-static void
-fill_key_event_string (GdkEvent *event)
-{
-  gunichar c;
-  gchar buf[256];
-
-  /* Fill in event->string crudely, since various programs
-   * depend on it.
-   */
-
-  c = 0;
-  if (event->key.keyval != GDK_KEY_VoidSymbol)
-    c = gdk_keyval_to_unicode (event->key.keyval);
-
-  if (c)
-    {
-      gsize bytes_written;
-      gint len;
-
-      /* Apply the control key - Taken from Xlib
-       */
-      if (event->key.state & GDK_CONTROL_MASK)
-	{
-	  if ((c >= '@' && c < '\177') || c == ' ')
-	    c &= 0x1F;
-	  else if (c == '2')
-	    {
-	      event->key.string = g_memdup ("\0\0", 2);
-	      event->key.length = 1;
-	      return;
-	    }
-	  else if (c >= '3' && c <= '7')
-	    c -= ('3' - '\033');
-	  else if (c == '8')
-	    c = '\177';
-	  else if (c == '/')
-	    c = '_' & 0x1F;
-	}
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-
-      event->key.string = g_locale_from_utf8 (buf, len,
-					      NULL, &bytes_written,
-					      NULL);
-      if (event->key.string)
-	event->key.length = bytes_written;
-    }
-  else if (event->key.keyval == GDK_KEY_Escape)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\033");
-    }
-  else if (event->key.keyval == GDK_KEY_Return ||
-	   event->key.keyval == GDK_KEY_KP_Enter)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\r");
-    }
-
-  if (!event->key.string)
-    {
-      event->key.length = 0;
-      event->key.string = g_strdup ("");
-    }
 }
 
 static GdkWin32MessageFilterReturn
@@ -2288,8 +2212,6 @@ gdk_event_translate (MSG  *msg,
       event->any.surface = window;
       event->key.time = _gdk_win32_get_next_tick (msg->time);
       event->key.keyval = GDK_KEY_VoidSymbol;
-      event->key.string = NULL;
-      event->key.length = 0;
       event->key.hardware_keycode = msg->wParam;
       /* save original scancode */
       gdk_event_set_scancode (event, msg->lParam >> 16);
@@ -2359,8 +2281,6 @@ gdk_event_translate (MSG  *msg,
 	impl->leading_surrogate_keydown = 0;
       else
 	impl->leading_surrogate_keyup = 0;
-
-      fill_key_event_string (event);
 
   /* Only one release key event is fired when both shift keys are pressed together
      and then released. In order to send the missing event, press events for shift

@@ -1113,8 +1113,6 @@ fill_key_event (GdkSurface    *window,
 {
   GdkEventPrivate *priv;
   GdkQuartzDeviceManagerCore *device_manager;
-  gchar buf[7];
-  gunichar c = 0;
 
   priv = (GdkEventPrivate *) event;
   priv->windowing_data = [nsevent retain];
@@ -1188,44 +1186,6 @@ fill_key_event (GdkSurface    *window,
    */
   gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (_gdk_display),
                                     &event->key.state);
-
-  event->key.string = NULL;
-
-  /* Fill in ->string since apps depend on it, taken from the x11 backend. */
-  if (event->key.keyval != GDK_KEY_VoidSymbol)
-    c = gdk_keyval_to_unicode (event->key.keyval);
-
-  if (c)
-    {
-      gsize bytes_written;
-      gint len;
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-      
-      event->key.string = g_locale_from_utf8 (buf, len,
-					      NULL, &bytes_written,
-					      NULL);
-      if (event->key.string)
-	event->key.length = bytes_written;
-    }
-  else if (event->key.keyval == GDK_KEY_Escape)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\033");
-    }
-  else if (event->key.keyval == GDK_KEY_Return ||
-	  event->key.keyval == GDK_KEY_KP_Enter)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\r");
-    }
-
-  if (!event->key.string)
-    {
-      event->key.length = 0;
-      event->key.string = g_strdup ("");
-    }
 
   GDK_NOTE(EVENTS,
     g_message ("key %s:\t\twindow: %p  key: %12s  %d",
