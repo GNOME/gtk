@@ -52,18 +52,19 @@ clicked_icon (GtkTreeView  *tv,
   return FALSE;
 }
 
-static gboolean
-release_event (GtkTreeView *tv,
-               GdkEvent    *event)
+static void
+release_event (GtkGestureMultiPress *gesture,
+               guint                 n_press,
+               gdouble               x,
+               gdouble               y,
+               GtkTreeView          *tv)
 {
   GtkTreePath *path;
-  gdouble x, y;
+  gint tx, ty;
 
-  if (gdk_event_get_event_type (event) != GDK_BUTTON_RELEASE)
-    return TRUE;
+  gtk_tree_view_convert_widget_to_tree_coords (tv, x, y, &tx, &ty);
 
-  gdk_event_get_coords (event, &x, &y);
-  if (clicked_icon (tv, x, y, &path))
+  if (clicked_icon (tv, tx, ty, &path))
     {
       GtkTreeModel *model;
       GtkTreeIter iter;
@@ -76,11 +77,7 @@ release_event (GtkTreeView *tv,
       g_print ("text was: %s\n", text);
       g_free (text);
       gtk_tree_path_free (path);
-
-      return TRUE;
     }
-
-  return FALSE;
 }
 
 int main (int argc, char *argv[])
@@ -92,6 +89,7 @@ int main (int argc, char *argv[])
   GtkCellRenderer *cell;
   GtkTreeStore *store;
   GtkTreeIter iter;
+  GtkGesture *gesture;
 
   gtk_init ();
 
@@ -131,8 +129,12 @@ int main (int argc, char *argv[])
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tv), GTK_TREE_MODEL (store));
 
-  g_signal_connect (tv, "event",
-                    G_CALLBACK (release_event), NULL);
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (release_event), tv);
+  gtk_widget_add_controller (tv, GTK_EVENT_CONTROLLER (gesture));
 
   gtk_widget_show (window);
 

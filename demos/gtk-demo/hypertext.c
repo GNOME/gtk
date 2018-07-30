@@ -135,55 +135,42 @@ static void set_cursor_if_appropriate (GtkTextView *text_view,
                                        gint         x,
                                        gint         y);
 
-/* Links can also be activated by clicking or tapping.
- */
-static gboolean
-event_cb (GtkWidget *text_view,
-          GdkEvent  *ev)
+static void
+released_cb (GtkGestureMultiPress *gesture,
+             guint                 n_press,
+             gdouble               x,
+             gdouble               y,
+             GtkWidget            *text_view)
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  gdouble ex, ey;
-  int x, y;
-  GdkEventType type;
+  int tx, ty;
 
-  type = gdk_event_get_event_type (ev);
+  if (gtk_gesture_single_get_button (GTK_GESTURE_SINGLE (gesture)) > 1)
+    return;
 
-  gdk_event_get_coords (ev, &ex, &ey);
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         ex, ey, &x, &y);
-
-  if (type == GDK_BUTTON_RELEASE)
-    {
-      guint button;
-
-      gdk_event_get_button (ev, &button);
-      if (button != GDK_BUTTON_PRIMARY)
-        return FALSE;
-    }
-  else if (type == GDK_MOTION_NOTIFY)
-    {
-      set_cursor_if_appropriate (GTK_TEXT_VIEW (text_view), x, y);
-      return FALSE;
-    }
-  else if (type == GDK_TOUCH_END)
-    {
-    }
-  else
-    return FALSE;
+                                         x, y, &tx, &ty);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 
   /* we shouldn't follow a link if the user has selected something */
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
-    return FALSE;
+    return;
 
   if (gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y))
     follow_if_link (text_view, &iter);
+}
 
-  return TRUE;
+static void
+motion_cb (GtkEventControllerMotion *controller,
+           gdouble                   x,
+           gdouble                   y,
+           GtkTextView              *text_view)
+{
+  set_cursor_if_appropriate (text_view, x, y);
 }
 
 static gboolean hovering_over_link = FALSE;
@@ -259,8 +246,16 @@ do_hypertext (GtkWidget *do_widget)
       controller = gtk_event_controller_key_new ();
       g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), view);
       gtk_widget_add_controller (view, controller);
-      g_signal_connect (view, "event",
-                        G_CALLBACK (event_cb), NULL);
+
+      controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+      g_signal_connect (controller, "released",
+                        G_CALLBACK (released_cb), view);
+      gtk_widget_add_controller (view, controller);
+
+      controller = gtk_event_controller_motion_new ();
+      g_signal_connect (controller, "motion",
+                        G_CALLBACK (motion_cb), view);
+      gtk_widget_add_controller (view, controller);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 

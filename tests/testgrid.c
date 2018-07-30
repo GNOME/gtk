@@ -31,17 +31,15 @@ test_widget (const gchar *label, const gchar *color)
 
 static GtkOrientation o;
 
-static gboolean
-toggle_orientation (GtkWidget *window, GdkEvent *event, GtkGrid *grid)
+static void
+toggle_orientation (GtkGestureMultiPress *gesture,
+                    guint                 n_press,
+                    gdouble               x,
+                    gdouble               y,
+                    GtkGrid              *grid)
 {
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
-    {
-      o = 1 - o;
-
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), o);
-    }
-
-  return GDK_EVENT_PROPAGATE;
+  o = 1 - o;
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), o);
 }
 
 static void
@@ -50,12 +48,16 @@ simple_grid (void)
   GtkWidget *window;
   GtkWidget *grid;
   GtkWidget *test1, *test2, *test3, *test4, *test5, *test6;
+  GtkGesture *gesture;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Orientation");
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
-  g_signal_connect (window, "event", G_CALLBACK (toggle_orientation), grid);
+
+  gesture = gtk_gesture_multi_press_new ();
+  g_signal_connect (gesture, "pressed", G_CALLBACK (toggle_orientation), grid);
+  gtk_widget_add_controller (window, GTK_EVENT_CONTROLLER (gesture));
 
   gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 5);

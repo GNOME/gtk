@@ -33,7 +33,9 @@
 #include "gtkmain.h"
 #include "gtkinvisible.h"
 #include "gtkwidgetprivate.h"
-
+#include "gtkgesturemultipress.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkeventcontrollerkey.h"
 
 static gboolean
 inspector_contains (GtkWidget *widget,
@@ -247,45 +249,71 @@ reemphasize_window (GtkWidget *window)
     gdk_surface_raise (gtk_widget_get_surface (window));
 }
 
-static gboolean
-property_query_event (GtkWidget *widget,
-                      GdkEvent  *event,
-                      gpointer   data)
+static void
+property_query_pressed (GtkGestureMultiPress *gesture,
+                        guint                 n_press,
+                        gdouble               x,
+                        gdouble               y,
+                        GtkInspectorWindow   *iw)
 {
-  GtkInspectorWindow *iw = (GtkInspectorWindow *)data;
-  GdkEventType event_type = gdk_event_get_event_type (event);
+  GdkEvent *event;
 
-  if (event_type == GDK_BUTTON_RELEASE)
+  gtk_grab_remove (iw->invisible);
+  if (iw->grab_seat)
     {
-      g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
-      gtk_grab_remove (widget);
-      if (iw->grabbed)
-        gdk_seat_ungrab (gdk_event_get_seat (event));
+      gdk_seat_ungrab (iw->grab_seat);
+      iw->grab_seat = NULL;
+    }
+
+  reemphasize_window (GTK_WIDGET (iw));
+
+  event = gtk_get_current_event ();
+  on_inspect_widget (iw->invisible, event, iw);
+  g_object_unref (event);
+
+  gtk_widget_destroy (iw->invisible);
+  iw->invisible = NULL;
+}
+
+static void
+property_query_motion (GtkEventControllerMotion *controller,
+                       gdouble                   x,
+                       gdouble                   y,
+                       GtkInspectorWindow       *iw)
+{
+  GdkEvent *event;
+
+  event = gtk_get_current_event ();
+  on_highlight_widget (iw->invisible, event, iw);
+  g_object_unref (event);
+}
+
+static gboolean
+property_query_key (GtkEventControllerKey *key,
+                    guint                  keyval,
+                    guint                  keycode,
+                    GdkModifierType        modifiers,
+                    GtkInspectorWindow    *iw)
+{
+  if (keyval == GDK_KEY_Escape)
+    {
+      gtk_grab_remove (iw->invisible);
+      if (iw->grab_seat)
+        {
+          gdk_seat_ungrab (iw->grab_seat);
+          iw->grab_seat = NULL;
+        }
       reemphasize_window (GTK_WIDGET (iw));
 
-      on_inspect_widget (widget, event, data);
-    }
-  else if (event_type == GDK_MOTION_NOTIFY)
-    {
-      on_highlight_widget (widget, event, data);
-    }
-  else if (event_type == GDK_KEY_PRESS)
-    {
-      guint keyval;
+      clear_flash (iw);
 
-      if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
-        {
-          g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
-          gtk_grab_remove (widget);
-          if (iw->grabbed)
-            gdk_seat_ungrab (gdk_event_get_seat (event));
-          reemphasize_window (GTK_WIDGET (iw));
+      gtk_widget_destroy (iw->invisible);
+      iw->invisible = NULL;
 
-          clear_flash (iw);
-        }
+      return TRUE;
     }
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -304,6 +332,8 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   GdkDisplay *display;
   GdkCursor *cursor;
   GdkGrabStatus status;
+  GtkEventController *controller;
+  GdkSeat *seat;
 
   if (!iw->invisible)
     {
@@ -314,14 +344,29 @@ gtk_inspector_on_inspect (GtkWidget          *button,
 
   display = gdk_display_get_default ();
   cursor = gdk_cursor_new_from_name ("crosshair", NULL);
-  status = gdk_seat_grab (gdk_display_get_default_seat (display),
+  seat = gdk_display_get_default_seat (display);
+  status = gdk_seat_grab (seat,
                           gtk_widget_get_surface (iw->invisible),
                           GDK_SEAT_CAPABILITY_ALL_POINTING, TRUE,
                           cursor, NULL, prepare_inspect_func, NULL);
   g_object_unref (cursor);
-  iw->grabbed = status == GDK_GRAB_SUCCESS;
+  if (status == GDK_GRAB_SUCCESS)
+    iw->grab_seat = seat;
 
-  g_signal_connect (iw->invisible, "event", G_CALLBACK (property_query_event), iw);
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  g_signal_connect (controller, "pressed",
+		    G_CALLBACK (property_query_pressed), iw);
+  gtk_widget_add_controller (iw->invisible, controller);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_event_controller_motion_new ());
+  g_signal_connect (controller, "motion",
+                    G_CALLBACK (property_query_motion), iw);
+  gtk_widget_add_controller (iw->invisible, controller);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_event_controller_key_new ());
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (property_query_key), iw);
+  gtk_widget_add_controller (iw->invisible, controller);
 
   gtk_grab_add (GTK_WIDGET (iw->invisible));
   deemphasize_window (GTK_WIDGET (iw));

@@ -39,6 +39,7 @@
 #include "gtktogglebutton.h"
 #include "gtktreemenu.h"
 #include "gtktypebuiltins.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkcomboboxaccessible.h"
 
@@ -275,9 +276,11 @@ static void     gtk_combo_box_menu_activate        (GtkWidget        *menu,
                                                     const gchar      *path,
                                                     GtkComboBox      *combo_box);
 static void     gtk_combo_box_update_sensitivity   (GtkComboBox      *combo_box);
-static gboolean gtk_combo_box_menu_event           (GtkWidget        *widget,
-                                                    GdkEvent         *event,
-                                                    gpointer          data);
+static gboolean gtk_combo_box_menu_key (GtkEventControllerKey *key,
+                                        guint                  keyval,
+                                        guint                  keycode,
+                                        GdkModifierType        modifiers,
+                                        GtkComboBox           *combo_box);
 static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box);
 
 /* cell layout */
@@ -843,7 +846,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, popup_widget);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_activate);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_event);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_key);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_show);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_hide);
 
@@ -1931,21 +1934,26 @@ gtk_combo_box_model_row_changed (GtkTreeModel     *model,
 }
 
 static gboolean
-gtk_combo_box_menu_event (GtkWidget *widget,
-                          GdkEvent  *event,
-                          gpointer   data)
+gtk_combo_box_menu_key (GtkEventControllerKey *key,
+                        guint                  keyval,
+                        guint                  keycode,
+                        GdkModifierType        modifiers,
+                        GtkComboBox           *combo_box)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
+  GtkWidget *widget;
+  GdkEvent *event;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
+  event = gtk_get_current_event ();
 
   if (!gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
     {
-      /* The menu hasn't managed the
-       * event, forward it to the combobox
-       */
-      return gtk_bindings_activate_event (G_OBJECT (combo_box), (GdkEventKey *)event);
+      gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
     }
 
-  return GDK_EVENT_PROPAGATE;
+  g_object_unref (event);
+
+  return TRUE;
 }
 
 /*
@@ -2726,19 +2734,12 @@ gtk_combo_box_dispose (GObject* object)
 }
 
 static gboolean
-gtk_cell_editable_event (GtkWidget *widget,
-                         GdkEvent  *event,
-                         gpointer   data)
+gtk_cell_editable_key_pressed (GtkEventControllerKey *key,
+                               guint                  keyval,
+                               guint                  keycode,
+                               GdkModifierType        modifiers,
+                               GtkComboBox           *combo_box)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
-  guint keyval;
-
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_PROPAGATE;
-
-  if (!gdk_event_get_keyval (event, &keyval))
-    return GDK_EVENT_PROPAGATE;
-
   if (keyval == GDK_KEY_Escape)
     {
       g_object_set (combo_box,
@@ -2768,25 +2769,25 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (cell_editable);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
+  GtkEventController *controller;
   GtkWidget *child;
 
   priv->is_cell_renderer = TRUE;
 
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect_object (controller, "key-pressed",
+                           G_CALLBACK (gtk_cell_editable_key_pressed),
+                           cell_editable, 0);
+
   if (priv->cell_view)
     {
-      g_signal_connect_object (priv->button, "event",
-                               G_CALLBACK (gtk_cell_editable_event),
-                               cell_editable, 0);
-
+      gtk_widget_add_controller (priv->button, controller);
       gtk_widget_grab_focus (priv->button);
     }
   else
     {
       child = gtk_bin_get_child (GTK_BIN (combo_box));
-
-      g_signal_connect_object (child, "event",
-                               G_CALLBACK (gtk_cell_editable_event),
-                               cell_editable, 0);
+      gtk_widget_add_controller (child, controller);
 
       gtk_widget_grab_focus (child);
       gtk_widget_set_can_focus (priv->button, FALSE);
