@@ -4385,7 +4385,7 @@ msgstr "vystředěná interpunkce CJK"
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr "kapitálkové mezery"
+msgstr "rozestupy velkých písmen"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
@@ -4405,7 +4405,7 @@ msgstr "petitové kapitálky z kapitálek"
 #: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
-msgstr "malé kapitálky z kapitálek"
+msgstr "kapitálky z velkých písmen"
 
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
@@ -4415,7 +4415,7 @@ msgstr "vzdálenosti"
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr "vlastní slitky"
+msgstr "volitelné slitky"
 
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
@@ -4480,7 +4480,7 @@ msgstr "formy s halant"
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr "alternativní poloviční šiřky"
+msgstr "alternativní poloviční šířky"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
@@ -4575,7 +4575,7 @@ msgstr "počáteční formy jamo"
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr "tabulární verzálkové číslice"
+msgstr "verzálkové číslice"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
@@ -4610,7 +4610,7 @@ msgstr "středové formy"
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr "matematická řečtina"
+msgstr "matematické řecké"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
@@ -4645,7 +4645,7 @@ msgstr "čitatelé"
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr "proporcionální skákavé číslic"
+msgstr "skákavé číslice"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
@@ -4655,7 +4655,7 @@ msgstr "optické vystrčení"
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "pořadové číslovky"
+msgstr "řadové číslovky"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
@@ -4680,7 +4680,7 @@ msgstr "proporcionální kana"
 #: gtk/open-type-layout.h:88
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "proporcionální verzálkové číslice"
+msgstr "proporcionální číslice"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
@@ -4755,7 +4755,7 @@ msgstr "zprava doleva zrcadlené formy"
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr "národní formy ruby"
+msgstr "formy notace ruby"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
@@ -4780,7 +4780,7 @@ msgstr "optická velikost"
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr "malé kapitálky"
+msgstr "kapitálky"
 
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
@@ -4930,7 +4930,7 @@ msgstr "tradiční formy pro jména"
 #: gtk/open-type-layout.h:138
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr "tabulární skákavé číslice"
+msgstr "tabulární číslice"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
