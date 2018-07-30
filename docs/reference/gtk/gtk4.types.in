@@ -157,6 +157,7 @@ gtk_separator_get_type
 gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
 gtk_settings_get_type
+gtk_shortcut_controller_get_type
 gtk_shortcut_label_get_type
 gtk_shortcuts_window_get_type
 gtk_shortcuts_section_get_type
