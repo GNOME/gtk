@@ -358,7 +358,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
 		    G_CALLBACK (property_query_pressed), iw);
   gtk_widget_add_controller (iw->invisible, controller);
 
-  controller = GTK_EVENT_CONTROLLER (gtk_event_controller_motion_new ());
+  controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "motion",
                     G_CALLBACK (property_query_motion), iw);
   gtk_widget_add_controller (iw->invisible, controller);
