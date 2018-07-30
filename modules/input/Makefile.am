@@ -175,8 +175,8 @@ endif
 endif
 
 protocol_built_sources =	\
-	gtk-text-input-protocol.c	\
-	gtk-text-input-client-protocol.h
+	text-input-unstable-v3-protocol.c	\
+	text-input-unstable-v3-client-protocol.h
 
 im_wayland_la_CPPFLAGS = $(AM_CPPFLAGS)
 im_wayland_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
@@ -188,6 +188,23 @@ STATIC_WAYLAND_MODULE = libstatic-im-wayland.la
 else
 if USE_WAYLAND
 WAYLAND_MODULE = im-wayland.la
+endif
+endif
+
+protocol_built_sources_gtk =	\
+	gtk-text-input-protocol.c	\
+	gtk-text-input-client-protocol.h
+
+im_waylandgtk_la_CPPFLAGS = $(AM_CPPFLAGS)
+im_waylandgtk_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_waylandgtk_la_SOURCES = imwaylandgtk.c $(protocol_built_sources_gtk)
+libstatic_im_waylandgtk_la_SOURCES = $(im_waylandgtk_la_SOURCES)
+im_waylandgtk_la_LIBADD = $(LDADDS)
+if INCLUDE_IM_WAYLAND
+STATIC_WAYLANDGTK_MODULE = libstatic-im-waylandgtk.la
+else
+if USE_WAYLAND
+WAYLANDGTK_MODULE = im-waylandgtk.la
 endif
 endif
 
@@ -253,6 +270,7 @@ module_LTLIBRARIES =			\
 	$(QUARTZ_MODULE)		\
 	$(BROADWAY_MODULE)		\
 	$(WAYLAND_MODULE)		\
+	$(WAYLANDGTK_MODULE)	\
 	$(THAI_MODULE)			\
 	$(TI_ER_MODULE)			\
 	$(TI_ET_MODULE)			\
@@ -272,6 +290,7 @@ noinst_LTLIBRARIES =				\
 	$(STATIC_QUARTZ_MODULE)			\
 	$(STATIC_BROADWAY_MODULE)		\
 	$(STATIC_WAYLAND_MODULE)		\
+	$(STATIC_WAYLANDGTK_MODULE)		\
 	$(STATIC_THAI_MODULE)			\
 	$(STATIC_TI_ER_MODULE)			\
 	$(STATIC_TI_ET_MODULE)			\
@@ -284,8 +303,8 @@ immodules.cache: Makefile.am $(module_LTLIBRARIES)
 	$(AM_V_GEN) $(top_builddir)/gtk/gtk-query-immodules-3.0$(EXEEXT) $(module_LTLIBRARIES) > immodules.cache
 
 if USE_WAYLAND
-BUILT_SOURCES = $(protocol_built_sources)
-EXTRA_DIST += $(protocol_built_sources)
+BUILT_SOURCES = $(protocol_built_sources) $(protocol_built_sources_gtk)
+EXTRA_DIST += $(protocol_built_sources) $(protocol_built_sources_gtk)
 endif
 
 EXTRA_DIST += README.multipress
