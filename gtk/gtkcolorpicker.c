@@ -51,9 +51,18 @@ gtk_color_picker_pick_finish (GtkColorPicker  *picker,
 GtkColorPicker *
 gtk_color_picker_new (void)
 {
+  GtkColorPicker *picker;
+
   if (gtk_should_use_portal ())
-    return gtk_color_picker_portal_new ();
+    picker = gtk_color_picker_portal_new ();
   else
-    return gtk_color_picker_shell_new ();
+    picker = gtk_color_picker_shell_new ();
+
+  if (picker)
+    g_debug ("Using %s for picking colors", g_type_name_from_instance (picker));
+  else
+    g_debug ("No suitable GtkColorPicker implementation\n");
+
+  return picker;
 }
 
