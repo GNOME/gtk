@@ -59,6 +59,7 @@
 #include "gtknativeprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
+#include "gtkshortcutcontroller.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -2332,6 +2333,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   GtkWidget *widget = GTK_WIDGET (instance);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GType layout_manager_type;
+  GtkEventController *controller;
 
   widget->priv = priv;
 
@@ -2403,6 +2405,10 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   layout_manager_type = gtk_widget_class_get_layout_manager_type (g_class);
   if (layout_manager_type != G_TYPE_INVALID)
     gtk_widget_set_layout_manager (widget, g_object_new (layout_manager_type, NULL));
+
+  controller = gtk_shortcut_controller_new ();
+  gtk_event_controller_set_name (controller, "gtk-widget-class-shortcuts");
+  gtk_widget_add_controller (widget, controller);
 }
 
 /**
@@ -4893,11 +4899,6 @@ gtk_widget_event (GtkWidget *widget,
 
   if (return_val == FALSE)
     return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_BUBBLE);
-
-  if (return_val == FALSE &&
-      (gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
-       gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
-    return_val |= gtk_bindings_activate_event (G_OBJECT (widget), event);
 
   return return_val;
 }
