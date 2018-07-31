@@ -159,11 +159,13 @@ image_drag_data_get (GtkWidget        *widget,
                      GtkSelectionData *selection_data,
                      gpointer          data)
 {
+  GdkAtom target;
   GdkPaintable *paintable;
   const gchar *name;
   int size;
 
-  if (gtk_selection_data_targets_include_image (selection_data, TRUE))
+  target = gtk_selection_data_get_target (selection_data);
+  if (gtk_targets_include_image (&target, 1, TRUE))
     {
       paintable = get_image_paintable (GTK_IMAGE (data), &size);
       if (GDK_IS_TEXTURE (paintable))
@@ -171,7 +173,7 @@ image_drag_data_get (GtkWidget        *widget,
       if (paintable)
         g_object_unref (paintable);
     }
-  else if (gtk_selection_data_targets_include_text (selection_data))
+  else if (gtk_targets_include_text (&target, 1))
     {
       if (gtk_image_get_storage_type (GTK_IMAGE (data)) == GTK_IMAGE_ICON_NAME)
         name = gtk_image_get_icon_name (GTK_IMAGE (data));
@@ -191,12 +193,14 @@ image_drag_data_received (GtkWidget        *widget,
                           GtkSelectionData *selection_data,
                           gpointer          data)
 {
-  gchar *text;
+  GdkAtom target;
 
   if (gtk_selection_data_get_length (selection_data) == 0)
     return;
 
-  if (gtk_selection_data_targets_include_image (selection_data, FALSE))
+  target = gtk_selection_data_get_target (selection_data);
+
+  if (gtk_targets_include_image (&target, 1, FALSE))
     {
       GdkTexture *texture;
 
@@ -205,10 +209,13 @@ image_drag_data_received (GtkWidget        *widget,
 
       g_object_unref (texture);
     }
-  else if (gtk_selection_data_targets_include_text (selection_data))
+  else if (gtk_targets_include_text (&target, 1))
     {
+      gchar *text;
+
       text = (gchar *)gtk_selection_data_get_text (selection_data);
       gtk_image_set_from_icon_name (GTK_IMAGE (data), text);
+
       g_free (text);
     }
   else
