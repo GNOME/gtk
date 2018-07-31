@@ -65,6 +65,12 @@ void           gtk_binding_entry_skip        (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers);
 GDK_AVAILABLE_IN_ALL
+void           gtk_binding_entry_add_signal_variant (GtkBindingSet*binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              const gchar         *signal_name,
+                                              GVariant            *binding_args);
+GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_add_signal  (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers,
