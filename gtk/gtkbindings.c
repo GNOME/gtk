@@ -997,24 +997,20 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
                               guint           n_args,
                               ...)
 {
-  GSList *slist, *free_slist;
+  GVariantBuilder builder;
   va_list args;
+  GType arg_type;
   guint i;
 
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (signal_name != NULL);
 
   va_start (args, n_args);
-  slist = NULL;
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);
   for (i = 0; i < n_args; i++)
     {
-      GtkBindingArg *arg;
-
-      arg = g_slice_new0 (GtkBindingArg);
-      slist = g_slist_prepend (slist, arg);
-
-      arg->arg_type = va_arg (args, GType);
-      switch (G_TYPE_FUNDAMENTAL (arg->arg_type))
+      arg_type = va_arg (args, GType);
+      switch (G_TYPE_FUNDAMENTAL (arg_type))
         {
         case G_TYPE_CHAR:
         case G_TYPE_UCHAR:
@@ -1023,33 +1019,35 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
         case G_TYPE_BOOLEAN:
         case G_TYPE_ENUM:
         case G_TYPE_FLAGS:
-          arg->arg_type = G_TYPE_LONG;
-          arg->d.long_data = va_arg (args, gint);
+          g_variant_builder_add (&builder, "x", (gint64) va_arg (args, gint));
           break;
         case G_TYPE_LONG:
         case G_TYPE_ULONG:
-          arg->arg_type = G_TYPE_LONG;
-          arg->d.long_data = va_arg (args, glong);
+          g_variant_builder_add (&builder, "x", (gint64) va_arg (args, glong));
           break;
         case G_TYPE_FLOAT:
         case G_TYPE_DOUBLE:
-          arg->arg_type = G_TYPE_DOUBLE;
-          arg->d.double_data = va_arg (args, gdouble);
+          g_variant_builder_add (&builder, "d", (gint64) va_arg (args, gdouble));
           break;
         case G_TYPE_STRING:
-          arg->arg_type = G_TYPE_STRING;
-          arg->d.string_data = va_arg (args, gchar*);
-          if (!arg->d.string_data)
-            {
-              g_warning ("gtk_binding_entry_add_signal(): type '%s' arg[%u] is 'NULL'",
-                         g_type_name (arg->arg_type),
-                         i);
-              i += n_args + 1;
+          {
+            char *s = va_arg (args, gchar*);
+            if (s != NULL)
+              {
+                g_variant_builder_add (&builder, "s", s);
+              }
+            else
+              {
+                g_warning ("gtk_binding_entry_add_signal(): type '%s' arg[%u] is 'NULL'",
+                           g_type_name (arg_type),
+                           i);
+                i += n_args + 1;
+              }
             }
           break;
         default:
           g_warning ("gtk_binding_entry_add_signal(): unsupported type '%s' for arg[%u]",
-                     g_type_name (arg->arg_type), i);
+                     g_type_name (arg_type), i);
           i += n_args + 1;
           break;
         }
@@ -1057,18 +1055,9 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   va_end (args);
 
   if (i == n_args || i == 0)
-    {
-      slist = g_slist_reverse (slist);
-      gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
-    }
-
-  free_slist = slist;
-  while (slist)
-    {
-      g_slice_free (GtkBindingArg, slist->data);
-      slist = slist->next;
-    }
-  g_slist_free (free_slist);
+    gtk_binding_entry_add_signal_variant (binding_set, keyval, modifiers, signal_name, g_variant_builder_end (&builder));
+  else
+    g_variant_builder_clear (&builder);
 }
 
 static guint
