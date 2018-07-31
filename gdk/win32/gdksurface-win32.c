@@ -760,17 +760,11 @@ gdk_win32_surface_destroy (GdkSurface *window,
   _gdk_remove_modal_window (window);
 
   /* Remove all our transient children */
-  tmp = surface_impl->transient_children;
-  while (tmp != NULL)
+  while (surface_impl->transient_children != NULL)
     {
-      GdkSurface *child = tmp->data;
-      GdkSurfaceImplWin32 *child_impl = GDK_SURFACE_IMPL_WIN32 (GDK_SURFACE (child)->impl);
-
-      child_impl->transient_owner = NULL;
-      tmp = tmp->next;
+      GdkSurface *child = surface_impl->transient_children->data;
+      gdk_surface_set_transient_for (child, NULL);
     }
-  g_slist_free (surface_impl->transient_children);
-  surface_impl->transient_children = NULL;
 
   /* Remove ourself from our transient owner */
   if (surface_impl->transient_owner != NULL)
@@ -1672,27 +1666,29 @@ gdk_win32_surface_set_transient_for (GdkSurface *window,
       return;
     }
 
-  if (parent == NULL)
+  if (surface_impl->transient_owner == parent)
+    return;
+
+  if (GDK_IS_SURFACE (surface_impl->transient_owner))
     {
       GdkSurfaceImplWin32 *trans_impl = GDK_SURFACE_IMPL_WIN32 (surface_impl->transient_owner->impl);
-      if (trans_impl->transient_children != NULL)
-        {
-          item = g_slist_find (trans_impl->transient_children, window);
-          item->data = NULL;
-          trans_impl->transient_children = g_slist_delete_link (trans_impl->transient_children, item);
-          trans_impl->num_transients--;
+      item = g_slist_find (trans_impl->transient_children, window);
+      item->data = NULL;
+      trans_impl->transient_children = g_slist_delete_link (trans_impl->transient_children, item);
+      trans_impl->num_transients--;
 
-          if (!trans_impl->num_transients)
-            {
-              trans_impl->transient_children = NULL;
-            }
+      if (!trans_impl->num_transients)
+        {
+          trans_impl->transient_children = NULL;
         }
+
       g_object_unref (G_OBJECT (surface_impl->transient_owner));
       g_object_unref (G_OBJECT (window));
 
       surface_impl->transient_owner = NULL;
     }
-  else
+
+  if (parent)
     {
       parent_impl = GDK_SURFACE_IMPL_WIN32 (parent->impl);
 
