@@ -1,6 +1,6 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell1" version="2">
+  <interface name="gtk_shell1" version="3">
     <description summary="gtk specific extensions">
       gtk_shell is a protocol extension providing additional features for
       clients implementing it.
@@ -30,7 +30,7 @@
     </request>
   </interface>
 
-  <interface name="gtk_surface1" version="2">
+  <interface name="gtk_surface1" version="3">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>
@@ -72,6 +72,11 @@
     <event name="configure_edges" since="2">
       <arg name="constraints" type="array"/>
     </event>
+
+    <!-- Version 3 additions -->
+
+    <request name="present_unconditional" since="3">
+    </request>
   </interface>
 
 </protocol>
