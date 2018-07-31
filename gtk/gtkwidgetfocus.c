@@ -89,8 +89,8 @@ tab_sort_func (gconstpointer a,
 
   if (y1 == y2)
     {
-      const float x1 = child_bounds1.origin.y + (child_bounds1.size.width / 2.0f);
-      const float x2 = child_bounds2.origin.y + (child_bounds2.size.width / 2.0f);
+      const float x1 = child_bounds1.origin.x + (child_bounds1.size.width / 2.0f);
+      const float x2 = child_bounds2.origin.x + (child_bounds2.size.width / 2.0f);
 
       if (text_direction == GTK_TEXT_DIR_RTL)
         return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
