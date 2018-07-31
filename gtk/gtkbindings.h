@@ -71,12 +71,6 @@ void           gtk_binding_entry_add_signal  (GtkBindingSet       *binding_set,
                                               const gchar         *signal_name,
                                               guint                n_args,
                                               ...);
-GDK_AVAILABLE_IN_ALL
-void           gtk_binding_entry_add_signall (GtkBindingSet       *binding_set,
-                                              guint                keyval,
-                                              GdkModifierType      modifiers,
-                                              const gchar         *signal_name,
-                                              GSList              *binding_args);
 
 GDK_AVAILABLE_IN_ALL
 GTokenType     gtk_binding_entry_add_signal_from_string
