@@ -408,6 +408,10 @@
         from ui files it run the command <command>gtk4-builder-tool simplify --replace</command>
         on them.
       </para>
+      <para>
+        The function gtk_widget_show_all(), the #GtkWidget::no-show-all property
+        and its getter and setter have been removed in  GTK+ 4, so you should stop using them.
+      </para>
     </section>
 
     <section>
