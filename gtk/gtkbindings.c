@@ -153,8 +153,7 @@ struct _GtkBindingSignal
 {
   GtkBindingSignal *next;
   gchar            *signal_name;
-  guint             n_args;
-  GtkBindingArg    *args;
+  GVariant         *args;
 };
 
 /* --- variables --- */
@@ -169,15 +168,14 @@ static GQuark            key_id_class_binding_set = 0;
 
 static GtkBindingSignal*
 binding_signal_new (const gchar *signal_name,
-                    guint        n_args)
+                    GVariant    *args)
 {
   GtkBindingSignal *signal;
 
-  signal = (GtkBindingSignal *) g_slice_alloc0 (sizeof (GtkBindingSignal) + n_args * sizeof (GtkBindingArg));
+  signal = g_slice_new0 (GtkBindingSignal);
   signal->next = NULL;
   signal->signal_name = (gchar *)g_intern_string (signal_name);
-  signal->n_args = n_args;
-  signal->args = (GtkBindingArg *)(signal + 1);
+  signal->args = g_variant_ref_sink (args);
 
   return signal;
 }
@@ -185,14 +183,8 @@ binding_signal_new (const gchar *signal_name,
 static void
 binding_signal_free (GtkBindingSignal *sig)
 {
-  guint i;
-
-  for (i = 0; i < sig->n_args; i++)
-    {
-      if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
-        g_free (sig->args[i].d.string_data);
-    }
-  g_slice_free1 (sizeof (GtkBindingSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
+  g_variant_unref (sig->args);
+  g_slice_free (GtkBindingSignal, sig);
 }
 
 static guint
@@ -438,7 +430,7 @@ binding_ht_lookup_entry (GtkBindingSet  *set,
 
 static gboolean
 binding_compose_params (GObject         *object,
-                        GtkBindingArg   *args,
+                        GVariantIter    *args,
                         GSignalQuery    *query,
                         GValue         **params_p)
 {
@@ -461,20 +453,22 @@ binding_compose_params (GObject         *object,
   for (i = 1; i < query->n_params + 1 && valid; i++)
     {
       GValue tmp_value = G_VALUE_INIT;
+      GVariant *tmp_variant;
 
       g_value_init (params, *types);
+      tmp_variant = g_variant_iter_next_value (args);
 
-      switch (G_TYPE_FUNDAMENTAL (args->arg_type))
+      switch ((guint) g_variant_classify (tmp_variant))
         {
-        case G_TYPE_DOUBLE:
+        case G_VARIANT_CLASS_DOUBLE:
           g_value_init (&tmp_value, G_TYPE_DOUBLE);
-          g_value_set_double (&tmp_value, args->d.double_data);
+          g_value_set_double (&tmp_value, g_variant_get_double (tmp_variant));
           break;
-        case G_TYPE_LONG:
+        case G_VARIANT_CLASS_INT64:
           g_value_init (&tmp_value, G_TYPE_LONG);
-          g_value_set_long (&tmp_value, args->d.long_data);
+          g_value_set_long (&tmp_value, g_variant_get_int64 (tmp_variant));
           break;
-        case G_TYPE_STRING:
+        case G_VARIANT_CLASS_STRING:
           /* gtk_rc_parse_flags/enum() has fancier parsing for this; we can't call
            * that since we don't have a GParamSpec, so just do something simple
            */
@@ -482,12 +476,13 @@ binding_compose_params (GObject         *object,
             {
               GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
               GEnumValue *enum_value;
+              const char *s = g_variant_get_string (tmp_variant, NULL);
 
               valid = FALSE;
 
-              enum_value = g_enum_get_value_by_name (class, args->d.string_data);
+              enum_value = g_enum_get_value_by_name (class, s);
               if (!enum_value)
-                enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
+                enum_value = g_enum_get_value_by_nick (class, s);
 
               if (enum_value)
                 {
@@ -506,12 +501,13 @@ binding_compose_params (GObject         *object,
             {
               GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
               GFlagsValue *flags_value;
+              const char *s = g_variant_get_string (tmp_variant, NULL);
 
               valid = FALSE;
 
-              flags_value = g_flags_get_value_by_name (class, args->d.string_data);
+              flags_value = g_flags_get_value_by_name (class, s);
               if (!flags_value)
-                flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
+                flags_value = g_flags_get_value_by_nick (class, s);
               if (flags_value)
                 {
                   g_value_init (&tmp_value, *types);
@@ -524,7 +520,7 @@ binding_compose_params (GObject         *object,
           else
             {
               g_value_init (&tmp_value, G_TYPE_STRING);
-              g_value_set_static_string (&tmp_value, args->d.string_data);
+              g_value_set_static_string (&tmp_value, g_variant_get_string (tmp_variant, NULL));
             }
           break;
         default:
@@ -540,9 +536,9 @@ binding_compose_params (GObject         *object,
           g_value_unset (&tmp_value);
         }
 
+      g_variant_unref (tmp_variant);
       types++;
       params++;
-      args++;
     }
 
   if (!valid)
@@ -580,6 +576,8 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
       GValue *params = NULL;
       GValue return_val = G_VALUE_INIT;
       gchar *accelerator = NULL;
+      GVariantIter args_iter;
+      gsize n_args;
 
       signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
       if (!signal_id)
@@ -596,9 +594,13 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
         }
 
       g_signal_query (signal_id, &query);
-      if (query.n_params != sig->n_args ||
+      if (sig->args)
+        n_args = g_variant_iter_init (&args_iter, sig->args);
+      else
+        n_args = 0;
+      if (query.n_params != n_args ||
           (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
-          !binding_compose_params (object, sig->args, &query, &params))
+          !binding_compose_params (object, &args_iter, &query, &params))
         {
           accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
           g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
@@ -881,7 +883,7 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
   GtkBindingSignal *signal, **signal_p;
   GSList *slist;
   guint n = 0;
-  GtkBindingArg *arg;
+  GVariantBuilder builder;
 
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (signal_name != NULL);
@@ -889,9 +891,8 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
   keyval = gdk_keyval_to_lower (keyval);
   modifiers = modifiers & BINDING_MOD_MASK ();
 
-  signal = binding_signal_new (signal_name, g_slist_length (binding_args));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);
 
-  arg = signal->args;
   for (slist = binding_args; slist; slist = slist->next)
     {
       GtkBindingArg *tmp_arg;
@@ -900,38 +901,34 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
       if (!tmp_arg)
         {
           g_warning ("gtk_binding_entry_add_signall(): arg[%u] is 'NULL'", n);
-          binding_signal_free (signal);
           return;
         }
       switch (G_TYPE_FUNDAMENTAL (tmp_arg->arg_type))
         {
         case  G_TYPE_LONG:
-          arg->arg_type = G_TYPE_LONG;
-          arg->d.long_data = tmp_arg->d.long_data;
+          g_variant_builder_add (&builder, "x", (gint64) tmp_arg->d.long_data);
           break;
         case  G_TYPE_DOUBLE:
-          arg->arg_type = G_TYPE_DOUBLE;
-          arg->d.double_data = tmp_arg->d.double_data;
+          g_variant_builder_add (&builder, "d", (double) tmp_arg->d.double_data);
           break;
         case  G_TYPE_STRING:
-          arg->arg_type = G_TYPE_STRING;
-          arg->d.string_data = g_strdup (tmp_arg->d.string_data);
-          if (!arg->d.string_data)
+          if (!tmp_arg->d.string_data)
             {
               g_warning ("gtk_binding_entry_add_signall(): value of 'string' arg[%u] is 'NULL'", n);
-              binding_signal_free (signal);
+              g_variant_builder_clear (&builder);
               return;
             }
+          g_variant_builder_add (&builder, "s", (gint64) tmp_arg->d.string_data);
           break;
         default:
           g_warning ("gtk_binding_entry_add_signall(): unsupported type '%s' for arg[%u]",
-                     g_type_name (arg->arg_type), n);
-          binding_signal_free (signal);
+                     g_type_name (tmp_arg->arg_type), n);
+          g_variant_builder_clear (&builder);
           return;
         }
-      arg++;
-      n++;
     }
+
+  signal = binding_signal_new (signal_name, g_variant_builder_end (&builder));
 
   entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
   if (!entry)
