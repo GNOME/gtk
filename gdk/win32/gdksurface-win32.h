@@ -33,6 +33,10 @@
 
 #include <windows.h>
 
+#ifdef GDK_WIN32_ENABLE_EGL
+# include <epoxy/egl.h>
+#endif
+
 G_BEGIN_DECLS
 
 typedef enum
@@ -350,6 +354,12 @@ struct _GdkWin32Surface
   gint surface_scale;
   gint unscaled_width;
   gint unscaled_height;
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  EGLSurface egl_surface;
+  EGLSurface egl_dummy_surface;
+  guint egl_force_redraw_all : 1;
+#endif
 };
 
 struct _GdkWin32SurfaceClass
@@ -390,6 +400,12 @@ gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
 void
 gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
                                             RECT        window_rect);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+EGLSurface _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
+                                               EGLConfig   config,
+                                               gboolean    is_dummy);
+#endif
 
 G_END_DECLS
 

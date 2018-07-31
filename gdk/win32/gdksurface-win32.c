@@ -692,6 +692,7 @@ gdk_win32_surface_destroy (GdkSurface *window,
 			   gboolean   foreign_destroy)
 {
   GdkWin32Surface *surface = GDK_WIN32_SURFACE (window);
+  GdkWin32Display *display = NULL;
 
   g_return_if_fail (GDK_IS_SURFACE (window));
 
@@ -711,6 +712,22 @@ gdk_win32_surface_destroy (GdkSurface *window,
       GdkSurface *child = surface->transient_children->data;
       gdk_win32_surface_set_transient_for (child, NULL);
     }
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  display = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
+
+  /* Get rid of any EGLSurfaces that we might have created */
+  if (surface->egl_surface != EGL_NO_SURFACE)
+    {
+      eglDestroySurface (display->egl_disp, surface->egl_surface);
+      surface->egl_surface = EGL_NO_SURFACE;
+    }
+  if (surface->egl_dummy_surface != EGL_NO_SURFACE)
+    {
+      eglDestroySurface (display->egl_disp, surface->egl_dummy_surface);
+      surface->egl_dummy_surface = EGL_NO_SURFACE;
+    }
+#endif
 
   /* Remove ourself from our transient owner */
   if (surface->transient_owner != NULL)
@@ -1254,14 +1271,16 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
     }
   else
     {
+      _gdk_win32_surface_invalidate_egl_framebuffer (window);
+
       if (with_move)
-	{
+        {
           gdk_win32_surface_do_move_resize (window, x, y, width, height);
-	}
+        }
       else
-	{
-	  gdk_win32_surface_resize (window, width, height);
-	}
+        {
+          gdk_win32_surface_resize (window, width, height);
+        }
     }
 
  out:
@@ -3793,6 +3812,9 @@ gdk_win32_surface_end_move_resize_drag (GdkSurface *window)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
   GdkW32DragMoveResizeContext *context = &impl->drag_move_resize_context;
+  
+  if (context->op == GDK_WIN32_DRAGOP_RESIZE)
+    _gdk_win32_surface_invalidate_egl_framebuffer (window);
 
   context->op = GDK_WIN32_DRAGOP_NONE;
 
@@ -4271,6 +4293,8 @@ gdk_win32_surface_unmaximize (GdkSurface *window)
   GDK_NOTE (MISC, g_print ("gdk_surface_unmaximize: %p: %s\n",
 			   GDK_SURFACE_HWND (window),
 			   _gdk_win32_surface_state_to_string (window->state)));
+
+  _gdk_win32_surface_invalidate_egl_framebuffer (window);
 
   if (GDK_SURFACE_IS_MAPPED (window))
     GtkShowWindow (window, SW_RESTORE);
@@ -5131,3 +5155,34 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 {
   iface->present = gdk_win32_drag_surface_present;
 }
+
+#ifdef GDK_WIN32_ENABLE_EGL
+EGLSurface
+_gdk_win32_surface_get_egl_surface (GdkSurface *surface,
+                                    EGLConfig   config,
+                                    gboolean    is_dummy)
+{
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  if (is_dummy)
+    {
+      if (impl->egl_dummy_surface == EGL_NO_SURFACE)
+        {
+          EGLint attribs[] = {EGL_WIDTH, 1, EGL_WIDTH, 1, EGL_NONE};
+          impl->egl_dummy_surface = eglCreatePbufferSurface (display->egl_disp,
+                                                             config,
+                                                             attribs);
+        }
+      return impl->egl_dummy_surface;
+    }
+  else
+    {
+      if (impl->egl_surface == EGL_NO_SURFACE)
+        impl->egl_surface = eglCreateWindowSurface (display->egl_disp, config, display->gl_hwnd, NULL);
+
+      return impl->egl_surface;
+    }
+
+}
+#endif

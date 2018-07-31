@@ -51,6 +51,7 @@
 #include "gdkmonitorprivate.h"
 #include "gdkwin32.h"
 #include "gdkkeysyms.h"
+#include "gdkglcontext-win32.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkdisplay-win32.h"
 #include "gdkdeviceprivate.h"
@@ -2961,7 +2962,11 @@ gdk_event_translate (MSG  *msg,
 	{
 	case SC_MINIMIZE:
 	case SC_RESTORE:
-	  do_show_window (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+      do_show_window (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+
+      if (msg->wParam == SC_RESTORE)
+        _gdk_win32_surface_invalidate_egl_framebuffer (window);
+
 	  break;
         case SC_MAXIMIZE:
           impl = GDK_WIN32_SURFACE (window);
