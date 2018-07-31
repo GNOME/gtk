@@ -994,52 +994,6 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
   return result;
 }
 
-
-/**
- * gtk_selection_data_get_targets:
- * @selection_data: a #GtkSelectionData object
- * @targets: (out) (array length=n_atoms) (transfer container):
- *           location to store an array of targets. The result stored
- *           here must be freed with g_free().
- * @n_atoms: location to store number of items in @targets.
- * 
- * Gets the contents of @selection_data as an array of targets.
- * This can be used to interpret the results of getting
- * the standard TARGETS target that is always supplied for
- * any selection.
- * 
- * Returns: %TRUE if @selection_data contains a valid
- *    array of targets, otherwise %FALSE.
- **/
-gboolean
-gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
-				GdkAtom                **targets,
-				gint                    *n_atoms)
-{
-  g_return_val_if_fail (selection_data != NULL, FALSE);
-
-  if (selection_data->length >= 0 &&
-      selection_data->format == 32 &&
-      selection_data->type == g_intern_static_string ("ATOM"))
-    {
-      if (targets)
-	*targets = g_memdup (selection_data->data, selection_data->length);
-      if (n_atoms)
-	*n_atoms = selection_data->length / sizeof (GdkAtom);
-
-      return TRUE;
-    }
-  else
-    {
-      if (targets)
-	*targets = NULL;
-      if (n_atoms)
-	*n_atoms = -1;
-
-      return FALSE;
-    }
-}
-
 /**
  * gtk_targets_include_text:
  * @targets: (array length=n_targets): an array of #GdkAtoms
@@ -1097,21 +1051,15 @@ gtk_targets_include_text (GdkAtom *targets,
 gboolean
 gtk_selection_data_targets_include_text (const GtkSelectionData *selection_data)
 {
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
+  GdkAtom target;
 
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
   init_atoms ();
 
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_text (targets, n_targets);
-      g_free (targets);
-    }
+  target = gtk_selection_data_get_target (selection_data);
 
-  return result;
+  return gtk_targets_include_text (&target, 1);
 }
 
 /**
@@ -1170,21 +1118,15 @@ gboolean
 gtk_selection_data_targets_include_image (const GtkSelectionData *selection_data,
 					  gboolean                writable)
 {
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
+  GdkAtom target;
 
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
   init_atoms ();
 
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_image (targets, n_targets, writable);
-      g_free (targets);
-    }
+  target = gtk_selection_data_get_target (selection_data);
 
-  return result;
+  return gtk_targets_include_image (&target, 1, writable);
 }
 
 /**
@@ -1238,21 +1180,15 @@ gtk_targets_include_uri (GdkAtom *targets,
 gboolean
 gtk_selection_data_targets_include_uri (const GtkSelectionData *selection_data)
 {
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
+  GdkAtom target;
 
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
   init_atoms ();
 
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_uri (targets, n_targets);
-      g_free (targets);
-    }
+  target = gtk_selection_data_get_target (selection_data);
 
-  return result;
+  return gtk_targets_include_uri (&target, 1);
 }
 
 /**
