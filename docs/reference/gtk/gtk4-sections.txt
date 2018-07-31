@@ -5203,7 +5203,6 @@ GtkBindingSet
 GtkBindingEntry
 GtkBindingSignal
 GtkBindingArg
-gtk_binding_entry_add_signall
 gtk_binding_set_new
 gtk_binding_set_by_class
 gtk_binding_set_find
