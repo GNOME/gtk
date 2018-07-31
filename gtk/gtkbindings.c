@@ -66,7 +66,6 @@ typedef enum {
 
 typedef struct _GtkBindingEntry  GtkBindingEntry;
 typedef struct _GtkBindingSignal GtkBindingSignal;
-typedef struct _GtkBindingArg    GtkBindingArg;
 
 /**
  * GtkBindingSet:
@@ -118,24 +117,6 @@ struct _GtkBindingEntry
   GtkBindingEntry  *set_next;
   GtkBindingEntry  *hash_next;
   GtkBindingSignal *signals;
-};
-
-/**
- * GtkBindingArg:
- * @arg_type: implementation detail
- *
- * A #GtkBindingArg holds the data associated with
- * an argument for a key binding signal emission as
- * stored in #GtkBindingSignal.
- */
-struct _GtkBindingArg
-{
-  GType      arg_type;
-  union {
-    glong    long_data;
-    gdouble  double_data;
-    gchar   *string_data;
-  } d;
 };
 
 /**
@@ -898,64 +879,6 @@ gtk_binding_entry_add_signal_variant (GtkBindingSet  *binding_set,
   *signal_p = signal;
 }
 
-static void
-gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-                               guint           keyval,
-                               GdkModifierType modifiers,
-                               const gchar    *signal_name,
-                               GSList         *binding_args)
-{
-  GSList *slist;
-  guint n = 0;
-  GVariantBuilder builder;
-
-  g_return_if_fail (binding_set != NULL);
-  g_return_if_fail (signal_name != NULL);
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);
-
-  for (slist = binding_args; slist; slist = slist->next)
-    {
-      GtkBindingArg *tmp_arg;
-
-      tmp_arg = slist->data;
-      if (!tmp_arg)
-        {
-          g_warning ("gtk_binding_entry_add_signall(): arg[%u] is 'NULL'", n);
-          return;
-        }
-      switch (G_TYPE_FUNDAMENTAL (tmp_arg->arg_type))
-        {
-        case  G_TYPE_LONG:
-          g_variant_builder_add (&builder, "x", (gint64) tmp_arg->d.long_data);
-          break;
-        case  G_TYPE_DOUBLE:
-          g_variant_builder_add (&builder, "d", (double) tmp_arg->d.double_data);
-          break;
-        case  G_TYPE_STRING:
-          if (!tmp_arg->d.string_data)
-            {
-              g_warning ("gtk_binding_entry_add_signall(): value of 'string' arg[%u] is 'NULL'", n);
-              g_variant_builder_clear (&builder);
-              return;
-            }
-          g_variant_builder_add (&builder, "s", (gint64) tmp_arg->d.string_data);
-          break;
-        default:
-          g_warning ("gtk_binding_entry_add_signall(): unsupported type '%s' for arg[%u]",
-                     g_type_name (tmp_arg->arg_type), n);
-          g_variant_builder_clear (&builder);
-          return;
-        }
-    }
-
-  gtk_binding_entry_add_signal_variant (binding_set,
-                                        keyval,
-                                        modifiers,
-                                        signal_name,
-                                        g_variant_builder_end (&builder));
-}
-
 /**
  * gtk_binding_entry_add_signal:
  * @binding_set: a #GtkBindingSet to install an entry for
@@ -1068,12 +991,11 @@ gtk_binding_parse_signal (GScanner       *scanner,
 {
   gchar *signal;
   guint expected_token = 0;
-  GSList *args;
-  GSList *slist;
   gboolean done;
   gboolean negate;
   gboolean need_arg;
   gboolean seen_comma;
+  GVariantBuilder builder;
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
 
@@ -1093,8 +1015,8 @@ gtk_binding_parse_signal (GScanner       *scanner,
   signal = g_strdup (scanner->value.v_string);
   g_scanner_get_next_token (scanner);
 
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);
   negate = FALSE;
-  args = NULL;
   done = FALSE;
   need_arg = TRUE;
   seen_comma = FALSE;
@@ -1102,8 +1024,6 @@ gtk_binding_parse_signal (GScanner       *scanner,
 
   do
     {
-      GtkBindingArg *arg;
-
       if (need_arg)
         expected_token = G_TOKEN_INT;
       else
@@ -1116,17 +1036,13 @@ gtk_binding_parse_signal (GScanner       *scanner,
         case G_TOKEN_FLOAT:
           if (need_arg)
             {
-              need_arg = FALSE;
-              arg = g_new (GtkBindingArg, 1);
-              arg->arg_type = G_TYPE_DOUBLE;
-              arg->d.double_data = scanner->value.v_float;
-
               if (negate)
-                {
-                  arg->d.double_data = - arg->d.double_data;
-                  negate = FALSE;
-                }
-              args = g_slist_prepend (args, arg);
+                g_variant_builder_add (&builder, "d", (double) scanner->value.v_float);
+              else
+                g_variant_builder_add (&builder, "d", (double) - scanner->value.v_float);
+
+              need_arg = FALSE;
+              negate = FALSE;
             }
           else
             done = TRUE;
@@ -1135,17 +1051,13 @@ gtk_binding_parse_signal (GScanner       *scanner,
         case G_TOKEN_INT:
           if (need_arg)
             {
-              need_arg = FALSE;
-              arg = g_new (GtkBindingArg, 1);
-              arg->arg_type = G_TYPE_LONG;
-              arg->d.long_data = scanner->value.v_int;
-
               if (negate)
-                {
-                  arg->d.long_data = - arg->d.long_data;
-                  negate = FALSE;
-                }
-              args = g_slist_prepend (args, arg);
+                g_variant_builder_add (&builder, "x", (gint64) - scanner->value.v_int);
+              else
+                g_variant_builder_add (&builder, "x", (gint64) scanner->value.v_int);
+
+              need_arg = FALSE;
+              negate = FALSE;
             }
           else
             done = TRUE;
@@ -1154,10 +1066,7 @@ gtk_binding_parse_signal (GScanner       *scanner,
           if (need_arg && !negate)
             {
               need_arg = FALSE;
-              arg = g_new (GtkBindingArg, 1);
-              arg->arg_type = G_TYPE_STRING;
-              arg->d.string_data = g_strdup (scanner->value.v_string);
-              args = g_slist_prepend (args, arg);
+              g_variant_builder_add (&builder, "s", scanner->value.v_string);
             }
           else
             done = TRUE;
@@ -1167,10 +1076,7 @@ gtk_binding_parse_signal (GScanner       *scanner,
           if (need_arg && !negate)
             {
               need_arg = FALSE;
-              arg = g_new (GtkBindingArg, 1);
-              arg->arg_type = G_TYPE_STRING;
-              arg->d.string_data = g_strdup (scanner->value.v_identifier);
-              args = g_slist_prepend (args, arg);
+              g_variant_builder_add (&builder, "s", scanner->value.v_string);
             }
           else
             done = TRUE;
@@ -1199,12 +1105,11 @@ gtk_binding_parse_signal (GScanner       *scanner,
         case ')':
           if (!(need_arg && seen_comma) && !negate)
             {
-              args = g_slist_reverse (args);
-              gtk_binding_entry_add_signall (binding_set,
-                                             keyval,
-                                             modifiers,
-                                             signal,
-                                             args);
+              gtk_binding_entry_add_signal_variant (binding_set,
+                                                    keyval,
+                                                    modifiers,
+                                                    signal,
+                                                    g_variant_builder_end (&builder));
               expected_token = G_TOKEN_NONE;
             }
 
@@ -1219,18 +1124,8 @@ gtk_binding_parse_signal (GScanner       *scanner,
 
   scanner->config->scan_symbols = TRUE;
 
-  for (slist = args; slist; slist = slist->next)
-    {
-      GtkBindingArg *arg;
+  g_variant_builder_clear (&builder);
 
-      arg = slist->data;
-
-      if (G_TYPE_FUNDAMENTAL (arg->arg_type) == G_TYPE_STRING)
-        g_free (arg->d.string_data);
-      g_free (arg);
-    }
-
-  g_slist_free (args);
   g_free (signal);
 
   return expected_token;
