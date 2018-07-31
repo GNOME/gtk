@@ -47,12 +47,8 @@ typedef struct _GtkBindingArg    GtkBindingArg;
  * GtkBindingSet:
  * @set_name: unique name of this binding set
  * @priority: unused
- * @widget_path_pspecs: unused
- * @widget_class_pspecs: unused
- * @class_branch_pspecs: unused
  * @entries: the key binding entries in this binding set
  * @current: implementation detail
- * @parsed: whether this binding set stems from a CSS file and is reset upon theme changes
  *
  * A binding set maintains a list of activatable key bindings.
  * A single binding set can match multiple types of widgets.
@@ -65,12 +61,8 @@ struct _GtkBindingSet
 {
   gchar           *set_name;
   gint             priority;
-  GSList          *widget_path_pspecs;
-  GSList          *widget_class_pspecs;
-  GSList          *class_branch_pspecs;
   GtkBindingEntry *entries;
   GtkBindingEntry *current;
-  guint            parsed : 1;
 };
 
 /**

@@ -926,10 +926,7 @@ parse_binding_set (GtkCssScanner *scanner)
 
   binding_set = gtk_binding_set_find (name);
   if (!binding_set)
-    {
-      binding_set = gtk_binding_set_new (name);
-      binding_set->parsed = TRUE;
-    }
+    binding_set = gtk_binding_set_new (name);
   g_free (name);
 
   if (!_gtk_css_parser_try (scanner->parser, "{", TRUE))
