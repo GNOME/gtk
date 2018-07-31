@@ -860,18 +860,44 @@ gtk_binding_entry_remove (GtkBindingSet  *binding_set,
     binding_entry_destroy (entry);
 }
 
-/*
- * gtk_binding_entry_add_signall:
+/**
+ * gtk_binding_entry_add_signal_variant:
  * @binding_set:  a #GtkBindingSet to add a signal to
  * @keyval:       key value
  * @modifiers:    key modifier
  * @signal_name:  signal name to be bound
- * @binding_args: (transfer none) (element-type GtkBindingArg):
- *     list of #GtkBindingArg signal arguments
+ * @binding_args: a #GVariant containing a struct with the arguments to pass.
  *
  * Override or install a new key binding for @keyval with @modifiers on
  * @binding_set.
  */
+void
+gtk_binding_entry_add_signal_variant (GtkBindingSet  *binding_set,
+                                      guint           keyval,
+                                      GdkModifierType modifiers,
+                                      const gchar    *signal_name,
+                                      GVariant       *binding_args)
+{
+  GtkBindingEntry *entry;
+  GtkBindingSignal *signal, **signal_p;
+
+  keyval = gdk_keyval_to_lower (keyval);
+  modifiers = modifiers & BINDING_MOD_MASK ();
+
+  signal = binding_signal_new (signal_name, binding_args);
+
+  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+  if (!entry)
+    {
+      gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
+      entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+    }
+  signal_p = &entry->signals;
+  while (*signal_p)
+    signal_p = &(*signal_p)->next;
+  *signal_p = signal;
+}
+
 static void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
                                guint           keyval,
@@ -879,17 +905,12 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
                                const gchar    *signal_name,
                                GSList         *binding_args)
 {
-  GtkBindingEntry *entry;
-  GtkBindingSignal *signal, **signal_p;
   GSList *slist;
   guint n = 0;
   GVariantBuilder builder;
 
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (signal_name != NULL);
-
-  keyval = gdk_keyval_to_lower (keyval);
-  modifiers = modifiers & BINDING_MOD_MASK ();
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);
 
@@ -928,18 +949,11 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
         }
     }
 
-  signal = binding_signal_new (signal_name, g_variant_builder_end (&builder));
-
-  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
-  if (!entry)
-    {
-      gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
-      entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
-    }
-  signal_p = &entry->signals;
-  while (*signal_p)
-    signal_p = &(*signal_p)->next;
-  *signal_p = signal;
+  gtk_binding_entry_add_signal_variant (binding_set,
+                                        keyval,
+                                        modifiers,
+                                        signal_name,
+                                        g_variant_builder_end (&builder));
 }
 
 /**
