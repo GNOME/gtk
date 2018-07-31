@@ -47,6 +47,9 @@
       <arg name="time" type="uint"/>
     </request>
 
+    <request name="present_unconditional">
+    </request>
+
     <!-- Version 2 additions -->
 
     <enum name="state">

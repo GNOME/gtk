@@ -3495,7 +3495,10 @@ gdk_wayland_window_focus (GdkWindow *window,
   if (!impl->display_server.gtk_surface)
     return;
 
-  gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
+  if (timestamp == GDK_CURRENT_TIME)
+    gtk_surface1_present_unconditional (impl->display_server.gtk_surface);
+  else
+    gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
 }
 
 static void
