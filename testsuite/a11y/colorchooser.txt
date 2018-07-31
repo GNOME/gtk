@@ -907,6 +907,21 @@ window1
                 action 1 description: Activates the color
                 action 2 name: customize
                 action 2 description: Customizes the color
+              picker_button
+                "push button"
+                parent: grid
+                index: 5
+                state: enabled focusable sensitive
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkImage>
+                image size: -1 x -1
+                image description: (null)
+                <AtkAction>
+                action 0 name: click
+                action 0 description: Clicks the button
             sv_popup
               "filler"
               parent: overlay
