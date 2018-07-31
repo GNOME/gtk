@@ -215,9 +215,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
       EGLSurface egl_surface = _gdk_win32_surface_get_egl_surface (surface, context_win32->egl_config, FALSE);
       gboolean force_egl_redraw_all = _get_is_egl_force_redraw (surface);
 
-	  if (!force_egl_redraw_all)
-        gdk_gl_blit_region (surface, painted);
-      else if (force_egl_redraw_all)
+	  if (force_egl_redraw_all)
         {
           GdkRectangle rect = {0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface)};
 
@@ -228,7 +226,15 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
           _reset_egl_force_redraw (surface);
         }
 
-      eglSwapBuffers (display->egl_disp, egl_surface);
+      if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN || force_egl_redraw_all)
+        eglSwapBuffers (display->egl_disp, egl_surface);
+      else if (gdk_gl_context_has_framebuffer_blit (context))
+        gdk_gl_blit_region (surface, painted);
+      else
+        {
+          g_warning ("Need to swap whole buffer even thouigh not everything was redrawn. Expect artifacts.");
+          eglSwapBuffers (display->egl_disp, egl_surface);
+        }
     }
 #endif
 }
