@@ -1,8 +1,0 @@
-<!-- wrong focus chain element -->
-<interface>
-  <object class="GtkBox">
-    <focus-chain>
-      <warbl/>
-    </focus-chain>
-  </object>
-</interface>

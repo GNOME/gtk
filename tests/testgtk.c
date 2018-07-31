@@ -4004,110 +4004,6 @@ create_flipping (GtkWidget *widget)
 }
 
 /*
- * Focus test
- */
-
-static GtkWidget*
-make_focus_table (GList **list)
-{
-  GtkWidget *grid;
-  gint i, j;
-  
-  grid = gtk_grid_new ();
-
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
-
-  for (i = 0; i < 5; i++)
-    {
-      for (j = 0; j < 5; j++)
-        {
-          GtkWidget *widget;
-          
-          if ((i + j) % 2)
-            widget = gtk_entry_new ();
-          else
-            widget = gtk_button_new_with_label ("Foo");
-
-          *list = g_list_prepend (*list, widget);
-          
-          gtk_widget_set_hexpand (widget, TRUE);
-          gtk_widget_set_vexpand (widget, TRUE);
-
-          gtk_grid_attach (GTK_GRID (grid), widget, i, j, 1, 1);
-        }
-    }
-
-  *list = g_list_reverse (*list);
-  
-  return grid;
-}
-
-static void
-create_focus (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  
-  if (!window)
-    {
-      GtkWidget *content_area;
-      GtkWidget *table;
-      GtkWidget *frame;
-      GList *list = NULL;
-      
-      window = gtk_dialog_new_with_buttons ("Keyboard focus navigation",
-                                            NULL, 0,
-                                            "_Close",
-                                            GTK_RESPONSE_NONE,
-                                            NULL);
-
-      gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-
-      gtk_window_set_title (GTK_WINDOW (window), "Keyboard Focus Navigation");
-
-      frame = gtk_frame_new ("Weird tab focus chain");
-
-      gtk_box_pack_start (GTK_BOX (content_area), frame);
-
-      table = make_focus_table (&list);
-
-      gtk_container_add (GTK_CONTAINER (frame), table);
-
-      gtk_container_set_focus_chain (GTK_CONTAINER (table),
-                                     list);
-
-      g_list_free (list);
-
-      frame = gtk_frame_new ("Default tab focus chain");
-
-      gtk_box_pack_start (GTK_BOX (content_area), frame);
-
-      list = NULL;
-      table = make_focus_table (&list);
-
-      g_list_free (list);
-
-      gtk_container_add (GTK_CONTAINER (frame), table);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
-/*
  * GtkFontSelection
  */
 
@@ -7120,7 +7016,6 @@ struct {
   { "entry", create_entry },
   { "expander", create_expander },
   { "flipping", create_flipping },
-  { "focus", create_focus },
   { "font selection", create_font_selection },
   { "image", create_image },
   { "key lookup", create_key_lookup },

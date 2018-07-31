@@ -134,15 +134,6 @@ void     gtk_container_foreach      (GtkContainer       *container,
 GDK_AVAILABLE_IN_ALL
 GList*   gtk_container_get_children     (GtkContainer       *container);
 
-GDK_AVAILABLE_IN_ALL
-void     gtk_container_set_focus_chain  (GtkContainer   *container,
-                                         GList          *focusable_widgets);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
-					 GList         **focusable_widgets);
-GDK_AVAILABLE_IN_ALL
-void     gtk_container_unset_focus_chain (GtkContainer  *container);
-
 /* Widget-level methods */
 GDK_AVAILABLE_IN_ALL
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,

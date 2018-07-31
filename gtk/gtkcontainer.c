@@ -117,29 +117,6 @@
  * the same “translatable”, “comments” and “context” attributes that are used
  * for regular properties.
  *
- * Containers can have a <focus-chain> element containing multiple
- * <widget> elements, one for each child that should be added to the focus
- * chain. The ”name” attribute gives the id of the widget.
- *
- * An example of these properties in UI definitions:
- * |[
- * <object class="GtkBox">
- *   <child>
- *     <object class="GtkEntry" id="entry1"/>
- *     <packing>
- *       <property name="pack-type">start</property>
- *     </packing>
- *   </child>
- *   <child>
- *     <object class="GtkEntry" id="entry2"/>
- *   </child>
- *   <focus-chain>
- *     <widget name="entry1"/>
- *     <widget name="entry2"/>
- *   </focus-chain>
- * </object>
- * ]|
- *
  */
 
 
@@ -147,7 +124,6 @@ struct _GtkContainerPrivate
 {
   guint resize_handler;
 
-  guint has_focus_chain    : 1;
   guint restyle_pending    : 1;
 };
 
@@ -177,8 +153,6 @@ static void     gtk_container_real_check_resize    (GtkContainer      *container
 static void     gtk_container_compute_expand       (GtkWidget         *widget,
                                                     gboolean          *hexpand_p,
                                                     gboolean          *vexpand_p);
-static gboolean gtk_container_focus                (GtkWidget         *widget,
-                                                    GtkDirectionType   direction);
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
                                                     GtkWidget         *widget);
 
@@ -206,16 +180,10 @@ static void    gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                                        GObject      *child,
                                                        const gchar  *tagname,
                                                        gpointer     *data);
-static void    gtk_container_buildable_custom_finished (GtkBuildable *buildable,
-                                                        GtkBuilder   *builder,
-                                                        GObject      *child,
-                                                        const gchar  *tagname,
-                                                        gpointer      data);
 
 /* --- variables --- */
 static GQuark                vadjustment_key_id;
 static GQuark                hadjustment_key_id;
-static GQuark                quark_focus_chain;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static gint                  GtkContainer_private_offset;
 static GtkWidgetClass       *gtk_container_parent_class = NULL;
@@ -310,11 +278,9 @@ gtk_container_class_init (GtkContainerClass *class)
 
   vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
-  quark_focus_chain = g_quark_from_static_string ("gtk-container-focus-chain");
 
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
-  widget_class->focus = gtk_container_focus;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
   class->add = gtk_container_add_unimplemented;
@@ -374,7 +340,6 @@ gtk_container_buildable_init (GtkBuildableIface *iface)
   iface->add_child = gtk_container_buildable_add_child;
   iface->custom_tag_start = gtk_container_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_container_buildable_custom_tag_end;
-  iface->custom_finished = gtk_container_buildable_custom_finished;
 }
 
 static void
@@ -602,85 +567,6 @@ static const GMarkupParser packing_parser =
     packing_text_element,
   };
 
-typedef struct
-  {
-    gchar *name;
-    gint line;
-    gint col;
-  } FocusChainWidget;
-
-static void
-focus_chain_widget_free (gpointer data)
-{
-  FocusChainWidget *fcw = data;
-
-  g_free (fcw->name);
-  g_free (fcw);
-}
-
-typedef struct
-  {
-    GSList *items;
-    GObject *object;
-    GtkBuilder *builder;
-    gint line;
-    gint col;
-  } FocusChainData;
-
-static void
-focus_chain_start_element (GMarkupParseContext  *context,
-                           const gchar          *element_name,
-                           const gchar         **names,
-                           const gchar         **values,
-                           gpointer              user_data,
-                           GError              **error)
-{
-  FocusChainData *data = (FocusChainData*)user_data;
-
-  if (strcmp (element_name, "widget") == 0)
-    {
-      const gchar *name;
-      FocusChainWidget *fcw;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "focus-chain", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      fcw = g_new (FocusChainWidget, 1);
-      fcw->name = g_strdup (name);
-      g_markup_parse_context_get_position (context, &fcw->line, &fcw->col);
-      data->items = g_slist_prepend (data->items, fcw);
-    }
-  else if (strcmp (element_name, "focus-chain") == 0)
-    {
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_INVALID, "", NULL,
-                                        G_MARKUP_COLLECT_INVALID))
-        _gtk_builder_prefix_error (data->builder, context, error);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkContainer", element_name,
-                                        error);
-    }
-}
-
-static const GMarkupParser focus_chain_parser =
-  {
-    focus_chain_start_element
-  };
-
 static gboolean
 gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GtkBuilder    *builder,
@@ -709,20 +595,6 @@ gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
 
       return TRUE;
     }
-  else if (!child && strcmp (tagname, "focus-chain") == 0)
-    {
-      FocusChainData *data;
-
-      data = g_slice_new0 (FocusChainData);
-      data->items = NULL;
-      data->object = G_OBJECT (buildable);
-      data->builder = builder;
-
-      *parser = focus_chain_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
 
   return FALSE;
 }
@@ -747,45 +619,6 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
   if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder,
                                             child, tagname, parser_data);
-}
-
-static void
-gtk_container_buildable_custom_finished (GtkBuildable *buildable,
-                                         GtkBuilder   *builder,
-                                         GObject      *child,
-                                         const gchar  *tagname,
-                                         gpointer      parser_data)
-{
-   if (strcmp (tagname, "focus-chain") == 0)
-    {
-      FocusChainData *data = (FocusChainData*)parser_data;
-      FocusChainWidget *fcw;
-      GSList *l;
-      GList *chain;
-      GObject *object;
-
-      chain = NULL;
-      for (l = data->items; l; l = l->next)
-        {
-          fcw = l->data;
-          object = _gtk_builder_lookup_object (builder, fcw->name, fcw->line, fcw->col);
-          if (!object)
-            continue;
-          chain = g_list_prepend (chain, object);
-        }
-
-      gtk_container_set_focus_chain (GTK_CONTAINER (data->object), chain);
-      g_list_free (chain);
-
-      g_slist_free_full (data->items, focus_chain_widget_free);
-      g_slice_free (FocusChainData, data);
-
-      return;
-    }
-
-  if (parent_buildable_iface->custom_finished)
-    parent_buildable_iface->custom_finished (buildable, builder,
-                                             child, tagname, parser_data);
 }
 
 /**
@@ -1441,12 +1274,6 @@ gtk_container_destroy (GtkWidget *widget)
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
 
-  /* do this before walking child widgets, to avoid
-   * removing children from focus chain one by one.
-   */
-  if (priv->has_focus_chain)
-    gtk_container_unset_focus_chain (container);
-
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
   GTK_WIDGET_CLASS (gtk_container_parent_class)->destroy (widget);
@@ -1883,12 +1710,6 @@ gtk_container_real_set_focus_child (GtkContainer *container,
     }
 }
 
-static GList*
-get_focus_chain (GtkContainer *container)
-{
-  return g_object_get_qdata (G_OBJECT (container), quark_focus_chain);
-}
-
 static GtkWidgetPath *
 gtk_container_real_get_path_for_child (GtkContainer *container,
                                        GtkWidget    *child)
@@ -1903,73 +1724,6 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
   return path;
 }
 
-/* Utility function, equivalent to g_list_reverse */
-static void
-reverse_ptr_array (GPtrArray *arr)
-{
-  int i;
-
-  for (i = 0; i < arr->len / 2; i ++)
-    {
-      void *a = g_ptr_array_index (arr, i);
-      void *b = g_ptr_array_index (arr, arr->len - 1 - i);
-
-      arr->pdata[i] = b;
-      arr->pdata[arr->len - 1 - i] = a;
-    }
-}
-
-static gboolean
-gtk_container_focus (GtkWidget        *widget,
-                     GtkDirectionType  direction)
-{
-  GtkContainerPrivate *priv;
-  gint return_val = FALSE;
-  GtkContainer *container;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
-
-  container = GTK_CONTAINER (widget);
-  priv = gtk_container_get_instance_private (container);
-
-  if (!priv->has_focus_chain)
-    {
-      return_val = GTK_WIDGET_CLASS (gtk_container_parent_class)->focus (widget, direction);
-    }
-  else
-    {
-      GList *focus_chain;
-      GList *l;
-      GPtrArray *child_array;
-
-      /* Here we compute the next focus child based on the focus chain set on @container.
-       * If we move via TAB, we consider the focus chain widgets in the order given to us (or in reverse).
-       * If UP/DOWN/LEFT/RIGHT are used, we sort the focus chain like normal, using their allocation. */
-      focus_chain = get_focus_chain (container);
-      child_array = g_ptr_array_sized_new (g_list_length (focus_chain));
-
-      for (l = focus_chain; l; l = l->next)
-        g_ptr_array_add (child_array, l->data);
-
-      if (direction == GTK_DIR_TAB_BACKWARD)
-        {
-          /* Reverse order for gtk_widget_focus_move to consider */
-          reverse_ptr_array (child_array);
-        }
-      else if (direction != GTK_DIR_TAB_FORWARD)
-        {
-          /* Nothing to be done. We don't sort the children, and we don't reverse them either. */
-          gtk_widget_focus_sort (widget, direction, child_array);
-        }
-
-      return_val = gtk_widget_focus_move (widget, direction, child_array);
-
-      g_ptr_array_free (child_array, TRUE);
-    }
-
-  return return_val;
-}
-
 static void
 gtk_container_children_callback (GtkWidget *widget,
                                  gpointer   client_data)
@@ -1978,159 +1732,6 @@ gtk_container_children_callback (GtkWidget *widget,
 
   children = (GList**) client_data;
   *children = g_list_prepend (*children, widget);
-}
-
-static void
-chain_widget_destroyed (GtkWidget *widget,
-                        gpointer   user_data)
-{
-  GtkContainer *container;
-  GList *chain;
-
-  container = GTK_CONTAINER (user_data);
-
-  chain = g_object_get_qdata (G_OBJECT (container), quark_focus_chain);
-
-  chain = g_list_remove (chain, widget);
-
-  g_signal_handlers_disconnect_by_func (widget,
-                                        chain_widget_destroyed,
-                                        user_data);
-
-  g_object_set_qdata (G_OBJECT (container), quark_focus_chain, chain);
-}
-
-/**
- * gtk_container_set_focus_chain:
- * @container: a #GtkContainer
- * @focusable_widgets: (transfer none) (element-type GtkWidget):
- *     the new focus chain
- *
- * Sets a focus chain, overriding the one computed automatically by GTK+.
- *
- * In principle each widget in the chain should be a descendant of the
- * container, but this is not enforced by this method, since it’s allowed
- * to set the focus chain before you pack the widgets, or have a widget
- * in the chain that isn’t always packed. The necessary checks are done
- * when the focus chain is actually traversed.
- **/
-void
-gtk_container_set_focus_chain (GtkContainer *container,
-                               GList        *focusable_widgets)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-  GList *chain;
-  GList *tmp_list;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  if (priv->has_focus_chain)
-    gtk_container_unset_focus_chain (container);
-
-  priv->has_focus_chain = TRUE;
-
-  chain = NULL;
-  tmp_list = focusable_widgets;
-  while (tmp_list != NULL)
-    {
-      g_return_if_fail (GTK_IS_WIDGET (tmp_list->data));
-
-      /* In principle each widget in the chain should be a descendant
-       * of the container, but we don't want to check that here. It's
-       * expensive and also it's allowed to set the focus chain before
-       * you pack the widgets, or have a widget in the chain that isn't
-       * always packed. So we check for ancestor during actual traversal.
-       */
-
-      chain = g_list_prepend (chain, tmp_list->data);
-
-      g_signal_connect (tmp_list->data,
-                        "destroy",
-                        G_CALLBACK (chain_widget_destroyed),
-                        container);
-
-      tmp_list = tmp_list->next;
-    }
-
-  chain = g_list_reverse (chain);
-
-  g_object_set_qdata (G_OBJECT (container), quark_focus_chain, chain);
-}
-
-/**
- * gtk_container_get_focus_chain:
- * @container:         a #GtkContainer
- * @focusable_widgets: (element-type GtkWidget) (out) (transfer container): location
- *                     to store the focus chain of the
- *                     container, or %NULL. You should free this list
- *                     using g_list_free() when you are done with it, however
- *                     no additional reference count is added to the
- *                     individual widgets in the focus chain.
- *
- * Retrieves the focus chain of the container, if one has been
- * set explicitly. If no focus chain has been explicitly
- * set, GTK+ computes the focus chain based on the positions
- * of the children. In that case, GTK+ stores %NULL in
- * @focusable_widgets and returns %FALSE.
- *
- * Returns: %TRUE if the focus chain of the container
- * has been set explicitly.
- **/
-gboolean
-gtk_container_get_focus_chain (GtkContainer *container,
-                               GList       **focus_chain)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
-
-  if (focus_chain)
-    {
-      if (priv->has_focus_chain)
-        *focus_chain = g_list_copy (get_focus_chain (container));
-      else
-        *focus_chain = NULL;
-    }
-
-  return priv->has_focus_chain;
-}
-
-/**
- * gtk_container_unset_focus_chain:
- * @container: a #GtkContainer
- *
- * Removes a focus chain explicitly set with gtk_container_set_focus_chain().
- **/
-void
-gtk_container_unset_focus_chain (GtkContainer  *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  if (priv->has_focus_chain)
-    {
-      GList *chain;
-      GList *tmp_list;
-
-      chain = get_focus_chain (container);
-
-      priv->has_focus_chain = FALSE;
-
-      g_object_set_qdata (G_OBJECT (container), quark_focus_chain, NULL);
-
-      tmp_list = chain;
-      while (tmp_list != NULL)
-        {
-          g_signal_handlers_disconnect_by_func (tmp_list->data,
-                                                chain_widget_destroyed,
-                                                container);
-
-          tmp_list = tmp_list->next;
-        }
-
-      g_list_free (chain);
-    }
 }
 
 /**

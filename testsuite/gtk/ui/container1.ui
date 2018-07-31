@@ -7,8 +7,5 @@
         <property name="position" translatable="yes" comments="foo" context="bar">1</property>
       </packing>
     </child>
-    <focus-chain>
-      <widget name="widget1"/>
-    </focus-chain>
   </object>
 </interface>

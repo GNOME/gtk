@@ -441,7 +441,7 @@ gtk_overlay_remove (GtkContainer *container,
  *
  * A widget’s index in the @overlay children list determines which order
  * the children are drawn if they overlap. The first child is drawn at
- * the bottom. It also affects the default focus chain order.
+ * the bottom. It also affects the focus order.
  */
 void
 gtk_overlay_reorder_overlay (GtkOverlay *overlay,

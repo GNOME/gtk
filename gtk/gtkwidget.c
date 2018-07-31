@@ -7685,9 +7685,7 @@ gtk_widget_get_display (GtkWidget *widget)
  *
  * This function is used by custom widget implementations; if you're
  * writing an app, you’d use gtk_widget_grab_focus() to move the focus
- * to a particular widget, and gtk_container_set_focus_chain() to
- * change the focus tab order. So you may want to investigate those
- * functions instead.
+ * to a particular widget.
  *
  * gtk_widget_child_focus() is called by containers as the user moves
  * around the window using keyboard shortcuts. @direction indicates
