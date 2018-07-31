@@ -146,11 +146,6 @@
 #define BINDING_MOD_MASK() (gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
 
 
-#define GTK_TYPE_IDENTIFIER (gtk_identifier_get_type ())
-_GDK_EXTERN
-GType gtk_identifier_get_type (void) G_GNUC_CONST;
-
-
 /* --- structures --- */
 typedef enum {
   GTK_BINDING_TOKEN_BIND,
@@ -166,19 +161,6 @@ static GQuark            key_id_class_binding_set = 0;
 
 
 /* --- functions --- */
-GType
-gtk_identifier_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    {
-      GTypeInfo tinfo = { 0, };
-      our_type = g_type_register_static (G_TYPE_STRING, I_("GtkIdentifier"), &tinfo, 0);
-    }
-
-  return our_type;
-}
 
 static GtkBindingSignal*
 binding_signal_new (const gchar *signal_name,
@@ -494,21 +476,19 @@ binding_compose_params (GObject         *object,
           if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_ENUM)
             {
               GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
+              GEnumValue *enum_value;
 
               valid = FALSE;
 
-              if (args->arg_type == GTK_TYPE_IDENTIFIER)
+              enum_value = g_enum_get_value_by_name (class, args->d.string_data);
+              if (!enum_value)
+                enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
+
+              if (enum_value)
                 {
-                  GEnumValue *enum_value = NULL;
-                  enum_value = g_enum_get_value_by_name (class, args->d.string_data);
-                  if (!enum_value)
-                    enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
-                  if (enum_value)
-                    {
-                      g_value_init (&tmp_value, *types);
-                      g_value_set_enum (&tmp_value, enum_value->value);
-                      valid = TRUE;
-                    }
+                  g_value_init (&tmp_value, *types);
+                  g_value_set_enum (&tmp_value, enum_value->value);
+                  valid = TRUE;
                 }
 
               g_type_class_unref (class);
@@ -520,21 +500,18 @@ binding_compose_params (GObject         *object,
           else if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_FLAGS)
             {
               GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
+              GFlagsValue *flags_value;
 
               valid = FALSE;
 
-              if (args->arg_type == GTK_TYPE_IDENTIFIER)
+              flags_value = g_flags_get_value_by_name (class, args->d.string_data);
+              if (!flags_value)
+                flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
+              if (flags_value)
                 {
-                  GFlagsValue *flags_value = NULL;
-                  flags_value = g_flags_get_value_by_name (class, args->d.string_data);
-                  if (!flags_value)
-                    flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
-                  if (flags_value)
-                    {
-                      g_value_init (&tmp_value, *types);
-                      g_value_set_flags (&tmp_value, flags_value->value);
-                      valid = TRUE;
-                    }
+                  g_value_init (&tmp_value, *types);
+                  g_value_set_flags (&tmp_value, flags_value->value);
+                  valid = TRUE;
                 }
 
               g_type_class_unref (class);
@@ -948,10 +925,7 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
           arg->d.double_data = tmp_arg->d.double_data;
           break;
         case  G_TYPE_STRING:
-          if (tmp_arg->arg_type != GTK_TYPE_IDENTIFIER)
-            arg->arg_type = G_TYPE_STRING;
-          else
-            arg->arg_type = GTK_TYPE_IDENTIFIER;
+          arg->arg_type = G_TYPE_STRING;
           arg->d.string_data = g_strdup (tmp_arg->d.string_data);
           if (!arg->d.string_data)
             {
@@ -1063,8 +1037,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
           arg->d.double_data = va_arg (args, gdouble);
           break;
         case G_TYPE_STRING:
-          if (arg->arg_type != GTK_TYPE_IDENTIFIER)
-            arg->arg_type = G_TYPE_STRING;
+          arg->arg_type = G_TYPE_STRING;
           arg->d.string_data = va_arg (args, gchar*);
           if (!arg->d.string_data)
             {
@@ -1206,7 +1179,7 @@ gtk_binding_parse_signal (GScanner       *scanner,
             {
               need_arg = FALSE;
               arg = g_new (GtkBindingArg, 1);
-              arg->arg_type = GTK_TYPE_IDENTIFIER;
+              arg->arg_type = G_TYPE_STRING;
               arg->d.string_data = g_strdup (scanner->value.v_identifier);
               args = g_slist_prepend (args, arg);
             }
