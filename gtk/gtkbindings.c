@@ -582,12 +582,8 @@ gtk_binding_set_new (const gchar *set_name)
 
   binding_set = g_new (GtkBindingSet, 1);
   binding_set->set_name = (gchar *) g_intern_string (set_name);
-  binding_set->widget_path_pspecs = NULL;
-  binding_set->widget_class_pspecs = NULL;
-  binding_set->class_branch_pspecs = NULL;
   binding_set->entries = NULL;
   binding_set->current = NULL;
-  binding_set->parsed = FALSE;
 
   binding_set_list = g_slist_prepend (binding_set_list, binding_set);
 
