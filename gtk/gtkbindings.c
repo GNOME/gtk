@@ -858,7 +858,7 @@ gtk_binding_entry_remove (GtkBindingSet  *binding_set,
     binding_entry_destroy (entry);
 }
 
-/**
+/*
  * gtk_binding_entry_add_signall:
  * @binding_set:  a #GtkBindingSet to add a signal to
  * @keyval:       key value
@@ -870,24 +870,12 @@ gtk_binding_entry_remove (GtkBindingSet  *binding_set,
  * Override or install a new key binding for @keyval with @modifiers on
  * @binding_set.
  */
-void
+static void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
                                guint           keyval,
                                GdkModifierType modifiers,
                                const gchar    *signal_name,
                                GSList         *binding_args)
-{
-  _gtk_binding_entry_add_signall (binding_set,
-                                  keyval, modifiers,
-                                  signal_name, binding_args);
-}
-
-void
-_gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-                                guint          keyval,
-                                GdkModifierType modifiers,
-                                const gchar    *signal_name,
-                                GSList        *binding_args)
 {
   GtkBindingEntry *entry;
   GtkBindingSignal *signal, **signal_p;
@@ -1060,7 +1048,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   if (i == n_args || i == 0)
     {
       slist = g_slist_reverse (slist);
-      _gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
+      gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
     }
 
   free_slist = slist;
@@ -1212,11 +1200,11 @@ gtk_binding_parse_signal (GScanner       *scanner,
           if (!(need_arg && seen_comma) && !negate)
             {
               args = g_slist_reverse (args);
-              _gtk_binding_entry_add_signall (binding_set,
-                                              keyval,
-                                              modifiers,
-                                              signal,
-                                              args);
+              gtk_binding_entry_add_signall (binding_set,
+                                             keyval,
+                                             modifiers,
+                                             signal,
+                                             args);
               expected_token = G_TOKEN_NONE;
             }
 
