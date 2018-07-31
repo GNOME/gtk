@@ -59,7 +59,7 @@ gtk_color_picker_new (void)
     picker = gtk_color_picker_shell_new ();
 
   if (picker)
-    g_debug ("Using %s for picking colors", g_type_name_from_instance (picker));
+    g_debug ("Using %s for picking colors", G_OBJECT_TYPE_NAME (picker));
   else
     g_debug ("No suitable GtkColorPicker implementation\n");
 
