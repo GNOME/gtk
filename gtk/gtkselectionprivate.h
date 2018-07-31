@@ -40,7 +40,6 @@ struct _GtkSelectionData
   /*< private >*/
   GdkAtom       target;
   GdkAtom       type;
-  gint          format;
   guchar       *data;
   gint          length;
   GdkDisplay   *display;

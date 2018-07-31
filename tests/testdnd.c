@@ -384,8 +384,7 @@ target_drag_data_received  (GtkWidget          *widget,
 			    GdkDrop            *drop,
 			    GtkSelectionData   *selection_data)
 {
-  if (gtk_selection_data_get_length (selection_data) >= 0 &&
-      gtk_selection_data_get_format (selection_data) == 8)
+  if (gtk_selection_data_get_length (selection_data) >= 0)
     {
       GdkDragAction action = gdk_drop_get_actions (drop);
       g_print ("Received \"%s\" in trashcan\n", (gchar *) gtk_selection_data_get_data (selection_data));
@@ -402,8 +401,7 @@ label_drag_data_received  (GtkWidget          *widget,
 			   GdkDrop            *drop,
 			   GtkSelectionData   *selection_data)
 {
-  if (gtk_selection_data_get_length (selection_data) >= 0 &&
-      gtk_selection_data_get_format (selection_data) == 8)
+  if (gtk_selection_data_get_length (selection_data) >= 0)
     {
       GdkDragAction action = action_make_unique (gdk_drop_get_actions (drop));
       g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
@@ -424,8 +422,8 @@ source_drag_data_get  (GtkWidget          *widget,
     g_print ("I was dropped on the rootwin\n");
   else
     gtk_selection_data_set (selection_data,
-			    gtk_selection_data_get_target (selection_data),
-			    8, (guchar *) "I'm Data!", 9);
+                            gtk_selection_data_get_target (selection_data),
+                            (guchar *) "I'm Data!", 9);
 }
   
 /* The following is a rather elaborate example demonstrating/testing

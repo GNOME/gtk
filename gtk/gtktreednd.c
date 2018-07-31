@@ -293,7 +293,6 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
   
   gtk_selection_data_set (selection_data,
                           g_intern_static_string ("GTK_TREE_MODEL_ROW"),
-                          8, /* bytes */
                           (void*)trd,
                           struct_size);
 
