@@ -334,6 +334,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   cairo_region_t *clip_region;
   GdkGLContextPaintData *paint_data;
   int major, minor, version;
+  gboolean es_use_bgra = FALSE;
 
   paint_context = gdk_surface_get_paint_gl_context (surface, NULL);
   if (paint_context == NULL)
@@ -343,6 +344,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     }
 
   clip_region = gdk_cairo_region_from_clip (cr);
+  es_use_bgra = gdk_gl_context_use_es_bgra (paint_context);
 
   gdk_gl_context_make_current (paint_context);
   paint_data = gdk_gl_context_get_paint_data (paint_context);
@@ -413,7 +415,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
                   cairo_image_surface_get_data (image));
   else
-    glReadPixels (x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
+    glReadPixels (x, y, width, height, es_use_bgra ? GL_BGRA : GL_RGBA, GL_UNSIGNED_BYTE,
                   cairo_image_surface_get_data (image));
 
   glPixelStorei (GL_PACK_ROW_LENGTH, 0);

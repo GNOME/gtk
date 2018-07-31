@@ -92,6 +92,10 @@
 #include "gdkintl.h"
 #include "gdk-private.h"
 
+#ifdef GDK_WINDOWING_WIN32
+# include "gdk/win32/gdkwin32.h"
+#endif
+
 #include <epoxy/gl.h>
 
 typedef struct {
@@ -1217,4 +1221,20 @@ gdk_gl_context_get_current (void)
   current = g_private_get (&thread_current_context);
 
   return current;
+}
+
+/* This is currently private! */
+/* When using GL/ES, don't flip the 'R' and 'B' bits on Windows/ANGLE for glReadPixels() */
+gboolean
+gdk_gl_context_use_es_bgra (GdkGLContext *context)
+{
+  if (!gdk_gl_context_get_use_es (context))
+    return FALSE;
+
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_WIN32_IS_GL_CONTEXT (context))
+    return TRUE;
+#endif
+
+  return FALSE;
 }
