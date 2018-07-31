@@ -172,13 +172,13 @@ void     gtk_container_propagate_draw   (GtkContainer   *container,
 					 GtkWidget      *child,
 					 cairo_t        *cr);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_24
 void     gtk_container_set_focus_chain  (GtkContainer   *container,
                                          GList          *focusable_widgets);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_24
 gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
 					 GList         **focusable_widgets);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_24
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 #define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && \

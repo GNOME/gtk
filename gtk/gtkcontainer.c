@@ -3340,6 +3340,9 @@ chain_widget_destroyed (GtkWidget *widget,
  * to set the focus chain before you pack the widgets, or have a widget
  * in the chain that isn’t always packed. The necessary checks are done
  * when the focus chain is actually traversed.
+ *
+ * Deprecated: 3.24: For overriding focus behavior, use the
+ *     GtkWidgetClass::focus signal.
  **/
 void
 gtk_container_set_focus_chain (GtkContainer *container,
@@ -3404,6 +3407,9 @@ gtk_container_set_focus_chain (GtkContainer *container,
  *
  * Returns: %TRUE if the focus chain of the container
  * has been set explicitly.
+ *
+ * Deprecated: 3.24: For overriding focus behavior, use the
+ *     GtkWidgetClass::focus signal.
  **/
 gboolean
 gtk_container_get_focus_chain (GtkContainer *container,
@@ -3431,6 +3437,9 @@ gtk_container_get_focus_chain (GtkContainer *container,
  * @container: a #GtkContainer
  *
  * Removes a focus chain explicitly set with gtk_container_set_focus_chain().
+ *
+ * Deprecated: 3.24: For overriding focus behavior, use the
+ *     GtkWidgetClass::focus signal.
  **/
 void
 gtk_container_unset_focus_chain (GtkContainer  *container)
