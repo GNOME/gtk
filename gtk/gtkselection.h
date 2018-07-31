@@ -88,10 +88,6 @@ GDK_AVAILABLE_IN_ALL
 gchar  **gtk_selection_data_get_uris (const GtkSelectionData     *selection_data);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_selection_data_get_targets          (const GtkSelectionData  *selection_data,
-                                                  GdkAtom          **targets,
-                                                  gint              *n_atoms);
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_targets_include_text (const GtkSelectionData  *selection_data);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_targets_include_image (const GtkSelectionData  *selection_data,
