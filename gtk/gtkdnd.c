@@ -656,9 +656,11 @@ gtk_drag_dest_motion (GtkWidget *widget,
 
   if (site->track_motion || site->flags & GTK_DEST_DEFAULT_MOTION)
     {
+      GdkDrag *drag;
       GdkDragAction actions;
-      
-      actions = gdk_drop_get_actions (drop);
+
+      drag = gdk_drop_get_drag (drop);
+      actions = gdk_drag_get_actions (drag);
 
       if ((actions & site->actions) == 0)
         actions = 0;
