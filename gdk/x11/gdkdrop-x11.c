@@ -809,15 +809,15 @@ gdk_x11_drop_finish (GdkDrop       *drop,
   if (action != 0)
     {
       xev.xclient.data.l[1] = 1;
-      xev.xclient.data.l[2] = xdnd_action_to_atom (display, action);
+      xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
     }
   else
     {
       xev.xclient.data.l[1] = 0;
-      xev.xclient.data.l[2] = None;
+      xev.xclient.data.l[4] = None;
     }
+  xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
-  xev.xclient.data.l[4] = 0;
 
   if (gdk_drop_get_drag (drop))
     {
