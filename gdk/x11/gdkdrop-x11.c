@@ -821,7 +821,7 @@ gdk_x11_drop_finish (GdkDrop       *drop,
 
   if (gdk_drop_get_drag (drop))
     {
-      gdk_x11_drag_handle_status (display, &xev);
+      gdk_x11_drag_handle_finished (display, &xev);
     }
   else
     {
