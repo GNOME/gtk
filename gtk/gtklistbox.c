@@ -2327,8 +2327,8 @@ gtk_list_box_remove (GtkContainer *container,
     gtk_list_box_drag_unhighlight_row (box);
 
   next = gtk_list_box_get_next_visible (box, ROW_PRIV (row)->iter);
-  gtk_widget_unparent (child);
   g_sequence_remove (ROW_PRIV (row)->iter);
+  gtk_widget_unparent (child);
   if (gtk_widget_get_visible (widget))
     gtk_list_box_update_header (box, next);
 
