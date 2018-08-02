@@ -388,7 +388,7 @@
       </informalfigure>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application1/exampleapp.desktop" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application1/org.gtk.exampleapp.desktop" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Note that <replaceable>@<!-- -->bindir@</replaceable> needs to be replaced
