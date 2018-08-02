@@ -2262,6 +2262,7 @@ gtk_list_box_remove (GtkContainer *container,
   gboolean was_visible;
   gboolean was_selected;
   GtkListBoxRow *row;
+  GSequenceIter *iter;
   GSequenceIter *next;
 
   was_visible = gtk_widget_get_visible (child);
@@ -2295,7 +2296,8 @@ gtk_list_box_remove (GtkContainer *container,
     }
 
   row = GTK_LIST_BOX_ROW (child);
-  if (g_sequence_iter_get_sequence (ROW_PRIV (row)->iter) != priv->children)
+  iter = ROW_PRIV (row)->iter;
+  if (g_sequence_iter_get_sequence (iter) != priv->children)
     {
       g_warning ("Tried to remove non-child %p", child);
       return;
@@ -2326,9 +2328,15 @@ gtk_list_box_remove (GtkContainer *container,
   if (row == priv->drag_highlighted_row)
     gtk_list_box_drag_unhighlight_row (box);
 
-  next = gtk_list_box_get_next_visible (box, ROW_PRIV (row)->iter);
+  next = gtk_list_box_get_next_visible (box, iter);
   gtk_widget_unparent (child);
-  g_sequence_remove (ROW_PRIV (row)->iter);
+  g_sequence_remove (iter);
+
+  /* After unparenting, those values are garbage */
+  iter = NULL;
+  row = NULL;
+  child = NULL;
+
   if (gtk_widget_get_visible (widget))
     gtk_list_box_update_header (box, next);
 
