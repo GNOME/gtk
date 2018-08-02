@@ -5,7 +5,6 @@
     "sdk": "org.gnome.Sdk",
     "command": "gtk4-demo",
     "tags": ["devel", "development", "nightly"],
-    "rename-desktop-file": "gtk4-demo.desktop",
     "rename-icon": "gtk4-demo",
     "desktop-file-name-prefix": "(Development) ",
     "finish-args": [
