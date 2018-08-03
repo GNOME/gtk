@@ -307,10 +307,13 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
                                    GtkAllocation *allocation,
                                    GtkAllocation *child_allocation)
 {
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
   GtkRevealerTransitionType transition;
   GtkBorder padding;
   gint vertical_padding, horizontal_padding;
+  gint minimum_width, natural_width, minimum_height, natural_height;
+  gint diff_width, diff_height;
 
   g_return_if_fail (revealer != NULL);
   g_return_if_fail (allocation != NULL);
@@ -320,26 +323,44 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
   vertical_padding = padding.top + padding.bottom;
   horizontal_padding = padding.left + padding.right;
 
+  child = gtk_bin_get_child (GTK_BIN (revealer));
   child_allocation->x = 0;
   child_allocation->y = 0;
   child_allocation->width = 0;
   child_allocation->height = 0;
-
-  child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
     {
       transition = effective_transition (revealer);
-      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
-          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
-                                                   &child_allocation->width);
-      else
-        gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
-                                                   &child_allocation->height);
-    }
+      gtk_widget_get_preferred_width_for_height (child, allocation->height - vertical_padding,
+                                                 &minimum_width, &natural_width);
+      gtk_widget_get_preferred_height_for_width (child, allocation->width - horizontal_padding,
+                                                 &minimum_height, &natural_height);
 
-  child_allocation->width = MAX (child_allocation->width, allocation->width - horizontal_padding);
-  child_allocation->height = MAX (child_allocation->height, allocation->height - vertical_padding);
+      child_allocation->width = natural_width;
+      child_allocation->height = natural_height;
+      switch (transition)
+        {
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+          /* allocation * (1 / priv->current_post) is used so that we allocate a
+           * size where the animation progress is taken into account, so the child
+           * can adapt properly between its minimum and natural size.
+           */
+          diff_width = natural_width - minimum_width;
+          child_allocation->width = natural_width - diff_width * (1 - priv->current_pos);
+          break;
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+          diff_height = natural_height - minimum_height;
+          child_allocation->height = natural_height - diff_height * (1 - priv->current_pos);
+          break;
+
+        case GTK_REVEALER_TRANSITION_TYPE_NONE:
+        case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
+        default:
+          break;
+        }
+    }
 }
 
 static void
