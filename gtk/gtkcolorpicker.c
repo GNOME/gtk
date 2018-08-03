@@ -20,7 +20,7 @@
 #include "gtkcolorpickerprivate.h"
 #include "gtkcolorpickerportalprivate.h"
 #include "gtkcolorpickershellprivate.h"
-#include "gtkprivate.h"
+#include "gtkcolorpickerkwinprivate.h"
 #include <gio/gio.h>
 
 
@@ -53,15 +53,16 @@ gtk_color_picker_new (void)
 {
   GtkColorPicker *picker;
 
-  if (gtk_should_use_portal ())
-    picker = gtk_color_picker_portal_new ();
-  else
+  picker = gtk_color_picker_portal_new ();
+  if (!picker)
     picker = gtk_color_picker_shell_new ();
+  if (!picker)
+    picker = gtk_color_picker_kwin_new ();
 
-  if (picker)
-    g_debug ("Using %s for picking colors", g_type_name_from_instance (picker));
+  if (!picker)
+    g_debug ("No suitable GtkColorPicker implementation");
   else
-    g_debug ("No suitable GtkColorPicker implementation\n");
+    g_debug ("Using %s for picking colors", G_OBJECT_TYPE_NAME (picker));
 
   return picker;
 }
