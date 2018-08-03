@@ -1515,7 +1515,9 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
 
   impl->initial_fullscreen_output = NULL;
 
-  app_id = g_get_prgname ();
+  app_id = impl->application.application_id;
+  if (app_id == NULL)
+    app_id = g_get_prgname ();
 
   if (app_id == NULL)
     app_id = "GTK+ Application";

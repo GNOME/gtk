@@ -177,6 +177,22 @@
       </para>
     </section>
 
+    <section>
+      <title>Set a proper app_id</title>
+      <para>
+        In GTK+4 we want the application's #GApplication
+        'application-id' (and therefore the D-Bus name), the desktop
+        file basename and Wayland's xdg-shell app_id to match. In
+        order to achieve this with GTK+3 call g_set_prgname() with the same
+        application id you passed to #GtkApplication. Rename your
+        desktop files to match the application id if needed.
+      </para>
+      <para>
+        The call to g_set_prgname() can be removed once you fully migrated
+        to GTK+4.
+      </para>
+    </section>
+
   </section>
 
   <section>

@@ -129,7 +129,7 @@ foreach icon_size: [ '16x16', '22x22', '24x24', '32x32', '48x48', '256x256', ]
 endforeach
 
 # desktop file
-install_data('gtk4-demo.desktop', install_dir: gtk_applicationsdir)
+install_data('org.gtk.Demo.desktop', install_dir: gtk_applicationsdir)
 
 # GSettings
 install_data('org.gtk.Demo.gschema.xml', install_dir: gtk_schemasdir)

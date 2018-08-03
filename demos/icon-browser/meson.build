@@ -17,4 +17,4 @@ executable('gtk4-icon-browser',
            link_args: extra_demo_ldflags,
            install: true)
 
-install_data('gtk4-icon-browser.desktop', install_dir: gtk_applicationsdir)
+install_data('org.gtk.IconBrowser.desktop', install_dir: gtk_applicationsdir)
