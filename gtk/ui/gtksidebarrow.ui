@@ -60,6 +60,7 @@
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="margin-start">4px</property>
+                <property name="visible">False</property>
               </object>
             </child>
           </object>
