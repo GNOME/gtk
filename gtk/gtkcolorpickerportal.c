@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkcolorpickerportalprivate.h"
+#include "gtkprivate.h"
 #include <gio/gio.h>
 
 struct _GtkColorPickerPortal
@@ -52,6 +53,9 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   GVariant *ret;
   guint version;
 
+  if (!gtk_should_use_portal ())
+    return FALSE;
+
   picker->portal_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                         G_DBUS_PROXY_FLAGS_NONE,
                                                         NULL,
@@ -63,7 +67,7 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
 
   if (picker->portal_proxy == NULL)
     {
-      g_debug ("Failed to create screnshot portal proxy");
+      g_debug ("Failed to create screenshot portal proxy");
       return FALSE;
     }
 
