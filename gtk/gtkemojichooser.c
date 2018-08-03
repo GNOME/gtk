@@ -345,11 +345,15 @@ add_emoji (GtkWidget    *box,
   GVariant *codes;
   char text[64];
   char *p = text;
+  const char *name;
+
   int i;
   PangoLayout *layout;
   PangoRectangle rect;
 
   codes = g_variant_get_child_value (item, 0);
+  g_variant_get_child (item, 1, "&s", &name);
+
   for (i = 0; i < g_variant_n_children (codes); i++)
     {
       gunichar code;
@@ -364,6 +368,7 @@ add_emoji (GtkWidget    *box,
   p[0] = 0;
 
   label = gtk_label_new (text);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (label), name);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
