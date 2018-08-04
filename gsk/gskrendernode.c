@@ -99,7 +99,7 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
  *
  * Acquires a reference on the given #GskRenderNode.
  *
- * Returns: (transfer none): the #GskRenderNode with an additional reference
+ * Returns: (transfer full): the #GskRenderNode with an additional reference
  */
 GskRenderNode *
 gsk_render_node_ref (GskRenderNode *node)
@@ -113,7 +113,7 @@ gsk_render_node_ref (GskRenderNode *node)
 
 /**
  * gsk_render_node_unref:
- * @node: a #GskRenderNode
+ * @node: (transfer full): a #GskRenderNode
  *
  * Releases a reference on the given #GskRenderNode.
  *
