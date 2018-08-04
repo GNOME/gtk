@@ -636,12 +636,12 @@ binding_compose_params (GObject       *object,
   return valid;
 }
 
-static gboolean
-binding_signal_activate_signal (GtkBindingSignalSignal *sig,
-                                const char             *set_name,
-                                guint                   keyval,
-                                GdkModifierType         modifiers,
-                                GObject                *object)
+gboolean
+gtk_binding_emit_signal (GObject     *object,
+                         const char  *signal,
+                         GVariant    *args,
+                         gboolean    *handled,
+                         GError     **error)
 {
   GSignalQuery query;
   guint signal_id;
@@ -649,49 +649,41 @@ binding_signal_activate_signal (GtkBindingSignalSignal *sig,
   GValue return_val = G_VALUE_INIT;
   GVariantIter args_iter;
   gsize n_args;
-  gboolean handled = FALSE;
+  guint i;
 
-  signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
+  *handled = FALSE;
+
+  signal_id = g_signal_lookup (signal, G_OBJECT_TYPE (object));
   if (!signal_id)
     {
-      char *accelerator = gtk_accelerator_name (keyval, modifiers);
-      g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                 "could not find signal \"%s\" in the '%s' class ancestry",
-                 set_name, accelerator,
-                 sig->signal_name,
-                 g_type_name (G_OBJECT_TYPE (object)));
-      g_free (accelerator);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Could not find signal \"%s\" in the '%s' class ancestry",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
       return FALSE;
     }
 
   g_signal_query (signal_id, &query);
-  if (sig->args)
-    n_args = g_variant_iter_init (&args_iter, sig->args);
+  if (args)
+    n_args = g_variant_iter_init (&args_iter, args);
   else
     n_args = 0;
-
   if (query.n_params != n_args ||
       (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
       !binding_compose_params (object, &args_iter, &query, &params))
     {
-      char *accelerator = gtk_accelerator_name (keyval, modifiers);
-      g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                 "signature mismatch for signal \"%s\" in the '%s' class ancestry",
-                 set_name, accelerator,
-                 sig->signal_name,
-                 g_type_name (G_OBJECT_TYPE (object)));
-      g_free (accelerator);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "signature mismatch for signal \"%s\" in the '%s' class ancestry",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
       return FALSE;
     }
   else if (!(query.signal_flags & G_SIGNAL_ACTION))
     {
-      char *accelerator = gtk_accelerator_name (keyval, modifiers);
-      g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                 "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
-                 set_name, accelerator,
-                 sig->signal_name,
-                 g_type_name (G_OBJECT_TYPE (object)));
-      g_free (accelerator);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
       return FALSE;
     }
 
@@ -703,23 +695,21 @@ binding_signal_activate_signal (GtkBindingSignalSignal *sig,
   if (query.return_type == G_TYPE_BOOLEAN)
     {
       if (g_value_get_boolean (&return_val))
-        handled = TRUE;
+        *handled = TRUE;
       g_value_unset (&return_val);
     }
   else
-    handled = TRUE;
+    *handled = TRUE;
 
   if (params != NULL)
     {
-      guint i;
-
       for (i = 0; i < query.n_params + 1; i++)
         g_value_unset (&params[i]);
 
       g_free (params);
     }
 
-  return handled;
+  return TRUE;
 }
 
 static gboolean
@@ -796,10 +786,26 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
       switch (sig->action_type)
         {
         case GTK_BINDING_SIGNAL:
-          handled = binding_signal_activate_signal ((GtkBindingSignalSignal *) sig,
-                                                    entry->binding_set->set_name,
-                                                    entry->keyval, entry->modifiers,
-                                                    object);
+          {
+            GtkBindingSignalSignal *signal = (GtkBindingSignalSignal *) sig;
+            GError *error = NULL;
+            gboolean signal_handled = FALSE;
+
+            if (gtk_binding_emit_signal (object, signal->signal_name, signal->args, &signal_handled, &error))
+              {
+                handled |= signal_handled;
+              }
+            else
+              {
+                char *accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+                g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": %s",
+                           entry->binding_set->set_name,
+                           accelerator,
+                           error->message);
+                g_free (accelerator);
+                g_clear_error (&error);
+              }
+          }
           break;
 
         case GTK_BINDING_ACTION:
