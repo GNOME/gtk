@@ -536,6 +536,82 @@ binding_compose_params (GObject         *object,
   return valid;
 }
 
+gboolean
+gtk_binding_emit_signal (GObject    *object,
+                         const char *signal,
+                         GVariant   *args,
+                         gboolean   *handled,
+                         GError    **error)
+{
+  GSignalQuery query;
+  guint signal_id;
+  GValue *params = NULL;
+  GValue return_val = G_VALUE_INIT;
+  GVariantIter args_iter;
+  gsize n_args;
+  guint i;
+
+  *handled = FALSE;
+
+  signal_id = g_signal_lookup (signal, G_OBJECT_TYPE (object));
+  if (!signal_id)
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Could not find signal \"%s\" in the '%s' class ancestry",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+
+  g_signal_query (signal_id, &query);
+  if (args)
+    n_args = g_variant_iter_init (&args_iter, args);
+  else
+    n_args = 0;
+  if (query.n_params != n_args ||
+      (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
+      !binding_compose_params (object, &args_iter, &query, &params))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "signature mismatch for signal \"%s\" in the '%s' class ancestry",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+  else if (!(query.signal_flags & G_SIGNAL_ACTION))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+
+  if (query.return_type == G_TYPE_BOOLEAN)
+    g_value_init (&return_val, G_TYPE_BOOLEAN);
+
+  g_signal_emitv (params, signal_id, 0, &return_val);
+
+  if (query.return_type == G_TYPE_BOOLEAN)
+    {
+      if (g_value_get_boolean (&return_val))
+        *handled = TRUE;
+      g_value_unset (&return_val);
+    }
+  else
+    *handled = TRUE;
+
+  if (params != NULL)
+    {
+      for (i = 0; i < query.n_params + 1; i++)
+        g_value_unset (&params[i]);
+
+      g_free (params);
+    }
+
+  return TRUE;
+}
+
 static gboolean
 gtk_binding_entry_activate (GtkBindingEntry *entry,
                             GObject         *object)
@@ -543,7 +619,6 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
   GtkBindingSignal *sig;
   gboolean old_emission;
   gboolean handled = FALSE;
-  gint i;
 
   old_emission = entry->in_emission;
   entry->in_emission = TRUE;
@@ -552,79 +627,21 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
 
   for (sig = entry->signals; sig; sig = sig->next)
     {
-      GSignalQuery query;
-      guint signal_id;
-      GValue *params = NULL;
-      GValue return_val = G_VALUE_INIT;
-      gchar *accelerator = NULL;
-      GVariantIter args_iter;
-      gsize n_args;
+      GError *error = NULL;
+      gboolean signal_handled;
 
-      signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
-      if (!signal_id)
+      if (gtk_binding_emit_signal (object, sig->signal_name, sig->args, &signal_handled, &error))
         {
-          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "could not find signal \"%s\" in the '%s' class ancestry",
-                     entry->binding_set->set_name,
-                     accelerator,
-                     sig->signal_name,
-                     g_type_name (G_OBJECT_TYPE (object)));
-          g_free (accelerator);
-          continue;
-        }
-
-      g_signal_query (signal_id, &query);
-      if (sig->args)
-        n_args = g_variant_iter_init (&args_iter, sig->args);
-      else
-        n_args = 0;
-      if (query.n_params != n_args ||
-          (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
-          !binding_compose_params (object, &args_iter, &query, &params))
-        {
-          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "signature mismatch for signal \"%s\" in the '%s' class ancestry",
-                     entry->binding_set->set_name,
-                     accelerator,
-                     sig->signal_name,
-                     g_type_name (G_OBJECT_TYPE (object)));
-        }
-      else if (!(query.signal_flags & G_SIGNAL_ACTION))
-        {
-          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
-                     entry->binding_set->set_name,
-                     accelerator,
-                     sig->signal_name,
-                     g_type_name (G_OBJECT_TYPE (object)));
-        }
-      g_free (accelerator);
-      if (accelerator)
-        continue;
-
-      if (query.return_type == G_TYPE_BOOLEAN)
-        g_value_init (&return_val, G_TYPE_BOOLEAN);
-
-      g_signal_emitv (params, signal_id, 0, &return_val);
-
-      if (query.return_type == G_TYPE_BOOLEAN)
-        {
-          if (g_value_get_boolean (&return_val))
-            handled = TRUE;
-          g_value_unset (&return_val);
+          handled |= signal_handled;
         }
       else
-        handled = TRUE;
-
-      if (params != NULL)
         {
-          for (i = 0; i < query.n_params + 1; i++)
-            g_value_unset (&params[i]);
-
-          g_free (params);
+          char *accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": %s",
+                     entry->binding_set->set_name,
+                     accelerator,
+                     error->message);
+          g_clear_error (&error);
         }
 
       if (entry->destroyed)
