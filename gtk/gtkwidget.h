@@ -420,6 +420,18 @@ GDK_AVAILABLE_IN_ALL
 GType                   gtk_widget_class_get_layout_manager_type        (GtkWidgetClass *widget_class);
 
 GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_add_binding_signal
+                                          (GtkWidgetClass      *widget_class,
+                                           GdkModifierType      mods,
+                                           guint                keyval,
+                                           const gchar         *signal,
+                                           const gchar         *format_string,
+                                           ...);
+GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_add_shortcut  (GtkWidgetClass      *widget_class,
+                                           GtkShortcut         *shortcut);
+
+GDK_AVAILABLE_IN_ALL
 void       gtk_widget_add_accelerator     (GtkWidget           *widget,
                                            const gchar         *accel_signal,
                                            GtkAccelGroup       *accel_group,
