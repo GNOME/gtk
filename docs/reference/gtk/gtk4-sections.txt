@@ -6692,6 +6692,30 @@ gtk_event_controller_motion_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkshortcut</FILE>
+<TITLE>GtkShortcut</TITLE>
+GtkShortcut
+gtk_shortcut_new
+gtk_shortcut_set_keyval
+gtk_shortcut_activate
+gtk_shortcut_get_arguments
+gtk_shortcut_set_arguments
+gtk_shortcut_get_signal
+gtk_shortcut_set_signal
+
+<SUBSECTION Standard>
+GTK_TYPE_SHORTCUT
+GTK_SHORTCUT
+GTK_SHORTCUT_CLASS
+GTK_IS_SHORTCUT
+GTK_IS_SHORTCUT_CLASS
+GTK_SHORTCUT_GET_CLASS
+
+<SUBSECTION Private>
+gtk_shortcut_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkshortcutcontroller</FILE>
 <TITLE>GtkShortcutController</TITLE>
 GtkShortcutController
