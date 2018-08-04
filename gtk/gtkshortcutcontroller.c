@@ -33,6 +33,8 @@
 
 #include "gtkeventcontrollerprivate.h"
 #include "gtkbindings.h"
+#include "gtkshortcut.h"
+#include "gtkwidgetprivate.h"
 
 #include <gdk/gdk.h>
 
@@ -58,11 +60,35 @@ gtk_shortcut_controller_finalize (GObject *object)
 }
 
 static gboolean
+gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
+                                          GtkShortcut           *shortcut,
+                                          const GdkEvent        *event)
+{
+  if (!gtk_shortcut_trigger (shortcut, event))
+    return FALSE;
+
+  return gtk_shortcut_activate (shortcut, gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
+}
+
+static gboolean
 gtk_shortcut_controller_handle_event (GtkEventController *controller,
                                       const GdkEvent     *event)
 {
-  return gtk_bindings_activate_event (G_OBJECT (gtk_event_controller_get_widget (controller)),
-                                      (GdkEventKey *) event);
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  GtkWidget *widget;
+  const GSList *l;
+
+  widget = gtk_event_controller_get_widget (controller); 
+  if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event))
+    return TRUE;
+
+  for (l = gtk_widget_class_get_shortcuts (GTK_WIDGET_GET_CLASS (widget)); l; l = l->next)
+    {
+      if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
