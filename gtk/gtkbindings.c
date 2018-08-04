@@ -441,9 +441,21 @@ binding_compose_params (GObject         *object,
 
       switch ((guint) g_variant_classify (tmp_variant))
         {
+        case G_VARIANT_CLASS_BOOLEAN:
+          g_value_init (&tmp_value, G_TYPE_BOOLEAN);
+          g_value_set_boolean (&tmp_value, g_variant_get_boolean (tmp_variant));
+          break;
         case G_VARIANT_CLASS_DOUBLE:
           g_value_init (&tmp_value, G_TYPE_DOUBLE);
           g_value_set_double (&tmp_value, g_variant_get_double (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_INT32:
+          g_value_init (&tmp_value, G_TYPE_LONG);
+          g_value_set_long (&tmp_value, g_variant_get_int32 (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_UINT32:
+          g_value_init (&tmp_value, G_TYPE_LONG);
+          g_value_set_long (&tmp_value, g_variant_get_uint32 (tmp_variant));
           break;
         case G_VARIANT_CLASS_INT64:
           g_value_init (&tmp_value, G_TYPE_LONG);
