@@ -232,6 +232,7 @@ void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
 
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);
+const GSList *    gtk_widget_class_get_shortcuts           (GtkWidgetClass *widget_class);
 
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
