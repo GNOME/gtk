@@ -25,6 +25,12 @@ G_BEGIN_DECLS
 guint _gtk_binding_parse_binding     (GScanner        *scanner);
 void  _gtk_binding_reset_parsed      (void);
 
+gboolean gtk_binding_emit_signal     (GObject         *object,
+                                      const char      *signal,
+                                      GVariant        *args,
+                                      gboolean        *handled,
+                                      GError         **error);
+
 G_END_DECLS
 
 #endif /* __GTK_BINDINGS_PRIVATE_H__ */
