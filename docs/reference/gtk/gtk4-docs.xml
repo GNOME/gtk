@@ -340,6 +340,11 @@
     </chapter>
 
     <chapter>
+      <title>Keyboard shortcuts</title>
+      <xi:include href="xml/gtkshortcut.xml" />
+    </chapter>
+
+    <chapter>
       <title>Data exchange, clipboards and Drag-and-Drop</title>
       <xi:include href="xml/gtkdragsource.xml"/>
       <xi:include href="xml/gtkdragicon.xml"/>
