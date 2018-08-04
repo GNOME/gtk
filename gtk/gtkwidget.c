@@ -59,6 +59,7 @@
 #include "gtknativeprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
+#include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
@@ -494,6 +495,7 @@ typedef struct {
 struct _GtkWidgetClassPrivate
 {
   GtkWidgetTemplate *template;
+  GSList *shortcuts;
   GType accessible_type;
   AtkRole accessible_role;
   GQuark css_name;
@@ -1719,6 +1721,7 @@ static void
 gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 {
   template_data_free (klass->priv->template);
+  g_slist_free_full (klass->priv->shortcuts, g_object_unref);
 }
 
 static void
@@ -4312,6 +4315,91 @@ gtk_widget_real_size_allocate (GtkWidget *widget,
                                int        height,
                                int        baseline)
 {
+}
+
+/**
+ * gtk_widget_class_add_binding_signal: (skip)
+ * @widget_class: the class to add the binding to
+ * @mods: key modifier of binding to install
+ * @keyval: key value of binding to install
+ * @signal: the signal to execute
+ * @format_string: GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
+ *
+ * Creates a new shortcut for @widget_class that emits the given action
+ * @signal with arguments read according to @format_string.
+ * The arguments and format string must be provided in the same way as
+ * with g_variant_new().
+ *
+ * This function is a convenience wrapper around
+ * gtk_widget_class_add_shortcut() and must be called during class
+ * initialization.
+ */
+void
+gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
+                                     GdkModifierType  mods,
+                                     guint            keyval,
+                                     const gchar     *signal,
+                                     const gchar     *format_string,
+                                     ...)
+{
+  GtkShortcut *shortcut;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (g_signal_lookup (signal, G_TYPE_FROM_CLASS (widget_class)));
+  /* XXX: validate variant format for signal */
+
+  shortcut = gtk_shortcut_new ();
+  gtk_shortcut_set_keyval (shortcut, mods, keyval);
+  gtk_shortcut_set_signal (shortcut, signal);
+  if (format_string)
+    {
+      va_list args;
+      va_start (args, format_string);
+      gtk_shortcut_set_arguments (shortcut,
+                                  g_variant_new_va (format_string, NULL, &args));
+      va_end (args);
+    }
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
+}
+
+/**
+ * gtk_widget_class_add_shortcut:
+ * @widget_class: the class to add the shortcut to
+ * @shortcut: (transfer none): the #GtkShortcut to add
+ *
+ * Installs a shortcut in @widget_class. Every instance created for
+ * @widget_class or its subclasses will inherit this shortcut and
+ * trigger it.
+ *
+ * Shortcuts added this way will be triggered in the @GTK_PHASE_BUBBLE
+ * phase, which means they may also trigger if child widgets have focus.
+ *
+ * This function must only be used in class initialization functions
+ * otherwise it is not guaranteed that the shortcut will be installed.
+ **/
+void
+gtk_widget_class_add_shortcut (GtkWidgetClass *widget_class,
+                               GtkShortcut    *shortcut)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
+
+  priv = widget_class->priv;
+
+  priv->shortcuts = g_slist_prepend (priv->shortcuts, g_object_ref (shortcut));
+}
+
+const GSList *
+gtk_widget_class_get_shortcuts (GtkWidgetClass *widget_class)
+{
+  return widget_class->priv->shortcuts;
 }
 
 static gboolean
