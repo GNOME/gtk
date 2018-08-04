@@ -1321,7 +1321,8 @@ get_scroll_unit (GtkScrolledWindow *sw,
 
 static void
 scroll_history_push (GtkScrolledWindow *sw,
-                     GdkEventScroll    *event)
+                     GdkEventScroll    *event,
+                     gboolean           shifted)
 {
   GtkScrolledWindowPrivate *priv = sw->priv;
   ScrollHistoryElem new_item;
@@ -1343,8 +1344,16 @@ scroll_history_push (GtkScrolledWindow *sw,
   if (i > 0)
     g_array_remove_range (priv->scroll_history, 0, i);
 
-  new_item.dx = event->delta_x;
-  new_item.dy = event->delta_y;
+  if (shifted)
+    {
+      new_item.dx = event->delta_y;
+      new_item.dy = event->delta_x;
+    }
+  else
+    {
+      new_item.dx = event->delta_x;
+      new_item.dy = event->delta_y;
+    }
   new_item.evtime = event->time;
   g_array_append_val (priv->scroll_history, new_item);
 }
@@ -3481,7 +3490,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           scroll_history_reset (scrolled_window);
         }
 
-      scroll_history_push (scrolled_window, event);
+      scroll_history_push (scrolled_window, event, shifted);
 
       if (input_source == GDK_SOURCE_TRACKPOINT ||
           input_source == GDK_SOURCE_TOUCHPAD)
