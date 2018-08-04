@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-27 06:04+0000\n"
-"PO-Revision-Date: 2018-05-27 08:15+0200\n"
+"POT-Creation-Date: 2018-07-31 22:24+0000\n"
+"PO-Revision-Date: 2018-08-04 19:39+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -476,20 +476,21 @@ msgid "Suspend"
 msgstr "Uśpienie"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:814
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
 #: gdk/x11/gdkglcontext-x11.c:1277
 msgid "No GL implementation is available"
 msgstr "Brak dostępnej implementacji GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:765 gdk/x11/gdkglcontext-x11.c:720
-#: gdk/x11/gdkglcontext-x11.c:770
+#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
+#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Nie można utworzyć kontekstu GL"
 
 #: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:719
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
+#: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
 #: gdk/x11/gdkglcontext-x11.c:971
 msgid "No available configurations for the given pixel format"
 msgstr "Brak dostępnych konfiguracji dla podanego formatu pikseli"
@@ -688,15 +689,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9229
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9253
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9238
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9262
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9195
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9219
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -1245,7 +1246,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12698 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12722 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1294,7 +1295,7 @@ msgid "_Apply"
 msgstr "_Zastosuj"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12699
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12723
 msgid "_OK"
 msgstr "_OK"
 
@@ -2212,52 +2213,52 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: gtk/gtkentry.c:9564 gtk/gtklabel.c:6680 gtk/gtktextview.c:9493
+#: gtk/gtkentry.c:9582 gtk/gtklabel.c:6680 gtk/gtktextview.c:9492
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtkentry.c:9568 gtk/gtklabel.c:6681 gtk/gtktextview.c:9497
+#: gtk/gtkentry.c:9586 gtk/gtklabel.c:6681 gtk/gtktextview.c:9496
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtkentry.c:9572 gtk/gtklabel.c:6682 gtk/gtktextview.c:9499
+#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6682 gtk/gtktextview.c:9498
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtkentry.c:9575 gtk/gtkfilechooserwidget.c:1476
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9593 gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9501
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: gtk/gtkentry.c:9586 gtk/gtklabel.c:6693 gtk/gtktextview.c:9516
+#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6693 gtk/gtktextview.c:9515
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtkentry.c:9596 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9614 gtk/gtktextview.c:9525
 msgid "Insert _Emoji"
 msgstr "Wstaw _emoji"
 
-#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9746
+#: gtk/gtkentry.c:9790 gtk/gtktextview.c:9745
 msgid "Select all"
 msgstr "Zaznacz wszystko"
 
-#: gtk/gtkentry.c:9775 gtk/gtktextview.c:9749
+#: gtk/gtkentry.c:9793 gtk/gtktextview.c:9748
 msgid "Cut"
 msgstr "Wytnij"
 
-#: gtk/gtkentry.c:9778 gtk/gtktextview.c:9752
+#: gtk/gtkentry.c:9796 gtk/gtktextview.c:9751
 msgid "Copy"
 msgstr "Skopiuj"
 
-#: gtk/gtkentry.c:9781 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9754
 msgid "Paste"
 msgstr "Wklej"
 
-#: gtk/gtkentry.c:10851
+#: gtk/gtkentry.c:10869
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
-#: gtk/gtkentry.c:11126
+#: gtk/gtkentry.c:11144
 msgid "Insert Emoji"
 msgstr "Wstawia emoji"
 
@@ -2283,7 +2284,7 @@ msgstr "_Nazwa"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3594 gtk/gtkplacessidebar.c:3662
+#: gtk/gtkplacessidebar.c:3612 gtk/gtkplacessidebar.c:3680
 #: gtk/gtkplacesview.c:1633
 msgid "_Open"
 msgstr "_Otwórz"
@@ -2453,7 +2454,7 @@ msgstr "S_kopiuj położenie"
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj zakładkę"
 
-#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2710
+#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2728
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "Z_mień nazwę"
@@ -2593,69 +2594,64 @@ msgstr "Dostęp"
 msgid "File System"
 msgstr "System plików"
 
-#: gtk/gtkfontbutton.c:381 gtk/gtkfontbutton.c:511
+#: gtk/gtkfontbutton.c:379 gtk/gtkfontbutton.c:509
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:494 gtk/gtkfontbutton.c:628
+#: gtk/gtkfontbutton.c:492 gtk/gtkfontbutton.c:626
 msgid "Pick a Font"
 msgstr "Wybór czcionki"
 
-#: gtk/gtkfontbutton.c:1390
+#: gtk/gtkfontbutton.c:1393
 msgctxt "font"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/gtkfontchooserwidget.c:1515
+#: gtk/gtkfontchooserwidget.c:1523
 msgid "Width"
 msgstr "Szerokość"
 
-#: gtk/gtkfontchooserwidget.c:1516
+#: gtk/gtkfontchooserwidget.c:1524
 msgid "Weight"
 msgstr "Waga"
 
-#: gtk/gtkfontchooserwidget.c:1517
+#: gtk/gtkfontchooserwidget.c:1525
 msgid "Italic"
 msgstr "Pochylenie"
 
-#: gtk/gtkfontchooserwidget.c:1518
+#: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
 msgstr "Nachylenie"
 
-#: gtk/gtkfontchooserwidget.c:1519
+#: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
 msgstr "Rozmiar wizualny"
 
-#: gtk/gtkfontchooserwidget.c:1658
-msgctxt "Language"
-msgid "Default"
-msgstr "Domyślny"
-
-#: gtk/gtkfontchooserwidget.c:1949 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2064 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Domyślne"
 
-#: gtk/gtkfontchooserwidget.c:1979
+#: gtk/gtkfontchooserwidget.c:2111
 msgid "Ligatures"
 msgstr "Ligatury"
 
-#: gtk/gtkfontchooserwidget.c:1980
+#: gtk/gtkfontchooserwidget.c:2112
 msgid "Letter Case"
 msgstr "Wielkość liter"
 
-#: gtk/gtkfontchooserwidget.c:1981
+#: gtk/gtkfontchooserwidget.c:2113
 msgid "Number Case"
 msgstr "Wielkość cyfr"
 
-#: gtk/gtkfontchooserwidget.c:1982
+#: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Spacing"
 msgstr "Odstępy cyfr"
 
-#: gtk/gtkfontchooserwidget.c:1983
+#: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Formatting"
 msgstr "Formatowanie cyfr"
 
-#: gtk/gtkfontchooserwidget.c:1984
+#: gtk/gtkfontchooserwidget.c:2116
 msgid "Character Variants"
 msgstr "Warianty znaku"
 
@@ -2667,7 +2663,7 @@ msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 msgid "Application menu"
 msgstr "Menu programu"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9265
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9289
 msgid "Close"
 msgstr "Zamknij"
 
@@ -3091,11 +3087,11 @@ msgid "Show other locations"
 msgstr "Wyświetla inne położenia"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3682
+#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3700
 msgid "_Start"
 msgstr "_Uruchom"
 
-#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3683
+#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3701
 msgid "_Stop"
 msgstr "Z_atrzymaj"
 
@@ -3133,90 +3129,90 @@ msgstr "Odblok_uj urządzenie"
 msgid "_Lock Device"
 msgstr "_Zablokuj urządzenie"
 
-#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3363
+#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3381
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Nie można uruchomić „%s”"
 
-#: gtk/gtkplacessidebar.c:2417
+#: gtk/gtkplacessidebar.c:2419
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Nie można uzyskać dostępu do „%s”"
 
-#: gtk/gtkplacessidebar.c:2635
+#: gtk/gtkplacessidebar.c:2653
 msgid "This name is already taken"
 msgstr "Ta nazwa jest już zajęta"
 
-#: gtk/gtkplacessidebar.c:2704 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2722 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Nazwa"
 
-#: gtk/gtkplacessidebar.c:2904
+#: gtk/gtkplacessidebar.c:2922
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Nie można odmontować „%s”"
 
-#: gtk/gtkplacessidebar.c:3080
+#: gtk/gtkplacessidebar.c:3098
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Nie można zatrzymać „%s”"
 
-#: gtk/gtkplacessidebar.c:3109
+#: gtk/gtkplacessidebar.c:3127
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Nie można wysunąć „%s”"
 
-#: gtk/gtkplacessidebar.c:3138 gtk/gtkplacessidebar.c:3167
+#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3185
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nie można wysunąć %s"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3333
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nie można odpytać „%s” o zmiany nośnika"
 
-#: gtk/gtkplacessidebar.c:3599 gtk/gtkplacessidebar.c:3665
+#: gtk/gtkplacessidebar.c:3617 gtk/gtkplacessidebar.c:3683
 #: gtk/gtkplacesview.c:1643
 msgid "Open in New _Tab"
 msgstr "O_twórz w nowej karcie"
 
-#: gtk/gtkplacessidebar.c:3605 gtk/gtkplacessidebar.c:3668
+#: gtk/gtkplacessidebar.c:3623 gtk/gtkplacessidebar.c:3686
 #: gtk/gtkplacesview.c:1654
 msgid "Open in New _Window"
 msgstr "Otwórz w nowy_m oknie"
 
-#: gtk/gtkplacessidebar.c:3672
+#: gtk/gtkplacessidebar.c:3690
 msgid "_Add Bookmark"
 msgstr "_Dodaj zakładkę"
 
-#: gtk/gtkplacessidebar.c:3673
+#: gtk/gtkplacessidebar.c:3691
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: gtk/gtkplacessidebar.c:3674
+#: gtk/gtkplacessidebar.c:3692
 msgid "Rename…"
 msgstr "Zmień nazwę…"
 
-#: gtk/gtkplacessidebar.c:3678 gtk/gtkplacesview.c:1688
+#: gtk/gtkplacessidebar.c:3696 gtk/gtkplacesview.c:1688
 msgid "_Mount"
 msgstr "Za_montuj"
 
-#: gtk/gtkplacessidebar.c:3679 gtk/gtkplacesview.c:1678
+#: gtk/gtkplacessidebar.c:3697 gtk/gtkplacesview.c:1678
 msgid "_Unmount"
 msgstr "O_dmontuj"
 
-#: gtk/gtkplacessidebar.c:3680
+#: gtk/gtkplacessidebar.c:3698
 msgid "_Eject"
 msgstr "Wy_suń"
 
-#: gtk/gtkplacessidebar.c:3681
+#: gtk/gtkplacessidebar.c:3699
 msgid "_Detect Media"
 msgstr "Wy_kryj nośnik"
 
-#: gtk/gtkplacessidebar.c:4127 gtk/gtkplacesview.c:1121
+#: gtk/gtkplacessidebar.c:4145 gtk/gtkplacesview.c:1121
 msgid "Computer"
 msgstr "Komputer"
 
@@ -3697,12 +3693,12 @@ msgstr "Wyniki wyszukiwania"
 msgid "Search Shortcuts"
 msgstr "Wyszukiwanie skrótów"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:326
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Brak wyników"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:340
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
 #: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Proszę spróbować innych słów"
@@ -3906,24 +3902,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:9213
+#: gtk/gtkwindow.c:9237
 msgid "Move"
 msgstr "Przenieś"
 
-#: gtk/gtkwindow.c:9221
+#: gtk/gtkwindow.c:9245
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: gtk/gtkwindow.c:9252
+#: gtk/gtkwindow.c:9276
 msgid "Always on Top"
 msgstr "Zawsze na wierzchu"
 
-#: gtk/gtkwindow.c:12686
+#: gtk/gtkwindow.c:12710
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK+?"
 
-#: gtk/gtkwindow.c:12688
+#: gtk/gtkwindow.c:12712
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3934,7 +3930,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK+. Jego użycie może spowodować awarię "
 "lub uszkodzenie programu."
 
-#: gtk/gtkwindow.c:12693
+#: gtk/gtkwindow.c:12717
 msgid "Don't show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -4003,7 +3999,7 @@ msgid "CSS Property"
 msgstr "Właściwość CSS"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
-#: gtk/ui/gtkcoloreditor.ui:295
+#: gtk/ui/gtkcoloreditor.ui:316
 msgid "Value"
 msgstr "Wartość"
 
@@ -4292,7 +4288,7 @@ msgid "Count"
 msgstr "Liczba"
 
 #: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
-#: gtk/ui/gtkfontchooserwidget.ui:255
+#: gtk/ui/gtkfontchooserwidget.ui:134 gtk/ui/gtkfontchooserwidget.ui:276
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -6235,702 +6231,702 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/script-names.c:16
+#: gtk/script-names.c:18
 msgctxt "Script"
 msgid "Arabic"
 msgstr "arabskie"
 
-#: gtk/script-names.c:17
+#: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Armenian"
 msgstr "ormiańskie"
 
-#: gtk/script-names.c:18
+#: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Bengali"
 msgstr "bengalskie"
 
-#: gtk/script-names.c:19
+#: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Bopomofo"
 msgstr "bopomofo"
 
-#: gtk/script-names.c:20
+#: gtk/script-names.c:22
 msgctxt "Script"
 msgid "Cherokee"
 msgstr "czirokeskie"
 
-#: gtk/script-names.c:21
+#: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Coptic"
 msgstr "koptyjskie"
 
-#: gtk/script-names.c:22
+#: gtk/script-names.c:24
 msgctxt "Script"
 msgid "Cyrillic"
 msgstr "cyrylica"
 
-#: gtk/script-names.c:23
+#: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Deseret"
 msgstr "deseret"
 
-#: gtk/script-names.c:24
+#: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Devanagari"
 msgstr "dewanagari"
 
-#: gtk/script-names.c:25
+#: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Ethiopic"
 msgstr "etiopskie"
 
-#: gtk/script-names.c:26
+#: gtk/script-names.c:28
 msgctxt "Script"
 msgid "Georgian"
 msgstr "gruzińskie"
 
-#: gtk/script-names.c:27
+#: gtk/script-names.c:29
 msgctxt "Script"
 msgid "Gothic"
 msgstr "gotyckie"
 
-#: gtk/script-names.c:28
+#: gtk/script-names.c:30
 msgctxt "Script"
 msgid "Greek"
 msgstr "greckie"
 
-#: gtk/script-names.c:29
+#: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Gujarati"
 msgstr "gudźarackie"
 
-#: gtk/script-names.c:30
+#: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Gurmukhi"
 msgstr "gurmukhi"
 
-#: gtk/script-names.c:31
+#: gtk/script-names.c:33
 msgctxt "Script"
 msgid "Han"
 msgstr "han"
 
-#: gtk/script-names.c:32
+#: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hangul"
 msgstr "hangyl"
 
-#: gtk/script-names.c:33
+#: gtk/script-names.c:35
 msgctxt "Script"
 msgid "Hebrew"
 msgstr "hebrajskie"
 
-#: gtk/script-names.c:34
+#: gtk/script-names.c:36
 msgctxt "Script"
 msgid "Hiragana"
 msgstr "hiragana"
 
-#: gtk/script-names.c:35
+#: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Kannada"
 msgstr "kannada"
 
-#: gtk/script-names.c:36
+#: gtk/script-names.c:38
 msgctxt "Script"
 msgid "Katakana"
 msgstr "katakana"
 
-#: gtk/script-names.c:37
+#: gtk/script-names.c:39
 msgctxt "Script"
 msgid "Khmer"
 msgstr "khmerskie"
 
-#: gtk/script-names.c:38
+#: gtk/script-names.c:40
 msgctxt "Script"
 msgid "Lao"
 msgstr "laotańskie"
 
-#: gtk/script-names.c:39
+#: gtk/script-names.c:41
 msgctxt "Script"
 msgid "Latin"
 msgstr "łacińskie"
 
-#: gtk/script-names.c:40
+#: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Malayalam"
 msgstr "malajalam"
 
-#: gtk/script-names.c:41
+#: gtk/script-names.c:43
 msgctxt "Script"
 msgid "Mongolian"
 msgstr "mongolskie"
 
-#: gtk/script-names.c:42
+#: gtk/script-names.c:44
 msgctxt "Script"
 msgid "Myanmar"
 msgstr "birmańskie"
 
-#: gtk/script-names.c:43
+#: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Ogham"
 msgstr "ogamiczne"
 
-#: gtk/script-names.c:44
+#: gtk/script-names.c:46
 msgctxt "Script"
 msgid "Old Italic"
 msgstr "starowłoskie"
 
-#: gtk/script-names.c:45
+#: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Oriya"
 msgstr "orija"
 
-#: gtk/script-names.c:46
+#: gtk/script-names.c:48
 msgctxt "Script"
 msgid "Runic"
 msgstr "runiczne"
 
-#: gtk/script-names.c:47
+#: gtk/script-names.c:49
 msgctxt "Script"
 msgid "Sinhala"
 msgstr "syngaleskie"
 
-#: gtk/script-names.c:48
+#: gtk/script-names.c:50
 msgctxt "Script"
 msgid "Syriac"
 msgstr "syryjskie"
 
-#: gtk/script-names.c:49
+#: gtk/script-names.c:51
 msgctxt "Script"
 msgid "Tamil"
 msgstr "tamilskie"
 
-#: gtk/script-names.c:50
+#: gtk/script-names.c:52
 msgctxt "Script"
 msgid "Telugu"
 msgstr "telugu"
 
-#: gtk/script-names.c:51
+#: gtk/script-names.c:53
 msgctxt "Script"
 msgid "Thaana"
 msgstr "taana"
 
-#: gtk/script-names.c:52
+#: gtk/script-names.c:54
 msgctxt "Script"
 msgid "Thai"
 msgstr "tajskie"
 
-#: gtk/script-names.c:53
+#: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Tibetan"
 msgstr "tybetańskie"
 
-#: gtk/script-names.c:54
+#: gtk/script-names.c:56
 msgctxt "Script"
 msgid "Canadian Aboriginal"
 msgstr "kanadyjskie autochtoniczne"
 
-#: gtk/script-names.c:55
+#: gtk/script-names.c:57
 msgctxt "Script"
 msgid "Yi"
 msgstr "yi"
 
-#: gtk/script-names.c:56
+#: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Tagalog"
 msgstr "tagalog"
 
-#: gtk/script-names.c:57
+#: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Hanunoo"
 msgstr "hanunó’o"
 
-#: gtk/script-names.c:58
+#: gtk/script-names.c:60
 msgctxt "Script"
 msgid "Buhid"
 msgstr "buhid"
 
-#: gtk/script-names.c:59
+#: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Tagbanwa"
 msgstr "tagbanwa"
 
-#: gtk/script-names.c:60
+#: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Braille"
 msgstr "Braille’a"
 
-#: gtk/script-names.c:61
+#: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Cypriot"
 msgstr "cypryjskie"
 
-#: gtk/script-names.c:62
+#: gtk/script-names.c:64
 msgctxt "Script"
 msgid "Limbu"
 msgstr "limbu"
 
-#: gtk/script-names.c:63
+#: gtk/script-names.c:65
 msgctxt "Script"
 msgid "Osmanya"
 msgstr "osmanya"
 
-#: gtk/script-names.c:64
+#: gtk/script-names.c:66
 msgctxt "Script"
 msgid "Shavian"
 msgstr "shawa"
 
-#: gtk/script-names.c:65
+#: gtk/script-names.c:67
 msgctxt "Script"
 msgid "Linear B"
 msgstr "linearne B"
 
-#: gtk/script-names.c:66
+#: gtk/script-names.c:68
 msgctxt "Script"
 msgid "Tai Le"
 msgstr "tai le"
 
-#: gtk/script-names.c:67
+#: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Ugaritic"
 msgstr "ugaryckie"
 
-#: gtk/script-names.c:68
+#: gtk/script-names.c:70
 msgctxt "Script"
 msgid "New Tai Lue"
 msgstr "nowe tai lue"
 
-#: gtk/script-names.c:69
+#: gtk/script-names.c:71
 msgctxt "Script"
 msgid "Buginese"
 msgstr "bugińskie"
 
-#: gtk/script-names.c:70
+#: gtk/script-names.c:72
 msgctxt "Script"
 msgid "Glagolitic"
 msgstr "głagolica"
 
-#: gtk/script-names.c:71
+#: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
 msgstr "tifinagh (berberskie)"
 
-#: gtk/script-names.c:72
+#: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Syloti Nagri"
 msgstr "syloti nagri"
 
-#: gtk/script-names.c:73
+#: gtk/script-names.c:75
 msgctxt "Script"
 msgid "Old Persian"
 msgstr "staroperskie"
 
-#: gtk/script-names.c:74
+#: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Kharoshthi"
 msgstr "charosti"
 
-#: gtk/script-names.c:75
+#: gtk/script-names.c:77
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Nieznane"
 
-#: gtk/script-names.c:76
+#: gtk/script-names.c:78
 msgctxt "Script"
 msgid "Balinese"
 msgstr "balijskie"
 
-#: gtk/script-names.c:77
+#: gtk/script-names.c:79
 msgctxt "Script"
 msgid "Cuneiform"
 msgstr "klinowe"
 
-#: gtk/script-names.c:78
+#: gtk/script-names.c:80
 msgctxt "Script"
 msgid "Phoenician"
 msgstr "fenickie"
 
-#: gtk/script-names.c:79
+#: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Phags-pa"
 msgstr "phags-pa"
 
-#: gtk/script-names.c:80
+#: gtk/script-names.c:82
 msgctxt "Script"
 msgid "N'Ko"
 msgstr "n’ko"
 
-#: gtk/script-names.c:81
+#: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Kayah Li"
 msgstr "kayah li"
 
-#: gtk/script-names.c:82
+#: gtk/script-names.c:84
 msgctxt "Script"
 msgid "Lepcha"
 msgstr "lepcza"
 
-#: gtk/script-names.c:83
+#: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Rejang"
 msgstr "rejang"
 
-#: gtk/script-names.c:84
+#: gtk/script-names.c:86
 msgctxt "Script"
 msgid "Sundanese"
 msgstr "sundajskie"
 
-#: gtk/script-names.c:85
+#: gtk/script-names.c:87
 msgctxt "Script"
 msgid "Saurashtra"
 msgstr "saurasztryjskie"
 
-#: gtk/script-names.c:86
+#: gtk/script-names.c:88
 msgctxt "Script"
 msgid "Cham"
 msgstr "czamskie"
 
-#: gtk/script-names.c:87
+#: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Ol Chiki"
 msgstr "ol ciki"
 
-#: gtk/script-names.c:88
+#: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Vai"
 msgstr "vai"
 
-#: gtk/script-names.c:89
+#: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Carian"
 msgstr "karyjskie"
 
-#: gtk/script-names.c:90
+#: gtk/script-names.c:92
 msgctxt "Script"
 msgid "Lycian"
 msgstr "likijskie"
 
-#: gtk/script-names.c:91
+#: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Lydian"
 msgstr "lidyjskie"
 
-#: gtk/script-names.c:92
+#: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Avestan"
 msgstr "awestyjskie"
 
-#: gtk/script-names.c:93
+#: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Bamum"
 msgstr "bamun"
 
-#: gtk/script-names.c:94
+#: gtk/script-names.c:96
 msgctxt "Script"
 msgid "Egyptian Hieroglpyhs"
 msgstr "hieroglify egipskie"
 
-#: gtk/script-names.c:95
+#: gtk/script-names.c:97
 msgctxt "Script"
 msgid "Imperial Aramaic"
 msgstr "aramejskie imperialne"
 
-#: gtk/script-names.c:96
+#: gtk/script-names.c:98
 msgctxt "Script"
 msgid "Inscriptional Pahlavi"
 msgstr "pahlawi inskrypcyjne"
 
-#: gtk/script-names.c:97
+#: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Inscriptional Parthian"
 msgstr "partyjskie inskrypcyjne"
 
-#: gtk/script-names.c:98
+#: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Javanese"
 msgstr "jawajskie"
 
-#: gtk/script-names.c:99
+#: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Kaithi"
 msgstr "kaithi"
 
-#: gtk/script-names.c:100
+#: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Lisu"
 msgstr "lisu"
 
-#: gtk/script-names.c:101
+#: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Meetei Mayek"
 msgstr "manipuri"
 
-#: gtk/script-names.c:102
+#: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Old South Arabian"
 msgstr "staroarabskie południowe"
 
-#: gtk/script-names.c:103
+#: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Old Turkic"
 msgstr "starotureckie"
 
-#: gtk/script-names.c:104
+#: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Samaritan"
 msgstr "samarytańskie"
 
-#: gtk/script-names.c:105
+#: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Tai Tham"
 msgstr "lana"
 
-#: gtk/script-names.c:106
+#: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Tai Viet"
 msgstr "tai viet"
 
-#: gtk/script-names.c:107
+#: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Batak"
 msgstr "batackie"
 
-#: gtk/script-names.c:108
+#: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Brahmi"
 msgstr "brahmi"
 
-#: gtk/script-names.c:109
+#: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Mandaic"
 msgstr "mandejskie"
 
-#: gtk/script-names.c:110
+#: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Chakma"
 msgstr "czakma"
 
-#: gtk/script-names.c:111
+#: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Meroitic Cursive"
 msgstr "meroickie (kursywa)"
 
-#: gtk/script-names.c:112
+#: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
 msgstr "hieroglify meroickie"
 
-#: gtk/script-names.c:113
+#: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Miao"
 msgstr "miao"
 
-#: gtk/script-names.c:114
+#: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Sharada"
 msgstr "śarada"
 
-#: gtk/script-names.c:115
+#: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Sora Sompeng"
 msgstr "sorang sompeng"
 
-#: gtk/script-names.c:116
+#: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Takri"
 msgstr "takri"
 
-#: gtk/script-names.c:117
+#: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Bassa"
 msgstr "bassa"
 
-#: gtk/script-names.c:118
+#: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Caucasian Albanian"
 msgstr "albańskie kaukaskie"
 
-#: gtk/script-names.c:119
+#: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Duployan"
 msgstr "Duployé’a"
 
-#: gtk/script-names.c:120
+#: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Elbasan"
 msgstr "elbasan"
 
-#: gtk/script-names.c:121
+#: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Grantha"
 msgstr "grantha"
 
-#: gtk/script-names.c:122
+#: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Khojki"
 msgstr "khojki"
 
-#: gtk/script-names.c:123
+#: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
 msgstr "khudawadi, sindhi"
 
-#: gtk/script-names.c:124
+#: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Linear A"
 msgstr "linearne A"
 
-#: gtk/script-names.c:125
+#: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mahajani"
 msgstr "mahajani"
 
-#: gtk/script-names.c:126
+#: gtk/script-names.c:128
 msgctxt "Script"
 msgid "Manichaean"
 msgstr "manichejskie"
 
-#: gtk/script-names.c:127
+#: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mende Kikakui"
 msgstr "mende ki-ka-ku"
 
-#: gtk/script-names.c:128
+#: gtk/script-names.c:130
 msgctxt "Script"
 msgid "Modi"
 msgstr "modi"
 
-#: gtk/script-names.c:129
+#: gtk/script-names.c:131
 msgctxt "Script"
 msgid "Mro"
 msgstr "mro"
 
-#: gtk/script-names.c:130
+#: gtk/script-names.c:132
 msgctxt "Script"
 msgid "Nabataean"
 msgstr "nabatejskie"
 
-#: gtk/script-names.c:131
+#: gtk/script-names.c:133
 msgctxt "Script"
 msgid "Old North Arabian"
 msgstr "staroarabskie północne"
 
-#: gtk/script-names.c:132
+#: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Old Permic"
 msgstr "staropermskie"
 
-#: gtk/script-names.c:133
+#: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pahawh Hmong"
 msgstr "pahawh hmong"
 
-#: gtk/script-names.c:134
+#: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Palmyrene"
 msgstr "palmirskie"
 
-#: gtk/script-names.c:135
+#: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Pau Cin Hau"
 msgstr "Pau Cin Hau"
 
-#: gtk/script-names.c:136
+#: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
 msgstr "pahlawi psałterzowe"
 
-#: gtk/script-names.c:137
+#: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Siddham"
 msgstr "siddham"
 
-#: gtk/script-names.c:138
+#: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Tirhuta"
 msgstr "tirhuta"
 
-#: gtk/script-names.c:139
+#: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Warang Citi"
 msgstr "varang kshiti"
 
-#: gtk/script-names.c:140
+#: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Ahom"
 msgstr "ahom"
 
-#: gtk/script-names.c:141
+#: gtk/script-names.c:143
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
 msgstr "hieroglify anatolijskie"
 
-#: gtk/script-names.c:142
+#: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Hatran"
 msgstr "hatran"
 
-#: gtk/script-names.c:143
+#: gtk/script-names.c:145
 msgctxt "Script"
 msgid "Multani"
 msgstr "multani"
 
-#: gtk/script-names.c:144
+#: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
 msgstr "starowęgierskie"
 
-#: gtk/script-names.c:145
+#: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "pismo znakowe"
 
-#: gtk/script-names.c:146
+#: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Adlam"
 msgstr "adlam"
 
-#: gtk/script-names.c:147
+#: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
 msgstr "bhaiksuki"
 
-#: gtk/script-names.c:148
+#: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Marchen"
 msgstr "marchen"
 
-#: gtk/script-names.c:149
+#: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Newa"
 msgstr "newa"
 
-#: gtk/script-names.c:150
+#: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Osage"
 msgstr "osage"
 
-#: gtk/script-names.c:151
+#: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Tangut"
 msgstr "tanguckie"
 
-#: gtk/script-names.c:152
+#: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
 msgstr "masaram gondi"
 
-#: gtk/script-names.c:153
+#: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
 msgstr "nüshu"
 
-#: gtk/script-names.c:154
+#: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
 msgstr "sojombo"
 
-#: gtk/script-names.c:155
+#: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
 msgstr "Dzanabadzara"
@@ -7003,76 +6999,80 @@ msgstr "_Ukończ"
 msgid "Select a Color"
 msgstr "Wybór koloru"
 
-#: gtk/ui/gtkcoloreditor.ui:64
+#: gtk/ui/gtkcoloreditor.ui:53
+msgid "Pick a color from the screen"
+msgstr "Wybiera kolor z ekranu"
+
+#: gtk/ui/gtkcoloreditor.ui:85
 msgid "Color Name"
 msgstr "Nazwa koloru"
 
-#: gtk/ui/gtkcoloreditor.ui:155
+#: gtk/ui/gtkcoloreditor.ui:176
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:171
+#: gtk/ui/gtkcoloreditor.ui:192
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:202
+#: gtk/ui/gtkcoloreditor.ui:223
 msgctxt "Color channel"
 msgid "H"
 msgstr "O"
 
-#: gtk/ui/gtkcoloreditor.ui:218
+#: gtk/ui/gtkcoloreditor.ui:239
 msgid "Hue"
 msgstr "Odcień"
 
-#: gtk/ui/gtkcoloreditor.ui:250
+#: gtk/ui/gtkcoloreditor.ui:271
 msgctxt "Color Channel"
 msgid "S"
 msgstr "N"
 
-#: gtk/ui/gtkcoloreditor.ui:260
+#: gtk/ui/gtkcoloreditor.ui:281
 msgctxt "Color Channel"
 msgid "V"
 msgstr "W"
 
-#: gtk/ui/gtkcoloreditor.ui:276
+#: gtk/ui/gtkcoloreditor.ui:297
 msgid "Saturation"
 msgstr "Nasycenie"
 
-#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:207
+#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
 msgid "Smileys & People"
 msgstr "Uśmieszki i osoby"
 
-#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:217
+#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
 msgid "Body & Clothing"
 msgstr "Ciało i ubrania"
 
-#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:227
+#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
 msgid "Animals & Nature"
 msgstr "Zwierzęta i przyroda"
 
-#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:237
+#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
 msgid "Food & Drink"
 msgstr "Jedzenie i napoje"
 
-#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:247
+#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
 msgid "Travel & Places"
 msgstr "Podróże i miejsca"
 
-#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
 msgid "Activities"
 msgstr "Sport"
 
-#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:267
+#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:302
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Rzeczy"
 
-#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:277
+#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:317
 msgid "Symbols"
 msgstr "Symbole"
 
-#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:287
+#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:332
 msgid "Flags"
 msgstr "Flagi"
 
@@ -7104,15 +7104,15 @@ msgstr "Wybór czcionki"
 msgid "Search font name"
 msgstr "Wyszukiwanie nazwy czcionki"
 
-#: gtk/ui/gtkfontchooserwidget.ui:101
+#: gtk/ui/gtkfontchooserwidget.ui:100
 msgid "Font Family"
 msgstr "Rodzina czcionek"
 
-#: gtk/ui/gtkfontchooserwidget.ui:123 gtk/ui/gtkfontchooserwidget.ui:242
+#: gtk/ui/gtkfontchooserwidget.ui:121 gtk/ui/gtkfontchooserwidget.ui:248
 msgid "Preview text"
 msgstr "Tekst podglądu"
 
-#: gtk/ui/gtkfontchooserwidget.ui:192
+#: gtk/ui/gtkfontchooserwidget.ui:201
 msgid "No Fonts Found"
 msgstr "Brak czcionek"
 
@@ -7647,10 +7647,16 @@ msgid "Vietnamese (VIQR)"
 msgstr "wietnamska (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:82
+#: modules/input/imwayland.c:100
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
+
+#. ID
+#: modules/input/imwaylandgtk.c:82
+msgctxt "input method menu"
+msgid "Waylandgtk"
+msgstr "Wayland (GTK+)"
 
 #. ID
 #: modules/input/imxim.c:26
