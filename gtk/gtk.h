@@ -198,6 +198,7 @@
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
+#include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutcontroller.h>
 #include <gtk/gtkshortcutlabel.h>
 #include <gtk/gtkshortcutsgroup.h>
