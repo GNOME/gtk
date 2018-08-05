@@ -234,7 +234,7 @@ gdk_content_formats_unref (GdkContentFormats *formats)
  * This is meant for debugging and logging.
  *
  * The form of the representation may change at any time and is
- * not guranteed to stay identical.
+ * not guaranteed to stay identical.
  **/
 void
 gdk_content_formats_print (GdkContentFormats *formats,
