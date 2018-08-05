@@ -65,10 +65,6 @@ struct _GtkShortcutTriggerClass
                                    GString             *string);
 };
 
-static GtkShortcutTrigger *     gtk_shortcut_trigger_new                (const GtkShortcutTriggerClass  *trigger_class,
-                                                                         gsize                           extra_size);
-
-
 G_DEFINE_BOXED_TYPE (GtkShortcutTrigger, gtk_shortcut_trigger,
                      gtk_shortcut_trigger_ref,
                      gtk_shortcut_trigger_unref)
@@ -87,15 +83,14 @@ gtk_shortcut_trigger_finalize (GtkShortcutTrigger *self)
  *
  * Returns: (transfer full): the newly created #GtkShortcutTrigger
  */
-GtkShortcutTrigger *
-gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class,
-                          gsize                          extra_size)
+static GtkShortcutTrigger *
+gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class)
 {
   GtkShortcutTrigger *self;
 
   g_return_val_if_fail (trigger_class != NULL, NULL);
 
-  self = g_malloc0 (trigger_class->struct_size + extra_size);
+  self = g_malloc0 (trigger_class->struct_size);
 
   self->trigger_class = trigger_class;
 
@@ -232,13 +227,13 @@ struct _GtkNeverTrigger
 };
 
 static void
-gsk_never_trigger_finalize (GtkShortcutTrigger *trigger)
+gtk_never_trigger_finalize (GtkShortcutTrigger *trigger)
 {
   g_assert_not_reached ();
 }
 
 static gboolean
-gsk_never_trigger_trigger (GtkShortcutTrigger *trigger,
+gtk_never_trigger_trigger (GtkShortcutTrigger *trigger,
                            const GdkEvent     *event)
                   
 {
@@ -246,7 +241,7 @@ gsk_never_trigger_trigger (GtkShortcutTrigger *trigger,
 }
 
 static void
-gsk_never_trigger_print (GtkShortcutTrigger *trigger,
+gtk_never_trigger_print (GtkShortcutTrigger *trigger,
                          GString            *string)
                   
 {
@@ -257,15 +252,15 @@ static const GtkShortcutTriggerClass GTK_NEVER_TRIGGER_CLASS = {
   GTK_SHORTCUT_TRIGGER_NEVER,
   sizeof (GtkNeverTrigger),
   "GtkNeverTrigger",
-  gsk_never_trigger_finalize,
-  gsk_never_trigger_trigger,
-  gsk_never_trigger_print
+  gtk_never_trigger_finalize,
+  gtk_never_trigger_trigger,
+  gtk_never_trigger_print
 };
 
 static GtkNeverTrigger never = { { &GTK_NEVER_TRIGGER_CLASS, 1 } };
 
 /**
- * gsk_never_trigger_get:
+ * gtk_never_trigger_get:
  *
  * Gets the never trigger. This is a singleton for a trigger that never triggers.
  * Use this trigger instead of %NULL because it implements all virtual functions.
@@ -291,12 +286,12 @@ struct _GtkKeyvalTrigger
 };
 
 static void
-gsk_keyval_trigger_finalize (GtkShortcutTrigger *trigger)
+gtk_keyval_trigger_finalize (GtkShortcutTrigger *trigger)
 {
 }
 
 static gboolean
-gsk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
+gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
                             const GdkEvent     *event)
 {
   GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
@@ -319,7 +314,7 @@ gsk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
 }
 
 static void
-gsk_keyval_trigger_print (GtkShortcutTrigger *trigger,
+gtk_keyval_trigger_print (GtkShortcutTrigger *trigger,
                           GString            *string)
                   
 {
@@ -335,13 +330,13 @@ static const GtkShortcutTriggerClass GTK_KEYVAL_TRIGGER_CLASS = {
   GTK_SHORTCUT_TRIGGER_KEYVAL,
   sizeof (GtkKeyvalTrigger),
   "GtkKeyvalTrigger",
-  gsk_keyval_trigger_finalize,
-  gsk_keyval_trigger_trigger,
-  gsk_keyval_trigger_print
+  gtk_keyval_trigger_finalize,
+  gtk_keyval_trigger_trigger,
+  gtk_keyval_trigger_print
 };
 
 /**
- * gsk_keyval_trigger_new:
+ * gtk_keyval_trigger_new:
  * @keyval: The keyval to trigger for
  * @modifiers: the modifiers that need to be present
  *
@@ -356,7 +351,7 @@ gtk_keyval_trigger_new (guint           keyval,
 {
   GtkKeyvalTrigger *self;
 
-  self = (GtkKeyvalTrigger *) gtk_shortcut_trigger_new (&GTK_KEYVAL_TRIGGER_CLASS, 0);
+  self = (GtkKeyvalTrigger *) gtk_shortcut_trigger_new (&GTK_KEYVAL_TRIGGER_CLASS);
 
   /* We store keyvals as lower key */
   if (keyval == GDK_KEY_ISO_Left_Tab)
@@ -404,4 +399,128 @@ gtk_keyval_trigger_get_keyval (GtkShortcutTrigger *trigger)
   return self->keyval;
 }
 
+/*** GTK_ALTERNATIVE_TRIGGER ***/
+
+typedef struct _GtkAlternativeTrigger GtkAlternativeTrigger;
+
+struct _GtkAlternativeTrigger
+{
+  GtkShortcutTrigger trigger;
+
+  GtkShortcutTrigger *first;
+  GtkShortcutTrigger *second;
+};
+
+static void
+gtk_alternative_trigger_finalize (GtkShortcutTrigger *trigger)
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+
+  gtk_shortcut_trigger_unref (self->first);
+  gtk_shortcut_trigger_unref (self->second);
+}
+
+static gboolean
+gtk_alternative_trigger_trigger (GtkShortcutTrigger *trigger,
+                                 const GdkEvent     *event)
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+
+  if (gtk_shortcut_trigger_trigger (self->first, event))
+    return TRUE;
+
+  if (gtk_shortcut_trigger_trigger (self->second, event))
+    return TRUE;
+
+  return FALSE;
+}
+
+static void
+gtk_alternative_trigger_print (GtkShortcutTrigger *trigger,
+                               GString            *string)
+                  
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+
+  gtk_shortcut_trigger_print (self->first, string);
+  g_string_append (string, ", ");
+  gtk_shortcut_trigger_print (self->second, string);
+}
+
+static const GtkShortcutTriggerClass GTK_ALTERNATIVE_TRIGGER_CLASS = {
+  GTK_SHORTCUT_TRIGGER_ALTERNATIVE,
+  sizeof (GtkAlternativeTrigger),
+  "GtkAlternativeTrigger",
+  gtk_alternative_trigger_finalize,
+  gtk_alternative_trigger_trigger,
+  gtk_alternative_trigger_print
+};
+
+/**
+ * gtk_alternative_trigger_new:
+ * @first: (transfer full): The first trigger that may trigger
+ * @second: (transfer full): The second trigger that may trigger
+ *
+ * Creates a #GtkShortcutTrigger that will trigger whenever either of the 2 given
+ * triggers gets triggered.
+ *
+ * Note that nesting is allowed, so if you want more than two alternative, create
+ * a new alternative trigger for each option.
+ *
+ * Returns: A new #GtkShortcutTrigger
+ */
+GtkShortcutTrigger *
+gtk_alternative_trigger_new (GtkShortcutTrigger *first,
+                             GtkShortcutTrigger *second)
+{
+  GtkAlternativeTrigger *self;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (first), NULL);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (second), NULL);
+
+  self = (GtkAlternativeTrigger *) gtk_shortcut_trigger_new (&GTK_ALTERNATIVE_TRIGGER_CLASS);
+
+  self->first = first;
+  self->second = second;
+
+  return &self->trigger;
+}
+
+/**
+ * gtk_alternative_trigger_get_first:
+ * @self: an alternative #GtkShortcutTrigger
+ *
+ * Gets the first of the 2 alternative triggers that may trigger @self.
+ * gtk_alternative_trigger_get_second() will return the other one.
+ *
+ * Returns: (transfer none): the first alternative trigger
+ **/
+GtkShortcutTrigger *
+gtk_alternative_trigger_get_first (GtkShortcutTrigger *trigger)
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_ALTERNATIVE), 0);
+
+  return self->first;
+}
+
+/**
+ * gtk_alternative_trigger_get_second:
+ * @self: an alternative #GtkShortcutTrigger
+ *
+ * Gets the second of the 2 alternative triggers that may trigger @self.
+ * gtk_alternative_trigger_get_first() will return the other one.
+ *
+ * Returns: (transfer none): the second alternative trigger
+ **/
+GtkShortcutTrigger *
+gtk_alternative_trigger_get_second (GtkShortcutTrigger *trigger)
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_ALTERNATIVE), 0);
+
+  return self->second;
+}
 
