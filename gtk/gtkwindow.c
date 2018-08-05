@@ -64,6 +64,8 @@
 #include "gtknative.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
+#include "gtkshortcut.h"
+#include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
@@ -585,16 +587,18 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
 		  GdkModifierType   modifiers,
 		  GtkDirectionType  direction)
 {
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Tab, modifiers,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Tab, modifiers,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
+  GtkShortcut *shortcut;
+
+  shortcut = gtk_shortcut_new ();
+  gtk_shortcut_set_trigger (shortcut,
+                            gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
+                                                         gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)));
+  gtk_shortcut_set_signal (shortcut, "move-focus");
+  gtk_shortcut_set_arguments (shortcut, g_variant_new_tuple ((GVariant*[1]) { g_variant_new_int32 (direction) }, 1));
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
 }
 
 static void
