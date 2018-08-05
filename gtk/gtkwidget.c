@@ -63,6 +63,7 @@
 #include "gtksettingsprivate.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -4761,8 +4762,8 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
 /**
  * gtk_widget_class_add_binding_signal: (skip)
  * @widget_class: the class to add the binding to
- * @mods: key modifier of binding to install
  * @keyval: key value of binding to install
+ * @mods: key modifier of binding to install
  * @signal: the signal to execute
  * @format_string: GVariant format string for arguments or %NULL for
  *     no arguments
@@ -4779,8 +4780,8 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
  **/
 void
 gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
-                                     GdkModifierType  mods,
                                      guint            keyval,
+                                     GdkModifierType  mods,
                                      const gchar     *signal,
                                      const gchar     *format_string,
                                      ...)
@@ -4792,7 +4793,7 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
   /* XXX: validate variant format for signal */
 
   shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_keyval (shortcut, mods, keyval);
+  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (keyval, mods));
   gtk_shortcut_set_signal (shortcut, signal);
   if (format_string)
     {

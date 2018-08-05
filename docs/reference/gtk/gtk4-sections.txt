@@ -6696,12 +6696,33 @@ gtk_event_controller_motion_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkshortcuttrigger</FILE>
+<TITLE>GtkShortcutTrigger</TITLE>
+GtkShortcutTrigger
+gtk_shortcut_trigger_ref
+gtk_shortcut_trigger_unref
+GtkShortcutTriggerType
+gtk_shortcut_trigger_get_trigger_type
+gtk_shortcut_trigger_trigger
+
+<SUBSECTION>
+gtk_keyval_trigger_new
+gtk_keyval_trigger_get_modifiers
+gtk_keyval_trigger_get_keyval
+
+<SUBSECTION Private>
+gtk_shortcut_trigger_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkshortcut</FILE>
 <TITLE>GtkShortcut</TITLE>
 GtkShortcut
 gtk_shortcut_new
 gtk_shortcut_set_keyval
 gtk_shortcut_activate
+gtk_shortcut_get_trigger
+gtk_shortcut_set_trigger
 gtk_shortcut_get_arguments
 gtk_shortcut_set_arguments
 gtk_shortcut_get_signal
