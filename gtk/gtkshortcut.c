@@ -23,6 +23,7 @@
 
 #include "gtkbindingsprivate.h"
 #include "gtkintl.h"
+#include "gtkshortcuttrigger.h"
 #include "gtkwidget.h"
 
 /**
@@ -53,9 +54,7 @@ struct _GtkShortcut
 {
   GObject parent_instance;
 
-  GdkModifierType mods;
-  guint keyval;
-
+  GtkShortcutTrigger *trigger;
   char *signal;
   GVariant *args;
 };
@@ -65,6 +64,7 @@ enum
   PROP_0,
   PROP_ARGUMENTS,
   PROP_SIGNAL,
+  PROP_TRIGGER,
 
   N_PROPS
 };
@@ -78,6 +78,7 @@ gtk_shortcut_dispose (GObject *object)
 {
   GtkShortcut *self = GTK_SHORTCUT (object);
 
+  g_clear_pointer (&self->trigger, gtk_shortcut_trigger_unref);
   g_clear_pointer (&self->signal, g_free);
   g_clear_pointer (&self->args, g_variant_unref);
 
@@ -102,6 +103,10 @@ gtk_shortcut_get_property (GObject    *object,
       g_value_set_string (value, self->signal);
       break;
 
+    case PROP_TRIGGER:
+      g_value_set_boxed (value, self->trigger);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -124,6 +129,10 @@ gtk_shortcut_set_property (GObject      *object,
 
     case PROP_SIGNAL:
       gtk_shortcut_set_signal (self, g_value_get_string (value));
+      break;
+
+    case PROP_TRIGGER:
+      gtk_shortcut_set_trigger (self, g_value_dup_boxed (value));
       break;
 
     default:
@@ -166,12 +175,25 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkShortcut:trigger:
+   *
+   * The trigger that triggers this shortcut.
+   */
+  properties[PROP_TRIGGER] =
+    g_param_spec_boxed ("trigger",
+                        P_("Trigger"),
+                        P_("The trigger for this shortcut"),
+                        GTK_TYPE_SHORTCUT_TRIGGER,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
 static void
 gtk_shortcut_init (GtkShortcut *self)
 {
+  self->trigger = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
 }
 
 /**
@@ -187,50 +209,11 @@ gtk_shortcut_new (void)
   return g_object_new (GTK_TYPE_SHORTCUT, NULL);
 }
 
-void
-gtk_shortcut_set_keyval (GtkShortcut     *self,
-                         guint            keyval,
-                         GdkModifierType  mods)
-{
-  g_return_if_fail (GTK_IS_SHORTCUT (self));
-
-  /* To deal with <Shift>, we need to uppercase
-   * or lowercase depending on situation.
-   */
-  if (mods & GDK_SHIFT_MASK)
-    {
-      if (keyval == GDK_KEY_Tab)
-        keyval = GDK_KEY_ISO_Left_Tab;
-      else
-        keyval = gdk_keyval_to_upper (keyval);
-    }
-  else
-    {
-      if (keyval == GDK_KEY_ISO_Left_Tab)
-        keyval = GDK_KEY_Tab;
-      else
-        keyval = gdk_keyval_to_lower (keyval);
-    }
-
-  self->keyval = keyval;
-  self->mods = mods;
-}
-
 gboolean
 gtk_shortcut_trigger (GtkShortcut    *self,
                       const GdkEvent *event)
 {
-  GdkModifierType mods;
-  guint keyval;
-
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return FALSE;
-
-  /* XXX: This needs to deal with groups */
-  gdk_event_get_state (event, &mods);
-  gdk_event_get_keyval (event, &keyval);
-
-  return keyval == self->keyval && mods == self->mods;
+  return gtk_shortcut_trigger_trigger (self->trigger, event);
 }
 
 gboolean
@@ -251,7 +234,7 @@ gtk_shortcut_activate (GtkShortcut *self,
                                     &handled,
                                     &error))
         {
-          char *accelerator = gtk_accelerator_name (self->keyval, self->mods);
+          char *accelerator = gtk_shortcut_trigger_to_string (self->trigger);
           g_warning ("gtk_shortcut_activate(): \":%s\": %s",
                      accelerator,
                      error->message);
@@ -266,6 +249,51 @@ gtk_shortcut_activate (GtkShortcut *self,
       /* shortcut is a dud */
       return FALSE;
     }
+}
+
+/**
+ * gtk_shortcut_get_trigger:
+ * @self: a #GtkShortcut
+ *
+ * Gets the trigger used to trigger @self.
+ *
+ * Returns: (transfer none): the trigger used
+ **/
+GtkShortcutTrigger *
+gtk_shortcut_get_trigger (GtkShortcut *self)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT (self), NULL);
+
+  return self->trigger;
+}
+
+/**
+ * gtk_shortcut_set_trigger:
+ * @self: a #GtkShortcut
+ * @trigger: (transfer full) (nullable): The new trigger.
+ *     If the @trigger is %NULL, the never trigger will be used.
+ *
+ * Sets the new trigger for @self to be @trigger.
+ **/
+void
+gtk_shortcut_set_trigger (GtkShortcut *self,
+                          GtkShortcutTrigger *trigger)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT (self));
+
+  if (trigger == NULL)
+    trigger = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
+
+  if (self->trigger == trigger)
+    {
+      gtk_shortcut_trigger_unref (trigger);
+      return;
+    }
+  
+  gtk_shortcut_trigger_unref (self->trigger);
+  self->trigger = trigger;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TRIGGER]);
 }
 
 GVariant *
