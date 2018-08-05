@@ -35,14 +35,17 @@ G_BEGIN_DECLS
 /**
  * GtkShortcutTriggerType:
  * @GTK_SHORTCUT_TRIGGER_NEVER: Never ever trigger
- * @GTK_SHORTCUT_TRIGGER_KEYVAL: Trigger if a key even with matching
+ * @GTK_SHORTCUT_TRIGGER_KEYVAL: Trigger if a key event with matching
  *     modifiers and keyval is received.
+ * @GTK_SHORTCUT_TRIGGER_ALTERNAITVE: Trigger if either if two
+ *     alternatives triggers
  *
  * The type of a trigger determines what the trigger triggers on.
  **/
 typedef enum {
   GTK_SHORTCUT_TRIGGER_NEVER,
-  GTK_SHORTCUT_TRIGGER_KEYVAL
+  GTK_SHORTCUT_TRIGGER_KEYVAL,
+  GTK_SHORTCUT_TRIGGER_ALTERNATIVE
 } GtkShortcutTriggerType;
 
 GDK_AVAILABLE_IN_ALL
@@ -76,6 +79,14 @@ GDK_AVAILABLE_IN_ALL
 GdkModifierType         gtk_keyval_trigger_get_modifiers        (GtkShortcutTrigger *self);
 GDK_AVAILABLE_IN_ALL
 guint                   gtk_keyval_trigger_get_keyval           (GtkShortcutTrigger *self);
+
+GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger *one,
+                                                                 GtkShortcutTrigger *two);
+GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkShortcutTrigger *trigger);
+GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkShortcutTrigger *trigger);
 
 G_END_DECLS
 
