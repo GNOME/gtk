@@ -60,7 +60,6 @@
 
 #include "gtkassistant.h"
 
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
@@ -379,7 +378,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkWindowClass *window_class;
-  GtkBindingSet *binding_set;
 
   gobject_class   = (GObjectClass *) class;
   widget_class    = (GtkWidgetClass *) class;
@@ -489,8 +487,10 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
-  binding_set = gtk_binding_set_by_class (class);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "escape", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "escape",
+                                       NULL);
 
   /**
    * GtkAssistant:use-header-bar:
