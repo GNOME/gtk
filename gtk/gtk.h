@@ -208,6 +208,7 @@
 #include <gtk/gtkshortcutssection.h>
 #include <gtk/gtkshortcutsshortcut.h>
 #include <gtk/gtkshortcutswindow.h>
+#include <gtk/gtkshortcuttrigger.h>
 #include <gtk/gtkshow.h>
 #include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>
