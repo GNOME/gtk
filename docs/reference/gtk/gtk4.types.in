@@ -163,6 +163,7 @@ gtk_settings_get_type
 gtk_shortcut_controller_get_type
 gtk_shortcut_get_type
 gtk_shortcut_label_get_type
+gtk_shortcut_trigger_get_type
 gtk_shortcuts_window_get_type
 gtk_shortcuts_section_get_type
 gtk_shortcuts_group_get_type
