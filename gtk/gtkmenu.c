@@ -2030,8 +2030,6 @@ gtk_menu_popdown (GtkMenu *menu)
   menu_shell->priv->active = FALSE;
   menu_shell->priv->ignore_enter = FALSE;
 
-  priv->have_position = FALSE;
-
   gtk_menu_stop_scrolling (menu);
   gtk_menu_stop_navigating_submenu (menu);
 
@@ -2764,32 +2762,6 @@ static void gtk_menu_measure (GtkWidget      *widget,
           get_arrows_border (menu, &arrow_border);
           single_height += arrow_border.top + arrow_border.bottom;
           min_height = MIN (min_height, single_height);
-
-          if (priv->have_position)
-            {
-              GdkDisplay *display;
-              GdkMonitor *monitor;
-              GdkRectangle workarea;
-              GtkBorder border;
-
-              display = gtk_widget_get_display (priv->toplevel);
-              monitor = gdk_display_get_monitor (display, priv->monitor_num);
-              gdk_monitor_get_workarea (monitor, &workarea);
-
-              if (priv->position_y + min_height > workarea.y + workarea.height)
-                min_height = workarea.y + workarea.height - priv->position_y;
-
-              if (priv->position_y + nat_height > workarea.y + workarea.height)
-                nat_height = workarea.y + workarea.height - priv->position_y;
-
-              _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
-
-              if (priv->position_y + border.top < workarea.y)
-                {
-                  min_height -= workarea.y - (priv->position_y + border.top);
-                  nat_height -= workarea.y - (priv->position_y + border.top);
-                }
-            }
 
           *minimum = min_height;
           *natural = nat_height;
