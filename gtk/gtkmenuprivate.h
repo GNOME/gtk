@@ -99,7 +99,6 @@ struct _GtkMenuPrivate
   gint heights_length;
   gint requested_height;
 
-  gboolean initially_pushed_in;
   gint monitor_num;
 
   /* Cached layout information */
