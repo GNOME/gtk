@@ -31,6 +31,11 @@ Information about mailing lists can be found at
 
   - http://www.gtk.org/mailing-lists.php
 
+Nightly documentation can be found at
+  - Gtk: https://gnome.pages.gitlab.gnome.org/gtk/gtk/
+  - Gdk: https://gnome.pages.gitlab.gnome.org/gtk/gtk/
+  - Gsk: https://gnome.pages.gitlab.gnome.org/gtk/gsk/
+
 Building and installing
 -----------------------
 
