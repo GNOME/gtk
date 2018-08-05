@@ -287,6 +287,14 @@
     </section>
 
     <section>
+      <title>Stop using GtkEventBox</title>
+      <para>
+        GtkEventBox is no longer needed and has been removed.
+        All widgets receive all events.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkHeaderBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
