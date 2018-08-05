@@ -1529,8 +1529,6 @@ gtk_menu_popup_internal (GtkMenu             *menu,
 
   menu_shell->priv->parent_menu_shell = parent_menu_shell;
 
-  priv->seen_item_enter = FALSE;
-
   /* Find the last viewable ancestor, and make an X grab on it
    */
   parent = GTK_WIDGET (menu);

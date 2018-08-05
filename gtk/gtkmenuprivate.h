@@ -89,7 +89,6 @@ struct _GtkMenuPrivate
   guint lower_arrow_prelight  : 1;
 
   guint have_layout           : 1;
-  guint seen_item_enter       : 1;
   guint ignore_button_release : 1;
   guint no_toggle_size        : 1;
   guint drag_already_pressed  : 1;
