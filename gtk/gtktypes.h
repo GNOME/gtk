@@ -45,6 +45,7 @@ typedef struct _GtkRoot  	       GtkRoot;
 typedef struct _GtkSelectionData       GtkSelectionData;
 typedef struct _GtkSettings            GtkSettings;
 typedef struct _GtkShortcut            GtkShortcut;
+typedef struct _GtkShortcutTrigger     GtkShortcutTrigger;
 typedef GdkSnapshot                    GtkSnapshot;
 typedef struct _GtkStyleContext        GtkStyleContext;
 typedef struct _GtkTooltip             GtkTooltip;
