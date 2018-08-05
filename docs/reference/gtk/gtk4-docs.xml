@@ -346,6 +346,7 @@
       <title>Keyboard shortcuts</title>
       <xi:include href="xml/gtkshortcutcontroller.xml" />
       <xi:include href="xml/gtkshortcut.xml" />
+      <xi:include href="xml/gtkshortcuttrigger.xml" />
     </chapter>
   </part>
 
