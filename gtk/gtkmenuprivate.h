@@ -72,8 +72,6 @@ struct _GtkMenuPrivate
   GtkWidget *top_arrow_widget;
   GtkWidget *bottom_arrow_widget;
 
-  GtkEventController *key_controller;
-
   gint scroll_offset;
   gint saved_scroll_offset;
   gint scroll_step;
