@@ -33,9 +33,11 @@ GDK_AVAILABLE_IN_ALL
 GtkShortcut *   gtk_shortcut_new                                (void);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_shortcut_set_keyval                         (GtkShortcut            *self,
-                                                                 guint                   keyval,
-                                                                 GdkModifierType         mods);
+void            gtk_shortcut_set_trigger                        (GtkShortcut            *self,
+                                                                 GtkShortcutTrigger     *trigger);
+GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *
+                gtk_shortcut_get_trigger                        (GtkShortcut            *self);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_shortcut_trigger                            (GtkShortcut            *self,
