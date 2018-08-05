@@ -104,17 +104,17 @@ gtk_focus_widget_size_allocate (GtkWidget           *widget,
 
   gtk_widget_size_allocate (self->child1, &child_alloc, -1);
 
-  child_alloc.x += child_width;
+  /*child_alloc.x += child_width;*/
 
-  gtk_widget_size_allocate (self->child2, &child_alloc, -1);
+  /*gtk_widget_size_allocate (self->child2, &child_alloc, -1);*/
 
-  child_alloc.y += child_height;
+  /*child_alloc.y += child_height;*/
 
-  gtk_widget_size_allocate (self->child4, &child_alloc, -1);
+  /*gtk_widget_size_allocate (self->child4, &child_alloc, -1);*/
 
-  child_alloc.x -= child_width;
+  /*child_alloc.x -= child_width;*/
 
-  gtk_widget_size_allocate (self->child3, &child_alloc, -1);
+  /*gtk_widget_size_allocate (self->child3, &child_alloc, -1);*/
 }
 
 static void
@@ -133,7 +133,7 @@ gtk_focus_widget_measure (GtkWidget      *widget,
   *minimum = 0;
   *natural = 0;
 
-  for (i = 0; i < 4; i ++)
+  for (i = 0; i < 1; i ++)
     {
       gtk_widget_measure (self->children[i], orientation, for_size,
                           &min, &nat, NULL, NULL);
@@ -152,9 +152,9 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
 
   gtk_widget_snapshot_child (widget, self->child1, snapshot);
-  gtk_widget_snapshot_child (widget, self->child2, snapshot);
-  gtk_widget_snapshot_child (widget, self->child3, snapshot);
-  gtk_widget_snapshot_child (widget, self->child4, snapshot);
+  /*gtk_widget_snapshot_child (widget, self->child2, snapshot);*/
+  /*gtk_widget_snapshot_child (widget, self->child3, snapshot);*/
+  /*gtk_widget_snapshot_child (widget, self->child4, snapshot);*/
 
   if (self->mouse_x != G_MININT && self->mouse_y != G_MININT)
     {
@@ -237,14 +237,14 @@ gtk_focus_widget_init (GtkFocusWidget *self)
 {
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
-  self->child1 = gtk_button_new_with_label ("1");
+  self->child1 = gtk_button_new ();//_with_label ("1");
   gtk_widget_set_parent (self->child1, GTK_WIDGET (self));
-  self->child2 = gtk_button_new_with_label ("2");
-  gtk_widget_set_parent (self->child2, GTK_WIDGET (self));
-  self->child3 = gtk_button_new_with_label ("3");
-  gtk_widget_set_parent (self->child3, GTK_WIDGET (self));
-  self->child4 = gtk_button_new_with_label ("4");
-  gtk_widget_set_parent (self->child4, GTK_WIDGET (self));
+  /*self->child2 = gtk_button_new_with_label ("2");*/
+  /*gtk_widget_set_parent (self->child2, GTK_WIDGET (self));*/
+  /*self->child3 = gtk_button_new_with_label ("3");*/
+  /*gtk_widget_set_parent (self->child3, GTK_WIDGET (self));*/
+  /*self->child4 = gtk_button_new_with_label ("4");*/
+  /*gtk_widget_set_parent (self->child4, GTK_WIDGET (self));*/
 
   self->mouse_x = G_MININT;
   self->mouse_y = G_MININT;

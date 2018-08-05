@@ -858,17 +858,18 @@ gtk_widget_real_contains (GtkWidget *widget,
   get_box_padding (style, &padding);
 
   /* Offset the given point to the border box */
-  point.x += padding.left + border.left;
-  point.y += padding.top  + border.top;
+  /*point.x += padding.left + border.left;*/
+  /*point.y += padding.top  + border.top;*/
 
   graphene_rect_init (&bounds,
                       0, 0,
-                      priv->allocation.width - margin.left - margin.right,
-                      priv->allocation.height - margin.top - margin.bottom);
+                      priv->allocation.width,// - margin.left - margin.right,
+                      priv->allocation.height);// - margin.top - margin.bottom);
 
   g_assert (graphene_matrix_inverse (&priv->transform, &inv_transform));
 
-  graphene_matrix_transform_point (&inv_transform, &point, &point);
+  /*graphene_matrix_transform_point (&inv_transform, &point, &point);*/
+  graphene_matrix_transform_point (&priv->transform, &point, &point);
 
   /* XXX: This misses rounded rects */
   return graphene_rect_contains_point (&bounds, &point);
@@ -879,6 +880,7 @@ gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
                       gdouble    y)
 {
+#if 1
   GtkWidget *child;
 
   for (child = _gtk_widget_get_last_child (widget);
@@ -895,6 +897,7 @@ gtk_widget_real_pick (GtkWidget *widget,
       if (picked)
         return picked;
     }
+#endif
 
   if (!gtk_widget_contains (widget, x, y))
     return NULL;
@@ -4511,6 +4514,10 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
 
       src_point.x -= origin_x;
       src_point.y -= origin_y;
+
+      /*graphene_matrix_transform_point (&parent->priv->transform, &src_point, &src_point);*/
+      /*g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));*/
+      /*graphene_matrix_transform_point (&inv_transform, &src_point, &src_point);*/
     }
 
   if (dest_x)
@@ -11320,10 +11327,10 @@ gtk_widget_contains (GtkWidget  *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (gtk_widget_get_pass_through (widget) ||
-      !gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_is_drawable (widget))
-    return FALSE;
+  /*if (gtk_widget_get_pass_through (widget) ||*/
+      /*!gtk_widget_is_sensitive (widget) ||*/
+      /*!gtk_widget_is_drawable (widget))*/
+    /*return FALSE;*/
 
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
 }
@@ -11357,10 +11364,10 @@ gtk_widget_pick (GtkWidget *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (gtk_widget_get_pass_through (widget) ||
-      !gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_is_drawable (widget))
-    return NULL;
+  /*if (gtk_widget_get_pass_through (widget) ||*/
+      /*!gtk_widget_is_sensitive (widget) ||*/
+      /*!gtk_widget_is_drawable (widget))*/
+    /*return NULL;*/
 
   return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
 }
@@ -11421,6 +11428,8 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                       alloc.y,
                       alloc.width,
                       alloc.height);
+
+  graphene_matrix_transform_bounds (&priv->transform, out_bounds, out_bounds);
 
   return TRUE;
 }
@@ -13119,7 +13128,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
 
-  if (!GTK_IS_WINDOW (widget))
+  /*if (!GTK_IS_WINDOW (widget))*/
     {
       gtk_snapshot_offset (snapshot, margin.left, margin.top);
       gtk_css_style_snapshot_background (style,
