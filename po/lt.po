@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-28 10:17+0000\n"
-"PO-Revision-Date: 2018-07-28 20:29+0300\n"
+"POT-Creation-Date: 2018-07-30 22:27+0000\n"
+"PO-Revision-Date: 2018-08-05 16:00+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -2606,19 +2606,14 @@ msgid "None"
 msgstr "Nėra"
 
 #: gtk/gtkfontchooserwidget.c:1523
-#| msgid "_Width:"
 msgid "Width"
 msgstr "Plotis"
 
 #: gtk/gtkfontchooserwidget.c:1524
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Weight"
 msgstr "Svoris"
 
 #: gtk/gtkfontchooserwidget.c:1525
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
 msgstr "Kursyvas"
 
@@ -2635,14 +2630,10 @@ msgid "Default"
 msgstr "Numatyta"
 
 #: gtk/gtkfontchooserwidget.c:2111
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
 msgstr "Ligatūros"
 
 #: gtk/gtkfontchooserwidget.c:2112
-#| msgctxt "paper size"
-#| msgid "US Letter Plus"
 msgid "Letter Case"
 msgstr "Raidžių registras"
 
@@ -2659,7 +2650,6 @@ msgid "Number Formatting"
 msgstr "Skaitmenų formatas"
 
 #: gtk/gtkfontchooserwidget.c:2116
-#| msgid "Dark Variant"
 msgid "Character Variants"
 msgstr "Simbolių variantai"
 
@@ -3696,12 +3686,12 @@ msgstr "Paieškos rezultatai"
 msgid "Search Shortcuts"
 msgstr "Paieškos trumpiniai"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:326
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Rezultatų nerasta"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:340
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
 #: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Bandykite kitą paiešką"
@@ -3998,7 +3988,7 @@ msgid "CSS Property"
 msgstr "CSS savybė"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
-#: gtk/ui/gtkcoloreditor.ui:295
+#: gtk/ui/gtkcoloreditor.ui:316
 msgid "Value"
 msgstr "Vertė"
 
@@ -4621,7 +4611,6 @@ msgid "General"
 msgstr "Bendra"
 
 #: gtk/open-type-layout.h:13
-#| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
 msgstr "Prieiti visas alternatyvas"
@@ -4642,7 +4631,6 @@ msgid "Above-base Substitutions"
 msgstr "Virš bazinės kaitos"
 
 #: gtk/open-type-layout.h:17
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
 msgstr "Alternatyvios trupmenos"
@@ -4758,19 +4746,16 @@ msgid "Final Glyph on Line Alternates"
 msgstr "Eilučių alternatyvų galutinė piktograma"
 
 #: gtk/open-type-layout.h:40
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
 msgstr "Galutinės formos #2"
 
 #: gtk/open-type-layout.h:41
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
 msgstr "Galutinės formos #3"
 
 #: gtk/open-type-layout.h:42
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
 msgstr "Galutinės formos"
@@ -4781,13 +4766,11 @@ msgid "Flattened accent forms"
 msgstr "Suplokštintos kirčiuotos formos"
 
 #: gtk/open-type-layout.h:44
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
 msgstr "Trupmenos"
 
 #: gtk/open-type-layout.h:45
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
 msgstr "Viso pločio"
@@ -4838,8 +4821,6 @@ msgid "Half Widths"
 msgstr "Pusės pločio"
 
 #: gtk/open-type-layout.h:55
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
 msgstr "Pradinės formos"
@@ -4850,8 +4831,6 @@ msgid "Isolated Forms"
 msgstr "Izoliuotos formos"
 
 #: gtk/open-type-layout.h:57
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
 msgstr "Kursyvai"
@@ -4882,21 +4861,16 @@ msgid "JIS2004 Forms"
 msgstr "JIS2004 formos"
 
 #: gtk/open-type-layout.h:63
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
 msgstr "Kerning"
 
 #: gtk/open-type-layout.h:64
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
 msgstr "Kairė paraštė"
 
 #: gtk/open-type-layout.h:65
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
 msgstr "Įprastinės ligatūros"
@@ -4917,13 +4891,11 @@ msgid "Localized Forms"
 msgstr "Lokalizuotos formos"
 
 #: gtk/open-type-layout.h:69
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "Iš kairės į dešinę alternatyvos"
 
 #: gtk/open-type-layout.h:70
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
 msgstr "Iš kairės į dešinę veidrodinės formos"
@@ -4989,7 +4961,6 @@ msgid "Optical Bounds"
 msgstr "Optinės ribos"
 
 #: gtk/open-type-layout.h:83
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
 msgstr "Kvadratiniai"
@@ -5015,7 +4986,6 @@ msgid "Proportional Kana"
 msgstr "Proporcinė Kana"
 
 #: gtk/open-type-layout.h:88
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
 msgstr "Proporciniai piešiniai"
@@ -5076,20 +5046,16 @@ msgid "Reph Forms"
 msgstr "Reph formos"
 
 #: gtk/open-type-layout.h:100
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Dešinė paraštė"
 
 #: gtk/open-type-layout.h:101
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Iš dešinės į kairę alternatyvos"
 
 #: gtk/open-type-layout.h:102
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Iš dešinės į kairę veidrodinės formos"
@@ -5225,7 +5191,6 @@ msgid "Stylistic Set 19"
 msgstr "Stilistinė aibė 19"
 
 #: gtk/open-type-layout.h:129
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
 msgstr "Stilistinė aibė 20"
@@ -5241,14 +5206,11 @@ msgid "Stretching Glyph Decomposition"
 msgstr "Ištempiamos piktogramos dekompozicija"
 
 #: gtk/open-type-layout.h:132
-#| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
 msgstr "Apatinis indeksas"
 
 #: gtk/open-type-layout.h:133
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
 msgstr "Viršutinis indeksas"
@@ -5299,14 +5261,11 @@ msgid "Alternate Vertical Metrics"
 msgstr "Alternatyvios vertikalios metrikos"
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Vattu variantai"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Vertikali rašyba"
@@ -5327,8 +5286,6 @@ msgid "Vertical Kana Alternates"
 msgstr "Vertikalios Kana alternatyvos"
 
 #: gtk/open-type-layout.h:148
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
 msgstr "Vertikalus Kerning"
@@ -6324,7 +6281,6 @@ msgid "Gothic"
 msgstr "Gotų"
 
 #: gtk/script-names.c:30
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
 msgstr "Graikų"
@@ -6375,7 +6331,6 @@ msgid "Khmer"
 msgstr "Khmerų"
 
 #: gtk/script-names.c:40
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
 msgstr "Laosiečių"
@@ -6406,8 +6361,6 @@ msgid "Ogham"
 msgstr "Ogham"
 
 #: gtk/script-names.c:46
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
 msgstr "Senoji italų"
@@ -6433,7 +6386,6 @@ msgid "Syriac"
 msgstr "Sirų"
 
 #: gtk/script-names.c:51
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
 msgstr "Tamil"
@@ -6449,8 +6401,6 @@ msgid "Thaana"
 msgstr "Thaana"
 
 #: gtk/script-names.c:54
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
 msgstr "Thai"
@@ -6516,8 +6466,6 @@ msgid "Shavian"
 msgstr "Šavių"
 
 #: gtk/script-names.c:67
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
 msgstr "Tiesinė B"
@@ -6568,13 +6516,11 @@ msgid "Kharoshthi"
 msgstr "Kharoshthi"
 
 #: gtk/script-names.c:77
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Nežinoma"
 
 #: gtk/script-names.c:78
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
 msgstr "Balinese"
@@ -6625,8 +6571,6 @@ msgid "Saurashtra"
 msgstr "Saurashtra"
 
 #: gtk/script-names.c:88
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
 msgstr "Cham"
@@ -6837,7 +6781,6 @@ msgid "Mende Kikakui"
 msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:130
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
 msgstr "Modi"
@@ -6913,8 +6856,6 @@ msgid "Hatran"
 msgstr "Hatran"
 
 #: gtk/script-names.c:145
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr "Multani"
@@ -6925,8 +6866,6 @@ msgid "Old Hungarian"
 msgstr "Senoji vengrų"
 
 #: gtk/script-names.c:147
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "Ženklai"
@@ -6942,7 +6881,6 @@ msgid "Bhaiksuki"
 msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:150
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
 msgstr "Marchen"
@@ -7050,76 +6988,80 @@ msgstr "_Baigti"
 msgid "Select a Color"
 msgstr "Pasirinkite spalvą"
 
-#: gtk/ui/gtkcoloreditor.ui:64
+#: gtk/ui/gtkcoloreditor.ui:53
+msgid "Pick a color from the screen"
+msgstr "Pasirinkite spalvą ekrane"
+
+#: gtk/ui/gtkcoloreditor.ui:85
 msgid "Color Name"
 msgstr "Spalvos pavadinimas"
 
-#: gtk/ui/gtkcoloreditor.ui:155
+#: gtk/ui/gtkcoloreditor.ui:176
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:171
+#: gtk/ui/gtkcoloreditor.ui:192
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:202
+#: gtk/ui/gtkcoloreditor.ui:223
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:218
+#: gtk/ui/gtkcoloreditor.ui:239
 msgid "Hue"
 msgstr "Atspalvis"
 
-#: gtk/ui/gtkcoloreditor.ui:250
+#: gtk/ui/gtkcoloreditor.ui:271
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:260
+#: gtk/ui/gtkcoloreditor.ui:281
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:276
+#: gtk/ui/gtkcoloreditor.ui:297
 msgid "Saturation"
 msgstr "Sodrumas"
 
-#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:207
+#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
 msgid "Smileys & People"
 msgstr "Šypsenėlės ir žmonės"
 
-#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:217
+#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
 msgid "Body & Clothing"
 msgstr "Kūnas ir drabužiai"
 
-#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:227
+#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
 msgid "Animals & Nature"
 msgstr "Gyvūnai ir gamta"
 
-#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:237
+#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
 msgid "Food & Drink"
 msgstr "Maistas ir gėrimai"
 
-#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:247
+#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
 msgid "Travel & Places"
 msgstr "Kelionės ir vietos"
 
-#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
 msgid "Activities"
 msgstr "Veiklos"
 
-#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:267
+#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:302
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objektai"
 
-#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:277
+#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:317
 msgid "Symbols"
 msgstr "Simboliai"
 
-#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:287
+#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:332
 msgid "Flags"
 msgstr "Vėliavos"
 
@@ -7694,10 +7636,18 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vietnamiečių (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:82
+#: modules/input/imwayland.c:100
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
+
+#. ID
+#: modules/input/imwaylandgtk.c:82
+#| msgctxt "input method menu"
+#| msgid "Wayland"
+msgctxt "input method menu"
+msgid "Waylandgtk"
+msgstr "Waylandgtk"
 
 #. ID
 #: modules/input/imxim.c:26
