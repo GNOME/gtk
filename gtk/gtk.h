@@ -194,6 +194,7 @@
 #include <gtk/gtkshortcutssection.h>
 #include <gtk/gtkshortcutsshortcut.h>
 #include <gtk/gtkshortcutswindow.h>
+#include <gtk/gtkshortcuttrigger.h>
 #include <gtk/gtkshow.h>
 #include <gtk/gtksnapshot.h>
 #include <gtk/gtkstacksidebar.h>
