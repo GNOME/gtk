@@ -872,6 +872,15 @@ gtk_scale_init (GtkScale *scale)
   gtk_range_set_round_digits (range, priv->digits);
 
   gtk_range_set_flippable (range, TRUE);
+
+  graphene_matrix_t t;
+  graphene_matrix_init_rotate (&t, 30.0f,
+                               graphene_vec3_z_axis ());
+  gtk_widget_set_transform (GTK_WIDGET (scale), &t);
+
+
+
+
 }
 
 static void

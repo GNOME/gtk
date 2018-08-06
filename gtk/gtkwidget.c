@@ -846,7 +846,8 @@ gtk_widget_real_contains (GtkWidget *widget,
                           gdouble    y)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  graphene_point_t point = {x, y};
+  graphene_vec4_t vec;
+  /*graphene_point_t point = {x, y};*/
   graphene_rect_t bounds;
   GtkBorder margin, border, padding;
   GtkCssStyle *style;
@@ -868,11 +869,19 @@ gtk_widget_real_contains (GtkWidget *widget,
 
   g_assert (graphene_matrix_inverse (&priv->transform, &inv_transform));
 
+  graphene_vec4_init (&vec, x, y, 0, 1);
+
   /*graphene_matrix_transform_point (&inv_transform, &point, &point);*/
-  graphene_matrix_transform_point (&priv->transform, &point, &point);
+  graphene_matrix_transform_vec4 (&inv_transform, &vec, &vec);
+  /*graphene_matrix_transform_point (&priv->transform, &point, &point);*/
 
   /* XXX: This misses rounded rects */
-  return graphene_rect_contains_point (&bounds, &point);
+  return graphene_rect_contains_point (&bounds,
+                                       &(graphene_point_t){
+                                         graphene_vec4_get_x (&vec),
+                                         graphene_vec4_get_y (&vec),
+                                       });
+                                       /*&point);*/
 }
 
 static GtkWidget *
@@ -880,7 +889,6 @@ gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
                       gdouble    y)
 {
-#if 1
   GtkWidget *child;
 
   for (child = _gtk_widget_get_last_child (widget);
@@ -897,7 +905,6 @@ gtk_widget_real_pick (GtkWidget *widget,
       if (picked)
         return picked;
     }
-#endif
 
   if (!gtk_widget_contains (widget, x, y))
     return NULL;
@@ -4449,7 +4456,7 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
   int dest_depth;
   GtkWidget **dest_path;
   int i;
-  graphene_point_t src_point;
+  graphene_vec4_t src_point;
 
   g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
@@ -4482,23 +4489,22 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
       i ++;
     }
 
-  src_point.x = src_x;
-  src_point.y = src_y;
+  graphene_vec4_init (&src_point, src_x, src_y, 0, 1);
 
   parent = src_widget;
   while (parent != ancestor)
     {
-      graphene_matrix_t inv_transform;
+      graphene_vec4_t offset;
       int origin_x, origin_y;
 
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_point.x += origin_x;
-      src_point.y += origin_y;
+      graphene_matrix_transform_vec4 (&parent->priv->transform, &src_point, &src_point);
 
-      g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));
-      graphene_matrix_transform_point (&inv_transform, &src_point, &src_point);
+      graphene_vec4_init (&offset, origin_x, origin_y, 0, 1);
+      graphene_vec4_add (&src_point, &offset, &src_point);
 
+      /*g_message ("1 Applying %s", G_OBJECT_TYPE_NAME (parent));*/
       parent = _gtk_widget_get_parent (parent);
     }
 
@@ -4507,24 +4513,28 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
   for (i = 0; i < dest_depth; i ++)
     {
       int origin_x, origin_y;
+      /*graphene_matrix_t inv_transform;*/
+      graphene_vec4_t offset;
 
       parent = dest_path[i];
 
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_point.x -= origin_x;
-      src_point.y -= origin_y;
-
-      /*graphene_matrix_transform_point (&parent->priv->transform, &src_point, &src_point);*/
+      /*g_message ("2 Applying %s", G_OBJECT_TYPE_NAME (parent));*/
+      /*graphene_matrix_transform_vec4 (&parent->priv->transform, &src_point, &src_point);*/
       /*g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));*/
-      /*graphene_matrix_transform_point (&inv_transform, &src_point, &src_point);*/
+
+      /*g_message ("Origin: */
+      /*graphene_matrix_transform_vec4 (&inv_transform, &src_point, &src_point);*/
+      graphene_vec4_init (&offset, -origin_x, -origin_y, 0, 1);
+      graphene_vec4_add (&src_point, &offset, &src_point);
     }
 
   if (dest_x)
-    *dest_x = src_point.x;
+    *dest_x = graphene_vec4_get_x (&src_point);
 
   if (dest_y)
-    *dest_y = src_point.y;
+    *dest_y = graphene_vec4_get_y (&src_point);
 
   return TRUE;
 }
@@ -11396,40 +11406,83 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                            graphene_rect_t *out_bounds)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
+  graphene_rect_t bounds;
+  GtkWidget *ancestor;
+  GtkWidget *parent;
+  int dest_depth;
+  GtkWidget **dest_path;
+  int i;
   GtkCssStyle *style;
-  GtkAllocation alloc;
+  GtkBorder margin, border, padding;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
-  g_return_val_if_fail (out_bounds != NULL, FALSE);
+  ancestor = gtk_widget_common_ancestor (widget, target);
+
+  if (!ancestor)
+    {
+      graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
+      return FALSE;
+    }
 
   style = gtk_css_node_get_style (priv->cssnode);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  alloc.x = - (padding.left + border.left);
-  alloc.y = - (padding.top + border.top);
-  alloc.width = priv->allocation.width - margin.left - margin.right;
-  alloc.height = priv->allocation.height -margin.top - margin.bottom;
-
-  if (!gtk_widget_translate_coordinates (widget,
-                                         target,
-                                         alloc.x, alloc.y,
-                                         &alloc.x, &alloc.y))
+  dest_depth = 0;
+  parent = target;
+  while (parent != ancestor)
     {
-      graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
-      return FALSE;
+      parent = gtk_widget_get_parent (parent);
+      dest_depth ++;
     }
 
-  graphene_rect_init (out_bounds,
-                      alloc.x,
-                      alloc.y,
-                      alloc.width,
-                      alloc.height);
+  dest_path = g_alloca (sizeof (GtkWidget *) * dest_depth);
+  parent = target;
+  i = 0;
+  while (parent != ancestor)
+    {
+      dest_path[dest_depth - 1 - i] = parent;
+      parent = gtk_widget_get_parent (parent);
+      i ++;
+    }
 
-  graphene_matrix_transform_bounds (&priv->transform, out_bounds, out_bounds);
+  /* TODO: CSS values in the position */
+  graphene_rect_init (&bounds,
+                      0, 0,
+                      widget->priv->allocation.width - margin.left - margin.right,
+                      widget->priv->allocation.height - margin.top - margin.bottom);
+
+  parent = widget;
+  while (parent != ancestor)
+    {
+      int origin_x, origin_y;
+
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+
+      graphene_matrix_transform_bounds (&parent->priv->transform, &bounds, &bounds);
+      graphene_rect_offset (&bounds, origin_x, origin_y);
+
+      parent = _gtk_widget_get_parent (parent);
+    }
+
+  g_assert (parent == ancestor);
+
+  for (i = 0; i < dest_depth; i ++)
+    {
+      int origin_x, origin_y;
+      graphene_matrix_t inv_transform;
+
+      parent = dest_path[i];
+
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+
+      graphene_rect_offset (&bounds, -origin_x, -origin_y);
+
+      g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));
+      graphene_matrix_transform_bounds (&inv_transform, &bounds, &bounds);
+    }
+
+  *out_bounds = bounds;
 
   return TRUE;
 }
