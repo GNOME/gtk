@@ -104,11 +104,6 @@ LDADDS = \
 	$(GDK_DEP_LIBS)				\
 	-lm
 
-if BUILD_FONT_DEMO
-AM_CPPFLAGS += $(FONTDEMO_CFLAGS)
-LDADDS += $(FONTDEMO_LIBS)
-endif
-
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
 
 desktopdir = $(datadir)/applications

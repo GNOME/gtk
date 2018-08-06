@@ -1426,6 +1426,22 @@ if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
 fi
 
+##################################################
+# Check for harfbuzz and pangoft2
+##################################################
+
+PKG_CHECK_MODULES(GTK_FONT_CHOOSER_WIDGET,
+                  harfbuzz >= 0.9 pangoft2,
+                  build_font_demo=yes,
+                  build_font_demo=no)
+AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$build_font_demo" = xyes ])
+if test "x$build_font_demo" = xyes; then
+  AC_DEFINE([HAVE_HARFBUZZ], 1, [defines whether we have HarfBuzz])
+  AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
+  GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GTK_FONT_CHOOSER_WIDGET_CFLAGS"
+  GTK_DEP_LIBS="$GTK_DEP_LIBS $GTK_FONT_CHOOSER_WIDGET_LIBS"
+fi
+
 if $PKG_CONFIG --exists x11; then
   X11_PREFIX="`$PKG_CONFIG --variable=prefix x11`"
 elif test x"$prefix" != xNONE; then
@@ -1776,19 +1792,6 @@ if test "$have_colord" = "yes"; then
         AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
 fi
 AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
-
-##################################################
-# Check for harfbuzz and pangoft2
-##################################################
-
-PKG_CHECK_MODULES(FONTDEMO, harfbuzz >= 0.9 pangoft2, build_font_demo=yes, build_font_demo=no)
-AC_SUBST(FONTDEMO_CFLAGS)
-AC_SUBST(FONTDEMO_LIBS)
-AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$build_font_demo" = xyes ])
-if test "x$build_font_demo" = xyes; then
-  AC_DEFINE([HAVE_HARFBUZZ], 1, [defines whether we have HarfBuzz])
-  AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
-fi
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
