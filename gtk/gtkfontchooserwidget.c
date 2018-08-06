@@ -773,8 +773,6 @@ change_tweak (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-
 typedef struct {
   guint32 tag;
   GtkAdjustment *adjustment;
@@ -821,8 +819,6 @@ axis_free (gpointer v)
   g_free (a);
 }
 
-#endif
-
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
@@ -835,9 +831,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
   priv->axes = g_hash_table_new_full (axis_hash, axis_equal, NULL, axis_free);
-#endif
 
   /* Default preview string  */
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
@@ -1189,8 +1183,7 @@ gtk_font_chooser_widget_finalize (GObject *object)
 
   g_list_free_full (priv->feature_items, g_free);
 
-  if (priv->axes)
-    g_hash_table_unref (priv->axes);
+  g_hash_table_unref (priv->axes);
 
   g_free (priv->font_features);
 
