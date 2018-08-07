@@ -531,7 +531,7 @@ binding_compose_params (GObject         *object,
         {
         case G_VARIANT_CLASS_BOOLEAN:
           g_value_init (&tmp_value, G_TYPE_BOOLEAN);
-          g_value_set_double (&tmp_value, g_variant_get_boolean (tmp_variant));
+          g_value_set_boolean (&tmp_value, g_variant_get_boolean (tmp_variant));
           break;
         case G_VARIANT_CLASS_DOUBLE:
           g_value_init (&tmp_value, G_TYPE_DOUBLE);
