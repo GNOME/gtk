@@ -31,7 +31,6 @@
 #include "gtkentryprivate.h"
 
 #include "gtkadjustment.h"
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkcelleditable.h"
