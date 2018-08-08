@@ -24,6 +24,10 @@
 
 G_BEGIN_DECLS
 
+typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
+                                      GVariant  *args,
+                                      gpointer   user_data);
+
 #define GTK_TYPE_SHORTCUT         (gtk_shortcut_get_type ())
 
 GDK_AVAILABLE_IN_ALL
@@ -56,6 +60,13 @@ const char *    gtk_shortcut_get_signal                         (GtkShortcut    
 GDK_AVAILABLE_IN_ALL
 void            gtk_shortcut_set_signal                         (GtkShortcut            *self,
                                                                  const gchar            *signal);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_shortcut_has_callback                       (GtkShortcut            *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_shortcut_set_callback                       (GtkShortcut            *self,
+                                                                 GtkShortcutFunc         callback,
+                                                                 gpointer                data,
+                                                                 GDestroyNotify          destroy);
 
 G_END_DECLS
 
