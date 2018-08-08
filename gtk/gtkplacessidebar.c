@@ -2416,7 +2416,10 @@ volume_mount_cb (GObject      *source_object,
           error->code != G_IO_ERROR_ALREADY_MOUNTED)
         {
           name = g_volume_get_name (G_VOLUME (source_object));
-          primary = g_strdup_printf (_("Unable to access “%s”"), name);
+          if (g_str_has_prefix (error->message, "Error unlocking"))
+            primary = g_strdup_printf (_("Error unlocking “%s”"), name);
+          else
+            primary = g_strdup_printf (_("Unable to access “%s”"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
