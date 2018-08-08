@@ -4442,6 +4442,7 @@ gtk_widget_remove_tick_callback
 gtk_widget_size_allocate
 gtk_widget_allocate
 gtk_widget_class_add_shortcut
+gtk_widget_class_add_binding
 gtk_widget_class_add_binding_signal
 gtk_widget_add_accelerator
 gtk_widget_remove_accelerator
@@ -6725,6 +6726,8 @@ gtk_shortcut_get_arguments
 gtk_shortcut_set_arguments
 gtk_shortcut_get_signal
 gtk_shortcut_set_signal
+gtk_shortcut_has_callback
+gtk_shortcut_set_callback
 
 <SUBSECTION Standard>
 GTK_TYPE_SHORTCUT

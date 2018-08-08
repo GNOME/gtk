@@ -4764,6 +4764,56 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
 }
 
 /**
+ * gtk_widget_class_add_binding: (skip)
+ * @widget_class: the class to add the binding to
+ * @keyval: key value of binding to install
+ * @mods: key modifier of binding to install
+ * @callback: the callback to call upon activation
+ * @format_string: GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
+ *
+ * Creates a new shortcut for @widget_class that calls the given @callback
+ * with arguments read according to @format_string.
+ * The arguments and format string must be provided in the same way as
+ * with g_variant_new().
+ *
+ * This function is a convenience wrapper around
+ * gtk_widget_class_add_shortcut() and must be called during class
+ * initialization. It does not provide for user_data, if you need that,
+ * you will have to use gtk_widget_class_add_shortcut() with a custom
+ * shortcut.
+ **/
+void
+gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
+                              guint            keyval,
+                              GdkModifierType  mods,
+                              GtkShortcutFunc  func,
+                              const gchar     *format_string,
+                              ...)
+{
+  GtkShortcut *shortcut;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  shortcut = gtk_shortcut_new ();
+  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (keyval, mods));
+  gtk_shortcut_set_callback (shortcut, func, NULL, NULL);
+  if (format_string)
+    {
+      va_list args;
+      va_start (args, format_string);
+      gtk_shortcut_set_arguments (shortcut,
+                                  g_variant_new_va (format_string, NULL, &args));
+      va_end (args);
+    }
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
+}
+
+/**
  * gtk_widget_class_add_binding_signal: (skip)
  * @widget_class: the class to add the binding to
  * @keyval: key value of binding to install
