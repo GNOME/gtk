@@ -38,7 +38,6 @@
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
-#include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -491,7 +490,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkWindowClass *window_class;
-  GtkBindingSet *binding_set;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
@@ -566,8 +564,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                      -1, 1, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
-  binding_set = gtk_binding_set_by_class (class);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Escape, 0, "close", NULL);
 
   /* Bind class to template
    */
