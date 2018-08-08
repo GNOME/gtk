@@ -56,6 +56,9 @@ struct _GtkShortcut
 
   GtkShortcutTrigger *trigger;
   char *signal;
+  GtkShortcutFunc callback;
+  gpointer user_data;
+  GDestroyNotify destroy_notify;
   GVariant *args;
 };
 
@@ -63,6 +66,7 @@ enum
 {
   PROP_0,
   PROP_ARGUMENTS,
+  PROP_CALLBACK,
   PROP_SIGNAL,
   PROP_TRIGGER,
 
@@ -81,6 +85,15 @@ gtk_shortcut_dispose (GObject *object)
   g_clear_pointer (&self->trigger, gtk_shortcut_trigger_unref);
   g_clear_pointer (&self->signal, g_free);
   g_clear_pointer (&self->args, g_variant_unref);
+  if (self->callback)
+    {
+      if (self->destroy_notify)
+        self->destroy_notify (self->user_data);
+
+      self->callback = NULL;
+      self->user_data = NULL;
+      self->destroy_notify = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_shortcut_parent_class)->dispose (object);
 }
@@ -97,6 +110,10 @@ gtk_shortcut_get_property (GObject    *object,
     {
     case PROP_ARGUMENTS:
       g_value_set_variant (value, self->args);
+      break;
+
+    case PROP_CALLBACK:
+      g_value_set_boolean (value, self->callback != NULL);
       break;
 
     case PROP_SIGNAL:
@@ -164,6 +181,18 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkShortcut:callback:
+   *
+   * Whether a callback is used for shortcut activation
+   */
+  properties[PROP_CALLBACK] =
+    g_param_spec_boolean ("callback",
+                          P_("Callback"),
+                          P_("Whether a callback is used for shortcut activation"),
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkShortcut:signal:
    *
    * The action signal to emit on the widget upon activation.
@@ -223,7 +252,11 @@ gtk_shortcut_activate (GtkShortcut *self,
   g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (self->signal)
+  if (self->callback)
+    {
+      return self->callback (widget, self->args, self->user_data);
+    }
+  else if (self->signal)
     {
       GError *error = NULL;
       gboolean handled;
@@ -320,6 +353,28 @@ gtk_shortcut_set_arguments (GtkShortcut *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ARGUMENTS]);
 }
 
+static void
+gtk_shortcut_clear_activation (GtkShortcut *self)
+{
+  if (self->signal)
+    {
+      g_clear_pointer (&self->signal, g_free);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SIGNAL]);
+    }
+
+  if (self->callback)
+    {
+      if (self->destroy_notify)
+        self->destroy_notify (self->user_data);
+
+      self->callback = NULL;
+      self->user_data = NULL;
+      self->destroy_notify = NULL;
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALLBACK]);
+    }
+}
+
 const char *
 gtk_shortcut_get_signal (GtkShortcut *self)
 {
@@ -337,9 +392,42 @@ gtk_shortcut_set_signal (GtkShortcut *self,
   if (g_strcmp0 (self->signal, signal) == 0)
     return;
   
-  g_clear_pointer (&self->signal, g_free);
+  g_object_freeze_notify (G_OBJECT (self));
+
+  gtk_shortcut_clear_activation (self);
   self->signal = g_strdup (signal);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SIGNAL]);
+
+  g_object_thaw_notify (G_OBJECT (self));
+}
+
+gboolean
+gtk_shortcut_has_callback (GtkShortcut *self)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
+
+  return self->callback != NULL;
+}
+
+void
+gtk_shortcut_set_callback (GtkShortcut     *self,
+                           GtkShortcutFunc  callback,
+                           gpointer         data,
+                           GDestroyNotify   destroy)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT (self));
+
+  g_object_freeze_notify (G_OBJECT (self));
+
+  gtk_shortcut_clear_activation (self);
+
+  self->callback = callback;
+  self->user_data = data;
+  self->destroy_notify = destroy;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALLBACK]);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
