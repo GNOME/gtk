@@ -33,6 +33,7 @@
 #include <gsk/gsk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
+#include <gtk/gtkshortcut.h>
 #include <gtk/gtktypes.h>
 #include <atk/atk.h>
 
@@ -373,6 +374,13 @@ void                    gtk_widget_class_set_layout_manager_type        (GtkWidg
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_widget_class_get_layout_manager_type        (GtkWidgetClass *widget_class);
 
+GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_add_binding   (GtkWidgetClass      *widget_class,
+                                           guint                keyval,
+                                           GdkModifierType      mods,
+                                           GtkShortcutFunc      callback,
+                                           const gchar         *format_string,
+                                           ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_binding_signal
                                           (GtkWidgetClass      *widget_class,
