@@ -33,6 +33,7 @@
 #include <gsk/gsk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
+#include <gtk/gtkshortcut.h>
 #include <gtk/gtktypes.h>
 #include <atk/atk.h>
 
@@ -428,6 +429,13 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
 
+GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_add_binding   (GtkWidgetClass      *widget_class,
+                                           guint                keyval,
+                                           GdkModifierType      mods,
+                                           GtkShortcutFunc      callback,
+                                           const gchar         *format_string,
+                                           ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_binding_signal
                                           (GtkWidgetClass      *widget_class,
