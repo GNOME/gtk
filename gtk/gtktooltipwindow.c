@@ -79,7 +79,6 @@ gtk_tooltip_window_init (GtkTooltipWindow *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_window_set_use_subsurface (window, TRUE);
   _gtk_window_request_csd (window);
 }
 
