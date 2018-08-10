@@ -1877,6 +1877,8 @@ gdk_wayland_window_handle_configure_popup (GdkWindow *window,
                                   &flipped_x,
                                   &flipped_y);
 
+  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
+
   g_signal_emit_by_name (window,
                          "moved-to-rect",
                          &flipped_rect,
@@ -2805,6 +2807,9 @@ should_map_as_popup (GdkWindow *window)
     default:
       break;
     }
+
+  if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+    return TRUE;
 
   return FALSE;
 }
