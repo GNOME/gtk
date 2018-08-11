@@ -792,18 +792,76 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
+static gint
+get_number (GtkCssStyle *style,
+            guint        property)
+{
+  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static void
+get_box_margin (GtkCssStyle *style,
+                GtkBorder   *margin)
+{
+  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
+  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
+  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
+  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+}
+
+static void
+get_box_border (GtkCssStyle *style,
+                GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
+  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
+  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
+}
+
+static void
+get_box_padding (GtkCssStyle *style,
+                 GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
+  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
+  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+}
+
 static gboolean
 gtk_widget_real_contains (GtkWidget *widget,
                           gdouble    x,
                           gdouble    y)
 {
-  graphene_rect_t widget_bounds;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  graphene_rect_t bounds;
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
 
-  gtk_widget_compute_bounds (widget, widget, &widget_bounds);
+  /*
+   * A widget always sees itself untransformed, so in here we don't need
+   * to consider the transformation at all.
+   */
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  graphene_rect_init (&bounds,
+                      - border.left - padding.left,
+                      - border.top - padding.top,
+                      priv->allocation.width - margin.left - margin.right,
+                      priv->allocation.height - margin.top - margin.bottom);
 
   /* XXX: This misses rounded rects */
-  return graphene_rect_contains_point (&widget_bounds,
-                                       &(graphene_point_t){x, y});
+  return graphene_rect_contains_point (&bounds,
+                                       &(graphene_point_t){ x, y});
 }
 
 static GtkWidget *
@@ -4002,48 +4060,6 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     {
       return NULL;
     }
-}
-
-static gint
-get_number (GtkCssStyle *style,
-            guint        property)
-{
-  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
-
-  if (d < 1)
-    return ceil (d);
-  else
-    return floor (d);
-}
-
-static void
-get_box_margin (GtkCssStyle *style,
-                GtkBorder   *margin)
-{
-  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
-  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
-  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
-  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
-}
-
-static void
-get_box_border (GtkCssStyle *style,
-                GtkBorder   *border)
-{
-  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
-  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
-  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
-}
-
-static void
-get_box_padding (GtkCssStyle *style,
-                 GtkBorder   *border)
-{
-  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
-  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
-  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
 }
 
 /**
