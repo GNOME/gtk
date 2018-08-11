@@ -52,6 +52,7 @@ tests = [
   ['textbuffer'],
   ['textiter'],
   ['treelistmodel'],
+  ['translate'],
   ['treemodel', ['treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
                  'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c']],
   ['treepath'],
