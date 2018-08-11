@@ -11255,38 +11255,84 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                            graphene_rect_t *out_bounds)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
+  graphene_rect_t bounds;
+  GtkWidget *ancestor;
+  GtkWidget *parent;
+  int dest_depth;
+  GtkWidget **dest_path;
+  int i;
   GtkCssStyle *style;
-  GtkAllocation alloc;
+  GtkBorder margin, border, padding;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
-  g_return_val_if_fail (out_bounds != NULL, FALSE);
+  ancestor = gtk_widget_common_ancestor (widget, target);
+
+  if (!ancestor)
+    {
+      graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
+      return FALSE;
+    }
 
   style = gtk_css_node_get_style (priv->cssnode);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  alloc.x = - (padding.left + border.left);
-  alloc.y = - (padding.top + border.top);
-  alloc.width = priv->allocation.width - margin.left - margin.right;
-  alloc.height = priv->allocation.height -margin.top - margin.bottom;
-
-  if (!gtk_widget_translate_coordinates (widget,
-                                         target,
-                                         alloc.x, alloc.y,
-                                         &alloc.x, &alloc.y))
+  dest_depth = 0;
+  parent = target;
+  while (parent != ancestor)
     {
-      graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
-      return FALSE;
+      parent = gtk_widget_get_parent (parent);
+      dest_depth ++;
     }
 
-  graphene_rect_init (out_bounds,
-                      alloc.x,
-                      alloc.y,
-                      alloc.width,
-                      alloc.height);
+  dest_path = g_alloca (sizeof (GtkWidget *) * dest_depth);
+  parent = target;
+  i = 0;
+  while (parent != ancestor)
+    {
+      dest_path[dest_depth - 1 - i] = parent;
+      parent = gtk_widget_get_parent (parent);
+      i ++;
+    }
+
+  graphene_rect_init (&bounds,
+                      - border.left - padding.left,
+                      - border.top - padding.top,
+                      priv->allocation.width - margin.left - margin.right,
+                      priv->allocation.height - margin.top - margin.bottom);
+
+  parent = widget;
+  while (parent != ancestor)
+    {
+      int origin_x, origin_y;
+
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+
+      graphene_matrix_transform_bounds (&parent->priv->transform, &bounds, &bounds);
+      graphene_rect_offset (&bounds, origin_x, origin_y);
+
+      parent = _gtk_widget_get_parent (parent);
+    }
+
+  g_assert (parent == ancestor);
+
+  for (i = 0; i < dest_depth; i ++)
+    {
+      int origin_x, origin_y;
+      graphene_matrix_t inv_transform;
+
+      parent = dest_path[i];
+
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+
+      graphene_rect_offset (&bounds, -origin_x, -origin_y);
+
+      /* TODO: Inversion can fail */
+      graphene_matrix_inverse (&parent->priv->transform, &inv_transform);
+      graphene_matrix_transform_bounds (&inv_transform, &bounds, &bounds);
+    }
+
+  *out_bounds = bounds;
 
   return TRUE;
 }
