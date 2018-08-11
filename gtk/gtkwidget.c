@@ -4452,7 +4452,7 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
   int dest_depth;
   GtkWidget **dest_path;
   int i;
-  graphene_point_t src_point;
+  graphene_vec4_t src_point;
 
   g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
@@ -4485,22 +4485,19 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
       i ++;
     }
 
-  src_point.x = src_x;
-  src_point.y = src_y;
+  graphene_vec4_init (&src_point, src_x, src_y, 0, 1);
 
   parent = src_widget;
   while (parent != ancestor)
     {
-      graphene_matrix_t inv_transform;
+      graphene_vec4_t offset;
       int origin_x, origin_y;
 
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_point.x += origin_x;
-      src_point.y += origin_y;
-
-      g_assert (graphene_matrix_inverse (&parent->priv->transform, &inv_transform));
-      graphene_matrix_transform_point (&inv_transform, &src_point, &src_point);
+      graphene_matrix_transform_vec4 (&parent->priv->transform, &src_point, &src_point);
+      graphene_vec4_init (&offset, origin_x, origin_y, 0, 0);
+      graphene_vec4_add (&src_point, &offset, &src_point);
 
       parent = _gtk_widget_get_parent (parent);
     }
@@ -4510,20 +4507,26 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
   for (i = 0; i < dest_depth; i ++)
     {
       int origin_x, origin_y;
+      graphene_vec4_t offset;
+      graphene_matrix_t inv_transform;
 
       parent = dest_path[i];
 
       gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_point.x -= origin_x;
-      src_point.y -= origin_y;
+      graphene_vec4_init (&offset, -origin_x, -origin_y, 0, 0);
+      graphene_vec4_add (&src_point, &offset, &src_point);
+
+      /* TODO: inversion can fail */
+      graphene_matrix_inverse (&parent->priv->transform, &inv_transform);
+      graphene_matrix_transform_vec4 (&inv_transform, &src_point, &src_point);
     }
 
   if (dest_x)
-    *dest_x = src_point.x;
+    *dest_x = graphene_vec4_get_x (&src_point);
 
   if (dest_y)
-    *dest_y = src_point.y;
+    *dest_y = graphene_vec4_get_y (&src_point);
 
   return TRUE;
 }
