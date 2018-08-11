@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-05 13:09+0000\n"
-"PO-Revision-Date: 2018-08-06 19:00+0200\n"
+"POT-Creation-Date: 2018-08-07 10:03+0000\n"
+"PO-Revision-Date: 2018-08-12 00:01+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2188,7 +2188,7 @@ msgstr "_Anuluj"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:525 gtk/gtkfilechoosernative.c:596
-#: gtk/gtkplacessidebar.c:3556 gtk/gtkplacessidebar.c:3625
+#: gtk/gtkplacessidebar.c:3562 gtk/gtkplacessidebar.c:3631
 #: gtk/gtkplacesview.c:1611
 msgid "_Open"
 msgstr "_Otwórz"
@@ -2303,7 +2303,7 @@ msgstr "S_kopiuj położenie"
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj zakładkę"
 
-#: gtk/gtkfilechooserwidget.c:2207 gtk/gtkplacessidebar.c:2675
+#: gtk/gtkfilechooserwidget.c:2207 gtk/gtkplacessidebar.c:2681
 #: gtk/ui/gtkfilechooserwidget.ui:492
 msgid "_Rename"
 msgstr "Z_mień nazwę"
@@ -2938,11 +2938,11 @@ msgid "Show other locations"
 msgstr "Wyświetla inne położenia"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2276 gtk/gtkplacessidebar.c:3645
+#: gtk/gtkplacessidebar.c:2276 gtk/gtkplacessidebar.c:3651
 msgid "_Start"
 msgstr "_Uruchom"
 
-#: gtk/gtkplacessidebar.c:2277 gtk/gtkplacessidebar.c:3646
+#: gtk/gtkplacessidebar.c:2277 gtk/gtkplacessidebar.c:3652
 msgid "_Stop"
 msgstr "Z_atrzymaj"
 
@@ -2980,90 +2980,98 @@ msgstr "Odblok_uj urządzenie"
 msgid "_Lock Device"
 msgstr "_Zablokuj urządzenie"
 
-#: gtk/gtkplacessidebar.c:2339 gtk/gtkplacessidebar.c:3327
+#: gtk/gtkplacessidebar.c:2339 gtk/gtkplacessidebar.c:3333
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Nie można uruchomić „%s”"
 
-#: gtk/gtkplacessidebar.c:2371
+#. Translators: This means that unlocking an encrypted storage
+#. * device failed. %s is the name of the device.
+#.
+#: gtk/gtkplacessidebar.c:2375
+#, c-format
+msgid "Error unlocking “%s”"
+msgstr "Błąd podczas odblokowywania urządzenia „%s”"
+
+#: gtk/gtkplacessidebar.c:2377
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Nie można uzyskać dostępu do „%s”"
 
-#: gtk/gtkplacessidebar.c:2600
+#: gtk/gtkplacessidebar.c:2606
 msgid "This name is already taken"
 msgstr "Ta nazwa jest już zajęta"
 
-#: gtk/gtkplacessidebar.c:2669 gtk/inspector/actions.ui:40
+#: gtk/gtkplacessidebar.c:2675 gtk/inspector/actions.ui:40
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/object-tree.ui:82
 #: gtk/ui/gtkfilechooserwidget.ui:179 gtk/ui/gtkfilechooserwidget.ui:468
 msgid "Name"
 msgstr "Nazwa"
 
-#: gtk/gtkplacessidebar.c:2868
+#: gtk/gtkplacessidebar.c:2874
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Nie można odmontować „%s”"
 
-#: gtk/gtkplacessidebar.c:3044
+#: gtk/gtkplacessidebar.c:3050
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Nie można zatrzymać „%s”"
 
-#: gtk/gtkplacessidebar.c:3073
+#: gtk/gtkplacessidebar.c:3079
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Nie można wysunąć „%s”"
 
-#: gtk/gtkplacessidebar.c:3102 gtk/gtkplacessidebar.c:3131
+#: gtk/gtkplacessidebar.c:3108 gtk/gtkplacessidebar.c:3137
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nie można wysunąć %s"
 
-#: gtk/gtkplacessidebar.c:3279
+#: gtk/gtkplacessidebar.c:3285
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nie można odpytać „%s” o zmiany nośnika"
 
-#: gtk/gtkplacessidebar.c:3562 gtk/gtkplacessidebar.c:3628
+#: gtk/gtkplacessidebar.c:3568 gtk/gtkplacessidebar.c:3634
 #: gtk/gtkplacesview.c:1620
 msgid "Open in New _Tab"
 msgstr "O_twórz w nowej karcie"
 
-#: gtk/gtkplacessidebar.c:3568 gtk/gtkplacessidebar.c:3631
+#: gtk/gtkplacessidebar.c:3574 gtk/gtkplacessidebar.c:3637
 #: gtk/gtkplacesview.c:1630
 msgid "Open in New _Window"
 msgstr "Otwórz w nowy_m oknie"
 
-#: gtk/gtkplacessidebar.c:3635
+#: gtk/gtkplacessidebar.c:3641
 msgid "_Add Bookmark"
 msgstr "_Dodaj zakładkę"
 
-#: gtk/gtkplacessidebar.c:3636
+#: gtk/gtkplacessidebar.c:3642
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: gtk/gtkplacessidebar.c:3637
+#: gtk/gtkplacessidebar.c:3643
 msgid "Rename…"
 msgstr "Zmień nazwę…"
 
-#: gtk/gtkplacessidebar.c:3641 gtk/gtkplacesview.c:1661
+#: gtk/gtkplacessidebar.c:3647 gtk/gtkplacesview.c:1661
 msgid "_Mount"
 msgstr "Za_montuj"
 
-#: gtk/gtkplacessidebar.c:3642 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3648 gtk/gtkplacesview.c:1652
 msgid "_Unmount"
 msgstr "O_dmontuj"
 
-#: gtk/gtkplacessidebar.c:3643
+#: gtk/gtkplacessidebar.c:3649
 msgid "_Eject"
 msgstr "Wy_suń"
 
-#: gtk/gtkplacessidebar.c:3644
+#: gtk/gtkplacessidebar.c:3650
 msgid "_Detect Media"
 msgstr "Wy_kryj nośnik"
 
-#: gtk/gtkplacessidebar.c:4138 gtk/gtkplacesview.c:1099
+#: gtk/gtkplacessidebar.c:4144 gtk/gtkplacesview.c:1099
 msgid "Computer"
 msgstr "Komputer"
 
