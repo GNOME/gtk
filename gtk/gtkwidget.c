@@ -59,7 +59,7 @@
 #include "gtkselection.h"
 #include "gtksettingsprivate.h"
 #include "gtkshortcut.h"
-#include "gtkshortcutcontroller.h"
+#include "gtkshortcutcontrollerprivate.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
@@ -2850,6 +2850,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 {
   GtkWidget *widget = GTK_WIDGET (instance);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkEventController *controller;
 
   widget->priv = priv;
 
@@ -2922,7 +2923,9 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
 
-  gtk_widget_add_controller (widget, gtk_shortcut_controller_new ());
+  controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_set_run_class (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
+  gtk_widget_add_controller (widget, controller);
   gtk_widget_add_controller (widget, gtk_event_controller_legacy_new ());
 }
 
