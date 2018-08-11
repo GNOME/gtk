@@ -30,7 +30,6 @@
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessible.h"
 #include "gtkapplicationprivate.h"
-#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcontainerprivate.h"
@@ -869,7 +868,6 @@ static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
@@ -2125,11 +2123,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__UINTv);
 
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
-                                "popup-menu", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Menu, 0,
-                                "popup-menu", 0);
+  gtk_widget_class_add_binding_signal (klass,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "popup-menu",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (klass,
+                                       GDK_KEY_Menu, 0,
+                                       "popup-menu",
+                                       NULL);
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, I_("widget"));
