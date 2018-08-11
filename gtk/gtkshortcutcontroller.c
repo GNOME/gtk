@@ -29,7 +29,7 @@
 
 #include "config.h"
 
-#include "gtkshortcutcontroller.h"
+#include "gtkshortcutcontrollerprivate.h"
 
 #include "gtkeventcontrollerprivate.h"
 #include "gtkbindings.h"
@@ -41,6 +41,8 @@
 struct _GtkShortcutController
 {
   GtkEventController parent_instance;
+
+  guint run_class : 1;
 };
 
 struct _GtkShortcutControllerClass
@@ -79,13 +81,17 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
   const GSList *l;
 
   widget = gtk_event_controller_get_widget (controller); 
-  if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event))
-    return TRUE;
 
-  for (l = gtk_widget_class_get_shortcuts (GTK_WIDGET_GET_CLASS (widget)); l; l = l->next)
+  if (self->run_class)
     {
-      if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event))
+      if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event))
         return TRUE;
+
+      for (l = gtk_widget_class_get_shortcuts (GTK_WIDGET_GET_CLASS (widget)); l; l = l->next)
+        {
+          if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event))
+            return TRUE;
+        }
     }
 
   return FALSE;
@@ -111,4 +117,11 @@ gtk_shortcut_controller_new (void)
 {
   return g_object_new (GTK_TYPE_SHORTCUT_CONTROLLER,
                        NULL);
+}
+
+void
+gtk_shortcut_controller_set_run_class (GtkShortcutController  *controller,
+                                       gboolean                run_class)
+{
+  controller->run_class = run_class;
 }
