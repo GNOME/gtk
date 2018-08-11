@@ -1051,6 +1051,15 @@ void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_transform        (GtkWidget               *widget,
                                                          const graphene_matrix_t *transform);
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
+                                                GtkWidget  *dest_widget,
+                                                double      src_x,
+                                                double      src_y,
+                                                double     *dest_x,
+                                                double     *dest_y);
+
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
