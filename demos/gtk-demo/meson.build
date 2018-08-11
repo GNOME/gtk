@@ -62,6 +62,7 @@ demos = files([
   'search_entry.c',
   'search_entry2.c',
   'shortcuts.c',
+  'shortcut_triggers.c',
   'sidebar.c',
   'sizegroup.c',
   'sliding_puzzle.c',
