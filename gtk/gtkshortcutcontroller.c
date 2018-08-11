@@ -42,6 +42,8 @@ struct _GtkShortcutController
 {
   GtkEventController parent_instance;
 
+  GSList *shortcuts;
+
   guint run_class : 1;
 };
 
@@ -54,11 +56,14 @@ G_DEFINE_TYPE (GtkShortcutController, gtk_shortcut_controller,
                GTK_TYPE_EVENT_CONTROLLER)
 
 static void
-gtk_shortcut_controller_finalize (GObject *object)
+gtk_shortcut_controller_dispose (GObject *object)
 {
-  //GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
 
-  G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->finalize (object);
+  g_slist_free_full (self->shortcuts, g_object_unref);
+  self->shortcuts = NULL;
+
+  G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->dispose (object);
 }
 
 static gboolean
@@ -80,10 +85,16 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
   GtkWidget *widget;
   const GSList *l;
 
-  widget = gtk_event_controller_get_widget (controller); 
+  for (l = self->shortcuts; l; l = l->next)
+    {
+      if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event))
+        return TRUE;
+    }
 
   if (self->run_class)
     {
+      widget = gtk_event_controller_get_widget (controller); 
+
       if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event))
         return TRUE;
 
@@ -103,7 +114,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gtk_shortcut_controller_finalize;
+  object_class->dispose = gtk_shortcut_controller_dispose;
   controller_class->handle_event = gtk_shortcut_controller_handle_event;
 }
 
@@ -124,4 +135,54 @@ gtk_shortcut_controller_set_run_class (GtkShortcutController  *controller,
                                        gboolean                run_class)
 {
   controller->run_class = run_class;
+}
+
+/**
+ * gtk_shortcut_controller_add_shortcut:
+ * @self: the controller
+ * @shortcut: a #GtkShortcut
+ *
+ * Adds @shortcut to the list of shortcuts handled by @self.
+ *
+ * The shortcut is added to the list so that it is triggered before
+ * all existing shortcuts.
+ * 
+ * FIXME: What's supposed to happen if a shortcut gets added twice?
+ **/
+void
+gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
+                                      GtkShortcut           *shortcut)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
+  g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
+
+  g_object_ref (shortcut);
+  self->shortcuts = g_slist_prepend (self->shortcuts, shortcut);
+}
+
+/**
+ * gtk_shortcut_controller_remove_shortcut:
+ * @self: the controller
+ * @shortcut: a #GtkShortcut
+ *
+ * Removes @shortcut from the list of shortcuts handled by @self.
+ *
+ * If @shortcut had not been added to @controller, this function does
+ * nothing.
+ **/
+void
+gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
+                                         GtkShortcut            *shortcut)
+{
+  GSList *l;
+
+  g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
+  g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
+
+  l = g_slist_find (self->shortcuts, shortcut);
+  if (l == NULL)
+    return;
+
+  self->shortcuts = g_slist_delete_link (self->shortcuts, l);
+  g_object_unref (shortcut);
 }
