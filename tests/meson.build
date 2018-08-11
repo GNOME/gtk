@@ -122,6 +122,7 @@ gtk_tests = [
   ['testpopupat'],
   ['testgaction'],
   ['testwidgetfocus'],
+  ['testwidgettransforms'],
   ['testcenterbox'],
   ['testgridbaseline'],
   ['showrendernode'],
