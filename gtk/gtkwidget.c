@@ -59,7 +59,7 @@
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
 #include "gtkshortcut.h"
-#include "gtkshortcutcontroller.h"
+#include "gtkshortcutcontrollerprivate.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
@@ -2412,6 +2412,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   controller = gtk_shortcut_controller_new ();
   gtk_event_controller_set_name (controller, "gtk-widget-class-shortcuts");
+  gtk_shortcut_controller_set_run_class (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
   gtk_widget_add_controller (widget, controller);
 }
 
