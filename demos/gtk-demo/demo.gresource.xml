@@ -204,6 +204,7 @@
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
     <file>shortcuts.c</file>
+    <file>shortcut_triggers.c</file>
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
     <file>sliding_puzzle.c</file>
