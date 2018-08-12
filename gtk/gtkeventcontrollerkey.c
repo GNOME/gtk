@@ -34,7 +34,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkbindings.h"
 
 #include <gdk/gdk.h>
 
