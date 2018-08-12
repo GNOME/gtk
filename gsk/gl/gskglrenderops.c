@@ -14,9 +14,23 @@ float
 ops_get_scale (const RenderOpBuilder *builder)
 {
   const graphene_matrix_t *mv = &builder->current_modelview;
+  graphene_vec3_t col1;
+  graphene_vec3_t col2;
 
-  return MAX (graphene_matrix_get_x_scale (mv),
-              graphene_matrix_get_y_scale (mv));
+  /* TODO: We should probably split this up into two values... */
+
+  graphene_vec3_init (&col1,
+                      graphene_matrix_get_value (mv, 0, 0),
+                      graphene_matrix_get_value (mv, 1, 0),
+                      graphene_matrix_get_value (mv, 2, 0));
+
+  graphene_vec3_init (&col2,
+                      graphene_matrix_get_value (mv, 0, 1),
+                      graphene_matrix_get_value (mv, 1, 1),
+                      graphene_matrix_get_value (mv, 2, 1));
+
+  return MAX (graphene_vec3_length (&col1),
+              graphene_vec3_length (&col2));
 }
 
 static inline gboolean
