@@ -40,7 +40,6 @@
 #include "gtklabel.h"
 #include "gtkbutton.h"
 #include "gtkenums.h"
-#include "gtkbindings.h"
 #include "gtkdialog.h"
 #include "gtkrevealer.h"
 #include "gtkintl.h"
@@ -308,12 +307,8 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 static void
 gtk_info_bar_class_init (GtkInfoBarClass *klass)
 {
-  GtkWidgetClass *widget_class;
-  GObjectClass *object_class;
-  GtkBindingSet *binding_set;
-
-  widget_class = GTK_WIDGET_CLASS (klass);
-  object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = gtk_info_bar_get_property;
   object_class->set_property = gtk_info_bar_set_property;
@@ -392,9 +387,10 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                   g_cclosure_marshal_VOID__VOID,
                                   G_TYPE_NONE, 0);
 
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "close",
+                                       NULL);
 
   /* Bind class to template
    */
