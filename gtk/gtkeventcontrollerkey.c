@@ -35,7 +35,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkbindings.h"
 #include "gtkenums.h"
 #include "gtkmain.h"
 
