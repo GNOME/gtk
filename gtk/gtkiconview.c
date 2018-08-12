@@ -21,7 +21,6 @@
 
 #include "gtkaccessible.h"
 #include "gtkadjustmentprivate.h"
-#include "gtkbindings.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
 #include "gtkcelllayout.h"
@@ -235,7 +234,7 @@ static gboolean             gtk_icon_view_unselect_all_internal          (GtkIco
 static void                 gtk_icon_view_update_rubberband              (GtkIconView            *icon_view);
 static void                 gtk_icon_view_item_invalidate_size           (GtkIconViewItem        *item);
 static void                 gtk_icon_view_invalidate_sizes               (GtkIconView            *icon_view);
-static void                 gtk_icon_view_add_move_binding               (GtkBindingSet          *binding_set,
+static void                 gtk_icon_view_add_move_binding               (GtkWidgetClass         *widget_class,
 									  guint                   keyval,
 									  guint                   modmask,
 									  GtkMovementStep         step,
@@ -338,16 +337,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_CONTAINER,
 static void
 gtk_icon_view_class_init (GtkIconViewClass *klass)
 {
-  GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-  GtkBindingSet *binding_set;
-  
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gobject_class = (GObjectClass *) klass;
-  widget_class = (GtkWidgetClass *) klass;
-  container_class = (GtkContainerClass *) klass;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   gobject_class->constructed = gtk_icon_view_constructed;
   gobject_class->dispose = gtk_icon_view_dispose;
@@ -822,70 +814,88 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                               _gtk_marshal_BOOLEAN__ENUM_INTv);
 
   /* Key bindings */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, 
-				"select-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK, 
-				"unselect-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK, 
-				"toggle-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
-				"toggle-cursor-item", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK, 
+				       "select-all",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK, 
+				       "unselect-all",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, GDK_CONTROL_MASK, 
+				       "toggle-cursor-item",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, GDK_CONTROL_MASK,
+				       "toggle-cursor-item",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0, 
-				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
-				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, 
-				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, 
-				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, 
-				"activate-cursor-item", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, 0, 
+				       "activate-cursor-item",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, 0,
+				       "activate-cursor-item",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Return, 0, 
+				       "activate-cursor-item",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_ISO_Enter, 0, 
+				       "activate-cursor-item",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Enter, 0, 
+				       "activate-cursor-item",
+                                       NULL);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Up, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Up, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Down, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Down, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Down, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Down, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_p, GDK_CONTROL_MASK,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_p, GDK_CONTROL_MASK,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_n, GDK_CONTROL_MASK,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_n, GDK_CONTROL_MASK,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Home, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Home, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_End, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_End, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_End, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_End, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Page_Up, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Page_Up, 0,
 				  GTK_MOVEMENT_PAGES, -1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0,
 				  GTK_MOVEMENT_PAGES, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Page_Down, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Page_Down, 0,
 				  GTK_MOVEMENT_PAGES, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0,
 				  GTK_MOVEMENT_PAGES, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Right, 0, 
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Right, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Left, 0, 
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Right, 0, 
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Right, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Left, 0, 
+  gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ICON_VIEW_ACCESSIBLE);
@@ -3410,35 +3420,35 @@ gtk_icon_view_build_items (GtkIconView *icon_view)
 }
 
 static void
-gtk_icon_view_add_move_binding (GtkBindingSet  *binding_set,
+gtk_icon_view_add_move_binding (GtkWidgetClass *widget_class,
 				guint           keyval,
 				guint           modmask,
 				GtkMovementStep step,
 				gint            count)
 {
   
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-                                I_("move-cursor"), 2,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask,
+                                       I_("move-cursor"),
+                                       "(ii)", step, count);
 
-  gtk_binding_entry_add_signal (binding_set, keyval, GDK_SHIFT_MASK,
-                                "move-cursor", 2,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, GDK_SHIFT_MASK,
+                                       "move-cursor",
+                                       "(ii)", step, count);
 
   if ((modmask & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
    return;
 
-  gtk_binding_entry_add_signal (binding_set, keyval, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "move-cursor", 2,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                       "move-cursor",
+                                       "(ii)", step, count);
 
-  gtk_binding_entry_add_signal (binding_set, keyval, GDK_CONTROL_MASK,
-                                "move-cursor", 2,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, GDK_CONTROL_MASK,
+                                       "move-cursor",
+                                       "(ii)", step, count);
 }
 
 static gboolean
