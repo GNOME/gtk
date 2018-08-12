@@ -32,7 +32,6 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkbindings.h"
 
 #include "a11y/gtklistboxaccessibleprivate.h"
 #include "a11y/gtklistboxrowaccessible.h"
