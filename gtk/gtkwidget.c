@@ -4371,30 +4371,6 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
   return widget_a;
 }
 
-void
-gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
-                                          int       *origin_x,
-                                          int       *origin_y)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  /* allocation is relative to the parent's origin */
-  *origin_x = priv->allocation.x;
-  *origin_y = priv->allocation.y;
-
-  /* ... but points to the upper left, excluding widget margins
-   * but including all the css properties */
-  *origin_x += margin.left + border.left + padding.left;
-  *origin_y += margin.top + border.top + padding.top;
-}
-
 /**
  * gtk_widget_translate_coordinates:
  * @src_widget:  a #GtkWidget
@@ -4492,8 +4468,27 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
     {
       graphene_vec4_t offset;
       int origin_x, origin_y;
+      GtkBorder margin, border, padding;
+      GtkCssStyle *style;
 
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+      style = gtk_css_node_get_style (parent->priv->cssnode);
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      /* CSS Values */
+      {
+        graphene_vec4_t v;
+
+        graphene_vec4_init (&v,
+                            margin.left + border.left + padding.left,
+                            margin.top + border.top + padding.top,
+                            0, 0);
+        graphene_vec4_add (&src_point, &v, &src_point);
+      }
+
+      origin_x = parent->priv->allocation.x;
+      origin_y = parent->priv->allocation.y;
 
       graphene_matrix_transform_vec4 (&parent->priv->transform, &src_point, &src_point);
       graphene_vec4_init (&offset, origin_x, origin_y, 0, 0);
@@ -4509,10 +4504,18 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
       int origin_x, origin_y;
       graphene_vec4_t offset;
       graphene_matrix_t inv_transform;
+      GtkBorder margin, border, padding;
+      GtkCssStyle *style;
 
       parent = dest_path[i];
 
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+      style = gtk_css_node_get_style (parent->priv->cssnode);
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      origin_x = parent->priv->allocation.x;
+      origin_y = parent->priv->allocation.y;
 
       graphene_vec4_init (&offset, -origin_x, -origin_y, 0, 0);
       graphene_vec4_add (&src_point, &offset, &src_point);
@@ -4520,6 +4523,16 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
       /* TODO: inversion can fail */
       graphene_matrix_inverse (&parent->priv->transform, &inv_transform);
       graphene_matrix_transform_vec4 (&inv_transform, &src_point, &src_point);
+
+      /* CSS Values */
+      {
+        graphene_vec4_t v;
+
+        graphene_vec4_init (&v,
+                            - margin.left - border.left - padding.left,
+                            - margin.top  - border.top  - padding.top, 0, 0);
+        graphene_vec4_add (&src_point, &v, &src_point);
+      }
     }
 
   if (dest_x)
@@ -11308,8 +11321,20 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
   while (parent != ancestor)
     {
       int origin_x, origin_y;
+      GtkBorder margin, border, padding;
+      GtkCssStyle *style;
 
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+      style = gtk_css_node_get_style (parent->priv->cssnode);
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      graphene_rect_offset (&bounds,
+                            margin.left + border.left + padding.left,
+                            margin.top  + border.top  + padding.top);
+
+      origin_x = parent->priv->allocation.x;
+      origin_y = parent->priv->allocation.y;
 
       graphene_matrix_transform_bounds (&parent->priv->transform, &bounds, &bounds);
       graphene_rect_offset (&bounds, origin_x, origin_y);
@@ -11323,16 +11348,28 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
     {
       int origin_x, origin_y;
       graphene_matrix_t inv_transform;
+      GtkBorder margin, border, padding;
+      GtkCssStyle *style;
 
       parent = dest_path[i];
 
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+      style = gtk_css_node_get_style (parent->priv->cssnode);
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      origin_x = parent->priv->allocation.x;
+      origin_y = parent->priv->allocation.y;
 
       graphene_rect_offset (&bounds, -origin_x, -origin_y);
 
       /* TODO: Inversion can fail */
       graphene_matrix_inverse (&parent->priv->transform, &inv_transform);
       graphene_matrix_transform_bounds (&inv_transform, &bounds, &bounds);
+
+      graphene_rect_offset (&bounds,
+                            - margin.left - border.left - padding.left,
+                            - margin.top  - border.top  - padding.top);
     }
 
   *out_bounds = bounds;
