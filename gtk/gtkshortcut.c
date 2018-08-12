@@ -21,7 +21,6 @@
 
 #include "gtkshortcut.h"
 
-#include "gtkbindingsprivate.h"
 #include "gtkintl.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkwidget.h"
@@ -245,6 +244,221 @@ gtk_shortcut_trigger (GtkShortcut    *self,
   return gtk_shortcut_trigger_trigger (self->trigger, event);
 }
 
+static gboolean
+binding_compose_params (GObject         *object,
+                        GVariantIter    *args,
+                        GSignalQuery    *query,
+                        GValue         **params_p)
+{
+  GValue *params;
+  const GType *types;
+  guint i;
+  gboolean valid;
+
+  params = g_new0 (GValue, query->n_params + 1);
+  *params_p = params;
+
+  /* The instance we emit on is the first object in the array
+   */
+  g_value_init (params, G_TYPE_OBJECT);
+  g_value_set_object (params, G_OBJECT (object));
+  params++;
+
+  types = query->param_types;
+  valid = TRUE;
+  for (i = 1; i < query->n_params + 1 && valid; i++)
+    {
+      GValue tmp_value = G_VALUE_INIT;
+      GVariant *tmp_variant;
+
+      g_value_init (params, *types);
+      tmp_variant = g_variant_iter_next_value (args);
+
+      switch ((guint) g_variant_classify (tmp_variant))
+        {
+        case G_VARIANT_CLASS_BOOLEAN:
+          g_value_init (&tmp_value, G_TYPE_BOOLEAN);
+          g_value_set_boolean (&tmp_value, g_variant_get_boolean (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_DOUBLE:
+          g_value_init (&tmp_value, G_TYPE_DOUBLE);
+          g_value_set_double (&tmp_value, g_variant_get_double (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_INT32:
+          g_value_init (&tmp_value, G_TYPE_LONG);
+          g_value_set_long (&tmp_value, g_variant_get_int32 (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_UINT32:
+          g_value_init (&tmp_value, G_TYPE_LONG);
+          g_value_set_long (&tmp_value, g_variant_get_uint32 (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_INT64:
+          g_value_init (&tmp_value, G_TYPE_LONG);
+          g_value_set_long (&tmp_value, g_variant_get_int64 (tmp_variant));
+          break;
+        case G_VARIANT_CLASS_STRING:
+          /* gtk_rc_parse_flags/enum() has fancier parsing for this; we can't call
+           * that since we don't have a GParamSpec, so just do something simple
+           */
+          if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_ENUM)
+            {
+              GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
+              GEnumValue *enum_value;
+              const char *s = g_variant_get_string (tmp_variant, NULL);
+
+              valid = FALSE;
+
+              enum_value = g_enum_get_value_by_name (class, s);
+              if (!enum_value)
+                enum_value = g_enum_get_value_by_nick (class, s);
+
+              if (enum_value)
+                {
+                  g_value_init (&tmp_value, *types);
+                  g_value_set_enum (&tmp_value, enum_value->value);
+                  valid = TRUE;
+                }
+
+              g_type_class_unref (class);
+            }
+          /* This is just a hack for compatibility with GTK+-1.2 where a string
+           * could be used for a single flag value / without the support for multiple
+           * values in gtk_rc_parse_flags(), this isn't very useful.
+           */
+          else if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_FLAGS)
+            {
+              GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
+              GFlagsValue *flags_value;
+              const char *s = g_variant_get_string (tmp_variant, NULL);
+
+              valid = FALSE;
+
+              flags_value = g_flags_get_value_by_name (class, s);
+              if (!flags_value)
+                flags_value = g_flags_get_value_by_nick (class, s);
+              if (flags_value)
+                {
+                  g_value_init (&tmp_value, *types);
+                  g_value_set_flags (&tmp_value, flags_value->value);
+                  valid = TRUE;
+                }
+
+              g_type_class_unref (class);
+            }
+          else
+            {
+              g_value_init (&tmp_value, G_TYPE_STRING);
+              g_value_set_static_string (&tmp_value, g_variant_get_string (tmp_variant, NULL));
+            }
+          break;
+        default:
+          valid = FALSE;
+          break;
+        }
+
+      if (valid)
+        {
+          if (!g_value_transform (&tmp_value, params))
+            valid = FALSE;
+
+          g_value_unset (&tmp_value);
+        }
+
+      g_variant_unref (tmp_variant);
+      types++;
+      params++;
+    }
+
+  if (!valid)
+    {
+      guint j;
+
+      for (j = 0; j < i; j++)
+        g_value_unset (&(*params_p)[j]);
+
+      g_free (*params_p);
+      *params_p = NULL;
+    }
+
+  return valid;
+}
+
+static gboolean
+gtk_shortcut_emit_signal (GObject    *object,
+                          const char *signal,
+                          GVariant   *args,
+                          gboolean   *handled,
+                          GError    **error)
+{
+  GSignalQuery query;
+  guint signal_id;
+  GValue *params = NULL;
+  GValue return_val = G_VALUE_INIT;
+  GVariantIter args_iter;
+  gsize n_args;
+  guint i;
+
+  *handled = FALSE;
+
+  signal_id = g_signal_lookup (signal, G_OBJECT_TYPE (object));
+  if (!signal_id)
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Could not find signal \"%s\" in the '%s' class ancestry",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+
+  g_signal_query (signal_id, &query);
+  if (args)
+    n_args = g_variant_iter_init (&args_iter, args);
+  else
+    n_args = 0;
+  if (query.n_params != n_args ||
+      (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
+      !binding_compose_params (object, &args_iter, &query, &params))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "signature mismatch for signal \"%s\" in the '%s' class ancestry",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+  else if (!(query.signal_flags & G_SIGNAL_ACTION))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
+                   signal,
+                   g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+
+  if (query.return_type == G_TYPE_BOOLEAN)
+    g_value_init (&return_val, G_TYPE_BOOLEAN);
+
+  g_signal_emitv (params, signal_id, 0, &return_val);
+
+  if (query.return_type == G_TYPE_BOOLEAN)
+    {
+      if (g_value_get_boolean (&return_val))
+        *handled = TRUE;
+      g_value_unset (&return_val);
+    }
+  else
+    *handled = TRUE;
+
+  if (params != NULL)
+    {
+      for (i = 0; i < query.n_params + 1; i++)
+        g_value_unset (&params[i]);
+
+      g_free (params);
+    }
+
+  return TRUE;
+}
+
 gboolean
 gtk_shortcut_activate (GtkShortcut *self,
                        GtkWidget   *widget)
@@ -261,11 +475,11 @@ gtk_shortcut_activate (GtkShortcut *self,
       GError *error = NULL;
       gboolean handled;
 
-      if (!gtk_binding_emit_signal (G_OBJECT (widget),
-                                    self->signal,
-                                    self->args,
-                                    &handled,
-                                    &error))
+      if (!gtk_shortcut_emit_signal (G_OBJECT (widget),
+                                     self->signal,
+                                     self->args,
+                                     &handled,
+                                     &error))
         {
           char *accelerator = gtk_shortcut_trigger_to_string (self->trigger);
           g_warning ("gtk_shortcut_activate(): \":%s\": %s",
