@@ -19,12 +19,12 @@
 
 #include "gtkcomboboxprivate.h"
 
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkcellareabox.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkiconprivate.h"
@@ -36,10 +36,11 @@
 #include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkprivate.h"
+#include "gtkshortcutcontroller.h"
 #include "gtktogglebutton.h"
 #include "gtktreemenu.h"
 #include "gtktypebuiltins.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkcomboboxaccessible.h"
 
@@ -854,6 +855,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   GtkStyleContext *context;
   GtkTreeMenu *menu;
   GtkEventController *controller;
+  GList *controllers, *list;
 
   priv->active = -1;
   priv->active_row = NULL;
@@ -893,6 +895,19 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                     G_CALLBACK (gtk_combo_box_scroll_controller_scroll),
                     combo_box);
   gtk_widget_add_controller (GTK_WIDGET (combo_box), controller);
+
+  controllers = _gtk_widget_list_controllers (priv->popup_widget, GTK_PHASE_BUBBLE);
+  for (list = controllers; list; list = list->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (list->data))
+        {
+          g_object_ref (list->data);
+          gtk_widget_remove_controller (priv->popup_widget, list->data);
+          gtk_widget_add_controller (priv->popup_widget, list->data);
+          break;
+        }
+    }
+  g_list_free (controllers);
 }
 
 static void
@@ -1869,18 +1884,7 @@ gtk_combo_box_menu_key (GtkEventControllerKey *key,
                         GdkModifierType        modifiers,
                         GtkComboBox           *combo_box)
 {
-  GtkWidget *widget;
-  GdkEvent *event;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
-  event = gtk_get_current_event ();
-
-  if (!gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
-    {
-      gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
-    }
-
-  g_object_unref (event);
+  gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
 
   return TRUE;
 }
