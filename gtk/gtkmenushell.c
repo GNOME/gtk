@@ -59,7 +59,6 @@
 
 #include "gtkmenushellprivate.h"
 
-#include "gtkbindings.h"
 #include "gtkintl.h"
 #include "gtkkeyhash.h"
 #include "gtklabelprivate.h"
@@ -166,15 +165,9 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkMenuShell, gtk_menu_shell, GTK_TYPE_CONT
 static void
 gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 {
-  GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-
-  GtkBindingSet *binding_set;
-
-  object_class = (GObjectClass*) klass;
-  widget_class = (GtkWidgetClass*) klass;
-  container_class = (GtkContainerClass*) klass;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->set_property = gtk_menu_shell_set_property;
   object_class->get_property = gtk_menu_shell_get_property;
@@ -343,43 +336,38 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                               _gtk_marshal_VOID__OBJECT_INTv);
 
 
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Escape, 0,
-                                "cancel", 0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Return, 0,
-                                "activate-current", 1,
-                                G_TYPE_BOOLEAN,
-                                TRUE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_ISO_Enter, 0,
-                                "activate-current", 1,
-                                G_TYPE_BOOLEAN,
-                                TRUE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_Enter, 0,
-                                "activate-current", 1,
-                                G_TYPE_BOOLEAN,
-                                TRUE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_space, 0,
-                                "activate-current", 1,
-                                G_TYPE_BOOLEAN,
-                                FALSE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_Space, 0,
-                                "activate-current", 1,
-                                G_TYPE_BOOLEAN,
-                                FALSE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_F10, 0,
-                                "cycle-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_F10, GDK_SHIFT_MASK,
-                                "cycle-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "cancel",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Return, 0,
+                                       "activate-current",
+                                       "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_ISO_Enter, 0,
+                                       "activate-current",
+                                       "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Enter, 0,
+                                       "activate-current",
+                                       "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, 0,
+                                       "activate-current",
+                                       "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, 0,
+                                       "activate-current",
+                                       "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_F10, 0,
+                                       "cycle-focus",
+                                       "(i)", GTK_DIR_TAB_FORWARD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "cycle-focus",
+                                       "(i)", GTK_DIR_TAB_BACKWARD);
 
   /**
    * GtkMenuShell:take-focus:
