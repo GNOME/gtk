@@ -78,7 +78,6 @@
 #include "gtkflowbox.h"
 
 #include "gtkadjustment.h"
-#include "gtkbindings.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkgesturedrag.h"
@@ -2987,7 +2986,7 @@ gtk_flow_box_focus (GtkWidget        *widget,
 }
 
 static void
-gtk_flow_box_add_move_binding (GtkBindingSet   *binding_set,
+gtk_flow_box_add_move_binding (GtkWidgetClass  *widget_class,
                                guint            keyval,
                                GdkModifierType  modmask,
                                GtkMovementStep  step,
@@ -3005,27 +3004,28 @@ gtk_flow_box_add_move_binding (GtkBindingSet   *binding_set,
       modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                       GDK_MODIFIER_INTENT_MODIFY_SELECTION);
     }
+  else
+    {
+      extend_mod_mask = GDK_SHIFT_MASK;
+      modify_mod_mask = GDK_CONTROL_MASK;
+    }
 
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | extend_mod_mask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | modify_mod_mask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | extend_mod_mask | modify_mod_mask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | extend_mod_mask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | modify_mod_mask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | extend_mod_mask | modify_mod_mask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
 }
 
 static void
@@ -3387,7 +3387,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   GObjectClass      *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass    *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
-  GtkBindingSet     *binding_set;
 
   object_class->finalize = gtk_flow_box_finalize;
   object_class->get_property = gtk_flow_box_get_property;
@@ -3664,50 +3663,57 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_CHILD];
 
-  binding_set = gtk_binding_set_by_class (class);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Home, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_End, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_End, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Up, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Up, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Down, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Down, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Page_Up, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Page_Down, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
 
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Right, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Right, 0,
                                  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Right, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Right, 0,
                                  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_Left, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Left, 0,
                                  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
-  gtk_flow_box_add_move_binding (binding_set, GDK_KEY_KP_Left, 0,
+  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Left, 0,
                                  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK,
-                                "toggle-cursor-child", 0, NULL);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
-                                "toggle-cursor-child", 0, NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, GDK_CONTROL_MASK,
+                                       "toggle-cursor-child",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, GDK_CONTROL_MASK,
+                                       "toggle-cursor-child",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
-                                "select-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "unselect-all", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK,
+                                       "select-all",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                       "unselect-all",
+                                       NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FLOW_BOX_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
