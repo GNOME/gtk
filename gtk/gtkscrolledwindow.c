@@ -28,7 +28,6 @@
 
 #include "gtkadjustment.h"
 #include "gtkadjustmentprivate.h"
-#include "gtkbindings.h"
 #include "gtkdnd.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
@@ -413,7 +412,7 @@ static GParamSpec *properties[NUM_PROPERTIES];
 G_DEFINE_TYPE_WITH_PRIVATE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN)
 
 static void
-add_scroll_binding (GtkBindingSet  *binding_set,
+add_scroll_binding (GtkWidgetClass *widget_class,
 		    guint           keyval,
 		    GdkModifierType mask,
 		    GtkScrollType   scroll,
@@ -421,27 +420,29 @@ add_scroll_binding (GtkBindingSet  *binding_set,
 {
   guint keypad_keyval = keyval - GDK_KEY_Left + GDK_KEY_KP_Left;
   
-  gtk_binding_entry_add_signal (binding_set, keyval, mask,
-                                "scroll-child", 2,
-                                GTK_TYPE_SCROLL_TYPE, scroll,
-				G_TYPE_BOOLEAN, horizontal);
-  gtk_binding_entry_add_signal (binding_set, keypad_keyval, mask,
-                                "scroll-child", 2,
-                                GTK_TYPE_SCROLL_TYPE, scroll,
-				G_TYPE_BOOLEAN, horizontal);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, mask,
+                                       "scroll-child",
+                                       "(ib)", scroll, horizontal);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keyval, mask,
+                                       "scroll-child",
+                                       "(ib)", scroll, horizontal);
 }
 
 static void
-add_tab_bindings (GtkBindingSet    *binding_set,
+add_tab_bindings (GtkWidgetClass   *widget_class,
 		  GdkModifierType   modifiers,
 		  GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "move-focus-out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-                                "move-focus-out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, modifiers,
+                                       "move-focus-out",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Tab, modifiers,
+                                       "move-focus-out",
+                                       "(i)", direction);
 }
 
 static void
@@ -521,7 +522,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
-  GtkBindingSet *binding_set;
 
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
@@ -796,25 +796,23 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GTK_TYPE_POSITION_TYPE);
 
-  binding_set = gtk_binding_set_by_class (class);
+  add_scroll_binding (widget_class, GDK_KEY_Left,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, TRUE);
+  add_scroll_binding (widget_class, GDK_KEY_Right, GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  TRUE);
+  add_scroll_binding (widget_class, GDK_KEY_Up,    GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, FALSE);
+  add_scroll_binding (widget_class, GDK_KEY_Down,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  FALSE);
 
-  add_scroll_binding (binding_set, GDK_KEY_Left,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, TRUE);
-  add_scroll_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  TRUE);
-  add_scroll_binding (binding_set, GDK_KEY_Up,    GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, FALSE);
-  add_scroll_binding (binding_set, GDK_KEY_Down,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  FALSE);
+  add_scroll_binding (widget_class, GDK_KEY_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
+  add_scroll_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
+  add_scroll_binding (widget_class, GDK_KEY_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
+  add_scroll_binding (widget_class, GDK_KEY_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
 
-  add_scroll_binding (binding_set, GDK_KEY_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
-  add_scroll_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
-  add_scroll_binding (binding_set, GDK_KEY_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
-  add_scroll_binding (binding_set, GDK_KEY_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
+  add_scroll_binding (widget_class, GDK_KEY_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, TRUE);
+  add_scroll_binding (widget_class, GDK_KEY_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   TRUE);
+  add_scroll_binding (widget_class, GDK_KEY_Home, 0,                GTK_SCROLL_START, FALSE);
+  add_scroll_binding (widget_class, GDK_KEY_End,  0,                GTK_SCROLL_END,   FALSE);
 
-  add_scroll_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, TRUE);
-  add_scroll_binding (binding_set, GDK_KEY_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   TRUE);
-  add_scroll_binding (binding_set, GDK_KEY_Home, 0,                GTK_SCROLL_START, FALSE);
-  add_scroll_binding (binding_set, GDK_KEY_End,  0,                GTK_SCROLL_END,   FALSE);
-
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("scrolledwindow"));
