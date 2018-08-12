@@ -30,7 +30,6 @@
 #include "gtksearchentryprivate.h"
 
 #include "gtkaccessible.h"
-#include "gtkbindings.h"
 #include "gtkeditable.h"
 #include "gtkbox.h"
 #include "gtkgestureclick.h"
@@ -326,7 +325,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   object_class->finalize = gtk_search_entry_finalize;
   object_class->get_property = gtk_search_entry_get_property;
@@ -462,14 +460,18 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_CONTROL_MASK,
-                                "next-match", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "previous-match", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
-                                "stop-search", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_g, GDK_CONTROL_MASK,
+                                       "next-match",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "previous-match",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "stop-search",
+                                       NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
