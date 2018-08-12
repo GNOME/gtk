@@ -6,12 +6,13 @@ static const char *css =
 "button {"
 "  all: unset; "
 "  background-color: white;"
-/*"  border: 30px solid blue;"*/
-/*"  margin: 40px;"*/
-/*"  padding: 40px;"*/
+"  border: 20px solid black;"
+"  padding: 20px;"
+"  margin: 40px;"
 "}"
 "button:hover {"
 "  background-color: blue;"
+"  border-color: red;"
 "}"
 "image {"
 "  background-color: teal;"
@@ -26,9 +27,9 @@ float scale = 1;
 graphene_matrix_t global_transform;
 
 static const GdkRGBA RED   = {1, 0, 0, 0.4};
-static const GdkRGBA GREEN = {0, 1, 0, 0.7};
+static const GdkRGBA GREEN = {0, 1, 0, 0.4};
 static const GdkRGBA BLUE  = {0, 0, 1, 0.4};
-static const GdkRGBA BLACK = {0, 0, 0, 1  };
+static const GdkRGBA BLACK = {0, 0, 0,   1};
 
 
 
@@ -264,6 +265,8 @@ transform_func (gpointer user_data)
                                  alloc.height  /2,
                                  0}
                             );
+
+  /*graphene_matrix_init_scale (&global_transform, 2, 2, 1);*/
 
 
   gtk_widget_set_transform (test_widget, &global_transform);
