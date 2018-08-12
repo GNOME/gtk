@@ -28,7 +28,6 @@
 #include "gtkscale.h"
 
 #include "gtkadjustment.h"
-#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkgizmoprivate.h"
@@ -621,10 +620,11 @@ gtk_scale_size_allocate (GtkWidget *widget,
     }
 }
 
-#define add_slider_binding(binding_set, keyval, mask, scroll)              \
-  gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
-                                I_("move-slider"), 1, \
-                                GTK_TYPE_SCROLL_TYPE, scroll)
+#define add_slider_binding(binding_set, keyval, mask, scroll)        \
+  gtk_widget_class_add_binding_signal (widget_class,                 \
+                                       keyval, mask,                 \
+                                       I_("move-slider"),            \
+                                       "(i)", scroll)
 
 static void
 gtk_scale_value_changed (GtkRange *range)
@@ -648,7 +648,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass  *range_class;
-  GtkBindingSet  *binding_set;
   
   gobject_class = G_OBJECT_CLASS (class);
   range_class = (GtkRangeClass*) class;
@@ -741,8 +740,6 @@ gtk_scale_class_init (GtkScaleClass *class)
    * blind users etc. don't care about scale orientation.
    */
   
-  binding_set = gtk_binding_set_by_class (class);
-
   add_slider_binding (binding_set, GDK_KEY_Left, 0,
                       GTK_SCROLL_STEP_LEFT);
 
