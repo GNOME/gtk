@@ -21,7 +21,6 @@
 
 #include "gtkactionhelperprivate.h"
 #include "gtkadjustmentprivate.h"
-#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
