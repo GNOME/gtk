@@ -29,7 +29,6 @@
 #include "gtkorientable.h"
 #include "gtksizegroup.h"
 #include "gtkwidget.h"
-#include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkgesturepan.h"
@@ -306,7 +305,6 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   object_class->finalize = gtk_shortcuts_section_finalize;
   object_class->get_property = gtk_shortcuts_section_get_property;
@@ -387,23 +385,23 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
 
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Up, 0,
-                                "change-current-page", 1,
-                                G_TYPE_INT, -1);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Down, 0,
-                                "change-current-page", 1,
-                                G_TYPE_INT, 1);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Up, GDK_CONTROL_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, -1);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Down, GDK_CONTROL_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Up, 0,
+                                       "change-current-page",
+                                       "(i)", -1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Down, 0,
+                                       "change-current-page",
+                                       "(i)", 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Up, GDK_CONTROL_MASK,
+                                       "change-current-page",
+                                       "(i)", -1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Down, GDK_CONTROL_MASK,
+                                       "change-current-page",
+                                       "(i)", 1);
+
   gtk_widget_class_set_css_name (widget_class, I_("shortcuts-section"));
 }
 
