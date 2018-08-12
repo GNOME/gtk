@@ -358,7 +358,6 @@
     <xi:include href="xml/gtkaccelmap.xml" />
     <xi:include href="xml/gtkdnd.xml" />
     <xi:include href="xml/gtksettings.xml" />
-    <xi:include href="xml/gtkbindings.xml" />
     <xi:include href="xml/gtkenums.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtktesting.xml" />
