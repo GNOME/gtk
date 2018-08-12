@@ -26,7 +26,6 @@
 
 #include "gtkpaned.h"
 
-#include "gtkbindings.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -276,24 +275,29 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *paned_props[LAST_PROP] = { NULL, };
 
 static void
-add_tab_bindings (GtkBindingSet    *binding_set,
-		  GdkModifierType   modifiers)
+add_tab_bindings (GtkWidgetClass  *widget_class,
+		  GdkModifierType  modifiers)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "toggle-handle-focus", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-				"toggle-handle-focus", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, modifiers,
+                                       "toggle-handle-focus",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Tab, modifiers,
+				       "toggle-handle-focus",
+                                       NULL);
 }
 
 static void
-add_move_binding (GtkBindingSet   *binding_set,
+add_move_binding (GtkWidgetClass  *widget_class,
 		  guint            keyval,
 		  GdkModifierType  mask,
 		  GtkScrollType    scroll)
 {
-  gtk_binding_entry_add_signal (binding_set, keyval, mask,
-				"move-handle", 1,
-				GTK_TYPE_SCROLL_TYPE, scroll);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, mask,
+				       "move-handle",
+                                       "(i)", scroll);
 }
 
 static void
@@ -335,16 +339,9 @@ gtk_paned_handle_contains (GtkGizmo *handle,
 static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
-  GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-  GtkPanedClass *paned_class;
-  GtkBindingSet *binding_set;
-
-  object_class = (GObjectClass *) class;
-  widget_class = (GtkWidgetClass *) class;
-  container_class = (GtkContainerClass *) class;
-  paned_class = (GtkPanedClass *) class;
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   object_class->set_property = gtk_paned_set_property;
   object_class->get_property = gtk_paned_get_property;
@@ -361,12 +358,12 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->child_type = gtk_paned_child_type;
   container_class->set_focus_child = gtk_paned_set_focus_child;
 
-  paned_class->cycle_child_focus = gtk_paned_cycle_child_focus;
-  paned_class->toggle_handle_focus = gtk_paned_toggle_handle_focus;
-  paned_class->move_handle = gtk_paned_move_handle;
-  paned_class->cycle_handle_focus = gtk_paned_cycle_handle_focus;
-  paned_class->accept_position = gtk_paned_accept_position;
-  paned_class->cancel_position = gtk_paned_cancel_position;
+  class->cycle_child_focus = gtk_paned_cycle_child_focus;
+  class->toggle_handle_focus = gtk_paned_toggle_handle_focus;
+  class->move_handle = gtk_paned_move_handle;
+  class->cycle_handle_focus = gtk_paned_cycle_handle_focus;
+  class->accept_position = gtk_paned_accept_position;
+  class->cancel_position = gtk_paned_cancel_position;
 
 
   paned_props[PROP_POSITION] =
@@ -604,84 +601,87 @@ gtk_paned_class_init (GtkPanedClass *class)
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
-  binding_set = gtk_binding_set_by_class (class);
-
   /* F6 and friends */
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_F6, 0,
-                                "cycle-child-focus", 1, 
-                                G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_F6, GDK_SHIFT_MASK,
-				"cycle-child-focus", 1,
-				G_TYPE_BOOLEAN, TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_F6, 0,
+                                       "cycle-child-focus",
+                                       "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_F6, GDK_SHIFT_MASK,
+                                       "cycle-child-focus",
+                                       "(b)", TRUE);
 
   /* F8 and friends */
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_F8, 0,
-				"cycle-handle-focus", 1,
-				G_TYPE_BOOLEAN, FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_F8, 0,
+	                               "cycle-handle-focus",
+                                       "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_F8, GDK_SHIFT_MASK,
+	                               "cycle-handle-focus",
+                                       "(b)", TRUE);
  
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_F8, GDK_SHIFT_MASK,
-				"cycle-handle-focus", 1,
-				G_TYPE_BOOLEAN, TRUE);
- 
-  add_tab_bindings (binding_set, 0);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK);
-  add_tab_bindings (binding_set, GDK_SHIFT_MASK);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK);
+  add_tab_bindings (widget_class, 0);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK);
+  add_tab_bindings (widget_class, GDK_SHIFT_MASK);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK);
 
   /* accept and cancel positions */
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Escape, 0,
-				"cancel-position", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_Escape, 0,
+				       "cancel-position",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Return, 0,
-				"accept-position", 0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_ISO_Enter, 0,
-				"accept-position", 0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Enter, 0,
-				"accept-position", 0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_space, 0,
-				"accept-position", 0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Space, 0,
-				"accept-position", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Return, 0,
+                                       "accept-position",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+			               GDK_KEY_ISO_Enter, 0,
+                                       "accept-position",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_KP_Enter, 0,
+                                       "accept-position",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_space, 0,
+                                       "accept-position",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, 0,
+                                       "accept-position",
+                                       NULL);
 
   /* move handle */
-  add_move_binding (binding_set, GDK_KEY_Left, 0, GTK_SCROLL_STEP_LEFT);
-  add_move_binding (binding_set, GDK_KEY_KP_Left, 0, GTK_SCROLL_STEP_LEFT);
-  add_move_binding (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_LEFT);
-  add_move_binding (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_LEFT);
+  add_move_binding (widget_class, GDK_KEY_Left, 0, GTK_SCROLL_STEP_LEFT);
+  add_move_binding (widget_class, GDK_KEY_KP_Left, 0, GTK_SCROLL_STEP_LEFT);
+  add_move_binding (widget_class, GDK_KEY_Left, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_LEFT);
+  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_LEFT);
 
-  add_move_binding (binding_set, GDK_KEY_Right, 0, GTK_SCROLL_STEP_RIGHT);
-  add_move_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_RIGHT);
-  add_move_binding (binding_set, GDK_KEY_KP_Right, 0, GTK_SCROLL_STEP_RIGHT);
-  add_move_binding (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_RIGHT);
+  add_move_binding (widget_class, GDK_KEY_Right, 0, GTK_SCROLL_STEP_RIGHT);
+  add_move_binding (widget_class, GDK_KEY_Right, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_RIGHT);
+  add_move_binding (widget_class, GDK_KEY_KP_Right, 0, GTK_SCROLL_STEP_RIGHT);
+  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_RIGHT);
 
-  add_move_binding (binding_set, GDK_KEY_Up, 0, GTK_SCROLL_STEP_UP);
-  add_move_binding (binding_set, GDK_KEY_Up, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_UP);
-  add_move_binding (binding_set, GDK_KEY_KP_Up, 0, GTK_SCROLL_STEP_UP);
-  add_move_binding (binding_set, GDK_KEY_KP_Up, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_UP);
-  add_move_binding (binding_set, GDK_KEY_Page_Up, 0, GTK_SCROLL_PAGE_UP);
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0, GTK_SCROLL_PAGE_UP);
+  add_move_binding (widget_class, GDK_KEY_Up, 0, GTK_SCROLL_STEP_UP);
+  add_move_binding (widget_class, GDK_KEY_Up, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_UP);
+  add_move_binding (widget_class, GDK_KEY_KP_Up, 0, GTK_SCROLL_STEP_UP);
+  add_move_binding (widget_class, GDK_KEY_KP_Up, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_UP);
+  add_move_binding (widget_class, GDK_KEY_Page_Up, 0, GTK_SCROLL_PAGE_UP);
+  add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0, GTK_SCROLL_PAGE_UP);
 
-  add_move_binding (binding_set, GDK_KEY_Down, 0, GTK_SCROLL_STEP_DOWN);
-  add_move_binding (binding_set, GDK_KEY_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_DOWN);
-  add_move_binding (binding_set, GDK_KEY_KP_Down, 0, GTK_SCROLL_STEP_DOWN);
-  add_move_binding (binding_set, GDK_KEY_KP_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_DOWN);
-  add_move_binding (binding_set, GDK_KEY_Page_Down, 0, GTK_SCROLL_PAGE_RIGHT);
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0, GTK_SCROLL_PAGE_RIGHT);
+  add_move_binding (widget_class, GDK_KEY_Down, 0, GTK_SCROLL_STEP_DOWN);
+  add_move_binding (widget_class, GDK_KEY_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_DOWN);
+  add_move_binding (widget_class, GDK_KEY_KP_Down, 0, GTK_SCROLL_STEP_DOWN);
+  add_move_binding (widget_class, GDK_KEY_KP_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_DOWN);
+  add_move_binding (widget_class, GDK_KEY_Page_Down, 0, GTK_SCROLL_PAGE_RIGHT);
+  add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0, GTK_SCROLL_PAGE_RIGHT);
 
-  add_move_binding (binding_set, GDK_KEY_Home, 0, GTK_SCROLL_START);
-  add_move_binding (binding_set, GDK_KEY_KP_Home, 0, GTK_SCROLL_START);
-  add_move_binding (binding_set, GDK_KEY_End, 0, GTK_SCROLL_END);
-  add_move_binding (binding_set, GDK_KEY_KP_End, 0, GTK_SCROLL_END);
+  add_move_binding (widget_class, GDK_KEY_Home, 0, GTK_SCROLL_START);
+  add_move_binding (widget_class, GDK_KEY_KP_Home, 0, GTK_SCROLL_START);
+  add_move_binding (widget_class, GDK_KEY_End, 0, GTK_SCROLL_END);
+  add_move_binding (widget_class, GDK_KEY_KP_End, 0, GTK_SCROLL_END);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PANED_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("paned"));
