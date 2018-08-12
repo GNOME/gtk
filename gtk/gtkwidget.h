@@ -1062,6 +1062,9 @@ void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_transform        (GtkWidget               *widget,
                                                          const graphene_matrix_t *transform);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_get_transform        (GtkWidget               *widget,
+                                                         graphene_matrix_t       *out_transform);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
