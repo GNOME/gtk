@@ -41,7 +41,6 @@
 
 #include "gtkmenubar.h"
 
-#include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuitemprivate.h"
@@ -83,8 +82,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
 
-  GtkBindingSet *binding_set;
-
   widget_class->measure = gtk_menu_bar_measure;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->root = gtk_menu_bar_root;
@@ -94,47 +91,38 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_bar_move_current;
 
-  binding_set = gtk_binding_set_by_class (class);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Left, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PREV);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Left, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PREV);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Right, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_NEXT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Right, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_NEXT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Up, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PARENT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Up, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PARENT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Down, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_CHILD);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Down, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_CHILD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Left, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_PREV);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Left, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_PREV);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Right, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_NEXT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Right, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_NEXT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Up, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_PARENT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Up, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_PARENT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Down, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_CHILD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Down, 0,
+                                       "move-current",
+                                       "(i)", GTK_MENU_DIR_CHILD);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
   gtk_widget_class_set_css_name (widget_class, I_("menubar"));
@@ -318,15 +306,15 @@ _gtk_menu_bar_get_viewable_menu_bars (GtkWindow *window)
       gboolean viewable = TRUE;
       
       while (widget)
-	{
-	  if (!gtk_widget_get_mapped (widget))
-	    viewable = FALSE;
+        {
+          if (!gtk_widget_get_mapped (widget))
+            viewable = FALSE;
 
           widget = gtk_widget_get_parent (widget);
-	}
+        }
 
       if (viewable)
-	viewable_menu_bars = g_list_prepend (viewable_menu_bars, menu_bars->data);
+        viewable_menu_bars = g_list_prepend (viewable_menu_bars, menu_bars->data);
     }
 
   return g_list_reverse (viewable_menu_bars);
@@ -334,7 +322,7 @@ _gtk_menu_bar_get_viewable_menu_bars (GtkWindow *window)
 
 static void
 set_menu_bars (GtkWindow *window,
-	       GList     *menubars)
+               GList     *menubars)
 {
   g_object_set_data (G_OBJECT (window), I_("gtk-menu-bar-list"), menubars);
 }
@@ -391,7 +379,7 @@ gtk_menu_bar_unroot (GtkWidget *widget)
  **/
 void
 _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
-			   GtkDirectionType  dir)
+                           GtkDirectionType  dir)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menubar));
   GtkMenuItem *to_activate = NULL;
@@ -439,7 +427,7 @@ gtk_menu_bar_get_popup_delay (GtkMenuShell *menu_shell)
 
 static void
 gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
-			   GtkMenuDirectionType  direction)
+                           GtkMenuDirectionType  direction)
 {
   GtkMenuBar *menubar = GTK_MENU_BAR (menu_shell);
 
