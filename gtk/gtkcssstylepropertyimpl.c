@@ -35,7 +35,6 @@
 #include "fallback-c89.c"
 
 /* the actual parsers we have */
-#include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssbordervalueprivate.h"
@@ -417,75 +416,6 @@ icon_style_parse (GtkCssStyleProperty *property,
     _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
-}
-
-static GtkCssValue *
-bindings_value_parse_one (GtkCssParser *parser)
-{
-  char *name;
-
-  name = _gtk_css_parser_try_ident (parser, TRUE);
-  if (name == NULL)
-    {
-      _gtk_css_parser_error (parser, "Not a valid binding name");
-      return NULL;
-    }
-
-  if (g_ascii_strcasecmp (name, "none") == 0)
-    {
-      name = NULL;
-    }
-  else if (!gtk_binding_set_find (name))
-    {
-      _gtk_css_parser_error (parser, "No binding set named '%s'", name);
-      g_free (name);
-      return NULL;
-    }
-
-  return _gtk_css_string_value_new_take (name);
-}
-
-static GtkCssValue *
-bindings_value_parse (GtkCssStyleProperty *property,
-                      GtkCssParser        *parser)
-{
-  return _gtk_css_array_value_parse (parser, bindings_value_parse_one);
-}
-
-static void
-bindings_value_query (GtkCssStyleProperty *property,
-                      const GtkCssValue   *css_value,
-                      GValue              *value)
-{
-  GPtrArray *array;
-  guint i;
-
-  g_value_init (value, G_TYPE_PTR_ARRAY);
-
-  if (_gtk_css_array_value_get_n_values (css_value) == 0)
-    return;
-
-  array = NULL;
-
-  for (i = 0; i < _gtk_css_array_value_get_n_values (css_value); i++)
-    {
-      const char *name;
-      GtkBindingSet *binding_set;
-      
-      name = _gtk_css_string_value_get (_gtk_css_array_value_get_nth (css_value, i));
-      if (name == NULL)
-        continue;
-
-      binding_set = gtk_binding_set_find (name);
-      if (binding_set == NULL)
-        continue;
-      
-      if (array == NULL)
-        array = g_ptr_array_new ();
-      g_ptr_array_add (array, binding_set);
-    }
-
-  g_value_take_boxed (value, array);
 }
 
 static GtkCssValue *
@@ -1753,16 +1683,6 @@ _gtk_css_style_property_init_properties (void)
                                           filter_value_parse,
                                           NULL,
                                           gtk_css_filter_value_new_none ());
-
-  /* Private property holding the binding sets */
-  gtk_css_style_property_register        ("-gtk-key-bindings",
-                                          GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
-                                          G_TYPE_PTR_ARRAY,
-                                          0,
-                                          0,
-                                          bindings_value_parse,
-                                          bindings_value_query,
-                                          _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
 
   gtk_css_style_property_register        ("caret-color",
                                           GTK_CSS_PROPERTY_CARET_COLOR,
