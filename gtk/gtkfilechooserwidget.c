@@ -22,7 +22,6 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 
-#include "gtkbindings.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
@@ -7878,18 +7877,20 @@ show_hidden_handler (GtkFileChooserWidget *impl)
 }
 
 static void
-add_normal_and_shifted_binding (GtkBindingSet   *binding_set,
+add_normal_and_shifted_binding (GtkWidgetClass  *widget_class,
                                 guint            keyval,
                                 GdkModifierType  modifiers,
                                 const gchar     *signal_name)
 {
-  gtk_binding_entry_add_signal (binding_set,
-                                keyval, modifiers,
-                                signal_name, 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modifiers,
+                                       signal_name,
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                keyval, modifiers | GDK_SHIFT_MASK,
-                                signal_name, 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modifiers | GDK_SHIFT_MASK,
+                                       signal_name,
+                                       NULL);
 }
 
 static void
@@ -7900,7 +7901,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   };
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkBindingSet *binding_set;
   gint i;
 
   gobject_class->finalize = gtk_file_chooser_widget_finalize;
@@ -8182,71 +8182,68 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 NULL,
                                 G_TYPE_NONE, 0);
 
-  binding_set = gtk_binding_set_by_class (class);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_l, GDK_CONTROL_MASK,
+                                       "location-toggle-popup",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_l, GDK_CONTROL_MASK,
-                                "location-toggle-popup",
-                                0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_v, GDK_CONTROL_MASK,
+                                       "location-popup-on-paste",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_v, GDK_CONTROL_MASK,
-                                "location-popup-on-paste",
-                                0);
-
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_Up, GDK_MOD1_MASK,
                                   "up-folder");
-
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_KP_Up, GDK_MOD1_MASK,
                                   "up-folder");
 
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_Down, GDK_MOD1_MASK,
                                   "down-folder");
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_KP_Down, GDK_MOD1_MASK,
                                   "down-folder");
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Home, GDK_MOD1_MASK,
-                                "home-folder",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_Home, GDK_MOD1_MASK,
-                                "home-folder",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_d, GDK_MOD1_MASK,
-                                "desktop-folder",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_h, GDK_CONTROL_MASK,
-                                "show-hidden",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_s, GDK_MOD1_MASK,
-                                "search-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_f, GDK_CONTROL_MASK,
-                                "search-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_r, GDK_MOD1_MASK,
-                                "recent-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_p, GDK_MOD1_MASK,
-                                "places-shortcut",
-                                0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Home, GDK_MOD1_MASK,
+                                       "home-folder",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Home, GDK_MOD1_MASK,
+                                       "home-folder",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_d, GDK_MOD1_MASK,
+                                       "desktop-folder",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_h, GDK_CONTROL_MASK,
+                                       "show-hidden",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_s, GDK_MOD1_MASK,
+                                       "search-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_f, GDK_CONTROL_MASK,
+                                       "search-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_r, GDK_MOD1_MASK,
+                                       "recent-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_p, GDK_MOD1_MASK,
+                                       "places-shortcut",
+                                       NULL);
 
-  for (i = 0; i < 10; i++)
-    gtk_binding_entry_add_signal (binding_set,
-                                  quick_bookmark_keyvals[i], GDK_MOD1_MASK,
-                                  "quick-bookmark",
-                                  1, G_TYPE_INT, i);
+  for (i = 0; i < G_N_ELEMENTS (quick_bookmark_keyvals); i++)
+    gtk_widget_class_add_binding_signal (widget_class,
+                                         quick_bookmark_keyvals[i], GDK_MOD1_MASK,
+                                         "quick-bookmark",
+                                         "(i)", i);
 
   g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
                                    g_param_spec_boolean ("search-mode",
