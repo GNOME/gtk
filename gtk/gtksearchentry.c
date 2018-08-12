@@ -30,7 +30,6 @@
 #include "gtksearchentryprivate.h"
 
 #include "gtkaccessible.h"
-#include "gtkbindings.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
@@ -153,7 +152,7 @@ static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gtk_search_entry_finalize;
   object_class->notify = gtk_search_entry_notify;
@@ -249,14 +248,18 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_CONTROL_MASK,
-                                "next-match", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "previous-match", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
-                                "stop-search", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_g, GDK_CONTROL_MASK,
+                                       "next-match",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "previous-match",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "stop-search",
+                                       NULL);
 }
 
 static void
