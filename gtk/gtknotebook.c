@@ -27,7 +27,6 @@
 
 #include "gtknotebook.h"
 
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
@@ -864,49 +863,53 @@ G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
                                                 gtk_notebook_buildable_init))
 
 static void
-add_tab_bindings (GtkBindingSet    *binding_set,
+add_tab_bindings (GtkWidgetClass   *widget_class,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "move_focus_out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-                                "move_focus_out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, modifiers,
+                                       "move_focus_out",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Tab, modifiers,
+                                       "move_focus_out",
+                                       "(i)", direction);
 }
 
 static void
-add_arrow_bindings (GtkBindingSet    *binding_set,
+add_arrow_bindings (GtkWidgetClass   *widget_class,
                     guint             keysym,
                     GtkDirectionType  direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
-  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
-                                "move_focus_out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
-                                "move_focus_out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, GDK_CONTROL_MASK,
+                                       "move_focus_out",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, GDK_CONTROL_MASK,
+                                       "move_focus_out",
+                                       "(i)", direction);
 }
 
 static void
-add_reorder_bindings (GtkBindingSet    *binding_set,
+add_reorder_bindings (GtkWidgetClass   *widget_class,
                       guint             keysym,
                       GtkDirectionType  direction,
                       gboolean          move_to_last)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
-  gtk_binding_entry_add_signal (binding_set, keysym, GDK_MOD1_MASK,
-                                "reorder_tab", 2,
-                                GTK_TYPE_DIRECTION_TYPE, direction,
-                                G_TYPE_BOOLEAN, move_to_last);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_MOD1_MASK,
-                                "reorder_tab", 2,
-                                GTK_TYPE_DIRECTION_TYPE, direction,
-                                G_TYPE_BOOLEAN, move_to_last);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, GDK_MOD1_MASK,
+                                       "reorder_tab",
+                                       "(ib)", direction, move_to_last);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, GDK_MOD1_MASK,
+                                       "reorder_tab",
+                                       "(ib)", direction, move_to_last);
 }
 
 static gboolean
@@ -964,7 +967,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   GObjectClass   *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
-  GtkBindingSet *binding_set;
 
   gobject_class->set_property = gtk_notebook_set_property;
   gobject_class->get_property = gtk_notebook_get_property;
@@ -1246,67 +1248,66 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_OBJECT__OBJECTv);
 
-  binding_set = gtk_binding_set_by_class (class);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_space, 0,
-                                "select-page", 1,
-                                G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_Space, 0,
-                                "select-page", 1,
-                                G_TYPE_BOOLEAN, FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, 0,
+                                       "select-page",
+                                       "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, 0,
+                                       "select-page",
+                                       "(b)", FALSE);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Home, 0,
-                                "focus-tab", 1,
-                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_Home, 0,
-                                "focus-tab", 1,
-                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_End, 0,
-                                "focus-tab", 1,
-                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_End, 0,
-                                "focus-tab", 1,
-                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Home, 0,
+                                       "focus-tab",
+                                       "(i)", GTK_NOTEBOOK_TAB_FIRST);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Home, 0,
+                                       "focus-tab",
+                                       "(i)", GTK_NOTEBOOK_TAB_FIRST);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_End, 0,
+                                       "focus-tab",
+                                       "(i)", GTK_NOTEBOOK_TAB_LAST);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_End, 0,
+                                       "focus-tab",
+                                       "(i)", GTK_NOTEBOOK_TAB_LAST);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Up, GDK_CONTROL_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, -1);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Down, GDK_CONTROL_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Up, GDK_CONTROL_MASK,
+                                       "change-current-page",
+                                       "(i)", -1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Down, GDK_CONTROL_MASK,
+                                       "change-current-page",
+                                       "(i)", 1);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, -1);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
+                                       "change-current-page",
+                                       "(i)", -1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
+                                       "change-current-page",
+                                       "(i)", 1);
 
-  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
+  add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
 
-  add_reorder_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP, FALSE);
-  add_reorder_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN, FALSE);
-  add_reorder_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT, FALSE);
-  add_reorder_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT, FALSE);
-  add_reorder_bindings (binding_set, GDK_KEY_Home, GTK_DIR_LEFT, TRUE);
-  add_reorder_bindings (binding_set, GDK_KEY_Home, GTK_DIR_UP, TRUE);
-  add_reorder_bindings (binding_set, GDK_KEY_End, GTK_DIR_RIGHT, TRUE);
-  add_reorder_bindings (binding_set, GDK_KEY_End, GTK_DIR_DOWN, TRUE);
+  add_reorder_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP, FALSE);
+  add_reorder_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN, FALSE);
+  add_reorder_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT, FALSE);
+  add_reorder_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT, FALSE);
+  add_reorder_bindings (widget_class, GDK_KEY_Home, GTK_DIR_LEFT, TRUE);
+  add_reorder_bindings (widget_class, GDK_KEY_Home, GTK_DIR_UP, TRUE);
+  add_reorder_bindings (widget_class, GDK_KEY_End, GTK_DIR_RIGHT, TRUE);
+  add_reorder_bindings (widget_class, GDK_KEY_End, GTK_DIR_DOWN, TRUE);
 
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_NOTEBOOK_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("notebook"));
