@@ -46,7 +46,6 @@
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbin.h>
-#include <gtk/gtkbindings.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbuildable.h>
