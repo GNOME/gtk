@@ -41,7 +41,6 @@
 
 #include "gtkmenubar.h"
 
-#include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuitemprivate.h"
@@ -101,15 +100,9 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
 static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
 {
-  GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
-  GtkMenuShellClass *menu_shell_class;
-
-  GtkBindingSet *binding_set;
-
-  gobject_class = (GObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  menu_shell_class = (GtkMenuShellClass*) class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
 
   gobject_class->get_property = gtk_menu_bar_get_property;
   gobject_class->set_property = gtk_menu_bar_set_property;
@@ -122,47 +115,38 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_bar_move_current;
 
-  binding_set = gtk_binding_set_by_class (class);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Left, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PREV);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Left, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PREV);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Right, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_NEXT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Right, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_NEXT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Up, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PARENT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Up, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_PARENT);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Down, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_CHILD);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Down, 0,
-				"move-current", 1,
-				GTK_TYPE_MENU_DIRECTION_TYPE,
-				GTK_MENU_DIR_CHILD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Left, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_PREV);
+  gtk_widget_class_add_binding_signal (widget_class,
+				       GDK_KEY_KP_Left, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_PREV);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Right, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_NEXT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Right, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_NEXT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Up, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_PARENT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Up, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_PARENT);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Down, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_CHILD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Down, 0,
+				       "move-current",
+                                       "(i)", GTK_MENU_DIR_CHILD);
 
   /**
    * GtkMenuBar:pack-direction:
