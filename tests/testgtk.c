@@ -6518,7 +6518,6 @@ main (int argc, char *argv[])
 {
   GtkCssProvider *provider, *memory_provider;
   GdkDisplay *display;
-  GtkBindingSet *binding_set;
   int i;
   gboolean done_benchmarks = FALSE;
 
@@ -6601,15 +6600,6 @@ main (int argc, char *argv[])
     }
   if (done_benchmarks)
     return 0;
-
-  /* bindings test
-   */
-  binding_set = gtk_binding_set_by_class (g_type_class_ref (GTK_TYPE_WIDGET));
-  gtk_binding_entry_add_signal (binding_set,
-				'9', GDK_CONTROL_MASK | GDK_RELEASE_MASK,
-				"debug_msg",
-				1,
-				G_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
 
   memory_provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (memory_provider,
