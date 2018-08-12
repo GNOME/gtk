@@ -21,7 +21,6 @@
 
 #include "gtkactionhelperprivate.h"
 #include "gtkadjustmentprivate.h"
-#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
@@ -33,6 +32,7 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbindings.h"
 
 #include "a11y/gtklistboxaccessibleprivate.h"
 #include "a11y/gtklistboxrowaccessible.h"
