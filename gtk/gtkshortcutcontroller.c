@@ -32,7 +32,6 @@
 #include "gtkshortcutcontrollerprivate.h"
 
 #include "gtkeventcontrollerprivate.h"
-#include "gtkbindings.h"
 #include "gtkshortcut.h"
 #include "gtkwidgetprivate.h"
 
@@ -84,7 +83,6 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
                                       double              y)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
-  GdkEventType event_type = gdk_event_get_event_type (event);
   GtkWidget *widget;
   const GSList *l;
 
@@ -97,13 +95,6 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
   if (self->run_class)
     {
       widget = gtk_event_controller_get_widget (controller);
-
-      if (event_type == GDK_KEY_PRESS ||
-          event_type == GDK_KEY_RELEASE)
-        {
-          if (gtk_bindings_activate_event (G_OBJECT (widget), event))
-            return TRUE;
-        }
 
       for (l = gtk_widget_class_get_shortcuts (GTK_WIDGET_GET_CLASS (widget)); l; l = l->next)
         {
