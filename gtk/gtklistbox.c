@@ -232,7 +232,7 @@ static GSequenceIter *      gtk_list_box_get_next_visible             (GtkListBo
                                                                        GSequenceIter       *iter);
 static void                 gtk_list_box_apply_filter                 (GtkListBox          *box,
                                                                        GtkListBoxRow       *row);
-static void                 gtk_list_box_add_move_binding             (GtkBindingSet       *binding_set,
+static void                 gtk_list_box_add_move_binding             (GtkWidgetClass      *widget_class,
                                                                        guint                keyval,
                                                                        GdkModifierType      modmask,
                                                                        GtkMovementStep      step,
@@ -438,9 +438,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkBindingSet *binding_set;
-
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ACCESSIBLE);
 
   object_class->get_property = gtk_list_box_get_property;
   object_class->set_property = gtk_list_box_set_property;
@@ -614,43 +611,52 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_ROW];
 
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Home, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_End, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_End, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Up, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Up, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Down, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Down, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Page_Up, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Page_Down, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
+  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK,
-                                "toggle-cursor-row", 0, NULL);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
-                                "toggle-cursor-row", 0, NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, GDK_CONTROL_MASK,
+                                       "toggle-cursor-row",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, GDK_CONTROL_MASK,
+                                       "toggle-cursor-row",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
-                                "select-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "unselect-all", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK,
+                                       "select-all",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                       "unselect-all",
+                                       NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ACCESSIBLE);
 }
 
 static void
@@ -1438,7 +1444,7 @@ gtk_list_box_set_accept_unpaired_release (GtkListBox *box,
 }
 
 static void
-gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
+gtk_list_box_add_move_binding (GtkWidgetClass  *widget_class,
                                guint            keyval,
                                GdkModifierType  modmask,
                                GtkMovementStep  step,
@@ -1457,26 +1463,22 @@ gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
                                                       GDK_MODIFIER_INTENT_MODIFY_SELECTION);
     }
 
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | extend_mod_mask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | modify_mod_mask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | extend_mod_mask | modify_mod_mask,
-                                "move-cursor", 2,
-                                GTK_TYPE_MOVEMENT_STEP, step,
-                                G_TYPE_INT, count,
-                                NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | extend_mod_mask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | modify_mod_mask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | extend_mod_mask | modify_mod_mask,
+                                       "move-cursor",
+                                       "(ii)", step, count);
 }
 
 static void
