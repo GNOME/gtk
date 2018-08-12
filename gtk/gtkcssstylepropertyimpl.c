@@ -35,7 +35,6 @@
 #include "fallback-c89.c"
 
 /* the actual parsers we have */
-#include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssbordervalueprivate.h"
