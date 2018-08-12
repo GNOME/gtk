@@ -1,4 +1,0 @@
-@binding-set gtk-emacs-text-view {
-  bind "<ctrl>u" { "move-cursor" (paragraph-ends, -1, 0)
-                   "delete-from-cursor" (paragraph-ends, 1) };
-};
