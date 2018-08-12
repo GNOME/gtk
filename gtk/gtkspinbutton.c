@@ -30,7 +30,6 @@
 #include "gtkspinbutton.h"
 
 #include "gtkadjustment.h"
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -323,10 +322,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_spin_button_editable_init))
 
-#define add_spin_binding(binding_set, keyval, mask, scroll)            \
-  gtk_binding_entry_add_signal (binding_set, keyval, mask,             \
-                                "change-value", 1,                     \
-                                GTK_TYPE_SCROLL_TYPE, scroll)
+#define add_spin_binding(widget_class, keyval, mask, scroll)            \
+  gtk_widget_class_add_binding_signal (widget_class, keyval, mask,      \
+                                       "change-value",                  \
+                                       "(i)", scroll)
 
 
 static void
@@ -355,7 +354,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
   GObjectClass     *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass   *widget_class = GTK_WIDGET_CLASS (class);
-  GtkBindingSet    *binding_set;
 
   gobject_class->finalize = gtk_spin_button_finalize;
   gobject_class->set_property = gtk_spin_button_set_property;
@@ -554,18 +552,16 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_SCROLL_TYPE);
 
-  binding_set = gtk_binding_set_by_class (class);
-
-  add_spin_binding (binding_set, GDK_KEY_Up, 0, GTK_SCROLL_STEP_UP);
-  add_spin_binding (binding_set, GDK_KEY_KP_Up, 0, GTK_SCROLL_STEP_UP);
-  add_spin_binding (binding_set, GDK_KEY_Down, 0, GTK_SCROLL_STEP_DOWN);
-  add_spin_binding (binding_set, GDK_KEY_KP_Down, 0, GTK_SCROLL_STEP_DOWN);
-  add_spin_binding (binding_set, GDK_KEY_Page_Up, 0, GTK_SCROLL_PAGE_UP);
-  add_spin_binding (binding_set, GDK_KEY_Page_Down, 0, GTK_SCROLL_PAGE_DOWN);
-  add_spin_binding (binding_set, GDK_KEY_End, GDK_CONTROL_MASK, GTK_SCROLL_END);
-  add_spin_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK, GTK_SCROLL_START);
-  add_spin_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
-  add_spin_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
+  add_spin_binding (widget_class, GDK_KEY_Up, 0, GTK_SCROLL_STEP_UP);
+  add_spin_binding (widget_class, GDK_KEY_KP_Up, 0, GTK_SCROLL_STEP_UP);
+  add_spin_binding (widget_class, GDK_KEY_Down, 0, GTK_SCROLL_STEP_DOWN);
+  add_spin_binding (widget_class, GDK_KEY_KP_Down, 0, GTK_SCROLL_STEP_DOWN);
+  add_spin_binding (widget_class, GDK_KEY_Page_Up, 0, GTK_SCROLL_PAGE_UP);
+  add_spin_binding (widget_class, GDK_KEY_Page_Down, 0, GTK_SCROLL_PAGE_DOWN);
+  add_spin_binding (widget_class, GDK_KEY_End, GDK_CONTROL_MASK, GTK_SCROLL_END);
+  add_spin_binding (widget_class, GDK_KEY_Home, GDK_CONTROL_MASK, GTK_SCROLL_START);
+  add_spin_binding (widget_class, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
+  add_spin_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("spinbutton"));
