@@ -20,7 +20,6 @@
 
 #include "gtkshortcutswindowprivate.h"
 
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkgrid.h"
 #include "gtkheaderbar.h"
@@ -771,7 +770,6 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkBindingSet *binding_set = gtk_binding_set_by_class (klass);
 
   object_class->constructed = gtk_shortcuts_window_constructed;
   object_class->finalize = gtk_shortcuts_window_finalize;
@@ -853,8 +851,14 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
                                  G_TYPE_NONE,
                                  0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_f, GDK_CONTROL_MASK, "search", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "close",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_f, GDK_CONTROL_MASK,
+                                       "search",
+                                       NULL);
 
   g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);
