@@ -22,7 +22,6 @@
 
 #include "gtkadjustmentprivate.h"
 #include "gtkbox.h"
-#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
@@ -53,6 +52,7 @@
 #include "gtkrendericonprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
+#include "gtkshortcutcontroller.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltip.h"
@@ -657,12 +657,12 @@ static void     gtk_tree_view_size_allocate        (GtkWidget      *widget,
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
 
+static gboolean gtk_tree_view_forward_controller_key_pressed  (GtkEventControllerKey *key,
+                                                               guint                  keyval,
+                                                               guint                  keycode,
+                                                               GdkModifierType        state,
+                                                               GtkTreeView           *tree_view);
 static gboolean gtk_tree_view_key_controller_key_pressed  (GtkEventControllerKey *key,
-                                                           guint                  keyval,
-                                                           guint                  keycode,
-                                                           GdkModifierType        state,
-                                                           GtkTreeView           *tree_view);
-static void     gtk_tree_view_key_controller_key_released (GtkEventControllerKey *key,
                                                            guint                  keyval,
                                                            guint                  keycode,
                                                            GdkModifierType        state,
@@ -1703,6 +1703,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   GtkCssNode *widget_node;
   GtkGesture *gesture;
   GtkEventController *controller;
+  GList *list, *controllers;
 
   gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (tree_view), GTK_OVERFLOW_HIDDEN);
@@ -1764,6 +1765,24 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_css_node_set_state (tree_view->header_node, gtk_css_node_get_state (widget_node));
   g_object_unref (tree_view->header_node);
 
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed",
+                    G_CALLBACK (gtk_tree_view_forward_controller_key_pressed), tree_view);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
+
+  controllers = gtk_widget_list_controllers (GTK_WIDGET (tree_view), GTK_PHASE_BUBBLE);
+  for (list = controllers; list; list = list->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (list->data))
+        {
+          g_object_ref (list->data);
+          gtk_widget_remove_controller (GTK_WIDGET (tree_view), list->data);
+          gtk_widget_add_controller (GTK_WIDGET (tree_view), list->data);
+          break;
+        }
+    }
+  g_list_free (controllers);
+
   tree_view->click_gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->click_gesture), 0);
   g_signal_connect (tree_view->click_gesture, "pressed",
@@ -1811,8 +1830,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_tree_view_key_controller_key_pressed), tree_view);
-  g_signal_connect (controller, "key-released",
-                    G_CALLBACK (gtk_tree_view_key_controller_key_released), tree_view);
   g_signal_connect (controller, "focus-out",
                     G_CALLBACK (gtk_tree_view_key_controller_focus_out), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
@@ -5288,7 +5305,6 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
   GtkWidget *button;
-  GdkEvent *event;
 
   if (tree_view->rubber_band_status)
     {
@@ -5408,16 +5424,16 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
         }
     }
 
-  /* Handle the keybindings. */
-  event = gtk_get_current_event ();
-  if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
-    {
-      g_object_unref (event);
-      return TRUE;
-    }
+  return FALSE;
+}
 
-  g_object_unref (event);
-
+static gboolean
+gtk_tree_view_forward_controller_key_pressed (GtkEventControllerKey *key,
+                                              guint                  keyval,
+                                              guint                  keycode,
+                                              GdkModifierType        state,
+                                              GtkTreeView           *tree_view)
+{
   if (tree_view->search_entry_avoid_unhandled_binding)
     {
       tree_view->search_entry_avoid_unhandled_binding = FALSE;
@@ -5454,24 +5470,6 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
     }
 
   return FALSE;
-}
-
-static void
-gtk_tree_view_key_controller_key_released (GtkEventControllerKey *key,
-                                           guint                  keyval,
-                                           guint                  keycode,
-                                           GdkModifierType        state,
-                                           GtkTreeView           *tree_view)
-{
-  GdkEvent *event;
-
-  if (tree_view->rubber_band_status)
-    return;
-
-  /* Handle the keybindings. */
-  event = gtk_get_current_event ();
-  gtk_bindings_activate_event (G_OBJECT (tree_view), (GdkEventKey *)event);
-  g_object_unref (event);
 }
 
 static void
