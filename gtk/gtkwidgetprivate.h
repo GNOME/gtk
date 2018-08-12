@@ -330,6 +330,11 @@ void              gtk_widget_get_origin_relative_to_parent (GtkWidget        *wi
                                                             int              *origin_x,
                                                             int              *origin_y);
 
+gboolean          gtk_widget_emit_event_signals            (GtkWidget      *widget,
+                                                            const GdkEvent *event);
+
+void              gtk_widget_init_legacy_controller        (GtkWidget *widget);
+
 void              gtk_widget_cancel_event_sequence         (GtkWidget             *widget,
                                                             GtkGesture            *gesture,
                                                             GdkEventSequence      *sequence,
