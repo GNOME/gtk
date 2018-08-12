@@ -37,49 +37,6 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 
-static gboolean
-inspector_contains (GtkWidget *widget,
-                    double     x,
-                    double     y)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  if (!gtk_widget_is_drawable (widget))
-    return FALSE;
-
-  return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
-}
-
-static GtkWidget *
-inspector_pick (GtkWidget *widget,
-                double     x,
-                double     y)
-{
-  /* Like gtk_widget_pick and gtk_widget_contains,
-   * but we need to consider insensitive widgets as well. */
-  GtkWidget *child;
-
-  for (child = _gtk_widget_get_last_child (widget);
-       child;
-       child = _gtk_widget_get_prev_sibling (child))
-    {
-      GtkWidget *picked;
-      int dx, dy;
-
-      gtk_widget_get_origin_relative_to_parent (child, &dx, &dy);
-
-      picked = GTK_WIDGET_GET_CLASS (child)->pick (child, x - dx, y - dy);
-      if (picked)
-        return picked;
-    }
-
-
-  if (!inspector_contains (widget, x, y))
-    return NULL;
-
-  return widget;
-}
-
 static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
 {
@@ -122,7 +79,7 @@ find_widget_at_pointer (GdkDevice *device)
       gdk_surface_get_device_position_double (gtk_widget_get_surface (widget),
                                              device, &x, &y, NULL);
 
-      widget = inspector_pick (widget, x, y);
+      widget = gtk_widget_pick (widget, x, y);
     }
 
   return widget;
