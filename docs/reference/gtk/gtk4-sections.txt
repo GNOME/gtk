@@ -5200,26 +5200,6 @@ gtk_drag_source_add_uri_targets
 </SECTION>
 
 <SECTION>
-<FILE>gtkbindings</FILE>
-<TITLE>Bindings</TITLE>
-GtkBindingSet
-GtkBindingEntry
-GtkBindingSignal
-GtkBindingArg
-gtk_binding_set_new
-gtk_binding_set_by_class
-gtk_binding_set_find
-gtk_bindings_activate
-gtk_bindings_activate_event
-gtk_binding_set_activate
-gtk_binding_entry_add_signal_variant
-gtk_binding_entry_add_signal
-gtk_binding_entry_add_signal_from_string
-gtk_binding_entry_skip
-gtk_binding_entry_remove
-</SECTION>
-
-<SECTION>
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
 GtkBaselinePosition
