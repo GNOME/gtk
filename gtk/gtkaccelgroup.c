@@ -109,7 +109,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
                         "Modifier Mask",
                         "Modifier Mask",
                         GDK_TYPE_MODIFIER_TYPE,
-                        default_accel_mod_mask,
+                        gtk_accelerator_get_default_mod_mask (),
                         G_PARAM_READABLE);
 
    g_object_class_install_properties (object_class,
