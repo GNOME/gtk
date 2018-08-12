@@ -1052,6 +1052,10 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_transform        (GtkWidget               *widget,
                                                          const graphene_matrix_t *transform);
 GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_get_transform        (GtkWidget               *widget,
+                                                         graphene_matrix_t       *out_transform);
+
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
                                                 GtkWidget  *dest_widget,
                                                 double      src_x,

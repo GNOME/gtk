@@ -13778,3 +13778,15 @@ gtk_widget_set_transform (GtkWidget               *widget,
 
   graphene_matrix_init_from_matrix (&priv->transform, transform);
 }
+
+void
+gtk_widget_get_transform (GtkWidget         *widget,
+                          graphene_matrix_t *out_transform)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (out_transform != NULL);
+
+  *out_transform = priv->transform;
+}
