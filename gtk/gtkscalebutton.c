@@ -37,7 +37,6 @@
 #include "gtkscalebutton.h"
 
 #include "gtkadjustment.h"
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbuttonprivate.h"
 #include "gtkimage.h"
@@ -171,7 +170,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   gobject_class->constructed = gtk_scale_button_constructed;
   gobject_class->finalize = gtk_scale_button_finalize;
@@ -298,20 +296,30 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                 G_TYPE_NONE, 0);
 
   /* Key bindings */
-  binding_set = gtk_binding_set_by_class (widget_class);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0,
-				"popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
-				"popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
-				"popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
-				"popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
-				"popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
-				"popdown", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_space, 0,
+				       "popup",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Space, 0,
+				       "popup",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Return, 0,
+				       "popup",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_ISO_Enter, 0,
+				       "popup",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Enter, 0,
+				       "popup",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+				       "popdown",
+                                       NULL);
 
   /* Bind class to template
    */
