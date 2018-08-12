@@ -36,7 +36,6 @@
 #include "gtktoolbar.h"
 #include "gtktoolbarprivate.h"
 
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
@@ -324,33 +323,35 @@ static guint toolbar_signals[LAST_SIGNAL] = { 0 };
 
 
 static void
-add_arrow_bindings (GtkBindingSet   *binding_set,
+add_arrow_bindings (GtkWidgetClass  *widget_class,
 		    guint            keysym,
 		    GtkDirectionType dir)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
-  gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, dir);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, dir);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, 0,
+                                       "move-focus",
+                                       "(i)", dir);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, 0,
+                                       "move-focus",
+                                       "(i)", dir);
 }
 
 static void
-add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
+add_ctrl_tab_bindings (GtkWidgetClass  *widget_class,
 		       GdkModifierType   modifiers,
 		       GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Tab, GDK_CONTROL_MASK | modifiers,
-				"move-focus", 1,
-				GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Tab, GDK_CONTROL_MASK | modifiers,
-				"move-focus", 1,
-				GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, GDK_CONTROL_MASK | modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Tab, GDK_CONTROL_MASK | modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
 }
 
 static void
@@ -359,7 +360,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
-  GtkBindingSet *binding_set;
   
   gobject_class = (GObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
@@ -499,28 +499,30 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  binding_set = gtk_binding_set_by_class (klass);
-  
-  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
-  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
-  
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Home, 0,
-                                "focus-home-or-end", 1,
-				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Home, 0,
-                                "focus-home-or-end", 1,
-				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_End, 0,
-                                "focus-home-or-end", 1,
-				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_End, 0,
-                                "focus-home-or-end", 1,
-				G_TYPE_BOOLEAN, FALSE);
-  
-  add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
-  add_ctrl_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
+  add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
+
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Home, 0,
+                                       "focus-home-or-end",
+                                       "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Home, 0,
+                                       "focus-home-or-end",
+                                       "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_End, 0,
+                                       "focus-home-or-end",
+                                       "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_End, 0,
+                                       "focus-home-or-end",
+                                       "(b)", FALSE);
+
+  add_ctrl_tab_bindings (widget_class, 0, GTK_DIR_TAB_FORWARD);
+  add_ctrl_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_css_name (widget_class, I_("toolbar"));
 }
