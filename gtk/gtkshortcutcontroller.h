@@ -46,10 +46,16 @@ GDK_AVAILABLE_IN_ALL
 GtkEventController *    gtk_shortcut_controller_new                     (void);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_shortcut_controller_add_shortcut            (GtkShortcutController  *controller,
+void                    gtk_shortcut_controller_set_scope               (GtkShortcutController  *self,
+                                                                         GtkShortcutScope        scope);
+GDK_AVAILABLE_IN_ALL
+GtkShortcutScope        gtk_shortcut_controller_get_scope               (GtkShortcutController  *self);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_shortcut_controller_add_shortcut            (GtkShortcutController  *self,
                                                                          GtkShortcut            *shortcut);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_shortcut_controller_remove_shortcut         (GtkShortcutController  *controller,
+void                    gtk_shortcut_controller_remove_shortcut         (GtkShortcutController  *self,
                                                                          GtkShortcut            *shortcut);
 
 G_END_DECLS
