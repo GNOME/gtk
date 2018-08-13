@@ -61,11 +61,6 @@ struct _GtkAccelLabelClass
 {
   GtkWidgetClass parent_class;
 
-  gchar		*mod_name_shift;
-  gchar		*mod_name_control;
-  gchar		*mod_name_alt;
-  gchar		*mod_separator;
-
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
