@@ -108,12 +108,6 @@ void      gtk_accel_label_set_use_underline  (GtkAccelLabel   *accel_label,
 GDK_AVAILABLE_IN_ALL
 gboolean  gtk_accel_label_get_use_underline  (GtkAccelLabel   *accel_label);
 
-
-/* private */
-gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
-							 guint               accelerator_key,
-							 GdkModifierType     accelerator_mods);
-
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccelLabel, g_object_unref)
 
 G_END_DECLS
