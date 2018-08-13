@@ -6731,6 +6731,9 @@ gtk_shortcut_get_type
 <TITLE>GtkShortcutController</TITLE>
 GtkShortcutController
 gtk_shortcut_controller_new
+GtkShortcutScope
+gtk_shortcut_controller_set_scope
+gtk_shortcut_controller_get_scope
 gtk_shortcut_controller_add_shortcut
 gtk_shortcut_controller_remove_shortcut
 
