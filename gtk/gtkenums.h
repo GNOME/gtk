@@ -1017,6 +1017,25 @@ typedef enum
 } GtkPanDirection;
 
 /**
+ * GtkShortcutScope:
+ * @GTK_SHORTCUT_SCOPE_LOCAL: Shortcuts are handled inside
+ *     the widget hte controller belongs to.
+ * @GTK_SHORTCUT_SCOPE_MANAGED: Shortcuts are handled by
+ *     the first ancestor that is a #GtkShortcutManager
+ * @GTK_SHORTCUT_SCOPE_GLOBAL: Shortcuts are handled by
+ *     the root widget.
+ *
+ * Describes where #GtkShortcuts added to a
+ * #GtkShortcutController get handled.
+ */
+typedef enum
+{
+  GTK_SHORTCUT_SCOPE_LOCAL,
+  GTK_SHORTCUT_SCOPE_MANAGED,
+  GTK_SHORTCUT_SCOPE_GLOBAL
+} GtkShortcutScope;
+
+/**
  * GtkPopoverConstraint:
  * @GTK_POPOVER_CONSTRAINT_NONE: Don't constrain the popover position
  *   beyond what is imposed by the implementation
