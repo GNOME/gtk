@@ -1812,10 +1812,21 @@ gtk_accelerator_get_label (guint           accelerator_key,
                            GdkModifierType accelerator_mods)
 {
   GString *gstring;
+
+  gstring = g_string_new (NULL);
+
+  gtk_accelerator_print_label (gstring, accelerator_key, accelerator_mods);
+
+  return g_string_free (gstring, FALSE);
+}
+
+void
+gtk_accelerator_print_label (GString        *gstring,
+                             guint           accelerator_key,
+                             GdkModifierType accelerator_mods)
+{
   gboolean seen_mod = FALSE;
   gunichar ch;
-
-  gstring = g_string_sized_new (10); /* ~len('backspace') */
 
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
@@ -1996,8 +2007,6 @@ gtk_accelerator_get_label (guint           accelerator_key,
 	    }
 	}
     }
-
-  return g_string_free (gstring, FALSE);
 }
 
 /**
