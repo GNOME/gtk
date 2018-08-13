@@ -1672,6 +1672,131 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
   return gtk_label;
 }
 
+/* Underscores in key names are better displayed as spaces
+ * E.g., Page_Up should be “Page Up”.
+ *
+ * Some keynames also have prefixes that are not suitable
+ * for display, e.g XF86AudioMute, so strip those out, too.
+ *
+ * This function is only called on untranslated keynames,
+ * so no need to be UTF-8 safe.
+ */
+static void
+append_without_underscores (GString *s,
+                            gchar   *str)
+{
+  gchar *p;
+
+  if (g_str_has_prefix (str, "XF86"))
+    p = str + 4;
+  else if (g_str_has_prefix (str, "ISO_"))
+    p = str + 4;
+  else
+    p = str;
+
+  for ( ; *p; p++)
+    {
+      if (*p == '_')
+        g_string_append_c (s, ' ');
+      else
+        g_string_append_c (s, *p);
+    }
+}
+
+/* On Mac, if the key has symbolic representation (e.g. arrow keys),
+ * append it to gstring and return TRUE; otherwise return FALSE.
+ * See http://docs.info.apple.com/article.html?path=Mac/10.5/en/cdb_symbs.html 
+ * for the list of special keys. */
+static gboolean
+append_keyval_symbol (guint    accelerator_key,
+                      GString *gstring)
+{
+#ifdef GDK_WINDOWING_QUARTZ
+  switch (accelerator_key)
+  {
+  case GDK_KEY_Return:
+    /* U+21A9 LEFTWARDS ARROW WITH HOOK */
+    g_string_append (gstring, "\xe2\x86\xa9");
+    return TRUE;
+
+  case GDK_KEY_ISO_Enter:
+    /* U+2324 UP ARROWHEAD BETWEEN TWO HORIZONTAL BARS */
+    g_string_append (gstring, "\xe2\x8c\xa4");
+    return TRUE;
+
+  case GDK_KEY_Left:
+    /* U+2190 LEFTWARDS ARROW */
+    g_string_append (gstring, "\xe2\x86\x90");
+    return TRUE;
+
+  case GDK_KEY_Up:
+    /* U+2191 UPWARDS ARROW */
+    g_string_append (gstring, "\xe2\x86\x91");
+    return TRUE;
+
+  case GDK_KEY_Right:
+    /* U+2192 RIGHTWARDS ARROW */
+    g_string_append (gstring, "\xe2\x86\x92");
+    return TRUE;
+
+  case GDK_KEY_Down:
+    /* U+2193 DOWNWARDS ARROW */
+    g_string_append (gstring, "\xe2\x86\x93");
+    return TRUE;
+
+  case GDK_KEY_Page_Up:
+    /* U+21DE UPWARDS ARROW WITH DOUBLE STROKE */
+    g_string_append (gstring, "\xe2\x87\x9e");
+    return TRUE;
+
+  case GDK_KEY_Page_Down:
+    /* U+21DF DOWNWARDS ARROW WITH DOUBLE STROKE */
+    g_string_append (gstring, "\xe2\x87\x9f");
+    return TRUE;
+
+  case GDK_KEY_Home:
+    /* U+2196 NORTH WEST ARROW */
+    g_string_append (gstring, "\xe2\x86\x96");
+    return TRUE;
+
+  case GDK_KEY_End:
+    /* U+2198 SOUTH EAST ARROW */
+    g_string_append (gstring, "\xe2\x86\x98");
+    return TRUE;
+
+  case GDK_KEY_Escape:
+    /* U+238B BROKEN CIRCLE WITH NORTHWEST ARROW */
+    g_string_append (gstring, "\xe2\x8e\x8b");
+    return TRUE;
+
+  case GDK_KEY_BackSpace:
+    /* U+232B ERASE TO THE LEFT */
+    g_string_append (gstring, "\xe2\x8c\xab");
+    return TRUE;
+
+  case GDK_KEY_Delete:
+    /* U+2326 ERASE TO THE RIGHT */
+    g_string_append (gstring, "\xe2\x8c\xa6");
+    return TRUE;
+
+  default:
+    return FALSE;
+  }
+#else /* !GDK_WINDOWING_QUARTZ */
+  return FALSE;
+#endif
+}
+
+static void
+append_separator (GString *string)
+{
+#ifndef GDK_WINDOWING_QUARTZ
+  g_string_append (string, "+");
+#else
+  /* no separator on quartz */
+#endif
+}
+
 /**
  * gtk_accelerator_get_label:
  * @accelerator_key: accelerator keyval
@@ -1686,16 +1811,193 @@ gchar*
 gtk_accelerator_get_label (guint           accelerator_key,
                            GdkModifierType accelerator_mods)
 {
-  GtkAccelLabelClass *klass;
-  gchar *label;
+  GString *gstring;
+  gboolean seen_mod = FALSE;
+  gunichar ch;
 
-  klass = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
-  label = _gtk_accel_label_class_get_accelerator_label (klass,
-                                                        accelerator_key,
-                                                        accelerator_mods);
-  g_type_class_unref (klass); /* klass is kept alive since gtk uses static types */
+  gstring = g_string_sized_new (10); /* ~len('backspace') */
 
-  return label;
+  if (accelerator_mods & GDK_SHIFT_MASK)
+    {
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the shift key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Shift"));
+#else
+      /* U+21E7 UPWARDS WHITE ARROW */
+      g_string_append (gstring, "\xe2\x87\xa7");
+#endif
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_CONTROL_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the control key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Ctrl"));
+#else
+      /* U+2303 UP ARROWHEAD */
+      g_string_append (gstring, "\xe2\x8c\x83");
+#endif
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_MOD1_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the alt key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Alt"));
+#else
+      /* U+2325 OPTION KEY */
+      g_string_append (gstring, "\xe2\x8c\xa5");
+#endif
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_MOD2_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      g_string_append (gstring, "Mod2");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_MOD3_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      g_string_append (gstring, "Mod3");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_MOD4_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      g_string_append (gstring, "Mod4");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_MOD5_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      g_string_append (gstring, "Mod5");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_SUPER_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      /* This is the text that should appear next to menu accelerators
+       * that use the super key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Super"));
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_HYPER_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      /* This is the text that should appear next to menu accelerators
+       * that use the hyper key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Hyper"));
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_META_MASK)
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the meta key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Meta"));
+#else
+      /* Command key symbol U+2318 PLACE OF INTEREST SIGN */
+      g_string_append (gstring, "\xe2\x8c\x98");
+#endif
+      seen_mod = TRUE;
+    }
+  
+  ch = gdk_keyval_to_unicode (accelerator_key);
+  if (ch && (ch == ' ' || g_unichar_isgraph (ch)))
+    {
+      if (seen_mod)
+        append_separator (gstring);
+
+      switch (ch)
+	{
+	case ' ':
+	  g_string_append (gstring, C_("keyboard label", "Space"));
+	  break;
+	case '\\':
+	  g_string_append (gstring, C_("keyboard label", "Backslash"));
+	  break;
+	default:
+	  g_string_append_unichar (gstring, g_unichar_toupper (ch));
+	  break;
+	}
+    }
+  else if (!append_keyval_symbol (accelerator_key, gstring))
+    {
+      gchar *tmp;
+
+      tmp = gdk_keyval_name (gdk_keyval_to_lower (accelerator_key));
+      if (tmp != NULL)
+	{
+          if (seen_mod)
+            append_separator (gstring);
+
+	  if (tmp[0] != 0 && tmp[1] == 0)
+	    g_string_append_c (gstring, g_ascii_toupper (tmp[0]));
+	  else
+	    {
+	      const gchar *str;
+              str = g_dpgettext2 (GETTEXT_PACKAGE, "keyboard label", tmp);
+	      if (str == tmp)
+                append_without_underscores (gstring, tmp);
+	      else
+		g_string_append (gstring, str);
+	    }
+	}
+    }
+
+  return g_string_free (gstring, FALSE);
 }
 
 /**
