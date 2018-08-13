@@ -727,7 +727,6 @@ update_accel (GtkModelButton *self,
     {
       guint key;
       GdkModifierType mods;
-      GtkAccelLabelClass *accel_class;
       char *str;
 
       if (!self->accel_label)
@@ -739,12 +738,9 @@ update_accel (GtkModelButton *self,
         }
 
       gtk_accelerator_parse (accel, &key, &mods);
-
-      accel_class = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
-      str = _gtk_accel_label_class_get_accelerator_label (accel_class, key, mods);
+      str = gtk_accelerator_get_label (key, mods);
       gtk_label_set_label (GTK_LABEL (self->accel_label), str);
       g_free (str);
-      g_type_class_unref (accel_class);
     }
   else
     {
