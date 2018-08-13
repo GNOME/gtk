@@ -10985,6 +10985,7 @@ gtk_window_export_handle (GtkWindow               *window,
 
       handle_str = g_strdup_printf ("x11:%x", xid);
       callback (window, handle_str, user_data);
+      g_free (handle_str);
 
       return TRUE;
     }
