@@ -34,10 +34,13 @@ struct _GtkAccelGroupPrivate
   GtkAccelGroupEntry *priv_accels;
 };
 
-void	_gtk_accel_group_reconnect        (GtkAccelGroup *accel_group,
-                                           GQuark         accel_path_quark);
-GSList* _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group);
+void	_gtk_accel_group_reconnect              (GtkAccelGroup          *accel_group,
+                                                 GQuark                  accel_path_quark);
+GSList* _gtk_accel_group_get_accelerables       (GtkAccelGroup          *accel_group);
 
+void    gtk_accelerator_print_label             (GString                *gstring,
+                                                 guint                   accelerator_key,
+                                                 GdkModifierType         accelerator_mods);
 G_END_DECLS
 
 #endif /* __GTK_ACCEL_GROUP_PRIVATE_H__ */
