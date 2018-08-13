@@ -32,7 +32,9 @@
 #include "gtkshortcutcontrollerprivate.h"
 
 #include "gtkeventcontrollerprivate.h"
+#include "gtkintl.h"
 #include "gtkshortcut.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
 #include <gdk/gdk.h>
@@ -42,6 +44,7 @@ struct _GtkShortcutController
   GtkEventController parent_instance;
 
   GSList *shortcuts;
+  GtkShortcutScope scope;
 
   guint run_class : 1;
 };
@@ -51,8 +54,66 @@ struct _GtkShortcutControllerClass
   GtkEventControllerClass parent_class;
 };
 
+enum {
+  PROP_0,
+  PROP_SCOPE,
+
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS] = { NULL, };
+
 G_DEFINE_TYPE (GtkShortcutController, gtk_shortcut_controller,
                GTK_TYPE_EVENT_CONTROLLER)
+
+static gboolean
+gtk_shortcut_controller_is_rooted (GtkShortcutController *self)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+
+  if (widget == NULL)
+    return FALSE;
+
+  return gtk_widget_get_root (widget) != NULL;
+}
+
+static void
+gtk_shortcut_controller_set_property (GObject      *object,
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
+
+  switch (prop_id)
+    {
+    case PROP_SCOPE:
+      gtk_shortcut_controller_set_scope (self, g_value_get_enum (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gtk_shortcut_controller_get_property (GObject    *object,
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
+
+  switch (prop_id)
+    {
+    case PROP_SCOPE:
+      g_value_set_enum (value, self->scope);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
 static void
 gtk_event_controller_dispose (GObject *object)
@@ -105,18 +166,75 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
 }
 
 static void
+gtk_shortcut_controller_set_widget (GtkEventController *controller,
+                                    GtkWidget          *widget)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+
+  GTK_EVENT_CONTROLLER_CLASS (gtk_shortcut_controller_parent_class)->set_widget (controller, widget);
+
+  if (_gtk_widget_get_root (widget))
+    gtk_shortcut_controller_root (self);
+}
+
+static void
+gtk_shortcut_controller_unset_widget (GtkEventController *controller)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+
+  if (_gtk_widget_get_root (widget))
+    gtk_shortcut_controller_unroot (self);
+
+  GTK_EVENT_CONTROLLER_CLASS (gtk_shortcut_controller_parent_class)->unset_widget (controller);
+}
+
+static void
 gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
 {
-  GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
 
   object_class->dispose = gtk_event_controller_dispose;
+  object_class->set_property = gtk_shortcut_controller_set_property;
+  object_class->get_property = gtk_shortcut_controller_get_property;
+
   controller_class->handle_event = gtk_shortcut_controller_handle_event;
+  controller_class->set_widget = gtk_shortcut_controller_set_widget;
+  controller_class->unset_widget = gtk_shortcut_controller_unset_widget;
+
+  /**
+   * GtkShortcutController:scope:
+   *
+   * What scope the shortcuts will be handled in.
+   */
+  properties[PROP_SCOPE] =
+      g_param_spec_enum ("scope",
+                         P_("Scope"),
+                         P_("What scope the shortcuts will be handled in"),
+                         GTK_TYPE_SHORTCUT_SCOPE,
+                         GTK_SHORTCUT_SCOPE_LOCAL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
 }
 
 static void
 gtk_shortcut_controller_init (GtkShortcutController *controller)
 {
+}
+
+void
+gtk_shortcut_controller_root (GtkShortcutController *controller)
+{
+  g_print ("rooting controller %p\n", controller);
+}
+
+void
+gtk_shortcut_controller_unroot (GtkShortcutController *controller)
+{
+  g_print ("unrooting controller %p\n", controller);
 }
 
 GtkEventController *
@@ -182,3 +300,57 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
   self->shortcuts = g_slist_delete_link (self->shortcuts, l);
   g_object_unref (shortcut);
 }
+
+/**
+ * gtk_shortcut_controller_set_scope:
+ * @self: a #GtkShortcutController
+ * @scope: the new scope to use
+ *
+ * Sets the controller to have the given @scope.
+ *
+ * The scope allows shortcuts to be activated outside of the normal
+ * event propagation. In particular, it allows installing global
+ * keyboard shortcuts that can be activated even when a widget does
+ * not have focus.
+ **/
+void
+gtk_shortcut_controller_set_scope (GtkShortcutController *self,
+                                   GtkShortcutScope       scope)
+{
+  gboolean rooted;
+
+  g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
+
+  if (self->scope == scope)
+    return;
+
+  rooted = gtk_shortcut_controller_is_rooted (self);
+
+  if (rooted)
+    gtk_shortcut_controller_unroot (self);
+
+  self->scope = scope;
+
+  if (rooted)
+    gtk_shortcut_controller_root (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SCOPE]);
+}
+
+/**
+ * gtk_shortcut_controller_get_scope:
+ * @self: a #GtkShortcutController
+ *
+ * Gets the scope for when this controller activates its shortcuts. See
+ * gtk_shortcut_controller_set_scope() for details.
+ *
+ * Returns: the controller's scope
+ **/
+GtkShortcutScope
+gtk_shortcut_controller_get_scope (GtkShortcutController *self)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self), GTK_SHORTCUT_SCOPE_LOCAL);
+
+  return self->scope;
+}
+

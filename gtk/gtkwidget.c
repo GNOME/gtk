@@ -864,12 +864,30 @@ gtk_widget_real_grab_notify (GtkWidget *widget,
 static void
 gtk_widget_real_root (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_root, NULL);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_root (GTK_SHORTCUT_CONTROLLER (l->data));
+    }
 }
 
 static void
 gtk_widget_real_unroot (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_unroot (GTK_SHORTCUT_CONTROLLER (l->data));
+    }
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
 }
 

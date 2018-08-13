@@ -25,4 +25,7 @@
 void                    gtk_shortcut_controller_set_run_class           (GtkShortcutController  *controller,
                                                                          gboolean                run_class);
 
+void                    gtk_shortcut_controller_root                    (GtkShortcutController  *controller);
+void                    gtk_shortcut_controller_unroot                  (GtkShortcutController  *controller);
+
 #endif /* __GTK_SHORTCUT_CONTROLLER_H__ */
