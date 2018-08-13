@@ -64,6 +64,13 @@ char *                  gtk_shortcut_trigger_to_string          (GtkShortcutTrig
 GDK_AVAILABLE_IN_ALL
 void                    gtk_shortcut_trigger_print              (GtkShortcutTrigger *self,
                                                                  GString            *string);
+GDK_AVAILABLE_IN_ALL
+char *                  gtk_shortcut_trigger_to_label           (GtkShortcutTrigger *self,
+                                                                 GdkDisplay         *display);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_shortcut_trigger_print_label        (GtkShortcutTrigger *self,
+                                                                 GdkDisplay         *display,
+                                                                 GString            *string);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_shortcut_trigger_trigger            (GtkShortcutTrigger *self,
