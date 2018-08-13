@@ -855,12 +855,30 @@ gtk_widget_real_grab_notify (GtkWidget *widget,
 static void
 gtk_widget_real_root (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_root, NULL);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_root (GTK_SHORTCUT_CONTROLLER (l->data));
+    }
 }
 
 static void
 gtk_widget_real_unroot (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_unroot (GTK_SHORTCUT_CONTROLLER (l->data));
+    }
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
 }
 
@@ -2835,7 +2853,18 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
-    priv->root = (GtkRoot *) widget;
+    {
+      priv->root = (GtkRoot *) widget;
+
+      controller = gtk_shortcut_controller_new ();
+      gtk_shortcut_controller_set_run_managed (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
+      gtk_widget_add_controller (widget, controller);
+
+      controller = gtk_shortcut_controller_new ();
+      gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+      gtk_shortcut_controller_set_run_managed (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
+      gtk_widget_add_controller (widget, controller);
+    }
 
   layout_manager_type = gtk_widget_class_get_layout_manager_type (g_class);
   if (layout_manager_type != G_TYPE_INVALID)
