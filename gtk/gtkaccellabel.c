@@ -177,38 +177,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
 
-#ifndef GDK_WINDOWING_QUARTZ
-  /* This is the text that should appear next to menu accelerators
-   * that use the shift key. If the text on this key isn't typically
-   * translated on keyboards used for your language, don't translate
-   * this.
-   */
-  class->mod_name_shift = g_strdup (C_("keyboard label", "Shift"));
-  /* This is the text that should appear next to menu accelerators
-   * that use the control key. If the text on this key isn't typically
-   * translated on keyboards used for your language, don't translate
-   * this.
-   */
-  class->mod_name_control = g_strdup (C_("keyboard label", "Ctrl"));
-  /* This is the text that should appear next to menu accelerators
-   * that use the alt key. If the text on this key isn't typically
-   * translated on keyboards used for your language, don't translate
-   * this.
-   */
-  class->mod_name_alt = g_strdup (C_("keyboard label", "Alt"));
-  class->mod_separator = g_strdup ("+");
-#else /* GDK_WINDOWING_QUARTZ */
-
-  /* U+21E7 UPWARDS WHITE ARROW */
-  class->mod_name_shift = g_strdup ("\xe2\x87\xa7");
-  /* U+2303 UP ARROWHEAD */
-  class->mod_name_control = g_strdup ("\xe2\x8c\x83");
-  /* U+2325 OPTION KEY */
-  class->mod_name_alt = g_strdup ("\xe2\x8c\xa5");
-  class->mod_separator = g_strdup ("");
-
-#endif /* GDK_WINDOWING_QUARTZ */
-
   props[PROP_ACCEL_CLOSURE] =
     g_param_spec_boxed ("accel-closure",
                         P_("Accelerator Closure"),
@@ -684,6 +652,16 @@ append_keyval_symbol (guint    accelerator_key,
 #endif
 }
 
+static void
+append_separator (GString *string)
+{
+#ifndef GDK_WINDOWING_QUARTZ
+  g_string_append (string, "+");
+#else
+  /* no separator on quartz */
+#endif
+}
+
 gchar *
 _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 					      guint               accelerator_key,
@@ -697,30 +675,62 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
-      g_string_append (gstring, klass->mod_name_shift);
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the shift key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Shift"));
+#else
+      /* U+21E7 UPWARDS WHITE ARROW */
+      g_string_append (gstring, "\xe2\x87\xa7");
+#endif
       seen_mod = TRUE;
     }
 
   if (accelerator_mods & GDK_CONTROL_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
-      g_string_append (gstring, klass->mod_name_control);
+        append_separator (gstring);
+
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the control key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Ctrl"));
+#else
+      /* U+2303 UP ARROWHEAD */
+      g_string_append (gstring, "\xe2\x8c\x83");
+#endif
       seen_mod = TRUE;
     }
 
   if (accelerator_mods & GDK_MOD1_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
-      g_string_append (gstring, klass->mod_name_alt);
+        append_separator (gstring);
+
+#ifndef GDK_WINDOWING_QUARTZ
+      /* This is the text that should appear next to menu accelerators
+       * that use the alt key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       */
+      g_string_append (gstring, C_("keyboard label", "Alt"));
+#else
+      /* U+2325 OPTION KEY */
+      g_string_append (gstring, "\xe2\x8c\xa5");
+#endif
       seen_mod = TRUE;
     }
 
   if (accelerator_mods & GDK_MOD2_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       g_string_append (gstring, "Mod2");
       seen_mod = TRUE;
@@ -729,7 +739,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (accelerator_mods & GDK_MOD3_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       g_string_append (gstring, "Mod3");
       seen_mod = TRUE;
@@ -738,7 +748,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (accelerator_mods & GDK_MOD4_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       g_string_append (gstring, "Mod4");
       seen_mod = TRUE;
@@ -747,7 +757,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (accelerator_mods & GDK_MOD5_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       g_string_append (gstring, "Mod5");
       seen_mod = TRUE;
@@ -756,7 +766,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (accelerator_mods & GDK_SUPER_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       /* This is the text that should appear next to menu accelerators
        * that use the super key. If the text on this key isn't typically
@@ -770,7 +780,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (accelerator_mods & GDK_HYPER_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       /* This is the text that should appear next to menu accelerators
        * that use the hyper key. If the text on this key isn't typically
@@ -784,7 +794,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (accelerator_mods & GDK_META_MASK)
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
 #ifndef GDK_WINDOWING_QUARTZ
       /* This is the text that should appear next to menu accelerators
@@ -804,7 +814,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   if (ch && (ch == ' ' || g_unichar_isgraph (ch)))
     {
       if (seen_mod)
-        g_string_append (gstring, klass->mod_separator);
+        append_separator (gstring);
 
       switch (ch)
 	{
@@ -827,7 +837,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       if (tmp != NULL)
 	{
           if (seen_mod)
-            g_string_append (gstring, klass->mod_separator);
+            append_separator (gstring);
 
 	  if (tmp[0] != 0 && tmp[1] == 0)
 	    g_string_append_c (gstring, g_ascii_toupper (tmp[0]));
