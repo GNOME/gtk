@@ -39,7 +39,7 @@
 
 #include "gtkshortcuttrigger.h"
 
-#include "gtkaccelgroup.h"
+#include "gtkaccelgroupprivate.h"
 
 typedef struct _GtkShortcutTriggerClass GtkShortcutTriggerClass;
 
@@ -62,6 +62,9 @@ struct _GtkShortcutTriggerClass
   gboolean        (* trigger)     (GtkShortcutTrigger  *trigger,
                                    const GdkEvent      *event);
   void            (* print)       (GtkShortcutTrigger  *trigger,
+                                   GString             *string);
+  gboolean        (* print_label) (GtkShortcutTrigger  *trigger,
+                                   GdkDisplay          *display,
                                    GString             *string);
 };
 
@@ -214,6 +217,71 @@ gtk_shortcut_trigger_print (GtkShortcutTrigger *self,
   return self->trigger_class->print (self, string);
 }
 
+/**
+ * gtk_shortcut_trigger_to_label:
+ * @self: a #GtkShortcutTrigger
+ * @display: #GdkDisplay to print for
+ *
+ * Gets textual representation for the given trigger. This
+ * function is returning a translated string for presentation
+ * to end users for example in menu items or in help texts.
+ *
+ * The @display in use may influence the resulting string in
+ * various forms, such as resolving hardware keycodes or by
+ * causing display-specific modifier names.
+ *
+ * The form of the representation may change at any time and is
+ * not guaranteed to stay identical.
+ *
+ * Returns: (transfer full): a new string
+ **/
+char *
+gtk_shortcut_trigger_to_label (GtkShortcutTrigger *self,
+                               GdkDisplay         *display)
+{
+  GString *string;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  string = g_string_new (NULL);
+  gtk_shortcut_trigger_print_label (self, display, string);
+
+  return g_string_free (string, FALSE);
+}
+
+/**
+ * gtk_shortcut_trigger_print_label:
+ * @self: a #GtkShortcutTrigger
+ * @display: #GdkDisplay to print for
+ * @string: a #GString to print into
+ *
+ * Prints the given trigger into a string. This function is
+ * returning a translated string for presentation to end users
+ * for example in menu items or in help texts.
+ *
+ * The @display in use may influence the resulting string in
+ * various forms, such as resolving hardware keycodes or by
+ * causing display-specific modifier names.
+ *
+ * The form of the representation may change at any time and is
+ * not guaranteed to stay identical.
+ *
+ * Returns: %TRUE if something was printed or %FALSE if the
+ *     trigger did not have a textual representation suitable
+ *     for end users.
+ **/
+gboolean
+gtk_shortcut_trigger_print_label (GtkShortcutTrigger *self,
+                                  GdkDisplay         *display,
+                                  GString            *string)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), FALSE);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (string != NULL, FALSE);
+
+  return self->trigger_class->print_label (self, display, string);
+}
+
 /*** GTK_SHORTCUT_TRIGGER_NEVER ***/
 
 typedef struct _GtkNeverTrigger GtkNeverTrigger;
@@ -248,13 +316,22 @@ gtk_never_trigger_print (GtkShortcutTrigger *trigger,
   g_string_append (string, "<never>");
 }
 
+static gboolean
+gtk_never_trigger_print_label (GtkShortcutTrigger *trigger,
+                               GdkDisplay         *display,
+                               GString            *string)
+{
+  return FALSE;                 
+}
+
 static const GtkShortcutTriggerClass GTK_NEVER_TRIGGER_CLASS = {
   GTK_SHORTCUT_TRIGGER_NEVER,
   sizeof (GtkNeverTrigger),
   "GtkNeverTrigger",
   gtk_never_trigger_finalize,
   gtk_never_trigger_trigger,
-  gtk_never_trigger_print
+  gtk_never_trigger_print,
+  gtk_never_trigger_print_label
 };
 
 static GtkNeverTrigger never = { { &GTK_NEVER_TRIGGER_CLASS, 1 } };
@@ -326,13 +403,27 @@ gtk_keyval_trigger_print (GtkShortcutTrigger *trigger,
   g_free (accelerator_name);
 }
 
+static gboolean
+gtk_keyval_trigger_print_label (GtkShortcutTrigger *trigger,
+                                GdkDisplay         *display,
+                                GString            *string)
+                  
+{
+  GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
+
+  gtk_accelerator_print_label (string, self->keyval, self->modifiers);
+
+  return TRUE;
+}
+
 static const GtkShortcutTriggerClass GTK_KEYVAL_TRIGGER_CLASS = {
   GTK_SHORTCUT_TRIGGER_KEYVAL,
   sizeof (GtkKeyvalTrigger),
   "GtkKeyvalTrigger",
   gtk_keyval_trigger_finalize,
   gtk_keyval_trigger_trigger,
-  gtk_keyval_trigger_print
+  gtk_keyval_trigger_print,
+  gtk_keyval_trigger_print_label
 };
 
 /**
@@ -447,13 +538,35 @@ gtk_alternative_trigger_print (GtkShortcutTrigger *trigger,
   gtk_shortcut_trigger_print (self->second, string);
 }
 
+static gboolean
+gtk_alternative_trigger_print_label (GtkShortcutTrigger *trigger,
+                                     GdkDisplay         *display,
+                                     GString            *string)
+                  
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+
+  if (gtk_shortcut_trigger_print_label (self->first, display, string))
+    {
+      g_string_append (string, ", ");
+      if (!gtk_shortcut_trigger_print_label (self->second, display, string))
+        g_string_truncate (string, string->len - 2);
+      return TRUE;
+    }
+  else
+    {
+      return gtk_shortcut_trigger_print_label (self->second, display, string);
+    }
+}
+
 static const GtkShortcutTriggerClass GTK_ALTERNATIVE_TRIGGER_CLASS = {
   GTK_SHORTCUT_TRIGGER_ALTERNATIVE,
   sizeof (GtkAlternativeTrigger),
   "GtkAlternativeTrigger",
   gtk_alternative_trigger_finalize,
   gtk_alternative_trigger_trigger,
-  gtk_alternative_trigger_print
+  gtk_alternative_trigger_print,
+  gtk_alternative_trigger_print_label
 };
 
 /**
