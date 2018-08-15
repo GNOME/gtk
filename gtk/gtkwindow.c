@@ -63,6 +63,7 @@
 #include "gtknative.h"
 #include "gtksettings.h"
 #include "gtkshortcut.h"
+#include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
@@ -161,7 +162,7 @@
  * widget that is added as a titlebar child.
  */
 
-#define MENU_BAR_ACCEL "F10"
+#define MENU_BAR_ACCEL GDK_KEY_F10
 #define RESIZE_HANDLE_SIZE 20
 #define MNEMONICS_DELAY 300 /* ms */
 #define NO_CONTENT_CHILD_NAT 200
@@ -459,6 +460,9 @@ static void     update_window_buttons                 (GtkWindow    *window);
 static void     get_shadow_width                      (GtkWindow    *window,
                                                        GtkBorder    *shadow_width);
 
+static gboolean    gtk_window_activate_menubar        (GtkWidget    *widget,
+                                                       GVariant     *args,
+                                                       gpointer      unused);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 #ifdef GDK_WINDOWING_X11
@@ -1678,9 +1682,9 @@ gtk_window_init (GtkWindow *window)
   GtkWidget *widget;
   GtkCssNode *widget_node;
   GdkSeat *seat;
-  GtkEventController *motion_controller;
   GtkEventController *controller;
   GtkDropTargetAsync *target;
+  GtkShortcut *shortcut;
 
   widget = GTK_WIDGET (window);
 
@@ -1737,12 +1741,12 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect (seat, "device-removed",
                     G_CALLBACK (device_removed_cb), window);
 
-  motion_controller = gtk_event_controller_motion_new ();
-  gtk_event_controller_set_propagation_phase (motion_controller,
+  controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_phase (controller,
                                               GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (motion_controller, "motion",
+  g_signal_connect_swapped (controller, "motion",
                             G_CALLBACK (gtk_window_capture_motion), window);
-  gtk_widget_add_controller (widget, motion_controller);
+  gtk_widget_add_controller (widget, controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
@@ -1760,6 +1764,16 @@ gtk_window_init (GtkWindow *window)
 
   /* Shared constraint solver */
   priv->constraint_solver = gtk_constraint_solver_new ();
+
+  controller = gtk_shortcut_controller_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+
+  shortcut = gtk_shortcut_new ();
+  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (MENU_BAR_ACCEL, 0));
+  gtk_shortcut_set_callback (shortcut, gtk_window_activate_menubar, NULL, NULL);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_event_controller_set_name (controller, "gtk-window-menubar-accel");
+  gtk_widget_add_controller (widget, controller);
 }
 
 static GtkGesture *
@@ -7497,65 +7511,42 @@ _gtk_window_set_window_group (GtkWindow      *window,
 }
 
 static gboolean
-gtk_window_activate_menubar (GtkWindow *window,
-                             GdkEvent  *event)
+gtk_window_activate_menubar (GtkWidget *widget,
+                             GVariant  *args,
+                             gpointer   unused)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint keyval = 0;
-  GdkModifierType mods = 0;
+  GList *tmp_menubars, *l;
+  GPtrArray *menubars;
+  GtkWidget *focus;
+  GtkWidget *first;
 
-  gtk_accelerator_parse (MENU_BAR_ACCEL, &keyval, &mods);
+  focus = gtk_window_get_focus (window);
 
-  if (keyval == 0)
-    {
-      g_warning ("Failed to parse menu bar accelerator '%s'", MENU_BAR_ACCEL);
-      return FALSE;
-    }
+  if (priv->title_box != NULL &&
+      (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
+      gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
+    return TRUE;
 
-  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
-        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
+  tmp_menubars = gtk_popover_menu_bar_get_viewable_menu_bars (window);
+  if (tmp_menubars == NULL)
     return FALSE;
 
-  /* FIXME this is wrong, needs to be in the global accel resolution
-   * thing, to properly consider i18n etc., but that probably requires
-   * AccelGroup changes etc.
-   */
-  if (gdk_key_event_get_keyval (event) == keyval &&
-      ((gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ()) ==
-       (mods & gtk_accelerator_get_default_mod_mask ())))
-    {
-      GList *tmp_menubars, *l;
-      GPtrArray *menubars;
-      GtkWidget *focus;
-      GtkWidget *first;
+  menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));;
+  for (l = tmp_menubars; l; l = l->next)
+    g_ptr_array_add (menubars, l->data);
 
-      focus = gtk_window_get_focus (window);
+  g_list_free (tmp_menubars);
 
-      if (priv->title_box != NULL &&
-          (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
-          gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
-        return TRUE;
+  gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
 
-      tmp_menubars = gtk_popover_menu_bar_get_viewable_menu_bars (window);
-      if (tmp_menubars == NULL)
-        return FALSE;
+  first = g_ptr_array_index (menubars, 0);
+  gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
 
-      menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));;
-      for (l = tmp_menubars; l; l = l->next)
-        g_ptr_array_add (menubars, l->data);
+  g_ptr_array_free (menubars, TRUE);
 
-      g_list_free (tmp_menubars);
-
-      gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
-
-      first = g_ptr_array_index (menubars, 0);
-      gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
-
-      g_ptr_array_free (menubars, TRUE);
-
-      return TRUE;
-    }
-  return FALSE;
+  return TRUE;
 }
 
 static void
@@ -7804,7 +7795,7 @@ gtk_window_activate_key (GtkWindow *window,
         }
     }
 
-  return gtk_window_activate_menubar (window, event);
+  return FALSE;
 }
 
 /*
