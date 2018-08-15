@@ -2012,7 +2012,7 @@ gtk_main_do_event (GdkEvent *event)
        * FIXME: this does not work with mnemonic modifiers other than Alt
        */
       if ((event->key.keyval == GDK_KEY_Alt_L || event->key.keyval == GDK_KEY_Alt_R) &&
-          ((event->key.state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_RELEASE_MASK|GDK_MOD1_MASK)) == 0) &&
+          ((event->key.state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_MOD1_MASK)) == 0) &&
           !GTK_IS_MENU_SHELL (grab_widget))
         {
           gboolean mnemonics_visible;
