@@ -595,6 +595,7 @@ scan_directory (const gchar *base_path,
 {
   GHashTable *dir_hash;
   GDir *dir;
+  GList *list = NULL, *iterator = NULL;
   const gchar *name;
   gchar *dir_path;
   gboolean dir_added = FALSE;
@@ -612,6 +613,13 @@ scan_directory (const gchar *base_path,
 
   while ((name = g_dir_read_name (dir)))
     {
+      list = g_list_prepend (list, g_strdup (name));
+    }
+  list = g_list_sort (list, (GCompareFunc) strcmp);
+  for (iterator = list; iterator; iterator = iterator->next)
+    {
+      name = iterator->data;
+
       gchar *path;
       gboolean retval;
       int flags = 0;
@@ -690,6 +698,7 @@ scan_directory (const gchar *base_path,
       g_free (path);
     }
 
+  g_list_free_full (list, g_free);
   g_dir_close (dir);
 
   /* Move dir into the big file hash */
