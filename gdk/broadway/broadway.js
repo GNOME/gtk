@@ -91,7 +91,6 @@ const GDK_BUTTON5_MASK  = 1 << 12;
 const GDK_SUPER_MASK    = 1 << 26;
 const GDK_HYPER_MASK    = 1 << 27;
 const GDK_META_MASK     = 1 << 28;
-const GDK_RELEASE_MASK  = 1 << 30;
 
 
 var useDataUrls = window.location.search.includes("datauri");
