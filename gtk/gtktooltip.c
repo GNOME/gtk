@@ -114,8 +114,6 @@ struct _GtkTooltip
 
   GtkWidget *tooltip_widget;
 
-  gdouble last_x;
-  gdouble last_y;
   GdkWindow *last_window;
 
   guint timeout_id;
@@ -865,223 +863,107 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 }
 
 static void
-get_bounding_box (GtkWidget    *widget,
-                  GdkRectangle *bounds)
-{
-  GtkAllocation allocation;
-  GtkBorder border = { 0, };
-  GdkWindow *window;
-  gint x, y;
-  gint w, h;
-  gint x1, y1;
-  gint x2, y2;
-  gint x3, y3;
-  gint x4, y4;
-
-  window = gtk_widget_get_parent_window (widget);
-  if (window == NULL)
-    window = gtk_widget_get_window (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  if (GTK_IS_WINDOW (widget))
-    _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
-  x = allocation.x + border.left;
-  y = allocation.y + border.right;
-  w = allocation.width - border.left - border.right;
-  h = allocation.height - border.top - border.bottom;
-
-  gdk_window_get_root_coords (window, x, y, &x1, &y1);
-  gdk_window_get_root_coords (window, x + w, y, &x2, &y2);
-  gdk_window_get_root_coords (window, x, y + h, &x3, &y3);
-  gdk_window_get_root_coords (window, x + w, y + h, &x4, &y4);
-
-#define MIN4(a,b,c,d) MIN(MIN(a,b),MIN(c,d))
-#define MAX4(a,b,c,d) MAX(MAX(a,b),MAX(c,d))
-
-  bounds->x = floor (MIN4 (x1, x2, x3, x4));
-  bounds->y = floor (MIN4 (y1, y2, y3, y4));
-  bounds->width = ceil (MAX4 (x1, x2, x3, x4)) - bounds->x;
-  bounds->height = ceil (MAX4 (y1, y2, y3, y4)) - bounds->y;
-}
-
-static void
 gtk_tooltip_position (GtkTooltip *tooltip,
 		      GdkDisplay *display,
-		      GtkWidget  *new_tooltip_widget)
+		      GtkWidget  *new_tooltip_widget,
+                      GdkDevice  *device)
 {
-  gint x, y, width, height;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-  guint cursor_size;
-  GdkRectangle bounds;
-  GtkBorder border;
-
-#define MAX_DISTANCE 32
+  GdkScreen *screen;
+  GtkSettings *settings;
+  GdkRectangle anchor_rect;
+  GdkWindow *window;
+  GdkWindow *widget_window;
+  GdkWindow *effective_toplevel;
+  GtkWidget *toplevel;
+  int rect_anchor_dx = 0;
+  int cursor_size;
+  int anchor_rect_padding;
 
   gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
-  gtk_widget_set_visible (GTK_WIDGET (tooltip->current_window), TRUE);
+  window = _gtk_widget_get_window (GTK_WIDGET (tooltip->current_window));
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
-  _gtk_window_get_shadow_width (GTK_WINDOW (tooltip->current_window), &border);
+  toplevel = _gtk_widget_get_toplevel (new_tooltip_widget);
+  gtk_widget_translate_coordinates (new_tooltip_widget, toplevel,
+                                    0, 0,
+                                    &anchor_rect.x, &anchor_rect.y);
 
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (tooltip->current_window)) - border.left - border.right;
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (tooltip->current_window)) - border.top - border.bottom;
+  anchor_rect.width = gtk_widget_get_allocated_width (new_tooltip_widget);
+  anchor_rect.height = gtk_widget_get_allocated_height (new_tooltip_widget);
 
-  monitor = gdk_display_get_monitor_at_point (display, tooltip->last_x, tooltip->last_y);
-  gdk_monitor_get_workarea (monitor, &workarea);
+  screen = gdk_window_get_screen (window);
+  settings = gtk_settings_get_for_screen (screen);
+  g_object_get (settings,
+                "gtk-cursor-theme-size", &cursor_size,
+                NULL);
 
-  get_bounding_box (new_tooltip_widget, &bounds);
-
-  /* Position the tooltip */
-
-  cursor_size = gdk_display_get_default_cursor_size (display);
-
-  /* Try below */
-  x = bounds.x + bounds.width / 2 - width / 2;
-  y = bounds.y + bounds.height + 4;
-
-  if (y + height <= workarea.y + workarea.height)
-    {
-      if (tooltip->keyboard_mode_enabled)
-        goto found;
-
-      if (y <= tooltip->last_y + cursor_size + MAX_DISTANCE)
-        {
-          if (tooltip->last_x + cursor_size + MAX_DISTANCE < x)
-            x = tooltip->last_x + cursor_size + MAX_DISTANCE;
-          else if (x + width < tooltip->last_x - MAX_DISTANCE)
-            x = tooltip->last_x - MAX_DISTANCE - width;
-
-          goto found;
-        }
-   }
-
-  /* Try above */
-  x = bounds.x + bounds.width / 2 - width / 2;
-  y = bounds.y - height - 4;
-
-  if (y >= workarea.y)
-    {
-      if (tooltip->keyboard_mode_enabled)
-        goto found;
-
-      if (y + height >= tooltip->last_y - MAX_DISTANCE)
-        {
-          if (tooltip->last_x + cursor_size + MAX_DISTANCE < x)
-            x = tooltip->last_x + cursor_size + MAX_DISTANCE;
-          else if (x + width < tooltip->last_x - MAX_DISTANCE)
-            x = tooltip->last_x - MAX_DISTANCE - width;
-
-          goto found;
-        }
-    }
-
-  /* Try right FIXME: flip on rtl ? */
-  x = bounds.x + bounds.width + 4;
-  y = bounds.y + bounds.height / 2 - height / 2;
-
-  if (x + width <= workarea.x + workarea.width)
-    {
-      if (tooltip->keyboard_mode_enabled)
-        goto found;
-
-      if (x <= tooltip->last_x + cursor_size + MAX_DISTANCE)
-        {
-          if (tooltip->last_y + cursor_size + MAX_DISTANCE < y)
-            y = tooltip->last_y + cursor_size + MAX_DISTANCE;
-          else if (y + height < tooltip->last_y - MAX_DISTANCE)
-            y = tooltip->last_y - MAX_DISTANCE - height;
-
-          goto found;
-        }
-    }
-
-  /* Try left FIXME: flip on rtl ? */
-  x = bounds.x - width - 4;
-  y = bounds.y + bounds.height / 2 - height / 2;
-
-  if (x >= workarea.x)
-    {
-      if (tooltip->keyboard_mode_enabled)
-        goto found;
-
-      if (x + width >= tooltip->last_x - MAX_DISTANCE)
-        {
-          if (tooltip->last_y + cursor_size + MAX_DISTANCE < y)
-            y = tooltip->last_y + cursor_size + MAX_DISTANCE;
-          else if (y + height < tooltip->last_y - MAX_DISTANCE)
-            y = tooltip->last_y - MAX_DISTANCE - height;
-
-          goto found;
-        }
-    }
-
-   /* Fallback */
-  if (tooltip->keyboard_mode_enabled)
-    {
-      x = bounds.x + bounds.width / 2 - width / 2;
-      y = bounds.y + bounds.height + 4;
-    }
+  if (device)
+    anchor_rect_padding = MAX (4, cursor_size - 32);
   else
+    anchor_rect_padding = 4;
+
+  anchor_rect.x -= anchor_rect_padding;
+  anchor_rect.y -= anchor_rect_padding;
+  anchor_rect.width += anchor_rect_padding * 2;
+  anchor_rect.height += anchor_rect_padding * 2;
+
+  if (device)
     {
-      /* At cursor */
-      x = tooltip->last_x + cursor_size * 3 / 4;
-      y = tooltip->last_y + cursor_size * 3 / 4;
-    }
+      const int max_x_distance = 32;
+      /* Max 48x48 icon + default padding */
+      const int max_anchor_rect_height = 48 + 8;
+      int pointer_x, pointer_y;
 
-found:
-  /* Show it */
-  if (x + width > workarea.x + workarea.width)
-    x -= x - (workarea.x + workarea.width) + width;
-  else if (x < workarea.x)
-    x = workarea.x;
+      /*
+       * For pointer position triggered tooltips, implement the following
+       * semantics:
+       *
+       * If the anchor rectangle is too tall (meaning if we'd be constrained
+       * and flip, it'd flip too far away), rely only on the pointer position
+       * to position the tooltip. The approximate pointer cursorrectangle is
+       * used as a anchor rectantgle.
+       *
+       * If the anchor rectangle isn't to tall, make sure the tooltip isn't too
+       * far away from the pointer position.
+       */
+      widget_window = _gtk_widget_get_window (new_tooltip_widget);
+      effective_toplevel = gdk_window_get_effective_toplevel (widget_window);
+      gdk_window_get_device_position (effective_toplevel,
+                                      device,
+                                      &pointer_x, &pointer_y, NULL);
 
-  if (y + height > workarea.y + workarea.height)
-    y -= y - (workarea.y + workarea.height) + height;
-  else if (y < workarea.y)
-    y = workarea.y;
-
-  if (!tooltip->keyboard_mode_enabled)
-    {
-      /* don't pop up under the pointer */
-      if (x <= tooltip->last_x && tooltip->last_x < x + width &&
-          y <= tooltip->last_y && tooltip->last_y < y + height)
-        y = tooltip->last_y - height - 2;
-    }
-
-#ifdef GDK_WINDOWING_WAYLAND
-  /* set the transient parent on the tooltip when running with the Wayland
-   * backend to allow correct positioning of the tooltip windows
-   */
-  if (GDK_IS_WAYLAND_DISPLAY (display))
-    {
-      GtkWidget *toplevel;
-
-      toplevel = gtk_widget_get_toplevel (tooltip->tooltip_widget);
-      if (GTK_IS_WINDOW (toplevel))
-        gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
-                                      GTK_WINDOW (toplevel));
-    }
-#endif
-#ifdef GDK_WINDOWING_MIR
-      /* Set the transient parent on the tooltip when running with the Mir
-       * backend to allow correct positioning of the tooltip windows */
-      if (GDK_IS_MIR_DISPLAY (display))
+      if (anchor_rect.height > max_anchor_rect_height)
         {
-          GtkWidget *toplevel;
-
-          toplevel = gtk_widget_get_toplevel (tooltip->tooltip_widget);
-          if (GTK_IS_WINDOW (toplevel))
-            gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
-                                          GTK_WINDOW (toplevel));
+          anchor_rect.x = pointer_x - 4;
+          anchor_rect.y = pointer_y - 4;
+          anchor_rect.width = cursor_size;
+          anchor_rect.height = cursor_size;
         }
-#endif
+      else
+        {
+          int anchor_point_x;
+          int x_distance;
 
-  x -= border.left;
-  y -= border.top;
+          anchor_point_x = anchor_rect.x + anchor_rect.width / 2;
+          x_distance = pointer_x - anchor_point_x;
 
-  gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
+          if (x_distance > max_x_distance)
+            rect_anchor_dx = x_distance - max_x_distance;
+          else if (x_distance < -max_x_distance)
+            rect_anchor_dx = x_distance + max_x_distance;
+        }
+    }
+
+  gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
+                                GTK_WINDOW (toplevel));
+
+  gdk_window_move_to_rect (window,
+                           &anchor_rect,
+                           GDK_GRAVITY_SOUTH,
+                           GDK_GRAVITY_NORTH,
+                           GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                           rect_anchor_dx, 0);
   gtk_widget_show (GTK_WIDGET (tooltip->current_window));
 }
 
@@ -1090,7 +972,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 {
   gint x, y;
   GdkScreen *screen;
-
+  GdkDevice *device;
   GdkWindow *window;
   GtkWidget *tooltip_widget;
   GtkTooltip *tooltip;
@@ -1102,10 +984,10 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
     {
       x = y = -1;
       tooltip_widget = tooltip->keyboard_widget;
+      device = NULL;
     }
   else
     {
-      GdkDevice *device;
       gint tx, ty;
 
       window = tooltip->last_window;
@@ -1118,8 +1000,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       gdk_window_get_device_position (window, device, &x, &y, NULL);
 
       gdk_window_get_root_coords (window, x, y, &tx, &ty);
-      tooltip->last_x = tx;
-      tooltip->last_y = ty;
 
       tooltip_widget = _gtk_widget_find_at_coords (window, x, y, &x, &y);
     }
@@ -1154,7 +1034,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
                         G_CALLBACK (gtk_tooltip_display_closed), tooltip);
     }
 
-  gtk_tooltip_position (tooltip, display, tooltip_widget);
+  gtk_tooltip_position (tooltip, display, tooltip_widget, device);
 
   /* Now a tooltip is visible again on the display, make sure browse
    * mode is enabled.

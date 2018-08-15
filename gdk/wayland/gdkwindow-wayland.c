@@ -1896,6 +1896,8 @@ gdk_wayland_window_handle_configure_popup (GdkWindow *window,
                                   &flipped_x,
                                   &flipped_y);
 
+  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
+
   g_signal_emit_by_name (window,
                          "moved-to-rect",
                          &flipped_rect,
@@ -2824,6 +2826,9 @@ should_map_as_popup (GdkWindow *window)
     default:
       break;
     }
+
+  if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+    return TRUE;
 
   return FALSE;
 }
@@ -3819,6 +3824,7 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindow *previous_parent;
+  gboolean was_subsurface = FALSE;
 
   g_assert (parent == NULL ||
             gdk_window_get_display (window) == gdk_window_get_display (parent));
@@ -3832,7 +3838,10 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
   unset_transient_for_exported (window);
 
   if (impl->display_server.wl_subsurface)
-    unmap_subsurface (window);
+    {
+      was_subsurface = TRUE;
+      unmap_subsurface (window);
+    }
 
   previous_parent = impl->transient_for;
   impl->transient_for = parent;
@@ -3845,9 +3854,10 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
         display_wayland->orphan_dialogs =
           g_list_remove (display_wayland->orphan_dialogs, window);
     }
+
   gdk_wayland_window_sync_parent (window, NULL);
-  if (should_map_as_subsurface (window) &&
-      parent && gdk_window_is_visible (window))
+
+  if (was_subsurface && parent)
     gdk_wayland_window_create_subsurface (window);
 }
 
