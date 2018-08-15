@@ -75,7 +75,7 @@ const GDK_CROSSING_GRAB = 1;
 const GDK_CROSSING_UNGRAB = 2;
 
 // GdkModifierType
-const GDK_SHIFT_MASK = 1 << 0;
+const GDK_SHIFT_MASK    = 1 << 0;
 const GDK_LOCK_MASK     = 1 << 1;
 const GDK_CONTROL_MASK  = 1 << 2;
 const GDK_MOD1_MASK     = 1 << 3;
@@ -91,7 +91,6 @@ const GDK_BUTTON5_MASK  = 1 << 12;
 const GDK_SUPER_MASK    = 1 << 26;
 const GDK_HYPER_MASK    = 1 << 27;
 const GDK_META_MASK     = 1 << 28;
-const GDK_RELEASE_MASK  = 1 << 30;
 
 
 var useDataUrls = window.location.search.includes("datauri");
