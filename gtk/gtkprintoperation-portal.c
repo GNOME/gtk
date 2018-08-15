@@ -37,6 +37,7 @@
 #include "gtkshow.h"
 #include "gtkintl.h"
 #include "gtkwindowprivate.h"
+#include "gtkprivate.h"
 
 
 typedef struct {
@@ -461,8 +462,8 @@ prepare_print_called (GObject      *source,
                                             portal->response_signal_id);
       portal->response_signal_id =
         g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (G_DBUS_PROXY (portal->proxy)),
-                                            "org.freedesktop.portal.Desktop",
-                                            "org.freedesktop.portal.Request",
+                                            PORTAL_BUS_NAME,
+                                            PORTAL_REQUEST_INTERFACE,
                                             "Response",
                                             handle,
                                             NULL,
@@ -491,9 +492,9 @@ create_portal_data (GtkPrintOperation          *op,
   proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                          G_DBUS_PROXY_FLAGS_NONE,
                                          NULL,
-                                         "org.freedesktop.portal.Desktop",
-                                         "/org/freedesktop/portal/desktop",
-                                         "org.freedesktop.portal.Print",
+                                         PORTAL_BUS_NAME,
+                                         PORTAL_OBJECT_PATH,
+                                         PORTAL_PRINT_INTERFACE,
                                          NULL,
                                          &error);
 
@@ -564,13 +565,13 @@ call_prepare_print (GtkPrintOperation *op,
     if (sender[i] == '.')
       sender[i] = '_';
 
-  portal->prepare_print_handle = g_strdup_printf ("/org/fredesktop/portal/desktop/request/%s/%s", sender, token);
+  portal->prepare_print_handle = g_strconcat (PORTAL_OBJECT_PATH "/request/", sender, "/", token, NULL);
   g_free (sender);
 
   portal->response_signal_id =
     g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (G_DBUS_PROXY (portal->proxy)),
-                                        "org.freedesktop.portal.Desktop",
-                                        "org.freedesktop.portal.Request",
+                                        PORTAL_BUS_NAME,
+                                        PORTAL_REQUEST_INTERFACE,
                                         "Response",
                                         portal->prepare_print_handle,
                                         NULL,

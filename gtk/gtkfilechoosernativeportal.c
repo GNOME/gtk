@@ -152,9 +152,9 @@ send_close (FilechooserPortalData *data)
   GDBusMessage *message;
   GError *error = NULL;
 
-  message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
-                                            "/org/freedesktop/portal/desktop",
-                                            "org.freedesktop.portal.FileChooser",
+  message = g_dbus_message_new_method_call (PORTAL_BUS_NAME,
+                                            PORTAL_OBJECT_PATH,
+                                            PORTAL_FILECHOOSER_INTERFACE,
                                             "Close");
   g_dbus_message_set_body (message,
                            g_variant_new ("(o)", data->portal_handle));
@@ -216,8 +216,8 @@ open_file_msg_cb (GObject *source_object,
 
       data->portal_response_signal_id =
         g_dbus_connection_signal_subscribe (data->connection,
-                                            "org.freedesktop.portal.Desktop",
-                                            "org.freedesktop.portal.Request",
+                                            PORTAL_BUS_NAME,
+                                            PORTAL_REQUEST_INTERFACE,
                                             "Response",
                                             data->portal_handle,
                                             NULL,
@@ -299,9 +299,9 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   char *sender;
   int i;
 
-  message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
-                                            "/org/freedesktop/portal/desktop",
-                                            "org.freedesktop.portal.FileChooser",
+  message = g_dbus_message_new_method_call (PORTAL_BUS_NAME,
+                                            PORTAL_OBJECT_PATH,
+                                            PORTAL_FILECHOOSER_INTERFACE,
                                             data->method_name);
 
   token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
@@ -310,13 +310,13 @@ show_portal_file_chooser (GtkFileChooserNative *self,
     if (sender[i] == '.')
       sender[i] = '_';
 
-  data->portal_handle = g_strdup_printf ("/org/fredesktop/portal/desktop/request/%s/%s", sender, token);
+  data->portal_handle = g_strconcat (PORTAL_OBJECT_PATH "/request/", sender, "/", token, NULL);
   g_free (sender);
 
   data->portal_response_signal_id =
         g_dbus_connection_signal_subscribe (data->connection,
-                                            "org.freedesktop.portal.Desktop",
-                                            "org.freedesktop.portal.Request",
+                                            PORTAL_BUS_NAME,
+                                            PORTAL_REQUEST_INTERFACE,
                                             "Response",
                                             data->portal_handle,
                                             NULL,

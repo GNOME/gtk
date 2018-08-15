@@ -111,6 +111,14 @@ void    _gtk_set_slowdown (gdouble slowdown_factor);
 
 gboolean gtk_should_use_portal (void);
 
+#define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
+#define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
+#define PORTAL_REQUEST_INTERFACE "org.freedesktop.portal.Request"
+#define PORTAL_FILECHOOSER_INTERFACE "org.freedesktop.portal.FileChooser"
+#define PORTAL_PRINT_INTERFACE "org.freedesktop.portal.Print"
+#define PORTAL_SCREENSHOT_INTERFACE "org.freedesktop.portal.Screenshot"
+#define PORTAL_INHIBIT_INTERFACE "org.freedesktop.portal.Inhibit"
+
 #ifdef G_OS_WIN32
 void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
 #endif

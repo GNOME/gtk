@@ -24,9 +24,13 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtksettings.h"
+#include "gtkprivate.h"
 
 G_DEFINE_TYPE (GtkApplicationImplDBus, gtk_application_impl_dbus, GTK_TYPE_APPLICATION_IMPL)
 
+#define DBUS_BUS_NAME               "org.freedesktop.DBus"
+#define DBUS_OBJECT_PATH            "/org/freedesktop/DBus"
+#define DBUS_BUS_INTERFACE          "org.freedesktop.DBus"
 #define GNOME_DBUS_NAME             "org.gnome.SessionManager"
 #define GNOME_DBUS_OBJECT_PATH      "/org/gnome/SessionManager"
 #define GNOME_DBUS_INTERFACE        "org.gnome.SessionManager"
@@ -304,9 +308,9 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       if (id && id[0])
         {
           res = g_dbus_connection_call_sync (dbus->session,
-                                             "org.freedesktop.DBus",
-                                             "/org/freedesktop/DBus",
-                                             "org.freedesktop.DBus",
+                                             DBUS_BUS_NAME,
+                                             DBUS_OBJECT_PATH,
+                                             DBUS_BUS_INTERFACE,
                                              "GetId",
                                              NULL,
                                              NULL,
@@ -340,9 +344,9 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
     {
       dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
                                                                           G_DBUS_PROXY_FLAGS_NONE,
-                                                                          "org.freedesktop.portal.Desktop",
-                                                                          "/org/freedesktop/portal/desktop",
-                                                                          "org.freedesktop.portal.Inhibit",
+                                                                          PORTAL_BUS_NAME,
+                                                                          PORTAL_OBJECT_PATH,
+                                                                          PORTAL_INHIBIT_INTERFACE,
                                                                           &error);
       if (error)
         {
@@ -608,9 +612,9 @@ gtk_application_impl_dbus_uninhibit (GtkApplicationImpl *impl,
           if (handle->cookie == cookie)
             {
               g_dbus_connection_call (dbus->session,
-                                      "org.freedesktop.portal.Desktop",
+                                      PORTAL_BUS_NAME,
                                       handle->handle,
-                                      "org.freedesktop.portal.Request",
+                                      PORTAL_REQUEST_INTERFACE,
                                       "Close",
                                       g_variant_new ("()"),
                                       G_VARIANT_TYPE_UNIT,

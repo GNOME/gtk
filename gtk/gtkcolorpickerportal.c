@@ -59,9 +59,9 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   picker->portal_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                         G_DBUS_PROXY_FLAGS_NONE,
                                                         NULL,
-                                                        "org.freedesktop.portal.Desktop",
-                                                        "/org/freedesktop/portal/desktop",
-                                                        "org.freedesktop.portal.Screenshot",
+                                                        PORTAL_BUS_NAME,
+                                                        PORTAL_OBJECT_PATH,
+                                                        PORTAL_SCREENSHOT_INTERFACE,
                                                         NULL,
                                                         error);
 
@@ -74,7 +74,7 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
  owner = g_dbus_proxy_get_name_owner (picker->portal_proxy);
   if (owner == NULL)
     {
-      g_debug ("org.freedesktop.portal.Screenshot not provided");
+      g_debug ("%s not provided", PORTAL_SCREENSHOT_INTERFACE);
       g_clear_object (&picker->portal_proxy);
       return FALSE;
     }
@@ -197,10 +197,10 @@ gtk_color_picker_portal_pick (GtkColorPicker      *cp,
     if (sender[i] == '.')
       sender[i] = '_';
 
-  handle = g_strdup_printf ("/org/freedesktop/portal/desktop/request/%s/%s", sender, token);
+  handle = g_strconcat (PORTAL_OBJECT_PATH "/request/", sender, "/", token, NULL);
   picker->portal_signal_id = g_dbus_connection_signal_subscribe (connection,
-                                                                 "org.freedesktop.portal.Desktop",
-                                                                 "org.freedesktop.portal.Request",
+                                                                 PORTAL_BUS_NAME,
+                                                                 PORTAL_REQUEST_INTERFACE,
                                                                  "Response",
                                                                  handle,
                                                                  NULL,
