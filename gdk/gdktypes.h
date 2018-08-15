@@ -200,8 +200,7 @@ typedef enum
  * @GDK_HYPER_MASK: the Hyper modifier
  * @GDK_META_MASK: the Meta modifier
  * @GDK_MODIFIER_RESERVED_29_MASK: A reserved bit flag; do not use in your own code
- * @GDK_RELEASE_MASK: not used in GDK itself. GTK uses it to differentiate
- *  between (keyval, modifiers) pairs from key press and release events.
+ * @GDK_MODIFIER_RESERVED_30_MASK: A reserved bit flag; do not use in your own code
  * @GDK_MODIFIER_MASK: a mask covering all modifier types.
  *
  * A set of bit-flags to indicate the state of modifier keys and mouse buttons
@@ -262,12 +261,11 @@ typedef enum
   GDK_META_MASK     = 1 << 28,
   
   GDK_MODIFIER_RESERVED_29_MASK  = 1 << 29,
-
-  GDK_RELEASE_MASK  = 1 << 30,
+  GDK_MODIFIER_RESERVED_30_MASK  = 1 << 30,
 
   /* Combination of GDK_SHIFT_MASK..GDK_BUTTON5_MASK + GDK_SUPER_MASK
-     + GDK_HYPER_MASK + GDK_META_MASK + GDK_RELEASE_MASK */
-  GDK_MODIFIER_MASK = 0x5c001fff
+     + GDK_HYPER_MASK + GDK_META_MASK */
+  GDK_MODIFIER_MASK = 0x1c001fff
 } GdkModifierType;
 
 /**
