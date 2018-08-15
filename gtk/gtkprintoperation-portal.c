@@ -378,7 +378,7 @@ prepare_print_response (GDBusConnection *connection,
 {
   PortalData *portal = data;
   guint32 response;
-  GVariant *options;
+  GVariant *options = NULL;
 
   if (portal->response_signal_id != 0)
     {
@@ -426,6 +426,9 @@ prepare_print_response (GDBusConnection *connection,
     }
   else
     portal->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+
+  if (options)
+    g_variant_unref (options);
 
   if (portal->loop)
     g_main_loop_quit (portal->loop);
