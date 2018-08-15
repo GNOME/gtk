@@ -2768,7 +2768,7 @@ gtk_window_remove_mnemonic (GtkWindow *window,
   _gtk_window_notify_keys_changed (window);
 }
 
-/**
+/*
  * gtk_window_mnemonic_activate:
  * @window: a #GtkWindow
  * @keyval: the mnemonic
@@ -2778,7 +2778,7 @@ gtk_window_remove_mnemonic (GtkWindow *window,
  *
  * Returns: %TRUE if the activation is done.
  */
-gboolean
+static gboolean
 gtk_window_mnemonic_activate (GtkWindow      *window,
 			      guint           keyval,
 			      GdkModifierType modifier)
@@ -6063,64 +6063,6 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
     }
 
   return FALSE;
-}
-
-/**
- * gtk_window_propagate_key_event:
- * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
- *
- * Propagate a key press or release event to the focus widget and
- * up the focus container chain until a widget handles @event.
- * This is normally called by the default ::key_press_event and
- * ::key_release_event handlers for toplevel windows,
- * however in some cases it may be useful to call this directly when
- * overriding the standard key handling for a toplevel window.
- *
- * Returns: %TRUE if a widget in the focus chain handled the event.
- */
-gboolean
-gtk_window_propagate_key_event (GtkWindow        *window,
-                                GdkEventKey      *event)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gboolean handled = FALSE;
-  GtkWidget *widget, *focus;
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  widget = GTK_WIDGET (window);
-
-  focus = priv->focus_widget;
-  if (focus)
-    g_object_ref (focus);
-  
-  while (!handled &&
-         focus && focus != widget &&
-         gtk_widget_get_root (focus) == GTK_ROOT (widget))
-    {
-      GtkWidget *parent;
-      
-      if (gtk_widget_is_sensitive (focus))
-        {
-          handled = gtk_widget_event (focus, (GdkEvent*) event);
-          if (handled)
-            break;
-        }
-
-      parent = _gtk_widget_get_parent (focus);
-      if (parent)
-        g_object_ref (parent);
-      
-      g_object_unref (focus);
-      
-      focus = parent;
-    }
-  
-  if (focus)
-    g_object_unref (focus);
-
-  return handled;
 }
 
 static GtkWindowRegion
