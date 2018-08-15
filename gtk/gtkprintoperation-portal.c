@@ -62,6 +62,8 @@ portal_data_free (gpointer data)
 {
   PortalData *portal = data;
 
+  if (portal->parent)
+    gtk_window_unexport_handle (portal->parent);
   g_object_unref (portal->op);
   g_object_unref (portal->proxy);
   if (portal->loop)
