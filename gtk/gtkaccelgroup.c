@@ -1088,20 +1088,6 @@ is_control (const gchar *string)
 }
 
 static inline gboolean
-is_release (const gchar *string)
-{
-  return ((string[0] == '<') &&
-          (string[1] == 'r' || string[1] == 'R') &&
-          (string[2] == 'e' || string[2] == 'E') &&
-          (string[3] == 'l' || string[3] == 'L') &&
-          (string[4] == 'e' || string[4] == 'E') &&
-          (string[5] == 'a' || string[5] == 'A') &&
-          (string[6] == 's' || string[6] == 'S') &&
-          (string[7] == 'e' || string[7] == 'E') &&
-          (string[8] == '>'));
-}
-
-static inline gboolean
 is_meta (const gchar *string)
 {
   return ((string[0] == '<') &&
@@ -1210,13 +1196,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
     {
       if (*accelerator == '<')
         {
-          if (len >= 9 && is_release (accelerator))
-            {
-              accelerator += 9;
-              len -= 9;
-              mods |= GDK_RELEASE_MASK;
-            }
-          else if (len >= 9 && is_primary (accelerator))
+          if (len >= 9 && is_primary (accelerator))
             {
               accelerator += 9;
               len -= 9;
@@ -1505,7 +1485,6 @@ gchar*
 gtk_accelerator_name (guint           accelerator_key,
                       GdkModifierType accelerator_mods)
 {
-  static const gchar text_release[] = "<Release>";
   static const gchar text_primary[] = "<Primary>";
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
@@ -1530,8 +1509,6 @@ gtk_accelerator_name (guint           accelerator_key,
 
   saved_mods = accelerator_mods;
   l = 0;
-  if (accelerator_mods & GDK_RELEASE_MASK)
-    l += sizeof (text_release) - 1;
   if (accelerator_mods & _gtk_get_primary_accel_mod ())
     {
       l += sizeof (text_primary) - 1;
@@ -1564,11 +1541,6 @@ gtk_accelerator_name (guint           accelerator_key,
   accelerator_mods = saved_mods;
   l = 0;
   accelerator[l] = 0;
-  if (accelerator_mods & GDK_RELEASE_MASK)
-    {
-      strcpy (accelerator + l, text_release);
-      l += sizeof (text_release) - 1;
-    }
   if (accelerator_mods & _gtk_get_primary_accel_mod ())
     {
       strcpy (accelerator + l, text_primary);
