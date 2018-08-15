@@ -4681,9 +4681,6 @@ gtk_window_get_toplevels
 gtk_window_list_toplevels
 gtk_window_add_mnemonic
 gtk_window_remove_mnemonic
-gtk_window_mnemonic_activate
-gtk_window_activate_key
-gtk_window_propagate_key_event
 gtk_window_get_focus
 gtk_window_set_focus
 gtk_window_get_default_widget
