@@ -244,21 +244,10 @@ void     gtk_window_remove_mnemonic       (GtkWindow       *window,
 					   guint            keyval,
 					   GtkWidget       *target);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_window_mnemonic_activate     (GtkWindow       *window,
-					   guint            keyval,
-					   GdkModifierType  modifier);
-GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
 					   GdkModifierType  modifier);
 GDK_AVAILABLE_IN_ALL
 GdkModifierType gtk_window_get_mnemonic_modifier (GtkWindow *window);
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_window_activate_key          (GtkWindow        *window,
-					   GdkEventKey      *event);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_window_propagate_key_event   (GtkWindow        *window,
-					   GdkEventKey      *event);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_present            (GtkWindow *window);
