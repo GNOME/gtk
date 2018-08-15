@@ -112,7 +112,6 @@ var GDK_BUTTON5_MASK  = 1 << 12;
 var GDK_SUPER_MASK    = 1 << 26;
 var GDK_HYPER_MASK    = 1 << 27;
 var GDK_META_MASK     = 1 << 28;
-var GDK_RELEASE_MASK  = 1 << 30;
 
 function getButtonMask (button) {
     if (button == 1)
