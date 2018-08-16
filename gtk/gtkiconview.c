@@ -153,9 +153,10 @@ static void gtk_icon_view_measure (GtkWidget *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
-static void             gtk_icon_view_size_allocate             (GtkWidget           *widget,
-                                                                 const GtkAllocation *allocation,
-                                                                 int                  baseline);
+static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
+                                                                 int                 width,
+                                                                 int                 height,
+                                                                 int                 baseline);
 static void             gtk_icon_view_snapshot                  (GtkWidget          *widget,
                                                                  GtkSnapshot        *snapshot);
 static void             gtk_icon_view_motion                    (GtkEventController *controller,
@@ -1616,9 +1617,10 @@ gtk_icon_view_allocate_children (GtkIconView *icon_view)
 }
 
 static void
-gtk_icon_view_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_icon_view_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 

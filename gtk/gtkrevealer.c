@@ -97,9 +97,10 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 static void     gtk_revealer_real_add                            (GtkContainer  *widget,
                                                                   GtkWidget     *child);
-static void     gtk_revealer_real_size_allocate                  (GtkWidget           *widget,
-                                                                  const GtkAllocation *allocation,
-                                                                  int                  baseline);
+static void     gtk_revealer_real_size_allocate                  (GtkWidget     *widget,
+                                                                  int            width,
+                                                                  int            height,
+                                                                  int            baseline);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -294,16 +295,16 @@ effective_transition (GtkRevealer *revealer)
 }
 
 static void
-gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
-                                   const GtkAllocation *allocation,
-                                   GtkAllocation       *child_allocation)
+gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
+                                   int            width,
+                                   int            height,
+                                   GtkAllocation *child_allocation)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
   GtkRevealerTransitionType transition;
 
   g_return_if_fail (revealer != NULL);
-  g_return_if_fail (allocation != NULL);
 
   child_allocation->x = 0;
   child_allocation->y = 0;
@@ -318,15 +319,15 @@ gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
-                            MAX (0, allocation->height),
+                            MAX (0, height),
                             NULL, &child_allocation->width, NULL, NULL);
       else
         gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                            MAX (0, allocation->width),
+                            MAX (0, width),
                             NULL, &child_allocation->height, NULL, NULL);
 
-      child_allocation->width = MAX (child_allocation->width, allocation->width);
-      child_allocation->height = MAX (child_allocation->height, allocation->height);
+      child_allocation->width = MAX (child_allocation->width, width);
+      child_allocation->height = MAX (child_allocation->height, height);
 
       switch (transition)
         {
@@ -363,9 +364,10 @@ gtk_revealer_real_add (GtkContainer *container,
 }
 
 static void
-gtk_revealer_real_size_allocate (GtkWidget           *widget,
-                                 const GtkAllocation *allocation,
-                                 int                  baseline)
+gtk_revealer_real_size_allocate (GtkWidget *widget,
+                                 int        width,
+                                 int        height,
+                                 int        baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkWidget *child;
@@ -375,7 +377,7 @@ gtk_revealer_real_size_allocate (GtkWidget           *widget,
     {
       GtkAllocation child_allocation;
 
-      gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
+      gtk_revealer_get_child_allocation (revealer, width, height, &child_allocation);
       gtk_widget_size_allocate (child, &child_allocation, -1);
     }
 }

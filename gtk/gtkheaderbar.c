@@ -894,9 +894,10 @@ gtk_header_bar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_header_bar_size_allocate (GtkWidget           *widget,
-                              const GtkAllocation *allocation,
-                              int                  baseline)
+gtk_header_bar_size_allocate (GtkWidget *widget,
+                              int        widget_width,
+                              int        widget_height,
+                              int        baseline)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
   GtkWidget *title_widget;
@@ -925,8 +926,8 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
   nvis_children = count_visible_children (bar);
   sizes = g_newa (GtkRequestedSize, nvis_children);
 
-  width = allocation->width - nvis_children * priv->spacing;
-  height = allocation->height;
+  width = widget_width - nvis_children * priv->spacing;
+  height = widget_height;
 
   i = 0;
   for (l = priv->children; l; l = l->next)
@@ -1025,7 +1026,7 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
     {
       gint side_free_space;
 
-      side_free_space = allocation->width / 2 - title_natural_size / 2 - side[packing];
+      side_free_space = widget_width / 2 - title_natural_size / 2 - side[packing];
 
       if (side_free_space > 0 && nexpand_children[packing] > 0)
         {
@@ -1043,12 +1044,12 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
   /* allocate the children on both sides of the title */
   for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
     {
-      child_allocation.y = allocation->y;
+      child_allocation.y = 0;
       child_allocation.height = height;
       if (packing == GTK_PACK_START)
-        x = allocation->x + start_width;
+        x = start_width;
       else
-        x = allocation->x + allocation->width - end_width;
+        x = widget_width - end_width;
 
       i = 0;
       for (l = priv->children; l != NULL; l = l->next)
@@ -1094,7 +1095,7 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
             }
 
           if (direction == GTK_TEXT_DIR_RTL)
-            child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+            child_allocation.x = widget_width - child_allocation.x  - child_allocation.width;
 
           gtk_widget_size_allocate (child->widget, &child_allocation, baseline);
 
@@ -1106,12 +1107,12 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
   /* We don't enforce css borders on the center widget, to make
    * title/subtitle combinations fit without growing the header
    */
-  child_allocation.y = allocation->y;
-  child_allocation.height = allocation->height;
+  child_allocation.y = 0;
+  child_allocation.height = widget_height;
 
-  child_size = MIN (allocation->width - side[0] - side[1], title_natural_size);
+  child_size = MIN (widget_width - side[0] - side[1], title_natural_size);
 
-  child_allocation.x = allocation->x + (allocation->width - child_size) / 2;
+  child_allocation.x = (widget_width - child_size) / 2;
   child_allocation.width = child_size;
 
   /* if the title widget is expanded, then grow it by all the available
@@ -1123,29 +1124,29 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
       child_allocation.x -= width / 2;
     }
 
-  if (allocation->x + side[0] > child_allocation.x)
-    child_allocation.x = allocation->x + side[0];
-  else if (allocation->x + allocation->width - side[1] < child_allocation.x + child_allocation.width)
-    child_allocation.x = allocation->x + allocation->width - side[1] - child_allocation.width;
+  if (side[0] > child_allocation.x)
+    child_allocation.x = side[0];
+  else if (widget_width - side[1] < child_allocation.x + child_allocation.width)
+    child_allocation.x = widget_width - side[1] - child_allocation.width;
 
   if (direction == GTK_TEXT_DIR_RTL)
-    child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+    child_allocation.x = widget_width - (child_allocation.x) - child_allocation.width;
 
   if (title_widget != NULL)
     {
       gtk_widget_size_allocate (title_widget, &child_allocation, baseline);
     }
 
-  child_allocation.y = allocation->y;
+  child_allocation.y = 0;
   child_allocation.height = height;
 
   if (priv->titlebar_start_box)
     {
       gboolean left = (direction == GTK_TEXT_DIR_LTR);
       if (left)
-        child_allocation.x = allocation->x;
+        child_allocation.x = 0;
       else
-        child_allocation.x = allocation->x + allocation->width - start_width + priv->spacing;
+        child_allocation.x = widget_width - start_width + priv->spacing;
       child_allocation.width = start_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_start_box, &child_allocation, baseline);
     }
@@ -1154,9 +1155,9 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
     {
       gboolean left = (direction != GTK_TEXT_DIR_LTR);
       if (left)
-        child_allocation.x = allocation->x;
+        child_allocation.x = 0;
       else
-        child_allocation.x = allocation->x + allocation->width - end_width + priv->spacing;
+        child_allocation.x = widget_width - end_width + priv->spacing;
       child_allocation.width = end_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_end_box, &child_allocation, baseline);
     }

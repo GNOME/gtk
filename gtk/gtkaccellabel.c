@@ -160,14 +160,19 @@ static void gtk_accel_label_measure (GtkWidget      *widget,
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_WIDGET)
 
 static void
-gtk_accel_label_size_allocate (GtkWidget           *widget,
-                               const GtkAllocation *allocation,
-                               int                   baseline)
+gtk_accel_label_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
 {
   GtkAccelLabel *al = GTK_ACCEL_LABEL (widget);
   GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (al);
 
-  gtk_widget_size_allocate (priv->box, allocation, baseline);
+  gtk_widget_size_allocate (priv->box,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            },baseline);
 }
 
 static void

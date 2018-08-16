@@ -173,9 +173,10 @@ static void gtk_expander_get_property (GObject          *object,
                                        GParamSpec       *pspec);
 
 static void     gtk_expander_destroy        (GtkWidget        *widget);
-static void     gtk_expander_size_allocate  (GtkWidget           *widget,
-                                             const GtkAllocation *allocation,
-                                             int                  baseline);
+static void     gtk_expander_size_allocate  (GtkWidget        *widget,
+                                             int               width,
+                                             int               height,
+                                             int               baseline);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
@@ -493,13 +494,18 @@ gtk_expander_destroy (GtkWidget *widget)
 }
 
 static void
-gtk_expander_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_expander_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (widget));
 
-  gtk_widget_size_allocate (priv->box, allocation, baseline);
+  gtk_widget_size_allocate (priv->box,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            }, baseline);
 }
 
 static void

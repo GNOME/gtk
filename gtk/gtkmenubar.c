@@ -87,9 +87,10 @@ static void gtk_menu_bar_measure (GtkWidget     *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
-static void gtk_menu_bar_size_allocate     (GtkWidget           *widget,
-                                            const GtkAllocation *allocation,
-                                            int                  baseline);
+static void gtk_menu_bar_size_allocate     (GtkWidget *widget,
+                                            int        width,
+                                            int        height,
+                                            int        baseline);
 static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
 					    GtkWidget       *old_toplevel);
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
@@ -338,9 +339,10 @@ gtk_menu_bar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_menu_bar_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_menu_bar_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (widget);
   GtkMenuBarPrivate *priv = menu_bar->priv;
@@ -357,7 +359,7 @@ gtk_menu_bar_size_allocate (GtkWidget           *widget,
   if (!menu_shell->priv->children)
     return;
 
-  remaining_space = *allocation;
+  remaining_space = (GtkAllocation) {0, 0, width, height};
   requested_sizes = g_array_new (FALSE, FALSE, sizeof (GtkRequestedSize));
 
   if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||

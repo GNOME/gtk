@@ -115,9 +115,10 @@ static void gtk_layout_measure (GtkWidget *widget,
                                 int            *natural,
                                 int            *minimum_baseline,
                                 int            *natural_baseline);
-static void gtk_layout_size_allocate      (GtkWidget          *widget,
-                                           const GtkAllocation *allocation,
-                                           int                 baseline);
+static void gtk_layout_size_allocate      (GtkWidget      *widget,
+                                           int             width,
+                                           int             height,
+                                           int             baseline);
 static void gtk_layout_add                (GtkContainer   *container,
 					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
@@ -707,9 +708,10 @@ gtk_layout_measure (GtkWidget *widget,
 
 
 static void
-gtk_layout_size_allocate (GtkWidget           *widget,
-                          const GtkAllocation *allocation,
-                          int                  baseline)
+gtk_layout_size_allocate (GtkWidget *widget,
+                          int        width,
+                          int        height,
+                          int        baseline)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = gtk_layout_get_instance_private (layout);

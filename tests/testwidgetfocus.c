@@ -88,13 +88,14 @@ GType gtk_focus_widget_get_type (void) G_GNUC_CONST;
 G_DEFINE_TYPE(GtkFocusWidget, gtk_focus_widget, GTK_TYPE_WIDGET)
 
 static void
-gtk_focus_widget_size_allocate (GtkWidget           *widget,
-                                const GtkAllocation *allocation,
-                                int                  baseline)
+gtk_focus_widget_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
-  int child_width  = (allocation->width)  / 2;
-  int child_height = (allocation->height) / 2;
+  int child_width  = width  / 2;
+  int child_height = height / 2;
   GtkAllocation child_alloc;
 
   child_alloc.x = 0;
