@@ -41,11 +41,13 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
-#include "gtkmenushellprivate.h"
 #include "gtknotebook.h"
 #include "gtkpango.h"
 #include "gtkprivate.h"
 #include "gtkseparatormenuitem.h"
+#include "gtkshortcut.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
 #include "gtkshow.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
@@ -278,7 +280,7 @@ struct _GtkLabelPrivate
 {
   GtkLabelSelectionInfo *select_info;
   GtkWidget *mnemonic_widget;
-  GtkWindow *mnemonic_window;
+  GtkEventController *mnemonic_controller;
 
   PangoAttrList *attrs;
   PangoAttrList *markup_attrs;
@@ -416,7 +418,6 @@ static GParamSpec *label_props[NUM_PROPERTIES] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark quark_shortcuts_connected;
-static GQuark quark_mnemonic_menu;
 static GQuark quark_mnemonics_visible_connected;
 static GQuark quark_gtk_signal;
 static GQuark quark_link;
@@ -481,7 +482,6 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_root                       (GtkWidget     *widget);
-static void gtk_label_unroot                     (GtkWidget     *widget);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
 static void gtk_label_do_popup                   (GtkLabel      *label,
                                                   double         x,
@@ -503,9 +503,7 @@ static void gtk_label_update_active_link  (GtkWidget *widget,
 
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
-static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
-                                             GtkWidget         *toplevel,
-					     guint              last_key);
+static void     gtk_label_setup_mnemonic    (GtkLabel          *label);
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDrag           *drag,
 					     GtkSelectionData  *selection_data);
@@ -651,7 +649,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->root = gtk_label_root;
-  widget_class->unroot = gtk_label_unroot;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->drag_data_get = gtk_label_drag_data_get;
@@ -1141,7 +1138,6 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("label"));
 
   quark_shortcuts_connected = g_quark_from_static_string ("gtk-label-shortcuts-connected");
-  quark_mnemonic_menu = g_quark_from_static_string ("gtk-mnemonic-menu");
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_link = g_quark_from_static_string ("link");
@@ -1344,7 +1340,6 @@ gtk_label_init (GtkLabel *label)
   priv->attrs = NULL;
 
   priv->mnemonic_widget = NULL;
-  priv->mnemonic_window = NULL;
 
   priv->mnemonics_visible = FALSE;
 }
@@ -1784,65 +1779,43 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
-gtk_label_setup_mnemonic (GtkLabel  *label,
-                          GtkWidget *toplevel,
-			  guint      last_key)
+gtk_label_setup_mnemonic (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *mnemonic_menu;
+  GtkShortcut *shortcut;
   
-  mnemonic_menu = g_object_get_qdata (G_OBJECT (label), quark_mnemonic_menu);
-  
-  if (last_key != GDK_KEY_VoidSymbol)
+  if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
     {
-      if (priv->mnemonic_window)
-	{
-	  gtk_window_remove_mnemonic  (priv->mnemonic_window,
-				       last_key,
-				       widget);
-	  priv->mnemonic_window = NULL;
-	}
-      if (mnemonic_menu)
-	{
-	  _gtk_menu_shell_remove_mnemonic (GTK_MENU_SHELL (mnemonic_menu),
-					   last_key,
-					   widget);
-	  mnemonic_menu = NULL;
-	}
+      if (priv->mnemonic_controller)
+        {
+          gtk_widget_remove_controller (widget, priv->mnemonic_controller);
+          priv->mnemonic_controller = NULL;
+        }
+      return;
     }
 
-  if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
-      goto done;
+  if (priv->mnemonic_controller == NULL)
+    {
+      priv->mnemonic_controller = gtk_shortcut_controller_new ();
+      gtk_event_controller_set_propagation_phase (priv->mnemonic_controller, GTK_PHASE_CAPTURE);
+      gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (priv->mnemonic_controller), GTK_SHORTCUT_SCOPE_MANAGED);
+      
+      shortcut = gtk_shortcut_new ();
+      gtk_shortcut_set_trigger (shortcut, gtk_mnemonic_trigger_new (priv->mnemonic_keyval));
+      gtk_shortcut_set_mnemonic_activate (shortcut, TRUE);
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (priv->mnemonic_controller), shortcut);
+      gtk_widget_add_controller (GTK_WIDGET (label), priv->mnemonic_controller);
+      g_object_unref (shortcut);
+    }
+  else
+    {
+      shortcut = g_list_model_get_item (G_LIST_MODEL (priv->mnemonic_controller), 0);
+      gtk_shortcut_set_trigger (shortcut, gtk_mnemonic_trigger_new (priv->mnemonic_keyval));
+      g_object_unref (shortcut);
+    }
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
-
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      GtkWidget *menu_shell;
-
-      menu_shell = gtk_widget_get_ancestor (widget,
-					    GTK_TYPE_MENU_SHELL);
-
-      if (menu_shell)
-	{
-	  _gtk_menu_shell_add_mnemonic (GTK_MENU_SHELL (menu_shell),
-					priv->mnemonic_keyval,
-					widget);
-	  mnemonic_menu = menu_shell;
-	}
-
-      if (!GTK_IS_MENU (menu_shell))
-	{
-	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
-				   priv->mnemonic_keyval,
-				   widget);
-	  priv->mnemonic_window = GTK_WINDOW (toplevel);
-	}
-    }
-
- done:
-  g_object_set_qdata (G_OBJECT (label), quark_mnemonic_menu, mnemonic_menu);
 }
 
 static void
@@ -1885,13 +1858,12 @@ static void
 gtk_label_root (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkSettings *settings;
   gboolean shortcuts_connected;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
 
-  gtk_label_setup_mnemonic (label, GTK_WIDGET (gtk_widget_get_root (widget)), priv->mnemonic_keyval);
+  gtk_label_setup_mnemonic (label);
 
   /* The PangoContext is replaced when the display changes, so clear the layouts */
   gtk_label_clear_layout (GTK_LABEL (widget));
@@ -1912,17 +1884,6 @@ gtk_label_root (GtkWidget *widget)
     }
 
   label_shortcut_setting_apply (GTK_LABEL (widget));
-}
-
-static void
-gtk_label_unroot (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  gtk_label_setup_mnemonic (label, NULL, priv->mnemonic_keyval);
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
 }
 
 void
@@ -2168,7 +2129,7 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (keyval != priv->mnemonic_keyval)
     {
-      gtk_label_setup_mnemonic (label, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (label))), keyval);
+      gtk_label_setup_mnemonic (label);
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
