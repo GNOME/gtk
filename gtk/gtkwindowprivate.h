@@ -57,7 +57,6 @@ void            _gtk_window_set_allocation         (GtkWindow           *window,
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
                                           GdkModifierType modifiers,
-                                          gboolean        is_mnemonic,
                                           gpointer        data);
 
 gboolean gtk_window_emit_close_request (GtkWindow *window);
