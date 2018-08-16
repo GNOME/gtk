@@ -250,7 +250,8 @@ struct _GtkWidgetClass
   void (* realize)             (GtkWidget        *widget);
   void (* unrealize)           (GtkWidget        *widget);
   void (* size_allocate)       (GtkWidget           *widget,
-                                const GtkAllocation *allocation,
+                                int                  width,
+                                int                  height,
                                 int                  baseline);
   void (* state_flags_changed) (GtkWidget        *widget,
                                 GtkStateFlags     previous_state_flags);

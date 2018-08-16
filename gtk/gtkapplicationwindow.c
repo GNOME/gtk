@@ -592,7 +592,8 @@ gtk_application_window_measure (GtkWidget *widget,
 
 static void
 gtk_application_window_real_size_allocate (GtkWidget           *widget,
-                                           const GtkAllocation *allocation,
+                                           int                  width,
+                                           int                  height,
                                            int                  baseline)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
@@ -604,7 +605,7 @@ gtk_application_window_real_size_allocate (GtkWidget           *widget,
       gint menubar_height;
       GtkWidget *child;
 
-      _gtk_window_set_allocation (GTK_WINDOW (widget), allocation, &child_allocation);
+      _gtk_window_set_allocation (GTK_WINDOW (widget), width, height, &child_allocation);
       menubar_allocation = child_allocation;
 
       gtk_widget_measure (window->priv->menubar, GTK_ORIENTATION_VERTICAL,
@@ -622,7 +623,8 @@ gtk_application_window_real_size_allocate (GtkWidget           *widget,
     }
   else
     GTK_WIDGET_CLASS (gtk_application_window_parent_class)->size_allocate (widget,
-                                                                           allocation,
+                                                                           width,
+                                                                           height,
                                                                            baseline);
 }
 

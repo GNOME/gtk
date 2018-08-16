@@ -59,8 +59,9 @@ notify_cb (GObject    *obj,
 
 /* Translate GtkWidget::size-allocate to AtkComponent::bounds-changed */
 static void
-size_allocate_cb (GtkWidget     *widget,
-                  GtkAllocation *allocation)
+size_allocate_cb (GtkWidget *widget,
+                  int        width,
+                  int        height)
 {
   AtkObject* accessible;
   AtkRectangle rect;
@@ -68,10 +69,14 @@ size_allocate_cb (GtkWidget     *widget,
   accessible = gtk_widget_get_accessible (widget);
   if (ATK_IS_COMPONENT (accessible))
     {
-      rect.x = allocation->x;
-      rect.y = allocation->y;
-      rect.width = allocation->width;
-      rect.height = allocation->height;
+      GtkAllocation alloc;
+      gtk_widget_get_allocation (widget, &alloc);
+
+      rect.x = alloc.x;
+      rect.y = alloc.y;
+      rect.width = alloc.width;
+      rect.height = alloc.height;
+
       g_signal_emit_by_name (accessible, "bounds-changed", &rect);
     }
 }

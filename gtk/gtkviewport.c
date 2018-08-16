@@ -96,9 +96,10 @@ static void gtk_viewport_get_property             (GObject         *object,
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_snapshot                 (GtkWidget        *widget,
 						   GtkSnapshot      *snapshot);
-static void gtk_viewport_size_allocate            (GtkWidget           *widget,
-                                                   const GtkAllocation *allocation,
-                                                   int                  baseline);
+static void gtk_viewport_size_allocate            (GtkWidget        *widget,
+                                                   int               width,
+                                                   int               height,
+                                                   int               baseline);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void viewport_set_adjustment               (GtkViewport      *viewport,
@@ -521,9 +522,10 @@ gtk_viewport_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_viewport_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_viewport_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
