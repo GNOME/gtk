@@ -46,6 +46,11 @@ GDK_AVAILABLE_IN_ALL
 GtkEventController *    gtk_shortcut_controller_new                     (void);
 
 GDK_AVAILABLE_IN_ALL
+void                    gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController  *self,
+                                                                         GdkModifierType         modifiers);
+GDK_AVAILABLE_IN_ALL
+GdkModifierType         gtk_shortcut_controller_get_mnemonics_modifiers (GtkShortcutController  *self);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_shortcut_controller_set_scope               (GtkShortcutController  *controller,
                                                                          GtkShortcutScope        scope);
 GDK_AVAILABLE_IN_ALL
