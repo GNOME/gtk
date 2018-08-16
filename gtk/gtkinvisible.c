@@ -29,6 +29,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
+#include "gtkshortcutmanager.h"
 #include "gtkwidgetprivate.h"
 
 
@@ -80,6 +81,11 @@ gtk_invisible_root_get_display (GtkRoot *root)
 }
 
 static void
+gtk_invisible_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
+{
+}
+
+static void
 gtk_invisible_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_invisible_root_get_display;
@@ -87,6 +93,8 @@ gtk_invisible_root_interface_init (GtkRootInterface *iface)
 
 G_DEFINE_TYPE_WITH_CODE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkInvisible)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+						gtk_invisible_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
 						gtk_invisible_root_interface_init))
 
