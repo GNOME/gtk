@@ -6690,6 +6690,10 @@ gtk_keyval_trigger_new
 gtk_keyval_trigger_get_modifiers
 gtk_keyval_trigger_get_keyval
 
+<SUBSECTION>
+gtk_mnemonic_trigger_new
+gtk_mnemonic_trigger_get_keyval
+
 <SUBSECTION Private>
 gtk_shortcut_trigger_get_type
 </SECTION>
@@ -6728,6 +6732,8 @@ gtk_shortcut_get_type
 GtkShortcutController
 gtk_shortcut_controller_new
 GtkShortcutScope
+gtk_shortcut_controller_set_mnemonics_modifiers
+gtk_shortcut_controller_get_mnemonics_modifiers
 gtk_shortcut_controller_set_scope
 gtk_shortcut_controller_get_scope
 gtk_shortcut_controller_add_shortcut
