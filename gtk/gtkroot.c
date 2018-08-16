@@ -24,6 +24,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "gtkshortcutmanager.h"
+
 /**
  * SECTION:gtkroot
  * @Title: GtkRoot
@@ -38,7 +40,8 @@
  * The obvious example of a #GtkRoot is #GtkWindow.
  */
 
-G_DEFINE_INTERFACE (GtkRoot, gtk_root, GTK_TYPE_WIDGET)
+G_DEFINE_INTERFACE_WITH_CODE (GtkRoot, gtk_root, GTK_TYPE_WIDGET,
+                              g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_SHORTCUT_MANAGER));
 
 static GdkDisplay *
 gtk_root_default_get_display (GtkRoot *self)
