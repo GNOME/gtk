@@ -236,20 +236,6 @@ void       gtk_window_set_has_user_ref_count (GtkWindow *window,
                                               gboolean   setting);
 
 GDK_AVAILABLE_IN_ALL
-void     gtk_window_add_mnemonic          (GtkWindow       *window,
-					   guint            keyval,
-					   GtkWidget       *target);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_remove_mnemonic       (GtkWindow       *window,
-					   guint            keyval,
-					   GtkWidget       *target);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
-					   GdkModifierType  modifier);
-GDK_AVAILABLE_IN_ALL
-GdkModifierType gtk_window_get_mnemonic_modifier (GtkWindow *window);
-
-GDK_AVAILABLE_IN_ALL
 void     gtk_window_present            (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_present_with_time  (GtkWindow *window,
