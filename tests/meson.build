@@ -41,6 +41,7 @@ gtk_tests = [
   ['testflowbox'],
   ['testfontchooser'],
   ['testfontoptions'],
+  ['testformentry'],
   ['testframe'],
   ['testfullscreen'],
   ['testgiconpixbuf'],
