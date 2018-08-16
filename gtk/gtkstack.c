@@ -168,9 +168,10 @@ static void     gtk_stack_forall                         (GtkContainer  *contain
 static void     gtk_stack_compute_expand                 (GtkWidget     *widget,
                                                           gboolean      *hexpand,
                                                           gboolean      *vexpand);
-static void     gtk_stack_size_allocate                  (GtkWidget           *widget,
-                                                          const GtkAllocation *allocation,
-                                                          int                  baseline);
+static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
+                                                          int            width,
+                                                          int            height,
+                                                          int            baseline);
 static void     gtk_stack_snapshot                       (GtkWidget     *widget,
                                                           GtkSnapshot   *snapshot);
 static void     gtk_stack_measure                        (GtkWidget      *widget,
@@ -2001,9 +2002,10 @@ gtk_stack_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_stack_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_stack_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -2019,11 +2021,11 @@ gtk_stack_size_allocate (GtkWidget           *widget,
       gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
                           -1,
                           &min, &nat, NULL, NULL);
-      child_allocation.width = MAX (min, allocation->width);
+      child_allocation.width = MAX (min, width);
       gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_VERTICAL,
                           child_allocation.width,
                           &min, &nat, NULL, NULL);
-      child_allocation.height = MAX (min, allocation->height);
+      child_allocation.height = MAX (min, height);
 
       gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation, -1);
 
@@ -2034,8 +2036,8 @@ gtk_stack_size_allocate (GtkWidget           *widget,
         }
     }
 
-  child_allocation.width = allocation->width;
-  child_allocation.height = allocation->height;
+  child_allocation.width = width;
+  child_allocation.height = height;
 
   if (priv->visible_child)
     {
@@ -2043,31 +2045,31 @@ gtk_stack_size_allocate (GtkWidget           *widget,
       int min_height;
 
       gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
-                          allocation->height, &min_width, NULL, NULL, NULL);
+                          height, &min_width, NULL, NULL, NULL);
       child_allocation.width = MAX (child_allocation.width, min_width);
 
       gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_VERTICAL,
                           child_allocation.width, &min_height, NULL, NULL, NULL);
       child_allocation.height = MAX (child_allocation.height, min_height);
 
-      if (child_allocation.width > allocation->width)
+      if (child_allocation.width > width)
         {
           GtkAlign halign = gtk_widget_get_halign (priv->visible_child->widget);
 
           if (halign == GTK_ALIGN_CENTER || halign == GTK_ALIGN_FILL)
-            child_allocation.x = (allocation->width - child_allocation.width) / 2;
+            child_allocation.x = (width - child_allocation.width) / 2;
           else if (halign == GTK_ALIGN_END)
-            child_allocation.x = (allocation->width - child_allocation.width);
+            child_allocation.x = (width - child_allocation.width);
         }
 
-      if (child_allocation.height > allocation->height)
+      if (child_allocation.height > height)
         {
           GtkAlign valign = gtk_widget_get_valign (priv->visible_child->widget);
 
           if (valign == GTK_ALIGN_CENTER || valign == GTK_ALIGN_FILL)
-            child_allocation.y = (allocation->height - child_allocation.height) / 2;
+            child_allocation.y = (height - child_allocation.height) / 2;
           else if (valign == GTK_ALIGN_END)
-            child_allocation.y = (allocation->height - child_allocation.height);
+            child_allocation.y = (height - child_allocation.height);
         }
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1);

@@ -246,15 +246,20 @@ measure_contents (GtkGizmo       *gizmo,
 }
 
 static void
-allocate_contents (GtkGizmo            *gizmo,
-                   const GtkAllocation *allocation,
-                   int                  baseline)
+allocate_contents (GtkGizmo *gizmo,
+                   int       width,
+                   int       height,
+                   int       baseline)
 {
   GtkPopover *popover = GTK_POPOVER (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (popover));
 
   if (child)
-    gtk_widget_size_allocate (child, allocation, -1);
+    gtk_widget_size_allocate (child,
+                              &(GtkAllocation) {
+                                0, 0,
+                                width, height
+                              }, -1);
 }
 
 static void
@@ -1387,13 +1392,14 @@ gtk_popover_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_popover_size_allocate (GtkWidget           *widget,
-                           const GtkAllocation *allocation,
-                           int                  baseline)
+gtk_popover_size_allocate (GtkWidget *widget,
+                           int        width,
+                           int        height,
+                           int        baseline)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkAllocation child_alloc = *allocation;
+  GtkAllocation child_alloc = (GtkAllocation) {0, 0, width, height};
 
   /* Note that we in measure() we add TAIL_HEIGHT in both directions, regardless
    * of the popovers position. This is to ensure that we get enough space
@@ -1779,10 +1785,11 @@ _gtk_popover_parent_unmap (GtkWidget *widget,
 }
 
 static void
-gtk_popover_parent_size_allocate (GtkWidget           *widget,
-                                  const GtkAllocation *allocation,
-                                  int                  baseline,
-                                  GtkPopover          *popover)
+gtk_popover_parent_size_allocate (GtkWidget  *widget,
+                                  int         width,
+                                  int         height,
+                                  int         baseline,
+                                  GtkPopover *popover)
 {
   gtk_popover_update_position (popover);
 }

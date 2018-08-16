@@ -425,8 +425,9 @@ static void gtk_window_map                (GtkWidget         *widget);
 static void gtk_window_unmap              (GtkWidget         *widget);
 static void gtk_window_realize            (GtkWidget         *widget);
 static void gtk_window_unrealize          (GtkWidget         *widget);
-static void gtk_window_size_allocate      (GtkWidget           *widget,
-                                           const GtkAllocation *allocation,
+static void gtk_window_size_allocate      (GtkWidget         *widget,
+                                           int                width,
+                                           int                height,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static void gtk_window_focus_in           (GtkWidget         *widget);
@@ -7136,7 +7137,8 @@ popover_size_allocate (GtkWindowPopover *popover,
  */
 void
 _gtk_window_set_allocation (GtkWindow           *window,
-                            const GtkAllocation *allocation,
+                            int                  width,
+                            int                  height,
                             GtkAllocation       *allocation_out)
 {
   GtkWidget *widget = (GtkWidget *)window;
@@ -7145,13 +7147,12 @@ _gtk_window_set_allocation (GtkWindow           *window,
   GtkBorder window_border = { 0 };
   GList *link;
 
-  g_assert (allocation != NULL);
   g_assert (allocation_out != NULL);
 
   child_allocation.x = 0;
   child_allocation.y = 0;
-  child_allocation.width = allocation->width;
-  child_allocation.height = allocation->height;
+  child_allocation.width = width;
+  child_allocation.height = height;
 
   get_shadow_width (window, &window_border);
 
@@ -7170,9 +7171,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
       title_allocation.x = window_border.left;
       title_allocation.y = window_border.top;
-      title_allocation.width =
-        MAX (1, (gint) allocation->width -
-             window_border.left - window_border.right);
+      title_allocation.width = MAX (1, width - window_border.left - window_border.right);
 
       gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL,
                           title_allocation.width,
@@ -7196,9 +7195,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   if (!_gtk_widget_is_toplevel (widget) && _gtk_widget_get_realized (widget))
     {
-      gdk_surface_move_resize (_gtk_widget_get_surface (widget),
-			       allocation->x, allocation->y,
-			       allocation->width, allocation->height);
+      gdk_surface_move_resize (_gtk_widget_get_surface (widget), 0, 0, width, height);
     }
 
   *allocation_out = child_allocation;
@@ -7212,15 +7209,16 @@ _gtk_window_set_allocation (GtkWindow           *window,
 }
 
 static void
-gtk_window_size_allocate (GtkWidget           *widget,
-                          const GtkAllocation *allocation,
-                          int                  baseline)
+gtk_window_size_allocate (GtkWidget *widget,
+                          int        width,
+                          int        height,
+                          int        baseline)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWidget *child;
   GtkAllocation child_allocation;
 
-  _gtk_window_set_allocation (window, allocation, &child_allocation);
+  _gtk_window_set_allocation (window, width, height, &child_allocation);
 
   child = gtk_bin_get_child (GTK_BIN (window));
   if (child && gtk_widget_get_visible (child))

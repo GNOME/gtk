@@ -103,9 +103,10 @@ static void gtk_fixed_measure (GtkWidget      *widget,
                                int            *natural_baseline);
 
 
-static void gtk_fixed_size_allocate (GtkWidget           *widget,
-                                     const GtkAllocation *allocation,
-                                     int                  baseline);
+static void gtk_fixed_size_allocate (GtkWidget *widget,
+                                     int        width,
+                                     int        height,
+                                     int        baseline);
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -371,9 +372,10 @@ gtk_fixed_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_fixed_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_fixed_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkWidget *child;
   GtkFixedChild *child_info;

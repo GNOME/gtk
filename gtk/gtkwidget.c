@@ -574,9 +574,10 @@ static void	gtk_widget_real_map		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unmap		 (GtkWidget	    *widget);
 static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
-static void	gtk_widget_real_size_allocate    (GtkWidget               *widget,
-                                                  const GtkAllocation     *allocation,
-                                                  int                      baseline);
+static void	gtk_widget_real_size_allocate    (GtkWidget         *widget,
+                                                  int                width,
+                                                  int                height,
+                                                  int                baseline);
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
@@ -1537,8 +1538,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
 		  NULL, NULL,
 		  NULL,
-		  G_TYPE_NONE, 2,
-		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE,
+		  G_TYPE_NONE, 3,
+                  G_TYPE_INT,
+                  G_TYPE_INT,
                   G_TYPE_INT);
 
   /**
@@ -4280,11 +4282,13 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
     g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
-                   &real_allocation,
+                   real_allocation.width,
+                   real_allocation.height,
                    baseline);
   else
     GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
-                                                  &real_allocation,
+                                                  real_allocation.width,
+                                                  real_allocation.height,
                                                   baseline);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
@@ -4550,9 +4554,10 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 }
 
 static void
-gtk_widget_real_size_allocate (GtkWidget           *widget,
-                               const GtkAllocation *allocation,
-                               int                  baseline)
+gtk_widget_real_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
