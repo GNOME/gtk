@@ -27,6 +27,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "gtkshortcutmanager.h"
+
 /**
  * SECTION:gtkroot
  * @Title: GtkRoot
@@ -42,7 +44,8 @@
  */
 
 G_DEFINE_INTERFACE_WITH_CODE (GtkRoot, gtk_root, GTK_TYPE_WIDGET,
-                              g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_NATIVE))
+                              g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_NATIVE);
+                              g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_SHORTCUT_MANAGER));
 
 static GdkDisplay *
 gtk_root_default_get_display (GtkRoot *self)
