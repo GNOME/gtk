@@ -520,7 +520,6 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
   temp_item = item;
   while (TRUE)
     {
-      GdkModifierType mnemonic_modifier = 0;
       guint key_val;
       gchar *key, *temp_keybinding;
 
@@ -532,22 +531,13 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
         /* parent can be NULL when activating a window from the panel */
         return NULL;
 
-      if (GTK_IS_MENU_BAR (parent))
-        {
-          GtkRoot *root;
-
-          root = gtk_widget_get_root (parent);
-          if (root && GTK_IS_WINDOW (root))
-            mnemonic_modifier = gtk_window_get_mnemonic_modifier (GTK_WINDOW (root));
-        }
-
       child = find_item_label (temp_item);
       if (GTK_IS_LABEL (child))
         {
           key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (child));
           if (key_val != GDK_KEY_VoidSymbol)
             {
-              key = gtk_accelerator_name (key_val, mnemonic_modifier);
+              key = gtk_accelerator_name (key_val, GDK_MOD1_MASK);
               if (full_keybinding)
                 temp_keybinding = g_strconcat (key, ":", full_keybinding, NULL);
               else
