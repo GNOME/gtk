@@ -4504,8 +4504,6 @@ gtk_window_set_display
 gtk_window_is_active
 gtk_window_is_maximized
 gtk_window_list_toplevels
-gtk_window_add_mnemonic
-gtk_window_remove_mnemonic
 gtk_window_get_focus
 gtk_window_set_focus
 gtk_window_get_default_widget
@@ -4528,7 +4526,6 @@ gtk_window_begin_resize_drag
 gtk_window_begin_move_drag
 gtk_window_set_decorated
 gtk_window_set_deletable
-gtk_window_set_mnemonic_modifier
 gtk_window_set_type_hint
 gtk_window_set_skip_taskbar_hint
 gtk_window_set_skip_pager_hint
@@ -4546,7 +4543,6 @@ gtk_window_get_destroy_with_parent
 gtk_window_get_icon
 gtk_window_get_icon_list
 gtk_window_get_icon_name
-gtk_window_get_mnemonic_modifier
 gtk_window_get_modal
 gtk_window_get_position
 gtk_window_get_role

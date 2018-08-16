@@ -347,7 +347,7 @@ gtk_application_accels_foreach_key (GtkApplicationAccels     *accels,
     {
       AccelKey *accel_key = key;
 
-      (* callback) (window, accel_key->key, accel_key->modifier, FALSE, user_data);
+      (* callback) (window, accel_key->key, accel_key->modifier, user_data);
     }
 }
 
