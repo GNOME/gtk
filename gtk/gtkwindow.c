@@ -52,7 +52,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
-#include "gtkmnemonichash.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtkmodelbuttonprivate.h"
