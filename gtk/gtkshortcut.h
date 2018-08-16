@@ -44,9 +44,6 @@ GtkShortcutTrigger *
                 gtk_shortcut_get_trigger                        (GtkShortcut            *self);
 
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_shortcut_trigger                            (GtkShortcut            *self,
-                                                                 const GdkEvent         *event);
-GDK_AVAILABLE_IN_ALL
 gboolean        gtk_shortcut_activate                           (GtkShortcut            *self,
                                                                  GtkWidget              *widget);
 
