@@ -34,6 +34,7 @@
 #include "gtkeventcontrollerprivate.h"
 #include "gtkintl.h"
 #include "gtkshortcut.h"
+#include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -291,17 +292,10 @@ gtk_shortcut_controller_init (GtkShortcutController *self)
   self->mnemonics_modifiers = GDK_MOD1_MASK;
 }
 
-static void
-complain_if_reached (gpointer should_be_gone)
-{
-  g_critical ("Shortcut controllers failed to clean up.");
-}
-
 void
 gtk_shortcut_controller_root (GtkShortcutController *self)
 {
-  GtkWidget *attach;
-  GSList *controllers;
+  GtkShortcutManager *manager;
 
   switch (self->scope)
     {
@@ -309,8 +303,18 @@ gtk_shortcut_controller_root (GtkShortcutController *self)
       return;
 
     case GTK_SHORTCUT_SCOPE_MANAGED:
+      {
+        GtkWidget *widget;
+        
+        for (widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+             !GTK_IS_SHORTCUT_MANAGER (widget);
+             widget = _gtk_widget_get_parent (widget));
+        manager = GTK_SHORTCUT_MANAGER (widget);
+      }
+      break;
+
     case GTK_SHORTCUT_SCOPE_GLOBAL:
-      attach = GTK_WIDGET (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
+      manager = GTK_SHORTCUT_MANAGER (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
       break;
 
     default:
@@ -318,16 +322,13 @@ gtk_shortcut_controller_root (GtkShortcutController *self)
       return;
     }
 
-  controllers = g_object_steal_data (G_OBJECT (attach), "gtk-shortcut-controllers");
-  controllers = g_slist_prepend (controllers, g_object_ref (self));
-  g_object_set_data_full (G_OBJECT (attach), "gtk-shortcut-controllers", controllers, complain_if_reached);
+  GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->add_controller (manager, self);
 }
 
 void
 gtk_shortcut_controller_unroot (GtkShortcutController *self)
 {
-  GtkWidget *attach;
-  GSList *controllers;
+  GtkShortcutManager *manager;
 
   switch (self->scope)
     {
@@ -335,8 +336,18 @@ gtk_shortcut_controller_unroot (GtkShortcutController *self)
       return;
 
     case GTK_SHORTCUT_SCOPE_MANAGED:
+      {
+        GtkWidget *widget;
+        
+        for (widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+             !GTK_IS_SHORTCUT_MANAGER (widget);
+             widget = _gtk_widget_get_parent (widget));
+        manager = GTK_SHORTCUT_MANAGER (widget);
+      }
+      break;
+
     case GTK_SHORTCUT_SCOPE_GLOBAL:
-      attach = GTK_WIDGET (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
+      manager = GTK_SHORTCUT_MANAGER (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
       break;
 
     default:
@@ -344,11 +355,7 @@ gtk_shortcut_controller_unroot (GtkShortcutController *self)
       return;
     }
 
-  controllers = g_object_steal_data (G_OBJECT (attach), "gtk-shortcut-controllers");
-  controllers = g_slist_remove (controllers, self);
-  if (controllers)
-    g_object_set_data_full (G_OBJECT (attach), "gtk-shortcut-controllers", controllers, complain_if_reached);
-  g_object_unref (self);
+  GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->remove_controller (manager, self);
 }
 
 GtkEventController *

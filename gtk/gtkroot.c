@@ -27,6 +27,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "gtkshortcutmanager.h"
+
 /**
  * SECTION:gtkroot
  * @Title: GtkRoot
