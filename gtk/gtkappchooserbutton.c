@@ -624,14 +624,15 @@ gtk_app_chooser_button_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_app_chooser_button_size_allocate (GtkWidget           *widget,
-                                       const GtkAllocation *allocation,
-                                       int                  baseline)
+gtk_app_chooser_button_size_allocate (GtkWidget *widget,
+                                      int        width,
+                                      int        height,
+                                      int        baseline)
 {
   GtkAppChooserButton *button = GTK_APP_CHOOSER_BUTTON (widget);
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (button);
 
-  gtk_widget_size_allocate (priv->combobox, allocation, baseline);
+  gtk_widget_size_allocate (priv->combobox, &(GtkAllocation){0, 0, width, height}, baseline);
 }
 
 static void

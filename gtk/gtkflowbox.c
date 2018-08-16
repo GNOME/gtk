@@ -413,40 +413,6 @@ gtk_flow_box_child_get_request_mode (GtkWidget *widget)
     return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
-static void
-gtk_flow_box_child_measure (GtkWidget     *widget,
-                            GtkOrientation  orientation,
-                            int             for_size,
-                            int            *minimum,
-                            int            *natural,
-                            int            *minimum_baseline,
-                            int            *natural_baseline)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (!child || ! gtk_widget_get_visible (child))
-    {
-      *minimum = *natural = 0;
-      return;
-    }
-
-  gtk_widget_measure (child, orientation, for_size,
-                      minimum, natural, minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_flow_box_child_size_allocate (GtkWidget           *widget,
-                                  const GtkAllocation *allocation,
-                                  int                  baseline)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, allocation, -1);
-}
-
 /* GObject implementation {{{2 */
 
 static void
@@ -456,8 +422,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
-  widget_class->measure = gtk_flow_box_child_measure;
-  widget_class->size_allocate = gtk_flow_box_child_size_allocate;
   widget_class->focus = gtk_flow_box_child_focus;
 
   class->activate = gtk_flow_box_child_activate;
@@ -1387,9 +1351,10 @@ get_offset_pixels (GtkAlign align,
 }
 
 static void
-gtk_flow_box_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_flow_box_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
@@ -1413,14 +1378,14 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      avail_size = allocation->width;
-      avail_other_size = allocation->height;
+      avail_size = width;
+      avail_other_size = height;
       item_spacing = priv->column_spacing; line_spacing = priv->row_spacing;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
-      avail_size = allocation->height;
-      avail_other_size = allocation->width;
+      avail_size = height;
+      avail_other_size = width;
       item_spacing = priv->row_spacing;
       line_spacing = priv->column_spacing;
     }
@@ -1720,7 +1685,7 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
         }
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        child_allocation.x = allocation->width - child_allocation.x - child_allocation.width;
+        child_allocation.x = width - child_allocation.x - child_allocation.width;
 
       gtk_widget_size_allocate (child, &child_allocation, -1);
 

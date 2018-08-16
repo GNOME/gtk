@@ -265,9 +265,10 @@ static void     gtk_calendar_measure        (GtkWidget        *widget,
                                              int            *natural,
                                              int            *minimum_baseline,
                                              int            *natural_baseline);
-static void     gtk_calendar_size_allocate  (GtkWidget           *widget,
-                                             const GtkAllocation *allocation,
-                                             int                  baseline);
+static void     gtk_calendar_size_allocate  (GtkWidget      *widget,
+                                             int             width,
+                                             int             height,
+                                             int             baseline);
 static void     gtk_calendar_snapshot       (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
 static void     gtk_calendar_button_press   (GtkGestureMultiPress *gesture,
@@ -1844,9 +1845,10 @@ gtk_calendar_measure (GtkWidget        *widget,
 }
 
 static void
-gtk_calendar_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_calendar_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
@@ -1856,16 +1858,16 @@ gtk_calendar_size_allocate (GtkWidget           *widget,
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
       priv->day_width = (priv->min_day_width
-                         * ((allocation->width - (inner_border * 2)
+                         * ((width - (inner_border * 2)
                              - (CALENDAR_MARGIN * 2) -  (DAY_XSEP * 6) - calendar_xsep * 2))
                          / (7 * priv->min_day_width + priv->max_week_char_width * 2));
-      priv->week_width = ((allocation->width - (inner_border * 2)
+      priv->week_width = ((width - (inner_border * 2)
                            - (CALENDAR_MARGIN * 2) - (DAY_XSEP * 6) - calendar_xsep * 2 )
                           - priv->day_width * 7 + CALENDAR_MARGIN + calendar_xsep);
     }
   else
     {
-      priv->day_width = (allocation->width
+      priv->day_width = (width
                          - (inner_border * 2)
                          - (CALENDAR_MARGIN * 2)
                          - (DAY_XSEP * 6))/7;

@@ -137,9 +137,10 @@ struct _GtkBoxChild
   guint      pack   : 1;
 };
 
-static void gtk_box_size_allocate         (GtkWidget              *widget,
-                                           const GtkAllocation    *allocation,
-                                           int                     baseline);
+static void gtk_box_size_allocate         (GtkWidget *widget,
+                                           int        width,
+                                           int        height,
+                                           int        baseline);
 
 static void gtk_box_set_property       (GObject        *object,
                                         guint           prop_id,
@@ -360,9 +361,10 @@ get_spacing (GtkBox *box)
 }
 
 static void
-gtk_box_size_allocate (GtkWidget           *widget,
-                       const GtkAllocation *allocation,
-                       int                  baseline)
+gtk_box_size_allocate (GtkWidget *widget,
+                       int        width,
+                       int        height,
+                       int        baseline)
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
@@ -401,9 +403,9 @@ gtk_box_size_allocate (GtkWidget           *widget,
   spacing = get_spacing (box);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    extra_space = allocation->width - (nvis_children - 1) * spacing;
+    extra_space = width - (nvis_children - 1) * spacing;
   else
-    extra_space = allocation->height - (nvis_children - 1) * spacing;
+    extra_space = height - (nvis_children - 1) * spacing;
 
   have_baseline = FALSE;
   minimum_above = natural_above = 0;
@@ -419,8 +421,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 
       gtk_widget_measure (child->widget,
                           priv->orientation,
-                          priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
-                                                  allocation->height : allocation->width,
+                          priv->orientation == GTK_ORIENTATION_HORIZONTAL ? height : width,
                           &sizes[i].minimum_size, &sizes[i].natural_size,
                           NULL, NULL);
 
@@ -548,8 +549,6 @@ gtk_box_size_allocate (GtkWidget           *widget,
    * and any of the child widgets explicitly request one */
   if (baseline == -1 && have_baseline)
     {
-      gint height = allocation->height;
-
       /* TODO: This is purely based on the minimum baseline, when things fit we should
 	 use the natural one? */
 
@@ -575,20 +574,20 @@ gtk_box_size_allocate (GtkWidget           *widget,
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  child_allocation.y = 0;
-	  child_allocation.height = allocation->height;
+	  child_allocation.height = height;
 	  if (packing == GTK_PACK_START)
 	    x = 0;
 	  else
-	    x = allocation->width;
+	    x = width;
 	}
       else
 	{
 	  child_allocation.x = 0;
-	  child_allocation.width = allocation->width;
+	  child_allocation.width = width;
 	  if (packing == GTK_PACK_START)
 	    y = 0;
 	  else
-	    y = allocation->height;
+	    y = height;
 	}
 
       for (i = 0, children = priv->children;
@@ -630,7 +629,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 		}
 
 	      if (direction == GTK_TEXT_DIR_RTL)
-		child_allocation.x = allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+		child_allocation.x = width - child_allocation.x - child_allocation.width;
 
 	    }
 	  else /* (priv->orientation == GTK_ORIENTATION_VERTICAL) */

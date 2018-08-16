@@ -142,9 +142,10 @@ static void gtk_progress_bar_get_property         (GObject        *object,
                                                    guint           prop_id,
                                                    GValue         *value,
                                                    GParamSpec     *pspec);
-static void gtk_progress_bar_size_allocate        (GtkWidget           *widget,
-                                                   const GtkAllocation *allocation,
-                                                   int                  baseline);
+static void gtk_progress_bar_size_allocate        (GtkWidget      *widget,
+                                                   int             width,
+                                                   int             height,
+                                                   int             baseline);
 
 static void     gtk_progress_bar_act_mode_enter   (GtkProgressBar *progress);
 static void     gtk_progress_bar_act_mode_leave   (GtkProgressBar *progress);
@@ -370,15 +371,16 @@ update_node_classes (GtkProgressBar *pbar)
 }
 
 static void
-allocate_trough (GtkGizmo            *gizmo,
-                 const GtkAllocation *allocation,
-                 int                  baseline)
+allocate_trough (GtkGizmo *gizmo,
+                 int       width,
+                 int       height,
+                 int       baseline)
 
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   GtkAllocation alloc;
-  gint width, height;
+  int progress_width, progress_height;
   gboolean inverted;
 
   inverted = priv->inverted;
@@ -389,58 +391,58 @@ allocate_trough (GtkGizmo            *gizmo,
     }
 
   gtk_widget_measure (priv->progress_widget, GTK_ORIENTATION_VERTICAL, -1,
-                      &height, NULL,
+                      &progress_height, NULL,
                       NULL, NULL);
 
   gtk_widget_measure (priv->progress_widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                      &width, NULL,
+                      &progress_width, NULL,
                       NULL, NULL);
 
   if (priv->activity_mode)
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          alloc.width = width + (allocation->width - width) / priv->activity_blocks;
-          alloc.x = allocation->x + priv->activity_pos * (allocation->width - alloc.width);
-          alloc.y = allocation->y + (allocation->height - height) / 2;
-          alloc.height = height;
+          alloc.width = progress_width + (width - progress_width) / priv->activity_blocks;
+          alloc.x = priv->activity_pos * (width - alloc.width);
+          alloc.y = (height - progress_height) / 2;
+          alloc.height = progress_height;
         }
       else
         {
 
-          alloc.height = height + (allocation->height - height) / priv->activity_blocks;
-          alloc.y = allocation->y + priv->activity_pos * (allocation->height - alloc.height);
-          alloc.x = allocation->x + (allocation->width - width) / 2;
-          alloc.width = width;
+          alloc.height = progress_height + (height - progress_height) / priv->activity_blocks;
+          alloc.y = priv->activity_pos * (height - alloc.height);
+          alloc.x = (width - progress_width) / 2;
+          alloc.width = progress_width;
         }
     }
   else
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          alloc.width = width + (allocation->width - width) * priv->fraction;
-          alloc.height = height;
-          alloc.y = allocation->y + (allocation->height - height) / 2;
+          alloc.width = progress_width + (width - progress_width) * priv->fraction;
+          alloc.height = progress_height;
+          alloc.y = (height - progress_height) / 2;
 
           if (!inverted)
-            alloc.x = allocation->x;
+            alloc.x = 0;
           else
-            alloc.x = allocation->x + allocation->width - alloc.width;
+            alloc.x = width - alloc.width;
         }
       else
         {
-          alloc.width = width;
-          alloc.height = height + (allocation->height - height) * priv->fraction;
-          alloc.x = allocation->x + (allocation->width - width) / 2;
+          alloc.width = progress_width;
+          alloc.height = progress_height + (height - progress_height) * priv->fraction;
+          alloc.x = (width - progress_width) / 2;
 
           if (!inverted)
-            alloc.y = allocation->y;
+            alloc.y = 0;
           else
-            alloc.y = allocation->y + allocation->height - alloc.height;
+            alloc.y = height - alloc.height;
         }
     }
 
-  gtk_widget_size_allocate (priv->progress_widget, &alloc,-1);
+  gtk_widget_size_allocate (priv->progress_widget, &alloc, -1);
 
 }
 
@@ -616,9 +618,10 @@ get_current_text (GtkProgressBar *pbar)
 }
 
 static void
-gtk_progress_bar_size_allocate (GtkWidget           *widget,
-                                const GtkAllocation *allocation,
-                                int                  baseline)
+gtk_progress_bar_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
 {
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (GTK_PROGRESS_BAR (widget));
   gint bar_width, bar_height;
@@ -630,18 +633,18 @@ gtk_progress_bar_size_allocate (GtkWidget           *widget,
       gtk_widget_measure (priv->trough_widget, GTK_ORIENTATION_VERTICAL, -1,
                           &bar_height, NULL,
                           NULL, NULL);
-      bar_width = allocation->width;
+      bar_width = width;
     }
   else
     {
       gtk_widget_measure (priv->trough_widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           &bar_width, NULL,
                           NULL, NULL);
-      bar_height = allocation->height;
+      bar_height = height;
     }
 
-  alloc.x = allocation->x + allocation->width - bar_width;
-  alloc.y = allocation->y + allocation->height - bar_height;
+  alloc.x = width - bar_width;
+  alloc.y = height - bar_height;
   alloc.width = bar_width;
   alloc.height = bar_height;
 
@@ -657,19 +660,19 @@ gtk_progress_bar_size_allocate (GtkWidget           *widget,
                       &text_height, NULL,
                       NULL, NULL);
 
-  text_width = CLAMP (text_nat, text_min, allocation->width);
+  text_width = CLAMP (text_nat, text_min, width);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      alloc.x = allocation->x + (allocation->width - text_width) / 2;
-      alloc.y = allocation->y;
+      alloc.x = (width - text_width) / 2;
+      alloc.y = 0;
       alloc.width = text_width;
       alloc.height = text_height;
     }
   else
     {
-      alloc.x = allocation->x + allocation->width - text_width;
-      alloc.y = allocation->y + (allocation->height - text_height) / 2;
+      alloc.x = width - text_width;
+      alloc.y = (height - text_height) / 2;
       alloc.width = text_width;
       alloc.height = text_height;
     }

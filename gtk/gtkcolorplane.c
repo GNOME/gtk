@@ -169,9 +169,10 @@ create_texture (GtkColorPlane *plane)
 }
 
 static void
-plane_size_allocate (GtkWidget           *widget,
-                     const GtkAllocation *allocation,
-                     int                   baseline)
+plane_size_allocate (GtkWidget *widget,
+                     int        width,
+                     int        height,
+                     int        baseline)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 

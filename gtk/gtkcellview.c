@@ -65,9 +65,10 @@ static void        gtk_cell_view_set_property             (GObject          *obj
                                                            GParamSpec       *pspec);
 static void        gtk_cell_view_finalize                 (GObject          *object);
 static void        gtk_cell_view_dispose                  (GObject          *object);
-static void        gtk_cell_view_size_allocate            (GtkWidget           *widget,
-                                                           const GtkAllocation *allocation,
-                                                           int                  baseline);
+static void        gtk_cell_view_size_allocate            (GtkWidget        *widget,
+                                                           int               width,
+                                                           int               height,
+                                                           int               baseline);
 static void        gtk_cell_view_snapshot                 (GtkWidget        *widget,
                                                            GtkSnapshot      *snapshot);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
@@ -470,19 +471,17 @@ gtk_cell_view_dispose (GObject *object)
 }
 
 static void
-gtk_cell_view_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_cell_view_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   GtkCellView *cellview;
   GtkCellViewPrivate *priv;
-  gint alloc_width, alloc_height, width, height;
+  gint alloc_width, alloc_height;
 
   cellview = GTK_CELL_VIEW (widget);
   priv = cellview->priv;
-
-  width = allocation->width;
-  height = allocation->height;
 
   gtk_cell_area_context_get_allocation (priv->context, &alloc_width, &alloc_height);
 
@@ -495,9 +494,9 @@ gtk_cell_view_size_allocate (GtkWidget           *widget,
    */
   if (priv->fit_model)
     gtk_cell_area_context_allocate (priv->context, width, height);
-  else if (alloc_width != allocation->width && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+  else if (alloc_width != width && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_cell_area_context_allocate (priv->context, width, -1);
-  else if (alloc_height != allocation->height && priv->orientation == GTK_ORIENTATION_VERTICAL)
+  else if (alloc_height != height && priv->orientation == GTK_ORIENTATION_VERTICAL)
     gtk_cell_area_context_allocate (priv->context, -1, height);
 }
 
