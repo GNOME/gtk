@@ -410,9 +410,10 @@ static void   gtk_entry_destroy              (GtkWidget        *widget);
 static void   gtk_entry_realize              (GtkWidget        *widget);
 static void   gtk_entry_unrealize            (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
-static void   gtk_entry_size_allocate        (GtkWidget           *widget,
-                                              const GtkAllocation *allocation,
-                                              int                  baseline);
+static void   gtk_entry_size_allocate        (GtkWidget        *widget,
+                                              int               width,
+                                              int               height,
+                                                int               baseline);
 static void   gtk_entry_snapshot             (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static void   gtk_entry_focus_in             (GtkWidget        *widget);
@@ -3088,7 +3089,7 @@ gtk_entry_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->unmap (widget);
 }
 
-static void  
+static void
 gtk_entry_get_text_allocation (GtkEntry     *entry,
                                GdkRectangle *allocation)
 {
@@ -3253,9 +3254,10 @@ gtk_entry_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_entry_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_entry_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -3263,13 +3265,13 @@ gtk_entry_size_allocate (GtkWidget           *widget,
 
   priv->text_baseline = baseline;
   priv->text_x = 0;
-  priv->text_width = allocation->width;
+  priv->text_width = width;
 
   for (i = 0; i < MAX_ICONS; i++)
     {
       EntryIconInfo *icon_info = priv->icons[i];
       GtkAllocation icon_alloc;
-      int width;
+      int icon_width;
 
       if (!icon_info)
         continue;
@@ -3277,23 +3279,23 @@ gtk_entry_size_allocate (GtkWidget           *widget,
       gtk_widget_measure (icon_info->widget,
                           GTK_ORIENTATION_HORIZONTAL,
                           -1,
-                          NULL, &width,
+                          NULL, &icon_width,
                           NULL, NULL);
 
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && i == GTK_ENTRY_ICON_PRIMARY) ||
           (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && i == GTK_ENTRY_ICON_SECONDARY))
         {
-          icon_alloc.x = allocation->x + priv->text_x + priv->text_width - width;
+          icon_alloc.x = priv->text_x + priv->text_width - icon_width;
         }
       else
         {
-          icon_alloc.x = allocation->x + priv->text_x;
-          priv->text_x += width;
+          icon_alloc.x = priv->text_x;
+          priv->text_x += icon_width;
         }
       icon_alloc.y = 0;
-      icon_alloc.width = width;
-      icon_alloc.height = allocation->height;
-      priv->text_width -= width;
+      icon_alloc.width = icon_width;
+      icon_alloc.height = height;
+      priv->text_width -= icon_width;
 
       gtk_widget_size_allocate (icon_info->widget, &icon_alloc, baseline);
     }
@@ -3309,8 +3311,8 @@ gtk_entry_size_allocate (GtkWidget           *widget,
                           &min, &nat,
                           NULL, NULL);
       progress_alloc.x = 0;
-      progress_alloc.y = allocation->height - nat;
-      progress_alloc.width = allocation->width;
+      progress_alloc.y = height - nat;
+      progress_alloc.width = width;
       progress_alloc.height = nat;
 
       gtk_widget_size_allocate (priv->progress_widget, &progress_alloc, -1);

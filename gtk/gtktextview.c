@@ -366,7 +366,8 @@ static void gtk_text_view_measure (GtkWidget      *widget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
 static void gtk_text_view_size_allocate        (GtkWidget           *widget,
-                                                const GtkAllocation *allocation,
+                                                int                  width,
+                                                int                  height,
                                                 int                  baseline);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
@@ -4082,9 +4083,10 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_text_view_size_allocate (GtkWidget *widget,
+                             int        widget_width,
+                             int        widget_height,
+                             int        baseline)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -4105,14 +4107,14 @@ gtk_text_view_size_allocate (GtkWidget           *widget,
    */
   left_rect.width = priv->border_window_size.left;
   right_rect.width = priv->border_window_size.right;
-  width = allocation->width - left_rect.width - right_rect.width;
+  width = widget_width - left_rect.width - right_rect.width;
   text_rect.width = MAX (1, width);
   top_rect.width = text_rect.width;
   bottom_rect.width = text_rect.width;
 
   top_rect.height = priv->border_window_size.top;
   bottom_rect.height = priv->border_window_size.bottom;
-  height = allocation->height - top_rect.height - bottom_rect.height;
+  height = widget_height - top_rect.height - bottom_rect.height;
   text_rect.height = MAX (1, height);
   left_rect.height = text_rect.height;
   right_rect.height = text_rect.height;

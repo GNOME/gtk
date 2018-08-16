@@ -132,7 +132,8 @@ static void gtk_path_bar_measure (GtkWidget *widget,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
 static void gtk_path_bar_size_allocate            (GtkWidget           *widget,
-                                                   const GtkAllocation *allocation,
+                                                   int                  width,
+                                                   int                  height,
                                                    int                  baseline);
 static void gtk_path_bar_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
@@ -485,9 +486,10 @@ gtk_path_bar_update_slider_buttons (GtkPathBar *path_bar)
 /* This is a tad complicated
  */
 static void
-gtk_path_bar_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_path_bar_size_allocate (GtkWidget *widget,
+                            int        widget_width,
+                            int        widget_height,
+                            int        baseline)
 {
   GtkPathBar *path_bar = GTK_PATH_BAR (widget);
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
@@ -507,7 +509,7 @@ gtk_path_bar_size_allocate (GtkWidget           *widget,
     return;
 
   direction = gtk_widget_get_direction (widget);
-  allocation_width = allocation->width;
+  allocation_width = widget_width;
 
   /* First, we check to see if we need the scrollbars. */
   if (priv->fake_root)
@@ -593,21 +595,21 @@ gtk_path_bar_size_allocate (GtkWidget           *widget,
     }
 
   /* Now, we allocate space to the buttons */
-  child_allocation.y = allocation->y;
-  child_allocation.height = allocation->height;
+  child_allocation.y = 0;
+  child_allocation.height = widget_height;
 
   if (direction == GTK_TEXT_DIR_RTL)
     {
-      child_allocation.x = allocation->x + allocation->width;
+      child_allocation.x = widget_width;
       if (need_sliders || priv->fake_root)
 	{
 	  child_allocation.x -= priv->slider_width;
-	  up_slider_offset = allocation->width - priv->slider_width;
+	  up_slider_offset = widget_width - priv->slider_width;
 	}
     }
   else
     {
-      child_allocation.x = allocation->x;
+      child_allocation.x = 0;
       if (need_sliders || priv->fake_root)
 	{
 	  up_slider_offset = 0;
@@ -659,7 +661,7 @@ gtk_path_bar_size_allocate (GtkWidget           *widget,
 
       if (direction == GTK_TEXT_DIR_RTL)
         {
-          down_slider_offset = child_allocation.x - allocation->x - priv->slider_width;
+          down_slider_offset = child_allocation.x - priv->slider_width;
         }
       else
         {
@@ -683,7 +685,7 @@ gtk_path_bar_size_allocate (GtkWidget           *widget,
   if (need_sliders || priv->fake_root)
     {
       child_allocation.width = priv->slider_width;
-      child_allocation.x = up_slider_offset + allocation->x;
+      child_allocation.x = up_slider_offset;
       gtk_widget_size_allocate (priv->up_slider_button,
                                 &child_allocation,
                                 -1);
@@ -702,7 +704,7 @@ gtk_path_bar_size_allocate (GtkWidget           *widget,
   if (need_sliders)
     {
       child_allocation.width = priv->slider_width;
-      child_allocation.x = down_slider_offset + allocation->x;
+      child_allocation.x = down_slider_offset;
       
       gtk_widget_size_allocate (priv->down_slider_button,
                                 &child_allocation,

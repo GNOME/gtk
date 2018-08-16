@@ -104,9 +104,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_IT
                          G_ADD_PRIVATE (GtkCheckMenuItem))
 
 static void
-gtk_check_menu_item_size_allocate (GtkWidget           *widget,
-                                   const GtkAllocation *allocation,
-                                   int                  baseline)
+gtk_check_menu_item_size_allocate (GtkWidget *widget,
+                                   int        width,
+                                   int        height,
+                                   int        baseline)
 {
   GtkAllocation indicator_alloc;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
@@ -114,7 +115,8 @@ gtk_check_menu_item_size_allocate (GtkWidget           *widget,
   gint toggle_size;
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate (widget,
-                                                                      allocation,
+                                                                      width,
+                                                                      height,
                                                                       baseline);
 
   gtk_widget_measure (priv->indicator_widget,
@@ -132,10 +134,10 @@ gtk_check_menu_item_size_allocate (GtkWidget           *widget,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     indicator_alloc.x = (toggle_size - indicator_alloc.width) / 2;
   else
-    indicator_alloc.x = allocation->width - toggle_size +
+    indicator_alloc.x = width - toggle_size +
       (toggle_size - indicator_alloc.width) / 2;
 
-  indicator_alloc.y = (allocation->height - indicator_alloc.height) / 2;
+  indicator_alloc.y = (height - indicator_alloc.height) / 2;
 
   gtk_widget_size_allocate (priv->indicator_widget,
                             &indicator_alloc,

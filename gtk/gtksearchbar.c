@@ -392,14 +392,19 @@ gtk_search_bar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_search_bar_size_allocate (GtkWidget           *widget,
-                              const GtkAllocation *allocation,
-                              int                  baseline)
+gtk_search_bar_size_allocate (GtkWidget *widget,
+                              int        width,
+                              int        height,
+                              int        baseline)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (widget);
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  gtk_widget_size_allocate (priv->revealer, allocation, baseline);
+  gtk_widget_size_allocate (priv->revealer,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            }, baseline);
 }
 
 static void

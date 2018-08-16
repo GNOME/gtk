@@ -300,9 +300,10 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
 }
 
 static void
-gtk_overlay_size_allocate (GtkWidget           *widget,
-                           const GtkAllocation *allocation,
-                           int                  baseline)
+gtk_overlay_size_allocate (GtkWidget *widget,
+                           int        width,
+                           int        height,
+                           int        baseline)
 {
   GtkOverlay *overlay = GTK_OVERLAY (widget);
   GtkWidget *child;
@@ -310,7 +311,11 @@ gtk_overlay_size_allocate (GtkWidget           *widget,
 
   main_widget = gtk_bin_get_child (GTK_BIN (overlay));
   if (main_widget && gtk_widget_get_visible (main_widget))
-    gtk_widget_size_allocate (main_widget, allocation, -1);
+    gtk_widget_size_allocate (main_widget,
+                              &(GtkAllocation) {
+                                0, 0,
+                                  width, height
+                              }, -1);
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
