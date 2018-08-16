@@ -60,6 +60,8 @@ struct _GtkShortcut
   gpointer user_data;
   GDestroyNotify destroy_notify;
   GVariant *args;
+
+  guint mnemonic_activate : 1;
 };
 
 enum
@@ -67,6 +69,7 @@ enum
   PROP_0,
   PROP_ARGUMENTS,
   PROP_CALLBACK,
+  PROP_MNEMONIC_ACTIVATE,
   PROP_SIGNAL,
   PROP_ACTION,
   PROP_TRIGGER,
@@ -118,6 +121,10 @@ gtk_shortcut_get_property (GObject    *object,
       g_value_set_boolean (value, self->callback != NULL);
       break;
 
+    case PROP_MNEMONIC_ACTIVATE:
+      g_value_set_boolean (value, self->mnemonic_activate);
+      break;
+
     case PROP_SIGNAL:
       g_value_set_string (value, self->signal);
       break;
@@ -148,6 +155,10 @@ gtk_shortcut_set_property (GObject      *object,
     {
     case PROP_ARGUMENTS:
       gtk_shortcut_set_arguments (self, g_value_get_variant (value));
+      break;
+
+    case PROP_MNEMONIC_ACTIVATE:
+      gtk_shortcut_set_mnemonic_activate (self, g_value_get_boolean (value));
       break;
 
     case PROP_SIGNAL:
@@ -201,6 +212,18 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                           P_("Whether a callback is used for shortcut activation"),
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkShortcut:mnemonic-activate:
+   *
+   * %TRUE if this shortcut should call gtk_widget_mnemonic_activate().
+   */
+  properties[PROP_MNEMONIC_ACTIVATE] =
+    g_param_spec_boolean ("mnemonic-activate",
+                          P_("Mnemonic activate"),
+                          P_("Call gtk_widget_mnemonic_activate()"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkShortcut:signal:
@@ -558,6 +581,10 @@ gtk_shortcut_activate (GtkShortcut *self,
 
       return handled;
     }
+  else if (self->mnemonic_activate)
+    {
+      return gtk_widget_mnemonic_activate (widget, FALSE);
+    }
   else
     {
       /* shortcut is a dud */
@@ -660,6 +687,12 @@ gtk_shortcut_clear_activation (GtkShortcut *self)
 
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALLBACK]);
     }
+
+  if (self->mnemonic_activate)
+    {
+      self->mnemonic_activate = FALSE;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MNEMONIC_ACTIVATE]);
+    }
 }
 
 const char *
@@ -742,6 +775,54 @@ gtk_shortcut_set_callback (GtkShortcut     *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALLBACK]);
 
+  g_object_thaw_notify (G_OBJECT (self));
+}
+
+/**
+ * gtk_shortcut_get_mnemonic_activate:
+ * @self: a #GtkShortcut
+ *
+ * Checks if this shortcut calls gtk_widget_mnemonic_activate() upon
+ * activation.
+ *
+ * Returns: %TRUE if it does.
+ **/
+gboolean
+gtk_shortcut_get_mnemonic_activate (GtkShortcut *self)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
+
+  return self->mnemonic_activate;
+}
+
+/**
+ * gtk_shortcut_set_mnemonic_activate:
+ * @self: a #GtkShortcut
+ * @mnemonic_activate: %TRUE to call gtk_widget_mnemonic_activate()
+ *     upon activation
+ *
+ * If @mnemonic_activate is %TRUE, this shortcut will call
+ * gtk_widget_mnemonic_activate() whenever it is activated. All
+ * previous activations will be unset.
+ *
+ * If @mnemonic_activate is %FALSE, it will stop this shortcut from
+ * calling gtk_widget_mnemonic_activate() if it did so before.
+ **/
+void
+gtk_shortcut_set_mnemonic_activate (GtkShortcut *self,
+                                    gboolean     mnemonic_activate)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT (self));
+
+  if (self->mnemonic_activate == mnemonic_activate)
+    return;
+  
+  g_object_freeze_notify (G_OBJECT (self));
+
+  gtk_shortcut_clear_activation (self);
+  self->mnemonic_activate = mnemonic_activate;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MNEMONIC_ACTIVATE]);
   g_object_thaw_notify (G_OBJECT (self));
 }
 
