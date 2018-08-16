@@ -62,6 +62,7 @@
 #include "gtksettingsprivate.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontrollerprivate.h"
+#include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
@@ -2853,9 +2854,10 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
-    {
-      priv->root = (GtkRoot *) widget;
+    priv->root = (GtkRoot *) widget;
 
+  if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_SHORTCUT_MANAGER))
+    {
       controller = gtk_shortcut_controller_new ();
       gtk_shortcut_controller_set_run_managed (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
       gtk_widget_add_controller (widget, controller);
