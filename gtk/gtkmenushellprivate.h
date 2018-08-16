@@ -20,7 +20,6 @@
 
 
 #include <gtk/gtkmenushell.h>
-#include <gtk/gtkmnemonichash.h>
 #include <gtk/gtkkeyhash.h>
 #include <gtk/gtkmenutrackerprivate.h>
 #include <gtk/gtkeventcontroller.h>
@@ -65,9 +64,6 @@ struct _GtkMenuShellPrivate
                                          * signal is coming soon (when checked
                                          * from inside of a "hide" handler).
                                          */
-  GtkMnemonicHash *mnemonic_hash;
-  GtkKeyHash *key_hash;
-
   GdkDevice *grab_pointer;
   GtkEventController *key_controller;
 };
@@ -78,13 +74,6 @@ gint        _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
 void        _gtk_menu_shell_set_grab_device  (GtkMenuShell *menu_shell,
                                               GdkDevice    *device);
 GdkDevice *_gtk_menu_shell_get_grab_device   (GtkMenuShell *menu_shell);
-
-void       _gtk_menu_shell_add_mnemonic      (GtkMenuShell *menu_shell,
-                                              guint         keyval,
-                                              GtkWidget    *target);
-void       _gtk_menu_shell_remove_mnemonic   (GtkMenuShell *menu_shell,
-                                              guint         keyval,
-                                              GtkWidget    *target);
 
 void       _gtk_menu_shell_update_mnemonics  (GtkMenuShell *menu_shell);
 void       _gtk_menu_shell_set_keyboard_mode (GtkMenuShell *menu_shell,
