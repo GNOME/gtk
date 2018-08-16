@@ -592,9 +592,10 @@ static void     gtk_tree_view_measure              (GtkWidget        *widget,
                                                     int            *natural,
                                                     int            *minimum_baseline,
                                                     int            *natural_baseline);
-static void     gtk_tree_view_size_allocate        (GtkWidget           *widget,
-                                                    const GtkAllocation *allocation,
-                                                    int                  baseline);
+static void     gtk_tree_view_size_allocate        (GtkWidget      *widget,
+                                                    int             width,
+                                                    int             height,
+                                                    int             baseline);
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
 
@@ -2540,9 +2541,10 @@ gtk_tree_view_size_allocate_drag_column (GtkWidget *widget)
 }
 
 static void
-gtk_tree_view_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_tree_view_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
@@ -2557,14 +2559,14 @@ gtk_tree_view_size_allocate (GtkWidget           *widget,
   page_size = gtk_adjustment_get_page_size (tree_view->priv->vadjustment);
   gtk_adjustment_configure (tree_view->priv->hadjustment,
                             gtk_adjustment_get_value (tree_view->priv->hadjustment) +
-                            (_gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL ? allocation->width - page_size : 0),
+                            (_gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL ? width - page_size : 0),
                             0,
-                            MAX (allocation->width, tree_view->priv->width),
-                            allocation->width * 0.1,
-                            allocation->width * 0.9,
-                            allocation->width);
+                            MAX (width, tree_view->priv->width),
+                            width * 0.1,
+                            width * 0.9,
+                            width);
 
-  page_size = allocation->height - gtk_tree_view_get_effective_header_height (tree_view);
+  page_size = height - gtk_tree_view_get_effective_header_height (tree_view);
   gtk_adjustment_configure (tree_view->priv->vadjustment,
                             gtk_adjustment_get_value (tree_view->priv->vadjustment),
                             0,
@@ -2654,9 +2656,9 @@ gtk_tree_view_size_allocate (GtkWidget           *widget,
        * or top right corner (for LTR)
        */
       min_x = gtk_adjustment_get_value (tree_view->priv->hadjustment);
-      max_x = min_x + allocation->width - child_rect.width;
+      max_x = min_x + width - child_rect.width;
       min_y = 0;
-      max_y = min_y + allocation->height - gtk_tree_view_get_effective_header_height (tree_view) - child_rect.height;
+        max_y = min_y + height - gtk_tree_view_get_effective_header_height (tree_view) - child_rect.height;
 
       if (direction == GTK_TEXT_DIR_LTR)
         /* Ensure that child's right edge is not sticking to the right

@@ -252,9 +252,10 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
 }
 
 static void
-gtk_menu_item_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_menu_item_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
@@ -265,7 +266,6 @@ gtk_menu_item_size_allocate (GtkWidget           *widget,
   GtkWidget *parent;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-  g_return_if_fail (allocation != NULL);
 
   direction = gtk_widget_get_direction (widget);
 
@@ -282,7 +282,7 @@ gtk_menu_item_size_allocate (GtkWidget           *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
     {
-      child_allocation = *allocation;
+      child_allocation = (GtkAllocation) {0, 0, width, height};
 
       if (child_pack_dir == GTK_PACK_DIRECTION_LTR ||
           child_pack_dir == GTK_PACK_DIRECTION_RTL)

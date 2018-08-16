@@ -386,9 +386,10 @@ gtk_center_box_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_center_box_size_allocate (GtkWidget           *widget,
-                              const GtkAllocation *allocation,
-                              int                  baseline)
+gtk_center_box_size_allocate (GtkWidget *widget,
+                              int        width,
+                              int        height,
+                              int        baseline)
 {
   GtkCenterBox *self = GTK_CENTER_BOX (widget);
   GtkAllocation child_allocation;
@@ -402,13 +403,13 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      size = allocation->width;
-      for_size = allocation->height;
+      size = width;
+      for_size = height;
     }
   else
     {
-      size = allocation->height;
-      for_size = allocation->width;
+      size = height;
+      for_size = width;
       baseline = -1;
     }
 
@@ -485,10 +486,10 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
               baseline = min_above;
               break;
             case GTK_BASELINE_POSITION_CENTER:
-              baseline = min_above + (allocation->height - (min_above + min_below)) / 2;
+              baseline = min_above + (height - (min_above + min_below)) / 2;
               break;
             case GTK_BASELINE_POSITION_BOTTOM:
-              baseline = allocation->height - min_below;
+              baseline = height - min_below;
               break;
             }
         }
@@ -509,7 +510,7 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
         child_pos[1] = size - child_size[1] - child_size[2];
     }
 
-  child_allocation = *allocation;
+  child_allocation = (GtkAllocation) { 0, 0, width, height };
 
   for (i = 0; i < 3; i++)
     {
@@ -518,20 +519,20 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
 
       if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          child_allocation.x = allocation->x + child_pos[i];
-          child_allocation.y = allocation->y;
+          child_allocation.x = child_pos[i];
+          child_allocation.y = 0;
           child_allocation.width = child_size[i];
-          child_allocation.height = allocation->height;
+          child_allocation.height = height;
         }
       else
         {
-          child_allocation.x = allocation->x;
-          child_allocation.y = allocation->y + child_pos[i];
-          child_allocation.width = allocation->width;
+          child_allocation.x = 0;
+          child_allocation.y = child_pos[i];
+          child_allocation.width = width;
           child_allocation.height = child_size[i];
         }
 
-      gtk_widget_size_allocate (child[i], &child_allocation, allocation->y + baseline);
+      gtk_widget_size_allocate (child[i], &child_allocation, baseline);
     }
 }
 

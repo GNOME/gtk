@@ -1519,8 +1519,9 @@ allocate_child (GtkGridRequest *request,
 }
 
 static void
-gtk_grid_request_allocate_children (GtkGridRequest      *request,
-                                    const GtkAllocation *allocation)
+gtk_grid_request_allocate_children (GtkGridRequest *request,
+                                    int             grid_width,
+                                    int             grid_height)
 {
   GtkWidget *child;
   GtkAllocation child_allocation;
@@ -1545,19 +1546,19 @@ gtk_grid_request_allocate_children (GtkGridRequest      *request,
       child_allocation.height = height;
 
       if (_gtk_widget_get_direction (GTK_WIDGET (request->grid)) == GTK_TEXT_DIR_RTL)
-        child_allocation.x = allocation->x + allocation->width
-                             - (child_allocation.x - allocation->x) - child_allocation.width;
+        child_allocation.x = grid_width - child_allocation.x - child_allocation.width;
 
       gtk_widget_size_allocate (child, &child_allocation, baseline);
     }
 }
 
-#define GET_SIZE(allocation, orientation) (orientation == GTK_ORIENTATION_HORIZONTAL ? allocation->width : allocation->height)
+#define GET_SIZE(width, height, orientation) (orientation == GTK_ORIENTATION_HORIZONTAL ? width : height)
 
 static void
-gtk_grid_size_allocate (GtkWidget          *widget,
-                        const GtkAllocation *allocation,
-                        int                  baseline)
+gtk_grid_size_allocate (GtkWidget *widget,
+                        int        width,
+                        int        height,
+                        int        baseline)
 {
   GtkGrid *grid = GTK_GRID (widget);
   GtkGridRequest request;
@@ -1583,15 +1584,15 @@ gtk_grid_size_allocate (GtkWidget          *widget,
     orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_grid_request_run (&request, 1 - orientation, FALSE);
-  gtk_grid_request_allocate (&request, 1 - orientation, GET_SIZE (allocation, 1 - orientation));
+  gtk_grid_request_allocate (&request, 1 - orientation, GET_SIZE (width, height, 1 - orientation));
   gtk_grid_request_run (&request, orientation, TRUE);
 
-  gtk_grid_request_allocate (&request, orientation, GET_SIZE (allocation, orientation));
+  gtk_grid_request_allocate (&request, orientation, GET_SIZE (width, height, orientation));
 
   gtk_grid_request_position (&request, 0);
   gtk_grid_request_position (&request, 1);
 
-  gtk_grid_request_allocate_children (&request, allocation);
+  gtk_grid_request_allocate_children (&request, width, height);
 }
 
 static void

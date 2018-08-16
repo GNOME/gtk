@@ -84,15 +84,16 @@ drawing_area_ensure_surface (DrawingArea *area,
 }
 
 static void
-drawing_area_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+drawing_area_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   DrawingArea *area = (DrawingArea *) widget;
 
-  drawing_area_ensure_surface (area, allocation->width, allocation->height);
+  drawing_area_ensure_surface (area, width, height);
 
-  GTK_WIDGET_CLASS (drawing_area_parent_class)->size_allocate (widget, allocation, baseline);
+  GTK_WIDGET_CLASS (drawing_area_parent_class)->size_allocate (widget, width, height, baseline);
 }
 
 static void

@@ -216,7 +216,8 @@ static void     gtk_paned_measure (GtkWidget *widget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
 static void     gtk_paned_size_allocate         (GtkWidget           *widget,
-                                                 const GtkAllocation *allocation,
+                                                 int                  width,
+                                                 int                  height,
                                                  int                  baseline);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
 static void     gtk_paned_snapshot              (GtkWidget        *widget,
@@ -1183,13 +1184,9 @@ gtk_paned_measure (GtkWidget *widget,
 }
 
 static void
-flip_child (const GtkAllocation *allocation,
-            GtkAllocation       *child_pos)
+flip_child (int            width,
+            GtkAllocation *child_pos)
 {
-  int width;
-
-  width = allocation->width;
-
   child_pos->x = width - child_pos->x - child_pos->width;
 }
 
@@ -1210,9 +1207,10 @@ gtk_paned_set_child_visible (GtkPaned  *paned,
 }
 
 static void
-gtk_paned_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_paned_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
@@ -1236,14 +1234,14 @@ gtk_paned_size_allocate (GtkWidget           *widget,
           gint child1_width, child2_width;
 
           gtk_widget_measure (priv->child1, GTK_ORIENTATION_HORIZONTAL,
-                              allocation->height,
+                              height,
                               &child1_width, NULL, NULL, NULL);
           gtk_widget_measure (priv->child2, GTK_ORIENTATION_HORIZONTAL,
-                              allocation->height,
+                              height,
                               &child2_width, NULL, NULL, NULL);
 
           gtk_paned_calc_position (paned,
-                                   MAX (1, allocation->width - handle_size),
+                                   MAX (1, width - handle_size),
                                    child1_width,
                                    child2_width);
 
@@ -1251,22 +1249,22 @@ gtk_paned_size_allocate (GtkWidget           *widget,
             priv->child1_size,
             0,
             handle_size,
-            allocation->height
+            height
           };
 
-          child1_allocation.height = child2_allocation.height = allocation->height;
+          child1_allocation.height = child2_allocation.height = height;
           child1_allocation.width = MAX (1, priv->child1_size);
           child1_allocation.x = 0;
           child1_allocation.y = child2_allocation.y = 0;
 
           child2_allocation.x = child1_allocation.x + priv->child1_size + handle_size;
-          child2_allocation.width = MAX (1, allocation->width - priv->child1_size - handle_size);
+          child2_allocation.width = MAX (1, width - priv->child1_size - handle_size);
 
           if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL)
             {
-              flip_child (allocation, &(child2_allocation));
-              flip_child (allocation, &(child1_allocation));
-              flip_child (allocation, &(handle_allocation));
+              flip_child (width, &(child2_allocation));
+              flip_child (width, &(child1_allocation));
+              flip_child (width, &(handle_allocation));
             }
 
           if (child1_width > child1_allocation.width)
@@ -1288,31 +1286,31 @@ gtk_paned_size_allocate (GtkWidget           *widget,
           gint child1_height, child2_height;
 
           gtk_widget_measure (priv->child1, GTK_ORIENTATION_VERTICAL,
-                              allocation->width,
+                              width,
                               &child1_height, NULL, NULL, NULL);
           gtk_widget_measure (priv->child2, GTK_ORIENTATION_VERTICAL,
-                              allocation->width,
+                              width,
                               &child2_height, NULL, NULL, NULL);
 
           gtk_paned_calc_position (paned,
-                                   MAX (1, allocation->height - handle_size),
+                                   MAX (1, height - handle_size),
                                    child1_height,
                                    child2_height);
 
           handle_allocation = (GdkRectangle){
             0,
             priv->child1_size,
-            allocation->width,
+            width,
             handle_size,
           };
 
-          child1_allocation.width = child2_allocation.width = allocation->width;
+          child1_allocation.width = child2_allocation.width = width;
           child1_allocation.height = MAX (1, priv->child1_size);
           child1_allocation.x = child2_allocation.x = 0;
           child1_allocation.y = 0;
 
           child2_allocation.y = child1_allocation.y + priv->child1_size + handle_size;
-          child2_allocation.height = MAX (1, allocation->height - child2_allocation.y);
+          child2_allocation.height = MAX (1, height - child2_allocation.y);
 
           if (child1_height > child1_allocation.height)
             {
@@ -1335,14 +1333,17 @@ gtk_paned_size_allocate (GtkWidget           *widget,
           gtk_paned_set_child_visible (paned, CHILD1, TRUE);
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
 
-          gtk_widget_size_allocate (priv->child1, allocation, -1);
+          gtk_widget_size_allocate (priv->child1,
+                                    &(GtkAllocation) {0, 0, width, height}, -1);
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
           gtk_paned_set_child_visible (paned, CHILD1, FALSE);
           gtk_paned_set_child_visible (paned, CHILD2, TRUE);
 
-          gtk_widget_size_allocate (priv->child2, allocation, -1);
+          gtk_widget_size_allocate (priv->child2,
+                                    &(GtkAllocation) {0, 0, width, height}, -1);
+
         }
       else
         {

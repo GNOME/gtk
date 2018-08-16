@@ -163,14 +163,20 @@ gtk_color_button_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_color_button_size_allocate (GtkWidget           *widget,
-                                const GtkAllocation *allocation,
-                                int                  baseline)
+gtk_color_button_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (widget);
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
-  gtk_widget_size_allocate (priv->button, allocation, baseline);
+  gtk_widget_size_allocate (priv->button,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            },
+                            baseline);
 }
 
 static void

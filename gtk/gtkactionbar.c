@@ -259,13 +259,19 @@ gtk_action_bar_set_child_property (GtkContainer *container,
 }
 
 static void
-gtk_action_bar_size_allocate (GtkWidget           *widget,
-                              const GtkAllocation *allocation,
-                              int                  baseline)
+gtk_action_bar_size_allocate (GtkWidget *widget,
+                              int        width,
+                              int        height,
+                              int        baseline)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
 
-  gtk_widget_size_allocate (priv->revealer, allocation, baseline);
+  gtk_widget_size_allocate (priv->revealer,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            },
+                            baseline);
 }
 
 static void

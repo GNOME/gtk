@@ -316,9 +316,10 @@ gtk_switch_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_switch_size_allocate (GtkWidget           *widget,
-                          const GtkAllocation *allocation,
-                          int                  baseline)
+gtk_switch_size_allocate (GtkWidget *widget,
+                          int        width,
+                          int        height,
+                          int        baseline)
 {
   GtkSwitch *self = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
@@ -326,29 +327,29 @@ gtk_switch_size_allocate (GtkWidget           *widget,
   GtkAllocation slider_alloc;
   int min;
 
-  slider_alloc.x = round (priv->handle_pos * (allocation->width / 2));
+  slider_alloc.x = round (priv->handle_pos * (width / 2));
   slider_alloc.y = 0;
-  slider_alloc.width = allocation->width / 2;
-  slider_alloc.height = allocation->height;
+  slider_alloc.width = width / 2;
+  slider_alloc.height = height;
 
   gtk_widget_size_allocate (priv->slider, &slider_alloc, -1);
 
 
   /* Center ON label in left half */
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  child_alloc.x = ((allocation->width / 2) - min) / 2;
+  child_alloc.x = ((width / 2) - min) / 2;
   child_alloc.width = min;
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
-  child_alloc.y = (allocation->height - min) / 2;
+  child_alloc.y = (height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->on_label, &child_alloc, -1);
 
   /* Center OFF label in right half */
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  child_alloc.x = (allocation->width / 2) + ((allocation->width / 2) - min) / 2;
+  child_alloc.x = (width / 2) + ((width / 2) - min) / 2;
   child_alloc.width = min;
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
-  child_alloc.y = (allocation->height - min) / 2;
+  child_alloc.y = (height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->off_label, &child_alloc, -1);
 }

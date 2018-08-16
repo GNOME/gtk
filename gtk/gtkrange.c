@@ -157,9 +157,10 @@ static void gtk_range_measure        (GtkWidget      *widget,
                                       int            *natural,
                                       int            *minimum_baseline,
                                       int            *natural_baseline);
-static void gtk_range_size_allocate  (GtkWidget           *widget,
-                                      const GtkAllocation *allocation,
-                                      int                  baseline);
+static void gtk_range_size_allocate  (GtkWidget      *widget,
+                                      int             width,
+                                      int             height,
+                                      int             baseline);
 static void gtk_range_unmap          (GtkWidget        *widget);
 
 static void gtk_range_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
@@ -231,7 +232,8 @@ static void          gtk_range_measure_trough           (GtkGizmo       *gizmo,
                                                          gint           *minimum_baseline,
                                                          gint           *natural_baseline);
 static void          gtk_range_allocate_trough          (GtkGizmo            *gizmo,
-                                                         const GtkAllocation *allocation,
+                                                         int                  width,
+                                                         int                  height,
                                                          int                  baseline);
 static gboolean      gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
@@ -1389,9 +1391,10 @@ gtk_range_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_range_allocate_trough (GtkGizmo            *gizmo,
-                           const GtkAllocation *allocation,
-                           int                  baseline)
+gtk_range_allocate_trough (GtkGizmo *gizmo,
+                           int       width,
+                           int       height,
+                           int       baseline)
 {
   GtkWidget *widget = gtk_widget_get_parent (GTK_WIDGET (gizmo));
   GtkRange *range = GTK_RANGE (widget);
@@ -1424,7 +1427,7 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
       double level, fill;
       GtkAllocation fill_alloc;
 
-      fill_alloc = *allocation;
+      fill_alloc = (GtkAllocation) {0, 0, width, height};
 
       level = CLAMP (priv->fill_level, lower, upper - page_size);
 
@@ -1435,14 +1438,14 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
           fill_alloc.width *= fill;
 
           if (should_invert (range))
-            fill_alloc.x += allocation->width - fill_alloc.width;
+            fill_alloc.x += width - fill_alloc.width;
         }
       else
         {
           fill_alloc.height *= fill;
 
           if (should_invert (range))
-            fill_alloc.y += allocation->height - fill_alloc.height;
+            fill_alloc.y += height - fill_alloc.height;
         }
 
       gtk_widget_size_allocate (priv->fill_widget, &fill_alloc, -1);
@@ -1460,27 +1463,27 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          highlight_alloc.y = allocation->y;
-          highlight_alloc.height = allocation->height;
+          highlight_alloc.y = 0;
+          highlight_alloc.height = height;
 
           if (!should_invert (range))
-            highlight_alloc.x = allocation->x;
+            highlight_alloc.x = 0;
           else
-            highlight_alloc.x = allocation->x + (allocation->width * (1 - value));
+            highlight_alloc.x = (width * (1 - value));
 
-          highlight_alloc.width = MAX (min, allocation->width * value);
+          highlight_alloc.width = MAX (min, width * value);
         }
       else
         {
-          highlight_alloc.x = allocation->x;
-          highlight_alloc.width = allocation->width;
+          highlight_alloc.x = 0;
+          highlight_alloc.width = width;
 
           if (!should_invert (range))
-            highlight_alloc.y = allocation->y;
+            highlight_alloc.y = 0;
           else
-            highlight_alloc.y = allocation->y + (allocation->height * (1 - value));
+            highlight_alloc.y = (height * (1 - value));
 
-          highlight_alloc.height = MAX (min, allocation->height* value);
+          highlight_alloc.height = MAX (min, height * value);
         }
 
       gtk_widget_size_allocate (priv->highlight_widget, &highlight_alloc, -1);
@@ -1492,16 +1495,17 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
  * give space to border over dimensions in one direction.
  */
 static void
-clamp_dimensions (const GtkAllocation *allocation,
-                  int                 *width,
-                  int                 *height,
-                  GtkBorder           *border,
-                  gboolean             border_expands_horizontally)
+clamp_dimensions (int        range_width,
+                  int        range_height,
+                  int       *width,
+                  int       *height,
+                  GtkBorder *border,
+                  gboolean   border_expands_horizontally)
 {
   gint extra, shortage;
 
   /* Width */
-  extra = allocation->width - border->left - border->right - *width;
+  extra = range_width - border->left - border->right - *width;
   if (extra > 0)
     {
       if (border_expands_horizontally)
@@ -1516,10 +1520,10 @@ clamp_dimensions (const GtkAllocation *allocation,
     }
   
   /* See if we can fit rect, if not kill the border */
-  shortage = *width - allocation->width;
+  shortage = *width - range_width;
   if (shortage > 0)
     {
-      *width = allocation->width;
+      *width = range_width;
       /* lose the border */
       border->left = 0;
       border->right = 0;
@@ -1527,7 +1531,7 @@ clamp_dimensions (const GtkAllocation *allocation,
   else
     {
       /* See if we can fit rect with borders */
-      shortage = *width + border->left + border->right - allocation->width;
+      shortage = *width + border->left + border->right - range_width;
       if (shortage > 0)
         {
           /* Shrink borders */
@@ -1537,7 +1541,7 @@ clamp_dimensions (const GtkAllocation *allocation,
     }
 
   /* Height */
-  extra = allocation->height - border->top - border->bottom - *height;
+  extra = range_height - border->top - border->bottom - *height;
   if (extra > 0)
     {
       if (border_expands_horizontally)
@@ -1553,10 +1557,10 @@ clamp_dimensions (const GtkAllocation *allocation,
     }
   
   /* See if we can fit rect, if not kill the border */
-  shortage = *height - allocation->height;
+  shortage = *height - range_height;
   if (shortage > 0)
     {
-      *height = allocation->height;
+      *height = range_height;
       /* lose the border */
       border->top = 0;
       border->bottom = 0;
@@ -1564,7 +1568,7 @@ clamp_dimensions (const GtkAllocation *allocation,
   else
     {
       /* See if we can fit rect with borders */
-      shortage = *height + border->top + border->bottom - allocation->height;
+      shortage = *height + border->top + border->bottom - range_height;
       if (shortage > 0)
         {
           /* Shrink borders */
@@ -1575,9 +1579,10 @@ clamp_dimensions (const GtkAllocation *allocation,
 }
 
 static void
-gtk_range_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_range_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
@@ -1598,9 +1603,9 @@ gtk_range_size_allocate (GtkWidget           *widget,
                       NULL, NULL);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    clamp_dimensions (allocation, &box_min_width, &box_min_height, &border, TRUE);
+    clamp_dimensions (width, height, &box_min_width, &box_min_height, &border, TRUE);
   else
-    clamp_dimensions (allocation, &box_min_width, &box_min_height, &border, FALSE);
+    clamp_dimensions (width, height, &box_min_width, &box_min_height, &border, FALSE);
 
   box_alloc.x = border.left;
   box_alloc.y = border.top;
