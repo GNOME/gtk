@@ -237,13 +237,6 @@ gtk_shortcut_new (void)
   return g_object_new (GTK_TYPE_SHORTCUT, NULL);
 }
 
-gboolean
-gtk_shortcut_trigger (GtkShortcut    *self,
-                      const GdkEvent *event)
-{
-  return gtk_shortcut_trigger_trigger (self->trigger, event);
-}
-
 static gboolean
 binding_compose_params (GObject         *object,
                         GVariantIter    *args,
