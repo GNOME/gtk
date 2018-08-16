@@ -128,9 +128,10 @@ gtk_fishbowl_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_fishbowl_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_fishbowl_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkFishbowl *fishbowl = GTK_FISHBOWL (widget);
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
@@ -147,8 +148,8 @@ gtk_fishbowl_size_allocate (GtkWidget           *widget,
         continue;
 
       gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
-      child_allocation.x = allocation->x + round (child->x * (allocation->width - child_requisition.width));
-      child_allocation.y = allocation->y + round (child->y * (allocation->height - child_requisition.height));
+      child_allocation.x = round (child->x * (width - child_requisition.width));
+      child_allocation.y = round (child->y * (height - child_requisition.height));
       child_allocation.width = child_requisition.width;
       child_allocation.height = child_requisition.height;
 

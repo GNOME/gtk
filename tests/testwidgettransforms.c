@@ -99,13 +99,18 @@ gtk_transform_tester_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_transform_tester_size_allocate (GtkWidget           *widget,
-                                    const GtkAllocation *allocation,
-                                    int                  baseline)
+gtk_transform_tester_size_allocate (GtkWidget *widget,
+                                    int        width,
+                                    int        height,
+                                    int        baseline)
 {
   GtkTransformTester *self = (GtkTransformTester *)widget;
 
-  gtk_widget_size_allocate (self->test_widget, allocation, -1);
+  gtk_widget_size_allocate (self->test_widget,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            }, -1);
 }
 
 static void

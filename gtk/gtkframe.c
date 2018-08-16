@@ -115,9 +115,10 @@ static void gtk_frame_get_property (GObject     *object,
 				    guint        param_id,
 				    GValue      *value,
 				    GParamSpec  *pspec);
-static void gtk_frame_size_allocate (GtkWidget           *widget,
-                                     const GtkAllocation *allocation,
-                                     int                  baseline);
+static void gtk_frame_size_allocate (GtkWidget  *widget,
+                                     int         width,
+                                     int         height,
+                                     int         baseline);
 static void gtk_frame_remove        (GtkContainer   *container,
 				     GtkWidget      *child);
 static void gtk_frame_forall        (GtkContainer   *container,
@@ -564,9 +565,10 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
 }
 
 static void
-gtk_frame_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_frame_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkFrame *frame = GTK_FRAME (widget);
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
@@ -579,7 +581,7 @@ gtk_frame_size_allocate (GtkWidget           *widget,
       gtk_widget_get_visible (priv->label_widget))
     {
       GtkAllocation label_allocation;
-      int nat_width, width, height;
+      int nat_width, label_width, label_height;
       float xalign;
 
       if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
@@ -589,14 +591,14 @@ gtk_frame_size_allocate (GtkWidget           *widget,
 
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           NULL, &nat_width, NULL, NULL);
-      width = MIN (new_allocation.width, nat_width);
+      label_width = MIN (new_allocation.width, nat_width);
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_VERTICAL, width,
-                          &height, NULL, NULL, NULL);
+                          &label_height, NULL, NULL, NULL);
 
       label_allocation.x = new_allocation.x + (new_allocation.width - width) * xalign;
-      label_allocation.y = new_allocation.y - height;
-      label_allocation.height = height;
-      label_allocation.width = width;
+      label_allocation.y = new_allocation.y - label_height;
+      label_allocation.height = label_height;
+      label_allocation.width = label_width;
 
       gtk_widget_size_allocate (priv->label_widget, &label_allocation, -1);
     }

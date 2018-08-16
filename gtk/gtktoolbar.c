@@ -191,7 +191,8 @@ static void       gtk_toolbar_get_property         (GObject             *object,
 static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
                                                     GtkSnapshot         *snapshot);
 static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
-                                                    const GtkAllocation *allocation,
+                                                    int                  width,
+                                                    int                  height,
                                                     int                  baseline);
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
@@ -1200,9 +1201,10 @@ rebuild_menu (GtkToolbar *toolbar)
 }
 
 static void
-gtk_toolbar_size_allocate (GtkWidget           *widget,
-                           const GtkAllocation *allocation,
-                           int                  baseline)
+gtk_toolbar_size_allocate (GtkWidget *widget,
+                           int        width,
+                           int        height,
+                           int        baseline)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
@@ -1240,14 +1242,14 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      available_size = size = allocation->width;
-      short_size = allocation->height;
+      available_size = size = width;
+      short_size = height;
       arrow_size = arrow_requisition.width;
     }
   else
     {
-      available_size = size = allocation->height;
-      short_size = allocation->width;
+      available_size = size = height;
+      short_size = width;
       arrow_size = arrow_requisition.height;
     }
 
@@ -1409,22 +1411,6 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
 
       fixup_allocation_for_rtl (available_size, &item_area);
     }
-
-  /* translate the items by allocation->(x,y) */
-  for (i = 0; i < n_items; ++i)
-    {
-      allocations[i].x += allocation->x;
-      allocations[i].y += allocation->y;
-    }
-
-  if (need_arrow)
-    {
-      arrow_allocation.x += allocation->x;
-      arrow_allocation.y += allocation->y;
-    }
-
-  item_area.x += allocation->x;
-  item_area.y += allocation->y;
 
   /* did anything change? */
   for (list = priv->content, i = 0; list != NULL; list = list->next, i++)

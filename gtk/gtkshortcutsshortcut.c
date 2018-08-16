@@ -517,13 +517,18 @@ gtk_shortcuts_shortcut_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_shortcuts_shortcut_size_allocate (GtkWidget           *widget,
-                                      const GtkAllocation *allocation,
-                                      int                  baseline)
+gtk_shortcuts_shortcut_size_allocate (GtkWidget *widget,
+                                      int        width,
+                                      int        height,
+                                      int        baseline)
 {
-  GTK_WIDGET_CLASS (gtk_shortcuts_shortcut_parent_class)->size_allocate (widget, allocation, baseline);
+  GTK_WIDGET_CLASS (gtk_shortcuts_shortcut_parent_class)->size_allocate (widget, width, height, baseline);
 
-  gtk_widget_size_allocate (GTK_WIDGET (GTK_SHORTCUTS_SHORTCUT (widget)->box), allocation, -1);
+  gtk_widget_size_allocate (GTK_WIDGET (GTK_SHORTCUTS_SHORTCUT (widget)->box),
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            }, -1);
 }
 
 static void

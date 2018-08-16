@@ -404,9 +404,10 @@ static void gtk_label_get_property      (GObject          *object,
 					 GParamSpec       *pspec);
 static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_destroy           (GtkWidget        *widget);
-static void gtk_label_size_allocate     (GtkWidget           *widget,
-                                         const GtkAllocation *allocation,
-                                         int                  baseline);
+static void gtk_label_size_allocate     (GtkWidget        *widget,
+                                         int               width,
+                                         int               height,
+                                         int               baseline);
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
 static void gtk_label_style_updated     (GtkWidget        *widget);
@@ -3649,9 +3650,10 @@ get_layout_location (GtkLabel  *label,
 }
 
 static void
-gtk_label_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline)
+gtk_label_size_allocate (GtkWidget *widget,
+                         int        width,
+                         int        height,
+                         int        baseline)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
@@ -3659,8 +3661,7 @@ gtk_label_size_allocate (GtkWidget           *widget,
   if (priv->layout)
     {
       if (priv->ellipsize || priv->wrap)
-        pango_layout_set_width (priv->layout,
-                                allocation->width * PANGO_SCALE);
+        pango_layout_set_width (priv->layout, width * PANGO_SCALE);
       else
         pango_layout_set_width (priv->layout, -1);
     }

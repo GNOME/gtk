@@ -219,9 +219,10 @@ static void     gtk_menu_get_child_property(GtkContainer     *container,
 static void     gtk_menu_destroy           (GtkWidget        *widget);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
-static void     gtk_menu_size_allocate     (GtkWidget           *widget,
-                                            const GtkAllocation *allocation,
-                                            int                  baseline);
+static void     gtk_menu_size_allocate     (GtkWidget        *widget,
+                                            int               width,
+                                            int               height,
+                                            int               baseline);
 static void     gtk_menu_show              (GtkWidget        *widget);
 static void     gtk_menu_snapshot          (GtkWidget        *widget,
                                             GtkSnapshot      *snapshot);
@@ -2494,9 +2495,10 @@ calculate_line_heights (GtkMenu *menu,
 }
 
 static void
-gtk_menu_size_allocate (GtkWidget           *widget,
-                        const GtkAllocation *allocation,
-                        int                  baseline)
+gtk_menu_size_allocate (GtkWidget *widget,
+                        int        widget_width,
+                        int        widget_height,
+                        int        baseline)
 {
   GtkMenu *menu;
   GtkMenuPrivate *priv;
@@ -2509,7 +2511,6 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   GtkBorder arrow_border;
 
   g_return_if_fail (GTK_IS_MENU (widget));
-  g_return_if_fail (allocation != NULL);
 
   menu = GTK_MENU (widget);
   menu_shell = GTK_MENU_SHELL (widget);
@@ -2517,7 +2518,7 @@ gtk_menu_size_allocate (GtkWidget           *widget,
 
   g_free (priv->heights);
   priv->heights_length = calculate_line_heights (menu,
-                                                 allocation->width,
+                                                 widget_width,
                                                  &priv->heights,
                                                  NULL);
 
@@ -2526,10 +2527,10 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   for (i = 0; i < priv->heights_length; i++)
     priv->requested_height += priv->heights[i];
 
-  x = allocation->x;
-  y = allocation->y;
-  width = allocation->width;
-  height = allocation->height;
+  x = 0;
+  y = 0;
+  width = widget_width;
+  height = widget_height;
 
   if (menu_shell->priv->active)
     gtk_menu_scroll_to (menu, priv->scroll_offset);

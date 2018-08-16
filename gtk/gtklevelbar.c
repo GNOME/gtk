@@ -427,9 +427,10 @@ gtk_level_bar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_level_bar_allocate_trough_continuous (GtkLevelBar         *self,
-                                          const GtkAllocation *allocation,
-                                          int                  baseline)
+gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
+                                          int          width,
+                                          int          height,
+                                          int          baseline)
 {
   GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (self);
   GtkAllocation block_area;
@@ -441,14 +442,14 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar         *self,
 
   /* allocate the empty (unfilled) part */
   gtk_widget_size_allocate (priv->block_widget[inverted ? 0 : 1],
-                            allocation,
+                            &(GtkAllocation) {0, 0, width, height},
                             baseline);
 
   if (priv->cur_value == 0)
     return;
 
   /* now allocate the filled part */
-  block_area = *allocation;
+  block_area = (GtkAllocation) {0, 0, width, height};
   fill_percentage = (priv->cur_value - priv->min_value) /
     (priv->max_value - priv->min_value);
 
@@ -463,7 +464,7 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar         *self,
       block_area.width = MAX (block_area.width, block_min);
 
       if (inverted)
-        block_area.x += allocation->width - block_area.width;
+        block_area.x += width - block_area.width;
     }
   else
     {
@@ -471,7 +472,7 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar         *self,
       block_area.height = MAX (block_area.height, block_min);
 
       if (inverted)
-        block_area.y += allocation->height - block_area.height;
+        block_area.y += height - block_area.height;
     }
 
   gtk_widget_size_allocate (priv->block_widget[inverted ? 1 : 0],
@@ -481,8 +482,9 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar         *self,
 
 static void
 gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
-                                        const GtkAllocation *allocation,
-                                        int baseline)
+                                        int          width,
+                                        int          height,
+                                        int          baseline)
 {
   GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (self);
   GtkAllocation block_area;
@@ -497,17 +499,17 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      block_width = MAX (block_width, (gint) floor (allocation->width / num_blocks));
-      block_height = allocation->height;
+      block_width = MAX (block_width, (gint) floor (width / num_blocks));
+      block_height = height;
     }
   else
     {
-      block_width = allocation->width;
-      block_height = MAX (block_height, (gint) floor (allocation->height / num_blocks));
+      block_width = width;
+      block_height = MAX (block_height, (gint) floor (height / num_blocks));
     }
 
-  block_area.x = allocation->x;
-  block_area.y = allocation->y;
+  block_area.x = 0;
+  block_area.y = 0;
   block_area.width = block_width;
   block_area.height = block_height;
 
@@ -525,28 +527,34 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
 }
 
 static void
-gtk_level_bar_allocate_trough (GtkGizmo            *gizmo,
-                               const GtkAllocation *allocation,
-                               int                  baseline)
+gtk_level_bar_allocate_trough (GtkGizmo *gizmo,
+                               int       width,
+                               int       height,
+                               int       baseline)
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkLevelBar *self = GTK_LEVEL_BAR (gtk_widget_get_parent (widget));
   GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (self);
 
   if (priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-    gtk_level_bar_allocate_trough_continuous (self, allocation, baseline);
+    gtk_level_bar_allocate_trough_continuous (self, width, height, baseline);
   else
-    gtk_level_bar_allocate_trough_discrete (self, allocation, baseline);
+    gtk_level_bar_allocate_trough_discrete (self, width, height, baseline);
 }
 
 static void
-gtk_level_bar_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_level_bar_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (GTK_LEVEL_BAR (widget));
 
-  gtk_widget_size_allocate (priv->trough_widget, allocation, baseline);
+  gtk_widget_size_allocate (priv->trough_widget,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            }, baseline);
 }
 
 static void

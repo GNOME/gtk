@@ -227,7 +227,8 @@ static void                 gtk_list_box_compute_expand               (GtkWidget
 static GType                gtk_list_box_child_type                   (GtkContainer        *container);
 static GtkSizeRequestMode   gtk_list_box_get_request_mode             (GtkWidget           *widget);
 static void                 gtk_list_box_size_allocate                (GtkWidget           *widget,
-                                                                       const GtkAllocation *allocation,
+                                                                       int                  width,
+                                                                       int                  height,
                                                                        int                  baseline);
 static void                 gtk_list_box_drag_leave                   (GtkWidget           *widget,
                                                                        GdkDrop             *drop);
@@ -2504,9 +2505,10 @@ gtk_list_box_measure (GtkWidget     *widget,
 }
 
 static void
-gtk_list_box_size_allocate (GtkWidget           *widget,
-                            const GtkAllocation *allocation,
-                            int                  baseline)
+gtk_list_box_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
   GtkAllocation child_allocation;
@@ -2516,22 +2518,22 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
   int child_min;
 
 
-  child_allocation.x = allocation->x;
-  child_allocation.y = allocation->y;
-  child_allocation.width = allocation->width;
+  child_allocation.x = 0;
+  child_allocation.y = 0;
+  child_allocation.width = width;
   child_allocation.height = 0;
 
-  header_allocation.x = allocation->x;
-  header_allocation.y = allocation->y;
-  header_allocation.width = allocation->width;
+  header_allocation.x = 0;
+  header_allocation.y = 0;
+  header_allocation.width = width;
   header_allocation.height = 0;
 
   if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
     {
       gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_VERTICAL,
-                          allocation->width,
+                          width,
                           &child_min, NULL, NULL, NULL);
-      header_allocation.height = allocation->height;
+      header_allocation.height = height;
       header_allocation.y = child_allocation.y;
       gtk_widget_size_allocate (priv->placeholder, &header_allocation, -1);
       child_allocation.y += child_min;
@@ -2552,7 +2554,7 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
       if (ROW_PRIV (row)->header != NULL)
         {
           gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
-                              allocation->width,
+                              width,
                               &child_min, NULL, NULL, NULL);
           header_allocation.height = child_min;
           header_allocation.y = child_allocation.y;

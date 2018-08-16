@@ -778,14 +778,16 @@ gtk_model_button_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_model_button_size_allocate (GtkWidget           *widget,
-                                const GtkAllocation *allocation,
-                                int                  baseline)
+gtk_model_button_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
 {
   if (GTK_MODEL_BUTTON (widget)->iconic)
     {
       GTK_WIDGET_CLASS (gtk_model_button_parent_class)->size_allocate (widget,
-                                                                       allocation,
+                                                                       width,
+                                                                       height,
                                                                        baseline);
     }
   else
@@ -813,10 +815,10 @@ gtk_model_button_size_allocate (GtkWidget           *widget,
                           NULL, NULL);
 
       if (indicator_is_left (widget))
-        child_allocation.x = allocation->x;
+        child_allocation.x = 0;
       else
-        child_allocation.x = allocation->x + allocation->width - check_nat_width;
-      child_allocation.y = allocation->y + (allocation->height - check_nat_height) / 2;
+        child_allocation.x = width - check_nat_width;
+      child_allocation.y = (height - check_nat_height) / 2;
       child_allocation.width = check_nat_width;
       child_allocation.height = check_nat_height;
 
@@ -839,10 +841,10 @@ gtk_model_button_size_allocate (GtkWidget           *widget,
                 border.right += check_nat_width;
             }
 
-          child_allocation.x = allocation->x + border.left;
-          child_allocation.y = allocation->y + border.top;
-          child_allocation.width = allocation->width - border.left - border.right;
-          child_allocation.height = allocation->height - border.top - border.bottom;
+          child_allocation.x = border.left;
+          child_allocation.y = border.top;
+          child_allocation.width = width - border.left - border.right;
+          child_allocation.height = height - border.top - border.bottom;
 
           if (baseline != -1)
             baseline -= border.top;

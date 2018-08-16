@@ -120,14 +120,19 @@ gtk_scrollbar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_scrollbar_size_allocate (GtkWidget           *widget,
-                             const GtkAllocation *allocation,
-                             int                  baseline)
+gtk_scrollbar_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   GtkScrollbar *self = GTK_SCROLLBAR (widget);
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
 
-  gtk_widget_size_allocate (priv->box, allocation, -1);
+  gtk_widget_size_allocate (priv->box,
+                            &(GtkAllocation) {
+                              0, 0,
+                              width, height
+                            }, -1);
 }
 
 static void
