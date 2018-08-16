@@ -6734,6 +6734,8 @@ gtk_shortcut_get_type
 GtkShortcutController
 gtk_shortcut_controller_new
 GtkShortcutScope
+GtkShortcutManager
+GtkShortcutManagerInterface
 gtk_shortcut_controller_set_mnemonics_modifiers
 gtk_shortcut_controller_get_mnemonics_modifiers
 gtk_shortcut_controller_set_scope
@@ -6748,9 +6750,16 @@ GTK_SHORTCUT_CONTROLLER_CLASS
 GTK_IS_SHORTCUT_CONTROLLER
 GTK_IS_SHORTCUT_CONTROLLER_CLASS
 GTK_SHORTCUT_CONTROLLER_GET_CLASS
+GTK_TYPE_SHORTCUT_MANAGER
+GTK_SHORTCUT_MANAGER
+GTK_SHORTCUT_MANAGER_CLASS
+GTK_IS_SHORTCUT_MANAGER
+GTK_IS_SHORTCUT_MANAGER_CLASS
+GTK_SHORTCUT_MANAGER_GET_CLASS
 
 <SUBSECTION Private>
 gtk_shortcut_controller_get_type
+gtk_shortcut_manager_get_type
 </SECTION>
 
 <SECTION>
