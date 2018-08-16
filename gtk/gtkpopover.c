@@ -107,7 +107,6 @@
 #include "gtkbinlayout.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
-#include "gtkmnemonichash.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
