@@ -203,6 +203,7 @@
 #include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutcontroller.h>
 #include <gtk/gtkshortcutlabel.h>
+#include <gtk/gtkshortcutmanager.h>
 #include <gtk/gtkshortcutsgroup.h>
 #include <gtk/gtkshortcutssection.h>
 #include <gtk/gtkshortcutsshortcut.h>
