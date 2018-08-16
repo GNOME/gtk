@@ -107,6 +107,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollbar.h"
 #include "gtksettings.h"
+#include "gtkshortcutmanager.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
@@ -316,7 +317,15 @@ static const gchar attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL)
+static void
+gtk_menu_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
+{
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL,
+                         G_ADD_PRIVATE (GtkMenu)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+                                                gtk_menu_shortcut_manager_interface_init))
 
 static void
 menu_queue_resize (GtkMenu *menu)
@@ -1068,6 +1077,7 @@ gtk_menu_init (GtkMenu *menu)
   GtkMenuPrivate *priv;
   GtkGesture *gesture;
   GtkEventController *controller;
+  GList *l, *controllers;
 
   priv = gtk_menu_get_instance_private (menu);
 
@@ -1077,7 +1087,6 @@ gtk_menu_init (GtkMenu *menu)
   gtk_container_add (GTK_CONTAINER (priv->toplevel), GTK_WIDGET (menu));
   g_signal_connect (priv->toplevel, "destroy", G_CALLBACK (gtk_widget_destroyed), &priv->toplevel);
   gtk_window_set_resizable (GTK_WINDOW (priv->toplevel), FALSE);
-  gtk_window_set_mnemonic_modifier (GTK_WINDOW (priv->toplevel), 0);
 
   _gtk_window_request_csd (GTK_WINDOW (priv->toplevel));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->toplevel),
@@ -1135,6 +1144,15 @@ gtk_menu_init (GtkMenu *menu)
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_menu_key_pressed), menu);
   gtk_widget_add_controller (GTK_WIDGET (menu), controller);
+
+  /* Trigger mnemonics without Alt */
+  controllers = _gtk_widget_list_controllers (GTK_WIDGET (menu), GTK_PHASE_CAPTURE);
+  for (l = controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_set_mnemonics_modifiers (l->data, 0);
+    }
+  g_list_free (controllers);
 }
 
 static void
