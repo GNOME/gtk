@@ -64,6 +64,11 @@ void            gtk_shortcut_set_callback                       (GtkShortcut    
                                                                  GtkShortcutFunc         callback,
                                                                  gpointer                data,
                                                                  GDestroyNotify          destroy);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_shortcut_get_mnemonic_activate              (GtkShortcut            *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_shortcut_set_mnemonic_activate              (GtkShortcut            *self,
+                                                                 gboolean                mnemonic_activate);
 
 G_END_DECLS
 
