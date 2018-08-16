@@ -361,6 +361,8 @@ GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_copy     		(const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
+guint16     gdk_event_get_flags         (const GdkEvent *event);
+GDK_AVAILABLE_IN_ALL
 GdkSurface *gdk_event_get_surface       (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
@@ -479,7 +481,7 @@ void           gdk_event_set_device_tool (GdkEvent       *event,
                                           GdkDeviceTool  *tool);
 
 GDK_AVAILABLE_IN_ALL
-int            gdk_event_get_scancode    (GdkEvent *event);
+int            gdk_event_get_scancode    (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);

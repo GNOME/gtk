@@ -89,6 +89,19 @@ G_DEFINE_TYPE (GdkEvent, gdk_event, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_EVENT_TYPE,
+  PROP_SURFACE,
+  PROP_FLAGS,
+  PROP_SEND_EVENT,
+  PROP_DEVICE,
+  PROP_SOURCE_DEVICE,
+  PROP_DISPLAY,
+  PROP_TIME,
+  PROP_STATE,
+  PROP_KEYVAL,
+  PROP_KEYCODE,
+  PROP_SCANCODE,
+  PROP_KEY_GROUP,
+  PROP_KEY_IS_MODIFIER,
   N_PROPS
 };
 
@@ -96,6 +109,17 @@ static GParamSpec *event_props[N_PROPS] = { NULL, };
 
 #define EVENT_PAYLOAD(ev) (&(ev)->any.type)
 #define EVENT_PAYLOAD_SIZE (sizeof (GdkEvent) - sizeof (GObject))
+
+static void gdk_event_set_time                 (GdkEvent       *event,
+                                                guint32         time);
+static void gdk_event_set_state                (GdkEvent       *event,
+                                                guint           state);
+static void gdk_event_set_keycode              (GdkEvent       *event,
+                                                guint16         keycode);
+static void gdk_event_set_key_group            (GdkEvent       *event,
+                                                guint8          group);
+static void gdk_event_set_key_is_modifier      (GdkEvent       *event,
+                                                gboolean        is_modifier);
 
 static void
 gdk_event_init (GdkEvent *event)
@@ -115,6 +139,65 @@ gdk_event_real_get_property (GObject    *object,
     case PROP_EVENT_TYPE:
       g_value_set_enum (value, event->any.type);
       break;
+    case PROP_SURFACE:
+      g_value_set_object (value, event->any.surface);
+      break;
+    case PROP_FLAGS:
+      g_value_set_uint (value, event->any.flags);
+      break;
+    case PROP_SEND_EVENT:
+      g_value_set_int (value, event->any.send_event);
+      break;
+    case PROP_DEVICE:
+      g_value_set_object (value, event->any.device);
+      break;
+    case PROP_SOURCE_DEVICE:
+      g_value_set_object (value, event->any.source_device);
+      break;
+    case PROP_DISPLAY:
+      g_value_set_object (value, event->any.display);
+      break;
+    case PROP_TIME:
+      g_value_set_uint (value, gdk_event_get_time (event));
+      break;
+    case PROP_STATE:
+      {
+	GdkModifierType state = 0;
+	if (gdk_event_get_state (event, &state))
+	  g_value_set_uint (value, state);
+      }
+      break;
+    case PROP_KEYVAL:
+      {
+	guint keyval = 0;
+	if (gdk_event_get_keyval (event, &keyval))
+	  g_value_set_uint (value, keyval);
+      }
+      break;
+    case PROP_KEYCODE:
+      {
+	guint16 keycode = 0;
+	if (gdk_event_get_keycode (event, &keycode))
+          g_value_set_uint (value, keycode);
+      }
+      break;
+    case PROP_SCANCODE:
+      g_value_set_uint (value, gdk_event_get_scancode (event));
+      break;
+    case PROP_KEY_GROUP:
+      {
+	guint group = 0;
+	if (gdk_event_get_key_group (event, &group))
+          g_value_set_uint (value, group);
+      }
+      break;
+    case PROP_KEY_IS_MODIFIER:
+      {
+	gboolean is_modifier = FALSE;
+	if (gdk_event_get_key_is_modifier (event, &is_modifier))
+          g_value_set_boolean (value, is_modifier);
+      }
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -133,6 +216,45 @@ gdk_event_real_set_property (GObject      *object,
     {
     case PROP_EVENT_TYPE:
       event->any.type = g_value_get_enum (value);
+      break;
+    case PROP_SURFACE:
+      event->any.surface = g_value_dup_object (value);
+      break;
+    case PROP_FLAGS:
+      event->any.flags = (guint16)g_value_get_uint (value);
+      break;
+    case PROP_SEND_EVENT:
+      event->any.send_event = (gint8)g_value_get_int (value);
+      break;
+    case PROP_DEVICE:
+      event->any.device = g_value_dup_object (value);
+      break;
+    case PROP_SOURCE_DEVICE:
+      event->any.source_device = g_value_dup_object (value);
+      break;
+    case PROP_DISPLAY:
+      event->any.display = g_value_dup_object (value);
+      break;
+    case PROP_TIME:
+      gdk_event_set_time (event, g_value_get_uint (value));
+      break;
+    case PROP_STATE:
+      gdk_event_set_state (event, g_value_get_uint (value));
+      break;
+    case PROP_KEYVAL:
+      gdk_event_set_keyval (event, g_value_get_uint (value));
+      break;
+    case PROP_KEYCODE:
+      gdk_event_set_keycode (event, g_value_get_uint (value));
+      break;
+    case PROP_SCANCODE:
+      gdk_event_set_scancode (event, g_value_get_uint (value));
+      break;
+    case PROP_KEY_GROUP:
+      gdk_event_set_key_group (event, (guint8)g_value_get_uint (value));
+      break;
+    case PROP_KEY_IS_MODIFIER:
+      gdk_event_set_key_is_modifier (event, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -157,6 +279,110 @@ gdk_event_class_init (GdkEventClass *klass)
                        GDK_TYPE_EVENT_TYPE, GDK_NOTHING,
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_SURFACE] =
+    g_param_spec_object ("surface",
+                         P_("Surface"),
+                         P_("Surface"),
+                         GDK_TYPE_SURFACE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_FLAGS] =
+    g_param_spec_uint ("flags",
+                       P_("Flags"),
+                       P_("Flags"),
+                       0, G_MAXUINT16, 0,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_SEND_EVENT] =
+    g_param_spec_int ("send-event",
+                      P_("Send event"),
+                      P_("Send event"),
+                      0, G_MAXINT8, 0,
+                      G_PARAM_READWRITE |
+                      G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_DEVICE] =
+    g_param_spec_object ("device",
+                         P_("Device"),
+                         P_("Device"),
+                         GDK_TYPE_DEVICE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_SOURCE_DEVICE] =
+    g_param_spec_object ("source-device",
+                         P_("Source device"),
+                         P_("Source device"),
+                         GDK_TYPE_DEVICE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         P_("Display"),
+                         P_("Display"),
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_TIME] =
+    g_param_spec_uint ("time",
+                       P_("Time"),
+                       P_("Time"),
+                       0, G_MAXUINT32, 0,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_STATE] =
+    g_param_spec_uint ("state",
+                       P_("State"),
+                       P_("State"),
+                       0, G_MAXUINT32, 0,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_KEYVAL] =
+    g_param_spec_uint ("keyval",
+                       P_("Keyval"),
+                       P_("Keyval"),
+                       0, G_MAXUINT32, 0,
+                       G_PARAM_READWRITE);
+
+  event_props[PROP_KEYCODE] =
+    g_param_spec_uint ("keycode",
+                       P_("Keycode"),
+                       P_("Hardware keycode"),
+                       0, G_MAXUINT16, 0,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_SCANCODE] =
+    g_param_spec_uint ("scancode",
+                       P_("Scancode"),
+                       P_("Key scancode"),
+                       0, G_MAXUINT16, 0,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_KEY_GROUP] =
+    g_param_spec_uint ("key-group",
+                       P_("Key group"),
+                       P_("Key group"),
+                       0, G_MAXUINT8, 0,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
+  event_props[PROP_KEY_IS_MODIFIER] =
+    g_param_spec_boolean ("key-is-modifier",
+                       P_("Key is modifier"),
+                       P_("Key is modifier"),
+                       FALSE,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+
   g_object_class_install_properties (object_class, N_PROPS, event_props);
 
   quark_event_user_data = g_quark_from_static_string ("gdk-event-user-data");
@@ -758,6 +984,22 @@ gdk_event_get_surface (const GdkEvent *event)
 }
 
 /**
+ * gdk_event_get_flags:
+ * @event: a #GdkEvent
+ *
+ * Extracts the flags associated with an event.
+ *
+ * Returns: The flags associated with the event
+ */
+guint16
+gdk_event_get_flags (const GdkEvent *event)
+{
+  g_return_val_if_fail (event != NULL, 0);
+
+  return event->any.flags;
+}
+
+/**
  * gdk_event_get_time:
  * @event: a #GdkEvent
  * 
@@ -823,6 +1065,83 @@ gdk_event_get_time (const GdkEvent *event)
       }
   
   return GDK_CURRENT_TIME;
+}
+
+/**
+ * gdk_event_set_time:
+ * @event: a #GdkEvent
+ * @time: a time stamp field to @event
+ * 
+ * Set the time stamp to @event, if there is one.
+ **/
+static void
+gdk_event_set_time (GdkEvent *event,
+                    guint32   time)
+{
+    switch (event->any.type)
+      {
+      case GDK_MOTION_NOTIFY:
+	event->motion.time = time;
+        return;
+      case GDK_BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+	event->button.time = time;
+        return;
+      case GDK_TOUCH_BEGIN:
+      case GDK_TOUCH_UPDATE:
+      case GDK_TOUCH_END:
+      case GDK_TOUCH_CANCEL:
+        event->touch.time = time;
+        return;
+      case GDK_TOUCHPAD_SWIPE:
+        event->touchpad_swipe.time = time;
+        return;
+      case GDK_TOUCHPAD_PINCH:
+        event->touchpad_pinch.time = time;
+        return;
+      case GDK_SCROLL:
+        event->scroll.time = time;
+        return;
+      case GDK_KEY_PRESS:
+      case GDK_KEY_RELEASE:
+	event->key.time = time;
+        return;
+      case GDK_ENTER_NOTIFY:
+      case GDK_LEAVE_NOTIFY:
+	event->crossing.time = time;
+        return;
+      case GDK_PROXIMITY_IN:
+      case GDK_PROXIMITY_OUT:
+	event->proximity.time = time;
+        return;
+      case GDK_DRAG_ENTER:
+      case GDK_DRAG_LEAVE:
+      case GDK_DRAG_MOTION:
+      case GDK_DROP_START:
+	event->dnd.time = time;
+        return;
+      case GDK_PAD_BUTTON_PRESS:
+      case GDK_PAD_BUTTON_RELEASE:
+        event->pad_button.time = time;
+        return;
+      case GDK_PAD_RING:
+      case GDK_PAD_STRIP:
+        event->pad_axis.time = time;
+        return;
+      case GDK_PAD_GROUP_MODE:
+        event->pad_group_mode.time = time;
+        return;
+      case GDK_CONFIGURE:
+      case GDK_FOCUS_CHANGE:
+      case GDK_NOTHING:
+      case GDK_DELETE:
+      case GDK_DESTROY:
+      case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
+      default:
+        /* return current time */
+        break;
+      }
 }
 
 /**
@@ -902,6 +1221,73 @@ gdk_event_get_state (const GdkEvent  *event,
 
   *state = 0;
   return FALSE;
+}
+
+/**
+ * gdk_event_set_state:
+ * @event: a #GdkEvent or %NULL
+ * @state: a state field to @event
+ *
+ * If the event contains a “state” field, puts @state to @event.
+ **/
+static void
+gdk_event_set_state (GdkEvent *event,
+                     guint     state)
+{
+    switch (event->any.type)
+      {
+      case GDK_MOTION_NOTIFY:
+	event->motion.state = state;
+        return;
+      case GDK_BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+        event->button.state = state;
+        return;
+      case GDK_TOUCH_BEGIN:
+      case GDK_TOUCH_UPDATE:
+      case GDK_TOUCH_END:
+      case GDK_TOUCH_CANCEL:
+        event->touch.state = state;
+        return;
+      case GDK_TOUCHPAD_SWIPE:
+        event->touchpad_swipe.state = state;
+        return;
+      case GDK_TOUCHPAD_PINCH:
+        event->touchpad_pinch.state = state;
+        return;
+      case GDK_SCROLL:
+	event->scroll.state = state;
+        return;
+      case GDK_KEY_PRESS:
+      case GDK_KEY_RELEASE:
+	event->key.state = state;
+        return;
+      case GDK_ENTER_NOTIFY:
+      case GDK_LEAVE_NOTIFY:
+	event->crossing.state = state;
+        return;
+      case GDK_CONFIGURE:
+      case GDK_FOCUS_CHANGE:
+      case GDK_PROXIMITY_IN:
+      case GDK_PROXIMITY_OUT:
+      case GDK_DRAG_ENTER:
+      case GDK_DRAG_LEAVE:
+      case GDK_DRAG_MOTION:
+      case GDK_DROP_START:
+      case GDK_NOTHING:
+      case GDK_DELETE:
+      case GDK_DESTROY:
+      case GDK_GRAB_BROKEN:
+      case GDK_PAD_BUTTON_PRESS:
+      case GDK_PAD_BUTTON_RELEASE:
+      case GDK_PAD_RING:
+      case GDK_PAD_STRIP:
+      case GDK_PAD_GROUP_MODE:
+      case GDK_EVENT_LAST:
+      default:
+        /* no state field */
+        break;
+      }
 }
 
 /**
@@ -1254,6 +1640,30 @@ gdk_event_get_keycode (const GdkEvent *event,
 }
 
 /**
+ * gdk_event_set_keycode:
+ * @event: a #GdkEvent
+ * @keycode: a keycode to @event
+ *
+ * Set the hardware keycode to an event.
+ *
+ * Also see gdk_event_get_scancode().
+ */
+static void
+gdk_event_set_keycode (GdkEvent *event,
+                       guint16   keycode)
+{
+  switch ((guint) event->any.type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      event->key.hardware_keycode = keycode;
+      return;
+    default:
+      break;
+    }
+}
+
+/**
  * gdk_event_get_key_group:
  * @event: a #GdkEvent
  * @group: (out): return location for the key group
@@ -1281,6 +1691,28 @@ gdk_event_get_key_group (const GdkEvent *event,
     }
 
   return fetched;
+}
+
+/**
+ * gdk_event_set_key_group:
+ * @event: a #GdkEvent
+ * @group: a key group to @event
+ *
+ * Set a key group to an event.
+ **/
+static void
+gdk_event_set_key_group (GdkEvent *event,
+                         guint8    group)
+{
+  switch ((guint) event->any.type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      event->key.group = group;
+      return;
+    default:
+      break;
+    }
 }
 
 /**
@@ -1312,6 +1744,28 @@ gdk_event_get_key_is_modifier (const GdkEvent *event,
     }
 
   return fetched;
+}
+
+/**
+ * gdk_event_set_key_is_modifier:
+ * @event: a #GdkEvent
+ * @is_modifier: is_modifier to @event
+ *
+ * Set %TRUE to a key event if the key is * a modifier key, otherwise %FALSE.
+ **/
+static void
+gdk_event_set_key_is_modifier (GdkEvent *event,
+                               gboolean  is_modifier)
+{
+  switch ((guint) event->any.type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      event->key.is_modifier = is_modifier;
+      return; 
+    default:
+      break;
+    }
 }
 
 /**
@@ -1933,15 +2387,6 @@ gdk_event_set_device_tool (GdkEvent      *event,
     g_set_object (&event->motion.tool, tool);
 }
 
-void
-gdk_event_set_scancode (GdkEvent *event,
-                        guint16 scancode)
-{
-  if (event->any.type == GDK_KEY_PRESS ||
-      event->any.type == GDK_KEY_RELEASE)
-    event->key.key_scancode = scancode;
-}
-
 /**
  * gdk_event_get_scancode:
  * @event: a #GdkEvent
@@ -1955,13 +2400,25 @@ gdk_event_set_scancode (GdkEvent *event,
  * Returns: The associated keyboard scancode or 0
  **/
 int
-gdk_event_get_scancode (GdkEvent *event)
+gdk_event_get_scancode (const GdkEvent *event)
 {
   if (event->any.type == GDK_KEY_PRESS ||
       event->any.type == GDK_KEY_RELEASE)
     return event->key.key_scancode;
 
   return 0;
+}
+
+void
+gdk_event_set_scancode (GdkEvent *event,
+                        guint16 scancode)
+{
+  if (event->any.type == GDK_KEY_PRESS ||
+      event->any.type == GDK_KEY_RELEASE)
+    {
+      event->key.key_scancode = scancode;
+      return;
+    }
 }
 
 void
