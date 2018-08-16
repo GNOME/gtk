@@ -66,6 +66,7 @@
 #include "gtksettings.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
+#include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
@@ -562,6 +563,7 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
+static void             gtk_window_shortcut_manager_interface_init      (GtkShortcutManagerInterface *iface);
 /* GtkRoot */
 static void             gtk_window_root_interface_init (GtkRootInterface *iface);
 static void             gtk_window_native_interface_init  (GtkNativeInterface  *iface);
@@ -583,6 +585,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
 						gtk_window_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
 						gtk_window_native_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+						gtk_window_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
 						gtk_window_root_interface_init))
 
@@ -2344,6 +2348,11 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 
       g_slice_free (GSListSubParserData, data);
     }
+}
+
+static void
+gtk_window_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
+{
 }
 
 static GdkDisplay *
