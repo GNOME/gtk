@@ -34,6 +34,7 @@
 #include "gtkeventcontrollerprivate.h"
 #include "gtkintl.h"
 #include "gtkshortcut.h"
+#include "gtkshortcuttrigger.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -45,6 +46,7 @@ struct _GtkShortcutController
 
   GSList *shortcuts;
   GtkShortcutScope scope;
+  GdkModifierType mnemonics_modifiers;
 
   guint run_class : 1;
   guint run_managed : 1;
@@ -57,6 +59,7 @@ struct _GtkShortcutControllerClass
 
 enum {
   PROP_0,
+  PROP_MNEMONICS_MODIFIERS,
   PROP_SCOPE,
 
   N_PROPS
@@ -88,6 +91,10 @@ gtk_shortcut_controller_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_MNEMONICS_MODIFIERS:
+      gtk_shortcut_controller_set_mnemonics_modifiers (self, g_value_get_flags (value));
+      break;
+
     case PROP_SCOPE:
       gtk_shortcut_controller_set_scope (self, g_value_get_enum (value));
       break;
@@ -107,6 +114,10 @@ gtk_shortcut_controller_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_MNEMONICS_MODIFIERS:
+      g_value_set_flags (value, self->mnemonics_modifiers);
+      break;
+
     case PROP_SCOPE:
       g_value_set_enum (value, self->scope);
       break;
@@ -130,9 +141,10 @@ gtk_shortcut_controller_dispose (GObject *object)
 static gboolean
 gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
                                           GtkShortcut           *shortcut,
-                                          GdkEvent              *event)
+                                          GdkEvent              *event,
+                                          gboolean               enable_mnemonics)
 {
-  if (!gtk_shortcut_trigger (shortcut, event))
+  if (!gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
     return FALSE;
 
   return gtk_shortcut_activate (shortcut, gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
@@ -142,7 +154,8 @@ static gboolean
 gtk_shortcut_controller_run_controllers (GtkEventController *controller,
                                          GdkEvent           *event,
                                          double              x,
-                                         double              y)
+                                         double              y,
+                                         gboolean            enable_mnemonics)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
   GtkWidget *widget;
@@ -150,7 +163,7 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
   for (l = self->shortcuts; l; l = l->next)
     {
-      if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event))
+      if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event, enable_mnemonics))
         return TRUE;
     }
 
@@ -160,7 +173,7 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
       for (l = gtk_widget_class_get_shortcuts (GTK_WIDGET_GET_CLASS (widget)); l; l = l->next)
         {
-          if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event))
+          if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event, enable_mnemonics))
             return TRUE;
         }
     }
@@ -175,7 +188,7 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
           if (gtk_event_controller_get_propagation_phase (l->data) != current_phase)
             continue;
 
-          if (gtk_shortcut_controller_run_controllers (l->data, event, x, y))
+          if (gtk_shortcut_controller_run_controllers (l->data, event, x, y, enable_mnemonics))
             return TRUE;
         }
     }
@@ -190,11 +203,23 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
                                       double              y)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  gboolean enable_mnemonics;
 
   if (self->scope != GTK_SHORTCUT_SCOPE_LOCAL)
     return FALSE;
 
-  return gtk_shortcut_controller_run_controllers (controller, event, x, y);
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    {
+      GdkModifierType modifiers;
+      modifiers = gdk_event_get_modifier_state (event);
+      enable_mnemonics = (modifiers & gtk_accelerator_get_default_mod_mask ()) == self->mnemonics_modifiers;
+    }
+  else
+    {
+      enable_mnemonics = FALSE;
+    }
+
+  return gtk_shortcut_controller_run_controllers (controller, event, x, y, enable_mnemonics);
 }
 
 static void
@@ -236,6 +261,19 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   controller_class->unset_widget = gtk_shortcut_controller_unset_widget;
 
   /**
+   * GtkShortcutController:mnemonic-modifiers:
+   *
+   * The modifiers that need to be pressed to allow mnemonics activation.
+   */
+  properties[PROP_MNEMONICS_MODIFIERS] =
+      g_param_spec_flags ("mnemonic-modifiers",
+                          P_("Mnemonic modifers"),
+                          P_("The modifiers to be pressed to allow mnemonics activation"),
+                          GDK_TYPE_MODIFIER_TYPE,
+                          GDK_MOD1_MASK,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkShortcutController:scope:
    *
    * What scope the shortcuts will be handled in.
@@ -249,12 +287,12 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
-
 }
 
 static void
-gtk_shortcut_controller_init (GtkShortcutController *controller)
+gtk_shortcut_controller_init (GtkShortcutController *self)
 {
+  self->mnemonics_modifiers = GDK_MOD1_MASK;
 }
 
 static void
@@ -439,5 +477,50 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
   g_return_val_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self), GTK_SHORTCUT_SCOPE_LOCAL);
 
   return self->scope;
+}
+
+/**
+ * gtk_shortcut_controller_set_mnemonics_modifiers:
+ * @self: a #GtkShortcutController
+ * @modifiers: the new mnemonics_modifiers to use
+ *
+ * Sets the controller to have the given @mnemonics_modifiers.
+ *
+ * The mnemonics modifiers determines which modifiers need to be pressed to allow
+ * activation of shortcuts with mnemonics triggers.
+ *
+ * This value is only relevant for local shortcut controllers. Global and managed
+ * shortcut controllers will have their shortcuts activated from other places which
+ * have their own modifiers for activating mnemonics.
+ **/
+void
+gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController *self,
+                                                 GdkModifierType        modifiers)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
+
+  if (self->mnemonics_modifiers == modifiers)
+    return;
+
+  self->mnemonics_modifiers = modifiers;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MNEMONICS_MODIFIERS]);
+}
+
+/**
+ * gtk_shortcut_controller_get_mnemonics_modifiers:
+ * @self: a #GtkShortcutController
+ *
+ * Gets the mnemonics modifiers for when this controller activates its shortcuts. See
+ * gtk_shortcut_controller_set_mnemonics_modifiers() for details.
+ *
+ * Returns: the controller's mnemonics modifiers
+ **/
+GdkModifierType
+gtk_shortcut_controller_get_mnemonics_modifiers (GtkShortcutController *self)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self), GTK_SHORTCUT_SCOPE_LOCAL);
+
+  return self->mnemonics_modifiers;
 }
 
