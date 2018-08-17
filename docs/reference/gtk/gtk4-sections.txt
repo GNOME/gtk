@@ -1792,8 +1792,6 @@ gtk_menu_popup_at_widget
 gtk_menu_popup_at_pointer
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
-gtk_menu_set_accel_path
-gtk_menu_get_accel_path
 gtk_menu_set_monitor
 gtk_menu_get_monitor
 gtk_menu_place_on_monitor
@@ -1891,8 +1889,6 @@ gtk_menu_item_get_use_underline
 gtk_menu_item_set_use_underline
 gtk_menu_item_set_submenu
 gtk_menu_item_get_submenu
-gtk_menu_item_set_accel_path
-gtk_menu_item_get_accel_path
 gtk_menu_item_select
 gtk_menu_item_deselect
 gtk_menu_item_activate
@@ -4446,7 +4442,6 @@ gtk_widget_class_add_binding
 gtk_widget_class_add_binding_signal
 gtk_widget_add_accelerator
 gtk_widget_remove_accelerator
-gtk_widget_set_accel_path
 gtk_widget_list_accel_closures
 gtk_widget_can_activate_accel
 gtk_widget_event
