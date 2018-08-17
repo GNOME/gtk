@@ -26,7 +26,6 @@
 
 #include "gtkwidgetprivate.h"
 
-#include "gtkaccelmapprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessible.h"
 #include "gtkapplicationprivate.h"
