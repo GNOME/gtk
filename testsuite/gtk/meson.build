@@ -90,7 +90,7 @@ foreach t : tests
 endforeach
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
-if add_languages('cpp')
+if add_languages('cpp', required: false)
   test_exe = executable('autotestkeywords',
                         'autotestkeywords.cc',
                         c_args : test_cargs + ['-Idummy-headers'],
