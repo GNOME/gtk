@@ -86,7 +86,6 @@
 #include "gtkmenuprivate.h"
 
 #include "gtkaccellabel.h"
-#include "gtkaccelmap.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkscrolledwindow.h"
