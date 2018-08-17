@@ -37,7 +37,6 @@
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkrecentmanager.h"
-#include "gtkaccelmapprivate.h"
 #include "gtkicontheme.h"
 #include "gtkbuilder.h"
 #include "gtkshortcutswindow.h"
