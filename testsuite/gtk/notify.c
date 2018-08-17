@@ -493,13 +493,8 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "text-column"))
         continue;
 
-      if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU_ITEM) &&
-	  g_str_equal (pspec->name, "accel-path"))
-        continue;
-
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU) &&
-	  (g_str_equal (pspec->name, "accel-path") ||
-	   g_str_equal (pspec->name, "active")))
+	  g_str_equal (pspec->name, "active"))
         continue;
 
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_CHECK_MENU_ITEM) &&
