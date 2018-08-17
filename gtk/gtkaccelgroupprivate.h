@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 
 struct _GtkAccelGroupPrivate
 {
-  guint               lock_count;
-  GdkModifierType     modifier_mask;
   GSList             *acceleratables;
   guint               n_accels;
   GtkAccelGroupEntry *priv_accels;
