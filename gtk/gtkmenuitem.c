@@ -125,7 +125,6 @@ enum {
 enum {
   PROP_0,
   PROP_SUBMENU,
-  PROP_ACCEL_PATH,
   PROP_LABEL,
   PROP_USE_UNDERLINE,
 
@@ -608,20 +607,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkMenuItem:accel-path:
-   *
-   * Sets the accelerator path of the menu item, through which runtime
-   * changes of the menu item's accelerator caused by the user can be
-   * identified and saved to persistant storage.
-   */
-  menu_item_props[PROP_ACCEL_PATH] =
-      g_param_spec_string ("accel-path",
-                           P_("Accel Path"),
-                           P_("Sets the accelerator path of the menu item"),
-                           NULL,
-                           GTK_PARAM_READWRITE);
-
-  /**
    * GtkMenuItem:label:
    *
    * The text for the child label.
@@ -760,9 +745,6 @@ gtk_menu_item_set_property (GObject      *object,
     case PROP_SUBMENU:
       gtk_menu_item_set_submenu (menu_item, g_value_get_object (value));
       break;
-    case PROP_ACCEL_PATH:
-      gtk_menu_item_set_accel_path (menu_item, g_value_get_string (value));
-      break;
     case PROP_LABEL:
       gtk_menu_item_set_label (menu_item, g_value_get_string (value));
       break;
@@ -794,9 +776,6 @@ gtk_menu_item_get_property (GObject    *object,
     {
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
-      break;
-    case PROP_ACCEL_PATH:
-      g_value_set_string (value, gtk_menu_item_get_accel_path (menu_item));
       break;
     case PROP_LABEL:
       g_value_set_string (value, gtk_menu_item_get_label (menu_item));
@@ -1601,43 +1580,11 @@ gtk_menu_item_can_activate_accel (GtkWidget *widget,
 }
 
 static void
-gtk_menu_item_accel_name_foreach (GtkWidget *widget,
-                                  gpointer   data)
-{
-  const gchar **path_p = data;
-
-  if (!*path_p)
-    {
-      if (GTK_IS_LABEL (widget))
-        {
-          *path_p = gtk_label_get_text (GTK_LABEL (widget));
-          if (*path_p && (*path_p)[0] == 0)
-            *path_p = NULL;
-        }
-      else if (GTK_IS_CONTAINER (widget))
-        gtk_container_foreach (GTK_CONTAINER (widget),
-                               gtk_menu_item_accel_name_foreach,
-                               data);
-    }
-}
-
-static void
 gtk_menu_item_parent_cb (GObject    *object,
                          GParamSpec *pspec,
                          gpointer    user_data)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
-  GtkMenu *menu;
-  GtkMenuShell *menu_shell;
-
-  menu_shell = gtk_menu_item_get_menu_shell (menu_item);
-  menu = GTK_IS_MENU (menu_shell) ? GTK_MENU (menu_shell) : NULL;
-
-  if (menu)
-    _gtk_menu_item_refresh_accel_path (menu_item,
-                                       menu->priv->accel_path,
-                                       menu->priv->accel_group,
-                                       TRUE);
 
   update_arrow_widget (menu_item);
 }
@@ -1651,133 +1598,6 @@ gtk_menu_item_direction_changed (GtkWidget        *widget,
   update_arrow_classes (menu_item);
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->direction_changed (widget, previous_dir);
-}
-
-void
-_gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
-                                   const gchar   *prefix,
-                                   GtkAccelGroup *accel_group,
-                                   gboolean       group_changed)
-{
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  const gchar *path;
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  g_return_if_fail (!accel_group || GTK_IS_ACCEL_GROUP (accel_group));
-
-  widget = GTK_WIDGET (menu_item);
-
-  if (!accel_group)
-    {
-      gtk_widget_set_accel_path (widget, NULL, NULL);
-      return;
-    }
-
-  path = _gtk_widget_get_accel_path (widget, NULL);
-  if (!path)  /* no active accel_path yet */
-    {
-      path = priv->accel_path;
-      if (!path && prefix)
-        {
-          const gchar *postfix = NULL;
-          gchar *new_path;
-
-          /* try to construct one from label text */
-          gtk_container_foreach (GTK_CONTAINER (menu_item),
-                                 gtk_menu_item_accel_name_foreach,
-                                 &postfix);
-          if (postfix)
-            {
-              new_path = g_strconcat (prefix, "/", postfix, NULL);
-              path = priv->accel_path = g_intern_string (new_path);
-              g_free (new_path);
-            }
-        }
-      if (path)
-        gtk_widget_set_accel_path (widget, path, accel_group);
-    }
-  else if (group_changed)    /* reinstall accelerators */
-    gtk_widget_set_accel_path (widget, path, accel_group);
-}
-
-/**
- * gtk_menu_item_set_accel_path:
- * @menu_item:  a valid #GtkMenuItem
- * @accel_path: (allow-none): accelerator path, corresponding to this menu
- *     item’s functionality, or %NULL to unset the current path.
- *
- * Set the accelerator path on @menu_item, through which runtime
- * changes of the menu item’s accelerator caused by the user can be
- * identified and saved to persistent storage (see gtk_accel_map_save()
- * on this). To set up a default accelerator for this menu item, call
- * gtk_accel_map_add_entry() with the same @accel_path. See also
- * gtk_accel_map_add_entry() on the specifics of accelerator paths,
- * and gtk_menu_set_accel_path() for a more convenient variant of
- * this function.
- *
- * This function is basically a convenience wrapper that handles
- * calling gtk_widget_set_accel_path() with the appropriate accelerator
- * group for the menu item.
- *
- * Note that you do need to set an accelerator on the parent menu with
- * gtk_menu_set_accel_group() for this to work.
- *
- * Note that @accel_path string will be stored in a #GQuark.
- * Therefore, if you pass a static string, you can save some memory
- * by interning it first with g_intern_static_string().
- */
-void
-gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
-                              const gchar *accel_path)
-{
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkWidget *widget;
-  GtkMenuShell *menu_shell;
-
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  g_return_if_fail (accel_path == NULL ||
-                    (accel_path[0] == '<' && strchr (accel_path, '/')));
-
-  widget = GTK_WIDGET (menu_item);
-
-  /* store new path */
-  priv->accel_path = g_intern_string (accel_path);
-
-  /* forget accelerators associated with old path */
-  gtk_widget_set_accel_path (widget, NULL, NULL);
-
-  /* install accelerators associated with new path */
-  menu_shell = gtk_menu_item_get_menu_shell (menu_item);
-  if (GTK_IS_MENU (menu_shell))
-    {
-      GtkMenu *menu = GTK_MENU (menu_shell);
-
-      if (menu->priv->accel_group)
-        _gtk_menu_item_refresh_accel_path (GTK_MENU_ITEM (widget),
-                                           NULL,
-                                           menu->priv->accel_group,
-                                           FALSE);
-    }
-}
-
-/**
- * gtk_menu_item_get_accel_path:
- * @menu_item:  a valid #GtkMenuItem
- *
- * Retrieve the accelerator path that was previously set on @menu_item.
- *
- * See gtk_menu_item_set_accel_path() for details.
- *
- * Returns: (nullable) (transfer none): the accelerator path corresponding to
- *     this menu item’s functionality, or %NULL if not set
- */
-const gchar *
-gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
-{
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);
-
-  return menu_item->priv->accel_path;
 }
 
 static void
