@@ -129,11 +129,6 @@ void       gtk_menu_item_toggle_size_request  (GtkMenuItem         *menu_item,
 GDK_AVAILABLE_IN_ALL
 void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
                                                gint                 allocation);
-GDK_AVAILABLE_IN_ALL
-void          gtk_menu_item_set_accel_path    (GtkMenuItem         *menu_item,
-                                               const gchar         *accel_path);
-GDK_AVAILABLE_IN_ALL
-const gchar * gtk_menu_item_get_accel_path    (GtkMenuItem    *menu_item);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_menu_item_set_label         (GtkMenuItem         *menu_item,

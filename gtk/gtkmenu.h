@@ -93,11 +93,6 @@ void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
 					   GtkAccelGroup       *accel_group);
 GDK_AVAILABLE_IN_ALL
 GtkAccelGroup* gtk_menu_get_accel_group	  (GtkMenu	       *menu);
-GDK_AVAILABLE_IN_ALL
-void           gtk_menu_set_accel_path    (GtkMenu             *menu,
-					   const gchar         *accel_path);
-GDK_AVAILABLE_IN_ALL
-const gchar*   gtk_menu_get_accel_path    (GtkMenu             *menu);
 
 GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
