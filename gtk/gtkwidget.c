@@ -724,7 +724,6 @@ static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 
-static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
@@ -891,7 +890,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
 
-  quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
@@ -5053,9 +5051,7 @@ widget_new_accel_closure (GtkWidget *widget,
  * The @accel_group needs to be added to the widget’s toplevel via
  * gtk_window_add_accel_group(), and the signal must be of type %G_SIGNAL_ACTION.
  * Accelerators added through this function are not user changeable during
- * runtime. If you want to support accelerators that can be changed by the
- * user, use gtk_accel_map_add_entry() and gtk_widget_set_accel_path() or
- * gtk_menu_item_set_accel_path() instead.
+ * runtime.
  */
 void
 gtk_widget_add_accelerator (GtkWidget      *widget,
@@ -5180,99 +5176,6 @@ gtk_widget_list_accel_closures (GtkWidget *widget)
     if (gtk_accel_group_from_accel_closure (slist->data))
       clist = g_list_prepend (clist, slist->data);
   return clist;
-}
-
-typedef struct {
-  GQuark         path_quark;
-  GtkAccelGroup *accel_group;
-  GClosure      *closure;
-} AccelPath;
-
-static void
-destroy_accel_path (gpointer data)
-{
-  AccelPath *apath = data;
-
-  gtk_accel_group_disconnect (apath->accel_group, apath->closure);
-
-  /* closures_destroy takes care of unrefing the closure */
-  g_object_unref (apath->accel_group);
-
-  g_slice_free (AccelPath, apath);
-}
-
-
-/**
- * gtk_widget_set_accel_path:
- * @widget: a #GtkWidget
- * @accel_path: (allow-none): path used to look up the accelerator
- * @accel_group: (allow-none): a #GtkAccelGroup.
- *
- * Given an accelerator group, @accel_group, and an accelerator path,
- * @accel_path, sets up an accelerator in @accel_group so whenever the
- * key binding that is defined for @accel_path is pressed, @widget
- * will be activated.  This removes any accelerators (for any
- * accelerator group) installed by previous calls to
- * gtk_widget_set_accel_path(). Associating accelerators with
- * paths allows them to be modified by the user and the modifications
- * to be saved for future use. (See gtk_accel_map_save().)
- *
- * This function is a low level function that would most likely
- * be used by a menu creation system.
- *
- * If you only want to
- * set up accelerators on menu items gtk_menu_item_set_accel_path()
- * provides a somewhat more convenient interface.
- *
- * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
- * pass a static string, you can save some memory by interning it first with
- * g_intern_static_string().
- **/
-void
-gtk_widget_set_accel_path (GtkWidget     *widget,
-			   const gchar   *accel_path,
-			   GtkAccelGroup *accel_group)
-{
-  AccelPath *apath;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_GET_CLASS (widget)->activate_signal != 0);
-
-  if (accel_path)
-    {
-      g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-      g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
-
-      gtk_accel_map_add_entry (accel_path, 0, 0);
-      apath = g_slice_new (AccelPath);
-      apath->accel_group = g_object_ref (accel_group);
-      apath->path_quark = g_quark_from_string (accel_path);
-      apath->closure = widget_new_accel_closure (widget, GTK_WIDGET_GET_CLASS (widget)->activate_signal);
-    }
-  else
-    apath = NULL;
-
-  /* also removes possible old settings */
-  g_object_set_qdata_full (G_OBJECT (widget), quark_accel_path, apath, destroy_accel_path);
-
-  if (apath)
-    gtk_accel_group_connect_by_path (apath->accel_group, g_quark_to_string (apath->path_quark), apath->closure);
-
-  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
-}
-
-const gchar*
-_gtk_widget_get_accel_path (GtkWidget *widget,
-			    gboolean  *locked)
-{
-  AccelPath *apath;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
-  if (locked)
-    *locked = apath ? gtk_accel_group_get_is_locked (apath->accel_group) : TRUE;
-  return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
 /**
@@ -8237,7 +8140,6 @@ gtk_widget_real_destroy (GtkWidget *object)
     }
 
   /* wipe accelerator closures (keep order) */
-  g_object_set_qdata (G_OBJECT (widget), quark_accel_path, NULL);
   g_object_set_qdata (G_OBJECT (widget), quark_accel_closures, NULL);
 
   /* Callers of add_mnemonic_label() should disconnect on ::destroy */
