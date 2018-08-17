@@ -35,8 +35,6 @@ struct _GtkMenuItemPrivate
 
   guint timer;
 
-  const char *accel_path;
-
   GtkActionHelper *action_helper;
 
   GtkWidget *arrow_widget;
@@ -49,10 +47,6 @@ struct _GtkMenuItemPrivate
   guint reserve_indicator      : 1;
 };
 
-void     _gtk_menu_item_refresh_accel_path   (GtkMenuItem   *menu_item,
-                                              const gchar   *prefix,
-                                              GtkAccelGroup *accel_group,
-                                              gboolean       group_changed);
 gboolean _gtk_menu_item_is_selectable        (GtkWidget     *menu_item);
 void     _gtk_menu_item_popup_submenu        (GtkWidget     *menu_item,
                                               gboolean       with_delay);
