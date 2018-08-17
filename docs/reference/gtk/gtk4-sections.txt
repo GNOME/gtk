@@ -58,7 +58,6 @@ GtkAccelGroupClass
 gtk_accel_group_new
 GtkAccelFlags
 gtk_accel_group_connect
-gtk_accel_group_connect_by_path
 GtkAccelGroupActivate
 GtkAccelGroupFindFunc
 gtk_accel_group_disconnect
@@ -97,37 +96,6 @@ GtkAccelGroupPrivate
 GtkAccelGroupEntry
 gtk_accel_group_query
 gtk_accel_group_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkaccelmap</FILE>
-<TITLE>Accelerator Maps</TITLE>
-GtkAccelMap
-GtkAccelMapForeach
-gtk_accel_map_add_entry
-gtk_accel_map_lookup_entry
-gtk_accel_map_change_entry
-gtk_accel_map_load
-gtk_accel_map_save
-gtk_accel_map_foreach
-gtk_accel_map_load_fd
-gtk_accel_map_save_fd
-gtk_accel_map_load_scanner
-gtk_accel_map_add_filter
-gtk_accel_map_foreach_unfiltered
-gtk_accel_map_get
-gtk_accel_map_lock_path
-gtk_accel_map_unlock_path
-<SUBSECTION Standard>
-GTK_ACCEL_MAP
-GTK_TYPE_ACCEL_MAP
-GTK_IS_ACCEL_MAP
-GTK_ACCEL_MAP_CLASS
-GTK_IS_ACCEL_MAP_CLASS
-GTK_ACCEL_MAP_GET_CLASS
-GtkAccelMapClass
-<SUBSECTION Private>
-gtk_accel_map_get_type
 </SECTION>
 
 <SECTION>
