@@ -430,6 +430,9 @@ test_type (gconstpointer data)
                                NULL);
       gdk_content_formats_unref (formats);
     }
+  /* check_property() with "keyval" works when event-type is GDK_KEY_PRESS */
+  else if (g_str_equal (g_type_name (type), "GdkEvent"))
+    instance = g_object_new (type, "event-type", GDK_KEY_PRESS, NULL);
   else
     instance = g_object_new (type, NULL);
 
