@@ -140,15 +140,6 @@ GType          gtk_accel_group_get_type           (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkAccelGroup* gtk_accel_group_new	      	  (void);
 GDK_AVAILABLE_IN_ALL
-gboolean       gtk_accel_group_get_is_locked      (GtkAccelGroup  *accel_group);
-GDK_AVAILABLE_IN_ALL
-GdkModifierType 
-               gtk_accel_group_get_modifier_mask  (GtkAccelGroup  *accel_group);
-GDK_AVAILABLE_IN_ALL
-void	       gtk_accel_group_lock		  (GtkAccelGroup  *accel_group);
-GDK_AVAILABLE_IN_ALL
-void	       gtk_accel_group_unlock		  (GtkAccelGroup  *accel_group);
-GDK_AVAILABLE_IN_ALL
 void	       gtk_accel_group_connect		  (GtkAccelGroup  *accel_group,
 						   guint	   accel_key,
 						   GdkModifierType accel_mods,
