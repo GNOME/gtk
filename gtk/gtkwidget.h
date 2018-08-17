@@ -453,10 +453,6 @@ gboolean   gtk_widget_remove_accelerator  (GtkWidget           *widget,
                                            guint                accel_key,
                                            GdkModifierType      accel_mods);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_accel_path      (GtkWidget           *widget,
-                                           const gchar         *accel_path,
-                                           GtkAccelGroup       *accel_group);
-GDK_AVAILABLE_IN_ALL
 GList*     gtk_widget_list_accel_closures (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_can_activate_accel  (GtkWidget           *widget,
