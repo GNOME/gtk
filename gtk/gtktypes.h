@@ -46,6 +46,7 @@ typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkRoot  	       GtkRoot;
 typedef struct _GtkSettings            GtkSettings;
 typedef struct _GtkShortcut            GtkShortcut;
+typedef struct _GtkShortcutAction      GtkShortcutAction;
 typedef struct _GtkShortcutTrigger     GtkShortcutTrigger;
 typedef GdkSnapshot                    GtkSnapshot;
 typedef struct _GtkStyleContext        GtkStyleContext;
