@@ -406,6 +406,12 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_widget_size_allocate       (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
                                            int                  baseline);
+GDK_AVAILABLE_IN_ALL
+void       gtk_widget_size_allocate_transformed (GtkWidget               *widget,
+                                                 int                      width,
+                                                 int                      height,
+                                                 int                      baseline,
+                                                 const graphene_matrix_t *transform);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
