@@ -200,15 +200,81 @@ gtk_shortcut_init (GtkShortcut *self)
 
 /**
  * gtk_shortcut_new:
+ * @trigger: (tranfer full) (allow-none): The trigger that will trigger the shortcut
+ * @action: (tranfer full) (allow-none): The action that will be activated upon
+ *    triggering
  *
- * Creates a new empty #GtkShortcut that never triggers and activates nothing.
+ * Creates a new #GtkShortcut that is triggered by @trigger and then activates
+ * @action.
  *
  * Returns: a new #GtkShortcut
  **/
 GtkShortcut *
-gtk_shortcut_new (void)
+gtk_shortcut_new (GtkShortcutTrigger *trigger,
+                  GtkShortcutAction  *action)
 {
-  return g_object_new (GTK_TYPE_SHORTCUT, NULL);
+  GtkShortcut *shortcut;
+
+  shortcut = g_object_new (GTK_TYPE_SHORTCUT,
+                           "action", action,
+                           "trigger", trigger,
+                           NULL);
+
+  if (trigger)
+    gtk_shortcut_trigger_unref (trigger);
+  if (action)
+    gtk_shortcut_action_unref (action);
+
+  return shortcut;
+}
+
+/**
+ * gtk_shortcut_new_with_arguments: (skip)
+ * @trigger: (tranfer full) (allow-none): The trigger that will trigger the shortcut
+ * @action: (tranfer full) (allow-none): The action that will be activated upon
+ *    triggering
+ * @format_string: (allow-none): GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
+ *
+ * Creates a new #GtkShortcut that is triggered by @trigger and then activates
+ * @action with arguments given by @format_string.
+ *
+ * Returns: a new #GtkShortcut
+ **/
+GtkShortcut *
+gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
+                                 GtkShortcutAction  *action,
+                                 const gchar        *format_string,
+                                 ...)
+{
+  GtkShortcut *shortcut;
+  GVariant *args;
+
+  if (format_string)
+    {
+      va_list valist;
+      va_start (valist, format_string);
+      args = g_variant_new_va (format_string, NULL, &valist);
+      va_end (valist);
+    }
+  else
+    {
+      args = NULL;
+    }
+
+  shortcut = g_object_new (GTK_TYPE_SHORTCUT,
+                           "action", action,
+                           "arguments", args,
+                           "trigger", trigger,
+                           NULL);
+
+  if (trigger)
+    gtk_shortcut_trigger_unref (trigger);
+  if (action)
+    gtk_shortcut_action_unref (action);
+
+  return shortcut;
 }
 
 /**
