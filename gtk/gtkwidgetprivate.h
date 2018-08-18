@@ -137,12 +137,18 @@ struct _GtkWidgetPrivate
   GtkStyleContext *context;
 
   /* The widget's allocated size */
-  GtkAllocation allocated_size;
+  int allocated_width;
+  int allocated_height;
   gint allocated_size_baseline;
-  GtkAllocation allocation;
+  /* Size with widget margins and alignment applied */
+  int width;
+  int height;
   gint allocated_baseline;
 
-  graphene_matrix_t allocated_transform;
+  /* Align and widget margin offset the position by this
+   * amount. */
+  int allocated_offset_x;
+  int allocated_offset_y;
   graphene_matrix_t transform;
 
   /* The widget's requested sizes */
@@ -449,7 +455,14 @@ static inline void
 _gtk_widget_get_allocation (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
-  *allocation = widget->priv->allocation;
+  GtkWidgetPrivate *priv = widget->priv;
+
+  *allocation = (GtkAllocation) {
+    (int)graphene_matrix_get_value (&priv->transform, 0, 3),
+    (int)graphene_matrix_get_value (&priv->transform, 1, 3),
+    priv->width,
+    priv->height
+  };
 }
 
 static inline GtkWidget *
