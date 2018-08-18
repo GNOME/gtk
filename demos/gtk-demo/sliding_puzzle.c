@@ -160,47 +160,13 @@ check_solved (GtkWidget *grid)
 }
 
 static gboolean
-puzzle_key_pressed (GtkEventControllerKey *controller,
-                    guint                  keyval,
-                    guint                  keycode,
-                    GdkModifierType        state,
-                    GtkWidget             *grid)
+puzzle_key_pressed (GtkWidget *grid,
+                    GVariant  *args,
+                    gpointer   unused)
 {
   int dx, dy;
 
-  dx = 0;
-  dy = 0;
-
-  switch (keyval)
-    {
-    case GDK_KEY_KP_Left:
-    case GDK_KEY_Left:
-      /* left */
-      dx = -1;
-      break;
-
-    case GDK_KEY_KP_Up:
-    case GDK_KEY_Up:
-      /* up */
-      dy = -1;
-      break;
-
-    case GDK_KEY_KP_Right:
-    case GDK_KEY_Right:
-      /* right */
-      dx = 1;
-      break;
-
-    case GDK_KEY_KP_Down:
-    case GDK_KEY_Down:
-      /* down */
-      dy = 1;
-      break;
-
-    default:
-      /* We return FALSE here because we didn't handle the key that was pressed */
-      return FALSE;
-    }
+  g_variant_get (args, "(ii)", &dx, &dy);
 
   if (!move_puzzle (grid, dx, dy))
     {
@@ -277,6 +243,24 @@ puzzle_button_pressed (GtkGestureClick *gesture,
 }
 
 static void
+add_move_binding (GtkShortcutController *controller,
+                  guint                  keyval,
+                  guint                  kp_keyval,
+                  int                    dx,
+                  int                    dy)
+{
+  GtkShortcut *shortcut;
+
+  shortcut = gtk_shortcut_new_with_arguments (
+                 gtk_alternative_trigger_new (gtk_keyval_trigger_new (keyval, 0),
+                                              gtk_keyval_trigger_new (kp_keyval, 0)),
+                 gtk_callback_action_new (puzzle_key_pressed, NULL, NULL),
+                 "(ii)", dx, dy);
+  gtk_shortcut_controller_add_shortcut (controller, shortcut);
+  g_object_unref (shortcut);
+}
+
+static void
 start_puzzle (GdkPaintable *puzzle)
 {
   GtkWidget *picture, *grid;
@@ -298,12 +282,21 @@ start_puzzle (GdkPaintable *puzzle)
     aspect_ratio = 1.0;
   gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, aspect_ratio, FALSE);
 
-  /* Add a key event controller so people can use the arrow
+  /* Add shortcuts so people can use the arrow
    * keys to move the puzzle */
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "key-pressed",
-                    G_CALLBACK (puzzle_key_pressed),
-                    grid);
+  controller = gtk_shortcut_controller_new ();
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
+                    GDK_KEY_Left, GDK_KEY_KP_Left,
+                    -1, 0);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
+                    GDK_KEY_Right, GDK_KEY_KP_Right,
+                    1, 0);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
+                    GDK_KEY_Up, GDK_KEY_KP_Up,
+                    0, -1);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
+                    GDK_KEY_Down, GDK_KEY_KP_Down,
+                    0, 1);
   gtk_widget_add_controller (GTK_WIDGET (grid), controller);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
