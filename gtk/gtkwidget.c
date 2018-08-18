@@ -4367,9 +4367,8 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
 
-  shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (keyval, mods));
-  gtk_shortcut_set_action (shortcut, gtk_callback_action_new (func, NULL, NULL));
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_callback_action_new (func, NULL, NULL));
   if (format_string)
     {
       va_list args;
@@ -4417,9 +4416,8 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
   g_return_if_fail (g_signal_lookup (signal, G_TYPE_FROM_CLASS (widget_class)));
   /* XXX: validate variant format for signal */
 
-  shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (keyval, mods));
-  gtk_shortcut_set_action (shortcut, gtk_signal_action_new (signal));
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_signal_action_new (signal));
   if (format_string)
     {
       va_list args;
@@ -4466,9 +4464,8 @@ gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   /* XXX: validate variant format for action */
 
-  shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (keyval, mods));
-  gtk_shortcut_set_action (shortcut, gtk_action_action_new (action_name));
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_action_action_new (action_name));
   if (format_string)
     {
       va_list args;
