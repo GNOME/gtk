@@ -34,7 +34,8 @@ static cairo_surface_t *surface = NULL;
 /* Create a new backing surface of the appropriate size */
 static void
 size_allocate (GtkWidget     *widget,
-               GtkAllocation *allocation,
+               int            width,
+               int            height,
                int            baseline,
                gpointer       data)
 {
@@ -49,9 +50,8 @@ size_allocate (GtkWidget     *widget,
       cairo_t *cr;
 
       surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                                   CAIRO_CONTENT_COLOR,
-                                                   gtk_widget_get_width (widget),
-                                                   gtk_widget_get_height (widget));
+                                                    CAIRO_CONTENT_COLOR,
+                                                    width, height);
       cr = cairo_create (surface);
 
       cairo_set_source_rgb (cr, 1, 1, 1);

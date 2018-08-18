@@ -27,8 +27,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, gtk_paned_accessible, GTK_TYPE_CONT
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
-gtk_paned_accessible_size_allocate_gtk (GtkWidget     *widget,
-                                        GtkAllocation *allocation)
+gtk_paned_accessible_size_allocate_gtk (GtkWidget *widget)
 {
   AtkObject *obj = gtk_widget_get_accessible (widget);
 

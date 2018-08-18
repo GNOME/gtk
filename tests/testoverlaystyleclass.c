@@ -2,7 +2,8 @@
 
 static void
 child_size_allocate (GtkWidget    *child,
-                     GdkRectangle *allocation,
+                     int           width,
+                     int           height,
                      gint          baseline,
                      gpointer      user_data)
 {
