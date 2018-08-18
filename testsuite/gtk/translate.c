@@ -170,13 +170,14 @@ translate_with_parent (void)
 
 
   /* Now try a translation... */
-  graphene_matrix_init_translate (&transform,
-                                  &(graphene_point3d_t){20, 0, 0});
-  gtk_widget_set_transform (child, &transform);
   gtk_widget_set_margin_start (child, 0);
   gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, NULL, NULL, NULL, NULL);
   gtk_widget_measure (parent, GTK_ORIENTATION_HORIZONTAL, -1, NULL, NULL, NULL, NULL);
   gtk_widget_size_allocate (parent, &(GtkAllocation){0, 0, WIDTH * 10, HEIGHT * 10}, -1);
+  graphene_matrix_init_translate (&transform,
+                                  &(graphene_point3d_t){20, 0, 0});
+  gtk_widget_set_transform (child, &transform);
+
   {
     double dx, dy;
 
