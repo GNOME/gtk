@@ -19,7 +19,8 @@ clear_surface (void)
 /* Create a new surface of the appropriate size to store our scribbles */
 static void
 size_allocate_cb (GtkWidget     *widget,
-                  GtkAllocation *alloc,
+                  int            width,
+                  int            height,
                   int            baseline,
                   gpointer       data)
 {
@@ -32,9 +33,9 @@ size_allocate_cb (GtkWidget     *widget,
   if (gtk_widget_get_surface (widget))
     {
       surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                                   CAIRO_CONTENT_COLOR,
-                                                   gtk_widget_get_width (widget),
-                                                   gtk_widget_get_height (widget));
+                                                    CAIRO_CONTENT_COLOR,
+                                                    width,
+                                                    height);
 
       /* Initialize the surface to white */
       clear_surface ();
