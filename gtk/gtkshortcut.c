@@ -22,6 +22,7 @@
 #include "gtkshortcut.h"
 
 #include "gtkintl.h"
+#include "gtkshortcutaction.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkwidget.h"
 
@@ -29,18 +30,19 @@
  * SECTION:gtkshortcut
  * @title: GtkShortcut
  * @short_description: A widget for displaying shortcut
- * @see_also: #GtkShortcutController, #GtkShortcutTrigger
+ * @see_also: #GtkShortcutController, #GtkShortcutAction,
+ *     #GtkShortcutTrigger
  *
  * GtkShortcut is the low level object used for managing keyboard
  * shortcuts.
  *
  * It contains a description of how to trigger the shortcut via a
  * #GtkShortcutTrigger and a way to activate the shortcut on a widget
- * with gtk_shortcut_activate().
+ * via #GtkShortcutAction.
  *
  * The actual work is usually done via #GtkShortcutController, which
  * decides if and when to activate a shortcut. Using that controller
- * directly however is rarely necessary as Various higher level
+ * directly however is rarely necessary as various higher level
  * convenience APIs exist on #GtkWidgets that make it easier to use
  * shortcuts in GTK.
  *
@@ -53,23 +55,16 @@ struct _GtkShortcut
 {
   GObject parent_instance;
 
+  GtkShortcutAction *action;
   GtkShortcutTrigger *trigger;
-  char *signal;
-  GtkShortcutFunc callback;
-  gpointer user_data;
-  GDestroyNotify destroy_notify;
   GVariant *args;
-
-  guint mnemonic_activate : 1;
 };
 
 enum
 {
   PROP_0,
+  PROP_ACTION,
   PROP_ARGUMENTS,
-  PROP_CALLBACK,
-  PROP_MNEMONIC_ACTIVATE,
-  PROP_SIGNAL,
   PROP_TRIGGER,
 
   N_PROPS
@@ -84,18 +79,9 @@ gtk_shortcut_dispose (GObject *object)
 {
   GtkShortcut *self = GTK_SHORTCUT (object);
 
+  g_clear_pointer (&self->action, gtk_shortcut_action_unref);
   g_clear_pointer (&self->trigger, gtk_shortcut_trigger_unref);
-  g_clear_pointer (&self->signal, g_free);
   g_clear_pointer (&self->args, g_variant_unref);
-  if (self->callback)
-    {
-      if (self->destroy_notify)
-        self->destroy_notify (self->user_data);
-
-      self->callback = NULL;
-      self->user_data = NULL;
-      self->destroy_notify = NULL;
-    }
 
   G_OBJECT_CLASS (gtk_shortcut_parent_class)->dispose (object);
 }
@@ -110,20 +96,12 @@ gtk_shortcut_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_ACTION:
+      g_value_set_boxed (value, self->action);
+      break;
+
     case PROP_ARGUMENTS:
       g_value_set_variant (value, self->args);
-      break;
-
-    case PROP_CALLBACK:
-      g_value_set_boolean (value, self->callback != NULL);
-      break;
-
-    case PROP_MNEMONIC_ACTIVATE:
-      g_value_set_boolean (value, self->mnemonic_activate);
-      break;
-
-    case PROP_SIGNAL:
-      g_value_set_string (value, self->signal);
       break;
 
     case PROP_TRIGGER:
@@ -146,16 +124,12 @@ gtk_shortcut_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_ACTION:
+      gtk_shortcut_set_action (self, g_value_dup_boxed (value));
+      break;
+
     case PROP_ARGUMENTS:
       gtk_shortcut_set_arguments (self, g_value_get_variant (value));
-      break;
-
-    case PROP_MNEMONIC_ACTIVATE:
-      gtk_shortcut_set_mnemonic_activate (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_SIGNAL:
-      gtk_shortcut_set_signal (self, g_value_get_string (value));
       break;
 
     case PROP_TRIGGER:
@@ -178,6 +152,18 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
   gobject_class->set_property = gtk_shortcut_set_property;
 
   /**
+   * GtkShortcut:action:
+   *
+   * The action that gets activated by this shortcut.
+   */
+  properties[PROP_ACTION] =
+    g_param_spec_boxed ("action",
+                        P_("Action"),
+                        P_("The action activated by this shortcut"),
+                        GTK_TYPE_SHORTCUT_ACTION,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkShortcut:arguments:
    *
    * Arguments passed to activation.
@@ -189,42 +175,6 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkShortcut:callback:
-   *
-   * Whether a callback is used for shortcut activation
-   */
-  properties[PROP_CALLBACK] =
-    g_param_spec_boolean ("callback",
-                          P_("Callback"),
-                          P_("Whether a callback is used for shortcut activation"),
-                          FALSE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkShortcut:mnemonic-activate:
-   *
-   * %TRUE if this shortcut should call gtk_widget_mnemonic_activate().
-   */
-  properties[PROP_MNEMONIC_ACTIVATE] =
-    g_param_spec_boolean ("mnemonic-activate",
-                          P_("Mnemonic activate"),
-                          P_("Call gtk_widget_mnemonic_activate()"),
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkShortcut:signal:
-   *
-   * The action signal to emit on the widget upon activation.
-   */
-  properties[PROP_SIGNAL] =
-    g_param_spec_string ("signal",
-                         P_("Signal"),
-                         P_("The action signal to emit"),
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkShortcut:trigger:
@@ -244,6 +194,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
 static void
 gtk_shortcut_init (GtkShortcut *self)
 {
+  self->action = gtk_nothing_action_new ();
   self->trigger = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
 }
 
@@ -260,262 +211,49 @@ gtk_shortcut_new (void)
   return g_object_new (GTK_TYPE_SHORTCUT, NULL);
 }
 
-static gboolean
-binding_compose_params (GObject         *object,
-                        GVariantIter    *args,
-                        GSignalQuery    *query,
-                        GValue         **params_p)
+/**
+ * gtk_shortcut_get_action:
+ * @self: a #GtkShortcut
+ *
+ * Gets the action that is activated by this shortcut.
+ *
+ * Returns: (transfer none): the action
+ **/
+GtkShortcutAction *
+gtk_shortcut_get_action (GtkShortcut *self)
 {
-  GValue *params;
-  const GType *types;
-  guint i;
-  gboolean valid;
+  g_return_val_if_fail (GTK_IS_SHORTCUT (self), NULL);
 
-  params = g_new0 (GValue, query->n_params + 1);
-  *params_p = params;
-
-  /* The instance we emit on is the first object in the array
-   */
-  g_value_init (params, G_TYPE_OBJECT);
-  g_value_set_object (params, G_OBJECT (object));
-  params++;
-
-  types = query->param_types;
-  valid = TRUE;
-  for (i = 1; i < query->n_params + 1 && valid; i++)
-    {
-      GValue tmp_value = G_VALUE_INIT;
-      GVariant *tmp_variant;
-
-      g_value_init (params, *types);
-      tmp_variant = g_variant_iter_next_value (args);
-
-      switch ((guint) g_variant_classify (tmp_variant))
-        {
-        case G_VARIANT_CLASS_BOOLEAN:
-          g_value_init (&tmp_value, G_TYPE_BOOLEAN);
-          g_value_set_boolean (&tmp_value, g_variant_get_boolean (tmp_variant));
-          break;
-        case G_VARIANT_CLASS_DOUBLE:
-          g_value_init (&tmp_value, G_TYPE_DOUBLE);
-          g_value_set_double (&tmp_value, g_variant_get_double (tmp_variant));
-          break;
-        case G_VARIANT_CLASS_INT32:
-          g_value_init (&tmp_value, G_TYPE_LONG);
-          g_value_set_long (&tmp_value, g_variant_get_int32 (tmp_variant));
-          break;
-        case G_VARIANT_CLASS_UINT32:
-          g_value_init (&tmp_value, G_TYPE_LONG);
-          g_value_set_long (&tmp_value, g_variant_get_uint32 (tmp_variant));
-          break;
-        case G_VARIANT_CLASS_INT64:
-          g_value_init (&tmp_value, G_TYPE_LONG);
-          g_value_set_long (&tmp_value, g_variant_get_int64 (tmp_variant));
-          break;
-        case G_VARIANT_CLASS_STRING:
-          /* gtk_rc_parse_flags/enum() has fancier parsing for this; we can't call
-           * that since we don't have a GParamSpec, so just do something simple
-           */
-          if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_ENUM)
-            {
-              GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
-              GEnumValue *enum_value;
-              const char *s = g_variant_get_string (tmp_variant, NULL);
-
-              valid = FALSE;
-
-              enum_value = g_enum_get_value_by_name (class, s);
-              if (!enum_value)
-                enum_value = g_enum_get_value_by_nick (class, s);
-
-              if (enum_value)
-                {
-                  g_value_init (&tmp_value, *types);
-                  g_value_set_enum (&tmp_value, enum_value->value);
-                  valid = TRUE;
-                }
-
-              g_type_class_unref (class);
-            }
-          /* This is just a hack for compatibility with GTK+-1.2 where a string
-           * could be used for a single flag value / without the support for multiple
-           * values in gtk_rc_parse_flags(), this isn't very useful.
-           */
-          else if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_FLAGS)
-            {
-              GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
-              GFlagsValue *flags_value;
-              const char *s = g_variant_get_string (tmp_variant, NULL);
-
-              valid = FALSE;
-
-              flags_value = g_flags_get_value_by_name (class, s);
-              if (!flags_value)
-                flags_value = g_flags_get_value_by_nick (class, s);
-              if (flags_value)
-                {
-                  g_value_init (&tmp_value, *types);
-                  g_value_set_flags (&tmp_value, flags_value->value);
-                  valid = TRUE;
-                }
-
-              g_type_class_unref (class);
-            }
-          else
-            {
-              g_value_init (&tmp_value, G_TYPE_STRING);
-              g_value_set_static_string (&tmp_value, g_variant_get_string (tmp_variant, NULL));
-            }
-          break;
-        default:
-          valid = FALSE;
-          break;
-        }
-
-      if (valid)
-        {
-          if (!g_value_transform (&tmp_value, params))
-            valid = FALSE;
-
-          g_value_unset (&tmp_value);
-        }
-
-      g_variant_unref (tmp_variant);
-      types++;
-      params++;
-    }
-
-  if (!valid)
-    {
-      guint j;
-
-      for (j = 0; j < i; j++)
-        g_value_unset (&(*params_p)[j]);
-
-      g_free (*params_p);
-      *params_p = NULL;
-    }
-
-  return valid;
+  return self->action;
 }
 
-static gboolean
-gtk_shortcut_emit_signal (GObject    *object,
-                          const char *signal,
-                          GVariant   *args,
-                          gboolean   *handled,
-                          GError    **error)
+/**
+ * gtk_shortcut_set_action:
+ * @self: a #GtkShortcut
+ * @action: (transfer full) (nullable): The new action.
+ *     If the @action is %NULL, the nothing action will be used.
+ *
+ * Sets the new action for @self to be @action.
+ **/
+void
+gtk_shortcut_set_action (GtkShortcut *self,
+                         GtkShortcutAction *action)
 {
-  GSignalQuery query;
-  guint signal_id;
-  GValue *params = NULL;
-  GValue return_val = G_VALUE_INIT;
-  GVariantIter args_iter;
-  gsize n_args;
-  guint i;
+  g_return_if_fail (GTK_IS_SHORTCUT (self));
 
-  *handled = FALSE;
+  if (action == NULL)
+    action = gtk_nothing_action_new ();
 
-  signal_id = g_signal_lookup (signal, G_OBJECT_TYPE (object));
-  if (!signal_id)
+  if (self->action == action)
     {
-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "Could not find signal \"%s\" in the '%s' class ancestry",
-                   signal,
-                   g_type_name (G_OBJECT_TYPE (object)));
-      return FALSE;
+      gtk_shortcut_action_unref (action);
+      return;
     }
+  
+  gtk_shortcut_action_unref (self->action);
+  self->action = action;
 
-  g_signal_query (signal_id, &query);
-  if (args)
-    n_args = g_variant_iter_init (&args_iter, args);
-  else
-    n_args = 0;
-  if (query.n_params != n_args ||
-      (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
-      !binding_compose_params (object, &args_iter, &query, &params))
-    {
-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "signature mismatch for signal \"%s\" in the '%s' class ancestry",
-                   signal,
-                   g_type_name (G_OBJECT_TYPE (object)));
-      return FALSE;
-    }
-  else if (!(query.signal_flags & G_SIGNAL_ACTION))
-    {
-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
-                   signal,
-                   g_type_name (G_OBJECT_TYPE (object)));
-      return FALSE;
-    }
-
-  if (query.return_type == G_TYPE_BOOLEAN)
-    g_value_init (&return_val, G_TYPE_BOOLEAN);
-
-  g_signal_emitv (params, signal_id, 0, &return_val);
-
-  if (query.return_type == G_TYPE_BOOLEAN)
-    {
-      if (g_value_get_boolean (&return_val))
-        *handled = TRUE;
-      g_value_unset (&return_val);
-    }
-  else
-    *handled = TRUE;
-
-  if (params != NULL)
-    {
-      for (i = 0; i < query.n_params + 1; i++)
-        g_value_unset (&params[i]);
-
-      g_free (params);
-    }
-
-  return TRUE;
-}
-
-gboolean
-gtk_shortcut_activate (GtkShortcut *self,
-                       GtkWidget   *widget)
-{
-  g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  if (self->callback)
-    {
-      return self->callback (widget, self->args, self->user_data);
-    }
-  else if (self->signal)
-    {
-      GError *error = NULL;
-      gboolean handled;
-
-      if (!gtk_shortcut_emit_signal (G_OBJECT (widget),
-                                     self->signal,
-                                     self->args,
-                                     &handled,
-                                     &error))
-        {
-          char *accelerator = gtk_shortcut_trigger_to_string (self->trigger);
-          g_warning ("gtk_shortcut_activate(): \":%s\": %s",
-                     accelerator,
-                     error->message);
-          g_clear_error (&error);
-          return FALSE;
-        }
-
-      return handled;
-    }
-  else if (self->mnemonic_activate)
-    {
-      return gtk_widget_mnemonic_activate (widget, FALSE);
-    }
-  else
-    {
-      /* shortcut is a dud */
-      return FALSE;
-    }
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTION]);
 }
 
 /**
@@ -585,137 +323,5 @@ gtk_shortcut_set_arguments (GtkShortcut *self,
     self->args = g_variant_ref_sink (args);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ARGUMENTS]);
-}
-
-static void
-gtk_shortcut_clear_activation (GtkShortcut *self)
-{
-  if (self->signal)
-    {
-      g_clear_pointer (&self->signal, g_free);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SIGNAL]);
-    }
-
-  if (self->callback)
-    {
-      if (self->destroy_notify)
-        self->destroy_notify (self->user_data);
-
-      self->callback = NULL;
-      self->user_data = NULL;
-      self->destroy_notify = NULL;
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALLBACK]);
-    }
-
-  if (self->mnemonic_activate)
-    {
-      self->mnemonic_activate = FALSE;
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MNEMONIC_ACTIVATE]);
-    }
-}
-
-const char *
-gtk_shortcut_get_signal (GtkShortcut *self)
-{
-  g_return_val_if_fail (GTK_IS_SHORTCUT (self), NULL);
-
-  return self->signal;
-}
-
-void
-gtk_shortcut_set_signal (GtkShortcut *self,
-                         const gchar *signal)
-{
-  g_return_if_fail (GTK_IS_SHORTCUT (self));
-
-  if (g_strcmp0 (self->signal, signal) == 0)
-    return;
-  
-  g_object_freeze_notify (G_OBJECT (self));
-
-  gtk_shortcut_clear_activation (self);
-  self->signal = g_strdup (signal);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SIGNAL]);
-
-  g_object_thaw_notify (G_OBJECT (self));
-}
-
-gboolean
-gtk_shortcut_has_callback (GtkShortcut *self)
-{
-  g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
-
-  return self->callback != NULL;
-}
-
-void
-gtk_shortcut_set_callback (GtkShortcut     *self,
-                           GtkShortcutFunc  callback,
-                           gpointer         data,
-                           GDestroyNotify   destroy)
-{
-  g_return_if_fail (GTK_IS_SHORTCUT (self));
-
-  g_object_freeze_notify (G_OBJECT (self));
-
-  gtk_shortcut_clear_activation (self);
-
-  self->callback = callback;
-  self->user_data = data;
-  self->destroy_notify = destroy;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALLBACK]);
-
-  g_object_thaw_notify (G_OBJECT (self));
-}
-
-/**
- * gtk_shortcut_get_mnemonic_activate:
- * @self: a #GtkShortcut
- *
- * Checks if this shortcut calls gtk_widget_mnemonic_activate() upon
- * activation.
- *
- * Returns: %TRUE if it does.
- **/
-gboolean
-gtk_shortcut_get_mnemonic_activate (GtkShortcut *self)
-{
-  g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
-
-  return self->mnemonic_activate;
-}
-
-/**
- * gtk_shortcut_set_mnemonic_activate:
- * @self: a #GtkShortcut
- * @mnemonic_activate: %TRUE to call gtk_widget_mnemonic_activate()
- *     upon activation
- *
- * If @mnemonic_activate is %TRUE, this shortcut will call
- * gtk_widget_mnemonic_activate() whenever it is activated. All
- * previous activations will be unset.
- *
- * If @mnemonic_activate is %FALSE, it will stop this shortcut from
- * calling gtk_widget_mnemonic_activate() if it did so before.
- **/
-void
-gtk_shortcut_set_mnemonic_activate (GtkShortcut *self,
-                                    gboolean     mnemonic_activate)
-{
-  g_return_if_fail (GTK_IS_SHORTCUT (self));
-
-  if (self->mnemonic_activate == mnemonic_activate)
-    return;
-  
-  g_object_freeze_notify (G_OBJECT (self));
-
-  gtk_shortcut_clear_activation (self);
-  self->mnemonic_activate = mnemonic_activate;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MNEMONIC_ACTIVATE]);
-  g_object_thaw_notify (G_OBJECT (self));
 }
 
