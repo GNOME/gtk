@@ -142,7 +142,6 @@ effective_align (GtkAlign         align,
 static void
 adjust_for_align (GtkAlign  align,
                   gint     *natural_size,
-                  gint     *allocated_pos,
                   gint     *allocated_size)
 {
   switch (align)
@@ -153,22 +152,15 @@ adjust_for_align (GtkAlign  align,
       /* change nothing */
       break;
     case GTK_ALIGN_START:
-      /* keep *allocated_pos where it is */
       *allocated_size = MIN (*allocated_size, *natural_size);
       break;
     case GTK_ALIGN_END:
       if (*allocated_size > *natural_size)
-        {
-          *allocated_pos += (*allocated_size - *natural_size);
-          *allocated_size = *natural_size;
-        }
+        *allocated_size = *natural_size;
       break;
     case GTK_ALIGN_CENTER:
       if (*allocated_size > *natural_size)
-        {
-          *allocated_pos += (*allocated_size - *natural_size) / 2;
-          *allocated_size = MIN (*allocated_size, *natural_size);
-        }
+        *allocated_size = MIN (*allocated_size, *natural_size);
       break;
     }
 }
@@ -178,12 +170,10 @@ adjust_for_margin(gint               start_margin,
                   gint               end_margin,
                   gint              *minimum_size,
                   gint              *natural_size,
-                  gint              *allocated_pos,
                   gint              *allocated_size)
 {
   *minimum_size -= (start_margin + end_margin);
   *natural_size -= (start_margin + end_margin);
-  *allocated_pos += start_margin;
   *allocated_size -= (start_margin + end_margin);
 }
 
@@ -192,7 +182,6 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
                                    GtkOrientation     orientation,
                                    gint              *minimum_size,
                                    gint              *natural_size,
-                                   gint              *allocated_pos,
                                    gint              *allocated_size)
 {
   GtkWidgetPrivate *priv = widget->priv;
@@ -202,18 +191,18 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
       adjust_for_margin (priv->margin.left,
                          priv->margin.right,
                          minimum_size, natural_size,
-                         allocated_pos, allocated_size);
+                         allocated_size);
       adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
-                        natural_size, allocated_pos, allocated_size);
+                        natural_size, allocated_size);
     }
   else
     {
       adjust_for_margin (priv->margin.top,
                          priv->margin.bottom,
                          minimum_size, natural_size,
-                         allocated_pos, allocated_size);
+                         allocated_size);
       adjust_for_align (effective_align (priv->valign, GTK_TEXT_DIR_NONE),
-                        natural_size, allocated_pos, allocated_size);
+                        natural_size, allocated_size);
     }
 }
 
@@ -296,7 +285,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           int adjusted_for_size;
           int minimum_for_size = 0;
           int natural_for_size = 0;
-          int dummy = 0;
 
           /* Pull the minimum for_size from the cache as it's needed to adjust
            * the proposed 'for_size' */
@@ -310,7 +298,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           adjusted_for_size = for_size;
           gtk_widget_adjust_size_allocation (widget, OPPOSITE_ORIENTATION (orientation),
                                              &for_size, &natural_for_size,
-                                             &dummy, &adjusted_for_size);
+                                             &adjusted_for_size);
 
           adjusted_for_size -= css_extra_for_size;
 
