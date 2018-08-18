@@ -1284,7 +1284,7 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonics_visible = TRUE;
 
   priv->mnemonic_shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_mnemonic_activate (priv->mnemonic_shortcut, TRUE);
+  gtk_shortcut_set_action (priv->mnemonic_shortcut, gtk_mnemonic_action_new ());
 
   controller = gtk_shortcut_controller_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
