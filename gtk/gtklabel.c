@@ -1803,7 +1803,7 @@ gtk_label_setup_mnemonic (GtkLabel *label)
       
       shortcut = gtk_shortcut_new ();
       gtk_shortcut_set_trigger (shortcut, gtk_mnemonic_trigger_new (priv->mnemonic_keyval));
-      gtk_shortcut_set_mnemonic_activate (shortcut, TRUE);
+      gtk_shortcut_set_action (shortcut, gtk_mnemonic_action_new ());
       gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (priv->mnemonic_controller), shortcut);
       gtk_widget_add_controller (GTK_WIDGET (label), priv->mnemonic_controller);
       g_object_unref (shortcut);
