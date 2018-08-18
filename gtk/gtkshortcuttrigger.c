@@ -69,10 +69,6 @@ struct _GtkShortcutTriggerClass
                                    GString             *string);
 };
 
-static GtkShortcutTrigger *     gtk_shortcut_trigger_new                (const GtkShortcutTriggerClass  *trigger_class,
-                                                                         gsize                           extra_size);
-
-
 G_DEFINE_BOXED_TYPE (GtkShortcutTrigger, gtk_shortcut_trigger,
                      gtk_shortcut_trigger_ref,
                      gtk_shortcut_trigger_unref)
@@ -91,15 +87,14 @@ gtk_shortcut_trigger_finalize (GtkShortcutTrigger *self)
  *
  * Returns: (transfer full): the newly created #GtkShortcutTrigger
  */
-GtkShortcutTrigger *
-gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class,
-                          gsize                          extra_size)
+static GtkShortcutTrigger *
+gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class)
 {
   GtkShortcutTrigger *self;
 
   g_return_val_if_fail (trigger_class != NULL, NULL);
 
-  self = g_malloc0 (trigger_class->struct_size + extra_size);
+  self = g_malloc0 (trigger_class->struct_size);
 
   self->trigger_class = trigger_class;
 
@@ -454,7 +449,7 @@ gtk_keyval_trigger_new (guint           keyval,
 {
   GtkKeyvalTrigger *self;
 
-  self = (GtkKeyvalTrigger *) gtk_shortcut_trigger_new (&GTK_KEYVAL_TRIGGER_CLASS, 0);
+  self = (GtkKeyvalTrigger *) gtk_shortcut_trigger_new (&GTK_KEYVAL_TRIGGER_CLASS);
 
   /* We store keyvals as lower key */
   if (keyval == GDK_KEY_ISO_Left_Tab)
@@ -605,7 +600,7 @@ gtk_mnemonic_trigger_new (guint keyval)
 {
   GtkMnemonicTrigger *self;
 
-  self = (GtkMnemonicTrigger *) gtk_shortcut_trigger_new (&GTK_MNEMONIC_TRIGGER_CLASS, 0);
+  self = (GtkMnemonicTrigger *) gtk_shortcut_trigger_new (&GTK_MNEMONIC_TRIGGER_CLASS);
 
   /* We store keyvals as lower key */
   if (keyval == GDK_KEY_ISO_Left_Tab)
@@ -736,7 +731,7 @@ gtk_alternative_trigger_new (GtkShortcutTrigger *first,
   g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (first), NULL);
   g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (second), NULL);
 
-  self = (GtkAlternativeTrigger *) gtk_shortcut_trigger_new (&GTK_ALTERNATIVE_TRIGGER_CLASS, 0);
+  self = (GtkAlternativeTrigger *) gtk_shortcut_trigger_new (&GTK_ALTERNATIVE_TRIGGER_CLASS);
 
   self->first = first;
   self->second = second;
