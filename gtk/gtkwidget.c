@@ -4217,11 +4217,6 @@ gtk_widget_size_allocate_transformed (GtkWidget               *widget,
   priv->allocated_height = height;
   priv->allocated_size_baseline = baseline;
 
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
       /* Go ahead and request the height for allocated width, note that the internals
@@ -4332,6 +4327,11 @@ gtk_widget_size_allocate_transformed (GtkWidget               *widget,
 
       goto check_clip;
     }
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
 
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
