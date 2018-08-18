@@ -6698,6 +6698,7 @@ gtk_shortcut_action_get_type
 <TITLE>GtkShortcut</TITLE>
 GtkShortcut
 gtk_shortcut_new
+gtk_shortcut_new_with_arguments
 gtk_shortcut_get_trigger
 gtk_shortcut_set_trigger
 gtk_shortcut_get_action
