@@ -11248,6 +11248,10 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
 
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
+  g_return_val_if_fail (out_bounds != NULL, FALSE);
+
   ancestor = gtk_widget_common_ancestor (widget, target);
 
   if (!ancestor)
