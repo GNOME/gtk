@@ -24,16 +24,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-03 10:17+0000\n"
-"PO-Revision-Date: 2018-07-07 21:35+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2018-08-18 06:26+0000\n"
+"PO-Revision-Date: 2018-08-18 16:25+0200\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -3689,7 +3689,7 @@ msgstr ""
 "Eine Liste der Stilattribute, die auf den Beschriftungstext angewendet "
 "werden sollen"
 
-#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4839 gtk/gtktextview.c:1045
+#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4860 gtk/gtktextview.c:1045
 msgid "Populate all"
 msgstr "Alle belegen"
 
@@ -3853,6 +3853,10 @@ msgstr "Übertragungsphase"
 msgid "Propagation phase at which this controller is run"
 msgstr "Übertragungsphase, zu der dieser Controller gestartet wird"
 
+#: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
+msgid "Flags"
+msgstr "Schalter"
+
 #: gtk/gtkexpander.c:300
 msgid "Expanded"
 msgstr "Ausgeklappt"
@@ -3955,7 +3959,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr ""
 "Der momentan zum Auswählen der anzuzeigenden Dateien zu verwendende Filter"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4805
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4826
 #: gtk/gtkplacesview.c:2262
 msgid "Local Only"
 msgstr "Nur lokal"
@@ -4221,11 +4225,11 @@ msgstr "Sprache, für die Funktionsmerkmale ausgewählt wurden"
 
 #: gtk/gtkfontchooserwidget.c:696
 msgid "The tweak action"
-msgstr ""
+msgstr "Die Optimierungs-Aktion"
 
 #: gtk/gtkfontchooserwidget.c:697
 msgid "The toggle action to switch to the tweak page"
-msgstr ""
+msgstr "Die auszulösende Aktion, um zur Optimierungsseite zu gelangen"
 
 #: gtk/gtkframe.c:232
 msgid "Text of the frame's label"
@@ -5713,19 +5717,19 @@ msgstr "Schrumpfen"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Soll das Kind kleiner als der angeforderte Raum gemacht werden können?"
 
-#: gtk/gtkplacessidebar.c:4768
+#: gtk/gtkplacessidebar.c:4789
 msgid "Location to Select"
 msgstr "Zu wählender Ort"
 
-#: gtk/gtkplacessidebar.c:4769
+#: gtk/gtkplacessidebar.c:4790
 msgid "The location to highlight in the sidebar"
 msgstr "Der in der Seitenleiste hervorzuhebende Ort"
 
-#: gtk/gtkplacessidebar.c:4774 gtk/gtkplacesview.c:2283
+#: gtk/gtkplacessidebar.c:4795 gtk/gtkplacesview.c:2283
 msgid "Open Flags"
-msgstr "Offene Flags"
+msgstr "Offene Schalter"
 
-#: gtk/gtkplacessidebar.c:4775 gtk/gtkplacesview.c:2284
+#: gtk/gtkplacessidebar.c:4796 gtk/gtkplacesview.c:2284
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5733,31 +5737,31 @@ msgstr ""
 "Die Arten, in denen eine aufrufende Anwendung ausgewählte Orte in der "
 "Seitenleiste öffnen kann"
 
-#: gtk/gtkplacessidebar.c:4781
+#: gtk/gtkplacessidebar.c:4802
 msgid "Show recent files"
 msgstr "Zuletzt verwendete Dateien anzeigen"
 
-#: gtk/gtkplacessidebar.c:4782
+#: gtk/gtkplacessidebar.c:4803
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Legt fest, ob die Seitenleiste einen Verweis auf zuletzt verwendete Dateien "
 "enthalten soll"
 
-#: gtk/gtkplacessidebar.c:4787
+#: gtk/gtkplacessidebar.c:4808
 msgid "Show 'Desktop'"
 msgstr "»Schreibtisch« anzeigen"
 
-#: gtk/gtkplacessidebar.c:4788
+#: gtk/gtkplacessidebar.c:4809
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Legt fest, ob die Seitenleiste einen Verweis auf den Schreibtisch-Ordner "
 "enthalten soll"
 
-#: gtk/gtkplacessidebar.c:4793
+#: gtk/gtkplacessidebar.c:4814
 msgid "Show 'Connect to Server'"
 msgstr "»Verbinden mit Server« anzeigen"
 
-#: gtk/gtkplacessidebar.c:4794
+#: gtk/gtkplacessidebar.c:4815
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5765,52 +5769,52 @@ msgstr ""
 "Festlegen, ob die Seitenleiste einen eingebauten Link für den Dialog "
 "»Verbindung mit Server herstellen« enthält"
 
-#: gtk/gtkplacessidebar.c:4799
+#: gtk/gtkplacessidebar.c:4820
 msgid "Show 'Enter Location'"
 msgstr "Zeige »Ort eingeben«"
 
-#: gtk/gtkplacessidebar.c:4800
+#: gtk/gtkplacessidebar.c:4821
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Legt fest, ob die Seitenleiste einen eingebauten Link zur manuellen "
 "Ortsangabe enthält"
 
-#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2263
+#: gtk/gtkplacessidebar.c:4827 gtk/gtkplacesview.c:2263
 msgid "Whether the sidebar only includes local files"
 msgstr "Legt fest, ob die Seitenleiste nur lokale Dateien enthalten soll"
 
-#: gtk/gtkplacessidebar.c:4811
+#: gtk/gtkplacessidebar.c:4832
 msgid "Show 'Trash'"
 msgstr "»Papierkorb« anzeigen"
 
-#: gtk/gtkplacessidebar.c:4812
+#: gtk/gtkplacessidebar.c:4833
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 "Legt fest, ob die Seitenleiste einen eingebauten Verweis zum Papierkorb "
 "enthält"
 
-#: gtk/gtkplacessidebar.c:4817
+#: gtk/gtkplacessidebar.c:4838
 msgid "Show 'Other locations'"
 msgstr "»Andere Orte« anzeigen"
 
-#: gtk/gtkplacessidebar.c:4818
+#: gtk/gtkplacessidebar.c:4839
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr ""
 "Legt fest, ob die Seitenleiste ein Objekt zum Anzeigen externer Orte enthält"
 
-#: gtk/gtkplacessidebar.c:4823
+#: gtk/gtkplacessidebar.c:4844
 msgid "Show “Starred Location”"
 msgstr "»Mit Stern markierten Ort« anzeigen"
 
-#: gtk/gtkplacessidebar.c:4824
+#: gtk/gtkplacessidebar.c:4845
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Legt fest, ob die Seitenleiste ein Objekt zum Anzeigen mit Stern markierter "
 "Orte enthält"
 
 # GTK+ Ereignisse
-#: gtk/gtkplacessidebar.c:4840
+#: gtk/gtkplacessidebar.c:4861
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 "Legt fest, ob ::populate-popup für Einblendfenster gesendet werden soll, die "
