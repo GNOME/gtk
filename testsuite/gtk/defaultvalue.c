@@ -316,7 +316,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SHORTCUT) &&
-          strcmp (pspec->name, "trigger") == 0)
+	  (strcmp (pspec->name, "action") == 0 ||
+           strcmp (pspec->name, "trigger") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
