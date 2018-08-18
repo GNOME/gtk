@@ -30,7 +30,13 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkShortcut, gtk_shortcut, GTK, SHORTCUT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcut *   gtk_shortcut_new                                (void);
+GtkShortcut *   gtk_shortcut_new                                (GtkShortcutTrigger     *trigger,
+                                                                 GtkShortcutAction      *action);
+GDK_AVAILABLE_IN_ALL
+GtkShortcut *   gtk_shortcut_new_with_arguments                 (GtkShortcutTrigger     *trigger,
+                                                                 GtkShortcutAction      *action,
+                                                                 const gchar            *format_string,
+                                                                 ...);
 
 GDK_AVAILABLE_IN_ALL
 GtkShortcutTrigger *
