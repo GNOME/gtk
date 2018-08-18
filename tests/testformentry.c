@@ -55,18 +55,18 @@ gtk_form_entry_size_allocate (GtkWidget *widget,
 
     x *= t;
 
-    gtk_widget_size_allocate (self->placeholder,
-                              &(GtkAllocation) {
-                                x, y,
-                                width,
-                                placeholder_height
-                              }, -1);
-
     graphene_matrix_init_scale (&m,
                                 CLAMP (t, FINAL_SCALE, 1.0),
                                 CLAMP (t, FINAL_SCALE, 1.0),
                                 1);
-    gtk_widget_set_transform (self->placeholder, &m);
+    graphene_matrix_translate (&m,
+                               &GRAPHENE_POINT3D_INIT (x, y, 0));
+
+    gtk_widget_size_allocate_transformed (self->placeholder,
+                                          width,
+                                          placeholder_height,
+                                          -1,
+                                          &m);
   }
 }
 
