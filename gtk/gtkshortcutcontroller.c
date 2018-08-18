@@ -148,7 +148,10 @@ gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
   if (!gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
     return FALSE;
 
-  return gtk_shortcut_activate (shortcut, gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
+  return gtk_shortcut_action_activate (gtk_shortcut_get_action (shortcut),
+                                       GTK_SHORTCUT_ACTION_EXCLUSIVE, /* FIXME */
+                                       gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)),
+                                       gtk_shortcut_get_arguments (shortcut));
 }
 
 static gboolean
