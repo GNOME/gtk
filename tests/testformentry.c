@@ -55,18 +55,18 @@ gtk_form_entry_size_allocate (GtkWidget *widget,
 
     x *= t;
 
-    gtk_widget_size_allocate (self->placeholder,
-                              &(GtkAllocation) {
-                                x, y,
-                                width,
-                                placeholder_height
-                              }, -1);
-
     graphene_matrix_init_scale (&m,
                                 CLAMP (t, FINAL_SCALE, 1.0),
                                 CLAMP (t, FINAL_SCALE, 1.0),
                                 1);
-    gtk_widget_set_transform (self->placeholder, &m);
+    graphene_matrix_translate (&m,
+                               &GRAPHENE_POINT3D_INIT (x, y, 0));
+
+    gtk_widget_size_allocate_transformed (self->placeholder,
+                                          width,
+                                          placeholder_height,
+                                          -1,
+                                          &m);
   }
 }
 
@@ -89,7 +89,7 @@ gtk_form_entry_measure (GtkWidget      *widget,
       gtk_widget_measure (self->entry, orientation, for_size,
                           &min1, &nat1, NULL, NULL);
 
-      gtk_widget_measure (self->entry, orientation, for_size,
+      gtk_widget_measure (self->placeholder, orientation, for_size,
                           &min2, &nat2, NULL, NULL);
 
       *minimum = MAX (min1, min2);
@@ -103,7 +103,7 @@ gtk_form_entry_measure (GtkWidget      *widget,
       gtk_widget_measure (self->entry, orientation, -1,
                           &min, &nat, NULL, NULL);
 
-      gtk_widget_measure (self->entry, orientation, -1,
+      gtk_widget_measure (self->placeholder, orientation, -1,
                           &pmin, &pnat, NULL, NULL);
 
       *minimum = min + (pmin * FINAL_SCALE);
