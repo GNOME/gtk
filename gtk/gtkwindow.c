@@ -6853,8 +6853,8 @@ gtk_window_realize (GtkWidget *widget)
   _gtk_widget_get_allocation (widget, &allocation);
 
   /* ensure widget tree is properly size allocated */
-  if (allocation.x == -1 &&
-      allocation.y == -1 &&
+  if (allocation.x == 0 &&
+      allocation.y == 0 &&
       allocation.width == 1 &&
       allocation.height == 1)
     {
