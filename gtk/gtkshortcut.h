@@ -24,10 +24,6 @@
 
 G_BEGIN_DECLS
 
-typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
-                                      GVariant  *args,
-                                      gpointer   user_data);
-
 #define GTK_TYPE_SHORTCUT         (gtk_shortcut_get_type ())
 
 GDK_AVAILABLE_IN_ALL
@@ -37,43 +33,23 @@ GDK_AVAILABLE_IN_ALL
 GtkShortcut *   gtk_shortcut_new                                (void);
 
 GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *
+                gtk_shortcut_get_trigger                        (GtkShortcut            *self);
+GDK_AVAILABLE_IN_ALL
 void            gtk_shortcut_set_trigger                        (GtkShortcut            *self,
                                                                  GtkShortcutTrigger     *trigger);
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *
-                gtk_shortcut_get_trigger                        (GtkShortcut            *self);
-
+GtkShortcutAction *
+                gtk_shortcut_get_action                         (GtkShortcut            *self);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_shortcut_activate                           (GtkShortcut            *self,
-                                                                 GtkWidget              *widget);
+void            gtk_shortcut_set_action                         (GtkShortcut            *self,
+                                                                 GtkShortcutAction      *action);
 
 GDK_AVAILABLE_IN_ALL
 GVariant *      gtk_shortcut_get_arguments                      (GtkShortcut            *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_shortcut_set_arguments                      (GtkShortcut            *self,
                                                                  GVariant               *args);
-GDK_AVAILABLE_IN_ALL
-const char *    gtk_shortcut_get_signal                         (GtkShortcut            *self);
-GDK_AVAILABLE_IN_ALL
-void            gtk_shortcut_set_signal                         (GtkShortcut            *self,
-                                                                 const gchar            *signal);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_shortcut_has_callback                       (GtkShortcut            *self);
-GDK_AVAILABLE_IN_ALL
-void            gtk_shortcut_set_callback                       (GtkShortcut            *self,
-                                                                 GtkShortcutFunc         callback,
-                                                                 gpointer                data,
-                                                                 GDestroyNotify          destroy);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_shortcut_get_mnemonic_activate              (GtkShortcut            *self);
-GDK_AVAILABLE_IN_ALL
-void            gtk_shortcut_set_mnemonic_activate              (GtkShortcut            *self,
-                                                                 gboolean                mnemonic_activate);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_shortcut_get_activate                       (GtkShortcut            *self);
-GDK_AVAILABLE_IN_ALL
-void            gtk_shortcut_set_activate                       (GtkShortcut            *self,
-                                                                 gboolean                activate);
 
 G_END_DECLS
 
