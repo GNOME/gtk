@@ -583,12 +583,11 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
 {
   GtkShortcut *shortcut;
 
-  shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_trigger (shortcut,
-                            gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
-                                                         gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)));
-  gtk_shortcut_set_action (shortcut, gtk_signal_action_new ("move-focus"));
-  gtk_shortcut_set_arguments (shortcut, g_variant_new_tuple ((GVariant*[1]) { g_variant_new_int32 (direction) }, 1));
+  shortcut = gtk_shortcut_new_with_arguments (
+                 gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
+                                              gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)),
+                 gtk_signal_action_new ("move-focus"),
+                 "(i)", direction);
 
   gtk_widget_class_add_shortcut (widget_class, shortcut);
 
@@ -1882,9 +1881,8 @@ gtk_window_init (GtkWindow *window)
   controller = gtk_shortcut_controller_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
 
-  shortcut = gtk_shortcut_new ();
-  gtk_shortcut_set_trigger (shortcut, gtk_keyval_trigger_new (MENU_BAR_ACCEL, 0));
-  gtk_shortcut_set_action (shortcut, gtk_callback_action_new (gtk_window_activate_menubar, NULL, NULL));
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (MENU_BAR_ACCEL, 0),
+                               gtk_callback_action_new (gtk_window_activate_menubar, NULL, NULL));
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (widget, controller);
 }

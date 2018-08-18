@@ -76,9 +76,8 @@ do_shortcut_triggers (GtkWidget *do_widget)
           gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller), GTK_SHORTCUT_SCOPE_GLOBAL);
           gtk_widget_add_controller (row, controller);
 
-          shortcut = gtk_shortcut_new ();
-          gtk_shortcut_set_trigger (shortcut, shortcuts[i].create_trigger_func());
-          gtk_shortcut_set_action (shortcut, gtk_callback_action_new (shortcut_activated, row, NULL));
+          shortcut = gtk_shortcut_new (shortcuts[i].create_trigger_func(),
+                                       gtk_callback_action_new (shortcut_activated, row, NULL));
           gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
         }
     }
