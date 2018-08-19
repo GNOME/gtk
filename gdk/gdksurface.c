@@ -461,12 +461,6 @@ gdk_surface_get_property (GObject    *object,
     }
 }
 
-static gboolean
-gdk_surface_is_subsurface (GdkSurface *surface)
-{
-   return surface->surface_type == GDK_SURFACE_SUBSURFACE;
-}
-
 static GdkSurface *
 gdk_surface_get_impl_surface (GdkSurface *surface)
 {
@@ -555,10 +549,7 @@ recompute_visible_regions_internal (GdkSurface *private,
   old_abs_y = private->abs_y;
 
   /* Update absolute position */
-  if ((gdk_surface_has_impl (private) &&
-       private->surface_type != GDK_SURFACE_SUBSURFACE) ||
-      (gdk_surface_is_toplevel (private) &&
-       private->surface_type == GDK_SURFACE_SUBSURFACE))
+  if (gdk_surface_has_impl (private))
     {
       /* Native surfaces and toplevel subsurfaces start here */
       private->abs_x = 0;
@@ -677,15 +668,6 @@ gdk_surface_new (GdkDisplay    *display,
       if (parent != NULL)
         g_warning (G_STRLOC "Toplevel surfaces must be created without a parent");
       break;
-    case GDK_SURFACE_SUBSURFACE:
-#ifdef GDK_WINDOWING_WAYLAND
-      if (!GDK_IS_WAYLAND_DISPLAY (display))
-        {
-          g_warning (G_STRLOC "Subsurface surfaces can only be used on Wayland");
-          return NULL;
-        }
-#endif
-      break;
     case GDK_SURFACE_CHILD:
       break;
     default:
@@ -714,11 +696,6 @@ gdk_surface_new (GdkDisplay    *display,
 
       native = TRUE; /* Always use native surfaces for toplevels */
     }
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (surface->surface_type == GDK_SURFACE_SUBSURFACE)
-    native = TRUE; /* Always use native windows for subsurfaces as well */
-#endif
 
   if (native)
     {
@@ -922,7 +899,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_CHILD:
     case GDK_SURFACE_TEMP:
-    case GDK_SURFACE_SUBSURFACE:
       if (surface->parent)
         {
           if (surface->parent->children)
@@ -1173,10 +1149,7 @@ gdk_surface_get_parent (GdkSurface *surface)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  if (gdk_surface_is_subsurface (surface))
-    return surface->transient_for;
-  else
-    return surface->parent;
+  return surface->parent;
 }
 
 /**
@@ -1196,8 +1169,7 @@ gdk_surface_get_toplevel (GdkSurface *surface)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  while (surface->surface_type == GDK_SURFACE_CHILD ||
-         surface->surface_type == GDK_SURFACE_SUBSURFACE)
+  while (surface->surface_type == GDK_SURFACE_CHILD)
     {
       if (gdk_surface_is_toplevel (surface))
         break;
