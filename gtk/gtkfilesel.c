@@ -325,7 +325,7 @@ static CompletionDir* open_ref_dir         (gchar* text_to_complete,
 					    CompletionState* cmpl_state);
 #ifndef G_PLATFORM_WIN32
 static gboolean       check_dir            (gchar *dir_name, 
-					    struct stat *result, 
+					    GStatBuf *result, 
 					    gboolean *stat_subdirs);
 #endif
 static CompletionDir* open_dir             (gchar* dir_name,
@@ -337,11 +337,11 @@ static CompletionDir* open_user_dir        (const gchar* text_to_complete,
 static CompletionDir* open_relative_dir    (gchar* dir_name, CompletionDir* dir,
 					    CompletionState *cmpl_state);
 static CompletionDirSent* open_new_dir     (gchar* dir_name, 
-					    struct stat* sbuf,
+					    GStatBuf *sbuf,
 					    gboolean stat_subdirs);
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
-					    struct stat *sbuf);
+					    GStatBuf *sbuf);
 #ifndef G_PLATFORM_WIN32
 static gchar*         find_parent_dir_fullname    (gchar* dirname);
 #endif
@@ -2984,9 +2984,9 @@ open_relative_dir (gchar           *dir_name,
 
 /* after the cache lookup fails, really open a new directory */
 static CompletionDirSent*
-open_new_dir (gchar       *dir_name,
-	      struct stat *sbuf,
-	      gboolean     stat_subdirs)
+open_new_dir (gchar    *dir_name,
+	      GStatBuf *sbuf,
+	      gboolean  stat_subdirs)
 {
   CompletionDirSent *sent;
   GDir *directory;
@@ -2995,7 +2995,7 @@ open_new_dir (gchar       *dir_name,
   gint entry_count = 0;
   gint n_entries = 0;
   gint i;
-  struct stat ent_sbuf;
+  GStatBuf ent_sbuf;
   GString *path;
   gchar *sys_dir_name;
 
@@ -3101,9 +3101,9 @@ open_new_dir (gchar       *dir_name,
 #ifndef G_PLATFORM_WIN32
 
 static gboolean
-check_dir (gchar       *dir_name,
-	   struct stat *result,
-	   gboolean    *stat_subdirs)
+check_dir (gchar    *dir_name,
+	   GStatBuf *result,
+	   gboolean *stat_subdirs)
 {
   /* A list of directories that we know only contain other directories.
    * Trying to stat every file in these directories would be very
@@ -3113,7 +3113,7 @@ check_dir (gchar       *dir_name,
   static struct {
     const gchar name[5];
     gboolean present;
-    struct stat statbuf;
+    GStatBuf statbuf;
   } no_stat_dirs[] = {
     { "/afs", FALSE, { 0 } },
     { "/net", FALSE, { 0 } }
@@ -3172,7 +3172,7 @@ open_dir (gchar           *dir_name,
 	  CompletionState *cmpl_state)
 {
 #ifndef G_PLATFORM_WIN32
-  struct stat sbuf;
+  GStatBuf sbuf;
   gboolean stat_subdirs;
   GList* cdsl;
 #endif
@@ -3238,7 +3238,7 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
   gint length = strlen (cmpl_dir->fullname);
   gchar *first_slash = strchr (cmpl_dir->fullname, G_DIR_SEPARATOR);
   gchar *sys_filename;
-  struct stat sbuf;
+  GStatBuf sbuf;
 
   /* Does it end with /. (\.) ? */
   if (length >= 2 &&
@@ -3338,9 +3338,9 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
 
 static gint
 correct_parent (CompletionDir *cmpl_dir,
-		struct stat   *sbuf)
+		GStatBuf      *sbuf)
 {
-  struct stat parbuf;
+  GStatBuf parbuf;
   gchar *last_slash;
   gchar *first_slash;
 #ifndef G_PLATFORM_WIN32

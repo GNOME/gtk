@@ -983,7 +983,7 @@ gtk_rc_context_parse_one_file (GtkRcContext *context,
 			       gboolean      reload)
 {
   GtkRcFile *rc_file;
-  struct stat statbuf;
+  GStatBuf statbuf;
   gint saved_priority;
 
   g_return_if_fail (filename != NULL);
@@ -1764,7 +1764,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
   GtkRcFile *rc_file;
   GSList *tmp_list;
   GtkRcContext *context;
-  struct stat statbuf;
+  GStatBuf statbuf;
 
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
 

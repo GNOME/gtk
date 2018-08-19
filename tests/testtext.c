@@ -20,7 +20,6 @@
 
 #include "config.h"
 #include <stdio.h>
-#include <sys/stat.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +29,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gstdio.h>
 
 #include "prop-editor.h"
 
@@ -2096,9 +2096,9 @@ save_as_ok_func (const char *filename, gpointer data)
 
   if (!buffer->filename || strcmp (filename, buffer->filename) != 0)
     {
-      struct stat statbuf;
+      GStatBuf statbuf;
 
-      if (stat (filename, &statbuf) == 0)
+      if (g_stat (filename, &statbuf) == 0)
 	{
 	  gchar *err = g_strdup_printf ("Ovewrite existing file '%s'?", filename);
 	  gint result = msgbox_run (NULL, err, "Yes", "No", NULL, 1);
