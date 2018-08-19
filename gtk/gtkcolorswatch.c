@@ -385,8 +385,6 @@ gtk_color_swatch_measure (GtkWidget *widget,
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
   gint w, h, min;
 
-  swatch = GTK_COLOR_SWATCH (widget);
-
   gtk_widget_measure (priv->overlay_widget,
                       orientation,
                       -1,
