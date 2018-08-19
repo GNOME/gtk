@@ -577,10 +577,8 @@ gtk_entry_completion_constructed (GObject *object)
 
   /* pack it all */
   priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
-  gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
-                            GDK_SURFACE_TYPE_HINT_COMBO);
+  gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window), GDK_SURFACE_TYPE_HINT_COMBO);
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
@@ -1463,7 +1461,14 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
       gtk_tree_path_free (path);
     }
 
-  gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
+  gdk_surface_move_to_rect (_gtk_widget_get_surface (completion->priv->popup_window),
+                            &allocation,
+                            GDK_GRAVITY_SOUTH,
+                            GDK_GRAVITY_NORTH,
+                            GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                            0, 0);
+
+  gtk_widget_show (completion->priv->popup_window);
 }
 
 static void
