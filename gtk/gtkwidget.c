@@ -4177,6 +4177,18 @@ adjust_for_align (GtkAlign           align,
     }
 }
 
+/**
+ * gtk_widget_size_allocate_transformed:
+ * @widget: a #GtkWidget
+ * @width: the new width to assign to @widget
+ * @height: the new height to assign to @widget
+ * @baseline: the new baseline to assign to @widget
+ * @transform: the new transformation to assign to @widget
+ *
+ * Allocates the given size, baseline and transformation
+ * to @widget. The positinon of @widget is given as part
+ * of the transformation matrix.
+ */
 void
 gtk_widget_size_allocate_transformed (GtkWidget               *widget,
                                       int                      width,
