@@ -67,13 +67,7 @@ enum {
   PROP_ACTIVE
 };
 
-struct _GtkSpinnerPrivate
-{
-  guint active : 1;
-};
-typedef struct _GtkSpinnerPrivate GtkSpinnerPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
 #define DEFAULT_SIZE 16
 
@@ -118,18 +112,22 @@ gtk_spinner_snapshot (GtkWidget   *widget,
                                GTK_CSS_IMAGE_BUILTIN_SPINNER);
 }
 
+static gboolean
+gtk_spinner_get_active (GtkSpinner *spinner)
+{
+  return (gtk_widget_get_state_flags ((GtkWidget *)spinner) & GTK_STATE_FLAG_CHECKED) > 0;
+}
+
 static void
 gtk_spinner_set_active (GtkSpinner *spinner,
                         gboolean    active)
 {
-  GtkSpinnerPrivate *priv = gtk_spinner_get_instance_private (spinner);
+  gboolean current_active = gtk_spinner_get_active (spinner);
 
   active = !!active;
 
-  if (priv->active != active)
+  if (active != current_active)
     {
-      priv->active = active;
-
       g_object_notify (G_OBJECT (spinner), "active");
 
       if (active)
@@ -147,12 +145,10 @@ gtk_spinner_get_property (GObject    *object,
                           GValue     *value,
                           GParamSpec *pspec)
 {
-  GtkSpinnerPrivate *priv = gtk_spinner_get_instance_private (GTK_SPINNER (object));
-
   switch (param_id)
     {
       case PROP_ACTIVE:
-        g_value_set_boolean (value, priv->active);
+        g_value_set_boolean (value, gtk_spinner_get_active (GTK_SPINNER (object)));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
