@@ -72,7 +72,7 @@
  * # CSS nodes
  *
  * GtkImage has a single CSS node with the name image. The style classes
- * .normal-icons or .large-icons may appear, depending on the #GtkImage::icon-size
+ * .normal-icons or .large-icons may appear, depending on the #GtkImage:icon-size
  * property.
  */
 
