@@ -33,7 +33,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
-#include "gtkgizmoprivate.h"
+#include "gtkiconprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -1384,26 +1384,6 @@ gtk_paned_snapshot (GtkWidget   *widget,
   gtk_snapshot_pop (snapshot);
 }
 
-static gboolean
-gtk_paned_render_handle (GtkGizmo    *gizmo,
-                         GtkSnapshot *snapshot)
-{
-  GtkWidget *widget = GTK_WIDGET (gizmo);
-  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  int width, height;
-
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  if (width > 0 && height > 0)
-    gtk_css_style_snapshot_icon (style,
-                                 snapshot,
-                                 width, height,
-                                 GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
-
-  return FALSE;
-}
-
 static void
 connect_drag_gesture_signals (GtkPaned   *paned,
                               GtkGesture *gesture)
@@ -1463,10 +1443,9 @@ gtk_paned_init (GtkPaned *paned)
   g_signal_connect (controller, "motion", G_CALLBACK (gtk_paned_motion), paned);
   gtk_widget_add_controller (GTK_WIDGET (paned), controller);
 
-  priv->handle_widget = gtk_gizmo_new ("separator",
-                                       NULL,
-                                       NULL,
-                                       gtk_paned_render_handle);
+  priv->handle_widget = gtk_icon_new ("separator");
+  gtk_icon_set_image (GTK_ICON (priv->handle_widget),
+                      GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
   gtk_widget_set_parent (priv->handle_widget, GTK_WIDGET (paned));
 }
 
