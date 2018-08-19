@@ -939,7 +939,7 @@ gtk_picture_get_can_shrink (GtkPicture *self)
  *
  * This text will be made available to accessibility tools.
  *
- * If the picture cannot be described textually, set this proeprty to %NULL.
+ * If the picture cannot be described textually, set this property to %NULL.
  */
 void
 gtk_picture_set_alternative_text (GtkPicture *self,
