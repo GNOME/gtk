@@ -6723,6 +6723,7 @@ gtk_shortcut_get_type
 <TITLE>GtkShortcutController</TITLE>
 GtkShortcutController
 gtk_shortcut_controller_new
+gtk_shortcut_controller_new_with_model
 GtkShortcutScope
 GtkShortcutManager
 GtkShortcutManagerInterface
