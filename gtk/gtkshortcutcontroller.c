@@ -25,6 +25,9 @@
  * @See_also: #GtkEventController, #GtkShortcut
  *
  * #GtkShortcutController is an event controller that manages shortcuts.
+ *
+ * #GtkShortcutController implements #GListModel for querying the shortcuts that
+ * have been added to it.
  **/
 
 #include "config.h"
@@ -45,7 +48,7 @@ struct _GtkShortcutController
 {
   GtkEventController parent_instance;
 
-  GSList *shortcuts;
+  GListModel *shortcuts;
   GtkShortcutScope scope;
   GdkModifierType mnemonics_modifiers;
 
@@ -68,8 +71,40 @@ enum {
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (GtkShortcutController, gtk_shortcut_controller,
-               GTK_TYPE_EVENT_CONTROLLER)
+static GType
+gtk_shortcut_controller_list_model_get_item_type (GListModel *list)
+{
+  return GTK_TYPE_SHORTCUT;
+}
+
+static guint
+gtk_shortcut_controller_list_model_get_n_items (GListModel *list)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (list);
+
+  return g_list_model_get_n_items (self->shortcuts);
+}
+
+static gpointer
+gtk_shortcut_controller_list_model_get_item (GListModel *list,
+                                             guint       position)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (list);
+
+  return g_list_model_get_item (self->shortcuts, position);
+}
+
+static void
+gtk_shortcut_controller_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_shortcut_controller_list_model_get_item_type;
+  iface->get_n_items = gtk_shortcut_controller_list_model_get_n_items;
+  iface->get_item = gtk_shortcut_controller_list_model_get_item;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkShortcutController, gtk_shortcut_controller,
+                         GTK_TYPE_EVENT_CONTROLLER,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_shortcut_controller_list_model_init))
 
 static gboolean
 gtk_shortcut_controller_is_rooted (GtkShortcutController *self)
@@ -133,10 +168,20 @@ gtk_shortcut_controller_dispose (GObject *object)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
 
-  g_slist_free_full (self->shortcuts, g_object_unref);
-  self->shortcuts = NULL;
+  g_list_store_remove_all (G_LIST_STORE (self->shortcuts));
 
   G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->dispose (object);
+}
+
+static void
+gtk_shortcut_controller_finalize (GObject *object)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
+
+  g_signal_handlers_disconnect_by_func (self->shortcuts, g_list_model_items_changed, self);
+  g_clear_object (&self->shortcuts);
+
+  G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->finalize (object);
 }
 
 static gboolean
@@ -162,10 +207,14 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
   GtkWidget *widget;
   const GSList *l;
+  guint i;
 
-  for (l = self->shortcuts; l; l = l->next)
+  for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
     {
-      if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event, enable_mnemonics))
+      if (gtk_shortcut_controller_trigger_shortcut (self, 
+                                                    g_list_model_get_item (self->shortcuts, i),
+                                                    event,
+                                                    enable_mnemonics))
         return TRUE;
     }
 
@@ -253,6 +302,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
 
   object_class->dispose = gtk_shortcut_controller_dispose;
+  object_class->finalize = gtk_shortcut_controller_finalize;
   object_class->set_property = gtk_shortcut_controller_set_property;
   object_class->get_property = gtk_shortcut_controller_get_property;
 
@@ -293,6 +343,9 @@ static void
 gtk_shortcut_controller_init (GtkShortcutController *self)
 {
   self->mnemonics_modifiers = GDK_MOD1_MASK;
+
+  self->shortcuts = G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT));
+  g_signal_connect_swapped (self->shortcuts, "items-changed", G_CALLBACK (g_list_model_items_changed), self);
 }
 
 void
@@ -401,8 +454,7 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
   g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
   g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
 
-  g_object_ref (shortcut);
-  self->shortcuts = g_slist_prepend (self->shortcuts, shortcut);
+  g_list_store_append (G_LIST_STORE (self->shortcuts), shortcut);
 }
 
 /**
@@ -419,17 +471,24 @@ void
 gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
                                          GtkShortcut            *shortcut)
 {
-  GSList *l;
+  guint i;
 
   g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
   g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
 
-  l = g_slist_find (self->shortcuts, shortcut);
-  if (l == NULL)
-    return;
+  for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
+    {
+      GtkShortcut *item = g_list_model_get_item (self->shortcuts, i);
 
-  self->shortcuts = g_slist_delete_link (self->shortcuts, l);
-  g_object_unref (shortcut);
+      if (item == shortcut)
+        {
+          g_object_unref (item);
+          g_list_store_remove (G_LIST_STORE (self->shortcuts), i);
+          return;
+        }
+
+      g_object_unref (item);
+    }
 }
 
 /**
