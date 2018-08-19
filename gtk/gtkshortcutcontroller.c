@@ -52,6 +52,7 @@ struct _GtkShortcutController
   GtkShortcutScope scope;
   GdkModifierType mnemonics_modifiers;
 
+  guint custom_shortcuts : 1;
   guint run_class : 1;
   guint run_managed : 1;
 };
@@ -64,6 +65,7 @@ struct _GtkShortcutControllerClass
 enum {
   PROP_0,
   PROP_MNEMONICS_MODIFIERS,
+  PROP_MODEL,
   PROP_SCOPE,
 
   N_PROPS
@@ -131,6 +133,29 @@ gtk_shortcut_controller_set_property (GObject      *object,
       gtk_shortcut_controller_set_mnemonics_modifiers (self, g_value_get_flags (value));
       break;
 
+    case PROP_MODEL:
+      {
+        GListModel *model = g_value_get_object (value);
+        if (model && g_list_model_get_item_type (model) != GTK_TYPE_SHORTCUT)
+          {
+            g_warning ("Setting a model with type '%s' on a shortcut controller that requires 'GtkShortcut'",
+                       g_type_name (g_list_model_get_item_type (model)));
+            model = NULL;
+          }
+        if (model == NULL)
+          {
+            self->shortcuts = G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT));
+            self->custom_shortcuts = TRUE;
+          }
+        else
+          {
+            self->shortcuts = g_object_ref (model);
+            self->custom_shortcuts = FALSE;
+          }
+        g_signal_connect_swapped (self->shortcuts, "items-changed", G_CALLBACK (g_list_model_items_changed), self);
+      }
+      break;
+
     case PROP_SCOPE:
       gtk_shortcut_controller_set_scope (self, g_value_get_enum (value));
       break;
@@ -168,7 +193,8 @@ gtk_shortcut_controller_dispose (GObject *object)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
 
-  g_list_store_remove_all (G_LIST_STORE (self->shortcuts));
+  if (self->custom_shortcuts)
+    g_list_store_remove_all (G_LIST_STORE (self->shortcuts));
 
   G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->dispose (object);
 }
@@ -324,6 +350,18 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkShortcutController:model:
+   *
+   * A list model to take shortcuts from
+   */
+  properties[PROP_MODEL] =
+      g_param_spec_object ("model",
+                           P_("Model"),
+                           P_("A list model to take shortcuts from"),
+                           G_TYPE_LIST_MODEL,
+                           G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkShortcutController:scope:
    *
    * What scope the shortcuts will be handled in.
@@ -343,9 +381,6 @@ static void
 gtk_shortcut_controller_init (GtkShortcutController *self)
 {
   self->mnemonics_modifiers = GDK_MOD1_MASK;
-
-  self->shortcuts = G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT));
-  g_signal_connect_swapped (self->shortcuts, "items-changed", G_CALLBACK (g_list_model_items_changed), self);
 }
 
 void
@@ -421,6 +456,17 @@ gtk_shortcut_controller_new (void)
                        NULL);
 }
 
+GtkEventController *
+gtk_shortcut_controller_new_for_model (GListModel *model)
+{
+  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (g_list_model_get_item_type (model) == GTK_TYPE_SHORTCUT, NULL);
+
+  return g_object_new (GTK_TYPE_SHORTCUT_CONTROLLER,
+                       "model", model,
+                       NULL);
+}
+
 void
 gtk_shortcut_controller_set_run_class (GtkShortcutController  *controller,
                                        gboolean                run_class)
@@ -442,6 +488,9 @@ gtk_shortcut_controller_set_run_managed (GtkShortcutController  *controller,
  *
  * Adds @shortcut to the list of shortcuts handled by @self.
  *
+ * If this controller uses an external shortcut list, this function does
+ * nothing.
+ *
  * The shortcut is added to the list so that it is triggered before
  * all existing shortcuts.
  * 
@@ -454,6 +503,9 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
   g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
   g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
 
+  if (!self->custom_shortcuts)
+    return;
+
   g_list_store_append (G_LIST_STORE (self->shortcuts), shortcut);
 }
 
@@ -464,8 +516,8 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
  *
  * Removes @shortcut from the list of shortcuts handled by @self.
  *
- * If @shortcut had not been added to @controller, this function does
- * nothing.
+ * If @shortcut had not been added to @controller or this controller
+ * uses an external shortcut list, this function does nothing.
  **/
 void
 gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
@@ -475,6 +527,9 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
 
   g_return_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self));
   g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
+
+  if (!self->custom_shortcuts)
+    return;
 
   for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
     {
