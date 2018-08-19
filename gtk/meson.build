@@ -16,7 +16,7 @@ gtk_cargs = [
 gtk_private_sources = files([
   'fallback-c89.c',
   'fnmatch.c',
-  'gdkpixbufutils.c',
+  'tools/gdkpixbufutils.c',
   'gtkactionhelper.c',
   'gtkactionmuxer.c',
   'gtkactionobservable.c',
@@ -113,7 +113,7 @@ gtk_private_sources = files([
   'gtkhsla.c',
   'gtkicon.c',
   'gtkiconcache.c',
-  'gtkiconcachevalidator.c',
+  'tools/gtkiconcachevalidator.c',
   'gtkiconhelper.c',
   'gtkkineticscrolling.c',
   'gtkkeyhash.c',
@@ -1077,38 +1077,6 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 link_with: libgtk,
                                 link_args: common_ldflags)
 
-# Installed tools
-gtk_tools = [
-  ['gtk4-query-settings', ['gtk-query-settings.c']],
-  ['gtk4-builder-tool', ['gtk-builder-tool.c']],
-  ['gtk4-update-icon-cache', ['updateiconcache.c', 'gtkiconcachevalidator.c']],
-  ['gtk4-encode-symbolic-svg', ['encodesymbolic.c', 'gdkpixbufutils.c']],
-]
-
-if os_unix
-  gtk_tools += [['gtk4-launch', ['gtk-launch.c']]]
-endif
-
-foreach tool: gtk_tools
-  tool_name = tool.get(0)
-  tool_srcs = tool.get(1)
-
-  exe = executable(tool_name, tool_srcs,
-                   include_directories: [confinc],
-                   c_args: gtk_cargs,
-                   dependencies: libgtk_dep,
-                   install: true)
-
-  set_variable(tool_name.underscorify(), exe) # used in testsuites
-endforeach
-
-# Data to install
-install_data('gtkbuilder.rng',
-             install_dir: join_paths(gtk_datadir, 'gtk-4.0'))
-
-install_data('gtkbuilder.loc', 'gtkbuilder.its',
-             install_dir: join_paths(gtk_datadir, 'gettext/its'))
-
 if quartz_enabled
   # HACK: install_data() doesn't allow installing under a different name (#1487)
   # FIXME: or maybe just rename it to gtk-keys.css in the src tree?
@@ -1117,3 +1085,5 @@ if quartz_enabled
                  configuration: configuration_data(),
                  install_dir: join_paths(get_option('datadir'), 'themes/Mac/gtk-4.0'))
 endif
+
+subdir('tools')
