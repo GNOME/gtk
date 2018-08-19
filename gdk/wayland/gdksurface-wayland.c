@@ -117,7 +117,6 @@ struct _GdkSurfaceImplWayland
     struct zxdg_popup_v6 *zxdg_popup_v6;
 
     struct gtk_surface1  *gtk_surface;
-    struct wl_subsurface *wl_subsurface;
     struct wl_egl_window *egl_window;
     struct wl_egl_window *dummy_egl_window;
     struct zxdg_exported_v1 *xdg_exported;
@@ -139,9 +138,6 @@ struct _GdkSurfaceImplWayland
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
-
-  int subsurface_x;
-  int subsurface_y;
 
   gchar *title;
 
@@ -220,8 +216,6 @@ static void gdk_wayland_surface_maybe_configure (GdkSurface *surface,
 
 static void maybe_set_gtk_surface_dbus_properties (GdkSurface *surface);
 static void maybe_set_gtk_surface_modal (GdkSurface *surface);
-
-static void gdk_surface_request_transient_parent_commit (GdkSurface *surface);
 
 static void gdk_wayland_surface_sync_margin (GdkSurface *surface);
 static void gdk_wayland_surface_sync_input_region (GdkSurface *surface);
@@ -1034,31 +1028,6 @@ gdk_wayland_surface_sync_input_region (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_set_input_region_if_empty (GdkSurface *surface)
-{
-  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-  GdkWaylandDisplay *display;
-  struct wl_region *empty;
-
-  if (!impl->input_region_dirty)
-    return;
-
-  if (impl->input_region == NULL)
-    return;
-
-  if (!cairo_region_is_empty (impl->input_region))
-    return;
-
-  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  empty = wl_compositor_create_region (display->compositor);
-
-  wl_surface_set_input_region (impl->display_server.wl_surface, empty);
-  wl_region_destroy (empty);
-
-  impl->input_region_dirty = FALSE;
-}
-
-static void
 surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
@@ -1095,76 +1064,6 @@ static const struct wl_surface_listener surface_listener = {
   surface_enter,
   surface_leave
 };
-
-static void
-on_parent_surface_committed (GdkSurfaceImplWayland *parent_impl,
-                             GdkSurface            *surface)
-{
-  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  g_signal_handler_disconnect (parent_impl,
-                               impl->parent_surface_committed_handler);
-  impl->parent_surface_committed_handler = 0;
-
-  wl_subsurface_set_desync (impl->display_server.wl_subsurface);
-
-  /* Special case if the input region is empty, it won't change on resize */
-  gdk_wayland_set_input_region_if_empty (surface);
-}
-
-static void
-gdk_wayland_surface_set_subsurface_position (GdkSurface *surface,
-                                             int         x,
-                                             int         y)
-{
-  GdkSurfaceImplWayland *impl;
-
-  impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  wl_subsurface_set_position (impl->display_server.wl_subsurface, x, y);
-  impl->subsurface_x = x;
-  impl->subsurface_y = y;
-
-  gdk_surface_request_transient_parent_commit (surface);
-}
-
-static void
-gdk_wayland_surface_create_subsurface (GdkSurface *surface)
-{
-  GdkSurfaceImplWayland *impl, *parent_impl = NULL;
-  GdkWaylandDisplay *display_wayland;
-
-  impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  if (!impl->display_server.wl_surface)
-    return; /* Bail out, surface and subsurface will be created later when shown */
-
-  if (impl->display_server.wl_subsurface)
-    return;
-
-  if (impl->transient_for)
-    parent_impl = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
-
-  if (parent_impl && parent_impl->display_server.wl_surface)
-    {
-      display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-      impl->display_server.wl_subsurface =
-        wl_subcompositor_get_subsurface (display_wayland->subcompositor,
-                                         impl->display_server.wl_surface, parent_impl->display_server.wl_surface);
-
-      /* In order to synchronize the initial position with the initial frame
-       * content, wait with making the subsurface desynchronized until after
-       * the parent was committed.
-       */
-      impl->parent_surface_committed_handler =
-        g_signal_connect_object (parent_impl, "committed",
-                                 G_CALLBACK (on_parent_surface_committed),
-                                 surface, 0);
-      gdk_wayland_surface_set_subsurface_position (surface,
-                                                   surface->x + surface->abs_x,
-                                                   surface->y + surface->abs_y);
-    }
-}
 
 static void
 gdk_wayland_surface_create_surface (GdkSurface *surface)
@@ -1811,23 +1710,15 @@ get_real_parent_and_translate (GdkSurface *surface,
 
   while (parent)
     {
-      GdkSurfaceImplWayland *parent_impl =
-        GDK_SURFACE_IMPL_WAYLAND (parent->impl);
       GdkSurface *effective_parent = gdk_surface_get_parent (parent);
 
-      if ((gdk_surface_has_native (parent) &&
-           !parent_impl->display_server.wl_subsurface) ||
-          !effective_parent)
+      if (gdk_surface_has_native (parent) && !effective_parent)
         break;
 
       *x += parent->x;
       *y += parent->y;
 
-      if (gdk_surface_has_native (parent) &&
-          parent_impl->display_server.wl_subsurface)
-        parent = parent->transient_for;
-      else
-        parent = effective_parent;
+      parent = effective_parent;
     }
 
   return parent;
@@ -2493,38 +2384,6 @@ should_map_as_popup (GdkSurface *surface)
   return FALSE;
 }
 
-static gboolean
-should_map_as_subsurface (GdkSurface *surface)
-{
-  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  if (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_SUBSURFACE)
-    return TRUE;
-
-  if (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_TEMP)
-    return FALSE;
-
-  /* if we want a popup, we do not want a subsurface */
-  if (should_map_as_popup (surface))
-    return FALSE;
-
-  if (impl->transient_for)
-    {
-      GdkSurfaceImplWayland *impl_parent;
-
-      impl_parent = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
-      /* subsurface require that the parent is mapped */
-      if (impl_parent->mapped)
-        return TRUE;
-      else
-        g_warning ("Couldn't map surface %p as subsurface because its parent is not mapped.",
-                   surface);
-
-    }
-
-  return FALSE;
-}
-
 /* Get the surface that can be used as a parent for a popup, i.e. a xdg_toplevel
  * or xdg_popup. If the surface is not, traverse up the transiency parents until
  * we find one.
@@ -2557,15 +2416,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
   if (impl->mapped || impl->use_custom_surface)
     return;
 
-  if (should_map_as_subsurface (surface))
-    {
-      if (impl->transient_for)
-        gdk_wayland_surface_create_subsurface (surface);
-      else
-        g_warning ("Couldn't map surface %p as susburface yet because it doesn't have a parent",
-                   surface);
-    }
-  else if (should_map_as_popup (surface))
+  if (should_map_as_popup (surface))
     {
       gboolean create_fallback = FALSE;
       struct wl_seat *grab_input_seat;
@@ -2664,26 +2515,6 @@ gdk_wayland_surface_show (GdkSurface *surface,
     gdk_wayland_surface_create_surface (surface);
 
   gdk_wayland_surface_map (surface);
-}
-
-static void
-unmap_subsurface (GdkSurface *surface)
-{
-  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-  GdkSurfaceImplWayland *parent_impl;
-
-  g_return_if_fail (impl->display_server.wl_subsurface);
-  g_return_if_fail (impl->transient_for);
-
-  parent_impl = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
-  wl_subsurface_destroy (impl->display_server.wl_subsurface);
-  if (impl->parent_surface_committed_handler)
-    {
-      g_signal_handler_disconnect (parent_impl,
-                                   impl->parent_surface_committed_handler);
-      impl->parent_surface_committed_handler = 0;
-    }
-  impl->display_server.wl_subsurface = NULL;
 }
 
 static void
@@ -2786,9 +2617,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
             impl->initial_configure_received = FALSE;
         }
 
-      if (impl->display_server.wl_subsurface)
-        unmap_subsurface (surface);
-
       if (impl->awaiting_frame)
         {
           GdkFrameClock *frame_clock;
@@ -2863,32 +2691,6 @@ gdk_surface_wayland_restack_toplevel (GdkSurface *surface,
 }
 
 static void
-gdk_surface_request_transient_parent_commit (GdkSurface *surface)
-{
-  GdkSurfaceImplWayland *surface_impl, *impl;
-  GdkFrameClock *frame_clock;
-
-  surface_impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  if (!surface_impl->transient_for)
-    return;
-
-  impl = GDK_SURFACE_IMPL_WAYLAND (surface_impl->transient_for->impl);
-
-  if (!impl->display_server.wl_surface || impl->pending_commit)
-    return;
-
-  frame_clock = gdk_surface_get_frame_clock (surface_impl->transient_for);
-
-  if (!frame_clock)
-    return;
-
-  impl->pending_commit = TRUE;
-  gdk_frame_clock_request_phase (frame_clock,
-                                 GDK_FRAME_CLOCK_PHASE_AFTER_PAINT);
-}
-
-static void
 gdk_surface_wayland_move_resize (GdkSurface *surface,
                                  gboolean    with_move,
                                  gint        x,
@@ -2906,15 +2708,6 @@ gdk_surface_wayland_move_resize (GdkSurface *surface,
           surface->x = x;
           surface->y = y;
           impl->position_method = POSITION_METHOD_MOVE_RESIZE;
-
-          if (impl->display_server.wl_subsurface &&
-              (x + surface->abs_x != impl->subsurface_x ||
-               y + surface->abs_y != impl->subsurface_y))
-            {
-              gdk_wayland_surface_set_subsurface_position (surface,
-                                                           x + surface->abs_x,
-                                                           y + surface->abs_y);
-            }
         }
     }
 
@@ -3428,7 +3221,6 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkSurface *previous_parent;
-  gboolean was_subsurface = FALSE;
 
   g_assert (parent == NULL ||
             gdk_surface_get_display (surface) == gdk_surface_get_display (parent));
@@ -3440,12 +3232,6 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
     }
 
   unset_transient_for_exported (surface);
-
-  if (impl->display_server.wl_subsurface)
-    {
-      was_subsurface = TRUE;
-      unmap_subsurface (surface);
-    }
 
   previous_parent = impl->transient_for;
   impl->transient_for = parent;
@@ -3459,8 +3245,6 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
           g_list_remove (display_wayland->orphan_dialogs, surface);
     }
   gdk_wayland_surface_sync_parent (surface, NULL);
-  if (was_subsurface && parent)
-    gdk_wayland_surface_create_subsurface (surface);
 }
 
 static void
@@ -4128,34 +3912,6 @@ _gdk_wayland_surface_set_grab_seat (GdkSurface *surface,
 }
 
 /**
- * gdk_wayland_surface_new_subsurface: (constructor)
- * @display: the display to create the surface on
- * @position: position relative to the transient surface
- *
- * Creates a new subsurface surface.
- *
- * Returns: (transfer full): the new #GdkSurface
- **/
-GdkSurface *
-gdk_wayland_surface_new_subsurface (GdkDisplay         *display,
-                                    const GdkRectangle *position)
-{
-  GdkSurfaceAttr attr;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (position != NULL, NULL);
-
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = position->x;
-  attr.y = position->y;
-  attr.width = position->width;
-  attr.height = position->height;
-  attr.surface_type = GDK_SURFACE_SUBSURFACE;
-
-  return gdk_surface_new (display, NULL, &attr);
-}
-
-/**
  * gdk_wayland_surface_get_wl_surface:
  * @surface: (type GdkWaylandSurface): a #GdkSurface
  *
@@ -4562,8 +4318,7 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
-  g_return_val_if_fail (!should_map_as_subsurface (surface) &&
-                        !should_map_as_popup (surface), FALSE);
+  g_return_val_if_fail (!should_map_as_popup (surface), FALSE);
 
   impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
   display_wayland = GDK_WAYLAND_DISPLAY (display);

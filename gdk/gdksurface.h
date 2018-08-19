@@ -43,11 +43,7 @@ typedef struct _GdkGeometry          GdkGeometry;
  * GdkSurfaceType:
  * @GDK_SURFACE_TOPLEVEL: toplevel window (used to implement #GtkWindow)
  * @GDK_SURFACE_CHILD: child surface (used to implement e.g. #GtkEntry)
- * @GDK_SURFACE_TEMP: override redirect temporary surface (used to implement
- *  #GtkMenu)
- * @GDK_SURFACE_SUBSURFACE: subsurface; This surface is visually
- *  tied to a toplevel, and is moved/stacked with it. Currently this window
- *  type is only implemented in Wayland
+ * @GDK_SURFACE_TEMP: override redirect temporary surface (used to implement #GtkMenu)
  *
  * Describes the kind of surface.
  */
@@ -55,8 +51,7 @@ typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
   GDK_SURFACE_CHILD,
-  GDK_SURFACE_TEMP,
-  GDK_SURFACE_SUBSURFACE
+  GDK_SURFACE_TEMP
 } GdkSurfaceType;
 
 /* Size restriction enumeration.
