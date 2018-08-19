@@ -31,7 +31,6 @@
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmenubar.h"
