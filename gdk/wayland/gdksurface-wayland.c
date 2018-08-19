@@ -1569,6 +1569,8 @@ gdk_wayland_surface_handle_configure_popup (GdkSurface *surface,
                                   &flipped_x,
                                   &flipped_y);
 
+  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
+
   g_signal_emit_by_name (surface,
                          "moved-to-rect",
                          &flipped_rect,
@@ -2466,6 +2468,9 @@ should_map_as_popup (GdkSurface *surface)
     default:
       break;
     }
+
+  if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+    return TRUE;
 
   return FALSE;
 }
