@@ -44,6 +44,8 @@ GType                   gtk_shortcut_controller_get_type                (void) G
 
 GDK_AVAILABLE_IN_ALL
 GtkEventController *    gtk_shortcut_controller_new                     (void);
+GDK_AVAILABLE_IN_ALL
+GtkEventController *    gtk_shortcut_controller_new_for_model           (GListModel             *list);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController  *self,
