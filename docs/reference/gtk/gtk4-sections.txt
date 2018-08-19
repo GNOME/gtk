@@ -4414,6 +4414,7 @@ GtkTickCallback
 gtk_widget_add_tick_callback
 gtk_widget_remove_tick_callback
 gtk_widget_size_allocate
+gtk_widget_size_allocate_transformed
 gtk_widget_add_accelerator
 gtk_widget_remove_accelerator
 gtk_widget_set_accel_path
