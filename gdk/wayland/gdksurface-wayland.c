@@ -140,6 +140,9 @@ struct _GdkSurfaceImplWayland
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
+  int subsurface_x;
+  int subsurface_y;
+
   gchar *title;
 
   struct {
@@ -1110,6 +1113,22 @@ on_parent_surface_committed (GdkSurfaceImplWayland *parent_impl,
 }
 
 static void
+gdk_wayland_surface_set_subsurface_position (GdkSurface *surface,
+                                             int         x,
+                                             int         y)
+{
+  GdkSurfaceImplWayland *impl;
+
+  impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
+
+  wl_subsurface_set_position (impl->display_server.wl_subsurface, x, y);
+  impl->subsurface_x = x;
+  impl->subsurface_y = y;
+
+  gdk_surface_request_transient_parent_commit (surface);
+}
+
+static void
 gdk_wayland_surface_create_subsurface (GdkSurface *surface)
 {
   GdkSurfaceImplWayland *impl, *parent_impl = NULL;
@@ -1132,9 +1151,6 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
       impl->display_server.wl_subsurface =
         wl_subcompositor_get_subsurface (display_wayland->subcompositor,
                                          impl->display_server.wl_surface, parent_impl->display_server.wl_surface);
-      wl_subsurface_set_position (impl->display_server.wl_subsurface,
-                                  surface->x + surface->abs_x,
-                                  surface->y + surface->abs_y);
 
       /* In order to synchronize the initial position with the initial frame
        * content, wait with making the subsurface desynchronized until after
@@ -1144,7 +1160,9 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
         g_signal_connect_object (parent_impl, "committed",
                                  G_CALLBACK (on_parent_surface_committed),
                                  surface, 0);
-      gdk_surface_request_transient_parent_commit (surface);
+      gdk_wayland_surface_set_subsurface_position (surface,
+                                                   surface->x + surface->abs_x,
+                                                   surface->y + surface->abs_y);
     }
 }
 
@@ -2889,12 +2907,13 @@ gdk_surface_wayland_move_resize (GdkSurface *surface,
           surface->y = y;
           impl->position_method = POSITION_METHOD_MOVE_RESIZE;
 
-          if (impl->display_server.wl_subsurface)
+          if (impl->display_server.wl_subsurface &&
+              (x + surface->abs_x != impl->subsurface_x ||
+               y + surface->abs_y != impl->subsurface_y))
             {
-              wl_subsurface_set_position (impl->display_server.wl_subsurface,
-                                          surface->x + surface->abs_x,
-                                          surface->y + surface->abs_y);
-              gdk_surface_request_transient_parent_commit (surface);
+              gdk_wayland_surface_set_subsurface_position (surface,
+                                                           x + surface->abs_x,
+                                                           y + surface->abs_y);
             }
         }
     }
