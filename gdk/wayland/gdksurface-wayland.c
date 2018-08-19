@@ -3404,6 +3404,7 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkSurface *previous_parent;
+  gboolean was_subsurface = FALSE;
 
   g_assert (parent == NULL ||
             gdk_surface_get_display (surface) == gdk_surface_get_display (parent));
@@ -3417,7 +3418,10 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
   unset_transient_for_exported (surface);
 
   if (impl->display_server.wl_subsurface)
-    unmap_subsurface (surface);
+    {
+      was_subsurface = TRUE;
+      unmap_subsurface (surface);
+    }
 
   previous_parent = impl->transient_for;
   impl->transient_for = parent;
@@ -3431,8 +3435,7 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
           g_list_remove (display_wayland->orphan_dialogs, surface);
     }
   gdk_wayland_surface_sync_parent (surface, NULL);
-  if (should_map_as_subsurface (surface) &&
-      parent && gdk_surface_is_visible (surface))
+  if (was_subsurface && parent)
     gdk_wayland_surface_create_subsurface (surface);
 }
 
