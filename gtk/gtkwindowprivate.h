@@ -116,8 +116,6 @@ gboolean    _gtk_window_is_popover_widget  (GtkWindow *window,
 GdkTexture *     gtk_window_get_icon_for_size (GtkWindow *window,
 					       int        size);
 
-void       gtk_window_set_use_subsurface (GtkWindow *window,
-                                          gboolean   use_subsurface);
 void       gtk_window_set_hardcoded_surface (GtkWindow *window,
 					     GdkSurface *surface);
 

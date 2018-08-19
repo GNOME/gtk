@@ -272,7 +272,6 @@ typedef struct
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
 
-  guint    use_subsurface            : 1;
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
 
@@ -3441,11 +3440,10 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  *
  * Passing %NULL for @parent unsets the current transient window.
  *
- * On Wayland, this function can also be used to attach a new
+ * This function can also be used to attach a new
  * #GTK_WINDOW_POPUP to a #GTK_WINDOW_TOPLEVEL parent already mapped
- * on screen so that the #GTK_WINDOW_POPUP will be created as a
- * subsurface-based window #GDK_SURFACE_SUBSURFACE which can be
- * positioned at will relatively to the #GTK_WINDOW_TOPLEVEL surface.
+ * on screen so that the #GTK_WINDOW_POPUP will be
+ * positioned relative to the #GTK_WINDOW_TOPLEVEL surface.
  *
  * On Windows, this function puts the child window on top of the parent,
  * much as the window manager would have done on X.
@@ -6847,19 +6845,7 @@ gtk_window_realize (GtkWidget *widget)
 					      allocation.height);
           break;
         case GTK_WINDOW_POPUP:
-#ifdef GDK_WINDOWING_WAYLAND
-          if (priv->use_subsurface &&
-              GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-            {
-              surface = gdk_wayland_surface_new_subsurface (gtk_widget_get_display (widget),
-							    &allocation);
-            }
-          else
-#endif
-            {
-              surface = gdk_surface_new_popup (gtk_widget_get_display (widget),
-					       &allocation);
-            }
+          surface = gdk_surface_new_popup (gtk_widget_get_display (widget), &allocation);
           break;
         default:
           g_error (G_STRLOC": Unknown window type %d!", priv->type);
@@ -10923,18 +10909,6 @@ gtk_window_enable_debugging (GtkWindow *window,
     gtk_window_set_debugging (TRUE, TRUE, warn);
 
   return TRUE;
-}
-
-void
-gtk_window_set_use_subsurface (GtkWindow *window,
-                               gboolean   use_subsurface)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!_gtk_widget_get_realized (GTK_WIDGET (window)));
-
-  priv->use_subsurface = use_subsurface;
 }
 
 void
