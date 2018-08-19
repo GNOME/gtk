@@ -1151,7 +1151,6 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
       g_signal_connect_swapped (priv->popover, "destroy",
                                 G_CALLBACK (popover_destroy_cb), menu_button);
       update_popover_direction (menu_button);
-      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (menu_button)), "menu-button");
     }
 
   if (popover && priv->menu)
