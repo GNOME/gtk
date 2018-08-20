@@ -1461,14 +1461,16 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
       gtk_tree_path_free (path);
     }
 
-  gdk_surface_move_to_rect (_gtk_widget_get_surface (completion->priv->popup_window),
-                            &allocation,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
-                            0, 0);
-
-  gtk_widget_show (completion->priv->popup_window);
+  if (gtk_window_get_transient_for (GTK_WINDOW (completion->priv->popup_window)))
+    {
+      gdk_surface_move_to_rect (_gtk_widget_get_surface (completion->priv->popup_window),
+                                &allocation,
+                                GDK_GRAVITY_SOUTH,
+                                GDK_GRAVITY_NORTH,
+                                GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                                0, 0);
+      gtk_widget_show (completion->priv->popup_window);
+   }
 }
 
 static void
