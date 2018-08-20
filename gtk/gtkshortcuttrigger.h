@@ -76,6 +76,15 @@ gboolean                gtk_shortcut_trigger_print_label        (GtkShortcutTrig
                                                                  GString            *string);
 
 GDK_AVAILABLE_IN_ALL
+guint                   gtk_shortcut_trigger_hash               (gconstpointer       trigger);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_shortcut_trigger_equal              (gconstpointer       trigger1,
+                                                                 gconstpointer       trigger2);
+GDK_AVAILABLE_IN_ALL
+gint                    gtk_shortcut_trigger_compare            (gconstpointer       trigger1,
+                                                                 gconstpointer       trigger2);
+
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_shortcut_trigger_trigger            (GtkShortcutTrigger *self,
                                                                  const GdkEvent     *event,
                                                                  gboolean            enable_mnemonics);
