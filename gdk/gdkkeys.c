@@ -738,7 +738,7 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
  *     of the key, or %NULL if @keyval is not a valid key. The string
  *     should not be modified.
  */
-gchar *
+const gchar *
 gdk_keyval_name (guint keyval)
 {
   return _gdk_keyval_name (keyval);
