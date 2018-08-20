@@ -1758,8 +1758,10 @@ accel_button_new (GtkAccelGroup *accel_group,
   GtkWidget *button;
   GtkWidget *label;
 
-  gtk_accelerator_parse (accel, &keyval, &modifiers);
-  g_assert (keyval);
+  if (!gtk_accelerator_parse (accel, &keyval, &modifiers))
+    {
+      g_assert_not_reached ();
+    }
 
   button = gtk_button_new ();
   gtk_widget_add_accelerator (button, "activate", accel_group,
