@@ -1418,10 +1418,10 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
  * so no need to be UTF-8 safe.
  */
 static void
-append_without_underscores (GString *s,
-                            gchar   *str)
+append_without_underscores (GString     *s,
+                            const gchar *str)
 {
-  gchar *p;
+  const gchar *p;
 
   if (g_str_has_prefix (str, "XF86"))
     p = str + 4;
@@ -1722,7 +1722,7 @@ gtk_accelerator_print_label (GString        *gstring,
     }
   else if (!append_keyval_symbol (accelerator_key, gstring))
     {
-      gchar *tmp;
+      const gchar *tmp;
 
       tmp = gdk_keyval_name (gdk_keyval_to_lower (accelerator_key));
       if (tmp != NULL)
