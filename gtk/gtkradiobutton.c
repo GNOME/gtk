@@ -140,7 +140,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  GROUP_CHANGED,
+  N_SIGNALS
+};
+
 static GParamSpec *radio_button_props[LAST_PROP] = { NULL, };
+static guint signals[N_SIGNALS] = { 0 };
 
 static void     gtk_radio_button_destroy        (GtkWidget           *widget);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
@@ -156,8 +162,6 @@ static void     gtk_radio_button_get_property   (GObject             *object,
 						 GParamSpec          *pspec);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioButton, gtk_radio_button, GTK_TYPE_CHECK_BUTTON)
-
-static guint group_changed_signal = 0;
 
 static void
 gtk_radio_button_class_init (GtkRadioButtonClass *class)
@@ -205,13 +209,13 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
    * more buttons to a different one, but not when the composition
    * of the group that a button belongs to changes.
    */
-  group_changed_signal = g_signal_new (I_("group-changed"),
-				       G_OBJECT_CLASS_TYPE (gobject_class),
-				       G_SIGNAL_RUN_FIRST,
-				       G_STRUCT_OFFSET (GtkRadioButtonClass, group_changed),
-				       NULL, NULL,
-				       NULL,
-				       G_TYPE_NONE, 0);
+  signals[GROUP_CHANGED] = g_signal_new (I_("group-changed"),
+                                         G_OBJECT_CLASS_TYPE (gobject_class),
+                                         G_SIGNAL_RUN_FIRST,
+                                         G_STRUCT_OFFSET (GtkRadioButtonClass, group_changed),
+                                         NULL, NULL,
+                                         NULL,
+                                         G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("radiobutton"));
@@ -340,15 +344,15 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
   g_object_ref (radio_button);
   
   g_object_notify_by_pspec (G_OBJECT (radio_button), radio_button_props[PROP_GROUP]);
-  g_signal_emit (radio_button, group_changed_signal, 0);
+  g_signal_emit (radio_button, signals[GROUP_CHANGED], 0);
   if (old_group_singleton)
     {
-      g_signal_emit (old_group_singleton, group_changed_signal, 0);
+      g_signal_emit (old_group_singleton, signals[GROUP_CHANGED], 0);
       g_object_unref (old_group_singleton);
     }
   if (new_group_singleton)
     {
-      g_signal_emit (new_group_singleton, group_changed_signal, 0);
+      g_signal_emit (new_group_singleton, signals[GROUP_CHANGED], 0);
       g_object_unref (new_group_singleton);
     }
 
@@ -604,9 +608,9 @@ gtk_radio_button_destroy (GtkWidget *widget)
   priv->group = NULL;
 
   if (old_group_singleton)
-    g_signal_emit (old_group_singleton, group_changed_signal, 0);
+    g_signal_emit (old_group_singleton, signals[GROUP_CHANGED], 0);
   if (was_in_group)
-    g_signal_emit (radio_button, group_changed_signal, 0);
+    g_signal_emit (radio_button, signals[GROUP_CHANGED], 0);
 
   GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->destroy (widget);
 }
