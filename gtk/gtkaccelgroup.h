@@ -184,11 +184,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_accelerator_valid		      (guint	        keyval,
 					       GdkModifierType  modifiers) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-void	 gtk_accelerator_parse		      (const gchar     *accelerator,
+gboolean gtk_accelerator_parse		      (const gchar     *accelerator,
 					       guint	       *accelerator_key,
 					       GdkModifierType *accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-void gtk_accelerator_parse_with_keycode       (const gchar     *accelerator,
+gboolean gtk_accelerator_parse_with_keycode   (const gchar     *accelerator,
                                                guint           *accelerator_key,
                                                guint          **accelerator_codes,
                                                GdkModifierType *accelerator_mods);

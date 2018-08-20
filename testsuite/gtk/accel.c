@@ -28,19 +28,19 @@ test_one_accel (const char *accel,
   char *label, *name;
 
   accel_key = 0;
-  gtk_accelerator_parse_with_keycode (accel,
-				      &accel_key,
-				      &keycodes,
-				      &mods);
+  g_assert (gtk_accelerator_parse_with_keycode (accel,
+                                                &accel_key,
+                                                &keycodes,
+                                                &mods));
 
   if (has_keysym)
     {
       guint accel_key_2;
       GdkModifierType mods_2;
 
-      gtk_accelerator_parse (accel,
-                             &accel_key_2,
-                             &mods_2);
+      g_assert (gtk_accelerator_parse (accel,
+                                       &accel_key_2,
+                                       &mods_2));
       g_assert (accel_key == accel_key_2);
       g_assert (mods == mods_2);
     }
