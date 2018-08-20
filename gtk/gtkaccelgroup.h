@@ -189,6 +189,7 @@ gboolean gtk_accelerator_parse		      (const gchar     *accelerator,
 					       GdkModifierType *accelerator_mods);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_accelerator_parse_with_keycode   (const gchar     *accelerator,
+                                               GdkDisplay      *display,
                                                guint           *accelerator_key,
                                                guint          **accelerator_codes,
                                                GdkModifierType *accelerator_mods);
