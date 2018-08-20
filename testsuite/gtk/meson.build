@@ -17,6 +17,7 @@ tests = [
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
+  ['concatmodel', ['../../gtk/gtkconcatmodel.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['cssprovider'],
   ['rbtree-crash', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['defaultvalue'],
