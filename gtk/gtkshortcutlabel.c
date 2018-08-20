@@ -129,7 +129,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
   const gchar *labels[16];
   GList *freeme = NULL;
   gchar key_label[6];
-  gchar *tmp;
+  const gchar *tmp;
   gunichar ch;
   gint i = 0;
   gchar **retval;
