@@ -499,7 +499,7 @@ typedef struct {
 struct _GtkWidgetClassPrivate
 {
   GtkWidgetTemplate *template;
-  GSList *shortcuts;
+  GListStore *shortcuts;
   GType accessible_type;
   AtkRole accessible_role;
   const char *css_name;
@@ -799,9 +799,29 @@ static void
 gtk_widget_base_class_init (gpointer g_class)
 {
   GtkWidgetClass *klass = g_class;
+  GtkWidgetClassPrivate *priv;
 
-  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
-  klass->priv->template = NULL;
+  priv = klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
+
+  priv->template = NULL;
+
+  if (priv->shortcuts == NULL)
+    {
+      priv->shortcuts = g_list_store_new (GTK_TYPE_SHORTCUT);
+    }
+  else
+    {
+      GListModel *parent_shortcuts = G_LIST_MODEL (priv->shortcuts);
+      guint i;
+
+      priv->shortcuts = g_list_store_new (GTK_TYPE_SHORTCUT);
+      for (i = 0; i < g_list_model_get_n_items (parent_shortcuts); i++)
+        {
+          GtkShortcut *shortcut = g_list_model_get_item (parent_shortcuts, i);
+          g_list_store_append (priv->shortcuts, shortcut);
+          g_object_unref (shortcut);
+        }
+    }
 }
 
 static void
@@ -2155,8 +2175,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 static void
 gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 {
+
   template_data_free (klass->priv->template);
-  g_slist_free_full (klass->priv->shortcuts, g_object_unref);
+  g_object_unref (klass->priv->shortcuts);
 }
 
 static void
@@ -2869,8 +2890,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   if (layout_manager_type != G_TYPE_INVALID)
     gtk_widget_set_layout_manager (widget, g_object_new (layout_manager_type, NULL));
 
-  controller = gtk_shortcut_controller_new ();
-  gtk_shortcut_controller_set_run_class (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts));
   gtk_widget_add_controller (widget, controller);
 }
 
@@ -4919,13 +4939,7 @@ gtk_widget_class_add_shortcut (GtkWidgetClass *widget_class,
 
   priv = widget_class->priv;
 
-  priv->shortcuts = g_slist_prepend (priv->shortcuts, g_object_ref (shortcut));
-}
-
-const GSList *
-gtk_widget_class_get_shortcuts (GtkWidgetClass *widget_class)
-{
-  return widget_class->priv->shortcuts;
+  g_list_store_append (priv->shortcuts, shortcut);
 }
 
 static gboolean
