@@ -912,6 +912,7 @@ is_keycode (const gchar *string)
 /**
  * gtk_accelerator_parse_with_keycode:
  * @accelerator: string representing an accelerator
+ * @display: (allow-none): the #GdkDisplay to look up @accelerator_codes in
  * @accelerator_key: (out) (allow-none): return location for accelerator
  *     keyval, or %NULL
  * @accelerator_codes: (out) (array zero-terminated=1) (transfer full) (allow-none):
@@ -937,6 +938,7 @@ is_keycode (const gchar *string)
  */
 gboolean
 gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
+                                    GdkDisplay      *display,
                                     guint           *accelerator_key,
                                     guint          **accelerator_codes,
                                     GdkModifierType *accelerator_mods)
@@ -1100,7 +1102,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 
           if (keyval && accelerator_codes != NULL)
             {
-              GdkKeymap *keymap = gdk_display_get_keymap (gdk_display_get_default ());
+              GdkKeymap *keymap = gdk_display_get_keymap (display ? display : gdk_display_get_default ());
               GdkKeymapKey *keys;
               gint n_keys, i, j;
 
@@ -1193,7 +1195,7 @@ gtk_accelerator_parse (const gchar     *accelerator,
                        guint           *accelerator_key,
                        GdkModifierType *accelerator_mods)
 {
-  return gtk_accelerator_parse_with_keycode (accelerator, accelerator_key, NULL, accelerator_mods);
+  return gtk_accelerator_parse_with_keycode (accelerator, NULL, accelerator_key, NULL, accelerator_mods);
 }
 
 /**
