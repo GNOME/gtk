@@ -63,6 +63,8 @@ struct _GtkShortcutActionClass
                                    GtkShortcutActionFlags        flags,
                                    GtkWidget                    *widget,
                                    GVariant                     *args);
+  void            (* print)       (GtkShortcutAction            *action,
+                                   GString                      *string);
 };
 
 G_DEFINE_BOXED_TYPE (GtkShortcutAction, gtk_shortcut_action,
@@ -152,6 +154,50 @@ gtk_shortcut_action_get_action_type (GtkShortcutAction *self)
 }
 
 /**
+ * gtk_shortcut_action_to_string:
+ * @self: a #GtkShortcutAction
+ *
+ * Prints the given action into a human-readable string.
+ * This is a small wrapper around gtk_shortcut_action_print() to help
+ * when debugging.
+ *
+ * Returns: (transfer full): a new string
+ **/
+char *
+gtk_shortcut_action_to_string (GtkShortcutAction *self)
+{
+  GString *string;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (self), NULL);
+
+  string = g_string_new (NULL);
+  gtk_shortcut_action_print (self, string);
+
+  return g_string_free (string, FALSE);
+}
+
+/**
+ * gtk_shortcut_action_print:
+ * @self: a #GtkShortcutAction
+ * @string: a #GString to print into
+ *
+ * Prints the given action into a string for the developer.
+ * This is meant for debugging and logging.
+ *
+ * The form of the representation may change at any time and is
+ * not guaranteed to stay identical.
+ **/
+void
+gtk_shortcut_action_print (GtkShortcutAction *self,
+                           GString           *string)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT_ACTION (self));
+  g_return_if_fail (string != NULL);
+
+  return self->action_class->print (self, string);
+}
+
+/**
  * gtk_shortcut_action_activate:
  * @self: a #GtkShortcutAction
  * @flags: flags to activate with
@@ -205,12 +251,20 @@ gtk_nothing_action_activate (GtkShortcutAction      *action,
   return FALSE;
 }
 
+static void
+gtk_nothing_action_print (GtkShortcutAction *action,
+                          GString           *string)
+{
+  g_string_append (string, "nothing");
+}
+
 static const GtkShortcutActionClass GTK_NOTHING_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_NOTHING,
   sizeof (GtkNothingAction),
   "GtkNothingAction",
   gtk_nothing_action_finalize,
-  gtk_nothing_action_activate
+  gtk_nothing_action_activate,
+  gtk_nothing_action_print
 };
 
 static GtkNothingAction nothing = { { &GTK_NOTHING_ACTION_CLASS, 1 } };
@@ -262,12 +316,22 @@ gtk_callback_action_activate (GtkShortcutAction      *action,
   return self->callback (widget, args, self->user_data);
 }
 
+static void
+gtk_callback_action_print (GtkShortcutAction *action,
+                           GString           *string)
+{
+  GtkCallbackAction *self = (GtkCallbackAction *) action;
+
+  g_string_append_printf (string, "callback(%p)", self->callback);
+}
+
 static const GtkShortcutActionClass GTK_CALLBACK_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_CALLBACK,
   sizeof (GtkCallbackAction),
   "GtkCallbackAction",
   gtk_callback_action_finalize,
-  gtk_callback_action_activate
+  gtk_callback_action_activate,
+  gtk_callback_action_print
 };
 
 /**
@@ -323,12 +387,20 @@ gtk_activate_action_activate (GtkShortcutAction      *action,
   return gtk_widget_activate (widget);
 }
 
+static void
+gtk_activate_action_print (GtkShortcutAction *action,
+                           GString           *string)
+{
+  g_string_append (string, "activate");
+}
+
 static const GtkShortcutActionClass GTK_ACTIVATE_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_ACTIVATE,
   sizeof (GtkActivateAction),
   "GtkActivateAction",
   gtk_activate_action_finalize,
-  gtk_activate_action_activate
+  gtk_activate_action_activate,
+  gtk_activate_action_print
 };
 
 static GtkActivateAction activate = { { &GTK_ACTIVATE_ACTION_CLASS, 1 } };
@@ -371,12 +443,20 @@ gtk_mnemonic_action_activate (GtkShortcutAction      *action,
   return gtk_widget_mnemonic_activate (widget, flags & GTK_SHORTCUT_ACTION_EXCLUSIVE ? FALSE : TRUE);
 }
 
+static void
+gtk_mnemonic_action_print (GtkShortcutAction *action,
+                           GString           *string)
+{
+  g_string_append (string, "mnemonic-activate");
+}
+
 static const GtkShortcutActionClass GTK_MNEMONIC_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_MNEMONIC,
   sizeof (GtkMnemonicAction),
   "GtkMnemonicAction",
   gtk_mnemonic_action_finalize,
-  gtk_mnemonic_action_activate
+  gtk_mnemonic_action_activate,
+  gtk_mnemonic_action_print
 };
 
 static GtkMnemonicAction mnemonic = { { &GTK_MNEMONIC_ACTION_CLASS, 1 } };
@@ -660,12 +740,22 @@ gtk_signal_action_activate (GtkShortcutAction      *action,
   return handled;
 }
 
+static void
+gtk_signal_action_print (GtkShortcutAction *action,
+                         GString           *string)
+{
+  GtkSignalAction *self = (GtkSignalAction *) action;
+
+  g_string_append_printf (string, "signal(%s)", self->name);
+}
+
 static const GtkShortcutActionClass GTK_SIGNAL_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_SIGNAL,
   sizeof (GtkSignalAction),
   "GtkSignalAction",
   gtk_signal_action_finalize,
-  gtk_signal_action_activate
+  gtk_signal_action_activate,
+  gtk_signal_action_print
 };
 
 /**
@@ -803,12 +893,22 @@ gtk_action_action_activate (GtkShortcutAction      *action,
   return TRUE;
 }
 
+static void
+gtk_action_action_print (GtkShortcutAction *action,
+                         GString           *string)
+{
+  GtkActionAction *self = (GtkActionAction *) action;
+
+  g_string_append_printf (string, "action(%s)", self->name);
+}
+
 static const GtkShortcutActionClass GTK_ACTION_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_ACTION,
   sizeof (GtkActionAction),
   "GtkActionAction",
   gtk_action_action_finalize,
-  gtk_action_action_activate
+  gtk_action_action_activate,
+  gtk_action_action_print
 };
 
 /**
@@ -892,12 +992,22 @@ gtk_gaction_action_activate (GtkShortcutAction      *action,
   return TRUE;
 }
 
+static void
+gtk_gaction_action_print (GtkShortcutAction *action,
+                          GString           *string)
+{
+  GtkGActionAction *self = (GtkGActionAction *) action;
+
+  g_string_append_printf (string, "gaction(%s %p)", g_action_get_name (self->gaction), self->gaction);
+}
+
 static const GtkShortcutActionClass GTK_GACTION_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_GACTION,
   sizeof (GtkGActionAction),
   "GtkGActionAction",
   gtk_gaction_action_finalize,
-  gtk_gaction_action_activate
+  gtk_gaction_action_activate,
+  gtk_gaction_action_print
 };
 
 /**
