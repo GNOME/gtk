@@ -257,22 +257,6 @@ gtk_check_button_get_property (GObject      *object,
 }
 
 static void
-gtk_check_button_snapshot (GtkWidget   *widget,
-                           GtkSnapshot *snapshot)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkWidget *child;
-
-  if (priv->draw_indicator)
-    gtk_widget_snapshot_child (widget, priv->indicator_widget, snapshot);
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (child)
-    gtk_widget_snapshot_child (widget, child, snapshot);
-}
-
-static void
 gtk_check_button_direction_changed (GtkWidget        *widget,
                                     GtkTextDirection  previous_direction)
 {
@@ -306,7 +290,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   widget_class->measure = gtk_check_button_measure;
   widget_class->size_allocate = gtk_check_button_size_allocate;
-  widget_class->snapshot = gtk_check_button_snapshot;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
 
