@@ -725,12 +725,6 @@ gtk_css_style_snapshot_border (GtkCssStyle *style,
     }
 }
 
-gboolean
-gtk_css_style_render_has_outline (GtkCssStyle *style)
-{
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100) > 0;
-}
-
 static void
 compute_outline_rect (GtkCssStyle       *style,
                       gdouble            x,

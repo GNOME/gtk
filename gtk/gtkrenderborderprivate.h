@@ -34,7 +34,6 @@ void            gtk_css_style_snapshot_border           (GtkCssStyle            
                                                          gdouble                 width,
                                                          gdouble                 height);
 
-gboolean        gtk_css_style_render_has_outline        (GtkCssStyle            *style);
 void            gtk_css_style_snapshot_outline          (GtkCssStyle            *style,
                                                          GtkSnapshot            *snapshot,
                                                          gdouble                 width,
