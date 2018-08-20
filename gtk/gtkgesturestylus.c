@@ -193,8 +193,8 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
 /**
  * gtk_gesture_stylus_get_axes:
  * @gesture: a GtkGestureStylus
- * @axes: array of requested axes, terminated with #GDK_AXIS_IGNORE
- * @values: (out): return location for the axis values
+ * @axes: (array): array of requested axes, terminated with #GDK_AXIS_IGNORE
+ * @values: (out) (array): return location for the axis values
  *
  * Returns the current values for the requested @axes. This function
  * must be called from either the #GtkGestureStylus:down,
