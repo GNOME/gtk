@@ -574,10 +574,10 @@ find_accel (GtkAccelKey *key,
  * so no need to be UTF-8 safe.
  */
 static void
-append_without_underscores (GString *s,
-                            gchar   *str)
+append_without_underscores (GString    *s,
+                            const char *str)
 {
-  gchar *p;
+  const char *p;
 
   if (g_str_has_prefix (str, "XF86"))
     p = str + 4;
@@ -816,7 +816,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
     }
   else if (!append_keyval_symbol (accelerator_key, gstring))
     {
-      gchar *tmp;
+      const char *tmp;
 
       tmp = gdk_keyval_name (gdk_keyval_to_lower (accelerator_key));
       if (tmp != NULL)
