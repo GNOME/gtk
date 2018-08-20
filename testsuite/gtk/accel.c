@@ -29,6 +29,7 @@ test_one_accel (const char *accel,
 
   accel_key = 0;
   g_assert (gtk_accelerator_parse_with_keycode (accel,
+                                                gdk_display_get_default (),
                                                 &accel_key,
                                                 &keycodes,
                                                 &mods));
