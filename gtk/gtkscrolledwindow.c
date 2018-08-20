@@ -1341,12 +1341,29 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
                               GtkScrolledWindow        *scrolled_window)
 {
   gdouble unit_x, unit_y;
+  gboolean shifted;
+  GdkModifierType state;
+
+  if (!gtk_get_current_event_state (&state))
+    return;
+
+  shifted = (state & GDK_SHIFT_MASK) != 0;
 
   unit_x = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
   unit_y = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL);
-  gtk_scrolled_window_decelerate (scrolled_window,
-                                  initial_vel_x * unit_x,
-                                  initial_vel_y * unit_y);
+
+  if (shifted)
+    {
+      gtk_scrolled_window_decelerate (scrolled_window,
+                                      initial_vel_y * unit_x,
+                                      initial_vel_x * unit_y);
+    }
+  else
+    {
+      gtk_scrolled_window_decelerate (scrolled_window,
+                                      initial_vel_x * unit_x,
+                                      initial_vel_y * unit_y);
+    }
 }
 
 static void
