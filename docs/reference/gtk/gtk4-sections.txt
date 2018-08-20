@@ -6660,6 +6660,8 @@ gtk_shortcut_action_ref
 gtk_shortcut_action_unref
 GtkShortcutActionType
 gtk_shortcut_action_get_action_type
+gtk_shortcut_action_to_string
+gtk_shortcut_action_print
 gtk_shortcut_action_activate
 
 <SUBSECTION>
