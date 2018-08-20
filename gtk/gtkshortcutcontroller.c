@@ -53,7 +53,6 @@ struct _GtkShortcutController
   GdkModifierType mnemonics_modifiers;
 
   guint custom_shortcuts : 1;
-  guint run_class : 1;
   guint run_managed : 1;
 };
 
@@ -242,17 +241,6 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
                                                     event,
                                                     enable_mnemonics))
         return TRUE;
-    }
-
-  if (self->run_class)
-    {
-      widget = gtk_event_controller_get_widget (controller); 
-
-      for (l = gtk_widget_class_get_shortcuts (GTK_WIDGET_GET_CLASS (widget)); l; l = l->next)
-        {
-          if (gtk_shortcut_controller_trigger_shortcut (self, l->data, event, enable_mnemonics))
-            return TRUE;
-        }
     }
 
   if (self->run_managed)
@@ -465,13 +453,6 @@ gtk_shortcut_controller_new_for_model (GListModel *model)
   return g_object_new (GTK_TYPE_SHORTCUT_CONTROLLER,
                        "model", model,
                        NULL);
-}
-
-void
-gtk_shortcut_controller_set_run_class (GtkShortcutController  *controller,
-                                       gboolean                run_class)
-{
-  controller->run_class = run_class;
 }
 
 void
