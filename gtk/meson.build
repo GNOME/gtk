@@ -202,6 +202,7 @@ gtk_public_sources = files([
   'gtkconstraintguide.c',
   'gtkconstraintlayout.c',
   'gtkconstraint.c',
+  'gtkconcatmodel.c',
   'gtkcontainer.c',
   'gtkcssprovider.c',
   'gtkdialog.c',
