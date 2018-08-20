@@ -131,7 +131,7 @@ atk_key_event_from_gdk_event_key (GdkEventKey       *key,
 
   event->state = state;
   event->keyval = keyval;
-  event->string = gdk_keyval_name (keyval);
+  event->string = (char *) gdk_keyval_name (keyval);
   event->length = strlen (event->string);
   event->keycode = keycode;
   event->timestamp = gdk_event_get_time ((GdkEvent *)key);
