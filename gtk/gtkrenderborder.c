@@ -668,19 +668,19 @@ gtk_css_style_snapshot_border (GtkCssStyle *style,
 {
   GtkBorderImage border_image;
   float border_width[4];
-  graphene_rect_t bounds;
-  cairo_t *cr;
 
   border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
   border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
   border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
   border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-  graphene_rect_init (&bounds, 0, 0, width, height);
-
   if (gtk_border_image_init (&border_image, style))
     {
+      cairo_t *cr;
+      graphene_rect_t bounds;
       double double_width[4] = { border_width[0], border_width[1], border_width[2], border_width[3] };
+
+      graphene_rect_init (&bounds, 0, 0, width, height);
 
       gtk_snapshot_push_debug (snapshot, "CSS border image");
       cr = gtk_snapshot_append_cairo (snapshot,
