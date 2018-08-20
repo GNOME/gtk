@@ -242,8 +242,6 @@ void _gtk_widget_get_preferred_size_and_baseline(GtkWidget        *widget,
                                                 gint              *minimum_baseline,
                                                 gint              *natural_baseline);
 
-const GSList *    gtk_widget_class_get_shortcuts           (GtkWidgetClass *widget_class);
-
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
 void              _gtk_widget_set_has_default              (GtkWidget *widget,
