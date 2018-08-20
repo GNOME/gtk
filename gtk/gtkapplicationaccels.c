@@ -196,9 +196,7 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
 
       for (i = 0; i < n; i++)
         {
-          gtk_accelerator_parse (accelerators[i], &keys[i].key, &keys[i].modifier);
-
-          if (keys[i].key == 0)
+          if (!gtk_accelerator_parse (accelerators[i], &keys[i].key, &keys[i].modifier))
             {
               g_warning ("Unable to parse accelerator '%s': ignored request to install %d accelerators",
                          accelerators[i], n);
@@ -272,12 +270,10 @@ gtk_application_accels_get_actions_for_accel (GtkApplicationAccels *accels,
   AccelKey accel_key;
   guint i, n;
 
-  gtk_accelerator_parse (accel, &accel_key.key, &accel_key.modifier);
-
-  if (accel_key.key == 0)
+  if (!gtk_accelerator_parse (accel, &accel_key.key, &accel_key.modifier))
     {
       g_critical ("invalid accelerator string '%s'", accel);
-      g_return_val_if_fail (accel_key.key != 0, NULL);
+      return NULL;
     }
 
   actions_and_targets = g_hash_table_lookup (accels->accel_to_actions, &accel_key);
