@@ -310,9 +310,10 @@ gtk_model_menu_item_set_accel (GtkModelMenuItem *item,
 
   if (accel)
     {
-      gtk_accelerator_parse (accel, &key, &modifiers);
-      if (!key)
-        modifiers = 0;
+      if (!gtk_accelerator_parse (accel, &key, &modifiers))
+        {
+          g_warning ("\"%s\" is not a valida accelerator, ignoring", accel);
+        }
     }
   else
     {
