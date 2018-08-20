@@ -133,7 +133,7 @@ GdkModifierType gdk_keymap_get_modifier_mask       (GdkKeymap           *keymap,
 /* Key values
  */
 GDK_AVAILABLE_IN_ALL
-gchar*   gdk_keyval_name         (guint        keyval) G_GNUC_CONST;
+const gchar*gdk_keyval_name      (guint        keyval) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 guint    gdk_keyval_from_name    (const gchar *keyval_name);
