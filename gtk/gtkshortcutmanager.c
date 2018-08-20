@@ -21,36 +21,51 @@
 
 #include "gtkshortcutmanager.h"
 
+#include "gtkconcatmodelprivate.h"
+
 G_DEFINE_INTERFACE (GtkShortcutManager, gtk_shortcut_manager, G_TYPE_OBJECT)
 
-static void
-complain_if_reached (gpointer should_be_gone)
+static GtkConcatModel *
+gtk_shortcut_manager_get_model (GtkShortcutManager  *self,
+                                GtkPropagationPhase  phase)
 {
-  g_critical ("Shortcut controllers failed to clean up.");
+  switch (phase)
+    {
+    case GTK_PHASE_CAPTURE:
+      return g_object_get_data (G_OBJECT (self), "gtk-shortcut-manager-capture");
+    case GTK_PHASE_BUBBLE:
+      return g_object_get_data (G_OBJECT (self), "gtk-shortcut-manager-bubble");
+    case GTK_PHASE_NONE:
+    case GTK_PHASE_TARGET:
+      return NULL;
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
 }
 
 static void
 gtk_shortcut_manager_default_add_controller (GtkShortcutManager    *self,
                                              GtkShortcutController *controller)
 {
-  GSList *controllers;
+  GtkConcatModel *model;
 
-  controllers = g_object_steal_data (G_OBJECT (self), "gtk-shortcut-controllers");
-  controllers = g_slist_prepend (controllers, g_object_ref (controller));
-  g_object_set_data_full (G_OBJECT (self), "gtk-shortcut-controllers", controllers, complain_if_reached);
+  model = gtk_shortcut_manager_get_model (self, 
+                                          gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller)));
+  if (model)
+    gtk_concat_model_append (model, G_LIST_MODEL (controller));
 }
 
 static void
 gtk_shortcut_manager_default_remove_controller (GtkShortcutManager    *self,
                                                 GtkShortcutController *controller)
 {
-  GSList *controllers;
+  GtkConcatModel *model;
 
-  controllers = g_object_steal_data (G_OBJECT (self), "gtk-shortcut-controllers");
-  controllers = g_slist_remove (controllers, controller);
-  if (controllers)
-    g_object_set_data_full (G_OBJECT (self), "gtk-shortcut-controllers", controllers, complain_if_reached);
-  g_object_unref (controller);
+  model = gtk_shortcut_manager_get_model (self, 
+                                          gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller)));
+  if (model)
+    gtk_concat_model_remove (model, G_LIST_MODEL (controller));
 }
 
 static void

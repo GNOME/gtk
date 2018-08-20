@@ -34,6 +34,7 @@
 
 #include "gtkshortcutcontrollerprivate.h"
 
+#include "gtkconcatmodelprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkintl.h"
 #include "gtkshortcut.h"
@@ -53,7 +54,6 @@ struct _GtkShortcutController
   GdkModifierType mnemonics_modifiers;
 
   guint custom_shortcuts : 1;
-  guint run_managed : 1;
 };
 
 struct _GtkShortcutControllerClass
@@ -212,15 +212,27 @@ gtk_shortcut_controller_finalize (GObject *object)
 static gboolean
 gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
                                           GtkShortcut           *shortcut,
+                                          guint                  position,
                                           const GdkEvent        *event,
                                           gboolean               enable_mnemonics)
 {
+  GtkWidget *widget;
+
   if (!gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
     return FALSE;
 
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+  if (!self->custom_shortcuts &&
+      GTK_IS_CONCAT_MODEL (self->shortcuts))
+    {
+      GListModel *model = gtk_concat_model_get_model_for_item (GTK_CONCAT_MODEL (self->shortcuts), position);
+      if (GTK_IS_SHORTCUT_CONTROLLER (model))
+        widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
+    }
+
   return gtk_shortcut_action_activate (gtk_shortcut_get_action (shortcut),
                                        GTK_SHORTCUT_ACTION_EXCLUSIVE, /* FIXME */
-                                       gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)),
+                                       widget,
                                        gtk_shortcut_get_arguments (shortcut));
 }
 
@@ -230,32 +242,16 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
                                          gboolean            enable_mnemonics)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
-  GtkWidget *widget;
-  const GSList *l;
   guint i;
 
   for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
     {
       if (gtk_shortcut_controller_trigger_shortcut (self, 
                                                     g_list_model_get_item (self->shortcuts, i),
+                                                    i,
                                                     event,
                                                     enable_mnemonics))
         return TRUE;
-    }
-
-  if (self->run_managed)
-    {
-      GtkPropagationPhase current_phase = gtk_event_controller_get_propagation_phase (controller);
-      widget = gtk_event_controller_get_widget (controller); 
-      
-      for (l = g_object_get_data (G_OBJECT (widget), "gtk-shortcut-controllers"); l; l = l->next)
-        {
-          if (gtk_event_controller_get_propagation_phase (l->data) != current_phase)
-            continue;
-
-          if (gtk_shortcut_controller_run_controllers (l->data, event, enable_mnemonics))
-            return TRUE;
-        }
     }
 
   return FALSE;
@@ -453,13 +449,6 @@ gtk_shortcut_controller_new_for_model (GListModel *model)
   return g_object_new (GTK_TYPE_SHORTCUT_CONTROLLER,
                        "model", model,
                        NULL);
-}
-
-void
-gtk_shortcut_controller_set_run_managed (GtkShortcutController  *controller,
-                                         gboolean                run_managed)
-{
-  controller->run_managed = run_managed;
 }
 
 /**
