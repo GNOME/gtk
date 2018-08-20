@@ -82,7 +82,6 @@
 
 typedef struct
 {
-  GtkWidget *widget;
   gint x;
   gint y;
 } GtkFixedChild;
