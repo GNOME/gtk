@@ -62,6 +62,9 @@ struct _GtkShortcutTriggerClass
   gboolean        (* trigger)     (GtkShortcutTrigger  *trigger,
                                    const GdkEvent      *event,
                                    gboolean             enable_mnemonics);
+  guint           (* hash)        (GtkShortcutTrigger  *trigger);
+  int             (* compare)     (GtkShortcutTrigger  *trigger1,
+                                   GtkShortcutTrigger  *trigger2);
   void            (* print)       (GtkShortcutTrigger  *trigger,
                                    GString             *string);
   gboolean        (* print_label) (GtkShortcutTrigger  *trigger,
@@ -287,6 +290,80 @@ gtk_shortcut_trigger_print_label (GtkShortcutTrigger *self,
   return self->trigger_class->print_label (self, display, string);
 }
 
+/**
+ * gtk_shortcut_trigger_hash:
+ * @trigger: (type GtkShortcutTrigger): a #GtkShortcutTrigger
+ *
+ * Generates a hash value for a #GtkShortcutTrigger.
+ *
+ * The output of this function is guaranteed to be the same for a given
+ * value only per-process.  It may change between different processor
+ * architectures or even different versions of GTK.  Do not use this
+ * function as a basis for building protocols or file formats.
+ *
+ * The types of @trigger is #gconstpointer only to allow use of this
+ * function with #GHashTable. They must each be a #GtkShortcutTrigger.
+ *
+ * Returns: a hash value corresponding to @trigger
+ **/
+guint
+gtk_shortcut_trigger_hash (gconstpointer trigger)
+{
+  GtkShortcutTrigger *t = (GtkShortcutTrigger *) trigger;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger), 0);
+
+  return t->trigger_class->hash (t);
+}
+
+/**
+ * gtk_shortcut_trigger_equal:
+ * @trigger1: (type GtkShortcutTrigger): a #GtkShortcutTrigger
+ * @trigger2: (type GtkShortcutTrigger): a #GtkShortcutTrigger
+ *
+ * Checks if @trigger1 and @trigger2 trigger under the same conditions.
+ *
+ * The types of @one and @two are #gconstpointer only to allow use of this
+ * function with #GHashTable. They must each be a #GtkShortcutTrigger.
+ *
+ * Returns: %TRUE if @trigger1 and @trigger2 are equal
+ **/
+gboolean
+gtk_shortcut_trigger_equal (gconstpointer trigger1,
+                            gconstpointer trigger2)
+{
+  return gtk_shortcut_trigger_compare (trigger1, trigger2) == 0;
+}
+
+/**
+ * gtk_shortcut_trigger_compare:
+ * @trigger1: (type GtkShortcutTrigger): a #GtkShortcutTrigger
+ * @trigger2: (type GtkShortcutTrigger): a #GtkShortcutTrigger
+ *
+ * 
+ * The types of @one and @two are #gconstpointer only to allow use of this
+ * function as a #GCompareFunc. They must each be a #GtkShortcutTrigger.
+ *
+ * Returns: An integer less than, equal to, or greater than zero if
+ *     @trigger1 is found, respectively, to be less than, to match,
+ *     or be greater than @trigger2.
+ **/
+gint
+gtk_shortcut_trigger_compare (gconstpointer trigger1,
+                              gconstpointer trigger2)
+{
+  GtkShortcutTrigger *t1 = (GtkShortcutTrigger *) trigger1;
+  GtkShortcutTrigger *t2 = (GtkShortcutTrigger *) trigger2;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger1), -1);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger2), 1);
+
+  if (t1->trigger_class != t2->trigger_class)
+    return t1->trigger_class->trigger_type - t2->trigger_class->trigger_type;
+
+  return t1->trigger_class->compare (t1, t2);
+}
+
 /*** GTK_SHORTCUT_TRIGGER_NEVER ***/
 
 typedef struct _GtkNeverTrigger GtkNeverTrigger;
@@ -314,6 +391,19 @@ gtk_never_trigger_trigger (GtkShortcutTrigger *trigger,
   return FALSE;
 }
 
+static guint
+gtk_never_trigger_hash (GtkShortcutTrigger *trigger)
+{
+  return GTK_SHORTCUT_TRIGGER_NEVER;
+}
+
+static int
+gtk_never_trigger_compare (GtkShortcutTrigger  *trigger1,
+                           GtkShortcutTrigger  *trigger2)
+{
+  return 0;
+}
+
 static void
 gtk_never_trigger_print (GtkShortcutTrigger *trigger,
                          GString            *string)
@@ -336,6 +426,8 @@ static const GtkShortcutTriggerClass GTK_NEVER_TRIGGER_CLASS = {
   "GtkNeverTrigger",
   gtk_never_trigger_finalize,
   gtk_never_trigger_trigger,
+  gtk_never_trigger_hash,
+  gtk_never_trigger_compare,
   gtk_never_trigger_print,
   gtk_never_trigger_print_label
 };
@@ -397,6 +489,30 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
   return keyval == self->keyval && modifiers == self->modifiers;
 }
 
+static guint
+gtk_keyval_trigger_hash (GtkShortcutTrigger *trigger)
+{
+  GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
+
+  return (self->modifiers << 24)
+       | (self->modifiers >> 8)
+       | (self->keyval << 16)
+       | GTK_SHORTCUT_TRIGGER_KEYVAL;
+}
+
+static int
+gtk_keyval_trigger_compare (GtkShortcutTrigger  *trigger1,
+                            GtkShortcutTrigger  *trigger2)
+{
+  GtkKeyvalTrigger *self1 = (GtkKeyvalTrigger *) trigger1;
+  GtkKeyvalTrigger *self2 = (GtkKeyvalTrigger *) trigger2;
+
+  if (self1->modifiers != self2->modifiers)
+    return self2->modifiers - self1->modifiers;
+
+  return self1->keyval - self2->keyval;
+}
+
 static void
 gtk_keyval_trigger_print (GtkShortcutTrigger *trigger,
                           GString            *string)
@@ -429,6 +545,8 @@ static const GtkShortcutTriggerClass GTK_KEYVAL_TRIGGER_CLASS = {
   "GtkKeyvalTrigger",
   gtk_keyval_trigger_finalize,
   gtk_keyval_trigger_trigger,
+  gtk_keyval_trigger_hash,
+  gtk_keyval_trigger_compare,
   gtk_keyval_trigger_print,
   gtk_keyval_trigger_print_label
 };
@@ -538,6 +656,25 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
   return keyval == self->keyval;
 }
 
+static guint
+gtk_mnemonic_trigger_hash (GtkShortcutTrigger *trigger)
+{
+  GtkMnemonicTrigger *self = (GtkMnemonicTrigger *) trigger;
+
+  return (self->keyval << 8)
+       | GTK_SHORTCUT_TRIGGER_MNEMONIC;
+}
+
+static int
+gtk_mnemonic_trigger_compare (GtkShortcutTrigger  *trigger1,
+                              GtkShortcutTrigger  *trigger2)
+{
+  GtkMnemonicTrigger *self1 = (GtkMnemonicTrigger *) trigger1;
+  GtkMnemonicTrigger *self2 = (GtkMnemonicTrigger *) trigger2;
+
+  return self1->keyval - self2->keyval;
+}
+
 static void
 gtk_mnemonic_trigger_print (GtkShortcutTrigger *trigger,
                             GString            *string)
@@ -577,6 +714,8 @@ static const GtkShortcutTriggerClass GTK_MNEMONIC_TRIGGER_CLASS = {
   "GtkMnemonicTrigger",
   gtk_mnemonic_trigger_finalize,
   gtk_mnemonic_trigger_trigger,
+  gtk_mnemonic_trigger_hash,
+  gtk_mnemonic_trigger_compare,
   gtk_mnemonic_trigger_print,
   gtk_mnemonic_trigger_print_label
 };
@@ -664,6 +803,36 @@ gtk_alternative_trigger_trigger (GtkShortcutTrigger *trigger,
   return FALSE;
 }
 
+static guint
+gtk_alternative_trigger_hash (GtkShortcutTrigger *trigger)
+{
+  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+  guint result;
+
+  result = gtk_shortcut_trigger_hash (self->first);
+  result <<= 5;
+
+  result |= gtk_shortcut_trigger_hash (self->second);
+  result <<= 5;
+
+  return result | GTK_SHORTCUT_TRIGGER_ALTERNATIVE;
+}
+
+static int
+gtk_alternative_trigger_compare (GtkShortcutTrigger  *trigger1,
+                                 GtkShortcutTrigger  *trigger2)
+{
+  GtkAlternativeTrigger *self1 = (GtkAlternativeTrigger *) trigger1;
+  GtkAlternativeTrigger *self2 = (GtkAlternativeTrigger *) trigger2;
+  int cmp;
+
+  cmp = gtk_shortcut_trigger_compare (self1->first, self2->first);
+  if (cmp != 0)
+    return cmp;
+
+  return gtk_shortcut_trigger_compare (self1->second, self2->second);
+}
+
 static void
 gtk_alternative_trigger_print (GtkShortcutTrigger *trigger,
                                GString            *string)
@@ -703,6 +872,8 @@ static const GtkShortcutTriggerClass GTK_ALTERNATIVE_TRIGGER_CLASS = {
   "GtkAlternativeTrigger",
   gtk_alternative_trigger_finalize,
   gtk_alternative_trigger_trigger,
+  gtk_alternative_trigger_hash,
+  gtk_alternative_trigger_compare,
   gtk_alternative_trigger_print,
   gtk_alternative_trigger_print_label
 };
