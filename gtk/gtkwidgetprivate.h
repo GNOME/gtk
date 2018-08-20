@@ -211,7 +211,7 @@ typedef struct
 struct _GtkWidgetClassPrivate
 {
   GtkWidgetTemplate *template;
-  GSList *shortcuts;
+  GListStore *shortcuts;
   GType accessible_type;
   AtkRole accessible_role;
   GQuark css_name;
@@ -247,8 +247,6 @@ void         _gtk_widget_add_attached_window    (GtkWidget    *widget,
                                                  GtkWindow    *window);
 void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
                                                  GtkWindow    *window);
-
-const GSList *    gtk_widget_class_get_shortcuts           (GtkWidgetClass *widget_class);
 
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
