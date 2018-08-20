@@ -92,6 +92,11 @@ GDK_AVAILABLE_IN_ALL
 GtkShortcutActionType   gtk_shortcut_action_get_action_type     (GtkShortcutAction      *self);
 
 GDK_AVAILABLE_IN_ALL
+char *                  gtk_shortcut_action_to_string           (GtkShortcutAction      *self);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_shortcut_action_print               (GtkShortcutAction      *self,
+                                                                 GString                *string);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_shortcut_action_activate            (GtkShortcutAction      *self,
                                                                  GtkShortcutActionFlags  flags,
                                                                  GtkWidget              *widget,
