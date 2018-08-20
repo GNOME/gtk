@@ -932,8 +932,10 @@ is_keycode (const gchar *string)
  *
  * If the parse fails, @accelerator_key, @accelerator_mods and
  * @accelerator_codes will be set to 0 (zero).
+ *
+ * Returns: %TRUE if parsing succeeded
  */
-void
+gboolean
 gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
                                     guint           *accelerator_key,
                                     guint          **accelerator_codes,
@@ -950,7 +952,8 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
     *accelerator_mods = 0;
   if (accelerator_codes)
     *accelerator_codes = NULL;
-  g_return_if_fail (accelerator != NULL);
+
+  g_return_val_if_fail (accelerator != NULL, FALSE);
 
   error = FALSE;
   keyval = 0;
@@ -1160,6 +1163,8 @@ out:
     *accelerator_key = gdk_keyval_to_lower (keyval);
   if (accelerator_mods)
     *accelerator_mods = mods;
+
+  return !error;
 }
 
 /**
@@ -1183,12 +1188,12 @@ out:
  * If the parse fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
  */
-void
+gboolean
 gtk_accelerator_parse (const gchar     *accelerator,
                        guint           *accelerator_key,
                        GdkModifierType *accelerator_mods)
 {
-  gtk_accelerator_parse_with_keycode (accelerator, accelerator_key, NULL, accelerator_mods);
+  return gtk_accelerator_parse_with_keycode (accelerator, accelerator_key, NULL, accelerator_mods);
 }
 
 /**
