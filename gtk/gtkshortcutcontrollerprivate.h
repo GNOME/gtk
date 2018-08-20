@@ -22,9 +22,6 @@
 
 #include "gtkshortcutcontroller.h"
 
-void                    gtk_shortcut_controller_set_run_managed         (GtkShortcutController  *controller,
-                                                                         gboolean                run_managed);
-
 void                    gtk_shortcut_controller_root                    (GtkShortcutController  *controller);
 void                    gtk_shortcut_controller_unroot                  (GtkShortcutController  *controller);
 
