@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-09 10:41+0000\n"
-"PO-Revision-Date: 2018-08-12 17:41+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"POT-Creation-Date: 2018-08-20 15:08+0000\n"
+"PO-Revision-Date: 2018-08-21 23:55+0800\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -5506,11 +5506,11 @@ msgstr "側邊欄是否只包含本地端檔案"
 
 #: gtk/gtkplacessidebar.c:4832
 msgid "Show 'Trash'"
-msgstr "顯示「回收筒」"
+msgstr "顯示「垃圾桶」"
 
 #: gtk/gtkplacessidebar.c:4833
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
-msgstr "側邊欄是否包含回收筒位置的內建捷徑"
+msgstr "側邊欄是否包含垃圾桶位置的內建捷徑"
 
 #: gtk/gtkplacessidebar.c:4838
 msgid "Show 'Other locations'"
