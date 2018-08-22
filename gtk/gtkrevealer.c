@@ -617,30 +617,32 @@ gtk_revealer_snapshot (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv;
   GtkRevealerTransitionType transition;
   GtkWidget *child;
+  gboolean clip_child;
 
+  priv = gtk_revealer_get_instance_private (revealer);
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child == NULL || !gtk_widget_get_mapped (child))
     return;
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
-    {
-      gtk_widget_snapshot_child (widget, child, snapshot);
-    }
-  else
-    {
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT(
-                                  0, 0,
-                                  gtk_widget_get_width (widget),
-                                  gtk_widget_get_height (widget)
-                              ));
-      gtk_widget_snapshot_child (widget, child, snapshot);
-      gtk_snapshot_pop (snapshot);
-    }
+  clip_child = transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
+               transition != GTK_REVEALER_TRANSITION_TYPE_CROSSFADE &&
+               gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER;
+  if (clip_child)
+    gtk_snapshot_push_clip (snapshot,
+                            &GRAPHENE_RECT_INIT(
+                                0, 0,
+                                gtk_widget_get_width (widget),
+                                gtk_widget_get_height (widget)
+                            ));
+
+  gtk_widget_snapshot_child (widget, child, snapshot);
+
+  if (clip_child)
+    gtk_snapshot_pop (snapshot);
 }
 
 /**
