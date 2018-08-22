@@ -1260,7 +1260,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                             P_("No show all"),
                             P_("Whether gtk_widget_show_all() should not affect this widget"),
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
  * GtkWidget:has-tooltip:
