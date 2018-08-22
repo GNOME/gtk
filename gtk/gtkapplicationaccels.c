@@ -22,135 +22,28 @@
 #include "config.h"
 
 #include "gtkapplicationaccelsprivate.h"
+
 #include "gtkactionmuxerprivate.h"
-
-#include <string.h>
-
-typedef struct
-{
-  guint           key;
-  GdkModifierType modifier;
-} AccelKey;
+#include "gtkshortcut.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcuttrigger.h"
 
 struct _GtkApplicationAccels
 {
   GObject parent;
 
-  GHashTable *action_to_accels;
-  GHashTable *accel_to_actions;
+  GListModel *shortcuts;
 };
 
 G_DEFINE_TYPE (GtkApplicationAccels, gtk_application_accels, G_TYPE_OBJECT)
-
-static AccelKey *
-accel_key_copy (const AccelKey *source)
-{
-  AccelKey *dest;
-
-  dest = g_slice_new (AccelKey);
-  dest->key = source->key;
-  dest->modifier = source->modifier;
-
-  return dest;
-}
-
-static void
-accel_key_free (gpointer data)
-{
-  AccelKey *key = data;
-
-  g_slice_free (AccelKey, key);
-}
-
-static guint
-accel_key_hash (gconstpointer data)
-{
-  const AccelKey *key = data;
-
-  return key->key + (key->modifier << 16);
-}
-
-static gboolean
-accel_key_equal (gconstpointer a,
-                 gconstpointer b)
-{
-  const AccelKey *ak = a;
-  const AccelKey *bk = b;
-
-  return ak->key == bk->key && ak->modifier == bk->modifier;
-}
-
-static void
-add_entry (GtkApplicationAccels *accels,
-           AccelKey             *key,
-           const gchar          *action_and_target)
-{
-  const gchar **old;
-  const gchar **new;
-  gint n;
-
-  old = g_hash_table_lookup (accels->accel_to_actions, key);
-  if (old != NULL)
-    for (n = 0; old[n]; n++)  /* find the length */
-      ;
-  else
-    n = 0;
-
-  new = g_new (const gchar *, n + 1 + 1);
-  memcpy (new, old, n * sizeof (const gchar *));
-  new[n] = action_and_target;
-  new[n + 1] = NULL;
-
-  g_hash_table_insert (accels->accel_to_actions, accel_key_copy (key), new);
-}
-
-static void
-remove_entry (GtkApplicationAccels *accels,
-              AccelKey             *key,
-              const gchar          *action_and_target)
-{
-  const gchar **old;
-  const gchar **new;
-  gint n, i;
-
-  /* if we can't find the entry then something has gone very wrong... */
-  old = g_hash_table_lookup (accels->accel_to_actions, key);
-  g_assert (old != NULL);
-
-  for (n = 0; old[n]; n++)  /* find the length */
-    ;
-  g_assert_cmpint (n, >, 0);
-
-  if (n == 1)
-    {
-      /* The simple case of removing the last action for an accel. */
-      g_assert_cmpstr (old[0], ==, action_and_target);
-      g_hash_table_remove (accels->accel_to_actions, key);
-      return;
-    }
-
-  for (i = 0; i < n; i++)
-    if (g_str_equal (old[i], action_and_target))
-      break;
-
-  /* We must have found it... */
-  g_assert_cmpint (i, <, n);
-
-  new = g_new (const gchar *, n - 1 + 1);
-  memcpy (new, old, i * sizeof (const gchar *));
-  memcpy (new + i, old + i + 1, (n - (i + 1)) * sizeof (const gchar *));
-  new[n - 1] = NULL;
-
-  g_hash_table_insert (accels->accel_to_actions, accel_key_copy (key), new);
-}
 
 static void
 gtk_application_accels_finalize (GObject *object)
 {
   GtkApplicationAccels *accels = GTK_APPLICATION_ACCELS (object);
 
-  g_hash_table_unref (accels->accel_to_actions);
-  g_hash_table_unref (accels->action_to_accels);
+  g_list_store_remove_all (G_LIST_STORE (accels->shortcuts));
+  g_object_unref (accels->shortcuts);
 
   G_OBJECT_CLASS (gtk_application_accels_parent_class)->finalize (object);
 }
@@ -166,9 +59,7 @@ gtk_application_accels_class_init (GtkApplicationAccelsClass *klass)
 static void
 gtk_application_accels_init (GtkApplicationAccels *accels)
 {
-  accels->accel_to_actions = g_hash_table_new_full (accel_key_hash, accel_key_equal,
-                                                    accel_key_free, g_free);
-  accels->action_to_accels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  accels->shortcuts = G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT));
 }
 
 GtkApplicationAccels *
@@ -182,52 +73,99 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
                                               const gchar          *detailed_action_name,
                                               const gchar * const  *accelerators)
 {
-  gchar *action_and_target;
-  AccelKey *keys, *old_keys;
-  gint i, n;
+  gchar *action_name;
+  GVariant *target;
+  GtkShortcut *shortcut;
+  GtkShortcutTrigger *trigger = NULL;
+  GError *error = NULL;
+  guint i;
 
-  action_and_target = gtk_normalise_detailed_action_name (detailed_action_name);
-
-  n = accelerators ? g_strv_length ((gchar **) accelerators) : 0;
-
-  if (n > 0)
+  if (!g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error))
     {
-      keys = g_new0 (AccelKey, n + 1);
+      g_critical ("Error parsing action name: %s", error->message);
+      g_error_free (error);
+      return;
+    }
 
-      for (i = 0; i < n; i++)
+  /* remove the accelerator if it already exists */
+  for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
+    {
+      GtkShortcut *s = g_list_model_get_item (accels->shortcuts, i);
+      GtkShortcutAction *action = gtk_shortcut_get_action (s);
+      GVariant *args = gtk_shortcut_get_arguments (s);
+
+      g_object_unref (s);
+
+      if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION ||
+          !g_str_equal (gtk_action_action_get_name (action), action_name))
+        continue;
+
+      if ((target == NULL && args != NULL) ||
+          (target != NULL && (args == NULL || !g_variant_equal (target, args))))
+        continue;
+
+      g_list_store_remove (G_LIST_STORE (accels->shortcuts), i);
+      break;
+    }
+
+  if (accelerators == NULL)
+    goto out;
+
+  for (i = 0; accelerators[i]; i++)
+    {
+      GtkShortcutTrigger *new_trigger;
+      guint key, modifier;
+
+      if (!gtk_accelerator_parse (accelerators[i], &key, &modifier))
         {
-          if (!gtk_accelerator_parse (accelerators[i], &keys[i].key, &keys[i].modifier))
-            {
-              g_warning ("Unable to parse accelerator '%s': ignored request to install %d accelerators",
-                         accelerators[i], n);
-              g_free (action_and_target);
-              g_free (keys);
-              return;
-            }
+          g_critical ("Unable to parse accelerator '%s': ignored request to install accelerators",
+                      accelerators[i]);
+          if (trigger)
+            gtk_shortcut_trigger_unref (trigger);
+          goto out;;
         }
+      new_trigger = gtk_keyval_trigger_new (key, modifier);
+      if (trigger)
+        trigger = gtk_alternative_trigger_new (trigger, new_trigger);
+      else
+        trigger = new_trigger;
     }
-  else
-    keys = NULL;
+  if (trigger == NULL)
+    goto out;
 
-  old_keys = g_hash_table_lookup (accels->action_to_accels, action_and_target);
-  if (old_keys)
-    {
-      /* We need to remove accel entries from existing keys */
-      for (i = 0; old_keys[i].key; i++)
-        remove_entry (accels, &old_keys[i], action_and_target);
-    }
+  shortcut = gtk_shortcut_new (trigger, gtk_action_action_new (action_name));
+  gtk_shortcut_set_arguments (shortcut, target);
+  g_list_store_append (G_LIST_STORE (accels->shortcuts), shortcut);
+  g_object_unref (shortcut);
 
-  if (keys)
-    {
-      g_hash_table_replace (accels->action_to_accels, action_and_target, keys);
+out:
+  g_free (action_name);
+  if (target)
+    g_variant_unref (target);
+}
 
-      for (i = 0; i < n; i++)
-        add_entry (accels, &keys[i], action_and_target);
-    }
-  else
+static void
+append_accelerators (GPtrArray          *accels,
+                     GtkShortcutTrigger *trigger)
+{
+  switch (gtk_shortcut_trigger_get_trigger_type (trigger))
     {
-      g_hash_table_remove (accels->action_to_accels, action_and_target);
-      g_free (action_and_target);
+    case GTK_SHORTCUT_TRIGGER_KEYVAL:
+      g_ptr_array_add (accels,
+                       gtk_accelerator_name (gtk_keyval_trigger_get_keyval (trigger),
+                                             gtk_keyval_trigger_get_modifiers (trigger)));
+      return;
+
+    case GTK_SHORTCUT_TRIGGER_ALTERNATIVE:
+      append_accelerators (accels, gtk_alternative_trigger_get_first (trigger));
+      append_accelerators (accels, gtk_alternative_trigger_get_second (trigger));
+      return;
+
+    case GTK_SHORTCUT_TRIGGER_MNEMONIC:
+    case GTK_SHORTCUT_TRIGGER_NEVER:
+    default:
+      /* not an accelerator */
+      return;
     }
 }
 
@@ -235,221 +173,137 @@ gchar **
 gtk_application_accels_get_accels_for_action (GtkApplicationAccels *accels,
                                               const gchar          *detailed_action_name)
 {
-  gchar *action_and_target;
-  AccelKey *keys;
-  gchar **result;
-  gint n, i = 0;
+  GPtrArray *result;
+  char *action_name;
+  GVariant *target;
+  GError *error = NULL;
+  guint i;
 
-  action_and_target = gtk_normalise_detailed_action_name (detailed_action_name);
+  result = g_ptr_array_new ();
 
-  keys = g_hash_table_lookup (accels->action_to_accels, action_and_target);
-  if (!keys)
+  if (!g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error))
     {
-      g_free (action_and_target);
-      return g_new0 (gchar *, 0 + 1);
+      g_critical ("Error parsing action name: %s", error->message);
+      g_error_free (error);
+      g_ptr_array_add (result, NULL);
+      return (gchar **) g_ptr_array_free (result, FALSE);
     }
 
-  for (n = 0; keys[n].key; n++)
-    ;
+  for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
+    {
+      GtkShortcut *shortcut = g_list_model_get_item (accels->shortcuts, i);
+      GtkShortcutAction *action = gtk_shortcut_get_action (shortcut);
+      GVariant *args = gtk_shortcut_get_arguments (shortcut);
 
-  result = g_new0 (gchar *, n + 1);
+      if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION ||
+          !g_str_equal (gtk_action_action_get_name (action), action_name))
+        continue;
 
-  for (i = 0; i < n; i++)
-    result[i] = gtk_accelerator_name (keys[i].key, keys[i].modifier);
+      if ((target == NULL && args != NULL) ||
+          (target != NULL && (args == NULL || !g_variant_equal (target, args))))
+        continue;
 
-  g_free (action_and_target);
-  return result;
+      append_accelerators (result, gtk_shortcut_get_trigger (shortcut));
+      break;
+    }
+
+  g_free (action_name);
+  if (target)
+    g_variant_unref (target);
+  g_ptr_array_add (result, NULL);
+  return (gchar **) g_ptr_array_free (result, FALSE);
+}
+
+static gboolean
+trigger_matches_accel (GtkShortcutTrigger *trigger,
+                       guint               keyval,
+                       GdkModifierType     modifiers)
+{
+  switch (gtk_shortcut_trigger_get_trigger_type (trigger))
+    {
+    case GTK_SHORTCUT_TRIGGER_KEYVAL:
+      return gtk_keyval_trigger_get_keyval (trigger) == keyval
+          && gtk_keyval_trigger_get_modifiers (trigger) == modifiers;
+
+    case GTK_SHORTCUT_TRIGGER_ALTERNATIVE:
+      return trigger_matches_accel (gtk_alternative_trigger_get_first (trigger), keyval, modifiers)
+          || trigger_matches_accel (gtk_alternative_trigger_get_second (trigger), keyval, modifiers);
+
+    case GTK_SHORTCUT_TRIGGER_MNEMONIC:
+    case GTK_SHORTCUT_TRIGGER_NEVER:
+    default:
+      return FALSE;
+    }
+}
+
+static char *
+get_detailed_name_for_shortcut (GtkShortcut *shortcut)
+{
+  GtkShortcutAction *action = gtk_shortcut_get_action (shortcut);
+
+  if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION)
+    return NULL;
+
+  return g_action_print_detailed_name (gtk_action_action_get_name (action), gtk_shortcut_get_arguments (shortcut));
 }
 
 gchar **
 gtk_application_accels_get_actions_for_accel (GtkApplicationAccels *accels,
                                               const gchar          *accel)
 {
-  const gchar * const *actions_and_targets;
-  gchar **detailed_actions;
-  AccelKey accel_key;
-  guint i, n;
+  GPtrArray *result;
+  guint key, modifiers;
+  guint i;
 
-  if (!gtk_accelerator_parse (accel, &accel_key.key, &accel_key.modifier))
+  if (!gtk_accelerator_parse (accel, &key, &modifiers))
     {
       g_critical ("invalid accelerator string '%s'", accel);
       return NULL;
     }
 
-  actions_and_targets = g_hash_table_lookup (accels->accel_to_actions, &accel_key);
-  n = actions_and_targets ? g_strv_length ((gchar **) actions_and_targets) : 0;
-
-  detailed_actions = g_new0 (gchar *, n + 1);
-
-  for (i = 0; i < n; i++)
+  result = g_ptr_array_new ();
+  
+  for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
     {
-      const gchar *action_and_target = actions_and_targets[i];
-      const gchar *sep;
-      GVariant *target;
+      GtkShortcut *shortcut = g_list_model_get_item (accels->shortcuts, i);
+      char *detailed_name;
 
-      sep = strrchr (action_and_target, '|');
-      target = g_variant_parse (NULL, action_and_target, sep, NULL, NULL);
-      detailed_actions[i] = g_action_print_detailed_name (sep + 1, target);
-      if (target)
-        g_variant_unref (target);
+      if (!trigger_matches_accel (gtk_shortcut_get_trigger (shortcut), key, modifiers))
+        continue;
+      
+      detailed_name = get_detailed_name_for_shortcut (shortcut);
+      if (detailed_name)
+        g_ptr_array_add (result, detailed_name);
     }
 
-  detailed_actions[n] = NULL;
-
-  return detailed_actions;
+  g_ptr_array_add (result, NULL);
+  return (gchar **) g_ptr_array_free (result, FALSE);
 }
 
 gchar **
 gtk_application_accels_list_action_descriptions (GtkApplicationAccels *accels)
 {
-  GHashTableIter iter;
-  gchar **result;
-  gint n, i = 0;
-  gpointer key;
+  GPtrArray *result;
+  guint i;
 
-  n = g_hash_table_size (accels->action_to_accels);
-  result = g_new (gchar *, n + 1);
-
-  g_hash_table_iter_init (&iter, accels->action_to_accels);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
+  result = g_ptr_array_new ();
+  
+  for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
     {
-      const gchar *action_and_target = key;
-      const gchar *sep;
-      GVariant *target;
+      GtkShortcut *shortcut = g_list_model_get_item (accels->shortcuts, i);
+      char *detailed_name;
 
-      sep = strrchr (action_and_target, '|');
-      target = g_variant_parse (NULL, action_and_target, sep, NULL, NULL);
-      result[i++] = g_action_print_detailed_name (sep + 1, target);
-      if (target)
-        g_variant_unref (target);
+      detailed_name = get_detailed_name_for_shortcut (shortcut);
+      if (detailed_name)
+        g_ptr_array_add (result, detailed_name);
     }
-  g_assert_cmpint (i, ==, n);
-  result[i] = NULL;
 
-  return result;
+  g_ptr_array_add (result, NULL);
+  return (gchar **) g_ptr_array_free (result, FALSE);
 }
 
-void
-gtk_application_accels_foreach_key (GtkApplicationAccels     *accels,
-                                    GtkWindow                *window,
-                                    GtkWindowKeysForeachFunc  callback,
-                                    gpointer                  user_data)
+GListModel *
+gtk_application_accels_get_shortcuts (GtkApplicationAccels *accels)
 {
-  GHashTableIter iter;
-  gpointer key;
-
-  g_hash_table_iter_init (&iter, accels->accel_to_actions);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
-    {
-      AccelKey *accel_key = key;
-
-      (* callback) (window, accel_key->key, accel_key->modifier, user_data);
-    }
-}
-
-gboolean
-gtk_application_accels_activate (GtkApplicationAccels *accels,
-                                 GActionGroup         *action_group,
-                                 guint                 key,
-                                 GdkModifierType       modifier)
-{
-  AccelKey accel_key = { key, modifier };
-  const gchar **actions;
-  gint i;
-
-  actions = g_hash_table_lookup (accels->accel_to_actions, &accel_key);
-
-  if (actions == NULL)
-    return FALSE;
-
-  /* We may have more than one action on a given accel.  This could be
-   * the case if we have different types of windows with different
-   * actions in each.
-   *
-   * Find the first one that will successfully activate and use it.
-   */
-  for (i = 0; actions[i]; i++)
-    {
-      const GVariantType *parameter_type;
-      const gchar *action_name;
-      const gchar *sep;
-      gboolean enabled;
-      GVariant *target;
-
-      sep = strrchr (actions[i], '|');
-      action_name = sep + 1;
-
-      if (!g_action_group_query_action (action_group, action_name, &enabled, &parameter_type, NULL, NULL, NULL))
-        continue;
-
-      if (!enabled)
-        continue;
-
-      /* We found an action with the correct name and it's enabled.
-       * This is the action that we are going to try to invoke.
-       *
-       * There is still the possibility that the target value doesn't
-       * match the expected parameter type.  In that case, we will print
-       * a warning.
-       *
-       * Note: we want to hold a ref on the target while we're invoking
-       * the action to prevent trouble if someone uninstalls the accel
-       * from the handler.  That's not a problem since we're parsing it.
-       */
-      if (actions[i] != sep) /* if it has a target... */
-        {
-          GError *error = NULL;
-
-          if (parameter_type == NULL)
-            {
-              gchar *accel_str = gtk_accelerator_name (key, modifier);
-              g_warning ("Accelerator '%s' tries to invoke action '%s' with target, but action has no parameter",
-                         accel_str, action_name);
-              g_free (accel_str);
-              return TRUE;
-            }
-
-          target = g_variant_parse (NULL, actions[i], sep, NULL, &error);
-          g_assert_no_error (error);
-          g_assert (target);
-
-          if (!g_variant_is_of_type (target, parameter_type))
-            {
-              gchar *accel_str = gtk_accelerator_name (key, modifier);
-              gchar *typestr = g_variant_type_dup_string (parameter_type);
-              gchar *targetstr = g_variant_print (target, TRUE);
-              g_warning ("Accelerator '%s' tries to invoke action '%s' with target '%s',"
-                         " but action expects parameter with type '%s'", accel_str, action_name, targetstr, typestr);
-              g_variant_unref (target);
-              g_free (targetstr);
-              g_free (accel_str);
-              g_free (typestr);
-              return TRUE;
-            }
-        }
-      else
-        {
-          if (parameter_type != NULL)
-            {
-              gchar *accel_str = gtk_accelerator_name (key, modifier);
-              gchar *typestr = g_variant_type_dup_string (parameter_type);
-              g_warning ("Accelerator '%s' tries to invoke action '%s' without target,"
-                         " but action expects parameter with type '%s'", accel_str, action_name, typestr);
-              g_free (accel_str);
-              g_free (typestr);
-              return TRUE;
-            }
-
-          target = NULL;
-        }
-
-      g_action_group_activate_action (action_group, action_name, target);
-
-      if (target)
-        g_variant_unref (target);
-
-      return TRUE;
-    }
-
-  return FALSE;
+  return accels->shortcuts;
 }
