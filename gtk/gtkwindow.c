@@ -271,6 +271,7 @@ typedef struct
   GtkGesture *drag_gesture;
   GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
+  GtkEventController *application_shortcut_controller;
 
   GdkSurface *hardcoded_surface;
 
@@ -3208,6 +3209,9 @@ gtk_window_release_application (GtkWindow *window)
       /* steal reference into temp variable */
       application = priv->application;
       priv->application = NULL;
+      gtk_widget_remove_controller (GTK_WIDGET (window),
+                                    priv->application_shortcut_controller);
+      priv->application_shortcut_controller = NULL;
 
       gtk_application_remove_window (application, window);
       g_object_unref (application);
@@ -3248,9 +3252,17 @@ gtk_window_set_application (GtkWindow      *window,
 
       if (priv->application != NULL)
         {
+          GtkApplicationAccels *app_accels;
+
           g_object_ref (priv->application);
 
           gtk_application_add_window (priv->application, window);
+
+          app_accels = gtk_application_get_application_accels (priv->application);
+          priv->application_shortcut_controller = gtk_shortcut_controller_new_for_model (gtk_application_accels_get_shortcuts (app_accels));
+          gtk_event_controller_set_propagation_phase (priv->application_shortcut_controller, GTK_PHASE_CAPTURE);
+          gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller), GTK_SHORTCUT_SCOPE_GLOBAL);
+          gtk_widget_add_controller (GTK_WIDGET (window), priv->application_shortcut_controller);
         }
 
       _gtk_widget_update_parent_muxer (GTK_WIDGET (window));
@@ -8014,7 +8026,6 @@ _gtk_window_keys_foreach (GtkWindow                *window,
 			  GtkWindowKeysForeachFunc func,
 			  gpointer                 func_data)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GSList *groups;
 
   groups = gtk_accel_groups_from_object (G_OBJECT (window));
@@ -8032,14 +8043,6 @@ _gtk_window_keys_foreach (GtkWindow                *window,
 	}
       
       groups = groups->next;
-    }
-
-  if (priv->application)
-    {
-      GtkApplicationAccels *app_accels;
-
-      app_accels = gtk_application_get_application_accels (priv->application);
-      gtk_application_accels_foreach_key (app_accels, window, func, func_data);
     }
 }
 
@@ -8135,7 +8138,6 @@ gboolean
 gtk_window_activate_key (GtkWindow   *window,
 			 GdkEventKey *event)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkKeyHash *key_hash;
   GtkWindowKeyEntry *found_entry = NULL;
   gboolean enable_accels;
@@ -8177,28 +8179,6 @@ gtk_window_activate_key (GtkWindow   *window,
         {
           if (gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers))
             return TRUE;
-
-          if (priv->application)
-            {
-              GtkWidget *focused_widget;
-              GtkActionMuxer *muxer;
-              GtkApplicationAccels *app_accels;
-
-              focused_widget = gtk_window_get_focus (window);
-
-              if (focused_widget)
-                muxer = _gtk_widget_get_action_muxer (focused_widget, FALSE);
-              else
-                muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (window), FALSE);
-
-              if (muxer == NULL)
-                return FALSE;
-
-              app_accels = gtk_application_get_application_accels (priv->application);
-              return gtk_application_accels_activate (app_accels,
-                                                      G_ACTION_GROUP (muxer),
-                                                      found_entry->keyval, found_entry->modifiers);
-            }
         }
     }
 

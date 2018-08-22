@@ -47,15 +47,7 @@ gchar **        gtk_application_accels_get_actions_for_accel        (GtkApplicat
 
 gchar **        gtk_application_accels_list_action_descriptions     (GtkApplicationAccels *accels);
 
-void            gtk_application_accels_foreach_key                  (GtkApplicationAccels     *accels,
-                                                                     GtkWindow                *window,
-                                                                     GtkWindowKeysForeachFunc  callback,
-                                                                     gpointer                  user_data);
-
-gboolean        gtk_application_accels_activate                     (GtkApplicationAccels *accels,
-                                                                     GActionGroup         *action_group,
-                                                                     guint                 key,
-                                                                     GdkModifierType       modifier);
+GListModel *    gtk_application_accels_get_shortcuts                (GtkApplicationAccels *accels);
 
 G_END_DECLS
 
