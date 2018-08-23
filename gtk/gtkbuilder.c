@@ -210,12 +210,13 @@
 #include "gtkbuilderprivate.h"
 #include "gtkdebug.h"
 #include "gtkmain.h"
+#include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkshortcuttrigger.h"
+#include "gtktestutils.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
-#include "gtkicontheme.h"
-#include "gtktestutils.h"
 
 
 static void gtk_builder_finalize       (GObject         *object);
@@ -2054,6 +2055,22 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
                            GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_VALUE,
                            "Could not parse RGBA color '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
+      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_TRIGGER))
+        {
+          GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (string);
+
+          if (trigger)
+            g_value_take_boxed (value, trigger);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse shortcut trigger '%s'",
                            string);
               ret = FALSE;
             }
