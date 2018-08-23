@@ -6635,6 +6635,7 @@ gtk_shortcut_trigger_ref
 gtk_shortcut_trigger_unref
 GtkShortcutTriggerType
 gtk_shortcut_trigger_get_trigger_type
+gtk_shortcut_trigger_parse_string
 gtk_shortcut_trigger_trigger
 gtk_shortcut_trigger_hash
 gtk_shortcut_trigger_equal
