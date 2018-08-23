@@ -1666,7 +1666,6 @@ create_menus (GtkWidget *widget)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
-  GtkWidget *optionmenu;
   GtkWidget *separator;
   GtkWidget *box;
   GtkWidget *label;
@@ -1676,7 +1675,6 @@ create_menus (GtkWidget *widget)
       GtkWidget *menubar;
       GtkWidget *menu;
       GtkWidget *menuitem;
-      GtkAccelGroup *accel_group;
       GtkWidget *image;
       GdkDisplay *display = gtk_widget_get_display (widget);
 
@@ -1686,9 +1684,6 @@ create_menus (GtkWidget *widget)
       gtk_window_set_display (GTK_WINDOW (window), display);
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
-
-      accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
 
@@ -1731,44 +1726,6 @@ create_menus (GtkWidget *widget)
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
-
-      menu = create_menu (1, 5);
-      gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
-
-      menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_add_accelerator (menuitem,
-				  "activate",
-				  accel_group,
-				  GDK_KEY_F1,
-				  0,
-				  GTK_ACCEL_VISIBLE);
-      menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_add_accelerator (menuitem,
-				  "activate",
-				  accel_group,
-				  GDK_KEY_F2,
-				  0,
-				  GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
-      menuitem = gtk_check_menu_item_new_with_label ("Accelerators Frozen");
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_add_accelerator (menuitem,
-				  "activate",
-				  accel_group,
-				  GDK_KEY_F2,
-				  0,
-				  GTK_ACCEL_VISIBLE);
-      gtk_widget_add_accelerator (menuitem,
-				  "activate",
-				  accel_group,
-				  GDK_KEY_F3,
-				  0,
-				  GTK_ACCEL_VISIBLE);
-
-      optionmenu = gtk_combo_box_text_new ();
-      gtk_combo_box_set_active (GTK_COMBO_BOX (optionmenu), 3);
-      gtk_container_add (GTK_CONTAINER (box2), optionmenu);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), separator);
