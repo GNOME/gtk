@@ -125,6 +125,7 @@ notify_external_change (GtkIMContextWayland *context)
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
 }
 
+
 static void
 text_input_enter (void                     *data,
                   struct zwp_text_input_v3 *text_input,
@@ -135,18 +136,7 @@ static void
 text_input_leave (void                     *data,
                   struct zwp_text_input_v3 *text_input,
                   struct wl_surface        *surface)
-{
-  /*
-  GtkIMContextWayland *context;
-
-  if (!global->current)
-    return;
-
-  context = GTK_IM_CONTEXT_WAYLAND (global->current);
-  TODO: does this clear text input or modify text?
-  reset_preedit (context);
-  */
-}
+{}
 
 static void
 text_input_preedit (void                     *data,
@@ -168,7 +158,6 @@ text_input_preedit (void                     *data,
   context->pending_preedit.cursor_begin = cursor_begin;
   context->pending_preedit.cursor_end = cursor_end;
 }
-
 
 static void
 text_input_preedit_apply (GtkIMContextWaylandGlobal *global)
@@ -664,6 +653,11 @@ gtk_im_context_wayland_focus_out (GtkIMContext *context)
 
   zwp_text_input_v3_disable (global->text_input);
   commit_state (context_wayland);
+
+  // after disable, incoming state changes won't take effect anyway
+  text_input_preedit(global, global->text_input, "", 0, 0);
+  text_input_preedit_apply(global);
+
   global->current = NULL;
 }
 
