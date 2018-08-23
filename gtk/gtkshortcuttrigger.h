@@ -63,6 +63,9 @@ GDK_AVAILABLE_IN_ALL
 GtkShortcutTriggerType  gtk_shortcut_trigger_get_trigger_type   (GtkShortcutTrigger *self);
 
 GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *    gtk_shortcut_trigger_parse_string       (const char         *string);
+
+GDK_AVAILABLE_IN_ALL
 char *                  gtk_shortcut_trigger_to_string          (GtkShortcutTrigger *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_shortcut_trigger_print              (GtkShortcutTrigger *self,

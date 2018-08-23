@@ -182,6 +182,35 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
 }
 
 /**
+ * gtk_shortcut_trigger_parse_string:
+ * @string: the string to parse
+ *
+ * Tries to parse the given string into a trigger. On success,
+ * the parsed trigger is returned. When parsing failed, %NULL is
+ * returned.
+ *
+ * FIXME: Document the supported format here once we've figured
+ * it out.
+ * For now, this function only supports gtk_accelerator_parse() and
+ * can only return a trigger of type %GTK_SHORTCUT_TRIGGER_KEYVAL.
+ *
+ * Returns: a new #GtkShortcutTrigger or %NULL on error
+ **/
+GtkShortcutTrigger *
+gtk_shortcut_trigger_parse_string (const char *string)
+{
+  GdkModifierType modifiers;
+  guint keyval;
+
+  g_return_val_if_fail (string != NULL, NULL);
+
+  if (gtk_accelerator_parse (string, &keyval, &modifiers))
+    return gtk_keyval_trigger_new (keyval, modifiers);
+
+  return NULL;
+}
+
+/**
  * gtk_shortcut_trigger_to_string:
  * @self: a #GtkShortcutTrigger
  *
