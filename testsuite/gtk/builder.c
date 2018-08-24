@@ -2045,9 +2045,6 @@ test_menus (void)
   const gchar *buffer =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <accel-groups>"
-    "      <group name=\"accelgroup1\"/>"
-    "    </accel-groups>"
     "    <child>"
     "      <object class=\"GtkBox\" id=\"vbox1\">"
     "        <property name=\"visible\">True</property>"
@@ -2078,15 +2075,11 @@ test_menus (void)
     "      </object>"
     "    </child>"
     "  </object>"
-    "<object class=\"GtkAccelGroup\" id=\"accelgroup1\"/>"
     "</interface>";
 
   const gchar *buffer1 =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <accel-groups>"
-    "      <group name=\"accelgroup1\"/>"
-    "    </accel-groups>"
     "    <child>"
     "      <object class=\"GtkBox\" id=\"vbox1\">"
     "        <property name=\"visible\">True</property>"
@@ -2110,7 +2103,6 @@ test_menus (void)
     "      </object>"
     "    </child>"
     "  </object>"
-    "<object class=\"GtkAccelGroup\" id=\"accelgroup1\"/>"
     "</interface>";
   GtkBuilder *builder;
   GtkWidget *window, *item;
