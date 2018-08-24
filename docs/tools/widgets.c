@@ -281,7 +281,6 @@ create_accel_label (void)
 {
   WidgetInfo *info;
   GtkWidget *widget, *button, *box;
-  GtkAccelGroup *accel_group;
 
   widget = gtk_accel_label_new ("Accel Label");
 
@@ -293,13 +292,9 @@ create_accel_label (void)
   gtk_container_add (GTK_CONTAINER (box), widget);
   gtk_container_add (GTK_CONTAINER (box), button);
 
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
-  accel_group = gtk_accel_group_new();
+  gtk_accel_label_set_accel (GTK_ACCEL_LABEL (widget), GDK_KEY_Q, GDK_CONTROL_MASK);
 
   info = new_widget_info ("accel-label", box, SMALL);
-
-  gtk_widget_add_accelerator (button, "activate", accel_group, GDK_KEY_Q, GDK_CONTROL_MASK,
-			      GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
 
   return info;
 }
