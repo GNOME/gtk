@@ -380,22 +380,11 @@ static void
 refetch_widget_accel_closure (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-  GClosure *closure = NULL;
-  GList *clist, *list;
 
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
   g_return_if_fail (GTK_IS_WIDGET (priv->accel_widget));
 
-  clist = gtk_widget_list_accel_closures (priv->accel_widget);
-  for (list = clist; list; list = list->next)
-    {
-      /* we just take the first closure used */
-      closure = list->data;
-      break;
-    }
-
-  g_list_free (clist);
-  gtk_accel_label_set_accel_closure (accel_label, closure);
+  gtk_accel_label_set_accel_closure (accel_label, NULL);
 }
 
 static void
