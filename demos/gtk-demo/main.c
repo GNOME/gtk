@@ -310,7 +310,6 @@ static const char *types[] =
   "GtkIconView ",
   "GtkCellRendererText ",
   "GtkContainer ",
-  "GtkAccelGroup ",
   "GtkPaned ",
   "GtkPrintOperation ",
   "GtkPrintContext ",
