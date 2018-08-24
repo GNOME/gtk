@@ -958,7 +958,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
   if (!window->priv->help_overlay)
     return;
 
-  gtk_window_set_modal (GTK_WINDOW (help_overlay), TRUE);
+  gtk_window_set_modal (GTK_WINDOW (help_overlay), FALSE);
   gtk_window_set_hide_on_close (GTK_WINDOW (help_overlay), TRUE);
   gtk_window_set_transient_for (GTK_WINDOW (help_overlay), GTK_WINDOW (window));
   gtk_shortcuts_window_set_window (help_overlay, GTK_WINDOW (window));
