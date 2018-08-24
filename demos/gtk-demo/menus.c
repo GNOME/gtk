@@ -87,7 +87,6 @@ do_menus (GtkWidget *do_widget)
       GtkWidget *menubar;
       GtkWidget *menu;
       GtkWidget *menuitem;
-      GtkAccelGroup *accel_group;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -95,9 +94,6 @@ do_menus (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Menus");
       g_signal_connect (window, "destroy",
                         G_CALLBACK(gtk_widget_destroyed), &window);
-
-      accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box);
