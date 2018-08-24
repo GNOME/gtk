@@ -34,6 +34,72 @@
     <property name="default-width">440</property>
     <property name="title" translatable="yes">Builder</property>
     <child>
+      <object class="GtkShortcutController" id="controller1">
+        <property name="scope">global</property>
+        <property name="propagation-phase">capture</property>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;n</property>
+            <property name="action">action(menu.new)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;o</property>
+            <property name="action">action(menu.open)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;s</property>
+            <property name="action">action(menu.save)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;&lt;Shift&gt;s</property>
+            <property name="action">action(menu.save_as)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;q</property>
+            <property name="action">action(win.quit)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;c</property>
+            <property name="action">action(menu.copy)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;x</property>
+            <property name="action">action(menu.cut)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;Primary&gt;v</property>
+            <property name="action">action(menu.paste)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">F1</property>
+            <property name="action">action(win.help)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">F7</property>
+            <property name="action">action(win.about)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="GtkBox" id="vbox1">
         <property name="orientation">vertical</property>
         <child>
@@ -53,25 +119,28 @@
                       <object class="GtkMenuItem" id="new_item">
                         <property name="label" translatable="yes">_New</property>
                         <property name="use-underline">1</property>
+                        <property name="action-name">menu.new</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="open_item">
                         <property name="label" translatable="yes">_Open</property>
                         <property name="use-underline">1</property>
+                        <property name="action-name">menu.open</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="save_item">
                         <property name="label" translatable="yes">_Save</property>
                         <property name="use-underline">1</property>
+                        <property name="action-name">menu.save</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="save_as_item">
                         <property name="label" translatable="yes">Save _As</property>
                         <property name="use-underline">1</property>
-                        <accelerator key="s" modifiers="primary | shift-mask" signal="activate"/>
+                        <property name="action-name">menu.save_as</property>
                       </object>
                     </child>
                     <child>
@@ -98,18 +167,21 @@
                       <object class="GtkMenuItem" id="copy_item">
                         <property name="label" translatable="yes">_Copy</property>
                         <property name="use-underline">1</property>
+                        <property name="action-name">menu.copy</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="cut_item">
                         <property name="label" translatable="yes">_Cut</property>
                         <property name="use-underline">1</property>
+                        <property name="action-name">menu.cut</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="paste_item">
                         <property name="label" translatable="yes">_Paste</property>
                         <property name="use-underline">1</property>
+                        <property name="action-name">menu.paste</property>
                       </object>
                     </child>
                   </object>
