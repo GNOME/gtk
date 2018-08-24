@@ -47,7 +47,6 @@ Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar ele
 Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
 Suspendisse feugiat quam quis dolor accumsan cursus. </property>
   </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkWindow" id="window">
     <property name="type">popup</property>
     <child>
@@ -1226,8 +1225,5 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
         </child>
       </object>
     </child>
-    <accel-groups>
-      <group name="accelgroup1"/>
-    </accel-groups>
   </object>
 </interface>
