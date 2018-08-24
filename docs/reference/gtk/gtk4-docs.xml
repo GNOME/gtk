@@ -355,7 +355,6 @@
     <title>GTK Core Reference</title>
     <xi:include href="xml/gtkmain.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
-    <xi:include href="xml/gtkaccelgroup.xml" />
     <xi:include href="xml/gtkdnd.xml" />
     <xi:include href="xml/gtksettings.xml" />
     <xi:include href="xml/gtkenums.xml" />
