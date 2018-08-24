@@ -1594,8 +1594,6 @@ gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
       gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
 
       gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
-      gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label),
-                                        GTK_WIDGET (menu_item));
     }
 }
 
