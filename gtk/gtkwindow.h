@@ -158,12 +158,6 @@ void       gtk_window_set_startup_id           (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_role              (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_add_accel_group          (GtkWindow           *window,
-						GtkAccelGroup	    *accel_group);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_remove_accel_group       (GtkWindow           *window,
-						GtkAccelGroup	    *accel_group);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
 GDK_AVAILABLE_IN_ALL
