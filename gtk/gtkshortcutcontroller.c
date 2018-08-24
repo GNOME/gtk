@@ -34,6 +34,7 @@
 
 #include "gtkshortcutcontrollerprivate.h"
 
+#include "gtkbuildable.h"
 #include "gtkconcatmodelprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkintl.h"
@@ -103,9 +104,37 @@ gtk_shortcut_controller_list_model_init (GListModelInterface *iface)
   iface->get_item = gtk_shortcut_controller_list_model_get_item;
 }
 
+static void
+gtk_shortcut_controller_buildable_add_child (GtkBuildable  *buildable,
+                                             GtkBuilder    *builder,
+                                             GObject       *child,
+                                             const gchar   *type)
+{
+  if (type != NULL)
+    {
+      GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    }
+  if (GTK_IS_SHORTCUT (child))
+    {
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (buildable), GTK_SHORTCUT (child));
+    }
+  else
+    {
+      g_warning ("Cannot add an object of type %s to a controller of type %s",
+                 g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
+    }
+}
+
+static void
+gtk_shortcut_controller_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add_child = gtk_shortcut_controller_buildable_add_child;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkShortcutController, gtk_shortcut_controller,
                          GTK_TYPE_EVENT_CONTROLLER,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_shortcut_controller_list_model_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_shortcut_controller_list_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_shortcut_controller_buildable_init))
 
 static gboolean
 gtk_shortcut_controller_is_rooted (GtkShortcutController *self)
