@@ -215,6 +215,7 @@
 
 #include "gtkbuilderprivate.h"
 
+#include "gdkpixbufutilsprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
