@@ -273,9 +273,8 @@ void              _gtk_widget_synthesize_crossing          (GtkWidget       *fro
                                                             GdkDevice       *device,
                                                             GdkCrossingMode  mode);
 
-void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
-                                                            GtkWidget *toplevel,
-                                                            gpointer   user_data);
+static inline gpointer _gtk_widget_peek_request_cache           (GtkWidget *widget);
+
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
 
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
