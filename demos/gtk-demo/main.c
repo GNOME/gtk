@@ -310,7 +310,6 @@ static gchar *types[] =
   "GtkIconView ",
   "GtkCellRendererText ",
   "GtkContainer ",
-  "GtkAccelGroup ",
   "GtkPaned ",
   "GtkPrintOperation ",
   "GtkPrintContext ",
