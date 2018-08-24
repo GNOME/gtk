@@ -4404,9 +4404,6 @@ gtk_widget_allocate
 gtk_widget_class_add_shortcut
 gtk_widget_class_add_binding
 gtk_widget_class_add_binding_signal
-gtk_widget_add_accelerator
-gtk_widget_remove_accelerator
-gtk_widget_list_accel_closures
 gtk_widget_can_activate_accel
 gtk_widget_event
 gtk_widget_activate
