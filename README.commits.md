@@ -12,12 +12,10 @@ people committing to GTK+ to follow a few rules:
    been working on GTK+ for a while it probably isn't necessary
    to ask. But when in doubt, ask. Even if your change is correct,
    somebody may know a better way to do things.
-
    If you are making changes to GTK+, you should be subscribed
    to gtk-devel-list@gnome.org. (Subscription address:
    gtk-devel-list-request@gnome.org.) This is a good place to ask
    about intended changes.
-
    #gtk+ on GIMPNet (irc.gimp.org, irc.us.gimp.org, irc.eu.gimp.org, ...)
    is also a good place to find GTK+ developers to discuss changes with,
    however, email to gtk-devel-list is the most certain and preferred
