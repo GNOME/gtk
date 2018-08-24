@@ -341,6 +341,7 @@
 
     <chapter>
       <title>Keyboard shortcuts</title>
+      <xi:include href="xml/gtkaccelgroup.xml" />
       <xi:include href="xml/gtkshortcut.xml" />
       <xi:include href="xml/gtkshortcuttrigger.xml" />
       <xi:include href="xml/gtkshortcutaction.xml" />
@@ -361,7 +362,6 @@
     <title>GTK Core Reference</title>
     <xi:include href="xml/gtkmain.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
-    <xi:include href="xml/gtkaccelgroup.xml" />
     <xi:include href="xml/gtksettings.xml" />
     <xi:include href="xml/gtkenums.xml" />
     <xi:include href="xml/gtktesting.xml" />
