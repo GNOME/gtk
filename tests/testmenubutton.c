@@ -40,7 +40,6 @@ int main (int argc, char **argv)
 	GtkWidget *label;
 	GtkWidget *check;
 	GtkWidget *combo;
-	GtkAccelGroup *accel_group;
 	guint i;
 	guint row = 0;
 	GMenu *menu;
@@ -54,9 +53,6 @@ int main (int argc, char **argv)
 	gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
 	gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 	gtk_container_add (GTK_CONTAINER (window), grid);
-
-	accel_group = gtk_accel_group_new ();
-	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
 	/* horizontal alignment */
 	label = gtk_label_new ("Horizontal Alignment:");
