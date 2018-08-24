@@ -213,6 +213,7 @@
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkshortcutactionprivate.h"
 #include "gtkshortcuttrigger.h"
 #include "gtktestutils.h"
 #include "gtktypebuiltins.h"
@@ -2109,6 +2110,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
                            string);
               ret = FALSE;
             }
+        }
+      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_ACTION))
+        {
+          GtkShortcutAction *action = gtk_shortcut_action_parse_builder (builder, string, error);
+
+          /* Works for success and failure (NULL) case */
+          g_value_take_boxed (value, action);
         }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
