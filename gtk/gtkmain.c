@@ -1890,14 +1890,7 @@ gtk_main_do_event (GdkEvent *event)
   if (is_pointing_event (event))
     target_widget = handle_pointing_event (event);
   else if (is_key_event (event))
-    {
-      if (event->any.type == GDK_KEY_PRESS &&
-          GTK_IS_WINDOW (target_widget) &&
-          gtk_window_activate_key (GTK_WINDOW (target_widget), (GdkEventKey *) event))
-        goto cleanup;
-
-      target_widget = handle_key_event (event);
-    }
+    target_widget = handle_key_event (event);
   else if (is_focus_event (event))
     {
       if (!GTK_IS_WINDOW (target_widget))
