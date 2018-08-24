@@ -51,8 +51,6 @@ struct _GtkMenuPrivate
   GtkWidget *parent_menu_item;
   GtkWidget *old_active_menu_item;
 
-  GtkAccelGroup *accel_group;
-
   gint                position_x;
   gint                position_y;
 
