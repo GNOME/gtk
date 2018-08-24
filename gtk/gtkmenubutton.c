@@ -408,6 +408,8 @@ gtk_menu_button_toggled (GtkToggleButton *button)
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   gboolean active = gtk_toggle_button_get_active (button);
 
+  gtk_widget_set_has_tooltip (GTK_WIDGET (button), !active);
+
   if (priv->menu)
     {
       if (active && !gtk_widget_get_visible (priv->menu))
