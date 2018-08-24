@@ -1749,14 +1749,15 @@ create_menus (GtkWidget *widget)
 
 
 static GtkWidget *
-accel_button_new (GtkAccelGroup *accel_group,
-		  const gchar   *text,
-		  const gchar   *accel)
+accel_button_new (const gchar *text,
+		  const gchar *accel)
 {
   guint keyval;
   GdkModifierType modifiers;
   GtkWidget *button;
   GtkWidget *label;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
 
   if (!gtk_accelerator_parse (accel, &keyval, &modifiers))
     {
@@ -1764,12 +1765,17 @@ accel_button_new (GtkAccelGroup *accel_group,
     }
 
   button = gtk_button_new ();
-  gtk_widget_add_accelerator (button, "activate", accel_group,
-			      keyval, modifiers, GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
+  controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller), GTK_SHORTCUT_SCOPE_GLOBAL);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, modifiers),
+                               gtk_activate_action_new ());
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  g_object_unref (shortcut);
+  gtk_widget_add_controller (button, controller);
 
   label = gtk_accel_label_new (text);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), button);
-  gtk_widget_show (label);
+  gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), keyval, modifiers);
   
   gtk_container_add (GTK_CONTAINER (button), label);
 
@@ -1784,7 +1790,6 @@ create_key_lookup (GtkWidget *widget)
 
   if (!window)
     {
-      GtkAccelGroup *accel_group = gtk_accel_group_new ();
       GtkWidget *button;
       GtkWidget *content_area;
 
@@ -1799,8 +1804,6 @@ create_key_lookup (GtkWidget *widget)
        */
       gtk_window_set_default_size (GTK_WINDOW (window), 300, -1);
 
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
       button = gtk_button_new_with_mnemonic ("Button 1 (_a)");
@@ -1813,23 +1816,23 @@ create_key_lookup (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (content_area), button);
       button = gtk_button_new_with_mnemonic ("Button 6 (_b)");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 7", "<Alt><Shift>b");
+      button = accel_button_new ("Button 7", "<Alt><Shift>b");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 8", "<Alt>d");
+      button = accel_button_new ("Button 8", "<Alt>d");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 9", "<Alt>Cyrillic_ve");
+      button = accel_button_new ("Button 9", "<Alt>Cyrillic_ve");
       gtk_container_add (GTK_CONTAINER (content_area), button);
       button = gtk_button_new_with_mnemonic ("Button 10 (_1)");
       gtk_container_add (GTK_CONTAINER (content_area), button);
       button = gtk_button_new_with_mnemonic ("Button 11 (_!)");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 12", "<Super>a");
+      button = accel_button_new ("Button 12", "<Super>a");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 13", "<Hyper>a");
+      button = accel_button_new ("Button 13", "<Hyper>a");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 14", "<Meta>a");
+      button = accel_button_new ("Button 14", "<Meta>a");
       gtk_container_add (GTK_CONTAINER (content_area), button);
-      button = accel_button_new (accel_group, "Button 15", "<Shift><Mod4>b");
+      button = accel_button_new ("Button 15", "<Shift><Mod4>b");
       gtk_container_add (GTK_CONTAINER (content_area), button);
 
       window_ptr = &window;
