@@ -517,7 +517,6 @@ static gboolean     disable_startup_notification = FALSE;
 
 static GQuark       quark_gtk_window_key_hash = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
-static GQuark       quark_gtk_buildable_accels = 0;
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -781,15 +780,11 @@ static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  widget_class = (GtkWidgetClass*) klass;
-  container_class = (GtkContainerClass*) klass;
-  
   quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
-  quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
 
   if (toplevel_list == NULL)
     toplevel_list = g_list_store_new (GTK_TYPE_WIDGET);
@@ -2136,7 +2131,6 @@ gtk_window_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->set_buildable_property = gtk_window_buildable_set_buildable_property;
-  iface->parser_finished = gtk_window_buildable_parser_finished;
   iface->custom_tag_start = gtk_window_buildable_custom_tag_start;
   iface->custom_finished = gtk_window_buildable_custom_finished;
   iface->add_child = gtk_window_buildable_add_child;
@@ -2172,78 +2166,28 @@ gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
 }
 
 typedef struct {
+  GObject *object;
+  GtkBuilder *builder;
   gchar *name;
   gint line;
   gint col;
-} ItemData;
+} NameSubParserData;
 
 static void
-item_data_free (gpointer data)
+focus_start_element (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     const gchar         **names,
+                     const gchar         **values,
+                     gpointer              user_data,
+                     GError              **error)
 {
-  ItemData *item_data = data;
+  NameSubParserData *data = (NameSubParserData*)user_data;
 
-  g_free (item_data->name);
-  g_free (item_data);
-}
-
-static void
-item_list_free (gpointer data)
-{
-  GSList *list = data;
-
-  g_slist_free_full (list, item_data_free);
-}
-
-static void
-gtk_window_buildable_parser_finished (GtkBuildable *buildable,
-				      GtkBuilder   *builder)
-{
-  GtkWindow *window = GTK_WINDOW (buildable);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GObject *object;
-  GSList *accels, *l;
-
-  if (priv->builder_visible)
-    gtk_widget_show (GTK_WIDGET (buildable));
-
-  accels = g_object_get_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels);
-  for (l = accels; l; l = l->next)
-    {
-      ItemData *data = l->data;
-
-      object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
-      if (!object)
-	continue;
-      gtk_window_add_accel_group (GTK_WINDOW (buildable), GTK_ACCEL_GROUP (object));
-    }
-
-  g_object_set_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels, NULL);
-
-  parent_buildable_iface->parser_finished (buildable, builder);
-}
-
-typedef struct {
-  GObject *object;
-  GtkBuilder *builder;
-  GSList *items;
-} GSListSubParserData;
-
-static void
-window_start_element (GtkBuildableParseContext  *context,
-                      const gchar          *element_name,
-                      const gchar         **names,
-                      const gchar         **values,
-                      gpointer              user_data,
-                      GError              **error)
-{
-  GSListSubParserData *data = (GSListSubParserData*)user_data;
-
-  if (strcmp (element_name, "group") == 0)
+  if (strcmp (element_name, "initial-focus") == 0)
     {
       const gchar *name;
-      ItemData *item_data;
 
-      if (!_gtk_builder_check_parent (data->builder, context, "accel-groups", error))
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
         return;
 
       if (!g_markup_collect_attributes (element_name, names, values, error,
@@ -2254,20 +2198,8 @@ window_start_element (GtkBuildableParseContext  *context,
           return;
         }
 
-      item_data = g_new (ItemData, 1);
-      item_data->name = g_strdup (name);
-      gtk_buildable_parse_context_get_position (context, &item_data->line, &item_data->col);
-      data->items = g_slist_prepend (data->items, item_data);
-    }
-  else if (strcmp (element_name, "accel-groups") == 0)
-    {
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
-                                        G_MARKUP_COLLECT_INVALID))
-        _gtk_builder_prefix_error (data->builder, context, error);
+      data->name = g_strdup (name);
+      g_markup_parse_context_get_position (context, &data->line, &data->col);
     }
   else
     {
@@ -2277,10 +2209,10 @@ window_start_element (GtkBuildableParseContext  *context,
     }
 }
 
-static const GtkBuildableParser window_parser =
-  {
-    window_start_element
-  };
+static const GMarkupParser focus_parser =
+{
+  focus_start_element
+};
 
 static gboolean
 gtk_window_buildable_custom_tag_start (GtkBuildable       *buildable,
@@ -2294,16 +2226,16 @@ gtk_window_buildable_custom_tag_start (GtkBuildable       *buildable,
 						tagname, parser, parser_data))
     return TRUE;
 
-  if (strcmp (tagname, "accel-groups") == 0)
+  if (strcmp (tagname, "initial-focus") == 0)
     {
-      GSListSubParserData *data;
+      NameSubParserData *data;
 
-      data = g_slice_new0 (GSListSubParserData);
-      data->items = NULL;
+      data = g_slice_new0 (NameSubParserData);
+      data->name = NULL;
       data->object = G_OBJECT (buildable);
       data->builder = builder;
 
-      *parser = window_parser;
+      *parser = focus_parser;
       *parser_data = data;
 
       return TRUE;
@@ -2322,14 +2254,21 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
   parent_buildable_iface->custom_finished (buildable, builder, child,
 					   tagname, user_data);
 
-  if (strcmp (tagname, "accel-groups") == 0)
+  if (strcmp (tagname, "initial-focus") == 0)
     {
-      GSListSubParserData *data = (GSListSubParserData*)user_data;
+      NameSubParserData *data = (NameSubParserData*)user_data;
 
-      g_object_set_qdata_full (G_OBJECT (buildable), quark_gtk_buildable_accels,
-                               data->items, (GDestroyNotify) item_list_free);
+      if (data->name)
+        {
+          GObject *object;
 
-      g_slice_free (GSListSubParserData, data);
+          object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
+          if (object)
+            gtk_window_set_focus (GTK_WINDOW (buildable), GTK_WIDGET (object));
+          g_free (data->name);
+        }
+
+      g_slice_free (NameSubParserData, data);
     }
 }
 
@@ -2684,47 +2623,66 @@ _gtk_window_notify_keys_changed (GtkWindow *window)
 }
 
 /**
- * gtk_window_add_accel_group:
- * @window: window to attach accelerator group to
- * @accel_group: a #GtkAccelGroup
+ * gtk_window_set_position:
+ * @window: a #GtkWindow.
+ * @position: a position constraint.
  *
- * Associate @accel_group with @window, such that calling
- * gtk_accel_groups_activate() on @window will activate accelerators
- * in @accel_group.
+ * Sets a position constraint for this window. If the old or new
+ * constraint is %GTK_WIN_POS_CENTER_ALWAYS, this will also cause
+ * the window to be repositioned to satisfy the new constraint. 
  **/
 void
-gtk_window_add_accel_group (GtkWindow     *window,
-			    GtkAccelGroup *accel_group)
+gtk_window_set_position (GtkWindow         *window,
+			 GtkWindowPosition  position)
 {
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  _gtk_accel_group_attach (accel_group, G_OBJECT (window));
-  g_signal_connect_object (accel_group, "accel-changed",
-			   G_CALLBACK (_gtk_window_notify_keys_changed),
-			   window, G_CONNECT_SWAPPED);
-  _gtk_window_notify_keys_changed (window);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (position == GTK_WIN_POS_CENTER_ALWAYS ||
+      priv->position == GTK_WIN_POS_CENTER_ALWAYS)
+    {
+      GtkWindowGeometryInfo *info;
+
+      info = gtk_window_get_geometry_info (window, TRUE);
+
+      /* this flag causes us to re-request the CENTER_ALWAYS
+       * constraint in gtk_window_move_resize(), see
+       * comment in that function.
+       */
+      info->position_constraints_changed = TRUE;
+
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+    }
+
+  if (priv->position != position)
+    {
+      priv->position = position;
+  
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_WIN_POS]);
+    }
 }
 
 /**
- * gtk_window_remove_accel_group:
+ * gtk_window_activate_focus:
  * @window: a #GtkWindow
- * @accel_group: a #GtkAccelGroup
- *
- * Reverses the effects of gtk_window_add_accel_group().
+ * 
+ * Activates the current focused widget within the window.
+ * 
+ * Returns: %TRUE if a widget got activated.
  **/
-void
-gtk_window_remove_accel_group (GtkWindow     *window,
-			       GtkAccelGroup *accel_group)
+gboolean 
+gtk_window_activate_focus (GtkWindow *window)
 {
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  g_signal_handlers_disconnect_by_func (accel_group,
-					_gtk_window_notify_keys_changed,
-					window);
-  _gtk_accel_group_detach (accel_group, G_OBJECT (window));
-  _gtk_window_notify_keys_changed (window);
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
+    return gtk_widget_activate (priv->focus_widget);
+
+  return FALSE;
+>>>>>>> 3a473f2862... accels: Remove GtkAccelGroup
 }
 
 /**
@@ -8107,31 +8065,6 @@ gtk_window_activate_menubar (GtkWidget *widget,
 }
 
 static void
-_gtk_window_keys_foreach (GtkWindow                *window,
-			  GtkWindowKeysForeachFunc func,
-			  gpointer                 func_data)
-{
-  GSList *groups;
-
-  groups = gtk_accel_groups_from_object (G_OBJECT (window));
-  while (groups)
-    {
-      GtkAccelGroup *group = groups->data;
-      gint i;
-
-      for (i = 0; i < group->priv->n_accels; i++)
-	{
-	  GtkAccelKey *key = &group->priv->priv_accels[i].key;
-	  
-	  if (key->accel_key)
-	    (*func) (window, key->accel_key, key->accel_mods, func_data);
-	}
-      
-      groups = groups->next;
-    }
-}
-
-static void
 gtk_window_keys_changed (GtkWindow *window)
 {
   gtk_window_free_key_hash (window);
@@ -8152,33 +8085,6 @@ window_key_entry_destroy (gpointer data)
   g_slice_free (GtkWindowKeyEntry, data);
 }
 
-static void
-add_to_key_hash (GtkWindow      *window,
-		 guint           keyval,
-		 GdkModifierType modifiers,
-		 gpointer        data)
-{
-  GtkKeyHash *key_hash = data;
-
-  GtkWindowKeyEntry *entry = g_slice_new (GtkWindowKeyEntry);
-
-  entry->keyval = keyval;
-  entry->modifiers = modifiers;
-
-  /* GtkAccelGroup stores lowercased accelerators. To deal
-   * with this, if <Shift> was specified, uppercase.
-   */
-  if (modifiers & GDK_SHIFT_MASK)
-    {
-      if (keyval == GDK_KEY_Tab)
-	keyval = GDK_KEY_ISO_Left_Tab;
-      else
-	keyval = gdk_keyval_to_upper (keyval);
-    }
-  
-  _gtk_key_hash_add_entry (key_hash, keyval, entry->modifiers, entry);
-}
-
 static GtkKeyHash *
 gtk_window_get_key_hash (GtkWindow *window)
 {
@@ -8190,7 +8096,6 @@ gtk_window_get_key_hash (GtkWindow *window)
   
   key_hash = _gtk_key_hash_new (gdk_display_get_keymap (priv->display),
 				(GDestroyNotify)window_key_entry_destroy);
-  _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
   g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, key_hash);
 
   return key_hash;
@@ -8208,69 +8113,6 @@ gtk_window_free_key_hash (GtkWindow *window)
 }
 
 /**
- * gtk_window_activate_key:
- * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
- *
- * Activates mnemonics and accelerators for this #GtkWindow. This is normally
- * called by the default ::key_press_event handler for toplevel windows,
- * however in some cases it may be useful to call this directly when
- * overriding the standard key handling for a toplevel window.
- *
- * Returns: %TRUE if a mnemonic or accelerator was found and activated.
- */
-gboolean
-gtk_window_activate_key (GtkWindow   *window,
-			 GdkEventKey *event)
-{
-  GtkKeyHash *key_hash;
-  GtkWindowKeyEntry *found_entry = NULL;
-  gboolean enable_accels;
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  key_hash = gtk_window_get_key_hash (window);
-
-  if (key_hash)
-    {
-      GSList *tmp_list;
-      GSList *entries = _gtk_key_hash_lookup (key_hash,
-					      event->hardware_keycode,
-					      event->state,
-					      gtk_accelerator_get_default_mod_mask (),
-					      event->group);
-
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                    "gtk-enable-accels", &enable_accels,
-                    NULL);
-
-      for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
-	{
-	  GtkWindowKeyEntry *entry = tmp_list->data;
-          if (enable_accels && !found_entry)
-            {
-              found_entry = entry;
-              break;
-            }
-	}
-
-      g_slist_free (entries);
-    }
-
-  if (found_entry)
-    {
-      if (enable_accels)
-        {
-          if (gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers))
-            return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
-/*
  * _gtk_window_set_is_active:
  * @window: a #GtkWindow
  * @is_active: %TRUE if the window is in the currently active toplevel

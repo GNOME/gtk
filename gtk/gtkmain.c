@@ -1939,12 +1939,11 @@ gtk_main_do_event (GdkEvent *event)
     target_widget = handle_pointing_event (event);
   else if (is_key_event (event))
     {
-      if (event->any.type == GDK_KEY_PRESS &&
-          GTK_IS_WINDOW (target_widget) &&
-          gtk_window_activate_key (GTK_WINDOW (target_widget), (GdkEventKey *) event))
-        goto cleanup;
+      GtkWidget *focus_widget;
 
-      target_widget = handle_key_event (event);
+      focus_widget = gtk_window_get_focus (GTK_WINDOW (event_widget));
+      if (focus_widget)
+        event_widget = focus_widget;
     }
   else if (is_focus_event (event))
     {

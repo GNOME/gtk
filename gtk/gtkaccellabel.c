@@ -68,7 +68,6 @@
  * set (see #GtkAccelFlags).
  * A #GtkAccelLabel can display multiple accelerators and even signal names,
  * though it is almost always used to display just one accelerator key.
- * ]|
  *
  * # CSS nodes
  *
@@ -84,8 +83,6 @@
 
 enum {
   PROP_0,
-  PROP_ACCEL_CLOSURE,
-  PROP_ACCEL_WIDGET,
   PROP_LABEL,
   PROP_USE_UNDERLINE,
   LAST_PROP
@@ -112,10 +109,6 @@ struct _GtkAccelLabelPrivate
   GtkWidget     *text_label;
   GtkWidget     *accel_label;
 
-  GtkWidget     *accel_widget;       /* done */
-  GClosure      *accel_closure;      /* has set function */
-  GtkAccelGroup *accel_group;        /* set by set_accel_closure() */
-
   guint           accel_key;         /* manual accel key specification if != 0 */
   GdkModifierType accel_mods;
 };
@@ -130,7 +123,6 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  guint               prop_id,
 						  GValue             *value,
 						  GParamSpec         *pspec);
-static void         gtk_accel_label_destroy      (GtkWidget          *widget);
 static void         gtk_accel_label_finalize     (GObject            *object);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_WIDGET)
@@ -145,23 +137,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
 
-  widget_class->destroy = gtk_accel_label_destroy;
-
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
-
-  props[PROP_ACCEL_CLOSURE] =
-    g_param_spec_boxed ("accel-closure",
-                        P_("Accelerator Closure"),
-                        P_("The closure to be monitored for accelerator changes"),
-                        G_TYPE_CLOSURE,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
-  props[PROP_ACCEL_WIDGET] =
-    g_param_spec_object ("accel-widget",
-                         P_("Accelerator Widget"),
-                         P_("The widget to be monitored for accelerator changes"),
-                         GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_LABEL] =
     g_param_spec_string ("label",
@@ -195,12 +171,6 @@ gtk_accel_label_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACCEL_CLOSURE:
-      gtk_accel_label_set_accel_closure (accel_label, g_value_get_boxed (value));
-      break;
-    case PROP_ACCEL_WIDGET:
-      gtk_accel_label_set_accel_widget (accel_label, g_value_get_object (value));
-      break;
     case PROP_LABEL:
       gtk_accel_label_set_label (accel_label, g_value_get_string (value));
       break;
@@ -220,16 +190,9 @@ gtk_accel_label_get_property (GObject    *object,
 			      GParamSpec *pspec)
 {
   GtkAccelLabel  *accel_label = GTK_ACCEL_LABEL (object);
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
 
   switch (prop_id)
     {
-    case PROP_ACCEL_CLOSURE:
-      g_value_set_boxed (value, priv->accel_closure);
-      break;
-    case PROP_ACCEL_WIDGET:
-      g_value_set_object (value, priv->accel_widget);
-      break;
     case PROP_LABEL:
       g_value_set_string (value, gtk_accel_label_get_label (accel_label));
       break;
@@ -250,6 +213,8 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   priv->accel_widget = NULL;
   priv->accel_closure = NULL;
   priv->accel_group = NULL;
+
+  gtk_widget_set_has_surface (GTK_WIDGET (accel_label), FALSE);
 
   priv->text_label = gtk_label_new ("");
   gtk_widget_set_hexpand (priv->text_label, TRUE);
@@ -281,17 +246,6 @@ gtk_accel_label_new (const gchar *string)
                               NULL);
 
   return GTK_WIDGET (accel_label);
-}
-
-static void
-gtk_accel_label_destroy (GtkWidget *widget)
-{
-  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-
-  gtk_accel_label_set_accel_widget (accel_label, NULL);
-  gtk_accel_label_set_accel_closure (accel_label, NULL);
-
-  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->destroy (widget);
 }
 
 static void
@@ -348,80 +302,6 @@ gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
                       &min, NULL, NULL, NULL);
 
   return min;
-}
-
-static void
-refetch_widget_accel_closure (GtkAccelLabel *accel_label)
-{
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
-  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
-  g_return_if_fail (GTK_IS_WIDGET (priv->accel_widget));
-
-  gtk_accel_label_set_accel_closure (accel_label, NULL);
-}
-
-static void
-accel_widget_weak_ref_cb (GtkAccelLabel *accel_label,
-                          GtkWidget     *old_accel_widget)
-{
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
-  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
-  g_return_if_fail (GTK_IS_WIDGET (priv->accel_widget));
-
-  g_signal_handlers_disconnect_by_func (priv->accel_widget,
-                                        refetch_widget_accel_closure,
-                                        accel_label);
-  priv->accel_widget = NULL;
-  g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_WIDGET]);
-}
-
-/**
- * gtk_accel_label_set_accel_widget:
- * @accel_label: a #GtkAccelLabel
- * @accel_widget: (nullable): the widget to be monitored, or %NULL
- *
- * Sets the widget to be monitored by this accelerator label. Passing %NULL for
- * @accel_widget will dissociate @accel_label from its current widget, if any.
- */
-void
-gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
-                                  GtkWidget     *accel_widget)
-{
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
-  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
-
-  if (accel_widget)
-    g_return_if_fail (GTK_IS_WIDGET (accel_widget));
-
-  if (accel_widget != priv->accel_widget)
-    {
-      if (priv->accel_widget)
-        {
-          gtk_accel_label_set_accel_closure (accel_label, NULL);
-          g_signal_handlers_disconnect_by_func (priv->accel_widget,
-                                                refetch_widget_accel_closure,
-                                                accel_label);
-          g_object_weak_unref (G_OBJECT (priv->accel_widget),
-                               (GWeakNotify) accel_widget_weak_ref_cb, accel_label);
-        }
-
-      priv->accel_widget = accel_widget;
-
-      if (priv->accel_widget)
-        {
-          g_object_weak_ref (G_OBJECT (priv->accel_widget),
-                             (GWeakNotify) accel_widget_weak_ref_cb, accel_label);
-          g_signal_connect_object (priv->accel_widget, "accel-closures-changed",
-                                   G_CALLBACK (refetch_widget_accel_closure),
-                                   accel_label, G_CONNECT_SWAPPED);
-          refetch_widget_accel_closure (accel_label);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_WIDGET]);
-    }
 }
 
 static void
@@ -511,14 +391,6 @@ gtk_accel_label_get_accel_closure (GtkAccelLabel *accel_label)
   return priv->accel_closure;
 }
 
-static gboolean
-find_accel (GtkAccelKey *key,
-	    GClosure    *closure,
-	    gpointer     data)
-{
-  return data == (gpointer) closure;
-}
-
 /**
  * gtk_accel_label_refetch:
  * @accel_label: a #GtkAccelLabel.
@@ -542,7 +414,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
                 "gtk-enable-accels", &enable_accels,
                 NULL);
 
-  if (enable_accels && (priv->accel_closure || priv->accel_key))
+  if (enable_accels && priv->accel_key)
     {
       gboolean have_accel = FALSE;
       guint accel_key;
@@ -554,21 +426,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
           accel_mods = priv->accel_mods;
           accel_key = priv->accel_key;
           have_accel = TRUE;
-        }
-
-      /* If we don't have a hardcoded value, check the accel group */
-      if (!have_accel)
-        {
-          GtkAccelKey *key;
-
-          key = gtk_accel_group_find (priv->accel_group, find_accel, priv->accel_closure);
-
-          if (key && key->accel_flags & GTK_ACCEL_VISIBLE)
-            {
-              accel_key = key->accel_key;
-              accel_mods = key->accel_mods;
-              have_accel = TRUE;
-            }
         }
 
       /* If we found a key using either method, set it */
