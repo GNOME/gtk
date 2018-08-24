@@ -724,7 +724,6 @@ static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 
-static GQuark		quark_accel_closures = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
@@ -910,7 +909,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
 
-  quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
@@ -4984,216 +4982,6 @@ gtk_widget_can_activate_accel (GtkWidget *widget,
   return can_activate;
 }
 
-typedef struct {
-  GClosure   closure;
-  guint      signal_id;
-} AccelClosure;
-
-static void
-closure_accel_activate (GClosure     *closure,
-			GValue       *return_value,
-			guint         n_param_values,
-			const GValue *param_values,
-			gpointer      invocation_hint,
-			gpointer      marshal_data)
-{
-  AccelClosure *aclosure = (AccelClosure*) closure;
-  gboolean can_activate = gtk_widget_can_activate_accel (closure->data, aclosure->signal_id);
-
-  if (can_activate)
-    g_signal_emit (closure->data, aclosure->signal_id, 0);
-
-  /* whether accelerator was handled */
-  g_value_set_boolean (return_value, can_activate);
-}
-
-static void
-closures_destroy (gpointer data)
-{
-  GSList *slist, *closures = data;
-
-  for (slist = closures; slist; slist = slist->next)
-    {
-      g_closure_invalidate (slist->data);
-      g_closure_unref (slist->data);
-    }
-  g_slist_free (closures);
-}
-
-static GClosure*
-widget_new_accel_closure (GtkWidget *widget,
-			  guint      signal_id)
-{
-  AccelClosure *aclosure;
-  GClosure *closure = NULL;
-  GSList *slist, *closures;
-
-  closures = g_object_steal_qdata (G_OBJECT (widget), quark_accel_closures);
-  for (slist = closures; slist; slist = slist->next)
-    if (!gtk_accel_group_from_accel_closure (slist->data))
-      {
-	/* reuse this closure */
-	closure = slist->data;
-	break;
-      }
-  if (!closure)
-    {
-      closure = g_closure_new_object (sizeof (AccelClosure), G_OBJECT (widget));
-      closures = g_slist_prepend (closures, g_closure_ref (closure));
-      g_closure_sink (closure);
-      g_closure_set_marshal (closure, closure_accel_activate);
-    }
-  g_object_set_qdata_full (G_OBJECT (widget), quark_accel_closures, closures, closures_destroy);
-
-  aclosure = (AccelClosure*) closure;
-  g_assert (closure->data == widget);
-  g_assert (closure->marshal == closure_accel_activate);
-  aclosure->signal_id = signal_id;
-
-  return closure;
-}
-
-/**
- * gtk_widget_add_accelerator:
- * @widget:       widget to install an accelerator on
- * @accel_signal: widget signal to emit on accelerator activation
- * @accel_group:  accel group for this widget, added to its toplevel
- * @accel_key:    GDK keyval of the accelerator
- * @accel_mods:   modifier key combination of the accelerator
- * @accel_flags:  flag accelerators, e.g. %GTK_ACCEL_VISIBLE
- *
- * Installs an accelerator for this @widget in @accel_group that causes
- * @accel_signal to be emitted if the accelerator is activated.
- * The @accel_group needs to be added to the widget’s toplevel via
- * gtk_window_add_accel_group(), and the signal must be of type %G_SIGNAL_ACTION.
- * Accelerators added through this function are not user changeable during
- * runtime.
- */
-void
-gtk_widget_add_accelerator (GtkWidget      *widget,
-			    const gchar    *accel_signal,
-			    GtkAccelGroup  *accel_group,
-			    guint           accel_key,
-			    GdkModifierType accel_mods,
-			    GtkAccelFlags   accel_flags)
-{
-  GClosure *closure;
-  GSignalQuery query;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (accel_signal != NULL);
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  g_signal_query (g_signal_lookup (accel_signal, G_OBJECT_TYPE (widget)), &query);
-  if (!query.signal_id ||
-      !(query.signal_flags & G_SIGNAL_ACTION) ||
-      query.return_type != G_TYPE_NONE ||
-      query.n_params)
-    {
-      /* hmm, should be elaborate enough */
-      g_warning (G_STRLOC ": widget '%s' has no activatable signal \"%s\" without arguments",
-		 G_OBJECT_TYPE_NAME (widget), accel_signal);
-      return;
-    }
-
-  closure = widget_new_accel_closure (widget, query.signal_id);
-
-  g_object_ref (widget);
-
-  /* install the accelerator. since we don't map this onto an accel_path,
-   * the accelerator will automatically be locked.
-   */
-  gtk_accel_group_connect (accel_group,
-			   accel_key,
-			   accel_mods,
-			   accel_flags | GTK_ACCEL_LOCKED,
-			   closure);
-
-  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
-
-  g_object_unref (widget);
-}
-
-/**
- * gtk_widget_remove_accelerator:
- * @widget:       widget to install an accelerator on
- * @accel_group:  accel group for this widget
- * @accel_key:    GDK keyval of the accelerator
- * @accel_mods:   modifier key combination of the accelerator
- *
- * Removes an accelerator from @widget, previously installed with
- * gtk_widget_add_accelerator().
- *
- * Returns: whether an accelerator was installed and could be removed
- */
-gboolean
-gtk_widget_remove_accelerator (GtkWidget      *widget,
-			       GtkAccelGroup  *accel_group,
-			       guint           accel_key,
-			       GdkModifierType accel_mods)
-{
-  GtkAccelGroupEntry *ag_entry;
-  GList *slist, *clist;
-  guint n;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
-
-  ag_entry = gtk_accel_group_query (accel_group, accel_key, accel_mods, &n);
-  clist = gtk_widget_list_accel_closures (widget);
-  for (slist = clist; slist; slist = slist->next)
-    {
-      guint i;
-
-      for (i = 0; i < n; i++)
-	if (slist->data == (gpointer) ag_entry[i].closure)
-	  {
-	    gboolean is_removed = gtk_accel_group_disconnect (accel_group, slist->data);
-
-	    g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
-
-	    g_list_free (clist);
-
-	    return is_removed;
-	  }
-    }
-  g_list_free (clist);
-
-  g_warning (G_STRLOC ": no accelerator (%u,%u) installed in accel group (%p) for %s (%p)",
-	     accel_key, accel_mods, accel_group,
-	     G_OBJECT_TYPE_NAME (widget), widget);
-
-  return FALSE;
-}
-
-/**
- * gtk_widget_list_accel_closures:
- * @widget:  widget to list accelerator closures for
- *
- * Lists the closures used by @widget for accelerator group connections
- * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
- * The closures can be used to monitor accelerator changes on @widget,
- * by connecting to the @GtkAccelGroup::accel-changed signal of the
- * #GtkAccelGroup of a closure which can be found out with
- * gtk_accel_group_from_accel_closure().
- *
- * Returns: (transfer container) (element-type GClosure):
- *     a newly allocated #GList of closures
- */
-GList*
-gtk_widget_list_accel_closures (GtkWidget *widget)
-{
-  GSList *slist;
-  GList *clist = NULL;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  for (slist = g_object_get_qdata (G_OBJECT (widget), quark_accel_closures); slist; slist = slist->next)
-    if (gtk_accel_group_from_accel_closure (slist->data))
-      clist = g_list_prepend (clist, slist->data);
-  return clist;
-}
-
 /**
  * gtk_widget_mnemonic_activate:
  * @widget: a #GtkWidget
@@ -8155,9 +7943,6 @@ gtk_widget_real_destroy (GtkWidget *object)
       priv->accessible = NULL;
     }
 
-  /* wipe accelerator closures (keep order) */
-  g_object_set_qdata (G_OBJECT (widget), quark_accel_closures, NULL);
-
   /* Callers of add_mnemonic_label() should disconnect on ::destroy */
   g_object_set_qdata (G_OBJECT (widget), quark_mnemonic_labels, NULL);
 
@@ -9740,90 +9525,6 @@ static const GMarkupParser accessibility_parser =
 
 typedef struct
 {
-  GObject *object;
-  GtkBuilder *builder;
-  guint    key;
-  guint    modifiers;
-  gchar   *signal;
-} AccelGroupParserData;
-
-static void
-accel_group_start_element (GMarkupParseContext  *context,
-                           const gchar          *element_name,
-                           const gchar         **names,
-                           const gchar         **values,
-                           gpointer              user_data,
-                           GError              **error)
-{
-  AccelGroupParserData *data = (AccelGroupParserData*)user_data;
-
-  if (strcmp (element_name, "accelerator") == 0)
-    {
-      const gchar *key_str = NULL;
-      const gchar *signal = NULL;
-      const gchar *modifiers_str = NULL;
-      guint key = 0;
-      guint modifiers = 0;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "key", &key_str,
-                                        G_MARKUP_COLLECT_STRING, "signal", &signal,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "modifiers", &modifiers_str,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      key = gdk_keyval_from_name (key_str);
-      if (key == 0)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "Could not parse key '%s'", key_str);
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      if (modifiers_str != NULL)
-        {
-          GFlagsValue aliases[2] = {
-            { 0, "primary", "primary" },
-            { 0, NULL, NULL }
-          };
-
-          aliases[0].value = _gtk_get_primary_accel_mod ();
-
-          if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE, aliases,
-                                               modifiers_str, &modifiers, error))
-            {
-              _gtk_builder_prefix_error (data->builder, context, error);
-	      return;
-            }
-        }
-
-      data->key = key;
-      data->modifiers = modifiers;
-      data->signal = g_strdup (signal);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkWidget", element_name,
-                                        error);
-    }
-}
-
-static const GMarkupParser accel_group_parser =
-  {
-    accel_group_start_element,
-  };
-
-typedef struct
-{
   GtkBuilder *builder;
   GSList *classes;
 } StyleParserData;
@@ -10024,20 +9725,6 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
                                        GMarkupParser    *parser,
                                        gpointer         *parser_data)
 {
-  if (strcmp (tagname, "accelerator") == 0)
-    {
-      AccelGroupParserData *data;
-
-      data = g_slice_new0 (AccelGroupParserData);
-      data->object = (GObject *)g_object_ref (buildable);
-      data->builder = builder;
-
-      *parser = accel_group_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
   if (strcmp (tagname, "accessibility") == 0)
     {
       AccessibilitySubParserData *data;
@@ -10088,45 +9775,6 @@ gtk_widget_buildable_custom_tag_end (GtkBuildable  *buildable,
                                      const gchar   *tagname,
                                      gpointer       data)
 {
-}
-
-void
-_gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
-                                          GtkWidget *toplevel,
-                                          gpointer   user_data)
-{
-  AccelGroupParserData *accel_data;
-  GSList *accel_groups;
-  GtkAccelGroup *accel_group;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_WIDGET (toplevel));
-  g_return_if_fail (user_data != NULL);
-
-  accel_data = (AccelGroupParserData*)user_data;
-  accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
-  if (g_slist_length (accel_groups) == 0)
-    {
-      accel_group = gtk_accel_group_new ();
-      if (GTK_IS_WINDOW (toplevel))
-        gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
-    }
-  else
-    {
-      g_assert (g_slist_length (accel_groups) == 1);
-      accel_group = g_slist_nth_data (accel_groups, 0);
-    }
-
-  gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
-			      accel_data->signal,
-			      accel_group,
-			      accel_data->key,
-			      accel_data->modifiers,
-			      GTK_ACCEL_VISIBLE);
-
-  g_object_unref (accel_data->object);
-  g_free (accel_data->signal);
-  g_slice_free (AccelGroupParserData, accel_data);
 }
 
 static void
@@ -10202,19 +9850,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
                                       const gchar  *tagname,
                                       gpointer      user_data)
 {
-  if (strcmp (tagname, "accelerator") == 0)
-    {
-      AccelGroupParserData *accel_data;
-      GtkRoot *root;
-
-      accel_data = (AccelGroupParserData*)user_data;
-      g_assert (accel_data->object);
-
-      root = _gtk_widget_get_root (GTK_WIDGET (accel_data->object));
-
-      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), GTK_WIDGET (root), user_data);
-    }
-  else if (strcmp (tagname, "accessibility") == 0)
+  if (strcmp (tagname, "accessibility") == 0)
     {
       AccessibilitySubParserData *a11y_data;
 
