@@ -37,8 +37,9 @@
 
 #include "config.h"
 
-#include "gtkshortcutaction.h"
+#include "gtkshortcutactionprivate.h"
 
+#include "gtkbuilder.h"
 #include "gtkwidgetprivate.h"
 
 typedef struct _GtkShortcutActionClass GtkShortcutActionClass;
@@ -225,6 +226,112 @@ gtk_shortcut_action_activate (GtkShortcutAction      *self,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return self->action_class->activate (self, flags, widget, args);
+}
+
+static char *
+string_is_function (const char *string,
+                    const char *function_name)
+{
+  gsize len;
+
+  if (!g_str_has_prefix (string, function_name))
+    return NULL;
+  string += strlen (function_name);
+
+  if (string[0] != '(')
+    return NULL;
+  string ++;
+
+  len = strlen (string);
+  if (len == 0 || string[len - 1] != ')')
+    return NULL;
+
+  return g_strndup (string, len - 1);
+}
+
+GtkShortcutAction *
+gtk_shortcut_action_parse_builder (GtkBuilder  *builder,
+                                   const char  *string,
+                                   GError     **error)
+{
+  GtkShortcutAction *result;
+  char *arg;
+
+  if (g_str_equal (string, "nothing"))
+    return gtk_nothing_action_new ();
+  if (g_str_equal (string, "activate"))
+    return gtk_activate_action_new ();
+  if (g_str_equal (string, "mnemonic-activate"))
+    return gtk_mnemonic_action_new ();
+
+  if ((arg = string_is_function (string, "action")))
+    {
+      result = gtk_action_action_new (arg);
+      g_free (arg);
+    }
+  else if ((arg = string_is_function (string, "signal")))
+    {
+      result = gtk_signal_action_new (arg);
+      g_free (arg);
+    }
+  else if ((arg = string_is_function (string, "callback")))
+    {
+      GtkShortcutFunc callback;
+
+      callback = (GtkShortcutFunc) gtk_builder_lookup_callback_symbol (builder, arg);
+      if (!callback)
+        {
+          static GModule *module = NULL;
+
+          if (G_UNLIKELY (module == NULL))
+            module = g_module_open (NULL, 0);
+
+          if (!g_module_symbol (module, arg, (gpointer) &callback))
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "No function named \"%s\" found", arg);
+              g_free (arg);
+              return NULL;
+            }
+        }
+      
+      result = gtk_callback_action_new (callback, NULL, NULL);
+      g_free (arg);
+    }
+  else if ((arg = string_is_function (string, "gaction")))
+    {
+      GObject *object = gtk_builder_get_object (builder, arg);
+
+      if (object == NULL)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ID,
+                       "Action with ID \"%s\" not found", arg);
+          g_free (arg);
+          return NULL;
+        }
+      else if (!G_IS_ACTION (object))
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ID,
+                       "Object with ID \"%s\" is not a GAction", arg);
+          g_free (arg);
+          return NULL;
+        }
+
+      result = gtk_gaction_action_new (G_ACTION (object));
+      g_free (arg);
+    }
+  else
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "String \"%s\" does not specify a GtkShortcutAction", string);
+      return NULL;
+    }
+
+  return result;
 }
 
 /*** GTK_SHORTCUT_ACTION_NOTHING ***/
