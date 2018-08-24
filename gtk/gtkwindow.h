@@ -122,12 +122,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_startup_id           (GtkWindow           *window,
                                                 const gchar         *startup_id);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_add_accel_group          (GtkWindow           *window,
-						GtkAccelGroup	    *accel_group);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_remove_accel_group       (GtkWindow           *window,
-						GtkAccelGroup	    *accel_group);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus                (GtkWindow           *window,
 						GtkWidget           *focus);
 GDK_AVAILABLE_IN_ALL

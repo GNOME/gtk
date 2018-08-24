@@ -25,15 +25,6 @@
 
 G_BEGIN_DECLS
 
-struct _GtkAccelGroupPrivate
-{
-  GSList             *acceleratables;
-  guint               n_accels;
-  GtkAccelGroupEntry *priv_accels;
-};
-
-GSList* _gtk_accel_group_get_accelerables       (GtkAccelGroup          *accel_group);
-
 void    gtk_accelerator_print_label             (GString                *gstring,
                                                  guint                   accelerator_key,
                                                  GdkModifierType         accelerator_mods);
