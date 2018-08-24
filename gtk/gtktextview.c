@@ -6946,12 +6946,15 @@ gtk_text_view_extend_selection (GtkTextView            *text_view,
       else
 	{
 	  /* start isn't on the start of a line, so we move it to the
-	   * start, and move end to the end unless it's already there.
+	   * start, and move start to the start of the next line unless
+	   * it's already there.
 	   */
 	  gtk_text_view_backward_display_line_start (text_view, start);
 
-	  if (!gtk_text_view_starts_display_line (text_view, end))
-	    gtk_text_view_forward_display_line_end (text_view, end);
+	  if (!gtk_text_view_starts_display_line (text_view, end)) {
+	    gtk_text_view_forward_display_line (text_view, end);
+	    gtk_text_view_backward_display_line_start (text_view, end);
+	  }
 	}
       break;
 
