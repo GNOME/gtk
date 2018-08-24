@@ -2125,7 +2125,6 @@ create_menus (GtkWidget *widget)
       GtkWidget *menubar;
       GtkWidget *menu;
       GtkWidget *menuitem;
-      GtkAccelGroup *accel_group;
       GtkWidget *image;
       GdkDisplay *display = gtk_widget_get_display (widget);
       
@@ -2136,9 +2135,6 @@ create_menus (GtkWidget *widget)
       
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
       
-      accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       
       
