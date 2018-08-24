@@ -192,11 +192,6 @@ static void gtk_menu_item_buildable_add_child      (GtkBuildable        *buildab
                                                     GtkBuilder          *builder,
                                                     GObject             *child,
                                                     const gchar         *type);
-static void gtk_menu_item_buildable_custom_finished(GtkBuildable        *buildable,
-                                                    GtkBuilder          *builder,
-                                                    GObject             *child,
-                                                    const gchar         *tagname,
-                                                    gpointer             user_data);
 
 static void gtk_menu_item_actionable_interface_init  (GtkActionableInterface *iface);
 
@@ -825,7 +820,6 @@ gtk_menu_item_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_menu_item_buildable_add_child;
-  iface->custom_finished = gtk_menu_item_buildable_custom_finished;
 }
 
 static void
@@ -839,46 +833,6 @@ gtk_menu_item_buildable_add_child (GtkBuildable *buildable,
                                    GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
-}
-
-
-static void
-gtk_menu_item_buildable_custom_finished (GtkBuildable *buildable,
-                                         GtkBuilder   *builder,
-                                         GObject      *child,
-                                         const gchar  *tagname,
-                                         gpointer      user_data)
-{
-  GtkWidget *toplevel;
-
-  if (strcmp (tagname, "accelerator") == 0)
-    {
-      GtkMenuShell *menu_shell;
-      GtkWidget *attach;
-
-      menu_shell = gtk_menu_item_get_menu_shell (GTK_MENU_ITEM (buildable));
-      if (menu_shell)
-        {
-          while (GTK_IS_MENU (menu_shell) &&
-                 (attach = gtk_menu_get_attach_widget (GTK_MENU (menu_shell))) != NULL)
-            menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (attach));
-
-          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (menu_shell)));
-        }
-      else
-        {
-          /* Fall back to something ... */
-          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (buildable)));
-
-          g_warning ("found a GtkMenuItem '%s' without a parent GtkMenuShell, assigned accelerators wont work.",
-                     gtk_buildable_get_name (buildable));
-        }
-
-      /* Feed the correct toplevel to the GtkWidget accelerator parsing code */
-      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), toplevel, user_data);
-    }
-  else
-    parent_buildable_iface->custom_finished (buildable, builder, child, tagname, user_data);
 }
 
 static void
