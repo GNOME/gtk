@@ -37,8 +37,9 @@
 
 #include "config.h"
 
-#include "gtkshortcutaction.h"
+#include "gtkshortcutactionprivate.h"
 
+#include "gtkbuilder.h"
 #include "gtkwidgetprivate.h"
 
 typedef struct _GtkShortcutActionClass GtkShortcutActionClass;
@@ -224,6 +225,62 @@ gtk_shortcut_action_activate (GtkShortcutAction      *self,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return self->action_class->activate (self, flags, widget, args);
+}
+
+static char *
+string_is_function (const char *string,
+                    const char *function_name)
+{
+  gsize len;
+
+  if (!g_str_has_prefix (string, function_name))
+    return NULL;
+  string += strlen (function_name);
+
+  if (string[0] != '(')
+    return NULL;
+  string ++;
+
+  len = strlen (string);
+  if (len == 0 || string[len - 1] != ')')
+    return NULL;
+
+  return g_strndup (string, len - 1);
+}
+
+GtkShortcutAction *
+gtk_shortcut_action_parse_builder (GtkBuilder  *builder,
+                                   const char  *string,
+                                   GError     **error)
+{
+  GtkShortcutAction *result;
+  char *arg;
+
+  if (g_str_equal (string, "nothing"))
+    return gtk_nothing_action_new ();
+  if (g_str_equal (string, "activate"))
+    return gtk_activate_action_new ();
+  if (g_str_equal (string, "mnemonic-activate"))
+    return gtk_mnemonic_action_new ();
+
+  if ((arg = string_is_function (string, "action")))
+    {
+      result = gtk_action_action_new (arg);
+      g_free (arg);
+    }
+  else if ((arg = string_is_function (string, "signal")))
+    {
+      result = gtk_signal_action_new (arg);
+      g_free (arg);
+    }
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "String \"%s\" does not specify a GtkShortcutAction", string);
+      return NULL;
+    }
+
+  return result;
 }
 
 /*** GTK_SHORTCUT_ACTION_NOTHING ***/
