@@ -1853,10 +1853,6 @@ gtk_main_do_event (GdkEvent *event)
     {
       GtkWidget *focus_widget;
 
-      if (event->any.type == GDK_KEY_PRESS &&
-          gtk_window_activate_key (GTK_WINDOW (target_widget), (GdkEventKey *) event))
-        goto cleanup;
-
       focus_widget = gtk_root_get_focus (GTK_ROOT (target_widget));
       if (focus_widget)
         target_widget = focus_widget;
