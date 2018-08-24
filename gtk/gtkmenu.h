@@ -135,15 +135,6 @@ GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_set_active		  (GtkMenu	       *menu,
 					   guint		index);
 
-/* set/get the accelerator group that holds global accelerators (should
- * be added to the corresponding toplevel with gtk_window_add_accel_group().
- */
-GDK_AVAILABLE_IN_ALL
-void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
-					   GtkAccelGroup       *accel_group);
-GDK_AVAILABLE_IN_ALL
-GtkAccelGroup* gtk_menu_get_accel_group	  (GtkMenu	       *menu);
-
 /* A reference count is kept for a widget when it is attached to
  * a particular widget. This is typically a menu item; it may also
  * be a widget with a popup menu - for instance, the Notebook widget.

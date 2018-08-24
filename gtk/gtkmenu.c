@@ -175,7 +175,6 @@ enum {
 enum {
   PROP_0,
   PROP_ACTIVE,
-  PROP_ACCEL_GROUP,
   PROP_ATTACH_WIDGET,
   PROP_TEAROFF_STATE,
   PROP_TEAROFF_TITLE,
@@ -604,19 +603,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkMenu:accel-group:
-   *
-   * The accel group holding accelerators for the menu.
-   **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_GROUP,
-                                   g_param_spec_object ("accel-group",
-                                                        P_("Accel Group"),
-                                                        P_("The accel group holding accelerators for the menu"),
-                                                        GTK_TYPE_ACCEL_GROUP,
-                                                        GTK_PARAM_READWRITE));
-
-  /**
    * GtkMenu:attach-widget:
    *
    * The widget the menu is attached to. Setting this property attaches
@@ -884,9 +870,6 @@ gtk_menu_set_property (GObject      *object,
     case PROP_ACTIVE:
       gtk_menu_set_active (menu, g_value_get_int (value));
       break;
-    case PROP_ACCEL_GROUP:
-      gtk_menu_set_accel_group (menu, g_value_get_object (value));
-      break;
     case PROP_ATTACH_WIDGET:
       {
         GtkWidget *widget;
@@ -952,9 +935,6 @@ gtk_menu_get_property (GObject     *object,
     {
     case PROP_ACTIVE:
       g_value_set_int (value, g_list_index (GTK_MENU_SHELL (menu)->priv->children, gtk_menu_get_active (menu)));
-      break;
-    case PROP_ACCEL_GROUP:
-      g_value_set_object (value, gtk_menu_get_accel_group (menu));
       break;
     case PROP_ATTACH_WIDGET:
       g_value_set_object (value, gtk_menu_get_attach_widget (menu));
@@ -1170,8 +1150,6 @@ gtk_menu_destroy (GtkWidget *widget)
       priv->needs_destruction_ref = FALSE;
       g_object_ref (widget);
     }
-
-  g_clear_object (&priv->accel_group);
 
   if (priv->toplevel)
     {
@@ -2118,56 +2096,6 @@ gtk_menu_set_active (GtkMenu *menu,
         }
     }
   g_object_notify (G_OBJECT (menu), "active");
-}
-
-/**
- * gtk_menu_set_accel_group:
- * @menu: a #GtkMenu
- * @accel_group: (allow-none): the #GtkAccelGroup to be associated
- *               with the menu.
- *
- * Set the #GtkAccelGroup which holds global accelerators for the
- * menu.  This accelerator group needs to also be added to all windows
- * that this menu is being used in with gtk_window_add_accel_group(),
- * in order for those windows to support all the accelerators
- * contained in this group.
- */
-void
-gtk_menu_set_accel_group (GtkMenu       *menu,
-                          GtkAccelGroup *accel_group)
-{
-  GtkMenuPrivate *priv;
-
-  g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  priv = menu->priv;
-
-  if (priv->accel_group != accel_group)
-    {
-      if (priv->accel_group)
-        g_object_unref (priv->accel_group);
-      priv->accel_group = accel_group;
-      if (priv->accel_group)
-        g_object_ref (priv->accel_group);
-    }
-}
-
-/**
- * gtk_menu_get_accel_group:
- * @menu: a #GtkMenu
- *
- * Gets the #GtkAccelGroup which holds global accelerators for the
- * menu. See gtk_menu_set_accel_group().
- *
- * Returns: (transfer none): the #GtkAccelGroup associated with the menu
- */
-GtkAccelGroup*
-gtk_menu_get_accel_group (GtkMenu *menu)
-{
-  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
-
-  return menu->priv->accel_group;
 }
 
 static gboolean
