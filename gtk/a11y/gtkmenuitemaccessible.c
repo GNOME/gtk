@@ -446,25 +446,6 @@ gtk_menu_item_accessible_action_get_description (AtkAction *action,
   return NULL;
 }
 
-static gboolean
-find_accel_by_widget (GtkAccelKey *key,
-                      GClosure    *closure,
-                      gpointer     data)
-{
-  /* We assume that closure->data points to the widget
-   * pending gtk_widget_get_accel_closures being made public
-   */
-  return data == (gpointer) closure->data;
-}
-
-static gboolean
-find_accel_by_closure (GtkAccelKey *key,
-                       GClosure    *closure,
-                       gpointer     data)
-{
-  return data == (gpointer) closure;
-}
-
 static GtkWidget *
 find_item_label (GtkWidget *item)
 {
@@ -593,30 +574,19 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
         
       if (!accelerator)
         {
-          GtkAccelGroup *group;
-          GtkAccelKey *key = NULL;
+          guint key = 0;
+          GdkModifierType modifiers = 0;
 
-          group = gtk_menu_get_accel_group (GTK_MENU (parent));
-          if (group)
-            key = gtk_accel_group_find (group, find_accel_by_widget, item);
-          else if (GTK_IS_ACCEL_LABEL (child))
+          if (GTK_IS_ACCEL_LABEL (child))
             {
               GtkAccelLabel *accel_label;
-              GClosure      *accel_closure;
 
               accel_label = GTK_ACCEL_LABEL (child);
-              g_object_get (accel_label, "accel-closure", &accel_closure, NULL);
-              if (accel_closure)
-                {
-                  key = gtk_accel_group_find (gtk_accel_group_from_accel_closure (accel_closure),
-                                              find_accel_by_closure,
-                                              accel_closure);
-                  g_closure_unref (accel_closure);
-                }
+              gtk_accel_label_get_accel (accel_label, &key, &modifiers);
             }
 
          if (key)
-           accelerator = gtk_accelerator_name (key->accel_key, key->accel_mods);
+           accelerator = gtk_accelerator_name (key, modifiers);
         }
    }
 

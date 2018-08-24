@@ -53,21 +53,6 @@ gtk_about_dialog_get_type
 <SECTION>
 <FILE>gtkaccelgroup</FILE>
 <TITLE>Keyboard Accelerators</TITLE>
-GtkAccelGroup
-GtkAccelGroupClass
-gtk_accel_group_new
-GtkAccelFlags
-gtk_accel_group_connect
-GtkAccelGroupActivate
-GtkAccelGroupFindFunc
-gtk_accel_group_disconnect
-gtk_accel_group_disconnect_key
-gtk_accel_group_activate
-gtk_accel_group_from_accel_closure
-gtk_accel_groups_activate
-gtk_accel_groups_from_object
-gtk_accel_group_find
-GtkAccelKey
 gtk_accelerator_valid
 gtk_accelerator_parse
 gtk_accelerator_name
@@ -77,21 +62,6 @@ gtk_accelerator_name_with_keycode
 gtk_accelerator_get_label_with_keycode
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
-
-<SUBSECTION Standard>
-GTK_TYPE_ACCEL_GROUP
-GTK_ACCEL_GROUP
-GTK_IS_ACCEL_GROUP
-GTK_ACCEL_GROUP_CLASS
-GTK_IS_ACCEL_GROUP_CLASS
-GTK_ACCEL_GROUP_GET_CLASS
-
-<SUBSECTION Private>
-GTK_ACCEL_GROUP_GET_PRIVATE
-GtkAccelGroupPrivate
-GtkAccelGroupEntry
-gtk_accel_group_query
-gtk_accel_group_get_type
 </SECTION>
 
 <SECTION>
@@ -99,9 +69,6 @@ gtk_accel_group_get_type
 <TITLE>GtkAccelLabel</TITLE>
 GtkAccelLabel
 gtk_accel_label_new
-gtk_accel_label_set_accel_closure
-gtk_accel_label_get_accel_widget
-gtk_accel_label_set_accel_widget
 gtk_accel_label_get_accel_width
 gtk_accel_label_set_accel
 gtk_accel_label_get_accel
@@ -1754,8 +1721,6 @@ gtk_menu_reorder_child
 gtk_menu_popup_at_rect
 gtk_menu_popup_at_widget
 gtk_menu_popup_at_pointer
-gtk_menu_set_accel_group
-gtk_menu_get_accel_group
 gtk_menu_set_monitor
 gtk_menu_get_monitor
 gtk_menu_place_on_monitor
@@ -4620,8 +4585,6 @@ gtk_window_new
 gtk_window_set_title
 gtk_window_set_resizable
 gtk_window_get_resizable
-gtk_window_add_accel_group
-gtk_window_remove_accel_group
 gtk_window_set_modal
 gtk_window_set_default_size
 gtk_window_set_hide_on_close

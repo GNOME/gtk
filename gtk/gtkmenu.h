@@ -89,12 +89,6 @@ void	   gtk_menu_set_active		  (GtkMenu	       *menu,
 					   guint		index);
 
 GDK_AVAILABLE_IN_ALL
-void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
-					   GtkAccelGroup       *accel_group);
-GDK_AVAILABLE_IN_ALL
-GtkAccelGroup* gtk_menu_get_accel_group	  (GtkMenu	       *menu);
-
-GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 					   GtkWidget	       *attach_widget,
 					   GtkMenuDetachFunc	detacher);
