@@ -1260,24 +1260,6 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 }
 
 static gboolean
-key_is_left_or_right (const GdkEvent *event)
-{
-  guint modifiers, keyval, state;
-
-  if (!gdk_event_get_keyval (event, &keyval) ||
-      !gdk_event_get_state (event, &state))
-    return FALSE;
-
-  modifiers = gtk_accelerator_get_default_mod_mask ();
-
-  return ((keyval == GDK_KEY_Right
-           || keyval == GDK_KEY_KP_Right
-           || keyval == GDK_KEY_Left
-           || keyval == GDK_KEY_KP_Left)
-          && (state & modifiers) == 0);
-}
-
-static gboolean
 should_trigger_location_entry (GtkFileChooserWidget *impl,
                                guint                 keyval,
                                GdkModifierType       state,
@@ -1338,12 +1320,6 @@ key_press_cb (GtkEventController *controller,
     {
       location_popup_handler (impl, string);
       return GDK_EVENT_STOP;
-    }
-
-  if (key_is_left_or_right (event))
-    {
-      if (gtk_widget_child_focus (priv->places_sidebar, GTK_DIR_LEFT))
-        return GDK_EVENT_STOP;
     }
 
   if ((keyval == GDK_KEY_Return
