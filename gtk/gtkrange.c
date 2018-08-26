@@ -449,7 +449,7 @@ gtk_range_class_init (GtkRangeClass *class)
                          P_("The sensitivity policy for the stepper that points to the adjustment's lower side"),
                          GTK_TYPE_SENSITIVITY_TYPE,
                          GTK_SENSITIVITY_AUTO,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   properties[PROP_UPPER_STEPPER_SENSITIVITY] =
       g_param_spec_enum ("upper-stepper-sensitivity",
@@ -457,7 +457,7 @@ gtk_range_class_init (GtkRangeClass *class)
                          P_("The sensitivity policy for the stepper that points to the adjustment's upper side"),
                          GTK_TYPE_SENSITIVITY_TYPE,
                          GTK_SENSITIVITY_AUTO,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkRange:show-fill-level:
