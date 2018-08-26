@@ -48,9 +48,9 @@ $ ninja
 ```
 
 **Note**: For information about submitting patches and pushing changes
-to Git, see the `README.md` and `README.commits` files. In particular,
+to Git, see the [README.md](./README.md) and [README.commits.md](./README.commits.md) files. In particular,
 don't, under any circumstances, push anything to Git before reading and
-understanding `README.commmits`.
+understanding [README.commits.md](./README.commits.md).
 
 Typically, you should work on your own branch:
 
@@ -60,6 +60,6 @@ $ git checkout -b your-branch
 
 Once you've finished working on the bug fix or feature, push the branch
 to the Git repository and open a new merge request, to let the GTK
-maintainers review your contribution. The [CODE-OWNERS](./docs-CODE-OWNERS)
+maintainers review your contribution. The [CODE-OWNERS](./docs/CODE-OWNERS)
 document contains the list of core contributors to GTK and the areas for
 which they are responsible.
