@@ -1260,40 +1260,22 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 }
 
 static gboolean
-should_trigger_location_entry (GtkFileChooserWidget *impl,
-                               guint                 keyval,
-                               GdkModifierType       state,
-                               const char          **string)
+trigger_location_entry (GtkWidget *widget,
+                        GVariant  *arguments,
+                        gpointer   unused)
 {
-  GdkModifierType no_text_input_mask;
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH)
+  if (priv->operation_mode == OPERATION_MODE_SEARCH)
     return FALSE;
 
-  no_text_input_mask =
-    gtk_widget_get_modifier_mask (GTK_WIDGET (impl), GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
-
-  if (state & no_text_input_mask)
+  if (priv->action != GTK_FILE_CHOOSER_ACTION_OPEN &&
+      priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     return FALSE;
 
-  switch (keyval)
-    {
-    case GDK_KEY_slash:
-    case GDK_KEY_KP_Divide:
-      *string = "/";
-      return TRUE;
-
-    case GDK_KEY_period:
-      *string = ".";
-      return TRUE;
-
-    case GDK_KEY_asciitilde:
-      *string = "~";
-      return TRUE;
-
-    default:
-      return FALSE;
-    }
+  location_popup_handler (impl, g_variant_get_string (arguments, NULL));
+  return TRUE;
 }
 
 /* Handles key press events on the file list, so that we can trap Enter to
@@ -1310,17 +1292,8 @@ key_press_cb (GtkEventController *controller,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   const GdkEvent *event;
-  const char *string;
 
   event = gtk_get_current_event ();
-
-  if (should_trigger_location_entry (impl, keyval, state, &string) &&
-      (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
-    {
-      location_popup_handler (impl, string);
-      return GDK_EVENT_STOP;
-    }
 
   if ((keyval == GDK_KEY_Return
        || keyval == GDK_KEY_ISO_Enter
@@ -1373,20 +1346,10 @@ widget_key_press_cb (GtkEventController *controller,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean handled = FALSE;
   GdkEvent *event;
-  const char *string;
 
   event = gtk_get_current_event ();
 
-  if (should_trigger_location_entry (impl, keyval, state, &string))
-    {
-      if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-          priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-        {
-          location_popup_handler (impl, string);
-          handled = TRUE;
-        }
-    }
-  else if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *) event))
+  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *) event))
     {
       if (priv->operation_mode != OPERATION_MODE_SEARCH)
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
@@ -8281,6 +8244,22 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                        GDK_KEY_p, GDK_MOD1_MASK,
                                        "places-shortcut",
                                        NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_slash, 0,
+                                trigger_location_entry,
+                                "s", "/");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_KP_Divide, 0,
+                                trigger_location_entry,
+                                "s", "/");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_period, 0,
+                                trigger_location_entry,
+                                "s", ".");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_asciitilde, 0,
+                                trigger_location_entry,
+                                "s", "~");
 
   for (i = 0; i < G_N_ELEMENTS (quick_bookmark_keyvals); i++)
     gtk_widget_class_add_binding_signal (widget_class,
