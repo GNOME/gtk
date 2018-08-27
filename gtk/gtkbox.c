@@ -887,125 +887,6 @@ gtk_box_pack (GtkBox      *box,
 }
 
 static void
-gtk_box_get_size (GtkWidget      *widget,
-		  GtkOrientation  orientation,
-		  gint           *minimum_size,
-		  gint           *natural_size,
-		  gint           *minimum_baseline,
-		  gint           *natural_baseline)
-{
-  GtkBox *box = GTK_BOX (widget);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  gint nvis_children;
-  gint minimum, natural;
-  gint minimum_above, natural_above;
-  gint minimum_below, natural_below;
-  gboolean have_baseline;
-  gint min_baseline, nat_baseline;
-  GtkWidget *child;
-
-  have_baseline = FALSE;
-  minimum = natural = 0;
-  minimum_above = natural_above = 0;
-  minimum_below = natural_below = 0;
-  min_baseline = nat_baseline = -1;
-
-  nvis_children = 0;
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      if (_gtk_widget_get_visible (child))
-        {
-          gint child_minimum, child_natural;
-          gint child_minimum_baseline = -1, child_natural_baseline = -1;
-
-          gtk_widget_measure (child,
-                              orientation,
-                              -1,
-                              &child_minimum, &child_natural,
-                              &child_minimum_baseline, &child_natural_baseline);
-
-          if (priv->orientation == orientation)
-	    {
-              if (priv->homogeneous)
-                {
-                  minimum = MAX (minimum, child_minimum);
-                  natural = MAX (natural, child_natural);
-                }
-              else
-                {
-                  minimum += child_minimum;
-                  natural += child_natural;
-                }
-	    }
-	  else
-	    {
-	      if (child_minimum_baseline >= 0)
-		{
-		  have_baseline = TRUE;
-		  minimum_below = MAX (minimum_below, child_minimum - child_minimum_baseline);
-		  natural_below = MAX (natural_below, child_natural - child_natural_baseline);
-		  minimum_above = MAX (minimum_above, child_minimum_baseline);
-		  natural_above = MAX (natural_above, child_natural_baseline);
-		}
-	      else
-		{
-		  /* The biggest mins and naturals in the opposing orientation */
-		  minimum = MAX (minimum, child_minimum);
-		  natural = MAX (natural, child_natural);
-		}
-	    }
-
-          nvis_children += 1;
-        }
-    }
-
-  if (nvis_children > 0 && priv->orientation == orientation)
-    {
-      gint spacing = get_spacing (box);
-
-      if (priv->homogeneous)
-	{
-          minimum *= nvis_children;
-          natural *= nvis_children;
-	}
-      minimum += (nvis_children - 1) * spacing;
-      natural += (nvis_children - 1) * spacing;
-    }
-
-  minimum = MAX (minimum, minimum_below + minimum_above);
-  natural = MAX (natural, natural_below + natural_above);
-
-  if (have_baseline)
-    {
-      switch (priv->baseline_pos)
-	{
-	case GTK_BASELINE_POSITION_TOP:
-	  min_baseline = minimum_above;
-	  nat_baseline = natural_above;
-	  break;
-	case GTK_BASELINE_POSITION_CENTER:
-	  min_baseline = minimum_above + (minimum - (minimum_above + minimum_below)) / 2;
-	  nat_baseline = natural_above + (natural - (natural_above + natural_below)) / 2;
-	  break;
-	case GTK_BASELINE_POSITION_BOTTOM:
-	  min_baseline = minimum - minimum_below;
-	  nat_baseline = natural - natural_below;
-	  break;
-        default:
-          break;
-	}
-    }
-
-  *minimum_size = minimum;
-  *natural_size = natural;
-  *minimum_baseline = min_baseline;
-  *natural_baseline = nat_baseline;
-}
-
-static void
 gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
                                                int     for_size,
 					       gint   *minimum_size,
@@ -1038,7 +919,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
   spacing = get_spacing (box);
   sizes = g_newa (GtkRequestedSize, nvis_children);
-  extra_space = for_size - (nvis_children - 1) * spacing;
+  extra_space = MAX (0, for_size - (nvis_children - 1) * spacing);
 
   /* Retrieve desired size for visible children */
   for (i = 0, child = _gtk_widget_get_first_child (widget);
@@ -1241,18 +1122,13 @@ gtk_box_measure (GtkWidget      *widget,
                  int            *minimum_baseline,
                  int            *natural_baseline)
 {
-  GtkBox        *box     = GTK_BOX (widget);
+  GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
 
-  if (for_size < 0)
-    gtk_box_get_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
+  if (priv->orientation != orientation)
+    gtk_box_compute_size_for_opposing_orientation (box, for_size, minimum, natural, minimum_baseline, natural_baseline);
   else
-    {
-      if (priv->orientation != orientation)
-        gtk_box_compute_size_for_opposing_orientation (box, for_size, minimum, natural, minimum_baseline, natural_baseline);
-      else
-        gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
-    }
+    gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
 }
 
 static void
