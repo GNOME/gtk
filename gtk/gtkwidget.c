@@ -3022,6 +3022,7 @@ gtk_widget_unparent (GtkWidget *widget)
   GObjectNotifyQueue *nqueue;
   GtkWidget *toplevel;
   GtkWidget *old_parent;
+  GtkWidget *old_prev_sibling;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -3085,6 +3086,7 @@ gtk_widget_unparent (GtkWidget *widget)
       if (priv->next_sibling)
         priv->next_sibling->priv->prev_sibling = priv->prev_sibling;
     }
+  old_prev_sibling = priv->prev_sibling;
   priv->parent = NULL;
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
@@ -3127,6 +3129,9 @@ gtk_widget_unparent (GtkWidget *widget)
   if (!priv->parent)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
+
+  if (old_parent->priv->children_observer)
+    gtk_list_list_model_item_removed (old_parent->priv->children_observer, old_prev_sibling);
 
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
@@ -6610,10 +6615,11 @@ gtk_widget_reposition_after (GtkWidget *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkStateFlags parent_flags;
-  GtkWidget *prev_parent;
+  GtkWidget *prev_parent, *prev_previous;
   GtkStateData data;
 
   prev_parent = priv->parent;
+  prev_previous = priv->prev_sibling;
 
   if (priv->parent != NULL && priv->parent != parent)
     {
@@ -6721,6 +6727,14 @@ gtk_widget_reposition_after (GtkWidget *widget,
 
   if (prev_parent == NULL)
     g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
+
+  if (parent->priv->children_observer)
+    {
+      if (prev_previous)
+        g_warning ("oops");
+      else
+        gtk_list_list_model_item_added (parent->priv->children_observer, widget);
+    }
 
   /* Enforce realized/mapped invariants
    */
@@ -8270,6 +8284,9 @@ gtk_widget_dispose (GObject *object)
 
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
+
+  if (priv->children_observer)
+    gtk_list_list_model_clear (priv->children_observer);
 
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
@@ -13199,6 +13216,49 @@ gtk_widget_render (GtkWidget            *widget,
 
       gsk_render_node_unref (root);
     }
+}
+
+static void
+gtk_widget_child_observer_destroyed (gpointer widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  priv->children_observer = NULL;
+}
+/**
+ * gtk_widget_observe_children:
+ * @widget: a #GtkWidget
+ *
+ * Returns a #GListModel to track the children of @widget. 
+ *
+ * Calling this function will enable extra internal bookkeeping to track
+ * children and emit signals on the returned listmodel. It may slow down
+ * operations a lot.
+ * 
+ * Applications should try hard to avoid calling this function because of
+ * the slowdowns.
+ *
+ * Returns: (transfer full): a #GListModel tracking @widget's children
+ **/
+GListModel *
+gtk_widget_observe_children (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if (priv->children_observer)
+    return g_object_ref (G_LIST_MODEL (priv->children_observer));
+
+  priv->children_observer = gtk_list_list_model_new (GTK_TYPE_WIDGET,
+                                                     (gpointer) gtk_widget_get_first_child,
+                                                     (gpointer) gtk_widget_get_next_sibling,
+                                                     (gpointer) gtk_widget_get_prev_sibling,
+                                                     (gpointer) gtk_widget_get_last_child,
+                                                     widget,
+                                                     gtk_widget_child_observer_destroyed);
+
+  return G_LIST_MODEL (priv->children_observer);
 }
 
 /**
