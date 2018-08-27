@@ -521,7 +521,7 @@ static void gtk_window_style_updated (GtkWidget     *widget);
 static void gtk_surface_state_flags_changed (GtkWidget     *widget,
 					     GtkStateFlags  previous_state);
 
-static GSList      *toplevel_list = NULL;
+static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static GList       *default_icon_list = NULL;
 static gchar       *default_icon_name = NULL;
@@ -785,6 +785,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
   quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
+
+  if (toplevel_list == NULL)
+    toplevel_list = g_list_store_new (GTK_TYPE_WIDGET);
 
   gobject_class->constructed = gtk_window_constructed;
   gobject_class->dispose = gtk_window_dispose;
@@ -1912,7 +1915,6 @@ gtk_window_init (GtkWindow *window)
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
-  toplevel_list = g_slist_prepend (toplevel_list, window);
   gtk_window_update_debugging ();
 
 #ifdef GDK_WINDOWING_X11
@@ -2002,6 +2004,9 @@ gtk_window_constructed (GObject *object)
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->bubble_drag_gesture),
                                                   GTK_PHASE_BUBBLE);
     }
+
+  g_list_store_append (toplevel_list, window);
+  g_object_unref (window);
 }
 
 static void
@@ -3273,6 +3278,26 @@ gtk_window_get_modal (GtkWindow *window)
 }
 
 /**
+ * gtk_window_get_toplevels:
+ *
+ * Returns a list of all existing toplevel windows.
+ *
+ * If you want to iterate through the list and perform actions involving
+ * callbacks that might destroy the widgets or add new ones, be aware that
+ * the list of toplevels will change and emit the "items-changed" signal.
+ *
+ * Returns: (element-type GtkWidget) (transfer none): the list of toplevel widgets
+ */
+GListModel *
+gtk_window_get_toplevels (void)
+{
+  if (toplevel_list == NULL)
+    toplevel_list = g_list_store_new (GTK_TYPE_WIDGET);
+
+  return G_LIST_MODEL (toplevel_list);
+}
+
+/**
  * gtk_window_list_toplevels:
  * 
  * Returns a list of all existing toplevel windows. The widgets
@@ -3287,11 +3312,18 @@ gtk_window_get_modal (GtkWindow *window)
 GList*
 gtk_window_list_toplevels (void)
 {
+  GListModel *toplevels;
   GList *list = NULL;
-  GSList *slist;
+  guint i;
 
-  for (slist = toplevel_list; slist; slist = slist->next)
-    list = g_list_prepend (list, slist->data);
+  toplevels = gtk_window_get_toplevels ();
+
+  for (i = 0; i < g_list_model_get_n_items (toplevels); i++)
+    {
+      gpointer item = g_list_model_get_item (toplevels, i);
+      list = g_list_prepend (list, item);
+      g_object_unref (item);
+    }
 
   return list;
 }
@@ -5870,10 +5902,21 @@ gtk_window_destroy (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  guint i;
 
   gtk_window_release_application (window);
 
-  toplevel_list = g_slist_remove (toplevel_list, window);
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
+      if (item == window)
+        {
+          g_list_store_remove (toplevel_list, i);
+          break;
+        }
+      else
+        g_object_unref (item);
+    }
   gtk_window_update_debugging ();
 
   if (priv->transient_parent)
