@@ -3595,6 +3595,10 @@ separator {
   background: transparentize(black, 0.9);
   min-width: 1px;
   min-height: 1px;
+
+  &.selection-mode {
+    background-color: darken($selected_bg_color, 20%);
+  }
 }
 
 
