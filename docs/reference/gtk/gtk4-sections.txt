@@ -4586,6 +4586,9 @@ gtk_window_set_titlebar
 gtk_window_get_titlebar
 gtk_window_set_interactive_debugging
 
+<SUBSECTION>
+gtk_widget_observe_children
+
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
