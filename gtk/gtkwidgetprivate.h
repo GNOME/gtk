@@ -31,6 +31,7 @@
 #include "gtkcontainer.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontroller.h"
+#include "gtklistlistmodelprivate.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkinvisible.h"
@@ -166,6 +167,10 @@ struct _GtkWidgetPrivate
   GtkWidget *next_sibling;
   GtkWidget *first_child;
   GtkWidget *last_child;
+
+  /* only created on-demand */
+  GtkListListModel *children_observer;
+  GtkListListModel *controller_observer;
 
   GtkWidget *focus_child;
 
