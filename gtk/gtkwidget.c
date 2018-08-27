@@ -3109,6 +3109,9 @@ gtk_widget_unparent (GtkWidget *widget)
 
   _gtk_widget_update_parent_muxer (widget);
 
+  if (old_parent->priv->children_observer)
+    gtk_list_list_model_item_removed (old_parent->priv->children_observer, old_prev_sibling);
+
   if (toplevel)
     {
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
