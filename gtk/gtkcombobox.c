@@ -2429,6 +2429,9 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
   if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
 
+  if (!priv->popup_window)
+    return;
+
   if (!gtk_widget_is_drawable (priv->popup_window))
     return;
 
