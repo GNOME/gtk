@@ -26,16 +26,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-12 11:11+0000\n"
-"PO-Revision-Date: 2018-08-13 19:39-0300\n"
-"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
+"POT-Creation-Date: 2018-08-26 22:59+0000\n"
+"PO-Revision-Date: 2018-08-27 23:44-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.1\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 
 # Não encontrei tradução melhor para broadway
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -2648,11 +2648,11 @@ msgstr "Itálico"
 
 #: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
-msgstr ""
+msgstr "Inclinado"
 
 #: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
-msgstr ""
+msgstr "Tamanho ótico"
 
 #: gtk/gtkfontchooserwidget.c:2064 gtk/inspector/prop-editor.c:1676
 msgid "Default"
@@ -2666,19 +2666,19 @@ msgstr "Ligaduras"
 
 #: gtk/gtkfontchooserwidget.c:2112
 msgid "Letter Case"
-msgstr "Caixa"
+msgstr "Caixa de letra"
 
 #: gtk/gtkfontchooserwidget.c:2113
 msgid "Number Case"
-msgstr ""
+msgstr "Caixa de número"
 
 #: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Spacing"
-msgstr ""
+msgstr "Espaçamento de número"
 
 #: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Formatting"
-msgstr ""
+msgstr "Formatação de número"
 
 #: gtk/gtkfontchooserwidget.c:2116
 msgid "Character Variants"
@@ -3168,10 +3168,10 @@ msgid "Unable to start “%s”"
 msgstr "Não foi possível iniciar “%s”"
 
 #: gtk/gtkplacessidebar.c:2420
-#, fuzzy, c-format
+#, c-format
 #| msgid "Opening “%s”."
 msgid "Error unlocking “%s”"
-msgstr "Abrindo “%s”."
+msgstr "Erro ao desbloquear “%s”"
 
 #: gtk/gtkplacessidebar.c:2422
 #, c-format
@@ -4701,762 +4701,747 @@ msgid "General"
 msgstr "Geral"
 
 #: gtk/open-type-layout.h:13
-#, fuzzy
 #| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr "Nome acessível"
+msgstr "Acessa todas alternativas"
 
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Formas sobrescritas"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Posicionamento de marca sobre a base"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Substituições sobre a base"
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
 #| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Autenticação"
+msgstr "Frações alternativas"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
 msgid "Akhands"
-msgstr ""
+msgstr "Akhands"
 
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Formas abaixo da base"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Posicionamento de marca abaixo da base"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Substituições abaixo da base"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Alternativas contextuais"
 
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "Formas sensíveis a maiúscula/minúscula"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "Composição/Decomposição de glifo"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Forma conjunta após Ro"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Formas conjuntas"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Ligaduras contextuais"
 
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Pontuação CJK centralizada"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Espaçamento para letras maiúsculas"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Espraiamento contextual"
 
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Posicionamento cursivo"
 
+# Versaletes, em tipografia, são caracteres maiúsculos com as mesmas
+# dimensões de caracteres minúsculos; sem diferença entre small e petite --Rafael
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Versaletes (petite) de maiúsculos"
 
+# Versaletes, em tipografia, são caracteres maiúsculos com as mesmas
+# dimensões de caracteres minúsculos; sem diferença entre small e petite --Rafael
 #: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Versaletes (small) de maiúsculos"
 
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Distances"
-msgstr ""
+msgstr "Distâncias"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Ligaduras discricionárias"
 
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr ""
+msgstr "Denominadores"
 
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Formas sem ponto"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "Formas de especialistas"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Alternativas a glifo final de linha"
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Paginador do terminal"
+msgstr "Formas de terminal #2"
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Paginador do terminal"
+msgstr "Formas de terminal #3"
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Paginador do terminal"
+msgstr "Formas de terminal"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Formas de acento achatado"
 
 #: gtk/open-type-layout.h:44
-#, fuzzy
 #| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
-msgstr "Ações"
+msgstr "Frações"
 
 #: gtk/open-type-layout.h:45
-#, fuzzy
 #| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
-msgstr "Componente em foco"
+msgstr "Largura cheia"
 
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr ""
+msgstr "Meia forma"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Formas Halant"
 
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Alternativas em meia largura"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Formas históricas"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Alternativas horizontais de Kana"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "Ligaduras históricas"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Formas Hojo Kanji"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Meia largura"
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "Estado inicial"
+msgstr "Formas iniciais"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "Formas isoladas"
 
 #: gtk/open-type-layout.h:57
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
-msgstr "_Itálico"
+msgstr "Itálicas"
 
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Alternativas de justificação"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "Formas JIS78"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "Formas JIS83"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "Formas JIS90"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "Formas JIS2004"
 
+# kerning é um conhecido em português referente ajuste do espaço usual entre dois caracteres tipográficos
 #: gtk/open-type-layout.h:63
-#, fuzzy
 #| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "Aviso"
+msgstr "Kerning"
 
 #: gtk/open-type-layout.h:64
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr "Bandeja esquerda"
+msgstr "Limites esquerdos"
 
 #: gtk/open-type-layout.h:65
-#, fuzzy
 #| msgctxt "cover page"
 #| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "Padrão"
+msgstr "Ligaduras padrão"
 
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Formas de Jamo inicial"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Figuras de revestimento"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Localized Forms"
-msgstr ""
+msgstr "Formas localizadas"
 
 #: gtk/open-type-layout.h:69
-#, fuzzy
 #| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "Marca de es_querda para a direita (LRM)"
+msgstr "Alternativas de esquerda-para-direita"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
 #| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "Marca de es_querda para a direita (LRM)"
+msgstr "Formas espelhadas de esquerda-para-direita"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Posicionamento de marca"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Formas mediais #2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Formas mediais"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Grego matemático"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Marca para posicionamento de marca"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Posicionamento de marca por substituição"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Formas de anotação alternativas"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "Formas NLC Kanji"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Formas Nukta"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Numeradores"
 
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Figuras estilo antigo"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Limites óticos"
 
 #: gtk/open-type-layout.h:83
-#, fuzzy
 #| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "Sinais"
+msgstr "Ordinais"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "Ornamentos"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Larguras proporcionais de alternativas"
 
+# Versaletes, em tipografia, são caracteres maiúsculos com as mesmas
+# dimensões de caracteres minúsculos; sem diferença entre small e petite --Rafael
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "Versaletes (petite)"
 
 #: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "Kana proporcional"
 
 #: gtk/open-type-layout.h:88
-#, fuzzy
 #| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "Propriedades"
+msgstr "Figuras proporcionais"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Formas pré-base"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Substituições pré-base"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Formas pós-base"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Substituições pós-base"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "Larguras proporcionais"
 
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Um quarto de larguras"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Randomize"
-msgstr ""
+msgstr "Aleatorizar"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Alternativas contextuais exigidas"
 
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Formas Rakar"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Ligaduras exigidas"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Formas Reph"
 
 #: gtk/open-type-layout.h:100
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr "Bandeja direita"
+msgstr "Limites direitos"
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
 #| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "Marca de _direita para a esquerda (RLM)"
+msgstr "Alternativas direita-para-esquerda"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
 #| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "Marca de _direita para a esquerda (RLM)"
+msgstr "Formas espelhadas de direita-para-esquerda"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Formas de notação Ruby"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Alternativas de variação exigida"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Alternativas estilísticas"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Inferiores científicos"
 
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Optical size"
-msgstr ""
+msgstr "Tamanho ótico"
 
+# Versaletes, em tipografia, são caracteres maiúsculos com as mesmas
+# dimensões de caracteres minúsculos; sem diferença entre small e petite --Rafael
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr ""
+msgstr "Versalete (small)"
 
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "Formas simplificadas"
 
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Stylistic Set 1"
-msgstr ""
+msgstr "Conjunto estilístico 1"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Stylistic Set 2"
-msgstr ""
+msgstr "Conjunto estilístico 2"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stylistic Set 3"
-msgstr ""
+msgstr "Conjunto estilístico 3"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
 msgid "Stylistic Set 4"
-msgstr ""
+msgstr "Conjunto estilístico 4"
 
 #: gtk/open-type-layout.h:114
 msgctxt "OpenType layout"
 msgid "Stylistic Set 5"
-msgstr ""
+msgstr "Conjunto estilístico 5"
 
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Stylistic Set 6"
-msgstr ""
+msgstr "Conjunto estilístico 6"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Stylistic Set 7"
-msgstr ""
+msgstr "Conjunto estilístico 7"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Stylistic Set 8"
-msgstr ""
+msgstr "Conjunto estilístico 8"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Stylistic Set 9"
-msgstr ""
+msgstr "Conjunto estilístico 9"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Stylistic Set 10"
-msgstr ""
+msgstr "Conjunto estilístico 10"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Stylistic Set 11"
-msgstr ""
+msgstr "Conjunto estilístico 11"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Stylistic Set 12"
-msgstr ""
+msgstr "Conjunto estilístico 12"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Stylistic Set 13"
-msgstr ""
+msgstr "Conjunto estilístico 13"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Stylistic Set 14"
-msgstr ""
+msgstr "Conjunto estilístico 14"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Stylistic Set 15"
-msgstr ""
+msgstr "Conjunto estilístico 15"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Stylistic Set 16"
-msgstr ""
+msgstr "Conjunto estilístico 16"
 
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Stylistic Set 17"
-msgstr ""
+msgstr "Conjunto estilístico 17"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Stylistic Set 18"
-msgstr ""
+msgstr "Conjunto estilístico 18"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Stylistic Set 19"
-msgstr ""
+msgstr "Conjunto estilístico 19"
 
 #: gtk/open-type-layout.h:129
-#, fuzzy
 #| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
-msgstr "Licença Artística 2.0"
+msgstr "Conjunto estilístico 20"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Alternativas de estilo de escrita matemática"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Decomposição em alongamento de glifo"
 
 #: gtk/open-type-layout.h:132
-#, fuzzy
 #| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "PostScript"
+msgstr "Subscrito"
 
 #: gtk/open-type-layout.h:133
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
-msgstr "Super"
+msgstr "Sobrescrito"
 
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Espraiamento"
 
 #: gtk/open-type-layout.h:135
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Título"
 
 #: gtk/open-type-layout.h:136
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Formas de Jamo ao final"
 
 #: gtk/open-type-layout.h:137
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Formas de nome tradicional"
 
 #: gtk/open-type-layout.h:138
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Figuras tabulares"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Formas tradicionais"
 
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Um terço da largura"
 
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Tamanho único"
 
 #: gtk/open-type-layout.h:142
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Medida vertical alternativa"
 
 #: gtk/open-type-layout.h:143
-#, fuzzy
 #| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
-msgstr "Versão escura"
+msgstr "Variantes Vattu"
 
 #: gtk/open-type-layout.h:144
-#, fuzzy
 #| msgctxt "sizegroup mode"
 #| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
-msgstr "Vertical"
+msgstr "Escrita vertical"
 
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Meia medida vertical alternativa"
 
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Formas Jamo vogal"
 
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "Alternativas verticais de Kana"
 
+# kerning é um conhecido em português referente ajuste do espaço usual entre dois caracteres tipográficos
 #: gtk/open-type-layout.h:148
-#, fuzzy
 #| msgctxt "sizegroup mode"
 #| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "Vertical"
+msgstr "Kerning vertical"
 
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Medida proporcional vertical alternativa"
 
 #: gtk/open-type-layout.h:150
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Alternativas verticais e rotação"
 
 #: gtk/open-type-layout.h:151
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "Rotação para alternativas verticais"
 
 #: gtk/open-type-layout.h:152
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Zero cortado"
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -6372,735 +6357,722 @@ msgstr "ROC 8k"
 #: gtk/script-names.c:18
 msgctxt "Script"
 msgid "Arabic"
-msgstr ""
+msgstr "Árabe"
 
 #: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Armenian"
-msgstr ""
+msgstr "Armênio"
 
 #: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Bengali"
-msgstr ""
+msgstr "Bengali"
 
 #: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr ""
+msgstr "Bopomofo"
 
 #: gtk/script-names.c:22
 msgctxt "Script"
 msgid "Cherokee"
-msgstr ""
+msgstr "Cheroqui"
 
 #: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Coptic"
-msgstr ""
+msgstr "Copta"
 
 #: gtk/script-names.c:24
 msgctxt "Script"
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirílico"
 
 #: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Deseret"
-msgstr ""
+msgstr "Deseret"
 
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Devanagari"
-msgstr ""
+msgstr "Devanágari"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Ethiopic"
-msgstr ""
+msgstr "Etíope"
 
 #: gtk/script-names.c:28
 msgctxt "Script"
 msgid "Georgian"
-msgstr ""
+msgstr "Georgiano"
 
 #: gtk/script-names.c:29
 msgctxt "Script"
 msgid "Gothic"
-msgstr ""
+msgstr "Gótico"
 
 #: gtk/script-names.c:30
-#, fuzzy
 #| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
-msgstr "Ve_rde:"
+msgstr "Grego"
 
 #: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Gujarati"
-msgstr ""
+msgstr "Guzerate"
 
 #: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmuqui"
 
 #: gtk/script-names.c:33
 msgctxt "Script"
 msgid "Han"
-msgstr ""
+msgstr "Han"
 
 #: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/script-names.c:35
 msgctxt "Script"
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebraico"
 
 #: gtk/script-names.c:36
 msgctxt "Script"
 msgid "Hiragana"
-msgstr ""
+msgstr "Hiragana"
 
 #: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Kannada"
-msgstr ""
+msgstr "Canarês"
 
 #: gtk/script-names.c:38
 msgctxt "Script"
 msgid "Katakana"
-msgstr ""
+msgstr "Katakana"
 
 #: gtk/script-names.c:39
 msgctxt "Script"
 msgid "Khmer"
-msgstr ""
+msgstr "Khmer"
 
 # prioridade de impressão
 #: gtk/script-names.c:40
-#, fuzzy
 #| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
-msgstr "Baixa"
+msgstr "Laosiano"
 
 #: gtk/script-names.c:41
 msgctxt "Script"
 msgid "Latin"
-msgstr ""
+msgstr "Latim"
 
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Malayalam"
-msgstr ""
+msgstr "Malaiala"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongol"
 
 #: gtk/script-names.c:44
 msgctxt "Script"
 msgid "Myanmar"
-msgstr ""
+msgstr "Myanmar"
 
 #: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Ogham"
-msgstr ""
+msgstr "Ogâmico"
 
 #: gtk/script-names.c:46
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
-msgstr "_Itálico"
+msgstr "Itálico antigo"
 
 #: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Oriya"
-msgstr ""
+msgstr "Oriá"
 
 #: gtk/script-names.c:48
 msgctxt "Script"
 msgid "Runic"
-msgstr ""
+msgstr "Rúnico"
 
 #: gtk/script-names.c:49
 msgctxt "Script"
 msgid "Sinhala"
-msgstr ""
+msgstr "Cingalês"
 
 #: gtk/script-names.c:50
 msgctxt "Script"
 msgid "Syriac"
-msgstr ""
+msgstr "Siríaco"
 
 #: gtk/script-names.c:51
-#, fuzzy
 #| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
-msgstr "_Família:"
+msgstr "Tâmil"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
 msgid "Telugu"
-msgstr ""
+msgstr "Télugo"
 
 #: gtk/script-names.c:53
 msgctxt "Script"
 msgid "Thaana"
-msgstr ""
+msgstr "Thaana"
 
 #: gtk/script-names.c:54
-#, fuzzy
 #| msgctxt "input method menu"
 #| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
-msgstr "Tailandês-Laosiano"
+msgstr "Tailandês"
 
 #: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Tibetan"
-msgstr ""
+msgstr "Tibetano"
 
 #: gtk/script-names.c:56
 msgctxt "Script"
 msgid "Canadian Aboriginal"
-msgstr ""
+msgstr "Aborígene canadense"
 
 #: gtk/script-names.c:57
 msgctxt "Script"
 msgid "Yi"
-msgstr ""
+msgstr "Yi"
 
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Tagalog"
-msgstr ""
+msgstr "Tagalo"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Hanunoo"
-msgstr ""
+msgstr "Hanunoo"
 
 #: gtk/script-names.c:60
 msgctxt "Script"
 msgid "Buhid"
-msgstr ""
+msgstr "Buhid"
 
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "Tagbanwa"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Braille"
-msgstr ""
+msgstr "Braile"
 
 #: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "Cipriota"
 
 #: gtk/script-names.c:64
 msgctxt "Script"
 msgid "Limbu"
-msgstr ""
+msgstr "Limbu"
 
 #: gtk/script-names.c:65
 msgctxt "Script"
 msgid "Osmanya"
-msgstr ""
+msgstr "Osmania"
 
 #: gtk/script-names.c:66
 msgctxt "Script"
 msgid "Shavian"
-msgstr ""
+msgstr "Shaviano"
 
 #: gtk/script-names.c:67
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
-msgstr "Bandeja traseira"
+msgstr "B linear"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
 msgid "Tai Le"
-msgstr ""
+msgstr "Tai Le"
 
 #: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr ""
+msgstr "Ugarítico"
 
 #: gtk/script-names.c:70
 msgctxt "Script"
 msgid "New Tai Lue"
-msgstr ""
+msgstr "Novo tai lue"
 
 #: gtk/script-names.c:71
 msgctxt "Script"
 msgid "Buginese"
-msgstr ""
+msgstr "Buginês"
 
 #: gtk/script-names.c:72
 msgctxt "Script"
 msgid "Glagolitic"
-msgstr ""
+msgstr "Glagolítico"
 
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinagh"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "Syloti nagri"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
 msgid "Old Persian"
-msgstr ""
+msgstr "Persa antigo"
 
 #: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Kharoshthi"
 
 #: gtk/script-names.c:77
-#, fuzzy
 #| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Desconhecido"
 
 #: gtk/script-names.c:78
-#, fuzzy
 #| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
-msgstr "Linha de base"
+msgstr "Balinês"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr ""
+msgstr "Cuneiforme"
 
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "Phoenician"
-msgstr ""
+msgstr "Fenício"
 
 #: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Phags-pa"
-msgstr ""
+msgstr "Phags-pa"
 
 #: gtk/script-names.c:82
 msgctxt "Script"
 msgid "N'Ko"
-msgstr ""
+msgstr "N'Ko"
 
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "Kayah li"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
 msgid "Lepcha"
-msgstr ""
+msgstr "Lepcha"
 
 #: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Rejang"
-msgstr ""
+msgstr "Rejang"
 
 #: gtk/script-names.c:86
 msgctxt "Script"
 msgid "Sundanese"
-msgstr ""
+msgstr "Sundanês"
 
 #: gtk/script-names.c:87
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "Saurashtra"
 
 #: gtk/script-names.c:88
-#, fuzzy
 #| msgctxt "Color name"
 #| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
-msgstr "Marrom"
+msgstr "Cham"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Ol Chiki"
-msgstr ""
+msgstr "Ol Chiki"
 
 #: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Vai"
-msgstr ""
+msgstr "Vai"
 
 #: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Carian"
-msgstr ""
+msgstr "Cariana"
 
 #: gtk/script-names.c:92
 msgctxt "Script"
 msgid "Lycian"
-msgstr ""
+msgstr "Lício"
 
 #: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Lydian"
-msgstr ""
+msgstr "Lídio"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Avestan"
-msgstr ""
+msgstr "Avéstico"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Bamum"
-msgstr ""
+msgstr "Bamum"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
 msgid "Egyptian Hieroglpyhs"
-msgstr ""
+msgstr "Hieroglifos egípcios"
 
 #: gtk/script-names.c:97
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Aramaico imperial"
 
 #: gtk/script-names.c:98
 msgctxt "Script"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Pálavi inscrito"
 
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Parta inscrito"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Javanese"
-msgstr ""
+msgstr "Javanês"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "Kaithi"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "Lisu"
 
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "Meetei Mayek"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Árabe do sul antigo"
 
 #: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Turco antigo"
 
 #: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Samaritan"
-msgstr ""
+msgstr "Samaritano"
 
 #: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Tai Tham"
-msgstr ""
+msgstr "Tai Tham"
 
 #: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr ""
+msgstr "Tai Viet"
 
 #: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Batak"
-msgstr ""
+msgstr "Bataque"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "Brahmi"
 
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandaico"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Meroítico cursivo"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Hieróglifos meroíticos"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "Sharada"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "Bassa"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Albaniano caucasiano"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployé"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "Khudawadi, Sindhi"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Linear A"
-msgstr ""
+msgstr "A Linear"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: gtk/script-names.c:128
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "Maniqueu"
 
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:130
-#, fuzzy
 #| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
-msgstr "Modificado"
+msgstr "Modi"
 
 #: gtk/script-names.c:131
 msgctxt "Script"
 msgid "Mro"
-msgstr ""
+msgstr "Mro"
 
 #: gtk/script-names.c:132
 msgctxt "Script"
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabateu"
 
 #: gtk/script-names.c:133
 msgctxt "Script"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Árabe do norte antigo"
 
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Old Permic"
-msgstr ""
+msgstr "Pérmico antigo"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh hmong"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmireno"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Pálavi saltério"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "Siddham"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: gtk/script-names.c:143
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Hieróglifos de Anatólia"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "Hatran"
 
 #: gtk/script-names.c:145
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
-msgstr "Multi_key"
+msgstr "Multani"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "Húngaro antigo"
 
 #: gtk/script-names.c:147
-#, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "Imprimindo"
+msgstr "Escrita de sinais"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:150
-#, fuzzy
 #| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "Pesquisar"
+msgstr "Marchen"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "Newa"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "Osage"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Tangut"
-msgstr ""
+msgstr "Tangut"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "Nushu"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Zanabazar Square"
 
 #: gtk/ui/gtkaboutdialog.ui:133
 msgid "About"
@@ -7172,7 +7144,7 @@ msgstr "Escolha uma cor"
 
 #: gtk/ui/gtkcoloreditor.ui:57
 msgid "Pick a color from the screen"
-msgstr ""
+msgstr "Escolha uma cor da tela"
 
 #: gtk/ui/gtkcoloreditor.ui:89
 msgid "Color Name"
@@ -7832,12 +7804,11 @@ msgstr "Wayland"
 
 #. ID
 #: modules/input/imwaylandgtk.c:82
-#, fuzzy
 #| msgctxt "input method menu"
 #| msgid "Wayland"
 msgctxt "input method menu"
 msgid "Waylandgtk"
-msgstr "Wayland"
+msgstr "Waylandgtk"
 
 #. ID
 #: modules/input/imxim.c:26
