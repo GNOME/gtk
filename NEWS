@@ -1,3 +1,40 @@
+Overview of Changes in GTK+ 3.23.3
+==================================
+
+* Deprecate a few APIs that are gone in GTK+ 4:
+ - focus chains in GtkContainer
+ - stepper sensitivity in GtkRange
+
+* Allow picking colors under kwin
+
+* Bug fixes:
+  #404 window: Fallback to CSD titlebar in focus-chain
+  #770 scrolledwindow: Fix horizontal decleration
+ #1263 win32: Implement smooth scrolling
+  #134 #432 #574 #579 #878
+       tooltip: Position using move-to-rect
+  #844 wayland: avoid idempotent wl_subsurface_set_position
+ #2393 Fix a typo
+  #125 combobox: Fix a critical warning
+  !290 fontchooser: Add missing build flags
+  !172 filechooser: Don't show private recent items
+
+* Translation updates:
+ - Brazilian Portuguese
+ - British English
+ - Catalan
+ - Chinese (Taiwan)
+ - French
+ - German
+ - Indonesian
+ - Italian
+ - Kazakh
+ - Korean
+ - Lithuanian
+ - Polish
+ - Turkish
+
+
 Overview of Changes in GTK+ 3.23.2
 ==================================
 
