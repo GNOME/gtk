@@ -60,8 +60,6 @@
  **/
 #include "config.h"
 
-#include "math.h"
-
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkeventcontrollerprivate.h"
@@ -69,6 +67,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+
+#include "fallback-c89.c"
 
 #define SCROLL_CAPTURE_THRESHOLD_MS 150
 
