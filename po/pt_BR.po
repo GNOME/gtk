@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-26 22:59+0000\n"
-"PO-Revision-Date: 2018-08-27 23:44-0200\n"
+"POT-Creation-Date: 2018-08-28 19:27+0000\n"
+"PO-Revision-Date: 2018-08-28 19:32-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -3169,7 +3169,6 @@ msgstr "Não foi possível iniciar “%s”"
 
 #: gtk/gtkplacessidebar.c:2420
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Error unlocking “%s”"
 msgstr "Erro ao desbloquear “%s”"
 
@@ -4701,7 +4700,6 @@ msgid "General"
 msgstr "Geral"
 
 #: gtk/open-type-layout.h:13
-#| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
 msgstr "Acessa todas alternativas"
@@ -4722,7 +4720,6 @@ msgid "Above-base Substitutions"
 msgstr "Substituições sobre a base"
 
 #: gtk/open-type-layout.h:17
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
 msgstr "Frações alternativas"
@@ -4842,19 +4839,16 @@ msgid "Final Glyph on Line Alternates"
 msgstr "Alternativas a glifo final de linha"
 
 #: gtk/open-type-layout.h:40
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
 msgstr "Formas de terminal #2"
 
 #: gtk/open-type-layout.h:41
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
 msgstr "Formas de terminal #3"
 
 #: gtk/open-type-layout.h:42
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
 msgstr "Formas de terminal"
@@ -4865,13 +4859,11 @@ msgid "Flattened accent forms"
 msgstr "Formas de acento achatado"
 
 #: gtk/open-type-layout.h:44
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
 msgstr "Frações"
 
 #: gtk/open-type-layout.h:45
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
 msgstr "Largura cheia"
@@ -4922,8 +4914,6 @@ msgid "Half Widths"
 msgstr "Meia largura"
 
 #: gtk/open-type-layout.h:55
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
 msgstr "Formas iniciais"
@@ -4934,8 +4924,6 @@ msgid "Isolated Forms"
 msgstr "Formas isoladas"
 
 #: gtk/open-type-layout.h:57
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
 msgstr "Itálicas"
@@ -4967,21 +4955,16 @@ msgstr "Formas JIS2004"
 
 # kerning é um conhecido em português referente ajuste do espaço usual entre dois caracteres tipográficos
 #: gtk/open-type-layout.h:63
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
 msgstr "Kerning"
 
 #: gtk/open-type-layout.h:64
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
 msgstr "Limites esquerdos"
 
 #: gtk/open-type-layout.h:65
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
 msgstr "Ligaduras padrão"
@@ -5002,13 +4985,11 @@ msgid "Localized Forms"
 msgstr "Formas localizadas"
 
 #: gtk/open-type-layout.h:69
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "Alternativas de esquerda-para-direita"
 
 #: gtk/open-type-layout.h:70
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
 msgstr "Formas espelhadas de esquerda-para-direita"
@@ -5074,7 +5055,6 @@ msgid "Optical Bounds"
 msgstr "Limites óticos"
 
 #: gtk/open-type-layout.h:83
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
 msgstr "Ordinais"
@@ -5102,7 +5082,6 @@ msgid "Proportional Kana"
 msgstr "Kana proporcional"
 
 #: gtk/open-type-layout.h:88
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
 msgstr "Figuras proporcionais"
@@ -5163,20 +5142,16 @@ msgid "Reph Forms"
 msgstr "Formas Reph"
 
 #: gtk/open-type-layout.h:100
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Limites direitos"
 
 #: gtk/open-type-layout.h:101
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Alternativas direita-para-esquerda"
 
 #: gtk/open-type-layout.h:102
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Formas espelhadas de direita-para-esquerda"
@@ -5314,7 +5289,6 @@ msgid "Stylistic Set 19"
 msgstr "Conjunto estilístico 19"
 
 #: gtk/open-type-layout.h:129
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
 msgstr "Conjunto estilístico 20"
@@ -5330,14 +5304,11 @@ msgid "Stretching Glyph Decomposition"
 msgstr "Decomposição em alongamento de glifo"
 
 #: gtk/open-type-layout.h:132
-#| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
 msgstr "Subscrito"
 
 #: gtk/open-type-layout.h:133
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
 msgstr "Sobrescrito"
@@ -5388,14 +5359,11 @@ msgid "Alternate Vertical Metrics"
 msgstr "Medida vertical alternativa"
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Variantes Vattu"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Escrita vertical"
@@ -5417,8 +5385,6 @@ msgstr "Alternativas verticais de Kana"
 
 # kerning é um conhecido em português referente ajuste do espaço usual entre dois caracteres tipográficos
 #: gtk/open-type-layout.h:148
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
 msgstr "Kerning vertical"
@@ -6415,7 +6381,6 @@ msgid "Gothic"
 msgstr "Gótico"
 
 #: gtk/script-names.c:30
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
 msgstr "Grego"
@@ -6467,7 +6432,6 @@ msgstr "Khmer"
 
 # prioridade de impressão
 #: gtk/script-names.c:40
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
 msgstr "Laosiano"
@@ -6498,8 +6462,6 @@ msgid "Ogham"
 msgstr "Ogâmico"
 
 #: gtk/script-names.c:46
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
 msgstr "Itálico antigo"
@@ -6525,7 +6487,6 @@ msgid "Syriac"
 msgstr "Siríaco"
 
 #: gtk/script-names.c:51
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
 msgstr "Tâmil"
@@ -6541,8 +6502,6 @@ msgid "Thaana"
 msgstr "Thaana"
 
 #: gtk/script-names.c:54
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
 msgstr "Tailandês"
@@ -6608,8 +6567,6 @@ msgid "Shavian"
 msgstr "Shaviano"
 
 #: gtk/script-names.c:67
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
 msgstr "B linear"
@@ -6660,13 +6617,11 @@ msgid "Kharoshthi"
 msgstr "Kharoshthi"
 
 #: gtk/script-names.c:77
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Desconhecido"
 
 #: gtk/script-names.c:78
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
 msgstr "Balinês"
@@ -6717,8 +6672,6 @@ msgid "Saurashtra"
 msgstr "Saurashtra"
 
 #: gtk/script-names.c:88
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
 msgstr "Cham"
@@ -6759,8 +6712,10 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:96
+#| msgctxt "Script"
+#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Hieroglifos egípcios"
 
 #: gtk/script-names.c:97
@@ -6929,7 +6884,6 @@ msgid "Mende Kikakui"
 msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:130
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
 msgstr "Modi"
@@ -7005,8 +6959,6 @@ msgid "Hatran"
 msgstr "Hatran"
 
 #: gtk/script-names.c:145
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr "Multani"
@@ -7017,8 +6969,6 @@ msgid "Old Hungarian"
 msgstr "Húngaro antigo"
 
 #: gtk/script-names.c:147
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "Escrita de sinais"
@@ -7034,7 +6984,6 @@ msgid "Bhaiksuki"
 msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:150
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
 msgstr "Marchen"
@@ -7804,8 +7753,6 @@ msgstr "Wayland"
 
 #. ID
 #: modules/input/imwaylandgtk.c:82
-#| msgctxt "input method menu"
-#| msgid "Wayland"
 msgctxt "input method menu"
 msgid "Waylandgtk"
 msgstr "Waylandgtk"
