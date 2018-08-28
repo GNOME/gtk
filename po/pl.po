@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-09 10:41+0000\n"
-"PO-Revision-Date: 2018-08-11 23:57+0200\n"
+"POT-Creation-Date: 2018-08-28 16:28+0000\n"
+"PO-Revision-Date: 2018-08-28 18:48+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -6628,7 +6628,7 @@ msgstr "bamun"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "hieroglify egipskie"
 
 #: gtk/script-names.c:97
