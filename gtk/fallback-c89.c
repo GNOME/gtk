@@ -106,3 +106,11 @@ exp2 (double x)
   return pow (2.0, x);
 }
 #endif
+
+#ifndef HAVE_TRUNC
+static inline double
+trunc (double x)
+{
+  return (x > 0 ? floor (x) : ceil (x));
+}
+#endif
