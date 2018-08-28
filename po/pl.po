@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-07 10:03+0000\n"
-"PO-Revision-Date: 2018-08-12 00:01+0200\n"
+"POT-Creation-Date: 2018-08-28 16:25+0000\n"
+"PO-Revision-Date: 2018-08-28 18:49+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -63,15 +63,15 @@ msgstr "Przeciąganie z innych programów nie jest obsługiwane."
 msgid "No compatible formats to transfer contents."
 msgstr "Brak zgodnych formatów do przesłania zawartości."
 
-#: gdk/gdksurface.c:1366
+#: gdk/gdksurface.c:1338
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Obsługa GL została wyłączona przez zmienną GDK_DEBUG"
 
-#: gdk/gdksurface.c:1377
+#: gdk/gdksurface.c:1349
 msgid "The current backend does not support OpenGL"
 msgstr "Bieżący mechanizm nie obsługuje OpenGL"
 
-#: gdk/gdksurface.c:1488
+#: gdk/gdksurface.c:1460
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Obsługa Vulkan została wyłączona przez zmienną GDK_DEBUG"
 
@@ -880,15 +880,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8079
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8065
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8088
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8045
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8031
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -1270,30 +1270,6 @@ msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Przełącza przełącznik"
 
-#: gtk/encodesymbolic.c:39
-msgid "Output to this directory instead of cwd"
-msgstr "Wyjście do tego katalogu zamiast cwd"
-
-#: gtk/encodesymbolic.c:91
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "Nieprawidłowy rozmiar %s\n"
-
-#: gtk/encodesymbolic.c:103 gtk/encodesymbolic.c:110 gtk/gtk-builder-tool.c:673
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "Nie można wczytać pliku: %s\n"
-
-#: gtk/encodesymbolic.c:140 gtk/encodesymbolic.c:146
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "Nie można zapisać pliku %s: %s\n"
-
-#: gtk/encodesymbolic.c:152
-#, c-format
-msgid "Can’t close stream"
-msgstr "Nie można zamknąć potoku"
-
 #: gtk/gtkaboutdialog.c:119 gtk/ui/gtkaboutdialog.ui:182
 msgid "License"
 msgstr "Licencja"
@@ -1575,70 +1551,6 @@ msgstr "Element <%s> nie jest dopuszczalny jako najwyższy poziom"
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "Tekst nie może pojawiać się wewnątrz <%s>"
-
-#: gtk/gtk-builder-tool.c:130
-#, c-format
-msgid "Packing property %s::%s not found\n"
-msgstr "Nie odnaleziono właściwości pakującej %s::%s\n"
-
-#: gtk/gtk-builder-tool.c:132
-#, c-format
-msgid "Cell property %s::%s not found\n"
-msgstr "Nie odnaleziono właściwości komórki %s::%s\n"
-
-#: gtk/gtk-builder-tool.c:134
-#, c-format
-msgid "Property %s::%s not found\n"
-msgstr "Nie odnaleziono właściwości %s::%s\n"
-
-#: gtk/gtk-builder-tool.c:142
-#, c-format
-msgid "Couldn’t parse value for %s::%s: %s\n"
-msgstr "Nie można przetworzyć wartości dla %s::%s: %s\n"
-
-#: gtk/gtk-builder-tool.c:694
-#, c-format
-msgid "Can’t parse file: %s\n"
-msgstr "Nie można przetworzyć pliku: %s\n"
-
-#: gtk/gtk-builder-tool.c:1054
-#, c-format
-msgid ""
-"Usage:\n"
-"  gtk-builder-tool [COMMAND] FILE\n"
-"\n"
-"Commands:\n"
-"  validate           Validate the file\n"
-"  simplify [OPTIONS] Simplify the file\n"
-"  enumerate          List all named objects\n"
-"  preview [OPTIONS]  Preview the file\n"
-"\n"
-"Simplify Options:\n"
-"  --replace          Replace the file\n"
-"\n"
-"Preview Options:\n"
-"  --id=ID            Preview only the named object\n"
-"  --css=FILE         Use style from CSS file\n"
-"\n"
-"Perform various tasks on GtkBuilder .ui files.\n"
-msgstr ""
-"Użycie:\n"
-"  gtk-builder-tool [POLECENIE] PLIK\n"
-"\n"
-"Polecenia:\n"
-"  validate           Sprawdza poprawność pliku\n"
-"  simplify [OPCJE]   Upraszcza plik\n"
-"  enumerate          Wyświetla listę wszystkich nazwanych obiektów\n"
-"  preview [OPCJE]    Wyświetla podgląd pliku\n"
-"\n"
-"Opcje upraszczania:\n"
-"  --replace          Zastępuje plik\n"
-"\n"
-"Opcje podglądu:\n"
-"  --id=ID            Wyświetla podgląd tylko nazwanego obiektu\n"
-"  --css=PLIK         Używa stylu z pliku CSS\n"
-"\n"
-"Wykonuje różne zadania na plikach .ui biblioteki GtkBuilder.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2179,7 +2091,7 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
-#: gtk/gtkwindow.c:10820 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:10806 gtk/inspector/css-editor.c:201
 #: gtk/inspector/recorder.c:817 gtk/ui/gtkappchooserdialog.ui:49
 #: gtk/ui/gtkassistant.ui:107 gtk/ui/gtkcolorchooserdialog.ui:32
 #: gtk/ui/gtkfontchooserdialog.ui:26
@@ -2461,51 +2373,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/gtkfontchooserwidget.c:1546
+#: gtk/gtkfontchooserwidget.c:1539
 msgid "Width"
 msgstr "Szerokość"
 
-#: gtk/gtkfontchooserwidget.c:1547
+#: gtk/gtkfontchooserwidget.c:1540
 msgid "Weight"
 msgstr "Waga"
 
-#: gtk/gtkfontchooserwidget.c:1548
+#: gtk/gtkfontchooserwidget.c:1541
 msgid "Italic"
 msgstr "Pochylenie"
 
-#: gtk/gtkfontchooserwidget.c:1549
+#: gtk/gtkfontchooserwidget.c:1542
 msgid "Slant"
 msgstr "Nachylenie"
 
-#: gtk/gtkfontchooserwidget.c:1550
+#: gtk/gtkfontchooserwidget.c:1543
 msgid "Optical Size"
 msgstr "Rozmiar wizualny"
 
-#: gtk/gtkfontchooserwidget.c:2075 gtk/inspector/prop-editor.c:1613
+#: gtk/gtkfontchooserwidget.c:2068 gtk/inspector/prop-editor.c:1613
 msgid "Default"
 msgstr "Domyślne"
 
-#: gtk/gtkfontchooserwidget.c:2119
+#: gtk/gtkfontchooserwidget.c:2112
 msgid "Ligatures"
 msgstr "Ligatury"
 
-#: gtk/gtkfontchooserwidget.c:2120
+#: gtk/gtkfontchooserwidget.c:2113
 msgid "Letter Case"
 msgstr "Wielkość liter"
 
-#: gtk/gtkfontchooserwidget.c:2121
+#: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Case"
 msgstr "Wielkość cyfr"
 
-#: gtk/gtkfontchooserwidget.c:2122
+#: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Spacing"
 msgstr "Odstępy cyfr"
 
-#: gtk/gtkfontchooserwidget.c:2123
+#: gtk/gtkfontchooserwidget.c:2116
 msgid "Number Formatting"
 msgstr "Formatowanie cyfr"
 
-#: gtk/gtkfontchooserwidget.c:2124
+#: gtk/gtkfontchooserwidget.c:2117
 msgid "Character Variants"
 msgstr "Warianty znaku"
 
@@ -2517,7 +2429,7 @@ msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 msgid "Application menu"
 msgstr "Menu programu"
 
-#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8115
+#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8101
 msgid "Close"
 msgstr "Zamknij"
 
@@ -2555,64 +2467,6 @@ msgstr "_Otwórz odnośnik"
 #: gtk/gtklabel.c:6087
 msgid "Copy _Link Address"
 msgstr "S_kopiuj adres odnośnika"
-
-#: gtk/gtk-launch.c:40
-msgid "Show program version"
-msgstr "Wyświetla wersję programu"
-
-#. Translators: this message will appear immediately after the
-#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
-#: gtk/gtk-launch.c:74
-msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr "PROGRAM [URI…] — uruchamia PROGRAM"
-
-#. Translators: this message will appear after the usage string
-#. and before the list of options.
-#: gtk/gtk-launch.c:78
-msgid ""
-"Launch an application (specified by its desktop file name),\n"
-"optionally passing one or more URIs as arguments."
-msgstr ""
-"Uruchamia program (podany przez jego nazwę pliku .desktop),\n"
-"opcjonalnie przekazując jeden lub więcej adresów URI jako parametry."
-
-#: gtk/gtk-launch.c:88
-#, c-format
-msgid "Error parsing commandline options: %s\n"
-msgstr "Błąd podczas przetwarzania opcji wiersza poleceń: %s\n"
-
-#: gtk/gtk-launch.c:90 gtk/gtk-launch.c:111
-#, c-format
-msgid "Try “%s --help” for more information."
-msgstr "Polecenie „%s --help” wyświetli więcej informacji."
-
-#. Translators: the %s is the program name. This error message
-#. means the user is calling gtk-launch without any argument.
-#: gtk/gtk-launch.c:109
-#, c-format
-msgid "%s: missing application name"
-msgstr "%s: brak nazwy programu"
-
-#: gtk/gtk-launch.c:138
-#, c-format
-msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
-"Tworzenie AppInfo z identyfikatora nie jest obsługiwane na nieuniksowych "
-"systemach operacyjnych"
-
-#. Translators: the first %s is the program name, the second one
-#. is the application name.
-#: gtk/gtk-launch.c:146
-#, c-format
-msgid "%s: no such application %s"
-msgstr "%s: program „%s” nie istnieje"
-
-#. Translators: the first %s is the program name, the second one
-#. is the error message.
-#: gtk/gtk-launch.c:164
-#, c-format
-msgid "%s: error launching application: %s\n"
-msgstr "%s: błąd podczas uruchamiania programu: %s\n"
 
 #: gtk/gtklinkbutton.c:344
 msgid "Copy URL"
@@ -2712,7 +2566,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:817 gtk/gtkmessagedialog.c:835
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10821
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10807
 msgid "_OK"
 msgstr "_OK"
 
@@ -3245,8 +3099,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najprawdopodobniej plik tymczasowy nie mógł zostać utworzony."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:233 gtk/gtkprintoperation-portal.c:540
-#: gtk/gtkprintoperation-portal.c:617 gtk/gtkprintunixdialog.c:3386
+#: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3386
 msgid "Print"
 msgstr "Wydruk"
 
@@ -3579,24 +3433,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:8063
+#: gtk/gtkwindow.c:8049
 msgid "Move"
 msgstr "Przenieś"
 
-#: gtk/gtkwindow.c:8071
+#: gtk/gtkwindow.c:8057
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: gtk/gtkwindow.c:8102
+#: gtk/gtkwindow.c:8088
 msgid "Always on Top"
 msgstr "Zawsze na wierzchu"
 
-#: gtk/gtkwindow.c:10808
+#: gtk/gtkwindow.c:10794
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK+?"
 
-#: gtk/gtkwindow.c:10810
+#: gtk/gtkwindow.c:10796
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3607,7 +3461,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK+. Jego użycie może spowodować awarię "
 "lub uszkodzenie programu."
 
-#: gtk/gtkwindow.c:10815
+#: gtk/gtkwindow.c:10801
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -6322,7 +6176,7 @@ msgstr "bamun"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "hieroglify egipskie"
 
 #: gtk/script-names.c:95
@@ -6629,6 +6483,261 @@ msgstr "sojombo"
 msgctxt "Script"
 msgid "Zanabazar Square"
 msgstr "Dzanabadzara"
+
+#: gtk/tools/encodesymbolic.c:39
+msgid "Output to this directory instead of cwd"
+msgstr "Wyjście do tego katalogu zamiast cwd"
+
+#: gtk/tools/encodesymbolic.c:91
+#, c-format
+msgid "Invalid size %s\n"
+msgstr "Nieprawidłowy rozmiar %s\n"
+
+#: gtk/tools/encodesymbolic.c:103 gtk/tools/encodesymbolic.c:110
+#: gtk/tools/gtk-builder-tool.c:673
+#, c-format
+msgid "Can’t load file: %s\n"
+msgstr "Nie można wczytać pliku: %s\n"
+
+#: gtk/tools/encodesymbolic.c:140 gtk/tools/encodesymbolic.c:146
+#, c-format
+msgid "Can’t save file %s: %s\n"
+msgstr "Nie można zapisać pliku %s: %s\n"
+
+#: gtk/tools/encodesymbolic.c:152
+#, c-format
+msgid "Can’t close stream"
+msgstr "Nie można zamknąć potoku"
+
+#: gtk/tools/gtk-builder-tool.c:130
+#, c-format
+msgid "Packing property %s::%s not found\n"
+msgstr "Nie odnaleziono właściwości pakującej %s::%s\n"
+
+#: gtk/tools/gtk-builder-tool.c:132
+#, c-format
+msgid "Cell property %s::%s not found\n"
+msgstr "Nie odnaleziono właściwości komórki %s::%s\n"
+
+#: gtk/tools/gtk-builder-tool.c:134
+#, c-format
+msgid "Property %s::%s not found\n"
+msgstr "Nie odnaleziono właściwości %s::%s\n"
+
+#: gtk/tools/gtk-builder-tool.c:142
+#, c-format
+msgid "Couldn’t parse value for %s::%s: %s\n"
+msgstr "Nie można przetworzyć wartości dla %s::%s: %s\n"
+
+#: gtk/tools/gtk-builder-tool.c:694
+#, c-format
+msgid "Can’t parse file: %s\n"
+msgstr "Nie można przetworzyć pliku: %s\n"
+
+#: gtk/tools/gtk-builder-tool.c:1054
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk-builder-tool [COMMAND] FILE\n"
+"\n"
+"Commands:\n"
+"  validate           Validate the file\n"
+"  simplify [OPTIONS] Simplify the file\n"
+"  enumerate          List all named objects\n"
+"  preview [OPTIONS]  Preview the file\n"
+"\n"
+"Simplify Options:\n"
+"  --replace          Replace the file\n"
+"\n"
+"Preview Options:\n"
+"  --id=ID            Preview only the named object\n"
+"  --css=FILE         Use style from CSS file\n"
+"\n"
+"Perform various tasks on GtkBuilder .ui files.\n"
+msgstr ""
+"Użycie:\n"
+"  gtk-builder-tool [POLECENIE] PLIK\n"
+"\n"
+"Polecenia:\n"
+"  validate           Sprawdza poprawność pliku\n"
+"  simplify [OPCJE]   Upraszcza plik\n"
+"  enumerate          Wyświetla listę wszystkich nazwanych obiektów\n"
+"  preview [OPCJE]    Wyświetla podgląd pliku\n"
+"\n"
+"Opcje upraszczania:\n"
+"  --replace          Zastępuje plik\n"
+"\n"
+"Opcje podglądu:\n"
+"  --id=ID            Wyświetla podgląd tylko nazwanego obiektu\n"
+"  --css=PLIK         Używa stylu z pliku CSS\n"
+"\n"
+"Wykonuje różne zadania na plikach .ui biblioteki GtkBuilder.\n"
+
+#: gtk/tools/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Wyświetla wersję programu"
+
+#. Translators: this message will appear immediately after the
+#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
+#: gtk/tools/gtk-launch.c:74
+msgid "APPLICATION [URI…] — launch an APPLICATION"
+msgstr "PROGRAM [URI…] — uruchamia PROGRAM"
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: gtk/tools/gtk-launch.c:78
+msgid ""
+"Launch an application (specified by its desktop file name),\n"
+"optionally passing one or more URIs as arguments."
+msgstr ""
+"Uruchamia program (podany przez jego nazwę pliku .desktop),\n"
+"opcjonalnie przekazując jeden lub więcej adresów URI jako parametry."
+
+#: gtk/tools/gtk-launch.c:88
+#, c-format
+msgid "Error parsing commandline options: %s\n"
+msgstr "Błąd podczas przetwarzania opcji wiersza poleceń: %s\n"
+
+#: gtk/tools/gtk-launch.c:90 gtk/tools/gtk-launch.c:111
+#, c-format
+msgid "Try “%s --help” for more information."
+msgstr "Polecenie „%s --help” wyświetli więcej informacji."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: gtk/tools/gtk-launch.c:109
+#, c-format
+msgid "%s: missing application name"
+msgstr "%s: brak nazwy programu"
+
+#: gtk/tools/gtk-launch.c:138
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr ""
+"Tworzenie AppInfo z identyfikatora nie jest obsługiwane na nieuniksowych "
+"systemach operacyjnych"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: gtk/tools/gtk-launch.c:146
+#, c-format
+msgid "%s: no such application %s"
+msgstr "%s: program „%s” nie istnieje"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: gtk/tools/gtk-launch.c:164
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s: błąd podczas uruchamiania programu: %s\n"
+
+#: gtk/tools/updateiconcache.c:1392
+#, c-format
+msgid "Failed to write header\n"
+msgstr "Zapisanie nagłówka się nie powiodło\n"
+
+#: gtk/tools/updateiconcache.c:1398
+#, c-format
+msgid "Failed to write hash table\n"
+msgstr "Zapisanie tablicy mieszającej się nie powiodło\n"
+
+#: gtk/tools/updateiconcache.c:1404
+#, c-format
+msgid "Failed to write folder index\n"
+msgstr "Zapisanie indeksu katalogu się nie powiodło\n"
+
+#: gtk/tools/updateiconcache.c:1412
+#, c-format
+msgid "Failed to rewrite header\n"
+msgstr "Przepisanie nagłówka się nie powiodło\n"
+
+#: gtk/tools/updateiconcache.c:1506
+#, c-format
+msgid "Failed to open file %s : %s\n"
+msgstr "Otwarcie pliku „%s” się nie powiodło: %s\n"
+
+#: gtk/tools/updateiconcache.c:1514 gtk/tools/updateiconcache.c:1544
+#, c-format
+msgid "Failed to write cache file: %s\n"
+msgstr "Zapisanie pliku pamięci podręcznej się nie powiodło: %s\n"
+
+#: gtk/tools/updateiconcache.c:1554
+#, c-format
+msgid "The generated cache was invalid.\n"
+msgstr "Utworzona pamięć podręczna była nieprawidłowa.\n"
+
+#: gtk/tools/updateiconcache.c:1568
+#, c-format
+msgid "Could not rename %s to %s: %s, removing %s then.\n"
+msgstr "Nie można zmienić nazwy %s na %s: %s, usuwanie %s.\n"
+
+#: gtk/tools/updateiconcache.c:1582
+#, c-format
+msgid "Could not rename %s to %s: %s\n"
+msgstr "Nie można zmienić nazwy %s na %s: %s\n"
+
+#: gtk/tools/updateiconcache.c:1592
+#, c-format
+msgid "Could not rename %s back to %s: %s.\n"
+msgstr "Nie można zmienić nazwy %s z powrotem na %s: %s.\n"
+
+#: gtk/tools/updateiconcache.c:1619
+#, c-format
+msgid "Cache file created successfully.\n"
+msgstr "Pomyślnie utworzono plik pamięci podręcznej.\n"
+
+#: gtk/tools/updateiconcache.c:1658
+msgid "Overwrite an existing cache, even if up to date"
+msgstr "Zastąpienie istniejącej pamięci podręcznej, nawet gdy jest aktualna"
+
+#: gtk/tools/updateiconcache.c:1659
+msgid "Don’t check for the existence of index.theme"
+msgstr "Bez sprawdzania istnienia pliku index.theme"
+
+#: gtk/tools/updateiconcache.c:1660
+msgid "Don’t include image data in the cache"
+msgstr "Bez włączania danych obrazów w pamięci podręcznej"
+
+#: gtk/tools/updateiconcache.c:1661
+msgid "Include image data in the cache"
+msgstr "Włączenia danych obrazów w pamięci podręcznej"
+
+#: gtk/tools/updateiconcache.c:1662
+msgid "Output a C header file"
+msgstr "Wyjście do pliku nagłówkowego C"
+
+#: gtk/tools/updateiconcache.c:1663
+msgid "Turn off verbose output"
+msgstr "Wyłączenie rozwlekłego wyjścia"
+
+#: gtk/tools/updateiconcache.c:1664
+msgid "Validate existing icon cache"
+msgstr "Sprawdzenie istniejącej pamięci podręcznej ikon"
+
+#: gtk/tools/updateiconcache.c:1731
+#, c-format
+msgid "File not found: %s\n"
+msgstr "Nie odnaleziono pliku: %s\n"
+
+#: gtk/tools/updateiconcache.c:1737
+#, c-format
+msgid "Not a valid icon cache: %s\n"
+msgstr "Nieprawidłowa pamięć podręczna ikon: %s\n"
+
+#: gtk/tools/updateiconcache.c:1750
+#, c-format
+msgid "No theme index file.\n"
+msgstr "Brak pliku indeksu motywu.\n"
+
+#: gtk/tools/updateiconcache.c:1754
+#, c-format
+msgid ""
+"No theme index file in “%s”.\n"
+"If you really want to create an icon cache here, use --ignore-theme-index.\n"
+msgstr ""
+"Brak pliku indeksu motywu w „%s”.\n"
+"Jeżeli naprawdę potrzeba utworzyć pamięć podręczną ikon, proszę użyć opcji --"
+"ignore-theme-index.\n"
 
 #: gtk/ui/gtkaboutdialog.ui:106
 msgid "About"
@@ -7177,114 +7286,6 @@ msgstr "Zmniejszenie głośności"
 #: gtk/ui/gtkvolumebutton.ui:44
 msgid "Decreases the volume"
 msgstr "Obniża głośność"
-
-#: gtk/updateiconcache.c:1383
-#, c-format
-msgid "Failed to write header\n"
-msgstr "Zapisanie nagłówka się nie powiodło\n"
-
-#: gtk/updateiconcache.c:1389
-#, c-format
-msgid "Failed to write hash table\n"
-msgstr "Zapisanie tablicy mieszającej się nie powiodło\n"
-
-#: gtk/updateiconcache.c:1395
-#, c-format
-msgid "Failed to write folder index\n"
-msgstr "Zapisanie indeksu katalogu się nie powiodło\n"
-
-#: gtk/updateiconcache.c:1403
-#, c-format
-msgid "Failed to rewrite header\n"
-msgstr "Przepisanie nagłówka się nie powiodło\n"
-
-#: gtk/updateiconcache.c:1497
-#, c-format
-msgid "Failed to open file %s : %s\n"
-msgstr "Otwarcie pliku „%s” się nie powiodło: %s\n"
-
-#: gtk/updateiconcache.c:1505 gtk/updateiconcache.c:1535
-#, c-format
-msgid "Failed to write cache file: %s\n"
-msgstr "Zapisanie pliku pamięci podręcznej się nie powiodło: %s\n"
-
-#: gtk/updateiconcache.c:1545
-#, c-format
-msgid "The generated cache was invalid.\n"
-msgstr "Utworzona pamięć podręczna była nieprawidłowa.\n"
-
-#: gtk/updateiconcache.c:1559
-#, c-format
-msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "Nie można zmienić nazwy %s na %s: %s, usuwanie %s.\n"
-
-#: gtk/updateiconcache.c:1573
-#, c-format
-msgid "Could not rename %s to %s: %s\n"
-msgstr "Nie można zmienić nazwy %s na %s: %s\n"
-
-#: gtk/updateiconcache.c:1583
-#, c-format
-msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Nie można zmienić nazwy %s z powrotem na %s: %s.\n"
-
-#: gtk/updateiconcache.c:1610
-#, c-format
-msgid "Cache file created successfully.\n"
-msgstr "Pomyślnie utworzono plik pamięci podręcznej.\n"
-
-#: gtk/updateiconcache.c:1649
-msgid "Overwrite an existing cache, even if up to date"
-msgstr "Zastąpienie istniejącej pamięci podręcznej, nawet gdy jest aktualna"
-
-#: gtk/updateiconcache.c:1650
-msgid "Don’t check for the existence of index.theme"
-msgstr "Bez sprawdzania istnienia pliku index.theme"
-
-#: gtk/updateiconcache.c:1651
-msgid "Don’t include image data in the cache"
-msgstr "Bez włączania danych obrazów w pamięci podręcznej"
-
-#: gtk/updateiconcache.c:1652
-msgid "Include image data in the cache"
-msgstr "Włączenia danych obrazów w pamięci podręcznej"
-
-#: gtk/updateiconcache.c:1653
-msgid "Output a C header file"
-msgstr "Wyjście do pliku nagłówkowego C"
-
-#: gtk/updateiconcache.c:1654
-msgid "Turn off verbose output"
-msgstr "Wyłączenie rozwlekłego wyjścia"
-
-#: gtk/updateiconcache.c:1655
-msgid "Validate existing icon cache"
-msgstr "Sprawdzenie istniejącej pamięci podręcznej ikon"
-
-#: gtk/updateiconcache.c:1722
-#, c-format
-msgid "File not found: %s\n"
-msgstr "Nie odnaleziono pliku: %s\n"
-
-#: gtk/updateiconcache.c:1728
-#, c-format
-msgid "Not a valid icon cache: %s\n"
-msgstr "Nieprawidłowa pamięć podręczna ikon: %s\n"
-
-#: gtk/updateiconcache.c:1741
-#, c-format
-msgid "No theme index file.\n"
-msgstr "Brak pliku indeksu motywu.\n"
-
-#: gtk/updateiconcache.c:1745
-#, c-format
-msgid ""
-"No theme index file in “%s”.\n"
-"If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr ""
-"Brak pliku indeksu motywu w „%s”.\n"
-"Jeżeli naprawdę potrzeba utworzyć pamięć podręczną ikon, proszę użyć opcji --"
-"ignore-theme-index.\n"
 
 #: modules/media/gtkffmediafile.c:216
 #, c-format
