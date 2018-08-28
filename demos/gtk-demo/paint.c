@@ -181,6 +181,7 @@ stylus_gesture_motion (GtkGestureStylus *gesture,
 static void
 drawing_area_init (DrawingArea *area)
 {
+  const GdkRGBA draw_rgba = { 0, 0, 0, 1 };
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (area), TRUE);
 
   area->stylus_gesture = gtk_gesture_stylus_new (GTK_WIDGET (area));
@@ -189,7 +190,7 @@ drawing_area_init (DrawingArea *area)
   g_signal_connect (area->stylus_gesture, "motion",
                     G_CALLBACK (stylus_gesture_motion), area);
 
-  area->draw_color = (GdkRGBA) { 0, 0, 0, 1 };
+  area->draw_color = draw_rgba;
 }
 
 GtkWidget *
@@ -223,6 +224,7 @@ do_paint (GtkWidget *toplevel)
   if (!window)
     {
       GtkWidget *draw_area, *headerbar, *colorbutton;
+      const GdkRGBA draw_rgba = { 0, 0, 0, 1 };
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -237,7 +239,7 @@ do_paint (GtkWidget *toplevel)
       g_signal_connect (colorbutton, "color-set",
                         G_CALLBACK (color_button_color_set), draw_area);
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (colorbutton),
-                                  &(GdkRGBA) { 0, 0, 0, 1 });
+                                  &draw_rgba);
 
       gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), colorbutton);
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
