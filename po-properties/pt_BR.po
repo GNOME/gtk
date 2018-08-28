@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation of the GTK+ Properties.
-# Copyright (C) 2017 the GTK+ authors.
+# Copyright (C) 2018 the GTK+ authors.
 # Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>, 1999.
 # Afonso Celso Medina <medina@maua.br>, 2004, 2005.
 # Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2006, 2008, 2009.
@@ -14,22 +14,22 @@
 # Felipe Braga <fbobraga@gmail.com>, 2015.
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Enrico Nicoletto <liverig@gmail.com>, 2013, 2016.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2012-2017, 2018.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2012-2018.
 # Bruno Lopes da Silva <brunolopesbldsb@gmail.com>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-09 15:30+0000\n"
-"PO-Revision-Date: 2018-07-09 15:18-0300\n"
-"Last-Translator: Bruno Lopes da Silva <brunolopesbldsb@gmail.com>\n"
+"POT-Creation-Date: 2018-08-27 14:13+0000\n"
+"PO-Revision-Date: 2018-08-28 00:31-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -614,7 +614,7 @@ msgstr "Nome da fonte"
 
 #: gtk/deprecated/gtkfontsel.c:241
 msgid "The string that represents this font"
-msgstr "A string que representa esta fonte"
+msgstr "O texto que representa esta fonte"
 
 #: gtk/deprecated/gtkfontsel.c:247 gtk/gtkfontchooser.c:90
 msgid "Preview text"
@@ -1165,9 +1165,10 @@ msgstr "A versão do programa"
 msgid "Copyright string"
 msgstr "Texto de copyright"
 
+# propositalmente traduz copyright aqui, mantendo copyright acima.
 #: gtk/gtkaboutdialog.c:372
 msgid "Copyright information for the program"
-msgstr "Informações de copyright do programa"
+msgstr "Informações de direitos autorais do programa"
 
 #: gtk/gtkaboutdialog.c:387
 msgid "Comments string"
@@ -2506,7 +2507,7 @@ msgstr "Família da fonte"
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:341
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
-"Nome da família da fonte; por exemplo, Sans, Helvetiva, Times, Monospace"
+"Nome da família da fonte; por exemplo, Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtkcellrenderertext.c:386
 #: gtk/gtktexttag.c:348
@@ -3627,7 +3628,7 @@ msgstr "As dicas do comportamento do campo de texto"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Uma lista de atributos de estilo a aplicar ao texto do rótulo"
 
-#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4839 gtk/gtktextview.c:1045
+#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4860 gtk/gtktextview.c:1045
 msgid "Populate all"
 msgstr "Preencher todos"
 
@@ -3655,15 +3656,13 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Se deve mostrar ou não um ícone para Emoji"
 
 #: gtk/gtkentry.c:1544
-#| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "Ativar recurso de completar Emoji"
 
 #: gtk/gtkentry.c:1545
-#, fuzzy
 #| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
-msgstr "Se deve usar fonte monoespaçada"
+msgstr "Se deve sugerir substituições por Emoji"
 
 #: gtk/gtkentry.c:1564
 msgid "Icon Prelight"
@@ -3790,6 +3789,11 @@ msgstr "Fase de propagação"
 msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagação na qual esse controlador é executado"
 
+#: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
+#| msgid "Open Flags"
+msgid "Flags"
+msgstr "Opções"
+
 #: gtk/gtkexpander.c:300
 msgid "Expanded"
 msgstr "Expandido"
@@ -3888,7 +3892,7 @@ msgstr "Filtro"
 msgid "The current filter for selecting which files are displayed"
 msgstr "O filtro atual para selecionar que arquivos serão exibidos"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4805
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4826
 #: gtk/gtkplacesview.c:2262
 msgid "Local Only"
 msgstr "Somente locais"
@@ -4127,40 +4131,35 @@ msgid "Whether the preview text entry is shown or not"
 msgstr "Se a entrada de texto pré-visualização é mostrada ou não"
 
 #: gtk/gtkfontchooser.c:118
-#| msgid "Selection mode"
 msgid "Selection level"
 msgstr "Nível de seleção"
 
 #: gtk/gtkfontchooser.c:119
-#, fuzzy
 #| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
-msgstr "Se deve usar fonte monoespaçada"
+msgstr "Se deve selecionar família, face ou fonte"
 
 #: gtk/gtkfontchooser.c:137
-#| msgid "Font Features"
 msgid "Font features"
 msgstr "Recursos da fonte"
 
 #: gtk/gtkfontchooser.c:138
-#, fuzzy
 #| msgid "Font features set"
 msgid "Font features as a string"
-msgstr "Recursos da fonte definido"
+msgstr "Recursos da fonte como um texto"
 
 #: gtk/gtkfontchooser.c:155
 msgid "Language for which features have been selected"
 msgstr "Idioma a ser aplicado nos recursos selecionados"
 
 #: gtk/gtkfontchooserwidget.c:696
-#, fuzzy
 #| msgid "The name of the action"
 msgid "The tweak action"
-msgstr "O nome da ação"
+msgstr "A ação de ajuste"
 
 #: gtk/gtkfontchooserwidget.c:697
 msgid "The toggle action to switch to the tweak page"
-msgstr ""
+msgstr "A ação de ativar/desativar para trocar para a página de ajuste"
 
 #: gtk/gtkframe.c:232
 msgid "Text of the frame's label"
@@ -4630,7 +4629,7 @@ msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
-"Uma string com caracteres _ em posições corresponde a caracteres a sublinhar "
+"Um texto com caracteres _ em posições corresponde a caracteres a sublinhar "
 "no texto"
 
 #: gtk/gtklabel.c:884
@@ -4674,8 +4673,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 msgstr ""
-"O local preferido para se colocar reticências na string, se o rótulo não "
-"possuir espaço suficiente para exibir a string inteira"
+"O local preferido para se colocar reticências no texto, se o rótulo não "
+"possuir espaço suficiente para exibir o texto inteiro"
 
 #: gtk/gtklabel.c:1002
 msgid "Single Line Mode"
@@ -4747,7 +4746,6 @@ msgstr "Nível de valor máximo para a barra"
 msgid "Maximum value level that can be displayed by the bar"
 msgstr "O nível de valor máximo que pode ser exibido na barra"
 
-# Tirei o "O", para ficar como as demais strings.
 #: gtk/gtklevelbar.c:1081
 msgid "The mode of the value indicator"
 msgstr "Modo do indicador de valor"
@@ -5256,7 +5254,6 @@ msgid "The text"
 msgstr "O texto"
 
 #: gtk/gtkmodelbutton.c:1175
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
 msgstr "O texto do botão inclui marcação XML. Veja pango_parse_markup()"
 
@@ -5408,7 +5405,7 @@ msgstr "Rótulo da aba"
 
 #: gtk/gtknotebook.c:825
 msgid "The string displayed on the child's tab label"
-msgstr "A string exibida no rótulo da aba do filho"
+msgstr "O texto exibido no rótulo da aba do filho"
 
 #: gtk/gtknotebook.c:831
 msgid "Menu label"
@@ -5416,7 +5413,7 @@ msgstr "Rótulo do menu"
 
 #: gtk/gtknotebook.c:832
 msgid "The string displayed in the child's menu entry"
-msgstr "A string exibida na entrada do menu do filho"
+msgstr "O texto exibido na entrada do menu do filho"
 
 #: gtk/gtknotebook.c:845
 msgid "Tab expand"
@@ -5632,19 +5629,19 @@ msgstr ""
 "Se VERDADEIRO o filho pode ser reduzido para um tamanho menor do que sua "
 "requisição"
 
-#: gtk/gtkplacessidebar.c:4768
+#: gtk/gtkplacessidebar.c:4789
 msgid "Location to Select"
 msgstr "Localização para selecionar"
 
-#: gtk/gtkplacessidebar.c:4769
+#: gtk/gtkplacessidebar.c:4790
 msgid "The location to highlight in the sidebar"
 msgstr "A localização para destacar na barra lateral"
 
-#: gtk/gtkplacessidebar.c:4774 gtk/gtkplacesview.c:2283
+#: gtk/gtkplacessidebar.c:4795 gtk/gtkplacesview.c:2283
 msgid "Open Flags"
 msgstr "Opções de abertura"
 
-#: gtk/gtkplacessidebar.c:4775 gtk/gtkplacesview.c:2284
+#: gtk/gtkplacessidebar.c:4796 gtk/gtkplacesview.c:2284
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5652,27 +5649,27 @@ msgstr ""
 "Modos nos quais o aplicativo chamador pode abrir localizações selecionadas "
 "na barra lateral"
 
-#: gtk/gtkplacessidebar.c:4781
+#: gtk/gtkplacessidebar.c:4802
 msgid "Show recent files"
 msgstr "Mostrar arquivos recentes"
 
-#: gtk/gtkplacessidebar.c:4782
+#: gtk/gtkplacessidebar.c:4803
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr "Se a barra lateral inclui um atalho embutido para arquivos recentes"
 
-#: gtk/gtkplacessidebar.c:4787
+#: gtk/gtkplacessidebar.c:4808
 msgid "Show 'Desktop'"
 msgstr "Mostrar a “Área de trabalho”"
 
-#: gtk/gtkplacessidebar.c:4788
+#: gtk/gtkplacessidebar.c:4809
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Se a barra lateral inclui um atalho embutido na pasta Área de trabalho"
 
-#: gtk/gtkplacessidebar.c:4793
+#: gtk/gtkplacessidebar.c:4814
 msgid "Show 'Connect to Server'"
 msgstr "Mostrar “Conectar a servidor”"
 
-#: gtk/gtkplacessidebar.c:4794
+#: gtk/gtkplacessidebar.c:4815
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5680,47 +5677,47 @@ msgstr ""
 "Se a barra lateral inclui um atalho embutido para um diálogo “Conectar a "
 "servidor”"
 
-#: gtk/gtkplacessidebar.c:4799
+#: gtk/gtkplacessidebar.c:4820
 msgid "Show 'Enter Location'"
 msgstr "Mostrar “Informe localização”"
 
-#: gtk/gtkplacessidebar.c:4800
+#: gtk/gtkplacessidebar.c:4821
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Se a barra lateral inclui um atalho embutido para informar manualmente uma "
 "localização"
 
-#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2263
+#: gtk/gtkplacessidebar.c:4827 gtk/gtkplacesview.c:2263
 msgid "Whether the sidebar only includes local files"
 msgstr "Se a barra lateral inclui apenas arquivos locais"
 
-#: gtk/gtkplacessidebar.c:4811
+#: gtk/gtkplacessidebar.c:4832
 msgid "Show 'Trash'"
 msgstr "Mostrar “Lixeira”"
 
-#: gtk/gtkplacessidebar.c:4812
+#: gtk/gtkplacessidebar.c:4833
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 "Se a barra lateral inclui um atalho embutido para a localização da Lixeira"
 
-#: gtk/gtkplacessidebar.c:4817
+#: gtk/gtkplacessidebar.c:4838
 msgid "Show 'Other locations'"
 msgstr "Mostrar “Outras localizações”"
 
-#: gtk/gtkplacessidebar.c:4818
+#: gtk/gtkplacessidebar.c:4839
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Se a barra lateral inclui um item para mostrar localizações externas"
 
-#: gtk/gtkplacessidebar.c:4823
+#: gtk/gtkplacessidebar.c:4844
 msgid "Show “Starred Location”"
 msgstr "Mostrar “Localização favorita”"
 
-#: gtk/gtkplacessidebar.c:4824
+#: gtk/gtkplacessidebar.c:4845
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Se a barra lateral inclui um item para mostrar arquivos favoritos"
 
-#: gtk/gtkplacessidebar.c:4840
+#: gtk/gtkplacessidebar.c:4861
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 "Se deve emitir ::populate-popup para janelas instantâneas que não são menus"
@@ -5899,7 +5896,7 @@ msgstr "Mensagem de estado"
 
 #: gtk/gtkprinter.c:157
 msgid "String giving the current state of the printer"
-msgstr "String informando o estado atual da impressora"
+msgstr "Um texto informando o estado atual da impressora"
 
 #: gtk/gtkprinter.c:163
 msgid "Location"
@@ -6012,7 +6009,7 @@ msgstr "Nome do trabalho"
 
 #: gtk/gtkprintoperation.c:1148
 msgid "A string used for identifying the print job."
-msgstr "Uma string usada para identificar o trabalho de impressão."
+msgstr "Um texto usado para identificar o trabalho de impressão."
 
 #: gtk/gtkprintoperation.c:1172
 msgid "Number of Pages"
@@ -6091,11 +6088,11 @@ msgstr "O estado da operação de impressão"
 
 #: gtk/gtkprintoperation.c:1356
 msgid "Status String"
-msgstr "“String” de estado"
+msgstr "Texto de estado"
 
 #: gtk/gtkprintoperation.c:1357
 msgid "A human-readable description of the status"
-msgstr "Uma descrição do estado legível"
+msgstr "Uma descrição do estado legível do estado"
 
 #: gtk/gtkprintoperation.c:1375
 msgid "Custom tab label"
@@ -6201,8 +6198,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
-"O local preferido para se colocar reticências na string, se a barra de "
-"progresso não tem espaço suficiente para exibir a string inteira, ou mesmo "
+"O local preferido para se colocar reticências no texto, se a barra de "
+"progresso não tem espaço suficiente para exibir o texto inteiro, ou mesmo "
 "alguma parte."
 
 #: gtk/gtkprogressbar.c:349
@@ -6547,7 +6544,7 @@ msgstr "Mostrar valor"
 #: gtk/gtkscale.c:776
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
-"Se o valor atual é exibido como uma “string” próxima à barra de deslizar"
+"Se o valor atual é exibido como um texto próximo à barra de deslizar"
 
 #: gtk/gtkscale.c:782
 msgid "Has Origin"
@@ -7659,7 +7656,6 @@ msgid "Climb Rate"
 msgstr "Taxa de aumento"
 
 #: gtk/gtkspinbutton.c:388
-#| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "O taxa de aceleração quando você mantém um botão ou tecla pressionados"
 
@@ -8077,7 +8073,7 @@ msgstr "Pixels de espaço em branco entre linhas quebradas num parágrafo"
 
 #: gtk/gtktexttag.c:544
 msgid "Underline RGBA"
-msgstr "Sublicado RGBA"
+msgstr "Sublinhado RGBA"
 
 #: gtk/gtktexttag.c:545
 msgid "Color of underline for this text"
@@ -8115,7 +8111,7 @@ msgstr "Nome da cor de fundo do parágrafo"
 
 #: gtk/gtktexttag.c:613
 msgid "Paragraph background color as a string"
-msgstr "Cor de fundo do parágrafo como uma string"
+msgstr "Cor de fundo do parágrafo como um texto"
 
 #: gtk/gtktexttag.c:629
 msgid "Paragraph background color"
