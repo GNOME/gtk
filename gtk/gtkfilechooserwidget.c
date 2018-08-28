@@ -7460,6 +7460,23 @@ recent_idle_cleanup (gpointer data)
   g_free (load_data);
 }
 
+static gboolean
+recent_item_is_private (GtkRecentInfo *info)
+{
+  gboolean is_private = FALSE;
+
+  if (gtk_recent_info_get_private_hint (info))
+    {
+      const gchar *app_name = g_get_application_name ();
+      gchar **recent_apps = gtk_recent_info_get_applications (info, NULL);
+      is_private = !g_strv_contains ((const char *const*) recent_apps,
+                                     app_name);
+      g_strfreev (recent_apps);
+    }
+
+  return is_private;
+}
+
 /* Populates the file system model with the GtkRecentInfo* items
  * in the provided list; frees the items
  */
@@ -7480,6 +7497,9 @@ populate_model_with_recent_items (GtkFileChooserWidget *impl,
     {
       GtkRecentInfo *info = l->data;
       GFile *file;
+
+      if (recent_item_is_private (info))
+        continue;
 
       file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
       _gtk_file_system_model_add_and_query_file (priv->recent_model,
