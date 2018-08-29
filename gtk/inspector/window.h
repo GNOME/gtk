@@ -111,8 +111,6 @@ void                    gtk_inspector_window_remove_overlay                     
 
 void                    gtk_inspector_window_select_widget_under_pointer        (GtkInspectorWindow     *iw);
 
-void                    gtk_inspector_window_rescan                             (GtkWidget              *iw);
-
 gboolean                gtk_inspector_is_recording                              (GtkWidget              *widget);
 GskRenderNode *         gtk_inspector_prepare_render                            (GtkWidget              *widget,
                                                                                  GskRenderer            *renderer,

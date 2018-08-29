@@ -180,24 +180,8 @@ show_object (GtkInspectorMiscInfo *sl,
              GObject              *object,
              const gchar          *tab)
 {
-  GtkTreeIter iter;
-
   g_object_set_data (G_OBJECT (sl->priv->object_tree), "next-tab", (gpointer)tab);
-  if (gtk_inspector_object_tree_find_object (sl->priv->object_tree, object, &iter))
-    {
-      gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
-    }
-  else if (GTK_IS_WIDGET (object) &&
-           gtk_inspector_object_tree_find_object (sl->priv->object_tree, G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object))), &iter))
-
-    {
-      gtk_inspector_object_tree_append_object (sl->priv->object_tree, object, &iter, NULL);
-      gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
-    }
-  else
-    {
-      g_warning ("GtkInspector: couldn't find the object in the tree");
-    }
+  gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
 }
 
 static void
