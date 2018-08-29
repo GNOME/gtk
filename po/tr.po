@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-12 10:31+0000\n"
-"PO-Revision-Date: 2018-08-12 14:06+0300\n"
+"POT-Creation-Date: 2018-08-29 05:29+0000\n"
+"PO-Revision-Date: 2018-08-29 19:33+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -3136,7 +3136,6 @@ msgstr "“%s” başlatılamadı"
 
 #: gtk/gtkplacessidebar.c:2420
 #, c-format
-#| msgid "Unsupported encoding “%s”"
 msgid "Error unlocking “%s”"
 msgstr "“%s” kilidi kaldırılırken hata."
 
@@ -6619,8 +6618,10 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:96
+#| msgctxt "Script"
+#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Mısır Resimyazıları"
 
 #: gtk/script-names.c:97
