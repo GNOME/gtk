@@ -6092,7 +6092,7 @@ gtk_file_chooser_widget_get_default_size (GtkFileChooserEmbed *chooser_embed,
     {
       gtk_widget_get_preferred_size (priv->extra_align,
                                      &req, NULL);
-      *default_height += gtk_box_get_spacing (GTK_BOX (chooser_embed)) + req.height;
+      *default_height += gtk_box_get_spacing (priv->box) + req.height;
     }
 }
 
