@@ -58,17 +58,10 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_object_tree_get_type            (void);
 
-void       gtk_inspector_object_tree_scan                (GtkInspectorObjectTree *wt,
-                                                          GtkWidget              *window);
-gboolean   gtk_inspector_object_tree_select_object       (GtkInspectorObjectTree *wt,
+char *     gtk_inspector_get_object_title                (GObject                *object);
+
+void       gtk_inspector_object_tree_select_object       (GtkInspectorObjectTree *wt,
                                                           GObject                *object);
-void       gtk_inspector_object_tree_append_object       (GtkInspectorObjectTree *wt,
-                                                          GObject                *object,
-                                                          GtkTreeIter            *parent_iter,
-                                                          const gchar            *name);
-gboolean   gtk_inspector_object_tree_find_object         (GtkInspectorObjectTree *wt,
-                                                          GObject                *object,
-                                                          GtkTreeIter            *iter);
 
 GObject   *gtk_inspector_object_tree_get_selected        (GtkInspectorObjectTree *wt);
 
