@@ -48,80 +48,96 @@
       </object>
     </child>
     <child>
-      <object class="GtkScrolledWindow">
-        <property name="hscrollbar-policy">never</property>
-        <property name="expand">1</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="homogeneous">true</property>
         <child>
-          <object class="GtkTreeView" id="tree">
-            <property name="model">model</property>
-            <property name="enable-search">0</property>
-            <property name="enable-grid-lines">vertical</property>
-            <signal name="row-activated" handler="on_row_activated"/>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection">
-                <signal name="changed" handler="on_selection_changed"/>
-              </object>
-            </child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="expand">1</property>
             <child>
-              <object class="GtkTreeViewColumn" id="object_column">
-                <property name="title" translatable="yes">Object</property>
-                <property name="resizable">1</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
+              <object class="GtkTreeView" id="tree">
+                <property name="model">model</property>
+                <property name="enable-search">0</property>
+                <property name="enable-grid-lines">vertical</property>
+                <signal name="row-activated" handler="on_row_activated"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection">
+                    <signal name="changed" handler="on_selection_changed"/>
                   </object>
-                  <attributes>
-                    <attribute name="text">1</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="object_column">
+                    <property name="title" translatable="yes">Object</property>
+                    <property name="resizable">1</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                        <attribute name="sensitive">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Name</property>
+                    <property name="resizable">1</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                        <attribute name="sensitive">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Label</property>
+                    <property name="resizable">1</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                        <property name="ellipsize">end</property>
+                        <property name="max-width-chars">30</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">3</attribute>
+                        <attribute name="sensitive">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Style Classes</property>
+                    <property name="resizable">1</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">4</attribute>
+                        <attribute name="sensitive">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="expand">1</property>
             <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Name</property>
-                <property name="resizable">1</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">2</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Label</property>
-                <property name="resizable">1</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                    <property name="ellipsize">end</property>
-                    <property name="max-width-chars">30</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">3</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Style Classes</property>
-                <property name="resizable">1</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">4</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
-                </child>
+              <object class="GtkListBox" id="list">
               </object>
             </child>
           </object>
@@ -129,4 +145,13 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="type_size_group">
+    <property name="mode">both</property>
+  </object>
+  <object class="GtkSizeGroup" id="name_size_group">
+    <property name="mode">both</property>
+  </object>
+  <object class="GtkSizeGroup" id="label_size_group">
+    <property name="mode">both</property>
+  </object>
 </interface>
