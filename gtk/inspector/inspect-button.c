@@ -157,11 +157,7 @@ select_widget (GtkInspectorWindow *iw,
 
   iw->selected_widget = widget;
 
-  if (!gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget)))
-    {
-      gtk_inspector_object_tree_scan (wt, gtk_widget_get_toplevel (widget));
-      gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget));
-    }
+  gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget));
 }
 
 static void
