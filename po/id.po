@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-3-22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-21 16:27+0000\n"
-"PO-Revision-Date: 2018-08-26 16:00+0700\n"
+"POT-Creation-Date: 2018-08-29 00:43+0000\n"
+"PO-Revision-Date: 2018-08-29 12:23+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -6620,7 +6620,7 @@ msgstr "Bamum"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Hieroglif Mesir"
 
 #: gtk/script-names.c:97
