@@ -62,13 +62,14 @@ set_selected_object (GtkInspectorWindow *iw,
                      GObject            *selected)
 {
   GList *l;
-  const char *title;
+  char *title;
 
   if (!gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->prop_list), selected))
     return FALSE;
 
-  title = (const char *)g_object_get_data (selected, "gtk-inspector-object-title");
+  title = gtk_inspector_get_object_title (selected);
   gtk_label_set_label (GTK_LABEL (iw->object_title), title);
+  g_free (title);
 
   gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
   gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
@@ -92,7 +93,6 @@ set_selected_object (GtkInspectorWindow *iw,
 static void
 on_object_activated (GtkInspectorObjectTree *wt,
                      GObject                *selected,
-                     const gchar            *name,
                      GtkInspectorWindow     *iw)
 {
   const gchar *tab;
@@ -232,8 +232,6 @@ gtk_inspector_window_constructed (GObject *object)
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 
   g_object_set_data (G_OBJECT (gdk_display_get_default ()), "-gtk-inspector", iw);
-
-  gtk_inspector_object_tree_scan (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), NULL);
 }
 
 static void
@@ -377,14 +375,6 @@ gtk_inspector_window_remove_overlay (GtkInspectorWindow  *iw,
   gtk_inspector_overlay_queue_draw (overlay);
 
   iw->overlays = g_list_delete_link (iw->overlays, item);
-}
-
-void
-gtk_inspector_window_rescan (GtkWidget *widget)
-{
-  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (widget);
-
-  gtk_inspector_object_tree_scan (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), NULL);
 }
 
 static GtkInspectorWindow *

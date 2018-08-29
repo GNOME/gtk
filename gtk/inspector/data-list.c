@@ -20,6 +20,8 @@
 
 #include "data-list.h"
 
+#include "object-tree.h"
+
 #include "gtktreeview.h"
 #include "gtkcellrenderertext.h"
 #include "gtktogglebutton.h"
@@ -114,7 +116,7 @@ void
 gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
                                     GObject              *object)
 {
-  const gchar *title;
+  gchar *title;
 
   clear_view (sl);
   sl->priv->object = NULL;
@@ -126,8 +128,9 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
       return;
     }
 
-  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  title = gtk_inspector_get_object_title (object);
   gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
+  g_free (title);
 
   gtk_widget_show (GTK_WIDGET (sl));
 
