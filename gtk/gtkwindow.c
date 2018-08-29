@@ -10797,7 +10797,6 @@ warn_response (GtkDialog *dialog,
 static gboolean
 update_debugging (gpointer data)
 {
-  gtk_inspector_window_rescan (inspector_window);
   gtk_window_update_debugging_id = 0;
   return G_SOURCE_REMOVE;
 }
