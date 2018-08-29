@@ -34,11 +34,18 @@
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcomboboxprivate.h"
+#include "gtkfilterlistmodel.h"
+#include "gtkflattenlistmodel.h"
+#include "gtkiconprivate.h"
 #include "gtkiconview.h"
 #include "gtklabel.h"
+#include "gtklistbox.h"
 #include "gtkmenuitem.h"
 #include "gtksettings.h"
+#include "gtksizegroup.h"
 #include "gtktextview.h"
+#include "gtktogglebutton.h"
+#include "gtktreelistmodel.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
 #include "gtktreestore.h"
@@ -74,6 +81,8 @@ struct _GtkInspectorObjectTreePrivate
 {
   GtkTreeView *tree;
   GtkTreeStore *model;
+  GtkListBox *list;
+  GtkTreeListModel *list_model;
   gulong map_hook;
   gulong unmap_hook;
   GtkTreeViewColumn *object_column;
@@ -81,6 +90,9 @@ struct _GtkInspectorObjectTreePrivate
   GtkWidget *search_entry;
   GtkTreeWalk *walk;
   gint search_length;
+  GtkSizeGroup *type_size_group;
+  GtkSizeGroup *name_size_group;
+  GtkSizeGroup *label_size_group;
 };
 
 typedef struct _ObjectTreeClassFuncs ObjectTreeClassFuncs;
@@ -91,6 +103,7 @@ typedef void (* ObjectTreeForallFunc) (GObject    *object,
 struct _ObjectTreeClassFuncs {
   GType         (* get_type)            (void);
   GObject *     (* get_parent)          (GObject                *object);
+  GListModel *  (* get_children)        (GObject                *object);
   void          (* forall)              (GObject                *object,
                                          ObjectTreeForallFunc    forall_func,
                                          gpointer                forall_data);
@@ -105,6 +118,12 @@ static GObject *
 object_tree_get_parent_default (GObject *object)
 {
   return g_object_get_data (object, "inspector-object-tree-parent");
+}
+
+static GListModel *
+object_tree_get_children_default (GObject *object)
+{
+  return NULL;
 }
 
 static void
@@ -138,6 +157,30 @@ static gboolean
 object_tree_widget_get_sensitive (GObject *object)
 {
   return gtk_widget_get_mapped (GTK_WIDGET (object));
+}
+
+static GListModel *
+object_tree_widget_get_children (GObject *object)
+{
+  GtkWidget *widget = GTK_WIDGET (object);
+  GtkFlattenListModel *flatten;
+  GListStore *list;
+  GListModel *sublist;
+
+  list = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  sublist = gtk_widget_observe_children (widget);
+  g_list_store_append (list, sublist);
+  g_object_unref (sublist);
+
+  sublist = gtk_widget_observe_controllers (widget);
+  g_list_store_append (list, sublist);
+  g_object_unref (sublist);
+
+  flatten = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list));
+  g_object_unref (list);
+
+  return G_LIST_MODEL (flatten);
 }
 
 typedef struct {
@@ -192,6 +235,17 @@ object_tree_widget_forall (GObject              *object,
      }
 }
 
+static GListModel *
+object_tree_tree_model_sort_get_children (GObject *object)
+{
+  GListStore *store;
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  g_list_store_append (store, gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (object)));
+
+  return G_LIST_MODEL (store);
+}
+
 static void
 object_tree_tree_model_sort_forall (GObject              *object,
                                     ObjectTreeForallFunc  forall_func,
@@ -201,6 +255,17 @@ object_tree_tree_model_sort_forall (GObject              *object,
 
   if (child)
     forall_func (child, "model", forall_data);
+}
+
+static GListModel *
+object_tree_tree_model_filter_get_children (GObject *object)
+{
+  GListStore *store;
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  g_list_store_append (store, gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (object)));
+
+  return G_LIST_MODEL (store);
 }
 
 static void
@@ -215,6 +280,83 @@ object_tree_tree_model_filter_forall (GObject              *object,
 }
 
 static void
+update_list_store (GListStore *store,
+                   GObject    *object,
+                   const char *property)
+{
+  gpointer value;
+
+  g_object_get (object, property, &value, NULL);
+  if (value)
+    {
+      g_list_store_splice (store,
+                           0,
+                           g_list_model_get_n_items (G_LIST_MODEL (store)),
+                           &value,
+                           1);
+    }
+  else
+    {
+      g_list_store_remove_all (store);
+    }
+}
+
+static void
+list_model_for_property_notify_cb (GObject    *object,
+                                   GParamSpec *pspec,
+                                   GListStore *store)
+{
+  update_list_store (store, object, pspec->name);
+}
+
+static GListModel *
+list_model_for_property (GObject    *object,
+                         const char *property)
+{
+  GListStore *store = g_list_store_new (G_TYPE_OBJECT);
+
+  /* g_signal_connect_object ("notify::property") */
+  g_signal_connect_closure_by_id (object,
+                                  g_signal_lookup (property, G_OBJECT_TYPE (object)),
+                                  g_quark_from_static_string (property),
+                                  g_cclosure_new_object (G_CALLBACK (list_model_for_property_notify_cb), G_OBJECT (store)),
+                                  FALSE);
+  update_list_store (store, object, property);
+
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
+list_model_for_properties (GObject     *object,
+                           const char **props)
+{
+  GListStore *concat;
+  GListModel *result;
+  guint i;
+
+  if (props[1] == NULL)
+    return list_model_for_property (object, props[0]);
+
+  concat = g_list_store_new (G_TYPE_LIST_MODEL);
+  for (i = 0; props[i]; i++)
+    {
+      GListModel *tmp = list_model_for_property (object, props[i]);
+      g_list_store_append (concat, tmp);
+      g_object_unref (tmp);
+    }
+
+  result = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (concat)));
+  g_object_unref (concat);
+  return result;
+}
+
+static GListModel *
+object_tree_menu_item_get_children (GObject *object)
+{
+  return list_model_for_properties (object, (const char *[2]) { "submenu", NULL });
+}
+
+static void
 object_tree_menu_item_forall (GObject              *object,
                               ObjectTreeForallFunc  forall_func,
                               gpointer              forall_data)
@@ -224,6 +366,12 @@ object_tree_menu_item_forall (GObject              *object,
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (object));
   if (submenu)
     forall_func (G_OBJECT (submenu), "submenu", forall_data);
+}
+
+static GListModel *
+object_tree_combo_box_get_children (GObject *object)
+{
+  return list_model_for_properties (object, (const char *[3]) { "model", "popup", NULL });
 }
 
 static void
@@ -241,6 +389,12 @@ object_tree_combo_box_forall (GObject              *object,
   child = G_OBJECT (gtk_combo_box_get_model (GTK_COMBO_BOX (object)));
   if (child)
     forall_func (child, "model", forall_data);
+}
+
+static GListModel *
+object_tree_tree_view_get_children (GObject *object)
+{
+  return NULL;
 }
 
 static void
@@ -265,6 +419,12 @@ object_tree_tree_view_forall (GObject              *object,
       child = G_OBJECT (gtk_tree_view_get_column (GTK_TREE_VIEW (object), i));
       forall_func (child, NULL, forall_data);
     }
+}
+
+static GListModel *
+object_tree_icon_view_get_children (GObject *object)
+{
+  return list_model_for_properties (object, (const char *[2]) { "model", NULL });
 }
 
 static void
@@ -299,6 +459,12 @@ cell_callback (GtkCellRenderer *renderer,
   return FALSE;
 }
 
+static GListModel *
+object_tree_cell_area_get_children (GObject *object)
+{
+  return NULL;
+}
+
 static void
 object_tree_cell_area_forall (GObject              *object,
                               ObjectTreeForallFunc  forall_func,
@@ -311,6 +477,12 @@ object_tree_cell_area_forall (GObject              *object,
   };
 
   gtk_cell_area_foreach (GTK_CELL_AREA (object), cell_callback, &data);
+}
+
+static GListModel *
+object_tree_cell_layout_get_children (GObject *object)
+{
+  return NULL;
 }
 
 static void
@@ -332,6 +504,12 @@ object_tree_cell_layout_forall (GObject              *object,
   forall_func (G_OBJECT (area), "cell-area", forall_data);
 }
 
+static GListModel *
+object_tree_text_view_get_children (GObject *object)
+{
+  return list_model_for_properties (object, (const char *[2]) { "buffer", NULL });
+}
+
 static void
 object_tree_text_view_forall (GObject              *object,
                               ObjectTreeForallFunc  forall_func,
@@ -341,6 +519,12 @@ object_tree_text_view_forall (GObject              *object,
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (object));
   forall_func (G_OBJECT (buffer), "buffer", forall_data);
+}
+
+static GListModel *
+object_tree_text_buffer_get_children (GObject *object)
+{
+  return list_model_for_properties (object, (const char *[2]) { "tag-table", NULL });
 }
 
 static void
@@ -366,6 +550,12 @@ tag_callback (GtkTextTag *tag,
   g_free (name);
 }
 
+static GListModel *
+object_tree_text_tag_table_get_children (GObject *object)
+{
+  return NULL;
+}
+
 static void
 object_tree_text_tag_table_forall (GObject              *object,
                                    ObjectTreeForallFunc  forall_func,
@@ -377,6 +567,12 @@ object_tree_text_tag_table_forall (GObject              *object,
   };
 
   gtk_text_tag_table_foreach (GTK_TEXT_TAG_TABLE (object), tag_callback, &data);
+}
+
+static GListModel *
+object_tree_application_get_children (GObject *object)
+{
+  return list_model_for_properties (object, (const char *[3]) { "app-menu", "menubar", NULL });
 }
 
 static void
@@ -404,90 +600,105 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
   {
     gtk_application_get_type,
     object_tree_get_parent_default,
+    object_tree_application_get_children,
     object_tree_application_forall,
     object_tree_get_sensitive_default
   },
   {
     gtk_text_tag_table_get_type,
     object_tree_get_parent_default,
+    object_tree_text_tag_table_get_children,
     object_tree_text_tag_table_forall,
     object_tree_get_sensitive_default
   },
   {
     gtk_text_buffer_get_type,
     object_tree_get_parent_default,
+    object_tree_text_buffer_get_children,
     object_tree_text_buffer_forall,
     object_tree_get_sensitive_default
   },
   {
     gtk_text_view_get_type,
     object_tree_widget_get_parent,
+    object_tree_text_view_get_children,
     object_tree_text_view_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_icon_view_get_type,
     object_tree_widget_get_parent,
+    object_tree_icon_view_get_children,
     object_tree_icon_view_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_tree_view_get_type,
     object_tree_widget_get_parent,
+    object_tree_tree_view_get_children,
     object_tree_tree_view_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_combo_box_get_type,
     object_tree_widget_get_parent,
+    object_tree_combo_box_get_children,
     object_tree_combo_box_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_menu_item_get_type,
     object_tree_widget_get_parent,
+    object_tree_menu_item_get_children,
     object_tree_menu_item_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_menu_get_type,
     object_tree_menu_get_parent,
+    object_tree_widget_get_children,
     object_tree_widget_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_widget_get_type,
     object_tree_widget_get_parent,
+    object_tree_widget_get_children,
     object_tree_widget_forall,
     object_tree_widget_get_sensitive
   },
   {
     gtk_tree_model_filter_get_type,
     object_tree_get_parent_default,
+    object_tree_tree_model_filter_get_children,
     object_tree_tree_model_filter_forall,
     object_tree_get_sensitive_default
   },
   {
     gtk_tree_model_sort_get_type,
     object_tree_get_parent_default,
+    object_tree_tree_model_sort_get_children,
     object_tree_tree_model_sort_forall,
     object_tree_get_sensitive_default
   },
   {
     gtk_cell_area_get_type,
     object_tree_get_parent_default,
+    object_tree_cell_area_get_children,
     object_tree_cell_area_forall,
     object_tree_get_sensitive_default
   },
   {
     gtk_cell_layout_get_type,
     object_tree_get_parent_default,
+    object_tree_cell_layout_get_children,
     object_tree_cell_layout_forall,
     object_tree_get_sensitive_default
   },
   {
     g_object_get_type,
     object_tree_get_parent_default,
+    object_tree_get_children_default,
     object_tree_forall_default,
     object_tree_get_sensitive_default
   },
@@ -520,6 +731,55 @@ object_get_parent (GObject *object)
   funcs = find_class_funcs (object);
   
   return funcs->get_parent (object);
+}
+
+static GListModel *
+object_get_children (GObject *object)
+{
+  GType object_type;
+  GListModel *result, *children;
+  GListStore *result_list;
+  guint i;
+
+  object_type = G_OBJECT_TYPE (object);
+  result = NULL;
+  result_list = NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (object_tree_class_funcs); i++)
+    {
+      if (!g_type_is_a (object_type, object_tree_class_funcs[i].get_type ()))
+        continue;
+
+      children = object_tree_class_funcs[i].get_children (object);
+      if (children == NULL)
+        continue;
+
+      if (result_list)
+        {
+          g_list_store_append (result_list, children);
+          g_object_unref (result_list);
+        }
+      else if (result == NULL)
+        {
+          result = children;
+        }
+      else
+        {
+          result_list = g_list_store_new (G_TYPE_LIST_MODEL);
+          g_list_store_append (result_list, result);
+          g_object_unref (result);
+          g_list_store_append (result_list, children);
+          g_object_unref (children);
+        }
+    }
+
+  if (result_list)
+    {
+      result = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (result_list)));
+      g_object_unref (result_list);
+    }
+
+  return result;
 }
 
 static void
@@ -936,9 +1196,151 @@ stop_search (GtkWidget              *entry,
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar), FALSE);
 }
 
+static GtkWidget *
+gtk_inspector_object_tree_create_list_widget (gpointer row_item,
+                                              gpointer user_data)
+{
+  GtkInspectorObjectTree *wt = user_data;
+  gpointer item;
+  const gchar *name;
+  GtkWidget *row, *box, *column, *child;
+  guint depth;
+
+  row = gtk_list_box_row_new ();
+  g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (row), box);
+
+  column = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_size_group_add_widget (wt->priv->type_size_group, column);
+  gtk_container_add (GTK_CONTAINER (box), column);
+
+  /* expander */
+  depth = gtk_tree_list_row_get_depth (row_item);
+  if (depth > 0)
+    {
+      child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_widget_set_size_request (child, 16 * depth, 0);
+      gtk_container_add (GTK_CONTAINER (column), child);
+    }
+  if (gtk_tree_list_row_is_expandable (row_item))
+    {
+      GtkWidget *title, *arrow;
+
+      child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
+      
+      title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
+      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
+      g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+      gtk_container_add (GTK_CONTAINER (child), title);
+
+      arrow = gtk_icon_new ("arrow");
+      gtk_container_add (GTK_CONTAINER (title), arrow);
+    }
+  else
+    {
+      child = gtk_image_new (); /* empty whatever */
+    }
+  gtk_container_add (GTK_CONTAINER (column), child);
+
+  item = gtk_tree_list_row_get_item (row_item);
+
+  /* 1st column: type name */
+  child = gtk_label_new (G_OBJECT_TYPE_NAME (item));
+  gtk_label_set_width_chars (GTK_LABEL (child), 30);
+  gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+  gtk_container_add (GTK_CONTAINER (column), child);
+
+  /* 2nd column: name */
+  name = NULL;
+
+  if (GTK_IS_WIDGET (item))
+    {
+      const gchar *id;
+
+      id = gtk_widget_get_name (item);
+      if (name == NULL && id != NULL && g_strcmp0 (id, G_OBJECT_TYPE_NAME (item)) != 0)
+        name = id;
+    }
+
+  if (GTK_IS_BUILDABLE (item))
+    {
+      const gchar *id;
+      id = gtk_buildable_get_name (item);
+      if (name == NULL && id != NULL && !g_str_has_prefix (id, "___object_"))
+        name = id;
+    }
+
+  child = gtk_label_new (name);
+  gtk_label_set_width_chars (GTK_LABEL (child), 15);
+  gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+  gtk_size_group_add_widget (wt->priv->name_size_group, child);
+  gtk_container_add (GTK_CONTAINER (box), child);
+
+  /* 3rd column: label */
+  child = gtk_label_new (NULL);
+  if (GTK_IS_LABEL (item))
+    g_object_bind_property (item, "label", child, "label", G_BINDING_SYNC_CREATE);
+  else if (GTK_IS_BUTTON (item))
+    g_object_bind_property (item, "label", child, "label", G_BINDING_SYNC_CREATE);
+  else if (GTK_IS_WINDOW (item))
+    g_object_bind_property (item, "title", child, "label", G_BINDING_SYNC_CREATE);
+  else if (GTK_IS_TREE_VIEW_COLUMN (item))
+    g_object_bind_property (item, "title", child, "label", G_BINDING_SYNC_CREATE);
+  gtk_label_set_width_chars (GTK_LABEL (child), 15);
+  gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+  gtk_size_group_add_widget (wt->priv->label_size_group, child);
+  gtk_container_add (GTK_CONTAINER (box), child);
+
+  g_object_unref (item);
+
+  return row;
+}
+
+static GListModel *
+create_model_for_object (gpointer object,
+                         gpointer user_data)
+{
+  return object_get_children (object);
+}
+
+static gboolean
+toplevel_filter_func (gpointer item,
+                      gpointer data)
+{
+  GdkDisplay *display = data;
+
+  if (!GTK_IS_WINDOW (item))
+    return FALSE;
+
+  if (g_str_equal (G_OBJECT_TYPE_NAME (item), "GtkInspectorWindow"))
+    return FALSE;
+
+  return gtk_window_get_window_type (item) == GTK_WINDOW_TOPLEVEL &&
+         gtk_widget_get_display (item) == display;
+}
+
+static GListModel *
+create_root_model (void)
+{
+  GtkFilterListModel *filter;
+
+  filter = gtk_filter_list_model_new_for_type (G_TYPE_OBJECT);
+
+  gtk_filter_list_model_set_filter_func (filter, 
+                                         toplevel_filter_func,
+                                         g_object_ref (gdk_display_get_default ()),
+                                         g_object_unref);
+  gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
+
+  return G_LIST_MODEL (filter);
+}
+
 static void
 gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
 {
+  GListModel *root_model;
   guint signal_id;
 
   wt->priv = gtk_inspector_object_tree_get_instance_private (wt);
@@ -959,6 +1361,21 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
                                                    map_or_unmap, wt, NULL);
 
   gtk_inspector_object_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
+
+  root_model = create_root_model ();
+  wt->priv->list_model = gtk_tree_list_model_new (FALSE,
+                                                  root_model,
+                                                  FALSE,
+                                                  create_model_for_object,
+                                                  NULL,
+                                                  NULL);
+  g_object_unref (root_model);
+
+  gtk_list_box_bind_model (wt->priv->list,
+                           G_LIST_MODEL (wt->priv->list_model),
+                           gtk_inspector_object_tree_create_list_widget,
+                           wt,
+                           NULL);
 }
 
 static void
@@ -967,6 +1384,8 @@ gtk_inspector_object_tree_dispose (GObject *object)
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (object);
 
   clear_store (wt);
+
+  g_clear_object (&wt->priv->list_model);
 
   G_OBJECT_CLASS (gtk_inspector_object_tree_parent_class)->dispose (object);
 }
@@ -1017,9 +1436,13 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/object-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, object_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, type_size_group);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, name_size_group);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, label_size_group);
   gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_hierarchy_changed);
@@ -1201,11 +1624,84 @@ select_object_internal (GtkInspectorObjectTree *wt,
   return FALSE;
 }
 
+static guint
+model_get_item_index (GListModel *model,
+                      gpointer    item)
+{
+  gpointer cmp;
+  guint i;
+
+  for (i = 0; (cmp = g_list_model_get_item (model, i)); i++)
+    {
+      if (cmp == item)
+        {
+          g_object_unref (cmp);
+          return i;
+        }
+      g_object_unref (cmp);
+    }
+
+  return G_MAXUINT;
+}
+
+static GtkTreeListRow *
+find_and_expand_object (GtkTreeListModel *model,
+                        GObject          *object)
+{
+  GtkTreeListRow *result;
+  GObject *parent;
+  guint pos;
+
+  parent = object_get_parent (object);
+  if (parent)
+    {
+      GtkTreeListRow *parent_row = find_and_expand_object (model, parent);
+      if (parent_row == NULL)
+        return NULL;
+
+      gtk_tree_list_row_set_expanded (parent_row, TRUE);
+      pos = model_get_item_index (gtk_tree_list_row_get_children (parent_row), object);
+      result = gtk_tree_list_row_get_child (parent_row, pos);
+      g_object_unref (parent_row);
+    }
+  else
+    {
+      pos = model_get_item_index (gtk_tree_list_model_get_model (model), object);
+      result = gtk_tree_list_model_get_child (model, pos);
+    }
+  
+  return result;
+}
+
+static void
+select_object_in_listbox (GtkInspectorObjectTree *wt,
+                          GObject                *object)
+{
+  GtkTreeListRow *row_item;
+  GtkListBoxRow *row_widget;
+
+  row_item = find_and_expand_object (wt->priv->list_model, object);
+  if (row_item == NULL)
+    return;
+
+  row_widget = gtk_list_box_get_row_at_index (wt->priv->list,
+                                              gtk_tree_list_row_get_position (row_item));
+  g_return_if_fail (row_widget != NULL);
+  gtk_list_box_select_row (wt->priv->list, row_widget);
+  g_object_unref (row_item);
+}
+
 gboolean
 gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
                                          GObject                *object)
 {
-  return select_object_internal (wt, object, TRUE);
+  gboolean result;
+
+  result = select_object_internal (wt, object, TRUE);
+
+  select_object_in_listbox (wt, object);
+
+  return result;
 }
 
 void
