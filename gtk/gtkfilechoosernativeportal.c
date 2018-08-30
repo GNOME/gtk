@@ -296,23 +296,13 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   gboolean multiple;
   const char *title;
   char *token;
-  char *sender;
-  int i;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
                                             "org.freedesktop.portal.FileChooser",
                                             data->method_name);
 
-  token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
-  sender = g_strdup (g_dbus_connection_get_unique_name (data->connection) + 1);
-  for (i = 0; sender[i]; i++)
-    if (sender[i] == '.')
-      sender[i] = '_';
-
-  data->portal_handle = g_strdup_printf ("/org/fredesktop/portal/desktop/request/%s/%s", sender, token);
-  g_free (sender);
-
+  data->portal_handle = gtk_get_portal_request_path (data->connection, &token);
   data->portal_response_signal_id =
         g_dbus_connection_signal_subscribe (data->connection,
                                             "org.freedesktop.portal.Desktop",
