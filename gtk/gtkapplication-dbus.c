@@ -24,6 +24,7 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtksettings.h"
+#include "gtkprivate.h"
 
 G_DEFINE_TYPE (GtkApplicationImplDBus, gtk_application_impl_dbus, GTK_TYPE_APPLICATION_IMPL)
 
@@ -194,6 +195,9 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
   dbus->unique_name = g_dbus_connection_get_unique_name (dbus->session);
+
+  if (gtk_should_use_portal ())
+    goto out;
 
   g_debug ("Connecting to session manager");
 
