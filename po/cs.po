@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-03 08:09+0000\n"
-"PO-Revision-Date: 2018-05-07 18:44+0200\n"
+"POT-Creation-Date: 2018-08-29 23:56+0000\n"
+"PO-Revision-Date: 2018-08-30 14:29+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -43,34 +43,38 @@ msgstr "Tato schránka nemůže uchovávat data."
 msgid "Cannot read from empty clipboard."
 msgstr "Nelze číst z prázdné schránky."
 
-#: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1136 gdk/gdkdnd.c:673
+#: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:592
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Není žádný kompatibilní formát pro přenos obsahu schránky."
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:215
-#: gtk/gtkdnd.c:858
+#: gtk/gtkdnd.c:818
 #, c-format
 msgid "Cannot provide contents as “%s”"
-msgstr "Nelze poskytnout obsah  jako „%s“"
+msgstr "Nezdařilo se poskytnout obsah jako „%s“"
 
 #: gdk/gdkcontentprovider.c:129
 #, c-format
 msgid "Cannot provide contents as %s"
-msgstr "Nelze poskytnout obsah jako %s"
+msgstr "Nezdařilo se poskytnout obsah jako %s"
 
-#: gdk/gdkdnd.c:340
-msgid "Reading not implemented."
-msgstr "Čtení není implementováno."
+#: gdk/gdkdrop.c:110
+msgid "Drag'n'drop from other applications is not supported."
+msgstr "„Táhni a upusť“ z jiné aplikace není podporováno."
 
-#: gdk/gdksurface.c:1402
+#: gdk/gdkdrop.c:143
+msgid "No compatible formats to transfer contents."
+msgstr "Není k dispozici žádný kompatibilní formát pro přenos obsahu."
+
+#: gdk/gdksurface.c:1338
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázána skrz GDK_DEBUG"
 
-#: gdk/gdksurface.c:1413
+#: gdk/gdksurface.c:1349
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
-#: gdk/gdksurface.c:1524
+#: gdk/gdksurface.c:1460
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora technologie Vulkan je zakázána skrz GDK_DEBUG"
 
@@ -455,9 +459,10 @@ msgstr "UspatDoPaměti"
 msgid "Not implemented on OS X"
 msgstr "Pro OS X není implementováno"
 
-#: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdnd-wayland.c:293
-#: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1109
-#: gdk/x11/gdkclipboard-x11.c:752 gdk/x11/gdkdnd-x11.c:352
+#: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdrop-wayland.c:207
+#: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1285
+#: gdk/win32/gdkdrop-win32.c:1330 gdk/x11/gdkclipboard-x11.c:760
+#: gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
 msgstr "Nebyl nalezen žádný kompatibilní přenosový formát"
 
@@ -543,28 +548,28 @@ msgstr ""
 "Nezdařilo se získat data ze schránky. Selhalo volání GlobalSize(0x%p): 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:896
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
 msgstr ""
-"Nezdařilo se získat data ze schránky. Selhala alokace %lu bajtů pro uchování "
-"dat."
+"Nezdařilo se získat data ze schránky. Selhalo přidělení %lu bajtů pro "
+"uchování dat."
 
-#: gdk/win32/gdkclipdrop-win32.c:928
+#: gdk/win32/gdkclipdrop-win32.c:927
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Nezdařilo se získat data ze schránky. Vypršel časový limit volání "
 "OpenClipboard()."
 
-#: gdk/win32/gdkclipdrop-win32.c:938
+#: gdk/win32/gdkclipdrop-win32.c:937
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Nelze uchovat schránku. Není aktivní žádná správa schránek.Nezdařilo se "
 "získat data ze schránky. Změnilo se vlastnictví schránky."
 
-#: gdk/win32/gdkclipdrop-win32.c:948
+#: gdk/win32/gdkclipdrop-win32.c:947
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -573,64 +578,63 @@ msgstr ""
 "získat data ze schránky. Data ve schránce se změnila dříve, než mohla být "
 "získána."
 
-#: gdk/win32/gdkclipdrop-win32.c:965
+#: gdk/win32/gdkclipdrop-win32.c:964
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Nezdařilo se získat data ze schránky. Selhalo volání OpenClipboard(): 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:990
+#: gdk/win32/gdkclipdrop-win32.c:989
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Nezdařilo se získat data ze schránky. Nebyl nalezen žádný kompatibilní "
 "přenosový formát."
 
-#: gdk/win32/gdkclipdrop-win32.c:1000
+#: gdk/win32/gdkclipdrop-win32.c:999
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Nezdařilo se získat data ze schránky. Selhalo volání GetClipboardData(): 0x"
 "%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1019
+#: gdk/win32/gdkdrop-win32.c:1218
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Nezdařilo se získat data DnD. Selhalo volání GlobalLock(0x%p): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1028
+#: gdk/win32/gdkdrop-win32.c:1227
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Nezdařilo se získat data DnD. Selhalo volání GlobalSize(0x%p): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1038
-#, fuzzy, c-format
+#: gdk/win32/gdkdrop-win32.c:1237
+#, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgstr ""
-"Nezdařilo se získat data DnD. Selhala alokace %lu bajtů pro uchování dat."
+"Nezdařilo se získat data DnD. Selhalo přidělení %lu bajtů pro uchování dat."
 
-#: gdk/win32/gdkdrop-win32.c:1081
+#: gdk/win32/gdkdrop-win32.c:1304
 #, c-format
-msgid "Failed to find target context record for context 0x%p"
-msgstr "Selhalo vyhledání záznamu cílového kontextu pro kontext 0x%p"
+msgid "GDK surface 0x%p is not registered as a drop target"
+msgstr "Povrch GDK 0x%p není registrován jako cíl pro upuštění"
 
-#: gdk/win32/gdkdrop-win32.c:1088
+#: gdk/win32/gdkdrop-win32.c:1311
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Záznam cílového kontextu 0x%p nemá žádný datový objekt"
 
-#: gdk/win32/gdkdrop-win32.c:1128
+#: gdk/win32/gdkdrop-win32.c:1349
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "Selhalo volání IDataObject_GetData (0x%x), vrací se 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1160
+#: gdk/win32/gdkdrop-win32.c:1381
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Selhala přeměna dat DnD ve formátu W32 0x%x na %p (%s)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#| msgid "Can’t close stream"
 msgid "writing a closed stream"
 msgstr "zapisuje se do zavřeného datového proudu"
 
@@ -654,15 +658,15 @@ msgid "Can't transmute a single handle"
 msgstr "Nelze přeměnit jednoduchý popisovač"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr "Selhala přeměna %zu bajtů dat z %s na %s"
+msgstr "Selhala přeměna %zu bajtů dat z %s na %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
 msgstr "Selhalo volání GlobalLock(): "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:366
+#: gdk/win32/gdkhdataoutputstream-win32.c:365
 msgid "GlobalAlloc() failed: "
 msgstr "Selhalo volání GlobalAlloc(): "
 
@@ -718,7 +722,7 @@ msgstr[2] "Otevírání %d položek"
 msgid "Clipboard manager could not store selection."
 msgstr "Správa schránky nemůže uchovat výběr."
 
-#: gdk/x11/gdkclipboard-x11.c:604
+#: gdk/x11/gdkclipboard-x11.c:612
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Nelze uchovat schránku. Není aktivní žádná správa schránek."
 
@@ -785,7 +789,7 @@ msgid "Edit"
 msgstr "Upravit"
 
 #: gtk/a11y/gtkcellaccessible.c:259 gtk/a11y/gtkcolorswatchaccessible.c:149
-#: gtk/a11y/gtkentryaccessible.c:1550 gtk/a11y/gtkexpanderaccessible.c:281
+#: gtk/a11y/gtkentryaccessible.c:1537 gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
 msgstr "Aktivovat"
@@ -840,7 +844,7 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Stiskne rozbalovací seznam"
 
-#: gtk/a11y/gtkentryaccessible.c:1559
+#: gtk/a11y/gtkentryaccessible.c:1546
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Aktivuje položku"
@@ -880,15 +884,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:413 gtk/gtkwindow.c:8178
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8065
 msgid "Minimize"
 msgstr "Minimalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:436 gtk/gtkwindow.c:8187
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
 msgid "Maximize"
 msgstr "Maximalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:436 gtk/gtkwindow.c:8144
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8031
 msgid "Restore"
 msgstr "Obnovit"
 
@@ -1270,30 +1274,6 @@ msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Přepne přepínač"
 
-#: gtk/encodesymbolic.c:39
-msgid "Output to this directory instead of cwd"
-msgstr "Výstup do tohoto adresáře namísto cwd"
-
-#: gtk/encodesymbolic.c:91
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "Neplatná velikost %s\n"
-
-#: gtk/encodesymbolic.c:103 gtk/encodesymbolic.c:110 gtk/gtk-builder-tool.c:673
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "Nezdařilo se načíst soubor: %s\n"
-
-#: gtk/encodesymbolic.c:140 gtk/encodesymbolic.c:146
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "Nezdařilo se uložit soubor %s: %s\n"
-
-#: gtk/encodesymbolic.c:152
-#, c-format
-msgid "Can’t close stream"
-msgstr "Nezdařilo se zavřít datový proud"
-
 #: gtk/gtkaboutdialog.c:119 gtk/ui/gtkaboutdialog.ui:182
 msgid "License"
 msgstr "Licence"
@@ -1363,44 +1343,44 @@ msgid "_License"
 msgstr "_Licence"
 
 #: gtk/gtkaboutdialog.c:736 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:827 gtk/ui/gtkassistant.ui:124
+#: gtk/gtkmessagedialog.c:821 gtk/ui/gtkassistant.ui:124
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: gtk/gtkaboutdialog.c:995
+#: gtk/gtkaboutdialog.c:993
 msgid "Could not show link"
 msgstr "Nelze zobrazit odkaz"
 
-#: gtk/gtkaboutdialog.c:1032
+#: gtk/gtkaboutdialog.c:1030
 msgid "Website"
 msgstr "Webové stránky"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1080 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1078 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "O aplikaci %s"
 
-#: gtk/gtkaboutdialog.c:2297
+#: gtk/gtkaboutdialog.c:2286
 msgid "Created by"
 msgstr "Vytvořili"
 
-#: gtk/gtkaboutdialog.c:2300
+#: gtk/gtkaboutdialog.c:2289
 msgid "Documented by"
 msgstr "Zdokumentovali"
 
-#: gtk/gtkaboutdialog.c:2310
+#: gtk/gtkaboutdialog.c:2299
 msgid "Translated by"
 msgstr "Přeložili"
 
-#: gtk/gtkaboutdialog.c:2315
-msgid "Artwork by"
-msgstr "Grafika"
+#: gtk/gtkaboutdialog.c:2304
+msgid "Design by"
+msgstr "Vzhled navrhli"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2486
+#: gtk/gtkaboutdialog.c:2473
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1414,7 +1394,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:198 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkaccellabel.c:195 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1425,7 +1405,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:204 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkaccellabel.c:201 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1436,7 +1416,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:210 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkaccellabel.c:207 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1447,7 +1427,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:802 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccellabel.c:796 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
@@ -1458,7 +1438,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:815 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccellabel.c:810 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1469,18 +1449,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:829 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccellabel.c:825 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:846
+#: gtk/gtkaccellabel.c:842
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mezerník"
 
-#: gtk/gtkaccellabel.c:849 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:845 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Zpětné lomítko"
@@ -1546,7 +1526,7 @@ msgid "Other Applications"
 msgstr "Další aplikace"
 
 #: gtk/gtkapplicationwindow.c:340 gtk/gtkprintoperation-unix.c:479
-#: gtk/gtkprintoperation-win32.c:1465 gtk/inspector/prop-editor.c:1623
+#: gtk/gtkprintoperation-win32.c:1479 gtk/inspector/prop-editor.c:1623
 msgid "Application"
 msgstr "Aplikace"
 
@@ -1575,70 +1555,6 @@ msgstr "Prvek <%s> není povolen na nejvyšší úrovni"
 msgid "Text may not appear inside <%s>"
 msgstr "Uvnitř <%s> se nesmí vyskytovat text"
 
-#: gtk/gtk-builder-tool.c:130
-#, c-format
-msgid "Packing property %s::%s not found\n"
-msgstr "Vlastnost balení %s::%s nebyla nalezena\n"
-
-#: gtk/gtk-builder-tool.c:132
-#, c-format
-msgid "Cell property %s::%s not found\n"
-msgstr "Vlastnost buňky %s::%s nebyla nalezena\n"
-
-#: gtk/gtk-builder-tool.c:134
-#, c-format
-msgid "Property %s::%s not found\n"
-msgstr "Vlastnost %s::%s nebyla nalezena\n"
-
-#: gtk/gtk-builder-tool.c:142
-#, c-format
-msgid "Couldn’t parse value for %s::%s: %s\n"
-msgstr "Nezdařilo se zpracovat hodnotu: %s::%s: %s\n"
-
-#: gtk/gtk-builder-tool.c:694
-#, c-format
-msgid "Can’t parse file: %s\n"
-msgstr "Nezdařilo se zpracovat soubor: %s\n"
-
-#: gtk/gtk-builder-tool.c:1054
-#, c-format
-msgid ""
-"Usage:\n"
-"  gtk-builder-tool [COMMAND] FILE\n"
-"\n"
-"Commands:\n"
-"  validate           Validate the file\n"
-"  simplify [OPTIONS] Simplify the file\n"
-"  enumerate          List all named objects\n"
-"  preview [OPTIONS]  Preview the file\n"
-"\n"
-"Simplify Options:\n"
-"  --replace          Replace the file\n"
-"\n"
-"Preview Options:\n"
-"  --id=ID            Preview only the named object\n"
-"  --css=FILE         Use style from CSS file\n"
-"\n"
-"Perform various tasks on GtkBuilder .ui files.\n"
-msgstr ""
-"Použití:\n"
-"  gtk-builder-tool [PŘÍKAZ] SOUBOR\n"
-"\n"
-"Příkazy:\n"
-"  validate           Ověřit soubor\n"
-"  simplify [VOLBY]   Zjednodušit soubor\n"
-"  enumerate          Vypsat všechny pojmenované objekty\n"
-"  preview [VOLBY]    Náhled souboru\n"
-"\n"
-"Volby zjednodušení:\n"
-"  --replace          Nahradit soubor\n"
-"\n"
-"Volby náhledu:\n"
-"  --id=ID            Náhled jen s pojmenovanými objekty\n"
-"  --css=FILE         Použít styl ze souboru CSS\n"
-"\n"
-"Provést různé ukoly se soubory GtkBuilder (.ui)\n"
-
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1649,7 +1565,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:798
+#: gtk/gtkcalendar.c:793
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1657,7 +1573,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:836
+#: gtk/gtkcalendar.c:831
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1666,7 +1582,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1640
+#: gtk/gtkcalendar.c:1635
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1681,7 +1597,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1671 gtk/gtkcalendar.c:2280
+#: gtk/gtkcalendar.c:1666 gtk/gtkcalendar.c:2275
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1697,7 +1613,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1703 gtk/gtkcalendar.c:2172
+#: gtk/gtkcalendar.c:1698 gtk/gtkcalendar.c:2167
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1713,7 +1629,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1945
+#: gtk/gtkcalendar.c:1940
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1748,7 +1664,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:222 gtk/gtkcolorbutton.c:395
+#: gtk/gtkcolorbutton.c:218 gtk/gtkcolorbutton.c:385
 msgid "Pick a Color"
 msgstr "Vybrat barvu"
 
@@ -1969,17 +1885,17 @@ msgstr "Vlastní barva %d: %s"
 msgid "Color Plane"
 msgstr "Barevná rovina"
 
-#: gtk/gtkcolorscale.c:210
+#: gtk/gtkcolorscale.c:211
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Odstín"
 
-#: gtk/gtkcolorscale.c:212
+#: gtk/gtkcolorscale.c:213
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/gtkcolorswatch.c:289
+#: gtk/gtkcolorswatch.c:290
 msgid "C_ustomize"
 msgstr "_Přizpůsobit"
 
@@ -2047,52 +1963,52 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: gtk/gtkentry.c:8261 gtk/gtklabel.c:6099 gtk/gtktextview.c:8592
+#: gtk/gtkentry.c:8212 gtk/gtklabel.c:6097 gtk/gtktextview.c:8579
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtkentry.c:8265 gtk/gtklabel.c:6100 gtk/gtktextview.c:8596
+#: gtk/gtkentry.c:8216 gtk/gtklabel.c:6098 gtk/gtktextview.c:8583
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtkentry.c:8269 gtk/gtklabel.c:6101 gtk/gtktextview.c:8598
+#: gtk/gtkentry.c:8220 gtk/gtklabel.c:6099 gtk/gtktextview.c:8585
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtkentry.c:8272 gtk/gtkfilechooserwidget.c:1481
-#: gtk/gtkfilechooserwidget.c:2202 gtk/gtklabel.c:6103 gtk/gtktextview.c:8601
+#: gtk/gtkentry.c:8223 gtk/gtkfilechooserwidget.c:1488
+#: gtk/gtkfilechooserwidget.c:2208 gtk/gtklabel.c:6101 gtk/gtktextview.c:8588
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: gtk/gtkentry.c:8283 gtk/gtklabel.c:6112 gtk/gtktextview.c:8615
+#: gtk/gtkentry.c:8234 gtk/gtklabel.c:6110 gtk/gtktextview.c:8602
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: gtk/gtkentry.c:8293 gtk/gtktextview.c:8625
+#: gtk/gtkentry.c:8244 gtk/gtktextview.c:8612
 msgid "Insert _Emoji"
 msgstr "Vložit _Emodži"
 
-#: gtk/gtkentry.c:8447 gtk/gtktextview.c:8828
+#: gtk/gtkentry.c:8398 gtk/gtktextview.c:8804
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: gtk/gtkentry.c:8450 gtk/gtktextview.c:8831
+#: gtk/gtkentry.c:8401 gtk/gtktextview.c:8807
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: gtk/gtkentry.c:8453 gtk/gtktextview.c:8834
+#: gtk/gtkentry.c:8404 gtk/gtktextview.c:8810
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: gtk/gtkentry.c:8456 gtk/gtktextview.c:8837
+#: gtk/gtkentry.c:8407 gtk/gtktextview.c:8813
 msgid "Paste"
 msgstr "Vložit"
 
-#: gtk/gtkentry.c:9310
+#: gtk/gtkentry.c:9268
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
-#: gtk/gtkentry.c:9582
+#: gtk/gtkentry.c:9540
 msgid "Insert Emoji"
 msgstr "Vložit Emodži"
 
@@ -2100,7 +2016,7 @@ msgstr "Vložit Emodži"
 msgid "Select a File"
 msgstr "Vyberte soubor"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1077
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1101
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -2108,7 +2024,7 @@ msgstr "Pracovní plocha"
 msgid "(None)"
 msgstr "(žádný)"
 
-#: gtk/gtkfilechooserbutton.c:2115
+#: gtk/gtkfilechooserbutton.c:2123
 msgid "Other…"
 msgstr "Jiné…"
 
@@ -2173,12 +2089,12 @@ msgid "A file with that name already exists"
 msgstr "Soubor s tímto názvem již existuje"
 
 #: gtk/gtkfilechoosernative.c:524 gtk/gtkfilechoosernative.c:602
-#: gtk/gtkfilechooserwidget.c:1480 gtk/gtkfilechooserwidget.c:6215
-#: gtk/gtkmessagedialog.c:831 gtk/gtkmessagedialog.c:840
+#: gtk/gtkfilechooserwidget.c:1487 gtk/gtkfilechooserwidget.c:6225
+#: gtk/gtkmessagedialog.c:825 gtk/gtkmessagedialog.c:834
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
-#: gtk/gtkwindow.c:10893 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:10806 gtk/inspector/css-editor.c:201
 #: gtk/inspector/recorder.c:817 gtk/ui/gtkappchooserdialog.ui:49
 #: gtk/ui/gtkassistant.ui:107 gtk/ui/gtkcolorchooserdialog.ui:32
 #: gtk/ui/gtkfontchooserdialog.ui:26
@@ -2187,7 +2103,7 @@ msgstr "_Zrušit"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:525 gtk/gtkfilechoosernative.c:596
-#: gtk/gtkplacessidebar.c:3552 gtk/gtkplacessidebar.c:3621
+#: gtk/gtkplacessidebar.c:3562 gtk/gtkplacessidebar.c:3631
 #: gtk/gtkplacesview.c:1611
 msgid "_Open"
 msgstr "_Otevřít"
@@ -2210,15 +2126,15 @@ msgstr "Výběr zobrazených typů souborů"
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserwidget.c:367
+#: gtk/gtkfilechooserwidget.c:368
 msgid "Type name of new folder"
 msgstr "Napište název nové složky"
 
-#: gtk/gtkfilechooserwidget.c:784
+#: gtk/gtkfilechooserwidget.c:783
 msgid "The folder could not be created"
 msgstr "Složku nelze vytvořit"
 
-#: gtk/gtkfilechooserwidget.c:797
+#: gtk/gtkfilechooserwidget.c:796
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2226,209 +2142,209 @@ msgstr ""
 "Složku nelze vytvořit, protože již existuje soubor se stejným názvem. Zkuste "
 "pro složku použít jiný název, nebo nejprve přejmenovat soubor."
 
-#: gtk/gtkfilechooserwidget.c:812
+#: gtk/gtkfilechooserwidget.c:811
 msgid "You need to choose a valid filename."
 msgstr "Vybraný název souboru musí být platný."
 
-#: gtk/gtkfilechooserwidget.c:815
+#: gtk/gtkfilechooserwidget.c:814
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "V %s nelze vytvořit soubor, jelikož se nejedná o složku"
 
-#: gtk/gtkfilechooserwidget.c:825
+#: gtk/gtkfilechooserwidget.c:824
 msgid "Cannot create file as the filename is too long"
 msgstr "Nelze vytvořit soubor, protože název je příliš dlouhý"
 
-#: gtk/gtkfilechooserwidget.c:826
+#: gtk/gtkfilechooserwidget.c:825
 msgid "Try using a shorter name."
 msgstr "Zkuste použít kratší název."
 
-#: gtk/gtkfilechooserwidget.c:836
+#: gtk/gtkfilechooserwidget.c:835
 msgid "You may only select folders"
 msgstr "Vybírat můžete jen složky"
 
-#: gtk/gtkfilechooserwidget.c:837
+#: gtk/gtkfilechooserwidget.c:836
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Položka, kterou jste vybrali, není složka. Zkuste použít jinou."
 
-#: gtk/gtkfilechooserwidget.c:845
+#: gtk/gtkfilechooserwidget.c:844
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: gtk/gtkfilechooserwidget.c:854
+#: gtk/gtkfilechooserwidget.c:853
 msgid "The folder contents could not be displayed"
 msgstr "Obsah složky nelze zobrazit"
 
-#: gtk/gtkfilechooserwidget.c:862
+#: gtk/gtkfilechooserwidget.c:861
 msgid "The file could not be deleted"
 msgstr "Soubor nelze smazat"
 
-#: gtk/gtkfilechooserwidget.c:870
+#: gtk/gtkfilechooserwidget.c:869
 msgid "The file could not be moved to the Trash"
 msgstr "Soubor nelze přesunout do koše"
 
-#: gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:1483
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Jste si jisti, že chcete trvale smazat „%s“?"
 
-#: gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:1486
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Pokud smažete položku, bude natrvalo ztracena."
 
-#: gtk/gtkfilechooserwidget.c:1607
+#: gtk/gtkfilechooserwidget.c:1614
 msgid "The file could not be renamed"
 msgstr "Soubor nemohl být přejmenován."
 
-#: gtk/gtkfilechooserwidget.c:1851
+#: gtk/gtkfilechooserwidget.c:1858
 msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
-#: gtk/gtkfilechooserwidget.c:2197
+#: gtk/gtkfilechooserwidget.c:2203
 msgid "_Visit File"
 msgstr "Podí_vat se na tento soubor"
 
-#: gtk/gtkfilechooserwidget.c:2198
+#: gtk/gtkfilechooserwidget.c:2204
 msgid "_Open With File Manager"
 msgstr "_Otevřít pomocí správce souborů"
 
-#: gtk/gtkfilechooserwidget.c:2199
+#: gtk/gtkfilechooserwidget.c:2205
 msgid "_Copy Location"
 msgstr "_Kopírovat umístění"
 
-#: gtk/gtkfilechooserwidget.c:2200
+#: gtk/gtkfilechooserwidget.c:2206
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: gtk/gtkfilechooserwidget.c:2201 gtk/gtkplacessidebar.c:2671
-#: gtk/ui/gtkfilechooserwidget.ui:487
+#: gtk/gtkfilechooserwidget.c:2207 gtk/gtkplacessidebar.c:2681
+#: gtk/ui/gtkfilechooserwidget.ui:492
 msgid "_Rename"
 msgstr "Př_ejmenovat"
 
-#: gtk/gtkfilechooserwidget.c:2203
+#: gtk/gtkfilechooserwidget.c:2209
 msgid "_Move to Trash"
 msgstr "Pře_sunout do koše"
 
-#: gtk/gtkfilechooserwidget.c:2207
+#: gtk/gtkfilechooserwidget.c:2213
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: gtk/gtkfilechooserwidget.c:2208
+#: gtk/gtkfilechooserwidget.c:2214
 msgid "Show _Size Column"
 msgstr "Z_obrazovat sloupec Velikost"
 
-#: gtk/gtkfilechooserwidget.c:2209
+#: gtk/gtkfilechooserwidget.c:2215
 msgid "Show _Time"
 msgstr "Zobrazi_t čas"
 
-#: gtk/gtkfilechooserwidget.c:2210
+#: gtk/gtkfilechooserwidget.c:2216
 msgid "Sort _Folders before Files"
 msgstr "_Složky řadit před soubory"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2497 gtk/inspector/css-node-tree.ui:134
+#: gtk/gtkfilechooserwidget.c:2503 gtk/inspector/css-node-tree.ui:134
 #: gtk/ui/gtkfilechooserwidget.ui:197 gtk/ui/gtkprintunixdialog.ui:117
 msgid "Location"
 msgstr "Umístění"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2587
+#: gtk/gtkfilechooserwidget.c:2596
 msgid "_Name:"
 msgstr "_Název:"
 
-#: gtk/gtkfilechooserwidget.c:3208 gtk/gtkfilechooserwidget.c:3222
+#: gtk/gtkfilechooserwidget.c:3218 gtk/gtkfilechooserwidget.c:3232
 #, c-format
 msgid "Searching in %s"
 msgstr "Hledá se v %s"
 
-#: gtk/gtkfilechooserwidget.c:3228
+#: gtk/gtkfilechooserwidget.c:3238
 msgid "Searching"
 msgstr "Hledá se"
 
-#: gtk/gtkfilechooserwidget.c:3235
+#: gtk/gtkfilechooserwidget.c:3245
 msgid "Enter location"
 msgstr "Zadat umístění"
 
-#: gtk/gtkfilechooserwidget.c:3237
+#: gtk/gtkfilechooserwidget.c:3247
 msgid "Enter location or URL"
 msgstr "Zadat umístění nebo URL"
 
-#: gtk/gtkfilechooserwidget.c:4239 gtk/gtkfilechooserwidget.c:7129
+#: gtk/gtkfilechooserwidget.c:4249 gtk/gtkfilechooserwidget.c:7139
 #: gtk/ui/gtkfilechooserwidget.ui:225
 msgid "Modified"
 msgstr "Změněno"
 
-#: gtk/gtkfilechooserwidget.c:4517
+#: gtk/gtkfilechooserwidget.c:4527
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: gtk/gtkfilechooserwidget.c:4521
+#: gtk/gtkfilechooserwidget.c:4531
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4651 gtk/gtkfilechooserwidget.c:4699
+#: gtk/gtkfilechooserwidget.c:4661 gtk/gtkfilechooserwidget.c:4709
 msgid "%H:%M"
 msgstr "%k∶%M"
 
-#: gtk/gtkfilechooserwidget.c:4653 gtk/gtkfilechooserwidget.c:4701
+#: gtk/gtkfilechooserwidget.c:4663 gtk/gtkfilechooserwidget.c:4711
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4657
+#: gtk/gtkfilechooserwidget.c:4667
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserwidget.c:4665
+#: gtk/gtkfilechooserwidget.c:4675
 msgid "%-e %b"
 msgstr "%-e. %B"
 
-#: gtk/gtkfilechooserwidget.c:4669
+#: gtk/gtkfilechooserwidget.c:4679
 msgid "%-e %b %Y"
 msgstr "%-e. %B %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4899 gtk/inspector/prop-editor.c:1626
+#: gtk/gtkfilechooserwidget.c:4909 gtk/inspector/prop-editor.c:1626
 #: modules/printbackends/gtkprintbackendcloudprint.c:731
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserwidget.c:4938 gtk/gtkplacessidebar.c:1062
+#: gtk/gtkfilechooserwidget.c:4948 gtk/gtkplacessidebar.c:1086
 msgid "Home"
 msgstr "Domů"
 
-#: gtk/gtkfilechooserwidget.c:5431
+#: gtk/gtkfilechooserwidget.c:5441
 msgid "Cannot change to folder because it is not local"
 msgstr "Nelze přejít do složky, protože není místní"
 
-#: gtk/gtkfilechooserwidget.c:6208 gtk/gtkprintunixdialog.c:651
+#: gtk/gtkfilechooserwidget.c:6218 gtk/gtkprintunixdialog.c:651
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný „%s“ již existuje. Chcete jej nahradit?"
 
-#: gtk/gtkfilechooserwidget.c:6211 gtk/gtkprintunixdialog.c:655
+#: gtk/gtkfilechooserwidget.c:6221 gtk/gtkprintunixdialog.c:655
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "V „%s“ již tento soubor existuje. Jeho nahrazením přepíšete celý jeho obsah."
 
-#: gtk/gtkfilechooserwidget.c:6216 gtk/gtkprintunixdialog.c:663
+#: gtk/gtkfilechooserwidget.c:6226 gtk/gtkprintunixdialog.c:663
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: gtk/gtkfilechooserwidget.c:6424
+#: gtk/gtkfilechooserwidget.c:6434
 msgid "You do not have access to the specified folder."
 msgstr "Do zadané složky nemáte přístup."
 
-#: gtk/gtkfilechooserwidget.c:7053
+#: gtk/gtkfilechooserwidget.c:7063
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
-#: gtk/gtkfilechooserwidget.c:7339
+#: gtk/gtkfilechooserwidget.c:7349
 msgid "Accessed"
 msgstr "Otevřeno"
 
@@ -2441,68 +2357,68 @@ msgstr "Otevřeno"
 msgid "File System"
 msgstr "Systém souborů"
 
-#: gtk/gtkfontbutton.c:377
+#: gtk/gtkfontbutton.c:405
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:515 gtk/gtkfontbutton.c:606
+#: gtk/gtkfontbutton.c:530 gtk/gtkfontbutton.c:618
 msgid "Pick a Font"
 msgstr "Vybrat písmo"
 
-#: gtk/gtkfontbutton.c:583 gtk/inspector/visual.ui:188
+#: gtk/gtkfontbutton.c:595 gtk/inspector/visual.ui:188
 msgid "Font"
 msgstr "Písmo"
 
-#: gtk/gtkfontbutton.c:1287
+#: gtk/gtkfontbutton.c:1311
 msgctxt "font"
 msgid "None"
 msgstr "Žádné"
 
-#: gtk/gtkfontchooserwidget.c:1554
+#: gtk/gtkfontchooserwidget.c:1539
 msgid "Width"
 msgstr "Šířka"
 
-#: gtk/gtkfontchooserwidget.c:1555
+#: gtk/gtkfontchooserwidget.c:1540
 msgid "Weight"
 msgstr "Tloušťka"
 
-#: gtk/gtkfontchooserwidget.c:1556
+#: gtk/gtkfontchooserwidget.c:1541
 msgid "Italic"
 msgstr "Kurzíva"
 
-#: gtk/gtkfontchooserwidget.c:1557
+#: gtk/gtkfontchooserwidget.c:1542
 msgid "Slant"
 msgstr "Skloněné"
 
-#: gtk/gtkfontchooserwidget.c:1558
+#: gtk/gtkfontchooserwidget.c:1543
 msgid "Optical Size"
 msgstr "Optická velikost"
 
-#: gtk/gtkfontchooserwidget.c:2083 gtk/inspector/prop-editor.c:1613
+#: gtk/gtkfontchooserwidget.c:2068 gtk/inspector/prop-editor.c:1613
 msgid "Default"
 msgstr "Výchozí"
 
-#: gtk/gtkfontchooserwidget.c:2127
+#: gtk/gtkfontchooserwidget.c:2112
 msgid "Ligatures"
 msgstr "Slitky"
 
-#: gtk/gtkfontchooserwidget.c:2128
+#: gtk/gtkfontchooserwidget.c:2113
 msgid "Letter Case"
 msgstr "Velikost písmen"
 
-#: gtk/gtkfontchooserwidget.c:2129
+#: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Case"
 msgstr "Velikost číslic"
 
-#: gtk/gtkfontchooserwidget.c:2130
+#: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Spacing"
-msgstr "Rozestup čísel"
+msgstr "Rozestup číslic"
 
-#: gtk/gtkfontchooserwidget.c:2131
+#: gtk/gtkfontchooserwidget.c:2116
 msgid "Number Formatting"
 msgstr "Formátování čísel"
 
-#: gtk/gtkfontchooserwidget.c:2132
+#: gtk/gtkfontchooserwidget.c:2117
 msgid "Character Variants"
 msgstr "Varianty znaků"
 
@@ -2510,11 +2426,11 @@ msgstr "Varianty znaků"
 msgid "OpenGL context creation failed"
 msgstr "Vytvoření kontextu GL selhalo"
 
-#: gtk/gtkheaderbar.c:389
+#: gtk/gtkheaderbar.c:386
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:8214
+#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8101
 msgid "Close"
 msgstr "Zavřít"
 
@@ -2527,94 +2443,37 @@ msgstr "Ikona „%s“ není v motivu %s obsažena"
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
-#: gtk/gtkinfobar.c:1030 gtk/gtkmessagedialog.c:342
+#: gtk/gtkinfobar.c:1036 gtk/gtkmessagedialog.c:339
 msgid "Information"
 msgstr "Informace"
 
-#: gtk/gtkinfobar.c:1034 gtk/gtkmessagedialog.c:346
+#: gtk/gtkinfobar.c:1040 gtk/gtkmessagedialog.c:343
 msgid "Question"
 msgstr "Otázka"
 
-#: gtk/gtkinfobar.c:1038 gtk/gtkmessagedialog.c:350
+#: gtk/gtkinfobar.c:1044 gtk/gtkmessagedialog.c:347
 msgid "Warning"
 msgstr "Varování"
 
-#: gtk/gtkinfobar.c:1042 gtk/gtkmessagedialog.c:354
+#: gtk/gtkinfobar.c:1048 gtk/gtkmessagedialog.c:351
 msgid "Error"
 msgstr "Chyba"
 
 #. Open Link
-#: gtk/gtklabel.c:6080
+#: gtk/gtklabel.c:6078
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6089
+#: gtk/gtklabel.c:6087
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
-#: gtk/gtk-launch.c:40
-msgid "Show program version"
-msgstr "Zobrazit verzi programu"
-
-#. Translators: this message will appear immediately after the
-#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
-#: gtk/gtk-launch.c:74
-msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr "APLIKACE [URI…] — spustit APLIKACI"
-
-#. Translators: this message will appear after the usage string
-#. and before the list of options.
-#: gtk/gtk-launch.c:78
-msgid ""
-"Launch an application (specified by its desktop file name),\n"
-"optionally passing one or more URIs as arguments."
-msgstr ""
-"Spustit aplikaci (zadanou tak, jak je uvedená ve svém souboru .desktop),\n"
-"volitelně předat jako argument jednu nebo více adres URI."
-
-#: gtk/gtk-launch.c:88
-#, c-format
-msgid "Error parsing commandline options: %s\n"
-msgstr "Chyba při analýze voleb příkazové řádky: %s\n"
-
-#: gtk/gtk-launch.c:90 gtk/gtk-launch.c:111
-#, c-format
-msgid "Try “%s --help” for more information."
-msgstr "Více informací viz „%s --help“."
-
-#. Translators: the %s is the program name. This error message
-#. means the user is calling gtk-launch without any argument.
-#: gtk/gtk-launch.c:109
-#, c-format
-msgid "%s: missing application name"
-msgstr "%s: chybí název aplikace"
-
-#: gtk/gtk-launch.c:138
-#, c-format
-msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
-"Vytváření AppInfo z ID není podporováno na jiných než unixových systémech"
-
-#. Translators: the first %s is the program name, the second one
-#. is the application name.
-#: gtk/gtk-launch.c:146
-#, c-format
-msgid "%s: no such application %s"
-msgstr "%s: neexistuje žádná aplikace s názvem %s"
-
-#. Translators: the first %s is the program name, the second one
-#. is the error message.
-#: gtk/gtk-launch.c:164
-#, c-format
-msgid "%s: error launching application: %s\n"
-msgstr "%s: chyba při spouštění aplikace: %s\n"
-
-#: gtk/gtklinkbutton.c:345
+#: gtk/gtklinkbutton.c:344
 msgid "Copy URL"
 msgstr "Kopírovat URL"
 
-#: gtk/gtklinkbutton.c:489
+#: gtk/gtklinkbutton.c:487
 msgid "Invalid URI"
 msgstr "Neplatné URI"
 
@@ -2655,7 +2514,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:972
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2665,7 +2524,7 @@ msgstr "default:LTR"
 #. * the separator that your locale uses or use "%Id" instead
 #. * of "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:96
+#: gtk/gtkmediacontrols.c:97
 #, c-format
 msgctxt "long time format"
 msgid "%d:%02d:%02d"
@@ -2677,7 +2536,7 @@ msgstr "%d∶%02d∶%02d"
 #. * change ":" to the separator that your locale uses or use
 #. * "%Id" instead of "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:104
+#: gtk/gtkmediacontrols.c:105
 #, c-format
 msgctxt "long time format"
 msgid "-%d:%02d:%02d"
@@ -2689,7 +2548,7 @@ msgstr "-%d∶%02d∶%02d"
 #. * ":" to the separator that your locale uses or use "%Id"
 #. * instead of "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:115
+#: gtk/gtkmediacontrols.c:116
 #, c-format
 msgctxt "short time format"
 msgid "-%d:%02d"
@@ -2701,22 +2560,22 @@ msgstr "-%d∶%02d"
 #. * separator that your locale uses or use "%Id" instead of
 #. * "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:124
+#: gtk/gtkmediacontrols.c:125
 #, c-format
 msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d∶%02d"
 
-#: gtk/gtkmessagedialog.c:823 gtk/gtkmessagedialog.c:841
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10894
+#: gtk/gtkmessagedialog.c:817 gtk/gtkmessagedialog.c:835
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10807
 msgid "_OK"
 msgstr "_Budiž"
 
-#: gtk/gtkmessagedialog.c:835
+#: gtk/gtkmessagedialog.c:829
 msgid "_No"
 msgstr "_Ne"
 
-#: gtk/gtkmessagedialog.c:836
+#: gtk/gtkmessagedialog.c:830
 msgid "_Yes"
 msgstr "_Ano"
 
@@ -2810,7 +2669,7 @@ msgid "GTK could not find a media module. Check your installation."
 msgstr ""
 "GTK se nezdařilo najít multimediální modul. Zkontrolujte svoji instalaci."
 
-#: gtk/gtknotebook.c:4304 gtk/gtknotebook.c:6559
+#: gtk/gtknotebook.c:4245 gtk/gtknotebook.c:6498
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
@@ -2855,209 +2714,217 @@ msgstr "Správa vlastních velikostí…"
 msgid "Page Setup"
 msgstr "Vzhled stránky"
 
-#: gtk/gtkpathbar.c:1332
+#: gtk/gtkpathbar.c:1354
 msgid "File System Root"
 msgstr "Kořen systému souborů"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:952
+#: gtk/gtkplacessidebar.c:976
 #, c-format
 msgid "Open %s"
 msgstr "Otevřít %s"
 
-#: gtk/gtkplacessidebar.c:1040
+#: gtk/gtkplacessidebar.c:1064
 msgid "Recent"
 msgstr "Naposledy použité"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1066
 msgid "Recent files"
 msgstr "Naposledy použité soubory"
 
-#: gtk/gtkplacessidebar.c:1051
+#: gtk/gtkplacessidebar.c:1075
 msgid "Starred"
 msgstr "Oblíbené"
 
-#: gtk/gtkplacessidebar.c:1053
+#: gtk/gtkplacessidebar.c:1077
 msgid "Starred files"
 msgstr "Oblíbené soubory"
 
-#: gtk/gtkplacessidebar.c:1064
+#: gtk/gtkplacessidebar.c:1088
 msgid "Open your personal folder"
 msgstr "Otevřít osobní složku"
 
-#: gtk/gtkplacessidebar.c:1079
+#: gtk/gtkplacessidebar.c:1103
 msgid "Open the contents of your desktop in a folder"
 msgstr "Otevřít obsah vaší plochy ve složce"
 
-#: gtk/gtkplacessidebar.c:1093
+#: gtk/gtkplacessidebar.c:1117
 msgid "Enter Location"
 msgstr "Zadat umístění"
 
-#: gtk/gtkplacessidebar.c:1095
+#: gtk/gtkplacessidebar.c:1119
 msgid "Manually enter a location"
 msgstr "Vložit umístění ručně"
 
-#: gtk/gtkplacessidebar.c:1105
+#: gtk/gtkplacessidebar.c:1129
 msgid "Trash"
 msgstr "Koš"
 
-#: gtk/gtkplacessidebar.c:1107
+#: gtk/gtkplacessidebar.c:1131
 msgid "Open the trash"
 msgstr "Otevřít koš"
 
-#: gtk/gtkplacessidebar.c:1218 gtk/gtkplacessidebar.c:1246
-#: gtk/gtkplacessidebar.c:1445
+#: gtk/gtkplacessidebar.c:1242 gtk/gtkplacessidebar.c:1270
+#: gtk/gtkplacessidebar.c:1469
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Připojit a otevřít „%s“"
 
-#: gtk/gtkplacessidebar.c:1334
+#: gtk/gtkplacessidebar.c:1358
 msgid "Open the contents of the file system"
 msgstr "Otevřít obsah systému souborů"
 
-#: gtk/gtkplacessidebar.c:1420
+#: gtk/gtkplacessidebar.c:1444
 msgid "New bookmark"
 msgstr "Nová záložka"
 
-#: gtk/gtkplacessidebar.c:1422
+#: gtk/gtkplacessidebar.c:1446
 msgid "Add a new bookmark"
 msgstr "Přidat novou záložku"
 
-#: gtk/gtkplacessidebar.c:1490
+#: gtk/gtkplacessidebar.c:1514
 msgid "Other Locations"
 msgstr "Další umístění"
 
-#: gtk/gtkplacessidebar.c:1491
+#: gtk/gtkplacessidebar.c:1515
 msgid "Show other locations"
 msgstr "Zobrazit další umístění"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2290 gtk/gtkplacessidebar.c:3641
+#: gtk/gtkplacessidebar.c:2276 gtk/gtkplacessidebar.c:3651
 msgid "_Start"
 msgstr "_Spustit"
 
-#: gtk/gtkplacessidebar.c:2291 gtk/gtkplacessidebar.c:3642
+#: gtk/gtkplacessidebar.c:2277 gtk/gtkplacessidebar.c:3652
 msgid "_Stop"
 msgstr "_Zastavit"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2298
+#: gtk/gtkplacessidebar.c:2284
 msgid "_Power On"
 msgstr "_Zapnout"
 
-#: gtk/gtkplacessidebar.c:2299
+#: gtk/gtkplacessidebar.c:2285
 msgid "_Safely Remove Drive"
 msgstr "_Bezpečně odebrat jednotku"
 
-#: gtk/gtkplacessidebar.c:2303
+#: gtk/gtkplacessidebar.c:2289
 msgid "_Connect Drive"
 msgstr "_Připojit jednotku"
 
-#: gtk/gtkplacessidebar.c:2304
+#: gtk/gtkplacessidebar.c:2290
 msgid "_Disconnect Drive"
 msgstr "_Odpojit jednotku"
 
-#: gtk/gtkplacessidebar.c:2308
+#: gtk/gtkplacessidebar.c:2294
 msgid "_Start Multi-disk Device"
 msgstr "_Spustit zařízení s více disky"
 
-#: gtk/gtkplacessidebar.c:2309
+#: gtk/gtkplacessidebar.c:2295
 msgid "_Stop Multi-disk Device"
 msgstr "_Zastavit zařízení s více disky"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:2300
 msgid "_Unlock Device"
 msgstr "_Odemknout zařízení"
 
-#: gtk/gtkplacessidebar.c:2315
+#: gtk/gtkplacessidebar.c:2301
 msgid "_Lock Device"
 msgstr "U_zamknout zařízení"
 
-#: gtk/gtkplacessidebar.c:2353 gtk/gtkplacessidebar.c:3323
+#: gtk/gtkplacessidebar.c:2339 gtk/gtkplacessidebar.c:3333
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Není možné spustit „%s“"
 
-#: gtk/gtkplacessidebar.c:2383
+#. Translators: This means that unlocking an encrypted storage
+#. * device failed. %s is the name of the device.
+#.
+#: gtk/gtkplacessidebar.c:2375
+#, c-format
+msgid "Error unlocking “%s”"
+msgstr "Chyba odemykání „%s“"
+
+#: gtk/gtkplacessidebar.c:2377
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Není možné přistoupit k „%s“"
 
-#: gtk/gtkplacessidebar.c:2596
+#: gtk/gtkplacessidebar.c:2606
 msgid "This name is already taken"
 msgstr "Název je již použit"
 
-#: gtk/gtkplacessidebar.c:2665 gtk/inspector/actions.ui:40
+#: gtk/gtkplacessidebar.c:2675 gtk/inspector/actions.ui:40
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/object-tree.ui:82
-#: gtk/ui/gtkfilechooserwidget.ui:179 gtk/ui/gtkfilechooserwidget.ui:463
+#: gtk/ui/gtkfilechooserwidget.ui:179 gtk/ui/gtkfilechooserwidget.ui:468
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkplacessidebar.c:2864
+#: gtk/gtkplacessidebar.c:2874
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Není možné odpojit „%s“"
 
-#: gtk/gtkplacessidebar.c:3040
+#: gtk/gtkplacessidebar.c:3050
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Není možné zastavit „%s“"
 
-#: gtk/gtkplacessidebar.c:3069
+#: gtk/gtkplacessidebar.c:3079
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Není možné vysunout „%s“"
 
-#: gtk/gtkplacessidebar.c:3098 gtk/gtkplacessidebar.c:3127
+#: gtk/gtkplacessidebar.c:3108 gtk/gtkplacessidebar.c:3137
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nezdařilo se vysunout %s"
 
-#: gtk/gtkplacessidebar.c:3275
+#: gtk/gtkplacessidebar.c:3285
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Není možné zkontrolovat „%s“ ohledně změny média"
 
-#: gtk/gtkplacessidebar.c:3558 gtk/gtkplacessidebar.c:3624
+#: gtk/gtkplacessidebar.c:3568 gtk/gtkplacessidebar.c:3634
 #: gtk/gtkplacesview.c:1620
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové kar_tě"
 
-#: gtk/gtkplacessidebar.c:3564 gtk/gtkplacessidebar.c:3627
+#: gtk/gtkplacessidebar.c:3574 gtk/gtkplacessidebar.c:3637
 #: gtk/gtkplacesview.c:1630
 msgid "Open in New _Window"
 msgstr "Otevřít v no_vém okně"
 
-#: gtk/gtkplacessidebar.c:3631
+#: gtk/gtkplacessidebar.c:3641
 msgid "_Add Bookmark"
 msgstr "_Přidat záložku"
 
-#: gtk/gtkplacessidebar.c:3632
+#: gtk/gtkplacessidebar.c:3642
 msgid "_Remove"
 msgstr "O_dstranit"
 
-#: gtk/gtkplacessidebar.c:3633
+#: gtk/gtkplacessidebar.c:3643
 msgid "Rename…"
 msgstr "Přejmenovat…"
 
-#: gtk/gtkplacessidebar.c:3637 gtk/gtkplacesview.c:1661
+#: gtk/gtkplacessidebar.c:3647 gtk/gtkplacesview.c:1661
 msgid "_Mount"
 msgstr "_Připojit"
 
-#: gtk/gtkplacessidebar.c:3638 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3648 gtk/gtkplacesview.c:1652
 msgid "_Unmount"
 msgstr "_Odpojit"
 
-#: gtk/gtkplacessidebar.c:3639
+#: gtk/gtkplacessidebar.c:3649
 msgid "_Eject"
 msgstr "V_ysunout"
 
-#: gtk/gtkplacessidebar.c:3640
+#: gtk/gtkplacessidebar.c:3650
 msgid "_Detect Media"
 msgstr "_Rozpoznat médium"
 
-#: gtk/gtkplacessidebar.c:4094 gtk/gtkplacesview.c:1099
+#: gtk/gtkplacessidebar.c:4144 gtk/gtkplacesview.c:1099
 msgid "Computer"
 msgstr "Počítač"
 
@@ -3101,11 +2968,11 @@ msgstr "_Připojit"
 msgid "Unable to get remote server location"
 msgstr "Nelze získat umístění vzdáleného serveru"
 
-#: gtk/gtkplacesview.c:1971 gtk/gtkplacesview.c:1980
+#: gtk/gtkplacesview.c:1970 gtk/gtkplacesview.c:1979
 msgid "Networks"
 msgstr "Sítě"
 
-#: gtk/gtkplacesview.c:1971 gtk/gtkplacesview.c:1980
+#: gtk/gtkplacesview.c:1970 gtk/gtkplacesview.c:1979
 msgid "On This Computer"
 msgstr "V tomto počítači"
 
@@ -3231,63 +3098,63 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Nejpravděpodobnější příčinou je nemožnost vytvoření dočasného souboru."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:233 gtk/gtkprintoperation-portal.c:540
-#: gtk/gtkprintoperation-portal.c:617 gtk/gtkprintunixdialog.c:3386
+#: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3386
 msgid "Print"
 msgstr "Tisk"
 
-#: gtk/gtkprintoperation-win32.c:615
+#: gtk/gtkprintoperation-win32.c:633
 msgid "Printer offline"
 msgstr "Tiskárna není připojena"
 
-#: gtk/gtkprintoperation-win32.c:617
+#: gtk/gtkprintoperation-win32.c:635
 msgid "Out of paper"
 msgstr "Došel papír"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:619
+#: gtk/gtkprintoperation-win32.c:637
 #: modules/printbackends/gtkprintbackendcups.c:2582
 msgid "Paused"
 msgstr "Přerušeno"
 
-#: gtk/gtkprintoperation-win32.c:621
+#: gtk/gtkprintoperation-win32.c:639
 msgid "Need user intervention"
 msgstr "Je potřeba zásah uživatele"
 
-#: gtk/gtkprintoperation-win32.c:721
+#: gtk/gtkprintoperation-win32.c:739
 msgid "Custom size"
 msgstr "Vlastní velikost"
 
-#: gtk/gtkprintoperation-win32.c:1557
+#: gtk/gtkprintoperation-win32.c:1571
 msgid "No printer found"
 msgstr "Nebyla nalezena žádná tiskárna"
 
-#: gtk/gtkprintoperation-win32.c:1584
+#: gtk/gtkprintoperation-win32.c:1598
 msgid "Invalid argument to CreateDC"
 msgstr "Neplatný argument ke CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1620 gtk/gtkprintoperation-win32.c:1866
+#: gtk/gtkprintoperation-win32.c:1634 gtk/gtkprintoperation-win32.c:1880
 msgid "Error from StartDoc"
 msgstr "Chyba ze StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1721 gtk/gtkprintoperation-win32.c:1744
-#: gtk/gtkprintoperation-win32.c:1792
+#: gtk/gtkprintoperation-win32.c:1735 gtk/gtkprintoperation-win32.c:1758
+#: gtk/gtkprintoperation-win32.c:1806
 msgid "Not enough free memory"
 msgstr "Nedostatek volné paměti"
 
-#: gtk/gtkprintoperation-win32.c:1797
+#: gtk/gtkprintoperation-win32.c:1811
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Neplatný argument pro PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1802
+#: gtk/gtkprintoperation-win32.c:1816
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Neplatný ukazatel na PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1807
+#: gtk/gtkprintoperation-win32.c:1821
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Neplatná obsluha na PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1812
+#: gtk/gtkprintoperation-win32.c:1826
 msgid "Unspecified error"
 msgstr "Neurčená chyba"
 
@@ -3562,24 +3429,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8162
+#: gtk/gtkwindow.c:8049
 msgid "Move"
 msgstr "Přesunout"
 
-#: gtk/gtkwindow.c:8170
+#: gtk/gtkwindow.c:8057
 msgid "Resize"
 msgstr "Změnit velikost"
 
-#: gtk/gtkwindow.c:8201
+#: gtk/gtkwindow.c:8088
 msgid "Always on Top"
 msgstr "Vždy navrchu"
 
-#: gtk/gtkwindow.c:10881
+#: gtk/gtkwindow.c:10794
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:10883
+#: gtk/gtkwindow.c:10796
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3590,7 +3457,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:10888
+#: gtk/gtkwindow.c:10801
 msgid "Don’t show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -3658,7 +3525,7 @@ msgid "CSS Property"
 msgstr "Vlastnost CSS"
 
 #: gtk/inspector/css-node-tree.ui:118 gtk/inspector/prop-list.ui:46
-#: gtk/inspector/recorder.ui:139 gtk/ui/gtkcoloreditor.ui:268
+#: gtk/inspector/recorder.ui:139 gtk/ui/gtkcoloreditor.ui:284
 msgid "Value"
 msgstr "Hodnota"
 
@@ -4046,7 +3913,7 @@ msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Obojí"
 
-#: gtk/inspector/statistics.c:385
+#: gtk/inspector/statistics.c:395
 msgid "GLib must be configured with --enable-debug"
 msgstr "GLib musí být nakonfigurována s --enable-debug"
 
@@ -4078,19 +3945,19 @@ msgstr "Kumulativní"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Povolit statistiky pomocí GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:445 gtk/inspector/visual.c:460
+#: gtk/inspector/visual.c:466 gtk/inspector/visual.c:481
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Motiv je napevno nastaven pomocí GTK_THEME"
 
-#: gtk/inspector/visual.c:668
+#: gtk/inspector/visual.c:689
 msgid "Backend does not support window scaling"
 msgstr "Podpůrná vrstva nepodporuje škálování oken"
 
-#: gtk/inspector/visual.c:763
+#: gtk/inspector/visual.c:784
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavení je napevno zadáno pomocí GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:824
+#: gtk/inspector/visual.c:845
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_DEBUG=gl-disable instead"
@@ -4098,7 +3965,7 @@ msgstr ""
 "Není možné nastavit za běhu.\n"
 "Místo toho použijte GDK_DEBUG=gl-disable"
 
-#: gtk/inspector/visual.c:833 gtk/inspector/visual.c:834
+#: gtk/inspector/visual.c:854 gtk/inspector/visual.c:855
 msgid "GL rendering is disabled"
 msgstr "Vykreslování přes GL je zakázáno"
 
@@ -6304,7 +6171,7 @@ msgstr "Bamumské"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Egyptské hieroglyfy"
 
 #: gtk/script-names.c:95
@@ -6612,6 +6479,260 @@ msgctxt "Script"
 msgid "Zanabazar Square"
 msgstr "Dzanabazarovo čtvercové"
 
+#: gtk/tools/encodesymbolic.c:39
+msgid "Output to this directory instead of cwd"
+msgstr "Výstup do tohoto adresáře namísto cwd"
+
+#: gtk/tools/encodesymbolic.c:91
+#, c-format
+msgid "Invalid size %s\n"
+msgstr "Neplatná velikost %s\n"
+
+#: gtk/tools/encodesymbolic.c:103 gtk/tools/encodesymbolic.c:110
+#: gtk/tools/gtk-builder-tool.c:673
+#, c-format
+msgid "Can’t load file: %s\n"
+msgstr "Nezdařilo se načíst soubor: %s\n"
+
+#: gtk/tools/encodesymbolic.c:140 gtk/tools/encodesymbolic.c:146
+#, c-format
+msgid "Can’t save file %s: %s\n"
+msgstr "Nezdařilo se uložit soubor %s: %s\n"
+
+#: gtk/tools/encodesymbolic.c:152
+#, c-format
+msgid "Can’t close stream"
+msgstr "Nezdařilo se zavřít datový proud"
+
+#: gtk/tools/gtk-builder-tool.c:130
+#, c-format
+msgid "Packing property %s::%s not found\n"
+msgstr "Vlastnost balení %s::%s nebyla nalezena\n"
+
+#: gtk/tools/gtk-builder-tool.c:132
+#, c-format
+msgid "Cell property %s::%s not found\n"
+msgstr "Vlastnost buňky %s::%s nebyla nalezena\n"
+
+#: gtk/tools/gtk-builder-tool.c:134
+#, c-format
+msgid "Property %s::%s not found\n"
+msgstr "Vlastnost %s::%s nebyla nalezena\n"
+
+#: gtk/tools/gtk-builder-tool.c:142
+#, c-format
+msgid "Couldn’t parse value for %s::%s: %s\n"
+msgstr "Nezdařilo se zpracovat hodnotu: %s::%s: %s\n"
+
+#: gtk/tools/gtk-builder-tool.c:694
+#, c-format
+msgid "Can’t parse file: %s\n"
+msgstr "Nezdařilo se zpracovat soubor: %s\n"
+
+#: gtk/tools/gtk-builder-tool.c:1054
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk-builder-tool [COMMAND] FILE\n"
+"\n"
+"Commands:\n"
+"  validate           Validate the file\n"
+"  simplify [OPTIONS] Simplify the file\n"
+"  enumerate          List all named objects\n"
+"  preview [OPTIONS]  Preview the file\n"
+"\n"
+"Simplify Options:\n"
+"  --replace          Replace the file\n"
+"\n"
+"Preview Options:\n"
+"  --id=ID            Preview only the named object\n"
+"  --css=FILE         Use style from CSS file\n"
+"\n"
+"Perform various tasks on GtkBuilder .ui files.\n"
+msgstr ""
+"Použití:\n"
+"  gtk-builder-tool [PŘÍKAZ] SOUBOR\n"
+"\n"
+"Příkazy:\n"
+"  validate           Ověřit soubor\n"
+"  simplify [VOLBY]   Zjednodušit soubor\n"
+"  enumerate          Vypsat všechny pojmenované objekty\n"
+"  preview [VOLBY]    Náhled souboru\n"
+"\n"
+"Volby zjednodušení:\n"
+"  --replace          Nahradit soubor\n"
+"\n"
+"Volby náhledu:\n"
+"  --id=ID            Náhled jen s pojmenovanými objekty\n"
+"  --css=FILE         Použít styl ze souboru CSS\n"
+"\n"
+"Provést různé ukoly se soubory GtkBuilder (.ui)\n"
+
+#: gtk/tools/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Zobrazit verzi programu"
+
+#. Translators: this message will appear immediately after the
+#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
+#: gtk/tools/gtk-launch.c:74
+msgid "APPLICATION [URI…] — launch an APPLICATION"
+msgstr "APLIKACE [URI…] — spustit APLIKACI"
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: gtk/tools/gtk-launch.c:78
+msgid ""
+"Launch an application (specified by its desktop file name),\n"
+"optionally passing one or more URIs as arguments."
+msgstr ""
+"Spustit aplikaci (zadanou tak, jak je uvedená ve svém souboru .desktop),\n"
+"volitelně předat jako argument jednu nebo více adres URI."
+
+#: gtk/tools/gtk-launch.c:88
+#, c-format
+msgid "Error parsing commandline options: %s\n"
+msgstr "Chyba při analýze voleb příkazové řádky: %s\n"
+
+#: gtk/tools/gtk-launch.c:90 gtk/tools/gtk-launch.c:111
+#, c-format
+msgid "Try “%s --help” for more information."
+msgstr "Více informací viz „%s --help“."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: gtk/tools/gtk-launch.c:109
+#, c-format
+msgid "%s: missing application name"
+msgstr "%s: chybí název aplikace"
+
+#: gtk/tools/gtk-launch.c:138
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr ""
+"Vytváření AppInfo z ID není podporováno na jiných než unixových systémech"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: gtk/tools/gtk-launch.c:146
+#, c-format
+msgid "%s: no such application %s"
+msgstr "%s: neexistuje žádná aplikace s názvem %s"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: gtk/tools/gtk-launch.c:164
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s: chyba při spouštění aplikace: %s\n"
+
+#: gtk/tools/updateiconcache.c:1392
+#, c-format
+msgid "Failed to write header\n"
+msgstr "Nezdařil se zápis záhlaví\n"
+
+#: gtk/tools/updateiconcache.c:1398
+#, c-format
+msgid "Failed to write hash table\n"
+msgstr "Nezdařil se zápis hešovací tabulky\n"
+
+#: gtk/tools/updateiconcache.c:1404
+#, c-format
+msgid "Failed to write folder index\n"
+msgstr "Nezdařil se zápis indexu složky\n"
+
+#: gtk/tools/updateiconcache.c:1412
+#, c-format
+msgid "Failed to rewrite header\n"
+msgstr "Nezdařil se přepis záhlaví\n"
+
+#: gtk/tools/updateiconcache.c:1506
+#, c-format
+msgid "Failed to open file %s : %s\n"
+msgstr "Nezdařilo se otevřít soubor %s : %s\n"
+
+#: gtk/tools/updateiconcache.c:1514 gtk/tools/updateiconcache.c:1544
+#, c-format
+msgid "Failed to write cache file: %s\n"
+msgstr "Nezdařil se zápis souboru vyrovnávací paměti: %s\n"
+
+#: gtk/tools/updateiconcache.c:1554
+#, c-format
+msgid "The generated cache was invalid.\n"
+msgstr "Vytvořená vyrovnávací paměť byla neplatná.\n"
+
+#: gtk/tools/updateiconcache.c:1568
+#, c-format
+msgid "Could not rename %s to %s: %s, removing %s then.\n"
+msgstr "Nelze přejmenovat %s na %s: %s, odstraňuje se tedy %s.\n"
+
+#: gtk/tools/updateiconcache.c:1582
+#, c-format
+msgid "Could not rename %s to %s: %s\n"
+msgstr "Nelze přejmenovat %s na %s: %s\n"
+
+#: gtk/tools/updateiconcache.c:1592
+#, c-format
+msgid "Could not rename %s back to %s: %s.\n"
+msgstr "%s nelze přejmenovat zpět na %s: %s.\n"
+
+#: gtk/tools/updateiconcache.c:1619
+#, c-format
+msgid "Cache file created successfully.\n"
+msgstr "Soubor vyrovnávací paměti úspěšně vytvořen.\n"
+
+#: gtk/tools/updateiconcache.c:1658
+msgid "Overwrite an existing cache, even if up to date"
+msgstr "Přepsat existující vyrovnávací paměť, i když je aktuální"
+
+#: gtk/tools/updateiconcache.c:1659
+msgid "Don’t check for the existence of index.theme"
+msgstr "Nekontrolovat existenci „index.theme“"
+
+#: gtk/tools/updateiconcache.c:1660
+msgid "Don’t include image data in the cache"
+msgstr "Nezahrnout do vyrovnávací paměti obrazová data"
+
+#: gtk/tools/updateiconcache.c:1661
+msgid "Include image data in the cache"
+msgstr "Zahrnout do vyrovnávací paměti obrazová data"
+
+#: gtk/tools/updateiconcache.c:1662
+msgid "Output a C header file"
+msgstr "Výstupem hlavičkový soubor jazyka C"
+
+#: gtk/tools/updateiconcache.c:1663
+msgid "Turn off verbose output"
+msgstr "Vypnout podrobný výstup"
+
+#: gtk/tools/updateiconcache.c:1664
+msgid "Validate existing icon cache"
+msgstr "Ověřit existující vyrovnávací paměť ikon"
+
+#: gtk/tools/updateiconcache.c:1731
+#, c-format
+msgid "File not found: %s\n"
+msgstr "Soubor nenalezen: %s\n"
+
+#: gtk/tools/updateiconcache.c:1737
+#, c-format
+msgid "Not a valid icon cache: %s\n"
+msgstr "Neplatná vyrovnávací paměť ikon: %s\n"
+
+#: gtk/tools/updateiconcache.c:1750
+#, c-format
+msgid "No theme index file.\n"
+msgstr "Soubor index motivu neexistuje.\n"
+
+#: gtk/tools/updateiconcache.c:1754
+#, c-format
+msgid ""
+"No theme index file in “%s”.\n"
+"If you really want to create an icon cache here, use --ignore-theme-index.\n"
+msgstr ""
+"V „%s“ nebyl nenalezen žádný indexový soubor motivu.\n"
+"Pokud si zde opravdu přejete vytvořit mezipaměť ikon, použijte --ignore-"
+"theme-index.\n"
+
 #: gtk/ui/gtkaboutdialog.ui:106
 msgid "About"
 msgstr "O aplikaci"
@@ -6684,39 +6805,43 @@ msgstr "_Dokončit"
 msgid "Select a Color"
 msgstr "Vyberte barvu"
 
-#: gtk/ui/gtkcoloreditor.ui:59
+#: gtk/ui/gtkcoloreditor.ui:46
+msgid "Pick a color from the screen"
+msgstr "Sejmout barvu z obrazovky"
+
+#: gtk/ui/gtkcoloreditor.ui:75
 msgid "Color Name"
 msgstr "Název barvy"
 
-#: gtk/ui/gtkcoloreditor.ui:142
+#: gtk/ui/gtkcoloreditor.ui:158
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:157
+#: gtk/ui/gtkcoloreditor.ui:173
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:184
+#: gtk/ui/gtkcoloreditor.ui:200
 msgctxt "Color channel"
 msgid "H"
 msgstr "O"
 
-#: gtk/ui/gtkcoloreditor.ui:199
+#: gtk/ui/gtkcoloreditor.ui:215
 msgid "Hue"
 msgstr "Odstín"
 
-#: gtk/ui/gtkcoloreditor.ui:227
+#: gtk/ui/gtkcoloreditor.ui:243
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:236
+#: gtk/ui/gtkcoloreditor.ui:252
 msgctxt "Color Channel"
 msgid "V"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:251
+#: gtk/ui/gtkcoloreditor.ui:267
 msgid "Saturation"
 msgstr "Sytost"
 
@@ -6782,11 +6907,11 @@ msgstr "Soubory"
 msgid "Remote location — only searching the current folder"
 msgstr "Vzdálené umístění — prohledává se pouze aktuální složka"
 
-#: gtk/ui/gtkfilechooserwidget.ui:403
+#: gtk/ui/gtkfilechooserwidget.ui:408
 msgid "Folder Name"
 msgstr "Název složky"
 
-#: gtk/ui/gtkfilechooserwidget.ui:429
+#: gtk/ui/gtkfilechooserwidget.ui:434
 msgid "_Create"
 msgstr "_Vytvořit"
 
@@ -6807,11 +6932,8 @@ msgid "Preview text"
 msgstr "Náhled textu"
 
 #: gtk/ui/gtkfontchooserwidget.ui:116 gtk/ui/gtkfontchooserwidget.ui:147
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
-msgstr "Vodorovný"
+msgstr "vodorovný"
 
 #: gtk/ui/gtkfontchooserwidget.ui:196
 msgid "No Fonts Found"
@@ -7160,114 +7282,6 @@ msgstr "Snížit hlasitost"
 #: gtk/ui/gtkvolumebutton.ui:44
 msgid "Decreases the volume"
 msgstr "Sníží hlasitost"
-
-#: gtk/updateiconcache.c:1383
-#, c-format
-msgid "Failed to write header\n"
-msgstr "Nezdařil se zápis záhlaví\n"
-
-#: gtk/updateiconcache.c:1389
-#, c-format
-msgid "Failed to write hash table\n"
-msgstr "Nezdařil se zápis hešovací tabulky\n"
-
-#: gtk/updateiconcache.c:1395
-#, c-format
-msgid "Failed to write folder index\n"
-msgstr "Nezdařil se zápis indexu složky\n"
-
-#: gtk/updateiconcache.c:1403
-#, c-format
-msgid "Failed to rewrite header\n"
-msgstr "Nezdařil se přepis záhlaví\n"
-
-#: gtk/updateiconcache.c:1497
-#, c-format
-msgid "Failed to open file %s : %s\n"
-msgstr "Nezdařilo se otevřít soubor %s : %s\n"
-
-#: gtk/updateiconcache.c:1505 gtk/updateiconcache.c:1535
-#, c-format
-msgid "Failed to write cache file: %s\n"
-msgstr "Nezdařil se zápis souboru vyrovnávací paměti: %s\n"
-
-#: gtk/updateiconcache.c:1545
-#, c-format
-msgid "The generated cache was invalid.\n"
-msgstr "Vytvořená vyrovnávací paměť byla neplatná.\n"
-
-#: gtk/updateiconcache.c:1559
-#, c-format
-msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "Nelze přejmenovat %s na %s: %s, odstraňuje se tedy %s.\n"
-
-#: gtk/updateiconcache.c:1573
-#, c-format
-msgid "Could not rename %s to %s: %s\n"
-msgstr "Nelze přejmenovat %s na %s: %s\n"
-
-#: gtk/updateiconcache.c:1583
-#, c-format
-msgid "Could not rename %s back to %s: %s.\n"
-msgstr "%s nelze přejmenovat zpět na %s: %s.\n"
-
-#: gtk/updateiconcache.c:1610
-#, c-format
-msgid "Cache file created successfully.\n"
-msgstr "Soubor vyrovnávací paměti úspěšně vytvořen.\n"
-
-#: gtk/updateiconcache.c:1649
-msgid "Overwrite an existing cache, even if up to date"
-msgstr "Přepsat existující vyrovnávací paměť, i když je aktuální"
-
-#: gtk/updateiconcache.c:1650
-msgid "Don’t check for the existence of index.theme"
-msgstr "Nekontrolovat existenci „index.theme“"
-
-#: gtk/updateiconcache.c:1651
-msgid "Don’t include image data in the cache"
-msgstr "Nezahrnout do vyrovnávací paměti obrazová data"
-
-#: gtk/updateiconcache.c:1652
-msgid "Include image data in the cache"
-msgstr "Zahrnout do vyrovnávací paměti obrazová data"
-
-#: gtk/updateiconcache.c:1653
-msgid "Output a C header file"
-msgstr "Výstupem hlavičkový soubor jazyka C"
-
-#: gtk/updateiconcache.c:1654
-msgid "Turn off verbose output"
-msgstr "Vypnout podrobný výstup"
-
-#: gtk/updateiconcache.c:1655
-msgid "Validate existing icon cache"
-msgstr "Ověřit existující vyrovnávací paměť ikon"
-
-#: gtk/updateiconcache.c:1722
-#, c-format
-msgid "File not found: %s\n"
-msgstr "Soubor nenalezen: %s\n"
-
-#: gtk/updateiconcache.c:1728
-#, c-format
-msgid "Not a valid icon cache: %s\n"
-msgstr "Neplatná vyrovnávací paměť ikon: %s\n"
-
-#: gtk/updateiconcache.c:1741
-#, c-format
-msgid "No theme index file.\n"
-msgstr "Soubor index motivu neexistuje.\n"
-
-#: gtk/updateiconcache.c:1745
-#, c-format
-msgid ""
-"No theme index file in “%s”.\n"
-"If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr ""
-"V „%s“ nebyl nenalezen žádný indexový soubor motivu.\n"
-"Pokud si zde opravdu přejete vytvořit mezipaměť ikon, použijte --ignore-"
-"theme-index.\n"
 
 #: modules/media/gtkffmediafile.c:216
 #, c-format
@@ -7878,6 +7892,15 @@ msgstr "Žádný profil není k dispozici"
 #: modules/printbackends/gtkprintercups.c:292
 msgid "Unspecified profile"
 msgstr "Neurčený profil"
+
+#~ msgid "Reading not implemented."
+#~ msgstr "Čtení není implementováno."
+
+#~ msgid "Failed to find target context record for context 0x%p"
+#~ msgstr "Selhalo vyhledání záznamu cílového kontextu pro kontext 0x%p"
+
+#~ msgid "Artwork by"
+#~ msgstr "Grafika"
 
 #~ msgctxt "Language"
 #~ msgid "Default"
