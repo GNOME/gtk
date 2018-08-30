@@ -556,17 +556,9 @@ call_prepare_print (GtkPrintOperation *op,
   GtkPrintOperationPrivate *priv = op->priv;
   GVariantBuilder opt_builder;
   char *token;
-  char *sender;
-  int i;
 
-  token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
-  sender = g_strdup (g_dbus_connection_get_unique_name (g_dbus_proxy_get_connection (portal->proxy)) + 1);
-  for (i = 0; sender[i]; i++)
-    if (sender[i] == '.')
-      sender[i] = '_';
-
-  portal->prepare_print_handle = g_strdup_printf ("/org/fredesktop/portal/desktop/request/%s/%s", sender, token);
-  g_free (sender);
+  portal->prepare_print_handle =
+      gtk_get_portal_request_path (g_dbus_proxy_get_connection (portal->proxy), &token);
 
   portal->response_signal_id =
     g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (G_DBUS_PROXY (portal->proxy)),
