@@ -34,9 +34,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-21 16:27+0000\n"
-"PO-Revision-Date: 2018-08-25 09:53+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2018-08-29 21:01+0000\n"
+"PO-Revision-Date: 2018-08-30 10:30+0200\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -6690,8 +6690,8 @@ msgstr "Bamum"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
-msgstr "Ägyptische Hieroglpyhen"
+msgid "Egyptian Hieroglyphs"
+msgstr "Ägyptische Hieroglyphen"
 
 #: gtk/script-names.c:97
 msgctxt "Script"
