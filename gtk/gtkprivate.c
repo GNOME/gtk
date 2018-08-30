@@ -291,3 +291,39 @@ gtk_should_use_portal (void)
 
   return use_portal[0] == '1';
 }
+
+static char *
+get_portal_path (GDBusConnection  *connection,
+                 const char       *kind,
+                 char            **token)
+{
+  char *sender;
+  int i;
+  char *path;
+
+  *token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
+  sender = g_strdup (g_dbus_connection_get_unique_name (connection) + 1);
+  for (i = 0; sender[i]; i++)
+    if (sender[i] == '.')
+      sender[i] = '_';
+
+  path = g_strconcat ("/org/freedesktop/portal/desktop", "/", kind, "/", sender, "/", token, NULL);
+
+  g_free (sender);
+
+  return path;
+}
+
+char *
+gtk_get_portal_request_path (GDBusConnection  *connection,
+                             char            **token)
+{
+   return get_portal_path (connection, "request", token);
+}
+
+char *
+gtk_get_portal_session_path (GDBusConnection  *connection,
+                             char            **token)
+{
+   return get_portal_path (connection, "session", token);
+}

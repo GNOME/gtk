@@ -96,6 +96,10 @@ gdouble _gtk_get_slowdown ();
 void    _gtk_set_slowdown (gdouble slowdown_factor);
 
 gboolean gtk_should_use_portal (void);
+char *gtk_get_portal_request_path (GDBusConnection  *connection,
+                                   char            **token);
+char *gtk_get_portal_session_path (GDBusConnection  *connection,
+                                   char            **token);
 
 #ifdef G_OS_WIN32
 void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
