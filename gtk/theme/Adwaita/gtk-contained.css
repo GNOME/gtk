@@ -1583,6 +1583,8 @@ scrolledwindow junction:backdrop { border-image-source: linear-gradient(to botto
 
 separator { background: rgba(0, 0, 0, 0.1); min-width: 1px; min-height: 1px; }
 
+separator.selection-mode { background-color: #215d9c; }
+
 /********* Lists * */
 list { color: black; background-color: #ffffff; border-color: #b6b6b3; }
 
