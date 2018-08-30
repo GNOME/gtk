@@ -178,11 +178,9 @@ gtk_color_picker_portal_pick (GtkColorPicker      *cp,
 {
   GtkColorPickerPortal *picker = GTK_COLOR_PICKER_PORTAL (cp);
   GVariantBuilder options;
-  char *token;
   GDBusConnection *connection;
-  char *sender;
+  char *token;
   char *handle;
-  int i;
 
   if (picker->task)
     return;
@@ -191,13 +189,7 @@ gtk_color_picker_portal_pick (GtkColorPicker      *cp,
 
   connection = g_dbus_proxy_get_connection (picker->portal_proxy);
 
-  token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
-  sender = g_strdup (g_dbus_connection_get_unique_name (connection) + 1);
-  for (i = 0; sender[i]; i++)
-    if (sender[i] == '.')
-      sender[i] = '_';
-
-  handle = g_strdup_printf ("/org/freedesktop/portal/desktop/request/%s/%s", sender, token);
+  handle = gtk_get_portal_request_path (connection, &token);
   picker->portal_signal_id = g_dbus_connection_signal_subscribe (connection,
                                                                  "org.freedesktop.portal.Desktop",
                                                                  "org.freedesktop.portal.Request",
@@ -210,7 +202,6 @@ gtk_color_picker_portal_pick (GtkColorPicker      *cp,
                                                                  NULL);
 
   g_free (handle);
-  g_free (sender);
 
   g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&options, "{sv}", "handle_token", g_variant_new_string (token));
