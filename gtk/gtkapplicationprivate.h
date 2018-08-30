@@ -45,6 +45,9 @@ void                    gtk_application_insert_action_group             (GtkAppl
 
 GtkApplicationAccels *  gtk_application_get_application_accels          (GtkApplication           *application);
 
+void                    gtk_application_set_screensaver_active          (GtkApplication           *application,
+                                                                         gboolean                  active);
+
 #define GTK_TYPE_APPLICATION_IMPL                           (gtk_application_impl_get_type ())
 #define GTK_APPLICATION_IMPL_CLASS(class)                   (G_TYPE_CHECK_CLASS_CAST ((class),                     \
                                                              GTK_TYPE_APPLICATION_IMPL,                            \
@@ -129,10 +132,13 @@ typedef struct
   GDBusProxy      *sm_proxy;
   GDBusProxy      *client_proxy;
   gchar           *client_path;
+  GDBusProxy      *ss_proxy;
 
   /* Portal support */
   GDBusProxy      *inhibit_proxy;
   GSList *inhibit_handles;
+  guint            state_changed_handler;
+  char *           session_id;
 } GtkApplicationImplDBus;
 
 typedef struct

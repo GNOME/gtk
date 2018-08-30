@@ -137,6 +137,7 @@ static guint gtk_application_signals[LAST_SIGNAL];
 enum {
   PROP_ZERO,
   PROP_REGISTER_SESSION,
+  PROP_SCREENSAVER_ACTIVE,
   PROP_APP_MENU,
   PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
@@ -157,6 +158,7 @@ struct _GtkApplicationPrivate
   guint            last_window_id;
 
   gboolean         register_session;
+  gboolean         screensaver_active;
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
@@ -521,6 +523,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_boolean (value, application->priv->register_session);
       break;
 
+    case PROP_SCREENSAVER_ACTIVE:
+      g_value_set_boolean (value, application->priv->screensaver_active);
+      break;
+
     case PROP_APP_MENU:
       g_value_set_object (value, gtk_application_get_app_menu (application));
       break;
@@ -651,6 +657,24 @@ gtk_application_class_init (GtkApplicationClass *class)
                           P_("Register with the session manager"),
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkApplication:screensaver-active:
+   *
+   * This property is %TRUE if GTK+ believes that the screensaver is
+   * currently active. GTK+ only tracks session state (including this)
+   * when #GtkApplication::register-session is set to %TRUE.
+   *
+   * Tracking the screensaver state is supported on Linux.
+   *
+   * Since: 3.24
+   */
+  gtk_application_props[PROP_SCREENSAVER_ACTIVE] =
+    g_param_spec_boolean ("screensaver-active",
+                          P_("Screensaver Active"),
+                          P_("Whether the screensaver is active"),
+                          FALSE,
+                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
 
   gtk_application_props[PROP_APP_MENU] =
     g_param_spec_object ("app-menu",
@@ -1459,4 +1483,17 @@ gtk_application_get_menu_by_id (GtkApplication *application,
     return NULL;
 
   return G_MENU (object);
+}
+
+void
+gtk_application_set_screensaver_active (GtkApplication *application,
+                                        gboolean        active)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  if (priv->screensaver_active != active)
+    {
+      priv->screensaver_active = active;
+      g_object_notify (G_OBJECT (application), "screensaver-active");
+    }
 }
