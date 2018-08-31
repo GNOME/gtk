@@ -430,6 +430,14 @@ test_type (gconstpointer data)
                                NULL);
       gdk_content_formats_unref (formats);
     }
+  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL))
+    {
+      GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
+      instance = g_object_new (type,
+                               "model", list_store,
+                               NULL);
+      g_object_unref (list_store);
+    }
   else
     instance = g_object_new (type, NULL);
 
