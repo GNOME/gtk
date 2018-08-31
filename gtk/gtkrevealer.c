@@ -301,51 +301,58 @@ gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
   GtkRevealerTransitionType transition;
+  gint minimum_width, natural_width, minimum_height, natural_height;
+  gint diff_width, diff_height;
 
   g_return_if_fail (revealer != NULL);
   g_return_if_fail (allocation != NULL);
 
+  child = gtk_bin_get_child (GTK_BIN (revealer));
   child_allocation->x = 0;
   child_allocation->y = 0;
   child_allocation->width = 0;
   child_allocation->height = 0;
-
-  child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
     {
       transition = effective_transition (revealer);
 
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
-                            MAX (0, allocation->height),
-                            NULL, &child_allocation->width, NULL, NULL);
+          gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
+                              allocation->height,
+                              &minimum_width, &natural_width, NULL, NULL);
       else
-        gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                            MAX (0, allocation->width),
-                            NULL, &child_allocation->height, NULL, NULL);
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                              allocation->width,
+                              &minimum_height, &natural_height, NULL, NULL);
 
-      child_allocation->width = MAX (child_allocation->width, allocation->width);
-      child_allocation->height = MAX (child_allocation->height, allocation->height);
-
+      child_allocation->width = natural_width;
+      child_allocation->height = natural_height;
       switch (transition)
         {
         case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
-            child_allocation->x = - child_allocation->width * (1 - priv->current_pos);
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+          /* allocation * (1 / priv->current_post) is used so that we allocate a
+           * size where the animation progress is taken into account, so the child
+           * can adapt properly between its minimum and natural size.
+           */
+          diff_width = natural_width - minimum_width;
+          child_allocation->width -= diff_width * (1 - priv->current_pos);
           break;
         case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
-            child_allocation->y = - child_allocation->height * (1 - priv->current_pos);
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+          diff_height = natural_height - minimum_height;
+          child_allocation->height -= diff_height * (1 - priv->current_pos);
           break;
 
         case GTK_REVEALER_TRANSITION_TYPE_NONE:
         case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
-        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
-        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
         default:
+          child_allocation->width = natural_width;
+          child_allocation->height = natural_height;
           break;
         }
     }
-
 }
 
 static void
