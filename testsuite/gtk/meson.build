@@ -19,6 +19,7 @@ tests = [
   ['cssprovider'],
   ['defaultvalue'],
   ['entry'],
+  ['filterlistmodel'],
   ['firefox-stylecontext'],
   ['floating'],
   ['focus'],
