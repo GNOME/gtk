@@ -43,6 +43,7 @@
 
     <chapter id="Lists">
       <title>GListModel support</title>
+      <xi:include href="xml/gtkfilterlistmodel.xml" />
       <xi:include href="xml/gtktreelistmodel.xml" />
     </chapter>
 

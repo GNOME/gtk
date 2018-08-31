@@ -64,6 +64,14 @@ test_finalize_object (gconstpointer data)
                              NULL);
       gdk_content_formats_unref (formats);
     }
+  else if (g_type_is_a (test_type, GTK_TYPE_FILTER_LIST_MODEL))
+    {
+      GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
+      object = g_object_new (test_type,
+                             "model", list_store,
+                             NULL);
+      g_object_unref (list_store);
+    }
   else
     object = g_object_new (test_type, NULL);
   g_assert (G_IS_OBJECT (object));
