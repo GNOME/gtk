@@ -347,6 +347,7 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
            * can adapt properly between its minimum and natural size.
            */
           diff_width = natural_width - minimum_width;
+          g_print ("allocation %d %d %d \n", natural_width, minimum_width, child_allocation->width);
           child_allocation->width = natural_width - diff_width * (1 - priv->current_pos);
           break;
         case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
