@@ -104,6 +104,7 @@
 #include <gtk/gtkfilechoosernative.h>
 #include <gtk/gtkfilechooserwidget.h>
 #include <gtk/gtkfilefilter.h>
+#include <gtk/gtkfilterlistmodel.h>
 #include <gtk/gtkflowbox.h>
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontchooser.h>
