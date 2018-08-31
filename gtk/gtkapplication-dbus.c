@@ -436,7 +436,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
         {
           g_debug ("Failed to get an inhibit portal proxy: %s", error->message);
           g_clear_error (&error);
-          goto end;
+          return;
         }
 
       if (register_session)
@@ -471,8 +471,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
           g_free (token);
         }
     }
-
-end:;
 }
 
 static void
