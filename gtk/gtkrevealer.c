@@ -601,6 +601,8 @@ gtk_revealer_measure (GtkWidget      *widget,
                       int            *minimum_baseline,
                       int            *natural_baseline)
 {
+  g_print ("here");
+  G_BREAKPOINT();
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->measure (widget,
                                                          orientation,
                                                          for_size,
