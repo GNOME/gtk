@@ -363,6 +363,8 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
           break;
         }
     }
+  child_allocation->width = 10;
+  child_allocation->height = 10;
 }
 
 static void
