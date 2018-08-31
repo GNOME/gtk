@@ -302,6 +302,7 @@ get_portal_path (GDBusConnection  *connection,
   char *path;
 
   *token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
+  /* +1 to skip the leading : */
   sender = g_strdup (g_dbus_connection_get_unique_name (connection) + 1);
   for (i = 0; sender[i]; i++)
     if (sender[i] == '.')
