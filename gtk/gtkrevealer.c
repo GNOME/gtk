@@ -1000,6 +1000,8 @@ gtk_revealer_set_transition_type (GtkRevealer               *revealer,
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
+  g_print ("WTFFF")
+  G_BREAKPOINT()
   g_return_if_fail (GTK_IS_REVEALER (revealer));
 
   if (priv->transition_type == transition)
