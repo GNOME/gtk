@@ -1287,10 +1287,13 @@ update_places (GtkPlacesSidebar *sidebar)
     }
   g_list_free_full (drives, g_object_unref);
 
-  /* add all network volumes that is not associated with a drive */
+  /* add all network volumes that are not associated with a drive, and
+   * loop devices
+   */
   volumes = g_volume_monitor_get_volumes (sidebar->volume_monitor);
   for (l = volumes; l != NULL; l = l->next)
     {
+      gboolean is_loop = FALSE;
       volume = l->data;
       drive = g_volume_get_drive (volume);
       if (drive != NULL)
@@ -1308,9 +1311,13 @@ update_places (GtkPlacesSidebar *sidebar)
           network_volumes = g_list_prepend (network_volumes, volume);
           continue;
         }
+      else if (g_strcmp0 (identifier, "loop") == 0)
+        is_loop = TRUE;
       g_free (identifier);
 
-      if (sidebar->show_other_locations && !is_external_volume (volume))
+      if (sidebar->show_other_locations &&
+          !is_external_volume (volume) &&
+          !is_loop)
         {
           g_object_unref (volume);
           continue;
