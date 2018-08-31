@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-08 09:22+0000\n"
-"PO-Revision-Date: 2018-08-08 18:50+0300\n"
+"POT-Creation-Date: 2018-08-31 03:19+0000\n"
+"PO-Revision-Date: 2018-08-31 13:57+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -1461,35 +1461,44 @@ msgstr "Programcığın öntanımlı metni"
 msgid "The default text appearing when there are no applications"
 msgstr "Uygulamalar olmadığında görünen öntanımlı metin"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Kayıt oturumu"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Oturum yöneticisi ile Kayıt"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Ekran Koruyucu Aktif"
+
+#: gtk/gtkapplication.c:675
+#| msgid "Whether the spinner is active"
+msgid "Whether the screensaver is active"
+msgstr "Ekran koruyucunun aktif olup olmaması"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Uygulama menüsü"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "Uygulama menüsü için GMenuModel"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Menü çubuğu"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "Menü çubuğu için GMenuModel"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Etkin pencere"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "En son odaklanılan pencere"
 
@@ -3629,12 +3638,10 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Emoji için bir simge gösterilmesi"
 
 #: gtk/gtkentry.c:1544
-#| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "Emoji tamamlamayı etkinleştir"
 
 #: gtk/gtkentry.c:1545
-#| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "Emojileri yenisiyle değiştirmenin önerilip önerilmeyeceği"
 
@@ -3759,7 +3766,6 @@ msgid "Propagation phase at which this controller is run"
 msgstr "Çalışan denetim biriminde yayılım aşaması"
 
 #: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
-#| msgid "Open Flags"
 msgid "Flags"
 msgstr "Bayraklar"
 
@@ -3961,11 +3967,11 @@ msgstr "İptal etiketi"
 msgid "The label on the cancel button"
 msgstr "İptal düğmesi üzerindeki etiket"
 
-#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
+#: gtk/gtkfilechooserwidget.c:8413 gtk/gtkfilechooserwidget.c:8414
 msgid "Search mode"
 msgstr "Arama kipi"
 
-#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
+#: gtk/gtkfilechooserwidget.c:8420 gtk/gtkfilechooserwidget.c:8421
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Alt başlık"
@@ -4096,22 +4102,18 @@ msgid "Whether the preview text entry is shown or not"
 msgstr "Metin girdisi önizleme gösterilip gösterilmemesi"
 
 #: gtk/gtkfontchooser.c:118
-#| msgid "Selection mode"
 msgid "Selection level"
 msgstr "Seçim düzeyi"
 
 #: gtk/gtkfontchooser.c:119
-#| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
 msgstr "Aile, yüz veya yazı tipinin seçilip seçilmeyeceği"
 
 #: gtk/gtkfontchooser.c:137
-#| msgid "Font Features"
 msgid "Font features"
 msgstr "Yazı tipi özellikleri"
 
 #: gtk/gtkfontchooser.c:138
-#| msgid "Font features set"
 msgid "Font features as a string"
 msgstr "Dizge olarak yazı tipi özellikleri"
 
@@ -4120,7 +4122,6 @@ msgid "Language for which features have been selected"
 msgstr "Seçilen özellikler için dil"
 
 #: gtk/gtkfontchooserwidget.c:696
-#| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "İnce ayar eylemi"
 
@@ -5216,7 +5217,6 @@ msgid "The text"
 msgstr "Metin"
 
 #: gtk/gtkmodelbutton.c:1175
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
 msgstr "XML biçimleme içeren düğme metni. Bakın: pango_parse_markup()"
 
@@ -7582,7 +7582,6 @@ msgid "Climb Rate"
 msgstr "Tırmanma Oranı"
 
 #: gtk/gtkspinbutton.c:388
-#| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "Bir düğme veya anahtar basılı tuttuğunuzda hızlanma oranı"
 
