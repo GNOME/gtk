@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-27 14:13+0000\n"
-"PO-Revision-Date: 2018-08-28 00:31-0200\n"
+"POT-Creation-Date: 2018-08-31 03:19+0000\n"
+"PO-Revision-Date: 2018-08-31 09:51-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1478,35 +1478,44 @@ msgstr "Texto padrão do componente"
 msgid "The default text appearing when there are no applications"
 msgstr "O texto padrão que aparece quando não há aplicativos"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Registrar sessão"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Registra junto ao gerenciador de sessão"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Proteção de tela ativa"
+
+#: gtk/gtkapplication.c:675
+#| msgid "Whether the spinner is active"
+msgid "Whether the screensaver is active"
+msgstr "Se a proteção de tela está ativa"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Menu de aplicativo"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "O GMenuModel para o menu de aplicativo"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Barra de menu"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "O GMenuModel para a barra de menu"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Janela ativa"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "A janela que recentemente estava em foco"
 
@@ -3660,7 +3669,6 @@ msgid "Enable Emoji completion"
 msgstr "Ativar recurso de completar Emoji"
 
 #: gtk/gtkentry.c:1545
-#| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "Se deve sugerir substituições por Emoji"
 
@@ -3790,7 +3798,6 @@ msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagação na qual esse controlador é executado"
 
 #: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
-#| msgid "Open Flags"
 msgid "Flags"
 msgstr "Opções"
 
@@ -3994,11 +4001,11 @@ msgstr "Rótulo de cancelar"
 msgid "The label on the cancel button"
 msgstr "O rótulo do botão de cancelar"
 
-#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
+#: gtk/gtkfilechooserwidget.c:8413 gtk/gtkfilechooserwidget.c:8414
 msgid "Search mode"
 msgstr "Modo de pesquisa"
 
-#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
+#: gtk/gtkfilechooserwidget.c:8420 gtk/gtkfilechooserwidget.c:8421
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -4135,7 +4142,6 @@ msgid "Selection level"
 msgstr "Nível de seleção"
 
 #: gtk/gtkfontchooser.c:119
-#| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
 msgstr "Se deve selecionar família, face ou fonte"
 
@@ -4144,7 +4150,6 @@ msgid "Font features"
 msgstr "Recursos da fonte"
 
 #: gtk/gtkfontchooser.c:138
-#| msgid "Font features set"
 msgid "Font features as a string"
 msgstr "Recursos da fonte como um texto"
 
@@ -4153,7 +4158,6 @@ msgid "Language for which features have been selected"
 msgstr "Idioma a ser aplicado nos recursos selecionados"
 
 #: gtk/gtkfontchooserwidget.c:696
-#| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "A ação de ajuste"
 
@@ -6543,8 +6547,7 @@ msgstr "Mostrar valor"
 
 #: gtk/gtkscale.c:776
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
-"Se o valor atual é exibido como um texto próximo à barra de deslizar"
+msgstr "Se o valor atual é exibido como um texto próximo à barra de deslizar"
 
 #: gtk/gtkscale.c:782
 msgid "Has Origin"
