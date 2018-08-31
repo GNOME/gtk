@@ -328,6 +328,7 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
   child_allocation->y = 0;
   child_allocation->width = 0;
   child_allocation->height = 0;
+  g_print ("here");
   if (child != NULL && gtk_widget_get_visible (child))
     {
       transition = effective_transition (revealer);
