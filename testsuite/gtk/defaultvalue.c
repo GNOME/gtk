@@ -108,6 +108,14 @@ test_type (gconstpointer data)
       instance = G_OBJECT (g_object_ref (gdk_surface_new_popup (display,
                                                                 &(GdkRectangle) { 0, 0, 100, 100 })));
     }
+  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL))
+    {
+      GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
+      instance = g_object_new (type,
+                               "model", list_store,
+                               NULL);
+      g_object_unref (list_store);
+    }
   else if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
            g_str_equal (g_type_name (type), "GdkX11Cursor"))
     instance = g_object_new (type, "display", display, NULL);
@@ -229,6 +237,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	continue;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+      if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) &&
+          strcmp (pspec->name, "model") == 0)
+        continue;
 
       /* This is set in init() */
       if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER_WIDGET) &&
