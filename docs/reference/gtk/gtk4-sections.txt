@@ -1240,6 +1240,26 @@ gtk_file_filter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkfilterlistmodel</FILE>
+<TITLE>GtkFilterListModel</TITLE>
+GtkFilterListModel
+gtk_filter_list_model_new
+gtk_filter_list_model_get_model
+gtk_filter_list_model_set_filter_func
+gtk_filter_list_model_has_filter
+gtk_filter_list_model_refilter
+<SUBSECTION Standard>
+GTK_FILTER_LIST_MODEL
+GTK_IS_FILTER_LIST_MODEL
+GTK_TYPE_FILTER_LIST_MODEL
+GTK_FILTER_LIST_MODEL_CLASS
+GTK_IS_FILTER_LIST_MODEL_CLASS
+GTK_FILTER_LIST_MODEL_GET_CLASS
+<SUBSECTION Private>
+gtk_filter_list_model_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfixed</FILE>
 <TITLE>GtkFixed</TITLE>
 GtkFixed
