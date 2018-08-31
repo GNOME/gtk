@@ -659,6 +659,8 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication:register-session:
    *
    * Set this property to %TRUE to register with the session manager.
+   * This will make GTK+ track the session state (such as the
+   * #GtkApplication::screensaver-active property).
    */
   gtk_application_props[PROP_REGISTER_SESSION] =
     g_param_spec_boolean ("register-session",
