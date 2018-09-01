@@ -16,3 +16,14 @@ build:
   stage: build
   script:
    - bash -x ./.gitlab-ci/test-docker.sh
+
+msys2-mingw32:
+  variables:
+    MSYSTEM: "MINGW32"
+    CHERE_INVOKING: "yes"
+  stage: build
+  tags:
+    - win32
+  script:
+    - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
+    - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
