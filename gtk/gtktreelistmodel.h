@@ -32,19 +32,25 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_LIST_MODEL (gtk_tree_list_model_get_type ())
+#define GTK_TYPE_TREE_LIST_ROW (gtk_tree_list_row_get_type ())
 
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkTreeListModel, gtk_tree_list_model, GTK, TREE_LIST_MODEL, GObject)
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, GTK, TREE_LIST_ROW, GObject)
 
 typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer data);
 
 GDK_AVAILABLE_IN_ALL
-GtkTreeListModel *      gtk_tree_list_model_new                 (GListModel             *root,
+GtkTreeListModel *      gtk_tree_list_model_new                 (gboolean                passthrough,
+                                                                 GListModel             *root,
                                                                  gboolean                autoexpand,
                                                                  GtkTreeListModelCreateModelFunc create_func,
                                                                  gpointer                data,
                                                                  GDestroyNotify          data_destroy);
 
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_tree_list_model_get_passthrough     (GtkTreeListModel       *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_list_model_set_autoexpand      (GtkTreeListModel       *self,
                                                                  gboolean                autoexpand);
@@ -52,18 +58,21 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_tree_list_model_get_autoexpand      (GtkTreeListModel       *self);
 
 GDK_AVAILABLE_IN_ALL
-guint                   gtk_tree_list_model_get_depth           (GtkTreeListModel       *self,
+GtkTreeListRow *        gtk_tree_list_model_get_row             (GtkTreeListModel       *self,
                                                                  guint                   position);
+
 GDK_AVAILABLE_IN_ALL
-void                    gtk_tree_list_model_set_expanded        (GtkTreeListModel       *self,
-                                                                 guint                   position,
+gpointer                gtk_tree_list_row_get_item              (GtkTreeListRow         *self);
+GDK_AVAILABLE_IN_ALL
+guint                   gtk_tree_list_row_get_depth             (GtkTreeListRow         *self);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_tree_list_row_set_expanded          (GtkTreeListRow         *self,
                                                                  gboolean                expanded);
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_tree_list_model_get_expanded        (GtkTreeListModel       *self,
-                                                                 guint                   position);
+gboolean                gtk_tree_list_row_get_expanded          (GtkTreeListRow         *self);
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_tree_list_model_is_expandable       (GtkTreeListModel       *self,
-                                                                 guint                   position);
+gboolean                gtk_tree_list_row_is_expandable         (GtkTreeListRow         *self);
+
 GDK_AVAILABLE_IN_ALL
 void
 gtk_tree_list_model_dump (GtkTreeListModel *self);
