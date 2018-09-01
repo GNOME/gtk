@@ -316,19 +316,18 @@ gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
     {
       transition = effective_transition (revealer);
 
-      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
-          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
-                            MAX (0, allocation->height),
-                            &minimum_width, &natural_width, NULL, NULL);
-      else
-        gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                            MAX (0, allocation->width),
-                            &minimum_height, &natural_height, NULL, NULL);
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
+                          MAX (0, allocation->height),
+                          &minimum_width, &natural_width, NULL, NULL);
+      gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                          MAX (0, allocation->width),
+                          &minimum_height, &natural_height, NULL, NULL);
 
       child_allocation->width = MAX (MIN(minimum_width, natural_width), allocation->width);
       child_allocation->height = MAX (MIN(minimum_height, natural_height), allocation->height);
-      g_print("Allocation child %d %d %d %d %d %d %d %d\n", minimum_width, natural_width, minimum_height, natural_height, child_allocation->width, child_allocation->height, allocation->width, allocation->height);
+      g_print("Allocation child %d %d %d %d %d %d %d %d\n",
+              minimum_width, natural_width, minimum_height, natural_height,
+              child_allocation->width, child_allocation->height, allocation->width, allocation->height);
 
       switch (transition)
         {
