@@ -1041,7 +1041,8 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
                                                         toplevel_filter_func,
                                                         g_object_ref (gdk_display_get_default ()),
                                                         g_object_unref));
-  wt->priv->list_model = gtk_tree_list_model_new (root_model,
+  wt->priv->list_model = gtk_tree_list_model_new (TRUE,
+                                                  root_model,
                                                   TRUE,
                                                   create_model_for_object,
                                                   NULL,

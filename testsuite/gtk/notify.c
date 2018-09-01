@@ -604,6 +604,11 @@ test_type (gconstpointer data)
 	   g_str_equal (pspec->name, "max-content-height")))
 	continue;
 
+      /* expanding only works if rows are expandable */
+      if (g_type_is_a (type, GTK_TYPE_TREE_LIST_ROW) &&
+	  g_str_equal (pspec->name, "font"))
+	continue;
+
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
 
