@@ -326,8 +326,8 @@ gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
                             MAX (0, allocation->width),
                             &minimum_height, &natural_height, NULL, NULL);
 
-      child_allocation->width = MAX (minimum_width, allocation->width);
-      child_allocation->height = MAX (minimum_height, allocation->height);
+      child_allocation->width = MAX (MIN(minimum_width, natural_width), allocation->width);
+      child_allocation->height = MAX (MIN(minimum_height, natural_height), allocation->height);
 
       switch (transition)
         {
