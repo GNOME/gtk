@@ -328,7 +328,7 @@ gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
 
       child_allocation->width = MAX (MIN(minimum_width, natural_width), allocation->width);
       child_allocation->height = MAX (MIN(minimum_height, natural_height), allocation->height);
-      g_print("Allocation child %d %d %d %d", minimum_width, minimum_height, child_allocation->width, child_allocation->height);
+      g_print("Allocation child %d %d %d %d %d %d %d %d\n", minimum_width, natural_width, minimum_height, natural_height, child_allocation->width, child_allocation->height, allocation->width, allocation->height);
 
       switch (transition)
         {
