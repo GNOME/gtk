@@ -48,9 +48,9 @@ $ ninja
 ```
 
 **Note**: For information about submitting patches and pushing changes
-to Git, see the [README.md](./README.md) and [README.commits.md](./README.commits.md) files. In particular,
+to Git, see the [README.md](./README.md) and [README.commits.md](./commits.README.md) files. In particular,
 don't, under any circumstances, push anything to Git before reading and
-understanding [README.commits.md](./README.commits.md).
+understanding [README.commits.md](./commits.README.md).
 
 Typically, you should work on your own branch:
 
