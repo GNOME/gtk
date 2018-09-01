@@ -25,9 +25,6 @@ create_list_model_for_directory (gpointer file,
       if (info == NULL)
         break;
 
-      if (g_file_info_get_file_type (info) != G_FILE_TYPE_DIRECTORY)
-        continue;
-
       child = g_file_get_child (file, g_file_info_get_name (info));
       g_list_store_append (store, child);
       g_object_unref (child);
@@ -38,54 +35,20 @@ create_list_model_for_directory (gpointer file,
   return G_LIST_MODEL (store);
 }
 
-static GtkTreeListModel *
-get_tree_list_model (GtkWidget *row)
-{
-  return GTK_TREE_LIST_MODEL (g_object_get_data (G_OBJECT (gtk_widget_get_parent (row)), "model"));
-}
-
-static void
-expand_clicked (GtkWidget *button,
-                GtkWidget *row)
-{
-  gtk_tree_list_model_set_expanded (get_tree_list_model (row),
-                                    gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)),
-                                    TRUE);
-}
-
-static void
-collapse_clicked (GtkWidget *button,
-                GtkWidget *row)
-{
-  gtk_tree_list_model_set_expanded (get_tree_list_model (row),
-                                    gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)),
-                                    FALSE);
-}
-
 static GtkWidget *
-create_widget_for_model (gpointer file,
+create_widget_for_model (gpointer item,
                          gpointer root)
 {
   GtkWidget *row, *box, *child;
-  GFile *iter;
+  GFile *file;
   guint depth;
 
   row = gtk_list_box_row_new ();
 
-  depth = 0;
-  for (iter = g_object_ref (g_file_get_parent (file));
-       !g_file_equal (root, iter);
-       g_set_object (&iter, g_file_get_parent (iter)))
-    {
-      g_object_unref (iter);
-      depth++;
-    }
-  g_object_unref (iter);
-  g_object_unref (iter);
-
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (row), box);
 
+  depth = gtk_tree_list_row_get_depth (item);
   if (depth > 0)
     {
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -93,17 +56,31 @@ create_widget_for_model (gpointer file,
       gtk_container_add (GTK_CONTAINER (box), child);
     }
 
-  child = gtk_button_new_from_icon_name ("list-remove-symbolic");
-  gtk_button_set_relief (GTK_BUTTON (child), GTK_RELIEF_NONE);
-  g_signal_connect (child, "clicked", G_CALLBACK (collapse_clicked), row);
+  if (gtk_tree_list_row_is_expandable (item))
+    {
+      GtkWidget *title, *arrow;
+
+      child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
+      
+      title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
+      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
+      g_object_bind_property (item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+      g_object_set_data_full (G_OBJECT (title), "make-sure-its-not-unreffed", g_object_ref (item), g_object_unref);
+      gtk_container_add (GTK_CONTAINER (child), title);
+
+      arrow = g_object_new (GTK_TYPE_SPINNER, "css-name", "arrow", NULL);
+      gtk_container_add (GTK_CONTAINER (title), arrow);
+    }
+  else
+    {
+      child = gtk_image_new (); /* empty whatever */
+    }
   gtk_container_add (GTK_CONTAINER (box), child);
 
-  child = gtk_button_new_from_icon_name ("list-add-symbolic");
-  gtk_button_set_relief (GTK_BUTTON (child), GTK_RELIEF_NONE);
-  g_signal_connect (child, "clicked", G_CALLBACK (expand_clicked), row);
-  gtk_container_add (GTK_CONTAINER (box), child);
-
+  file = gtk_tree_list_row_get_item (item);
   child = gtk_label_new (g_file_get_basename (file));
+  g_object_unref (file);
+
   gtk_container_add (GTK_CONTAINER (box), child);
 
   return row;
@@ -132,7 +109,8 @@ main (int argc, char *argv[])
 
   root = g_file_new_for_path (g_get_current_dir ());
   dirmodel = create_list_model_for_directory (root, NULL);
-  model = G_LIST_MODEL (gtk_tree_list_model_new (dirmodel,
+  model = G_LIST_MODEL (gtk_tree_list_model_new (FALSE,
+                                                 dirmodel,
                                                  FALSE,
                                                  create_list_model_for_directory,
                                                  NULL, NULL));
