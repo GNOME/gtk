@@ -28,6 +28,7 @@
 enum {
   PROP_0,
   PROP_AUTOEXPAND,
+  PROP_PASSTHROUGH,
   PROP_ROOT_MODEL,
   NUM_PROPERTIES
 };
@@ -38,6 +39,7 @@ typedef struct _TreeAugment TreeAugment;
 struct _TreeNode
 {
   GListModel *model;
+  GtkTreeListRow *row;
   GtkCssRbTree *children;
   union {
     TreeNode *parent;
@@ -65,9 +67,22 @@ struct _GtkTreeListModel
   GDestroyNotify user_destroy;
 
   guint autoexpand : 1;
+  guint passthrough : 1;
 };
 
 struct _GtkTreeListModelClass
+{
+  GObjectClass parent_class;
+};
+
+struct _GtkTreeListRow
+{
+  GObject parent_instance;
+
+  TreeNode *node; /* NULL when the row has been destroyed */
+};
+
+struct _GtkTreeListRowClass
 {
   GObjectClass parent_class;
 };
@@ -290,73 +305,47 @@ gtk_tree_list_model_get_nth (GtkTreeListModel *self,
   g_return_val_if_reached (NULL);
 }
 
-static GType
-gtk_tree_list_model_get_item_type (GListModel *list)
+static GListModel *
+tree_node_create_model (GtkTreeListModel *self,
+                        TreeNode         *node)
 {
-  GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
+  TreeNode *parent = node->parent;
+  GListModel *model;
+  GObject *item;
 
-  return g_list_model_get_item_type (self->root_node.model);
-}
+  item = g_list_model_get_item (parent->model,
+                                tree_node_get_local_position (parent->children, node));
+  model = self->create_func (item, self->user_data);
+  g_object_unref (item);
+  if (model == NULL)
+    node->empty = TRUE;
 
-static guint
-gtk_tree_list_model_get_n_items (GListModel *list)
-{
-  GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
-
-  return tree_node_get_n_children (&self->root_node);
+  return model;
 }
 
 static gpointer
-gtk_tree_list_model_get_item (GListModel *list,
-                              guint       position)
+tree_node_get_item (TreeNode *node)
 {
-  GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
-  TreeNode *node, *parent;
-
-  node = gtk_tree_list_model_get_nth (self, position);
-  if (node == NULL)
-    return NULL;
+  TreeNode *parent;
 
   parent = node->parent;
   return g_list_model_get_item (parent->model,
                                 tree_node_get_local_position (parent->children, node));
 }
 
-static void
-gtk_tree_list_model_model_init (GListModelInterface *iface)
+static GtkTreeListRow *
+tree_node_get_row (TreeNode *node)
 {
-  iface->get_item_type = gtk_tree_list_model_get_item_type;
-  iface->get_n_items = gtk_tree_list_model_get_n_items;
-  iface->get_item = gtk_tree_list_model_get_item;
-}
-
-G_DEFINE_TYPE_WITH_CODE (GtkTreeListModel, gtk_tree_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_tree_list_model_model_init))
-
-static void
-gtk_tree_list_model_augment (GtkCssRbTree *tree,
-                             gpointer      _aug,
-                             gpointer      _node,
-                             gpointer      left,
-                             gpointer      right)
-{
-  TreeAugment *aug = _aug;
-
-  aug->n_items = 1;
-  aug->n_items += tree_node_get_n_children (_node);
-  aug->n_local = 1;
-
-  if (left)
+  if (node->row)
     {
-      TreeAugment *left_aug = gtk_css_rb_tree_get_augment (tree, left);
-      aug->n_items += left_aug->n_items;
-      aug->n_local += left_aug->n_local;
+      return g_object_ref (node->row);
     }
-  if (right)
+  else
     {
-      TreeAugment *right_aug = gtk_css_rb_tree_get_augment (tree, right);
-      aug->n_items += right_aug->n_items;
-      aug->n_local += right_aug->n_local;
+      node->row = g_object_new (GTK_TYPE_TREE_LIST_ROW, NULL);
+      node->row->node = node;
+
+      return node->row;
     }
 }
 
@@ -433,10 +422,15 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
                               tree_added);
 }
 
+static void gtk_tree_list_row_destroy (GtkTreeListRow *row);
+
 static void
 gtk_tree_list_model_clear_node (gpointer data)
 {
   TreeNode *node = data;
+
+  if (node->row)
+    gtk_tree_list_row_destroy (node->row);
 
   if (node->model)
     {
@@ -447,6 +441,33 @@ gtk_tree_list_model_clear_node (gpointer data)
     }
   if (node->children)
     gtk_css_rb_tree_unref (node->children);
+}
+
+static void
+gtk_tree_list_model_augment (GtkCssRbTree *tree,
+                             gpointer      _aug,
+                             gpointer      _node,
+                             gpointer      left,
+                             gpointer      right)
+{
+  TreeAugment *aug = _aug;
+
+  aug->n_items = 1;
+  aug->n_items += tree_node_get_n_children (_node);
+  aug->n_local = 1;
+
+  if (left)
+    {
+      TreeAugment *left_aug = gtk_css_rb_tree_get_augment (tree, left);
+      aug->n_items += left_aug->n_items;
+      aug->n_local += left_aug->n_local;
+    }
+  if (right)
+    {
+      TreeAugment *right_aug = gtk_css_rb_tree_get_augment (tree, right);
+      aug->n_items += right_aug->n_items;
+      aug->n_local += right_aug->n_local;
+    }
 }
 
 static void
@@ -479,6 +500,111 @@ gtk_tree_list_model_init_node (GtkTreeListModel *list,
     }
 }
 
+static guint
+gtk_tree_list_model_expand_node (GtkTreeListModel *self,
+                                 TreeNode         *node)
+{
+  GListModel *model;
+
+  if (node->empty)
+    return 0;
+  
+  if (node->model != NULL)
+    return 0;
+
+  model = tree_node_create_model (self, node);
+
+  if (model == NULL)
+    return 0;
+  
+  if (!g_type_is_a (g_list_model_get_item_type (model), g_list_model_get_item_type (self->root_node.model)))
+    {
+      g_critical ("The GtkTreeListModelCreateModelFunc for %p returned a model with item type \"%s\" "
+                  "but \"%s\" is required.",
+                  self,
+                  g_type_name (g_list_model_get_item_type (model)),
+                  g_type_name (g_list_model_get_item_type (self->root_node.model)));
+      return 0;
+    }
+
+  gtk_tree_list_model_init_node (self, node, model);
+
+  tree_node_mark_dirty (node);
+  
+  return tree_node_get_n_children (node);
+}
+
+static guint
+gtk_tree_list_model_collapse_node (GtkTreeListModel *self,
+                                   TreeNode         *node)
+{      
+  guint n_items;
+
+  if (node->model == NULL)
+    return 0;
+
+  n_items = tree_node_get_n_children (node);
+
+  g_clear_pointer (&node->children, gtk_css_rb_tree_unref);
+  g_clear_object (&node->model);
+
+  tree_node_mark_dirty (node);
+
+  return n_items;
+}
+
+
+static GType
+gtk_tree_list_model_get_item_type (GListModel *list)
+{
+  GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
+
+  if (self->passthrough)
+    return GTK_TYPE_TREE_LIST_ROW;
+  else
+    return g_list_model_get_item_type (self->root_node.model);
+}
+
+static guint
+gtk_tree_list_model_get_n_items (GListModel *list)
+{
+  GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
+
+  return tree_node_get_n_children (&self->root_node);
+}
+
+static gpointer
+gtk_tree_list_model_get_item (GListModel *list,
+                              guint       position)
+{
+  GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
+  TreeNode *node;
+
+  node = gtk_tree_list_model_get_nth (self, position);
+  if (node == NULL)
+    return NULL;
+
+  if (self->passthrough)
+    {
+      return tree_node_get_item (node);
+    }
+  else
+    {
+      return tree_node_get_row (node);
+    }
+}
+
+static void
+gtk_tree_list_model_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_tree_list_model_get_item_type;
+  iface->get_n_items = gtk_tree_list_model_get_n_items;
+  iface->get_item = gtk_tree_list_model_get_item;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkTreeListModel, gtk_tree_list_model, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_tree_list_model_model_init))
+
 static void
 gtk_tree_list_model_set_property (GObject      *object,
                                   guint         prop_id,
@@ -491,6 +617,10 @@ gtk_tree_list_model_set_property (GObject      *object,
     {
     case PROP_AUTOEXPAND:
       gtk_tree_list_model_set_autoexpand (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_PASSTHROUGH:
+      self->passthrough = g_value_get_boolean (value);
       break;
 
     default:
@@ -511,6 +641,10 @@ gtk_tree_list_model_get_property (GObject     *object,
     {
     case PROP_AUTOEXPAND:
       g_value_set_boolean (value, self->autoexpand);
+      break;
+
+    case PROP_PASSTHROUGH:
+      g_value_set_boolean (value, self->passthrough);
       break;
 
     case PROP_ROOT_MODEL:
@@ -557,6 +691,20 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkTreeListModel:passthrough:
+   *
+   * If %FALSE, the #GListModel functions for this object return custom
+   * #GtkTreeListRow objects.
+   * If %TRUE, the values of the child models are pass through unmodified.
+   */
+  properties[PROP_PASSTHROUGH] =
+      g_param_spec_boolean ("passthrough",
+                            P_("passthrough"),
+                            P_("If child model values are passed through"),
+                            FALSE,
+                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkTreeListModel:root-model:
    *
    * The root model displayed
@@ -580,6 +728,7 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
 
 /**
  * gtk_tree_list_model_new:
+ * @passthrough: %TRUE to pass through items from the models
  * @root: The #GListModel to use as root
  * @autoexpand: %TRUE to set the autoexpand property and expand the @root model
  * @create_func: Function to call to create the #GListModel for the children
@@ -592,7 +741,8 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
  * Returns: a newly created #GtkTreeListModel. 
  **/
 GtkTreeListModel *
-gtk_tree_list_model_new (GListModel                      *root,
+gtk_tree_list_model_new (gboolean                         passthrough,
+                         GListModel                      *root,
                          gboolean                         autoexpand,
                          GtkTreeListModelCreateModelFunc  create_func,
                          gpointer                         user_data,
@@ -605,6 +755,7 @@ gtk_tree_list_model_new (GListModel                      *root,
 
   self = g_object_new (GTK_TYPE_TREE_LIST_MODEL,
                        "autoexpand", autoexpand,
+                       "passthrough", passthrough,
                        NULL);
 
   self->create_func = create_func;
@@ -614,6 +765,29 @@ gtk_tree_list_model_new (GListModel                      *root,
   gtk_tree_list_model_init_node (self, &self->root_node, g_object_ref (root));
 
   return self;
+}
+
+/**
+ * gtk_tree_list_model_get_passthrough:
+ * @self: a #GtkTreeListModel
+ *
+ * If this function returns %FALSE, the #GListModel functions for @self
+ * return custom #GtkTreeListRow objects. You need to call
+ * gtk_tree_list_row_get_item() on these objects to get the original
+ * item.
+ *
+ * If %TRUE, the values of the child models are passed through in their
+ * original state. You then need to call gtk_tree_list_model_get_row()
+ * to get the custom #GtkTreeListRows.
+ *
+ * Returns: %TRUE if the model is passing through original row items
+ **/
+gboolean
+gtk_tree_list_model_get_passthrough (GtkTreeListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_TREE_LIST_MODEL (self), FALSE);
+
+  return self->passthrough;
 }
 
 /**
@@ -657,21 +831,225 @@ gtk_tree_list_model_get_autoexpand (GtkTreeListModel *self)
   return self->autoexpand;
 }
 
+/**
+ * gtk_tree_list_model_get_row:
+ * @self: a #GtkTreeListModel
+ * @position: the position of the row to fetch
+ *
+ * Gets the row object for the given row. If @position is greater than
+ * the number of items in @self, %NULL is returned.
+ *
+ * The row object can be used to expand and collapse rows as well as
+ * to inspect its position in the tree. See its documentation for details.
+ *
+ * This row object is persistent and will refer to the current item as
+ * long as the row is present in @self, independent of other rows being
+ * added or removed.
+ *
+ * If @self is set to not be passthrough, this function is equivalent
+ * to calling g_list_model_get_item().
+ *
+ * Returns: (nullable) (transfer: full): The row item 
+ **/
+GtkTreeListRow *
+gtk_tree_list_model_get_row (GtkTreeListModel *self,
+                             guint             position)
+{
+  TreeNode *node;
+
+  g_return_val_if_fail (GTK_IS_TREE_LIST_MODEL (self), NULL);
+
+  node = gtk_tree_list_model_get_nth (self, position);
+  if (node == NULL)
+    return NULL;
+
+  return tree_node_get_row (node);
+}
+
+/***   ROW   ***/
+
+enum {
+  ROW_PROP_0,
+  ROW_PROP_DEPTH,
+  ROW_PROP_EXPANDABLE,
+  ROW_PROP_EXPANDED,
+  ROW_PROP_ITEM,
+  NUM_ROW_PROPERTIES
+};
+
+static GParamSpec *row_properties[NUM_ROW_PROPERTIES] = { NULL, };
+
+G_DEFINE_TYPE (GtkTreeListRow, gtk_tree_list_row, G_TYPE_OBJECT)
+
+static void
+gtk_tree_list_row_destroy (GtkTreeListRow *self)
+{
+  g_object_freeze_notify (G_OBJECT (self));
+
+  /* FIXME: We could check some properties to avoid excess notifies */
+  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_DEPTH]);
+  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDABLE]);
+  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDED]);
+  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_ITEM]);
+
+  self->node = NULL;
+  g_object_freeze_notify (G_OBJECT (self));
+}
+
+static void
+gtk_tree_list_row_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GtkTreeListRow *self = GTK_TREE_LIST_ROW (object);
+
+  switch (prop_id)
+    {
+    case ROW_PROP_EXPANDED:
+      gtk_tree_list_row_set_expanded (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_tree_list_row_get_property (GObject     *object,
+                                guint        prop_id,
+                                GValue      *value,
+                                GParamSpec  *pspec)
+{
+  GtkTreeListRow *self = GTK_TREE_LIST_ROW (object);
+
+  switch (prop_id)
+    {
+    case ROW_PROP_DEPTH:
+      g_value_set_uint (value, gtk_tree_list_row_get_depth (self));
+      break;
+
+    case ROW_PROP_EXPANDABLE:
+      g_value_set_boolean (value, gtk_tree_list_row_is_expandable (self));
+      break;
+
+    case ROW_PROP_EXPANDED:
+      g_value_set_boolean (value, gtk_tree_list_row_get_expanded (self));
+      break;
+
+    case ROW_PROP_ITEM:
+      g_value_take_object (value, gtk_tree_list_row_get_item (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_tree_list_row_dispose (GObject *object)
+{
+  GtkTreeListRow *self = GTK_TREE_LIST_ROW (object);
+
+  if (self->node)
+    self->node->row = NULL;
+
+  G_OBJECT_CLASS (gtk_tree_list_row_parent_class)->dispose (object);
+};
+
+static void
+gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->set_property = gtk_tree_list_row_set_property;
+  gobject_class->get_property = gtk_tree_list_row_get_property;
+  gobject_class->dispose = gtk_tree_list_row_dispose;
+
+  /**
+   * GtkTreeListRow:depth:
+   *
+   * The depth in the tree of this row
+   */
+  row_properties[ROW_PROP_DEPTH] =
+      g_param_spec_uint ("depth",
+                         P_("Depth"),
+                         P_("Depth in the tree"),
+                         0, G_MAXUINT, 0,
+                         GTK_PARAM_READABLE);
+
+  /**
+   * GtkTreeListRow:expandable:
+   *
+   * If this row can ever be expanded
+   */
+  row_properties[ROW_PROP_EXPANDABLE] =
+      g_param_spec_boolean ("expandable",
+                            P_("Expandable"),
+                            P_("If this row can ever be expanded"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
+
+  /**
+   * GtkTreeListRow:expanded:
+   *
+   * If this row is currently expanded
+   */
+  row_properties[ROW_PROP_EXPANDED] =
+      g_param_spec_boolean ("expanded",
+                            P_("Expanded"),
+                            P_("If this row is currently expanded"),
+                            FALSE,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkTreeListRow:item:
+   *
+   * The item held in this row
+   */
+  row_properties[ROW_PROP_ITEM] =
+      g_param_spec_object ("item",
+                           P_("Item"),
+                           P_("The item held in this row"),
+                           G_TYPE_OBJECT,
+                           GTK_PARAM_READABLE);
+
+  g_object_class_install_properties (gobject_class, NUM_ROW_PROPERTIES, row_properties);
+}
+
+static void
+gtk_tree_list_row_init (GtkTreeListRow *self)
+{
+}
+
+/**
+ * gtk_tree_list_row_get_depth:
+ * @self: a #GtkTreeListRow
+ *
+ * Gets the depth of this row. Rows that correspond to items in
+ * the root model have a depth of zero, rows corresponding to items
+ * of models of direct children of the root model have a depth of
+ * 1 and so on.
+ *
+ * The depth of a row never changes until the row is destroyed.
+ *
+ * Returns: The depth of this row
+ **/
 guint
-gtk_tree_list_model_get_depth (GtkTreeListModel *self,
-                               guint             position)
+gtk_tree_list_row_get_depth (GtkTreeListRow *self)
 {
   TreeNode *node;
   guint depth;
 
-  g_return_val_if_fail (GTK_IS_TREE_LIST_MODEL (self), FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_LIST_ROW (self), 0);
 
-  node = gtk_tree_list_model_get_nth (self, position);
-  if (node == NULL)
+  if (self->node == NULL)
     return 0;
 
   depth = 0;
-  for (node = node->parent;
+  for (node = self->node->parent;
        !node->is_root;
        node = node->parent)
     depth++;
@@ -679,131 +1057,105 @@ gtk_tree_list_model_get_depth (GtkTreeListModel *self,
   return depth;
 }
 
-static GListModel *
-tree_node_create_model (GtkTreeListModel *self,
-                        TreeNode         *node)
-{
-  TreeNode *parent = node->parent;
-  GListModel *model;
-  GObject *item;
-
-  item = g_list_model_get_item (parent->model,
-                                tree_node_get_local_position (parent->children, node));
-  model = self->create_func (item, self->user_data);
-  g_object_unref (item);
-  if (model == NULL)
-    node->empty = TRUE;
-
-  return model;
-}
-
-static guint
-gtk_tree_list_model_expand_node (GtkTreeListModel *self,
-                                 TreeNode         *node)
-{
-  GListModel *model;
-
-  if (node->empty)
-    return 0;
-  
-  if (node->model != NULL)
-    return 0;
-
-  model = tree_node_create_model (self, node);
-
-  if (model == NULL)
-    return 0;
-  
-  g_assert (g_list_model_get_item_type (model) == g_list_model_get_item_type (self->root_node.model));
-  gtk_tree_list_model_init_node (self, node, model);
-
-  tree_node_mark_dirty (node);
-  
-  return tree_node_get_n_children (node);
-}
-
-static void
-gtk_tree_list_model_collapse_node (GtkTreeListModel *self,
-                                   guint             position,
-                                   TreeNode         *node)
-{      
-  guint n_items;
-
-  if (node->model == NULL)
-    return;
-
-  n_items = tree_node_get_n_children (node);
-
-  g_clear_pointer (&node->children, gtk_css_rb_tree_unref);
-  g_clear_object (&node->model);
-
-  tree_node_mark_dirty (node);
-
-  if (n_items > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), position + 1, n_items, 0);
-}
-
+/**
+ * gtk_tree_list_row_set_expanded:
+ * @self: a #GtkTreeListRow
+ * @expanded: %TRUE if the row should be expanded
+ *
+ * Expands or collapses a row.
+ *
+ * If a row is expanded, the model of calling the 
+ * #GtkTreeListModelCreateModelFunc for the row's item will
+ * be inserted after this row. If a row is collapsed, those
+ * items will be removed from the model.
+ *
+ * If the row is not expandable, this function does nothing.
+ **/
 void
-gtk_tree_list_model_set_expanded (GtkTreeListModel *self,
-                                  guint             position,
-                                  gboolean          expanded)
+gtk_tree_list_row_set_expanded (GtkTreeListRow *self,
+                                gboolean        expanded)
 {
-  TreeNode *node;
+  GtkTreeListModel *list;
+  gboolean was_expanded;
   guint n_items;
 
-  g_return_if_fail (GTK_IS_TREE_LIST_MODEL (self));
+  g_return_if_fail (GTK_IS_TREE_LIST_ROW (self));
 
-  node = gtk_tree_list_model_get_nth (self, position);
-  if (node == NULL)
+  if (self->node == NULL)
     return;
+
+  was_expanded = self->node->children != NULL;
+  if (was_expanded == expanded)
+    return;
+
+  list = tree_node_get_tree_list_model (self->node);
 
   if (expanded)
     {
-      n_items = gtk_tree_list_model_expand_node (self, node);
+      n_items = gtk_tree_list_model_expand_node (list, self->node);
       if (n_items > 0)
-        g_list_model_items_changed (G_LIST_MODEL (self), position + 1, 0, n_items);
+        g_list_model_items_changed (G_LIST_MODEL (list), tree_node_get_position (self->node) + 1, 0, n_items);
     }
   else
     {
-      gtk_tree_list_model_collapse_node (self, position, node);
+      n_items = gtk_tree_list_model_collapse_node (list, self->node);
+      if (n_items > 0)
+        g_list_model_items_changed (G_LIST_MODEL (list), tree_node_get_position (self->node) + 1, n_items, 0);
     }
+
+  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDED]);
 }
 
+/**
+ * gtk_tree_list_row_get_expanded:
+ * @self: a #GtkTreeListRow
+ *
+ * Gets if a row is currently expanded.
+ *
+ * Returns: %TRUE if the row is expanded
+ **/
 gboolean
-gtk_tree_list_model_get_expanded (GtkTreeListModel *self,
-                                  guint             position)
+gtk_tree_list_row_get_expanded (GtkTreeListRow *self)
 {
-  TreeNode *node;
+  g_return_val_if_fail (GTK_IS_TREE_LIST_ROW (self), FALSE);
 
-  g_return_val_if_fail (GTK_IS_TREE_LIST_MODEL (self), FALSE);
-
-  node = gtk_tree_list_model_get_nth (self, position);
-  if (node == NULL)
+  if (self->node == NULL)
     return FALSE;
 
-  return node->children != NULL;
+  return self->node->children != NULL;
 }
 
+/**
+ * gtk_tree_list_row_is_expandable:
+ * @self: a #GtkTreeListRow
+ *
+ * Checks if a row can be expanded. This does not mean that the
+ * row is actually expanded, this can be checked with
+ * gtk_tree_list_row_get_expanded()
+ * 
+ * If a row is expandable never changes until the row is destroyed.
+ *
+ * Returns: %TRUE if the row is expandable
+ **/
 gboolean
-gtk_tree_list_model_is_expandable (GtkTreeListModel *self,
-                                   guint             position)
+gtk_tree_list_row_is_expandable (GtkTreeListRow *self)
 {
+  GtkTreeListModel *list;
   GListModel *model;
-  TreeNode *node;
 
-  g_return_val_if_fail (GTK_IS_TREE_LIST_MODEL (self), FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_LIST_ROW (self), FALSE);
 
-  node = gtk_tree_list_model_get_nth (self, position);
-  if (node == NULL)
+  if (self->node == NULL)
     return FALSE;
 
-  if (node->empty)
+  if (self->node->empty)
     return FALSE;
 
-  if (node->model)
+  if (self->node->model)
     return TRUE;
 
-  model = tree_node_create_model (self, node);
+  list = tree_node_get_tree_list_model (self->node);
+  model = tree_node_create_model (list, self->node);
   if (model)
     {
       g_object_unref (model);
@@ -811,6 +1163,29 @@ gtk_tree_list_model_is_expandable (GtkTreeListModel *self,
     }
 
   return FALSE;
+}
+
+/**
+ * gtk_tree_list_row_get_item:
+ * @self: a #GtkTreeListRow
+ *
+ * Gets the item corresponding to this row,
+ *
+ * The value returned by this function never changes until the
+ * row is destroyed.
+ *
+ * Returns: (nullable) (type GObject) (transfer full): The item of this row
+ *    or %NULL when the row was destroyed
+ **/
+gpointer
+gtk_tree_list_row_get_item (GtkTreeListRow *self)
+{
+  g_return_val_if_fail (GTK_IS_TREE_LIST_ROW (self), NULL);
+
+  if (self->node == NULL)
+    return NULL;
+
+  return tree_node_get_item (self->node);
 }
 
 static void
