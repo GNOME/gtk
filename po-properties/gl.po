@@ -18,10 +18,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-29 21:02+0000\n"
-"PO-Revision-Date: 2018-08-29 23:49+0200\n"
+"POT-Creation-Date: 2018-08-31 17:47+0000\n"
+"PO-Revision-Date: 2018-09-01 14:59+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Proxecto Trasno <proxecto@trasno.gal>\n"
+"Language-Team: Galician\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1485,35 +1485,44 @@ msgstr "Texto predeterminado do widget"
 msgid "The default text appearing when there are no applications"
 msgstr "O texto predeterminado que aparece cando non hai aplicativos"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Rexistrar sesión"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Rexistrar co xestor de sesións"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Salvapantallas activo"
+
+#: gtk/gtkapplication.c:675
+#| msgid "Whether the spinner is active"
+msgid "Whether the screensaver is active"
+msgstr "Indica se o salvapantallas está activo"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Menú de aplicativo"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "O GMenModel para o menú de aplicativos"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Barra de menú"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "O GMenuModel para a barra de menú"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Xanela activa"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "A xanela que tivo o foco máis recentemente"
 
@@ -3674,12 +3683,10 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Indica se se mostra unha icona de Emoji"
 
 #: gtk/gtkentry.c:1544
-#| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "Activar o completado Emoji"
 
 #: gtk/gtkentry.c:1545
-#| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "Indica se suxerir a substitución de Emojis"
 
@@ -3806,7 +3813,6 @@ msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagación na que este controlador se executa"
 
 #: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
-#| msgid "Open Flags"
 msgid "Flags"
 msgstr "Bandeiras"
 
@@ -4148,22 +4154,18 @@ msgid "Whether the preview text entry is shown or not"
 msgstr "Indica se se mostra ou non a vista previa da entrada texto"
 
 #: gtk/gtkfontchooser.c:118
-#| msgid "Selection mode"
 msgid "Selection level"
 msgstr "Nivel de selección"
 
 #: gtk/gtkfontchooser.c:119
-#| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
 msgstr "Indica se seleccionar a familia, tipo ou fonte"
 
 #: gtk/gtkfontchooser.c:137
-#| msgid "Font Features"
 msgid "Font features"
 msgstr "Caracteristicas do tipo de letra"
 
 #: gtk/gtkfontchooser.c:138
-#| msgid "Font features set"
 msgid "Font features as a string"
 msgstr "Características do tipo de letra como unha cadea"
 
@@ -4172,7 +4174,6 @@ msgid "Language for which features have been selected"
 msgstr "Linguiaxe para o cal as características foron seleccionadas"
 
 #: gtk/gtkfontchooserwidget.c:696
-#| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "A acción de axustes"
 
@@ -5274,7 +5275,6 @@ msgid "The text"
 msgstr "O texto"
 
 #: gtk/gtkmodelbutton.c:1175
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
 msgstr "O texto do botón inclúe marcación XML. Vexa pango_parse_markup()"
 
@@ -7712,7 +7712,6 @@ msgid "Climb Rate"
 msgstr "Taxa de incremento"
 
 #: gtk/gtkspinbutton.c:388
-#| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "A taxa de aceleración cando mantén premido un botón ou chave"
 
