@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-27 14:12+0000\n"
-"PO-Revision-Date: 2018-09-02 23:17+0200\n"
+"POT-Creation-Date: 2018-09-02 21:20+0000\n"
+"PO-Revision-Date: 2018-09-02 23:33+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -3425,7 +3425,7 @@ msgstr ""
 
 #. window
 #: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:610 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Udskriv"
 
@@ -6728,7 +6728,7 @@ msgstr "Bamum"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Ægyptiske hieroglyffer"
 
 # https://en.wikipedia.org/wiki/Old_Aramaic_language#Imperial_Aramaic
