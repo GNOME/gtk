@@ -25,6 +25,19 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+/**
+ * SECTION:gtkflattenlistmodel
+ * @title: GtkFlattenListModel
+ * @short_description: a #GListModel that flattens a goven listmodel
+ * @see_also: #GListModel
+ *
+ * #GtkFlattenModel is a list model that takes a list model containing
+ * list models and flattens it into a single model.
+ *
+ * Another term for this is concatenation: #GtkFlattenModel takes a list
+ * of lists and concatenates them into a single list.
+ */
+
 enum {
   PROP_0,
   PROP_HAS_FILTER,

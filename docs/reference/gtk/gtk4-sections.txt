@@ -1280,6 +1280,24 @@ gtk_fixed_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkflattenlistmodel</FILE>
+<TITLE>GtkFlattenListModel</TITLE>
+GtkFlattenListModel
+gtk_flatten_list_model_new
+gtk_flatten_list_model_set_model
+gtk_flatten_list_model_get_model
+<SUBSECTION Standard>
+GTK_FLATTEN_LIST_MODEL
+GTK_IS_FLATTEN_LIST_MODEL
+GTK_TYPE_FLATTEN_LIST_MODEL
+GTK_FLATTEN_LIST_MODEL_CLASS
+GTK_IS_FLATTEN_LIST_MODEL_CLASS
+GTK_FLATTEN_LIST_MODEL_GET_CLASS
+<SUBSECTION Private>
+gtk_flatten_list_model_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfontbutton</FILE>
 <TITLE>GtkFontButton</TITLE>
 GtkFontButton
