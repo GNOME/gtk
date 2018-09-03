@@ -1054,6 +1054,7 @@ gdk_clipboard_write_serialize_done (GObject      *content,
 
   g_object_unref (task);
 }
+
 void
 gdk_clipboard_write_async (GdkClipboard        *clipboard,
                            const char          *mime_type,
@@ -1076,6 +1077,7 @@ gdk_clipboard_write_async (GdkClipboard        *clipboard,
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (callback != NULL);
 
+g_print ("clipboard write in %s\n", mime_type);
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_clipboard_write_async);
@@ -1232,6 +1234,7 @@ gdk_clipboard_set_content (GdkClipboard       *clipboard,
       formats = gdk_content_formats_new (NULL, 0);
     }
 
+g_print ("claiming clipboard for %s\n", gdk_content_formats_to_string (formats));
   result = gdk_clipboard_claim (clipboard, formats, TRUE, provider);
 
   gdk_content_formats_unref (formats);

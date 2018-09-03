@@ -19,6 +19,7 @@ gdk_public_sources = files([
   'gdkdrawcontext.c',
   'gdkdrop.c',
   'gdkevents.c',
+  'gfiletransferportal.c',
   'gdkframeclock.c',
   'gdkframeclockidle.c',
   'gdkframetimings.c',
