@@ -1054,6 +1054,7 @@ gdk_clipboard_write_serialize_done (GObject      *content,
 
   g_object_unref (task);
 }
+
 void
 gdk_clipboard_write_async (GdkClipboard        *clipboard,
                            const char          *mime_type,
