@@ -1063,10 +1063,10 @@ gtk_button_box_new (GtkOrientation orientation)
  * @widget: a #GtkButtonBox
  * @child: a child of @widget
  *
- * Returns whether the child is exempted from homogenous
+ * Returns whether the child is exempted from homogeneous
  * sizing.
  *
- * Returns: %TRUE if the child is not subject to homogenous sizing
+ * Returns: %TRUE if the child is not subject to homogeneous sizing
  */
 gboolean
 gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
@@ -1084,7 +1084,7 @@ gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
  * @child: a child of @widget
  * @non_homogeneous: the new value
  *
- * Sets whether the child is exempted from homogeous sizing.
+ * Sets whether the child is exempted from homogeneous sizing.
  */
 void
 gtk_button_box_set_child_non_homogeneous (GtkButtonBox *widget,
