@@ -103,23 +103,30 @@ visible_child_changed_cb (GtkWidget    *stack,
     }
 }
 
-static GList *
+static GSList *
 get_file_list (const char *dir)
 {
   GFileEnumerator *enumerator;
   GFile *file;
-  GList *list = NULL;
+  GFileInfo *info;
+  GSList *list = NULL;
   
   file = g_file_new_for_path (dir);
-  enumerator = g_file_enumerate_children (file, "standard::name", 0, NULL, NULL);
+  enumerator = g_file_enumerate_children (file, "standard::name,standard::type", 0, NULL, NULL);
   g_object_unref (file);
   if (enumerator == NULL)
     return NULL;
 
-  while (g_file_enumerator_iterate (enumerator, NULL, &file, NULL, NULL) && file != NULL)
-    list = g_list_prepend (list, g_object_ref (file));
+  while (g_file_enumerator_iterate (enumerator, &info, &file, NULL, NULL) && file != NULL)
+    {
+      /* the portal can't handle directories */
+      if (g_file_info_get_file_type (info) != G_FILE_TYPE_REGULAR)
+        continue;
 
-  return g_list_reverse (list);
+      list = g_slist_prepend (list, g_object_ref (file));
+    }
+
+  return g_slist_reverse (list);
 }
 
 static void
