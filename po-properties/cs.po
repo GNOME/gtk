@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties gtk-3.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-30 08:34+0000\n"
-"PO-Revision-Date: 2018-08-30 14:26+0200\n"
+"POT-Creation-Date: 2018-09-03 10:47+0000\n"
+"PO-Revision-Date: 2018-09-04 11:08+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1464,35 +1464,43 @@ msgstr "Výchozí text widgetu"
 msgid "The default text appearing when there are no applications"
 msgstr "Výchozí text, který se zobrazí v případě neexistence aplikací"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Registrovat sezení"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Registrovat ve správci sezení"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Šetřič obrazovky aktivní"
+
+#: gtk/gtkapplication.c:675
+msgid "Whether the screensaver is active"
+msgstr "Jestli je šetřič obrazovky aktivní"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "GMenuModel nabídky aplikace"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Lišta nabídky"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "GMenuModel lišty nabídky"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Aktivovat okno"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "Okno, které bylo aktivní naposledy"
 
