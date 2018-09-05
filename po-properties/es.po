@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-23 10:11+0000\n"
-"PO-Revision-Date: 2018-07-23 11:59+0200\n"
+"POT-Creation-Date: 2018-09-03 10:47+0000\n"
+"PO-Revision-Date: 2018-09-05 11:14+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -1494,35 +1494,44 @@ msgstr "Texto predeterminado del widget"
 msgid "The default text appearing when there are no applications"
 msgstr "El texto predeterminado que aparece cuando no hay aplicaciones"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Registrar sesión"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Registrar con el gestor de sesiones"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Salvapantallas activo"
+
+#: gtk/gtkapplication.c:675
+#| msgid "Whether the spinner is active"
+msgid "Whether the screensaver is active"
+msgstr "Indica si el salvapantallas está activo"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Menú Aplicaciones"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "El GMenuModel para el menú de aplicaciones"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Barra de menú"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "El GMenuModel para la barra de menú"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Ventana activa"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "La ventana que ha tenido el foco más recientemente"
 
@@ -3663,7 +3672,7 @@ msgstr "Pistas para el comportamiento del campo de texto"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Un lista de atributos de estilos para aplicar al texto de la etiqueta"
 
-#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4857 gtk/gtktextview.c:1045
+#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4860 gtk/gtktextview.c:1045
 msgid "Populate all"
 msgstr "Poblar todo"
 
@@ -3921,7 +3930,7 @@ msgstr "Filtro"
 msgid "The current filter for selecting which files are displayed"
 msgstr "El filtro actual para seleccionar qué archivos se están mostrando"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4823
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4826
 #: gtk/gtkplacesview.c:2262
 msgid "Local Only"
 msgstr "Sólo local"
@@ -4025,12 +4034,12 @@ msgstr "Etiqueta de cancelar"
 msgid "The label on the cancel button"
 msgstr "La etiqueta del botón de cancelar"
 
-#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
+#: gtk/gtkfilechooserwidget.c:8413 gtk/gtkfilechooserwidget.c:8414
 msgid "Search mode"
 msgstr "Modo de búsqueda"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
+#: gtk/gtkfilechooserwidget.c:8420 gtk/gtkfilechooserwidget.c:8421
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -5659,19 +5668,19 @@ msgstr "Encoger"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Si es TRUE, el hijo puede hacerse más pequeño que sus requisitos"
 
-#: gtk/gtkplacessidebar.c:4786
+#: gtk/gtkplacessidebar.c:4789
 msgid "Location to Select"
 msgstr "Ubicación que seleccionar"
 
-#: gtk/gtkplacessidebar.c:4787
+#: gtk/gtkplacessidebar.c:4790
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicación que resaltar en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4792 gtk/gtkplacesview.c:2283
+#: gtk/gtkplacessidebar.c:4795 gtk/gtkplacesview.c:2283
 msgid "Open Flags"
 msgstr "Abrir opciones"
 
-#: gtk/gtkplacessidebar.c:4793 gtk/gtkplacesview.c:2284
+#: gtk/gtkplacessidebar.c:4796 gtk/gtkplacesview.c:2284
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5679,29 +5688,29 @@ msgstr ""
 "Modos en los que la aplicación llamante puede abrir ubicaciones "
 "seleccionadas en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4799
+#: gtk/gtkplacessidebar.c:4802
 msgid "Show recent files"
 msgstr "Mostrar archivo recientes"
 
-#: gtk/gtkplacessidebar.c:4800
+#: gtk/gtkplacessidebar.c:4803
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Indica si la barra lateral incluye un atajo para los archivos recientes"
 
-#: gtk/gtkplacessidebar.c:4805
+#: gtk/gtkplacessidebar.c:4808
 msgid "Show 'Desktop'"
 msgstr "Mostrar «Escritorio»"
 
-#: gtk/gtkplacessidebar.c:4806
+#: gtk/gtkplacessidebar.c:4809
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Indica si la barra lateral incluye un atajo a la carpeta del Escritorio"
 
-#: gtk/gtkplacessidebar.c:4811
+#: gtk/gtkplacessidebar.c:4814
 msgid "Show 'Connect to Server'"
 msgstr "Mostrar «Conectar al servidor»"
 
-#: gtk/gtkplacessidebar.c:4812
+#: gtk/gtkplacessidebar.c:4815
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5709,52 +5718,52 @@ msgstr ""
 "Indica si la barra lateral incluye un atajo integrado al diálogo «Conectar "
 "al servidor»"
 
-#: gtk/gtkplacessidebar.c:4817
+#: gtk/gtkplacessidebar.c:4820
 msgid "Show 'Enter Location'"
 msgstr "Mostrar «Introducir ubicación»"
 
-#: gtk/gtkplacessidebar.c:4818
+#: gtk/gtkplacessidebar.c:4821
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Indica si la barra lateral incluye un atajo integrado para introducir "
 "manualmente la ubicación"
 
-#: gtk/gtkplacessidebar.c:4824 gtk/gtkplacesview.c:2263
+#: gtk/gtkplacessidebar.c:4827 gtk/gtkplacesview.c:2263
 msgid "Whether the sidebar only includes local files"
 msgstr "Indica si la barra lateral sólo incluye archivos locales"
 
-#: gtk/gtkplacessidebar.c:4829
+#: gtk/gtkplacessidebar.c:4832
 msgid "Show 'Trash'"
 msgstr "Mostrar «Papelera»"
 
-#: gtk/gtkplacessidebar.c:4830
+#: gtk/gtkplacessidebar.c:4833
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 "Indica si la barra lateral incluye un atajo integrado a la ubicación de la "
 "papelera"
 
-#: gtk/gtkplacessidebar.c:4835
+#: gtk/gtkplacessidebar.c:4838
 msgid "Show 'Other locations'"
 msgstr "Mostrar «Otras ubicaciones»"
 
-#: gtk/gtkplacessidebar.c:4836
+#: gtk/gtkplacessidebar.c:4839
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr ""
 "Indica si la barra lateral incluye un elemento para mostrar ubicaciones "
 "externas"
 
-#: gtk/gtkplacessidebar.c:4841
+#: gtk/gtkplacessidebar.c:4844
 msgid "Show “Starred Location”"
 msgstr "Mostrar «Ubicación favorita»"
 
-#: gtk/gtkplacessidebar.c:4842
+#: gtk/gtkplacessidebar.c:4845
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Indica si la barra lateral incluye un elemento para mostrar archivos "
 "favoritos"
 
-#: gtk/gtkplacessidebar.c:4858
+#: gtk/gtkplacessidebar.c:4861
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 "Indica si se debe emitir ::populate-popup para elementos emergentes que no "
