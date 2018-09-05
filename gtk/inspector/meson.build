@@ -27,7 +27,6 @@ inspector_sources = files(
   'recorder.c',
   'recording.c',
   'renderrecording.c',
-  'rendernodeview.c',
   'resource-list.c',
   'selector.c',
   'signals-list.c',
