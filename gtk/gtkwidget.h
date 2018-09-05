@@ -1033,6 +1033,8 @@ GtkWidget *             gtk_widget_get_prev_sibling     (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_widget_observe_children     (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
+GListModel *            gtk_widget_observe_controllers  (GtkWidget *widget);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_after         (GtkWidget *widget,
                                                          GtkWidget *parent,
                                                          GtkWidget *previous_sibling);

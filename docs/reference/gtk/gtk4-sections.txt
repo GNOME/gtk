@@ -4626,6 +4626,7 @@ gtk_window_set_interactive_debugging
 
 <SUBSECTION>
 gtk_widget_observe_children
+gtk_widget_observe_controllers
 
 <SUBSECTION Standard>
 GTK_WINDOW
