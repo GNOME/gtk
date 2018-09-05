@@ -145,8 +145,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkRenderNodeView" id="render_node_view">
-                        <property name="visible">True</property>
+                      <object class="GtkPicture" id="render_node_view">
                         <property name="expand">True</property>
                       </object>
                     </child>

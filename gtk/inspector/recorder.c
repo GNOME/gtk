@@ -24,6 +24,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktreelistmodel.h>
@@ -40,7 +41,6 @@
 #include "gtk/gtkrendernodepaintableprivate.h"
 
 #include "recording.h"
-#include "rendernodeview.h"
 #include "renderrecording.h"
 #include "startrecording.h"
 
@@ -377,26 +377,29 @@ recordings_list_row_selected (GtkListBox           *box,
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      GListModel *root_model;
+      GListStore *root_model;
+      graphene_rect_t bounds;
+      GskRenderNode *node;
+      GdkPaintable *paintable;
 
-      gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view),
-                                            gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
-                                            gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      gtk_render_node_view_set_viewport (GTK_RENDER_NODE_VIEW (priv->render_node_view),
-                                         gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+      node = gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording));
+      gsk_render_node_get_bounds (node, &bounds);
+      paintable = gtk_render_node_paintable_new (node, &bounds);
+      gtk_picture_set_paintable (GTK_PICTURE (priv->render_node_view), paintable);
 
-      root_model = create_list_model_for_render_node (gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+      root_model = g_list_store_new (GDK_TYPE_PAINTABLE);
+      g_list_store_append (root_model, paintable);
       priv->render_node_model = gtk_tree_list_model_new (FALSE,
-                                                         root_model,
+                                                         G_LIST_MODEL (root_model),
                                                          TRUE,
                                                          create_list_model_for_render_node_paintable,
                                                          NULL, NULL);
       g_object_unref (root_model);
+      g_object_unref (paintable);
     }
   else
     {
-      gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view), NULL);
+      gtk_picture_set_paintable (GTK_PICTURE (priv->render_node_view), NULL);
     }
 
   gtk_list_box_bind_model (GTK_LIST_BOX (priv->render_node_list),
@@ -930,17 +933,26 @@ render_node_list_selection_changed (GtkListBox           *list,
 {
   GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GskRenderNode *node;
+  GdkPaintable *paintable;
+  GtkTreeListRow *row_item;
 
-  node = get_selected_node (recorder);
-  if (node == NULL)
+  if (row == NULL)
     {
       gtk_widget_set_sensitive (priv->render_node_save_button, FALSE);
       return;
     }
 
+  row_item = g_list_model_get_item (G_LIST_MODEL (priv->render_node_model),
+                                    gtk_list_box_row_get_index (row));
+  paintable = gtk_tree_list_row_get_item (row_item);
+
   gtk_widget_set_sensitive (priv->render_node_save_button, TRUE);
-  gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view), node);
+  gtk_picture_set_paintable (GTK_PICTURE (priv->render_node_view), paintable);
+  node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
   populate_render_node_properties (GTK_LIST_STORE (priv->render_node_properties), node);
+
+  g_object_unref (paintable);
+  g_object_unref (row_item);
 }
 
 static void
