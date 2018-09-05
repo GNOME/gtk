@@ -149,3 +149,11 @@ gtk_render_node_paintable_new (GskRenderNode         *node,
 
   return GDK_PAINTABLE (self);
 }
+
+GskRenderNode *
+gtk_render_node_paintable_get_render_node (GtkRenderNodePaintable *self)
+{
+  g_return_val_if_fail (GTK_IS_RENDER_NODE_PAINTABLE (self), NULL);
+
+  return self->node;
+}
