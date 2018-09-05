@@ -8275,6 +8275,11 @@ gtk_widget_dispose (GObject *object)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
 
+  if (priv->children_observer)
+    gtk_list_list_model_clear (priv->children_observer);
+  if (priv->controller_observer)
+    gtk_list_list_model_clear (priv->controller_observer);
+
   if (priv->parent && GTK_IS_CONTAINER (priv->parent))
     gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
   else if (priv->parent)
@@ -8284,9 +8289,6 @@ gtk_widget_dispose (GObject *object)
 
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
-
-  if (priv->children_observer)
-    gtk_list_list_model_clear (priv->children_observer);
 
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
@@ -12920,6 +12922,9 @@ gtk_widget_add_controller (GtkWidget          *widget,
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
 
   priv->event_controllers = g_list_prepend (priv->event_controllers, controller);
+
+  if (priv->controller_observer)
+    gtk_list_list_model_item_added_at (priv->controller_observer, 0);
 }
 
 /**
@@ -12938,6 +12943,7 @@ gtk_widget_remove_controller (GtkWidget          *widget,
                               GtkEventController *controller)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *before, *list;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
@@ -12945,8 +12951,13 @@ gtk_widget_remove_controller (GtkWidget          *widget,
 
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->unset_widget (controller);
 
-  priv->event_controllers = g_list_remove (priv->event_controllers, controller);
+  list = g_list_find (priv->event_controllers, controller);
+  before = list->prev;
+  priv->event_controllers = g_list_delete_link (priv->event_controllers, list);
   g_object_unref (controller);
+
+  if (priv->controller_observer)
+    gtk_list_list_model_item_removed (priv->controller_observer, before);
 }
 
 GList *
@@ -13225,6 +13236,7 @@ gtk_widget_child_observer_destroyed (gpointer widget)
 
   priv->children_observer = NULL;
 }
+
 /**
  * gtk_widget_observe_children:
  * @widget: a #GtkWidget
@@ -13260,6 +13272,78 @@ gtk_widget_observe_children (GtkWidget *widget)
                                                      gtk_widget_child_observer_destroyed);
 
   return G_LIST_MODEL (priv->children_observer);
+}
+
+static void
+gtk_widget_controller_observer_destroyed (gpointer widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  priv->controller_observer = NULL;
+}
+
+static gpointer
+gtk_widget_controller_list_get_first (gpointer widget)
+{
+  return GTK_WIDGET (widget)->priv->event_controllers;
+}
+
+static gpointer
+gtk_widget_controller_list_get_next (gpointer item,
+                                     gpointer widget)
+{
+  return g_list_next (item);
+}
+
+static gpointer
+gtk_widget_controller_list_get_prev (gpointer item,
+                                     gpointer widget)
+{
+  return g_list_previous (item);
+}
+
+static gpointer
+gtk_widget_controller_list_get_item (gpointer item,
+                                     gpointer widget)
+{
+  return g_object_ref (((GList *) item)->data);
+}
+
+/**
+ * gtk_widget_observe_controllers:
+ * @widget: a #GtkWidget
+ *
+ * Returns a #GListModel to track the #GtkEventControllers of @widget. 
+ *
+ * Calling this function will enable extra internal bookkeeping to track
+ * controllers and emit signals on the returned listmodel. It may slow down
+ * operations a lot.
+ * 
+ * Applications should try hard to avoid calling this function because of
+ * the slowdowns.
+ *
+ * Returns: (transfer full): a #GListModel tracking @widget's controllers
+ **/
+GListModel *
+gtk_widget_observe_controllers (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if (priv->controller_observer)
+    return g_object_ref (G_LIST_MODEL (priv->controller_observer));
+
+  priv->controller_observer = gtk_list_list_model_new (GTK_TYPE_EVENT_CONTROLLER,
+                                                      gtk_widget_controller_list_get_first,
+                                                      gtk_widget_controller_list_get_next,
+                                                      gtk_widget_controller_list_get_prev,
+                                                      NULL,
+                                                      gtk_widget_controller_list_get_item,
+                                                      widget,
+                                                      gtk_widget_controller_observer_destroyed);
+
+  return G_LIST_MODEL (priv->controller_observer);
 }
 
 /**
