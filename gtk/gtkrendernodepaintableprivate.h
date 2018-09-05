@@ -31,6 +31,8 @@ G_DECLARE_FINAL_TYPE (GtkRenderNodePaintable, gtk_render_node_paintable, GTK, RE
 GdkPaintable *  gtk_render_node_paintable_new   (GskRenderNode         *node,
                                                  const graphene_rect_t *bounds);
 
+GskRenderNode * gtk_render_node_paintable_get_render_node       (GtkRenderNodePaintable *self);
+
 G_END_DECLS
 
 #endif /* __GTK_RENDER_NODE_PAINTABLE_H__ */
