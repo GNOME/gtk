@@ -16,15 +16,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 17:16+0000\n"
-"PO-Revision-Date: 2018-07-23 11:55+0200\n"
+"POT-Creation-Date: 2018-09-03 10:46+0000\n"
+"PO-Revision-Date: 2018-09-05 11:14+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -691,18 +691,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415
-#: gtk/gtkwindow.c:9248
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9253
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439
-#: gtk/gtkwindow.c:9257
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9262
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439
-#: gtk/gtkwindow.c:9214
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9219
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1256,7 +1253,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12717 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12722 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1307,7 +1304,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12718
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12723
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -2297,7 +2294,7 @@ msgstr "_Nombre"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3612 gtk/gtkplacessidebar.c:3680
+#: gtk/gtkplacessidebar.c:3615 gtk/gtkplacessidebar.c:3683
 #: gtk/gtkplacesview.c:1633
 msgid "_Open"
 msgstr "_Abrir"
@@ -2468,7 +2465,7 @@ msgstr "Copiar _ubicación"
 msgid "_Add to Bookmarks"
 msgstr "_Añadir a los marcadores"
 
-#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2728
+#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2731
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "_Renombrar"
@@ -2669,7 +2666,6 @@ msgid "Number Formatting"
 msgstr "Formato de número"
 
 #: gtk/gtkfontchooserwidget.c:2116
-#| msgid "Dark Variant"
 msgid "Character Variants"
 msgstr "Variantes de caracteres"
 
@@ -2681,7 +2677,7 @@ msgstr "Falló al crear el contexto de OpenGL"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9284
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9289
 msgid "Close"
 msgstr "Cerrar"
 
@@ -3104,11 +3100,11 @@ msgid "Show other locations"
 msgstr "Mostrar otras ubicaciones"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3700
+#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3703
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3701
+#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3704
 msgid "_Stop"
 msgstr "_Detener"
 
@@ -3146,90 +3142,96 @@ msgstr "_Desbloquear dispositivo"
 msgid "_Lock Device"
 msgstr "_Bloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3381
+#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3384
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "No se pudo iniciar «%s»"
 
-#: gtk/gtkplacessidebar.c:2419
+#: gtk/gtkplacessidebar.c:2420
+#, c-format
+#| msgid "Opening “%s”."
+msgid "Error unlocking “%s”"
+msgstr "Error al desbloquear «%s»"
+
+#: gtk/gtkplacessidebar.c:2422
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "No se puede acceder a «%s»"
 
-#: gtk/gtkplacessidebar.c:2653
+#: gtk/gtkplacessidebar.c:2656
 msgid "This name is already taken"
 msgstr "Este nombre ya está en uso"
 
-#: gtk/gtkplacessidebar.c:2722 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2725 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Nombre"
 
-#: gtk/gtkplacessidebar.c:2922
+#: gtk/gtkplacessidebar.c:2925
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "No se puede desmontar «%s»"
 
-#: gtk/gtkplacessidebar.c:3098
+#: gtk/gtkplacessidebar.c:3101
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "No se pudo detener «%s»"
 
-#: gtk/gtkplacessidebar.c:3127
+#: gtk/gtkplacessidebar.c:3130
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "No se pudo expulsar «%s»"
 
-#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3185
+#: gtk/gtkplacessidebar.c:3159 gtk/gtkplacessidebar.c:3188
 #, c-format
 msgid "Unable to eject %s"
 msgstr "No se pudo expulsar %s"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3336
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3617 gtk/gtkplacessidebar.c:3683
+#: gtk/gtkplacessidebar.c:3620 gtk/gtkplacessidebar.c:3686
 #: gtk/gtkplacesview.c:1643
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3623 gtk/gtkplacessidebar.c:3686
+#: gtk/gtkplacessidebar.c:3626 gtk/gtkplacessidebar.c:3689
 #: gtk/gtkplacesview.c:1654
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
-#: gtk/gtkplacessidebar.c:3690
+#: gtk/gtkplacessidebar.c:3693
 msgid "_Add Bookmark"
 msgstr "_Añadir marcador"
 
-#: gtk/gtkplacessidebar.c:3691
+#: gtk/gtkplacessidebar.c:3694
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: gtk/gtkplacessidebar.c:3692
+#: gtk/gtkplacessidebar.c:3695
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gtk/gtkplacessidebar.c:3696 gtk/gtkplacesview.c:1688
+#: gtk/gtkplacessidebar.c:3699 gtk/gtkplacesview.c:1688
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3697 gtk/gtkplacesview.c:1678
+#: gtk/gtkplacessidebar.c:3700 gtk/gtkplacesview.c:1678
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: gtk/gtkplacessidebar.c:3698
+#: gtk/gtkplacessidebar.c:3701
 msgid "_Eject"
 msgstr "_Expulsar"
 
-#: gtk/gtkplacessidebar.c:3699
+#: gtk/gtkplacessidebar.c:3702
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:4145 gtk/gtkplacesview.c:1121
+#: gtk/gtkplacessidebar.c:4148 gtk/gtkplacesview.c:1121
 msgid "Computer"
 msgstr "Equipo"
 
@@ -3398,7 +3400,7 @@ msgstr "La razón más probable es que no se pudiera crear un archivo temporal."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:610 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3709,12 +3711,12 @@ msgstr "Resultados de búsqueda"
 msgid "Search Shortcuts"
 msgstr "Atajos de búsqueda"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:326
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "No se han encontrado resultados"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:340
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
 #: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Pruebe una búsqueda diferente"
@@ -3917,24 +3919,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9232
+#: gtk/gtkwindow.c:9237
 msgid "Move"
 msgstr "Mover"
 
-#: gtk/gtkwindow.c:9240
+#: gtk/gtkwindow.c:9245
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: gtk/gtkwindow.c:9271
+#: gtk/gtkwindow.c:9276
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: gtk/gtkwindow.c:12705
+#: gtk/gtkwindow.c:12710
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: gtk/gtkwindow.c:12707
+#: gtk/gtkwindow.c:12712
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3945,7 +3947,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:12712
+#: gtk/gtkwindow.c:12717
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -4014,7 +4016,7 @@ msgid "CSS Property"
 msgstr "Propiedad CSS"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
-#: gtk/ui/gtkcoloreditor.ui:295
+#: gtk/ui/gtkcoloreditor.ui:320
 msgid "Value"
 msgstr "Valor"
 
@@ -6642,8 +6644,10 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:96
+#| msgctxt "Script"
+#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Jeroglíficos egipcios"
 
 #: gtk/script-names.c:97
@@ -6949,7 +6953,7 @@ msgstr "Soyombo"
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Zanabazar cuadrada"
 
 #: gtk/ui/gtkaboutdialog.ui:133
 msgid "About"
@@ -7019,76 +7023,80 @@ msgstr "_Terminar"
 msgid "Select a Color"
 msgstr "Seleccionar un color"
 
-#: gtk/ui/gtkcoloreditor.ui:64
+#: gtk/ui/gtkcoloreditor.ui:57
+msgid "Pick a color from the screen"
+msgstr "Elija un color para la pantalla"
+
+#: gtk/ui/gtkcoloreditor.ui:89
 msgid "Color Name"
 msgstr "Nombre del color"
 
-#: gtk/ui/gtkcoloreditor.ui:155
+#: gtk/ui/gtkcoloreditor.ui:180
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:171
+#: gtk/ui/gtkcoloreditor.ui:196
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:202
+#: gtk/ui/gtkcoloreditor.ui:227
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:218
+#: gtk/ui/gtkcoloreditor.ui:243
 msgid "Hue"
 msgstr "Tono"
 
-#: gtk/ui/gtkcoloreditor.ui:250
+#: gtk/ui/gtkcoloreditor.ui:275
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:260
+#: gtk/ui/gtkcoloreditor.ui:285
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:276
+#: gtk/ui/gtkcoloreditor.ui:301
 msgid "Saturation"
 msgstr "Saturación"
 
-#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:207
+#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
 msgid "Smileys & People"
 msgstr "Caritas y personas"
 
-#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:217
+#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
 msgid "Body & Clothing"
 msgstr "Cuerpo y ropa"
 
-#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:227
+#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
 msgid "Animals & Nature"
 msgstr "Animales y naturaleza"
 
-#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:237
+#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
 msgid "Food & Drink"
 msgstr "Comida y bebida"
 
-#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:247
+#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
 msgid "Travel & Places"
 msgstr "Viajes y lugares"
 
-#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
 msgid "Activities"
 msgstr "Actividades"
 
-#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:267
+#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:302
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objetos"
 
-#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:277
+#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:317
 msgid "Symbols"
 msgstr "Símbolos"
 
-#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:287
+#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:332
 msgid "Flags"
 msgstr "Banderas"
 
@@ -7666,10 +7674,18 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vietnamita (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:82
+#: modules/input/imwayland.c:100
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
+
+#. ID
+#: modules/input/imwaylandgtk.c:82
+#| msgctxt "input method menu"
+#| msgid "Wayland"
+msgctxt "input method menu"
+msgid "Waylandgtk"
+msgstr "Waylandgtk"
 
 #. ID
 #: modules/input/imxim.c:26
