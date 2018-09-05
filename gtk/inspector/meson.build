@@ -11,7 +11,6 @@ inspector_sources = files(
   'graphdata.c',
   'gtkstackcombo.c',
   'gtktreemodelcssnode.c',
-  'gtktreemodelrendernode.c',
   'highlightoverlay.c',
   'init.c',
   'inspect-button.c',

@@ -81,27 +81,9 @@
                       <class name="sidebar"/>
                     </style>
                     <child>
-                      <object class="GtkTreeView" id="render_node_tree">
+                      <object class="GtkListBox" id="render_node_list">
                         <property name="vexpand">1</property>
-                        <property name="search-column">0</property>
-                        <property name="enable-search">0</property>
-                        <property name="headers-visible">0</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection">
-                            <signal name="changed" handler="render_node_list_selection_changed"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="render_node_name_column">
-                            <property name="resizable">1</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
+                        <signal name="row-selected" handler="render_node_list_selection_changed"/>
                       </object>
                     </child>
                   </object>
