@@ -345,6 +345,11 @@ create_widget_for_render_node (gpointer row_item,
     }
   gtk_container_add (GTK_CONTAINER (box), child);
 
+  /* icon */
+  child = gtk_image_new_from_paintable (paintable);
+  gtk_container_add (GTK_CONTAINER (box), child);
+
+  /* name */
   name = node_name (node);
   child = gtk_label_new (name);
   g_free (name);
