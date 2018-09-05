@@ -307,7 +307,7 @@ get_portal_path (GDBusConnection  *connection,
     if (sender[i] == '.')
       sender[i] = '_';
 
-  path = g_strconcat ("/org/freedesktop/portal/desktop", "/", kind, "/", sender, "/", token, NULL);
+  path = g_strconcat ("/org/freedesktop/portal/desktop", "/", kind, "/", sender, "/", *token, NULL);
 
   g_free (sender);
 
