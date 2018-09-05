@@ -242,9 +242,13 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
     default:
       {
         double image_ratio = (double) width / height;
-        double ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
+        double ratio;
         double x, y, w, h;
 
+        if (self->paintable == NULL)
+          break;
+
+        ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
         if (ratio == 0)
           {
             w = width;
@@ -268,7 +272,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
         gtk_css_style_snapshot_icon_paintable (style,
                                                snapshot,
                                                self->paintable,
-                                               width, height,
+                                               w, h,
                                                self->texture_is_symbolic);
         gtk_snapshot_offset (snapshot, -x, -y);
       }
