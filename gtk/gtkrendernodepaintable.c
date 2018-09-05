@@ -60,13 +60,16 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
                                    &transform);
     }
 
-  gtk_snapshot_push_clip (snapshot, &self->bounds);
   gtk_snapshot_offset (snapshot, -self->bounds.origin.x, -self->bounds.origin.y);
 
+  gtk_snapshot_push_clip (snapshot, &self->bounds);
+
   gtk_snapshot_append_node (snapshot, self->node);
+  //gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 1, 0, 0, 1 }, &self->bounds);
+
+  gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_offset (snapshot, self->bounds.origin.x, self->bounds.origin.y);
-  gtk_snapshot_pop (snapshot);
 
   if (needs_transform)
     gtk_snapshot_pop (snapshot);
