@@ -40,7 +40,6 @@
 #include "object-tree.h"
 #include "prop-list.h"
 #include "recorder.h"
-#include "rendernodeview.h"
 #include "resource-list.h"
 #include "selector.h"
 #include "signals-list.h"
@@ -85,7 +84,6 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_STATISTICS);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
-  g_type_ensure (GTK_TYPE_RENDER_NODE_VIEW);
   g_type_ensure (GTK_TYPE_STACK_COMBO);
 
   if (extension_point == NULL)
