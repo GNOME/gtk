@@ -826,15 +826,22 @@ gtk_application_impl_dbus_finalize (GObject *object)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) object;
 
-  g_dbus_connection_call (dbus->session,
-                          "org.freedesktop.portal.Desktop",
-                          dbus->session_id,
-                          "org.freedesktop.portal.Session",
-                          "Close",
-                          NULL, NULL, 0, -1, NULL, NULL, NULL);
+  if (dbus->session_id)
+    {
+      g_dbus_connection_call (dbus->session,
+                              "org.freedesktop.portal.Desktop",
+                              dbus->session_id,
+                              "org.freedesktop.portal.Session",
+                              "Close",
+                              NULL, NULL, 0, -1, NULL, NULL, NULL);
 
-  g_free (dbus->session_id);
-  g_dbus_connection_signal_unsubscribe (dbus->session, dbus->state_changed_handler);
+      g_free (dbus->session_id);
+    }
+
+  if (dbus->state_changed_handler)
+    g_dbus_connection_signal_unsubscribe (dbus->session,
+                                          dbus->state_changed_handler);
+
   g_clear_object (&dbus->inhibit_proxy);
   g_slist_free_full (dbus->inhibit_handles, inhibit_handle_free);
   g_free (dbus->app_menu_path);
