@@ -6,6 +6,7 @@
     <property name="child-model">store</property>
   </object>
   <template class="IconBrowserWindow" parent="GtkApplicationWindow">
+    <style><class name="devel"/></style>
     <property name="title" translatable="yes">Icon Browser</property>
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
