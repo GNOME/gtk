@@ -674,6 +674,8 @@ headerbar entry, headerbar spinbutton, headerbar separator, headerbar button { m
 
 headerbar switch { margin-top: 9px; margin-bottom: 9px; }
 
+headerbar.titlebar headerbar:not(.titlebar) { background: none; box-shadow: none; }
+
 .background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar, .background:not(.tiled-top):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled-top):not(.maximized):not(.solid-csd) .titlebar, .background:not(.tiled-left):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled-left):not(.maximized):not(.solid-csd) .titlebar, .background:not(.tiled-right):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled-right):not(.maximized):not(.solid-csd) .titlebar, .background:not(.tiled-bottom):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled-bottom):not(.maximized):not(.solid-csd) .titlebar { border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
 window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + headerbar:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + headerbar, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:first-child { border-top-left-radius: 7px; }

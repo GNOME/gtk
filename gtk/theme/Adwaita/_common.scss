@@ -1652,6 +1652,16 @@ headerbar {
     margin-top: 9px;
     margin-bottom: 9px;
   }
+
+  &.titlebar headerbar:not(.titlebar) {
+    // Drop the background of non-titlebar nested headerbars. This is needed to
+    // work around headerbar sliding animation issues without refactoring
+    // Adwaita's support of titlebars and headerbars as it may break
+    // applications.
+    // See https://gitlab.gnome.org/GNOME/gtk/issues/1264 for more information.
+    background: none;
+    box-shadow: none;
+  }
 }
 
 .background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar,
