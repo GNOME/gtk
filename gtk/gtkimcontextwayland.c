@@ -105,6 +105,9 @@ notify_external_change (GtkIMContextWayland *context)
 {
   gboolean result;
 
+  if (!global->current)
+    return;
+
   context->surrounding_change = ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER;
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
 }
