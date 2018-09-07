@@ -678,7 +678,7 @@ searchbar > revealer > box { padding: 6px; border-width: 0 0 1px; }
 
 .solid-csd .titlebar:backdrop:dir(rtl):not(headerbar), .solid-csd .titlebar:backdrop:dir(ltr):not(headerbar), .solid-csd .titlebar:dir(rtl):not(headerbar), .solid-csd .titlebar:dir(ltr):not(headerbar), .solid-csd headerbar:backdrop:dir(rtl), .solid-csd headerbar:backdrop:dir(ltr), .solid-csd headerbar:dir(rtl), .solid-csd headerbar:dir(ltr) { margin-left: -1px; margin-right: -1px; margin-top: -1px; border-radius: 0; box-shadow: none; }
 
-headerbar entry, headerbar spinbutton, headerbar separator, headerbar button { margin-top: 6px; margin-bottom: 6px; }
+headerbar entry, headerbar spinbutton, headerbar separator:not(.sidebar), headerbar button { margin-top: 6px; margin-bottom: 6px; }
 
 headerbar switch { margin-top: 9px; margin-bottom: 9px; }
 
@@ -1589,8 +1589,6 @@ scrolledwindow junction:backdrop { border-image-source: linear-gradient(to botto
 
 separator { background: rgba(0, 0, 0, 0.1); min-width: 1px; min-height: 1px; }
 
-separator.selection-mode { background-color: #215d9c; }
-
 /********* Lists * */
 list { color: black; background-color: #ffffff; border-color: #b6b6b3; }
 
@@ -1683,9 +1681,9 @@ filechooserbutton:drop(active) { box-shadow: none; border-color: transparent; }
 /*********** Sidebar * */
 .sidebar { border-style: none; background-color: #f4f4f3; }
 
-stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list, stacksidebar.sidebar.left:dir(rtl) list, .sidebar:dir(ltr), .sidebar.left, .sidebar.left:dir(rtl) { border-right: 1px solid #b6b6b3; border-left-style: none; }
+stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list, stacksidebar.sidebar.left:dir(rtl) list, .sidebar:not(separator):dir(ltr), .sidebar:not(separator).left, .sidebar:not(separator).left:dir(rtl) { border-right: 1px solid #b6b6b3; border-left-style: none; }
 
-stacksidebar.sidebar:dir(rtl) list .sidebar:dir(rtl), stacksidebar.sidebar.right list .sidebar:dir(rtl), .sidebar.right { border-left: 1px solid #b6b6b3; border-right-style: none; }
+stacksidebar.sidebar:dir(rtl) list .sidebar:not(separator):dir(rtl), stacksidebar.sidebar.right list .sidebar:not(separator):dir(rtl), .sidebar:not(separator).right { border-left: 1px solid #b6b6b3; border-right-style: none; }
 
 .sidebar:backdrop { background-color: #f2f2f2; border-color: #c0c0bd; transition: 200ms ease-out; }
 
@@ -1698,6 +1696,12 @@ stacksidebar row { padding: 10px 4px; }
 stacksidebar row > label { padding-left: 6px; padding-right: 6px; }
 
 stacksidebar row.needs-attention > label { background-size: 6px 6px, 0 0; }
+
+separator.sidebar { background-color: #b6b6b3; }
+
+separator.sidebar:backdrop { background-color: #c0c0bd; }
+
+separator.sidebar.selection-mode, .selection-mode separator.sidebar { background-color: #215d9c; }
 
 /**************** File chooser * */
 row image.sidebar-icon { opacity: 0.7; }
