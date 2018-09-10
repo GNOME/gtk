@@ -1165,16 +1165,7 @@ spinbutton {
     padding: 0;
 
     entry {
-      min-width: 28px;
-      // reset all the other props since the spinbutton node is styled here
-      margin: 0;
-      background: none;
-      background-color: transparent;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-
-      &:backdrop:disabled { background-color: transparent; }
+      @extend %spinbutton_horz_entry;
     }
 
     button {
@@ -1229,6 +1220,10 @@ spinbutton {
 
   // OSD horizontal
   .osd &:not(.vertical) {
+    entry {
+      @extend %spinbutton_horz_entry;
+    }
+
     button {
       @include button(undecorated);
 
@@ -1346,6 +1341,17 @@ spinbutton {
   }
 }
 
+%spinbutton_horz_entry {
+  // reset all the other props since the spinbutton node is styled here
+  margin: 0;
+  background: none;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+
+  &:backdrop:disabled { background-color: transparent; }
+}
 
 /**************
  * ComboBoxes *
