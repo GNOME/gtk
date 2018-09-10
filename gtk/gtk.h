@@ -141,6 +141,7 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtklockbutton.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkmaplistmodel.h>
 #include <gtk/gtkmediacontrols.h>
 #include <gtk/gtkmediafile.h>
 #include <gtk/gtkmediastream.h>
