@@ -1664,7 +1664,7 @@ headerbar {
   // add vertical margins to common widget on the headerbar to avoid them spanning the whole height
   entry,
   spinbutton,
-  separator,
+  separator:not(.sidebar),
   button {
     margin-top: 6px;
     margin-bottom: 6px;
@@ -3836,19 +3836,21 @@ filechooserbutton:drop(active) {
   border-style: none;
   background-color: mix($bg_color, $base_color, 50%);
 
-  @at-root %sidebar_left,
-  &:dir(ltr),
-  &.left,
-  &.left:dir(rtl) {
-    border-right: 1px solid $borders_color;
-    border-left-style: none;
-  }
+  &:not(separator) {
+    @at-root %sidebar_left,
+    &:dir(ltr),
+    &.left,
+    &.left:dir(rtl) {
+      border-right: 1px solid $borders_color;
+      border-left-style: none;
+    }
 
-  @at-root %sidebar_right
-  &:dir(rtl),
-  &.right {
-    border-left: 1px solid $borders_color;
-    border-right-style: none;
+    @at-root %sidebar_right
+    &:dir(rtl),
+    &.right {
+      border-left: 1px solid $borders_color;
+      border-right-style: none;
+    }
   }
 
   &:backdrop {
@@ -3890,8 +3892,6 @@ stacksidebar {
 
 separator.sidebar {
   background-color: $borders_color;
-  border-style: none;
-  margin: 0px 0px 0px 0px;
 
   &:backdrop {
     background-color: $backdrop_borders_color;
