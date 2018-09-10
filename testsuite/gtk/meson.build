@@ -31,6 +31,7 @@ tests = [
   ['keyhash', ['../../gtk/gtkkeyhash.c', gtkresources, '../../gtk/gtkprivate.c'], gtk_cargs],
   ['listbox'],
   ['main'],
+  ['maplistmodel'],
   ['notify'],
   ['no-gtk-init'],
   ['object'],
