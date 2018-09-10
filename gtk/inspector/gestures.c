@@ -37,55 +37,12 @@ enum
 
 struct _GtkInspectorGesturesPrivate
 {
+  GtkWidget *listbox;
   GtkSizeGroup *sizegroup;
-  GObject *object;
   GtkInspectorObjectTree *object_tree;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGestures, gtk_inspector_gestures, GTK_TYPE_BOX)
-
-static void
-gtk_inspector_gestures_init (GtkInspectorGestures *sl)
-{
-  sl->priv = gtk_inspector_gestures_get_instance_private (sl);
-  sl->priv->sizegroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  g_object_set (sl,
-                "orientation", GTK_ORIENTATION_VERTICAL,
-                "margin-start", 60,
-                "margin-end", 60,
-                "margin-top", 60,
-                "margin-bottom", 30,
-                "spacing", 10,
-                NULL);
-}
-
-static void
-clear_all (GtkInspectorGestures *sl)
-{
-  GList *children, *l;
-  GtkWidget *child;
-
-  children = gtk_container_get_children (GTK_CONTAINER (sl));
-  for (l = children; l; l = l->next)
-    {
-      child = l->data;
-      gtk_container_remove (GTK_CONTAINER (sl), child);
-    }
-  g_list_free (children);
-}
-
-static void
-phase_changed_cb (GtkComboBox *combo, GtkInspectorGestures *sl)
-{
-  GtkWidget *row;
-  GtkPropagationPhase phase;
-  GtkGesture *gesture;
-
-  phase = gtk_combo_box_get_active (combo);
-  row = gtk_widget_get_ancestor (GTK_WIDGET (combo), GTK_TYPE_LIST_BOX_ROW);
-  gesture = GTK_GESTURE (g_object_get_data (G_OBJECT (row), "gesture"));
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), phase);
-}
 
 static void
 row_activated (GtkListBox           *box,
@@ -99,11 +56,66 @@ row_activated (GtkListBox           *box,
 }
 
 static void
-add_gesture (GtkInspectorGestures *sl,
-             GObject              *object,
-             GtkWidget            *listbox,
-             GtkGesture           *gesture,
-             GtkPropagationPhase   phase)
+gtk_inspector_gestures_init (GtkInspectorGestures *sl)
+{
+  GtkWidget *frame;
+
+  sl->priv = gtk_inspector_gestures_get_instance_private (sl);
+  sl->priv->sizegroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  g_object_set (sl,
+                "orientation", GTK_ORIENTATION_VERTICAL,
+                "margin-start", 60,
+                "margin-end", 60,
+                "margin-top", 60,
+                "margin-bottom", 30,
+                "spacing", 10,
+                NULL);
+
+  frame = gtk_frame_new (NULL);
+  gtk_widget_show (frame);
+  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+
+  sl->priv->listbox = gtk_list_box_new ();
+  g_signal_connect (sl->priv->listbox, "row-activated", G_CALLBACK (row_activated), sl);
+  gtk_container_add (GTK_CONTAINER (frame), sl->priv->listbox);
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (sl->priv->listbox), GTK_SELECTION_NONE);
+
+  gtk_container_add (GTK_CONTAINER (sl), frame);
+
+}
+
+static void
+clear_all (GtkInspectorGestures *sl)
+{
+  GList *children, *l;
+  GtkWidget *child;
+
+  children = gtk_container_get_children (GTK_CONTAINER (sl->priv->listbox));
+  for (l = children; l; l = l->next)
+    {
+      child = l->data;
+      gtk_container_remove (GTK_CONTAINER (sl->priv->listbox), child);
+    }
+  g_list_free (children);
+}
+
+static void
+phase_changed_cb (GtkComboBox *combo, GtkInspectorGestures *sl)
+{
+  GtkWidget *row;
+  GtkPropagationPhase phase;
+  GtkEventController *controller;
+
+  phase = gtk_combo_box_get_active (combo);
+  row = gtk_widget_get_ancestor (GTK_WIDGET (combo), GTK_TYPE_LIST_BOX_ROW);
+  controller = GTK_EVENT_CONTROLLER (g_object_get_data (G_OBJECT (row), "gesture"));
+  gtk_event_controller_set_propagation_phase (controller, phase);
+}
+
+static void
+add_controller (GtkInspectorGestures *sl,
+                GObject              *object,
+                GtkEventController   *controller)
 {
   GtkWidget *row;
   GtkWidget *box;
@@ -111,13 +123,12 @@ add_gesture (GtkInspectorGestures *sl,
   GtkWidget *combo;
 
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (listbox), row);
-  gtk_widget_show (row);
+  gtk_container_add (GTK_CONTAINER (sl->priv->listbox), row);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   gtk_container_add (GTK_CONTAINER (row), box);
   g_object_set (box, "margin", 10, NULL);
   gtk_widget_show (box);
-  label = gtk_label_new (g_type_name_from_instance ((GTypeInstance*)gesture));
+  label = gtk_label_new (G_OBJECT_TYPE_NAME (controller));
   g_object_set (label, "xalign", 0.0, NULL);
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_size_group_add_widget (sl->priv->sizegroup, label);
@@ -130,94 +141,37 @@ add_gesture (GtkInspectorGestures *sl,
   gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_CAPTURE, C_("event phase", "Capture"));
   gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_BUBBLE, C_("event phase", "Bubble"));
   gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_TARGET, C_("event phase", "Target"));
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), phase);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_event_controller_get_propagation_phase (controller));
   gtk_container_add (GTK_CONTAINER (box), combo);
   gtk_widget_show (combo);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
-  g_object_set_data (G_OBJECT (row), "gesture", gesture);
+  g_object_set_data (G_OBJECT (row), "gesture", controller);
   g_signal_connect (combo, "changed", G_CALLBACK (phase_changed_cb), sl);
-}
-
-static void
-add_gesture_group (GtkInspectorGestures *sl,
-                   GObject              *object,
-                   GtkGesture           *gesture,
-                   GHashTable           *hash)
-{
-  GtkWidget *frame;
-  GtkWidget *listbox;
-  GList *list, *l;
-  GtkGesture *g;
-  GtkPropagationPhase phase;
-
-  frame = gtk_frame_new (NULL);
-  gtk_widget_show (frame);
-  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
-
-  listbox = gtk_list_box_new ();
-  g_signal_connect (listbox, "row-activated", G_CALLBACK (row_activated), sl);
-  gtk_container_add (GTK_CONTAINER (frame), listbox);
-  gtk_widget_show (listbox);
-  gtk_list_box_set_selection_mode (GTK_LIST_BOX (listbox), GTK_SELECTION_NONE);
-
-  list = gtk_gesture_get_group (gesture);
-  for (l = list; l; l = l->next)
-    {
-      g = l->data;
-      phase = GPOINTER_TO_INT (g_hash_table_lookup (hash, g));
-      add_gesture (sl, object, listbox, g, phase);
-      g_hash_table_remove (hash, g);
-    }
-  g_list_free (list);
-
-  gtk_container_add (GTK_CONTAINER (sl), frame);
 }
 
 void
 gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
                                    GObject              *object)
 {
-  GHashTable *hash;
-  GHashTableIter iter;
+  GtkPropagationPhase phase;
   GList *list, *l;
-  gint phase;
 
   clear_all (sl);
-  gtk_widget_hide (GTK_WIDGET (sl));
 
   if (!GTK_IS_WIDGET (object))
     return;
 
-  hash = g_hash_table_new (g_direct_hash, g_direct_equal);
   for (phase = GTK_PHASE_NONE; phase <= GTK_PHASE_TARGET; phase++)
     {
       list = _gtk_widget_list_controllers (GTK_WIDGET (object), phase);
       for (l = list; l; l = l->next)
         {
-          GtkEventController *controller = l->data;
-
-          if (GTK_IS_GESTURE (controller))
-            g_hash_table_insert (hash, controller, GINT_TO_POINTER (phase));
+          add_controller (sl, object, l->data);
         }
       g_list_free (list);
     }
-
-  if (g_hash_table_size (hash))
-    gtk_widget_show (GTK_WIDGET (sl));
-
-  while (g_hash_table_size (hash) > 0)
-    {
-      gpointer key, value;
-      GtkGesture *gesture;
-      g_hash_table_iter_init (&iter, hash);
-      (void)g_hash_table_iter_next (&iter, &key, &value);
-      gesture = key;
-      add_gesture_group (sl, object, gesture, hash);
-    }
-
-  g_hash_table_unref (hash);
 }
 
 static void
