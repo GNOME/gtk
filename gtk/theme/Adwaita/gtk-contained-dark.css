@@ -666,11 +666,11 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 
 .solid-csd .titlebar:backdrop:dir(rtl):not(headerbar), .solid-csd .titlebar:backdrop:dir(ltr):not(headerbar), .solid-csd .titlebar:dir(rtl):not(headerbar), .solid-csd .titlebar:dir(ltr):not(headerbar), .solid-csd headerbar:backdrop:dir(rtl), .solid-csd headerbar:backdrop:dir(ltr), .solid-csd headerbar:dir(rtl), .solid-csd headerbar:dir(ltr) { margin-left: -1px; margin-right: -1px; margin-top: -1px; border-radius: 0; box-shadow: none; }
 
-.titlebar:not(headerbar) headerbar:not(.titlebar), headerbar.titlebar headerbar:not(.titlebar) { background-color: rgba 0, 0, 0, 0; background-image: none; box-shadow: none; }
-
-headerbar entry, headerbar spinbutton, headerbar separator, headerbar button { margin-top: 6px; margin-bottom: 6px; }
+headerbar entry, headerbar spinbutton, headerbar separator:not(.sidebar), headerbar button { margin-top: 6px; margin-bottom: 6px; }
 
 headerbar switch { margin-top: 9px; margin-bottom: 9px; }
+
+headerbar.titlebar headerbar:not(.titlebar) { background: none; box-shadow: none; }
 
 .background .titlebar:backdrop, .background .titlebar { border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
@@ -1637,9 +1637,9 @@ filechooserbutton:drop(active) { box-shadow: none; border-color: transparent; }
 /*********** Sidebar * */
 .sidebar { border-style: none; background-color: #2b3032; }
 
-stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list, stacksidebar.sidebar.left:dir(rtl) list, .sidebar:dir(ltr), .sidebar.left, .sidebar.left:dir(rtl) { border-right: 1px solid #1b1f20; border-left-style: none; }
+stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list, stacksidebar.sidebar.left:dir(rtl) list, .sidebar:not(separator):dir(ltr), .sidebar:not(separator).left, .sidebar:not(separator).left:dir(rtl) { border-right: 1px solid #1b1f20; border-left-style: none; }
 
-stacksidebar.sidebar:dir(rtl) list .sidebar:dir(rtl), stacksidebar.sidebar.right list .sidebar:dir(rtl), .sidebar.right { border-left: 1px solid #1b1f20; border-right-style: none; }
+stacksidebar.sidebar:dir(rtl) list .sidebar:not(separator):dir(rtl), stacksidebar.sidebar.right list .sidebar:not(separator):dir(rtl), .sidebar:not(separator).right { border-left: 1px solid #1b1f20; border-right-style: none; }
 
 .sidebar:backdrop { background-color: #2c3133; border-color: #202425; transition: 200ms ease-out; }
 
@@ -1653,7 +1653,7 @@ stacksidebar row > label { padding-left: 6px; padding-right: 6px; }
 
 stacksidebar row.needs-attention > label { background-size: 6px 6px, 0 0; }
 
-separator.sidebar { background-color: #1b1f20; border-style: none; margin: 0px 0px 0px 0px; }
+separator.sidebar { background-color: #1b1f20; }
 
 separator.sidebar:backdrop { background-color: #202425; }
 
