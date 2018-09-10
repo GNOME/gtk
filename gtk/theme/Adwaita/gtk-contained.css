@@ -1667,6 +1667,12 @@ stacksidebar row > label { padding-left: 6px; padding-right: 6px; }
 
 stacksidebar row.needs-attention > label { background-size: 6px 6px, 0 0; }
 
+separator.sidebar { background-color: #b6b6b3; border-style: none; margin: 0px 0px 0px 0px; }
+
+separator.sidebar:backdrop { background-color: #c0c0bd; }
+
+separator.sidebar.selection-mode, .selection-mode separator.sidebar { background-color: #215d9c; }
+
 /**************** File chooser * */
 row image.sidebar-icon { opacity: 0.7; }
 

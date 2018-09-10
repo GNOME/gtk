@@ -3888,6 +3888,21 @@ stacksidebar {
   }
 }
 
+separator.sidebar {
+  background-color: $borders_color;
+  border-style: none;
+  margin: 0px 0px 0px 0px;
+
+  &:backdrop {
+    background-color: $backdrop_borders_color;
+  }
+
+  &.selection-mode,
+  .selection-mode & {
+    background-color: darken($selected_bg_color, 20%);
+  }
+}
+
 
 /****************
  * File chooser *
