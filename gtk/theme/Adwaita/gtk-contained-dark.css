@@ -489,10 +489,6 @@ button:link > label, button:visited > label { text-decoration-line: underline; }
 /***************** GtkSpinButton * */
 spinbutton:not(.vertical) { padding: 0; }
 
-spinbutton:not(.vertical) entry { min-width: 28px; margin: 0; background: none; background-color: transparent; border: none; border-radius: 0; box-shadow: none; }
-
-spinbutton:not(.vertical) entry:backdrop:disabled { background-color: transparent; }
-
 spinbutton:not(.vertical) button { min-height: 16px; margin: 0; padding-bottom: 0; padding-top: 0; color: #dadad9; background-image: none; border-style: none none none solid; border-color: rgba(27, 31, 32, 0.3); border-radius: 0; box-shadow: none; }
 
 spinbutton:not(.vertical) button:dir(rtl) { border-style: none solid none none; }
@@ -554,6 +550,10 @@ spinbutton.vertical button.down { border-radius: 0 0 3px 3px; border-style: none
 treeview spinbutton:not(.vertical) { min-height: 0; border-style: none; border-radius: 0; }
 
 treeview spinbutton:not(.vertical) entry { min-height: 0; padding: 1px 2px; }
+
+spinbutton:not(.vertical) entry, .osd spinbutton:not(.vertical) entry { min-width: 28px; margin: 0; background: none; background-color: transparent; border: none; border-radius: 0; box-shadow: none; }
+
+spinbutton:not(.vertical) entry:backdrop:disabled { background-color: transparent; }
 
 /************** ComboBoxes * */
 combobox arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); min-height: 16px; min-width: 16px; }
