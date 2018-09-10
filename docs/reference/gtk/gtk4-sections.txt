@@ -1745,6 +1745,27 @@ gtk_link_button_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkmaplistmodel</FILE>
+<TITLE>GtkMapListModel</TITLE>
+GtkMapListModel
+GtkMapListModelMapFunc
+gtk_map_list_model_new
+gtk_map_list_model_set_map_func
+gtk_map_list_model_set_model
+gtk_map_list_model_get_model
+gtk_map_list_model_has_map
+<SUBSECTION Standard>
+GTK_MAP_LIST_MODEL
+GTK_IS_MAP_LIST_MODEL
+GTK_TYPE_MAP_LIST_MODEL
+GTK_MAP_LIST_MODEL_CLASS
+GTK_IS_MAP_LIST_MODEL_CLASS
+GTK_MAP_LIST_MODEL_GET_CLASS
+<SUBSECTION Private>
+gtk_map_list_model_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkmenu</FILE>
 <TITLE>GtkMenu</TITLE>
 GtkMenu
