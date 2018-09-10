@@ -302,6 +302,7 @@ gtk_public_sources = files([
   'gtkprintoperationpreview.c',
   'gtkprintsettings.c',
   'gtkprogressbar.c',
+  'gtkpropertylookuplistmodel.c',
   'gtkradiobutton.c',
   'gtkradiomenuitem.c',
   'gtkradiotoolbutton.c',
