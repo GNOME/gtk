@@ -1269,8 +1269,19 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                           G_MARKUP_TREAT_CDATA_AS_TEXT,
                                           &data, NULL);
 
-  if (!g_markup_parse_context_parse (data.ctx, buffer, length, error))
-    goto out;
+  if (buffer[0] == 'G' &&
+      buffer[1] == 'M' &&
+      buffer[2] == 'U' &&
+      buffer[3] == 0)
+    {
+      if (!g_markup_parse_context_replay (data.ctx, buffer, length, error))
+        goto out;
+    }
+  else
+    {
+      if (!g_markup_parse_context_parse (data.ctx, buffer, length, error))
+        goto out;
+    }
 
   _gtk_builder_finish (builder);
   if (_gtk_builder_lookup_failed (builder, error))

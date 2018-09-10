@@ -57,7 +57,7 @@ for f in get_files('gesture', '.symbolic.png'):
 xml += '\n'
 
 for f in get_files('ui', '.ui'):
-  xml += '    <file preprocess=\'xml-stripblanks\'>ui/{0}</file>\n'.format(f)
+  xml += '    <file preprocess=\'xml-stripblanks,xml-preparse\'>ui/{0}</file>\n'.format(f)
 
 xml += '\n'
 
