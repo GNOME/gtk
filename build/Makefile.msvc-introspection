@@ -109,6 +109,7 @@ $(top_builddir)/build/win32/$(1).msvc.introspect:
 	echo '	--cflags-end	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	'$($(_gir_name)_MSVC_SCANNERFLAGS)'	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	--filelist='$(_gir_name)'_list	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
+	echo '	-L.\vs$$$$(VSVER)\$$$$(CFG)\$$$$(PLAT)\bin	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	-o $$$$@'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '' >>$(top_builddir)/build/win32/$(1).msvc.introspect
 

@@ -34,12 +34,12 @@ EXTRA_DIST += 			\
 	gdkversionmacros.h.in
 
 GDK_CFLAGS_DEFINES =	\
-	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DG_LOG_USE_STRUCTURED=1	\
 	-DGDK_COMPILATION
 
 
 AM_CPPFLAGS =				\
+	-DG_LOG_DOMAIN=\"Gdk\"		\
 	$(GDK_CFLAGS_DEFINES)		\
 	-I$(top_builddir)		\
 	-I$(top_builddir)/gdk		\
