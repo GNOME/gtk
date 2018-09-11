@@ -23,10 +23,15 @@
 
 #include "gtksizegroup.h"
 #include "gtkcomboboxtext.h"
-#include "gtklistbox.h"
+#include "gtkflattenlistmodel.h"
+#include "gtkframe.h"
 #include "gtkgesture.h"
 #include "gtklabel.h"
-#include "gtkframe.h"
+#include "gtklistbox.h"
+#include "gtkmaplistmodel.h"
+#include "gtkpropertylookuplistmodelprivate.h"
+#include "gtkscrolledwindow.h"
+#include "gtksortlistmodel.h"
 #include "gtkwidgetprivate.h"
 
 enum
@@ -38,7 +43,7 @@ enum
 struct _GtkInspectorControllersPrivate
 {
   GtkWidget *listbox;
-  GListModel *model;
+  GtkPropertyLookupListModel *model;
   GtkSizeGroup *sizegroup;
   GtkInspectorObjectTree *object_tree;
 };
@@ -59,28 +64,31 @@ row_activated (GtkListBox              *box,
 static void
 gtk_inspector_controllers_init (GtkInspectorControllers *sl)
 {
-  GtkWidget *frame;
+  GtkWidget *sw, *box;
 
   sl->priv = gtk_inspector_controllers_get_instance_private (sl);
   sl->priv->sizegroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  g_object_set (sl,
-                "orientation", GTK_ORIENTATION_VERTICAL,
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+  g_object_set (box,
                 "margin-start", 60,
                 "margin-end", 60,
                 "margin-top", 60,
                 "margin-bottom", 30,
-                "spacing", 10,
                 NULL);
-
-  frame = gtk_frame_new (NULL);
-  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (sw), box);
+  gtk_widget_set_hexpand (box, TRUE);
+  gtk_widget_set_vexpand (box, TRUE);
 
   sl->priv->listbox = gtk_list_box_new ();
+  gtk_widget_set_halign (sl->priv->listbox, GTK_ALIGN_CENTER);
   g_signal_connect (sl->priv->listbox, "row-activated", G_CALLBACK (row_activated), sl);
-  gtk_container_add (GTK_CONTAINER (frame), sl->priv->listbox);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (sl->priv->listbox), GTK_SELECTION_NONE);
+  gtk_container_add (GTK_CONTAINER (box), sl->priv->listbox);
 
-  gtk_container_add (GTK_CONTAINER (sl), frame);
+  gtk_container_add (GTK_CONTAINER (sl), sw);
 }
 
 static void
@@ -135,22 +143,96 @@ create_controller_widget (gpointer item,
   return row;
 }
 
+static gpointer
+map_to_controllers (gpointer widget,
+                    gpointer unused)
+{
+  gpointer result = gtk_widget_observe_controllers (widget);
+  g_object_unref (widget);
+  return result;
+}
+
+static int
+compare_phases (GtkPropagationPhase first,
+                GtkPropagationPhase second)
+{
+  int priorities[] = {
+    [GTK_PHASE_NONE] = 0,
+    [GTK_PHASE_CAPTURE] = 1,
+    [GTK_PHASE_BUBBLE] = 3,
+    [GTK_PHASE_TARGET] = 2
+  };
+
+  return priorities[first] - priorities[second];
+}
+
+static int
+compare_controllers (gconstpointer _first,
+                     gconstpointer _second,
+                     gpointer      unused)
+{
+  GtkEventController *first = GTK_EVENT_CONTROLLER (_first);
+  GtkEventController *second = GTK_EVENT_CONTROLLER (_second);
+  GtkPropagationPhase first_phase, second_phase;
+  GtkWidget *first_widget, *second_widget;
+  int result;
+
+  
+  first_phase = gtk_event_controller_get_propagation_phase (first);
+  second_phase = gtk_event_controller_get_propagation_phase (second);
+  result = compare_phases (first_phase, second_phase);
+  if (result != 0)
+    return result;
+
+  first_widget = gtk_event_controller_get_widget (first);
+  second_widget = gtk_event_controller_get_widget (second);
+  if (first_widget == second_widget)
+    return 0;
+
+  if (gtk_widget_is_ancestor (first_widget, second_widget))
+    result = -1;
+  else
+    result = 1;
+
+  if (first_phase == GTK_PHASE_BUBBLE)
+    result = -result;
+
+  return result;
+}
+
 void
 gtk_inspector_controllers_set_object (GtkInspectorControllers *sl,
                                       GObject                 *object)
 {
   GtkInspectorControllersPrivate *priv = sl->priv;
+  GtkMapListModel *map_model;
+  GtkFlattenListModel *flatten_model;
+  GtkSortListModel *sort_model;
 
   if (!GTK_IS_WIDGET (object))
     return;
 
-  priv->model = gtk_widget_observe_controllers (GTK_WIDGET (object));
+  priv->model = gtk_property_lookup_list_model_new (GTK_TYPE_WIDGET, "parent");
+  gtk_property_lookup_list_model_set_object (priv->model, object);
+
+  map_model = gtk_map_list_model_new (G_TYPE_LIST_MODEL, G_LIST_MODEL (priv->model), map_to_controllers, NULL, NULL);
+  g_object_unref (priv->model);
+
+  flatten_model = gtk_flatten_list_model_new (GTK_TYPE_EVENT_CONTROLLER, G_LIST_MODEL (map_model));
+
+  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (flatten_model),
+                                        compare_controllers,
+                                        NULL, NULL);
+
   gtk_list_box_bind_model (GTK_LIST_BOX (priv->listbox),
-                           priv->model,
+                           G_LIST_MODEL (sort_model),
                            create_controller_widget,
                            sl,
                            NULL);
-  g_object_unref (priv->model);
+
+  g_object_unref (sort_model);
+  g_object_unref (flatten_model);
+  g_object_unref (map_model);
 }
 
 static void
