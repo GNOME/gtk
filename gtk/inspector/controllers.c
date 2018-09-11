@@ -38,6 +38,7 @@ enum
 struct _GtkInspectorControllersPrivate
 {
   GtkWidget *listbox;
+  GListModel *model;
   GtkSizeGroup *sizegroup;
   GtkInspectorObjectTree *object_tree;
 };
@@ -72,7 +73,6 @@ gtk_inspector_controllers_init (GtkInspectorControllers *sl)
                 NULL);
 
   frame = gtk_frame_new (NULL);
-  gtk_widget_show (frame);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
 
   sl->priv->listbox = gtk_list_box_new ();
@@ -81,22 +81,6 @@ gtk_inspector_controllers_init (GtkInspectorControllers *sl)
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (sl->priv->listbox), GTK_SELECTION_NONE);
 
   gtk_container_add (GTK_CONTAINER (sl), frame);
-
-}
-
-static void
-clear_all (GtkInspectorControllers *sl)
-{
-  GList *children, *l;
-  GtkWidget *child;
-
-  children = gtk_container_get_children (GTK_CONTAINER (sl->priv->listbox));
-  for (l = children; l; l = l->next)
-    {
-      child = l->data;
-      gtk_container_remove (GTK_CONTAINER (sl->priv->listbox), child);
-    }
-  g_list_free (children);
 }
 
 static void
@@ -113,27 +97,25 @@ phase_changed_cb (GtkComboBox             *combo,
   gtk_event_controller_set_propagation_phase (controller, phase);
 }
 
-static void
-add_controller (GtkInspectorControllers *sl,
-                GObject                 *object,
-                GtkEventController      *controller)
+static GtkWidget *
+create_controller_widget (gpointer item,
+                          gpointer user_data)
 {
+  GtkEventController *controller = item;
+  GtkInspectorControllers *sl = user_data;
   GtkWidget *row;
   GtkWidget *box;
   GtkWidget *label;
   GtkWidget *combo;
 
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (sl->priv->listbox), row);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   gtk_container_add (GTK_CONTAINER (row), box);
   g_object_set (box, "margin", 10, NULL);
-  gtk_widget_show (box);
   label = gtk_label_new (G_OBJECT_TYPE_NAME (controller));
   g_object_set (label, "xalign", 0.0, NULL);
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_size_group_add_widget (sl->priv->sizegroup, label);
-  gtk_widget_show (label);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
@@ -144,35 +126,31 @@ add_controller (GtkInspectorControllers *sl,
   gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_TARGET, C_("event phase", "Target"));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_event_controller_get_propagation_phase (controller));
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_widget_show (combo);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
   g_object_set_data (G_OBJECT (row), "controller", controller);
   g_signal_connect (combo, "changed", G_CALLBACK (phase_changed_cb), sl);
+
+  return row;
 }
 
 void
 gtk_inspector_controllers_set_object (GtkInspectorControllers *sl,
                                       GObject                 *object)
 {
-  GtkPropagationPhase phase;
-  GList *list, *l;
-
-  clear_all (sl);
+  GtkInspectorControllersPrivate *priv = sl->priv;
 
   if (!GTK_IS_WIDGET (object))
     return;
 
-  for (phase = GTK_PHASE_NONE; phase <= GTK_PHASE_TARGET; phase++)
-    {
-      list = _gtk_widget_list_controllers (GTK_WIDGET (object), phase);
-      for (l = list; l; l = l->next)
-        {
-          add_controller (sl, object, l->data);
-        }
-      g_list_free (list);
-    }
+  priv->model = gtk_widget_observe_controllers (GTK_WIDGET (object));
+  gtk_list_box_bind_model (GTK_LIST_BOX (priv->listbox),
+                           priv->model,
+                           create_controller_widget,
+                           sl,
+                           NULL);
+  g_object_unref (priv->model);
 }
 
 static void
