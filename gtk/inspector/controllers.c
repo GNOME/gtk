@@ -23,10 +23,13 @@
 
 #include "gtksizegroup.h"
 #include "gtkcomboboxtext.h"
-#include "gtklistbox.h"
+#include "gtkflattenlistmodel.h"
+#include "gtkframe.h"
 #include "gtkgesture.h"
 #include "gtklabel.h"
-#include "gtkframe.h"
+#include "gtklistbox.h"
+#include "gtkmaplistmodel.h"
+#include "gtkpropertylookuplistmodelprivate.h"
 #include "gtkwidgetprivate.h"
 
 enum
@@ -38,7 +41,7 @@ enum
 struct _GtkInspectorControllersPrivate
 {
   GtkWidget *listbox;
-  GListModel *model;
+  GtkPropertyLookupListModel *model;
   GtkSizeGroup *sizegroup;
   GtkInspectorObjectTree *object_tree;
 };
@@ -135,22 +138,40 @@ create_controller_widget (gpointer item,
   return row;
 }
 
+static gpointer
+map_to_controllers (gpointer widget,
+                    gpointer unused)
+{
+  gpointer result = gtk_widget_observe_controllers (widget);
+  g_object_unref (widget);
+  return result;
+}
+
 void
 gtk_inspector_controllers_set_object (GtkInspectorControllers *sl,
                                       GObject                 *object)
 {
   GtkInspectorControllersPrivate *priv = sl->priv;
+  GtkMapListModel *map_model;
+  GtkFlattenListModel *flatten_model;
 
   if (!GTK_IS_WIDGET (object))
     return;
 
-  priv->model = gtk_widget_observe_controllers (GTK_WIDGET (object));
+  priv->model = gtk_property_lookup_list_model_new (GTK_TYPE_WIDGET, "parent");
+  gtk_property_lookup_list_model_set_object (priv->model, object);
+
+  map_model = gtk_map_list_model_new (G_TYPE_LIST_MODEL, G_LIST_MODEL (priv->model), map_to_controllers, NULL, NULL);
+  g_object_unref (priv->model);
+
+  flatten_model = gtk_flatten_list_model_new (GTK_TYPE_EVENT_CONTROLLER, G_LIST_MODEL (map_model));
+
   gtk_list_box_bind_model (GTK_LIST_BOX (priv->listbox),
-                           priv->model,
+                           G_LIST_MODEL (flatten_model),
                            create_controller_widget,
                            sl,
                            NULL);
-  g_object_unref (priv->model);
+  g_object_unref (flatten_model);
 }
 
 static void
