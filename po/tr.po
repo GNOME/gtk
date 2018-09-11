@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-07 10:03+0000\n"
-"PO-Revision-Date: 2018-08-08 10:42+0300\n"
+"POT-Creation-Date: 2018-09-10 23:22+0000\n"
+"PO-Revision-Date: 2018-09-11 23:15+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -63,19 +63,18 @@ msgid "Drag'n'drop from other applications is not supported."
 msgstr "Diğer uygulamalardan sürükle ve bırak desteklenmemektedir."
 
 #: gdk/gdkdrop.c:143
-#| msgid "No compatible formats to transfer clipboard contents."
 msgid "No compatible formats to transfer contents."
 msgstr "İçerikleri aktarmak için uyumlu biçim yok."
 
-#: gdk/gdksurface.c:1366
+#: gdk/gdksurface.c:1338
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL desteği GDK_DEBUG yoluyla devre dışı bırakılmış"
 
-#: gdk/gdksurface.c:1377
+#: gdk/gdksurface.c:1349
 msgid "The current backend does not support OpenGL"
 msgstr "Şimdiki arka uç OpenGL’i desteklemiyor"
 
-#: gdk/gdksurface.c:1488
+#: gdk/gdksurface.c:1460
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan desteği GDK_DEBUG yoluyla devre dışı bırakılmış"
 
@@ -854,15 +853,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Kapat"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8079
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8065
 msgid "Minimize"
 msgstr "Simge durumuna küçült"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8088
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
 msgid "Maximize"
 msgstr "Ekranı Kapla"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8045
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8031
 msgid "Restore"
 msgstr "Geri Yükle"
 
@@ -1244,30 +1243,6 @@ msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Anahtarı değiştir"
 
-#: gtk/encodesymbolic.c:39
-msgid "Output to this directory instead of cwd"
-msgstr "Çıktı cwd yerine bu dizine"
-
-#: gtk/encodesymbolic.c:91
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "Geçersiz boyut %s\n"
-
-#: gtk/encodesymbolic.c:103 gtk/encodesymbolic.c:110 gtk/gtk-builder-tool.c:673
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "Dosya yüklenemedi: %s\n"
-
-#: gtk/encodesymbolic.c:140 gtk/encodesymbolic.c:146
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "%s dosyası kaydedilemedi: %s\n"
-
-#: gtk/encodesymbolic.c:152
-#, c-format
-msgid "Can’t close stream"
-msgstr "Akış kapatılamadı"
-
 #: gtk/gtkaboutdialog.c:119 gtk/ui/gtkaboutdialog.ui:182
 msgid "License"
 msgstr "Lisans"
@@ -1548,70 +1523,6 @@ msgstr "<%s> ögesine en üst düzeyde izin verilmez"
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "<%s> içinde metin bulunamaz"
-
-#: gtk/gtk-builder-tool.c:130
-#, c-format
-msgid "Packing property %s::%s not found\n"
-msgstr "%s:%s paketleme özelliği bulunamadı\n"
-
-#: gtk/gtk-builder-tool.c:132
-#, c-format
-msgid "Cell property %s::%s not found\n"
-msgstr "Hücre özelliği %s::%s bulunamadı\n"
-
-#: gtk/gtk-builder-tool.c:134
-#, c-format
-msgid "Property %s::%s not found\n"
-msgstr "%s::%s özelliği bulunamadı\n"
-
-#: gtk/gtk-builder-tool.c:142
-#, c-format
-msgid "Couldn’t parse value for %s::%s: %s\n"
-msgstr "%s::%s için değer ayrıştırılamadı: %s\n"
-
-#: gtk/gtk-builder-tool.c:694
-#, c-format
-msgid "Can’t parse file: %s\n"
-msgstr "Dosya ayrıştırılamadı: %s\n"
-
-#: gtk/gtk-builder-tool.c:1054
-#, c-format
-msgid ""
-"Usage:\n"
-"  gtk-builder-tool [COMMAND] FILE\n"
-"\n"
-"Commands:\n"
-"  validate           Validate the file\n"
-"  simplify [OPTIONS] Simplify the file\n"
-"  enumerate          List all named objects\n"
-"  preview [OPTIONS]  Preview the file\n"
-"\n"
-"Simplify Options:\n"
-"  --replace          Replace the file\n"
-"\n"
-"Preview Options:\n"
-"  --id=ID            Preview only the named object\n"
-"  --css=FILE         Use style from CSS file\n"
-"\n"
-"Perform various tasks on GtkBuilder .ui files.\n"
-msgstr ""
-"Kullanım:\n"
-"  gtk-builder-tool [KOMUT] DOSYA\n"
-"\n"
-"Komutlar:\n"
-"  validate              Dosyayı doğrula\n"
-"  simplify [SEÇENEKLER] Dosyayı basitleştir\n"
-"  enumerate             Tüm nesneleri listele\n"
-"  preview [SEÇENEKLER]  Dosyayı önizle\n"
-"\n"
-"Simplify (Basitleştir) Seçenekleri:\n"
-"  --replace             Dosyayı değiştir\n"
-"\n"
-"Preview (Önizle) Seçenekleri:\n"
-"  --id=KİMLİK           Yalnızca adı verilen nesneyi önizle\n"
-"  --css=DOSYA           CSS dosyasından biçem kullan\n"
-"\n"
-"GtkBuilder .ui dosyaları üzerinde çeşitli görevler gerçekleştir.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2152,7 +2063,7 @@ msgstr "Bu adda bir dosya zaten var"
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
-#: gtk/gtkwindow.c:10820 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:10806 gtk/inspector/css-editor.c:201
 #: gtk/inspector/recorder.c:817 gtk/ui/gtkappchooserdialog.ui:49
 #: gtk/ui/gtkassistant.ui:107 gtk/ui/gtkcolorchooserdialog.ui:32
 #: gtk/ui/gtkfontchooserdialog.ui:26
@@ -2435,51 +2346,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/gtkfontchooserwidget.c:1546
+#: gtk/gtkfontchooserwidget.c:1539
 msgid "Width"
 msgstr "Genişlik"
 
-#: gtk/gtkfontchooserwidget.c:1547
+#: gtk/gtkfontchooserwidget.c:1540
 msgid "Weight"
 msgstr "Ağırlık"
 
-#: gtk/gtkfontchooserwidget.c:1548
+#: gtk/gtkfontchooserwidget.c:1541
 msgid "Italic"
 msgstr "Eğik"
 
-#: gtk/gtkfontchooserwidget.c:1549
+#: gtk/gtkfontchooserwidget.c:1542
 msgid "Slant"
 msgstr "Eğrilik"
 
-#: gtk/gtkfontchooserwidget.c:1550
+#: gtk/gtkfontchooserwidget.c:1543
 msgid "Optical Size"
 msgstr "Optik Boyut"
 
-#: gtk/gtkfontchooserwidget.c:2075 gtk/inspector/prop-editor.c:1613
+#: gtk/gtkfontchooserwidget.c:2068 gtk/inspector/prop-editor.c:1613
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gtk/gtkfontchooserwidget.c:2119
+#: gtk/gtkfontchooserwidget.c:2112
 msgid "Ligatures"
 msgstr "Bağlamalar"
 
-#: gtk/gtkfontchooserwidget.c:2120
+#: gtk/gtkfontchooserwidget.c:2113
 msgid "Letter Case"
 msgstr "Harf Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2121
+#: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Case"
 msgstr "Sayı Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2122
+#: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Spacing"
 msgstr "Numara Boşluklama"
 
-#: gtk/gtkfontchooserwidget.c:2123
+#: gtk/gtkfontchooserwidget.c:2116
 msgid "Number Formatting"
 msgstr "Numara Biçimlendirme"
 
-#: gtk/gtkfontchooserwidget.c:2124
+#: gtk/gtkfontchooserwidget.c:2117
 msgid "Character Variants"
 msgstr "Karakter Değişkeleri"
 
@@ -2491,7 +2402,7 @@ msgstr "OpenGL içerik oluşturulması başarısız oldu"
 msgid "Application menu"
 msgstr "Uygulama menüsü"
 
-#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8115
+#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8101
 msgid "Close"
 msgstr "Kapat"
 
@@ -2529,64 +2440,6 @@ msgstr "Bağlantı _Aç"
 #: gtk/gtklabel.c:6087
 msgid "Copy _Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
-
-#: gtk/gtk-launch.c:40
-msgid "Show program version"
-msgstr "Program sürümünü göster"
-
-#. Translators: this message will appear immediately after the
-#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
-#: gtk/gtk-launch.c:74
-msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr "UYGULAMA [URI…] — bir UYGULAMA başlat"
-
-#. Translators: this message will appear after the usage string
-#. and before the list of options.
-#: gtk/gtk-launch.c:78
-msgid ""
-"Launch an application (specified by its desktop file name),\n"
-"optionally passing one or more URIs as arguments."
-msgstr ""
-"(Masaüstü dosyası adıyla belirtilmiş) bir uygulamayı, isteğe bağlı olarak\n"
-"bir veya daha çok URI’yi parametre olarak geçirerek, çalıştır."
-
-#: gtk/gtk-launch.c:88
-#, c-format
-msgid "Error parsing commandline options: %s\n"
-msgstr "Komut satırı seçeneklerini ayrıştırırken hata: %s\n"
-
-#: gtk/gtk-launch.c:90 gtk/gtk-launch.c:111
-#, c-format
-msgid "Try “%s --help” for more information."
-msgstr "Daha çok bilgi için “%s --help” komutunu deneyin."
-
-#. Translators: the %s is the program name. This error message
-#. means the user is calling gtk-launch without any argument.
-#: gtk/gtk-launch.c:109
-#, c-format
-msgid "%s: missing application name"
-msgstr "%s: eksik uygulama adı"
-
-#: gtk/gtk-launch.c:138
-#, c-format
-msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
-"Kimlikten UygulamaBilgisi oluşturma Unix olmayan işletim sistemlerinde "
-"desteklenmiyor"
-
-#. Translators: the first %s is the program name, the second one
-#. is the application name.
-#: gtk/gtk-launch.c:146
-#, c-format
-msgid "%s: no such application %s"
-msgstr "%s: böyle bir uygulama yok %s"
-
-#. Translators: the first %s is the program name, the second one
-#. is the error message.
-#: gtk/gtk-launch.c:164
-#, c-format
-msgid "%s: error launching application: %s\n"
-msgstr "%s: uygulama başlatılırken hata: %s\n"
 
 #: gtk/gtklinkbutton.c:344
 msgid "Copy URL"
@@ -2686,7 +2539,7 @@ msgid "%d:%02d"
 msgstr "%d.%02d"
 
 #: gtk/gtkmessagedialog.c:817 gtk/gtkmessagedialog.c:835
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10821
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10807
 msgid "_OK"
 msgstr "_TAMAM"
 
@@ -2961,7 +2814,6 @@ msgstr "“%s” başlatılamadı"
 #.
 #: gtk/gtkplacessidebar.c:2375
 #, c-format
-#| msgid "Unsupported encoding “%s”"
 msgid "Error unlocking “%s”"
 msgstr "“%s” kilidi kaldırılırken hata"
 
@@ -3215,8 +3067,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "En olası sebebi geçici dosyanın oluşturulamamış olmasıdır."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:233 gtk/gtkprintoperation-portal.c:540
-#: gtk/gtkprintoperation-portal.c:617 gtk/gtkprintunixdialog.c:3386
+#: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
+#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3386
 msgid "Print"
 msgstr "Yazdır"
 
@@ -3545,24 +3397,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%% %d"
 
-#: gtk/gtkwindow.c:8063
+#: gtk/gtkwindow.c:8049
 msgid "Move"
 msgstr "Taşı"
 
-#: gtk/gtkwindow.c:8071
+#: gtk/gtkwindow.c:8057
 msgid "Resize"
 msgstr "Yeniden Boyutlandır"
 
-#: gtk/gtkwindow.c:8102
+#: gtk/gtkwindow.c:8088
 msgid "Always on Top"
 msgstr "Her Zaman Üstte"
 
-#: gtk/gtkwindow.c:10808
+#: gtk/gtkwindow.c:10794
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ denetleyicisi kullanmak istiyor musunuz?"
 
-#: gtk/gtkwindow.c:10810
+#: gtk/gtkwindow.c:10796
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3573,7 +3425,7 @@ msgstr ""
 "izin veren etkileşimli bir hata ayıklayıcıdır. Bunun kullanılması "
 "uygulamanın kesilmesine ya da çökmesine neden olabilir."
 
-#: gtk/gtkwindow.c:10815
+#: gtk/gtkwindow.c:10801
 msgid "Don’t show this message again"
 msgstr "Bu iletiyi yeniden gösterme"
 
@@ -6287,8 +6139,10 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:94
+#| msgctxt "Script"
+#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr "Mısır Resimyazıları"
 
 #: gtk/script-names.c:95
@@ -6595,6 +6449,261 @@ msgstr "Soyombo"
 msgctxt "Script"
 msgid "Zanabazar Square"
 msgstr "Zanabazar Kare"
+
+#: gtk/tools/encodesymbolic.c:39
+msgid "Output to this directory instead of cwd"
+msgstr "Çıktı cwd yerine bu dizine"
+
+#: gtk/tools/encodesymbolic.c:91
+#, c-format
+msgid "Invalid size %s\n"
+msgstr "Geçersiz boyut %s\n"
+
+#: gtk/tools/encodesymbolic.c:103 gtk/tools/encodesymbolic.c:110
+#: gtk/tools/gtk-builder-tool.c:673
+#, c-format
+msgid "Can’t load file: %s\n"
+msgstr "Dosya yüklenemedi: %s\n"
+
+#: gtk/tools/encodesymbolic.c:140 gtk/tools/encodesymbolic.c:146
+#, c-format
+msgid "Can’t save file %s: %s\n"
+msgstr "%s dosyası kaydedilemedi: %s\n"
+
+#: gtk/tools/encodesymbolic.c:152
+#, c-format
+msgid "Can’t close stream"
+msgstr "Akış kapatılamadı"
+
+#: gtk/tools/gtk-builder-tool.c:130
+#, c-format
+msgid "Packing property %s::%s not found\n"
+msgstr "%s:%s paketleme özelliği bulunamadı\n"
+
+#: gtk/tools/gtk-builder-tool.c:132
+#, c-format
+msgid "Cell property %s::%s not found\n"
+msgstr "Hücre özelliği %s::%s bulunamadı\n"
+
+#: gtk/tools/gtk-builder-tool.c:134
+#, c-format
+msgid "Property %s::%s not found\n"
+msgstr "%s::%s özelliği bulunamadı\n"
+
+#: gtk/tools/gtk-builder-tool.c:142
+#, c-format
+msgid "Couldn’t parse value for %s::%s: %s\n"
+msgstr "%s::%s için değer ayrıştırılamadı: %s\n"
+
+#: gtk/tools/gtk-builder-tool.c:694
+#, c-format
+msgid "Can’t parse file: %s\n"
+msgstr "Dosya ayrıştırılamadı: %s\n"
+
+#: gtk/tools/gtk-builder-tool.c:1054
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk-builder-tool [COMMAND] FILE\n"
+"\n"
+"Commands:\n"
+"  validate           Validate the file\n"
+"  simplify [OPTIONS] Simplify the file\n"
+"  enumerate          List all named objects\n"
+"  preview [OPTIONS]  Preview the file\n"
+"\n"
+"Simplify Options:\n"
+"  --replace          Replace the file\n"
+"\n"
+"Preview Options:\n"
+"  --id=ID            Preview only the named object\n"
+"  --css=FILE         Use style from CSS file\n"
+"\n"
+"Perform various tasks on GtkBuilder .ui files.\n"
+msgstr ""
+"Kullanım:\n"
+"  gtk-builder-tool [KOMUT] DOSYA\n"
+"\n"
+"Komutlar:\n"
+"  validate              Dosyayı doğrula\n"
+"  simplify [SEÇENEKLER] Dosyayı basitleştir\n"
+"  enumerate             Tüm nesneleri listele\n"
+"  preview [SEÇENEKLER]  Dosyayı önizle\n"
+"\n"
+"Simplify (Basitleştir) Seçenekleri:\n"
+"  --replace             Dosyayı değiştir\n"
+"\n"
+"Preview (Önizle) Seçenekleri:\n"
+"  --id=KİMLİK           Yalnızca adı verilen nesneyi önizle\n"
+"  --css=DOSYA           CSS dosyasından biçem kullan\n"
+"\n"
+"GtkBuilder .ui dosyaları üzerinde çeşitli görevler gerçekleştir.\n"
+
+#: gtk/tools/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Program sürümünü göster"
+
+#. Translators: this message will appear immediately after the
+#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
+#: gtk/tools/gtk-launch.c:74
+msgid "APPLICATION [URI…] — launch an APPLICATION"
+msgstr "UYGULAMA [URI…] — bir UYGULAMA başlat"
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: gtk/tools/gtk-launch.c:78
+msgid ""
+"Launch an application (specified by its desktop file name),\n"
+"optionally passing one or more URIs as arguments."
+msgstr ""
+"(Masaüstü dosyası adıyla belirtilmiş) bir uygulamayı, isteğe bağlı olarak\n"
+"bir veya daha çok URI’yi parametre olarak geçirerek, çalıştır."
+
+#: gtk/tools/gtk-launch.c:88
+#, c-format
+msgid "Error parsing commandline options: %s\n"
+msgstr "Komut satırı seçeneklerini ayrıştırırken hata: %s\n"
+
+#: gtk/tools/gtk-launch.c:90 gtk/tools/gtk-launch.c:111
+#, c-format
+msgid "Try “%s --help” for more information."
+msgstr "Daha çok bilgi için “%s --help” komutunu deneyin."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: gtk/tools/gtk-launch.c:109
+#, c-format
+msgid "%s: missing application name"
+msgstr "%s: eksik uygulama adı"
+
+#: gtk/tools/gtk-launch.c:138
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr ""
+"Kimlikten UygulamaBilgisi oluşturma Unix olmayan işletim sistemlerinde "
+"desteklenmiyor"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: gtk/tools/gtk-launch.c:146
+#, c-format
+msgid "%s: no such application %s"
+msgstr "%s: böyle bir uygulama yok %s"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: gtk/tools/gtk-launch.c:164
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s: uygulama başlatılırken hata: %s\n"
+
+#: gtk/tools/updateiconcache.c:1392
+#, c-format
+msgid "Failed to write header\n"
+msgstr "Başlık yazılırken başarısız olundu\n"
+
+#: gtk/tools/updateiconcache.c:1398
+#, c-format
+msgid "Failed to write hash table\n"
+msgstr "Özet tablosu yazılırken başarısız olundu\n"
+
+#: gtk/tools/updateiconcache.c:1404
+#, c-format
+msgid "Failed to write folder index\n"
+msgstr "Klasör dizinini yazma başarısız oldu\n"
+
+#: gtk/tools/updateiconcache.c:1412
+#, c-format
+msgid "Failed to rewrite header\n"
+msgstr "Başlık yeniden yazılırken başarısız olundu\n"
+
+#: gtk/tools/updateiconcache.c:1506
+#, c-format
+msgid "Failed to open file %s : %s\n"
+msgstr "%s dosyası açılırken başarısız olundu : %s\n"
+
+#: gtk/tools/updateiconcache.c:1514 gtk/tools/updateiconcache.c:1544
+#, c-format
+msgid "Failed to write cache file: %s\n"
+msgstr "Önbellek dosyası yazılırken başarısız olundu: %s\n"
+
+#: gtk/tools/updateiconcache.c:1554
+#, c-format
+msgid "The generated cache was invalid.\n"
+msgstr "Oluşturulan önbellek geçersiz oldu.\n"
+
+#: gtk/tools/updateiconcache.c:1568
+#, c-format
+msgid "Could not rename %s to %s: %s, removing %s then.\n"
+msgstr "%s, %s olarak yeniden adlandırılamadı: %s, o zaman %s siliniyor.\n"
+
+#: gtk/tools/updateiconcache.c:1582
+#, c-format
+msgid "Could not rename %s to %s: %s\n"
+msgstr "%s dosyası %s olarak yeniden adlandırılamadı: %s\n"
+
+#: gtk/tools/updateiconcache.c:1592
+#, c-format
+msgid "Could not rename %s back to %s: %s.\n"
+msgstr "%s dosyası geri %s olarak yeniden adlandırılamadı: %s\n"
+
+#: gtk/tools/updateiconcache.c:1619
+#, c-format
+msgid "Cache file created successfully.\n"
+msgstr "Ön bellek dosyası başarıyla oluşturuldu.\n"
+
+#: gtk/tools/updateiconcache.c:1658
+msgid "Overwrite an existing cache, even if up to date"
+msgstr "Güncel olsa bile var olan önbelleğin üzerine yaz"
+
+#: gtk/tools/updateiconcache.c:1659
+msgid "Don’t check for the existence of index.theme"
+msgstr "index.themeʼin bulunup bulunmadığını denetleme"
+
+#: gtk/tools/updateiconcache.c:1660
+msgid "Don’t include image data in the cache"
+msgstr "Önbellekte görüntü verisini içerme"
+
+#: gtk/tools/updateiconcache.c:1661
+msgid "Include image data in the cache"
+msgstr "Önbelleğe görüntü verisini dahil et"
+
+#: gtk/tools/updateiconcache.c:1662
+msgid "Output a C header file"
+msgstr "C başlık dosyası çıktısı"
+
+#: gtk/tools/updateiconcache.c:1663
+msgid "Turn off verbose output"
+msgstr "Ayrıntılı çıktıyı kapat"
+
+#: gtk/tools/updateiconcache.c:1664
+msgid "Validate existing icon cache"
+msgstr "Var olan simge önbelleğini doğrula"
+
+#: gtk/tools/updateiconcache.c:1731
+#, c-format
+msgid "File not found: %s\n"
+msgstr "Dosya bulunamadı: %s\n"
+
+#: gtk/tools/updateiconcache.c:1737
+#, c-format
+msgid "Not a valid icon cache: %s\n"
+msgstr "Geçerli bir simge önbelleği değil: %s\n"
+
+#: gtk/tools/updateiconcache.c:1750
+#, c-format
+msgid "No theme index file.\n"
+msgstr "Tema dizin dosyası yok.\n"
+
+#: gtk/tools/updateiconcache.c:1754
+#, c-format
+msgid ""
+"No theme index file in “%s”.\n"
+"If you really want to create an icon cache here, use --ignore-theme-index.\n"
+msgstr ""
+"“%s” içinde tema dizin dosyası yok.\n"
+"Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
+"theme-indexʼi kullanın.\n"
 
 #: gtk/ui/gtkaboutdialog.ui:106
 msgid "About"
@@ -7143,114 +7252,6 @@ msgstr "Sesi Azalt"
 #: gtk/ui/gtkvolumebutton.ui:44
 msgid "Decreases the volume"
 msgstr "Ses düzeyini azaltır"
-
-#: gtk/updateiconcache.c:1383
-#, c-format
-msgid "Failed to write header\n"
-msgstr "Başlık yazılırken başarısız olundu\n"
-
-#: gtk/updateiconcache.c:1389
-#, c-format
-msgid "Failed to write hash table\n"
-msgstr "Özet tablosu yazılırken başarısız olundu\n"
-
-#: gtk/updateiconcache.c:1395
-#, c-format
-msgid "Failed to write folder index\n"
-msgstr "Klasör dizinini yazma başarısız oldu\n"
-
-#: gtk/updateiconcache.c:1403
-#, c-format
-msgid "Failed to rewrite header\n"
-msgstr "Başlık yeniden yazılırken başarısız olundu\n"
-
-#: gtk/updateiconcache.c:1497
-#, c-format
-msgid "Failed to open file %s : %s\n"
-msgstr "%s dosyası açılırken başarısız olundu : %s\n"
-
-#: gtk/updateiconcache.c:1505 gtk/updateiconcache.c:1535
-#, c-format
-msgid "Failed to write cache file: %s\n"
-msgstr "Önbellek dosyası yazılırken başarısız olundu: %s\n"
-
-#: gtk/updateiconcache.c:1545
-#, c-format
-msgid "The generated cache was invalid.\n"
-msgstr "Oluşturulan önbellek geçersiz oldu.\n"
-
-#: gtk/updateiconcache.c:1559
-#, c-format
-msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "%s, %s olarak yeniden adlandırılamadı: %s, o zaman %s siliniyor.\n"
-
-#: gtk/updateiconcache.c:1573
-#, c-format
-msgid "Could not rename %s to %s: %s\n"
-msgstr "%s dosyası %s olarak yeniden adlandırılamadı: %s\n"
-
-#: gtk/updateiconcache.c:1583
-#, c-format
-msgid "Could not rename %s back to %s: %s.\n"
-msgstr "%s dosyası geri %s olarak yeniden adlandırılamadı: %s\n"
-
-#: gtk/updateiconcache.c:1610
-#, c-format
-msgid "Cache file created successfully.\n"
-msgstr "Ön bellek dosyası başarıyla oluşturuldu.\n"
-
-#: gtk/updateiconcache.c:1649
-msgid "Overwrite an existing cache, even if up to date"
-msgstr "Güncel olsa bile var olan önbelleğin üzerine yaz"
-
-#: gtk/updateiconcache.c:1650
-msgid "Don’t check for the existence of index.theme"
-msgstr "index.themeʼin bulunup bulunmadığını denetleme"
-
-#: gtk/updateiconcache.c:1651
-msgid "Don’t include image data in the cache"
-msgstr "Önbellekte görüntü verisini içerme"
-
-#: gtk/updateiconcache.c:1652
-msgid "Include image data in the cache"
-msgstr "Önbelleğe görüntü verisini dahil et"
-
-#: gtk/updateiconcache.c:1653
-msgid "Output a C header file"
-msgstr "C başlık dosyası çıktısı"
-
-#: gtk/updateiconcache.c:1654
-msgid "Turn off verbose output"
-msgstr "Ayrıntılı çıktıyı kapat"
-
-#: gtk/updateiconcache.c:1655
-msgid "Validate existing icon cache"
-msgstr "Var olan simge önbelleğini doğrula"
-
-#: gtk/updateiconcache.c:1722
-#, c-format
-msgid "File not found: %s\n"
-msgstr "Dosya bulunamadı: %s\n"
-
-#: gtk/updateiconcache.c:1728
-#, c-format
-msgid "Not a valid icon cache: %s\n"
-msgstr "Geçerli bir simge önbelleği değil: %s\n"
-
-#: gtk/updateiconcache.c:1741
-#, c-format
-msgid "No theme index file.\n"
-msgstr "Tema dizin dosyası yok.\n"
-
-#: gtk/updateiconcache.c:1745
-#, c-format
-msgid ""
-"No theme index file in “%s”.\n"
-"If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr ""
-"“%s” içinde tema dizin dosyası yok.\n"
-"Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
-"theme-indexʼi kullanın.\n"
 
 #: modules/media/gtkffmediafile.c:216
 #, c-format
