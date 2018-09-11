@@ -26,11 +26,11 @@
 
 #include "actions.h"
 #include "cellrenderergraph.h"
+#include "controllers.h"
 #include "css-editor.h"
 #include "css-node-tree.h"
 #include "data-list.h"
 #include "general.h"
-#include "gestures.h"
 #include "graphdata.h"
 #include "logs.h"
 #include "magnifier.h"
@@ -63,11 +63,11 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
+  g_type_ensure (GTK_TYPE_INSPECTOR_CONTROLLERS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_NODE_TREE);
   g_type_ensure (GTK_TYPE_INSPECTOR_DATA_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
-  g_type_ensure (GTK_TYPE_INSPECTOR_GESTURES);
   g_type_ensure (GTK_TYPE_INSPECTOR_LOGS);
   g_type_ensure (GTK_TYPE_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);

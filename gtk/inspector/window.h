@@ -69,7 +69,7 @@ typedef struct
   GtkWidget *actions;
   GtkWidget *menu;
   GtkWidget *misc_info;
-  GtkWidget *gestures;
+  GtkWidget *controllers;
   GtkWidget *magnifier;
 
   GtkWidget *invisible;

@@ -18,7 +18,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "gestures.h"
+#include "controllers.h"
 #include "object-tree.h"
 
 #include "gtksizegroup.h"
@@ -35,32 +35,32 @@ enum
   PROP_OBJECT_TREE
 };
 
-struct _GtkInspectorGesturesPrivate
+struct _GtkInspectorControllersPrivate
 {
   GtkWidget *listbox;
   GtkSizeGroup *sizegroup;
   GtkInspectorObjectTree *object_tree;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGestures, gtk_inspector_gestures, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorControllers, gtk_inspector_controllers, GTK_TYPE_BOX)
 
 static void
-row_activated (GtkListBox           *box,
-               GtkListBoxRow        *row,
-               GtkInspectorGestures *sl)
+row_activated (GtkListBox              *box,
+               GtkListBoxRow           *row,
+               GtkInspectorControllers *sl)
 {
-  GObject *gesture;
+  GObject *controller;
   
-  gesture = G_OBJECT (g_object_get_data (G_OBJECT (row), "gesture"));
-  gtk_inspector_object_tree_select_object (sl->priv->object_tree, gesture);
+  controller = G_OBJECT (g_object_get_data (G_OBJECT (row), "controller"));
+  gtk_inspector_object_tree_select_object (sl->priv->object_tree, controller);
 }
 
 static void
-gtk_inspector_gestures_init (GtkInspectorGestures *sl)
+gtk_inspector_controllers_init (GtkInspectorControllers *sl)
 {
   GtkWidget *frame;
 
-  sl->priv = gtk_inspector_gestures_get_instance_private (sl);
+  sl->priv = gtk_inspector_controllers_get_instance_private (sl);
   sl->priv->sizegroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   g_object_set (sl,
                 "orientation", GTK_ORIENTATION_VERTICAL,
@@ -85,7 +85,7 @@ gtk_inspector_gestures_init (GtkInspectorGestures *sl)
 }
 
 static void
-clear_all (GtkInspectorGestures *sl)
+clear_all (GtkInspectorControllers *sl)
 {
   GList *children, *l;
   GtkWidget *child;
@@ -100,7 +100,8 @@ clear_all (GtkInspectorGestures *sl)
 }
 
 static void
-phase_changed_cb (GtkComboBox *combo, GtkInspectorGestures *sl)
+phase_changed_cb (GtkComboBox             *combo,
+                  GtkInspectorControllers *sl)
 {
   GtkWidget *row;
   GtkPropagationPhase phase;
@@ -108,14 +109,14 @@ phase_changed_cb (GtkComboBox *combo, GtkInspectorGestures *sl)
 
   phase = gtk_combo_box_get_active (combo);
   row = gtk_widget_get_ancestor (GTK_WIDGET (combo), GTK_TYPE_LIST_BOX_ROW);
-  controller = GTK_EVENT_CONTROLLER (g_object_get_data (G_OBJECT (row), "gesture"));
+  controller = GTK_EVENT_CONTROLLER (g_object_get_data (G_OBJECT (row), "controller"));
   gtk_event_controller_set_propagation_phase (controller, phase);
 }
 
 static void
-add_controller (GtkInspectorGestures *sl,
-                GObject              *object,
-                GtkEventController   *controller)
+add_controller (GtkInspectorControllers *sl,
+                GObject                 *object,
+                GtkEventController      *controller)
 {
   GtkWidget *row;
   GtkWidget *box;
@@ -147,13 +148,13 @@ add_controller (GtkInspectorGestures *sl,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
-  g_object_set_data (G_OBJECT (row), "gesture", controller);
+  g_object_set_data (G_OBJECT (row), "controller", controller);
   g_signal_connect (combo, "changed", G_CALLBACK (phase_changed_cb), sl);
 }
 
 void
-gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
-                                   GObject              *object)
+gtk_inspector_controllers_set_object (GtkInspectorControllers *sl,
+                                      GObject                 *object)
 {
   GtkPropagationPhase phase;
   GList *list, *l;
@@ -180,7 +181,7 @@ get_property (GObject    *object,
               GValue     *value,
               GParamSpec *pspec)
 {
-  GtkInspectorGestures *sl = GTK_INSPECTOR_GESTURES (object);
+  GtkInspectorControllers *sl = GTK_INSPECTOR_CONTROLLERS (object);
 
   switch (param_id)
     {
@@ -200,7 +201,7 @@ set_property (GObject      *object,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  GtkInspectorGestures *sl = GTK_INSPECTOR_GESTURES (object);
+  GtkInspectorControllers *sl = GTK_INSPECTOR_CONTROLLERS (object);
 
   switch (param_id)
     {
@@ -215,7 +216,7 @@ set_property (GObject      *object,
 }
 
 static void
-gtk_inspector_gestures_class_init (GtkInspectorGesturesClass *klass)
+gtk_inspector_controllers_class_init (GtkInspectorControllersClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 

@@ -365,12 +365,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkInspectorGestures" id="gestures">
+                      <object class="GtkInspectorControllers" id="controllers">
                         <property name="object-tree">object_tree</property>
                       </object>
                       <packing>
-                        <property name="name">gestures</property>
-                        <property name="title" translatable="yes">Gestures</property>
+                        <property name="name">controllers</property>
+                        <property name="title" translatable="yes">Controllers</property>
                       </packing>
                     </child>
                     <child>
