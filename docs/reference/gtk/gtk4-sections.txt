@@ -2594,6 +2594,29 @@ gtk_size_group_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkslicelistmodel</FILE>
+<TITLE>GtkMapListModel</TITLE>
+GtkSliceListModel
+gtk_slice_list_model_new
+gtk_slice_list_model_new_for_type
+gtk_slice_list_model_set_model
+gtk_slice_list_model_get_model
+gtk_slice_list_model_set_offset
+gtk_slice_list_model_get_offset
+gtk_slice_list_model_set_size
+gtk_slice_list_model_get_size
+<SUBSECTION Standard>
+GTK_SLICE_LIST_MODEL
+GTK_IS_SLICE_LIST_MODEL
+GTK_TYPE_SLICE_LIST_MODEL
+GTK_SLICE_LIST_MODEL_CLASS
+GTK_IS_SLICE_LIST_MODEL_CLASS
+GTK_SLICE_LIST_MODEL_GET_CLASS
+<SUBSECTION Private>
+gtk_slice_list_model_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkspinbutton</FILE>
 <TITLE>GtkSpinButton</TITLE>
 GtkSpinButton
