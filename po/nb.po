@@ -1109,7 +1109,7 @@ msgid ""
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "Dette programmet har absolutt ingen garanti.\n"
-"Besøk  <a href=\"%s\">%s</a> for detaljer."
+"Besøk <a href=\"%s\">%s</a> for detaljer."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2058,11 +2058,11 @@ msgstr "Klarte ikke å lese innholdet i mappen"
 #. Translators: see g_date_time_format() for details on the format
 #: gtk/gtkfilechooserwidget.c:4785 gtk/gtkfilechooserwidget.c:4833
 msgid "%H:%M"
-msgstr "%H.%M"
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4787 gtk/gtkfilechooserwidget.c:4835
 msgid "%l:%M %p"
-msgstr "%H.%M"
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4791
 msgid "Yesterday"
@@ -3263,7 +3263,7 @@ msgstr "Et element <%s> er allerede spesifisert"
 
 #: gtk/gtktextbufferserialize.c:1304
 msgid "A <text> element can’t occur before a <tags> element"
-msgstr "Et <text>-element kan ikke komme før et <tags>-element"
+msgstr "Et <text>-element kan ikke forekomme før et <tags>-element"
 
 #: gtk/gtktextbufferserialize.c:1710
 msgid "Serialized data is malformed"
@@ -3526,7 +3526,7 @@ msgstr "Referansetall"
 
 #: gtk/inspector/misc-info.ui:131
 msgid "Buildable ID"
-msgstr "Byggbar-ID"
+msgstr "Byggbar ID"
 
 #: gtk/inspector/misc-info.ui:163
 msgid "Default Widget"
@@ -3545,7 +3545,7 @@ msgstr "Fokuskomponent"
 
 #: gtk/inspector/misc-info.ui:248
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "Etikett for hurtigtast"
 
 #: gtk/inspector/misc-info.ui:281
 msgid "Request Mode"
@@ -3561,15 +3561,15 @@ msgstr "Grunnlinje"
 
 #: gtk/inspector/misc-info.ui:377
 msgid "Clip Area"
-msgstr "Klippområde"
+msgstr "Utklippsområde"
 
 #: gtk/inspector/misc-info.ui:409
 msgid "Frame Clock"
-msgstr ""
+msgstr "Bildeklokke"
 
 #: gtk/inspector/misc-info.ui:452
 msgid "Tick Callback"
-msgstr ""
+msgstr "Tilbakekall for tikk"
 
 #: gtk/inspector/misc-info.ui:486
 msgid "Frame Count"
@@ -3581,15 +3581,15 @@ msgstr "Bilderate"
 
 #: gtk/inspector/misc-info.ui:550
 msgid "Accessible Role"
-msgstr "Rolle for accessible"
+msgstr "Tilgjengelig rolle"
 
 #: gtk/inspector/misc-info.ui:582
 msgid "Accessible Name"
-msgstr "Navn på accessible"
+msgstr "Tilgjengelig navn"
 
 #: gtk/inspector/misc-info.ui:616
 msgid "Accessible Description"
-msgstr "Beskrivelse for accessible"
+msgstr "Tilgjengelig beskrivelse"
 
 #: gtk/inspector/misc-info.ui:650
 msgid "Mapped"
@@ -3914,7 +3914,7 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:554
 msgid "Show Layout Borders"
-msgstr "Vis grenser for utforming"
+msgstr "Vis kantramme for utforming"
 
 #: gtk/inspector/visual.ui:586
 msgid "Snapshot Debug Nodes"
@@ -3954,7 +3954,7 @@ msgstr "Programvareoverflater"
 
 #: gtk/inspector/visual.ui:793
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "Utvidelse for teksturrektangel"
 
 #: gtk/inspector/window.ui:31
 msgid "Select an Object"
@@ -3978,7 +3978,7 @@ msgstr "Vis alle ressurser"
 
 #: gtk/inspector/window.ui:221
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "Spor signalutslipp på dette objektet"
 
 #: gtk/inspector/window.ui:229
 msgid "Clear log"
@@ -5187,7 +5187,7 @@ msgstr "Samba"
 
 #: gtk/ui/gtkplacesview.ui:125
 msgid "SSH File Transfer Protocol"
-msgstr "SSH File Transfer Protocol"
+msgstr "SSH filoverføringsprotokoll"
 
 #: gtk/ui/gtkplacesview.ui:135
 msgid "WebDAV"
@@ -5571,7 +5571,7 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Ingen indeksfil for tema i «%s».\n"
-"Bruk --ignore-theme-index hvis du virkelig vil opprette en ikonbuffer her.\n"
+"Bruk --ignore-theme-index hvis du virkelig vil opprette et ikonbuffer her.\n"
 
 #. ID
 #: modules/input/imam-et.c:452
