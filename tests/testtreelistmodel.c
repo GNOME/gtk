@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+#define ROWS 30
+
 static GListModel *
 create_list_model_for_directory (gpointer file,
                                  gpointer unused)
@@ -8,6 +10,9 @@ create_list_model_for_directory (gpointer file,
   GListStore *store;
   GFile *child;
   GFileInfo *info;
+
+  if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
+    return NULL;
 
   enumerate = g_file_enumerate_children (file,
                                          G_FILE_ATTRIBUTE_STANDARD_TYPE
@@ -44,6 +49,7 @@ create_widget_for_model (gpointer item,
   guint depth;
 
   row = gtk_list_box_row_new ();
+  gtk_widget_set_vexpand (row, TRUE);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (row), box);
@@ -86,13 +92,24 @@ create_widget_for_model (gpointer item,
   return row;
 }
 
+static void
+update_adjustment (GListModel    *model,
+                   guint          position,
+                   guint          removed,
+                   guint          added,
+                   GtkAdjustment *adjustment)
+{
+  gtk_adjustment_set_upper (adjustment, MAX (ROWS, g_list_model_get_n_items (model)));
+}
+
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *win;
-  GtkWidget *sw;
-  GtkWidget *listbox;
-  GListModel *model, *dirmodel;
+  GtkAdjustment *adjustment;
+  GtkWidget *win, *box, *scrollbar, *listbox;
+  GListModel *dirmodel;
+  GtkTreeListModel *tree;
+  GtkSliceListModel *slice;
   GFile *root;
 
   gtk_init ();
@@ -101,26 +118,44 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (win), sw);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (win), box);
 
   listbox = gtk_list_box_new ();
-  gtk_container_add (GTK_CONTAINER (sw), listbox);
+  gtk_widget_set_hexpand (listbox, TRUE);
+  gtk_container_add (GTK_CONTAINER (box), listbox);
 
-  root = g_file_new_for_path (g_get_current_dir ());
+  if (argc > 1)
+    root = g_file_new_for_commandline_arg (argv[1]);
+  else
+    root = g_file_new_for_path (g_get_current_dir ());
   dirmodel = create_list_model_for_directory (root, NULL);
-  model = G_LIST_MODEL (gtk_tree_list_model_new (FALSE,
-                                                 dirmodel,
-                                                 FALSE,
-                                                 create_list_model_for_directory,
-                                                 NULL, NULL));
+  tree = gtk_tree_list_model_new (FALSE,
+                                  dirmodel,
+                                  TRUE,
+                                  create_list_model_for_directory,
+                                  NULL, NULL);
   g_object_unref (dirmodel);
+
+  slice = gtk_slice_list_model_new (G_LIST_MODEL (tree), 0, ROWS);
+
   gtk_list_box_bind_model (GTK_LIST_BOX (listbox),
-                           model,
+                           G_LIST_MODEL (slice),
                            create_widget_for_model,
                            root, g_object_unref);
-  g_object_set_data (G_OBJECT (listbox), "model", model);
-  g_object_unref (model);
+
+  adjustment = gtk_adjustment_new (0,
+                                   0, MAX (g_list_model_get_n_items (G_LIST_MODEL (tree)), ROWS), 
+                                   1, ROWS - 1,
+                                   ROWS);
+  g_object_bind_property (adjustment, "value", slice, "offset", 0);
+  g_signal_connect (tree, "items-changed", G_CALLBACK (update_adjustment), adjustment);
+
+  scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
+  gtk_container_add (GTK_CONTAINER (box), scrollbar);
+
+  g_object_unref (tree);
+  g_object_unref (slice);
 
   gtk_widget_show (win);
 
