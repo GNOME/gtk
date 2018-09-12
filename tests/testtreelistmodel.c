@@ -2,42 +2,123 @@
 
 #define ROWS 30
 
-static GListModel *
-create_list_model_for_directory (gpointer file,
-                                 gpointer unused)
+GSList *pending;
+guint active = 0;
+
+static void
+got_files (GObject      *enumerate,
+           GAsyncResult *res,
+           gpointer      store);
+
+static gboolean
+start_enumerate (GListStore *store)
 {
   GFileEnumerator *enumerate;
-  GListStore *store;
-  GFile *child;
-  GFileInfo *info;
-
-  if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
-    return NULL;
+  GFile *file = g_object_get_data (G_OBJECT (store), "file");
+  GError *error = NULL;
 
   enumerate = g_file_enumerate_children (file,
                                          G_FILE_ATTRIBUTE_STANDARD_TYPE
                                          "," G_FILE_ATTRIBUTE_STANDARD_NAME,
                                          0,
                                          NULL,
-                                         NULL);
+                                         &error);
+
   if (enumerate == NULL)
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_TOO_MANY_OPEN_FILES))
+        {
+          g_clear_error (&error);
+          pending = g_slist_prepend (pending, g_object_ref (store));
+          return TRUE;
+        }
+
+      g_clear_error (&error);
+      g_object_unref (store);
+      return FALSE;
+    }
+
+  if (active > 20)
+    {
+      g_object_unref (enumerate);
+      pending = g_slist_prepend (pending, g_object_ref (store));
+      return TRUE;
+    }
+
+  active++;
+  g_file_enumerator_next_files_async (enumerate,
+                                      g_file_is_native (file) ? 5000 : 100,
+                                      G_PRIORITY_DEFAULT_IDLE,
+                                      NULL,
+                                      got_files,
+                                      g_object_ref (store));
+
+  g_object_unref (enumerate);
+  return TRUE;
+}
+
+static void
+got_files (GObject      *enumerate,
+           GAsyncResult *res,
+           gpointer      store)
+{
+  GList *l, *files;
+  GFile *file = g_object_get_data (store, "file");
+  GPtrArray *array;
+
+  files = g_file_enumerator_next_files_finish (G_FILE_ENUMERATOR (enumerate), res, NULL);
+  if (files == NULL)
+    {
+      g_object_unref (store);
+      if (pending)
+        {
+          GListStore *store = pending->data;
+          pending = g_slist_remove (pending, store);
+          start_enumerate (store);
+        }
+      active--;
+      return;
+    }
+
+  array = g_ptr_array_new ();
+  g_ptr_array_new_with_free_func (g_object_unref);
+  for (l = files; l; l = l->next)
+    {
+      GFileInfo *info = l->data;
+      GFile *child;
+
+      child = g_file_get_child (file, g_file_info_get_name (info));
+      g_ptr_array_add (array, child);
+    }
+  g_list_free_full (files, g_object_unref);
+
+  g_list_store_splice (store, g_list_model_get_n_items (store), 0, array->pdata, array->len);
+  g_ptr_array_unref (array);
+
+  g_file_enumerator_next_files_async (G_FILE_ENUMERATOR (enumerate),
+                                      g_file_is_native (file) ? 5000 : 100,
+                                      G_PRIORITY_DEFAULT_IDLE,
+                                      NULL,
+                                      got_files,
+                                      store);
+}
+
+static GListModel *
+create_list_model_for_directory (gpointer file,
+                                 gpointer unused)
+{
+  GListStore *store;
+
+  if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
     return NULL;
 
   store = g_list_store_new (G_TYPE_FILE);
+  g_object_set_data_full (G_OBJECT (store), "file", g_object_ref (file), g_object_unref);
 
-  while (g_file_enumerator_iterate (enumerate, &info, NULL, NULL, NULL))
-    {
-      if (info == NULL)
-        break;
-
-      child = g_file_get_child (file, g_file_info_get_name (info));
-      g_list_store_append (store, child);
-      g_object_unref (child);
-    }
-
-  g_object_unref (enumerate);
-
-  return G_LIST_MODEL (store);
+  if (start_enumerate (store))
+    return G_LIST_MODEL (store);
+  else
+    return NULL;
 }
 
 static GtkWidget *
