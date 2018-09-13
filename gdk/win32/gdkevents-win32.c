@@ -2736,10 +2736,9 @@ gdk_event_translate (MSG  *msg,
           if (SystemParametersInfo (SPI_GETWHEELSCROLLCHARS, 0, &chars_multiplier, 0))
             event->scroll.delta_x *= (gdouble) chars_multiplier;
         }
-      /* It seems that delta values given by Windows are
-       * inverted (positive delta scrolls up, not down).
+      /* Positive delta scrolls up, not down,
+         see API documentation for WM_MOUSEWHEEL message.
        */
-      event->scroll.delta_x *= -1.0;
       event->scroll.delta_y *= -1.0;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       event->scroll.x = (gint16) point.x / impl->surface_scale;
