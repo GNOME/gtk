@@ -654,8 +654,11 @@ gtk_im_context_wayland_focus_out (GtkIMContext *context)
   commit_state (context_wayland);
 
   /* after disable, incoming state changes won't take effect anyway */
-  text_input_preedit (global, global->text_input, "", 0, 0);
-  text_input_preedit_apply (global);
+  if (context_wayland->current_preedit.text)
+    {
+      text_input_preedit (global, global->text_input, NULL, 0, 0);
+      text_input_preedit_apply (global);
+    }
 
   global->current = NULL;
 }
