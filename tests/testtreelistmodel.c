@@ -181,15 +181,35 @@ update_adjustment (GListModel    *model,
                    GtkAdjustment *adjustment)
 {
   gtk_adjustment_set_upper (adjustment, MAX (ROWS, g_list_model_get_n_items (model)));
+  g_print ("%u items\n", g_list_model_get_n_items (model));
+}
+
+static gboolean
+match_file (gpointer item, gpointer data)
+{
+  GtkWidget *search_entry = data;
+  GFile *file = gtk_tree_list_row_get_item (item);
+  char *path;
+  gboolean result;
+  
+  path = g_file_get_path (file);
+
+  result = strstr (path, gtk_entry_get_text (GTK_ENTRY (search_entry))) != NULL;
+
+  g_object_unref (file);
+  g_free (path);
+
+  return result;
 }
 
 int
 main (int argc, char *argv[])
 {
   GtkAdjustment *adjustment;
-  GtkWidget *win, *box, *scrollbar, *listbox;
+  GtkWidget *win, *hbox, *vbox, *scrollbar, *listbox, *search_entry;
   GListModel *dirmodel;
   GtkTreeListModel *tree;
+  GtkFilterListModel *filter;
   GtkSliceListModel *slice;
   GFile *root;
 
@@ -199,12 +219,19 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (win), box);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (win), vbox);
+
+  search_entry = gtk_search_entry_new ();
+  gtk_container_add (GTK_CONTAINER (vbox), search_entry);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), hbox);
+  gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   listbox = gtk_list_box_new ();
   gtk_widget_set_hexpand (listbox, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), listbox);
+  gtk_container_add (GTK_CONTAINER (hbox), listbox);
 
   if (argc > 1)
     root = g_file_new_for_commandline_arg (argv[1]);
@@ -218,7 +245,12 @@ main (int argc, char *argv[])
                                   NULL, NULL);
   g_object_unref (dirmodel);
 
-  slice = gtk_slice_list_model_new (G_LIST_MODEL (tree), 0, ROWS);
+  filter = gtk_filter_list_model_new (G_LIST_MODEL (tree),
+                                      match_file,
+                                      search_entry,
+                                      NULL);
+  g_signal_connect_swapped (search_entry, "search-changed", G_CALLBACK (gtk_filter_list_model_refilter), filter);
+  slice = gtk_slice_list_model_new (G_LIST_MODEL (filter), 0, ROWS);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (listbox),
                            G_LIST_MODEL (slice),
@@ -230,12 +262,13 @@ main (int argc, char *argv[])
                                    1, ROWS - 1,
                                    ROWS);
   g_object_bind_property (adjustment, "value", slice, "offset", 0);
-  g_signal_connect (tree, "items-changed", G_CALLBACK (update_adjustment), adjustment);
+  g_signal_connect (filter, "items-changed", G_CALLBACK (update_adjustment), adjustment);
 
   scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
-  gtk_container_add (GTK_CONTAINER (box), scrollbar);
+  gtk_container_add (GTK_CONTAINER (hbox), scrollbar);
 
   g_object_unref (tree);
+  g_object_unref (filter);
   g_object_unref (slice);
 
   gtk_widget_show (win);
