@@ -37,6 +37,7 @@
 #include "gtkshow.h"
 #include "gtkintl.h"
 #include "gtkwindowprivate.h"
+#include "gtkprivate.h"
 
 
 typedef struct {
