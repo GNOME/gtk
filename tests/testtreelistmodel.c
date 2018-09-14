@@ -103,10 +103,42 @@ got_files (GObject      *enumerate,
                                       store);
 }
 
+static int
+compare_files (gconstpointer first,
+               gconstpointer second,
+               gpointer unused)
+{
+  char *first_path, *second_path;
+  int result;
+#if 0
+  GFileType first_type, second_type;
+
+  /* This is a bit slow, because each g_file_query_file_type() does a stat() */
+  first_type = g_file_query_file_type (G_FILE (first), G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL);
+  second_type = g_file_query_file_type (G_FILE (second), G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL);
+
+  if (first_type == G_FILE_TYPE_DIRECTORY && second_type != G_FILE_TYPE_DIRECTORY)
+    return -1;
+  if (first_type != G_FILE_TYPE_DIRECTORY && second_type == G_FILE_TYPE_DIRECTORY)
+    return 1;
+#endif
+
+  first_path = g_file_get_path (G_FILE (first));
+  second_path = g_file_get_path (G_FILE (second));
+
+  result = strcasecmp (first_path, second_path);
+
+  g_free (first_path);
+  g_free (second_path);
+
+  return result;
+}
+
 static GListModel *
 create_list_model_for_directory (gpointer file,
                                  gpointer unused)
 {
+  GtkSortListModel *sort;
   GListStore *store;
 
   if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
@@ -115,10 +147,14 @@ create_list_model_for_directory (gpointer file,
   store = g_list_store_new (G_TYPE_FILE);
   g_object_set_data_full (G_OBJECT (store), "file", g_object_ref (file), g_object_unref);
 
-  if (start_enumerate (store))
-    return G_LIST_MODEL (store);
-  else
+  if (!start_enumerate (store))
     return NULL;
+
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (store),
+                                  compare_files,
+                                  NULL, NULL);
+  g_object_unref (store);
+  return G_LIST_MODEL (sort);
 }
 
 static GtkWidget *
@@ -181,7 +217,21 @@ update_adjustment (GListModel    *model,
                    GtkAdjustment *adjustment)
 {
   gtk_adjustment_set_upper (adjustment, MAX (ROWS, g_list_model_get_n_items (model)));
-  g_print ("%u items\n", g_list_model_get_n_items (model));
+}
+
+static void
+update_statusbar (GListModel   *model,
+                  guint         position,
+                  guint         removed,
+                  guint         added,
+                  GtkStatusbar *statusbar)
+{
+  char *s;
+  gtk_statusbar_remove_all (statusbar, 0);
+
+  s = g_strdup_printf ("%u items", g_list_model_get_n_items (model));
+  gtk_statusbar_push (statusbar, 0, s);
+  g_free (s);
 }
 
 static gboolean
@@ -206,7 +256,7 @@ int
 main (int argc, char *argv[])
 {
   GtkAdjustment *adjustment;
-  GtkWidget *win, *hbox, *vbox, *scrollbar, *listbox, *search_entry;
+  GtkWidget *win, *hbox, *vbox, *scrollbar, *listbox, *search_entry, *statusbar;
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
@@ -266,6 +316,11 @@ main (int argc, char *argv[])
 
   scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
   gtk_container_add (GTK_CONTAINER (hbox), scrollbar);
+
+  statusbar = gtk_statusbar_new ();
+  g_signal_connect (filter, "items-changed", G_CALLBACK (update_statusbar), statusbar);
+  update_statusbar (G_LIST_MODEL (filter), 0, 0, 0, GTK_STATUSBAR (statusbar));
+  gtk_container_add (GTK_CONTAINER (vbox), statusbar);
 
   g_object_unref (tree);
   g_object_unref (filter);
