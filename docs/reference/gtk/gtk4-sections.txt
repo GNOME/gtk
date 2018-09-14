@@ -2617,6 +2617,28 @@ gtk_slice_list_model_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtksortlistmodel</FILE>
+<TITLE>GtkSortListModel</TITLE>
+GtkSortListModel
+gtk_sort_list_model_new
+gtk_sort_list_model_new_for_type
+gtk_sort_list_model_set_sort_func
+gtk_sort_list_model_has_sort
+gtk_sort_list_model_set_model
+gtk_sort_list_model_get_model
+gtk_sort_list_model_resort
+<SUBSECTION Standard>
+GTK_SORT_LIST_MODEL
+GTK_IS_SORT_LIST_MODEL
+GTK_TYPE_SORT_LIST_MODEL
+GTK_SORT_LIST_MODEL_CLASS
+GTK_IS_SORT_LIST_MODEL_CLASS
+GTK_SORT_LIST_MODEL_GET_CLASS
+<SUBSECTION Private>
+gtk_sort_list_model_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkspinbutton</FILE>
 <TITLE>GtkSpinButton</TITLE>
 GtkSpinButton
