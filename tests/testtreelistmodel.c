@@ -2,7 +2,7 @@
 
 #define ROWS 30
 
-GSList *pending;
+GSList *pending = NULL;
 guint active = 0;
 
 static void
@@ -26,7 +26,7 @@ start_enumerate (GListStore *store)
 
   if (enumerate == NULL)
     {
-      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_TOO_MANY_OPEN_FILES))
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_TOO_MANY_OPEN_FILES) && active)
         {
           g_clear_error (&error);
           pending = g_slist_prepend (pending, g_object_ref (store));
@@ -219,19 +219,36 @@ update_adjustment (GListModel    *model,
   gtk_adjustment_set_upper (adjustment, MAX (ROWS, g_list_model_get_n_items (model)));
 }
 
-static void
-update_statusbar (GListModel   *model,
-                  guint         position,
-                  guint         removed,
-                  guint         added,
-                  GtkStatusbar *statusbar)
+static gboolean
+update_statusbar (GtkStatusbar *statusbar)
 {
-  char *s;
+  GListModel *model = g_object_get_data (G_OBJECT (statusbar), "model");
+  GString *string = g_string_new (NULL);
+  guint n;
+  gboolean result = G_SOURCE_REMOVE;
+
   gtk_statusbar_remove_all (statusbar, 0);
 
-  s = g_strdup_printf ("%u items", g_list_model_get_n_items (model));
-  gtk_statusbar_push (statusbar, 0, s);
-  g_free (s);
+  n = g_list_model_get_n_items (model);
+  g_string_append_printf (string, "%u", n);
+  if (GTK_IS_FILTER_LIST_MODEL (model))
+    {
+      guint n_unfiltered = g_list_model_get_n_items (gtk_filter_list_model_get_model (GTK_FILTER_LIST_MODEL (model)));
+      if (n != n_unfiltered)
+        g_string_append_printf (string, "/%u", n_unfiltered);
+    }
+  g_string_append (string, " items");
+
+  if (pending || active)
+    {
+      g_string_append_printf (string, " (%u directories remaining)", active + g_slist_length (pending));
+      result = G_SOURCE_CONTINUE;
+    }
+
+  gtk_statusbar_push (statusbar, 0, string->str);
+  g_free (string->str);
+
+  return result;
 }
 
 static gboolean
@@ -318,8 +335,10 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (hbox), scrollbar);
 
   statusbar = gtk_statusbar_new ();
-  g_signal_connect (filter, "items-changed", G_CALLBACK (update_statusbar), statusbar);
-  update_statusbar (G_LIST_MODEL (filter), 0, 0, 0, GTK_STATUSBAR (statusbar));
+  gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
+  g_object_set_data (G_OBJECT (statusbar), "model", filter);
+  g_signal_connect_swapped (filter, "items-changed", G_CALLBACK (update_statusbar), statusbar);
+  update_statusbar (GTK_STATUSBAR (statusbar));
   gtk_container_add (GTK_CONTAINER (vbox), statusbar);
 
   g_object_unref (tree);
