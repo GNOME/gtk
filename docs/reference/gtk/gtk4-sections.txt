@@ -458,6 +458,24 @@ gtk_single_selection_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtklistview</FILE>
+<TITLE>GtkListView</TITLE>
+GtkListView
+gtk_list_view_new
+gtk_list_view_set_model
+gtk_list_view_get_model
+<SUBSECTION Standard>
+GTK_LIST_VIEW
+GTK_LIST_VIEW_CLASS
+GTK_LIST_VIEW_GET_CLASS
+GTK_IS_LIST_VIEW
+GTK_IS_LIST_VIEW_CLASS
+GTK_TYPE_LIST_VIEW
+<SUBSECTION Private>
+gtk_list_view_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkbuildable</FILE>
 GtkBuildable
 GtkBuildableIface
