@@ -146,7 +146,9 @@ gtk/gtkfilechooserwidget.c
 gtk/gtkfilefilter.c
 gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
+gtk/gtkfilterlistmodel.c
 gtk/gtkfixed.c
+gtk/gtkflattenlistmodel.c
 gtk/gtkflowbox.c
 gtk/gtkfontbutton.c
 gtk/gtkfontchooser.c
@@ -184,6 +186,7 @@ gtk/gtkliststore.c
 gtk/gtklockbutton.c
 gtk/gtkmagnifier.c
 gtk/gtkmain.c
+gtk/gtkmaplistmodel.c
 gtk/gtkmediacontrols.c
 gtk/gtkmediafile.c
 gtk/gtkmediastream.c
@@ -230,6 +233,7 @@ gtk/gtkprintoperation-unix.c
 gtk/gtkprintoperation-win32.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogressbar.c
+gtk/gtkpropertylookuplistmodel.c
 gtk/gtkradiobutton.c
 gtk/gtkradiomenuitem.c
 gtk/gtkradiotoolbutton.c
@@ -256,6 +260,8 @@ gtk/gtkshortcutsshortcut.c
 gtk/gtkshortcutswindow.c
 gtk/gtksidebarrow.c
 gtk/gtksizegroup.c
+gtk/gtkslicelistmodel.c
+gtk/gtksortlistmodel.c
 gtk/gtkspinbutton.c
 gtk/gtkspinner.c
 gtk/gtkstack.c
@@ -286,6 +292,7 @@ gtk/gtktoolshell.c
 gtk/gtktooltipwindow.c
 gtk/gtktrashmonitor.c
 gtk/gtktreednd.c
+gtk/gtktreelistmodel.c
 gtk/gtktreemenu.c
 gtk/gtktreemodel.c
 gtk/gtktreemodelfilter.c
@@ -302,10 +309,10 @@ gtk/gtkwidget.c
 gtk/gtkwidgetpaintable.c
 gtk/gtkwindow.c
 gtk/inspector/action-editor.c
+gtk/inspector/controllers.c
 gtk/inspector/css-editor.c
 gtk/inspector/css-node-tree.c
 gtk/inspector/general.c
-gtk/inspector/gestures.c
 gtk/inspector/gtkstackcombo.c
 gtk/inspector/menu.c
 gtk/inspector/misc-info.c
