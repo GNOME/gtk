@@ -19,6 +19,7 @@ start_enumerate (GListStore *store)
 
   enumerate = g_file_enumerate_children (file,
                                          G_FILE_ATTRIBUTE_STANDARD_TYPE
+                                         "," G_FILE_ATTRIBUTE_STANDARD_ICON
                                          "," G_FILE_ATTRIBUTE_STANDARD_NAME,
                                          0,
                                          NULL,
@@ -88,9 +89,10 @@ got_files (GObject      *enumerate,
       GFile *child;
 
       child = g_file_get_child (file, g_file_info_get_name (info));
-      g_ptr_array_add (array, child);
+      g_object_set_data_full (G_OBJECT (info), "file", child, g_object_unref);
+      g_ptr_array_add (array, info);
     }
-  g_list_free_full (files, g_object_unref);
+  g_list_free (files);
 
   g_list_store_splice (store, g_list_model_get_n_items (store), 0, array->pdata, array->len);
   g_ptr_array_unref (array);
@@ -108,6 +110,7 @@ compare_files (gconstpointer first,
                gconstpointer second,
                gpointer unused)
 {
+  GFile *first_file, *second_file;
   char *first_path, *second_path;
   int result;
 #if 0
@@ -123,8 +126,10 @@ compare_files (gconstpointer first,
     return 1;
 #endif
 
-  first_path = g_file_get_path (G_FILE (first));
-  second_path = g_file_get_path (G_FILE (second));
+  first_file = g_object_get_data (G_OBJECT (first), "file");
+  second_file = g_object_get_data (G_OBJECT (second), "file");
+  first_path = g_file_get_path (first_file);
+  second_path = g_file_get_path (second_file);
 
   result = strcasecmp (first_path, second_path);
 
@@ -135,8 +140,7 @@ compare_files (gconstpointer first,
 }
 
 static GListModel *
-create_list_model_for_directory (gpointer file,
-                                 gpointer unused)
+create_list_model_for_directory (gpointer file)
 {
   GtkSortListModel *sort;
   GListStore *store;
@@ -144,7 +148,7 @@ create_list_model_for_directory (gpointer file,
   if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
     return NULL;
 
-  store = g_list_store_new (G_TYPE_FILE);
+  store = g_list_store_new (G_TYPE_FILE_INFO);
   g_object_set_data_full (G_OBJECT (store), "file", g_object_ref (file), g_object_unref);
 
   if (!start_enumerate (store))
@@ -162,13 +166,15 @@ create_widget_for_model (gpointer item,
                          gpointer root)
 {
   GtkWidget *row, *box, *child;
+  GFileInfo *info;
   GFile *file;
   guint depth;
+  GIcon *icon;
 
   row = gtk_list_box_row_new ();
   gtk_widget_set_vexpand (row, TRUE);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_container_add (GTK_CONTAINER (row), box);
 
   depth = gtk_tree_list_row_get_depth (item);
@@ -200,13 +206,34 @@ create_widget_for_model (gpointer item,
     }
   gtk_container_add (GTK_CONTAINER (box), child);
 
-  file = gtk_tree_list_row_get_item (item);
+  info = gtk_tree_list_row_get_item (item);
+
+  icon = g_file_info_get_icon (info);
+  if (icon)
+    {
+      child = gtk_image_new_from_gicon (icon);
+      gtk_container_add (GTK_CONTAINER (box), child);
+    }
+
+  file = g_object_get_data (G_OBJECT (info), "file");
   child = gtk_label_new (g_file_get_basename (file));
-  g_object_unref (file);
+  g_object_unref (info);
 
   gtk_container_add (GTK_CONTAINER (box), child);
 
   return row;
+}
+
+static GListModel *
+create_list_model_for_file_info (gpointer file_info,
+                                 gpointer unused)
+{
+  GFile *file = g_object_get_data (file_info, "file");
+
+  if (file == NULL)
+    return NULL;
+
+  return create_list_model_for_directory (file);
 }
 
 static void
@@ -255,7 +282,8 @@ static gboolean
 match_file (gpointer item, gpointer data)
 {
   GtkWidget *search_entry = data;
-  GFile *file = gtk_tree_list_row_get_item (item);
+  GFileInfo *info = gtk_tree_list_row_get_item (item);
+  GFile *file = g_object_get_data (G_OBJECT (info), "file");
   char *path;
   gboolean result;
   
@@ -263,7 +291,7 @@ match_file (gpointer item, gpointer data)
 
   result = strstr (path, gtk_entry_get_text (GTK_ENTRY (search_entry))) != NULL;
 
-  g_object_unref (file);
+  g_object_unref (info);
   g_free (path);
 
   return result;
@@ -304,11 +332,11 @@ main (int argc, char *argv[])
     root = g_file_new_for_commandline_arg (argv[1]);
   else
     root = g_file_new_for_path (g_get_current_dir ());
-  dirmodel = create_list_model_for_directory (root, NULL);
+  dirmodel = create_list_model_for_directory (root);
   tree = gtk_tree_list_model_new (FALSE,
                                   dirmodel,
                                   TRUE,
-                                  create_list_model_for_directory,
+                                  create_list_model_for_file_info,
                                   NULL, NULL);
   g_object_unref (dirmodel);
 
