@@ -39,6 +39,14 @@ G_DECLARE_FINAL_TYPE (GtkTreeListModel, gtk_tree_list_model, GTK, TREE_LIST_MODE
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, GTK, TREE_LIST_ROW, GObject)
 
+/**
+ * GtkTreeListModelCreateModelFunc:
+ * @item: The item that is expaned
+ * @data: User data passed when registering the function
+ *
+ * Prototype of the function called to create new child models when
+ * gtk_tree_list_row_set_expanded() is called.
+ */
 typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer data);
 
 GDK_AVAILABLE_IN_ALL
