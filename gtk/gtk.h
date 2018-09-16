@@ -146,6 +146,7 @@
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtkliststore.h>
+#include <gtk/gtklistview.h>
 #include <gtk/gtklockbutton.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmaplistmodel.h>
