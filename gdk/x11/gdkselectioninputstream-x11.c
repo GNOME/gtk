@@ -140,7 +140,7 @@ gdk_x11_selection_input_stream_flush (GdkX11SelectionInputStream *stream)
                                   written, priv->pending_size));
   g_task_return_int (priv->pending_task, written);
 
-  priv->pending_task = NULL;
+  g_clear_object (&priv->pending_task);
   priv->pending_data = NULL;
   priv->pending_size = 0;
 }
