@@ -28,6 +28,36 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GtkListCreateWidgetFunc:
+ * @user_data: (closure): user data
+ *
+ * Called whenever a new widget needs to be created for managing a row in
+ * the list.
+ *
+ * The widget will later be bound to an item via the #GtkListBindWidgetFunc.
+ *
+ * Returns: (transfer full): a #GtkWidget
+ */
+typedef GtkWidget * (* GtkListCreateWidgetFunc) (gpointer user_data);
+
+/**
+ * GtkListBindWidgetFunc:
+ * @widget: The #GtkWidget to bind
+ * @item: (type GObject) (allow-none): item to bind or %NULL to unbind
+ *     the widget.
+ * @user_data: (closure): user data
+ *
+ * Binds a widget previously created via a #GtkListCreateWidgetFunc to
+ * an @item.
+ *
+ * Rebinding a @widget to different @items is supported as well as
+ * unbinding it by setting @item to %NULL.
+ */
+typedef void (* GtkListBindWidgetFunc) (GtkWidget *widget,
+                                        gpointer   item,
+                                        gpointer   user_data);
+
 #define GTK_TYPE_LIST_VIEW         (gtk_list_view_get_type ())
 
 GDK_AVAILABLE_IN_ALL
@@ -41,7 +71,12 @@ GListModel *    gtk_list_view_get_model                         (GtkListView    
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_model                         (GtkListView            *self,
                                                                  GListModel             *model);
-
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_functions                     (GtkListView            *self,
+                                                                 GtkListCreateWidgetFunc create_func,
+                                                                 GtkListBindWidgetFunc   bind_func,
+                                                                 gpointer                user_data,
+                                                                 GDestroyNotify          user_destroy);
 
 G_END_DECLS
 
