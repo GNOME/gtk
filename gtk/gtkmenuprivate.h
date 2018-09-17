@@ -81,8 +81,6 @@ struct _GtkMenuPrivate
   guint needs_destruction_ref : 1;
   guint scroll_fast           : 1;
 
-  guint upper_arrow_visible   : 1;
-  guint lower_arrow_visible   : 1;
   guint upper_arrow_prelight  : 1;
   guint lower_arrow_prelight  : 1;
 

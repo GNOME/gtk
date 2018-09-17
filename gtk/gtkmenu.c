@@ -1123,13 +1123,13 @@ gtk_menu_init (GtkMenu *menu)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->top_arrow_widget),
                                GTK_STYLE_CLASS_TOP);
   gtk_widget_set_parent (priv->top_arrow_widget, GTK_WIDGET (menu));
-  gtk_widget_hide (priv->top_arrow_widget);
+  gtk_widget_set_child_visible (priv->top_arrow_widget, FALSE);
 
   priv->bottom_arrow_widget = gtk_icon_new ("arrow");
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->bottom_arrow_widget),
                                GTK_STYLE_CLASS_BOTTOM);
   gtk_widget_set_parent (priv->bottom_arrow_widget, GTK_WIDGET (menu));
-  gtk_widget_hide (priv->bottom_arrow_widget);
+  gtk_widget_set_child_visible (priv->bottom_arrow_widget, FALSE);
 
   gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
@@ -1967,8 +1967,8 @@ get_arrows_border (GtkMenu   *menu,
                       &bottom_arrow_height, NULL,
                       NULL, NULL);
 
-  border->top = priv->upper_arrow_visible ? top_arrow_height : 0;
-  border->bottom = priv->lower_arrow_visible ? bottom_arrow_height : 0;
+  border->top = gtk_widget_get_child_visible (priv->top_arrow_widget) ? top_arrow_height : 0;
+  border->bottom = gtk_widget_get_child_visible (priv->bottom_arrow_widget) ? bottom_arrow_height : 0;
   border->left = border->right = 0;
 }
 
@@ -2537,13 +2537,13 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   arrow_allocation.width = width;
   arrow_allocation.height = arrow_border.top;
 
-  if (priv->upper_arrow_visible)
+  if (gtk_widget_get_child_visible (priv->top_arrow_widget))
     gtk_widget_size_allocate (priv->top_arrow_widget, &arrow_allocation, -1);
 
   arrow_allocation.y = height - y - arrow_border.bottom;
   arrow_allocation.height = arrow_border.bottom;
 
-  if (priv->lower_arrow_visible)
+  if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
     gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1);
 
   width = MAX (1, width);
@@ -3122,7 +3122,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   get_arrows_sensitive_area (menu, &rect, NULL);
 
   in_arrow = FALSE;
-  if (priv->upper_arrow_visible &&
+  if (gtk_widget_get_child_visible (priv->top_arrow_widget) &&
       (x >= rect.x) && (x < rect.x + rect.width) &&
       (y >= rect.y) && (y < rect.y + rect.height))
     {
@@ -3133,7 +3133,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
     {
       gboolean arrow_pressed = FALSE;
 
-      if (priv->upper_arrow_visible)
+      if (gtk_widget_get_child_visible (priv->top_arrow_widget))
         {
           scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
 
@@ -3193,7 +3193,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   get_arrows_sensitive_area (menu, NULL, &rect);
 
   in_arrow = FALSE;
-  if (priv->lower_arrow_visible &&
+  if (gtk_widget_get_child_visible (priv->bottom_arrow_widget) &&
       (x >= rect.x) && (x < rect.x + rect.width) &&
       (y >= rect.y) && (y < rect.y + rect.height))
     {
@@ -3204,7 +3204,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
     {
       gboolean arrow_pressed = FALSE;
 
-      if (priv->lower_arrow_visible)
+      if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
         {
           scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
 
@@ -3360,7 +3360,9 @@ gtk_menu_captured_event (GtkWidget *widget,
   menu = GTK_MENU (widget);
   priv = menu->priv;
 
-  if (!priv->upper_arrow_visible && !priv->lower_arrow_visible && priv->drag_start_y < 0)
+  if (!gtk_widget_get_child_visible (priv->top_arrow_widget) &&
+      !gtk_widget_get_child_visible (priv->bottom_arrow_widget) &&
+      priv->drag_start_y < 0)
     return retval;
 
   source_device = gdk_event_get_source_device (event);
@@ -3427,10 +3429,10 @@ gtk_menu_captured_event (GtkWidget *widget,
               view_height = gdk_surface_get_height (gtk_widget_get_surface (widget));
               get_arrows_border (menu, &arrow_border);
 
-              if (priv->upper_arrow_visible)
+              if (gtk_widget_get_child_visible (priv->top_arrow_widget))
                 view_height -= arrow_border.top;
 
-              if (priv->lower_arrow_visible)
+              if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
                 view_height -= arrow_border.bottom;
 
               offset = CLAMP (offset,
@@ -3687,11 +3689,13 @@ gtk_menu_scroll_to (GtkMenu *menu,
   GtkCssNode *top_arrow_node, *bottom_arrow_node;
 
   top_arrow_node = gtk_widget_get_css_node (priv->top_arrow_widget);
-  gtk_css_node_set_visible (top_arrow_node, priv->upper_arrow_visible);
+  gtk_css_node_set_visible (top_arrow_node,
+                            gtk_widget_get_child_visible (priv->top_arrow_widget));
   gtk_css_node_set_state (top_arrow_node, priv->upper_arrow_state);
 
   bottom_arrow_node = gtk_widget_get_css_node (priv->bottom_arrow_widget);
-  gtk_css_node_set_visible (bottom_arrow_node, priv->lower_arrow_visible);
+  gtk_css_node_set_visible (top_arrow_node,
+                            gtk_widget_get_child_visible (priv->bottom_arrow_widget));
   gtk_css_node_set_state (bottom_arrow_node, priv->lower_arrow_state);
 
   priv->scroll_offset = offset;
@@ -4156,7 +4160,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
           }
 
         menu_shell->priv->ignore_enter = TRUE;
-        old_upper_arrow_visible = priv->upper_arrow_visible;
+        old_upper_arrow_visible = gtk_widget_get_child_visible (priv->top_arrow_widget);
         old_offset = priv->scroll_offset;
 
         new_offset = priv->scroll_offset + step;
@@ -4167,7 +4171,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
         if (menu_shell->priv->active_menu_item)
           {
             GtkWidget *new_child;
-            gboolean new_upper_arrow_visible = priv->upper_arrow_visible;
+            gboolean new_upper_arrow_visible = gtk_widget_get_child_visible (priv->top_arrow_widget);
             GtkBorder arrow_border;
 
             get_arrows_border (menu, &arrow_border);
