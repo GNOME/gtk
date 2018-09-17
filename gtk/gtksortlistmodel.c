@@ -418,7 +418,7 @@ gtk_sort_list_model_create_sequences (GtkSortListModel *self)
  * @self: a #GtkSortListModel
  * @sort_func: (allow-none): sort function or %NULL to not sort items
  * @user_data: user data passed to @sort_func
- * @destroy: destroy notifier for @user_data
+ * @user_destroy: destroy notifier for @user_data
  *
  * Sets the function used to sort items. The function will be called for every
  * item and must return an integer less than, equal to, or greater than zero if

@@ -39,13 +39,13 @@ G_DECLARE_FINAL_TYPE (GtkMapListModel, gtk_map_list_model, GTK, MAP_LIST_MODEL, 
 /**
  * GtkMapListModelMapFunc:
  * @item: (transfer full): The item to map
- * @data: user data
+ * @user_data: user data
  *
  * User function that is called to map an @item of the original model.
  *
  * Returns: (transfer full): The item to map to. This function may not return %NULL
  */
-typedef gpointer (* GtkMapListModelMapFunc) (gpointer item, gpointer data);
+typedef gpointer (* GtkMapListModelMapFunc) (gpointer item, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL
 GtkMapListModel *       gtk_map_list_model_new                  (GType                   item_type,

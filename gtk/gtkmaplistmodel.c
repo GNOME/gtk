@@ -421,7 +421,7 @@ gtk_map_list_model_augment (GtkCssRbTree *map,
  * @model: (allow-none): The model to map or %NULL for none
  * @map_func: (allow-none): map function or %NULL to not map items
  * @user_data: user data passed to @map_func
- * @destroy: destroy notifier for @user_data
+ * @user_destroy: destroy notifier for @user_data
  *
  * Creates a new #GtkMapListModel for the given arguments.
  *
@@ -431,8 +431,8 @@ GtkMapListModel *
 gtk_map_list_model_new (GType                   item_type,
                         GListModel             *model,
                         GtkMapListModelMapFunc  map_func,
-                        gpointer                data,
-                        GDestroyNotify          data_destroy)
+                        gpointer                user_data,
+                        GDestroyNotify          user_destroy)
 {
   GtkMapListModel *result;
 
@@ -445,7 +445,7 @@ gtk_map_list_model_new (GType                   item_type,
                          NULL);
 
   if (map_func)
-    gtk_map_list_model_set_map_func (result, map_func, data, data_destroy);
+    gtk_map_list_model_set_map_func (result, map_func, user_data, user_destroy);
 
   return result;
 }
@@ -498,7 +498,7 @@ gtk_map_list_model_init_items (GtkMapListModel *self)
  * @self: a #GtkMapListModel
  * @map_func: (allow-none): map function or %NULL to not map items
  * @user_data: user data passed to @map_func
- * @destroy: destroy notifier for @user_data
+ * @user_destroy: destroy notifier for @user_data
  *
  * Sets the function used to map items. The function will be called whenever
  * an item needs to be mapped and must return the item to use for the given

@@ -470,7 +470,7 @@ gtk_slice_list_model_get_offset (GtkSliceListModel *self)
 }
 
 /**
- * gtk_slice_list_model_set_offset:
+ * gtk_slice_list_model_set_size:
  * @self: a #GtkSliceListModel
  * @size: the maximum size
  *

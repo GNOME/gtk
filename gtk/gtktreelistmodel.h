@@ -42,20 +42,20 @@ G_DECLARE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, GTK, TREE_LIST_ROW, GOb
 /**
  * GtkTreeListModelCreateModelFunc:
  * @item: The item that is expaned
- * @data: User data passed when registering the function
+ * @user_data: User data passed when registering the function
  *
  * Prototype of the function called to create new child models when
  * gtk_tree_list_row_set_expanded() is called.
  */
-typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer data);
+typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL
 GtkTreeListModel *      gtk_tree_list_model_new                 (gboolean                passthrough,
                                                                  GListModel             *root,
                                                                  gboolean                autoexpand,
                                                                  GtkTreeListModelCreateModelFunc create_func,
-                                                                 gpointer                data,
-                                                                 GDestroyNotify          data_destroy);
+                                                                 gpointer                user_data,
+                                                                 GDestroyNotify          user_destroy);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_tree_list_model_get_model           (GtkTreeListModel       *self);
@@ -93,7 +93,7 @@ GDK_AVAILABLE_IN_ALL
 GtkTreeListRow *        gtk_tree_list_row_get_parent            (GtkTreeListRow         *self);
 GDK_AVAILABLE_IN_ALL
 GtkTreeListRow *        gtk_tree_list_row_get_child             (GtkTreeListRow         *self,
-                                                                 guint                   child);
+                                                                 guint                   position);
 
 
 G_END_DECLS

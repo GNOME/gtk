@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkFilterListModel, gtk_filter_list_model, GTK, FILTER_LIST_MODEL, GObject)
 
-typedef gboolean (* GtkFilterListModelFilterFunc) (gpointer item, gpointer data);
+typedef gboolean (* GtkFilterListModelFilterFunc) (gpointer item, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL
 GtkFilterListModel *    gtk_filter_list_model_new               (GListModel             *model,
