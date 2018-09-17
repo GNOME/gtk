@@ -2522,6 +2522,19 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   for (i = 0; i < priv->heights_length; i++)
     priv->requested_height += priv->heights[i];
 
+
+  /* Show scroll arrows if necessary */
+  if (priv->requested_height > allocation->height)
+    {
+      gtk_widget_set_child_visible (priv->top_arrow_widget, TRUE);
+      gtk_widget_set_child_visible (priv->bottom_arrow_widget, TRUE);
+    }
+  else
+    {
+      gtk_widget_set_child_visible (priv->top_arrow_widget, FALSE);
+      gtk_widget_set_child_visible (priv->bottom_arrow_widget, FALSE);
+    }
+
   x = allocation->x;
   y = allocation->y;
   width = allocation->width;
@@ -2545,9 +2558,6 @@ gtk_menu_size_allocate (GtkWidget           *widget,
 
   if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
     gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1);
-
-  width = MAX (1, width);
-  height = MAX (1, height);
 
   if (menu_shell->priv->children)
     {
@@ -2599,15 +2609,28 @@ static void
 gtk_menu_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
+  GtkMenuPrivate *priv = gtk_menu_get_instance_private (GTK_MENU (widget));
+  GtkBorder arrows_border;
+
+  get_arrows_border (GTK_MENU (widget), &arrows_border);
+
+  /* TODO: This snapshots the arrow widgets twice. */
+
+  if (gtk_widget_get_child_visible (priv->top_arrow_widget))
+    gtk_widget_snapshot_child (widget, priv->top_arrow_widget, snapshot);
+
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT(
-                            0, 0,
+                            0, arrows_border.top,
                             gtk_widget_get_width (widget),
-                            gtk_widget_get_height (widget)));
+                            gtk_widget_get_height (widget) - arrows_border.top - arrows_border.bottom));
 
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->snapshot (widget, snapshot);
 
   gtk_snapshot_pop (snapshot);
+
+  if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
+    gtk_widget_snapshot_child (widget, priv->bottom_arrow_widget, snapshot);
 }
 
 static void
