@@ -174,7 +174,7 @@ gtk_sort_list_model_add_items (GtkSortListModel *self,
     {
       gpointer item = g_list_model_get_item (self->model, position + i);
       sorted_iter = g_sequence_insert_sorted (self->sorted, item, self->sort_func, self->user_data);
-      unsorted_iter = g_sequence_insert_before (unsorted_iter, sorted_iter);
+      g_sequence_insert_before (unsorted_iter, sorted_iter);
       if (unmodified_start != NULL || unmodified_end != NULL)
         {
           pos = g_sequence_iter_get_position (sorted_iter);
@@ -186,7 +186,7 @@ gtk_sort_list_model_add_items (GtkSortListModel *self,
   if (unmodified_start)
     *unmodified_start = start;
   if (unmodified_end)
-  *unmodified_end = end;
+    *unmodified_end = end;
 }
 
 static void
