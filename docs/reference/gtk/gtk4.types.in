@@ -121,6 +121,7 @@ gtk_label_get_type
 gtk_layout_child_get_type
 gtk_layout_manager_get_type
 gtk_link_button_get_type
+gtk_list_item_factory_get_type
 gtk_list_store_get_type
 gtk_list_box_get_type
 gtk_list_box_row_get_type
