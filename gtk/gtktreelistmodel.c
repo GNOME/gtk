@@ -25,6 +25,16 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+/**
+ * SECTION:gtktreelistmodel
+ * @Short_description: a List model that can create child models on demand
+ * @Title: GtkTreeListModel
+ * @See_also: #GListModel
+ *
+ * #GtkTreeListModel is a #GListModel implementation that can expand rows
+ * by creating new child list models on demand.
+ */
+
 enum {
   PROP_0,
   PROP_AUTOEXPAND,
