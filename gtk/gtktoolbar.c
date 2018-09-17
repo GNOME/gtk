@@ -281,7 +281,8 @@ static void            toolbar_content_set_start_allocation (ToolbarContent     
 							     GtkAllocation       *new_start_allocation);
 static void            toolbar_content_get_start_allocation (ToolbarContent      *content,
 							     GtkAllocation       *start_allocation);
-static gboolean        toolbar_content_get_expand           (ToolbarContent      *content);
+static gboolean        toolbar_content_get_expand           (ToolbarContent      *content,
+                                                             GtkOrientation       orientation);
 static void            toolbar_content_set_goal_allocation  (ToolbarContent      *content,
 							     GtkAllocation       *allocation);
 static void            toolbar_content_set_child_visible    (ToolbarContent      *content,
@@ -1336,7 +1337,7 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
         {
           ToolbarContent *content = list->data;
 
-          if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
+          if (toolbar_content_get_expand (content, priv->orientation) && new_states[i] == NORMAL)
             n_expand_items++;
         }
 
@@ -1344,7 +1345,7 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
         {
           ToolbarContent *content = list->data;
 
-          if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
+          if (toolbar_content_get_expand (content, priv->orientation) && new_states[i] == NORMAL)
             {
               gint extra = size / n_expand_items;
               if (size % n_expand_items != 0)
@@ -2904,10 +2905,10 @@ toolbar_content_set_start_allocation (ToolbarContent *content,
 }
 
 static gboolean
-toolbar_content_get_expand (ToolbarContent *content)
+toolbar_content_get_expand (ToolbarContent *content, GtkOrientation orientation)
 {
   if (!content->disappearing &&
-      gtk_tool_item_get_expand (content->item))
+      (gtk_tool_item_get_expand (content->item) || gtk_widget_compute_expand (GTK_WIDGET (content->item), orientation)))
     return TRUE;
 
   return FALSE;
