@@ -43,6 +43,7 @@ tests = [
   ['regression-tests'],
   ['scrolledwindow'],
   ['searchbar'],
+  ['sortlistmodel'],
   ['spinbutton'],
   ['stylecontext'],
   ['templates'],
