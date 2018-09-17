@@ -12,6 +12,9 @@ docpath = join_paths(gtk_datadir, 'gtk-doc', 'html')
 version_conf = configuration_data()
 version_conf.set('GTK_VERSION', meson.project_version())
 
+src_dir_conf = configuration_data()
+src_dir_conf.set('SRC_DIR', meson.source_root())
+
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
