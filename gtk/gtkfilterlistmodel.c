@@ -33,7 +33,7 @@
  *
  * #GtkFilterListModel is a list model that filters a given other
  * listmodel.
- * It hides some elements from the other elements according to
+ * It hides some elements from the other model according to
  * criteria given by a #GtkFilterListModelFilterFunc.
  */
 
