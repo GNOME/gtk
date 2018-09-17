@@ -22,7 +22,7 @@
 #include "gtklistview.h"
 
 #include "gtkintl.h"
-#include "gtkprivate.h"
+#include "gtklistitemfactoryprivate.h"
 
 /**
  * SECTION:gtklistview
@@ -38,6 +38,7 @@ struct _GtkListView
   GtkWidget parent_instance;
 
   GListModel *model;
+  GtkListItemFactory *item_factory;
 };
 
 enum
@@ -115,6 +116,8 @@ gtk_list_view_dispose (GObject *object)
   GtkListView *self = GTK_LIST_VIEW (object);
 
   gtk_list_view_clear_model (self);
+
+  g_clear_object (&self->item_factory);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
 }
@@ -256,5 +259,22 @@ gtk_list_view_set_model (GtkListView *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+}
+
+void
+gtk_list_view_set_functions (GtkListView            *self,
+                             GtkListCreateWidgetFunc create_func,
+                             GtkListBindWidgetFunc   bind_func,
+                             gpointer                user_data,
+                             GDestroyNotify          user_destroy)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (create_func);
+  g_return_if_fail (bind_func);
+  g_return_if_fail (user_data != NULL || user_destroy == NULL);
+
+  g_clear_object (&self->item_factory);
+
+  self->item_factory = gtk_list_item_factory_new (create_func, bind_func, user_data, user_destroy);
 }
 
