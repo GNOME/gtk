@@ -17,6 +17,7 @@ fedora-x86_64:
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
+  coverage: '/^\s+lines\.+:\s+([\d.]+\%)\s+/'
   artifacts:
     when: on_failure
     name: "gtk-${CI_COMMIT_REF_NAME}"
