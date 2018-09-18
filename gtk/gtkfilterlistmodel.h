@@ -36,6 +36,17 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkFilterListModel, gtk_filter_list_model, GTK, FILTER_LIST_MODEL, GObject)
 
+/**
+ * GtkFilterListModelFilterFunc:
+ * @item: (type GObject): The item that may be filtered
+ * @user_data: user data
+ *
+ * User function that is called to determine if the @item of the original model should be visible.
+ * If it should be visible, this function must return %TRUE. If the model should filter out the
+ * @item, %FALSE must be returned.
+ *
+ * Returns: %TRUE to keep the item around
+ */
 typedef gboolean (* GtkFilterListModelFilterFunc) (gpointer item, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL

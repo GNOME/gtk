@@ -180,6 +180,11 @@ gtk_map_list_model_get_item (GListModel *list,
     }
 
   node->item = self->map_func (g_list_model_get_item (self->model, position), self->user_data);
+  if (!G_TYPE_CHECK_INSTANCE_TYPE (node->item, self->item_type))
+    {
+      g_critical ("Map function returned a %s, but it is not a subtype of the model's type %s",
+                  G_OBJECT_TYPE_NAME (node->item), g_type_name (self->item_type));
+    }
   g_object_add_weak_pointer (node->item, &node->item);
 
   return node->item;
