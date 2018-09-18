@@ -18,7 +18,7 @@
  */
 
 
-/**
+/*
  * SECTION:gtklistlistmodel
  * @Short_description: a List model for lists
  * @Title: GtkListListModel
@@ -26,7 +26,7 @@
  *
  * #GtkListListModel is a #GListModel implementation that takes a list API and provides
  * it as a GListModel.
- */
+ **/
 
 #include "config.h"
 
