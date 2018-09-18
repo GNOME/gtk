@@ -76,7 +76,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_tree_list_model_get_autoexpand      (GtkTreeListModel       *self);
 
 GDK_AVAILABLE_IN_ALL
-GtkTreeListRow *        gtk_tree_list_model_get_child           (GtkTreeListModel       *self,
+GtkTreeListRow *        gtk_tree_list_model_get_child_row       (GtkTreeListModel       *self,
                                                                  guint                   position);
 GDK_AVAILABLE_IN_ALL
 GtkTreeListRow *        gtk_tree_list_model_get_row             (GtkTreeListModel       *self,
@@ -100,7 +100,7 @@ GListModel *            gtk_tree_list_row_get_children          (GtkTreeListRow 
 GDK_AVAILABLE_IN_ALL
 GtkTreeListRow *        gtk_tree_list_row_get_parent            (GtkTreeListRow         *self);
 GDK_AVAILABLE_IN_ALL
-GtkTreeListRow *        gtk_tree_list_row_get_child             (GtkTreeListRow         *self,
+GtkTreeListRow *        gtk_tree_list_row_get_child_row         (GtkTreeListRow         *self,
                                                                  guint                   position);
 
 

@@ -881,7 +881,7 @@ gtk_tree_list_model_get_autoexpand (GtkTreeListModel *self)
  * If @self is set to not be passthrough, this function is equivalent
  * to calling g_list_model_get_item().
  *
- * Do not confuse this function with gtk_tree_list_model_get_child().
+ * Do not confuse this function with gtk_tree_list_model_get_child_row().
  *
  * Returns: (nullable) (transfer full): The row item 
  **/
@@ -901,7 +901,7 @@ gtk_tree_list_model_get_row (GtkTreeListModel *self,
 }
 
 /**
- * gtk_tree_list_model_get_child:
+ * gtk_tree_list_model_get_child_row:
  * @self: a #GtkTreeListModel
  * @position: position of the child to get
  *
@@ -916,8 +916,8 @@ gtk_tree_list_model_get_row (GtkTreeListModel *self,
  * Returns: (nullable) (transfer full): the child in @position
  **/
 GtkTreeListRow *
-gtk_tree_list_model_get_child (GtkTreeListModel *self,
-                               guint             position)
+gtk_tree_list_model_get_child_row (GtkTreeListModel *self,
+                                   guint             position)
 {
   TreeNode *child;
 
@@ -1345,7 +1345,7 @@ gtk_tree_list_row_get_parent (GtkTreeListRow *self)
 }
 
 /**
- * gtk_tree_list_row_get_child:
+ * gtk_tree_list_row_get_child_row:
  * @self: a #GtkTreeListRow
  * @position: position of the child to get
  *
@@ -1355,8 +1355,8 @@ gtk_tree_list_row_get_parent (GtkTreeListRow *self)
  * Returns: (nullable) (transfer full): the child in @position
  **/
 GtkTreeListRow *
-gtk_tree_list_row_get_child (GtkTreeListRow *self,
-                             guint           position)
+gtk_tree_list_row_get_child_row (GtkTreeListRow *self,
+                                 guint           position)
 {
   TreeNode *child;
 

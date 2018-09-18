@@ -1251,13 +1251,13 @@ find_and_expand_object (GtkTreeListModel *model,
 
       gtk_tree_list_row_set_expanded (parent_row, TRUE);
       pos = model_get_item_index (gtk_tree_list_row_get_children (parent_row), object);
-      result = gtk_tree_list_row_get_child (parent_row, pos);
+      result = gtk_tree_list_row_get_child_row (parent_row, pos);
       g_object_unref (parent_row);
     }
   else
     {
       pos = model_get_item_index (gtk_tree_list_model_get_model (model), object);
-      result = gtk_tree_list_model_get_child (model, pos);
+      result = gtk_tree_list_model_get_child_row (model, pos);
     }
   
   return result;
