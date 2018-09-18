@@ -22,6 +22,7 @@
 #include "gtklistview.h"
 
 #include "gtkintl.h"
+#include "gtkrbtreeprivate.h"
 #include "gtklistitemfactoryprivate.h"
 
 /**
@@ -33,12 +34,30 @@
  * GtkListView is a widget to present a view into a large dynamic list of items.
  */
 
+typedef struct _ListRow ListRow;
+typedef struct _ListRowAugment ListRowAugment;
+
 struct _GtkListView
 {
   GtkWidget parent_instance;
 
   GListModel *model;
   GtkListItemFactory *item_factory;
+
+  GtkRbTree *rows;
+};
+
+struct _ListRow
+{
+  guint n_rows;
+  guint height;
+  GtkWidget *widget;
+};
+
+struct _ListRowAugment
+{
+  guint n_rows;
+  guint height;
 };
 
 enum
@@ -53,10 +72,78 @@ G_DEFINE_TYPE (GtkListView, gtk_list_view, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
-static gboolean
-gtk_list_view_is_empty (GtkListView *self)
+static void
+list_row_augment (GtkRbTree *tree,
+                  gpointer   node_augment,
+                  gpointer   node,
+                  gpointer   left,
+                  gpointer   right)
 {
-  return self->model == NULL;
+  ListRow *row = node;
+  ListRowAugment *aug = node_augment;
+
+  aug->height = row->height;
+  aug->n_rows = row->n_rows;
+
+  if (left)
+    {
+      ListRowAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
+
+      aug->height += left_aug->height;
+      aug->n_rows += left_aug->n_rows;
+    }
+
+  if (right)
+    {
+      ListRowAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
+
+      aug->height += right_aug->height;
+      aug->n_rows += right_aug->n_rows;
+    }
+}
+
+static void
+list_row_clear (gpointer _row)
+{
+  ListRow *row = _row;
+
+  g_clear_pointer (&row->widget, gtk_widget_unparent);
+}
+
+static ListRow *
+gtk_list_view_get_row (GtkListView *self,
+                       guint        position,
+                       guint       *offset)
+{
+  ListRow *row, *tmp;
+
+  row = gtk_rb_tree_get_root (self->rows);
+
+  while (row)
+    {
+      tmp = gtk_rb_tree_node_get_left (row);
+      if (tmp)
+        {
+          ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, tmp);
+          if (position < aug->n_rows)
+            {
+              row = tmp;
+              continue;
+            }
+          position -= aug->n_rows;
+        }
+
+      if (position < row->n_rows)
+        break;
+      position -= row->n_rows;
+
+      row = gtk_rb_tree_node_get_right (row);
+    }
+
+  if (offset)
+    *offset = row ? position : 0;
+
+  return row;
 }
 
 static void
@@ -69,17 +156,38 @@ gtk_list_view_measure (GtkWidget      *widget,
                        int            *natural_baseline)
 {
   GtkListView *self = GTK_LIST_VIEW (widget);
+  ListRow *row;
+  int min, nat, child_min, child_nat;
 
-  if (gtk_list_view_is_empty (self))
+  /* XXX: Figure out how to split a given height into per-row heights.
+   * Good luck! */
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    for_size = -1;
+
+  min = 0;
+  nat = 0;
+
+  for (row = gtk_rb_tree_get_first (self->rows);
+       row != NULL;
+       row = gtk_rb_tree_node_get_next (row))
     {
-      *minimum = 0;
-      *natural = 0;
-      return;
+      gtk_widget_measure (row->widget,
+                          orientation, for_size,
+                          &child_min, &child_nat, NULL, NULL);
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          min = MAX (min, child_min);
+          nat = MAX (nat, child_nat);
+        }
+      else
+        {
+          min += child_nat;
+          nat = min;
+        }
     }
 
-  *minimum = 0;
-  *natural = 0;
-  return;
+  *minimum = min;
+  *natural = nat;
 }
 
 static void
@@ -88,7 +196,81 @@ gtk_list_view_size_allocate (GtkWidget *widget,
                              int        height,
                              int        baseline)
 {
-  //GtkListView *self = GTK_LIST_VIEW (widget);
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  GtkAllocation child_allocation = { 0, 0, 0, 0 };
+  ListRow *row;
+  int nat;
+
+  child_allocation.width = width;
+
+  for (row = gtk_rb_tree_get_first (self->rows);
+       row != NULL;
+       row = gtk_rb_tree_node_get_next (row))
+    {
+      gtk_widget_measure (row->widget, GTK_ORIENTATION_VERTICAL,
+                          width,
+                          NULL, &nat, NULL, NULL);
+      if (row->height != nat)
+        {
+          row->height = nat;
+          gtk_rb_tree_node_mark_dirty (row);
+        }
+      child_allocation.height = row->height;
+      gtk_widget_size_allocate (row->widget, &child_allocation, -1);
+      child_allocation.y += child_allocation.height;
+    }
+}
+
+static void
+gtk_list_view_remove_rows (GtkListView *self,
+                           guint        position,
+                           guint        n_rows)
+{
+  ListRow *row;
+  guint i;
+
+  if (n_rows == 0)
+    return;
+
+  row = gtk_list_view_get_row (self, position, NULL);
+
+  for (i = 0; i < n_rows; i++)
+    {
+      ListRow *next = gtk_rb_tree_node_get_next (row);
+      gtk_rb_tree_remove (self->rows, row);
+      row = next;
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
+static void
+gtk_list_view_add_rows (GtkListView *self,
+                        guint        position,
+                        guint        n_rows)
+{
+  ListRow *row;
+  guint i;
+
+  if (n_rows == 0)
+    return;
+
+  row = gtk_list_view_get_row (self, position, NULL);
+
+  for (i = 0; i < n_rows; i++)
+    {
+      ListRow *new_row;
+      gpointer item;
+
+      new_row = gtk_rb_tree_insert_before (self->rows, row);
+      new_row->n_rows = 1;
+      new_row->widget = gtk_list_item_factory_create (self->item_factory);
+      gtk_widget_insert_before (new_row->widget, GTK_WIDGET (self), row ? row->widget : NULL);
+      item = g_list_model_get_item (self->model, position + i);
+      gtk_list_item_factory_bind (self->item_factory, new_row->widget, item);
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
@@ -98,6 +280,8 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
                                       guint        added,
                                       GtkListView *self)
 {
+  gtk_list_view_remove_rows (self, position, removed);
+  gtk_list_view_add_rows (self, position, added);
 }
 
 static void
@@ -105,6 +289,8 @@ gtk_list_view_clear_model (GtkListView *self)
 {
   if (self->model == NULL)
     return;
+
+  gtk_list_view_remove_rows (self, 0, g_list_model_get_n_items (self->model));
 
   g_signal_handlers_disconnect_by_func (self->model, gtk_list_view_model_items_changed_cb, self);
   g_clear_object (&self->model);
@@ -120,6 +306,16 @@ gtk_list_view_dispose (GObject *object)
   g_clear_object (&self->item_factory);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
+}
+
+static void
+gtk_list_view_finalize (GObject *object)
+{
+  GtkListView *self = GTK_LIST_VIEW (object);
+
+  gtk_rb_tree_unref (self->rows);
+
+  G_OBJECT_CLASS (gtk_list_view_parent_class)->finalize (object);
 }
 
 static void
@@ -172,6 +368,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   widget_class->size_allocate = gtk_list_view_size_allocate;
 
   gobject_class->dispose = gtk_list_view_dispose;
+  gobject_class->finalize = gtk_list_view_finalize;
   gobject_class->get_property = gtk_list_view_get_property;
   gobject_class->set_property = gtk_list_view_set_property;
 
@@ -195,6 +392,11 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 static void
 gtk_list_view_init (GtkListView *self)
 {
+  self->rows = gtk_rb_tree_new (ListRow,
+                                ListRowAugment,
+                                list_row_augment,
+                                list_row_clear,
+                                NULL);
 }
 
 /**
@@ -253,9 +455,11 @@ gtk_list_view_set_model (GtkListView *self,
       self->model = g_object_ref (model);
 
       g_signal_connect (model,
-                        "items-changed", 
+                        "items-changed",
                         G_CALLBACK (gtk_list_view_model_items_changed_cb),
                         self);
+
+      gtk_list_view_add_rows (self, 0, g_list_model_get_n_items (model));
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
@@ -268,13 +472,19 @@ gtk_list_view_set_functions (GtkListView            *self,
                              gpointer                user_data,
                              GDestroyNotify          user_destroy)
 {
+  guint n_items;
+
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (create_func);
   g_return_if_fail (bind_func);
   g_return_if_fail (user_data != NULL || user_destroy == NULL);
 
-  g_clear_object (&self->item_factory);
+  n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
+  gtk_list_view_remove_rows (self, 0, n_items);
 
+  g_clear_object (&self->item_factory);
   self->item_factory = gtk_list_item_factory_new (create_func, bind_func, user_data, user_destroy);
+
+  gtk_list_view_add_rows (self, 0, n_items);
 }
 
