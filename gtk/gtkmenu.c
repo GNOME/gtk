@@ -2503,6 +2503,7 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   gint x, y, i;
   gint width, height;
   GtkBorder arrow_border;
+  int base_width;
 
   g_return_if_fail (GTK_IS_MENU (widget));
   g_return_if_fail (allocation != NULL);
@@ -2559,48 +2560,45 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
     gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1);
 
-  if (menu_shell->priv->children)
+
+  base_width = width / gtk_menu_get_n_columns (menu);
+  children = menu_shell->priv->children;
+  while (children)
     {
-      gint base_width = width / gtk_menu_get_n_columns (menu);
+      child = children->data;
+      children = children->next;
 
-      children = menu_shell->priv->children;
-      while (children)
+      if (gtk_widget_get_visible (child))
         {
-          child = children->data;
-          children = children->next;
+          gint l, r, t, b;
 
-          if (gtk_widget_get_visible (child))
+          get_effective_child_attach (child, &l, &r, &t, &b);
+
+          if (gtk_widget_get_direction (GTK_WIDGET (menu)) == GTK_TEXT_DIR_RTL)
             {
-              gint l, r, t, b;
-
-              get_effective_child_attach (child, &l, &r, &t, &b);
-
-              if (gtk_widget_get_direction (GTK_WIDGET (menu)) == GTK_TEXT_DIR_RTL)
-                {
-                  guint tmp;
-                  tmp = gtk_menu_get_n_columns (menu) - l;
-                  l = gtk_menu_get_n_columns (menu) - r;
-                  r = tmp;
-                }
-
-              child_allocation.width = (r - l) * base_width;
-              child_allocation.height = 0;
-              child_allocation.x = l * base_width;
-              child_allocation.y = - priv->scroll_offset;
-
-              for (i = 0; i < b; i++)
-                {
-                  if (i < t)
-                    child_allocation.y += priv->heights[i];
-                  else
-                    child_allocation.height += priv->heights[i];
-                }
-
-              gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
-                                                  priv->toggle_size);
-
-              gtk_widget_size_allocate (child, &child_allocation, -1);
+              guint tmp;
+              tmp = gtk_menu_get_n_columns (menu) - l;
+              l = gtk_menu_get_n_columns (menu) - r;
+              r = tmp;
             }
+
+          child_allocation.width = (r - l) * base_width;
+          child_allocation.height = 0;
+          child_allocation.x = l * base_width;
+          child_allocation.y = - priv->scroll_offset;
+
+          for (i = 0; i < b; i++)
+            {
+              if (i < t)
+                child_allocation.y += priv->heights[i];
+              else
+                child_allocation.height += priv->heights[i];
+            }
+
+          gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
+                                              priv->toggle_size);
+
+          gtk_widget_size_allocate (child, &child_allocation, -1);
         }
     }
 }
