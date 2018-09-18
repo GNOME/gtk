@@ -494,7 +494,7 @@ gtk_tree_list_model_init_node (GtkTreeListModel *list,
   gsize i, n;
   TreeNode *node;
 
-  self->model = g_object_ref (model);
+  self->model = model;
   g_signal_connect (model,
                     "items-changed",
                     G_CALLBACK (gtk_tree_list_model_items_changed_cb),
