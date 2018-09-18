@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-09 20:07+0000\n"
-"PO-Revision-Date: 2018-09-09 23:43+0300\n"
+"POT-Creation-Date: 2018-09-18 13:50+0000\n"
+"PO-Revision-Date: 2018-09-18 23:08+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -3392,8 +3392,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Наиболее вероятная причина: не удалось создать временный файл."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:610 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Печать"
 
@@ -7006,9 +7006,10 @@ msgstr ""
 msgid "About"
 msgstr "О приложении"
 
+# заголовок, не имена и почта переводчиков
 #: gtk/ui/gtkaboutdialog.ui:173
 msgid "Credits"
-msgstr "Stas Solovey <whats_up@tut.by>, 2014-2018."
+msgstr "Благодарности"
 
 #: gtk/ui/gtkappchooserdialog.ui:78
 msgid "_View All Applications"
