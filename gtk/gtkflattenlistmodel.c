@@ -509,6 +509,10 @@ gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
 
       added = gtk_flatten_list_model_add_items (self, NULL, 0, g_list_model_get_n_items (model));
     }
+  else
+    {
+      added = 0;
+    }
 
   if (removed > 0 || added > 0)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
