@@ -958,7 +958,7 @@ gtk_tree_list_row_destroy (GtkTreeListRow *self)
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_ITEM]);
 
   self->node = NULL;
-  g_object_freeze_notify (G_OBJECT (self));
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
 static void
