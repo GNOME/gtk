@@ -778,7 +778,7 @@ gtk_tree_list_model_new (gboolean                         passthrough,
   self->user_data = user_data;
   self->user_destroy = user_destroy;
 
-  gtk_tree_list_model_init_node (self, &self->root_node, g_object_ref (root));
+  gtk_tree_list_model_init_node (self, &self->root_node, root);
 
   return self;
 }
