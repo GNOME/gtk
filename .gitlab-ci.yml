@@ -14,9 +14,12 @@ stages:
 
 fedora-x86_64:
   image: registry.gitlab.gnome.org/gnome/gtk/master:v1
+  before_script:
+    - dnf install -y lcov
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
+  coverage: '/^\s+lines\.+:\s+([\d.]+\%)\s+/'
   artifacts:
     when: on_failure
     name: "gtk-${CI_COMMIT_REF_NAME}"

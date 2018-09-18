@@ -12,6 +12,7 @@ ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
 meson \
+        -Db_coverage=true \
         -Dx11-backend=true \
         -Dwayland-backend=true \
         -Dbroadway-backend=true \
@@ -30,3 +31,5 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --suite=gtk+ \
         --no-suite=gtk+:gsk \
         --no-suite=gtk+:a11y
+
+ninja coverage
