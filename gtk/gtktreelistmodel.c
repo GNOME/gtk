@@ -730,7 +730,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
                             P_("passthrough"),
                             P_("If child model values are passed through"),
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
