@@ -17,8 +17,9 @@ fedora-x86_64:
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
+  coverage: '/^\s+lines\.+:\s+([\d.]+\%)\s+/'
   artifacts:
-    when: on_failure
+    when: always
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
@@ -72,6 +73,7 @@ pages:
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
 
     - mkdir -p public/
+    - mv _build/meson-logs/coveragereport public/coverage
     - mv _build/docs/reference/gtk/html/ public/gtk/
     - mv _build/docs/reference/gdk/html/ public/gdk/
     - mv _build/docs/reference/gsk/html/ public/gsk/
