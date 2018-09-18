@@ -33,6 +33,7 @@ RUN dnf -y install \
     iso-codes \
     itstool \
     json-glib-devel \
+    lcov \
     libattr-devel \
     libepoxy-devel \
     libffi-devel \
