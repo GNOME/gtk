@@ -576,9 +576,9 @@ gtk_tree_list_model_get_item_type (GListModel *list)
   GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
 
   if (self->passthrough)
-    return GTK_TYPE_TREE_LIST_ROW;
-  else
     return g_list_model_get_item_type (self->root_node.model);
+  else
+    return GTK_TYPE_TREE_LIST_ROW;
 }
 
 static guint
