@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-29 05:29+0000\n"
-"PO-Revision-Date: 2018-08-29 19:33+0300\n"
+"POT-Creation-Date: 2018-09-19 02:33+0000\n"
+"PO-Revision-Date: 2018-09-19 14:08+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -1921,12 +1921,12 @@ msgstr "Bir Renk Seç"
 #: gtk/gtkcolorchooserwidget.c:304
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr "Kırmızı %d%%, Yeşil %d%%, Mavi %d%%, Alpha %d%%"
+msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d, Alpha %%%d"
 
 #: gtk/gtkcolorchooserwidget.c:310
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr "Kırmızı %d%%, Yeşil %d%%, Mavi %d%%"
+msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d"
 
 #: gtk/gtkcolorchooserwidget.c:387
 #, c-format
@@ -2174,7 +2174,7 @@ msgstr "mm"
 
 #: gtk/gtkcustompaperunixdialog.c:615
 msgid "Margins from Printer…"
-msgstr "Yazıcıdan Gelen Kenar Boşlukları..."
+msgstr "Yazıcıdan Gelen Kenar Boşlukları…"
 
 #: gtk/gtkcustompaperunixdialog.c:781
 #, c-format
@@ -2276,7 +2276,7 @@ msgstr "(Hiçbiri)"
 
 #: gtk/gtkfilechooserbutton.c:2158
 msgid "Other…"
-msgstr "Diğer..."
+msgstr "Diğer…"
 
 #: gtk/gtkfilechooserdialog.c:542
 msgid "_Name"
@@ -2431,7 +2431,7 @@ msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1608
 msgid "The file could not be renamed"
-msgstr "Dosya yeniden adlandırılamadı."
+msgstr "Dosya yeniden adlandırılamadı"
 
 #: gtk/gtkfilechooserwidget.c:1922
 msgid "Could not select file"
@@ -3384,8 +3384,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "En olası sebebi geçici dosyanın oluşturulamamış olmasıdır."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Yazdır"
 
@@ -6618,8 +6618,6 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:96
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
 msgstr "Mısır Resimyazıları"
