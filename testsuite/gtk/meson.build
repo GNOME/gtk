@@ -118,9 +118,9 @@ if add_languages('cpp', required: false)
   if get_option('install-tests')
     conf = configuration_data()
     conf.set('testexecdir', testexecdir)
-    conf.set('test', 'keywords')
+    conf.set('test', 'autotestkeywords')
     configure_file(input: 'gtk.test.in',
-                   output: 'keywords.test',
+                   output: 'autotestkeywords.test',
                    configuration: conf,
                    install_dir: testdatadir)
   endif
