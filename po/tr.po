@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-10 23:22+0000\n"
-"PO-Revision-Date: 2018-09-11 23:15+0300\n"
+"POT-Creation-Date: 2018-09-19 10:56+0000\n"
+"PO-Revision-Date: 2018-09-19 14:04+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -853,15 +853,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Kapat"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8065
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8108
 msgid "Minimize"
 msgstr "Simge durumuna küçült"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8117
 msgid "Maximize"
 msgstr "Ekranı Kapla"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8031
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
 msgid "Restore"
 msgstr "Geri Yükle"
 
@@ -1631,7 +1631,7 @@ msgstr "Yeni kısayol…"
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr "%% %d"
+msgstr "%%%d"
 
 #: gtk/gtkcolorbutton.c:218 gtk/gtkcolorbutton.c:385
 msgid "Pick a Color"
@@ -1640,12 +1640,12 @@ msgstr "Renk Seç"
 #: gtk/gtkcolorchooserwidget.c:302
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr "Kırmızı %d%%, Yeşil %d%%, Mavi %d%%, Alpha %d%%"
+msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d, Alpha %%%d"
 
 #: gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr "Kırmızı %d%%, Yeşil %d%%, Mavi %d%%"
+msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d"
 
 #: gtk/gtkcolorchooserwidget.c:385
 #, c-format
@@ -2063,8 +2063,8 @@ msgstr "Bu adda bir dosya zaten var"
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
-#: gtk/gtkwindow.c:10806 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:817 gtk/ui/gtkappchooserdialog.ui:49
+#: gtk/gtkwindow.c:10848 gtk/inspector/css-editor.c:201
+#: gtk/inspector/recorder.c:1017 gtk/ui/gtkappchooserdialog.ui:49
 #: gtk/ui/gtkassistant.ui:107 gtk/ui/gtkcolorchooserdialog.ui:32
 #: gtk/ui/gtkfontchooserdialog.ui:26
 msgid "_Cancel"
@@ -2078,7 +2078,7 @@ msgid "_Open"
 msgstr "_Aç"
 
 #: gtk/gtkfilechoosernative.c:596 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:818
+#: gtk/inspector/recorder.c:1018
 msgid "_Save"
 msgstr "_Kaydet"
 
@@ -2164,7 +2164,7 @@ msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1614
 msgid "The file could not be renamed"
-msgstr "Dosya yeniden adlandırılamadı."
+msgstr "Dosya yeniden adlandırılamadı"
 
 #: gtk/gtkfilechooserwidget.c:1858
 msgid "Could not select file"
@@ -2402,7 +2402,7 @@ msgstr "OpenGL içerik oluşturulması başarısız oldu"
 msgid "Application menu"
 msgstr "Uygulama menüsü"
 
-#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8101
+#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8144
 msgid "Close"
 msgstr "Kapat"
 
@@ -2539,7 +2539,7 @@ msgid "%d:%02d"
 msgstr "%d.%02d"
 
 #: gtk/gtkmessagedialog.c:817 gtk/gtkmessagedialog.c:835
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10807
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10849
 msgid "_OK"
 msgstr "_TAMAM"
 
@@ -2827,8 +2827,8 @@ msgid "This name is already taken"
 msgstr "Bu ad zaten kullanılıyor"
 
 #: gtk/gtkplacessidebar.c:2675 gtk/inspector/actions.ui:40
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/object-tree.ui:82
-#: gtk/ui/gtkfilechooserwidget.ui:179 gtk/ui/gtkfilechooserwidget.ui:468
+#: gtk/inspector/css-node-tree.ui:35 gtk/ui/gtkfilechooserwidget.ui:179
+#: gtk/ui/gtkfilechooserwidget.ui:468
 msgid "Name"
 msgstr "Ad"
 
@@ -3213,7 +3213,7 @@ msgstr "Aşağıdan yukarıya"
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr "%% %.0f"
+msgstr "%%%.0f"
 
 #: gtk/gtkrecentmanager.c:1033 gtk/gtkrecentmanager.c:1046
 #: gtk/gtkrecentmanager.c:1179 gtk/gtkrecentmanager.c:1189
@@ -3395,26 +3395,26 @@ msgstr "Tam Ses"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr "%% %d"
+msgstr "%%%d"
 
-#: gtk/gtkwindow.c:8049
+#: gtk/gtkwindow.c:8092
 msgid "Move"
 msgstr "Taşı"
 
-#: gtk/gtkwindow.c:8057
+#: gtk/gtkwindow.c:8100
 msgid "Resize"
 msgstr "Yeniden Boyutlandır"
 
-#: gtk/gtkwindow.c:8088
+#: gtk/gtkwindow.c:8131
 msgid "Always on Top"
 msgstr "Her Zaman Üstte"
 
-#: gtk/gtkwindow.c:10794
+#: gtk/gtkwindow.c:10836
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ denetleyicisi kullanmak istiyor musunuz?"
 
-#: gtk/gtkwindow.c:10796
+#: gtk/gtkwindow.c:10838
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3425,7 +3425,7 @@ msgstr ""
 "izin veren etkileşimli bir hata ayıklayıcıdır. Bunun kullanılması "
 "uygulamanın kesilmesine ya da çökmesine neden olabilir."
 
-#: gtk/gtkwindow.c:10801
+#: gtk/gtkwindow.c:10843
 msgid "Don’t show this message again"
 msgstr "Bu iletiyi yeniden gösterme"
 
@@ -3450,6 +3450,26 @@ msgstr "Etkin"
 #: gtk/inspector/actions.ui:66
 msgid "Parameter Type"
 msgstr "Parametre Türü"
+
+#: gtk/inspector/controllers.c:131
+msgctxt "event phase"
+msgid "None"
+msgstr "Hiçbiri"
+
+#: gtk/inspector/controllers.c:132
+msgctxt "event phase"
+msgid "Capture"
+msgstr "Yakala"
+
+#: gtk/inspector/controllers.c:133
+msgctxt "event phase"
+msgid "Bubble"
+msgstr "Baloncuk"
+
+#: gtk/inspector/controllers.c:134
+msgctxt "event phase"
+msgid "Target"
+msgstr "Hedef"
 
 #: gtk/inspector/css-editor.c:112
 msgid "You can type here any CSS rule recognized by GTK+."
@@ -3485,7 +3505,7 @@ msgstr "Geçerli CSSʼleri kaydet"
 msgid "ID"
 msgstr "Kimlik"
 
-#: gtk/inspector/css-node-tree.ui:61 gtk/inspector/object-tree.ui:114
+#: gtk/inspector/css-node-tree.ui:61
 msgid "Style Classes"
 msgstr "Biçem Sınıfları"
 
@@ -3494,7 +3514,7 @@ msgid "CSS Property"
 msgstr "CSS Özelliği"
 
 #: gtk/inspector/css-node-tree.ui:118 gtk/inspector/prop-list.ui:46
-#: gtk/inspector/recorder.ui:139 gtk/ui/gtkcoloreditor.ui:284
+#: gtk/inspector/recorder.ui:121 gtk/ui/gtkcoloreditor.ui:284
 msgid "Value"
 msgstr "Değer"
 
@@ -3566,31 +3586,11 @@ msgstr "Vulkan API sürümü"
 msgid "Vulkan driver version"
 msgstr "Vulkan sürücü sürümü"
 
-#: gtk/inspector/gestures.c:129
-msgctxt "event phase"
-msgid "None"
-msgstr "Hiçbiri"
-
-#: gtk/inspector/gestures.c:130
-msgctxt "event phase"
-msgid "Capture"
-msgstr "Yakala"
-
-#: gtk/inspector/gestures.c:131
-msgctxt "event phase"
-msgid "Bubble"
-msgstr "Baloncuk"
-
-#: gtk/inspector/gestures.c:132
-msgctxt "event phase"
-msgid "Target"
-msgstr "Hedef"
-
 #: gtk/inspector/menu.c:92
 msgid "Unnamed section"
 msgstr "Adsız bölüm"
 
-#: gtk/inspector/menu.ui:28 gtk/inspector/object-tree.ui:97
+#: gtk/inspector/menu.ui:28
 msgid "Label"
 msgstr "Etiket"
 
@@ -3693,10 +3693,6 @@ msgstr "Üst Düzeydir"
 msgid "Child Visible"
 msgstr "Görünür Çocuk"
 
-#: gtk/inspector/object-tree.ui:67
-msgid "Object"
-msgstr "Nesne"
-
 #: gtk/inspector/prop-editor.c:679
 #, c-format
 msgid "Pointer: %p"
@@ -3780,7 +3776,7 @@ msgstr "Tema"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-list.ui:30 gtk/inspector/recorder.ui:126
+#: gtk/inspector/prop-list.ui:30 gtk/inspector/recorder.ui:108
 msgid "Property"
 msgstr "Özellikler"
 
@@ -3796,7 +3792,7 @@ msgstr "Öznitelik"
 msgid "Defined At"
 msgstr "Şurada Tanımlanmış"
 
-#: gtk/inspector/recorder.c:785
+#: gtk/inspector/recorder.c:988
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode kaydetme başarısız"
@@ -4095,8 +4091,8 @@ msgid "Actions"
 msgstr "Eylemler"
 
 #: gtk/inspector/window.ui:373
-msgid "Gestures"
-msgstr "Hareketler"
+msgid "Controllers"
+msgstr "Denetçiler"
 
 #: gtk/inspector/window.ui:382
 msgid "Magnifier"
@@ -6139,8 +6135,6 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:94
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
 msgstr "Mısır Resimyazıları"
@@ -7860,6 +7854,12 @@ msgstr "Kullanılabilir profil yok"
 #: modules/printbackends/gtkprintercups.c:292
 msgid "Unspecified profile"
 msgstr "Belirtilmemiş profil"
+
+#~ msgid "Object"
+#~ msgstr "Nesne"
+
+#~ msgid "Gestures"
+#~ msgstr "Hareketler"
 
 #~ msgid "Reading not implemented."
 #~ msgstr "Okuma henüz gerçeklenmemiş."
