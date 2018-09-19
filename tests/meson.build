@@ -63,6 +63,7 @@ gtk_tests = [
   ['testlist3'],
   ['testlist4'],
   ['testlistview'],
+  ['testlistview-animating'],
   ['testlevelbar'],
   ['testlockbutton'],
   ['testmenubutton'],
