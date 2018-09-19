@@ -1113,11 +1113,14 @@ create_root_model (void)
   GtkFilterListModel *filter;
   GtkFlattenListModel *flatten;
   GListStore *list, *special;
+  gpointer item;
 
   list = g_list_store_new (G_TYPE_LIST_MODEL);
 
   special = g_list_store_new (G_TYPE_OBJECT);
-  g_list_store_append (special, g_application_get_default ());
+  item = g_application_get_default ();
+  if (item)
+    g_list_store_append (special, item);
   g_list_store_append (special, gtk_settings_get_default ());
   g_list_store_append (list, special);
   g_object_unref (special);
