@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-19 10:56+0000\n"
-"PO-Revision-Date: 2018-09-19 14:04+0300\n"
+"POT-Creation-Date: 2018-09-19 11:05+0000\n"
+"PO-Revision-Date: 2018-09-19 14:12+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -1625,13 +1625,13 @@ msgstr "Geçersiz"
 #.
 #: gtk/gtkcellrendereraccel.c:412 gtk/gtkcellrendereraccel.c:489
 msgid "New accelerator…"
-msgstr "Yeni kısayol…"
+msgstr "Yeni hızlandırıcı…"
 
 #: gtk/gtkcellrendererprogress.c:365 gtk/gtkcellrendererprogress.c:458
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr "%%%d"
+msgstr "%% %d"
 
 #: gtk/gtkcolorbutton.c:218 gtk/gtkcolorbutton.c:385
 msgid "Pick a Color"
@@ -3213,7 +3213,7 @@ msgstr "Aşağıdan yukarıya"
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr "%%%.0f"
+msgstr "%% %.0f"
 
 #: gtk/gtkrecentmanager.c:1033 gtk/gtkrecentmanager.c:1046
 #: gtk/gtkrecentmanager.c:1179 gtk/gtkrecentmanager.c:1189
@@ -3395,7 +3395,7 @@ msgstr "Tam Ses"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr "%%%d"
+msgstr "%% %d"
 
 #: gtk/gtkwindow.c:8092
 msgid "Move"
