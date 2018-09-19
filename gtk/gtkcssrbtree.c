@@ -353,7 +353,7 @@ gtk_css_rb_tree_remove_node_fixup (GtkCssRbTree *tree,
                                    GtkCssRbNode *node,
                                    GtkCssRbNode *parent)
 {
-  while (node->parent && is_black (node))
+  while (node != tree->root && is_black (node))
     {
       if (node == parent->left)
 	{
@@ -664,7 +664,7 @@ gtk_css_rb_tree_remove (GtkCssRbTree *tree,
 
   /* We need to clean up the validity of the tree.
    */
-  if (x && is_black (y))
+  if (is_black (y))
     gtk_css_rb_tree_remove_node_fixup (tree, x, y->parent);
 
   if (y != real_node)

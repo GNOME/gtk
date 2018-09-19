@@ -17,6 +17,7 @@ tests = [
   ['cellarea'],
   ['check-icon-names'],
   ['cssprovider'],
+  ['cssrbtree-crash', ['../../gtk/gtkcssrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['defaultvalue'],
   ['entry'],
   ['filterlistmodel'],
