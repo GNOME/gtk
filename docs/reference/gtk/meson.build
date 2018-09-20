@@ -133,6 +133,7 @@ private_headers = [
   'gtkkineticscrollingprivate.h',
   'gtklabelprivate.h',
   'gtklistitemfactoryprivate.h',
+  'gtklistitemmanagerprivate.h',
   'gtklockbuttonprivate.h',
   'gtkmagnifierprivate.h',
   'gtkmediafileprivate.h',
