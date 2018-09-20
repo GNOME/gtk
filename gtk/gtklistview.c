@@ -25,6 +25,7 @@
 #include "gtkintl.h"
 #include "gtkcssrbtreeprivate.h"
 #include "gtklistitemfactoryprivate.h"
+#include "gtklistitemmanagerprivate.h"
 #include "gtkscrollable.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
@@ -46,7 +47,7 @@ struct _GtkListView
   GtkWidget parent_instance;
 
   GListModel *model;
-  GtkListItemFactory *item_factory;
+  GtkListItemManager *item_manager;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
 
@@ -518,14 +519,12 @@ gtk_list_view_add_rows (GtkListView *self,
   for (i = 0; i < n_rows; i++)
     {
       ListRow *new_row;
-      gpointer item;
         
       new_row = gtk_css_rb_tree_insert_before (self->rows, row);
       new_row->n_rows = 1;
-      new_row->widget = gtk_list_item_factory_create (self->item_factory);
-      gtk_widget_insert_before (new_row->widget, GTK_WIDGET (self), row ? row->widget : NULL);
-      item = g_list_model_get_item (self->model, position + i);
-      gtk_list_item_factory_bind (self->item_factory, new_row->widget, item);
+      new_row->widget = gtk_list_item_manager_create_list_item (self->item_manager,
+                                                                position + i,
+                                                                row ? row->widget : NULL);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
@@ -539,6 +538,7 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
                                       GtkListView *self)
 {
   gtk_list_view_remove_rows (self, position, removed);
+  gtk_list_item_manager_model_changed (self->item_manager, position, removed, added);
   gtk_list_view_add_rows (self, position, added);
 }
 
@@ -608,7 +608,7 @@ gtk_list_view_dispose (GObject *object)
   gtk_list_view_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_list_view_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
-  g_clear_object (&self->item_factory);
+  g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
 }
@@ -619,6 +619,7 @@ gtk_list_view_finalize (GObject *object)
   GtkListView *self = GTK_LIST_VIEW (object);
 
   gtk_css_rb_tree_unref (self->rows);
+  g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->finalize (object);
 }
@@ -787,6 +788,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 static void
 gtk_list_view_init (GtkListView *self)
 {
+  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self));
+
   self->rows = gtk_css_rb_tree_new (ListRow,
                                     ListRowAugment,
                                     list_row_augment,
@@ -847,6 +850,8 @@ gtk_list_view_set_model (GtkListView *self,
 
   gtk_list_view_clear_model (self);
 
+  gtk_list_item_manager_set_model (self->item_manager, model);
+
   if (model)
     {
       self->model = g_object_ref (model);
@@ -869,6 +874,7 @@ gtk_list_view_set_functions (GtkListView            *self,
                              gpointer                user_data,
                              GDestroyNotify          user_destroy)
 {
+  GtkListItemFactory *factory;
   guint n_items;
 
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
@@ -879,8 +885,9 @@ gtk_list_view_set_functions (GtkListView            *self,
   n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
   gtk_list_view_remove_rows (self, 0, n_items);
 
-  g_clear_object (&self->item_factory);
-  self->item_factory = gtk_list_item_factory_new (create_func, bind_func, user_data, user_destroy);
+  factory = gtk_list_item_factory_new (create_func, bind_func, user_data, user_destroy);
+  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  g_object_unref (factory);
 
   gtk_list_view_add_rows (self, 0, n_items);
 }
