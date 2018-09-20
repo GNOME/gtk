@@ -107,7 +107,7 @@ gdk_drop_read_local_async (GdkDrop             *self,
   if (priv->drag == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                                     _("Drag'n'drop from other applications is not supported."));
+                                     _("Drag’n’drop from other applications is not supported."));
       g_object_unref (task);
       return;
     }

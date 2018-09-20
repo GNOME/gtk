@@ -201,7 +201,7 @@ gdk_win32_hdata_output_stream_close (GOutputStream  *output_stream,
       if (priv->handle_is_buffer)
         {
           g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                               _("Can't transmute a single handle"));
+                               _("Can’t transmute a single handle"));
           return FALSE;
         }
 

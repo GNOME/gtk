@@ -1045,7 +1045,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   row_properties[ROW_PROP_CHILDREN] =
       g_param_spec_object ("children",
                            P_("Children"),
-                           P_("Model holding the row's children"),
+                           P_("Model holding the row’s children"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READABLE);
 
