@@ -4604,6 +4604,10 @@ gtk_widget_class_bind_template_callback
 gtk_widget_class_bind_template_callback_full
 gtk_widget_class_set_connect_func
 
+<SUBSECTION>
+gtk_widget_observe_children
+gtk_widget_observe_controllers
+
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET
@@ -4732,10 +4736,6 @@ gtk_window_set_has_user_ref_count
 gtk_window_set_titlebar
 gtk_window_get_titlebar
 gtk_window_set_interactive_debugging
-
-<SUBSECTION>
-gtk_widget_observe_children
-gtk_widget_observe_controllers
 
 <SUBSECTION Standard>
 GTK_WINDOW
