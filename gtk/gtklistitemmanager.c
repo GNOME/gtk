@@ -165,7 +165,7 @@ gtk_list_item_manager_create_list_item (GtkListItemManager *self,
                                         guint               position,
                                         GtkWidget          *next_sibling)
 {
-  GtkWidget *result;
+  GtkListItem *result;
   gpointer item;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
@@ -175,7 +175,7 @@ gtk_list_item_manager_create_list_item (GtkListItemManager *self,
   item = g_list_model_get_item (self->model, position);
   gtk_list_item_factory_bind (self->factory, result, item);
   g_object_unref (item);
-  gtk_widget_insert_before (result, self->widget, next_sibling);
+  gtk_widget_insert_before (GTK_WIDGET (result), self->widget, next_sibling);
 
-  return result;
+  return GTK_WIDGET (result);
 }

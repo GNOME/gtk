@@ -21,6 +21,8 @@
 
 #include "gtklistitemfactoryprivate.h"
 
+#include "gtklistitemprivate.h"
+
 struct _GtkListItemFactory
 {
   GObject parent_instance;
@@ -84,22 +86,41 @@ gtk_list_item_factory_new (GtkListCreateWidgetFunc create_func,
   return self;
 }
 
-GtkWidget *
+GtkListItem *
 gtk_list_item_factory_create (GtkListItemFactory *self)
 {
+  GtkWidget *widget, *result;
+
   g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (self), NULL);
 
-  return self->create_func (self->user_data);
+  widget = self->create_func (self->user_data);
+
+  result = gtk_list_item_new ("row");
+
+  gtk_list_item_set_child (GTK_LIST_ITEM (result), widget);
+
+  return GTK_LIST_ITEM (result);
 }
 
 void
 gtk_list_item_factory_bind (GtkListItemFactory *self,
-                            GtkWidget          *widget,
+                            GtkListItem        *list_item,
                             gpointer            item)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
 
-  self->bind_func (widget, item, self->user_data);
+  gtk_list_item_bind (list_item, item);
+
+  self->bind_func (gtk_bin_get_child (GTK_BIN (list_item)), item, self->user_data);
 }
 
+void
+gtk_list_item_factory_unbind (GtkListItemFactory *self,
+                              GtkListItem        *list_item)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
+  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
+
+  gtk_list_item_unbind (list_item);
+}
