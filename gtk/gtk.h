@@ -145,6 +145,7 @@
 #include <gtk/gtklevelbar.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
+#include <gtk/gtklistitem.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtklistview.h>
 #include <gtk/gtklockbutton.h>
