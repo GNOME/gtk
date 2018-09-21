@@ -149,21 +149,27 @@ gtk_list_item_manager_model_changed (GtkListItemManager *self,
 }
 
 /*
- * gtk_list_item_manager_create_list_item:
+ * gtk_list_item_manager_acquire_list_item:
  * @self: a #GtkListItemManager
  * @position: the row in the model to create a list item for
  * @next_sibling: the widget this widget should be inserted before or %NULL
  *     if none
  *
- * Creates a new list item widget to use for @position. No widget may
+ * Creates a list item widget to use for @position. No widget may
  * yet exist that is used for @position.
+ *
+ * When the returned item is no longer needed, the caller is responsible
+ * for calling gtk_list_item_manager_release_list_item().  
+ * A particular case is when the row at @position is removed. In that case,
+ * all list items in the removed range must be released before
+ * gtk_list_item_manager_model_changed() is called.
  *
  * Returns: a properly setup widget to use in @position
  **/
 GtkWidget *
-gtk_list_item_manager_create_list_item (GtkListItemManager *self,
-                                        guint               position,
-                                        GtkWidget          *next_sibling)
+gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
+                                         guint               position,
+                                         GtkWidget          *next_sibling)
 {
   GtkListItem *result;
   gpointer item;
@@ -178,4 +184,23 @@ gtk_list_item_manager_create_list_item (GtkListItemManager *self,
   gtk_widget_insert_before (GTK_WIDGET (result), self->widget, next_sibling);
 
   return GTK_WIDGET (result);
+}
+
+/*
+ * gtk_list_item_manager_release_list_item:
+ * @self: a #GtkListItemManager
+ * @item: an item previously acquired with
+ *     gtk_list_item_manager_acquire_list_item()
+ *
+ * Releases an item that was previously acquired via
+ * gtk_list_item_manager_acquire_list_item() and is no longer in use.
+ **/
+void
+gtk_list_item_manager_release_list_item (GtkListItemManager *self,
+                                         GtkWidget          *item)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
+  g_return_if_fail (GTK_IS_LIST_ITEM (item));
+
+  gtk_widget_unparent (item);
 }
