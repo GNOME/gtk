@@ -53,9 +53,11 @@ void                    gtk_list_item_manager_model_changed     (GtkListItemMana
                                                                  guint                   position,
                                                                  guint                   removed,
                                                                  guint                   added);
-GtkWidget *             gtk_list_item_manager_create_list_item  (GtkListItemManager     *self,
+GtkWidget *             gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  GtkWidget              *next_sibling);
+void                    gtk_list_item_manager_release_list_item (GtkListItemManager     *self,
+                                                                 GtkWidget              *widget);
 
 G_END_DECLS
 
