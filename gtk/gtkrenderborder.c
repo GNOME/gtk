@@ -405,8 +405,8 @@ set_stroke_style (cairo_t        *cr,
        */
       if (n == nearbyint (n))
         {
-          segments[0] = 1;
-          segments[1] = 2;
+          segments[0] = line_width;
+          segments[1] = 2 * line_width;
         }
       else
         {
