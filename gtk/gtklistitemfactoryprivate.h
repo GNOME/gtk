@@ -21,6 +21,7 @@
 #ifndef __GTK_LIST_ITEM_FACTORY_H__
 #define __GTK_LIST_ITEM_FACTORY_H__
 
+#include <gtk/gtklistitem.h>
 #include <gtk/gtklistview.h>
 
 G_BEGIN_DECLS
@@ -42,11 +43,13 @@ GtkListItemFactory *    gtk_list_item_factory_new               (GtkListCreateWi
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 
-GtkWidget *             gtk_list_item_factory_create            (GtkListItemFactory     *self);
+GtkListItem *           gtk_list_item_factory_create            (GtkListItemFactory     *self);
 
 void                    gtk_list_item_factory_bind              (GtkListItemFactory     *self,
-                                                                 GtkWidget              *widget,
+                                                                 GtkListItem            *list_item,
                                                                  gpointer                item);
+void                    gtk_list_item_factory_unbind            (GtkListItemFactory     *self,
+                                                                 GtkListItem            *list_item);
 
 
 G_END_DECLS
