@@ -491,6 +491,24 @@ gtk_single_selection_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtklistitem</FILE>
+<TITLE>GtkListItem</TITLE>
+GtkListItem
+gtk_list_item_get_item
+gtk_list_item_get_child
+gtk_list_item_set_child
+<SUBSECTION Standard>
+GTK_LIST_ITEM
+GTK_LIST_ITEM_CLASS
+GTK_LIST_ITEM_GET_CLASS
+GTK_IS_LIST_ITEM
+GTK_IS_LIST_ITEM_CLASS
+GTK_TYPE_LIST_ITEM
+<SUBSECTION Private>
+gtk_list_item_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtklistitemfactory</FILE>
 <TITLE>GtkListItemFactory</TITLE>
 GtkListItemFactory
@@ -505,6 +523,7 @@ GTK_TYPE_LIST_ITEM_FACTORY
 gtk_list_item_factory_get_type
 </SECTION>
 
+<SECTION>
 <FILE>gtklistview</FILE>
 <TITLE>GtkListView</TITLE>
 GtkListView
