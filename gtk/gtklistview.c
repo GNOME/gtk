@@ -125,7 +125,7 @@ list_row_clear (gpointer _row)
 {
   ListRow *row = _row;
 
-  g_clear_pointer (&row->widget, gtk_widget_unparent);
+  g_assert (row->widget == NULL);
 }
 
 static ListRow *
@@ -454,6 +454,8 @@ gtk_list_view_remove_rows (GtkListView *self,
   for (i = 0; i < n_rows; i++)
     {
       ListRow *next = gtk_rb_tree_node_get_next (row);
+      gtk_list_item_manager_release_list_item (self->item_manager, row->widget);
+      row->widget = NULL;
       gtk_rb_tree_remove (self->rows, row);
       row = next;
     }
@@ -487,9 +489,9 @@ gtk_list_view_add_rows (GtkListView *self,
         
       new_row = gtk_rb_tree_insert_before (self->rows, row);
       new_row->n_rows = 1;
-      new_row->widget = gtk_list_item_manager_create_list_item (self->item_manager,
-                                                                position + i,
-                                                                row ? row->widget : NULL);
+      new_row->widget = gtk_list_item_manager_acquire_list_item (self->item_manager,
+                                                                 position + i,
+                                                                 row ? row->widget : NULL);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
