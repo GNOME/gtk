@@ -1,7 +1,12 @@
 #include <gtk/gtk.h>
 
+#ifdef SMALL
+#define AVERAGE 15
+#define VARIANCE 10
+#else
 #define AVERAGE 300
 #define VARIANCE 200
+#endif
 
 static GtkWidget *
 create_widget (gpointer unused)
@@ -31,6 +36,22 @@ create_widget_for_listbox (gpointer item,
   return widget;
 }
 
+static gboolean reverse_sort;
+
+static int
+compare (gconstpointer first,
+         gconstpointer second,
+         gpointer      unused)
+{
+  int diff = (GPOINTER_TO_UINT (g_object_get_data ((gpointer) first, "counter")) % 1000)
+             - (GPOINTER_TO_UINT (g_object_get_data ((gpointer) second, "counter")) % 1000);
+
+  if (reverse_sort)
+    return -diff;
+  else
+    return diff;
+}
+
 static void
 add (GListStore *store)
 {
@@ -39,8 +60,10 @@ add (GListStore *store)
   char *message;
   guint pos;
 
+  counter++;
   o = g_object_new (G_TYPE_OBJECT, NULL);
-  message = g_strdup_printf ("Item %u", ++counter);
+  g_object_set_data (o, "counter", GUINT_TO_POINTER (counter));
+  message = g_strdup_printf ("Item %u", counter);
   g_object_set_data_full (o, "message", message, g_free);
 
   pos = g_random_int_range (0, g_list_model_get_n_items (G_LIST_MODEL (store)) + 1);
@@ -68,15 +91,33 @@ do_stuff (gpointer store)
   return G_SOURCE_CONTINUE;
 }
 
+static gboolean
+revert_sort (gpointer sort)
+{
+  reverse_sort = !reverse_sort;
+
+  gtk_sort_list_model_resort (sort);
+
+  return G_SOURCE_CONTINUE;
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   GtkWidget *win, *hbox, *vbox, *sw, *listview, *listbox, *label;
   GListStore *store;
+  GtkSortListModel *sort;
   guint i;
 
   gtk_init ();
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  for (i = 0; i < AVERAGE; i++)
+    add (store);
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (store),
+                                  compare,
+                                  NULL, NULL);
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
@@ -117,16 +158,14 @@ main (int   argc,
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (sw), listbox);
 
-  store = g_list_store_new (G_TYPE_OBJECT);
-  for (i = 0; i < AVERAGE; i++)
-    add (store);
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (store));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (sort));
   gtk_list_box_bind_model (GTK_LIST_BOX (listbox),
-                           G_LIST_MODEL (store),
+                           G_LIST_MODEL (sort),
                            create_widget_for_listbox,
                            NULL, NULL);
 
   g_timeout_add (100, do_stuff, store);
+  g_timeout_add_seconds (3, revert_sort, sort);
 
   gtk_widget_show (win);
 
