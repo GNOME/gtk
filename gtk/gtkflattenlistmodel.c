@@ -480,7 +480,7 @@ void
 gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
                                   GListModel          *model)
 {
-  guint removed, added;
+  guint removed, added = 0;
 
   g_return_if_fail (GTK_IS_FLATTEN_LIST_MODEL (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
