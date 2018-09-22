@@ -766,6 +766,10 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 
   g_assert (_gdk_wayland_is_shm_surface (impl->staging_cairo_surface));
 
+  /* XXX: Is this correct? */
+  if (!impl->display_server.wl_surface)
+    return;
+
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->display_server.wl_surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->staging_cairo_surface),
