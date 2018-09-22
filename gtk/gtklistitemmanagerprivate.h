@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkListItemManager GtkListItemManager;
 typedef struct _GtkListItemManagerClass GtkListItemManagerClass;
+typedef struct _GtkListItemManagerChange GtkListItemManagerChange;
 
 GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CONST;
 
@@ -48,15 +49,22 @@ void                    gtk_list_item_manager_set_model         (GtkListItemMana
                                                                  GListModel             *model);
 GListModel *            gtk_list_item_manager_get_model         (GtkListItemManager     *self);
 
+guint                   gtk_list_item_manager_get_size          (GtkListItemManager     *self);
 
-void                    gtk_list_item_manager_model_changed     (GtkListItemManager     *self,
-                                                                 guint                   position,
-                                                                 guint                   removed,
-                                                                 guint                   added);
+GtkListItemManagerChange *
+                        gtk_list_item_manager_begin_change      (GtkListItemManager     *self);
+void                    gtk_list_item_manager_end_change        (GtkListItemManager     *self,
+                                                                 GtkListItemManagerChange *change);
 GtkWidget *             gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  GtkWidget              *next_sibling);
+GtkWidget *             gtk_list_item_manager_try_reacquire_list_item
+                                                                (GtkListItemManager     *self,
+                                                                 GtkListItemManagerChange *change,
+                                                                 guint                   position,
+                                                                 GtkWidget              *next_sibling);
 void                    gtk_list_item_manager_release_list_item (GtkListItemManager     *self,
+                                                                 GtkListItemManagerChange *change,
                                                                  GtkWidget              *widget);
 
 G_END_DECLS
