@@ -45,6 +45,7 @@
                     <property name="hexpand">True</property>
                     <property name="halign">end</property>
                     <property name="valign">center</property>
+                    <property name="no-show-all">1</property>
                     <style>
                       <class name="sidebar-icon"/>
                     </style>
