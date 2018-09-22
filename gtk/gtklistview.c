@@ -451,9 +451,10 @@ gtk_list_view_pick (GtkWidget *widget,
 }
 
 static void
-gtk_list_view_remove_rows (GtkListView *self,
-                           guint        position,
-                           guint        n_rows)
+gtk_list_view_remove_rows (GtkListView              *self,
+                           GtkListItemManagerChange *change,
+                           guint                     position,
+                           guint                     n_rows)
 {
   ListRow *row;
   guint i, n_remaining;
@@ -479,7 +480,7 @@ gtk_list_view_remove_rows (GtkListView *self,
   for (i = 0; i < n_rows; i++)
     {
       ListRow *next = gtk_css_rb_tree_get_next (self->rows, row);
-      gtk_list_item_manager_release_list_item (self->item_manager, row->widget);
+      gtk_list_item_manager_release_list_item (self->item_manager, change, row->widget);
       row->widget = NULL;
       gtk_css_rb_tree_remove (self->rows, row);
       row = next;
@@ -489,10 +490,11 @@ gtk_list_view_remove_rows (GtkListView *self,
 }
 
 static void
-gtk_list_view_add_rows (GtkListView *self,
-                        guint        position,
-                        guint        n_rows)
-{
+gtk_list_view_add_rows (GtkListView              *self,
+                        GtkListItemManagerChange *change,
+                        guint                     position,
+                        guint                     n_rows)
+{  
   ListRow *row;
   guint i, n_total;
 
@@ -514,9 +516,19 @@ gtk_list_view_add_rows (GtkListView *self,
         
       new_row = gtk_css_rb_tree_insert_before (self->rows, row);
       new_row->n_rows = 1;
-      new_row->widget = gtk_list_item_manager_acquire_list_item (self->item_manager,
-                                                                 position + i,
-                                                                 row ? row->widget : NULL);
+      if (change)
+        {
+          new_row->widget = gtk_list_item_manager_try_reacquire_list_item (self->item_manager,
+                                                                           change,
+                                                                           position + i,
+                                                                           row ? row->widget : NULL);
+        }
+      if (new_row->widget == NULL)
+        {
+          new_row->widget = gtk_list_item_manager_acquire_list_item (self->item_manager,
+                                                                     position + i,
+                                                                     row ? row->widget : NULL);
+        }
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
@@ -529,9 +541,14 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
                                       guint        added,
                                       GtkListView *self)
 {
-  gtk_list_view_remove_rows (self, position, removed);
-  gtk_list_item_manager_model_changed (self->item_manager, position, removed, added);
-  gtk_list_view_add_rows (self, position, added);
+  GtkListItemManagerChange *change;
+
+  change = gtk_list_item_manager_begin_change (self->item_manager);
+
+  gtk_list_view_remove_rows (self, change, position, removed);
+  gtk_list_view_add_rows (self, change, position, added);
+
+  gtk_list_item_manager_end_change (self->item_manager, change);
 }
 
 static void
@@ -540,7 +557,7 @@ gtk_list_view_clear_model (GtkListView *self)
   if (self->model == NULL)
     return;
 
-  gtk_list_view_remove_rows (self, 0, g_list_model_get_n_items (self->model));
+  gtk_list_view_remove_rows (self, NULL, 0, g_list_model_get_n_items (self->model));
 
   g_signal_handlers_disconnect_by_func (self->model,
                                         gtk_list_view_model_items_changed_cb,
@@ -853,7 +870,7 @@ gtk_list_view_set_model (GtkListView *self,
                         G_CALLBACK (gtk_list_view_model_items_changed_cb),
                         self);
 
-      gtk_list_view_add_rows (self, 0, g_list_model_get_n_items (model));
+      gtk_list_view_add_rows (self, NULL, 0, g_list_model_get_n_items (model));
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
@@ -875,12 +892,12 @@ gtk_list_view_set_functions (GtkListView            *self,
   g_return_if_fail (user_data != NULL || user_destroy == NULL);
 
   n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
-  gtk_list_view_remove_rows (self, 0, n_items);
+  gtk_list_view_remove_rows (self, NULL, 0, n_items);
 
   factory = gtk_list_item_factory_new (create_func, bind_func, user_data, user_destroy);
   gtk_list_item_manager_set_factory (self->item_manager, factory);
   g_object_unref (factory);
 
-  gtk_list_view_add_rows (self, 0, n_items);
+  gtk_list_view_add_rows (self, NULL, 0, n_items);
 }
 
