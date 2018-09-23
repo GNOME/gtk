@@ -86,7 +86,6 @@ struct _GtkButtonPrivate
   GtkActionHelper       *action_helper;
 
   GtkGesture            *gesture;
-  GtkEventController    *key_controller;
 
   guint                  activate_timeout;
 
@@ -445,6 +444,7 @@ static void
 gtk_button_init (GtkButton *button)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+  GtkEventController *key_controller;
 
   gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
@@ -466,10 +466,10 @@ gtk_button_init (GtkButton *button)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (priv->gesture));
 
-  priv->key_controller = gtk_event_controller_key_new ();
-  g_signal_connect (priv->key_controller, "key-pressed", G_CALLBACK (key_controller_key_pressed_cb), button);
-  g_signal_connect (priv->key_controller, "key-released", G_CALLBACK (key_controller_key_released_cb), button);
-  gtk_widget_add_controller (GTK_WIDGET (button), priv->key_controller);
+  key_controller = gtk_event_controller_key_new ();
+  g_signal_connect (key_controller, "key-pressed", G_CALLBACK (key_controller_key_pressed_cb), button);
+  g_signal_connect (key_controller, "key-released", G_CALLBACK (key_controller_key_released_cb), button);
+  gtk_widget_add_controller (GTK_WIDGET (button), key_controller);
 }
 
 static void
