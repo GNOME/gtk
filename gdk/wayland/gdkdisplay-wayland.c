@@ -1207,7 +1207,7 @@ open_shared_memory (void)
 #if defined (__NR_memfd_create)
       if (!force_shm_open)
         {
-          ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+          ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC | MFD_ALLOW_SEALING);
 
           /* fall back to shm_open until debian stops shipping 3.16 kernel
            * See bug 766341
@@ -1240,6 +1240,10 @@ open_shared_memory (void)
   if (ret < 0)
     g_critical (G_STRLOC ": creating shared memory file (using %s) failed: %m",
                 force_shm_open? "shm_open" : "memfd_create");
+
+  if (!force_shm_open && ret >= 0) {
+    fcntl(ret, F_ADD_SEALS, F_SEAL_SHRINK);
+  }
 
   return ret;
 }
