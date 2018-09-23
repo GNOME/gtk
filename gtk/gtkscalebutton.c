@@ -80,7 +80,6 @@
 
 
 #define SCALE_SIZE 100
-#define CLICK_TIMEOUT 250
 
 enum
 {
