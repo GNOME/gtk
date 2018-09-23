@@ -1207,13 +1207,21 @@ open_shared_memory (void)
 #if defined (__NR_memfd_create)
       if (!force_shm_open)
         {
-          ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+          int options = MFD_CLOEXEC;
+#if defined (MFD_ALLOW_SEALING)
+          options |= MFD_ALLOW_SEALING;
+#endif
+          ret = syscall (__NR_memfd_create, "gdk-wayland", options);
 
           /* fall back to shm_open until debian stops shipping 3.16 kernel
            * See bug 766341
            */
           if (ret < 0 && errno == ENOSYS)
             force_shm_open = TRUE;
+#if defined (F_ADD_SEALS) && defined (F_SEAL_SHRINK)
+          if (ret >= 0)
+            fcntl (ret, F_ADD_SEALS, F_SEAL_SHRINK);
+#endif
         }
 #endif
 
