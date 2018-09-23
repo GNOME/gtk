@@ -79,9 +79,6 @@
 #include "a11y/gtkwindowaccessible.h"
 
 
-#define HEADER_SPACING 12
-#define ACTION_AREA_SPACING 12
-
 typedef struct _GtkAssistantPage GtkAssistantPage;
 
 struct _GtkAssistantPage
