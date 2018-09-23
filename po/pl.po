@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 16:25+0000\n"
-"PO-Revision-Date: 2018-08-28 18:49+0200\n"
+"POT-Creation-Date: 2018-09-23 16:12+0000\n"
+"PO-Revision-Date: 2018-09-23 18:15+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -56,7 +56,7 @@ msgid "Cannot provide contents as %s"
 msgstr "Nie można dostarczyć zawartości jako %s"
 
 #: gdk/gdkdrop.c:110
-msgid "Drag'n'drop from other applications is not supported."
+msgid "Drag’n’drop from other applications is not supported."
 msgstr "Przeciąganie z innych programów nie jest obsługiwane."
 
 #: gdk/gdkdrop.c:143
@@ -650,7 +650,7 @@ msgid "Ran out of buffer space (buffer size is fixed)"
 msgstr "Skończyło się miejsce w buforze (rozmiar bufora jest stały)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
-msgid "Can't transmute a single handle"
+msgid "Can’t transmute a single handle"
 msgstr "Nie można przekształcić jednego uchwytu"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
@@ -880,15 +880,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8065
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8108
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8117
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8031
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8074
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -2091,8 +2091,8 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
-#: gtk/gtkwindow.c:10806 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:817 gtk/ui/gtkappchooserdialog.ui:49
+#: gtk/gtkwindow.c:10848 gtk/inspector/css-editor.c:201
+#: gtk/inspector/recorder.c:1017 gtk/ui/gtkappchooserdialog.ui:49
 #: gtk/ui/gtkassistant.ui:107 gtk/ui/gtkcolorchooserdialog.ui:32
 #: gtk/ui/gtkfontchooserdialog.ui:26
 msgid "_Cancel"
@@ -2106,7 +2106,7 @@ msgid "_Open"
 msgstr "_Otwórz"
 
 #: gtk/gtkfilechoosernative.c:596 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:818
+#: gtk/inspector/recorder.c:1018
 msgid "_Save"
 msgstr "_Zapisz"
 
@@ -2429,7 +2429,7 @@ msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 msgid "Application menu"
 msgstr "Menu programu"
 
-#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8101
+#: gtk/gtkheaderbar.c:451 gtk/gtkwindow.c:8144
 msgid "Close"
 msgstr "Zamknij"
 
@@ -2566,7 +2566,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:817 gtk/gtkmessagedialog.c:835
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10807
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10849
 msgid "_OK"
 msgstr "_OK"
 
@@ -2857,8 +2857,8 @@ msgid "This name is already taken"
 msgstr "Ta nazwa jest już zajęta"
 
 #: gtk/gtkplacessidebar.c:2675 gtk/inspector/actions.ui:40
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/object-tree.ui:82
-#: gtk/ui/gtkfilechooserwidget.ui:179 gtk/ui/gtkfilechooserwidget.ui:468
+#: gtk/inspector/css-node-tree.ui:35 gtk/ui/gtkfilechooserwidget.ui:179
+#: gtk/ui/gtkfilechooserwidget.ui:468
 msgid "Name"
 msgstr "Nazwa"
 
@@ -3100,7 +3100,7 @@ msgstr "Najprawdopodobniej plik tymczasowy nie mógł zostać utworzony."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3386
+#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3386
 msgid "Print"
 msgstr "Wydruk"
 
@@ -3433,24 +3433,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:8049
+#: gtk/gtkwindow.c:8092
 msgid "Move"
 msgstr "Przenieś"
 
-#: gtk/gtkwindow.c:8057
+#: gtk/gtkwindow.c:8100
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: gtk/gtkwindow.c:8088
+#: gtk/gtkwindow.c:8131
 msgid "Always on Top"
 msgstr "Zawsze na wierzchu"
 
-#: gtk/gtkwindow.c:10794
+#: gtk/gtkwindow.c:10836
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK+?"
 
-#: gtk/gtkwindow.c:10796
+#: gtk/gtkwindow.c:10838
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3461,7 +3461,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK+. Jego użycie może spowodować awarię "
 "lub uszkodzenie programu."
 
-#: gtk/gtkwindow.c:10801
+#: gtk/gtkwindow.c:10843
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -3486,6 +3486,26 @@ msgstr "Wyłączone"
 #: gtk/inspector/actions.ui:66
 msgid "Parameter Type"
 msgstr "Typ parametru"
+
+#: gtk/inspector/controllers.c:131
+msgctxt "event phase"
+msgid "None"
+msgstr "Brak"
+
+#: gtk/inspector/controllers.c:132
+msgctxt "event phase"
+msgid "Capture"
+msgstr "Przytrzymanie"
+
+#: gtk/inspector/controllers.c:133
+msgctxt "event phase"
+msgid "Bubble"
+msgstr "Bańka"
+
+#: gtk/inspector/controllers.c:134
+msgctxt "event phase"
+msgid "Target"
+msgstr "Cel"
 
 #: gtk/inspector/css-editor.c:112
 msgid "You can type here any CSS rule recognized by GTK+."
@@ -3521,7 +3541,7 @@ msgstr "Zapisuje bieżące reguły CSS"
 msgid "ID"
 msgstr "Identyfikator"
 
-#: gtk/inspector/css-node-tree.ui:61 gtk/inspector/object-tree.ui:114
+#: gtk/inspector/css-node-tree.ui:61
 msgid "Style Classes"
 msgstr "Klasy stylu"
 
@@ -3530,7 +3550,7 @@ msgid "CSS Property"
 msgstr "Właściwość CSS"
 
 #: gtk/inspector/css-node-tree.ui:118 gtk/inspector/prop-list.ui:46
-#: gtk/inspector/recorder.ui:139 gtk/ui/gtkcoloreditor.ui:284
+#: gtk/inspector/recorder.ui:121 gtk/ui/gtkcoloreditor.ui:284
 msgid "Value"
 msgstr "Wartość"
 
@@ -3602,31 +3622,11 @@ msgstr "Wersja API Vulkan"
 msgid "Vulkan driver version"
 msgstr "Wersja sterownika Vulkan"
 
-#: gtk/inspector/gestures.c:129
-msgctxt "event phase"
-msgid "None"
-msgstr "Brak"
-
-#: gtk/inspector/gestures.c:130
-msgctxt "event phase"
-msgid "Capture"
-msgstr "Przytrzymanie"
-
-#: gtk/inspector/gestures.c:131
-msgctxt "event phase"
-msgid "Bubble"
-msgstr "Bańka"
-
-#: gtk/inspector/gestures.c:132
-msgctxt "event phase"
-msgid "Target"
-msgstr "Cel"
-
 #: gtk/inspector/menu.c:92
 msgid "Unnamed section"
 msgstr "Sekcja bez nazwy"
 
-#: gtk/inspector/menu.ui:28 gtk/inspector/object-tree.ui:97
+#: gtk/inspector/menu.ui:28
 msgid "Label"
 msgstr "Etykieta"
 
@@ -3729,10 +3729,6 @@ msgstr "Jest najwyższego poziomu"
 msgid "Child Visible"
 msgstr "Element potomny jest widoczny"
 
-#: gtk/inspector/object-tree.ui:67
-msgid "Object"
-msgstr "Obiekt"
-
 #: gtk/inspector/prop-editor.c:679
 #, c-format
 msgid "Pointer: %p"
@@ -3816,7 +3812,7 @@ msgstr "Motyw"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-list.ui:30 gtk/inspector/recorder.ui:126
+#: gtk/inspector/prop-list.ui:30 gtk/inspector/recorder.ui:108
 msgid "Property"
 msgstr "Właściwość"
 
@@ -3832,7 +3828,7 @@ msgstr "Atrybut"
 msgid "Defined At"
 msgstr "Określone w"
 
-#: gtk/inspector/recorder.c:785
+#: gtk/inspector/recorder.c:988
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Zapisanie węzła rysowania się nie powiodło"
@@ -4131,8 +4127,8 @@ msgid "Actions"
 msgstr "Działania"
 
 #: gtk/inspector/window.ui:373
-msgid "Gestures"
-msgstr "Gesty"
+msgid "Controllers"
+msgstr "Kontrolery"
 
 #: gtk/inspector/window.ui:382
 msgid "Magnifier"
