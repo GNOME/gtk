@@ -205,6 +205,30 @@ gtk_list_item_manager_end_change (GtkListItemManager       *self,
 }
 
 /*
+ * gtk_list_item_manager_change_contains:
+ * @change: a #GtkListItemManagerChange
+ * @list_item: The item that may have been released into this change set
+ *
+ * Checks if @list_item has been released as part of @change but not been
+ * reacquired yet.
+ *
+ * This is useful to test before calling gtk_list_item_manager_end_change()
+ * if special actions need to be performed when important list items - like
+ * the focused item - are about to be deleted.
+ *
+ * Returns: %TRUE if the item is part of this change
+ **/
+gboolean
+gtk_list_item_manager_change_contains (GtkListItemManagerChange *change,
+                                       GtkWidget                *list_item)
+{
+  g_return_val_if_fail (change != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (list_item), FALSE);
+
+  return g_hash_table_lookup (change->items, gtk_list_item_get_item (GTK_LIST_ITEM (list_item))) == list_item;
+}
+
+/*
  * gtk_list_item_manager_acquire_list_item:
  * @self: a #GtkListItemManager
  * @position: the row in the model to create a list item for
