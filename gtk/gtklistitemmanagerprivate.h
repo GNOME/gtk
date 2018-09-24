@@ -63,6 +63,9 @@ GtkWidget *             gtk_list_item_manager_try_reacquire_list_item
                                                                  GtkListItemManagerChange *change,
                                                                  guint                   position,
                                                                  GtkWidget              *next_sibling);
+void                    gtk_list_item_manager_update_list_item  (GtkListItemManager     *self,
+                                                                 GtkWidget              *item,
+                                                                 guint                   position);
 void                    gtk_list_item_manager_release_list_item (GtkListItemManager     *self,
                                                                  GtkListItemManagerChange *change,
                                                                  GtkWidget              *widget);
