@@ -27,8 +27,8 @@ struct _GtkListItemFactory
 {
   GObject parent_instance;
 
-  GtkListCreateWidgetFunc create_func;
-  GtkListBindWidgetFunc bind_func;
+  GtkListItemSetupFunc setup_func;
+  GtkListItemBindFunc bind_func;
   gpointer user_data;
   GDestroyNotify user_destroy;
 };
@@ -65,20 +65,19 @@ gtk_list_item_factory_init (GtkListItemFactory *self)
 }
 
 GtkListItemFactory *
-gtk_list_item_factory_new (GtkListCreateWidgetFunc create_func,
-                           GtkListBindWidgetFunc   bind_func,
-                           gpointer                user_data,
-                           GDestroyNotify          user_destroy)
+gtk_list_item_factory_new (GtkListItemSetupFunc setup_func,
+                           GtkListItemBindFunc  bind_func,
+                           gpointer             user_data,
+                           GDestroyNotify       user_destroy)
 {
   GtkListItemFactory *self;
 
-  g_return_val_if_fail (create_func, NULL);
-  g_return_val_if_fail (bind_func, NULL);
+  g_return_val_if_fail (setup_func || bind_func, NULL);
   g_return_val_if_fail (user_data != NULL || user_destroy == NULL, NULL);
 
   self = g_object_new (GTK_TYPE_LIST_ITEM_FACTORY, NULL);
 
-  self->create_func = create_func;
+  self->setup_func = setup_func;
   self->bind_func = bind_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
@@ -89,15 +88,14 @@ gtk_list_item_factory_new (GtkListCreateWidgetFunc create_func,
 GtkListItem *
 gtk_list_item_factory_create (GtkListItemFactory *self)
 {
-  GtkWidget *widget, *result;
+  GtkWidget *result;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (self), NULL);
 
-  widget = self->create_func (self->user_data);
-
   result = gtk_list_item_new ("row");
 
-  gtk_list_item_set_child (GTK_LIST_ITEM (result), widget);
+  if (self->setup_func)
+    self->setup_func (GTK_LIST_ITEM (result), self->user_data);
 
   return GTK_LIST_ITEM (result);
 }
@@ -116,7 +114,8 @@ gtk_list_item_factory_bind (GtkListItemFactory *self,
   gtk_list_item_set_item (list_item, item);
   gtk_list_item_set_position (list_item, position);
 
-  self->bind_func (gtk_bin_get_child (GTK_BIN (list_item)), item, self->user_data);
+  if (self->bind_func)  
+    self->bind_func (list_item, self->user_data);
 
   g_object_thaw_notify (G_OBJECT (list_item));
 }
