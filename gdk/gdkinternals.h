@@ -184,6 +184,7 @@ struct _GdkSurface
   guint viewable : 1; /* mapped and all parents mapped */
   guint in_update : 1;
   guint frame_clock_events_paused : 1;
+  guint has_grab : 1;
 
   /* The GdkSurface that has the impl, ref:ed if another surface.
    * This ref is required to keep the wrapper of the impl surface alive
@@ -218,6 +219,8 @@ struct _GdkSurface
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
 extern gint       _gdk_screen_number;
+
+extern gint       _gdk_nb_grabs;
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
