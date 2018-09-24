@@ -138,25 +138,21 @@ create_list_model_for_directory (gpointer file)
   return G_LIST_MODEL (sort);
 }
 
-static GtkWidget *
-create_widget (gpointer unused)
-{
-  return gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-}
-
 static void
-bind_widget (GtkWidget *box,
-             gpointer   item,
+bind_widget (GtkListItem *list_item,
              gpointer   unused)
 {
-  GtkWidget *child;
+  GtkWidget *box, *child;
   GFileInfo *info;
   GFile *file;
   guint depth;
   GIcon *icon;
+  gpointer item;
 
-  while (gtk_widget_get_first_child (box))
-    gtk_container_remove (GTK_CONTAINER (box), gtk_widget_get_first_child (box));
+  item = gtk_list_item_get_item (list_item);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  gtk_list_item_set_child (list_item, box);
 
   depth = gtk_tree_list_row_get_depth (item);
   if (depth > 0)
@@ -302,7 +298,7 @@ main (int argc, char *argv[])
 
   listview = gtk_list_view_new ();
   gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
-                               create_widget,
+                               NULL,
                                bind_widget,
                                NULL, NULL);
   gtk_container_add (GTK_CONTAINER (sw), listview);
