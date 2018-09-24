@@ -55,6 +55,9 @@ GtkListItemManagerChange *
                         gtk_list_item_manager_begin_change      (GtkListItemManager     *self);
 void                    gtk_list_item_manager_end_change        (GtkListItemManager     *self,
                                                                  GtkListItemManagerChange *change);
+gboolean                gtk_list_item_manager_change_contains   (GtkListItemManagerChange *change,
+                                                                 GtkWidget              *list_item);
+
 GtkWidget *             gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  GtkWidget              *next_sibling);
