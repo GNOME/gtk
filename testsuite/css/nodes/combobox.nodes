@@ -10,14 +10,14 @@
       [window.background.popup:dir(ltr)]
         decoration:dir(ltr)
         menu:dir(ltr)
-          [arrow.top:dir(ltr)]
+          arrow.top:dir(ltr)
           menuitem:dir(ltr)
             cellview:dir(ltr)
           menuitem:dir(ltr)
             cellview:dir(ltr)
           menuitem:dir(ltr)
             cellview:dir(ltr)
-          [arrow.bottom:dir(ltr)]
+          arrow.bottom:dir(ltr)
     combobox:dir(ltr)
       box.linked.horizontal:dir(ltr)
         entry.combo:dir(ltr)
@@ -29,11 +29,11 @@
       [window.background.popup:dir(ltr)]
         decoration:dir(ltr)
         menu:dir(ltr)
-          [arrow.top:dir(ltr)]
+          arrow.top:dir(ltr)
           menuitem:dir(ltr)
             cellview:dir(ltr)
           menuitem:dir(ltr)
             cellview:dir(ltr)
           menuitem:dir(ltr)
             cellview:dir(ltr)
-          [arrow.bottom:dir(ltr)]
+          arrow.bottom:dir(ltr)
