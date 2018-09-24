@@ -35,6 +35,8 @@ G_DECLARE_FINAL_TYPE (GtkListItem, gtk_list_item, GTK, LIST_ITEM, GtkBin)
 
 GDK_AVAILABLE_IN_ALL
 gpointer        gtk_list_item_get_item                          (GtkListItem            *self);
+GDK_AVAILABLE_IN_ALL
+guint           gtk_list_item_get_position                      (GtkListItem            *self);
 
 G_END_DECLS
 

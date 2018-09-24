@@ -52,12 +52,14 @@ struct _GtkListItem
   GtkBin parent_instance;
 
   GObject *item;
+  guint position;
 };
 
 enum
 {
   PROP_0,
   PROP_ITEM,
+  PROP_POSITION,
 
   N_PROPS
 };
@@ -88,6 +90,10 @@ gtk_list_item_get_property (GObject    *object,
     {
     case PROP_ITEM:
       g_value_set_object (value, self->item);
+      break;
+
+    case PROP_POSITION:
+      g_value_set_uint (value, self->position);
       break;
 
     default:
@@ -134,6 +140,18 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_TYPE_OBJECT,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkListItem:position:
+   *
+   * Position in the item
+   */
+  properties[PROP_POSITION] =
+    g_param_spec_uint ("position",
+                       P_("Position"),
+                       P_("Position of the item"),
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   /* This gets overwritten by gtk_list_item_new() but better safe than sorry */
@@ -159,10 +177,10 @@ gtk_list_item_new (const char *css_name)
  * gtk_list_item_get_item:
  * @self: a #GtkListItem
  *
- * Gets the item that is currently displayed or model that @self is
+ * Gets the item that is currently displayed in model that @self is
  * currently bound to or %NULL if @self is unbound.
  *
- * Returns: (nullable) (transfer none) (type GObject): The model in use
+ * Returns: (nullable) (transfer none) (type GObject): The item displayed
  **/
 gpointer
 gtk_list_item_get_item (GtkListItem *self)
@@ -170,6 +188,23 @@ gtk_list_item_get_item (GtkListItem *self)
   g_return_val_if_fail (GTK_IS_LIST_ITEM (self), NULL);
 
   return self->item;
+}
+
+/**
+ * gtk_list_item_get_position:
+ * @self: a #GtkListItem
+ *
+ * Gets the position in the model that @self currently displays.
+ * If @self is unbound, 0 is returned.
+ *
+ * Returns: The position of this item
+ **/
+guint
+gtk_list_item_get_position (GtkListItem *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (self), 0);
+
+  return self->position;
 }
 
 void
@@ -184,28 +219,33 @@ gtk_list_item_set_child (GtkListItem *self,
 }
 
 void
-gtk_list_item_bind (GtkListItem *self,
-                    gpointer     item)
+gtk_list_item_set_item (GtkListItem *self,
+                        gpointer     item)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM (self));
-  g_return_if_fail (G_IS_OBJECT (item));
-  /* Must unbind before rebinding */
-  g_return_if_fail (self->item == NULL);
+  g_return_if_fail (item == NULL || G_IS_OBJECT (item));
 
-  self->item = g_object_ref (item);
+  if (self->item == item)
+    return;
+
+  g_clear_object (&self->item);
+  if (item)
+    self->item = g_object_ref (item);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }
 
 void
-gtk_list_item_unbind (GtkListItem *self)
+gtk_list_item_set_position (GtkListItem *self,
+                            guint        position)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM (self));
-  /* Must be bound */
-  g_return_if_fail (self->item != NULL);
 
-  g_clear_object (&self->item);
+  if (self->position == position)
+    return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
+  self->position = position;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_POSITION]);
 }
 
