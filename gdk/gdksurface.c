@@ -134,6 +134,8 @@ static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
 
 
+gint        _gdk_nb_grabs;
+
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
@@ -5205,6 +5207,24 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
   toplevel = gdk_surface_get_toplevel (surface);
 
   return toplevel->frame_clock;
+}
+
+void
+gdk_surface_set_has_grab (GdkSurface *surface,
+                          gboolean    has_grab)
+{
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  if (has_grab && !surface->has_grab)
+    _gdk_nb_grabs++;
+
+  if (!has_grab && surface->has_grab)
+    {
+      g_assert (_gdk_nb_grabs > 0);
+      _gdk_nb_grabs--;
+    }
+
+  surface->has_grab = has_grab;
 }
 
 /**

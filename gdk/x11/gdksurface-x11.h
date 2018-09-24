@@ -107,6 +107,10 @@ struct _GdkToplevelX11
    */
   guint has_focus : 1;
 
+  /* Set if the application has grabbed the focus in one of the toplevels.
+   */
+  guint has_grabbed_focus : 1;
+
   /* Set if the pointer is inside this window. (This is needed for
    * for focus tracking)
    */

@@ -35,4 +35,7 @@ gboolean gdk_running_in_sandbox (void);
 
 const gchar *   gdk_get_startup_notification_id (void);
 
+void            gdk_surface_set_has_grab        (GdkSurface *surface,
+                                                 gboolean    has_grab);
+
 #endif /* __GDK__PRIVATE_H__ */

@@ -73,6 +73,7 @@
 #include "inspector/window.h"
 
 #include "gdk/gdkeventsprivate.h"
+#include "gdk/gdk-private.h"
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendererprivate.h"
 
@@ -6049,6 +6050,7 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   priv->has_grab = has_grab;
+  gdk_surface_set_has_grab (priv->surface, has_grab);
 }
 
 /**

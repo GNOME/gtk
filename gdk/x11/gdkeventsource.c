@@ -36,8 +36,16 @@ static void     gdk_event_source_finalize (GSource     *source);
 
 static GQuark quark_needs_enter = 0;
 
-#define APPEARS_FOCUSED(toplevel)                           \
-  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+/*
+ * The toplevel should appear as focused when
+ * - it has the keyboard grab,
+ * - or it has normal focus and no other toplevel of this application has the keyboard grab
+ * - or it has pointer focus
+ */
+#define APPEARS_FOCUSED(toplevel)                                      \
+  ( (toplevel)->has_focus ||                                           \
+   ((toplevel)->has_focus_window && !(toplevel)->has_grabbed_focus) || \
+    (toplevel)->has_pointer_focus)
 
 struct _GdkEventSource
 {
