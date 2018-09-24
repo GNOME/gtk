@@ -868,24 +868,23 @@ gtk_list_view_set_model (GtkListView *self,
 }
 
 void
-gtk_list_view_set_functions (GtkListView            *self,
-                             GtkListCreateWidgetFunc create_func,
-                             GtkListBindWidgetFunc   bind_func,
-                             gpointer                user_data,
-                             GDestroyNotify          user_destroy)
+gtk_list_view_set_functions (GtkListView          *self,
+                             GtkListItemSetupFunc  setup_func,
+                             GtkListItemBindFunc   bind_func,
+                             gpointer              user_data,
+                             GDestroyNotify        user_destroy)
 {
   GtkListItemFactory *factory;
   guint n_items;
 
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (create_func);
-  g_return_if_fail (bind_func);
+  g_return_if_fail (setup_func || bind_func);
   g_return_if_fail (user_data != NULL || user_destroy == NULL);
 
   n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
   gtk_list_view_remove_rows (self, NULL, 0, n_items);
 
-  factory = gtk_list_item_factory_new (create_func, bind_func, user_data, user_destroy);
+  factory = gtk_list_item_factory_new (setup_func, bind_func, user_data, user_destroy);
   gtk_list_item_manager_set_factory (self->item_manager, factory);
   g_object_unref (factory);
 
