@@ -29,9 +29,10 @@ GtkWidget *     gtk_list_item_new                               (const char     
 void            gtk_list_item_set_child                         (GtkListItem            *item,
                                                                  GtkWidget              *child);
 
-void            gtk_list_item_bind                              (GtkListItem            *self,
+void            gtk_list_item_set_item                          (GtkListItem            *self,
                                                                  gpointer                item);
-void            gtk_list_item_unbind                            (GtkListItem            *self);
+void            gtk_list_item_set_position                      (GtkListItem            *self,
+                                                                 guint                   position);
 
 G_END_DECLS
 

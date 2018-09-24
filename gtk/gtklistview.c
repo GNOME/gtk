@@ -510,6 +510,22 @@ gtk_list_view_add_rows (GtkListView              *self,
 }
 
 static void
+gtk_list_view_update_rows (GtkListView *self,
+                           guint        position)
+{
+  ListRow *row;
+
+  for (row = gtk_list_view_get_row (self, position, NULL);
+       row;
+       row = gtk_rb_tree_node_get_next (row))
+    {
+      gtk_list_item_manager_update_list_item (self->item_manager, row->widget, position);
+
+      position++;
+    }
+}
+
+static void
 gtk_list_view_model_items_changed_cb (GListModel  *model,
                                       guint        position,
                                       guint        removed,
@@ -522,6 +538,8 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
 
   gtk_list_view_remove_rows (self, change, position, removed);
   gtk_list_view_add_rows (self, change, position, added);
+  if (removed != added)
+    gtk_list_view_update_rows (self, position + added);
 
   gtk_list_item_manager_end_change (self->item_manager, change);
 }
