@@ -54,10 +54,8 @@ struct _GtkListView
   int list_width;
 
   /* managing the visible region */
-  guint anchor_pos;
-  int anchor_dy;
-  guint first_visible_pos;
-  guint lasst_visible_pos;
+  GtkWidget *anchor;
+  int anchor_align;
 };
 
 struct _ListRow
@@ -285,6 +283,54 @@ gtk_list_view_get_list_height (GtkListView *self)
 }
 
 static void
+gtk_list_view_set_anchor (GtkListView *self,
+                          guint        position,
+                          double       align)
+{
+  ListRow *row;
+
+  g_assert (align >= 0.0 && align <= 1.0);
+
+  row = gtk_list_view_get_row (self, position, NULL);
+  if (row == NULL)
+    {
+      /* like, if the list is empty */
+      self->anchor = NULL;
+      self->anchor_align = 0.0;
+      return;
+    }
+
+  self->anchor = row->widget;
+  self->anchor_align = align;
+
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
+}
+
+static void
+gtk_list_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
+                                           GtkListView   *self)
+{
+  if (adjustment == self->adjustment[GTK_ORIENTATION_VERTICAL])
+    {
+      ListRow *row;
+      guint pos;
+      int dy;
+
+      row = gtk_list_view_get_row_at_y (self, gtk_adjustment_get_value (adjustment), &dy);
+      if (row)
+        pos = list_row_get_position (self, row);
+      else
+        pos = 0;
+
+      gtk_list_view_set_anchor (self, pos, 0);
+    }
+  else
+    { 
+      gtk_widget_queue_allocate (GTK_WIDGET (self));
+    }
+}
+
+static void
 gtk_list_view_update_adjustments (GtkListView    *self,
                                   GtkOrientation  orientation)
 {
@@ -306,15 +352,21 @@ gtk_list_view_update_adjustments (GtkListView    *self,
       page_size = gtk_widget_get_height (GTK_WIDGET (self));
       upper = gtk_list_view_get_list_height (self);
 
-      row = gtk_list_view_get_row (self, self->anchor_pos, NULL);
+      if (self->anchor)
+        row = gtk_list_view_get_row (self, gtk_list_item_get_position (GTK_LIST_ITEM (self->anchor)), NULL);
+      else
+        row = NULL;
       if (row)
         value = list_row_get_y (self, row);
       else
         value = 0;
-      value += self->anchor_dy;
+      value += self->anchor_align * (page_size - (row ? row->height : 0));
     }
   upper = MAX (upper, page_size);
 
+  g_signal_handlers_block_by_func (self->adjustment[orientation],
+                                   gtk_list_view_adjustment_value_changed_cb,
+                                   self);
   gtk_adjustment_configure (self->adjustment[orientation],
                             value,
                             0,
@@ -322,6 +374,9 @@ gtk_list_view_update_adjustments (GtkListView    *self,
                             page_size * 0.1,
                             page_size * 0.9,
                             page_size);
+  g_signal_handlers_unblock_by_func (self->adjustment[orientation],
+                                     gtk_list_view_adjustment_value_changed_cb,
+                                     self);
 }
 
 static void
@@ -413,7 +468,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
 
   /* step 4: actually allocate the widgets */
   child_allocation.x = - gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-  child_allocation.y = - gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_VERTICAL]);
+  child_allocation.y = - round (gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_VERTICAL]));
   child_allocation.width = self->list_width;
   for (row = gtk_rb_tree_get_first (self->rows);
        row != NULL;
@@ -425,6 +480,23 @@ gtk_list_view_size_allocate (GtkWidget *widget,
     }
 }
 
+static guint
+gtk_list_view_get_anchor (GtkListView *self,
+                          double      *align)
+{
+  guint anchor_pos;
+
+  if (self->anchor)
+    anchor_pos = gtk_list_item_get_position (GTK_LIST_ITEM (self->anchor));
+  else
+    anchor_pos = 0;
+
+  if (align)
+    *align = self->anchor_align;
+
+  return anchor_pos;
+}
+
 static void
 gtk_list_view_remove_rows (GtkListView              *self,
                            GtkListItemManagerChange *change,
@@ -432,23 +504,10 @@ gtk_list_view_remove_rows (GtkListView              *self,
                            guint                     n_rows)
 {
   ListRow *row;
-  guint i, n_remaining;
+  guint i;
 
   if (n_rows == 0)
     return;
-
-  n_remaining = self->model ? g_list_model_get_n_items (self->model) : 0;
-  if (self->anchor_pos >= position + n_rows)
-    {
-      self->anchor_pos -= n_rows;
-    }
-  else if (self->anchor_pos >= position)
-    {
-      self->anchor_pos = position;
-      if (self->anchor_pos > 0 && self->anchor_pos >= n_remaining)
-        self->anchor_pos = n_remaining - 1;
-      self->anchor_dy = 0;
-    }
 
   row = gtk_list_view_get_row (self, position, NULL);
 
@@ -471,17 +530,10 @@ gtk_list_view_add_rows (GtkListView              *self,
                         guint                     n_rows)
 {  
   ListRow *row;
-  guint i, n_total;
+  guint i;
 
   if (n_rows == 0)
     return;
-
-  n_total = self->model ? g_list_model_get_n_items (self->model) : 0;
-  if (self->anchor_pos >= position)
-    {
-      if (n_total != n_rows) /* the model was not empty before */
-        self->anchor_pos += n_rows;
-    }
 
   row = gtk_list_view_get_row (self, position, NULL);
 
@@ -541,6 +593,15 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
   if (removed != added)
     gtk_list_view_update_rows (self, position + added);
 
+  if (gtk_list_item_manager_change_contains (change, self->anchor))
+    {
+      guint anchor_pos = gtk_list_item_get_position (GTK_LIST_ITEM (self->anchor));
+      
+      /* removed cannot be NULL or the anchor wouldn't have been removed */
+      anchor_pos = position + (anchor_pos - position) * added / removed;
+      gtk_list_view_set_anchor (self, anchor_pos, self->anchor_align);
+    }
+
   gtk_list_item_manager_end_change (self->item_manager, change);
 }
 
@@ -556,35 +617,6 @@ gtk_list_view_clear_model (GtkListView *self)
                                         gtk_list_view_model_items_changed_cb,
                                         self);
   g_clear_object (&self->model);
-}
-
-static void
-gtk_list_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
-                                           GtkListView   *self)
-{
-  if (adjustment == self->adjustment[GTK_ORIENTATION_VERTICAL])
-    {
-      ListRow *row;
-      guint pos;
-      int dy;
-
-      row = gtk_list_view_get_row_at_y (self, gtk_adjustment_get_value (adjustment), &dy);
-      if (row)
-        pos = list_row_get_position (self, row);
-      else
-        pos = 0;
-
-      if (pos != self->anchor_pos || dy != self->anchor_dy)
-        {
-          self->anchor_pos = pos;
-          self->anchor_dy = dy;
-          gtk_widget_queue_allocate (GTK_WIDGET (self));
-        }
-    }
-  else
-    { 
-      gtk_widget_queue_allocate (GTK_WIDGET (self));
-    }
 }
 
 static void
@@ -862,6 +894,7 @@ gtk_list_view_set_model (GtkListView *self,
                         self);
 
       gtk_list_view_add_rows (self, NULL, 0, g_list_model_get_n_items (model));
+      gtk_list_view_set_anchor (self, 0, 0);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
@@ -875,13 +908,15 @@ gtk_list_view_set_functions (GtkListView          *self,
                              GDestroyNotify        user_destroy)
 {
   GtkListItemFactory *factory;
-  guint n_items;
+  guint n_items, anchor;
+  double anchor_align;
 
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (setup_func || bind_func);
   g_return_if_fail (user_data != NULL || user_destroy == NULL);
 
   n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
+  anchor = gtk_list_view_get_anchor (self, &anchor_align);
   gtk_list_view_remove_rows (self, NULL, 0, n_items);
 
   factory = gtk_list_item_factory_new (setup_func, bind_func, user_data, user_destroy);
@@ -889,5 +924,6 @@ gtk_list_view_set_functions (GtkListView          *self,
   g_object_unref (factory);
 
   gtk_list_view_add_rows (self, NULL, 0, n_items);
+  gtk_list_view_set_anchor (self, anchor, anchor_align);
 }
 
