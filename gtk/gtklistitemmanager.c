@@ -236,7 +236,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   result = gtk_list_item_factory_create (self->factory);
 
   item = g_list_model_get_item (self->model, position);
-  gtk_list_item_factory_bind (self->factory, result, item);
+  gtk_list_item_factory_bind (self->factory, result, position, item);
   g_object_unref (item);
   gtk_widget_insert_before (GTK_WIDGET (result), self->widget, next_sibling);
 
@@ -274,6 +274,7 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
   item = g_list_model_get_item (self->model, position);
   if (g_hash_table_steal_extended (change->items, item, NULL, (gpointer *) &result))
     {
+      gtk_list_item_factory_update (self->factory, result, position);
       gtk_widget_insert_before (GTK_WIDGET (result), self->widget, next_sibling);
       /* XXX: Should we let the listview do this? */
       gtk_widget_queue_resize (GTK_WIDGET (result));
@@ -285,6 +286,26 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
   g_object_unref (item);
 
   return GTK_WIDGET (result);
+}
+
+/**
+ * gtk_list_item_manager_update_list_item:
+ * @self: a #GtkListItemManager
+ * @item: a #GtkListItem that has been acquired
+ * @position: the new position of that list item
+ *
+ * Updates the position of the given @item. This function must be called whenever
+ * the position of an item changes, like when new items are added before it.
+ **/
+void
+gtk_list_item_manager_update_list_item (GtkListItemManager *self,
+                                        GtkWidget          *item,
+                                        guint               position)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
+  g_return_if_fail (GTK_IS_LIST_ITEM (item));
+
+  gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position);
 }
 
 /*
