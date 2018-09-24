@@ -28,10 +28,38 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_LIST_ITEM         (gtk_list_item_get_type ())
-
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkListItem, gtk_list_item, GTK, LIST_ITEM, GtkBin)
+
+/**
+ * GtkListItemSetupFunc:
+ * @item: the #GtkListItem to set up
+ * @user_data: (closure): user data
+ *
+ * Called whenever a new list item needs to be setup for managing a row in
+ * the list.
+ *
+ * At this point, the list item is not bound yet, so gtk_list_item_get_item()
+ * will return %NULL.
+ * The list item will later be bound to an item via the #GtkListItemBindFunc.
+ */
+typedef void (* GtkListItemSetupFunc) (GtkListItem *item, gpointer user_data);
+
+/**
+ * GtkListItemBindFunc:
+ * @item: the #GtkListItem to bind
+ * @user_data: (closure): user data
+ *
+ * Binds a#GtkListItem previously set up via a #GtkListItemSetupFunc to
+ * an @item.
+ *
+ * Rebinding a @item to different @items is supported as well as
+ * unbinding it by setting @item to %NULL.
+ */
+typedef void (* GtkListItemBindFunc) (GtkListItem *item,
+                                      gpointer   user_data);
+
+#define GTK_TYPE_LIST_ITEM         (gtk_list_item_get_type ())
 
 GDK_AVAILABLE_IN_ALL
 gpointer        gtk_list_item_get_item                          (GtkListItem            *self);
