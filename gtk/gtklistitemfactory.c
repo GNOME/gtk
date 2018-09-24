@@ -153,14 +153,31 @@ gtk_list_item_factory_create (GtkListItemFactory *self)
 void
 gtk_list_item_factory_bind (GtkListItemFactory *self,
                             GtkListItem        *list_item,
+                            guint               position,
                             gpointer            item)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
 
-  gtk_list_item_bind (list_item, item);
+  g_object_freeze_notify (G_OBJECT (list_item));
+
+  gtk_list_item_set_item (list_item, item);
+  gtk_list_item_set_position (list_item, position);
 
   self->bind_func (gtk_list_item_get_child (list_item), item, self->user_data);
+
+  g_object_thaw_notify (G_OBJECT (list_item));
+}
+
+void
+gtk_list_item_factory_update (GtkListItemFactory *self,
+                              GtkListItem        *list_item,
+                              guint               position)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
+  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
+
+  gtk_list_item_set_position (list_item, position);
 }
 
 void
@@ -170,5 +187,10 @@ gtk_list_item_factory_unbind (GtkListItemFactory *self,
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
 
-  gtk_list_item_unbind (list_item);
+  g_object_freeze_notify (G_OBJECT (list_item));
+
+  gtk_list_item_set_item (list_item, NULL);
+  gtk_list_item_set_position (list_item, 0);
+
+  g_object_thaw_notify (G_OBJECT (list_item));
 }
