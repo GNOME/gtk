@@ -25,38 +25,37 @@
 #endif
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtklistitem.h>
 
 G_BEGIN_DECLS
 
 /**
- * GtkListCreateWidgetFunc:
+ * GtkListItemSetupFunc:
+ * @item: the #GtkListItem to set up
  * @user_data: (closure): user data
  *
- * Called whenever a new widget needs to be created for managing a row in
+ * Called whenever a new list item needs to be setup for managing a row in
  * the list.
  *
- * The widget will later be bound to an item via the #GtkListBindWidgetFunc.
- *
- * Returns: (transfer full): a #GtkWidget
+ * At this point, the list item is not bound yet, so gtk_list_item_get_item()
+ * will return %NULL.  
+ * The list item will later be bound to an item via the #GtkListItemBindFunc.
  */
-typedef GtkWidget * (* GtkListCreateWidgetFunc) (gpointer user_data);
+typedef void (* GtkListItemSetupFunc) (GtkListItem *item, gpointer user_data);
 
 /**
- * GtkListBindWidgetFunc:
- * @widget: The #GtkWidget to bind
- * @item: (type GObject) (allow-none): item to bind or %NULL to unbind
- *     the widget.
+ * GtkListItemBindFunc:
+ * @item: the #GtkListItem to bind
  * @user_data: (closure): user data
  *
- * Binds a widget previously created via a #GtkListCreateWidgetFunc to
+ * Binds a#GtkListItem previously set up via a #GtkListItemSetupFunc to
  * an @item.
  *
- * Rebinding a @widget to different @items is supported as well as
+ * Rebinding a @item to different @items is supported as well as
  * unbinding it by setting @item to %NULL.
  */
-typedef void (* GtkListBindWidgetFunc) (GtkWidget *widget,
-                                        gpointer   item,
-                                        gpointer   user_data);
+typedef void (* GtkListItemBindFunc) (GtkListItem *item,
+                                      gpointer   user_data);
 
 #define GTK_TYPE_LIST_VIEW         (gtk_list_view_get_type ())
 
@@ -73,8 +72,8 @@ void            gtk_list_view_set_model                         (GtkListView    
                                                                  GListModel             *model);
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_functions                     (GtkListView            *self,
-                                                                 GtkListCreateWidgetFunc create_func,
-                                                                 GtkListBindWidgetFunc   bind_func,
+                                                                 GtkListItemSetupFunc    setup_func,
+                                                                 GtkListItemBindFunc     bind_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 
