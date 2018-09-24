@@ -47,7 +47,11 @@ GtkListItem *           gtk_list_item_factory_create            (GtkListItemFact
 
 void                    gtk_list_item_factory_bind              (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item,
+                                                                 guint                   position,
                                                                  gpointer                item);
+void                    gtk_list_item_factory_update            (GtkListItemFactory     *self,
+                                                                 GtkListItem            *list_item,
+                                                                 guint                   position);
 void                    gtk_list_item_factory_unbind            (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item);
 
