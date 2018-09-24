@@ -8,30 +8,46 @@
 #define VARIANCE 200
 #endif
 
-static GtkWidget *
-create_widget (gpointer unused)
+static void
+setup_list_item (GtkListItem *list_item,
+                 gpointer     unused)
 {
-  return gtk_label_new ("");
+  GtkWidget *label = gtk_label_new ("");
+
+  gtk_list_item_set_child (list_item, label);
 }
 
 static void
-bind_widget (GtkWidget *widget,
-             gpointer   item,
-             gpointer   unused)
+bind_list_item (GtkListItem *list_item,
+                gpointer     unused)
 {
-  const char *message = g_object_get_data (item, "message");
+  GtkWidget *label;
+  gpointer item;
+  char *s;
 
-  gtk_label_set_text (GTK_LABEL (widget), message);
+  item = gtk_list_item_get_item (list_item);
+
+  if (item)
+    s = g_strdup_printf ("%u: %s",
+                         gtk_list_item_get_position (list_item),
+                         (const char *) g_object_get_data (item, "message"));
+  else
+    s = NULL;
+
+  label = gtk_list_item_get_child (list_item);
+  gtk_label_set_text (GTK_LABEL (label), s);
+
+  g_free (s);
 }
 
 static GtkWidget *
 create_widget_for_listbox (gpointer item,
                            gpointer unused)
 {
+  const char *message = g_object_get_data (item, "message");
   GtkWidget *widget;
 
-  widget = create_widget (unused);
-  bind_widget (widget, item, unused);
+  widget = gtk_label_new (message);
 
   return widget;
 }
@@ -131,8 +147,8 @@ main (int   argc,
 
   listview = gtk_list_view_new ();
   gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
-                               create_widget,
-                               bind_widget,
+                               setup_list_item,
+                               bind_list_item,
                                NULL, NULL);
   gtk_container_add (GTK_CONTAINER (sw), listview);
 
