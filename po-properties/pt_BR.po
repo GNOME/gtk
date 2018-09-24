@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-31 03:19+0000\n"
-"PO-Revision-Date: 2018-08-31 09:51-0200\n"
+"POT-Creation-Date: 2018-09-24 18:22+0000\n"
+"PO-Revision-Date: 2018-09-24 16:47-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1491,7 +1491,6 @@ msgid "Screensaver Active"
 msgstr "Proteção de tela ativa"
 
 #: gtk/gtkapplication.c:675
-#| msgid "Whether the spinner is active"
 msgid "Whether the screensaver is active"
 msgstr "Se a proteção de tela está ativa"
 
@@ -6333,7 +6332,7 @@ msgstr "O número de dígitos para arredondar em um valor."
 
 #: gtk/gtkrange.c:538 gtk/gtkswitch.c:947
 msgid "Slider Width"
-msgstr "Largura da barra deslizante"
+msgstr "Largura do controle deslizante"
 
 #: gtk/gtkrange.c:539
 msgid "Width of scrollbar or scale thumb"
@@ -6567,11 +6566,11 @@ msgstr "A posição onde o valor atual é exibido"
 
 #: gtk/gtkscale.c:807
 msgid "Slider Length"
-msgstr "Comprimento da barra deslizante"
+msgstr "Comprimento do controle deslizante"
 
 #: gtk/gtkscale.c:808
 msgid "Length of scale's slider"
-msgstr "Comprimento da barra deslizante da escala"
+msgstr "Comprimento do controle deslizante da escala"
 
 #: gtk/gtkscale.c:822
 msgid "Value spacing"
@@ -7862,7 +7861,7 @@ msgstr "O componente mínimo da manipulação"
 
 #: gtk/gtkswitch.c:964
 msgid "Slider Height"
-msgstr "Altura da barra deslizante"
+msgstr "Altura do controle deslizante"
 
 #: gtk/gtkswitch.c:965
 msgid "The minimum height of the handle"
