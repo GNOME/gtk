@@ -208,17 +208,6 @@ gtk_list_item_get_position (GtkListItem *self)
 }
 
 void
-gtk_list_item_set_child (GtkListItem *self,
-                         GtkWidget   *child)
-{
-  g_return_if_fail (GTK_IS_LIST_ITEM (self));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
-
-  _gtk_bin_set_child (GTK_BIN (self), child);
-  gtk_widget_insert_after (child, GTK_WIDGET (self), NULL);
-}
-
-void
 gtk_list_item_set_item (GtkListItem *self,
                         gpointer     item)
 {
