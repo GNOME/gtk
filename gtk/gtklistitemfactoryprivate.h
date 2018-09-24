@@ -38,8 +38,8 @@ typedef struct _GtkListItemFactoryClass GtkListItemFactoryClass;
 
 GType                   gtk_list_item_factory_get_type          (void) G_GNUC_CONST;
 
-GtkListItemFactory *    gtk_list_item_factory_new               (GtkListCreateWidgetFunc create_func,
-                                                                 GtkListBindWidgetFunc   bind_func,
+GtkListItemFactory *    gtk_list_item_factory_new               (GtkListItemSetupFunc    setup_func,
+                                                                 GtkListItemBindFunc     bind_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 
