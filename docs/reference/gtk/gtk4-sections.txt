@@ -495,6 +495,7 @@ gtk_single_selection_get_type
 <TITLE>GtkListItem</TITLE>
 GtkListItem
 gtk_list_item_get_item
+gtk_list_item_get_position
 gtk_list_item_get_child
 gtk_list_item_set_child
 <SUBSECTION Standard>
