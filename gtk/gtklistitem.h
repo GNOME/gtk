@@ -44,6 +44,8 @@ GType           gtk_list_item_get_type                          (void) G_GNUC_CO
 
 GDK_AVAILABLE_IN_ALL
 gpointer        gtk_list_item_get_item                          (GtkListItem            *self);
+GDK_AVAILABLE_IN_ALL
+guint           gtk_list_item_get_position                      (GtkListItem            *self);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_item_set_child                         (GtkListItem            *self,
