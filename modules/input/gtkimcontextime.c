@@ -479,30 +479,53 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
 
       len = ImmGetCompositionStringW (himc, GCS_COMPSTR, NULL, 0);
       if (len > 0)
-	{
-	  GError *error = NULL;
-	  gpointer buf = g_alloca (len);
+        {
+          GError *error = NULL;
+          gpointer buf = g_alloca (len);
 
-	  ImmGetCompositionStringW (himc, GCS_COMPSTR, buf, len);
-	  len /= 2;
-	  utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
-	  if (error)
-	    {
-	      g_warning ("%s", error->message);
-	      g_error_free (error);
-	    }
+          ImmGetCompositionStringW (himc, GCS_COMPSTR, buf, len);
+          len /= 2;
+          utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+          if (error)
+            {
+              g_warning ("%s", error->message);
+              g_error_free (error);
+            }
 	  
-	  if (pos_ret)
-	    {
-	      pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
-	      if (pos < 0 || len < pos)
-		{
-		  g_warning ("ImmGetCompositionString: "
-			     "Invalid cursor position!");
-		  pos = 0;
-		}
-	    }
-	}
+          if (pos_ret)
+            {
+              pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
+              if (pos < 0 || len < pos)
+                {
+                  g_warning ("ImmGetCompositionString: "
+                             "Invalid cursor position!");
+                  pos = 0;
+                }
+            }
+        }
+
+      if (context_ime->commit_string)
+        {
+          if (utf8str)
+            {
+              gchar *utf8str_new = g_strdup (utf8str);
+
+              /* Note: We *don't* want to update context_ime->commit_string here!
+               * Otherwise it will be updated repeatedly, not what we want!
+               */
+              g_free (utf8str);
+              utf8str = g_strconcat (context_ime->commit_string,
+                                     utf8str_new,
+                                     NULL);
+              g_free (utf8str_new);
+              pos += g_utf8_strlen (context_ime->commit_string, -1);
+            }
+          else
+            {
+              utf8str = g_strdup (context_ime->commit_string);
+              pos = g_utf8_strlen (context_ime->commit_string, -1);
+            }
+        }
     }
 
   if (!utf8str)
@@ -997,6 +1020,18 @@ ERROR_OUT:
   ImmReleaseContext (hwnd, himc);
 }
 
+static void
+gtk_im_context_ime_commit_input_string (GtkIMContext *context)
+{
+  GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
+
+  if (context_ime->commit_string == NULL)
+    return;
+
+  g_signal_emit_by_name (context, "commit", context_ime->commit_string);
+  g_free (context_ime->commit_string);
+  context_ime->commit_string = NULL;
+}
 
 static GdkFilterReturn
 gtk_im_context_ime_message_filter (GdkXEvent *xevent,
@@ -1069,11 +1104,29 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
                 gpointer buf = g_alloca (len);
                 ImmGetCompositionStringW (himc, GCS_RESULTSTR, buf, len);
                 len /= 2;
-                context_ime->commit_string = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+                if (context_ime->commit_string == NULL)
+                  context_ime->commit_string = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+                else
+                  {
+                    gchar *tmp_commit_string = g_strdup (context_ime->commit_string);
+                    gchar *utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+
+                    g_free (context_ime->commit_string);
+                    context_ime->commit_string = g_strconcat (context_ime->commit_string, utf8str, NULL);
+                    g_free (tmp_commit_string);
+                    g_free (utf8str);
+                  }
+
                 if (error)
                   {
                     g_warning ("%s", error->message);
                     g_error_free (error);
+                  }
+
+                if (!context_ime->preediting)
+                  {
+                    gtk_im_context_ime_commit_input_string (context);
+                    retval = TRUE;
                   }
               }
 
@@ -1083,6 +1136,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
 
         if (context_ime->use_preedit)
           retval = TRUE;
+
         break;
       }
 
@@ -1099,12 +1153,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
       g_signal_emit_by_name (context, "preedit-changed");
       g_signal_emit_by_name (context, "preedit-end");
 
-      if (context_ime->commit_string)
-        {
-          g_signal_emit_by_name (context, "commit", context_ime->commit_string);
-          g_free (context_ime->commit_string);
-          context_ime->commit_string = NULL;
-        }
+      gtk_im_context_ime_commit_input_string (context);
 
       if (context_ime->use_preedit)
         retval = TRUE;
