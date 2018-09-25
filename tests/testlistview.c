@@ -163,7 +163,7 @@ create_list_model_for_directory (gpointer file)
 
 static void
 bind_widget (GtkListItem *list_item,
-             gpointer   unused)
+             gpointer     unused)
 {
   GtkWidget *box, *child;
   GFileInfo *info;
@@ -171,6 +171,7 @@ bind_widget (GtkListItem *list_item,
   guint depth;
   GIcon *icon;
   gpointer item;
+  char *s;
 
   item = gtk_list_item_get_item (list_item);
 
@@ -179,6 +180,12 @@ bind_widget (GtkListItem *list_item,
     gtk_container_remove (GTK_CONTAINER (list_item), child);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_container_add (GTK_CONTAINER (list_item), box);
+
+  child = gtk_label_new (NULL);
+  gtk_label_set_width_chars (GTK_LABEL (child), 5);
+  gtk_label_set_xalign (GTK_LABEL (child), 1.0);
+  g_object_bind_property (list_item, "position", child, "label", G_BINDING_SYNC_CREATE);
+  gtk_container_add (GTK_CONTAINER (box), child);
 
   depth = gtk_tree_list_row_get_depth (item);
   if (depth > 0)
@@ -219,7 +226,9 @@ bind_widget (GtkListItem *list_item,
     }
 
   file = g_object_get_data (G_OBJECT (info), "file");
-  child = gtk_label_new (g_file_get_basename (file));
+  s = g_file_get_basename (file);
+  child = gtk_label_new (s);
+  g_free (s);
   g_object_unref (info);
 
   gtk_container_add (GTK_CONTAINER (box), child);
