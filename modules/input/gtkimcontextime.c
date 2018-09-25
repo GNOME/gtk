@@ -997,6 +997,15 @@ ERROR_OUT:
   ImmReleaseContext (hwnd, himc);
 }
 
+static void
+gtk_im_context_ime_commit_input_string (GtkIMContext *context)
+{
+  GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
+
+  g_signal_emit_by_name (context, "commit", context_ime->commit_string);
+  g_free (context_ime->commit_string);
+  context_ime->commit_string = NULL;
+}
 
 static GdkFilterReturn
 gtk_im_context_ime_message_filter (GdkXEvent *xevent,
@@ -1069,11 +1078,29 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
                 gpointer buf = g_alloca (len);
                 ImmGetCompositionStringW (himc, GCS_RESULTSTR, buf, len);
                 len /= 2;
-                context_ime->commit_string = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+                if (context_ime->commit_string == NULL)
+                  context_ime->commit_string = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+                else
+                  {
+                    gchar *tmp_commit_string = g_strdup (context_ime->commit_string);
+                    gchar *utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+
+                    g_free (context_ime->commit_string);
+                    context_ime->commit_string = g_strconcat (context_ime->commit_string, utf8str, NULL);
+                    g_free (tmp_commit_string);
+                    g_free (utf8str);
+                  }
+
                 if (error)
                   {
                     g_warning ("%s", error->message);
                     g_error_free (error);
+                  }
+
+                if (!context_ime->preediting)
+                  {
+                    gtk_im_context_ime_commit_input_string (context);
+                    retval = TRUE;
                   }
               }
 
@@ -1083,6 +1110,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
 
         if (context_ime->use_preedit)
           retval = TRUE;
+
         break;
       }
 
@@ -1100,11 +1128,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
       g_signal_emit_by_name (context, "preedit-end");
 
       if (context_ime->commit_string)
-        {
-          g_signal_emit_by_name (context, "commit", context_ime->commit_string);
-          g_free (context_ime->commit_string);
-          context_ime->commit_string = NULL;
-        }
+        gtk_im_context_ime_commit_input_string (context);
 
       if (context_ime->use_preedit)
         retval = TRUE;
