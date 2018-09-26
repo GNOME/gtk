@@ -1147,86 +1147,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box26">
-                        <property name="orientation">vertical</property>
-                        <property name="homogeneous">1</property>
-                        <property name="spacing">6</property>
-                        <property name="hexpand">1</property>
-                        <child>
-                          <object class="GtkFrame" id="frame1">
-                            <style>
-                              <class name="border-inset"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label1">
-                                <property name="label" translatable="yes">&lt;b&gt;Inset&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame2">
-                            <style>
-                              <class name="border-outset"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label2">
-                                <property name="label" translatable="yes">&lt;b&gt;Outset&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame3">
-                            <style>
-                              <class name="border-groove"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label17">
-                                <property name="label" translatable="yes">&lt;b&gt;Groove&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame4">
-                            <style>
-                              <class name="border-ridge"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label18">
-                                <property name="label" translatable="yes">&lt;b&gt;Ridge&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSeparator" id="separator4">
-                        <property name="orientation">vertical</property>
-                      </object>
-                      <packing>
-                        <property name="position">7</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkBox" id="box4">
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
@@ -3585,3 +3505,4 @@ bad things might happen.</property>
     </child>
   </object>
 </interface>
+
