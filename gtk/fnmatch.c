@@ -36,14 +36,14 @@
 #include <glib.h>
 
 static gunichar
-get_char (const char **str)
+get_char (const char **str,
+          gboolean     casefold)
 {
   gunichar c = g_utf8_get_char (*str);
   *str = g_utf8_next_char (*str);
 
-#ifdef G_PLATFORM_WIN32
-  c = g_unichar_tolower (c);
-#endif
+  if (casefold)
+    c = g_unichar_tolower (c);
 
   return c;
 }
@@ -56,13 +56,14 @@ get_char (const char **str)
 
 static gunichar
 get_unescaped_char (const char **str,
-		    gboolean    *was_escaped)
+		    gboolean    *was_escaped,
+                    gboolean     casefold)
 {
-  gunichar c = get_char (str);
+  gunichar c = get_char (str, casefold);
 
   *was_escaped = DO_ESCAPE && c == '\\';
   if (*was_escaped)
-    c = get_char (str);
+    c = get_char (str, casefold);
   
   return c;
 }
@@ -74,7 +75,8 @@ static gboolean
 gtk_fnmatch_intern (const char *pattern,
 		    const char *string,
 		    gboolean    component_start,
-		    gboolean    no_leading_period)
+		    gboolean    no_leading_period,
+                    gboolean    casefold)
 {
   const char *p = pattern, *n = string;
   
@@ -82,8 +84,8 @@ gtk_fnmatch_intern (const char *pattern,
     {
       const char *last_n = n;
       
-      gunichar c = get_char (&p);
-      gunichar nc = get_char (&n);
+      gunichar c = get_char (&p, casefold);
+      gunichar nc = get_char (&n, casefold);
       
       switch (c)
 	{
@@ -97,7 +99,7 @@ gtk_fnmatch_intern (const char *pattern,
 	  break;
 	case '\\':
 	  if (DO_ESCAPE)
-	    c = get_char (&p);
+	    c = get_char (&p, casefold);
 	  if (nc != c)
 	    return FALSE;
 	  break;
@@ -108,9 +110,9 @@ gtk_fnmatch_intern (const char *pattern,
 	  {
 	    const char *last_p = p;
 
-	    for (last_p = p, c = get_char (&p);
+	    for (last_p = p, c = get_char (&p, casefold);
 		 c == '?' || c == '*';
-		 last_p = p, c = get_char (&p))
+		 last_p = p, c = get_char (&p, casefold))
 	      {
 		if (c == '?')
 		  {
@@ -120,7 +122,7 @@ gtk_fnmatch_intern (const char *pattern,
 		      return FALSE;
 		    else
 		      {
-			last_n = n; nc = get_char (&n);
+			last_n = n; nc = get_char (&n, casefold);
 		      }
 		  }
 	      }
@@ -138,17 +140,17 @@ gtk_fnmatch_intern (const char *pattern,
 	      }
 
 	    if (DO_ESCAPE && c == '\\')
-	      c = get_char (&p);
+	      c = get_char (&p, casefold);
 
 	    for (p = last_p; nc != '\0';)
 	      {
 		if ((c == '[' || nc == c) &&
-		    gtk_fnmatch_intern (p, last_n, component_start, no_leading_period))
+		    gtk_fnmatch_intern (p, last_n, component_start, no_leading_period, casefold))
 		  return TRUE;
 		
 		component_start = (nc == G_DIR_SEPARATOR);
 		last_n = n;
-		nc = get_char (&n);
+		nc = get_char (&n, casefold);
 	      }
 		  
 	    return FALSE;
@@ -170,7 +172,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    if (not)
 	      ++p;
 
-	    c = get_unescaped_char (&p, &was_escaped);
+	    c = get_unescaped_char (&p, &was_escaped, casefold);
 	    for (;;)
 	      {
 		register gunichar cstart = c, cend = c;
@@ -178,15 +180,15 @@ gtk_fnmatch_intern (const char *pattern,
 		  /* [ (unterminated) loses.  */
 		  return FALSE;
 
-		c = get_unescaped_char (&p, &was_escaped);
+		c = get_unescaped_char (&p, &was_escaped, casefold);
 		
 		if (!was_escaped && c == '-' && *p != ']')
 		  {
-		    cend = get_unescaped_char (&p, &was_escaped);
+		    cend = get_unescaped_char (&p, &was_escaped, casefold);
 		    if (cend == '\0')
 		      return FALSE;
 
-		    c = get_char (&p);
+		    c = get_char (&p, casefold);
 		  }
 
 		if (nc >= cstart && nc <= cend)
@@ -208,7 +210,7 @@ gtk_fnmatch_intern (const char *pattern,
 		  /* [... (unterminated) loses.  */
 		  return FALSE;
 
-		c = get_unescaped_char (&p, &was_escaped);
+		c = get_unescaped_char (&p, &was_escaped, casefold);
 	      }
 	    if (not)
 	      return FALSE;
@@ -246,9 +248,10 @@ gtk_fnmatch_intern (const char *pattern,
 gboolean
 _gtk_fnmatch (const char *pattern,
 	      const char *string,
-	      gboolean no_leading_period)
+	      gboolean no_leading_period,
+              gboolean casefold)
 {
-  return gtk_fnmatch_intern (pattern, string, TRUE, no_leading_period);
+  return gtk_fnmatch_intern (pattern, string, TRUE, no_leading_period, casefold);
 }
 
 #undef FNMATCH_TEST_CASES

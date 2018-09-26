@@ -716,7 +716,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 
       filter = gtk_file_filter_new ();
       pattern = g_strconcat (chooser_entry->file_part, "*", NULL);
-      gtk_file_filter_add_pattern (filter, pattern);
+      gtk_file_filter_add_pattern (filter, pattern, FALSE);
 
       _gtk_file_system_model_set_filter (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
                                          filter);
