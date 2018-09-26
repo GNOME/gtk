@@ -1910,11 +1910,14 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
           break;
         }
 
-      if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
-          priv->last_visible_widget_height > height)
-        y -= priv->last_visible_widget_height - height;
-      else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
-        y -= (priv->last_visible_widget_height - height) / 2;
+      if (priv->last_visible_child != NULL)
+        {
+          if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
+              priv->last_visible_widget_height > height)
+            y -= priv->last_visible_widget_height - height;
+          else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
+            y -= (priv->last_visible_widget_height - height) / 2;
+        }
 
       gtk_snapshot_offset (snapshot, x, y);
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
