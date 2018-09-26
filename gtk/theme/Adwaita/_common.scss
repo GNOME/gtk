@@ -1723,9 +1723,9 @@ headerbar { // headerbar border rounding
 // Development versions of apps to use a differently styled headerbar
 
 window.devel {    
-  headerbar { // FIXME: avoid using hardcoded colors
-    background: transparent -gtk-icontheme("system-run-symbolic") 80% 0/128px 128px no-repeat, 
-                linear-gradient(to left, mix($selected_bg_color, $bg_color, 50%) 8%, $bg_color 25%);
+  headerbar {
+    background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+                linear-gradient(to left, mix($selected_bg_color, $bg_color, 10%) 8%, $bg_color 25%);
     color: transparentize($fg_color,.9);
     
     label { color: $fg_color; }
