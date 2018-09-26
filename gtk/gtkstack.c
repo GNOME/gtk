@@ -2088,12 +2088,14 @@ gtk_stack_draw_slide (GtkWidget *widget,
       x += priv->last_visible_surface_allocation.x;
       y += priv->last_visible_surface_allocation.y;
 
-
-      if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
-          priv->last_visible_widget_height > allocation.height)
-        y -= priv->last_visible_widget_height - allocation.height;
-      else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
-        y -= (priv->last_visible_widget_height - allocation.height) / 2;
+      if (priv->last_visible_child != NULL)
+        {
+          if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
+              priv->last_visible_widget_height > allocation.height)
+            y -= priv->last_visible_widget_height - allocation.height;
+          else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
+            y -= (priv->last_visible_widget_height - allocation.height) / 2;
+        }
 
       cairo_save (cr);
       cairo_set_source_surface (cr, priv->last_visible_surface, x, y);
