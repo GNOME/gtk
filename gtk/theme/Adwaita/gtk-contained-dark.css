@@ -694,7 +694,7 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) > separator { background-color: #1b1f20; }
 
-window.devel headerbar { background: transparent -gtk-icontheme("system-run-symbolic") 80% 0/128px 128px no-repeat, linear-gradient(to left, #2a4b6c 8%, #33393b 25%); color: rgba(238, 238, 236, 0.1); }
+window.devel headerbar { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #313d45 8%, #33393b 25%); color: rgba(238, 238, 236, 0.1); }
 
 window.devel headerbar label { color: #eeeeec; }
 
@@ -1616,7 +1616,7 @@ expander title > arrow:disabled { color: #919494; }
 
 expander title > arrow:disabled:backdrop { color: #566164; }
 
-expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+expander title > arrow:checked, expander title:checked > arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 expander title:hover > arrow { color: white; }
 
