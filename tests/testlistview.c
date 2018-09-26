@@ -20,7 +20,8 @@ start_enumerate (GListStore *store)
   enumerate = g_file_enumerate_children (file,
                                          G_FILE_ATTRIBUTE_STANDARD_TYPE
                                          "," G_FILE_ATTRIBUTE_STANDARD_ICON
-                                         "," G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                         "," G_FILE_ATTRIBUTE_STANDARD_NAME
+                                         "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
                                          0,
                                          NULL,
                                          &error);
@@ -161,23 +162,94 @@ create_list_model_for_directory (gpointer file)
   return G_LIST_MODEL (sort);
 }
 
+typedef struct _RowData RowData;
+struct _RowData
+{
+  GtkWidget *depth_box;
+  GtkWidget *expander;
+  GtkWidget *icon;
+  GtkWidget *name;
+
+  GtkTreeListRow *current_item;
+  GBinding *expander_binding;
+};
+
+static void row_data_notify_item (GtkListItem *item,
+                                  GParamSpec  *pspec,
+                                  RowData     *data);
 static void
-bind_widget (GtkListItem *list_item,
-             gpointer     unused)
+row_data_unbind (RowData *data)
+{
+  if (data->current_item == NULL)
+    return;
+
+  g_binding_unbind (data->expander_binding);
+
+  g_clear_object (&data->current_item);
+}
+
+static void
+row_data_bind (RowData        *data,
+               GtkTreeListRow *item)
+{
+  GFileInfo *info;
+  GIcon *icon;
+  guint depth;
+
+  row_data_unbind (data);
+
+  if (item == NULL)
+    return;
+
+  data->current_item = g_object_ref (item);
+
+  depth = gtk_tree_list_row_get_depth (item);
+  gtk_widget_set_size_request (data->depth_box, 16 * depth, 0);
+
+  gtk_widget_set_sensitive (data->expander, gtk_tree_list_row_is_expandable (item));
+  data->expander_binding = g_object_bind_property (item, "expanded", data->expander, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+
+  info = gtk_tree_list_row_get_item (item);
+
+  icon = g_file_info_get_icon (info);
+  gtk_widget_set_visible (data->icon, icon != NULL);
+  if (icon)
+    gtk_image_set_from_gicon (GTK_IMAGE (data->icon), icon);
+
+  gtk_label_set_label (GTK_LABEL (data->name), g_file_info_get_display_name (info));
+
+  g_object_unref (info);
+}
+
+static void
+row_data_notify_item (GtkListItem *item,
+                      GParamSpec  *pspec,
+                      RowData     *data)
+{
+  row_data_bind (data, gtk_list_item_get_item (item));
+}
+
+static void
+row_data_free (gpointer _data)
+{
+  RowData *data = _data;
+
+  row_data_unbind (data);
+
+  g_slice_free (RowData, data);
+}
+
+static void
+setup_widget (GtkListItem *list_item,
+              gpointer     unused)
 {
   GtkWidget *box, *child;
-  GFileInfo *info;
-  GFile *file;
-  guint depth;
-  GIcon *icon;
-  gpointer item;
-  char *s;
+  RowData *data;
 
-  item = gtk_list_item_get_item (list_item);
+  data = g_slice_new0 (RowData);
+  g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_item), data);
+  g_object_set_data_full (G_OBJECT (list_item), "row-data", data, row_data_free);
 
-  child = gtk_bin_get_child (GTK_BIN (list_item));
-  if (child)
-    gtk_container_remove (GTK_CONTAINER (list_item), child);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_container_add (GTK_CONTAINER (list_item), box);
 
@@ -187,51 +259,22 @@ bind_widget (GtkListItem *list_item,
   g_object_bind_property (list_item, "position", child, "label", G_BINDING_SYNC_CREATE);
   gtk_container_add (GTK_CONTAINER (box), child);
 
-  depth = gtk_tree_list_row_get_depth (item);
-  if (depth > 0)
-    {
-      child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_widget_set_size_request (child, 16 * depth, 0);
-      gtk_container_add (GTK_CONTAINER (box), child);
-    }
-
-  if (gtk_tree_list_row_is_expandable (item))
-    {
-      GtkWidget *title, *arrow;
-
-      child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
-      
-      title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
-      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
-      g_object_bind_property (item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      g_object_set_data_full (G_OBJECT (title), "make-sure-its-not-unreffed", g_object_ref (item), g_object_unref);
-      gtk_container_add (GTK_CONTAINER (child), title);
-
-      arrow = g_object_new (GTK_TYPE_SPINNER, "css-name", "arrow", NULL);
-      gtk_container_add (GTK_CONTAINER (title), arrow);
-    }
-  else
-    {
-     child = gtk_image_new (); /* empty whatever */
-    }
+  data->depth_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (box), data->depth_box);
+  
+  child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
   gtk_container_add (GTK_CONTAINER (box), child);
+  data->expander = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
+  gtk_button_set_relief (GTK_BUTTON (data->expander), GTK_RELIEF_NONE);
+  gtk_container_add (GTK_CONTAINER (child), data->expander);
+  child = g_object_new (GTK_TYPE_SPINNER, "css-name", "arrow", NULL);
+  gtk_container_add (GTK_CONTAINER (data->expander), child);
 
-  info = gtk_tree_list_row_get_item (item);
+  data->icon = gtk_image_new ();
+  gtk_container_add (GTK_CONTAINER (box), data->icon);
 
-  icon = g_file_info_get_icon (info);
-  if (icon)
-    {
-      child = gtk_image_new_from_gicon (icon);
-      gtk_container_add (GTK_CONTAINER (box), child);
-    }
-
-  file = g_object_get_data (G_OBJECT (info), "file");
-  s = g_file_get_basename (file);
-  child = gtk_label_new (s);
-  g_free (s);
-  g_object_unref (info);
-
-  gtk_container_add (GTK_CONTAINER (box), child);
+  data->name = gtk_label_new (NULL);
+  gtk_container_add (GTK_CONTAINER (box), data->name);
 }
 
 static GListModel *
@@ -325,8 +368,8 @@ main (int argc, char *argv[])
 
   listview = gtk_list_view_new ();
   gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
+                               setup_widget,
                                NULL,
-                               bind_widget,
                                NULL, NULL);
   gtk_container_add (GTK_CONTAINER (sw), listview);
 
