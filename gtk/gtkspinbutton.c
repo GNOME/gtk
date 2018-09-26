@@ -155,7 +155,7 @@
  * // Provides a function to retrieve a floating point value from a
  * // GtkSpinButton, and creates a high precision spin button.
  *
- * gfloat
+ * float
  * grab_float_value (GtkSpinButton *button,
  *                   gpointer       user_data)
  * {
