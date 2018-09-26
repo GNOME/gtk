@@ -108,6 +108,9 @@ GDK_AVAILABLE_IN_ALL
 void gtk_file_filter_add_pattern        (GtkFileFilter      *filter,
 					 const gchar        *pattern);
 GDK_AVAILABLE_IN_ALL
+void gtk_file_filter_add_case_insensitive_pattern (GtkFileFilter *filter,
+					           const gchar   *pattern);
+GDK_AVAILABLE_IN_ALL
 void gtk_file_filter_add_pixbuf_formats (GtkFileFilter      *filter);
 GDK_AVAILABLE_IN_ALL
 void gtk_file_filter_add_custom         (GtkFileFilter      *filter,

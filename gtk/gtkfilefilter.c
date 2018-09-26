@@ -82,6 +82,7 @@ typedef struct _FilterRule FilterRule;
 
 typedef enum {
   FILTER_RULE_PATTERN,
+  FILTER_RULE_PATTERN_CI,
   FILTER_RULE_MIME_TYPE,
   FILTER_RULE_PIXBUF_FORMATS,
   FILTER_RULE_CUSTOM
@@ -166,6 +167,7 @@ filter_rule_free (FilterRule *rule)
       g_free (rule->u.mime_type);
       break;
     case FILTER_RULE_PATTERN:
+    case FILTER_RULE_PATTERN_CI:
       g_free (rule->u.pattern);
       break;
     case FILTER_RULE_CUSTOM:
@@ -230,6 +232,7 @@ typedef struct {
   ParserType     type;
   GString       *string;
   gboolean       parsing;
+  gboolean       ignore_case;
 } SubParserData;
 
 static void
@@ -242,9 +245,23 @@ parser_start_element (GMarkupParseContext  *context,
 {
   SubParserData *data = (SubParserData*)user_data;
 
-  if (!g_markup_collect_attributes (element_name, names, values, error,
-                                    G_MARKUP_COLLECT_INVALID, NULL, NULL,
-                                    G_MARKUP_COLLECT_INVALID))
+  if (strcmp (element_name, "patterns") == 0)
+    {
+      gboolean ignore_case = FALSE;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "ignore-case", &ignore_case,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->ignore_case = ignore_case;
+    }
+  else if (!g_markup_collect_attributes (element_name, names, values, error,
+                                         G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                         G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, context, error);
       return;
@@ -307,7 +324,10 @@ parser_end_element (GMarkupParseContext *context,
           gtk_file_filter_add_mime_type (data->filter, data->string->str);
           break;
         case PARSE_PATTERNS:
-          gtk_file_filter_add_pattern (data->filter, data->string->str);
+          if (data->ignore_case)
+            gtk_file_filter_add_case_insensitive_pattern (data->filter, data->string->str);
+          else
+            gtk_file_filter_add_pattern (data->filter, data->string->str);
           break;
         default:
           break;
@@ -497,6 +517,31 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
 }
 
 /**
+ * gtk_file_filter_add_case_insensitive_pattern:
+ * @filter: a #GtkFileFilter
+ * @pattern: a shell style glob
+ * 
+ * Adds a rule allowing a shell style glob to a filter,
+ * ignoring case.
+ **/
+void
+gtk_file_filter_add_case_insensitive_pattern (GtkFileFilter *filter,
+			                      const gchar   *pattern)
+{
+  FilterRule *rule;
+  
+  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
+  g_return_if_fail (pattern != NULL);
+
+  rule = g_slice_new (FilterRule);
+  rule->type = FILTER_RULE_PATTERN_CI;
+  rule->needed = GTK_FILE_FILTER_DISPLAY_NAME;
+  rule->u.pattern = g_strdup (pattern);
+
+  file_filter_add_rule (filter, rule);
+}
+
+/**
  * gtk_file_filter_add_pixbuf_formats:
  * @filter: a #GtkFileFilter
  * 
@@ -609,6 +654,7 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
 	  }
 	  break;
 	case FILTER_RULE_PATTERN:
+	case FILTER_RULE_PATTERN_CI:
 	  {
 	    // patterns will need to be stripped of their leading *.
 	    GString *pattern = g_string_new (rule->u.pattern);
@@ -674,6 +720,7 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
           return NULL;
 	  break;
 	case FILTER_RULE_PATTERN:
+	case FILTER_RULE_PATTERN_CI:
           g_ptr_array_add (array, g_strdup (rule->u.pattern));
 	  break;
 	case FILTER_RULE_PIXBUF_FORMATS:
@@ -728,6 +775,7 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
   for (tmp_list = filter->rules; tmp_list; tmp_list = tmp_list->next)
     {
       FilterRule *rule = tmp_list->data;
+      gboolean casefold = FALSE;
 
       if ((filter_info->contains & rule->needed) != rule->needed)
 	continue;
@@ -752,9 +800,15 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
                 return TRUE;
         }
 	  break;
+	case FILTER_RULE_PATTERN_CI:
+          casefold = TRUE;
+          /* Fall thru */
 	case FILTER_RULE_PATTERN:
+#ifdef G_PLATFORM_WIN32
+          casefold = TRUE;
+#endif
 	  if (filter_info->display_name != NULL &&
-	      _gtk_fnmatch (rule->u.pattern, filter_info->display_name, FALSE))
+              _gtk_fnmatch (rule->u.pattern, filter_info->display_name, FALSE, casefold))
 	    return TRUE;
 	  break;
 	case FILTER_RULE_PIXBUF_FORMATS:
@@ -821,6 +875,9 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
         case FILTER_RULE_PATTERN:
           g_variant_builder_add (&builder, "(us)", 0, rule->u.pattern);
           break;
+        case FILTER_RULE_PATTERN_CI:
+          g_variant_builder_add (&builder, "(us)", 2, rule->u.pattern);
+          break;
         case FILTER_RULE_MIME_TYPE:
           g_variant_builder_add (&builder, "(us)", 1, rule->u.mime_type);
           break;
@@ -880,6 +937,9 @@ gtk_file_filter_new_from_gvariant (GVariant *variant)
         {
         case 0:
           gtk_file_filter_add_pattern (filter, tmp);
+          break;
+        case 2:
+          gtk_file_filter_add_case_insensitive_pattern (filter, tmp);
           break;
         case 1:
           gtk_file_filter_add_mime_type (filter, tmp);
