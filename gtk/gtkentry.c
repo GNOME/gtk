@@ -4324,6 +4324,7 @@ gtk_entry_event (GtkWidget *widget,
   for (i = 0; i < MAX_ICONS; i++)
     {
       if (priv->icons[i] &&
+          event->any.window != NULL &&
           priv->icons[i]->window == event->any.window)
         {
           icon_info = priv->icons[i];
