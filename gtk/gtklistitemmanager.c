@@ -21,6 +21,8 @@
 
 #include "gtklistitemmanagerprivate.h"
 
+#include "gtkwidgetprivate.h"
+
 struct _GtkListItemManager
 {
   GObject parent_instance;
@@ -310,6 +312,33 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
   g_object_unref (item);
 
   return GTK_WIDGET (result);
+}
+
+/**
+ * gtk_list_item_manager_move_list_item:
+ * @self: a #GtkListItemManager
+ * @list_item: an acquired #GtkListItem that should be moved to represent
+ *     a different row
+ * @position: the new position of that list item
+ * @prev_sibling: the new previous sibling
+ *
+ * Moves the widget to represent a new position in the listmodel without
+ * releasing the item.
+ *
+ * This is most useful when scrolling.
+ **/
+void
+gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
+                                      GtkWidget              *list_item,
+                                      guint                   position,
+                                      GtkWidget              *prev_sibling)
+{
+  gpointer item;
+
+  item = g_list_model_get_item (self->model, position);
+  gtk_list_item_factory_bind (self->factory, GTK_LIST_ITEM (list_item), position, item);
+  gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
+  g_object_unref (item);
 }
 
 /**
