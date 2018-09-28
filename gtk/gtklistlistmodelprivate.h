@@ -64,6 +64,9 @@ void                    gtk_list_list_model_item_removed        (GtkListListMode
                                                                  gpointer                previous);
 void                    gtk_list_list_model_item_removed_at     (GtkListListModel       *self,
                                                                  guint                   position);
+void                    gtk_list_list_model_item_moved          (GtkListListModel       *self,
+                                                                 gpointer                item,
+                                                                 gpointer                previous_previous);
 
 void                    gtk_list_list_model_clear               (GtkListListModel       *self);
 
