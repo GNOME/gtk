@@ -337,7 +337,8 @@ gtk_list_view_merge_list_rows (GtkListView *self,
 }
 
 static void
-gtk_list_view_release_rows (GtkListView *self)
+gtk_list_view_release_rows (GtkListView *self,
+                            GQueue      *released)
 {
   ListRow *row, *prev, *next;
   guint i;
@@ -348,7 +349,7 @@ gtk_list_view_release_rows (GtkListView *self)
     {
       if (row->widget)
         {
-          gtk_list_item_manager_release_list_item (self->item_manager, NULL, row->widget);
+          g_queue_push_tail (released, row->widget);
           row->widget = NULL;
           i++;
           prev = gtk_css_rb_tree_get_previous (self->rows, row);
@@ -380,7 +381,7 @@ gtk_list_view_release_rows (GtkListView *self)
   
   if (row->widget)
     {
-      gtk_list_item_manager_release_list_item (self->item_manager, NULL, row->widget);
+      g_queue_push_tail (released, row->widget);
       row->widget = NULL;
       prev = gtk_css_rb_tree_get_previous (self->rows, row);
       if (prev && gtk_list_view_merge_list_rows (self, prev, row))
@@ -391,7 +392,7 @@ gtk_list_view_release_rows (GtkListView *self)
     {
       if (next->widget)
         {
-          gtk_list_item_manager_release_list_item (self->item_manager, NULL, next->widget);
+          g_queue_push_tail (released, next->widget);
           next->widget = NULL;
         }
       gtk_list_view_merge_list_rows (self, row, next);
@@ -405,9 +406,10 @@ gtk_list_view_ensure_rows (GtkListView              *self,
 {
   ListRow *row, *new_row;
   guint i, offset;
-  GtkWidget *insert_after;
+  GtkWidget *widget, *insert_after;
+  GQueue released = G_QUEUE_INIT;
 
-  gtk_list_view_release_rows (self);
+  gtk_list_view_release_rows (self, &released);
 
   row = gtk_list_view_get_row (self, self->anchor_start, &offset);
   if (offset > 0)
@@ -445,9 +447,20 @@ gtk_list_view_ensure_rows (GtkListView              *self,
             }
           if (new_row->widget == NULL)
             {
-              new_row->widget = gtk_list_item_manager_acquire_list_item (self->item_manager,
-                                                                         i,
-                                                                         insert_after);
+              new_row->widget = g_queue_pop_head (&released);
+              if (new_row->widget)
+                {
+                  gtk_list_item_manager_move_list_item (self->item_manager,
+                                                        new_row->widget,
+                                                        i,
+                                                        insert_after);
+                }
+              else
+                {
+                  new_row->widget = gtk_list_item_manager_acquire_list_item (self->item_manager,
+                                                                             i,
+                                                                             insert_after);
+                }
             }
         }
       else
@@ -457,6 +470,9 @@ gtk_list_view_ensure_rows (GtkListView              *self,
         }
       insert_after = new_row->widget;
     }
+
+  while ((widget = g_queue_pop_head (&released)))
+    gtk_list_item_manager_release_list_item (self->item_manager, NULL, widget);
 }
 
 static void
