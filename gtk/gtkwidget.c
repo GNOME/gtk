@@ -6441,7 +6441,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
   if (parent->priv->children_observer)
     {
       if (prev_previous)
-        g_warning ("oops");
+        gtk_list_list_model_item_moved (parent->priv->children_observer, widget, prev_previous);
       else
         gtk_list_list_model_item_added (parent->priv->children_observer, widget);
     }
