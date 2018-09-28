@@ -232,8 +232,8 @@ gtk_list_item_manager_change_contains (GtkListItemManagerChange *change,
  * gtk_list_item_manager_acquire_list_item:
  * @self: a #GtkListItemManager
  * @position: the row in the model to create a list item for
- * @next_sibling: the widget this widget should be inserted before or %NULL
- *     if none
+ * @prev_sibling: the widget this widget should be inserted before or %NULL
+ *     if it should be the first widget
  *
  * Creates a list item widget to use for @position. No widget may
  * yet exist that is used for @position.
@@ -249,20 +249,20 @@ gtk_list_item_manager_change_contains (GtkListItemManagerChange *change,
 GtkWidget *
 gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
                                          guint               position,
-                                         GtkWidget          *next_sibling)
+                                         GtkWidget          *prev_sibling)
 {
   GtkListItem *result;
   gpointer item;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
-  g_return_val_if_fail (next_sibling == NULL || GTK_IS_WIDGET (next_sibling), NULL);
+  g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
   result = gtk_list_item_factory_create (self->factory);
 
   item = g_list_model_get_item (self->model, position);
   gtk_list_item_factory_bind (self->factory, result, position, item);
   g_object_unref (item);
-  gtk_widget_insert_before (GTK_WIDGET (result), self->widget, next_sibling);
+  gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
 
   return GTK_WIDGET (result);
 }
@@ -271,8 +271,8 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
  * gtk_list_item_manager_try_acquire_list_item_from_change:
  * @self: a #GtkListItemManager
  * @position: the row in the model to create a list item for
- * @next_sibling: the widget this widget should be inserted before or %NULL
- *     if none
+ * @prev_sibling: the widget this widget should be inserted after or %NULL
+ *     if it should be the first widget
  *
  * Like gtk_list_item_manager_acquire_list_item(), but only tries to acquire list
  * items from those previously released as part of @change.
@@ -286,20 +286,20 @@ GtkWidget *
 gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
                                                GtkListItemManagerChange *change,
                                                guint                     position,
-                                               GtkWidget                *next_sibling)
+                                               GtkWidget                *prev_sibling)
 {
   GtkListItem *result;
   gpointer item;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
-  g_return_val_if_fail (next_sibling == NULL || GTK_IS_WIDGET (next_sibling), NULL);
+  g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
   /* XXX: can we avoid temporarily allocating items on failure? */
   item = g_list_model_get_item (self->model, position);
   if (g_hash_table_steal_extended (change->items, item, NULL, (gpointer *) &result))
     {
       gtk_list_item_factory_update (self->factory, result, position);
-      gtk_widget_insert_before (GTK_WIDGET (result), self->widget, next_sibling);
+      gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
       /* XXX: Should we let the listview do this? */
       gtk_widget_queue_resize (GTK_WIDGET (result));
     }
