@@ -206,15 +206,12 @@ gtk_list_list_model_new_with_size (GType          item_type,
   return result;
 }
 
-void
-gtk_list_list_model_item_added (GtkListListModel *self,
-                                gpointer          item)
+static guint
+gtk_list_list_model_find (GtkListListModel *self,
+                          gpointer          item)
 {
-  gpointer x;
   guint position;
-
-  g_return_if_fail (GTK_IS_LIST_LIST_MODEL (self));
-  g_return_if_fail (item != NULL);
+  gpointer x;
 
   position = 0;
   for (x = self->get_first (self->data);
@@ -222,7 +219,17 @@ gtk_list_list_model_item_added (GtkListListModel *self,
        x = self->get_next (x, self->data))
     position++;
 
-  gtk_list_list_model_item_added_at (self, position);
+  return position;
+}
+
+void
+gtk_list_list_model_item_added (GtkListListModel *self,
+                                gpointer          item)
+{
+  g_return_if_fail (GTK_IS_LIST_LIST_MODEL (self));
+  g_return_if_fail (item != NULL);
+
+  gtk_list_list_model_item_added_at (self, gtk_list_list_model_find (self, item));
 }
 
 void
@@ -241,26 +248,49 @@ void
 gtk_list_list_model_item_removed (GtkListListModel *self,
                                   gpointer          previous)
 {
-  gpointer x;
   guint position;
 
   g_return_if_fail (GTK_IS_LIST_LIST_MODEL (self));
 
   if (previous == NULL)
+    position = 0;
+  else
+    position = 1 + gtk_list_list_model_find (self, previous);
+
+  gtk_list_list_model_item_removed_at (self, position);
+}
+
+void
+gtk_list_list_model_item_moved (GtkListListModel *self,
+                                gpointer          item,
+                                gpointer          previous_previous)
+{
+  guint position, previous_position;
+  guint min, max;
+
+  g_return_if_fail (GTK_IS_LIST_LIST_MODEL (self));
+  g_return_if_fail (item != previous_previous);
+
+  position = gtk_list_list_model_find (self, item);
+
+  if (previous_previous == NULL)
     {
-      position = 0;
+      previous_position = 0;
     }
   else
     {
-      position = 1;
-
-      for (x = self->get_first (self->data);
-           x != previous;
-           x = self->get_next (x, self->data))
-        position++;
+      previous_position = gtk_list_list_model_find (self, previous_previous);
+      if (position > previous_position)
+        previous_position++;
     }
 
-  gtk_list_list_model_item_removed_at (self, position);
+  /* item didn't move */
+  if (position == previous_position)
+    return;
+
+  min = MIN (position, previous_position);
+  max = MAX (position, previous_position) + 1;
+  g_list_model_items_changed (G_LIST_MODEL (self), min, max - min, max - min);
 }
 
 void
