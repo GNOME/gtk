@@ -60,12 +60,12 @@ gboolean                gtk_list_item_manager_change_contains   (GtkListItemMana
 
 GtkWidget *             gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
                                                                  guint                   position,
-                                                                 GtkWidget              *next_sibling);
+                                                                 GtkWidget              *prev_sibling);
 GtkWidget *             gtk_list_item_manager_try_reacquire_list_item
                                                                 (GtkListItemManager     *self,
                                                                  GtkListItemManagerChange *change,
                                                                  guint                   position,
-                                                                 GtkWidget              *next_sibling);
+                                                                 GtkWidget              *prev_sibling);
 void                    gtk_list_item_manager_update_list_item  (GtkListItemManager     *self,
                                                                  GtkWidget              *item,
                                                                  guint                   position);
