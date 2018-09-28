@@ -404,7 +404,7 @@ gtk_list_view_ensure_rows (GtkListView              *self,
 {
   ListRow *row, *new_row;
   guint i, offset;
-  GtkWidget *insert_before;
+  GtkWidget *insert_after;
 
   gtk_list_view_release_rows (self);
 
@@ -417,7 +417,7 @@ gtk_list_view_ensure_rows (GtkListView              *self,
       gtk_rb_tree_node_mark_dirty (row);
     }
 
-  insert_before = gtk_widget_get_first_child (GTK_WIDGET (self));
+  insert_after = NULL;
 
   for (i = self->anchor_start; i < self->anchor_end; i++)
     {
@@ -440,21 +440,21 @@ gtk_list_view_ensure_rows (GtkListView              *self,
               new_row->widget = gtk_list_item_manager_try_reacquire_list_item (self->item_manager,
                                                                                change,
                                                                                i,
-                                                                               insert_before);
+                                                                               insert_after);
             }
           if (new_row->widget == NULL)
             {
               new_row->widget = gtk_list_item_manager_acquire_list_item (self->item_manager,
                                                                          i,
-                                                                         insert_before);
+                                                                         insert_after);
             }
         }
       else
         {
           if (update_start <= i)
             gtk_list_item_manager_update_list_item (self->item_manager, new_row->widget, i);
-          insert_before = gtk_widget_get_next_sibling (new_row->widget);
         }
+      insert_after = new_row->widget;
     }
 }
 
@@ -888,18 +888,18 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
       /* The anchor was removed, do a more expensive rebuild trying to find if
        * the anchor maybe got readded somewhere else */
       ListRow *row, *new_row;
-      GtkWidget *insert_before;
+      GtkWidget *insert_after;
       guint i, offset, anchor_pos;
       
       row = gtk_list_view_get_row (self, position, &offset);
-      for (new_row = row;
+      for (new_row = gtk_rb_tree_node_get_previous (row);
            new_row && new_row->widget == NULL;
-           new_row = gtk_rb_tree_node_get_next (new_row))
-        ;
+           new_row = gtk_rb_tree_node_get_previous (new_row))
+        { }
       if (new_row)
-        insert_before = new_row->widget;
+        insert_after = new_row->widget;
       else
-        insert_before = NULL; /* we're at the end */
+        insert_after = NULL; /* we're at the start */
 
       for (i = 0; i < added; i++)
         {
@@ -908,7 +908,7 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
           widget = gtk_list_item_manager_try_reacquire_list_item (self->item_manager,
                                                                   change,
                                                                   position + i,
-                                                                  insert_before);
+                                                                  insert_after);
           if (widget == NULL)
             {
               offset++;
@@ -938,6 +938,8 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
             }
 
           new_row->widget = widget;
+          insert_after = widget;
+
           if (widget == self->anchor)
             {
               anchor_pos = position + i;
