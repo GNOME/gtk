@@ -104,7 +104,8 @@ void
 gtk_list_item_factory_bind (GtkListItemFactory *self,
                             GtkListItem        *list_item,
                             guint               position,
-                            gpointer            item)
+                            gpointer            item,
+                            gboolean            selected)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
@@ -113,6 +114,7 @@ gtk_list_item_factory_bind (GtkListItemFactory *self,
 
   gtk_list_item_set_item (list_item, item);
   gtk_list_item_set_position (list_item, position);
+  gtk_list_item_set_selected (list_item, selected);
 
   if (self->bind_func)  
     self->bind_func (list_item, self->user_data);
@@ -123,12 +125,18 @@ gtk_list_item_factory_bind (GtkListItemFactory *self,
 void
 gtk_list_item_factory_update (GtkListItemFactory *self,
                               GtkListItem        *list_item,
-                              guint               position)
+                              guint               position,
+                              gboolean            selected)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
 
+  g_object_freeze_notify (G_OBJECT (list_item));
+
   gtk_list_item_set_position (list_item, position);
+  gtk_list_item_set_selected (list_item, selected);
+
+  g_object_thaw_notify (G_OBJECT (list_item));
 }
 
 void
