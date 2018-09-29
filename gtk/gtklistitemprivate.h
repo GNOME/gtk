@@ -30,6 +30,8 @@ void            gtk_list_item_set_item                          (GtkListItem    
                                                                  gpointer                item);
 void            gtk_list_item_set_position                      (GtkListItem            *self,
                                                                  guint                   position);
+void            gtk_list_item_set_selected                      (GtkListItem            *self,
+                                                                 gboolean                selected);
 
 G_END_DECLS
 
