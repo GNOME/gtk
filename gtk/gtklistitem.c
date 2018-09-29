@@ -22,8 +22,10 @@
 #include "gtklistitemprivate.h"
 
 #include "gtkbinlayout.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtklistitem
@@ -324,6 +326,8 @@ gtk_list_item_set_item (GtkListItem *self,
   g_clear_object (&self->item);
   if (item)
     self->item = g_object_ref (item);
+
+  gtk_css_node_invalidate (gtk_widget_get_css_node (GTK_WIDGET (self)), GTK_CSS_CHANGE_ANIMATIONS);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }
