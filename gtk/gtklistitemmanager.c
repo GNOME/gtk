@@ -262,7 +262,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   result = gtk_list_item_factory_create (self->factory);
 
   item = g_list_model_get_item (self->model, position);
-  gtk_list_item_factory_bind (self->factory, result, position, item);
+  gtk_list_item_factory_bind (self->factory, result, position, item, FALSE);
   g_object_unref (item);
   gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
 
@@ -300,7 +300,7 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
   item = g_list_model_get_item (self->model, position);
   if (g_hash_table_steal_extended (change->items, item, NULL, (gpointer *) &result))
     {
-      gtk_list_item_factory_update (self->factory, result, position);
+      gtk_list_item_factory_update (self->factory, result, position, FALSE);
       gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
       /* XXX: Should we let the listview do this? */
       gtk_widget_queue_resize (GTK_WIDGET (result));
@@ -336,7 +336,7 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
   gpointer item;
 
   item = g_list_model_get_item (self->model, position);
-  gtk_list_item_factory_bind (self->factory, GTK_LIST_ITEM (list_item), position, item);
+  gtk_list_item_factory_bind (self->factory, GTK_LIST_ITEM (list_item), position, item, FALSE);
   gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
   g_object_unref (item);
 }
@@ -358,7 +358,7 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
-  gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position);
+  gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position, FALSE);
 }
 
 /*
