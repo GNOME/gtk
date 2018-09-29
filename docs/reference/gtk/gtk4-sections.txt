@@ -498,6 +498,9 @@ gtk_list_item_get_item
 gtk_list_item_get_position
 gtk_list_item_get_child
 gtk_list_item_set_child
+gtk_list_item_get_selected
+gtk_list_item_get_selectable
+gtk_list_item_set_selectable
 <SUBSECTION Standard>
 GTK_LIST_ITEM
 GTK_LIST_ITEM_CLASS
