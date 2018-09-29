@@ -65,6 +65,14 @@ GDK_AVAILABLE_IN_ALL
 gpointer        gtk_list_item_get_item                          (GtkListItem            *self);
 GDK_AVAILABLE_IN_ALL
 guint           gtk_list_item_get_position                      (GtkListItem            *self);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_item_get_selected                      (GtkListItem            *self);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_item_get_selectable                    (GtkListItem            *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_item_set_selectable                    (GtkListItem            *self,
+                                                                 gboolean                selectable);
+
 
 G_END_DECLS
 
