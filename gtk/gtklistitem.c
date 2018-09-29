@@ -53,6 +53,9 @@ struct _GtkListItem
 
   GObject *item;
   guint position;
+
+  guint selectable : 1;
+  guint selected : 1;
 };
 
 enum
@@ -60,6 +63,8 @@ enum
   PROP_0,
   PROP_ITEM,
   PROP_POSITION,
+  PROP_SELECTABLE,
+  PROP_SELECTED,
 
   N_PROPS
 };
@@ -96,6 +101,14 @@ gtk_list_item_get_property (GObject    *object,
       g_value_set_uint (value, self->position);
       break;
 
+    case PROP_SELECTABLE:
+      g_value_set_boolean (value, self->selectable);
+      break;
+
+    case PROP_SELECTED:
+      g_value_set_boolean (value, self->selected);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -108,10 +121,14 @@ gtk_list_item_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-  //GtkListItem *self = GTK_LIST_ITEM (object);
+  GtkListItem *self = GTK_LIST_ITEM (object);
 
   switch (property_id)
     {
+    case PROP_SELECTABLE:
+      gtk_list_item_set_selectable (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -152,6 +169,30 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                        0, G_MAXUINT, 0,
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkListItem:selectable:
+   *
+   * If the item can be selected by the user
+   */
+  properties[PROP_SELECTABLE] =
+    g_param_spec_boolean ("selectable",
+                          P_("Selectable"),
+                          P_("If the item can be selected by the user"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListItem:selected:
+   *
+   * If the item is currently selected
+   */
+  properties[PROP_SELECTED] =
+    g_param_spec_boolean ("selected",
+                          P_("Selected"),
+                          P_("If the item is currently selected"),
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   /* This gets overwritten by gtk_list_item_new() but better safe than sorry */
@@ -161,6 +202,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
 static void
 gtk_list_item_init (GtkListItem *self)
 {
+  self->selectable = TRUE;
 }
 
 GtkWidget *
@@ -238,3 +280,89 @@ gtk_list_item_set_position (GtkListItem *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_POSITION]);
 }
 
+/**
+ * gtk_list_item_get_selected:
+ * @self: a #GtkListItem
+ *
+ * Checks if the item is displayed as selected. The selected state is
+ * maintained by the container and its list model and cannot be set
+ * otherwise.
+ *
+ * Returns: %TRUE if the item is selected.
+ **/
+gboolean
+gtk_list_item_get_selected (GtkListItem *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (self), FALSE);
+
+  return self->selected;
+}
+
+void
+gtk_list_item_set_selected (GtkListItem *self,
+                            gboolean     selected)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM (self));
+
+  if (self->selected == selected)
+    return;
+
+  self->selected = selected;
+
+  if (selected)
+    gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
+  else
+    gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+}
+
+/**
+ * gtk_list_item_get_selectable:
+ * @self: a #GtkListItem
+ *
+ * Checks if a list item has been set to be selectable via
+ * gtk_list_item_set_selectable().
+ *
+ * Do not confuse this function with gtk_list_item_get_selected().
+ *
+ * Returns: %TRUE if the item is selectable
+ **/
+gboolean
+gtk_list_item_get_selectable (GtkListItem *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (self), FALSE);
+
+  return self->selectable;
+}
+
+/**
+ * gtk_list_item_set_selectable:
+ * @self: a #GtkListItem
+ * @selectable: if the item should be selectable
+ *
+ * Sets @self to be selectable. If an item is selectable, clicking
+ * on the item or using the keyboard will try to select or unselect
+ * the item. If this succeeds is up to the model to determine, as
+ * it is managing the selected state.
+ *
+ * Note that this means that making an item non-selectable has no
+ * influence on the selected state at all. A non-selectable item 
+ * may still be selected.
+ *
+ * By default, list items are selectable. When rebinding them to
+ * a new item, they will also be reset to be selectable by GTK.
+ **/
+void
+gtk_list_item_set_selectable (GtkListItem *self,
+                              gboolean     selectable)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM (self));
+
+  if (self->selectable == selectable)
+    return;
+
+  self->selectable = selectable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
+}
