@@ -16,6 +16,12 @@
         <attribute name="action">win.transition</attribute>
       </item>
     </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
   </menu>
   <menu id="dinner_menu">
     <section>
