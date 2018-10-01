@@ -18,7 +18,7 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="label" translatable="yes">_About Widget Factory</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>
