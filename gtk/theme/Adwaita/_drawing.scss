@@ -192,19 +192,24 @@
   //
   // normal button
   //
+  $_bg: if($variant == 'light', lighten($c, 3%), lighten($c, 1%));
+  $_bc: if($variant == 'light', darken($c,25%), darken($c,10%));
+  $_sc: if($variant == 'light', mix($c, darken($c,15%), 65%), mix($c, darken($c,5%), 65%));
 
     color: $tc;
-    border-color: darken($c,25%);
-    background-image: image(lighten($c, 3%));
-    box-shadow: inset 0 -2px mix($c, darken($c,25%), 65%);
+    border-color: $_bc;
+    background-image: image($_bg);
+    box-shadow: inset 0 -2px $_sc;
   }
 
   @else if $t==hover {
   //
   // hovered button
   //
-    background-image: image(lighten($c, 2%));
-    box-shadow: inset 0 -2px mix($c, darken($c,25%), 70%);
+  $_sc: if($variant == 'light', mix($c, darken($c,15%), 70%), mix($c, darken($c,2%), 70%));
+
+    background-image: image(lighten($c, 6%));
+    box-shadow: inset 0 -2px $_sc;
 
   }
 
@@ -212,8 +217,9 @@
   //
   // pushed button
   //
+  $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 4%));
 
-     background-image: image(mix($c, darken($c,25%), 55%));
+     background-image: image($_bg);
      box-shadow: none;
   }
 
