@@ -2653,10 +2653,10 @@ switch {
     border-radius: 3px;
     transition: $button_transition;
 
-    @include button(normal-alt, $edge: $shadow_color);
+    @include button(normal, $edge: $shadow_color);
   }
 
-  &:hover slider { @include button(hover-alt, $edge: $shadow_color); }
+  &:hover slider { @include button(hover, $edge: $shadow_color); }
 
   &:checked slider { border: 1px solid $selected_borders_color; }
 
@@ -2755,9 +2755,9 @@ radio {
   border: 1px solid;
   -gtk-icon-source: none;
 
-  @include button(normal-alt, $edge: $shadow_color);
+  @include button(normal, $edge: $shadow_color);
 
-  &:hover { @include button(hover-alt, $edge: $shadow_color); }
+  &:hover { @include button(hover, $edge: $shadow_color); }
   &:active { @include button(active); }
   &:disabled { @include button(insensitive); }
   &:backdrop {
@@ -3016,14 +3016,14 @@ scale {
   }
 
   slider {
-    @include button(normal-alt, $edge: $shadow_color);
+    @include button(normal, $edge: $shadow_color);
 
     border: 1px solid darken($alt_borders_color, 3%);
     border-radius: 100%;
     transition: $button_transition;
     transition-property: background, border, box-shadow;
 
-    &:hover { @include button(hover-alt, $edge: $shadow_color); }
+    &:hover { @include button(hover, $edge: $shadow_color); }
 
     &:active { border-color: $selected_borders_color; }
 

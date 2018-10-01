@@ -1085,9 +1085,9 @@ switch:backdrop:checked { color: #e8e8e7; border-color: #4a90d9; background-colo
 
 switch:backdrop:disabled { color: #c3c3c0; border-color: #c0c0bd; background-color: #f1f1f1; }
 
-switch slider { margin: -1px; min-width: 44px; min-height: 26px; border: 1px solid; border-radius: 3px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #91918c; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); background-image: linear-gradient(to bottom, #f4f4f4 20%, #e8e8e7 90%); box-shadow: inset 0 1px white, inset 0 -2px #ededec, inset 0 -1px #cacac8, 0 1px rgba(0, 0, 0, 0.1); }
+switch slider { margin: -1px; min-width: 44px; min-height: 26px; border: 1px solid; border-radius: 3px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); color: #2e3436; border-color: #aaaaa6; background-image: image(#e1e1df); box-shadow: inset 0 -2px #d2d2d0; }
 
-switch:hover slider { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #91918c; box-shadow: inset 0 1px white, inset 0 -2px #f4f4f4, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); background-image: linear-gradient(to bottom, #fefefe 10%, #f2f2f1 90%); }
+switch:hover slider { background-image: image(#ededec); box-shadow: inset 0 -2px #d5d5d3; }
 
 switch:checked slider { border: 1px solid #184472; }
 
@@ -1138,7 +1138,7 @@ checkbutton.text-button label:not(:only-child):first-child, radiobutton.text-but
 
 checkbutton.text-button label:not(:only-child):last-child, radiobutton.text-button label:not(:only-child):last-child { margin-right: 4px; }
 
-check, radio { margin: 0 4px; min-height: 14px; min-width: 14px; border: 1px solid; -gtk-icon-source: none; color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #91918c; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); background-image: linear-gradient(to bottom, #f4f4f4 20%, #e8e8e7 90%); box-shadow: inset 0 1px white, inset 0 -2px #ededec, inset 0 -1px #cacac8, 0 1px rgba(0, 0, 0, 0.1); }
+check, radio { margin: 0 4px; min-height: 14px; min-width: 14px; border: 1px solid; -gtk-icon-source: none; color: #2e3436; border-color: #aaaaa6; background-image: image(#e1e1df); box-shadow: inset 0 -2px #d2d2d0; }
 
 check:only-child, radio:only-child { margin: 0; }
 
@@ -1146,7 +1146,7 @@ popover check.left:dir(rtl), popover radio.left:dir(rtl) { margin-left: 0; margi
 
 popover check.right:dir(ltr), popover radio.right:dir(ltr) { margin-left: 12px; margin-right: 0; }
 
-check:hover, radio:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #91918c; box-shadow: inset 0 1px white, inset 0 -2px #f4f4f4, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); background-image: linear-gradient(to bottom, #fefefe 10%, #f2f2f1 90%); }
+check:hover, radio:hover { background-image: image(#ededec); box-shadow: inset 0 -2px #d5d5d3; }
 
 check:active, radio:active { background-image: image(#ccccca); box-shadow: none; }
 
@@ -1263,9 +1263,9 @@ scale fill:disabled:backdrop, scale fill:disabled { border-color: transparent; b
 
 .osd scale fill:disabled:backdrop, .osd scale fill:disabled { border-color: transparent; background-color: transparent; }
 
-scale slider { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #91918c; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); background-image: linear-gradient(to bottom, #f4f4f4 20%, #e8e8e7 90%); box-shadow: inset 0 1px white, inset 0 -2px #ededec, inset 0 -1px #cacac8, 0 1px rgba(0, 0, 0, 0.1); border: 1px solid #898984; border-radius: 100%; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); transition-property: background, border, box-shadow; }
+scale slider { color: #2e3436; border-color: #aaaaa6; background-image: image(#e1e1df); box-shadow: inset 0 -2px #d2d2d0; border: 1px solid #898984; border-radius: 100%; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); transition-property: background, border, box-shadow; }
 
-scale slider:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #91918c; box-shadow: inset 0 1px white, inset 0 -2px #f4f4f4, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); background-image: linear-gradient(to bottom, #fefefe 10%, #f2f2f1 90%); }
+scale slider:hover { background-image: image(#ededec); box-shadow: inset 0 -2px #d5d5d3; }
 
 scale slider:active { border-color: #184472; }
 
