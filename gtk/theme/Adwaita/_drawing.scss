@@ -195,7 +195,7 @@
 
     color: $tc;
     border-color: darken($c,25%);
-    background-image: image(darken($c, 3%));
+    background-image: image(lighten($c, 3%));
     box-shadow: inset 0 -2px mix($c, darken($c,25%), 65%);
   }
 
