@@ -3763,19 +3763,21 @@ messagedialog { // Message Dialog styling
 
     .dialog-action-area button {
       padding: 10px 14px; // labels are not vertically centered on message dialog, this is a workaround
-      border-radius: 0;
+      border-radius: 0; /* FIXME: top corners still get 3px rounding */
       border-left-style: solid;
       border-right-style: none;
       border-bottom-style: none;
 
       &:first-child{
         border-left-style: none;
+        border-top-left-radius: 0;
         border-bottom-left-radius: 7px;
         -gtk-outline-bottom-left-radius: 5px;
       }
 
       &:last-child {
         border-bottom-right-radius: 7px;
+        border-top-right-radius: 0;
         -gtk-outline-bottom-right-radius: 5px;
       }
     }
