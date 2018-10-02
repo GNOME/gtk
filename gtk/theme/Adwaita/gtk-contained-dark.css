@@ -1646,11 +1646,11 @@ messagedialog .titlebar { min-height: 20px; background-image: none; background-c
 
 messagedialog.csd.background { border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; }
 
-messagedialog.csd .dialog-action-area button { padding: 10px 14px; border-radius: 0; border-color: pink; border-left-style: solid; border-right-style: none; border-bottom-style: none; }
+messagedialog.csd .dialog-action-area button { padding: 10px 14px; border-radius: 0; /* FIXME: top corners still get 3px rounding */ border-left-style: solid; border-right-style: none; border-bottom-style: none; }
 
-messagedialog.csd .dialog-action-area button:first-child { border-left-style: none; border-bottom-left-radius: 7px; -gtk-outline-bottom-left-radius: 5px; }
+messagedialog.csd .dialog-action-area button:first-child { border-left-style: none; border-top-left-radius: 0; border-bottom-left-radius: 7px; -gtk-outline-bottom-left-radius: 5px; }
 
-messagedialog.csd .dialog-action-area button:last-child { border-bottom-right-radius: 7px; -gtk-outline-bottom-right-radius: 5px; }
+messagedialog.csd .dialog-action-area button:last-child { border-bottom-right-radius: 7px; border-top-right-radius: 0; -gtk-outline-bottom-right-radius: 5px; }
 
 filechooser .dialog-action-box { border-top: 1px solid #1b1f20; }
 
