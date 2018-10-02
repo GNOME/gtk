@@ -995,6 +995,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
               0 1px transparentize(white, 1);
   text-shadow: none;
   -gtk-icon-shadow: none;
+  &:hover { border-color: $borders_color; }
 }
 
 /* menu buttons */
@@ -3643,6 +3644,13 @@ row {
       &:backdrop { background-color: $selected_bg_color; }
     }
   }
+
+  button {
+   @extend %undecorated_button;
+   /* do draw a border though: */
+   border: 1px solid transparentize($borders_color, 0.5);
+  }
+
 
   &:selected { @extend %selected_items; }
 }
