@@ -537,6 +537,7 @@ button {
       &:hover {
         transition: $button_transition;
         transition-duration: 500ms;
+        border: 1px solid $borders_color;
 
         &:active { transition: $button_transition; }
       }
