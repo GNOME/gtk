@@ -2124,6 +2124,7 @@ gdk_event_translate (MSG  *msg,
 			 (gulong) msg->wParam,
 			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
 			 _gdk_input_codepage));
+      gdk_display_setting_changed (display, "gtk-im-module");
       break;
 
     case WM_SYSKEYUP:
