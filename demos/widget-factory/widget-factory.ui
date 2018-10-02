@@ -1147,167 +1147,277 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box26">
-                        <property name="orientation">vertical</property>
-                        <property name="homogeneous">1</property>
-                        <property name="spacing">6</property>
-                        <property name="hexpand">1</property>
+                      <!-- This should probably be framed -->
+                      <object class="GtkBox">
                         <child>
-                          <object class="GtkFrame" id="frame1">
-                            <style>
-                              <class name="border-inset"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label1">
-                                <property name="label" translatable="yes">&lt;b&gt;Inset&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
+                          <object class="GtkListBox" id="listbox2">
+                            <property name="selection-mode">none</property>
+                            <child type="placeholder">
+                              <object class="GtkLabel">
+                                <property name="label">No rows found</property>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame2">
-                            <style>
-                              <class name="border-outset"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label2">
-                                <property name="label" translatable="yes">&lt;b&gt;Outset&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame3">
-                            <style>
-                              <class name="border-groove"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label17">
-                                <property name="label" translatable="yes">&lt;b&gt;Groove&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame4">
-                            <style>
-                              <class name="border-ridge"/>
-                            </style>
-                            <child type="label">
-                              <object class="GtkLabel" id="label18">
-                                <property name="label" translatable="yes">&lt;b&gt;Ridge&lt;/b&gt;</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSeparator" id="separator4">
-                        <property name="orientation">vertical</property>
-                      </object>
-                      <packing>
-                        <property name="position">7</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box4">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="hexpand">1</property>
-                        <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow1">
-                            <property name="width-request">150</property>
-                            <property name="can-focus">1</property>
-                            <property name="vscrollbar-policy">always</property>
-                            <property name="shadow-type">in</property>
-                            <property name="vexpand">1</property>
                             <child>
-                              <object class="GtkTreeView" id="treeview1">
-                                <property name="can-focus">1</property>
-                                <property name="model">liststore1</property>
-                                <property name="headers-clickable">0</property>
-                                <property name="search-column">0</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection"/>
-                                </child>
+                              <object class="GtkListBoxRow" id="listboxrow11">
+                                <property name="activatable">0</property>
+                                <property name="selectable">0</property>
                                 <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                    <property name="title" translatable="yes">Cool</property>
+                                  <object class="GtkBox">
                                     <child>
-                                      <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
-                                      <attributes>
-                                        <attribute name="active">0</attribute>
-                                        <attribute name="radio">4</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                                    <property name="title" translatable="yes">Icon</property>
-                                    <property name="reorderable">1</property>
-                                    <child>
-                                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
-                                      <attributes>
-                                        <attribute name="icon_name">1</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                                    <property name="title" translatable="yes">Name</property>
-                                    <property name="resizable">1</property>
-                                    <property name="reorderable">1</property>
-                                    <property name="sort-indicator">1</property>
-                                    <property name="sort-column-id">2</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="cellrenderertext3">
-                                        <property name="ellipsize">end</property>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Row 1</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin">6</property>
+                                        <property name="hexpand">1</property>
                                       </object>
-                                      <attributes>
-                                        <attribute name="text">2</attribute>
-                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSwitch" id="listboxrow11switch">
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBoxRow" id="listboxrow12">
+                                <property name="activatable">0</property>
                                 <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                    <property name="title" translatable="yes">Nick</property>
-                                    <property name="resizable">1</property>
-                                    <property name="reorderable">1</property>
-                                    <property name="sort-indicator">1</property>
-                                    <property name="sort-column-id">3</property>
+                                  <object class="GtkBox">
                                     <child>
-                                      <object class="GtkCellRendererText" id="cellrenderertext4">
-                                        <property name="ellipsize">end</property>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Row 2</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin">6</property>
+                                        <property name="hexpand">1</property>
                                       </object>
-                                      <attributes>
-                                        <attribute name="text">3</attribute>
-                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkScale">
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
+                                        <property name="draw-value">0</property>
+                                        <property name="width-request">150</property>
+                                        <property name="adjustment">adjustment1</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBoxRow" id="listboxrow13">
+                                <child>
+                                  <object class="GtkBox">
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Row 3</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin">6</property>
+                                        <property name="hexpand">1</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkImage" id="listboxrow13image">
+                                        <property name="icon-name">object-select-symbolic</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
+                                        <property name="opacity">0</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBoxRow" id="listboxrow14">
+                                <child>
+                                  <object class="GtkBox">
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Row 4</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin">6</property>
+                                        <property name="hexpand">1</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="icon-name">object-select-symbolic</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
+                                        <property name="opacity">0</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBoxRow" id="listboxrow15">
+                                <property name="activatable">0</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Row 5</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin">6</property>
+                                        <property name="hexpand">1</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="listboxrow15button">
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
+                                        <property name="icon-name">appointment-soon-symbolic</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBoxRow" id="listboxrow16">
+                                <property name="activatable">0</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Row 6</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin">6</property>
+                                        <property name="hexpand">1</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton">
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
                           </object>
+                        </child>
+                      </object>
+                      </child>
+                      <child>
+                        <object class="GtkBox" id="box4">
+                          <property name="orientation">vertical</property>
+                          <property name="spacing">6</property>
+                          <property name="hexpand">1</property>
+                          <child>
+                            <object class="GtkScrolledWindow" id="scrolledwindow1">
+                              <property name="width-request">150</property>
+                              <property name="can-focus">1</property>
+                              <property name="vscrollbar-policy">always</property>
+                              <property name="shadow-type">in</property>
+                              <property name="vexpand">1</property>
+                              <child>
+                                <object class="GtkTreeView" id="treeview1">
+                                  <property name="can-focus">1</property>
+                                  <property name="model">liststore1</property>
+                                  <property name="headers-clickable">0</property>
+                                  <property name="search-column">0</property>
+                                  <child internal-child="selection">
+                                    <object class="GtkTreeSelection" id="treeview-selection"/>
+                                  </child>
+                                  <child>
+                                    <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                                      <property name="title" translatable="yes">Cool</property>
+                                      <child>
+                                        <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
+                                        <attributes>
+                                          <attribute name="active">0</attribute>
+                                          <attribute name="radio">4</attribute>
+                                        </attributes>
+                                      </child>
+                                    </object>
+                                  </child>
+                                  <child>
+                                    <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                      <property name="title" translatable="yes">Icon</property>
+                                      <property name="reorderable">1</property>
+                                      <child>
+                                        <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
+                                        <attributes>
+                                          <attribute name="icon_name">1</attribute>
+                                        </attributes>
+                                      </child>
+                                    </object>
+                                  </child>
+                                  <child>
+                                    <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                      <property name="title" translatable="yes">Name</property>
+                                      <property name="resizable">1</property>
+                                      <property name="reorderable">1</property>
+                                      <property name="sort-indicator">1</property>
+                                      <property name="sort-column-id">2</property>
+                                      <child>
+                                        <object class="GtkCellRendererText" id="cellrenderertext3">
+                                          <property name="ellipsize">end</property>
+                                        </object>
+                                        <attributes>
+                                          <attribute name="text">2</attribute>
+                                        </attributes>
+                                      </child>
+                                    </object>
+                                  </child>
+                                  <child>
+                                    <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                      <property name="title" translatable="yes">Nick</property>
+                                      <property name="resizable">1</property>
+                                      <property name="reorderable">1</property>
+                                      <property name="sort-indicator">1</property>
+                                      <property name="sort-column-id">3</property>
+                                      <child>
+                                        <object class="GtkCellRendererText" id="cellrenderertext4">
+                                          <property name="ellipsize">end</property>
+                                        </object>
+                                        <attributes>
+                                          <attribute name="text">3</attribute>
+                                        </attributes>
+                                      </child>
+                                    </object>
+                                  </child>
+                                </object>
+                              </child>
+                            </object>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow2">
