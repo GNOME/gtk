@@ -3298,11 +3298,18 @@ gdk_window_wayland_move_resize (GdkWindow *window,
         }
     }
 
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+    {
+      impl->saved_width = width;
+      impl->saved_height = height;
+    }
+
   /* If this function is called with width and height = -1 then that means
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
     gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+
 }
 
 /* Avoid zero width/height as this is a protocol error */
