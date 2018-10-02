@@ -2242,6 +2242,25 @@ _gdk_win32_window_fill_min_max_info (GdkWindow  *window,
   return TRUE;
 }
 
+static void
+gdk_settings_notify (GdkWindow        *window,
+                     const char       *name,
+                     GdkSettingAction  action)
+{
+  GdkEvent *new_event;
+
+  if (!g_str_has_prefix (name, "gtk-"))
+    return;
+
+  new_event = gdk_event_new (GDK_SETTING);
+  new_event->setting.window = window;
+  new_event->setting.send_event = FALSE;
+  new_event->setting.action = action;
+  new_event->setting.name = (char*) name;
+
+  _gdk_win32_append_event (new_event);
+}
+
 #define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
 			     GDK_BUTTON2_MASK | \
 			     GDK_BUTTON3_MASK | \
@@ -2456,6 +2475,7 @@ gdk_event_translate (MSG  *msg,
 			 (gulong) msg->wParam,
 			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
 			 _gdk_input_codepage));
+      gdk_settings_notify (window, "gtk-im-module", GDK_SETTING_ACTION_CHANGED);
       break;
 
     case WM_SYSKEYUP:
