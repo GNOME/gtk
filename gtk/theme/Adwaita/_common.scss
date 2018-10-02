@@ -3637,6 +3637,10 @@ list {
   }
 
   row { padding: 2px; }
+
+  border-radius: 6px; /* rounded borders for lists ...*/
+  /* ... not for scrolled lists though */
+  scrolledwindow & { border-radius: 0; }
 }
 
 row {
@@ -3666,6 +3670,10 @@ row {
   }
 
   &:selected { @extend %selected_items; }
+  /* non scrolled lists get a rounded corner */
+  &:first-child { border-radius: 3px 3px 0 0; }
+  &:last-child { border-radius: 0 0 3px 3px; }
+     scrolledview &:first-child, scrolledview &:last-child { border-raidus: 0 }
 }
 
 
