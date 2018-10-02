@@ -3673,7 +3673,7 @@ row {
   /* non scrolled lists get a rounded corner */
   &:first-child { border-radius: 3px 3px 0 0; }
   &:last-child { border-radius: 0 0 3px 3px; }
-     scrolledview &:first-child, scrolledview &:last-child { border-raidus: 0 }
+     scrolledview &:first-child, scrolledview &:last-child { border-radius: 0 }
 }
 
 

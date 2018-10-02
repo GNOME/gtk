@@ -1596,7 +1596,7 @@ scrolledwindow junction:backdrop { border-image-source: linear-gradient(to botto
 separator { background: rgba(0, 0, 0, 0.1); min-width: 1px; min-height: 1px; }
 
 /********* Lists * */
-list { color: black; background-color: #ffffff; border-color: #b6b6b3; border-radius: 6px; /* not for scrolled lists though */ }
+list { color: black; background-color: #ffffff; border-color: #b6b6b3; border-radius: 6px; /* rounded borders for lists ...*/ /* ... not for scrolled lists though */ }
 
 list:backdrop { background-color: #fcfcfc; border-color: #c0c0bd; }
 
@@ -1626,7 +1626,7 @@ row:first-child { border-radius: 3px 3px 0 0; }
 
 row:last-child { border-radius: 0 0 3px 3px; }
 
-scrolledview row:first-child, scrolledview row:last-child { border-raidus: 0; }
+scrolledview row:first-child, scrolledview row:last-child { border-radius: 0; }
 
 /********************* App Notifications * */
 .app-notification, .app-notification.frame { padding: 10px; border-radius: 0 0 5px 5px; background-color: rgba(28, 31, 32, 0.7); background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px); background-clip: padding-box; }
