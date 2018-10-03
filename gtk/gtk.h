@@ -195,6 +195,7 @@
 #include <gtk/gtkshortcutsshortcut.h>
 #include <gtk/gtkshortcutswindow.h>
 #include <gtk/gtkshow.h>
+#include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>
 #include <gtk/gtksnapshot.h>
 #include <gtk/gtksortlistmodel.h>
