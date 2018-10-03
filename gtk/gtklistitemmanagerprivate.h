@@ -24,6 +24,7 @@
 #include "gtk/gtktypes.h"
 
 #include "gtk/gtklistitemfactoryprivate.h"
+#include "gtk/gtkselectionmodel.h"
 
 G_BEGIN_DECLS
 
@@ -46,8 +47,8 @@ void                    gtk_list_item_manager_set_factory       (GtkListItemMana
                                                                  GtkListItemFactory     *factory);
 GtkListItemFactory *    gtk_list_item_manager_get_factory       (GtkListItemManager     *self);
 void                    gtk_list_item_manager_set_model         (GtkListItemManager     *self,
-                                                                 GListModel             *model);
-GListModel *            gtk_list_item_manager_get_model         (GtkListItemManager     *self);
+                                                                 GtkSelectionModel      *model);
+GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);
 
 guint                   gtk_list_item_manager_get_size          (GtkListItemManager     *self);
 
