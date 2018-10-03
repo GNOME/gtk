@@ -28,7 +28,7 @@ struct _GtkListItemManager
   GObject parent_instance;
 
   GtkWidget *widget;
-  GListModel *model;
+  GtkSelectionModel *model;
   GtkListItemFactory *factory;
 };
 
@@ -107,7 +107,7 @@ gtk_list_item_manager_get_factory (GtkListItemManager *self)
 
 void
 gtk_list_item_manager_set_model (GtkListItemManager *self,
-                                 GListModel         *model)
+                                 GtkSelectionModel  *model)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
@@ -121,7 +121,7 @@ gtk_list_item_manager_set_model (GtkListItemManager *self,
     self->model = g_object_ref (model);
 }
 
-GListModel *
+GtkSelectionModel *
 gtk_list_item_manager_get_model (GtkListItemManager *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
@@ -255,14 +255,16 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
 {
   GtkListItem *result;
   gpointer item;
+  gboolean selected;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
   result = gtk_list_item_factory_create (self->factory);
 
-  item = g_list_model_get_item (self->model, position);
-  gtk_list_item_factory_bind (self->factory, result, position, item, FALSE);
+  item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
+  selected = gtk_selection_model_is_selected (self->model, position);
+  gtk_list_item_factory_bind (self->factory, result, position, item, selected);
   g_object_unref (item);
   gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
 
@@ -297,7 +299,7 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
   /* XXX: can we avoid temporarily allocating items on failure? */
-  item = g_list_model_get_item (self->model, position);
+  item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   if (g_hash_table_steal_extended (change->items, item, NULL, (gpointer *) &result))
     {
       gtk_list_item_factory_update (self->factory, result, position, FALSE);
@@ -334,9 +336,11 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
                                       GtkWidget              *prev_sibling)
 {
   gpointer item;
+  gboolean selected;
 
-  item = g_list_model_get_item (self->model, position);
-  gtk_list_item_factory_bind (self->factory, GTK_LIST_ITEM (list_item), position, item, FALSE);
+  item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
+  selected = gtk_selection_model_is_selected (self->model, position);
+  gtk_list_item_factory_bind (self->factory, GTK_LIST_ITEM (list_item), position, item, selected);
   gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
   g_object_unref (item);
 }
@@ -355,10 +359,13 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
                                         GtkWidget          *item,
                                         guint               position)
 {
+  gboolean selected;
+
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
-  gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position, FALSE);
+  selected = gtk_selection_model_is_selected (self->model, position);
+  gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position, selected);
 }
 
 /*
