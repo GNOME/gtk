@@ -142,6 +142,7 @@ gtk_scrollbar_get_type
 gtk_scrolled_window_get_type
 gtk_search_bar_get_type
 gtk_search_entry_get_type
+gtk_selection_model_get_type
 gtk_separator_get_type
 gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
@@ -151,6 +152,7 @@ gtk_shortcuts_window_get_type
 gtk_shortcuts_section_get_type
 gtk_shortcuts_group_get_type
 gtk_shortcuts_shortcut_get_type
+gtk_single_selection_get_type
 gtk_size_group_get_type
 gtk_snapshot_get_type
 gtk_spin_button_get_type
