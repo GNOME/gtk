@@ -27,6 +27,8 @@
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkscrollable.h"
+#include "gtkselectionmodel.h"
+#include "gtksingleselection.h"
 #include "gtkwidgetprivate.h"
 
 /* Maximum number of list items created by the listview.
@@ -908,7 +910,7 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
       guint i, offset, anchor_pos;
       
       row = gtk_list_view_get_row (self, position, &offset);
-      for (new_row = gtk_rb_tree_node_get_previous (row);
+      for (new_row = row ? gtk_rb_tree_node_get_previous (row) : gtk_rb_tree_get_last (self->rows);
            new_row && new_row->widget == NULL;
            new_row = gtk_rb_tree_node_get_previous (new_row))
         { }
@@ -969,6 +971,9 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
           anchor_pos = gtk_list_item_get_position (GTK_LIST_ITEM (self->anchor));
 
           anchor_pos = position + (anchor_pos - position) * added / removed;
+          if (anchor_pos >= g_list_model_get_n_items (self->model) &&
+              anchor_pos > 0)
+            anchor_pos--;
         }
       gtk_list_view_set_anchor (self, anchor_pos, self->anchor_align, change, position);
     }
@@ -998,6 +1003,34 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
 }
 
 static void
+gtk_list_view_model_selection_changed_cb (GListModel  *model,
+                                          guint        position,
+                                          guint        n_items,
+                                          GtkListView *self)
+{
+  ListRow *row;
+  guint offset;
+
+  row = gtk_list_view_get_row (self, position, &offset);
+
+  if (offset)
+    {
+      position += row->n_rows - offset;
+      n_items -= row->n_rows - offset;
+      row = gtk_rb_tree_node_get_next (row);
+    }
+
+  while (n_items > 0)
+    {
+      if (row->widget)
+        gtk_list_item_manager_update_list_item (self->item_manager, row->widget, position);
+      position += row->n_rows;
+      n_items -= MIN (n_items, row->n_rows);
+      row = gtk_rb_tree_node_get_next (row);
+    }
+}
+
+static void
 gtk_list_view_clear_model (GtkListView *self)
 {
   if (self->model == NULL)
@@ -1005,6 +1038,9 @@ gtk_list_view_clear_model (GtkListView *self)
 
   gtk_list_view_remove_rows (self, NULL, 0, g_list_model_get_n_items (self->model));
 
+  g_signal_handlers_disconnect_by_func (self->model,
+                                        gtk_list_view_model_selection_changed_cb,
+                                        self);
   g_signal_handlers_disconnect_by_func (self->model,
                                         gtk_list_view_model_items_changed_cb,
                                         self);
@@ -1260,9 +1296,12 @@ gtk_list_view_get_model (GtkListView *self)
 /**
  * gtk_list_view_set_model:
  * @self: a #GtkListView
- * @file: (allow-none) (transfer none): the model to use or %NULL for none
+ * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use for
+ * Sets the #GListModel to use.
+ *
+ * If the @model is a #GtkSelectionModel, it is used for managing the selection.
+ * Otherwise, @self creates a #GtkSingleSelection for the selection.
  **/
 void
 gtk_list_view_set_model (GtkListView *self,
@@ -1276,20 +1315,38 @@ gtk_list_view_set_model (GtkListView *self,
 
   gtk_list_view_clear_model (self);
 
-  gtk_list_item_manager_set_model (self->item_manager, model);
-
   if (model)
     {
+      GtkSelectionModel *selection_model;
+
       self->model = g_object_ref (model);
+
+      if (GTK_IS_SELECTION_MODEL (model))
+        selection_model = GTK_SELECTION_MODEL (g_object_ref (model));
+      else
+        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+
+      gtk_list_item_manager_set_model (self->item_manager, selection_model);
 
       g_signal_connect (model,
                         "items-changed",
                         G_CALLBACK (gtk_list_view_model_items_changed_cb),
                         self);
+      g_signal_connect (selection_model,
+                        "selection-changed",
+                        G_CALLBACK (gtk_list_view_model_selection_changed_cb),
+                        self);
+
+      g_object_unref (selection_model);
 
       gtk_list_view_add_rows (self, 0, g_list_model_get_n_items (model));
       gtk_list_view_set_anchor (self, 0, 0, NULL, (guint) -1);
     }
+  else
+    {
+      gtk_list_item_manager_set_model (self->item_manager, NULL);
+    }
+
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
