@@ -443,6 +443,30 @@ gtk_list_box_row_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkselectionmodel</FILE>
+<TITLE>GtkSelectionModel</TITLE>
+GtkSelectionModel
+gtk_selection_model_is_selected
+gtk_selection_model_select_item
+gtk_selection_model_unselect_item
+gtk_selection_model_select_range
+gtk_selection_model_unselect_range
+gtk_selection_model_select_all
+gtk_selection_model_unselect_all
+<SUBSECTION>
+gtk_selection_model_selection_changed
+<SUBSECTION Standard>
+GTK_SELECTION_MODEL
+GTK_SELECTION_MODEL_CLASS
+GTK_SELECTION_MODEL_GET_CLASS
+GTK_IS_SELECTION_MODEL
+GTK_IS_SELECTION_MODEL_CLASS
+GTK_TYPE_SELECTION_MODEL
+<SUBSECTION Private>
+gtk_selection_model_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtklistitem</FILE>
 <TITLE>GtkListItem</TITLE>
 GtkListItem

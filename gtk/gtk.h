@@ -188,6 +188,7 @@
 #include <gtk/gtksearchbar.h>
 #include <gtk/gtksearchentry.h>
 #include <gtk/gtkselection.h>
+#include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
