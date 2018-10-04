@@ -1651,11 +1651,11 @@ handle_pointing_event (GdkEvent *event)
 
       if (event->any.type == GDK_BUTTON_RELEASE)
         {
-          old_target = target;
-          target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
-          if (target == NULL)
-            target = GTK_WIDGET (toplevel);
-          gtk_synthesize_crossing_events (toplevel, old_target, target, event,
+          GtkWidget *new_target;
+          new_target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+          if (new_target == NULL)
+            new_target = GTK_WIDGET (toplevel);
+          gtk_synthesize_crossing_events (toplevel, target, new_target, event,
                                           GDK_CROSSING_UNGRAB);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
