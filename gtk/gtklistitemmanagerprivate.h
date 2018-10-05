@@ -52,6 +52,11 @@ GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemMana
 
 guint                   gtk_list_item_manager_get_size          (GtkListItemManager     *self);
 
+void                    gtk_list_item_manager_select            (GtkListItemManager     *self,
+                                                                 GtkListItem            *item,
+                                                                 gboolean                modify,
+                                                                 gboolean                extend);
+
 GtkListItemManagerChange *
                         gtk_list_item_manager_begin_change      (GtkListItemManager     *self);
 void                    gtk_list_item_manager_end_change        (GtkListItemManager     *self,
