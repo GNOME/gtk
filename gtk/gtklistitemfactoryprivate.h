@@ -43,7 +43,8 @@ GtkListItemFactory *    gtk_list_item_factory_new               (GtkListItemSetu
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 
-GtkListItem *           gtk_list_item_factory_create            (GtkListItemFactory     *self);
+void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
+                                                                 GtkListItem            *list_item);
 
 void                    gtk_list_item_factory_bind              (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item,
