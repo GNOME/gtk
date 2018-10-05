@@ -23,7 +23,9 @@
 
 #include "gtkbinlayout.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkgestureclick.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 
@@ -232,19 +234,94 @@ gtk_list_item_class_init (GtkListItemClass *klass)
 }
 
 static void
-gtk_list_item_init (GtkListItem *self)
+gtk_list_item_click_gesture_pressed (GtkGestureClick *gesture,
+                                     int              n_press,
+                                     double           x,
+                                     double           y,
+                                     GtkListItem     *self)
 {
-  self->selectable = TRUE;
+  GtkWidget *widget = GTK_WIDGET (self);
+  GdkModifierType state;
+  GdkEvent *event;
+  gboolean extend, modify;
+
+  if (!self->selectable)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture),
+                                      gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)));
+  state = gdk_event_get_modifier_state (event);
+  extend = (state & GDK_SHIFT_MASK) != 0;
+  modify = (state & GDK_CONTROL_MASK) != 0;
+
+  gtk_widget_activate_action (GTK_WIDGET (self),
+                              "list.select-item",
+                              "(ubb)",
+                              self->position, modify, extend);
+
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+
+  if (gtk_widget_get_focus_on_click (widget))
+    gtk_widget_grab_focus (widget);
 }
 
-GtkWidget *
+static void
+gtk_list_item_click_gesture_released (GtkGestureClick *gesture,
+                                      int              n_press,
+                                      double           x,
+                                      double           y,
+                                      GtkListItem     *self)
+{
+  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
+}
+
+static void
+gtk_list_item_click_gesture_canceled (GtkGestureClick  *gesture,
+                                      GdkEventSequence *sequence,
+                                      GtkListItem      *self)
+{
+  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
+}
+
+static void
+gtk_list_item_init (GtkListItem *self)
+{
+  GtkGesture *gesture;
+
+  self->selectable = TRUE;
+  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                              GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
+                                     FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
+                                 GDK_BUTTON_PRIMARY);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (gtk_list_item_click_gesture_pressed), self);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (gtk_list_item_click_gesture_released), self);
+  g_signal_connect (gesture, "cancel",
+                    G_CALLBACK (gtk_list_item_click_gesture_canceled), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+}
+
+GtkListItem *
 gtk_list_item_new (const char *css_name)
 {
+  GtkListItem *result;
+
   g_return_val_if_fail (css_name != NULL, NULL);
 
-  return g_object_new (GTK_TYPE_LIST_ITEM,
-                       "css-name", css_name,
-                       NULL);
+  result = g_object_new (GTK_TYPE_LIST_ITEM,
+                         "css-name", css_name,
+                         NULL);
+
+  return result;
 }
 
 /**
@@ -446,6 +523,8 @@ gtk_list_item_set_selectable (GtkListItem *self,
     return;
 
   self->selectable = selectable;
+
+  gtk_widget_set_can_focus (GTK_WIDGET (self), self->selectable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
 }
