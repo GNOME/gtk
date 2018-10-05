@@ -85,19 +85,14 @@ gtk_list_item_factory_new (GtkListItemSetupFunc setup_func,
   return self;
 }
 
-GtkListItem *
-gtk_list_item_factory_create (GtkListItemFactory *self)
+void
+gtk_list_item_factory_setup (GtkListItemFactory *self,
+                             GtkListItem         *list_item)
 {
-  GtkWidget *result;
-
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (self), NULL);
-
-  result = gtk_list_item_new ("row");
+  g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
 
   if (self->setup_func)
-    self->setup_func (GTK_LIST_ITEM (result), self->user_data);
-
-  return GTK_LIST_ITEM (result);
+    self->setup_func (list_item, self->user_data);
 }
 
 void
