@@ -58,18 +58,49 @@ static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE (GtkEventControllerMotion, gtk_event_controller_motion, GTK_TYPE_EVENT_CONTROLLER)
 
+static void
+get_coords (GtkWidget      *widget,
+            const GdkEvent *event,
+            double         *x,
+            double         *y)
+{
+  GdkWindow *window, *ancestor;
+  GtkAllocation alloc;
+
+  gtk_widget_get_allocation (widget, &alloc);
+  gdk_event_get_coords (event, x, y);
+
+  ancestor = gtk_widget_get_window (widget);
+  window = gdk_event_get_window (event);
+
+  while (window && ancestor && (window != ancestor))
+    {
+      gdk_window_coords_to_parent (window, *x, *y, x, y);
+      window = gdk_window_get_parent (window);
+    }
+
+  if (!gtk_widget_get_has_window (widget))
+    {
+      *x -= alloc.x;
+      *y -= alloc.y;
+    }
+}
+
 static gboolean
 gtk_event_controller_motion_handle_event (GtkEventController *controller,
                                           const GdkEvent     *event)
 {
   GtkEventControllerClass *parent_class;
+  GtkWidget *widget;
   GdkEventType type;
+
+  widget = gtk_event_controller_get_widget (controller);
 
   type = gdk_event_get_event_type (event);
   if (type == GDK_ENTER_NOTIFY)
     {
       double x, y;
-      gdk_event_get_coords (event, &x, &y);
+      get_coords (widget, event, &x, &y);
       g_signal_emit (controller, signals[ENTER], 0, x, y);
     }
   else if (type == GDK_LEAVE_NOTIFY)
@@ -79,7 +110,7 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
   else if (type == GDK_MOTION_NOTIFY)
     {
       double x, y;
-      gdk_event_get_coords (event, &x, &y);
+      get_coords (widget, event, &x, &y);
       g_signal_emit (controller, signals[MOTION], 0, x, y);
     }
 
