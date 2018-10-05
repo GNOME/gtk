@@ -21,6 +21,7 @@
 
 #include "gtklistitemmanagerprivate.h"
 
+#include "gtklistitemprivate.h"
 #include "gtkwidgetprivate.h"
 
 struct _GtkListItemManager
@@ -127,6 +128,27 @@ gtk_list_item_manager_get_model (GtkListItemManager *self)
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
 
   return self->model;
+}
+
+void
+gtk_list_item_manager_select (GtkListItemManager *self,
+                              GtkListItem        *item,
+                              gboolean            modify,
+                              gboolean            extend)
+{
+  guint pos = gtk_list_item_get_position (item);
+
+  if (modify)
+    {
+      if (gtk_list_item_get_selected (item))
+        gtk_selection_model_unselect_item (self->model, pos);
+      else
+        gtk_selection_model_select_item (self->model, pos, FALSE);
+    }
+  else
+    {
+      gtk_selection_model_select_item (self->model, pos, TRUE);
+    }
 }
 
 #if 0 
@@ -260,7 +282,8 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
-  result = gtk_list_item_factory_create (self->factory);
+  result = gtk_list_item_new (self, "row");
+  gtk_list_item_factory_setup (self->factory, result);
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
