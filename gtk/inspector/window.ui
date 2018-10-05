@@ -330,7 +330,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree"/>
+                      <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree">
+                        <signal name="notify::node" handler="notify_node"/>
+                      </object>
                       <packing>
                         <property name="name">css-nodes</property>
                         <property name="title" translatable="yes">CSS Nodes</property>

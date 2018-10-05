@@ -50,9 +50,11 @@ typedef struct _GtkInspectorCssNodeTreeClass
 
 G_BEGIN_DECLS
 
-GType      gtk_inspector_css_node_tree_get_type       (void);
-void       gtk_inspector_css_node_tree_set_object     (GtkInspectorCssNodeTree *cnt,
-                                                       GObject                 *object);
+GType           gtk_inspector_css_node_tree_get_type            (void);
+void            gtk_inspector_css_node_tree_set_object          (GtkInspectorCssNodeTree        *cnt,
+                                                                 GObject                        *object);
+
+GtkCssNode *    gtk_inspector_css_node_tree_get_node            (GtkInspectorCssNodeTree        *cnt);
 
 G_END_DECLS
 

@@ -44,16 +44,17 @@
 #include "magnifier.h"
 #include "recorder.h"
 
-#include "gtklabel.h"
-#include "gtkbutton.h"
-#include "gtkstack.h"
-#include "gtktreeviewcolumn.h"
-#include "gtkmodulesprivate.h"
-#include "gtkwindowprivate.h"
-#include "gtkwindowgroup.h"
-#include "gtkprivate.h"
 #include "gdk-private.h"
 #include "gskrendererprivate.h"
+#include "gtkbutton.h"
+#include "gtkcsswidgetnodeprivate.h"
+#include "gtklabel.h"
+#include "gtkmodulesprivate.h"
+#include "gtkprivate.h"
+#include "gtkstack.h"
+#include "gtktreeviewcolumn.h"
+#include "gtkwindowgroup.h"
+#include "gtkwindowprivate.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -116,6 +117,29 @@ on_object_selected (GtkInspectorObjectTree *wt,
   gtk_widget_set_sensitive (iw->object_details_button, selected != NULL);
   if (GTK_IS_WIDGET (selected))
     gtk_inspector_flash_widget (iw, GTK_WIDGET (selected));
+}
+
+static void
+notify_node (GtkInspectorCssNodeTree *cnt,
+             GParamSpec              *pspec,
+             GtkInspectorWindow      *iw)
+{
+  GtkCssNode *node;
+  GtkWidget *widget = NULL;
+
+  for (node = gtk_inspector_css_node_tree_get_node (cnt);
+       node != NULL;
+       node = gtk_css_node_get_parent (node))
+    {
+      if (!GTK_IS_CSS_WIDGET_NODE (node))
+        continue;
+
+      widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (node));
+      if (widget != NULL)
+        break;
+    }
+  if (widget)
+    gtk_inspector_flash_widget (iw, widget);
 }
 
 static void
@@ -296,6 +320,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, open_object_details);
   gtk_widget_class_bind_template_callback (widget_class, close_object_details);
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
+  gtk_widget_class_bind_template_callback (widget_class, notify_node);
 }
 
 static GdkDisplay *

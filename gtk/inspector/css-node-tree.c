@@ -62,6 +62,14 @@ enum
   COLUMN_PROP_LOCATION
 };
 
+enum
+{
+  PROP_0,
+  PROP_NODE,
+
+  N_PROPS
+};
+
 struct _GtkInspectorCssNodeTreePrivate
 {
   GtkWidget *node_tree;
@@ -75,6 +83,8 @@ struct _GtkInspectorCssNodeTreePrivate
   GHashTable *prop_iters;
   GtkCssNode *node;
 };
+
+static GParamSpec *properties[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssNodeTree, gtk_inspector_css_node_tree, GTK_TYPE_BOX)
 
@@ -169,6 +179,41 @@ gtk_inspector_css_node_tree_unset_node (GtkInspectorCssNodeTree *cnt)
 }
 
 static void
+gtk_inspector_css_node_tree_get_property (GObject    *object,
+                                          guint       property_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec)
+{
+  GtkInspectorCssNodeTree *cnt = GTK_INSPECTOR_CSS_NODE_TREE (object);
+  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+
+  switch (property_id)
+    {
+    case PROP_NODE:
+      g_value_set_object (value, priv->node);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_inspector_css_node_tree_set_property (GObject      *object,
+                                          guint         property_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec)
+{
+  switch (property_id)
+    {
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_inspector_css_node_tree_finalize (GObject *object)
 {
   GtkInspectorCssNodeTree *cnt = GTK_INSPECTOR_CSS_NODE_TREE (object);
@@ -202,7 +247,18 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
 
   ensure_css_sections ();
 
+  object_class->set_property = gtk_inspector_css_node_tree_set_property;
+  object_class->get_property = gtk_inspector_css_node_tree_get_property;
   object_class->finalize = gtk_inspector_css_node_tree_finalize;
+
+  properties[PROP_NODE] =
+    g_param_spec_object ("node",
+                         "Node",
+                         "Currently inspected CSS node",
+                         GTK_TYPE_CSS_NODE,
+                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-node-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_tree);
@@ -458,8 +514,21 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
   gtk_inspector_css_node_tree_unset_node (cnt);
 
   priv->node = node;
+  if (node)
+    {
+      g_signal_connect (node, "style-changed", G_CALLBACK (gtk_inspector_css_node_tree_update_style_cb), cnt);
+    }
 
-  g_signal_connect (node, "style-changed", G_CALLBACK (gtk_inspector_css_node_tree_update_style_cb), cnt);
+  g_object_notify_by_pspec (G_OBJECT (cnt), properties[PROP_NODE]);
 }
 
+GtkCssNode *
+gtk_inspector_css_node_tree_get_node (GtkInspectorCssNodeTree *cnt)
+{
+  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+
+  return priv->node;
+}
+
+// vim: set et sw=2 ts=2:
 // vim: set et sw=2 ts=2:
