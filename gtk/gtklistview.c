@@ -1201,6 +1201,34 @@ gtk_list_view_set_property (GObject      *object,
 }
 
 static void
+gtk_list_view_select_item (GtkWidget  *widget,
+                           const char *action_name,
+                           GVariant   *parameter)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  GtkSelectionModel *selection_model;
+  guint pos;
+  gboolean modify, extend;
+
+  selection_model = gtk_list_item_manager_get_model (self->item_manager);
+  g_variant_get (parameter, "(ubb)", &pos, &modify, &extend);
+
+  /* XXX: handle extend by tracking the item to extend from */
+
+  if (modify)
+    {
+      if (gtk_selection_model_is_selected (selection_model, pos))
+        gtk_selection_model_unselect_item (selection_model, pos);
+      else
+        gtk_selection_model_select_item (selection_model, pos, FALSE);
+    }
+  else
+    {
+      gtk_selection_model_select_item (selection_model, pos, TRUE);
+    }
+}
+
+static void
 gtk_list_view_class_init (GtkListViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -1243,6 +1271,11 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+  gtk_widget_class_install_action (widget_class,
+                                   "list.select-item",
+                                   "(ubb)",
+                                   gtk_list_view_select_item);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
