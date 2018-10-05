@@ -22,9 +22,12 @@
 
 #include "gtklistitem.h"
 
+#include "gtklistitemmanagerprivate.h"
+
 G_BEGIN_DECLS
 
-GtkWidget *     gtk_list_item_new                               (const char             *css_name);
+GtkListItem *   gtk_list_item_new                               (GtkListItemManager     *manager,
+                                                                 const char             *css_name);
 
 void            gtk_list_item_set_item                          (GtkListItem            *self,
                                                                  gpointer                item);
