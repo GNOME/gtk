@@ -19,6 +19,61 @@ ops_get_scale (const RenderOpBuilder *builder)
               graphene_matrix_get_y_scale (mv));
 }
 
+static inline gboolean
+matrix_is_only_translation (const graphene_matrix_t *mat)
+{
+  graphene_vec4_t row1;
+  graphene_vec4_t row2;
+  graphene_vec4_t row3;
+  graphene_vec4_t row;
+
+  graphene_vec4_init (&row1, 1, 0, 0, 0);
+  graphene_vec4_init (&row2, 0, 1, 0, 0);
+  graphene_vec4_init (&row3, 0, 0, 1, 0);
+
+  graphene_matrix_get_row (mat, 0, &row);
+  if (!graphene_vec4_equal (&row1, &row))
+    return FALSE;
+
+  graphene_matrix_get_row (mat, 1, &row);
+  if (!graphene_vec4_equal (&row2, &row))
+    return FALSE;
+
+  graphene_matrix_get_row (mat, 2, &row);
+  if (!graphene_vec4_equal (&row3, &row))
+    return FALSE;
+
+  graphene_matrix_get_row (mat, 3, &row);
+  if (graphene_vec4_get_w (&row) != 1)
+    return FALSE;
+
+  return TRUE;
+}
+
+void
+ops_transform_bounds_modelview (const RenderOpBuilder *builder,
+                                const graphene_rect_t *src,
+                                graphene_rect_t       *dst)
+{
+  if (builder->modelview_is_translation)
+    {
+      graphene_vec4_t row4;
+
+      /* TODO: We could do the get_row here only once, when setting the new modelview matrix. */
+      graphene_matrix_get_row (&builder->current_modelview, 3, &row4);
+      *dst = *src;
+      graphene_rect_offset (dst, graphene_vec4_get_x (&row4), graphene_vec4_get_y (&row4));
+    }
+  else
+    {
+      graphene_matrix_transform_bounds (&builder->current_modelview,
+                                        src,
+                                        dst);
+    }
+
+  graphene_rect_offset (dst, builder->dx, builder->dy);
+}
+
 void
 ops_set_program (RenderOpBuilder *builder,
                  const Program   *program)
@@ -156,6 +211,7 @@ ops_set_modelview (RenderOpBuilder         *builder,
 
   prev_mv = builder->current_modelview;
   builder->current_modelview = *modelview;
+  builder->modelview_is_translation = matrix_is_only_translation (modelview);
 
   return prev_mv;
 }

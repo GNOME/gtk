@@ -221,7 +221,10 @@ typedef struct
   int current_render_target;
   int current_texture;
   GskRoundedRect current_clip;
+
   graphene_matrix_t current_modelview;
+  guint modelview_is_translation : 1;
+
   graphene_matrix_t current_projection;
   graphene_rect_t current_viewport;
   float current_opacity;
@@ -245,6 +248,10 @@ GskRoundedRect    ops_set_clip           (RenderOpBuilder         *builder,
 
 graphene_matrix_t ops_set_modelview      (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *modelview);
+
+void              ops_transform_bounds_modelview (const RenderOpBuilder *builder,
+                                                  const graphene_rect_t *src,
+                                                  graphene_rect_t       *dst);
 
 graphene_matrix_t ops_set_projection     (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *projection);

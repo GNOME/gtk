@@ -2140,10 +2140,9 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
   {
     graphene_rect_t transformed_node_bounds;
 
-    graphene_matrix_transform_bounds (&builder->current_modelview,
-                                      &node->bounds,
-                                      &transformed_node_bounds);
-    graphene_rect_offset (&transformed_node_bounds, builder->dx, builder->dy);
+    ops_transform_bounds_modelview (builder,
+                                    &node->bounds,
+                                    &transformed_node_bounds);
 
     if (!graphene_rect_intersection (&builder->current_clip.bounds,
                                      &transformed_node_bounds, NULL))
