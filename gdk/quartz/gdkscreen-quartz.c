@@ -144,7 +144,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
                                                 "display", display,
                                                 NULL);
       g_ptr_array_add (display_quartz->monitors, monitor);
-      monitor->nsscreen = [array objectAtIndex:i];
+      monitor->monitor_num = i;
 
       NSRect rect = [[array objectAtIndex:i] frame];
 
