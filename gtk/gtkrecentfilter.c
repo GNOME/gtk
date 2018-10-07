@@ -91,7 +91,7 @@ static void     gtk_recent_filter_buildable_custom_tag_end       (GtkBuildable  
 								  GtkBuilder    *builder,
 								  GObject       *child,
 								  const gchar   *tagname,
-								  gpointer      *data);
+								  gpointer       data);
 
 typedef struct _GtkRecentFilterClass GtkRecentFilterClass;
 typedef struct _FilterRule FilterRule;
@@ -392,7 +392,7 @@ gtk_recent_filter_buildable_custom_tag_end (GtkBuildable *buildable,
 					    GtkBuilder   *builder,
 					    GObject      *child,
 					    const gchar  *tagname,
-					    gpointer     *parser_data)
+					    gpointer      parser_data)
 {
   if (strcmp (tagname, "mime-types") == 0 ||
       strcmp (tagname, "patterns") == 0 ||

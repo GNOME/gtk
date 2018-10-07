@@ -389,7 +389,7 @@ static void    gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                                        GtkBuilder   *builder,
                                                        GObject      *child,
                                                        const gchar  *tagname,
-                                                       gpointer     *data);
+                                                       gpointer      data);
 static void    gtk_container_buildable_custom_finished (GtkBuildable *buildable,
                                                         GtkBuilder   *builder,
                                                         GObject      *child,
@@ -964,7 +964,7 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
                                         const gchar  *tagname,
-                                        gpointer     *parser_data)
+                                        gpointer      parser_data)
 {
   if (strcmp (tagname, "packing") == 0)
     {

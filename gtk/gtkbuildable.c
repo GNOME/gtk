@@ -270,7 +270,7 @@ gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
  * @builder: #GtkBuilder used to construct this object
  * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
- * @data: (type gpointer): user data that will be passed in to parser functions
+ * @data: user data that will be passed in to parser functions
  *
  * This is called at the end of each custom element handled by 
  * the buildable.
@@ -282,7 +282,7 @@ gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
                               GtkBuilder    *builder,
                               GObject       *child,
                               const gchar   *tagname,
-                              gpointer      *data)
+                              gpointer       data)
 {
   GtkBuildableIface *iface;
 

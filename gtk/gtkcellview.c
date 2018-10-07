@@ -94,7 +94,7 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								GtkBuilder    	      *builder,
 								GObject       	      *child,
 								const gchar   	      *tagname,
-								gpointer      	      *data);
+								gpointer      	       data);
 
 static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
 static void       gtk_cell_view_get_preferred_width            (GtkWidget             *widget,
@@ -1003,7 +1003,7 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 					GtkBuilder   *builder,
 					GObject      *child,
 					const gchar  *tagname,
-					gpointer     *data)
+					gpointer      data)
 {
   if (_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
 						 data))

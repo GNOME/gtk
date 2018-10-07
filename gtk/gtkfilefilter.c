@@ -138,7 +138,7 @@ static void     gtk_file_filter_buildable_custom_tag_end       (GtkBuildable  *b
 								GtkBuilder    *builder,
 								GObject       *child,
 								const gchar   *tagname,
-								gpointer      *data);
+								gpointer       data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -366,7 +366,7 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
                                           GtkBuilder   *builder,
                                           GObject      *child,
                                           const gchar  *tagname,
-                                          gpointer     *user_data)
+                                          gpointer      user_data)
 {
   if (strcmp (tagname, "mime-types") == 0 ||
       strcmp (tagname, "patterns") == 0)

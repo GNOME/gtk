@@ -180,7 +180,7 @@ static void gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 						       GtkBuilder   *builder,
 						       GObject      *child,
 						       const gchar  *tagname,
-						       gpointer     *user_data);
+						       gpointer      user_data);
 static void gtk_icon_factory_finalize   (GObject             *object);
 static void get_default_icons           (GtkIconFactory      *icon_factory);
 static void icon_source_clear           (GtkIconSource       *source);
@@ -2595,7 +2595,7 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 					   GtkBuilder   *builder,
 					   GObject      *child,
 					   const gchar  *tagname,
-					   gpointer     *user_data)
+					   gpointer      user_data)
 {
   GtkIconFactory *icon_factory;
 

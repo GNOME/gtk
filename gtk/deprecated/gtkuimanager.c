@@ -399,7 +399,7 @@ static void     gtk_ui_manager_buildable_custom_tag_end (GtkBuildable 	 *buildab
 							 GtkBuilder   	 *builder,
 							 GObject      	 *child,
 							 const gchar  	 *tagname,
-							 gpointer     	 *data);
+							 gpointer     	  data);
 static void gtk_ui_manager_do_set_add_tearoffs          (GtkUIManager *manager,
                                                          gboolean      add_tearoffs);
 
@@ -3351,7 +3351,7 @@ gtk_ui_manager_buildable_custom_tag_end (GtkBuildable *buildable,
 					 GtkBuilder   *builder,
 					 GObject      *child,
 					 const gchar  *tagname,
-					 gpointer     *data)
+					 gpointer      data)
 {
   queue_update (GTK_UI_MANAGER (buildable));
   g_object_notify (G_OBJECT (buildable), "ui");

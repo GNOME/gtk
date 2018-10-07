@@ -166,7 +166,7 @@ static void gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
 						       GtkBuilder   *builder,
 						       GObject      *child,
 						       const gchar  *tagname,
-						       gpointer     *user_data);
+						       gpointer      user_data);
 
 static guint         action_group_signals[LAST_SIGNAL] = { 0 };
 
@@ -486,7 +486,7 @@ gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
 					   GtkBuilder   *builder,
 					   GObject      *child,
 					   const gchar  *tagname,
-					   gpointer     *user_data)
+					   gpointer      user_data)
 {
   AcceleratorParserData *data;
   
