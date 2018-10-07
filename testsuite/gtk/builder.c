@@ -2470,6 +2470,87 @@ test_file_filter (void)
   g_object_unref (builder);
 }
 
+static void
+test_file_chooser_widget (void)
+{
+  GtkBuilder *builder;
+  GObject *obj;
+  GSList *filters;
+
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class='GtkFileChooserWidget' id='widget1'>"
+    "    <filters>"
+    "      <filter>filter1</filter>"
+    "    </filters>"
+    "  </object>"
+    "  <object class='GtkFileFilter' id='filter1'/>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  obj = gtk_builder_get_object (builder, "widget1");
+  g_assert (GTK_IS_FILE_CHOOSER_WIDGET (obj));
+  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (obj));
+  g_assert (g_slist_length (filters) == 1);
+  g_slist_free (filters);
+
+  g_object_unref (builder);
+}
+
+static void
+test_file_chooser_button (void)
+{
+  GtkBuilder *builder;
+  GObject *obj;
+  GSList *filters;
+
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class='GtkFileChooserButton' id='button1'>"
+    "    <filters>"
+    "      <filter>filter1</filter>"
+    "    </filters>"
+    "  </object>"
+    "  <object class='GtkFileFilter' id='filter1'/>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  obj = gtk_builder_get_object (builder, "button1");
+  g_assert (GTK_IS_FILE_CHOOSER_BUTTON (obj));
+  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (obj));
+  g_assert (g_slist_length (filters) == 1);
+  g_slist_free (filters);
+
+  g_object_unref (builder);
+}
+
+static void
+test_file_chooser_dialog (void)
+{
+  GtkBuilder *builder;
+  GObject *obj;
+  GSList *filters;
+
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class='GtkFileChooserDialog' id='dialog1'>"
+    "    <filters>"
+    "      <filter>filter1</filter>"
+    "    </filters>"
+    "  </object>"
+    "  <object class='GtkFileFilter' id='filter1'/>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  obj = gtk_builder_get_object (builder, "dialog1");
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (obj));
+  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (obj));
+  g_assert (g_slist_length (filters) == 1);
+  g_slist_free (filters);
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2515,6 +2596,9 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
   g_test_add_func ("/Builder/anaconda-signal", test_anaconda_signal);
   g_test_add_func ("/Builder/FileFilter", test_file_filter);
+  g_test_add_func ("/Builder/FileChooserWidget", test_file_chooser_widget);
+  g_test_add_func ("/Builder/FileChooserButton", test_file_chooser_button);
+  g_test_add_func ("/Builder/FileChooserDialog", test_file_chooser_dialog);
 
   return g_test_run();
 }
