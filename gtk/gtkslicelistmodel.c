@@ -426,9 +426,8 @@ gtk_slice_list_model_get_model (GtkSliceListModel *self)
  *
  * Sets the offset into the original model for this slice.
  *
- * If the offset is larger than the number of the items in
- * the sliced model, it will remain unchanged and @self will
- * be empty.
+ * If the offset is too large for the sliced model,
+ * @self will end up empty. 
  **/
 void
 gtk_slice_list_model_set_offset (GtkSliceListModel *self,
@@ -457,7 +456,7 @@ gtk_slice_list_model_set_offset (GtkSliceListModel *self,
  * gtk_slice_list_model_get_offset:
  * @self: a #GtkSliceListModel
  *
- * Gets the offset via gtk_slice_list_model_set_offset()
+ * Gets the offset set via gtk_slice_list_model_set_offset()
  *
  * Returns: The offset
  **/
@@ -474,7 +473,7 @@ gtk_slice_list_model_get_offset (GtkSliceListModel *self)
  * @self: a #GtkSliceListModel
  * @size: the maximum size
  *
- * Sets the maximum size. So @self will never have more items
+ * Sets the maximum size. @self will never have more items
  * than @size.
  *
  * It can however have fewer items if the offset is too large or
@@ -510,7 +509,7 @@ gtk_slice_list_model_set_size (GtkSliceListModel *self,
  * gtk_slice_list_model_get_size:
  * @self: a #GtkSliceListModel
  *
- * Gets thje size set via gtk_slice_list_model_set_size().
+ * Gets the size set via gtk_slice_list_model_set_size().
  *
  * Returns: The size
  **/
