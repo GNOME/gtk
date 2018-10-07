@@ -19,6 +19,8 @@
 #include "config.h"
 #include "gtkfilechooser.h"
 #include "gtkfilechooserprivate.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -853,3 +855,149 @@ gtk_file_chooser_get_choice (GtkFileChooser  *chooser,
   return NULL;
 }
 
+typedef struct {
+  gchar *widget_name;
+  gint line;
+  gint col;
+} FilterInfo;
+
+typedef struct {
+  GtkFileChooser *chooser;
+  GtkBuilder     *builder;
+  gboolean        in_tag;
+  GList          *items;
+  gint            line;
+  gint            col;
+} SubParserData;
+
+static void
+free_filter_info (gpointer data)
+{
+  FilterInfo *item = data;
+
+  g_free (item->widget_name);
+  g_free (item);
+}
+
+static void
+parser_start_element (GtkBuildableParseContext *context,
+                      const gchar              *element_name,
+                      const gchar             **names,
+                      const gchar             **values,
+                      gpointer                  user_data,
+                      GError                  **error)
+{
+  SubParserData *parser_data = user_data;
+
+  if (strcmp (element_name, "filter") == 0)
+    {
+      if (!_gtk_builder_check_parent (parser_data->builder, context, "filters", error))
+        return;
+
+      parser_data->in_tag = TRUE;
+      gtk_buildable_parse_context_get_position (context, &parser_data->line, &parser_data->col);
+    }
+  else if (strcmp (element_name, "filters") == 0)
+    {
+      if (!_gtk_builder_check_parent (parser_data->builder, context, "object", error))
+        return;
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (parser_data->builder, context,
+                                        "GtkFileChooser", element_name,
+                                        error);
+    }
+}
+
+static void
+parser_text_element (GtkBuildableParseContext *context,
+                     const gchar              *text,
+                     gsize                     text_len,
+                     gpointer                  user_data,
+                     GError                  **error)
+{
+  SubParserData *parser_data = user_data;
+
+  if (parser_data->in_tag)
+    {
+      FilterInfo *item;
+
+      item = g_new (FilterInfo, 1);
+      item->widget_name = g_strdup (text);
+      item->line = parser_data->line;
+      item->col = parser_data->col;
+      parser_data->items = g_list_append (parser_data->items, item);
+    }
+}
+
+static void
+parser_end_element (GtkBuildableParseContext *context,
+                    const gchar              *element_name,
+                    gpointer                  user_data,
+                    GError                  **error)
+{
+  SubParserData *parser_data = user_data;
+
+  parser_data->in_tag = FALSE;
+}
+
+static const GtkBuildableParser sub_parser =
+  {
+    parser_start_element,
+    parser_end_element,
+    parser_text_element,
+  };
+
+gboolean
+_gtk_file_chooser_buildable_custom_tag_start (GtkFileChooser     *chooser,
+                                              GtkBuilder         *builder,
+                                              GObject            *child,
+                                              const gchar        *tagname,
+                                              GtkBuildableParser *parser,
+                                              gpointer           *data)
+{
+  if (strcmp (tagname, "filters") == 0)
+    {
+      SubParserData *parser_data = g_slice_new0 (SubParserData);
+      parser_data->chooser = chooser;
+      parser_data->builder = builder;
+      *parser = sub_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+_gtk_file_chooser_buildable_custom_finished (GtkFileChooser *chooser,
+                                             GtkBuilder     *builder,
+                                             GObject        *child,
+                                             const gchar    *tagname,
+                                             gpointer       *data)
+{
+  if (strcmp (tagname, "filters") == 0)
+    {
+      SubParserData *parser_data = (SubParserData*)data;
+      GList *l;
+
+      for (l = parser_data->items; l; l = l->next)
+        {
+          FilterInfo *info = l->data;
+          GObject *object;
+
+          object = _gtk_builder_lookup_object (builder, info->widget_name, info->line, info->col);
+          if (!object)
+            continue;
+
+          gtk_file_chooser_add_filter (chooser, GTK_FILE_FILTER (object));
+        }
+
+      g_list_free_full (parser_data->items, free_filter_info);
+      g_slice_free (SubParserData, parser_data);
+      return TRUE;
+    }
+
+  return FALSE;
+}

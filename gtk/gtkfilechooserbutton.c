@@ -234,6 +234,21 @@ typedef struct
  *  Function Prototypes  *
  * ********************* */
 
+/* GtkBuildableIface Functions */
+static GtkBuildableIface *parent_buildable_iface;
+static void gtk_file_chooser_buildable_iface_init    (GtkBuildableIface          *iface);
+static gboolean gtk_file_chooser_button_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                                    GtkBuilder         *builder,
+                                                                    GObject            *child,
+                                                                    const gchar        *tagname,
+                                                                    GtkBuildableParser *parser,
+                                                                    gpointer           *data);
+static void     gtk_file_chooser_button_buildable_custom_finished  (GtkBuildable  *buildable,
+                                                                    GtkBuilder    *builder,
+                                                                    GObject       *child,
+                                                                    const gchar   *tagname,
+                                                                    gpointer       data);
+
 /* GtkFileChooserIface Functions */
 static void     gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface);
 static gboolean gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
@@ -348,7 +363,9 @@ static guint file_chooser_button_signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkFileChooserButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
-                                                gtk_file_chooser_button_file_chooser_iface_init))
+                                                gtk_file_chooser_button_file_chooser_iface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_file_chooser_buildable_iface_init))
 
 static void
 gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
@@ -501,6 +518,45 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
                               GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_file_chooser_button_drag_drop), button);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
+}
+
+
+/* ******************************* *
+ *  GtkBuildableIface Functions  *
+ * ******************************* */
+static void
+gtk_file_chooser_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->custom_tag_start = gtk_file_chooser_button_buildable_custom_tag_start;
+  iface->custom_finished = gtk_file_chooser_button_buildable_custom_finished;
+}
+
+static gboolean
+gtk_file_chooser_button_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                    GtkBuilder         *builder,
+                                                    GObject            *child,
+                                                    const gchar        *tagname,
+                                                    GtkBuildableParser *parser,
+                                                    gpointer           *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
+
+  return _gtk_file_chooser_buildable_custom_tag_start (GTK_FILE_CHOOSER (buildable), builder, child,
+                                                       tagname, parser, data);
+}
+
+static void
+gtk_file_chooser_button_buildable_custom_finished (GtkBuildable  *buildable,
+                                                   GtkBuilder    *builder,
+                                                   GObject       *child,
+                                                   const gchar   *tagname,
+                                                   gpointer       data)
+{
+  if (!_gtk_file_chooser_buildable_custom_finished (GTK_FILE_CHOOSER (buildable), builder, child, tagname, data))
+    parent_buildable_iface->custom_finished (buildable, builder, child, tagname, data);
 }
 
 

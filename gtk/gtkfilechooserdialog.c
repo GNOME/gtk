@@ -37,6 +37,7 @@
 #include "gtkdialogprivate.h"
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
+#include "gtkbuildable.h"
 
 #include <stdarg.h>
 
@@ -220,6 +221,22 @@ struct _GtkFileChooserDialogPrivate
   gboolean has_entry;
 };
 
+/* GtkBuildable method implementation */
+static GtkBuildableIface *parent_buildable_iface;
+
+static void gtk_file_chooser_buildable_iface_init    (GtkBuildableIface          *iface);
+static gboolean gtk_file_chooser_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                                    GtkBuilder         *builder,
+                                                                    GObject            *child,
+                                                                    const gchar        *tagname,
+                                                                    GtkBuildableParser *parser,
+                                                                    gpointer           *data);
+static void     gtk_file_chooser_dialog_buildable_custom_finished  (GtkBuildable  *buildable,
+                                                                    GtkBuilder    *builder,
+                                                                    GObject       *child,
+                                                                    const gchar   *tagname,
+                                                                    gpointer       data);
+
 static void     gtk_file_chooser_dialog_set_property (GObject               *object,
                                                       guint                  prop_id,
                                                       const GValue          *value,
@@ -253,7 +270,45 @@ static void setup_save_entry (GtkFileChooserDialog *dialog);
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDialog, gtk_file_chooser_dialog, GTK_TYPE_DIALOG,
                          G_ADD_PRIVATE (GtkFileChooserDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
-                                                _gtk_file_chooser_delegate_iface_init))
+                                                _gtk_file_chooser_delegate_iface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_file_chooser_buildable_iface_init))
+
+
+static void
+gtk_file_chooser_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->custom_tag_start = gtk_file_chooser_dialog_buildable_custom_tag_start;
+  iface->custom_finished = gtk_file_chooser_dialog_buildable_custom_finished;
+}
+
+static gboolean
+gtk_file_chooser_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                    GtkBuilder         *builder,
+                                                    GObject            *child,
+                                                    const gchar        *tagname,
+                                                    GtkBuildableParser *parser,
+                                                    gpointer           *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
+
+  return _gtk_file_chooser_buildable_custom_tag_start (GTK_FILE_CHOOSER (buildable), builder, child,
+                                                       tagname, parser, data);
+}
+
+static void
+gtk_file_chooser_dialog_buildable_custom_finished (GtkBuildable  *buildable,
+                                                   GtkBuilder    *builder,
+                                                   GObject       *child,
+                                                   const gchar   *tagname,
+                                                   gpointer       data)
+{
+  if (!_gtk_file_chooser_buildable_custom_finished (GTK_FILE_CHOOSER (buildable), builder, child, tagname, data))
+    parent_buildable_iface->custom_finished (buildable, builder, child, tagname, data);
+}
 
 static void
 gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
