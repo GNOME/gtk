@@ -365,7 +365,7 @@ gtk_slice_list_model_new_for_type (GType item_type)
 /**
  * gtk_slice_list_model_set_model:
  * @self: a #GtkSliceListModel
- * @model: (allow-none): The model to be sliceped
+ * @model: (allow-none): The model to be sliced
  *
  * Sets the model to show a slice of. The model's item type must conform
  * to @self's item type.
@@ -477,7 +477,7 @@ gtk_slice_list_model_get_offset (GtkSliceListModel *self)
  * Sets the maximum size. So @self will never have more items
  * than @size.
  *
- * It can however have fewer items if the offset is to large or
+ * It can however have fewer items if the offset is too large or
  * the model sliced from doesn't have enough items.
  */
 void
