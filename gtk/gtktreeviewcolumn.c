@@ -413,7 +413,7 @@ gtk_tree_view_column_custom_tag_end (GtkBuildable *buildable,
 				     GtkBuilder   *builder,
 				     GObject      *child,
 				     const gchar  *tagname,
-				     gpointer     *data)
+				     gpointer      data)
 {
   /* Just ignore the boolean return from here */
   _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname, data);
