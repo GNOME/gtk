@@ -490,10 +490,6 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   fmt.format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
   g_array_append_val (comp, fmt);
 
-  fmt.format = CF_DIB;
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_selection->compatibility_formats, fmt.target, comp);
 
 
@@ -507,13 +503,6 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   fmt.format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF);
   g_array_append_val (comp, fmt);
 
-  fmt.format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.format = CF_DIB;
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_selection->compatibility_formats, fmt.target, comp);
 
 
@@ -525,13 +514,6 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   g_array_append_val (comp, fmt);
 
   fmt.format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF);
-  g_array_append_val (comp, fmt);
-
-  fmt.format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.format = CF_DIB;
   g_array_append_val (comp, fmt);
 
   g_hash_table_replace (win32_selection->compatibility_formats, fmt.target, comp);
@@ -606,10 +588,6 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
   g_array_append_val (comp, fmt);
 
-  fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_selection->compatibility_targets, GINT_TO_POINTER (_gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG)), comp);
 
 
@@ -623,13 +601,6 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_JPEG);
   g_array_append_val (comp, fmt);
 
-  fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP);
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_selection->compatibility_targets, GINT_TO_POINTER (_gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF)), comp);
 
 
@@ -641,13 +612,6 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   g_array_append_val (comp, fmt);
 
   fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_GIF);
-  g_array_append_val (comp, fmt);
-
-  fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.target = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP);
   g_array_append_val (comp, fmt);
 
   g_hash_table_replace (win32_selection->compatibility_targets, GINT_TO_POINTER (_gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF)), comp);
