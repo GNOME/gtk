@@ -319,6 +319,19 @@ GDK_AVAILABLE_IN_ALL
 const char *gtk_file_chooser_get_choice              (GtkFileChooser  *chooser,
                                                       const char      *id);
 
+gboolean   _gtk_file_chooser_buildable_custom_tag_start (GtkFileChooser *chooser,
+                                                         GtkBuilder     *builder,
+                                                         GObject        *child,
+                                                         const gchar    *tagname,
+                                                         GMarkupParser  *parser,
+                                                         gpointer       *data);
+
+gboolean   _gtk_file_chooser_buildable_custom_finished  (GtkFileChooser *chooser,
+                                                         GtkBuilder     *builder,
+                                                         GObject        *child,
+                                                         const gchar    *tagname,
+                                                         gpointer       *data);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_H__ */
