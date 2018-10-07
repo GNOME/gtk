@@ -32,10 +32,15 @@ gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
 {
   GdkQuartzScreen *quartz_screen = GDK_QUARTZ_SCREEN(gdk_display_get_default_screen (monitor->display));
   GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR(monitor);
+  NSArray *array;
+  NSScreen *screen;
 
   GDK_QUARTZ_ALLOC_POOL;
 
-  NSRect rect = [quartz_monitor->nsscreen visibleFrame];
+  array = [NSScreen screens];
+  screen = [array objectAtIndex:quartz_monitor->monitor_num];
+
+  NSRect rect = [screen visibleFrame];
 
   dest->x = rect.origin.x - quartz_screen->min_x;
   dest->y = quartz_screen->height - (rect.origin.y + rect.size.height) + quartz_screen->min_y;
