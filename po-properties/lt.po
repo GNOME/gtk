@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 20:35+0000\n"
-"PO-Revision-Date: 2018-08-05 15:59+0300\n"
+"POT-Creation-Date: 2018-08-31 03:19+0000\n"
+"PO-Revision-Date: 2018-10-07 16:53+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -1463,35 +1463,44 @@ msgstr "Valdymo elemento numatytasis tekstas"
 msgid "The default text appearing when there are no applications"
 msgstr "Numatytasis tekstas, rodomas, kai nėra programų"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Registruoti sesiją"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Registruoti su seanso valdykle"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Ekrano užsklanda aktyvi"
+
+#: gtk/gtkapplication.c:675
+#| msgid "Whether the spinner is active"
+msgid "Whether the screensaver is active"
+msgstr "Ar ekrano užsklanda yra aktyvi"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Programos meniu"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "Programos meniu GMenuModel"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Meniu juosta"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "Meniu juostos GMenuModel"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Aktyvus langas"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "Langas, kuris paskutinis buvo aktyvus"
 
@@ -3603,7 +3612,7 @@ msgstr "Tekstinio lauko elgsenos patarimai"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Žymės teksto stiliaus atributų sąrašas"
 
-#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4839 gtk/gtktextview.c:1045
+#: gtk/gtkentry.c:1508 gtk/gtkplacessidebar.c:4860 gtk/gtktextview.c:1045
 msgid "Populate all"
 msgstr "Užpildyti visus"
 
@@ -3628,12 +3637,10 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Ar rodyti emoji piktogramą"
 
 #: gtk/gtkentry.c:1544
-#| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "Įjungti Emoji užbaigimą"
 
 #: gtk/gtkentry.c:1545
-#| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "Ar siūlyti Emoji pakeitimus"
 
@@ -3759,7 +3766,6 @@ msgid "Propagation phase at which this controller is run"
 msgstr "Propagavimo fazė, kurioje vykdomas šis kontroleris"
 
 #: gtk/gtkeventcontrollerscroll.c:374 gtk/gtkeventcontrollerscroll.c:375
-#| msgid "Open Flags"
 msgid "Flags"
 msgstr "Požymiai"
 
@@ -3860,7 +3866,7 @@ msgstr "Filtras"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Šiuo metu naudojamas failų išvedimo filtras"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4805
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4826
 #: gtk/gtkplacesview.c:2262
 msgid "Local Only"
 msgstr "Tik vietiniai failai"
@@ -3956,11 +3962,11 @@ msgstr "Atsisakymo užrašas"
 msgid "The label on the cancel button"
 msgstr "Užrašas ant atsisakymo mygtuko"
 
-#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
+#: gtk/gtkfilechooserwidget.c:8413 gtk/gtkfilechooserwidget.c:8414
 msgid "Search mode"
 msgstr "Paieškos veiksena"
 
-#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
+#: gtk/gtkfilechooserwidget.c:8420 gtk/gtkfilechooserwidget.c:8421
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Antraeilis pavadinimas"
@@ -4091,22 +4097,18 @@ msgid "Whether the preview text entry is shown or not"
 msgstr "Ar peržiūros teksto laukas rodomas, ar ne"
 
 #: gtk/gtkfontchooser.c:118
-#| msgid "Selection mode"
 msgid "Selection level"
 msgstr "Pasirinkimo lygis"
 
 #: gtk/gtkfontchooser.c:119
-#| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
 msgstr "Ar pasirinkti šeimą, išvaizdą ar šriftą"
 
 #: gtk/gtkfontchooser.c:137
-#| msgid "Font Features"
 msgid "Font features"
 msgstr "Šrifto savybės"
 
 #: gtk/gtkfontchooser.c:138
-#| msgid "Font features set"
 msgid "Font features as a string"
 msgstr "Šrifto savybės kai simbolių eilutė"
 
@@ -4115,7 +4117,6 @@ msgid "Language for which features have been selected"
 msgstr "Kalba, kuriai buvo pasirinktos savybės"
 
 #: gtk/gtkfontchooserwidget.c:696
-#| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "Reguliavimo veiksmas"
 
@@ -5204,7 +5205,6 @@ msgid "The text"
 msgstr "Tekstas"
 
 #: gtk/gtkmodelbutton.c:1175
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
 msgstr "Mygtuko tekste naudojami XML elementai. Žr. pango_parse_markup()"
 
@@ -5569,19 +5569,19 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Jei TEIGIAMA, vaikinis objektas gali būti sumažintas daugiau, nei jam reikia"
 
-#: gtk/gtkplacessidebar.c:4768
+#: gtk/gtkplacessidebar.c:4789
 msgid "Location to Select"
 msgstr "Žymima vieta"
 
-#: gtk/gtkplacessidebar.c:4769
+#: gtk/gtkplacessidebar.c:4790
 msgid "The location to highlight in the sidebar"
 msgstr "Žymima vieta šoniniame polangyje"
 
-#: gtk/gtkplacessidebar.c:4774 gtk/gtkplacesview.c:2283
+#: gtk/gtkplacessidebar.c:4795 gtk/gtkplacesview.c:2283
 msgid "Open Flags"
 msgstr "Atvėrimo požymiai"
 
-#: gtk/gtkplacessidebar.c:4775 gtk/gtkplacesview.c:2284
+#: gtk/gtkplacessidebar.c:4796 gtk/gtkplacesview.c:2284
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5589,28 +5589,28 @@ msgstr ""
 "Veiksenos, kuriomis kviečiančioji programa gali atverti šoniniame polangyje "
 "pasirinktas vieta"
 
-#: gtk/gtkplacessidebar.c:4781
+#: gtk/gtkplacessidebar.c:4802
 msgid "Show recent files"
 msgstr "Rodyti neseniai naudotus failus"
 
-#: gtk/gtkplacessidebar.c:4782
+#: gtk/gtkplacessidebar.c:4803
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Ar šoniniame polangyje rodyti integruotą trumpinį į neseniai naudotus failus"
 
-#: gtk/gtkplacessidebar.c:4787
+#: gtk/gtkplacessidebar.c:4808
 msgid "Show 'Desktop'"
 msgstr "Rodyti „darbastalį“"
 
-#: gtk/gtkplacessidebar.c:4788
+#: gtk/gtkplacessidebar.c:4809
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Ar šoniniame polangyje rodyti integruotą nuorodą į darbastalio aplanką"
 
-#: gtk/gtkplacessidebar.c:4793
+#: gtk/gtkplacessidebar.c:4814
 msgid "Show 'Connect to Server'"
 msgstr "Rodyti „Prisijungti prie serverio“"
 
-#: gtk/gtkplacessidebar.c:4794
+#: gtk/gtkplacessidebar.c:4815
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5618,44 +5618,44 @@ msgstr ""
 "Ar šoninis polangis turi integruotą nuorodą į dialogą „Prisijungti prie "
 "serverio“"
 
-#: gtk/gtkplacessidebar.c:4799
+#: gtk/gtkplacessidebar.c:4820
 msgid "Show 'Enter Location'"
 msgstr "Rodyti „Įvesti vieta“"
 
-#: gtk/gtkplacessidebar.c:4800
+#: gtk/gtkplacessidebar.c:4821
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Ar šoninis polangis turi integruotą trumpinį rankiniam vietos įvedimui"
 
-#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2263
+#: gtk/gtkplacessidebar.c:4827 gtk/gtkplacesview.c:2263
 msgid "Whether the sidebar only includes local files"
 msgstr "Ar šoniniame polangyje rodyti tik vietinius failus"
 
-#: gtk/gtkplacessidebar.c:4811
+#: gtk/gtkplacessidebar.c:4832
 msgid "Show 'Trash'"
 msgstr "Rodyti šiukšliadėžę"
 
-#: gtk/gtkplacessidebar.c:4812
+#: gtk/gtkplacessidebar.c:4833
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Ar šoninis polangis turi integruotą trumpinį į šiukšliadėžę"
 
-#: gtk/gtkplacessidebar.c:4817
+#: gtk/gtkplacessidebar.c:4838
 msgid "Show 'Other locations'"
 msgstr "Rodyti „kitas vietas“"
 
-#: gtk/gtkplacessidebar.c:4818
+#: gtk/gtkplacessidebar.c:4839
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Ar šoninis polangis turi integruotą trumpinį į išorines vietas"
 
-#: gtk/gtkplacessidebar.c:4823
+#: gtk/gtkplacessidebar.c:4844
 msgid "Show “Starred Location”"
 msgstr "Rodyti „Vieta su žvaigždute“"
 
-#: gtk/gtkplacessidebar.c:4824
+#: gtk/gtkplacessidebar.c:4845
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Ar šoninis polangis turi rodyti žvaigždute pažymėtus failus"
 
-#: gtk/gtkplacessidebar.c:4840
+#: gtk/gtkplacessidebar.c:4861
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 "Ar sukelti ::populate-popup liečiamiems iššokantiems langeliams, kurie nėra "
@@ -7563,7 +7563,6 @@ msgid "Climb Rate"
 msgstr "Lipimo taktas"
 
 #: gtk/gtkspinbutton.c:388
-#| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "Spartėjimo greitis, kai laikote mygtuką ar klavišą nuspaustą"
 
