@@ -180,6 +180,15 @@ _gdk_win32_get_setting (const gchar *name,
             }
         }
     }
+  else if (strcmp ("gtk-im-module", name) == 0)
+    {
+      if (_gdk_input_locale_is_ime)
+        g_value_set_string (value, "ime");
+      else
+        g_value_set_string (value, "");
+
+      return TRUE;
+    }
 
   return FALSE;
 }
