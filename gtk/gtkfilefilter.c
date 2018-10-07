@@ -50,6 +50,7 @@
  * rules:
  * |[
  * <object class="GtkFileFilter">
+ *   <property name="name" translatable="yes">Text and Images</property>
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
  *     <mime-type>image/ *</mime-type>
@@ -119,6 +120,25 @@ struct _FilterRule
   } u;
 };
 
+enum {
+  PROP_0,
+  PROP_NAME,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
+
+static void gtk_file_filter_set_property (GObject            *object,
+                                          guint               prop_id,
+                                          const GValue       *value,
+                                          GParamSpec         *pspec);
+static void gtk_file_filter_get_property (GObject            *object,
+                                          guint               prop_id,
+                                          GValue             *value,
+                                          GParamSpec         *pspec);
+
+
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
@@ -154,7 +174,28 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  gobject_class->set_property = gtk_file_filter_set_property;
+  gobject_class->get_property = gtk_file_filter_get_property;
   gobject_class->finalize = gtk_file_filter_finalize;
+
+  /**
+   * GtkFileFilter:name:
+   *
+   * The human-readable name of the filter.
+   *
+   * This is the string that will be displayed in the file selector user
+   * interface if there is a selectable list of filters.
+   *
+   * Since: 3.24.2
+   */
+  props[PROP_NAME] =
+      g_param_spec_string ("name",
+                           P_("Name"),
+                           P_("The human-readable name for this filter"),
+                           NULL,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 }
 
 static void
@@ -180,6 +221,44 @@ filter_rule_free (FilterRule *rule)
     }
 
   g_slice_free (FilterRule, rule);
+}
+
+static void
+gtk_file_filter_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GtkFileFilter *filter = GTK_FILE_FILTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      gtk_file_filter_set_name (filter, g_value_get_string (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_file_filter_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GtkFileFilter *filter = GTK_FILE_FILTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, filter->name);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void

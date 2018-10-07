@@ -2617,6 +2617,7 @@ test_file_filter (void)
   const gchar buffer[] =
     "<interface>"
     "  <object class='GtkFileFilter' id='filter1'>"
+    "    <property name='name'>Text and Images</property>"
     "    <mime-types>"
     "      <mime-type>text/plain</mime-type>"
     "      <mime-type>image/*</mime-type>"
@@ -2632,7 +2633,7 @@ test_file_filter (void)
   obj = gtk_builder_get_object (builder, "filter1");
   g_assert (GTK_IS_FILE_FILTER (obj));
   filter = GTK_FILE_FILTER (obj);
-  g_assert_cmpstr (gtk_file_filter_get_name (filter), ==, "filter1");
+  g_assert_cmpstr (gtk_file_filter_get_name (filter), ==, "Text and Images");
   g_assert (gtk_file_filter_get_needed (filter) & GTK_FILE_FILTER_MIME_TYPE);
   g_assert (gtk_file_filter_get_needed (filter) & GTK_FILE_FILTER_DISPLAY_NAME);
 
