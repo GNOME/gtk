@@ -41,7 +41,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
-#include "gtkeventcontrollerlegacyprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureprivate.h"
 #include "gtkgesturesingle.h"
@@ -2878,8 +2877,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
-
-  gtk_widget_add_controller (widget, gtk_event_controller_legacy_new ());
 }
 
 
