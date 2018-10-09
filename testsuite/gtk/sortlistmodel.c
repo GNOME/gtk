@@ -56,7 +56,7 @@ splice (GListStore *store,
         guint      *numbers,
         guint       added)
 {
-  GObject *objects[added];
+  GObject **objects = g_newa (GObject *, added);
   guint i;
 
   for (i = 0; i < added; i++)
