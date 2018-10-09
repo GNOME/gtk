@@ -131,7 +131,7 @@ compare_files (gconstpointer first,
   first_path = g_file_get_path (first_file);
   second_path = g_file_get_path (second_file);
 
-  result = strcasecmp (first_path, second_path);
+  result = g_ascii_strcasecmp (first_path, second_path);
 
   g_free (first_path);
   g_free (second_path);
