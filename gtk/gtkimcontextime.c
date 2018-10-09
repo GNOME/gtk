@@ -466,30 +466,53 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
 
       len = ImmGetCompositionStringW (himc, GCS_COMPSTR, NULL, 0);
       if (len > 0)
-	{
-	  GError *error = NULL;
-	  gpointer buf = g_alloca (len);
+        {
+          GError *error = NULL;
+          gpointer buf = g_alloca (len);
 
-	  ImmGetCompositionStringW (himc, GCS_COMPSTR, buf, len);
-	  len /= 2;
-	  utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
-	  if (error)
-	    {
-	      g_warning ("%s", error->message);
-	      g_error_free (error);
-	    }
+          ImmGetCompositionStringW (himc, GCS_COMPSTR, buf, len);
+          len /= 2;
+          utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+          if (error)
+            {
+               g_warning ("%s", error->message);
+               g_error_free (error);
+            }
 
-	  if (pos_ret)
-	    {
-	      pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
-	      if (pos < 0 || len < pos)
-		{
-		  g_warning ("ImmGetCompositionString: "
-			     "Invalid cursor position!");
-		  pos = 0;
-		}
-	    }
-	}
+          if (pos_ret)
+            {
+              pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
+              if (pos < 0 || len < pos)
+                {
+                  g_warning ("ImmGetCompositionString: "
+                             "Invalid cursor position!");
+                  pos = 0;
+                }
+            }
+        }
+    }
+
+  if (context_ime->commit_string)
+    {
+      if (utf8str)
+        {
+          gchar *utf8str_new = g_strdup (utf8str);
+
+          /* Note: We *don't* want to update context_ime->commit_string here!
+           * Otherwise it will be updated repeatedly, not what we want!
+           */
+          g_free (utf8str);
+          utf8str = g_strconcat (context_ime->commit_string,
+                                 utf8str_new,
+                                 NULL);
+          g_free (utf8str_new);
+          pos += g_utf8_strlen (context_ime->commit_string, -1);
+        }
+      else
+        {
+          utf8str = g_strdup (context_ime->commit_string);
+          pos = g_utf8_strlen (context_ime->commit_string, -1);
+        }
     }
 
   if (!utf8str)
@@ -1065,10 +1088,15 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
                     g_warning ("%s", error->message);
                     g_error_free (error);
                   }
-              }
 
-            if (context_ime->commit_string)
-              retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
+                if (context_ime->commit_string)
+                  {
+                    g_signal_emit_by_name (context, "commit", context_ime->commit_string);
+                    g_free (context_ime->commit_string);
+                    context_ime->commit_string = NULL;
+                    retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
+                  }
+              }
           }
 
         if (context_ime->use_preedit)
@@ -1088,13 +1116,6 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
       context_ime->preediting = FALSE;
       g_signal_emit_by_name (context, "preedit-changed");
       g_signal_emit_by_name (context, "preedit-end");
-
-      if (context_ime->commit_string)
-        {
-          g_signal_emit_by_name (context, "commit", context_ime->commit_string);
-          g_free (context_ime->commit_string);
-          context_ime->commit_string = NULL;
-        }
 
       if (context_ime->use_preedit)
         retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
