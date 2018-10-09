@@ -180,14 +180,14 @@ static gboolean
 is_near (gpointer item,
          gpointer data)
 {
-  return ABS (g_object_get_qdata (item, number_quark) - data) <= 2;
+  return ABS (GPOINTER_TO_INT (g_object_get_qdata (item, number_quark)) - GPOINTER_TO_INT (data)) <= 2;
 }
 
 static gboolean
 is_not_near (gpointer item,
              gpointer data)
 {
-  return ABS (g_object_get_qdata (item, number_quark) - data) > 2;
+  return ABS (GPOINTER_TO_INT (g_object_get_qdata (item, number_quark)) - GPOINTER_TO_INT (data)) > 2;
 }
 
 static void
