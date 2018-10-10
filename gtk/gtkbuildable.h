@@ -115,7 +115,7 @@ struct _GtkBuildableIface
 					    GtkBuilder    *builder,
 					    GObject       *child,
 					    const gchar   *tagname,
-					    gpointer      *data);
+					    gpointer       data);
   void          (* custom_finished)        (GtkBuildable  *buildable,
 					    GtkBuilder    *builder,
 					    GObject       *child,
@@ -164,7 +164,7 @@ void      gtk_buildable_custom_tag_end         (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
 						const gchar         *tagname,
-						gpointer            *data);
+						gpointer             data);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_custom_finished        (GtkBuildable        *buildable,
 						GtkBuilder          *builder,

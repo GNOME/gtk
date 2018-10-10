@@ -293,7 +293,7 @@ static void     gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable
 							 GtkBuilder   *builder,
 							 GObject      *child,
 							 const gchar  *tagname,
-							 gpointer     *data);
+							 gpointer      data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (GtkListStore)
@@ -2626,7 +2626,7 @@ gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
                                          GtkBuilder   *builder,
                                          GObject      *child,
                                          const gchar  *tagname,
-                                         gpointer     *parser_data)
+                                         gpointer      parser_data)
 {
   SubParserData *data = (SubParserData*)parser_data;
 

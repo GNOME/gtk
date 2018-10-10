@@ -179,7 +179,7 @@ static void    gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                                        GtkBuilder   *builder,
                                                        GObject      *child,
                                                        const gchar  *tagname,
-                                                       gpointer     *data);
+                                                       gpointer      data);
 
 /* --- variables --- */
 static GQuark                vadjustment_key_id;
@@ -604,7 +604,7 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
                                         const gchar  *tagname,
-                                        gpointer     *parser_data)
+                                        gpointer      parser_data)
 {
   if (strcmp (tagname, "packing") == 0)
     {

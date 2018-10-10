@@ -320,7 +320,7 @@ static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildab
 							  GtkBuilder    *builder,
 							  GObject       *child,
 							  const gchar   *tagname,
-							  gpointer      *data);
+							  gpointer       data);
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
@@ -6866,7 +6866,7 @@ gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
                                         const gchar  *tagname,
-                                        gpointer     *data)
+                                        gpointer      data)
 {
   if (!_gtk_cell_layout_buildable_custom_tag_end (buildable, builder,
                                                   child, tagname, data))
