@@ -302,9 +302,9 @@ show_variations (GtkEmojiChooser *chooser,
 
   g_signal_connect (box, "child-activated", G_CALLBACK (emoji_activated), parent_popover);
 
-  add_emoji (box, FALSE, emoji_data, 0, NULL);
+  add_emoji (box, FALSE, emoji_data, 0, chooser);
   for (modifier = 0x1f3fb; modifier <= 0x1f3ff; modifier++)
-    add_emoji (box, FALSE, emoji_data, modifier, NULL);
+    add_emoji (box, FALSE, emoji_data, modifier, chooser);
 
   gtk_widget_show_all (view);
   gtk_popover_popup (GTK_POPOVER (popover));
