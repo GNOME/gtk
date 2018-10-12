@@ -198,16 +198,20 @@ state_nick (GtkEventSequenceState state)
 }
 
 typedef struct {
+  GtkEventController *controller;
   GString *str;
   gboolean exit;
 } LegacyData;
 
 static gboolean
-legacy_cb (GtkWidget *w, GdkEvent *button, gpointer data)
+legacy_cb (GtkEventControllerLegacy *c, GdkEvent *button, gpointer data)
 {
   if (gdk_event_get_event_type (button) == GDK_BUTTON_PRESS)
     {
       LegacyData *ld = data;
+      GtkWidget *w;
+
+      w = gtk_event_controller_get_widget (ld->controller);
 
       if (ld->str->len > 0)
         g_string_append (ld->str, ", ");
@@ -377,9 +381,12 @@ add_legacy (GtkWidget *w, GString *str, gboolean exit)
   LegacyData *data;
 
   data = g_new (LegacyData, 1);
+  data->controller = gtk_event_controller_legacy_new ();
   data->str = str;
   data->exit = exit;
-  g_signal_connect (w, "event", G_CALLBACK (legacy_cb), data);
+
+  gtk_widget_add_controller (w, data->controller);
+  g_signal_connect (data->controller, "event", G_CALLBACK (legacy_cb), data);
 }
 
 static void
