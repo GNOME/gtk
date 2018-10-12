@@ -6540,7 +6540,6 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
   if (tab_text)
     tab_label = gtk_label_new (tab_text);
   gtk_notebook_set_tab_label (notebook, child, tab_label);
-  child_notify (notebook, child, "tab-label");
 }
 
 /**
