@@ -12,29 +12,28 @@ draw_popup (GtkDrawingArea  *da,
 }
 
 static gboolean
-place_popup (GtkWidget *parent,
-             GdkEvent  *event,
-             GtkWidget *popup)
+place_popup (GtkEventControllerMotion *motion,
+             gdouble                   x,
+             gdouble                   y,
+             GtkWidget                *popup)
 {
-  gint width, height;
-  gdouble x, y;
+  gint width, height, win_x, win_y;
+  GtkWidget *widget;
 
-  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
-    {
-      gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
-      gdk_event_get_root_coords (event, &x, &y);
-      gtk_window_move (GTK_WINDOW (popup),
-                       (int) x - width / 2,
-                       (int) y - height / 2);
-    }
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
 
-  return GDK_EVENT_PROPAGATE;
+  gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
+  gtk_window_get_position (GTK_WINDOW (widget), &win_x, &win_y);
+  gtk_window_move (GTK_WINDOW (popup),
+                   (int) win_x + x - width / 2,
+                   (int) win_y + y - height / 2);
 }
 
 static gboolean
 on_map (GtkWidget *parent)
 {
   GtkWidget *popup, *da;
+  GtkEventController *motion;
 
   popup = gtk_window_new (GTK_WINDOW_POPUP);
   da = gtk_drawing_area_new ();
@@ -43,7 +42,10 @@ on_map (GtkWidget *parent)
 
   gtk_widget_set_size_request (GTK_WIDGET (popup), 20, 20);
   gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
-  g_signal_connect (parent, "event", G_CALLBACK (place_popup), popup);
+
+  motion = gtk_event_controller_motion_new ();
+  gtk_widget_add_controller (parent, motion);
+  g_signal_connect (motion, "motion", G_CALLBACK (place_popup), popup);
 
   gtk_widget_show (popup);
 
