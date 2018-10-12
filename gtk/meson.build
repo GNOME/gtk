@@ -101,7 +101,6 @@ gtk_private_sources = files([
   'gtkcssvalue.c',
   'gtkcsswidgetnode.c',
   'gtkcsswin32sizevalue.c',
-  'gtkeventcontrollerlegacy.c',
   'gtkfilechooserembed.c',
   'gtkfilechooserentry.c',
   'gtkfilechoosererrorstack.c',
@@ -399,7 +398,6 @@ gtk_public_sources = files([
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
   'gtktexthandleprivate.h',
-  'gtkeventcontrollerlegacyprivate.h',
 ])
 
 gtk_public_headers = files([
@@ -471,6 +469,7 @@ gtk_public_headers = files([
   'gtkeventcontrollerkey.h',
   'gtkeventcontrollerscroll.h',
   'gtkeventcontrollermotion.h',
+  'gtkeventcontrollerlegacy.h',
   'gtkexpander.h',
   'gtkfilechooser.h',
   'gtkfilechooserbutton.h',

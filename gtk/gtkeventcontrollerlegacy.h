@@ -20,8 +20,11 @@
 #ifndef __GTK_EVENT_CONTROLLER_LEGACY_H__
 #define __GTK_EVENT_CONTROLLER_LEGACY_H__
 
-#include "gtkeventcontrollerprivate.h"
-#include "gtkwidgetprivate.h"
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gtk/gtkeventcontroller.h>
 
 G_BEGIN_DECLS
 
@@ -35,17 +38,12 @@ G_BEGIN_DECLS
 typedef struct _GtkEventControllerLegacy GtkEventControllerLegacy;
 typedef struct _GtkEventControllerLegacyClass GtkEventControllerLegacyClass;
 
-struct _GtkEventControllerLegacy
-{
-  GtkEventController parent_instance;
-};
-
-struct _GtkEventControllerLegacyClass
-{
-  GtkEventControllerClass parent_class;
-};
-
+GDK_AVAILABLE_IN_ALL
 GType               gtk_event_controller_legacy_get_type   (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
 GtkEventController *gtk_event_controller_legacy_new        (void);
+
+G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_LEGACY_H__ */
