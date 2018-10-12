@@ -762,14 +762,13 @@ load_file (const gchar *demoname,
           /* Skipping blank lines */
           while (g_ascii_isspace (*p))
             p++;
-          if (*p)
-            {
-              p = lines[i];
-              state++;
-              /* Fall through */
-            }
-          else
+
+          if (!*p)
             break;
+
+          p = lines[i];
+          state++;
+          /* Fall through */
 
         case 3:
           /* Reading program body */
