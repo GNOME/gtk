@@ -5242,18 +5242,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  /* Non input events get handled right away */
-  switch ((guint) event->any.type)
-    {
-    case GDK_NOTHING:
-    case GDK_DELETE:
-    case GDK_DESTROY:
-    case GDK_CONFIGURE:
-      return gtk_widget_emit_event_signals (widget, event);
-    default:
-      break;
-    }
-
   event_copy = gdk_event_copy (event);
 
   translate_event_coordinates (event_copy, widget);
