@@ -1053,6 +1053,12 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   impl->override_redirect = xattributes.override_redirect;
 
+  /* This event mask will be set near the end of the function, but to avoid some
+   * races, the window has to be created with this mask already.
+   */
+  xattributes.event_mask = StructureNotifyMask | PropertyChangeMask;
+  xattributes_mask |= CWEventMask;
+
   /* Sanity checks */
   switch (window->window_type)
     {
