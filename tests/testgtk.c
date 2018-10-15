@@ -5695,27 +5695,26 @@ create_surface_states (GtkWidget *widget)
  * Window sizing
  */
 
-static gint
-configure_event_callback (GtkWidget *widget,
-                          GdkEvent *event,
-                          gpointer data)
+static void
+size_allocate_callback (GtkWidget     *widget,
+			GtkAllocation *allocation,
+			int            baseline,
+			gpointer       data)
 {
   GtkWidget *label = data;
   gchar *msg;
   gint x, y;
-  
+
   gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
-  
-  msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
+
+  msg = g_strdup_printf ("size: %d x %d\n"
                          "position: %d, %d",
-                         0, 0, 0, 0, // FIXME
+                         allocation->width, allocation->height,
                          x, y);
-  
+
   gtk_label_set_text (GTK_LABEL (label), msg);
 
   g_free (msg);
-
-  return FALSE;
 }
 
 static void
@@ -5867,10 +5866,10 @@ window_controls (GtkWidget *window)
 
   gtk_container_add (GTK_CONTAINER (control_window), vbox);
 
-  label = gtk_label_new ("<no configure events>");
+  label = gtk_label_new ("<no size>");
   gtk_box_pack_start (GTK_BOX (vbox), label);
 
-  g_signal_connect (window, "event", G_CALLBACK (configure_event_callback), label);
+  g_signal_connect_after (window, "size-allocate", G_CALLBACK (size_allocate_callback), label);
 
   adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 0, 0);
