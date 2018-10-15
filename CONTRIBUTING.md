@@ -194,24 +194,21 @@ Closes #1234
  - When committing code on behalf of others use the `--author` option, e.g.
  `git commit -a --author "Joe Coder <joe@coder.org>"` and `--signoff`.
 
- - If your commit is addressing an issue, use the GitLab syntax to
- automatically close the issue on push:
+ - If your commit is addressing an issue, use the
+ [GitLab syntax](https://docs.gitlab.com/ce/user/project/issues/automatic_issue_closing.html)
+ to automatically close the issue when merging the commit with the upstream
+ repository:
 
 ```plain
 Closes #1234
-```
-
-  or:
-
-```plain
 Fixes #1234
-```
-
-  or:
-
-```plain
 Closes: https://gitlab.gnome.org/GNOME/gtk/issues/1234
 ```
+
+ - If you have a merge request with multiple commits and none of them
+ completely fixes an issue, you should add a reference to the issue in
+ the commit message, e.g. `Bug: #1234`, and use the automatic issue
+ closing syntax in the description of the merge request.
 
 ### Access to the GTK repository
 
