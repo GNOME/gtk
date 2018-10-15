@@ -210,7 +210,7 @@ Closes: https://gitlab.gnome.org/GNOME/gtk/issues/1234
  the commit message, e.g. `Bug: #1234`, and use the automatic issue
  closing syntax in the description of the merge request.
 
-### Access to the GTK repository
+### Commit access to the GTK repository
 
 GTK is part of the GNOME infrastructure. At the current time, any
 person with write access to the GNOME repository can merge changes to
@@ -238,10 +238,11 @@ people committing to GTK to follow a few rules:
 0. Always write a meaningful commit message. Changes without a sufficient
    commit message will be reverted.
 
-0. Never push to a public branch directly; you should always go through
-   a merge request, to ensure that the code is tested on the CI infrastructure
-   at the very least. A merge request is also the proper place to get a
-   comprehensive code review from the core developers of GTK.
+0. Never push to the `master` branch, or any stable branches, directly; you
+   should always go through a merge request, to ensure that the code is
+   tested on the CI infrastructure at the very least. A merge request is
+   also the proper place to get a comprehensive code review from the core
+   developers of GTK.
 
 If you have been contributing to GTK for a while and you don't have commit
 access to the repository, you may ask to obtain it following the [GNOME account
