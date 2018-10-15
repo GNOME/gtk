@@ -134,8 +134,10 @@ gdk_surface_impl_quartz_get_context (GdkSurfaceImplQuartz *surface_impl,
       if (![surface_impl->view lockFocusIfCanDraw])
         return NULL;
     }
-
-  cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+  if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
+       cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+  else
+       cg_context = [[NSGraphicsContext currentContext] CGContext];
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
