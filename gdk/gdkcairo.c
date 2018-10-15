@@ -303,7 +303,8 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
                                               gdk_pixbuf_get_height (pixbuf),
 					      scale);
 
-  gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
+  if (surface)
+    gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
 
   return surface;
 }

@@ -141,6 +141,8 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
        cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
        cg_context = [[NSGraphicsContext currentContext] CGContext];
+  if (!cg_context)
+      return NULL;
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
@@ -332,8 +334,8 @@ gdk_quartz_ref_cairo_surface (GdkWindow *window)
           gdk_quartz_create_cairo_surface (impl,
                                            gdk_window_get_width (impl->wrapper) * scale,
                                            gdk_window_get_height (impl->wrapper) * scale);
-
-      cairo_surface_set_device_scale (impl->cairo_surface, scale, scale);
+      if (impl->cairo_surface)
+        cairo_surface_set_device_scale (impl->cairo_surface, scale, scale);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
