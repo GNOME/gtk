@@ -2804,6 +2804,7 @@ gdk_window_get_content (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
   surface = gdk_window_ref_impl_surface (window);
+  g_return_val_if_fail (surface, CAIRO_CONTENT_COLOR);
   content = cairo_surface_get_content (surface);
   cairo_surface_destroy (surface);
 
@@ -3065,7 +3066,8 @@ gdk_window_end_paint_internal (GdkWindow *window)
 
           cairo_destroy (cr);
 
-          cairo_surface_flush (surface);
+          if (surface)
+            cairo_surface_flush (surface);
           cairo_surface_destroy (surface);
         }
     }
@@ -3561,6 +3563,8 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   surface = ref_window_surface (window);
+  if (!surface)
+    return NULL;
 
   if (gdk_window_has_impl (window))
     {
@@ -10143,6 +10147,8 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   window_surface = gdk_window_ref_impl_surface (window);
+  if (!window_surface)
+    return NULL;
   sx = sy = 1;
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
 
@@ -10234,7 +10240,7 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 					 int             scale)
 {
   GdkWindowImplClass *impl_class;
-  cairo_surface_t *window_surface, *surface;
+  cairo_surface_t *window_surface, *surface = NULL;
   GdkDisplay *display;
   GdkScreen *screen;
 
@@ -10254,18 +10260,22 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
   else
     {
       window_surface = gdk_window_ref_impl_surface (window);
-      surface =
-        cairo_surface_create_similar_image (window_surface,
-                                            format,
-                                            width,
-                                            height);
-      cairo_surface_destroy (window_surface);
+      if (window_surface)
+        {
+          surface =
+            cairo_surface_create_similar_image (window_surface,
+                                                format,
+                                                width,
+                                                height);
+          cairo_surface_destroy (window_surface);
+        }
     }
 
   if (scale == 0)
     scale = gdk_window_get_scale_factor (window);
 
-  cairo_surface_set_device_scale (surface, scale, scale);
+  if (surface)
+    cairo_surface_set_device_scale (surface, scale, scale);
 
   return surface;
 }

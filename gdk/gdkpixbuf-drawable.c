@@ -97,6 +97,7 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
   g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
 
   surface = _gdk_window_ref_cairo_surface (src);
+  g_return_val_if_fail (surface, NULL);
   scale = gdk_window_get_scale_factor (src);
 
   /* We do not know what happened to this surface outside of GDK.

@@ -185,7 +185,7 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
   int n_channels;
   int j;
 
-  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
+  if (!surface || cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     return;
 
   /* This function can't just copy any pixbuf to any surface, be
@@ -303,7 +303,8 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
                                               gdk_pixbuf_get_height (pixbuf),
 					      scale);
 
-  gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
+  if (surface)
+    gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
 
   return surface;
 }
@@ -460,6 +461,8 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
   cairo_t *cr;
   gint x, y, stride;
   guchar *data;
+
+  g_return_val_if_fail (surface, NULL);
 
   _gdk_cairo_surface_extents (surface, &extents);
 
