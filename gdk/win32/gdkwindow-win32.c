@@ -1474,7 +1474,7 @@ show_window_internal (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       (window->state & GDK_WINDOW_STATE_ABOVE)?HWND_TOPMOST:HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
     }
 }
 
@@ -1824,7 +1824,7 @@ gdk_win32_window_raise (GdkWindow *window)
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
         API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOPMOST,
 	                         0, 0, 0, 0,
-				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
+				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
       else if (window->accept_focus)
         /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
          * fail when for example dragging a window belonging to a different
@@ -1834,7 +1834,7 @@ gdk_win32_window_raise (GdkWindow *window)
       else
         API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
   			         0, 0, 0, 0,
-			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
+			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
     }
 }
 
@@ -1851,7 +1851,7 @@ gdk_win32_window_lower (GdkWindow *window)
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_BOTTOM,
 			       0, 0, 0, 0,
-			       SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
+			       SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
     }
 }
 
@@ -2910,7 +2910,7 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
   rect.right += after.right - before.right;
   rect.bottom += after.bottom - before.bottom;
 
-  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION;
+  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION | SWP_NOOWNERZORDER;
 
   if (will_be_topmost && !was_topmost)
     {
@@ -5353,7 +5353,7 @@ gdk_win32_window_fullscreen (GdkWindow *window)
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
                 x, y, width, height,
-                SWP_NOCOPYBITS | SWP_SHOWWINDOW));
+                SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_NOOWNERZORDER));
     }
 }
 
@@ -5376,7 +5376,7 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
-			       SWP_NOCOPYBITS | SWP_SHOWWINDOW));
+			       SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_NOOWNERZORDER));
 
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
@@ -5402,7 +5402,7 @@ gdk_win32_window_set_keep_above (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       setting ? HWND_TOPMOST : HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
     }
 
   gdk_synthesize_window_state (window,
@@ -5428,7 +5428,7 @@ gdk_win32_window_set_keep_below (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       setting ? HWND_BOTTOM : HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
     }
 
   gdk_synthesize_window_state (window,
