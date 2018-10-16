@@ -2768,6 +2768,9 @@ gtk_drag_source_info_free (GtkDragSourceInfo *info)
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
+  GdkDragContext *context;
+  GdkEvent       *last_event;
+
   g_signal_handlers_disconnect_by_func (info->context,
                                         gtk_drag_context_drop_performed_cb,
                                         info);
@@ -2820,12 +2823,15 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 
   /* keep the icon_window alive until the (possible) drag cancel animation is done */
   g_object_set_data_full (G_OBJECT (info->context), "former-gtk-source-info", info, (GDestroyNotify)gtk_drag_source_info_free);
+  context = info->context;
+  last_event = info->last_event;
 
-  gtk_drag_clear_source_info (info->context);
-  g_object_unref (info->context);
+  gtk_drag_clear_source_info (context);
 
-  if (info->last_event)
-    gdk_event_free (info->last_event);
+  if (last_event)
+    gdk_event_free (last_event);
+
+  g_object_unref (context);
 }
 
 static gboolean
