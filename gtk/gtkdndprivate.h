@@ -43,7 +43,7 @@ struct _GtkDragDestSite
 G_BEGIN_DECLS
 
 GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
-                                                         GtkImageDefinition     *icon,
+                                                         gboolean               *out_needs_icon,
                                                          GtkTargetList          *target_list,
                                                          GdkDragAction           actions,
                                                          gint                    button,

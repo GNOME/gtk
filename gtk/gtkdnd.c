@@ -1699,18 +1699,20 @@ gtk_drag_is_managed (GtkWidget *source_widget)
     FALSE;
 }
 
-/* Like gtk_drag_begin(), but also takes a GtkIconHelper
- * so that we can set the icon from the source site information
+/* Like gtk_drag_begin(), but also communicates the need to
+ * create an icon for the drag operation back to the caller.
+ * If the caller passes out_needs_icon == NULL, it means that
+ * the caller does not care.
  */
 GdkDragContext *
-gtk_drag_begin_internal (GtkWidget          *widget,
-                         GtkImageDefinition *icon,
-                         GtkTargetList      *target_list,
-                         GdkDragAction       actions,
-                         gint                button,
-                         const GdkEvent     *event,
-                         int                 x,
-                         int                 y)
+gtk_drag_begin_internal (GtkWidget           *widget,
+                         gboolean            *out_needs_icon,
+                         GtkTargetList       *target_list,
+                         GdkDragAction        actions,
+                         gint                 button,
+                         const GdkEvent      *event,
+                         int                  x,
+                         int                  y)
 {
   GtkDragSourceInfo *info;
   GList *targets = NULL;
@@ -1873,19 +1875,15 @@ gtk_drag_begin_internal (GtkWidget          *widget,
    * application may have set one in ::drag_begin, or it may
    * not have set one.
    */
-  if (!info->icon_widget)
+  if (!info->icon_widget && out_needs_icon == NULL)
     {
-      if (icon)
-        {
-          set_icon_helper (info->context, icon, 0, 0);
-        }
-      else
-        {
-          icon = gtk_image_definition_new_icon_name ("text-x-generic");
-          set_icon_helper (info->context, icon, 0, 0);
-          gtk_image_definition_unref (icon);
-        }
+      GtkImageDefinition *icon = gtk_image_definition_new_icon_name ("text-x-generic");
+      set_icon_helper (info->context, icon, 0, 0);
+      gtk_image_definition_unref (icon);
     }
+
+  if (out_needs_icon != NULL)
+    *out_needs_icon = (info->icon_widget == NULL);
 
   if (managed)
     {
