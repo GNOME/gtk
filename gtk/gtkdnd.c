@@ -1703,14 +1703,14 @@ gtk_drag_is_managed (GtkWidget *source_widget)
  * so that we can set the icon from the source site information
  */
 GdkDragContext *
-gtk_drag_begin_internal (GtkWidget          *widget,
-                         GtkImageDefinition *icon,
-                         GtkTargetList      *target_list,
-                         GdkDragAction       actions,
-                         gint                button,
-                         const GdkEvent     *event,
-                         int                 x,
-                         int                 y)
+gtk_drag_begin_internal (GtkWidget           *widget,
+                         GtkImageDefinition **icon,
+                         GtkTargetList       *target_list,
+                         GdkDragAction        actions,
+                         gint                 button,
+                         const GdkEvent      *event,
+                         int                  x,
+                         int                  y)
 {
   GtkDragSourceInfo *info;
   GList *targets = NULL;
@@ -1875,15 +1875,15 @@ gtk_drag_begin_internal (GtkWidget          *widget,
    */
   if (!info->icon_widget)
     {
-      if (icon)
+      if (icon && *icon)
         {
-          set_icon_helper (info->context, icon, 0, 0);
+          set_icon_helper (info->context, *icon, 0, 0);
         }
       else
         {
-          icon = gtk_image_definition_new_icon_name ("text-x-generic");
-          set_icon_helper (info->context, icon, 0, 0);
-          gtk_image_definition_unref (icon);
+          GtkImageDefinition *new_icon = gtk_image_definition_new_icon_name ("text-x-generic");
+          set_icon_helper (info->context, new_icon, 0, 0);
+          gtk_image_definition_unref (new_icon);
         }
     }
 

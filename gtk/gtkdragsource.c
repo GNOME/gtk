@@ -95,7 +95,7 @@ gtk_drag_source_event_cb (GtkWidget *widget,
           button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (site->drag_gesture));
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
 
-          gtk_drag_begin_internal (widget, site->image_def, site->target_list,
+          gtk_drag_begin_internal (widget, &site->image_def, site->target_list,
                                    site->actions, button, last_event,
                                    start_x, start_y);
 
