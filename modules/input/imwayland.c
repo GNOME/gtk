@@ -42,6 +42,10 @@ struct _GtkIMContextWaylandGlobal
 
   GtkIMContext *current;
 
+  /* The input-method.enter event may happen before or after GTK focus-in,
+   * so the context may not exist at the time. Same for leave and focus-out. */
+  gboolean focused;
+
   guint serial;
 };
 
@@ -116,6 +120,13 @@ static const GtkIMContextInfo *info_list[] =
 #define MODULE_ENTRY(type, function) type _gtk_immodule_wayland_ ## function
 #endif
 
+
+static void
+enable (GtkIMContextWayland *context_wayland);
+
+static void
+disable (GtkIMContextWayland *context_wayland);
+
 static void
 notify_external_change (GtkIMContextWayland *context)
 {
@@ -132,13 +143,23 @@ static void
 text_input_enter (void                     *data,
                   struct zwp_text_input_v3 *text_input,
                   struct wl_surface        *surface)
-{}
+{
+  global->focused = TRUE;
+
+  if (global->current)
+    enable (GTK_IM_CONTEXT_WAYLAND (global->current));
+}
 
 static void
 text_input_leave (void                     *data,
                   struct zwp_text_input_v3 *text_input,
                   struct wl_surface        *surface)
-{}
+{
+  global->focused = FALSE;
+
+  if (global->current)
+    disable (GTK_IM_CONTEXT_WAYLAND (global->current));
+}
 
 static void
 text_input_preedit (void                     *data,
@@ -467,12 +488,6 @@ commit_state (GtkIMContextWayland *context)
 }
 
 static void
-enable_text_input (GtkIMContextWayland *context)
-{
-  zwp_text_input_v3_enable (global->text_input);
-}
-
-static void
 gtk_im_context_wayland_finalize (GObject *object)
 {
   GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (object);
@@ -512,14 +527,15 @@ released_cb (GtkGestureMultiPress *gesture,
 
   g_object_get (context, "input-hints", &hints, NULL);
 
-  if (n_press == 1 &&
+  if (global->focused &&
+      n_press == 1 &&
       (hints & GTK_INPUT_HINT_INHIBIT_OSK) == 0 &&
       !gtk_drag_check_threshold (context->widget,
                                  context->press_x,
                                  context->press_y,
                                  x, y))
     {
-      enable_text_input (GTK_IM_CONTEXT_WAYLAND (context));
+      zwp_text_input_v3_enable (global->text_input);
       g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
       commit_state (context);
     }
@@ -623,18 +639,10 @@ gtk_im_context_wayland_filter_keypress (GtkIMContext *context,
 }
 
 static void
-gtk_im_context_wayland_focus_in (GtkIMContext *context)
+enable (GtkIMContextWayland *context_wayland)
 {
-  GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
   gboolean result;
-
-  if (global->current == context)
-    return;
-  if (!global->text_input)
-    return;
-
-  global->current = context;
-  enable_text_input (context_wayland);
+  zwp_text_input_v3_enable (global->text_input);
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
   notify_content_type (context_wayland);
   notify_cursor_location (context_wayland);
@@ -642,15 +650,8 @@ gtk_im_context_wayland_focus_in (GtkIMContext *context)
 }
 
 static void
-gtk_im_context_wayland_focus_out (GtkIMContext *context)
+disable (GtkIMContextWayland *context_wayland)
 {
-  GtkIMContextWayland *context_wayland;
-
-  if (global->current != context)
-    return;
-
-  context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
-
   zwp_text_input_v3_disable (global->text_input);
   commit_state (context_wayland);
 
@@ -660,6 +661,34 @@ gtk_im_context_wayland_focus_out (GtkIMContext *context)
       text_input_preedit (global, global->text_input, NULL, 0, 0);
       text_input_preedit_apply (global);
     }
+}
+
+static void
+gtk_im_context_wayland_focus_in (GtkIMContext *context)
+{
+  GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+
+  if (global->current == context)
+    return;
+  if (!global->text_input)
+    return;
+
+  global->current = context;
+
+  if (global->focused)
+    enable (context_wayland);
+}
+
+static void
+gtk_im_context_wayland_focus_out (GtkIMContext *context)
+{
+  GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+
+  if (global->current != context)
+    return;
+
+  if (global->focused)
+    disable (context_wayland);
 
   global->current = NULL;
 }
