@@ -120,13 +120,6 @@ static const GtkIMContextInfo *info_list[] =
 #define MODULE_ENTRY(type, function) type _gtk_immodule_wayland_ ## function
 #endif
 
-
-static void
-enable (GtkIMContextWayland *context_wayland);
-
-static void
-disable (GtkIMContextWayland *context_wayland);
-
 static void
 notify_external_change (GtkIMContextWayland *context)
 {
@@ -137,28 +130,6 @@ notify_external_change (GtkIMContextWayland *context)
 
   context->surrounding_change = ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER;
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
-}
-
-static void
-text_input_enter (void                     *data,
-                  struct zwp_text_input_v3 *text_input,
-                  struct wl_surface        *surface)
-{
-  global->focused = TRUE;
-
-  if (global->current)
-    enable (GTK_IM_CONTEXT_WAYLAND (global->current));
-}
-
-static void
-text_input_leave (void                     *data,
-                  struct zwp_text_input_v3 *text_input,
-                  struct wl_surface        *surface)
-{
-  global->focused = FALSE;
-
-  if (global->current)
-    disable (GTK_IM_CONTEXT_WAYLAND (global->current));
 }
 
 static void
@@ -293,71 +264,6 @@ text_input_done (void                     *data,
   text_input_commit_apply(global, valid);
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
   text_input_preedit_apply(global);
-}
-
-static const struct zwp_text_input_v3_listener text_input_listener = {
-  text_input_enter,
-  text_input_leave,
-  text_input_preedit,
-  text_input_commit,
-  text_input_delete_surrounding_text,
-  text_input_done,
-};
-
-static void
-registry_handle_global (void               *data,
-                        struct wl_registry *registry,
-                        uint32_t            id,
-                        const char         *interface,
-                        uint32_t            version)
-{
-  GtkIMContextWaylandGlobal *global = data;
-  GdkSeat *seat = gdk_display_get_default_seat (gdk_display_get_default ());
-
-  if (strcmp (interface, "zwp_text_input_manager_v3") == 0)
-    {
-      global->text_input_manager_wl_id = id;
-      global->text_input_manager =
-        wl_registry_bind (global->registry, global->text_input_manager_wl_id,
-                          &zwp_text_input_manager_v3_interface, 1);
-      global->text_input =
-        zwp_text_input_manager_v3_get_text_input (global->text_input_manager,
-                                          gdk_wayland_seat_get_wl_seat (seat));
-      global->serial = 0;
-      zwp_text_input_v3_add_listener (global->text_input,
-                                      &text_input_listener, global);
-    }
-}
-
-static void
-registry_handle_global_remove (void               *data,
-                               struct wl_registry *registry,
-                               uint32_t            id)
-{
-  GtkIMContextWaylandGlobal *global = data;
-
-  if (id != global->text_input_manager_wl_id)
-    return;
-
-  g_clear_pointer(&global->text_input, zwp_text_input_v3_destroy);
-  g_clear_pointer(&global->text_input_manager, zwp_text_input_manager_v3_destroy);
-}
-
-static const struct wl_registry_listener registry_listener = {
-    registry_handle_global,
-    registry_handle_global_remove
-};
-
-static void
-gtk_im_context_wayland_global_init (GdkDisplay *display)
-{
-  g_return_if_fail (global == NULL);
-
-  global = g_new0 (GtkIMContextWaylandGlobal, 1);
-  global->display = gdk_wayland_display_get_wl_display (display);
-  global->registry = wl_display_get_registry (global->display);
-
-  wl_registry_add_listener (global->registry, &registry_listener, global);
 }
 
 static void
@@ -661,6 +567,94 @@ disable (GtkIMContextWayland *context_wayland)
       text_input_preedit (global, global->text_input, NULL, 0, 0);
       text_input_preedit_apply (global);
     }
+}
+
+static void
+text_input_enter (void                     *data,
+                  struct zwp_text_input_v3 *text_input,
+                  struct wl_surface        *surface)
+{
+  global->focused = TRUE;
+
+  if (global->current)
+    enable (GTK_IM_CONTEXT_WAYLAND (global->current));
+}
+
+static void
+text_input_leave (void                     *data,
+                  struct zwp_text_input_v3 *text_input,
+                  struct wl_surface        *surface)
+{
+  global->focused = FALSE;
+
+  if (global->current)
+    disable (GTK_IM_CONTEXT_WAYLAND (global->current));
+}
+
+
+static const struct zwp_text_input_v3_listener text_input_listener = {
+  text_input_enter,
+  text_input_leave,
+  text_input_preedit,
+  text_input_commit,
+  text_input_delete_surrounding_text,
+  text_input_done,
+};
+
+static void
+registry_handle_global (void               *data,
+                        struct wl_registry *registry,
+                        uint32_t            id,
+                        const char         *interface,
+                        uint32_t            version)
+{
+  GtkIMContextWaylandGlobal *global = data;
+  GdkSeat *seat = gdk_display_get_default_seat (gdk_display_get_default ());
+
+  if (strcmp (interface, "zwp_text_input_manager_v3") == 0)
+    {
+      global->text_input_manager_wl_id = id;
+      global->text_input_manager =
+        wl_registry_bind (global->registry, global->text_input_manager_wl_id,
+                          &zwp_text_input_manager_v3_interface, 1);
+      global->text_input =
+        zwp_text_input_manager_v3_get_text_input (global->text_input_manager,
+                                          gdk_wayland_seat_get_wl_seat (seat));
+      global->serial = 0;
+      zwp_text_input_v3_add_listener (global->text_input,
+                                      &text_input_listener, global);
+    }
+}
+
+static void
+registry_handle_global_remove (void               *data,
+                               struct wl_registry *registry,
+                               uint32_t            id)
+{
+  GtkIMContextWaylandGlobal *global = data;
+
+  if (id != global->text_input_manager_wl_id)
+    return;
+
+  g_clear_pointer(&global->text_input, zwp_text_input_v3_destroy);
+  g_clear_pointer(&global->text_input_manager, zwp_text_input_manager_v3_destroy);
+}
+
+static const struct wl_registry_listener registry_listener = {
+    registry_handle_global,
+    registry_handle_global_remove
+};
+
+static void
+gtk_im_context_wayland_global_init (GdkDisplay *display)
+{
+  g_return_if_fail (global == NULL);
+
+  global = g_new0 (GtkIMContextWaylandGlobal, 1);
+  global->display = gdk_wayland_display_get_wl_display (display);
+  global->registry = wl_display_get_registry (global->display);
+
+  wl_registry_add_listener (global->registry, &registry_listener, global);
 }
 
 static void
