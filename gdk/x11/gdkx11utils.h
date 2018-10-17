@@ -72,6 +72,9 @@ void          gdk_x11_grab_server    (void);
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_ungrab_server  (void);
 
+GDK_DEPRECATED_IN_3_24
+cairo_pattern_t *gdk_x11_get_parent_relative_pattern (void);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_UTILS_H__ */
