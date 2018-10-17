@@ -2976,6 +2976,7 @@ gdk_window_x11_set_background (GdkWindow      *window,
                                cairo_pattern_t *pattern)
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  GdkDisplay *display;
   double r, g, b, a;
   cairo_surface_t *surface;
   cairo_matrix_t matrix;
@@ -2988,6 +2989,30 @@ gdk_window_x11_set_background (GdkWindow      *window,
       XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
                                   GDK_WINDOW_XID (window), None);
       return;
+    }
+
+  display = gdk_window_get_display (window);
+  if (pattern == gdk_x11_display_get_parent_relative_pattern (display))
+    {
+      GdkWindow *parent;
+
+      /* X throws BadMatch if the parent has a different depth when
+       * using ParentRelative */
+      parent = gdk_window_get_parent (window);
+      if (parent && window->depth == parent->depth)
+        {
+          XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
+                                      GDK_WINDOW_XID (window), ParentRelative);
+          return;
+        }
+      else
+        {
+          g_warning ("Can't set ParentRelative background for window %#lx, depth of parent doesn't match",
+                     GDK_WINDOW_XID (window));
+          XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
+                                      GDK_WINDOW_XID (window), None);
+          return;
+        }
     }
 
   switch (cairo_pattern_get_type (pattern))

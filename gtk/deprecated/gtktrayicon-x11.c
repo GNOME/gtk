@@ -950,6 +950,7 @@ gtk_tray_icon_realize (GtkWidget *widget)
 {
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
   GdkWindow *window;
+  cairo_pattern_t *parent_relative;
 
   /* Set our visual before realizing */
   gtk_tray_icon_set_visual (icon);
@@ -966,7 +967,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   else
     {
       /* Set a parent-relative background pixmap */
-      gdk_window_set_background_pattern (window, NULL);
+      parent_relative =
+        gdk_x11_display_get_parent_relative_pattern (gdk_window_get_display (window));
+      gdk_window_set_background_pattern (window, parent_relative);
     }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
