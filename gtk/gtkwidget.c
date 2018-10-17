@@ -10529,13 +10529,13 @@ gtk_widget_real_get_request_mode (GtkWidget *widget)
 }
 
 static void
-gtk_widget_real_measure (GtkWidget *widget,
-                         GtkOrientation orientation,
-                         int        for_size,
-                         int       *minimum,
-                         int       *natural,
-                         int       *minimum_baseline,
-                         int       *natural_baseline)
+gtk_widget_real_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
 {
   *minimum = 0;
   *natural = 0;
