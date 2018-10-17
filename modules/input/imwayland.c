@@ -623,7 +623,7 @@ registry_handle_global (void               *data,
                           &zwp_text_input_manager_v3_interface, 1);
       global->text_input =
         zwp_text_input_manager_v3_get_text_input (global->text_input_manager,
-                                          gdk_wayland_seat_get_wl_seat (seat));
+                                                  gdk_wayland_seat_get_wl_seat (seat));
       global->serial = 0;
       zwp_text_input_v3_add_listener (global->text_input,
                                       &text_input_listener, global);
@@ -640,8 +640,8 @@ registry_handle_global_remove (void               *data,
   if (id != global->text_input_manager_wl_id)
     return;
 
-  g_clear_pointer(&global->text_input, zwp_text_input_v3_destroy);
-  g_clear_pointer(&global->text_input_manager, zwp_text_input_manager_v3_destroy);
+  g_clear_pointer (&global->text_input, zwp_text_input_v3_destroy);
+  g_clear_pointer (&global->text_input_manager, zwp_text_input_manager_v3_destroy);
 }
 
 static const struct wl_registry_listener registry_listener = {
