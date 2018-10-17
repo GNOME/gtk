@@ -43,6 +43,9 @@ struct _GtkIMContextWaylandGlobal
   GtkIMContext *current;
 
   guint serial;
+  guint commit_idle_id;
+  guint in_done : 1;
+  guint need_state_commit : 1;
 };
 
 struct _GtkIMContextWaylandClass
@@ -115,6 +118,8 @@ static const GtkIMContextInfo *info_list[] =
 #else
 #define MODULE_ENTRY(type, function) type _gtk_immodule_wayland_ ## function
 #endif
+
+static void commit_state (GtkIMContextWayland *context);
 
 static void
 notify_external_change (GtkIMContextWayland *context)
@@ -255,6 +260,17 @@ text_input_delete_surrounding_text_apply (GtkIMContextWaylandGlobal *global,
   context->pending_surrounding_delete = defaults;
 }
 
+static gboolean
+commit_idle_cb (gpointer user_data)
+{
+  GtkIMContextWaylandGlobal *global = user_data;
+
+  commit_state (GTK_IM_CONTEXT_WAYLAND (global->current));
+  global->commit_idle_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 text_input_done (void                     *data,
                  struct zwp_text_input_v3 *text_input,
@@ -267,11 +283,20 @@ text_input_done (void                     *data,
   if (!global->current)
     return;
 
+  global->in_done = TRUE;
   valid = serial == global->serial;
   text_input_delete_surrounding_text_apply(global, valid);
   text_input_commit_apply(global, valid);
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
   text_input_preedit_apply(global);
+  global->in_done = FALSE;
+
+  if (global->need_state_commit)
+    {
+      global->need_state_commit = FALSE;
+      global->commit_idle_id =
+        g_idle_add_full (GDK_PRIORITY_EVENTS + 1, commit_idle_cb, global, NULL);
+    }
 }
 
 static const struct zwp_text_input_v3_listener text_input_listener = {
@@ -461,6 +486,20 @@ commit_state (GtkIMContextWayland *context)
 {
   if (global->current != GTK_IM_CONTEXT (context))
     return;
+  if (global->in_done)
+    {
+      if (!global->commit_idle_id)
+        global->need_state_commit = TRUE;
+      return;
+    }
+
+  if (global->commit_idle_id)
+    {
+      g_source_remove (global->commit_idle_id);
+      global->commit_idle_id = 0;
+    }
+
+  global->need_state_commit = FALSE;
   global->serial++;
   zwp_text_input_v3_commit (global->text_input);
   context->surrounding_change = ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD;
@@ -679,6 +718,12 @@ gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
   GtkIMContextWayland *context_wayland;
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+
+  if (rect->x == context_wayland->cursor_rect.x &&
+      rect->y == context_wayland->cursor_rect.y &&
+      rect->width == context_wayland->cursor_rect.width &&
+      rect->height == context_wayland->cursor_rect.height)
+    return;
 
   context_wayland->cursor_rect = *rect;
   notify_cursor_location (context_wayland);
