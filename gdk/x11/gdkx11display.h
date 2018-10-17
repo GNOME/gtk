@@ -105,7 +105,6 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
 
-
 G_END_DECLS
 
 #endif /* __GDK_X11_DISPLAY_H__ */

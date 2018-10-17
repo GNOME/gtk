@@ -6442,8 +6442,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * Sets the background of @window.
  *
- * A background of %NULL means that the window will inherit its
- * background from its parent window.
+ * A background of %NULL means that the window won't have any background. On the
+ * X11 backend it's also possible to inherit the background from the parent
+ * window using gdk_x11_get_parent_relative_pattern().
  *
  * The windowing system will normally fill a window with its background
  * when the window is obscured then exposed.
@@ -6478,12 +6479,10 @@ gdk_window_set_background_pattern (GdkWindow       *window,
  * gdk_window_get_background_pattern:
  * @window: a window
  *
- * Gets the pattern used to clear the background on @window. If @window
- * does not have its own background and reuses the parent's, %NULL is
- * returned and you’ll have to query it yourself.
+ * Gets the pattern used to clear the background on @window.
  *
  * Returns: (nullable) (transfer none): The pattern to use for the
- * background or %NULL to use the parent’s background.
+ * background or %NULL if there is no background.
  *
  * Since: 2.22
  *
