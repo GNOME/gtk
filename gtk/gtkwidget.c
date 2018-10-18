@@ -7974,7 +7974,11 @@ gtk_widget_get_ancestor (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   while (widget && !g_type_is_a (G_OBJECT_TYPE (widget), widget_type))
-    widget = widget->priv->parent;
+    {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+      widget = priv->parent;
+    }
 
   return widget;
 }
@@ -8019,9 +8023,12 @@ gtk_widget_is_ancestor (GtkWidget *widget,
 
   while (widget)
     {
-      if (widget->priv->parent == ancestor)
-	return TRUE;
-      widget = widget->priv->parent;
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+      if (priv->parent == ancestor)
+        return TRUE;
+
+      widget = priv->parent;
     }
 
   return FALSE;
