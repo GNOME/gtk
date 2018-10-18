@@ -1720,6 +1720,19 @@ headerbar { // headerbar border rounding
   @extend %titlebar;
 }
 
+// View switcher in headerbars
+headerbar stackswitcher { padding: 0; margin: 0; border-width: 0; }
+headerbar stackswitcher button {
+   border-radius: 0;
+   border-width: 0 1px 0;
+   padding-top: 12px; padding-bottom: 12px;
+   margin: 0;
+
+   &:active {
+      color: pink; //FIXME pushed buttons should be a tad darker perhaps
+   }
+}
+
 // Development versions of apps to use a differently styled headerbar
 
 window.devel {    
@@ -1731,6 +1744,8 @@ window.devel {
     label { color: $fg_color; }
   }
 }
+
+
 
 /************
  * Pathbars *
@@ -4459,7 +4474,9 @@ headerbar.selection-mode button.titlebutton,
     &:backdrop {
       color: $backdrop_selected_fg_color;
 
-      &:disabled { color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%); }
+      &:disabled {
+         color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%);
+      }
     }
   }
 }
