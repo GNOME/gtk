@@ -192,9 +192,9 @@
   //
   // normal button
   //
-  $_bg: if($variant == 'light', lighten($c, 3%), lighten($c, 1%));
+  $_bg: if($variant == 'light', darken($c, 5%), lighten($c, 1%));
   $_bc: if($variant == 'light', darken($c,25%), darken($c,10%));
-  $_sc: if($variant == 'light', mix($c, darken($c,15%), 65%), mix($c, darken($c,5%), 65%));
+  $_sc: if($variant == 'light', mix($c, darken($c,35%), 65%), mix($c, darken($c,5%), 65%));
 
     color: $tc;
     border-color: $_bc;
@@ -217,7 +217,7 @@
   //
   // pushed button
   //
-  $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 4%));
+  $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 10%), darken(mix($c, $base_color, 85%), 4%));
 
      background-image: image($_bg);
      box-shadow: none;
