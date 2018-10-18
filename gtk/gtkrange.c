@@ -112,7 +112,6 @@ struct _GtkRangePrivate
   /* Whether dragging is ongoing */
   guint in_drag                : 1;
 
-  GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
 
   GtkScrollType autoscroll_mode;
@@ -570,14 +569,14 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  g_signal_connect (priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
-  g_signal_connect (priv->multipress_gesture, "released",
+  g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_range_multipress_gesture_released), range);
-  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
-  gtk_gesture_group (priv->drag_gesture, priv->multipress_gesture);
+  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
+  gtk_gesture_group (priv->drag_gesture, gesture);
 
   gesture = gtk_gesture_long_press_new ();
   g_object_set (gesture, "delay-factor", 2.0, NULL);
@@ -1943,7 +1942,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
     {
       gboolean handled;
 
-      gtk_gesture_set_state (priv->multipress_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       g_signal_emit_by_name (widget, "popup-menu", &handled);
       return;
     }
@@ -2022,7 +2021,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   if (priv->grab_location == priv->slider_widget);
     /* leave it to ::drag-begin to claim the sequence */
   else if (priv->grab_location != NULL)
-    gtk_gesture_set_state (priv->multipress_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
