@@ -4459,7 +4459,9 @@ headerbar.selection-mode button.titlebutton,
     &:backdrop {
       color: $backdrop_selected_fg_color;
 
-      &:disabled { color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%); }
+      &:disabled {
+         color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%);
+      }
     }
   }
 }
