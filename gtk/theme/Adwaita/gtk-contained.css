@@ -702,6 +702,12 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) > separator { background-color: #c6c6bf; }
 
+headerbar stackswitcher { padding: 0; margin: 0; border-width: 0; }
+
+headerbar stackswitcher button { border-radius: 0; border-width: 0 1px 0; padding-top: 12px; padding-bottom: 12px; margin: 0; }
+
+headerbar stackswitcher button:active { color: pink; }
+
 window.devel headerbar:last-child { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #e3ebf3 8%, #f6f6f5 25%); color: rgba(46, 52, 54, 0.1); }
 
 window.devel headerbar:last-child label { color: #2e3436; }
