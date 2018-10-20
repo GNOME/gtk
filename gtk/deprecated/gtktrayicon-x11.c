@@ -967,8 +967,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   else
     {
       /* Set a parent-relative background pixmap */
-      parent_relative =
-        gdk_x11_display_get_parent_relative_pattern (gdk_window_get_display (window));
+      parent_relative = gdk_x11_get_parent_relative_pattern ();
       gdk_window_set_background_pattern (window, parent_relative);
     }
 G_GNUC_END_IGNORE_DEPRECATIONS

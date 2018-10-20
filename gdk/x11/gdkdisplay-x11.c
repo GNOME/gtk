@@ -181,11 +181,6 @@ static void
 gdk_x11_display_init (GdkX11Display *display)
 {
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
-
-  display->parent_relative_pattern =
-    cairo_pattern_create_raster_source (NULL,
-                                        CAIRO_CONTENT_COLOR,
-                                        0, 0);
 }
 
 static void
@@ -2099,8 +2094,6 @@ gdk_x11_display_finalize (GObject *object)
   g_object_unref (display_x11->screen);
   g_list_free_full (display_x11->screens, g_object_unref);
 
-  cairo_pattern_destroy (display_x11->parent_relative_pattern);
-
   g_ptr_array_free (display_x11->monitors, TRUE);
 
   g_free (display_x11->startup_notification_id);
@@ -2652,25 +2645,6 @@ gdk_x11_display_supports_composite (GdkDisplay *display)
   return x11_display->have_xcomposite &&
 	 x11_display->have_xdamage &&
 	 x11_display->have_xfixes;
-}
-
-/**
- * gdk_x11_display_get_parent_relative_pattern:
- * @display: (type GdkX11Display): a #GdkDisplay
- *
- * Used with gdk_window_set_background_pattern() to inherit background from
- * parent window. Useful for imitating transparency when compositing is not
- * available.
- *
- * Although it looks like a real cairo pattern, it has only a meaning for
- * gdk_window_set_background_pattern(). Don't use it in other contexts.
- **/
-cairo_pattern_t *
-gdk_x11_display_get_parent_relative_pattern (GdkDisplay *display)
-{
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
-
-  return x11_display->parent_relative_pattern;
 }
 
 /**
