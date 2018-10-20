@@ -2976,7 +2976,6 @@ gdk_window_x11_set_background (GdkWindow      *window,
                                cairo_pattern_t *pattern)
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  GdkDisplay *display;
   double r, g, b, a;
   cairo_surface_t *surface;
   cairo_matrix_t matrix;
@@ -2991,8 +2990,7 @@ gdk_window_x11_set_background (GdkWindow      *window,
       return;
     }
 
-  display = gdk_window_get_display (window);
-  if (pattern == gdk_x11_display_get_parent_relative_pattern (display))
+  if (pattern == gdk_x11_get_parent_relative_pattern ())
     {
       GdkWindow *parent;
 

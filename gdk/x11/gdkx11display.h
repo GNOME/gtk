@@ -105,9 +105,6 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
 
-GDK_AVAILABLE_IN_ALL
-cairo_pattern_t *gdk_x11_display_get_parent_relative_pattern (GdkDisplay *display);
-
 G_END_DECLS
 
 #endif /* __GDK_X11_DISPLAY_H__ */
