@@ -1128,7 +1128,7 @@ gtk_drag_begin_idle (gpointer arg)
 
 GdkDragContext *
 gtk_drag_begin_internal (GtkWidget         *widget,
-			 GtkImageDefinition *icon,
+			 gboolean          *out_needs_icon,
 			 GtkTargetList     *target_list,
 			 GdkDragAction      actions,
 			 gint               button,
@@ -1221,29 +1221,11 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    * application may have set one in ::drag_begin, or it may
    * not have set one.
    */
-  if (!info->icon_surface && icon)
-    {
-      switch (gtk_image_definition_get_storage_type (icon))
-        {
-          case GTK_IMAGE_PIXBUF:
-              gtk_drag_set_icon_pixbuf (context,
-                                        gtk_image_definition_get_pixbuf (icon),
-                                        -2, -2);
-              break;
-          case GTK_IMAGE_STOCK:
-              gtk_drag_set_icon_stock (context,
-                                       gtk_image_definition_get_stock (icon),
-                                       -2, -2);
-              break;
-          case GTK_IMAGE_ICON_NAME:
-              gtk_drag_set_icon_name (context,
-                                      gtk_image_definition_get_icon_name (icon),
-                                      -2, -2);
-              break;
-          default:
-              break;
-        }
-    }
+  if (info->icon_surface == NULL && out_needs_icon == NULL)
+    gtk_drag_set_icon_default (context);
+
+  if (out_needs_icon != NULL)
+    *out_needs_icon = (info->icon_surface == NULL);
 
   /* no image def or no supported type -> set the default */
   if (!info->icon_surface)
