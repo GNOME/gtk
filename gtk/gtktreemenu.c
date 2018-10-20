@@ -988,18 +988,11 @@ static gint
 menu_item_position (GtkTreeMenu *menu,
                     GtkWidget   *item)
 {
-  GList *children, *l;
+  GList *children;
   gint   position;
 
   children = gtk_container_get_children (GTK_CONTAINER (menu));
-  for (position = 0, l = children; l; position++, l = l->next)
-    {
-      GtkWidget *iitem = l->data;
-
-      if (item == iitem)
-        break;
-    }
-
+  position = g_list_index (children, item);
   g_list_free (children);
 
   return position;
