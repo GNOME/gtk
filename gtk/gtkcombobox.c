@@ -1629,6 +1629,10 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
 
       entry = gtk_entry_new ();
       gtk_widget_show (entry);
+      /* This sets GtkEntry's minimum-width to be 1 char long, short enough
+       * to workaround gtk issue gtk#1422 . Also fixes evince#1002 */
+      gtk_entry_set_width_chars (GTK_ENTRY (entry), 1);
+
       gtk_container_add (GTK_CONTAINER (combo_box), entry);
 
       context = gtk_widget_get_style_context (GTK_WIDGET (entry));
