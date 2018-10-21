@@ -161,7 +161,8 @@
  * .insertion-cursor.
  */
 
-#define MIN_ENTRY_WIDTH  150
+#define MIN_ENTRY_WIDTH  1
+#define NAT_ENTRY_WIDTH  150
 
 #define MAX_ICONS 2
 
@@ -3599,7 +3600,7 @@ gtk_entry_measure (GtkCssGadget   *gadget,
         }
 
       if (priv->max_width_chars < 0)
-        nat = min;
+        nat = NAT_ENTRY_WIDTH;
       else
         nat = char_pixels * priv->max_width_chars;
 
