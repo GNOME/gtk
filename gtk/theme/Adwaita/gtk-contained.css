@@ -696,9 +696,9 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) > separator { background-color: #b6b6b3; }
 
-window.devel headerbar:last-child { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #d8dfe6 8%, #e8e8e7 25%); color: rgba(46, 52, 54, 0.1); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #d8dfe6 8%, #e8e8e7 25%); color: rgba(46, 52, 54, 0.1); }
 
-window.devel headerbar:last-child label { color: #2e3436; }
+window.devel headerbar.titlebar:not(.selection-mode) label { color: #2e3436; }
 
 /************ Pathbars * */
 .path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
