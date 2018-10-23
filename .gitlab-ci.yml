@@ -23,7 +23,7 @@ fedora-x86_64:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
   cache:
-    key: "$CI_JOB_NAME"
+    key: fedora
     <<: *cache-paths
 
 .mingw-defaults: &mingw-defaults
@@ -34,7 +34,7 @@ fedora-x86_64:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
   cache:
-    key: "%CI_JOB_NAME%"
+    key: mingw
     <<: *cache-paths
 
 msys2-mingw32:
