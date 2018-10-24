@@ -327,12 +327,8 @@ pango_dep      = dependency('pango', version: pango_req,
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
-
-if require_pangoft2
-  pangoft_dep  = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
-else
-  pangoft_dep  = dependency('pangoft2', required: false)
-endif
+pangoft_dep    = dependency('pangoft2', required: require_pangoft2,
+                            fallback : ['pango', 'libpangoft2_dep'])
 
 if pangoft_dep.found()
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
@@ -373,7 +369,8 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 atk_dep        = dependency('atk', version: atk_req)
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
@@ -590,9 +587,24 @@ endif
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
 # doing the same check as glib. We can't check that by linking to glib because
 # it might be a subproject and hence not built yet.
-libintl_dep = cc.find_library('intl', required : false)
-if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
+if cc.has_function('ngettext')
+  libintl_dep = []
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+else
+  libintl_dep = cc.find_library('intl', required : false)
+  if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
+    cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+  else
+    # Don't use subproject('proxy-libintl').get_variable('intl_dep') because that
+    # makes the dependency unconditional. This way, people have the option of
+    # either not providing the subproject or disabling it entirely with
+    # --wrap-mode=nodownload or nofallback.
+    libintl_dep = dependency('', required : false,
+                             fallback: ['proxy-libintl', 'intl_dep'])
+    if libintl_dep.found()
+      cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+    endif
+  endif
 endif
 
 if os_unix
