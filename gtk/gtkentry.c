@@ -166,7 +166,7 @@
  * .insertion-cursor.
  */
 
-#define MIN_ENTRY_WIDTH  150
+#define NAT_ENTRY_WIDTH  150
 
 #define MAX_ICONS 2
 
@@ -3169,13 +3169,13 @@ gtk_entry_measure (GtkWidget      *widget,
       digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
 
-      if (priv->width_chars < 0)
-        min = MIN_ENTRY_WIDTH;
-      else
+      if (priv->width_chars >= 0)
         min = char_pixels * priv->width_chars;
+      else
+        min = 0;
 
       if (priv->max_width_chars < 0)
-        nat = min;
+        nat = NAT_ENTRY_WIDTH;
       else
         nat = char_pixels * priv->max_width_chars;
 
