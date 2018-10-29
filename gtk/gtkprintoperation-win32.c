@@ -947,7 +947,7 @@ devmode_from_settings (GtkPrintSettings *settings,
   gsize extras_len;
   const char *val;
 
-  // If we already provided a valid hDevMode, don't initialize a new one; just lock the one we have
+  /* If we already provided a valid hDevMode, don't initialize a new one; just lock the one we have */
   if (hDevMode)
     {
       devmode = GlobalLock (hDevMode);
@@ -977,10 +977,11 @@ devmode_from_settings (GtkPrintSettings *settings,
           memcpy (((char *)devmode) + sizeof (DEVMODEW), extras, extras_len);
         }
       g_free (extras);
+
       if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION))
-      {
-        devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
-      }
+        {
+          devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
+        }
     }
   
   if (page_setup ||
@@ -1235,7 +1236,7 @@ dialog_from_print_settings (GtkPrintOperation *op,
 	}
     }
   
-  // If we have a printer saved, restore our settings
+  /* If we have a printer saved, restore our settings */
   printer = gtk_print_settings_get_printer (settings);
   if (printer)
     {
@@ -1246,7 +1247,7 @@ dialog_from_print_settings (GtkPrintOperation *op,
     }
   else
     {
-      // Otherwise, use the default settings
+      /* Otherwise, use the default settings */
       DWORD FlagsCopy = printdlgex->Flags;
       printdlgex->Flags |= PD_RETURNDEFAULT;
       PrintDlgExW (printdlgex);
