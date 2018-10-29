@@ -4030,15 +4030,19 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
   return symbolic_cache->proxy_pixbuf;
 }
 
-static gchar *
-rgba_to_string_noalpha (const GdkRGBA *rgba)
+#define MAX_RGB_STRING_LENGTH (3 + 1 + ((3 + 1) * 3) + 1 + 1)
+static inline void
+rgba_to_string_noalpha (const GdkRGBA *rgba,
+                        char          *buff)
 {
-  GdkRGBA color;
-
-  color = *rgba;
-  color.alpha = 1.0;
-
-  return gdk_rgba_to_string (&color);
+  /* gdk_rgba_to_string inlined in here for the alpha == 1 case,
+   * and g_strdup_printf replaced with g_snprintf */
+  g_snprintf (buff,
+              MAX_RGB_STRING_LENGTH,
+              "rgb(%d,%d,%d)",
+              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
 }
 
 static void
@@ -4183,10 +4187,10 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
-  gchar *css_fg;
-  gchar *css_success;
-  gchar *css_warning;
-  gchar *css_error;
+  char css_fg[MAX_RGB_STRING_LENGTH];
+  char css_warning[MAX_RGB_STRING_LENGTH] = "rgb(245,121,62)";
+  char css_success[MAX_RGB_STRING_LENGTH] = "rgb(78,154,6)";
+  char css_error[MAX_RGB_STRING_LENGTH] = "rgb(204,0,0)";
   gchar *data;
   gchar *width;
   gchar *height;
@@ -4198,24 +4202,16 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 
   alpha = fg->alpha;
 
-  css_fg = rgba_to_string_noalpha (fg);
-
-  css_success = css_warning = css_error = NULL;
+  rgba_to_string_noalpha (fg, css_fg);
 
   if (warning_color)
-    css_warning = rgba_to_string_noalpha (warning_color);
-  else
-    css_warning = g_strdup ("rgb(245,121,62)");
+    rgba_to_string_noalpha (warning_color, css_warning);
 
   if (error_color)
-    css_error = rgba_to_string_noalpha (error_color);
-  else
-    css_error = g_strdup ("rgb(204,0,0)");
+    rgba_to_string_noalpha (error_color, css_error);
 
   if (success_color)
-    css_success = rgba_to_string_noalpha (success_color);
-  else
-    css_success = g_strdup ("rgb(78,154,6)");
+    rgba_to_string_noalpha (success_color, css_success);
 
   if (!g_file_load_contents (icon_info->icon_file, NULL, &file_data, &file_len, NULL, error))
     return NULL;
@@ -4224,10 +4220,6 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
     {
       g_propagate_error (error, icon_info->load_error);
       icon_info->load_error = NULL;
-      g_free (css_fg);
-      g_free (css_warning);
-      g_free (css_error);
-      g_free (css_success);
       g_free (file_data);
       return NULL;
     }
@@ -4242,10 +4234,6 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 
       if (!pixbuf)
         {
-          g_free (css_fg);
-          g_free (css_warning);
-          g_free (css_error);
-          g_free (css_success);
           g_free (file_data);
           return NULL;
         }
@@ -4300,10 +4288,6 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
                       "</svg>",
                       NULL);
   g_free (escaped_file_data);
-  g_free (css_fg);
-  g_free (css_warning);
-  g_free (css_error);
-  g_free (css_success);
   g_free (width);
   g_free (height);
 
