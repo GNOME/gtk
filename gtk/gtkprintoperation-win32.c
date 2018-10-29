@@ -963,7 +963,7 @@ devmode_from_settings (GtkPrintSettings *settings,
   gsize extras_len;
   const char *val;
 
-  // If we already provided a valid hDevMode, don't initialize a new one; just lock the one we have
+  /* If we already provided a valid hDevMode, don't initialize a new one; just lock the one we have */
   if (hDevMode)
     {
       devmode = GlobalLock (hDevMode);
@@ -995,9 +995,9 @@ devmode_from_settings (GtkPrintSettings *settings,
       g_free (extras);
   
       if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION))
-      {
-        devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
-      }
+        {
+          devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
+        }
     }
   
   if (page_setup ||
@@ -1252,25 +1252,25 @@ dialog_from_print_settings (GtkPrintOperation *op,
 	}
     }
   
-  // If we have a printer saved, restore our settings
+  /* If we have a printer saved, restore our settings */
   printer = gtk_print_settings_get_printer (settings);
   if (printer)
-  {
-    printdlgex->hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
+    {
+      printdlgex->hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
   
-    printdlgex->hDevMode = devmode_from_settings (settings,
+      printdlgex->hDevMode = devmode_from_settings (settings,
 						  op->priv->default_page_setup, NULL);
-  }
+    }
   else
-  {
-    // Otherwise, use the default settings
-    DWORD FlagsCopy = printdlgex->Flags;
-    printdlgex->Flags |= PD_RETURNDEFAULT;
-    PrintDlgExW (printdlgex);
-    printdlgex->Flags = FlagsCopy;
+    {
+      /* Otherwise, use the default settings */
+      DWORD FlagsCopy = printdlgex->Flags;
+      printdlgex->Flags |= PD_RETURNDEFAULT;
+      PrintDlgExW (printdlgex);
+      printdlgex->Flags = FlagsCopy;
 
-    devmode_from_settings (settings, op->priv->default_page_setup, printdlgex->hDevMode);
-  }
+      devmode_from_settings (settings, op->priv->default_page_setup, printdlgex->hDevMode);
+    }
 }
 
 typedef struct {
