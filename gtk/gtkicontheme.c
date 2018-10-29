@@ -4519,16 +4519,16 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
 }
 
 typedef struct {
-  gboolean is_symbolic;
+  guint is_symbolic : 1;
+  guint success_color_set : 1;
+  guint warning_color_set : 1;
+  guint error_color_set : 1;
+  guint fg_set : 1;
   GtkIconInfo *dup;
   GdkRGBA fg;
-  gboolean fg_set;
   GdkRGBA success_color;
-  gboolean success_color_set;
   GdkRGBA warning_color;
-  gboolean warning_color_set;
   GdkRGBA error_color;
-  gboolean error_color_set;
 } AsyncSymbolicData;
 
 static void
