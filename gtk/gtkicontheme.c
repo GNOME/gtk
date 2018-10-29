@@ -4466,7 +4466,7 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
  * @icon_info: a #GtkIconInfo
  * @context: a #GtkStyleContext
  * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
- *     loaded icon was a symbolic one and whether the @fg color was
+ *     loaded icon was a symbolic one and whether the foreground color was
  *     applied to it.
  * @error: (allow-none): location to store error information on failure,
  *     or %NULL.
