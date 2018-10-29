@@ -138,11 +138,11 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
         return NULL;
     }
   if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
-       cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+    cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
-       cg_context = [[NSGraphicsContext currentContext] CGContext];
+    cg_context = [[NSGraphicsContext currentContext] CGContext];
   if (!cg_context)
-       return NULL;
+    return NULL;
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
@@ -306,10 +306,10 @@ gdk_quartz_create_cairo_surface (GdkWindowImplQuartz *impl,
   surface_data->cg_context = cg_context;
 
   if (cg_context)
-       surface = cairo_quartz_surface_create_for_cg_context (cg_context,
-                                                             width, height);
+    surface = cairo_quartz_surface_create_for_cg_context (cg_context,
+                                                          width, height);
   else
-       surface = cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    surface = cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
   cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
                                surface_data,
