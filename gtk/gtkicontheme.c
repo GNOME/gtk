@@ -197,7 +197,6 @@ struct _GtkIconInfo
   gchar *filename;
   GFile *icon_file;
   GLoadableIcon *loadable;
-  GSList *emblem_infos;
 
   /* Cache pixbuf (if there is any) */
   GdkPixbuf *cache_pixbuf;
@@ -216,7 +215,6 @@ struct _GtkIconInfo
   gint desired_size;
   gint desired_scale;
   guint forced_size     : 1;
-  guint emblems_applied : 1;
   guint is_svg          : 1;
   guint is_resource     : 1;
 
@@ -3272,7 +3270,6 @@ static GtkIconInfo *
 icon_info_dup (GtkIconInfo *icon_info)
 {
   GtkIconInfo *dup;
-  GSList *l;
 
   dup = icon_info_new (icon_info->dir_type, icon_info->dir_size, icon_info->dir_scale);
 
@@ -3286,13 +3283,6 @@ icon_info_dup (GtkIconInfo *icon_info)
   if (icon_info->pixbuf)
     dup->pixbuf = g_object_ref (icon_info->pixbuf);
 
-  for (l = icon_info->emblem_infos; l != NULL; l = l->next)
-    {
-      dup->emblem_infos =
-        g_slist_append (dup->emblem_infos,
-                        icon_info_dup (l->data));
-    }
-
   if (icon_info->cache_pixbuf)
     dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
 
@@ -3301,7 +3291,6 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
   dup->forced_size = icon_info->forced_size;
-  dup->emblems_applied = icon_info->emblems_applied;
   dup->is_resource = icon_info->is_resource;
   dup->min_size = icon_info->min_size;
   dup->max_size = icon_info->max_size;
@@ -3325,7 +3314,6 @@ gtk_icon_info_finalize (GObject *object)
   g_clear_object (&icon_info->icon_file);
 
   g_clear_object (&icon_info->loadable);
-  g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) g_object_unref);
   g_clear_object (&icon_info->pixbuf);
   g_clear_object (&icon_info->proxy_pixbuf);
   g_clear_object (&icon_info->cache_pixbuf);
@@ -3351,9 +3339,8 @@ gtk_icon_info_class_init (GtkIconInfoClass *klass)
  * Gets the base size for the icon. The base size
  * is a size for the icon that was specified by
  * the icon theme creator. This may be different
- * than the actual size of image; an example of
- * this is small emblem icons that can be attached
- * to a larger icon. These icons will be given
+ * than the actual size of image;
+ * These icons will be given
  * the same base size as the larger icons to which
  * they are attached.
  *
@@ -3441,109 +3428,13 @@ gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
   return is_symbolic;
 }
 
-static GdkPixbuf *
-apply_emblems_to_pixbuf (GdkPixbuf   *pixbuf,
-                         GtkIconInfo *info)
-{
-  GdkPixbuf *icon = NULL;
-  gint w, h, pos;
-  GSList *l;
-
-  if (info->emblem_infos == NULL)
-    return NULL;
-
-  w = gdk_pixbuf_get_width (pixbuf);
-  h = gdk_pixbuf_get_height (pixbuf);
-
-  for (l = info->emblem_infos, pos = 0; l; l = l->next, pos++)
-    {
-      GtkIconInfo *emblem_info = l->data;
-
-      if (icon_info_ensure_scale_and_pixbuf (emblem_info))
-        {
-          GdkPixbuf *emblem = emblem_info->pixbuf;
-          gint ew, eh;
-          gint x = 0, y = 0; /* silence compiler */
-          gdouble scale;
-
-          ew = gdk_pixbuf_get_width (emblem);
-          eh = gdk_pixbuf_get_height (emblem);
-          if (ew >= w)
-            {
-              scale = 0.75;
-              ew = ew * 0.75;
-              eh = eh * 0.75;
-            }
-          else
-            scale = 1.0;
-
-          switch (pos % 4)
-            {
-            case 0:
-              x = w - ew;
-              y = h - eh;
-              break;
-            case 1:
-              x = w - ew;
-              y = 0;
-              break;
-            case 2:
-              x = 0;
-              y = h - eh;
-              break;
-            case 3:
-              x = 0;
-              y = 0;
-              break;
-            default:
-              break;
-            }
-
-          if (icon == NULL)
-            {
-              icon = gdk_pixbuf_copy (pixbuf);
-              if (icon == NULL)
-                break;
-            }
-
-          gdk_pixbuf_composite (emblem, icon, x, y, ew, eh, x, y,
-                                scale, scale, GDK_INTERP_BILINEAR, 255);
-       }
-   }
-
-  return icon;
-}
-
-/* Combine the icon with all emblems, the first emblem is placed 
- * in the southeast corner. Scale emblems to be at most 3/4 of the
- * size of the icon itself.
- */
-static void 
-apply_emblems (GtkIconInfo *info)
-{
-  GdkPixbuf *icon;
-
-  if (info->emblems_applied)
-    return;
-
-  icon = apply_emblems_to_pixbuf (info->pixbuf, info);
-
-  if (icon)
-    {
-      g_object_unref (info->pixbuf);
-      info->pixbuf = icon;
-      info->emblems_applied = TRUE;
-    }
-}
-
 /* If this returns TRUE, its safe to call icon_info_ensure_scale_and_pixbuf
  * without blocking
  */
 static gboolean
 icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
 {
-  if (icon_info->pixbuf &&
-      (icon_info->emblem_infos == NULL || icon_info->emblems_applied))
+  if (icon_info->pixbuf)
     return TRUE;
 
   if (icon_info->load_error)
@@ -3565,10 +3456,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
   gdouble dir_scale;
 
   if (icon_info->pixbuf)
-    {
-      apply_emblems (icon_info);
-      return TRUE;
-    }
+    return TRUE;
 
   if (icon_info->load_error)
     return FALSE;
@@ -3749,8 +3637,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
                                                    GDK_INTERP_BILINEAR);
       g_object_unref (source_pixbuf);
     }
-
-  apply_emblems (icon_info);
 
   return TRUE;
 }
@@ -3964,7 +3850,6 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
   if (!icon_info_get_pixbuf_ready (icon_info))
     {
       /* If not, copy results from dup back to icon_info */
-      icon_info->emblems_applied = dup->emblems_applied;
       icon_info->scale = dup->scale;
       g_clear_object (&icon_info->pixbuf);
       if (dup->pixbuf)
@@ -4340,15 +4225,6 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
 
   if (pixbuf != NULL)
     {
-      GdkPixbuf *icon;
-
-      icon = apply_emblems_to_pixbuf (pixbuf, icon_info);
-      if (icon != NULL)
-        {
-          g_object_unref (pixbuf);
-          pixbuf = icon;
-        }
-
       if (use_cache)
         {
           icon_info->symbolic_pixbuf_cache =
@@ -4925,34 +4801,6 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
       info = gtk_icon_theme_choose_icon_for_scale (icon_theme, names, size, scale, flags);
 
       return info;
-    }
-  else if (G_IS_EMBLEMED_ICON (icon))
-    {
-      GIcon *base, *emblem;
-      GList *list, *l;
-      GtkIconInfo *base_info, *emblem_info;
-
-      base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
-      base_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme, base, size, scale, flags);
-      if (base_info)
-        {
-          info = icon_info_dup (base_info);
-          g_object_unref (base_info);
-
-          list = g_emblemed_icon_get_emblems (G_EMBLEMED_ICON (icon));
-          for (l = list; l; l = l->next)
-            {
-              emblem = g_emblem_get_icon (G_EMBLEM (l->data));
-              /* always force size for emblems */
-              emblem_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme, emblem, size / 2, scale, flags | GTK_ICON_LOOKUP_FORCE_SIZE);
-              if (emblem_info)
-                info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
-            }
-
-          return info;
-        }
-      else
-        return NULL;
     }
 
   return NULL;
