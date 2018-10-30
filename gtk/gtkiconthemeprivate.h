@@ -27,8 +27,4 @@ void        gtk_icon_theme_lookup_symbolic_colors       (GtkCssStyle    *style,
                                                          GdkRGBA        *warning_out,
                                                          GdkRGBA        *error_out);
 
-GtkIconInfo *gtk_icon_info_new_for_file (GFile *file,
-                                         gint   size,
-                                         gint   scale);
-
 #endif /* __GTK_ICON_THEME_PRIVATE_H__ */
