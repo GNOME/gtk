@@ -3940,7 +3940,7 @@ rgba_to_pixel(const GdkRGBA  *rgba,
   pixel[3] = 255;
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 gtk_icon_theme_color_symbolic_pixbuf (GdkPixbuf     *symbolic,
                                       const GdkRGBA *fg_color,
                                       const GdkRGBA *success_color,

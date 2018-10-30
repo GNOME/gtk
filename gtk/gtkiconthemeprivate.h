@@ -31,11 +31,4 @@ GtkIconInfo *gtk_icon_info_new_for_file (GFile *file,
                                          gint   size,
                                          gint   scale);
 
-GdkPixbuf * gtk_icon_theme_color_symbolic_pixbuf (GdkPixbuf     *symbolic,
-                                                  const GdkRGBA *fg_color,
-                                                  const GdkRGBA *success_color,
-                                                  const GdkRGBA *warning_color,
-                                                  const GdkRGBA *error_color);
-
-
 #endif /* __GTK_ICON_THEME_PRIVATE_H__ */
