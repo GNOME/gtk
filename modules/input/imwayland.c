@@ -479,6 +479,10 @@ gtk_im_context_wayland_finalize (GObject *object)
 
   g_clear_object (&context->window);
   g_clear_object (&context->gesture);
+  g_free (context->surrounding.text);
+  g_free (context->current_preedit.text);
+  g_free (context->pending_preedit.text);
+  g_free (context->pending_commit);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
