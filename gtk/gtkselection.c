@@ -66,6 +66,13 @@
  * never need to use most of the functions in this section directly;
  * #GtkClipboard provides a nicer interface to the same functionality.
  *
+ * If an application is expected to exchange image data and work
+ * on Windows, it is highly advised to support at least "image/bmp" target
+ * for the widest possible compatibility with third-party applications.
+ * #GtkClipboard already does that by using gtk_target_list_add_image_targets()
+ * and gtk_selection_data_set_pixbuf() or gtk_selection_data_get_pixbuf(),
+ * which is one of the reasons why it is advised to use #GtkClipboard.
+ *
  * Some of the datatypes defined this section are used in
  * the #GtkClipboard and drag-and-drop API’s as well. The
  * #GtkTargetEntry and #GtkTargetList objects represent
