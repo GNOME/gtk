@@ -607,7 +607,7 @@ void
 _gdk_input_quartz_tablet_proximity (NSPointingDeviceType deviceType)
 {
   /* some tablets reports  NSPointingDeviceTypeUnknown */
-  if ((deviceType == NSPenPointingDevice) || (deviceType == NSPointingDeviceTypeUnknown))
+  if ((deviceType == NSPenPointingDevice) || (deviceType == NSUnknownPointingDevice))
     active_device = _gdk_quartz_pen;
   else if (deviceType == NSCursorPointingDevice)
     active_device = _gdk_quartz_cursor;
