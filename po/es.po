@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-03 10:46+0000\n"
-"PO-Revision-Date: 2018-09-05 11:14+0200\n"
+"POT-Creation-Date: 2018-10-29 18:35+0000\n"
+"PO-Revision-Date: 2018-10-31 13:15+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -2632,7 +2632,7 @@ msgstr "Cursiva"
 
 #: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
-msgstr ""
+msgstr "Slant"
 
 #: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
@@ -2973,7 +2973,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No se puede finalizar el proceso con PID %d: %s"
 
-#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7386
+#: gtk/gtknotebook.c:5123 gtk/gtknotebook.c:7401
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -3149,7 +3149,6 @@ msgstr "No se pudo iniciar «%s»"
 
 #: gtk/gtkplacessidebar.c:2420
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Error unlocking “%s”"
 msgstr "Error al desbloquear «%s»"
 
@@ -3299,7 +3298,7 @@ msgid "Disconnect"
 msgstr "Desconectar"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
-#: gtk/ui/gtksidebarrow.ui:60
+#: gtk/ui/gtksidebarrow.ui:61
 msgid "Unmount"
 msgstr "Desmontar"
 
@@ -3399,8 +3398,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "La razón más probable es que no se pudiera crear un archivo temporal."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:610 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Imprimir"
 
@@ -6644,8 +6643,6 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:96
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
 msgstr "Jeroglíficos egipcios"
@@ -7681,8 +7678,6 @@ msgstr "Wayland"
 
 #. ID
 #: modules/input/imwaylandgtk.c:82
-#| msgctxt "input method menu"
-#| msgid "Wayland"
 msgctxt "input method menu"
 msgid "Waylandgtk"
 msgstr "Waylandgtk"
