@@ -1655,7 +1655,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 3);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
 
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_PNG);
@@ -1665,14 +1665,10 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
   g_array_append_val (comp, fmt);
 
-  fmt.w32format = CF_DIB;
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_JPEG);
 
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_JPEG);
@@ -1682,17 +1678,10 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF);
   g_array_append_val (comp, fmt);
 
-  fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.w32format = CF_DIB;
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_GIF);
 
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_GIF);
@@ -1700,13 +1689,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   g_array_append_val (comp, fmt);
 
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF);
-  g_array_append_val (comp, fmt);
-
-  fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.w32format = CF_DIB;
   g_array_append_val (comp, fmt);
 
   g_hash_table_replace (win32_clipdrop->compatibility_w32formats, (gpointer) fmt.contentformat, comp);
@@ -1771,7 +1753,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   g_hash_table_replace (win32_clipdrop->compatibility_contentformats, GINT_TO_POINTER (CF_UNICODETEXT), comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 3);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG);
   fmt.transmute = FALSE;
 
@@ -1781,14 +1763,10 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
   g_array_append_val (comp, fmt);
 
-  fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_clipdrop->compatibility_contentformats, GINT_TO_POINTER (_gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG)), comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF);
   fmt.transmute = FALSE;
 
@@ -1798,17 +1776,10 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_JPEG);
   g_array_append_val (comp, fmt);
 
-  fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP);
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_clipdrop->compatibility_contentformats, GINT_TO_POINTER (_gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF)), comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 4);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF);
   fmt.transmute = FALSE;
 
@@ -1818,17 +1789,10 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_GIF);
   g_array_append_val (comp, fmt);
 
-  fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG);
-  fmt.transmute = TRUE;
-  g_array_append_val (comp, fmt);
-
-  fmt.contentformat = _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP);
-  g_array_append_val (comp, fmt);
-
   g_hash_table_replace (win32_clipdrop->compatibility_contentformats, GINT_TO_POINTER (_gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF)), comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 3);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.w32format = CF_DIB;
   fmt.transmute = FALSE;
 
@@ -1842,7 +1806,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   g_hash_table_replace (win32_clipdrop->compatibility_contentformats, GINT_TO_POINTER (CF_DIB), comp);
 
 
-  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 3);
+  comp = g_array_sized_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair), 2);
   fmt.w32format = _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_CFSTR_SHELLIDLIST);
   fmt.transmute = FALSE;
 
