@@ -1690,30 +1690,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   GTK_TYPE_DIRECTION_TYPE);
 
   /**
-   * GtkWidget::event:
-   * @widget: the object which received the signal.
-   * @event: the #GdkEvent which triggered this signal
-   *
-   * The GTK+ main loop will emit this signal for each GDK event delivered
-   * to a widget.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event
-   * and to cancel the emission of the second specific ::event signal.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[EVENT] =
-    g_signal_new (I_("event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
    * GtkWidget::drag-leave:
    * @widget: the object which received the signal.
    * @context: the drag context
@@ -5266,18 +5242,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  /* Non input events get handled right away */
-  switch ((guint) event->any.type)
-    {
-    case GDK_NOTHING:
-    case GDK_DELETE:
-    case GDK_DESTROY:
-    case GDK_CONFIGURE:
-      return gtk_widget_emit_event_signals (widget, event);
-    default:
-      break;
-    }
-
   event_copy = gdk_event_copy (event);
 
   translate_event_coordinates (event_copy, widget);
@@ -5302,22 +5266,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
       (event->any.type == GDK_KEY_PRESS ||
        event->any.type == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
-
-  return return_val;
-}
-
-gboolean
-gtk_widget_emit_event_signals (GtkWidget      *widget,
-                               const GdkEvent *event)
-{
-  gboolean return_val = FALSE, handled;
-
-  g_object_ref (widget);
-
-  g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
-  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
-
-  g_object_unref (widget);
 
   return return_val;
 }

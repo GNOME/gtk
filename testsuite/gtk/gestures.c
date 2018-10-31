@@ -198,16 +198,20 @@ state_nick (GtkEventSequenceState state)
 }
 
 typedef struct {
+  GtkEventController *controller;
   GString *str;
   gboolean exit;
 } LegacyData;
 
 static gboolean
-legacy_cb (GtkWidget *w, GdkEvent *button, gpointer data)
+legacy_cb (GtkEventControllerLegacy *c, GdkEvent *button, gpointer data)
 {
   if (gdk_event_get_event_type (button) == GDK_BUTTON_PRESS)
     {
       LegacyData *ld = data;
+      GtkWidget *w;
+
+      w = gtk_event_controller_get_widget (ld->controller);
 
       if (ld->str->len > 0)
         g_string_append (ld->str, ", ");
@@ -377,9 +381,13 @@ add_legacy (GtkWidget *w, GString *str, gboolean exit)
   LegacyData *data;
 
   data = g_new (LegacyData, 1);
+  data->controller = gtk_event_controller_legacy_new ();
   data->str = str;
   data->exit = exit;
-  g_signal_connect (w, "event", G_CALLBACK (legacy_cb), data);
+
+  gtk_event_controller_set_propagation_phase (data->controller, GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (w, data->controller);
+  g_signal_connect (data->controller, "event", G_CALLBACK (legacy_cb), data);
 }
 
 static void
@@ -457,6 +465,10 @@ test_mixed (void)
 
   str = g_string_new ("");
 
+  add_legacy (A, str, GDK_EVENT_PROPAGATE);
+  add_legacy (B, str, GDK_EVENT_PROPAGATE);
+  add_legacy (C, str, GDK_EVENT_PROPAGATE);
+
   add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
@@ -466,10 +478,6 @@ test_mixed (void)
   add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-
-  add_legacy (A, str, GDK_EVENT_PROPAGATE);
-  add_legacy (B, str, GDK_EVENT_PROPAGATE);
-  add_legacy (C, str, GDK_EVENT_PROPAGATE);
 
   gtk_widget_get_allocation (A, &allocation);
 
@@ -516,6 +524,10 @@ test_early_exit (void)
 
   str = g_string_new ("");
 
+  add_legacy (A, str, GDK_EVENT_PROPAGATE);
+  add_legacy (B, str, GDK_EVENT_STOP);
+  add_legacy (C, str, GDK_EVENT_PROPAGATE);
+
   add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
@@ -523,10 +535,6 @@ test_early_exit (void)
   add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-
-  add_legacy (A, str, GDK_EVENT_PROPAGATE);
-  add_legacy (B, str, GDK_EVENT_STOP);
-  add_legacy (C, str, GDK_EVENT_PROPAGATE);
 
   gtk_widget_get_allocation (A, &allocation);
 

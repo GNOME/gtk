@@ -1325,138 +1325,6 @@ create_rotated_text (GtkWidget *widget)
 
 
 /*
- * Saved Position
- */
-gint upositionx = 0;
-gint upositiony = 0;
-
-static gboolean
-configure_event (GtkWidget *window)
-{
-  GtkLabel *lx;
-  GtkLabel *ly;
-  gchar buffer[64];
-
-  lx = g_object_get_data (G_OBJECT (window), "x");
-  ly = g_object_get_data (G_OBJECT (window), "y");
-
-  gdk_surface_get_root_origin (gtk_widget_get_surface (window),
-                              &upositionx, &upositiony);
-  sprintf (buffer, "%d", upositionx);
-  gtk_label_set_text (lx, buffer);
-  sprintf (buffer, "%d", upositiony);
-  gtk_label_set_text (ly, buffer);
-
-  return FALSE;
-}
-
-static void
-uposition_stop_configure (GtkToggleButton *toggle,
-			  GObject         *window)
-{
-  if (gtk_toggle_button_get_active (toggle))
-    g_signal_handlers_block_by_func (window, G_CALLBACK (configure_event), NULL);
-  else
-    g_signal_handlers_unblock_by_func (window, G_CALLBACK (configure_event), NULL);
-}
-
-static void
-create_saved_position (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-
-  if (!window)
-    {
-      GtkWidget *hbox;
-      GtkWidget *main_vbox;
-      GtkWidget *vbox;
-      GtkWidget *x_label;
-      GtkWidget *y_label;
-      GtkWidget *button;
-      GtkWidget *label;
-      GtkWidget *any;
-
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_title (GTK_WINDOW (window), "Saved Position");
-      g_signal_connect (window, "event", G_CALLBACK (configure_event), NULL);
-
-      gtk_window_move (GTK_WINDOW (window), upositionx, upositiony);
-
-      gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), main_vbox);
-
-      button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
-                             "label", "Stop Events",
-                             "active", FALSE,
-                             "visible", TRUE,
-                             NULL);
-      g_signal_connect (button, "clicked", G_CALLBACK (uposition_stop_configure), window);
-
-      vbox =
-	g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_VERTICAL,
-		      "homogeneous", FALSE,
-		      "spacing", 5,
-		      NULL);
-      gtk_container_add (GTK_CONTAINER (main_vbox), vbox);
-      gtk_container_add (GTK_CONTAINER (vbox), button);
-
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox);
-
-      label = gtk_label_new ("X Origin : ");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (hbox), label);
-
-      x_label = gtk_label_new ("");
-      gtk_box_pack_start (GTK_BOX (hbox), x_label);
-      g_object_set_data (G_OBJECT (window), "x", x_label);
-
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox);
-
-      label = gtk_label_new ("Y Origin : ");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (hbox), label);
-
-      y_label = gtk_label_new ("");
-      gtk_box_pack_start (GTK_BOX (hbox), y_label);
-      g_object_set_data (G_OBJECT (window), "y", y_label);
-
-      any =
-	g_object_new (gtk_separator_get_type (),
-			"GtkWidget::visible", TRUE,
-			NULL);
-      gtk_box_pack_start (GTK_BOX (main_vbox), any);
-
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (main_vbox), hbox);
-
-      button = gtk_button_new_with_label ("Close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_box_pack_start (GTK_BOX (hbox), button);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
-
-      gtk_widget_show (window);
-    }
-  else
-    gtk_widget_destroy (window);
-}
-
-/*
  * GtkPixmap
  */
 
@@ -5695,27 +5563,26 @@ create_surface_states (GtkWidget *widget)
  * Window sizing
  */
 
-static gint
-configure_event_callback (GtkWidget *widget,
-                          GdkEvent *event,
-                          gpointer data)
+static void
+size_allocate_callback (GtkWidget     *widget,
+			GtkAllocation *allocation,
+			int            baseline,
+			gpointer       data)
 {
   GtkWidget *label = data;
   gchar *msg;
   gint x, y;
-  
+
   gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
-  
-  msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
+
+  msg = g_strdup_printf ("size: %d x %d\n"
                          "position: %d, %d",
-                         0, 0, 0, 0, // FIXME
+                         allocation->width, allocation->height,
                          x, y);
-  
+
   gtk_label_set_text (GTK_LABEL (label), msg);
 
   g_free (msg);
-
-  return FALSE;
 }
 
 static void
@@ -5867,10 +5734,10 @@ window_controls (GtkWidget *window)
 
   gtk_container_add (GTK_CONTAINER (control_window), vbox);
 
-  label = gtk_label_new ("<no configure events>");
+  label = gtk_label_new ("<no size>");
   gtk_box_pack_start (GTK_BOX (vbox), label);
 
-  g_signal_connect (window, "event", G_CALLBACK (configure_event_callback), label);
+  g_signal_connect_after (window, "size-allocate", G_CALLBACK (size_allocate_callback), label);
 
   adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 0, 0);
@@ -7034,7 +6901,6 @@ struct {
   { "radio buttons", create_radio_buttons },
   { "range controls", create_range_controls },
   { "rotated text", create_rotated_text },
-  { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },
   { "size groups", create_size_groups },
   { "spinbutton", create_spins },
