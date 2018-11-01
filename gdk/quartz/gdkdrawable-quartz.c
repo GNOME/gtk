@@ -65,15 +65,15 @@ _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
 
   cg_context = gdk_quartz_drawable_get_context (drawable, TRUE);
 
-  if (!cg_context)
-    return NULL;
-
   surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
   surface_data->drawable = drawable;
   surface_data->cg_context = cg_context;
 
-  surface = cairo_quartz_surface_create_for_cg_context (cg_context,
-                                                        width, height);
+  if (cg_context)
+    surface = cairo_quartz_surface_create_for_cg_context (cg_context,
+                                                          width, height);
+  else
+    surface = cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
   cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
                                surface_data,
