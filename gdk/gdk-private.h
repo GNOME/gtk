@@ -32,6 +32,7 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             const char   *theme,
                                             int           size);
 gboolean gdk_running_in_sandbox (void);
+gboolean gdk_should_use_portal (void);
 
 const gchar *   gdk_get_startup_notification_id (void);
 
