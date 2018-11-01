@@ -884,7 +884,7 @@ void
 gdk_quartz_drawable_release_context (GdkDrawable  *drawable, 
 				     CGContextRef  cg_context)
 {
-  if (!context)
+  if (!cg_context)
     return;
   
   if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))

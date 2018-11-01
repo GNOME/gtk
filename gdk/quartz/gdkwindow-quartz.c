@@ -113,8 +113,10 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
        cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
        cg_context = [[NSGraphicsContext currentContext] CGContext];
+
   if (!cg_context)
-    return;
+    return NULL;
+
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
