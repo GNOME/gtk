@@ -471,14 +471,7 @@ gdk_display_open_default (void)
 gboolean
 gdk_running_in_sandbox (void)
 {
-  char *path;
-  gboolean ret;
-
-  path = g_build_filename (g_get_user_runtime_dir (), "flatpak-info", NULL);
-  ret = g_file_test (path, G_FILE_TEST_EXISTS);
-  g_free (path);
-
-  return ret;
+  return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
 }
 
 /**
