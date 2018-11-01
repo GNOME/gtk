@@ -272,7 +272,7 @@ gdk_running_in_sandbox (void)
   char *path;
   gboolean ret;
 
-  path = g_build_filename (g_get_user_runtime_dir (), "flatpak-info", NULL);
+  path = g_build_filename ("/.flatpak-info", NULL);
   ret = g_file_test (path, G_FILE_TEST_EXISTS);
   g_free (path);
 
