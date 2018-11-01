@@ -113,6 +113,8 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
        cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
        cg_context = [[NSGraphicsContext currentContext] CGContext];
+  if (!cg_context)
+    return;
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
@@ -272,6 +274,10 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       gint i;
 
       cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
+
+      if (!cg_context)
+        goto done;
+
       color = _gdk_quartz_colormap_get_cgcolor_from_pixel (window,
                                                            private->bg_color.pixel);
       CGContextSetFillColorWithColor (cg_context, color);

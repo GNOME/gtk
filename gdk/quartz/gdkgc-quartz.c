@@ -112,13 +112,16 @@ create_clip_mask (GdkPixmap *source_pixmap)
                                       CGImageGetColorSpace (source),
                                       CGImageGetBitmapInfo (source));
 
-  CGContextTranslateCTM (cg_context, 0, height);
-  CGContextScaleCTM (cg_context, 1.0, -1.0);
+  if (cg_context)
+    {
+      CGContextTranslateCTM (cg_context, 0, height);
+      CGContextScaleCTM (cg_context, 1.0, -1.0);
 
-  CGContextDrawImage (cg_context,
-                      CGRectMake (0, 0, width, height), source);
+      CGContextDrawImage (cg_context,
+                          CGRectMake (0, 0, width, height), source);
 
-  CGContextRelease (cg_context);
+      CGContextRelease (cg_context);
+    }
 
   return clip_mask;
 }
@@ -366,6 +369,9 @@ gdk_quartz_draw_tiled_pattern (void         *info,
   CGImageRef   pattern_image;
   size_t       width, height;
 
+  if (!context)
+    return;
+  
   pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_tile (gc)));
 
   width = CGImageGetWidth (pattern_image);
@@ -386,6 +392,9 @@ gdk_quartz_draw_stippled_pattern (void         *info,
   CGImageRef  pattern_image;
   CGRect      rect;
   CGColorRef  color;
+
+  if (!context)
+    return;
 
   pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_stipple (gc)));
   rect = CGRectMake (0, 0,
@@ -412,6 +421,9 @@ gdk_quartz_draw_opaque_stippled_pattern (void         *info,
   CGImageRef  pattern_image;
   CGRect      rect;
   CGColorRef  color;
+
+  if (!context)
+    return;
 
   pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_stipple (gc)));
   rect = CGRectMake (0, 0,
@@ -448,7 +460,7 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 
   g_return_val_if_fail (gc == NULL || GDK_IS_GC (gc), FALSE);
 
-  if (!gc)
+  if (!gc || !context)
     return FALSE;
 
   private = GDK_GC_QUARTZ (gc);

@@ -134,14 +134,17 @@ gdk_pixmap_impl_quartz_get_context (GdkDrawable *drawable,
                                       bytes_per_row,
                                       colorspace,
                                       alpha_info);
-  CGContextSetAllowsAntialiasing (cg_context, antialias);
 
-  CGColorSpaceRelease (colorspace);
+  if (cg_context)
+    {
+      CGContextSetAllowsAntialiasing (cg_context, antialias);
 
-  /* convert coordinates from core graphics to gtk+ */
-  CGContextTranslateCTM (cg_context, 0, impl->height);
-  CGContextScaleCTM (cg_context, 1.0, -1.0);
+      CGColorSpaceRelease (colorspace);
 
+      /* convert coordinates from core graphics to gtk+ */
+      CGContextTranslateCTM (cg_context, 0, impl->height);
+      CGContextScaleCTM (cg_context, 1.0, -1.0);
+    }
   return cg_context;
 }
 
