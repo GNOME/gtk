@@ -709,6 +709,10 @@ devmode_to_settings (GtkPrintSettings *settings,
       g_free (extra);
     }
   
+  char *devmode_name = g_utf16_to_utf8 (devmode->dmDeviceName, -1, NULL, NULL, NULL);
+  gtk_print_settings_set (settings, "win32-devmode-name", devmode_name);
+  g_free (devmode_name);
+
   if (devmode->dmFields & DM_ORIENTATION)
     gtk_print_settings_set_orientation (settings,
 					orientation_from_win32 (devmode->dmOrientation));
@@ -986,6 +990,11 @@ devmode_from_settings (GtkPrintSettings *settings,
       devmode->dmSpecVersion = DM_SPECVERSION;
       devmode->dmSize = sizeof (DEVMODEW);
   
+      gunichar2 *device_name = g_utf8_to_utf16 (gtk_print_settings_get (settings, "win32-devmode-name"), -1, NULL, NULL, NULL);
+      memcpy (devmode->dmDeviceName, device_name, CCHDEVICENAME);
+      g_free (device_name);
+
+
       devmode->dmDriverExtra = 0;
       if (extras && extras_len > 0)
         {
