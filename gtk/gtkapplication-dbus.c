@@ -259,7 +259,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
   dbus->unique_name = g_dbus_connection_get_unique_name (dbus->session);
 
-  if (gtk_should_use_portal ())
+  if (gdk_should_use_portal ())
     goto out;
 
   g_debug ("Connecting to session manager");
