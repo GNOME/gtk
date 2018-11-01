@@ -77,6 +77,7 @@ struct _GdkWaylandDisplay
 
   GHashTable *settings;
   GsdXftSettings xft_settings;
+  GDBusProxy *settings_portal;
 
   guint32    shell_capabilities;
 
