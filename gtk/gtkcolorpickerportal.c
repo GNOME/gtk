@@ -53,7 +53,7 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   GVariant *ret;
   guint version;
 
-  if (!gtk_should_use_portal ())
+  if (!gdk_should_use_portal ())
     return FALSE;
 
   picker->portal_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
