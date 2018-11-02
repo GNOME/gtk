@@ -1524,9 +1524,6 @@ update_xft_settings (GdkDisplay *display)
     }
 }
 
-#define WM_SETTINGS_SCHEMA "org.gnome.desktop.wm.preferences"
-#define CLASSIC_WM_SETTINGS_SCHEMA "org.gnome.shell.extensions.classic-overrides"
-
 typedef struct _TranslationEntry TranslationEntry;
 struct _TranslationEntry {
   gboolean valid;
@@ -1560,8 +1557,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.sound", "input-feedback-sounds", "gtk-enable-input-feedback-sounds", G_TYPE_BOOLEAN, { . b = FALSE } },
   { FALSE, "org.gnome.desktop.privacy", "recent-files-max-age", "gtk-recent-files-max-age", G_TYPE_INT, { .i = 30 } },
   { FALSE, "org.gnome.desktop.privacy", "remember-recent-files",    "gtk-recent-files-enabled", G_TYPE_BOOLEAN, { .b = TRUE } },
-  { FALSE, WM_SETTINGS_SCHEMA, "button-layout",    "gtk-decoration-layout", G_TYPE_STRING, { .s = "menu:close" } },
-  { FALSE, CLASSIC_WM_SETTINGS_SCHEMA, "button-layout",   "gtk-decoration-layout", G_TYPE_STRING, { .s = "menu:close" } },
+  { FALSE, "org.gnome.desktop.wm.preferences", "button-layout",    "gtk-decoration-layout", G_TYPE_STRING, { .s = "menu:close" } },
   { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "antialiasing", "gtk-xft-antialias", G_TYPE_NONE, { .i = 0 } },
   { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "hinting", "gtk-xft-hinting", G_TYPE_NONE, { .i = 0 } },
   { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "hinting", "gtk-xft-hintstyle", G_TYPE_NONE, { .i = 0 } },
@@ -1760,19 +1756,9 @@ set_decoration_layout_from_entry (GdkDisplay       *display,
                                   GValue           *value)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GSettings *settings = NULL;
-  const char *session;
+  GSettings *settings;
 
-  /* Hack: until we get session-dependent defaults in GSettings,
-   *       swap out the usual schema for the "classic" one when
-   *       running in classic mode
-   */
-  session = g_getenv ("XDG_CURRENT_DESKTOP");
-  if (session && strstr (session, "GNOME-Classic"))
-    settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, CLASSIC_WM_SETTINGS_SCHEMA);
-
-  if (settings == NULL)
-    settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, WM_SETTINGS_SCHEMA);
+  settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, entry->schema);
 
   if (settings)
     {
