@@ -1780,6 +1780,12 @@ init_settings (GdkDisplay *display)
 
   if (gdk_should_use_portal ())
     {
+      GVariant *ret;
+      GError *error = NULL;
+      const char *schema;
+      GVariant *val;
+      GVariantIter *iter;
+
       display_wayland->settings_portal = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                                         G_DBUS_PROXY_FLAGS_NONE,
                                                                         NULL,
@@ -1787,37 +1793,68 @@ init_settings (GdkDisplay *display)
                                                                         PORTAL_OBJECT_PATH,
                                                                         PORTAL_SETTINGS_INTERFACE,
                                                                         NULL,
-                                                                        NULL);
+                                                                        &error);
+      if (error)
+        {
+          g_warning ("Setting portal not found: %s", error->message);
+          g_error_free (error);
+
+          goto fallback;
+        }
+
+      ret = g_dbus_proxy_call_sync (display_wayland->settings_portal,
+                                    "ReadAll",
+                                    g_variant_new ("()"),
+                                    G_DBUS_CALL_FLAGS_NONE,
+                                    G_MAXINT,
+                                    NULL,
+                                    &error);
+
+      if (error)
+        {
+          g_warning ("Failed to read portal settings: %s", error->message);
+          g_error_free (error);
+          g_clear_object (&display_wayland->settings_portal);
+
+          goto fallback;
+        }
+
+      g_variant_get (ret, "(a{sa{sv}})", &iter);
+
+      while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema, &val))
+        {
+          GVariantIter *iter2 = g_variant_iter_new (val);
+          const char *key;
+          GVariant *v;
+
+          while (g_variant_iter_loop (iter2, "{sv}", &key, &v))
+            {
+              TranslationEntry *entry = find_translation_entry_by_schema (schema, key);
+              if (entry)
+                {
+                  char *a = g_variant_print (v, FALSE);
+                  g_debug ("Using portal setting for %s %s: %s\n", schema, key, a);
+                  g_free (a);
+                  apply_portal_setting (entry, v, display);
+                }
+              else
+                {
+                  g_debug ("Ignoring portal setting for %s %s", schema, key);
+                }
+            }
+          g_variant_iter_free (iter2);
+        }
+      g_variant_iter_free (iter);
+
+      g_variant_unref (ret);
 
       g_signal_connect (display_wayland->settings_portal, "g-signal",
                         G_CALLBACK (settings_portal_changed), display_wayland);
 
-      for (i = 0; i < G_N_ELEMENTS (translations); i++)
-        {
-          GVariant *ret;
-
-          ret = g_dbus_proxy_call_sync (display_wayland->settings_portal,
-                                  "Read",
-                                  g_variant_new ("(ss)", translations[i].schema, translations[i].key),
-                                  G_DBUS_CALL_FLAGS_NONE,
-                                  G_MAXINT,
-                                  NULL,
-                                  NULL);
-          if (ret)
-            {
-              GVariant *value;
-              g_variant_get (ret, "(v)", &value);
-              apply_portal_setting (&translations[i], value, display);
-              g_variant_unref (value);
-              g_variant_unref (ret);
-            }
-          else
-            {
-              g_warning ("no portal value for %s %s", translations[i].schema, translations[i].key);
-            }
-        }
-
       return;
+
+fallback:
+      g_debug ("Failed to use settings portal; falling back to gsettings");
     }
 
   g_intern_static_string ("antialiasing");
