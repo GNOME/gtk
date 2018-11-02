@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-29 18:36+0000\n"
-"PO-Revision-Date: 2018-11-02 09:50+0100\n"
+"PO-Revision-Date: 2018-11-02 09:53+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -4144,7 +4144,7 @@ msgstr "Akcia vyladenia"
 
 #: gtk/gtkfontchooserwidget.c:697
 msgid "The toggle action to switch to the tweak page"
-msgstr ""
+msgstr "Akcia prepnutia na stránku s vyladeniami"
 
 #: gtk/gtkframe.c:232
 msgid "Text of the frame's label"
