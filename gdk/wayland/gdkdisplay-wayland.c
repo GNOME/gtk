@@ -1372,23 +1372,6 @@ _gdk_wayland_is_shm_surface (cairo_surface_t *surface)
   return cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key) != NULL;
 }
 
-/* When using the Settings portal, we cache the value in
- * the fallback member, and we ignore the valid field
- */
-typedef struct _TranslationEntry TranslationEntry;
-struct _TranslationEntry {
-  gboolean valid;
-  const gchar *schema;
-  const gchar *key;
-  const gchar *setting;
-  GType type;
-  union {
-    const char *s;
-    gint         i;
-    gboolean     b;
-  } fallback;
-};
-
 typedef enum
 {
   GSD_FONT_ANTIALIASING_MODE_NONE,
@@ -1469,6 +1452,22 @@ get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
   return 96.0 * factor;
 }
 
+/* When using the Settings portal, we cache the value in
+ * the fallback member, and we ignore the valid field
+ */
+typedef struct _TranslationEntry TranslationEntry;
+struct _TranslationEntry {
+  gboolean valid;
+  const gchar *schema;
+  const gchar *key;
+  const gchar *setting;
+  GType type;
+  union {
+    const char *s;
+    gint         i;
+    gboolean     b;
+  } fallback;
+};
 
 static TranslationEntry * find_translation_entry_by_schema (const char *schema,
                                                             const char *key);
@@ -1707,8 +1706,8 @@ settings_changed (GSettings  *settings,
 
 static void
 apply_portal_setting (TranslationEntry *entry,
-                      GVariant   *value,
-                      GdkDisplay *display)
+                      GVariant         *value,
+                      GdkDisplay       *display)
 {
   switch (entry->type)
     {
