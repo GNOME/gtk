@@ -62,5 +62,6 @@ GDK_AVAILABLE_IN_ALL
 GdkPrivateVTable *      gdk__private__  (void);
 
 gboolean gdk_running_in_sandbox (void);
+gboolean gdk_should_use_portal (void);
 
 #endif /* __GDK__PRIVATE_H__ */
