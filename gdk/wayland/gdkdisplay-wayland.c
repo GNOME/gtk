@@ -1738,13 +1738,13 @@ apply_portal_setting (TranslationEntry *entry,
 }
 
 static void
-settings_portal_changed (GDBusProxy     *proxy,
-                         const char     *sender_name,
-                         const char     *signal_name,
-                         GVariant       *parameters,
+settings_portal_changed (GDBusProxy *proxy,
+                         const char *sender_name,
+                         const char *signal_name,
+                         GVariant   *parameters,
                          GdkDisplay *display)
 {
-  if (strcmp (signal_name, "PropertyChanged") == 0)
+  if (strcmp (signal_name, "SettingChanged") == 0)
     {
       const char *namespace;
       const char *name;
