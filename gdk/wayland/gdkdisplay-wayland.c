@@ -1638,7 +1638,8 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.wm.preferences", "action-double-click-titlebar", "gtk-titlebar-double-click", G_TYPE_STRING, { .s = "toggle-maximize" } },
   { FALSE, "org.gnome.desktop.wm.preferences", "action-middle-click-titlebar", "gtk-titlebar-middle-click", G_TYPE_STRING, { .s = "none" } },
   { FALSE, "org.gnome.desktop.wm.preferences", "action-right-click-titlebar", "gtk-titlebar-right-click", G_TYPE_STRING, { .s = "menu" } },
-  { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } }
+  { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
+  { FALSE, "org.gnome.fontconfig", "timestamp", "gtk-fontconfig-timestamp", G_TYPE_INT, { .i = 0 } }
 };
 
 
@@ -1755,7 +1756,10 @@ settings_portal_changed (GDBusProxy     *proxy,
       entry = find_translation_entry_by_schema (namespace, name);
       if (entry != NULL)
         {
-          apply_portal_setting (entry, value, display))
+          char *a = g_variant_print (value, FALSE);
+          g_debug ("Using changed portal setting %s %s: %s", namespace, name, a);
+          g_free (a);
+          apply_portal_setting (entry, value, display);
           gdk_display_setting_changed (display, entry->setting);
         }
       else
@@ -1936,7 +1940,10 @@ set_value_from_entry (GdkDisplay       *display,
           g_value_set_string (value, entry->fallback.s);
           break;
         case G_TYPE_INT:
-          g_value_set_int (value, entry->fallback.i);
+          if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
+            g_value_set_uint (value, (guint)entry->fallback.i);
+          else
+            g_value_set_int (value, entry->fallback.i);
           break;
         case G_TYPE_BOOLEAN:
           g_value_set_boolean (value, entry->fallback.b);
