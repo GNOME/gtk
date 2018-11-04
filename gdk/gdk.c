@@ -474,6 +474,26 @@ gdk_running_in_sandbox (void)
   return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
 }
 
+gboolean
+gdk_should_use_portal (void)
+{
+  static const char *use_portal = NULL;
+
+  if (G_UNLIKELY (use_portal == NULL))
+    {
+      if (gdk_running_in_sandbox ())
+        use_portal = "1";
+      else
+        {
+          use_portal = g_getenv ("GTK_USE_PORTAL");
+          if (!use_portal)
+            use_portal = "";
+        }
+    }
+
+  return use_portal[0] == '1';
+}
+
 /**
  * gdk_display_open_default_libgtk_only:
  *
