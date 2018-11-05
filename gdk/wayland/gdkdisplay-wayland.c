@@ -1483,7 +1483,7 @@ update_xft_settings (GdkDisplay *display)
   GsdXftSettings xft_settings;
   double dpi;
 
-  if (gdk_should_use_portal ())
+  if (display_wayland->settings_portal)
     {
       TranslationEntry *entry;
 
@@ -1637,7 +1637,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.wm.preferences", "action-middle-click-titlebar", "gtk-titlebar-middle-click", G_TYPE_STRING, { .s = "none" } },
   { FALSE, "org.gnome.desktop.wm.preferences", "action-right-click-titlebar", "gtk-titlebar-right-click", G_TYPE_STRING, { .s = "menu" } },
   { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
-  { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_INT, { .i = 0 } }
+  { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } }
 };
 
 
@@ -1720,6 +1720,11 @@ apply_portal_setting (TranslationEntry *entry,
       entry->fallback.b = g_variant_get_boolean (value);
       break;
     case G_TYPE_NONE:
+      if (strcmp (entry->key, "serial") == 0)
+        {
+          entry->fallback.i = g_variant_get_int32 (value);
+          break;
+        }
       if (strcmp (entry->key, "antialiasing") == 0)
         entry->fallback.i = get_antialiasing (g_variant_get_string (value, NULL));
       else if (strcmp (entry->key, "hinting") == 0)
@@ -1930,7 +1935,7 @@ set_value_from_entry (GdkDisplay       *display,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GSettings *settings;
 
-  if (gdk_should_use_portal ())
+  if (display_wayland->settings_portal)
     {
       switch (entry->type)
         {
@@ -1938,16 +1943,15 @@ set_value_from_entry (GdkDisplay       *display,
           g_value_set_string (value, entry->fallback.s);
           break;
         case G_TYPE_INT:
-          if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
-            g_value_set_uint (value, (guint)entry->fallback.i);
-          else
-            g_value_set_int (value, entry->fallback.i);
+          g_value_set_int (value, entry->fallback.i);
           break;
         case G_TYPE_BOOLEAN:
           g_value_set_boolean (value, entry->fallback.b);
           break;
         case G_TYPE_NONE:
-          if (g_str_equal (entry->setting, "gtk-xft-antialias"))
+          if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
+            g_value_set_uint (value, (guint)entry->fallback.i);
+          else if (g_str_equal (entry->setting, "gtk-xft-antialias"))
             g_value_set_int (value, display_wayland->xft_settings.antialias);
           else if (g_str_equal (entry->setting, "gtk-xft-hinting"))
             g_value_set_int (value, display_wayland->xft_settings.hinting);
@@ -1995,7 +1999,9 @@ set_value_from_entry (GdkDisplay       *display,
                                   : entry->fallback.b);
       break;
     case G_TYPE_NONE:
-      if (g_str_equal (entry->setting, "gtk-xft-antialias"))
+      if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
+        g_value_set_uint (value, (guint)entry->fallback.i);
+      else if (g_str_equal (entry->setting, "gtk-xft-antialias"))
         g_value_set_int (value, display_wayland->xft_settings.antialias);
       else if (g_str_equal (entry->setting, "gtk-xft-hinting"))
         g_value_set_int (value, display_wayland->xft_settings.hinting);
@@ -2021,7 +2027,7 @@ set_decoration_layout_from_entry (GdkDisplay       *display,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GSettings *settings = NULL;
 
-  if (gdk_should_use_portal ())
+  if (display_wayland->settings_portal)
     {
       g_value_set_string (value, entry->fallback.s);
       return;
