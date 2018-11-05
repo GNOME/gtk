@@ -346,7 +346,7 @@ update_xft_settings (GdkScreen *screen)
   GsdXftSettings xft_settings;
   double dpi;
 
-  if (gdk_should_use_portal ())
+  if (screen_wayland->settings_portal)
     {
       TranslationEntry *entry;
 
@@ -822,7 +822,7 @@ set_value_from_entry (GdkScreen        *screen,
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
   GSettings *settings;
 
-  if (gdk_should_use_portal ())
+  if (screen_wayland->settings_portal)
     {
       switch (entry->type)
         {
@@ -917,7 +917,7 @@ set_decoration_layout_from_entry (GdkScreen        *screen,
   GSettings *settings = NULL;
   const char *session;
 
-  if (gdk_should_use_portal ())
+  if (screen_wayland->settings_portal)
     {
       g_value_set_string (value, entry->fallback.s);
       return;
