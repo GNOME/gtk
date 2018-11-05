@@ -1789,6 +1789,14 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
+  /**
+   * GtkPopover::closed:
+   *
+   * This signal is emitted when the popover is dismissed either through
+   * API or user interaction.
+   *
+   * Since: 3.12
+   */
   signals[CLOSED] =
     g_signal_new (I_("closed"),
                   G_TYPE_FROM_CLASS (object_class),
