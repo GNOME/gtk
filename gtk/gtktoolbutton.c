@@ -79,9 +79,6 @@ enum {
   PROP_ACTION_TARGET
 };
 
-static void gtk_tool_button_init          (GtkToolButton      *button,
-					   GtkToolButtonClass *klass);
-static void gtk_tool_button_class_init    (GtkToolButtonClass *klass);
 static void gtk_tool_button_set_property  (GObject            *object,
 					   guint               prop_id,
 					   const GValue       *value,
@@ -122,33 +119,11 @@ struct _GtkToolButtonPrivate
 static GObjectClass        *parent_class = NULL;
 static guint                toolbutton_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_tool_button_get_type (void)
-{
-  static GType g_define_type_id = 0;
+G_DEFINE_TYPE_WITH_CODE (GtkToolButton, gtk_tool_button, GTK_TYPE_TOOL_ITEM,
+                         G_ADD_PRIVATE (GtkToolButton)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
+                                                gtk_tool_button_actionable_iface_init));
 
-  if (!g_define_type_id)
-    {
-      const GInterfaceInfo actionable_info =
-      {
-        (GInterfaceInitFunc) gtk_tool_button_actionable_iface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      g_define_type_id = g_type_register_static_simple (GTK_TYPE_TOOL_ITEM,
-                                                        I_("GtkToolButton"),
-                                                        sizeof (GtkToolButtonClass),
-                                                        (GClassInitFunc) gtk_tool_button_class_init,
-                                                        sizeof (GtkToolButton),
-                                                        (GInstanceInitFunc) gtk_tool_button_init,
-                                                        0);
-
-      g_type_add_interface_static (g_define_type_id,
-                                   GTK_TYPE_ACTIONABLE, &actionable_info);
-    }
-  return g_define_type_id;
-}
 
 static void
 gtk_tool_button_class_init (GtkToolButtonClass *klass)
@@ -268,27 +243,22 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   
-  g_type_class_add_private (object_class, sizeof (GtkToolButtonPrivate));
-
   gtk_widget_class_set_css_name (widget_class, I_("toolbutton"));
 }
 
 static void
-gtk_tool_button_init (GtkToolButton      *button,
-		      GtkToolButtonClass *klass)
+gtk_tool_button_init (GtkToolButton      *button)
 {
   GtkToolItem *toolitem = GTK_TOOL_ITEM (button);
 
-  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                              GTK_TYPE_TOOL_BUTTON,
-                                              GtkToolButtonPrivate);
+  button->priv = gtk_tool_button_get_instance_private (button);
 
   button->priv->contents_invalid = TRUE;
 
   gtk_tool_item_set_homogeneous (toolitem, TRUE);
 
   /* create button */
-  button->priv->button = g_object_new (klass->button_type, NULL);
+  button->priv->button = g_object_new (GTK_TOOL_BUTTON_GET_CLASS(button)->button_type, NULL);
   gtk_widget_set_focus_on_click (GTK_WIDGET (button->priv->button), FALSE);
   g_signal_connect_object (button->priv->button, "clicked",
 			   G_CALLBACK (button_clicked), button, 0);
