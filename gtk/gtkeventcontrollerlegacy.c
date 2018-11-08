@@ -63,7 +63,7 @@ gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
   controller_class->handle_event = gtk_event_controller_legacy_handle_event;
 
   /**
-   * GtkEventController::event:
+   * GtkEventControllerLegacy::event:
    * @controller: the object which received the signal.
    * @event: the #GdkEvent which triggered this signal
    *
@@ -71,17 +71,17 @@ gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
    * to @controller.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event
-   * and to cancel the emission of the second specific ::event signal.
-   *   %FALSE to propagate the event further.
+   * and the emission of this signal. %FALSE to propagate the event further.
    */
   signals[EVENT] =
     g_signal_new (I_("event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  0, _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__OBJECT,
+                  G_TYPE_BOOLEAN, 1,
+                  GDK_TYPE_EVENT);
+
   g_signal_set_va_marshaller (signals[EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 }
