@@ -11,7 +11,7 @@ draw_popup (GtkDrawingArea  *da,
   cairo_paint (cr);
 }
 
-static gboolean
+static void
 place_popup (GtkEventControllerMotion *motion,
              gdouble                   x,
              gdouble                   y,
