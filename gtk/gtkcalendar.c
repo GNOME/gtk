@@ -188,8 +188,6 @@ struct _GtkCalendarPrivate
 {
   GtkCalendarDisplayOptions display_flags;
 
-  gchar grow_space [32];
-
   gint  month;
   gint  year;
   gint  selected_day;
