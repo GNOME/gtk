@@ -2444,11 +2444,6 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
       else
         gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (scrolled_window)))
-	gtk_widget_queue_draw (GTK_WIDGET (scrolled_window));
-
-      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-
       g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_SHADOW_TYPE]);
     }
 }
