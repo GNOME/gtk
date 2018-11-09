@@ -63,8 +63,6 @@ void        gtk_color_scale_set_rgba (GtkColorScale     *scale,
 
 void        gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                              GtkSnapshot    *snapshot,
-                                             int             x,
-                                             int             y,
                                              int             width,
                                              int             height);
 

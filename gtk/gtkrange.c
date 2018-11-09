@@ -1670,7 +1670,6 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
    */
   if (GTK_IS_COLOR_SCALE (widget))
     gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot,
-                                     0, 0,
                                      gtk_widget_get_width (GTK_WIDGET (gizmo)),
                                      gtk_widget_get_height (GTK_WIDGET (gizmo)));
 

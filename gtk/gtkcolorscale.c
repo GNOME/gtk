@@ -54,8 +54,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 void
 gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                  GtkSnapshot    *snapshot,
-                                 int             x,
-                                 int             y,
                                  int             width,
                                  int             height)
 {
@@ -102,7 +100,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
 
       gtk_snapshot_append_texture (snapshot,
                                    texture,
-                                   &GRAPHENE_RECT_INIT(x, y, width, height));
+                                   &GRAPHENE_RECT_INIT(0, 0, width, height));
       g_object_unref (texture);
     }
   else if (priv->type == GTK_COLOR_SCALE_ALPHA)
@@ -111,21 +109,20 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       graphene_point_t start, end;
 
       cr = gtk_snapshot_append_cairo (snapshot,
-                                      &GRAPHENE_RECT_INIT(x, y, width, height));
-      cairo_translate (cr, x, y);
+                                      &GRAPHENE_RECT_INIT(0, 0, width, height));
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
           gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         {
           cairo_translate (cr, width, 0);
           cairo_scale (cr, -1, 1);
-          graphene_point_init (&start, x + width, y);
-          graphene_point_init (&end, x, y);
+          graphene_point_init (&start, width, 0);
+          graphene_point_init (&end, 0, 0);
         }
       else
         {
-          graphene_point_init (&start, x, y);
-          graphene_point_init (&end, x + width, y);
+          graphene_point_init (&start, 0, 0);
+          graphene_point_init (&end, width, 0);
         }
 
       cairo_pattern_t *pattern;
@@ -147,7 +144,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       color = &priv->color;
 
       gtk_snapshot_append_linear_gradient (snapshot,
-                                           &GRAPHENE_RECT_INIT(x, y, width, height),
+                                           &GRAPHENE_RECT_INIT(0, 0, width, height),
                                            &start,
                                            &end,
                                            (GskColorStop[2]) {
