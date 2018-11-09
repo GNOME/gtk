@@ -994,15 +994,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                 "change-current-page", 1,
                                 G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, -1);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
-                                "change-current-page", 1,
-                                G_TYPE_INT, 1);
-
   add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
   add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
   add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);

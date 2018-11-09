@@ -1463,18 +1463,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
-  add_move_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_HORIZONTAL_PAGES, -1);
-
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_HORIZONTAL_PAGES, -1);
-  
-  add_move_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
-
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
-
   /* Select all */
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
 				"select-all", 1,
