@@ -1799,7 +1799,6 @@ gtk_scale_add_mark (GtkScale        *scale,
   if (mark->markup && *mark->markup)
     {
       mark->label_widget = g_object_new (GTK_TYPE_LABEL,
-                                         "css-name", "label",
                                          "use-markup", TRUE,
                                          "label", mark->markup,
                                          NULL);
