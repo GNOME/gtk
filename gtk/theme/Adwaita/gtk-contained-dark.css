@@ -1470,7 +1470,11 @@ progressbar.vertical progress { margin: -1px 0; }
 
 progressbar:backdrop { box-shadow: none; transition: 200ms ease-out; }
 
-progressbar progress { border-radius: 1.5px; }
+progressbar progress { /* share most of scales' */ /* override insensitive that is specific to progress */ border-radius: 1.5px; }
+
+progressbar progress:disabled { background-color: #919494; border-color: #919494; }
+
+progressbar progress:backdrop:disabled { background-color: #566164; border-color: #566164; }
 
 progressbar progress.left { border-top-left-radius: 2px; border-bottom-left-radius: 2px; }
 
