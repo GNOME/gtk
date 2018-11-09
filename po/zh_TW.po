@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-20 15:07+0000\n"
-"PO-Revision-Date: 2018-08-21 23:50+0800\n"
+"POT-Creation-Date: 2018-11-09 07:52+0000\n"
+"PO-Revision-Date: 2018-11-09 17:03+0800\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: <>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -2501,7 +2501,7 @@ msgstr "輸入位置或 URL"
 #: gtk/gtkfilechooserwidget.c:4340 gtk/gtkfilechooserwidget.c:7244
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
-msgstr "已修改"
+msgstr "修改時間"
 
 #: gtk/gtkfilechooserwidget.c:4618
 #, c-format
@@ -2594,71 +2594,55 @@ msgstr "請選擇字型"
 #: gtk/gtkfontbutton.c:1393
 msgctxt "font"
 msgid "None"
-msgstr "沒有"
+msgstr "無"
 
 #: gtk/gtkfontchooserwidget.c:1523
-#, fuzzy
-#| msgid "_Width:"
 msgid "Width"
-msgstr "寬度(_W)："
+msgstr "寬度"
 
 #: gtk/gtkfontchooserwidget.c:1524
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Weight"
-msgstr "Right"
+msgstr "字重"
 
 #: gtk/gtkfontchooserwidget.c:1525
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
-msgstr "斜體(_I)"
+msgstr "義式斜體"
 
 #: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
-msgstr ""
+msgstr "斜體"
 
 #: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
-msgstr ""
+msgstr "最適大小"
 
 #: gtk/gtkfontchooserwidget.c:2064 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "預設值"
 
 #: gtk/gtkfontchooserwidget.c:2111
-#, fuzzy
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
-msgstr "擷取"
+msgstr "連字"
 
 #: gtk/gtkfontchooserwidget.c:2112
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "US Letter Plus"
 msgid "Letter Case"
-msgstr "美制 Letter Plus"
+msgstr "字母大小寫"
 
 #: gtk/gtkfontchooserwidget.c:2113
 msgid "Number Case"
-msgstr ""
+msgstr "數字風格"
 
 #: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Spacing"
-msgstr ""
+msgstr "數字間距"
 
 #: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Formatting"
-msgstr ""
+msgstr "數字格式設定"
 
 #: gtk/gtkfontchooserwidget.c:2116
-#, fuzzy
-#| msgid "Dark Variant"
 msgid "Character Variants"
-msgstr "暗色系變體"
+msgstr "字形變體"
 
 #: gtk/gtkglarea.c:313
 msgid "OpenGL context creation failed"
@@ -2962,7 +2946,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "不能結束 PID 為 %d 的程序：%s"
 
-#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7386
+#: gtk/gtknotebook.c:5123 gtk/gtknotebook.c:7401
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -3137,10 +3121,9 @@ msgid "Unable to start “%s”"
 msgstr "無法啟動 「%s」"
 
 #: gtk/gtkplacessidebar.c:2420
-#, fuzzy, c-format
-#| msgid "Opening “%s”."
+#, c-format
 msgid "Error unlocking “%s”"
-msgstr "正在開啟「%s」"
+msgstr "解除鎖定「%s」時出錯"
 
 #: gtk/gtkplacessidebar.c:2422
 #, c-format
@@ -3287,7 +3270,7 @@ msgid "Disconnect"
 msgstr "斷線"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
-#: gtk/ui/gtksidebarrow.ui:60
+#: gtk/ui/gtksidebarrow.ui:61
 msgid "Unmount"
 msgstr "卸載"
 
@@ -3387,8 +3370,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "最可能的原因是無法建立暫存檔案。"
 
 #. window
-#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "列印"
 
@@ -6698,7 +6681,7 @@ msgstr ""
 
 #: gtk/script-names.c:96
 msgctxt "Script"
-msgid "Egyptian Hieroglpyhs"
+msgid "Egyptian Hieroglyphs"
 msgstr ""
 
 #: gtk/script-names.c:97
