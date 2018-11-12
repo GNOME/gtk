@@ -673,6 +673,7 @@ init_settings (GdkScreen *screen)
       const char *schema;
       GVariant *val;
       GVariantIter *iter;
+      const char *patterns[] = { "org.gnome.*", NULL };
 
       screen_wayland->settings_portal = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                                        G_DBUS_PROXY_FLAGS_NONE,
@@ -692,7 +693,7 @@ init_settings (GdkScreen *screen)
 
       ret = g_dbus_proxy_call_sync (screen_wayland->settings_portal,
                                     "ReadAll",
-                                    g_variant_new ("(s)", "org.gnome.*"),
+                                    g_variant_new ("(^as)", patterns),
                                     G_DBUS_CALL_FLAGS_NONE,
                                     G_MAXINT,
                                     NULL,
