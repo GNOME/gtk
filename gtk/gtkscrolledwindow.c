@@ -1252,7 +1252,7 @@ scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
   priv->smooth_scroll = TRUE;
 }
 
-static void
+static gboolean
 scroll_controller_scroll (GtkEventControllerScroll *scroll,
                           gdouble                   delta_x,
                           gdouble                   delta_y,
@@ -1263,7 +1263,7 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
   GdkModifierType state;
 
   if (!gtk_get_current_event_state (&state))
-    return;
+    return GDK_EVENT_PROPAGATE;
 
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
@@ -1322,6 +1322,8 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
       g_source_set_name_by_id (priv->scroll_events_overshoot_id,
                                "[gtk+] start_scroll_deceleration_cb");
     }
+
+  return GDK_EVENT_STOP;
 }
 
 static void
