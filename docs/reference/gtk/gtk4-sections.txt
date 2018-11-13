@@ -6606,6 +6606,24 @@ gtk_gesture_single_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkeventcontrollerlegacy</FILE>
+<TITLE>GtkEventControllerlegacy</TITLE>
+GtkEventControllerlegacy
+gtk_event_controller_legacy_new
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_LEGACY
+GTK_EVENT_CONTROLLER_LEGACY
+GTK_EVENT_CONTROLLER_LEGACY_CLASS
+GTK_IS_EVENT_CONTROLLER_LEGACY
+GTK_IS_EVENT_CONTROLLER_LEGACY_CLASS
+GTK_EVENT_CONTROLLER_LEGACY_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_legacy_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkeventcontrollerscroll</FILE>
 <TITLE>GtkEventControllerScroll</TITLE>
 GtkEventControllerScroll
