@@ -23,16 +23,16 @@
 
 #define CUSTOM_ITEM "custom-item"
 
-static GtkWidget *toplevel, *combobox, *box;
+static GtkWidget *toplevel, *button, *box;
 static GtkWidget *sel_image, *sel_name;
 
 static void
-combo_changed_cb (GtkComboBox *cb,
-                  gpointer     user_data)
+combo_changed_cb (GtkAppChooserButton *button,
+                  gpointer             user_data)
 {
   GAppInfo *app_info;
 
-  app_info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (cb));
+  app_info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (button));
 
   if (app_info == NULL)
     return;
@@ -73,10 +73,10 @@ main (int argc,
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (toplevel), box);
 
-  combobox = gtk_app_chooser_button_new ("image/jpeg");
-  gtk_box_pack_start (GTK_BOX (box), combobox);
+  button = gtk_app_chooser_button_new ("image/jpeg");
+  gtk_box_pack_start (GTK_BOX (box), button);
 
-  g_signal_connect (combobox, "changed",
+  g_signal_connect (button, "changed",
                     G_CALLBACK (combo_changed_cb), NULL);
 
   w = gtk_label_new (NULL);
@@ -91,37 +91,37 @@ main (int argc,
   sel_name = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (w), sel_name);
 
-  gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (combobox), "Choose one, <i>not</i> two");
-  gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (combobox));
-  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+  gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (button), "Choose one, <i>not</i> two");
+  gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (button));
+  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (button),
                                              CUSTOM_ITEM,
                                              "Hey, I'm special!",
                                              g_themed_icon_new ("face-smile"));
 
   /* this one will trigger a warning, and will not be added */
-  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (button),
                                              CUSTOM_ITEM,
                                              "Hey, I'm fake!",
                                              g_themed_icon_new ("face-evil"));
 
-  gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (combobox),
+  gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (button),
                                                TRUE);
-  gtk_app_chooser_button_set_show_default_item (GTK_APP_CHOOSER_BUTTON (combobox),
+  gtk_app_chooser_button_set_show_default_item (GTK_APP_CHOOSER_BUTTON (button),
                                                 TRUE);
 
   /* connect to the detailed signal */
-  g_signal_connect (combobox, "custom-item-activated::" CUSTOM_ITEM,
+  g_signal_connect (button, "custom-item-activated::" CUSTOM_ITEM,
                     G_CALLBACK (special_item_activated_cb), NULL);
 
   /* connect to the generic signal too */
-  g_signal_connect (combobox, "custom-item-activated",
+  g_signal_connect (button, "custom-item-activated",
                     G_CALLBACK (action_cb), NULL);
 
   /* test refresh on a combo */
-  gtk_app_chooser_refresh (GTK_APP_CHOOSER (combobox));
+  gtk_app_chooser_refresh (GTK_APP_CHOOSER (button));
 
 #if 0
-  gtk_app_chooser_button_set_active_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+  gtk_app_chooser_button_set_active_custom_item (GTK_APP_CHOOSER_BUTTON (button),
                                                  CUSTOM_ITEM);
 #endif
   gtk_widget_show (toplevel);
