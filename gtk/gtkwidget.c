@@ -1467,8 +1467,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::size-allocate:
    * @widget: the object which received the signal.
-   * @allocation: (type Gtk.Allocation): the region which has been
-   *   allocated to the widget.
+   * @width: the content width of the widget
+   * @height: the content height of the widget
    * @baseline: the baseline
    */
   widget_signals[SIZE_ALLOCATE] =
