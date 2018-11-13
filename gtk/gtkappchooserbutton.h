@@ -40,13 +40,9 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAppChooserButton        GtkAppChooserButton;
 typedef struct _GtkAppChooserButtonClass   GtkAppChooserButtonClass;
-typedef struct _GtkAppChooserButtonPrivate GtkAppChooserButtonPrivate;
 
 struct _GtkAppChooserButton {
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkAppChooserButtonPrivate *priv;
 };
 
 /**
