@@ -745,12 +745,7 @@ gtk_menu_item_dispose (GObject *object)
 
   g_clear_object (&priv->motion_controller);
   g_clear_object (&priv->action_helper);
-
-  if (priv->arrow_widget)
-    {
-      gtk_widget_unparent (priv->arrow_widget);
-      priv->arrow_widget = NULL;
-    }
+  g_clear_pointer (&priv->arrow_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_menu_item_parent_class)->dispose (object);
 }
@@ -846,11 +841,7 @@ gtk_menu_item_detacher (GtkWidget *widget,
   g_return_if_fail (priv->submenu == (GtkWidget*) menu);
 
   priv->submenu = NULL;
-  if (priv->arrow_widget)
-    {
-      gtk_widget_unparent (priv->arrow_widget);
-      priv->arrow_widget = NULL;
-    }
+  g_clear_pointer (&priv->arrow_widget, gtk_widget_unparent);
 }
 
 static void

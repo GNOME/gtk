@@ -364,11 +364,7 @@ gtk_search_bar_dispose (GObject *object)
       _gtk_bin_set_child (GTK_BIN (bar), NULL);
     }
 
-  if (priv->revealer != NULL)
-    {
-      gtk_widget_unparent (priv->revealer);
-      priv->revealer = NULL;
-    }
+  g_clear_pointer (&priv->revealer, gtk_widget_unparent);
 
   gtk_search_bar_set_entry (bar, NULL);
   gtk_search_bar_set_key_capture_widget (bar, NULL);

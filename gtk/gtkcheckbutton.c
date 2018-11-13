@@ -135,8 +135,7 @@ gtk_check_button_finalize (GObject *object)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (object));
 
-  if (priv->indicator_widget)
-    gtk_widget_unparent (priv->indicator_widget);
+  g_clear_pointer (&priv->indicator_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_check_button_parent_class)->finalize (object);
 }

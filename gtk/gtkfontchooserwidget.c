@@ -669,11 +669,7 @@ gtk_font_chooser_widget_dispose (GObject *object)
   GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (object);
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
 
-  if (priv->stack)
-    {
-      gtk_widget_unparent (priv->stack);
-      priv->stack = NULL;
-    }
+  g_clear_pointer (&priv->stack, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->dispose (object);
 }

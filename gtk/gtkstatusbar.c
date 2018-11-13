@@ -121,11 +121,7 @@ gtk_statusbar_dispose (GObject *object)
 {
   GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (object));
 
-  if (priv->frame)
-    {
-      gtk_widget_unparent (priv->frame);
-      priv->frame = NULL;
-    }
+  g_clear_pointer (&priv->frame, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
 }

@@ -597,8 +597,7 @@ gtk_progress_bar_finalize (GObject *object)
 
   g_free (priv->text);
 
-  if (priv->label)
-    gtk_widget_unparent (priv->label);
+  g_clear_pointer (&priv->label, gtk_widget_unparent);
 
   gtk_widget_unparent (priv->progress_widget);
   gtk_widget_unparent (priv->trough_widget);
@@ -1014,11 +1013,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
     }
   else
     {
-      if (priv->label)
-        {
-          gtk_widget_unparent (priv->label);
-          priv->label = NULL;
-        }
+      g_clear_pointer (&priv->label, gtk_widget_unparent);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (pbar));

@@ -622,23 +622,9 @@ gtk_center_box_dispose (GObject *object)
 {
   GtkCenterBox *self = GTK_CENTER_BOX (object);
 
-  if (self->start_widget)
-    {
-      gtk_widget_unparent (self->start_widget);
-      self->start_widget = NULL;
-    }
-
-  if (self->center_widget)
-    {
-      gtk_widget_unparent (self->center_widget);
-      self->center_widget = NULL;
-    }
-
-  if (self->end_widget)
-    {
-      gtk_widget_unparent (self->end_widget);
-      self->end_widget = NULL;
-    }
+  g_clear_pointer (&self->start_widget, gtk_widget_unparent);
+  g_clear_pointer (&self->center_widget, gtk_widget_unparent);
+  g_clear_pointer (&self->end_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_center_box_parent_class)->dispose (object);
 }

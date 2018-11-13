@@ -2864,11 +2864,7 @@ update_arrow_nodes (GtkNotebook *notebook)
         }
       else
         {
-          if (priv->arrow_widget[i])
-            {
-              gtk_widget_unparent (priv->arrow_widget[i]);
-              priv->arrow_widget[i] = NULL;
-            }
+          g_clear_pointer (&priv->arrow_widget[i], gtk_widget_unparent);
         }
     }
 }

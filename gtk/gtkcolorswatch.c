@@ -509,11 +509,7 @@ swatch_dispose (GObject *object)
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
 
-  if (priv->popover)
-    {
-      gtk_widget_destroy (priv->popover);
-      priv->popover = NULL;
-    }
+  g_clear_pointer (&priv->popover, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->dispose (object);
 }

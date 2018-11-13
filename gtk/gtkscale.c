@@ -1143,8 +1143,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
         }
       else if (priv->value_widget)
         {
-          gtk_widget_unparent (priv->value_widget);
-          priv->value_widget = NULL;
+          g_clear_pointer (&priv->value_widget, gtk_widget_unparent);
           gtk_range_set_round_digits (GTK_RANGE (scale), -1);
         }
 
@@ -1580,8 +1579,7 @@ gtk_scale_finalize (GObject *object)
 
   gtk_scale_clear_marks (scale);
 
-  if (priv->value_widget)
-    gtk_widget_unparent (priv->value_widget);
+  g_clear_pointer (&priv->value_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_scale_parent_class)->finalize (object);
 }
@@ -1675,17 +1673,9 @@ gtk_scale_clear_marks (GtkScale *scale)
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
 
-  if (priv->top_marks_widget)
-    {
-      gtk_widget_unparent (priv->top_marks_widget);
-      priv->top_marks_widget = NULL;
-    }
 
-  if (priv->bottom_marks_widget)
-    {
-      gtk_widget_unparent (priv->bottom_marks_widget);
-      priv->bottom_marks_widget = NULL;
-    }
+  g_clear_pointer (&priv->top_marks_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->bottom_marks_widget, gtk_widget_unparent);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_remove_class (context, "marks-before");

@@ -2788,8 +2788,7 @@ gtk_entry_finalize (GObject *object)
   if (priv->attrs)
     pango_attr_list_unref (priv->attrs);
 
-  if (priv->progress_widget)
-    gtk_widget_unparent (priv->progress_widget);
+  g_clear_pointer (&priv->progress_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }

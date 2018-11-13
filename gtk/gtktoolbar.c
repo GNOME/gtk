@@ -2596,11 +2596,7 @@ gtk_toolbar_dispose (GObject *object)
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
   GtkToolbarPrivate *priv = toolbar->priv;
 
-  if (priv->arrow_button)
-    {
-      gtk_widget_unparent (priv->arrow_button);
-      priv->arrow_button = NULL;
-    }
+  g_clear_pointer (&priv->arrow_button, gtk_widget_unparent);
 
   if (priv->menu)
     {

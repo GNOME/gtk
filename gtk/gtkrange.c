@@ -1117,8 +1117,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
     }
   else
     {
-      gtk_widget_unparent (priv->fill_widget);
-      priv->fill_widget = NULL;
+      g_clear_pointer (&priv->fill_widget, gtk_widget_unparent);
     }
 
   g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_SHOW_FILL_LEVEL]);
@@ -1289,15 +1288,10 @@ gtk_range_finalize (GObject *object)
   GtkRange *range = GTK_RANGE (object);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  gtk_widget_unparent (priv->slider_widget);
-
-  if (priv->fill_widget)
-    gtk_widget_unparent (priv->fill_widget);
-
-  if (priv->highlight_widget)
-    gtk_widget_unparent (priv->highlight_widget);
-
-  gtk_widget_unparent (priv->trough_widget);
+  g_clear_pointer (&priv->slider_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->fill_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->highlight_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->trough_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_range_parent_class)->finalize (object);
 }
@@ -2855,8 +2849,7 @@ _gtk_range_set_has_origin (GtkRange *range,
     }
   else
     {
-      gtk_widget_unparent (priv->highlight_widget);
-      priv->highlight_widget = NULL;
+      g_clear_pointer (&priv->highlight_widget, gtk_widget_unparent);
     }
 }
 
