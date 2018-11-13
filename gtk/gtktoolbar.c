@@ -1201,7 +1201,7 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
-  GtkAllocation arrow_allocation, item_area, widget_allocation;
+  GtkAllocation arrow_allocation, item_area;
   GtkAllocation *allocations;
   ItemState *new_states;
   gint arrow_size;
@@ -1215,20 +1215,8 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
   gint needed_size;
   GtkRequisition arrow_requisition;
   gboolean overflowing;
-  gboolean size_changed;
 
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  size_changed = FALSE;
-  if (widget_allocation.x != priv->prev_allocation.x ||
-      widget_allocation.y != priv->prev_allocation.y ||
-      widget_allocation.width != priv->prev_allocation.width ||
-      widget_allocation.height != priv->prev_allocation.height)
-    {
-      size_changed = TRUE;
-    }
-
-  if (size_changed)
-    gtk_toolbar_stop_sliding (toolbar);
+  gtk_toolbar_stop_sliding (toolbar);
 
   gtk_widget_get_preferred_size (priv->arrow_button,
                                  &arrow_requisition, NULL);
@@ -1430,8 +1418,7 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
           new_states[i] != NORMAL)
         {
           /* an item disappeared and we didn't change size, so begin sliding */
-          if (!size_changed)
-            gtk_toolbar_begin_sliding (toolbar);
+          gtk_toolbar_begin_sliding (toolbar);
         }
     }
 
