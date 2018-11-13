@@ -190,6 +190,11 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_FRAGMENTATION_EXT:
       return "A descriptor pool creation has failed due to fragmentation";
 #endif
+#if VK_HEADER_VERSION >= 89
+    case VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT:
+      return "Invalid DRM format modifier plane layout";
+#endif
+
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
     default:
