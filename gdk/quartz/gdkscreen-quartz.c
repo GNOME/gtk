@@ -67,7 +67,7 @@ static void  gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen);
 static void display_reconfiguration_callback (CGDirectDisplayID            display,
                                               CGDisplayChangeSummaryFlags  flags,
                                               void                        *userInfo);
-static const double dpi = 96.0;
+static const double dpi = 72.0;
 static gint get_mm_from_pixels (NSScreen *screen, int pixels);
 
 G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, GDK_TYPE_SCREEN);
