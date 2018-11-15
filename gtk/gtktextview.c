@@ -146,8 +146,6 @@
 #define SPACE_FOR_CURSOR 1
 #define CURSOR_ASPECT_RATIO (0.04)
 
-#define GTK_TEXT_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TEXT_VIEW, GtkTextViewPrivate))
-
 typedef struct _GtkTextWindow GtkTextWindow;
 typedef struct _GtkTextPendingScroll GtkTextPendingScroll;
 
