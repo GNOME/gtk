@@ -107,7 +107,7 @@ struct _GtkContainerClass
 
   /*< private >*/
 
-  unsigned int _handle_border_width : 1;
+  gpointer _handle_border_width;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

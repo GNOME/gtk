@@ -2409,7 +2409,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
 {
   g_return_if_fail (GTK_IS_CONTAINER_CLASS (klass));
 
-  klass->_handle_border_width = TRUE;
+  klass->_handle_border_width = GINT_TO_POINTER((int) TRUE);
 }
 
 /**
