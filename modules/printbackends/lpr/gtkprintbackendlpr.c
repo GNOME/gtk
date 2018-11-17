@@ -390,9 +390,13 @@ gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend)
 {
   GtkPrinter *printer;
 
-  printer = gtk_printer_new (_("Print to LPR"),
-			     GTK_PRINT_BACKEND (backend),
-			     TRUE); 
+  printer = g_object_new (GTK_TYPE_PRINTER,
+			  "name", _("Print to LPR"),
+			  "backend", backend,
+			  "is-virtual", FALSE,
+			  "accepts-pdf", TRUE,
+			  "accepts-ps", TRUE,
+			  NULL);
   gtk_printer_set_has_details (printer, TRUE);
   gtk_printer_set_icon_name (printer, "printer");
   gtk_printer_set_is_active (printer, TRUE);
