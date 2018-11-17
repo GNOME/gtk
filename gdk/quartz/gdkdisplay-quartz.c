@@ -262,24 +262,28 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->beep = gdk_quartz_display_beep;
   display_class->sync = gdk_quartz_display_sync;
   display_class->flush = gdk_quartz_display_flush;
-  display_class->queue_events = _gdk_quartz_display_queue_events;
   display_class->has_pending = _gdk_quartz_display_has_pending;
+  display_class->queue_events = _gdk_quartz_display_queue_events;
   display_class->get_default_group = gdk_quartz_display_get_default_group;
   display_class->supports_selection_notification = gdk_quartz_display_supports_selection_notification;
   display_class->request_selection_notification = gdk_quartz_display_request_selection_notification;
-  display_class->supports_clipboard_persistence = gdk_quartz_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_quartz_display_store_clipboard;
+
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
   display_class->supports_composite = gdk_quartz_display_supports_composite;
-  display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
-  display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
-  display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;
-  display_class->get_default_cursor_size = _gdk_quartz_display_get_default_cursor_size;
-  display_class->get_maximal_cursor_size = _gdk_quartz_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_quartz_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_quartz_display_supports_cursor_color;
 
+  display_class->supports_clipboard_persistence = gdk_quartz_display_supports_clipboard_persistence;
+  display_class->store_clipboard = gdk_quartz_display_store_clipboard;
+
+  display_class->get_default_cursor_size = _gdk_quartz_display_get_default_cursor_size;
+  display_class->get_maximal_cursor_size = _gdk_quartz_display_get_maximal_cursor_size;
+  display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
+  display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
+  display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;
+
+  display_class->get_app_launch_context = NULL; /* FIXME */
   display_class->before_process_all_updates = _gdk_quartz_display_before_process_all_updates;
   display_class->after_process_all_updates = _gdk_quartz_display_after_process_all_updates;
   display_class->get_next_serial = gdk_quartz_display_get_next_serial;
@@ -288,15 +292,23 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
   display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
+  display_class->push_error_trap = NULL; /* FIXME */
+  display_class->pop_error_trap = NULL; /* FIXME */
+
   display_class->get_selection_owner = _gdk_quartz_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_quartz_display_set_selection_owner;
+  display_class->send_selection_notify = NULL; /* FIXME */
   display_class->get_selection_property = _gdk_quartz_display_get_selection_property;
   display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
+
+//  display_class->get_default_seat = NULL; /* FIXME */
+
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
+  display_class->get_monitor_at_window = NULL; /* FIXME */
 
   ProcessSerialNumber psn = { 0, kCurrentProcess };
 
