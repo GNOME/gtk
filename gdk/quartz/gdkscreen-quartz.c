@@ -131,10 +131,6 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
   int i;
   int max_x, max_y;
   GdkDisplay *display = gdk_screen_get_display (GDK_SCREEN (screen));
-  GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (display);
-
-  g_ptr_array_free (display_quartz->monitors, TRUE);
-  display_quartz->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -152,10 +148,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
    */
   for (i = 0; i < [array count]; i++)
     {
-      GdkQuartzMonitor *monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
-                                                "display", display,
-                                                NULL);
-      g_ptr_array_add (display_quartz->monitors, monitor);
+      GdkQuartzMonitor *monitor = gdk_display_get_monitor (display, i);
       monitor->monitor_num = i;
 
       NSRect rect = [[array objectAtIndex:i] frame];
@@ -176,7 +169,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
       NSRect rect;
       GdkMonitor *monitor;
 
-      monitor = GDK_MONITOR(display_quartz->monitors->pdata[i]);
+      monitor = gdk_display_get_monitor (display, i);
       nsscreen = [array objectAtIndex:i];
       rect = [nsscreen frame];
 
@@ -189,12 +182,6 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
         monitor->scale_factor = [(id <ScaleFactor>) nsscreen backingScaleFactor];
       else
         monitor->scale_factor = 1;
-      monitor->width_mm = get_mm_from_pixels(nsscreen, monitor->geometry.width);
-      monitor->height_mm = get_mm_from_pixels(nsscreen, monitor->geometry.height);
-      monitor->refresh_rate = 0; // unknown
-      monitor->manufacturer = NULL; // unknown
-      monitor->model = NULL; // unknown
-      monitor->subpixel_layout = GDK_SUBPIXEL_LAYOUT_UNKNOWN; // unknown
     }
 
   GDK_QUARTZ_RELEASE_POOL;
