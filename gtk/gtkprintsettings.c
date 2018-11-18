@@ -1914,7 +1914,7 @@ add_value_to_key_file (const gchar  *key,
  * gtk_print_settings_to_key_file:
  * @settings: a #GtkPrintSettings
  * @key_file: the #GKeyFile to save the print settings to
- * @group_name: the group to add the settings to in @key_file, or 
+ * @group_name: (nullable): the group to add the settings to in @key_file, or
  *     %NULL to use the default “Print Settings”
  *
  * This function adds the print settings from @settings to @key_file.

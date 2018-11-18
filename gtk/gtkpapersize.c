@@ -949,7 +949,7 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
 /**
  * gtk_paper_size_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the papersize from
- * @group_name: the name ofthe group in the key file to read,
+ * @group_name: (nullable): the name of the group in the key file to read,
  *     or %NULL to read the first group
  * @error: (allow-none): return location for an error, or %NULL
  *

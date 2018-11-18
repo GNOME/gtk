@@ -152,7 +152,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
 /**
  * gtk_actionable_set_action_target_value:
  * @actionable: a #GtkActionable widget
- * @target_value: a #GVariant to set as the target value, or %NULL
+ * @target_value: (nullable): a #GVariant to set as the target value, or %NULL
  *
  * Sets the target value of an actionable widget.
  *
