@@ -60,7 +60,8 @@ struct _GtkContainer
  * @add: Signal emitted when a widget is added to container.
  * @remove: Signal emitted when a widget is removed from container.
  * @check_resize: Signal emitted when a size recalculation is needed.
- * @forall: Invokes callback on each child of container.
+ * @forall: Invokes callback on each child of container. The callback handler
+ *    may remove the child.
  * @set_focus_child: Sets the focused child of container.
  * @child_type: Returns the type of the children supported by the container.
  * @composite_name: Gets a widget’s composite name. Deprecated: 3.10.

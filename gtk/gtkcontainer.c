@@ -2456,6 +2456,8 @@ gtk_container_forall (GtkContainer *container,
  * added to the container by the application with explicit add()
  * calls.
  *
+ * It is permissible to remove the child from the @callback handler.
+ *
  * Most applications should use gtk_container_foreach(),
  * rather than gtk_container_forall().
  **/
