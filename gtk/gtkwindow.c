@@ -3341,6 +3341,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
     }
 
   update_window_buttons (window);
+
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TRANSIENT_FOR]);
 }
 
 /**
