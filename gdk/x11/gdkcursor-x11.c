@@ -261,7 +261,7 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
 /**
  * gdk_x11_display_set_cursor_theme:
  * @display: (type GdkX11Display): a #GdkDisplay
- * @theme: the name of the cursor theme to use, or %NULL to unset
+ * @theme: (nullable): the name of the cursor theme to use, or %NULL to unset
  *         a previously set value
  * @size: the cursor size to use, or 0 to keep the previous size
  *
