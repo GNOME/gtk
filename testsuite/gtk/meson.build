@@ -1,150 +1,109 @@
-test_accel = executable('accel', 'accel.c', dependencies: libgtk_dep)
-test('gtk/accel test', test_accel)
+gtk_tests_export_dynamic_ldflag = []
 
-test_accessible = executable('accessible', 'accessible.c', dependencies: libgtk_dep)
-test('gtk/accessible test', test_accessible)
+if cc.get_id() != 'msvc'
+  gtk_tests_export_dynamic_ldflag = ['-Wl,--export-dynamic']
+endif
 
-test_action = executable('action', 'action.c', dependencies: libgtk_dep)
-test('gtk/action test', test_action)
+tests = [
+  ['accel'],
+  ['accessible'],
+  ['action'],
+  ['adjustment'],
+  ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
+  ['builder', [], [], gtk_tests_export_dynamic_ldflag],
+  ['builderparser'],
+  ['cellarea'],
+  ['check-icon-names'],
+  ['check-cursor-names'],
+  ['cssprovider'],
+  ['defaultvalue'],
+  ['entry'],
+  ['firefox-stylecontext'],
+  ['floating'],
+  ['focus'],
+  ['gestures'],
+  ['grid'],
+  ['gtkmenu'],
+  ['icontheme'],
+  ['keyhash', ['../../gtk/gtkkeyhash.c', gtkresources, '../../gtk/gtkprivate.c'], gtk_cargs],
+  ['listbox'],
+  ['notify'],
+  ['no-gtk-init'],
+  ['object'],
+  ['papersize'],
+  ['rbtree', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
+  ['recentmanager'],
+  ['regression-tests'],
+  ['scrolledwindow'],
+  ['spinbutton'],
+  ['stylecontext'],
+  ['templates'],
+  ['textbuffer'],
+  ['textiter'],
+  ['treemodel', ['treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
+                 'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c']],
+  ['treepath'],
+  ['treeview'],
+  ['typename'],
+  ['window'],
+  ['displayclose'],
+  ['revealer-size'],
+]
 
+test_cargs = []
 
-test_adjustment = executable('adjustment', 'adjustment.c', dependencies: libgtk_dep)
-test('gtk/adjustment test', test_adjustment)
+if os_unix
+  # tests += [['defaultvalue']]  # disabled in Makefile.am as well
+  test_cargs += ['-DHAVE_UNIX_PRINT_WIDGETS']
+endif
 
-test_bitmask = executable('bitmask', 'bitmask.c', dependencies: libgtk_dep)
-test('gtk/bitmask test', test_bitmask)
-
-test_builder = executable('builder', 'builder.c', dependencies: libgtk_dep)
-test('gtk/builder test', test_builder)
-
-test_builderparser = executable(
-  'builderparser',
-  'builderparser.c',
-  dependencies: libgtk_dep,
-  link_with: libgtk,
-
-)
-test(
-  'gtk/builderparser test',
-  test_builderparser,
-  env: [
-      'G_TEST_SRCDIR='+meson.source_root(),
-      'G_TEST_BUILDDIR='+meson.build_root()
+if x11_enabled
+  tests += [
+    ['clipboard'],
+    ['objects-finalize', ['../../gdk/x11/gdkdisplaymanager-x11.c'], ['-DGDK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ]
-)
+endif
 
-test_cellarea = executable('cellarea', 'cellarea.c', dependencies: libgtk_dep)
-test('gtk/cellarea test', test_cellarea)
+foreach t : tests
+  test_name = t.get(0)
+  test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
+  test_extra_cargs = t.get(2, [])
+  test_extra_ldflags = t.get(3, [])
 
-test_check_icon_names = executable('check_icon_names', 'check-icon-names.c', dependencies: libgtk_dep)
-test('gtk/check_icon_names test', test_check_icon_names)
+  test_exe = executable(test_name, test_srcs,
+    c_args : test_cargs + test_extra_cargs,
+    link_args : test_extra_ldflags,
+    dependencies : libgtk_dep)
 
-test_check_cursor_names = executable('check_cursor_names', 'check-cursor-names.c', dependencies: libgtk_dep)
-test('gtk/check_cursor_names test', test_check_cursor_names)
+  test(test_name, test_exe,
+       args: [ '--tap', '-k' ],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'GSK_RENDERER=cairo',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+            ],
+       suite: 'gtk')
+endforeach
 
-test_clipboard = executable('clipboard', 'clipboard.c', dependencies: libgtk_dep)
-test('gtk/clipboard test', test_clipboard)
-
-test_cssprovider = executable('cssprovider', 'cssprovider.c', dependencies: libgtk_dep)
-test('gtk/cssprovider test', test_cssprovider)
-
-test_defaultvalue = executable('defaultvalue', 'defaultvalue.c', dependencies: libgtk_dep)
-test('gtk/defaultvalue test', test_defaultvalue)
-
-test_entry = executable('entry', 'entry.c', dependencies: libgtk_dep)
-test('gtk/entry test', test_entry)
-
-test_firefox_stylecontext = executable('firefox_stylecontext', 'firefox-stylecontext.c', dependencies: libgtk_dep)
-test('gtk/firefox_stylecontext test', test_firefox_stylecontext)
-
-test_floating = executable('floating', 'floating.c', dependencies: libgtk_dep)
-test('gtk/floating test', test_floating)
-
-test_focus = executable('focus', 'focus.c', dependencies: libgtk_dep)
-test('gtk/focus test', test_focus)
-
-test_gestures = executable('gestures', 'gestures.c', dependencies: libgtk_dep)
-test('gtk/gestures test', test_gestures)
-
-test_grid = executable('grid', 'grid.c', dependencies: libgtk_dep)
-test('gtk/grid test', test_grid)
-
-test_gtkmenu = executable('gtkmenu', 'gtkmenu.c', dependencies: libgtk_dep)
-test('gtk/gtkmenu test', test_gtkmenu)
-
-test_icontheme = executable('icontheme', 'icontheme.c', dependencies: libgtk_dep)
-test('gtk/icontheme test', test_icontheme)
-
-test_keyhash = executable('keyhash', 'keyhash.c', dependencies: libgtk_dep)
-test('gtk/keyhash test', test_keyhash)
-
-test_listbox = executable('listbox', 'listbox.c', dependencies: libgtk_dep)
-test('gtk/listbox test', test_listbox)
-
-test_notify = executable('notify', 'notify.c', dependencies: libgtk_dep)
-test('gtk/notify test', test_notify)
-
-test_no_gtk_init = executable('no_gtk_init', 'no-gtk-init.c', dependencies: libgtk_dep)
-test('gtk/no_gtk_init test', test_no_gtk_init)
-
-test_object = executable('object', 'object.c', dependencies: libgtk_dep)
-test('gtk/object test', test_object)
-
-test_objects_finalize = executable('objects_finalize', 'objects-finalize.c', dependencies: libgtk_dep)
-test('gtk/objects_finalize test', test_objects_finalize)
-
-test_papersize = executable('papersize', 'papersize.c', dependencies: libgtk_dep)
-test('gtk/papersize test', test_papersize)
-
-test_rbtree = executable('rbtree', 'rbtree.c', dependencies: libgtk_dep)
-test('gtk/rbtree test', test_rbtree)
-
-test_recentmanager = executable('recentmanager', 'recentmanager.c', dependencies: libgtk_dep)
-test('gtk/recentmanager test', test_recentmanager)
-
-test_regression_tests = executable('regression_tests', 'regression-tests.c', dependencies: libgtk_dep)
-test('gtk/regression_tests test', test_regression_tests)
-
-test_scrolledwindow = executable('scrolledwindow', 'scrolledwindow.c', dependencies: libgtk_dep)
-test('gtk/scrolledwindow test', test_scrolledwindow)
-
-test_spinbutton = executable('spinbutton', 'spinbutton.c', dependencies: libgtk_dep)
-test('gtk/spinbutton test', test_spinbutton)
-
-test_stylecontext = executable('stylecontext', 'stylecontext.c', dependencies: libgtk_dep)
-test('gtk/stylecontext test', test_stylecontext)
-
-test_templates = executable('templates', 'templates.c', dependencies: libgtk_dep)
-test('gtk/templates test', test_templates)
-
-test_textbuffer = executable('textbuffer', 'textbuffer.c', dependencies: libgtk_dep)
-test('gtk/textbuffer test', test_textbuffer)
-
-test_textiter = executable('textiter', 'textiter.c', dependencies: libgtk_dep)
-test('gtk/textiter test', test_textiter)
-
-test_treemodel = executable(
-  'treemodel',
-  'treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
-  'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c',
-  dependencies: libgtk_dep
-)
-test('gtk/treemodel test', test_treemodel)
-
-test_treepath = executable('treepath', 'treepath.c', dependencies: libgtk_dep)
-test('gtk/treepath test', test_treepath)
-
-test_treeview = executable('treeview', 'treeview.c', dependencies: libgtk_dep)
-test('gtk/treeview test', test_treeview)
-
-test_typename = executable('typename', 'typename.c', dependencies: libgtk_dep)
-test('gtk/typename test', test_typename)
-
-test_window = executable('window', 'window.c', dependencies: libgtk_dep)
-test('gtk/window test', test_window)
-
-test_displayclose = executable('displayclose', 'displayclose.c', dependencies: libgtk_dep)
-test('gtk/displayclose test', test_displayclose)
-
-test_revealer_size = executable('revealer_size', 'revealer-size.c', dependencies: libgtk_dep)
-test('gtk/revealer_size test', test_revealer_size)
+# FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
+if add_languages('cpp', required: false)
+  test_exe = executable('autotestkeywords',
+                        'autotestkeywords.cc',
+                        c_args : test_cargs + ['-Idummy-headers'],
+                        dependencies : libgtk_dep)
+  test('c++ keywords', test_exe,
+       args: [ '--tap', '-k' ],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+            ],
+       suite: 'gtk')
+endif
