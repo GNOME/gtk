@@ -2763,24 +2763,17 @@ gtk_entry_finalize (GObject *object)
       g_slice_free (EntryIconInfo, icon_info);
     }
 
-  if (priv->cached_layout)
-    g_object_unref (priv->cached_layout);
-
-  g_object_unref (priv->im_context);
+  g_clear_object (&priv->cached_layout);
+  g_clear_object (&priv->im_context);
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_destroy);
+  g_clear_pointer (&priv->magnifier_popover, gtk_widget_destroy);
+  g_clear_pointer (&priv->progress_widget, gtk_widget_unparent);
+  g_clear_object (&priv->text_handle);
+  g_free (priv->placeholder_text);
+  g_free (priv->im_module);
 
   if (priv->blink_timeout)
     g_source_remove (priv->blink_timeout);
-
-  if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
-
-  if (priv->magnifier_popover)
-    gtk_widget_destroy (priv->magnifier_popover);
-
-  if (priv->text_handle)
-    g_object_unref (priv->text_handle);
-  g_free (priv->placeholder_text);
-  g_free (priv->im_module);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -2788,7 +2781,6 @@ gtk_entry_finalize (GObject *object)
   if (priv->attrs)
     pango_attr_list_unref (priv->attrs);
 
-  g_clear_pointer (&priv->progress_widget, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
