@@ -1,3 +1,39 @@
-option('enable-x11-backend', type: 'boolean', value: 'true')
-option('enable-wayland-backend', type: 'boolean', value: 'true')
-option('enable-broadway-backend', type: 'boolean', value: 'false')
+# GDK backends
+option('x11-backend', type: 'boolean', value: true,
+  description : 'Enable the X11 gdk backend (only when building on Unix)')
+option('wayland-backend', type: 'boolean', value: true,
+  description : 'Enable the wayland gdk backend (only when building on Unix except for macOS)')
+option('broadway-backend', type: 'boolean', value: false,
+  description : 'Enable the broadway (HTML5) gdk backend')
+option('win32-backend', type: 'boolean', value: true,
+  description : 'Enable the Windows gdk backend (only when building on Windows)')
+option('quartz-backend', type: 'boolean', value: true,
+  description : 'Enable the macOS gdk backend (only when building on macOS)')
+
+# Optional dependencies
+option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable support for the Xinerama extension')
+option('cloudproviders', type: 'boolean', value: false,
+  description : 'Enable the cloudproviders support')
+
+# Print backends
+option('print-backends', type : 'string', value : 'cups,file',
+  description : 'Build the specified print backends (comma-separated list, "all", or "none")')
+option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Build colord support for the CUPS printing backend')
+
+# Documentation and introspection
+option('documentation', type: 'boolean', value: 'false',
+  description : 'Build API reference and tools documentation')
+option('man-pages', type: 'boolean', value: 'false',
+  description : 'Build man pages for installed tools')
+option('introspection', type: 'boolean', value: 'true',
+  description : 'Build introspection data (requires gobject-introspection)')
+
+# Demos and binaries
+option('demos', type: 'boolean', value: 'true',
+  description : 'Build demo programs')
+option('build-examples', type: 'boolean', value: 'true',
+  description : 'Build examples')
+option('build-tests', type: 'boolean', value: 'true',
+  description : 'Build tests')
