@@ -796,7 +796,7 @@ enum_to_string (GType type,
  * gtk_page_setup_to_key_file:
  * @setup: a #GtkPageSetup
  * @key_file: the #GKeyFile to save the page setup to
- * @group_name: the group to add the settings to in @key_file, 
+ * @group_name: (nullable): the group to add the settings to in @key_file,
  *      or %NULL to use the default name “Page Setup”
  * 
  * This function adds the page setup from @setup to @key_file.

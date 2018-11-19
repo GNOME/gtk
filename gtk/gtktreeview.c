@@ -12419,7 +12419,7 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
 /**
  * gtk_tree_view_set_expander_column:
  * @tree_view: A #GtkTreeView
- * @column: %NULL, or the column to draw the expander arrow at.
+ * @column: (nullable): %NULL, or the column to draw the expander arrow at.
  *
  * Sets the column to draw the expander arrow at. It must be in @tree_view.  
  * If @column is %NULL, then the expander arrow is always at the first 
