@@ -75,7 +75,7 @@ gtkdemo_deps = [libgtk_dep]
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
-  gtkdemo_deps += harfbuzz_dep
+  gtkdemo_deps += [harfbuzz_dep, pangoft_dep]
 endif
 
 if os_unix
@@ -108,6 +108,5 @@ gtkdemo = executable(
   gtkdemo_resources,
   dependencies: gtkdemo_deps,
   include_directories : confinc,
-  gui_app: true,
   install: true
 )
