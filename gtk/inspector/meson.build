@@ -8,6 +8,7 @@ inspector_sources = files(
   'general.c',
   'gestures.c',
   'graphdata.c',
+  'gtkstackcombo.c',
   'gtktreemodelcssnode.c',
   'init.c',
   'inspect-button.c',
@@ -23,9 +24,8 @@ inspector_sources = files(
   'signals-list.c',
   'size-groups.c',
   'statistics.c',
+  'strv-editor.c',
   'treewalk.c',
   'visual.c',
   'window.c',
-  'strv-editor.c',
-  'gtkstackcombo.c'
 )
