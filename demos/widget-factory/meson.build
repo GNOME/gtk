@@ -15,6 +15,5 @@ widget_factory = executable(
   widgetfactory_resources,
   dependencies: libgtk_dep,
   include_directories : confinc,
-  gui_app: true,
   install: true
 )
