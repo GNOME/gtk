@@ -254,17 +254,17 @@ if gdk_backends.length() == 0
   error('No backends enabled')
 endif
 
-# FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = shared_library('gdk-3',
-  sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
-  dependencies: gdk_deps,
-  include_directories: [confinc, gdkx11_inc, wlinc],
-  c_args: [
-    '-DGDK_COMPILATION',
-    '-DG_LOG_DOMAIN="Gdk"',
-  ] + common_cflags,
-  link_whole: gdk_backends,
-  link_args: common_ldflags)
+                        sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
+                        dependencies: gdk_deps,
+                        include_directories: [confinc, gdkx11_inc, wlinc],
+                        c_args: [
+                          '-DGDK_COMPILATION',
+                          '-DG_LOG_DOMAIN="Gdk"',
+                        ] + common_cflags,
+                        link_whole: gdk_backends,
+                        link_args: common_ldflags,
+                        install: true)
 
 libgdk_dep = declare_dependency(
   link_with: libgdk,
