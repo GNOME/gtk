@@ -7617,7 +7617,10 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   display = _gtk_widget_get_display (widget);
   monitor = gdk_display_get_monitor (display, 0);
 
-  return gdk_monitor_get_scale_factor (monitor);
+  if (monitor)
+    return gdk_monitor_get_scale_factor (monitor);
+
+  return 1;
 }
 
 /**
