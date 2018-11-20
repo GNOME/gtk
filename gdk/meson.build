@@ -246,7 +246,7 @@ if gdk_backends.length() == 0
 endif
 
 # FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
-libgdk = static_library('gdk',
+libgdk = shared_library('gdk-3',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   dependencies: gdk_deps,
   include_directories: [confinc, gdkx11_inc, wlinc],
@@ -257,10 +257,8 @@ libgdk = static_library('gdk',
   link_whole: gdk_backends,
   link_args: common_ldflags)
 
-# We don't have link_with: to internal static libs here on purpose, just
-# list the dependencies and generated headers and such, for use in the
-# "public" libgtk_dep used by internal executables.
 libgdk_dep = declare_dependency(
+  link_with: libgdk,
   sources: ['gdk.h', gdkconfig, gdkenum_h],
   include_directories: [confinc, gdkx11_inc, wlinc],
   dependencies: gdk_deps)
