@@ -204,6 +204,15 @@ gdk_deps = [
   pangocairo_dep
 ]
 
+if win32_enabled
+  gdk_deps += [cc.find_library('advapi32'),
+               cc.find_library('comctl32'),
+               cc.find_library('dwmapi'),
+               cc.find_library('imm32'),
+               cc.find_library('setupapi'),
+               cc.find_library('winmm')]
+endif
+
 gdk_sources = [
   # Generated
   gdkconfig,

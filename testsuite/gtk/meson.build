@@ -15,7 +15,6 @@ tests = [
   ['cellarea'],
   ['check-icon-names'],
   ['check-cursor-names'],
-  ['clipboard'],
   ['cssprovider'],
   ['defaultvalue'],
   ['entry'],
@@ -31,7 +30,6 @@ tests = [
   ['notify'],
   ['no-gtk-init'],
   ['object'],
-  ['objects-finalize', ['../../gdk/x11/gdkdisplaymanager-x11.c'], ['-DGDK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['papersize'],
   ['rbtree', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['recentmanager'],
@@ -57,6 +55,13 @@ test_cargs = []
 if os_unix
   # tests += [['defaultvalue']]  # disabled in Makefile.am as well
   test_cargs += ['-DHAVE_UNIX_PRINT_WIDGETS']
+endif
+
+if x11_enabled
+  tests += [
+    ['clipboard'],
+    ['objects-finalize', ['../../gdk/x11/gdkdisplaymanager-x11.c'], ['-DGDK_COMPILATION', '-UG_ENABLE_DEBUG']],
+  ]
 endif
 
 foreach t : tests

@@ -840,13 +840,6 @@ if win32_enabled
   gtk_cargs += []
   gtk_sources += gtk_use_win32_sources
   gtk_deps += [ giowin32_dep, pangowin32_dep ]
-
-  gtk_deps += [cc.find_library('advapi32'),
-               cc.find_library('comctl32'),
-               cc.find_library('dwmapi'),
-               cc.find_library('imm32'),
-               cc.find_library('setupapi'),
-               cc.find_library('winmm')]
 else
   gtk_deps += [ atkbridge_dep, ]
 endif
