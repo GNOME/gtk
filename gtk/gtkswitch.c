@@ -324,16 +324,13 @@ gtk_switch_size_allocate (GtkWidget *widget,
   GtkSwitch *self = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
   GtkAllocation child_alloc;
-  GtkAllocation slider_alloc;
   int min;
 
-  slider_alloc.x = round (priv->handle_pos * (width / 2));
-  slider_alloc.y = 0;
-  slider_alloc.width = width / 2;
-  slider_alloc.height = height;
-
-  gtk_widget_size_allocate (priv->slider, &slider_alloc, -1);
-
+  gtk_widget_size_allocate (priv->slider,
+                            &(GtkAllocation) {
+                              round (priv->handle_pos * (width / 2)), 0,
+                              width / 2, height
+                            }, -1);
 
   /* Center ON label in left half */
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
