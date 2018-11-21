@@ -12925,23 +12925,28 @@ _gtk_widget_consumes_motion (GtkWidget        *widget,
                              GdkEventSequence *sequence)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GList *l;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  for (l = priv->event_controllers; l; l = l->next)
+  while (widget != NULL && !GTK_IS_WINDOW (widget))
     {
-      GtkEventController *controller = l->data;
+      GList *l;
 
-      if (controller == NULL ||
-          !GTK_IS_GESTURE (controller))
-        continue;
+      for (l = priv->event_controllers; l; l = l->next)
+        {
+          GtkEventController *controller = l->data;
 
-      if ((!GTK_IS_GESTURE_SINGLE (controller) ||
-           GTK_IS_GESTURE_DRAG (controller) ||
-           GTK_IS_GESTURE_SWIPE (controller)) &&
-          gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
-        return TRUE;
+          if (controller == NULL ||
+              !GTK_IS_GESTURE (controller))
+            continue;
+
+          if ((!GTK_IS_GESTURE_SINGLE (controller) ||
+               GTK_IS_GESTURE_DRAG (controller) ||
+               GTK_IS_GESTURE_SWIPE (controller)) &&
+              gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
+            return TRUE;
+        }
+
+      widget = priv->parent;
+      priv = gtk_widget_get_instance_private (widget);
     }
 
   return FALSE;
