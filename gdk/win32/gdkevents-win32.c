@@ -3095,25 +3095,11 @@ gdk_event_translate (MSG  *msg,
 
       if (msg->message == WM_MOUSEWHEEL)
         {
-          UINT lines_multiplier = 3;
           event->scroll.delta_y = (gdouble) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
-          /* -1 means that we should scroll in screens, not lines.
-           * Right now GDK doesn't support that.
-           */
-          if (SystemParametersInfo (SPI_GETWHEELSCROLLLINES, 0, &lines_multiplier, 0) &&
-              lines_multiplier != (UINT) -1)
-            event->scroll.delta_y *= (gdouble) lines_multiplier;
         }
       else if (msg->message == WM_MOUSEHWHEEL)
         {
-          UINT chars_multiplier = 3;
           event->scroll.delta_x = (gdouble) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
-          /* There doesn't seem to be any indication that
-           * h-scroll has an equivalent of the "screen" mode,
-           * indicated by multiplier being (UINT) -1.
-           */
-          if (SystemParametersInfo (SPI_GETWHEELSCROLLCHARS, 0, &chars_multiplier, 0))
-            event->scroll.delta_x *= (gdouble) chars_multiplier;
         }
       /* Positive delta scrolls up, not down,
          see API documentation for WM_MOUSEWHEEL message.
