@@ -292,13 +292,19 @@ select_thread_func (void *arg)
     }
 }
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+#define GDK_QUARTZ_APPLICATION_DEFINED NSApplicationDefined
+#else
+#define GDK_QUARTZ_APPLICATION_DEFINED NSEventTypeApplicationDefined
+#endif
+
 static void 
 got_fd_activity (void *info)
 {
   NSEvent *event;
 
   /* Post a message so we'll break out of the message loop */
-  event = [NSEvent otherEventWithType: NSApplicationDefined
+  event = [NSEvent otherEventWithType: GDK_QUARTZ_APPLICATION_DEFINED
 	                     location: NSZeroPoint
 	                modifierFlags: 0
 	                    timestamp: 0
@@ -714,6 +720,12 @@ static GSourceFuncs event_funcs = {
  *********             Our Poll Function            *********
  ************************************************************/
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+#define GDK_QUARTZ_EVENT_MASK_ANY NSAnyEventMask
+#else
+#define GDK_QUARTZ_EVENT_MASK_ANY NSEventMaskAny
+#endif
+
 static gint
 poll_func (GPollFD *ufds,
 	   guint    nfds,
@@ -739,7 +751,7 @@ poll_func (GPollFD *ufds,
     limit_date = [NSDate dateWithTimeIntervalSinceNow:timeout_/1000.0];
 
   getting_events++;
-  event = [NSApp nextEventMatchingMask: NSAnyEventMask
+  event = [NSApp nextEventMatchingMask: GDK_QUARTZ_EVENT_MASK_ANY
 	                     untilDate: limit_date
 	                        inMode: NSDefaultRunLoopMode
                                dequeue: YES];
@@ -758,7 +770,7 @@ poll_func (GPollFD *ufds,
     n_ready = select_thread_collect_poll (ufds, nfds);
       
   if (event &&
-      [event type] == NSApplicationDefined &&
+      [event type] == GDK_QUARTZ_APPLICATION_DEFINED &&
       [event subtype] == GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP)
     {
       /* Just used to wake us up; if an event and a FD arrived at the same

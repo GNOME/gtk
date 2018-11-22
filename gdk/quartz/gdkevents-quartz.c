@@ -35,6 +35,7 @@
 #include "gdkquartzdisplay.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartzdevicemanager-core.h"
+#include "gdkquartzkeys.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
@@ -289,15 +290,15 @@ get_keyboard_modifiers_from_ns_flags (NSUInteger nsflags)
 {
   GdkModifierType modifiers = 0;
 
-  if (nsflags & NSAlphaShiftKeyMask)
+  if (nsflags & GDK_QUARTZ_ALPHA_SHIFT_KEY_MASK)
     modifiers |= GDK_LOCK_MASK;
-  if (nsflags & NSShiftKeyMask)
+  if (nsflags & GDK_QUARTZ_SHIFT_KEY_MASK)
     modifiers |= GDK_SHIFT_MASK;
-  if (nsflags & NSControlKeyMask)
+  if (nsflags & GDK_QUARTZ_CONTROL_KEY_MASK)
     modifiers |= GDK_CONTROL_MASK;
-  if (nsflags & NSAlternateKeyMask)
+  if (nsflags & GDK_QUARTZ_ALTERNATE_KEY_MASK)
     modifiers |= GDK_MOD1_MASK;
-  if (nsflags & NSCommandKeyMask)
+  if (nsflags & GDK_QUARTZ_COMMAND_KEY_MASK)
     modifiers |= GDK_MOD2_MASK;
 
   return modifiers;
@@ -315,31 +316,31 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
 {
   switch ([nsevent type])
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
+    case GDK_QUARTZ_LEFT_MOUSE_DOWN:
+    case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
+    case GDK_QUARTZ_OTHER_MOUSE_DOWN:
       return GDK_BUTTON_PRESS_MASK;
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
+    case GDK_QUARTZ_LEFT_MOUSE_UP:
+    case GDK_QUARTZ_RIGHT_MOUSE_UP:
+    case GDK_QUARTZ_OTHER_MOUSE_UP:
       return GDK_BUTTON_RELEASE_MASK;
-    case NSMouseMoved:
+    case GDK_QUARTZ_MOUSE_MOVED:
       return GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK;
-    case NSScrollWheel:
+    case GDK_QUARTZ_SCROLL_WHEEL:
       /* Since applications that want button press events can get
        * scroll events on X11 (since scroll wheel events are really
        * button press events there), we need to use GDK_BUTTON_PRESS_MASK too.
        */
       return GDK_SCROLL_MASK | GDK_BUTTON_PRESS_MASK;
-    case NSLeftMouseDragged:
+    case GDK_QUARTZ_LEFT_MOUSE_DRAGGED:
       return (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
 	      GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | 
 	      GDK_BUTTON1_MASK);
-    case NSRightMouseDragged:
+    case GDK_QUARTZ_RIGHT_MOUSE_DRAGGED:
       return (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
 	      GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | 
 	      GDK_BUTTON3_MASK);
-    case NSOtherMouseDragged:
+    case GDK_QUARTZ_OTHER_MOUSE_DRAGGED:
       {
 	GdkEventMask mask;
 
@@ -356,9 +357,9 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
     case NSEventTypeMagnify:
     case NSEventTypeRotate:
       return GDK_TOUCHPAD_GESTURE_MASK;
-    case NSKeyDown:
-    case NSKeyUp:
-    case NSFlagsChanged:
+    case GDK_QUARTZ_KEY_DOWN:
+    case GDK_QUARTZ_KEY_UP:
+    case GDK_QUARTZ_FLAGS_CHANGED:
       {
         switch (_gdk_quartz_keys_event_type (nsevent))
 	  {
@@ -374,10 +375,10 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
       }
       break;
 
-    case NSMouseEntered:
+    case GDK_QUARTZ_MOUSE_ENTERED:
       return GDK_ENTER_NOTIFY_MASK;
 
-    case NSMouseExited:
+    case GDK_QUARTZ_MOUSE_EXITED:
       return GDK_LEAVE_NOTIFY_MASK;
 
     default:
@@ -409,9 +410,9 @@ is_mouse_button_press_event (NSEventType type)
 {
   switch (type)
     {
-      case NSLeftMouseDown:
-      case NSRightMouseDown:
-      case NSOtherMouseDown:
+      case GDK_QUARTZ_LEFT_MOUSE_DOWN:
+      case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
+      case GDK_QUARTZ_OTHER_MOUSE_DOWN:
         return TRUE;
     }
 
@@ -766,7 +767,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
        * gdk gets confused about getting e.g. button presses with no
        * window (the title bar is not known to it).
        */
-      if (event_type != NSMouseMoved)
+      if (event_type != GDK_QUARTZ_MOUSE_MOVED)
         if (*y < 0)
           return NULL;
 
@@ -821,23 +822,23 @@ find_window_for_ns_event (NSEvent *nsevent,
 
   switch (event_type)
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
-    case NSMouseMoved:
-    case NSScrollWheel:
-    case NSLeftMouseDragged:
-    case NSRightMouseDragged:
-    case NSOtherMouseDragged:
+    case GDK_QUARTZ_LEFT_MOUSE_DOWN:
+    case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
+    case GDK_QUARTZ_OTHER_MOUSE_DOWN:
+    case GDK_QUARTZ_LEFT_MOUSE_UP:
+    case GDK_QUARTZ_RIGHT_MOUSE_UP:
+    case GDK_QUARTZ_OTHER_MOUSE_UP:
+    case GDK_QUARTZ_MOUSE_MOVED:
+    case GDK_QUARTZ_SCROLL_WHEEL:
+    case GDK_QUARTZ_LEFT_MOUSE_DRAGGED:
+    case GDK_QUARTZ_RIGHT_MOUSE_DRAGGED:
+    case GDK_QUARTZ_OTHER_MOUSE_DRAGGED:
     case NSEventTypeMagnify:
     case NSEventTypeRotate:
       return find_toplevel_for_mouse_event (nsevent, x, y);
-      
-    case NSMouseEntered:
-    case NSMouseExited:
+
+    case GDK_QUARTZ_MOUSE_ENTERED:
+    case GDK_QUARTZ_MOUSE_EXITED:
       /* Only handle our own entered/exited events, not the ones for the
        * titlebar buttons.
        */
@@ -846,9 +847,9 @@ find_window_for_ns_event (NSEvent *nsevent,
       else
         return NULL;
 
-    case NSKeyDown:
-    case NSKeyUp:
-    case NSFlagsChanged:
+    case GDK_QUARTZ_KEY_DOWN:
+    case GDK_QUARTZ_KEY_UP:
+    case GDK_QUARTZ_FLAGS_CHANGED:
       return find_toplevel_for_keyboard_event (nsevent);
 
     default:
@@ -1022,16 +1023,16 @@ fill_button_event (GdkWindow *window,
 
   switch ([nsevent type])
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
+    case GDK_QUARTZ_LEFT_MOUSE_DOWN:
+    case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
+    case GDK_QUARTZ_OTHER_MOUSE_DOWN:
       type = GDK_BUTTON_PRESS;
       state &= ~get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
 
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
+    case GDK_QUARTZ_LEFT_MOUSE_UP:
+    case GDK_QUARTZ_RIGHT_MOUSE_UP:
+    case GDK_QUARTZ_OTHER_MOUSE_UP:
       type = GDK_BUTTON_RELEASE;
       state |= get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
@@ -1135,7 +1136,7 @@ fill_key_event (GdkWindow    *window,
   event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
   gdk_event_set_scancode (event, [nsevent keyCode]);
-  event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
+  event->key.group = ([nsevent modifierFlags] & GDK_QUARTZ_ALTERNATE_KEY_MASK) ? 1 : 0;
   event->key.keyval = GDK_KEY_VoidSymbol;
 
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
@@ -1256,7 +1257,7 @@ synthesize_crossing_event (GdkWindow *window,
 {
   switch ([nsevent type])
     {
-    case NSMouseEntered:
+    case GDK_QUARTZ_MOUSE_ENTERED:
       /* Enter events are considered always to be from another toplevel
        * window, this shouldn't negatively affect any app or gtk code,
        * and is the only way to make GtkMenu work. EEK EEK EEK.
@@ -1272,7 +1273,7 @@ synthesize_crossing_event (GdkWindow *window,
                            GDK_NOTIFY_NONLINEAR);
       return TRUE;
 
-    case NSMouseExited:
+    case GDK_QUARTZ_MOUSE_EXITED:
       /* See above */
       if (!(window->event_mask & GDK_LEAVE_NOTIFY_MASK))
         return FALSE;
@@ -1359,12 +1360,12 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
   GdkWindowImplQuartz *toplevel_impl;
   gboolean lion;
 
-  /* Resizing from the resize indicator only begins if an NSLeftMouseButton
+  /* Resizing from the resize indicator only begins if an GDK_QUARTZ_LEFT_MOUSE_BUTTON
    * event is received in the resizing area.
    */
   toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
   if ([toplevel_impl->toplevel showsResizeIndicator])
-  if ([event type] == NSLeftMouseDown &&
+  if ([event type] == GDK_QUARTZ_LEFT_MOUSE_DOWN &&
       [toplevel_impl->toplevel showsResizeIndicator])
     {
       NSRect frame;
@@ -1403,9 +1404,9 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
    */
   lion = gdk_quartz_osx_version () >= GDK_OSX_LION;
   if (lion &&
-      ([event type] == NSLeftMouseDown ||
-       [event type] == NSRightMouseDown ||
-       [event type] == NSOtherMouseDown))
+      ([event type] == GDK_QUARTZ_LEFT_MOUSE_DOWN ||
+       [event type] == GDK_QUARTZ_RIGHT_MOUSE_DOWN ||
+       [event type] == GDK_QUARTZ_OTHER_MOUSE_DOWN))
     {
       if (x < GDK_LION_RESIZE ||
           x > toplevel->width - GDK_LION_RESIZE ||
@@ -1415,6 +1416,14 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
 
   return FALSE;
 }
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+#define GDK_QUARTZ_APP_KIT_DEFINED NSAppKitDefined
+#define GDK_QUARTZ_APPLICATION_DEACTIVATED NSApplicationDeactivatedEventType
+#else
+#define GDK_QUARTZ_APP_KIT_DEFINED NSEventTypeAppKitDefined
+#define GDK_QUARTZ_APPLICATION_DEACTIVATED NSEventSubtypeApplicationDeactivated
+#endif
 
 static gboolean
 gdk_event_translate (GdkEvent *event,
@@ -1431,9 +1440,9 @@ gdk_event_translate (GdkEvent *event,
    * grabs when the application loses focus (gets deactivated).
    */
   event_type = [nsevent type];
-  if (event_type == NSAppKitDefined)
+  if (event_type == GDK_QUARTZ_APP_KIT_DEFINED)
     {
-      if ([nsevent subtype] == NSApplicationDeactivatedEventType)
+      if ([nsevent subtype] ==  GDK_QUARTZ_APPLICATION_DEACTIVATED)
         _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
 
       /* This could potentially be used to break grabs when clicking
@@ -1469,7 +1478,7 @@ gdk_event_translate (GdkEvent *event,
     {
       GdkWindow *toplevel = NULL;
 
-      if (event_type == NSMouseMoved)
+      if (event_type == GDK_QUARTZ_MOUSE_MOVED)
         {
           /* Motion events received after clicking the menu bar do not have the
            * window field set.  Instead of giving up on the event immediately,
@@ -1540,9 +1549,9 @@ gdk_event_translate (GdkEvent *event,
    * native apps). If the app is active, we focus the window and then handle
    * the event, also to match native apps.
    */
-  if ((event_type == NSRightMouseDown ||
-       event_type == NSOtherMouseDown ||
-       event_type == NSLeftMouseDown))
+  if ((event_type == GDK_QUARTZ_RIGHT_MOUSE_DOWN ||
+       event_type == GDK_QUARTZ_OTHER_MOUSE_DOWN ||
+       event_type == GDK_QUARTZ_LEFT_MOUSE_DOWN))
     {
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
@@ -1566,23 +1575,23 @@ gdk_event_translate (GdkEvent *event,
 
   switch (event_type)
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
+    case GDK_QUARTZ_LEFT_MOUSE_DOWN:
+    case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
+    case GDK_QUARTZ_OTHER_MOUSE_DOWN:
+    case GDK_QUARTZ_LEFT_MOUSE_UP:
+    case GDK_QUARTZ_RIGHT_MOUSE_UP:
+    case GDK_QUARTZ_OTHER_MOUSE_UP:
       fill_button_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
-    case NSLeftMouseDragged:
-    case NSRightMouseDragged:
-    case NSOtherMouseDragged:
-    case NSMouseMoved:
+    case GDK_QUARTZ_LEFT_MOUSE_DRAGGED:
+    case GDK_QUARTZ_RIGHT_MOUSE_DRAGGED:
+    case GDK_QUARTZ_OTHER_MOUSE_DRAGGED:
+    case GDK_QUARTZ_MOUSE_MOVED:
       fill_motion_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
-    case NSScrollWheel:
+    case GDK_QUARTZ_SCROLL_WHEEL:
       {
         GdkScrollDirection direction;
 	float dx;
@@ -1659,17 +1668,17 @@ gdk_event_translate (GdkEvent *event,
         return_val = FALSE;
       break;
 #endif
-    case NSMouseExited:
+    case GDK_QUARTZ_MOUSE_EXITED:
       if (WINDOW_IS_TOPLEVEL (window))
           [[NSCursor arrowCursor] set];
       /* fall through */
-    case NSMouseEntered:
+    case GDK_QUARTZ_MOUSE_ENTERED:
       return_val = synthesize_crossing_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
-    case NSKeyDown:
-    case NSKeyUp:
-    case NSFlagsChanged:
+    case GDK_QUARTZ_KEY_DOWN:
+    case GDK_QUARTZ_KEY_UP:
+    case GDK_QUARTZ_FLAGS_CHANGED:
       {
         GdkEventType type;
 

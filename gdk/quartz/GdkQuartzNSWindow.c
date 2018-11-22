@@ -796,19 +796,27 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 }
 
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER
-#define NSFullScreenWindowMask NSWindowStyleMaskFullScreen
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+typedef enum
+  {
+   GDK_QUARTZ_FULL_SCREEN_MASK = NSFullScreenWindowMask,
+  } GdkQuartzFullScreen;
+#else
+typedef enum
+  {
+   GDK_QUARTZ_FULL_SCREEN_MASK = NSWindowStyleMaskFullScreen,
+  } GdkQuartzFullScreen;
 #endif
 - (void)setStyleMask:(NSUInteger)styleMask
 {
   gboolean was_fullscreen;
   gboolean is_fullscreen;
 
-  was_fullscreen = (([self styleMask] & NSFullScreenWindowMask) != 0);
+  was_fullscreen = (([self styleMask] & GDK_QUARTZ_FULL_SCREEN_MASK) != 0);
 
   [super setStyleMask:styleMask];
 
-  is_fullscreen = (([self styleMask] & NSFullScreenWindowMask) != 0);
+  is_fullscreen = (([self styleMask] & GDK_QUARTZ_FULL_SCREEN_MASK) != 0);
 
   if (was_fullscreen != is_fullscreen)
     _gdk_quartz_window_update_fullscreen_state ([[self contentView] gdkWindow]);
