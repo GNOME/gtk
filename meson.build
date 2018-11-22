@@ -454,7 +454,6 @@ if cc.get_id() == 'msvc'
 endif
 
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
-cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 atk_pkgs = ['atk']
 

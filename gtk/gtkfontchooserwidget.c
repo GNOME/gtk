@@ -56,14 +56,10 @@
 #include "gtkgesturemultipress.h"
 #include "gtkeventcontrollerscroll.h"
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
+#ifdef HAVE_HARFBUZZ
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_MULTIPLE_MASTERS_H
 #include "language-names.h"
 #include "script-names.h"
 #endif
@@ -870,7 +866,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
   gtk_font_chooser_widget_populate_features (fontchooser);
 #endif
 
@@ -1459,7 +1455,7 @@ gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
     }
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
 
 /* OpenType variations */
 
@@ -1518,67 +1514,124 @@ adjustment_changed (GtkAdjustment *adjustment,
 }
 
 static gboolean
-should_show_axis (FT_Var_Axis *ax)
+should_show_axis (hb_ot_var_axis_t       *hb_axis,
+                  hb_ot_var_axis_flags_t  flags)
 {
-  /* FIXME use FT_Get_Var_Axis_Flags */
-  if (ax->tag == FT_MAKE_TAG ('o', 'p', 's', 'z'))
+  if (hb_axis->tag == HB_OT_TAG_VAR_AXIS_OPTICAL_SIZE)
+    return FALSE;
+
+  if ((flags & HB_OT_VAR_AXIS_FLAG_HIDDEN) != 0)
     return FALSE;
 
   return TRUE;
 }
 
 static gboolean
-is_named_instance (FT_Face face)
+is_named_instance (hb_font_t *hb_font)
 {
-  return (face->face_index >> 16) > 0;
+  hb_face_t *hb_face;
+  unsigned int n_axes;
+  unsigned int n_instances;
+  unsigned int len;
+  const int *coords;
+  float *design_coords;
+  int *norm_coords;
+  unsigned int instance;
+  int i;
+
+  hb_face = hb_font_get_face (hb_font);
+  n_axes = hb_ot_var_get_axis_count (hb_face);
+  n_instances = hb_ot_var_get_named_instance_count (hb_face);
+  if (n_instances == 0)
+    return FALSE;
+
+  coords = hb_font_get_var_coords_normalized (hb_font, &len);
+  if (len < n_axes)
+    return FALSE;
+  design_coords = g_new (float, len);
+  norm_coords = g_new (int, len);
+  for (instance = 0; instance < n_instances; instance++)
+    {
+       hb_ot_var_named_instance_get_design_coords (hb_face, instance, &len, design_coords);
+       hb_ot_var_normalize_coords (hb_face, len, design_coords, norm_coords);
+       for (i = 0; i < len; i++)
+         {
+           if (norm_coords[i] != coords[i])
+             break;
+         }
+       if (i == len)
+         {
+           hb_ot_name_id_t name_id;
+           char name[64];
+           unsigned int name_len;
+
+           name_id = hb_ot_var_named_instance_get_subfamily_name_id (hb_face, instance);
+           hb_ot_name_get_utf8 (hb_face, name_id, hb_language_get_default (), &name_len, name);
+           g_print ("found named instance: %d, %s\n",  instance, name);
+           return TRUE;
+         }
+    }
+
+  return FALSE;
 }
 
 static struct {
   guint32 tag;
   const char *name;
 } axis_names[] = {
-  { FT_MAKE_TAG ('w', 'd', 't', 'h'), N_("Width") },
-  { FT_MAKE_TAG ('w', 'g', 'h', 't'), N_("Weight") },
-  { FT_MAKE_TAG ('i', 't', 'a', 'l'), N_("Italic") },
-  { FT_MAKE_TAG ('s', 'l', 'n', 't'), N_("Slant") },
-  { FT_MAKE_TAG ('o', 'p', 's', 'z'), N_("Optical Size") },
+  { HB_OT_TAG_VAR_AXIS_WIDTH,  N_("Width") },
+  { HB_OT_TAG_VAR_AXIS_WEIGHT, N_("Weight") },
+  { HB_OT_TAG_VAR_AXIS_ITALIC, N_("Italic") },
+  { HB_OT_TAG_VAR_AXIS_SLANT,  N_("Slant") },
 };
 
+
 static gboolean
-add_axis (GtkFontChooserWidget *fontchooser,
-          FT_Face               face,
-          FT_Var_Axis          *ax,
-          FT_Fixed              value,
-          int                   row)
+add_axis (GtkFontChooserWidget   *fontchooser,
+          hb_font_t              *hb_font,
+          hb_ot_var_axis_t       *hb_axis,
+          hb_ot_var_axis_flags_t  axis_flags,
+          int                     value,
+          int                     row)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   Axis *axis;
-  const char *name;
+  const char *name = NULL;
+  char text[64];
+  unsigned int len = 64;
   int i;
 
   axis = g_new (Axis, 1);
-  axis->tag = ax->tag;
+  axis->tag = hb_axis->tag;
   axis->fontchooser = GTK_WIDGET (fontchooser);
 
-  name = ax->name;
   for (i = 0; i < G_N_ELEMENTS (axis_names); i++)
     {
-      if (axis_names[i].tag == ax->tag)
+      if (axis_names[i].tag == hb_axis->tag)
         {
           name = _(axis_names[i].name);
           break;
         }
     }
+
+  if (name == NULL)
+    {
+      hb_face_t *hb_face = hb_font_get_face (hb_font);
+      hb_language_t language = hb_language_get_default ();
+      hb_ot_name_get_utf8 (hb_face, hb_axis->name_id, language, &len, text);
+      name = text;
+    }
+
   axis->label = gtk_label_new (name);
   gtk_widget_set_halign (axis->label, GTK_ALIGN_START);
   gtk_widget_set_valign (axis->label, GTK_ALIGN_BASELINE);
   gtk_grid_attach (GTK_GRID (priv->axis_grid), axis->label, 0, row, 1, 1);
-  axis->adjustment = gtk_adjustment_new ((double)FixedToFloat(value),
-                                         (double)FixedToFloat(ax->minimum),
-                                         (double)FixedToFloat(ax->maximum),
+  axis->adjustment = gtk_adjustment_new ((double)value,
+                                         (double)hb_axis->min_value,
+                                         (double)hb_axis->max_value,
                                          1.0, 10.0, 0.0);
   axis->scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, axis->adjustment);
-  gtk_scale_add_mark (GTK_SCALE (axis->scale), (double)FixedToFloat(ax->def), GTK_POS_TOP, NULL);
+  gtk_scale_add_mark (GTK_SCALE (axis->scale), (double)hb_axis->default_value, GTK_POS_TOP, NULL);
   gtk_widget_set_valign (axis->scale, GTK_ALIGN_BASELINE);
   gtk_widget_set_hexpand (axis->scale, TRUE);
   gtk_widget_set_size_request (axis->scale, 100, -1);
@@ -1593,7 +1646,8 @@ add_axis (GtkFontChooserWidget *fontchooser,
 
   adjustment_changed (axis->adjustment, axis);
   g_signal_connect (axis->adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis);
-  if (is_named_instance (face) || !should_show_axis (ax))
+
+  if (is_named_instance (hb_font) || !should_show_axis (hb_axis, axis_flags))
     {
       gtk_widget_hide (axis->label);
       gtk_widget_hide (axis->scale);
@@ -1610,9 +1664,13 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
-  FT_Face ft_face;
-  FT_MM_Var *ft_mm_var;
-  FT_Error ret;
+  hb_font_t *hb_font;
+  hb_face_t *hb_face;
+  unsigned int n_axes;
+  hb_ot_var_axis_t *axes;
+  const int *coords;
+  unsigned int len;
+  int i;
   gboolean has_axis = FALSE;
 
   if (priv->updating_variations)
@@ -1626,39 +1684,22 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
 
-  ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
-  if (ret == 0)
+  hb_font = pango_font_get_hb_font (pango_font);
+  hb_face = hb_font_get_face (hb_font);
+  n_axes = hb_ot_var_get_axis_count (hb_face); 
+  axes = g_new (hb_ot_var_axis_t, n_axes);
+  hb_ot_var_get_axes (hb_face, 0, &n_axes, axes);
+  coords = hb_font_get_var_coords_normalized (hb_font, &len);
+  if (len != n_axes)
+    g_warning ("%d axes, %d coords\n", n_axes, len);
+  for (i = 0; i < n_axes; i++)
     {
-      int i;
-      FT_Fixed *coords;
-
-      coords = g_new (FT_Fixed, ft_mm_var->num_axis);
-      for (i = 0; i < ft_mm_var->num_axis; i++)
-        coords[i] = ft_mm_var->axis[i].def;
-
-      if (ft_face->face_index > 0)
-        {
-          int instance_id = ft_face->face_index >> 16;
-          if (instance_id && instance_id <= ft_mm_var->num_namedstyles)
-            {
-              FT_Var_Named_Style *instance = &ft_mm_var->namedstyle[instance_id - 1];
-              memcpy (coords, instance->coords, ft_mm_var->num_axis * sizeof (*coords));
-            }
-        }
-
-      for (i = 0; i < ft_mm_var->num_axis; i++)
-        {
-          if (add_axis (fontchooser, ft_face, &ft_mm_var->axis[i], coords[i], i + 4))
-            has_axis = TRUE;
-        }
-
-      g_free (coords);
-      free (ft_mm_var);
+      hb_ot_var_axis_flags_t flags;
+      flags = hb_ot_var_axis_get_flags (hb_face, i);
+      if (add_axis (fontchooser, hb_font, &axes[i], flags, i < len ? coords[i] : 0, i + 4))
+        has_axis = TRUE;
     }
-
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
   g_object_unref (pango_font);
 
   return has_axis;
@@ -1798,7 +1839,7 @@ find_affected_text (hb_tag_t   feature_tag,
   chars = g_string_new ("");
 
   hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
-  hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
+  hb_ot_layout_script_select_language (hb_face, HB_OT_TAG_GSUB, script_index, 1, &lang_tag, &lang_index);
   if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, feature_tag, &feature_index))
     {
       unsigned int lookup_indexes[32];
@@ -2125,8 +2166,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFont *pango_font;
-  FT_Face ft_face;
   hb_font_t *hb_font;
+  hb_face_t *hb_face;
   hb_tag_t script_tag;
   hb_tag_t lang_tag;
   guint script_index = 0;
@@ -2134,6 +2175,10 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   int i, j;
   GList *l;
   gboolean has_feature = FALSE;
+  hb_tag_t table[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
+  hb_tag_t features[80];
+  unsigned int count;
+  unsigned int n_features;
 
   for (l = priv->feature_items; l; l = l->next)
     {
@@ -2147,67 +2192,47 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
-  hb_font = hb_ft_font_create (ft_face, NULL);
+  hb_font = pango_font_get_hb_font (pango_font);
+  hb_face = hb_font_get_face (hb_font);
 
-  if (hb_font)
+  find_language_and_script (fontchooser, hb_face, &lang_tag, &script_tag);
+
+  n_features = 0;
+  for (i = 0; i < 2; i++)
     {
-      hb_tag_t table[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
-      hb_face_t *hb_face;
-      hb_tag_t features[80];
-      unsigned int count;
-      unsigned int n_features;
-
-      hb_face = hb_font_get_face (hb_font);
-
-      find_language_and_script (fontchooser, hb_face, &lang_tag, &script_tag);
-
-      n_features = 0;
-      for (i = 0; i < 2; i++)
-        {
-          hb_ot_layout_table_find_script (hb_face, table[i], script_tag, &script_index);
-          hb_ot_layout_script_find_language (hb_face, table[i], script_index, lang_tag, &lang_index);
-          count = G_N_ELEMENTS (features);
-          hb_ot_layout_language_get_feature_tags (hb_face,
-                                                  table[i],
-                                                  script_index,
-                                                  lang_index,
-                                                  n_features,
-                                                  &count,
-                                                  features);
-          n_features += count;
-        }
-
-      for (j = 0; j < n_features; j++)
-        {
-          for (l = priv->feature_items; l; l = l->next)
-            {
-              FeatureItem *item = l->data;
-              if (item->tag != features[j])
-                continue;
-
-              has_feature = TRUE;
-              gtk_widget_show (item->top);
-              gtk_widget_show (gtk_widget_get_parent (item->top));
-
-              update_feature_example (item, hb_face, script_tag, lang_tag, priv->font_desc);
-
-              if (GTK_IS_RADIO_BUTTON (item->feat))
-                {
-                  GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
-                  gtk_widget_show (gtk_widget_get_parent (def));
-                }
-              else if (GTK_IS_CHECK_BUTTON (item->feat))
-                {
-                  set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
-                }
-            }
-        }
-
-      hb_font_destroy (hb_font);
+      hb_ot_layout_table_find_script (hb_face, table[i], script_tag, &script_index);
+      hb_ot_layout_script_select_language (hb_face, table[i], script_index, 1, &lang_tag, &lang_index);
+      count = G_N_ELEMENTS (features);
+      hb_ot_layout_language_get_feature_tags (hb_face, table[i], script_index, lang_index, n_features, &count, features);
+      n_features += count;
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  for (j = 0; j < n_features; j++)
+    {
+      for (l = priv->feature_items; l; l = l->next)
+        {
+          FeatureItem *item = l->data;
+          if (item->tag != features[j])
+            continue;
+
+          has_feature = TRUE;
+          gtk_widget_show (item->top);
+          gtk_widget_show (gtk_widget_get_parent (item->top));
+
+          update_feature_example (item, hb_face, script_tag, lang_tag, priv->font_desc);
+
+          if (GTK_IS_RADIO_BUTTON (item->feat))
+            {
+              GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
+              gtk_widget_show (gtk_widget_get_parent (def));
+            }
+          else if (GTK_IS_CHECK_BUTTON (item->feat))
+            {
+              set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
+            }
+        }
+    }
+
   g_object_unref (pango_font);
 
   return has_feature;
@@ -2260,7 +2285,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 }
 
-#endif
+#endif  /* HAVE_HARFBUZ */
 
 static void
 gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser,
@@ -2307,7 +2332,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
       gtk_font_chooser_widget_update_marks (fontchooser);
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
       if (gtk_font_chooser_widget_update_font_features (fontchooser))
         has_tweak = TRUE;
       if (gtk_font_chooser_widget_update_font_variations (fontchooser))
