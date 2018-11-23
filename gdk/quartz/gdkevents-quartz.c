@@ -398,6 +398,8 @@ is_mouse_button_press_event (NSEventType type)
       case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
       case GDK_QUARTZ_OTHER_MOUSE_DOWN:
         return TRUE;
+    default:
+      return FALSE;
     }
 
   return FALSE;
@@ -458,8 +460,12 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
         }
       else
         {
-          *screen_point = [[nsevent window] convertBaseToScreen:point];
-
+          if (gdk_quartz_osx_version () >= GDK_OSX_LION)
+            *screen_point = [[nsevent window] convertPointToScreen:point];
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 10700
+          else
+            *screen_point = [[nsevent window] convertBaseToScreen:point];
+#endif
           *x = point.x;
           *y = toplevel->height - point.y;
         }
