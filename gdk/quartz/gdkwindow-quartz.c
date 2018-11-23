@@ -219,10 +219,14 @@ gdk_window_impl_quartz_finalize (GObject *object)
  *
  * If drawable NULL, no flushing is done, only registering that a flush was
  * done externally.
+ *
+ * Note: As of MacOS 10.14 NSWindow flushWindow is deprecated because
+ * Quartz has the ability to handle deferred drawing on its own.
  */
 void
 _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
 {
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
   static struct timeval prev_tv;
   static gint intervals[4];
   static gint index;
@@ -248,6 +252,7 @@ _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
     }
   else
     prev_tv = tv;
+#endif
 }
 
 static cairo_user_data_key_t gdk_quartz_cairo_key;
@@ -378,7 +383,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
 
           toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
           nswindow = toplevel_impl->toplevel;
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
           /* In theory, we could skip the flush disabling, since we only
            * have one NSView.
            */
@@ -388,6 +393,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
               [nswindow disableFlushWindow];
               update_nswindows = g_slist_prepend (update_nswindows, nswindow);
             }
+#endif
         }
     }
 
@@ -411,10 +417,12 @@ _gdk_quartz_display_before_process_all_updates (GdkDisplay *display)
     {
       [NSAnimationContext endGrouping];
     }
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101100
   else
     {
       NSDisableScreenUpdates ();
     }
+#endif
 }
 
 void
@@ -432,9 +440,10 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
       [[nswindow contentView] displayIfNeeded];
 
       _gdk_quartz_window_flush (NULL);
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
+#endif
       [nswindow release];
 
       tmp_list = tmp_list->next;
@@ -448,10 +457,12 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
     {
       [NSAnimationContext beginGrouping];
     }
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101100
   else
     {
       NSEnableScreenUpdates ();
     }
+#endif
 }
 
 static const gchar *
