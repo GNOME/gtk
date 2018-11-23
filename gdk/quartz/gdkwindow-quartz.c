@@ -158,10 +158,11 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
       if (![window_impl->view lockFocusIfCanDraw])
         return NULL;
     }
-  if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
-  else
+#else
     cg_context = [[NSGraphicsContext currentContext] CGContext];
+#endif
   if (!cg_context)
     return NULL;
   CGContextSaveGState (cg_context);
