@@ -128,26 +128,6 @@ ensure_atom_tables (void)
     }
 }
 
-static GdkAtom
-intern_atom_internal (const gchar *atom_name, gboolean allocate)
-{
-  gpointer result;
-  gchar *name;
-  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
-
-  ensure_atom_tables ();
-  
-  if (g_hash_table_lookup_extended (names_to_atoms, atom_name, NULL, &result))
-    return result;
-  
-  result = GINT_TO_POINTER (atoms_to_names->len);
-  name = allocate ? g_strdup (atom_name) : (gchar *)atom_name;
-  g_hash_table_insert(names_to_atoms, name, result);
-  g_ptr_array_add(atoms_to_names, name);
-  
-  return result;  
-}
-
 void
 _gdk_quartz_window_delete_property (GdkWindow *window,
                                     GdkAtom    property)
