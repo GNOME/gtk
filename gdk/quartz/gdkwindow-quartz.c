@@ -141,7 +141,7 @@ static CGContextRef
 gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 				    gboolean             antialias)
 {
-  CGContextRef cg_context;
+  CGContextRef cg_context = NULL;
   CGSize scale;
 
   if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
@@ -158,10 +158,15 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
       if (![window_impl->view lockFocusIfCanDraw])
         return NULL;
     }
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 101000
+    cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+#else
   if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
     cg_context = [[NSGraphicsContext currentContext] CGContext];
+#endif
+
   if (!cg_context)
     return NULL;
   CGContextSaveGState (cg_context);
