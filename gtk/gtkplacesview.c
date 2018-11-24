@@ -1855,6 +1855,13 @@ on_address_entry_text_changed (GtkPlacesView *view)
 
 out:
   gtk_widget_set_sensitive (priv->connect_button, supported);
+  if (scheme && !supported)
+    gtk_style_context_add_class (gtk_widget_get_style_context (priv->address_entry),
+                                 GTK_STYLE_CLASS_ERROR);
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (priv->address_entry),
+                                    GTK_STYLE_CLASS_ERROR);
+
   g_free (address);
   g_free (scheme);
 }
