@@ -6,6 +6,7 @@
 #include "gskprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkgltextureprivate.h"
+#include "gdk/gdkglcontextprivate.h"
 
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
@@ -109,6 +110,34 @@ gsk_gl_driver_set_texture_parameters (GskGLDriver *self,
 
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+static void
+gsk_gl_driver_upload_texture (GskGLDriver *self,
+                              Texture     *texture,
+                              int          min_filter,
+                              int          mag_filter,
+                              guchar      *data)
+{
+  if (self->bound_source_texture != texture)
+    {
+      g_critical ("You must bind the texture before initializing it.");
+      return;
+    }
+
+  gsk_gl_driver_set_texture_parameters (self, min_filter, mag_filter);
+  gdk_gl_context_upload_texture (self->gl_context,
+                                 data,
+                                 texture->width,
+                                 texture->height,
+                                 texture->width * 4,
+                                 GL_TEXTURE_2D);
+
+  texture->min_filter = min_filter;
+  texture->mag_filter = mag_filter;
+
+  if (texture->min_filter != GL_NEAREST)
+    glGenerateMipmap (GL_TEXTURE_2D);
 }
 
 static void
@@ -497,8 +526,9 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
                                        int          min_filter,
                                        int          mag_filter)
 {
+  const int stride = gdk_texture_get_width (texture) * 4;
   Texture *t;
-  cairo_surface_t *surface;
+  guchar *texture_data = NULL;
 
   if (GDK_IS_GL_TEXTURE (texture))
     {
@@ -509,7 +539,8 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
           /* In this case, we have to temporarily make the texture's context the current one,
            * download its data into our context and then create a texture from it. */
           gdk_gl_context_make_current (texture_context);
-          surface = gdk_texture_download_surface (texture);
+          texture_data = g_malloc (stride * gdk_texture_get_height (texture));
+          gdk_texture_download (texture, texture_data, stride);
           gdk_gl_context_make_current (self->gl_context);
         }
       else
@@ -528,8 +559,10 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
             return t->texture_id;
         }
 
-      surface = gdk_texture_download_surface (texture);
+      texture_data = g_malloc (stride * gdk_texture_get_height (texture));
+      gdk_texture_download (texture, texture_data, stride);
     }
+  g_assert (texture_data != NULL);
 
   t = create_texture (self, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
 
@@ -537,12 +570,9 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
     t->user = texture;
 
   gsk_gl_driver_bind_source_texture (self, t->texture_id);
-  gsk_gl_driver_init_texture_with_surface (self,
-                                           t->texture_id,
-                                           surface,
-                                           min_filter,
-                                           mag_filter);
-  cairo_surface_destroy (surface);
+  gsk_gl_driver_upload_texture (self, t, min_filter, mag_filter, texture_data);
+
+  g_free (texture_data);
 
   return t->texture_id;
 }
