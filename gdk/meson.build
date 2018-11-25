@@ -269,6 +269,7 @@ libgdk = shared_library('gdk-3',
                         ] + common_cflags,
                         link_whole: gdk_backends,
                         link_args: common_ldflags,
+                        darwin_versions : gtk_osxversions,
                         install: true)
 
 libgdk_dep = declare_dependency(

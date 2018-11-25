@@ -5,7 +5,7 @@ project('gtk+-3.0', 'c',
           'c_std=gnu89',
           'warning_level=1'
         ],
-        meson_version : '>= 0.43.0',
+        meson_version : '>= 0.48.0',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
@@ -79,6 +79,7 @@ gtk_binary_version = '3.0.0'
 gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 
 gtk_soversion = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_interface_age)
+gtk_osxversions = [(100 * gtk_minor_version) + 1, '@0@.@1@.0'.format((100 * gtk_minor_version) + 1, gtk_micro_version)]
 
 gtk_api_version = '@0@.0'.format(gtk_major_version)
 
@@ -285,12 +286,6 @@ if os_unix and not os_darwin
     endif
   endforeach
 endif
-
-# Maintain compatibility with autotools
-if os_darwin
-  common_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
-endif
-
 
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
