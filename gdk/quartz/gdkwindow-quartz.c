@@ -2832,25 +2832,18 @@ gdk_quartz_window_set_keep_below (GdkWindow *window,
   [impl->toplevel setLevel: level - (setting ? 1 : 0)];
 }
 
+/* X11 "feature" not useful in other backends. */
 static GdkWindow *
 gdk_quartz_window_get_group (GdkWindow *window)
 {
-  g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
     return NULL;
-
-  /* FIXME: Implement */
-
-  return NULL;
 }
 
+/* X11 "feature" not useful in other backends. */
 static void
 gdk_quartz_window_set_group (GdkWindow *window,
                              GdkWindow *leader)
 {
-  /* FIXME: Implement */	
 }
 
 static void

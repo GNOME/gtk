@@ -41,10 +41,7 @@ static void display_reconfiguration_callback (CGDirectDisplayID            displ
 static GdkWindow *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  /* FIXME: Implement */
-
+/* X11-only. */
   return NULL;
 }
 
@@ -117,51 +114,49 @@ gdk_quartz_display_beep (GdkDisplay *display)
 static void
 gdk_quartz_display_sync (GdkDisplay *display)
 {
-  /* Not supported. */
+  /* Not needed. */
 }
 
 static void
 gdk_quartz_display_flush (GdkDisplay *display)
 {
-  /* Not supported. */
+  /* Not needed. */
 }
 
 static gboolean
 gdk_quartz_display_supports_selection_notification (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  /* FIXME: Implement */
+  /* X11-only. */
   return FALSE;
 }
 
 static gboolean
 gdk_quartz_display_request_selection_notification (GdkDisplay *display,
                                                    GdkAtom     selection)
-
 {
-  /* FIXME: Implement */
+  /* X11-only. */
   return FALSE;
 }
 
 static gboolean
 gdk_quartz_display_supports_clipboard_persistence (GdkDisplay *display)
 {
-  /* FIXME: Implement */
+  /* X11-only */
   return FALSE;
 }
 
 static gboolean
 gdk_quartz_display_supports_shapes (GdkDisplay *display)
 {
-  /* FIXME: Implement */
+  /* Not needed, nothing ever calls this.*/
   return FALSE;
 }
 
 static gboolean
 gdk_quartz_display_supports_input_shapes (GdkDisplay *display)
 {
-  /* FIXME: Implement */
+  /* Not needed, nothign ever calls this. */
   return FALSE;
 }
 
@@ -172,20 +167,23 @@ gdk_quartz_display_store_clipboard (GdkDisplay    *display,
                                     const GdkAtom *targets,
                                     gint           n_targets)
 {
-  /* FIXME: Implement */
+  /* MacOS persists pasteboard items automatically, no application
+   * action is required.
+   */
 }
 
 
 static gboolean
 gdk_quartz_display_supports_composite (GdkDisplay *display)
 {
-  /* FIXME: Implement */
+  /* X11-only. */
   return FALSE;
 }
 
 static gulong
 gdk_quartz_display_get_next_serial (GdkDisplay *display)
 {
+  /* X11-only. */
   return 0;
 }
 
@@ -193,7 +191,24 @@ static void
 gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
                                             const gchar *startup_id)
 {
-  /* FIXME: Implement? */
+  /* This should call finishLaunching, but doing so causes Quartz to throw
+   * "_createMenuRef called with existing principal MenuRef already"
+   * " associated with menu".
+  [NSApp finishLaunching];
+  */
+}
+
+static void
+gdk_quartz_display_push_error_trap (GdkDisplay *display)
+{
+  /* X11-only. */
+}
+
+static gint
+gdk_quartz_display_pop_error_trap (GdkDisplay *display, gboolean ignore)
+{
+  /* X11 only. */
+  return 0;
 }
 
 /* The display monitor list comprises all of the CGDisplays connected
@@ -318,6 +333,19 @@ gdk_quartz_display_get_primary_monitor (GdkDisplay *display)
                               GINT_TO_POINTER (primary_id));
 }
 
+static GdkMonitor *
+gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
+                                          GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  NSWindow *nswindow = impl->toplevel;
+  NSScreen *screen = [nswindow screen];
+  CGDirectDisplayID id = [[[screen deviceDescription]
+                           objectForKey: @"NSScreenNumber"] unsignedIntValue];
+  return g_hash_table_lookup (GDK_QUARTZ_DISPLAY (display)->monitors,
+                              GINT_TO_POINTER (id));
+}
+
 G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 
 static void
@@ -400,7 +428,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;
 
-  display_class->get_app_launch_context = NULL; /* FIXME */
+  /* display_class->get_app_launch_context = NULL; Has default. */
   display_class->before_process_all_updates = _gdk_quartz_display_before_process_all_updates;
   display_class->after_process_all_updates = _gdk_quartz_display_after_process_all_updates;
   display_class->get_next_serial = gdk_quartz_display_get_next_serial;
@@ -409,12 +437,12 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
   display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
-  display_class->push_error_trap = NULL; /* FIXME */
-  display_class->pop_error_trap = NULL; /* FIXME */
+  display_class->push_error_trap = gdk_quartz_display_push_error_trap;
+  display_class->pop_error_trap = gdk_quartz_display_pop_error_trap;
 
   display_class->get_selection_owner = _gdk_quartz_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_quartz_display_set_selection_owner;
-  display_class->send_selection_notify = NULL; /* FIXME */
+  display_class->send_selection_notify = NULL; /* Ignore. X11 stuff removed in master.  */
   display_class->get_selection_property = _gdk_quartz_display_get_selection_property;
   display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
@@ -425,7 +453,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
-  display_class->get_monitor_at_window = NULL; /* FIXME */
+  display_class->get_monitor_at_window = gdk_quartz_display_get_monitor_at_window;
 
   /**
    * GdkQuartzDisplay::monitors-changed:
