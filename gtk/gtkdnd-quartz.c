@@ -1588,7 +1588,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
    * info->context after it has been destroyed.
    */
   pasteboard = [NSPasteboard pasteboardWithName: NSDragPboard];
-  [pasteboard declareTypes: nil owner: nil];
+  [pasteboard clearContents];
 
   [pool release];
 
