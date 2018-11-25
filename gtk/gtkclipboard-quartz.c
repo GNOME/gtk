@@ -565,7 +565,7 @@ gtk_clipboard_clear (GtkClipboard *clipboard)
 {
   clipboard_unset (clipboard);
 
-  [clipboard->pasteboard declareTypes:nil owner:nil];
+  [clipboard clearContents];
 }
 
 static void
