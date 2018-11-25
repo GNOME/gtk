@@ -1514,13 +1514,12 @@ adjustment_changed (GtkAdjustment *adjustment,
 }
 
 static gboolean
-should_show_axis (hb_ot_var_axis_t       *hb_axis,
-                  hb_ot_var_axis_flags_t  flags)
+should_show_axis (hb_ot_var_axis_info_t *hb_axis)
 {
   if (hb_axis->tag == HB_OT_TAG_VAR_AXIS_OPTICAL_SIZE)
     return FALSE;
 
-  if ((flags & HB_OT_VAR_AXIS_FLAG_HIDDEN) != 0)
+  if ((hb_axis->flags & HB_OT_VAR_AXIS_FLAG_HIDDEN) != 0)
     return FALSE;
 
   return TRUE;
@@ -1589,8 +1588,7 @@ static struct {
 static gboolean
 add_axis (GtkFontChooserWidget   *fontchooser,
           hb_font_t              *hb_font,
-          hb_ot_var_axis_t       *hb_axis,
-          hb_ot_var_axis_flags_t  axis_flags,
+          hb_ot_var_axis_info_t  *hb_axis,
           int                     value,
           int                     row)
 {
@@ -1647,7 +1645,7 @@ add_axis (GtkFontChooserWidget   *fontchooser,
   adjustment_changed (axis->adjustment, axis);
   g_signal_connect (axis->adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis);
 
-  if (is_named_instance (hb_font) || !should_show_axis (hb_axis, axis_flags))
+  if (is_named_instance (hb_font) || !should_show_axis (hb_axis))
     {
       gtk_widget_hide (axis->label);
       gtk_widget_hide (axis->scale);
@@ -1667,7 +1665,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   hb_font_t *hb_font;
   hb_face_t *hb_face;
   unsigned int n_axes;
-  hb_ot_var_axis_t *axes;
+  hb_ot_var_axis_info_t *axes;
   const int *coords;
   unsigned int len;
   int i;
@@ -1688,16 +1686,14 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   hb_font = pango_font_get_hb_font (pango_font);
   hb_face = hb_font_get_face (hb_font);
   n_axes = hb_ot_var_get_axis_count (hb_face); 
-  axes = g_new (hb_ot_var_axis_t, n_axes);
-  hb_ot_var_get_axes (hb_face, 0, &n_axes, axes);
+  axes = g_new (hb_ot_var_axis_info_t, n_axes);
+  hb_ot_var_get_axis_infos (hb_face, 0, &n_axes, axes);
   coords = hb_font_get_var_coords_normalized (hb_font, &len);
   if (len != n_axes)
     g_warning ("%d axes, %d coords\n", n_axes, len);
   for (i = 0; i < n_axes; i++)
     {
-      hb_ot_var_axis_flags_t flags;
-      flags = hb_ot_var_axis_get_flags (hb_face, i);
-      if (add_axis (fontchooser, hb_font, &axes[i], flags, i < len ? coords[i] : 0, i + 4))
+      if (add_axis (fontchooser, hb_font, &axes[i], i < len ? coords[i] : 0, i + 4))
         has_axis = TRUE;
     }
   g_object_unref (pango_font);
