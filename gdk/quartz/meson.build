@@ -1,4 +1,6 @@
-# FIXME: do we need to do an add_language() for objective-c here?
+
+add_languages(['objc'])
+
 gdk_quartz_sources = files(
   'GdkQuartzView.c',
   'GdkQuartzNSWindow.c',
@@ -41,8 +43,12 @@ gdk_quartz_public_headers = files(
 install_headers(gdk_quartz_public_headers, subdir: 'gtk-3.0/gdk/quartz')
 install_headers('gdkquartz.h', subdir: 'gtk-3.0/gdk')
 
-gdk_quartz_deps = [ # FIXME
-]
+core_graphics_dep = dependency('appleframeworks', modules : 'CoreGraphics', required : true)
+appkit_dep = dependency('appleframeworks', modules : 'AppKit', required : true)
+cocoa_dep = dependency('appleframeworks', modules : 'Cocoa', required : true)
+carbon_dep = dependency('appleframeworks', modules : 'Carbon', required : true)
+
+gdk_quartz_deps = [ core_graphics_dep, appkit_dep, cocoa_dep, carbon_dep ]
 
 libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
