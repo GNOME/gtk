@@ -505,7 +505,7 @@ if broadway_enabled
 endif
 
 if quartz_enabled
-  pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon']
+  pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon', '-framework CoreGraphics']
   backend_immodules += ['quartz']
 endif
 
