@@ -1562,11 +1562,11 @@ is_named_instance (hb_font_t *hb_font)
          {
            hb_ot_name_id_t name_id;
            char name[64];
-           unsigned int name_len;
+           unsigned int name_len = 64;
 
            name_id = hb_ot_var_named_instance_get_subfamily_name_id (hb_face, instance);
            hb_ot_name_get_utf8 (hb_face, name_id, hb_language_get_default (), &name_len, name);
-           g_print ("found named instance: %d, %s\n",  instance, name);
+           g_print ("found named instance %d, name %d -> %s\n",  instance, name_id, name);
            return TRUE;
          }
     }
@@ -1619,6 +1619,8 @@ add_axis (GtkFontChooserWidget   *fontchooser,
       hb_ot_name_get_utf8 (hb_face, hb_axis->name_id, language, &len, text);
       name = text;
     }
+
+g_print ("axis %s\n", name);
 
   axis->label = gtk_label_new (name);
   gtk_widget_set_halign (axis->label, GTK_ALIGN_START);
