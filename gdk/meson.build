@@ -249,6 +249,9 @@ foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11']
     if backend == 'wayland'
       gdk_backends_gen_headers += get_variable('gdk_@0@_gen_headers'.format(backend))
     endif
+    if backend == 'quartz'
+      common_cflags += ['-DGDK_WINDOWING_QUARTZ', '-xobjective-c']
+    endif
   endif
 endforeach
 
