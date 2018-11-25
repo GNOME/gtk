@@ -897,6 +897,7 @@ libgtk = shared_library('gtk-3',
                         dependencies: gtk_deps + [libgdk_dep],
                         link_with: libgdk,
                         link_args: common_ldflags,
+                        darwin_versions : gtk_osxversions,
                         install: true)
 
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
