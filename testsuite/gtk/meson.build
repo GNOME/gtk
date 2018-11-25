@@ -1,6 +1,6 @@
 gtk_tests_export_dynamic_ldflag = []
 
-if cc.get_id() != 'msvc'
+if cc.get_id() != 'msvc' and cc.get_id() != 'clang'
   gtk_tests_export_dynamic_ldflag = ['-Wl,--export-dynamic']
 endif
 
