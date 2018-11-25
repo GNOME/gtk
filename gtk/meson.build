@@ -846,7 +846,7 @@ endif
 
 if quartz_enabled
   gtk_sources += gtk_use_quartz_sources
-  gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
+  gtk_cargs += ['-DGDK_WINDOWING_QUARTZ', '-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
 # So we don't add these twice
