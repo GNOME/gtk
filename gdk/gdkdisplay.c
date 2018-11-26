@@ -1318,6 +1318,11 @@ _gdk_display_check_grab_ownership (GdkDisplay *display,
   GdkGrabOwnership higher_ownership, device_ownership;
   gboolean device_is_keyboard;
 
+  g_return_val_if_fail (display, TRUE);
+
+  if (!display->device_grabs)
+      return TRUE; /* No hash table, no grabs. */
+
   g_hash_table_iter_init (&iter, display->device_grabs);
   higher_ownership = device_ownership = GDK_OWNERSHIP_NONE;
   device_is_keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD);
