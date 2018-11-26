@@ -1957,10 +1957,10 @@ stackswitcher button.circular, stackswitcher button.text-button.circular { min-w
 
 /************* App Icons * */
 /* Outline for low res icons */
-.lowres_icon { icon-shadow: 1px 1px rgba(0, 0, 0, 0.3), -1px -1px rgba(0, 0, 0, 0.3), -1px 1px rgba(0, 0, 0, 0.3), 1px -1px rgba(0, 0, 0, 0.3); }
+.lowres-icon { icon-shadow: 1px 1px rgba(0, 0, 0, 0.3), -1px -1px rgba(0, 0, 0, 0.3), -1px 1px rgba(0, 0, 0, 0.3), 1px -1px rgba(0, 0, 0, 0.3); }
 
 /* Drapshadow for large icons */
-.icon_dropshadow { icon-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.7); }
+.icon-dropshadow { icon-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.7); }
 
 /********* Emoji * */
 popover.emoji-picker { padding-left: 0; padding-right: 0; }
