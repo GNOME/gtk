@@ -28,6 +28,9 @@
             <property name="vexpand">1</property>
             <child>
               <object class="GtkImage" id="logo_image">
+                <style>
+                  <class name="icon-dropshadow"/>
+                </style>
                 <property name="icon-name">image-missing</property>
               </object>
             </child>
