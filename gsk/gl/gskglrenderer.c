@@ -301,7 +301,7 @@ rounded_rect_to_floats (GskGLRenderer        *self,
   int i;
   graphene_rect_t transformed_bounds;
 
-  graphene_matrix_transform_bounds (&builder->current_modelview, &rect->bounds, &transformed_bounds);
+  graphene_matrix_transform_bounds (builder->current_modelview, &rect->bounds, &transformed_bounds);
 
   outline[0] = transformed_bounds.origin.x;
   outline[1] = transformed_bounds.origin.y;
@@ -578,7 +578,7 @@ render_border_node (GskGLRenderer   *self,
 
     /* Prepare outline */
     outline = *rounded_outline;
-    graphene_matrix_transform_bounds (&builder->current_modelview,
+    graphene_matrix_transform_bounds (builder->current_modelview,
                                       &outline.bounds, &outline.bounds);
     for (i = 0; i < 4; i ++)
       {
@@ -711,17 +711,15 @@ render_offset_node (GskGLRenderer   *self,
 
     default:
       {
-        graphene_matrix_t prev_mv;
         graphene_matrix_t transform, transformed_mv;
 
         graphene_matrix_init_translate (&transform,
                                         &GRAPHENE_POINT3D_INIT(dx, dy, 1.0));
-        graphene_matrix_multiply (&transform, &builder->current_modelview, &transformed_mv);
-        prev_mv = ops_set_modelview (builder, &transformed_mv);
+        graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
 
+        ops_push_modelview (builder, &transformed_mv);
         gsk_gl_renderer_add_render_ops (self, child, builder);
-
-        ops_set_modelview (builder, &prev_mv);
+        ops_pop_modelview (builder);
       }
     }
 }
@@ -732,16 +730,14 @@ render_transform_node (GskGLRenderer   *self,
                        RenderOpBuilder *builder)
 {
   GskRenderNode *child = gsk_transform_node_get_child (node);
-  graphene_matrix_t prev_mv;
   graphene_matrix_t transform, transformed_mv;
 
   graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
-  graphene_matrix_multiply (&transform, &builder->current_modelview, &transformed_mv);
-  prev_mv = ops_set_modelview (builder, &transformed_mv);
+  graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
 
+  ops_push_modelview (builder, &transformed_mv);
   gsk_gl_renderer_add_render_ops (self, child, builder);
-
-  ops_set_modelview (builder, &prev_mv);
+  ops_pop_modelview (builder);
 }
 
 static inline void
@@ -805,7 +801,7 @@ render_clip_node (GskGLRenderer   *self,
   GskRoundedRect child_clip;
 
   transformed_clip = *gsk_clip_node_peek_clip (node);
-  graphene_matrix_transform_bounds (&builder->current_modelview, &transformed_clip, &transformed_clip);
+  graphene_matrix_transform_bounds (builder->current_modelview, &transformed_clip, &transformed_clip);
 
   graphene_rect_intersection (&transformed_clip,
                               &builder->current_clip.bounds,
@@ -835,7 +831,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
   int i;
 
   transformed_clip = child_clip;
-  graphene_matrix_transform_bounds (&builder->current_modelview, &child_clip.bounds, &transformed_clip.bounds);
+  graphene_matrix_transform_bounds (builder->current_modelview, &child_clip.bounds, &transformed_clip.bounds);
 
   if (graphene_rect_contains_rect (&builder->current_clip.bounds,
                                    &transformed_clip.bounds))
@@ -1071,7 +1067,6 @@ render_outset_shadow_node (GskGLRenderer       *self,
   RenderOp op;
   graphene_matrix_t identity;
   graphene_matrix_t prev_projection;
-  graphene_matrix_t prev_modelview;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
   int blurred_texture_id;
@@ -1124,7 +1119,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       op.op = OP_CLEAR;
       ops_add (builder, &op);
       prev_projection = ops_set_projection (builder, &item_proj);
-      prev_modelview = ops_set_modelview (builder, &identity);
+      ops_push_modelview (builder, &identity);
       prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       /* Draw outline */
@@ -1175,7 +1170,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
       ops_set_clip (builder, &prev_clip);
       ops_set_viewport (builder, &prev_viewport);
-      ops_set_modelview (builder, &prev_modelview);
+      ops_pop_modelview (builder);
       ops_set_projection (builder, &prev_projection);
       ops_set_render_target (builder, prev_render_target);
 
@@ -2273,7 +2268,6 @@ add_offscreen_ops (GskGLRenderer   *self,
   RenderOp op;
   graphene_matrix_t identity;
   graphene_matrix_t prev_projection;
-  graphene_matrix_t prev_modelview;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
   GskRoundedRect prev_clip;
@@ -2313,7 +2307,7 @@ add_offscreen_ops (GskGLRenderer   *self,
   op.op = OP_CLEAR;
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
-  prev_modelview = ops_set_modelview (builder, &identity);
+  ops_push_modelview (builder, &identity);
   prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x * scale,
                                                                   min_y * scale,
                                                                   width, height));
@@ -2329,7 +2323,7 @@ add_offscreen_ops (GskGLRenderer   *self,
     ops_set_clip (builder, &prev_clip);
 
   ops_set_viewport (builder, &prev_viewport);
-  ops_set_modelview (builder, &prev_modelview);
+  ops_pop_modelview (builder);
   ops_set_projection (builder, &prev_projection);
   ops_set_render_target (builder, prev_render_target);
 
@@ -2547,11 +2541,11 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   memset (&render_op_builder, 0, sizeof (render_op_builder));
   render_op_builder.renderer = self;
   render_op_builder.current_projection = projection;
-  render_op_builder.current_modelview = modelview;
   render_op_builder.current_viewport = *viewport;
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
   gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);
+  ops_push_modelview (&render_op_builder, &modelview);
 
   if (fbo_id != 0)
     ops_set_render_target (&render_op_builder, fbo_id);
@@ -2560,6 +2554,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   /* We correctly reset the state everywhere */
   g_assert_cmpint (render_op_builder.current_render_target, ==, fbo_id);
+  ops_pop_modelview (&render_op_builder);
+  ops_finish (&render_op_builder);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/
 

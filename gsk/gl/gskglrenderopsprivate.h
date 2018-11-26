@@ -12,6 +12,20 @@
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 12
 
+
+
+typedef struct
+{
+  guint is_only_translation : 1;
+  float scale;
+} OpsMatrixMetadata;
+
+typedef struct
+{
+  graphene_matrix_t matrix;
+  OpsMatrixMetadata metadata;
+} MatrixStackEntry;
+
 enum {
   OP_NONE,
   OP_CHANGE_OPACITY         =  1,
@@ -222,9 +236,6 @@ typedef struct
   int current_texture;
   GskRoundedRect current_clip;
 
-  graphene_matrix_t current_modelview;
-  guint modelview_is_translation : 1;
-
   graphene_matrix_t current_projection;
   graphene_rect_t current_viewport;
   float current_opacity;
@@ -234,10 +245,19 @@ typedef struct
 
   GArray *render_ops;
   GskGLRenderer *renderer;
+
+  /* Stack of modelview matrices */
+  GArray *mv_stack;
+  /* Pointer into mv_stack */
+  const graphene_matrix_t *current_modelview;
 } RenderOpBuilder;
 
 
 
+void              ops_finish             (RenderOpBuilder         *builder);
+void              ops_push_modelview     (RenderOpBuilder         *builder,
+                                          const graphene_matrix_t *mv);
+void              ops_pop_modelview      (RenderOpBuilder         *builder);
 float             ops_get_scale          (const RenderOpBuilder   *builder);
 
 void              ops_set_program        (RenderOpBuilder         *builder,
@@ -245,9 +265,6 @@ void              ops_set_program        (RenderOpBuilder         *builder,
 
 GskRoundedRect    ops_set_clip           (RenderOpBuilder         *builder,
                                           const GskRoundedRect    *clip);
-
-graphene_matrix_t ops_set_modelview      (RenderOpBuilder         *builder,
-                                          const graphene_matrix_t *modelview);
 
 void              ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                                   const graphene_rect_t *src,

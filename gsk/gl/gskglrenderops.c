@@ -1,5 +1,13 @@
 #include "gskglrenderopsprivate.h"
 
+void
+ops_finish (RenderOpBuilder *builder)
+{
+  if (builder->mv_stack)
+    g_array_free (builder->mv_stack, TRUE);
+}
+
+
 static inline void
 rgba_to_float (const GdkRGBA *c,
                float         *f)
@@ -13,24 +21,14 @@ rgba_to_float (const GdkRGBA *c,
 float
 ops_get_scale (const RenderOpBuilder *builder)
 {
-  const graphene_matrix_t *mv = &builder->current_modelview;
-  graphene_vec3_t col1;
-  graphene_vec3_t col2;
+  const MatrixStackEntry *head;
 
-  /* TODO: We should probably split this up into two values... */
+  g_assert (builder->mv_stack != NULL);
+  g_assert (builder->mv_stack->len >= 1);
 
-  graphene_vec3_init (&col1,
-                      graphene_matrix_get_value (mv, 0, 0),
-                      graphene_matrix_get_value (mv, 1, 0),
-                      graphene_matrix_get_value (mv, 2, 0));
+  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  graphene_vec3_init (&col2,
-                      graphene_matrix_get_value (mv, 0, 1),
-                      graphene_matrix_get_value (mv, 1, 1),
-                      graphene_matrix_get_value (mv, 2, 1));
-
-  return MAX (graphene_vec3_length (&col1),
-              graphene_vec3_length (&col2));
+  return head->metadata.scale;
 }
 
 static inline gboolean
@@ -64,23 +62,59 @@ matrix_is_only_translation (const graphene_matrix_t *mat)
   return TRUE;
 }
 
+static void
+extract_matrix_metadata (const graphene_matrix_t *m,
+                         OpsMatrixMetadata       *md)
+{
+  graphene_vec3_t col1;
+  graphene_vec3_t col2;
+
+  /* Is this matrix JUST a translation? */
+  md->is_only_translation = matrix_is_only_translation (m);
+
+  /* TODO: We should probably split this up into two values... */
+
+  /* Scale */
+  graphene_vec3_init (&col1,
+                      graphene_matrix_get_value (m, 0, 0),
+                      graphene_matrix_get_value (m, 1, 0),
+                      graphene_matrix_get_value (m, 2, 0));
+
+  graphene_vec3_init (&col2,
+                      graphene_matrix_get_value (m, 0, 1),
+                      graphene_matrix_get_value (m, 1, 1),
+                      graphene_matrix_get_value (m, 2, 1));
+
+  md->scale = MAX (graphene_vec3_length (&col1),
+                   graphene_vec3_length (&col2));
+
+}
+
+
 void
 ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                 const graphene_rect_t *src,
                                 graphene_rect_t       *dst)
 {
-  if (builder->modelview_is_translation)
+  const MatrixStackEntry *head;
+
+  g_assert (builder->mv_stack != NULL);
+  g_assert (builder->mv_stack->len >= 1);
+
+  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
+
+  if (head->metadata.is_only_translation)
     {
       graphene_vec4_t row4;
 
       /* TODO: We could do the get_row here only once, when setting the new modelview matrix. */
-      graphene_matrix_get_row (&builder->current_modelview, 3, &row4);
+      graphene_matrix_get_row (builder->current_modelview, 3, &row4);
       *dst = *src;
       graphene_rect_offset (dst, graphene_vec4_get_x (&row4), graphene_vec4_get_y (&row4));
     }
   else
     {
-      graphene_matrix_transform_bounds (&builder->current_modelview,
+      graphene_matrix_transform_bounds (builder->current_modelview,
                                         src,
                                         dst);
     }
@@ -118,12 +152,12 @@ ops_set_program (RenderOpBuilder *builder,
     }
 
   if (memcmp (&empty_matrix, &builder->program_state[program->index].modelview, sizeof (graphene_matrix_t)) == 0 ||
-      memcmp (&builder->current_modelview, &builder->program_state[program->index].modelview, sizeof (graphene_matrix_t)) != 0)
+      memcmp (builder->current_modelview, &builder->program_state[program->index].modelview, sizeof (graphene_matrix_t)) != 0)
     {
       op.op = OP_CHANGE_MODELVIEW;
-      op.modelview = builder->current_modelview;
+      op.modelview = *builder->current_modelview;
       g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].modelview = builder->current_modelview;
+      builder->program_state[program->index].modelview = *builder->current_modelview;
     }
 
   if (memcmp (&empty_rect, &builder->program_state[program->index].viewport, sizeof (graphene_rect_t)) == 0 ||
@@ -187,17 +221,16 @@ ops_set_clip (RenderOpBuilder      *builder,
   return prev_clip;
 }
 
-graphene_matrix_t
+static void
 ops_set_modelview (RenderOpBuilder         *builder,
                    const graphene_matrix_t *modelview)
 {
   RenderOp op;
-  graphene_matrix_t prev_mv;
 
   if (builder->current_program &&
       memcmp (&builder->program_state[builder->current_program->index].modelview, modelview,
               sizeof (graphene_matrix_t)) == 0)
-    return *modelview;
+    return;
 
   if (builder->render_ops->len > 0)
     {
@@ -222,12 +255,51 @@ ops_set_modelview (RenderOpBuilder         *builder,
 
   if (builder->current_program != NULL)
     builder->program_state[builder->current_program->index].modelview = *modelview;
+}
 
-  prev_mv = builder->current_modelview;
-  builder->current_modelview = *modelview;
-  builder->modelview_is_translation = matrix_is_only_translation (modelview);
+void
+ops_push_modelview (RenderOpBuilder         *builder,
+                    const graphene_matrix_t *mv)
+{
+  MatrixStackEntry *entry;
 
-  return prev_mv;
+  if (G_UNLIKELY (builder->mv_stack == NULL))
+      builder->mv_stack = g_array_new (FALSE, TRUE, sizeof (MatrixStackEntry));
+
+  g_assert (builder->mv_stack != NULL);
+
+  g_array_set_size (builder->mv_stack, builder->mv_stack->len + 1);
+  entry = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
+
+  entry->matrix = *mv;
+  extract_matrix_metadata (mv, &entry->metadata);
+
+  builder->current_modelview = &entry->matrix;
+  ops_set_modelview (builder, mv);
+}
+
+void
+ops_pop_modelview (RenderOpBuilder *builder)
+{
+  const graphene_matrix_t *m;
+  const MatrixStackEntry *head;
+
+  g_assert (builder->mv_stack);
+  g_assert (builder->mv_stack->len >= 1);
+
+  builder->mv_stack->len --;
+  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
+  m = &head->matrix;
+
+  if (builder->mv_stack->len >= 1)
+    {
+      builder->current_modelview = m;
+      ops_set_modelview (builder, m);
+    }
+  else
+    {
+      builder->current_modelview = NULL;
+    }
 }
 
 graphene_matrix_t
