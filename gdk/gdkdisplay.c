@@ -1256,6 +1256,9 @@ _gdk_display_has_touch_grab (GdkDisplay       *display,
                              gulong            serial)
 {
   guint i;
+  g_return_val_if_fail (display, NULL);
+  if (!display->touch_implicit_grabs)
+      return NULL;
 
   for (i = 0; i < display->touch_implicit_grabs->len; i++)
     {
