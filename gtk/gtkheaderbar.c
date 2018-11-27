@@ -532,7 +532,7 @@ gtk_header_bar_reorder_css_node (GtkHeaderBar *bar,
         previous_widget = iter->widget;
     }
 
-  if ((pack_type == GTK_PACK_START))
+  if (pack_type == GTK_PACK_START)
     gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (bar)),
                                gtk_widget_get_css_node (widget),
                                previous_widget ? gtk_widget_get_css_node (previous_widget) : NULL);
