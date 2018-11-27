@@ -4398,60 +4398,23 @@ gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
  **/
 gboolean
 gtk_widget_translate_coordinates (GtkWidget  *src_widget,
-				  GtkWidget  *dest_widget,
-				  gint        src_x,
-				  gint        src_y,
-				  gint       *dest_x,
-				  gint       *dest_y)
+                                  GtkWidget  *dest_widget,
+                                  gint        src_x,
+                                  gint        src_y,
+                                  gint       *dest_x,
+                                  gint       *dest_y)
 {
-  GtkWidget *ancestor;
-  GtkWidget *parent;
+  double x, y;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
-
-  ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
-  if (!ancestor)
-    {
-      if (dest_x)
-        *dest_x = 0;
-      if (dest_y)
-        *dest_y = 0;
-      return FALSE;
-    }
-
-
-  parent = src_widget;
-  while (parent != ancestor)
-    {
-      int origin_x, origin_y;
-
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
-
-      src_x += origin_x;
-      src_y += origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
-
-  parent = dest_widget;
-  while (parent != ancestor)
-    {
-      int origin_x, origin_y;
-
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
-
-      src_x -= origin_x;
-      src_y -= origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
+  if (!gtk_widget_translate_coordinatesf (src_widget, dest_widget,
+                                          src_x, src_y, &x, &y))
+    return FALSE;
 
   if (dest_x)
-    *dest_x = src_x;
+    *dest_x =x;
 
   if (dest_y)
-    *dest_y = src_y;
+    *dest_y = y;
 
   return TRUE;
 }
