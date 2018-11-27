@@ -361,6 +361,7 @@ add_emoji (GtkWidget    *box,
         p += g_unichar_to_utf8 (code, p);
     }
   g_variant_unref (codes);
+  p += g_unichar_to_utf8 (0xFE0F, p);
   p[0] = 0;
 
   label = gtk_label_new (text);
