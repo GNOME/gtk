@@ -474,6 +474,7 @@ get_text (GVariant *emoji_data,
         p += g_unichar_to_utf8 (code, p);
     }
   g_variant_unref (codes);
+  p += g_unichar_to_utf8 (0xFE0F, p); /* U+FE0F is the Emoji variation selector */
   p[0] = 0;
 }
 
