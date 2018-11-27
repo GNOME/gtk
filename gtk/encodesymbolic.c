@@ -79,7 +79,7 @@ load_symbolic_svg (char *file_data, gsize file_len,
   svg_height = g_strdup_printf ("%d",gdk_pixbuf_get_height (pixbuf));
   g_object_unref (pixbuf);
 
-  escaped_file_data = g_markup_escape_text (file_data, file_len);
+  escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
@@ -101,7 +101,7 @@ load_symbolic_svg (char *file_data, gsize file_len,
                       "      fill: ", css_success, " !important;\n"
                       "    }\n"
                       "  </style>\n"
-                      "  <xi:include href=\"data:text/xml,", escaped_file_data, "\"/>\n"
+                      "  <xi:include href=\"data:text/xml;base64,", escaped_file_data, "\"/>\n"
                       "</svg>",
                       NULL);
   g_free (escaped_file_data);
