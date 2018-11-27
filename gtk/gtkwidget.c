@@ -662,9 +662,6 @@ static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget      
 static void             gtk_widget_queue_tooltip_query          (GtkWidget        *widget);
 
 
-static void             gtk_widget_adjust_baseline_allocation   (GtkWidget        *widget,
-                                                                 gint             *baseline);
-
 static void                  template_data_free                 (GtkWidgetTemplate*template_data);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
@@ -4185,10 +4182,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                                      &adjusted_allocation.y,
                                      &adjusted_allocation.height);
   if (baseline >= 0)
-    {
-      gtk_widget_adjust_baseline_allocation (widget, &baseline);
-      baseline -= margin.top + border.top + padding.top;
-    }
+    baseline -= priv->margin.top;
 
   if (adjusted_allocation.x < real_allocation.x ||
       adjusted_allocation.y < real_allocation.y ||
@@ -4259,6 +4253,9 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                            margin.right + border.right + padding.right;
   real_allocation.height -= margin.top + border.top + padding.top +
                             margin.bottom + border.bottom + padding.bottom;
+
+  if (baseline >= 0)
+    baseline -= margin.top + border.top + padding.top;
 
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
     g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
@@ -4638,15 +4635,6 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
       adjust_for_align (effective_align (priv->valign, GTK_TEXT_DIR_NONE),
                         natural_size, allocated_pos, allocated_size);
     }
-}
-
-static void
-gtk_widget_adjust_baseline_allocation (GtkWidget *widget,
-                                       gint      *baseline)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  *baseline -= priv->margin.top;
 }
 
 static gboolean
@@ -11430,10 +11418,20 @@ int
 gtk_widget_get_allocated_baseline (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssStyle *style;
+  GtkBorder margin, border, padding;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->allocated_baseline;
+  if (priv->allocated_baseline == -1)
+    return -1;
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  return priv->allocated_baseline - margin.top - border.top - padding.top;
 }
 
 /**
