@@ -2255,7 +2255,7 @@ add_offscreen_ops (GskGLRenderer   *self,
                    float            min_y,
                    float            max_y,
                    GskRenderNode   *child_node,
-                   int             *texture_id,
+                   int             *texture_id_out,
                    gboolean        *is_offscreen,
                    gboolean         force_offscreen,
                    gboolean         reset_clip)
@@ -2271,6 +2271,7 @@ add_offscreen_ops (GskGLRenderer   *self,
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
   GskRoundedRect prev_clip;
+  int texture_id = 0;
 
   /* We need the child node as a texture. If it already is one, we don't need to draw
    * it on a framebuffer of course. */
@@ -2281,18 +2282,31 @@ add_offscreen_ops (GskGLRenderer   *self,
 
       get_gl_scaling_filters (child_node, &gl_min_filter, &gl_mag_filter);
 
-      *texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                           texture,
-                                                           gl_min_filter,
-                                                           gl_mag_filter);
+      *texture_id_out = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                               texture,
+                                                               gl_min_filter,
+                                                               gl_mag_filter);
       *is_offscreen = FALSE;
       return;
     }
 
-  *texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, *texture_id);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, *texture_id);
-  render_target = gsk_gl_driver_create_render_target (self->gl_driver, *texture_id, TRUE, TRUE);
+  /* Check if we've already cached the drawn texture. */
+  {
+    const int cached_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, child_node);
+
+    if (cached_id != 0)
+      {
+        *texture_id_out = cached_id;
+        /* We didn't render it offscreen, but hand out an offscreen texture id */
+        *is_offscreen = TRUE;
+        return;
+      }
+  }
+
+  texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
+  render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
 
   graphene_matrix_init_ortho (&item_proj,
                               min_x * scale, max_x * scale,
@@ -2328,6 +2342,9 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_set_render_target (builder, prev_render_target);
 
   *is_offscreen = TRUE;
+  *texture_id_out = texture_id;
+
+  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, child_node, texture_id);
 }
 
 static void

@@ -33,6 +33,11 @@ int             gsk_gl_driver_get_texture_for_texture   (GskGLDriver     *driver
                                                          GdkTexture      *texture,
                                                          int              min_filter,
                                                          int              mag_filter);
+int             gsk_gl_driver_get_texture_for_pointer   (GskGLDriver     *driver,
+                                                         gpointer         pointer);
+void            gsk_gl_driver_set_texture_for_pointer   (GskGLDriver     *driver,
+                                                         gpointer         pointer,
+                                                         int              texture_id);
 int             gsk_gl_driver_create_permanent_texture  (GskGLDriver     *driver,
                                                          float            width,
                                                          float            height);
