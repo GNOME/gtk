@@ -1477,7 +1477,7 @@ headerbar {
   border-color: $alt_borders_color;
   border-radius: 0;
 
-  @include headerbar_fill(darken($bg_color, 5%));
+  @include headerbar_fill(darken($bg_color, 10%));
 
   &:backdrop {
     border-color: $backdrop_borders_color;

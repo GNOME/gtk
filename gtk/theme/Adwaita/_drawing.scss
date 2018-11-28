@@ -500,9 +500,9 @@
 // $hc: top highlight color
 // $ov: a background layer for background shorthand (hence no commas!)
 //
-  $gradient: linear-gradient(to top, darken($c, 13%), darken($c, 2%) 2px, $c 3px);
+  $gradient: linear-gradient(to top, darken($c, 3%) 3px, lighten($c, 6%));
 
-  @if $variant == 'dark' { $gradient: linear-gradient(to top, darken($c, 3%), darken($c, 1%) 2px, $c 3px); }
+  @if $variant == 'dark' { $gradient: linear-gradient(to top, $c 3px, lighten($c, 3%)); }
 
   @if $ov != none { background: $c $ov, $gradient; }
   @else { background: $c $gradient; }
