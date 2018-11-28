@@ -7,7 +7,6 @@ ops_finish (RenderOpBuilder *builder)
     g_array_free (builder->mv_stack, TRUE);
 }
 
-
 static inline void
 rgba_to_float (const GdkRGBA *c,
                float         *f)
@@ -28,38 +27,9 @@ ops_get_scale (const RenderOpBuilder *builder)
 
   head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  return head->metadata.scale;
-}
-
-static inline gboolean
-matrix_is_only_translation (const graphene_matrix_t *mat)
-{
-  graphene_vec4_t row1;
-  graphene_vec4_t row2;
-  graphene_vec4_t row3;
-  graphene_vec4_t row;
-
-  graphene_vec4_init (&row1, 1, 0, 0, 0);
-  graphene_vec4_init (&row2, 0, 1, 0, 0);
-  graphene_vec4_init (&row3, 0, 0, 1, 0);
-
-  graphene_matrix_get_row (mat, 0, &row);
-  if (!graphene_vec4_equal (&row1, &row))
-    return FALSE;
-
-  graphene_matrix_get_row (mat, 1, &row);
-  if (!graphene_vec4_equal (&row2, &row))
-    return FALSE;
-
-  graphene_matrix_get_row (mat, 2, &row);
-  if (!graphene_vec4_equal (&row3, &row))
-    return FALSE;
-
-  graphene_matrix_get_row (mat, 3, &row);
-  if (graphene_vec4_get_w (&row) != 1)
-    return FALSE;
-
-  return TRUE;
+  /* TODO: Use two separate values */
+  return MAX (head->metadata.scale_x,
+              head->metadata.scale_y);
 }
 
 static void
@@ -69,10 +39,9 @@ extract_matrix_metadata (const graphene_matrix_t *m,
   graphene_vec3_t col1;
   graphene_vec3_t col2;
 
-  /* Is this matrix JUST a translation? */
-  md->is_only_translation = matrix_is_only_translation (m);
-
-  /* TODO: We should probably split this up into two values... */
+  /* Translate */
+  md->translate_x = graphene_matrix_get_value (m, 3, 0);
+  md->translate_y = graphene_matrix_get_value (m, 3, 1);
 
   /* Scale */
   graphene_vec3_init (&col1,
@@ -85,9 +54,36 @@ extract_matrix_metadata (const graphene_matrix_t *m,
                       graphene_matrix_get_value (m, 1, 1),
                       graphene_matrix_get_value (m, 2, 1));
 
-  md->scale = MAX (graphene_vec3_length (&col1),
-                   graphene_vec3_length (&col2));
+  md->scale_x = graphene_vec3_length (&col1);
+  md->scale_y = graphene_vec3_length (&col2);
 
+  /* A simple matrix (in our case) is one that doesn't do anything but scale
+   * and/or translate.
+   *
+   * For orher matrices, we fall back to offscreen drawing.
+   */
+  md->simple = TRUE;
+  {
+    static const guchar check_zero[4][4] = {
+      { 0, 1, 0, 1 },        /* If any of the values marked as '1' here is non-zero, */
+      { 1, 0, 0, 1 },        /* We have to resort to offscreen drawing later on. */
+      { 1, 1, 0, 1 },
+      { 0, 0, 0, 0 },
+    };
+    int x, y;
+
+    for (x = 0; x < 4; x ++)
+      for (y = 0; y < 4; y ++)
+          if (check_zero[y][x] &&
+              graphene_matrix_get_value (m, y, x) != 0.0f)
+            {
+              md->simple = FALSE;
+              goto out;
+            }
+  }
+
+out:
+  md->only_translation = (md->simple && md->scale_x == 0 && md->scale_y == 0);
 }
 
 
@@ -103,14 +99,12 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
 
   head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  if (head->metadata.is_only_translation)
+  if (head->metadata.only_translation)
     {
-      graphene_vec4_t row4;
-
-      /* TODO: We could do the get_row here only once, when setting the new modelview matrix. */
-      graphene_matrix_get_row (builder->current_modelview, 3, &row4);
       *dst = *src;
-      graphene_rect_offset (dst, graphene_vec4_get_x (&row4), graphene_vec4_get_y (&row4));
+      graphene_rect_offset (dst,
+                            head->metadata.translate_x,
+                            head->metadata.translate_y);
     }
   else
     {

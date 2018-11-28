@@ -16,8 +16,13 @@
 
 typedef struct
 {
-  guint is_only_translation : 1;
-  float scale;
+  float translate_x;
+  float translate_y;
+  float scale_x;
+  float scale_y;
+
+  guint simple : 1;
+  guint only_translation : 1;
 } OpsMatrixMetadata;
 
 typedef struct
