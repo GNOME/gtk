@@ -1686,6 +1686,8 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
 
   _gtk_menu_shell_update_mnemonics (menu_shell);
+
+  gtk_window_present (GTK_WINDOW (priv->toplevel));
 }
 
 static GdkDevice *

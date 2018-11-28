@@ -1650,7 +1650,8 @@ gdk_x11_surface_focus (GdkSurface *surface,
 
   display = GDK_SURFACE_DISPLAY (surface);
 
-  if (gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
+  if (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_TEMP &&
+      gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
 					   g_intern_static_string ("_NET_ACTIVE_WINDOW")))
     {
       XClientMessageEvent xclient;
