@@ -692,7 +692,7 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) separator { background-color: #252526; }
 
-window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #3b4049 8%, #3f3e40 25%); color: rgba(238, 238, 236, 0.1); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(21, 83, 158, 0.1)), linear-gradient(to top, #2d2d2e 3px, #323233); color: rgba(238, 238, 236, 0.1); }
 
 window.devel headerbar.titlebar:not(.selection-mode) label { color: #eeeeec; }
 

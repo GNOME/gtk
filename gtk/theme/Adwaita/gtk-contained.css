@@ -700,7 +700,7 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) separator { background-color: #d6d1cd; }
 
-window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #e3eaf2 8%, #f6f5f4 25%); color: rgba(46, 52, 54, 0.1); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(53, 132, 228, 0.2)), linear-gradient(to top, #d8d4d0, #dfdcd8 3px, #edebe9); color: rgba(46, 52, 54, 0.1); }
 
 window.devel headerbar.titlebar:not(.selection-mode) label { color: #2e3436; }
 
