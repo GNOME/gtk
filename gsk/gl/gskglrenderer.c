@@ -219,6 +219,31 @@ gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
                                          MAX (self->corner[2].height, self->corner[3].height)) * 2);
 }
 
+static inline gboolean
+node_supports_transform (GskRenderNode *node)
+{
+  /* Some nodes can't handle non-trivial transforms without being
+   * rendered to a texture (e.g. rotated clips, etc.). Some however
+   * work just fine, mostly because they already draw their child
+   * to a texture and just render the texture manipulated in some
+   * way, think opacity or color matrix. */
+  const guint node_type = gsk_render_node_get_node_type (node);
+
+  switch (node_type)
+    {
+      case GSK_COLOR_NODE:
+      case GSK_OPACITY_NODE:
+      case GSK_COLOR_MATRIX_NODE:
+      case GSK_TEXTURE_NODE:
+        return TRUE;
+
+      default:
+        return FALSE;
+    }
+  return FALSE;
+}
+
+
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                RenderOpBuilder *builder,
@@ -736,7 +761,43 @@ render_transform_node (GskGLRenderer   *self,
   graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
 
   ops_push_modelview (builder, &transformed_mv);
-  gsk_gl_renderer_add_render_ops (self, child, builder);
+  if (ops_modelview_is_simple (builder) ||
+      node_supports_transform (child))
+    {
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+    }
+  else
+    {
+      const float min_x = builder->dx + child->bounds.origin.x;
+      const float min_y = builder->dy + child->bounds.origin.y;
+      const float max_x = min_x + child->bounds.size.width;
+      const float max_y = min_y + child->bounds.size.height;
+      const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+        { { min_x, min_y }, { 0, 1 }, },
+        { { min_x, max_y }, { 0, 0 }, },
+        { { max_x, min_y }, { 1, 1 }, },
+
+        { { max_x, max_y }, { 1, 0 }, },
+        { { min_x, max_y }, { 0, 0 }, },
+        { { max_x, min_y }, { 1, 1 }, },
+      };
+      int texture_id;
+      gboolean is_offscreen;
+      /* For non-trivial transforms, we draw everything on a texture and then
+       * draw the texture transformed. */
+      /* TODO: We should compute a modelview containing only the "non-trivial"
+       *       part (e.g. the rotation) and use that. We want to keep the scale
+       *       for the texture.
+       */
+      add_offscreen_ops (self, builder,
+                         min_x, max_x, min_y, max_y,
+                         child,
+                         &texture_id, &is_offscreen,
+                         FALSE, TRUE);
+      ops_set_texture (builder, texture_id);
+      ops_set_program (builder, &self->blit_program);
+      ops_draw (builder, vertex_data);
+    }
   ops_pop_modelview (builder);
 }
 

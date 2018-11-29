@@ -263,6 +263,7 @@ void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *mv);
 void              ops_pop_modelview      (RenderOpBuilder         *builder);
+gboolean          ops_modelview_is_simple (const RenderOpBuilder  *builder);
 float             ops_get_scale          (const RenderOpBuilder   *builder);
 
 void              ops_set_program        (RenderOpBuilder         *builder,

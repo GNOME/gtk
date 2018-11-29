@@ -116,6 +116,19 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
   graphene_rect_offset (dst, builder->dx, builder->dy);
 }
 
+gboolean
+ops_modelview_is_simple (const RenderOpBuilder *builder)
+{
+  const MatrixStackEntry *head;
+
+  g_assert (builder->mv_stack != NULL);
+  g_assert (builder->mv_stack->len >= 1);
+
+  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
+
+  return head->metadata.simple;
+}
+
 void
 ops_set_program (RenderOpBuilder *builder,
                  const Program   *program)
