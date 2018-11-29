@@ -145,6 +145,7 @@ struct _GtkWidgetPrivate
 
   graphene_matrix_t allocated_transform;
   graphene_matrix_t transform;
+  guint has_transform : 1;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
