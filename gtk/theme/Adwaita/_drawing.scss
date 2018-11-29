@@ -195,8 +195,8 @@
     outline-color: transparentize($tc, 0.7);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    $button_fill: if($variant == 'light', linear-gradient(to top, darken($c, 7%) 2px, darken($c, 4%), $c 1px),
-                                          linear-gradient(to top, darken($c, 3%) 2px, darken($c,2%), $c 1px)) !global;
+    $button_fill: if($variant == 'light', linear-gradient(to top, darken($c,14%) 2px, darken($c, 8%) 2px, lighten($c, 2%)),
+                                          linear-gradient(to top, darken($c,8%) 2px, darken($c,4%) 2px, $c)) !global;
     background-image: $button_fill;
     @include _button_text_shadow($tc, $c);
     @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
