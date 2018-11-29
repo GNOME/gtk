@@ -3,18 +3,18 @@
 #include <gtk/gtk.h>
 
 static const char *css =
-"button {"
+"test>button {"
 "  all: unset; "
 "  background-color: white;"
 "  border: 20px solid black;"
 "  padding: 20px;"
 "  margin: 40px;"
 "}"
-"button:hover {"
+"test>button:hover {"
 "  background-color: blue;"
 "  border-color: red;"
 "}"
-"image {"
+"test image {"
 "  background-color: teal;"
 "}"
 ;
@@ -24,6 +24,7 @@ GtkWidget *transform_tester;
 GtkWidget *test_widget;
 GtkWidget *test_child;
 float scale = 1;
+gboolean do_picking = TRUE;
 graphene_matrix_t global_transform;
 
 static const GdkRGBA RED   = {1, 0, 0, 0.4};
@@ -122,6 +123,9 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
   int x, y;
 
   GTK_WIDGET_CLASS (gtk_transform_tester_parent_class)->snapshot (widget, snapshot);
+
+  if (!do_picking)
+    return;
 
   gtk_widget_compute_bounds (self->test_widget, widget, &child_bounds);
   gtk_widget_compute_bounds (self->test_widget, self->test_widget, &self_bounds);
@@ -226,6 +230,8 @@ gtk_transform_tester_class_init (GtkTransformTesterClass *klass)
   widget_class->measure = gtk_transform_tester_measure;
   widget_class->size_allocate = gtk_transform_tester_size_allocate;
   widget_class->snapshot = gtk_transform_tester_snapshot;
+
+  gtk_widget_class_set_css_name (widget_class, "test");
 }
 
 static void
@@ -292,12 +298,21 @@ transform_func (gpointer user_data)
   return G_SOURCE_CONTINUE;
 }
 
+static void
+toggled_cb (GtkToggleButton *source,
+            gpointer         user_data)
+{
+  do_picking = gtk_toggle_button_get_active (source);
+}
+
 int
 main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *matrix_chooser;
   GtkWidget *box;
+  GtkWidget *titlebar;
+  GtkWidget *toggle_button;
   GtkCssProvider *provider;
 
   gtk_init ();
@@ -313,6 +328,16 @@ main (int argc, char **argv)
   matrix_chooser = g_object_new (GTK_TYPE_MATRIX_CHOOSER, NULL);
   transform_tester = g_object_new (GTK_TYPE_TRANSFORM_TESTER, NULL);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  titlebar = gtk_header_bar_new ();
+
+  gtk_window_set_titlebar (GTK_WINDOW (window), titlebar);
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (titlebar), TRUE);
+
+  toggle_button = gtk_toggle_button_new ();
+  gtk_button_set_label (GTK_BUTTON (toggle_button), "Picking");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle_button), do_picking);
+  g_signal_connect (toggle_button, "toggled", G_CALLBACK (toggled_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (titlebar), toggle_button);
 
   test_widget = gtk_button_new ();
   gtk_widget_set_size_request (test_widget, TEST_WIDGET_MIN_SIZE, TEST_WIDGET_MIN_SIZE);
