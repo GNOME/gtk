@@ -1175,7 +1175,7 @@ gtk_popover_update_position (GtkPopover *popover)
   gint i, j;
   gint best;
 
-  if (!priv->window)
+  if (!priv->window || !gtk_widget_get_mapped (widget))
     return;
 
   gtk_widget_get_preferred_size (widget, NULL, &req);
