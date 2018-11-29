@@ -628,9 +628,10 @@ add_cups_options (const gchar *key,
 
   key = key + strlen ("cups-");
 
-  if (printer && printer->ppd_file)
+  if (printer && printer->ppd_file && !g_str_has_prefix (value, "Custom."))
     {
       ppd_coption_t *coption;
+      ppd_cparam_t  *cparam;
       gboolean       found = FALSE;
       gboolean       custom_values_enabled = FALSE;
 
@@ -649,12 +650,72 @@ add_cups_options (const gchar *key,
             }
 
           if (custom_values_enabled && !found)
-            custom_value = TRUE;
+	    {
+	      /* Check syntax of the invalid choice to see whether
+		 it could be a custom value */
+	      char *p = NULL;
+	      int l1 = -1, l2 = -1;
+
+	      if (g_str_equal(key, "PageSize") || g_str_equal(key, "PageRegion"))
+		{
+		  /* Handle custom page sizes... */
+		  sscanf(value, "%*[0-9.,]%*[xX]%*[0-9.,]%n%m[cminftpCMINFTP]%n", &l1, &p, &l2);
+		  if (strlen(value) == l1 ||
+		      (p && l1 != l2 && strlen(value) == l2 &&
+		       (!strcasecmp(p, "cm") || !strcasecmp(p, "mm") ||
+			!strcasecmp(p, "m" ) || !strcasecmp(p, "in") ||
+			!strcasecmp(p, "ft") || !strcasecmp(p, "pt"))))
+		    custom_value = TRUE;
+		  if (p)
+		    free(p);
+		}
+	      else
+		{
+		  /* Handle other custom options... */
+		  if ((cparam = (ppd_cparam_t *)cupsArrayFirst(coption->params)) != NULL)
+		    {
+		      switch (cparam->type)
+			{
+			case PPD_CUSTOM_CURVE :
+			case PPD_CUSTOM_INVCURVE :
+			case PPD_CUSTOM_REAL :
+			  sscanf(value, "%*[0-9.,+-]%n", &l1);
+			  if (strlen(value) == l1)
+			    custom_value = TRUE;
+			  break;
+
+			case PPD_CUSTOM_POINTS :
+			  sscanf(value, "%*[0-9.,+-]%n%m[cminftpCMINFTP]%n", &l1, &p, &l2);
+			  if (strlen(value) == l1 ||
+			      (p && l1 != l2 && strlen(value) == l2 &&
+			       (!strcasecmp(p, "cm") || !strcasecmp(p, "mm") ||
+				!strcasecmp(p, "m" ) || !strcasecmp(p, "in") ||
+				!strcasecmp(p, "ft") || !strcasecmp(p, "pt"))))
+			    custom_value = TRUE;
+			  if (p)
+			    free(p);
+			  break;
+
+			case PPD_CUSTOM_INT :
+			  sscanf(value, "%*[0-9+-]%n", &l1);
+			  if (strlen(value) == l1)
+			    custom_value = TRUE;
+			  break;
+
+			case PPD_CUSTOM_PASSCODE :
+			case PPD_CUSTOM_PASSWORD :
+			case PPD_CUSTOM_STRING :
+			  custom_value = TRUE;
+			  break;
+			}
+		    }
+		}
+	    }
         }
     }
 
   /* Add "Custom." prefix to custom values if not already added. */
-  if (custom_value && !g_str_has_prefix (value, "Custom."))
+  if (custom_value)
     {
       new_value = g_strdup_printf ("Custom.%s", value);
       gtk_cups_request_encode_option (request, key, new_value);
