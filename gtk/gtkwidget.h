@@ -459,11 +459,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_activate               (GtkWidget        *widget);
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_intersect           (GtkWidget           *widget,
-                                           const GdkRectangle  *area,
-                                           GdkRectangle        *intersection);
-
-GDK_AVAILABLE_IN_ALL
 void    gtk_widget_freeze_child_notify    (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_child_notify           (GtkWidget           *widget,
