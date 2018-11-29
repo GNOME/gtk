@@ -231,13 +231,25 @@ open_file_msg_cb (GObject *source_object,
 }
 
 static GVariant *
-get_filters (GtkFileChooser *self)
+get_filters (GtkFileChooserNative *self)
 {
   GSList *list, *l;
   GVariantBuilder builder;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(sa(us))"));
-  list = gtk_file_chooser_list_filters (self);
+  list = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
+
+  /* The current filter should be listed first. */
+  if (self->current_filter)
+    {
+      l = g_slist_find (list, self->current_filter);
+      if (l)
+        {
+          list = g_slist_remove (list, self->current_filter);
+          list = g_slist_prepend (list, self->current_filter);
+        }
+    }
+
   for (l = list; l; l = l->next)
     {
       GtkFileFilter *filter = l->data;
@@ -331,7 +343,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
                            g_variant_new_string (self->cancel_label));
   g_variant_builder_add (&opt_builder, "{sv}", "modal",
                          g_variant_new_boolean (data->modal));
-  g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (GTK_FILE_CHOOSER (self)));
+  g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (self));
   if (GTK_FILE_CHOOSER_NATIVE (self)->current_name)
     g_variant_builder_add (&opt_builder, "{sv}", "current_name",
                            g_variant_new_string (GTK_FILE_CHOOSER_NATIVE (self)->current_name));
