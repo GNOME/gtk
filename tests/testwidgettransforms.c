@@ -106,8 +106,30 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
                                     int         baseline)
 {
   GtkTransformTester *self = (GtkTransformTester *)widget;
+  int w, h;
 
-  gtk_widget_size_allocate (self->test_widget, &(GtkAllocation){ 0, 0, width, height }, -1);
+  if (!self->test_widget)
+    return;
+
+  scale += 2.5f;
+
+  gtk_widget_measure (self->test_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &w, NULL, NULL, NULL);
+  gtk_widget_measure (self->test_widget, GTK_ORIENTATION_VERTICAL, w,
+                      &h, NULL, NULL, NULL);
+
+  graphene_matrix_init_identity (&global_transform);
+  graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ -w/2.0f, -h/2.0f, 0});
+
+  graphene_matrix_rotate (&global_transform, scale,
+                          graphene_vec3_z_axis ());
+
+  graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ width / 2.0f, height / 2.0f, 0});
+
+  gtk_widget_size_allocate_transformed (self->test_widget,
+                                        w, h,
+                                        -1,
+                                        &global_transform);
 }
 
 static void
@@ -234,6 +256,16 @@ gtk_transform_tester_class_init (GtkTransformTesterClass *klass)
   gtk_widget_class_set_css_name (widget_class, "test");
 }
 
+static gboolean
+tick_cb (GtkWidget     *widget,
+         GdkFrameClock *frame_clock,
+         gpointer       user_data)
+{
+  gtk_widget_queue_allocate (widget);
+
+  return G_SOURCE_CONTINUE;
+}
+
 static void
 gtk_transform_tester_set_test_widget (GtkTransformTester *self,
                                       GtkWidget          *test_widget)
@@ -242,60 +274,8 @@ gtk_transform_tester_set_test_widget (GtkTransformTester *self,
 
   self->test_widget = test_widget;
   gtk_widget_set_parent (test_widget, (GtkWidget *)self);
-}
 
-
-static gboolean
-transform_func (gpointer user_data)
-{
-  GtkAllocation alloc;
-
-  scale += 2.5f;
-  gtk_widget_get_allocation (test_widget, &alloc);
-
-  graphene_matrix_init_identity (&global_transform);
-  graphene_matrix_translate (&global_transform,
-                             &(graphene_point3d_t){
-                              /*- alloc.width,*/
-                              /*0,*/
-                                 - alloc.width / 2,
-                                 - alloc.height / 2,
-                                 0}
-                            );
-
-  graphene_matrix_rotate (&global_transform, scale,
-                          graphene_vec3_z_axis ());
-
-  graphene_matrix_translate (&global_transform,
-                             &(graphene_point3d_t){
-                                 alloc.width / 2,
-                                 alloc.height  /2,
-                                 0}
-                            );
-
-  /*graphene_matrix_init_scale (&global_transform, 2, 2, 1);*/
-
-
-  gtk_widget_set_transform (test_widget, &global_transform);
-
-
-
-
-
-  /*graphene_matrix_init_scale (&global_transform, 0.5, 1, 1);*/
-  /*graphene_matrix_translate (&global_transform,*/
-                             /*&(graphene_point3d_t){*/
-                               /*alloc.width / 2, 0, 0*/
-                             /*});*/
-
-
-
-  /*gtk_widget_set_transform (test_child, &global_transform);*/
-
-
-  gtk_widget_queue_draw (test_widget);
-
-  return G_SOURCE_CONTINUE;
+  gtk_widget_add_tick_callback (GTK_WIDGET (self), tick_cb, NULL, NULL);
 }
 
 static void
@@ -353,8 +333,6 @@ main (int argc, char **argv)
 
 
   gtk_transform_tester_set_test_widget (GTK_TRANSFORM_TESTER (transform_tester), test_widget);
-
-  g_timeout_add (16, transform_func, NULL);
 
   gtk_widget_set_vexpand (transform_tester, TRUE);
   gtk_container_add (GTK_CONTAINER (box), transform_tester);
