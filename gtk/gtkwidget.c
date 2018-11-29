@@ -2887,6 +2887,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
     }
 
   graphene_matrix_init_identity (&priv->transform);
+  priv->has_transform = FALSE;
 
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
@@ -4312,6 +4313,7 @@ gtk_widget_size_allocate_transformed (GtkWidget               *widget,
   priv->allocation = real_allocation;
   priv->allocated_baseline = baseline;
   priv->transform = final_transform;
+  priv->has_transform = !graphene_matrix_is_identity (&final_transform);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -13472,9 +13474,13 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  gtk_snapshot_push_transform (snapshot, &priv->transform);
+  if (priv->has_transform)
+    gtk_snapshot_push_transform (snapshot, &priv->transform);
+
   gtk_widget_snapshot (child, snapshot);
-  gtk_snapshot_pop (snapshot);
+
+  if (priv->has_transform)
+    gtk_snapshot_pop (snapshot);
 }
 
 /**
@@ -13713,6 +13719,8 @@ gtk_widget_set_transform (GtkWidget               *widget,
                           const graphene_matrix_t *transform)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  priv->has_transform = !graphene_matrix_is_identity (transform);
 
   graphene_matrix_init_from_matrix (&priv->transform, transform);
 }
