@@ -747,6 +747,14 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
                                                gint       *dest_y);
 
 GDK_AVAILABLE_IN_ALL
+gboolean     gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
+                                                GtkWidget  *dest_widget,
+                                                double      src_x,
+                                                double      src_y,
+                                                double     *dest_x,
+                                                double     *dest_y);
+
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_contains              (GtkWidget  *widget,
                                                gdouble     x,
                                                gdouble     y);
