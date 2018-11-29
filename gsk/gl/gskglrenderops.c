@@ -83,7 +83,7 @@ extract_matrix_metadata (const graphene_matrix_t *m,
   }
 
 out:
-  md->only_translation = (md->simple && md->scale_x == 0 && md->scale_y == 0);
+  md->only_translation = (md->simple && md->scale_x == 1 && md->scale_y == 1);
 }
 
 
