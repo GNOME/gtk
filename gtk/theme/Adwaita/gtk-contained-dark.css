@@ -692,9 +692,11 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) separator { background-color: #252526; }
 
-window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(21, 83, 158, 0.1)), linear-gradient(to top, #2d2d2e 3px, #323233); color: rgba(238, 238, 236, 0.1); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: #3f3e40 -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(21, 83, 158, 0.1)), linear-gradient(to top, #2d2d2e 3px, #323233); color: rgba(238, 238, 236, 0.1); }
 
 window.devel headerbar.titlebar:not(.selection-mode) label { color: #eeeeec; }
+
+window.devel headerbar.titlebar:not(.selection-mode):backdrop { background: #3f3e40 -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, image(#3f3e40); /* background-color would flash */ color: rgba(238, 238, 236, 0.05); }
 
 /************ Pathbars * */
 .path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }

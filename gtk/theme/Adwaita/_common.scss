@@ -1790,10 +1790,16 @@ window.devel {
                  linear-gradient(to top, lighten($c, 3%) 3px, lighten($c, 5%));
     }
 
-    background: transparent $gradient;
+    background: $bg_color $gradient;
     color: transparentize($fg_color,.9);
 
     label { color: $fg_color; }
+
+    &:backdrop {
+      background: $bg_color -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+                  image($bg_color); /* background-color would flash */
+      color: transparentize($fg_color,.95);
+    }
   }
 }
 
