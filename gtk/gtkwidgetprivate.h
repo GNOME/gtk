@@ -151,6 +151,7 @@ struct _GtkWidgetPrivate
   int allocated_offset_x;
   int allocated_offset_y;
   graphene_matrix_t transform;
+  guint has_transform : 1;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
