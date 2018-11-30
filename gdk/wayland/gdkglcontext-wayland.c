@@ -170,7 +170,7 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
     {
       GdkGLContext *shared;
       GdkWaylandGLContext *shared_wayland;
-     
+
       shared = gdk_gl_context_get_shared_context (context);
       if (shared == NULL)
         shared = context;
@@ -182,20 +182,29 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
       eglQuerySurface (display_wayland->egl_display, egl_surface,
                        EGL_BUFFER_AGE_EXT, &buffer_age);
 
-      if (buffer_age == 2)
+      switch (buffer_age)
         {
-          if (context->old_updated_area[0])
-            return cairo_region_copy (context->old_updated_area[0]);
-        }
-      else if (buffer_age == 3)
-        {
-          if (context->old_updated_area[0] &&
-              context->old_updated_area[1])
-            {
-              cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
-              cairo_region_union (damage, context->old_updated_area[1]);
-              return damage;
-            }
+          case 1:
+            return cairo_region_create ();
+            break;
+
+          case 2:
+            if (context->old_updated_area[0])
+              return cairo_region_copy (context->old_updated_area[0]);
+            break;
+
+          case 3:
+            if (context->old_updated_area[0] &&
+                context->old_updated_area[1])
+              {
+                cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
+                cairo_region_union (damage, context->old_updated_area[1]);
+                return damage;
+              }
+            break;
+
+          default:
+            ;
         }
     }
 

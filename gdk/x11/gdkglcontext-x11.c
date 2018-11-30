@@ -201,31 +201,41 @@ gdk_x11_gl_context_get_damage (GdkGLContext *context)
     {
       GdkGLContext *shared;
       GdkX11GLContext *shared_x11;
-     
+
       shared = gdk_gl_context_get_shared_context (context);
       if (shared == NULL)
         shared = context;
       shared_x11 = GDK_X11_GL_CONTEXT (shared);
 
       gdk_gl_context_make_current (shared);
-      glXQueryDrawable(dpy, shared_x11->attached_drawable,
-		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
+      glXQueryDrawable (dpy, shared_x11->attached_drawable,
+                        GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
-      if (buffer_age == 2)
+      switch (buffer_age)
         {
-          if (context->old_updated_area[0])
-            return cairo_region_copy (context->old_updated_area[0]);
+          case 1:
+            return cairo_region_create ();
+            break;
+
+          case 2:
+            if (context->old_updated_area[0])
+              return cairo_region_copy (context->old_updated_area[0]);
+            break;
+
+          case 3:
+            if (context->old_updated_area[0] &&
+                context->old_updated_area[1])
+              {
+                cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
+                cairo_region_union (damage, context->old_updated_area[1]);
+                return damage;
+              }
+            break;
+
+          default:
+            ;
         }
-      else if (buffer_age == 3)
-        {
-          if (context->old_updated_area[0] &&
-              context->old_updated_area[1])
-            {
-              cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
-              cairo_region_union (damage, context->old_updated_area[1]);
-              return damage;
-            }
-        }
+
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->get_damage (context);
