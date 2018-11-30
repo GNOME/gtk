@@ -2703,10 +2703,11 @@ switch {
 
   // similar to the .scale
   border: 1px solid $borders_color;
-  border-radius: 3px;
+  border-radius: 14px;
   color: $fg_color;
   background-color: $dark_fill;
   text-shadow: 0 1px transparentize(black, 0.9);
+  font-size: 0; /*FIXME: quick workaround for the labels*/
 
   &:checked {
     color: $selected_fg_color;
@@ -2746,11 +2747,12 @@ switch {
 
   slider {
     margin: -1px;
-    min-width: 44px;
-    min-height: 26px;
+    min-width: 24px;
+    min-height: 24px;
     border: 1px solid;
-    border-radius: 3px;
+    border-radius: 50%;
     transition: $button_transition;
+    -gtk-outline-radius: 20px;
 
     @include button(normal-alt, $edge: $shadow_color);
   }
@@ -2786,6 +2788,7 @@ switch {
       slider { &:checked, & { border-color: $selected_borders_color; } }
     }
   }
+
 }
 
 
