@@ -133,6 +133,7 @@ dump_framebuffer (const char *filename, int w, int h)
 
   glReadPixels (0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, data);
   s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, w, h, stride);
+  g_message ("%d, %d", w, h);
   cairo_surface_write_to_png (s, filename);
 
   cairo_surface_destroy (s);
@@ -247,6 +248,7 @@ node_supports_transform (GskRenderNode *node)
       case GSK_OPACITY_NODE:
       case GSK_COLOR_MATRIX_NODE:
       case GSK_TEXTURE_NODE:
+      case GSK_OFFSET_NODE:
         return TRUE;
 
       default:
@@ -821,10 +823,15 @@ render_transform_node (GskGLRenderer   *self,
       gboolean is_offscreen;
       /* For non-trivial transforms, we draw everything on a texture and then
        * draw the texture transformed. */
+
       /* TODO: We should compute a modelview containing only the "non-trivial"
        *       part (e.g. the rotation) and use that. We want to keep the scale
        *       for the texture.
        */
+
+      g_message ("%s:Offscreen drawing %s", __FUNCTION__, child->node_class->type_name);
+
+
       add_offscreen_ops (self, builder,
                          &node->bounds,
                          child,
@@ -832,7 +839,11 @@ render_transform_node (GskGLRenderer   *self,
                          FALSE, TRUE);
       ops_set_texture (builder, texture_id);
       ops_set_program (builder, &self->blit_program);
+      graphene_matrix_t m;
+      graphene_matrix_init_identity (&m);
+      /*ops_push_modelview (builder, &m);*/
       ops_draw (builder, vertex_data);
+      /*ops_pop_modelview (builder);*/
     }
   ops_pop_modelview (builder);
 }
@@ -2406,7 +2417,7 @@ add_offscreen_ops (GskGLRenderer         *self,
     }
 
   /* Check if we've already cached the drawn texture. */
-  {
+  if (0){
     const int cached_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, child_node);
 
     if (cached_id != 0)
@@ -2632,6 +2643,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_DUMP_FRAMEBUFFER:
+          g_message ("--> Dumping to %s", op->dump.filename);
           dump_framebuffer (op->dump.filename, op->dump.width, op->dump.height);
           break;
 

@@ -210,7 +210,7 @@ typedef struct
       int source2;
     } cross_fade;
     struct {
-      char *filename;
+      char *filename; /* Will leak */
       int width;
       int height;
     } dump;
@@ -271,7 +271,6 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
                                           const char              *filename,
                                           int                      width,
                                           int                      height);
-
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *mv);

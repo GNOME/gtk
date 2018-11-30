@@ -62,7 +62,7 @@ static void               gtk_bin_measure                         (GtkWidget    
                                                                    int            *natural_baseline);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
-
+#include "gtklabel.h"
 static void
 gtk_bin_size_allocate (GtkWidget *widget,
                        int        width,
@@ -73,11 +73,31 @@ gtk_bin_size_allocate (GtkWidget *widget,
   GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
 
   if (priv->child && gtk_widget_get_visible (priv->child))
-    gtk_widget_size_allocate (priv->child,
-                              &(GtkAllocation) {
-                                0, 0,
-                                width, height
-                              }, baseline);
+    {
+      if (!GTK_IS_LABEL (priv->child))
+        {
+          gtk_widget_size_allocate (priv->child,
+                                    &(GtkAllocation) {
+                                      0, 0,
+                                      width, height
+                                    }, baseline);
+        }
+      else
+        {
+          g_message ("ZOMG");
+          graphene_matrix_t m;
+          graphene_matrix_init_rotate (&m, 45.0f,
+                                       graphene_vec3_z_axis ());
+          /*graphene_matrix_translate (&m,*/
+                                     /*&(graphene_point3d_t) {rect.x, rect.y, 0 });*/
+
+          gtk_widget_size_allocate_transformed (priv->child,
+                                                width, height,
+                                                -1, &m);
+
+        }
+
+    }
 }
 
 static void
