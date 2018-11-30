@@ -58,7 +58,7 @@ struct _GtkPixelCache {
 };
 
 GtkPixelCache *
-_gtk_pixel_cache_new ()
+_gtk_pixel_cache_new (void)
 {
   GtkPixelCache *cache;
 
