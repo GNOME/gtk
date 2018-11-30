@@ -2,7 +2,6 @@ project('gtk+-3.0', 'c',
         version: '3.24.1',
         default_options: [
           'buildtype=debugoptimized',
-          'c_std=gnu89',
           'warning_level=1'
         ],
         meson_version : '>= 0.48.0',
