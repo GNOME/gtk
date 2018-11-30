@@ -307,8 +307,10 @@ if os_unix
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
-cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
+cairo_dep      = dependency('cairo', version: cairo_req,
+                            fallback : ['cairo', 'libcairo_dep'])
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
+                            fallback : ['cairo', 'libcairogobject_dep'])
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 
@@ -321,12 +323,13 @@ if pangoft_dep.found()
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
   # We get the dependency itself from pango, but pango doesn't care
   # about ft2 version, so an extra check is needed.
-  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2)
+  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2,
+                            fallback : ['freetype2', 'freetype_dep'])
 endif
 
 if win32_enabled
   # for GTK_IM_CONTEXT_IME
-  pangowin32_dep  = dependency('pangowin32')
+  pangowin32_dep  = dependency('pangowin32', fallback : ['pango', 'libpangowin32_dep'])
 endif
 
 pangocairo_dep = dependency('pangocairo', version: cairo_req,
@@ -335,7 +338,8 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-atk_dep        = dependency('atk', version: atk_req)
+atk_dep        = dependency('atk', version: atk_req,
+                            fallback : ['atk', 'libatk_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
@@ -361,19 +365,32 @@ backend_immodules = []
 
 pc_gdk_extra_libs = []
 
+cairo_found_type = cairo_dep.type_name()
+if cairo_found_type == 'internal'
+  cairo_features = subproject('cairo').get_variable('built_features')
+endif
+
 cairo_backends = []
 foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
                    ['cairo-win32', cairo_req, win32_enabled],
                    ['cairo-quartz', cairo_req, quartz_enabled],
                    ['cairo', cairo_req, broadway_enabled or wayland_enabled], ]
- backend_enabled = backend.get(2)
- cairo_backend_req = backend.get(1)
- cairo_backend = backend.get(0)
- if backend_enabled
-   if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc').found()
-     cairo_backends += [ cairo_backend ]
-   endif
- endif
+  backend_enabled = backend.get(2)
+  cairo_backend_req = backend.get(1)
+  cairo_backend = backend.get(0)
+  if backend_enabled
+    if cairo_found_type == 'pkgconfig'
+      if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc').found()
+        cairo_backends += cairo_backend
+      endif
+    else
+      foreach f: cairo_features
+        if f['name'] == cairo_backend
+          cairo_backends += cairo_backend
+        endif
+      endforeach
+    endif
+  endif
 endforeach
 
 cairo_pkg_found = false
@@ -422,7 +439,7 @@ if x11_enabled
   xdamage_dep    = dependency('xdamage', required: false)
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
-  fontconfig_dep = dependency('fontconfig')
+  fontconfig_dep = dependency('fontconfig', fallback: ['fontconfig', 'fontconfig_dep'])
   atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
 
   backend_immodules += ['xim']
