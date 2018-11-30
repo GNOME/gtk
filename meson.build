@@ -241,6 +241,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wmissing-include-dirs',
     '-Wlogical-op',
     '-Wignored-qualifiers',
+    '-Wno-discarded-qualifiers',
     '-Werror=implicit',
     '-Werror=nonnull',
     '-Werror=init-self',
