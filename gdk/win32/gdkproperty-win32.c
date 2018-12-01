@@ -333,6 +333,42 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
+  else if (strcmp ("gtk-xft-hinting", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
+      g_value_set_int (value, 1);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-antialias", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
+      g_value_set_int (value, 1);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-hintstyle", name) == 0)
+    {
+      g_value_set_static_string (value, "hintfull");
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-rgba", name) == 0)
+    {
+      unsigned int orientation = 0;
+      if (SystemParametersInfoW (SPI_GETFONTSMOOTHINGORIENTATION, 0, &orientation, 0))
+        {
+          if (orientation == FE_FONTSMOOTHINGORIENTATIONRGB)
+            g_value_set_static_string (value, "rgb");
+          else if (orientation == FE_FONTSMOOTHINGORIENTATIONBGR)
+            g_value_set_static_string (value, "bgr");
+          else
+            g_value_set_static_string (value, "none");
+        }
+      else
+        g_value_set_static_string (value, "none");
+
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
+      return TRUE;
+    }
   else if (strcmp ("gtk-font-name", name) == 0)
     {
       NONCLIENTMETRICS ncm;
