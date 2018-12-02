@@ -109,6 +109,7 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                 const graphene_rect_t *src,
                                 graphene_rect_t       *dst)
 {
+  const float scale = ops_get_scale (builder);
   const MatrixStackEntry *head;
 
   g_assert (builder->mv_stack != NULL);
@@ -130,7 +131,7 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                         dst);
     }
 
-  graphene_rect_offset (dst, builder->dx, builder->dy);
+  graphene_rect_offset (dst, builder->dx * scale, builder->dy * scale);
 }
 
 gboolean
