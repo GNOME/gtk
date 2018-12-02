@@ -157,6 +157,7 @@ ops_set_program (RenderOpBuilder *builder,
   static const graphene_matrix_t empty_matrix;
   static const graphene_rect_t empty_rect;
   RenderOp op;
+  ProgramState *program_state;
 
   if (builder->current_program == program)
     return;
@@ -166,50 +167,54 @@ ops_set_program (RenderOpBuilder *builder,
   g_array_append_val (builder->render_ops, op);
   builder->current_program = program;
 
+  program_state = &builder->program_state[program->index];
+
   /* If the projection is not yet set for this program, we use the current one. */
-  if (memcmp (&empty_matrix, &builder->program_state[program->index].projection, sizeof (graphene_matrix_t)) == 0 ||
-      memcmp (&builder->current_projection, &builder->program_state[program->index].projection, sizeof (graphene_matrix_t)) != 0)
+  if (memcmp (&empty_matrix, &program_state->projection, sizeof (graphene_matrix_t)) == 0 ||
+      memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
     {
       op.op = OP_CHANGE_PROJECTION;
       op.projection = builder->current_projection;
       g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].projection = builder->current_projection;
+      program_state->projection = builder->current_projection;
     }
 
-  if (memcmp (&empty_matrix, &builder->program_state[program->index].modelview, sizeof (graphene_matrix_t)) == 0 ||
-      memcmp (builder->current_modelview, &builder->program_state[program->index].modelview, sizeof (graphene_matrix_t)) != 0)
+  if (memcmp (&empty_matrix, &program_state->modelview, sizeof (graphene_matrix_t)) == 0 ||
+      memcmp (builder->current_modelview, &program_state->modelview, sizeof (graphene_matrix_t)) != 0)
     {
       op.op = OP_CHANGE_MODELVIEW;
       op.modelview = *builder->current_modelview;
       g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].modelview = *builder->current_modelview;
+      program_state->modelview = *builder->current_modelview;
     }
 
-  if (memcmp (&empty_rect, &builder->program_state[program->index].viewport, sizeof (graphene_rect_t)) == 0 ||
-      memcmp (&builder->current_viewport, &builder->program_state[program->index].viewport, sizeof (graphene_rect_t)) != 0)
+  if (memcmp (&empty_rect, &program_state->viewport, sizeof (graphene_rect_t)) == 0 ||
+      memcmp (&builder->current_viewport, &program_state->viewport, sizeof (graphene_rect_t)) != 0)
     {
       op.op = OP_CHANGE_VIEWPORT;
       op.viewport = builder->current_viewport;
       g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].viewport = builder->current_viewport;
+      program_state->viewport = builder->current_viewport;
     }
 
-  if (memcmp (&empty_clip, &builder->program_state[program->index].clip, sizeof (GskRoundedRect)) == 0 ||
-      memcmp (&builder->current_clip, &builder->program_state[program->index].clip, sizeof (GskRoundedRect)) != 0)
+  if (memcmp (&empty_clip, &program_state->clip, sizeof (GskRoundedRect)) == 0 ||
+      memcmp (&builder->current_clip, &program_state->clip, sizeof (GskRoundedRect)) != 0)
     {
       op.op = OP_CHANGE_CLIP;
       op.clip = builder->current_clip;
       g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].clip = builder->current_clip;
+      program_state->clip = builder->current_clip;
     }
 
-  if (builder->program_state[program->index].opacity != builder->current_opacity)
+  if (program_state->opacity != builder->current_opacity)
     {
       op.op = OP_CHANGE_OPACITY;
       op.opacity = builder->current_opacity;
       g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].opacity = builder->current_opacity;
+      program_state->opacity = builder->current_opacity;
     }
+
+  builder->current_program_state = &builder->program_state[program->index];
 }
 
 GskRoundedRect
@@ -238,7 +243,7 @@ ops_set_clip (RenderOpBuilder      *builder,
     }
 
   if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].clip = *clip;
+    builder->current_program_state->clip = *clip;
 
   prev_clip = builder->current_clip;
   builder->current_clip = *clip;
@@ -253,7 +258,7 @@ ops_set_modelview (RenderOpBuilder         *builder,
   RenderOp op;
 
   if (builder->current_program &&
-      memcmp (&builder->program_state[builder->current_program->index].modelview, modelview,
+      memcmp (&builder->current_program_state->modelview, modelview,
               sizeof (graphene_matrix_t)) == 0)
     return;
 
@@ -279,7 +284,7 @@ ops_set_modelview (RenderOpBuilder         *builder,
     }
 
   if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].modelview = *modelview;
+    builder->current_program_state->modelview = *modelview;
 }
 
 void
@@ -356,7 +361,7 @@ ops_set_projection (RenderOpBuilder         *builder,
     }
 
   if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].projection = *projection;
+    builder->current_program_state->projection = *projection;
 
   prev_mv = builder->current_projection;
   builder->current_projection = *projection;
@@ -376,7 +381,7 @@ ops_set_viewport (RenderOpBuilder       *builder,
   g_array_append_val (builder->render_ops, op);
 
   if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].viewport = *viewport;
+    builder->current_program_state->viewport = *viewport;
 
   prev_viewport = builder->current_viewport;
   builder->current_viewport = *viewport;
@@ -455,7 +460,7 @@ ops_set_opacity (RenderOpBuilder *builder,
   builder->current_opacity = opacity;
 
   if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].opacity = opacity;
+    builder->current_program_state->opacity = opacity;
 
   return prev_opacity;
 }
@@ -466,10 +471,10 @@ ops_set_color (RenderOpBuilder *builder,
 {
   RenderOp op;
 
-  if (gdk_rgba_equal (color, &builder->program_state[builder->current_program->index].color))
+  if (gdk_rgba_equal (color, &builder->current_program_state->color))
     return;
 
-  builder->program_state[builder->current_program->index].color = *color;
+  builder->current_program_state->color = *color;
 
   op.op = OP_CHANGE_COLOR;
   op.color = *color;
@@ -484,15 +489,15 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
   RenderOp op;
 
   if (memcmp (matrix,
-              &builder->program_state[builder->current_program->index].color_matrix.matrix,
+              &builder->current_program_state->color_matrix.matrix,
               sizeof (graphene_matrix_t)) == 0 &&
       memcmp (offset,
-              &builder->program_state[builder->current_program->index].color_matrix.offset,
+              &builder->current_program_state->color_matrix.offset,
               sizeof (graphene_vec4_t)) == 0)
     return;
 
-  builder->program_state[builder->current_program->index].color_matrix.matrix = *matrix;
-  builder->program_state[builder->current_program->index].color_matrix.offset = *offset;
+  builder->current_program_state->color_matrix.matrix = *matrix;
+  builder->current_program_state->color_matrix.offset = *offset;
 
   op.op = OP_CHANGE_COLOR_MATRIX;
   op.color_matrix.matrix = *matrix;
@@ -507,18 +512,16 @@ ops_set_border (RenderOpBuilder      *builder,
 {
   RenderOp op;
 
-  /* TODO: Assert that current_program == border program? */
-
-  if (memcmp (&builder->program_state[builder->current_program->index].border.widths,
+  if (memcmp (&builder->current_program_state->border.widths,
               widths, sizeof (float) * 4) == 0 &&
-      memcmp (&builder->program_state[builder->current_program->index].border.outline,
+      memcmp (&builder->current_program_state->border.outline,
               outline, sizeof (GskRoundedRect)) == 0)
     return;
 
   memcpy (&builder->program_state[builder->current_program->index].border.widths,
           widths, sizeof (float) * 4);
 
-  builder->program_state[builder->current_program->index].border.outline = *outline;
+  builder->current_program_state->border.outline = *outline;
 
   op.op = OP_CHANGE_BORDER;
   op.border.widths[0] = widths[0];
@@ -537,11 +540,11 @@ ops_set_border_color (RenderOpBuilder *builder,
   op.op = OP_CHANGE_BORDER_COLOR;
   rgba_to_float (color, op.border.color);
 
-  if (memcmp (&op.border.color, &builder->program_state[builder->current_program->index].border.color,
+  if (memcmp (&op.border.color, &builder->current_program_state->border.color,
               sizeof (float) * 4) == 0)
     return;
 
-  rgba_to_float (color, builder->program_state[builder->current_program->index].border.color);
+  rgba_to_float (color, builder->current_program_state->border.color);
 
   g_array_append_val (builder->render_ops, op);
 }

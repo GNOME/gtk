@@ -218,30 +218,32 @@ typedef struct
 
 typedef struct
 {
-  /* Per-Program State */
-  struct {
-    GskRoundedRect clip;
-    graphene_matrix_t modelview;
-    graphene_matrix_t projection;
-    int source_texture;
-    graphene_rect_t viewport;
-    float opacity;
-    /* Per-program state */
-    union {
-      GdkRGBA color;
-      struct {
-        graphene_matrix_t matrix;
-        graphene_vec4_t offset;
-      } color_matrix;
-      struct {
-        float widths[4];
-        float color[4];
-        GskRoundedRect outline;
-      } border;
-    };
-  } program_state[GL_N_PROGRAMS];
+  GskRoundedRect clip;
+  graphene_matrix_t modelview;
+  graphene_matrix_t projection;
+  int source_texture;
+  graphene_rect_t viewport;
+  float opacity;
+  /* Per-program state */
+  union {
+    GdkRGBA color;
+    struct {
+      graphene_matrix_t matrix;
+      graphene_vec4_t offset;
+    } color_matrix;
+    struct {
+      float widths[4];
+      float color[4];
+      GskRoundedRect outline;
+    } border;
+  };
+} ProgramState;
 
+typedef struct
+{
+  ProgramState program_state[GL_N_PROGRAMS];
   /* Current global state */
+  ProgramState *current_program_state;
   const Program *current_program;
   int current_render_target;
   int current_texture;
