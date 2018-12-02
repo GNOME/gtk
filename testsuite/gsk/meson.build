@@ -52,6 +52,7 @@ gl_tests = [
   ['gradient simple',              'gradient_simple'],
   ['gradient transformed',         'gradient_transformed'],
   ['gradient clipped',             'gradient_clipped'],
+  ['offscreen opacity',            'opacity_clip'],
 ]
 
 foreach gl_test : gl_tests
