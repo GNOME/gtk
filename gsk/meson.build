@@ -1,6 +1,4 @@
 gsk_private_gl_shaders = [
-  'resources/glsl/blend.fs.glsl',
-  'resources/glsl/blend.vs.glsl',
   'resources/glsl/blit.fs.glsl',
   'resources/glsl/blit.vs.glsl',
   'resources/glsl/color.fs.glsl',

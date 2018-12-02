@@ -282,7 +282,6 @@ struct _GskGLRenderer
   union {
     Program programs[GL_N_PROGRAMS];
     struct {
-      Program blend_program;
       Program blit_program;
       Program color_program;
       Program coloring_program;
@@ -1965,7 +1964,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     const char *vs;
     const char *fs;
   } program_definitions[] = {
-    { "blend",           "blend.vs.glsl", "blend.fs.glsl" },
     { "blit",            "blit.vs.glsl",  "blit.fs.glsl" },
     { "color",           "blit.vs.glsl",  "color.fs.glsl" },
     { "coloring",        "blit.vs.glsl",  "coloring.fs.glsl" },
