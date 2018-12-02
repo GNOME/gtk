@@ -323,6 +323,49 @@ struct _GskGLRendererClass
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
+static void G_GNUC_UNUSED
+add_rect_ops (RenderOpBuilder       *builder,
+              const graphene_rect_t *r)
+{
+  const float min_x = r->origin.x;
+  const float min_y = r->origin.y;
+  const float max_x = min_x + r->size.width;
+  const float max_y = min_y + r->size.height;
+
+  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+    { { min_x, min_y }, { 0, 1 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+
+    { { max_x, max_y }, { 1, 0 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+  });
+}
+
+static void G_GNUC_UNUSED
+add_rect_outline_ops (GskGLRenderer         *self,
+                      RenderOpBuilder       *builder,
+                      const graphene_rect_t *rect)
+{
+  ops_set_program (builder, &self->color_program);
+  ops_set_color (builder, &(GdkRGBA) { 1, 0, 0, 1 });
+
+  add_rect_ops (builder,
+                &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y,
+                                     1, rect->size.height));
+  add_rect_ops (builder,
+                &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y,
+                                     rect->size.width, 1));
+  add_rect_ops (builder,
+                &GRAPHENE_RECT_INIT (rect->origin.x + rect->size.width - 1, rect->origin.y,
+                                     1, rect->size.height));
+
+  add_rect_ops (builder,
+                &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y + rect->size.height - 1,
+                                     rect->size.width, 1));
+}
+
 static inline void
 rounded_rect_to_floats (GskGLRenderer        *self,
                         RenderOpBuilder      *builder,
