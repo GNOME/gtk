@@ -189,6 +189,10 @@ main (int argc, char **argv)
       GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
       GtkWidget *image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
 
+      gtk_widget_set_size_request (image,
+                                   gdk_texture_get_width (texture),
+                                   gdk_texture_get_height (texture));
+
       gtk_container_add (GTK_CONTAINER (box), nodeview);
       gtk_container_add (GTK_CONTAINER (box), image);
       gtk_container_add (GTK_CONTAINER (window), box);
