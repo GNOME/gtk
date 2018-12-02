@@ -2390,6 +2390,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
   GskRoundedRect prev_clip;
+  float prev_opacity;
   int texture_id = 0;
 
   /* We need the child node as a texture. If it already is one, we don't need to draw
@@ -2455,9 +2456,11 @@ add_offscreen_ops (GskGLRenderer         *self,
 
   builder->dx = 0;
   builder->dy = 0;
+  prev_opacity = ops_set_opacity (builder, 1.0);
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
+  ops_set_opacity (builder, prev_opacity);
   builder->dx = dx;
   builder->dy = dy;
 
