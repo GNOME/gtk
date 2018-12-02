@@ -54,6 +54,7 @@ enum {
   OP_CHANGE_UNBLURRED_OUTSET_SHADOW = 19,
   OP_CLEAR                  =  20,
   OP_DRAW                   =  21,
+  OP_DUMP_FRAMEBUFFER       =  22,
 };
 
 typedef struct
@@ -207,6 +208,11 @@ typedef struct
       float progress;
       int source2;
     } cross_fade;
+    struct {
+      char *filename;
+      int width;
+      int height;
+    } dump;
   };
 } RenderOp;
 
@@ -258,6 +264,10 @@ typedef struct
 } RenderOpBuilder;
 
 
+void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
+                                          const char              *filename,
+                                          int                      width,
+                                          int                      height);
 
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,

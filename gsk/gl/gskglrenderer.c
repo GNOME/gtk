@@ -2562,6 +2562,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.vao_size);
           break;
 
+        case OP_DUMP_FRAMEBUFFER:
+          dump_framebuffer (op->dump.filename, op->dump.width, op->dump.height);
+          break;
+
         default:
           g_warn_if_reached ();
         }

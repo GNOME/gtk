@@ -17,6 +17,23 @@ rgba_to_float (const GdkRGBA *c,
   f[3] = c->alpha;
 }
 
+/* Debugging only! */
+void
+ops_dump_framebuffer (RenderOpBuilder *builder,
+                      const char      *filename,
+                      int              width,
+                      int              height)
+{
+  RenderOp op;
+
+  op.op = OP_DUMP_FRAMEBUFFER;
+  op.dump.filename = g_strdup (filename);
+  op.dump.width = width;
+  op.dump.height = height;
+
+  g_array_append_val (builder->render_ops, op);
+}
+
 float
 ops_get_scale (const RenderOpBuilder *builder)
 {
