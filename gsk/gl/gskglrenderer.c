@@ -324,7 +324,7 @@ rounded_rect_to_floats (GskGLRenderer        *self,
   int i;
   graphene_rect_t transformed_bounds;
 
-  graphene_matrix_transform_bounds (builder->current_modelview, &rect->bounds, &transformed_bounds);
+  ops_transform_bounds_modelview (builder, &rect->bounds, &transformed_bounds);
 
   outline[0] = transformed_bounds.origin.x;
   outline[1] = transformed_bounds.origin.y;
@@ -601,8 +601,8 @@ render_border_node (GskGLRenderer   *self,
 
     /* Prepare outline */
     outline = *rounded_outline;
-    graphene_matrix_transform_bounds (builder->current_modelview,
-                                      &outline.bounds, &outline.bounds);
+    ops_transform_bounds_modelview (builder, &outline.bounds, &outline.bounds);
+
     for (i = 0; i < 4; i ++)
       {
         outline.corner[i].width *= scale;
@@ -860,7 +860,7 @@ render_clip_node (GskGLRenderer   *self,
   GskRoundedRect child_clip;
 
   transformed_clip = *gsk_clip_node_peek_clip (node);
-  graphene_matrix_transform_bounds (builder->current_modelview, &transformed_clip, &transformed_clip);
+  ops_transform_bounds_modelview (builder, &transformed_clip, &transformed_clip);
 
   graphene_rect_intersection (&transformed_clip,
                               &builder->current_clip.bounds,
@@ -890,7 +890,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
   int i;
 
   transformed_clip = child_clip;
-  graphene_matrix_transform_bounds (builder->current_modelview, &child_clip.bounds, &transformed_clip.bounds);
+  ops_transform_bounds_modelview (builder, &child_clip.bounds, &transformed_clip.bounds);
 
   if (graphene_rect_contains_rect (&builder->current_clip.bounds,
                                    &transformed_clip.bounds))
