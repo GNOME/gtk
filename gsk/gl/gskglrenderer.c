@@ -2324,6 +2324,8 @@ add_offscreen_ops (GskGLRenderer   *self,
   const float scale = ops_get_scale (builder);
   const float width = (max_x - min_x) * scale;
   const float height = (max_y - min_y) * scale;
+  const float dx = builder->dx;
+  const float dy = builder->dy;
   int render_target;
   int prev_render_target;
   RenderOp op;
@@ -2391,8 +2393,13 @@ add_offscreen_ops (GskGLRenderer   *self,
                               &GSK_ROUNDED_RECT_INIT (min_x * scale,
                                                       min_y * scale,
                                                       width, height));
+  builder->dx = 0;
+  builder->dy = 0;
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
+
+  builder->dx = dx;
+  builder->dy = dy;
 
   if (reset_clip)
     ops_set_clip (builder, &prev_clip);
