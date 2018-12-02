@@ -2622,8 +2622,27 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_viewport = *viewport;
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
-  gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);
   ops_push_modelview (&render_op_builder, &modelview);
+  /* Initial clip is self->render_region! */
+  if (self->render_region != NULL)
+    {
+      cairo_rectangle_int_t render_extents;
+
+      cairo_region_get_extents (self->render_region, &render_extents);
+      render_op_builder.current_clip = GSK_ROUNDED_RECT_INIT (render_extents.x,
+                                                              render_extents.y,
+                                                              render_extents.width,
+                                                              render_extents.height);
+
+      ops_transform_bounds_modelview (&render_op_builder,
+                                      &render_op_builder.current_clip.bounds,
+                                      &render_op_builder.current_clip.bounds);
+    }
+  else
+    {
+      gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);
+    }
+
 
   if (fbo_id != 0)
     ops_set_render_target (&render_op_builder, fbo_id);
