@@ -7111,6 +7111,9 @@ popover_size_allocate (GtkWindowPopover *popover,
 {
   cairo_rectangle_int_t rect;
 
+  if (!gtk_widget_get_mapped (popover->widget))
+    return;
+
   if (GTK_IS_POPOVER (popover->widget))
     gtk_popover_update_position (GTK_POPOVER (popover->widget));
 
