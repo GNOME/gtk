@@ -105,8 +105,19 @@ print_render_node_tree (GskRenderNode *root, int level)
         g_print ("%*s Texture %p\n", level * INDENT, " ", gsk_texture_node_get_texture (root));
         break;
 
+      case GSK_DEBUG_NODE:
+        g_print ("%*s Debug: %s\n", level * INDENT, " ", gsk_debug_node_get_message (root));
+        print_render_node_tree (gsk_debug_node_get_child (root), level + 1);
+        break;
+
+      case GSK_CLIP_NODE:
+        g_print ("%*s Clip (%f, %f, %f, %f):\n", level * INDENT, " ",
+                 root->bounds.origin.x, root->bounds.origin.y, root->bounds.size.width, root->bounds.size.height);
+        print_render_node_tree (gsk_clip_node_get_child (root), level + 1);
+        break;
+
       default:
-        g_print ("UNKNOWN: %u\n", type);
+        g_print ("%*s %s\n", level * INDENT, " ", root->node_class->type_name);
     }
 
 #undef INDENT
