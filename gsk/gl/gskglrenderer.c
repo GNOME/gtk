@@ -246,16 +246,13 @@ node_supports_transform (GskRenderNode *node)
 
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static void add_offscreen_ops                 (GskGLRenderer   *self,
-                                               RenderOpBuilder *builder,
-                                               float            min_x,
-                                               float            max_x,
-                                               float            min_y,
-                                               float            max_y,
-                                               GskRenderNode   *child_node,
-                                               int             *texture_id,
-                                               gboolean        *is_offscreen,
-                                               gboolean         force_offscreen,
-                                               gboolean         reset_clip);
+                                               RenderOpBuilder       *builder,
+                                               const graphene_rect_t *bounds,
+                                               GskRenderNode         *child_node,
+                                               int                   *texture_id,
+                                               gboolean              *is_offscreen,
+                                               gboolean               force_offscreen,
+                                               gboolean               reset_clip);
 static void gsk_gl_renderer_add_render_ops     (GskGLRenderer   *self,
                                                 GskRenderNode   *node,
                                                 RenderOpBuilder *builder);
@@ -790,7 +787,7 @@ render_transform_node (GskGLRenderer   *self,
        *       for the texture.
        */
       add_offscreen_ops (self, builder,
-                         min_x, max_x, min_y, max_y,
+                         &node->bounds,
                          child,
                          &texture_id, &is_offscreen,
                          FALSE, TRUE);
@@ -934,7 +931,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
         }
 
       prev_clip = ops_set_clip (builder, &child_clip);
-      add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+      add_offscreen_ops (self, builder, &node->bounds,
                          child,
                          &texture_id, &is_offscreen, TRUE, FALSE);
 
@@ -970,10 +967,7 @@ render_color_matrix_node (GskGLRenderer       *self,
 
   /* Pass min_x/max_x/min_y/max_y without builder->dx/dy! */
   add_offscreen_ops (self, builder,
-                     node->bounds.origin.x,
-                     node->bounds.origin.x + node->bounds.size.width,
-                     node->bounds.origin.y,
-                     node->bounds.origin.y + node->bounds.size.height,
+                     &node->bounds,
                      gsk_color_matrix_node_get_child (node),
                      &texture_id, &is_offscreen, FALSE, TRUE);
 
@@ -1017,7 +1011,8 @@ render_blur_node (GskGLRenderer       *self,
   int texture_id;
   gboolean is_offscreen;
   RenderOp op;
-  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+  add_offscreen_ops (self, builder,
+                     &node->bounds,
                      gsk_blur_node_get_child (node),
                      &texture_id, &is_offscreen, FALSE, TRUE);
 
@@ -1535,7 +1530,7 @@ render_shadow_node (GskGLRenderer       *self,
 
       /* Draw the child offscreen, without the offset. */
       add_offscreen_ops (self, builder,
-                         min_x, max_x, min_y, max_y,
+                         &shadow_child->bounds,
                          shadow_child, &texture_id, &is_offscreen, FALSE, TRUE);
 
       ops_offset (builder, dx, dy);
@@ -1583,8 +1578,8 @@ render_cross_fade_node (GskGLRenderer       *self,
                         GskRenderNode       *node,
                         RenderOpBuilder     *builder)
 {
-  const float min_x = node->bounds.origin.x;
-  const float min_y = node->bounds.origin.y;
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
   GskRenderNode *start_node = gsk_cross_fade_node_get_start_child (node);
@@ -1607,10 +1602,14 @@ render_cross_fade_node (GskGLRenderer       *self,
   /* TODO: We create 2 textures here as big as the cross-fade node, but both the
    * start and the end node might be a lot smaller than that. */
 
-  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, start_node,
+  add_offscreen_ops (self, builder,
+                     &node->bounds,
+                     start_node,
                      &start_texture_id, &is_offscreen1, TRUE, TRUE);
 
-  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, end_node,
+  add_offscreen_ops (self, builder,
+                     &node->bounds,
+                     end_node,
                      &end_texture_id, &is_offscreen2, TRUE, TRUE);
 
   ops_set_program (builder, &self->cross_fade_program);
@@ -2314,21 +2313,18 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 }
 
 static void
-add_offscreen_ops (GskGLRenderer   *self,
-                   RenderOpBuilder *builder,
-                   float            min_x,
-                   float            max_x,
-                   float            min_y,
-                   float            max_y,
-                   GskRenderNode   *child_node,
-                   int             *texture_id_out,
-                   gboolean        *is_offscreen,
-                   gboolean         force_offscreen,
-                   gboolean         reset_clip)
+add_offscreen_ops (GskGLRenderer         *self,
+                   RenderOpBuilder       *builder,
+                   const graphene_rect_t *bounds,
+                   GskRenderNode         *child_node,
+                   int                   *texture_id_out,
+                   gboolean              *is_offscreen,
+                   gboolean               force_offscreen,
+                   gboolean               reset_clip)
 {
   const float scale = ops_get_scale (builder);
-  const float width = (max_x - min_x) * scale;
-  const float height = (max_y - min_y) * scale;
+  const float width  = bounds->size.width  * scale;
+  const float height = bounds->size.height * scale;
   const float dx = builder->dx;
   const float dy = builder->dy;
   int render_target;
@@ -2377,8 +2373,10 @@ add_offscreen_ops (GskGLRenderer   *self,
   render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
 
   graphene_matrix_init_ortho (&item_proj,
-                              min_x * scale, max_x * scale,
-                              min_y * scale, max_y * scale,
+                              bounds->origin.x * scale,
+                              (bounds->origin.x + bounds->size.width) * scale,
+                              bounds->origin.y * scale,
+                              (bounds->origin.y + bounds->size.height) * scale,
                               ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
   graphene_matrix_scale (&item_proj, 1, -1, 1);
   graphene_matrix_init_identity (&identity);
@@ -2390,14 +2388,16 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
   ops_push_modelview (builder, &identity);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x * scale,
-                                                                  min_y * scale,
-                                                                  width, height));
+  prev_viewport = ops_set_viewport (builder,
+                                    &GRAPHENE_RECT_INIT (bounds->origin.x * scale,
+                                                         bounds->origin.y * scale,
+                                                         width, height));
   if (reset_clip)
     prev_clip = ops_set_clip (builder,
-                              &GSK_ROUNDED_RECT_INIT (min_x * scale,
-                                                      min_y * scale,
+                              &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale,
+                                                      bounds->origin.y * scale,
                                                       width, height));
+
   builder->dx = 0;
   builder->dy = 0;
 
