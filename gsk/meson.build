@@ -43,6 +43,7 @@ gsk_private_sources = files([
   'gl/gskgldriver.c',
   'gl/gskglrenderops.c',
   'gl/gskglshadowcache.c',
+  'gl/gskglnodesample.c',
 ])
 
 gsk_public_headers = files([

@@ -14,6 +14,7 @@
 #include "gskglrenderopsprivate.h"
 #include "gskcairoblurprivate.h"
 #include "gskglshadowcacheprivate.h"
+#include "gskglnodesampleprivate.h"
 
 #include "gskprivate.h"
 
