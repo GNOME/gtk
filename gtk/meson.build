@@ -394,10 +394,9 @@ gtk_private_type_headers = files(
   'gtktexthandleprivate.h',
 )
 
-gtk_public_headers = files(
+gtk_gir_public_headers = files(
   'gtk.h',
   'gtk-autocleanups.h',
-  'gtkx.h',
   'gtkx-autocleanups.h',
   'gtk-a11y.h',
   'gtkaboutdialog.h',
@@ -589,7 +588,6 @@ gtk_public_headers = files(
   'gtktextbuffer.h',
   'gtktextbufferrichtext.h',
   'gtktextchild.h',
-  'gtktextdisplay.h',
   'gtktextiter.h',
   'gtktextmark.h',
   'gtktexttag.h',
@@ -622,9 +620,14 @@ gtk_public_headers = files(
   'gtkwindowgroup.h',
 )
 
+gtk_nogir_public_headers = files(
+  'gtkx.h',
+  'gtktextdisplay.h',
+)
+
 # Installed headers without compatibility guarantees that are not included in gtk/gtk.h
 gtk_semi_private_headers = files('gtktextlayout.h')
-
+gtk_public_headers = gtk_gir_public_headers + gtk_nogir_public_headers
 install_headers(gtk_public_headers + gtk_semi_private_headers, subdir: 'gtk-3.0/gtk')
 
 gtk_unix_sources = files(
@@ -654,6 +657,7 @@ gtk_win32_sources = files(
 )
 
 if os_win32
+  # FIXME these sources should not be added to generate_gir?
   gtk_sources += gtk_win32_sources
 endif
 
@@ -762,7 +766,7 @@ gtkprivatetypebuiltins_h = gtkprivatetypebuiltins[1]
 typefuncs = custom_target('gtktypefuncs.inc',
                           depends: [ gdkenum_h ],
                           output: 'gtktypefuncs.inc',
-                          input: gdk_headers +
+                          input: gdk_public_headers +
                             gtk_public_headers +
                             gtk_deprecated_headers +
                             [ gtktypebuiltins_h, gdkenum_h ],
@@ -846,7 +850,7 @@ endif
 
 if quartz_enabled
   gtk_sources += gtk_use_quartz_sources
-  gtk_cargs += ['-DGDK_WINDOWING_QUARTZ', '-xobjective-c']  # FIXME? maybe add_languages() instead?
+  gtk_cargs += ['-DGDK_WINDOWING_QUARTZ', '-xobjective-c']
 endif
 
 # So we don't add these twice
@@ -902,65 +906,12 @@ libgtk = shared_library('gtk-3',
 
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 # Introspection
-build_gir = get_option('introspection')
 if build_gir
-  gir_args = [
-    '--quiet',
-  ]
-
-  # We may build some of the dependencies as sub-projects; this means
-  # that we need to depend on the built introspection data, instead of
-  # the installed one
-  gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', ]
-
-  if pixbuf_dep.type_name() == 'internal'
-    gdk_gir_inc += subproject('gdk-pixbuf').get_variable('gdkpixbuf_gir').get(0)
-  else
-    gdk_gir_inc += 'GdkPixbuf-2.0'
-  endif
-
-  if pango_dep.type_name() == 'internal'
-    gdk_gir_inc += subproject('pango').get_variable('pango_gir').get(0)
-  else
-    gdk_gir_inc += 'Pango-1.0'
-  endif
-
-  gdk_gir = gnome.generate_gir(libgtk,
-                               sources: gdk_public_headers + gdk_sources + [ gdkenum_h ],
-                               namespace: 'Gdk',
-                               nsversion: gtk_api_version,
-                               identifier_prefix: 'Gdk',
-                               symbol_prefix: 'gdk',
-                               export_packages: 'gtk+-3.0',
-                               includes: gdk_gir_inc,
-                               header: 'gdk/gdk.h',
-                               install: true,
-                               extra_args: gir_args + [
-                                 '-DGDK_COMPILATION',
-                               ])
-  gdk_gir_dep = declare_dependency(sources: gdk_gir)
-  gtk_dep_sources += gdk_gir
-
-  if x11_enabled
-    gdk_x11_gir = gnome.generate_gir(libgtk,
-                                     sources: gdk_x11_public_headers + gdk_x11_sources,
-                                     namespace: 'GdkX11',
-                                     nsversion: gtk_api_version,
-                                     identifier_prefix: 'Gdk',
-                                     symbol_prefix: 'gdk',
-                                     export_packages: 'gtk+-x11-3.0',
-                                     includes: [ gdk_gir[0], 'xlib-2.0', ],
-                                     install: true,
-                                     dependencies: gdk_gir_dep,
-                                     header: 'gdk/gdkx.h',
-                                     extra_args: gir_args + [
-                                       '-DGDK_COMPILATION',
-                                     ])
-    gtk_dep_sources += gdk_x11_gir
-  endif
+  gir_args = ['--quiet']
 
   gtk_introspection_sources = [
-    gtk_public_headers,
+    gtk_gir_public_headers,
+    gtk_deprecated_headers,
     gtk_sources,
     a11y_headers,
     a11y_sources,
