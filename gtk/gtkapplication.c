@@ -387,8 +387,6 @@ gtk_application_init (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  priv = gtk_application_get_instance_private (application);
-
   priv->muxer = gtk_action_muxer_new ();
 
   priv->accels = gtk_application_accels_new ();
