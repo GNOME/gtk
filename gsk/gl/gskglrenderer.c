@@ -778,6 +778,7 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_TEXTURE_NODE:
     case GSK_COLOR_NODE:
     case GSK_COLOR_MATRIX_NODE:
+    case GSK_SHADOW_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -1577,8 +1578,8 @@ render_shadow_node (GskGLRenderer       *self,
           continue;
         }
 
-      min_x = shadow_child->bounds.origin.x;
-      min_y = shadow_child->bounds.origin.y;
+      min_x = builder->dx + shadow_child->bounds.origin.x;
+      min_y = builder->dy + shadow_child->bounds.origin.y;
       max_x = min_x + shadow_child->bounds.size.width;
       max_y = min_y + shadow_child->bounds.size.height;
 
