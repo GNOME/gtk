@@ -573,6 +573,7 @@ if cloudproviders_enabled
   endif
 endif
 
+build_gir = get_option('introspection')
 subdir('gdk')
 subdir('gtk')
 subdir('modules')
