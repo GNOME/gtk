@@ -22,6 +22,7 @@
 #include <gdk/gdkdeviceprivate.h>
 #include <gdk/gdkseatdefaultprivate.h>
 #include <gdk/gdkdevicemanagerprivate.h>
+#include <gdk/gdkdisplayprivate.h>
 #include "gdkdevicemanager-core-quartz.h"
 #include "gdkquartzdevice-core.h"
 #include "gdkkeysyms.h"
