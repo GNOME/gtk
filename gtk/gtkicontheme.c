@@ -1031,11 +1031,12 @@ void
 gtk_icon_theme_add_resource_path (GtkIconTheme *icon_theme,
                                   const gchar  *path)
 {
-  GtkIconThemePrivate *priv = icon_theme->priv;
+  GtkIconThemePrivate *priv = NULL;
 
   g_return_if_fail (GTK_IS_ICON_THEME (icon_theme));
   g_return_if_fail (path != NULL);
 
+  priv = icon_theme->priv;
   priv->resource_paths = g_list_append (priv->resource_paths, g_strdup (path));
 
   do_theme_change (icon_theme);
