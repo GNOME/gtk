@@ -782,6 +782,8 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_BORDER_NODE:
     case GSK_OUTSET_SHADOW_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -940,10 +942,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
                           RenderOpBuilder     *builder)
 {
   const float scale = ops_get_scale (builder);
-  const float min_x = node->bounds.origin.x;
-  const float min_y = node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   GskRoundedRect child_clip = *gsk_rounded_clip_node_peek_clip (node);
   GskRoundedRect transformed_clip;
   GskRoundedRect prev_clip;
@@ -972,6 +970,10 @@ render_rounded_clip_node (GskGLRenderer       *self,
   else if (graphene_rect_intersection (&builder->current_clip.bounds,
                                        &transformed_clip.bounds, NULL))
     {
+      const float min_x = builder->dx + node->bounds.origin.x;
+      const float min_y = builder->dy + node->bounds.origin.y;
+      const float max_x = min_x + node->bounds.size.width;
+      const float max_y = min_y + node->bounds.size.height;
       graphene_matrix_t scale_matrix;
       gboolean is_offscreen;
       int texture_id;
