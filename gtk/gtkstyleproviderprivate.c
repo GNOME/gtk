@@ -118,7 +118,7 @@ _gtk_style_provider_private_get_settings (GtkStyleProviderPrivate *provider)
 {
   GtkStyleProviderPrivateInterface *iface;
 
-  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
 
