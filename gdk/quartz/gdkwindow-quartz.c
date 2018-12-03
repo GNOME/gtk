@@ -171,57 +171,13 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
 }
 
 static void
-check_grab_unmap (GdkWindow *window)
-{
-  GList *list, *l;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *device_manager;
-
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_FLOATING);
-  for (l = list; l; l = l->next)
-    {
-      _gdk_display_end_device_grab (display, l->data, 0, window, TRUE);
-    }
-
-  g_list_free (list);
-}
-
-static void
-check_grab_destroy (GdkWindow *window)
-{
-  GList *list, *l;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *device_manager;
-
-  /* Make sure there is no lasting grab in this native window */
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_MASTER);
-
-  for (l = list; l; l = l->next)
-    {
-      GdkDeviceGrabInfo *grab;
-
-      grab = _gdk_display_get_last_device_grab (display, l->data);
-      if (grab && grab->native_window == window)
-        {
-          /* Serials are always 0 in quartz, but for clarity: */
-          grab->serial_end = grab->serial_start;
-          grab->implicit_ungrab = TRUE;
-        }
-    }
-
-  g_list_free (list);
-}
-
-static void
 gdk_window_impl_quartz_finalize (GObject *object)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (object);
+  GdkDisplay *display = gdk_window_get_display (impl->wrapper);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
 
-  check_grab_destroy (GDK_WINDOW_IMPL_QUARTZ (object)->wrapper);
+  gdk_seat_ungrab (seat);
 
   if (impl->transient_for)
     g_object_unref (impl->transient_for);
@@ -1147,14 +1103,15 @@ void
 gdk_window_quartz_hide (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
+  gdk_seat_ungrab (seat);
 
   /* Make sure we're not stuck in fullscreen mode. */
 #ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 #endif
-
-  check_grab_unmap (window);
 
   _gdk_window_clear_update_area (window);
 
@@ -2862,7 +2819,9 @@ gdk_quartz_window_set_group (GdkWindow *window,
 static void
 gdk_quartz_window_destroy_notify (GdkWindow *window)
 {
-  check_grab_destroy (window);
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
+  gdk_seat_ungrab (seat);
 }
 
 static void
