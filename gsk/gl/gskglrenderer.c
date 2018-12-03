@@ -536,8 +536,8 @@ render_border_node (GskGLRenderer   *self,
                     RenderOpBuilder *builder)
 {
   const float scale = ops_get_scale (builder);
-  const float min_x = node->bounds.origin.x;
-  const float min_y = node->bounds.origin.y;
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
@@ -779,6 +779,7 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_COLOR_NODE:
     case GSK_COLOR_MATRIX_NODE:
     case GSK_SHADOW_NODE:
+    case GSK_BORDER_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
