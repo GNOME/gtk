@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 struct _GdkQuartzDisplay
 {
   GdkDisplay parent_instance;
-  GPtrArray *monitors;
+  GHashTable *monitors;
 };
 
 struct _GdkQuartzDisplayClass
