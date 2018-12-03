@@ -56,8 +56,6 @@
 #include "gtkbuttonprivate.h"
 
 #include "gtkactionhelperprivate.h"
-#include "gtkapplicationprivate.h"
-#include "gtkbox.h"
 #include "gtkcheckbutton.h"
 #include "gtkcontainerprivate.h"
 #include "gtkgesturemultipress.h"
@@ -68,9 +66,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkbuttonaccessible.h"
 
