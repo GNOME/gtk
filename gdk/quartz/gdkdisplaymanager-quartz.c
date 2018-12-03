@@ -55,7 +55,6 @@ static void
 gdk_quartz_display_manager_class_init (GdkQuartzDisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
   object_class->finalize = gdk_quartz_display_manager_finalize;
 }
