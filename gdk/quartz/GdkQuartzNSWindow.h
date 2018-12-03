@@ -53,7 +53,10 @@
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
 -(void)setStyleMask:(NSUInteger)styleMask;
 #endif
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+- (NSPoint)convertPointToScreen:(NSPoint)point;
+- (NSPoint)convertPointFromScreen:(NSPoint)point;
+#endif
 @end
 
 

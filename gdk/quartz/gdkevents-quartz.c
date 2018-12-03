@@ -394,12 +394,15 @@ get_window_point_from_screen_point (GdkWindow *window,
                                     gint      *y)
 {
   NSPoint point;
-  NSWindow *nswindow;
+  GdkQuartzNSWindow *nswindow;
 
-  nswindow = ((GdkWindowImplQuartz *)window->impl)->toplevel;
+  nswindow = (GdkQuartzNSWindow*)(((GdkWindowImplQuartz *)window->impl)->toplevel);
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
   point = [nswindow convertScreenToBase:screen_point];
-
+#else
+  point = [nswindow convertPointFromScreen:screen_point];
+#endif
   *x = point.x;
   *y = window->height - point.y;
 }
@@ -413,6 +416,8 @@ is_mouse_button_press_event (NSEventType type)
       case NSRightMouseDown:
       case NSOtherMouseDown:
         return TRUE;
+    default:
+      return FALSE;
     }
 
   return FALSE;
@@ -473,8 +478,12 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
         }
       else
         {
-          *screen_point = [[nsevent window] convertBaseToScreen:point];
-
+          if (gdk_quartz_osx_version () >= GDK_OSX_LION)
+            *screen_point = [(GdkQuartzNSWindow*)[nsevent window] convertPointToScreen:point];
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 10700
+          else
+            *screen_point = [[nsevent window] convertBaseToScreen:point];
+#endif
           *x = point.x;
           *y = toplevel->height - point.y;
         }
