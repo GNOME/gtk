@@ -765,45 +765,12 @@ render_offset_node (GskGLRenderer   *self,
                     RenderOpBuilder *builder)
 {
   GskRenderNode *child = gsk_offset_node_get_child (node);
-  const guint child_type = gsk_render_node_get_node_type (child);
   const float dx = gsk_offset_node_get_x_offset (node);
   const float dy = gsk_offset_node_get_y_offset (node);
 
-  /* TODO: We do this only for selected node type we know handle
-   *       builder->dx/dy correctly. That should be "all nodes" eventually.
-   */
-  switch (child_type)
-    {
-    case GSK_TEXT_NODE:
-    case GSK_TEXTURE_NODE:
-    case GSK_COLOR_NODE:
-    case GSK_COLOR_MATRIX_NODE:
-    case GSK_SHADOW_NODE:
-    case GSK_BORDER_NODE:
-    case GSK_OUTSET_SHADOW_NODE:
-    case GSK_LINEAR_GRADIENT_NODE:
-    case GSK_CLIP_NODE:
-    case GSK_ROUNDED_CLIP_NODE:
-      {
-        ops_offset (builder, dx, dy);
-        gsk_gl_renderer_add_render_ops (self, child, builder);
-        ops_offset (builder, - dx, - dy);
-      }
-    break;
-
-    default:
-      {
-        graphene_matrix_t transform, transformed_mv;
-
-        graphene_matrix_init_translate (&transform,
-                                        &GRAPHENE_POINT3D_INIT(dx, dy, 1.0));
-        graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
-
-        ops_push_modelview (builder, &transformed_mv);
-        gsk_gl_renderer_add_render_ops (self, child, builder);
-        ops_pop_modelview (builder);
-      }
-    }
+  ops_offset (builder, dx, dy);
+  gsk_gl_renderer_add_render_ops (self, child, builder);
+  ops_offset (builder, - dx, - dy);
 }
 
 static inline void
