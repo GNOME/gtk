@@ -124,15 +124,15 @@ const static struct {
   guint keyval;
   unsigned int modmask; /* So we can tell when a mod key is pressed/released */
 } modifier_keys[] = {
-  {  54, GDK_KEY_Meta_R,    NSCommandKeyMask },
-  {  55, GDK_KEY_Meta_L,    NSCommandKeyMask },
-  {  56, GDK_KEY_Shift_L,   NSShiftKeyMask },
-  {  57, GDK_KEY_Caps_Lock, NSAlphaShiftKeyMask },
-  {  58, GDK_KEY_Alt_L,     NSAlternateKeyMask },
-  {  59, GDK_KEY_Control_L, NSControlKeyMask },
-  {  60, GDK_KEY_Shift_R,   NSShiftKeyMask },
-  {  61, GDK_KEY_Alt_R,     NSAlternateKeyMask },
-  {  62, GDK_KEY_Control_R, NSControlKeyMask }
+  {  54, GDK_KEY_Meta_R,    GDK_QUARTZ_COMMAND_KEY_MASK },
+  {  55, GDK_KEY_Meta_L,    GDK_QUARTZ_COMMAND_KEY_MASK },
+  {  56, GDK_KEY_Shift_L,   GDK_QUARTZ_SHIFT_KEY_MASK },
+  {  57, GDK_KEY_Caps_Lock, GDK_QUARTZ_ALPHA_SHIFT_KEY_MASK },
+  {  58, GDK_KEY_Alt_L,     GDK_QUARTZ_ALTERNATE_KEY_MASK },
+  {  59, GDK_KEY_Control_L, GDK_QUARTZ_CONTROL_KEY_MASK },
+  {  60, GDK_KEY_Shift_R,   GDK_QUARTZ_SHIFT_KEY_MASK },
+  {  61, GDK_KEY_Alt_R,     GDK_QUARTZ_ALTERNATE_KEY_MASK },
+  {  62, GDK_KEY_Control_R, GDK_QUARTZ_CONTROL_KEY_MASK }
 };
 
 const static struct {
@@ -783,11 +783,11 @@ _gdk_quartz_keys_event_type (NSEvent *event)
   
   switch ([event type])
     {
-    case NSKeyDown:
+    case GDK_QUARTZ_KEY_DOWN:
       return GDK_KEY_PRESS;
-    case NSKeyUp:
+    case GDK_QUARTZ_KEY_UP:
       return GDK_KEY_RELEASE;
-    case NSFlagsChanged:
+    case GDK_QUARTZ_FLAGS_CHANGED:
       break;
     default:
       g_assert_not_reached ();
