@@ -39,7 +39,7 @@ gdk_sources = files(
   'gdkmonitor.c'
 )
 
-gdk_public_headers = files(
+gdk_gir_public_headers = files(
   'gdk.h',
   'gdk-autocleanup.h',
   'gdkapplaunchcontext.h',
@@ -58,7 +58,6 @@ gdk_public_headers = files(
   'gdkglcontext.h',
   'gdkkeys.h',
   'gdkkeysyms.h',
-  'gdkkeysyms-compat.h',
   'gdkmain.h',
   'gdkmonitor.h',
   'gdkpango.h',
@@ -77,6 +76,8 @@ gdk_public_headers = files(
   'gdkvisual.h',
   'gdkwindow.h',
 )
+gdk_nogir_public_headers = [files('gdkkeysyms-compat.h')]
+gdk_public_headers = gdk_gir_public_headers + gdk_nogir_public_headers
 install_headers(gdk_public_headers, subdir : 'gtk-3.0/gdk')
 
 deprecated_h_sources = files('deprecated/gdkcolor.h')
@@ -141,8 +142,6 @@ gdkresources = gnome.compile_resources('gdkresources',
   c_name: '_gdk',
   extra_args: '--manual-register'
 )
-
-gdk_headers = gdk_public_headers
 
 gdk_enums = gnome.mkenums('gdkenumtypes',
   sources: gdk_public_headers,
@@ -272,8 +271,85 @@ libgdk = shared_library('gdk-3',
                         darwin_versions : gtk_osxversions,
                         install: true)
 
+gdk_dep_sources = [gdkconfig, gdkenum_h]
+# Introspection
+if build_gir
+  gir_args = ['--quiet']
+
+  # We may build some of the dependencies as sub-projects; this means
+  # that we need to depend on the built introspection data, instead of
+  # the installed one
+  gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', ]
+
+  if pixbuf_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('gdk-pixbuf').get_variable('gdkpixbuf_gir').get(0)
+  else
+    gdk_gir_inc += 'GdkPixbuf-2.0'
+  endif
+
+  if pango_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('pango').get_variable('pango_gir').get(0)
+  else
+    gdk_gir_inc += 'Pango-1.0'
+  endif
+
+  gdk_gir_sources = gdk_gir_public_headers + deprecated_h_sources
+  gdk_gir_sources += gdk_sources + gdk_enums + [gdkconfig]
+  gdk_gir = gnome.generate_gir(libgdk,
+                               sources: gdk_gir_sources,
+                               namespace: 'Gdk',
+                               nsversion: gtk_api_version,
+                               identifier_prefix: 'Gdk',
+                               symbol_prefix: 'gdk',
+                               export_packages: 'gdk-3.0',
+                               includes: gdk_gir_inc,
+                               header: 'gdk/gdk.h',
+                               install: true,
+                               extra_args: gir_args + [
+                                 '-DGDK_COMPILATION',
+                               ])
+  gdk_gir_dep = declare_dependency(sources: gdk_gir)
+  gdk_dep_sources += gdk_gir
+
+  if x11_enabled
+    gdk_x11_gir = gnome.generate_gir(libgdk,
+                                     sources: gdk_x11_public_headers + gdk_x11_sources,
+                                     namespace: 'GdkX11',
+                                     nsversion: gtk_api_version,
+                                     identifier_prefix: 'Gdk',
+                                     symbol_prefix: 'gdk',
+                                     export_packages: 'gdk-x11-3.0',
+                                     includes: gdk_gir_inc + [ gdk_gir[0], 'xlib-2.0', ],
+                                     install: true,
+                                     dependencies: gdk_gir_dep,
+                                     header: 'gdk/gdkx.h',
+                                     extra_args: gir_args + [
+                                       '-DGDK_COMPILATION',
+                                     ])
+    gdk_dep_sources += gdk_x11_gir
+  endif
+
+  if win32_enabled
+    gdk_win32_gir = gnome.generate_gir(libgdk,
+                                     sources: gdk_win32_public_headers + gdk_win32_sources,
+                                     namespace: 'GdkWin32',
+                                     nsversion: gtk_api_version,
+                                     identifier_prefix: 'Gdk',
+                                     symbol_prefix: 'gdk',
+                                     export_packages: 'gdk-win32-3.0',
+                                     includes: gdk_gir_inc + [gdk_gir[0]],
+                                     install: true,
+                                     dependencies: gdk_gir_dep,
+                                     header: 'gdk/gdkwin32.h',
+                                     extra_args: gir_args + [
+                                       '-DGDK_COMPILATION',
+                                     ])
+    gdk_dep_sources += gdk_x11_gir
+  endif
+endif
+
 libgdk_dep = declare_dependency(
   link_with: libgdk,
-  sources: ['gdk.h', gdkconfig, gdkenum_h],
+  sources: gdk_dep_sources,
   include_directories: [confinc, gdkx11_inc, wlinc],
   dependencies: gdk_deps)

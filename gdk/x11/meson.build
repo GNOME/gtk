@@ -19,7 +19,6 @@ gdk_x11_sources = files(
   'gdkmain-x11.c',
   'gdkproperty-x11.c',
   'gdkscreen-x11.c',
-  'gdkscreen-x11.h',
   'gdkselection-x11.c',
   'gdktestutils-x11.c',
   'gdkvisual-x11.c',
