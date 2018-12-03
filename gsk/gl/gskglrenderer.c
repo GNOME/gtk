@@ -781,6 +781,7 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_SHADOW_NODE:
     case GSK_BORDER_NODE:
     case GSK_OUTSET_SHADOW_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -898,7 +899,11 @@ render_linear_gradient_node (GskGLRenderer       *self,
   op.op = OP_CHANGE_LINEAR_GRADIENT;
   op.linear_gradient.n_color_stops = n_color_stops;
   op.linear_gradient.start_point = *start;
+  op.linear_gradient.start_point.x += builder->dx;
+  op.linear_gradient.start_point.y += builder->dy;
   op.linear_gradient.end_point = *end;
+  op.linear_gradient.end_point.x += builder->dx;
+  op.linear_gradient.end_point.y += builder->dy;
   ops_add (builder, &op);
 
   ops_draw (builder, vertex_data);
