@@ -816,19 +816,30 @@ render_transform_node (GskGLRenderer   *self,
 
   graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
   graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
+  graphene_matrix_translate (&transformed_mv, &(graphene_point3d_t) { builder->dx, builder->dy, 0});
+
+  /* We just added the offset to the new modelview matrix, so the following
+   * cases dont' have to care about builder->dx/dy! */
 
   ops_push_modelview (builder, &transformed_mv);
   if (ops_modelview_is_simple (builder) ||
       node_supports_transform (child))
     {
+      const float dx = builder->dx;
+      const float dy = builder->dy;
+
+      builder->dx = 0;
+      builder->dy = 0;
       gsk_gl_renderer_add_render_ops (self, child, builder);
+      builder->dx = dx;
+      builder->dy = dy;
     }
   else
     {
-      const float min_x = builder->dx + child->bounds.origin.x;
-      const float min_y = builder->dy + child->bounds.origin.y;
-      const float max_x = min_x + child->bounds.size.width;
-      const float max_y = min_y + child->bounds.size.height;
+      const float min_x = node->bounds.origin.x;
+      const float min_y = node->bounds.origin.y;
+      const float max_x = min_x + node->bounds.size.width;
+      const float max_y = min_y + node->bounds.size.height;
       const GskQuadVertex vertex_data[GL_N_VERTICES] = {
         { { min_x, min_y }, { 0, 1 }, },
         { { min_x, max_y }, { 0, 0 }, },
