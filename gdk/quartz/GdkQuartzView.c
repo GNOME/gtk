@@ -17,6 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <AvailabilityMacros.h>
 #include "config.h"
 #import "GdkQuartzView.h"
 #include "gdkquartzwindow.h"
@@ -201,8 +202,12 @@
       /* discard invalid text input with Chinese input methods */
       str = "";
       [self unmarkText];
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
       NSInputManager *currentInputManager = [NSInputManager currentInputManager];
       [currentInputManager markedTextAbandoned:self];
+#else
+      [[NSTextInputContext currentInputContext] discardMarkedText];
+#endif
     }
   else
    {
