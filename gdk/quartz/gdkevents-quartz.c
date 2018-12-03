@@ -398,8 +398,11 @@ get_window_point_from_screen_point (GdkWindow *window,
 
   nswindow = ((GdkWindowImplQuartz *)window->impl)->toplevel;
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
   point = [nswindow convertScreenToBase:screen_point];
-
+#else
+  point = [nswindow convertPointFromScreen:screen_point];
+#endif
   *x = point.x;
   *y = window->height - point.y;
 }
