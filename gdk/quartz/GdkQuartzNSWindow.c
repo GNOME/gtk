@@ -189,7 +189,6 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkEvent *event;
 
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   /* In case the window is changed when maximized remove the maximized state */
@@ -220,7 +219,6 @@
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkEvent *event;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   /* see same in windowDidMove */
@@ -256,7 +254,11 @@
   [self checkSendEnterNotify];
 }
 
--(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
+-(id)initWithContentRect:(NSRect)contentRect
+               styleMask:(NSWindowStyleMask)styleMask
+                 backing:(NSBackingStoreType)backingType
+                   defer:(BOOL)flag
+                  screen:(NSScreen *)screen
 {
   self = [super initWithContentRect:contentRect
 	                  styleMask:styleMask
@@ -826,7 +828,6 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 {
   NSRect screenFrame = [[self screen] visibleFrame];
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   if (!maximized)
@@ -840,7 +841,6 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 {
 
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   if (maximized)
