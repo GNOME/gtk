@@ -780,6 +780,7 @@ render_offset_node (GskGLRenderer   *self,
     case GSK_COLOR_MATRIX_NODE:
     case GSK_SHADOW_NODE:
     case GSK_BORDER_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
       {
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -1176,8 +1177,8 @@ render_outset_shadow_node (GskGLRenderer       *self,
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  const float min_x = outline->bounds.origin.x - spread - blur_extra / 2.0;
-  const float min_y = outline->bounds.origin.y - spread - blur_extra / 2.0;
+  const float min_x = builder->dx + outline->bounds.origin.x - spread - blur_extra / 2.0;
+  const float min_y = builder->dy + outline->bounds.origin.y - spread - blur_extra / 2.0;
   const float max_x = min_x + outline->bounds.size.width  + (spread + blur_extra/2.0) * 2;
   const float max_y = min_y + outline->bounds.size.height + (spread + blur_extra/2.0) * 2;
   float texture_width, texture_height;
