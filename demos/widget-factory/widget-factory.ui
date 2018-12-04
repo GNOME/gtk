@@ -16,6 +16,16 @@
         <attribute name="action">win.transition</attribute>
       </item>
     </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About Widget Factory</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
   </menu>
   <menu id="dinner_menu">
     <section>
