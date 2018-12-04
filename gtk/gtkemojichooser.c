@@ -392,7 +392,7 @@ add_emoji (GtkWidget    *box,
         p += g_unichar_to_utf8 (code, p);
     }
   g_variant_unref (codes);
-  p += g_unichar_to_utf8 (0xFE0E, p); /* U+FE0F is the Emoji variation selector */
+  p += g_unichar_to_utf8 (0xFE0F, p); /* U+FE0F is the Emoji variation selector */
   p[0] = 0;
 
   label = gtk_label_new (text);
