@@ -36,13 +36,10 @@
  * SECTION:gtkgrid
  * @Short_description: Pack widgets in rows and columns
  * @Title: GtkGrid
- * @See_also: #GtkTable, #GtkHBox, #GtkVBox
+ * @See_also: #GtkBox
  *
  * GtkGrid is a container which arranges its child widgets in
- * rows and columns. It is a very similar to #GtkTable and #GtkBox,
- * but it consistently uses #GtkWidget’s #GtkWidget:margin and #GtkWidget:expand
- * properties instead of custom child properties, and it fully supports
- * [height-for-width geometry management][geometry-management].
+ * rows and columns, with arbitrary positions and horizontal/vertical spans.
  *
  * Children are added using gtk_grid_attach(). They can span multiple
  * rows or columns. It is also possible to add a child next to an
@@ -51,7 +48,8 @@
  *
  * GtkGrid can be used like a #GtkBox by just using gtk_container_add(),
  * which will place children next to each other in the direction determined
- * by the #GtkOrientable:orientation property.
+ * by the #GtkOrientable:orientation property. However, if all you want is a
+ * single row or column, then #GtkBox is the preferred widget.
  *
  * # CSS nodes
  *
