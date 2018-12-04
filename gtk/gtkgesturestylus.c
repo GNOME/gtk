@@ -160,8 +160,8 @@ gesture_get_current_event (GtkGestureStylus *gesture)
  * @value: (out): return location for the axis value
  *
  * Returns the current value for the requested @axis. This function
- * must be called from either the #GtkGestureStylus:down,
- * #GtkGestureStylus:motion, #GtkGestureStylus:up or #GtkGestureStylus:proximity
+ * must be called from either the #GtkGestureStylus::down,
+ * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
  * signals.
  *
  * Returns: #TRUE if there is a current value for the axis
@@ -191,8 +191,8 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
  * @values: (out) (array): return location for the axis values
  *
  * Returns the current values for the requested @axes. This function
- * must be called from either the #GtkGestureStylus:down,
- * #GtkGestureStylus:motion, #GtkGestureStylus:up or #GtkGestureStylus:proximity
+ * must be called from either the #GtkGestureStylus::down,
+ * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
  * signals.
  *
  * Returns: #TRUE if there is a current value for the axes
