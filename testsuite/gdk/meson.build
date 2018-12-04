@@ -1,24 +1,26 @@
+tests = [
+  'cairo',
+  'display',
+  'encoding',
+  'keysyms',
+  'rectangle',
+  'rgba',
+  'seat',
+  'visual',
+]
 
-test_cairo = executable('cairo', 'cairo.c', dependencies: libgtk_dep)
-test('gdk/cairo', test_cairo)
+foreach t : tests
+  test_exe = executable(t, '@0@.c'.format(t),
+                        dependencies: libgtk_dep)
 
-test_display = executable('display', 'display.c', dependencies: libgtk_dep)
-test('gdk/display', test_display)
-
-test_encoding = executable('encoding', 'encoding.c', dependencies: libgtk_dep)
-test('gdk/encoding', test_encoding)
-
-test_keysyms = executable('keysyms', 'keysyms.c', dependencies: libgtk_dep)
-test('gdk/keysyms', test_keysyms)
-
-test_rectangle = executable('rectangle', 'rectangle.c', dependencies: libgtk_dep)
-test('gdk/rectangle', test_rectangle)
-
-test_rgba = executable('rgba', 'rgba.c', dependencies: libgtk_dep)
-test('gdk/rgba', test_rgba)
-
-test_seat = executable('seat', 'seat.c', dependencies: libgtk_dep)
-test('gdk/seat', test_seat)
-
-test_visual = executable('visual', 'visual.c', dependencies: libgtk_dep)
-test('gdk/visual', test_visual)
+  test(t, test_exe,
+       args: [ '--tap', '-k' ],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+            ],
+       suite: 'gdk')
+endforeach
