@@ -24,16 +24,15 @@
 
 /**
  * SECTION:gtkbox
- * @Short_description: A container box
+ * @Short_description: A container for packing widgets in a single row or column
  * @Title: GtkBox
- * @See_also: #GtkFrame, #GtkGrid, #GtkLayout
+ * @See_also: #GtkGrid
  *
- * The GtkBox widget organizes child widgets into a rectangular area.
- *
- * The rectangular area of a GtkBox is organized into either a single row
- * or a single column of child widgets depending upon the orientation.
- * Thus, all children of a GtkBox are allocated one dimension in common,
- * which is the height of a row, or the width of a column.
+ * The GtkBox widget arranges child widgets into a single row or column,
+ * depending upon the value of its #GtkOrientable:orientation property. Within
+ * the other dimension, all children are allocated the same size. Of course,
+ * the #GtkWidget:halign and #GtkWidget:valign properties can be used on
+ * the children to influence their allocation.
  *
  * GtkBox uses a notion of packing. Packing refers
  * to adding widgets with reference to a particular position in a
@@ -68,9 +67,6 @@
  * Use gtk_box_set_child_packing() to reset the expand,
  * fill and padding child properties.
  * Use gtk_box_query_child_packing() to query these fields.
- *
- * Note that a single-row or single-column #GtkGrid provides exactly
- * the same functionality as #GtkBox.
  *
  * # CSS nodes
  *
@@ -310,9 +306,9 @@ gtk_box_class_init (GtkBoxClass *class)
    * but #GtkHBox, #GtkVBox and other subclasses use the old default
    * of %TRUE.
    *
-   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
-   * and #GtkWidget:vexpand properties are the preferred way to influence
-   * child size allocation in containers.
+   * Note: The #GtkWidget:hexpand or #GtkWidget:vexpand properties are the
+   * preferred way to influence whether the child receives extra space, by
+   * setting the child’s expand property corresponding to the box’s orientation.
    *
    * In contrast to #GtkWidget:hexpand, the expand child property does
    * not cause the box to expand itself.
@@ -327,11 +323,12 @@ gtk_box_class_init (GtkBoxClass *class)
   /**
    * GtkBox:fill:
    *
-   * Whether the child should receive extra space when the parent grows.
+   * Whether the child should fill extra space or use it as padding.
    *
-   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
-   * and #GtkWidget:vexpand properties are the preferred way to influence
-   * child size allocation in containers.
+   * Note: The #GtkWidget:halign or #GtkWidget:valign properties are the
+   * preferred way to influence whether the child fills available space, by
+   * setting the child’s align property corresponding to the box’s orientation
+   * to %GTK_ALIGN_FILL to fill, or to something else to refrain from filling.
    */
   child_props[CHILD_PROP_FILL] =
       g_param_spec_boolean ("fill",
@@ -340,6 +337,14 @@ gtk_box_class_init (GtkBoxClass *class)
                             TRUE,
                             GTK_PARAM_READWRITE);
 
+  /**
+   * GtkBox:padding:
+   *
+   * Extra space to put between the child and its neighbors, in pixels.
+   *
+   * Note: The CSS padding properties are the preferred way to add space among
+   * widgets, by setting the paddings corresponding to the box’s orientation.
+   */
   child_props[CHILD_PROP_PADDING] =
       g_param_spec_uint ("padding",
                          P_("Padding"),
