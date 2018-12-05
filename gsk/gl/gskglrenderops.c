@@ -1,5 +1,12 @@
 #include "gskglrenderopsprivate.h"
 
+static inline gboolean
+rect_equal (const graphene_rect_t *a,
+            const graphene_rect_t *b)
+{
+  return memcmp (a, b, sizeof (graphene_rect_t)) == 0;
+}
+
 void
 ops_finish (RenderOpBuilder *builder)
 {
@@ -188,8 +195,8 @@ ops_set_program (RenderOpBuilder *builder,
       program_state->modelview = *builder->current_modelview;
     }
 
-  if (memcmp (&empty_rect, &program_state->viewport, sizeof (graphene_rect_t)) == 0 ||
-      memcmp (&builder->current_viewport, &program_state->viewport, sizeof (graphene_rect_t)) != 0)
+  if (rect_equal (&empty_rect, &program_state->viewport) ||
+      !rect_equal (&builder->current_viewport, &program_state->viewport))
     {
       op.op = OP_CHANGE_VIEWPORT;
       op.viewport = builder->current_viewport;
@@ -375,6 +382,10 @@ ops_set_viewport (RenderOpBuilder       *builder,
 {
   RenderOp op;
   graphene_rect_t prev_viewport;
+
+  if (builder->current_program_state != NULL &&
+      rect_equal (&builder->current_program_state->viewport, viewport))
+    return builder->current_program_state->viewport;
 
   op.op = OP_CHANGE_VIEWPORT;
   op.viewport = *viewport;
