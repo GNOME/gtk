@@ -426,9 +426,28 @@ ops_set_render_target (RenderOpBuilder *builder,
     return render_target_id;
 
   prev_render_target = builder->current_render_target;
-  op.op = OP_CHANGE_RENDER_TARGET;
-  op.render_target_id = render_target_id;
-  g_array_append_val (builder->render_ops, op);
+
+  if (builder->render_ops->len > 0)
+    {
+      RenderOp *last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
+      if (last_op->op == OP_CHANGE_RENDER_TARGET)
+        {
+          last_op->render_target_id = render_target_id;
+        }
+      else
+        {
+          op.op = OP_CHANGE_RENDER_TARGET;
+          op.render_target_id = render_target_id;
+          g_array_append_val (builder->render_ops, op);
+        }
+    }
+  else
+    {
+      op.op = OP_CHANGE_RENDER_TARGET;
+      op.render_target_id = render_target_id;
+      g_array_append_val (builder->render_ops, op);
+    }
+
   builder->current_render_target = render_target_id;
 
   return prev_render_target;
