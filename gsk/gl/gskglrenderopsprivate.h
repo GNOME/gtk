@@ -50,11 +50,12 @@ enum {
   OP_CHANGE_OUTSET_SHADOW   =  15,
   OP_CHANGE_BORDER          =  16,
   OP_CHANGE_BORDER_COLOR    =  17,
-  OP_CHANGE_CROSS_FADE      =  18,
-  OP_CHANGE_UNBLURRED_OUTSET_SHADOW = 19,
-  OP_CLEAR                  =  20,
-  OP_DRAW                   =  21,
-  OP_DUMP_FRAMEBUFFER       =  22,
+  OP_CHANGE_BORDER_WIDTH    =  18,
+  OP_CHANGE_CROSS_FADE      =  19,
+  OP_CHANGE_UNBLURRED_OUTSET_SHADOW = 20,
+  OP_CLEAR                  =  21,
+  OP_DRAW                   =  22,
+  OP_DUMP_FRAMEBUFFER       =  23,
 };
 
 typedef struct
@@ -310,8 +311,9 @@ void              ops_set_color_matrix   (RenderOpBuilder         *builder,
                                           const graphene_vec4_t   *offset);
 
 void              ops_set_border         (RenderOpBuilder         *builder,
-                                          const float             *widths,
                                           const GskRoundedRect    *outline);
+void              ops_set_border_width   (RenderOpBuilder         *builder,
+                                          const float             *widths);
 
 void              ops_set_border_color   (RenderOpBuilder         *builder,
                                           const GdkRGBA           *color);

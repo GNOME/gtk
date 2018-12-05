@@ -663,7 +663,8 @@ render_border_node (GskGLRenderer   *self,
       }
 
     ops_set_program (builder, &self->border_program);
-    ops_set_border (builder, widths, &outline);
+    ops_set_border_width (builder, widths);
+    ops_set_border (builder, &outline);
 
     for (i = 0; i < 4; i ++)
       {
@@ -1879,8 +1880,7 @@ apply_border_op (const Program  *program,
   float widths[4];
   float heights[4];
   int i;
-  OP_PRINT (" -> Border (%f, %f, %f, %f)",
-            op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
+  OP_PRINT (" -> Border Outline");
 
   outline[0] = o->bounds.origin.x;
   outline[1] = o->bounds.origin.y;
@@ -1893,10 +1893,19 @@ apply_border_op (const Program  *program,
       heights[i] = o->corner[i].height;
     }
 
-  glUniform4fv (program->border.widths_location, 1, op->border.widths);
   glUniform4fv (program->border.outline_location, 1, outline);
   glUniform4fv (program->border.corner_widths_location, 1, widths);
   glUniform4fv (program->border.corner_heights_location, 1, heights);
+}
+
+static inline void
+apply_border_width_op (const Program  *program,
+                       const RenderOp *op)
+{
+  OP_PRINT (" -> Border width (%f, %f, %f, %f)",
+            op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
+
+  glUniform4fv (program->border.widths_location, 1, op->border.widths);
 }
 
 static inline void
@@ -2606,6 +2615,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
         case OP_CHANGE_BORDER:
           apply_border_op (program, op);
+          break;
+
+        case OP_CHANGE_BORDER_WIDTH:
+          apply_border_width_op (program, op);
           break;
 
         case OP_CHANGE_UNBLURRED_OUTSET_SHADOW:

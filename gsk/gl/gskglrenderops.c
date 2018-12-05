@@ -537,28 +537,40 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
 
 void
 ops_set_border (RenderOpBuilder      *builder,
-                const float          *widths,
                 const GskRoundedRect *outline)
 {
   RenderOp op;
 
-  if (memcmp (&builder->current_program_state->border.widths,
-              widths, sizeof (float) * 4) == 0 &&
-      memcmp (&builder->current_program_state->border.outline,
+  if (memcmp (&builder->current_program_state->border.outline,
               outline, sizeof (GskRoundedRect)) == 0)
     return;
-
-  memcpy (&builder->program_state[builder->current_program->index].border.widths,
-          widths, sizeof (float) * 4);
 
   builder->current_program_state->border.outline = *outline;
 
   op.op = OP_CHANGE_BORDER;
+  op.border.outline = *outline;
+  g_array_append_val (builder->render_ops, op);
+}
+
+void
+ops_set_border_width (RenderOpBuilder *builder,
+                      const float     *widths)
+{
+  RenderOp op;
+
+  if (memcmp (builder->current_program_state->border.widths,
+              widths, sizeof (float) * 4) == 0)
+    return;
+
+  memcpy (&builder->current_program_state->border.widths,
+          widths, sizeof (float) * 4);
+
+  op.op = OP_CHANGE_BORDER_WIDTH;
   op.border.widths[0] = widths[0];
   op.border.widths[1] = widths[1];
   op.border.widths[2] = widths[2];
   op.border.widths[3] = widths[3];
-  op.border.outline = *outline;
+
   g_array_append_val (builder->render_ops, op);
 }
 
