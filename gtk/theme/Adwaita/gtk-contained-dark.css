@@ -799,11 +799,17 @@ menubar:backdrop, .menubar:backdrop { background-color: #3f3e40; }
 
 menubar > menuitem, .menubar > menuitem { min-height: 16px; padding: 4px 8px; }
 
+menubar > menuitem menu, .menubar > menuitem menu { border-radius: 0 0 5px 5px; }
+
+menubar > menuitem menu menu, .menubar > menuitem menu menu { border-radius: 5px; }
+
 menubar > menuitem:hover, .menubar > menuitem:hover { box-shadow: inset 0 -3px #15539e; color: #3584e4; }
 
 menubar > menuitem:disabled, .menubar > menuitem:disabled { color: #969696; box-shadow: none; }
 
-menu, .menu, .context-menu { padding: 2px 0px; background-color: #2b2831; border: 1px solid #252526; }
+.background.popup { background-color: transparent; }
+
+menu, .menu, .context-menu { padding: 8px 0px; background-color: #2b2831; border: 1px solid #252526; border-radius: 5px; }
 
 .csd menu, .csd .menu, .csd .context-menu { border: none; }
 
@@ -829,9 +835,9 @@ menu menuitem label:dir(rtl), menu menuitem label:dir(ltr), .menu menuitem label
 
 menu > arrow, .menu > arrow, .context-menu > arrow { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; min-height: 16px; min-width: 16px; padding: 4px; background-color: #2b2831; border-radius: 0; }
 
-menu > arrow.top, .menu > arrow.top, .context-menu > arrow.top { margin-top: -6px; border-bottom: 1px solid #3a3740; -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+menu > arrow.top, .menu > arrow.top, .context-menu > arrow.top { margin-top: -6px; border-bottom: 1px solid #3a3740; border-top-right-radius: 5px; border-top-left-radius: 5px; -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
 
-menu > arrow.bottom, .menu > arrow.bottom, .context-menu > arrow.bottom { margin-bottom: -6px; border-top: 1px solid #3a3740; -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+menu > arrow.bottom, .menu > arrow.bottom, .context-menu > arrow.bottom { margin-bottom: -6px; border-top: 1px solid #3a3740; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 menu > arrow:hover, .menu > arrow:hover, .context-menu > arrow:hover { background-color: #3a3740; }
 
@@ -1909,7 +1915,7 @@ decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(
 
 .ssd decoration { box-shadow: 0 0 0 1px rgba(37, 37, 38, 0.9); }
 
-.csd.popup decoration { border-radius: 0; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(37, 37, 38, 0.8); }
+.csd.popup decoration { border-radius: 5px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(37, 37, 38, 0.8); }
 
 tooltip.csd decoration { border-radius: 5px; box-shadow: none; }
 
