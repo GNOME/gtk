@@ -963,6 +963,11 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-right-style: solid;
 }
 
+%linked_only {
+    border-radius: 3px;
+    border-style: solid;
+}
+
 // 1st/last child are at text start/end
 %linked {
   @extend %linked_middle;
@@ -970,16 +975,13 @@ toolbar.inline-toolbar toolbutton:backdrop {
   &:dir(ltr) {
     &:first-child { @extend %linked_left; }
     &:last-child { @extend %linked_right; }
+    &:only-child { @extend %linked_only; }
   }
 
   &:dir(rtl) {
     &:first-child { @extend %linked_right; }
     &:last-child { @extend %linked_left; }
-  }
-
-  &:only-child {
-    border-radius: 3px;
-    border-style: solid;
+    &:only-child { @extend %linked_only; }
   }
 }
 
