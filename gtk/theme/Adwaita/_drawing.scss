@@ -582,9 +582,6 @@
 // top, bottom, right, left
 //
 
-  $_undershoot_color_dark: transparentize(black, 0.8);
-  $_undershoot_color_light: transparentize(white, 0.8);
-
   $_gradient_dir: left;
   $_dash_bg_size: 10px 1px;
   $_gradient_repeat: repeat-x;
@@ -599,15 +596,34 @@
     $_bg_pos: $p center;
   }
 
-  background-image: linear-gradient(to $_gradient_dir, // this is the dashed line
-                                    $_undershoot_color_light 50%,
-                                    $_undershoot_color_dark 50%);
-
   padding-#{$p}: 1px;
   background-size: $_dash_bg_size;
   background-repeat: $_gradient_repeat;
   background-origin: content-box;
   background-position: $_bg_pos;
   border: none;
-  box-shadow: none;
+
+  // Replace dashed line with light shadow
+  $_undershoot_shadow_color: darken(white, 20%);
+  $_undershoot_shadow_alpha: 0.8;
+  @if $variant=='dark' {
+    $us_shadow_color: lighten(black, 8%);
+  }
+
+  @if ($p == left) {
+    box-shadow: inset 2px 0 0 transparentize($_undershoot_shadow_color, $_undershoot_shadow_alpha),
+                inset 1px 0 0 transparentize(darken($_undershoot_shadow_color, 20%), $_undershoot_shadow_alpha);
+  }
+  @else if ($p == right) {
+    box-shadow: inset -2px 0 0 transparentize($_undershoot_shadow_color,$_undershoot_shadow_alpha),
+                inset -1px 0 0 transparentize( darken($_undershoot_shadow_color, 20%), $_undershoot_shadow_alpha);
+  }
+  @else if ($p == top) {
+    box-shadow: inset 0 2px 0 0 transparentize($_undershoot_shadow_color,$_undershoot_shadow_alpha),
+                inset 0 1px 0 0 transparentize(darken($_undershoot_shadow_color, 20%), $_undershoot_shadow_alpha);
+  }
+  @else if ($p == bottom) {
+      box-shadow: inset 0 -2px 0 0 transparentize($_undershoot_shadow_color,$_undershoot_shadow_alpha),
+                  inset 0 -1px 0 0 transparentize(darken($_undershoot_shadow_color, 20%), $_undershoot_shadow_alpha);
+  }
 }
