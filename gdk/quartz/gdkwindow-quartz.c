@@ -141,7 +141,7 @@ static CGContextRef
 gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 				    gboolean             antialias)
 {
-  CGContextRef cg_context;
+  CGContextRef cg_context = NULL;
   CGSize scale;
 
   if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
@@ -158,13 +158,15 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
       if (![window_impl->view lockFocusIfCanDraw])
         return NULL;
     }
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 101000
+    cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+#else
   if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
-#else
     cg_context = [[NSGraphicsContext currentContext] CGContext];
 #endif
+
   if (!cg_context)
     return NULL;
   CGContextSaveGState (cg_context);
@@ -544,7 +546,11 @@ _gdk_quartz_window_debug_highlight (GdkWindow *window, gint number)
     [debug_window[number] close];
 
   debug_window[number] = [[NSWindow alloc] initWithContentRect:rect
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+                                                     styleMask:(NSUInteger)GDK_QUARTZ_BORDERLESS_WINDOW
+#else
                                                      styleMask:(NSWindowStyleMask)GDK_QUARTZ_BORDERLESS_WINDOW
+#endif
 			                               backing:NSBackingStoreBuffered
 			                                 defer:NO];
 
@@ -3097,7 +3103,7 @@ gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
   colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
   cg_context = CGBitmapContextCreate (NULL,
                                       1, 1, 8, 4, colorspace,
-                                      kCGImageAlphaPremultipliedLast);
+                                      (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
   CGColorSpaceRelease (colorspace);
 
   return cg_context;

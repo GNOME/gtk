@@ -262,7 +262,11 @@
 }
 
 -(id)initWithContentRect:(NSRect)contentRect
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+               styleMask:(NSUInteger)styleMask
+#else
                styleMask:(NSWindowStyleMask)styleMask
+#endif
                  backing:(NSBackingStoreType)backingType
                    defer:(BOOL)flag
                   screen:(NSScreen *)screen
@@ -375,6 +379,22 @@
 
   initialPositionKnown = NO;
 }
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+- (NSPoint)convertPointToScreen:(NSPoint)point
+{
+  NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
+  NSRect outrect = [self convertRectToScreen: inrect];
+  return (NSPoint)((CGRect)outrect).origin;
+
+}
+
+- (NSPoint)convertPointFromScreen:(NSPoint)point
+{
+  NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
+  NSRect outrect = [self convertRectFromScreen: inrect];
+  return (NSPoint)((CGRect)outrect).origin;
+}
+#endif
 
 - (BOOL)trackManualMove
 {

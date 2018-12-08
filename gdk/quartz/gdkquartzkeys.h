@@ -49,8 +49,8 @@ GType gdk_quartz_keymap_get_type (void);
 typedef enum
   {
     GDK_QUARTZ_FLAGS_CHANGED = NSFlagsChanged,
-    GDK_QUARTZ_KEY_UP = NSEventTypeKeyUp,
-    GDK_QUARTZ_KEY_DOWN = NSEventTypeKeyDown,
+    GDK_QUARTZ_KEY_UP = NSKeyUp,
+    GDK_QUARTZ_KEY_DOWN = NSKeyDown,
     GDK_QUARTZ_MOUSE_ENTERED = NSMouseEntered,
     GDK_QUARTZ_MOUSE_EXITED = NSMouseExited,
     GDK_QUARTZ_SCROLL_WHEEL = NSScrollWheel,
@@ -78,7 +78,7 @@ typedef enum
 
 typedef enum
   {
-   GDK_QUARTZ_EVENT_MASK_ANY = NSEventMaskAny,
+   GDK_QUARTZ_EVENT_MASK_ANY = NSAnyEventMask,
   } GdkQuartzEventMask;
 
 #else
