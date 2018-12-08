@@ -32,9 +32,16 @@ gdk_quartz_osx_version (void)
 
   if (minor == GDK_OSX_UNSUPPORTED)
     {
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
       OSErr err = Gestalt (gestaltSystemVersionMinor, (SInt32*)&minor);
 
       g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
+#else
+      NSOperatingSystemVersion version;
+
+      version = [[NSProcessInfo processInfo] operatingSystemVersion];
+      minor = version.minorVersion;
+#endif
     }
 
   if (minor < GDK_OSX_MIN)

@@ -52,6 +52,27 @@ typedef struct
   GdkWMDecoration decor;
 } FullscreenSavedGeometry;
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+typedef enum
+{
+ GDK_QUARTZ_BORDERLESS_WINDOW = NSBorderlessWindowMask,
+ GDK_QUARTZ_CLOSABLE_WINDOW = NSClosableWindowMask,
+ GDK_QUARTZ_FULLSCREEN_WINDOW = NSFullScreenWindowMask,
+ GDK_QUARTZ_MINIATURIZABLE_WINDOW = NSMiniaturizableWindowMask,
+ GDK_QUARTZ_RESIZABLE_WINDOW = NSResizableWindowMask,
+ GDK_QUARTZ_TITLED_WINDOW = NSTitledWindowMask,
+} GdkQuartzWindowMask;
+#else
+typedef enum
+{
+ GDK_QUARTZ_BORDERLESS_WINDOW = NSWindowStyleMaskBorderless,
+ GDK_QUARTZ_CLOSABLE_WINDOW = NSWindowStyleMaskClosable,
+ GDK_QUARTZ_FULLSCREEN_WINDOW = NSWindowStyleMaskFullScreen,
+ GDK_QUARTZ_MINIATURIZABLE_WINDOW = NSWindowStyleMaskMiniaturizable,
+ GDK_QUARTZ_RESIZABLE_WINDOW = NSWindowStyleMaskResizable,
+ GDK_QUARTZ_TITLED_WINDOW = NSWindowStyleMaskTitled,
+} GdkQuartzWindowMask;
+#endif
 
 #ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
 static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
@@ -120,7 +141,7 @@ static CGContextRef
 gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 				    gboolean             antialias)
 {
-  CGContextRef cg_context;
+  CGContextRef cg_context = NULL;
   CGSize scale;
 
   if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
@@ -137,10 +158,15 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
       if (![window_impl->view lockFocusIfCanDraw])
         return NULL;
     }
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 101000
+    cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+#else
   if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
     cg_context = [[NSGraphicsContext currentContext] CGContext];
+#endif
+
   if (!cg_context)
     return NULL;
   CGContextSaveGState (cg_context);
@@ -171,57 +197,13 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
 }
 
 static void
-check_grab_unmap (GdkWindow *window)
-{
-  GList *list, *l;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *device_manager;
-
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_FLOATING);
-  for (l = list; l; l = l->next)
-    {
-      _gdk_display_end_device_grab (display, l->data, 0, window, TRUE);
-    }
-
-  g_list_free (list);
-}
-
-static void
-check_grab_destroy (GdkWindow *window)
-{
-  GList *list, *l;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *device_manager;
-
-  /* Make sure there is no lasting grab in this native window */
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_MASTER);
-
-  for (l = list; l; l = l->next)
-    {
-      GdkDeviceGrabInfo *grab;
-
-      grab = _gdk_display_get_last_device_grab (display, l->data);
-      if (grab && grab->native_window == window)
-        {
-          /* Serials are always 0 in quartz, but for clarity: */
-          grab->serial_end = grab->serial_start;
-          grab->implicit_ungrab = TRUE;
-        }
-    }
-
-  g_list_free (list);
-}
-
-static void
 gdk_window_impl_quartz_finalize (GObject *object)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (object);
+  GdkDisplay *display = gdk_window_get_display (impl->wrapper);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
 
-  check_grab_destroy (GDK_WINDOW_IMPL_QUARTZ (object)->wrapper);
+  gdk_seat_ungrab (seat);
 
   if (impl->transient_for)
     g_object_unref (impl->transient_for);
@@ -239,10 +221,14 @@ gdk_window_impl_quartz_finalize (GObject *object)
  *
  * If drawable NULL, no flushing is done, only registering that a flush was
  * done externally.
+ *
+ * Note: As of MacOS 10.14 NSWindow flushWindow is deprecated because
+ * Quartz has the ability to handle deferred drawing on its own.
  */
 void
 _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
 {
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
   static struct timeval prev_tv;
   static gint intervals[4];
   static gint index;
@@ -268,6 +254,7 @@ _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
     }
   else
     prev_tv = tv;
+#endif
 }
 
 static cairo_user_data_key_t gdk_quartz_cairo_key;
@@ -398,7 +385,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
 
           toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
           nswindow = toplevel_impl->toplevel;
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
           /* In theory, we could skip the flush disabling, since we only
            * have one NSView.
            */
@@ -408,6 +395,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
               [nswindow disableFlushWindow];
               update_nswindows = g_slist_prepend (update_nswindows, nswindow);
             }
+#endif
         }
     }
 
@@ -431,10 +419,12 @@ _gdk_quartz_display_before_process_all_updates (GdkDisplay *display)
     {
       [NSAnimationContext endGrouping];
     }
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101100
   else
     {
       NSDisableScreenUpdates ();
     }
+#endif
 }
 
 void
@@ -452,9 +442,10 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
       [[nswindow contentView] displayIfNeeded];
 
       _gdk_quartz_window_flush (NULL);
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
+#endif
       [nswindow release];
 
       tmp_list = tmp_list->next;
@@ -468,10 +459,12 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
     {
       [NSAnimationContext beginGrouping];
     }
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101100
   else
     {
       NSEnableScreenUpdates ();
     }
+#endif
 }
 
 static const gchar *
@@ -553,7 +546,11 @@ _gdk_quartz_window_debug_highlight (GdkWindow *window, gint number)
     [debug_window[number] close];
 
   debug_window[number] = [[NSWindow alloc] initWithContentRect:rect
-                                                     styleMask:NSBorderlessWindowMask
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+                                                     styleMask:(NSUInteger)GDK_QUARTZ_BORDERLESS_WINDOW
+#else
+                                                     styleMask:(NSWindowStyleMask)GDK_QUARTZ_BORDERLESS_WINDOW
+#endif
 			                               backing:NSBackingStoreBuffered
 			                                 defer:NO];
 
@@ -880,14 +877,14 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
             ((attributes_mask & GDK_WA_TYPE_HINT) &&
               attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN))
           {
-            style_mask = NSBorderlessWindowMask;
+            style_mask = GDK_QUARTZ_BORDERLESS_WINDOW;
           }
         else
           {
-            style_mask = (NSTitledWindowMask |
-                          NSClosableWindowMask |
-                          NSMiniaturizableWindowMask |
-                          NSResizableWindowMask);
+            style_mask = (GDK_QUARTZ_TITLED_WINDOW |
+                          GDK_QUARTZ_CLOSABLE_WINDOW |
+                          GDK_QUARTZ_MINIATURIZABLE_WINDOW |
+                          GDK_QUARTZ_RESIZABLE_WINDOW);
           }
 
 	impl->toplevel = [[GdkQuartzNSWindow alloc] initWithContentRect:content_rect 
@@ -1147,14 +1144,15 @@ void
 gdk_window_quartz_hide (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
+  gdk_seat_ungrab (seat);
 
   /* Make sure we're not stuck in fullscreen mode. */
 #ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 #endif
-
-  check_grab_unmap (window);
 
   _gdk_window_clear_update_area (window);
 
@@ -1626,7 +1624,7 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
        * windows with borders and the root relative coordinates
        * otherwise.
        */
-      if ([impl->toplevel styleMask] == NSBorderlessWindowMask)
+      if ([impl->toplevel styleMask] == GDK_QUARTZ_BORDERLESS_WINDOW)
         {
           _gdk_quartz_window_xy_to_gdk_xy (ns_rect.origin.x,
                                            ns_rect.origin.y + ns_rect.size.height,
@@ -2353,13 +2351,14 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
   if (decorations == 0 || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP ||
       impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN )
     {
-      new_mask = NSBorderlessWindowMask;
+      new_mask = GDK_QUARTZ_BORDERLESS_WINDOW;
     }
   else
     {
       /* FIXME: Honor other GDK_DECOR_* flags. */
-      new_mask = (NSTitledWindowMask | NSClosableWindowMask |
-                    NSMiniaturizableWindowMask | NSResizableWindowMask);
+      new_mask = (GDK_QUARTZ_TITLED_WINDOW | GDK_QUARTZ_CLOSABLE_WINDOW |
+                  GDK_QUARTZ_MINIATURIZABLE_WINDOW |
+                  GDK_QUARTZ_RESIZABLE_WINDOW);
     }
 
   GDK_QUARTZ_ALLOC_POOL;
@@ -2377,14 +2376,14 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
       /* Properly update the size of the window when the titlebar is
        * added or removed.
        */
-      if (old_mask == NSBorderlessWindowMask &&
-          new_mask != NSBorderlessWindowMask)
+      if (old_mask == GDK_QUARTZ_BORDERLESS_WINDOW &&
+          new_mask != GDK_QUARTZ_BORDERLESS_WINDOW)
         {
           rect = [NSWindow frameRectForContentRect:rect styleMask:new_mask];
 
         }
-      else if (old_mask != NSBorderlessWindowMask &&
-               new_mask == NSBorderlessWindowMask)
+      else if (old_mask != GDK_QUARTZ_BORDERLESS_WINDOW &&
+               new_mask == GDK_QUARTZ_BORDERLESS_WINDOW)
         {
           rect = [NSWindow contentRectForFrameRect:rect styleMask:old_mask];
         }
@@ -2400,13 +2399,14 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
 
           [(id<CanSetStyleMask>)impl->toplevel setStyleMask:new_mask];
 
-          /* It appears that unsetting and then resetting NSTitledWindowMask
-           * does not reset the title in the title bar as might be expected.
+          /* It appears that unsetting and then resetting
+           * GDK_QUARTZ_TITLED_WINDOW does not reset the title in the
+           * title bar as might be expected.
            *
            * In theory we only need to set this if new_mask includes
-           * NSTitledWindowMask. This behaved extremely oddly when
+           * GDK_QUARTZ_TITLED_WINDOW. This behaved extremely oddly when
            * conditionalized upon that and since it has no side effects (i.e.
-           * if NSTitledWindowMask is not requested, the title will not be
+           * if GDK_QUARTZ_TITLED_WINDOW is not requested, the title will not be
            * displayed) just do it unconditionally. We also must null check
            * 'title' before setting it to avoid crashing.
            */
@@ -2439,7 +2439,7 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
           [impl->toplevel setContentView:old_view];
         }
 
-      if (new_mask == NSBorderlessWindowMask)
+      if (new_mask == GDK_QUARTZ_BORDERLESS_WINDOW)
         {
           [impl->toplevel setContentSize:rect.size];
           [impl->toplevel setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
@@ -2474,7 +2474,7 @@ gdk_quartz_window_get_decorations (GdkWindow       *window,
   if (decorations)
     {
       /* Borderless is 0, so we can't check it as a bit being set. */
-      if ([impl->toplevel styleMask] == NSBorderlessWindowMask)
+      if ([impl->toplevel styleMask] == GDK_QUARTZ_BORDERLESS_WINDOW)
         {
           *decorations = 0;
         }
@@ -2517,19 +2517,19 @@ gdk_quartz_window_set_functions (GdkWindow    *window,
       NSUInteger mask = [impl->toplevel styleMask];
 
       if (min)
-        mask = mask | NSMiniaturizableWindowMask;
+        mask = mask | GDK_QUARTZ_MINIATURIZABLE_WINDOW;
       else
-        mask = mask & ~NSMiniaturizableWindowMask;
+        mask = mask & ~GDK_QUARTZ_MINIATURIZABLE_WINDOW;
 
       if (max)
-        mask = mask | NSResizableWindowMask;
+        mask = mask | GDK_QUARTZ_RESIZABLE_WINDOW;
       else
-        mask = mask & ~NSResizableWindowMask;
+        mask = mask & ~GDK_QUARTZ_RESIZABLE_WINDOW;
 
       if (close)
-        mask = mask | NSClosableWindowMask;
+        mask = mask | GDK_QUARTZ_CLOSABLE_WINDOW;
       else
-        mask = mask & ~NSClosableWindowMask;
+        mask = mask & ~GDK_QUARTZ_CLOSABLE_WINDOW;
 
       [impl->toplevel setStyleMask:mask];
     }
@@ -2662,7 +2662,7 @@ window_is_fullscreen (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
-  return ([impl->toplevel styleMask] & NSFullScreenWindowMask) != 0;
+  return ([impl->toplevel styleMask] & GDK_QUARTZ_FULLSCREEN_WINDOW) != 0;
 }
 
 static void
@@ -2838,31 +2838,26 @@ gdk_quartz_window_set_keep_below (GdkWindow *window,
   [impl->toplevel setLevel: level - (setting ? 1 : 0)];
 }
 
+/* X11 "feature" not useful in other backends. */
 static GdkWindow *
 gdk_quartz_window_get_group (GdkWindow *window)
 {
-  g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
     return NULL;
-
-  /* FIXME: Implement */
-
-  return NULL;
 }
 
+/* X11 "feature" not useful in other backends. */
 static void
 gdk_quartz_window_set_group (GdkWindow *window,
                              GdkWindow *leader)
 {
-  /* FIXME: Implement */	
 }
 
 static void
 gdk_quartz_window_destroy_notify (GdkWindow *window)
 {
-  check_grab_destroy (window);
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
+  gdk_seat_ungrab (seat);
 }
 
 static void
@@ -3108,7 +3103,7 @@ gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
   colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
   cg_context = CGBitmapContextCreate (NULL,
                                       1, 1, 8, 4, colorspace,
-                                      kCGImageAlphaPremultipliedLast);
+                                      (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
   CGColorSpaceRelease (colorspace);
 
   return cg_context;

@@ -87,52 +87,20 @@ _gdk_quartz_display_get_keymap (GdkDisplay *display)
  */
 static guint *keyval_array = NULL;
 
-static inline UniChar
-macroman2ucs (unsigned char c)
-{
-  /* Precalculated table mapping MacRoman-128 to Unicode. Generated
-     by creating single element CFStringRefs then extracting the
-     first character. */
-  
-  static const unsigned short table[128] = {
-    0xc4, 0xc5, 0xc7, 0xc9, 0xd1, 0xd6, 0xdc, 0xe1,
-    0xe0, 0xe2, 0xe4, 0xe3, 0xe5, 0xe7, 0xe9, 0xe8,
-    0xea, 0xeb, 0xed, 0xec, 0xee, 0xef, 0xf1, 0xf3,
-    0xf2, 0xf4, 0xf6, 0xf5, 0xfa, 0xf9, 0xfb, 0xfc,
-    0x2020, 0xb0, 0xa2, 0xa3, 0xa7, 0x2022, 0xb6, 0xdf,
-    0xae, 0xa9, 0x2122, 0xb4, 0xa8, 0x2260, 0xc6, 0xd8,
-    0x221e, 0xb1, 0x2264, 0x2265, 0xa5, 0xb5, 0x2202, 0x2211,
-    0x220f, 0x3c0, 0x222b, 0xaa, 0xba, 0x3a9, 0xe6, 0xf8,
-    0xbf, 0xa1, 0xac, 0x221a, 0x192, 0x2248, 0x2206, 0xab,
-    0xbb, 0x2026, 0xa0, 0xc0, 0xc3, 0xd5, 0x152, 0x153,
-    0x2013, 0x2014, 0x201c, 0x201d, 0x2018, 0x2019, 0xf7, 0x25ca,
-    0xff, 0x178, 0x2044, 0x20ac, 0x2039, 0x203a, 0xfb01, 0xfb02,
-    0x2021, 0xb7, 0x201a, 0x201e, 0x2030, 0xc2, 0xca, 0xc1,
-    0xcb, 0xc8, 0xcd, 0xce, 0xcf, 0xcc, 0xd3, 0xd4,
-    0xf8ff, 0xd2, 0xda, 0xdb, 0xd9, 0x131, 0x2c6, 0x2dc,
-    0xaf, 0x2d8, 0x2d9, 0x2da, 0xb8, 0x2dd, 0x2db, 0x2c7
-  };
-
-  if (c < 128)
-    return c;
-  else
-    return table[c - 128];
-}
-
 const static struct {
   guint keycode;
   guint keyval;
   unsigned int modmask; /* So we can tell when a mod key is pressed/released */
 } modifier_keys[] = {
-  {  54, GDK_KEY_Meta_R,    NSCommandKeyMask },
-  {  55, GDK_KEY_Meta_L,    NSCommandKeyMask },
-  {  56, GDK_KEY_Shift_L,   NSShiftKeyMask },
-  {  57, GDK_KEY_Caps_Lock, NSAlphaShiftKeyMask },
-  {  58, GDK_KEY_Alt_L,     NSAlternateKeyMask },
-  {  59, GDK_KEY_Control_L, NSControlKeyMask },
-  {  60, GDK_KEY_Shift_R,   NSShiftKeyMask },
-  {  61, GDK_KEY_Alt_R,     NSAlternateKeyMask },
-  {  62, GDK_KEY_Control_R, NSControlKeyMask }
+  {  54, GDK_KEY_Meta_R,    GDK_QUARTZ_COMMAND_KEY_MASK },
+  {  55, GDK_KEY_Meta_L,    GDK_QUARTZ_COMMAND_KEY_MASK },
+  {  56, GDK_KEY_Shift_L,   GDK_QUARTZ_SHIFT_KEY_MASK },
+  {  57, GDK_KEY_Caps_Lock, GDK_QUARTZ_ALPHA_SHIFT_KEY_MASK },
+  {  58, GDK_KEY_Alt_L,     GDK_QUARTZ_ALTERNATE_KEY_MASK },
+  {  59, GDK_KEY_Control_L, GDK_QUARTZ_CONTROL_KEY_MASK },
+  {  60, GDK_KEY_Shift_R,   GDK_QUARTZ_SHIFT_KEY_MASK },
+  {  61, GDK_KEY_Alt_R,     GDK_QUARTZ_ALTERNATE_KEY_MASK },
+  {  62, GDK_KEY_Control_R, GDK_QUARTZ_CONTROL_KEY_MASK }
 };
 
 const static struct {
@@ -783,11 +751,11 @@ _gdk_quartz_keys_event_type (NSEvent *event)
   
   switch ([event type])
     {
-    case NSKeyDown:
+    case GDK_QUARTZ_KEY_DOWN:
       return GDK_KEY_PRESS;
-    case NSKeyUp:
+    case GDK_QUARTZ_KEY_UP:
       return GDK_KEY_RELEASE;
-    case NSFlagsChanged:
+    case GDK_QUARTZ_FLAGS_CHANGED:
       break;
     default:
       g_assert_not_reached ();
