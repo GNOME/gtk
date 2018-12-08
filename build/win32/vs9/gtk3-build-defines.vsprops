@@ -45,7 +45,7 @@
 	/>
 	<UserMacro
 		Name="GtkGdkCommonLibs"
-		Value="imm32.lib"
+		Value="pangowin32-1.0.lib imm32.lib"
 	/>
 	<UserMacro
 		Name="GdkBroadwayAdditionalLibs"
@@ -57,7 +57,7 @@
 	/>
 	<UserMacro
 		Name="GtkAdditionalLibs"
-		Value="atk-1.0.lib pangowin32-1.0.lib winspool.lib comctl32.lib $(GtkGdkCommonLibs)"
+		Value="atk-1.0.lib winspool.lib comctl32.lib $(GtkGdkCommonLibs)"
 	/>
 	<UserMacro
 		Name="GtkIntrospectNMakeCmd"
