@@ -2436,7 +2436,7 @@ propagate_event_up (GtkWidget *widget,
        */
       if (!gtk_widget_is_sensitive (widget))
         handled_event = event->any.type != GDK_SCROLL;
-      else
+      else if (gtk_widget_get_realized (widget))
         handled_event = gtk_widget_event (widget, event);
 
       tmp = gtk_widget_get_parent (widget);
@@ -2490,7 +2490,7 @@ propagate_event_down (GtkWidget *widget,
           else
             handled_event = TRUE;
         }
-      else
+      else if (gtk_widget_get_realized (widget))
         handled_event = _gtk_widget_captured_event (widget, event);
     }
   g_list_free_full (widgets, (GDestroyNotify)g_object_unref);
