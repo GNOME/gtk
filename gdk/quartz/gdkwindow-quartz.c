@@ -3103,7 +3103,7 @@ gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
   colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
   cg_context = CGBitmapContextCreate (NULL,
                                       1, 1, 8, 4, colorspace,
-                                      kCGImageAlphaPremultipliedLast);
+                                      (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
   CGColorSpaceRelease (colorspace);
 
   return cg_context;
