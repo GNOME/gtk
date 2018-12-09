@@ -14,7 +14,7 @@
 # Bruno Brouard <annoa.b@gmail.com>, 2009,2011-12.
 # Claude Paroz <claude@2xlibre.net>, 2007-2018.
 # Gérard Baylard <Geodebay@gmail.com>, 2011.
-# Charles Monzat <superboa@hotmail.fr>, 2018.
+# Charles Monzat <charles.monzat@numericable.fr>, 2018.
 #
 # spin button : bouton compteur
 # spinner : indicateur d'activité
@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-12 11:11+0000\n"
-"PO-Revision-Date: 2018-08-14 13:25+0200\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"POT-Creation-Date: 2018-12-04 20:57+0000\n"
+"PO-Revision-Date: 2018-11-13 16:26+0100\n"
+"Last-Translator: Charles Monzat <charles.monzat@numericable.fr>\n"
 "Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -412,7 +412,7 @@ msgstr "Indique si le groupe d’actions est visible."
 
 #: gtk/deprecated/gtkactiongroup.c:242
 msgid "Accelerator Group"
-msgstr "Group d’accélérateurs"
+msgstr "Groupe d’accélérateurs"
 
 #: gtk/deprecated/gtkactiongroup.c:243
 msgid "The accelerator group the actions of this group should use."
@@ -971,23 +971,23 @@ msgstr "Colonnes"
 msgid "The number of columns in the table"
 msgstr "Le nombre de colonnes dans la table"
 
-#: gtk/deprecated/gtktable.c:203 gtk/gtkgrid.c:1758
+#: gtk/deprecated/gtktable.c:203 gtk/gtkgrid.c:1756
 msgid "Row spacing"
 msgstr "Espacement des lignes"
 
-#: gtk/deprecated/gtktable.c:204 gtk/gtkgrid.c:1759
+#: gtk/deprecated/gtktable.c:204 gtk/gtkgrid.c:1757
 msgid "The amount of space between two consecutive rows"
 msgstr "Espace entre deux lignes consécutives"
 
-#: gtk/deprecated/gtktable.c:212 gtk/gtkgrid.c:1765
+#: gtk/deprecated/gtktable.c:212 gtk/gtkgrid.c:1763
 msgid "Column spacing"
 msgstr "Espacement des colonnes"
 
-#: gtk/deprecated/gtktable.c:213 gtk/gtkgrid.c:1766
+#: gtk/deprecated/gtktable.c:213 gtk/gtkgrid.c:1764
 msgid "The amount of space between two consecutive columns"
 msgstr "Espace entre deux colonnes consécutives"
 
-#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3841
+#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:285 gtk/gtkflowbox.c:3841
 #: gtk/gtkstack.c:459 gtk/gtktoolbar.c:597 gtk/gtktoolitemgroup.c:1690
 msgid "Homogeneous"
 msgstr "Homogène"
@@ -998,11 +998,11 @@ msgstr ""
 "Si vrai (TRUE), les cellules du tableau ont toutes même largeur et même "
 "hauteur"
 
-#: gtk/deprecated/gtktable.c:229 gtk/gtkgrid.c:1797
+#: gtk/deprecated/gtktable.c:229 gtk/gtkgrid.c:1795
 msgid "Left attachment"
 msgstr "Liaison à gauche"
 
-#: gtk/deprecated/gtktable.c:230 gtk/gtkgrid.c:1798 gtk/gtkmenu.c:958
+#: gtk/deprecated/gtktable.c:230 gtk/gtkgrid.c:1796 gtk/gtkmenu.c:958
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "Le numéro de colonne à laquelle le côté gauche de l’élément enfant est "
@@ -1018,7 +1018,7 @@ msgstr ""
 "Le numéro de colonne à laquelle le côté droit de l’élément graphique enfant "
 "est attaché"
 
-#: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1804
+#: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1802
 msgid "Top attachment"
 msgstr "Liaison en haut"
 
@@ -1138,7 +1138,7 @@ msgstr "Couleur de succès"
 msgid "Success color for symbolic icons"
 msgstr "Couleur de succès pour les icônes symboliques"
 
-#: gtk/deprecated/gtktrayicon-x11.c:168 gtk/gtkbox.c:345
+#: gtk/deprecated/gtktrayicon-x11.c:168 gtk/gtkbox.c:350
 msgid "Padding"
 msgstr "Remplissage"
 
@@ -1348,11 +1348,11 @@ msgstr "Valeur de la cible de l’action"
 msgid "The parameter for action invocations"
 msgstr "Le paramètre pour les appels de l’action"
 
-#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:2013
+#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:358 gtk/gtkheaderbar.c:2013
 msgid "Pack type"
 msgstr "Type d’empaquetage"
 
-#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:2014
+#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:359 gtk/gtkheaderbar.c:2014
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1360,14 +1360,14 @@ msgstr ""
 "Le GtkPackType indiquant si l’élément enfant est placé par rapport au début "
 "ou la fin du conteneur parent"
 
-#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:2020
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1738
+#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020
+#: gtk/gtknotebook.c:840 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1738
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Position"
 
-#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:2021
-#: gtk/gtknotebook.c:839 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
+#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:366 gtk/gtkheaderbar.c:2021
+#: gtk/gtknotebook.c:841 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
 msgstr "Le rang de l’élément enfant dans le parent"
 
@@ -1515,35 +1515,43 @@ msgstr "Texte par défaut pour l’élément graphique"
 msgid "The default text appearing when there are no applications"
 msgstr "Le texte apparaissant par défaut quand il n’y pas d’application"
 
-#: gtk/gtkapplication.c:650
+#: gtk/gtkapplication.c:656
 msgid "Register session"
 msgstr "Enregistre la session du"
 
-#: gtk/gtkapplication.c:651
+#: gtk/gtkapplication.c:657
 msgid "Register with the session manager"
 msgstr "Enregistrer par le gestionnaire de sessions"
 
-#: gtk/gtkapplication.c:657
+#: gtk/gtkapplication.c:674
+msgid "Screensaver Active"
+msgstr "Économiseur d’écran actif"
+
+#: gtk/gtkapplication.c:675
+msgid "Whether the screensaver is active"
+msgstr "Indique si l’économiseur d’écran est actif"
+
+#: gtk/gtkapplication.c:681
 msgid "Application menu"
 msgstr "Menu de l’application"
 
-#: gtk/gtkapplication.c:658
+#: gtk/gtkapplication.c:682
 msgid "The GMenuModel for the application menu"
 msgstr "Le GMenuModel pour le menu de l’application"
 
-#: gtk/gtkapplication.c:664
+#: gtk/gtkapplication.c:688
 msgid "Menubar"
 msgstr "Barre de menu"
 
-#: gtk/gtkapplication.c:665
+#: gtk/gtkapplication.c:689
 msgid "The GMenuModel for the menubar"
 msgstr "Le GMenuModel pour la barre de menu"
 
-#: gtk/gtkapplication.c:671
+#: gtk/gtkapplication.c:695
 msgid "Active window"
 msgstr "Fenêtre active"
 
-#: gtk/gtkapplication.c:672
+#: gtk/gtkapplication.c:696
 msgid "The window which most recently had focus"
 msgstr "La fenêtre ayant reçu le focus le plus récemment"
 
@@ -1731,47 +1739,47 @@ msgstr ""
 "Si vrai (TRUE), l’élément graphique enfant n’est pas soumis au "
 "redimensionnement homogène"
 
-#: gtk/gtkbox.c:282 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:341
+#: gtk/gtkbox.c:278 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:341
 #: gtk/gtkheaderbar.c:2048 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
 msgstr "Espacement"
 
-#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:2049
+#: gtk/gtkbox.c:279 gtk/gtkheaderbar.c:2049
 msgid "The amount of space between children"
 msgstr "L’espacement entre éléments enfants"
 
-#: gtk/gtkbox.c:290 gtk/gtkflowbox.c:3842
+#: gtk/gtkbox.c:286 gtk/gtkflowbox.c:3842
 msgid "Whether the children should all be the same size"
 msgstr "Indique si les éléments enfants doivent tous avoir la même taille"
 
-#: gtk/gtkbox.c:296
+#: gtk/gtkbox.c:292
 msgid "Baseline position"
 msgstr "Position de la ligne de base"
 
-#: gtk/gtkbox.c:297
+#: gtk/gtkbox.c:293
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr ""
 "La position des éléments graphiques alignés sur la ligne de base si de "
 "l’espace supplémentaire est disponible"
 
-#: gtk/gtkbox.c:322 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:589
+#: gtk/gtkbox.c:318 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:589
 #: gtk/gtktoolitemgroup.c:1697 gtk/gtktoolpalette.c:1027
 #: gtk/gtktreeviewcolumn.c:323
 msgid "Expand"
 msgstr "Étendre"
 
-#: gtk/gtkbox.c:323
+#: gtk/gtkbox.c:319
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr ""
 "Indique si l’élément enfant doit occuper l’espace supplémentaire lorsque le "
 "parent est agrandi"
 
-#: gtk/gtkbox.c:338 gtk/gtktoolitemgroup.c:1704
+#: gtk/gtkbox.c:335 gtk/gtktoolitemgroup.c:1704
 msgid "Fill"
 msgstr "Remplir"
 
-#: gtk/gtkbox.c:339
+#: gtk/gtkbox.c:336
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
@@ -1779,7 +1787,7 @@ msgstr ""
 "Indique si l’espace supplémentaire doit être alloué à l’élément enfant ou "
 "laissé en remplissage"
 
-#: gtk/gtkbox.c:346
+#: gtk/gtkbox.c:351
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 "Espace supplémentaire à disposer entre l’élément enfant et ses voisins, en "
@@ -3259,7 +3267,7 @@ msgstr "Drapeaux d’état"
 
 #: gtk/gtkcssnode.c:649
 msgid "If other nodes can see this node"
-msgstr "Si les autre nœuds peuvent voir ce nœud"
+msgstr "Si les autres nœuds peuvent voir ce nœud"
 
 #: gtk/gtkcssnode.c:654
 msgid "Widget type"
@@ -4093,11 +4101,11 @@ msgstr "Étiquette d’annulation"
 msgid "The label on the cancel button"
 msgstr "L’étiquette du bouton annuler"
 
-#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
+#: gtk/gtkfilechooserwidget.c:8413 gtk/gtkfilechooserwidget.c:8414
 msgid "Search mode"
 msgstr "Mode de recherche"
 
-#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
+#: gtk/gtkfilechooserwidget.c:8420 gtk/gtkfilechooserwidget.c:8421
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Sous-titre"
@@ -4386,51 +4394,51 @@ msgstr "Utiliser OpenGL ES"
 msgid "Whether the context uses OpenGL or OpenGL ES"
 msgstr "Indique si le contexte utilise OpenGL ou OpenGL ES"
 
-#: gtk/gtkgrid.c:1772
+#: gtk/gtkgrid.c:1770
 msgid "Row Homogeneous"
 msgstr "Homogénéité des lignes"
 
-#: gtk/gtkgrid.c:1773
+#: gtk/gtkgrid.c:1771
 msgid "If TRUE, the rows are all the same height"
 msgstr "Si vrai (TRUE), toutes les lignes ont la même hauteur"
 
-#: gtk/gtkgrid.c:1779
+#: gtk/gtkgrid.c:1777
 msgid "Column Homogeneous"
 msgstr "Homogénéité des colonnes"
 
-#: gtk/gtkgrid.c:1780
+#: gtk/gtkgrid.c:1778
 msgid "If TRUE, the columns are all the same width"
 msgstr "Si vrai (TRUE), toutes les colonnes ont la même largeur"
 
-#: gtk/gtkgrid.c:1786
+#: gtk/gtkgrid.c:1784
 msgid "Baseline Row"
 msgstr "Ligne de base"
 
-#: gtk/gtkgrid.c:1787
+#: gtk/gtkgrid.c:1785
 msgid "The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"
 msgstr ""
 "La ligne sur laquelle aligner la ligne de base lorsque valign vaut "
 "GTK_ALIGN_BASELINE"
 
-#: gtk/gtkgrid.c:1805
+#: gtk/gtkgrid.c:1803
 msgid "The row number to attach the top side of a child widget to"
 msgstr ""
 "Le numéro de la ligne à laquelle le haut de l’élément graphique enfant est "
 "attaché"
 
-#: gtk/gtkgrid.c:1811 gtk/gtklayout.c:674 gtk/gtktreeviewcolumn.c:268
+#: gtk/gtkgrid.c:1809 gtk/gtklayout.c:674 gtk/gtktreeviewcolumn.c:268
 msgid "Width"
 msgstr "Largeur"
 
-#: gtk/gtkgrid.c:1812
+#: gtk/gtkgrid.c:1810
 msgid "The number of columns that a child spans"
 msgstr "Le nombre de colonnes qu’un élément enfant fusionne"
 
-#: gtk/gtkgrid.c:1818 gtk/gtklayout.c:683 gtk/gtkshortcutsgroup.c:362
+#: gtk/gtkgrid.c:1816 gtk/gtklayout.c:683 gtk/gtkshortcutsgroup.c:362
 msgid "Height"
 msgstr "Hauteur"
 
-#: gtk/gtkgrid.c:1819
+#: gtk/gtkgrid.c:1817
 msgid "The number of rows that a child spans"
 msgstr "Le nombre de lignes qu’un élément enfant fusionne"
 
@@ -5025,7 +5033,7 @@ msgstr "Aligner avec"
 
 #: gtk/gtkmenubutton.c:520
 msgid "The parent widget which the menu should align with."
-msgstr "L’élément graphique parant sur lequel le menu doit s’aligner"
+msgstr "L’élément graphique parent sur lequel le menu doit s’aligner"
 
 #: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:645
 #: gtk/gtkstylecontext.c:243
@@ -5453,53 +5461,53 @@ msgstr "Fenêtre parente transitoire"
 msgid "The transient parent of the dialog"
 msgstr "La fenêtre parente transitoire de la boîte de dialogue"
 
-#: gtk/gtknotebook.c:763
+#: gtk/gtknotebook.c:765
 msgid "Page"
 msgstr "Page"
 
-#: gtk/gtknotebook.c:764
+#: gtk/gtknotebook.c:766
 msgid "The index of the current page"
 msgstr "L’index de la page actuelle"
 
-#: gtk/gtknotebook.c:771
+#: gtk/gtknotebook.c:773
 msgid "Tab Position"
 msgstr "Position des onglets"
 
-#: gtk/gtknotebook.c:772
+#: gtk/gtknotebook.c:774
 msgid "Which side of the notebook holds the tabs"
 msgstr "Indique le côté du bloc-notes où sont disposés les onglets"
 
-#: gtk/gtknotebook.c:779
+#: gtk/gtknotebook.c:781
 msgid "Show Tabs"
 msgstr "Afficher les onglets"
 
-#: gtk/gtknotebook.c:780
+#: gtk/gtknotebook.c:782
 msgid "Whether tabs should be shown"
 msgstr "Indique si les onglets doivent être affichés"
 
-#: gtk/gtknotebook.c:786
+#: gtk/gtknotebook.c:788
 msgid "Show Border"
 msgstr "Afficher la bordure"
 
-#: gtk/gtknotebook.c:787
+#: gtk/gtknotebook.c:789
 msgid "Whether the border should be shown"
 msgstr "Indique si la bordure doit être affichée"
 
-#: gtk/gtknotebook.c:793
+#: gtk/gtknotebook.c:795
 msgid "Scrollable"
 msgstr "Défilement possible"
 
-#: gtk/gtknotebook.c:794
+#: gtk/gtknotebook.c:796
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Si vrai (TRUE), des flèches de défilement sont ajoutées lorsqu’il y a trop "
 "d’onglets"
 
-#: gtk/gtknotebook.c:800
+#: gtk/gtknotebook.c:802
 msgid "Enable Popup"
 msgstr "Activer le popup"
 
-#: gtk/gtknotebook.c:801
+#: gtk/gtknotebook.c:803
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -5507,139 +5515,139 @@ msgstr ""
 "Si vrai (TRUE), un clic droit sur le bloc-notes affiche un menu que l’on "
 "peut utiliser pour changer de page"
 
-#: gtk/gtknotebook.c:814
+#: gtk/gtknotebook.c:816
 msgid "Group Name"
 msgstr "Nom de groupe"
 
-#: gtk/gtknotebook.c:815
+#: gtk/gtknotebook.c:817
 msgid "Group name for tab drag and drop"
 msgstr "Nom de groupe pour le glisser-déposer des onglets"
 
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:826
 msgid "Tab label"
 msgstr "Étiquette de l’onglet"
 
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:827
 msgid "The string displayed on the child's tab label"
 msgstr "La chaîne affichée sur l’étiquette des onglets enfants"
 
-#: gtk/gtknotebook.c:831
+#: gtk/gtknotebook.c:833
 msgid "Menu label"
 msgstr "Étiquette de menu"
 
-#: gtk/gtknotebook.c:832
+#: gtk/gtknotebook.c:834
 msgid "The string displayed in the child's menu entry"
 msgstr "La chaîne affichée dans l’entrée du menu enfant"
 
-#: gtk/gtknotebook.c:845
+#: gtk/gtknotebook.c:847
 msgid "Tab expand"
 msgstr "Développer l’onglet"
 
-#: gtk/gtknotebook.c:846
+#: gtk/gtknotebook.c:848
 msgid "Whether to expand the child's tab"
 msgstr "Indique si l’onglet de l’enfant doit être développé"
 
-#: gtk/gtknotebook.c:852
+#: gtk/gtknotebook.c:854
 msgid "Tab fill"
 msgstr "Remplir l’onglet"
 
-#: gtk/gtknotebook.c:853
+#: gtk/gtknotebook.c:855
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Indique si l’onglet de l’enfant doit remplir la zone allouée"
 
-#: gtk/gtknotebook.c:860
+#: gtk/gtknotebook.c:862
 msgid "Tab reorderable"
 msgstr "Onglet réorganisable"
 
-#: gtk/gtknotebook.c:861
+#: gtk/gtknotebook.c:863
 msgid "Whether the tab is reorderable by user action"
 msgstr ""
 "Indique si l’onglet peut être placé à un autre endroit par une action de "
 "l’utilisateur"
 
-#: gtk/gtknotebook.c:867
+#: gtk/gtknotebook.c:869
 msgid "Tab detachable"
 msgstr "Onglet détachable"
 
-#: gtk/gtknotebook.c:868
+#: gtk/gtknotebook.c:870
 msgid "Whether the tab is detachable"
 msgstr "Indique si l’onglet peut être détaché"
 
-#: gtk/gtknotebook.c:883 gtk/gtkscrollbar.c:136
+#: gtk/gtknotebook.c:885 gtk/gtkscrollbar.c:136
 msgid "Secondary backward stepper"
 msgstr "Second bouton fléché de recul"
 
-#: gtk/gtknotebook.c:884
+#: gtk/gtknotebook.c:886
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Affiche un second bouton fléché de recul à l’extrémité opposée de la ligne "
 "d’onglets"
 
-#: gtk/gtknotebook.c:899 gtk/gtkscrollbar.c:143
+#: gtk/gtknotebook.c:901 gtk/gtkscrollbar.c:143
 msgid "Secondary forward stepper"
 msgstr "Second bouton fléché d’avancement"
 
-#: gtk/gtknotebook.c:900
+#: gtk/gtknotebook.c:902
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Affiche un second bouton fléché d’avancement à l’extrémité opposée de la "
 "ligne d’onglets"
 
-#: gtk/gtknotebook.c:914 gtk/gtkscrollbar.c:122
+#: gtk/gtknotebook.c:916 gtk/gtkscrollbar.c:122
 msgid "Backward stepper"
 msgstr "Bouton fléché de recul"
 
-#: gtk/gtknotebook.c:915 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:917 gtk/gtkscrollbar.c:123
 msgid "Display the standard backward arrow button"
 msgstr "Affiche le bouton fléché standard de recul"
 
-#: gtk/gtknotebook.c:929 gtk/gtkscrollbar.c:129
+#: gtk/gtknotebook.c:931 gtk/gtkscrollbar.c:129
 msgid "Forward stepper"
 msgstr "Bouton fléché d’avancement"
 
-#: gtk/gtknotebook.c:930 gtk/gtkscrollbar.c:130
+#: gtk/gtknotebook.c:932 gtk/gtkscrollbar.c:130
 msgid "Display the standard forward arrow button"
 msgstr "Affiche le bouton fléché standard d’avancement"
 
-#: gtk/gtknotebook.c:947
+#: gtk/gtknotebook.c:949
 msgid "Tab overlap"
 msgstr "Superposition d’onglet"
 
-#: gtk/gtknotebook.c:948
+#: gtk/gtknotebook.c:950
 msgid "Size of tab overlap area"
 msgstr "Taille de la zone de superposition des onglets"
 
-#: gtk/gtknotebook.c:966
+#: gtk/gtknotebook.c:968
 msgid "Tab curvature"
 msgstr "Arrondi de l’onglet"
 
-#: gtk/gtknotebook.c:967
+#: gtk/gtknotebook.c:969
 msgid "Size of tab curvature"
 msgstr "Taille de l’arrondi de l’onglet"
 
-#: gtk/gtknotebook.c:986
+#: gtk/gtknotebook.c:988
 msgid "Arrow spacing"
 msgstr "Espacement des flèches"
 
-#: gtk/gtknotebook.c:987
+#: gtk/gtknotebook.c:989
 msgid "Scroll arrow spacing"
 msgstr "Espacement entre flèches de défilement"
 
-#: gtk/gtknotebook.c:1006
+#: gtk/gtknotebook.c:1008
 msgid "Initial gap"
 msgstr "Espace initial"
 
-#: gtk/gtknotebook.c:1007
+#: gtk/gtknotebook.c:1009
 msgid "Initial gap before the first tab"
 msgstr "Espace initial avant le premier onglet"
 
-#: gtk/gtknotebook.c:1027
+#: gtk/gtknotebook.c:1029
 msgid "Tab gap"
 msgstr "Interstice d’onglet"
 
-#: gtk/gtknotebook.c:1028
+#: gtk/gtknotebook.c:1030
 msgid "Active tab is drawn with a gap at the bottom"
 msgstr "L’onglet actif est affiché avec un interstice inférieur"
 
@@ -7080,7 +7088,7 @@ msgstr "Tailles des icônes"
 
 #: gtk/gtksettings.c:559
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr "Liste des tailles d’icônes (gtk-menu=16,16:gtk-button=20,20..."
+msgstr "Liste des tailles d’icônes (gtk-menu=16,16:gtk-button=20,20…"
 
 #: gtk/gtksettings.c:567
 msgid "GTK Modules"
@@ -7435,7 +7443,7 @@ msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Indique si les barres d’outils affichent uniquement du texte, uniquement des "
-"icônes, du texte et des icônes, ..."
+"icônes, du texte et des icônes, etc."
 
 #: gtk/gtksettings.c:1246
 msgid "Toolbar Icon Size"
@@ -7465,7 +7473,7 @@ msgstr "Le bouton principal déplace le curseur"
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
-"Indidque si un clic principal sur la coulisse doit mettre le curseur en "
+"Indique si un clic principal sur la coulisse doit mettre le curseur en "
 "position"
 
 #: gtk/gtksettings.c:1308
@@ -7595,7 +7603,7 @@ msgstr "Palette à utiliser dans le sélecteur de couleurs"
 
 #: gtk/gtksettings.c:1533
 msgid "IM Preedit style"
-msgstr "Style de préédition IM"
+msgstr "Style de pré-édition IM"
 
 #: gtk/gtksettings.c:1534
 msgid "How to draw the input method preedit string"
@@ -7631,7 +7639,7 @@ msgid ""
 "the app should display it itself."
 msgstr ""
 "Définir à vrai (TRUE) si l’environnement de bureau affiche la barre de menu, "
-"à faux (FALSE) si l’application doit l’afficher lui-même."
+"à faux (FALSE) si l’application doit l’afficher elle-même."
 
 #: gtk/gtksettings.c:1580
 msgid "Desktop environment shows the desktop folder"
@@ -7671,7 +7679,7 @@ msgstr "L’action à réaliser après un clic droit sur la barre de titre"
 
 #: gtk/gtksettings.c:1696
 msgid "Dialogs use header bar"
-msgstr "Les boîtes de dialogues utilisent la barre d’en-tête"
+msgstr "Les boîtes de dialogue utilisent la barre d’en-tête"
 
 #: gtk/gtksettings.c:1697
 msgid ""
