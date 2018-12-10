@@ -2311,6 +2311,8 @@ gdk_event_translate (MSG  *msg,
 
   STGMEDIUM *property_change_data;
 
+  gboolean _gdk_input_locale_is_ime_current;
+
   display = gdk_display_get_default ();
   window = gdk_win32_handle_table_lookup (msg->hwnd);
 
@@ -2462,6 +2464,7 @@ gdk_event_translate (MSG  *msg,
   switch (msg->message)
     {
     case WM_INPUTLANGCHANGE:
+      _gdk_input_locale_is_ime_current = _gdk_input_locale_is_ime;
       _gdk_input_locale = (HKL) msg->lParam;
       _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
       _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
@@ -2475,7 +2478,10 @@ gdk_event_translate (MSG  *msg,
 			 (gulong) msg->wParam,
 			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
 			 _gdk_input_codepage));
-      gdk_settings_notify (window, "gtk-im-module", GDK_SETTING_ACTION_CHANGED);
+
+      if (!_gdk_input_locale_is_ime_current)
+        gdk_settings_notify (window, "gtk-im-module", GDK_SETTING_ACTION_CHANGED);
+
       break;
 
     case WM_SYSKEYUP:
