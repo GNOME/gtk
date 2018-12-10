@@ -642,11 +642,12 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
   if (gtk_widget_is_toplevel (toplevel))
     {
 #ifdef GDK_WINDOWING_X11
-      gtk_window_present_with_time (GTK_WINDOW (toplevel),
-      gdk_x11_get_server_time (gtk_widget_get_window (widget)));
-#else
-      gtk_window_present (GTK_WINDOW (toplevel));
+      if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (toplevel)))
+        gtk_window_present_with_time (GTK_WINDOW (toplevel),
+                                      gdk_x11_get_server_time (gtk_widget_get_window (widget)));
+      else
 #endif
+        gtk_window_present (GTK_WINDOW (toplevel));
     }
   return TRUE;
 }
