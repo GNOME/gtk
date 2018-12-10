@@ -75,7 +75,12 @@
                       <object class="GtkCellRendererText" id="secondary_padding"/>
                     </child>
                     <child>
-                      <object class="GtkCellRendererPixbuf" id="app_icon"/>
+                      <object class="GtkCellRendererPixbuf" id="app_icon">
+                        <style>
+                          <class name="lowres-icon"/>
+                        </style>
+                        <property name="stock-size">5</property>
+                      </object>
                       <attributes>
                         <attribute name="gicon">1</attribute>
                       </attributes>
