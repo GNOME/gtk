@@ -2256,7 +2256,7 @@ gdk_settings_notify (GdkWindow        *window,
   new_event->setting.window = window;
   new_event->setting.send_event = FALSE;
   new_event->setting.action = action;
-  new_event->setting.name = (char*) name;
+  new_event->setting.name = g_strdup (name);
 
   _gdk_win32_append_event (new_event);
 }
@@ -2475,7 +2475,9 @@ gdk_event_translate (MSG  *msg,
 			 (gulong) msg->wParam,
 			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
 			 _gdk_input_codepage));
+
       gdk_settings_notify (window, "gtk-im-module", GDK_SETTING_ACTION_CHANGED);
+
       break;
 
     case WM_SYSKEYUP:
