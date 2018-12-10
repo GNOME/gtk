@@ -2256,7 +2256,7 @@ gdk_settings_notify (GdkWindow        *window,
   new_event->setting.window = window;
   new_event->setting.send_event = FALSE;
   new_event->setting.action = action;
-  new_event->setting.name = (char*) name;
+  new_event->setting.name = g_strdup (name);
 
   _gdk_win32_append_event (new_event);
 }
