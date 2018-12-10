@@ -851,7 +851,7 @@ button {
   &.circular { // The Bloody Circul Button
     border-radius: 9999px;
     -gtk-outline-radius: 9999px;
-
+    
     label { padding: 0; }
 
     // the followind code is needed since we use a darker bottom border on buttons, which looks pretty
@@ -863,12 +863,20 @@ button {
 
     &:not(.flat):not(:checked):not(:active):not(:disabled):not(:backdrop) {
       @include button(normal);
+      $button_fill: if($variant == 'light', linear-gradient(to top, darken($bg_color, 4%), $bg_color),
+                                            linear-gradient(to top, darken($bg_color, 1%), $bg_color));
+      box-shadow: if($variant == 'light', inset 0 -2px darken($bg_color, 12%), 
+                                          inset 0 -2px darken($bg_color, 6%));
       background-image: $button_fill, $_border_bg;
       border-color: transparent;
     }
 
     &:hover:not(:checked):not(:active):not(:disabled):not(:backdrop) {
       @include button(hover);
+      $button_fill: if($variant == 'light', linear-gradient(to top, $bg_color, lighten($bg_color, 2%)),
+                                            linear-gradient(to top, darken($bg_color, 1%), lighten($bg_color, 2%)));
+      box-shadow: if($variant == 'light', inset 0 -2px darken($bg_color, 4%), 
+                                          inset 0 -2px darken($bg_color, 2%));
       background-image: $button_fill, $_border_bg;
       border-color: transparent;
     }
