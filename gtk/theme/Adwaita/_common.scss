@@ -6,6 +6,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
 $backdrop_transition: 200ms ease-out;
 $button_transition: all 200ms $ease-out-quad;
+$button_radius: 5px;
 $menu_radius: 5px;
 
 * {
@@ -527,7 +528,7 @@ button {
     min-width: 16px;
     padding: 4px 8px;
     border: 1px solid;
-    border-radius: 3px;
+    border-radius: $button_radius;
     transition: $button_transition;
 
     @include button(normal);
@@ -968,8 +969,8 @@ toolbar.inline-toolbar toolbutton:backdrop {
 }
 
 %linked_left {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
+    border-top-left-radius: $button_radius;
+    border-bottom-left-radius: $button_radius;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none;
@@ -978,8 +979,8 @@ toolbar.inline-toolbar toolbutton:backdrop {
 %linked_right {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-top-right-radius: $button_radius;
+    border-bottom-right-radius: $button_radius;
     border-right-style: solid;
 }
 
@@ -991,7 +992,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   &:last-child { @extend %linked_right; }
 
   &:only-child {
-    border-radius: 3px;
+    border-radius: $button_radius;
     border-style: solid;
   }
 }
@@ -1057,7 +1058,7 @@ modelbutton.flat,
   min-height: 26px;
   padding-left: 5px;
   padding-right: 5px;
-  border-radius: 3px;
+  border-radius: $button_radius;
   outline-offset: -2px;
 
   @extend %undecorated_button;
