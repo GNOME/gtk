@@ -524,7 +524,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 button {
   @at-root %button_basic, & {
 
-    min-height: 24px;
+    min-height: 22px;
     min-width: 16px;
     padding: 4px 8px;
     border: 1px solid;
