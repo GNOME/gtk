@@ -8,6 +8,7 @@ $backdrop_transition: 200ms ease-out;
 $button_transition: all 200ms $ease-out-quad;
 $button_radius: 5px;
 $menu_radius: 5px;
+$window_radius: $button_radius + 4;
 
 * {
   padding: 0;
@@ -4423,7 +4424,7 @@ colorchooser .popover.osd { border-radius: 5px; }
  * Window Decorations *
  *********************/
 decoration {
-  border-radius: 7px 7px 0 0;
+  border-radius: $window_radius $window_radius 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
 
