@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtktypes.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
