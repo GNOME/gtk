@@ -27,7 +27,8 @@
 
 #include "config.h"
 
-#include "gtklayoutmanager.h"
+#include "gtklayoutmanagerprivate.h"
+#include "gtkwidget.h"
 
 #ifdef G_ENABLE_DEBUG
 #define LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED(m,method)   G_STMT_START {  \
