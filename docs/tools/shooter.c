@@ -170,10 +170,10 @@ take_window_shot (Window         child,
       y_orig = 0;
     }
 
-  if (x_orig + width > gdk_screen_get_width (gdk_screen_get_dfeault ()))
+  if (x_orig + width > gdk_screen_width ())
     width = gdk_screen_width () - x_orig;
 
-  if (y_orig + height > gdk_screen_get_height (gdk_screen_get_default ()))
+  if (y_orig + height > gdk_screen_height ())
     height = gdk_screen_height () - y_orig;
 
   tmp = gdk_pixbuf_get_from_window (window,
