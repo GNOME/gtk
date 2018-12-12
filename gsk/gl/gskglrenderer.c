@@ -247,6 +247,7 @@ node_supports_transform (GskRenderNode *node)
       case GSK_OPACITY_NODE:
       case GSK_COLOR_MATRIX_NODE:
       case GSK_TEXTURE_NODE:
+      case GSK_OFFSET_NODE:
         return TRUE;
 
       default:
@@ -2651,6 +2652,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_DUMP_FRAMEBUFFER:
+          g_message ("--> Dumping to %s", op->dump.filename);
           dump_framebuffer (op->dump.filename, op->dump.width, op->dump.height);
           break;
 

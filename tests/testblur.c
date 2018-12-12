@@ -26,12 +26,25 @@ snapshot_blur (GtkWidget   *widget,
                GtkSnapshot *snapshot)
 {
   GtkBlurBox *box = (GtkBlurBox *) widget;
+  static float k = 0.0f;
 
-  gtk_snapshot_push_blur (snapshot, box->radius);
+  /*gtk_snapshot_push_blur (snapshot, box->radius);*/
+
+  k += 0.1f;
+
+  graphene_matrix_t m;
+  graphene_matrix_init_rotate (&m, k,
+                               /*0.1f,*/
+                               graphene_vec3_z_axis ());
+
+  gtk_snapshot_push_transform (snapshot, &m);
 
   GTK_WIDGET_CLASS (gtk_blur_box_parent_class)->snapshot (widget, snapshot);
-
   gtk_snapshot_pop (snapshot);
+
+  gtk_widget_queue_draw (widget);
+
+  /*gtk_snapshot_pop (snapshot);*/
 }
 
 

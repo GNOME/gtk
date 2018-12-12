@@ -424,7 +424,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                   "gtk-shell-shows-menubar", FALSE,
                   NULL);
 
-  if (dbus->sm_proxy == NULL)
+  if (dbus->sm_proxy == NULL && 0)
     {
       dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
                                                                           G_DBUS_PROXY_FLAGS_NONE,
