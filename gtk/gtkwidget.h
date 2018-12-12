@@ -425,6 +425,12 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *natural_size);
 
 GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_set_layout_manager   (GtkWidget        *widget,
+                                                         GtkLayoutManager *layout_manager);
+GDK_AVAILABLE_IN_ALL
+GtkLayoutManager *      gtk_widget_get_layout_manager   (GtkWidget        *widget);
+
+GDK_AVAILABLE_IN_ALL
 void       gtk_widget_add_accelerator     (GtkWidget           *widget,
                                            const gchar         *accel_signal,
                                            GtkAccelGroup       *accel_group,

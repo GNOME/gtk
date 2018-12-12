@@ -161,6 +161,9 @@ struct _GtkWidgetPrivate
   /* The render node we draw or %NULL if not yet created.*/
   GskRenderNode *render_node;
 
+  /* The layout manager, or %NULL */
+  GtkLayoutManager *layout_manager;
+
   GSList *paintables;
 
   /* The widget's surface or its parent surface if it does

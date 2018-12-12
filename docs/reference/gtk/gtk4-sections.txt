@@ -4587,6 +4587,8 @@ gtk_widget_get_first_child
 gtk_widget_get_last_child
 gtk_widget_insert_before
 gtk_widget_insert_after
+gtk_widget_set_layout_manager
+gtk_widget_get_layout_manager
 
 <SUBSECTION>
 gtk_widget_get_path
