@@ -134,6 +134,7 @@
 #include <gtk/gtkinfobar.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
+#include <gtk/gtklayoutmanager.h>
 #include <gtk/gtklevelbar.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
