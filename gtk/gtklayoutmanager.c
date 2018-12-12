@@ -22,12 +22,23 @@
  * @Title: GtkLayoutManager
  * @Short_description: Base class for layout manager
  *
- * ...
+ * Layout managers are delegate classes that handle the preferred size
+ * and the allocation of a container widget.
+ *
+ * You typically subclass #GtkLayoutManager if you want to implement a
+ * layout policy for the children of a widget, without necessarily
+ * implementing the @GtkWidgetClass.measure() and @GtkWidgetClass.size_allocate()
+ * virtual functions directly.
+ *
+ * Each #GtkWidget can only have a #GtkLayoutManager instance associated to it
+ * at any given time; it is possible, though, to replace the layout manager
+ * instance using gtk_widget_set_layout_manager().
  */
 
 #include "config.h"
 
-#include "gtklayoutmanager.h"
+#include "gtklayoutmanagerprivate.h"
+#include "gtkwidget.h"
 
 #ifdef G_ENABLE_DEBUG
 #define LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED(m,method)   G_STMT_START {  \
@@ -108,7 +119,7 @@ gtk_layout_manager_init (GtkLayoutManager *self)
  * @layout_manager: a #GtkLayoutManager
  * @widget: (nullable): a #GtkWidget
  *
- * ...
+ * Sets a back pointer from @widget to @layout_manager.
  */
 void
 gtk_layout_manager_set_widget (GtkLayoutManager *layout_manager,
@@ -116,22 +127,44 @@ gtk_layout_manager_set_widget (GtkLayoutManager *layout_manager,
 {
   GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (layout_manager);
 
+  if (widget != NULL && priv->widget != NULL)
+    {
+      g_critical ("The layout manager %p of type %s is already in use "
+                  "by widget %p '%s', and cannot be used by widget %p '%s'",
+                  layout_manager, G_OBJECT_TYPE_NAME (layout_manager),
+                  priv->widget, gtk_widget_get_name (priv->widget),
+                  widget, gtk_widget_get_name (widget));
+      return;
+    }
+
   priv->widget = widget;
 }
 
 /**
  * gtk_layout_manager_measure:
- * @manager:
- * @widget:
- * @orientation:
- * @for_size:
- * @minimum: (out):
- * @natural: (out):
- * @minimum_baseline: (out):
- * @natural_baseline: (out):
+ * @manager: a #GtkLayoutManager
+ * @widget: the #GtkWidget using @manager
+ * @orientation: the orientation to measure
+ * @for_size: Size for the opposite of @orientation; for instance, if
+ *   the @orientation is %GTK_ORIENTATION_HORIZONTAL, this is the height
+ *   of the widget; if the @orientation is %GTK_ORIENTATION_VERTICAL, this
+ *   is the width of the widget. This allows to measure the height for the
+ *   given width, and the width for the given height. Use -1 if the size
+ *   is not known
+ * @minimum: (out) (optional): the minimum size for the given size and
+ *   orientation
+ * @natural: (out) (optional): the natural, or preferred size for the
+ *   given size and orientation
+ * @minimum_baseline: (out) (optional): the baseline position for the
+ *   minimum size
+ * @natural_baseline: (out) (optional): the baseline position for the
+ *   natural size
  *
- * ...
+ * Measures the size of the @widget using @manager, for the
+ * given @orientation and size.
  *
+ * See [GtkWidget's geometry management section][geometry-management] for
+ * more details.
  */
 void
 gtk_layout_manager_measure (GtkLayoutManager *manager,
@@ -158,13 +191,15 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
 
 /**
  * gtk_layout_manager_allocate:
- * @manager:
- * @widget:
- * @width:
- * @height:
- * @baseline:
+ * @manager: a #GtkLayoutManager
+ * @widget: the #GtkWidget using @manager
+ * @width: the new width of the @widget
+ * @height: the new height of the @widget
+ * @baseline: the baseline position of the @widget
  *
- * ...
+ * This function assigns the given @width, @height, and @baseline to
+ * a @widget, and computes the position and sizes of the children of
+ * the @widget using the layout management policy of @manager.
  */
 void
 gtk_layout_manager_allocate (GtkLayoutManager *manager,
@@ -185,12 +220,12 @@ gtk_layout_manager_allocate (GtkLayoutManager *manager,
 
 /**
  * gtk_layout_manager_get_request_mode:
- * @manager:
- * @widget:
+ * @manager: a #GtkLayoutManager
+ * @widget: the #GtkWidget using @manager
  *
- * ...
+ * Retrieves the request mode of @manager.
  *
- * Returns: ...
+ * Returns: a #GtkSizeRequestMode
  */
 GtkSizeRequestMode
 gtk_layout_manager_get_request_mode (GtkLayoutManager *manager,
@@ -207,15 +242,38 @@ gtk_layout_manager_get_request_mode (GtkLayoutManager *manager,
 }
 
 /**
+ * gtk_layout_manager_get_widget:
+ * @manager: a #GtkLayoutManager
+ *
+ * Retrieves the #GtkWidget using the given #GtkLayoutManager.
+ *
+ * Returns: (transfer none) (nullable): a #GtkWidget
+ */
+GtkWidget *
+gtk_layout_manager_get_widget (GtkLayoutManager *manager)
+{
+  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (manager);
+
+  g_return_val_if_fail (GTK_IS_LAYOUT_MANAGER (manager), NULL);
+
+  return priv->widget;
+}
+
+/**
  * gtk_layout_manager_layout_changed:
  * @manager: a #GtkLayoutManager
  *
- * ...
+ * Queues a resize on the #GtkWidget using @manager, if any.
+ *
+ * This function should be called by subclasses of #GtkLayoutManager in
+ * response to changes to their layout management policies.
  */
 void
 gtk_layout_manager_layout_changed (GtkLayoutManager *manager)
 {
   GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (manager);
+
+  g_return_if_fail (GTK_IS_LAYOUT_MANAGER (manager));
 
   if (priv->widget != NULL)
     gtk_widget_queue_resize (priv->widget);

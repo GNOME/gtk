@@ -47,6 +47,7 @@
 #include "gtkgestureswipe.h"
 #include "gtkintl.h"
 #include "gtkinvisible.h"
+#include "gtklayoutmanagerprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
@@ -4257,16 +4258,26 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   if (baseline >= 0)
     baseline -= margin.top + border.top + padding.top;
 
-  if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
-    g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
-                   real_allocation.width,
-                   real_allocation.height,
-                   baseline);
+  if (priv->layout_manager != NULL)
+    {
+      gtk_layout_manager_allocate (priv->layout_manager, widget,
+                                   real_allocation.width,
+                                   real_allocation.height,
+                                   baseline);
+    }
   else
-    GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
-                                                  real_allocation.width,
-                                                  real_allocation.height,
-                                                  baseline);
+    {
+      if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
+        g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
+                       real_allocation.width,
+                       real_allocation.height,
+                       baseline);
+      else
+        GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
+                                                      real_allocation.width,
+                                                      real_allocation.height,
+                                                      baseline);
+    }
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
@@ -8157,6 +8168,9 @@ gtk_widget_dispose (GObject *object)
 
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
+
+  gtk_widget_set_layout_manager (widget, NULL);
+  g_clear_object (&priv->layout_manager);
 
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
@@ -13629,4 +13643,51 @@ gtk_widget_get_height (GtkWidget *widget)
          margin.top  - margin.bottom -
          border.top  - border.bottom -
          padding.top - padding.bottom;
+}
+
+/**
+ * gtk_widget_set_layout_manager:
+ * @widget: a #GtkWidget
+ * @layout_manager: (nullable) (transfer full): a #GtkLayoutManager
+ *
+ * Sets the layout manager delegate instance that provides an implementation
+ * for measuring and allocating the children of @widget.
+ *
+ * The @widget acquires a reference to the given @layout_manager.
+ */
+void
+gtk_widget_set_layout_manager (GtkWidget        *widget,
+                               GtkLayoutManager *layout_manager)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (layout_manager == NULL || GTK_IS_LAYOUT_MANAGER (layout_manager));
+  g_return_if_fail (gtk_layout_manager_get_widget (layout_manager) == NULL);
+
+  if (g_set_object (&priv->layout_manager, layout_manager))
+    {
+      if (priv->layout_manager != NULL)
+        gtk_layout_manager_set_widget (priv->layout_manager, widget);
+
+      gtk_widget_queue_resize (widget);
+    }
+}
+
+/**
+ * gtk_widget_get_layout_manager:
+ * @widget: a #GtkWidget
+ *
+ * Retrieves the layout manager set using gtk_widget_set_layout_manager().
+ *
+ * Returns: (transfer none) (nullable): a #GtkLayoutManager
+ */
+GtkLayoutManager *
+gtk_widget_get_layout_manager (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return priv->layout_manager;
 }
