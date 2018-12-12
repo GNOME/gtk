@@ -1721,8 +1721,8 @@ headerbar {
 
 .background .titlebar {
   &:backdrop, & {
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    border-top-left-radius: $window_radius;
+    border-top-right-radius: $window_radius;
   }
 }
 
