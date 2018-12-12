@@ -22,6 +22,7 @@
 
 #include "gtkimcontextxim.h"
 #include "gtkimmoduleprivate.h"
+#include "gtkeventcontrollerlegacy.h"
 
 #include "gtk/gtkintl.h"
 
@@ -102,6 +103,9 @@ struct _StatusWindow
 
   /* Currently focused GtkIMContextXIM for the toplevel, if any */
   GtkIMContextXIM *context;
+
+  /* Event controller used to track configure events */
+  GtkEventController *event_controller;
 };
 
 static void     gtk_im_context_xim_finalize           (GObject               *obj);
@@ -1629,6 +1633,16 @@ on_status_toplevel_configure (GtkWidget     *toplevel,
   return GDK_EVENT_PROPAGATE;
 }
 
+static void
+toplevel_controller_event_cb (GtkEventControllerLegacy *controller,
+                              GdkEvent                 *event,
+                              gpointer                  user_data)
+{
+  on_status_toplevel_configure (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller)),
+                                event,
+                                user_data);
+}
+
 /* Frees a status window and removes its link from the status_windows list
  */
 static void
@@ -1645,9 +1659,9 @@ status_window_free (StatusWindow *status_window)
   g_signal_handlers_disconnect_by_func (status_window->toplevel,
 					G_CALLBACK (on_status_toplevel_notify_display),
 					status_window);
-  g_signal_handlers_disconnect_by_func (status_window->toplevel,
-					G_CALLBACK (on_status_toplevel_configure),
-					status_window);
+
+  gtk_widget_remove_controller (status_window->toplevel,
+                                status_window->event_controller);
 
   if (status_window->window)
     gtk_widget_destroy (status_window->window);
@@ -1670,18 +1684,23 @@ status_window_get (GtkWidget *toplevel)
 
   status_window = g_new0 (StatusWindow, 1);
   status_window->toplevel = toplevel;
+  status_window->event_controller = gtk_event_controller_legacy_new ();
 
   status_windows = g_slist_prepend (status_windows, status_window);
 
   g_signal_connect (toplevel, "destroy",
 		    G_CALLBACK (on_status_toplevel_destroy),
 		    status_window);
-  g_signal_connect (toplevel, "event",
-		    G_CALLBACK (on_status_toplevel_configure),
-		    status_window);
   g_signal_connect (toplevel, "notify::display",
 		    G_CALLBACK (on_status_toplevel_notify_display),
 		    status_window);
+
+
+  g_signal_connect (status_window->event_controller,
+                    "event",
+                    G_CALLBACK (toplevel_controller_event_cb),
+                    status_window);
+  gtk_widget_add_controller (toplevel, status_window->event_controller);
 
   g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", status_window);
 
