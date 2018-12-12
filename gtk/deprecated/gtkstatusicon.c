@@ -1420,7 +1420,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   surface = gtk_icon_helper_load_surface (icon_helper, 1);
   if (surface)
     {
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, round_size, round_size);
+      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
+                                            cairo_image_surface_get_width (surface),
+                                            cairo_image_surface_get_height (surface));
       cairo_surface_destroy (surface);
     }
   else
