@@ -7118,7 +7118,19 @@ popover_size_allocate (GtkWindowPopover *popover,
     gtk_popover_update_position (GTK_POPOVER (popover->widget));
 
   popover_get_rect (popover, window, &rect);
-  gtk_widget_size_allocate (popover->widget, &rect, -1);
+  /*gtk_widget_size_allocate (popover->widget, &rect, -1);*/
+
+  graphene_matrix_t m;
+  graphene_matrix_init_rotate (&m, 45.0f,
+                               graphene_vec3_z_axis ());
+  graphene_matrix_translate (&m,
+                             &(graphene_point3d_t) {rect.x, rect.y, 0 });
+
+  gtk_widget_size_allocate_transformed (popover->widget,
+                                        rect.width, rect.height,
+                                        -1, &m);
+
+
 }
 
 /* _gtk_window_set_allocation:
