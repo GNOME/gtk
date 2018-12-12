@@ -911,7 +911,7 @@ window1
                 "push button"
                 parent: grid
                 index: 5
-                state: enabled focusable sensitive
+                state: enabled focusable sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
