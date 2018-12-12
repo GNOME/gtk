@@ -7152,3 +7152,19 @@ gtk_root_get_for_surface
 <SUBSECTION Private>
 gtk_root_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtklayoutmanager</FILE>
+GtkLayoutManager
+GtkLayoutManagerClass
+
+gtk_layout_manager_measure
+gtk_layout_manager_allocate
+gtk_layout_manager_get_request_mode
+gtk_layout_manager_get_widget
+gtk_layout_manager_layout_changed
+
+<SUBSECTION Standard>
+GTK_TYPE_LAYOUT_MANAGER
+gtk_layout_manager_get_type
+</SECTION>
