@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtktypes.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -87,6 +88,9 @@ void                    gtk_layout_manager_allocate             (GtkLayoutManage
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode      gtk_layout_manager_get_request_mode     (GtkLayoutManager *manager,
                                                                  GtkWidget        *widget);
+
+GDK_AVAILABLE_IN_ALL
+GtkWidget *             gtk_layout_manager_get_widget           (GtkLayoutManager *manager);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_layout_manager_layout_changed       (GtkLayoutManager *manager);
