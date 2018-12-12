@@ -811,35 +811,54 @@ render_transform_node (GskGLRenderer   *self,
     }
   else
     {
-      const float min_x = node->bounds.origin.x;
-      const float min_y = node->bounds.origin.y;
-      const float max_x = min_x + node->bounds.size.width;
-      const float max_y = min_y + node->bounds.size.height;
-      const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { 0, 1 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
-
-        { { max_x, max_y }, { 1, 0 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
-      };
+      const float min_x = child->bounds.origin.x;
+      const float min_y = child->bounds.origin.y;
+      const float max_x = min_x + child->bounds.size.width;
+      const float max_y = min_y + child->bounds.size.height;
       int texture_id;
       gboolean is_offscreen;
       /* For non-trivial transforms, we draw everything on a texture and then
        * draw the texture transformed. */
+
       /* TODO: We should compute a modelview containing only the "non-trivial"
        *       part (e.g. the rotation) and use that. We want to keep the scale
        *       for the texture.
        */
+
       add_offscreen_ops (self, builder,
-                         &node->bounds,
+                         &child->bounds,
                          child,
-                         &texture_id, &is_offscreen,
+                         &texture_id,
+                         &is_offscreen,
                          RESET_CLIP | RESET_OPACITY);
       ops_set_texture (builder, texture_id);
       ops_set_program (builder, &self->blit_program);
-      ops_draw (builder, vertex_data);
+
+      if (is_offscreen)
+        {
+          ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+            { { min_x, min_y }, { 0, 1 }, },
+            { { min_x, max_y }, { 0, 0 }, },
+            { { max_x, min_y }, { 1, 1 }, },
+
+            { { max_x, max_y }, { 1, 0 }, },
+            { { min_x, max_y }, { 0, 0 }, },
+            { { max_x, min_y }, { 1, 1 }, },
+          });
+        }
+      else
+        {
+          ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+            { { min_x, min_y }, { 0, 0 }, },
+            { { min_x, max_y }, { 0, 1 }, },
+            { { max_x, min_y }, { 1, 0 }, },
+
+            { { max_x, max_y }, { 1, 1 }, },
+            { { min_x, max_y }, { 0, 1 }, },
+            { { max_x, min_y }, { 1, 0 }, },
+          });
+
+        }
     }
   ops_pop_modelview (builder);
 }
