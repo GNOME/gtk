@@ -1,3 +1,46 @@
+Overview of Changes in GTK+ 3.24.2
+==================================
+
+* new api: gdk_x11_display_get_parent_relative pattern
+
+* wayland: Use the settings portal when sandboxed
+
+* Bugs fixed:
+ widget-factory: Move app menu contents to primary menu
+ Make dashed border-style work correctly
+ gtkstack: fix null pointer dereference
+ GDK W32: Support switching input modules at runtime
+ Tooltip: Fix the used cursor size if 0 in Settings
+ quartz: Fix crash when realizing GtkOffscreenWindow
+ win32 dnd: Fix setting icon on drag-begin
+ Fix race in GtkPlug window creation
+ widget-factory: Add Keyboard Shortcuts menu item
+ quartz: do not cache the screen in the gdkmonitor
+ Trash in side bar sometimes contains a home icon
+ wayland: Avoid crashes inside wl_proxy_marshal
+ gtkimcontextime.c: Fix Korean input
+ entry: Handle no-window events in gtk_entry_event
+ Tooltip: Fix the used cursor size if 0 in Setting
+ Notebook: Ensure menu_label updates with tab_label
+ Adwaita: Improve headerbar theming
+ win32: Make scroll behavior similar to Linux
+ fix symbolic icon rendering with new librsvg
+ emoji selector: force Emoji presentation
+ a11y: fix a crash under wayland
+ 
+* Translation updates:
+ - Africaans
+ - Basque
+ - Brazilian Portuguese
+ - Chinese (Taiwan)
+ - Esperanto
+ - Lithuanian
+ - Slovak
+ - Slovenian
+ - Spanish
+ - Turkish
+
+
 Overview of Changes in GTK+ 3.24.1
 ==================================
 
