@@ -592,7 +592,7 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 .inline-toolbar:backdrop, searchbar > revealer > box:backdrop, .location-bar:backdrop { border-color: #2a2a2b; background-color: #383738; box-shadow: none; transition: 200ms ease-out; }
 
 /*************** Header bars * */
-.titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #111111; border-radius: 0; background: #252526 linear-gradient(to top, #302f30 3px, #323233); box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); /* hide the close button separator */ }
+.titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #111111; border-radius: 0; background: #252526 linear-gradient(to top, #302f30, #353435); box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); /* hide the close button separator */ }
 
 .titlebar:backdrop:not(headerbar), headerbar:backdrop { border-color: #2a2a2b; background-color: #3f3e40; background-image: none; box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); transition: 200ms ease-out; }
 
@@ -600,7 +600,7 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 
 .titlebar:not(headerbar) .subtitle, headerbar .subtitle { font-size: smaller; padding-left: 12px; padding-right: 12px; }
 
-.selection-mode .titlebar:not(headerbar), .selection-mode.titlebar:not(headerbar), .selection-mode headerbar, headerbar.selection-mode { color: #ffffff; border-color: #030c17; text-shadow: 0 -1px rgba(0, 0, 0, 0.5); background: #15539e linear-gradient(to top, #185cb0 3px, #185fb4); box-shadow: inset 0 1px rgba(29, 88, 161, 0.535); }
+.selection-mode .titlebar:not(headerbar), .selection-mode.titlebar:not(headerbar), .selection-mode headerbar, headerbar.selection-mode { color: #ffffff; border-color: #030c17; text-shadow: 0 -1px rgba(0, 0, 0, 0.5); background: #15539e linear-gradient(to top, #185cb0, #1961b9); box-shadow: inset 0 1px rgba(29, 88, 161, 0.535); }
 
 .selection-mode .titlebar:backdrop:not(headerbar), .selection-mode.titlebar:backdrop:not(headerbar), .selection-mode headerbar:backdrop, headerbar.selection-mode:backdrop { background-color: #15539e; background-image: none; box-shadow: inset 0 1px rgba(32, 91, 162, 0.442); }
 
