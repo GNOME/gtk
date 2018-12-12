@@ -475,11 +475,11 @@ render_text_node (GskGLRenderer   *self,
   const PangoFont *font = gsk_text_node_peek_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
   const float text_scale = ops_get_scale (builder);
-  guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+  const guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+  const float x = gsk_text_node_get_x (node) + builder->dx;
+  const float y = gsk_text_node_get_y (node) + builder->dy;
   int i;
   int x_position = 0;
-  float x = gsk_text_node_get_x (node) + builder->dx;
-  float y = gsk_text_node_get_y (node) + builder->dy;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && font_has_color_glyphs (font))
@@ -492,8 +492,6 @@ render_text_node (GskGLRenderer   *self,
       ops_set_color (builder, color);
     }
 
-  /* We use one quad per character, unlike the other nodes which
-   * use at most one quad altogether */
   for (i = 0; i < num_glyphs; i++)
     {
       const PangoGlyphInfo *gi = &glyphs[i];
