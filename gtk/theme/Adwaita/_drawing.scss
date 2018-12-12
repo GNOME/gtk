@@ -186,7 +186,7 @@
   $_hilight_color: _button_hilight_color($c);
   $_button_edge: if($edge == none, none, _widget_edge($edge));
   $_blank_edge: if($edge == none, none, _widget_edge(transparentize($edge,1)));
-  $_button_outer: 0 0 2px $shadow_color;
+  $_button_outer: 0 1px 2px $shadow_color;
 
   @if $t==normal {
   //
