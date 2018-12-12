@@ -127,16 +127,27 @@ print_render_node_tree (GskRenderNode *root, int level)
 static void G_GNUC_UNUSED
 dump_framebuffer (const char *filename, int w, int h)
 {
-  int stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, w);
+  const int stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, w);
   guchar *data = g_malloc (h * stride);
+  guchar *flipped = g_malloc (h * stride);
   cairo_surface_t *s;
+  int i;
 
   glReadPixels (0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, data);
-  s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, w, h, stride);
+  for (i = 0; i < h; i ++)
+    {
+      memcpy (flipped + (stride * i),
+              data + ((h - 1 - i) * stride),
+              stride);
+
+    }
+  g_free (data);
+
+  s = cairo_image_surface_create_for_data (flipped, CAIRO_FORMAT_ARGB32, w, h, stride);
   cairo_surface_write_to_png (s, filename);
 
   cairo_surface_destroy (s);
-  g_free (data);
+  g_free (flipped);
 }
 
 static gboolean
