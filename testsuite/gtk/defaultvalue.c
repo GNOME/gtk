@@ -94,6 +94,10 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_APP_CHOOSER_DIALOG))
     return;
 
+  /* pixbufs without pixel data are just pointless */
+  if (g_type_is_a (type, GDK_TYPE_PIXBUF))
+    return;
+
   /* These leak their GDBusConnections */
   if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_BUTTON) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
