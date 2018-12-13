@@ -188,7 +188,7 @@ treeview entry.flat:focus, treeview entry:focus { border-color: #15539e; }
 @keyframes needs_attention { from { background-image: -gtk-gradient(radial, center center, 0, center center, 0.01, to(#1f76e1), to(transparent)); }
   to { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#15539e), to(transparent)); } }
 
-notebook > header > tabs > arrow, button.titlebutton, button { min-height: 24px; min-width: 18px; padding: 4px 8px; border: 1px solid; border-radius: 5px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); color: #eeeeec; outline-color: rgba(238, 238, 236, 0.3); border-color: #252526; border-bottom-color: #111111; background-image: linear-gradient(to top, #3c3c3d 2px, #3f3e40); text-shadow: 0 -1px rgba(0, 0, 0, 0.802353); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.802353); box-shadow: inset 0 1px rgba(255, 255, 255, 0.02), 0 1px 1px rgba(37, 37, 38, 0.5); }
+notebook > header > tabs > arrow, button.titlebutton, button { min-height: 24px; min-width: 16px; padding: 4px 8px; border: 1px solid; border-radius: 5px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); color: #eeeeec; outline-color: rgba(238, 238, 236, 0.3); border-color: #252526; border-bottom-color: #111111; background-image: linear-gradient(to top, #3c3c3d 2px, #3f3e40); text-shadow: 0 -1px rgba(0, 0, 0, 0.802353); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.802353); box-shadow: inset 0 1px rgba(255, 255, 255, 0.02), 0 1px 1px rgba(37, 37, 38, 0.5); }
 
 notebook > header > tabs > arrow, button.sidebar-button, button.titlebutton, button.flat { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; transition: none; }
 
