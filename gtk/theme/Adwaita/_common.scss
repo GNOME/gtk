@@ -1633,8 +1633,8 @@ headerbar {
         background-color: transparentize($selected_bg_color, 1);
         background-image: none;
         box-shadow: none;
-        padding-left: 10px;
-        padding-right: 10px;
+        min-height: 20px;
+        padding: 6px 10px;
 
         arrow { -GtkArrow-arrow-scaling: 1; }
 
