@@ -3005,7 +3005,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       /* X throws BadMatch if the parent has a different depth when
        * using ParentRelative */
       parent = gdk_window_get_parent (window);
-      if (parent == NULL || window->depth == parent->depth)
+      if (parent != NULL && window->depth == parent->depth &&
+          cairo_pattern_status (pattern) == CAIRO_STATUS_SUCCESS)
         {
           XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
                                       GDK_WINDOW_XID (window), ParentRelative);
