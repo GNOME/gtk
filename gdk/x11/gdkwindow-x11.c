@@ -2985,6 +2985,7 @@ gdk_window_x11_set_background (GdkWindow      *window,
   double r, g, b, a;
   cairo_surface_t *surface;
   cairo_matrix_t matrix;
+  cairo_pattern_t *parent_relative_pattern;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -2997,8 +2998,10 @@ gdk_window_x11_set_background (GdkWindow      *window,
     }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (pattern == gdk_x11_get_parent_relative_pattern ())
+  parent_relative_pattern = gdk_x11_get_parent_relative_pattern ();
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+  if (pattern == parent_relative_pattern)
     {
       GdkWindow *parent;
 
