@@ -536,6 +536,7 @@ enum {
   PROP_EXPAND,
   PROP_SCALE_FACTOR,
   PROP_CSS_NAME,
+  PROP_LAYOUT_MANAGER,
   NUM_PROPERTIES
 };
 
@@ -1328,6 +1329,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            P_("The name of this widget in the CSS tree"),
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
+  /**
+   * GtkWidget:layout-manager:
+   *
+   * The #GtkLayoutManager instance to use to compute the preferred size
+   * of the widget, and allocate its children.
+   */
+  widget_props[PROP_LAYOUT_MANAGER] =
+    g_param_spec_object ("layout-manager",
+                         P_("Layout Manager"),
+                         P_("The layout manager used to layout children of the widget"),
+                         GTK_TYPE_LAYOUT_MANAGER,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
@@ -2323,6 +2337,9 @@ gtk_widget_set_property (GObject         *object,
       else
         gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
       break;
+    case PROP_LAYOUT_MANAGER:
+      gtk_widget_set_layout_manager (widget, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2462,6 +2479,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_CSS_NAME:
       g_value_set_string (value, gtk_css_node_get_name (priv->cssnode));
+      break;
+    case PROP_LAYOUT_MANAGER:
+      g_value_set_object (value, gtk_widget_get_layout_manager (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -13627,6 +13647,8 @@ gtk_widget_set_layout_manager (GtkWidget        *widget,
         gtk_layout_manager_set_widget (priv->layout_manager, widget);
 
       gtk_widget_queue_resize (widget);
+
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_LAYOUT_MANAGER]);
     }
 }
 
