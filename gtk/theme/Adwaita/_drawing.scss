@@ -279,7 +279,7 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    $button_fill: if($variant == 'light', image(darken($c, 12%)), image(darken($c, 9%))) !global;
+    $button_fill: if($variant == 'light', image(darken($c, 14%)), image(darken($c, 9%))) !global;
     background-image: $button_fill;
     @include _shadows(inset 0 1px transparentize($_hilight_color, 1), $_button_edge);
 
