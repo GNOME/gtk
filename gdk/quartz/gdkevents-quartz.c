@@ -1551,8 +1551,10 @@ gdk_event_translate (GdkEvent *event,
           grab = _gdk_display_get_last_device_grab (_gdk_display,
                                                     gdk_seat_get_pointer (seat));
         }
-      return_val = TRUE;
     }
+
+  return_val = TRUE;
+
   switch (event_type)
     {
     case GDK_QUARTZ_LEFT_MOUSE_DOWN:
