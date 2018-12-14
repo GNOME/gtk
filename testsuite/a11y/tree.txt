@@ -59,6 +59,11 @@ window1
       action 1 description: Creates a widget in which the contents of the cell can be edited
       action 2 name: activate
       action 2 description: Activates the cell
+      <AtkTableCell>
+      table: tv
+      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-span: 1
+      row-span: 1
       tv
         "table cell"
         parent: tv
@@ -103,6 +108,11 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
       tv
         "table cell"
         parent: tv
@@ -147,6 +157,11 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
     tv
       "table cell"
       parent: tv
@@ -162,6 +177,12 @@ window1
       action 1 description: Creates a widget in which the contents of the cell can be edited
       action 2 name: activate
       action 2 description: Activates the cell
+      <AtkTableCell>
+      table: tv
+      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-span: 1
+      row-span: 1
+      position: 1 0
       tv
         "table cell"
         parent: tv
@@ -206,6 +227,12 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 1 0
       tv
         "table cell"
         parent: tv
@@ -250,6 +277,12 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 1 0
     tv
       "table cell"
       parent: tv
@@ -265,6 +298,12 @@ window1
       action 1 description: Creates a widget in which the contents of the cell can be edited
       action 2 name: activate
       action 2 description: Activates the cell
+      <AtkTableCell>
+      table: tv
+      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-span: 1
+      row-span: 1
+      position: 2 0
       tv
         "table cell"
         parent: tv
@@ -309,6 +348,12 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 2 0
       tv
         "table cell"
         parent: tv
@@ -353,3 +398,9 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 2 0
