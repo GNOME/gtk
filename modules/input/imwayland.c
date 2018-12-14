@@ -269,6 +269,11 @@ text_input_done (void                     *data,
 static void
 notify_surrounding_text (GtkIMContextWayland *context)
 {
+#define MAX_LEN 4000
+  const gchar *start, *end;
+  int len, cursor, anchor;
+  char *str = NULL;
+
   if (!global || !global->text_input)
     return;
   if (global->current != GTK_IM_CONTEXT (context))
@@ -276,12 +281,67 @@ notify_surrounding_text (GtkIMContextWayland *context)
   if (!context->surrounding.text)
     return;
 
+  len = strlen (context->surrounding.text);
+  cursor = context->surrounding.cursor_idx;
+  anchor = context->surrounding.anchor_idx;
+
+  /* The protocol specifies a maximum length of 4KiB on transfers,
+   * mangle the surrounding text if it's bigger than that, and relocate
+   * cursor/anchor locations as per the string being sent.
+   */
+  if (len > MAX_LEN)
+    {
+      if (context->surrounding.cursor_idx < MAX_LEN &&
+          context->surrounding.anchor_idx < MAX_LEN)
+        {
+          start = context->surrounding.text;
+          end = &context->surrounding.text[MAX_LEN];
+        }
+      else if (context->surrounding.cursor_idx > len - MAX_LEN &&
+               context->surrounding.cursor_idx > len - MAX_LEN)
+        {
+          start = &context->surrounding.text[len - MAX_LEN];
+          end = &context->surrounding.text[len];
+        }
+      else
+        {
+          int mid, a, b;
+          int cursor_len = ABS (context->surrounding.cursor_idx -
+                                context->surrounding.anchor_idx);
+
+          if (cursor_len > MAX_LEN)
+            {
+              g_warn_if_reached ();
+              return;
+            }
+
+          mid = MIN (context->surrounding.cursor_idx,
+                     context->surrounding.cursor_idx) + (cursor_len / 2);
+          a = MAX (0, mid - (MAX_LEN / 2));
+          b = MIN (MAX_LEN, mid + (MAX_LEN / 2));
+
+          start = &context->surrounding.text[a];
+          end = &context->surrounding.text[b];
+        }
+
+      if (start != context->surrounding.text)
+        start = g_utf8_next_char (start);
+      if (end != &context->surrounding.text[len])
+        end = g_utf8_find_prev_char (context->surrounding.text, end);
+
+      cursor -= start - context->surrounding.text;
+      anchor -= start - context->surrounding.text;
+
+      str = g_strndup (start, end - start);
+    }
+
   zwp_text_input_v3_set_surrounding_text (global->text_input,
-                                          context->surrounding.text,
-                                          context->surrounding.cursor_idx,
-                                          context->surrounding.anchor_idx);
+                                          str ? str : context->surrounding.text,
+                                          cursor, anchor);
   zwp_text_input_v3_set_text_change_cause (global->text_input,
                                            context->surrounding_change);
+  g_free (str);
+#undef MAX_LEN
 }
 
 static void
