@@ -75,6 +75,14 @@ struct _GtkCellAccessibleParentIface
   void     ( *update_relationset) (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell,
                                  AtkRelationSet          *relationset);
+  void     ( *get_cell_position) (GtkCellAccessibleParent *parent,
+                                  GtkCellAccessible       *cell,
+                                  gint                    *row,
+                                  gint                    *column);
+  GPtrArray *   ( *get_column_header_cells) (GtkCellAccessibleParent *parent,
+                                             GtkCellAccessible       *cell);
+  GPtrArray *   ( *get_row_header_cells)    (GtkCellAccessibleParent *parent,
+                                             GtkCellAccessible       *cell);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -115,6 +123,17 @@ GDK_AVAILABLE_IN_3_12
 void     gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
                                                       GtkCellAccessible       *cell,
                                                       AtkRelationSet          *relationset);
+GDK_AVAILABLE_IN_ALL
+void     gtk_cell_accessible_parent_get_cell_position(GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell,
+                                                      gint                    *row,
+                                                      gint                    *column);
+
+GPtrArray   *gtk_cell_accessible_parent_get_column_header_cells (GtkCellAccessibleParent *parent,
+                                                                 GtkCellAccessible       *cell);
+
+GPtrArray   *gtk_cell_accessible_parent_get_row_header_cells    (GtkCellAccessibleParent *parent,
+                                                                 GtkCellAccessible       *cell);
 
 G_END_DECLS
 

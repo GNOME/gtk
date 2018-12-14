@@ -1392,6 +1392,56 @@ gtk_tree_view_accessible_update_relationset (GtkCellAccessibleParent *parent,
 }
 
 static void
+gtk_tree_view_accessible_get_cell_position (GtkCellAccessibleParent *parent,
+                                            GtkCellAccessible       *cell,
+                                            gint                    *row,
+                                            gint                    *column)
+{
+  GtkWidget *widget;
+  GtkTreeView *tree_view;
+  GtkTreeViewAccessibleCellInfo *cell_info;
+  GtkTreeViewAccessible *accessible;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
+  if (widget == NULL)
+    return;
+
+  tree_view = GTK_TREE_VIEW (widget);
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (parent);
+  cell_info = find_cell_info (accessible, cell);
+  if (!cell_info)
+    return;
+
+  if (row)
+    (*row) = _gtk_rbtree_node_get_index (cell_info->tree, cell_info->node);
+  if (column)
+    (*column) = get_column_number (tree_view, cell_info->cell_col_ref);
+}
+
+static GPtrArray *
+gtk_tree_view_accessible_get_column_header_cells (GtkCellAccessibleParent *parent,
+                                                  GtkCellAccessible       *cell)
+{
+  GtkWidget *widget;
+  GtkTreeViewAccessibleCellInfo *cell_info;
+  GtkTreeViewAccessible *accessible;
+  GPtrArray *array;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
+  if (widget == NULL)
+    return NULL;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (parent);
+  cell_info = find_cell_info (accessible, cell);
+  if (!cell_info)
+    return NULL;
+
+  array = g_ptr_array_new_full (1, g_object_unref);
+  g_ptr_array_add (array, g_object_ref (get_header_from_column ( (cell_info->cell_col_ref))));
+  return array;
+}
+
+static void
 gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 {
   iface->get_cell_extents = gtk_tree_view_accessible_get_cell_extents;
@@ -1403,6 +1453,8 @@ gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
   iface->activate = gtk_tree_view_accessible_activate;
   iface->edit = gtk_tree_view_accessible_edit;
   iface->update_relationset = gtk_tree_view_accessible_update_relationset;
+  iface->get_cell_position = gtk_tree_view_accessible_get_cell_position;
+  iface->get_column_header_cells = gtk_tree_view_accessible_get_column_header_cells;
 }
 
 void
