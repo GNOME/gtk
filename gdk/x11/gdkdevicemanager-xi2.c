@@ -1115,7 +1115,7 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
           device_get_tool_serial_and_id (device, &serial_id, &tool_id))
         {
           seat = gdk_device_get_seat (device);
-          tool = gdk_seat_get_tool (seat, serial_id);
+          tool = gdk_seat_get_tool (seat, serial_id, tool_id);
 
           if (!tool && serial_id > 0)
             {
