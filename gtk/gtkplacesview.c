@@ -1628,8 +1628,6 @@ populate_available_protocols_grid (GtkGrid *grid)
   if (g_strv_contains (supported_protocols, "dav"))
     /* Translators: do not translate dav:// and davs:// */
     attach_protocol_row_to_grid (grid, _("WebDAV"), _("dav:// or davs://"));
-
-  gtk_widget_show_all (GTK_WIDGET (grid));
 }
 
 /* Constructs the popup menu if needed */
