@@ -183,6 +183,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, _gtk_boolean_handled_accumulator, NULL, NULL,
                   G_TYPE_BOOLEAN, 3, G_TYPE_UINT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
+
   /**
    * GtkEventControllerKey::key-released:
    * @controller: the object which received the signal.
@@ -198,6 +199,17 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
+
+  /**
+   * GtkEventControllerKey::modifiers:
+   * @controller: the object which received the signal.
+   * @keyval: the released key.
+   * @state: the bitmask, representing the new state of modifier keys and
+   *   pointer buttons. See #GdkModifierType.
+   *
+   * This signal is emitted whenever the state of modifier keys and pointer
+   * buttons change.
+   */
   signals[MODIFIERS] =
     g_signal_new (I_("modifiers"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
@@ -205,6 +217,14 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   0, NULL, NULL,
                   g_cclosure_marshal_BOOLEAN__FLAGS,
                   G_TYPE_BOOLEAN, 1, GDK_TYPE_MODIFIER_TYPE);
+
+  /**
+   * GtkEventControllerKey::im-update:
+   * @controller: the object which received the signal.
+   *
+   * This signal is emitted whenever the input method context filters away a
+   * keypress and prevents the @controller receiving it.
+   */
   signals[IM_UPDATE] =
     g_signal_new (I_("im-update"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
@@ -212,6 +232,14 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkEventControllerKey::focus-in:
+   * @controller: the object which received the signal.
+   *
+   * This signal is emitted whenever the #GtkEventController:widget controlled
+   * by the @controller is given the keyboard focus.
+   */
   signals[FOCUS_IN] =
     g_signal_new (I_("focus-in"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
@@ -219,6 +247,14 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkEventControllerKey::focus-out:
+   * @controller: the object which received the signal.
+   *
+   * This signal is emitted whenever the #GtkEventController:widget controlled
+   * by the @controller loses the keyboard focus.
+   */
   signals[FOCUS_OUT] =
     g_signal_new (I_("focus-out"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
@@ -234,6 +270,13 @@ gtk_event_controller_key_init (GtkEventControllerKey *controller)
   controller->pressed_keys = g_hash_table_new (NULL, NULL);
 }
 
+/**
+ * gtk_event_controller_key_new:
+ *
+ * Creates a new event controller that will handle key events.
+ *
+ * Returns: a new #GtkEventControllerKey
+ **/
 GtkEventController *
 gtk_event_controller_key_new (void)
 {
@@ -241,6 +284,13 @@ gtk_event_controller_key_new (void)
                        NULL);
 }
 
+/**
+ * gtk_event_controller_key_set_im_context:
+ * @controller: a #GtkEventControllerKey
+ * @im_context: a #GtkIMContext
+ *
+ * Sets the input method context of the key @controller.
+ **/
 void
 gtk_event_controller_key_set_im_context (GtkEventControllerKey *controller,
                                          GtkIMContext          *im_context)
@@ -258,9 +308,9 @@ gtk_event_controller_key_set_im_context (GtkEventControllerKey *controller,
  * gtk_event_controller_key_get_im_context:
  * @controller: a #GtkEventControllerKey
  *
- * Gets the IM context of a key controller.
+ * Gets the input method context of the key @controller.
  *
- * Returns: (transfer none): the IM context
+ * Returns: (transfer none): the #GtkIMContext
  **/
 GtkIMContext *
 gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
@@ -270,6 +320,15 @@ gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
   return controller->im_context;
 }
 
+/**
+ * gtk_event_controller_key_forward:
+ * @controller: a #GtkEventControllerKey
+ * @widget: a #GtkWidget
+ *
+ * Forwards the current event of this @controller to a @widget.
+ *
+ * Returns: whether the @widget handled the event
+ **/
 gboolean
 gtk_event_controller_key_forward (GtkEventControllerKey *controller,
                                   GtkWidget             *widget)
@@ -289,6 +348,15 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
   return FALSE;
 }
 
+/**
+ * gtk_event_controller_key_get_group:
+ * @controller: a #GtkEventControllerKey
+ *
+ * Gets the key group of the current event of this @controller.
+ * See gdk_event_get_key_group().
+ *
+ * Returns: the key group
+ **/
 guint
 gtk_event_controller_key_get_group (GtkEventControllerKey *controller)
 {
