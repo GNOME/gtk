@@ -187,3 +187,69 @@ gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
   if (iface->update_relationset)
     (iface->update_relationset) (parent, cell, relationset);
 }
+
+void
+gtk_cell_accessible_parent_get_cell_position (GtkCellAccessibleParent *parent,
+                                              GtkCellAccessible       *cell,
+                                              gint                    *row,
+                                              gint                    *column)
+{
+  GtkCellAccessibleParentIface *iface;
+
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (cell));
+
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
+
+  if (iface->get_cell_position)
+    (iface->get_cell_position) (parent, cell, row, column);
+  else
+    {
+      if (row)
+        *row = -1;
+      if (column)
+        *column = -1;
+    }
+}
+
+/**
+ * gtk_cell_accessible_parent_get_column_header_cells:
+ * Returns: (transfer full) (element-type AtkObject)
+ */
+GPtrArray *
+gtk_cell_accessible_parent_get_column_header_cells (GtkCellAccessibleParent *parent,
+                                                    GtkCellAccessible       *cell)
+{
+  GtkCellAccessibleParentIface *iface;
+
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent), NULL);
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE (cell), NULL);
+
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
+
+  if (iface->get_column_header_cells)
+    return (iface->get_column_header_cells) (parent, cell);
+  else
+    return NULL;
+}
+
+/**
+ * gtk_cell_accessible_parent_get_row_header_cells:
+ * Returns: (transfer full) (element-type AtkObject)
+ */
+GPtrArray *
+gtk_cell_accessible_parent_get_row_header_cells (GtkCellAccessibleParent *parent,
+                                                    GtkCellAccessible       *cell)
+{
+  GtkCellAccessibleParentIface *iface;
+
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent), NULL);
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE (cell), NULL);
+
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
+
+  if (iface->get_row_header_cells)
+    return (iface->get_row_header_cells) (parent, cell);
+  else
+    return NULL;
+}
