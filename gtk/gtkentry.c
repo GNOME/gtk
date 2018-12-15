@@ -7484,15 +7484,18 @@ gtk_entry_clear_icon (GtkEntry             *entry,
   if (GDK_IS_WINDOW (icon_info->window))
     gdk_window_hide (icon_info->window);
 
+  _gtk_icon_helper_clear (icon_helper);
+
+  g_object_notify_by_pspec (G_OBJECT (entry),
+                            entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
+                                        ? PROP_PIXBUF_PRIMARY
+                                        : PROP_PIXBUF_SECONDARY]);
+
   storage_type = _gtk_icon_helper_get_storage_type (icon_helper);
 
   switch (storage_type)
     {
     case GTK_IMAGE_PIXBUF:
-      g_object_notify_by_pspec (G_OBJECT (entry),
-                                entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
-                                            ? PROP_PIXBUF_PRIMARY
-                                            : PROP_PIXBUF_SECONDARY]);
       break;
 
     case GTK_IMAGE_STOCK:
@@ -7520,8 +7523,6 @@ gtk_entry_clear_icon (GtkEntry             *entry,
       g_assert_not_reached ();
       break;
     }
-
-  _gtk_icon_helper_clear (icon_helper);
 
   g_object_notify_by_pspec (G_OBJECT (entry),
                             entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
