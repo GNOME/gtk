@@ -24,7 +24,7 @@ developers, including those developing proprietary software, without
 any license fees or royalties.</description>
   <homepage rdf:resource="http://www.gtk.org/" />
   <license rdf:resource="http://usefulinc.com/doap/licenses/lgpl" />
-  <bug-database rdf:resource="http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gtk/issues/" />
   <download-page rdf:resource="http://download.gnome.org/sources/gtk+/" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-list" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-app-devel-list" />
