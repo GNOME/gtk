@@ -379,12 +379,7 @@ get_window_point_from_screen_point (GdkWindow *window,
   GdkQuartzNSWindow *nswindow;
 
   nswindow = (GdkQuartzNSWindow*)(((GdkWindowImplQuartz *)window->impl)->toplevel);
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  point = [nswindow convertScreenToBase:screen_point];
-#else
   point = [nswindow convertPointFromScreen:screen_point];
-#endif
   *x = point.x;
   *y = window->height - point.y;
 }
@@ -460,12 +455,7 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
         }
       else
         {
-          if (gdk_quartz_osx_version () >= GDK_OSX_LION)
-            *screen_point = [(GdkQuartzNSWindow*)[nsevent window] convertPointToScreen:point];
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 10700
-          else
-            *screen_point = [[nsevent window] convertBaseToScreen:point];
-#endif
+	  *screen_point = [(GdkQuartzNSWindow*)[nsevent window] convertPointToScreen:point];
           *x = point.x;
           *y = toplevel->height - point.y;
         }

@@ -379,22 +379,46 @@
 
   initialPositionKnown = NO;
 }
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+
 - (NSPoint)convertPointToScreen:(NSPoint)point
 {
-  NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
-  NSRect outrect = [self convertRectToScreen: inrect];
-  return (NSPoint)((CGRect)outrect).origin;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
+  if (gdk_quartz_osx_version () >= GDK_OSX_MOJAVE)
+    {
+      return [super convertPointToScreen: point];
+    }
+#endif
+  if (gdk_quartz_osx_version () >= GDK_OSX_LION)
+    {
+      NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
+      NSRect outrect = [self convertRectToScreen: inrect];
+      return (NSPoint)((CGRect)outrect).origin;
+    }
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+  return [self convertBaseToScreen:point];
+#endif
 }
 
 - (NSPoint)convertPointFromScreen:(NSPoint)point
 {
-  NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
-  NSRect outrect = [self convertRectFromScreen: inrect];
-  return (NSPoint)((CGRect)outrect).origin;
-}
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
+  if (gdk_quartz_osx_version () >= GDK_OSX_MOJAVE)
+    {
+      return [super convertPointToScreen: point];
+    }
 #endif
+  if (gdk_quartz_osx_version () >= GDK_OSX_LION)
+    {
+      NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
+      NSRect outrect = [self convertRectFromScreen: inrect];
+      return (NSPoint)((CGRect)outrect).origin;
+    }
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+  return [self convertScreenToBase:point];
+#endif
+}
 
 - (BOOL)trackManualMove
 {
@@ -407,11 +431,8 @@
 
   if (!inManualMove)
     return NO;
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  currentLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
-#else
+
   currentLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-#endif
   newOrigin.x = currentLocation.x - initialMoveLocation.x;
   newOrigin.y = currentLocation.y - initialMoveLocation.y;
 
@@ -442,11 +463,7 @@
 
   inManualMove = YES;
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  initialMoveLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
-#else
   initialMoveLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-#endif
   initialMoveLocation.x -= frame.origin.x;
   initialMoveLocation.y -= frame.origin.y;
 }
@@ -462,12 +479,7 @@
     return NO;
 
   inTrackManualResize = YES;
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  mouse_location = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
-#else
   mouse_location = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-#endif
   mdx = initialResizeLocation.x - mouse_location.x;
   mdy = initialResizeLocation.y - mouse_location.y;
 
@@ -552,12 +564,7 @@
   resizeEdge = edge;
 
   initialResizeFrame = [self frame];
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  initialResizeLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
-#else
   initialResizeLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-#endif
 }
 
 
@@ -690,13 +697,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 - (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender
 {
   NSPoint point = [sender draggingLocation];
-  NSPoint screen_point;
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  screen_point = [self convertBaseToScreen:point];
-#else
-  screen_point = [self convertPointToScreen:point];
-#endif
+  NSPoint screen_point = [self convertPointToScreen:point];
   GdkEvent *event;
   int gx, gy;
 
@@ -724,13 +725,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
   NSPoint point = [sender draggingLocation];
-  NSPoint screen_point;
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-    screen_point = [self convertBaseToScreen:point];
-#else
-  screen_point = [self convertPointToScreen:point];
-#endif
+  NSPoint screen_point = [self convertPointToScreen:point];
   GdkEvent *event;
   int gy, gx;
 
