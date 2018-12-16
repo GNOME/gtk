@@ -1,4 +1,4 @@
-FROM fedora:28
+FROM fedora:29
 
 RUN dnf -y install \
     hicolor-icon-theme \
@@ -70,7 +70,7 @@ RUN dnf -y install \
     xorg-x11-server-Xvfb \
  && dnf clean all
 
-RUN pip3 install meson
+RUN pip3 install meson==0.49.0
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}

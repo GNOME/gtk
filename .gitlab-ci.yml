@@ -13,7 +13,7 @@ stages:
     - subprojects/pango/
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v2
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
@@ -64,7 +64,7 @@ flatpak:widget-factory:
   <<: *flatpak-defaults
 
 pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v2
   stage: deploy 
   script:
     - meson -Ddocumentation=true _build .
