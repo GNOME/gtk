@@ -246,6 +246,8 @@ iter_init_common (GtkTextIter *_iter,
   g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (tree != NULL, NULL);
 
+  memset (iter, 0, sizeof (GtkTextRealIter));
+
   iter->tree = tree;
 
   iter->chars_changed_stamp =
