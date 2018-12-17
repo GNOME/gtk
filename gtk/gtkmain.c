@@ -2439,6 +2439,8 @@ propagate_event_up (GtkWidget *widget,
       else if (gtk_widget_get_realized (widget))
         handled_event = gtk_widget_event (widget, event);
 
+      handled_event |= !gtk_widget_get_realized (widget);
+
       tmp = gtk_widget_get_parent (widget);
       g_object_unref (widget);
 
@@ -2492,6 +2494,8 @@ propagate_event_down (GtkWidget *widget,
         }
       else if (gtk_widget_get_realized (widget))
         handled_event = _gtk_widget_captured_event (widget, event);
+
+      handled_event |= !gtk_widget_get_realized (widget);
     }
   g_list_free_full (widgets, (GDestroyNotify)g_object_unref);
 
