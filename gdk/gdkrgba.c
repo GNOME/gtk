@@ -338,9 +338,9 @@ gdk_rgba_equal (gconstpointer p1,
  * where “r”, “g”, “b” and “a” represent the red, green,
  * blue and alpha values respectively. “r”, “g”, and “b” are
  * represented as integers in the range 0 to 255, and “a”
- * is represented as floating point value in the range 0 to 1.
+ * is represented as a floating point value in the range 0 to 1.
  *
- * These string forms are string forms those supported by
+ * These string forms are string forms that are supported by
  * the CSS3 colors module, and can be parsed by gdk_rgba_parse().
  *
  * Note that this string representation may lose some
