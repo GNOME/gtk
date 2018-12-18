@@ -1120,6 +1120,10 @@ gtk_media_stream_unprepared (GtkMediaStream *self)
  * your GtkMediaStream.pause() implementation), abort pending seeks
  * and mark the stream as prepared.
  *
+ * if the stream is already in an error state, this call will be ignored
+ * and the existing error will be retained.
+ * FIXME: Or do we want to set the new error?
+ *
  * To unset an error, the stream must be reset via a call to
  * gtk_media_stream_unprepared().
  **/
@@ -1130,8 +1134,10 @@ gtk_media_stream_gerror (GtkMediaStream *self,
   GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
 
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
-  g_return_if_fail (gtk_media_stream_get_error (self) == NULL);
   g_return_if_fail (error != NULL);
+
+  if (priv->error)
+    return;
 
   g_object_freeze_notify (G_OBJECT (self));
 
