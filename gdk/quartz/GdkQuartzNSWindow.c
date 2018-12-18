@@ -405,7 +405,7 @@
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
   if (gdk_quartz_osx_version () >= GDK_OSX_MOJAVE)
     {
-      return [super convertPointToScreen: point];
+      return [super convertPointFromScreen: point];
     }
 #endif
   if (gdk_quartz_osx_version () >= GDK_OSX_LION)
