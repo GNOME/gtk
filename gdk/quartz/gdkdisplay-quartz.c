@@ -252,7 +252,7 @@ configure_monitor (GdkMonitor *monitor)
   monitor->width_mm = width;
   monitor->height_mm = height;
   monitor->geometry = disp_geometry;
-  monitor->scale_factor = 1;
+  monitor->scale_factor = CGDisplayModeGetPixelWidth (mode) / (float)CGDisplayModeGetWidth (mode);
   monitor->refresh_rate = refresh_rate;
   monitor->subpixel_layout = GDK_SUBPIXEL_LAYOUT_UNKNOWN;
   CGDisplayModeRelease (mode);
