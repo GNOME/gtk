@@ -14,14 +14,14 @@ main (gint argc,
   box = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), box);
 
-  widget = gtk_label_new ("Some filler text to avoid\nresizing of the window");
+  widget = gtk_label_new ("Some filler text just to avoid\nresizing of the window");
   gtk_widget_set_margin_top (widget, 10);
   gtk_widget_set_margin_bottom (widget, 10);
   gtk_widget_set_margin_start (widget, 10);
   gtk_widget_set_margin_end (widget, 10);
   gtk_grid_attach (GTK_GRID (box), widget, 1, 1, 1, 1);
 
-  widget = gtk_label_new ("Some filler text to avoid\nresizing of the window");
+  widget = gtk_label_new ("Some filler text just to avoid\nresizing of the window");
   gtk_widget_set_margin_top (widget, 10);
   gtk_widget_set_margin_bottom (widget, 10);
   gtk_widget_set_margin_start (widget, 10);
