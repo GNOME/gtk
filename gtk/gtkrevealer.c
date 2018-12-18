@@ -449,7 +449,7 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkAllocation child_allocation;
   GtkWidget *child;
-  gboolean window_visible;
+  gboolean child_visible, window_visible;
   int bin_x, bin_y;
   GtkRevealerTransitionType transition;
   GtkBorder padding;
@@ -460,7 +460,9 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
   gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
-  if (child != NULL && gtk_widget_get_visible (child))
+  child_visible = child != NULL && gtk_widget_get_visible (child) &&
+                  gtk_widget_get_child_visible (child);
+  if (child_visible)
     gtk_widget_size_allocate (child, &child_allocation);
 
   if (gtk_widget_get_realized (widget))
