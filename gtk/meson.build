@@ -637,16 +637,16 @@ foreach p: proto_sources
   proto_name = p.get(0)
   proto_stability = p.get(1)
 
-  if proto_stability == 'stable'
-    output_base = proto_name
-    input = '@0@.xml'.format(proto_name)
-  else
-    proto_version = p.get(2)
-    output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
-    input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
-  endif
-
   if wayland_enabled
+    if proto_stability == 'stable'
+      output_base = proto_name
+      input = '@0@.xml'.format(proto_name)
+    else
+      proto_version = p.get(2)
+      output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
+      input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+    endif
+
     # wayland_scanner is defined in gdk/wayland/meson.build
     im_wayland_sources += custom_target('@0@ client header'.format(output_base),
                                         input: input,
