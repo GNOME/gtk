@@ -38,6 +38,23 @@
 
 #include <string.h>
 
+static const char *wacom_type_atoms[] = {
+  "STYLUS",
+  "CURSOR",
+  "ERASER",
+  "PAD",
+  "TOUCH"
+};
+#define N_WACOM_TYPE_ATOMS G_N_ELEMENTS (wacom_type_atoms)
+
+enum {
+  WACOM_TYPE_STYLUS,
+  WACOM_TYPE_CURSOR,
+  WACOM_TYPE_ERASER,
+  WACOM_TYPE_PAD,
+  WACOM_TYPE_TOUCH,
+};
+
 struct _GdkX11DeviceManagerXI2
 {
   GdkX11DeviceManagerCore parent_object;
@@ -1018,6 +1035,66 @@ device_get_tool_serial_and_id (GdkDevice *device,
   return TRUE;
 }
 
+static GdkDeviceToolType
+device_get_tool_type (GdkDevice *device)
+{
+  GdkDisplay *display;
+  gulong nitems, bytes_after;
+  guint32 *data;
+  int rc, format;
+  Atom type;
+  Atom device_type;
+  Atom types[N_WACOM_TYPE_ATOMS];
+  GdkDeviceToolType tool_type = GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+
+  display = gdk_device_get_display (device);
+  gdk_x11_display_error_trap_push (display);
+
+  rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
+                      gdk_x11_device_get_id (device),
+                      gdk_x11_get_xatom_by_name_for_display (display, "Wacom Tool Type"),
+                      0, 1, False, XA_ATOM, &type, &format, &nitems, &bytes_after,
+                      (guchar **) &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (rc != Success)
+    return GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+
+  if (type != XA_ATOM || format != 32 || nitems != 1)
+    {
+      XFree (data);
+      return GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+    }
+
+  device_type = *data;
+  XFree (data);
+
+  if (device_type == 0)
+    return GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+
+  gdk_x11_display_error_trap_push (display);
+  rc = XInternAtoms (GDK_DISPLAY_XDISPLAY (display),
+                     (char **) wacom_type_atoms,
+                     N_WACOM_TYPE_ATOMS,
+                     False,
+                     types);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (rc == 0)
+    return GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+
+  if (device_type == types[WACOM_TYPE_STYLUS])
+    tool_type = GDK_DEVICE_TOOL_TYPE_PEN;
+  else if (device_type == types[WACOM_TYPE_CURSOR])
+    tool_type = GDK_DEVICE_TOOL_TYPE_MOUSE;
+  else if (device_type == types[WACOM_TYPE_ERASER])
+    tool_type = GDK_DEVICE_TOOL_TYPE_ERASER;
+  else if (device_type == types[WACOM_TYPE_TOUCH])
+    tool_type = GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+
+  return tool_type;
+}
+
 static void
 handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
                         XIPropertyEvent        *ev)
@@ -1038,13 +1115,18 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
           device_get_tool_serial_and_id (device, &serial_id, &tool_id))
         {
           seat = gdk_device_get_seat (device);
-          tool = gdk_seat_get_tool (seat, serial_id);
+          tool = gdk_seat_get_tool (seat, serial_id, tool_id);
 
           if (!tool && serial_id > 0)
             {
-              tool = gdk_device_tool_new (serial_id, tool_id,
-                                          GDK_DEVICE_TOOL_TYPE_UNKNOWN, 0);
-              gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), tool);
+              GdkDeviceToolType tool_type;
+
+              tool_type = device_get_tool_type (device);
+              if (tool_type != GDK_DEVICE_TOOL_TYPE_UNKNOWN)
+                {
+                  tool = gdk_device_tool_new (serial_id, tool_id, tool_type, 0);
+                  gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), tool);
+                }
             }
         }
 

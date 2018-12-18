@@ -449,12 +449,13 @@ gdk_seat_tool_removed (GdkSeat       *seat,
 
 GdkDeviceTool *
 gdk_seat_get_tool (GdkSeat *seat,
-                   guint64  serial)
+                   guint64  serial,
+                   guint64  hw_id)
 {
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_tool (seat, serial);
+  return seat_class->get_tool (seat, serial, hw_id);
 }
