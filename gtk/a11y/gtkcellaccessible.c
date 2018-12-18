@@ -423,7 +423,7 @@ gtk_cell_accessible_get_row_header_cells (AtkTableCell *table_cell)
                                                           cell);
 }
 
-static gboolean
+static AtkObject *
 gtk_cell_accessible_get_table (AtkTableCell *table_cell)
 {
   AtkObject *obj;
