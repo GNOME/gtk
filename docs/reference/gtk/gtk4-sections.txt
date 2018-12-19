@@ -7164,9 +7164,23 @@ gtk_layout_manager_measure
 gtk_layout_manager_allocate
 gtk_layout_manager_get_request_mode
 gtk_layout_manager_get_widget
+gtk_layout_manager_get_layout_child
 gtk_layout_manager_layout_changed
 
 <SUBSECTION Standard>
 GTK_TYPE_LAYOUT_MANAGER
 gtk_layout_manager_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtklayoutchild</FILE>
+GtkLayoutChild
+GtkLayoutChildClass
+
+gtk_layout_child_get_layout_manager
+gtk_layout_child_get_child_widget
+
+<SUBSECTION Standard>
+GTK_TYPE_LAYOUT_CHILD
+gtk_layout_child_get_type
 </SECTION>
