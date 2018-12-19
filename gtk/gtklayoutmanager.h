@@ -20,6 +20,7 @@
 
 #include <gtk/gtktypes.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtklayoutchild.h>
 
 G_BEGIN_DECLS
 
@@ -48,23 +49,26 @@ struct _GtkLayoutManagerClass
   GObjectClass parent_class;
 
   /*< public >*/
-  GtkSizeRequestMode (* get_request_mode) (GtkLayoutManager *manager,
-                                           GtkWidget        *widget);
+  GtkSizeRequestMode (* get_request_mode)    (GtkLayoutManager *manager,
+                                              GtkWidget        *widget);
 
-  void               (* measure)          (GtkLayoutManager *manager,
-                                           GtkWidget        *widget,
-                                           GtkOrientation    orientation,
-                                           int               for_size,
-                                           int              *minimum,
-                                           int              *natural,
-                                           int              *minimum_baseline,
-                                           int              *natural_baseline);
+  void               (* measure)             (GtkLayoutManager *manager,
+                                              GtkWidget        *widget,
+                                              GtkOrientation    orientation,
+                                              int               for_size,
+                                              int              *minimum,
+                                              int              *natural,
+                                              int              *minimum_baseline,
+                                              int              *natural_baseline);
 
-  void               (* allocate)         (GtkLayoutManager *manager,
-                                           GtkWidget        *widget,
-                                           int               width,
-                                           int               height,
-                                           int               baseline);
+  void               (* allocate)            (GtkLayoutManager *manager,
+                                              GtkWidget        *widget,
+                                              int               width,
+                                              int               height,
+                                              int               baseline);
+
+  GtkLayoutChild *   (* create_layout_child) (GtkLayoutManager *manager,
+                                              GtkWidget        *widget);
 
   /*< private >*/
   gpointer _padding[16];
@@ -94,5 +98,9 @@ GtkWidget *             gtk_layout_manager_get_widget           (GtkLayoutManage
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_layout_manager_layout_changed       (GtkLayoutManager *manager);
+
+GDK_AVAILABLE_IN_ALL
+GtkLayoutChild *        gtk_layout_manager_get_layout_child     (GtkLayoutManager *manager,
+                                                                 GtkWidget        *widget);
 
 G_END_DECLS
