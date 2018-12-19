@@ -32,6 +32,11 @@
 #include <math.h>
 
 #define CORNER_MASK_CACHE_SIZE 300U
+#if 0
+#define DEBUG_CACHE(args) g_print args
+#else
+#define DEBUG_CACHE(args)
+#endif
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -817,9 +822,12 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       cairo_destroy (mask_cr);
 
       if (g_hash_table_size(corner_mask_cache) < CORNER_MASK_CACHE_SIZE)
-        g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
-      else
-        mask_not_in_cache = TRUE;
+        {
+          g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+          DEBUG_CACHE(("corner_mask_cache now contains %u items\n",
+                       g_hash_table_size(corner_mask_cache)));
+        }
+      else mask_not_in_cache = TRUE;
     }
 
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
