@@ -111,6 +111,9 @@ static void gtk_revealer_measure (GtkWidget      *widget,
 static void     gtk_revealer_snapshot                            (GtkWidget     *widget,
                                                                   GtkSnapshot   *snapshot);
 
+static void     gtk_revealer_set_position (GtkRevealer *revealer,
+                                           gdouble      pos);
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN)
 
 static void
@@ -202,10 +205,8 @@ gtk_revealer_unmap (GtkWidget *widget)
 
   /* Finish & stop the animation */
   if (priv->current_pos != priv->target_pos)
-    {
-      priv->current_pos = priv->target_pos;
-      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
-    }
+    gtk_revealer_set_position (revealer, priv->target_pos);
+
   if (priv->tick_id != 0)
     {
       gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
