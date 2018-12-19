@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include "gtkdebug.h"
+
 #include "gtkcssshadowvalueprivate.h"
 
 #include "gtkcairoblurprivate.h"
@@ -817,7 +819,11 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       cairo_destroy (mask_cr);
 
       if (g_hash_table_size (corner_mask_cache) < CORNER_MASK_CACHE_SIZE)
-        g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+        {
+          g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+          GTK_NOTE (MISC, (g_print("corner_mask_cache now contains %u items\n",
+                                   g_hash_table_size(corner_mask_cache))));
+        }
       else
         mask_not_in_cache = TRUE;
     }
