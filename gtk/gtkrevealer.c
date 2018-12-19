@@ -202,10 +202,8 @@ gtk_revealer_unmap (GtkWidget *widget)
 
   /* Finish & stop the animation */
   if (priv->current_pos != priv->target_pos)
-    {
-      priv->current_pos = priv->target_pos;
-      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
-    }
+    gtk_revealer_set_position (revealer, priv->target_pos);
+
   if (priv->tick_id != 0)
     {
       gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
