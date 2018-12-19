@@ -7121,3 +7121,21 @@ gtk_layout_child_get_child_widget
 GTK_TYPE_LAYOUT_CHILD
 gtk_layout_child_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkboxlayout</FILE>
+GtkBoxLayout
+GtkBoxLayoutClass
+
+gtk_box_layout_new
+gtk_box_layout_set_homogeneous
+gtk_box_layout_get_homogeneous
+gtk_box_layout_set_spacing
+gtk_box_layout_get_spacing
+gtk_box_layout_set_baseline_position
+gtk_box_layout_get_baseline_position
+
+<SUBSECTION Standard>
+GTK_TYPE_BOX_LAYOUT
+gtk_box_layout_get_type
+</SECTION>
