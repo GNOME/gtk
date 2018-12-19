@@ -57,7 +57,7 @@
  */
 
 
-typedef struct _GtkLayoutChild   GtkLayoutChild;
+typedef struct _LayoutChild   LayoutChild;
 
 typedef struct
 {
@@ -77,7 +77,7 @@ typedef struct
   GList *children;
 } GtkLayoutPrivate;
 
-struct _GtkLayoutChild {
+struct _LayoutChild {
   GtkWidget *widget;
   gint x;
   gint y;
@@ -298,7 +298,7 @@ gtk_layout_set_vadjustment (GtkLayout     *layout,
   g_object_notify (G_OBJECT (layout), "vadjustment");
 }
 
-static GtkLayoutChild*
+static LayoutChild *
 get_child (GtkLayout  *layout,
            GtkWidget  *widget)
 {
@@ -308,7 +308,7 @@ get_child (GtkLayout  *layout,
   children = priv->children;
   while (children)
     {
-      GtkLayoutChild *child;
+      LayoutChild *child;
 
       child = children->data;
       children = children->next;
@@ -338,12 +338,12 @@ gtk_layout_put (GtkLayout     *layout,
 		gint           y)
 {
   GtkLayoutPrivate *priv = gtk_layout_get_instance_private (layout);
-  GtkLayoutChild *child;
+  LayoutChild *child;
 
   g_return_if_fail (GTK_IS_LAYOUT (layout));
   g_return_if_fail (GTK_IS_WIDGET (child_widget));
 
-  child = g_new (GtkLayoutChild, 1);
+  child = g_new (LayoutChild, 1);
 
   child->widget = child_widget;
   child->x = x;
@@ -362,7 +362,7 @@ gtk_layout_move_internal (GtkLayout       *layout,
                           gboolean         change_y,
                           gint             y)
 {
-  GtkLayoutChild *child;
+  LayoutChild *child;
 
   child = get_child (layout, widget);
 
@@ -660,7 +660,7 @@ gtk_layout_get_child_property (GtkContainer *container,
                                GValue       *value,
                                GParamSpec   *pspec)
 {
-  GtkLayoutChild *layout_child;
+  LayoutChild *layout_child;
 
   layout_child = get_child (GTK_LAYOUT (container), child);
   
@@ -729,7 +729,7 @@ gtk_layout_size_allocate (GtkWidget *widget,
 
   while (tmp_list)
     {
-      GtkLayoutChild *child = tmp_list->data;
+      LayoutChild *child = tmp_list->data;
       GtkAllocation allocation;
       GtkRequisition requisition;
 
@@ -765,7 +765,7 @@ gtk_layout_remove (GtkContainer *container,
   GtkLayout *layout = GTK_LAYOUT (container);
   GtkLayoutPrivate *priv = gtk_layout_get_instance_private (layout);
   GList *tmp_list;
-  GtkLayoutChild *child = NULL;
+  LayoutChild *child = NULL;
 
   tmp_list = priv->children;
   while (tmp_list)
@@ -793,7 +793,7 @@ gtk_layout_forall (GtkContainer *container,
 {
   GtkLayout *layout = GTK_LAYOUT (container);
   GtkLayoutPrivate *priv = gtk_layout_get_instance_private (layout);
-  GtkLayoutChild *child;
+  LayoutChild *child;
   GList *tmp_list;
 
   tmp_list = priv->children;
