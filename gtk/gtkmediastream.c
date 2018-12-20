@@ -1137,7 +1137,10 @@ gtk_media_stream_gerror (GtkMediaStream *self,
   g_return_if_fail (error != NULL);
 
   if (priv->error)
-    return;
+    {
+      g_error_free (error);
+      return;
+    }
 
   g_object_freeze_notify (G_OBJECT (self));
 
