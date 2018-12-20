@@ -111,8 +111,32 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   if (fd < 0)
     goto done;
   
-  if (fstat (fd, &st) < 0 || st.st_size < 4)
+  /* We need to know the correct function to call for the GStatBuf st we are using here,
+   * because GStatBuf may not be stat on Windows
+   */
+#ifdef G_OS_WIN32
+  if (GLIB_CHECK_VERSION (2, 57, 3))
+    {
+# ifdef __MINGW64_VERSION_MAJOR
+#  ifdef _WIN64
+#   define gtk_fstat _fstat64
+#  else
+#   define gtk_fstat _fstat32
+#  endif
+# elif defined (_MSC_VER) && !defined (_WIN64)
+#   define gtk_fstat _fstat32
+# endif
+    }
+#endif
+
+#ifndef gtk_fstat
+#define gtk_fstat fstat
+#endif
+
+  if (gtk_fstat (fd, &st) < 0 || st.st_size < 4)
     goto done;
+
+#undef gtk_fstat
 
   /* Verify cache is uptodate */
   if (st.st_mtime < path_st.st_mtime)
