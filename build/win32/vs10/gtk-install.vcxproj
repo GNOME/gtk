@@ -108,10 +108,10 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenerateGtkPC)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GtkPCFiles);%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating .pc files...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenerateGtkPC)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenerateGtkPCX64)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GtkPCFiles);%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating .pc files...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenerateGtkPCX64)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenerateGtkPC)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GtkPCFiles);%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating .pc files...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenerateGtkPCX64)</Command>
