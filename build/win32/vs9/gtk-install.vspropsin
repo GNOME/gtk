@@ -39,6 +39,7 @@ mkdir $(CopyDir)\include\gail-1.0\libgail-util&#x0D;&#x0A;
 #include "gailutil.headers"
 
 copy $(ConfigurationName)\$(PlatformName)\bin\libwimp.dll $(Outdir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\libwimp.pdb $(Outdir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;
 
 mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
