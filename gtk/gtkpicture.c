@@ -798,26 +798,36 @@ gtk_picture_set_paintable (GtkPicture   *self,
 
   if (self->paintable)
     {
-      g_signal_handlers_disconnect_by_func (self->paintable,
-                                            gtk_picture_paintable_invalidate_contents,
-                                            self);
-      g_signal_handlers_disconnect_by_func (self->paintable,
-                                            gtk_picture_paintable_invalidate_size,
-                                            self);
+      const guint flags = gdk_paintable_get_flags (self->paintable);
+
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_handlers_disconnect_by_func (self->paintable,
+                                              gtk_picture_paintable_invalidate_contents,
+                                              self);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_handlers_disconnect_by_func (self->paintable,
+                                              gtk_picture_paintable_invalidate_size,
+                                              self);
     }
 
   self->paintable = paintable;
 
   if (paintable)
     {
-      g_signal_connect (paintable,
-                        "invalidate-contents",
-                        G_CALLBACK (gtk_picture_paintable_invalidate_contents),
-                        self);
-      g_signal_connect (paintable,
-                        "invalidate-size",
-                        G_CALLBACK (gtk_picture_paintable_invalidate_size),
-                        self);
+      const guint flags = gdk_paintable_get_flags (paintable);
+
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_connect (paintable,
+                          "invalidate-contents",
+                          G_CALLBACK (gtk_picture_paintable_invalidate_contents),
+                          self);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_connect (paintable,
+                          "invalidate-size",
+                          G_CALLBACK (gtk_picture_paintable_invalidate_size),
+                          self);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
