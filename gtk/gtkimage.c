@@ -77,7 +77,7 @@
  */
 
 
-struct _GtkImagePrivate
+typedef struct
 {
   GtkIconHelper *icon_helper;
   GtkIconSize icon_size;
@@ -86,7 +86,7 @@ struct _GtkImagePrivate
 
   char *filename;
   char *resource_path;
-};
+} GtkImagePrivate;
 
 
 static void gtk_image_snapshot             (GtkWidget    *widget,
