@@ -45,7 +45,6 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkImage              GtkImage;
-typedef struct _GtkImagePrivate       GtkImagePrivate;
 typedef struct _GtkImageClass         GtkImageClass;
 
 /**
