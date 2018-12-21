@@ -34,7 +34,6 @@ endif
 endif
 
 GTK_BASE_CFLAGS_DEFINES =				\
-	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"		\
 	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
 	-DGTK_COMPILATION				\
@@ -54,6 +53,7 @@ GTK_PLAT_CFLAGS_DEFINES =				\
 INCLUDES =						\
 	$(GTK_BASE_CFLAGS_DEFINES)			\
 	$(GTK_PLAT_CFLAGS_DEFINES)			\
+	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-I$(top_builddir)				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\

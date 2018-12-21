@@ -391,7 +391,6 @@ if HAVE_INTROSPECTION
 MSVC_INTROSPECT_GIRS = Gdk-2.0.gir
 
 BASE_MSVC_GIR_CFLAGS =			\
-	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
 	-I../.. -I../../gdk -I.../../gdk/win32
 
