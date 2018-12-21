@@ -24,9 +24,9 @@ def main(argv):
     base_pc.setup(argv, gdk_parser)
 
     atk_min_ver = '1.29.2'
-    cairo_min_ver = '1.6'
     gdk_pixbuf_min_ver = '2.21.0'
     gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -lwinmm'
+    gdk_additional_libs = '-lcairo'
     glib_min_ver = '2.28.0'
 
     cairo_backends = 'cairo-win32'
@@ -38,14 +38,13 @@ def main(argv):
     pkg_replace_items = {'@GTK_API_VERSION@': '2.0',
                          '@gdktarget@': gdktarget}
 
-    pkg_required_packages = 'gdk-pixbuf-2.0 >= ' + gdk_pixbuf_min_ver + ' ' + \
-                            'cairo >= ' + cairo_min_ver + ' '
+    pkg_required_packages = 'gdk-pixbuf-2.0 >= ' + gdk_pixbuf_min_ver + ' '
 
     gdk_pc_replace_items = {'@GDK_PACKAGES@': gio_package + ' ' + \
                                               'pangowin32 pangocairo' + ' ' + \
                                               pkg_required_packages,
                             '@GDK_PRIVATE_PACKAGES@': gio_package + ' ' + cairo_backends,
-                            '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs,
+                            '@GDK_EXTRA_LIBS@': gdk_additional_libs + ' ' + gdk_win32_sys_libs,
                             '@GDK_EXTRA_CFLAGS@': ''}
 
     gtk_pc_replace_items = {'@host@': gdk_args.host,
@@ -55,7 +54,7 @@ def main(argv):
                                               gio_package,
                             '@GTK_PRIVATE_PACKAGES@': 'atk',
                             '@GTK_EXTRA_CFLAGS@': '',
-                            '@GTK_EXTRA_LIBS@': '',
+                            '@GTK_EXTRA_LIBS@': ' ' + gdk_additional_libs,
                             '@GTK_EXTRA_CFLAGS@': ''}
 
     pkg_replace_items.update(base_pc.base_replace_items)
