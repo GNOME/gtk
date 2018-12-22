@@ -2144,12 +2144,13 @@ menu,
     border-radius: 0;
 
     &.top {
-      margin-top: -6px;
+      margin-top: -2px;
       border-bottom: 1px solid mix($fg_color, $base_color, 10%);
       -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
     }
 
     &.bottom {
+      margin-top: 4px;
       margin-bottom: -6px;
       border-top: 1px solid mix($fg_color, $base_color, 10%);
       -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
