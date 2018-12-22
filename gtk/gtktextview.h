@@ -97,7 +97,7 @@ typedef enum
 } GtkTextExtendSelection;
 
 /**
- * GTK_TEXT_VIEW_PRIORITY_VALIDATE:
+ * GTK_TEXT_VIEW_PRIORITY_VALIDATE: (value 125)
  *
  * The priority at which the text view validates onscreen lines
  * in an idle job in the background.

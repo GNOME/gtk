@@ -54,7 +54,7 @@ G_BEGIN_DECLS
 #define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
 
 /**
- * GDK_PRIORITY_REDRAW:
+ * GDK_PRIORITY_REDRAW: (value 120)
  *
  * This is the priority that the idle handler processing surface updates
  * is given in the
