@@ -2204,7 +2204,7 @@ menu,
     border-radius: 0;
 
     &.top {
-      margin-top: -6px;
+      margin-top: -2px;
       border-bottom: 1px solid mix($fg_color, $base_color, 10%);
       border-top-right-radius: $menu_radius;
       border-top-left-radius: $menu_radius;
@@ -2212,6 +2212,7 @@ menu,
     }
 
     &.bottom {
+      margin-top: 4px;
       margin-bottom: -6px;
       border-top: 1px solid mix($fg_color, $base_color, 10%);
       border-bottom-right-radius: $menu_radius;
