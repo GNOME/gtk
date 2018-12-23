@@ -768,12 +768,12 @@ gtk_stack_progress_updated (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  gtk_widget_queue_draw (GTK_WIDGET (stack));
-
   if (!priv->vhomogeneous || !priv->hhomogeneous)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
   else if (is_window_moving_transition (priv->active_transition_type))
     gtk_widget_queue_allocate (GTK_WIDGET (stack));
+  else
+    gtk_widget_queue_draw (GTK_WIDGET (stack));
 
   if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
