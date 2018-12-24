@@ -655,6 +655,16 @@ menu menuitem arrow:dir(ltr), .menu menuitem arrow:dir(ltr) { -gtk-icon-source: 
 
 menu menuitem arrow:dir(rtl), .menu menuitem arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); margin-right: 10px; }
 
+menu > arrow, .menu > arrow { border-width: 2px; border-style: solid; color: #000; background-color: transparent; background-image: none; border-color: transparent; min-height: 16px; min-width: 16px; padding: 4px; border-radius: 0; }
+
+menu > arrow.top, .menu > arrow.top { border-bottom: 1px solid gray; -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+
+menu > arrow.bottom, .menu > arrow.bottom { margin-bottom: -2px; margin-top: 2px; border-top: 1px solid gray; -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+
+menu > arrow:hover, .menu > arrow:hover { background-color: #000; color: #fff; }
+
+menu > arrow:disabled, .menu > arrow:disabled { color: transparent; background-color: transparent; border-color: transparent; }
+
 menuitem check, menuitem radio { min-height: 16px; min-width: 16px; }
 
 menuitem check:dir(ltr), menuitem radio:dir(ltr) { margin-right: 7px; }
