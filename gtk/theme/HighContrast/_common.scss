@@ -1599,6 +1599,35 @@ menu,
       margin-right: 10px;
     }
   }
+  //overflow arrows
+  > arrow {
+    @include button(undecorated);
+
+    min-height: 16px;
+    min-width: 16px;
+    padding: 4px;
+    border-radius: 0;
+
+    &.top {
+      border-bottom: 1px solid $borders_color;
+      -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+    }
+
+    &.bottom {
+      margin-bottom: -2px;
+      margin-top: 2px;
+      border-top: 1px solid $borders_color;
+      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    }
+
+    &:hover { background-color: $selected_bg_color; color: $selected_fg_color; }
+
+    &:disabled {
+      color: transparent;
+      background-color: transparent;
+      border-color: transparent ;
+    }
+  }
 }
 
 menuitem {
