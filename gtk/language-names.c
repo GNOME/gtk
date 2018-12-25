@@ -16,7 +16,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
-#if defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
+#if !defined (G_OS_WIN32) && defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
 #include <hb-ot.h>
 
 #include "language-names.h"
