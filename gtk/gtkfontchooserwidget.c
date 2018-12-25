@@ -1442,7 +1442,7 @@ gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
     }
 }
 
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+#if defined(HAVE_HARFBUZZ)
 
 /* OpenType variations */
 
@@ -1612,7 +1612,11 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+#endif
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -1644,7 +1648,11 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   return has_axis;
@@ -2145,7 +2153,12 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   if (hb_font)
@@ -2205,7 +2218,11 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (pango_font))
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   return has_feature;
