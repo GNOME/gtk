@@ -523,7 +523,7 @@ msgstr "Descobreix"
 
 #: gtk/gtkactionbar.c:393
 msgid "Controls whether the action bar shows its contents or not"
-msgstr "Controla si l'barra d'accions mostra o no els seus continguts"
+msgstr "Controla si la barra d'accions mostra o no els seus continguts"
 
 #: gtk/gtkadjustment.c:139 gtk/gtkcellrendererprogress.c:136
 #: gtk/gtkscalebutton.c:197 gtk/gtkspinbutton.c:383
@@ -1586,7 +1586,7 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
-"El lloc preferit de la cadena on inserir-hi els punts suspensius, si el "
+"El lloc preferit de la cadena on inserir els punts suspensius, si el "
 "representador de cel·les no conté espai suficient per mostrar tota la cadena"
 
 #: gtk/gtkcellrenderertext.c:462 gtk/gtkfilechooserbutton.c:454
@@ -4293,7 +4293,7 @@ msgstr "Radi del difuminat"
 
 #: gtk/gtkoverlay.c:835
 msgid "Apply a blur to the content behind this child"
-msgstr "Aplica el difuminat al contingut darrera aquest fill"
+msgstr "Aplica el difuminat al contingut darrere aquest fill"
 
 #: gtk/gtkoverlay.c:845
 msgid "Index"
@@ -4402,11 +4402,11 @@ msgstr "Descripció de text alternativa"
 
 #: gtk/gtkpicture.c:346
 msgid "Keep aspect ratio"
-msgstr "Mantén el ràtio d'aspecte"
+msgstr "Mantén la ràtio d'aspecte"
 
 #: gtk/gtkpicture.c:347
 msgid "Render contents respecting the aspect ratio"
-msgstr "Renderitza els continguts respectant el ràtio d'aspecte"
+msgstr "Renderitza els continguts respectant la ràtio d'aspecte"
 
 #: gtk/gtkpicture.c:358
 msgid "Can shrink"
@@ -7138,7 +7138,7 @@ msgstr "Si és «TRUE» (cert), el giny rebrà l'acció per defecte quan s'enfoq
 
 #: gtk/gtkwidget.c:1047
 msgid "The cursor to show when hoving above widget"
-msgstr "El cursor ha mostrar quan el punter passi per sobre del giny"
+msgstr "El cursor a mostrar quan el punter passi per sobre del giny"
 
 #: gtk/gtkwidget.c:1061
 msgid "Has tooltip"
