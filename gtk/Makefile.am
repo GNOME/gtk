@@ -492,6 +492,7 @@ gtk_private_h_sources =		\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
 	gtkfontchooserwidgetprivate.h \
+	gtkfontfeaturesprivate.h \
 	gtkgestureprivate.h	\
 	gtkgesturedragprivate.h	\
 	gtkgesturelongpressprivate.h	\
@@ -793,6 +794,7 @@ gtk_base_c_sources = 		\
 	gtkfontchooserdialog.c	\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
+	gtkfontfeatures.c	\
 	gtkframe.c		\
 	gtkgladecatalog.c	\
 	gtkgesture.c		\
