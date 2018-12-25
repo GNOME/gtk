@@ -2802,6 +2802,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->last_child = NULL;
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
+  priv->depth = 1;
   priv->allocated_baseline = -1;
   priv->allocated_size_baseline = -1;
 
@@ -2979,6 +2980,22 @@ gtk_widget_new (GType        type,
   return widget;
 }
 
+static void
+gtk_widget_propagate_depth (GtkWidget *widget,
+                            int        new_depth)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *child;
+
+  priv->depth = new_depth;
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    gtk_widget_propagate_depth (child, new_depth + 1);
+}
+
+
 /**
  * gtk_widget_unparent:
  * @widget: a #GtkWidget
@@ -3062,6 +3079,7 @@ gtk_widget_unparent (GtkWidget *widget)
   priv->parent = NULL;
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
+  gtk_widget_propagate_depth (widget, 1);
 
   /* parent may no longer expand if the removed
    * child was expand=TRUE and could therefore
@@ -6505,6 +6523,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
   gtk_widget_push_verify_invariants (widget);
 
   priv->parent = parent;
+  gtk_widget_propagate_depth (widget, gtk_widget_get_depth (parent) + 1);
 
   if (previous_sibling)
     {

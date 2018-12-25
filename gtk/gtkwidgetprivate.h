@@ -167,6 +167,7 @@ struct _GtkWidgetPrivate
   GtkWidget *next_sibling;
   GtkWidget *first_child;
   GtkWidget *last_child;
+  int depth;
 
   /* only created on-demand */
   GtkListListModel *children_observer;
@@ -479,6 +480,12 @@ static inline GtkWidget *
 _gtk_widget_get_last_child (GtkWidget *widget)
 {
   return widget->priv->last_child;
+}
+
+static inline int
+gtk_widget_get_depth (GtkWidget *widget)
+{
+  return widget->priv->depth;
 }
 
 G_END_DECLS
