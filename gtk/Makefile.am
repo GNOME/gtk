@@ -980,6 +980,7 @@ gtk_base_c_sources = 		\
 	gtkwin32theme.c		\
 	gdkpixbufutils.c	\
 	language-names.c	\
+	language-names-win32.c	\
 	script-names.c
 
 if USE_QUARTZ
