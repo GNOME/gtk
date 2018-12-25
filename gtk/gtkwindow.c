@@ -11260,39 +11260,45 @@ update_cursor (GtkWindow *toplevel,
                GtkWidget *target)
 {
   GdkCursor *cursor = NULL;
-  GList *widgets = NULL, *l;
+  GtkWidget **widgets;
+  int n_widgets = 0;
+  int i;
 
   if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget))
     {
       /* Outside the grab widget, cursor stays to whatever the grab
        * widget says.
        */
-      widgets = g_list_prepend (widgets, grab_widget);
+      widgets = g_alloca (sizeof (*widgets));
+      widgets[0] = grab_widget;
+      n_widgets = 1;
     }
   else
     {
       /* Inside the grab widget or in absence of grabs, allow walking
        * up the hierarchy to find out the cursor.
        */
+      widgets = g_alloca (sizeof (*widgets) * gtk_widget_get_depth (target));
+
       while (target)
         {
-          widgets = g_list_prepend (widgets, target);
+          widgets[n_widgets] = target;
+          n_widgets ++;
           if (grab_widget && target == grab_widget)
             break;
           target = _gtk_widget_get_parent (target);
         }
     }
 
-  for (l = g_list_last (widgets); l; l = l->prev)
+  for (i = 0; i < n_widgets; i ++)
     {
-      cursor = gtk_widget_get_cursor (l->data);
+      cursor = gtk_widget_get_cursor (widgets[i]);
       if (cursor)
         break;
     }
 
   gdk_surface_set_device_cursor (gtk_widget_get_surface (GTK_WIDGET (toplevel)),
-				 device, cursor);
-  g_list_free (widgets);
+                                 device, cursor);
 }
 
 void
