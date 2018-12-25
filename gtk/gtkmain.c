@@ -2459,26 +2459,35 @@ propagate_event_down (GtkWidget *widget,
                       GdkEvent  *event,
                       GtkWidget *topmost)
 {
-  gint handled_event = FALSE;
-  GList *widgets = NULL;
-  GList *l;
+  gboolean handled_event = FALSE;
+  GtkWidget **widgets;
+  int n_widgets = 0;
+  int topmost_depth;
+  int i;
 
-  widgets = g_list_prepend (widgets, g_object_ref (widget));
+  if (topmost)
+    topmost_depth = gtk_widget_get_depth (topmost);
+  else
+    topmost_depth = 0;
+
+  widgets = g_alloca (sizeof (*widgets) *
+                      (gtk_widget_get_depth (widget) - topmost_depth));
   while (widget && widget != topmost)
     {
       widget = gtk_widget_get_parent (widget);
       if (!widget)
         break;
 
-      widgets = g_list_prepend (widgets, g_object_ref (widget));
+      widgets[n_widgets] = g_object_ref (widget);
+      n_widgets ++;
 
       if (widget == topmost)
         break;
     }
 
-  for (l = widgets; l && !handled_event; l = l->next)
+  for (i = n_widgets - 1; i >= 0; i --)
     {
-      widget = (GtkWidget *)l->data;
+      widget = widgets[i];
 
       if (!gtk_widget_is_sensitive (widget))
         {
@@ -2491,9 +2500,17 @@ propagate_event_down (GtkWidget *widget,
             handled_event = TRUE;
         }
       else
-        handled_event = _gtk_widget_captured_event (widget, event);
+        {
+          handled_event = _gtk_widget_captured_event (widget, event);
+        }
+
+      if (handled_event)
+        break;
     }
-  g_list_free_full (widgets, (GDestroyNotify)g_object_unref);
+
+  /* Unref all now */
+  for (i = 0; i < n_widgets; i ++)
+    g_object_unref (widgets[i]);
 
   return handled_event;
 }
