@@ -3057,9 +3057,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <class name="small-button"/>
                                             </style>
                                           </object>
-                                          <packing>
-                                            <property name="pack-type">end</property>
-                                          </packing>
                                         </child>
                                       </object>
                                     </child>
@@ -3090,9 +3087,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <class name="small-button"/>
                                             </style>
                                           </object>
-                                          <packing>
-                                            <property name="pack-type">end</property>
-                                          </packing>
                                         </child>
                                       </object>
                                     </child>
