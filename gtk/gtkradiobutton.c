@@ -113,8 +113,8 @@
  *                                                          "I’m the second radio button.");
  *
  *    // Pack them into a box, then show all the widgets
- *    gtk_box_pack_start (GTK_BOX (box), radio1);
- *    gtk_box_pack_start (GTK_BOX (box), radio2);
+ *    gtk_container_add (GTK_CONTAINER (box), radio1);
+ *    gtk_container_add (GTK_CONTAINER (box), radio2);
  *    gtk_container_add (GTK_CONTAINER (window), box);
  *    gtk_widget_show (window);
  *    return;

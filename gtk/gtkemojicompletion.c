@@ -514,13 +514,13 @@ add_emoji (GtkWidget          *list,
   gtk_widget_set_focus_on_click (child, FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (child), box);
-  gtk_box_pack_start (GTK_BOX (box), label);
+  gtk_container_add (GTK_CONTAINER (box), label);
   g_object_set_data (G_OBJECT (child), "base", label);
 
   stack = gtk_stack_new ();
   gtk_stack_set_homogeneous (GTK_STACK (stack), TRUE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT);
-  gtk_box_pack_start (GTK_BOX (box), stack);
+  gtk_container_add (GTK_CONTAINER (box), stack);
   g_object_set_data (G_OBJECT (child), "stack", stack);
 
   g_variant_get_child (emoji_data, 2, "&s", &shortname);
