@@ -70,6 +70,8 @@ struct _GtkFontChooserWidgetPrivate
   GList *feature_items;
 
   GAction *tweak_action;
+
+  gpointer ft_ext_items;
 };
 
 typedef struct {
@@ -87,6 +89,20 @@ void        gtk_font_chooser_widget_take_font_desc            (GtkFontChooserWid
 gboolean    gtk_font_chooser_widget_update_font_features      (GtkFontChooserWidget *fontchooser);
 gboolean    gtk_font_chooser_widget_update_font_variations    (GtkFontChooserWidget *fontchooser);
 void        gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontchooser);
+void        gtk_font_chooser_widget_release_extra_ft_items    (GtkFontChooserWidget *fontchooser);
 
-gboolean    output_cb (GtkSpinButton *spin,
-                       gpointer       data);
+#if defined (GDK_WINDOWING_WIN32) && (HAVE_HARFBUZZ)
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+_GDK_EXTERN
+FT_Face     gtk_font_chooser_widget_win32_acquire_ftface      (GtkFontChooserWidget *fontchooser,
+                                                               PangoFont            *font,
+                                                               PangoFontMap         *map);
+
+_GDK_EXTERN
+void        gtk_font_chooser_widget_win32_release_ftface      (GtkFontChooserWidget *fontchooser);
+#endif
+
+gboolean    output_cb              (GtkSpinButton *spin,
+                                    gpointer       data);
