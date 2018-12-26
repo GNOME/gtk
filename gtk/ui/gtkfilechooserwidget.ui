@@ -65,10 +65,6 @@
                                         <property name="icon-name">folder-new-symbolic</property>
                                         <signal name="notify::active" handler="new_folder_popover_active"/>
                                       </object>
-                                      <packing>
-                                        <property name="pack-type">end</property>
-                                        <property name="position">1</property>
-                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -101,9 +97,6 @@
                                       <object class="GtkSpinner" id="search_spinner">
                                         <property name="visible">0</property>
                                       </object>
-                                      <packing>
-                                        <property name="pack-type">end</property>
-                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -367,9 +360,6 @@
                     <property name="valign">start</property>
                     <signal name="changed" handler="filter_combo_changed" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
                 </child>
               </object>
               <packing>
@@ -377,10 +367,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>

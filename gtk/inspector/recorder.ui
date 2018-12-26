@@ -31,6 +31,8 @@
                 <property name="icon-name">insert-object-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Add debug nodes</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
+                <property name="halign">start</property>
+                <property name="hexpand">1</property>
               </object>
             </child>
             <child>
@@ -41,9 +43,6 @@
                 <property name="tooltip-text" translatable="yes">Save selected node</property>
                 <signal name="clicked" handler="render_node_save"/>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
             </child>
           </object>
         </child>
