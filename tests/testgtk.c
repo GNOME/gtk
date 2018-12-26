@@ -1468,7 +1468,6 @@ create_tooltips (GtkWidget *widget)
 			"label", "[?]",
 			NULL);
       gtk_container_add (GTK_CONTAINER (box3), button);
-      gtk_box_set_child_packing (GTK_BOX (box3), button, GTK_PACK_START);
       gtk_widget_set_tooltip_text (button, "Start the Tooltips Inspector");
 
       frame = g_object_new (gtk_frame_get_type (),
@@ -1477,7 +1476,6 @@ create_tooltips (GtkWidget *widget)
 			      NULL);
       gtk_container_add (GTK_CONTAINER (box2), frame);
       gtk_container_add (GTK_CONTAINER (frame), box3);
-      gtk_box_set_child_packing (GTK_BOX (box2), frame, GTK_PACK_START);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), separator);
