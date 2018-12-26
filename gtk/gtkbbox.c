@@ -119,13 +119,6 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 G_DEFINE_TYPE_WITH_PRIVATE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
 
 static void
-gtk_button_box_add (GtkContainer *container,
-                    GtkWidget    *widget)
-{
-  gtk_box_pack_start (GTK_BOX (container), widget);
-}
-
-static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)
 {
   GtkWidgetClass *widget_class;
@@ -143,7 +136,6 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   widget_class->size_allocate = gtk_button_box_size_allocate;
 
   container_class->remove = gtk_button_box_remove;
-  container_class->add = gtk_button_box_add;
   container_class->set_child_property = gtk_button_box_set_child_property;
   container_class->get_child_property = gtk_button_box_get_child_property;
 

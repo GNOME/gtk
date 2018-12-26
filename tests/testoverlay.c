@@ -468,12 +468,12 @@ test_input_stacking (void)
 			 "But the entry does");
   gtk_widget_set_margin_top (label, 8);
   gtk_widget_set_margin_bottom (label, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), label);
 
   entry = gtk_entry_new ();
   gtk_widget_set_margin_top (entry, 8);
   gtk_widget_set_margin_bottom (entry, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), entry);
 
 
   gtk_container_add (GTK_CONTAINER (win), overlay);
