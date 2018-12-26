@@ -724,18 +724,20 @@ apply_orientation (GtkScaleButton *button,
     {
       priv->applied_orientation = orientation;
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), orientation);
-      gtk_container_child_set (GTK_CONTAINER (priv->box),
-                               priv->plus_button,
-                               "pack-type",
-                               orientation == GTK_ORIENTATION_VERTICAL ?
-                               GTK_PACK_START : GTK_PACK_END,
-                               NULL);
-      gtk_container_child_set (GTK_CONTAINER (priv->box),
-                               priv->minus_button,
-                               "pack-type",
-                               orientation == GTK_ORIENTATION_VERTICAL ?
-                               GTK_PACK_END : GTK_PACK_START,
-                               NULL);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          gtk_box_reorder_child (GTK_BOX (priv->box), priv->scale, 0);
+          gtk_box_reorder_child (GTK_BOX (priv->box), priv->minus_button, 1);
+          gtk_box_reorder_child (GTK_BOX (priv->box), priv->plus_button, 2);
+        }
+      else
+        {
+          gtk_box_reorder_child (GTK_BOX (priv->box), priv->scale, 1);
+          gtk_box_reorder_child (GTK_BOX (priv->box), priv->minus_button, 2);
+          gtk_box_reorder_child (GTK_BOX (priv->box), priv->plus_button, 0);
+
+        }
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->scale), orientation);
 
