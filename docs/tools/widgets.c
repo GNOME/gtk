@@ -991,7 +991,7 @@ create_statusbar (void)
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "Hold on...");
 
-  gtk_box_pack_end (GTK_BOX (vbox), widget);
+  gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   info = new_widget_info ("statusbar", vbox, SMALL);
 
@@ -1074,7 +1074,7 @@ create_volume_button (void)
   gtk_container_add (GTK_CONTAINER (widget), box);
 
   button = gtk_volume_button_new ();
-  gtk_box_pack_end (GTK_BOX (box), button);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
   popup = gtk_scale_button_get_popup (GTK_SCALE_BUTTON (button));

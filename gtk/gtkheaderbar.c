@@ -152,7 +152,7 @@ init_sizing_box (GtkHeaderBar *bar)
   w = gtk_label_new (NULL);
   context = gtk_widget_get_style_context (w);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
-  gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w);
+  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
@@ -161,7 +161,7 @@ init_sizing_box (GtkHeaderBar *bar)
   w = gtk_label_new (NULL);
   context = gtk_widget_get_style_context (w);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w);
+  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
@@ -189,7 +189,7 @@ create_title_box (const char *title,
   gtk_label_set_line_wrap (GTK_LABEL (title_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
-  gtk_box_pack_start (GTK_BOX (label_box), title_label);
+  gtk_container_add (GTK_CONTAINER (label_box), title_label);
   gtk_label_set_width_chars (GTK_LABEL (title_label), MIN_TITLE_CHARS);
 
   subtitle_label = gtk_label_new (subtitle);
@@ -198,7 +198,7 @@ create_title_box (const char *title,
   gtk_label_set_line_wrap (GTK_LABEL (subtitle_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
-  gtk_box_pack_start (GTK_BOX (label_box), subtitle_label);
+  gtk_container_add (GTK_CONTAINER (label_box), subtitle_label);
   gtk_widget_set_visible (subtitle_label, subtitle && subtitle[0]);
 
   if (ret_title_label)
@@ -453,7 +453,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
               if (button)
                 {
-                  gtk_box_pack_start (GTK_BOX (box), button);
+                  gtk_container_add (GTK_CONTAINER (box), button);
                   n_children ++;
                 }
             }
@@ -468,7 +468,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               continue;
             }
 
-          gtk_box_pack_start (GTK_BOX (box), separator);
+          gtk_container_add (GTK_CONTAINER (box), separator);
           if (i == 1)
             gtk_box_reorder_child (GTK_BOX (box), separator, 0);
 

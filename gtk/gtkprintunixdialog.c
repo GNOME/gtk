@@ -1294,13 +1294,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (frame), label_widget);
+  gtk_container_add (GTK_CONTAINER (frame), label_widget);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_box_pack_start (GTK_BOX (frame), child);
+  gtk_container_add (GTK_CONTAINER (frame), child);
 
   gtk_widget_show (frame);
 
@@ -1345,14 +1345,14 @@ add_option_to_extension_point (GtkPrinterOption *option,
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
-      gtk_box_pack_start (GTK_BOX (hbox), label);
-      gtk_box_pack_start (GTK_BOX (hbox), widget);
+      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), widget);
       gtk_widget_show (hbox);
 
-      gtk_box_pack_start (GTK_BOX (extension_point), hbox);
+      gtk_container_add (GTK_CONTAINER (extension_point), hbox);
     }
   else
-    gtk_box_pack_start (GTK_BOX (extension_point), widget);
+    gtk_container_add (GTK_CONTAINER (extension_point), widget);
 }
 
 static gint
@@ -1630,7 +1630,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
           gtk_widget_show (table);
           gtk_widget_show (frame);
 
-          gtk_box_pack_start (GTK_BOX (priv->advanced_vbox),
+          gtk_container_add (GTK_CONTAINER (priv->advanced_vbox),
                               frame);
         }
     }
