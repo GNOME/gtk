@@ -70,6 +70,8 @@ struct _GtkFontChooserWidgetPrivate
   GList *feature_items;
 
   GAction *tweak_action;
+
+  gpointer ft_ext_items;
 };
 
 typedef struct {
@@ -87,6 +89,7 @@ void        gtk_font_chooser_widget_take_font_desc            (GtkFontChooserWid
 gboolean    gtk_font_chooser_widget_update_font_features      (GtkFontChooserWidget *fontchooser);
 gboolean    gtk_font_chooser_widget_update_font_variations    (GtkFontChooserWidget *fontchooser);
 void        gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontchooser);
+void        gtk_font_chooser_widget_release_extra_ft_items    (GtkFontChooserWidget *fontchooser);
 
-gboolean    output_cb (GtkSpinButton *spin,
-                       gpointer       data);
+gboolean    output_cb              (GtkSpinButton *spin,
+                                    gpointer       data);

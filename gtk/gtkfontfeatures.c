@@ -33,8 +33,8 @@
 #include "gtkradiobutton.h"
 #include "gtkgesturemultipress.h"
 
-#if defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
+#ifdef HAVE_HARFBUZZ
+
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
@@ -45,6 +45,9 @@
 #include "language-names.h"
 #include "script-names.h"
 #include "open-type-layout.h"
+
+/* Do the PangoFont->FT_Face conversion... */
+#include "gtk-pangofont-ftface-util.c"
 
 static void update_font_features (GtkFontChooserWidget *fontchooser);
 
@@ -83,6 +86,42 @@ axis_remove (gpointer key,
   gtk_widget_destroy (a->label);
   gtk_widget_destroy (a->scale);
   gtk_widget_destroy (a->spin);
+}
+
+static FT_Face
+get_ft_face_from_pango_font (GtkFontChooserWidget *fontchooser,
+                             PangoFont            *font)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoFontMap *font_map = NULL;
+
+  if (priv->ft_ext_items == NULL)
+    priv->ft_ext_items = FT_EXT_ITEM_INIT (font);
+
+  if (priv->font_map != NULL)
+    font_map = priv->font_map;
+  else
+    font_map = pango_cairo_font_map_get_default ();
+
+  return FT_FACE_FROM_PANGO_FONT (priv->ft_ext_items, font, font_map);
+}
+
+static void
+release_ft_face_from_pango_font (GtkFontChooserWidget *fontchooser,
+                                 PangoFont            *font)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  PANGO_FONT_RELEASE_FT_FACE (priv->ft_ext_items, font);
+}
+
+void
+gtk_font_chooser_widget_release_extra_ft_items (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  if (RELEASE_EXTRA_FT_ITEMS (priv->ft_ext_items))
+    priv->ft_ext_items = NULL;
 }
 
 /* OpenType variations */
@@ -241,6 +280,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
   gboolean has_axis = FALSE;
+  PangoFontMap *font_map = NULL;
 
   if (priv->updating_variations)
     return FALSE;
@@ -254,7 +294,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+  ft_face = get_ft_face_from_pango_font (fontchooser, pango_font);
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -286,7 +326,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  release_ft_face_from_pango_font (fontchooser, pango_font);
 
   g_object_unref (pango_font);
 
@@ -775,6 +815,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   int i, j;
   GList *l;
   gboolean has_feature = FALSE;
+  PangoFontMap *font_map = NULL;
 
   for (l = priv->feature_items; l; l = l->next)
     {
@@ -789,7 +830,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+  ft_face = get_ft_face_from_pango_font (fontchooser, pango_font);
 
   hb_font = hb_ft_font_create (ft_face, NULL);
 
@@ -850,7 +891,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  release_ft_face_from_pango_font (fontchooser, pango_font);
 
   g_object_unref (pango_font);
 

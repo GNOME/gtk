@@ -713,7 +713,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
-#if defined(HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
   priv->axes = g_hash_table_new_full (axis_hash, axis_equal, NULL, axis_free);
 #endif
 
@@ -754,7 +754,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
-#if defined(HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
   gtk_font_chooser_widget_populate_features (fontchooser);
 #endif
   gtk_font_chooser_widget_set_cell_size (fontchooser);
@@ -1062,6 +1062,9 @@ gtk_font_chooser_widget_finalize (GObject *object)
     g_hash_table_unref (priv->axes);
 
   g_free (priv->font_features);
+
+  if (priv->ft_ext_items)
+    gtk_font_chooser_widget_release_extra_ft_items (fontchooser);
 
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->finalize (object);
 }
@@ -1379,7 +1382,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
       gtk_font_chooser_widget_update_marks (fontchooser);
 
-#if defined(HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
+#ifdef HAVE_HARFBUZZ
       if (gtk_font_chooser_widget_update_font_features (fontchooser))
         has_tweak = TRUE;
       if (gtk_font_chooser_widget_update_font_variations (fontchooser))
