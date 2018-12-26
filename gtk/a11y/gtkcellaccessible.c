@@ -368,7 +368,7 @@ atk_component_interface_init (AtkComponentIface *iface)
   iface->grab_focus = gtk_cell_accessible_grab_focus;
 }
 
-static gboolean
+static int
 gtk_cell_accessible_get_column_span (AtkTableCell *table_cell)
 {
   return 1;
@@ -387,7 +387,7 @@ gtk_cell_accessible_get_column_header_cells (AtkTableCell *table_cell)
                                                              cell);
 }
 
-static gboolean
+static int
 gtk_cell_accessible_get_position (AtkTableCell *table_cell,
                                   gint         *row,
                                   gint         *column)
@@ -404,7 +404,7 @@ gtk_cell_accessible_get_position (AtkTableCell *table_cell,
   return ((row && *row > 0) || (column && *column > 0));
 }
 
-static gboolean
+static int
 gtk_cell_accessible_get_row_span (AtkTableCell *table_cell)
 {
   return 1;
@@ -423,7 +423,7 @@ gtk_cell_accessible_get_row_header_cells (AtkTableCell *table_cell)
                                                           cell);
 }
 
-static gboolean
+static AtkObject *
 gtk_cell_accessible_get_table (AtkTableCell *table_cell)
 {
   AtkObject *obj;
