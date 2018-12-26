@@ -3283,7 +3283,7 @@ bad things might happen.</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Zelda</property>
     <property name="hide-on-close">1</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
         <child>
           <object class="GtkLabel">
@@ -3322,7 +3322,7 @@ bad things might happen.</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Settings</property>
     <property name="hide-on-close">1</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
         <child>
           <object class="GtkGrid">
@@ -3443,7 +3443,7 @@ bad things might happen.</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Choose one</property>
     <property name="hide-on-close">1</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
         <child>
           <object class="GtkFlowBox" id="selection_flowbox">
