@@ -97,7 +97,6 @@ enum {
 
 enum {
   CHILD_PROP_0,
-  CHILD_PROP_PACK_TYPE,
   CHILD_PROP_POSITION,
   LAST_CHILD_PROP
 };
@@ -227,13 +226,6 @@ gtk_box_class_init (GtkBoxClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
-
-  child_props[CHILD_PROP_PACK_TYPE] =
-      g_param_spec_enum ("pack-type",
-                         P_("Pack type"),
-                         P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
-                         GTK_TYPE_PACK_TYPE, GTK_PACK_START,
-                         GTK_PARAM_READWRITE);
 
   child_props[CHILD_PROP_POSITION] =
       g_param_spec_int ("position",
@@ -666,11 +658,6 @@ gtk_box_set_child_property (GtkContainer *container,
 {
   switch (property_id)
     {
-    case CHILD_PROP_PACK_TYPE:
-      gtk_box_set_child_packing (GTK_BOX (container),
-				 child,
-				 g_value_get_enum (value));
-      break;
     case CHILD_PROP_POSITION:
       gtk_box_reorder_child (GTK_BOX (container),
 			     child,
@@ -689,19 +676,12 @@ gtk_box_get_child_property (GtkContainer *container,
 			    GValue       *value,
 			    GParamSpec   *pspec)
 {
-  GtkPackType pack_type = 0;
   GtkBoxPrivate *priv = gtk_box_get_instance_private (GTK_BOX (container));
   GList *list;
+  int i;
 
   switch (property_id)
     {
-      guint i;
-    case CHILD_PROP_PACK_TYPE:
-      gtk_box_query_child_packing (GTK_BOX (container),
-                                   child,
-                                   &pack_type);
-      g_value_set_enum (value, pack_type);
-      break;
     case CHILD_PROP_POSITION:
       i = 0;
       for (list = priv->children; list; list = list->next)
@@ -852,8 +832,7 @@ gtk_box_update_child_css_position (GtkBox      *box,
 
 static void
 gtk_box_pack (GtkBox      *box,
-              GtkWidget   *child,
-              GtkPackType  pack_type)
+              GtkWidget   *child)
 {
   GtkContainer *container = GTK_CONTAINER (box);
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
@@ -865,7 +844,7 @@ gtk_box_pack (GtkBox      *box,
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
-  child_info->pack = pack_type;
+  child_info->pack = GTK_PACK_START;
 
   priv->children = g_list_append (priv->children, child_info);
   gtk_box_update_child_css_position (box, child_info);
@@ -874,8 +853,6 @@ gtk_box_pack (GtkBox      *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
 
-  if (pack_type != GTK_PACK_START)
-    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PACK_TYPE]);
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
 
   gtk_widget_thaw_child_notify (child);
@@ -1175,7 +1152,7 @@ void
 gtk_box_pack_start (GtkBox    *box,
 		    GtkWidget *child)
 {
-  gtk_box_pack (box, child, GTK_PACK_START);
+  gtk_box_pack (box, child);
 }
 
 /**
@@ -1191,7 +1168,7 @@ void
 gtk_box_pack_end (GtkBox    *box,
 		  GtkWidget *child)
 {
-  gtk_box_pack (box, child, GTK_PACK_END);
+  gtk_box_pack (box, child);
 }
 
 /**
@@ -1397,93 +1374,6 @@ gtk_box_reorder_child (GtkBox    *box,
     {
       gtk_widget_queue_resize (child);
     }
-}
-
-/**
- * gtk_box_query_child_packing:
- * @box: a #GtkBox
- * @child: the #GtkWidget of the child to query
- * @pack_type: (out) (optional): pointer to return location for pack-type
- *     child property
- *
- * Obtains information about how @child is packed into @box.
- */
-void
-gtk_box_query_child_packing (GtkBox      *box,
-			     GtkWidget   *child,
-			     GtkPackType *pack_type)
-{
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GList *list;
-  GtkBoxChild *child_info = NULL;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  list = priv->children;
-  while (list)
-    {
-      child_info = list->data;
-      if (child_info->widget == child)
-	break;
-
-      list = list->next;
-    }
-
-  if (list)
-    {
-      if (pack_type)
-	*pack_type = child_info->pack;
-    }
-}
-
-/**
- * gtk_box_set_child_packing:
- * @box: a #GtkBox
- * @child: the #GtkWidget of the child to set
- * @pack_type: the new value of the pack-type child property
- *
- * Sets the way @child is packed into @box.
- */
-void
-gtk_box_set_child_packing (GtkBox      *box,
-			   GtkWidget   *child,
-			   GtkPackType  pack_type)
-{
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GList *list;
-  GtkBoxChild *child_info = NULL;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  list = priv->children;
-  while (list)
-    {
-      child_info = list->data;
-      if (child_info->widget == child)
-	break;
-
-      list = list->next;
-    }
-
-  gtk_widget_freeze_child_notify (child);
-  if (list)
-    {
-      if (pack_type != GTK_PACK_END)
-        pack_type = GTK_PACK_START;
-      if (child_info->pack != pack_type)
-        {
-	  child_info->pack = pack_type;
-          gtk_box_update_child_css_position (box, child_info);
-          gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_PACK_TYPE]);
-        }
-
-      if (_gtk_widget_get_visible (child) &&
-          _gtk_widget_get_visible (GTK_WIDGET (box)))
-	gtk_widget_queue_resize (child);
-    }
-  gtk_widget_thaw_child_notify (child);
 }
 
 static void
