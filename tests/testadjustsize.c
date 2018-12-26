@@ -325,7 +325,7 @@ open_valigned_label_window (void)
 
   label = gtk_label_new ("Both labels expand");
   gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (box), label);
+  gtk_container_add (GTK_CONTAINER (box), label);
 
   label = gtk_label_new ("Some wrapping text with width-chars = 15 and max-width-chars = 35");
   gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
@@ -341,7 +341,7 @@ open_valigned_label_window (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
 
-  gtk_box_pack_start (GTK_BOX (box), frame);
+  gtk_container_add (GTK_CONTAINER (box), frame);
 
   gtk_window_present (GTK_WINDOW (window));
 }
