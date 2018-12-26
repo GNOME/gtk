@@ -70,6 +70,8 @@ struct _GtkFontChooserWidgetPrivate
   GList *feature_items;
 
   GAction *tweak_action;
+
+  gpointer ft_ext_items;
 };
 
 typedef struct {

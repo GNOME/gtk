@@ -33,8 +33,18 @@
 #include "gtkradiobutton.h"
 #include "gtkgesturemultipress.h"
 
-#if defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
+#ifdef HAVE_HARFBUZZ
+
+#ifdef HAVE_PANGOFT
+# include <pango/pangofc-font.h>
+#endif
+#ifdef GDK_WINDOWING_WIN32
+# include <pango/pangowin32.h>
+
+/* Check for TTC fonts and get their font data */
+# define FONT_TABLE_TTCF  (('t' << 0) + ('t' << 8) + ('c' << 16) + ('f' << 24))
+#endif
+
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
@@ -83,6 +93,150 @@ axis_remove (gpointer key,
   gtk_widget_destroy (a->label);
   gtk_widget_destroy (a->scale);
   gtk_widget_destroy (a->spin);
+}
+
+/* Until Pango uses HarfBuzz for shaping on all platforms, we need to go through FreeType */
+#ifdef GDK_WINDOWING_WIN32
+
+typedef struct _gtk_win32_ft_items
+{
+  FT_Library ft_lib;
+  FT_Byte *font_data_stream;
+  FT_Face face;
+  HDC hdc;
+  LOGFONTW *logfont;
+  HFONT hfont;
+} gtk_win32_ft_items;
+
+static FT_Face
+get_ftface_from_pangowin32_font (PangoFont                   *font,
+                                 PangoFontMap                *font_map,
+                                 GtkFontChooserWidgetPrivate *priv)
+{
+  PangoWin32FontCache *cache = NULL;
+  LOGFONTW *logfont;
+  HFONT hfont;
+  unsigned char buf[4];
+  HDC hdc;
+  gsize font_size;
+  DWORD is_ttc_font;
+  gtk_win32_ft_items *item = NULL;
+
+  cache = pango_win32_font_map_get_font_cache (font_map);
+
+  if (!cache)
+    {
+      g_warning ("Failed to acquire PangoWin32FontCache, font features will likely not work!");
+      return NULL;
+    }
+
+  logfont = pango_win32_font_logfontw (font);
+  hfont = pango_win32_font_cache_loadw (cache, logfont);
+  hdc = GetDC (NULL);
+
+  if (hdc == NULL)
+    {
+      g_warning ("Failed to acquire DC, font features will likely not work!");
+      return NULL;
+    }
+
+  if (priv->ft_ext_items == NULL)
+    priv->ft_ext_items = g_new0 (gtk_win32_ft_items, 1);
+
+  item = (gtk_win32_ft_items *) priv->ft_ext_items;
+
+  /* We need to track these because we can only release/free those items *after* we
+   * are done with them in FreeType
+   */
+  item->logfont = logfont;
+  item->hfont = hfont;
+  item->hdc = hdc;
+
+  if (item->ft_lib == NULL)
+    {
+      if (FT_Init_FreeType (&item->ft_lib) != FT_Err_Ok)
+        {
+          g_warning ("Failed to initialize FreeType, font features will likely not work!");
+          return NULL;
+        }
+    }
+
+  if (SelectObject (hdc, hfont) == HGDI_ERROR)
+    {
+      g_warning ("SelectObject() for the PangoFont failed, font features will likely not work!");
+      return NULL;
+    }
+
+  item->hfont = hfont;
+
+  /* Check whether the HFONT refers to a font in a .ttc font file */
+  is_ttc_font = GetFontData(hdc, FONT_TABLE_TTCF, 0, &buf, 1);
+
+  if (is_ttc_font == 1)
+    font_size = GetFontData(hdc, FONT_TABLE_TTCF, 0, NULL, 0);
+  else
+    font_size = GetFontData(hdc, 0, 0, NULL, 0);
+
+  if (font_size == GDI_ERROR && is_ttc_font == GDI_ERROR)
+    {
+      g_warning ("GetFontData() failed");
+      return NULL;
+    }
+
+  /* Now, get the font data stream that we need for creating the FT_Face */
+  item->font_data_stream = g_malloc (font_size);
+  if (GetFontData (hdc,
+                   is_ttc_font == 1 ? FONT_TABLE_TTCF : 0,
+                   0,
+                   item->font_data_stream,
+                   font_size) == GDI_ERROR)
+    {
+      /* Todo: Cleanup !*/
+      g_warning ("Unable to get data stream of font!");
+      return NULL;
+    }
+
+  /* Finally, create the FT_Face we need */
+  if (FT_New_Memory_Face (item->ft_lib,
+                          item->font_data_stream,
+                          font_size,
+                          0,
+                          &item->face) != FT_Err_Ok)
+    {
+      /* Todo: Cleanup! */
+      g_warning ("Unable to create FT_Face!");
+      return NULL;
+    }
+
+  /* Todo: Cleanup function */
+  return item->face;
+}
+
+/* Windows: Determine whether we are using PangoWin32 or PangoFT, if there is PangoFT support */
+# ifdef HAVE_PANGOFT
+#  define FT_FACE_FROM_PANGO_FONT(f,m,p) \
+          PANGO_IS_FC_FONT(f) ?        \
+          pango_fc_font_lock_face (PANGO_FC_FONT (f)) : \
+          get_ftface_from_pangowin32_font (f, m, p)
+
+#  define PANGO_FONT_UNLOCK_FACE(f) pango_fc_font_unlock_face(PANGO_FC_FONT(f))
+# else
+#  define FT_FACE_FROM_PANGO_FONT(f,m,p) get_ftface_from_pangowin32_font (f, m, p)
+#  define PANGO_FONT_UNLOCK_FACE(f)
+# endif
+
+/* Non-Windows: Just assume we are using PangoFT */
+#elif defined (HAVE_PANGOFT)
+# define FT_FACE_FROM_PANGO_FONT(f,m,p) pango_fc_font_lock_face (PANGO_FC_FONT (f))
+# define PANGO_FONT_UNLOCK_FACE(f) pango_fc_font_unlock_face(PANGO_FC_FONT(f))
+#endif
+
+static FT_Face
+get_ft_face_from_pango_font (PangoFont                   *font,
+                             PangoFontMap                *font_map,
+                             GtkFontChooserWidgetPrivate *priv)
+{
+  return FT_FACE_FROM_PANGO_FONT (font, font_map, priv);
 }
 
 /* OpenType variations */
@@ -241,6 +395,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
   gboolean has_axis = FALSE;
+  PangoFontMap *font_map = NULL;
 
   if (priv->updating_variations)
     return FALSE;
@@ -254,7 +409,12 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+  if (priv->font_map != NULL)
+    font_map = priv->font_map;
+  else
+    font_map = pango_cairo_font_map_get_default ();
+
+  ft_face = get_ft_face_from_pango_font (pango_font, font_map, priv);
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -286,7 +446,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  PANGO_FONT_UNLOCK_FACE (pango_font);
 
   g_object_unref (pango_font);
 
@@ -775,6 +935,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   int i, j;
   GList *l;
   gboolean has_feature = FALSE;
+  PangoFontMap *font_map = NULL;
 
   for (l = priv->feature_items; l; l = l->next)
     {
@@ -782,14 +943,19 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       gtk_widget_hide (item->top);
       gtk_widget_hide (gtk_widget_get_parent (item->top));
     }
-
+/* *** Re-enable this later ! ***
   if ((priv->level & GTK_FONT_CHOOSER_LEVEL_FEATURES) == 0)
-    return FALSE;
+    return FALSE;*/
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+  if (priv->font_map != NULL)
+    font_map = priv->font_map;
+  else
+    font_map = pango_cairo_font_map_get_default ();
+
+  ft_face = get_ft_face_from_pango_font (pango_font, font_map, priv);
 
   hb_font = hb_ft_font_create (ft_face, NULL);
 
@@ -850,7 +1016,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  PANGO_FONT_UNLOCK_FACE (pango_font);
 
   g_object_unref (pango_font);
 
