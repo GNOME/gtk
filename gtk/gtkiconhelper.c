@@ -317,10 +317,54 @@ get_surface_size (GtkIconHelper   *self,
 }
 
 static cairo_surface_t *
+copy_surface (GtkIconHelper   *self,
+              cairo_surface_t *orig_surface)
+{
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  cairo_format_t format;
+  int width, height;
+  double x_scale, y_scale, x_offset, y_offset;
+
+  if (cairo_surface_get_type (orig_surface) == CAIRO_SURFACE_TYPE_IMAGE)
+    format = cairo_image_surface_get_format (orig_surface);
+  else
+    format = CAIRO_FORMAT_ARGB32;
+
+  cairo_surface_get_device_scale (orig_surface, &x_scale, &y_scale);
+  cairo_surface_get_device_offset (orig_surface, &x_offset, &y_offset);
+  get_surface_size (self, orig_surface, &width, &height);
+
+  surface = cairo_surface_create_similar_image (orig_surface, format, width * x_scale, height * y_scale);
+  cairo_surface_set_device_scale (surface, x_scale, y_scale);
+  cairo_surface_set_device_offset (surface, x_offset, y_offset);
+
+  cr = cairo_create (surface);
+  cairo_set_source_surface (cr, orig_surface, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  return surface;
+}
+
+static cairo_surface_t *
 ensure_surface_from_surface (GtkIconHelper   *self,
+                             GtkCssStyle   *style,
                              cairo_surface_t *orig_surface)
 {
-  return cairo_surface_reference (orig_surface);
+  cairo_surface_t *surface;
+  GtkCssIconEffect icon_effect;
+
+  icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
+  if (icon_effect != GTK_CSS_ICON_EFFECT_NONE)
+    {
+      surface = copy_surface (self, orig_surface);
+      gtk_css_icon_effect_apply (icon_effect, surface);
+    }
+  else
+    surface = cairo_surface_reference (orig_surface);
+
+  return surface;
 }
 
 static gboolean
@@ -526,7 +570,9 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
   switch (gtk_image_definition_get_storage_type (self->priv->def))
     {
     case GTK_IMAGE_SURFACE:
-      surface = ensure_surface_from_surface (self, gtk_image_definition_get_surface (self->priv->def));
+      surface = ensure_surface_from_surface (self,
+                                             gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
+                                             gtk_image_definition_get_surface (self->priv->def));
       break;
 
     case GTK_IMAGE_PIXBUF:
