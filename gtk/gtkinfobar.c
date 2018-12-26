@@ -490,6 +490,7 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
 
   ad = get_response_data (child, TRUE);
 
+  G_DEBUG_HERE();
   ad->response_id = response_id;
 
   if (GTK_IS_BUTTON (child))
@@ -508,7 +509,7 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
   else
     g_warning ("Only 'activatable' widgets can be packed into the action area of a GtkInfoBar");
 
-  gtk_box_pack_end (GTK_BOX (priv->action_area), child);
+  gtk_container_add (GTK_CONTAINER (priv->action_area), child);
   if (response_id == GTK_RESPONSE_HELP)
     gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area),
                                         child, TRUE);

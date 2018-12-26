@@ -116,8 +116,9 @@ activate (GApplication *gapp)
                 "margin", 20,
                 "row-spacing", 12,
                 "column-spacing", 12,
+                "vexpand", TRUE,
                 NULL);
-  gtk_box_pack_start (GTK_BOX (box), grid);
+  gtk_container_add (GTK_CONTAINER (box), grid);
 
   label = gtk_label_new ("Start");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
@@ -151,7 +152,7 @@ activate (GApplication *gapp)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check, 1, 3, 1, 1);
 
-  gtk_box_pack_end (GTK_BOX (box), bar);
+  gtk_container_add (GTK_CONTAINER (box), bar);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show (window);
 }

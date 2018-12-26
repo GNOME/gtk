@@ -548,17 +548,17 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
 
   /* Build contents */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox);
+  gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
   icon = gtk_image_new_from_icon_name ("dialog-password");
   gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
 
   gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (icon, GTK_ALIGN_START);
-  gtk_box_pack_start (GTK_BOX (hbox), icon);
+  gtk_container_add (GTK_CONTAINER (hbox), icon);
 
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
-  gtk_box_pack_start (GTK_BOX (hbox), main_vbox);
+  gtk_container_add (GTK_CONTAINER (hbox), main_vbox);
 
   secondary = strstr (message, "\n");
   if (secondary != NULL)
@@ -574,7 +574,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
   g_free (primary);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
@@ -587,7 +587,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label));
+      gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
     }
 
   grid = gtk_grid_new ();
@@ -595,7 +595,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
   gtk_widget_set_margin_bottom (grid, 12);
-  gtk_box_pack_start (GTK_BOX (main_vbox), grid);
+  gtk_container_add (GTK_CONTAINER (main_vbox), grid);
 
   can_anonymous = priv->ask_flags & G_ASK_PASSWORD_ANONYMOUS_SUPPORTED;
 
@@ -618,7 +618,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       gtk_grid_attach (GTK_GRID (grid), anon_box, 1, rows++, 1, 1);
 
       choice = gtk_radio_button_new_with_mnemonic (NULL, _("_Anonymous"));
-      gtk_box_pack_start (GTK_BOX (anon_box),
+      gtk_container_add (GTK_CONTAINER (anon_box),
                           choice);
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (pw_dialog_anonymous_toggled), operation);
@@ -626,7 +626,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
       choice = gtk_radio_button_new_with_mnemonic (group, _("Registered U_ser"));
-      gtk_box_pack_start (GTK_BOX (anon_box),
+      gtk_container_add (GTK_CONTAINER (anon_box),
                           choice);
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (pw_dialog_anonymous_toggled), operation);
@@ -675,7 +675,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
                          GINT_TO_POINTER (G_PASSWORD_SAVE_NEVER));
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (remember_button_toggled), operation);
-      gtk_box_pack_start (GTK_BOX (remember_box), choice);
+      gtk_container_add (GTK_CONTAINER (remember_box), choice);
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
       choice = gtk_radio_button_new_with_mnemonic (group, _("Remember password until you _logout"));
@@ -685,7 +685,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
                          GINT_TO_POINTER (G_PASSWORD_SAVE_FOR_SESSION));
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (remember_button_toggled), operation);
-      gtk_box_pack_start (GTK_BOX (remember_box), choice);
+      gtk_container_add (GTK_CONTAINER (remember_box), choice);
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
       choice = gtk_radio_button_new_with_mnemonic (group, _("Remember _forever"));
@@ -695,7 +695,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
                          GINT_TO_POINTER (G_PASSWORD_SAVE_PERMANENTLY));
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (remember_button_toggled), operation);
-      gtk_box_pack_start (GTK_BOX (remember_box), choice);
+      gtk_container_add (GTK_CONTAINER (remember_box), choice);
     }
 
   g_signal_connect (G_OBJECT (dialog), "response",
@@ -1403,7 +1403,7 @@ create_show_processes_dialog (GtkMountOperation *op,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_box_pack_start (GTK_BOX (content_area), vbox);
+  gtk_container_add (GTK_CONTAINER (content_area), vbox);
 
   if (secondary != NULL)
     s = g_strdup_printf ("<big><b>%s</b></big>\n\n%s", primary, secondary);
@@ -1414,7 +1414,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), s);
   g_free (s);
-  gtk_box_pack_start (GTK_BOX (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), label);
 
   /* First count the items in the list then
    * add the buttons in reverse order
@@ -1464,7 +1464,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_IN);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window);
+  gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
 
   g_signal_connect (tree_view, "popup-menu",
                     G_CALLBACK (on_popup_menu_for_process_tree_view),
