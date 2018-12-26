@@ -33,8 +33,15 @@
 #include "gtkradiobutton.h"
 #include "gtkgesturemultipress.h"
 
-#if defined (HAVE_HARFBUZZ) && defined (HAVE_PANGOFT)
-#include <pango/pangofc-font.h>
+#ifdef HAVE_HARFBUZZ
+
+#ifdef HAVE_PANGOFT
+# include <pango/pangofc-font.h>
+#endif
+#ifdef GDK_WINDOWING_WIN32
+# include <pango/pangowin32.h>
+#endif
+
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
@@ -83,6 +90,54 @@ axis_remove (gpointer key,
   gtk_widget_destroy (a->label);
   gtk_widget_destroy (a->scale);
   gtk_widget_destroy (a->spin);
+}
+
+
+
+#ifdef GDK_WINDOWING_WIN32
+static FT_Face
+get_ftface_from_pangowin32_font (PangoFont *font, PangoFontMap *font_map)
+{
+  FT_Face face = NULL;
+  PangoWin32FontCache *cache = NULL;
+  LOGFONTW *logfont;
+  HFONT hfont;
+
+  cache = pango_win32_font_map_get_font_cache (font_map);
+  logfont = pango_win32_font_logfontw (font);
+  hfont = pango_win32_font_cache_loadw (cache, logfont);
+
+  /** TODO!!! */
+
+  pango_win32_font_cache_unload (cache, hfont);
+  g_free (logfont);
+
+  return face;
+}
+
+/* Windows: Determine whether we are using PangoWin32 or PangoFT, if there is PangoFT support */
+# ifdef HAVE_PANGOFT
+#  define FT_FACE_FROM_PANGO_FONT(f,m) \
+          PANGO_IS_FC_FONT(f) ?        \
+          pango_fc_font_lock_face (PANGO_FC_FONT (f)) : \
+          get_ftface_from_pangowin32_font (f, m)
+
+#  define PANGO_FONT_UNLOCK_FACE(f) pango_fc_font_unlock_face(PANGO_FC_FONT(f))
+# else
+#  define FT_FACE_FROM_PANGO_FONT(f,m) get_ftface_from_pangowin32_font (f, m)
+#  define PANGO_FONT_UNLOCK_FACE(f)
+# endif
+
+/* Non-Windows: Just assume we are using PangoFT */
+#elif defined (HAVE_PANGOFT)
+# define FT_FACE_FROM_PANGO_FONT(f,m) pango_fc_font_lock_face (PANGO_FC_FONT (f))
+# define PANGO_FONT_UNLOCK_FACE(f) pango_fc_font_unlock_face(PANGO_FC_FONT(f))
+#endif
+
+static FT_Face
+get_ft_face_from_pango_font (PangoFont *font, PangoFontMap *font_map)
+{
+  return FT_FACE_FROM_PANGO_FONT (font, font_map);
 }
 
 /* OpenType variations */
@@ -241,6 +296,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
   gboolean has_axis = FALSE;
+  PangoFontMap *font_map = NULL;
 
   if (priv->updating_variations)
     return FALSE;
@@ -254,7 +310,12 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+  if (priv->font_map != NULL)
+    font_map = priv->font_map;
+  else
+    font_map = pango_cairo_font_map_get_default ();
+
+  ft_face = get_ft_face_from_pango_font (pango_font, font_map);
 
   ret = FT_Get_MM_Var (ft_face, &ft_mm_var);
   if (ret == 0)
@@ -286,7 +347,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
       free (ft_mm_var);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  PANGO_FONT_UNLOCK_FACE (pango_font);
 
   g_object_unref (pango_font);
 
@@ -775,6 +836,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   int i, j;
   GList *l;
   gboolean has_feature = FALSE;
+  PangoFontMap *font_map = NULL;
 
   for (l = priv->feature_items; l; l = l->next)
     {
@@ -789,7 +851,12 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font));
+  if (priv->font_map != NULL)
+    font_map = priv->font_map;
+  else
+    font_map = pango_cairo_font_map_get_default ();
+
+  ft_face = get_ft_face_from_pango_font (pango_font, font_map);
 
   hb_font = hb_ft_font_create (ft_face, NULL);
 
@@ -850,7 +917,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  PANGO_FONT_UNLOCK_FACE (pango_font);
 
   g_object_unref (pango_font);
 
