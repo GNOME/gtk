@@ -28,14 +28,8 @@
                   <class name="dialog-action-area"/>
                 </style>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>
