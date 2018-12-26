@@ -16,16 +16,10 @@
                   <object class="GtkIcon" id="arrow">
                     <property name="css-name">arrow</property>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>
