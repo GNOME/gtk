@@ -104,15 +104,6 @@ void        gtk_box_reorder_child       (GtkBox         *box,
                                          GtkWidget      *child,
                                          gint            position);
 
-GDK_AVAILABLE_IN_ALL
-void        gtk_box_query_child_packing (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         GtkPackType    *pack_type);
-GDK_AVAILABLE_IN_ALL
-void        gtk_box_set_child_packing   (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         GtkPackType     pack_type);
-
 G_END_DECLS
 
 #endif /* __GTK_BOX_H__ */
