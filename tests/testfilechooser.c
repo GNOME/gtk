@@ -663,11 +663,11 @@ main (int argc, char **argv)
   gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);
 
   preview_label = gtk_label_new (NULL);
-  gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_label, TRUE, TRUE, 0);
   g_object_set (preview_label, "margin", 6, NULL);
 
   preview_image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (preview_vbox), preview_image, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_image, TRUE, TRUE, 0);
   g_object_set (preview_image, "margin", 6, NULL);
 
   update_preview_cb (GTK_FILE_CHOOSER (dialog));

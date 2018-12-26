@@ -52,18 +52,18 @@ main (int argc, char **argv)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  adjustment = gtk_adjustment_new (20, 0, 200, 1, 10, 0);
-  scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
-  gtk_box_pack_end (GTK_BOX (vbox), scale);
-
-  label = gtk_label_new ("Event processing time (ms):");
-  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_box_pack_end (GTK_BOX (vbox), label);
-
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
   gtk_widget_set_vexpand (da, TRUE);
-  gtk_box_pack_end (GTK_BOX (vbox), da);
+  gtk_container_add (GTK_CONTAINER (vbox), da);
+
+  label = gtk_label_new ("Event processing time (ms):");
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), label);
+
+  adjustment = gtk_adjustment_new (20, 0, 200, 1, 10, 0);
+  scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
+  gtk_container_add (GTK_CONTAINER (vbox), scale);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "motion",
