@@ -918,7 +918,7 @@ test_children (void)
     "<interface>"
     "  <object class=\"GtkDialog\" id=\"dialog1\">"
     "    <property name=\"use_header_bar\">1</property>"
-    "    <child internal-child=\"vbox\">"
+    "    <child internal-child=\"content_area\">"
     "      <object class=\"GtkBox\" id=\"dialog1-vbox\">"
     "        <property name=\"orientation\">vertical</property>"
     "          <child internal-child=\"action_area\">"
@@ -961,7 +961,6 @@ test_children (void)
   g_assert (vbox != NULL);
   g_assert (GTK_IS_BOX (vbox));
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (vbox)) == GTK_ORIENTATION_VERTICAL);
-  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (gtk_widget_get_parent (GTK_WIDGET (vbox)))), "dialog1") == 0);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (content_area)), "dialog1-vbox") == 0);
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
@@ -1334,7 +1333,7 @@ test_dialog (void)
   const gchar buffer1[] =
     "<interface>"
     "  <object class=\"GtkDialog\" id=\"dialog1\">"
-    "    <child internal-child=\"vbox\">"
+    "    <child internal-child=\"content_area\">"
     "      <object class=\"GtkBox\" id=\"dialog1-vbox\">"
     "        <property name=\"orientation\">vertical</property>"
     "          <child internal-child=\"action_area\">"

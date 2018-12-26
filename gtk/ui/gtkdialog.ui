@@ -10,11 +10,19 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="vbox">
+      <object class="GtkBox">
         <property name="orientation">vertical</property>
         <style>
           <class name="dialog-vbox"/>
         </style>
+
+        <!-- This is empty here and just exists so we can expose it as
+             GtkDialog API. -->
+        <child>
+          <object class="GtkBox" id="content_area">
+          </object>
+        </child>
+
         <child>
           <object class="GtkBox" id="action_box">
             <style>

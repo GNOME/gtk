@@ -15,8 +15,8 @@
         </child>
       </object>
     </child>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+    <child internal-child="content_area">
+      <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <property name="margin">5</property>
