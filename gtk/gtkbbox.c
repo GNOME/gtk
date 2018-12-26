@@ -835,11 +835,6 @@ gtk_button_box_size_allocate (GtkWidget *widget,
     }
   total_size = primary_size + secondary_size;
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    width = width;
-  else
-    height = height;
-
   switch (priv->layout_style)
     {
       case GTK_BUTTONBOX_SPREAD:
