@@ -170,9 +170,9 @@
 
 typedef struct
 {
-  GtkWidget *vbox;
   GtkWidget *headerbar;
   GtkWidget *action_area;
+  GtkWidget *content_area;
   GtkWidget *action_box;
   GtkSizeGroup *size_group;
 
@@ -592,9 +592,9 @@ gtk_dialog_class_init (GtkDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkdialog.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, vbox);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, headerbar);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, content_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
 
   gtk_widget_class_set_css_name (widget_class, I_("dialog"));
@@ -1621,5 +1621,5 @@ gtk_dialog_get_content_area (GtkDialog *dialog)
 
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  return priv->vbox;
+  return priv->content_area;
 }
