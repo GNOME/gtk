@@ -34,6 +34,7 @@
 #include "gtkmarshalers.h"
 #include "gtkgesturepan.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcenterbox.h"
 #include "gtkintl.h"
 
 /**
@@ -444,13 +445,13 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   g_signal_connect_swapped (self->show_all, "clicked",
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 
-  self->footer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+  self->footer = gtk_center_box_new ();
   GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), self->footer);
 
   gtk_widget_set_hexpand (GTK_WIDGET (self->switcher), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (self->switcher), GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (self->footer), GTK_WIDGET (self->switcher));
-  gtk_box_pack_end (GTK_BOX (self->footer), self->show_all);
+  gtk_center_box_set_center_widget (GTK_CENTER_BOX (self->footer), GTK_WIDGET (self->switcher));
+  gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->footer), self->show_all);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
