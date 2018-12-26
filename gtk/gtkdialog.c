@@ -133,8 +133,8 @@
  * # GtkDialog as GtkBuildable
  *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
- * @vbox and @action_area as internal children with the names “vbox” and
- * “action_area”.
+ * @message_area and @action_area as internal children with the names
+ * “action_area” and “action_area”.
  *
  * GtkDialog supports a custom <action-widgets> element, which can contain
  * multiple <action-widget> elements. The “response” attribute specifies a
@@ -170,9 +170,9 @@
 
 typedef struct
 {
-  GtkWidget *vbox;
   GtkWidget *headerbar;
   GtkWidget *action_area;
+  GtkWidget *content_area;
   GtkWidget *action_box;
   GtkSizeGroup *size_group;
 
@@ -592,9 +592,9 @@ gtk_dialog_class_init (GtkDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkdialog.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, vbox);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, headerbar);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, content_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
 
   gtk_widget_class_set_css_name (widget_class, I_("dialog"));
@@ -727,7 +727,7 @@ gtk_dialog_close (GtkDialog *dialog)
  * Creates a new dialog box.
  *
  * Widgets should not be packed into this #GtkWindow
- * directly, but into the @vbox and @action_area, as described above.
+ * directly, but into the @content_area and @action_area, as described above.
  *
  * Returns: the new dialog as a #GtkWidget
  */
@@ -1621,5 +1621,5 @@ gtk_dialog_get_content_area (GtkDialog *dialog)
 
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  return priv->vbox;
+  return priv->content_area;
 }
