@@ -982,22 +982,16 @@ test_child_properties (void)
     "  <object class=\"GtkBox\" id=\"vbox1\">"
     "    <child>"
     "      <object class=\"GtkLabel\" id=\"label1\"/>"
-    "      <packing>"
-    "        <property name=\"pack-type\">start</property>"
-    "      </packing>"
     "    </child>"
     "    <child>"
     "      <object class=\"GtkLabel\" id=\"label2\"/>"
-    "      <packing>"
-    "        <property name=\"pack-type\">end</property>"
-    "      </packing>"
     "    </child>"
     "  </object>"
     "</interface>";
 
   GObject *label, *vbox;
-  GtkPackType pack_type;
-  
+  int position;
+
   builder = builder_new_from_string (buffer1, -1, NULL);
   vbox = gtk_builder_get_object (builder, "vbox1");
   g_assert (GTK_IS_BOX (vbox));
@@ -1006,19 +1000,19 @@ test_child_properties (void)
   g_assert (GTK_IS_LABEL (label));
   gtk_container_child_get (GTK_CONTAINER (vbox),
                            GTK_WIDGET (label),
-                           "pack-type",
-                           &pack_type,
+                           "position",
+                           &position,
                            NULL);
-  g_assert (pack_type == GTK_PACK_START);
-  
+  g_assert_cmpint (position, ==, 0);
+
   label = gtk_builder_get_object (builder, "label2");
   g_assert (GTK_IS_LABEL (label));
   gtk_container_child_get (GTK_CONTAINER (vbox),
                            GTK_WIDGET (label),
-                           "pack-type",
-                           &pack_type,
+                           "position",
+                           &position,
                            NULL);
-  g_assert (pack_type == GTK_PACK_END);
+  g_assert_cmpint (position, ==, 1);
 
   g_object_unref (builder);
 }
@@ -1786,9 +1780,6 @@ test_reference_counting (void)
     "        <property name=\"orientation\">vertical</property>"
     "    <child>"
     "      <object class=\"GtkLabel\" id=\"label1\"/>"
-    "      <packing>"
-    "        <property name=\"pack-type\">start</property>"
-    "      </packing>"
     "    </child>"
     "  </object>"
     "</interface>";
