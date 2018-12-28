@@ -34,21 +34,8 @@
  * the #GtkWidget:halign and #GtkWidget:valign properties can be used on
  * the children to influence their allocation.
  *
- * GtkBox uses a notion of packing. Packing refers
- * to adding widgets with reference to a particular position in a
- * #GtkContainer. For a GtkBox, there are two reference positions: the
- * start and the end of the box.
- * For a vertical #GtkBox, the start is defined as the top of the box and
- * the end is defined as the bottom. For a horizontal #GtkBox the start
- * is defined as the left side and the end is defined as the right side.
- *
- * Use repeated calls to gtk_box_pack_start() to pack widgets into a
- * GtkBox from start to end. Use gtk_box_pack_end() to add widgets from
- * end to start. You may intersperse these calls and add widgets from
- * both ends of the same GtkBox.
- *
- * Because GtkBox is a #GtkContainer, you may also use gtk_container_add()
- * to insert widgets into the box. Use gtk_container_remove()
+ * Use repeated calls to gtk_container_add() to pack widgets into a
+ * GtkBox from start to end. Use gtk_container_remove()
  * to remove widgets from the GtkBox.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
@@ -1196,14 +1183,6 @@ gtk_box_get_baseline_position (GtkBox *box)
  *   the list
  *
  * Moves @child to a new @position in the list of @box children.
- * The list contains widgets packed #GTK_PACK_START
- * as well as widgets packed #GTK_PACK_END, in the order that these
- * widgets were added to @box.
- *
- * A widget’s position in the @box children list determines where
- * the widget is packed into @box.  A child widget at some position
- * in the list will be packed just after all other widgets of the
- * same packing type that appear earlier in the list.
  */
 void
 gtk_box_reorder_child (GtkBox    *box,
