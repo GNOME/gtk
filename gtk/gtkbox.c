@@ -70,7 +70,6 @@
 
 #include "gtkbox.h"
 #include "gtkboxprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
@@ -101,36 +100,17 @@ enum {
   LAST_CHILD_PROP
 };
 
-typedef struct _GtkBoxChild        GtkBoxChild;
-
-struct _GtkBoxPrivate
+typedef struct
 {
-  GList          *children;
-
   GtkOrientation  orientation;
   gint16          spacing;
 
   guint           homogeneous    : 1;
   guint           baseline_pos   : 2;
-};
-typedef struct _GtkBoxPrivate GtkBoxPrivate;
+} GtkBoxPrivate;
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 static GParamSpec *child_props[LAST_CHILD_PROP] = { NULL, };
-
-/*
- * GtkBoxChild:
- * @widget: the child widget, packed into the GtkBox.
- *  neighbors, set when packed, zero by default.
- * @pack: one of #GtkPackType indicating whether the child is packed with
- *  reference to the start (top/left) or end (bottom/right) of the GtkBox.
- */
-struct _GtkBoxChild
-{
-  GtkWidget *widget;
-
-  guint      pack   : 1;
-};
 
 static void gtk_box_size_allocate         (GtkWidget *widget,
                                            int        width,
@@ -356,11 +336,9 @@ gtk_box_size_allocate (GtkWidget *widget,
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkBoxChild *child;
-  GList *children;
+  GtkWidget *child;
   gint nvis_children;
   gint nexpand_children;
-
   GtkTextDirection direction;
   GtkAllocation child_allocation;
   GtkRequestedSize *sizes;
@@ -368,9 +346,6 @@ gtk_box_size_allocate (GtkWidget *widget,
   gint minimum_above, natural_above;
   gint minimum_below, natural_below;
   gboolean have_baseline;
-
-  GtkPackType packing;
-
   gint extra_space;
   gint children_minimum_size = 0;
   gint size_given_to_child;
@@ -400,14 +375,14 @@ gtk_box_size_allocate (GtkWidget *widget,
   minimum_below = natural_below = 0;
 
   /* Retrieve desired size for visible children. */
-  for (i = 0, children = priv->children; children; children = children->next)
+  for (i = 0, child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
     {
-      child = children->data;
-
-      if (!_gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child))
 	continue;
 
-      gtk_widget_measure (child->widget,
+      gtk_widget_measure (child,
                           priv->orientation,
                           priv->orientation == GTK_ORIENTATION_HORIZONTAL ? height : width,
                           &sizes[i].minimum_size, &sizes[i].natural_size,
@@ -451,83 +426,69 @@ gtk_box_size_allocate (GtkWidget *widget,
     }
 
   /* Allocate child sizes. */
-  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
+  for (i = 0, child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
     {
-      for (i = 0, children = priv->children;
-	   children;
-	   children = children->next)
-	{
-	  child = children->data;
+      /* If widget is not visible, skip it. */
+      if (!_gtk_widget_get_visible (child))
+        continue;
 
-	  /* If widget is not visible, skip it. */
-	  if (!_gtk_widget_get_visible (child->widget))
-	    continue;
+      /* Assign the child's size. */
+      if (priv->homogeneous)
+        {
+          child_size = size_given_to_child;
 
-	  /* If widget is packed differently skip it, but still increment i,
-	   * since widget is visible and will be handled in next loop iteration.
-	   */
-	  if (child->pack != packing)
-	    {
-	      i++;
-	      continue;
-	    }
+          if (n_extra_widgets > 0)
+            {
+              child_size++;
+              n_extra_widgets--;
+            }
+        }
+      else
+        {
+          child_size = sizes[i].minimum_size;
 
-	  /* Assign the child's size. */
-	  if (priv->homogeneous)
-	    {
-              child_size = size_given_to_child;
+          if (gtk_widget_compute_expand (child, priv->orientation))
+            {
+              child_size += size_given_to_child;
 
-	      if (n_extra_widgets > 0)
-		{
-		  child_size++;
-		  n_extra_widgets--;
-		}
-	    }
-	  else
-	    {
-              child_size = sizes[i].minimum_size;
+              if (n_extra_widgets > 0)
+                {
+                  child_size++;
+                  n_extra_widgets--;
+                }
+            }
+        }
 
-              if (gtk_widget_compute_expand (child->widget, priv->orientation))
-		{
-                  child_size += size_given_to_child;
+      sizes[i].natural_size = child_size;
 
-		  if (n_extra_widgets > 0)
-		    {
-		      child_size++;
-		      n_extra_widgets--;
-		    }
-		}
-	    }
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+          gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE)
+        {
+          int child_allocation_width;
+          int child_minimum_height, child_natural_height;
 
-	  sizes[i].natural_size = child_size;
+          child_allocation_width = child_size;
 
-	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-              gtk_widget_get_valign (child->widget) == GTK_ALIGN_BASELINE)
-	    {
-	      int child_allocation_width;
-	      int child_minimum_height, child_natural_height;
+          child_minimum_baseline = -1;
+          child_natural_baseline = -1;
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                              child_allocation_width,
+                              &child_minimum_height, &child_natural_height,
+                              &child_minimum_baseline, &child_natural_baseline);
 
-              child_allocation_width = child_size;
+          if (child_minimum_baseline >= 0)
+            {
+              have_baseline = TRUE;
+              minimum_below = MAX (minimum_below, child_minimum_height - child_minimum_baseline);
+              natural_below = MAX (natural_below, child_natural_height - child_natural_baseline);
+              minimum_above = MAX (minimum_above, child_minimum_baseline);
+              natural_above = MAX (natural_above, child_natural_baseline);
+            }
+        }
 
-	      child_minimum_baseline = -1;
-	      child_natural_baseline = -1;
-              gtk_widget_measure (child->widget, GTK_ORIENTATION_VERTICAL,
-                                  child_allocation_width,
-                                  &child_minimum_height, &child_natural_height,
-                                  &child_minimum_baseline, &child_natural_baseline);
-
-	      if (child_minimum_baseline >= 0)
-		{
-		  have_baseline = TRUE;
-		  minimum_below = MAX (minimum_below, child_minimum_height - child_minimum_baseline);
-		  natural_below = MAX (natural_below, child_natural_height - child_natural_baseline);
-		  minimum_above = MAX (minimum_above, child_minimum_baseline);
-		  natural_above = MAX (natural_above, child_natural_baseline);
-		}
-	    }
-
-	  i++;
-	}
+      i++;
     }
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
@@ -557,89 +518,52 @@ gtk_box_size_allocate (GtkWidget *widget,
     }
 
   /* Allocate child positions. */
-  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
+      child_allocation.y = 0;
+      child_allocation.height = height;
+      x = 0;
+    }
+  else
+    {
+      child_allocation.x = 0;
+      child_allocation.width = width;
+      y = 0;
+    }
+
+  for (i = 0, child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      /* If widget is not visible, skip it. */
+      if (!_gtk_widget_get_visible (child))
+        continue;
+
+      child_size = sizes[i].natural_size;
+
+      /* Assign the child's position. */
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-	  child_allocation.y = 0;
-	  child_allocation.height = height;
-	  if (packing == GTK_PACK_START)
-	    x = 0;
-	  else
-	    x = width;
-	}
-      else
-	{
-	  child_allocation.x = 0;
-	  child_allocation.width = width;
-	  if (packing == GTK_PACK_START)
-	    y = 0;
-	  else
-	    y = height;
-	}
+        {
+          child_allocation.width = child_size;
+          child_allocation.x = x;
 
-      for (i = 0, children = priv->children;
-	   children;
-	   children = children->next)
-	{
-	  child = children->data;
+          x += child_size + spacing;
 
-	  /* If widget is not visible, skip it. */
-	  if (!_gtk_widget_get_visible (child->widget))
-	    continue;
+          if (direction == GTK_TEXT_DIR_RTL)
+            child_allocation.x = width - child_allocation.x - child_allocation.width;
 
-	  /* If widget is packed differently skip it, but still increment i,
-	   * since widget is visible and will be handled in next loop iteration.
-	   */
-	  if (child->pack != packing)
-	    {
-	      i++;
-	      continue;
-	    }
+        }
+      else /* (priv->orientation == GTK_ORIENTATION_VERTICAL) */
+        {
+          child_allocation.height = child_size;
+          child_allocation.y = y;
 
-	  child_size = sizes[i].natural_size;
+          y += child_size + spacing;
+        }
 
-	  /* Assign the child's position. */
-	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    {
-              child_allocation.width = child_size;
-              child_allocation.x = x;
+      gtk_widget_size_allocate (child, &child_allocation, baseline);
 
-	      if (packing == GTK_PACK_START)
-		{
-		  x += child_size + spacing;
-		}
-	      else
-		{
-		  x -= child_size + spacing;
-
-		  child_allocation.x -= child_size;
-		}
-
-	      if (direction == GTK_TEXT_DIR_RTL)
-		child_allocation.x = width - child_allocation.x - child_allocation.width;
-
-	    }
-	  else /* (priv->orientation == GTK_ORIENTATION_VERTICAL) */
-	    {
-              child_allocation.height = child_size;
-              child_allocation.y = y;
-
-	      if (packing == GTK_PACK_START)
-		{
-		  y += child_size + spacing;
-		}
-	      else
-		{
-		  y -= child_size + spacing;
-
-		  child_allocation.y -= child_size;
-		}
-	    }
-	  gtk_widget_size_allocate (child->widget, &child_allocation, baseline);
-
-	  i++;
-	}
+      i++;
     }
 }
 
@@ -676,24 +600,24 @@ gtk_box_get_child_property (GtkContainer *container,
 			    GValue       *value,
 			    GParamSpec   *pspec)
 {
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (GTK_BOX (container));
-  GList *list;
+  GtkWidget *p;
   int i;
 
   switch (property_id)
     {
     case CHILD_PROP_POSITION:
       i = 0;
-      for (list = priv->children; list; list = list->next)
-	{
-	  GtkBoxChild *child_entry;
+      for (p = _gtk_widget_get_first_child (GTK_WIDGET (container));
+           p != NULL;
+           p = _gtk_widget_get_next_sibling (p))
+        {
+          if (p == child)
+            break;
 
-	  child_entry = list->data;
-	  if (child_entry->widget == child)
-	    break;
-	  i++;
-	}
-      g_value_set_int (value, list ? i : -1);
+          i ++;
+        }
+
+      g_value_set_int (value, i);
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -801,61 +725,17 @@ gtk_box_get_path_for_child (GtkContainer *container,
 }
 
 static void
-gtk_box_update_child_css_position (GtkBox      *box,
-                                   GtkBoxChild *child_info)
-{
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkBoxChild *prev;
-  gboolean reverse;
-  GList *l;
-
-  prev = NULL;
-  for (l = priv->children; l->data != child_info; l = l->next)
-    {
-      GtkBoxChild *cur = l->data;
-
-      if (cur->pack == child_info->pack)
-        prev = cur;
-    }
-
-  reverse = child_info->pack == GTK_PACK_END;
-
-  if (reverse)
-    gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                                gtk_widget_get_css_node (child_info->widget),
-                                prev ? gtk_widget_get_css_node (prev->widget) : NULL);
-  else
-    gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                               gtk_widget_get_css_node (child_info->widget),
-                               prev ? gtk_widget_get_css_node (prev->widget) : NULL);
-}
-
-static void
-gtk_box_pack (GtkBox      *box,
-              GtkWidget   *child)
+gtk_box_pack (GtkBox    *box,
+              GtkWidget *child)
 {
   GtkContainer *container = GTK_CONTAINER (box);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkBoxChild *child_info;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (_gtk_widget_get_parent (child) == NULL);
 
-  child_info = g_new (GtkBoxChild, 1);
-  child_info->widget = child;
-  child_info->pack = GTK_PACK_START;
-
-  priv->children = g_list_append (priv->children, child_info);
-  gtk_box_update_child_css_position (box, child_info);
-
-  gtk_widget_freeze_child_notify (child);
-
   gtk_widget_set_parent (child, GTK_WIDGET (box));
-
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
-
-  gtk_widget_thaw_child_notify (child);
 }
 
 static void
@@ -1111,8 +991,6 @@ gtk_box_init (GtkBox *box)
   gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-  priv->children = NULL;
-
   priv->homogeneous = FALSE;
   priv->spacing = 0;
   priv->baseline_pos = GTK_BASELINE_POSITION_CENTER;
@@ -1332,48 +1210,35 @@ gtk_box_reorder_child (GtkBox    *box,
 		       GtkWidget *child,
 		       gint       position)
 {
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GList *old_link;
-  GList *new_link;
-  GtkBoxChild *child_info = NULL;
-  gint old_position;
+  GtkWidget *widget;
+  int old_pos = -1;
+  int i;
+  GtkWidget *p;
+  GtkWidget *new_next_sibling = NULL;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  old_link = priv->children;
-  old_position = 0;
-  while (old_link)
-    {
-      child_info = old_link->data;
-      if (child_info->widget == child)
-	break;
+  widget = GTK_WIDGET (box);
 
-      old_link = old_link->next;
-      old_position++;
+  i = 0;
+  for (p = gtk_widget_get_first_child (widget);
+       p != NULL;
+       p = gtk_widget_get_next_sibling (p))
+    {
+      if (p == child)
+        old_pos = i;
+
+      if (i == position)
+        {
+          new_next_sibling = p;
+        }
+
+      i ++;
     }
 
-  g_return_if_fail (old_link != NULL);
-
-  if (position == old_position)
-    return;
-
-  priv->children = g_list_delete_link (priv->children, old_link);
-
-  if (position < 0)
-    new_link = NULL;
-  else
-    new_link = g_list_nth (priv->children, position);
-
-  priv->children = g_list_insert_before (priv->children, new_link, child_info);
-  gtk_box_update_child_css_position (box, child_info);
-
+  gtk_widget_insert_before (child, widget, new_next_sibling);
   gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_POSITION]);
-  if (_gtk_widget_get_visible (child) &&
-      _gtk_widget_get_visible (GTK_WIDGET (box)))
-    {
-      gtk_widget_queue_resize (child);
-    }
 }
 
 static void
@@ -1387,40 +1252,7 @@ static void
 gtk_box_remove (GtkContainer *container,
 		GtkWidget    *widget)
 {
-  GtkBox *box = GTK_BOX (container);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkBoxChild *child;
-  GList *children;
-
-  children = priv->children;
-  while (children)
-    {
-      child = children->data;
-
-      if (child->widget == widget)
-	{
-	  gboolean was_visible;
-
-	  was_visible = _gtk_widget_get_visible (widget);
-	  gtk_widget_unparent (widget);
-
-	  priv->children = g_list_remove_link (priv->children, children);
-	  g_list_free (children);
-	  g_free (child);
-
-	  /* queue resize regardless of gtk_widget_get_visible (container),
-	   * since that's what is needed by toplevels.
-	   */
-	  if (was_visible)
-            {
-	      gtk_widget_queue_resize (GTK_WIDGET (container));
-            }
-
-	  break;
-	}
-
-      children = children->next;
-    }
+  gtk_widget_unparent (widget);
 }
 
 static void
@@ -1428,51 +1260,32 @@ gtk_box_forall (GtkContainer *container,
 		GtkCallback   callback,
 		gpointer      callback_data)
 {
-  GtkBox *box = GTK_BOX (container);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkBoxChild *child;
-  GList *children;
+  GtkWidget *child;
 
-  children = priv->children;
-  while (children)
+  child = gtk_widget_get_first_child (GTK_WIDGET (container));
+  while (child)
     {
-      child = children->data;
-      children = children->next;
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
 
-      if (child->pack == GTK_PACK_START)
-	(* callback) (child->widget, callback_data);
+      (* callback) (child, callback_data);
+
+      child = next;
     }
 
-
-  children = g_list_last (priv->children);
-  while (children)
-    {
-      child = children->data;
-      children = children->prev;
-
-      if (child->pack == GTK_PACK_END)
-	(* callback) (child->widget, callback_data);
-    }
 }
 
 GList *
 _gtk_box_get_children (GtkBox *box)
 {
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkBoxChild *child;
-  GList *children;
+  GtkWidget *p;
   GList *retval = NULL;
 
   g_return_val_if_fail (GTK_IS_BOX (box), NULL);
 
-  children = priv->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      retval = g_list_prepend (retval, child->widget);
-    }
+  for (p = _gtk_widget_get_first_child (GTK_WIDGET (box));
+       p != NULL;
+       p = _gtk_widget_get_next_sibling (p))
+    retval = g_list_prepend (retval, p);
 
   return g_list_reverse (retval);
 }
