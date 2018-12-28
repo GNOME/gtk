@@ -52,15 +52,17 @@ msgstr "El tipus de pantalla broadway no està implementat: «%s»"
 
 #: gdk/gdkclipboard.c:239
 msgid "This clipboard cannot store data."
-msgstr ""
+msgstr "Aquest porta-retalls no pot emmagatzemar dades."
 
 #: gdk/gdkclipboard.c:294 gdk/gdkclipboard.c:789 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
-msgstr ""
+msgstr "No s'ha pogut llegir el porta-retalls buit."
 
 #: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:592
 msgid "No compatible formats to transfer clipboard contents."
 msgstr ""
+"No hi ha cap format compatible per transferir els continguts del porta-"
+"retalls"
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:215
 #: gtk/gtkdnd.c:818
@@ -75,11 +77,11 @@ msgstr "No es poden proporcionar continguts com a %s"
 
 #: gdk/gdkdrop.c:110
 msgid "Drag’n’drop from other applications is not supported."
-msgstr ""
+msgstr "No hi ha compatibilitat amb arrossega i deixa anar des d'altres aplicacions"
 
 #: gdk/gdkdrop.c:143
 msgid "No compatible formats to transfer contents."
-msgstr ""
+msgstr "No hi ha cap format compatible per transferir contingut."
 
 #: gdk/gdksurface.c:1338
 msgid "GL support disabled via GDK_DEBUG"
@@ -93,7 +95,6 @@ msgstr "El rerefons no és compatible OpenGL"
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "S'ha desactivat el suport Vulkan mitjançant GDK_DEBUG"
 
-#.
 #. * Translators, the strings in the “keyboard label” context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ — these should be removed in the translation. Similarly,
@@ -103,7 +104,6 @@ msgstr "S'ha desactivat el suport Vulkan mitjançant GDK_DEBUG"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
-#.
 #: gdk/keyname-table.h:6843
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -382,7 +382,7 @@ msgstr "Expulsa"
 #: gdk/keyname-table.h:6898
 msgctxt "keyboard label"
 msgid "Explorer"
-msgstr ""
+msgstr "Explorador"
 
 #: gdk/keyname-table.h:6899
 msgctxt "keyboard label"
@@ -392,12 +392,12 @@ msgstr "Calculadora"
 #: gdk/keyname-table.h:6900
 msgctxt "keyboard label"
 msgid "Mail"
-msgstr ""
+msgstr "Correu"
 
 #: gdk/keyname-table.h:6901
 msgctxt "keyboard label"
 msgid "WWW"
-msgstr ""
+msgstr "Web"
 
 #: gdk/keyname-table.h:6902
 msgctxt "keyboard label"
@@ -407,7 +407,7 @@ msgstr "Cerca"
 #: gdk/keyname-table.h:6903
 msgctxt "keyboard label"
 msgid "Tools"
-msgstr ""
+msgstr "Eines"
 
 #: gdk/keyname-table.h:6904
 msgctxt "keyboard label"
@@ -483,7 +483,7 @@ msgstr "No implementat a OS X"
 #: gdk/win32/gdkdrop-win32.c:1330 gdk/x11/gdkclipboard-x11.c:760
 #: gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
-msgstr ""
+msgstr "No s'ha trobat cap format de transferència compatible"
 
 #: gdk/wayland/gdkglcontext-wayland.c:146 gdk/win32/gdkglcontext-win32.c:705
 #: gdk/x11/gdkglcontext-x11.c:670 gdk/x11/gdkglcontext-x11.c:720
@@ -507,121 +507,136 @@ msgid "Core GL is not available on EGL implementation"
 msgstr "El nucli GL no es troba disponible en la implementació EGL"
 
 #: gdk/win32/gdkclipdrop-win32.c:718
-#, c-format
+#, c-formatg
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr ""
+msgstr "No es pot reclamar la propietat del porta-retalls. OpenClipboard() ha excedit el temps"
 
 #: gdk/win32/gdkclipdrop-win32.c:728
 #, c-format
-msgid "Cannot claim clipboard ownership. Another process claimed it before us."
+msgid ""
+"Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
+"No es pot reclamar la propietat del porta-retalls. Un altre procés la reclamat abans que nosaltres."
 
 #: gdk/win32/gdkclipdrop-win32.c:742
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "No es pot reclamar la propietat del porta-retalls. OpenClipboard() ha fallat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "No es pot reclamar la propietat del porta-retalls. EmptyClipboard() ha fallat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr ""
+msgstr "No es poden establir les dades del porta-retalls. OpenClipboard() ha excedit el temps d'espera."
 
 #: gdk/win32/gdkclipdrop-win32.c:807 gdk/win32/gdkclipdrop-win32.c:838
 #, c-format
-msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
+msgid ""
+"Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
+"No es poden establir les dades del porta-retalls. Un altre procés ha demanat la propietat."
 
 #: gdk/win32/gdkclipdrop-win32.c:821
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "No es poden establir les dades del porta-retalls. OpenClipboard() ha fallat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:873
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "No es poden obtenir les dades del porta-retalls. GlobalLock(0x%p) ha fallat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:884
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "No es poden obtenir les dades del porta-retalls. GlobalSize(0x%p) ha fallat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
 msgstr ""
+"No es poden obtenir les dades del porta-retalls. No s'han pogut assignar %lu bytes per a emmagatzemar les dades."
 
 #: gdk/win32/gdkclipdrop-win32.c:927
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr ""
+msgstr "No es poden obtenir les dades del porta-retalls. OpenClipboard() ha excedit el temps d'espera."
 
 #: gdk/win32/gdkclipdrop-win32.c:937
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
-msgstr ""
+msgstr "No es poden obtenir les dades del porta-retalls. Ha canviat la propietat del porta-retalls."
 
 #: gdk/win32/gdkclipdrop-win32.c:947
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
-msgstr ""
+msgstr "No es poden obtenir les dades del porta-retalls. Les dades han canviat abans que es poguessin obtenir."
 
 #: gdk/win32/gdkclipdrop-win32.c:964
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"No es poden obtenir les dades del porta-retalls. OpenClipboard() ha fallat: 0x%lx."
+"mantenir"
 
 #: gdk/win32/gdkclipdrop-win32.c:989
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
+"No es poden obtenir les dades del porta-retalls. No s'ha trobat cap format "
+"de transferència compatible."
 
 #: gdk/win32/gdkclipdrop-win32.c:999
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
+"No es poden obtenir les dades del porta-retalls. GetClipboardData() ha fallat: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1218
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
+"No s'han pogut obtenir les dades DnD. GlobalLock(0x%p) ha fallat: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1227
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
+"No s'han pogut obtenir les dades DnD. GlobalSize(0x%p) ha fallat: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1237
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgstr ""
+"No s'han pogut obtenir les dades DnD. No s'han pogut assignar %lu bytes per a emmagatzemar les dades."
 
 #: gdk/win32/gdkdrop-win32.c:1304
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr ""
+"Superfície GDK 0x%p no està registrada com una destinació per deixar anar"
 
 #: gdk/win32/gdkdrop-win32.c:1311
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr ""
+msgstr "El registre contextual de destinació 0x%p que no té cap objecte de dades"
 
 #: gdk/win32/gdkdrop-win32.c:1349
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
+"IDataObject_GetData (0x%x) ha fallat, retornant 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1381
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
-msgstr ""
+msgstr "S'ha produït un error en convertir les dades W32 del format DnD 0x%x to %p (%s)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
 msgid "writing a closed stream"
@@ -642,20 +657,20 @@ msgstr "No hi ha prou espai a la memòria cau (la mida de la memòria és fixa)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
-msgstr ""
+msgstr "No es convertir un únic gestor"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr ""
+msgstr "No s'han pogut convertir  %zu bytes de dades de %s a %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
-msgstr ""
+msgstr "GlobalLock() ha fallat: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:365
 msgid "GlobalAlloc() failed: "
-msgstr ""
+msgstr "GlobalAlloc() ha fallat: "
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:56
@@ -706,11 +721,13 @@ msgstr[1] "S'estan obrint %d elements"
 
 #: gdk/x11/gdkclipboard-x11.c:436
 msgid "Clipboard manager could not store selection."
-msgstr ""
+msgstr "El gestor de porta-retalls no ha pogut desar la selecció."
 
 #: gdk/x11/gdkclipboard-x11.c:612
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
+"No es pot emmagatzemar el porta-retalls. No està actiu el gestor del porta-"
+"retalls."
 
 #: gdk/x11/gdkglcontext-x11.c:946
 #, c-format
@@ -721,24 +738,26 @@ msgstr ""
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
 msgid "Format %s not supported"
-msgstr ""
+msgstr "El format %s no és compatible"
 
-#: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
+#: gdk/x11/gdktextlistconverter-x11.c:65
+#: gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
-msgstr ""
+msgstr "No hi ha prou espai a la destinació"
 
-#: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:138
+#: gdk/x11/gdktextlistconverter-x11.c:91
+#: gdk/x11/gdktextlistconverter-x11.c:138
 msgid "Need complete input to do conversion"
-msgstr ""
+msgstr "Cal completar l'entrada per fer la conversió"
 
 #: gdk/x11/gdktextlistconverter-x11.c:159
 #: gdk/x11/gdktextlistconverter-x11.c:193
 msgid "Invalid byte sequence in conversion input"
-msgstr ""
+msgstr "La seqüència de bytes a l'entrada de conversió no és vàlida"
 
 #: gdk/x11/gdktextlistconverter-x11.c:185
 msgid "Invalid formats in compound text conversion."
-msgstr ""
+msgstr "Formats no vàlids en la conversió de text compost."
 
 #: gdk/x11/gdktextlistconverter-x11.c:202
 #, c-format
@@ -872,15 +891,18 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Tanca"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410 gtk/gtkwindow.c:8111
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:410
+#: gtk/gtkwindow.c:8111
 msgid "Minimize"
 msgstr "Minimitza"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8120
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:433
+#: gtk/gtkwindow.c:8120
 msgid "Maximize"
 msgstr "Maximitza"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433 gtk/gtkwindow.c:8077
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:433
+#: gtk/gtkwindow.c:8077
 msgid "Restore"
 msgstr "Restaura"
 
@@ -1343,7 +1365,8 @@ msgstr "No s'ha pogut mostrar l'enllaç"
 msgid "Website"
 msgstr "Lloc web"
 
-#. used for the application menu on MacOS.  %s is replaced with the application name.
+#. used for the application menu on MacOS.  %s is replaced with the
+#. application name.
 #: gtk/gtkaboutdialog.c:1078 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
@@ -1363,11 +1386,10 @@ msgstr "Traduït per"
 
 #: gtk/gtkaboutdialog.c:2304
 msgid "Design by"
-msgstr ""
+msgstr "Dissenyat per"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
-#.
 #: gtk/gtkaboutdialog.c:2473
 #, c-format
 msgid ""
@@ -1381,7 +1403,6 @@ msgstr ""
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccellabel.c:200 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
@@ -1392,7 +1413,6 @@ msgstr "Maj"
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccellabel.c:206 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
@@ -1403,7 +1423,6 @@ msgstr "Ctrl"
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccellabel.c:212 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
@@ -1414,7 +1433,6 @@ msgstr "Alt"
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccellabel.c:801 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
@@ -1425,7 +1443,6 @@ msgstr "Súper"
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccellabel.c:815 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
@@ -1436,7 +1453,6 @@ msgstr "Híper"
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccellabel.c:830 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
@@ -1552,7 +1568,6 @@ msgstr "El text pot no aparèixer dins de <%s>"
 #. * further influenced by BIDI ordering. Thus, if you have a default
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
-#.
 #: gtk/gtkcalendar.c:792
 msgid "calendar:MY"
 msgstr "calendar:MY"
@@ -1560,7 +1575,6 @@ msgstr "calendar:MY"
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
-#.
 #: gtk/gtkcalendar.c:830
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
@@ -1569,7 +1583,6 @@ msgstr "calendar:week_start:1"
 #. * Translate it to the widest year text
 #. *
 #. * If you don't understand this, leave it as "2000"
-#.
 #: gtk/gtkcalendar.c:1634
 msgctxt "year measurement template"
 msgid "2000"
@@ -1584,7 +1597,6 @@ msgstr "2000"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#.
 #: gtk/gtkcalendar.c:1665 gtk/gtkcalendar.c:2275
 #, c-format
 msgctxt "calendar:day:digits"
@@ -1600,7 +1612,6 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#.
 #: gtk/gtkcalendar.c:1697 gtk/gtkcalendar.c:2167
 #, c-format
 msgctxt "calendar:week:digits"
@@ -1616,7 +1627,6 @@ msgstr "%d"
 #. * msgid.
 #. *
 #. * "%Y" is appropriate for most locales.
-#.
 #: gtk/gtkcalendar.c:1940
 msgctxt "calendar year format"
 msgid "%Y"
@@ -1624,7 +1634,6 @@ msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
-#.
 #: gtk/gtkcellrendereraccel.c:270
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1633,7 +1642,6 @@ msgstr "Inhabilitat"
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
-#.
 #: gtk/gtkcellrendereraccel.c:280
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1641,7 +1649,6 @@ msgstr "No vàlid"
 
 #. This label is displayed in a treeview cell displaying an accelerator
 #. * when the cell is clicked to change the acelerator.
-#.
 #: gtk/gtkcellrendereraccel.c:412 gtk/gtkcellrendereraccel.c:489
 msgid "New accelerator…"
 msgstr "Accelerador nou…"
@@ -1887,14 +1894,13 @@ msgstr "Alfa"
 msgid "C_ustomize"
 msgstr "_Personalitza"
 
-# Premi a qui va ficar "Per defecte:LTR. M'ha costat
-# trobar en quin mòdul estava l'error. jm
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
 #. * want inches, otherwise translate to default:mm.
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
-#.
+# Premi a qui va ficar "Per defecte:LTR. M'ha costat
+# trobar en quin mòdul estava l'error. jm
 #: gtk/gtkcustompaperunixdialog.c:117
 msgid "default:mm"
 msgstr "default:mm"
@@ -2110,7 +2116,6 @@ msgstr "Seleccioneu quins tipus de fitxers es mostren"
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
-#.
 #: gtk/gtkfilechooserutils.c:505
 #, c-format
 msgid "%1$s on %2$s"
@@ -2127,7 +2132,8 @@ msgstr "No s'ha pogut crear la carpeta"
 #: gtk/gtkfilechooserwidget.c:796
 msgid ""
 "The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
+"exists.  Try using a different name for the folder, or rename the file "
+"first."
 msgstr ""
 "No s'ha pogut crear la carpeta perquè ja existeix un fitxer amb el mateix "
 "nom. Proveu d'utilitzar un nom diferent per a la carpeta, o bé canvieu el "
@@ -2342,11 +2348,11 @@ msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 msgid "Accessed"
 msgstr "Accedit"
 
-#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
+#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they
+#. are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake “File System” volume.  So, we’ll return a pointer to
 #. * this particular string.
-#.
 #: gtk/gtkfilesystem.c:49
 msgid "File System"
 msgstr "Sistema de fitxers"
@@ -2505,13 +2511,12 @@ msgstr ""
 "La política del sistema no permet fer canvis.\n"
 "Contacteu amb l'administrador del sistema"
 
-# Premi a qui va ficar "Per defecte:LTR. M'ha costat
-# trobar en quin mòdul estava l'error. jm
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
-#.
+# Premi a qui va ficar "Per defecte:LTR. M'ha costat
+# trobar en quin mòdul estava l'error. jm
 #: gtk/gtkmain.c:972
 msgid "default:LTR"
 msgstr "default:LTR"
@@ -2521,48 +2526,44 @@ msgstr "default:LTR"
 #. * hours, 5 minutes, and 2 seconds. You may change ":" to
 #. * the separator that your locale uses or use "%Id" instead
 #. * of "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:97
 #, c-format
 msgctxt "long time format"
 msgid "%d:%02d:%02d"
-msgstr ""
+msgstr "%d:%02d:%02d"
 
 #. -hour:minutes:seconds
 #. Translators: This is a time format, like "-9:05:02" for 9
 #. * hours, 5 minutes, and 2 seconds playback remaining. You may
 #. * change ":" to the separator that your locale uses or use
 #. * "%Id" instead of "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:105
 #, c-format
 msgctxt "long time format"
 msgid "-%d:%02d:%02d"
-msgstr ""
+msgstr "-%d:%02d:%02d"
 
 #. -minutes:seconds
 #. Translators: This is a time format, like "-5:02" for 5
 #. * minutes and 2 seconds playback remaining. You may change
 #. * ":" to the separator that your locale uses or use "%Id"
 #. * instead of "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:116
 #, c-format
 msgctxt "short time format"
 msgid "-%d:%02d"
-msgstr ""
+msgstr "-%d:%02d"
 
 #. minutes:seconds
 #. Translators: This is a time format, like "5:02" for 5
 #. * minutes and 2 seconds. You may change ":" to the
 #. * separator that your locale uses or use "%Id" instead of
 #. * "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:125
 #, c-format
 msgctxt "short time format"
 msgid "%d:%02d"
-msgstr ""
+msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:817 gtk/gtkmessagedialog.c:835
 #: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:10852
@@ -2666,6 +2667,7 @@ msgstr "No es pot finalitzar el procés amb el PID %d: %s"
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
 msgstr ""
+"La GTK no ha pogut trobar un mòdul de mitjans. Comproveu la instal·lació."
 
 #: gtk/gtknotebook.c:4252 gtk/gtknotebook.c:6520
 #, c-format
@@ -2838,7 +2840,6 @@ msgstr "No es pot iniciar «%s»"
 
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
-#.
 #: gtk/gtkplacessidebar.c:2375
 #, c-format
 msgid "Error unlocking “%s”"
@@ -3013,10 +3014,10 @@ msgstr "Xarxes"
 msgid "On This Computer"
 msgstr "En aquest ordinador"
 
-#. Translators: respectively, free and total space of the drive. The plural form
+#. Translators: respectively, free and total space of the drive. The plural
+#. form
 #. * should be based on the free space available.
 #. * i.e. 1 GB / 24 GB available.
-#.
 #: gtk/gtkplacesviewrow.c:133
 #, c-format
 msgid "%s / %s available"
@@ -3057,7 +3058,6 @@ msgstr "No està disponible"
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
-#.
 #: gtk/gtkprintoperation.c:257
 #, c-format
 msgid "%s job #%d"
@@ -3130,7 +3130,8 @@ msgstr "S'ha produït un error en crear la previsualització d'impressió"
 
 #: gtk/gtkprintoperation.c:2936
 #, c-format
-msgid "The most probable reason is that a temporary file could not be created."
+msgid ""
+"The most probable reason is that a temporary file could not be created."
 msgstr ""
 "El motiu més probable és perquè no s'ha pogut crear un fitxer temporal."
 
@@ -3213,11 +3214,10 @@ msgid "Getting printer information…"
 msgstr "S'està obtenint informació de la impressora…"
 
 #. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
-#.
+#. * multiple pages on a sheet when printing (same as in
+#. gtkprintbackendcups.c)
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
-#.
 #: gtk/gtkprintunixdialog.c:3095
 #: modules/printbackends/gtkprintbackendcups.c:5393
 msgid "Left to right, top to bottom"
@@ -3310,7 +3310,6 @@ msgstr "Cerca"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
-#.
 #: gtk/gtkshortcutlabel.c:80
 msgctxt "keyboard side marker"
 msgid "L"
@@ -3320,7 +3319,6 @@ msgstr "E"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
-#.
 #: gtk/gtkshortcutlabel.c:93
 msgctxt "keyboard side marker"
 msgid "R"
@@ -3362,17 +3360,20 @@ msgstr "Llisca a l'esquerra"
 msgid "Swipe right"
 msgstr "Llisca a la dreta"
 
-#. Translators: This is the window title for the shortcuts window in normal mode
+#. Translators: This is the window title for the shortcuts window in normal
+#. mode
 #: gtk/gtkshortcutswindow.c:933
 msgid "Shortcuts"
 msgstr "Dreceres"
 
-#. Translators: This is the window title for the shortcuts window in search mode
+#. Translators: This is the window title for the shortcuts window in search
+#. mode
 #: gtk/gtkshortcutswindow.c:938
 msgid "Search Results"
 msgstr "Resultats de cerca"
 
-#. Translators: This is placeholder text for the search entry in the shortcuts window
+#. Translators: This is placeholder text for the search entry in the shortcuts
+#. window
 #: gtk/gtkshortcutswindow.c:982
 msgid "Search Shortcuts"
 msgstr "Dreceres de cerca"
@@ -3390,7 +3391,6 @@ msgstr "Proveu una cerca diferent"
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
-#.
 #: gtk/gtkswitch.c:646
 msgctxt "switch"
 msgid "ON"
@@ -3398,7 +3398,6 @@ msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-#.
 #: gtk/gtkswitch.c:652
 msgctxt "switch"
 msgid "OFF"
@@ -3460,7 +3459,6 @@ msgstr "Volum al màxim"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
-#.
 #: gtk/gtkvolumebutton.c:246
 #, c-format
 msgctxt "volume percentage"
@@ -3488,8 +3486,8 @@ msgstr "Voleu utilitzar l'inspector de la GTK+?"
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
-"the internals of any GTK+ application. Using it may cause the application to "
-"break or crash."
+"the internals of any GTK+ application. Using it may cause the application to"
+" break or crash."
 msgstr ""
 "L'inspector de la GTK+ és un depurador interactiu que us permet explorar i "
 "modificar qualsevol aplicació GTK+ internament. Podeu arribar a trencar o "
@@ -3550,8 +3548,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Podeu inhabilitar temporalment aquest CSS personalitzat fent clic en el botó "
-"«Fes una pausa» d'aquí sobre."
+"Podeu inhabilitar temporalment aquest CSS personalitzat fent clic en el botó"
+" «Fes una pausa» d'aquí sobre."
 
 #: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3880,7 +3878,7 @@ msgstr "Afegeix nodes de depuració"
 
 #: gtk/inspector/recorder.ui:41
 msgid "Save selected node"
-msgstr ""
+msgstr "Desa el node seleccionat"
 
 #: gtk/inspector/resource-list.ui:68
 msgid "Path"
@@ -4053,7 +4051,7 @@ msgstr "Alentiment"
 
 #: gtk/inspector/visual.ui:386
 msgid "Show fps overlay"
-msgstr ""
+msgstr "Mostra la superposició fps"
 
 #: gtk/inspector/visual.ui:413
 msgid "Show Graphic Updates"
@@ -4161,7 +4159,7 @@ msgstr "Accions"
 
 #: gtk/inspector/window.ui:375
 msgid "Controllers"
-msgstr ""
+msgstr "Controladors"
 
 #: gtk/inspector/window.ui:384
 msgid "Magnifier"
@@ -4189,11 +4187,11 @@ msgstr "Estadístiques"
 
 #: gtk/inspector/window.ui:445
 msgid "Logging"
-msgstr ""
+msgstr "Registre"
 
 #: gtk/inspector/window.ui:453
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: gtk/inspector/window.ui:460
 msgid "CSS"
@@ -4216,7 +4214,7 @@ msgstr "Formes sobre la base"
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr  "Marca de posicionament sobre la base"
+msgstr "Marca de posicionament sobre la base"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
@@ -4266,7 +4264,7 @@ msgstr "Composició / descomposició de glifs"
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Forma de conjunt després de Ro"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
@@ -4376,7 +4374,7 @@ msgstr "Formes mitjanes"
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Formes Halant"
 
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
@@ -4401,12 +4399,12 @@ msgstr "Lligadures històriques"
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr  "Formes Hojo Kanji"
+msgstr "Formes Hojo Kanji"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
@@ -4431,7 +4429,7 @@ msgstr "Cursives"
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr  "Alternatives de justificació"
+msgstr "Alternatives de justificació"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
@@ -4471,12 +4469,12 @@ msgstr "Lligadures estàndards"
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Formes principals Jamo"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Figures de línia"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
@@ -4496,37 +4494,37 @@ msgstr "Formes emmirallades esquerra-dreta"
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Marca posicionament"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Formes medials #2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Formes medials"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Matemàtica grega"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Posicionament marca a marca"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Marca posicionament a través de substitució"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Formes d'anotació alternatives"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
@@ -4541,17 +4539,17 @@ msgstr "Formes Nukta"
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Numeradors"
 
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Figures antigues"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr  "Límits òptics"
+msgstr "Límits òptics"
 
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
@@ -4656,22 +4654,22 @@ msgstr "Formes emmirallades dreta-esquerra"
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Formes de notació Ruby"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Alternatives de variació requerides"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Alternatives estilístiques"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Inferiors científics"
 
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
@@ -4791,12 +4789,12 @@ msgstr "Conjunt estilístic 20"
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Alternatives d'estil d'script matemàtic"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Descomposició del glif estirat"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
@@ -4811,7 +4809,7 @@ msgstr "Superíndex"
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Picar"
 
 #: gtk/open-type-layout.h:135
 msgctxt "OpenType layout"
@@ -4821,37 +4819,37 @@ msgstr "Inclinada"
 #: gtk/open-type-layout.h:136
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Formes d'arrossegament Jamo"
 
 #: gtk/open-type-layout.h:137
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Formes de noms tradicionals"
 
 #: gtk/open-type-layout.h:138
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Figures tabulars"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Formes tradicionals"
 
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Amplades dividides per tres"
 
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Caixa única"
 
 #: gtk/open-type-layout.h:142
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Mètriques verticals alternatives"
 
 #: gtk/open-type-layout.h:143
 msgctxt "OpenType layout"
@@ -4866,12 +4864,12 @@ msgstr "Escriptura vertical"
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Mitges mètriques verticals alternatives"
 
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Formes de vocal Jamo"
 
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
@@ -5817,57 +5815,57 @@ msgstr "ROC 8k"
 #: gtk/script-names.c:16
 msgctxt "Script"
 msgid "Arabic"
-msgstr ""
+msgstr "Àrab"
 
 #: gtk/script-names.c:17
 msgctxt "Script"
 msgid "Armenian"
-msgstr ""
+msgstr "Armeni"
 
 #: gtk/script-names.c:18
 msgctxt "Script"
 msgid "Bengali"
-msgstr ""
+msgstr "Bengalí"
 
 #: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr ""
+msgstr "Bopomofo"
 
 #: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Cherokee"
-msgstr ""
+msgstr "Cherokee"
 
 #: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Coptic"
-msgstr ""
+msgstr "Copte"
 
 #: gtk/script-names.c:22
 msgctxt "Script"
 msgid "Cyrillic"
-msgstr ""
+msgstr "Ciríl·lic"
 
 #: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Deseret"
-msgstr ""
+msgstr "Deseret"
 
 #: gtk/script-names.c:24
 msgctxt "Script"
 msgid "Devanagari"
-msgstr ""
+msgstr "Devanagari"
 
 #: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Ethiopic"
-msgstr ""
+msgstr "Etiòpic"
 
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Georgian"
-msgstr ""
+msgstr "Georgià"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
@@ -5882,79 +5880,77 @@ msgstr "Grec"
 #: gtk/script-names.c:29
 msgctxt "Script"
 msgid "Gujarati"
-msgstr ""
+msgstr "Gujarati"
 
 #: gtk/script-names.c:30
 msgctxt "Script"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmukhi"
 
 #: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Han"
-msgstr ""
+msgstr "Han"
 
 #: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/script-names.c:33
 msgctxt "Script"
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreu"
 
 #: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hiragana"
-msgstr ""
+msgstr "Hiragana"
 
 #: gtk/script-names.c:35
 msgctxt "Script"
 msgid "Kannada"
-msgstr ""
+msgstr "Kanarès"
 
 #: gtk/script-names.c:36
 msgctxt "Script"
 msgid "Katakana"
-msgstr ""
+msgstr "Katakana"
 
 #: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Khmer"
-msgstr ""
+msgstr "Khmer"
 
 #: gtk/script-names.c:38
-#, fuzzy
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
-msgstr "Baixa"
+msgstr "Laosià"
 
 #: gtk/script-names.c:39
 msgctxt "Script"
 msgid "Latin"
-msgstr ""
+msgstr "Llatí"
 
 #: gtk/script-names.c:40
 msgctxt "Script"
 msgid "Malayalam"
-msgstr ""
+msgstr "Malaiàlam"
 
 #: gtk/script-names.c:41
 msgctxt "Script"
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongol"
 
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Myanmar"
-msgstr ""
+msgstr "Myanmar"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
 msgid "Ogham"
-msgstr ""
+msgstr "Ogàmic"
 
 #: gtk/script-names.c:44
 msgctxt "Script"
@@ -5964,22 +5960,22 @@ msgstr "Cursiva antiga"
 #: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Oriya"
-msgstr ""
+msgstr "Oriya"
 
 #: gtk/script-names.c:46
 msgctxt "Script"
 msgid "Runic"
-msgstr ""
+msgstr "Rúnic"
 
 #: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Sinhala"
-msgstr ""
+msgstr "Singalès"
 
 #: gtk/script-names.c:48
 msgctxt "Script"
 msgid "Syriac"
-msgstr ""
+msgstr "Siríac"
 
 #: gtk/script-names.c:49
 msgctxt "Script"
@@ -5989,12 +5985,12 @@ msgstr "Tàmil"
 #: gtk/script-names.c:50
 msgctxt "Script"
 msgid "Telugu"
-msgstr ""
+msgstr "Telugu"
 
 #: gtk/script-names.c:51
 msgctxt "Script"
 msgid "Thaana"
-msgstr ""
+msgstr "Thaana"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
@@ -6009,57 +6005,57 @@ msgstr "Tibetà"
 #: gtk/script-names.c:54
 msgctxt "Script"
 msgid "Canadian Aboriginal"
-msgstr ""
+msgstr "Canadenc aborigen"
 
 #: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Yi"
-msgstr ""
+msgstr "Yi"
 
 #: gtk/script-names.c:56
 msgctxt "Script"
 msgid "Tagalog"
-msgstr ""
+msgstr "Tagàlog"
 
 #: gtk/script-names.c:57
 msgctxt "Script"
 msgid "Hanunoo"
-msgstr ""
+msgstr "Hanunoo"
 
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Buhid"
-msgstr ""
+msgstr "Bugui"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "Tagbanwa"
 
 #: gtk/script-names.c:60
 msgctxt "Script"
 msgid "Braille"
-msgstr ""
+msgstr "Braille"
 
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "Xipriota"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Limbu"
-msgstr ""
+msgstr "Limbu"
 
 #: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Osmanya"
-msgstr ""
+msgstr "Osmanya"
 
 #: gtk/script-names.c:64
 msgctxt "Script"
 msgid "Shavian"
-msgstr ""
+msgstr "Shavià"
 
 #: gtk/script-names.c:65
 msgctxt "Script"
@@ -6069,37 +6065,37 @@ msgstr "Lineal B"
 #: gtk/script-names.c:66
 msgctxt "Script"
 msgid "Tai Le"
-msgstr ""
+msgstr "Tai Le"
 
 #: gtk/script-names.c:67
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr ""
+msgstr "Ugarític"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
 msgid "New Tai Lue"
-msgstr ""
+msgstr "Tai Lue nou"
 
 #: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Buginese"
-msgstr ""
+msgstr "Bugui"
 
 #: gtk/script-names.c:70
 msgctxt "Script"
 msgid "Glagolitic"
-msgstr ""
+msgstr "Glagolític"
 
 #: gtk/script-names.c:71
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinagh"
 
 #: gtk/script-names.c:72
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "Syloti nagri"
 
 #: gtk/script-names.c:73
 msgctxt "Script"
@@ -6109,7 +6105,7 @@ msgstr "Persa antic"
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Kharoshthi"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
@@ -6117,419 +6113,404 @@ msgid "Unknown"
 msgstr "Desconegut"
 
 #: gtk/script-names.c:76
-#, fuzzy
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
-msgstr "Línia base"
+msgstr "Balinès"
 
 #: gtk/script-names.c:77
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr ""
+msgstr "Cuneïforme"
 
 #: gtk/script-names.c:78
 msgctxt "Script"
 msgid "Phoenician"
-msgstr ""
+msgstr "Fenici"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
 msgid "Phags-pa"
-msgstr ""
+msgstr "Phags-pa"
 
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "N'Ko"
-msgstr ""
+msgstr "N'Ko"
 
 #: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "Kayah Li"
 
 #: gtk/script-names.c:82
 msgctxt "Script"
 msgid "Lepcha"
-msgstr ""
+msgstr "Lepcha"
 
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Rejang"
-msgstr ""
+msgstr "Rejang"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
 msgid "Sundanese"
-msgstr ""
+msgstr "Sundanès"
 
 #: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "Saurashtra"
 
 #: gtk/script-names.c:86
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
-msgstr "Camaleó"
+msgstr "Cham"
 
 #: gtk/script-names.c:87
 msgctxt "Script"
 msgid "Ol Chiki"
-msgstr ""
+msgstr "Ol Chiki"
 
 #: gtk/script-names.c:88
 msgctxt "Script"
 msgid "Vai"
-msgstr ""
+msgstr "Vai"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Carian"
-msgstr ""
+msgstr "Carian"
 
 #: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Lycian"
-msgstr ""
+msgstr "Lici"
 
 #: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Lydian"
-msgstr ""
+msgstr "Lidi"
 
 #: gtk/script-names.c:92
 msgctxt "Script"
 msgid "Avestan"
-msgstr ""
+msgstr "Avèstic"
 
 #: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Bamum"
-msgstr ""
+msgstr "Bamum"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "Jeroglífics egipcis"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Arameu imperial"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Inscripcions Pahlavi"
 
 #: gtk/script-names.c:97
 msgctxt "Script"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Inscripcions Parthian"
 
 #: gtk/script-names.c:98
 msgctxt "Script"
 msgid "Javanese"
-msgstr ""
+msgstr "Javanès"
 
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "Kaithi"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "Lisu"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "Meetei Mayek"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Àrab del sud antic"
 
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Turc antic"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Samaritan"
-msgstr ""
+msgstr "Samarità"
 
 #: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Tai Tham"
-msgstr ""
+msgstr "Tai Tham"
 
 #: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr ""
+msgstr "Tai Viet"
 
 #: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Batak"
-msgstr ""
+msgstr "Batak"
 
 #: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "Brahmi"
 
 #: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandaic"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Cursiva meroítica"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Jeroglífics meroítics"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "Sharada"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "Bassa"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Albanès caucàsic"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployé"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "Khudawadi, sindhi"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Linear A"
-msgstr ""
+msgstr "Lineal A"
 
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "Maniqueu"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:128
-#, fuzzy
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
-msgstr "Modificat"
+msgstr "Modi"
 
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mro"
-msgstr ""
+msgstr "Mro"
 
 #: gtk/script-names.c:130
 msgctxt "Script"
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabateu"
 
 #: gtk/script-names.c:131
 msgctxt "Script"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Àrab del nord antic"
 
 #: gtk/script-names.c:132
 msgctxt "Script"
 msgid "Old Permic"
-msgstr ""
+msgstr "Pèrmic antic"
 
 #: gtk/script-names.c:133
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh Hmong"
 
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmira"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Inscripcions Pahlavi"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "Siddham"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Jeroglífics anatòlics"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "Arameu de Hatra"
 
 #: gtk/script-names.c:143
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
-msgstr "Tecla multi"
+msgstr "Multani"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "Hongarès antic"
 
 #: gtk/script-names.c:145
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "S'està imprimint"
+msgstr "Escriptura de signes"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
-#, fuzzy
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "S'està cercant"
+msgstr "Marchen"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "Newa"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "Osage"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Tangut"
-msgstr ""
+msgstr "Tangut"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "Nushu"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Quadrat de Zanabazar"
 
 #: gtk/tools/encodesymbolic.c:39
 msgid "Output to this directory instead of cwd"
@@ -6784,8 +6765,7 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
-"Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-"
-"theme-index.\n"
+"Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
 
 #: gtk/ui/gtkaboutdialog.ui:106
 msgid "About"
@@ -6821,7 +6801,8 @@ msgstr "Preferències"
 msgid "Services"
 msgstr "Serveis"
 
-#. used for the application menu on MacOS.  %s is replaced with the application name.
+#. used for the application menu on MacOS.  %s is replaced with the
+#. application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
 #, c-format
 msgid "Hide %s"
@@ -6837,7 +6818,8 @@ msgstr "Amaga els altres"
 msgid "Show All"
 msgstr "Mostra-ho tot"
 
-#. used for the application menu on MacOS.  %s is replaced with the application name.
+#. used for the application menu on MacOS.  %s is replaced with the
+#. application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
 #, c-format
 msgid "Quit %s"
@@ -6861,7 +6843,7 @@ msgstr "Seleccioneu un color"
 
 #: gtk/ui/gtkcoloreditor.ui:46
 msgid "Pick a color from the screen"
-msgstr ""
+msgstr "Seleccioneu un color per la pantalla"
 
 #: gtk/ui/gtkcoloreditor.ui:75
 msgid "Color Name"
@@ -7200,12 +7182,14 @@ msgstr "Imprimeix el document"
 msgid "_Now"
 msgstr "_Ara"
 
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
+#. this is one of the choices for the print at option in the print dialog. It
+#. also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:872
 msgid "A_t:"
 msgstr "_A:"
 
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
+#. Ability to parse the am/pm format depends on actual locale. You can remove
+#. the am/pm values below for your locale if they are not supported.
 #: gtk/ui/gtkprintunixdialog.ui:875 gtk/ui/gtkprintunixdialog.ui:877
 #: gtk/ui/gtkprintunixdialog.ui:895 gtk/ui/gtkprintunixdialog.ui:897
 #: gtk/ui/gtkprintunixdialog.ui:902
@@ -7220,7 +7204,9 @@ msgstr ""
 msgid "Time of print"
 msgstr "Hora d'impressió"
 
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
+#. this is one of the choices for the print at option in the print dialog. It
+#. means that the print job will not be printed until it explicitly gets
+#. 'released'.
 #: gtk/ui/gtkprintunixdialog.ui:915
 msgid "On _hold"
 msgstr "En _espera"
@@ -7233,14 +7219,16 @@ msgstr "Posa la tasca en espera fins que s'alliberi explícitament"
 msgid "Add Cover Page"
 msgstr "Afegeix una coberta"
 
+#. this is the label used for the option in the print dialog that controls the
+#. front cover page.
 # Possiblement sigui "abans de" (josep)
-#. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:971
 msgid "Be_fore:"
 msgstr "A_bans:"
 
+#. this is the label used for the option in the print dialog that controls the
+#. back cover page.
 # Possiblement "després de" (josep)
-#. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:991
 msgid "_After:"
 msgstr "_Després:"
@@ -7259,7 +7247,8 @@ msgstr "Qualitat d'imatge"
 msgid "Color"
 msgstr "Color"
 
-#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
+#. This will appear as a tab label in the print dialog. It's a typographical
+#. term, as in "Binding and finishing"
 #: gtk/ui/gtkprintunixdialog.ui:1119
 msgid "Finishing"
 msgstr "Acabant"
@@ -7450,8 +7439,8 @@ msgstr ""
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr ""
-"La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de "
-"color."
+"La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de"
+" color."
 
 #: modules/printbackends/gtkprintbackendcups.c:2539
 #, c-format
@@ -7661,13 +7650,15 @@ msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Safata posterior"
 
-#. Translators: Output bin where one sided output is oriented in the face-up position
+#. Translators: Output bin where one sided output is oriented in the face-up
+#. position
 #: modules/printbackends/gtkprintbackendcups.c:4438
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Safata cara amunt"
 
-#. Translators: Output bin where one sided output is oriented in the face-down position
+#. Translators: Output bin where one sided output is oriented in the face-down
+#. position
 #: modules/printbackends/gtkprintbackendcups.c:4440
 msgctxt "output-bin"
 msgid "Face Down Bin"
@@ -7712,7 +7703,6 @@ msgstr "Per defecte de la impressora"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5388
 msgid "Urgent"
 msgstr "Urgent"
@@ -7731,21 +7721,18 @@ msgstr "Baixa"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5418
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5429
 msgid "Billing Info"
 msgstr "Informació de facturació"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5453
 msgctxt "cover page"
 msgid "None"
@@ -7783,7 +7770,6 @@ msgstr "No classificat"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5471
 msgctxt "printer option"
 msgid "Pages per Sheet"
@@ -7791,25 +7777,22 @@ msgstr "Pàgines per full"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5488
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
-# Possiblement sigui "abans de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
-#.
+# Possiblement sigui "abans de" (josep)
 #: modules/printbackends/gtkprintbackendcups.c:5530
 msgctxt "printer option"
 msgid "Before"
 msgstr "Abans"
 
-# Possiblement "després de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
-#.
+# Possiblement "després de" (josep)
 #: modules/printbackends/gtkprintbackendcups.c:5545
 msgctxt "printer option"
 msgid "After"
@@ -7818,16 +7801,14 @@ msgstr "Després"
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5565
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Imprimeix a"
 
-# FIXME: s'ha de mirar que no sigui massa llarg
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
-#.
+# FIXME: s'ha de mirar que no sigui massa llarg
 #: modules/printbackends/gtkprintbackendcups.c:5576
 msgctxt "printer option"
 msgid "Print at time"
@@ -7837,14 +7818,13 @@ msgstr "Imprimeix a una hora determinada"
 #. * paper size. The two placeholders are replaced with
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
-#.
 #: modules/printbackends/gtkprintbackendcups.c:5621
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Personalitzat %sx%s"
 
-# Connectada? (josep)
 #. TRANSLATORS: this this the ICC color profile to use for this job
+# Connectada? (josep)
 #: modules/printbackends/gtkprintbackendcups.c:5731
 msgctxt "printer option"
 msgid "Printer Profile"
@@ -7912,695 +7892,3 @@ msgstr "No hi ha cap perfil disponible"
 #: modules/printbackends/gtkprintercups.c:292
 msgid "Unspecified profile"
 msgstr "No s'ha especificat cap perfil"
-
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr ""
-#~ "El perfil del nucli GL 3.2 no es troba disponible en la implementació EGL"
-
-#~ msgid "Artwork by"
-#~ msgstr "Art per"
-
-#~ msgctxt "input method menu"
-#~ msgid "Simple"
-#~ msgstr "Simple"
-
-#~ msgctxt "input method menu"
-#~ msgid "None"
-#~ msgstr "Cap"
-
-#~ msgid "No item for URI “%s” found"
-#~ msgstr "No s'ha trobat cap element per a l'URI «%s»"
-
-#~ msgid "Untitled filter"
-#~ msgstr "Filtre sense títol"
-
-#~ msgid "Could not remove item"
-#~ msgstr "No s'ha pogut suprimir l'element"
-
-#~ msgid "Could not clear list"
-#~ msgstr "No s'ha pogut netejar la llista"
-
-#~ msgid "Copy _Location"
-#~ msgstr "Copia la _ubicació"
-
-#~ msgid "_Remove From List"
-#~ msgstr "Sup_rimeix de la llista"
-
-#~ msgid "_Clear List"
-#~ msgstr "_Neteja la llista"
-
-#~ msgid "Show _Private Resources"
-#~ msgstr "Mostra els recursos _privats"
-
-#~ msgid "No items found"
-#~ msgstr "No s'ha trobat cap element"
-
-#~ msgid "No recently used resource found with URI “%s”"
-#~ msgstr "No hi ha cap recurs emprat recentment amb l'URI «%s»"
-
-#~ msgid "Open “%s”"
-#~ msgstr "Obre «%s»"
-
-#~ msgid "Unknown item"
-#~ msgstr "Element desconegut"
-
-#~ msgctxt "recent menu label"
-#~ msgid "_%d. %s"
-#~ msgstr "_%d. %s"
-
-#~ msgctxt "recent menu label"
-#~ msgid "%d. %s"
-#~ msgstr "%d. (%s)"
-
-# FIXME
-#~ msgid "Unknown error when trying to deserialize %s"
-#~ msgstr "S'ha produït un error en intentar desserialitzar %s"
-
-# FIXME
-#~ msgid "No deserialize function found for format %s"
-#~ msgstr "No s'ha trobat cap funció per desserialitzar el format %s"
-
-#~ msgid "Both “id” and “name” were found on the <%s> element"
-#~ msgstr "S'ha trobat «id» i «name» a l'element <%s>"
-
-#~ msgid "The attribute “%s” was found twice on the <%s> element"
-#~ msgstr "S'ha trobat dues vegades l'atribut «%s» a l'element <%s>"
-
-#~ msgid "<%s> element has invalid ID “%s”"
-#~ msgstr "L'element <%s> té un identificador no vàlid «%s»"
-
-#~ msgid "<%s> element has neither a “name” nor an “id” attribute"
-#~ msgstr "L'element <%s> no té ni l'atribut «name» ni l'«id»"
-
-#~ msgid "Attribute “%s” repeated twice on the same <%s> element"
-#~ msgstr "L'atribut «%s» està repetit dues vegades en el mateix element <%s>"
-
-#~ msgid "Attribute “%s” is invalid on <%s> element in this context"
-#~ msgstr "L'atribut «%s» no és vàlid per a l'element <%s> en aquest context"
-
-#~ msgid "Tag “%s” has not been defined."
-#~ msgstr "L'etiqueta «%s» no ha estat definida."
-
-#~ msgid "Anonymous tag found and tags can not be created."
-#~ msgstr "S'han trobat etiquetes anònimes, i no se n'han pogut crear."
-
-#~ msgid "Tag “%s” does not exist in buffer and tags can not be created."
-#~ msgstr ""
-#~ "L'etiqueta «%s» no existeix a la memòria intermèdia, i no se'n poden "
-#~ "crear."
-
-#~ msgid "Element <%s> is not allowed below <%s>"
-#~ msgstr "No es permet l'element <%s> per sota de <%s>"
-
-#~ msgid "“%s” is not a valid attribute type"
-#~ msgstr "«%s» no és un tipus d'atribut vàlid"
-
-#~ msgid "“%s” is not a valid attribute name"
-#~ msgstr "«%s» no és un nom d'atribut vàlid"
-
-#~ msgid ""
-#~ "“%s” could not be converted to a value of type “%s” for attribute “%s”"
-#~ msgstr ""
-#~ "No s'ha pogut convertir «%s» a un valor de tipus «%s» per a l'atribut «%s»"
-
-#~ msgid "“%s” is not a valid value for attribute “%s”"
-#~ msgstr "«%s» no és un valor vàlid per a l'atribut «%s»"
-
-#~ msgid "Tag “%s” already defined"
-#~ msgstr "L'etiqueta «%s» ja està definida"
-
-#~ msgid "Tag “%s” has invalid priority “%s”"
-#~ msgstr "L'etiqueta «%s» té una prioritat («%s») no vàlida"
-
-#~ msgid "Outermost element in text must be <text_view_markup> not <%s>"
-#~ msgstr ""
-#~ "L'element de més enfora del text ha de ser <text_view_markup> i no pas <"
-#~ "%s>"
-
-#~ msgid "A <%s> element has already been specified"
-#~ msgstr "Ja s'ha especificat un element <%s>"
-
-#~ msgid "A <text> element can’t occur before a <tags> element"
-#~ msgstr "No pot haver-hi un element <text> abans d'un de <tags>"
-
-#~ msgid "Serialized data is malformed"
-#~ msgstr "Les dades en sèrie estan mal formades"
-
-#~ msgid ""
-#~ "Serialized data is malformed. First section isn’t "
-#~ "GTKTEXTBUFFERCONTENTS-0001"
-#~ msgstr ""
-#~ "Les dades serialitzades estan mal formades. La primera secció no és "
-#~ "GTKTEXTBUFFERCONTENTS-0001"
-
-#~ msgid "Clip Area"
-#~ msgstr "Àrea de retallada"
-
-#~ msgid "Object"
-#~ msgstr "Objecte"
-
-#~ msgid "Rendering Mode"
-#~ msgstr "Mode de renderització"
-
-#~ msgid "Similar"
-#~ msgstr "Similar"
-
-#~ msgid "Image"
-#~ msgstr "Imatge"
-
-#~ msgid "Recording"
-#~ msgstr "Gravació"
-
-#~ msgid "Always"
-#~ msgstr "Sempre"
-
-#~ msgid "Software Surfaces"
-#~ msgstr "Superfícies de programari"
-
-#~ msgid "Gestures"
-#~ msgstr "Gestos"
-
-#~ msgid "smb://"
-#~ msgstr "smb://"
-
-#~ msgid "Select which type of documents are shown"
-#~ msgstr "Seleccioneu quins tipus de documents es mostren"
-
-#~ msgctxt "input method menu"
-#~ msgid "Amharic (EZ+)"
-#~ msgstr "Amhàric (EZ+)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Broadway"
-#~ msgstr "Broadway"
-
-# FIXME
-#~ msgctxt "input method menu"
-#~ msgid "Cedilla"
-#~ msgstr "Ce trencada"
-
-#~ msgctxt "input menthod menu"
-#~ msgid "Cyrillic (Transliterated)"
-#~ msgstr "Ciríl·lic (transliterat)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Windows IME"
-#~ msgstr "Windows IME"
-
-#~ msgctxt "input method menu"
-#~ msgid "Inuktitut (Transliterated)"
-#~ msgstr "Inuktitut (transliterat)"
-
-#~ msgctxt "input method menu"
-#~ msgid "IPA"
-#~ msgstr "IPA"
-
-#~ msgctxt "input method menu"
-#~ msgid "Multipress"
-#~ msgstr "Multipress"
-
-#~ msgctxt "input method menu"
-#~ msgid "Mac OS X Quartz"
-#~ msgstr "Mac OS X Quartz"
-
-#~ msgctxt "input method menu"
-#~ msgid "Tigrigna-Eritrean (EZ+)"
-#~ msgstr "Tigrinya-Eritreà (EZ+)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Tigrigna-Ethiopian (EZ+)"
-#~ msgstr "Tigrinya-Etíop (EZ+)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Vietnamese (VIQR)"
-#~ msgstr "Vietnamita (VIQR)"
-
-#~ msgctxt "input method menu"
-#~ msgid "X Input Method"
-#~ msgstr "Mètode d'entrada d'X"
-
-# Connectada? (josep)
-#~ msgid "printer offline"
-#~ msgstr "la impressora no està en línia"
-
-#~ msgid "ready to print"
-#~ msgstr "a punt per imprimir"
-
-#~ msgid "processing job"
-#~ msgstr "s'està processant la tasca"
-
-#~ msgid "paused"
-#~ msgstr "en pausa"
-
-#~ msgid "unknown"
-#~ msgstr "desconegut"
-
-#~ msgid "test-output.%s"
-#~ msgstr "prova-de-sortida.%s"
-
-#~ msgid "Print to Test Printer"
-#~ msgstr "Imprimiu per provar la impressora"
-
-#~ msgid "Snapshot Debug Nodes"
-#~ msgstr "Nodes de depuració de la instantània"
-
-#~ msgid "Could not start the search process"
-#~ msgstr "No s'ha pogut iniciar el procés de cerca"
-
-#~ msgid ""
-#~ "The program was not able to create a connection to the indexer daemon. "
-#~ "Please make sure it is running."
-#~ msgstr ""
-#~ "El programa no ha pogut crear cap connexió al dimoni d'indexació. "
-#~ "Assegureu-vos que s'està executant."
-
-#~ msgid "smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
-#~ msgstr "smb://foo.exemple.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
-
-#~ msgid "Error parsing option --gdk-debug"
-#~ msgstr "S'ha produït un error en analitzar l'opció --gdk-debug"
-
-#~ msgid "Error parsing option --gdk-no-debug"
-#~ msgstr "S'ha produït un error en analitzar l'opció --gdk-no-debug"
-
-#~ msgid "Program class as used by the window manager"
-#~ msgstr "Classe del programa tal com l'utilitza el gestor de finestres"
-
-#~ msgid "CLASS"
-#~ msgstr "CLASSE"
-
-#~ msgid "Program name as used by the window manager"
-#~ msgstr "El nom del programa tal com l'utilitza el gestor de finestres"
-
-#~ msgid "NAME"
-#~ msgstr "NOM"
-
-#~ msgid "X display to use"
-#~ msgstr "Visualització X que s'ha d'utilitzar"
-
-#~ msgid "DISPLAY"
-#~ msgstr "VISUALITZACIÓ"
-
-#~ msgid "GDK debugging flags to set"
-#~ msgstr "Senyaladors de depuració del GDK que s'han d'habilitar"
-
-#~ msgid "FLAGS"
-#~ msgstr "SENYALADORS"
-
-#~ msgid "GDK debugging flags to unset"
-#~ msgstr "Senyaladors de depuració del GDK que s'han d'inhabilitar"
-
-#~ msgid "Load additional GTK+ modules"
-#~ msgstr "Carrega mòduls addicionals de la GTK+"
-
-#~ msgid "MODULES"
-#~ msgstr "MÒDULS"
-
-#~ msgid "Make all warnings fatal"
-#~ msgstr "Considera tots els avisos com a greus"
-
-#~ msgid "GTK+ debugging flags to set"
-#~ msgstr "Senyaladors de depuració de GTK+ que s'han d'habilitar"
-
-#~ msgid "GTK+ debugging flags to unset"
-#~ msgstr "Senyaladors de depuració de GTK+ que s'han d'inhabilitar"
-
-#~ msgid "Cannot open display: %s"
-#~ msgstr "No es pot obrir la pantalla: %s"
-
-#~ msgid "GTK+ Options"
-#~ msgstr "Opcions del GTK+"
-
-#~ msgid "Show GTK+ Options"
-#~ msgstr "Mostra les opcions del GTK+"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "L'extensió WGL_ARB_create_context necessària per crear perfils del nucli "
-#~ "no es troba disponible"
-
-#~ msgid ""
-#~ "Select the color you want from the outer ring. Select the darkness or "
-#~ "lightness of that color using the inner triangle."
-#~ msgstr ""
-#~ "Seleccioneu el color que vulgueu de l'anell extern. Seleccioneu la foscor "
-#~ "o la claror del color utilitzant el triangle intern."
-
-#~ msgid ""
-#~ "Click the eyedropper, then click a color anywhere on your screen to "
-#~ "select that color."
-#~ msgstr ""
-#~ "Feu clic al selector de color i, tot seguit, feu clic en un punt de la "
-#~ "pantalla per seleccionar-ne el color."
-
-#~ msgid "_Hue:"
-#~ msgstr "_Matís:"
-
-#~ msgid "Position on the color wheel."
-#~ msgstr "Posició a la roda de colors."
-
-#~ msgid "S_aturation:"
-#~ msgstr "S_aturació:"
-
-#~ msgid "Intensity of the color."
-#~ msgstr "Intensitat del color."
-
-#~ msgid "_Value:"
-#~ msgstr "_Valor:"
-
-#~ msgid "Brightness of the color."
-#~ msgstr "Brillantor del color."
-
-#~ msgid "_Red:"
-#~ msgstr "_Vermell:"
-
-#~ msgid "Amount of red light in the color."
-#~ msgstr "Quantitat de llum vermella en el color."
-
-#~ msgid "Amount of green light in the color."
-#~ msgstr "Quantitat de llum verda en el color."
-
-#~ msgid "_Blue:"
-#~ msgstr "_Blau:"
-
-#~ msgid "Amount of blue light in the color."
-#~ msgstr "Quantitat de llum blava en el color."
-
-#~ msgid "Op_acity:"
-#~ msgstr "Op_acitat:"
-
-#~ msgid "Transparency of the color."
-#~ msgstr "Transparència del color."
-
-#~ msgid "Color _name:"
-#~ msgstr "_Nom del color:"
-
-#~ msgid ""
-#~ "You can enter an HTML-style hexadecimal color value, or simply a color "
-#~ "name such as “orange” in this entry."
-#~ msgstr ""
-#~ "Podeu introduir un valor de color hexadecimal a l'estil HTML, o "
-#~ "simplement el nom d'un color com ara «orange» (taronja)."
-
-#~ msgid "_Palette:"
-#~ msgstr "_Paleta:"
-
-#~ msgid "Color Wheel"
-#~ msgstr "Roda de colors"
-
-#~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re "
-#~ "selecting now. You can drag this color to a palette entry, or select this "
-#~ "color as current by dragging it to the other color swatch alongside."
-#~ msgstr ""
-#~ "El color seleccionat prèviament, per comparar-lo amb el que esteu "
-#~ "seleccionant. Podeu arrossegar aquest color a l'entrada de paleta, o "
-#~ "seleccionar-lo com a actual per portar-lo a l'altra banda de la gamma de "
-#~ "colors."
-
-#~ msgid ""
-#~ "The color you’ve chosen. You can drag this color to a palette entry to "
-#~ "save it for use in the future."
-#~ msgstr ""
-#~ "El color que heu triat. Podeu arrossegar aquest color cap a una paleta i "
-#~ "desar-lo per utilitzar-lo més endavant."
-
-#~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re "
-#~ "selecting now."
-#~ msgstr ""
-#~ "El color seleccionat anteriorment, per comparar-lo amb el color que esteu "
-#~ "seleccionant."
-
-#~ msgid "The color you’ve chosen."
-#~ msgstr "El color que heu triat."
-
-#~ msgid ""
-#~ "Click this palette entry to make it the current color. To change this "
-#~ "entry, drag a color swatch here or right-click it and select “Save color "
-#~ "here.”"
-#~ msgstr ""
-#~ "Feu clic en aquesta entrada de paleta per fer que sigui el color actual. "
-#~ "Per canviar aquesta entrada, arrossegueu una gamma de colors aquí o feu-"
-#~ "hi clic amb el botó dret i seleccioneu «Desa el color aquí»."
-
-#~ msgid "_Help"
-#~ msgstr "A_juda"
-
-#~ msgid "Color Selection"
-#~ msgstr "Selecció de color"
-
-#~ msgid "abcdefghijk ABCDEFGHIJK"
-#~ msgstr "abcçdefghijk ABCÇDEFGHIJK"
-
-#~ msgid "_Style:"
-#~ msgstr "E_stil:"
-
-#~ msgid "Si_ze:"
-#~ msgstr "_Mida:"
-
-#~ msgid "_Preview:"
-#~ msgstr "_Previsualització:"
-
-#~ msgid "Font Selection"
-#~ msgstr "Selecció del tipus de lletra"
-
-#~ msgctxt "Number format"
-#~ msgid "%d"
-#~ msgstr "%d"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Apply"
-#~ msgstr "_Aplica"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Cancel"
-#~ msgstr "_Cancel·la"
-
-#~ msgctxt "Stock label"
-#~ msgid "C_onnect"
-#~ msgstr "C_onnecta"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Convert"
-#~ msgstr "_Converteix"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Discard"
-#~ msgstr "_Descarta"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Disconnect"
-#~ msgstr "_Desconnecta"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Edit"
-#~ msgstr "_Edita"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Index"
-#~ msgstr "Índe_x"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Information"
-#~ msgstr "_Informació"
-
-#~ msgctxt "Stock label"
-#~ msgid "_No"
-#~ msgstr "_No"
-
-#~ msgctxt "Stock label"
-#~ msgid "_OK"
-#~ msgstr "_D'acord"
-
-#~ msgctxt "Stock label"
-#~ msgid "Landscape"
-#~ msgstr "Apaïsat"
-
-#~ msgctxt "Stock label"
-#~ msgid "Portrait"
-#~ msgstr "Vertical"
-
-#~ msgctxt "Stock label"
-#~ msgid "Reverse landscape"
-#~ msgstr "Apaïsat del revés"
-
-#~ msgctxt "Stock label"
-#~ msgid "Reverse portrait"
-#~ msgstr "Vertical del revés"
-
-#~ msgctxt "Stock label"
-#~ msgid "Page Set_up"
-#~ msgstr "Confi_guració de la pàgina"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Preferences"
-#~ msgstr "_Preferències"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Color"
-#~ msgstr "_Color"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Font"
-#~ msgstr "_Tipus de lletra"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Undelete"
-#~ msgstr "Rec_upera"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Yes"
-#~ msgstr "_Sí"
-
-#~ msgid "Unexpected start tag '%s' on line %d char %d"
-#~ msgstr ""
-#~ "S'ha trobat una etiqueta d'inici «%s» inesperada a la línia %d, caràcter "
-#~ "%d"
-
-#~ msgid "Unexpected character data on line %d char %d"
-#~ msgstr ""
-#~ "S'han trobat dades de caràcter inesperades a la línia %d, caràcter %d"
-
-#~ msgid "Empty"
-#~ msgstr "Buit"
-
-#~ msgctxt "input method menu"
-#~ msgid "System (%s)"
-#~ msgstr "Sistema (%s)"
-
-#~ msgid "Connect to Server"
-#~ msgstr "Connecta a un servidor"
-
-#~ msgid "Connect to a network server address"
-#~ msgstr "Connecta a l'adreça d'un servidor de xarxa"
-
-#~ msgid "Ignore hidden"
-#~ msgstr "Ignora els ocults"
-
-#~ msgid "Show Pixel Cache"
-#~ msgstr "Mostra la cau de píxels"
-
-#~ msgid "Error launching preview"
-#~ msgstr "S'ha produït un error en executar la previsualització"
-
-#~ msgid "Changes are applied instantly, only for this selected widget."
-#~ msgstr "Els canvis s'apliquen immediatament només pel giny seleccionat."
-
-#~ msgid "Change name"
-#~ msgstr "Canvia nom"
-
-#~ msgid "Change classes"
-#~ msgstr "Canvia classes"
-
-#~ msgid "CSS properties"
-#~ msgstr "Propietats CSS"
-
-#~ msgid "Show all CSS nodes"
-#~ msgstr "Mostra tots els nodes CSS"
-
-#~ msgid "Show CSS properties"
-#~ msgstr "Mostra les propietats CSS"
-
-#~ msgid "Classes"
-#~ msgstr "Classes"
-
-#~ msgid "Node:"
-#~ msgstr "Node:"
-
-#~ msgid "Hierarchy"
-#~ msgstr "Jerarquia"
-
-#~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core "
-#~ "profiles is not available"
-#~ msgstr ""
-#~ "L'extensió GLX_ARB_create_context_profile necessària per crear perfils "
-#~ "del nucli no es troba disponible"
-
-#~ msgid "New class"
-#~ msgstr "Classe nova"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancel·la"
-
-#~ msgid "Add a class"
-#~ msgstr "Afegeix una classe"
-
-#~ msgid "Restore defaults for this widget"
-#~ msgstr "Recupera els valors per defecte per aquest giny"
-
-#~ msgid "Allocated size"
-#~ msgstr "Mida assignada"
-
-#~ msgid "Object Hierarchy"
-#~ msgstr "Jerarquia de l'objecte"
-
-#~ msgid "Style Properties"
-#~ msgstr "Propietats de l'estil"
-
-#~ msgid "_Customize"
-#~ msgstr "_Personalitza"
-
-#~ msgid "Yesterday at %-I:%M %P"
-#~ msgstr "Ahir a les %-I:%M %P"
-
-#~ msgid "Devices"
-#~ msgstr "Dispositius"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Adreces d'interès"
-
-#~ msgid "Browse Network"
-#~ msgstr "Navega per la xarxa"
-
-#~ msgid "Browse the contents of the network"
-#~ msgstr "Navega pel contingut de la xarxa"
-
-#~ msgid "Remove"
-#~ msgstr "Suprimeix"
-
-#~ msgid "X display"
-#~ msgstr "Pantalla X"
-
-#~ msgid "All Files"
-#~ msgstr "Tots els fitxers"
-
-#~ msgid "No Files Found"
-#~ msgstr "No s'ha trobat cap fitxer"
-
-#~ msgid "Invalid object type '%s' on line %d"
-#~ msgstr "El tipus d'objecte «%s» a la línia %d no és vàlid"
-
-#~ msgid "Invalid type function on line %d: '%s'"
-#~ msgstr "Funció de tipus no vàlida a la línia %d: «%s»"
-
-#~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-#~ msgstr ""
-#~ "Identificador d'objecte duplicat «%s» a la línia %d (anteriorment a la "
-#~ "línia % d)"
-
-#~ msgid "Invalid signal '%s' for type '%s' on line %d"
-#~ msgstr "El senyal «%s» per al tipus «%s» a la línia %d no és vàlid"
-
-#~ msgid "Invalid root element: <%s>"
-#~ msgstr "El nom de l'element arrel no és vàlid: «%s»"
-
-#~ msgid "Unhandled tag: <%s>"
-#~ msgstr "L'etiqueta no està gestionada: «%s»"
-
-#~ msgid "The license of the program"
-#~ msgstr "La llicència del programa"
-
-#~ msgctxt "progress bar label"
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
-#~ msgctxt "volume percentage"
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "Choose a widget through the inspector"
-#~ msgstr "Trieu un giny a través de l'inspector"
