@@ -111,10 +111,27 @@ wiki](https://wiki.gnome.org/GitLab).
 ### Dependencies
 
 In order to get GTK from Git installed on your system, you need to have the
-required versions of all the GTK dependencies; typically, this means a
-recent version of GLib, Cairo, Pango, and ATK, as well as the platform
-specific dependencies for the windowing system you are using (Wayland, X11,
-Windows, or macOS).
+required versions of all the software dependencies required by GTK; typically,
+this means a recent version of GLib, Cairo, Pango, and ATK, as well as the
+platform-specific dependencies for the windowing system you are using (Wayland,
+X11, Windows, or macOS).
+
+The core dependencies for GTK are:
+
+ - [GLib, GObject, and GIO](https://gitlab.gnome.org/GNOME/glib)
+ - [Cairo](http://cairographics.org)
+ - [Pango](https://gitlab.gnome.org/GNOME/pango)
+ - [GdkPixbuf](https://gitlab.gnome.org/GNOME/gdk-pixbuf)
+ - [Epoxy](https://github.com/anholt/libepoxy)
+ - [ATK](https://gitlab.gnome.org/GNOME/atk)
+ - [Graphene](https://github.com/ebassi/graphene)
+
+GTK will attempt to download and build some of these dependencies if it
+cannot find them on your system.
+
+Additionally, you may want to look at projects that create a development
+environment for you, like [jhbuild](https://wiki.gnome.org/HowDoI/Jhbuild)
+and [gvsbuild](https://github.com/wingtk/gvsbuild).
 
 ### Getting started
 
