@@ -80,10 +80,6 @@ GDK_AVAILABLE_IN_ALL
 void        gtk_box_pack_start          (GtkBox         *box,
                                          GtkWidget      *child);
 GDK_AVAILABLE_IN_ALL
-void        gtk_box_pack_end            (GtkBox         *box,
-                                         GtkWidget      *child);
-
-GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_homogeneous     (GtkBox         *box,
                                          gboolean        homogeneous);
 GDK_AVAILABLE_IN_ALL
