@@ -712,20 +712,6 @@ gtk_box_get_path_for_child (GtkContainer *container,
 }
 
 static void
-gtk_box_pack (GtkBox    *box,
-              GtkWidget *child)
-{
-  GtkContainer *container = GTK_CONTAINER (box);
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (_gtk_widget_get_parent (child) == NULL);
-
-  gtk_widget_set_parent (child, GTK_WIDGET (box));
-  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
-}
-
-static void
 gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
                                                int     for_size,
 					       gint   *minimum_size,
@@ -1005,22 +991,6 @@ gtk_box_new (GtkOrientation orientation,
 }
 
 /**
- * gtk_box_pack_start:
- * @box: a #GtkBox
- * @child: the #GtkWidget to be added to @box
- *
- * Adds @child to @box, packed with reference to the start of @box.
- * The @child is packed after any other child packed with reference
- * to the start of @box.
- */
-void
-gtk_box_pack_start (GtkBox    *box,
-		    GtkWidget *child)
-{
-  gtk_box_pack (box, child);
-}
-
-/**
  * gtk_box_set_homogeneous:
  * @box: a #GtkBox
  * @homogeneous: a boolean value, %TRUE to create equal allotments,
@@ -1231,9 +1201,10 @@ gtk_box_reorder_child (GtkBox    *box,
 
 static void
 gtk_box_add (GtkContainer *container,
-	     GtkWidget    *widget)
+             GtkWidget    *child)
 {
-  gtk_box_pack_start (GTK_BOX (container), widget);
+  gtk_widget_set_parent (child, GTK_WIDGET (container));
+  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
 }
 
 static void
