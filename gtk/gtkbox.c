@@ -1021,22 +1021,6 @@ gtk_box_pack_start (GtkBox    *box,
 }
 
 /**
- * gtk_box_pack_end:
- * @box: a #GtkBox
- * @child: the #GtkWidget to be added to @box
- *
- * Adds @child to @box, packed with reference to the end of @box.
- * The @child is packed after (away from end of) any other child
- * packed with reference to the end of @box.
- */
-void
-gtk_box_pack_end (GtkBox    *box,
-		  GtkWidget *child)
-{
-  gtk_box_pack (box, child);
-}
-
-/**
  * gtk_box_set_homogeneous:
  * @box: a #GtkBox
  * @homogeneous: a boolean value, %TRUE to create equal allotments,
