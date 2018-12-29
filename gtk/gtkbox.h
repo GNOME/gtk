@@ -75,10 +75,6 @@ GType       gtk_box_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*  gtk_box_new                 (GtkOrientation  orientation,
                                          gint            spacing);
-
-GDK_AVAILABLE_IN_ALL
-void        gtk_box_pack_start          (GtkBox         *box,
-                                         GtkWidget      *child);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_homogeneous     (GtkBox         *box,
                                          gboolean        homogeneous);

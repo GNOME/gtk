@@ -322,7 +322,6 @@ gtk_bin_get_type
 GtkBox
 GtkBoxClass
 gtk_box_new
-gtk_box_pack_start
 gtk_box_get_homogeneous
 gtk_box_set_homogeneous
 gtk_box_get_spacing
