@@ -208,12 +208,12 @@ do_drawingarea (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Checkerboard pattern</u>");
-      gtk_box_pack_start (GTK_BOX (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_vexpand (frame, TRUE);
-      gtk_box_pack_start (GTK_BOX (vbox), frame);
+      gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       da = gtk_drawing_area_new ();
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
@@ -228,12 +228,12 @@ do_drawingarea (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Scribble area</u>");
-      gtk_box_pack_start (GTK_BOX (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_vexpand (frame, TRUE);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      gtk_box_pack_start (GTK_BOX (vbox), frame);
+      gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       da = gtk_drawing_area_new ();
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);

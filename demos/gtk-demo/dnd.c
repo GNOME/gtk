@@ -352,7 +352,7 @@ do_dnd (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       fixed = gtk_fixed_new ();
-      gtk_box_pack_start (GTK_BOX (vbox), fixed);
+      gtk_container_add (GTK_CONTAINER (vbox), fixed);
       gtk_widget_set_hexpand (fixed, TRUE);
       gtk_widget_set_vexpand (fixed, TRUE);
 
