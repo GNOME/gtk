@@ -62,7 +62,7 @@ msgstr "No s'ha pogut llegir el porta-retalls buit."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr ""
 "No hi ha cap format compatible per transferir els continguts del porta-"
-"retalls"
+"retalls."
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:215
 #: gtk/gtkdnd.c:818
@@ -77,7 +77,7 @@ msgstr "No es poden proporcionar continguts com a %s"
 
 #: gdk/gdkdrop.c:110
 msgid "Drag’n’drop from other applications is not supported."
-msgstr "No hi ha compatibilitat amb arrossega i deixa anar des d'altres aplicacions"
+msgstr "Arrossega i deixa anar no és compatible des d'altres aplicacions."
 
 #: gdk/gdkdrop.c:143
 msgid "No compatible formats to transfer contents."
@@ -509,14 +509,14 @@ msgstr "El nucli GL no es troba disponible en la implementació EGL"
 #: gdk/win32/gdkclipdrop-win32.c:718
 #, c-formatg
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr "No es pot reclamar la propietat del porta-retalls. OpenClipboard() ha excedit el temps"
+msgstr "No es pot reclamar la propietat del porta-retalls. OpenClipboard() ha excedit el temps."
 
 #: gdk/win32/gdkclipdrop-win32.c:728
 #, c-format
 msgid ""
 "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
-"No es pot reclamar la propietat del porta-retalls. Un altre procés la reclamat abans que nosaltres."
+"No es pot reclamar la propietat del porta-retalls. Un altre procés l'ha reclamat abans que nosaltres."
 
 #: gdk/win32/gdkclipdrop-win32.c:742
 #, c-format
@@ -583,7 +583,6 @@ msgstr "No es poden obtenir les dades del porta-retalls. Les dades han canviat a
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "No es poden obtenir les dades del porta-retalls. OpenClipboard() ha fallat: 0x%lx."
-"mantenir"
 
 #: gdk/win32/gdkclipdrop-win32.c:989
 #, c-format
@@ -657,12 +656,12 @@ msgstr "No hi ha prou espai a la memòria cau (la mida de la memòria és fixa)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
-msgstr "No es convertir un únic gestor"
+msgstr "No es pot convertir un únic gestor"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr "No s'han pogut convertir  %zu bytes de dades de %s a %u"
+msgstr "No s'han pogut convertir %zu bytes de dades de %s a %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
@@ -2302,7 +2301,7 @@ msgstr "%-e %b"
 
 #: gtk/gtkfilechooserwidget.c:4679
 msgid "%-e %b %Y"
-msgstr "%-e %b %Y"
+msgstr "%-e %b de %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -6135,7 +6134,7 @@ msgstr "Phags-pa"
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "N'Ko"
-msgstr "N'Ko"
+msgstr "Nko"
 
 #: gtk/script-names.c:81
 msgctxt "Script"

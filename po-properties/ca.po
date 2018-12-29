@@ -4332,7 +4332,7 @@ msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "La posició del separador emmarcat en píxels (0 significa de tot el trajecte "
-"fins l'esquerra/part superior)"
+"fins a l'esquerra/part superior)"
 
 #: gtk/gtkpaned.c:402
 msgid "Position Set"
