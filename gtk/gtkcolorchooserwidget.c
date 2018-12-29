@@ -570,7 +570,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       connect_custom_signals (p, cc);
       gtk_container_add (GTK_CONTAINER (box), p);
 
-      if (i == 9)
+      if (i == 8)
         break;
     }
   g_variant_unref (variant);
