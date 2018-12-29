@@ -193,6 +193,17 @@
       </para>
     </section>
 
+    <section>
+      <title>Stop using GtkBox's pack-type child property</title>
+      <para>
+        In order to improve performance and simplify the widget, GtkBox lost its
+        'pack-type' child property. In GTK+4, every GtkBox instance has a simple
+        list of child widgets that it allocates from start to end.
+        The old behavior of pack-type=END can be emulated by simply making the
+        box child in the center hexpand and right-align the ones at the end.
+      </para>
+    </section>
+
   </section>
 
   <section>
