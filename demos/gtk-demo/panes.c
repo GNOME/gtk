@@ -148,7 +148,7 @@ do_panes (GtkWidget *do_widget)
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       g_object_set (vpaned, "margin", 5, NULL);
-      gtk_box_pack_start (GTK_BOX (vbox), vpaned);
+      gtk_container_add (GTK_CONTAINER (vbox), vpaned);
 
       hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
@@ -173,13 +173,13 @@ do_panes (GtkWidget *do_widget)
 
       /* Now create toggle buttons to control sizing */
 
-      gtk_box_pack_start (GTK_BOX (vbox),
+      gtk_container_add (GTK_CONTAINER (vbox),
                           create_pane_options (GTK_PANED (hpaned),
                                                "Horizontal",
                                                "Left",
                                                "Right"));
 
-      gtk_box_pack_start (GTK_BOX (vbox),
+      gtk_container_add (GTK_CONTAINER (vbox),
                           create_pane_options (GTK_PANED (vpaned),
                                                "Vertical",
                                                "Top",
