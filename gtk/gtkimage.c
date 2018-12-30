@@ -1100,16 +1100,16 @@ gtk_image_snapshot (GtkWidget   *widget,
     {
       double image_ratio = (double) width / height;
 
-    if (ratio > image_ratio)
-      {
-        w = width;
-        h = width / ratio;
-      }
-    else
-      {
-        w = height * ratio;
-        h = height;
-      }
+      if (ratio > image_ratio)
+        {
+          w = width;
+          h = width / ratio;
+        }
+      else
+        {
+          w = height * ratio;
+          h = height;
+        }
 
       x = (width - ceil (w)) / 2;
 
