@@ -523,7 +523,6 @@ static void gtk_window_state_flags_changed (GtkWidget     *widget,
 static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static gchar       *default_icon_name = NULL;
-static guint        default_icon_serial = 0;
 static gboolean     disable_startup_notification = FALSE;
 
 static GQuark       quark_gtk_window_key_hash = 0;
@@ -4774,10 +4773,6 @@ gtk_window_set_default_icon_name (const gchar *name)
 {
   GList *tmp_list;
   GList *toplevels;
-
-  /* Update serial so we don't used cached pixmaps/masks
-   */
-  default_icon_serial++;
 
   g_free (default_icon_name);
   default_icon_name = g_strdup (name);
