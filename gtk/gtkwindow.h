@@ -297,9 +297,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_default_icon_name        (const gchar *name);
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_default_icon_name     (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_set_default_icon_from_file   (const gchar *filename,
-						    GError     **err);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_auto_startup_notification (gboolean setting);
