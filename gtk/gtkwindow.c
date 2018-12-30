@@ -4982,38 +4982,6 @@ load_texture_verbosely (const char *filename,
 }
 
 /**
- * gtk_window_set_icon_from_file:
- * @window: a #GtkWindow
- * @filename: (type filename): location of icon file
- * @err: (allow-none): location to store error, or %NULL.
- *
- * Sets the icon for @window.
- * Warns on failure if @err is %NULL.
- *
- * This function is equivalent to calling gtk_window_set_icon()
- * with a surface created by loading the image from @filename.
- *
- * Returns: %TRUE if setting the icon succeeded.
- **/
-gboolean
-gtk_window_set_icon_from_file (GtkWindow   *window,
-			       const gchar *filename,
-			       GError     **err)
-{
-  GdkTexture *texture = load_texture_verbosely (filename, err);
-
-  if (texture)
-    {
-      gtk_window_set_icon (window, texture);
-      g_object_unref (texture);
-      
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-/**
  * gtk_window_set_default_icon_list:
  * @list: (element-type GdkTexture) (transfer container): a list of #GdkTextures
  *
