@@ -4951,36 +4951,6 @@ gtk_window_get_icon (GtkWindow  *window)
     return NULL;
 }
 
-/* Load surface, printing warning on failure if error == NULL
- */
-static GdkTexture *
-load_texture_verbosely (const char *filename,
-			GError    **err)
-{
-  GFile *file;
-  GError *local_err = NULL;
-  GdkTexture *texture;
-
-  file = g_file_new_for_path (filename);
-  texture = gdk_texture_new_from_file (file, &local_err);
-  g_object_unref (file);
-
-  if (!texture)
-    {
-      if (err)
-	*err = local_err;
-      else
-	{
-	  g_warning ("Error loading icon from file '%s':\n\t%s",
-		     filename, local_err->message);
-	  g_error_free (local_err);
-	}
-      return NULL;
-    }
-
-  return texture;
-}
-
 /**
  * gtk_window_set_default_icon_list:
  * @list: (element-type GdkTexture) (transfer container): a list of #GdkTextures
@@ -5112,34 +5082,6 @@ const gchar *
 gtk_window_get_default_icon_name (void)
 {
   return default_icon_name;
-}
-
-/**
- * gtk_window_set_default_icon_from_file:
- * @filename: (type filename): location of icon file
- * @err: (allow-none): location to store error, or %NULL.
- *
- * Sets an icon to be used as fallback for windows that haven't
- * had gtk_window_set_icon_list() called on them from a file
- * on disk. Warns on failure if @err is %NULL.
- *
- * Returns: %TRUE if setting the icon succeeded.
- **/
-gboolean
-gtk_window_set_default_icon_from_file (const gchar *filename,
-				       GError     **err)
-{
-  GdkTexture *texture = load_texture_verbosely (filename, err);
-
-  if (texture)
-    {
-      gtk_window_set_default_icon (texture);
-      g_object_unref (texture);
-      
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 /**
