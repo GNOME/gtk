@@ -895,7 +895,6 @@ render_clip_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
                   RenderOpBuilder *builder)
 {
-  GskRoundedRect prev_clip;
   GskRenderNode *child = gsk_clip_node_get_child (node);
   graphene_rect_t transformed_clip;
   graphene_rect_t intersection;
@@ -905,15 +904,40 @@ render_clip_node (GskGLRenderer   *self,
   ops_transform_bounds_modelview (builder, &transformed_clip, &transformed_clip);
 
   graphene_rect_intersection (&transformed_clip,
-                              &builder->current_clip.bounds,
+                              &builder->current_clip->bounds,
                               &intersection);
 
   gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
 
-  prev_clip = ops_set_clip (builder, &child_clip);
+  ops_push_clip (builder, &child_clip);
   gsk_gl_renderer_add_render_ops (self, child, builder);
-  ops_set_clip (builder, &prev_clip);
+  ops_pop_clip (builder);
 }
+
+static gboolean
+gsk_rounded_rect_intersection (const GskRoundedRect *self,
+                               const GskRoundedRect *other,
+                               GskRoundedRect       *out_intersection)
+{
+  const graphene_rect_t *self_bounds = &self->bounds;
+  const graphene_rect_t *other_bounds = &other->bounds;
+
+  if (graphene_rect_contains_rect (self_bounds, other_bounds))
+    {
+      *out_intersection = *other;
+      return TRUE;
+    }
+
+  /* TODO: There are a few cases here that we can express using a single
+   *       rounded rectangle, which are even interesting in every day usage.
+   *       For example, a partially scrolled-away rounded rectangle
+   *       might just work.
+   */
+
+  return FALSE;
+}
+
+
 
 static inline void
 render_rounded_clip_node (GskGLRenderer       *self,
@@ -923,31 +947,41 @@ render_rounded_clip_node (GskGLRenderer       *self,
   const float scale = ops_get_scale (builder);
   GskRoundedRect child_clip = *gsk_rounded_clip_node_peek_clip (node);
   GskRoundedRect transformed_clip;
-  GskRoundedRect prev_clip;
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+  GskRoundedRect intersection;
+  gboolean need_offscreen;
   int i;
 
   transformed_clip = child_clip;
   ops_transform_bounds_modelview (builder, &child_clip.bounds, &transformed_clip.bounds);
 
-  if (graphene_rect_contains_rect (&builder->current_clip.bounds,
-                                   &transformed_clip.bounds))
+  if (!ops_has_clip (builder))
+    {
+      intersection = transformed_clip;
+      need_offscreen = FALSE;
+    }
+  else
+    {
+      need_offscreen = !gsk_rounded_rect_intersection (builder->current_clip,
+                                                       &transformed_clip,
+                                                       &intersection);
+    }
+
+  if (!need_offscreen)
     {
       /* If they don't intersect at all, we can simply set
        * the new clip and add the render ops */
       for (i = 0; i < 4; i ++)
         {
-          transformed_clip.corner[i].width *= scale;
-          transformed_clip.corner[i].height *= scale;
+          intersection.corner[i].width *= scale;
+          intersection.corner[i].height *= scale;
         }
 
-      prev_clip = ops_set_clip (builder, &transformed_clip);
+      ops_push_clip (builder, &intersection);
       gsk_gl_renderer_add_render_ops (self, child, builder);
-
-      ops_set_clip (builder, &prev_clip);
+      ops_pop_clip (builder);
     }
-  else if (graphene_rect_intersection (&builder->current_clip.bounds,
-                                       &transformed_clip.bounds, NULL))
+  else
     {
       const float min_x = builder->dx + node->bounds.origin.x;
       const float min_y = builder->dy + node->bounds.origin.y;
@@ -973,12 +1007,12 @@ render_rounded_clip_node (GskGLRenderer       *self,
           child_clip.corner[i].height *= scale;
         }
 
-      prev_clip = ops_set_clip (builder, &child_clip);
+      ops_push_clip (builder, &child_clip);
       add_offscreen_ops (self, builder, &node->bounds,
                          child,
                          &texture_id, &is_offscreen, TRUE, FALSE);
+      ops_pop_clip (builder);
 
-      ops_set_clip (builder, &prev_clip);
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, texture_id);
 
@@ -1205,7 +1239,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       int texture_id, render_target;
       int blurred_render_target;
       int prev_render_target;
-      GskRoundedRect prev_clip, blit_clip;
+      GskRoundedRect blit_clip;
 
       texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
@@ -1228,7 +1262,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
       /* Draw outline */
       ops_set_program (builder, &self->color_program);
-      prev_clip = ops_set_clip (builder, &offset_outline);
+      ops_push_clip (builder, &offset_outline);
       ops_set_color (builder, gsk_outset_shadow_node_peek_color (node));
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,                            }, { 0, 1 }, },
@@ -1246,6 +1280,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       blurred_render_target = gsk_gl_driver_create_render_target (self->gl_driver, blurred_texture_id, TRUE, TRUE);
 
       ops_set_render_target (builder, blurred_render_target);
+      ops_pop_clip (builder);
       op.op = OP_CLEAR;
       ops_add (builder, &op);
 
@@ -1259,7 +1294,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       op.blur.radius = blur_radius;
       ops_add (builder, &op);
 
-      ops_set_clip (builder, &blit_clip);
+      ops_push_clip (builder, &blit_clip);
       ops_set_texture (builder, texture_id);
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,             0              }, { 0, 1 }, },
@@ -1272,7 +1307,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       });
 
 
-      ops_set_clip (builder, &prev_clip);
+      ops_pop_clip (builder);
       ops_set_viewport (builder, &prev_viewport);
       ops_pop_modelview (builder);
       ops_set_projection (builder, &prev_projection);
@@ -2254,7 +2289,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                     &node->bounds,
                                     &transformed_node_bounds);
 
-    if (!graphene_rect_intersection (&builder->current_clip.bounds,
+    if (!graphene_rect_intersection (&builder->current_clip->bounds,
                                      &transformed_node_bounds, NULL))
       return;
   }
@@ -2384,7 +2419,6 @@ add_offscreen_ops (GskGLRenderer         *self,
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
-  GskRoundedRect prev_clip;
   float prev_opacity;
   int texture_id = 0;
 
@@ -2444,10 +2478,10 @@ add_offscreen_ops (GskGLRenderer         *self,
                                                          bounds->origin.y * scale,
                                                          width, height));
   if (reset_clip)
-    prev_clip = ops_set_clip (builder,
-                              &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale,
-                                                      bounds->origin.y * scale,
-                                                      width, height));
+    ops_push_clip (builder,
+                   &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale,
+                                           bounds->origin.y * scale,
+                                           width, height));
 
   builder->dx = 0;
   builder->dy = 0;
@@ -2460,7 +2494,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   builder->dy = dy;
 
   if (reset_clip)
-    ops_set_clip (builder, &prev_clip);
+    ops_pop_clip (builder);
 
   ops_set_viewport (builder, &prev_viewport);
   ops_pop_modelview (builder);
@@ -2696,25 +2730,34 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
   ops_push_modelview (&render_op_builder, &modelview);
+  cairo_rectangle_int_t render_extents;
+
+  /*cairo_region_get_extents (self->render_region, &render_extents);*/
   /* Initial clip is self->render_region! */
   if (self->render_region != NULL)
     {
-      cairo_rectangle_int_t render_extents;
+      GskRoundedRect transformed_render_region = { 0, };
+      /*cairo_rectangle_int_t render_extents;*/
 
       cairo_region_get_extents (self->render_region, &render_extents);
-      render_op_builder.current_clip = GSK_ROUNDED_RECT_INIT (render_extents.x,
-                                                              render_extents.y,
-                                                              render_extents.width,
-                                                              render_extents.height);
 
       ops_transform_bounds_modelview (&render_op_builder,
-                                      &render_op_builder.current_clip.bounds,
-                                      &render_op_builder.current_clip.bounds);
+                                      &GRAPHENE_RECT_INIT (render_extents.x,
+                                                           render_extents.y,
+                                                           render_extents.width,
+                                                           render_extents.height),
+                                      &transformed_render_region.bounds);
+      ops_push_clip (&render_op_builder, &transformed_render_region);
     }
   else
     {
-      gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);
+      ops_push_clip (&render_op_builder,
+                     &GSK_ROUNDED_RECT_INIT (viewport->origin.x,
+                                             viewport->origin.y,
+                                             viewport->size.width,
+                                             viewport->size.height));
     }
+  /*gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);*/
 
 
   if (fbo_id != 0)
@@ -2722,9 +2765,18 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
 
+  /*if (self->render_region)*/
+  /*add_rect_outline_ops (self, &render_op_builder,*/
+                        /*&GRAPHENE_RECT_INIT (*/
+                                             /*render_extents.x,*/
+                                             /*render_extents.y,*/
+                                             /*render_extents.width,*/
+                                             /*render_extents.height));*/
+
   /* We correctly reset the state everywhere */
   g_assert_cmpint (render_op_builder.current_render_target, ==, fbo_id);
   ops_pop_modelview (&render_op_builder);
+  ops_pop_clip (&render_op_builder);
   ops_finish (&render_op_builder);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/

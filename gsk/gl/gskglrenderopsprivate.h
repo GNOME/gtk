@@ -248,7 +248,6 @@ typedef struct
   const Program *current_program;
   int current_render_target;
   int current_texture;
-  GskRoundedRect current_clip;
 
   graphene_matrix_t current_projection;
   graphene_rect_t current_viewport;
@@ -264,6 +263,10 @@ typedef struct
   GArray *mv_stack;
   /* Pointer into mv_stack */
   const graphene_matrix_t *current_modelview;
+
+  /* Same thing */
+  GArray *clip_stack;
+  const GskRoundedRect *current_clip;
 } RenderOpBuilder;
 
 
@@ -282,8 +285,10 @@ float             ops_get_scale          (const RenderOpBuilder   *builder);
 void              ops_set_program        (RenderOpBuilder         *builder,
                                           const Program           *program);
 
-GskRoundedRect    ops_set_clip           (RenderOpBuilder         *builder,
+void              ops_push_clip          (RenderOpBuilder         *builder,
                                           const GskRoundedRect    *clip);
+void              ops_pop_clip           (RenderOpBuilder         *builder);
+gboolean          ops_has_clip           (RenderOpBuilder         *builder);
 
 void              ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                                   const graphene_rect_t *src,

@@ -12,6 +12,9 @@ ops_finish (RenderOpBuilder *builder)
 {
   if (builder->mv_stack)
     g_array_free (builder->mv_stack, TRUE);
+
+  if (builder->clip_stack)
+    g_array_free (builder->clip_stack, TRUE);
 }
 
 static inline void
@@ -208,9 +211,9 @@ ops_set_program (RenderOpBuilder *builder,
       memcmp (&builder->current_clip, &program_state->clip, sizeof (GskRoundedRect)) != 0)
     {
       op.op = OP_CHANGE_CLIP;
-      op.clip = builder->current_clip;
+      op.clip = *builder->current_clip;
       g_array_append_val (builder->render_ops, op);
-      program_state->clip = builder->current_clip;
+      program_state->clip = *builder->current_clip;
     }
 
   if (program_state->opacity != builder->current_opacity)
@@ -224,12 +227,11 @@ ops_set_program (RenderOpBuilder *builder,
   builder->current_program_state = &builder->program_state[program->index];
 }
 
-GskRoundedRect
+static void
 ops_set_clip (RenderOpBuilder      *builder,
               const GskRoundedRect *clip)
 {
   RenderOp *last_op;
-  GskRoundedRect prev_clip;
 
   if (builder->render_ops->len > 0)
     {
@@ -251,11 +253,49 @@ ops_set_clip (RenderOpBuilder      *builder,
 
   if (builder->current_program != NULL)
     builder->current_program_state->clip = *clip;
+}
 
-  prev_clip = builder->current_clip;
-  builder->current_clip = *clip;
+void
+ops_push_clip (RenderOpBuilder      *self,
+               const GskRoundedRect *clip)
+{
+  if (G_UNLIKELY (self->clip_stack == NULL))
+    self->clip_stack = g_array_new (FALSE, TRUE, sizeof (GskRoundedRect));
 
-  return prev_clip;
+  g_assert (self->clip_stack != NULL);
+
+  g_array_append_val (self->clip_stack, *clip);
+  self->current_clip = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
+  ops_set_clip (self, clip);
+}
+
+void
+ops_pop_clip (RenderOpBuilder *self)
+{
+  const GskRoundedRect *head;
+
+  g_assert (self->clip_stack);
+  g_assert (self->clip_stack->len >= 1);
+
+  self->clip_stack->len --;
+  head = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
+
+  if (self->clip_stack->len >= 1)
+    {
+      self->current_clip = head;
+      ops_set_clip (self, head);
+    }
+  else
+    {
+      self->current_clip = NULL;
+    }
+}
+
+gboolean
+ops_has_clip (RenderOpBuilder *self)
+{
+  return self->clip_stack != NULL &&
+         self->clip_stack->len > 1;
 }
 
 static void
@@ -301,7 +341,7 @@ ops_push_modelview (RenderOpBuilder         *builder,
   MatrixStackEntry *entry;
 
   if (G_UNLIKELY (builder->mv_stack == NULL))
-      builder->mv_stack = g_array_new (FALSE, TRUE, sizeof (MatrixStackEntry));
+    builder->mv_stack = g_array_new (FALSE, TRUE, sizeof (MatrixStackEntry));
 
   g_assert (builder->mv_stack != NULL);
 
