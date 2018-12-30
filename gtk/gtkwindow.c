@@ -4913,25 +4913,6 @@ gtk_window_set_default_icon_list (GList *list)
 }
 
 /**
- * gtk_window_set_default_icon:
- * @icon: the icon
- *
- * Sets an icon to be used as fallback for windows that haven't
- * had gtk_window_set_icon() called on them from a surface.
- **/
-void
-gtk_window_set_default_icon (GdkTexture *icon)
-{
-  GList *list;
-  
-  g_return_if_fail (GDK_IS_TEXTURE (icon));
-
-  list = g_list_prepend (NULL, icon);
-  gtk_window_set_default_icon_list (list);
-  g_list_free (list);
-}
-
-/**
  * gtk_window_set_default_icon_name:
  * @name: the name of the themed icon
  *
