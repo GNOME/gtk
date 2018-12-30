@@ -16,7 +16,6 @@
  */
 
 #include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
 
 typedef struct _CompareInfo CompareInfo;
 

@@ -44,7 +44,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
 
 #include "a11y/gtkpanedaccessible.h"
 
