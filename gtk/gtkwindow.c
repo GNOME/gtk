@@ -522,7 +522,6 @@ static void gtk_surface_state_flags_changed (GtkWidget     *widget,
 
 static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
-static GList       *default_icon_list = NULL;
 static gchar       *default_icon_name = NULL;
 static guint        default_icon_serial = 0;
 static gboolean     disable_startup_notification = FALSE;
@@ -4561,14 +4560,6 @@ gtk_window_realize_icon (GtkWindow *window)
       icon_list = ensure_icon_info (priv->transient_parent)->icon_list;
       if (icon_list)
         info->using_parent_icon = TRUE;
-    }      
-
-  /* Inherit from default */
-  if (icon_list == NULL)
-    {
-      icon_list = default_icon_list;
-      if (icon_list)
-        info->using_default_icon = TRUE;
     }
 
   /* Look up themed icon */
@@ -4679,9 +4670,6 @@ gtk_window_get_icon_for_size (GtkWindow *window,
         return icon_from_list (info->icon_list, size);
     }
 
-  if (default_icon_list != NULL)
-    return icon_from_list (default_icon_list, size);
-
   if (default_icon_name != NULL)
     return icon_from_name (default_icon_name, size);
 
@@ -4778,58 +4766,6 @@ gtk_window_get_icon_name (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_default_icon_list:
- * @list: (element-type GdkTexture) (transfer container): a list of #GdkTextures
- *
- * Sets an icon list to be used as fallback for windows that haven't
- * had gtk_window_set_icon_list() called on them to set up a
- * window-specific icon list. This function allows you to set up the
- * icon for all windows in your app at once.
- *
- * See gtk_window_set_icon_list() for more details.
- * 
- **/
-void
-gtk_window_set_default_icon_list (GList *list)
-{
-  GList *toplevels;
-  GList *tmp_list;
-  if (list == default_icon_list)
-    return;
-
-  /* Update serial so we don't used cached pixmaps/masks
-   */
-  default_icon_serial++;
-  
-  g_list_foreach (list,
-                  (GFunc) g_object_ref, NULL);
-
-  g_list_free_full (default_icon_list, g_object_unref);
-
-  default_icon_list = g_list_copy (list);
-  
-  /* Update all toplevels */
-  toplevels = gtk_window_list_toplevels ();
-  tmp_list = toplevels;
-  while (tmp_list != NULL)
-    {
-      GtkWindowIconInfo *info;
-      GtkWindow *w = tmp_list->data;
-      
-      info = get_icon_info (w);
-      if (info && info->using_default_icon)
-        {
-          gtk_window_unrealize_icon (w);
-          if (_gtk_widget_get_realized (GTK_WIDGET (w)))
-            gtk_window_realize_icon (w);
-        }
-
-      tmp_list = tmp_list->next;
-    }
-  g_list_free (toplevels);
-}
-
-/**
  * gtk_window_set_default_icon_name:
  * @name: the name of the themed icon
  *
@@ -4850,9 +4786,6 @@ gtk_window_set_default_icon_name (const gchar *name)
   g_free (default_icon_name);
   default_icon_name = g_strdup (name);
 
-  g_list_free_full (default_icon_list, g_object_unref);
-  default_icon_list = NULL;
-  
   /* Update all toplevels */
   toplevels = gtk_window_list_toplevels ();
   tmp_list = toplevels;
@@ -4889,22 +4822,6 @@ const gchar *
 gtk_window_get_default_icon_name (void)
 {
   return default_icon_name;
-}
-
-/**
- * gtk_window_get_default_icon_list:
- * 
- * Gets the value set by gtk_window_set_default_icon_list().
- * The list is a copy and should be freed with g_list_free(),
- * but the surfaces in the list have not had their reference count
- * incremented.
- * 
- * Returns: (element-type GdkTexture) (transfer container): copy of default icon list 
- **/
-GList*
-gtk_window_get_default_icon_list (void)
-{
-  return g_list_copy (default_icon_list);
 }
 
 #define INCLUDE_CSD_SIZE 1
