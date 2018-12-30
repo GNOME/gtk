@@ -387,7 +387,7 @@ gtk_cell_accessible_get_column_header_cells (AtkTableCell *table_cell)
                                                              cell);
 }
 
-static int
+static gboolean
 gtk_cell_accessible_get_position (AtkTableCell *table_cell,
                                   gint         *row,
                                   gint         *column)
