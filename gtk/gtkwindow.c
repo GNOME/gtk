@@ -518,7 +518,7 @@ static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
 static void gtk_window_style_updated (GtkWidget     *widget);
-static void gtk_surface_state_flags_changed (GtkWidget     *widget,
+static void gtk_window_state_flags_changed (GtkWidget     *widget,
 					     GtkStateFlags  previous_state);
 
 static GListStore  *toplevel_list = NULL;
@@ -807,7 +807,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
-  widget_class->state_flags_changed = gtk_surface_state_flags_changed;
+  widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
   widget_class->snapshot = gtk_window_snapshot;
   widget_class->pick = gtk_window_pick;
@@ -7849,8 +7849,8 @@ gtk_window_real_set_focus (GtkWindow *window,
 }
 
 static void
-gtk_surface_state_flags_changed (GtkWidget     *widget,
-				 GtkStateFlags  previous_state)
+gtk_window_state_flags_changed (GtkWidget     *widget,
+                                GtkStateFlags  previous_state)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
