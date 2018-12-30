@@ -370,11 +370,9 @@ typedef enum
 
 typedef struct
 {
-  GList     *icon_list;
   gchar     *icon_name;
   guint      realized : 1;
   guint      using_default_icon : 1;
-  guint      using_parent_icon : 1;
   guint      using_themed_icon : 1;
 } GtkWindowIconInfo;
 
@@ -4517,7 +4515,7 @@ gtk_window_realize_icon (GtkWindow *window)
   GtkWidget *widget;
   GtkWindowIconInfo *info;
   GdkSurface *surface;
-  GList *icon_list;
+  GList *icon_list = NULL;
 
   widget = GTK_WIDGET (window);
   surface = _gtk_widget_get_surface (widget);
@@ -4528,37 +4526,24 @@ gtk_window_realize_icon (GtkWindow *window)
   if (priv->type == GTK_WINDOW_POPUP)
     return;
 
-  icon_list = NULL;
-  
   info = ensure_icon_info (window);
 
   if (info->realized)
     return;
 
   info->using_default_icon = FALSE;
-  info->using_parent_icon = FALSE;
   info->using_themed_icon = FALSE;
-  
-  icon_list = info->icon_list;
 
   /* Look up themed icon */
-  if (icon_list == NULL && info->icon_name) 
+  if (icon_list == NULL && info->icon_name)
     {
       icon_list = icon_list_from_theme (window, info->icon_name);
       if (icon_list)
-	info->using_themed_icon = TRUE;
-    }
-
-  /* Inherit from transient parent */
-  if (icon_list == NULL && priv->transient_parent)
-    {
-      icon_list = ensure_icon_info (priv->transient_parent)->icon_list;
-      if (icon_list)
-        info->using_parent_icon = TRUE;
+        info->using_themed_icon = TRUE;
     }
 
   /* Look up themed icon */
-  if (icon_list == NULL && default_icon_name) 
+  if (icon_list == NULL && default_icon_name)
     {
       icon_list = icon_list_from_theme (window, default_icon_name);
       info->using_default_icon = TRUE;
@@ -4575,51 +4560,6 @@ gtk_window_realize_icon (GtkWindow *window)
     {
       g_list_free_full (icon_list, g_object_unref);
     }
-}
-
-static GdkTexture *
-icon_from_list (GList *list,
-                gint   size)
-{
-  GdkTexture *texture;
-  cairo_surface_t *source, *target;
-  cairo_t *cr;
-  GList *l;
-
-  /* Look for possible match */
-  for (l = list; l; l = l->next)
-    {
-      texture = list->data;
-      
-      if (gdk_texture_get_width (texture) <= size &&
-          gdk_texture_get_height (texture) <= size)
-        return g_object_ref (texture);
-    }
-
-  /* scale larger match down */
-  texture = list->data;
-  source = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                       gdk_texture_get_width (texture),
-                                       gdk_texture_get_height (texture));
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (source),
-                        cairo_image_surface_get_stride (source));
-  cairo_surface_mark_dirty (source);
-
-  target = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
-  cr = cairo_create (target);
-  cairo_scale (cr,
-	       (double) size / gdk_texture_get_width (texture),
-	       (double) size / gdk_texture_get_height (texture));
-  cairo_set_source_surface (cr, source, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-  cairo_surface_destroy (source);
-
-  texture = gdk_texture_new_for_surface (target);
-  cairo_surface_destroy (target);
-
-  return texture;
 }
 
 static GdkTexture *
@@ -4645,25 +4585,11 @@ GdkTexture *
 gtk_window_get_icon_for_size (GtkWindow *window,
                               int        size)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWindowIconInfo *info;
   const gchar *name;
-
-  info = ensure_icon_info (window);
-
-  if (info->icon_list != NULL)
-    return icon_from_list (info->icon_list, size);
 
   name = gtk_window_get_icon_name (window);
   if (name != NULL)
     return icon_from_name (name, size);
-
-  if (priv->transient_parent != NULL)
-    {
-      info = ensure_icon_info (priv->transient_parent);
-      if (info->icon_list)
-        return icon_from_list (info->icon_list, size);
-    }
 
   if (default_icon_name != NULL)
     return icon_from_name (default_icon_name, size);
@@ -4718,7 +4644,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
 {
   GtkWindowIconInfo *info;
   gchar *tmp;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   info = ensure_icon_info (window);
@@ -4730,9 +4656,6 @@ gtk_window_set_icon_name (GtkWindow   *window,
   info->icon_name = g_strdup (name);
   g_free (tmp);
 
-  g_list_free_full (info->icon_list, g_object_unref);
-  info->icon_list = NULL;
-  
   update_themed_icon (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
