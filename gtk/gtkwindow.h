@@ -287,8 +287,6 @@ void       gtk_window_set_default_icon_list        (GList      *list);
 GDK_AVAILABLE_IN_ALL
 GList*     gtk_window_get_default_icon_list        (void);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default_icon             (GdkTexture  *icon);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_default_icon_name        (const gchar *name);
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_default_icon_name     (void);
