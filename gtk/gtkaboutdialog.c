@@ -553,7 +553,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_LOGO] =
     g_param_spec_object ("logo",
                          P_("Logo"),
-                         P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
+                         P_("A logo for the about box."),
                          GDK_TYPE_PAINTABLE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1745,18 +1745,6 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 
   if (logo != NULL)
     gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), logo);
-  else
-    {
-      GList *surfaces = gtk_window_get_default_icon_list ();
-
-      if (surfaces != NULL)
-        {
-          gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image),
-				        GDK_PAINTABLE (surfaces->data));
-
-          g_list_free (surfaces);
-        }
-    }
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
@@ -1800,7 +1788,6 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
                                      const gchar    *icon_name)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
-  GList *icons;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1839,11 +1826,6 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
 
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name);
       gtk_image_set_pixel_size (GTK_IMAGE (priv->logo_image), best_size);
-    }
-  else if ((icons = gtk_window_get_default_icon_list ()))
-    {
-      gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), icons->data);
-      g_list_free (icons);
     }
   else
     {
