@@ -323,7 +323,6 @@ enum {
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
   PROP_HIDE_ON_CLOSE,
-  PROP_ICON,
   PROP_ICON_NAME,
   PROP_DISPLAY,
   PROP_TYPE_HINT,
@@ -912,15 +911,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             P_("If this window should be hidden when the user clicks the close button"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-
-  window_props[PROP_ICON] =
-      g_param_spec_object ("icon",
-                           P_("Icon"),
-                           P_("Icon for this window"),
-			   GDK_TYPE_TEXTURE,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   /**
    * GtkWindow:mnemonics-visible:
    *
@@ -2057,10 +2047,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_HIDE_ON_CLOSE:
       gtk_window_set_hide_on_close (window, g_value_get_boolean (value));
       break;
-    case PROP_ICON:
-      gtk_window_set_icon (window,
-                           g_value_get_object (value));
-      break;
     case PROP_ICON_NAME:
       gtk_window_set_icon_name (window, g_value_get_string (value));
       break;
@@ -2170,9 +2156,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_HIDE_ON_CLOSE:
       g_value_set_boolean (value, priv->hide_on_close);
-      break;
-    case PROP_ICON:
-      g_value_set_object (value, gtk_window_get_icon (window));
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_window_get_icon_name (window));
@@ -4774,8 +4757,6 @@ gtk_window_set_icon_list (GtkWindow  *window,
 
   info->icon_list = g_list_copy (list);
 
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON]);
-  
   gtk_window_unrealize_icon (window);
   
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
@@ -4811,50 +4792,6 @@ gtk_window_get_icon_list (GtkWindow  *window)
   else
     return NULL;  
 }
-
-/**
- * gtk_window_set_icon:
- * @window: a #GtkWindow
- * @icon: (allow-none): icon image, or %NULL
- *
- * Sets up the icon representing a #GtkWindow. This icon is used when
- * the window is minimized (also known as iconified).  Some window
- * managers or desktop environments may also place it in the window
- * frame, or display it in other contexts. On others, the icon is not
- * used at all, so your mileage may vary.
- *
- * The icon should be provided in whatever size it was naturally
- * drawn; that is, don’t scale the image before passing it to
- * GTK+. Scaling is postponed until the last minute, when the desired
- * final size is known, to allow best quality.
- *
- * If you have your icon hand-drawn in multiple sizes, use
- * gtk_window_set_icon_list(). Then the best size will be used.
- *
- * This function is equivalent to calling gtk_window_set_icon_list()
- * with a 1-element list.
- *
- * See also gtk_window_set_default_icon_list() to set the icon
- * for all windows in your application in one go.
- **/
-void
-gtk_window_set_icon (GtkWindow  *window,
-                     GdkTexture *icon)
-{
-  GList *list;
-  
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (icon == NULL || GDK_IS_TEXTURE (icon));
-
-  list = NULL;
-
-  if (icon)
-    list = g_list_append (list, icon);
-  
-  gtk_window_set_icon_list (window, list);
-  g_list_free (list);  
-}
-
 
 static void 
 update_themed_icon (GtkWindow *window)
@@ -4925,30 +4862,6 @@ gtk_window_get_icon_name (GtkWindow *window)
   info = ensure_icon_info (window);
 
   return info->icon_name;
-}
-
-/**
- * gtk_window_get_icon:
- * @window: a #GtkWindow
- * 
- * Gets the value set by gtk_window_set_icon() (or if you've
- * called gtk_window_set_icon_list(), gets the first icon in
- * the icon list).
- *
- * Returns: (transfer none) (nullable): icon for window or %NULL if none
- **/
-GdkTexture *
-gtk_window_get_icon (GtkWindow  *window)
-{
-  GtkWindowIconInfo *info;
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
-
-  info = get_icon_info (window);
-  if (info && info->icon_list)
-    return (GdkTexture *) (info->icon_list->data);
-  else
-    return NULL;
 }
 
 /**
