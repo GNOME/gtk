@@ -4562,16 +4562,22 @@ gtk_window_realize_icon (GtkWindow *window)
     }
 }
 
-static GdkTexture *
-icon_from_name (const gchar *name,
-                gint         size)
+GdkTexture *
+gtk_window_get_icon_for_size (GtkWindow *window,
+                              int        size)
 {
+  const char *name;
   GtkIconInfo *info;
   GdkTexture *texture;
 
+  name = gtk_window_get_icon_name (window);
+
+  if (!name)
+    name = default_icon_name;
+
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-				     name, size,
-				     GTK_ICON_LOOKUP_FORCE_SIZE);
+                                     name, size,
+                                     GTK_ICON_LOOKUP_FORCE_SIZE);
   if (info == NULL)
     return NULL;
 
@@ -4579,22 +4585,6 @@ icon_from_name (const gchar *name,
   g_object_unref (info);
 
   return texture;
-}
-
-GdkTexture *
-gtk_window_get_icon_for_size (GtkWindow *window,
-                              int        size)
-{
-  const gchar *name;
-
-  name = gtk_window_get_icon_name (window);
-  if (name != NULL)
-    return icon_from_name (name, size);
-
-  if (default_icon_name != NULL)
-    return icon_from_name (default_icon_name, size);
-
-  return NULL;
 }
 
 static void
