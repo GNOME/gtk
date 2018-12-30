@@ -53,7 +53,6 @@
 #include "gtkrangeprivate.h"
 #include "gtkscale.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkwindowprivate.h"
 
 #include "a11y/gtkscalebuttonaccessible.h"

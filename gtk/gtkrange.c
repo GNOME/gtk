@@ -40,7 +40,6 @@
 #include "gtkprivate.h"
 #include "gtkscale.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkrangeaccessible.h"

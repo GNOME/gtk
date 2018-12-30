@@ -113,7 +113,6 @@
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkimage.h"
 #include "gtkactionable.h"
 #include "gtkmain.h"

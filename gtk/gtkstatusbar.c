@@ -30,7 +30,6 @@
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"

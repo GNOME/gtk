@@ -46,7 +46,6 @@
 #include "gtkstylecascadeprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 

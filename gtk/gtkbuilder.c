@@ -213,7 +213,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkicontheme.h"
 #include "gtktestutils.h"
 

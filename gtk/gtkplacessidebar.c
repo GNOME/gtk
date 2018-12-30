@@ -47,7 +47,6 @@
 #include "gtksettings.h"
 #include "gtktrashmonitor.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkpopover.h"
 #include "gtkgrid.h"
 #include "gtklabel.h"
