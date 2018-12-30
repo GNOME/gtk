@@ -4702,93 +4702,6 @@ gtk_window_unrealize_icon (GtkWindow *window)
 
 }
 
-/**
- * gtk_window_set_icon_list:
- * @window: a #GtkWindow
- * @list: (element-type GdkTexture): list of image surfaces
- *
- * Sets up the icon representing a #GtkWindow. The icon is used when
- * the window is minimized (also known as iconified).  Some window
- * managers or desktop environments may also place it in the window
- * frame, or display it in other contexts. On others, the icon is not
- * used at all, so your mileage may vary.
- *
- * gtk_window_set_icon_list() allows you to pass in the same icon in
- * several hand-drawn sizes. The list should contain the natural sizes
- * your icon is available in; that is, don’t scale the image before
- * passing it to GTK+. Scaling is postponed until the last minute,
- * when the desired final size is known, to allow best quality.
- *
- * By passing several sizes, you may improve the final image quality
- * of the icon, by reducing or eliminating automatic image scaling.
- *
- * Recommended sizes to provide: 16x16, 32x32, 48x48 at minimum, and
- * larger images (64x64, 128x128) if you have them.
- *
- * See also gtk_window_set_default_icon_list() to set the icon
- * for all windows in your application in one go.
- *
- * Note that transient windows (those who have been set transient for another
- * window using gtk_window_set_transient_for()) will inherit their
- * icon from their transient parent. So there’s no need to explicitly
- * set the icon on transient windows.
- **/
-void
-gtk_window_set_icon_list (GtkWindow  *window,
-                          GList      *list)
-{
-  GtkWindowIconInfo *info;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  info = ensure_icon_info (window);
-
-  if (info->icon_list == list) /* check for NULL mostly */
-    return;
-
-  g_list_foreach (list,
-                  (GFunc) g_object_ref, NULL);
-
-  g_list_free_full (info->icon_list, g_object_unref);
-
-  info->icon_list = g_list_copy (list);
-
-  gtk_window_unrealize_icon (window);
-  
-  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    gtk_window_realize_icon (window);
-
-  /* We could try to update our transient children, but I don't think
-   * it's really worth it. If we did it, the best way would probably
-   * be to have children connect to notify::icon-list
-   */
-}
-
-/**
- * gtk_window_get_icon_list:
- * @window: a #GtkWindow
- * 
- * Retrieves the list of icons set by gtk_window_set_icon_list().
- * The list is copied, but the reference count on each
- * member won’t be incremented.
- *
- * Returns: (element-type GdkTexture) (transfer container): copy of window’s icon list
- **/
-GList*
-gtk_window_get_icon_list (GtkWindow  *window)
-{
-  GtkWindowIconInfo *info;
-  
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
-
-  info = get_icon_info (window);
-
-  if (info)
-    return g_list_copy (info->icon_list);
-  else
-    return NULL;  
-}
-
 static void 
 update_themed_icon (GtkWindow *window)
 {
@@ -5724,9 +5637,6 @@ gtk_window_destroy (GtkWidget *widget)
     gtk_window_set_transient_for (window, NULL);
 
   remove_attach_widget (window);
-
-  /* frees the icons */
-  gtk_window_set_icon_list (window, NULL);
 
   if (priv->has_user_ref_count)
     {

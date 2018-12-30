@@ -4888,8 +4888,6 @@ create_wmhints (GtkWidget *widget)
 
       list = g_list_prepend (NULL, texture);
 
-      gtk_window_set_icon_list (GTK_WINDOW (window), list);
-
       g_list_free (list);
       g_object_unref (texture);
       g_object_unref (pixbuf);
