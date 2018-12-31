@@ -234,6 +234,103 @@ get_current_desktop (GdkScreen *screen)
   return workspace;
 }
 
+gboolean
+_gdk_x11_screen_get_monitor_work_area (GdkScreen    *screen,
+                                       GdkMonitor   *monitor,
+                                       GdkRectangle *area)
+{
+  GdkAtom net_workareas;
+  GdkDisplay *display;
+  Display *xdisplay;
+  int current_desktop;
+  char *workareas_dn_name;
+  Atom workareas_dn;
+  int screen_number;
+  Window xroot;
+  int result;
+  Atom type;
+  int format;
+  gulong num;
+  gulong leftovers;
+  guchar *ret_workarea;
+  long *workareas;
+  GdkRectangle geometry;
+  int i;
+
+  net_workareas = gdk_atom_intern_static_string ("_NET_WORKAREAS");
+  if (!gdk_x11_screen_supports_net_wm_hint (screen, net_workareas))
+    return FALSE;
+
+  display = gdk_screen_get_display (screen);
+  xdisplay = gdk_x11_display_get_xdisplay (display);
+
+  current_desktop = get_current_desktop (screen);
+  workareas_dn_name = g_strdup_printf ("_NET_WORKAREAS_D%d", current_desktop);
+  workareas_dn = XInternAtom (xdisplay, workareas_dn_name, True);
+  g_free (workareas_dn_name);
+
+  if (workareas_dn == None)
+    return FALSE;
+
+  screen_number = gdk_x11_screen_get_screen_number (screen);
+  xroot = XRootWindow (xdisplay, screen_number);
+
+  gdk_x11_display_error_trap_push (display);
+
+  ret_workarea = NULL;
+  result = XGetWindowProperty (xdisplay,
+                               xroot,
+                               workareas_dn,
+                               0,
+                               G_MAXLONG,
+                               False,
+                               AnyPropertyType,
+                               &type,
+                               &format,
+                               &num,
+                               &leftovers,
+                               &ret_workarea);
+
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (result != Success ||
+      type == None ||
+      format == 0 ||
+      leftovers ||
+      num % 4 != 0)
+    {
+      XFree (ret_workarea);
+
+      return FALSE;
+    }
+
+  workareas = (long *) ret_workarea;
+
+  gdk_monitor_get_geometry (monitor, &geometry);
+  *area = geometry;
+
+  for (i = 0; i < num / 4; i++)
+    {
+      GdkRectangle work_area;
+
+      work_area = (GdkRectangle) {
+        .x = workareas[0],
+        .y = workareas[1],
+        .width = workareas[2],
+        .height = workareas[3],
+      };
+
+      if (gdk_rectangle_intersect (area, &work_area, &work_area))
+        *area = work_area;
+
+      workareas += 4;
+    }
+
+  XFree (ret_workarea);
+
+  return TRUE;
+}
+
 void
 gdk_x11_screen_get_work_area (GdkScreen    *screen,
                               GdkRectangle *area)
