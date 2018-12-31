@@ -131,6 +131,7 @@ gtk_tests = [
   ['testoutsetshadowdrawing'],
   ['testblur'],
   ['testtexture'],
+  ['testshrinking'],
 ]
 
 if os_unix
