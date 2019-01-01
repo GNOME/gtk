@@ -11914,7 +11914,11 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
       int baseline;
 
       gtk_widget_get_allocated_size (widget, &allocation, &baseline);
-      gtk_widget_size_allocate (widget, &allocation, baseline);
+      gtk_widget_size_allocate_transformed (widget,
+                                            allocation.width,
+                                            allocation.height,
+                                            baseline,
+                                            &priv->allocated_transform);
     }
   else if (priv->alloc_needed_on_child)
     {
