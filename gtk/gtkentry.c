@@ -183,7 +183,6 @@ static GQuark          quark_entry_completion = 0;
 
 typedef struct _EntryIconInfo EntryIconInfo;
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
-typedef struct _GtkEntryCapslockFeedback GtkEntryCapslockFeedback;
 
 struct _GtkEntryPrivate
 {
@@ -293,13 +292,6 @@ struct _GtkEntryPasswordHint
 {
   gint position;      /* Position (in text) of the last password hint */
   guint source_id;    /* Timeout source id */
-};
-
-struct _GtkEntryCapslockFeedback
-{
-  GtkWidget *entry;
-  GtkWidget *window;
-  GtkWidget *label;
 };
 
 enum {
