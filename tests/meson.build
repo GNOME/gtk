@@ -134,6 +134,7 @@ gtk_tests = [
   ['testblur'],
   ['testtexture'],
   ['testshrinking'],
+  ['testflipping'],
 ]
 
 if os_unix
