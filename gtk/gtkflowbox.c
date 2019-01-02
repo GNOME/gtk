@@ -2634,12 +2634,15 @@ gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   if (n_press != 1)
     gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   priv->active_child = child;
   gtk_widget_queue_draw (GTK_WIDGET (box));
 
   if (n_press == 2 && !priv->activate_on_single_click)
-    g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_CLAIMED);
+      g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
+    }
 }
 
 static void
@@ -2674,6 +2677,9 @@ gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
   if (priv->active_child != NULL &&
       priv->active_child == gtk_flow_box_get_child_at_pos (box, x, y))
     {
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_CLAIMED);
+
       if (priv->activate_on_single_click)
         gtk_flow_box_select_and_activate (box, priv->active_child);
       else
