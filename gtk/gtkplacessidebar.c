@@ -2084,6 +2084,9 @@ drag_data_received_callback (GtkWidget        *list_box,
 
       source_row = (void*) gtk_selection_data_get_data (selection_data);
 
+      if (sidebar->row_placeholder != NULL)
+        g_object_get (sidebar->row_placeholder, "order-index", &target_order_index, NULL);
+
       reorder_bookmarks (sidebar, GTK_SIDEBAR_ROW (*source_row), target_order_index);
       success = TRUE;
     }
