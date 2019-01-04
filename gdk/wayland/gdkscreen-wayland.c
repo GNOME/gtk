@@ -491,6 +491,7 @@ update_xft_settings (GdkScreen *screen)
 
 static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.interface", "gtk-theme", "gtk-theme-name" , G_TYPE_STRING, { .s = "Adwaita" } },
+  { FALSE, "org.gnome.desktop.interface", "gtk-key-theme", "gtk-key-theme-name" , G_TYPE_STRING, { .s = "Default" } },
   { FALSE, "org.gnome.desktop.interface", "icon-theme", "gtk-icon-theme-name", G_TYPE_STRING, { .s = "gnome" } },
   { FALSE, "org.gnome.desktop.interface", "cursor-theme", "gtk-cursor-theme-name", G_TYPE_STRING, { .s = "Adwaita" } },
   { FALSE, "org.gnome.desktop.interface", "cursor-size", "gtk-cursor-theme-size", G_TYPE_INT, { .i = 32 } },
