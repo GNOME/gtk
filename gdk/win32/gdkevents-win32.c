@@ -2464,7 +2464,7 @@ gdk_event_translate (MSG  *msg,
     case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
       _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
-      _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
+      _gdk_input_locale_is_ime = (ImmGetIMEFileName (_gdk_input_locale, NULL, 0) != 0);
       GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		     LOCALE_IDEFAULTANSICODEPAGE,
 		     buf, sizeof (buf));
