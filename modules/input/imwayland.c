@@ -298,7 +298,7 @@ notify_surrounding_text (GtkIMContextWayland *context)
           end = &context->surrounding.text[MAX_LEN];
         }
       else if (context->surrounding.cursor_idx > len - MAX_LEN &&
-               context->surrounding.cursor_idx > len - MAX_LEN)
+               context->surrounding.anchor_idx > len - MAX_LEN)
         {
           start = &context->surrounding.text[len - MAX_LEN];
           end = &context->surrounding.text[len];
