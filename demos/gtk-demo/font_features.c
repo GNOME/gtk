@@ -9,10 +9,13 @@
  */
 
 #include <gtk/gtk.h>
-#include <pango/pangofc-font.h>
+
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
+
+/* Do the PangoFont->FT_Face conversion... */
+#include "gtk/gtk-pangofont-ftface-util.c"
 
 static GtkWidget *label;
 static GtkWidget *settings;
@@ -118,15 +121,12 @@ update_display (void)
 }
 
 static PangoFont *
-get_pango_font (void)
+get_pango_font (PangoContext *context,
+                PangoFontMap *map)
 {
   PangoFontDescription *desc;
-  PangoContext *context;
-  PangoFontMap *map;
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font));
-  context = gtk_widget_get_pango_context (font);
-  map = pango_context_get_font_map (context);
 
   return pango_font_map_load_font (map, context, desc);
 }
@@ -212,11 +212,16 @@ update_script_combo (void)
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
+  gpointer extra_ft_items = NULL;
+  PangoContext *pango_context = gtk_widget_get_pango_context (font);
+  PangoFontMap *font_map = pango_context_get_font_map (pango_context);
 
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
-  pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+  pango_font = get_pango_font (pango_context, font_map);
+  extra_ft_items = FT_EXT_ITEM_INIT (pango_font);
+
+  ft_face = FT_FACE_FROM_PANGO_FONT (extra_ft_items, pango_font, font_map);
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
@@ -267,7 +272,10 @@ update_script_combo (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  PANGO_FONT_RELEASE_FT_FACE (extra_ft_items, pango_font);
+
+  RELEASE_EXTRA_FT_ITEMS(extra_ft_items);
+
   g_object_unref (pango_font);
 
   g_hash_table_iter_init (&iter, tags);
@@ -348,6 +356,9 @@ update_features (void)
   PangoFont *pango_font;
   FT_Face ft_face;
   hb_font_t *hb_font;
+  gpointer extra_ft_items = NULL;
+  PangoContext *pango_context = gtk_widget_get_pango_context (font);
+  PangoFontMap *font_map = pango_context_get_font_map (pango_context);
 
   for (i = 0; i < num_features; i++)
     gtk_widget_set_opacity (icon[i], 0);
@@ -363,8 +374,9 @@ update_features (void)
                       2, &lang_index,
                       -1);
 
-  pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+  pango_font = get_pango_font (pango_context, font_map);
+  extra_ft_items = FT_EXT_ITEM_INIT (pango_font);
+  ft_face = FT_FACE_FROM_PANGO_FONT (extra_ft_items, pango_font, font_map),
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   if (hb_font)
@@ -400,7 +412,10 @@ update_features (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+  PANGO_FONT_RELEASE_FT_FACE (extra_ft_items, pango_font);
+
+  RELEASE_EXTRA_FT_ITEMS (extra_ft_items);
+
   g_object_unref (pango_font);
 }
 
