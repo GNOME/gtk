@@ -1171,7 +1171,8 @@ gtk_extra_sources =				\
 	deprecated/gtkstatusicon-quartz.c	\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
-	fallback-c89.c
+	fallback-c89.c				\
+	gtk-pangofont-ftface-util.c
 
 #
 # setup GTK+ sources and their dependencies
