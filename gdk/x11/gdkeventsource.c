@@ -32,8 +32,8 @@ static gboolean gdk_event_source_dispatch (GSource     *source,
                                            gpointer     user_data);
 static void     gdk_event_source_finalize (GSource     *source);
 
-#define APPEARS_FOCUSED(toplevel)                           \
-  ((toplevel)->has_focus || (toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
+#define HAS_FOCUS(toplevel)                           \
+  ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
 struct _GdkEventSource
 {
@@ -148,10 +148,10 @@ handle_focus_change (GdkEventCrossing *event)
   if (!event->focus || toplevel->has_focus_window)
     return;
 
-  had_focus = APPEARS_FOCUSED (toplevel);
+  had_focus = HAS_FOCUS (toplevel);
   toplevel->has_pointer_focus = focus_in;
 
-  if (APPEARS_FOCUSED (toplevel) != had_focus)
+  if (HAS_FOCUS (toplevel) != had_focus)
     {
       GdkEvent *focus_event;
 
