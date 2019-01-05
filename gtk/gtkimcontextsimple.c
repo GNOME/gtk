@@ -67,7 +67,7 @@
 
 struct _GtkIMContextSimplePrivate
 {
-  guint16        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
+  guint32        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
   gunichar       tentative_match;
   gint           tentative_match_len;
 
@@ -310,7 +310,7 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
 static int
 compare_seq_index (const void *key, const void *value)
 {
-  const guint16 *keysyms = key;
+  const guint32 *keysyms = key;
   const guint16 *seq = value;
 
   if (keysyms[0] < seq[0])
@@ -325,7 +325,7 @@ static int
 compare_seq (const void *key, const void *value)
 {
   int i = 0;
-  const guint16 *keysyms = key;
+  const guint32 *keysyms = key;
   const guint16 *seq = value;
 
   while (keysyms[i])
@@ -481,7 +481,7 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
 
 gboolean
 gtk_check_compact_table (const GtkComposeTableCompact  *table,
-                         guint16                       *compose_buffer,
+                         guint32                       *compose_buffer,
                          gint                           n_compose,
                          gboolean                      *compose_finish,
                          gboolean                      *compose_match,
@@ -643,7 +643,7 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 }
 
 gboolean
-gtk_check_algorithmically (const guint16       *compose_buffer,
+gtk_check_algorithmically (const guint32       *compose_buffer,
                            gint                 n_compose,
                            gunichar            *output_char)
 
@@ -1178,7 +1178,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 #ifdef GDK_WINDOWING_WIN32
       if (GDK_IS_WIN32_DISPLAY (display))
         {
-          guint16  output[10];
+          guint32  output[10];
           gsize    output_size = 10;
           const guint32 *ligature = NULL;
           GdkKeymap *keymap = gdk_keymap_get_default ();
@@ -1196,15 +1196,15 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               n_compose -= 1;
               priv->compose_buffer[n_compose] = 0;
               for (l_i = 0; ligature[l_i] != 0 && n_compose < GTK_MAX_COMPOSE_LEN; l_i++)
-                priv->compose_buffer[n_compose++] = (guint16) ligature[l_i];
+                priv->compose_buffer[n_compose++] = ligature[l_i];
 
               use_full_buffer = TRUE;
             }
 
-          switch (gdk_win32_keymap_check_compose (keymap,
-                                                  priv->compose_buffer,
-                                                  n_compose,
-                                                  output, &output_size))
+          switch (gdk_win32_keymap_check_compose32 (keymap,
+                                                    priv->compose_buffer,
+                                                    n_compose,
+                                                    output, &output_size))
             {
             case GDK_WIN32_KEYMAP_MATCH_NONE:
               break;
