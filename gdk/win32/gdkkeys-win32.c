@@ -804,7 +804,7 @@ sort_combinations_by_gdk_keyval (gconstpointer a,
 
 static gboolean
 linear_find_dead_key_by_keyval (GArray   *array,
-                                guint16   keyval,
+                                guint32   keyval,
                                 gsize    *index)
 {
   gsize i;
@@ -822,7 +822,7 @@ linear_find_dead_key_by_keyval (GArray   *array,
 
 static gboolean
 find_dead_key_by_keyval (GArray   *array,
-                         guint16   keyval,
+                         guint32   keyval,
                          gsize    *index)
 {
   gsize i;
@@ -883,7 +883,7 @@ find_dead_key_by_keyval (GArray   *array,
 static gboolean
 find_combination_by_keyval (GdkWin32Keymap *keymap,
                             GArray         *array,
-                            guint16         keyval,
+                            guint32         keyval,
                             gsize          *index)
 {
   gsize  i;
@@ -1446,7 +1446,7 @@ update_keymap (GdkKeymap *gdk_keymap)
  */
 static gboolean
 check_for_depth (GArray  *dead_keys,
-                 guint16  keyval,
+                 guint32  keyval,
                  gsize   *index,
                  gsize    depth)
 {
@@ -1478,10 +1478,10 @@ check_for_depth (GArray  *dead_keys,
  */
 static GdkWin32KeymapMatch
 check_compose_internal (GdkWin32Keymap *keymap,
-                        guint16         compose_buffer0,
-                        guint16        *compose_buffer1,
+                        guint32         compose_buffer0,
+                        guint32        *compose_buffer1,
                         gsize           compose_buffer1_len,
-                        guint16        *output,
+                        guint32        *output,
                         gsize          *output_len,
                         gsize           depth)
 {
@@ -1603,6 +1603,41 @@ gdk_win32_keymap_check_compose (GdkWin32Keymap *keymap,
                                 gsize           compose_buffer_len,
                                 guint16        *output,
                                 gsize          *output_len)
+{
+  GdkWin32KeymapMatch result;
+  guint32 *compose_buffer32;
+  guint32 *output32;
+  gsize i;
+
+  /* Can't combine an empty buffer */
+  if (compose_buffer_len == 0)
+    return GDK_WIN32_KEYMAP_MATCH_NONE;
+
+  compose_buffer32 = g_new0 (guint32, compose_buffer_len);
+  output32 = g_new0 (guint32, *output_len);
+
+  for (i = 0; i < compose_buffer_len; i++)
+    compose_buffer32[i] = compose_buffer[i];
+
+  result = check_compose_internal (keymap,
+                                   compose_buffer32[0], &compose_buffer32[1], compose_buffer_len - 1,
+                                   output32, output_len, 0);
+
+  for (i = 0; i < *output_len; i++)
+    output[i] = (guint16) output32[i];
+
+  g_free (output32);
+  g_free (compose_buffer32);
+
+  return result;
+}
+
+GdkWin32KeymapMatch
+gdk_win32_keymap_check_compose32 (GdkWin32Keymap *keymap,
+                                  guint32        *compose_buffer,
+                                  gsize           compose_buffer_len,
+                                  guint32        *output,
+                                  gsize          *output_len)
 {
   GdkWin32KeymapMatch result;
 
