@@ -143,11 +143,11 @@ gtk_list_item_manager_select (GtkListItemManager *self,
       if (gtk_list_item_get_selected (item))
         gtk_selection_model_unselect_item (self->model, pos);
       else
-        gtk_selection_model_select_item (self->model, pos, FALSE);
+        gtk_selection_model_select_item (self->model, pos, FALSE, extend);
     }
   else
     {
-      gtk_selection_model_select_item (self->model, pos, TRUE);
+      gtk_selection_model_select_item (self->model, pos, TRUE, extend);
     }
 }
 

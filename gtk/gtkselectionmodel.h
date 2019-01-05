@@ -67,7 +67,8 @@ struct _GtkSelectionModelInterface
 
   gboolean              (* select_item)                         (GtkSelectionModel      *model,
                                                                  guint                   position,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                exclusive,
+                                                                 gboolean                extend);
   gboolean              (* unselect_item)                       (GtkSelectionModel      *model,
                                                                  guint                   position);
   gboolean              (* select_range)                        (GtkSelectionModel      *model,
@@ -88,7 +89,8 @@ gboolean                gtk_selection_model_is_selected         (GtkSelectionMod
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_item         (GtkSelectionModel      *model,
                                                                  guint                   position,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                exclusive,
+                                                                 gboolean                extend);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_item       (GtkSelectionModel      *model,
                                                                  guint                   position);

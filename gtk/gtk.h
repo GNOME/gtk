@@ -157,6 +157,7 @@
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmodelbutton.h>
 #include <gtk/gtkmountoperation.h>
+#include <gtk/gtkmultiselection.h>
 #include <gtk/gtknativedialog.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkorientable.h>

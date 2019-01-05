@@ -79,7 +79,8 @@ gtk_selection_model_default_is_selected (GtkSelectionModel *model,
 static gboolean
 gtk_selection_model_default_select_item (GtkSelectionModel *model,
                                          guint              position,
-                                         gboolean           exclusive)
+                                         gboolean           exclusive,
+                                         gboolean           extend)
 {
   return FALSE;
 }
@@ -181,14 +182,15 @@ gtk_selection_model_is_selected (GtkSelectionModel *model,
 gboolean
 gtk_selection_model_select_item (GtkSelectionModel *model,
                                  guint              position,
-                                 gboolean           exclusive)
+                                 gboolean           exclusive,
+                                 gboolean           extend)
 {
   GtkSelectionModelInterface *iface;
 
   g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
-  return iface->select_item (model, position, exclusive);
+  return iface->select_item (model, position, exclusive, extend);
 }
 
 gboolean

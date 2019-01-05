@@ -108,7 +108,8 @@ gtk_single_selection_is_selected (GtkSelectionModel *model,
 static gboolean
 gtk_single_selection_select_item (GtkSelectionModel *model,
                                   guint              position,
-                                  gboolean           exclusive)
+                                  gboolean           exclusive,
+                                  gboolean           extend)
 {
   GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
 
