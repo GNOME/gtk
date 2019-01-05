@@ -317,7 +317,7 @@ gtk_multi_selection_init (GtkMultiSelection *self)
  *
  * Returns: (transfer full) (type GtkMultiSelection): a new #GtkMultiSelection
  **/
-GListModel *
+GtkMultiSelection *
 gtk_multi_selection_new (GListModel *model)
 {
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);

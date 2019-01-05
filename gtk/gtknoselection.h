@@ -30,7 +30,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkNoSelection, gtk_no_selection, GTK, NO_SELECTION, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GListModel * gtk_no_selection_new (GListModel *model);
+GtkNoSelection * gtk_no_selection_new (GListModel *model);
 
 G_END_DECLS
 

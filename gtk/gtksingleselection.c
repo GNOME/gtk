@@ -403,7 +403,7 @@ gtk_single_selection_init (GtkSingleSelection *self)
  *
  * Returns: (transfer full) (type GtkSingleSelection): a new #GtkSingleSelection
  **/
-GListModel *
+GtkSingleSelection *
 gtk_single_selection_new (GListModel *model)
 {
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);

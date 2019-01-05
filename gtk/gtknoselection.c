@@ -205,7 +205,7 @@ gtk_no_selection_init (GtkNoSelection *self)
  *
  * Returns: (transfer full) (type GtkNoSelection): a new #GtkNoSelection
  **/
-GListModel *
+GtkNoSelection *
 gtk_no_selection_new (GListModel *model)
 {
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
