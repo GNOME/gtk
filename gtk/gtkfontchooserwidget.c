@@ -788,14 +788,39 @@ bind_row (GtkListItem *list_item,
 }
 
 static void
+row_activated_cb (GtkGestureMultiPress *gesture,
+                  int n_press,
+                  double x,
+                  double y,
+                  GtkFontChooserWidget *fontchooser)
+{
+  gchar *fontname;
+
+  if (n_press == 1)
+    return;
+
+  fontname = gtk_font_chooser_widget_get_font (fontchooser);
+  _gtk_font_chooser_font_activated (GTK_FONT_CHOOSER (fontchooser), fontname);
+  g_free (fontname);
+}
+
+static void
 setup_row (GtkListItem *list_item,
            gpointer     data)
 {
+  GtkFontChooserWidget *fontchooser = data;
   GtkWidget *row;
+  GtkEventController *double_click;
 
   row = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (row), 0.0);
   g_object_set (row, "margin", 10, NULL);
+
+  double_click = gtk_gesture_multi_press_new ();
+  g_signal_connect (double_click, "pressed",
+                    G_CALLBACK (row_activated_cb), fontchooser);
+  gtk_widget_add_controller (row, double_click);
+
   gtk_container_add (GTK_CONTAINER (list_item), row);
 }
 
