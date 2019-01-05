@@ -1049,6 +1049,9 @@ gtk_list_view_model_selection_changed_cb (GListModel  *model,
 
   row = gtk_list_view_get_row (self, position, &offset);
 
+  if (row == NULL)
+    return;
+
   if (offset)
     {
       position += row->n_rows - offset;
