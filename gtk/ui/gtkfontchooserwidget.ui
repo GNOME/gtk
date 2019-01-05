@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkListStore" id="model">
-    <columns>
-      <!-- column-name family -->
-      <column type="PangoFontFamily"/>
-      <!-- column-name face -->
-      <column type="PangoFontFace"/>
-      <!-- column-name description -->
-      <column type="GtkDelayedFontDescription"/>
-      <!-- column-name preview-title -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeModelFilter" id="filter_model">
-    <property name="child-model">model</property>
-    <signal name="row-deleted" handler="rows_changed_cb" swapped="yes"/>
-    <signal name="row-inserted" handler="rows_changed_cb" swapped="yes"/>
-  </object>
   <object class="GtkAdjustment" id="slider_adjustment">
     <property name="upper">100</property>
     <property name="step-increment">1</property>
@@ -63,7 +46,7 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="list_scrolled_window">
+                      <object class="GtkScrolledWindow">
                         <property name="width-request">400</property>
                         <property name="height-request">300</property>
                         <property name="can-focus">1</property>
@@ -72,38 +55,13 @@
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">etched-in</property>
                         <child>
-                          <object class="GtkTreeView" id="family_face_list">
-                            <property name="can-focus">1</property>
-                            <property name="model">filter_model</property>
-                            <property name="headers-visible">0</property>
-                            <property name="enable-search">0</property>
-                            <property name="fixed-height-mode">1</property>
-                            <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
-                            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
-                            <signal name="style-updated" handler="gtk_font_chooser_widget_set_cell_size" object="GtkFontChooserWidget" after="yes" swapped="yes"/>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection1">
-                                <property name="mode">browse</property>
-                                <signal name="changed" handler="selection_changed"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="family_face_column">
-                                <property name="sizing">fixed</property>
-                                <property name="title" translatable="yes">Font Family</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="family_face_cell">
-                                    <property name="ellipsize">end</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
+                          <object class="GtkListView" id="family_face_listview">
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">0</property>
                         <property name="width">3</property>
                       </packing>
                     </child>
