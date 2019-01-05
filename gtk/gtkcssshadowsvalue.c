@@ -288,20 +288,6 @@ gtk_css_shadows_value_get_shadows (const GtkCssValue  *shadows,
 }
 
 void
-_gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
-                                   cairo_t           *cr)
-{
-  guint i;
-
-  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
-
-  for (i = 0; i < shadows->len; i++)
-    {
-      _gtk_css_shadow_value_paint_icon (shadows->values[i], cr);
-    }
-}
-
-void
 gtk_css_shadows_value_snapshot_outset (const GtkCssValue   *shadows,
                                        GtkSnapshot         *snapshot,
                                        const GskRoundedRect*border_box)
