@@ -1362,7 +1362,7 @@ gtk_list_view_set_model (GtkListView *self,
       if (GTK_IS_SELECTION_MODEL (model))
         selection_model = GTK_SELECTION_MODEL (g_object_ref (model));
       else
-        selection_model = GTK_SELECTION_MODEL (gtk_multi_selection_new (model));
+        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
 
       gtk_list_item_manager_set_model (self->item_manager, selection_model);
 
