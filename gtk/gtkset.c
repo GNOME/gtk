@@ -210,7 +210,7 @@ gtk_set_remove_item (GtkSet   *set,
 }
 
 /* This is peculiar operation: Replace every number n >= first by n + shift
- * This is only supported for negatie if the shifting does not cause any
+ * This is only supported for negative shift if the shifting does not cause any
  * ranges to overlap.
  */
 void
