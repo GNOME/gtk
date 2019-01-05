@@ -1184,7 +1184,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           GdkKeymap *keymap = gdk_keymap_get_default ();
           GdkWin32Keymap *win32_keymap = GDK_WIN32_KEYMAP (keymap);
 
-          ligature = gdk_win32_keymap_fetch_ligature (keymap, event);
+          ligature = gdk_win32_keymap_fetch_ligature (win32_keymap, event);
 
           /* Work around the fact that event->keyval can't hold more
            * than 1 UCS-4 codepoint.
