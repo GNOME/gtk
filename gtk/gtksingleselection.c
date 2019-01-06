@@ -435,7 +435,7 @@ void
 gtk_single_selection_set_selected (GtkSingleSelection *self,
                                    guint               position)
 {
-  gpointer new_selected;
+  gpointer new_selected = NULL;
   guint old_position;
 
   g_return_if_fail (GTK_IS_SINGLE_SELECTION (self));
@@ -443,7 +443,9 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
   if (self->selected == position)
     return;
 
-  new_selected = g_list_model_get_item (self->model, position);
+  if (self->model)
+    new_selected = g_list_model_get_item (self->model, position);
+
   if (new_selected == NULL)
     position = GTK_INVALID_LIST_POSITION;
 
