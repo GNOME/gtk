@@ -253,14 +253,16 @@ configure_monitor (GdkMonitor *monitor)
   monitor->height_mm = height;
   monitor->geometry = disp_geometry;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
-  if (gdk_quartz_osx_version () >= GDK_OSX_MOUNTAIN_LION)
+  if (mode && gdk_quartz_osx_version () >= GDK_OSX_MOUNTAIN_LION)
+  {
     monitor->scale_factor = CGDisplayModeGetPixelWidth (mode) / CGDisplayModeGetWidth (mode);
+    CGDisplayModeRelease (mode);
+  }
   else
 #endif
     monitor->scale_factor = 1;
   monitor->refresh_rate = refresh_rate;
   monitor->subpixel_layout = GDK_SUBPIXEL_LAYOUT_UNKNOWN;
-  CGDisplayModeRelease (mode);
 }
 
 static void
