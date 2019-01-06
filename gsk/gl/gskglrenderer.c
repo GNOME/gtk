@@ -2736,14 +2736,12 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
   ops_push_modelview (&render_op_builder, &modelview);
-  cairo_rectangle_int_t render_extents;
 
-  /*cairo_region_get_extents (self->render_region, &render_extents);*/
   /* Initial clip is self->render_region! */
   if (self->render_region != NULL)
     {
       GskRoundedRect transformed_render_region = { 0, };
-      /*cairo_rectangle_int_t render_extents;*/
+      cairo_rectangle_int_t render_extents;
 
       cairo_region_get_extents (self->render_region, &render_extents);
 
@@ -2763,21 +2761,11 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                                              viewport->size.width,
                                              viewport->size.height));
     }
-  /*gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, viewport, 0.0f);*/
-
 
   if (fbo_id != 0)
     ops_set_render_target (&render_op_builder, fbo_id);
 
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
-
-  /*if (self->render_region)*/
-  /*add_rect_outline_ops (self, &render_op_builder,*/
-                        /*&GRAPHENE_RECT_INIT (*/
-                                             /*render_extents.x,*/
-                                             /*render_extents.y,*/
-                                             /*render_extents.width,*/
-                                             /*render_extents.height));*/
 
   /* We correctly reset the state everywhere */
   g_assert_cmpint (render_op_builder.current_render_target, ==, fbo_id);
