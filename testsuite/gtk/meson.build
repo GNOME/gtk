@@ -44,6 +44,7 @@ tests = [
   ['regression-tests'],
   ['scrolledwindow'],
   ['searchbar'],
+  ['slicelistmodel'],
   ['sortlistmodel'],
   ['spinbutton'],
   ['stylecontext'],
