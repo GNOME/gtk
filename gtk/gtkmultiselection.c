@@ -233,12 +233,11 @@ gtk_multi_selection_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MODEL:
+      gtk_multi_selection_clear_model (self);
       self->model = g_value_dup_object (value);
-      g_warn_if_fail (self->model != NULL);
-      g_signal_connect (self->model,
-                        "items-changed",
-                        G_CALLBACK (gtk_multi_selection_items_changed_cb),
-                        self);
+      if (self->model)
+        g_signal_connect (self->model, "items-changed",
+                          G_CALLBACK (gtk_multi_selection_items_changed_cb), self);
       break;
 
     default:
