@@ -9,15 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "message.h"
+
 static GdkPixbuf *avatar_pixbuf_other;
 static GtkWidget *window = NULL;
-
-#define GTK_TYPE_MESSAGE		  (gtk_message_get_type ())
-#define GTK_MESSAGE(message)		  (G_TYPE_CHECK_INSTANCE_CAST ((message), GTK_TYPE_MESSAGE, GtkMessage))
-#define GTK_MESSAGE_CLASS(klass)		  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MESSAGE, GtkMessageClass))
-#define GTK_IS_MESSAGE(message)		  (G_TYPE_CHECK_INSTANCE_TYPE ((message), GTK_TYPE_MESSAGE))
-#define GTK_IS_MESSAGE_CLASS(klass)	  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MESSAGE))
-#define GTK_MESSAGE_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MESSAGE, GtkMessageClass))
 
 #define GTK_TYPE_MESSAGE_ROW		  (gtk_message_row_get_type ())
 #define GTK_MESSAGE_ROW(message_row)		  (G_TYPE_CHECK_INSTANCE_CAST ((message_row), GTK_TYPE_MESSAGE_ROW, GtkMessageRow))
@@ -26,32 +21,9 @@ static GtkWidget *window = NULL;
 #define GTK_IS_MESSAGE_ROW_CLASS(klass)	  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MESSAGE_ROW))
 #define GTK_MESSAGE_ROW_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MESSAGE_ROW, GtkMessageRowClass))
 
-typedef struct _GtkMessage   GtkMessage;
-typedef struct _GtkMessageClass  GtkMessageClass;
 typedef struct _GtkMessageRow   GtkMessageRow;
 typedef struct _GtkMessageRowClass  GtkMessageRowClass;
 typedef struct _GtkMessageRowPrivate  GtkMessageRowPrivate;
-
-
-struct _GtkMessage
-{
-  GObject parent;
-
-  guint id;
-  char *sender_name;
-  char *sender_nick;
-  char *message;
-  gint64 time;
-  guint reply_to;
-  char *resent_by;
-  int n_favorites;
-  int n_reshares;
-};
-
-struct _GtkMessageClass
-{
-  GObjectClass parent_class;
-};
 
 struct _GtkMessageRow
 {
@@ -83,83 +55,9 @@ struct _GtkMessageRowPrivate
   GtkButton *expand_button;
 };
 
-GType      gtk_message_get_type  (void) G_GNUC_CONST;
 GType      gtk_message_row_get_type  (void) G_GNUC_CONST;
 
-G_DEFINE_TYPE (GtkMessage, gtk_message, G_TYPE_OBJECT);
-
-static void
-gtk_message_finalize (GObject *obj)
-{
-  GtkMessage *msg = GTK_MESSAGE (obj);
-
-  g_free (msg->sender_name);
-  g_free (msg->sender_nick);
-  g_free (msg->message);
-  g_free (msg->resent_by);
-
-  G_OBJECT_CLASS (gtk_message_parent_class)->finalize (obj);
-}
-static void
-gtk_message_class_init (GtkMessageClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = gtk_message_finalize;
-}
-
-static void
-gtk_message_init (GtkMessage *msg)
-{
-}
-
-static void
-gtk_message_parse (GtkMessage *msg, const char *str)
-{
-  char **strv;
-  int i;
-
-  strv = g_strsplit (str, "|", 0);
-
-  i = 0;
-  msg->id = strtol (strv[i++], NULL, 10);
-  msg->sender_name = g_strdup (strv[i++]);
-  msg->sender_nick = g_strdup (strv[i++]);
-  msg->message = g_strdup (strv[i++]);
-  msg->time = strtol (strv[i++], NULL, 10);
-  if (strv[i])
-    {
-      msg->reply_to = strtol (strv[i++], NULL, 10);
-      if (strv[i])
-        {
-          if (*strv[i])
-            msg->resent_by = g_strdup (strv[i]);
-          i++;
-          if (strv[i])
-            {
-              msg->n_favorites = strtol (strv[i++], NULL, 10);
-              if (strv[i])
-                {
-                  msg->n_reshares = strtol (strv[i++], NULL, 10);
-                }
-
-            }
-        }
-    }
-
-  g_strfreev (strv);
-}
-
-static GtkMessage *
-gtk_message_new (const char *str)
-{
-  GtkMessage *msg;
-  msg = g_object_new (gtk_message_get_type (), NULL);
-  gtk_message_parse (msg, str);
-  return msg;
-}
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkMessageRow, gtk_message_row, GTK_TYPE_LIST_BOX_ROW);
-
 
 static void
 gtk_message_row_update (GtkMessageRow *row)
@@ -333,15 +231,48 @@ row_activated (GtkListBox *listbox, GtkListBoxRow *row)
   gtk_message_row_expand (GTK_MESSAGE_ROW (row));
 }
 
+static void
+update_count (GtkListBox *listbox, GtkLabel *label)
+{
+  GList *children = gtk_container_get_children (GTK_CONTAINER (listbox));
+  guint n_items = g_list_length (children);
+  g_list_free (children);
+
+  char *text = g_strdup_printf ("%u rows", n_items);
+  gtk_label_set_label (label, text);
+  g_free (text);
+}
+
+static GtkWidget *header_label;
+
+static void
+add_more (GtkListBox *listbox)
+{
+  GBytes *data;
+  char **lines;
+  int i;
+
+  data = g_resources_lookup_data ("/listbox/messages.txt", 0, NULL);
+  lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
+
+  for (i = 0; lines[i] != NULL && *lines[i]; i++)
+    {
+      GtkMessage *message = gtk_message_new (lines[i]);
+      GtkMessageRow *row = gtk_message_row_new (message);
+      gtk_container_add (GTK_CONTAINER (listbox), GTK_WIDGET (row));
+    }
+
+  g_strfreev (lines);
+  g_bytes_unref (data);
+
+  update_count (listbox, GTK_LABEL (header_label));
+}
+
 GtkWidget *
 do_listbox (GtkWidget *do_widget)
 {
   GtkWidget *scrolled, *listbox, *vbox, *label;
-  GtkMessage *message;
-  GtkMessageRow *row;
-  GBytes *data;
-  char **lines;
-  int i;
+  GtkWidget *header, *more;
 
   if (!window)
     {
@@ -350,14 +281,26 @@ do_listbox (GtkWidget *do_widget)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "List Box");
-      gtk_window_set_default_size (GTK_WINDOW (window),
-                                   400, 600);
+      gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
 
       /* NULL window variable when window is closed */
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
                         &window);
+
+      listbox = gtk_list_box_new ();
+
+      header = gtk_header_bar_new ();
+      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
+      gtk_header_bar_set_title (GTK_HEADER_BAR (header), "List View");
+      header_label = gtk_label_new ("");
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), header_label);
+      more = gtk_button_new_from_icon_name ("list-add");
+
+      g_signal_connect_swapped (more, "clicked", G_CALLBACK (add_more), listbox);
+
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), more);
+      gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
       gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -367,26 +310,14 @@ do_listbox (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
       gtk_widget_set_vexpand (scrolled, TRUE);
       gtk_box_pack_start (GTK_BOX (vbox), scrolled);
-      listbox = gtk_list_box_new ();
       gtk_container_add (GTK_CONTAINER (scrolled), listbox);
 
       gtk_list_box_set_sort_func (GTK_LIST_BOX (listbox), (GtkListBoxSortFunc)gtk_message_row_sort, listbox, NULL);
       gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (listbox), FALSE);
       g_signal_connect (listbox, "row-activated", G_CALLBACK (row_activated), NULL);
 
-      data = g_resources_lookup_data ("/listbox/messages.txt", 0, NULL);
-      lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
-
-      for (i = 0; lines[i] != NULL && *lines[i]; i++)
-        {
-          message = gtk_message_new (lines[i]);
-          row = gtk_message_row_new (message);
-          gtk_widget_show (GTK_WIDGET (row));
-          gtk_container_add (GTK_CONTAINER (listbox), GTK_WIDGET (row));
-        }
-
-      g_strfreev (lines);
-      g_bytes_unref (data);
+      add_more (listbox);
+      update_count (listbox, header_label);
     }
 
   if (!gtk_widget_get_visible (window))
