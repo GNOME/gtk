@@ -203,7 +203,6 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
       if (i == added)
         {
           /* the item really was deleted */
-          g_print ("  %u => ☠\n", self->selected);
           g_clear_object (&self->selected_item);
           if (self->autoselect)
             {
