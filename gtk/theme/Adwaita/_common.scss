@@ -1216,6 +1216,7 @@ spinbutton {
       &:backdrop:disabled {
         color: transparentize($backdrop_insensitive_color,0.7);
         background-color: transparent;
+        background-image: none;
         border-style: none none none solid; // It is needed or it gets overridden
 
         &:dir(rtl) { border-style: none solid none none; }

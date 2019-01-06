@@ -513,7 +513,7 @@ spinbutton:not(.vertical) button:active { background-color: rgba(0, 0, 0, 0.1); 
 
 spinbutton:not(.vertical) button:backdrop { color: #96999a; background-color: transparent; border-color: rgba(192, 192, 189, 0.3); transition: 200ms ease-out; }
 
-spinbutton:not(.vertical) button:backdrop:disabled { color: rgba(195, 195, 192, 0.3); background-color: transparent; border-style: none none none solid; }
+spinbutton:not(.vertical) button:backdrop:disabled { color: rgba(195, 195, 192, 0.3); background-color: transparent; background-image: none; border-style: none none none solid; }
 
 spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) { border-style: none solid none none; }
 
