@@ -545,7 +545,7 @@ test_effect (void)
   GtkWidget *win;
   GtkWidget *overlay;
   GtkWidget *button;
-  GtkWidget *image;
+  GtkWidget *picture;
   GtkWidget *sw;
   GtkWidget *box;
   GtkWidget *label;
@@ -566,7 +566,7 @@ test_effect (void)
   gtk_widget_set_valign (button, GTK_ALIGN_START);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-  gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
+  /*gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);*/
 
   button = gtk_button_new_with_label ("Maybe this one?");
   label = gtk_bin_get_child (GTK_BIN (button));
@@ -577,7 +577,7 @@ test_effect (void)
   gtk_widget_set_valign (button, GTK_ALIGN_END);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-  gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
+  /*gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);*/
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -587,17 +587,17 @@ test_effect (void)
                                   GTK_POLICY_AUTOMATIC);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (sw), box);
-  image = gtk_image_new ();
+  picture = gtk_picture_new ();
   if (g_file_test ("portland-rose.jpg", G_FILE_TEST_EXISTS))
-    gtk_image_set_from_file (GTK_IMAGE (image), "portland-rose.jpg");
+    gtk_picture_set_filename (GTK_PICTURE (picture), "portland-rose.jpg");
   else if (g_file_test ("tests/portland-rose.jpg", G_FILE_TEST_EXISTS))
-    gtk_image_set_from_file (GTK_IMAGE (image), "tests/portland-rose.jpg");
+    gtk_picture_set_filename (GTK_PICTURE (picture), "tests/portland-rose.jpg");
   else if (g_file_test ("../tests/portland-rose.jpg", G_FILE_TEST_EXISTS))
-    gtk_image_set_from_file (GTK_IMAGE (image), "../tests/portland-rose.jpg");
+    gtk_picture_set_filename (GTK_PICTURE (picture), "../tests/portland-rose.jpg");
   else
     g_error ("portland-rose.jpg not found. No rose for you!\n");
 
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (box), picture);
 
   return win;
 }
