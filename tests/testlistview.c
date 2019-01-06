@@ -106,6 +106,8 @@ got_files (GObject      *enumerate,
                                       store);
 }
 
+static gboolean invert_sort;
+
 static int
 compare_files (gconstpointer first,
                gconstpointer second,
@@ -133,6 +135,9 @@ compare_files (gconstpointer first,
   second_path = g_file_get_path (second_file);
 
   result = strcasecmp (first_path, second_path);
+
+  if (invert_sort)
+    result = - result;
 
   g_free (first_path);
   g_free (second_path);
@@ -340,16 +345,63 @@ match_file (gpointer item, gpointer data)
   return result;
 }
 
+static void
+resort_model (GListModel *model)
+{
+  if (GTK_IS_SELECTION_MODEL (model))
+    {
+      resort_model (gtk_selection_model_get_model (GTK_SELECTION_MODEL (model)));
+    }
+  else if (GTK_IS_FILTER_LIST_MODEL (model))
+    {
+      resort_model (gtk_filter_list_model_get_model (GTK_FILTER_LIST_MODEL (model)));
+    }
+  else if (GTK_IS_SORT_LIST_MODEL (model))
+    {
+      gtk_sort_list_model_resort (GTK_SORT_LIST_MODEL (model));
+    }
+  else if (GTK_IS_TREE_LIST_MODEL (model))
+    {
+      int i;
+
+      resort_model (gtk_tree_list_model_get_model (GTK_TREE_LIST_MODEL (model)));
+
+      for (i = 0; i < g_list_model_get_n_items (model); i++)
+        {
+          GtkTreeListRow *row;
+          row = gtk_tree_list_model_get_row (GTK_TREE_LIST_MODEL (model), i);
+          if (gtk_tree_list_row_get_expanded (row))
+            {
+              resort_model (gtk_tree_list_row_get_children (row));
+            }
+        }
+    }
+}
+
+static void
+toggle_sort (GtkButton *button, GtkListView *view)
+{
+  invert_sort = !invert_sort;
+
+  gtk_button_set_icon_name (button, invert_sort ? "view-sort-descending" : "view-sort-ascending");
+
+  resort_model (gtk_list_view_get_model (view));
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *win, *vbox, *sw, *listview, *search_entry, *statusbar;
+  GtkWidget *hbox, *button;
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
+  GtkSelectionModel *selection;
   GFile *root;
 
   gtk_init ();
+
+  listview = gtk_list_view_new ();
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
@@ -357,16 +409,21 @@ main (int argc, char *argv[])
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (win), vbox);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   search_entry = gtk_search_entry_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), search_entry);
+  gtk_container_add (GTK_CONTAINER (hbox), search_entry);
+  gtk_widget_set_hexpand (search_entry, TRUE);
+  button = gtk_button_new_from_icon_name ("view-sort-ascending");
+  g_signal_connect (button, "clicked", G_CALLBACK (toggle_sort), listview);
+  gtk_container_add (GTK_CONTAINER (hbox), button);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_container_add (GTK_CONTAINER (vbox), sw);
 
-  listview = gtk_list_view_new ();
   gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
                                setup_widget,
                                NULL,
@@ -391,8 +448,10 @@ main (int argc, char *argv[])
                                       search_entry,
                                       NULL);
   g_signal_connect_swapped (search_entry, "search-changed", G_CALLBACK (gtk_filter_list_model_refilter), filter);
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (filter)));
 
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (filter));
+
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
