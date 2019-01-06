@@ -160,31 +160,7 @@ gtk_set_remove_range (GtkSet *set,
       int cmp = range_compare (&s, r);
 
       if (cmp < 0)
-        {
-          if (first > -1)
-            {
-              Range a[2];
-              int k = 0;
-
-              r = &g_array_index (set->ranges, Range, first);
-              if (r->first < s.first)
-                {
-                  a[k].first = r->first;
-                  a[k].n_items = s.first - r->first;
-                  k++;
-                }
-              r = &g_array_index (set->ranges, Range, last);
-              if (r->first + r->n_items > s.first + s.n_items)
-                {
-                  a[k].first = s.first + s.n_items;
-                  a[k].n_items = r->first + r->n_items - a[k].first;
-                  k++;
-                }
-              g_array_remove_range (set->ranges, first, last - first + 1);
-              if (k > 0)
-                g_array_insert_vals (set->ranges, first, a, k);
-            }
-        }
+        break;
 
       if (cmp == 0)
         {
@@ -193,6 +169,31 @@ gtk_set_remove_range (GtkSet *set,
           last = i;
         }
     }
+
+  if (first > -1)
+    {
+      Range *r;
+      Range a[2];
+      int k = 0;
+
+      r = &g_array_index (set->ranges, Range, first);
+      if (r->first < s.first)
+        {
+          a[k].first = r->first;
+          a[k].n_items = s.first - r->first;
+          k++;
+        }
+      r = &g_array_index (set->ranges, Range, last);
+      if (r->first + r->n_items > s.first + s.n_items)
+        {
+          a[k].first = s.first + s.n_items;
+          a[k].n_items = r->first + r->n_items - a[k].first;
+          k++;
+        }
+      g_array_remove_range (set->ranges, first, last - first + 1);
+      if (k > 0)
+        g_array_insert_vals (set->ranges, first, a, k);
+   }
 }
 
 void
@@ -227,3 +228,18 @@ gtk_set_shift (GtkSet *set,
         r->first += shift;
     }
 }
+
+#if 0
+void
+gtk_set_dump (GtkSet *set)
+{
+  int i;
+
+  for (i = 0; i < set->ranges->len; i++)
+    {
+      Range *r = &g_array_index (set->ranges, Range, i);
+      g_print (" %u:%u", r->first, r->n_items);
+    }
+  g_print ("\n");
+}
+#endif
