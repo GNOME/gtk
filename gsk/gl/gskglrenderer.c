@@ -1994,20 +1994,19 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   int i;
   static const struct {
     const char *name;
-    const char *vs;
     const char *fs;
   } program_definitions[] = {
-    { "blit",            "blit.vs.glsl",  "blit.fs.glsl" },
-    { "color",           "blit.vs.glsl",  "color.fs.glsl" },
-    { "coloring",        "blit.vs.glsl",  "coloring.fs.glsl" },
-    { "color matrix",    "blit.vs.glsl",  "color_matrix.fs.glsl" },
-    { "linear gradient", "blit.vs.glsl",  "linear_gradient.fs.glsl" },
-    { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
-    { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
-    { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
-    { "unblurred outset shadow",   "blit.vs.glsl",  "unblurred_outset_shadow.fs.glsl" },
-    { "border",          "blit.vs.glsl",  "border.fs.glsl" },
-    { "cross fade",      "blit.vs.glsl",  "cross_fade.fs.glsl" },
+    { "blit",            "blit.fs.glsl" },
+    { "color",           "color.fs.glsl" },
+    { "coloring",        "coloring.fs.glsl" },
+    { "color matrix",    "color_matrix.fs.glsl" },
+    { "linear gradient", "linear_gradient.fs.glsl" },
+    { "blur",            "blur.fs.glsl" },
+    { "inset shadow",    "inset_shadow.fs.glsl" },
+    { "outset shadow",   "outset_shadow.fs.glsl" },
+    { "unblurred outset shadow",   "unblurred_outset_shadow.fs.glsl" },
+    { "border",          "border.fs.glsl" },
+    { "cross fade",      "cross_fade.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -2048,13 +2047,17 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
 #endif
 
+  gsk_shader_builder_set_common_vertex_shader (builder, "blit.vs.glsl",
+                                               &shader_error);
+
+  g_assert_no_error (shader_error);
+
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     {
       Program *prog = &self->programs[i];
 
       prog->index = i;
       prog->id = gsk_shader_builder_create_program (builder,
-                                                    program_definitions[i].vs,
                                                     program_definitions[i].fs,
                                                     &shader_error);
 
@@ -2063,7 +2066,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
           g_propagate_prefixed_error (error, shader_error,
                                       "Unable to create '%s' program (from %s and %s):\n",
                                       program_definitions[i].name,
-                                      program_definitions[i].vs,
+                                      "blit.vs.glsl",
                                       program_definitions[i].fs);
 
           g_object_unref (builder);
