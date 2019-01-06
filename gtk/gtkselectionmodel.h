@@ -108,6 +108,9 @@ gboolean                gtk_selection_model_select_all          (GtkSelectionMod
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_all        (GtkSelectionModel      *model);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *            gtk_selection_model_get_model           (GtkSelectionModel      *model);
+
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL
 void                    gtk_selection_model_selection_changed   (GtkSelectionModel      *model,

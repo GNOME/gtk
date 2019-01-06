@@ -21,6 +21,7 @@
 
 #include "gtkselectionmodel.h"
 
+#include "gtkintl.h"
 #include "gtkmarshalers.h"
 
 /**
@@ -156,6 +157,17 @@ gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
   g_signal_set_va_marshaller (signals[SELECTION_CHANGED],
                               GTK_TYPE_SELECTION_MODEL,
                               _gtk_marshal_VOID__UINT_UINTv);
+
+  g_object_interface_install_property (iface,
+    g_param_spec_object ("model",
+                         P_("Model"),
+                         P_("List managed by this selection"),
+                         G_TYPE_LIST_MODEL,
+                         G_PARAM_READWRITE
+                         | G_PARAM_CONSTRUCT_ONLY
+                         | G_PARAM_EXPLICIT_NOTIFY
+                         | G_PARAM_STATIC_STRINGS));
+
 }
 
 /**
@@ -252,6 +264,18 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->unselect_all (model);
+}
+
+GListModel *
+gtk_selection_model_get_model (GtkSelectionModel *model)
+{
+  GListModel *child;
+
+  g_object_get (model, "model", &child, NULL);
+  if (child)
+    g_object_unref (child);
+
+  return child;
 }
 
 void

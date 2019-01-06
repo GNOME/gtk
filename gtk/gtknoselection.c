@@ -48,9 +48,11 @@ struct _GtkNoSelectionClass
 
 enum {
   PROP_0,
+
+  /* selectionmodel */
   PROP_MODEL,
 
-  N_PROPS,
+  N_PROPS = PROP_MODEL
 };
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
@@ -177,19 +179,7 @@ gtk_no_selection_class_init (GtkNoSelectionClass *klass)
   gobject_class->set_property = gtk_no_selection_set_property;
   gobject_class->dispose = gtk_no_selection_dispose;
 
-  /**
-   * GtkNoSelection:model
-   *
-   * The list managed by this selection
-   */
-  properties[PROP_MODEL] =
-    g_param_spec_object ("model",
-                         P_("Model"),
-                         P_("List managed by this selection"),
-                         G_TYPE_LIST_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  g_object_class_override_property (gobject_class, PROP_MODEL, "model");
 }
 
 static void
