@@ -779,12 +779,14 @@ render_transform_node (GskGLRenderer   *self,
                        GskRenderNode   *node,
                        RenderOpBuilder *builder)
 {
+  const float scale = ops_get_scale (builder);
   GskRenderNode *child = gsk_transform_node_get_child (node);
   graphene_matrix_t transform, transformed_mv;
 
   graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
   graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
-  graphene_matrix_translate (&transformed_mv, &(graphene_point3d_t) { builder->dx, builder->dy, 0});
+  graphene_matrix_translate (&transformed_mv,
+                             &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
 
   /* We just added the offset to the new modelview matrix, so the following
    * cases dont' have to care about builder->dx/dy! */
