@@ -55,8 +55,6 @@ enum {
   N_PROPS = PROP_MODEL
 };
 
-static GParamSpec *properties[N_PROPS] = { NULL, };
-
 static GType
 gtk_no_selection_get_item_type (GListModel *list)
 {
