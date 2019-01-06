@@ -333,7 +333,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/slicelistmodel/create", test_create);
   g_test_add_func ("/slicelistmodel/set-model", test_set_model);
   g_test_add_func ("/slicelistmodel/set-slice", test_set_slice);
+#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/slicelistmodel/changes", test_changes);
+#endif
 
   return g_test_run ();
 }
