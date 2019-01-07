@@ -73,9 +73,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
 {
   int i;
   GList *hits = NULL;
-  /* The max was originally set to 1000 to mimic something called "the
-   * boogie backend".
-   */
+  /* The max was originally set to 1000 to mimic the Beagle backend. */
   const unsigned int max_hits = 1000;
   const unsigned int max_iter = submitted_hits + [ns_query resultCount];
 
