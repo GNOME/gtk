@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "gtk/gtkcssrbtreeprivate.h"
+#include "gtk/gtkrbtreeprivate.h"
 
 typedef struct _Node Node;
 typedef struct _Aug Aug;
@@ -35,11 +35,11 @@ struct _Aug {
 };
 
 static void
-augment (GtkCssRbTree *tree,
-         gpointer      _aug,
-         gpointer      _node,
-         gpointer      left,
-         gpointer      right)
+augment (GtkRbTree *tree,
+         gpointer   _aug,
+         gpointer   _node,
+         gpointer   left,
+         gpointer   right)
 {
   Aug *aug = _aug;
   
@@ -47,33 +47,33 @@ augment (GtkCssRbTree *tree,
 
   if (left)
     {
-      Aug *left_aug = gtk_css_rb_tree_get_augment (tree, left);
+      Aug *left_aug = gtk_rb_tree_get_augment (tree, left);
 
       aug->n_items += left_aug->n_items;
     }
 
   if (right)
     {
-      Aug *right_aug = gtk_css_rb_tree_get_augment (tree, right);
+      Aug *right_aug = gtk_rb_tree_get_augment (tree, right);
 
       aug->n_items += right_aug->n_items;
     }
 }
 
 static Node *
-get (GtkCssRbTree *tree,
-     guint         pos)
+get (GtkRbTree *tree,
+     guint      pos)
 {
   Node *node, *tmp;
 
-  node = gtk_css_rb_tree_get_root (tree);
+  node = gtk_rb_tree_get_root (tree);
 
   while (node)
     {
-      tmp = gtk_css_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_get_left (tree, node);
       if (tmp)
         {
-          Aug *aug = gtk_css_rb_tree_get_augment (tree, tmp);
+          Aug *aug = gtk_rb_tree_get_augment (tree, tmp);
           if (pos < aug->n_items)
             {
               node = tmp;
@@ -86,45 +86,45 @@ get (GtkCssRbTree *tree,
         break;
       pos--;
 
-      node = gtk_css_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_get_right (tree, node);
     }
 
   return node;
 }
 
 static void
-add (GtkCssRbTree *tree,
-     guint         pos)
+add (GtkRbTree *tree,
+     guint      pos)
 {
   Node *node = get (tree, pos);
 
-  gtk_css_rb_tree_insert_before (tree, node);
+  gtk_rb_tree_insert_before (tree, node);
 }
 
 static void
-delete (GtkCssRbTree *tree,
-        guint         pos)
+delete (GtkRbTree *tree,
+        guint      pos)
 {
   Node *node = get (tree, pos);
 
-  gtk_css_rb_tree_remove (tree, node);
+  gtk_rb_tree_remove (tree, node);
 }
 
 static guint
-print_node (GtkCssRbTree *tree,
-            Node         *node,
-            guint         depth,
-            const char   *prefix,
-            guint         n)
+print_node (GtkRbTree  *tree,
+            Node       *node,
+            guint       depth,
+            const char *prefix,
+            guint       n)
 {
   Node *child;
 
-  child = gtk_css_rb_tree_get_left (tree, node);
+  child = gtk_rb_tree_get_left (tree, node);
   if (child)
     n = print_node (tree, child, depth + 1, "/", n);
   g_print ("%*s %u\n", 2 * depth, prefix, n);
   n++;
-  child = gtk_css_rb_tree_get_right (tree, node);
+  child = gtk_rb_tree_get_right (tree, node);
   if (child)
     n = print_node (tree, child, depth + 1, "\\", n);
 
@@ -132,18 +132,18 @@ print_node (GtkCssRbTree *tree,
 }
 
 static void
-print (GtkCssRbTree *tree)
+print (GtkRbTree *tree)
 {
-  print_node (tree, gtk_css_rb_tree_get_root (tree), 0, "", 0);
+  print_node (tree, gtk_rb_tree_get_root (tree), 0, "", 0);
 }
 
 static void
 test_crash (void)
 {
-  GtkCssRbTree *tree;
+  GtkRbTree *tree;
   guint i;
 
-  tree = gtk_css_rb_tree_new (Node, Aug, augment, NULL, NULL);
+  tree = gtk_rb_tree_new (Node, Aug, augment, NULL, NULL);
 
   for (i = 0; i < 300; i++)
     add (tree, i);
@@ -270,7 +270,7 @@ test_crash (void)
   print (tree);
   delete (tree, 102);
 
-  gtk_css_rb_tree_unref (tree);
+  gtk_rb_tree_unref (tree);
 }
 
 int

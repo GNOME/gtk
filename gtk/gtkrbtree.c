@@ -17,51 +17,51 @@
 
 #include "config.h"
 
-#include "gtkcssrbtreeprivate.h"
+#include "gtkrbtreeprivate.h"
 
 #include "gtkdebug.h"
 
-typedef struct _GtkCssRbNode GtkCssRbNode;
+typedef struct _GtkRbNode GtkRbNode;
 
-struct _GtkCssRbTree
+struct _GtkRbTree
 {
   guint ref_count;
 
   gsize element_size;
   gsize augment_size;
-  GtkCssRbTreeAugmentFunc augment_func;
+  GtkRbTreeAugmentFunc augment_func;
   GDestroyNotify clear_func;
   GDestroyNotify clear_augment_func;
 
-  GtkCssRbNode *root;
+  GtkRbNode *root;
 };
 
-struct _GtkCssRbNode
+struct _GtkRbNode
 {
   guint red :1;
   guint dirty :1;
 
-  GtkCssRbNode *left;
-  GtkCssRbNode *right;
-  GtkCssRbNode *parent;
+  GtkRbNode *left;
+  GtkRbNode *right;
+  GtkRbNode *parent;
 };
 
-#define NODE_FROM_POINTER(ptr) ((GtkCssRbNode *) ((ptr) ? (((guchar *) (ptr)) - sizeof (GtkCssRbNode)) : NULL))
-#define NODE_TO_POINTER(node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkCssRbNode)) : NULL))
-#define NODE_TO_AUG_POINTER(tree, node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkCssRbNode) + (tree)->element_size) : NULL))
+#define NODE_FROM_POINTER(ptr) ((GtkRbNode *) ((ptr) ? (((guchar *) (ptr)) - sizeof (GtkRbNode)) : NULL))
+#define NODE_TO_POINTER(node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode)) : NULL))
+#define NODE_TO_AUG_POINTER(tree, node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode) + (tree)->element_size) : NULL))
 
 static inline gsize
-gtk_css_rb_node_get_size (GtkCssRbTree *tree)
+gtk_rb_node_get_size (GtkRbTree *tree)
 {
-  return sizeof (GtkCssRbNode) + tree->element_size + tree->augment_size;
+  return sizeof (GtkRbNode) + tree->element_size + tree->augment_size;
 }
 
-static GtkCssRbNode *
-gtk_css_rb_node_new (GtkCssRbTree *tree)
+static GtkRbNode *
+gtk_rb_node_new (GtkRbTree *tree)
 {
-  GtkCssRbNode *result;
+  GtkRbNode *result;
 
-  result = g_slice_alloc0 (gtk_css_rb_node_get_size (tree));
+  result = g_slice_alloc0 (gtk_rb_node_get_size (tree));
 
   result->red = TRUE;
   result->dirty = TRUE;
@@ -70,35 +70,35 @@ gtk_css_rb_node_new (GtkCssRbTree *tree)
 }
 
 static void
-gtk_css_rb_node_free (GtkCssRbTree *tree,
-                      GtkCssRbNode *node)
+gtk_rb_node_free (GtkRbTree *tree,
+                  GtkRbNode *node)
 {
   if (tree->clear_func)
     tree->clear_func (NODE_TO_POINTER (node));
   if (tree->clear_augment_func)
     tree->clear_augment_func (NODE_TO_AUG_POINTER (tree, node));
 
-  g_slice_free1 (gtk_css_rb_node_get_size (tree), node);
+  g_slice_free1 (gtk_rb_node_get_size (tree), node);
 }
 
 static void
-gtk_css_rb_node_free_deep (GtkCssRbTree *tree,
-                           GtkCssRbNode *node)
+gtk_rb_node_free_deep (GtkRbTree *tree,
+                       GtkRbNode *node)
 {
-  GtkCssRbNode *right = node->right;
+  GtkRbNode *right = node->right;
 
   if (node->left)
-    gtk_css_rb_node_free_deep (tree, node->left);
+    gtk_rb_node_free_deep (tree, node->left);
 
-  gtk_css_rb_node_free (tree, node);
+  gtk_rb_node_free (tree, node);
 
   if (right)
-    gtk_css_rb_node_free_deep (tree, right);
+    gtk_rb_node_free_deep (tree, right);
 }
 
 static void
-gtk_css_rb_node_mark_dirty (GtkCssRbNode *node,
-                            gboolean      mark_parent)
+gtk_rb_node_mark_dirty (GtkRbNode *node,
+                        gboolean   mark_parent)
 {
   if (node->dirty)
     return;
@@ -106,12 +106,12 @@ gtk_css_rb_node_mark_dirty (GtkCssRbNode *node,
   node->dirty = TRUE;
 
   if (mark_parent && node->parent)
-    gtk_css_rb_node_mark_dirty (node->parent, TRUE);
+    gtk_rb_node_mark_dirty (node->parent, TRUE);
 }
 
 static void
-gtk_css_rb_node_clean (GtkCssRbTree *tree,
-                       GtkCssRbNode *node)
+gtk_rb_node_clean (GtkRbTree *tree,
+                   GtkRbNode *node)
 {
   if (!node->dirty)
     return;
@@ -125,8 +125,8 @@ gtk_css_rb_node_clean (GtkCssRbTree *tree,
                         NODE_TO_POINTER (node->right));
 }
 
-static GtkCssRbNode *
-gtk_css_rb_node_get_first (GtkCssRbNode *node)
+static GtkRbNode *
+gtk_rb_node_get_first (GtkRbNode *node)
 {
   while (node->left)
     node = node->left;
@@ -134,8 +134,8 @@ gtk_css_rb_node_get_first (GtkCssRbNode *node)
   return node;
 }
 
-static GtkCssRbNode *
-gtk_css_rb_node_get_last (GtkCssRbNode *node)
+static GtkRbNode *
+gtk_rb_node_get_last (GtkRbNode *node)
 {
   while (node->right)
     node = node->right;
@@ -143,13 +143,13 @@ gtk_css_rb_node_get_last (GtkCssRbNode *node)
   return node;
 }
 
-static GtkCssRbNode *
-gtk_css_rb_node_get_previous (GtkCssRbNode *node)
+static GtkRbNode *
+gtk_rb_node_get_previous (GtkRbNode *node)
 {
-  GtkCssRbNode *parent;
+  GtkRbNode *parent;
 
   if (node->left)
-    return gtk_css_rb_node_get_last (node->left);
+    return gtk_rb_node_get_last (node->left);
 
   for (parent = node->parent; parent != NULL; parent = node->parent)
     {
@@ -162,13 +162,13 @@ gtk_css_rb_node_get_previous (GtkCssRbNode *node)
   return NULL;
 }
 
-static GtkCssRbNode *
-gtk_css_rb_node_get_next (GtkCssRbNode *node)
+static GtkRbNode *
+gtk_rb_node_get_next (GtkRbNode *node)
 {
-  GtkCssRbNode *parent;
+  GtkRbNode *parent;
 
   if (node->right)
-    return gtk_css_rb_node_get_first (node->right);
+    return gtk_rb_node_get_first (node->right);
 
   for (parent = node->parent; parent != NULL; parent = node->parent)
     {
@@ -182,10 +182,10 @@ gtk_css_rb_node_get_next (GtkCssRbNode *node)
 }
 
 static void
-gtk_css_rb_node_rotate_left (GtkCssRbTree *tree,
-                             GtkCssRbNode *node)
+gtk_rb_node_rotate_left (GtkRbTree *tree,
+                         GtkRbNode *node)
 {
-  GtkCssRbNode *right;
+  GtkRbNode *right;
 
   right = node->right;
 
@@ -209,15 +209,15 @@ gtk_css_rb_node_rotate_left (GtkCssRbTree *tree,
   right->left = node;
   node->parent = right;
 
-  gtk_css_rb_node_mark_dirty (node, FALSE);
-  gtk_css_rb_node_mark_dirty (right, FALSE);
+  gtk_rb_node_mark_dirty (node, FALSE);
+  gtk_rb_node_mark_dirty (right, FALSE);
 }
 
 static void
-gtk_css_rb_node_rotate_right (GtkCssRbTree *tree,
-                              GtkCssRbNode *node)
+gtk_rb_node_rotate_right (GtkRbTree *tree,
+                          GtkRbNode *node)
 {
-  GtkCssRbNode *left;
+  GtkRbNode *left;
 
   left = node->left;
 
@@ -242,12 +242,12 @@ gtk_css_rb_node_rotate_right (GtkCssRbTree *tree,
   left->right = node;
   node->parent = left;
 
-  gtk_css_rb_node_mark_dirty (node, FALSE);
-  gtk_css_rb_node_mark_dirty (left, FALSE);
+  gtk_rb_node_mark_dirty (node, FALSE);
+  gtk_rb_node_mark_dirty (left, FALSE);
 }
 
 static gboolean
-is_red (GtkCssRbNode *node_or_null)
+is_red (GtkRbNode *node_or_null)
 {
   if (node_or_null == NULL)
     return FALSE;
@@ -256,13 +256,13 @@ is_red (GtkCssRbNode *node_or_null)
 }
 
 static inline gboolean
-is_black (GtkCssRbNode *node_or_null)
+is_black (GtkRbNode *node_or_null)
 {
   return !is_red (node_or_null);
 }
 
 static void
-set_black (GtkCssRbNode *node_or_null)
+set_black (GtkRbNode *node_or_null)
 {
   if (node_or_null == NULL)
     return;
@@ -271,7 +271,7 @@ set_black (GtkCssRbNode *node_or_null)
 }
 
 static void
-set_red (GtkCssRbNode *node_or_null)
+set_red (GtkRbNode *node_or_null)
 {
   if (node_or_null == NULL)
     return;
@@ -280,8 +280,8 @@ set_red (GtkCssRbNode *node_or_null)
 }
 
 static void
-gtk_css_rb_tree_insert_fixup (GtkCssRbTree *tree,
-                              GtkCssRbNode *node)
+gtk_rb_tree_insert_fixup (GtkRbTree *tree,
+                          GtkRbNode *node)
 {
 
   /* check Red-Black properties */
@@ -292,7 +292,7 @@ gtk_css_rb_tree_insert_fixup (GtkCssRbTree *tree,
 
       if (node->parent == node->parent->parent->left)
 	{
-	  GtkCssRbNode *uncle = node->parent->parent->right;
+	  GtkRbNode *uncle = node->parent->parent->right;
 
 	  if (is_red (uncle))
 	    {
@@ -309,18 +309,18 @@ gtk_css_rb_tree_insert_fixup (GtkCssRbTree *tree,
 		{
 		  /* make node a left child */
 		  node = node->parent;
-		  gtk_css_rb_node_rotate_left (tree, node);
+		  gtk_rb_node_rotate_left (tree, node);
 		}
 	      /* recolor and rotate */
               set_black (node->parent);
               set_red (node->parent->parent);
-	      gtk_css_rb_node_rotate_right (tree, node->parent->parent);
+	      gtk_rb_node_rotate_right (tree, node->parent->parent);
 	    }
 	}
       else
 	{
 	  /* mirror image of above code */
-	  GtkCssRbNode *uncle = node->parent->parent->left;
+	  GtkRbNode *uncle = node->parent->parent->left;
 
 	  if (is_red (uncle))
 	    {
@@ -336,11 +336,11 @@ gtk_css_rb_tree_insert_fixup (GtkCssRbTree *tree,
 	      if (node == node->parent->left)
 		{
 		  node = node->parent;
-		  gtk_css_rb_node_rotate_right (tree, node);
+		  gtk_rb_node_rotate_right (tree, node);
 		}
 	      set_black (node->parent);
 	      set_red (node->parent->parent);
-	      gtk_css_rb_node_rotate_left (tree, node->parent->parent);
+	      gtk_rb_node_rotate_left (tree, node->parent->parent);
 	    }
 	}
     }
@@ -349,21 +349,21 @@ gtk_css_rb_tree_insert_fixup (GtkCssRbTree *tree,
 }
 
 static void
-gtk_css_rb_tree_remove_node_fixup (GtkCssRbTree *tree,
-                                   GtkCssRbNode *node,
-                                   GtkCssRbNode *parent)
+gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
+                               GtkRbNode *node,
+                               GtkRbNode *parent)
 {
   while (node != tree->root && is_black (node))
     {
       if (node == parent->left)
 	{
-	  GtkCssRbNode *w = parent->right;
+	  GtkRbNode *w = parent->right;
 
 	  if (is_red (w))
 	    {
 	      set_black (w);
               set_red (parent);
-	      gtk_css_rb_node_rotate_left (tree, parent);
+	      gtk_rb_node_rotate_left (tree, parent);
 	      w = parent->right;
 	    }
 	  if (is_black (w->left) && is_black (w->right))
@@ -377,24 +377,24 @@ gtk_css_rb_tree_remove_node_fixup (GtkCssRbTree *tree,
 		{
 		  set_black (w->left);
 		  set_red (w);
-		  gtk_css_rb_node_rotate_right (tree, w);
+		  gtk_rb_node_rotate_right (tree, w);
 		  w = parent->right;
 		}
 	      w->red = parent->red;
 	      set_black (parent);
               set_black (w->right);
-	      gtk_css_rb_node_rotate_left (tree, parent);
+	      gtk_rb_node_rotate_left (tree, parent);
 	      node = tree->root;
 	    }
 	}
       else
 	{
-	  GtkCssRbNode *w = parent->left;
+	  GtkRbNode *w = parent->left;
 	  if (is_red (w))
 	    {
 	      set_black (w);
 	      set_red (parent);
-	      gtk_css_rb_node_rotate_right (tree, parent);
+	      gtk_rb_node_rotate_right (tree, parent);
 	      w = parent->left;
 	    }
 	  if (is_black (w->right) && is_black (w->left))
@@ -408,13 +408,13 @@ gtk_css_rb_tree_remove_node_fixup (GtkCssRbTree *tree,
 		{
 		  set_black (w->right);
 		  set_red (w);
-		  gtk_css_rb_node_rotate_left (tree, w);
+		  gtk_rb_node_rotate_left (tree, w);
 		  w = parent->left;
 		}
 	      w->red = parent->red;
 	      set_black (parent);
 	      set_black (w->left);
-	      gtk_css_rb_node_rotate_right (tree, parent);
+	      gtk_rb_node_rotate_right (tree, parent);
 	      node = tree->root;
 	    }
 	}
@@ -425,16 +425,16 @@ gtk_css_rb_tree_remove_node_fixup (GtkCssRbTree *tree,
   set_black (node);
 }
 
-GtkCssRbTree *
-gtk_css_rb_tree_new_for_size (gsize                   element_size,
-                              gsize                   augment_size,
-                              GtkCssRbTreeAugmentFunc augment_func,
-                              GDestroyNotify          clear_func,
-                              GDestroyNotify          clear_augment_func)
+GtkRbTree *
+gtk_rb_tree_new_for_size (gsize                element_size,
+                          gsize                augment_size,
+                          GtkRbTreeAugmentFunc augment_func,
+                          GDestroyNotify       clear_func,
+                          GDestroyNotify       clear_augment_func)
 {
-  GtkCssRbTree *tree;
+  GtkRbTree *tree;
 
-  tree = g_slice_new0 (GtkCssRbTree);
+  tree = g_slice_new0 (GtkRbTree);
   tree->ref_count = 1;
 
   tree->element_size = element_size;
@@ -446,8 +446,8 @@ gtk_css_rb_tree_new_for_size (gsize                   element_size,
   return tree;
 }
 
-GtkCssRbTree *
-gtk_css_rb_tree_ref (GtkCssRbTree *tree)
+GtkRbTree *
+gtk_rb_tree_ref (GtkRbTree *tree)
 {
   tree->ref_count++;
 
@@ -455,103 +455,103 @@ gtk_css_rb_tree_ref (GtkCssRbTree *tree)
 }
 
 void
-gtk_css_rb_tree_unref (GtkCssRbTree *tree)
+gtk_rb_tree_unref (GtkRbTree *tree)
 {
   tree->ref_count--;
   if (tree->ref_count > 0)
     return;
 
   if (tree->root)
-    gtk_css_rb_node_free_deep (tree, tree->root);
+    gtk_rb_node_free_deep (tree, tree->root);
     
-  g_slice_free (GtkCssRbTree, tree);
+  g_slice_free (GtkRbTree, tree);
 }
 
 gpointer
-gtk_css_rb_tree_get_first (GtkCssRbTree *tree)
+gtk_rb_tree_get_first (GtkRbTree *tree)
 {
   if (tree->root == NULL)
     return NULL;
 
-  return NODE_TO_POINTER (gtk_css_rb_node_get_first (tree->root));
+  return NODE_TO_POINTER (gtk_rb_node_get_first (tree->root));
 }
 
 gpointer
-gtk_css_rb_tree_get_last (GtkCssRbTree *tree)
+gtk_rb_tree_get_last (GtkRbTree *tree)
 {
   if (tree->root == NULL)
     return NULL;
 
-  return NODE_TO_POINTER (gtk_css_rb_node_get_last (tree->root));
+  return NODE_TO_POINTER (gtk_rb_node_get_last (tree->root));
 }
 
 gpointer
-gtk_css_rb_tree_get_previous (GtkCssRbTree *tree,
-                              gpointer      node)
+gtk_rb_tree_get_previous (GtkRbTree *tree,
+                          gpointer   node)
 {
-  return NODE_TO_POINTER (gtk_css_rb_node_get_previous (NODE_FROM_POINTER (node)));
+  return NODE_TO_POINTER (gtk_rb_node_get_previous (NODE_FROM_POINTER (node)));
 }
 
 gpointer
-gtk_css_rb_tree_get_next (GtkCssRbTree *tree,
-                          gpointer      node)
+gtk_rb_tree_get_next (GtkRbTree *tree,
+                      gpointer   node)
 {
-  return NODE_TO_POINTER (gtk_css_rb_node_get_next (NODE_FROM_POINTER (node)));
+  return NODE_TO_POINTER (gtk_rb_node_get_next (NODE_FROM_POINTER (node)));
 }
 
 gpointer
-gtk_css_rb_tree_get_root (GtkCssRbTree *tree)
+gtk_rb_tree_get_root (GtkRbTree *tree)
 {
   return NODE_TO_POINTER (tree->root);
 }
 
 gpointer
-gtk_css_rb_tree_get_parent (GtkCssRbTree *tree,
-                            gpointer      node)
+gtk_rb_tree_get_parent (GtkRbTree *tree,
+                        gpointer   node)
 {
   return NODE_TO_POINTER (NODE_FROM_POINTER (node)->parent);
 }
 
 gpointer
-gtk_css_rb_tree_get_left (GtkCssRbTree *tree,
-                          gpointer      node)
+gtk_rb_tree_get_left (GtkRbTree *tree,
+                      gpointer   node)
 {
   return NODE_TO_POINTER (NODE_FROM_POINTER (node)->left);
 }
 
 gpointer
-gtk_css_rb_tree_get_right (GtkCssRbTree *tree,
-                           gpointer      node)
+gtk_rb_tree_get_right (GtkRbTree *tree,
+                       gpointer   node)
 {
   return NODE_TO_POINTER (NODE_FROM_POINTER (node)->right);
 }
 
 gpointer
-gtk_css_rb_tree_get_augment (GtkCssRbTree *tree,
-                             gpointer      node)
+gtk_rb_tree_get_augment (GtkRbTree *tree,
+                         gpointer   node)
 {
-  GtkCssRbNode *rbnode = NODE_FROM_POINTER (node);
+  GtkRbNode *rbnode = NODE_FROM_POINTER (node);
 
-  gtk_css_rb_node_clean (tree, rbnode);
+  gtk_rb_node_clean (tree, rbnode);
 
   return NODE_TO_AUG_POINTER (tree, rbnode);
 }
 
 void
-gtk_css_rb_tree_mark_dirty (GtkCssRbTree *tree,
-                            gpointer      node)
+gtk_rb_tree_mark_dirty (GtkRbTree *tree,
+                        gpointer   node)
 {
-  gtk_css_rb_node_mark_dirty (NODE_FROM_POINTER (node), TRUE);
+  gtk_rb_node_mark_dirty (NODE_FROM_POINTER (node), TRUE);
 }
 
 gpointer
-gtk_css_rb_tree_insert_before (GtkCssRbTree *tree,
-                              gpointer      node)
+gtk_rb_tree_insert_before (GtkRbTree *tree,
+                           gpointer   node)
 {
-  GtkCssRbNode *result;
+  GtkRbNode *result;
 
   /* setup new node */
-  result = gtk_css_rb_node_new (tree);
+  result = gtk_rb_node_new (tree);
 
   if (tree->root == NULL)
     {
@@ -560,15 +560,15 @@ gtk_css_rb_tree_insert_before (GtkCssRbTree *tree,
     }
   else if (node == NULL)
     {
-      return gtk_css_rb_tree_insert_after (tree, gtk_css_rb_tree_get_last (tree));
+      return gtk_rb_tree_insert_after (tree, gtk_rb_tree_get_last (tree));
     }
   else
     {
-      GtkCssRbNode *current = NODE_FROM_POINTER (node);
+      GtkRbNode *current = NODE_FROM_POINTER (node);
 
       if (current->left)
         {
-          current = gtk_css_rb_node_get_last (current->left);
+          current = gtk_rb_node_get_last (current->left);
           current->right = result;
         }
       else
@@ -576,22 +576,22 @@ gtk_css_rb_tree_insert_before (GtkCssRbTree *tree,
           current->left = result;
         }
       result->parent = current;
-      gtk_css_rb_node_mark_dirty (current, TRUE);
+      gtk_rb_node_mark_dirty (current, TRUE);
     }
 
-  gtk_css_rb_tree_insert_fixup (tree, result);
+  gtk_rb_tree_insert_fixup (tree, result);
 
   return NODE_TO_POINTER (result);
 }
 
 gpointer
-gtk_css_rb_tree_insert_after (GtkCssRbTree *tree,
-                             gpointer      node)
+gtk_rb_tree_insert_after (GtkRbTree *tree,
+                          gpointer   node)
 {
-  GtkCssRbNode *result;
+  GtkRbNode *result;
 
   /* setup new node */
-  result = gtk_css_rb_node_new (tree);
+  result = gtk_rb_node_new (tree);
 
   if (tree->root == NULL)
     {
@@ -600,15 +600,15 @@ gtk_css_rb_tree_insert_after (GtkCssRbTree *tree,
     }
   else if (node == NULL)
     {
-      return gtk_css_rb_tree_insert_before (tree, gtk_css_rb_tree_get_first (tree));
+      return gtk_rb_tree_insert_before (tree, gtk_rb_tree_get_first (tree));
     }
   else
     {
-      GtkCssRbNode *current = NODE_FROM_POINTER (node);
+      GtkRbNode *current = NODE_FROM_POINTER (node);
 
       if (current->right)
         {
-          current = gtk_css_rb_node_get_first (current->right);
+          current = gtk_rb_node_get_first (current->right);
           current->left = result;
         }
       else
@@ -616,19 +616,19 @@ gtk_css_rb_tree_insert_after (GtkCssRbTree *tree,
           current->right = result;
         }
       result->parent = current;
-      gtk_css_rb_node_mark_dirty (current, TRUE);
+      gtk_rb_node_mark_dirty (current, TRUE);
     }
 
-  gtk_css_rb_tree_insert_fixup (tree, result);
+  gtk_rb_tree_insert_fixup (tree, result);
 
   return NODE_TO_POINTER (result);
 }
 
 void
-gtk_css_rb_tree_remove (GtkCssRbTree *tree,
-                        gpointer      node)
+gtk_rb_tree_remove (GtkRbTree *tree,
+                    gpointer   node)
 {
-  GtkCssRbNode *x, *y, *real_node;
+  GtkRbNode *x, *y, *real_node;
   
   real_node = NODE_FROM_POINTER (node);
   y = real_node;
@@ -655,7 +655,7 @@ gtk_css_rb_tree_remove (GtkCssRbTree *tree,
 	y->parent->left = x;
       else
 	y->parent->right = x;
-      gtk_css_rb_node_mark_dirty (y->parent, TRUE);
+      gtk_rb_node_mark_dirty (y->parent, TRUE);
     }
   else
     {
@@ -665,7 +665,7 @@ gtk_css_rb_tree_remove (GtkCssRbTree *tree,
   /* We need to clean up the validity of the tree.
    */
   if (is_black (y))
-    gtk_css_rb_tree_remove_node_fixup (tree, x, y->parent);
+    gtk_rb_tree_remove_node_fixup (tree, x, y->parent);
 
   if (y != real_node)
     {
@@ -686,35 +686,35 @@ gtk_css_rb_tree_remove (GtkCssRbTree *tree,
             y->parent->left = y;
           else
             y->parent->right = y;
-          gtk_css_rb_node_mark_dirty (y->parent, TRUE);
+          gtk_rb_node_mark_dirty (y->parent, TRUE);
         }
       else
         {
           tree->root = y;
         }
-      gtk_css_rb_node_mark_dirty (y, TRUE);
+      gtk_rb_node_mark_dirty (y, TRUE);
     }
 
-  gtk_css_rb_node_free (tree, real_node);
+  gtk_rb_node_free (tree, real_node);
 }
 
 void
-gtk_css_rb_tree_remove_all (GtkCssRbTree *tree)
+gtk_rb_tree_remove_all (GtkRbTree *tree)
 {
   if (tree->root)
-    gtk_css_rb_node_free_deep (tree, tree->root);
+    gtk_rb_node_free_deep (tree, tree->root);
 
   tree->root = NULL;
 }
 
 gpointer
-gtk_css_rb_tree_find (GtkCssRbTree           *tree,
-                      gpointer               *out_before,
-                      gpointer               *out_after,
-                      GtkCssRbTreeFindFunc    find_func,
-                      gpointer                user_data)
+gtk_rb_tree_find (GtkRbTree           *tree,
+                  gpointer            *out_before,
+                  gpointer            *out_after,
+                  GtkRbTreeFindFunc    find_func,
+                  gpointer             user_data)
 {
-  GtkCssRbNode *node, *before = NULL, *after = NULL;
+  GtkRbNode *node, *before = NULL, *after = NULL;
   int cmp;
 
   if (tree->root == NULL)
@@ -753,9 +753,9 @@ gtk_css_rb_tree_find (GtkCssRbTree           *tree,
     }
 
   if (out_before)
-    *out_before = NODE_TO_POINTER (gtk_css_rb_node_get_previous (node));
+    *out_before = NODE_TO_POINTER (gtk_rb_node_get_previous (node));
   if (out_after)
-    *out_after = NODE_TO_POINTER (gtk_css_rb_node_get_next (node));
+    *out_after = NODE_TO_POINTER (gtk_rb_node_get_next (node));
 
   return NODE_TO_POINTER (node);
 }
