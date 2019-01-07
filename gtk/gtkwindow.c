@@ -1774,8 +1774,7 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_SURFACE_EDGE_SOUTH)
         return FALSE;
 
-      if (supports_edge_constraints &&
-          (edge == GDK_SURFACE_EDGE_NORTH ||
+      if ((edge == GDK_SURFACE_EDGE_NORTH ||
            edge == GDK_SURFACE_EDGE_SOUTH) &&
           (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_WEST)))
         return FALSE;
@@ -1789,8 +1788,7 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_SURFACE_EDGE_SOUTH)
         return FALSE;
 
-      if (supports_edge_constraints &&
-          (edge == GDK_SURFACE_EDGE_NORTH ||
+      if ((edge == GDK_SURFACE_EDGE_NORTH ||
            edge == GDK_SURFACE_EDGE_SOUTH) &&
           (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_EAST)))
         return FALSE;
@@ -1809,8 +1807,7 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_SURFACE_EDGE_WEST)
         return FALSE;
 
-      if (supports_edge_constraints &&
-          (edge == GDK_SURFACE_EDGE_EAST ||
+      if ((edge == GDK_SURFACE_EDGE_EAST ||
            edge == GDK_SURFACE_EDGE_WEST) &&
           (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_NORTH)))
         return FALSE;
@@ -1824,8 +1821,7 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_SURFACE_EDGE_WEST)
         return FALSE;
 
-      if (supports_edge_constraints &&
-          (edge == GDK_SURFACE_EDGE_EAST ||
+      if ((edge == GDK_SURFACE_EDGE_EAST ||
            edge == GDK_SURFACE_EDGE_WEST) &&
           (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_SOUTH)))
         return FALSE;
