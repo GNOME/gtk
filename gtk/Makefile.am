@@ -534,6 +534,7 @@ gtk_private_h_sources =		\
 	gtknativedialogprivate.h \
 	gtkorientableprivate.h	\
 	gtkpango.h		\
+	gtkpangofontutilsprivate.h	\
 	gtkpathbar.h		\
 	gtkplacessidebarprivate.h	\
 	gtkplacesviewprivate.h	\
@@ -858,6 +859,7 @@ gtk_base_c_sources = 		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
 	gtkpango.c		\
+	gtkpangofontutils.c	\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
 	gtkplacessidebar.c	\
