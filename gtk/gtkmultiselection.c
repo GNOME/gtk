@@ -46,6 +46,17 @@ struct _GtkMultiSelection
   guint last_selected;
 };
 
+/*
+ * We store a set of positions for selected items. This can be maintained
+ * efficiently as long as it consists of a small number of ranges. I
+ * degenerate cases such as 'every second item in the list', it will
+ * be O(|model|).
+ *
+ * To implement persistence across add/remove changes in the underlying
+ * model (for example, resorting), we mark the selected objects, which
+ * is also going to be O(|model|) in the 'select all' case.
+ */
+
 struct _GtkMultiSelectionClass
 {
   GObjectClass parent_class;
@@ -102,6 +113,38 @@ gtk_multi_selection_is_selected (GtkSelectionModel *model,
   return gtk_set_contains (self->selected, position);
 }
 
+static void
+mark_selected (GtkMultiSelection *self, gboolean in)
+{
+  GtkSetIter iter;
+  guint pos;
+
+  gtk_set_iter_init (&iter, self->selected);
+  while (gtk_set_iter_next (&iter, &pos))
+    {
+      /* Mark the object as being selected in this multiselection.
+       * See gtk_multi_selection_items_changed_cb, where this is
+       * used to identify objects that were removed and readded.
+       */
+      GObject *obj = g_list_model_get_item (self->model, pos);
+      g_object_set_data (obj, "GtkMultiSelection", in ? self : NULL);
+      g_object_unref (obj);
+    }
+}
+
+static void
+mark_range (GtkMultiSelection *self, guint first, guint n_items, gboolean in)
+{
+  guint pos;
+
+  for (pos = first; pos < first + n_items; pos++)
+    {
+      GObject *obj = g_list_model_get_item (self->model, pos);
+      g_object_set_data (obj, "GtkMultiSelection", in ? self : NULL);
+      g_object_unref (obj);
+    }
+}
+
 static gboolean
 gtk_multi_selection_select_range (GtkSelectionModel *model,
                                   guint              position,
@@ -111,7 +154,11 @@ gtk_multi_selection_select_range (GtkSelectionModel *model,
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
 
   if (exclusive)
-    gtk_set_remove_all (self->selected);
+    {
+      mark_selected (self, FALSE);
+      gtk_set_remove_all (self->selected);
+    }
+  mark_range (self, position, n_items, TRUE);
   gtk_set_add_range (self->selected, position, n_items);
   gtk_selection_model_selection_changed (model, position, n_items);
 
@@ -125,6 +172,7 @@ gtk_multi_selection_unselect_range (GtkSelectionModel *model,
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
 
+  mark_range (self, position, n_items, FALSE);
   gtk_set_remove_range (self->selected, position, n_items);
   gtk_selection_model_selection_changed (model, position, n_items);
 
@@ -202,8 +250,18 @@ gtk_multi_selection_items_changed_cb (GListModel        *model,
                                       guint              added,
                                       GtkMultiSelection *self)
 {
+  guint pos;
+
   gtk_set_remove_range (self->selected, position, removed);
   gtk_set_shift (self->selected, position, (int)added - (int)removed);
+  for (pos = position; pos < position + added; pos++)
+    {
+      GObject *obj = g_list_model_get_item (self->model, pos);
+      if (g_object_get_data (obj, "GtkMultiSelection") == self)
+        gtk_set_add_item (self->selected, pos);
+      g_object_unref (obj);
+    }
+
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
 }
 
