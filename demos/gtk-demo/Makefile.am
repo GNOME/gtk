@@ -75,9 +75,15 @@ demos_base =					\
 	tree_store.c
 
 demos_opt =
+extra_nodist_demo_sources =
 
 if BUILD_FONT_DEMO
 demos_opt += font_features.c
+
+extra_nodist_demo_sources +=	\
+	gtkpangofontutils.c	\
+	gtkpangofontutilsprivate.h
+
 endif
 
 if OS_UNIX
@@ -130,7 +136,13 @@ demos.h: $(demos) geninclude.pl
 demos.h.win32: $(demos_base) geninclude.pl
 	 $(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos_base)) > demos.h.win32
 
-nodist_gtk3_demo_SOURCES = demos.h
+gtkpangofontutils.c: $(top_srcdir)/gtk/gtkpangofontutils.c
+	$(AM_V_GEN) cp $< $@
+
+gtkpangofontutilsprivate.h: $(top_srcdir)/gtk/gtkpangofontutilsprivate.h
+	$(AM_V_GEN) cp $< $@
+
+nodist_gtk3_demo_SOURCES = demos.h $(extra_nodist_demo_sources)
 
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
@@ -199,6 +211,6 @@ dist-hook: \
 	$(top_builddir)/build/win32/vs9/gtk3-demo.vcproj	\
 	$(top_builddir)/build/win32/vs9/gtk3-demo-application.vcproj
 
-DISTCLEANFILES = demos.h demos.h.win32
+DISTCLEANFILES = demos.h demos.h.win32 $(extra_nodist_demo_sources)
 
 -include $(top_srcdir)/git.mk
