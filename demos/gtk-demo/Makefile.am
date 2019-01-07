@@ -75,9 +75,15 @@ demos_base =					\
 	tree_store.c
 
 demos_opt =
+extra_demo_sources =
 
 if BUILD_FONT_DEMO
 demos_opt += font_features.c
+
+extra_demo_sources +=	\
+	$(top_srcdir)/gtk/gtkpangofontutils.c	\
+	$(top_srcdir)/gtk/gtkpangofontutilsprivate.h
+
 endif
 
 if OS_UNIX
@@ -134,6 +140,7 @@ nodist_gtk3_demo_SOURCES = demos.h
 
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
+	$(extra_demo_sources)	\
 	gtkfishbowl.c		\
 	gtkfishbowl.h		\
 	demo_resources.c	\
@@ -188,7 +195,7 @@ uninstall-update-icon-cache:
 MSVCPROJS = gtk3-demo gtk3-demo-application
 
 gtk3_demo_FILES = $(gtk3_demo_SOURCES)
-gtk3_demo_EXCLUDES = font_features.c|pagesetup.c
+gtk3_demo_EXCLUDES = font_features.c|pagesetup.c|$(top_srcdir)/gtk/gtkpangofontutils.c
 
 gtk3_demo_application_FILES = $(gtk3_demo_application_SOURCES)
 gtk3_demo_application_EXCLUDES = dummy
