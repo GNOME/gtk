@@ -307,7 +307,7 @@ gtk_public_sources = files([
   'gtkradiomenuitem.c',
   'gtkradiotoolbutton.c',
   'gtkrange.c',
-  'gtkrbtree.c',
+  'gtktreerbtree.c',
   'gtkrecentmanager.c',
   'gtkrender.c',
   'gtkrenderbackground.c',

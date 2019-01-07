@@ -39,7 +39,7 @@ tests = [
   ['objects-finalize'],
   ['papersize'],
   ['propertylookuplistmodel', ['../../gtk/gtkpropertylookuplistmodel.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
-  ['rbtree', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
+  ['rbtree', ['../../gtk/gtktreerbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['recentmanager'],
   ['regression-tests'],
   ['scrolledwindow'],
