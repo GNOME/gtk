@@ -75,9 +75,15 @@ demos_base =					\
 	tree_store.c
 
 demos_opt =
+extra_demo_sources =
 
 if BUILD_FONT_DEMO
 demos_opt += font_features.c
+
+extra_demo_sources +=	\
+	$(top_srcdir)/gtk/gtkpangofontutils.c	\
+	$(top_srcdir)/gtk/gtkpangofontutilsprivate.h
+
 endif
 
 if OS_UNIX
@@ -130,7 +136,7 @@ demos.h: $(demos) geninclude.pl
 demos.h.win32: $(demos_base) geninclude.pl
 	 $(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos_base)) > demos.h.win32
 
-nodist_gtk3_demo_SOURCES = demos.h
+nodist_gtk3_demo_SOURCES = demos.h $(extra_demo_sources)
 
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
