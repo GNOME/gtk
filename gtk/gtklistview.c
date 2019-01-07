@@ -23,7 +23,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkintl.h"
-#include "gtkcssrbtreeprivate.h"
+#include "gtkrbtreeprivate.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkscrollable.h"
@@ -60,7 +60,7 @@ struct _GtkListView
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
 
-  GtkCssRbTree *rows;
+  GtkRbTree *rows;
   int list_width;
 
   /* managing the visible region */
@@ -109,9 +109,9 @@ dump (GtkListView *self)
   n_widgets = 0;
   n_list_rows = 0;
   g_print ("ANCHOR: %u - %u\n", self->anchor_start, self->anchor_end);
-  for (row = gtk_css_rb_tree_get_first (self->rows);
+  for (row = gtk_rb_tree_get_first (self->rows);
        row;
-       row = gtk_css_rb_tree_get_next (self->rows, row))
+       row = gtk_rb_tree_get_next (self->rows, row))
     {
       if (row->widget)
         n_widgets++;
@@ -123,11 +123,11 @@ dump (GtkListView *self)
 }
 
 static void
-list_row_augment (GtkCssRbTree *tree,
-                  gpointer      node_augment,
-                  gpointer      node,
-                  gpointer      left,
-                  gpointer      right)
+list_row_augment (GtkRbTree *tree,
+                  gpointer   node_augment,
+                  gpointer   node,
+                  gpointer   left,
+                  gpointer   right)
 {
   ListRow *row = node;
   ListRowAugment *aug = node_augment;
@@ -137,7 +137,7 @@ list_row_augment (GtkCssRbTree *tree,
 
   if (left)
     {
-      ListRowAugment *left_aug = gtk_css_rb_tree_get_augment (tree, left);
+      ListRowAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
 
       aug->height += left_aug->height;
       aug->n_rows += left_aug->n_rows;
@@ -145,7 +145,7 @@ list_row_augment (GtkCssRbTree *tree,
 
   if (right)
     {
-      ListRowAugment *right_aug = gtk_css_rb_tree_get_augment (tree, right);
+      ListRowAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
 
       aug->height += right_aug->height;
       aug->n_rows += right_aug->n_rows;
@@ -167,14 +167,14 @@ gtk_list_view_get_row (GtkListView *self,
 {
   ListRow *row, *tmp;
 
-  row = gtk_css_rb_tree_get_root (self->rows);
+  row = gtk_rb_tree_get_root (self->rows);
 
   while (row)
     {
-      tmp = gtk_css_rb_tree_get_left (self->rows, row);
+      tmp = gtk_rb_tree_get_left (self->rows, row);
       if (tmp)
         {
-          ListRowAugment *aug = gtk_css_rb_tree_get_augment (self->rows, tmp);
+          ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, tmp);
           if (position < aug->n_rows)
             {
               row = tmp;
@@ -187,7 +187,7 @@ gtk_list_view_get_row (GtkListView *self,
         break;
       position -= row->n_rows;
 
-      row = gtk_css_rb_tree_get_right (self->rows, row);
+      row = gtk_rb_tree_get_right (self->rows, row);
     }
 
   if (offset)
@@ -203,10 +203,10 @@ list_row_get_position (GtkListView *self,
   ListRow *parent, *left;
   int pos;
 
-  left = gtk_css_rb_tree_get_left (self->rows, row);
+  left = gtk_rb_tree_get_left (self->rows, row);
   if (left)
     {
-      ListRowAugment *aug = gtk_css_rb_tree_get_augment (self->rows, left);
+      ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, left);
       pos = aug->n_rows;
     }
   else
@@ -214,17 +214,17 @@ list_row_get_position (GtkListView *self,
       pos = 0; 
     }
 
-  for (parent = gtk_css_rb_tree_get_parent (self->rows, row);
+  for (parent = gtk_rb_tree_get_parent (self->rows, row);
        parent != NULL;
-       parent = gtk_css_rb_tree_get_parent (self->rows, row))
+       parent = gtk_rb_tree_get_parent (self->rows, row))
     {
-      ListRow *left = gtk_css_rb_tree_get_left (self->rows, parent);
+      ListRow *left = gtk_rb_tree_get_left (self->rows, parent);
 
       if (left != row)
         {
           if (left)
             {
-              ListRowAugment *aug = gtk_css_rb_tree_get_augment (self->rows, left);
+              ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, left);
               pos += aug->n_rows;
             }
           pos += parent->n_rows;
@@ -243,14 +243,14 @@ gtk_list_view_get_row_at_y (GtkListView *self,
 {
   ListRow *row, *tmp;
 
-  row = gtk_css_rb_tree_get_root (self->rows);
+  row = gtk_rb_tree_get_root (self->rows);
 
   while (row)
     {
-      tmp = gtk_css_rb_tree_get_left (self->rows, row);
+      tmp = gtk_rb_tree_get_left (self->rows, row);
       if (tmp)
         {
-          ListRowAugment *aug = gtk_css_rb_tree_get_augment (self->rows, tmp);
+          ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, tmp);
           if (y < aug->height)
             {
               row = tmp;
@@ -263,7 +263,7 @@ gtk_list_view_get_row_at_y (GtkListView *self,
         break;
       y -= row->height * row->n_rows;
 
-      row = gtk_css_rb_tree_get_right (self->rows, row);
+      row = gtk_rb_tree_get_right (self->rows, row);
     }
 
   if (offset)
@@ -279,26 +279,26 @@ list_row_get_y (GtkListView *self,
   ListRow *parent, *left;
   int y;
 
-  left = gtk_css_rb_tree_get_left (self->rows, row);
+  left = gtk_rb_tree_get_left (self->rows, row);
   if (left)
     {
-      ListRowAugment *aug = gtk_css_rb_tree_get_augment (self->rows, left);
+      ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, left);
       y = aug->height;
     }
   else
     y = 0; 
 
-  for (parent = gtk_css_rb_tree_get_parent (self->rows, row);
+  for (parent = gtk_rb_tree_get_parent (self->rows, row);
        parent != NULL;
-       parent = gtk_css_rb_tree_get_parent (self->rows, row))
+       parent = gtk_rb_tree_get_parent (self->rows, row))
     {
-      left = gtk_css_rb_tree_get_left (self->rows, parent);
+      left = gtk_rb_tree_get_left (self->rows, parent);
 
       if (left != row)
         {
           if (left)
             {
-              ListRowAugment *aug = gtk_css_rb_tree_get_augment (self->rows, left);
+              ListRowAugment *aug = gtk_rb_tree_get_augment (self->rows, left);
               y += aug->height;
             }
           y += parent->height * parent->n_rows;
@@ -316,11 +316,11 @@ gtk_list_view_get_list_height (GtkListView *self)
   ListRow *row;
   ListRowAugment *aug;
   
-  row = gtk_css_rb_tree_get_root (self->rows);
+  row = gtk_rb_tree_get_root (self->rows);
   if (row == NULL)
     return 0;
 
-  aug = gtk_css_rb_tree_get_augment (self->rows, row);
+  aug = gtk_rb_tree_get_augment (self->rows, row);
   return aug->height;
 }
 
@@ -333,8 +333,8 @@ gtk_list_view_merge_list_rows (GtkListView *self,
     return FALSE;
 
   first->n_rows += second->n_rows;
-  gtk_css_rb_tree_mark_dirty (self->rows, first);
-  gtk_css_rb_tree_remove (self->rows, second);
+  gtk_rb_tree_mark_dirty (self->rows, first);
+  gtk_rb_tree_remove (self->rows, second);
 
   return TRUE;
 }
@@ -346,7 +346,7 @@ gtk_list_view_release_rows (GtkListView *self,
   ListRow *row, *prev, *next;
   guint i;
 
-  row = gtk_css_rb_tree_get_first (self->rows);
+  row = gtk_rb_tree_get_first (self->rows);
   i = 0;
   while (i < self->anchor_start)
     {
@@ -355,16 +355,16 @@ gtk_list_view_release_rows (GtkListView *self,
           g_queue_push_tail (released, row->widget);
           row->widget = NULL;
           i++;
-          prev = gtk_css_rb_tree_get_previous (self->rows, row);
+          prev = gtk_rb_tree_get_previous (self->rows, row);
           if (prev && gtk_list_view_merge_list_rows (self, prev, row))
             row = prev;
-          next = gtk_css_rb_tree_get_next (self->rows, row);
+          next = gtk_rb_tree_get_next (self->rows, row);
           if (next && next->widget == NULL)
             {
               i += next->n_rows;
               if (!gtk_list_view_merge_list_rows (self, next, row))
                 g_assert_not_reached ();
-              row = gtk_css_rb_tree_get_next (self->rows, next);
+              row = gtk_rb_tree_get_next (self->rows, next);
             }
           else 
             {
@@ -374,7 +374,7 @@ gtk_list_view_release_rows (GtkListView *self,
       else
         {
           i += row->n_rows;
-          row = gtk_css_rb_tree_get_next (self->rows, row);
+          row = gtk_rb_tree_get_next (self->rows, row);
         }
     }
 
@@ -386,12 +386,12 @@ gtk_list_view_release_rows (GtkListView *self,
     {
       g_queue_push_tail (released, row->widget);
       row->widget = NULL;
-      prev = gtk_css_rb_tree_get_previous (self->rows, row);
+      prev = gtk_rb_tree_get_previous (self->rows, row);
       if (prev && gtk_list_view_merge_list_rows (self, prev, row))
         row = prev;
     }
 
-  while ((next = gtk_css_rb_tree_get_next (self->rows, row)))
+  while ((next = gtk_rb_tree_get_next (self->rows, row)))
     {
       if (next->widget)
         {
@@ -417,10 +417,10 @@ gtk_list_view_ensure_rows (GtkListView              *self,
   row = gtk_list_view_get_row (self, self->anchor_start, &offset);
   if (offset > 0)
     {
-      new_row = gtk_css_rb_tree_insert_before (self->rows, row);
+      new_row = gtk_rb_tree_insert_before (self->rows, row);
       new_row->n_rows = offset;
       row->n_rows -= offset;
-      gtk_css_rb_tree_mark_dirty (self->rows, row);
+      gtk_rb_tree_mark_dirty (self->rows, row);
     }
 
   insert_after = NULL;
@@ -429,15 +429,15 @@ gtk_list_view_ensure_rows (GtkListView              *self,
     {
       if (row->n_rows > 1)
         {
-          new_row = gtk_css_rb_tree_insert_before (self->rows, row);
+          new_row = gtk_rb_tree_insert_before (self->rows, row);
           new_row->n_rows = 1;
           row->n_rows--;
-          gtk_css_rb_tree_mark_dirty (self->rows, row);
+          gtk_rb_tree_mark_dirty (self->rows, row);
         }
       else
         {
           new_row = row;
-          row = gtk_css_rb_tree_get_next (self->rows, row);
+          row = gtk_rb_tree_get_next (self->rows, row);
         }
       if (new_row->widget == NULL)
         {
@@ -639,9 +639,9 @@ gtk_list_view_measure_across (GtkWidget      *widget,
   min = 0;
   nat = 0;
 
-  for (row = gtk_css_rb_tree_get_first (self->rows);
+  for (row = gtk_rb_tree_get_first (self->rows);
        row != NULL;
-       row = gtk_css_rb_tree_get_next (self->rows, row))
+       row = gtk_rb_tree_get_next (self->rows, row))
     {
       /* ignore unavailable rows */
       if (row->widget == NULL)
@@ -677,9 +677,9 @@ gtk_list_view_measure_list (GtkWidget      *widget,
   min = 0;
   nat = 0;
 
-  for (row = gtk_css_rb_tree_get_first (self->rows);
+  for (row = gtk_rb_tree_get_first (self->rows);
        row != NULL;
-       row = gtk_css_rb_tree_get_next (self->rows, row))
+       row = gtk_rb_tree_get_next (self->rows, row))
     {
       if (row->widget)
         {
@@ -737,7 +737,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   int min, nat, row_height;
 
   /* step 0: exit early if list is empty */
-  if (gtk_css_rb_tree_get_root (self->rows) == NULL)
+  if (gtk_rb_tree_get_root (self->rows) == NULL)
     return;
 
   /* step 1: determine width of the list */
@@ -752,9 +752,9 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   /* step 2: determine height of known list items */
   heights = g_array_new (FALSE, FALSE, sizeof (int));
 
-  for (row = gtk_css_rb_tree_get_first (self->rows);
+  for (row = gtk_rb_tree_get_first (self->rows);
        row != NULL;
-       row = gtk_css_rb_tree_get_next (self->rows, row))
+       row = gtk_rb_tree_get_next (self->rows, row))
     {
       if (row->widget == NULL)
         continue;
@@ -769,7 +769,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       if (row->height != row_height)
         {
           row->height = row_height;
-          gtk_css_rb_tree_mark_dirty (self->rows, row);
+          gtk_rb_tree_mark_dirty (self->rows, row);
         }
       g_array_append_val (heights, row_height);
     }
@@ -778,9 +778,9 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   row_height = gtk_list_view_get_unknown_row_height (self, heights);
   g_array_free (heights, TRUE);
 
-  for (row = gtk_css_rb_tree_get_first (self->rows);
+  for (row = gtk_rb_tree_get_first (self->rows);
        row != NULL;
-       row = gtk_css_rb_tree_get_next (self->rows, row))
+       row = gtk_rb_tree_get_next (self->rows, row))
     {
       if (row->widget)
         continue;
@@ -788,7 +788,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       if (row->height != row_height)
         {
           row->height = row_height;
-          gtk_css_rb_tree_mark_dirty (self->rows, row);
+          gtk_rb_tree_mark_dirty (self->rows, row);
         }
     }
 
@@ -800,9 +800,9 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   child_allocation.x = - gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   child_allocation.y = - round (gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_VERTICAL]));
   child_allocation.width = self->list_width;
-  for (row = gtk_css_rb_tree_get_first (self->rows);
+  for (row = gtk_rb_tree_get_first (self->rows);
        row != NULL;
-       row = gtk_css_rb_tree_get_next (self->rows, row))
+       row = gtk_rb_tree_get_next (self->rows, row))
     {
       if (row->widget)
         {
@@ -883,17 +883,17 @@ gtk_list_view_remove_rows (GtkListView              *self,
       if (row->n_rows > n_rows)
         {
           row->n_rows -= n_rows;
-          gtk_css_rb_tree_mark_dirty (self->rows, row);
+          gtk_rb_tree_mark_dirty (self->rows, row);
           n_rows = 0;
         }
       else
         {
-          ListRow *next = gtk_css_rb_tree_get_next (self->rows, row);
+          ListRow *next = gtk_rb_tree_get_next (self->rows, row);
           if (row->widget)
             gtk_list_item_manager_release_list_item (self->item_manager, change, row->widget);
           row->widget = NULL;
           n_rows -= row->n_rows;
-          gtk_css_rb_tree_remove (self->rows, row);
+          gtk_rb_tree_remove (self->rows, row);
           row = next;
         }
     }
@@ -915,9 +915,9 @@ gtk_list_view_add_rows (GtkListView *self,
   row = gtk_list_view_get_row (self, position, &offset);
 
   if (row == NULL || row->widget)
-    row = gtk_css_rb_tree_insert_before (self->rows, row);
+    row = gtk_rb_tree_insert_before (self->rows, row);
   row->n_rows += n_rows;
-  gtk_css_rb_tree_mark_dirty (self->rows, row);
+  gtk_rb_tree_mark_dirty (self->rows, row);
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
@@ -946,9 +946,9 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
       guint i, offset, anchor_pos;
       
       row = gtk_list_view_get_row (self, position, &offset);
-      for (new_row = row ? gtk_css_rb_tree_get_previous (self->rows, row) : gtk_css_rb_tree_get_last (self->rows);
+      for (new_row = row ? gtk_rb_tree_get_previous (self->rows, row) : gtk_rb_tree_get_last (self->rows);
            new_row && new_row->widget == NULL;
-           new_row = gtk_css_rb_tree_get_previous (self->rows, new_row))
+           new_row = gtk_rb_tree_get_previous (self->rows, new_row))
         ;
       if (new_row)
         insert_after = new_row->widget;
@@ -971,24 +971,24 @@ gtk_list_view_model_items_changed_cb (GListModel  *model,
 
           if (offset > 0)
             {
-              new_row = gtk_css_rb_tree_insert_before (self->rows, row);
+              new_row = gtk_rb_tree_insert_before (self->rows, row);
               new_row->n_rows = offset;
               row->n_rows -= offset;
               offset = 0;
-              gtk_css_rb_tree_mark_dirty (self->rows, row);
+              gtk_rb_tree_mark_dirty (self->rows, row);
             }
 
           if (row->n_rows == 1)
             {
               new_row = row;
-              row = gtk_css_rb_tree_get_next (self->rows, row);
+              row = gtk_rb_tree_get_next (self->rows, row);
             }
           else
             {
-              new_row = gtk_css_rb_tree_insert_before (self->rows, row);
+              new_row = gtk_rb_tree_insert_before (self->rows, row);
               new_row->n_rows = 1;
               row->n_rows--;
-              gtk_css_rb_tree_mark_dirty (self->rows, row);
+              gtk_rb_tree_mark_dirty (self->rows, row);
             }
 
           new_row->widget = widget;
@@ -1056,7 +1056,7 @@ gtk_list_view_model_selection_changed_cb (GListModel  *model,
     {
       position += row->n_rows - offset;
       n_items -= row->n_rows - offset;
-      row = gtk_css_rb_tree_get_next (self->rows, row);
+      row = gtk_rb_tree_get_next (self->rows, row);
     }
 
   while (n_items > 0)
@@ -1065,7 +1065,7 @@ gtk_list_view_model_selection_changed_cb (GListModel  *model,
         gtk_list_item_manager_update_list_item (self->item_manager, row->widget, position);
       position += row->n_rows;
       n_items -= MIN (n_items, row->n_rows);
-      row = gtk_css_rb_tree_get_next (self->rows, row);
+      row = gtk_rb_tree_get_next (self->rows, row);
     }
 }
 
@@ -1121,7 +1121,7 @@ gtk_list_view_finalize (GObject *object)
 {
   GtkListView *self = GTK_LIST_VIEW (object);
 
-  gtk_css_rb_tree_unref (self->rows);
+  gtk_rb_tree_unref (self->rows);
   g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->finalize (object);
@@ -1293,11 +1293,11 @@ gtk_list_view_init (GtkListView *self)
 {
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self));
 
-  self->rows = gtk_css_rb_tree_new (ListRow,
-                                    ListRowAugment,
-                                    list_row_augment,
-                                    list_row_clear,
-                                    NULL);
+  self->rows = gtk_rb_tree_new (ListRow,
+                                ListRowAugment,
+                                list_row_augment,
+                                list_row_clear,
+                                NULL);
 
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
