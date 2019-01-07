@@ -161,13 +161,19 @@ match_backend (GdkDisplay *display,
 }
 
 static const gchar *
-lookup_immodule (gchar **immodules_list)
+lookup_immodule (GdkDisplay  *display,
+                 gchar      **immodules_list)
 {
-  while (immodules_list && *immodules_list)
+  guint i;
+
+  for (i = 0; immodules_list[i]; i++)
     {
-      if (g_strcmp0 (*immodules_list, SIMPLE_ID) == 0)
+      if (!match_backend (display, immodules_list[i]))
+        continue;
+
+      if (g_strcmp0 (immodules_list[i], SIMPLE_ID) == 0)
         return SIMPLE_ID;
-      else if (g_strcmp0 (*immodules_list, NONE_ID) == 0)
+      else if (g_strcmp0 (immodules_list[i], NONE_ID) == 0)
         return NONE_ID;
       else
         {
@@ -175,11 +181,10 @@ lookup_immodule (gchar **immodules_list)
           GIOExtension *ext;
 
           ep = g_io_extension_point_lookup (GTK_IM_MODULE_EXTENSION_POINT_NAME);
-          ext = g_io_extension_point_get_extension_by_name (ep, *immodules_list);
+          ext = g_io_extension_point_get_extension_by_name (ep, immodules_list[i]);
           if (ext)
             return g_io_extension_get_name (ext);
         }
-      immodules_list++;
     }
 
   return NULL;
@@ -207,7 +212,7 @@ _gtk_im_module_get_default_context_id (GdkDisplay *display)
     {
       char **immodules;
       immodules = g_strsplit (envvar, ":", 0);
-      context_id = lookup_immodule (immodules);
+      context_id = lookup_immodule (display, immodules);
       g_strfreev (immodules);
 
       if (context_id)
@@ -222,7 +227,7 @@ _gtk_im_module_get_default_context_id (GdkDisplay *display)
       char **immodules;
 
       immodules = g_strsplit (tmp, ":", 0);
-      context_id = lookup_immodule (immodules);
+      context_id = lookup_immodule (display, immodules);
       g_strfreev (immodules);
       g_free (tmp);
 
