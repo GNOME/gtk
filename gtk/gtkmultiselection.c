@@ -48,7 +48,7 @@ struct _GtkMultiSelection
 
 /*
  * We store a set of positions for selected items. This can be maintained
- * efficiently as long as it consists of a small number of ranges. I
+ * efficiently as long as it consists of a small number of ranges. In
  * degenerate cases such as 'every second item in the list', it will
  * be O(|model|).
  *
