@@ -33,6 +33,14 @@ struct _GtkSet
   GArray *ranges;
 };
 
+typedef struct
+{
+  GtkSet *set;
+  Range *current;
+  int idx;
+  guint pos;
+} GtkRealSetIter;
+
 GtkSet *
 gtk_set_new (void)
 {
@@ -227,6 +235,45 @@ gtk_set_shift (GtkSet *set,
       if (r->first >= first)
         r->first += shift;
     }
+}
+
+void
+gtk_set_iter_init (GtkSetIter *iter,
+                   GtkSet     *set)
+{
+  GtkRealSetIter *ri = (GtkRealSetIter *)iter;
+
+  ri->set = set;
+  ri->idx = -1;
+  ri->current = 0;
+}
+
+gboolean
+gtk_set_iter_next (GtkSetIter *iter,
+                   guint      *item)
+{
+  GtkRealSetIter *ri = (GtkRealSetIter *)iter;
+
+  if (ri->idx == -1)
+    { 
+next_range:
+      ri->idx++;
+
+      if (ri->idx == ri->set->ranges->len)
+        return FALSE;
+
+      ri->current = &g_array_index (ri->set->ranges, Range, ri->idx);
+      ri->pos = ri->current->first;
+    }
+  else
+    {
+      ri->pos++;
+      if (ri->pos == ri->current->first + ri->current->n_items)
+        goto next_range;
+    }
+
+  *item = ri->pos;
+  return TRUE;
 }
 
 #if 0

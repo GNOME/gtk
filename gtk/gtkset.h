@@ -23,6 +23,15 @@
 #include <glib.h>
 
 typedef struct _GtkSet GtkSet;
+typedef struct _GtkSetIter GtkSetIter;
+
+struct _GtkSetIter
+{
+  gpointer dummy1;
+  gpointer dummy2;
+  int      dummy3;
+  int      dummy4;
+};
 
 GtkSet   *gtk_set_new          (void);
 void      gtk_set_free         (GtkSet   *set);
@@ -45,5 +54,10 @@ void      gtk_set_remove_range (GtkSet   *set,
 void      gtk_set_shift        (GtkSet   *set,
                                 guint     first,
                                 int       shift);
+
+void      gtk_set_iter_init    (GtkSetIter *iter,
+                                GtkSet     *set);
+gboolean  gtk_set_iter_next    (GtkSetIter *iter,
+                                guint      *item);
 
 #endif  /* __GTK_SET_H__ */
