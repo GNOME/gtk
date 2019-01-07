@@ -244,11 +244,17 @@ static const gchar *
 get_effective_context_id (GtkIMMulticontext *multicontext)
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
+  GdkDisplay *display;
 
   if (priv->context_id_aux)
     return priv->context_id_aux;
 
-  return _gtk_im_module_get_default_context_id ();
+  if (priv->client_widget)
+    display = gtk_widget_get_display (priv->client_widget);
+  else
+    display = gdk_display_get_default ();
+
+  return _gtk_im_module_get_default_context_id (display);
 }
 
 static GtkIMContext *

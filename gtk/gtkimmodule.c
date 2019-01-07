@@ -115,13 +115,12 @@ is_platform (const char *context_id)
 }
 
 static gboolean
-match_backend (const char *context_id)
+match_backend (GdkDisplay *display,
+               const char *context_id)
 {
 #ifdef GDK_WINDOWING_WAYLAND
   if (g_strcmp0 (context_id, "wayland") == 0)
     {
-      GdkDisplay *display = gdk_display_get_default ();
-
       return GDK_IS_WAYLAND_DISPLAY (display) &&
              gdk_wayland_display_query_registry (display,
                                                  "zwp_text_input_manager_v3");
@@ -130,22 +129,22 @@ match_backend (const char *context_id)
 
 #ifdef GDK_WINDOWING_BROADWAY
   if (g_strcmp0 (context_id, "broadway") == 0)
-    return GDK_IS_BROADWAY_DISPLAY (gdk_display_get_default ());
+    return GDK_IS_BROADWAY_DISPLAY (display);
 #endif
 
 #ifdef GDK_WINDOWING_X11
   if (g_strcmp0 (context_id, "xim") == 0)
-    return GDK_IS_X11_DISPLAY (gdk_display_get_default ());
+    return GDK_IS_X11_DISPLAY (display);
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
   if (g_strcmp0 (context_id, "ime") == 0)
-    return GDK_IS_WIN32_DISPLAY (gdk_display_get_default ());
+    return GDK_IS_WIN32_DISPLAY (display);
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
   if (g_strcmp0 (context_id, "quartz") == 0)
-    return GDK_IS_QUARTZ_DISPLAY (gdk_display_get_default ());
+    return GDK_IS_QUARTZ_DISPLAY (display);
 #endif
 
   return TRUE;
@@ -178,14 +177,15 @@ lookup_immodule (gchar **immodules_list)
 
 /**
  * _gtk_im_module_get_default_context_id:
- * 
+ * @display: The display to look up the module for
+ *
  * Return the context_id of the best IM context type 
  * for the given window.
  * 
  * Returns: the context ID (will never be %NULL)
  */
 const gchar *
-_gtk_im_module_get_default_context_id (void)
+_gtk_im_module_get_default_context_id (GdkDisplay *display)
 {
   const gchar *context_id = NULL;
   const gchar *envvar;
@@ -205,7 +205,7 @@ _gtk_im_module_get_default_context_id (void)
     }
 
   /* Check if the certain immodule is set in XSETTINGS. */
-  settings = gtk_settings_get_default ();
+  settings = gtk_settings_get_for_display (display);
   g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
   if (tmp)
     {
@@ -231,7 +231,7 @@ _gtk_im_module_get_default_context_id (void)
       const char *context_id;
 
       context_id = g_io_extension_get_name (ext);
-      if (match_backend (context_id))
+      if (match_backend (display, context_id))
         return context_id;
 
       // FIXME: locale matching
