@@ -102,8 +102,6 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 
 static void propagate_purpose (GtkIMMulticontext *context);
 
-static const gchar *global_context_id = NULL;
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIMMulticontext, gtk_im_multicontext, GTK_TYPE_IM_CONTEXT)
 
 static void
@@ -256,19 +254,13 @@ get_effective_context_id (GtkIMMulticontext *multicontext)
   if (priv->context_id_aux)
     return priv->context_id_aux;
 
-  if (!global_context_id)
-    global_context_id = _gtk_im_module_get_default_context_id ();
-
-  return global_context_id;
+  return _gtk_im_module_get_default_context_id ();
 }
 
 static GtkIMContext *
 gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
-
-  if (g_strcmp0 (priv->context_id, get_effective_context_id (multicontext)) != 0)
-    gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
 
   if (!priv->slave)
     {
@@ -290,23 +282,31 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 }
 
 static void
-im_module_setting_changed (GtkSettings *settings, 
-                           gpointer     data)
+im_module_setting_changed (GtkSettings       *settings, 
+                           GtkIMMulticontext *self)
 {
-  global_context_id = NULL;
+  gtk_im_multicontext_set_slave (self, NULL, FALSE);
 }
-
 
 static void
 gtk_im_multicontext_set_client_window (GtkIMContext *context,
 				       GdkWindow    *window)
 {
-  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
-  GtkIMMulticontextPrivate *priv = multicontext->priv;
+  GtkIMMulticontext *self = GTK_IM_MULTICONTEXT (context);
+  GtkIMMulticontextPrivate *priv = self->priv;
   GtkIMContext *slave;
   GdkScreen *screen;
   GtkSettings *settings;
-  gboolean connected;
+
+  if (priv->client_window != NULL)
+    {
+      screen = gdk_window_get_screen (priv->client_window);
+      settings = gtk_settings_get_for_screen (screen);
+
+      g_signal_handlers_disconnect_by_func (settings,
+                                            im_module_setting_changed,
+                                            self);
+    }
 
   priv->client_window = window;
 
@@ -315,20 +315,12 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
       screen = gdk_window_get_screen (window);
       settings = gtk_settings_get_for_screen (screen);
 
-      connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
-                                                      "gtk-im-module-connected"));
-      if (!connected)
-        {
-          g_signal_connect (settings, "notify::gtk-im-module",
-                            G_CALLBACK (im_module_setting_changed), NULL);
-          g_object_set_data (G_OBJECT (settings), "gtk-im-module-connected",
-                             GINT_TO_POINTER (TRUE));
-
-          global_context_id = NULL;
-        }
+      g_signal_connect (settings, "notify::gtk-im-module",
+                        G_CALLBACK (im_module_setting_changed),
+                        self);
     }
 
-  slave = gtk_im_multicontext_get_slave (multicontext);
+  slave = gtk_im_multicontext_get_slave (self);
   if (slave)
     gtk_im_context_set_client_window (slave, window);
 }
@@ -723,9 +715,14 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 const char *
 gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
 {
+  GtkIMMulticontextPrivate *priv = context->priv;
+
   g_return_val_if_fail (GTK_IS_IM_MULTICONTEXT (context), NULL);
 
-  return context->priv->context_id;
+  if (priv->context_id == NULL)
+    gtk_im_multicontext_get_slave (context);
+
+  return priv->context_id;
 }
 
 /**
