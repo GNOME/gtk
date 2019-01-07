@@ -1174,11 +1174,12 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
       if (gtk_widget_is_toplevel (toplevel))
         {
 #ifdef GDK_WINDOWING_X11
-          gtk_window_present_with_time (GTK_WINDOW (toplevel),
-                                        gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
-#else
-          gtk_window_present (GTK_WINDOW (toplevel));
+          if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (toplevel)))
+            gtk_window_present_with_time (GTK_WINDOW (toplevel),
+                                          gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
+          else
 #endif
+            gtk_window_present (GTK_WINDOW (toplevel));
         }
 
       return TRUE;
