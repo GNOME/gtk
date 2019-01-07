@@ -118,33 +118,43 @@ static gboolean
 match_backend (GdkDisplay *display,
                const char *context_id)
 {
-#ifdef GDK_WINDOWING_WAYLAND
   if (g_strcmp0 (context_id, "wayland") == 0)
     {
+#ifdef GDK_WINDOWING_WAYLAND
       return GDK_IS_WAYLAND_DISPLAY (display) &&
              gdk_wayland_display_query_registry (display,
                                                  "zwp_text_input_manager_v3");
+#else
+      return FALSE;
+#endif
     }
-#endif
 
-#ifdef GDK_WINDOWING_BROADWAY
   if (g_strcmp0 (context_id, "broadway") == 0)
+#ifdef GDK_WINDOWING_BROADWAY
     return GDK_IS_BROADWAY_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
-#ifdef GDK_WINDOWING_X11
   if (g_strcmp0 (context_id, "xim") == 0)
+#ifdef GDK_WINDOWING_X11
     return GDK_IS_X11_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
-#ifdef GDK_WINDOWING_WIN32
   if (g_strcmp0 (context_id, "ime") == 0)
+#ifdef GDK_WINDOWING_WIN32
     return GDK_IS_WIN32_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
   if (g_strcmp0 (context_id, "quartz") == 0)
+#ifdef GDK_WINDOWING_QUARTZ
     return GDK_IS_QUARTZ_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
   return TRUE;
