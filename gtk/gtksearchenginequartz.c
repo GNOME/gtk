@@ -73,9 +73,14 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
 {
   int i;
   GList *hits = NULL;
+  /* The max was originally set to 1000 to mimic something called "the
+   * boogie backend".
+   */
+  const unsigned int max_hits = 1000;
+  const unsigned int max_iter = submitted_hits + [ns_query resultCount];
 
   /* Here we submit hits "submitted_hits" to "resultCount" */
-  for (i = submitted_hits; i < [ns_query resultCount]; i++)
+  for (i = submitted_hits; i < max_iter && i < max_hits; ++i)
     {
       id result = [ns_query resultAtIndex:i];
       const char *result_path;
@@ -95,15 +100,10 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
   _gtk_search_engine_hits_added (engine, hits);
   g_list_free_full (hits, (GDestroyNotify) _gtk_search_hit_free);
 
-  submitted_hits += [ns_query resultCount];
-
-  /* The beagle backend stops at 1000 hits, so guess we do so too here.
-   * It works pretty snappy on my MacBook, if we get rid of this limit
-   * we are almost definitely going to need some code to submit hits
-   * in batches.
-   */
-  if (submitted_hits > 25)
+  if (max_iter >= max_hits)
     [ns_query stopQuery];
+
+  submitted_hits = max_iter;
 }
 
 - (void) queryUpdate:(id)sender
