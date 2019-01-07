@@ -106,8 +106,6 @@ got_files (GObject      *enumerate,
                                       store);
 }
 
-static gboolean invert_sort;
-
 static int
 compare_files (gconstpointer first,
                gconstpointer second,
@@ -136,9 +134,6 @@ compare_files (gconstpointer first,
 
   result = strcasecmp (first_path, second_path);
 
-  if (invert_sort)
-    result = - result;
-
   g_free (first_path);
   g_free (second_path);
 
@@ -148,7 +143,6 @@ compare_files (gconstpointer first,
 static GListModel *
 create_list_model_for_directory (gpointer file)
 {
-  GtkSortListModel *sort;
   GListStore *store;
 
   if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
@@ -160,11 +154,7 @@ create_list_model_for_directory (gpointer file)
   if (!start_enumerate (store))
     return NULL;
 
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (store),
-                                  compare_files,
-                                  NULL, NULL);
-  g_object_unref (store);
-  return G_LIST_MODEL (sort);
+  return G_LIST_MODEL (store);
 }
 
 typedef struct _RowData RowData;
@@ -345,47 +335,75 @@ match_file (gpointer item, gpointer data)
   return result;
 }
 
-static void
-resort_model (GListModel *model)
-{
-  if (GTK_IS_SELECTION_MODEL (model))
-    {
-      resort_model (gtk_selection_model_get_model (GTK_SELECTION_MODEL (model)));
-    }
-  else if (GTK_IS_FILTER_LIST_MODEL (model))
-    {
-      resort_model (gtk_filter_list_model_get_model (GTK_FILTER_LIST_MODEL (model)));
-    }
-  else if (GTK_IS_SORT_LIST_MODEL (model))
-    {
-      gtk_sort_list_model_resort (GTK_SORT_LIST_MODEL (model));
-    }
-  else if (GTK_IS_TREE_LIST_MODEL (model))
-    {
-      int i;
-
-      resort_model (gtk_tree_list_model_get_model (GTK_TREE_LIST_MODEL (model)));
-
-      for (i = 0; i < g_list_model_get_n_items (model); i++)
-        {
-          GtkTreeListRow *row;
-          row = gtk_tree_list_model_get_row (GTK_TREE_LIST_MODEL (model), i);
-          if (gtk_tree_list_row_get_expanded (row))
-            {
-              resort_model (gtk_tree_list_row_get_children (row));
-            }
-        }
-    }
-}
+static gboolean invert_sort;
 
 static void
-toggle_sort (GtkButton *button, GtkListView *view)
+toggle_sort (GtkButton *button, GtkSortListModel *sort)
 {
   invert_sort = !invert_sort;
 
   gtk_button_set_icon_name (button, invert_sort ? "view-sort-descending" : "view-sort-ascending");
 
-  resort_model (gtk_list_view_get_model (view));
+  gtk_sort_list_model_resort (sort);
+}
+
+static int
+sort_tree (gconstpointer a, gconstpointer b, gpointer data)
+{
+  GtkTreeListRow *ra = (GtkTreeListRow *) a;
+  GtkTreeListRow *rb = (GtkTreeListRow *) b;
+  GtkTreeListRow *pa, *pb;
+  guint da, db;
+  int i;
+  GFile *ia, *ib;
+  int cmp = 0;
+
+  da = gtk_tree_list_row_get_depth (ra);
+  db = gtk_tree_list_row_get_depth (rb);
+
+  if (da > db)
+    for (i = 0; i < da - db; i++)
+      {
+        ra = gtk_tree_list_row_get_parent (ra);
+        if (ra) g_object_unref (ra);
+      }
+  if (db > da)
+    for (i = 0; i < db - da; i++)
+      {
+        rb = gtk_tree_list_row_get_parent (rb);
+        if (rb) g_object_unref (rb);
+      }
+
+  /* now ra and rb are ancestors of a and b at the same depth */
+
+  if (ra == rb)
+    return da - db;
+
+  pa = ra;
+  pb = rb;
+  do {
+    ra = pa;
+    rb = pb;
+    pa = gtk_tree_list_row_get_parent (ra);
+    pb = gtk_tree_list_row_get_parent (rb);
+    if (pa) g_object_unref (pa);
+    if (pb) g_object_unref (pb);
+  } while (pa != pb);
+
+  /* now ra and rb are ancestors of a and b that have a common parent */
+
+  ia = gtk_tree_list_row_get_item (ra);
+  ib = gtk_tree_list_row_get_item (rb);
+
+  cmp = compare_files (ia, ib, NULL);
+
+  g_object_unref (ia);
+  g_object_unref (ib);
+
+  if (invert_sort)
+    cmp = -cmp;
+
+  return cmp;
 }
 
 int
@@ -396,12 +414,11 @@ main (int argc, char *argv[])
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
+  GtkSortListModel *sort;
   GtkSelectionModel *selection;
   GFile *root;
 
   gtk_init ();
-
-  listview = gtk_list_view_new ();
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
@@ -416,13 +433,14 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (hbox), search_entry);
   gtk_widget_set_hexpand (search_entry, TRUE);
   button = gtk_button_new_from_icon_name ("view-sort-ascending");
-  g_signal_connect (button, "clicked", G_CALLBACK (toggle_sort), listview);
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_container_add (GTK_CONTAINER (vbox), sw);
+
+  listview = gtk_list_view_new ();
 
   gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
                                setup_widget,
@@ -443,13 +461,17 @@ main (int argc, char *argv[])
   g_object_unref (dirmodel);
   g_object_unref (root);
 
-  filter = gtk_filter_list_model_new (G_LIST_MODEL (tree),
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sort_tree, NULL, NULL);
+
+  g_signal_connect (button, "clicked", G_CALLBACK (toggle_sort), sort);
+
+  filter = gtk_filter_list_model_new (G_LIST_MODEL (sort),
                                       match_file,
                                       search_entry,
                                       NULL);
+                                  
   g_signal_connect_swapped (search_entry, "search-changed", G_CALLBACK (gtk_filter_list_model_refilter), filter);
   selection = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (filter)));
-
 
   gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
 
