@@ -1153,33 +1153,6 @@ gtk_settings_create_for_display (GdkDisplay *display)
                              NULL);
   else
 #endif
-#ifdef GDK_WINDOWING_BROADWAY
-    if (GDK_IS_BROADWAY_DISPLAY (display))
-      settings = g_object_new (GTK_TYPE_SETTINGS,
-                               "gtk-im-module", "broadway",
-                               NULL);
-  else
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    if (GDK_IS_WAYLAND_DISPLAY (display))
-      {
-        if (gdk_wayland_display_query_registry (display,
-                                                "zwp_text_input_manager_v3"))
-          {
-            settings = g_object_new (GTK_TYPE_SETTINGS,
-                                     "gtk-im-module", "wayland",
-                                     NULL);
-          }
-        else
-          {
-            /* Fallback to other IM methods if the compositor does not
-             * implement the interface(s).
-             */
-            settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
-          }
-      }
-  else
-#endif
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
   settings->priv->display = display;
