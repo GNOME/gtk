@@ -47,6 +47,7 @@ EXTRA_DIST +=	\
 	pc_base.py			\
 	gtkpc.py			\
 	README_EGL_MSVC.txt		\
+	README_FONT_TWEAKING_MSVC.txt	\
 	regenerate-demos-h-win32.batin	\
 	$(GENERATED_ITEMS)
 
