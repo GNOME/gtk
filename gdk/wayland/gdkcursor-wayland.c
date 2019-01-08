@@ -336,43 +336,43 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
                                                      const gchar *name,
                                                      guint        scale)
 {
-  GdkWaylandCursor *private;
+  GdkWaylandCursor *wayland_cursor;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  private = g_hash_table_lookup (display_wayland->cursor_cache, name);
-  if (private)
-    return GDK_CURSOR (g_object_ref (private));
+  wayland_cursor = g_hash_table_lookup (display_wayland->cursor_cache, name);
+  if (wayland_cursor && wayland_cursor->scale == scale)
+    return GDK_CURSOR (g_object_ref (wayland_cursor));
 
-  private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
-                          "display", display,
-                          NULL);
+  wayland_cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
+                                 "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                                 "display", display,
+                                 NULL);
 
   /* Blank cursor case */
   if (!name || g_str_equal (name, "none") || g_str_equal (name, "blank_cursor"))
     {
-      private->name = g_strdup ("none");
-      private->scale = scale;
+      wayland_cursor->name = g_strdup ("none");
+      wayland_cursor->scale = scale;
 
-      return GDK_CURSOR (private);
+      return GDK_CURSOR (wayland_cursor);
     }
 
-  private->name = g_strdup (name);
-  private->scale = scale;
+  wayland_cursor->name = g_strdup (name);
+  wayland_cursor->scale = scale;
 
-  if (!_gdk_wayland_cursor_update (display_wayland, private))
+  if (!_gdk_wayland_cursor_update (display_wayland, wayland_cursor))
     {
-      g_object_unref (private);
+      g_object_unref (wayland_cursor);
       return NULL;
     }
 
   /* Insert into cache. */
-  g_hash_table_insert (display_wayland->cursor_cache,
-                       private->name,
-                       g_object_ref (private));
-  return GDK_CURSOR (private);
+  g_hash_table_replace (display_wayland->cursor_cache,
+                        wayland_cursor->name,
+                        g_object_ref (wayland_cursor));
+  return GDK_CURSOR (wayland_cursor);
 }
 
 GdkCursor *
