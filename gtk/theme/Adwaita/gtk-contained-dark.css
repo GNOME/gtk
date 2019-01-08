@@ -678,7 +678,7 @@ headerbar switch { margin-top: 9px; margin-bottom: 9px; }
 
 headerbar.titlebar headerbar:not(.titlebar) { background: none; box-shadow: none; }
 
-.background .titlebar:backdrop, .background .titlebar { border-top-left-radius: 10px; border-top-right-radius: 10px; }
+.background .titlebar:backdrop, .background .titlebar { border-top-left-radius: 8px; border-top-right-radius: 8px; }
 
 .background.tiled .titlebar:backdrop, .background.tiled .titlebar, .background.tiled-top .titlebar:backdrop, .background.tiled-top .titlebar, .background.tiled-right .titlebar:backdrop, .background.tiled-right .titlebar, .background.tiled-bottom .titlebar:backdrop, .background.tiled-bottom .titlebar, .background.tiled-left .titlebar:backdrop, .background.tiled-left .titlebar, .background.maximized .titlebar:backdrop, .background.maximized .titlebar, .background.solid-csd .titlebar:backdrop, .background.solid-csd .titlebar { border-top-left-radius: 0; border-top-right-radius: 0; }
 
@@ -1636,7 +1636,7 @@ calendar:indeterminate { color: alpha(currentColor,0.1); }
 /*********** Dialogs * */
 messagedialog .titlebar { min-height: 20px; background-image: none; background-color: #3f3e40; border-style: none; border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
-messagedialog.csd.background { border-bottom-left-radius: 11px; border-bottom-right-radius: 11px; }
+messagedialog.csd.background { border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; }
 
 messagedialog.csd .dialog-action-area button { padding: 10px 14px; border-radius: 0; border-left-style: solid; border-right-style: none; border-bottom-style: none; }
 
@@ -1872,7 +1872,7 @@ colorchooser .popover.osd { border-radius: 5px; }
 .scale-popup button:hover { background-color: rgba(238, 238, 236, 0.1); border-radius: 5px; }
 
 /********************** Window Decorations * */
-decoration { border-radius: 10px 10px 0 0; border-width: 0px; box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(37, 37, 38, 0.9); margin: 10px; }
+decoration { border-radius: 8px 8px 0 0; border-width: 0px; box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(37, 37, 38, 0.9); margin: 10px; }
 
 decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(37, 37, 38, 0.9); transition: 200ms ease-out; }
 
@@ -1886,7 +1886,7 @@ decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(
 
 tooltip.csd decoration { border-radius: 5px; box-shadow: none; }
 
-messagedialog.csd decoration { border-radius: 10px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(37, 37, 38, 0.8); }
+messagedialog.csd decoration { border-radius: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(37, 37, 38, 0.8); }
 
 .solid-csd decoration { margin: 0; padding: 4px; background-color: #252526; border: solid 1px #252526; border-radius: 0; box-shadow: inset 0 0 0 3px #373738, inset 0 1px rgba(238, 238, 236, 0.07); }
 
