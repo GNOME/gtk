@@ -390,12 +390,7 @@ gtk_revealer_set_position (GtkRevealer *revealer,
 
   priv->current_pos = pos;
 
-  /* We check target_pos here too, because we want to ensure we set
-   * child_visible immediately when starting a reveal operation
-   * otherwise the child widgets will not be properly realized
-   * after the reveal returns.
-   */
-  new_visible = priv->current_pos != 0.0 || priv->target_pos != 0.0;
+  new_visible = priv->current_pos != 0.0;
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL &&
