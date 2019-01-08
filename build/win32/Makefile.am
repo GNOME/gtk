@@ -43,6 +43,7 @@ EXTRA_DIST +=	\
 	pc_base.py			\
 	gtkpc.py			\
 	README_EGL_MSVC.txt		\
+	README_FONT_TWEAKING_MSVC.txt	\
 	$(GENERATED_ITEMS)
 
 -include $(top_srcdir)/git.mk
