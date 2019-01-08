@@ -342,7 +342,7 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   wayland_cursor = g_hash_table_lookup (display_wayland->cursor_cache, name);
-  if (wayland_cursor)
+  if (wayland_cursor && wayland_cursor->scale == scale)
     return GDK_CURSOR (g_object_ref (wayland_cursor));
 
   wayland_cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
@@ -369,9 +369,9 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
     }
 
   /* Insert into cache. */
-  g_hash_table_insert (display_wayland->cursor_cache,
-                       wayland_cursor->name,
-                       g_object_ref (wayland_cursor));
+  g_hash_table_replace (display_wayland->cursor_cache,
+                        wayland_cursor->name,
+                        g_object_ref (wayland_cursor));
   return GDK_CURSOR (wayland_cursor);
 }
 
