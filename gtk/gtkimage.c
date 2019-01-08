@@ -134,7 +134,8 @@
  *
  * # CSS nodes
  *
- * GtkImage has a single CSS node with the name image.
+ * GtkImage has a single CSS node with the name image. The style classes
+ * may appear on image CSS nodes: .icon-dropshadow, .lowres-icon.
  */
 
 
