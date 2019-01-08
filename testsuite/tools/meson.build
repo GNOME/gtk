@@ -8,7 +8,7 @@ if bash.found()
   foreach t : ['simplify', 'settings']
     configure_file(output: t,
                    input: '@0@.in'.format(t),
-                   configuration: configuration_data(),
+                   copy: true,
                    install: get_option('install-tests'),
                    install_dir: testexecdir)
     test(t, bash,
