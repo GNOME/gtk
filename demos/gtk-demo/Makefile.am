@@ -209,9 +209,20 @@ gtk3_demo_application_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
+$(top_builddir)/build/win32/demos.list: Makefile
+	-$(RM) $@
+	for F in $(demos_base); do \
+		case $$F in \
+		*.c) \
+			echo $$F' ^'>>$(top_builddir)/build/win32/demos.list \
+			;; \
+		esac \
+	done
+
 dist-hook: \
 	$(top_builddir)/build/win32/vs9/gtk3-demo.vcproj	\
-	$(top_builddir)/build/win32/vs9/gtk3-demo-application.vcproj
+	$(top_builddir)/build/win32/vs9/gtk3-demo-application.vcproj	\
+	$(top_builddir)/build/win32/demos.list
 
 DISTCLEANFILES = demos.h demos.h.win32 $(extra_nodist_demo_sources)
 
