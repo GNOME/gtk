@@ -7659,7 +7659,8 @@ gtk_window_focus (GtkWidget        *widget,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkBin *bin;
   GtkContainer *container;
-  GtkWidget *child;
+  GtkWidget *first;
+  GtkWidget *second;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
@@ -7705,24 +7706,26 @@ gtk_window_focus (GtkWidget        *widget,
   /* Now try to focus the first widget in the window,
    * taking care to hook titlebar widgets into the
    * focus chain.
-  */
-  if (priv->title_box != NULL &&
-      old_focus_child != NULL &&
+   */
+  if (old_focus_child != NULL &&
       priv->title_box != old_focus_child)
-    child = priv->title_box;
-  else
-    child = gtk_bin_get_child (bin);
-
-  if (child)
     {
-      if (gtk_widget_child_focus (child, direction))
-        return TRUE;
-      else if (priv->title_box != NULL &&
-               priv->title_box != child &&
-               gtk_widget_child_focus (priv->title_box, direction))
-        return TRUE;
-
+      first = priv->title_box;
+      second = gtk_bin_get_child (bin);
     }
+  else
+    {
+      first = gtk_bin_get_child (bin);
+      second = priv->title_box;
+    }
+
+  if (first != NULL &&
+      gtk_widget_child_focus (first, direction))
+    return TRUE;
+
+  if (second != NULL &&
+      gtk_widget_child_focus (second, direction))
+    return TRUE;
 
   return FALSE;
 }
