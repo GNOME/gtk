@@ -1009,7 +1009,7 @@ _gtk_popover_update_child_visible (GtkPopover *popover)
     }
 
   parent = gtk_widget_get_parent (GTK_WIDGET (priv->parent_scrollable));
-  rect = priv->pointing_to;
+  gtk_popover_get_pointing_to (popover, &rect);
 
   gtk_widget_translate_coordinates (priv->widget, parent,
                                     rect.x, rect.y, &rect.x, &rect.y);
