@@ -1,3 +1,27 @@
+Overview of Changes in GTK+ 3.24.3
+==================================
+
+* Bugs fixed:
+ x11: Be more careful about setting ParentRelative
+ x11: set proper tool type for Wacom tablets
+ wayland im: Handle enter/leave in input method
+ wayland im: Respect string length limits
+ wayland: Support key theme setting
+ wayland: Fix intermittent cursor scaling issues
+ quartz: Make resolution handling work on all versions
+ quartz: Make file chooser search work
+ win32: Fix a crash on IME changes
+ placessidebar: insert drops at the right spot
+ file chooser: Fix connecting to nfs shares
+ revealer: Fix underallocation problems
+ icons: Recolor polygons in svg as well
+ flowbox: fix dnd problems
+ text view: 0-fill new text iters
+ event controller motion: translate coordinates
+
+* Translation updates:
+ Japanese
+
 Overview of Changes in GTK+ 3.24.2
 ==================================
 
