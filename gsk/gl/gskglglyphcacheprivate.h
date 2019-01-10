@@ -59,6 +59,8 @@ struct _GskGLCachedGlyph
   int draw_width;
   int draw_height;
 
+  float scale;
+
   guint64 timestamp;
 };
 

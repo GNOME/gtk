@@ -322,12 +322,13 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
       value->draw_height = ink_rect.height;
       value->timestamp = cache->timestamp;
       value->atlas = NULL; /* For now */
+      value->scale = (guint)(scale * 1024);
 
       key->font = g_object_ref (font);
       key->glyph = glyph;
       key->scale = (guint)(scale * 1024);
 
-      if (ink_rect.width > 0 && ink_rect.height > 0)
+      if (ink_rect.width > 0 && ink_rect.height > 0 && key->scale > 0)
         add_to_cache (cache, key, value);
 
       g_hash_table_insert (cache->hash_table, key, value);

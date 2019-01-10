@@ -496,7 +496,7 @@ render_text_node (GskGLRenderer   *self,
                                          text_scale);
 
       /* e.g. whitespace */
-      if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
+      if (glyph->draw_width <= 0 || glyph->draw_height <= 0 || glyph->scale <= 0)
         goto next;
 
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
