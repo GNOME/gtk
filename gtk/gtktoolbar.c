@@ -438,7 +438,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    * to display a context menu on the toolbar. The context-menu should
    * appear at the coordinates given by @x and @y. The mouse button
    * number is given by the @button parameter. If the menu was popped
-   * up using the keybaord, @button is -1.
+   * up using the keyboard, @button is -1.
    *
    * Returns: return %TRUE if the signal was handled, %FALSE if not
    */
