@@ -72,7 +72,7 @@ struct _GtkIMContextIMEPrivate
   LPVOID read_str;
   DWORD read_str_len;
 
-  guint16 compose_buffer[10];
+  guint32 compose_buffer[10];
   gsize   n_compose;
 };
 
@@ -326,7 +326,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   GtkIMContextIMEPrivate *priv;
   guint32          c;
   gsize            i;
-  guint16          output[10];
+  guint32          output[10];
   gsize            output_size = 10;
   const guint32   *ligature = NULL;
   GdkKeymap       *keymap;
@@ -361,7 +361,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (ligature != NULL)
     {
       for (i = 0; ligature[i] != 0 && priv->n_compose < G_N_ELEMENTS (priv->compose_buffer); i++)
-        priv->compose_buffer[priv->n_compose++] = (guint16) ligature[i];
+        priv->compose_buffer[priv->n_compose++] = ligature[i];
     }
   else
     {
@@ -375,10 +375,10 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
       return FALSE;
     }
 
-  switch (gdk_win32_keymap_check_compose (keymap,
-                                          priv->compose_buffer,
-                                          priv->n_compose,
-                                          output, &output_size))
+  switch (gdk_win32_keymap_check_compose32 (keymap,
+                                            priv->compose_buffer,
+                                            priv->n_compose,
+                                            output, &output_size))
     {
     case GDK_WIN32_KEYMAP_MATCH_NONE:
       for (i = 0; i < priv->n_compose; i++)
