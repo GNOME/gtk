@@ -639,17 +639,10 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
-  /* Translators: if the "on" state label requires more than three
-   * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-   * the state
-   */
-  priv->on_label = gtk_label_new (C_("switch", "ON"));
+  priv->on_label = gtk_label_new ("❙");
   gtk_widget_set_parent (priv->on_label, GTK_WIDGET (self));
 
-  /* Translators: if the "off" state label requires more than three
-   * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-   */
-  priv->off_label = gtk_label_new (C_("switch", "OFF"));
+  priv->off_label = gtk_label_new ("○");
   gtk_widget_set_parent (priv->off_label, GTK_WIDGET (self));
 
   priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
