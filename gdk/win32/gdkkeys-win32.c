@@ -1578,7 +1578,7 @@ check_compose_internal (GdkWin32Keymap *keymap,
           sub == GDK_WIN32_KEYMAP_MATCH_PARTIAL)
         {
           /* Recursive invocation already filled the output buffer */
-          return GDK_WIN32_KEYMAP_MATCH_EXACT; 
+          return sub;
         }
     }
 
@@ -1623,8 +1623,10 @@ gdk_win32_keymap_check_compose (GdkWin32Keymap *keymap,
                                    compose_buffer32[0], &compose_buffer32[1], compose_buffer_len - 1,
                                    output32, output_len, 0);
 
-  for (i = 0; i < *output_len; i++)
-    output[i] = (guint16) output32[i];
+  if (result == GDK_WIN32_KEYMAP_MATCH_EXACT ||
+      result == GDK_WIN32_KEYMAP_MATCH_PARTIAL)
+    for (i = 0; i < *output_len; i++)
+      output[i] = (guint16) output32[i];
 
   g_free (output32);
   g_free (compose_buffer32);
