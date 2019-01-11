@@ -299,10 +299,10 @@ gtk_switch_create_pango_layouts (GtkSwitch *self)
   GtkSwitchPrivate *priv = self->priv;
 
   g_clear_object (&priv->on_layout);
-  priv->on_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "❙");
+  priv->on_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "⏽");
 
   g_clear_object (&priv->off_layout);
-  priv->off_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "○");
+  priv->off_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "⭘");
 }
 
 static void
