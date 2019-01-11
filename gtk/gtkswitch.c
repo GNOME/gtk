@@ -639,10 +639,10 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
-  priv->on_label = gtk_label_new ("❙");
+  priv->on_label = gtk_label_new ("⏽");
   gtk_widget_set_parent (priv->on_label, GTK_WIDGET (self));
 
-  priv->off_label = gtk_label_new ("○");
+  priv->off_label = gtk_label_new ("⭘");
   gtk_widget_set_parent (priv->off_label, GTK_WIDGET (self));
 
   priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
