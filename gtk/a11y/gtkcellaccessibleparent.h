@@ -128,10 +128,10 @@ void     gtk_cell_accessible_parent_get_cell_position(GtkCellAccessibleParent *p
                                                       GtkCellAccessible       *cell,
                                                       gint                    *row,
                                                       gint                    *column);
-
+GDK_AVAILABLE_IN_ALL
 GPtrArray   *gtk_cell_accessible_parent_get_column_header_cells (GtkCellAccessibleParent *parent,
                                                                  GtkCellAccessible       *cell);
-
+GDK_AVAILABLE_IN_ALL
 GPtrArray   *gtk_cell_accessible_parent_get_row_header_cells    (GtkCellAccessibleParent *parent,
                                                                  GtkCellAccessible       *cell);
 
