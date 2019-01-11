@@ -1727,8 +1727,8 @@ gtk_list_box_update_selection_full (GtkListBox    *box,
     {
       gtk_list_box_unselect_all_internal (box);
       gtk_list_box_row_set_selected (row, TRUE);
-      g_signal_emit (box, signals[ROW_SELECTED], 0, row);
       priv->selected_row = row;
+      g_signal_emit (box, signals[ROW_SELECTED], 0, row);
     }
   else if (priv->selection_mode == GTK_SELECTION_SINGLE)
     {
