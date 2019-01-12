@@ -2464,7 +2464,6 @@ gdk_event_translate (MSG  *msg,
     case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
       _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
-      _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
       GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		     LOCALE_IDEFAULTANSICODEPAGE,
 		     buf, sizeof (buf));
@@ -2476,6 +2475,22 @@ gdk_event_translate (MSG  *msg,
 			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
 			 _gdk_input_codepage));
       gdk_settings_notify (window, "gtk-im-module", GDK_SETTING_ACTION_CHANGED);
+
+      /* Generate a dummy key event to "nudge" IMContext */
+      event = gdk_event_new (GDK_KEY_PRESS);
+      event->key.window = window;
+      event->key.time = _gdk_win32_get_next_tick (msg->time);
+      event->key.keyval = GDK_KEY_VoidSymbol;
+      event->key.string = NULL;
+      event->key.length = 0;
+      event->key.hardware_keycode = 0;
+      gdk_event_set_scancode (event, 0);
+      gdk_event_set_device (event, device_manager_win32->core_keyboard);
+      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+      gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_keyboard));
+      event->key.is_modifier = FALSE;
+      event->key.state = 0;
+      _gdk_win32_append_event (event);
       break;
 
     case WM_SYSKEYUP:
