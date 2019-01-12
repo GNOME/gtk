@@ -33,9 +33,6 @@ typedef void            (* GtkRbTreeAugmentFunc)        (GtkRbTree              
                                                          gpointer                 node,
                                                          gpointer                 left,
                                                          gpointer                 right);
-typedef int             (* GtkRbTreeFindFunc)           (GtkRbTree               *tree,
-                                                         gpointer                 node,
-                                                         gpointer                 user_data);
 
 GtkRbTree *          gtk_rb_tree_new_for_size           (gsize                    element_size,
                                                          gsize                    augment_size,
@@ -75,12 +72,6 @@ gpointer             gtk_rb_tree_insert_after           (GtkRbTree              
 void                 gtk_rb_tree_remove                 (GtkRbTree               *tree,
                                                          gpointer                 node);
 void                 gtk_rb_tree_remove_all             (GtkRbTree               *tree);
-
-gpointer             gtk_rb_tree_find                   (GtkRbTree               *tree,
-                                                         gpointer                *out_before,
-                                                         gpointer                *out_after,
-                                                         GtkRbTreeFindFunc        find_func,
-                                                         gpointer                 user_data);
 
 
 G_END_DECLS
