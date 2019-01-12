@@ -6254,8 +6254,8 @@ gtk_label_get_current_link (GtkLabel *label)
  * This function is intended for use in a #GtkLabel::activate-link handler
  * or for use in a #GtkWidget::query-tooltip handler.
  *
- * Returns: the currently active URI. The string is owned by GTK+ and must
- *   not be freed or modified.
+ * Returns: (nullable): the currently active URI or %NULL if there is none.
+ *   The string is owned by GTK+ and must not be freed or modified.
  */
 const gchar *
 gtk_label_get_current_uri (GtkLabel *label)
