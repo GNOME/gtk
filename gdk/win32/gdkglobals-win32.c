@@ -38,7 +38,7 @@ HINSTANCE	  _gdk_app_hmodule;
 gint		  _gdk_input_ignore_core;
 
 HKL		  _gdk_input_locale;
-gboolean	  _gdk_input_locale_is_ime;
+gboolean	  _gdk_input_locale_is_ime = FALSE;
 UINT		  _gdk_input_codepage;
 
 gint		  _gdk_input_ignore_wintab = FALSE;
