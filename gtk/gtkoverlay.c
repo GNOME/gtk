@@ -314,7 +314,7 @@ gtk_overlay_size_allocate (GtkWidget *widget,
     gtk_widget_size_allocate (main_widget,
                               &(GtkAllocation) {
                                 0, 0,
-                                  width, height
+                                width, height
                               }, -1);
 
   for (child = gtk_widget_get_first_child (widget);
