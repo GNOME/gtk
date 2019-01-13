@@ -566,7 +566,7 @@ test_effect (void)
   gtk_widget_set_valign (button, GTK_ALIGN_START);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-  /*gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);*/
+  gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
 
   button = gtk_button_new_with_label ("Maybe this one?");
   label = gtk_bin_get_child (GTK_BIN (button));
@@ -577,7 +577,7 @@ test_effect (void)
   gtk_widget_set_valign (button, GTK_ALIGN_END);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-  /*gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);*/
+  gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   sw = gtk_scrolled_window_new (NULL, NULL);
