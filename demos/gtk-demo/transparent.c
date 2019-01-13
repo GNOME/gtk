@@ -12,12 +12,10 @@ do_transparent (GtkWidget *do_widget)
 
   if (!window)
     {
-      GtkWidget *sw;
       GtkWidget *overlay;
       GtkWidget *button;
       GtkWidget *label;
-      GtkWidget *box;
-      GtkWidget *image;
+      GtkWidget *picture;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -54,17 +52,8 @@ do_transparent (GtkWidget *do_widget)
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
       gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
-      sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (overlay), sw);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                      GTK_POLICY_AUTOMATIC,
-                                      GTK_POLICY_AUTOMATIC);
-      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (sw), box);
-      image = gtk_image_new_from_resource ("/transparent/portland-rose.jpg");
-
-      gtk_container_add (GTK_CONTAINER (box), image);
+      picture = gtk_picture_new_for_resource ("/transparent/portland-rose.jpg");
+      gtk_container_add (GTK_CONTAINER (overlay), picture);
     }
 
   if (!gtk_widget_get_visible (window))
