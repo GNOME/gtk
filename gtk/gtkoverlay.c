@@ -728,8 +728,8 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 
           gtk_widget_get_allocation (child, &alloc);
           graphene_rect_init (&bounds, alloc.x, alloc.y, alloc.width, alloc.height);
-          gtk_snapshot_push_clip (snapshot, &bounds);
           gtk_snapshot_push_blur (snapshot, blur);
+          gtk_snapshot_push_clip (snapshot, &bounds);
           gtk_snapshot_append_node (snapshot, main_widget_node);
           gtk_snapshot_pop (snapshot);
           gtk_snapshot_pop (snapshot);
