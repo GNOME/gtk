@@ -45,6 +45,10 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
   gboolean needs_transform;
 
+  if (self->bounds.size.width <= 0 ||
+      self->bounds.size.height <= 0)
+    return;
+
   needs_transform = self->bounds.size.width != width ||
                     self->bounds.size.height != height;
 
