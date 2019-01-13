@@ -190,11 +190,6 @@ quartz_filter_keypress (GtkIMContext *context,
   if (!GDK_IS_QUARTZ_WINDOW (qc->client_window))
     return FALSE;
 
-  nsview = gdk_quartz_window_get_nsview (qc->client_window);
-  win = (GdkWindow *)[ (GdkQuartzView *)nsview gdkWindow];
-  GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
-			   qc->client_window, win, nsview));
-
   NSEvent *nsevent = gdk_quartz_event_get_nsevent ((GdkEvent *)event);
 
   if (!nsevent)
@@ -205,6 +200,12 @@ quartz_filter_keypress (GtkIMContext *context,
       else
         return gtk_im_context_filter_keypress (qc->slave, event);
     }
+
+  nsview = gdk_quartz_window_get_nsview (qc->client_window);
+
+  win = (GdkWindow *)[(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
+  GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
+                           qc->client_window, win, nsview));
 
   if (event->type == GDK_KEY_RELEASE)
     return FALSE;
