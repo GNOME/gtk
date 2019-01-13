@@ -1091,10 +1091,15 @@ render_blur_node (GskGLRenderer       *self,
   gboolean is_offscreen;
   RenderOp op;
 
+  /* TODO(perf): We're forcing the child offscreen even if it's a texture
+   * so the resulting offscreen texture is bigger by the gaussian blur factor
+   * (see gsk_blur_node_new), but we didn't have to do that if the blur
+   * shader could handle that situation. */
+
   add_offscreen_ops (self, builder,
                      &node->bounds,
                      gsk_blur_node_get_child (node),
-                     &texture_id, &is_offscreen, FALSE, TRUE);
+                     &texture_id, &is_offscreen, TRUE, TRUE);
 
   ops_set_program (builder, &self->blur_program);
   op.op = OP_CHANGE_BLUR;
