@@ -740,8 +740,7 @@ gtk_overlay_snapshot (GtkWidget   *widget,
               rect.x = rect.y = 0;
               rect.width = main_alloc.width;
               rect.height = main_alloc.height;
-              clip = cairo_region_create ();
-              cairo_region_union_rectangle (clip, &rect);
+              clip = cairo_region_create_rectangle (&rect);
             }
           cairo_region_subtract_rectangle (clip, (cairo_rectangle_int_t *)&alloc);
         }
