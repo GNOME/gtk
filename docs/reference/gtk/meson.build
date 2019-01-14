@@ -362,6 +362,7 @@ content_files = [
   'running.sgml',
   'text_widget.sgml',
   'tree_widget.sgml',
+  'treeview_tutorial.xml',
   'visual_index.xml',
   'wayland.xml',
   'windows.sgml',
@@ -378,6 +379,7 @@ expand_content_files = [
   'question_index.sgml',
   'text_widget.sgml',
   'tree_widget.sgml',
+  'treeview_tutorial.xml',
 ]
 
 configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)

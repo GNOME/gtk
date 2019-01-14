@@ -162,6 +162,7 @@
     <chapter id="TreeWidgetObjects">
       <title>Tree, List and Icon Grid Widgets</title>
       <xi:include href="xml/tree_widget.sgml" />
+      <xi:include href="xml/treeview_tutorial.xml" />
       <xi:include href="xml/gtktreemodel.xml" />
       <xi:include href="xml/gtktreeselection.xml" />
       <xi:include href="xml/gtktreeviewcolumn.xml" />

@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="TreeView-tutorial">
+  <refmeta>
+    <refentrytitle>TreeView Tutorial</refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>GTK Library</refmiscinfo>
+  </refmeta>
+
+  <refnamediv>
+    <refname>TreeView Tutorial</refname>
+    <refpurpose>A tutorial on the use of GtkTreeModel, GtkTreeView, and friends</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>Overview</title>
+    <para>GtkTreeView is a widget that displays single- or multi-columned
+    lists and trees.</para>
+
+    <para>The purpose of this tutorial is not to provide an exhaustive
+    documentation of #GtkTreeView - that is what the API documentation is
+    for, which should be read alongside with this tutorial. The goal is
+    rather to present an introduction to the most commonly-used aspects
+    of #GtkTreeView, and to demonstrate how the various #GtkTreeView
+    components and concepts work together. Furthermore, an attempt has
+    been made to shed some light on custom tree models and custom cell
+    renderers, which seem to be often-mentioned, but rarely
+    explained.</para>
+
+    <para>Developers looking for a quick and dirty introduction that
+    teaches them everything they need to know in less than five paragraphs
+    will not find it here. In the author's experience, developers who do
+    not understand how the tree view and the models work together will run
+    into problems once they try to modify the given examples, whereas
+    developers who have worked with other toolkits that employ the
+    Model/View/Controller-design will find that the API reference provides
+    all the information they need to know in more condensed form anyway.
+    Those who disagree may jump straight to the working example code of
+    course.</para>
+
+    <para>Please note that the code examples in the following sections do
+    not necessarily demonstrate how GtkTreeView is used best in a particular
+    situation. There are different ways to achieve the same result, and the
+    examples merely show those different ways, so that developers are able
+    to decide which one is most suitable for the task at hand.</para>
+
+    <refsect2>
+      <title>Components</title>
+
+      <para>The most important concept underlying #GtkTreeView is that of
+      complete separation between data and how that data is displayed on
+      the screen. This is commonly known as Model/View/Controller-design,
+      or MVC. Data of various type (strings, numbers, images, etc.) is
+      stored in a "model". The "view" is then told which data to display,
+      where to display it, and how to display it. One of the advantages
+      of this approach is that you can have multiple views that display
+      the same data (a directory tree for example) in different ways, or
+      in the same way multiple times, with only one copy of the underlying
+      data. This avoids duplication of data and programming effort if the
+      same data is re-used in different contexts. Also, when the data in
+      the model is updated, all views automatically get updated as
+      well.</para>
+
+      <para>So, while #GtkTreeModel is used to store data, there are other
+      components that determine which data is displayed in the #GtkTreeView
+      and how it is displayed. These components are #GtkTreeViewColumn and
+      #GtkCellRenderer. A #GtkTreeView is made up of tree view columns.
+      These are the columns that users perceive as columns. They have a
+      clickable column header with a column title that can be hidden, and
+      can be resized and sorted. Tree view columns do not display any data,
+      they are only used as a device to represent the user-side of the tree
+      view (sorting etc.) and serve as packing widgets for the components
+      that do the actual rendering of data onto the screen, namely the
+      #GtkCellRenderer family of objects. There are a number of different
+      cell renderers that specialise in rendering certain data like
+      strings, pixbufs, or toggle buttons. More on this later.</para>
+
+      <para>Cell renderers are packed into tree view columns to display data.
+      A tree view column needs to contain at least one cell renderer, but can
+      contain multiple cell renderers. For example, if one wanted to display
+      a 'Filename' column where each filename has a little icon on the left
+      indicating the file type, one would pack a GtkCellRendererPixbuf and a
+      GtkCellRendererText into one tree view column. Packing renderers into a
+      tree view column is similar to packing widgets into a #GtkBox.</para>
+    </refsect2>
+
+    <refsect2>
+      <title>GtkTreeModels for Data Storage: GtkListStore and GtkTreeStore</title>
+
+      <para>It is important to realise what #GtkTreeModel is and what it is
+      not. #GtkTreeModel is basically just an 'interface' to the data store,
+      meaning that it is a standardised set of functions that allows a
+      #GtkTreeView widget (and the application programmer) to query certain
+      characteristics of a data store, for example how many rows there are,
+      which rows have children, and how many children a particular row has.
+      It also provides functions to retrieve data from the data store, and
+      tell the tree view what type of data is stored in the model. Every
+      data store must implement the #GtkTreeModel interface and provide these
+      functions. #GtkTreeModel itself only provides a way to query a data
+      store's characteristics and to retrieve existing data, it does not
+      provide a way to remove or add rows to the store or put data into the
+      store. This is done using the specific store's functions.</para>
+
+      <para>GTK comes with two built-in data stores (models): #GtkListStore
+      and #GtkTreeStore. As the names imply, #GtkListStore is used for simple
+      lists of data items where items have no hierarchical parent-child
+      relationships, and #GtkTreeStore is used for tree-like data structures,
+      where items can have parent-child relationships. A list of files in a
+      directory would be an example of a simple list structure, whereas a
+      directory tree is an example for a tree structure. A list is basically
+      just a special case of a tree with none of the items having any
+      children, so one could use a tree store to maintain a simple list of
+      items as well. The only reason #GtkListStore exists is in order to
+      provide an easier interface that does not need to cater for
+      child-parent relationships, and because a simple list model can be
+      optimised for the special case where no children exist, which makes it
+      faster and more efficient.</para>
+
+      <para>#GtkListStore and #GtkTreeStore should cater for most types of
+      data an application developer might want to display in a #GtkTreeView.
+      However, it should be noted that #GtkListStore and #GtkTreeStore have
+      been designed to cater to a large number of potential use cases, and
+      so are not overly optimized. If you already have your specialized data
+      store; if you plan to store a lot of data; or if have a large number
+      of rows, you should consider implementing your own custom model that
+      stores and manipulates data your own way and implements the
+      #GtkTreeModel interface. This will not only be more efficient, but
+      probably also lead to saner code in the long run, and give you more
+      control over your data. See below for more details on how to implement
+      custom models.</para>
+
+      <para>Tree model implementations like #GtkListStore and #GtkTreeStore
+      will take care of the view side for you once you have configured the
+      #GtkTreeView to display what you want. If you change data in the store,
+      the model will notify the tree view and your data display will be
+      updated. If you add or remove rows, the model will also notify the
+      store, and your row will appear in or disappear from the view as
+      well.</para>
+    </refsect2>
+
+  </refsect1>
