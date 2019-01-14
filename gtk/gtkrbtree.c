@@ -50,6 +50,23 @@ struct _GtkRbNode
 #define NODE_TO_POINTER(node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode)) : NULL))
 #define NODE_TO_AUG_POINTER(tree, node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode) + (tree)->element_size) : NULL))
 
+static inline GtkRbNode *
+parent (GtkRbNode *node)
+{
+  return node->parent;
+}
+
+static void
+set_parent (GtkRbTree *tree,
+            GtkRbNode *node,
+            GtkRbNode *new_parent)
+{
+  node->parent = new_parent;
+
+  if (new_parent == NULL)
+    tree->root = node;
+}
+
 static inline gsize
 gtk_rb_node_get_size (GtkRbTree *tree)
 {
@@ -105,8 +122,8 @@ gtk_rb_node_mark_dirty (GtkRbNode *node,
   
   node->dirty = TRUE;
 
-  if (mark_parent && node->parent)
-    gtk_rb_node_mark_dirty (node->parent, TRUE);
+  if (mark_parent && parent (node))
+    gtk_rb_node_mark_dirty (parent (node), TRUE);
 }
 
 static void
@@ -146,17 +163,17 @@ gtk_rb_node_get_last (GtkRbNode *node)
 static GtkRbNode *
 gtk_rb_node_get_previous (GtkRbNode *node)
 {
-  GtkRbNode *parent;
+  GtkRbNode *p;
 
   if (node->left)
     return gtk_rb_node_get_last (node->left);
 
-  for (parent = node->parent; parent != NULL; parent = node->parent)
+  for (p = parent (node); p != NULL; p = parent (node))
     {
-      if (parent->right == node)
-        return parent;
+      if (p->right == node)
+        return p;
 
-      node = parent;
+      node = p;
     }
 
   return NULL;
@@ -165,17 +182,17 @@ gtk_rb_node_get_previous (GtkRbNode *node)
 static GtkRbNode *
 gtk_rb_node_get_next (GtkRbNode *node)
 {
-  GtkRbNode *parent;
+  GtkRbNode *p;
 
   if (node->right)
     return gtk_rb_node_get_first (node->right);
 
-  for (parent = node->parent; parent != NULL; parent = node->parent)
+  for (p = parent (node); p != NULL; p = parent (node))
     {
-      if (parent->left == node)
-        return parent;
+      if (p->left == node)
+        return p;
 
-      node = parent;
+      node = p;
     }
 
   return NULL;
@@ -185,29 +202,26 @@ static void
 gtk_rb_node_rotate_left (GtkRbTree *tree,
                          GtkRbNode *node)
 {
-  GtkRbNode *right;
+  GtkRbNode *right, *p;
 
   right = node->right;
+  p = parent (node);
 
   node->right = right->left;
   if (right->left)
-    right->left->parent = node;
+    set_parent (tree, right->left, node);
 
-  right->parent = node->parent;
-  if (node->parent)
+  set_parent (tree, right, p);
+  if (p)
     {
-      if (node == node->parent->left)
-	node->parent->left = right;
+      if (node == p->left)
+	p->left = right;
       else
-	node->parent->right = right;
-    }
-  else
-    {
-      tree->root = right;
+	p->right = right;
     }
 
   right->left = node;
-  node->parent = right;
+  set_parent (tree, node, right);
 
   gtk_rb_node_mark_dirty (node, FALSE);
   gtk_rb_node_mark_dirty (right, FALSE);
@@ -217,30 +231,27 @@ static void
 gtk_rb_node_rotate_right (GtkRbTree *tree,
                           GtkRbNode *node)
 {
-  GtkRbNode *left;
+  GtkRbNode *left, *p;
 
   left = node->left;
+  p = parent (node);
 
   node->left = left->right;
   if (left->right)
-    left->right->parent = node;
+    set_parent (tree, left->right, node);
 
-  left->parent = node->parent;
-  if (node->parent)
+  set_parent (tree, left, p);
+  if (p)
     {
-      if (node == node->parent->right)
-	node->parent->right = left;
+      if (node == p->right)
+	p->right = left;
       else
-	node->parent->left = left;
-    }
-  else
-    {
-      tree->root = left;
+	p->left = left;
     }
 
   /* link node and left */
   left->right = node;
-  node->parent = left;
+  set_parent (tree, node, left);
 
   gtk_rb_node_mark_dirty (node, FALSE);
   gtk_rb_node_mark_dirty (left, FALSE);
@@ -283,64 +294,73 @@ static void
 gtk_rb_tree_insert_fixup (GtkRbTree *tree,
                           GtkRbNode *node)
 {
+  GtkRbNode *p;
 
   /* check Red-Black properties */
-  while (node->parent && is_red (node->parent))
+  for (p = parent (node);
+       p && is_red (p);
+       p = parent (node))
     {
-      /* we have a violation */
-      g_assert (node->parent->parent);
+      GtkRbNode *pp = parent (p);
 
-      if (node->parent == node->parent->parent->left)
+      /* we have a violation */
+      g_assert (pp);
+
+      if (p == pp->left)
 	{
-	  GtkRbNode *uncle = node->parent->parent->right;
+	  GtkRbNode *uncle = pp->right;
 
 	  if (is_red (uncle))
 	    {
 	      /* uncle is red */
-	      set_black (node->parent);
+	      set_black (p);
               set_black (uncle);
-              set_red (node->parent->parent);
-	      node = node->parent->parent;
+              set_red (pp);
+	      node = pp;
 	    }
 	  else
 	    {
 	      /* uncle is black */
-	      if (node == node->parent->right)
+	      if (node == p->right)
 		{
 		  /* make node a left child */
-		  node = node->parent;
+		  node = p;
+                  p = parent (node);
+                  pp = parent (p);
 		  gtk_rb_node_rotate_left (tree, node);
 		}
 	      /* recolor and rotate */
-              set_black (node->parent);
-              set_red (node->parent->parent);
-	      gtk_rb_node_rotate_right (tree, node->parent->parent);
+              set_black (p);
+              set_red (pp);
+	      gtk_rb_node_rotate_right (tree, pp);
 	    }
 	}
       else
 	{
 	  /* mirror image of above code */
-	  GtkRbNode *uncle = node->parent->parent->left;
+	  GtkRbNode *uncle = pp->left;
 
 	  if (is_red (uncle))
 	    {
 	      /* uncle is red */
-              set_black (node->parent);
+              set_black (p);
               set_black (uncle);
-              set_red (node->parent->parent);
-	      node = node->parent->parent;
+              set_red (pp);
+	      node = pp;
 	    }
 	  else
 	    {
               /* uncle is black */
-	      if (node == node->parent->left)
+	      if (node == p->left)
 		{
-		  node = node->parent;
+		  node = p;
+                  p = parent (node);
+                  pp = parent (p);
 		  gtk_rb_node_rotate_right (tree, node);
 		}
-	      set_black (node->parent);
-	      set_red (node->parent->parent);
-	      gtk_rb_node_rotate_left (tree, node->parent->parent);
+	      set_black (p);
+	      set_red (pp);
+	      gtk_rb_node_rotate_left (tree, pp);
 	    }
 	}
     }
@@ -351,25 +371,25 @@ gtk_rb_tree_insert_fixup (GtkRbTree *tree,
 static void
 gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
                                GtkRbNode *node,
-                               GtkRbNode *parent)
+                               GtkRbNode *p)
 {
   while (node != tree->root && is_black (node))
     {
-      if (node == parent->left)
+      if (node == p->left)
 	{
-	  GtkRbNode *w = parent->right;
+	  GtkRbNode *w = p->right;
 
 	  if (is_red (w))
 	    {
 	      set_black (w);
-              set_red (parent);
-	      gtk_rb_node_rotate_left (tree, parent);
-	      w = parent->right;
+              set_red (p);
+	      gtk_rb_node_rotate_left (tree, p);
+	      w = p->right;
 	    }
 	  if (is_black (w->left) && is_black (w->right))
 	    {
 	      set_red (w);
-	      node = parent;
+	      node = p;
 	    }
 	  else
 	    {
@@ -378,29 +398,29 @@ gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
 		  set_black (w->left);
 		  set_red (w);
 		  gtk_rb_node_rotate_right (tree, w);
-		  w = parent->right;
+		  w = p->right;
 		}
-	      w->red = parent->red;
-	      set_black (parent);
+	      w->red = p->red;
+	      set_black (p);
               set_black (w->right);
-	      gtk_rb_node_rotate_left (tree, parent);
+	      gtk_rb_node_rotate_left (tree, p);
 	      node = tree->root;
 	    }
 	}
       else
 	{
-	  GtkRbNode *w = parent->left;
+	  GtkRbNode *w = p->left;
 	  if (is_red (w))
 	    {
 	      set_black (w);
-	      set_red (parent);
-	      gtk_rb_node_rotate_right (tree, parent);
-	      w = parent->left;
+	      set_red (p);
+	      gtk_rb_node_rotate_right (tree, p);
+	      w = p->left;
 	    }
 	  if (is_black (w->right) && is_black (w->left))
 	    {
 	      set_red (w);
-	      node = parent;
+	      node = p;
 	    }
 	  else
 	    {
@@ -409,17 +429,17 @@ gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
 		  set_black (w->right);
 		  set_red (w);
 		  gtk_rb_node_rotate_left (tree, w);
-		  w = parent->left;
+		  w = p->left;
 		}
-	      w->red = parent->red;
-	      set_black (parent);
+	      w->red = p->red;
+	      set_black (p);
 	      set_black (w->left);
-	      gtk_rb_node_rotate_right (tree, parent);
+	      gtk_rb_node_rotate_right (tree, p);
 	      node = tree->root;
 	    }
 	}
 
-      parent = node->parent;
+      p = parent (node);
     }
 
   set_black (node);
@@ -509,7 +529,7 @@ gpointer
 gtk_rb_tree_get_parent (GtkRbTree *tree,
                         gpointer   node)
 {
-  return NODE_TO_POINTER (NODE_FROM_POINTER (node)->parent);
+  return NODE_TO_POINTER (parent (NODE_FROM_POINTER (node)));
 }
 
 gpointer
@@ -575,7 +595,7 @@ gtk_rb_tree_insert_before (GtkRbTree *tree,
         {
           current->left = result;
         }
-      result->parent = current;
+      set_parent (tree, result, current);
       gtk_rb_node_mark_dirty (current, TRUE);
     }
 
@@ -615,7 +635,7 @@ gtk_rb_tree_insert_after (GtkRbTree *tree,
         {
           current->right = result;
         }
-      result->parent = current;
+      set_parent (tree, result, current);
       gtk_rb_node_mark_dirty (current, TRUE);
     }
 
@@ -628,7 +648,7 @@ void
 gtk_rb_tree_remove (GtkRbTree *tree,
                     gpointer   node)
 {
-  GtkRbNode *x, *y, *real_node;
+  GtkRbNode *x, *y, *p, *real_node;
   
   real_node = NODE_FROM_POINTER (node);
   y = real_node;
@@ -647,25 +667,22 @@ gtk_rb_tree_remove (GtkRbTree *tree,
     x = y->right;
 
   /* remove y from the parent chain */
+  p = parent (y);
   if (x != NULL)
-    x->parent = y->parent;
-  if (y->parent)
+    set_parent (tree, x, p);
+  if (p)
     {
-      if (y == y->parent->left)
-	y->parent->left = x;
+      if (y == p->left)
+	p->left = x;
       else
-	y->parent->right = x;
-      gtk_rb_node_mark_dirty (y->parent, TRUE);
-    }
-  else
-    {
-      tree->root = x;
+	p->right = x;
+      gtk_rb_node_mark_dirty (p, TRUE);
     }
 
   /* We need to clean up the validity of the tree.
    */
   if (is_black (y))
-    gtk_rb_tree_remove_node_fixup (tree, x, y->parent);
+    gtk_rb_tree_remove_node_fixup (tree, x, p);
 
   if (y != real_node)
     {
@@ -675,22 +692,19 @@ gtk_rb_tree_remove (GtkRbTree *tree,
 
       y->left = real_node->left;
       if (y->left)
-        y->left->parent = y;
+        set_parent (tree, y->left, y);
       y->right = real_node->right;
       if (y->right)
-        y->right->parent = y;
-      y->parent = real_node->parent;
-      if (y->parent)
+        set_parent (tree, y->right, y);
+      p = parent (real_node);
+      set_parent (tree, y, p);
+      if (p)
         {
-          if (y->parent->left == real_node)
-            y->parent->left = y;
+          if (p->left == real_node)
+            p->left = y;
           else
-            y->parent->right = y;
-          gtk_rb_node_mark_dirty (y->parent, TRUE);
-        }
-      else
-        {
-          tree->root = y;
+            p->right = y;
+          gtk_rb_node_mark_dirty (p, TRUE);
         }
       gtk_rb_node_mark_dirty (y, TRUE);
     }
