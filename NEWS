@@ -1,3 +1,24 @@
+Overview of Changes in GTK+ 3.24.3
+==================================
+
+* Bugs fixed:
+ wayland: Respect length limits in text protocol
+ wayland: Support key themes
+ wayland: Fix hi-dpi cursor scaling
+ quartz: Make point-to-pixel conversions work on all versions
+ quartz: Re-add support for hidpi scaling
+ quartz: Fix search engine integration
+ win32: Fix ime change hangling
+ placessidebar: Insert drops in the right place
+ x11: Fix problems gdk_x11_get_parent_relative
+ x11: Fix Wacom tool types
+ icons: Recolor polygons as well in symbolic icons
+ switch: Use Unicode symbols for I/O instead of translations
+ 
+* Translation updates:
+ Japanese
+
+
 Overview of Changes in GTK+ 3.24.2
 ==================================
 
