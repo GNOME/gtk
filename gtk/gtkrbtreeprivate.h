@@ -61,6 +61,7 @@ gpointer             gtk_rb_tree_get_right              (GtkRbTree              
                                                          gpointer                 node);
 gpointer             gtk_rb_tree_get_augment            (GtkRbTree               *tree,
                                                          gpointer                 node);
+GtkRbTree *          gtk_rb_tree_node_get_tree          (gpointer                 node);
 
 void                 gtk_rb_tree_mark_dirty             (GtkRbTree               *tree,
                                                          gpointer                 node);

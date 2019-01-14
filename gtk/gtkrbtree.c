@@ -43,17 +43,41 @@ struct _GtkRbNode
 
   GtkRbNode *left;
   GtkRbNode *right;
-  GtkRbNode *parent;
+  /* The difference between tree and parent here is that we OR the tree with 1 and because
+   * pointers are always multiples of 4, we can know if we've stored a parent or the tree here */
+  union {
+    gpointer parent_or_tree;
+    GtkRbNode *parent;
+    GtkRbTree *tree;
+  };
 };
 
 #define NODE_FROM_POINTER(ptr) ((GtkRbNode *) ((ptr) ? (((guchar *) (ptr)) - sizeof (GtkRbNode)) : NULL))
 #define NODE_TO_POINTER(node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode)) : NULL))
 #define NODE_TO_AUG_POINTER(tree, node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode) + (tree)->element_size) : NULL))
 
+static inline gboolean
+is_root (GtkRbNode *node)
+{
+  return GPOINTER_TO_SIZE (node->parent_or_tree) & 1 ? TRUE : FALSE;
+}
+
 static inline GtkRbNode *
 parent (GtkRbNode *node)
 {
-  return node->parent;
+  if (is_root (node))
+    return NULL;
+  else
+    return node->parent;
+}
+
+static GtkRbTree *
+tree (GtkRbNode *node)
+{
+  while (!is_root (node))
+    node = parent (node);
+
+  return GSIZE_TO_POINTER (GPOINTER_TO_SIZE (node->tree) & ~1);
 }
 
 static void
@@ -61,10 +85,16 @@ set_parent (GtkRbTree *tree,
             GtkRbNode *node,
             GtkRbNode *new_parent)
 {
-  node->parent = new_parent;
 
-  if (new_parent == NULL)
-    tree->root = node;
+  if (new_parent != NULL)
+    {
+      node->parent = new_parent;
+    }
+  else
+    {
+      node->tree = GSIZE_TO_POINTER (GPOINTER_TO_SIZE (tree) | 1);
+      tree->root = node;
+    }
 }
 
 static inline gsize
@@ -555,6 +585,12 @@ gtk_rb_tree_get_augment (GtkRbTree *tree,
   gtk_rb_node_clean (tree, rbnode);
 
   return NODE_TO_AUG_POINTER (tree, rbnode);
+}
+
+GtkRbTree *
+gtk_rb_tree_node_get_tree (gpointer node)
+{
+  return tree (NODE_FROM_POINTER (node));
 }
 
 void
