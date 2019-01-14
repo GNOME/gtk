@@ -121,7 +121,7 @@ tree_node_get_nth_child (TreeNode *node,
 
   while (child)
     {
-      tmp = gtk_rb_tree_get_left (tree, child);
+      tmp = gtk_rb_tree_node_get_left (child);
       if (tmp)
         {
           aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -138,7 +138,7 @@ tree_node_get_nth_child (TreeNode *node,
 
       position--;
 
-      child = gtk_rb_tree_get_right (tree, child);
+      child = gtk_rb_tree_node_get_right (child);
     }
 
   return NULL;
@@ -170,7 +170,7 @@ tree_node_get_local_position (GtkRbTree *tree,
   TreeAugment *left_aug;
   guint n;
   
-  left = gtk_rb_tree_get_left (tree, node);
+  left = gtk_rb_tree_node_get_left (node);
   if (left)
     {
       left_aug = gtk_rb_tree_get_augment (tree, left);
@@ -181,11 +181,11 @@ tree_node_get_local_position (GtkRbTree *tree,
       n = 0;
     }
 
-  for (parent = gtk_rb_tree_get_parent (tree, node);
+  for (parent = gtk_rb_tree_node_get_parent (node);
        parent;
-       parent = gtk_rb_tree_get_parent (tree, node))
+       parent = gtk_rb_tree_node_get_parent (node))
     {
-      left = gtk_rb_tree_get_left (tree, parent);
+      left = gtk_rb_tree_node_get_left (parent);
       if (left == node)
         {
           /* we are the left node, nothing changes */
@@ -220,18 +220,18 @@ tree_node_get_position (TreeNode *node)
     {
       tree = node->parent->children;
 
-      left = gtk_rb_tree_get_left (tree, node);
+      left = gtk_rb_tree_node_get_left (node);
       if (left)
         {
           left_aug = gtk_rb_tree_get_augment (tree, left);
           n += left_aug->n_items;
         }
 
-      for (parent = gtk_rb_tree_get_parent (tree, node);
+      for (parent = gtk_rb_tree_node_get_parent (node);
            parent;
-           parent = gtk_rb_tree_get_parent (tree, node))
+           parent = gtk_rb_tree_node_get_parent (node))
         {
-          left = gtk_rb_tree_get_left (tree, parent);
+          left = gtk_rb_tree_node_get_left (parent);
           if (left == node)
             {
               /* we are the left node, nothing changes */
@@ -262,7 +262,7 @@ tree_node_mark_dirty (TreeNode *node)
        !node->is_root;
        node = node->parent)
     {
-      gtk_rb_tree_mark_dirty (node->parent->children, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 }
 
@@ -283,7 +283,7 @@ gtk_tree_list_model_get_nth (GtkTreeListModel *self,
 
   while (TRUE)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           TreeAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -309,7 +309,7 @@ gtk_tree_list_model_get_nth (GtkTreeListModel *self,
         }
       position -= n_children;
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   g_return_val_if_reached (NULL);
@@ -406,7 +406,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
       for (i = 0; i < removed; i++)
         {
           tmp = child;
-          child = gtk_rb_tree_get_next (node->children, child);
+          child = gtk_rb_tree_node_get_next (child);
           gtk_rb_tree_remove (node->children, tmp);
         }
     }
@@ -426,7 +426,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
       for (i = 0; i < added; i++)
         {
           tree_added += gtk_tree_list_model_expand_node (self, child);
-          child = gtk_rb_tree_get_next (node->children, child);
+          child = gtk_rb_tree_node_get_next (child);
         }
     }
 

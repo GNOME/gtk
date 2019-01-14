@@ -88,7 +88,7 @@ gtk_flatten_list_model_get_nth (GtkRbTree *tree,
 
   while (node)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           FlattenAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -105,7 +105,7 @@ gtk_flatten_list_model_get_nth (GtkRbTree *tree,
         break;
       position -= model_n_items;
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (model_position)
@@ -127,7 +127,7 @@ gtk_flatten_list_model_get_nth_model (GtkRbTree *tree,
 
   while (node)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           FlattenAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -145,7 +145,7 @@ gtk_flatten_list_model_get_nth_model (GtkRbTree *tree,
       position--;
       before += g_list_model_get_n_items (node->model);
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (items_before)
@@ -220,13 +220,13 @@ gtk_flatten_list_model_items_changed_cb (GListModel          *model,
   GtkFlattenListModel *self = node->list;
   guint real_position;
 
-  gtk_rb_tree_mark_dirty (self->items, node);
+  gtk_rb_tree_node_mark_dirty (node);
 
   for (real_position = position;
-       (parent = gtk_rb_tree_get_parent (self->items, node)) != NULL;
+       (parent = gtk_rb_tree_node_get_parent (node)) != NULL;
        node = parent)
     {
-      FlattenNode *left = gtk_rb_tree_get_left (self->items, parent);
+      FlattenNode *left = gtk_rb_tree_node_get_left (parent);
       if (left != node)
         {
           if (left)
@@ -366,7 +366,7 @@ gtk_flatten_list_model_model_items_changed_cb (GListModel          *model,
   real_removed = 0;
   for (i = 0; i < removed; i++)
     {
-      FlattenNode *next = gtk_rb_tree_get_next (self->items, node);
+      FlattenNode *next = gtk_rb_tree_node_get_next (node);
       real_removed += g_list_model_get_n_items (node->model);
       gtk_rb_tree_remove (self->items, node);
       node = next;

@@ -70,7 +70,7 @@ get (GtkRbTree *tree,
 
   while (node)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           Aug *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -86,7 +86,7 @@ get (GtkRbTree *tree,
         break;
       pos--;
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   return node;
@@ -119,12 +119,12 @@ print_node (GtkRbTree  *tree,
 {
   Node *child;
 
-  child = gtk_rb_tree_get_left (tree, node);
+  child = gtk_rb_tree_node_get_left (node);
   if (child)
     n = print_node (tree, child, depth + 1, "/", n);
   g_print ("%*s %u\n", 2 * depth, prefix, n);
   n++;
-  child = gtk_rb_tree_get_right (tree, node);
+  child = gtk_rb_tree_node_get_right (node);
   if (child)
     n = print_node (tree, child, depth + 1, "\\", n);
 

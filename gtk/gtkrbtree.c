@@ -536,15 +536,13 @@ gtk_rb_tree_get_last (GtkRbTree *tree)
 }
 
 gpointer
-gtk_rb_tree_get_previous (GtkRbTree *tree,
-                          gpointer   node)
+gtk_rb_tree_node_get_previous (gpointer node)
 {
   return NODE_TO_POINTER (gtk_rb_node_get_previous (NODE_FROM_POINTER (node)));
 }
 
 gpointer
-gtk_rb_tree_get_next (GtkRbTree *tree,
-                      gpointer   node)
+gtk_rb_tree_node_get_next (gpointer node)
 {
   return NODE_TO_POINTER (gtk_rb_node_get_next (NODE_FROM_POINTER (node)));
 }
@@ -556,22 +554,19 @@ gtk_rb_tree_get_root (GtkRbTree *tree)
 }
 
 gpointer
-gtk_rb_tree_get_parent (GtkRbTree *tree,
-                        gpointer   node)
+gtk_rb_tree_node_get_parent (gpointer node)
 {
   return NODE_TO_POINTER (parent (NODE_FROM_POINTER (node)));
 }
 
 gpointer
-gtk_rb_tree_get_left (GtkRbTree *tree,
-                      gpointer   node)
+gtk_rb_tree_node_get_left (gpointer node)
 {
   return NODE_TO_POINTER (NODE_FROM_POINTER (node)->left);
 }
 
 gpointer
-gtk_rb_tree_get_right (GtkRbTree *tree,
-                       gpointer   node)
+gtk_rb_tree_node_get_right (gpointer node)
 {
   return NODE_TO_POINTER (NODE_FROM_POINTER (node)->right);
 }
@@ -594,8 +589,7 @@ gtk_rb_tree_node_get_tree (gpointer node)
 }
 
 void
-gtk_rb_tree_mark_dirty (GtkRbTree *tree,
-                        gpointer   node)
+gtk_rb_tree_node_mark_dirty (gpointer node)
 {
   gtk_rb_node_mark_dirty (NODE_FROM_POINTER (node), TRUE);
 }

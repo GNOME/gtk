@@ -45,25 +45,19 @@ GtkRbTree *          gtk_rb_tree_new_for_size           (gsize                  
 GtkRbTree *          gtk_rb_tree_ref                    (GtkRbTree               *tree);
 void                 gtk_rb_tree_unref                  (GtkRbTree               *tree);
 
+gpointer             gtk_rb_tree_get_root               (GtkRbTree               *tree);
 gpointer             gtk_rb_tree_get_first              (GtkRbTree               *tree);
 gpointer             gtk_rb_tree_get_last               (GtkRbTree               *tree);
-gpointer             gtk_rb_tree_get_previous           (GtkRbTree               *tree,
-                                                         gpointer                 node);
-gpointer             gtk_rb_tree_get_next               (GtkRbTree               *tree,
-                                                         gpointer                 node);
 
-gpointer             gtk_rb_tree_get_root               (GtkRbTree               *tree);
-gpointer             gtk_rb_tree_get_parent             (GtkRbTree               *tree,
-                                                         gpointer                 node);
-gpointer             gtk_rb_tree_get_left               (GtkRbTree               *tree,
-                                                         gpointer                 node);
-gpointer             gtk_rb_tree_get_right              (GtkRbTree               *tree,
-                                                         gpointer                 node);
-gpointer             gtk_rb_tree_get_augment            (GtkRbTree               *tree,
-                                                         gpointer                 node);
+gpointer             gtk_rb_tree_node_get_previous      (gpointer                 node);
+gpointer             gtk_rb_tree_node_get_next          (gpointer                 node);
+gpointer             gtk_rb_tree_node_get_parent        (gpointer                 node);
+gpointer             gtk_rb_tree_node_get_left          (gpointer                 node);
+gpointer             gtk_rb_tree_node_get_right         (gpointer                 node);
 GtkRbTree *          gtk_rb_tree_node_get_tree          (gpointer                 node);
+void                 gtk_rb_tree_node_mark_dirty        (gpointer                 node);
 
-void                 gtk_rb_tree_mark_dirty             (GtkRbTree               *tree,
+gpointer             gtk_rb_tree_get_augment            (GtkRbTree               *tree,
                                                          gpointer                 node);
 
 gpointer             gtk_rb_tree_insert_before          (GtkRbTree               *tree,

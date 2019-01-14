@@ -92,7 +92,7 @@ gtk_filter_list_model_get_nth_filtered (GtkRbTree *tree,
 
   while (node)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           FilterAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -114,7 +114,7 @@ gtk_filter_list_model_get_nth_filtered (GtkRbTree *tree,
 
       unfiltered++;
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (out_unfiltered)
@@ -136,7 +136,7 @@ gtk_filter_list_model_get_nth (GtkRbTree *tree,
 
   while (node)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           FilterAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -156,7 +156,7 @@ gtk_filter_list_model_get_nth (GtkRbTree *tree,
       if (node->visible)
         filtered++;
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (out_filtered)
@@ -280,7 +280,7 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
   filter_removed = 0;
   for (i = 0; i < removed; i++)
     {
-      FilterNode *next = gtk_rb_tree_get_next (self->items, node);
+      FilterNode *next = gtk_rb_tree_node_get_next (node);
       if (node->visible)
         filter_removed++;
       gtk_rb_tree_remove (self->items, node);
@@ -677,7 +677,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self)
   n_was_visible = 0;
   for (i = 0, node = gtk_rb_tree_get_first (self->items);
        node != NULL;
-       i++, node = gtk_rb_tree_get_next (self->items, node))
+       i++, node = gtk_rb_tree_node_get_next (node))
     {
       visible = gtk_filter_list_model_run_filter (self, i);
       if (visible == node->visible)
@@ -691,7 +691,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self)
         }
 
       node->visible = visible;
-      gtk_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
       first_change = MIN (n_is_visible, first_change);
       if (visible)
         n_is_visible++;

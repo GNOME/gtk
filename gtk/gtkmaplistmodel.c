@@ -95,7 +95,7 @@ gtk_map_list_model_get_nth (GtkRbTree *tree,
 
   while (node)
     {
-      tmp = gtk_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
           MapAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
@@ -114,7 +114,7 @@ gtk_map_list_model_get_nth (GtkRbTree *tree,
         }
       position -= node->n_items;
 
-      node = gtk_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (out_start_pos)
@@ -168,7 +168,7 @@ gtk_map_list_model_get_item (GListModel *list,
       MapNode *before = gtk_rb_tree_insert_before (self->items, node);
       before->n_items = position - offset;
       node->n_items -= before->n_items;
-      gtk_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 
   if (node->n_items > 1)
@@ -176,7 +176,7 @@ gtk_map_list_model_get_item (GListModel *list,
       MapNode *after = gtk_rb_tree_insert_after (self->items, node);
       after->n_items = node->n_items - 1;
       node->n_items = 1;
-      gtk_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 
   node->item = self->map_func (g_list_model_get_item (self->model, position), self->user_data);
@@ -225,7 +225,7 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
       end = start + node->n_items;
       if (start == position && end <= position + removed)
         {
-          MapNode *next = gtk_rb_tree_get_next (self->items, node);
+          MapNode *next = gtk_rb_tree_node_get_next (node);
           removed -= node->n_items;
           gtk_rb_tree_remove (self->items, node);
           node = next;
@@ -236,16 +236,16 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
             {
               node->n_items -= removed;
               removed = 0;
-              gtk_rb_tree_mark_dirty (self->items, node);
+              gtk_rb_tree_node_mark_dirty (node);
             }
           else if (start < position)
             {
               guint overlap = node->n_items - (position - start);
               node->n_items -= overlap;
-              gtk_rb_tree_mark_dirty (self->items, node);
+              gtk_rb_tree_node_mark_dirty (node);
               removed -= overlap;
               start = position;
-              node = gtk_rb_tree_get_next (self->items, node);
+              node = gtk_rb_tree_node_get_next (node);
             }
         }
     }
@@ -258,7 +258,7 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
         node = gtk_rb_tree_insert_after (self->items, node);
 
       node->n_items += added;
-      gtk_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
@@ -489,7 +489,7 @@ gtk_map_list_model_init_items (GtkMapListModel *self)
         {
           MapNode *node = gtk_rb_tree_insert_before (self->items, NULL);
           node->n_items = g_list_model_get_n_items (self->model);
-          gtk_rb_tree_mark_dirty (self->items, node);
+          gtk_rb_tree_node_mark_dirty (node);
         }
     }
   else
