@@ -708,6 +708,11 @@ gtk_rb_tree_remove (GtkRbTree *tree,
 	p->right = x;
       gtk_rb_node_mark_dirty (p, TRUE);
     }
+  else
+    {
+      if (x == NULL)
+        tree->root = NULL;
+    }
 
   /* We need to clean up the validity of the tree.
    */
