@@ -59,9 +59,6 @@
                     </child>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="app_icon">
-                        <style>
-                          <class name="lowres-icon"/>
-                        </style>
                         <property name="stock-size">5</property>
                       </object>
                       <attributes>
