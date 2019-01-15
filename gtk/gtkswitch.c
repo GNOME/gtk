@@ -298,11 +298,48 @@ gtk_switch_create_pango_layouts (GtkSwitch *self)
 {
   GtkSwitchPrivate *priv = self->priv;
 
+  /* Glyphs for the ON state, in descending order of preference */
+  const char *on_glyphs[] = {
+    "⏽", /* U+23FD POWER ON SYMBOL */
+    "❙", /* U+2759 MEDIUM VERTICAL BAR */
+  };
+
+  /* Glyphs for the OFF state, in descending order of preference */
+  const char *off_glyphs[] = {
+    "⭘", /* U+2B58 HEAVY CIRCLE */
+    "○", /* U+25CB WHITE CIRCLE */
+  };
+  int i;
+
   g_clear_object (&priv->on_layout);
-  priv->on_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "⏽");
+
+  for (i = 0; i < G_N_ELEMENTS (on_glyphs); i++)
+    {
+      PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), on_glyphs[i]);
+
+      if (pango_layout_get_unknown_glyphs_count (layout) == 0)
+        {
+          priv->on_layout = layout;
+          break;
+        }
+
+      g_object_unref (layout);
+    }
 
   g_clear_object (&priv->off_layout);
-  priv->off_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "⭘");
+
+  for (i = 0; i < G_N_ELEMENTS (off_glyphs); i++)
+    {
+      PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), off_glyphs[i]);
+
+      if (pango_layout_get_unknown_glyphs_count (layout) == 0)
+        {
+          priv->off_layout = layout;
+          break;
+        }
+
+      g_object_unref (layout);
+    }
 }
 
 static void
