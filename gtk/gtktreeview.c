@@ -463,6 +463,8 @@ struct _GtkTreeViewPrivate
   /* Tooltip support */
   gint tooltip_column;
 
+  int expander_size;
+
   /* Here comes the bitfield */
   guint scroll_to_use_align : 1;
 
@@ -1682,7 +1684,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   priv->search_custom_entry_set = FALSE;
   priv->typeselect_flush_timeout = 0;
   priv->width = 0;
-          
+  priv->expander_size = -1;
+
   priv->hover_selection = FALSE;
   priv->hover_expand = FALSE;
 
@@ -2726,11 +2729,15 @@ row_is_separator (GtkTreeView *tree_view,
 static int
 gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
 {
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkStyleContext *context;
   GtkCssStyle *style;
   int min_width;
   int min_height;
   int expander_size;
+
+  if (priv->expander_size != -1)
+    return priv->expander_size;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
   gtk_style_context_save (context);
@@ -2745,7 +2752,10 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
   gtk_style_context_restore (context);
 
   expander_size = MAX (min_width, min_height);
-  return expander_size + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
+
+  priv->expander_size = expander_size + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
+
+  return priv->expander_size;
 }
 
 static void
@@ -7963,6 +7973,7 @@ static void
 gtk_tree_view_style_updated (GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *list;
   GtkTreeViewColumn *column;
   GtkStyleContext *style_context;
@@ -7972,8 +7983,8 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
   if (gtk_widget_get_realized (widget))
     {
-      gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
-      gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
+      gtk_tree_view_set_grid_lines (tree_view, priv->grid_lines);
+      gtk_tree_view_set_enable_tree_lines (tree_view, priv->tree_lines_enabled);
     }
 
   style_context = gtk_widget_get_style_context (widget);
@@ -7981,15 +7992,18 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
   if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
     {
-      for (list = tree_view->priv->columns; list; list = list->next)
+      for (list = priv->columns; list; list = list->next)
 	{
 	  column = list->data;
 	  _gtk_tree_view_column_cell_set_dirty (column, TRUE);
 	}
 
-      tree_view->priv->fixed_height = -1;
-      gtk_tree_rbtree_mark_invalid (tree_view->priv->tree);
+      priv->fixed_height = -1;
+      gtk_tree_rbtree_mark_invalid (priv->tree);
     }
+
+  /* Invalidate expander size */
+  priv->expander_size = -1;
 }
 
 
