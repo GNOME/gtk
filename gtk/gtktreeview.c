@@ -5545,6 +5545,7 @@ validate_row (GtkTreeView   *tree_view,
   gboolean is_separator = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   gint expander_size;
+  int separator_height;
 
   /* double check the row needs validating */
   if (! GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_INVALID) &&
@@ -5572,6 +5573,8 @@ validate_row (GtkTreeView   *tree_view,
        !(gtk_tree_view_column_get_visible (GTK_TREE_VIEW_COLUMN (first_column->data)));
        first_column = first_column->next)
     ;
+
+  separator_height = get_separator_height (tree_view);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
   gtk_style_context_save (context);
@@ -5604,7 +5607,7 @@ validate_row (GtkTreeView   *tree_view,
 
       if (is_separator)
         {
-          height = get_separator_height (tree_view);
+          height = separator_height;
         }
       else
         {
