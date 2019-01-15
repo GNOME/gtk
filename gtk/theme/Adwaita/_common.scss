@@ -1680,7 +1680,13 @@ headerbar {
       padding: 0;
     }
   }
-
+  
+  stackswitcher button:checked {
+    /* darken switchbuttons for headerbars. issue #1588 */
+    background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
+    border-top-color: darken($borders_color, 7%);
+  }
+  
   separator.titlebutton { opacity: 0; } /* hide the close button separator */
 
   .solid-csd & {
