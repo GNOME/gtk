@@ -1677,7 +1677,8 @@ headerbar {
     }
   }
   
-  stackswitcher button:checked {
+  stackswitcher button:checked,
+  button.toggle:checked {
     /* darken switchbuttons for headerbars. issue #1588 */
     background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
     border-top-color: darken($borders_color, 7%);
