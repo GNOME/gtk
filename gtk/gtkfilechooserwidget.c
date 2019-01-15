@@ -6993,10 +6993,6 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
 {
   GList *l, *files, *files_with_info, *infos;
   GFile *file;
-  gboolean select = FALSE;
-
-  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (impl->priv->search_model), NULL) == 0)
-    select = TRUE;
 
   files = NULL;
   files_with_info = NULL;
@@ -7024,8 +7020,6 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
   g_list_free_full (infos, g_object_unref);
 
   gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "list");
-  if (select)
-    gtk_widget_grab_focus (impl->priv->browse_files_tree_view);
 }
 
 /* Callback used from GtkSearchEngine when the query is done running */
