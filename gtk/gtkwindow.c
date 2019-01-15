@@ -7743,31 +7743,25 @@ gtk_window_move_focus (GtkWidget        *widget,
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
+#include "gtktreeview.h"
+
 static void
 gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *old_focus = priv->focus_widget;
-  gboolean had_default = FALSE;
-  gboolean focus_had_default = FALSE;
-  gboolean old_focus_had_default = FALSE;
 
   if (old_focus)
     {
       g_object_ref (old_focus);
       g_object_freeze_notify (G_OBJECT (old_focus));
-      old_focus_had_default = gtk_widget_has_default (old_focus);
     }
   if (focus)
     {
       g_object_ref (focus);
       g_object_freeze_notify (G_OBJECT (focus));
-      focus_had_default = gtk_widget_has_default (focus);
     }
-
-  if (priv->default_widget)
-    had_default = gtk_widget_has_default (priv->default_widget);
 
   if (priv->focus_widget)
     {
