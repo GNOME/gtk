@@ -277,10 +277,6 @@ entry {
       &.right { margin-left: 6px; }
     }
 
-    undershoot {
-      &.left { @include undershoot(left); }
-      &.right { @include undershoot(right); }
-    }
 
     &.flat {
       &:focus, &:backdrop, &:disabled, &:backdrop:disabled, & {
@@ -3677,16 +3673,6 @@ scrolledwindow {
     }
   }
 
-  // Overflow indication, works similarly to the overshoot, the size if fixed tho.
-  undershoot {
-    &.top { @include undershoot(top); }
-
-    &.bottom { @include undershoot(bottom); }
-
-    &.left { @include undershoot(left); }
-
-    &.right { @include undershoot(right); }
-  }
 
   junction { // the small square between two scrollbars
     border-color: transparent;
