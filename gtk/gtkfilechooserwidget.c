@@ -7674,6 +7674,23 @@ list_cursor_changed (GtkTreeView          *list,
   check_preview_change (impl);
 }
 
+static gboolean
+browse_files_tree_view_keynav_failed_cb (GtkWidget        *widget,
+                                         GtkDirectionType  direction,
+                                         gpointer          user_data)
+{
+ GtkFileChooserWidget *self = user_data;
+ GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
+
+ if (direction == GTK_DIR_UP && priv->operation_mode == OPERATION_MODE_SEARCH)
+   {
+     gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
+     return TRUE;
+   }
+
+  return FALSE;
+}
+
 /* Callback used when a row in the file list is activated */
 static void
 list_row_activated (GtkTreeView          *tree_view,
@@ -8400,6 +8417,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_end_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
+  gtk_widget_class_bind_template_callback (widget_class, browse_files_tree_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
