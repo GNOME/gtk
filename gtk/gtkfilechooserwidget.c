@@ -1414,6 +1414,7 @@ widget_key_press_cb (GtkEventController *controller,
       if (priv->operation_mode != OPERATION_MODE_SEARCH)
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
 
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
       handled = TRUE;
     }
 
