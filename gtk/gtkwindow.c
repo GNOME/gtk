@@ -7749,25 +7749,17 @@ gtk_window_real_set_focus (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *old_focus = priv->focus_widget;
-  gboolean had_default = FALSE;
-  gboolean focus_had_default = FALSE;
-  gboolean old_focus_had_default = FALSE;
 
   if (old_focus)
     {
       g_object_ref (old_focus);
       g_object_freeze_notify (G_OBJECT (old_focus));
-      old_focus_had_default = gtk_widget_has_default (old_focus);
     }
   if (focus)
     {
       g_object_ref (focus);
       g_object_freeze_notify (G_OBJECT (focus));
-      focus_had_default = gtk_widget_has_default (focus);
     }
-
-  if (priv->default_widget)
-    had_default = gtk_widget_has_default (priv->default_widget);
 
   if (priv->focus_widget)
     {
@@ -7775,7 +7767,6 @@ gtk_window_real_set_focus (GtkWindow *window,
 	  (priv->focus_widget != priv->default_widget))
         {
           _gtk_widget_set_has_default (priv->focus_widget, FALSE);
-	  gtk_widget_queue_draw (priv->focus_widget);
 
 	  if (priv->default_widget)
             _gtk_widget_set_has_default (priv->default_widget, TRUE);
@@ -7816,29 +7807,13 @@ gtk_window_real_set_focus (GtkWindow *window,
         g_object_notify (G_OBJECT (priv->focus_widget), "is-focus");
     }
 
-  /* If the default widget changed, a redraw will have been queued
-   * on the old and new default widgets by gtk_window_set_default(), so
-   * we only have to worry about the case where it didn't change.
-   * We'll sometimes queue a draw twice on the new widget but that
-   * is harmless.
-   */
-  if (priv->default_widget &&
-      (had_default != gtk_widget_has_default (priv->default_widget)))
-    gtk_widget_queue_draw (priv->default_widget);
-  
   if (old_focus)
     {
-      if (old_focus_had_default != gtk_widget_has_default (old_focus))
-	gtk_widget_queue_draw (old_focus);
-	
       g_object_thaw_notify (G_OBJECT (old_focus));
       g_object_unref (old_focus);
     }
   if (focus)
     {
-      if (focus_had_default != gtk_widget_has_default (focus))
-	gtk_widget_queue_draw (focus);
-
       g_object_thaw_notify (G_OBJECT (focus));
       g_object_unref (focus);
     }
