@@ -5801,6 +5801,7 @@ gtk_page_setup_unix_dialog_get_type
 </SECTION>
 
 <SECTION>
+<INCLUDE>gtk/gtk.h</INCLUDE>
 <FILE>gtktesting</FILE>
 <TITLE>Testing</TITLE>
 gtk_test_init
