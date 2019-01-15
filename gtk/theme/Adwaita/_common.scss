@@ -3676,7 +3676,7 @@ row {
 
     &:backdrop:hover { background-color: transparent; }
 
-    &:selected {
+    &:selected:focus(visible) {
       &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
 
       &.has-open-popup,
@@ -3686,7 +3686,8 @@ row {
     }
   }
 
-  &:selected { @extend %selected_items; }
+  &:selected:focus(visible) { @extend %selected_items; }
+  &:selected:focus, &:selected { background-color: grey; }
 }
 
 
