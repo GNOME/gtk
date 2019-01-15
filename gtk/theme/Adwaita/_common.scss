@@ -1780,9 +1780,13 @@ treeview.view {
   rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
   &:selected {
-    &:focus, & {
+    &:focus, &{
       border-radius: 0;
+      background-color: grey;
+    }
 
+    &:focus(visible) {
+      border-radius: 0;
       @extend %selected_items;
     }
 
