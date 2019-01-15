@@ -664,7 +664,7 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 
 .default-decoration.titlebar:not(headerbar) button.titlebutton, headerbar.default-decoration button.titlebutton { min-height: 26px; min-width: 26px; margin: 0; padding: 0; }
 
-.titlebar:not(headerbar) stackswitcher button:checked, headerbar stackswitcher button:checked { /* darken switchbuttons for headerbars. issue #1588 */ background: image(#282828); border-top-color: #141314; }
+.titlebar:not(headerbar) stackswitcher button:checked, .titlebar:not(headerbar) button.toggle:checked, headerbar stackswitcher button:checked, headerbar button.toggle:checked { /* darken switchbuttons for headerbars. issue #1588 */ background: image(#282828); border-top-color: #141314; }
 
 .titlebar:not(headerbar) separator.titlebutton, headerbar separator.titlebutton { opacity: 0; }
 
