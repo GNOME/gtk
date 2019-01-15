@@ -553,8 +553,6 @@ static void list_row_activated         (GtkTreeView           *tree_view,
                                         GtkTreePath           *path,
                                         GtkTreeViewColumn     *column,
                                         GtkFileChooserWidget  *impl);
-static void list_cursor_changed        (GtkTreeView           *treeview,
-                                        GtkFileChooserWidget  *impl);
 
 static void path_bar_clicked (GtkPathBar            *path_bar,
                               GFile                 *file,
