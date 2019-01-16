@@ -90,6 +90,8 @@ struct _GdkSnapshot {
 
   GArray                *state_stack;
   GPtrArray             *nodes;
+
+  guint from_parent : 1;
 };
 
 struct _GtkSnapshotClass {
@@ -98,6 +100,8 @@ struct _GtkSnapshotClass {
 
 void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
                                                                  GskRenderNode          *node);
+
+GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot            *parent_snapshot);
 
 G_END_DECLS
 

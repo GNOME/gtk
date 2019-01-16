@@ -12961,7 +12961,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   if (opacity <= 0.0)
     return NULL;
 
-  snapshot = gtk_snapshot_new ();
+  snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
   _gtk_widget_get_allocation (widget, &allocation);
   gtk_snapshot_push_debug (snapshot,
