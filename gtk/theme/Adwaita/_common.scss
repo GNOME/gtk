@@ -1682,6 +1682,9 @@ headerbar {
     /* darken switchbuttons for headerbars. issue #1588 */
     background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
     border-top-color: darken($borders_color, 7%);
+    &:backdrop {
+      @include button(backdrop-active);
+    }
   }
   
   separator.titlebutton { opacity: 0; } /* hide the close button separator */
