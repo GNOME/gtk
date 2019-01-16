@@ -256,7 +256,7 @@ reveal_child_changed_cb (GObject      *object,
   if (priv->entry)
     {
       if (reveal_child)
-        _gtk_entry_grab_focus (GTK_ENTRY (priv->entry), FALSE);
+        gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->entry));
       else
         gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
     }

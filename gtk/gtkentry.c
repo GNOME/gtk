@@ -4138,21 +4138,14 @@ gtk_entry_focus_out (GtkWidget *widget)
     _gtk_entry_completion_popdown (completion);
 }
 
-void
-_gtk_entry_grab_focus (GtkEntry  *entry,
-                       gboolean   select_all)
-{
-  GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (GTK_WIDGET (entry));
-  if (select_all)
-    gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-}
-
 static void
 gtk_entry_grab_focus (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   gboolean select_on_focus;
+
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (GTK_WIDGET (entry));
 
   if (priv->editable && !priv->in_click)
     {
@@ -4161,11 +4154,8 @@ gtk_entry_grab_focus (GtkWidget *widget)
                     &select_on_focus,
                     NULL);
 
-      _gtk_entry_grab_focus (entry, select_on_focus);
-    }
-  else
-    {
-      _gtk_entry_grab_focus (entry, FALSE);
+      if (select_on_focus)
+        gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
     }
 }
 
@@ -4186,7 +4176,7 @@ gtk_entry_grab_focus_without_selecting (GtkEntry *entry)
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  _gtk_entry_grab_focus (entry, FALSE);
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (GTK_WIDGET (entry));
 }
 
 static void
