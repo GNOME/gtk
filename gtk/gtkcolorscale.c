@@ -289,7 +289,7 @@ gtk_color_scale_set_rgba (GtkColorScale *scale,
   GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
 
   priv->color = *color;
-  gtk_widget_queue_draw (GTK_WIDGET (scale));
+  gtk_widget_queue_draw (gtk_range_get_trough_widget (GTK_RANGE (scale)));
 }
 
 GtkWidget *

@@ -2948,6 +2948,14 @@ gtk_range_get_slider_widget (GtkRange *range)
   return priv->slider_widget;
 }
 
+GtkWidget *
+gtk_range_get_trough_widget (GtkRange *range)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  return priv->trough_widget;
+}
+
 void
 gtk_range_start_autoscroll (GtkRange      *range,
                             GtkScrollType  scroll_type)
