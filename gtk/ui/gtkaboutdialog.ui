@@ -98,6 +98,7 @@
                         <property name="wrap">1</property>
                         <property name="selectable">1</property>
                         <property name="max-width-chars">60</property>
+                        <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
                       </object>
                     </child>
                   </object>
