@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-08 14:59+0000\n"
-"PO-Revision-Date: 2019-01-09 09:46+0100\n"
+"POT-Creation-Date: 2019-01-14 17:03+0000\n"
+"PO-Revision-Date: 2019-01-16 09:19+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -57,7 +57,6 @@ msgid "Cannot provide contents as %s"
 msgstr "No se pudo proporcionar el contenido como %s"
 
 #: gdk/gdkdrop.c:110
-#| msgid "Drag'n'drop from other applications is not supported."
 msgid "Drag’n’drop from other applications is not supported."
 msgstr "No se soporta arrastrar y soltar desde otras aplicaciones."
 
@@ -612,6 +611,8 @@ msgstr "No se pueden obtener los datos de DnD. GlobalSize(0x%p) falló: 0x%lx."
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgstr ""
+"No se pueden obtener datos DnD. Falló al reservar %lu bytes para guardar los "
+"datos."
 
 #: gdk/win32/gdkdrop-win32.c:1304
 #, c-format
@@ -622,6 +623,7 @@ msgstr "Superficie GDK 0x%p no registrada como objetivo para soltar"
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr ""
+"El registro de contexto de destino 0x%p no tiene ningún objeto de datos"
 
 #: gdk/win32/gdkdrop-win32.c:1349
 #, c-format
@@ -634,7 +636,6 @@ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Falló al transmutar los datos en formato DnD W32 0x%x a %p (%s)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#| msgid "Can’t close stream"
 msgid "writing a closed stream"
 msgstr "escribiendo en un flujo cerrado"
 
@@ -652,7 +653,6 @@ msgid "Ran out of buffer space (buffer size is fixed)"
 msgstr "El búfer se ha quedado sin espacio (su tamaño es fijo)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
-#| msgid "Can't transmute a single handle"
 msgid "Can’t transmute a single handle"
 msgstr "No se puede transmutar un único manejador"
 
@@ -723,6 +723,8 @@ msgstr "El gestor del portapapeles no pudo almacenar la selección."
 #: gdk/x11/gdkclipboard-x11.c:612
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
+"No se puede guardar el portapapeles. No hay ningún gestor del portapapeles "
+"activo."
 
 #: gdk/x11/gdkglcontext-x11.c:946
 #, c-format
@@ -750,7 +752,7 @@ msgstr "Secuencia de bytes no válida en la entrada de conversión"
 
 #: gdk/x11/gdktextlistconverter-x11.c:185
 msgid "Invalid formats in compound text conversion."
-msgstr ""
+msgstr "Formatos no válidos en la conversión de texto compuesto."
 
 #: gdk/x11/gdktextlistconverter-x11.c:202
 #, c-format
@@ -2410,11 +2412,10 @@ msgid "Ligatures"
 msgstr "Ligaduras"
 
 #: gtk/gtkfontchooserwidget.c:2114
-#, fuzzy
 #| msgctxt "paper size"
 #| msgid "US Letter Plus"
 msgid "Letter Case"
-msgstr "US Letter Plus"
+msgstr "Letter Case"
 
 #: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Case"
@@ -2853,7 +2854,6 @@ msgstr "No se pudo iniciar «%s»"
 #.
 #: gtk/gtkplacessidebar.c:2378
 #, c-format
-#| msgid "Unsupported encoding “%s”"
 msgid "Error unlocking “%s”"
 msgstr "Error al desbloquear «%s»"
 
@@ -3398,23 +3398,6 @@ msgstr "No se han encontrado resultados"
 #: gtk/ui/gtkfilechooserwidget.ui:306 gtk/ui/gtkplacesview.ui:247
 msgid "Try a different search"
 msgstr "Pruebe una búsqueda diferente"
-
-#. Translators: if the "on" state label requires more than three
-#. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-#. * the state
-#.
-#: gtk/gtkswitch.c:646
-msgctxt "switch"
-msgid "ON"
-msgstr "❙"
-
-#. Translators: if the "off" state label requires more than three
-#. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-#.
-#: gtk/gtkswitch.c:652
-msgctxt "switch"
-msgid "OFF"
-msgstr "○"
 
 #: gtk/gtktextutil.c:55
 msgid "LRM _Left-to-right mark"
@@ -4079,7 +4062,7 @@ msgstr "Ralentizar"
 
 #: gtk/inspector/visual.ui:386
 msgid "Show fps overlay"
-msgstr ""
+msgstr "Mostrar superposición de fps"
 
 #: gtk/inspector/visual.ui:413
 msgid "Show Graphic Updates"
@@ -6230,8 +6213,6 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:94
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
 msgstr "Jeroglíficos egipcios"
@@ -6539,7 +6520,7 @@ msgstr "Soyombo"
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Zanabazar Square"
 
 #: gtk/tools/encodesymbolic.c:39
 msgid "Output to this directory instead of cwd"
@@ -6868,7 +6849,7 @@ msgstr "Seleccionar un color"
 
 #: gtk/ui/gtkcoloreditor.ui:46
 msgid "Pick a color from the screen"
-msgstr ""
+msgstr "Elegir un color de la pantalla"
 
 #: gtk/ui/gtkcoloreditor.ui:75
 msgid "Color Name"
@@ -7913,6 +7894,14 @@ msgstr "No hay un perfil disponible"
 #: modules/printbackends/gtkprintercups.c:292
 msgid "Unspecified profile"
 msgstr "Perfil no especificado"
+
+#~ msgctxt "switch"
+#~ msgid "ON"
+#~ msgstr "❙"
+
+#~ msgctxt "switch"
+#~ msgid "OFF"
+#~ msgstr "○"
 
 #~ msgid "Object"
 #~ msgstr "Objeto"
