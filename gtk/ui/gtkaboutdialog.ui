@@ -125,6 +125,7 @@
                         <property name="selectable">1</property>
                         <property name="no-show-all">1</property>
                         <property name="max-width-chars">60</property>
+                        <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
                       </object>
                       <packing>
                         <property name="fill">0</property>
