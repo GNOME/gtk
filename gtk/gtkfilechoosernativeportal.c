@@ -332,6 +332,9 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   g_variant_builder_add (&opt_builder, "{sv}", "modal",
                          g_variant_new_boolean (data->modal));
   g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (GTK_FILE_CHOOSER (self)));
+  if (self->current_filter)
+    g_variant_builder_add (&opt_builder, "{sv}", "current_filter",
+                           gtk_file_filter_to_gvariant (self->current_filter));
   if (self->current_name)
     g_variant_builder_add (&opt_builder, "{sv}", "current_name",
                            g_variant_new_string (GTK_FILE_CHOOSER_NATIVE (self)->current_name));
