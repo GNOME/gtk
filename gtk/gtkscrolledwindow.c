@@ -263,7 +263,6 @@ typedef struct
   gdouble drag_start_x;
   gdouble drag_start_y;
 
-  GdkDevice             *drag_device;
   guint                  kinetic_scrolling         : 1;
   guint                  capture_button_press      : 1;
   guint                  in_drag                   : 1;
@@ -369,9 +368,6 @@ static void  gtk_scrolled_window_map                   (GtkWidget           *wid
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
 static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
 static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
-
-static void  gtk_scrolled_window_grab_notify           (GtkWidget           *widget,
-                                                        gboolean             was_grabbed);
 
 static void _gtk_scrolled_window_set_adjustment_value  (GtkScrolledWindow *scrolled_window,
                                                         GtkAdjustment     *adjustment,
@@ -526,7 +522,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->measure = gtk_scrolled_window_measure;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
-  widget_class->grab_notify = gtk_scrolled_window_grab_notify;
   widget_class->realize = gtk_scrolled_window_realize;
   widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->direction_changed = gtk_scrolled_window_direction_changed;
@@ -3465,7 +3460,7 @@ gtk_scrolled_window_adjustment_value_changed (GtkAdjustment *adjustment,
   maybe_emit_edge_reached (scrolled_window, adjustment);
 
   /* Allow overshooting for kinetic scrolling operations */
-  if (priv->drag_device || priv->deceleration_id)
+  if (priv->deceleration_id)
     return;
 
   /* Ensure GtkAdjustment and unclamped values are in sync */
@@ -3885,26 +3880,6 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
   indicator_reset (&priv->vindicator);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_scrolled_window_grab_notify (GtkWidget *widget,
-                                 gboolean   was_grabbed)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->grab_notify (widget, was_grabbed);
-
-  if (priv->drag_device &&
-      gtk_widget_device_is_shadowed (widget,
-                                     priv->drag_device))
-    {
-      if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
-        gtk_scrolled_window_start_deceleration (scrolled_window);
-      else
-        gtk_scrolled_window_cancel_deceleration (scrolled_window);
-    }
 }
 
 /**
