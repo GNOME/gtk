@@ -360,8 +360,6 @@ static void     gtk_scrolled_window_measure (GtkWidget      *widget,
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
 static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
-static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
-
 static void _gtk_scrolled_window_set_adjustment_value  (GtkScrolledWindow *scrolled_window,
                                                         GtkAdjustment     *adjustment,
                                                         gdouble            value);
@@ -377,7 +375,6 @@ static void     gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrol
 static void     gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window);
 static void     remove_indicator     (GtkScrolledWindow *sw,
                                       Indicator         *indicator);
-static void     indicator_stop_fade  (Indicator         *indicator);
 static gboolean maybe_hide_indicator (gpointer data);
 
 static void     indicator_start_fade (Indicator *indicator,
@@ -516,7 +513,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->realize = gtk_scrolled_window_realize;
-  widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->direction_changed = gtk_scrolled_window_direction_changed;
 
   container_class->add = gtk_scrolled_window_add;
@@ -3589,6 +3585,35 @@ gtk_scrolled_window_map (GtkWidget *widget)
 }
 
 static void
+indicator_reset (Indicator *indicator)
+{
+  if (indicator->conceil_timer)
+    {
+      g_source_remove (indicator->conceil_timer);
+      indicator->conceil_timer = 0;
+    }
+
+  if (indicator->over_timeout_id)
+    {
+      g_source_remove (indicator->over_timeout_id);
+      indicator->over_timeout_id = 0;
+    }
+
+  if (indicator->scrollbar && indicator->tick_id)
+    {
+      gtk_widget_remove_tick_callback (indicator->scrollbar,
+                                       indicator->tick_id);
+      indicator->tick_id = 0;
+    }
+
+  indicator->scrollbar = NULL;
+  indicator->over = FALSE;
+  gtk_progress_tracker_finish (&indicator->tracker);
+  indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
+  indicator->last_scroll_time = 0;
+}
+
+static void
 gtk_scrolled_window_unmap (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
@@ -3598,8 +3623,8 @@ gtk_scrolled_window_unmap (GtkWidget *widget)
 
   gtk_scrolled_window_update_animating (scrolled_window);
 
-  indicator_stop_fade (&priv->hindicator);
-  indicator_stop_fade (&priv->vindicator);
+  indicator_reset (&priv->hindicator);
+  indicator_reset (&priv->vindicator);
 }
 
 static void
@@ -3675,27 +3700,6 @@ indicator_start_fade (Indicator *indicator,
     }
   else
     indicator_set_fade (indicator, target);
-}
-
-static void
-indicator_stop_fade (Indicator *indicator)
-{
-  if (indicator->tick_id != 0)
-    {
-      indicator_set_fade (indicator, indicator->target_pos);
-      gtk_widget_remove_tick_callback (indicator->scrollbar, indicator->tick_id);
-      indicator->tick_id = 0;
-    }
-
-  if (indicator->conceil_timer)
-    {
-      g_source_remove (indicator->conceil_timer);
-      indicator->conceil_timer = 0;
-    }
-
-  gtk_progress_tracker_finish (&indicator->tracker);
-  indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
-  indicator->last_scroll_time = 0;
 }
 
 static gboolean
@@ -3832,47 +3836,6 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   gtk_scrolled_window_sync_use_indicators (scrolled_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->realize (widget);
-}
-
-static void
-indicator_reset (Indicator *indicator)
-{
-  if (indicator->conceil_timer)
-    {
-      g_source_remove (indicator->conceil_timer);
-      indicator->conceil_timer = 0;
-    }
-
-  if (indicator->over_timeout_id)
-    {
-      g_source_remove (indicator->over_timeout_id);
-      indicator->over_timeout_id = 0;
-    }
-
-  if (indicator->scrollbar && indicator->tick_id)
-    {
-      gtk_widget_remove_tick_callback (indicator->scrollbar,
-                                       indicator->tick_id);
-      indicator->tick_id = 0;
-    }
-
-  indicator->scrollbar = NULL;
-  indicator->over = FALSE;
-  gtk_progress_tracker_finish (&indicator->tracker);
-  indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
-  indicator->last_scroll_time = 0;
-}
-
-static void
-gtk_scrolled_window_unrealize (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  indicator_reset (&priv->hindicator);
-  indicator_reset (&priv->vindicator);
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }
 
 /**
