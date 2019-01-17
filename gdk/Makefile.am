@@ -534,7 +534,7 @@ GdkWin32_3_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
 GdkWin32_3_0_gir_MSVC_SCANNERFLAGS =	\
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkwin32.h"	\
-	--include-uninstalled=./Gdk-3.0.gir
+	--include-uninstalled='./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/bin/Gdk-3.0.gir'
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 

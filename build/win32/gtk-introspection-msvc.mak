@@ -6,8 +6,15 @@ APIVERSION = 3.0
 
 CHECK_PACKAGE = gdk-pixbuf-2.0 atk pangocairo gio-2.0
 
-built_install_girs = Gdk-$(APIVERSION).gir GdkWin32-$(APIVERSION).gir Gtk-$(APIVERSION).gir
-built_install_typelibs = Gdk-$(APIVERSION).typelib GdkWin32-$(APIVERSION).typelib Gtk-$(APIVERSION).typelib
+built_install_girs =	\
+	vs$(VSVER)\$(CFG)\$(PLAT)\bin\Gdk-$(APIVERSION).gir	\
+	vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).gir	\
+	vs$(VSVER)\$(CFG)\$(PLAT)\bin\Gtk-$(APIVERSION).gir
+
+built_install_typelibs =	\
+	vs$(VSVER)\$(CFG)\$(PLAT)\bin\Gdk-$(APIVERSION).typelib	\
+	vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).typelib	\
+	vs$(VSVER)\$(CFG)\$(PLAT)\bin\Gtk-$(APIVERSION).typelib
 
 !include introspection-msvc.mak
 
@@ -30,8 +37,8 @@ setgirbuildenv:
 !include introspection.body.mak
 
 install-introspection: all
-	@-copy *.gir "$(G_IR_INCLUDEDIR)"
-	@-copy /b *.typelib "$(G_IR_TYPELIBDIR)"
+	@-copy vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gir "$(G_IR_INCLUDEDIR)"
+	@-copy /b vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.typelib "$(G_IR_TYPELIBDIR)"
 
 !else
 all:
@@ -39,5 +46,5 @@ all:
 !endif
 
 clean:
-	@-del /f/q *.typelib
-	@-del /f/q *.gir
+	@-del /f/q vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.typelib
+	@-del /f/q vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gir
