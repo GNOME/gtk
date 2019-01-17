@@ -1985,6 +1985,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     gtk_menu_shell_select_first (menu_shell, TRUE);
 
   /* Once everything is set up correctly, map the toplevel */
+  gtk_window_force_resize (GTK_WINDOW (priv->toplevel));
   gtk_widget_show (priv->toplevel);
 
   if (xgrab_shell == widget)
