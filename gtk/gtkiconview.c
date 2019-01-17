@@ -1667,6 +1667,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   GtkIconViewItem *dest_item = NULL;
   GtkStyleContext *context;
   int width, height;
+  double offset_x, offset_y;
 
   icon_view = GTK_ICON_VIEW (widget);
 
@@ -1680,9 +1681,10 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
                               width, height
                           ));
 
-  gtk_snapshot_offset (snapshot,
-                       - gtk_adjustment_get_value (icon_view->priv->hadjustment),
-                       - gtk_adjustment_get_value (icon_view->priv->vadjustment));
+  offset_x = gtk_adjustment_get_value (icon_view->priv->hadjustment);
+  offset_y = gtk_adjustment_get_value (icon_view->priv->vadjustment);
+
+  gtk_snapshot_offset (snapshot, - offset_x, - offset_y);
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
 
@@ -1705,7 +1707,8 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
                           item->cell_area.width  + icon_view->priv->item_padding * 2,
                           item->cell_area.height + icon_view->priv->item_padding * 2);
 
-      if (gdk_rectangle_intersect (&item->cell_area, &(GdkRectangle) { 0, 0, width, height }, NULL))
+      if (gdk_rectangle_intersect (&item->cell_area,
+                                   &(GdkRectangle) { offset_x, offset_y, width, height }, NULL))
         {
           gtk_icon_view_snapshot_item (icon_view, snapshot, item,
                                        item->cell_area.x, item->cell_area.y,
