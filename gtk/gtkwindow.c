@@ -262,6 +262,8 @@ struct _GtkWindowPrivate
   guint    maximized                 : 1;
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
+  guint    unlimited_guessed_size_x  : 1;
+  guint    unlimited_guessed_size_y  : 1;
 
   guint    use_subsurface            : 1;
 
@@ -6455,6 +6457,17 @@ gtk_window_unmap (GtkWidget *widget)
     gtk_widget_unmap (child);
 }
 
+void
+gtk_window_set_unlimited_guessed_size (GtkWindow *window,
+                                       gboolean   x,
+                                       gboolean   y)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->unlimited_guessed_size_x = x;
+  priv->unlimited_guessed_size_y = y;
+}
+
 /* (Note: Replace "size" with "width" or "height". Also, the request
  * mode is honoured.)
  * For selecting the default window size, the following conditions
@@ -6493,8 +6506,15 @@ gtk_window_guess_default_size (GtkWindow *window,
 
   gdk_monitor_get_workarea (monitor, &workarea);
 
-  *width = workarea.width;
-  *height = workarea.height;
+  if (window->priv->unlimited_guessed_size_x)
+    *width = INT_MAX;
+  else
+    *width = workarea.width;
+
+  if (window->priv->unlimited_guessed_size_y)
+    *height = INT_MAX;
+  else
+    *height = workarea.height;
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {

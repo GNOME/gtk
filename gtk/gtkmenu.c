@@ -5243,9 +5243,15 @@ gtk_menu_position (GtkMenu  *menu,
 
   if (!rect_window)
     {
+      gtk_window_set_unlimited_guessed_size (GTK_WINDOW (priv->toplevel),
+                                             FALSE, FALSE);
       gtk_menu_position_legacy (menu, set_scroll_offset);
       return;
     }
+
+  gtk_window_set_unlimited_guessed_size (GTK_WINDOW (priv->toplevel),
+                                         !!(anchor_hints & GDK_ANCHOR_RESIZE_X),
+                                         !!(anchor_hints & GDK_ANCHOR_RESIZE_Y));
 
   /* Realize so we have the proper width and height to figure out
    * the right place to popup the menu.
