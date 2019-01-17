@@ -61,6 +61,7 @@ struct _GdkEventAny
   GdkDevice *device;
   GdkDevice *source_device;
   GdkDisplay *display;
+  GObject *user_data;
 };
 
 /*

@@ -79,8 +79,6 @@ static GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
 static gpointer       _gdk_event_data = NULL;
 static GDestroyNotify _gdk_event_notify = NULL;
 
-static GQuark quark_event_user_data = 0;
-
 static void gdk_event_constructed (GObject *object);
 static void gdk_event_finalize (GObject *object);
 
@@ -158,8 +156,6 @@ gdk_event_class_init (GdkEventClass *klass)
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_properties (object_class, N_PROPS, event_props);
-
-  quark_event_user_data = g_quark_from_static_string ("gdk-event-user-data");
 }
 
 void
@@ -626,8 +622,8 @@ gdk_event_copy (const GdkEvent *event)
     g_object_ref (new_event->any.device);
   if (new_event->any.source_device)
     g_object_ref (new_event->any.source_device);
-
-  gdk_event_set_user_data (new_event, gdk_event_get_user_data (event));
+  if (new_event->any.user_data)
+    g_object_ref (new_event->any.user_data);
 
   switch ((guint) event->any.type)
     {
@@ -737,6 +733,7 @@ gdk_event_finalize (GObject *object)
 
   g_clear_object (&event->any.device);
   g_clear_object (&event->any.source_device);
+  g_clear_object (&event->any.user_data);
 
   G_OBJECT_CLASS (gdk_event_parent_class)->finalize (object);
 }
@@ -1968,22 +1965,13 @@ void
 gdk_event_set_user_data (GdkEvent *event,
                          GObject  *user_data)
 {
-  if (user_data)
-    {
-      g_object_set_qdata_full (G_OBJECT (event), quark_event_user_data,
-                               g_object_ref (user_data),
-                               g_object_unref);
-    }
-  else
-    {
-      g_object_steal_qdata (G_OBJECT (event), quark_event_user_data);
-    }
+  g_set_object (&event->any.user_data, user_data);
 }
 
 GObject *
 gdk_event_get_user_data (const GdkEvent *event)
 {
-  return g_object_get_qdata (G_OBJECT (event), quark_event_user_data);
+  return event->any.user_data;
 }
 
 /**
