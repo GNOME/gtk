@@ -233,6 +233,10 @@ ops_set_clip (RenderOpBuilder      *builder,
 {
   RenderOp *last_op;
 
+  if (builder->current_program_state &&
+      memcmp (&builder->current_program_state->clip, clip,sizeof (GskRoundedRect)) == 0)
+    return;
+
   if (builder->render_ops->len > 0)
     {
       last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
