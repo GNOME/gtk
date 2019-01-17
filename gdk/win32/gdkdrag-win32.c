@@ -1840,7 +1840,6 @@ gdk_win32_drag_find_window (GdkDrag    *drag,
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   find_window_enum_arg a;
-  HWND result;
 
   g_assert (_win32_main_thread == NULL ||
             _win32_main_thread == g_thread_self ());

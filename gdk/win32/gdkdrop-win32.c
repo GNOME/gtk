@@ -1090,7 +1090,7 @@ static void
 gdk_win32_drop_finish (GdkDrop       *drop,
                        GdkDragAction  action)
 {
-  GdkDrag *drag;
+/*GdkDrag *drag;*/
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
 
   g_return_if_fail (drop != NULL);
