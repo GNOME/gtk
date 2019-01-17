@@ -140,6 +140,7 @@ struct _GdkWindowImplWayland
   EGLSurface dummy_egl_surface;
 
   unsigned int initial_configure_received : 1;
+  unsigned int configuring_popup : 1;
   unsigned int mapped : 1;
   unsigned int use_custom_surface : 1;
   unsigned int pending_buffer_attached : 1;
@@ -1088,12 +1089,18 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
   is_xdg_popup = is_realized_popup (window);
   is_visible = gdk_window_is_visible (window);
 
-  if (is_xdg_popup && is_visible && !impl->initial_configure_received)
+  if (is_xdg_popup &&
+      is_visible &&
+      !impl->initial_configure_received &&
+      !impl->configuring_popup)
     gdk_window_hide (window);
 
   gdk_wayland_window_configure (window, width, height, scale);
 
-  if (is_xdg_popup && is_visible && !impl->initial_configure_received)
+  if (is_xdg_popup &&
+      is_visible &&
+      !impl->initial_configure_received &&
+      !impl->configuring_popup)
     gdk_window_show (window);
 }
 
@@ -2413,9 +2420,11 @@ calculate_moved_to_rect_result (GdkWindow    *window,
   window_width = width + window->shadow_left + window->shadow_right;
   window_height = height + window->shadow_top + window->shadow_bottom;
 
+  impl->configuring_popup = TRUE;
   gdk_window_move_resize (window,
                           window_x, window_y,
                           window_width, window_height);
+  impl->configuring_popup = FALSE;
 
   calculate_popup_rect (window,
                         impl->pending_move_to_rect.rect_anchor,
