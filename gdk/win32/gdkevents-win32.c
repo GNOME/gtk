@@ -1331,7 +1331,6 @@ _gdk_win32_do_emit_configure_event (GdkSurface *window,
                                     RECT       rect)
 {
   GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-  GdkEvent *event;
 
   impl->unscaled_width = rect.right - rect.left;
   impl->unscaled_height = rect.bottom - rect.top;
