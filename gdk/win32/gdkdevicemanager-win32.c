@@ -883,10 +883,7 @@ gdk_input_other_event (GdkDisplay *display,
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
   GdkDeviceGrabInfo *last_grab;
-  GdkEventMask masktest;
   guint key_state;
-  POINT pt;
-  GdkSurfaceImplWin32 *impl;
 
   PACKET packet;
   gint root_x, root_y;

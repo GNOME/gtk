@@ -55,7 +55,6 @@ static void gdk_surface_impl_win32_finalize   (GObject                 *object);
 static gpointer parent_class = NULL;
 static GSList *modal_window_stack = NULL;
 
-static const cairo_user_data_key_t gdk_win32_cairo_key;
 typedef struct _FullscreenInfo FullscreenInfo;
 
 struct _FullscreenInfo
@@ -749,7 +748,6 @@ gdk_win32_surface_destroy (GdkSurface *window,
 			  gboolean   foreign_destroy)
 {
   GdkSurfaceImplWin32 *surface_impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-  GSList *tmp;
 
   g_return_if_fail (GDK_IS_SURFACE (window));
 
