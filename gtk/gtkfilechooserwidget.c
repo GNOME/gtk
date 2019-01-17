@@ -7146,6 +7146,7 @@ show_spinner (gpointer data)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   gtk_widget_show (priv->search_spinner);
+  gtk_spinner_start (GTK_SPINNER (priv->search_spinner));
   priv->show_progress_timeout = 0;
 
   return G_SOURCE_REMOVE;
