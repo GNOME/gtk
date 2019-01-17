@@ -214,13 +214,6 @@ typedef struct
 
 typedef struct
 {
-  gdouble dx;
-  gdouble dy;
-  guint32 evtime;
-} ScrollHistoryElem;
-
-typedef struct
-{
   GtkWidget     *hscrollbar;
   GtkWidget     *vscrollbar;
 
