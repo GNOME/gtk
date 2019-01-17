@@ -485,10 +485,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
-void           gdk_event_set_user_data (GdkEvent *event,
-                                        GObject  *user_data);
-
-GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_is_sent       (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL

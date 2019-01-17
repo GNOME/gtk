@@ -632,4 +632,8 @@ union _GdkEvent
   GdkEventPadGroupMode      pad_group_mode;
 };
 
+void           gdk_event_set_user_data              (GdkEvent *event,
+                                                     GObject  *user_data);
+
+
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
