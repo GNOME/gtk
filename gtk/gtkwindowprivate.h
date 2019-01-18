@@ -135,6 +135,11 @@ void       gtk_window_set_hardcoded_window (GtkWindow *window,
 
 GdkScreen *_gtk_window_get_screen (GtkWindow *window);
 
+void       gtk_window_set_unlimited_guessed_size (GtkWindow *window,
+                                                  gboolean   x,
+                                                  gboolean   y);
+void       gtk_window_force_resize (GtkWindow *window);
+
 /* Exported handles */
 
 typedef void (*GtkWindowHandleExported)  (GtkWindow               *window,

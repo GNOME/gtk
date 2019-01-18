@@ -262,6 +262,9 @@ struct _GtkWindowPrivate
   guint    maximized                 : 1;
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
+  guint    unlimited_guessed_size_x  : 1;
+  guint    unlimited_guessed_size_y  : 1;
+  guint    force_resize              : 1;
 
   guint    use_subsurface            : 1;
 
@@ -6455,6 +6458,25 @@ gtk_window_unmap (GtkWidget *widget)
     gtk_widget_unmap (child);
 }
 
+void
+gtk_window_set_unlimited_guessed_size (GtkWindow *window,
+                                       gboolean   x,
+                                       gboolean   y)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->unlimited_guessed_size_x = x;
+  priv->unlimited_guessed_size_y = y;
+}
+
+void
+gtk_window_force_resize (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->force_resize = TRUE;
+}
+
 /* (Note: Replace "size" with "width" or "height". Also, the request
  * mode is honoured.)
  * For selecting the default window size, the following conditions
@@ -6493,8 +6515,15 @@ gtk_window_guess_default_size (GtkWindow *window,
 
   gdk_monitor_get_workarea (monitor, &workarea);
 
-  *width = workarea.width;
-  *height = workarea.height;
+  if (window->priv->unlimited_guessed_size_x)
+    *width = INT_MAX;
+  else
+    *width = workarea.width;
+
+  if (window->priv->unlimited_guessed_size_y)
+    *height = INT_MAX;
+  else
+    *height = workarea.height;
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
@@ -9364,7 +9393,8 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   
   info = gtk_window_get_geometry_info (window, FALSE);
 
-  if (priv->need_default_size)
+  if (priv->need_default_size ||
+      priv->force_resize)
     {
       gtk_window_guess_default_size (window, width, height);
       gtk_window_get_remembered_size (window, &w, &h);
@@ -9769,9 +9799,13 @@ gtk_window_move_resize (GtkWindow *window)
       info->last.configure_request.y != new_request.y)
     configure_request_pos_changed = TRUE;
 
-  if ((info->last.configure_request.width != new_request.width ||
+  if (priv->force_resize ||
+      (info->last.configure_request.width != new_request.width ||
        info->last.configure_request.height != new_request.height))
-    configure_request_size_changed = TRUE;
+    {
+      priv->force_resize = FALSE;
+      configure_request_size_changed = TRUE;
+    }
   
   hints_changed = FALSE;
   
