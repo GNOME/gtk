@@ -1904,18 +1904,7 @@ gtk_main_do_event (GdkEvent *event)
       break;
     }
 
-  if (event->any.type == GDK_ENTER_NOTIFY
-      || event->any.type == GDK_LEAVE_NOTIFY
-      || event->any.type == GDK_BUTTON_PRESS
-      || event->any.type == GDK_KEY_PRESS
-      || event->any.type == GDK_DRAG_ENTER
-      || event->any.type == GDK_GRAB_BROKEN
-      || event->any.type == GDK_MOTION_NOTIFY
-      || event->any.type == GDK_TOUCH_UPDATE
-      || event->any.type == GDK_SCROLL)
-    {
-      _gtk_tooltip_handle_event (event);
-    }
+  _gtk_tooltip_handle_event (event);
 
  cleanup:
   tmp_list = current_events;

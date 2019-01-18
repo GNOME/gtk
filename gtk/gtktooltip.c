@@ -841,6 +841,33 @@ tooltips_enabled (GdkEvent *event)
 {
   GdkDevice *source_device;
   GdkInputSource source;
+  GdkModifierType event_state = 0;
+
+  switch ((guint)gdk_event_get_event_type (event))
+    {
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_KEY_PRESS:
+    case GDK_DRAG_ENTER:
+    case GDK_GRAB_BROKEN:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_UPDATE:
+    case GDK_SCROLL:
+      break; /* OK */
+
+    default:
+      return FALSE;
+    }
+
+  gdk_event_get_state (event, &event_state);
+  if ((event_state &
+       (GDK_BUTTON1_MASK |
+        GDK_BUTTON2_MASK |
+        GDK_BUTTON3_MASK |
+        GDK_BUTTON4_MASK |
+        GDK_BUTTON5_MASK)) != 0)
+    return FALSE;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -862,18 +889,8 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   GtkWidget *target;
   GdkSurface *surface;
   gdouble dx, dy;
-  GdkModifierType event_state = 0;
 
   if (!tooltips_enabled (event))
-    return;
-
-  gdk_event_get_state (event, &event_state);
-  if ((event_state &
-       (GDK_BUTTON1_MASK |
-        GDK_BUTTON2_MASK |
-        GDK_BUTTON3_MASK |
-        GDK_BUTTON4_MASK |
-        GDK_BUTTON5_MASK)) != 0)
     return;
 
   event_type = gdk_event_get_event_type (event);
