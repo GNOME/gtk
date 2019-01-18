@@ -1384,7 +1384,7 @@ gtk_paned_snapshot (GtkWidget   *widget,
   gtk_snapshot_pop (snapshot);
 }
 
-static gboolean
+static void
 gtk_paned_render_handle (GtkGizmo    *gizmo,
                          GtkSnapshot *snapshot)
 {
@@ -1400,8 +1400,6 @@ gtk_paned_render_handle (GtkGizmo    *gizmo,
                                  snapshot,
                                  width, height,
                                  GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
-
-  return FALSE;
 }
 
 static void

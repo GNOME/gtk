@@ -337,7 +337,7 @@ gtk_level_bar_get_real_inverted (GtkLevelBar *self)
   return priv->inverted;
 }
 
-static gboolean
+static void
 gtk_level_bar_render_trough (GtkGizmo    *gizmo,
                              GtkSnapshot *snapshot)
 {
@@ -367,8 +367,6 @@ gtk_level_bar_render_trough (GtkGizmo    *gizmo,
       for (i = 0; i < num_blocks; i++)
         gtk_widget_snapshot_child (widget, priv->block_widget[i], snapshot);
     }
-
-  return FALSE;
 }
 
 static void

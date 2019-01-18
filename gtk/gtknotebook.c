@@ -452,7 +452,7 @@ static void gtk_notebook_allocate_tabs       (GtkGizmo         *gizmo,
                                               int               width,
                                               int               height,
                                               int               baseline);
-static gboolean gtk_notebook_snapshot_tabs   (GtkGizmo         *gizmo,
+static void     gtk_notebook_snapshot_tabs   (GtkGizmo         *gizmo,
                                               GtkSnapshot      *snapshot);
 
 /*** GtkNotebook Private Functions ***/
@@ -4335,7 +4335,7 @@ gtk_notebook_search_page (GtkNotebook *notebook,
   return NULL;
 }
 
-static gboolean
+static void
 gtk_notebook_snapshot_tabs (GtkGizmo    *gizmo,
                             GtkSnapshot *snapshot)
 {
@@ -4355,7 +4355,7 @@ gtk_notebook_snapshot_tabs (GtkGizmo    *gizmo,
   showarrow = FALSE;
 
   if (!gtk_notebook_has_current_page (notebook))
-    return FALSE;
+    return;
 
   if (!priv->first_tab)
     priv->first_tab = priv->children;
@@ -4453,8 +4453,6 @@ gtk_notebook_snapshot_tabs (GtkGizmo    *gizmo,
 
   if (priv->operation != DRAG_OPERATION_DETACH)
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->cur_page->tab_widget, snapshot);
-
-  return FALSE;
 }
 
 /* Private GtkNotebook Size Allocate Functions:

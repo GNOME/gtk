@@ -25,7 +25,7 @@ typedef void    (* GtkGizmoAllocateFunc)  (GtkGizmo *gizmo,
                                            int       width,
                                            int       height,
                                            int       baseline);
-typedef gboolean (* GtkGizmoSnapshotFunc) (GtkGizmo    *gizmo,
+typedef void    (* GtkGizmoSnapshotFunc)  (GtkGizmo    *gizmo,
                                            GtkSnapshot *snapshot);
 
 

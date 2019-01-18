@@ -446,7 +446,7 @@ allocate_trough (GtkGizmo *gizmo,
 
 }
 
-static gboolean
+static void
 snapshot_trough (GtkGizmo    *gizmo,
                  GtkSnapshot *snapshot)
 
@@ -455,8 +455,6 @@ snapshot_trough (GtkGizmo    *gizmo,
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->progress_widget, snapshot);
-
-  return FALSE;
 }
 
 static void

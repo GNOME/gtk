@@ -205,7 +205,7 @@ handle_drag_end (GtkGestureDrag *gesture,
   gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
 }
 
-static gboolean
+static void
 snapshot_func (GtkGizmo    *gizmo,
                GtkSnapshot *snapshot)
 {
@@ -216,7 +216,6 @@ snapshot_func (GtkGizmo    *gizmo,
                                gtk_widget_get_width (GTK_WIDGET (gizmo)),
                                gtk_widget_get_height (GTK_WIDGET (gizmo)),
                                GTK_CSS_IMAGE_BUILTIN_HANDLE);
-  return TRUE;
 }
 
 static GtkWidget *

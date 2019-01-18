@@ -234,7 +234,7 @@ static void          gtk_range_allocate_trough          (GtkGizmo            *gi
                                                          int                  width,
                                                          int                  height,
                                                          int                  baseline);
-static gboolean      gtk_range_render_trough            (GtkGizmo     *gizmo,
+static void          gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
 
 static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
@@ -1656,7 +1656,7 @@ gtk_range_direction_changed (GtkWidget        *widget,
   GTK_WIDGET_CLASS (gtk_range_parent_class)->direction_changed (widget, previous_direction);
 }
 
-static gboolean
+static void
 gtk_range_render_trough (GtkGizmo    *gizmo,
                          GtkSnapshot *snapshot)
 {
@@ -1681,8 +1681,6 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->highlight_widget, snapshot);
 
   gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->slider_widget, snapshot);
-
-  return gtk_widget_has_visible_focus (widget);
 }
 
 static void
