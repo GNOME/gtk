@@ -4474,7 +4474,7 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   end_change (GTK_ENTRY (editable));
 
   if (n_inserted != n_chars)
-      gtk_widget_error_bell (GTK_WIDGET (editable));
+    gtk_widget_error_bell (GTK_WIDGET (editable));
 
   *position += n_inserted;
 }
