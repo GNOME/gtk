@@ -25,8 +25,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection"
-				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection"
+				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean"
 				Output="$(GtkIntrospectBuiltFiles)"
 			/>
@@ -38,8 +38,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) install-introspection"
-				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean install-introspection"
+				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64)"
+				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean all"
 				CleanCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean"
 				Output="$(GtkIntrospectBuiltFiles)"
 			/>
@@ -53,8 +53,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection"
-				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection"
+				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean"
 				Output="$(GtkIntrospectBuiltFiles)"
 			/>
@@ -66,8 +66,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) install-introspection"
-				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean install-introspection"
+				BuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64)"
+				ReBuildCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean all"
 				CleanCommandLine="$(GtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean"
 				Output="$(GtkIntrospectBuiltFiles)"
 			/>

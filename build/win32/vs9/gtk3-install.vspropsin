@@ -9,7 +9,9 @@
 		Name="GtkDoInstallBin"
 		Value="
 mkdir $(CopyDir)\bin&#x0D;&#x0A;
+mkdir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
 mkdir $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+mkdir $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
 
 copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
@@ -37,6 +39,12 @@ copy $(ConfigurationName)\$(PlatformName)\bin\gtk-query-settings.exe $(CopyDir)\
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\Gdk-3.0.gir copy $(ConfigurationName)\$(PlatformName)\bin\Gdk-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\GdkWin32-3.0.gir copy $(ConfigurationName)\$(PlatformName)\bin\GdkWin32-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\Gtk-3.0.gir copy $(ConfigurationName)\$(PlatformName)\bin\Gtk-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\Gdk-3.0.typelib copy $(ConfigurationName)\$(PlatformName)\bin\Gdk-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\GdkWin32-3.0.typelib copy $(ConfigurationName)\$(PlatformName)\bin\GdkWin32-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\Gtk-3.0.typelib copy $(ConfigurationName)\$(PlatformName)\bin\Gtk-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
 goto DONE_BIN&#x0D;&#x0A;
 
 :DO_BROADWAY_BIN&#x0D;&#x0A;
@@ -66,6 +74,12 @@ copy .\Release\$(PlatformName)\bin\gtk-query-settings.exe $(CopyDir)\bin&#x0D;&#
 copy .\Release\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Release\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Release\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
+if exist .\Release\$(PlatformName)\bin\Gdk-3.0.gir copy .\Release\$(PlatformName)\bin\Gdk-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist .\Release\$(PlatformName)\bin\GdkWin32-3.0.gir copy .\Release\$(PlatformName)\bin\GdkWin32-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist .\Release\$(PlatformName)\bin\Gtk-3.0.gir copy .\Release\$(PlatformName)\bin\Gtk-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist .\Release\$(PlatformName)\bin\Gdk-3.0.typelib copy .\Release\$(PlatformName)\bin\Gdk-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
+if exist .\Release\$(PlatformName)\bin\GdkWin32-3.0.typelib copy .\Release\$(PlatformName)\bin\GdkWin32-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
+if exist .\Release\$(PlatformName)\bin\Gtk-3.0.typelib copy .\Release\$(PlatformName)\bin\Gtk-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
 goto DONE_BIN&#x0D;&#x0A;
 
 :DO_BROADWAY_DEBUG&#x0D;&#x0A;
@@ -89,6 +103,12 @@ copy .\Debug\$(PlatformName)\bin\gtk-query-settings.exe $(CopyDir)\bin&#x0D;&#x0
 copy .\Debug\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Debug\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Debug\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
+if exist .\Debug\$(PlatformName)\bin\Gdk-3.0.gir copy .\Debug\$(PlatformName)\bin\Gdk-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist .\Debug\$(PlatformName)\bin\GdkWin32-3.0.gir copy .\Debug\$(PlatformName)\bin\GdkWin32-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist .\Debug\$(PlatformName)\bin\Gtk-3.0.gir copy .\Debug\$(PlatformName)\bin\Gtk-3.0.gir $(CopyDir)\share\gir-1.0&#x0D;&#x0A;
+if exist .\Debug\$(PlatformName)\bin\Gdk-3.0.typelib copy .\Debug\$(PlatformName)\bin\Gdk-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
+if exist .\Debug\$(PlatformName)\bin\GdkWin32-3.0.typelib copy .\Debug\$(PlatformName)\bin\GdkWin32-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
+if exist .\Debug\$(PlatformName)\bin\Gtk-3.0.typelib copy .\Debug\$(PlatformName)\bin\Gtk-3.0.typelib $(CopyDir)\lib\girepository-1.0&#x0D;&#x0A;
 :DONE_BIN&#x0D;&#x0A;
 
 copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;

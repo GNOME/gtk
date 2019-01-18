@@ -17,7 +17,7 @@
     <GtkIntrospectNMakeCmd>cd ..
 set VCInstallDir=$(VCInstallDir)
 nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallRoot)</GtkIntrospectNMakeCmd>
-    <GtkIntrospectBuiltFiles>$(SolutionDir)\..\Gtk-3.0.gir;$(SolutionDir)\..\Gtk-3.0.typelib</GtkIntrospectBuiltFiles>
+    <GtkIntrospectBuiltFiles>$(BinDir)\Gtk-3.0.gir;$(BinDir)\Gtk-3.0.typelib</GtkIntrospectBuiltFiles>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3builddefinesprops</_PropertySheetDisplayName>

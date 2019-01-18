@@ -68,32 +68,36 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeOutput>$(GtkIntrospectBuiltFiles)</NMakeOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeOutput>$(GtkIntrospectBuiltFiles)</NMakeOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeOutput>$(GtkIntrospectBuiltFiles)</NMakeOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>$(GtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeOutput>$(GtkIntrospectBuiltFiles)</NMakeOutput>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="gtk3-install.vcxproj">
-      <Project>{23bbf35f-78af-4e8c-983f-7b90448cd7df}</Project>
+    <ProjectReference Include="gdk-3.vcxproj">
+      <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="gtk-3.vcxproj">
+      <Project>{95a4b53d-2773-4406-a2c1-8fd2840bbad8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
