@@ -944,7 +944,7 @@ gtk_tooltip_handle_event_internal (GdkEventType   event_type,
 	if (current_tooltip)
 	  {
 	    gboolean tip_area_set;
-	    GdkRectangle tip_area;
+            GdkRectangle tip_area;
 	    gboolean hide_tooltip;
 
 	    tip_area_set = current_tooltip->tip_area_set;
@@ -963,10 +963,7 @@ gtk_tooltip_handle_event_internal (GdkEventType   event_type,
 
 	    /* Did the pointer move out of the previous "context area"? */
 	    if (tip_area_set)
-	      hide_tooltip |= (x <= tip_area.x
-			       || x >= tip_area.x + tip_area.width
-			       || y <= tip_area.y
-			       || y >= tip_area.y + tip_area.height);
+	      hide_tooltip |= !gdk_rectangle_contains_point (&tip_area, x, y);
 
 	    if (hide_tooltip)
 	      gtk_tooltip_hide_tooltip (current_tooltip);
