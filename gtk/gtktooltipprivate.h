@@ -31,9 +31,6 @@
 
 G_BEGIN_DECLS
 
-void _gtk_tooltip_focus_in               (GtkWidget          *widget);
-void _gtk_tooltip_focus_out              (GtkWidget          *widget);
-void _gtk_tooltip_toggle_keyboard_mode   (GtkWidget          *widget);
 void _gtk_tooltip_handle_event           (GdkEvent           *event);
 void _gtk_tooltip_hide                   (GtkWidget          *widget);
 

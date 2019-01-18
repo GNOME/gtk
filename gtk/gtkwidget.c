@@ -5205,15 +5205,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (widget == gtk_get_event_target (event_copy))
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
 
-  /* XXX: Tooltips should be handled through captured events in the toplevel */
-  if (event_copy->any.type == GDK_FOCUS_CHANGE)
-    {
-      if (event_copy->focus_change.in)
-        _gtk_tooltip_focus_in (widget);
-      else
-        _gtk_tooltip_focus_out (widget);
-    }
-
   if (return_val == FALSE)
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
   g_object_unref (event_copy);

@@ -103,7 +103,6 @@ struct _GtkTooltip
   GtkWidget *window;
 
   GtkWindow *current_window;
-  GtkWidget *keyboard_widget;
 
   GtkWidget *tooltip_widget;
 
@@ -115,7 +114,6 @@ struct _GtkTooltip
   GdkRectangle tip_area;
 
   guint browse_mode_enabled : 1;
-  guint keyboard_mode_enabled : 1;
   guint tip_area_set : 1;
   guint custom_was_reset : 1;
 };
@@ -172,10 +170,8 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   tooltip->browse_mode_timeout_id = 0;
 
   tooltip->browse_mode_enabled = FALSE;
-  tooltip->keyboard_mode_enabled = FALSE;
 
   tooltip->current_window = NULL;
-  tooltip->keyboard_widget = NULL;
 
   tooltip->tooltip_widget = NULL;
 
@@ -573,7 +569,7 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
       has_tooltip = gtk_widget_get_has_tooltip (*widget);
 
       if (has_tooltip)
-        return_value = gtk_widget_query_tooltip (*widget, *x, *y, tooltip->keyboard_mode_enabled, tooltip);
+        return_value = gtk_widget_query_tooltip (*widget, *x, *y, FALSE, tooltip);
 
       if (!return_value)
         {
@@ -711,28 +707,21 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
-  if (tooltip->keyboard_mode_enabled)
-    {
-      x = y = -1;
-      tooltip_widget = tooltip->keyboard_widget;
-      device = NULL;
-    }
-  else
-    {
-      gint tx, ty;
+  {
+    gint tx, ty;
 
-      surface = tooltip->last_surface;
+    surface = tooltip->last_surface;
 
-      if (!GDK_IS_SURFACE (surface))
-        return;
+    if (!GDK_IS_SURFACE (surface))
+      return;
 
-      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+    device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
-      gdk_surface_get_device_position (surface, device, &x, &y, NULL);
+    gdk_surface_get_device_position (surface, device, &x, &y, NULL);
 
-      gdk_surface_get_root_coords (surface, x, y, &tx, &ty);
-      tooltip_widget = _gtk_widget_find_at_coords (surface, x, y, &x, &y);
-    }
+    gdk_surface_get_root_coords (surface, x, y, &tx, &ty);
+    tooltip_widget = _gtk_widget_find_at_coords (surface, x, y, &x, &y);
+  }
 
   if (!tooltip_widget)
     return;
@@ -778,6 +767,8 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 static void
 gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
 {
+  guint timeout = BROWSE_DISABLE_TIMEOUT;
+
   if (!tooltip)
     return;
 
@@ -792,30 +783,17 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
 
   tooltip->tooltip_widget = NULL;
 
-  if (!tooltip->keyboard_mode_enabled)
+  /* The tooltip is gone, after (by default, should be configurable) 500ms
+   * we want to turn off browse mode
+   */
+  if (!tooltip->browse_mode_timeout_id)
     {
-      guint timeout = BROWSE_DISABLE_TIMEOUT;
-
-      /* The tooltip is gone, after (by default, should be configurable) 500ms
-       * we want to turn off browse mode
-       */
-      if (!tooltip->browse_mode_timeout_id)
-        {
-	  tooltip->browse_mode_timeout_id =
-	    g_timeout_add_full (0, timeout,
-                                tooltip_browse_mode_expired,
-                                g_object_ref (tooltip),
-                                g_object_unref);
-	  g_source_set_name_by_id (tooltip->browse_mode_timeout_id, "[gtk+] tooltip_browse_mode_expired");
-	}
-    }
-  else
-    {
-      if (tooltip->browse_mode_timeout_id)
-        {
-	  g_source_remove (tooltip->browse_mode_timeout_id);
-	  tooltip->browse_mode_timeout_id = 0;
-	}
+      tooltip->browse_mode_timeout_id =
+        g_timeout_add_full (0, timeout,
+                            tooltip_browse_mode_expired,
+                            g_object_ref (tooltip),
+                            g_object_unref);
+      g_source_set_name_by_id (tooltip->browse_mode_timeout_id, "[gtk+] tooltip_browse_mode_expired");
     }
 
   if (tooltip->current_window)
@@ -871,122 +849,6 @@ gtk_tooltip_start_delay (GdkDisplay *display)
                                             g_object_ref (display),
                                             g_object_unref);
   g_source_set_name_by_id (tooltip->timeout_id, "[gtk+] tooltip_popup_timeout");
-}
-
-void
-_gtk_tooltip_focus_in (GtkWidget *widget)
-{
-  gint x = 0, y = 0;
-  gboolean return_value = FALSE;
-  GdkDisplay *display;
-  GtkTooltip *tooltip;
-  GdkDevice *device;
-
-  /* Get current tooltip for this display */
-  display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
-
-  /* Check if keyboard mode is enabled at this moment */
-  if (!tooltip || !tooltip->keyboard_mode_enabled)
-    return;
-
-  device = gtk_get_current_event_device ();
-
-  if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
-
-  /* This function should be called by either a focus in event,
-   * or a key binding. In either case there should be a device.
-   */
-  if (!device)
-    return;
-
-  if (tooltip->keyboard_widget)
-    g_object_unref (tooltip->keyboard_widget);
-
-  tooltip->keyboard_widget = g_object_ref (widget);
-
-  gdk_surface_get_device_position (gtk_widget_get_surface (widget),
-                                  device, &x, &y, NULL);
-
-  return_value = gtk_tooltip_run_requery (&widget, tooltip, &x, &y);
-  if (!return_value)
-    {
-      gtk_tooltip_hide_tooltip (tooltip);
-      return;
-    }
-
-  if (!tooltip->current_window)
-    {
-      if (gtk_widget_get_tooltip_window (widget))
-	tooltip->current_window = gtk_widget_get_tooltip_window (widget);
-      else
-	tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
-    }
-
-  gtk_tooltip_show_tooltip (display);
-}
-
-void
-_gtk_tooltip_focus_out (GtkWidget *widget)
-{
-  GdkDisplay *display;
-  GtkTooltip *tooltip;
-
-  /* Get current tooltip for this display */
-  display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
-
-  if (!tooltip || !tooltip->keyboard_mode_enabled)
-    return;
-
-  if (tooltip->keyboard_widget)
-    {
-      g_object_unref (tooltip->keyboard_widget);
-      tooltip->keyboard_widget = NULL;
-    }
-
-  gtk_tooltip_hide_tooltip (tooltip);
-}
-
-void
-_gtk_tooltip_toggle_keyboard_mode (GtkWidget *widget)
-{
-  GdkDisplay *display;
-  GtkTooltip *tooltip;
-
-  display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
-
-  if (!tooltip)
-    {
-      tooltip = g_object_new (GTK_TYPE_TOOLTIP, NULL);
-      g_object_set_qdata_full (G_OBJECT (display),
-			       quark_current_tooltip,
-			       tooltip,
-                               g_object_unref);
-      g_signal_connect (display, "closed",
-			G_CALLBACK (gtk_tooltip_display_closed),
-			tooltip);
-    }
-
-  tooltip->keyboard_mode_enabled ^= 1;
-
-  if (tooltip->keyboard_mode_enabled)
-    {
-      tooltip->keyboard_widget = g_object_ref (widget);
-      _gtk_tooltip_focus_in (widget);
-    }
-  else
-    {
-      if (tooltip->keyboard_widget)
-        {
-	  g_object_unref (tooltip->keyboard_widget);
-	  tooltip->keyboard_widget = NULL;
-	}
-
-      gtk_tooltip_hide_tooltip (tooltip);
-    }
 }
 
 void
@@ -1068,26 +930,6 @@ gtk_tooltip_handle_event_internal (GdkEventType  event_type,
 
   if (current_tooltip)
     gtk_tooltip_set_last_surface (current_tooltip, surface);
-
-  if (current_tooltip && current_tooltip->keyboard_mode_enabled)
-    {
-      gboolean return_value;
-
-      has_tooltip_widget = current_tooltip->keyboard_widget;
-      if (!has_tooltip_widget)
-	return;
-
-      return_value = gtk_tooltip_run_requery (&has_tooltip_widget,
-					      current_tooltip,
-					      &x, &y);
-
-      if (!return_value)
-	gtk_tooltip_hide_tooltip (current_tooltip);
-      else
-	gtk_tooltip_start_delay (display);
-
-      return;
-    }
 
   /* Hide the tooltip when there's no new tooltip widget */
   if (!has_tooltip_widget)
