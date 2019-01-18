@@ -4971,10 +4971,10 @@ gtk_entry_backspace (GtkEntry *entry)
   if (prev_pos < priv->current_pos)
     {
       PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
       /* Deleting parts of characters */
       if (log_attrs[priv->current_pos].backspace_deletes_character)
@@ -5008,8 +5008,6 @@ gtk_entry_backspace (GtkEntry *entry)
 	{
           gtk_editable_delete_text (editable, prev_pos, priv->current_pos);
 	}
-      
-      g_free (log_attrs);
     }
   else
     {
@@ -6170,10 +6168,10 @@ gtk_entry_move_logically (GtkEntry *entry,
   else
     {
       PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
       while (count > 0 && new_pos < length)
 	{
@@ -6191,8 +6189,6 @@ gtk_entry_move_logically (GtkEntry *entry,
 	  
 	  count++;
 	}
-      
-      g_free (log_attrs);
     }
 
   return new_pos;
@@ -6216,18 +6212,16 @@ gtk_entry_move_forward_word (GtkEntry *entry,
   else if (new_pos < length)
     {
       PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
-      
+      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+
       /* Find the next word boundary */
       new_pos++;
       while (new_pos < n_attrs - 1 && !(log_attrs[new_pos].is_word_end ||
                                         (log_attrs[new_pos].is_word_start && allow_whitespace)))
-	new_pos++;
-
-      g_free (log_attrs);
+        new_pos++;
     }
 
   return new_pos;
@@ -6249,19 +6243,17 @@ gtk_entry_move_backward_word (GtkEntry *entry,
   else if (start > 0)
     {
       PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
       new_pos = start - 1;
 
       /* Find the previous word boundary */
       while (new_pos > 0 && !(log_attrs[new_pos].is_word_start || 
                               (log_attrs[new_pos].is_word_end && allow_whitespace)))
-	new_pos--;
-
-      g_free (log_attrs);
+        new_pos--;
     }
 
   return new_pos;
@@ -6272,21 +6264,19 @@ gtk_entry_delete_whitespace (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
-  PangoLogAttr *log_attrs;
+  const PangoLogAttr *log_attrs;
   gint n_attrs;
   gint start, end;
 
-  pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+  log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
   start = end = priv->current_pos;
-  
+
   while (start > 0 && log_attrs[start-1].is_white)
     start--;
 
   while (end < n_attrs && log_attrs[end].is_white)
     end++;
-
-  g_free (log_attrs);
 
   if (start != end)
     gtk_editable_delete_text (GTK_EDITABLE (entry), start, end);
