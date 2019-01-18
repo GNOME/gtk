@@ -659,9 +659,6 @@ static void             gtk_widget_buildable_parser_finished    (GtkBuildable   
 
 static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget        *widget);
 
-static void             gtk_widget_queue_tooltip_query          (GtkWidget        *widget);
-
-
 static void                  template_data_free                 (GtkWidgetTemplate*template_data);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
@@ -2249,7 +2246,7 @@ gtk_widget_set_property (GObject         *object,
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_set_has_tooltip (widget, tmp);
       if (_gtk_widget_get_visible (widget))
-        gtk_widget_queue_tooltip_query (widget);
+        gtk_widget_trigger_tooltip_query (widget);
       break;
     case PROP_TOOLTIP_TEXT:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
@@ -2270,7 +2267,7 @@ gtk_widget_set_property (GObject         *object,
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_set_has_tooltip (widget, tmp);
       if (_gtk_widget_get_visible (widget))
-        gtk_widget_queue_tooltip_query (widget);
+        gtk_widget_trigger_tooltip_query (widget);
       break;
     case PROP_HALIGN:
       gtk_widget_set_halign (widget, g_value_get_enum (value));
@@ -10886,7 +10883,7 @@ gtk_widget_set_tooltip_window (GtkWidget *widget,
   gtk_widget_set_has_tooltip (widget, has_tooltip);
 
   if (has_tooltip && _gtk_widget_get_visible (widget))
-    gtk_widget_queue_tooltip_query (widget);
+    gtk_widget_trigger_tooltip_query (widget);
 }
 
 /**
@@ -10918,39 +10915,7 @@ gtk_widget_get_tooltip_window (GtkWidget *widget)
 void
 gtk_widget_trigger_tooltip_query (GtkWidget *widget)
 {
-  gtk_tooltip_trigger_tooltip_query (gtk_widget_get_display (widget));
-}
-
-static guint tooltip_query_id;
-static GSList *tooltip_query_displays;
-
-static gboolean
-tooltip_query_idle (gpointer data)
-{
-  g_slist_foreach (tooltip_query_displays, (GFunc)gtk_tooltip_trigger_tooltip_query, NULL);
-  g_slist_free_full (tooltip_query_displays, g_object_unref);
-
-  tooltip_query_displays = NULL;
-  tooltip_query_id = 0;
-
-  return FALSE;
-}
-
-static void
-gtk_widget_queue_tooltip_query (GtkWidget *widget)
-{
-  GdkDisplay *display;
-
-  display = gtk_widget_get_display (widget);
-
-  if (!g_slist_find (tooltip_query_displays, display))
-    tooltip_query_displays = g_slist_prepend (tooltip_query_displays, g_object_ref (display));
-
-  if (tooltip_query_id == 0)
-    {
-      tooltip_query_id = g_idle_add (tooltip_query_idle, NULL);
-      g_source_set_name_by_id (tooltip_query_id, "[gtk+] tooltip_query_idle");
-    }
+  gtk_tooltip_trigger_tooltip_query (widget);
 }
 
 /**

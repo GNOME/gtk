@@ -377,11 +377,14 @@ gtk_tooltip_set_tip_area (GtkTooltip         *tooltip,
  * key press.
  */
 void
-gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
+gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 {
+  GdkDisplay *display;
   gint x, y;
   GdkSurface *surface;
   GdkDevice *device;
+
+  display = gtk_widget_get_display (widget);
 
   /* Trigger logic as if the mouse moved */
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));

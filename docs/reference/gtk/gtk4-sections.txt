@@ -3362,7 +3362,6 @@ gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_icon_name
 gtk_tooltip_set_icon_from_gicon
 gtk_tooltip_set_custom
-gtk_tooltip_trigger_tooltip_query
 gtk_tooltip_set_tip_area
 <SUBSECTION Standard>
 GTK_TYPE_TOOLTIP
