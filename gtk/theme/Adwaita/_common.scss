@@ -279,6 +279,10 @@ entry {
       &.right { margin-left: 6px; }
     }
 
+    placeholder {
+      @extend .dim-label;
+    }
+
     undershoot {
       &.left { @include undershoot(left); }
       &.right { @include undershoot(right); }
@@ -294,7 +298,12 @@ entry {
       }
     }
 
-    &:focus { @include entry(focus); }
+    &:focus {
+      @include entry(focus);
+      > placeholder {
+        opacity: 0; /* We hide placeholders on focus */
+      }
+    }
 
     &:disabled { @include entry(insensitive); }
 
