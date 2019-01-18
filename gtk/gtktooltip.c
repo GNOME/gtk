@@ -135,8 +135,9 @@ static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 static void       gtk_tooltip_set_last_surface      (GtkTooltip      *tooltip,
 						    GdkSurface       *surface);
 
-static void       gtk_tooltip_handle_event_internal (GdkEventType  event_type,
+static void       gtk_tooltip_handle_event_internal (GdkEventType   event_type,
                                                      GdkSurface    *surface,
+                                                     GtkWidget     *target_widget,
                                                      gdouble       dx,
                                                      gdouble       dy);
 
@@ -383,6 +384,10 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   gint x, y;
   GdkSurface *surface;
   GdkDevice *device;
+  GtkWidget *toplevel;
+  int dx, dy;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   display = gtk_widget_get_display (widget);
 
@@ -392,7 +397,14 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (!surface)
     return;
 
-  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, x, y);
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (gtk_widget_get_surface (toplevel) != surface)
+    return;
+
+  gtk_widget_translate_coordinates (toplevel, widget, x, y, &dx, &dy);
+
+  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, dx, dy);
 }
 
 static void
@@ -427,52 +439,6 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
     gtk_widget_translate_coordinates (event_widget, picked_widget, surface_x, surface_y, widget_x, widget_y);
 
   return picked_widget;
-}
-
-/* Ignores (x, y) on input, translates event coordinates to
- * allocation relative (x, y) of the returned widget.
- */
-static GtkWidget *
-find_topmost_widget_coords (GdkSurface *surface,
-                            gdouble    dx,
-                            gdouble    dy,
-                            gint      *x,
-                            gint      *y)
-{
-  GtkAllocation allocation;
-  gint tx, ty;
-  GtkWidget *tmp;
-
-  /* Returns coordinates relative to tmp's allocation. */
-  tmp = _gtk_widget_find_at_coords (surface, dx, dy, &tx, &ty);
-
-  if (!tmp)
-    return NULL;
-
-  /* Make sure the pointer can actually be on the widget returned. */
-  gtk_widget_get_allocation (tmp, &allocation);
-  allocation.x = 0;
-  allocation.y = 0;
-  if (GTK_IS_WINDOW (tmp))
-    {
-      GtkBorder border;
-      _gtk_window_get_shadow_width (GTK_WINDOW (tmp), &border);
-      allocation.x = border.left;
-      allocation.y = border.top;
-      allocation.width -= border.left + border.right;
-      allocation.height -= border.top + border.bottom;
-    }
-
-  if (tx < allocation.x || tx >= allocation.width ||
-      ty < allocation.y || ty >= allocation.height)
-    return NULL;
-
-  if (x)
-    *x = tx;
-  if (y)
-    *y = ty;
-
-  return tmp;
 }
 
 static gint
@@ -893,6 +859,7 @@ void
 _gtk_tooltip_handle_event (GdkEvent *event)
 {
   GdkEventType event_type;
+  GtkWidget *target;
   GdkSurface *surface;
   gdouble dx, dy;
   GdkModifierType event_state = 0;
@@ -912,22 +879,23 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   event_type = gdk_event_get_event_type (event);
   surface = gdk_event_get_surface (event);
   gdk_event_get_coords (event, &dx, &dy);
+  target = gtk_get_event_target (event);
 
-  gtk_tooltip_handle_event_internal (event_type, surface, dx, dy);
+  gtk_tooltip_handle_event_internal (event_type, surface, target, dx, dy);
 }
 
+/* dx/dy must be in @target_widget's coordinates */
 static void
-gtk_tooltip_handle_event_internal (GdkEventType  event_type,
+gtk_tooltip_handle_event_internal (GdkEventType   event_type,
                                    GdkSurface    *surface,
+                                   GtkWidget     *target_widget,
                                    gdouble       dx,
                                    gdouble       dy)
 {
   int x = 0, y = 0;
-  GtkWidget *has_tooltip_widget;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
 
-  has_tooltip_widget = find_topmost_widget_coords (surface, dx, dy, &x, &y);
   display = gdk_surface_get_display (surface);
   current_tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
@@ -935,7 +903,7 @@ gtk_tooltip_handle_event_internal (GdkEventType  event_type,
     gtk_tooltip_set_last_surface (current_tooltip, surface);
 
   /* Hide the tooltip when there's no new tooltip widget */
-  if (!has_tooltip_widget)
+  if (!target_widget)
     {
       if (current_tooltip)
 	gtk_tooltip_hide_tooltip (current_tooltip);
@@ -965,7 +933,7 @@ gtk_tooltip_handle_event_internal (GdkEventType  event_type,
 	    tip_area_set = current_tooltip->tip_area_set;
 	    tip_area = current_tooltip->tip_area;
 
-	    gtk_tooltip_run_requery (&has_tooltip_widget,
+	    gtk_tooltip_run_requery (&target_widget,
                                      current_tooltip,
                                      &x, &y);
 
@@ -974,7 +942,7 @@ gtk_tooltip_handle_event_internal (GdkEventType  event_type,
 
 	    /* Is the pointer above another widget now? */
 	    if (GTK_TOOLTIP_VISIBLE (current_tooltip))
-	      hide_tooltip |= has_tooltip_widget != current_tooltip->tooltip_widget;
+	      hide_tooltip |= target_widget != current_tooltip->tooltip_widget;
 
 	    /* Did the pointer move out of the previous "context area"? */
 	    if (tip_area_set)
