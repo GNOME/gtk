@@ -65,6 +65,6 @@
 	/>
 	<UserMacro
 		Name="GtkIntrospectBuiltFiles"
-		Value="$(SolutionDir)\..\Gtk-3.0.gir;$(SolutionDir)\..\Gtk-3.0.typelib;$(SolutionDir)\..\GdkWin32-3.0.gir;$(SolutionDir)\..\GdkWin32-3.0.typelib;$(SolutionDir)\..\Gdk-3.0.gir;$(SolutionDir)\..\Gdk-3.0.typelib"
+		Value="$(SolutionDir)\$(ConfigurationName)\$(PlatformName)\bin\Gtk-3.0.gir;$(SolutionDir)\$(ConfigurationName)\$(PlatformName)\bin\Gtk-3.0.typelib;$(SolutionDir)\$(ConfigurationName)\$(PlatformName)\bin\GdkWin32-3.0.gir;$(SolutionDir)\$(ConfigurationName)\$(PlatformName)\bin\GdkWin32-3.0.typelib;$(SolutionDir)\$(ConfigurationName)\$(PlatformName)\bin\Gdk-3.0.gir;$(SolutionDir)\$(ConfigurationName)\$(PlatformName)\bin\Gdk-3.0.typelib"
 	/>
 </VisualStudioPropertySheet>
