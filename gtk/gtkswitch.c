@@ -65,6 +65,7 @@
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtkswitchaccessible.h"
@@ -400,6 +401,31 @@ gtk_switch_size_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_switch_style_updated (GtkWidget *widget)
+{
+  GtkSwitch *self = GTK_SWITCH (widget);
+  GtkCssStyleChange *change;
+  GtkStyleContext *context;
+
+  GTK_WIDGET_CLASS (gtk_switch_parent_class)->style_updated (widget);
+
+  context = gtk_widget_get_style_context (widget);
+  change = gtk_style_context_get_change (context);
+
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
+    gtk_switch_update_state_labels (self);
+}
+
+static void
+gtk_switch_display_changed (GtkWidget  *widget,
+                            GdkDisplay *previous_display)
+{
+  GtkSwitch *self = GTK_SWITCH (widget);
+
+  gtk_switch_update_state_labels (self);
+}
+
+static void
 gtk_switch_set_action_name (GtkActionable *actionable,
                             const gchar   *action_name)
 {
@@ -591,6 +617,8 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   widget_class->measure = gtk_switch_measure;
   widget_class->size_allocate = gtk_switch_size_allocate;
+  widget_class->style_updated = gtk_switch_style_updated;
+  widget_class->display_changed = gtk_switch_display_changed;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
