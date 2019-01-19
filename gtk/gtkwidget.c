@@ -35,6 +35,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcsstransformvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -4324,6 +4325,32 @@ gtk_widget_size_allocate_transformed (GtkWidget               *widget,
       real_allocation.width = MAX (1, real_allocation.width);
       real_allocation.height = MAX (1, real_allocation.height);
     }
+
+  /* Apply CSS transformation */
+  {
+    graphene_matrix_t css_transform;
+    GtkCssValue *transform_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget),
+                                                                     GTK_CSS_PROPERTY_TRANSFORM);
+
+
+    if (!gtk_css_transform_value_is_none (transform_value) &&
+        gtk_css_transform_value_get_matrix (transform_value, &css_transform))
+      {
+        graphene_matrix_translate (&final_transform,
+                                   &(graphene_point3d_t) {
+                                    - real_allocation.width / 2.0f,
+                                    - real_allocation.height / 2.0f,
+                                    0
+                                   });
+        graphene_matrix_multiply (&final_transform, &css_transform, &final_transform);
+        graphene_matrix_translate (&final_transform,
+                                   &(graphene_point3d_t) {
+                                    real_allocation.width / 2.0f,
+                                    real_allocation.height / 2.0f,
+                                    0
+                                   });
+      }
+  }
 
   baseline_changed = priv->allocated_baseline != baseline;
   size_changed = (priv->allocation.width != real_allocation.width ||
