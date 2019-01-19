@@ -143,9 +143,12 @@
  */
 
 typedef struct {
+  grefcount ref_count;
+
   guint id;
   int width;
   int height;
+
   GdkTexture *holder;
 } Texture;
 
@@ -200,6 +203,53 @@ static void gtk_gl_area_allocate_texture (GtkGLArea *area);
 static guint area_signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkGLArea, gtk_gl_area, GTK_TYPE_WIDGET)
+
+static Texture *
+texture_new (void)
+{
+  Texture *texture = g_new0 (Texture, 1);
+
+  g_ref_count_init (&texture->ref_count);
+
+  return texture;
+}
+
+static void
+texture_free (Texture *texture)
+{
+  if (texture->holder != NULL)
+    {
+      gdk_gl_texture_release (GDK_GL_TEXTURE (texture->holder));
+      texture->holder = NULL;
+    }
+
+  if (texture->id != 0)
+    {
+      glDeleteTextures (1, &texture->id);
+      texture->id = 0;
+    }
+
+  g_free (texture);
+}
+
+static gpointer
+texture_ref (gpointer data)
+{
+  Texture *texture = data;
+
+  g_ref_count_inc (&texture->ref_count);
+
+  return texture;
+}
+
+static void
+texture_unref (gpointer data)
+{
+  Texture *texture = data;
+
+  if (g_ref_count_dec (&texture->ref_count))
+    texture_free (texture);
+}
 
 static void
 gtk_gl_area_set_property (GObject      *gobject,
@@ -381,23 +431,6 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
 }
 
 static void
-delete_one_texture (gpointer data)
-{
-  Texture *texture = data;
-
-  if (texture->holder)
-    gdk_gl_texture_release (GDK_GL_TEXTURE (texture->holder));
-
-  if (texture->id != 0)
-    {
-      glDeleteTextures (1, &texture->id);
-      texture->id = 0;
-    }
-
-  g_free (texture);
-}
-
-static void
 gtk_gl_area_ensure_texture (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
@@ -427,17 +460,13 @@ gtk_gl_area_ensure_texture (GtkGLArea *area)
           if (priv->texture == NULL)
             priv->texture = texture;
           else
-            delete_one_texture (texture);
+            texture_free (texture);
         }
     }
 
   if (priv->texture == NULL)
     {
-      priv->texture = g_new (Texture, 1);
-
-      priv->texture->width = 0;
-      priv->texture->height = 0;
-      priv->texture->holder = NULL;
+      priv->texture = texture_new ();
 
       glGenTextures (1, &priv->texture->id);
     }
@@ -592,18 +621,17 @@ gtk_gl_area_delete_textures (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
-  if (priv->texture)
+  if (priv->texture != NULL)
     {
-      delete_one_texture (priv->texture);
+      texture_free (priv->texture);
       priv->texture = NULL;
     }
 
-  /* FIXME: we need to explicitly release all outstanding
-   * textures here, otherwise release_texture will get called
-   * later and access freed memory.
-   */
-  g_list_free_full (priv->textures, delete_one_texture);
-  priv->textures = NULL;
+  if (priv->textures != NULL)
+    {
+      g_list_free_full (priv->textures, texture_unref);
+      priv->textures = NULL;
+    }
 }
 
 static void
@@ -669,10 +697,13 @@ gtk_gl_area_draw_error_screen (GtkGLArea   *area,
 }
 
 static void
-release_texture (gpointer data)
+gtk_gl_area_release_texture (gpointer data)
 {
   Texture *texture = data;
+
   texture->holder = NULL;
+
+  texture_unref (texture);
 }
 
 static void
@@ -733,13 +764,15 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
 
       texture = priv->texture;
       priv->texture = NULL;
+
       priv->textures = g_list_prepend (priv->textures, texture);
 
       texture->holder = gdk_gl_texture_new (priv->context,
                                             texture->id,
                                             texture->width,
                                             texture->height,
-                                            release_texture, texture);
+                                            gtk_gl_area_release_texture,
+                                            texture_ref (texture));
 
       gtk_snapshot_append_texture (snapshot,
                                    texture->holder,
