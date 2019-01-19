@@ -298,17 +298,18 @@ _gtk_css_parser_skip_whitespace (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_parser_try (GtkCssParser *parser,
-                     const char   *string,
-                     gboolean      skip_whitespace)
+gtk_css_parser_try_len (GtkCssParser *parser,
+                        const char   *string,
+                        gsize         string_len,
+                        gboolean      skip_whitespace)
 {
   g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
   g_return_val_if_fail (string != NULL, FALSE);
 
-  if (g_ascii_strncasecmp (parser->data, string, strlen (string)) != 0)
+  if (g_ascii_strncasecmp (parser->data, string, string_len) != 0)
     return FALSE;
 
-  parser->data += strlen (string);
+  parser->data += string_len;
 
   if (skip_whitespace)
     _gtk_css_parser_skip_whitespace (parser);
