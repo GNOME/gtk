@@ -3606,7 +3606,6 @@ indicator_reset (Indicator *indicator)
       indicator->tick_id = 0;
     }
 
-  indicator->scrollbar = NULL;
   indicator->over = FALSE;
   gtk_progress_tracker_finish (&indicator->tracker);
   indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
