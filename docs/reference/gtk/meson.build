@@ -412,6 +412,9 @@ gnome.gtkdoc('gtk4',
                '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
                '--ignore-headers=' + ' '.join(private_headers),
              ],
+             mkdb_args: [
+               '--default-includes=gtk/gtk.h',
+             ],
              fixxref_args: [
                '--html-dir=@0@'.format(docpath),
                '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
