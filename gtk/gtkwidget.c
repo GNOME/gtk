@@ -36,6 +36,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcsstransformvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -4216,6 +4217,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
   graphene_matrix_t transform_matrix;
+  GtkTransform *css_transform;
 #ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
 #endif
@@ -4330,6 +4332,20 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
 
   style = gtk_css_node_get_style (priv->cssnode);
+
+  /* Apply CSS transformation */
+  css_transform = gtk_css_transform_value_get_transform (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TRANSFORM));
+
+  if (css_transform)
+    {
+      transform = gtk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+      adjusted.x = adjusted.y = 0;
+
+      transform = gtk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.width / 2, adjusted.height / 2));
+      transform = gtk_transform_transform (transform, css_transform);
+      transform = gtk_transform_translate (transform, &GRAPHENE_POINT_INIT (- adjusted.width / 2, - adjusted.height / 2));
+    }
+
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
