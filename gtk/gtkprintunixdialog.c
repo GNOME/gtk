@@ -62,6 +62,7 @@
  * @Short_description: A print dialog
  * @Title: GtkPrintUnixDialog
  * @See_also: #GtkPageSetupUnixDialog, #GtkPrinter, #GtkPrintJob
+ * @Include: gtk/gtkunixprint.h
  *
  * GtkPrintUnixDialog implements a print dialog for platforms
  * which don’t provide a native print dialog, like Unix. It can
