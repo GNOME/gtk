@@ -11140,7 +11140,7 @@ gtk_widget_contains (GtkWidget  *widget,
 
   if (gtk_widget_get_pass_through (widget) ||
       !gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_is_drawable (widget))
+      !_gtk_widget_is_drawable (widget))
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
@@ -11177,7 +11177,7 @@ gtk_widget_pick (GtkWidget *widget,
 
   if (gtk_widget_get_pass_through (widget) ||
       !gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_is_drawable (widget))
+      !_gtk_widget_is_drawable (widget))
     return NULL;
 
   return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
