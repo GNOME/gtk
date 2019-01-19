@@ -75,7 +75,6 @@ struct _GtkCssValue {
 };
 
 static GtkCssValue *    gtk_css_transform_value_alloc           (guint                  n_values);
-static gboolean         gtk_css_transform_value_is_none         (const GtkCssValue     *value);
 
 static void
 gtk_css_transform_clear (GtkCssTransform *transform)
@@ -733,7 +732,7 @@ _gtk_css_transform_value_new_none (void)
   return _gtk_css_value_ref (&none_singleton);
 }
 
-static gboolean
+gboolean
 gtk_css_transform_value_is_none (const GtkCssValue *value)
 {
   return value->n_transforms == 0;
