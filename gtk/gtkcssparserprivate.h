@@ -66,8 +66,10 @@ gboolean        _gtk_css_parser_is_string         (GtkCssParser          *parser
  * however is fine to call if you don’t know yet if the token is a foo or a bar,
  * you can _try_bar() if try_foo() failed.
  */
-gboolean        _gtk_css_parser_try               (GtkCssParser          *parser,
+#define        _gtk_css_parser_try(p, s, skip) (gtk_css_parser_try_len (p, s, strlen(s), skip))
+gboolean        gtk_css_parser_try_len            (GtkCssParser          *parser,
                                                    const char            *string,
+                                                   gsize                  string_len,
                                                    gboolean               skip_whitespace);
 char *          _gtk_css_parser_try_ident         (GtkCssParser          *parser,
                                                    gboolean               skip_whitespace);
