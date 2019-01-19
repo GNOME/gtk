@@ -186,14 +186,13 @@ transition_info_add (TransitionInfo    infos[GTK_CSS_PROPERTY_N_PROPERTIES],
                      GtkStyleProperty *property,
                      guint             index)
 {
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
-
   if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
     {
-      GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+      GtkCssShorthandProperty *shorthand = (GtkCssShorthandProperty *) property;
+      guint len = _gtk_css_shorthand_property_get_n_subproperties (shorthand);
       guint i;
 
-      for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
+      for (i = 0; i < len; i++)
         {
           GtkCssStyleProperty *prop = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
 
@@ -228,9 +227,10 @@ transition_infos_set (TransitionInfo  infos[GTK_CSS_PROPERTY_N_PROPERTIES],
       prop_value = _gtk_css_array_value_get_nth (transitions, i);
       if (g_ascii_strcasecmp (_gtk_css_ident_value_get (prop_value), "all") == 0)
         {
+          const guint len = _gtk_css_style_property_get_n_properties ();
           guint j;
 
-          for (j = 0; j < _gtk_css_style_property_get_n_properties (); j++)
+          for (j = 0; j < len; j++)
             {
               property = GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (j));
               transition_info_add (infos, property, i);
