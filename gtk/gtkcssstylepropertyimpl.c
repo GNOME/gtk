@@ -1601,6 +1601,14 @@ _gtk_css_style_property_init_properties (void)
                                           transform_value_parse,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
+  gtk_css_style_property_register        ("transform",
+                                          GTK_CSS_PROPERTY_TRANSFORM,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_SIZE,
+                                          transform_value_parse,
+                                          NULL,
+                                          _gtk_css_transform_value_new_none ());
   gtk_css_style_property_register        ("-gtk-icon-filter",
                                           GTK_CSS_PROPERTY_ICON_FILTER,
                                           G_TYPE_NONE,
@@ -1609,7 +1617,6 @@ _gtk_css_style_property_init_properties (void)
                                           filter_value_parse,
                                           NULL,
                                           gtk_css_filter_value_new_none ());
-
   gtk_css_style_property_register        ("border-spacing",
                                           GTK_CSS_PROPERTY_BORDER_SPACING,
                                           G_TYPE_NONE,
