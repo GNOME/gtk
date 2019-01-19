@@ -624,6 +624,16 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
+              <entry><phrase role="nowrap">transform</phrase></entry>
+              <entry><code>none | 〈transform〉+</code></entry>
+              <entry><code>none</code></entry>
+              <entry></entry>
+              <entry>✓</entry>
+              <entry><ulink url="https://www.w3.org/TR/css-transforms-1/">CSS3</ulink>,
+                     <ulink url="https://drafts.csswg.org/css-transforms-2/">3D</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
               <entry><phrase role="nowrap">min-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
