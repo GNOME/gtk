@@ -273,6 +273,20 @@ test_crash (void)
   gtk_rb_tree_unref (tree);
 }
 
+static void
+test_crash2 (void)
+{
+  GtkRbTree *tree;
+
+  tree = gtk_rb_tree_new (Node, Aug, augment, NULL, NULL);
+
+  add (tree, 0);
+  add (tree, 0);
+  add (tree, 1);
+
+  gtk_rb_tree_unref (tree);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -280,7 +294,8 @@ main (int argc, char *argv[])
   setlocale (LC_ALL, "C");
   g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
 
-  g_test_add_func ("/csrbtree/crash", test_crash);
+  g_test_add_func ("/rbtree/crash", test_crash);
+  g_test_add_func ("/rbtree/crash2", test_crash2);
 
   return g_test_run ();
 }
