@@ -21,6 +21,15 @@
 
 #include "gtkdebug.h"
 
+/* Define the following to print adds and removals to stdout.
+ * The format of the printout will be suitable for addition as a new test to
+ * testsuite/gtk/rbtree-crash.c
+ * by just grepping the printouts from the relevant rbtree.
+ *
+ * This is meant to be a trivial way to add rbtree tests to the testsuite.
+ */
+#undef DUMP_MODIFICATION
+
 typedef struct _GtkRbNode GtkRbNode;
 
 struct _GtkRbTree
@@ -227,6 +236,24 @@ gtk_rb_node_get_next (GtkRbNode *node)
 
   return NULL;
 }
+
+#ifdef DUMP_MODIFICATION
+static guint
+position (GtkRbTree *tree,
+          GtkRbNode *node)
+{
+  GtkRbNode *n;
+  guint i;
+
+  i = 0;
+  for (n = gtk_rb_node_get_first (tree->root);
+       n != node;
+       n = gtk_rb_node_get_next (n))
+    i++;
+
+  return i;
+}
+#endif
 
 static void
 gtk_rb_node_rotate_left (GtkRbTree *tree,
@@ -600,12 +627,16 @@ gtk_rb_tree_insert_before (GtkRbTree *tree,
 {
   GtkRbNode *result;
 
-  /* setup new node */
-  result = gtk_rb_node_new (tree);
 
   if (tree->root == NULL)
     {
+#ifdef DUMP_MODIFICATION
+      g_print ("add (tree, 0); /* 0x%p */\n", tree);
+#endif /* DUMP_MODIFICATION */
+
       g_assert (node == NULL);
+
+      result = gtk_rb_node_new (tree);
       tree->root = result;
     }
   else if (node == NULL)
@@ -615,6 +646,13 @@ gtk_rb_tree_insert_before (GtkRbTree *tree,
   else
     {
       GtkRbNode *current = NODE_FROM_POINTER (node);
+
+#ifdef DUMP_MODIFICATION
+      g_print ("add (tree, %u); /* 0x%p */\n", position (tree, current), tree);
+#endif /* DUMP_MODIFICATION */
+
+      /* setup new node */
+      result = gtk_rb_node_new (tree);
 
       if (current->left)
         {
@@ -638,36 +676,31 @@ gpointer
 gtk_rb_tree_insert_after (GtkRbTree *tree,
                           gpointer   node)
 {
-  GtkRbNode *result;
+  GtkRbNode *current, *result;
+
+  if (node == NULL)
+    return gtk_rb_tree_insert_before (tree, gtk_rb_tree_get_first (tree));
+
+  current = NODE_FROM_POINTER (node);
+
+#ifdef DUMP_MODIFICATION
+  g_print ("add (tree, %u); /* 0x%p */\n", position (tree, current) + 1, tree);
+#endif /* DUMP_MODIFICATION */
 
   /* setup new node */
   result = gtk_rb_node_new (tree);
 
-  if (tree->root == NULL)
+  if (current->right)
     {
-      g_assert (node == NULL);
-      tree->root = result;
-    }
-  else if (node == NULL)
-    {
-      return gtk_rb_tree_insert_before (tree, gtk_rb_tree_get_first (tree));
+      current = gtk_rb_node_get_first (current->right);
+      current->left = result;
     }
   else
     {
-      GtkRbNode *current = NODE_FROM_POINTER (node);
-
-      if (current->right)
-        {
-          current = gtk_rb_node_get_first (current->right);
-          current->left = result;
-        }
-      else
-        {
-          current->right = result;
-        }
-      set_parent (tree, result, current);
-      gtk_rb_node_mark_dirty (current, TRUE);
+      current->right = result;
     }
+  set_parent (tree, result, current);
+  gtk_rb_node_mark_dirty (current, TRUE);
 
   gtk_rb_tree_insert_fixup (tree, result);
 
@@ -681,6 +714,11 @@ gtk_rb_tree_remove (GtkRbTree *tree,
   GtkRbNode *x, *y, *p, *real_node;
   
   real_node = NODE_FROM_POINTER (node);
+
+#ifdef DUMP_MODIFICATION
+  g_print ("delete (tree, %u); /* 0x%p */\n", position (tree, real_node), tree);
+#endif /* DUMP_MODIFICATION */
+
   y = real_node;
   if (y->left && y->right)
     {
@@ -750,6 +788,10 @@ gtk_rb_tree_remove (GtkRbTree *tree,
 void
 gtk_rb_tree_remove_all (GtkRbTree *tree)
 {
+#ifdef DUMP_MODIFICATION
+      g_print ("delete_all (tree); /* 0x%p */\n", tree);
+#endif /* DUMP_MODIFICATION */
+
   if (tree->root)
     gtk_rb_node_free_deep (tree, tree->root);
 
