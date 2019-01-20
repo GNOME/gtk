@@ -105,16 +105,6 @@ _gtk_im_module_create (const gchar *context_id)
 }
 
 static gboolean
-is_platform (const char *context_id)
-{
-  return g_strcmp0 (context_id, "wayland") == 0 ||
-         g_strcmp0 (context_id, "broadway") == 0 ||
-         g_strcmp0 (context_id, "xim") == 0 ||
-         g_strcmp0 (context_id, "quartz") == 0 ||
-         g_strcmp0 (context_id, "ime") == 0;
-}
-
-static gboolean
 match_backend (GdkDisplay *display,
                const char *context_id)
 {
@@ -205,6 +195,8 @@ _gtk_im_module_get_default_context_id (GdkDisplay *display)
   const gchar *context_id = NULL;
   const gchar *envvar;
   GtkSettings *settings;
+  GIOExtensionPoint *ep;
+  GList *l;
   char *tmp;
 
   envvar = g_getenv ("GTK_IM_MODULE");
@@ -235,26 +227,19 @@ _gtk_im_module_get_default_context_id (GdkDisplay *display)
         return context_id;
     }
 
-  GIOExtensionPoint *ep;
-  GList *list, *l;
-
   ep = g_io_extension_point_lookup (GTK_IM_MODULE_EXTENSION_POINT_NAME);
-  list = g_io_extension_point_get_extensions (ep);
-  for (l = list; l; l = l->next)
+  for (l = g_io_extension_point_get_extensions (ep); l; l = l->next)
     {
       GIOExtension *ext = l->data;
-      const char *context_id;
 
       context_id = g_io_extension_get_name (ext);
       if (match_backend (display, context_id))
         return context_id;
-
-      // FIXME: locale matching
-      if (!is_platform (context_id))
-        return context_id;
     }
 
-  return context_id ? context_id : SIMPLE_ID;
+  g_error ("GTK was run without any IM module being present. This must not happen.");
+
+  return SIMPLE_ID;
 }
 
 void
