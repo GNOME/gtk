@@ -5638,15 +5638,15 @@ gtk_label_move_logically (GtkLabel *label,
 
   if (priv->text)
     {
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
       gint length;
 
       gtk_label_ensure_layout (label);
-      
+
       length = g_utf8_strlen (priv->text, -1);
 
-      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (priv->layout, &n_attrs);
 
       while (count > 0 && offset < length)
 	{
@@ -5664,8 +5664,6 @@ gtk_label_move_logically (GtkLabel *label,
 	  
 	  count++;
 	}
-      
-      g_free (log_attrs);
     }
 
   return g_utf8_offset_to_pointer (priv->text, offset) - priv->text;
@@ -5738,19 +5736,17 @@ gtk_label_move_forward_word (GtkLabel *label,
   length = g_utf8_strlen (priv->text, -1);
   if (new_pos < length)
     {
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
       gtk_label_ensure_layout (label);
 
-      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (priv->layout, &n_attrs);
 
       /* Find the next word end */
       new_pos++;
       while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
-	new_pos++;
-
-      g_free (log_attrs);
+        new_pos++;
     }
 
   return g_utf8_offset_to_pointer (priv->text, new_pos) - priv->text;
@@ -5767,20 +5763,18 @@ gtk_label_move_backward_word (GtkLabel *label,
 
   if (new_pos > 0)
     {
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
       gtk_label_ensure_layout (label);
 
-      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (priv->layout, &n_attrs);
 
       new_pos -= 1;
 
       /* Find the previous word beginning */
       while (new_pos > 0 && !log_attrs[new_pos].is_word_start)
-	new_pos--;
-
-      g_free (log_attrs);
+        new_pos--;
     }
 
   return g_utf8_offset_to_pointer (priv->text, new_pos) - priv->text;
