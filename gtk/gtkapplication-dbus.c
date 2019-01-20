@@ -191,6 +191,13 @@ screensaver_signal_session (GDBusProxy     *proxy,
   gtk_application_set_screensaver_active (application, active);
 }
 
+enum {
+  UNKNOWN   = 0,
+  RUNNING   = 1,
+  QUERY_END = 2,
+  ENDING    = 3
+};
+
 static void
 screensaver_signal_portal (GDBusConnection *connection,
                            const char       *sender_name,
@@ -200,9 +207,10 @@ screensaver_signal_portal (GDBusConnection *connection,
                            GVariant         *parameters,
                            gpointer          data)
 {
-  GtkApplication   *application = data;
+  GtkApplication *application = data;
   gboolean active;
   GVariant *state;
+  guint32 session_state;
 
   if (!g_str_equal (signal_name, "StateChanged"))
     return;
@@ -210,6 +218,10 @@ screensaver_signal_portal (GDBusConnection *connection,
   g_variant_get (parameters, "(o@a{sv})", NULL, &state);
   g_variant_lookup (state, "screensaver-active", "b", &active);
   gtk_application_set_screensaver_active (application, active);
+
+  g_variant_lookup (state, "session-state", "u", &session_state);
+  if (session_state == ENDING)
+    g_application_quit (G_APPLICATION (application));
 }
 
 static void
