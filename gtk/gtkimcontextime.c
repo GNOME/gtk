@@ -130,7 +130,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEX
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "ime",
-                                                         10))
+                                                         0))
 
 static void
 gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)

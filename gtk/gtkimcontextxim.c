@@ -149,7 +149,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextXIM, gtk_im_context_xim, GTK_TYPE_IM_CONTEX
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "xim",
-                                                         10))
+                                                         0))
 
 static GSList *open_ims = NULL;
 

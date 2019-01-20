@@ -47,7 +47,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextBroadway, gtk_im_context_broadway, GTK_TYPE
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "broadway",
-                                                         10))
+                                                         0))
 
 static void
 broadway_set_client_widget (GtkIMContext *context, GtkWidget *widget)

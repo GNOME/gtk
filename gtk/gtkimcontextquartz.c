@@ -55,7 +55,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "quartz",
-                                                         10))
+                                                         0))
 
 static void
 quartz_get_preedit_string (GtkIMContext *context,
