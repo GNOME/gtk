@@ -809,7 +809,7 @@ menubar > menuitem:disabled, .menubar > menuitem:disabled { color: #969696; box-
 
 .background.popup { background-color: transparent; }
 
-menu, .menu, .context-menu { margin: 4px; padding: 8px 0px; background-color: #303032; border: 1px solid #252526; border-radius: 5px; }
+menu, .menu, .context-menu { margin: 4px; padding: 4px 0px; background-color: #303032; border: 1px solid #252526; border-radius: 5px; }
 
 .csd menu, .csd .menu, .csd .context-menu { border: none; }
 
