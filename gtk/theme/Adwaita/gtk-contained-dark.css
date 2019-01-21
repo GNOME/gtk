@@ -505,7 +505,7 @@ spinbutton:not(.vertical) button:active { background-color: rgba(0, 0, 0, 0.1); 
 
 spinbutton:not(.vertical) button:backdrop { color: #8c8c8c; background-color: transparent; border-color: rgba(42, 42, 43, 0.3); transition: 200ms ease-out; }
 
-spinbutton:not(.vertical) button:backdrop:disabled { color: rgba(101, 100, 102, 0.3); background-color: transparent; border-style: none none none solid; }
+spinbutton:not(.vertical) button:backdrop:disabled { color: rgba(101, 100, 102, 0.3); background-color: transparent; background-image: none; border-style: none none none solid; }
 
 spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) { border-style: none solid none none; }
 
@@ -1077,7 +1077,7 @@ scrollbar.horizontal button.up { -gtk-icon-source: -gtk-icontheme("pan-start-sym
 treeview ~ scrollbar.vertical { border-top: 1px solid #252526; margin-top: -1px; }
 
 /********** Switch * */
-switch { font-weight: bold; font-size: smaller; outline-offset: -4px; border: 1px solid #252526; border-radius: 14px; color: #eeeeec; background-color: #323233; text-shadow: 0 1px rgba(0, 0, 0, 0.1); font-size: 0; /*FIXME: quick workaround for the labels*/ }
+switch { font-weight: bold; font-size: x-small; outline-offset: -4px; border: 1px solid #252526; border-radius: 14px; color: #eeeeec; background-color: #323233; text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
 
 switch:checked { color: #ffffff; border-color: #030c17; background-color: #15539e; text-shadow: 0 1px rgba(3, 12, 23, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
 
