@@ -2735,7 +2735,6 @@ switch {
   color: $fg_color;
   background-color: $dark_fill;
   text-shadow: 0 1px transparentize(black, 0.9);
-  font-size: 0; /*FIXME: quick workaround for the labels*/
 
   &:checked {
     color: $selected_fg_color;

@@ -1085,7 +1085,7 @@ scrollbar.horizontal button.up { -gtk-icon-source: -gtk-icontheme("pan-start-sym
 treeview ~ scrollbar.vertical { border-top: 1px solid #cdc7c2; margin-top: -1px; }
 
 /********** Switch * */
-switch { font-weight: bold; font-size: smaller; outline-offset: -4px; border: 1px solid #cdc7c2; border-radius: 14px; color: #2e3436; background-color: #e1dedb; text-shadow: 0 1px rgba(0, 0, 0, 0.1); font-size: 0; /*FIXME: quick workaround for the labels*/ }
+switch { font-weight: bold; font-size: smaller; outline-offset: -4px; border: 1px solid #cdc7c2; border-radius: 14px; color: #2e3436; background-color: #e1dedb; text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
 
 switch:checked { color: #ffffff; border-color: #185fb4; background-color: #3584e4; text-shadow: 0 1px rgba(24, 95, 180, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
 
