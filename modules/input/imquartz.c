@@ -196,7 +196,7 @@ quartz_filter_keypress (GtkIMContext *context,
     {
       if (event->hardware_keycode == 0 && event->keyval == 0xffffff)
         /* update text input changes by mouse events */
-        return output_result (context, win);
+        return output_result (context, event->win);
       else
         return gtk_im_context_filter_keypress (qc->slave, event);
     }
