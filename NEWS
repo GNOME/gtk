@@ -7,6 +7,7 @@ Overview of Changes in GTK+ 3.24.4
  wayland: Fix long combobox positioning
  about dialog: Activate all links in the same way
  switch: Add fallbacks for symbols
+ spinbutton: Fix background color
 
 * Translation updates:
  Africaans
