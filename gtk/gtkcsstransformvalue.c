@@ -200,14 +200,14 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
       break;
     case GTK_CSS_TRANSFORM_SKEW:
       graphene_matrix_init_skew (&skew,
-                                 _gtk_css_number_value_get (transform->skew.x, 100),
-                                 _gtk_css_number_value_get (transform->skew.y, 100));
+                                 _gtk_css_number_value_get (transform->skew.x, 100) / 180.0f * G_PI,
+                                 _gtk_css_number_value_get (transform->skew.y, 100)  /180.0f * G_PI);
       graphene_matrix_multiply (matrix, &skew, &tmp);
       graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
     case GTK_CSS_TRANSFORM_SKEW_X:
       graphene_matrix_init_skew (&skew,
-                                 _gtk_css_number_value_get (transform->skew_x.skew, 100),
+                                 _gtk_css_number_value_get (transform->skew_x.skew, 100) / 180.0f * G_PI,
                                  0);
       graphene_matrix_multiply (matrix, &skew, &tmp);
       graphene_matrix_init_from_matrix (matrix, &tmp);
@@ -215,7 +215,7 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
     case GTK_CSS_TRANSFORM_SKEW_Y:
       graphene_matrix_init_skew (&skew,
                                  0,
-                                 _gtk_css_number_value_get (transform->skew_y.skew, 100));
+                                 _gtk_css_number_value_get (transform->skew_y.skew, 100) / 180.0f * G_PI);
       graphene_matrix_multiply (matrix, &skew, &tmp);
       graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
