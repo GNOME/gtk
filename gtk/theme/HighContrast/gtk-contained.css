@@ -409,13 +409,13 @@ spinbutton:not(.vertical) button:dir(rtl) { border-style: none solid none none; 
 
 spinbutton:not(.vertical) button:hover { color: #000; background-color: #fff; }
 
-spinbutton:not(.vertical) button:disabled { color: rgba(128, 128, 128, 0.3); }
+spinbutton:not(.vertical) button:disabled, spinbutton:not(.vertical) button:backdrop:disabled { color: rgba(128, 128, 128, 0.3); }
 
 spinbutton:not(.vertical) button:active { background-color: rgba(0, 0, 0, 0.8); color: #fff; }
 
 spinbutton:not(.vertical) button:backdrop { color: #000; background-color: transparent; border-color: rgba(141, 141, 141, 0.3); }
 
-spinbutton:not(.vertical) button:backdrop:disabled { color: white; background-image: none; border-style: none none none solid; }
+spinbutton:not(.vertical) button:backdrop:disabled { background-image: none; border-style: none none none solid; }
 
 spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) { border-style: none solid none none; }
 
