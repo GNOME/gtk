@@ -68,7 +68,7 @@ label:disabled:backdrop { color: #656466; }
 
 label:backdrop { color: #969696; }
 
-.dim-label, label.separator, .titlebar:not(headerbar) .subtitle, headerbar .subtitle { opacity: 0.55; text-shadow: none; }
+.dim-label, label.separator, spinbutton:not(.vertical) placeholder, entry placeholder, .titlebar:not(headerbar) .subtitle, headerbar .subtitle { opacity: 0.55; text-shadow: none; }
 
 assistant .sidebar { background-color: #26232d; border-top: 1px solid #2a2a2b; }
 
@@ -107,6 +107,8 @@ spinbutton:not(.vertical) undershoot.right, entry undershoot.right { background-
 spinbutton.flat:focus:not(.vertical), spinbutton.flat:backdrop:not(.vertical), spinbutton.flat:disabled:not(.vertical), spinbutton.flat:backdrop:disabled:not(.vertical), spinbutton.flat:not(.vertical), entry.flat:focus, entry.flat:backdrop, entry.flat:disabled, entry.flat:backdrop:disabled, entry.flat { min-height: 0; padding: 2px; background-color: transparent; border-color: transparent; border-radius: 0; }
 
 spinbutton:focus:not(.vertical), entry:focus { box-shadow: inset 0 0 0 1px #15539e; border-color: #092444; outline: none; }
+
+spinbutton:focus:not(.vertical) > placeholder, entry:focus > placeholder { opacity: 0; /* We hide placeholders on focus */ }
 
 spinbutton:disabled:not(.vertical), entry:disabled { color: #969696; border-color: #2a2a2b; background-color: #353338; box-shadow: none; }
 
@@ -1588,7 +1590,9 @@ list { color: white; background-color: #26232d; border-color: #2a2a2b; }
 
 list:backdrop { background-color: #282530; border-color: #2f2e2f; }
 
-list row { padding: 2px; }
+list row:not(.expander) { padding: 2px; }
+
+list row.expander .row-header { padding: 2px; }
 
 row { transition: all 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 

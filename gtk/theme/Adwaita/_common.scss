@@ -3662,7 +3662,8 @@ list {
     border-color: $backdrop_borders_color;
   }
 
-  row { padding: 2px; }
+  row:not(.expander) { padding: 2px; }
+  row.expander .row-header { padding: 2px; }
 }
 
 row {
