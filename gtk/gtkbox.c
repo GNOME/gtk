@@ -1164,3 +1164,33 @@ _gtk_box_get_children (GtkBox *box)
 
   return g_list_reverse (retval);
 }
+
+void
+gtk_box_prepend (GtkBox    *box,
+                 GtkWidget *child)
+{
+  gtk_widget_insert_after (child, GTK_WIDGET (box), NULL);
+}
+
+void
+gtk_box_append (GtkBox    *box,
+                GtkWidget *child)
+{
+  gtk_widget_insert_before (child, GTK_WIDGET (box), NULL);
+}
+
+void
+gtk_box_insert_before (GtkBox    *box,
+                       GtkWidget *child,
+                       GtkWidget *sibling)
+{
+  gtk_widget_insert_before (child, GTK_WIDGET (box), sibling);
+}
+
+void
+gtk_box_insert_after (GtkBox    *box,
+                      GtkWidget *child,
+                      GtkWidget *sibling)
+{
+  gtk_widget_insert_after (child, GTK_WIDGET (box), sibling);
+}

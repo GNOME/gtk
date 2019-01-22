@@ -96,6 +96,22 @@ void        gtk_box_reorder_child       (GtkBox         *box,
                                          GtkWidget      *child,
                                          gint            position);
 
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_prepend             (GtkBox         *box,
+                                         GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_append              (GtkBox         *box,
+                                         GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_insert_before       (GtkBox         *box,
+                                         GtkWidget      *child,
+                                         GtkWidget      *sibling);
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_insert_after        (GtkBox         *box,
+                                         GtkWidget      *child,
+                                         GtkWidget      *sibling);
+
+
 G_END_DECLS
 
 #endif /* __GTK_BOX_H__ */
