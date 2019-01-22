@@ -35,8 +35,9 @@
  * the children to influence their allocation.
  *
  * Use repeated calls to gtk_container_add() to pack widgets into a
- * GtkBox from start to end. Use gtk_container_remove()
- * to remove widgets from the GtkBox.
+ * GtkBox from start to end. Use gtk_container_remove() to remove widgets
+ * from the GtkBox. gtk_box_insert_child_after() can be used to add a child
+ * at a particular position.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
  * of the GtkBox are forced to get the same amount of space.
@@ -45,7 +46,7 @@
  * minimally placed between all children in the GtkBox. Note that
  * spacing is added between the children.
  *
- * Use gtk_box_reorder_child() to move a GtkBox child to a different
+ * Use gtk_box_reorder_child_after() to move a child to a different
  * place in the box.
  *
  * # CSS nodes
@@ -1047,75 +1048,6 @@ gtk_box_get_baseline_position (GtkBox *box)
   return priv->baseline_pos;
 }
 
-/**
- * gtk_box_reorder_child:
- * @box: a #GtkBox
- * @child: the #GtkWidget to move
- * @position: the new position for @child in the list of children
- *   of @box, starting from 0. If negative, indicates the end of
- *   the list
- *
- * Moves @child to a new @position in the list of @box children.
- */
-void
-gtk_box_reorder_child (GtkBox    *box,
-		       GtkWidget *child,
-		       gint       position)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  widget = GTK_WIDGET (box);
-
-  if (position == 0)
-    {
-      gtk_widget_insert_after (child, widget, NULL);
-      gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
-                                 gtk_widget_get_css_node (child),
-                                 NULL);
-    }
-  else if (position < 0)
-    {
-      gtk_widget_insert_before (child, widget, NULL);
-      gtk_css_node_insert_before (gtk_widget_get_css_node (widget),
-                                  gtk_widget_get_css_node (child),
-                                  NULL);
-    }
-  else
-    {
-      int i = 0;
-      int old_pos = -1;
-      GtkWidget *p;
-      GtkWidget *new_next_sibling = NULL;
-
-
-      for (p = _gtk_widget_get_first_child (widget);
-           p != NULL;
-           p = _gtk_widget_get_next_sibling (p))
-        {
-          if (p == child)
-            old_pos = i;
-
-          if (i == position + 1)
-            {
-              new_next_sibling = p;
-            }
-
-          i ++;
-        }
-
-      if (position == old_pos)
-        return;
-
-      gtk_widget_insert_before (child, widget, new_next_sibling);
-      gtk_css_node_insert_before (gtk_widget_get_css_node (widget),
-                                  gtk_widget_get_css_node (child),
-                                  new_next_sibling ? gtk_widget_get_css_node (new_next_sibling) : NULL);
-    }
-}
-
 static void
 gtk_box_add (GtkContainer *container,
              GtkWidget    *child)
@@ -1163,4 +1095,74 @@ _gtk_box_get_children (GtkBox *box)
     retval = g_list_prepend (retval, p);
 
   return g_list_reverse (retval);
+}
+
+/**
+ * gtk_box_insert_child_after:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to insert
+ * @sibling: (nullable): the sibling to move @child after, or %NULL
+ *
+ * Inserts @child in the position after @sibling in the list
+ * of @box children. If @sibling is %NULL, insert @child at 
+ * the first position.
+ */
+void
+gtk_box_insert_child_after (GtkBox    *box,
+                            GtkWidget *child,
+                            GtkWidget *sibling)
+{
+  GtkWidget *widget = GTK_WIDGET (box);
+
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+  if (sibling)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (sibling));
+      g_return_if_fail (gtk_widget_get_parent (sibling) == widget);
+    }
+
+  if (child == sibling)
+    return;
+
+  gtk_widget_insert_after (child, widget, sibling);
+  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
+                             gtk_widget_get_css_node (child),
+                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
+}
+
+/**
+ * gtk_box_reorder_child_after:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to move, must be a child of @box
+ * @sibling: (nullable): the sibling to move @child after, or %NULL
+ *
+ * Moves @child to the position after @sibling in the list
+ * of @box children. If @sibling is %NULL, move @child to
+ * the first position.
+ */
+void
+gtk_box_reorder_child_after (GtkBox    *box,
+                             GtkWidget *child,
+                             GtkWidget *sibling)
+{
+  GtkWidget *widget = GTK_WIDGET (box);
+
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == widget);
+  if (sibling)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (sibling));
+      g_return_if_fail (gtk_widget_get_parent (sibling) == widget);
+    }
+
+  if (child == sibling)
+    return;
+
+  gtk_widget_insert_after (child, widget, sibling);
+  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
+                             gtk_widget_get_css_node (child),
+                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
 }

@@ -323,9 +323,10 @@ gtk_box_get_homogeneous
 gtk_box_set_homogeneous
 gtk_box_get_spacing
 gtk_box_set_spacing
-gtk_box_reorder_child
 gtk_box_get_baseline_position
 gtk_box_set_baseline_position
+gtk_box_insert_child_after
+gtk_box_reorder_child_after
 <SUBSECTION Standard>
 GTK_BOX
 GTK_IS_BOX
