@@ -207,7 +207,7 @@ screensaver_signal_portal (GDBusConnection *connection,
                            GVariant         *parameters,
                            gpointer          data)
 {
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *)impl;
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *)data;
   GtkApplication *application = data;
   gboolean active;
   GVariant *state;
