@@ -67,9 +67,6 @@
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="short_time_label">
@@ -79,10 +76,6 @@
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -118,9 +111,6 @@
               <object class="GtkLabel" id="label4">
                 <property name="label" translatable="yes">Resent by</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLinkButton" id="resent_by_button">
@@ -130,9 +120,6 @@
                 <property name="relief">none</property>
                 <property name="uri">http://www.gtk.org</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -172,9 +159,6 @@
                     <property name="relief">none</property>
                     <signal name="clicked" handler="reshare_clicked" swapped="yes"/>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="favorite-buttton">
@@ -184,9 +168,6 @@
                     <property name="relief">none</property>
                     <signal name="clicked" handler="favorite_clicked" swapped="yes"/>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="more-button">
@@ -200,14 +181,8 @@
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -250,14 +225,8 @@ FAVORITES</property>
                         </child>
                         <child type="label_item"/>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box6">
@@ -279,14 +248,8 @@ FAVORITES</property>
                           <class name="dim-label"/>
                         </style>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
             </child>

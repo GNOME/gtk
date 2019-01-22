@@ -472,9 +472,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry1">
@@ -486,9 +483,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="secondary-icon-tooltip-text">Change mode</property>
                             <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry2">
@@ -497,9 +491,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="invisible-char">•</property>
                             <property name="text" translatable="yes">entry</property>
                           </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="box223">
@@ -519,14 +510,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="can-focus">1</property>
                                 <property name="icon-name">window-close-symbolic</property>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">4</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
@@ -588,9 +573,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="sensitive">0</property>
                                 <property name="label" translatable="yes">label</property>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="spinbutton1">
@@ -599,9 +581,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="max-width-chars">2</property>
                                 <property name="adjustment">adjustment2</property>
                               </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="spinbutton2">
@@ -610,9 +589,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="width-chars">2</property>
                                 <property name="max-width-chars">2</property>
                               </object>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -806,9 +782,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                       <object class="GtkSeparator" id="separator1">
                         <property name="orientation">vertical</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box19">
@@ -828,9 +801,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can-focus">1</property>
                             <property name="receives-default">1</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton3">
@@ -839,9 +809,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="receives-default">1</property>
                             <property name="active">1</property>
                           </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton4">
@@ -851,9 +818,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="receives-default">1</property>
                             <property name="active">1</property>
                           </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="combobox1">
@@ -866,9 +830,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </attributes>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">5</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="combobox2">
@@ -882,9 +843,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </attributes>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">6</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkFontButton" id="fontbutton1">
@@ -892,9 +850,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="receives-default">1</property>
                             <property name="level">family|style|size|features|variations</property>
                           </object>
-                          <packing>
-                            <property name="position">6</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkColorButton" id="colorbutton1">
@@ -903,16 +858,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="rgba">#31316867a09f</property>
                             <property name="use-alpha">1</property>
                           </object>
-                          <packing>
-                            <property name="position">8</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkFileChooserButton" id="filechooserbutton1">
                           </object>
-                          <packing>
-                            <property name="position">8</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLinkButton" id="linkbutton1">
@@ -923,39 +872,24 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="relief">none</property>
                             <property name="uri">http://www.gtk.org</property>
                           </object>
-                          <packing>
-                            <property name="position">9</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkSwitch" id="switch1">
                             <property name="halign">center</property>
                           </object>
-                          <packing>
-                            <property name="position">10</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkSwitch" id="switch2">
                             <property name="sensitive">0</property>
                             <property name="halign">center</property>
                           </object>
-                          <packing>
-                            <property name="position">11</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator2">
                         <property name="orientation">vertical</property>
                       </object>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box20">
@@ -976,26 +910,17 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="fraction">0.5</property>
                                 <property name="inverted">1</property>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkProgressBar" id="progressbar3">
                                 <property name="fraction">0.5</property>
                                 <property name="show-text">1</property>
                               </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkLevelBar" id="levelbar1">
                                 <property name="value">0.6</property>
                               </object>
-                              <packing>
-                                <property name="position">10</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkLevelBar" id="levelbar2">
@@ -1008,9 +933,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <offset name="full" value="5"/>
                                 </offsets>
                               </object>
-                              <packing>
-                                <property name="position">11</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1039,16 +961,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="fill-level">75</property>
                                     <property name="draw-value">0</property>
                                   </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkScale" id="scale5">
@@ -1066,9 +982,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <mark value="4" position="bottom"></mark>
                             </marks>
                           </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="box25">
@@ -1092,9 +1005,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inverted">1</property>
                                     <property name="halign">start</property>
                                   </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -1129,32 +1039,17 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="halign">start</property>
                                     <signal name="format-value" handler="scale_format_value_blank"/>
                                   </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">4</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator3">
                         <property name="orientation">vertical</property>
                       </object>
-                      <packing>
-                        <property name="position">5</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box26">
@@ -1187,9 +1082,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame3">
@@ -1203,9 +1095,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame4">
@@ -1219,22 +1108,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">6</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator4">
                         <property name="orientation">vertical</property>
                       </object>
-                      <packing>
-                        <property name="position">7</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box4">
@@ -1335,25 +1215,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">8</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkSeparator" id="separator5"/>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box5">
@@ -1379,9 +1247,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           <object class="GtkBox" id="box7">
                             <property name="orientation">vertical</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label6">
@@ -1463,9 +1328,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkNotebook" id="notebook3">
@@ -1519,9 +1381,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkNotebook" id="notebook4">
@@ -1575,14 +1434,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">4</property>
-                  </packing>
                 </child>
               </object>
               <packing>
@@ -3145,9 +2998,6 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="show-emoji-icon">1</property>
                             <property name="placeholder-text" translatable="yes">Age…</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                         <style>
                           <class name="linked"/>

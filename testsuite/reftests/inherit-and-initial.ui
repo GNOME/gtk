@@ -358,9 +358,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar1">
@@ -443,9 +440,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box2">
@@ -470,9 +464,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="comboboxtext2">
@@ -488,9 +479,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry1">
@@ -499,9 +487,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="invisible_char">•</property>
                     <property name="text" translatable="yes">entry</property>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry2">
@@ -511,9 +496,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="invisible_char">•</property>
                     <property name="text" translatable="yes">entry</property>
                   </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box18">
@@ -526,9 +508,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">label</property>
                       </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label4">
@@ -537,9 +516,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">label</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="spinbutton1">
@@ -548,9 +524,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="spinbutton2">
@@ -558,14 +531,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
                       </object>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">4</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkGrid" id="grid1">
@@ -799,14 +766,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">5</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator1">
@@ -814,9 +775,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box19">
@@ -832,9 +790,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="togglebutton2">
@@ -844,9 +799,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="togglebutton3">
@@ -856,9 +808,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="receives_default">True</property>
                     <property name="active">True</property>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="togglebutton4">
@@ -869,9 +818,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="receives_default">True</property>
                     <property name="active">True</property>
                   </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="combobox1">
@@ -886,9 +832,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </attributes>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">5</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="combobox2">
@@ -904,9 +847,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </attributes>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">6</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkFontButton" id="fontbutton1">
@@ -914,9 +854,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
-                  <packing>
-                    <property name="position">6</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkColorButton" id="colorbutton1">
@@ -925,23 +862,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="receives_default">True</property>
                     <property name="rgba">#31316867a09f</property>
                   </object>
-                  <packing>
-                    <property name="position">8</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkFileChooserButton" id="filechooserbutton1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">8</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator2">
@@ -949,9 +877,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box20">
@@ -972,9 +897,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">False</property>
                         <property name="fraction">0.5</property>
                       </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkProgressBar" id="progressbar2">
@@ -983,14 +905,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="fraction">0.5</property>
                         <property name="inverted">True</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box27">
@@ -1012,9 +928,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="fill_level">75</property>
                             <property name="draw_value">False</property>
                           </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkScale" id="scale2">
@@ -1026,19 +939,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="fill_level">75</property>
                             <property name="draw_value">False</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box25">
@@ -1058,9 +962,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="orientation">vertical</property>
                             <property name="fraction">0.5</property>
                           </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkProgressBar" id="progressbar6">
@@ -1070,14 +971,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="fraction">0.5</property>
                             <property name="inverted">True</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box23">
@@ -1096,9 +991,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="fill_level">75</property>
                             <property name="draw_value">False</property>
                           </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkScale" id="scale4">
@@ -1112,19 +1004,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="fill_level">75</property>
                             <property name="draw_value">False</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box22">
@@ -1147,9 +1030,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkExpander" id="expander1">
@@ -1195,19 +1075,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator3">
@@ -1215,9 +1086,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">5</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box26">
@@ -1250,9 +1118,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkFrame" id="frame2">
@@ -1279,9 +1144,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkFrame" id="frame3">
@@ -1307,9 +1169,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkFrame" id="frame4">
@@ -1336,14 +1195,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">6</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator4">
@@ -1351,9 +1204,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">7</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box4">
@@ -1414,9 +1264,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow2">
@@ -1431,28 +1278,16 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">8</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSeparator" id="separator5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box5">
@@ -1770,23 +1605,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStatusbar" id="statusbar1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
-          <packing>
-            <property name="position">5</property>
-          </packing>
         </child>
       </object>
     </child>

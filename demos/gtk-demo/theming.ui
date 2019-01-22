@@ -131,9 +131,6 @@
             <property name="can-focus">1</property>
             <property name="receives-default">1</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton">
@@ -141,9 +138,6 @@
             <property name="can-focus">1</property>
             <property name="receives-default">1</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>

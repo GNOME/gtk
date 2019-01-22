@@ -20,9 +20,6 @@
               <class name="only-child-notref"/>
             </style>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
       </object>
     </child>

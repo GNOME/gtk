@@ -135,9 +135,6 @@
           </object>
         </child>
       </object>
-      <packing>
-        <property name="position">0</property>
-      </packing>
     </child>
   </template>
   <object class="GtkBox" id="a_popup">

@@ -14,9 +14,6 @@
             <property name="vexpand">1</property>
             <signal name="font-activated" handler="font_activated_cb" swapped="no"/>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

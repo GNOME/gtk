@@ -43,9 +43,6 @@
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
@@ -56,9 +53,6 @@
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="available_protocols_grid">
@@ -94,9 +88,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -126,9 +117,6 @@
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -168,9 +156,6 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -238,9 +223,6 @@
                   <attribute name="scale" value="1.44"/>
                 </attributes>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
@@ -249,9 +231,6 @@
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -259,9 +238,6 @@
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkActionBar" id="actionbar">
@@ -336,9 +312,6 @@
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="position">1</property>
-      </packing>
     </child>
   </template>
 </interface>

@@ -21,9 +21,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">purple</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button2">
@@ -33,9 +30,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">yellow</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button3">
@@ -45,9 +39,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">red</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button4">
@@ -57,9 +48,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">yellow</property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button5">
@@ -69,14 +57,8 @@
                 <property name="receives_default">True</property>
                 <property name="name">purple</property>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box3">
@@ -91,9 +73,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">purple</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button8">
@@ -103,9 +82,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">yellow</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button9">
@@ -115,9 +91,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">red</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button10">
@@ -127,14 +100,8 @@
                 <property name="receives_default">True</property>
                 <property name="name">green</property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box4">
@@ -149,9 +116,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">purple</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button14">
@@ -161,9 +125,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">yellow</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button15">
@@ -173,14 +134,8 @@
                 <property name="receives_default">True</property>
                 <property name="name">purple</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box5">
@@ -195,9 +150,6 @@
                 <property name="receives_default">True</property>
                 <property name="name">purple</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button11">
@@ -207,14 +159,8 @@
                 <property name="receives_default">True</property>
                 <property name="name">green</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box6">
@@ -229,14 +175,8 @@
                 <property name="receives_default">True</property>
                 <property name="name">blue</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
       </object>
     </child>

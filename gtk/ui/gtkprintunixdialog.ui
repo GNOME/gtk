@@ -144,9 +144,6 @@
                           <object class="GtkBox" id="extension_point">
                             <property name="spacing">18</property>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -263,9 +260,6 @@
                                   <relation type="labelled-by" target="label_widget1"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -357,19 +351,10 @@
                                   <relation type="labelled-by" target="label_widget2"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -538,9 +523,6 @@
                                         <property name="valign">baseline</property>
                                         <property name="label">%</property>
                                       </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -552,9 +534,6 @@
                                   <relation type="labelled-by" target="label_widget3"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -710,14 +689,8 @@
                                   <relation type="labelled-by" target="label_widget4"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -731,14 +704,8 @@
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label2">
@@ -820,9 +787,6 @@
                               <relation type="labelled-by" target="label_widget5"/>
                             </accessibility>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -932,9 +896,6 @@
                               <relation type="labelled-by" target="label_widget6"/>
                             </accessibility>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -1008,9 +969,6 @@
                               <relation type="labelled-by" target="label_widget7"/>
                             </accessibility>
                           </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -1019,9 +977,6 @@
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label3">

@@ -17,9 +17,6 @@
             <property name="invisible_char_set">True</property>
             <property name="placeholder_text">Subject or Addresses contain</property>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkEntry" id="entry2">
@@ -30,9 +27,6 @@
             <property name="invisible_char_set">True</property>
             <property name="placeholder_text">Message contains</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkEntry" id="entry3">
@@ -44,9 +38,6 @@
             <property name="invisible_char_set">True</property>
             <property name="placeholder_text">Body contains</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>

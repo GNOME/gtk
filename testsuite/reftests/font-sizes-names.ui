@@ -16,9 +16,6 @@
             <property name="label" translatable="yes">xx-small</property>
             <property name="name">xx-small</property>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
@@ -27,9 +24,6 @@
             <property name="label" translatable="yes">x-small</property>
             <property name="name">x-small</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label3">
@@ -38,9 +32,6 @@
             <property name="label" translatable="yes">small</property>
             <property name="name">small</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label4">
@@ -49,9 +40,6 @@
             <property name="label" translatable="yes">medium</property>
             <property name="name">medium</property>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label5">
@@ -60,9 +48,6 @@
             <property name="label" translatable="yes">large</property>
             <property name="name">large</property>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label6">
@@ -71,9 +56,6 @@
             <property name="label" translatable="yes">x-large</property>
             <property name="name">x-large</property>
           </object>
-          <packing>
-            <property name="position">5</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label7">
@@ -82,9 +64,6 @@
             <property name="label" translatable="yes">xx-large</property>
             <property name="name">xx-large</property>
           </object>
-          <packing>
-            <property name="position">6</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label8">
@@ -93,9 +72,6 @@
             <property name="label" translatable="yes">smaller</property>
             <property name="name">smaller</property>
           </object>
-          <packing>
-            <property name="position">7</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label9">
@@ -104,9 +80,6 @@
             <property name="label" translatable="yes">larger</property>
             <property name="name">larger</property>
           </object>
-          <packing>
-            <property name="position">8</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box-smaller">
@@ -121,14 +94,8 @@
                 <property name="label" translatable="yes">smaller smaller</property>
                 <property name="name">smaller</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">9</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box-larger">
@@ -143,14 +110,8 @@
                 <property name="label" translatable="yes">larger larger</property>
                 <property name="name">larger</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">10</property>
-          </packing>
         </child>
       </object>
     </child>

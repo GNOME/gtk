@@ -21,27 +21,18 @@
                 <property name="visible">True</property>
                 <property name="label">One</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="two">
                 <property name="visible">True</property>
                 <property name="label">Two</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="three">
                 <property name="visible">True</property>
                 <property name="label">Three</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -61,18 +52,12 @@
                 <property name="visible">True</property>
                 <property name="label">Verylongtext</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="short">
                 <property name="visible">True</property>
                 <property name="label">Short</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -90,27 +75,18 @@
                 <property name="visible">True</property>
                 <property name="label">A</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="b">
                 <property name="visible">True</property>
                 <property name="label">B</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="c">
                 <property name="visible">True</property>
                 <property name="label">C</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>

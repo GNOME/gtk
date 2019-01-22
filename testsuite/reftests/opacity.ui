@@ -27,19 +27,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box4">
@@ -58,16 +49,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
       </object>
     </child>

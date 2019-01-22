@@ -19,9 +19,6 @@
               <placeholder/>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label1">
@@ -29,9 +26,6 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">I'm tomato.</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

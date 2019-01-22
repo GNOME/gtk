@@ -139,9 +139,6 @@
                       <object class="GtkLabel" id="label1">
                         <property name="label" translatable="yes">Portrait</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -170,9 +167,6 @@
                       <object class="GtkLabel" id="label2">
                         <property name="label" translatable="yes">Reverse portrait</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -201,9 +195,6 @@
                       <object class="GtkLabel" id="label3">
                         <property name="label" translatable="yes">Landscape</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -231,9 +222,6 @@
                       <object class="GtkLabel" id="label4">
                         <property name="label" translatable="yes">Reverse landscape</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                 </child>

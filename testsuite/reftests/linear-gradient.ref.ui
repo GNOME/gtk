@@ -19,9 +19,6 @@
             <property name="receives_default">True</property>
             <property name="name">a</property>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="button2">
@@ -32,9 +29,6 @@
             <property name="receives_default">True</property>
             <property name="name">b</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="button3">
@@ -45,9 +39,6 @@
             <property name="receives_default">True</property>
             <property name="name">c</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="button4">
@@ -58,9 +49,6 @@
             <property name="receives_default">True</property>
             <property name="name">d</property>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
       </object>
     </child>

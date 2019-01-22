@@ -23,9 +23,6 @@
             <property name="xalign">0</property>
             <property name="ellipsize">end</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="available_space_label">
@@ -34,9 +31,6 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="path_label">
@@ -48,9 +42,6 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStack" id="mount_stack">
@@ -78,9 +69,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
       </object>
     </child>
