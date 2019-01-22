@@ -51,9 +51,6 @@ World</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkPaned" id="paned2">
@@ -96,9 +93,6 @@ World</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkPaned" id="paned3">
@@ -139,9 +133,6 @@ World</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkPaned" id="paned4">
@@ -182,9 +173,6 @@ World</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
       </object>
     </child>

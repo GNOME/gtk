@@ -20,9 +20,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button2">
@@ -31,9 +28,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button3">
@@ -42,9 +36,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button4">
@@ -53,9 +44,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button5">
@@ -64,14 +52,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box3">
@@ -85,9 +67,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button8">
@@ -96,9 +75,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button9">
@@ -107,9 +83,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button10">
@@ -118,14 +91,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box4">
@@ -139,9 +106,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button14">
@@ -150,9 +114,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button15">
@@ -161,14 +122,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box5">
@@ -182,9 +137,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button11">
@@ -193,14 +145,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box6">
@@ -214,14 +160,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
       </object>
     </child>

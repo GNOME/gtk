@@ -37,9 +37,6 @@
                 <property name="justify">center</property>
                 <property name="selectable">1</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkStack" id="stack">
@@ -225,14 +222,8 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

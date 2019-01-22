@@ -18,9 +18,6 @@
             <property name="label" translatable="yes">Please enter your name and email address below. The "optional" fields below do not need to be filled in, unless you wish to include this information in email you send.</property>
             <property name="wrap">True</property>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid1">
@@ -91,9 +88,6 @@ For example, "Work" or "Personal".</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid2">
@@ -177,9 +171,6 @@ For example, "Work" or "Personal".</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid3">
@@ -264,9 +255,6 @@ For example, "Work" or "Personal".</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
       </object>
     </child>

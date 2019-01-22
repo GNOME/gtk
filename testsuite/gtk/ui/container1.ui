@@ -3,9 +3,6 @@
   <object class="GtkBox">
     <child>
       <object class="GtkLabel" id="widget1"/>
-      <packing>
-        <property name="position" translatable="yes" comments="foo" context="bar">1</property>
-      </packing>
     </child>
   </object>
 </interface>

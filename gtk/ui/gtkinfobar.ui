@@ -20,9 +20,6 @@
                 <property name="margin">6</property>
                 <property name="layout-style">end</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="close_button">
@@ -36,9 +33,6 @@
                   <class name="close"/>
                 </style>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
         </child>

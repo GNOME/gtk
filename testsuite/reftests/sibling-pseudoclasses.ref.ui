@@ -19,9 +19,6 @@
               <placeholder/>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label1">
@@ -32,9 +29,6 @@
               <attribute name="foreground" value="#ffff63634747"/>
             </attributes>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

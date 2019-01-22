@@ -81,12 +81,6 @@ enum {
   LAST_PROP = PROP_ORIENTATION
 };
 
-enum {
-  CHILD_PROP_0,
-  CHILD_PROP_POSITION,
-  LAST_CHILD_PROP
-};
-
 typedef struct
 {
   GtkOrientation  orientation;
@@ -97,7 +91,6 @@ typedef struct
 } GtkBoxPrivate;
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
-static GParamSpec *child_props[LAST_CHILD_PROP] = { NULL, };
 
 static void gtk_box_size_allocate         (GtkWidget *widget,
                                            int        width,
@@ -119,16 +112,6 @@ static void gtk_box_remove             (GtkContainer   *container,
 static void gtk_box_forall             (GtkContainer   *container,
                                         GtkCallback     callback,
                                         gpointer        callback_data);
-static void gtk_box_set_child_property (GtkContainer   *container,
-                                        GtkWidget      *child,
-                                        guint           property_id,
-                                        const GValue   *value,
-                                        GParamSpec     *pspec);
-static void gtk_box_get_child_property (GtkContainer   *container,
-                                        GtkWidget      *child,
-                                        guint           property_id,
-                                        GValue         *value,
-                                        GParamSpec     *pspec);
 static GType gtk_box_child_type        (GtkContainer   *container);
 static GtkWidgetPath * gtk_box_get_path_for_child
                                        (GtkContainer   *container,
@@ -162,8 +145,6 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->remove = gtk_box_remove;
   container_class->forall = gtk_box_forall;
   container_class->child_type = gtk_box_child_type;
-  container_class->set_child_property = gtk_box_set_child_property;
-  container_class->get_child_property = gtk_box_get_child_property;
   container_class->get_path_for_child = gtk_box_get_path_for_child;
 
   g_object_class_override_property (object_class,
@@ -193,16 +174,6 @@ gtk_box_class_init (GtkBoxClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
-
-  child_props[CHILD_PROP_POSITION] =
-      g_param_spec_int ("position",
-                        P_("Position"),
-                        P_("The index of the child in the parent"),
-                        -1, G_MAXINT,
-                        0,
-                        GTK_PARAM_READWRITE);
-
-  gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, child_props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
   gtk_widget_class_set_css_name (widget_class, I_("box"));
@@ -558,58 +529,6 @@ static GType
 gtk_box_child_type (GtkContainer   *container)
 {
   return GTK_TYPE_WIDGET;
-}
-
-static void
-gtk_box_set_child_property (GtkContainer *container,
-                            GtkWidget    *child,
-                            guint         property_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  switch (property_id)
-    {
-    case CHILD_PROP_POSITION:
-      gtk_box_reorder_child (GTK_BOX (container),
-			     child,
-			     g_value_get_int (value));
-      break;
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_box_get_child_property (GtkContainer *container,
-			    GtkWidget    *child,
-			    guint         property_id,
-			    GValue       *value,
-			    GParamSpec   *pspec)
-{
-  GtkWidget *p;
-  int i;
-
-  switch (property_id)
-    {
-    case CHILD_PROP_POSITION:
-      i = 0;
-      for (p = _gtk_widget_get_first_child (GTK_WIDGET (container));
-           p != NULL;
-           p = _gtk_widget_get_next_sibling (p))
-        {
-          if (p == child)
-            break;
-
-          i ++;
-        }
-
-      g_value_set_int (value, i);
-      break;
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
 }
 
 typedef struct _CountingData CountingData;
@@ -1195,8 +1114,6 @@ gtk_box_reorder_child (GtkBox    *box,
                                   gtk_widget_get_css_node (child),
                                   new_next_sibling ? gtk_widget_get_css_node (new_next_sibling) : NULL);
     }
-
-  gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_POSITION]);
 }
 
 static void
@@ -1204,7 +1121,6 @@ gtk_box_add (GtkContainer *container,
              GtkWidget    *child)
 {
   gtk_widget_set_parent (child, GTK_WIDGET (container));
-  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
 }
 
 static void

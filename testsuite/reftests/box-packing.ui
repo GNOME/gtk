@@ -46,9 +46,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid2">
@@ -86,9 +83,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid3">
@@ -126,9 +120,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid4">
@@ -167,9 +158,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box2">
@@ -210,9 +198,6 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkGrid" id="grid6">
@@ -252,9 +237,6 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkGrid" id="grid7">
@@ -292,9 +274,6 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkGrid" id="grid8">
@@ -333,14 +312,8 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid9">

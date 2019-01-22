@@ -23,9 +23,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image2">
@@ -35,14 +32,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box3">
@@ -56,9 +47,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image4">
@@ -68,14 +56,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box4">
@@ -89,9 +71,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image6">
@@ -101,14 +80,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box5">
@@ -122,9 +95,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image8">
@@ -134,14 +104,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box6">
@@ -160,9 +124,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkImage" id="image10">
@@ -172,14 +133,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box8">
@@ -194,9 +149,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkImage" id="image12">
@@ -206,14 +158,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box9">
@@ -228,9 +174,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkImage" id="image14">
@@ -240,14 +183,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box10">
@@ -262,9 +199,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkImage" id="image16">
@@ -274,19 +208,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box11">

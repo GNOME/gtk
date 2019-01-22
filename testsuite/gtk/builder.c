@@ -990,7 +990,6 @@ test_child_properties (void)
     "</interface>";
 
   GObject *label, *vbox;
-  int position;
 
   builder = builder_new_from_string (buffer1, -1, NULL);
   vbox = gtk_builder_get_object (builder, "vbox1");
@@ -998,21 +997,9 @@ test_child_properties (void)
 
   label = gtk_builder_get_object (builder, "label1");
   g_assert (GTK_IS_LABEL (label));
-  gtk_container_child_get (GTK_CONTAINER (vbox),
-                           GTK_WIDGET (label),
-                           "position",
-                           &position,
-                           NULL);
-  g_assert_cmpint (position, ==, 0);
 
   label = gtk_builder_get_object (builder, "label2");
   g_assert (GTK_IS_LABEL (label));
-  gtk_container_child_get (GTK_CONTAINER (vbox),
-                           GTK_WIDGET (label),
-                           "position",
-                           &position,
-                           NULL);
-  g_assert_cmpint (position, ==, 1);
 
   g_object_unref (builder);
 }
@@ -1964,9 +1951,6 @@ test_add_objects (void)
     "            <property name=\"visible\">True</property>"
     "            <property name=\"label\" translatable=\"no\">second label</property>"
     "          </object>"
-    "          <packing>"
-    "            <property name=\"position\">1</property>"
-    "          </packing>"
     "        </child>"
     "      </object>"
     "    </child>"

@@ -21,18 +21,12 @@
                 <property name="vexpand">True</property>
                 <property name="icon_name">help-about</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -54,9 +48,6 @@
                 <property name="vexpand">True</property>
                 <property name="icon_name">help-about</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator2">
@@ -64,9 +55,6 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -86,9 +74,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image3">
@@ -98,9 +83,6 @@
                 <property name="vexpand">True</property>
                 <property name="icon_name">help-about</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -131,9 +113,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator6">
@@ -141,9 +120,6 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -164,9 +140,6 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image4">
@@ -176,9 +149,6 @@
                 <property name="vexpand">True</property>
                 <property name="icon_name">help-about</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>

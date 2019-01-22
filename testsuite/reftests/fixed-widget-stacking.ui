@@ -35,9 +35,6 @@ TEST123</property>
                 <property name="can_focus">True</property>
                 <property name="buffer">textbuffer1</property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
           <packing>

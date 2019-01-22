@@ -19,9 +19,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label2">
@@ -29,9 +26,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label3">
@@ -39,9 +33,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label4">
@@ -49,9 +40,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label5">
@@ -59,9 +47,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label16">
@@ -69,9 +54,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">5</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label17">
@@ -79,9 +61,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">6</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -99,10 +78,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label7">
@@ -110,10 +85,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label8">
@@ -121,10 +92,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label9">
@@ -132,10 +99,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label10">
@@ -143,10 +106,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">4</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label11">
@@ -154,10 +113,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">5</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label12">
@@ -165,10 +120,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">6</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -186,18 +137,12 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label14">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label15">
@@ -205,18 +150,12 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label18">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label19">
@@ -224,37 +163,12 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label20">
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes"> X X X </property>
-              </object>
-              <packing>
-                <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label21">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes"> X X X </property>
-              </object>
-              <packing>
-                <property name="position">6</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label22">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">7</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label23">
@@ -262,18 +176,12 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">8</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label27">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">9</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label24">
@@ -281,18 +189,12 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">10</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label25">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">11</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label26">
@@ -300,9 +202,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">12</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -320,9 +219,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label29">
@@ -330,10 +226,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label30">
@@ -341,9 +233,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label31">
@@ -351,10 +240,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label32">
@@ -362,9 +247,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label33">
@@ -372,10 +254,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">5</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label34">
@@ -383,9 +261,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">6</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -403,10 +278,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label36">
@@ -414,9 +285,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label37">
@@ -424,10 +292,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label38">
@@ -435,9 +299,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label39">
@@ -445,10 +306,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">4</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label40">
@@ -456,9 +313,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="position">5</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label41">
@@ -466,10 +320,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> X X X </property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-                <property name="position">6</property>
-              </packing>
             </child>
           </object>
           <packing>

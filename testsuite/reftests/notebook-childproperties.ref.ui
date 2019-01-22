@@ -28,9 +28,6 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">page 2</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel" id="label2">
@@ -38,9 +35,6 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">page 2</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label6">
@@ -48,9 +42,6 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">page 3</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel" id="label3">
@@ -58,9 +49,6 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">page 3</property>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>

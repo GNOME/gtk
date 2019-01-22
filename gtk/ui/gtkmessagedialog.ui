@@ -41,14 +41,8 @@
                     <property name="wrap">1</property>
                     <property name="max-width-chars">60</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
         </child>

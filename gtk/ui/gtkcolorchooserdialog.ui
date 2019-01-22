@@ -20,9 +20,6 @@
             <signal name="notify::rgba" handler="propagate_notify" swapped="no"/>
             <signal name="notify::show-editor" handler="propagate_notify" swapped="no"/>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

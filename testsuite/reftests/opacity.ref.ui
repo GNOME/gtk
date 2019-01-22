@@ -25,19 +25,10 @@
                     <property name="receives_default">True</property>
                     <property name="name">ref</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box4">
@@ -55,16 +46,10 @@
                     <property name="receives_default">True</property>
                     <property name="name">ref</property>
                   </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
       </object>
     </child>
