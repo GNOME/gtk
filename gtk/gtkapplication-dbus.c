@@ -96,6 +96,7 @@ client_proxy_signal (GDBusProxy  *proxy,
   if (g_str_equal (signal_name, "QueryEndSession"))
     {
       g_debug ("Received QueryEndSession");
+      g_signal_emit_by_name (dbus->impl.application, "query-end");
       send_quit_response (dbus, TRUE, NULL);
     }
   else if (g_str_equal (signal_name, "CancelEndSession"))
@@ -236,6 +237,8 @@ screensaver_signal_portal (GDBusConnection *connection,
         }
       else if (session_state == QUERY_END)
         {
+          g_signal_emit_by_name (dbus->impl.application, "query-end");
+
           g_dbus_proxy_call (dbus->inhibit_proxy,
                              "QueryEndResponse",
                              g_variant_new ("(o)", dbus->session_id),

@@ -131,6 +131,7 @@
 enum {
   WINDOW_ADDED,
   WINDOW_REMOVED,
+  QUERY_END,
   LAST_SIGNAL
 };
 
@@ -661,6 +662,24 @@ gtk_application_class_init (GtkApplicationClass *class)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
 
+  /**
+   * GtkApplication::query-end:
+   * @application: the #GtkApplication which emitted the signal
+   *
+   * Emitted when the session manager is about to end the session, only
+   * if #GtkApplication::register-session is %TRUE. Applications can
+   * connect to this signal and call gtk_application_inhibit() with
+   * %GTK_APPLICATION_INHIBIT_LOGOUT to delay the end of the session
+   * until state has been saved.
+   *
+   * Since: 3.24.8
+   */
+  gtk_application_signals[QUERY_END] =
+    g_signal_new (I_("query-end"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
   /**
    * GtkApplication:register-session:
    *
