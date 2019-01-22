@@ -1536,6 +1536,11 @@ headerbar {
       background-color: $selected_bg_color;
       background-image: none;
       box-shadow: inset 0 1px mix($top_hilight, $selected_bg_color, 60%);
+      
+      label { 
+        text-shadow: none;
+        color: $selected_fg_color; 
+      }
     }
 
     .subtitle:link { @extend *:link:selected;  }
