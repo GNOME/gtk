@@ -234,6 +234,8 @@ screensaver_signal_portal (GDBusConnection *connection,
         }
       else if (session_state == QUERY_END)
         {
+          g_signal_emit_by_name (dbus->impl.application, "query-end");
+
           g_dbus_proxy_call (dbus->inhibit_proxy,
                              "QueryEndResponse",
                              g_variant_new ("(o)", dbus->session_id),
