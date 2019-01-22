@@ -1789,7 +1789,7 @@ init_settings (GdkDisplay *display)
     {
       GVariant *ret;
       GError *error = NULL;
-      const char *schema;
+      const char *schema_str;
       GVariant *val;
       GVariantIter *iter;
       const char *patterns[] = { "org.gnome.*", NULL }; 
@@ -1829,7 +1829,7 @@ init_settings (GdkDisplay *display)
 
       g_variant_get (ret, "(a{sa{sv}})", &iter);
 
-      while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema, &val))
+      while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema_str, &val))
         {
           GVariantIter *iter2 = g_variant_iter_new (val);
           const char *key;
@@ -1837,17 +1837,17 @@ init_settings (GdkDisplay *display)
 
           while (g_variant_iter_loop (iter2, "{sv}", &key, &v))
             {
-              TranslationEntry *entry = find_translation_entry_by_schema (schema, key);
+              TranslationEntry *entry = find_translation_entry_by_schema (schema_str, key);
               if (entry)
                 {
                   char *a = g_variant_print (v, FALSE);
-                  g_debug ("Using portal setting for %s %s: %s\n", schema, key, a);
+                  g_debug ("Using portal setting for %s %s: %s\n", schema_str, key, a);
                   g_free (a);
                   apply_portal_setting (entry, v, display);
                 }
               else
                 {
-                  g_debug ("Ignoring portal setting for %s %s", schema, key);
+                  g_debug ("Ignoring portal setting for %s %s", schema_str, key);
                 }
             }
           g_variant_iter_free (iter2);

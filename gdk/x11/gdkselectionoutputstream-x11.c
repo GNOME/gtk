@@ -869,7 +869,6 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
                                           gpointer                      user_data)
 {
   const char *mime_type, *selection, *target, *property;
-  gsize i;
 
   selection = gdk_x11_get_xatom_name_for_display (display, xselection);
   target = gdk_x11_get_xatom_name_for_display (display, xtarget);
@@ -991,6 +990,8 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
     }
   else
     {
+      gsize i;
+
       for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
         {
           if (g_str_equal (target, special_targets[i].x_target) &&

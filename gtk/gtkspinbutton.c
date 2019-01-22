@@ -796,15 +796,15 @@ button_released_cb (GtkGestureMultiPress *gesture,
 
   if (button == GDK_BUTTON_SECONDARY)
     {
-      GtkWidget *button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+      GtkWidget *button_widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
       double diff;
-      if (button == priv->down_button)
+      if (button_widget == priv->down_button)
         {
           diff = gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment);
           if (diff > EPSILON)
             gtk_spin_button_real_spin (spin_button, -diff);
         }
-      else if (button == priv->up_button)
+      else if (button_widget == priv->up_button)
         {
           diff = gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_value (priv->adjustment);
           if (diff > EPSILON)

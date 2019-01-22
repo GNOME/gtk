@@ -653,7 +653,6 @@ render_border_node (GskGLRenderer   *self,
       }
     };
     int indices[4] = { 0, 1, 2, 3 };
-    int i;
 
     /* We sort them by color */
     sort_border_sides (colors, indices);
@@ -1067,7 +1066,7 @@ render_color_matrix_node (GskGLRenderer       *self,
 
   if (is_offscreen)
     {
-      GskQuadVertex vertex_data[GL_N_VERTICES] = {
+      GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
         { { min_x, min_y }, { 0, 1 }, },
         { { min_x, max_y }, { 0, 0 }, },
         { { max_x, min_y }, { 1, 1 }, },
@@ -1077,7 +1076,7 @@ render_color_matrix_node (GskGLRenderer       *self,
         { { max_x, min_y }, { 1, 1 }, },
       };
 
-      ops_draw (builder, vertex_data);
+      ops_draw (builder, offscreen_vertex_data);
     }
   else
     {
@@ -1120,7 +1119,7 @@ render_blur_node (GskGLRenderer       *self,
 
   if (is_offscreen)
     {
-      GskQuadVertex vertex_data[GL_N_VERTICES] = {
+      GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
         { { min_x, min_y }, { 0, 1 }, },
         { { min_x, max_y }, { 0, 0 }, },
         { { max_x, min_y }, { 1, 1 }, },
@@ -1130,7 +1129,7 @@ render_blur_node (GskGLRenderer       *self,
         { { max_x, min_y }, { 1, 1 }, },
       };
 
-      ops_draw (builder, vertex_data);
+      ops_draw (builder, offscreen_vertex_data);
     }
   else
     {
@@ -1635,7 +1634,7 @@ render_shadow_node (GskGLRenderer       *self,
       ops_set_texture (builder, texture_id);
       if (is_offscreen)
         {
-          const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+          const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
             { { dx + min_x, dy + min_y }, { 0, 1 }, },
             { { dx + min_x, dy + max_y }, { 0, 0 }, },
             { { dx + max_x, dy + min_y }, { 1, 1 }, },
@@ -1645,11 +1644,11 @@ render_shadow_node (GskGLRenderer       *self,
             { { dx + max_x, dy + min_y }, { 1, 1 }, },
           };
 
-          ops_draw (builder, vertex_data);
+          ops_draw (builder, offscreen_vertex_data);
         }
       else
         {
-          const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+          const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
             { { dx + min_x, dy + min_y }, { 0, 0 }, },
             { { dx + min_x, dy + max_y }, { 0, 1 }, },
             { { dx + max_x, dy + min_y }, { 1, 0 }, },
@@ -1659,7 +1658,7 @@ render_shadow_node (GskGLRenderer       *self,
             { { dx + max_x, dy + min_y }, { 1, 0 }, },
           };
 
-          ops_draw (builder, vertex_data);
+          ops_draw (builder, onscreen_vertex_data);
         }
 
       ops_offset (builder, - dx, - dy);

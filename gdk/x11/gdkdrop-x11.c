@@ -375,14 +375,14 @@ gdk_x11_drop_read_actions (GdkDrop *drop)
           if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
             {
               GString *action_str = g_string_new (NULL);
-              GdkDragAction actions = gdk_drop_get_actions (drop);
-              if (actions & GDK_ACTION_MOVE)
+              GdkDragAction drop_actions = gdk_drop_get_actions (drop);
+              if (drop_actions & GDK_ACTION_MOVE)
                 g_string_append(action_str, "MOVE ");
-              if (actions & GDK_ACTION_COPY)
+              if (drop_actions & GDK_ACTION_COPY)
                 g_string_append(action_str, "COPY ");
-              if (actions & GDK_ACTION_LINK)
+              if (drop_actions & GDK_ACTION_LINK)
                 g_string_append(action_str, "LINK ");
-              if (actions & GDK_ACTION_ASK)
+              if (drop_actions & GDK_ACTION_ASK)
                 g_string_append(action_str, "ASK ");
 
               g_message("Xdnd actions = %s", action_str->str);

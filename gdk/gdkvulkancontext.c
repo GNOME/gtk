@@ -786,12 +786,12 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
       else
         {
           gint64 device_idx;
-          GError *error = NULL;
+          GError *error2 = NULL;
 
-          if (!g_ascii_string_to_signed (override, 10, 0, G_MAXINT, &device_idx, &error))
+          if (!g_ascii_string_to_signed (override, 10, 0, G_MAXINT, &device_idx, &error2))
             {
-              g_warning ("Failed to parse %s: %s", "GDK_VULKAN_DEVICE", error->message);
-              g_error_free (error);
+              g_warning ("Failed to parse %s: %s", "GDK_VULKAN_DEVICE", error2->message);
+              g_error_free (error2);
               device_idx = -1;
             }
 

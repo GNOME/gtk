@@ -6334,7 +6334,6 @@ paste_received (GObject      *clipboard,
 
   if (priv->insert_pos >= 0)
     {
-      gint pos, start, end;
       pos = priv->insert_pos;
       gtk_editable_get_selection_bounds (editable, &start, &end);
       if (!((start <= pos && pos <= end) || (end <= pos && pos <= start)))

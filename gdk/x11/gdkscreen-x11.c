@@ -676,7 +676,7 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
 
   for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      monitor = x11_display->monitors->pdata[i];
       monitor->add = FALSE;
       monitor->remove = TRUE;
     }
@@ -720,7 +720,7 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
 
   for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      monitor = x11_display->monitors->pdata[i];
       if (monitor->add)
         {
           gdk_display_monitor_added (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
