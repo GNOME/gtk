@@ -48,6 +48,7 @@
 #include "visual.h"
 #include "window.h"
 #include "gtkstackcombo.h"
+#include "widgetview.h"
 
 #include "gtkmagnifierprivate.h"
 
@@ -85,6 +86,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
   g_type_ensure (GTK_TYPE_STACK_COMBO);
+  g_type_ensure (GTK_TYPE_WIDGET_VIEW);
 
   if (extension_point == NULL)
     {

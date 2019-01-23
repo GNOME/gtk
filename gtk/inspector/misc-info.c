@@ -29,6 +29,7 @@
 #include "gtkframe.h"
 #include "gtkbutton.h"
 #include "gtkwidgetprivate.h"
+#include "widgetview.h"
 
 
 struct _GtkInspectorMiscInfoPrivate {
@@ -223,19 +224,10 @@ update_focus_widget (GtkInspectorMiscInfo *sl)
   GtkWidget *widget;
 
   widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
-  if (widget)
-    {
-      gchar *tmp;
-      tmp = g_strdup_printf ("%p", widget);
-      gtk_label_set_label (GTK_LABEL (sl->priv->focus_widget), tmp);
-      g_free (tmp);
-      gtk_widget_set_sensitive (sl->priv->focus_widget_button, TRUE);
-    }
-  else
-    {
-      gtk_label_set_label (GTK_LABEL (sl->priv->focus_widget), "NULL");   
-      gtk_widget_set_sensitive (sl->priv->focus_widget_button, FALSE);
-    }
+
+  gtk_widget_view_set_inspected_widget (GTK_WIDGET_VIEW (sl->priv->focus_widget),
+                                        widget);
+  gtk_widget_set_sensitive (sl->priv->focus_widget_button, widget != NULL);
 }
 
 static void

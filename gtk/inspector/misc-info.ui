@@ -176,11 +176,9 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="focus_widget">
-                            <property name="selectable">1</property>
+                          <object class="GtkWidgetView" id="focus_widget">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="ellipsize">end</property>
                           </object>
                         </child>
                         <child>

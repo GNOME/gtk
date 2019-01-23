@@ -37,5 +37,6 @@ inspector_sources = files(
   'treewalk.c',
   'updatesoverlay.c',
   'visual.c',
+  'widgetview.c',
   'window.c',
 )
