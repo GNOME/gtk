@@ -11341,8 +11341,6 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
   while (parent != ancestor)
     {
       int origin_x, origin_y;
-      GtkBorder margin, border, padding;
-      GtkCssStyle *style;
 
       style = gtk_css_node_get_style (parent->priv->cssnode);
       get_box_margin (style, &margin);
@@ -11368,8 +11366,6 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
     {
       int origin_x, origin_y;
       graphene_matrix_t inv_transform;
-      GtkBorder margin, border, padding;
-      GtkCssStyle *style;
 
       parent = dest_path[i];
 
