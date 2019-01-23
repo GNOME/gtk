@@ -35,8 +35,9 @@
  * the children to influence their allocation.
  *
  * Use repeated calls to gtk_container_add() to pack widgets into a
- * GtkBox from start to end. Use gtk_container_remove()
- * to remove widgets from the GtkBox.
+ * GtkBox from start to end. Use gtk_container_remove() to remove widgets
+ * from the GtkBox. gtk_box_insert_child_after() can be used to add a child
+ * at a particular position.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
  * of the GtkBox are forced to get the same amount of space.
@@ -45,7 +46,7 @@
  * minimally placed between all children in the GtkBox. Note that
  * spacing is added between the children.
  *
- * Use gtk_box_reorder_child_after() to move a GtkBox child to a different
+ * Use gtk_box_reorder_child_after() to move a child to a different
  * place in the box.
  *
  * # CSS nodes
@@ -1096,6 +1097,16 @@ _gtk_box_get_children (GtkBox *box)
   return g_list_reverse (retval);
 }
 
+/**
+ * gtk_box_insert_child_after:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to insert
+ * @sibling: (nullable): the sibling to move @child after, or %NULL
+ *
+ * Inserts @child in the position after @sibling in the list
+ * of @box children. If @sibling is %NULL, insert @child at 
+ * the first position.
+ */
 void
 gtk_box_insert_child_after (GtkBox    *box,
                             GtkWidget *child,
@@ -1121,6 +1132,16 @@ gtk_box_insert_child_after (GtkBox    *box,
                              sibling ? gtk_widget_get_css_node (sibling) : NULL);
 }
 
+/**
+ * gtk_box_reorder_child_after:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to move, must be a child of @box
+ * @sibling: (nullable): the sibling to move @child after, or %NULL
+ *
+ * Moves @child to the position after @sibling in the list
+ * of @box children. If @sibling is %NULL, move @child to
+ * the first position.
+ */
 void
 gtk_box_reorder_child_after (GtkBox    *box,
                              GtkWidget *child,
