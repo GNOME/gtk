@@ -1623,7 +1623,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_TRANSFORM,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_SIZE,
+                                          GTK_CSS_AFFECTS_TRANSFORM,
                                           transform_value_parse,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
