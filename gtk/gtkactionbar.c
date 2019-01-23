@@ -64,7 +64,6 @@ struct _GtkActionBarPrivate
 enum {
   CHILD_PROP_0,
   CHILD_PROP_PACK_TYPE,
-  CHILD_PROP_POSITION
 };
 
 enum {
@@ -161,31 +160,6 @@ gtk_action_bar_get_child_property (GtkContainer *container,
 
       break;
 
-    case CHILD_PROP_POSITION:
-      if (gtk_widget_get_parent (child) == priv->start_box)
-        {
-          int n;
-          gtk_container_child_get (GTK_CONTAINER (priv->start_box),
-                                   child,
-                                   "position", &n,
-                                   NULL);
-          g_value_set_int (value, n);
-        }
-      else if (gtk_widget_get_parent (child) == priv->end_box)
-        {
-          int n;
-          gtk_container_child_get (GTK_CONTAINER (priv->end_box),
-                                   child,
-                                   "position", &n,
-                                   NULL);
-          g_value_set_int (value, n);
-        }
-      else /* Center widget */
-        {
-          g_value_set_int (value, 0);
-        }
-      break;
-
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
@@ -229,27 +203,6 @@ gtk_action_bar_set_child_property (GtkContainer *container,
           /* Ignore the center widget */
         }
 
-      break;
-
-    case CHILD_PROP_POSITION:
-      if (gtk_widget_get_parent (child) == priv->start_box)
-        {
-          gtk_container_child_set (GTK_CONTAINER (priv->start_box),
-                                   child,
-                                   "position", g_value_get_int (value),
-                                   NULL);
-        }
-      else if (gtk_widget_get_parent (child) == priv->end_box)
-        {
-          gtk_container_child_set (GTK_CONTAINER (priv->end_box),
-                                   child,
-                                   "position", g_value_get_int (value),
-                                   NULL);
-        }
-      else
-        {
-          /* Ignore center widget */
-        }
       break;
 
     default:
@@ -379,13 +332,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
                                                                  P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
                                                                  GTK_TYPE_PACK_TYPE, GTK_PACK_START,
                                                                  G_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_POSITION,
-                                              g_param_spec_int ("position",
-                                                                P_("Position"),
-                                                                P_("The index of the child in the parent"),
-                                                                -1, G_MAXINT, 0,
-                                                                G_PARAM_READWRITE));
 
   props[PROP_REVEALED] =
     g_param_spec_boolean ("revealed",
