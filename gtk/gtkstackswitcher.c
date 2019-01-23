@@ -236,14 +236,14 @@ on_position_updated (GtkWidget        *widget,
                            NULL);
 
   if (position == 0)
-    gtk_box_reorder_child (GTK_BOX (self), button, gtk_widget_get_first_child (GTK_WIDGET (self)));
+    gtk_box_reorder_child_after (GTK_BOX (self), button, NULL);
   else
     {
       GtkWidget *sibling = gtk_widget_get_first_child (GTK_WIDGET (self));
       int i;
-      for (i = 0; i < position; i++)
+      for (i = 1; i < position; i++)
         sibling = gtk_widget_get_next_sibling (sibling);
-      gtk_box_reorder_child (GTK_BOX (self), button, sibling);
+      gtk_box_reorder_child_after (GTK_BOX (self), button, sibling);
     }
 }
 

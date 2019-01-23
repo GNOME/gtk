@@ -745,8 +745,7 @@ add_custom_color (GtkColorChooserWidget *cc,
   gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
   connect_custom_signals (p, cc);
 
-  gtk_container_add (GTK_CONTAINER (cc->priv->custom), p);
-  gtk_box_reorder_child (GTK_BOX (cc->priv->custom), p, gtk_widget_get_next_sibling (gtk_widget_get_first_child (cc->priv->custom)));
+  gtk_box_insert_child_after (GTK_BOX (cc->priv->custom), p, gtk_widget_get_first_child (cc->priv->custom));
   gtk_widget_show (p);
 
   select_swatch (cc, GTK_COLOR_SWATCH (p));

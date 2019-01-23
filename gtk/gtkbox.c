@@ -45,7 +45,7 @@
  * minimally placed between all children in the GtkBox. Note that
  * spacing is added between the children.
  *
- * Use gtk_box_reorder_child() to move a GtkBox child to a different
+ * Use gtk_box_reorder_child_after() to move a GtkBox child to a different
  * place in the box.
  *
  * # CSS nodes
@@ -1097,17 +1097,51 @@ _gtk_box_get_children (GtkBox *box)
 }
 
 void
-gtk_box_reorder_child (GtkBox    *box,
-                       GtkWidget *child,
-                       GtkWidget *sibling)
+gtk_box_insert_child_after (GtkBox    *box,
+                            GtkWidget *child,
+                            GtkWidget *sibling)
 {
   GtkWidget *widget = GTK_WIDGET (box);
+
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+  if (sibling)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (sibling));
+      g_return_if_fail (gtk_widget_get_parent (sibling) == widget);
+    }
 
   if (child == sibling)
     return;
 
-  gtk_widget_insert_before (child, widget, sibling);
-  gtk_css_node_insert_before (gtk_widget_get_css_node (widget),
-                              gtk_widget_get_css_node (child),
-                              sibling ? gtk_widget_get_css_node (sibling) : NULL);
+  gtk_widget_insert_after (child, widget, sibling);
+  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
+                             gtk_widget_get_css_node (child),
+                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
+}
+
+void
+gtk_box_reorder_child_after (GtkBox    *box,
+                             GtkWidget *child,
+                             GtkWidget *sibling)
+{
+  GtkWidget *widget = GTK_WIDGET (box);
+
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == widget);
+  if (sibling)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (sibling));
+      g_return_if_fail (gtk_widget_get_parent (sibling) == widget);
+    }
+
+  if (child == sibling)
+    return;
+
+  gtk_widget_insert_after (child, widget, sibling);
+  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
+                             gtk_widget_get_css_node (child),
+                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
 }

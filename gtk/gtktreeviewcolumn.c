@@ -964,9 +964,9 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
    * reverse things
    */
   if (priv->xalign <= 0.5)
-    gtk_box_reorder_child (GTK_BOX (hbox), arrow, NULL);
+    gtk_box_reorder_child_after (GTK_BOX (hbox), arrow, gtk_widget_get_last_child (hbox));
   else
-    gtk_box_reorder_child (GTK_BOX (hbox), arrow, gtk_widget_get_first_child (hbox));
+    gtk_box_reorder_child_after (GTK_BOX (hbox), arrow, NULL);
 
   if (priv->show_sort_indicator
       || (GTK_IS_TREE_SORTABLE (model) && priv->sort_column_id >= 0))

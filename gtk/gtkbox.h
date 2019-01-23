@@ -92,9 +92,14 @@ GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_box_reorder_child (GtkBox         *box,
-                                   GtkWidget      *child,
-                                   GtkWidget      *sibling);
+void        gtk_box_insert_child_after (GtkBox         *box,
+                                        GtkWidget      *child,
+                                        GtkWidget      *sibling);
+
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_reorder_child_after (GtkBox         *box,
+                                         GtkWidget      *child,
+                                         GtkWidget      *sibling);
 
 
 G_END_DECLS

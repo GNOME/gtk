@@ -1040,14 +1040,14 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Current orientation of the box is vertical! */
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->down_button, NULL);
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->up_button, NULL);
+      gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->up_button, NULL);
+      gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->entry, NULL);
     }
   else
     {
       /* Current orientation of the box is horizontal! */
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->entry, NULL);
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->down_button, NULL);
+      gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->entry, NULL);
+      gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->up_button, NULL);
     }
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), priv->orientation);
