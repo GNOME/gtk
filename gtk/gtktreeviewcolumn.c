@@ -963,13 +963,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
    * left otherwise; do this by packing boxes, so flipping text direction will
    * reverse things
    */
-  g_object_ref (arrow);
-  gtk_container_remove (GTK_BOX (hbox), arrow);
   if (priv->xalign <= 0.5)
-    gtk_box_append (GTK_BOX (hbox), arrow);
+    gtk_box_reorder_child (GTK_BOX (hbox), arrow, NULL);
   else
-    gtk_box_prepend (GTK_BOX (hbox), arrow);
-  g_object_unref (arrow);
+    gtk_box_reorder_child (GTK_BOX (hbox), arrow, gtk_widget_get_first_child (hbox));
 
   if (priv->show_sort_indicator
       || (GTK_IS_TREE_SORTABLE (model) && priv->sort_column_id >= 0))

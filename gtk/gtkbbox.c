@@ -386,15 +386,7 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
   gtk_widget_child_notify (child, "secondary");
 
   if (bbox->priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    {
-      g_object_ref (child);
-      gtk_container_remove (GTK_CONTAINER (bbox), child);
-      if (is_secondary)
-        gtk_box_prepend (GTK_CONTAINER (bbox), child);
-      else
-        gtk_box_append (GTK_CONTAINER (bbox), child);
-      g_object_unref (child);
-    }
+    gtk_box_reorder_child (GTK_BOX (bbox), child, is_secondary ? gtk_widget_get_first_child (GTK_WIDGET (bbox)) : NULL);
 
   if (gtk_widget_get_visible (GTK_WIDGET (widget)) &&
       gtk_widget_get_visible (child))

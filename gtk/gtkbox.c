@@ -45,6 +45,9 @@
  * minimally placed between all children in the GtkBox. Note that
  * spacing is added between the children.
  *
+ * Use gtk_box_reorder_child() to move a GtkBox child to a different
+ * place in the box.
+ *
  * # CSS nodes
  *
  * GtkBox uses a single CSS node with name box.
@@ -1094,31 +1097,17 @@ _gtk_box_get_children (GtkBox *box)
 }
 
 void
-gtk_box_prepend (GtkBox    *box,
-                 GtkWidget *child)
-{
-  gtk_widget_insert_after (child, GTK_WIDGET (box), NULL);
-}
-
-void
-gtk_box_append (GtkBox    *box,
-                GtkWidget *child)
-{
-  gtk_widget_insert_before (child, GTK_WIDGET (box), NULL);
-}
-
-void
-gtk_box_insert_before (GtkBox    *box,
+gtk_box_reorder_child (GtkBox    *box,
                        GtkWidget *child,
                        GtkWidget *sibling)
 {
-  gtk_widget_insert_before (child, GTK_WIDGET (box), sibling);
-}
+  GtkWidget *widget = GTK_WIDGET (box);
 
-void
-gtk_box_insert_after (GtkBox    *box,
-                      GtkWidget *child,
-                      GtkWidget *sibling)
-{
-  gtk_widget_insert_after (child, GTK_WIDGET (box), sibling);
+  if (child == sibling)
+    return;
+
+  gtk_widget_insert_before (child, widget, sibling);
+  gtk_css_node_insert_before (gtk_widget_get_css_node (widget),
+                              gtk_widget_get_css_node (child),
+                              sibling ? gtk_widget_get_css_node (sibling) : NULL);
 }

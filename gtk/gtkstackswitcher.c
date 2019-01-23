@@ -235,19 +235,16 @@ on_position_updated (GtkWidget        *widget,
                            "position", &position,
                            NULL);
 
-  g_object_ref (button);
-  gtk_container_remove (GTK_BOX (self), button);
   if (position == 0)
-    gtk_box_prepend (GTK_BOX (self), button);
+    gtk_box_reorder_child (GTK_BOX (self), button, gtk_widget_get_first_child (GTK_WIDGET (self)));
   else
     {
       GtkWidget *sibling = gtk_widget_get_first_child (GTK_WIDGET (self));
       int i;
       for (i = 0; i < position; i++)
         sibling = gtk_widget_get_next_sibling (sibling);
-      gtk_box_insert_before (GTK_BOX (self), button, sibling);
+      gtk_box_reorder_child (GTK_BOX (self), button, sibling);
     }
-  g_object_unref (button);
 }
 
 static void

@@ -6198,8 +6198,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
                                         tab_pos_names[i]);
     }
 
-  g_object_ref (priv->header_widget);
-  gtk_container_remove (GTK_CONTAINER (priv->box), priv->header_widget);
   switch (tab_pos)
     {
     case GTK_POS_TOP:
@@ -6207,7 +6205,8 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       gtk_widget_set_vexpand (priv->tabs_widget, FALSE);
       gtk_widget_set_hexpand (priv->header_widget, TRUE);
       gtk_widget_set_vexpand (priv->header_widget, FALSE);
-      gtk_box_prepend (GTK_BOX (priv->box), priv->header_widget);
+      if (priv->show_tabs)
+        gtk_box_reorder_child (GTK_BOX (priv->box), priv->header_widget, gtk_widget_get_first_child (priv->box));
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), GTK_ORIENTATION_VERTICAL);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->header_widget), GTK_ORIENTATION_HORIZONTAL);
@@ -6218,7 +6217,8 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       gtk_widget_set_vexpand (priv->tabs_widget, FALSE);
       gtk_widget_set_hexpand (priv->header_widget, TRUE);
       gtk_widget_set_vexpand (priv->header_widget, FALSE);
-      gtk_box_append (GTK_BOX (priv->box), priv->header_widget);
+      if (priv->show_tabs)
+        gtk_box_reorder_child (GTK_BOX (priv->box), priv->header_widget, NULL);
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), GTK_ORIENTATION_VERTICAL);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->header_widget), GTK_ORIENTATION_HORIZONTAL);
@@ -6229,7 +6229,8 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       gtk_widget_set_vexpand (priv->tabs_widget, TRUE);
       gtk_widget_set_hexpand (priv->header_widget, FALSE);
       gtk_widget_set_vexpand (priv->header_widget, TRUE);
-      gtk_box_prepend (GTK_BOX (priv->box), priv->header_widget);
+      if (priv->show_tabs)
+        gtk_box_reorder_child (GTK_BOX (priv->box), priv->header_widget, gtk_widget_get_first_child (priv->box));
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), GTK_ORIENTATION_HORIZONTAL);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->header_widget), GTK_ORIENTATION_VERTICAL);
@@ -6240,7 +6241,8 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       gtk_widget_set_vexpand (priv->tabs_widget, TRUE);
       gtk_widget_set_hexpand (priv->header_widget, FALSE);
       gtk_widget_set_vexpand (priv->header_widget, TRUE);
-      gtk_box_append (GTK_BOX (priv->box), priv->header_widget);
+      if (priv->show_tabs)
+        gtk_box_reorder_child (GTK_BOX (priv->box), priv->header_widget, NULL);
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), GTK_ORIENTATION_HORIZONTAL);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->header_widget), GTK_ORIENTATION_VERTICAL);
@@ -6249,7 +6251,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       g_assert_not_reached ();
       break;
     }
-  g_object_unref (priv->header_widget);
 }
 
 /**
@@ -7148,10 +7149,11 @@ gtk_notebook_set_action_widget (GtkNotebook *notebook,
 
   if (widget)
     {
+      gtk_container_add (GTK_CONTAINER (priv->header_widget), widget);
       if (pack_type == GTK_PACK_START)
-        gtk_box_prepend (GTK_BOX (priv->header_widget), widget);
+        gtk_box_reorder_child (GTK_BOX (priv->header_widget), widget, gtk_widget_get_first_child (priv->header_widget));
       else
-        gtk_box_append (GTK_BOX (priv->header_widget), widget);
+        gtk_box_reorder_child (GTK_BOX (priv->header_widget), widget, NULL);
       gtk_widget_set_child_visible (widget, priv->show_tabs);
     }
 

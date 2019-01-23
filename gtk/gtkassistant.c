@@ -1125,13 +1125,7 @@ gtk_assistant_init (GtkAssistant *assistant)
       buttons = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
 
       for (l = buttons; l; l = l->next)
-        {
-          GtkWidget *child = l->data;
-          g_object_ref (child);
-          gtk_container_remove (GTK_CONTAINER (priv->action_area), child);
-          gtk_box_prepend (GTK_BOX (priv->action_area), child);
-          g_object_unref (child);
-        }
+        gtk_box_reorder_child (GTK_BOX (priv->action_area), GTK_WIDGET (l->data), NULL);
 
       g_list_free (buttons);
     }
@@ -1699,12 +1693,14 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
     {
       int i;
       sibling = gtk_widget_get_first_child (priv->sidebar);
-      for (i = 1; i < 2 * position; i++)
+      for (i = 0; i < 2 * position; i++)
         sibling = gtk_widget_get_next_sibling (sibling);
     }
 
-  gtk_box_insert_after (GTK_BOX (priv->sidebar), page_info->regular_title, sibling);
-  gtk_box_insert_after (GTK_BOX (priv->sidebar), page_info->current_title,  page_info->regular_title);
+  gtk_container_add (GTK_CONTAINER (priv->sidebar), page_info->regular_title);
+  gtk_container_add (GTK_CONTAINER (priv->sidebar), page_info->current_title);
+  gtk_box_reorder_child (GTK_BOX (priv->sidebar), page_info->regular_title, sibling);
+  gtk_box_reorder_child (GTK_BOX (priv->sidebar), page_info->current_title, sibling);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (box);
