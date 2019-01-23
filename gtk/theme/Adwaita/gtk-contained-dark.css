@@ -1590,7 +1590,9 @@ list { color: white; background-color: #26232d; border-color: #2a2a2b; }
 
 list:backdrop { background-color: #282530; border-color: #2f2e2f; }
 
-list row:not(.expander) { padding: 2px; }
+list row { padding: 2px; }
+
+list row.expander { padding: 0px; }
 
 list row.expander .row-header { padding: 2px; }
 
