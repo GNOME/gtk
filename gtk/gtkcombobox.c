@@ -1156,9 +1156,7 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
       gtk_widget_set_hexpand (child, TRUE);
       gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
       gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
-      gtk_container_add (GTK_CONTAINER (gtk_widget_get_parent (priv->arrow)),
-                         priv->cell_view);
-      gtk_box_reorder_child (GTK_BOX (gtk_widget_get_parent (priv->arrow)), priv->cell_view, 0);
+      gtk_box_prepend (GTK_BOX (gtk_widget_get_parent (priv->arrow)), priv->cell_view);
       _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
     }
 }
@@ -1193,8 +1191,7 @@ gtk_combo_box_add (GtkContainer *container,
     }
 
   gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (priv->box), widget);
-  gtk_box_reorder_child (GTK_BOX (priv->box), widget, 0);
+  gtk_box_prepend (GTK_BOX (priv->box), widget);
   _gtk_bin_set_child (GTK_BIN (container), widget);
 
   if (priv->has_entry)

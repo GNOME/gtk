@@ -45,9 +45,6 @@
  * minimally placed between all children in the GtkBox. Note that
  * spacing is added between the children.
  *
- * Use gtk_box_reorder_child() to move a GtkBox child to a different
- * place in the box.
- *
  * # CSS nodes
  *
  * GtkBox uses a single CSS node with name box.
@@ -1045,75 +1042,6 @@ gtk_box_get_baseline_position (GtkBox *box)
   g_return_val_if_fail (GTK_IS_BOX (box), GTK_BASELINE_POSITION_CENTER);
 
   return priv->baseline_pos;
-}
-
-/**
- * gtk_box_reorder_child:
- * @box: a #GtkBox
- * @child: the #GtkWidget to move
- * @position: the new position for @child in the list of children
- *   of @box, starting from 0. If negative, indicates the end of
- *   the list
- *
- * Moves @child to a new @position in the list of @box children.
- */
-void
-gtk_box_reorder_child (GtkBox    *box,
-		       GtkWidget *child,
-		       gint       position)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  widget = GTK_WIDGET (box);
-
-  if (position == 0)
-    {
-      gtk_widget_insert_after (child, widget, NULL);
-      gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
-                                 gtk_widget_get_css_node (child),
-                                 NULL);
-    }
-  else if (position < 0)
-    {
-      gtk_widget_insert_before (child, widget, NULL);
-      gtk_css_node_insert_before (gtk_widget_get_css_node (widget),
-                                  gtk_widget_get_css_node (child),
-                                  NULL);
-    }
-  else
-    {
-      int i = 0;
-      int old_pos = -1;
-      GtkWidget *p;
-      GtkWidget *new_next_sibling = NULL;
-
-
-      for (p = _gtk_widget_get_first_child (widget);
-           p != NULL;
-           p = _gtk_widget_get_next_sibling (p))
-        {
-          if (p == child)
-            old_pos = i;
-
-          if (i == position + 1)
-            {
-              new_next_sibling = p;
-            }
-
-          i ++;
-        }
-
-      if (position == old_pos)
-        return;
-
-      gtk_widget_insert_before (child, widget, new_next_sibling);
-      gtk_css_node_insert_before (gtk_widget_get_css_node (widget),
-                                  gtk_widget_get_css_node (child),
-                                  new_next_sibling ? gtk_widget_get_css_node (new_next_sibling) : NULL);
-    }
 }
 
 static void

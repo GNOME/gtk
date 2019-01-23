@@ -134,10 +134,7 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
     return;
 
   if (should_have_separator)
-    {
-      gtk_container_add (GTK_CONTAINER (box), box->separator);
-      gtk_box_reorder_child (GTK_BOX (box), box->separator, 0);
-    }
+    gtk_box_prepend (GTK_BOX (box), box->separator);
   else
     gtk_container_remove (GTK_CONTAINER (box), box->separator);
 }
@@ -332,8 +329,16 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
   g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
-  gtk_container_add (GTK_CONTAINER (box->item_box), widget);
-  gtk_box_reorder_child (GTK_BOX (box->item_box), widget, position);
+  if (position == 0)
+    gtk_box_prepend (GTK_BOX (box->item_box), widget);
+  else
+    {
+      GtkWidget *sibling = gtk_widget_get_first_child (GTK_WIDGET (box->item_box));
+      int i;
+      for (i = 1; i < position; i++)
+        sibling = gtk_widget_get_next_sibling (sibling);
+      gtk_box_insert_after (GTK_BOX (box->item_box), widget, sibling);
+    }
 
   gtk_menu_section_box_schedule_separator_sync (box);
 }
@@ -457,8 +462,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   g_object_set_data (G_OBJECT (button), "focus", focus);
   g_object_set_data (G_OBJECT (focus), "focus", button);
 
-  gtk_container_add (GTK_CONTAINER (box), button);
-  gtk_box_reorder_child (GTK_BOX (box), button, 0);
+  gtk_box_prepend (GTK_BOX (box), button);
 
   g_signal_connect (focus, "clicked", G_CALLBACK (open_submenu), item);
   g_signal_connect (button, "clicked", G_CALLBACK (close_submenu), item);

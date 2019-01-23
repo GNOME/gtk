@@ -865,6 +865,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   priv->box = gtk_box_new (priv->orientation, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (spin_button));
+
   priv->entry = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 0);
   gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), 0);
@@ -1036,17 +1037,24 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
            gtk_entry_get_alignment (entry) == 0.5)
     gtk_entry_set_alignment (entry, 0.0);
 
+  g_object_ref (priv->up_button);
+  g_object_ref (priv->down_button);
+  gtk_container_remove (GTK_CONTAINER (priv->box), priv->up_button);
+  gtk_container_remove (GTK_CONTAINER (priv->box), priv->down_button);
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Current orientation of the box is vertical! */
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->entry, 0);
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->down_button, 1);
+      gtk_box_insert_after (GTK_BOX (priv->box), priv->up_button, priv->entry);
+      gtk_box_insert_after (GTK_BOX (priv->box), priv->down_button, priv->up_button);
     }
   else
     {
       /* Current orientation of the box is horizontal! */
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->up_button, 0);
+      gtk_box_insert_before (GTK_BOX (priv->box), priv->up_button, priv->entry);
+      gtk_box_insert_after (GTK_BOX (priv->box), priv->down_button, priv->entry);
     }
+  g_object_unref (priv->up_button);
+  g_object_unref (priv->down_button);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), priv->orientation);
 

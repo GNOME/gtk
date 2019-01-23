@@ -92,11 +92,6 @@ GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_box_reorder_child       (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         gint            position);
-
-GDK_AVAILABLE_IN_ALL
 void        gtk_box_prepend             (GtkBox         *box,
                                          GtkWidget      *child);
 GDK_AVAILABLE_IN_ALL

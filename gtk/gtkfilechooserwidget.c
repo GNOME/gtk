@@ -916,8 +916,7 @@ update_preview_widget_visibility (GtkFileChooserWidget *impl)
       if (!priv->preview_label)
         {
           priv->preview_label = gtk_label_new (priv->preview_display_name);
-          gtk_container_add (GTK_CONTAINER (priv->preview_box), priv->preview_label);
-          gtk_box_reorder_child (GTK_BOX (priv->preview_box), priv->preview_label, 0);
+          gtk_box_prepend (GTK_BOX (priv->preview_box), priv->preview_label);
           gtk_label_set_ellipsize (GTK_LABEL (priv->preview_label), PANGO_ELLIPSIZE_MIDDLE);
           gtk_widget_show (priv->preview_label);
         }
@@ -957,10 +956,10 @@ set_preview_widget (GtkFileChooserWidget *impl,
   if (priv->preview_widget)
     {
       gtk_widget_show (priv->preview_widget);
-      gtk_container_add (GTK_CONTAINER (priv->preview_box), priv->preview_widget);
-      gtk_box_reorder_child (GTK_BOX (priv->preview_box),
-                             priv->preview_widget,
-                             (priv->use_preview_label && priv->preview_label) ? 1 : 0);
+      if (priv->use_preview_label && priv->preview_label)
+        gtk_box_insert_after (GTK_BOX (priv->preview_box), priv->preview_widget, priv->preview_label);
+      else
+        gtk_box_prepend (GTK_BOX (priv->preview_box), priv->preview_widget);
     }
 
   update_preview_widget_visibility (impl);
@@ -2607,8 +2606,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), priv->location_entry);
 
   priv->save_widgets = vbox;
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->save_widgets);
-  gtk_box_reorder_child (GTK_BOX (priv->box), priv->save_widgets, 0);
+  gtk_box_prepend (GTK_BOX (priv->box), priv->save_widgets);
   gtk_widget_show (priv->save_widgets);
 }
 

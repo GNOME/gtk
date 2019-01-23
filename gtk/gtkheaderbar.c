@@ -468,9 +468,10 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               continue;
             }
 
-          gtk_container_add (GTK_CONTAINER (box), separator);
           if (i == 1)
-            gtk_box_reorder_child (GTK_BOX (box), separator, 0);
+            gtk_box_prepend (GTK_BOX (box), separator);
+          else
+            gtk_box_append (GTK_BOX (box), separator);
 
           if (i == 0)
             gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LEFT);

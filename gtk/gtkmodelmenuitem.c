@@ -191,8 +191,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
 
       image = gtk_image_new_from_gicon (icon);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
-      gtk_container_add (GTK_CONTAINER (child), image);
-      gtk_box_reorder_child (GTK_BOX (child), image, 0);
+      gtk_box_prepend (GTK_BOX (child), image);
     }
 
   g_object_notify (G_OBJECT (item), "icon");

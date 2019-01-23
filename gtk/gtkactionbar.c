@@ -210,8 +210,7 @@ gtk_action_bar_set_child_property (GtkContainer *container,
             {
               g_object_ref (child);
               gtk_container_remove (GTK_CONTAINER (priv->start_box), child);
-              gtk_container_add (GTK_CONTAINER (priv->end_box), child);
-              gtk_box_reorder_child (GTK_BOX (priv->end_box), child, 0);
+              gtk_box_prepend (GTK_BOX (priv->end_box), child);
               g_object_unref (child);
             }
         }
@@ -221,7 +220,7 @@ gtk_action_bar_set_child_property (GtkContainer *container,
             {
               g_object_ref (child);
               gtk_container_remove (GTK_CONTAINER (priv->end_box), child);
-              gtk_container_add (GTK_CONTAINER (priv->start_box), child);
+              gtk_box_append (GTK_BOX (priv->start_box), child);
               g_object_unref (child);
             }
         }
@@ -462,7 +461,7 @@ gtk_action_bar_pack_start (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_container_add (GTK_CONTAINER (priv->start_box), child);
+  gtk_box_append (GTK_BOX (priv->start_box), child);
 }
 
 /**
@@ -479,8 +478,7 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_container_add (GTK_CONTAINER (priv->end_box), child);
-  gtk_box_reorder_child (GTK_BOX (priv->end_box), child, 0);
+  gtk_box_prepend (GTK_BOX (priv->end_box), child);
 }
 
 /**
