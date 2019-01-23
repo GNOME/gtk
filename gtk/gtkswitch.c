@@ -288,12 +288,14 @@ gtk_switch_update_state_labels (GtkSwitch *sw)
   const char *on_glyphs[] = {
     "⏽", /* U+23FD POWER ON SYMBOL */
     "❙", /* U+2759 MEDIUM VERTICAL BAR */
+    ""
   };
 
   /* Glyphs for the OFF state, in descending order of preference */
   const char *off_glyphs[] = {
     "⭘", /* U+2B58 HEAVY CIRCLE */
     "○", /* U+25CB WHITE CIRCLE */
+    ""
   };
 
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
