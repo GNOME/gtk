@@ -3966,7 +3966,7 @@ cups_request_ppd (GtkPrinter *printer)
   g_io_channel_set_encoding (data->ppd_io, NULL, NULL);
   g_io_channel_set_close_on_unref (data->ppd_io, TRUE);
 
-  data->printer = g_object_ref (printer);
+  data->printer = (GtkPrinterCups *) g_object_ref (printer);
 
   resource = g_strdup_printf ("/printers/%s.ppd",
                               gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS (printer)));
