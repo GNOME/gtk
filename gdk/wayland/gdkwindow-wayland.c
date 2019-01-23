@@ -3532,14 +3532,20 @@ gdk_wayland_window_focus (GdkWindow *window,
   if (!impl->display_server.gtk_surface)
     return;
 
-  /* We didn't have an event to fetch a time from, meaning we have nothing valid
-   * to send. This should rather be translated to a 'needs-attention' request or
-   * something.
-   */
   if (timestamp == GDK_CURRENT_TIME)
-    return;
+    {
+      GdkWaylandDisplay *display_wayland =
+        GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
 
-  gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
+      if (display_wayland->gtk_shell_version >= 3)
+        {
+          gtk_surface1_request_focus (impl->display_server.gtk_surface,
+                                      display_wayland->startup_notification_id);
+          g_clear_pointer (&display_wayland->startup_notification_id, g_free);
+        }
+    }
+  else
+    gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
 }
 
 static void
