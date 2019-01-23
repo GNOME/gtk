@@ -115,6 +115,7 @@ typedef guint64 GtkCssChange;
  * @GTK_CSS_AFFECTS_POSTEFFECT: An effect is applied after drawing that changes
  * @GTK_CSS_AFFECTS_TEXT: Affects anything related to text rendering.
  * @GTK_CSS_AFFECTS_REDRAW: Affects anything that requires redraw.
+ * @GTK_CSS_AFFECTS_TRANSFORM: Affects the element transformation.
  *
  * The generic effects that a CSS property can have. If a value is
  * set, then the property will have an influence on that feature.
@@ -133,7 +134,8 @@ typedef enum {
   GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 8),
   GTK_CSS_AFFECTS_OUTLINE       = (1 << 9),
   GTK_CSS_AFFECTS_SIZE          = (1 << 10),
-  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 11)
+  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 11),
+  GTK_CSS_AFFECTS_TRANSFORM     = (1 << 12),
 } GtkCssAffects;
 
 #define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_CONTENT |       \
