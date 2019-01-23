@@ -451,7 +451,7 @@ plane_set_property (GObject      *object,
 		    GParamSpec   *pspec)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (object);
-  GObject *adjustment;
+  GtkAdjustment *adjustment;
 
   /* Construct only properties can only be set once, these are created
    * only in order to be properly buildable from gtkcoloreditor.ui
