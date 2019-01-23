@@ -302,12 +302,14 @@ gtk_switch_create_pango_layouts (GtkSwitch *self)
   const char *on_glyphs[] = {
     "⏽", /* U+23FD POWER ON SYMBOL */
     "❙", /* U+2759 MEDIUM VERTICAL BAR */
+    ""
   };
 
   /* Glyphs for the OFF state, in descending order of preference */
   const char *off_glyphs[] = {
     "⭘", /* U+2B58 HEAVY CIRCLE */
     "○", /* U+25CB WHITE CIRCLE */
+    ""
   };
   int i;
 
