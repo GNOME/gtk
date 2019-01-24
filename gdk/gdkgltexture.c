@@ -189,7 +189,7 @@ gdk_gl_texture_release (GdkGLTexture *self)
  *
  * Note that the GL texture must not be modified until @destroy is called,
  * which will happen when the GdkTexture object is finalized, or due to
- * an explicit call of gdk_texture_release_gl().
+ * an explicit call of gdk_gl_texture_release().
  *
  * Return value: (transfer full): A newly-created #GdkTexture
  */
