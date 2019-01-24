@@ -121,8 +121,7 @@ enum {
 
 enum {
   CHILD_PROP_0,
-  CHILD_PROP_PACK_TYPE,
-  CHILD_PROP_POSITION
+  CHILD_PROP_PACK_TYPE
 };
 
 static GParamSpec *header_bar_props[LAST_PROP] = { NULL, };
@@ -1543,7 +1542,6 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
   gtk_widget_set_parent (widget, GTK_WIDGET (bar));
   g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
   gtk_widget_child_notify (widget, "pack-type");
-  gtk_widget_child_notify (widget, "position");
   gtk_widget_thaw_child_notify (widget);
 
   _gtk_header_bar_update_separator_visibility (bar);
@@ -1634,38 +1632,6 @@ gtk_header_bar_forall (GtkContainer *container,
     }
 }
 
-static void
-gtk_header_bar_reorder_child (GtkHeaderBar *bar,
-                              GtkWidget    *widget,
-                              gint          position)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GList *l;
-  gint old_position;
-  Child *child;
-
-  l = find_child_link (bar, widget, &old_position);
-
-  if (l == NULL)
-    return;
-
-  if (old_position == position)
-    return;
-
-  child = l->data; 
-  priv->children = g_list_delete_link (priv->children, l);
-
-  if (position < 0)
-    l = NULL;
-  else
-    l = g_list_nth (priv->children, position);
-
-  priv->children = g_list_insert_before (priv->children, l, child);
-  gtk_header_bar_reorder_css_node (bar, child->pack_type, widget);
-  gtk_widget_child_notify (widget, "position");
-  gtk_widget_queue_resize (widget);
-}
-
 static GType
 gtk_header_bar_child_type (GtkContainer *container)
 {
@@ -1680,7 +1646,6 @@ gtk_header_bar_get_child_property (GtkContainer *container,
                                    GParamSpec   *pspec)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (container);
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *l;
   Child *child;
 
@@ -1697,10 +1662,6 @@ gtk_header_bar_get_child_property (GtkContainer *container,
     {
     case CHILD_PROP_PACK_TYPE:
       g_value_set_enum (value, child->pack_type);
-      break;
-
-    case CHILD_PROP_POSITION:
-      g_value_set_int (value, g_list_position (priv->children, l));
       break;
 
     default:
@@ -1732,10 +1693,6 @@ gtk_header_bar_set_child_property (GtkContainer *container,
       child->pack_type = g_value_get_enum (value);
       _gtk_header_bar_update_separator_visibility (bar);
       gtk_widget_queue_resize (widget);
-      break;
-
-    case CHILD_PROP_POSITION:
-      gtk_header_bar_reorder_child (bar, widget, g_value_get_int (value));
       break;
 
     default:
@@ -1838,13 +1795,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                                  P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
                                                                  GTK_TYPE_PACK_TYPE, GTK_PACK_START,
                                                                  GTK_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_POSITION,
-                                              g_param_spec_int ("position",
-                                                                P_("Position"),
-                                                                P_("The index of the child in the parent"),
-                                                                -1, G_MAXINT, 0,
-                                                                GTK_PARAM_READWRITE));
 
   header_bar_props[PROP_TITLE] =
       g_param_spec_string ("title",
