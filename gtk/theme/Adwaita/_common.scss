@@ -2100,6 +2100,7 @@ treeview.view {
 }
 
 
+
 /*********
  * Menus *
  *********/
@@ -2115,9 +2116,14 @@ menubar,
     min-height: 16px;
     padding: 4px 8px;
 
+    // remove padding and rounding from menubar submenus
     menu {
-    	border-radius: 0 0 $menu_radius $menu_radius;
-      	menu { border-radius: $menu_radius; }
+      border-radius: 0;
+      padding:0;
+      menu {
+        border-radius: 0;
+        padding:0;
+      }
     }
 
     &:hover { //Seems like it :hover even with keyboard focus
@@ -2130,6 +2136,9 @@ menubar,
       box-shadow: none;
     }
   }
+
+  // remove padding and rounding from menubar submenu decoration
+  .csd.popup decoration {border-radius:0;}
 }
 
 // Needed to make the border-radius of menus work

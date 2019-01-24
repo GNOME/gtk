@@ -801,13 +801,15 @@ menubar:backdrop, .menubar:backdrop { background-color: #3f3e40; }
 
 menubar > menuitem, .menubar > menuitem { min-height: 16px; padding: 4px 8px; }
 
-menubar > menuitem menu, .menubar > menuitem menu { border-radius: 0 0 5px 5px; }
+menubar > menuitem menu, .menubar > menuitem menu { border-radius: 0; padding: 0; }
 
-menubar > menuitem menu menu, .menubar > menuitem menu menu { border-radius: 5px; }
+menubar > menuitem menu menu, .menubar > menuitem menu menu { border-radius: 0; padding: 0; }
 
 menubar > menuitem:hover, .menubar > menuitem:hover { box-shadow: inset 0 -3px #15539e; color: #3584e4; }
 
 menubar > menuitem:disabled, .menubar > menuitem:disabled { color: #969696; box-shadow: none; }
+
+menubar .csd.popup decoration, .menubar .csd.popup decoration { border-radius: 0; }
 
 .background.popup { background-color: transparent; }
 
