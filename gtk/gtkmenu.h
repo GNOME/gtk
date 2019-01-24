@@ -177,14 +177,6 @@ void	   gtk_menu_set_display           (GtkMenu	       *menu,
 					   GdkDisplay          *display);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_menu_attach                (GtkMenu             *menu,
-                                           GtkWidget           *child,
-                                           guint                left_attach,
-                                           guint                right_attach,
-                                           guint                top_attach,
-                                           guint                bottom_attach);
-
-GDK_AVAILABLE_IN_ALL
 void       gtk_menu_set_monitor           (GtkMenu             *menu,
                                            gint                 monitor_num);
 GDK_AVAILABLE_IN_ALL
