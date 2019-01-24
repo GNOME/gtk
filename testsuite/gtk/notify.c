@@ -529,7 +529,7 @@ test_type (gconstpointer data)
 
       /* Special restrictions on allowed values */
       if (pspec->owner_type == GTK_TYPE_COMBO_BOX &&
-           g_str_equal (pspec->name, "id-column") ||
+          (g_str_equal (pspec->name, "id-column") ||
            g_str_equal (pspec->name, "active-id") ||
            g_str_equal (pspec->name, "entry-text-column")))
         continue;
