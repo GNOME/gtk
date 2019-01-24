@@ -67,8 +67,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkColorSelectionDialog","has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkColorSelection",      "child",                NULL, },
     { "GtkColorSelection",      "current-color",        (void*) NULL, },                /* not a valid boxed color */
-    { "GtkComboBox",            "row-span-column",      (void*) MATCH_ANY_VALUE },      /* GtkComboBoxEntry needs a tree model for this */
-    { "GtkComboBox",            "column-span-column",   (void*) MATCH_ANY_VALUE },      /* GtkComboBoxEntry needs a tree model for this */
     { "GtkFileChooserButton",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_SAVE },
     { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER },
