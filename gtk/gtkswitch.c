@@ -60,7 +60,7 @@
 #include "gtkgesturesingle.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
-#include "gtklabel.h"
+#include "gtkimage.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
@@ -86,8 +86,8 @@ struct _GtkSwitchPrivate
   guint state                 : 1;
   guint is_active             : 1;
 
-  GtkWidget *on_label;
-  GtkWidget *off_label;
+  GtkWidget *on_image;
+  GtkWidget *off_image;
   GtkWidget *slider;
 };
 typedef struct _GtkSwitchPrivate GtkSwitchPrivate;
@@ -282,56 +282,6 @@ gtk_switch_activate (GtkSwitch *sw)
 }
 
 static void
-gtk_switch_update_state_labels (GtkSwitch *sw)
-{
-  /* Glyphs for the ON state, in descending order of preference */
-  const char *on_glyphs[] = {
-    "⏽", /* U+23FD POWER ON SYMBOL */
-    "❙", /* U+2759 MEDIUM VERTICAL BAR */
-    ""
-  };
-
-  /* Glyphs for the OFF state, in descending order of preference */
-  const char *off_glyphs[] = {
-    "⭘", /* U+2B58 HEAVY CIRCLE */
-    "○", /* U+25CB WHITE CIRCLE */
-    ""
-  };
-
-  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
-  GtkWidget *widget = GTK_WIDGET (sw);
-  int i;
-
-  for (i = 0; i < G_N_ELEMENTS (on_glyphs); i++)
-    {
-      PangoLayout *layout = gtk_widget_create_pango_layout (widget, on_glyphs[i]);
-
-      if (pango_layout_get_unknown_glyphs_count (layout) == 0)
-        {
-          gtk_label_set_text (GTK_LABEL (priv->on_label), on_glyphs[i]);
-          g_object_unref (layout);
-          break;
-        }
-
-      g_object_unref (layout);
-    }
-
-  for (i = 0; i < G_N_ELEMENTS (off_glyphs); i++)
-    {
-      PangoLayout *layout = gtk_widget_create_pango_layout (widget, off_glyphs[i]);
-
-      if (pango_layout_get_unknown_glyphs_count (layout) == 0)
-        {
-          gtk_label_set_text (GTK_LABEL (priv->off_label), off_glyphs[i]);
-          g_object_unref (layout);
-          break;
-        }
-
-      g_object_unref (layout);
-    }
-}
-
-static void
 gtk_switch_measure (GtkWidget      *widget,
                     GtkOrientation  orientation,
                     int             for_size,
@@ -349,8 +299,8 @@ gtk_switch_measure (GtkWidget      *widget,
                       &slider_minimum, &slider_natural,
                       NULL, NULL);
 
-  gtk_widget_measure (priv->on_label, orientation, for_size, NULL, &on_nat, NULL, NULL);
-  gtk_widget_measure (priv->off_label, orientation, for_size, NULL, &off_nat, NULL, NULL);
+  gtk_widget_measure (priv->on_image, orientation, for_size, NULL, &on_nat, NULL, NULL);
+  gtk_widget_measure (priv->off_image, orientation, for_size, NULL, &off_nat, NULL, NULL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -383,48 +333,23 @@ gtk_switch_size_allocate (GtkWidget *widget,
                               width / 2, height
                             }, -1);
 
-  /* Center ON label in left half */
-  gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  /* Center ON icon in left half */
+  gtk_widget_measure (priv->on_image, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
   child_alloc.x = ((width / 2) - min) / 2;
   child_alloc.width = min;
-  gtk_widget_measure (priv->on_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
+  gtk_widget_measure (priv->on_image, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (priv->on_label, &child_alloc, -1);
+  gtk_widget_size_allocate (priv->on_image, &child_alloc, -1);
 
-  /* Center OFF label in right half */
-  gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  /* Center OFF icon in right half */
+  gtk_widget_measure (priv->off_image, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
   child_alloc.x = (width / 2) + ((width / 2) - min) / 2;
   child_alloc.width = min;
-  gtk_widget_measure (priv->off_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
+  gtk_widget_measure (priv->off_image, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (priv->off_label, &child_alloc, -1);
-}
-
-static void
-gtk_switch_style_updated (GtkWidget *widget)
-{
-  GtkSwitch *self = GTK_SWITCH (widget);
-  GtkCssStyleChange *change;
-  GtkStyleContext *context;
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->style_updated (widget);
-
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
-    gtk_switch_update_state_labels (self);
-}
-
-static void
-gtk_switch_display_changed (GtkWidget  *widget,
-                            GdkDisplay *previous_display)
-{
-  GtkSwitch *self = GTK_SWITCH (widget);
-
-  gtk_switch_update_state_labels (self);
+  gtk_widget_size_allocate (priv->off_image, &child_alloc, -1);
 }
 
 static void
@@ -559,8 +484,8 @@ gtk_switch_finalize (GObject *object)
 
   gtk_switch_end_toggle_animation (GTK_SWITCH (object));
 
-  gtk_widget_unparent (priv->on_label);
-  gtk_widget_unparent (priv->off_label);
+  gtk_widget_unparent (priv->on_image);
+  gtk_widget_unparent (priv->off_image);
   gtk_widget_unparent (priv->slider);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->finalize (object);
@@ -619,8 +544,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   widget_class->measure = gtk_switch_measure;
   widget_class->size_allocate = gtk_switch_size_allocate;
-  widget_class->style_updated = gtk_switch_style_updated;
-  widget_class->display_changed = gtk_switch_display_changed;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
@@ -718,16 +641,14 @@ gtk_switch_init (GtkSwitch *self)
   priv->pan_gesture = gesture;
 
 
-  priv->on_label = gtk_label_new ("");
-  gtk_widget_set_parent (priv->on_label, GTK_WIDGET (self));
+  priv->on_image = gtk_image_new_from_icon_name ("on-symbolic");
+  gtk_widget_set_parent (priv->on_image, GTK_WIDGET (self));
 
-  priv->off_label = gtk_label_new ("");
-  gtk_widget_set_parent (priv->off_label, GTK_WIDGET (self));
+  priv->off_image = gtk_image_new_from_icon_name ("off-symbolic");
+  gtk_widget_set_parent (priv->off_image, GTK_WIDGET (self));
 
   priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
   gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
-
-  gtk_switch_update_state_labels (self);
 }
 
 /**
