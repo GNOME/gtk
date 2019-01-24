@@ -63,6 +63,7 @@
 #include "gtkactionhelper.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssgadgetprivate.h"
+#include "gtkiconhelperprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -86,8 +87,8 @@ struct _GtkSwitchPrivate
 
   GtkCssGadget *gadget;
   GtkCssGadget *slider_gadget;
-  PangoLayout  *off_layout;
-  PangoLayout  *on_layout;
+  GtkCssGadget *on_gadget;
+  GtkCssGadget *off_gadget;
 
   double handle_pos;
   guint tick_id;
@@ -293,82 +294,6 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
   gtk_widget_queue_allocate (GTK_WIDGET (sw));
 }
 
-static void
-gtk_switch_create_pango_layouts (GtkSwitch *self)
-{
-  GtkSwitchPrivate *priv = self->priv;
-
-  /* Glyphs for the ON state, in descending order of preference */
-  const char *on_glyphs[] = {
-    "⏽", /* U+23FD POWER ON SYMBOL */
-    "❙", /* U+2759 MEDIUM VERTICAL BAR */
-    ""
-  };
-
-  /* Glyphs for the OFF state, in descending order of preference */
-  const char *off_glyphs[] = {
-    "⭘", /* U+2B58 HEAVY CIRCLE */
-    "○", /* U+25CB WHITE CIRCLE */
-    ""
-  };
-  int i;
-
-  g_clear_object (&priv->on_layout);
-
-  for (i = 0; i < G_N_ELEMENTS (on_glyphs); i++)
-    {
-      PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), on_glyphs[i]);
-
-      if (pango_layout_get_unknown_glyphs_count (layout) == 0)
-        {
-          priv->on_layout = layout;
-          break;
-        }
-
-      g_object_unref (layout);
-    }
-
-  g_clear_object (&priv->off_layout);
-
-  for (i = 0; i < G_N_ELEMENTS (off_glyphs); i++)
-    {
-      PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), off_glyphs[i]);
-
-      if (pango_layout_get_unknown_glyphs_count (layout) == 0)
-        {
-          priv->off_layout = layout;
-          break;
-        }
-
-      g_object_unref (layout);
-    }
-}
-
-static void
-gtk_switch_screen_changed (GtkWidget *widget,
-                           GdkScreen *prev_screen)
-{
-  gtk_switch_create_pango_layouts (GTK_SWITCH (widget));
-}
-
-static void
-gtk_switch_style_updated (GtkWidget *widget)
-{
-  GtkSwitch *self = GTK_SWITCH (widget);
-  GtkStyleContext *context;
-  GtkCssStyleChange *change;
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->style_updated (widget);
-
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
-    gtk_switch_create_pango_layouts (self);
-}
-
-
-
 static gboolean
 gtk_switch_enter (GtkWidget        *widget,
                   GdkEventCrossing *event)
@@ -454,7 +379,8 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
   GtkSwitch *self;
   GtkSwitchPrivate *priv;
   gint slider_minimum, slider_natural;
-  PangoRectangle on_rect, off_rect;
+  gint on_minimum, on_natural;
+  gint off_minimum, off_natural;
 
   widget = gtk_css_gadget_get_owner (gadget);
   self = GTK_SWITCH (widget);
@@ -466,20 +392,26 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
                                      &slider_minimum, &slider_natural,
                                      NULL, NULL);
 
-  pango_layout_get_pixel_extents (priv->on_layout, NULL, &on_rect);
-  pango_layout_get_pixel_extents (priv->off_layout, NULL, &off_rect);
+  gtk_css_gadget_get_preferred_size (priv->on_gadget,
+                                     orientation,
+                                     -1,
+                                     &on_minimum, &on_natural,
+                                     NULL, NULL);
+  gtk_css_gadget_get_preferred_size (priv->off_gadget,
+                                     orientation,
+                                     -1,
+                                     &off_minimum, &off_natural,
+                                     NULL, NULL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      int text_width = MAX (on_rect.width, off_rect.width);
-      *minimum = 2 * MAX (slider_minimum, text_width);
-      *natural = 2 * MAX (slider_natural, text_width);
+      *minimum = 2 * MAX (slider_minimum, MAX (on_minimum, off_minimum));
+      *natural = 2 * MAX (slider_natural, MAX (on_natural, off_natural));
     }
   else
     {
-      int text_height = MAX (on_rect.height, off_rect.height);
-      *minimum = MAX (slider_minimum, text_height);
-      *natural = MAX (slider_natural, text_height);
+      *minimum = MAX (slider_minimum, MAX (on_minimum, off_minimum));
+      *natural = MAX (slider_natural, MAX (on_natural, off_natural));
     }
 }
 
@@ -516,15 +448,28 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
 {
   GtkSwitch *self = GTK_SWITCH (gtk_css_gadget_get_owner (gadget));
   GtkSwitchPrivate *priv = self->priv;
-  GtkAllocation slider_alloc;
+  GtkAllocation child_alloc;
   
-  slider_alloc.x = allocation->x + round (priv->handle_pos * (allocation->width - allocation->width / 2));
-  slider_alloc.y = allocation->y;
-  slider_alloc.width = allocation->width / 2;
-  slider_alloc.height = allocation->height;
+  child_alloc.x = allocation->x + round (priv->handle_pos * (allocation->width - allocation->width / 2));
+  child_alloc.y = allocation->y;
+  child_alloc.width = allocation->width / 2;
+  child_alloc.height = allocation->height;
 
   gtk_css_gadget_allocate (priv->slider_gadget,
-                           &slider_alloc,
+                           &child_alloc,
+                           baseline,
+                           out_clip);
+
+  child_alloc.x = allocation->x;
+
+  gtk_css_gadget_allocate (priv->on_gadget,
+                           &child_alloc,
+                           baseline,
+                           out_clip);
+
+  child_alloc.x = allocation->x + allocation->width/2;
+  gtk_css_gadget_allocate (priv->off_gadget,
+                           &child_alloc,
                            baseline,
                            out_clip);
 
@@ -653,24 +598,9 @@ gtk_switch_render_trough (GtkCssGadget *gadget,
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-  GtkStyleContext *context = gtk_widget_get_style_context (widget);
-  PangoRectangle rect;
-  gint label_x, label_y;
 
-  pango_layout_get_pixel_extents (priv->on_layout, NULL, &rect);
-
-  label_x = x + ((width / 2) - rect.width) / 2;
-  label_y = y + (height - rect.height) / 2;
-
-  gtk_render_layout (context, cr, label_x, label_y, priv->on_layout);
-
-  pango_layout_get_pixel_extents (priv->off_layout, NULL, &rect);
-
-  label_x = x + (width / 2) + ((width / 2) - rect.width) / 2;
-  label_y = y + (height - rect.height) / 2;
-
-  gtk_render_layout (context, cr, label_x, label_y, priv->off_layout);
-
+  gtk_css_gadget_draw (priv->on_gadget, cr);
+  gtk_css_gadget_draw (priv->off_gadget, cr);
   gtk_css_gadget_draw (priv->slider_gadget, cr);
 
   return FALSE;
@@ -861,12 +791,11 @@ gtk_switch_dispose (GObject *object)
 
   g_clear_object (&priv->gadget);
   g_clear_object (&priv->slider_gadget);
+  g_clear_object (&priv->on_gadget);
+  g_clear_object (&priv->off_gadget);
 
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
-
-  g_clear_object (&priv->on_layout);
-  g_clear_object (&priv->off_layout);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
@@ -960,8 +889,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->draw = gtk_switch_draw;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
-  widget_class->screen_changed = gtk_switch_screen_changed;
-  widget_class->style_updated = gtk_switch_style_updated;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
@@ -1091,6 +1018,16 @@ gtk_switch_init (GtkSwitch *self)
                                                    NULL,
                                                    NULL);
 
+  priv->on_gadget = gtk_icon_helper_new_named ("image", GTK_WIDGET (self));
+  _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (priv->on_gadget), "switch-on-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->on_gadget), widget_node);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->on_gadget), gtk_css_node_get_state (widget_node));
+
+  priv->off_gadget = gtk_icon_helper_new_named ("image", GTK_WIDGET (self));
+  _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (priv->off_gadget), "switch-off-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->off_gadget), widget_node);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->off_gadget), gtk_css_node_get_state (widget_node));
+
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
@@ -1113,8 +1050,6 @@ gtk_switch_init (GtkSwitch *self)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   priv->pan_gesture = gesture;
-
-  gtk_switch_create_pango_layouts (self);
 }
 
 /**
