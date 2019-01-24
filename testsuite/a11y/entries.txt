@@ -152,7 +152,8 @@ window1
       <AtkText>
       text: text
       character count: 4
-      caret offset: 0
+      caret offset: 4
+      selection 0: (0, 4) text
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>

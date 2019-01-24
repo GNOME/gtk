@@ -7,6 +7,14 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
+  unnamed-GtkContainerAccessible-0
+    "panel"
+    parent: window1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
   box1
     "filler"
     parent: window1

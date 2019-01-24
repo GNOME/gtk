@@ -773,7 +773,7 @@ window1
                 parent: grid
                 index: 0
                 description: Pick a color from the screen
-                state: enabled focusable sensitive has-tooltip
+                state: enabled focusable sensitive visible has-tooltip
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget

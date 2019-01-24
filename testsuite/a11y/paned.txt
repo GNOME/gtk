@@ -18,8 +18,8 @@ window1
     alpha: 1
     <AtkValue>
     minimum value: 0.000000
-    maximum value: 59.000000
-    current value: 25.000000
+    maximum value: 60.000000
+    current value: 26.000000
     label1
       "label"
       parent: paned1
