@@ -23,39 +23,6 @@
  * oh yes, this test app surely has a lot of ugly code
  */
 
-/* grid combo demo */
-static GdkPixbuf *
-create_color_pixbuf (const char *color)
-{
-        GdkPixbuf *pixbuf;
-        GdkRGBA rgba;
-
-        int x;
-        int num;
-        guchar *pixels, *p;
-
-        if (!gdk_rgba_parse (&rgba, color))
-                return NULL;
-
-        pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-                                 FALSE, 8,
-                                 16, 16);
-
-        p = pixels = gdk_pixbuf_get_pixels (pixbuf);
-
-        num = gdk_pixbuf_get_width (pixbuf) *
-                gdk_pixbuf_get_height (pixbuf);
-
-        for (x = 0; x < num; x++) {
-                p[0] = rgba.red * 255;
-                p[1] = rgba.green * 255;
-                p[2] = rgba.blue * 255;
-                p += 3;
-        }
-
-        return pixbuf;
-}
-
 /* blaat */
 static GtkTreeModel *
 create_tree_blaat (void)
@@ -956,7 +923,7 @@ int
 main (int argc, char **argv)
 {
         GtkWidget *window, *cellview, *mainbox;
-        GtkWidget *combobox, *comboboxtext, *comboboxgrid;
+        GtkWidget *combobox, *comboboxtext;
         GtkWidget *tmp, *boom;
         GtkCellRenderer *renderer;
         GtkTreeModel *model;
