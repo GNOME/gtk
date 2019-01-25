@@ -29,7 +29,6 @@
 struct _GdkQuartzMonitor
 {
   GdkMonitor parent;
-  gint monitor_num;
   CGDirectDisplayID id;
 };
 

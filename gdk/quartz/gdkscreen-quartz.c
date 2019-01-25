@@ -120,9 +120,9 @@ gdk_quartz_screen_finalize (GObject *object)
 static void
 gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
 {
-  int i, monitors;
+  uint32_t max_displays = 0, disp;
+  CGDirectDisplayID *displays;
   int max_x, max_y;
-  GdkDisplay *display = gdk_screen_get_display (GDK_SCREEN (screen));
 
   screen->width = 0;
   screen->height = 0;
@@ -136,22 +136,20 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
    * covered by the monitors.  From this we can deduce the width
    * and height of the root screen.
    */
-  monitors = gdk_display_get_n_monitors (display);
-  for (i = 0; i < monitors; ++i)
+  CGGetActiveDisplayList (0, NULL, &max_displays);
+  displays = g_new0 (CGDirectDisplayID, max_displays);
+  CGGetActiveDisplayList (max_displays, displays, &max_displays);
+
+  for (disp = 0; disp < max_displays; ++disp)
     {
-      GdkQuartzMonitor *monitor =
-           GDK_QUARTZ_MONITOR (gdk_display_get_monitor (display, i));
-      GdkRectangle rect;
-
-      gdk_monitor_get_geometry (GDK_MONITOR (monitor), &rect);
-      screen->min_x = MIN (screen->min_x, rect.x);
-      max_x = MAX (max_x, rect.x + rect.width);
-
-      screen->min_y = MIN (screen->min_y, rect.y);
-      max_y = MAX (max_y, rect.y + rect.height);
-
-      screen->mm_height += GDK_MONITOR (monitor)->height_mm;
-      screen->mm_width += GDK_MONITOR (monitor)->width_mm;
+      CGRect bounds = CGDisplayBounds (displays[disp]);
+      CGSize disp_size = CGDisplayScreenSize (displays[disp]);
+      screen->min_x = MIN (screen->min_x, (int)trunc (bounds.origin.x));
+      screen->min_y = MIN (screen->min_y, (int)trunc (bounds.origin.y));
+      max_x = MAX (max_x, (int)trunc (bounds.origin.x + bounds.size.width));
+      max_y = MAX (max_y, (int)trunc (bounds.origin.y + bounds.size.height));
+      screen->mm_width += (int)trunc (disp_size.height);
+      screen->mm_height += (int)trunc (disp_size.width);
     }
 
   screen->width = max_x - screen->min_x;

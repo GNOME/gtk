@@ -235,7 +235,7 @@ get_active_displays (CGDirectDisplayID **screens)
 }
 
 static void
-configure_monitor (GdkMonitor *monitor)
+configure_monitor (GdkMonitor *monitor, const GdkRectangle *screen_rect)
 {
   GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR (monitor);
   CGSize disp_size = CGDisplayScreenSize (quartz_monitor->id);
@@ -246,6 +246,13 @@ configure_monitor (GdkMonitor *monitor)
                                 (int)trunc (disp_bounds.origin.y),
                                 (int)trunc (disp_bounds.size.width),
                                 (int)trunc (disp_bounds.size.height)};
+
+  if (screen_rect)
+    {
+      disp_geometry.x = disp_geometry.x - screen_rect->x;
+      disp_geometry.y = screen_rect->height - (disp_geometry.y + disp_geometry.height) + screen_rect->y;
+    }
+
   CGDisplayModeRef mode = CGDisplayCopyDisplayMode (quartz_monitor->id);
   gint refresh_rate = (int)trunc (CGDisplayModeGetRefreshRate (mode));
 
@@ -272,6 +279,7 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
 {
   GdkQuartzDisplay *display = data;
   GdkQuartzMonitor *monitor;
+  GdkQuartzScreen *screen;
 
   /* Ignore the begin configuration signal. */
   if (flags & kCGDisplayBeginConfigurationFlag)
@@ -281,6 +289,8 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
                kCGDisplaySetMainFlag | kCGDisplayDesktopShapeChangedFlag |
                kCGDisplayMirrorFlag | kCGDisplayUnMirrorFlag))
     {
+      GdkRectangle screen_rect;
+
       monitor = g_hash_table_lookup (display->monitors,
                                      GINT_TO_POINTER (cg_display));
       if (!monitor)
@@ -293,7 +303,14 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
           gdk_display_monitor_added (GDK_DISPLAY (display),
                                      GDK_MONITOR (monitor));
         }
-      configure_monitor (GDK_MONITOR (monitor));
+
+      screen = GDK_QUARTZ_SCREEN (gdk_display_get_default_screen (display));
+      screen_rect.x = screen->min_x;
+      screen_rect.y = screen->min_y;
+      screen_rect.width = screen->width;
+      screen_rect.height = screen->height;
+
+      configure_monitor (GDK_MONITOR (monitor), &screen_rect);
     }
   else if (flags & (kCGDisplayRemoveFlag |  kCGDisplayDisabledFlag))
     {
@@ -358,14 +375,30 @@ G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 static void
 gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
+  int min_x = 0, min_y = 0, max_x = 0, max_y = 0;
   uint32_t max_displays = 0, disp;
   CGDirectDisplayID *displays;
+  GdkRectangle screen_rect;
 
   CGGetActiveDisplayList (0, NULL, &max_displays);
   display->monitors = g_hash_table_new_full (g_direct_hash, NULL,
                                              NULL, g_object_unref);
   displays = g_new0 (CGDirectDisplayID, max_displays);
   CGGetActiveDisplayList (max_displays, displays, &max_displays);
+
+  for (disp = 0; disp < max_displays; ++disp)
+    {
+      CGRect bounds = CGDisplayBounds (displays[disp]);
+      min_x = MIN (min_x, (int)trunc (bounds.origin.x));
+      min_y = MIN (min_y, (int)trunc (bounds.origin.y));
+      max_x = MAX (max_x, (int)trunc (bounds.origin.x + bounds.size.width));
+      max_y = MAX (max_y, (int)trunc (bounds.origin.y + bounds.size.height));
+    }
+  screen_rect.x = min_x;
+  screen_rect.y = min_y;
+  screen_rect.width = max_x - min_x;
+  screen_rect.height = max_y - min_y;
+
   for (disp = 0; disp < max_displays; ++disp)
     {
       GdkQuartzMonitor *monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
@@ -373,7 +406,7 @@ gdk_quartz_display_init (GdkQuartzDisplay *display)
       monitor->id = displays[disp];
       g_hash_table_insert (display->monitors, GINT_TO_POINTER (monitor->id),
                            monitor);
-      configure_monitor (GDK_MONITOR (monitor));
+      configure_monitor (GDK_MONITOR (monitor), &screen_rect);
     }
   CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
                                             display);
