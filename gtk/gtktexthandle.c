@@ -110,34 +110,6 @@ _text_handle_pos_from_widget (GtkTextHandle *handle,
 }
 
 static void
-gtk_text_handle_set_state (GtkTextHandle *handle,
-                           gint           pos,
-                           GtkStateFlags  state)
-{
-  GtkTextHandlePrivate *priv = handle->priv;
-
-  if (!priv->windows[pos].widget)
-    return;
-
-  gtk_widget_set_state_flags (priv->windows[pos].widget, state, FALSE);
-  gtk_widget_queue_draw (priv->windows[pos].widget);
-}
-
-static void
-gtk_text_handle_unset_state (GtkTextHandle *handle,
-                             gint           pos,
-                             GtkStateFlags  state)
-{
-  GtkTextHandlePrivate *priv = handle->priv;
-
-  if (!priv->windows[pos].widget)
-    return;
-
-  gtk_widget_unset_state_flags (priv->windows[pos].widget, state);
-  gtk_widget_queue_draw (priv->windows[pos].widget);
-}
-
-static void
 handle_drag_begin (GtkGestureDrag *gesture,
                    gdouble         x,
                    gdouble         y,
@@ -164,7 +136,6 @@ handle_drag_begin (GtkGestureDrag *gesture,
   priv->windows[pos].dx = x;
   priv->windows[pos].dy = y;
   priv->windows[pos].dragged = TRUE;
-  gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
   g_signal_emit (handle, signals[DRAG_STARTED], 0, pos);
 }
 
@@ -202,7 +173,6 @@ handle_drag_end (GtkGestureDrag *gesture,
                                       gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
   g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
   priv->windows[pos].dragged = FALSE;
-  gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
 }
 
 static void

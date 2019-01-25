@@ -3040,8 +3040,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
 
   if ((priv->upper_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
     {
-      gboolean arrow_pressed = FALSE;
-
       if (gtk_widget_get_child_visible (priv->top_arrow_widget))
         {
           scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
@@ -3083,9 +3081,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
         {
           GtkStateFlags arrow_state = 0;
 
-          if (arrow_pressed)
-            arrow_state |= GTK_STATE_FLAG_ACTIVE;
-
           if (priv->upper_arrow_prelight)
             arrow_state |= GTK_STATE_FLAG_PRELIGHT;
 
@@ -3111,8 +3106,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
 
   if ((priv->lower_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
     {
-      gboolean arrow_pressed = FALSE;
-
       if (gtk_widget_get_child_visible (priv->bottom_arrow_widget))
         {
           scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
@@ -3153,9 +3146,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
       if ((priv->lower_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
         {
           GtkStateFlags arrow_state = 0;
-
-          if (arrow_pressed)
-            arrow_state |= GTK_STATE_FLAG_ACTIVE;
 
           if (priv->lower_arrow_prelight)
             arrow_state |= GTK_STATE_FLAG_PRELIGHT;

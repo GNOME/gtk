@@ -1623,28 +1623,6 @@ gtk_range_unmap (GtkWidget *widget)
 }
 
 static void
-update_slider_state (GtkRange *range)
-{
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-
-  if (priv->grab_location == priv->slider_widget)
-    gtk_widget_set_state_flags (priv->slider_widget, GTK_STATE_FLAG_ACTIVE, FALSE);
-  else
-    gtk_widget_unset_state_flags (priv->slider_widget, GTK_STATE_FLAG_ACTIVE);
-}
-
-static void
-update_trough_state (GtkRange *range)
-{
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-
-  if (priv->grab_location == priv->trough_widget)
-    gtk_widget_set_state_flags (priv->trough_widget, GTK_STATE_FLAG_ACTIVE, FALSE);
-  else
-    gtk_widget_unset_state_flags (priv->trough_widget, GTK_STATE_FLAG_ACTIVE);
-}
-
-static void
 gtk_range_direction_changed (GtkWidget        *widget,
                              GtkTextDirection  previous_direction)
 {
@@ -1699,9 +1677,6 @@ range_grab_add (GtkRange  *range,
    */
   priv->grab_location = location;
 
-  update_trough_state (range);
-  update_slider_state (range);
-
   gtk_style_context_add_class (context, "dragging");
 }
 
@@ -1735,8 +1710,6 @@ range_grab_remove (GtkRange *range)
 
   priv->grab_location = NULL;
 
-  update_trough_state (range);
-  update_slider_state (range);
   update_zoom_state (range, FALSE);
 
   gtk_style_context_remove_class (context, "dragging");

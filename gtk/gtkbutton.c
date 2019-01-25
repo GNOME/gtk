@@ -133,7 +133,6 @@ static void gtk_button_display_changed (GtkWidget         *widget,
 static void gtk_button_unrealize (GtkWidget * widget);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
-static void gtk_button_update_state   (GtkButton          *button);
 static void gtk_button_finish_activate (GtkButton         *button,
 					gboolean           do_it);
 
@@ -305,10 +304,8 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
   priv->in_button = TRUE;
 
   if (!priv->activate_timeout)
-    {
-      priv->button_down = TRUE;
-      gtk_button_update_state (button);
-    }
+    priv->button_down = TRUE;
+
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
@@ -358,33 +355,7 @@ multipress_released_cb (GtkGestureMultiPress *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   if (sequence)
-    {
-      priv->in_button = FALSE;
-      gtk_button_update_state (button);
-    }
-}
-
-static void
-multipress_gesture_update_cb (GtkGesture       *gesture,
-                              GdkEventSequence *sequence,
-                              GtkButton        *button)
-{
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-  gboolean in_button;
-  gdouble x, y;
-
-  if (sequence != gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
-    return;
-
-  gtk_gesture_get_point (gesture, sequence, &x, &y);
-
-  in_button = gtk_widget_contains (GTK_WIDGET (button), x, y);
-
-  if (priv->in_button != in_button)
-    {
-      priv->in_button = in_button;
-      gtk_button_update_state (button);
-    }
+    priv->in_button = FALSE;
 }
 
 static void
@@ -457,7 +428,6 @@ gtk_button_init (GtkButton *button)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
   g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
-  g_signal_connect (priv->gesture, "update", G_CALLBACK (multipress_gesture_update_cb), button);
   g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (priv->gesture));
@@ -772,8 +742,6 @@ gtk_button_do_release (GtkButton *button,
 
       if (emit_clicked)
         gtk_button_clicked (button);
-
-      gtk_button_update_state (button);
     }
 }
 
@@ -805,7 +773,6 @@ gtk_real_button_activate (GtkButton *button)
       priv->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT, button_activate_timeout, button);
       g_source_set_name_by_id (priv->activate_timeout, "[gtk+] button_activate_timeout");
       priv->button_down = TRUE;
-      gtk_button_update_state (button);
     }
 }
 
@@ -819,8 +786,6 @@ gtk_button_finish_activate (GtkButton *button,
   priv->activate_timeout = 0;
 
   priv->button_down = FALSE;
-
-  gtk_button_update_state (button);
 
   if (do_it)
     gtk_button_clicked (button);
@@ -958,26 +923,6 @@ gtk_button_get_use_underline (GtkButton *button)
 }
 
 static void
-gtk_button_update_state (GtkButton *button)
-{
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-  GtkStateFlags new_state;
-  gboolean depressed;
-
-  if (priv->activate_timeout)
-    depressed = TRUE;
-  else
-    depressed = priv->in_button && priv->button_down;
-
-  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) & ~(GTK_STATE_FLAG_ACTIVE);
-
-  if (depressed)
-    new_state |= GTK_STATE_FLAG_ACTIVE;
-
-  gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
-}
-
-static void
 gtk_button_display_changed (GtkWidget  *widget,
                             GdkDisplay *previous_display)
 {
@@ -986,11 +931,7 @@ gtk_button_display_changed (GtkWidget  *widget,
 
   /* If the button is being pressed while the display changes the
     release might never occur, so we reset the state. */
-  if (priv->button_down)
-    {
-      priv->button_down = FALSE;
-      gtk_button_update_state (button);
-    }
+  priv->button_down = FALSE;
 }
 
 static void

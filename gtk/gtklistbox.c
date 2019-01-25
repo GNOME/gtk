@@ -1744,9 +1744,6 @@ gtk_list_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
     {
       priv->active_row = row;
-      gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
-                                  GTK_STATE_FLAG_ACTIVE,
-                                  FALSE);
 
       if (n_press == 2 && !priv->activate_single_click)
         gtk_list_box_activate (box, row);
@@ -1842,7 +1839,6 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 
   if (priv->active_row)
     {
-      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
       priv->active_row = NULL;
     }
 
@@ -1857,7 +1853,6 @@ gtk_list_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
 
   if (priv->active_row)
     {
-      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
       priv->active_row = NULL;
       gtk_widget_queue_draw (GTK_WIDGET (box));
     }
@@ -2321,10 +2316,7 @@ gtk_list_box_remove (GtkContainer *container,
   if (row == priv->cursor_row)
     priv->cursor_row = NULL;
   if (row == priv->active_row)
-    {
-      gtk_widget_unset_state_flags (GTK_WIDGET (row), GTK_STATE_FLAG_ACTIVE);
-      priv->active_row = NULL;
-    }
+    priv->active_row = NULL;
 
   if (row == priv->drag_highlighted_row)
     gtk_list_box_drag_unhighlight_row (box);
