@@ -30,24 +30,30 @@ static void
 gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
                                  GdkRectangle *dest)
 {
+  int i;
   GdkQuartzScreen *quartz_screen = GDK_QUARTZ_SCREEN(gdk_display_get_default_screen (monitor->display));
   GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR(monitor);
+
+  *dest = monitor->geometry;
 
   GDK_QUARTZ_ALLOC_POOL;
 
   NSArray *array = [NSScreen screens];
-  if (quartz_monitor->monitor_num < [array count])
+  for (i = 0; i < [array count]; i++)
     {
-      NSScreen *screen = [array objectAtIndex:quartz_monitor->monitor_num];
-      NSRect rect = [screen visibleFrame];
-
-      dest->x = rect.origin.x - quartz_screen->min_x;
-      dest->y = quartz_screen->height - (rect.origin.y + rect.size.height) + quartz_screen->min_y;
-      dest->width = rect.size.width;
-      dest->height = rect.size.height;
+      NSScreen *screen = [array objectAtIndex:i];
+      NSNumber *screen_num = screen.deviceDescription[@"NSScreenNumber"];
+      CGDirectDisplayID display_id = screen_num.unsignedIntValue;
+      if (display_id == quartz_monitor->id)
+        {
+          NSRect rect = [screen visibleFrame];
+          dest->x = rect.origin.x - quartz_screen->min_x;
+          dest->y = quartz_screen->height - (rect.origin.y + rect.size.height) + quartz_screen->min_y;
+          dest->width = rect.size.width;
+          dest->height = rect.size.height;
+          break;
+        }
     }
-  else
-    *dest = monitor->geometry;
 
   GDK_QUARTZ_RELEASE_POOL;
 }
