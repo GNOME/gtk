@@ -193,6 +193,7 @@ gtk_public_sources = files([
   'gtkcellrenderertoggle.c',
   'gtkcellview.c',
   'gtkcenterbox.c',
+  'gtkcenterlayout.c',
   'gtkcheckbutton.c',
   'gtkcheckmenuitem.c',
   'gtkcolorbutton.c',
