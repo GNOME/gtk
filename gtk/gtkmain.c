@@ -1553,6 +1553,24 @@ is_pointing_event (GdkEvent *event)
     }
 }
 
+static inline void
+set_widget_active_state (GtkWidget       *target,
+                         const gboolean   release)
+{
+  GtkWidget *w;
+
+  w = target;
+  while (w)
+    {
+      if (release)
+        gtk_widget_unset_state_flags (w, GTK_STATE_FLAG_ACTIVE);
+      else
+        gtk_widget_set_state_flags (w, GTK_STATE_FLAG_ACTIVE, FALSE);
+
+      w = gtk_widget_get_parent (w);
+    }
+}
+
 static GtkWidget *
 handle_pointing_event (GdkEvent *event)
 {
@@ -1641,6 +1659,9 @@ handle_pointing_event (GdkEvent *event)
                                           GDK_CROSSING_UNGRAB);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
+
+      set_widget_active_state (target, event->any.type == GDK_BUTTON_RELEASE);
+
       break;
     case GDK_SCROLL:
     case GDK_TOUCHPAD_PINCH:
