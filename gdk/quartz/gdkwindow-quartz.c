@@ -612,10 +612,10 @@ _gdk_quartz_window_gdk_xy_to_xy (gint  gdk_x,
   GdkQuartzScreen *screen_quartz = GDK_QUARTZ_SCREEN (_gdk_screen);
 
   if (ns_y)
-    *ns_y = screen_quartz->height - gdk_y + screen_quartz->min_y;
+    *ns_y = screen_quartz->main_display_origin_y - gdk_y;
 
   if (ns_x)
-    *ns_x = gdk_x + screen_quartz->min_x;
+    *ns_x = gdk_x - screen_quartz->main_display_origin_x;
 }
 
 void
@@ -627,10 +627,10 @@ _gdk_quartz_window_xy_to_gdk_xy (gint  ns_x,
   GdkQuartzScreen *screen_quartz = GDK_QUARTZ_SCREEN (_gdk_screen);
 
   if (gdk_y)
-    *gdk_y = screen_quartz->height - ns_y + screen_quartz->min_y;
+    *gdk_y = screen_quartz->main_display_origin_y - ns_y;
 
   if (gdk_x)
-    *gdk_x = ns_x - screen_quartz->min_x;
+    *gdk_x = screen_quartz->main_display_origin_x + ns_x;
 }
 
 void
