@@ -2880,6 +2880,9 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
   info->avahi_printer = TRUE;
   info->printer_name = data->printer_name;
   info->printer_uri = data->printer_uri;
+  info->default_printer = FALSE;
+  info->remote_printer = TRUE;
+  info->is_accepting_jobs = TRUE;
 
   if (data->got_printer_state)
     {
