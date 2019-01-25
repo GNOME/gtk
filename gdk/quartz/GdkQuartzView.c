@@ -31,7 +31,7 @@
   if ((self = [super initWithFrame: frameRect]))
     {
       markedRange = NSMakeRange (NSNotFound, 0);
-      selectedRange = NSMakeRange (NSNotFound, 0);
+      selectedRange = NSMakeRange (0, 0);
     }
 
   return self;
@@ -124,7 +124,8 @@
 -(void)unmarkText
 {
   GDK_NOTE (EVENTS, g_message ("unmarkText"));
-  markedRange = selectedRange = NSMakeRange (NSNotFound, 0);
+  selectedRange = NSMakeRange (0, 0);
+  markedRange = NSMakeRange (NSNotFound, 0);
 
   g_object_set_data_full (G_OBJECT (gdk_window), TIC_MARKED_TEXT, NULL, g_free);
 }
@@ -209,7 +210,14 @@
   else
    {
       str = [string UTF8String];
+      selectedRange = NSMakeRange ([string length], 0);
    }
+
+  if (replacementRange.length > 0)
+    {
+      g_object_set_data (G_OBJECT (gdk_window), TIC_INSERT_TEXT_REPLACE_LEN,
+                         GINT_TO_POINTER (replacementRange.length));
+    }
 
   g_object_set_data_full (G_OBJECT (gdk_window), TIC_INSERT_TEXT, g_strdup (str), g_free);
   GDK_NOTE (EVENTS, g_message ("insertText: set %s (%p, nsview %p): %s",
