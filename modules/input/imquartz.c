@@ -129,8 +129,11 @@ output_result (GtkIMContext *context,
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval = FALSE;
+  int fixed_str_replace_len;
   gchar *fixed_str, *marked_str;
 
+  fixed_str_replace_len = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (win),
+      TIC_INSERT_TEXT_REPLACE_LEN));
   fixed_str = g_strdup (g_object_get_data (G_OBJECT (win), TIC_INSERT_TEXT));
   marked_str = g_strdup (g_object_get_data (G_OBJECT (win), TIC_MARKED_TEXT));
   if (fixed_str)
@@ -139,6 +142,13 @@ output_result (GtkIMContext *context,
       g_free (qc->preedit_str);
       qc->preedit_str = NULL;
       g_object_set_data (G_OBJECT (win), TIC_INSERT_TEXT, NULL);
+      if (fixed_str_replace_len)
+        {
+          gboolean retval;
+          g_object_set_data (G_OBJECT (win), TIC_INSERT_TEXT_REPLACE_LEN, 0);
+          g_signal_emit_by_name (context, "delete-surrounding",
+              -fixed_str_replace_len, fixed_str_replace_len, &retval);
+        }
       g_signal_emit_by_name (context, "commit", fixed_str);
       g_signal_emit_by_name (context, "preedit_changed");
 
@@ -168,6 +178,11 @@ output_result (GtkIMContext *context,
     }
   if (!fixed_str && !marked_str)
     {
+      unsigned int filtered =
+	  GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (win),
+					       GIC_FILTER_KEY));
+      if (filtered)
+        retval = TRUE;
       if (qc->preedit_str && strlen (qc->preedit_str) > 0)
         retval = TRUE;
     }

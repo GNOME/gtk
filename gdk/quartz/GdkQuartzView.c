@@ -31,7 +31,7 @@
   if ((self = [super initWithFrame: frameRect]))
     {
       markedRange = NSMakeRange (NSNotFound, 0);
-      selectedRange = NSMakeRange (NSNotFound, 0);
+      selectedRange = NSMakeRange (0, 0);
     }
 
   return self;
@@ -57,6 +57,16 @@
 
 -(void) keyDown: (NSEvent *) theEvent
 {
+  /* NOTE: When user press Cmd+A, interpretKeyEvents: will call noop:
+     method. When user press and hold A to show the accented char window,
+     it consumed repeating key down events for key 'A' do NOT call
+     any other method. We use this behavior to determine if this key
+     down event is filtered by interpretKeyEvents.
+  */
+
+  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+                     GUINT_TO_POINTER (GIC_FILTER_FILTERED));
+
   GDK_NOTE (EVENTS, g_message ("keyDown"));
   [self interpretKeyEvents: [NSArray arrayWithObject: theEvent]];
 }
@@ -124,7 +134,8 @@
 -(void)unmarkText
 {
   GDK_NOTE (EVENTS, g_message ("unmarkText"));
-  markedRange = selectedRange = NSMakeRange (NSNotFound, 0);
+  selectedRange = NSMakeRange (0, 0);
+  markedRange = NSMakeRange (NSNotFound, 0);
 
   g_object_set_data_full (G_OBJECT (gdk_window), TIC_MARKED_TEXT, NULL, g_free);
 }
@@ -209,7 +220,14 @@
   else
    {
       str = [string UTF8String];
+      selectedRange = NSMakeRange ([string length], 0);
    }
+
+  if (replacementRange.length > 0)
+    {
+      g_object_set_data (G_OBJECT (gdk_window), TIC_INSERT_TEXT_REPLACE_LEN,
+                         GINT_TO_POINTER (replacementRange.length));
+    }
 
   g_object_set_data_full (G_OBJECT (gdk_window), TIC_INSERT_TEXT, g_strdup (str), g_free);
   GDK_NOTE (EVENTS, g_message ("insertText: set %s (%p, nsview %p): %s",
@@ -537,6 +555,8 @@
 -(void)noop: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("noop"));
+  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+                     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 /* --------------------------------------------------------------- */
