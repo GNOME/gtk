@@ -189,14 +189,6 @@ enum {
   PROP_MENU_TYPE_HINT
 };
 
-enum {
-  CHILD_PROP_0,
-  CHILD_PROP_LEFT_ATTACH,
-  CHILD_PROP_RIGHT_ATTACH,
-  CHILD_PROP_TOP_ATTACH,
-  CHILD_PROP_BOTTOM_ATTACH
-};
-
 static void     gtk_menu_set_property      (GObject          *object,
                                             guint             prop_id,
                                             const GValue     *value,
@@ -206,16 +198,6 @@ static void     gtk_menu_get_property      (GObject          *object,
                                             GValue           *value,
                                             GParamSpec       *pspec);
 static void     gtk_menu_finalize          (GObject          *object);
-static void     gtk_menu_set_child_property(GtkContainer     *container,
-                                            GtkWidget        *child,
-                                            guint             property_id,
-                                            const GValue     *value,
-                                            GParamSpec       *pspec);
-static void     gtk_menu_get_child_property(GtkContainer     *container,
-                                            GtkWidget        *child,
-                                            guint             property_id,
-                                            GValue           *value,
-                                            GParamSpec       *pspec);
 static void     gtk_menu_destroy           (GtkWidget        *widget);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
@@ -516,8 +498,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->measure = gtk_menu_measure;
 
   container_class->remove = gtk_menu_remove;
-  container_class->get_child_property = gtk_menu_get_child_property;
-  container_class->set_child_property = gtk_menu_set_child_property;
   
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
@@ -782,38 +762,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                       G_PARAM_STATIC_BLURB |
                                                       G_PARAM_EXPLICIT_NOTIFY));
 
- gtk_container_class_install_child_property (container_class,
-                                             CHILD_PROP_LEFT_ATTACH,
-                                              g_param_spec_int ("left-attach",
-                                                               P_("Left Attach"),
-                                                               P_("The column number to attach the left side of the child to"),
-                                                                -1, INT_MAX, -1,
-                                                               GTK_PARAM_READWRITE));
-
- gtk_container_class_install_child_property (container_class,
-                                             CHILD_PROP_RIGHT_ATTACH,
-                                              g_param_spec_int ("right-attach",
-                                                               P_("Right Attach"),
-                                                               P_("The column number to attach the right side of the child to"),
-                                                                -1, INT_MAX, -1,
-                                                               GTK_PARAM_READWRITE));
-
- gtk_container_class_install_child_property (container_class,
-                                             CHILD_PROP_TOP_ATTACH,
-                                              g_param_spec_int ("top-attach",
-                                                               P_("Top Attach"),
-                                                               P_("The row number to attach the top of the child to"),
-                                                                -1, INT_MAX, -1,
-                                                               GTK_PARAM_READWRITE));
-
- gtk_container_class_install_child_property (container_class,
-                                             CHILD_PROP_BOTTOM_ATTACH,
-                                              g_param_spec_int ("bottom-attach",
-                                                               P_("Bottom Attach"),
-                                                               P_("The row number to attach the bottom of the child to"),
-                                                                -1, INT_MAX, -1,
-                                                               GTK_PARAM_READWRITE));
-
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_Up, 0,
@@ -1016,69 +964,6 @@ gtk_menu_get_property (GObject     *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
-    }
-}
-
-static void
-gtk_menu_set_child_property (GtkContainer *container,
-                             GtkWidget    *child,
-                             guint         property_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
-{
-  GtkMenu *menu = GTK_MENU (container);
-  AttachInfo *ai = get_attach_info (child);
-
-  switch (property_id)
-    {
-    case CHILD_PROP_LEFT_ATTACH:
-      ai->left_attach = g_value_get_int (value);
-      break;
-    case CHILD_PROP_RIGHT_ATTACH:
-      ai->right_attach = g_value_get_int (value);
-      break;
-    case CHILD_PROP_TOP_ATTACH:
-      ai->top_attach = g_value_get_int (value);
-      break;
-    case CHILD_PROP_BOTTOM_ATTACH:
-      ai->bottom_attach = g_value_get_int (value);
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      return;
-    }
-
-  menu_queue_resize (menu);
-}
-
-static void
-gtk_menu_get_child_property (GtkContainer *container,
-                             GtkWidget    *child,
-                             guint         property_id,
-                             GValue       *value,
-                             GParamSpec   *pspec)
-{
-  AttachInfo *ai = get_attach_info (child);
-
-  switch (property_id)
-    {
-    case CHILD_PROP_LEFT_ATTACH:
-      g_value_set_int (value, ai->left_attach);
-      break;
-    case CHILD_PROP_RIGHT_ATTACH:
-      g_value_set_int (value, ai->right_attach);
-      break;
-    case CHILD_PROP_TOP_ATTACH:
-      g_value_set_int (value, ai->top_attach);
-      break;
-    case CHILD_PROP_BOTTOM_ATTACH:
-      g_value_set_int (value, ai->bottom_attach);
-      break;
-      
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      return;
     }
 }
 
@@ -3857,68 +3742,6 @@ gtk_menu_set_display (GtkMenu    *menu,
       GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
       if (attach_widget)
         attach_widget_display_changed (attach_widget, NULL, menu);
-    }
-}
-
-/**
- * gtk_menu_attach:
- * @menu: a #GtkMenu
- * @child: a #GtkMenuItem
- * @left_attach: The column number to attach the left side of the item to
- * @right_attach: The column number to attach the right side of the item to
- * @top_attach: The row number to attach the top of the item to
- * @bottom_attach: The row number to attach the bottom of the item to
- *
- * Adds a new #GtkMenuItem to a (table) menu. The number of “cells” that
- * an item will occupy is specified by @left_attach, @right_attach,
- * @top_attach and @bottom_attach. These each represent the leftmost,
- * rightmost, uppermost and lower column and row numbers of the table.
- * (Columns and rows are indexed from zero).
- *
- * Note that this function is not related to gtk_menu_detach().
- */
-void
-gtk_menu_attach (GtkMenu   *menu,
-                 GtkWidget *child,
-                 guint      left_attach,
-                 guint      right_attach,
-                 guint      top_attach,
-                 guint      bottom_attach)
-{
-  GtkMenuShell *menu_shell;
-  GtkWidget *parent;
-
-  g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (GTK_IS_MENU_ITEM (child));
-  parent = gtk_widget_get_parent (child);
-  g_return_if_fail (parent == NULL || parent == GTK_WIDGET (menu));
-  g_return_if_fail (left_attach < right_attach);
-  g_return_if_fail (top_attach < bottom_attach);
-
-  menu_shell = GTK_MENU_SHELL (menu);
-
-  if (!parent)
-    {
-      AttachInfo *ai = get_attach_info (child);
-
-      ai->left_attach = left_attach;
-      ai->right_attach = right_attach;
-      ai->top_attach = top_attach;
-      ai->bottom_attach = bottom_attach;
-
-      menu_shell->priv->children = g_list_append (menu_shell->priv->children, child);
-      gtk_widget_insert_before (child, GTK_WIDGET (menu), menu->priv->bottom_arrow_widget);
-
-      menu_queue_resize (menu);
-    }
-  else
-    {
-      gtk_container_child_set (GTK_CONTAINER (parent), child,
-                               "left-attach",   left_attach,
-                               "right-attach",  right_attach,
-                               "top-attach",    top_attach,
-                               "bottom-attach", bottom_attach,
-                               NULL);
     }
 }
 
