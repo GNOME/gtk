@@ -3687,6 +3687,7 @@ gtk_notebook_focus (GtkWidget        *widget,
             return TRUE;
           if (focus_action_in (notebook, first_action, direction))
             return TRUE;
+          return FALSE;
         case GTK_DIR_UP:
         case GTK_DIR_LEFT:
         case GTK_DIR_RIGHT:
