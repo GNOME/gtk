@@ -2808,7 +2808,7 @@ update_arrow_nodes (GtkNotebook *notebook)
                       next_widget = priv->arrow_widget[1];
                       break;
                     }
-                  /* fall through */
+                  G_GNUC_FALLTHROUGH;
                 case 1:
                   if (priv->children)
                     {
@@ -2821,14 +2821,14 @@ update_arrow_nodes (GtkNotebook *notebook)
                       next_widget = priv->arrow_widget[2];
                       break;
                     }
-                  /* fall through */
+                  G_GNUC_FALLTHROUGH;
                 case 2:
                   if (priv->arrow_widget[3])
                     {
                       next_widget = priv->arrow_widget[3];
                       break;
                     }
-                  /* fall through */
+                  G_GNUC_FALLTHROUGH;
                 case 3:
                   next_widget = NULL;
                   break;

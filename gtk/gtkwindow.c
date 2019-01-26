@@ -1494,7 +1494,7 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                           sequence, GTK_EVENT_SEQUENCE_DENIED);
           return;
         }
-      /* fall through */
+      G_GNUC_FALLTHROUGH;
 
     case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)

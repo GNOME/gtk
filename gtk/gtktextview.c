@@ -5862,7 +5862,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 	{
         case GTK_MOVEMENT_VISUAL_POSITIONS:
           leave_direction = count > 0 ? GTK_DIR_RIGHT : GTK_DIR_LEFT;
-          /* fall through */
+          G_GNUC_FALLTHROUGH;
         case GTK_MOVEMENT_LOGICAL_POSITIONS:
         case GTK_MOVEMENT_WORDS:
 	  scroll_step = GTK_SCROLL_HORIZONTAL_STEPS;
@@ -5872,7 +5872,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 	  break;	  
         case GTK_MOVEMENT_DISPLAY_LINES:
           leave_direction = count > 0 ? GTK_DIR_DOWN : GTK_DIR_UP;
-          /* fall through */
+          G_GNUC_FALLTHROUGH;
         case GTK_MOVEMENT_PARAGRAPHS:
         case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	  scroll_step = GTK_SCROLL_STEPS;

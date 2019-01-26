@@ -603,7 +603,7 @@ completion_store_set (GtkFileSystemModel  *model,
     {
     case FULL_PATH_COLUMN:
       prefix = chooser_entry->dir_part;
-      /* fall through */
+      G_GNUC_FALLTHROUGH;
     case DISPLAY_NAME_COLUMN:
       if (_gtk_file_info_consider_as_directory (info))
         suffix = G_DIR_SEPARATOR_S;
