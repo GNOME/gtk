@@ -111,6 +111,7 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
         return gtk_css_dimension_value_new (number->value / 100.0 * 
                                             get_base_font_size_px (property_id, provider, style, parent_style),
                                             GTK_CSS_PX);
+      G_GNUC_FALLTHROUGH;
     case GTK_CSS_NUMBER:
     case GTK_CSS_PX:
     case GTK_CSS_DEG:
