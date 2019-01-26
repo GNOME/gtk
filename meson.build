@@ -11,7 +11,7 @@ project('gtk+', 'c',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
-glib_minor_req = 55
+glib_minor_req = 59
 glib_micro_req = 0
 
 if glib_minor_req.is_odd()
