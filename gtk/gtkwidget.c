@@ -13585,3 +13585,25 @@ gtk_widget_get_height (GtkWidget *widget)
          border.top  - border.bottom -
          padding.top - padding.bottom;
 }
+
+void
+gtk_widget_set_context_menu (GtkWidget  *widget,
+                             GMenuModel *menu)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (menu == NULL || G_IS_MENU_MODEL (menu));
+
+  g_set_object (&priv->context_menu, menu);
+}
+
+GMenuModel *
+gtk_widget_get_context_menu (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return priv->context_menu;
+}
