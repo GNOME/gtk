@@ -27,7 +27,9 @@
 #include "gdkdisplay-x11.h"
 
 #include <glib.h>
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
 #include <gio/gdesktopappinfo.h>
+#endif
 
 #include <string.h>
 #include <unistd.h>
@@ -349,10 +351,16 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
   else
     workspace_str = NULL;
 
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
   if (G_IS_DESKTOP_APP_INFO (info))
     application_id = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (info));
   else
     application_id = NULL;
+#else
+  /* GDesktopAppInfo files are not available with Cocoa
+   * and startup-notification-spec only cares about desktop files. */
+  application_id = NULL;
+#endif
 
   startup_id = g_strdup_printf ("%s-%lu-%s-%s-%d_TIME%lu",
                                 g_get_prgname (),
