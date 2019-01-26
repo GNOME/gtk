@@ -289,6 +289,7 @@ gtk_css_value_array_transition (GtkCssValue *start,
        * into arrays and start animating them. */
       g_warning ("Don't know how to transition arrays for property '%s'", 
                  _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id))));
+      return NULL;
     case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
     case GTK_CSS_PROPERTY_TRANSITION_DURATION:
     case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
