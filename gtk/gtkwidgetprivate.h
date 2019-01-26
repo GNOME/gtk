@@ -205,6 +205,8 @@ struct _GtkWidgetPrivate
 
   /* Pointer cursor */
   GdkCursor *cursor;
+
+  GMenuModel *context_menu;
 };
 
 void          gtk_widget_root               (GtkWidget *widget);
