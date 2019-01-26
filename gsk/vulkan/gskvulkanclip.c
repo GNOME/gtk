@@ -72,6 +72,7 @@ gsk_vulkan_clip_intersect_rect (GskVulkanClip         *dest,
            */
           return FALSE;
         }
+      break;
 
     default:
       g_assert_not_reached ();
