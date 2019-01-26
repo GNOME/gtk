@@ -1027,6 +1027,13 @@ void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
                                                          GtkWidget   *child,
                                                          GtkSnapshot *snapshot);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_set_context_menu     (GtkWidget  *widget,
+                                                         GMenuModel *menu);
+GDK_AVAILABLE_IN_ALL
+GMenuModel *            gtk_widget_get_context_menu     (GtkWidget  *widget);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
