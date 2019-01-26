@@ -37,9 +37,9 @@ fedora-x86_64:
     key: "%CI_JOB_NAME%"
     <<: *cache-paths
 
-msys2-mingw64:
+msys2-mingw32:
   variables:
-    MSYSTEM: "MINGW64"
+    MSYSTEM: "MINGW32"
     CHERE_INVOKING: "yes"
   <<: *mingw-defaults
 

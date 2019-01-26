@@ -42,6 +42,7 @@ ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
 meson \
+    --buildtype plain \
     -Denable-x11-backend=false \
     -Denable-wayland-backend=false \
     -Denable-win32-backend=true \
