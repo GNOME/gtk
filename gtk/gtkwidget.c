@@ -573,6 +573,7 @@ enum {
   PROP_SCALE_FACTOR,
   PROP_CSS_NAME,
   PROP_LAYOUT_MANAGER,
+  PROP_CONTEXT_MENU,
   NUM_PROPERTIES
 };
 
@@ -1427,6 +1428,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          P_("Layout Manager"),
                          P_("The layout manager used to layout children of the widget"),
                          GTK_TYPE_LAYOUT_MANAGER,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_CONTEXT_MENU] =
+    g_param_spec_object ("context-menu",
+                         P_("Context Menu"),
+                         P_("The menu model used for this widgets' context menu"),
+                         G_TYPE_MENU_MODEL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
@@ -2361,6 +2369,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_get_object (value));
       break;
+    case PROP_CONTEXT_MENU:
+      gtk_widget_set_context_menu (widget, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2512,6 +2523,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_LAYOUT_MANAGER:
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
+      break;
+    case PROP_CONTEXT_MENU:
+      g_value_set_object (value, gtk_widget_get_context_menu (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -13591,4 +13605,27 @@ gtk_widget_get_layout_manager (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return priv->layout_manager;
+}
+
+void
+gtk_widget_set_context_menu (GtkWidget  *widget,
+                             GMenuModel *menu)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (menu == NULL || G_IS_MENU_MODEL (menu));
+
+  g_set_object (&priv->context_menu, menu);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CONTEXT_MENU]);
+}
+
+GMenuModel *
+gtk_widget_get_context_menu (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return priv->context_menu;
 }
