@@ -252,6 +252,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Werror=array-bounds',
     '-Werror=empty-body',
     '-Werror=implicit',
+    '-Werror=implicit-fallthrough',
     '-Werror=init-self',
     '-Werror=int-to-pointer-cast',
     '-Werror=main',
@@ -264,6 +265,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Werror=return-type',
     '-Werror=sequence-point',
     '-Werror=trigraphs',
+    '-Werror=vla',
     '-Werror=write-strings',
   ]
 else
