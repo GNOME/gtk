@@ -2040,6 +2040,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	      if (appearance.strikethrough_rgba)
 		gdk_rgba_free (appearance.strikethrough_rgba);
 	      appearance.strikethrough_rgba = gdk_rgba_copy (&rgba);
+	      break;
             case PANGO_ATTR_RISE:
               appearance.rise = ((PangoAttrInt *)attr)->value;
               break;
