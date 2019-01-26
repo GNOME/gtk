@@ -386,7 +386,8 @@ gdk_frame_clock_paint_idle (void *data)
               _gdk_frame_clock_emit_before_paint (clock);
               priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_UPDATE:
           if (priv->freeze_count == 0)
             {
@@ -397,7 +398,8 @@ gdk_frame_clock_paint_idle (void *data)
                   _gdk_frame_clock_emit_update (clock);
                 }
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
           if (priv->freeze_count == 0)
             {
@@ -427,7 +429,8 @@ gdk_frame_clock_paint_idle (void *data)
 	      if (iter == 5)
 		g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_PAINT:
           if (priv->freeze_count == 0)
             {
@@ -447,7 +450,8 @@ gdk_frame_clock_paint_idle (void *data)
                   _gdk_frame_clock_emit_paint (clock);
                 }
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
           if (priv->freeze_count == 0)
             {
@@ -462,7 +466,8 @@ gdk_frame_clock_paint_idle (void *data)
                 timings->frame_end_time = g_get_monotonic_time ();
 #endif /* G_ENABLE_DEBUG */
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
         default:
           ;

@@ -104,7 +104,7 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
     {
     default:
       g_assert_not_reached();
-      /* fall through */
+      G_GNUC_FALLTHROUGH;
     case GTK_CSS_PERCENT:
       /* percentages for font sizes are computed, other percentages aren't */
       if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)

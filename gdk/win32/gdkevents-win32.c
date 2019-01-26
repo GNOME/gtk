@@ -2830,8 +2830,8 @@ gdk_event_translate (MSG  *msg,
 	{
 	  generate_grab_broken_event (_gdk_device_manager, keyboard_grab->surface, TRUE, NULL);
 	}
+      G_GNUC_FALLTHROUGH;
 
-      /* fallthrough */
     case WM_SETFOCUS:
       if (keyboard_grab != NULL &&
 	  !keyboard_grab->owner_events)
