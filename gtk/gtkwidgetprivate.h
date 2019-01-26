@@ -176,6 +176,8 @@ struct _GtkWidgetPrivate
 
   /* Pointer cursor */
   GdkCursor *cursor;
+
+  GMenuModel *context_menu;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
