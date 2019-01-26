@@ -707,6 +707,7 @@ translate_mnemonics (const char *src)
         case '&':
           /* Win32 needs ampersands escaped */
           g_string_append (s, "&&");
+          break;
         default:
           g_string_append_c (s, c);
         }
