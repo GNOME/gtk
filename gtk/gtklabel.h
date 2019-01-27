@@ -64,10 +64,6 @@ struct _GtkLabelClass
 			    gboolean        extend_selection);
   void (* copy_clipboard)  (GtkLabel       *label);
 
-  /* Hook to customize right-click popup for selectable labels */
-  void (* populate_popup)   (GtkLabel       *label,
-                             GtkMenu        *menu);
-
   gboolean (*activate_link) (GtkLabel       *label,
                              const gchar    *uri);
 
@@ -216,6 +212,10 @@ void         gtk_label_set_yalign (GtkLabel *label,
 
 GDK_AVAILABLE_IN_ALL
 gfloat       gtk_label_get_yalign (GtkLabel *label);
+
+GDK_AVAILABLE_IN_ALL
+GMenuModel * gtk_label_get_default_context_menu (GtkLabel *label);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
 
