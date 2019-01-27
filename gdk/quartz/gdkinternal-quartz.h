@@ -84,6 +84,19 @@ GdkModifierType _gdk_quartz_events_get_current_mouse_modifiers    (void);
 
 void         _gdk_quartz_events_break_all_grabs         (guint32    time);
 
+/* Devices */
+void       _gdk_quartz_device_core_set_active (GdkDevice  *device,
+                                               gboolean    active,
+                                               NSUInteger  device_id);
+
+gboolean   _gdk_quartz_device_core_is_active (GdkDevice  *device,
+                                              NSUInteger  device_id);
+
+void       _gdk_quartz_device_core_set_unique (GdkDevice          *device,
+                                               unsigned long long  unique_id);
+
+unsigned long long _gdk_quartz_device_core_get_unique (GdkDevice *device);
+
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
 NSEvent *  _gdk_quartz_event_loop_get_pending   (void);
