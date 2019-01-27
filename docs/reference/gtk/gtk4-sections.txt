@@ -1716,6 +1716,8 @@ gtk_label_set_single_line_mode
 gtk_label_get_current_uri
 gtk_label_set_track_visited_links
 gtk_label_get_track_visited_links
+gtk_label_add_to_context_menu
+
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL
