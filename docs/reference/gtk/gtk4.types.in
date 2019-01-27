@@ -109,6 +109,7 @@ gtk_gl_area_get_type
 gtk_grid_get_type
 gtk_grid_layout_child_get_type
 gtk_grid_layout_get_type
+gtk_grid_view_get_type
 gtk_header_bar_get_type
 gtk_icon_theme_get_type
 gtk_icon_view_get_type
