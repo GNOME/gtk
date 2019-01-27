@@ -5184,7 +5184,7 @@ translate_event_coordinates (GdkEvent  *event,
   gdk_event_set_coords (event, dx, dy);
 }
 
-static gint
+static gboolean
 gtk_widget_event_internal (GtkWidget      *widget,
                            const GdkEvent *event)
 {
@@ -5198,6 +5198,9 @@ gtk_widget_event_internal (GtkWidget      *widget,
    */
   if (!event_surface_is_still_viewable (event))
     return TRUE;
+
+  if (!_gtk_widget_get_mapped (widget))
+    return FALSE;
 
   event_copy = gdk_event_copy (event);
 
