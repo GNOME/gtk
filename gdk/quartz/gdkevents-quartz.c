@@ -42,6 +42,7 @@
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
+#define TABLET_AXES 5
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
 #define NSEventTypeRotate 13
@@ -173,7 +174,7 @@ gdk_event_apply_filters (NSEvent *nsevent,
 {
   GList *tmp_list;
   GdkFilterReturn result;
-  
+
   tmp_list = *filters;
 
   while (tmp_list)
@@ -557,7 +558,7 @@ generate_motion_event (GdkWindow *window)
   event->motion.state = _gdk_quartz_events_get_current_keyboard_modifiers () |
                         _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
-  event->motion.device = gdk_seat_get_pointer (seat);
+  gdk_event_set_device (event, gdk_seat_get_pointer (seat));
   gdk_event_set_seat (event, seat);
 
   append_event (event, TRUE);
@@ -1019,6 +1020,8 @@ fill_button_event (GdkWindow *window,
                    gint       y_root)
 {
   GdkEventType type;
+  GdkDevice *event_device = NULL;
+  gdouble *axes = NULL;
   gint state;
   GdkSeat *seat = gdk_display_get_default_seat (_gdk_display);
 
@@ -1045,6 +1048,20 @@ fill_button_event (GdkWindow *window,
       g_assert_not_reached ();
     }
 
+  event_device = _gdk_quartz_device_manager_core_device_for_ns_event (gdk_display_get_device_manager (_gdk_display),
+                                                                      nsevent);
+
+  if ([nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT)
+    {
+      axes = g_new (gdouble, TABLET_AXES);
+
+      axes[0] = x;
+      axes[1] = y;
+      axes[2] = [nsevent pressure];
+      axes[3] = [nsevent tilt].x;
+      axes[4] = [nsevent tilt].y;
+    }
+
   event->any.type = type;
   event->button.window = window;
   event->button.time = get_time_from_ns_event (nsevent);
@@ -1052,11 +1069,12 @@ fill_button_event (GdkWindow *window,
   event->button.y = y;
   event->button.x_root = x_root;
   event->button.y_root = y_root;
-  /* FIXME event->axes */
+  event->button.axes = axes;
   event->button.state = state;
   event->button.button = get_mouse_button_from_ns_event (nsevent);
 
-  event->button.device = gdk_seat_get_pointer (seat);
+  gdk_event_set_device (event, gdk_seat_get_pointer (seat));
+  gdk_event_set_source_device (event, event_device);
   gdk_event_set_seat (event, seat);
 }
 
@@ -1070,6 +1088,22 @@ fill_motion_event (GdkWindow *window,
                    gint       y_root)
 {
   GdkSeat *seat = gdk_display_get_default_seat (_gdk_display);
+  GdkDevice *event_device = NULL;
+  gdouble *axes = NULL;
+
+  event_device = _gdk_quartz_device_manager_core_device_for_ns_event (gdk_display_get_device_manager (_gdk_display),
+                                                                      nsevent);
+
+  if ([nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT)
+    {
+      axes = g_new (gdouble, TABLET_AXES);
+
+      axes[0] = x;
+      axes[1] = y;
+      axes[2] = [nsevent pressure];
+      axes[3] = [nsevent tilt].x;
+      axes[4] = [nsevent tilt].y;
+    }
 
   event->any.type = GDK_MOTION_NOTIFY;
   event->motion.window = window;
@@ -1078,11 +1112,13 @@ fill_motion_event (GdkWindow *window,
   event->motion.y = y;
   event->motion.x_root = x_root;
   event->motion.y_root = y_root;
-  /* FIXME event->axes */
+  event->motion.axes = axes;
   event->motion.state = get_keyboard_modifiers_from_ns_event (nsevent) |
                         _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
-  event->motion.device = gdk_seat_get_pointer (seat);
+  gdk_event_set_device (event, gdk_seat_get_pointer (seat));
+  gdk_event_set_source_device (event, event_device);
+
   gdk_event_set_seat (event, seat);
 }
 
@@ -1112,9 +1148,9 @@ fill_scroll_event (GdkWindow          *window,
   event->scroll.y_root = y_root;
   event->scroll.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->scroll.direction = direction;
-  event->scroll.device = gdk_seat_get_pointer (seat);
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
+  gdk_event_set_device (event, gdk_seat_get_pointer (seat));
   gdk_event_set_seat (event, seat);
 }
 
@@ -1468,6 +1504,15 @@ gdk_event_translate (GdkEvent *event,
           return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
           goto done;
         }
+    }
+
+  /* We need to register the proximity event from any point on the screen
+   * to properly register the devices
+   */
+  if (event_type == GDK_QUARTZ_EVENT_TABLET_PROXIMITY)
+    {
+      _gdk_quartz_device_manager_register_device_for_ns_event (gdk_display_get_device_manager (_gdk_display),
+                                                               nsevent);
     }
 
   nswindow = [nsevent window];

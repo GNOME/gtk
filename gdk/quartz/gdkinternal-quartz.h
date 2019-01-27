@@ -75,6 +75,16 @@ typedef enum {
   GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
 } GdkQuartzEventSubType;
 
+#if MACOS_X_VERSION_MIN_SUPPORTED >= GDK_OSX_SIERRA
+#define GDK_QUARTZ_EVENT_TABLET_PROXIMITY NSEventTypeTabletProximity
+#define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_PROXIMITY NSEventSubtypeTabletProximity
+#define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT NSEventSubtypeTabletPoint
+#else
+#define GDK_QUARTZ_EVENT_TABLET_PROXIMITY NSTabletProximity
+#define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_PROXIMITY NSTabletProximityEventSubtype
+#define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT NSTabletPointEventSubtype
+#endif
+
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
                                                         gboolean   got_focus);
 void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
@@ -83,6 +93,19 @@ GdkModifierType _gdk_quartz_events_get_current_keyboard_modifiers (void);
 GdkModifierType _gdk_quartz_events_get_current_mouse_modifiers    (void);
 
 void         _gdk_quartz_events_break_all_grabs         (guint32    time);
+
+/* Devices */
+void       _gdk_quartz_device_core_set_active (GdkDevice  *device,
+                                               gboolean    active,
+                                               NSUInteger  device_id);
+
+gboolean   _gdk_quartz_device_core_is_active (GdkDevice  *device,
+                                              NSUInteger  device_id);
+
+void       _gdk_quartz_device_core_set_unique (GdkDevice          *device,
+                                               unsigned long long  unique_id);
+
+unsigned long long _gdk_quartz_device_core_get_unique (GdkDevice *device);
 
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
