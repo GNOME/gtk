@@ -278,7 +278,6 @@ struct _GtkEntryPrivate
   guint         truncate_multiline      : 1;
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
-  guint         populate_all            : 1;
 };
 
 struct _EntryIconInfo
@@ -300,7 +299,6 @@ struct _GtkEntryPasswordHint
 
 enum {
   ACTIVATE,
-  POPULATE_POPUP,
   MOVE_CURSOR,
   INSERT_AT_CURSOR,
   DELETE_FROM_CURSOR,
@@ -361,7 +359,6 @@ enum {
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
   PROP_ATTRIBUTES,
-  PROP_POPULATE_ALL,
   PROP_TABS,
   PROP_SHOW_EMOJI_ICON,
   PROP_ENABLE_EMOJI_COMPLETION,
@@ -1357,19 +1354,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:populate-all:
-   *
-   * If :populate-all is %TRUE, the #GtkEntry::populate-popup
-   * signal is also emitted for touch popups.
-   */
-  entry_props[PROP_POPULATE_ALL] =
-      g_param_spec_boolean ("populate-all",
-                            P_("Populate all"),
-                            P_("Whether to emit ::populate-popup for touch popups"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkEntry::tabs:
    *
    * A list of tabstops to apply to the text of the entry.
@@ -1403,34 +1387,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
 
-  /**
-   * GtkEntry::populate-popup:
-   * @entry: The entry on which the signal is emitted
-   * @widget: the container that is being populated
-   *
-   * The ::populate-popup signal gets emitted before showing the
-   * context menu of the entry.
-   *
-   * If you need to add items to the context menu, connect
-   * to this signal and append your items to the @widget, which
-   * will be a #GtkMenu in this case.
-   *
-   * If #GtkEntry:populate-all is %TRUE, this signal will
-   * also be emitted to populate touch popups. In this case,
-   * @widget will be a different container, e.g. a #GtkToolbar.
-   * The signal handler should not make assumptions about the
-   * type of @widget.
-   */
-  signals[POPULATE_POPUP] =
-    g_signal_new (I_("populate-popup"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkEntryClass, populate_popup),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_WIDGET);
-  
  /* Action signals */
   
   /**
@@ -2157,14 +2113,6 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_attributes (entry, g_value_get_boxed (value));
       break;
 
-    case PROP_POPULATE_ALL:
-      if (priv->populate_all != g_value_get_boolean (value))
-        {
-          priv->populate_all = g_value_get_boolean (value);
-          g_object_notify_by_pspec (object, pspec);
-        }
-      break;
-
     case PROP_TABS:
       gtk_entry_set_tabs (entry, g_value_get_boxed (value));
       break;
@@ -2395,10 +2343,6 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_ATTRIBUTES:
       g_value_set_boxed (value, priv->attrs);
-      break;
-
-    case PROP_POPULATE_ALL:
-      g_value_set_boolean (value, priv->populate_all);
       break;
 
     case PROP_TABS:

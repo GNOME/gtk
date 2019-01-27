@@ -78,9 +78,6 @@ struct _GtkEntry
 /**
  * GtkEntryClass:
  * @parent_class: The parent class.
- * @populate_popup: Class handler for the #GtkEntry::populate-popup signal. If
- *   non-%NULL, this will be called to add additional entries to the context
- *   menu when it is displayed.
  * @activate: Class handler for the #GtkEntry::activate signal. The default
  *   implementation calls gtk_window_activate_default() on the entry’s top-level
  *   window.
@@ -114,10 +111,6 @@ struct _GtkEntry
 struct _GtkEntryClass
 {
   GtkWidgetClass parent_class;
-
-  /* Hook to customize right-click popup */
-  void (* populate_popup)   (GtkEntry       *entry,
-                             GtkWidget      *popup);
 
   /* Action signals
    */
