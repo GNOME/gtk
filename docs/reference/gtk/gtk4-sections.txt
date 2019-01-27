@@ -496,6 +496,24 @@ gtk_list_view_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkgridview</FILE>
+<TITLE>GtkGridView</TITLE>
+GtkGridView
+gtk_grid_view_new
+gtk_grid_view_set_model
+gtk_grid_view_get_model
+<SUBSECTION Standard>
+GTK_GRID_VIEW
+GTK_GRID_VIEW_CLASS
+GTK_GRID_VIEW_GET_CLASS
+GTK_IS_GRID_VIEW
+GTK_IS_GRID_VIEW_CLASS
+GTK_TYPE_GRID_VIEW
+<SUBSECTION Private>
+gtk_grid_view_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkbuildable</FILE>
 GtkBuildable
 GtkBuildableIface
