@@ -8,8 +8,8 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
-static GtkWidget *menu = NULL;
 static GtkWidget *notebook = NULL;
+static GSimpleActionGroup *actions = NULL;
 
 static guint search_progress_id = 0;
 static guint finish_search_id = 0;
@@ -83,69 +83,42 @@ stop_search (GtkButton *button,
 }
 
 static void
-clear_entry (GtkEntry *entry)
+clear_entry (GSimpleAction *action,
+             GVariant      *parameter,
+             gpointer       user_data)
 {
-  gtk_editable_set_text (GTK_EDITABLE (entry), "");
+  GtkEditable *editable = user_data;
+
+  gtk_editable_set_text (editable, "");
 }
 
 static void
-search_by_name (GtkWidget *item,
-                GtkEntry  *entry)
+set_search_by (GSimpleAction *action,
+               GVariant      *value,
+               gpointer       user_data)
 {
-  gtk_entry_set_icon_tooltip_text (entry,
-                                   GTK_ENTRY_ICON_PRIMARY,
-                                   "Search by name\n"
-                                   "Click here to change the search type");
-  gtk_entry_set_placeholder_text (entry, "name");
-}
+  GtkEntry *entry = user_data;
+  const char *term;
 
-static void
-search_by_description (GtkWidget *item,
-                       GtkEntry  *entry)
-{
+  term = g_variant_get_string (value, NULL);
 
-  gtk_entry_set_icon_tooltip_text (entry,
-                                   GTK_ENTRY_ICON_PRIMARY,
-                                   "Search by description\n"
-                                   "Click here to change the search type");
-  gtk_entry_set_placeholder_text (entry, "description");
-}
+  g_simple_action_set_state (action, value);
 
-static void
-search_by_file (GtkWidget *item,
-                GtkEntry  *entry)
-{
-  gtk_entry_set_icon_tooltip_text (entry,
-                                   GTK_ENTRY_ICON_PRIMARY,
-                                   "Search by file name\n"
-                                   "Click here to change the search type");
-  gtk_entry_set_placeholder_text (entry, "file name");
-}
-
-GtkWidget *
-create_search_menu (GtkWidget *entry)
-{
-  GtkWidget *menu;
-  GtkWidget *item;
-
-  menu = gtk_menu_new ();
-
-  item = gtk_menu_item_new_with_mnemonic ("Search by _name");
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (search_by_name), entry);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic ("Search by _description");
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (search_by_description), entry);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic ("Search by _file name");
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (search_by_file), entry);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-  return menu;
+  if (g_str_equal (term, "name"))
+    {
+      gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY, "Search by name");
+      gtk_entry_set_placeholder_text (entry, "name");
+    }
+  else if (g_str_equal (term, "description"))
+    {
+      gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY, "Search by description");
+      gtk_entry_set_placeholder_text (entry, "description");
+    }
+  else if (g_str_equal (term, "filename"))
+    {
+      gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY, "Search by file name");
+      gtk_entry_set_placeholder_text (entry, "file name");
+    }
 }
 
 static void
@@ -154,7 +127,28 @@ icon_press_cb (GtkEntry       *entry,
                gpointer        data)
 {
   if (position == GTK_ENTRY_ICON_PRIMARY)
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
+    {
+      GAction *action;
+      GVariant *state;
+      GVariant *new_state;
+      const char *s;
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "search-by");
+      state = g_action_get_state (action);
+      s = g_variant_get_string (state, NULL);
+
+      if (g_str_equal (s, "name"))
+        new_state = g_variant_new_string ("description");
+      else if (g_str_equal (s, "description"))
+        new_state = g_variant_new_string ("filename");
+      else if (g_str_equal (s, "filename"))
+        new_state = g_variant_new_string ("name");
+      else
+        g_assert_not_reached ();
+
+      g_action_change_state (action, new_state);
+      g_variant_unref (state);
+    }
 }
 
 static void
@@ -165,7 +159,6 @@ activate_cb (GtkEntry  *entry,
     return;
 
   start_search (button, entry);
-
 }
 
 static void
@@ -187,32 +180,60 @@ search_entry_destroyed (GtkWidget *widget)
 }
 
 static void
-entry_populate_popup (GtkEntry *entry,
-                      GtkMenu  *menu,
-                      gpointer user_data)
+text_changed (GObject *object,
+              GParamSpec *pspec,
+              gpointer data)
 {
-  GtkWidget *item;
-  GtkWidget *search_menu;
+  GtkEntry *entry = GTK_ENTRY (object);
+  GActionMap *actions = data;
+  GAction *action;
   gboolean has_text;
 
   has_text = gtk_entry_get_text_length (entry) > 0;
 
-  item = gtk_separator_menu_item_new ();
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  action = g_action_map_lookup_action (actions, "clear");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), has_text);
+}
 
-  item = gtk_menu_item_new_with_mnemonic ("C_lear");
-  gtk_widget_show (item);
-  g_signal_connect_swapped (item, "activate",
-                            G_CALLBACK (clear_entry), entry);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, has_text);
+static GMenuModel *
+create_search_menu_model (void)
+{
+  GMenu *menu = g_menu_new ();
+  g_menu_append (menu, _("Name"), "search.search-by::name");
+  g_menu_append (menu, _("Description"), "search.search-by::description");
+  g_menu_append (menu, _("File Name"), "search.search-by::filename");
 
-  search_menu = create_search_menu (GTK_WIDGET (entry));
-  item = gtk_menu_item_new_with_label ("Search by");
-  gtk_widget_show (item);
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), search_menu);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  return G_MENU_MODEL (menu);
+}
+
+static void
+entry_add_to_context_menu (GtkEntry *entry)
+{
+  GMenuModel *menu;
+  GActionEntry entries[] = {
+    { "clear", clear_entry, NULL, NULL, NULL },
+    { "search-by", NULL, "s", "'name'", set_search_by }
+  };
+  GMenuModel *submenu;
+  GMenuItem *item;
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS(entries), entry);
+  gtk_widget_insert_action_group (GTK_WIDGET (entry), "search", G_ACTION_GROUP (actions));
+
+  menu = gtk_widget_get_context_menu (GTK_WIDGET (entry));
+  item = g_menu_item_new (_("C_lear"), "search.clear");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "edit-clear-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+  g_object_unref (item);
+
+  submenu = create_search_menu_model ();
+  g_menu_append_submenu (G_MENU (menu), _("Search By"), submenu);
+  g_object_unref (submenu);
+
+  gtk_widget_set_context_menu (GTK_WIDGET (entry), menu);
+
+  g_signal_connect (entry, "notify::text", G_CALLBACK (text_changed), actions);
 }
 
 GtkWidget *
@@ -271,29 +292,25 @@ do_search_entry (GtkWidget *do_widget)
       gtk_widget_show (cancel_button);
 
       /* Set up the search icon */
-      search_by_name (NULL, GTK_ENTRY (entry));
+      GVariant *value = g_variant_ref_sink (g_variant_new_string ("name"));
+      set_search_by (NULL, value, entry);
+      g_variant_unref (value);
 
-      /* Set up the clear icon */
-      g_signal_connect (entry, "icon-press",
-                        G_CALLBACK (icon_press_cb), NULL);
-      g_signal_connect (entry, "activate",
-                        G_CALLBACK (activate_cb), NULL);
+      gtk_entry_set_icon_activatable (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
+      gtk_entry_set_icon_sensitive (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
 
-      /* Create the menu */
-      menu = create_search_menu (entry);
-      gtk_menu_attach_to_widget (GTK_MENU (menu), entry, NULL);
+      g_signal_connect (entry, "icon-press", G_CALLBACK (icon_press_cb), NULL);
+      g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), NULL);
 
       /* add accessible alternatives for icon functionality */
-      g_object_set (entry, "populate-all", TRUE, NULL);
-      g_signal_connect (entry, "populate-popup",
-                        G_CALLBACK (entry_populate_popup), NULL);
+      entry_add_to_context_menu (GTK_ENTRY (entry));
     }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
     {
-      gtk_widget_destroy (menu);
+      g_clear_object (&actions);
       gtk_widget_destroy (window);
     }
 
