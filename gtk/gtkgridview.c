@@ -24,6 +24,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+#define DEFAULT_MAX_COLUMNS (7)
+
 /**
  * SECTION:gtkgridview
  * @title: GtkGridView
@@ -38,11 +40,15 @@ struct _GtkGridView
   GtkWidget parent_instance;
 
   GListModel *model;
+  guint min_columns;
+  guint max_columns;
 };
 
 enum
 {
   PROP_0,
+  PROP_MAX_COLUMNS,
+  PROP_MIN_COLUMNS,
   PROP_MODEL,
 
   N_PROPS
@@ -129,6 +135,14 @@ gtk_grid_view_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_MAX_COLUMNS:
+      g_value_set_uint (value, self->max_columns);
+      break;
+
+    case PROP_MIN_COLUMNS:
+      g_value_set_uint (value, self->min_columns);
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -149,6 +163,14 @@ gtk_grid_view_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_MAX_COLUMNS:
+      gtk_grid_view_set_max_columns (self, g_value_get_uint (value));
+      break;
+
+    case PROP_MIN_COLUMNS:
+      gtk_grid_view_set_min_columns (self, g_value_get_uint (value));
+      break;
+
     case PROP_MODEL:
       gtk_grid_view_set_model (self, g_value_get_object (value));
       break;
@@ -173,6 +195,33 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   gobject_class->set_property = gtk_grid_view_set_property;
 
   /**
+   * GtkGridView:max-columns:
+   *
+   * Maximum number of columns per row
+   *
+   * If this number is smaller than GtkGridView:min-columns, that value
+   * is used instead.
+   */
+  properties[PROP_MAX_COLUMNS] =
+    g_param_spec_uint ("max-columns",
+                       P_("Max columns"),
+                       P_("Maximum number of columns per row"),
+                       1, G_MAXUINT, DEFAULT_MAX_COLUMNS,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkGridView:min-columns:
+   *
+   * Minimum number of columns per row
+   */
+  properties[PROP_MIN_COLUMNS] =
+    g_param_spec_uint ("min-columns",
+                       P_("Min columns"),
+                       P_("Minimum number of columns per row"),
+                       1, G_MAXUINT, 1,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkGridView:model:
    *
    * Model for the items displayed
@@ -192,6 +241,8 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 static void
 gtk_grid_view_init (GtkGridView *self)
 {
+  self->min_columns = 1;
+  self->max_columns = DEFAULT_MAX_COLUMNS;
 }
 
 /**
@@ -256,5 +307,91 @@ gtk_grid_view_set_model (GtkGridView *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+}
+
+/**
+ * gtk_grid_view_get_max_columns:
+ * @self: a #GtkGridView
+ *
+ * Gets the maximum number of columns that the grid will use.
+ *
+ * Returns: The maximum number of columns
+ **/
+guint
+gtk_grid_view_get_max_columns (GtkGridView *self)
+{
+  g_return_val_if_fail (GTK_IS_GRID_VIEW (self), DEFAULT_MAX_COLUMNS);
+
+  return self->max_columns;
+}
+
+/**
+ * gtk_grid_view_set_max_columns:
+ * @self: a #GtkGridView
+ * @max_columns: The maximum number of columns
+ *
+ * Sets the maximum number of columns to use. This number must be at least 1.
+ * 
+ * If @max_columns is smaller than the minimum set via
+ * gtk_grid_view_set_min_columns(), that value is used instead.
+ **/
+void
+gtk_grid_view_set_max_columns (GtkGridView *self,
+                               guint        max_columns)
+{
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+  g_return_if_fail (max_columns > 0);
+
+  if (self->max_columns == max_columns)
+    return;
+
+  self->max_columns = max_columns;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_COLUMNS]);
+}
+
+/**
+ * gtk_grid_view_get_min_columns:
+ * @self: a #GtkGridView
+ *
+ * Gets the minimum number of columns that the grid will use.
+ *
+ * Returns: The minimum number of columns
+ **/
+guint
+gtk_grid_view_get_min_columns (GtkGridView *self)
+{
+  g_return_val_if_fail (GTK_IS_GRID_VIEW (self), 1);
+
+  return self->min_columns;
+}
+
+/**
+ * gtk_grid_view_set_min_columns:
+ * @self: a #GtkGridView
+ * @min_columns: The minimum number of columns
+ *
+ * Sets the minimum number of columns to use. This number must be at least 1.
+ * 
+ * If @min_columns is smaller than the minimum set via
+ * gtk_grid_view_set_max_columns(), that value is ignored.
+ **/
+void
+gtk_grid_view_set_min_columns (GtkGridView *self,
+                               guint        min_columns)
+{
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+  g_return_if_fail (min_columns > 0);
+
+  if (self->min_columns == min_columns)
+    return;
+
+  self->min_columns = min_columns;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MIN_COLUMNS]);
 }
 
