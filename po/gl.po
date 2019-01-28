@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-27 20:14+0000\n"
+"POT-Creation-Date: 2019-01-27 21:40+0000\n"
 "PO-Revision-Date: 2019-01-27 22:39+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -63,7 +63,6 @@ msgid "Drag’n’drop from other applications is not supported."
 msgstr "Arrastrar e soltar desde outros aplicativos non está admitido."
 
 #: gdk/gdkdrop.c:143
-#| msgid "No compatible formats to transfer clipboard contents."
 msgid "No compatible formats to transfer contents."
 msgstr "Formatos non compatíbeis para transferir contidos."
 
@@ -634,7 +633,6 @@ msgstr ""
 "Produciuse un fallo ao transmutar os datos DnD W32 ao formato 0x%x to %p (%s)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#| msgid "Error writing to image stream"
 msgid "writing a closed stream"
 msgstr "escribindo un fluxo de peche"
 
@@ -4551,7 +4549,6 @@ msgid "Optical Bounds"
 msgstr "Ligazóns ópticas"
 
 #: gtk/open-type-layout.h:83
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
 msgstr "Ordinais"
@@ -4577,7 +4574,6 @@ msgid "Proportional Kana"
 msgstr "Kana proporcional"
 
 #: gtk/open-type-layout.h:88
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
 msgstr "Figuras proporcionais"
@@ -4638,20 +4634,16 @@ msgid "Reph Forms"
 msgstr "Formas Reph"
 
 #: gtk/open-type-layout.h:100
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Ligazóns á esquerda"
 
 #: gtk/open-type-layout.h:101
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Alternativas dereita-a-esquerda"
 
 #: gtk/open-type-layout.h:102
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Formas espelladas de dereita a esquerda"
@@ -4787,7 +4779,6 @@ msgid "Stylistic Set 19"
 msgstr "Conxunto estilístico 19"
 
 #: gtk/open-type-layout.h:129
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
 msgstr "Conxunto estilístico 20"
@@ -4803,17 +4794,14 @@ msgid "Stretching Glyph Decomposition"
 msgstr "Decomposición de glifos por reducción"
 
 #: gtk/open-type-layout.h:132
-#| msgid "PostScript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "Subscript"
+msgstr "Subíndice"
 
 #: gtk/open-type-layout.h:133
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
-msgstr "Superscript"
+msgstr "Superíndice"
 
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
@@ -4861,14 +4849,11 @@ msgid "Alternate Vertical Metrics"
 msgstr "Métricas verticais alternativas"
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Variantes Vattu"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Escrita vertical"
@@ -4889,8 +4874,6 @@ msgid "Vertical Kana Alternates"
 msgstr "Alternativas Kana vertical"
 
 #: gtk/open-type-layout.h:148
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
 msgstr "Kerning vertical"
@@ -6176,8 +6159,6 @@ msgid "Saurashtra"
 msgstr "Saurashtra"
 
 #: gtk/script-names.c:86
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
 msgstr "Cham"
@@ -6388,7 +6369,6 @@ msgid "Mende Kikakui"
 msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:128
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
 msgstr "Modi"
@@ -6464,8 +6444,6 @@ msgid "Hatran"
 msgstr "Hatran"
 
 #: gtk/script-names.c:143
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr "Multani"
@@ -6476,8 +6454,6 @@ msgid "Old Hungarian"
 msgstr "Húngaro antigo"
 
 #: gtk/script-names.c:145
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "Escrita de canto"
@@ -6493,7 +6469,6 @@ msgid "Bhaiksuki"
 msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
 msgstr "Marchen"
