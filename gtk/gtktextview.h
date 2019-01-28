@@ -120,8 +120,6 @@ struct _GtkTextView
 /**
  * GtkTextViewClass:
  * @parent_class: The object class structure needs to be the first
- * @populate_popup: The class handler for the #GtkTextView::populate-popup
- *   signal.
  * @move_cursor: The class handler for the #GtkTextView::move-cursor
  *   keybinding signal.
  * @set_anchor: The class handler for the #GtkTextView::set-anchor
@@ -159,8 +157,6 @@ struct _GtkTextViewClass
 
   /*< public >*/
 
-  void (* populate_popup)        (GtkTextView      *text_view,
-                                  GtkWidget        *popup);
   void (* move_cursor)           (GtkTextView      *text_view,
                                   GtkMovementStep   step,
                                   gint              count,
