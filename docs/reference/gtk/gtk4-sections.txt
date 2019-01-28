@@ -3094,6 +3094,8 @@ gtk_text_view_set_input_hints
 gtk_text_view_get_input_hints
 gtk_text_view_set_monospace
 gtk_text_view_get_monospace
+gtk_text_view_add_to_context_menu
+
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW
