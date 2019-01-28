@@ -502,6 +502,10 @@ GtkGridView
 gtk_grid_view_new
 gtk_grid_view_set_model
 gtk_grid_view_get_model
+gtk_grid_view_set_max_columns
+gtk_grid_view_get_max_columns
+gtk_grid_view_set_min_columns
+gtk_grid_view_get_min_columns
 <SUBSECTION Standard>
 GTK_GRID_VIEW
 GTK_GRID_VIEW_CLASS
