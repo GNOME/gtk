@@ -1081,7 +1081,7 @@ scrollbar.horizontal button.up { -gtk-icon-source: -gtk-icontheme("pan-start-sym
 treeview ~ scrollbar.vertical { border-top: 1px solid #1b1b1b; margin-top: -1px; }
 
 /********** Switch * */
-switch { font-weight: bold; font-size: x-small; outline-offset: -4px; border: 1px solid #1b1b1b; border-radius: 14px; color: #eeeeec; background-color: #282828; text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
+switch { outline-offset: -4px; border: 1px solid #1b1b1b; border-radius: 14px; color: #eeeeec; background-color: #282828; text-shadow: 0 1px rgba(0, 0, 0, 0.1); /* only show i / o for the accessible theme */ }
 
 switch:checked { color: #ffffff; border-color: #030c17; background-color: #15539e; text-shadow: 0 1px rgba(3, 12, 23, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
 
@@ -1094,6 +1094,8 @@ switch:backdrop:checked { border-color: #030c17; background-color: #15539e; }
 switch:backdrop:disabled { color: #5b5b5b; border-color: #202020; background-color: #323232; }
 
 switch slider { margin: -1px; min-width: 24px; min-height: 24px; border: 1px solid; border-radius: 50%; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); -gtk-outline-radius: 20px; color: #eeeeec; outline-color: rgba(238, 238, 236, 0.3); border-color: #070707; text-shadow: 0 -1px rgba(0, 0, 0, 0.834353); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.834353); background-image: linear-gradient(to bottom, #2d2d2d 20%, #262626 90%); box-shadow: inset 0 1px rgba(255, 255, 255, 0.02), 0 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.07); }
+
+switch image { color: transparent; }
 
 switch:hover slider { color: #eeeeec; outline-color: rgba(238, 238, 236, 0.3); border-color: #070707; box-shadow: inset 0 1px rgba(255, 255, 255, 0.02), 0 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to bottom, #353535 20%, #2b2b2b 90%); }
 
