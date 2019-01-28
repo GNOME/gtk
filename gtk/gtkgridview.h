@@ -41,6 +41,16 @@ GListModel *    gtk_grid_view_get_model                         (GtkGridView    
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_model                         (GtkGridView            *self,
                                                                  GListModel             *model);
+GDK_AVAILABLE_IN_ALL
+guint           gtk_grid_view_get_min_columns                   (GtkGridView            *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_set_min_columns                   (GtkGridView            *self,
+                                                                 guint                   min_columns);
+GDK_AVAILABLE_IN_ALL
+guint           gtk_grid_view_get_max_columns                   (GtkGridView            *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_set_max_columns                   (GtkGridView            *self,
+                                                                 guint                   max_columns);
 
 
 G_END_DECLS
