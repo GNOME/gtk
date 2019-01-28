@@ -1336,6 +1336,15 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	    done; \
 	  done; \
 	done; \
+	for s in scalable; do \
+	  for c in status; do \
+	    for f in $(srcdir)/icons/$$s/$$c/*.svg; do \
+	      test "$$f" = "$(srcdir)/icons/$$s/$$c/*.svg" && continue; \
+	      n=`basename $$f`; \
+	      echo "    <file>icons/$$s/$$c/$$n</file>" >> $@; \
+	    done; \
+	  done; \
+	done; \
 	for f in $(srcdir)/inspector/*.ui; do \
 	  n=`basename $$f`; \
 	  echo "    <file compressed='true' preprocess='xml-stripblanks'>inspector/$$n</file>" >> $@; \

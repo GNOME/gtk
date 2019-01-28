@@ -630,10 +630,10 @@ button {
 
   // big standalone buttons like in Documents pager
   &.osd {
-    min-width: 24px;
+    min-width: 26px;
     min-height: 32px;
 
-    &.image-button { min-width: 32px; }
+    &.image-button { min-width: 34px; }
 
     color: $osd_fg_color;
     border-radius: 5px;
