@@ -147,15 +147,13 @@ gdk_quartz_device_manager_core_list_devices (GdkDeviceManager *device_manager,
       devices = g_list_prepend (devices, quartz_device_manager_core->core_pointer);
     }
 
-
   GList *devices_iter;
   for (devices_iter = quartz_device_manager_core->known_devices;
        devices_iter;
        devices_iter = g_list_next (devices_iter))
-  {
-    devices = g_list_append (devices, GDK_DEVICE(devices_iter->data));
-  }
-
+    {
+      devices = g_list_append (devices, GDK_DEVICE(devices_iter->data));
+    }
 
   return devices;
 }
