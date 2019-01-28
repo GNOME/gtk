@@ -2748,8 +2748,6 @@ treeview ~ scrollbar.vertical {
  * Switch *
  **********/
 switch {
-  font-weight: bold;
-  font-size: x-small;
   outline-offset: -4px;
 
   // similar to the .scale
@@ -2806,6 +2804,8 @@ switch {
 
     @include button(normal-alt, $edge: $shadow_color);
   }
+
+  image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover slider { @include button(hover-alt, $edge: $shadow_color); }
 
