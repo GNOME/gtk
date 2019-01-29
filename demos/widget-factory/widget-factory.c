@@ -1325,7 +1325,7 @@ toggle_format (GSimpleAction *action,
   if (g_variant_get_boolean (value))
     gtk_text_buffer_apply_tag_by_name (gtk_text_view_get_buffer (text_view), name, &start, &end);
   else
-    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (text_view), "bold", &start, &end);
+    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (text_view), name, &start, &end);
 }
 
 static GActionGroup *actions;
@@ -1401,13 +1401,15 @@ text_view_add_to_context_menu (GtkTextView *text_view)
 
   menu = gtk_text_view_get_default_context_menu (text_view);
   item = g_menu_item_new (_("Bold"), "format.bold");
-  //g_menu_item_set_attribute (item, "touch-icon", "s", "edit-clear-symbolic");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-bold-symbolic");
   g_menu_append_item (G_MENU (menu), item);
   g_object_unref (item);
   item = g_menu_item_new (_("Italics"), "format.italic");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-italic-symbolic");
   g_menu_append_item (G_MENU (menu), item);
   g_object_unref (item);
   item = g_menu_item_new (_("Underline"), "format.underline");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-underline-symbolic");
   g_menu_append_item (G_MENU (menu), item);
 
   gtk_widget_set_context_menu (GTK_WIDGET (text_view), menu);
