@@ -432,7 +432,11 @@
  * ]|
  */
 
-#define GTK_STATE_FLAGS_DO_PROPAGATE (GTK_STATE_FLAG_INSENSITIVE|GTK_STATE_FLAG_BACKDROP)
+#define GTK_STATE_FLAGS_DO_SET_PROPAGATE   (GTK_STATE_FLAG_INSENSITIVE | \
+                                            GTK_STATE_FLAG_BACKDROP)
+#define GTK_STATE_FLAGS_DO_UNSET_PROPAGATE (GTK_STATE_FLAG_INSENSITIVE | \
+                                            GTK_STATE_FLAG_BACKDROP | \
+                                            GTK_STATE_FLAG_PRELIGHT)
 
 typedef struct {
   gchar               *name;           /* Name of the template automatic child */
@@ -6551,7 +6555,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
 
   /* Merge both old state and current parent state,
    * making sure to only propagate the right states */
-  data.flags_to_set = parent_flags & GTK_STATE_FLAGS_DO_PROPAGATE;
+  data.flags_to_set = parent_flags & GTK_STATE_FLAGS_DO_SET_PROPAGATE;
   data.flags_to_unset = 0;
   gtk_widget_propagate_state (widget, &data);
 
@@ -8985,8 +8989,8 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
       /* Make sure to only propagate the right states further */
       child_data.old_scale_factor = new_scale_factor;
-      child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
-      child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
+      child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_SET_PROPAGATE;
+      child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_UNSET_PROPAGATE;
 
       if (child_data.flags_to_set != 0 ||
           child_data.flags_to_unset != 0)
