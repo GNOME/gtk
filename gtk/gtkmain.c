@@ -1728,9 +1728,7 @@ gtk_main_do_event (GdkEvent *event)
 
   /* Find the widget which got the event. We store the widget
    * in the user_data field of GdkSurface's. Ignore the event
-   * if we don't have a widget for it, except for GDK_PROPERTY_NOTIFY
-   * events which are handled specially. Though this happens rarely,
-   * bogus events can occur for e.g. destroyed GdkSurfaces.
+   * if we don't have a widget for it.
    */
   event_widget = gtk_get_event_widget (event);
   if (!event_widget)
