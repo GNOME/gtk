@@ -58,6 +58,8 @@
 #include "gtkemojichooser.h"
 #include "gtkpango.h"
 #include "gtknative.h"
+#include "gtkwidgetprivate.h"
+#include "gtkactionmuxerprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -8808,13 +8810,13 @@ append_bubble_item (GtkTextView *text_view,
                     GMenuModel  *model,
                     int          index)
 {
-  GtkTextViewPrivate *priv = text_view->priv;
   GtkWidget *item, *image;
   GVariant *att;
   const char *icon_name;
   const char *action_name;
-  GAction *action;
   GMenuModel *link;
+  char **split = NULL;
+  gboolean is_toggle_action = FALSE;
 
   link = g_menu_model_get_item_link (model, index, "section");
   if (link)
@@ -8839,14 +8841,37 @@ append_bubble_item (GtkTextView *text_view,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  if (g_str_has_prefix (action_name, "context."))
+  split = g_strsplit (action_name, ".", 2);
+  if (split[0] && split[1])
     {
-      action = g_action_map_lookup_action (priv->context_actions, action_name + strlen ("context."));
-      if (action && !g_action_get_enabled (action))
-        return;
-    }
+      GActionGroup *group = NULL;
+      gboolean enabled;
+      const GVariantType *param_type;
+      const GVariantType *state_type;
+      GtkActionMuxer *muxer;
+     
+      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE);
+      if (muxer)
+        group = gtk_action_muxer_lookup (muxer, split[0]);
+      if (group)
+        {
+          g_action_group_query_action (group, split[1], &enabled, &param_type, &state_type, NULL, NULL);
 
-  item = gtk_button_new ();
+          if (!enabled)
+            return;
+
+          if (param_type == NULL &&
+              state_type != NULL &&
+              g_variant_type_equal (state_type, G_VARIANT_TYPE_BOOLEAN))
+            is_toggle_action = TRUE;
+        }
+    }
+  g_strfreev (split);
+
+  if (is_toggle_action)
+    item = gtk_toggle_button_new ();
+  else
+    item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
   gtk_widget_show (image);
