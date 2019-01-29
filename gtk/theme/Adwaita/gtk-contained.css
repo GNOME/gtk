@@ -1610,7 +1610,9 @@ list { color: black; background-color: #ffffff; border-color: #dad6d2; }
 
 list:backdrop { background-color: #fcfcfc; border-color: #e0ddd9; }
 
-list row:not(.expander) { padding: 2px; }
+list row { padding: 2px; }
+
+list row.expander { padding: 0px; }
 
 list row.expander .row-header { padding: 2px; }
 
