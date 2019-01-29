@@ -497,7 +497,7 @@ button:link > label, button:visited > label { text-decoration-line: underline; }
 /***************** GtkSpinButton * */
 spinbutton:not(.vertical) { padding: 0; }
 
-spinbutton:not(.vertical) entry { min-width: 28px; margin: 0; background: none; background-color: transparent; border: none; border-radius: 0; box-shadow: none; }
+spinbutton:not(.vertical) entry, .osd spinbutton:not(.vertical) entry { min-width: 28px; margin: 0; background: none; background-color: transparent; border: none; border-radius: 0; box-shadow: none; }
 
 spinbutton:not(.vertical) entry:backdrop:disabled { background-color: transparent; }
 
