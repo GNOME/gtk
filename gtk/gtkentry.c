@@ -3536,12 +3536,10 @@ gtk_entry_move_handle (GtkEntry              *entry,
     }
   else
     {
-      GtkAllocation allocation;
       GdkRectangle rect;
 
-      gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
-      rect.x = x + text_allocation.x - allocation.x;
-      rect.y = y + text_allocation.y - allocation.y;
+      rect.x = x + text_allocation.x;
+      rect.y = y + text_allocation.y;
       rect.width = 1;
       rect.height = height;
 
