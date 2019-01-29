@@ -1720,6 +1720,7 @@ void
 gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
+  GtkWidget *target_widget;
   GtkWidget *grab_widget = NULL;
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
@@ -1734,6 +1735,8 @@ gtk_main_do_event (GdkEvent *event)
   if (!event_widget)
     return;
 
+  target_widget = event_widget;
+
   /* If pointer or keyboard grabs are in effect, munge the events
    * so that each window group looks like a separate app.
    */
@@ -1741,7 +1744,7 @@ gtk_main_do_event (GdkEvent *event)
   if (rewritten_event)
     {
       event = rewritten_event;
-      event_widget = gtk_get_event_widget (event);
+      target_widget = gtk_get_event_widget (event);
     }
 
   /* Push the event onto a stack of current events for
@@ -1750,28 +1753,28 @@ gtk_main_do_event (GdkEvent *event)
   current_events = g_list_prepend (current_events, event);
 
   if (is_pointing_event (event))
-    event_widget = handle_pointing_event (event);
-  else if (GTK_IS_WINDOW (event_widget) &&
+    target_widget = handle_pointing_event (event);
+  else if (GTK_IS_WINDOW (target_widget) &&
            (event->any.type == GDK_KEY_PRESS ||
             event->any.type == GDK_KEY_RELEASE))
     {
       GtkWidget *focus_widget;
 
       if (event->any.type == GDK_KEY_PRESS &&
-          gtk_window_activate_key (GTK_WINDOW (event_widget), (GdkEventKey *) event))
+          gtk_window_activate_key (GTK_WINDOW (target_widget), (GdkEventKey *) event))
         goto cleanup;
 
-      focus_widget = gtk_window_get_focus (GTK_WINDOW (event_widget));
+      focus_widget = gtk_window_get_focus (GTK_WINDOW (target_widget));
       if (focus_widget)
-        event_widget = focus_widget;
+        target_widget = focus_widget;
     }
 
-  if (!event_widget)
+  if (!target_widget)
     goto cleanup;
 
-  gdk_event_set_user_data (event, G_OBJECT (event_widget));
+  gdk_event_set_user_data (event, G_OBJECT (target_widget));
 
-  window_group = gtk_main_get_window_group (event_widget);
+  window_group = gtk_main_get_window_group (target_widget);
   device = gdk_event_get_device (event);
 
   /* check whether there is a (device) grab in effect... */
@@ -1786,17 +1789,17 @@ gtk_main_do_event (GdkEvent *event)
    * This is the key to implementing modality.
    */
   if (!grab_widget ||
-      ((gtk_widget_is_sensitive (event_widget) || event->any.type == GDK_SCROLL) &&
-       gtk_widget_is_ancestor (event_widget, grab_widget)))
-    grab_widget = event_widget;
+      ((gtk_widget_is_sensitive (target_widget) || event->any.type == GDK_SCROLL) &&
+       gtk_widget_is_ancestor (target_widget, grab_widget)))
+    grab_widget = target_widget;
 
   /* popovers are not really a "child" of their "parent" in the widget/window
    * hierarchy sense, we however want to interact with popovers spawn by widgets
    * within grab_widget. If this is the case, we let the event go through
    * unaffected by the grab.
    */
-  if (check_event_in_child_popover (event_widget, grab_widget))
-    grab_widget = event_widget;
+  if (check_event_in_child_popover (target_widget, grab_widget))
+    grab_widget = target_widget;
 
   /* If the widget receiving events is actually blocked by another
    * device GTK+ grab
@@ -1821,35 +1824,35 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_DELETE:
-      g_object_ref (event_widget);
+      g_object_ref (target_widget);
       if (!gtk_window_group_get_current_grab (window_group) ||
-          gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget)
+          gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == target_widget)
         {
-          if (!GTK_IS_WINDOW (event_widget) ||
-              !gtk_window_emit_close_request (GTK_WINDOW (event_widget)))
-            gtk_widget_destroy (event_widget);
+          if (!GTK_IS_WINDOW (target_widget) ||
+              !gtk_window_emit_close_request (GTK_WINDOW (target_widget)))
+            gtk_widget_destroy (target_widget);
         }
-      g_object_unref (event_widget);
+      g_object_unref (target_widget);
       break;
 
     case GDK_DESTROY:
       /* Unexpected GDK_DESTROY from the outside, ignore for
        * child windows, handle like a GDK_DELETE for toplevels
        */
-      if (!gtk_widget_get_parent (event_widget))
+      if (!gtk_widget_get_parent (target_widget))
         {
-          g_object_ref (event_widget);
-          if (!gtk_widget_event (event_widget, event) &&
-              gtk_widget_get_realized (event_widget))
-            gtk_widget_destroy (event_widget);
-          g_object_unref (event_widget);
+          g_object_ref (target_widget);
+          if (!gtk_widget_event (target_widget, event) &&
+              gtk_widget_get_realized (target_widget))
+            gtk_widget_destroy (target_widget);
+          g_object_unref (target_widget);
         }
       break;
 
     case GDK_FOCUS_CHANGE:
     case GDK_GRAB_BROKEN:
-      if (!_gtk_widget_captured_event (event_widget, event))
-        gtk_widget_event (event_widget, event);
+      if (!_gtk_widget_captured_event (target_widget, event))
+        gtk_widget_event (target_widget, event);
       break;
 
     case GDK_KEY_PRESS:
@@ -1915,7 +1918,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      _gtk_drag_dest_handle_event (event_widget, event);
+      _gtk_drag_dest_handle_event (target_widget, event);
       break;
     case GDK_EVENT_LAST:
     default:
