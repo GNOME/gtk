@@ -436,7 +436,8 @@
                                             GTK_STATE_FLAG_BACKDROP)
 #define GTK_STATE_FLAGS_DO_UNSET_PROPAGATE (GTK_STATE_FLAG_INSENSITIVE | \
                                             GTK_STATE_FLAG_BACKDROP | \
-                                            GTK_STATE_FLAG_PRELIGHT)
+                                            GTK_STATE_FLAG_PRELIGHT | \
+                                            GTK_STATE_FLAG_ACTIVE)
 
 typedef struct {
   gchar               *name;           /* Name of the template automatic child */
