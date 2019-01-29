@@ -1317,54 +1317,116 @@ page_combo_separator_func (GtkTreeModel *model,
 }
 
 static void
-activate_item (GtkWidget *item, GtkTextView *tv)
+toggle_format (GSimpleAction *action,
+               GVariant      *value,
+               gpointer       user_data)
 {
-  const gchar *tag;
+  GtkTextView *text_view = user_data;
   GtkTextIter start, end;
-  gboolean active;
+  const char *name;
 
-  g_object_get (item, "active", &active, NULL);
-  tag = (const gchar *)g_object_get_data (G_OBJECT (item), "tag");
-  gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (tv), &start, &end);
-  if (active)
-    gtk_text_buffer_apply_tag_by_name (gtk_text_view_get_buffer (tv), tag, &start, &end);
+  name = g_action_get_name (G_ACTION (action));
+
+  g_simple_action_set_state (action, value);
+
+  gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (text_view), &start, &end);
+  if (g_variant_get_boolean (value))
+    gtk_text_buffer_apply_tag_by_name (gtk_text_view_get_buffer (text_view), name, &start, &end);
   else
-    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (tv), tag, &start, &end);
+    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (text_view), name, &start, &end);
+}
+
+static GActionGroup *actions;
+
+static void
+text_changed (GtkTextBuffer *buffer)
+{
+  GAction *bold;
+  GAction *italic;
+  GAction *underline;
+  GtkTextIter iter;
+  GtkTextTagTable *tags;
+  GtkTextTag *bold_tag, *italic_tag, *underline_tag;
+  gboolean all_bold, all_italic, all_underline;
+  GtkTextIter start, end;
+  gboolean has_selection;
+
+  bold = g_action_map_lookup_action (G_ACTION_MAP (actions), "bold");
+  italic = g_action_map_lookup_action (G_ACTION_MAP (actions), "italic");
+  underline = g_action_map_lookup_action (G_ACTION_MAP (actions), "underline");
+
+  has_selection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (bold), has_selection);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (italic), has_selection);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (underline), has_selection);
+  if (!has_selection)
+    return;
+
+  tags = gtk_text_buffer_get_tag_table (buffer);
+  bold_tag = gtk_text_tag_table_lookup (tags, "bold");
+  italic_tag = gtk_text_tag_table_lookup (tags, "italic");
+  underline_tag = gtk_text_tag_table_lookup (tags, "underline");
+  all_bold = TRUE;
+  all_italic = TRUE;
+  all_underline = TRUE;
+  gtk_text_iter_assign (&iter, &start);
+  while (!gtk_text_iter_equal (&iter, &end))
+    {
+      all_bold &= gtk_text_iter_has_tag (&iter, bold_tag);
+      all_italic &= gtk_text_iter_has_tag (&iter, italic_tag);
+      all_underline &= gtk_text_iter_has_tag (&iter, underline_tag);
+      gtk_text_iter_forward_char (&iter);
+    }
+
+  g_simple_action_set_state (G_SIMPLE_ACTION (bold), g_variant_new_boolean (all_bold));
+  g_simple_action_set_state (G_SIMPLE_ACTION (italic), g_variant_new_boolean (all_italic));
+  g_simple_action_set_state (G_SIMPLE_ACTION (underline), g_variant_new_boolean (all_underline));
 }
 
 static void
-add_item (GtkTextView *tv,
-          GtkWidget   *popup,
-          const gchar *text,
-          const gchar *tag,
-          gboolean     set)
+text_view_add_to_context_menu (GtkTextView *text_view)
 {
-  GtkWidget *item, *label;
+  GMenuModel *menu;
+  GActionEntry entries[] = {
+    { "bold", NULL, NULL, "false", toggle_format },
+    { "italic", NULL, NULL, "false", toggle_format },
+    { "underline", NULL, NULL, "false", toggle_format },
+  };
+  GMenuItem *item;
+  GAction *action;
 
-  if (GTK_IS_MENU (popup))
-    {
-      item = gtk_check_menu_item_new ();
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), set);
-      g_signal_connect (item, "toggled", G_CALLBACK (activate_item), tv);
-    }
-  else
-    {
-      item = gtk_check_button_new ();
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), set);
-      gtk_widget_set_focus_on_click (item, FALSE);
-      g_signal_connect (item, "clicked", G_CALLBACK (activate_item), tv);
-    }
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), text_view);
 
-  label = gtk_label_new ("");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_label_set_markup (GTK_LABEL (label), text);
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (item), label);
-  g_object_set_data (G_OBJECT (item), "tag", (gpointer)tag);
-  gtk_widget_show (item);
-  gtk_container_add (GTK_CONTAINER (popup), item);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "bold");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "italic");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "underline");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (text_view), "format", G_ACTION_GROUP (actions));
+
+  menu = gtk_widget_get_context_menu (GTK_WIDGET (text_view));
+  item = g_menu_item_new (_("Bold"), "format.bold");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-bold-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+  g_object_unref (item);
+  item = g_menu_item_new (_("Italics"), "format.italic");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-italic-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+  g_object_unref (item);
+  item = g_menu_item_new (_("Underline"), "format.underline");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-underline-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+
+  gtk_widget_set_context_menu (GTK_WIDGET (text_view), menu);
+
+  g_signal_connect (gtk_text_view_get_buffer (text_view), "changed", G_CALLBACK (text_changed), NULL);
+  g_signal_connect (gtk_text_view_get_buffer (text_view), "mark-set", G_CALLBACK (text_changed), NULL);
 }
 
+#if 0
 static void
 populate_popup (GtkTextView *tv,
                 GtkWidget   *popup)
@@ -1408,6 +1470,7 @@ populate_popup (GtkTextView *tv,
   add_item (tv, popup, "<i>Italics</i>", "italic", all_italic);
   add_item (tv, popup, "<u>Underline</u>", "underline", all_underline);
 }
+#endif
 
 static void
 open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button)
@@ -1856,8 +1919,7 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "osd", widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "textview1");
-  g_signal_connect (widget, "populate-popup",
-                    G_CALLBACK (populate_popup), NULL);
+  text_view_add_to_context_menu (GTK_TEXT_VIEW (widget));
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "open_popover");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "open_popover_entry");
