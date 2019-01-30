@@ -80,6 +80,8 @@ struct _GtkAppChooserDialogPrivate {
 
   GtkSizeGroup *buttons;
 
+  GActionMap *context_actions;
+
   gboolean show_more_clicked;
   gboolean dismissed;
 };
@@ -141,6 +143,13 @@ widget_application_selected_cb (GtkAppChooserWidget *widget,
                                 gpointer             user_data)
 {
   GtkDialog *self = user_data;
+  gboolean can_remove;
+  GAction *action;
+
+  can_remove = g_app_info_can_remove_supports_type (app_info);
+
+  action = g_action_map_lookup_action (GTK_APP_CHOOSER_DIALOG (self)->priv->context_actions, "forget-association");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_remove);  
 
   gtk_dialog_set_response_sensitive (self, GTK_RESPONSE_OK, TRUE);
 }
@@ -281,8 +290,9 @@ widget_notify_for_button_cb (GObject    *source,
 }
 
 static void
-forget_menu_item_activate_cb (GtkMenuItem *item,
-                              gpointer     user_data)
+forget_association (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer     user_data)
 {
   GtkAppChooserDialog *self = user_data;
   GAppInfo *info;
@@ -299,34 +309,35 @@ forget_menu_item_activate_cb (GtkMenuItem *item,
     }
 }
 
-static GtkWidget *
-build_forget_menu_item (GtkAppChooserDialog *self)
+static void
+gtk_app_chooser_dialog_add_context_actions (GtkAppChooserDialog *self)
 {
-  GtkWidget *retval;
+    GActionEntry entries[] = {
+    { "forget-association", forget_association, NULL, NULL, NULL },
+  };
 
-  retval = gtk_menu_item_new_with_label (_("Forget association"));
-  gtk_widget_show (retval);
+  GSimpleActionGroup *actions = g_simple_action_group_new ();
+  GAction *action;
 
-  g_signal_connect (retval, "activate",
-                    G_CALLBACK (forget_menu_item_activate_cb), self);
+  self->priv->context_actions = G_ACTION_MAP (actions);
 
-  return retval;
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "forget-association");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "context", G_ACTION_GROUP (actions));
 }
 
 static void
-widget_populate_popup_cb (GtkAppChooserWidget *widget,
-                          GtkMenu             *menu,
-                          GAppInfo            *info,
-                          gpointer             user_data)
+setup_context_menu (GtkWidget *widget)
 {
-  GtkAppChooserDialog *self = user_data;
-  GtkWidget *menu_item;
+  GMenu *menu;
 
-  if (g_app_info_can_remove_supports_type (info))
-    {
-      menu_item = build_forget_menu_item (self);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    }
+  menu = g_menu_new ();
+  g_menu_append (menu, _("Forget association"), "context.forget-association");
+  gtk_widget_set_context_menu (widget, G_MENU_MODEL (menu));
+  g_object_unref (menu);
 }
 
 static void
@@ -339,15 +350,14 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
   gtk_widget_set_vexpand (self->priv->app_chooser_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (self->priv->inner_box), self->priv->app_chooser_widget);
 
-
   g_signal_connect (self->priv->app_chooser_widget, "application-selected",
                     G_CALLBACK (widget_application_selected_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "application-activated",
                     G_CALLBACK (widget_application_activated_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "notify::show-other",
                     G_CALLBACK (widget_notify_for_button_cb), self);
-  g_signal_connect (self->priv->app_chooser_widget, "populate-popup",
-                    G_CALLBACK (widget_populate_popup_cb), self);
+
+  setup_context_menu (self->priv->app_chooser_widget);
 
   /* Add the custom button to the new appchooser */
   gtk_container_add (GTK_CONTAINER (self->priv->inner_box),
@@ -533,6 +543,8 @@ gtk_app_chooser_dialog_finalize (GObject *object)
   g_free (self->priv->content_type);
   g_free (self->priv->heading);
 
+  g_object_unref (self->priv->context_actions);
+
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->finalize (object);
 }
 
@@ -671,6 +683,8 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
    */
   g_signal_connect (self, "response",
                     G_CALLBACK (gtk_app_chooser_dialog_response), NULL);
+
+  gtk_app_chooser_dialog_add_context_actions (self);
 }
 
 static void
