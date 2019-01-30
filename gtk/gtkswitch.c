@@ -449,7 +449,8 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   GtkSwitch *self = GTK_SWITCH (gtk_css_gadget_get_owner (gadget));
   GtkSwitchPrivate *priv = self->priv;
   GtkAllocation child_alloc;
-  
+  GtkAllocation on_clip, off_clip, slider_clip;
+
   child_alloc.x = allocation->x + round (priv->handle_pos * (allocation->width - allocation->width / 2));
   child_alloc.y = allocation->y;
   child_alloc.width = allocation->width / 2;
@@ -458,20 +459,26 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   gtk_css_gadget_allocate (priv->slider_gadget,
                            &child_alloc,
                            baseline,
-                           out_clip);
+                           &slider_clip);
+
+  gdk_rectangle_union (out_clip, &slider_clip, out_clip);
 
   child_alloc.x = allocation->x;
 
   gtk_css_gadget_allocate (priv->on_gadget,
                            &child_alloc,
                            baseline,
-                           out_clip);
+                           &on_clip);
+
+  gdk_rectangle_union (out_clip, &on_clip, out_clip);
 
   child_alloc.x = allocation->x + allocation->width - child_alloc.width;
   gtk_css_gadget_allocate (priv->off_gadget,
                            &child_alloc,
                            baseline,
-                           out_clip);
+                           &off_clip);
+
+  gdk_rectangle_union (out_clip, &off_clip, out_clip);
 
   if (gtk_widget_get_realized (GTK_WIDGET (self)))
     {
