@@ -31,6 +31,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <sys/mman.h>
+#include <fribidi.h>
 
 #include "gdk.h"
 #include "gdkwayland.h"
@@ -499,7 +500,7 @@ update_direction (GdkWaylandKeymap *keymap)
              {
                PangoDirection dir;
 
-               dir = pango_unichar_direction (xkb_keysym_to_utf32 (syms[sym]));
+               dir = gdk_unichar_direction (xkb_keysym_to_utf32 (syms[sym]));
                switch (dir)
                  {
                  case PANGO_DIRECTION_RTL:
