@@ -480,7 +480,7 @@ get_direction (XkbDescRec *xkb,
     {
       gint level = 0;
       KeySym sym = XkbKeySymEntry (xkb, code, level, group);
-      PangoDirection dir = pango_unichar_direction (gdk_keyval_to_unicode (sym));
+      PangoDirection dir = gdk_unichar_direction (gdk_keyval_to_unicode (sym));
 
       switch (dir)
         {
