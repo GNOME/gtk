@@ -6388,7 +6388,7 @@ gtk_entry_create_layout (GtkEntry *entry,
       PangoDirection pango_dir;
 
       if (gtk_entry_get_display_mode (entry) == DISPLAY_NORMAL)
-	pango_dir = pango_find_base_dir (display_text, n_bytes);
+	pango_dir = _gtk_pango_find_base_dir (display_text, n_bytes);
       else
 	pango_dir = PANGO_DIRECTION_NEUTRAL;
 
