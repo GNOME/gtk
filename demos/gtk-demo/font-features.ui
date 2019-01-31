@@ -50,6 +50,7 @@
                         <property name="can_focus">1</property>
                         <property name="receives_default">1</property>
                         <property name="font">Sans 12</property>
+                        <property name="level">style|size|variations|features</property>
                         <signal name="font-set" handler="font_changed" swapped="no"/>
                       </object>
                     </child>
