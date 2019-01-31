@@ -558,6 +558,8 @@ cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
                                                         gint       width,
                                                         gint       height);
 
+PangoDirection gdk_unichar_direction (gunichar ch);
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */
