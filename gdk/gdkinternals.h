@@ -351,7 +351,6 @@ void gdk_synthesize_surface_state (GdkSurface     *surface,
                                    GdkSurfaceState unset_flags,
                                    GdkSurfaceState set_flags);
 
-
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */
