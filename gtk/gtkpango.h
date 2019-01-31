@@ -82,6 +82,9 @@ gchar *_gtk_pango_get_text_after  (PangoLayout     *layout,
 PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
                                            PangoAttrList *from);
 
+PangoDirection _gtk_pango_find_base_dir (const gchar *text,
+                                         gint         length);
+
 G_END_DECLS
 
 #endif /* __GTK_PANGO_H__ */
