@@ -58,6 +58,7 @@
 #include "gtkpixelcacheprivate.h"
 #include "gtkmagnifierprivate.h"
 #include "gtkemojichooser.h"
+#include "gtkpango.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -6460,7 +6461,7 @@ iter_line_is_rtl (const GtkTextIter *iter)
   gtk_text_iter_set_line_offset (&start, 0);
   gtk_text_iter_forward_line (&end);
   text = gtk_text_iter_get_visible_text (&start, &end);
-  direction = pango_find_base_dir (text, -1);
+  direction = _gtk_pango_find_base_dir (text, -1);
 
   g_free (text);
 
