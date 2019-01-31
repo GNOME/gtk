@@ -396,13 +396,14 @@ recordings_list_row_selected (GtkListBox           *box,
                                                          NULL, NULL);
       g_object_unref (root_model);
       g_object_unref (paintable);
+
+      g_print ("%u render nodes\n", g_list_model_get_n_items (G_LIST_MODEL (priv->render_node_model)));
     }
   else
     {
       gtk_picture_set_paintable (GTK_PICTURE (priv->render_node_view), NULL);
     }
 
-  g_print ("%u render nodes\n", g_list_model_get_n_items (G_LIST_MODEL (priv->render_node_model)));
 
   gtk_list_box_bind_model (GTK_LIST_BOX (priv->render_node_list),
                            G_LIST_MODEL (priv->render_node_model),
