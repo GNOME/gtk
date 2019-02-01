@@ -833,6 +833,12 @@ typedef enum
 
   is_fullscreen = (([self styleMask] & GDK_QUARTZ_FULL_SCREEN_MASK) != 0);
 
+  /* NOTE: When user close a fullscreen window, setStyleMask: might be called
+     after windowWillClose: and GdkWindowImplQuartz is already finialized.
+     Ingore updating style when window is closing. */
+  if (self.delegate == nil)
+    return;
+
   if (was_fullscreen != is_fullscreen)
     _gdk_quartz_window_update_fullscreen_state ([[self contentView] gdkWindow]);
 }
