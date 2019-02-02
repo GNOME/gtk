@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-25 19:22+0000\n"
-"PO-Revision-Date: 2019-01-27 20:59+0100\n"
+"POT-Creation-Date: 2019-01-30 19:21+0000\n"
+"PO-Revision-Date: 2019-02-02 15:53+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -3133,7 +3133,7 @@ msgstr "„%s” nem indítható"
 #: gtk/gtkplacessidebar.c:2423
 #, c-format
 msgid "Error unlocking “%s”"
-msgstr "Hiba a(z) „%s” feloldásakor."
+msgstr "Hiba a(z) „%s” feloldásakor"
 
 #: gtk/gtkplacessidebar.c:2425
 #, c-format
@@ -4781,17 +4781,17 @@ msgstr "Utolsó betűkészletjel a sorváltozatoknál"
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Terminál formák #2"
+msgstr "Záró formák #2"
 
 #: gtk/open-type-layout.h:41
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Terminál formák #3"
+msgstr "Záró formák #3"
 
 #: gtk/open-type-layout.h:42
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Terminál formák"
+msgstr "Záró formák"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
@@ -4831,7 +4831,7 @@ msgstr "Történelmi formák"
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr "Történelmi kana változatok"
+msgstr "Vízszintes kana változatok"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
@@ -4926,12 +4926,12 @@ msgstr "Lokalizált formák"
 #: gtk/open-type-layout.h:69
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "Balról jobbra változatok"
+msgstr "Balról jobbra írt változatok"
 
 #: gtk/open-type-layout.h:70
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "Balról jobbra tükrözött formák"
+msgstr "Balról jobbra írt tükrözött formák"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -4941,12 +4941,12 @@ msgstr "Jelpozicionálás"
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr "Mediális formák #2"
+msgstr "Középső formák #2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr "Mediális formák"
+msgstr "Középső formák"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
@@ -5056,7 +5056,7 @@ msgstr "Negyed szélességűek"
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Randomize"
-msgstr "Véletlenszerűen"
+msgstr "Véletlenszerű"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
@@ -5086,12 +5086,12 @@ msgstr "Jobb oldali határok"
 #: gtk/open-type-layout.h:101
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "Jobbról balra változatok"
+msgstr "Jobbról balra írt változatok"
 
 #: gtk/open-type-layout.h:102
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "Jobbról balra tükrözött formák"
+msgstr "Jobbról balra írt tükrözött formák"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
@@ -5121,7 +5121,7 @@ msgstr "Optikai méret"
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr "Kiskapitális"
+msgstr "Kiskapitálisok"
 
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
@@ -6791,7 +6791,7 @@ msgstr "Khojki"
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr "Szindhi"
+msgstr "Khudabadi, szindhi"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
@@ -6896,7 +6896,7 @@ msgstr "Multani"
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr "Ómagyar"
+msgstr "Székely–magyar"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
