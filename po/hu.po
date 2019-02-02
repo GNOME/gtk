@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-26 10:42+0000\n"
-"PO-Revision-Date: 2019-01-27 21:12+0100\n"
+"POT-Creation-Date: 2019-02-01 10:08+0000\n"
+"PO-Revision-Date: 2019-02-02 15:50+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -37,7 +37,7 @@ msgstr "Üres vágólapról nem lehet olvasni."
 
 #: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:592
 msgid "No compatible formats to transfer clipboard contents."
-msgstr "Nincs kompatibilis formátum a vágólap tartalmának átadásához."
+msgstr "Nincs megfelelő formátum a vágólap tartalmának átviteléhez."
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:215
 #: gtk/gtkdnd.c:818
@@ -52,13 +52,11 @@ msgstr "A tartalom nem adható meg mint %s"
 
 #: gdk/gdkdrop.c:110
 msgid "Drag’n’drop from other applications is not supported."
-msgstr ""
+msgstr "Egyéb alkalmazásokból a fogd és vidd módszer nem támogatott."
 
 #: gdk/gdkdrop.c:143
-#, fuzzy
-#| msgid "No compatible formats to transfer clipboard contents."
 msgid "No compatible formats to transfer contents."
-msgstr "Nincs kompatibilis formátum a vágólap tartalmának átadásához."
+msgstr "Nincsenek megfelelő formátumok a tartalmak átviteléhez."
 
 #: gdk/gdksurface.c:1338
 msgid "GL support disabled via GDK_DEBUG"
@@ -458,7 +456,7 @@ msgstr "Nincs megvalósítva OS X rendszeren"
 #: gdk/win32/gdkdrop-win32.c:1330 gdk/x11/gdkclipboard-x11.c:760
 #: gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
-msgstr "Nincs kompatibilis átadási formátum"
+msgstr "Nem található megfelelő átviteli formátum"
 
 #: gdk/wayland/gdkglcontext-wayland.c:146 gdk/win32/gdkglcontext-win32.c:705
 #: gdk/x11/gdkglcontext-x11.c:670 gdk/x11/gdkglcontext-x11.c:720
@@ -484,136 +482,155 @@ msgstr "Az alap GL nem érhető el az EGL megvalósításban"
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
+"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() túllépte az "
+"időkorlátot."
 
 #: gdk/win32/gdkclipdrop-win32.c:728
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
+"Nem lehet elkérni a vágólap tulajdonjogát. Egy másik folyamat már elkérte "
+"előttünk."
 
 #: gdk/win32/gdkclipdrop-win32.c:742
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() meghiúsult: 0x%"
+"lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
+"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() meghiúsult: 0x%"
+"lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet beállítani a vágólap adatait. Az OpenClipboard() túllépte az "
+"időkorlátot."
 
 #: gdk/win32/gdkclipdrop-win32.c:807 gdk/win32/gdkclipdrop-win32.c:838
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet beállítani a vágólap adatait. Egy másik folyamat elkérte a vágólap "
+"tulajdonjogát."
 
 #: gdk/win32/gdkclipdrop-win32.c:821
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet beállítani a vágólap adatait. Az OpenClipboard() meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:873
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
+"Nem lehet lekérni a vágólap adatait. A GlobalLock(0x%p) meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:884
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
+"Nem lehet lekérni a vágólap adatait. A GlobalSize(0x%p) meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
 msgstr ""
+"Nem lehet lekérni a vágólap adatait. Nem sikerült %lu bájtot lefoglalni az "
+"adatok tárolásához."
 
 #: gdk/win32/gdkclipdrop-win32.c:927
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet lekérni a vágólap adatait. Az OpenClipboard() túllépte az "
+"időkorlátot."
 
 #: gdk/win32/gdkclipdrop-win32.c:937
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet lekérni a vágólap adatait. A vágólap tulajdonjoga megváltozott."
 
 #: gdk/win32/gdkclipdrop-win32.c:947
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet lekérni a vágólap adatait. A vágólap adatai megváltoztak, mielőtt "
+"lekérhettük volna."
 
 #: gdk/win32/gdkclipdrop-win32.c:964
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Nem lehet lekérni a vágólap adatait. Az OpenClipboard() meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:989
-#, fuzzy, c-format
-#| msgid "No compatible transfer format found"
+#, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
-msgstr "Nincs kompatibilis átadási formátum"
+msgstr ""
+"Nem lehet lekérni a vágólap adatait. Nem található megfelelő átviteli "
+"formátum."
 
 #: gdk/win32/gdkclipdrop-win32.c:999
-#, fuzzy, c-format
-#| msgid "Cannot store clipboard. No clipboard manager is active."
+#, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
+msgstr ""
+"Nem lehet lekérni a vágólap adatait. A GetClipboardData() meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1218
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "Nem lehet lekérni a DnD adatait. A GlobalLock(0x%p) meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1227
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "Nem lehet lekérni a DnD adatait. A GlobalSize(0x%p) meghiúsult: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1237
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgstr ""
+"Nem lehet lekérni a DnD adatait. Nem sikerült %lu bájtot lefoglalni az adatok "
+"tárolásához."
 
 #: gdk/win32/gdkdrop-win32.c:1304
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
-msgstr ""
+msgstr "A 0x%p GDK felület nincs regisztrálva ejtési célként"
 
 #: gdk/win32/gdkdrop-win32.c:1311
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr ""
+msgstr "A 0x%p célkörnyezetrekordnak nincs adatobjektuma"
 
 #: gdk/win32/gdkdrop-win32.c:1349
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
-msgstr ""
+msgstr "A IDataObject_GetData (0x%x) meghiúsult, visszatérési érték: 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1381
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
+"Nem sikerült átalakítani a DnD adatok 0x%x W32 formátumát erre: %p (%s)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#, fuzzy
-#| msgid "Can’t close stream"
 msgid "writing a closed stream"
-msgstr "Az adatfolyam lezárása meghiúsult"
+msgstr "egy lezárt adatfolyam írása"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
-msgstr ""
+msgstr "A g_try_realloc () meghiúsult"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:94
 #: gdk/win32/gdkhdataoutputstream-win32.c:232
@@ -622,16 +639,16 @@ msgstr "GlobalReAlloc() sikertelen: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
-msgstr ""
+msgstr "Elfogyott a pufferterület (a pufferméret rögzített)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
-msgstr ""
+msgstr "Nem lehet átalakítani egy önálló kezelőt"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr ""
+msgstr "Nem sikerült átalakítani %zu bájt adatot erről: %s erre: %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
@@ -1345,7 +1362,7 @@ msgstr "Fordította"
 
 #: gtk/gtkaboutdialog.c:2304
 msgid "Design by"
-msgstr ""
+msgstr "Tervezte"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1934,52 +1951,52 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:8158 gtk/gtklabel.c:6098 gtk/gtktextview.c:8579
+#: gtk/gtkentry.c:8156 gtk/gtklabel.c:6092 gtk/gtktextview.c:8579
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtkentry.c:8162 gtk/gtklabel.c:6099 gtk/gtktextview.c:8583
+#: gtk/gtkentry.c:8160 gtk/gtklabel.c:6093 gtk/gtktextview.c:8583
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtkentry.c:8166 gtk/gtklabel.c:6100 gtk/gtktextview.c:8585
+#: gtk/gtkentry.c:8164 gtk/gtklabel.c:6094 gtk/gtktextview.c:8585
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtkentry.c:8169 gtk/gtkfilechooserwidget.c:1484
-#: gtk/gtkfilechooserwidget.c:2204 gtk/gtklabel.c:6102 gtk/gtktextview.c:8588
+#: gtk/gtkentry.c:8167 gtk/gtkfilechooserwidget.c:1484
+#: gtk/gtkfilechooserwidget.c:2204 gtk/gtklabel.c:6096 gtk/gtktextview.c:8588
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: gtk/gtkentry.c:8180 gtk/gtklabel.c:6111 gtk/gtktextview.c:8602
+#: gtk/gtkentry.c:8178 gtk/gtklabel.c:6105 gtk/gtktextview.c:8602
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: gtk/gtkentry.c:8190 gtk/gtktextview.c:8612
+#: gtk/gtkentry.c:8188 gtk/gtktextview.c:8612
 msgid "Insert _Emoji"
 msgstr "_Emodzsi beszúrása"
 
-#: gtk/gtkentry.c:8344 gtk/gtktextview.c:8804
+#: gtk/gtkentry.c:8342 gtk/gtktextview.c:8804
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: gtk/gtkentry.c:8347 gtk/gtktextview.c:8807
+#: gtk/gtkentry.c:8345 gtk/gtktextview.c:8807
 msgid "Cut"
 msgstr "Kivágás"
 
-#: gtk/gtkentry.c:8350 gtk/gtktextview.c:8810
+#: gtk/gtkentry.c:8348 gtk/gtktextview.c:8810
 msgid "Copy"
 msgstr "Másolás"
 
-#: gtk/gtkentry.c:8353 gtk/gtktextview.c:8813
+#: gtk/gtkentry.c:8351 gtk/gtktextview.c:8813
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: gtk/gtkentry.c:9217
+#: gtk/gtkentry.c:9215
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
-#: gtk/gtkentry.c:9489
+#: gtk/gtkentry.c:9487
 msgid "Insert Emoji"
 msgstr "Emodzsi beszúrása"
 
@@ -2432,12 +2449,12 @@ msgid "Error"
 msgstr "Hiba"
 
 #. Open Link
-#: gtk/gtklabel.c:6079
+#: gtk/gtklabel.c:6073
 msgid "_Open Link"
 msgstr "Hi_vatkozás megnyitása"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6082
 msgid "Copy _Link Address"
 msgstr "_Hivatkozás címének másolása"
 
@@ -2639,7 +2656,7 @@ msgstr "Nem fejeztethető be a(z) %d azonosítójú folyamat: %s"
 
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
-msgstr ""
+msgstr "A GTK nem talált médiamodult. Ellenőrizze a telepítést."
 
 #: gtk/gtknotebook.c:4252 gtk/gtknotebook.c:6518
 #, c-format
@@ -2815,7 +2832,6 @@ msgstr "„%s” nem indítható"
 #.
 #: gtk/gtkplacessidebar.c:2378
 #, c-format
-#| msgid "Unsupported encoding “%s”"
 msgid "Error unlocking “%s”"
 msgstr "Hiba a(z) „%s” feloldásakor"
 
@@ -4017,7 +4033,7 @@ msgstr "Lassulás"
 
 #: gtk/inspector/visual.ui:386
 msgid "Show fps overlay"
-msgstr ""
+msgstr "Másodpercenkénti képkockaszám rátét megjelenítése"
 
 #: gtk/inspector/visual.ui:413
 msgid "Show Graphic Updates"
@@ -4520,7 +4536,7 @@ msgstr "Optikai határok"
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "Sorszámnevek"
+msgstr "Sorszámok"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
@@ -6168,8 +6184,6 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: gtk/script-names.c:94
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglpyhs"
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
 msgstr "Egyiptomi hieroglifák"
@@ -6317,7 +6331,7 @@ msgstr "Khojki"
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr "Khudawadi, sindhi"
+msgstr "Khudabadi, szindhi"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
@@ -6372,7 +6386,7 @@ msgstr "Pahawh Hmong"
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr "Palmyrene"
+msgstr "Palmír"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
@@ -6387,7 +6401,7 @@ msgstr "Zsoltáros pahlavi"
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Siddham"
-msgstr "Siddham"
+msgstr "Sziddham"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
@@ -6894,7 +6908,6 @@ msgid "Flags"
 msgstr "Zászlók"
 
 #: gtk/ui/gtkemojichooser.ui:203
-#| msgid "Recent"
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Legutóbbi"
@@ -6936,8 +6949,6 @@ msgid "Preview text"
 msgstr "Mintaszöveg"
 
 #: gtk/ui/gtkfontchooserwidget.ui:116 gtk/ui/gtkfontchooserwidget.ui:147
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
 msgstr "vízszintes"
 
@@ -7247,27 +7258,20 @@ msgstr "Csökkenti a hangerőt"
 
 #: modules/media/gtkffmediafile.c:216
 #, c-format
-#| msgid "Unspecified error"
 msgid "Unspecified error decoding video"
 msgstr "Meghatározatlan hiba a videodekódoláskor"
 
 #: modules/media/gtkffmediafile.c:318 modules/media/gtkffmediafile.c:492
-#, fuzzy
-#| msgid "Not enough free memory"
 msgid "Not enough memory"
-msgstr "Nincs elég szabad memória"
+msgstr "Nincs elég memória"
 
 #: modules/media/gtkffmediafile.c:515
-#, fuzzy
-#| msgid "Not a valid page setup file"
 msgid "Not a video file"
-msgstr "Nem érvényes oldalbeállítási fájl"
+msgstr "Nem videofájl"
 
 #: modules/media/gtkffmediafile.c:534
-#, fuzzy
-#| msgid "Unsupported encoding “%s”"
 msgid "Unsupported video codec"
-msgstr "Nem támogatott „%s” kódolás"
+msgstr "Nem támogatott videokodek"
 
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
