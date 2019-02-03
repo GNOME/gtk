@@ -570,6 +570,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
                       GdkDevice  *device)
 {
   GtkSettings *settings;
+  graphene_rect_t anchor_bounds;
   GdkRectangle anchor_rect;
   GdkSurface *surface;
   GdkSurface *effective_toplevel;
@@ -584,12 +585,11 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   tooltip->tooltip_widget = new_tooltip_widget;
 
   toplevel = _gtk_widget_get_toplevel (new_tooltip_widget);
-  gtk_widget_translate_coordinates (new_tooltip_widget, toplevel,
-                                    0, 0,
-                                    &anchor_rect.x, &anchor_rect.y);
-
-  anchor_rect.width = gtk_widget_get_allocated_width (new_tooltip_widget);
-  anchor_rect.height = gtk_widget_get_allocated_height (new_tooltip_widget);
+  gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds);
+  anchor_rect = (GdkRectangle) {
+    floorf (anchor_bounds.origin.x), floorf (anchor_bounds.origin.y),
+    ceilf (anchor_bounds.size.width), ceilf (anchor_bounds.size.height)
+  };
 
   settings = gtk_settings_get_for_display (display);
   g_object_get (settings,
