@@ -1574,21 +1574,21 @@ set_widget_active_state (GtkWidget       *target,
 static GtkWidget *
 handle_pointing_event (GdkEvent *event)
 {
-  GtkWidget *target = NULL, *old_target = NULL, *widget;
+  GtkWidget *target = NULL, *old_target = NULL, *event_widget;
   GtkWindow *toplevel;
   GtkWidget *toplevel_widget;
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
 
-  widget = gtk_get_event_widget (event);
+  event_widget = gtk_get_event_widget (event);
   device = gdk_event_get_device (event);
   if (!device || !gdk_event_get_coords (event, &x, &y))
-    return widget;
+    return event_widget;
 
-  toplevel_widget = gtk_widget_get_toplevel (widget);
+  toplevel_widget = gtk_widget_get_toplevel (event_widget);
   if (!GTK_IS_WINDOW (toplevel_widget))
-    return widget;
+    return event_widget;
 
   toplevel = GTK_WINDOW (toplevel_widget);
 
