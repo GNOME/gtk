@@ -1754,8 +1754,8 @@ create_menu (GdkDisplay *display, gint depth, gint length)
   menuitem = gtk_menu_item_new ();
   label = gtk_label_new ("Image Item");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (menuitem), box);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
