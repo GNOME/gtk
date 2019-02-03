@@ -625,7 +625,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * If the anchor rectangle isn't to tall, make sure the tooltip isn't too
        * far away from the pointer position.
        */
-      effective_toplevel = _gtk_widget_get_surface (new_tooltip_widget);
+      effective_toplevel = _gtk_widget_get_surface (toplevel);
       gdk_surface_get_device_position (effective_toplevel,
                                        device,
                                        &pointer_x, &pointer_y, NULL);
