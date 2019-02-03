@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 10:08+0000\n"
-"PO-Revision-Date: 2019-02-02 15:50+0100\n"
+"POT-Creation-Date: 2019-02-02 14:53+0000\n"
+"PO-Revision-Date: 2019-02-03 14:53+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -496,15 +496,15 @@ msgstr ""
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() meghiúsult: 0x%"
-"lx."
+"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() meghiúsult: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
-"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() meghiúsult: 0x%"
-"lx."
+"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() meghiúsult: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
@@ -600,8 +600,8 @@ msgstr "Nem lehet lekérni a DnD adatait. A GlobalSize(0x%p) meghiúsult: 0x%lx.
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgstr ""
-"Nem lehet lekérni a DnD adatait. Nem sikerült %lu bájtot lefoglalni az adatok "
-"tárolásához."
+"Nem lehet lekérni a DnD adatait. Nem sikerült %lu bájtot lefoglalni az "
+"adatok tárolásához."
 
 #: gdk/win32/gdkdrop-win32.c:1304
 #, c-format
@@ -2083,7 +2083,7 @@ msgstr "Már létezik egy ugyanilyen nevű fájl"
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:661 gtk/gtkprintunixdialog.c:728
 #: gtk/gtkwindow.c:10822 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:1017 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/inspector/recorder.c:1018 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:54 gtk/ui/gtkcolorchooserdialog.ui:29
 #: gtk/ui/gtkfontchooserdialog.ui:23
 msgid "_Cancel"
@@ -2097,7 +2097,7 @@ msgid "_Open"
 msgstr "_Megnyitás"
 
 #: gtk/gtkfilechoosernative.c:597 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:1018
+#: gtk/inspector/recorder.c:1019
 msgid "_Save"
 msgstr "M_entés"
 
@@ -2275,11 +2275,11 @@ msgstr "Nem sikerült beolvasni a mappa tartalmát"
 #. Translators: see g_date_time_format() for details on the format
 #: gtk/gtkfilechooserwidget.c:4656 gtk/gtkfilechooserwidget.c:4704
 msgid "%H:%M"
-msgstr "%k.%M"
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4658 gtk/gtkfilechooserwidget.c:4706
 msgid "%l:%M %p"
-msgstr "%l.%M %p"
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4662
 msgid "Yesterday"
@@ -2287,11 +2287,11 @@ msgstr "Tegnap"
 
 #: gtk/gtkfilechooserwidget.c:4670
 msgid "%-e %b"
-msgstr "%b %e"
+msgstr "%b. %-e."
 
 #: gtk/gtkfilechooserwidget.c:4674
 msgid "%-e %b %Y"
-msgstr "%Y %B %e"
+msgstr "%Y. %b. %-e."
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -3841,7 +3841,7 @@ msgstr "Attribútum"
 msgid "Defined At"
 msgstr "Definiálva itt:"
 
-#: gtk/inspector/recorder.c:988
+#: gtk/inspector/recorder.c:989
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "A RenderNode mentése meghiúsult"
