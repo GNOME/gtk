@@ -6,6 +6,9 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
 $backdrop_transition: 200ms ease-out;
 $button_transition: all 200ms $ease-out-quad;
+$button_radius: 5px;
+$menu_radius: 5px;
+$window_radius: $button_radius + 3;
 
 * {
   padding: 0;
@@ -274,10 +277,6 @@ entry {
       &.right { margin-left: 6px; }
     }
 
-    undershoot {
-      &.left { @include undershoot(left); }
-      &.right { @include undershoot(right); }
-    }
 
     &.flat {
       &:focus, &:backdrop, &:disabled, &:backdrop:disabled, & {
@@ -524,9 +523,9 @@ button {
 
     min-height: 24px;
     min-width: 16px;
-    padding: 4px 8px;
+    padding: 4px 9px;
     border: 1px solid;
-    border-radius: 3px;
+    border-radius: $button_radius;
     transition: $button_transition;
 
     @include button(normal);
@@ -589,8 +588,8 @@ button {
 
     &.image-button {
       min-width: 24px;
-      padding-left: 4px;
-      padding-right: 4px;
+      padding-left: 5px;
+      padding-right: 5px;
     }
 
     &.text-button {
@@ -631,10 +630,10 @@ button {
 
   // big standalone buttons like in Documents pager
   &.osd {
-    min-width: 24px;
+    min-width: 26px;
     min-height: 32px;
 
-    &.image-button { min-width: 32px; }
+    &.image-button { min-width: 34px; }
 
     color: $osd_fg_color;
     border-radius: 5px;
@@ -862,12 +861,14 @@ button {
 
     &:not(.flat):not(:checked):not(:active):not(:disabled):not(:backdrop) {
       @include button(normal);
+
       background-image: $button_fill, $_border_bg;
       border-color: transparent;
     }
 
     &:hover:not(:checked):not(:active):not(:disabled):not(:backdrop) {
       @include button(hover);
+
       background-image: $button_fill, $_border_bg;
       border-color: transparent;
     }
@@ -959,8 +960,8 @@ toolbar.inline-toolbar toolbutton:backdrop {
 }
 
 %linked_left {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
+    border-top-left-radius: $button_radius;
+    border-bottom-left-radius: $button_radius;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none;
@@ -969,8 +970,8 @@ toolbar.inline-toolbar toolbutton:backdrop {
 %linked_right {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-top-right-radius: $button_radius;
+    border-bottom-right-radius: $button_radius;
     border-right-style: solid;
 }
 
@@ -982,7 +983,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   &:last-child { @extend %linked_right; }
 
   &:only-child {
-    border-radius: 3px;
+    border-radius: $button_radius;
     border-style: solid;
   }
 }
@@ -1048,7 +1049,7 @@ modelbutton.flat,
   min-height: 26px;
   padding-left: 5px;
   padding-right: 5px;
-  border-radius: 3px;
+  border-radius: $button_radius;
   outline-offset: -2px;
 
   @extend %undecorated_button;
@@ -1094,6 +1095,12 @@ button.color {
   }
 }
 
+/* list buttons */
+/* tone down as per new designs, see issue #1473 */
+list row button {
+  @extend %undecorated_button;
+  border: 1px solid transparentize($borders_color, .5);
+}
 
 /*********
  * Links *
@@ -1498,7 +1505,7 @@ headerbar {
   border-color: $alt_borders_color;
   border-radius: 0;
 
-  @include headerbar_fill;
+  @include headerbar_fill(darken($bg_color, 10%));
 
   &:backdrop {
     border-color: $backdrop_borders_color;
@@ -1537,6 +1544,11 @@ headerbar {
       background-color: $selected_bg_color;
       background-image: none;
       box-shadow: inset 0 1px mix($top_hilight, $selected_bg_color, 60%);
+      
+      label { 
+        text-shadow: none;
+        color: $selected_fg_color; 
+      }
     }
 
     .subtitle:link { @extend *:link:selected;  }
@@ -1631,8 +1643,8 @@ headerbar {
         background-color: transparentize($selected_bg_color, 1);
         background-image: none;
         box-shadow: none;
-        padding-left: 10px;
-        padding-right: 10px;
+        min-height: 20px;
+        padding: 6px 10px;
 
         arrow { -GtkArrow-arrow-scaling: 1; }
 
@@ -1669,6 +1681,19 @@ headerbar {
       padding: 0;
     }
   }
+  
+  stackswitcher button:checked,
+  button.toggle:checked {
+    /* darken switchbuttons for headerbars. issue #1588 */
+    background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
+    border-color: darken($borders_color, 3%);
+    border-top-color: darken($borders_color, 8%);
+    &:backdrop {
+      @include button(backdrop-active);
+    }
+  }
+  
+  separator.titlebutton { opacity: 0; } /* hide the close button separator */
 
   .solid-csd & {
     &:backdrop, & {
@@ -1710,8 +1735,8 @@ headerbar {
 
 .background .titlebar {
   &:backdrop, & {
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    border-top-left-radius: $window_radius;
+    border-top-right-radius: $window_radius;
   }
 }
 
@@ -1783,11 +1808,26 @@ headerbar { // headerbar border rounding
 
 window.devel {
   headerbar.titlebar:not(.selection-mode) {
-    background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
-                linear-gradient(to left, mix($selected_bg_color, $bg_color, 10%) 8%, $bg_color 25%);
+    $c: darken($bg_color, 10%);
+    $gradient: -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+               linear-gradient(to right, transparent 65%, transparentize($selected_bg_color, 0.8)),
+               linear-gradient(to top, darken($c, 3%), $c 3px, lighten($c, 6%));
+    @if $variant == 'dark' {
+      $gradient: -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+                 linear-gradient(to right, transparent 65%, transparentize($selected_bg_color, 0.9)),
+                 linear-gradient(to top, lighten($c, 3%) 3px, lighten($c, 5%));
+    }
+
+    background: $bg_color $gradient;
     color: transparentize($fg_color,.9);
 
     label { color: $fg_color; }
+
+    &:backdrop {
+      background: $bg_color -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+                  image($bg_color); /* background-color would flash */
+      color: transparentize($fg_color,.95);
+    }
   }
 }
 
@@ -2060,6 +2100,7 @@ treeview.view {
 }
 
 
+
 /*********
  * Menus *
  *********/
@@ -2075,6 +2116,16 @@ menubar,
     min-height: 16px;
     padding: 4px 8px;
 
+    // remove padding and rounding from menubar submenus
+    menu {
+      border-radius: 0;
+      padding:0;
+      menu {
+        border-radius: 0;
+        padding:0;
+      }
+    }
+
     &:hover { //Seems like it :hover even with keyboard focus
       box-shadow: inset 0 -3px $selected_bg_color;
       color: $link_color;
@@ -2085,15 +2136,23 @@ menubar,
       box-shadow: none;
     }
   }
+
+  // remove padding and rounding from menubar submenu decoration
+  .csd.popup decoration {border-radius:0;}
 }
+
+// Needed to make the border-radius of menus work
+// otherwise the background bleeds out of the menu edges
+.background.popup { background-color: transparent; }
 
 menu,
 .menu,
 .context-menu {
   margin: 4px; // see https://bugzilla.gnome.org/show_bug.cgi?id=591258
-  padding: 2px 0px;
+  padding: 4px 0px;
   background-color: $menu_color;
   border: 1px solid $borders_color; // adds borders in a non composited env
+  border-radius: $menu_radius;
 
   .csd & { border: none; }  // axes borders in a composited env
 
@@ -2153,14 +2212,19 @@ menu,
     border-radius: 0;
 
     &.top {
-      margin-top: -6px;
+      margin-top: -2px;
       border-bottom: 1px solid mix($fg_color, $base_color, 10%);
+      border-top-right-radius: $menu_radius;
+      border-top-left-radius: $menu_radius;
       -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
     }
 
     &.bottom {
+      margin-top: 4px;
       margin-bottom: -6px;
       border-top: 1px solid mix($fg_color, $base_color, 10%);
+      border-bottom-right-radius: $menu_radius;
+      border-bottom-left-radius: $menu_radius;
       -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
     }
 
@@ -2195,7 +2259,7 @@ menuitem {
 
 popover.background {
   padding: 2px;
-  border-radius: 5px;
+  border-radius: $menu_radius + 4;
   background-color: $popover_bg_color;
 
   .csd &, & { border: 1px solid $borders_color; }
@@ -2685,13 +2749,11 @@ treeview ~ scrollbar.vertical {
  * Switch *
  **********/
 switch {
-  font-weight: bold;
-  font-size: smaller;
   outline-offset: -4px;
 
   // similar to the .scale
   border: 1px solid $borders_color;
-  border-radius: 3px;
+  border-radius: 14px;
   color: $fg_color;
   background-color: $dark_fill;
   text-shadow: 0 1px transparentize(black, 0.9);
@@ -2734,14 +2796,17 @@ switch {
 
   slider {
     margin: -1px;
-    min-width: 44px;
-    min-height: 26px;
+    min-width: 24px;
+    min-height: 24px;
     border: 1px solid;
-    border-radius: 3px;
+    border-radius: 50%;
     transition: $button_transition;
+    -gtk-outline-radius: 20px;
 
     @include button(normal-alt, $edge: $shadow_color);
   }
+
+  image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover slider { @include button(hover-alt, $edge: $shadow_color); }
 
@@ -2774,6 +2839,7 @@ switch {
       slider { &:checked, & { border-color: $selected_borders_color; } }
     }
   }
+
 }
 
 
@@ -3635,16 +3701,6 @@ scrolledwindow {
     }
   }
 
-  // Overflow indication, works similarly to the overshoot, the size if fixed tho.
-  undershoot {
-    &.top { @include undershoot(top); }
-
-    &.bottom { @include undershoot(bottom); }
-
-    &.left { @include undershoot(left); }
-
-    &.right { @include undershoot(right); }
-  }
 
   junction { // the small square between two scrollbars
     border-color: transparent;
@@ -3822,8 +3878,8 @@ messagedialog { // Message Dialog styling
   &.csd { // rounded bottom border styling for csd version
     &.background {
       // bigger radius for better antialiasing
-      border-bottom-left-radius: 9px;
-      border-bottom-right-radius: 9px;
+      border-bottom-left-radius: $window_radius+1;
+      border-bottom-right-radius: $window_radius+1;
     }
 
     .dialog-action-area button {
@@ -4381,7 +4437,7 @@ colorchooser .popover.osd { border-radius: 5px; }
  * Window Decorations *
  *********************/
 decoration {
-  border-radius: 7px 7px 0 0;
+  border-radius: $window_radius $window_radius 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
 
@@ -4423,7 +4479,7 @@ decoration {
   .ssd & { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
 
   .csd.popup & {
-    border-radius: 0;
+    border-radius: $menu_radius;
     box-shadow: 0 1px 2px transparentize(black, 0.8),
                 0 0 0 1px transparentize($_wm_border, 0.1);
   }
@@ -4434,7 +4490,7 @@ decoration {
   }
 
   messagedialog.csd & {
-    border-radius: 7px;
+    border-radius: $window_radius;
     box-shadow: 0 1px 2px transparentize(black, 0.8),
                 0 0 0 1px transparentize($_wm_border, 0.1);
   }
@@ -4574,6 +4630,23 @@ stackswitcher button.text-button.circular { // FIXME aggregate with buttons
   min-width: 32px;
   min-height: 32px;
   padding: 0;
+}
+
+/*************
+ * App Icons *
+ *************/
+/* Outline for low res icons */
+.lowres-icon {
+-gtk-icon-shadow: 1px 1px rgba(0,0,0,0.3),
+             -1px -1px rgba(0,0,0,0.3),
+             -1px 1px rgba(0,0,0,0.3),
+             1px -1px rgba(0,0,0,0.3);
+}
+
+/* Drapshadow for large icons */ 
+.icon-dropshadow {
+  -gtk-icon-shadow: 0 2px 12px rgba(0,0,0,0.2), 
+               0 1px 2px rgba(0,0,0,0.7);
 }
 
 /*********

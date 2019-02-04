@@ -115,8 +115,8 @@
 // buttons
 
 @function _border_color($c, $darker: false) {
-  @if $darker == true { @return darken($c, 30%); }
-  @else { @return darken($c, 20%); }
+  @if $darker == true { @return darken($c, 20%); }
+  @else { @return darken($c, 10%); }
 }
 
 @function _text_shadow_color ($tc: $fg_color, $bg: $bg_color) {
@@ -139,10 +139,10 @@
 //
   @if lightness($c)>95% { @return white; }
   @else if lightness($c)>90% { @return transparentize(white, 0.2); }
-  @else if lightness($c)>80% { @return transparentize(white, 0.4); }
-  @else if lightness($c)>50% { @return transparentize(white, 0.6); }
-  @else if lightness($c)>40% { @return transparentize(white, 0.8); }
-  @else { @return transparentize(white, 0.95); }
+  @else if lightness($c)>80% { @return transparentize(white, 0.5); }
+  @else if lightness($c)>50% { @return transparentize(white, 0.8); }
+  @else if lightness($c)>40% { @return transparentize(white, 0.9); }
+  @else { @return transparentize(white, 0.98); }
 }
 
 @mixin _button_text_shadow ($tc:$fg_color, $bg:$bg_color) {
@@ -186,6 +186,7 @@
   $_hilight_color: _button_hilight_color($c);
   $_button_edge: if($edge == none, none, _widget_edge($edge));
   $_blank_edge: if($edge == none, none, _widget_edge(transparentize($edge,1)));
+  $_button_shadow: 0 1px 2px transparentize($shadow_color, 0.03);
 
   @if $t==normal {
   //
@@ -195,11 +196,11 @@
     outline-color: transparentize($tc, 0.7);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    $button_fill: if($variant == 'light', linear-gradient(to bottom, $c, darken($c, 4%) 60%, darken($c, 10%)),
-                                          linear-gradient(to bottom, darken($c, 2%), darken($c, 4%) 60%, darken($c, 6%))) !global;
+    $button_fill: if($variant == 'light', linear-gradient(to top, darken($c, 4%) 2px, $c),
+                                          linear-gradient(to top, darken($c,1%) 2px, $c)) !global;
     background-image: $button_fill;
     @include _button_text_shadow($tc, $c);
-    @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
+    @include _shadows(inset 0 1px $_hilight_color, $_button_edge, $_button_shadow);
   }
 
   @else if $t==hover {
@@ -211,14 +212,14 @@
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     @if $variant == 'light' {
-      $button_fill: linear-gradient(to bottom, lighten($c, 6%), $c 60%, darken($c, 4%)) !global;
+      $button_fill: linear-gradient(to top, $c, lighten($c, 1%) 1px) !global;
       @include _button_text_shadow($tc, lighten($c, 6%));
-      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge);
+      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge, $_button_shadow);
     }
     @else {
-      $button_fill: linear-gradient(to bottom, lighten($c, 1%), darken($c, 2%) 60%, darken($c, 4%)) !global;
+      $button_fill: linear-gradient(to top, darken($c,1%), lighten($c, 1%) 1px) !global;
       @include _button_text_shadow($tc,lighten($c, 6%));
-      @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge);
+      @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge, $_button_shadow);
     }
     background-image: $button_fill;
   }
@@ -233,17 +234,13 @@
     @include _button_text_shadow($tc, $c);
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 5%) 20%, $c 90%);
-      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),
-                        inset 0 -2px lighten($c, 2%),
-                        inset 0 -1px darken($c, 12%),
-                        $_button_edge);
+       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),
+                        $_button_edge, $_button_shadow);
     }
     @else {
       background-image: linear-gradient(to bottom, darken($c, 3%) 20%, darken($c, 6%) 90%);
       @include _shadows(inset 0 1px $_hilight_color,
-                        inset 0 -2px darken($c, 4%),
-                        inset 0 -1px darken($c, 9%),
-                        $_button_edge);
+                        $_button_edge, $_button_shadow);
     }
   }
 
@@ -257,16 +254,12 @@
     @if $variant == 'light' {
       $button_fill: linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%) !global;
       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),
-                        inset 0 -2px lighten($c, 5%),
-                        inset 0 -1px darken($c, 10%),
-                        $_button_edge);
+                        $_button_edge, $_button_shadow);
     }
     @else {
       $button_fill: linear-gradient(to bottom, $c 20%, darken($c, 4%) 90%) !global;
       @include _shadows(inset 0 1px $_hilight_color,
-                        inset 0 -2px darken($c, 3%),
-                        inset 0 -1px darken($c, 6%),
-                        $_button_edge);
+                        $_button_edge, $_button_shadow);
     }
     background-image: $button_fill;
   }
@@ -278,7 +271,7 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    $button_fill: image(darken($c, 6%)) !global;
+    $button_fill: if($variant == 'light', image(darken($c, 14%)), image(darken($c, 9%))) !global;
     background-image: $button_fill;
     @include _shadows(inset 0 1px transparentize($_hilight_color, 1), $_button_edge);
 
@@ -499,9 +492,9 @@
 // $hc: top highlight color
 // $ov: a background layer for background shorthand (hence no commas!)
 //
-  $gradient: linear-gradient(to top, darken($c, 13%), darken($c, 2%) 2px, $c 3px);
+  $gradient: linear-gradient(to top, darken($c, 2%), lighten($c, 1%));
 
-  @if $variant == 'dark' { $gradient: linear-gradient(to top, darken($c, 3%), darken($c, 1%) 2px, $c 3px); }
+  @if $variant == 'dark' { $gradient: linear-gradient(to top, lighten($c, 4%), lighten($c, 6%)); }
 
   @if $ov != none { background: $c $ov, $gradient; }
   @else { background: $c $gradient; }
@@ -588,42 +581,4 @@
   box-shadow: none;              //
 }
 
-@mixin undershoot($p) {
-//
-// undershoot
-//
-// $p: position
-//
-// possible $p values:
-// top, bottom, right, left
-//
 
-  $_undershoot_color_dark: transparentize(black, 0.8);
-  $_undershoot_color_light: transparentize(white, 0.8);
-
-  $_gradient_dir: left;
-  $_dash_bg_size: 10px 1px;
-  $_gradient_repeat: repeat-x;
-  $_bg_pos: center $p;
-
-  background-color: transparent; // shouldn't be needed, but better to be sure;
-
-  @if ($p == left) or ($p == right) {
-    $_gradient_dir: top;
-    $_dash_bg_size: 1px 10px;
-    $_gradient_repeat: repeat-y;
-    $_bg_pos: $p center;
-  }
-
-  background-image: linear-gradient(to $_gradient_dir, // this is the dashed line
-                                    $_undershoot_color_light 50%,
-                                    $_undershoot_color_dark 50%);
-
-  padding-#{$p}: 1px;
-  background-size: $_dash_bg_size;
-  background-repeat: $_gradient_repeat;
-  background-origin: content-box;
-  background-position: $_bg_pos;
-  border: none;
-  box-shadow: none;
-}

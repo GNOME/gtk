@@ -2,16 +2,16 @@
 // it gets @if ed depending on $variant
 
 
-$base_color: if($variant == 'light', #ffffff, #232729);
+$base_color: if($variant == 'light', #ffffff, lighten(desaturate(#241f31, 100%), 2%));
 $text_color: if($variant == 'light', black, white);
-$bg_color: if($variant == 'light', #e8e8e7, #33393b);
+$bg_color: if($variant == 'light', #f6f5f4, darken(desaturate(#3d3846, 100%), 4%));
 $fg_color: if($variant == 'light', #2e3436, #eeeeec);
 
 $selected_fg_color: #ffffff;
-$selected_bg_color: if($variant == 'light', #4a90d9, darken(#4a90d9, 20%));
-$selected_borders_color: if($variant== 'light', darken($selected_bg_color, 30%), darken($selected_bg_color, 20%));
-$borders_color: if($variant == 'light', darken($bg_color, 20%), darken($bg_color, 10%));
-$alt_borders_color: if($variant == 'light', darken($bg_color, 35%), darken($bg_color, 17%));
+$selected_bg_color: if($variant == 'light', #3584e4, darken(#3584e4, 20%));
+$selected_borders_color: if($variant== 'light', darken($selected_bg_color, 15%), darken($selected_bg_color, 30%));
+$borders_color: if($variant == 'light', darken($bg_color, 18%), darken($bg_color, 10%));
+$alt_borders_color: if($variant == 'light', darken($bg_color, 24%), darken($bg_color, 18%));
 $borders_edge: if($variant == 'light', transparentize(white, 0.2), transparentize($fg_color, 0.93));
 $link_color: if($variant == 'light', darken($selected_bg_color, 10%), lighten($selected_bg_color, 20%));
 $link_visited_color: if($variant == 'light', darken($selected_bg_color, 20%), lighten($selected_bg_color, 10%));
@@ -29,12 +29,12 @@ $scrollbar_slider_active_color: if($variant=='light', darken($selected_bg_color,
 
 $warning_color: #f57900;
 $error_color: #cc0000;
-$success_color: if($variant == 'light', #73d216, darken(#73d216, 10%));
-$destructive_color: if($variant == 'light', #ef2929, darken(#ef2929, 10%));
+$success_color: if($variant == 'light', #33d17a, darken(#33d17a, 10%));
+$destructive_color: if($variant == 'light', #e01b24, darken(#e01b24, 10%));
 
 $osd_fg_color: #eeeeec;
 $osd_text_color: white;
-$osd_bg_color: transparentize(#1c1f20, 0.3);
+$osd_bg_color: transparentize(darken(#3d3846,10%), 0.3);
 $osd_insensitive_bg_color: transparentize(mix($osd_fg_color, opacify($osd_bg_color, 1), 10%), 0.5);
 $osd_insensitive_fg_color: mix($osd_fg_color, opacify($osd_bg_color, 1), 50%);
 $osd_borders_color: transparentize(black, 0.3);
