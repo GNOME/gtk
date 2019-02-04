@@ -168,6 +168,7 @@ gdk_deps = [
   pixbuf_dep,
   cairo_dep,
   pango_dep,
+  fribidi_dep,
   cairogobj_dep,
   glib_dep,
   gobject_dep,

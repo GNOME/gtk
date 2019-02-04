@@ -28,6 +28,7 @@ endif
 
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
 pango_req          = '>= 1.41.0'
+fribidi_req        = '>= 0.19.7'
 atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
@@ -325,6 +326,8 @@ cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() 
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
+fribidi_dep    = dependency('fribidi', version: fribidi_req,
+                            fallback : ['fribidi', 'libfribidi_dep'])
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
