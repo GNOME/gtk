@@ -637,7 +637,7 @@ menubar > menuitem:hover, .menubar > menuitem:hover { box-shadow: inset 0 -3px #
 
 menubar > menuitem:disabled, .menubar > menuitem:disabled { color: gray; box-shadow: none; }
 
-menu, .menu { margin: 4px; padding: 1px; background-color: #fff; border: 1px solid gray; }
+menu, .menu { margin: 4px; padding: 0px; background-color: #fff; border: 1px solid gray; }
 
 menu menuitem, .menu menuitem { text-shadow: none; padding: 4px; min-width: 40px; }
 
