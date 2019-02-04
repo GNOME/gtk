@@ -4182,7 +4182,6 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
-      gtk_container_add (GTK_CONTAINER (vbox), button);
 
       button = gtk_check_button_new_with_label ("Fill Tab");
       gtk_container_add (GTK_CONTAINER (hbox), button);
