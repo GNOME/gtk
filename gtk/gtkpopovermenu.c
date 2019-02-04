@@ -116,7 +116,6 @@ enum {
 
 enum {
   CHILD_PROP_SUBMENU = 1,
-  CHILD_PROP_POSITION
 };
 
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
@@ -224,14 +223,6 @@ gtk_popover_menu_get_child_property (GtkContainer *container,
       }
       break;
 
-    case CHILD_PROP_POSITION:
-      {
-        gint position;
-        gtk_container_child_get (GTK_CONTAINER (stack), child, "position", &position, NULL);
-        g_value_set_int (value, position);
-      }
-      break;
-
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec); 
       break;
@@ -259,14 +250,6 @@ gtk_popover_menu_set_child_property (GtkContainer *container,
         const gchar *name;
         name = g_value_get_string (value);
         gtk_container_child_set (GTK_CONTAINER (stack), child, "name", name, NULL);
-      }
-      break;
-
-    case CHILD_PROP_POSITION:
-      {
-        gint position;
-        position = g_value_get_int (value);
-        gtk_container_child_set (GTK_CONTAINER (stack), child, "position", position, NULL);
       }
       break;
 
@@ -360,14 +343,6 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                                    P_("The name of the submenu"),
                                                                    NULL,
                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_POSITION,
-                                              g_param_spec_int ("position",
-                                                                P_("Position"),
-                                                                P_("The index of the child in the parent"),
-                                                                -1, G_MAXINT, 0,
-                                                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
