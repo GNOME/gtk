@@ -34,7 +34,6 @@
 
 #include "gtkaboutdialog.h"
 #include "gtkbutton.h"
-#include "gtkbbox.h"
 #include "gtkdialog.h"
 #include "gtkgrid.h"
 #include "gtkbox.h"

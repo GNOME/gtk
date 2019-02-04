@@ -221,7 +221,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (scrolled), extra_hbox);
   gtk_widget_show (extra_hbox);
 
-  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_spacing (GTK_BOX (bbox), 6);
   gtk_container_add (GTK_CONTAINER (box), bbox);
   gtk_widget_show (bbox);

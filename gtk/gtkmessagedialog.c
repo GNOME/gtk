@@ -33,7 +33,6 @@
 #include "gtkbuildable.h"
 #include "gtklabel.h"
 #include "gtkbox.h"
-#include "gtkbbox.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -281,7 +280,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_EXPAND);
+  gtk_widget_set_halign (action_area, GTK_ALIGN_FILL);
+  gtk_box_set_homogeneous (GTK_BOX (action_area), TRUE);
 
   settings = gtk_widget_get_settings (GTK_WIDGET (dialog));
   g_object_get (settings, "gtk-keynav-use-caret", &use_caret, NULL);

@@ -792,8 +792,7 @@ main (int argc, char *argv[])
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (hbox), vbox2);
 
-  bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
+  bbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (vbox2), bbox);
 
   button = gtk_button_new_with_mnemonic ("<< (_Q)");
@@ -810,8 +809,7 @@ main (int argc, char *argv[])
                     "changed", G_CALLBACK (selection_changed), button);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
+  bbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (vbox2), bbox);
 
   button = gtk_button_new_with_mnemonic ("<< (_E)");

@@ -346,8 +346,7 @@ typedef enum
  * @GTK_PACK_START: The child is packed into the start of the box
  * @GTK_PACK_END: The child is packed into the end of the box
  *
- * Represents the packing location #GtkBox children. (See: #GtkVBox,
- * #GtkHBox, and #GtkButtonBox).
+ * Represents the packing location #GtkBox children
  */
 typedef enum
 {

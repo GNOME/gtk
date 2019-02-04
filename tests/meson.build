@@ -18,7 +18,6 @@ gtk_tests = [
   ['testappchooserbutton'],
   ['testassistant'],
   ['testbaseline'],
-  ['testbbox'],
   ['testbox'],
   ['testboxcss'],
   ['testbuttons'],

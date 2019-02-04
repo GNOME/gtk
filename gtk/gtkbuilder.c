@@ -171,7 +171,7 @@
  *     <child internal-child="vbox">
  *       <object class="GtkBox" id="vbox1">
  *         <child internal-child="action_area">
- *           <object class="GtkButtonBox" id="hbuttonbox1">
+ *           <object class="GtkBox" id="hbuttonbox1">
  *             <child>
  *               <object class="GtkButton" id="ok_button">
  *                 <property name="label">gtk-ok</property>

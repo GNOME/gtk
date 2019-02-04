@@ -965,7 +965,7 @@ test_children (void)
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
   g_assert (action_area != NULL);
-  g_assert (GTK_IS_BUTTON_BOX (action_area));
+  g_assert (GTK_IS_BOX (action_area));
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (action_area)) == GTK_ORIENTATION_HORIZONTAL);
   g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);

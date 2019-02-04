@@ -15,10 +15,10 @@
               </object>
             </child>
             <child>
-              <object class="GtkButtonBox" id="action_area">
+              <object class="GtkBox" id="action_area">
                 <property name="spacing">6</property>
                 <property name="margin">6</property>
-                <property name="layout-style">end</property>
+                <property name="halign">end</property>
               </object>
             </child>
             <child>
