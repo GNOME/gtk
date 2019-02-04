@@ -1530,6 +1530,18 @@ headerbar {
     @extend .dim-label;
   }
 
+  /* Darken switchbuttons for headerbars. issue #1588 */
+  stackswitcher button:checked,
+  button.toggle:checked {
+
+    background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
+    border-color: darken($borders_color, 3%);
+    border-top-color: darken($borders_color, 8%);
+    &:backdrop {
+      @include button(backdrop-active);
+    }
+  }
+
   .selection-mode &,
   &.selection-mode {
     $_hc: mix($top_hilight,$selected_bg_color, 50%); // hilight color
@@ -1682,16 +1694,7 @@ headerbar {
     }
   }
   
-  stackswitcher button:checked,
-  button.toggle:checked {
-    /* darken switchbuttons for headerbars. issue #1588 */
-    background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
-    border-color: darken($borders_color, 3%);
-    border-top-color: darken($borders_color, 8%);
-    &:backdrop {
-      @include button(backdrop-active);
-    }
-  }
+
   
   separator.titlebutton { opacity: 0; } /* hide the close button separator */
 

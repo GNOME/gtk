@@ -596,13 +596,19 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 .inline-toolbar:backdrop, searchbar > revealer > box:backdrop, .location-bar:backdrop { border-color: #d5d0cc; background-color: #eae8e6; box-shadow: none; transition: 200ms ease-out; }
 
 /*************** Header bars * */
-.titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #bfb8b1; border-radius: 0; background: #dfdcd8 linear-gradient(to top, #dad6d2, #e1dedb); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); /* hide the close button separator */ }
+.titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #bfb8b1; border-radius: 0; background: #dfdcd8 linear-gradient(to top, #dad6d2, #e1dedb); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); /* Darken switchbuttons for headerbars. issue #1588 */ /* hide the close button separator */ }
 
 .titlebar:backdrop:not(headerbar), headerbar:backdrop { border-color: #d5d0cc; background-color: #f6f5f4; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); transition: 200ms ease-out; }
 
 .titlebar:not(headerbar) .title, headerbar .title { padding-left: 12px; padding-right: 12px; font-weight: bold; }
 
 .titlebar:not(headerbar) .subtitle, headerbar .subtitle { font-size: smaller; padding-left: 12px; padding-right: 12px; }
+
+.titlebar:not(headerbar) stackswitcher button:checked, .titlebar:not(headerbar) button.toggle:checked, headerbar stackswitcher button:checked, headerbar button.toggle:checked { background: image(#cfcac4); border-color: #c6bfb9; border-top-color: #bab3ab; }
+
+.titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop { border-color: #d5d0cc; background-image: image(#e4e4e0); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+
+.titlebar:not(headerbar) stackswitcher button:checked:backdrop label, .titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop label, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop label, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop label, headerbar button.toggle:checked:backdrop { color: #929595; }
 
 .selection-mode .titlebar:not(headerbar), .selection-mode.titlebar:not(headerbar), .selection-mode headerbar, headerbar.selection-mode { color: #ffffff; border-color: #185fb4; text-shadow: 0 -1px rgba(0, 0, 0, 0.5); background: #3584e4 linear-gradient(to top, #2c7fe3, #3987e5); box-shadow: inset 0 1px rgba(134, 181, 239, 0.9); }
 
@@ -673,12 +679,6 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 .default-decoration.titlebar:not(headerbar), headerbar.default-decoration { min-height: 28px; padding: 4px; }
 
 .default-decoration.titlebar:not(headerbar) button.titlebutton, headerbar.default-decoration button.titlebutton { min-height: 26px; min-width: 26px; margin: 0; padding: 0; }
-
-.titlebar:not(headerbar) stackswitcher button:checked, .titlebar:not(headerbar) button.toggle:checked, headerbar stackswitcher button:checked, headerbar button.toggle:checked { /* darken switchbuttons for headerbars. issue #1588 */ background: image(#cfcac4); border-color: #c6bfb9; border-top-color: #bab3ab; }
-
-.titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop { border-color: #d5d0cc; background-image: image(#e4e4e0); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-
-.titlebar:not(headerbar) stackswitcher button:checked:backdrop label, .titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop label, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop label, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop label, headerbar button.toggle:checked:backdrop { color: #929595; }
 
 .titlebar:not(headerbar) separator.titlebutton, headerbar separator.titlebutton { opacity: 0; }
 
