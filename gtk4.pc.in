@@ -7,8 +7,8 @@ targets=@GDK_BACKENDS@
 gtk_binary_version=@GTK_BINARY_VERSION@
 gtk_host=@host@
 
-Name: GTK+
-Description: GTK+ Graphical UI Library
+Name: GTK
+Description: GTK Graphical UI Library
 Version: @VERSION@
 Requires: @GDK_PACKAGES@ @GSK_PACKAGES@ @GTK_PACKAGES@
 Requires.private: @GDK_PRIVATE_PACKAGES@ @GSK_PRIVATE_PACKAGES@ @GTK_PRIVATE_PACKAGES@

@@ -7,8 +7,8 @@ targets=@GDK_BACKENDS@
 gtk_binary_version=@GTK_BINARY_VERSION@
 gtk_host=@host@
 
-Name: GTK+
-Description: GTK+ Unix print support
+Name: GTK
+Description: GTK Unix print support
 Version: @VERSION@
 Requires: gtk+-@GTK_API_VERSION@ @GTK_PACKAGES@
 Cflags: -I${includedir}/gtk-@GTK_API_VERSION@/unix-print
