@@ -185,7 +185,7 @@ _gdk_event_queue_find_first (GdkDisplay *display)
 
   gboolean paused = display->event_pause_count > 0;
 
-  tmp_list = display->queued_events;
+  tmp_list = g_queue_peek_head_link (&display->queued_events);
   while (tmp_list)
     {
       GdkEvent *event = tmp_list->data;
@@ -221,14 +221,9 @@ GList *
 _gdk_event_queue_append (GdkDisplay *display,
 			 GdkEvent   *event)
 {
-  display->queued_tail = g_list_append (display->queued_tail, event);
-  
-  if (!display->queued_events)
-    display->queued_events = display->queued_tail;
-  else
-    display->queued_tail = display->queued_tail->next;
+  g_queue_push_tail (&display->queued_events, event);
 
-  return display->queued_tail;
+  return g_queue_peek_tail_link (&display->queued_events);
 }
 
 /**
@@ -239,22 +234,18 @@ _gdk_event_queue_append (GdkDisplay *display,
  *
  * Appends an event after the specified event, or if it isn’t in
  * the queue, onto the tail of the event queue.
- *
- * Returns: the newly appended list node.
  */
-GList*
+void
 _gdk_event_queue_insert_after (GdkDisplay *display,
                                GdkEvent   *sibling,
                                GdkEvent   *event)
 {
-  GList *prev = g_list_find (display->queued_events, sibling);
-  if (prev && prev->next)
-    {
-      display->queued_events = g_list_insert_before (display->queued_events, prev->next, event);
-      return prev->next;
-    }
+  GList *prev = g_queue_find (&display->queued_events, sibling);
+
+  if (prev)
+    g_queue_insert_after (&display->queued_events, prev, event);
   else
-    return _gdk_event_queue_append (display, event);
+    g_queue_push_tail (&display->queued_events, event);
 }
 
 /**
@@ -268,19 +259,17 @@ _gdk_event_queue_insert_after (GdkDisplay *display,
  *
  * Returns: the newly prepended list node.
  */
-GList*
+void
 _gdk_event_queue_insert_before (GdkDisplay *display,
 				GdkEvent   *sibling,
 				GdkEvent   *event)
 {
-  GList *next = g_list_find (display->queued_events, sibling);
+  GList *next = g_queue_find (&display->queued_events, sibling);
+
   if (next)
-    {
-      display->queued_events = g_list_insert_before (display->queued_events, next, event);
-      return next->prev;
-    }
+    g_queue_insert_before (&display->queued_events, next, event);
   else
-    return _gdk_event_queue_append (display, event);
+    g_queue_push_head (&display->queued_events, event);
 }
 
 
@@ -295,15 +284,7 @@ void
 _gdk_event_queue_remove_link (GdkDisplay *display,
 			      GList      *node)
 {
-  if (node->prev)
-    node->prev->next = node->next;
-  else
-    display->queued_events = node->next;
-  
-  if (node->next)
-    node->next->prev = node->prev;
-  else
-    display->queued_tail = node->prev;
+  g_queue_unlink (&display->queued_events, node);
 }
 
 /**
@@ -368,7 +349,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   /* If the last N events in the event queue are motion notify
    * events for the same surface, drop all but the last */
 
-  tmp_list = display->queued_tail;
+  tmp_list = g_queue_peek_tail_link (&display->queued_events);
 
   while (tmp_list)
     {
@@ -409,14 +390,12 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
         gdk_event_push_history (last_motion, pending_motions->data);
 
       g_object_unref (pending_motions->data);
-      display->queued_events = g_list_delete_link (display->queued_events,
-                                                   pending_motions);
+      g_queue_delete_link (&display->queued_events, pending_motions);
       pending_motions = next;
     }
 
-  if (pending_motions &&
-      pending_motions == display->queued_events &&
-      pending_motions == display->queued_tail)
+  if (g_queue_get_length (&display->queued_events) == 1 &&
+      g_queue_peek_head_link (&display->queued_events) == pending_motions)
     {
       GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_surface);
       if (clock) /* might be NULL if surface was destroyed */
@@ -429,7 +408,7 @@ _gdk_event_queue_flush (GdkDisplay *display)
 {
   GList *tmp_list;
 
-  for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = display->queued_events.head; tmp_list; tmp_list = tmp_list->next)
     {
       GdkEvent *event = tmp_list->data;
       event->any.flags |= GDK_EVENT_FLUSHED;

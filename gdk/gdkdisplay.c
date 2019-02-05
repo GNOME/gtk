@@ -363,6 +363,8 @@ gdk_display_init (GdkDisplay *display)
   display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                   (GDestroyNotify) free_pointer_info);
 
+  g_queue_init (&display->queued_events);
+
   display->debug_flags = _gdk_debug_flags;
 
   display->composited = TRUE;
@@ -376,9 +378,7 @@ gdk_display_dispose (GObject *object)
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
-  g_list_free_full (display->queued_events, (GDestroyNotify) g_object_unref);
-  display->queued_events = NULL;
-  display->queued_tail = NULL;
+  g_queue_clear (&display->queued_events);
 
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
 }

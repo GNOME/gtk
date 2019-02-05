@@ -74,8 +74,7 @@ struct _GdkDisplay
 {
   GObject parent_instance;
 
-  GList *queued_events;
-  GList *queued_tail;
+  GQueue queued_events;
 
   guint event_pause_count;       /* How many times events are blocked */
 
