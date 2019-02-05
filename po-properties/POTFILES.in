@@ -73,7 +73,6 @@ gtk/gtkapplication-quartz.c
 gtk/gtkapplicationwindow.c
 gtk/gtkaspectframe.c
 gtk/gtkassistant.c
-gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbindings.c
 gtk/gtkbookmarksmanager.c
