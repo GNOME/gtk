@@ -3276,7 +3276,7 @@ colorswatch {
 
   // nth-child is used for the custom colors row.
   // the :not() madness is needed since actually the overlay is selectable by GtkColorSwatch > .overlay
-  // and GtkColorSwatch.overlay, I know it's weird, but this is gtk+.
+  // and GtkColorSwatch.overlay, I know it's weird, but this is GTK.
 
   // hover effect
   &.activatable:hover,
