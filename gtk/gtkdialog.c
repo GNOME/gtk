@@ -31,11 +31,9 @@
 #include "gtkdialog.h"
 #include "gtkdialogprivate.h"
 #include "gtkheaderbar.h"
-#include "gtkbbox.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkbox.h"
-#include "gtkboxprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
@@ -389,9 +387,6 @@ apply_response_for_action_area (GtkDialog *dialog,
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   g_assert (gtk_widget_get_parent (child) == priv->action_area);
-
-  if (response_id == GTK_RESPONSE_HELP)
-    gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area), child, TRUE);
 }
 
 static void

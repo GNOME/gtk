@@ -329,7 +329,7 @@ main (int    argc,
 
   for (j = 0; j < 3; j++)
     {
-      hbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       gtk_box_set_baseline_position (GTK_BOX (hbox), j);

@@ -922,7 +922,7 @@ test_children (void)
     "      <object class=\"GtkBox\" id=\"dialog1-vbox\">"
     "        <property name=\"orientation\">vertical</property>"
     "          <child internal-child=\"action_area\">"
-    "            <object class=\"GtkButtonBox\" id=\"dialog1-action_area\">"
+    "            <object class=\"GtkBox\" id=\"dialog1-action_area\">"
     "              <property name=\"orientation\">horizontal</property>"
     "            </object>"
     "          </child>"
@@ -965,7 +965,7 @@ test_children (void)
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
   g_assert (action_area != NULL);
-  g_assert (GTK_IS_BUTTON_BOX (action_area));
+  g_assert (GTK_IS_BOX (action_area));
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (action_area)) == GTK_ORIENTATION_HORIZONTAL);
   g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);
@@ -1324,7 +1324,7 @@ test_dialog (void)
     "      <object class=\"GtkBox\" id=\"dialog1-vbox\">"
     "        <property name=\"orientation\">vertical</property>"
     "          <child internal-child=\"action_area\">"
-    "            <object class=\"GtkButtonBox\" id=\"dialog1-action_area\">"
+    "            <object class=\"GtkBox\" id=\"dialog1-action_area\">"
     "              <property name=\"orientation\">horizontal</property>"
     "              <child>"
     "                <object class=\"GtkButton\" id=\"button_cancel\"/>"
@@ -2179,7 +2179,7 @@ test_message_area (void)
     "      </object>"
     "    </child>"
     "    <child internal-child=\"action_area\">"
-    "      <object class=\"GtkButtonBox\" id=\"actionarea1\">"
+    "      <object class=\"GtkBox\" id=\"actionarea1\">"
     "       <property name=\"orientation\">vertical</property>"
     "        <child>"
     "          <object class=\"GtkButton\" id=\"button_ok\">"
@@ -2420,7 +2420,7 @@ test_no_ids (void)
     "      </object>"
     "    </child>"
     "    <child internal-child=\"action_area\">"
-    "      <object class=\"GtkButtonBox\">"
+    "      <object class=\"GtkBox\">"
     "       <property name=\"orientation\">vertical</property>"
     "        <child>"
     "          <object class=\"GtkButton\" id=\"button_ok\">"

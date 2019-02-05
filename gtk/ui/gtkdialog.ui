@@ -29,9 +29,9 @@
               <class name="dialog-action-box"/>
             </style>
             <child>
-              <object class="GtkButtonBox" id="action_area">
-                <property name="layout-style">end</property>
+              <object class="GtkBox" id="action_area">
                 <property name="hexpand">1</property>
+                <property name="halign">end</property>
                 <style>
                   <class name="dialog-action-area"/>
                 </style>

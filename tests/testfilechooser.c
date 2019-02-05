@@ -706,7 +706,7 @@ main (int argc, char **argv)
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  vbbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
+  vbbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (control_window), vbbox);
 
   button = gtk_button_new_with_mnemonic ("_Select all");

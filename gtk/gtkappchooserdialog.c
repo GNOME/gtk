@@ -48,7 +48,6 @@
 #include "gtkmessagedialog.h"
 #include "gtksettings.h"
 #include "gtklabel.h"
-#include "gtkbbox.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
 #include "gtktogglebutton.h"

@@ -10,9 +10,8 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+          <object class="GtkBox" id="dialog-action_area1">
             <property name="margin">6</property>
-            <property name="layout-style">end</property>
             <property name="hexpand">1</property>
             <property name="halign">end</property>
           </object>

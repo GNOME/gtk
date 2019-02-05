@@ -35,7 +35,6 @@
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkbbox.h"
 #include "gtkbox.h"
 #include "gtklabel.h"
 #include "gtkbutton.h"
@@ -510,9 +509,6 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
     g_warning ("Only 'activatable' widgets can be packed into the action area of a GtkInfoBar");
 
   gtk_container_add (GTK_CONTAINER (priv->action_area), child);
-  if (response_id == GTK_RESPONSE_HELP)
-    gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area),
-                                        child, TRUE);
 }
 
 /**
@@ -975,10 +971,6 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
                                            G_OBJECT (info_bar));
           g_signal_connect_closure_by_id (object, signal_id, 0, closure, FALSE);
         }
-
-      if (ad->response_id == GTK_RESPONSE_HELP)
-        gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area),
-                                            GTK_WIDGET (object), TRUE);
     }
 
   g_slist_free_full (data->items, action_widget_info_free);

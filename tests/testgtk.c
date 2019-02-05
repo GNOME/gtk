@@ -598,122 +598,6 @@ create_radio_buttons (GtkWidget *widget)
 }
 
 /*
- * GtkButtonBox
- */
-
-static GtkWidget *
-create_bbox (gint  horizontal,
-	     char* title, 
-	     gint  spacing,
-	     gint  child_w,
-	     gint  child_h,
-	     gint  layout)
-{
-  GtkWidget *frame;
-  GtkWidget *bbox;
-  GtkWidget *button;
-	
-  frame = gtk_frame_new (title);
-
-  if (horizontal)
-    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  else
-    bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-
-  gtk_container_add (GTK_CONTAINER (frame), bbox);
-
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
-  gtk_box_set_spacing (GTK_BOX (bbox), spacing);
-  
-  button = gtk_button_new_with_label ("OK");
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-  
-  button = gtk_button_new_with_label ("Cancel");
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-  
-  button = gtk_button_new_with_label ("Help");
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-
-  return frame;
-}
-
-static void
-create_button_box (GtkWidget *widget)
-{
-  static GtkWidget* window = NULL;
-  GtkWidget *main_vbox;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *frame_horz;
-  GtkWidget *frame_vert;
-
-  if (!window)
-  {
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (widget));
-    gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
-    
-    g_signal_connect (window, "destroy",
-		      G_CALLBACK (gtk_widget_destroyed),
-		      &window);
-
-    main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_add (GTK_CONTAINER (window), main_vbox);
-
-    frame_horz = gtk_frame_new ("Horizontal Button Boxes");
-    gtk_widget_set_margin_top (frame_horz, 10);
-    gtk_widget_set_margin_bottom (frame_horz, 10);
-    gtk_container_add (GTK_CONTAINER (main_vbox), frame_horz);
-
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
-
-    gtk_container_add (GTK_CONTAINER (vbox),
-                        create_bbox (TRUE, "Spread", 40, 85, 20, GTK_BUTTONBOX_SPREAD));
-
-    gtk_container_add (GTK_CONTAINER (vbox),
-                        create_bbox (TRUE, "Edge", 40, 85, 20, GTK_BUTTONBOX_EDGE));
-
-    gtk_container_add (GTK_CONTAINER (vbox),
-                        create_bbox (TRUE, "Start", 40, 85, 20, GTK_BUTTONBOX_START));
-
-    gtk_container_add (GTK_CONTAINER (vbox),
-                        create_bbox (TRUE, "End", 40, 85, 20, GTK_BUTTONBOX_END));
-
-    gtk_container_add (GTK_CONTAINER (vbox),
-                        create_bbox (TRUE, "Center", 40, 85, 20, GTK_BUTTONBOX_CENTER));
-
-    frame_vert = gtk_frame_new ("Vertical Button Boxes");
-    gtk_widget_set_margin_top (frame_vert, 10);
-    gtk_widget_set_margin_bottom (frame_vert, 10);
-    gtk_container_add (GTK_CONTAINER (main_vbox), frame_vert);
-
-    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
-
-    gtk_container_add (GTK_CONTAINER (hbox),
-                        create_bbox (FALSE, "Spread", 30, 85, 20, GTK_BUTTONBOX_SPREAD));
-
-    gtk_container_add (GTK_CONTAINER (hbox),
-                        create_bbox (FALSE, "Edge", 30, 85, 20, GTK_BUTTONBOX_EDGE));
-
-    gtk_container_add (GTK_CONTAINER (hbox),
-                        create_bbox (FALSE, "Start", 30, 85, 20, GTK_BUTTONBOX_START));
-
-    gtk_container_add (GTK_CONTAINER (hbox),
-                        create_bbox (FALSE, "End", 30, 85, 20, GTK_BUTTONBOX_END));
-
-    gtk_container_add (GTK_CONTAINER (hbox),
-                        create_bbox (FALSE, "Center", 30, 85, 20, GTK_BUTTONBOX_CENTER));
-  }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
-/*
  * GtkToolBar
  */
 
@@ -3602,7 +3486,7 @@ create_forward_back (const char       *title,
 		     GtkTextDirection  text_dir)
 {
   GtkWidget *frame = gtk_frame_new (title);
-  GtkWidget *bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  GtkWidget *bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   GtkWidget *back_button = gtk_button_new_with_label ("Back");
   GtkWidget *forward_button = gtk_button_new_with_label ("Forward");
 
@@ -3902,7 +3786,8 @@ create_display_screen (GtkWidget *widget)
   gtk_grid_attach (GTK_GRID (grid), label_dpy, 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), combo_dpy, 0, 1, 1, 1);
 
-  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_halign (bbox, GTK_ALIGN_END);
   applyb = gtk_button_new_with_label ("_Apply");
   cancelb = gtk_button_new_with_label ("_Cancel");
   
@@ -6674,7 +6559,6 @@ struct {
 } buttons[] =
 {
   { "alpha window", create_alpha_window },
-  { "button box", create_button_box },
   { "buttons", create_buttons },
   { "check buttons", create_check_buttons },
   { "color selection", create_color_selection },

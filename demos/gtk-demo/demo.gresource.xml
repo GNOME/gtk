@@ -143,7 +143,6 @@
     <file>application_demo.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
-    <file>button_box.c</file>
     <file>changedisplay.c</file>
     <file>clipboard.c</file>
     <file>colorsel.c</file>
