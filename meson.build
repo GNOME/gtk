@@ -867,27 +867,27 @@ pkgconf.set('GTK_EXTRA_CFLAGS', '')
 
 pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 
-pkgs = [ 'gtk+-4.0.pc' ]
+pkgs = [ 'gtk4.pc' ]
 
 pkg_targets = ''
 foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
-    pkgs += ['gtk+-@0@-4.0.pc'.format(backend)]
+    pkgs += ['gtk4-@0@.pc'.format(backend)]
     pkg_targets += ' ' + backend
   endif
 endforeach
 pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
 
 foreach pkg: pkgs
-  configure_file(input: 'gtk+-4.0.pc.in',
+  configure_file(input: 'gtk4.pc.in',
                  output: pkg,
                  configuration: pkgconf,
                  install_dir: pkg_install_dir)
 endforeach
 
 if os_unix
-  configure_file(input: 'gtk+-unix-print-4.0.pc.in',
-                 output: 'gtk+-unix-print-4.0.pc',
+  configure_file(input: 'gtk4-unix-print.pc.in',
+                 output: 'gtk4-unix-print.pc',
                  configuration: pkgconf,
                  install_dir: pkg_install_dir)
 endif
@@ -910,7 +910,7 @@ meson.add_install_script('build-aux/meson/post-install.sh',
 summary = [
   '',
   '------',
-  'GTK+ @0@ (@1@)'.format(gtk_version, gtk_api_version),
+  'GTK @0@ (@1@)'.format(gtk_version, gtk_api_version),
   '',
   '  Display backends: @0@'.format(pkg_targets.strip()),
   '    Print backends: @0@'.format(' '.join(print_backends)),
