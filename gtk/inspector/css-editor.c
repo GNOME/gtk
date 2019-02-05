@@ -109,7 +109,7 @@ set_initial_text (GtkInspectorCssEditor *ce)
 {
   gchar *initial_text;
   initial_text = g_strconcat ("/*\n",
-                              _("You can type here any CSS rule recognized by GTK+."), "\n",
+                              _("You can type here any CSS rule recognized by GTK."), "\n",
                               _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
                               _("Changes are applied instantly and globally, for the whole application."), "\n",
                               "*/\n\n", NULL);
