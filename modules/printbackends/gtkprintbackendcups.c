@@ -1636,7 +1636,7 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
 
   dispatch = (GtkPrintCupsDispatchWatch *) g_source_new (&_cups_dispatch_watch_funcs,
                                                          sizeof (GtkPrintCupsDispatchWatch));
-  g_source_set_name (&dispatch->source, "GTK+ CUPS backend");
+  g_source_set_name (&dispatch->source, "GTK CUPS backend");
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'\n", G_STRFUNC, dispatch, request->server, request->resource));
@@ -1766,7 +1766,7 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
 	timeout = 1000;
 
       id = g_timeout_add (timeout, cups_job_info_poll_timeout, data);
-      g_source_set_name_by_id (id, "[gtk+] cups_job_info_poll_timeout");
+      g_source_set_name_by_id (id, "[gtk] cups_job_info_poll_timeout");
     }
   else
     cups_job_poll_data_free (data);
@@ -3685,7 +3685,7 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       if (cups_backend->list_printers_poll > 0)
         g_source_remove (cups_backend->list_printers_poll);
       cups_backend->list_printers_poll = g_timeout_add (200, (GSourceFunc) cups_request_printer_list, cups_backend);
-      g_source_set_name_by_id (cups_backend->list_printers_poll, "[gtk+] cups_request_printer_list");
+      g_source_set_name_by_id (cups_backend->list_printers_poll, "[gtk] cups_request_printer_list");
     }
   else if (cups_backend->list_printers_attempts != -1)
     cups_backend->list_printers_attempts++;
@@ -3734,7 +3734,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
       if (cups_request_printer_list (cups_backend))
         {
           cups_backend->list_printers_poll = g_timeout_add (50, (GSourceFunc) cups_request_printer_list, backend);
-          g_source_set_name_by_id (cups_backend->list_printers_poll, "[gtk+] cups_request_printer_list");
+          g_source_set_name_by_id (cups_backend->list_printers_poll, "[gtk] cups_request_printer_list");
         }
 
 #ifdef HAVE_CUPS_API_1_6
@@ -3868,7 +3868,7 @@ cups_request_ppd (GtkPrinter *printer)
               if (cups_printer->get_remote_ppd_poll > 0)
                 g_source_remove (cups_printer->get_remote_ppd_poll);
               cups_printer->get_remote_ppd_poll = g_timeout_add (200, (GSourceFunc) cups_request_ppd, printer);
-              g_source_set_name_by_id (cups_printer->get_remote_ppd_poll, "[gtk+] cups_request_ppd");
+              g_source_set_name_by_id (cups_printer->get_remote_ppd_poll, "[gtk] cups_request_ppd");
             }
           else if (cups_printer->get_remote_ppd_attempts != -1)
             cups_printer->get_remote_ppd_attempts++;
@@ -4132,7 +4132,7 @@ cups_get_default_printer (GtkPrintBackendCups *backend)
       if (cups_request_default_printer (cups_backend))
         {
           cups_backend->default_printer_poll = g_timeout_add (200, (GSourceFunc) cups_request_default_printer, backend);
-          g_source_set_name_by_id (cups_backend->default_printer_poll, "[gtk+] cups_request_default_printer");
+          g_source_set_name_by_id (cups_backend->default_printer_poll, "[gtk] cups_request_default_printer");
         }
     }
 }
@@ -4268,7 +4268,7 @@ cups_printer_request_details (GtkPrinter *printer)
               if (cups_request_ppd (printer))
                 {
                   cups_printer->get_remote_ppd_poll = g_timeout_add (50, (GSourceFunc) cups_request_ppd, printer);
-                  g_source_set_name_by_id (cups_printer->get_remote_ppd_poll, "[gtk+] cups_request_ppd");
+                  g_source_set_name_by_id (cups_printer->get_remote_ppd_poll, "[gtk] cups_request_ppd");
                 }
             }
         }
@@ -5173,7 +5173,7 @@ colord_printer_option_set_changed_cb (GtkPrinterOptionSet *set,
 #endif
 
 /*
- * Lookup translation and Gtk+ name of given IPP option name.
+ * Lookup translation and GTK name of given IPP option name.
  */
 static gboolean
 get_ipp_option_translation (const gchar  *ipp_option_name,
