@@ -42,24 +42,24 @@ activate_about (GSimpleAction *action,
 {
   GtkApplication *app = user_data;
   const gchar *authors[] = {
-    "The GTK+ Team",
+    "The GTK Team",
     NULL
   };
 
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
-                         "program-name", "GTK+ Demo",
-                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                         "program-name", "GTK Demo",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK %d.%d.%d",
                                                      PACKAGE_VERSION,
                                                      gtk_get_major_version (),
                                                      gtk_get_minor_version (),
                                                      gtk_get_micro_version ()),
-                         "copyright", "(C) 1997-2013 The GTK+ Team",
+                         "copyright", "(C) 1997-2013 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
-                         "comments", "Program to demonstrate GTK+ widgets",
+                         "comments", "Program to demonstrate GTK widgets",
                          "authors", authors,
-                         "logo-icon-name", "gtk3-demo",
-                         "title", "About GTK+ Demo",
+                         "logo-icon-name", "gtk4-demo",
+                         "title", "About GTK Demo",
                          NULL);
 }
 

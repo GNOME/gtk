@@ -3,12 +3,12 @@
   <id>org.gtk.Demo.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.0+</project_license>
-  <name>GTK+ Demo</name>
-  <summary>Program to demonstrate GTK+ functions</summary>
+  <name>GTK Demo</name>
+  <summary>Program to demonstrate GTK functions</summary>
   <description>
     <p>
-      GTK+ Demo is a collection of examples that demonstrate the major
-      features of the GTK+ toolkit.
+      GTK Demo is a collection of examples that demonstrate the major
+      features of the GTK toolkit.
     </p>
   </description>
   <screenshots>
