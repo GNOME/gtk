@@ -2386,7 +2386,7 @@ gtk_entry_completion_changed (GtkWidget *widget,
     g_timeout_add (COMPLETION_TIMEOUT,
                    gtk_entry_completion_timeout,
                    completion);
-  g_source_set_name_by_id (completion->priv->completion_timeout, "[gtk+] gtk_entry_completion_timeout");
+  g_source_set_name_by_id (completion->priv->completion_timeout, "[gtk] gtk_entry_completion_timeout");
 }
 
 static gboolean
@@ -2448,7 +2448,7 @@ completion_insert_text_callback (GtkEntry           *entry,
                             g_cclosure_new_object (G_CALLBACK (check_completion_callback),
                                                    G_OBJECT (completion)));
       g_source_attach (completion->priv->check_completion_idle, NULL);
-      g_source_set_name (completion->priv->check_completion_idle, "[gtk+] check_completion_callback");
+      g_source_set_name (completion->priv->check_completion_idle, "[gtk] check_completion_callback");
     }
 }
 

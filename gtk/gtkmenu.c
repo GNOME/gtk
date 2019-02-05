@@ -3066,7 +3066,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                                                       : MENU_SCROLL_TIMEOUT1,
                                                     gtk_menu_scroll_timeout,
                                                     menu);
-              g_source_set_name_by_id (priv->scroll_timeout, "[gtk+] gtk_menu_scroll_timeout");
+              g_source_set_name_by_id (priv->scroll_timeout, "[gtk] gtk_menu_scroll_timeout");
             }
           else if (!enter && !in_arrow && priv->upper_arrow_prelight)
             {
@@ -3132,7 +3132,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                                                       : MENU_SCROLL_TIMEOUT1,
                                                     gtk_menu_scroll_timeout,
                                                     menu);
-              g_source_set_name_by_id (priv->scroll_timeout, "[gtk+] gtk_menu_scroll_timeout");
+              g_source_set_name_by_id (priv->scroll_timeout, "[gtk] gtk_menu_scroll_timeout");
             }
           else if (!enter && !in_arrow && priv->lower_arrow_prelight)
             {

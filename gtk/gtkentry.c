@@ -4575,7 +4575,7 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
           password_hint->source_id = g_timeout_add (password_hint_timeout,
                                                     (GSourceFunc)gtk_entry_remove_password_hint,
                                                     entry);
-          g_source_set_name_by_id (password_hint->source_id, "[gtk+] gtk_entry_remove_password_hint");
+          g_source_set_name_by_id (password_hint->source_id, "[gtk] gtk_entry_remove_password_hint");
         }
     }
 }
@@ -8414,7 +8414,7 @@ gtk_entry_selection_bubble_popup_set (GtkEntry *entry)
 
   priv->selection_bubble_timeout_id =
     g_timeout_add (50, gtk_entry_selection_bubble_popup_show, entry);
-  g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_entry_selection_bubble_popup_cb");
+  g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk] gtk_entry_selection_bubble_popup_cb");
 }
 
 static void
@@ -8832,7 +8832,7 @@ blink_cb (gpointer data)
       priv->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
                                            blink_cb,
                                            entry);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
     }
   else
     {
@@ -8841,7 +8841,7 @@ blink_cb (gpointer data)
       priv->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
                                            blink_cb,
                                            entry);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
     }
 
   return G_SOURCE_REMOVE;
@@ -8860,7 +8860,7 @@ gtk_entry_check_cursor_blink (GtkEntry *entry)
 	  priv->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
                                                blink_cb,
                                                entry);
-	  g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+	  g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
 	}
     }
   else
@@ -8888,7 +8888,7 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
       priv->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
                                            blink_cb,
                                            entry);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
       show_cursor (entry);
     }
 }

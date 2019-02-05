@@ -762,7 +762,7 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
                             tooltip_browse_mode_expired,
                             g_object_ref (tooltip),
                             g_object_unref);
-      g_source_set_name_by_id (tooltip->browse_mode_timeout_id, "[gtk+] tooltip_browse_mode_expired");
+      g_source_set_name_by_id (tooltip->browse_mode_timeout_id, "[gtk] tooltip_browse_mode_expired");
     }
 
   if (tooltip->current_window)
@@ -817,7 +817,7 @@ gtk_tooltip_start_delay (GdkDisplay *display)
                                             tooltip_popup_timeout,
                                             g_object_ref (display),
                                             g_object_unref);
-  g_source_set_name_by_id (tooltip->timeout_id, "[gtk+] tooltip_popup_timeout");
+  g_source_set_name_by_id (tooltip->timeout_id, "[gtk] tooltip_popup_timeout");
 }
 
 void
