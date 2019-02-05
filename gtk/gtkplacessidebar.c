@@ -228,7 +228,6 @@ struct _GtkPlacesSidebarClass {
 
 enum {
   OPEN_LOCATION,
-  POPULATE_POPUP,
   SHOW_ERROR_MESSAGE,
   SHOW_ENTER_LOCATION,
   DRAG_ACTION_REQUESTED,
@@ -251,7 +250,6 @@ enum {
   PROP_SHOW_STARRED_LOCATION,
   PROP_LOCAL_ONLY,
   PROP_SHOW_OTHER_LOCATIONS,
-  PROP_POPULATE_ALL,
   NUM_PROPERTIES
 };
 
@@ -3663,33 +3661,6 @@ create_row_popover (GtkPlacesSidebar *sidebar,
 
   /* Update everything! */
   check_popover_sensitivity (row, &data);
-
-  if (sidebar->populate_all)
-    {
-      gchar *uri;
-      GVolume *volume;
-      GFile *file;
-
-      g_object_get (row,
-                    "uri", &uri,
-                    "volume", &volume,
-                    NULL);
-
-      if (uri)
-        file = g_file_new_for_uri (uri);
-      else
-        file = NULL;
-
-      g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
-                     box, file, volume);
-
-      if (file)
-        g_object_unref (file);
-
-      g_free (uri);
-      if (volume)
-        g_object_unref (volume);
-    }
 }
 
 static void
@@ -4235,14 +4206,6 @@ gtk_places_sidebar_set_property (GObject      *obj,
       gtk_places_sidebar_set_local_only (sidebar, g_value_get_boolean (value));
       break;
 
-    case PROP_POPULATE_ALL:
-      if (sidebar->populate_all != g_value_get_boolean (value))
-        {
-          sidebar->populate_all = g_value_get_boolean (value);
-          g_object_notify_by_pspec (obj, pspec);
-        }
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -4293,10 +4256,6 @@ gtk_places_sidebar_get_property (GObject    *obj,
 
     case PROP_LOCAL_ONLY:
       g_value_set_boolean (value, gtk_places_sidebar_get_local_only (sidebar));
-      break;
-
-    case PROP_POPULATE_ALL:
-      g_value_set_boolean (value, sidebar->populate_all);
       break;
 
     default:
@@ -4495,53 +4454,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_TYPE_NONE, 2,
                         G_TYPE_OBJECT,
                         GTK_TYPE_PLACES_OPEN_FLAGS);
-
-  /*
-   * GtkPlacesSidebar::populate-popup:
-   * @sidebar: the object which received the signal.
-   * @container: (type Gtk.Widget): a #GtkMenu or another #GtkContainer
-   * @selected_item: (type Gio.File) (nullable): #GFile with the item to which
-   *     the popup should refer, or %NULL in the case of a @selected_volume.
-   * @selected_volume: (type Gio.Volume) (nullable): #GVolume if the selected
-   *     item is a volume, or %NULL if it is a file.
-   *
-   * The places sidebar emits this signal when the user invokes a contextual
-   * popup on one of its items. In the signal handler, the application may
-   * add extra items to the menu as appropriate. For example, a file manager
-   * may want to add a "Properties" command to the menu.
-   *
-   * It is not necessary to store the @selected_item for each menu item;
-   * during their callbacks, the application can use gtk_places_sidebar_get_location()
-   * to get the file to which the item refers.
-   *
-   * The @selected_item argument may be %NULL in case the selection refers to
-   * a volume. In this case, @selected_volume will be non-%NULL. In this case,
-   * the calling application will have to g_object_ref() the @selected_volume and
-   * keep it around to use it in the callback.
-   *
-   * The @container and all its contents are destroyed after the user
-   * dismisses the popup. The popup is re-created (and thus, this signal is
-   * emitted) every time the user activates the contextual menu.
-   *
-   * Before 3.18, the @container always was a #GtkMenu, and you were expected
-   * to add your items as #GtkMenuItems. The popup may be implemented
-   * as a #GtkPopover, in which case @container will be something else, e.g. a
-   * #GtkBox, to which you may add #GtkModelButtons or other widgets, such as
-   * #GtkEntries, #GtkSpinButtons, etc. If your application can deal with this
-   * situation, you can set #GtkPlacesSidebar::populate-all to %TRUE to request
-   * that this signal is emitted for populating popovers as well.
-   */
-  places_sidebar_signals [POPULATE_POPUP] =
-          g_signal_new (I_("populate-popup"),
-                        G_OBJECT_CLASS_TYPE (gobject_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, populate_popup),
-                        NULL, NULL,
-                        _gtk_marshal_VOID__OBJECT_OBJECT_OBJECT,
-                        G_TYPE_NONE, 3,
-                        GTK_TYPE_WIDGET,
-                        G_TYPE_FILE,
-                        G_TYPE_VOLUME);
 
   /*
    * GtkPlacesSidebar::show-error-message:
@@ -4802,20 +4714,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 FALSE,
                                 GTK_PARAM_READWRITE);
 
-
-  /*
-   * GtkPlacesSidebar:populate-all:
-   *
-   * If :populate-all is %TRUE, the #GtkPlacesSidebar::populate-popup signal
-   * is also emitted for popovers.
-   */
-  properties[PROP_POPULATE_ALL] =
-          g_param_spec_boolean (I_("populate-all"),
-                                P_("Populate all"),
-                                P_("Whether to emit ::populate-popup for popups that are not menus"),
-                                FALSE,
-                                G_PARAM_READWRITE);
-
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("placessidebar"));
@@ -4954,10 +4852,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
  * been called with a location that is not among the sidebar’s list of places to
  * show.
  *
- * You can use this function to get the selection in the @sidebar.  Also, if you
- * connect to the #GtkPlacesSidebar::populate-popup signal, you can use this
- * function to get the location that is being referred to during the callbacks
- * for your menu items.
+ * You can use this function to get the selection in the @sidebar.
  *
  * Returns: (nullable) (transfer full): a #GFile with the selected location, or
  * %NULL if nothing is visually selected.
