@@ -5392,7 +5392,7 @@ gtk_menu_scroll_to (GtkMenu           *menu,
           if (!priv->upper_arrow_visible || !priv->lower_arrow_visible)
             gtk_widget_queue_draw (GTK_WIDGET (menu));
 
-          if (!priv->upper_arrow_visible &
+          if (!priv->upper_arrow_visible &&
               flags & GTK_MENU_SCROLL_FLAG_ADAPT)
             should_offset_by_arrow = TRUE;
           else
