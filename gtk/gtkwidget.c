@@ -46,7 +46,6 @@
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkintl.h"
-#include "gtkinvisible.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
