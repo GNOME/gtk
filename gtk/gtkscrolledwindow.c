@@ -2854,7 +2854,7 @@ gtk_scrolled_window_finalize (GObject *object)
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->gadget);
-  g_clear_pointer (&priv->scroll_history, (GDestroyNotify) g_array_unref);
+  g_clear_pointer (&priv->scroll_history, g_array_unref);
 
   G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->finalize (object);
 }
@@ -3690,7 +3690,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       gtk_adjustment_set_value (hadjustment, position);
     }
   else if (data->hscrolling)
-    g_clear_pointer (&data->hscrolling, (GDestroyNotify) gtk_kinetic_scrolling_free);
+    g_clear_pointer (&data->hscrolling, gtk_kinetic_scrolling_free);
 
   if (data->vscrolling &&
       gtk_kinetic_scrolling_tick (data->vscrolling, elapsed, &position))
@@ -3699,7 +3699,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       gtk_adjustment_set_value (vadjustment, position);
     }
   else if (data->vscrolling)
-    g_clear_pointer (&data->vscrolling, (GDestroyNotify) gtk_kinetic_scrolling_free);
+    g_clear_pointer (&data->vscrolling, gtk_kinetic_scrolling_free);
 
   if (!data->hscrolling && !data->vscrolling)
     {
