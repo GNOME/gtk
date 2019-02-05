@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include "gtkcontainer.h"
 #include "gtkcontainerprivate.h"
 
