@@ -27,7 +27,7 @@
 
 #include <cairo-win32.h>
 
-#include <Windows.h>
+#include <windows.h>
 
 G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
