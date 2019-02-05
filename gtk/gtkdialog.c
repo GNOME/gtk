@@ -34,7 +34,6 @@
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkbox.h"
-#include "gtkboxprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"

@@ -11,7 +11,6 @@ private_headers = [
   'gtkapplicationprivate.h',
   'gtkbindingsprivate.h',
   'gtkbitmaskprivate.h',
-  'gtkboxprivate.h',
   'gtkbuilderprivate.h',
   'gtkbuttonprivate.h',
   'gtkcellareaboxcontextprivate.h',

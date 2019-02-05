@@ -57,7 +57,6 @@
 #include "config.h"
 
 #include "gtkbox.h"
-#include "gtkboxprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
@@ -1079,22 +1078,6 @@ gtk_box_forall (GtkContainer *container,
       child = next;
     }
 
-}
-
-GList *
-_gtk_box_get_children (GtkBox *box)
-{
-  GtkWidget *p;
-  GList *retval = NULL;
-
-  g_return_val_if_fail (GTK_IS_BOX (box), NULL);
-
-  for (p = _gtk_widget_get_first_child (GTK_WIDGET (box));
-       p != NULL;
-       p = _gtk_widget_get_next_sibling (p))
-    retval = g_list_prepend (retval, p);
-
-  return g_list_reverse (retval);
 }
 
 /**
