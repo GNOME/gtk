@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 10:09+0000\n"
-"PO-Revision-Date: 2019-02-02 18:15+0100\n"
+"POT-Creation-Date: 2019-02-05 17:37+0000\n"
+"PO-Revision-Date: 2019-02-05 21:00+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:154 gdk/gdkseat.c:199
 #: gdk/gdkseat.c:200 gdk/gdksurface.c:265 gdk/gdksurface.c:266
 #: gdk/win32/gdkcursor-win32.c:234 gtk/gtkinvisible.c:95
-#: gtk/gtkmountoperation.c:181 gtk/gtkstylecontext.c:207 gtk/gtkwindow.c:969
+#: gtk/gtkmountoperation.c:181 gtk/gtkstylecontext.c:206 gtk/gtkwindow.c:955
 msgid "Display"
 msgstr "Kijelző"
 
@@ -262,11 +262,11 @@ msgstr "Cellamegjelenítő"
 msgid "The cell renderer represented by this accessible"
 msgstr "Az akadálymentes elem által képviselt cellamegjelenítő"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:354
 msgid "Program name"
 msgstr "Programnév"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:355
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -274,128 +274,124 @@ msgstr ""
 "A program neve. Ha nincs beállítva, akkor alapértelmezés szerint "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:366
 msgid "Program version"
 msgstr "Programverzió"
 
-#: gtk/gtkaboutdialog.c:368
+#: gtk/gtkaboutdialog.c:367
 msgid "The version of the program"
 msgstr "A program verziója"
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:378
 msgid "Copyright string"
 msgstr "Copyright szöveg"
 
-#: gtk/gtkaboutdialog.c:380
+#: gtk/gtkaboutdialog.c:379
 msgid "Copyright information for the program"
 msgstr "Copyright-információ a programról"
 
-#: gtk/gtkaboutdialog.c:393
+#: gtk/gtkaboutdialog.c:392
 msgid "Comments string"
 msgstr "Megjegyzések"
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:393
 msgid "Comments about the program"
 msgstr "Megjegyzések a programról"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:415
 msgid "License"
 msgstr "Licenc"
 
-#: gtk/gtkaboutdialog.c:417
+#: gtk/gtkaboutdialog.c:416
 msgid "The license of the program"
 msgstr "A program licence"
 
-#: gtk/gtkaboutdialog.c:435
+#: gtk/gtkaboutdialog.c:434
 msgid "System Information"
 msgstr "Rendszerinformációk"
 
-#: gtk/gtkaboutdialog.c:436
+#: gtk/gtkaboutdialog.c:435
 msgid "Information about the system on which the program is running"
 msgstr "Információk a rendszerről, amelyen a program fut"
 
-#: gtk/gtkaboutdialog.c:461
+#: gtk/gtkaboutdialog.c:460
 msgid "License Type"
 msgstr "Licenctípus"
 
-#: gtk/gtkaboutdialog.c:462
+#: gtk/gtkaboutdialog.c:461
 msgid "The license type of the program"
 msgstr "A program licencének típusa"
 
-#: gtk/gtkaboutdialog.c:475
+#: gtk/gtkaboutdialog.c:474
 msgid "Website URL"
 msgstr "Webhely URL"
 
-#: gtk/gtkaboutdialog.c:476
+#: gtk/gtkaboutdialog.c:475
 msgid "The URL for the link to the website of the program"
 msgstr "A program webhelyére mutató hivatkozás URL-je"
 
-#: gtk/gtkaboutdialog.c:487
+#: gtk/gtkaboutdialog.c:486
 msgid "Website label"
 msgstr "Webhely címke"
 
-#: gtk/gtkaboutdialog.c:488
+#: gtk/gtkaboutdialog.c:487
 msgid "The label for the link to the website of the program"
 msgstr "A program webhelyére mutató hivatkozás címkéje"
 
-#: gtk/gtkaboutdialog.c:501
+#: gtk/gtkaboutdialog.c:500
 msgid "Authors"
 msgstr "Szerzők"
 
-#: gtk/gtkaboutdialog.c:502
+#: gtk/gtkaboutdialog.c:501
 msgid "List of authors of the program"
 msgstr "A program szerzőinek listája"
 
-#: gtk/gtkaboutdialog.c:515
+#: gtk/gtkaboutdialog.c:514
 msgid "Documenters"
 msgstr "Dokumentáció írói"
 
-#: gtk/gtkaboutdialog.c:516
+#: gtk/gtkaboutdialog.c:515
 msgid "List of people documenting the program"
 msgstr "A program dokumentációját író emberek listája"
 
-#: gtk/gtkaboutdialog.c:529
+#: gtk/gtkaboutdialog.c:528
 msgid "Artists"
 msgstr "Művészek"
 
-#: gtk/gtkaboutdialog.c:530
+#: gtk/gtkaboutdialog.c:529
 msgid "List of people who have contributed artwork to the program"
 msgstr "Azon emberek listája, akik alkotásaikat adták a programhoz"
 
-#: gtk/gtkaboutdialog.c:543
+#: gtk/gtkaboutdialog.c:542
 msgid "Translator credits"
 msgstr "Fordítók"
 
-#: gtk/gtkaboutdialog.c:544
+#: gtk/gtkaboutdialog.c:543
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "A fordítók listája. Ezt a karakterláncot fordítandónak kell jelölni"
 
-#: gtk/gtkaboutdialog.c:556
+#: gtk/gtkaboutdialog.c:555
 msgid "Logo"
 msgstr "Logó"
 
-#: gtk/gtkaboutdialog.c:557
-msgid ""
-"A logo for the about box. If this is not set, it defaults to "
-"gtk_window_get_default_icon_list()"
-msgstr ""
-"Logó a névjegy mezőhöz. Ha nincs beállítva, alapértelmezett értéke a "
-"gtk_window_get_default_icon_list()"
+#: gtk/gtkaboutdialog.c:556
+msgid "A logo for the about box."
+msgstr "Logó a névjegymezőhöz."
 
-#: gtk/gtkaboutdialog.c:569
+#: gtk/gtkaboutdialog.c:568
 msgid "Logo Icon Name"
 msgstr "Logóikon neve"
 
-#: gtk/gtkaboutdialog.c:570
+#: gtk/gtkaboutdialog.c:569
 msgid "A named icon to use as the logo for the about box."
 msgstr "Egy megnevezett ikon a névjegy mező logójának."
 
-#: gtk/gtkaboutdialog.c:581
+#: gtk/gtkaboutdialog.c:580
 msgid "Wrap license"
 msgstr "Licenc tördelése"
 
-#: gtk/gtkaboutdialog.c:582
+#: gtk/gtkaboutdialog.c:581
 msgid "Whether to wrap the license text."
 msgstr "Tördelje-e a licenc szövegét?"
 
@@ -479,7 +475,7 @@ msgstr ""
 "Egy GtkPackType, amely azt jelzi, hogy a gyermekben a hivatkozás a szülő "
 "elejére vagy végére mutat"
 
-#: gtk/gtkactionbar.c:338 gtk/gtkinfobar.c:352
+#: gtk/gtkactionbar.c:338 gtk/gtkinfobar.c:351
 msgid "Reveal"
 msgstr "Felfedés"
 
@@ -488,7 +484,7 @@ msgid "Controls whether the action bar shows its contents or not"
 msgstr "A műveletsáv megjelenítse-e a tartalmát vagy sem"
 
 #: gtk/gtkadjustment.c:139 gtk/gtkcellrendererprogress.c:136
-#: gtk/gtkscalebutton.c:197 gtk/gtkspinbutton.c:383
+#: gtk/gtkscalebutton.c:196 gtk/gtkspinbutton.c:383
 msgid "Value"
 msgstr "Érték"
 
@@ -555,11 +551,11 @@ msgstr "Alap elem megjelenítése"
 msgid "Whether the combobox should show the default application on top"
 msgstr "A legördülő lista tetején megjelenjen-e az alap alkalmazás"
 
-#: gtk/gtkappchooserbutton.c:697 gtk/gtkappchooserdialog.c:640
+#: gtk/gtkappchooserbutton.c:697 gtk/gtkappchooserdialog.c:639
 msgid "Heading"
 msgstr "Címsor"
 
-#: gtk/gtkappchooserbutton.c:698 gtk/gtkappchooserdialog.c:641
+#: gtk/gtkappchooserbutton.c:698 gtk/gtkappchooserdialog.c:640
 msgid "The text to show at the top of the dialog"
 msgstr "A párbeszédablak tetején megjelenítendő szöveg"
 
@@ -571,11 +567,11 @@ msgstr "Tartalom típusa"
 msgid "The content type used by the open with object"
 msgstr "A megnyitás ezzel objektum által használt tartalomtípus"
 
-#: gtk/gtkappchooserdialog.c:626
+#: gtk/gtkappchooserdialog.c:625
 msgid "GFile"
 msgstr "GFile"
 
-#: gtk/gtkappchooserdialog.c:627
+#: gtk/gtkappchooserdialog.c:626
 msgid "The GFile used by the app chooser dialog"
 msgstr "Az alkalmazásválasztó párbeszédablak által használt GFile"
 
@@ -707,11 +703,11 @@ msgstr "Gyermek követése"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "A képarány beállítása a keret gyermekével megegyezőre"
 
-#: gtk/gtkassistant.c:504 gtk/gtkdialog.c:584
+#: gtk/gtkassistant.c:504 gtk/gtkdialog.c:579
 msgid "Use Header Bar"
 msgstr "Fejlécsáv használata"
 
-#: gtk/gtkassistant.c:505 gtk/gtkdialog.c:585
+#: gtk/gtkassistant.c:505 gtk/gtkdialog.c:580
 msgid "Use Header Bar for actions."
 msgstr "Fejlécsáv használata a műveletekhez"
 
@@ -747,70 +743,38 @@ msgstr "Van térköze"
 msgid "Whether the assistant adds padding around the page"
 msgstr "A varázsló ad-e hozzá térközt az oldal köré"
 
-#: gtk/gtkbbox.c:145
-msgid "Layout style"
-msgstr "Elrendezés stílusa"
-
-#: gtk/gtkbbox.c:146
-msgid ""
-"How to lay out the buttons in the box. Possible values are: spread, edge, "
-"start and end"
-msgstr ""
-"A gombok elrendezése a dobozon belül. A lehetséges értékek: spread, edge, "
-"start és end"
-
-#: gtk/gtkbbox.c:154
-msgid "Secondary"
-msgstr "Másodlagos"
-
-#: gtk/gtkbbox.c:155
-msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, e."
-"g., help buttons"
-msgstr ""
-"Ha IGAZ, a gyermek gyermekek egy másodlagos csoportjában jelenik meg; "
-"hasznos például súgógombokhoz"
-
-#: gtk/gtkbbox.c:162
-msgid "Non-Homogeneous"
-msgstr "Nem homogén"
-
-#: gtk/gtkbbox.c:163
-msgid "If TRUE, the child will not be subject to homogeneous sizing"
-msgstr "Ha IGAZ, akkor a gyermek nem lesz homogén méretezés alanya"
-
-#: gtk/gtkbox.c:157 gtk/gtkcellareabox.c:308 gtk/gtkheaderbar.c:1822
+#: gtk/gtkbox.c:156 gtk/gtkcellareabox.c:308 gtk/gtkheaderbar.c:1822
 #: gtk/gtkiconview.c:494 gtk/gtktreeviewcolumn.c:284
 msgid "Spacing"
 msgstr "Távolság"
 
-#: gtk/gtkbox.c:158 gtk/gtkheaderbar.c:1823
+#: gtk/gtkbox.c:157 gtk/gtkheaderbar.c:1823
 msgid "The amount of space between children"
 msgstr "A gyermekek közötti távolság"
 
-#: gtk/gtkbox.c:164 gtk/gtkflowbox.c:3436 gtk/gtkstack.c:326
+#: gtk/gtkbox.c:163 gtk/gtkflowbox.c:3436 gtk/gtkstack.c:326
 #: gtk/gtktoolbar.c:509
 msgid "Homogeneous"
 msgstr "Homogén"
 
-#: gtk/gtkbox.c:165 gtk/gtkflowbox.c:3437
+#: gtk/gtkbox.c:164 gtk/gtkflowbox.c:3437
 msgid "Whether the children should all be the same size"
 msgstr "A gyermekeknek egyforma méretűeknek kell-e lenniük"
 
-#: gtk/gtkbox.c:171 gtk/gtkcenterbox.c:650
+#: gtk/gtkbox.c:170 gtk/gtkcenterbox.c:650
 msgid "Baseline position"
 msgstr "Alapvonal helye"
 
-#: gtk/gtkbox.c:172 gtk/gtkcenterbox.c:651
+#: gtk/gtkbox.c:171 gtk/gtkcenterbox.c:651
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr "Az alapvonalra igazított felületi elemek helye, ha elérhető extra hely"
 
-#: gtk/gtkbuilder.c:280
+#: gtk/gtkbuilder.c:279
 msgid "Translation Domain"
 msgstr "Fordítási tartomány"
 
-#: gtk/gtkbuilder.c:281
+#: gtk/gtkbuilder.c:280
 msgid "The translation domain used by gettext"
 msgstr "A gettext által használt fordítási tartomány"
 
@@ -830,7 +794,7 @@ msgid "The border relief style"
 msgstr "A szegélykiemelés stílusa"
 
 #: gtk/gtkbutton.c:242 gtk/gtkcellrendererpixbuf.c:200 gtk/gtkimage.c:196
-#: gtk/gtkprinter.c:170 gtk/gtkwindow.c:962
+#: gtk/gtkprinter.c:170 gtk/gtkwindow.c:948
 msgid "Icon Name"
 msgstr "Ikonnév"
 
@@ -1241,7 +1205,7 @@ msgid "The name of the icon from the icon theme"
 msgstr "Az ikon neve az ikontémában"
 
 #: gtk/gtkcellrendererpixbuf.c:215 gtk/gtkimage.c:210 gtk/gtkmodelbutton.c:942
-#: gtk/gtkshortcutsshortcut.c:590 gtk/gtkwindow.c:919
+#: gtk/gtkshortcutsshortcut.c:590
 msgid "Icon"
 msgstr "Ikon"
 
@@ -1254,7 +1218,7 @@ msgid "Value of the progress bar"
 msgstr "A folyamatjelző értéke"
 
 #: gtk/gtkcellrendererprogress.c:152 gtk/gtkcellrenderertext.c:254
-#: gtk/gtkentrybuffer.c:351 gtk/gtkentry.c:918 gtk/gtkmessagedialog.c:198
+#: gtk/gtkentrybuffer.c:351 gtk/gtkentry.c:918 gtk/gtkmessagedialog.c:197
 #: gtk/gtkmodelbutton.c:954 gtk/gtkprogressbar.c:214 gtk/gtkspinbutton.c:406
 #: gtk/gtktextbuffer.c:425
 msgid "Text"
@@ -1296,7 +1260,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "A függőleges szövegigazítás, 0 (felül) és 1 (alul) között."
 
 #: gtk/gtkcellrendererprogress.c:216 gtk/gtklevelbar.c:1048
-#: gtk/gtkmodelbutton.c:1008 gtk/gtkprogressbar.c:191 gtk/gtkrange.c:380
+#: gtk/gtkmodelbutton.c:1008 gtk/gtkprogressbar.c:191 gtk/gtkrange.c:379
 msgid "Inverted"
 msgstr "Fordított"
 
@@ -1304,7 +1268,7 @@ msgstr "Fordított"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "A folyamatjelző növekedési irányának megfordítása"
 
-#: gtk/gtkcellrendererspin.c:119 gtk/gtkrange.c:373 gtk/gtkscalebutton.c:207
+#: gtk/gtkcellrendererspin.c:119 gtk/gtkrange.c:372 gtk/gtkscalebutton.c:206
 #: gtk/gtkscrollbar.c:223 gtk/gtkspinbutton.c:333
 msgid "Adjustment"
 msgstr "Igazítás"
@@ -1414,11 +1378,11 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Előtérszín GdkRGBA-ként"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtkentry.c:844 gtk/gtktexttag.c:263
-#: gtk/gtktextview.c:757
+#: gtk/gtktextview.c:758
 msgid "Editable"
 msgstr "Szerkeszthető"
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:264 gtk/gtktextview.c:758
+#: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:264 gtk/gtktextview.c:759
 msgid "Whether the text can be modified by the user"
 msgstr "A szöveg szerkeszthető-e a felhasználó által"
 
@@ -2228,7 +2192,7 @@ msgstr "Több sor csonkítása"
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Több beillesztett sor csonkítva legyen-e az első sorra"
 
-#: gtk/gtkentry.c:956 gtk/gtktextview.c:893
+#: gtk/gtkentry.c:956 gtk/gtktextview.c:894
 msgid "Overwrite mode"
 msgstr "Felülírás mód"
 
@@ -2402,11 +2366,11 @@ msgstr "Elsődleges ikon buboréksúgójának jelölőkódja"
 msgid "Secondary icon tooltip markup"
 msgstr "Másodlagos ikon buboréksúgójának jelölőkódja"
 
-#: gtk/gtkentry.c:1284 gtk/gtktextview.c:919
+#: gtk/gtkentry.c:1284 gtk/gtktextview.c:920
 msgid "IM module"
 msgstr "Beviteli mód modul"
 
-#: gtk/gtkentry.c:1285 gtk/gtktextview.c:920
+#: gtk/gtkentry.c:1285 gtk/gtktextview.c:921
 msgid "Which IM module should be used"
 msgstr "A használandó beviteli modul"
 
@@ -2418,19 +2382,19 @@ msgstr "Kiegészítés"
 msgid "The auxiliary completion object"
 msgstr "A külső kiegészítési objektum"
 
-#: gtk/gtkentry.c:1315 gtk/gtkimcontext.c:331 gtk/gtktextview.c:935
+#: gtk/gtkentry.c:1315 gtk/gtkimcontext.c:331 gtk/gtktextview.c:936
 msgid "Purpose"
 msgstr "Cél"
 
-#: gtk/gtkentry.c:1316 gtk/gtkimcontext.c:332 gtk/gtktextview.c:936
+#: gtk/gtkentry.c:1316 gtk/gtkimcontext.c:332 gtk/gtktextview.c:937
 msgid "Purpose of the text field"
 msgstr "A szövegmező célja"
 
-#: gtk/gtkentry.c:1329 gtk/gtkimcontext.c:339 gtk/gtktextview.c:951
+#: gtk/gtkentry.c:1329 gtk/gtkimcontext.c:339 gtk/gtktextview.c:952
 msgid "hints"
 msgstr "javaslatok"
 
-#: gtk/gtkentry.c:1330 gtk/gtkimcontext.c:340 gtk/gtktextview.c:952
+#: gtk/gtkentry.c:1330 gtk/gtkimcontext.c:340 gtk/gtktextview.c:953
 msgid "Hints for the text field behaviour"
 msgstr "Javaslatok a szövegmező viselkedéséhez"
 
@@ -2438,15 +2402,15 @@ msgstr "Javaslatok a szövegmező viselkedéséhez"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "A bemeneti mező szövegére alkalmazandó stílusattribútumok listája"
 
-#: gtk/gtkentry.c:1360 gtk/gtkplacessidebar.c:4767 gtk/gtktextview.c:966
+#: gtk/gtkentry.c:1360 gtk/gtkplacessidebar.c:4766 gtk/gtktextview.c:967
 msgid "Populate all"
 msgstr "Összes feltöltése"
 
-#: gtk/gtkentry.c:1361 gtk/gtktextview.c:967
+#: gtk/gtkentry.c:1361 gtk/gtktextview.c:968
 msgid "Whether to emit ::populate-popup for touch popups"
 msgstr "Kiadja-e a ::populate-popup üzenetet a felugró menü érintéséhez"
 
-#: gtk/gtkentry.c:1372 gtk/gtktexttag.c:529 gtk/gtktextview.c:869
+#: gtk/gtkentry.c:1372 gtk/gtktexttag.c:529 gtk/gtktextview.c:870
 msgid "Tabs"
 msgstr "Lapok"
 
@@ -2625,7 +2589,7 @@ msgstr "Szűrő"
 msgid "The current filter for selecting which files are displayed"
 msgstr "A megjelenítendő fájlok kiválasztására használt aktuális szűrő"
 
-#: gtk/gtkfilechooser.c:386 gtk/gtkplacessidebar.c:4735
+#: gtk/gtkfilechooser.c:386 gtk/gtkplacessidebar.c:4734
 #: gtk/gtkplacesview.c:2264
 msgid "Local Only"
 msgstr "Csak helyi"
@@ -3302,23 +3266,23 @@ msgstr "Tartalék használata"
 msgid "Whether to use icon names fallback"
 msgstr "Az ikonnevek tartaléka használandó-e"
 
-#: gtk/gtkinfobar.c:332 gtk/gtkmessagedialog.c:175
+#: gtk/gtkinfobar.c:331 gtk/gtkmessagedialog.c:174
 msgid "Message Type"
 msgstr "Üzenettípus"
 
-#: gtk/gtkinfobar.c:333 gtk/gtkmessagedialog.c:176
+#: gtk/gtkinfobar.c:332 gtk/gtkmessagedialog.c:175
 msgid "The type of message"
 msgstr "Az üzenet típusa"
 
-#: gtk/gtkinfobar.c:345 gtk/gtksearchbar.c:442
+#: gtk/gtkinfobar.c:344 gtk/gtksearchbar.c:442
 msgid "Show Close Button"
 msgstr "Bezárás gomb megjelenítése"
 
-#: gtk/gtkinfobar.c:346
+#: gtk/gtkinfobar.c:345
 msgid "Whether to include a standard close button"
 msgstr "Legyen-e szabványos bezárás gomb"
 
-#: gtk/gtkinfobar.c:353
+#: gtk/gtkinfobar.c:352
 msgid "Controls whether the info bar shows its contents or not"
 msgstr ""
 "Azt szabályozza, hogy az információs sáv megjelenítse-e a tartalmát vagy sem"
@@ -3335,7 +3299,7 @@ msgstr "A címke szövege"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A címke szövegén alkalmazandó stílusattribútumok listája"
 
-#: gtk/gtklabel.c:785 gtk/gtktexttag.c:371 gtk/gtktextview.c:774
+#: gtk/gtklabel.c:785 gtk/gtktexttag.c:371 gtk/gtktextview.c:775
 msgid "Justification"
 msgstr "Sorkizárás"
 
@@ -3726,51 +3690,51 @@ msgstr "Gyermek csomagolásának iránya"
 msgid "The child pack direction of the menubar"
 msgstr "A menüsáv gyermekének csomagolásának iránya"
 
-#: gtk/gtkmenubutton.c:494
+#: gtk/gtkmenubutton.c:493
 msgid "Popup"
 msgstr "Felbukkanó"
 
-#: gtk/gtkmenubutton.c:495
+#: gtk/gtkmenubutton.c:494
 msgid "The dropdown menu."
 msgstr "A legördülő menü."
 
-#: gtk/gtkmenubutton.c:511
+#: gtk/gtkmenubutton.c:510
 msgid "Menu model"
 msgstr "Menümodell"
 
-#: gtk/gtkmenubutton.c:512
+#: gtk/gtkmenubutton.c:511
 msgid "The model from which the popup is made."
 msgstr "A modell, amelyből a felbukkanó készül."
 
-#: gtk/gtkmenubutton.c:523
+#: gtk/gtkmenubutton.c:522
 msgid "Align with"
 msgstr "Igazítás ehhez"
 
-#: gtk/gtkmenubutton.c:524
+#: gtk/gtkmenubutton.c:523
 msgid "The parent widget which the menu should align with."
 msgstr "Szülő felületi elem, amelyhez a menüt igazítani kell"
 
-#: gtk/gtkmenubutton.c:536 gtk/gtkshortcutsshortcut.c:685
+#: gtk/gtkmenubutton.c:535 gtk/gtkshortcutsshortcut.c:685
 msgid "Direction"
 msgstr "Irány"
 
-#: gtk/gtkmenubutton.c:537
+#: gtk/gtkmenubutton.c:536
 msgid "The direction the arrow should point."
 msgstr "Az irány, amerre a nyílnak mutatnia kell."
 
-#: gtk/gtkmenubutton.c:550
+#: gtk/gtkmenubutton.c:549
 msgid "Use a popover"
 msgstr "Popover használata"
 
-#: gtk/gtkmenubutton.c:551
+#: gtk/gtkmenubutton.c:550
 msgid "Use a popover instead of a menu"
 msgstr "Popover használata menü helyett"
 
-#: gtk/gtkmenubutton.c:562
+#: gtk/gtkmenubutton.c:561
 msgid "Popover"
 msgstr "Popover"
 
-#: gtk/gtkmenubutton.c:563
+#: gtk/gtkmenubutton.c:562
 msgid "The popover"
 msgstr "a popover"
 
@@ -3856,7 +3820,7 @@ msgstr "Menütípus javaslat"
 msgid "Menu window type hint"
 msgstr "Menüablaktípus javaslat"
 
-#: gtk/gtkmenuitem.c:606 gtk/gtkpopovermenu.c:359
+#: gtk/gtkmenuitem.c:606 gtk/gtkpopovermenu.c:342
 msgid "Submenu"
 msgstr "Almenü"
 
@@ -3889,47 +3853,47 @@ msgstr "Menü"
 msgid "The dropdown menu"
 msgstr "A legördülő menü."
 
-#: gtk/gtkmessagedialog.c:183
+#: gtk/gtkmessagedialog.c:182
 msgid "Message Buttons"
 msgstr "Üzenetgombok"
 
-#: gtk/gtkmessagedialog.c:184
+#: gtk/gtkmessagedialog.c:183
 msgid "The buttons shown in the message dialog"
 msgstr "Az üzenetablakban látható gombok"
 
-#: gtk/gtkmessagedialog.c:199
+#: gtk/gtkmessagedialog.c:198
 msgid "The primary text of the message dialog"
 msgstr "Az üzenetablak elsődleges szövege"
 
-#: gtk/gtkmessagedialog.c:212
+#: gtk/gtkmessagedialog.c:211
 msgid "Use Markup"
 msgstr "Jelölőkód használata"
 
-#: gtk/gtkmessagedialog.c:213
+#: gtk/gtkmessagedialog.c:212
 msgid "The primary text of the title includes Pango markup."
 msgstr "A cím elsődleges szövege tartalmaz-e Pango jelölőkódot"
 
-#: gtk/gtkmessagedialog.c:225
+#: gtk/gtkmessagedialog.c:224
 msgid "Secondary Text"
 msgstr "Másodlagos szöveg"
 
-#: gtk/gtkmessagedialog.c:226
+#: gtk/gtkmessagedialog.c:225
 msgid "The secondary text of the message dialog"
 msgstr "Az üzenetablak másodlagos szövege"
 
-#: gtk/gtkmessagedialog.c:239
+#: gtk/gtkmessagedialog.c:238
 msgid "Use Markup in secondary"
 msgstr "Jelölőkód használata másodlagos szövegben"
 
-#: gtk/gtkmessagedialog.c:240
+#: gtk/gtkmessagedialog.c:239
 msgid "The secondary text includes Pango markup."
 msgstr "A másodlagos szöveg tartalmaz-e Pango jelölőkódot"
 
-#: gtk/gtkmessagedialog.c:254
+#: gtk/gtkmessagedialog.c:253
 msgid "Message area"
 msgstr "Üzenetterület"
 
-#: gtk/gtkmessagedialog.c:255
+#: gtk/gtkmessagedialog.c:254
 msgid "GtkBox that holds the dialog’s primary and secondary labels"
 msgstr "Az ablak elsődleges és másodlagos címkéit tartalmazó GtkBox"
 
@@ -3982,7 +3946,7 @@ msgstr "Ikonszerű"
 msgid "Whether to prefer the icon over text"
 msgstr "Előnyben részesítse-e az ikont a szöveggel szemben"
 
-#: gtk/gtkmountoperation.c:165 gtk/gtkstylecontext.c:220
+#: gtk/gtkmountoperation.c:165 gtk/gtkstylecontext.c:219
 msgid "Parent"
 msgstr "Szülő"
 
@@ -4010,7 +3974,7 @@ msgstr "Párbeszédablak címe"
 msgid "The title of the file chooser dialog"
 msgstr "A fájlválasztó párbeszédablak címe"
 
-#: gtk/gtknativedialog.c:224 gtk/gtkpopover.c:1638 gtk/gtkwindow.c:873
+#: gtk/gtknativedialog.c:224 gtk/gtkpopover.c:1638 gtk/gtkwindow.c:868
 msgid "Modal"
 msgstr "Kizárólagos"
 
@@ -4026,11 +3990,11 @@ msgstr ""
 msgid "Whether the dialog is currently visible"
 msgstr "Látható-e a párbeszédablak"
 
-#: gtk/gtknativedialog.c:248 gtk/gtkwindow.c:1080
+#: gtk/gtknativedialog.c:248 gtk/gtkwindow.c:1066
 msgid "Transient for Window"
 msgstr "Áttetsző ezen ablak számára"
 
-#: gtk/gtknativedialog.c:249 gtk/gtkwindow.c:1081
+#: gtk/gtknativedialog.c:249 gtk/gtkwindow.c:1067
 msgid "The transient parent of the dialog"
 msgstr "A párbeszédablak áttetsző szülője"
 
@@ -4111,12 +4075,12 @@ msgstr "Menücímke"
 msgid "The string displayed in the child’s menu entry"
 msgstr "A gyermek menübejegyzésen megjelenő karakterlánc"
 
-#: gtk/gtknotebook.c:779 gtk/gtkpaned.c:395 gtk/gtkpopover.c:1625
-#: gtk/gtkpopovermenu.c:367 gtk/gtkstack.c:400
+#: gtk/gtknotebook.c:779 gtk/gtkpaned.c:394 gtk/gtkpopover.c:1625
+#: gtk/gtkstack.c:400
 msgid "Position"
 msgstr "Pozíció"
 
-#: gtk/gtknotebook.c:780 gtk/gtkpopovermenu.c:368 gtk/gtkstack.c:401
+#: gtk/gtknotebook.c:780 gtk/gtkstack.c:401
 msgid "The index of the child in the parent"
 msgstr "A gyermek indexe a szülőben"
 
@@ -4216,59 +4180,59 @@ msgstr "Táblaeszköz"
 msgid "Pad device to control"
 msgstr "Vezérlendő táblaeszköz"
 
-#: gtk/gtkpaned.c:396
+#: gtk/gtkpaned.c:395
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "A keretelválasztó helye képpontokban megadva (a 0 a bal/felső oldalt jelenti)"
 
-#: gtk/gtkpaned.c:402
+#: gtk/gtkpaned.c:401
 msgid "Position Set"
 msgstr "Pozíció beállítva"
 
-#: gtk/gtkpaned.c:403
+#: gtk/gtkpaned.c:402
 msgid "TRUE if the Position property should be used"
 msgstr "Ha IGAZ, akkor a Pozíció tulajdonságot kell használni"
 
-#: gtk/gtkpaned.c:416
+#: gtk/gtkpaned.c:415
 msgid "Minimal Position"
 msgstr "Minimális pozíció"
 
-#: gtk/gtkpaned.c:417
+#: gtk/gtkpaned.c:416
 msgid "Smallest possible value for the “position” property"
 msgstr "A „Pozíció” tulajdonság lehető legkisebb értéke"
 
-#: gtk/gtkpaned.c:430
+#: gtk/gtkpaned.c:429
 msgid "Maximal Position"
 msgstr "Maximális pozíció"
 
-#: gtk/gtkpaned.c:431
+#: gtk/gtkpaned.c:430
 msgid "Largest possible value for the “position” property"
 msgstr "A „Pozíció” tulajdonság lehető legnagyobb értéke"
 
-#: gtk/gtkpaned.c:444
+#: gtk/gtkpaned.c:443
 msgid "Wide Handle"
 msgstr "Széles fogantyú"
 
-#: gtk/gtkpaned.c:445
+#: gtk/gtkpaned.c:444
 msgid "Whether the paned should have a prominent handle"
 msgstr "Az ablakkeret rendelkezzen-e feltűnő fogantyúval"
 
-#: gtk/gtkpaned.c:465
+#: gtk/gtkpaned.c:464
 msgid "Resize"
 msgstr "Átméretezés"
 
-#: gtk/gtkpaned.c:466
+#: gtk/gtkpaned.c:465
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 "Ha IGAZ, akkor a gyermek kinyúlik és összezsugorodik a bekeretezett felületi "
 "elemmel együtt"
 
-#: gtk/gtkpaned.c:479
+#: gtk/gtkpaned.c:478
 msgid "Shrink"
 msgstr "Zsugorodás"
 
-#: gtk/gtkpaned.c:480
+#: gtk/gtkpaned.c:479
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Ha IGAZ, akkor a gyermek a kért méretnél kisebbre is zsugorítható"
 
@@ -4304,19 +4268,19 @@ msgstr "Zsugorítható"
 msgid "Allow self to be smaller than contents"
 msgstr "Az objektum maga kisebb lehet mint a tartalom"
 
-#: gtk/gtkplacessidebar.c:4704
+#: gtk/gtkplacessidebar.c:4703
 msgid "Location to Select"
 msgstr "Kiválasztandó hely"
 
-#: gtk/gtkplacessidebar.c:4705
+#: gtk/gtkplacessidebar.c:4704
 msgid "The location to highlight in the sidebar"
 msgstr "Az oldalsávban kiemelendő hely"
 
-#: gtk/gtkplacessidebar.c:4710 gtk/gtkplacesview.c:2285
+#: gtk/gtkplacessidebar.c:4709 gtk/gtkplacesview.c:2285
 msgid "Open Flags"
 msgstr "Megnyitás jelzői"
 
-#: gtk/gtkplacessidebar.c:4711 gtk/gtkplacesview.c:2286
+#: gtk/gtkplacessidebar.c:4710 gtk/gtkplacesview.c:2286
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4324,61 +4288,61 @@ msgstr ""
 "Azok a módok, amelyekben a hívó alkalmazás megnyithatja az oldalsávban "
 "kiválasztott helyeket"
 
-#: gtk/gtkplacessidebar.c:4717
+#: gtk/gtkplacessidebar.c:4716
 msgid "Show recent files"
 msgstr "Legutóbbi fájlok megjelenítése"
 
-#: gtk/gtkplacessidebar.c:4718
+#: gtk/gtkplacessidebar.c:4717
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr "Az oldalsáv tartalmaz-e beépített hivatkozást a legutóbbi fájlokra"
 
-#: gtk/gtkplacessidebar.c:4723
+#: gtk/gtkplacessidebar.c:4722
 msgid "Show “Desktop”"
 msgstr "„Asztal” megjelenítése"
 
-#: gtk/gtkplacessidebar.c:4724
+#: gtk/gtkplacessidebar.c:4723
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Az oldalsáv tartalmaz-e beépített hivatkozást az Asztal mappára"
 
-#: gtk/gtkplacessidebar.c:4729
+#: gtk/gtkplacessidebar.c:4728
 msgid "Show “Enter Location”"
 msgstr "Az „Adja meg a helyet” megjelenítése"
 
-#: gtk/gtkplacessidebar.c:4730
+#: gtk/gtkplacessidebar.c:4729
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Az oldalsáv tartalmaz-e beépített hivatkozást egy hely megadásához"
 
-#: gtk/gtkplacessidebar.c:4736 gtk/gtkplacesview.c:2265
+#: gtk/gtkplacessidebar.c:4735 gtk/gtkplacesview.c:2265
 msgid "Whether the sidebar only includes local files"
 msgstr "Az oldalsáv csak helyi fájlokat tartalmaz-e"
 
-#: gtk/gtkplacessidebar.c:4741
+#: gtk/gtkplacessidebar.c:4740
 msgid "Show “Trash”"
 msgstr "„Kuka” megjelenítése"
 
-#: gtk/gtkplacessidebar.c:4742
+#: gtk/gtkplacessidebar.c:4741
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Az oldalsáv tartalmaz-e beépített hivatkozást a Kuka helyére"
 
-#: gtk/gtkplacessidebar.c:4747
+#: gtk/gtkplacessidebar.c:4746
 msgid "Show “Other locations”"
 msgstr "„Egyéb helyek” megjelenítése"
 
-#: gtk/gtkplacessidebar.c:4748
+#: gtk/gtkplacessidebar.c:4747
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Az oldalsáv tartalmaz-e egy elemet a külső helyek megjelenítéséhez"
 
-#: gtk/gtkplacessidebar.c:4753
+#: gtk/gtkplacessidebar.c:4752
 msgid "Show “Starred Location”"
 msgstr "„Csillagozott hely” megjelenítése"
 
-#: gtk/gtkplacessidebar.c:4754
+#: gtk/gtkplacessidebar.c:4753
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Az oldalsáv tartalmaz-e egy elemet a csillagozott fájlok megjelenítéséhez"
 
-#: gtk/gtkplacessidebar.c:4768
+#: gtk/gtkplacessidebar.c:4767
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Kiadja-e a ::populate-popup üzenetet a nem menü felugrókhoz"
 
@@ -4482,15 +4446,15 @@ msgstr "Megszorítás"
 msgid "Constraint for the popover position"
 msgstr "A popover pozíciójához tartozó megszorítás"
 
-#: gtk/gtkpopovermenu.c:344
+#: gtk/gtkpopovermenu.c:327
 msgid "Visible submenu"
 msgstr "Látható almenü"
 
-#: gtk/gtkpopovermenu.c:345
+#: gtk/gtkpopovermenu.c:328
 msgid "The name of the visible submenu"
 msgstr "A látható almenü neve"
 
-#: gtk/gtkpopovermenu.c:360
+#: gtk/gtkpopovermenu.c:343
 msgid "The name of the submenu"
 msgstr "Az almenü neve"
 
@@ -4876,43 +4840,43 @@ msgstr ""
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Az a rádiógomb, amely csoportjához ez a gomb tartozik."
 
-#: gtk/gtkrange.c:374
+#: gtk/gtkrange.c:373
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "A tartományobjektum aktuális értékét tartalmazó GtkAdjustment"
 
-#: gtk/gtkrange.c:381
+#: gtk/gtkrange.c:380
 msgid "Invert direction slider moves to increase range value"
 msgstr "Csúszka irányának megfordítása a tartományérték növeléséhez"
 
-#: gtk/gtkrange.c:394
+#: gtk/gtkrange.c:393
 msgid "Show Fill Level"
 msgstr "Kitöltési szint megjelenítése"
 
-#: gtk/gtkrange.c:395
+#: gtk/gtkrange.c:394
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "A vályúban megjelenítendő-e kitöltésszint-jelző."
 
-#: gtk/gtkrange.c:408
+#: gtk/gtkrange.c:407
 msgid "Restrict to Fill Level"
 msgstr "Korlátozás a kitöltési szintre"
 
-#: gtk/gtkrange.c:409
+#: gtk/gtkrange.c:408
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "A felső szegély korlátozása a kitöltési szintre."
 
-#: gtk/gtkrange.c:421
+#: gtk/gtkrange.c:420
 msgid "Fill Level"
 msgstr "Kitöltési szint"
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:421
 msgid "The fill level."
 msgstr "A kitöltés szintje."
 
-#: gtk/gtkrange.c:435
+#: gtk/gtkrange.c:434
 msgid "Round Digits"
 msgstr "Kerekítési számjegyek"
 
-#: gtk/gtkrange.c:436
+#: gtk/gtkrange.c:435
 msgid "The number of digits to round the value to."
 msgstr "Az érték kerekítése ennyi számjegyre."
 
@@ -4956,20 +4920,20 @@ msgstr "Gyermek megjelenítve"
 msgid "Whether the child is revealed and the animation target reached"
 msgstr "A gyermek megjelent-e, és az animáció célja el van-e érve"
 
-#: gtk/gtkscalebutton.c:198
+#: gtk/gtkscalebutton.c:197
 msgid "The value of the scale"
 msgstr "A méretezés értéke"
 
-#: gtk/gtkscalebutton.c:208
+#: gtk/gtkscalebutton.c:207
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "A méretezőgomb-objektum aktuális értékét tartalmazó GtkAdjustment"
 
-#: gtk/gtkscalebutton.c:234
+#: gtk/gtkscalebutton.c:233
 msgid "Icons"
 msgstr "Ikonok"
 
-#: gtk/gtkscalebutton.c:235
+#: gtk/gtkscalebutton.c:234
 msgid "List of icon names"
 msgstr "Ikonnevek listája"
 
@@ -5041,110 +5005,110 @@ msgstr "Függőleges görgethető irányelve"
 msgid "The GtkAdjustment that contains the current value of this scrollbar"
 msgstr "A görgetősáv aktuális értékét tartalmazó GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:526
+#: gtk/gtkscrolledwindow.c:525
 msgid "Horizontal Adjustment"
 msgstr "Vízszintes igazítás"
 
-#: gtk/gtkscrolledwindow.c:527
+#: gtk/gtkscrolledwindow.c:526
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "A vízszintes pozícióhoz tartozó GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:533
+#: gtk/gtkscrolledwindow.c:532
 msgid "Vertical Adjustment"
 msgstr "Függőleges igazítás"
 
-#: gtk/gtkscrolledwindow.c:534
+#: gtk/gtkscrolledwindow.c:533
 msgid "The GtkAdjustment for the vertical position"
 msgstr "A függőleges pozícióhoz tartozó GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:540
+#: gtk/gtkscrolledwindow.c:539
 msgid "Horizontal Scrollbar Policy"
 msgstr "Vízszintes görgetősáv irányelv"
 
-#: gtk/gtkscrolledwindow.c:541
+#: gtk/gtkscrolledwindow.c:540
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Mikor kerüljön megjelenítésre a vízszintes görgetősáv"
 
-#: gtk/gtkscrolledwindow.c:548
+#: gtk/gtkscrolledwindow.c:547
 msgid "Vertical Scrollbar Policy"
 msgstr "Függőleges görgetősáv irányelv"
 
-#: gtk/gtkscrolledwindow.c:549
+#: gtk/gtkscrolledwindow.c:548
 msgid "When the vertical scrollbar is displayed"
 msgstr "Mikor kerüljön megjelenítésre a függőleges görgetősáv"
 
-#: gtk/gtkscrolledwindow.c:556
+#: gtk/gtkscrolledwindow.c:555
 msgid "Window Placement"
 msgstr "Ablak elhelyezése"
 
-#: gtk/gtkscrolledwindow.c:557
+#: gtk/gtkscrolledwindow.c:556
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Hol legyen a tartalom a görgetősávokhoz képest."
 
-#: gtk/gtkscrolledwindow.c:564
+#: gtk/gtkscrolledwindow.c:563
 msgid "Shadow Type"
 msgstr "Árnyéktípus"
 
-#: gtk/gtkscrolledwindow.c:565
+#: gtk/gtkscrolledwindow.c:564
 msgid "Style of bevel around the contents"
 msgstr "A tartalom körüli élkidolgozás stílusa"
 
-#: gtk/gtkscrolledwindow.c:577
+#: gtk/gtkscrolledwindow.c:576
 msgid "Minimum Content Width"
 msgstr "Legkisebb tartalomszélesség"
 
-#: gtk/gtkscrolledwindow.c:578
+#: gtk/gtkscrolledwindow.c:577
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legkisebb szélesség"
 
-#: gtk/gtkscrolledwindow.c:589
+#: gtk/gtkscrolledwindow.c:588
 msgid "Minimum Content Height"
 msgstr "Legkisebb tartalommagasság"
 
-#: gtk/gtkscrolledwindow.c:590
+#: gtk/gtkscrolledwindow.c:589
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legkisebb magasság"
 
-#: gtk/gtkscrolledwindow.c:602
+#: gtk/gtkscrolledwindow.c:601
 msgid "Kinetic Scrolling"
 msgstr "Kinetikus görgetés"
 
-#: gtk/gtkscrolledwindow.c:603
+#: gtk/gtkscrolledwindow.c:602
 msgid "Kinetic scrolling mode."
 msgstr "Kinetikus görgetés mód."
 
-#: gtk/gtkscrolledwindow.c:617
+#: gtk/gtkscrolledwindow.c:616
 msgid "Overlay Scrolling"
 msgstr "Átfedő görgetés"
 
-#: gtk/gtkscrolledwindow.c:618
+#: gtk/gtkscrolledwindow.c:617
 msgid "Overlay scrolling mode"
 msgstr "Átfedő görgetés mód."
 
-#: gtk/gtkscrolledwindow.c:629
+#: gtk/gtkscrolledwindow.c:628
 msgid "Maximum Content Width"
 msgstr "Legnagyobb tartalomszélesség"
 
-#: gtk/gtkscrolledwindow.c:630
+#: gtk/gtkscrolledwindow.c:629
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "A görgetett ablak által a tartalomnak lefoglalandó legnagyobb szélesség"
 
-#: gtk/gtkscrolledwindow.c:641
+#: gtk/gtkscrolledwindow.c:640
 msgid "Maximum Content Height"
 msgstr "Legnagyobb tartalommagasság"
 
-#: gtk/gtkscrolledwindow.c:642
+#: gtk/gtkscrolledwindow.c:641
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legnagyobb magasság"
 
-#: gtk/gtkscrolledwindow.c:657 gtk/gtkscrolledwindow.c:658
+#: gtk/gtkscrolledwindow.c:656 gtk/gtkscrolledwindow.c:657
 msgid "Propagate Natural Width"
 msgstr "Természetes szélesség propagálása"
 
-#: gtk/gtkscrolledwindow.c:673 gtk/gtkscrolledwindow.c:674
+#: gtk/gtkscrolledwindow.c:672 gtk/gtkscrolledwindow.c:673
 msgid "Propagate Natural Height"
 msgstr "Természetes magasság propagálása"
 
@@ -5556,10 +5520,11 @@ msgstr "A párbeszédablakok fejlécsávot használnak"
 
 #: gtk/gtksettings.c:948
 msgid ""
-"Whether builtin GTK+ dialogs should use a header bar instead of an action "
+"Whether builtin GTK dialogs should use a header bar instead of an action "
 "area."
 msgstr ""
-"A beépített GTK+ ablakok fejlécsávot használjanak-e a műveletterület helyett."
+"A beépített GTK párbeszédablakok fejlécsávot használjanak-e a műveletterület "
+"helyett."
 
 #: gtk/gtksettings.c:962
 msgid "Enable primary paste"
@@ -5578,8 +5543,8 @@ msgid "Recent Files Enabled"
 msgstr "Legutóbbi fájlok engedélyezve"
 
 #: gtk/gtksettings.c:978
-msgid "Whether GTK+ remembers recent files"
-msgstr "Emlékezzen-e a GTK+ a legutóbbi fájlokra"
+msgid "Whether GTK remembers recent files"
+msgstr "Emlékezzen-e a GTK a legutóbbi fájlokra"
 
 #: gtk/gtksettings.c:991
 msgid "Long press time"
@@ -5867,11 +5832,11 @@ msgstr "Verem"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Ehhez a GtkStackSidebar elemhez társított verem"
 
-#: gtk/gtkstylecontext.c:208
+#: gtk/gtkstylecontext.c:207
 msgid "The associated GdkDisplay"
 msgstr "A társított GdkDisplay"
 
-#: gtk/gtkstylecontext.c:221
+#: gtk/gtkstylecontext.c:220
 msgid "The parent style context"
 msgstr "A szülő stíluskörnyezete"
 
@@ -6041,7 +6006,7 @@ msgstr ""
 "javasolt. A Pango előre meghatároz bizonyos arányokat, mint például a "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:372 gtk/gtktextview.c:775
+#: gtk/gtktexttag.c:372 gtk/gtktextview.c:776
 msgid "Left, right, or center justification"
 msgstr "Balra, jobbra vagy középre igazítás"
 
@@ -6058,7 +6023,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Bal oldali margó"
 
-#: gtk/gtktexttag.c:399 gtk/gtktextview.c:796
+#: gtk/gtktexttag.c:399 gtk/gtktextview.c:797
 msgid "Width of the left margin in pixels"
 msgstr "A bal margó szélessége, képpontokban megadva"
 
@@ -6066,15 +6031,15 @@ msgstr "A bal margó szélessége, képpontokban megadva"
 msgid "Right margin"
 msgstr "Jobb oldali margó"
 
-#: gtk/gtktexttag.c:409 gtk/gtktextview.c:816
+#: gtk/gtktexttag.c:409 gtk/gtktextview.c:817
 msgid "Width of the right margin in pixels"
 msgstr "A jobb margó szélessége, képpontokban megadva"
 
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:861
+#: gtk/gtktexttag.c:419 gtk/gtktextview.c:862
 msgid "Indent"
 msgstr "Behúzás"
 
-#: gtk/gtktexttag.c:420 gtk/gtktextview.c:862
+#: gtk/gtktexttag.c:420 gtk/gtktextview.c:863
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "A bekezdés behúzása, képpontokban megadva"
 
@@ -6090,7 +6055,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Vonalak feletti képpontok"
 
-#: gtk/gtktexttag.c:441 gtk/gtktextview.c:734
+#: gtk/gtktexttag.c:441 gtk/gtktextview.c:735
 msgid "Pixels of blank space above paragraphs"
 msgstr "A bekezdések feletti üres terület, képpontokban megadva"
 
@@ -6098,7 +6063,7 @@ msgstr "A bekezdések feletti üres terület, képpontokban megadva"
 msgid "Pixels below lines"
 msgstr "Vonalak alatti képpontok"
 
-#: gtk/gtktexttag.c:451 gtk/gtktextview.c:742
+#: gtk/gtktexttag.c:451 gtk/gtktextview.c:743
 msgid "Pixels of blank space below paragraphs"
 msgstr "A bekezdések alatti üres terület, képpontokban megadva"
 
@@ -6106,7 +6071,7 @@ msgstr "A bekezdések alatti üres terület, képpontokban megadva"
 msgid "Pixels inside wrap"
 msgstr "Tördelésen belüli képpontok"
 
-#: gtk/gtktexttag.c:461 gtk/gtktextview.c:750
+#: gtk/gtktexttag.c:461 gtk/gtktextview.c:751
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "A bekezdés áttördelt sorai közötti üres terület, képpontokban megadva"
 
@@ -6126,12 +6091,12 @@ msgstr "Áthúzás RGBA"
 msgid "Color of strikethrough for this text"
 msgstr "Ezen szöveg áthúzásának színe"
 
-#: gtk/gtktexttag.c:520 gtk/gtktextview.c:766
+#: gtk/gtktexttag.c:520 gtk/gtktextview.c:767
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "A sorok tördelésének módja: soha, szóhatárokon, karakterhatárokon"
 
-#: gtk/gtktexttag.c:530 gtk/gtktextview.c:870
+#: gtk/gtktexttag.c:530 gtk/gtktextview.c:871
 msgid "Custom tabs for this text"
 msgstr "A szöveg egyedi lapjai"
 
@@ -6319,79 +6284,79 @@ msgstr "Beállított betűjellemzők"
 msgid "Whether this tag affects font features"
 msgstr "Az elem befolyásolja-e a betűjellemzőket"
 
-#: gtk/gtktextview.c:733
+#: gtk/gtktextview.c:734
 msgid "Pixels Above Lines"
 msgstr "Sorok feletti képpontok"
 
-#: gtk/gtktextview.c:741
+#: gtk/gtktextview.c:742
 msgid "Pixels Below Lines"
 msgstr "Sorok alatti képpontok"
 
-#: gtk/gtktextview.c:749
+#: gtk/gtktextview.c:750
 msgid "Pixels Inside Wrap"
 msgstr "Tördelésen belüli képpontok"
 
-#: gtk/gtktextview.c:765
+#: gtk/gtktextview.c:766
 msgid "Wrap Mode"
 msgstr "Sortördelés módja"
 
-#: gtk/gtktextview.c:795
+#: gtk/gtktextview.c:796
 msgid "Left Margin"
 msgstr "Bal oldali margó"
 
-#: gtk/gtktextview.c:815
+#: gtk/gtktextview.c:816
 msgid "Right Margin"
 msgstr "Jobb oldali margó"
 
-#: gtk/gtktextview.c:834
+#: gtk/gtktextview.c:835
 msgid "Top Margin"
 msgstr "Felső margó"
 
-#: gtk/gtktextview.c:835
+#: gtk/gtktextview.c:836
 msgid "Height of the top margin in pixels"
 msgstr "A felső margó magassága képpontokban megadva"
 
-#: gtk/gtktextview.c:853
+#: gtk/gtktextview.c:854
 msgid "Bottom Margin"
 msgstr "Alsó margó"
 
-#: gtk/gtktextview.c:854
+#: gtk/gtktextview.c:855
 msgid "Height of the bottom margin in pixels"
 msgstr "Az alsó margó magassága képpontokban megadva"
 
-#: gtk/gtktextview.c:877
+#: gtk/gtktextview.c:878
 msgid "Cursor Visible"
 msgstr "Kurzor látható"
 
-#: gtk/gtktextview.c:878
+#: gtk/gtktextview.c:879
 msgid "If the insertion cursor is shown"
 msgstr "A beszúrási kurzor látható-e"
 
-#: gtk/gtktextview.c:885
+#: gtk/gtktextview.c:886
 msgid "Buffer"
 msgstr "Puffer"
 
-#: gtk/gtktextview.c:886
+#: gtk/gtktextview.c:887
 msgid "The buffer which is displayed"
 msgstr "A megjelenített puffer"
 
-#: gtk/gtktextview.c:894
+#: gtk/gtktextview.c:895
 msgid "Whether entered text overwrites existing contents"
 msgstr "A beírt szöveg felülírja-e a meglévő tartalmat"
 
-#: gtk/gtktextview.c:901
+#: gtk/gtktextview.c:902
 msgid "Accepts tab"
 msgstr "Tabulátor elfogadása"
 
-#: gtk/gtktextview.c:902
+#: gtk/gtktextview.c:903
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "A Tab gomb megnyomása tabulátor karakter beírását eredményezi-e"
 
-#: gtk/gtktextview.c:980
+#: gtk/gtktextview.c:981
 msgid "Monospace"
 msgstr "Rögzített szélességű"
 
-#: gtk/gtktextview.c:981
+#: gtk/gtktextview.c:982
 msgid "Whether to use a monospace font"
 msgstr "Használjon-e rögzített szélességű betűkészletet"
 
@@ -6707,7 +6672,7 @@ msgstr "A sorok eszköztippszövegeit tartalmazó modelloszlop."
 msgid "Whether to display the column"
 msgstr "Az oszlop megjelenítésre kerüljön-e"
 
-#: gtk/gtktreeviewcolumn.c:261 gtk/gtkwindow.c:866
+#: gtk/gtktreeviewcolumn.c:261 gtk/gtkwindow.c:861
 msgid "Resizable"
 msgstr "Átméretezhető"
 
@@ -7090,44 +7055,44 @@ msgstr "A felületi elem neve a CSS fában"
 msgid "Observed widget"
 msgstr "Megfigyelt felületi elem"
 
-#: gtk/gtkwindow.c:830
+#: gtk/gtkwindow.c:825
 msgid "Window Type"
 msgstr "Ablak típusa"
 
-#: gtk/gtkwindow.c:831
+#: gtk/gtkwindow.c:826
 msgid "The type of the window"
 msgstr "Az ablak típusa"
 
-#: gtk/gtkwindow.c:838
+#: gtk/gtkwindow.c:833
 msgid "Window Title"
 msgstr "Ablakcím"
 
-#: gtk/gtkwindow.c:839
+#: gtk/gtkwindow.c:834
 msgid "The title of the window"
 msgstr "Az ablak címe"
 
-#: gtk/gtkwindow.c:845
+#: gtk/gtkwindow.c:840
 msgid "Window Role"
 msgstr "Ablak szerepe"
 
-#: gtk/gtkwindow.c:846
+#: gtk/gtkwindow.c:841
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Az ablaknak egy munkamenet visszaállításakor használt egyedi azonosítója"
 
-#: gtk/gtkwindow.c:859
+#: gtk/gtkwindow.c:854
 msgid "Startup ID"
 msgstr "Indítási azonosító"
 
-#: gtk/gtkwindow.c:860
+#: gtk/gtkwindow.c:855
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Az ablaknak az indítási értesítő által használt egyedi azonosítója"
 
-#: gtk/gtkwindow.c:867
+#: gtk/gtkwindow.c:862
 msgid "If TRUE, users can resize the window"
 msgstr "Ha IGAZ, akkor a felhasználók átméretezhetik az ablakot"
 
-#: gtk/gtkwindow.c:874
+#: gtk/gtkwindow.c:869
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7135,93 +7100,89 @@ msgstr ""
 "Ha IGAZ, akkor az ablak kizárólagos (más ablakok nem használhatók addig, "
 "amíg ez látszik)"
 
-#: gtk/gtkwindow.c:880
+#: gtk/gtkwindow.c:875
 msgid "Window Position"
 msgstr "Ablakpozíció"
 
-#: gtk/gtkwindow.c:881
+#: gtk/gtkwindow.c:876
 msgid "The initial position of the window"
 msgstr "Az ablak kezdeti helye"
 
-#: gtk/gtkwindow.c:888
+#: gtk/gtkwindow.c:883
 msgid "Default Width"
 msgstr "Alapértelmezett szélesség"
 
-#: gtk/gtkwindow.c:889
+#: gtk/gtkwindow.c:884
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Az ablak alapértelmezett szélessége; az ablak első megjelenítésekor "
 "használatos"
 
-#: gtk/gtkwindow.c:896
+#: gtk/gtkwindow.c:891
 msgid "Default Height"
 msgstr "Alapértelmezett magasság"
 
-#: gtk/gtkwindow.c:897
+#: gtk/gtkwindow.c:892
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Az ablak alapértelmezett magassága; az ablak első megjelenítésekor "
 "használatos"
 
-#: gtk/gtkwindow.c:904
+#: gtk/gtkwindow.c:899
 msgid "Destroy with Parent"
 msgstr "Szülővel együtt megsemmisítendő"
 
-#: gtk/gtkwindow.c:905
+#: gtk/gtkwindow.c:900
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Az ablakot meg kell-e semmisíteni a szülővel együtt"
 
-#: gtk/gtkwindow.c:911
+#: gtk/gtkwindow.c:906
 msgid "Hide on close"
 msgstr "Elrejtés bezáráskor"
 
-#: gtk/gtkwindow.c:912
+#: gtk/gtkwindow.c:907
 msgid "If this window should be hidden when the user clicks the close button"
 msgstr ""
 "Az ablakot el kell-e rejteni, ha a felhasználó a bezárás gombra kattint"
 
 #: gtk/gtkwindow.c:920
-msgid "Icon for this window"
-msgstr "Az ablak ikonja"
-
-#: gtk/gtkwindow.c:934
 msgid "Mnemonics Visible"
 msgstr "Hívóbetűk láthatók"
 
-#: gtk/gtkwindow.c:935
+#: gtk/gtkwindow.c:921
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "A hívóbetűk láthatók-e ebben az ablakban?"
 
-#: gtk/gtkwindow.c:949
+#: gtk/gtkwindow.c:935
 msgid "Focus Visible"
 msgstr "Fókusz látható"
 
-#: gtk/gtkwindow.c:950
+#: gtk/gtkwindow.c:936
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "A fókusz téglalapok láthatók-e ebben az ablakban"
 
-#: gtk/gtkwindow.c:963
+#: gtk/gtkwindow.c:949
 msgid "Name of the themed icon for this window"
 msgstr "Az ablak témaikonja"
 
-#: gtk/gtkwindow.c:970
+#: gtk/gtkwindow.c:956
 msgid "The display that will display this window"
 msgstr "A megjelenítő, amely meg fogja jeleníteni ezt az ablakot"
 
-#: gtk/gtkwindow.c:976
+#: gtk/gtkwindow.c:962
 msgid "Is Active"
 msgstr "Aktív-e"
 
-#: gtk/gtkwindow.c:977
+#: gtk/gtkwindow.c:963
 msgid "Whether the toplevel is the current active window"
 msgstr "A legfelső szintű-e a jelenlegi aktív ablak"
 
-#: gtk/gtkwindow.c:983
+#: gtk/gtkwindow.c:969
 msgid "Type hint"
 msgstr "Típussúgó"
 
-#: gtk/gtkwindow.c:984
+#: gtk/gtkwindow.c:970
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -7229,94 +7190,94 @@ msgstr ""
 "Segítség az asztali környezet számára, hogy megállapítsa, milyen ablak is ez "
 "és hogyan kell kezelni."
 
-#: gtk/gtkwindow.c:991
+#: gtk/gtkwindow.c:977
 msgid "Skip taskbar"
 msgstr "Tálca kihagyása"
 
-#: gtk/gtkwindow.c:992
+#: gtk/gtkwindow.c:978
 msgid "TRUE if the window should not be in the task bar."
 msgstr "Ha IGAZ, akkor az ablak nem jelenik meg a tálcán."
 
-#: gtk/gtkwindow.c:998
+#: gtk/gtkwindow.c:984
 msgid "Skip pager"
 msgstr "Lapozó kihagyása"
 
-#: gtk/gtkwindow.c:999
+#: gtk/gtkwindow.c:985
 msgid "TRUE if the window should not be in the pager."
 msgstr "Ha IGAZ, akkor az ablak nem jelenik meg a lapozóban."
 
-#: gtk/gtkwindow.c:1005
+#: gtk/gtkwindow.c:991
 msgid "Urgent"
 msgstr "Sürgős"
 
-#: gtk/gtkwindow.c:1006
+#: gtk/gtkwindow.c:992
 msgid "TRUE if the window should be brought to the user’s attention."
 msgstr ""
 "Ha IGAZ, akkor az ablaknak fel kell hívnia magára a felhasználó figyelmét."
 
-#: gtk/gtkwindow.c:1017
+#: gtk/gtkwindow.c:1003
 msgid "Accept focus"
 msgstr "Fókusz fogadása"
 
-#: gtk/gtkwindow.c:1018
+#: gtk/gtkwindow.c:1004
 msgid "TRUE if the window should receive the input focus."
 msgstr "Ha IGAZ, akkor az ablaknak kell fogadnia a beviteli fókuszt."
 
-#: gtk/gtkwindow.c:1029
+#: gtk/gtkwindow.c:1015
 msgid "Focus on map"
 msgstr "Fókusz leképezéskor"
 
-#: gtk/gtkwindow.c:1030
+#: gtk/gtkwindow.c:1016
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr ""
 "Ha IGAZ, akkor az ablaknak kell fogadnia a beviteli fókuszt leképezett "
 "állapotban."
 
-#: gtk/gtkwindow.c:1041
+#: gtk/gtkwindow.c:1027
 msgid "Decorated"
 msgstr "Díszített"
 
-#: gtk/gtkwindow.c:1042
+#: gtk/gtkwindow.c:1028
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Díszítse-e az ablakkezelő az ablakot."
 
-#: gtk/gtkwindow.c:1053
+#: gtk/gtkwindow.c:1039
 msgid "Deletable"
 msgstr "Törölhető"
 
-#: gtk/gtkwindow.c:1054
+#: gtk/gtkwindow.c:1040
 msgid "Whether the window frame should have a close button"
 msgstr "Az ablakkeret rendelkezzen-e bezárás gombbal"
 
-#: gtk/gtkwindow.c:1066
+#: gtk/gtkwindow.c:1052
 msgid "Gravity"
 msgstr "Gravitáció"
 
-#: gtk/gtkwindow.c:1067
+#: gtk/gtkwindow.c:1053
 msgid "The window gravity of the window"
 msgstr "Az ablak gravitációja"
 
-#: gtk/gtkwindow.c:1098
+#: gtk/gtkwindow.c:1084
 msgid "Attached to Widget"
 msgstr "Csatolva ezen felületi elemhez"
 
-#: gtk/gtkwindow.c:1099
+#: gtk/gtkwindow.c:1085
 msgid "The widget where the window is attached"
 msgstr "A felületi elem, amelyhez az ablak csatolva van"
 
-#: gtk/gtkwindow.c:1105
+#: gtk/gtkwindow.c:1091
 msgid "Is maximized"
 msgstr "Maximalizálva van-e"
 
-#: gtk/gtkwindow.c:1106
+#: gtk/gtkwindow.c:1092
 msgid "Whether the window is maximized"
 msgstr "Az ablak teljes méretű-e"
 
-#: gtk/gtkwindow.c:1125
+#: gtk/gtkwindow.c:1111
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1126
+#: gtk/gtkwindow.c:1112
 msgid "The GtkApplication for the window"
 msgstr "Az ablak GtkApplication objektuma"
 
