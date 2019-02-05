@@ -169,8 +169,8 @@
   button to our window, with the label "Hello World". Two new GtkWidget pointers
   are declared to accomplish this, <varname>button</varname> and
   <varname>button_box</varname>. The button_box variable is created to store a
-  #GtkButtonBox which is GTK's way of controlling the size and layout of buttons.
-  The #GtkButtonBox is created and assigned to gtk_button_box_new() which takes a
+  #GtkBox which is GTK's way of controlling the size and layout of buttons.
+  The #GtkBox is created and assigned to gtk_box_new() which takes a
   #GtkOrientation enum as parameter. The buttons which this box will contain can
   either be stored horizontally or vertically but this does not matter in this
   particular case as we are dealing with only one button. After initializing

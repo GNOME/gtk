@@ -271,31 +271,6 @@ gtk_aspect_frame_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkbbox</FILE>
-<TITLE>GtkButtonBox</TITLE>
-GtkButtonBox
-GtkButtonBoxClass
-gtk_button_box_new
-gtk_button_box_get_layout
-gtk_button_box_get_child_secondary
-gtk_button_box_get_child_non_homogeneous
-GtkButtonBoxStyle
-gtk_button_box_set_layout
-gtk_button_box_set_child_secondary
-gtk_button_box_set_child_non_homogeneous
-<SUBSECTION Standard>
-GTK_BUTTON_BOX
-GTK_IS_BUTTON_BOX
-GTK_TYPE_BUTTON_BOX
-GTK_BUTTON_BOX_CLASS
-GTK_IS_BUTTON_BOX_CLASS
-GTK_BUTTON_BOX_GET_CLASS
-<SUBSECTION Private>
-GtkButtonBoxPrivate
-gtk_button_box_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkbin</FILE>
 <TITLE>GtkBin</TITLE>
 GtkBin
