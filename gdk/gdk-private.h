@@ -36,4 +36,8 @@ gboolean gdk_should_use_portal (void);
 
 const gchar *   gdk_get_startup_notification_id (void);
 
+PangoDirection gdk_unichar_direction (gunichar    ch);
+PangoDirection gdk_find_base_dir     (const char *text,
+                                      int         len);
+
 #endif /* __GDK__PRIVATE_H__ */
