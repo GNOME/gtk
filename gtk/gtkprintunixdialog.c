@@ -1937,7 +1937,7 @@ schedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
     return;
 
   priv->mark_conflicts_id = g_idle_add (mark_conflicts_callback, dialog);
-  g_source_set_name_by_id (priv->mark_conflicts_id, "[gtk+] mark_conflicts_callback");
+  g_source_set_name_by_id (priv->mark_conflicts_id, "[gtk] mark_conflicts_callback");
 }
 
 static void

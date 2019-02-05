@@ -57,7 +57,7 @@ The GDK API
 ===========
 
 It is expect that the GDK DND API will never be
-used by anything other than the DND code in GTK+.
+used by anything other than the DND code in GTK.
 
 /* Drag and Drop */
 
@@ -159,7 +159,7 @@ the taskbar.
 Internally, when the outer drag enters a proxy dest site, a
 new source drag is created, with SourceInfo and
 GdkDragContext. From the GDK side, it looks much like a
-normal source drag; on the GTK+ side, most of the code is
+normal source drag; on the GTK side, most of the code is
 disjoint. The need to pass in a specific target window
 is the reason why the GDK DND API splits
 gdk_drag_find_window() and gdk_drag_motion().

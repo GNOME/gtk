@@ -200,20 +200,20 @@ activate_about (GSimpleAction *action,
   };
 
   gtk_show_about_dialog (GTK_WINDOW (window),
-                         "program-name", "GTK+ Code Demos",
-                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                         "program-name", "GTK Code Demos",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK %d.%d.%d",
                                                      PACKAGE_VERSION,
                                                      gtk_get_major_version (),
                                                      gtk_get_minor_version (),
                                                      gtk_get_micro_version ()),
-                         "copyright", "(C) 1997-2013 The GTK+ Team",
+                         "copyright", "(C) 1997-2013 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
-                         "comments", "Program to demonstrate GTK+ functions.",
+                         "comments", "Program to demonstrate GTK functions.",
                          "authors", authors,
                          "documenters", documentors,
                          "logo-icon-name", "gtk4-demo",
-                         "title", "About GTK+ Code Demos",
+                         "title", "About GTK Code Demos",
                          NULL);
 }
 

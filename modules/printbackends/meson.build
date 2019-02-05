@@ -14,7 +14,7 @@ endif
 # The 'file' print backend cannot be disabled
 print_backends = ['file']
 
-# Checks to see if we should compile with CUPS backend for GTK+
+# Checks to see if we should compile with CUPS backend for GTK
 enable_cups = enabled_print_backends.contains('cups')
 if enable_cups
   #cups_config = find_program('cups-config', required : true)
@@ -49,7 +49,7 @@ if enable_cups
   endif
 endif
 
-# Checks to see if we should compile with cloudprint backend for GTK+
+# Checks to see if we should compile with cloudprint backend for GTK
 enable_cloudprint = enabled_print_backends.contains('cloudprint')
 if enable_cloudprint
   rest_dep = dependency('rest-0.7', required : true)

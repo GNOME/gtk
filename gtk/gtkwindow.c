@@ -2920,7 +2920,7 @@ _gtk_window_notify_keys_changed (GtkWindow *window)
   if (!priv->keys_changed_handler)
     {
       priv->keys_changed_handler = g_idle_add (handle_keys_changed, window);
-      g_source_set_name_by_id (priv->keys_changed_handler, "[gtk+] handle_keys_changed");
+      g_source_set_name_by_id (priv->keys_changed_handler, "[gtk] handle_keys_changed");
     }
 }
 
@@ -10453,7 +10453,7 @@ _gtk_window_schedule_mnemonics_visible (GtkWindow *window)
 
   priv->mnemonics_display_timeout_id =
     g_timeout_add (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, window);
-  g_source_set_name_by_id (priv->mnemonics_display_timeout_id, "[gtk+] schedule_mnemonics_visible_cb");
+  g_source_set_name_by_id (priv->mnemonics_display_timeout_id, "[gtk] schedule_mnemonics_visible_cb");
 }
 
 /**
@@ -10782,7 +10782,7 @@ gtk_window_update_debugging (void)
       gtk_window_update_debugging_id == 0)
     {
       gtk_window_update_debugging_id = g_idle_add (update_debugging, NULL);
-      g_source_set_name_by_id (gtk_window_update_debugging_id, "[gtk+] gtk_window_update_debugging");
+      g_source_set_name_by_id (gtk_window_update_debugging_id, "[gtk] gtk_window_update_debugging");
     }
 }
 

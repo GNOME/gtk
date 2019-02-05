@@ -280,7 +280,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert (buffer, &iter,
       "This line (and most of the others in this buffer) is word-wrapped, "
       "using the proper Unicode algorithm. Word wrap should work in all "
-      "scripts and languages that GTK+ supports. Let's make this a long "
+      "scripts and languages that GTK supports. Let's make this a long "
       "paragraph to demonstrate: blah blah blah blah blah blah blah blah "
       "blah blah blah blah blah blah blah blah blah blah blah\n\n", -1);
 

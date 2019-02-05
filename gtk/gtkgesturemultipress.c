@@ -152,7 +152,7 @@ _gtk_gesture_multi_press_update_timeout (GtkGestureMultiPress *gesture)
   g_object_get (settings, "gtk-double-click-time", &double_click_time, NULL);
 
   priv->double_click_timeout_id = g_timeout_add (double_click_time, _double_click_timeout_cb, gesture);
-  g_source_set_name_by_id (priv->double_click_timeout_id, "[gtk+] _double_click_timeout_cb");
+  g_source_set_name_by_id (priv->double_click_timeout_id, "[gtk] _double_click_timeout_cb");
 }
 
 static gboolean

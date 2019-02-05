@@ -262,7 +262,7 @@ start_progressive_loading (GtkWidget *picture)
    * pauses in the reading process.
    */
   load_timeout = g_timeout_add (150, progressive_timeout, picture);
-  g_source_set_name_by_id (load_timeout, "[gtk+] progressive_timeout");
+  g_source_set_name_by_id (load_timeout, "[gtk] progressive_timeout");
 }
 
 static void

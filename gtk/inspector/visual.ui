@@ -51,7 +51,7 @@
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="theme_label">
-                            <property name="label" translatable="yes">GTK+ Theme</property>
+                            <property name="label" translatable="yes">GTK Theme</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>

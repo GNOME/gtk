@@ -1,10 +1,10 @@
 /* Theming/Style Classes
  *
- * GTK+ uses CSS for theming. Style classes can be associated
+ * GTK uses CSS for theming. Style classes can be associated
  * with widgets to inform the theme about intended rendering.
  *
  * This demo shows some common examples where theming features
- * of GTK+ are used for certain effects: primary toolbars,
+ * of GTK are used for certain effects: primary toolbars,
  * inline toolbars and linked buttons.
  */
 

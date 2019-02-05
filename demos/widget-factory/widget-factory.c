@@ -212,28 +212,28 @@ activate_about (GSimpleAction *action,
                           glib_major_version,
                           glib_minor_version,
                           glib_micro_version);
-  g_string_append_printf (s, "\tGTK+\t%d.%d.%d\n",
+  g_string_append_printf (s, "\tGTK\t%d.%d.%d\n",
                           gtk_get_major_version (),
                           gtk_get_minor_version (),
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nA link can apppear here: <http://www.gtk.org>");
 
-  version = g_strdup_printf ("%s\nRunning against GTK+ %d.%d.%d",
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
-                         "program-name", "GTK+ Widget Factory",
+                         "program-name", "GTK Widget Factory",
                          "version", version,
-                         "copyright", "(C) 1997-2013 The GTK+ Team",
+                         "copyright", "(C) 1997-2013 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
-                         "comments", "Program to demonstrate GTK+ themes and widgets",
+                         "comments", "Program to demonstrate GTK themes and widgets",
                          "authors", authors,
                          "logo-icon-name", "gtk4-widget-factory",
-                         "title", "About GTK+ Widget Factory",
+                         "title", "About GTK Widget Factory",
                          "system-information", s->str,
                          NULL);
 

@@ -4,26 +4,26 @@
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 ]>
 <chapter id="gtk-migrating-3-to-4">
-  <title>Migrating from GTK+ 3.x to GTK+ 4</title>
+  <title>Migrating from GTK 3.x to GTK 4</title>
 
   <para>
-    GTK+ 4 is a major new version of GTK+ that breaks both API and ABI
-    compared to GTK+ 3.x. Thankfully, most of the changes are not hard
+    GTK 4 is a major new version of GTK that breaks both API and ABI
+    compared to GTK 3.x. Thankfully, most of the changes are not hard
     to adapt to and there are a number of steps that you can take to
-    prepare your GTK+ 3.x application for the switch to GTK+ 4. After
+    prepare your GTK 3.x application for the switch to GTK 4. After
     that, there's a small number of adjustments that you may have to do
-    when you actually switch your application to build against GTK+ 4.
+    when you actually switch your application to build against GTK 4.
   </para>
 
   <section>
-    <title>Preparation in GTK+ 3.x</title>
+    <title>Preparation in GTK 3.x</title>
 
     <para>
       The steps outlined in the following sections assume that your
-      application is working with GTK+ 3.24, which is the final stable
-      release of GTK+ 3.x. It includes all the necessary APIs and tools
-      to help you port your application to GTK+ 4. If you are still using
-      an older version of GTK+ 3.x, you should first get your application
+      application is working with GTK 3.24, which is the final stable
+      release of GTK 3.x. It includes all the necessary APIs and tools
+      to help you port your application to GTK 4. If you are still using
+      an older version of GTK 3.x, you should first get your application
       to build and work with the latest minor release in the 3.24 series.
     </para>
 
@@ -33,7 +33,7 @@
         Over the years, a number of functions, and in some cases, entire
         widgets have been deprecated. These deprecations are clearly spelled
         out in the API reference, with hints about the recommended replacements.
-        The API reference for GTK+ 3 also includes an
+        The API reference for GTK 3 also includes an
         <ulink url="https://developer.gnome.org/gtk3/3.24/api-index-deprecated.html">index</ulink> of all deprecated symbols.
       </para>
       <para>
@@ -70,7 +70,7 @@
     <section>
       <title>Do not use widget style properties</title>
       <para>
-        Style properties do not exist in GTK+ 4. You should stop using them in
+        Style properties do not exist in GTK 4. You should stop using them in
         your custom CSS and in your code.
       </para>
     </section>
@@ -78,18 +78,18 @@
     <section>
       <title>Review your window creation flags</title>
       <para>
-        GTK+ 4 removes the GDK_WA_CURSOR flag. Instead, just use
+        GTK 4 removes the GDK_WA_CURSOR flag. Instead, just use
         gdk_window_set_cursor() to set a cursor on the window after
         creating it.
       </para>
       <para>
-        GTK+ 4 also removes the GDK_WA_VISUAL flag, and always uses
+        GTK 4 also removes the GDK_WA_VISUAL flag, and always uses
         an RGBA visual for windows. To prepare your code for this,
         use gdk_window_set_visual (gdk_screen_get_rgba_visual ()) after
         creating your window.
       </para>
       <para>
-        GTK+ 4 also removes the GDK_WA_WMCLASS flag. If you need this
+        GTK 4 also removes the GDK_WA_WMCLASS flag. If you need this
         X11-specific functionality, use XSetClassHint() directly.
       </para>
     </section>
@@ -97,12 +97,12 @@
     <section>
       <title>Stop using non-RGBA visuals</title>
       <para>
-        GTK+ 4 always uses RGBA visuals for its windows; you should make
+        GTK 4 always uses RGBA visuals for its windows; you should make
         sure that your code works with that.
       </para>
       <para>
         At the same time, you should stop using GdkVisual APIs, this object
-        not longer exist in GTK+ 4. Most of its APIs are deprecated already
+        not longer exist in GTK 4. Most of its APIs are deprecated already
         and not useful when dealing with RGBA visuals.
       </para>
     </section>
@@ -110,7 +110,7 @@
     <section>
       <title>Stop using GtkBox:padding, GtkBox:fill and GtkBox:expand</title>
       <para>
-        GTK+4 removes these #GtkBox child properties, so you should not use them.
+        GTK4 removes these #GtkBox child properties, so you should not use them.
         You can replace GtkBox:padding using the #GtkWidget:margin properties
         on your #GtkBox child widgets.
       </para>
@@ -152,7 +152,7 @@
     <section>
       <title>Stop using gdk_pixbuf_get_from_window() and gdk_cairo_set_source_surface()</title>
       <para>
-        These functions are not supported in GTK+ 4. Instead, either use backend-specific
+        These functions are not supported in GTK 4. Instead, either use backend-specific
         APIs, or render your widgets using gtk_widget_render().
       </para>
     </section>
@@ -162,7 +162,7 @@
       <para>
         The functions and properties related to automatically add a GtkImage
         to a GtkButton, and using a GtkSetting to control its visibility, are
-        not supported in GTK+ 4. Instead, you can just pack a GtkImage inside
+        not supported in GTK 4. Instead, you can just pack a GtkImage inside
         a GtkButton, and control its visibility like you would for any other
         widget. If you only want to add a named icon to a GtkButton, you can
         use gtk_button_set_icon_name().
@@ -172,24 +172,24 @@
     <section>
       <title>Stop using GtkWidget event signals</title>
       <para>
-        Event controllers and #GtkGestures replace event signals in GTK+ 4. They
-        have been backported to GTK+ 3.x so you can prepare for this change.
+        Event controllers and #GtkGestures replace event signals in GTK 4. They
+        have been backported to GTK 3.x so you can prepare for this change.
       </para>
     </section>
 
     <section>
       <title>Set a proper app_id</title>
       <para>
-        In GTK+4 we want the application's #GApplication
+        In GTK4 we want the application's #GApplication
         'application-id' (and therefore the D-Bus name), the desktop
         file basename and Wayland's xdg-shell app_id to match. In
-        order to achieve this with GTK+3 call g_set_prgname() with the same
+        order to achieve this with GTK3 call g_set_prgname() with the same
         application id you passed to #GtkApplication. Rename your
         desktop files to match the application id if needed.
       </para>
       <para>
         The call to g_set_prgname() can be removed once you fully migrated
-        to GTK+4.
+        to GTK4.
       </para>
     </section>
 
@@ -197,7 +197,7 @@
       <title>Stop using GtkBox's pack-type child property</title>
       <para>
         In order to improve performance and simplify the widget, GtkBox lost its
-        'pack-type' child property. In GTK+4, every GtkBox instance has a simple
+        'pack-type' child property. In GTK4, every GtkBox instance has a simple
         list of child widgets that it allocates from start to end.
         The old behavior of pack-type=END can be emulated by simply making the
         box child in the center hexpand and right-align the ones at the end.
@@ -212,15 +212,15 @@
     <para>
       This section outlines porting tasks that you need to tackle when
       you get to the point that you actually build your application against
-      GTK+ 4. Making it possible to prepare for these in GTK+ 3 would
+      GTK 4. Making it possible to prepare for these in GTK 3 would
       have been either impossible or impractical.
     </para>
 
     <section>
       <title>Stop using GdkScreen</title>
       <para>
-        The GdkScreen object has been removed in GTK+ 4. Most of its APIs already
-        had replacements in GTK+ 3 and were deprecated, a few remaining replacements
+        The GdkScreen object has been removed in GTK 4. Most of its APIs already
+        had replacements in GTK 3 and were deprecated, a few remaining replacements
         have been added to GdkDisplay.
       </para>
     </section>
@@ -238,7 +238,7 @@
     <section>
       <title>Stop using GdkVisual</title>
       <para>
-        This object is not useful with current GTK+ drawing APIs and has been removed
+        This object is not useful with current GTK drawing APIs and has been removed
         without replacement.
       </para>
     </section>
@@ -246,8 +246,8 @@
     <section>
       <title>Stop using GdkDeviceManager</title>
       <para>
-        The GdkDeviceManager object has been removed in GTK+ 4. Most of its APIs already
-        had replacements in GTK+ 3 and were deprecated in favor of GdkSeat.
+        The GdkDeviceManager object has been removed in GTK 4. Most of its APIs already
+        had replacements in GTK 3 and were deprecated in favor of GdkSeat.
       </para>
     </section>
 
@@ -275,9 +275,9 @@
     <section>
       <title>Stop accessing GdkEvent fields</title>
       <para>
-        Direct access to GdkEvent structs is no longer possible in GTK+ 4. Some
-        frequently-used fields already had accessors in GTK+ 3, and the remaining
-        fields have gained accessors in GTK+ 4.
+        Direct access to GdkEvent structs is no longer possible in GTK 4. Some
+        frequently-used fields already had accessors in GTK 3, and the remaining
+        fields have gained accessors in GTK 4.
       </para>
     </section>
 
@@ -328,7 +328,7 @@
     <section>
       <title>Adapt to GtkCssProvider API changes</title>
       <para>
-        In GTK+ 4, the various #GtkCssProvider load functions have lost
+        In GTK 4, the various #GtkCssProvider load functions have lost
         their #GError argument. If you want to handle CSS loading errors,
         use the #GtkCssProvider::parsing-error signal instead.
       </para>
@@ -337,7 +337,7 @@
     <section>
       <title>Stop using GtkContainer::border-width</title>
       <para>
-        GTK+ 4 has removed the #GtkContainer::border-width property.
+        GTK 4 has removed the #GtkContainer::border-width property.
         Use other means to influence the spacing of your containers,
         such as the CSS margin and padding properties on child widgets.
       </para>
@@ -346,9 +346,9 @@
     <section>
       <title>Adapt to GtkWidget's size request changes</title>
       <para>
-        GTK+ 3 used five different virtual functions in GtkWidget to
+        GTK 3 used five different virtual functions in GtkWidget to
         implement size requisition, namely the gtk_widget_get_preferred_width()
-        family of functions. To simplify widget implementations, GTK+4 uses
+        family of functions. To simplify widget implementations, GTK4 uses
         only one virtual function, GtkWidgetClass::measure() that widgets
         have to implement.
       </para>
@@ -366,7 +366,7 @@
     <section>
       <title>Switch to GtkWidget's children APIs</title>
       <para>
-        Instead of the GtkContainer subclass, in GTK+ 4, any widget can
+        Instead of the GtkContainer subclass, in GTK 4, any widget can
         have children, and there is new API to navigate the widget tree:
         gtk_widget_get_first_child(), gtk_widget_get_last_child(),
         gtk_widget_get_next_sibling(), gtk_widget_get_prev_sibling().
@@ -378,7 +378,7 @@
     <section>
       <title>Don't use -gtk-gradient in your CSS</title>
       <para>
-        GTK+ now supports standard CSS syntax for both linear and radial
+        GTK now supports standard CSS syntax for both linear and radial
         gradients, just use those.
       </para>
     </section>
@@ -386,7 +386,7 @@
     <section>
       <title>Don't use -gtk-icon-effect in your CSS</title>
       <para>
-        GTK+ now supports a more versatile -gtk-icon-filter instead. Replace
+        GTK now supports a more versatile -gtk-icon-filter instead. Replace
         -gtk-icon-effect: dim; with -gtk-icon-filter: opacity(0.5); and
         -gtk-icon-effect: hilight; with -gtk-icon-filter: brightness(1.2);.
       </para>
@@ -403,8 +403,8 @@
     <section>
       <title>Adapt to drawing model changes</title>
       <para>
-        This area has seen the most radical changes in the transition from GTK+ 3
-        to GTK+ 4. Widgets no longer use a draw() function to render their contents
+        This area has seen the most radical changes in the transition from GTK 3
+        to GTK 4. Widgets no longer use a draw() function to render their contents
         to a cairo surface. Instead, they have a snapshot() function that creates
         one or more GskRenderNodes to represent their content. Third-party widgets
         that use a draw() function or a #GtkWidget::draw signal handler for custom
@@ -434,7 +434,7 @@
     <section>
       <title>Widgets are now visible by default</title>
       <para>
-        The default value of #GtkWidget::visible in GTK+ 4 is %TRUE, so you no
+        The default value of #GtkWidget::visible in GTK 4 is %TRUE, so you no
         longer need to explicitly show all your widgets. On the flip side, you
         need to hide widgets that are not meant to be visible from the start.
       </para>
@@ -445,7 +445,7 @@
       </para>
       <para>
         The function gtk_widget_show_all(), the #GtkWidget::no-show-all property
-        and its getter and setter have been removed in  GTK+ 4, so you should stop using them.
+        and its getter and setter have been removed in  GTK 4, so you should stop using them.
       </para>
     </section>
 
@@ -487,8 +487,8 @@
     <section>
       <title>GtkWidget event signals are removed</title>
       <para>
-        Event controllers and #GtkGestures have already been introduced in GTK+ 3 to handle
-        input for many cases. In GTK+ 4, the traditional widget signals for handling input,
+        Event controllers and #GtkGestures have already been introduced in GTK 3 to handle
+        input for many cases. In GTK 4, the traditional widget signals for handling input,
         such as #GtkWidget::motion-event or #GtkWidget::event have been removed.
       </para>
     </section>
@@ -544,7 +544,7 @@
     <section>
       <title>Adapt to icon size API changes</title>
       <para>
-        Instead of the existing extensible set of symbolic icon sizes, GTK+ now only
+        Instead of the existing extensible set of symbolic icon sizes, GTK now only
         supports normal and large icons with the #GtkIconSize enumeration. The actual sizes
         can be defined by themes via the CSS property -gtk-icon-size.
       </para>

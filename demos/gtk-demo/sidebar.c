@@ -19,7 +19,7 @@ do_sidebar (GtkWidget *do_widget)
   GtkWidget *widget;
   GtkWidget *header;
   const gchar* pages[] = {
-    "Welcome to GTK+",
+    "Welcome to GTK",
     "GtkStackSidebar Widget",
     "Automatic navigation",
     "Consistent appearance",

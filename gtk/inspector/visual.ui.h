@@ -1,4 +1,4 @@
-N_("GTK+ Theme");
+N_("GTK Theme");
 N_("Dark Variant");
 N_("Cursor Theme");
 N_("Cursor Size");

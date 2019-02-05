@@ -17,7 +17,7 @@
   <refsect1>
     <title>Overview</title>
     <para>
-      To create a tree or list in GTK+, use the #GtkTreeModel interface in
+      To create a tree or list in GTK, use the #GtkTreeModel interface in
       conjunction with the #GtkTreeView widget.  This widget is
       designed around a <firstterm>Model/View/Controller</firstterm>
       design and consists of four major parts:
@@ -46,7 +46,7 @@
   <refsect1>
     <title>Creating a model</title>
     <para>
-      GTK+ provides two simple models that can be used: the #GtkListStore
+      GTK provides two simple models that can be used: the #GtkListStore
       and the #GtkTreeStore.  GtkListStore is used to model list widgets, 
       while the GtkTreeStore models trees.  It is possible to develop a new 
       type of model, but the existing models should be satisfactory for all 
@@ -164,7 +164,7 @@ tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
       </para>
       <para>
         Cell renderers are used to draw the data in the tree model in a
-        way.  There are a number of cell renderers that come with GTK+,
+        way.  There are a number of cell renderers that come with GTK,
         including the #GtkCellRendererText, #GtkCellRendererPixbuf and
         the #GtkCellRendererToggle.
         It is relatively easy to write a custom renderer.

@@ -1832,7 +1832,7 @@ gtk_cell_renderer_text_popup_unmap (GtkMenu *menu,
     return;
 
   priv->entry_menu_popdown_timeout = g_timeout_add (500, popdown_timeout, data);
-  g_source_set_name_by_id (priv->entry_menu_popdown_timeout, "[gtk+] popdown_timeout");
+  g_source_set_name_by_id (priv->entry_menu_popdown_timeout, "[gtk] popdown_timeout");
 }
 
 static void

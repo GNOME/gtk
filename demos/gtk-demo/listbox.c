@@ -361,7 +361,7 @@ do_listbox (GtkWidget *do_widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
       gtk_container_add (GTK_CONTAINER (window), vbox);
-      label = gtk_label_new ("Messages from Gtk+ and friends");
+      label = gtk_label_new ("Messages from GTK and friends");
       gtk_container_add (GTK_CONTAINER (vbox), label);
       scrolled = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);

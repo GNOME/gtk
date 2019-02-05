@@ -2633,7 +2633,7 @@ queue_update_im_spot_location (GtkTextView *text_view)
                                             do_update_im_spot_location,
                                             text_view,
                                             NULL);
-      g_source_set_name_by_id (priv->im_spot_idle, "[gtk+] do_update_im_spot_location");
+      g_source_set_name_by_id (priv->im_spot_idle, "[gtk] do_update_im_spot_location");
     }
 }
 
@@ -4320,7 +4320,7 @@ gtk_text_view_invalidate (GtkTextView *text_view)
   if (!priv->first_validate_idle)
     {
       priv->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 2, first_validate_callback, text_view, NULL);
-      g_source_set_name_by_id (priv->first_validate_idle, "[gtk+] first_validate_callback");
+      g_source_set_name_by_id (priv->first_validate_idle, "[gtk] first_validate_callback");
       DV (g_print (G_STRLOC": adding first validate idle %d\n",
                    priv->first_validate_idle));
     }
@@ -4328,7 +4328,7 @@ gtk_text_view_invalidate (GtkTextView *text_view)
   if (!priv->incremental_validate_idle)
     {
       priv->incremental_validate_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
-      g_source_set_name_by_id (priv->incremental_validate_idle, "[gtk+] incremental_validate_callback");
+      g_source_set_name_by_id (priv->incremental_validate_idle, "[gtk] incremental_validate_callback");
       DV (g_print (G_STRLOC": adding incremental validate idle %d\n",
                    priv->incremental_validate_idle));
     }
@@ -5689,14 +5689,14 @@ blink_cb (gpointer data)
       priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
                                            blink_cb,
                                            text_view);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
     }
   else 
     {
       priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
                                            blink_cb,
                                            text_view);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
       priv->blink_time += get_cursor_time (text_view);
     }
 
@@ -5735,7 +5735,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 	      priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
                                                    blink_cb,
                                                    text_view);
-	      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+	      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
 	    }
 	}
       else
@@ -5767,7 +5767,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
       priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
                                            blink_cb,
                                            text_view);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
     }
 }
 
@@ -7116,7 +7116,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
     g_source_remove (text_view->priv->scroll_timeout);
 
   text_view->priv->scroll_timeout = g_timeout_add (50, selection_scan_timeout, text_view);
-  g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] selection_scan_timeout");
+  g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk] selection_scan_timeout");
 
   gtk_text_view_selection_bubble_popup_unset (text_view);
 
@@ -7783,7 +7783,7 @@ gtk_text_view_drag_motion (GtkWidget *widget,
   if (!priv->scroll_timeout)
   {
     priv->scroll_timeout = g_timeout_add (100, drag_scan_timeout, text_view);
-    g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] drag_scan_timeout");
+    g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk] drag_scan_timeout");
   }
 
   gtk_drag_highlight (widget);
@@ -8861,7 +8861,7 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
     g_source_remove (priv->selection_bubble_timeout_id);
 
   priv->selection_bubble_timeout_id = g_timeout_add (50, gtk_text_view_selection_bubble_popup_show, text_view);
-  g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_text_view_selection_bubble_popup_cb");
+  g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk] gtk_text_view_selection_bubble_popup_cb");
 }
 
 /* Child GdkSurfaces */

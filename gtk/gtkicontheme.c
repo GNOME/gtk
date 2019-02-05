@@ -729,7 +729,7 @@ queue_theme_changed (GtkIconTheme *icon_theme)
                                                   theme_changed_idle,
                                                   icon_theme,
                                                   NULL);
-      g_source_set_name_by_id (priv->theme_changed_idle, "[gtk+] theme_changed_idle");
+      g_source_set_name_by_id (priv->theme_changed_idle, "[gtk] theme_changed_idle");
     }
 }
 

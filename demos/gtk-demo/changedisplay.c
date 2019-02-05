@@ -7,7 +7,7 @@
  * computers, as long as there is a network connection to the
  * computer where the application is running.
  *
- * Only some of the windowing systems where GTK+ runs have the
+ * Only some of the windowing systems where GTK runs have the
  * concept of multiple displays. (The X Window System is the
  * main example.) Other windowing systems can only handle one
  * keyboard and mouse, and combine all monitors into

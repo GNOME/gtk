@@ -48,7 +48,7 @@
  * of #GtkCellRendererSpin:digits to display. Other #GtkSpinButton properties
  * can be set in a handler for the #GtkCellRenderer::editing-started signal.
  *
- * The #GtkCellRendererSpin cell renderer was added in GTK+ 2.10.
+ * The #GtkCellRendererSpin cell renderer was added in GTK 2.10.
  */
 
 

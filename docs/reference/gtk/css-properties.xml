@@ -4,15 +4,15 @@
 ]>
 <refentry id="chap-css-properties">
 <refmeta>
-<refentrytitle>GTK+ CSS Properties</refentrytitle>
+<refentrytitle>GTK CSS Properties</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>GTK+ CSS Properties</refname>
+<refname>GTK CSS Properties</refname>
 <refpurpose>
-CSS Properties in GTK+
+CSS Properties in GTK
 </refpurpose>
 </refnamediv>
 
@@ -34,9 +34,9 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
   <title>Supported CSS Properties</title>
 
     <para>
-      GTK+ supports CSS properties and shorthands as far as they can be applied
+      GTK supports CSS properties and shorthands as far as they can be applied
       in the context of widgets, and adds its own properties only when needed.
-      All GTK+-specific properties have a -gtk prefix.
+      All GTK-specific properties have a -gtk prefix.
     </para>
 
     <para>
@@ -66,7 +66,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
     </para>
 
     <para>
-      Whereever a number is allowed, GTK+ also accepts a Windows-specific
+      Whereever a number is allowed, GTK also accepts a Windows-specific
       theme size:
     </para>
 
@@ -1159,7 +1159,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       </table>
 
       <para>
-        GTK+ uses the CSS outline properties to render the 'focus rectangle'.
+        GTK uses the CSS outline properties to render the 'focus rectangle'.
       </para>
 
       <table pgwide="1">

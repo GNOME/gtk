@@ -164,7 +164,7 @@ gtk_menu_section_box_schedule_separator_sync (GtkMenuSectionBox *box)
       box->separator_sync_idle = g_idle_add_full (G_PRIORITY_HIGH_IDLE, /* before resize... */
                                                   gtk_menu_section_box_handle_sync_separators,
                                                   box, NULL);
-      g_source_set_name_by_id (box->separator_sync_idle, "[gtk+] menu section box handle sync separators");
+      g_source_set_name_by_id (box->separator_sync_idle, "[gtk] menu section box handle sync separators");
     }
 }
 

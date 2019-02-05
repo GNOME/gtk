@@ -4,23 +4,23 @@
 ]>
 <refentry id="gtk-x11">
 <refmeta>
-<refentrytitle>Using GTK+ on the X Window System</refentrytitle>
+<refentrytitle>Using GTK on the X Window System</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>Using GTK+ on the X Window System</refname>
+<refname>Using GTK on the X Window System</refname>
 <refpurpose>
-X11-specific aspects of using GTK+
+X11-specific aspects of using GTK
 </refpurpose>
 </refnamediv>
 
 <refsect1>
-<title>GTK+ for the X Window System</title>
+<title>GTK for the X Window System</title>
 
 <para>
-On UNIX, the X backend is the default build for GTK+.
+On UNIX, the X backend is the default build for GTK.
 So you don't need to do anything special when compiling it,
 and everything should "just work."
 </para>
@@ -145,7 +145,7 @@ url="http://www.freedesktop.org/standards/">convention</ulink>.
 </para>
 
 <para>
-GTK+ has functions for asking the window manager to do various things;
+GTK has functions for asking the window manager to do various things;
 see for example <link
 linkend="gtk-window-iconify">gtk_window_iconify()</link> or <link
 linkend="gtk-window-maximize">gtk_window_maximize()</link> or <link

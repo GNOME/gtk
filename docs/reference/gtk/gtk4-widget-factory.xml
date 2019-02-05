@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk4-widget-factory</title>
-  <productname>GTK+</productname>
+  <productname>GTK</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -24,7 +24,7 @@
 
 <refnamediv>
   <refname>gtk4-widget-factory</refname>
-  <refpurpose>Demonstrate GTK+ widgets</refpurpose>
+  <refpurpose>Demonstrate GTK widgets</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
@@ -37,8 +37,8 @@
 <refsect1><title>Description</title>
 <para>
 <command>gtk4-widget-factory</command> is a collection of examples.
-Its purpose is to demonstrate many GTK+ widgets in a form
-that is useful to GTK+ theme developers.
+Its purpose is to demonstrate many GTK widgets in a form
+that is useful to GTK theme developers.
 </para>
 <para>
 The application shows widgets in different, typical combinations

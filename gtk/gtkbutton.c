@@ -771,7 +771,7 @@ gtk_real_button_activate (GtkButton *button)
   if (gtk_widget_get_realized (widget) && !priv->activate_timeout)
     {
       priv->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT, button_activate_timeout, button);
-      g_source_set_name_by_id (priv->activate_timeout, "[gtk+] button_activate_timeout");
+      g_source_set_name_by_id (priv->activate_timeout, "[gtk] button_activate_timeout");
       priv->button_down = TRUE;
     }
 }

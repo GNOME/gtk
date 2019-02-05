@@ -856,13 +856,13 @@ create_about_dialog (void)
 
   widget = gtk_about_dialog_new ();
   g_object_set (widget,
-                "program-name", "GTK+ Code Demos",
+                "program-name", "GTK Code Demos",
                 "version", PACKAGE_VERSION,
-                "copyright", "© 1997-2013 The GTK+ Team",
+                "copyright", "© 1997-2013 The GTK Team",
                 "website", "http://www.gtk.org",
-                "comments", "Program to demonstrate GTK+ functions.",
+                "comments", "Program to demonstrate GTK functions.",
                 "logo-icon-name", "help-about",
-                "title", "About GTK+ Code Demos",
+                "title", "About GTK Code Demos",
                 "authors", authors,
 		NULL);
   gtk_window_set_icon_name (GTK_WINDOW (widget), "help-about");

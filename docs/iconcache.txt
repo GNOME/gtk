@@ -1,4 +1,4 @@
-Information about the icon theme cache format used by GTK+
+Information about the icon theme cache format used by GTK
 for more information, see the mailing list threads at 
 
 http://mail.gnome.org/archives/gtk-devel-list/2004-April/msg00065.html
@@ -30,7 +30,7 @@ We would like to propose the cache file format as an appendix to the
 icon theme specification. One thing which still needs to be investigated
 is caching of the actual image data; the file format is has an
 IMAGE_DATA_OFFSET member to allow adding that compatibly. An
-implementation of the caching scheme for GTK+ can be found at [2]. The
+implementation of the caching scheme for GTK can be found at [2]. The
 cache generator which is included in the patch depends only on glib, and
 it may be a good idea to move it to freedesktop.org as well. 
 

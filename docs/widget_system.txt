@@ -1,5 +1,5 @@
-Notes about the inner workings of the widget system of GTK+
-===========================================================
+Notes about the inner workings of the widget system of GTK
+==========================================================
 
 This file contains some notes as to how the widget system does
 and should work. It consists of three parts:

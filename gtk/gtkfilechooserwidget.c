@@ -2461,7 +2461,7 @@ reset_location_timeout (GtkFileChooserWidget *impl)
   priv->location_changed_id = g_timeout_add (LOCATION_CHANGED_TIMEOUT,
                                             location_changed_timeout_cb,
                                             impl);
-  g_source_set_name_by_id (priv->location_changed_id, "[gtk+] location_changed_timeout_cb");
+  g_source_set_name_by_id (priv->location_changed_id, "[gtk] location_changed_timeout_cb");
 }
 
 static void
@@ -4285,7 +4285,7 @@ load_setup_timer (GtkFileChooserWidget *impl)
   g_assert (priv->load_state != LOAD_PRELOAD);
 
   priv->load_timeout_id = g_timeout_add (MAX_LOADING_TIME, load_timeout_cb, impl);
-  g_source_set_name_by_id (priv->load_timeout_id, "[gtk+] load_timeout_cb");
+  g_source_set_name_by_id (priv->load_timeout_id, "[gtk] load_timeout_cb");
   priv->load_state = LOAD_PRELOAD;
 }
 
@@ -7471,7 +7471,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
                                           recent_idle_load,
                                           load_data,
                                           recent_idle_cleanup);
-  g_source_set_name_by_id (priv->load_recent_id, "[gtk+] recent_idle_load");
+  g_source_set_name_by_id (priv->load_recent_id, "[gtk] recent_idle_load");
 }
 
 /* Called from ::should_respond(). We return whether there are selected

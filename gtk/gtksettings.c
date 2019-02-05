@@ -74,7 +74,7 @@
  * [XSettings](http://www.freedesktop.org/wiki/Specifications/xsettings-spec)
  * manager that is usually part of the desktop environment, along with
  * utilities that let the user change these settings. In the absence of
- * an Xsettings manager, GTK+ reads default values for settings from
+ * an Xsettings manager, GTK reads default values for settings from
  * `settings.ini` files in
  * `/etc/gtk-4.0`, `$XDG_CONFIG_DIRS/gtk-4.0`
  * and `$XDG_CONFIG_HOME/gtk-4.0`.
@@ -440,7 +440,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-font-name:
    *
-   * The default font to use. GTK+ uses the family name and size from this string.
+   * The default font to use. GTK uses the family name and size from this string.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-font-name",
@@ -578,7 +578,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-print-backends:
    *
    * A comma-separated list of print backends to use in the print
-   * dialog. Available print backends depend on the GTK+ installation,
+   * dialog. Available print backends depend on the GTK installation,
    * and may include "file", "cups", "lpr" or "papi".
    */
   result = settings_install_property_parser (class,
@@ -633,7 +633,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Which IM (input method) module should be used by default. This is the
    * input method that will be used if the user has not explicitly chosen
    * another input method from the IM context menu.
-   * This also can be a colon-separated list of input methods, which GTK+
+   * This also can be a colon-separated list of input methods, which GTK
    * will try in turn until it finds one available on the system.
    *
    * See #GtkIMContext.
@@ -683,7 +683,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK+ itself does not support event sounds, you have to use a loadable
+   * GTK itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
@@ -703,7 +703,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK+ itself does not support event sounds, you have to use a loadable
+   * GTK itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
@@ -724,7 +724,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK+ itself does not support event sounds, you have to use a loadable
+   * GTK itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
@@ -745,7 +745,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * slider/value to move by the range’s page-size towards the point clicked.
    *
    * Whichever action you choose for the primary button, the other action will
-   * be available by holding Shift and primary-clicking, or (since GTK+ 3.22.25)
+   * be available by holding Shift and primary-clicking, or (since GTK 3.22.25)
    * clicking the middle mouse button.
    */
   result = settings_install_property_parser (class,
@@ -760,7 +760,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-application-prefer-dark-theme:
    *
-   * Whether the application prefers to use a dark theme. If a GTK+ theme
+   * Whether the application prefers to use a dark theme. If a GTK theme
    * includes a dark variant, it will be used instead of the configured
    * theme.
    *
@@ -935,7 +935,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-dialogs-use-header:
    *
-   * Whether builtin GTK+ dialogs such as the file chooser, the
+   * Whether builtin GTK dialogs such as the file chooser, the
    * color chooser or the font chooser will use a header bar at
    * the top to show action widgets, or an action area at the bottom.
    *
@@ -945,7 +945,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-dialogs-use-header",
                                                                    P_("Dialogs use header bar"),
-                                                                   P_("Whether builtin GTK+ dialogs should use a header bar instead of an action area."),
+                                                                   P_("Whether builtin GTK dialogs should use a header bar instead of an action area."),
                                                                    FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
@@ -969,13 +969,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-recent-files-enabled:
    *
-   * Whether GTK+ should keep track of items inside the recently used
+   * Whether GTK should keep track of items inside the recently used
    * resources list. If set to %FALSE, the list will always be empty.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-recent-files-enabled",
                                                                    P_("Recent Files Enabled"),
-                                                                   P_("Whether GTK+ remembers recent files"),
+                                                                   P_("Whether GTK remembers recent files"),
                                                                    TRUE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
@@ -998,7 +998,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-keynav-use-caret:
    *
-   * Whether GTK+ should make sure that text can be navigated with
+   * Whether GTK should make sure that text can be navigated with
    * a caret, even if it is not editable. This is useful when using
    * a screen reader.
    */

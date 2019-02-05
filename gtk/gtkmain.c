@@ -1090,7 +1090,7 @@ gtk_main_sync (void)
 
   store.store_loop = g_main_loop_new (NULL, TRUE);
   store_timeout = g_timeout_add_seconds (10, (GSourceFunc) g_main_loop_quit, store.store_loop);
-  g_source_set_name_by_id (store_timeout, "[gtk+] gtk_main_sync clipboard store timeout");
+  g_source_set_name_by_id (store_timeout, "[gtk] gtk_main_sync clipboard store timeout");
 
   if (g_main_loop_is_running (store.store_loop))
     g_main_loop_run (store.store_loop);
