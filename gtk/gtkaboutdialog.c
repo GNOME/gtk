@@ -716,21 +716,11 @@ apply_use_header_bar (GtkAboutDialog *about)
       g_signal_connect (priv->credits_button, "toggled", G_CALLBACK (toggle_credits), about);
 
       gtk_dialog_add_action_widget (GTK_DIALOG (about), priv->credits_button, GTK_RESPONSE_NONE);
-      gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (priv->credits_button)),
-                               priv->credits_button,
-                               "secondary", TRUE,
-                               NULL);
 
       priv->license_button = gtk_toggle_button_new_with_mnemonic (_("_License"));
       g_object_bind_property (priv->license_page, "visible",
                               priv->license_button, "visible", G_BINDING_SYNC_CREATE);
       g_signal_connect (priv->license_button, "toggled", G_CALLBACK (toggle_license), about);
-
-      gtk_dialog_add_action_widget (GTK_DIALOG (about), priv->license_button, GTK_RESPONSE_NONE);
-      gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (priv->license_button)),
-                               priv->license_button,
-                               "secondary", TRUE,
-                               NULL);
 
       gtk_dialog_add_button (GTK_DIALOG (about), _("_Close"), GTK_RESPONSE_DELETE_EVENT);
     }
