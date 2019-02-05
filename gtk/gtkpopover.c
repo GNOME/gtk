@@ -1184,12 +1184,14 @@ gtk_popover_draw (GtkWidget *widget,
           gap_end = final_y - rect_y;
         }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       /* Now render the frame, without the gap for the arrow tip */
       gtk_render_frame_gap (context, cr,
                             rect_x, rect_y,
                             rect_w, rect_h,
                             gap_side,
                             gap_start, gap_end);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     {
