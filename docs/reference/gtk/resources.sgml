@@ -12,7 +12,7 @@
 <refnamediv>
 <refname>Mailing lists and bug reports</refname>
 <refpurpose>
-Getting help with GTK+
+Getting help with GTK
 </refpurpose>
 </refnamediv>
 
@@ -20,7 +20,7 @@ Getting help with GTK+
 <title>Opening a bug or feature request</title>
 
 <para>
-If you encounter a bug, misfeature, or missing feature in GTK+, please
+If you encounter a bug, misfeature, or missing feature in GTK, please
 file a bug report on our
 <ulink url="https://gitlab.gnome.org/GNOME/gtk/issues/new">GitLab project</ulink>.
 You should also file issues if the documentation is out of date with the
@@ -36,27 +36,27 @@ discussed, we'll add a note to that effect in the report.
 
 <para>
 The bug tracker should definitely be used for feature requests, it's
-not only for bugs. We track all GTK+ development in GitLab, to ensure
+not only for bugs. We track all GTK development in GitLab, to ensure
 that nothing gets lost.
 </para>
 
 </refsect1>
 
 <refsect1>
-<title>Working on GTK+</title>
+<title>Working on GTK</title>
 
 <para>
-If you develop a bugfix or enhancement for GTK+, please open a merge
+If you develop a bugfix or enhancement for GTK, please open a merge
 request in GitLab as well. You should not attach patches to an issue,
 or describe the fix as a comment. Merge requests allow us to build
-GTK+ with your code applied, and run the test suite, on multiple platforms
+GTK with your code applied, and run the test suite, on multiple platforms
 and architectures, and verify that nothing breaks. They also allow us to
 do proper code reviews, so we can iterate over the changes.
 </para>
 
 <para>
 You should follow the <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/CONTRIBUTING.md">contribution guide</ulink>
-for GTK+, available on GitLab.
+for GTK, available on GitLab.
 </para>
 
 <para>
@@ -72,8 +72,8 @@ get lost, or forgotten. Always open a merge request.
 <title>Mailing lists</title>
 
 <para>
-There are several mailing lists dedicated to GTK+ and related
-libraries. Discussion of GLib, Pango, and ATK in addition to GTK+
+There are several mailing lists dedicated to GTK and related
+libraries. Discussion of GLib, Pango, and ATK in addition to GTK
 proper is welcome on these lists. You can subscribe or view the
 archives of these lists on 
 <ulink url="https://mail.gnome.org">http://mail.gnome.org</ulink>.
@@ -88,28 +88,28 @@ some days to happen.
 <varlistentry>
 <term><ulink url="mailto:gtk-list@gnome.org">gtk-list@gnome.org</ulink></term>
 <listitem><para>
-gtk-list covers general GTK+ topics; questions about using GTK+ in programs,
-GTK+ from a user standpoint, announcements of GTK+-related projects
-such as themes or GTK+ modules would all be on-topic. The bulk of the
-traffic consists of GTK+ programming questions.
+gtk-list covers general GTK topics; questions about using GTK in programs,
+GTK from a user standpoint, announcements of GTK-related projects
+such as themes or GTK modules would all be on-topic. The bulk of the
+traffic consists of GTK programming questions.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><ulink url="mailto:gtk-app-devel-list@gnome.org">gtk-app-devel-list@gnome.org</ulink></term> 
 <listitem><para>
-gtk-app-devel-list covers writing applications in GTK+. It's narrower
+gtk-app-devel-list covers writing applications in GTK. It's narrower
 in scope than gtk-list, but the two lists overlap quite a
-bit. gtk-app-devel-list is a good place to ask questions about GTK+
+bit. gtk-app-devel-list is a good place to ask questions about GTK
 programming.  </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><ulink url="mailto:gtk-devel-list@gnome.org">gtk-devel-list@gnome.org</ulink></term>
 <listitem><para>
-gtk-devel-list is for discussion of work on GTK+ itself, it is 
+gtk-devel-list is for discussion of work on GTK itself, it is 
 <emphasis>not</emphasis> for
-asking questions about how to use GTK+ in applications. gtk-devel-list 
+asking questions about how to use GTK in applications. gtk-devel-list 
 is appropriate for discussion of patches, bugs, proposed features, 
 and so on.
 </para></listitem>
@@ -118,7 +118,7 @@ and so on.
 <varlistentry>
 <term><ulink url="mailto:gtk-i18n-list@gnome.org">gtk-i18n-list@gnome.org</ulink></term>
 <listitem><para>
-gtk-i18n-list is for discussion of internationalization in GTK+; 
+gtk-i18n-list is for discussion of internationalization in GTK; 
 Pango is the main focus of the list. Questions about the details of 
 using Pango, and discussion of proposed Pango patches or features, are
 all on topic.
@@ -129,7 +129,7 @@ all on topic.
 <term><ulink url="mailto:gtk-doc-list@gnome.org">gtk-doc-list@gnome.org</ulink></term>
 <listitem><para>
 gtk-doc-list is for discussion of the <application>gtk-doc</application> 
-documentation system (used to document GTK+), and for work on the GTK+ 
+documentation system (used to document GTK), and for work on the GTK 
 documentation.
 </para></listitem>
 </varlistentry>

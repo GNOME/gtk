@@ -4,15 +4,15 @@
 ]>
 <refentry id="gtk-other-software">
 <refmeta>
-<refentrytitle>Mixing GTK+ with other software</refentrytitle>
+<refentrytitle>Mixing GTK with other software</refentrytitle>
 <manvolnum>3</manvolnum>
-<refmiscinfo>Mixing GTK+ with other software</refmiscinfo>
+<refmiscinfo>Mixing GTK with other software</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>Mixing GTK+ with other software</refname>
+<refname>Mixing GTK with other software</refname>
 <refpurpose>
-How to combine GTK+ with other code and event loops
+How to combine GTK with other code and event loops
 </refpurpose>
 </refnamediv>
 
@@ -20,9 +20,9 @@ How to combine GTK+ with other code and event loops
 <title>Overview</title>
 
 <para>
-Often people want to use GTK+ in combination with another library or existing 
-body of code that is not GTK+-aware. The general problem people encounter 
-is that the control flow of the other code does not return to GTK+, so 
+Often people want to use GTK in combination with another library or existing 
+body of code that is not GTK-aware. The general problem people encounter 
+is that the control flow of the other code does not return to GTK, so 
 widgets do not repaint, mouse and keyboard events are ignored, and so forth.
 </para>
 
@@ -35,10 +35,10 @@ targetting, and your own familiarity with each approach.
 </refsect1>
 
 <refsect1>
-<title>Periodically yield to GTK+ main loop</title>
+<title>Periodically yield to GTK main loop</title>
 
 <para>
-This is the simplest method, but requires you to modify the non-GTK+ code.
+This is the simplest method, but requires you to modify the non-GTK code.
 Say you have a function that does some kind of lengthy task:
 <informalexample>
 <programlisting>
@@ -99,7 +99,7 @@ lengthy task.
 </refsect1>
 
 <refsect1>
-<title>Run the other code as a slave of the GTK+ main loop</title>
+<title>Run the other code as a slave of the GTK main loop</title>
 
 <para>
 As a slightly cleaner solution, you can ask the main loop to run a small part of your 
@@ -190,7 +190,7 @@ your needs.
 </refsect1>
 
 <refsect1>
-<title>Integrate the GTK+ main loop with another main loop</title>
+<title>Integrate the GTK main loop with another main loop</title>
 
 <para>
 </para>

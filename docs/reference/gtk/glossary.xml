@@ -51,11 +51,11 @@
     <glossterm>column</glossterm>
     <glossdef>
       <para>
-	GTK+ contains several widgets which display data in columns,
+	GTK contains several widgets which display data in columns,
         e.g. the #GtkTreeView. 
         These <glossterm linkend="view-column">view columns</glossterm> in 
         the tree view are represented by #GtkTreeViewColumn
-        objects inside GTK+. They should not be confused with 
+        objects inside GTK. They should not be confused with 
         <glossterm linkend="model-column">model columns</glossterm> which
         are used to organize the data in tree models.
       </para>
@@ -114,7 +114,7 @@
     <glossterm>event</glossterm>
     <glossdef>
       <para>
-        Events are the way in which GDK informs GTK+ about external events
+        Events are the way in which GDK informs GTK about external events
         like pointer motion, button clicks, key presses, etc. 
       </para>
     </glossdef>
@@ -177,7 +177,7 @@
       <para>
         These widgets follow the well-known model-view pattern, which separates
         the data (the model) to be displayed from the component which does the 
-        actual visualization (the view). Examples of this pattern in GTK+ are 
+        actual visualization (the view). Examples of this pattern in GTK are 
         the #GtkTreeView/#GtkTreeModel and #GtkTextView/#GtkTextBuffer
       </para>
       <para>
@@ -281,7 +281,7 @@
     <glossterm>style</glossterm>
     <glossdef>
       <para>
-        A style encapsulates what GTK+ needs to know in order to draw
+        A style encapsulates what GTK needs to know in order to draw
         a widget. Styles can be modified with 
         <link linkend="gtk3-Resource-Files">resource files</link>.
       </para>
@@ -294,7 +294,7 @@
       <para>
 	A <glossterm linkend="widget">widget</glossterm> that does not
 	require a <glossterm linkend="parent">parent</glossterm> container.  
-        The only toplevel widgets in GTK+ are #GtkWindow and widgets derived from it.
+        The only toplevel widgets in GTK are #GtkWindow and widgets derived from it.
       </para>
       <glossseealso>
 	<glossterm linkend="container">container</glossterm>

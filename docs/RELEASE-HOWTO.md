@@ -1,5 +1,5 @@
-How to do a GTK+ release?
-=========================
+How to do a GTK release?
+========================
 
 ## Before we begin
 
@@ -91,7 +91,7 @@ $ ninja -C _build gtk40-properties-pot
   12. Tag the release. The git command for doing that looks like:
 
 ```sh
-$ git tag -m "GTK+ 4.2.0" 4.2.0
+$ git tag -m "GTK 4.2.0" 4.2.0
 ```
 
   13. Bump the version number in `meson.build` and commit the change.
@@ -110,8 +110,8 @@ $ git push origin 4.2.0
     this looks like:
 
 ```sh
-$ scp gtk+-4.2.0.tar.xz matthiasc@master.gnome.org:
-$ ssh matthiasc@master.gnome.org ftpadmin install gtk+-4.2.0.tar.xz
+$ scp gtk-4.2.0.tar.xz matthiasc@master.gnome.org:
+$ ssh matthiasc@master.gnome.org ftpadmin install gtk-4.2.0.tar.xz
 ```
 
   16. Go to the gnome-announce list archives, find the last announce message,

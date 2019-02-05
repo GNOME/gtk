@@ -4,26 +4,26 @@
 ]>
 <refentry id="chap-input-handling">
 <refmeta>
-<refentrytitle>The GTK+ Input and Event Handling Model</refentrytitle>
+<refentrytitle>The GTK Input and Event Handling Model</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>The GTK+ Input and Event Handling Model</refname>
+<refname>The GTK Input and Event Handling Model</refname>
 <refpurpose>
-    GTK+ input and event handling in detail
+    GTK input and event handling in detail
 </refpurpose>
 </refnamediv>
 
 
   <refsect1 id="input-overview">
-    <title>Overview of GTK+ input and event handling</title>
+    <title>Overview of GTK input and event handling</title>
 
   <para>
-   This chapter describes in detail how GTK+ handles input. If you are interested
+   This chapter describes in detail how GTK handles input. If you are interested
    in what happens to translate a key press or mouse motion of the users into a
-   change of a GTK+ widget, you should read this chapter. This knowledge will also
+   change of a GTK widget, you should read this chapter. This knowledge will also
    be useful if you decide to implement your own widgets.
   </para>
 
@@ -33,13 +33,13 @@
     <!-- input devices: master/slave, keyboard/pointer/touch -->
     <para>
      The most basic input devices that every computer user has interacted with are
-     keyboards and mice; beyond these, GTK+ supports touchpads, touchscreens and
-     more exotic input devices such as graphics tablets. Inside GTK+, every such
+     keyboards and mice; beyond these, GTK supports touchpads, touchscreens and
+     more exotic input devices such as graphics tablets. Inside GTK, every such
      input device is represented by a #GdkDevice object.
     </para>
 
     <para>
-     To simplify dealing with the variability between these input devices, GTK+
+     To simplify dealing with the variability between these input devices, GTK
      has a concept of master and slave devices. The concrete physical devices that
      have many different characteristics (mice may have 2 or 3 or 8 buttons,
      keyboards have different layouts and may or may not have a separate number
@@ -48,14 +48,14 @@
      pointer/keyboard pairs - you can think of such a pair as a 'seat'.
     </para>
     <para>
-     GTK+ widgets generally deal with the master devices, and thus can be used
+     GTK widgets generally deal with the master devices, and thus can be used
      with any pointing device or keyboard.
     </para>
 
     <!-- input events: button, touch, key, motion, etc -->
     <para>
      When a user interacts with an input device (e.g. moves a mouse or presses
-     a key on the keyboard), GTK+ receives events from the windowing system.
+     a key on the keyboard), GTK receives events from the windowing system.
      These are typically directed at a specific window - for pointer events,
      the window under the pointer (grabs complicate this), for keyboard events,
      the window with the keyboard focus.
@@ -81,7 +81,7 @@
       </simplelist>
     </para>
     <para>
-      When GTK+ is initialized, it sets up an event handler function with
+      When GTK is initialized, it sets up an event handler function with
       gdk_event_handler_set(), which receives all of these input events
       (as well as others, for instance window management related events).
     </para>
@@ -152,7 +152,7 @@
 
     <para>
       Next, the #GtkWidget::event signal is emitted.
-      Handling these signals was the primary way to handle input in GTK+ widgets
+      Handling these signals was the primary way to handle input in GTK widgets
       before gestures were introduced. The signal is emitted from
       the target widget up to the top-level, as part of the “bubble” phase.
     </para>
@@ -193,7 +193,7 @@
       by granting a “pointer emulating” hint to one of the currently interacting touch
       sequences, which will be reported on every #GdkEventTouch event from that sequence. By
       default, if a widget didn't request touch events by setting %GDK_TOUCH_MASK on its
-      event mask and didn't override #GtkWidget::touch-event, GTK+ will transform these
+      event mask and didn't override #GtkWidget::touch-event, GTK will transform these
       “pointer emulating” events into semantically similar #GdkEventButton and #GdkEventMotion
       events. Depending on %GDK_TOUCH_MASK being in the event mask or not, non-pointer-emulating
       sequences could still trigger gestures or just get filtered out, regardless of the widget

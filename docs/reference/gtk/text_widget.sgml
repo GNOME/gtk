@@ -18,14 +18,14 @@
 <title>Conceptual Overview</title>
 
 <para>
-GTK+ has an extremely powerful framework for multiline text editing.  The
+GTK has an extremely powerful framework for multiline text editing.  The
 primary objects involved in the process are #GtkTextBuffer, which represents the 
 text being edited, and #GtkTextView, a widget which can display a #GtkTextBuffer. 
 Each buffer can be displayed by any number of views.
 </para>
 
 <para>
-One of the important things to remember about text in GTK+ is that it's in the
+One of the important things to remember about text in GTK is that it's in the
 UTF-8 encoding. This means that one character can be encoded as multiple
 bytes. Character counts are usually referred to as
 <firstterm>offsets</firstterm>, while byte counts are called
@@ -197,7 +197,7 @@ foreground color &mdash; use CSS to override their default values.
 
 <para>
 The <application>gtk-demo</application> application that comes with
-GTK+ contains more example code for #GtkTextView.
+GTK contains more example code for #GtkTextView.
 </para>
 
 </refsect1>
