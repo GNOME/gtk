@@ -930,7 +930,6 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
                                         gpointer      user_data)
 {
   GtkInfoBar *info_bar = GTK_INFO_BAR (buildable);
-  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
   GSList *l;
   SubParserData *data;
   GObject *object;
