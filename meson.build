@@ -322,8 +322,10 @@ if os_unix
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
-cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
+cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc',
+                            fallback : ['cairo', 'libcairo_dep'])
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc',
+                            fallback : ['cairo', 'libcairogobject_dep'])
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
@@ -338,7 +340,8 @@ if pangoft_dep.found()
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
   # We get the dependency itself from pango, but pango doesn't care
   # about ft2 version, so an extra check is needed.
-  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2)
+  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2,
+                            fallback: ['freetype2', 'freetype_dep'])
 
   # Fallback case: Look for the FreeType2 headers and library manually when its .pc
   # file is not available, such as on Visual Studio
@@ -363,7 +366,8 @@ endif
 
 if win32_enabled
   # for GTK_IM_CONTEXT_IME
-  pangowin32_dep  = dependency('pangowin32')
+  pangowin32_dep  = dependency('pangowin32',
+                               fallback : ['pango', 'libpangowin32_dep'])
 endif
 
 pangocairo_dep = dependency('pangocairo', version: cairo_req,
@@ -372,7 +376,8 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-atk_dep        = dependency('atk', version: atk_req)
+atk_dep        = dependency('atk', version: atk_req,
+                            fallback : ['atk', 'libatk_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
@@ -409,7 +414,8 @@ foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
  cairo_backend_req = backend.get(1)
  cairo_backend = backend.get(0)
  if backend_enabled
-   if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc').found()
+   if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc',
+                 fallback : ['cairo', 'libcairo_dep']).found()
      cairo_backends += [ cairo_backend ]
    endif
  endif
