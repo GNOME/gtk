@@ -536,7 +536,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
           GObject *object = g_hash_table_lookup (priv->objects,
-                                                 prop->text->str);
+                                                 g_strstrip (prop->text->str));
 
           if (object)
             {
@@ -722,7 +722,9 @@ _gtk_builder_construct (GtkBuilder  *builder,
    * be set once.
    */
   if (info->constructor ||
-      (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL))
+      (info->parent &&
+       info->parent->tag_type == TAG_CHILD &&
+       ((ChildInfo*)info->parent)->internal_child != NULL))
     param_filter_flags = G_PARAM_CONSTRUCT_ONLY;
   else
     param_filter_flags = G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY;
@@ -758,7 +760,9 @@ _gtk_builder_construct (GtkBuilder  *builder,
       if (construct_parameters->len)
         g_warning ("Can't pass in construct-only parameters to %s", info->id);
     }
-  else if (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL)
+  else if (info->parent &&
+           info->parent->tag_type == TAG_CHILD &&
+           ((ChildInfo*)info->parent)->internal_child != NULL)
     {
       gchar *childname = ((ChildInfo*)info->parent)->internal_child;
       obj = gtk_builder_get_internal_child (builder, info, childname, error);
