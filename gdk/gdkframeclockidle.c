@@ -243,7 +243,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                     gdk_frame_clock_flush_idle,
                                                     g_object_ref (clock_idle),
                                                     (GDestroyNotify) g_object_unref);
-          g_source_set_name_by_id (priv->flush_idle_id, "[gtk+] gdk_frame_clock_flush_idle");
+          g_source_set_name_by_id (priv->flush_idle_id, "[gtk] gdk_frame_clock_flush_idle");
         }
 
       if (!priv->in_paint_idle &&
@@ -254,7 +254,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                     gdk_frame_clock_paint_idle,
                                                     g_object_ref (clock_idle),
                                                     (GDestroyNotify) g_object_unref);
-          g_source_set_name_by_id (priv->paint_idle_id, "[gtk+] gdk_frame_clock_paint_idle");
+          g_source_set_name_by_id (priv->paint_idle_id, "[gtk] gdk_frame_clock_paint_idle");
         }
     }
 }

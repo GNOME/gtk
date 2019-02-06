@@ -216,7 +216,7 @@ startup_timeout (void *data)
     std->timeout_id = 0;
   else {
     std->timeout_id = g_timeout_add_seconds ((min_timeout + 500)/1000, startup_timeout, std);
-    g_source_set_name_by_id (std->timeout_id, "[gtk+] startup_timeout");
+    g_source_set_name_by_id (std->timeout_id, "[gtk] startup_timeout");
   }
 
   /* always remove this one, but we may have reinstalled another one. */
@@ -253,7 +253,7 @@ add_startup_timeout (GdkX11Screen *screen,
   if (data->timeout_id == 0) {
     data->timeout_id = g_timeout_add_seconds (STARTUP_TIMEOUT_LENGTH_SECONDS,
                                               startup_timeout, data);
-    g_source_set_name_by_id (data->timeout_id, "[gtk+] startup_timeout");
+    g_source_set_name_by_id (data->timeout_id, "[gtk] startup_timeout");
   }
 }
 

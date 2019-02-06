@@ -466,7 +466,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
           id = g_timeout_add (next_image_delay,
                               (GSourceFunc) gdk_wayland_device_update_surface_cursor,
                               device);
-          g_source_set_name_by_id (id, "[gtk+] gdk_wayland_device_update_surface_cursor");
+          g_source_set_name_by_id (id, "[gtk] gdk_wayland_device_update_surface_cursor");
           pointer->cursor_timeout_id = id;
         }
       else
@@ -2173,7 +2173,7 @@ deliver_key_event (GdkWaylandSeat *seat,
   timeout = (seat->repeat_deadline - now) / 1000L;
 
   seat->repeat_timer = g_timeout_add (timeout, keyboard_repeat, seat);
-  g_source_set_name_by_id (seat->repeat_timer, "[gtk+] keyboard_repeat");
+  g_source_set_name_by_id (seat->repeat_timer, "[gtk] keyboard_repeat");
 }
 
 static void
