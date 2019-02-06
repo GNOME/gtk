@@ -24,6 +24,7 @@
 #include "gtk/gtktypes.h"
 
 #include "gtk/gtklistitemfactoryprivate.h"
+#include "gtk/gtkrbtreeprivate.h"
 #include "gtk/gtkselectionmodel.h"
 
 G_BEGIN_DECLS
@@ -38,10 +39,44 @@ G_BEGIN_DECLS
 typedef struct _GtkListItemManager GtkListItemManager;
 typedef struct _GtkListItemManagerClass GtkListItemManagerClass;
 typedef struct _GtkListItemManagerChange GtkListItemManagerChange;
+typedef struct _GtkListItemManagerItem GtkListItemManagerItem; /* sorry */
+typedef struct _GtkListItemManagerItemAugment GtkListItemManagerItemAugment;
+
+struct _GtkListItemManagerItem
+{
+  GtkWidget *widget;
+  guint n_items;
+};
+
+struct _GtkListItemManagerItemAugment
+{
+  guint n_items;
+};
+
 
 GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CONST;
 
-GtkListItemManager *    gtk_list_item_manager_new               (GtkWidget              *widget);
+GtkListItemManager *    gtk_list_item_manager_new_for_size      (GtkWidget              *widget,
+                                                                 gsize                   element_size,
+                                                                 gsize                   augment_size,
+                                                                 GtkRbTreeAugmentFunc    augment_func);
+#define gtk_list_item_manager_new(widget, type, augment_type, augment_func) \
+  gtk_list_item_manager_new_for_size (widget, sizeof (type), sizeof (augment_type), (augment_func))
+
+void                    gtk_list_item_manager_augment_node      (GtkRbTree              *tree,
+                                                                 gpointer                node_augment,
+                                                                 gpointer                node,
+                                                                 gpointer                left,
+                                                                 gpointer                right);
+gpointer                gtk_list_item_manager_get_root          (GtkListItemManager     *self);
+gpointer                gtk_list_item_manager_get_first         (GtkListItemManager     *self);
+gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
+                                                                 guint                   position,
+                                                                 guint                  *offset);
+guint                   gtk_list_item_manager_get_item_position (GtkListItemManager     *self,
+                                                                 gpointer                item);
+gpointer                gtk_list_item_manager_get_item_augment  (GtkListItemManager     *self,
+                                                                 gpointer                item);
 
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);
@@ -56,6 +91,14 @@ void                    gtk_list_item_manager_select            (GtkListItemMana
                                                                  GtkListItem            *item,
                                                                  gboolean                modify,
                                                                  gboolean                extend);
+
+void                    gtk_list_item_manager_set_anchor        (GtkListItemManager     *self,
+                                                                 guint                   position,
+                                                                 double                  align,
+                                                                 GtkListItemManagerChange *change,
+                                                                 guint                   update_start);
+guint                   gtk_list_item_manager_get_anchor        (GtkListItemManager     *self,
+                                                                 double                 *align);
 
 GtkListItemManagerChange *
                         gtk_list_item_manager_begin_change      (GtkListItemManager     *self);
