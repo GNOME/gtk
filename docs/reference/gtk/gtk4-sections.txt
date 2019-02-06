@@ -6242,10 +6242,13 @@ gtk_header_bar_get_type
 <FILE>gtkstack</FILE>
 <TITLE>GtkStack</TITLE>
 GtkStack
+GtkStackPage
 gtk_stack_new
 gtk_stack_add_named
 gtk_stack_add_titled
 gtk_stack_get_child_by_name
+gtk_stack_get_page
+gtk_stack_page_get_child
 gtk_stack_set_visible_child
 gtk_stack_get_visible_child
 gtk_stack_set_visible_child_name

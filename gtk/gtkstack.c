@@ -52,8 +52,29 @@
  * These animations respect the #GtkSettings:gtk-enable-animations
  * setting.
  *
- * The GtkStack widget was added in GTK+ 3.10.
+ * GtkStack maintains a #GtkStackPage object for each added
+ * child, which holds additional per-child properties. You
+ * obtain the #GtkStackPage for a child with gtk_stack_get_page().
  *
+ * # GtkStack as GtkBuildable
+ *
+ * To set child-specific properties in a .ui file, create GtkStackPage
+ * objects explictly, and set the child widget as a property on it:
+ * |[
+ *   <object class="GtkStack" id="stack">
+ *     <child>
+ *       <object class="GtkStackPage">
+ *         <property name="name">page1</property>
+ *         <property name="title">In the beginning…</property>
+ *         <property name="widget">
+ *           <object class="GtkLabel">
+ *             <property name="label">It was dark</property>
+ *           </object>
+ *         </property>
+ *       </object>
+ *     </child>
+ * ]|
+ * 
  * # CSS nodes
  *
  * GtkStack has a single CSS node named stack.
@@ -92,6 +113,39 @@
  *  filter events out events to the last_child widget during transitions
  */
 
+typedef struct {
+  GList *children;
+
+  GtkStackPage *visible_child;
+
+  gboolean hhomogeneous;
+  gboolean vhomogeneous;
+
+  GtkStackTransitionType transition_type;
+  guint transition_duration;
+
+  GtkStackPage *last_visible_child;
+  GskRenderNode *last_visible_node;
+  GtkAllocation last_visible_surface_allocation;
+  guint tick_id;
+  GtkProgressTracker tracker;
+  gboolean first_frame_skipped;
+
+  gint last_visible_widget_width;
+  gint last_visible_widget_height;
+
+  gboolean interpolate_size;
+
+  GtkStackTransitionType active_transition_type;
+
+} GtkStackPrivate;
+
+static void gtk_stack_buildable_interface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkStack, gtk_stack, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkStack)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_stack_buildable_interface_init))
 enum  {
   PROP_0,
   PROP_HOMOGENEOUS,
@@ -109,6 +163,7 @@ enum  {
 enum
 {
   CHILD_PROP_0,
+  CHILD_PROP_WIDGET,
   CHILD_PROP_NAME,
   CHILD_PROP_TITLE,
   CHILD_PROP_ICON_NAME,
@@ -117,9 +172,8 @@ enum
   LAST_CHILD_PROP
 };
 
-typedef struct _GtkStackChildInfo GtkStackChildInfo;
-
-struct _GtkStackChildInfo {
+struct _GtkStackPage {
+  GObject instance;
   GtkWidget *widget;
   gchar *name;
   gchar *title;
@@ -128,35 +182,222 @@ struct _GtkStackChildInfo {
   GtkWidget *last_focus;
 };
 
-typedef struct {
-  GList *children;
-
-  GtkStackChildInfo *visible_child;
-
-  gboolean hhomogeneous;
-  gboolean vhomogeneous;
-
-  GtkStackTransitionType transition_type;
-  guint transition_duration;
-
-  GtkStackChildInfo *last_visible_child;
-  GskRenderNode *last_visible_node;
-  GtkAllocation last_visible_surface_allocation;
-  guint tick_id;
-  GtkProgressTracker tracker;
-  gboolean first_frame_skipped;
-
-  gint last_visible_widget_width;
-  gint last_visible_widget_height;
-
-  gboolean interpolate_size;
-
-  GtkStackTransitionType active_transition_type;
-
-} GtkStackPrivate;
+struct _GtkStackPageClass {
+  GObjectClass parent_class;
+};
 
 static GParamSpec *stack_props[LAST_PROP] = { NULL, };
 static GParamSpec *stack_child_props[LAST_CHILD_PROP] = { NULL, };
+
+G_DEFINE_TYPE (GtkStackPage, gtk_stack_page, G_TYPE_OBJECT)
+
+static void
+gtk_stack_page_init (GtkStackPage *page)
+{
+}
+
+static void
+gtk_stack_page_finalize (GObject *object)
+{
+  GtkStackPage *page = GTK_STACK_PAGE (object);
+
+  g_clear_object (&page->widget);
+  g_free (page->name);
+  g_free (page->title);
+  g_free (page->icon_name);
+
+  if (page->last_focus)
+    g_object_remove_weak_pointer (G_OBJECT (page->last_focus),
+                                  (gpointer *)&page->last_focus);
+
+  G_OBJECT_CLASS (gtk_stack_page_parent_class)->finalize (object);
+}
+
+static void
+gtk_stack_page_get_property (GObject      *object,
+                             guint         property_id,
+                             GValue       *value,
+                             GParamSpec   *pspec)
+{
+  GtkStackPage *info = GTK_STACK_PAGE (object);
+  GtkWidget *stack = gtk_widget_get_parent (GTK_WIDGET (info->widget));
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (stack));
+
+  switch (property_id)
+    {
+    case CHILD_PROP_WIDGET:
+      g_value_set_object (value, info->widget);
+      break;
+
+    case CHILD_PROP_NAME:
+      g_value_set_string (value, info->name);
+      break;
+
+    case CHILD_PROP_TITLE:
+      g_value_set_string (value, info->title);
+      break;
+
+    case CHILD_PROP_ICON_NAME:
+      g_value_set_string (value, info->icon_name);
+      break;
+
+    case CHILD_PROP_POSITION:
+      g_value_set_int (value, g_list_index (priv->children, info));
+      break;
+
+    case CHILD_PROP_NEEDS_ATTENTION:
+      g_value_set_boolean (value, info->needs_attention);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void reorder_child (GtkStack  *stack,
+                           GtkWidget *child,
+                           gint       position);
+
+static void
+gtk_stack_page_set_property (GObject      *object,
+                             guint         property_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GtkStackPage *info = GTK_STACK_PAGE (object);
+  GtkWidget *stack = NULL;
+  GtkStackPrivate *priv = NULL;
+  gchar *name;
+  GList *l;
+
+  if (info->widget)
+    {
+      stack = gtk_widget_get_parent (info->widget);
+      if (stack)
+        priv = gtk_stack_get_instance_private (GTK_STACK (stack));
+    }
+
+  switch (property_id)
+    {
+    case CHILD_PROP_WIDGET:
+      g_set_object (&info->widget, g_value_get_object (value));
+      break;
+
+    case CHILD_PROP_NAME:
+      name = g_value_dup_string (value);
+      for (l = priv ? priv->children : NULL; l != NULL; l = l->next)
+        {
+          GtkStackPage *info2 = l->data;
+          if (info == info2)
+            continue;
+          if (g_strcmp0 (info2->name, name) == 0)
+            {
+              g_warning ("Duplicate child name in GtkStack: %s", name);
+              break;
+            }
+        }
+
+      g_free (info->name);
+      info->name = name;
+
+      g_object_notify_by_pspec (object, pspec);
+
+      if (priv && priv->visible_child == info)
+        g_object_notify_by_pspec (G_OBJECT (stack),
+                                  stack_props[PROP_VISIBLE_CHILD_NAME]);
+
+      break;
+
+    case CHILD_PROP_TITLE:
+      g_free (info->title);
+      info->title = g_value_dup_string (value);
+      g_object_notify_by_pspec (object, pspec);
+      break;
+
+    case CHILD_PROP_ICON_NAME:
+      g_free (info->icon_name);
+      info->icon_name = g_value_dup_string (value);
+      g_object_notify_by_pspec (object, pspec);
+      break;
+
+    case CHILD_PROP_POSITION:
+      if (stack)
+        reorder_child (GTK_STACK (stack), info->widget, g_value_get_int (value));
+      break;
+
+    case CHILD_PROP_NEEDS_ATTENTION:
+      info->needs_attention = g_value_get_boolean (value);
+      g_object_notify_by_pspec (object, pspec);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+static void
+gtk_stack_page_class_init (GtkStackPageClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = gtk_stack_page_finalize;
+  object_class->get_property = gtk_stack_page_get_property;
+  object_class->set_property = gtk_stack_page_set_property;
+
+  stack_child_props[CHILD_PROP_WIDGET] =
+    g_param_spec_object ("widget",
+                         P_("Widget"),
+                         P_("The widget of the page"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE);
+
+  stack_child_props[CHILD_PROP_NAME] =
+    g_param_spec_string ("name",
+                         P_("Name"),
+                         P_("The name of the child page"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
+
+  stack_child_props[CHILD_PROP_TITLE] =
+    g_param_spec_string ("title",
+                         P_("Title"),
+                         P_("The title of the child page"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
+
+  stack_child_props[CHILD_PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name",
+                         P_("Icon name"),
+                         P_("The icon name of the child page"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
+
+  stack_child_props[CHILD_PROP_POSITION] =
+    g_param_spec_int ("position",
+                      P_("Position"),
+                      P_("The index of the child in the parent"),
+                      -1, G_MAXINT,
+                      0,
+                      GTK_PARAM_READWRITE);
+
+  /**
+   * GtkStack:needs-attention:
+   *
+   * Sets a flag specifying whether the child requires the user attention.
+   * This is used by the #GtkStackSwitcher to change the appearance of the
+   * corresponding button when a page needs attention and it is not the
+   * current one.
+   */
+  stack_child_props[CHILD_PROP_NEEDS_ATTENTION] =
+    g_param_spec_boolean ("needs-attention",
+                         P_("Needs Attention"),
+                         P_("Whether this page needs attention"),
+                         FALSE,
+                         GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_child_props);
+}
 
 static void     gtk_stack_add                            (GtkContainer  *widget,
                                                           GtkWidget     *child);
@@ -190,19 +431,31 @@ static void     gtk_stack_set_property                   (GObject       *object,
                                                           guint          property_id,
                                                           const GValue  *value,
                                                           GParamSpec    *pspec);
-static void     gtk_stack_get_child_property             (GtkContainer  *container,
-                                                          GtkWidget     *child,
-                                                          guint          property_id,
-                                                          GValue        *value,
-                                                          GParamSpec    *pspec);
-static void     gtk_stack_set_child_property             (GtkContainer  *container,
-                                                          GtkWidget     *child,
-                                                          guint          property_id,
-                                                          const GValue  *value,
-                                                          GParamSpec    *pspec);
 static void     gtk_stack_unschedule_ticks               (GtkStack      *stack);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkStack, gtk_stack, GTK_TYPE_CONTAINER)
+
+static void     gtk_stack_add_page                       (GtkStack     *stack,
+                                                          GtkStackPage *page);
+
+static void
+gtk_stack_buildable_add_child (GtkBuildable *buildable,
+                               GtkBuilder   *builder,
+                               GObject      *child,
+                               const char   *type)
+{
+  if (GTK_IS_STACK_PAGE (child))
+    gtk_stack_add_page (GTK_STACK (buildable), GTK_STACK_PAGE (child));
+  else if (GTK_IS_WIDGET (child))
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else
+    g_warning ("Can't add a child of type '%s' to '%s'", G_OBJECT_TYPE_NAME (child), G_OBJECT_TYPE_NAME (buildable));
+}
+
+static void
+gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
+{
+  iface->add_child = gtk_stack_buildable_add_child;
+}
 
 static void
 gtk_stack_finalize (GObject *obj)
@@ -319,8 +572,6 @@ gtk_stack_class_init (GtkStackClass *klass)
   container_class->add = gtk_stack_add;
   container_class->remove = gtk_stack_remove;
   container_class->forall = gtk_stack_forall;
-  container_class->set_child_property = gtk_stack_set_child_property;
-  container_class->get_child_property = gtk_stack_get_child_property;
 
   stack_props[PROP_HOMOGENEOUS] =
       g_param_spec_boolean ("homogeneous", P_("Homogeneous"), P_("Homogeneous sizing"),
@@ -374,51 +625,6 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
-  stack_child_props[CHILD_PROP_NAME] =
-    g_param_spec_string ("name",
-                         P_("Name"),
-                         P_("The name of the child page"),
-                         NULL,
-                         GTK_PARAM_READWRITE);
-
-  stack_child_props[CHILD_PROP_TITLE] =
-    g_param_spec_string ("title",
-                         P_("Title"),
-                         P_("The title of the child page"),
-                         NULL,
-                         GTK_PARAM_READWRITE);
-
-  stack_child_props[CHILD_PROP_ICON_NAME] =
-    g_param_spec_string ("icon-name",
-                         P_("Icon name"),
-                         P_("The icon name of the child page"),
-                         NULL,
-                         GTK_PARAM_READWRITE);
-
-  stack_child_props[CHILD_PROP_POSITION] =
-    g_param_spec_int ("position",
-                      P_("Position"),
-                      P_("The index of the child in the parent"),
-                      -1, G_MAXINT,
-                      0,
-                      GTK_PARAM_READWRITE);
-
-  /**
-   * GtkStack:needs-attention:
-   *
-   * Sets a flag specifying whether the child requires the user attention.
-   * This is used by the #GtkStackSwitcher to change the appearance of the
-   * corresponding button when a page needs attention and it is not the
-   * current one.
-   */
-  stack_child_props[CHILD_PROP_NEEDS_ATTENTION] =
-    g_param_spec_boolean ("needs-attention",
-                         P_("Needs Attention"),
-                         P_("Whether this page needs attention"),
-                         FALSE,
-                         GTK_PARAM_READWRITE);
-
-  gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, stack_child_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STACK_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("stack"));
@@ -437,12 +643,12 @@ gtk_stack_new (void)
   return g_object_new (GTK_TYPE_STACK, NULL);
 }
 
-static GtkStackChildInfo *
+static GtkStackPage *
 find_child_info_for_widget (GtkStack  *stack,
                             GtkWidget *child)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *info;
+  GtkStackPage *info;
   GList *l;
 
   for (l = priv->children; l != NULL; l = l->next)
@@ -464,7 +670,7 @@ reorder_child (GtkStack  *stack,
   GList *l;
   GList *old_link = NULL;
   GList *new_link = NULL;
-  GtkStackChildInfo *child_info = NULL;
+  GtkStackPage *child_info = NULL;
   gint num = 0;
 
   l = priv->children;
@@ -481,7 +687,7 @@ reorder_child (GtkStack  *stack,
 
       if (old_link == NULL)
         {
-          GtkStackChildInfo *info;
+          GtkStackPage *info;
           info = l->data;
 
           /* Keep trying to find the current position and link location of the child */
@@ -507,126 +713,6 @@ reorder_child (GtkStack  *stack,
   gtk_container_child_notify_by_pspec (GTK_CONTAINER (stack), child, stack_child_props[CHILD_PROP_POSITION]);
 }
 
-static void
-gtk_stack_get_child_property (GtkContainer *container,
-                              GtkWidget    *child,
-                              guint         property_id,
-                              GValue       *value,
-                              GParamSpec   *pspec)
-{
-  GtkStack *stack = GTK_STACK (container);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *info;
-
-  info = find_child_info_for_widget (stack, child);
-  if (info == NULL)
-    {
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      return;
-    }
-
-  switch (property_id)
-    {
-    case CHILD_PROP_NAME:
-      g_value_set_string (value, info->name);
-      break;
-
-    case CHILD_PROP_TITLE:
-      g_value_set_string (value, info->title);
-      break;
-
-    case CHILD_PROP_ICON_NAME:
-      g_value_set_string (value, info->icon_name);
-      break;
-
-    case CHILD_PROP_POSITION:
-      g_value_set_int (value, g_list_index (priv->children, info));
-      break;
-
-    case CHILD_PROP_NEEDS_ATTENTION:
-      g_value_set_boolean (value, info->needs_attention);
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_stack_set_child_property (GtkContainer *container,
-                              GtkWidget    *child,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  GtkStack *stack = GTK_STACK (container);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *info;
-  GtkStackChildInfo *info2;
-  gchar *name;
-  GList *l;
-
-  info = find_child_info_for_widget (stack, child);
-  if (info == NULL)
-    {
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      return;
-    }
-
-  switch (property_id)
-    {
-    case CHILD_PROP_NAME:
-      name = g_value_dup_string (value);
-      for (l = priv->children; l != NULL; l = l->next)
-        {
-          info2 = l->data;
-          if (info == info2)
-            continue;
-          if (g_strcmp0 (info2->name, name) == 0)
-            {
-              g_warning ("Duplicate child name in GtkStack: %s", name);
-              break;
-            }
-        }
-
-      g_free (info->name);
-      info->name = name;
-
-      gtk_container_child_notify_by_pspec (container, child, pspec);
-
-      if (priv->visible_child == info)
-        g_object_notify_by_pspec (G_OBJECT (stack),
-                                  stack_props[PROP_VISIBLE_CHILD_NAME]);
-
-      break;
-
-    case CHILD_PROP_TITLE:
-      g_free (info->title);
-      info->title = g_value_dup_string (value);
-      gtk_container_child_notify_by_pspec (container, child, pspec);
-      break;
-
-    case CHILD_PROP_ICON_NAME:
-      g_free (info->icon_name);
-      info->icon_name = g_value_dup_string (value);
-      gtk_container_child_notify_by_pspec (container, child, pspec);
-      break;
-
-    case CHILD_PROP_POSITION:
-      reorder_child (stack, child, g_value_get_int (value));
-      break;
-
-    case CHILD_PROP_NEEDS_ATTENTION:
-      info->needs_attention = g_value_get_boolean (value);
-      gtk_container_child_notify_by_pspec (container, child, pspec);
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
 
 static inline gboolean
 is_left_transition (GtkStackTransitionType transition_type)
@@ -922,12 +1008,12 @@ gtk_stack_start_transition (GtkStack               *stack,
 
 static void
 set_visible_child (GtkStack               *stack,
-                   GtkStackChildInfo      *child_info,
+                   GtkStackPage      *child_info,
                    GtkStackTransitionType  transition_type,
                    guint                   transition_duration)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *info;
+  GtkStackPage *info;
   GtkWidget *widget = GTK_WIDGET (stack);
   GList *l;
   GtkWidget *toplevel;
@@ -1061,7 +1147,7 @@ stack_child_visibility_notify_cb (GObject    *obj,
   GtkStack *stack = GTK_STACK (user_data);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkWidget *child = GTK_WIDGET (obj);
-  GtkStackChildInfo *child_info;
+  GtkStackPage *child_info;
 
   child_info = find_child_info_for_widget (stack, child);
 
@@ -1078,6 +1164,12 @@ stack_child_visibility_notify_cb (GObject    *obj,
       priv->last_visible_child = NULL;
     }
 }
+
+static void
+gtk_stack_add_internal (GtkStack *stack,
+                        GtkWidget  *child,
+                        const char *name,
+                        const char *title);
 
 /**
  * gtk_stack_add_titled:
@@ -1100,11 +1192,7 @@ gtk_stack_add_titled (GtkStack   *stack,
   g_return_if_fail (GTK_IS_STACK (stack));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (stack),
-                                     child,
-                                     "name", name,
-                                     "title", title,
-                                     NULL);
+  gtk_stack_add_internal (stack, child, name, title);
 }
 
 /**
@@ -1124,10 +1212,7 @@ gtk_stack_add_named (GtkStack   *stack,
   g_return_if_fail (GTK_IS_STACK (stack));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (stack),
-                                     child,
-                                     "name", name,
-                                     NULL);
+  gtk_stack_add_internal (stack, child, name, NULL);
 }
 
 static void
@@ -1135,31 +1220,65 @@ gtk_stack_add (GtkContainer *container,
                GtkWidget    *child)
 {
   GtkStack *stack = GTK_STACK (container);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *child_info;
+
+  gtk_stack_add_internal (stack, child, NULL, NULL);
+}
+
+static void
+gtk_stack_add_internal (GtkStack   *stack,
+                        GtkWidget  *child,
+                        const char *name,
+                        const char *title)
+{
+  GtkStackPage *child_info;
 
   g_return_if_fail (child != NULL);
 
-  child_info = g_slice_new (GtkStackChildInfo);
-  child_info->widget = child;
-  child_info->name = NULL;
-  child_info->title = NULL;
+  child_info = g_object_new (GTK_TYPE_STACK_PAGE, NULL);
+  child_info->widget = g_object_ref (child);
+  child_info->name = g_strdup (name);
+  child_info->title = g_strdup (title);
   child_info->icon_name = NULL;
   child_info->needs_attention = FALSE;
   child_info->last_focus = NULL;
 
-  priv->children = g_list_append (priv->children, child_info);
+  gtk_stack_add_page (stack, child_info);
 
-  gtk_widget_set_child_visible (child, FALSE);
-  gtk_widget_set_parent (child, GTK_WIDGET (stack));
+  g_object_unref (child_info);
+}
 
-  g_signal_connect (child, "notify::visible",
+static void
+gtk_stack_add_page (GtkStack     *stack,
+                    GtkStackPage *child_info)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GList *l;
+
+  g_return_if_fail (child_info->widget != NULL);
+
+  for (l = priv->children; l != NULL; l = l->next)
+    {
+      GtkStackPage *info = l->data;
+      if (info->name &&
+          g_strcmp0 (info->name, child_info->name) == 0)
+        {
+          g_warning ("While adding page: duplicate child name in GtkStack: %s", child_info->name);
+          break;
+        }
+    }
+
+  priv->children = g_list_append (priv->children, g_object_ref (child_info));
+
+  gtk_widget_set_child_visible (child_info->widget, FALSE);
+  gtk_widget_set_parent (child_info->widget, GTK_WIDGET (stack));
+
+  g_signal_connect (child_info->widget, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);
 
-  gtk_container_child_notify_by_pspec (container, child, stack_child_props[CHILD_PROP_POSITION]);
+  g_object_notify_by_pspec (G_OBJECT (child_info), stack_child_props[CHILD_PROP_POSITION]);
 
   if (priv->visible_child == NULL &&
-      gtk_widget_get_visible (child))
+      gtk_widget_get_visible (child_info->widget))
     set_visible_child (stack, child_info, priv->transition_type, priv->transition_duration);
 
   if (priv->hhomogeneous || priv->vhomogeneous || priv->visible_child == child_info)
@@ -1172,7 +1291,7 @@ gtk_stack_remove (GtkContainer *container,
 {
   GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *child_info;
+  GtkStackPage *child_info;
   gboolean was_visible;
 
   child_info = find_child_info_for_widget (stack, child);
@@ -1197,18 +1316,26 @@ gtk_stack_remove (GtkContainer *container,
 
   gtk_widget_unparent (child);
 
-  g_free (child_info->name);
-  g_free (child_info->title);
-  g_free (child_info->icon_name);
-
-  if (child_info->last_focus)
-    g_object_remove_weak_pointer (G_OBJECT (child_info->last_focus),
-                                  (gpointer *)&child_info->last_focus);
-
-  g_slice_free (GtkStackChildInfo, child_info);
+  g_object_unref (child_info);
 
   if ((priv->hhomogeneous || priv->vhomogeneous) && was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
+}
+
+/**
+ * gtk_stack_get_page:
+ * @stack: a #GtkStack
+ * @child: a child of @stack
+ *
+ * Returns the #GtkStackPage object for @child.
+ * 
+ * Returns: (transfer none): the #GtkStackPage for @child
+ */
+GtkStackPage *
+gtk_stack_get_page (GtkStack  *stack,
+                    GtkWidget *child)
+{
+  return find_child_info_for_widget (stack, child);
 }
 
 /**
@@ -1227,7 +1354,7 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
                              const gchar *name)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *info;
+  GtkStackPage *info;
   GList *l;
 
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
@@ -1241,6 +1368,20 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
     }
 
   return NULL;
+}
+
+/**
+ * gtk_stack_page_get_child:
+ * @page: a #GtkStackPage
+ *
+ * Returns the stack child to which @page belongs.
+ *
+ * Returns: (transfer none): the child to which @page belongs
+ */
+GtkWidget *
+gtk_stack_page_get_child (GtkStackPage *page)
+{
+  return page->widget;
 }
 
 /**
@@ -1630,7 +1771,7 @@ gtk_stack_set_visible_child (GtkStack  *stack,
                              GtkWidget *child)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *child_info;
+  GtkStackPage *child_info;
 
   g_return_if_fail (GTK_IS_STACK (stack));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -1694,7 +1835,7 @@ gtk_stack_set_visible_child_full (GtkStack               *stack,
                                   GtkStackTransitionType  transition)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *child_info, *info;
+  GtkStackPage *child_info, *info;
   GList *l;
 
   g_return_if_fail (GTK_IS_STACK (stack));
@@ -1731,7 +1872,7 @@ gtk_stack_forall (GtkContainer *container,
 {
   GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *child_info;
+  GtkStackPage *child_info;
   GList *l;
 
   l = priv->children;
@@ -1753,7 +1894,7 @@ gtk_stack_compute_expand (GtkWidget *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   gboolean hexpand, vexpand;
-  GtkStackChildInfo *child_info;
+  GtkStackPage *child_info;
   GtkWidget *child;
   GList *l;
 
@@ -2088,7 +2229,7 @@ gtk_stack_measure (GtkWidget      *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackChildInfo *child_info;
+  GtkStackPage *child_info;
   GtkWidget *child;
   gint child_min, child_nat;
   GList *l;

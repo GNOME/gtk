@@ -41,6 +41,16 @@ G_BEGIN_DECLS
 typedef struct _GtkStack GtkStack;
 typedef struct _GtkStackClass GtkStackClass;
 
+#define GTK_TYPE_STACK_PAGE (gtk_stack_page_get_type ())
+#define GTK_STACK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK_PAGE, GtkStackPage))
+#define GTK_STACK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK_PAGE, GtkStackPageClass))
+#define GTK_IS_STACK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_PAGE))
+#define GTK_IS_STACK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK_PAGE))
+#define GTK_STACK_PAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK_PAGE, GtkStackPageClass))
+
+typedef struct _GtkStackPage GtkStackPage;
+typedef struct _GtkStackPageClass GtkStackPageClass;
+
 typedef enum {
   GTK_STACK_TRANSITION_TYPE_NONE,
   GTK_STACK_TRANSITION_TYPE_CROSSFADE,
@@ -73,6 +83,9 @@ struct _GtkStackClass {
 };
 
 GDK_AVAILABLE_IN_ALL
+GType                  gtk_stack_page_get_type           (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
 GType                  gtk_stack_get_type                (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
@@ -86,6 +99,13 @@ void                   gtk_stack_add_titled              (GtkStack              
                                                           GtkWidget              *child,
                                                           const gchar            *name,
                                                           const gchar            *title);
+
+GDK_AVAILABLE_IN_ALL
+GtkStackPage *         gtk_stack_get_page                (GtkStack               *stack,
+                                                          GtkWidget              *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *            gtk_stack_page_get_child          (GtkStackPage           *page);
+
 GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_get_child_by_name       (GtkStack               *stack,
                                                           const gchar            *name);
