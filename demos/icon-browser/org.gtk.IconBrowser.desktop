@@ -2,7 +2,7 @@
 Name=Icon Browser
 Comment=An application that shows themed icons
 Exec=gtk4-icon-browser
-Icon=gtk4-icon-browser
+Icon=org.gtk.IconBrowser
 Terminal=false
 Type=Application
 StartupNotify=true

@@ -119,12 +119,10 @@ executable('gtk4-demo-application',
 # icons
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
-foreach icon_size: [ '16x16', '22x22', '24x24', '32x32', '48x48', '256x256', ]
-  gtk_demo_icons_dir = join_paths(icontheme_dir, '@0@/apps'.format(icon_size))
-  install_data('data/@0@/gtk4-demo.png'.format(icon_size),
-               install_dir: gtk_demo_icons_dir)
-  install_data('data/@0@/gtk4-demo-symbolic.symbolic.png'.format(icon_size),
-               install_dir: gtk_demo_icons_dir)
+foreach size: ['scalable', 'symbolic']
+  install_subdir('hicolor/' + size,
+    install_dir: icontheme_dir
+  )
 endforeach
 
 # desktop file
