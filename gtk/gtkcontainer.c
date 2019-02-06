@@ -413,6 +413,30 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GError *error = NULL;
   GObjectNotifyQueue *nqueue;
 
+  if (GTK_CONTAINER_GET_CLASS (container)->get_child_meta != NULL)
+    {
+      GObject *child_meta = GTK_CONTAINER_GET_CLASS (container)->get_child_meta (container, child);
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (child_meta), name);
+      if (pspec)
+        {
+          if (!gtk_builder_value_from_string (builder, pspec, value, &gvalue, &error))
+            {
+              g_warning ("Could not read property %s:%s with value %s of type %s: %s",
+                         g_type_name (G_OBJECT_TYPE (container)),
+                         name,
+                         value,
+                         g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+                         error->message);
+              g_error_free (error);
+              return;
+            }
+
+          g_object_set_property (child_meta, name, &gvalue);
+          g_value_unset (&gvalue);
+          return;
+        }
+    }
+
   pspec = gtk_container_class_find_child_property (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
     {
@@ -1878,3 +1902,12 @@ gtk_container_get_path_for_child (GtkContainer *container,
   return path;
 }
 
+GObject *
+gtk_container_get_child_meta (GtkContainer *container,
+                              GtkWidget    *child)
+{
+  if (GTK_CONTAINER_GET_CLASS (container)->get_child_meta)
+    return GTK_CONTAINER_GET_CLASS (container)->get_child_meta (container, child);
+
+  return NULL;
+}
