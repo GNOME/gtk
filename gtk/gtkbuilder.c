@@ -63,7 +63,7 @@
  * RELAX NG schema below. We refer to these descriptions as “GtkBuilder
  * UI definitions” or just “UI definitions” if the context is clear.
  *
- * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
+ * [RELAX NG Compact Syntax](https://gitlab.gnome.org/GNOME/gtk/tree/master/gtk/gtkbuilder.rnc)
  *
  * The toplevel element is <interface>. It optionally takes a “domain”
  * attribute, which will make the builder look for translated strings

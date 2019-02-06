@@ -78,7 +78,7 @@
  *
  * ## Creating a search bar
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/search-bar.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/search-bar.c)
  */
 
 typedef struct {

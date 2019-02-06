@@ -81,7 +81,7 @@ static const GtkIMContextInfo imwayland_info =
   "waylandgtk",      /* ID */
   NC_("input method menu", "Waylandgtk"),      /* Human readable name */
   GETTEXT_PACKAGE, /* Translation domain */
-  GTK_LOCALEDIR,   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
+  GTK_LOCALEDIR,   /* Dir for bindtextdomain (not strictly needed for "gtk") */
   "",              /* Languages for which this module is the default */
 };
 

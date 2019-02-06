@@ -104,7 +104,7 @@
  *
  * ## Handling fallback yourself
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/sunny.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/sunny.c)
  *
  * The XML format understood by #GtkBuilder for #GMenuModel consists
  * of a toplevel `<menu>` element, which contains one or more `<item>`

@@ -21,7 +21,7 @@ many things that we value:
 Please, do not use the issue tracker for support questions. If you have
 questions on how to use GTK effectively, you can use:
 
- - the `#gtk+` IRC channel on irc.gnome.org
+ - the `#gtk` IRC channel on irc.gnome.org
  - the [gtk](https://mail.gnome.org/mailman/listinfo/gtk-list) mailing list,
    for general questions on GTK
  - the [gtk-app-devel](https://mail.gnome.org/mailman/listinfo/gtk-app-devel-list)
@@ -245,7 +245,7 @@ people committing to GTK to follow a few rules:
    better way to do things. If you are making changes to GTK, you should
    be subscribed to the [gtk-devel](https://mail.gnome.org/mailman/listinfo/gtk-devel-list)
    mailing list; this is a good place to ask about intended changes.
-   The `#gtk+` IRC channel on irc.gnome.org is also a good place to find GTK
+   The `#gtk` IRC channel on irc.gnome.org is also a good place to find GTK
    developers to discuss changes, but if you live outside of the EU/US time
    zones, an email to the gtk-devel mailing list is the most certain and
    preferred method.

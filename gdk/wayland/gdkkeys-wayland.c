@@ -304,9 +304,9 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
     state |= GDK_SUPER_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Hyper")))
     state |= GDK_HYPER_MASK;
-  /* Gtk+ treats MOD1 as a synonym for Alt, and does not expect it to
+  /* GTK treats MOD1 as a synonym for Alt, and does not expect it to
    * be mapped around, so we should avoid adding GDK_META_MASK if MOD1
-   * is already included to avoid confusing gtk+ and applications that
+   * is already included to avoid confusing GTK and applications that
    * rely on that behavior.
    */
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Meta")) &&
