@@ -41,6 +41,9 @@ G_BEGIN_DECLS
 typedef struct _GtkStack GtkStack;
 typedef struct _GtkStackClass GtkStackClass;
 
+#define GTK_TYPE_STACK_PAGE (gtk_stack_page_get_type ())
+G_DECLARE_FINAL_TYPE (GtkStackPage, gtk_stack_page, GTK, STACK_PAGE, GObject)
+
 typedef enum {
   GTK_STACK_TRANSITION_TYPE_NONE,
   GTK_STACK_TRANSITION_TYPE_CROSSFADE,
@@ -86,6 +89,13 @@ void                   gtk_stack_add_titled              (GtkStack              
                                                           GtkWidget              *child,
                                                           const gchar            *name,
                                                           const gchar            *title);
+
+GDK_AVAILABLE_IN_ALL
+GtkStackPage *         gtk_stack_get_page                (GtkStack               *stack,
+                                                          GtkWidget              *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *            gtk_stack_page_get_child          (GtkStackPage           *page);
+
 GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_get_child_by_name       (GtkStack               *stack,
                                                           const gchar            *name);

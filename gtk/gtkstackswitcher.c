@@ -160,48 +160,35 @@ rebuild_child (GtkWidget   *self,
 }
 
 static void
-update_needs_attention (GtkWidget *widget, GtkWidget *button, gpointer data)
-{
-  GtkContainer *container;
-  gboolean needs_attention;
-  GtkStyleContext *context;
-
-  container = GTK_CONTAINER (data);
-  gtk_container_child_get (container, widget,
-                           "needs-attention", &needs_attention,
-                           NULL);
-
-  context = gtk_widget_get_style_context (button);
-  if (needs_attention)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
-  else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
-}
-
-static void
 update_button (GtkStackSwitcher *self,
                GtkWidget        *widget,
                GtkWidget        *button)
 {
   gchar *title;
   gchar *icon_name;
+  gboolean needs_attention;
   GtkStackSwitcherPrivate *priv;
-
+  GtkStyleContext *context;
   priv = gtk_stack_switcher_get_instance_private (self);
 
-  gtk_container_child_get (GTK_CONTAINER (priv->stack), widget,
-                           "title", &title,
-                           "icon-name", &icon_name,
-                           NULL);
+  g_object_get (gtk_stack_get_page (priv->stack, widget),
+                "title", &title,
+                "icon-name", &icon_name,
+                "needs-attention", &needs_attention,
+                NULL);
 
   rebuild_child (button, icon_name, title);
 
   gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL || icon_name != NULL));
 
+  context = gtk_widget_get_style_context (button);
+  if (needs_attention)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+
   g_free (title);
   g_free (icon_name);
-
-  update_needs_attention (widget, button, priv->stack);
 }
 
 static void
@@ -354,6 +341,7 @@ add_child (GtkWidget        *widget,
   GtkWidget *button;
   GList *group;
   GtkStackSwitcherPrivate *priv;
+  GtkStackPage *page;
 
   priv = gtk_stack_switcher_get_instance_private (self);
 
@@ -362,6 +350,7 @@ add_child (GtkWidget        *widget,
   gtk_widget_set_focus_on_click (button, FALSE);
   gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (button), FALSE);
 
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
   update_button (self, widget, button);
 
   group = gtk_container_get_children (GTK_CONTAINER (self));
@@ -376,10 +365,10 @@ add_child (GtkWidget        *widget,
   g_object_set_data (G_OBJECT (button), "stack-child", widget);
   g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), self);
   g_signal_connect (widget, "notify::visible", G_CALLBACK (on_title_icon_visible_updated), self);
-  g_signal_connect (widget, "child-notify::title", G_CALLBACK (on_title_icon_visible_updated), self);
-  g_signal_connect (widget, "child-notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), self);
-  g_signal_connect (widget, "child-notify::position", G_CALLBACK (on_position_updated), self);
-  g_signal_connect (widget, "child-notify::needs-attention", G_CALLBACK (on_needs_attention_updated), self);
+  g_signal_connect (page, "notify::title", G_CALLBACK (on_title_icon_visible_updated), self);
+  g_signal_connect (page, "notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), self);
+  g_signal_connect (page, "notify::position", G_CALLBACK (on_position_updated), self);
+  g_signal_connect (page, "notify::needs-attention", G_CALLBACK (on_needs_attention_updated), self);
 
   g_hash_table_insert (priv->buttons, widget, button);
 }
@@ -393,10 +382,16 @@ remove_child (GtkWidget        *widget,
 
   priv = gtk_stack_switcher_get_instance_private (self);
 
-  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, self);
-  g_signal_handlers_disconnect_by_func (widget, on_position_updated, self);
-  g_signal_handlers_disconnect_by_func (widget, on_needs_attention_updated, self);
-
+  if (priv->stack)
+    {
+      GtkStackPage *page = gtk_stack_get_page (priv->stack, widget);
+      if (page)
+        {
+          g_signal_handlers_disconnect_by_func (page, on_title_icon_visible_updated, self);
+          g_signal_handlers_disconnect_by_func (page, on_position_updated, self);
+          g_signal_handlers_disconnect_by_func (page, on_needs_attention_updated, self);
+        }
+    }
   button = g_hash_table_lookup (priv->buttons, widget);
   gtk_container_remove (GTK_CONTAINER (self), button);
   g_hash_table_remove (priv->buttons, widget);
