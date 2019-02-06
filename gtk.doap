@@ -5,7 +5,7 @@
          xmlns:gnome="http://api.gnome.org/doap-extensions#"
          xmlns="http://usefulinc.com/ns/doap#">
 
-  <name xml:lang="en">gtk+</name>
+  <name xml:lang="en">gtk</name>
   <shortname>gtk</shortname>
   <shortdesc xml:lang="en">Multi-platform toolkit</shortdesc>
   <description xml:lang="en">GTK is a multi-platform toolkit for creating graphical user
