@@ -265,6 +265,7 @@ struct _GtkWindowPrivate
   guint    unlimited_guessed_size_x  : 1;
   guint    unlimited_guessed_size_y  : 1;
   guint    force_resize              : 1;
+  guint    fixate_size               : 1;
 
   guint    use_subsurface            : 1;
 
@@ -550,6 +551,10 @@ static void gtk_window_get_preferred_height_for_width (GtkWidget *widget,
 static void gtk_window_style_updated (GtkWidget     *widget);
 static void gtk_window_state_flags_changed (GtkWidget     *widget,
                                             GtkStateFlags  previous_state);
+
+static void gtk_window_get_remembered_size (GtkWindow *window,
+                                            int       *width,
+                                            int       *height);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -6436,6 +6441,8 @@ gtk_window_unmap (GtkWidget *widget)
    */
   priv->need_default_position = TRUE;
 
+  priv->fixate_size = FALSE;
+
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
@@ -6477,6 +6484,14 @@ gtk_window_force_resize (GtkWindow *window)
   priv->force_resize = TRUE;
 }
 
+void
+gtk_window_fixate_size (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->fixate_size = TRUE;
+}
+
 /* (Note: Replace "size" with "width" or "height". Also, the request
  * mode is honoured.)
  * For selecting the default window size, the following conditions
@@ -6507,6 +6522,13 @@ gtk_window_guess_default_size (GtkWindow *window,
   widget = GTK_WIDGET (window);
   display = gtk_widget_get_display (widget);
   gdkwindow = _gtk_widget_get_window (widget);
+
+  if (window->priv->fixate_size)
+    {
+      g_assert (gdkwindow);
+      gtk_window_get_remembered_size (window, width, height);
+      return;
+    }
 
   if (gdkwindow)
     monitor = gdk_display_get_monitor_at_window (display, gdkwindow);
