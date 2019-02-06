@@ -1398,13 +1398,18 @@ moved_to_rect_cb (GdkWindow          *window,
                   gboolean            flipped_y,
                   GtkMenu            *menu)
 {
-  g_signal_emit (menu,
-                 menu_signals[POPPED_UP],
-                 0,
-                 flipped_rect,
-                 final_rect,
-                 flipped_x,
-                 flipped_y);
+  GtkMenuPrivate *priv = menu->priv;
+
+  gtk_window_fixate_size (GTK_WINDOW (priv->toplevel));
+
+  if (!priv->emulated_move_to_rect)
+    g_signal_emit (menu,
+                   menu_signals[POPPED_UP],
+                   0,
+                   flipped_rect,
+                   final_rect,
+                   flipped_x,
+                   flipped_y);
 }
 
 static void
@@ -5287,9 +5292,9 @@ gtk_menu_position (GtkMenu  *menu,
 
   g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
 
-  if (!emulated_move_to_rect)
-    g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
-                      menu);
+  g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
+                    menu);
+  priv->emulated_move_to_rect = emulated_move_to_rect;
 
   gdk_window_move_to_rect (toplevel,
                            &rect,
