@@ -18,12 +18,10 @@ install_data('org.gtk.WidgetFactory.desktop', install_dir: gtk_applicationsdir)
 # icons
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
-foreach icon_size : ['16x16', '22x22', '24x24', '32x32', '48x48', '256x256', ]
-  icons_dir = join_paths(icontheme_dir, '@0@/apps'.format(icon_size))
-  install_data('data/@0@/gtk4-widget-factory.png'.format(icon_size),
-               install_dir: icons_dir)
-  install_data('data/@0@/gtk4-widget-factory-symbolic.symbolic.png'.format(icon_size),
-               install_dir: icons_dir)
+foreach size: ['scalable', 'symbolic']
+  install_subdir('hicolor/' + size,
+    install_dir: icontheme_dir
+  )
 endforeach
 
 # appdata
