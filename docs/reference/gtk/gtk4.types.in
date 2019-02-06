@@ -155,6 +155,7 @@ gtk_snapshot_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type
+gtk_stack_page_get_type
 gtk_stack_sidebar_get_type
 gtk_stack_switcher_get_type
 gtk_statusbar_get_type

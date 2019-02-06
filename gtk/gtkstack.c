@@ -1235,6 +1235,15 @@ gtk_stack_get_child_meta (GtkContainer  *container,
   return G_OBJECT (find_child_info_for_widget (GTK_STACK (container), child));
 }
 
+/**
+ * gtk_stack_get_page:
+ * @stack: a #GtkStack
+ * @child: a child of @stack
+ *
+ * Returns the #GtkStackPage object for @child.
+ * 
+ * Returns: the #GtkStackPage for @child
+ */
 GtkStackPage *
 gtk_stack_get_page (GtkStack  *stack,
                     GtkWidget *child)
@@ -1274,6 +1283,14 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
   return NULL;
 }
 
+/**
+ * gtk_stack_page_get_child:
+ * @page: a #GtkStackPage
+ *
+ * Returns the stack child to which @page belongs.
+ *
+ * Returns: the child to which @page belongs
+ */
 GtkWidget *
 gtk_stack_page_get_child (GtkStackPage *page)
 {
