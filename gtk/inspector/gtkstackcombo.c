@@ -81,10 +81,10 @@ add_child (GtkWidget     *widget,
     {
       char *name, *title;
 
-      gtk_container_child_get (GTK_CONTAINER (self->stack), widget,
-                               "name", &name,
-                              "title", &title,
-                               NULL);
+      g_object_get (gtk_stack_get_page (self->stack, widget),
+                    "name", &name,
+                    "title", &title,
+                    NULL);
 
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (self->combo), name, title);
 

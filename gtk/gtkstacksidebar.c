@@ -140,7 +140,7 @@ sort_list (GtkListBoxRow *row1,
     {
       item = gtk_bin_get_child (GTK_BIN (row1));
       widget = g_object_get_data (G_OBJECT (item), "stack-child");
-      gtk_container_child_get (GTK_CONTAINER (priv->stack), widget,
+      g_object_get (gtk_stack_get_page (GTK_STACK (priv->stack), widget),
                                "position", &left,
                                NULL);
     }
@@ -149,7 +149,7 @@ sort_list (GtkListBoxRow *row1,
     {
       item = gtk_bin_get_child (GTK_BIN (row2));
       widget = g_object_get_data (G_OBJECT (item), "stack-child");
-      gtk_container_child_get (GTK_CONTAINER (priv->stack), widget,
+      g_object_get (gtk_stack_get_page (GTK_STACK (priv->stack), widget),
                                "position", &right,
                                NULL);
     }
@@ -227,10 +227,10 @@ update_row (GtkStackSidebar *sidebar,
   gboolean needs_attention;
   GtkStyleContext *context;
 
-  gtk_container_child_get (GTK_CONTAINER (priv->stack), widget,
-                           "title", &title,
-                           "needs-attention", &needs_attention,
-                           NULL);
+  g_object_get (gtk_stack_get_page (GTK_STACK (priv->stack), widget),
+                "title", &title,
+                "needs-attention", &needs_attention,
+                NULL);
 
   item = gtk_bin_get_child (GTK_BIN (row));
   gtk_label_set_text (GTK_LABEL (item), title);
@@ -275,6 +275,7 @@ add_child (GtkWidget       *widget,
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GtkWidget *item;
   GtkWidget *row;
+  GObject *page;
 
   /* Check we don't actually already know about this widget */
   if (g_hash_table_lookup (priv->rows, widget))
@@ -291,13 +292,14 @@ add_child (GtkWidget       *widget,
   update_row (sidebar, widget, row);
 
   /* Hook up for events */
-  g_signal_connect (widget, "child-notify::title",
-                    G_CALLBACK (on_child_updated), sidebar);
-  g_signal_connect (widget, "child-notify::needs-attention",
-                    G_CALLBACK (on_child_updated), sidebar);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
   g_signal_connect (widget, "notify::visible",
                     G_CALLBACK (on_child_updated), sidebar);
-  g_signal_connect (widget, "child-notify::position",
+  g_signal_connect (page, "notify::title",
+                    G_CALLBACK (on_child_updated), sidebar);
+  g_signal_connect (page, "notify::needs-attention",
+                    G_CALLBACK (on_child_updated), sidebar);
+  g_signal_connect (page, "notify::position",
                     G_CALLBACK (on_position_updated), sidebar);
 
   g_object_set_data (G_OBJECT (item), I_("stack-child"), widget);
@@ -316,8 +318,15 @@ remove_child (GtkWidget       *widget,
   if (!row)
     return;
 
-  g_signal_handlers_disconnect_by_func (widget, on_child_updated, sidebar);
-  g_signal_handlers_disconnect_by_func (widget, on_position_updated, sidebar);
+  if (priv->stack)
+    {
+      GObject *page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
+      if (page)
+        {
+          g_signal_handlers_disconnect_by_func (page, on_child_updated, sidebar);
+          g_signal_handlers_disconnect_by_func (page, on_position_updated, sidebar);
+        }
+    }
 
   gtk_container_remove (GTK_CONTAINER (priv->list), row);
   g_hash_table_remove (priv->rows, widget);

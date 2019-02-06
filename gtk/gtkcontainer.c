@@ -1877,4 +1877,3 @@ gtk_container_get_path_for_child (GtkContainer *container,
 
   return path;
 }
-
