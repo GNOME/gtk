@@ -53,8 +53,7 @@
  *
  * The functions in this section are specific to the GDK X11 backend.
  * To use them, you need to include the `<gdk/gdkx.h>` header and use
- * the X11-specific pkg-config files to build your application (either
- * `gdk-x11-3.0` or `gtk+-x11-3.0`).
+ * the X11-specific pkg-config file `gtk4-x11` to build your application.
  *
  * To make your code compile with other GDK backends, guard backend-specific
  * calls by an ifdef as follows. Since GDK may be built with multiple
