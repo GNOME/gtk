@@ -815,6 +815,8 @@ menubar > menuitem:disabled, .menubar > menuitem:disabled { color: #919190; box-
 
 menubar .csd.popup decoration, .menubar .csd.popup decoration { border-radius: 0; }
 
+.background.popup { background-color: transparent; }
+
 menu, .menu, .context-menu { padding: 4px 0px; background-color: #2f2f2f; border: 1px solid #1b1b1b; border-radius: 5px; }
 
 .csd menu, .csd .menu, .csd .context-menu { border: none; }

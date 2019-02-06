@@ -823,6 +823,8 @@ menubar > menuitem:disabled, .menubar > menuitem:disabled { color: #929595; box-
 
 menubar .csd.popup decoration, .menubar .csd.popup decoration { border-radius: 0; }
 
+.background.popup { background-color: transparent; }
+
 menu, .menu, .context-menu { padding: 4px 0px; background-color: #ffffff; border: 1px solid #cdc7c2; border-radius: 5px; }
 
 .csd menu, .csd .menu, .csd .context-menu { border: none; }
