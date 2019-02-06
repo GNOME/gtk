@@ -1,4 +1,4 @@
-/*  gcc -g -Wall -O2 -o dialog-test dialog-test.c `pkg-config --cflags --libs gtk+-3.0` */
+/*  gcc -g -Wall -O2 -o dialog-test dialog-test.c `pkg-config --cflags --libs gtk4` */
 #include <gtk/gtk.h>
 
 static GtkWidget *window;
