@@ -140,7 +140,7 @@ sort_list (GtkListBoxRow *row1,
     {
       item = gtk_bin_get_child (GTK_BIN (row1));
       widget = g_object_get_data (G_OBJECT (item), "stack-child");
-      g_object_get (gtk_container_get_child_meta (GTK_CONTAINER (priv->stack), widget),
+      g_object_get (gtk_stack_get_page (GTK_STACK (priv->stack), widget),
                                "position", &left,
                                NULL);
     }
@@ -149,7 +149,7 @@ sort_list (GtkListBoxRow *row1,
     {
       item = gtk_bin_get_child (GTK_BIN (row2));
       widget = g_object_get_data (G_OBJECT (item), "stack-child");
-      g_object_get (gtk_container_get_child_meta (GTK_CONTAINER (priv->stack), widget),
+      g_object_get (gtk_stack_get_page (GTK_STACK (priv->stack), widget),
                                "position", &right,
                                NULL);
     }
@@ -227,7 +227,7 @@ update_row (GtkStackSidebar *sidebar,
   gboolean needs_attention;
   GtkStyleContext *context;
 
-  g_object_get (gtk_container_get_child_meta (GTK_CONTAINER (priv->stack), widget),
+  g_object_get (gtk_stack_get_page (GTK_STACK (priv->stack), widget),
                 "title", &title,
                 "needs-attention", &needs_attention,
                 NULL);
@@ -292,7 +292,7 @@ add_child (GtkWidget       *widget,
   update_row (sidebar, widget, row);
 
   /* Hook up for events */
-  page = gtk_container_get_child_meta (GTK_CONTAINER (priv->stack), widget);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
   g_signal_connect (widget, "notify::visible",
                     G_CALLBACK (on_child_updated), sidebar);
   g_signal_connect (page, "notify::title",
@@ -320,7 +320,7 @@ remove_child (GtkWidget       *widget,
 
   if (priv->stack)
     {
-      GObject *page = gtk_container_get_child_meta (GTK_CONTAINER (priv->stack), widget);
+      GObject *page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
       if (page)
         {
           g_signal_handlers_disconnect_by_func (page, on_child_updated, sidebar);

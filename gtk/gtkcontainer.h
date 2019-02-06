@@ -98,8 +98,6 @@ struct _GtkContainerClass
   GtkWidgetPath * (*get_path_for_child) (GtkContainer *container,
                                          GtkWidget    *child);
 
-  GObject * (*get_child_meta) (GtkContainer *container,
-                               GtkWidget    *child);
 
   /*< private >*/
 
@@ -111,6 +109,7 @@ struct _GtkContainerClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 
@@ -234,9 +233,6 @@ void    gtk_container_forall		     (GtkContainer *container,
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
-GDK_AVAILABLE_IN_ALL
-GObject * gtk_container_get_child_meta (GtkContainer *container,
-                                        GtkWidget    *child);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkContainer, g_object_unref)
 
