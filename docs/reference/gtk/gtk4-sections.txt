@@ -1587,23 +1587,6 @@ GtkIMMulticontextPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtkinvisible</FILE>
-<TITLE>GtkInvisible</TITLE>
-GtkInvisible
-gtk_invisible_new
-<SUBSECTION Standard>
-GTK_INVISIBLE
-GTK_IS_INVISIBLE
-GTK_TYPE_INVISIBLE
-GTK_INVISIBLE_CLASS
-GTK_IS_INVISIBLE_CLASS
-GTK_INVISIBLE_GET_CLASS
-<SUBSECTION Private>
-gtk_invisible_get_type
-GtkInvisiblePrivate
-</SECTION>
-
-<SECTION>
 <FILE>gtklabel</FILE>
 <TITLE>GtkLabel</TITLE>
 GtkLabel

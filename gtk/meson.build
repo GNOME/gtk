@@ -505,7 +505,6 @@ gtk_public_headers = files([
   'gtkimmodule.h',
   'gtkimmulticontext.h',
   'gtkinfobar.h',
-  'gtkinvisible.h',
   'gtklabel.h',
   'gtklayout.h',
   'gtklevelbar.h',

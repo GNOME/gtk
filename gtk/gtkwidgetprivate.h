@@ -34,7 +34,7 @@
 #include "gtklistlistmodelprivate.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkinvisible.h"
+#include "gtkinvisibleprivate.h"
 #include "gtkgesture.h"
 
 G_BEGIN_DECLS
