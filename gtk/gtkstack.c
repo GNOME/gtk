@@ -142,6 +142,7 @@ enum  {
 enum
 {
   CHILD_PROP_0,
+  CHILD_PROP_WIDGET,
   CHILD_PROP_NAME,
   CHILD_PROP_TITLE,
   CHILD_PROP_ICON_NAME,
@@ -210,6 +211,7 @@ gtk_stack_page_finalize (GObject *object)
 {
   GtkStackPage *page = GTK_STACK_PAGE (object);
 
+  g_object_unref (page->widget);
   g_free (page->name);
   g_free (page->title);
   g_free (page->icon_name);
@@ -233,6 +235,10 @@ gtk_stack_page_get_property (GObject      *object,
 
   switch (property_id)
     {
+    case CHILD_PROP_WIDGET:
+      g_value_set_object (value, info->widget);
+      break;
+
     case CHILD_PROP_NAME:
       g_value_set_string (value, info->name);
       break;
@@ -284,6 +290,10 @@ gtk_stack_page_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case CHILD_PROP_WIDGET:
+      g_set_object (&info->widget, g_value_get_object (value));
+      break;
+
     case CHILD_PROP_NAME:
       name = g_value_dup_string (value);
       for (l = priv ? priv->children : NULL; l != NULL; l = l->next)
@@ -344,6 +354,13 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   object_class->finalize = gtk_stack_page_finalize;
   object_class->get_property = gtk_stack_page_get_property;
   object_class->set_property = gtk_stack_page_set_property;
+
+  stack_child_props[CHILD_PROP_WIDGET] =
+    g_param_spec_object ("widget",
+                         P_("Widget"),
+                         P_("The widget of the page"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE);
 
   stack_child_props[CHILD_PROP_NAME] =
     g_param_spec_string ("name",
