@@ -1,6 +1,6 @@
-# Polish translation for gtk+.
-# Copyright © 1998-2019 the gtk+ authors.
-# This file is distributed under the same license as the gtk+ package.
+# Polish translation for gtk.
+# Copyright © 1998-2019 the gtk authors.
+# This file is distributed under the same license as the gtk package.
 # Krzysztof Krzyżaniak <eloy@venco.com.pl>, 1998.
 # Tomasz Kłoczko <kloczek@rudy.mif.pg.gda.pl>, 1999.
 # Paweł Dziekoński <dziekons@pld.org.pl>, 1999.
@@ -14,10 +14,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+\n"
+"Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-05 17:36+0000\n"
-"PO-Revision-Date: 2019-02-06 21:50+0100\n"
+"PO-Revision-Date: 2019-02-06 21:54+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2667,7 +2667,7 @@ msgstr "Nie można zakończyć procesu o PID %d: %s"
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
 msgstr ""
-"Biblioteka GTK+ nie może odnaleźć modułu multimediów. Proszę sprawdzić "
+"Biblioteka GTK nie może odnaleźć modułu multimediów. Proszę sprawdzić "
 "poprawność instalacji."
 
 #: gtk/gtknotebook.c:4252 gtk/gtknotebook.c:6518
@@ -3468,7 +3468,7 @@ msgstr "Zawsze na wierzchu"
 #: gtk/gtkwindow.c:10349
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
-msgstr "Użyć Inspektora biblioteki GTK+?"
+msgstr "Użyć Inspektora biblioteki GTK?"
 
 #: gtk/gtkwindow.c:10351
 #, c-format
@@ -3477,9 +3477,9 @@ msgid ""
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
-"Inspektor biblioteki GTK+ to interaktywny debuger umożliwiający przeglądanie "
-"i modyfikowanie wnętrza programu GTK+. Jego użycie może spowodować awarię "
-"lub uszkodzenie programu."
+"Inspektor biblioteki GTK to interaktywny debuger umożliwiający przeglądanie "
+"i modyfikowanie wnętrza programu GTK. Jego użycie może spowodować awarię lub "
+"uszkodzenie programu."
 
 #: gtk/gtkwindow.c:10356
 msgid "Don’t show this message again"
@@ -3489,7 +3489,7 @@ msgstr "Bez wyświetlania ponownie"
 #: gtk/imwaylandgtk.c:82
 msgctxt "input method menu"
 msgid "Waylandgtk"
-msgstr "Wayland GTK+"
+msgstr "Wayland GTK"
 
 #: gtk/inspector/action-editor.c:279
 msgid "Activate"

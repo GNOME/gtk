@@ -1,6 +1,6 @@
-# Polish translation for gtk+-properties.
-# Copyright © 1998-2019 the gtk+ authors.
-# This file is distributed under the same license as the gtk+ package.
+# Polish translation for gtk-properties.
+# Copyright © 1998-2019 the gtk authors.
+# This file is distributed under the same license as the gtk package.
 # Krzysztof Krzyżaniak <eloy@venco.com.pl>, 1998.
 # Tomasz Kłoczko <kloczek@rudy.mif.pg.gda.pl>, 1999.
 # Paweł Dziekoński <dziekons@pld.org.pl>, 1999.
@@ -14,10 +14,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties\n"
+"Project-Id-Version: gtk-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-05 17:37+0000\n"
-"PO-Revision-Date: 2019-02-06 21:52+0100\n"
+"PO-Revision-Date: 2019-02-06 21:54+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
