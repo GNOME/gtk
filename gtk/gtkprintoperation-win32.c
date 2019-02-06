@@ -41,7 +41,7 @@
 #include "gtkprintoperation-private.h"
 #include "gtkprint-win32.h"
 #include "gtkintl.h"
-#include "gtkinvisible.h"
+#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -1719,7 +1719,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
   
   if (parent == NULL)
     {
-      invisible = gtk_invisible_new ();
+      invisible = gtk_window_new (GTK_WINDOW_POPUP);
       parentHWnd = get_parent_hwnd (invisible);
     }
   else 

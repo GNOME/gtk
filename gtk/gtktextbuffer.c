@@ -28,7 +28,6 @@
 #include <stdarg.h>
 
 #include "gtkdnd.h"
-#include "gtkinvisible.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h"
 #include "gtktextbufferprivate.h"

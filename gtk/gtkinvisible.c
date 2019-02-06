@@ -24,7 +24,7 @@
 
 #include "config.h"
 #include <gdk/gdk.h>
-#include "gtkinvisible.h"
+#include "gtkinvisibleprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

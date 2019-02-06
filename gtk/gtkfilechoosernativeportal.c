@@ -39,7 +39,6 @@
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
-#include "gtkinvisible.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
@@ -391,9 +390,7 @@ window_handle_exported (GtkWindow  *window,
 
   if (data->modal)
     {
-      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (window));
-
-      data->grab_widget = gtk_invisible_new_for_display (display);
+      data->grab_widget = gtk_label_new ("");
       gtk_grab_add (GTK_WIDGET (data->grab_widget));
     }
 
