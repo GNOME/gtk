@@ -46,9 +46,6 @@ GDK_AVAILABLE_IN_ALL
 GType                    gdk_wayland_surface_get_type             (void);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *              gdk_wayland_surface_new_subsurface       (GdkDisplay            *display,
-                                                                    const GdkRectangle    *position);
-GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
