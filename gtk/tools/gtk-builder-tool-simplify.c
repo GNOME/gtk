@@ -576,6 +576,71 @@ rewrite_stack (Element      *element,
   element->children = new_children;
 }
 
+static Element *
+rewrite_assistant_child (Element *child, MyParserData *data)
+{
+  Element *object = NULL;
+  Element *packing = NULL;
+  Element *new_object;
+  Element *prop;
+  GList *l;
+
+  if (!g_str_equal (child->element_name, "child"))
+    return child;
+
+  for (l = child->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+      if (g_str_equal (elt->element_name, "object"))
+        object = elt;
+      else if (g_str_equal (elt->element_name, "packing"))
+        packing = elt;
+    }
+
+  if (!packing)
+    return child;
+
+  new_object = g_new0 (Element, 1);
+  new_object->element_name = g_strdup ("object");
+  new_object->attribute_names = g_new0 (char *, 2);
+  new_object->attribute_names[0] = g_strdup ("class");
+  new_object->attribute_values = g_new0 (char *, 2);
+  new_object->attribute_values[0] = g_strdup ("GtkAssistantPage");
+  new_object->children = packing->children;
+  packing->children = NULL;
+
+  prop = g_new0 (Element, 1);
+  prop->element_name = g_strdup ("property");
+  prop->attribute_names = g_new0 (char *, 2);
+  prop->attribute_names[0] = g_strdup ("name");
+  prop->attribute_values = g_new0 (char *, 2);
+  prop->attribute_values[0] = g_strdup ("child");
+  prop->children = g_list_append (prop->children, object);
+  new_object->children = g_list_append (new_object->children, prop);
+      
+  g_list_free (child->children);
+  child->children = g_list_append (NULL, new_object);
+
+  return child;
+}
+
+static void
+rewrite_assistant (Element      *element,
+                   MyParserData *data)
+{
+  GList *l, *new_children;
+
+  new_children = NULL;
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+      new_children = g_list_append (new_children, rewrite_assistant_child (child, data));
+    }
+
+  g_list_free (element->children);
+  element->children = new_children;
+}
+
 static gboolean
 simplify_element (Element      *element,
                   MyParserData *data)
@@ -617,6 +682,10 @@ simplify_element (Element      *element,
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkStack"))
         rewrite_stack (element, data);
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkAssistant"))
+        rewrite_assistant (element, data);
           
       if (g_str_equal (element->element_name, "property") &&
           property_has_been_removed (element, data))
