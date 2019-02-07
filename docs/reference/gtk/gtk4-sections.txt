@@ -211,8 +211,11 @@ gtk_adjustment_get_type
 <FILE>gtkassistant</FILE>
 <TITLE>GtkAssistant</TITLE>
 GtkAssistant
+GtkAssistantPage
 GtkAssistantClass
 gtk_assistant_new
+gtk_assistant_get_page
+gtk_assistant_page_get_child
 gtk_assistant_get_current_page
 gtk_assistant_set_current_page
 gtk_assistant_get_n_pages
