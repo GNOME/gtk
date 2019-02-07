@@ -119,17 +119,14 @@ parse_template_error (const gchar  *message,
   return TRUE;
 }
 
-void
-do_validate (int *argc, char ***argv)
+static gboolean
+validate_file (const char *filename)
 {
   GtkBuilder *builder;
   GError *error = NULL;
   gint ret;
   gchar *class_name = NULL;
   gchar *parent_name = NULL;
-  const gchar *filename;
-
-  filename = (*argv)[1];
 
   builder = gtk_builder_new ();
   ret = gtk_builder_add_from_file (builder, filename, &error);
@@ -144,9 +141,24 @@ do_validate (int *argc, char ***argv)
         }
       else
         {
-          g_printerr ("%s\n", error->message);
-          exit (1);
+          g_printerr ("%s: %s\n", filename, error->message);
+          return FALSE;
         }
     }
+
+  return TRUE;
 }
 
+void
+do_validate (int *argc, char ***argv)
+{
+  int i;
+
+  for (i = 1; i < *argc; i++)
+    {
+      if (!validate_file ((*argv)[i]))
+        exit (1);
+    }
+
+  return;
+}
