@@ -46,6 +46,7 @@ usage (void)
              "\n"
              "Simplify Options:\n"
              "  --replace          Replace the file\n"
+             "  --3to4             Convert from a GTK3 to GTK4\n"
              "\n"
              "Preview Options:\n"
              "  --id=ID            Preview only the named object\n"
