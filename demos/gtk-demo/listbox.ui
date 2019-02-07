@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
-  <!-- interface-requires gtkdemo 3.10 -->
   <object class="GtkMenu" id="menu1">
     <child>
       <object class="GtkMenuItem" id="menuitem1">
@@ -53,7 +50,7 @@
                     <property name="valign">baseline</property>
                     <property name="label" translatable="0">Username</property>
                     <attributes>
-                      <attribute name="weight" value="bold"/>
+                      <attribute name="weight" value="bold"></attribute>
                     </attributes>
                   </object>
                 </child>

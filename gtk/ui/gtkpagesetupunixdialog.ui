@@ -1,25 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkListStore" id="custom_paper_list">
     <columns>
-      <!-- column-name paper -->
       <column type="GObject"/>
     </columns>
   </object>
   <object class="GtkListStore" id="page_setup_list">
     <columns>
-      <!-- column-name page-setup -->
       <column type="GObject"/>
-      <!-- column-name is-separator -->
       <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="printer_list">
     <columns>
-      <!-- column-name name -->
       <column type="gchararray"/>
-      <!-- column-name printer -->
       <column type="GObject"/>
     </columns>
   </object>

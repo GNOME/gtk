@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtkprivate 3.10 -->
-  <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkAdjustment" id="a_adj">
     <property name="upper">1</property>
     <property name="step-increment">0.01</property>
@@ -27,7 +24,6 @@
     <signal name="value-changed" handler="hsv_changed" object="GtkColorEditor" swapped="yes"/>
   </object>
   <template class="GtkColorEditor" parent="GtkBox">
-    <property name="can-focus">False</property>
     <signal name="notify::visible" handler="dismiss_current_popup" swapped="no"/>
     <child>
       <object class="GtkOverlay" id="overlay">

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkComboBox" parent="GtkBin">
     <child>
       <object class="GtkBox" id="box">

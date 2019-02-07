@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkDialog" parent="GtkWindow">
     <property name="window-position">center-on-parent</property>
     <property name="type-hint">dialog</property>
@@ -15,14 +13,9 @@
         <style>
           <class name="dialog-vbox"/>
         </style>
-
-        <!-- This is empty here and just exists so we can expose it as
-             GtkDialog API. -->
         <child>
-          <object class="GtkBox" id="content_area">
-          </object>
+          <object class="GtkBox" id="content_area"/>
         </child>
-
         <child>
           <object class="GtkBox" id="action_box">
             <style>
