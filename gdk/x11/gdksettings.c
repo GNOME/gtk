@@ -69,6 +69,7 @@ static const struct {
   {"Gtk/RecentFilesMaxAge",   "gtk-recent-files-max-age"},
   {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"},
   {"Gtk/KeynavUseCaret",      "gtk-keynav-use-caret"},
+  {"Gtk/DialogsAlwaysCSD",    "gtk-dialogs-always-csd"},
 
   /* These are here in order to be recognized, but are not sent to
      gtk as they are handled internally by gdk: */

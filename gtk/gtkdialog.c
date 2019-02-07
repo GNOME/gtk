@@ -457,12 +457,17 @@ gtk_dialog_constructed (GObject *object)
 {
   GtkDialog *dialog = GTK_DIALOG (object);
   GtkDialogPrivate *priv = dialog->priv;
+  GtkSettings *settings;
+  gboolean always_csd;
 
   G_OBJECT_CLASS (gtk_dialog_parent_class)->constructed (object);
 
   priv->constructed = TRUE;
   if (priv->use_header_bar == -1)
     priv->use_header_bar = FALSE;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (dialog));
+  g_object_get (settings, "gtk-dialogs-always-csd", &always_csd, NULL);
 
   if (priv->use_header_bar)
     {
@@ -493,6 +498,13 @@ gtk_dialog_constructed (GObject *object)
       update_suggested_action (dialog);
 
       g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
+    }
+  else if (always_csd)
+    {
+      g_object_set (priv->headerbar, "has-subtitle", FALSE, NULL);
+      GtkStyleContext *context = gtk_widget_get_style_context (priv->headerbar);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLEBAR);
+      gtk_style_context_add_class (context, "default-decoration");
     }
   else
     {

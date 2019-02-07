@@ -224,7 +224,8 @@ enum {
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED,
   PROP_LONG_PRESS_TIME,
-  PROP_KEYNAV_USE_CARET
+  PROP_KEYNAV_USE_CARET,
+  PROP_DIALOGS_ALWAYS_CSD
 };
 
 /* --- prototypes --- */
@@ -1767,6 +1768,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEYNAV_USE_CARET);
+
+  /**
+   * GtkSettings:gtk-dialogs-always-csd:
+   *
+   * Whether GTK+ should make all dialogs use client side decorations
+   * even when gtk-dialogs-use-header is set to false
+   *
+   * Since: 3.22
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-dialogs-always-csd",
+                                                                   P_("Whether to always use CSD in dialogs"),
+                                                                   P_("Whether to always use CSD in dialogs"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_DIALOGS_ALWAYS_CSD);
 }
 
 static void
