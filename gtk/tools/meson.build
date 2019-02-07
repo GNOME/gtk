@@ -1,7 +1,11 @@
 # Installed tools
 gtk_tools = [
   ['gtk4-query-settings', ['gtk-query-settings.c']],
-  ['gtk4-builder-tool', ['gtk-builder-tool.c']],
+  ['gtk4-builder-tool', ['gtk-builder-tool.c',
+                         'gtk-builder-tool-simplify.c',
+                         'gtk-builder-tool-validate.c',
+                         'gtk-builder-tool-enumerate.c',
+                         'gtk-builder-tool-preview.c']],
   ['gtk4-update-icon-cache', ['updateiconcache.c', 'gtkiconcachevalidator.c']],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c', 'gdkpixbufutils.c']],
 ]
