@@ -62,6 +62,7 @@ struct _GtkMenuPrivate
   gint               rect_anchor_dx;
   gint               rect_anchor_dy;
   GdkWindowTypeHint  menu_type_hint;
+  gboolean           emulated_move_to_rect;
 
   guint toggle_size;
   guint accel_size;
