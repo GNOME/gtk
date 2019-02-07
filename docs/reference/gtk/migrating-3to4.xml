@@ -306,6 +306,21 @@
     </section>
 
     <section>
+      <title>Stop using GtkButtonBox</title>
+      <para>
+        GtkButtonBox has been removed. Use a GtkBox instead.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to GtkButton API changes</title>
+      <para>
+        GtkBox no longer has pack-start and -end. Pack your widgets in the 
+        correct order, or reorder them as necessary.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkHeaderBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
