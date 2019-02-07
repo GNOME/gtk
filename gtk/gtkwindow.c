@@ -474,7 +474,6 @@ static GdkScreen *gtk_window_check_screen (GtkWindow *window);
 static GtkWindowGeometryInfo* gtk_window_get_geometry_info         (GtkWindow    *window,
                                                                     gboolean      create);
 
-static void     gtk_window_move_resize               (GtkWindow    *window);
 static gboolean gtk_window_compare_hints             (GdkGeometry  *geometry_a,
                                                       guint         flags_a,
                                                       GdkGeometry  *geometry_b,
@@ -9751,7 +9750,7 @@ gtk_window_constrain_position (GtkWindow    *window,
     }
 }
 
-static void
+void
 gtk_window_move_resize (GtkWindow *window)
 {
   /* Overview:
