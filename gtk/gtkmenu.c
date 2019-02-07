@@ -5267,6 +5267,7 @@ gtk_menu_position (GtkMenu  *menu,
    * the right place to popup the menu.
    */
   gtk_widget_realize (priv->toplevel);
+  gtk_window_move_resize (GTK_WINDOW (priv->toplevel));
 
   if (!gtk_widget_get_visible (priv->toplevel))
     gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), priv->menu_type_hint);
