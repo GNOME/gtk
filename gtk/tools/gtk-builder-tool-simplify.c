@@ -27,25 +27,215 @@
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
 
+typedef struct Element Element;
+struct Element {
+  Element *parent;
+  char *element_name;
+  char **attribute_names;
+  char **attribute_values;
+  char *data;
+  GList *children;
+};
+
+static void
+free_element (gpointer data)
+{
+  Element *element = data;
+  g_list_free_full (element->children, free_element);
+  g_free (element->element_name);
+  g_strfreev (element->attribute_names);
+  g_strfreev (element->attribute_values);
+  g_free (element->data);
+  g_free (element);
+}
 
 typedef struct {
-  GtkBuilder *builder;
-  GList *classes;
-  gboolean packing;
-  gboolean packing_started;
-  gboolean cell_packing;
-  gboolean cell_packing_started;
-  gint in_child;
-  gint child_started;
-  gchar **attribute_names;
-  gchar **attribute_values;
+  Element *root;
+  Element *current;
   GString *value;
-  gboolean unclosed_starttag;
-  gint indent;
+  GtkBuilder *builder;
   char *input_filename;
   char *output_filename;
   FILE *output;
+  gboolean convert3to4;
 } MyParserData;
+
+static void
+start_element (GMarkupParseContext  *context,
+               const char           *element_name,
+               const char          **attribute_names,
+               const char          **attribute_values,
+               gpointer              user_data,
+               GError              **error)
+{
+  MyParserData *data = user_data;
+  Element *elt;
+
+  elt = g_new0 (Element, 1);
+  elt->parent = data->current;
+  elt->element_name = g_strdup (element_name);
+  elt->attribute_names = g_strdupv ((char **)attribute_names);
+  elt->attribute_values = g_strdupv ((char **)attribute_values);
+
+  if (data->current)
+    data->current->children = g_list_append (data->current->children, elt);
+  data->current = elt;
+
+  if (data->root == NULL)
+    data->root = elt;
+
+  g_string_truncate (data->value, 0);
+}
+
+static void
+end_element (GMarkupParseContext  *context,
+             const char           *element_name,
+             gpointer              user_data,
+             GError              **error)
+{
+  MyParserData *data = user_data;
+
+  data->current->data = g_strdup (data->value->str);
+
+  data->current = data->current->parent;
+}
+
+static void
+text (GMarkupParseContext  *context,
+      const char           *text,
+      gsize                 text_len,
+      gpointer              user_data,
+      GError              **error)
+{
+  MyParserData *data = user_data;
+
+  if (data->value)
+    {
+      g_string_append_len (data->value, text, text_len);
+      return;
+    }
+}
+
+static GMarkupParser parser = {
+  start_element,
+  end_element,
+  text,
+  NULL,
+  NULL
+};
+
+static const gchar *
+canonical_boolean_value (MyParserData *data,
+                         const gchar  *string)
+{
+  GValue value = G_VALUE_INIT;
+  gboolean b = FALSE;
+
+  if (gtk_builder_value_from_string_type (data->builder, G_TYPE_BOOLEAN, string, &value, NULL))
+    b = g_value_get_boolean (&value);
+
+  return b ? "1" : "0";
+}
+
+/* A number of properties unfortunately can't be omitted even
+ * if they are nominally set to their default value. In many
+ * cases, this is due to subclasses not overriding the default
+ * value from the superclass.
+ */
+static gboolean
+needs_explicit_setting (const gchar  *class_name,
+                        const gchar  *property_name,
+                        gboolean      packing)
+{
+  struct _Prop {
+    const char *class;
+    const char *property;
+    gboolean packing;
+  } props[] = {
+    { "GtkAboutDialog", "program-name", 0 },
+    { "GtkCalendar", "year", 0 },
+    { "GtkCalendar", "month", 0 },
+    { "GtkCalendar", "day", 0 },
+    { "GtkPlacesSidebar", "show-desktop", 0 },
+    { "GtkRadioButton", "draw-indicator", 0 },
+    { "GtkGrid", "left-attach", 1 },
+    { "GtkGrid", "top-attach", 1 },
+    { "GtkWidget", "hexpand", 0 },
+    { "GtkWidget", "vexpand", 0 },
+  };
+  gchar *canonical_name;
+  gboolean found;
+  gint k;
+
+  canonical_name = g_strdup (property_name);
+  g_strdelimit (canonical_name, "_", '-');
+
+  found = FALSE;
+  for (k = 0; k < G_N_ELEMENTS (props); k++)
+    {
+      if (strcmp (class_name, props[k].class) == 0 &&
+          strcmp (canonical_name, props[k].property) == 0 &&
+          packing == props[k].packing)
+        {
+          found = TRUE;
+          break;
+        }
+    }
+
+  g_free (canonical_name);
+
+  return found;
+}
+
+static gboolean
+is_pcdata_element (Element *element)
+{
+  /* elements that can contain text */
+  const char *names[] = {
+    "property",
+    "attribute",
+    "action-widget",
+    "pattern",
+    "mime-type",
+    "col",
+    "item",
+    NULL,
+  };
+
+  if (g_str_equal (element->element_name, "property") &&
+      (g_strv_contains ((const char * const *)element->attribute_names, "bind-source") ||
+       g_strv_contains ((const char * const *)element->attribute_names, "bind_source")))
+    return FALSE;
+
+  if (g_strv_contains (names, element->element_name))
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+is_container_element (Element *element)
+{
+  /* elements that just hold a list of things and
+   * can be omitted when they have no children
+   */
+  const char *names[] = {
+    "packing",
+    "cell-packing",
+    "attributes",
+    "action-widgets",
+    "patterns",
+    "mime-types",
+    "attributes",
+    "row",
+    "items"
+  };
+
+  if (g_strv_contains (names, element->element_name))
+    return TRUE;
+
+  return FALSE;
+}
 
 static void
 canonicalize_key (gchar *key)
@@ -71,7 +261,9 @@ canonicalize_key (gchar *key)
 static GParamSpec *
 get_property_pspec (MyParserData *data,
                     const gchar  *class_name,
-                    const gchar  *property_name)
+                    const gchar  *property_name,
+                    gboolean      packing,
+                    gboolean      cell_packing)
 {
   GType type;
   GObjectClass *class;
@@ -81,9 +273,7 @@ get_property_pspec (MyParserData *data,
   type = g_type_from_name (class_name);
   if (type == G_TYPE_INVALID)
     {
-      GtkBuilder *builder = gtk_builder_new ();
-      type = gtk_builder_get_type_from_name (builder, class_name);
-      g_object_unref (builder);
+      type = gtk_builder_get_type_from_name (data->builder, class_name);
       if (type == G_TYPE_INVALID)
         return NULL;
     }
@@ -91,9 +281,9 @@ get_property_pspec (MyParserData *data,
   class = g_type_class_ref (type);
   canonical_name = g_strdup (property_name);
   canonicalize_key (canonical_name);
-  if (data->packing)
+  if (packing)
     pspec = gtk_container_class_find_child_property (class, canonical_name);
-  else if (data->cell_packing)
+  else if (cell_packing)
     {
       GObjectClass *cell_class;
 
@@ -110,25 +300,26 @@ get_property_pspec (MyParserData *data,
   return pspec;
 }
 
-
 static gboolean
 value_is_default (MyParserData *data,
                   const gchar  *class_name,
                   const gchar  *property_name,
-                  const gchar  *value_string)
+                  const gchar  *value_string,
+                  gboolean      packing,
+                  gboolean      cell_packing)
 {
   GValue value = { 0, };
   gboolean ret;
   GError *error = NULL;
   GParamSpec *pspec;
 
-  pspec = get_property_pspec (data, class_name, property_name);
+  pspec = get_property_pspec (data, class_name, property_name, packing, cell_packing);
 
   if (pspec == NULL)
     {
-      if (data->packing)
+      if (packing)
         g_printerr (_("Packing property %s::%s not found\n"), class_name, property_name);
-      else if (data->cell_packing)
+      else if (cell_packing)
         g_printerr (_("Cell property %s::%s not found\n"), class_name, property_name);
       else
         g_printerr (_("Property %s::%s not found\n"), class_name, property_name);
@@ -151,73 +342,163 @@ value_is_default (MyParserData *data,
   return ret;
 }
 
+static const char *
+get_class_name (Element *element)
+{
+  Element *parent = element->parent;
+  int i;
+
+  if (g_str_equal (element->element_name, "object"))
+    parent = element;
+
+  if (g_str_equal (parent->element_name, "packing"))
+    parent = parent->parent->parent; /* child - object */
+
+  if (g_str_equal (parent->element_name, "object"))
+    {
+      for (i = 0; parent->attribute_names[i]; i++)
+        {
+          if (g_str_equal (parent->attribute_names[i], "class"))
+            return parent->attribute_values[i];
+        }
+    }
+  else if (g_str_equal (parent->element_name, "template"))
+    {
+      for (i = 0; parent->attribute_names[i]; i++)
+        {
+          if (g_str_equal (parent->attribute_names[i], "parent"))
+            return parent->attribute_values[i];
+        }
+    }
+
+  return NULL;
+}
+
 static gboolean
-property_is_boolean (MyParserData *data,
-                     const gchar  *class_name,
-                     const gchar  *property_name)
+property_is_boolean (Element      *element,
+                     MyParserData *data)
 {
   GParamSpec *pspec;
+  gboolean packing = FALSE;
+  const char *class_name;
+  const char *property_name;
+  int i;
 
-  pspec = get_property_pspec (data, class_name, property_name);
+  if (g_str_equal (element->parent->element_name, "packing"))
+    packing = TRUE;
+
+  class_name = get_class_name (element);
+  property_name = "";
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (strcmp (element->attribute_names[i], "name") == 0)
+        property_name = (const gchar *)element->attribute_values[i];
+    }
+
+  pspec = get_property_pspec (data, class_name, property_name, packing, FALSE);
   if (pspec)
     return G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN;
 
   return FALSE;
 }
 
-static const gchar *
-canonical_boolean_value (MyParserData *data,
-                         const gchar  *string)
+static gboolean
+property_can_be_omitted (Element      *element,
+                         MyParserData *data)
 {
-  GValue value = G_VALUE_INIT;
-  gboolean b = FALSE;
+  gint i;
+  gboolean bound;
+  gboolean translatable;
+  const gchar *class_name;
+  const gchar *property_name;
+  const gchar *value_string;
+  gboolean packing = FALSE;
+  gboolean cell_packing = FALSE;
 
-  if (gtk_builder_value_from_string_type (data->builder, G_TYPE_BOOLEAN, string, &value, NULL))
-    b = g_value_get_boolean (&value);
+  if (g_str_equal (element->parent->element_name, "packing"))
+    packing = TRUE;
+  if (g_str_equal (element->parent->element_name, "cell-packing"))
+    cell_packing = TRUE;
 
-  return b ? "1" : "0";
+  class_name = get_class_name (element);
+  property_name = "";
+  value_string = element->data;
+
+  bound = FALSE;
+  translatable = FALSE;
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (strcmp (element->attribute_names[i], "bind-source") == 0 ||
+          strcmp (element->attribute_names[i], "bind_source") == 0)
+        bound = TRUE;
+      else if (strcmp (element->attribute_names[i], "translatable") == 0)
+        translatable = TRUE;
+      else if (strcmp (element->attribute_names[i], "name") == 0)
+        property_name = (const gchar *)element->attribute_values[i];
+    }
+
+  if (translatable)
+    return FALSE;
+
+  if (bound)
+    return FALSE;
+
+  if (needs_explicit_setting (class_name, property_name, packing))
+    return FALSE;
+
+  return value_is_default (data, class_name, property_name, value_string, packing, cell_packing);
 }
 
-/* A number of properties unfortunately can't be omitted even
- * if they are nominally set to their default value. In many
- * cases, this is due to subclasses not overriding the default
- * value from the superclass.
- */
 static gboolean
-needs_explicit_setting (MyParserData *data,
-                        const gchar  *class_name,
-                        const gchar  *property_name)
+property_has_been_removed (Element      *element,
+                           MyParserData *data)
 {
+  const gchar *class_name;
+  const gchar *property_name;
+  gboolean packing = FALSE;
   struct _Prop {
     const char *class;
     const char *property;
     gboolean packing;
   } props[] = {
-    { "GtkAboutDialog", "program-name", 0 },
-    { "GtkCalendar", "year", 0 },
-    { "GtkCalendar", "month", 0 },
-    { "GtkCalendar", "day", 0 },
-    { "GtkPlacesSidebar", "show-desktop", 0 },
-    { "GtkRadioButton", "draw-indicator", 0 },
-    { "GtkGrid", "left-attach", 1 },
-    { "GtkGrid", "top-attach", 1 },
-    { "GtkWidget", "hexpand", 0 },
-    { "GtkWidget", "vexpand", 0 },
-    { NULL, NULL, 0 }
+    { "GtkActionBar", "position", 1 },
+    { "GtkButtonBox", "secondary", 1 },
+    { "GtkButtonBox", "non-homogeneous", 1 },
+    { "GtkBox", "pack-type", 1 },
+    { "GtkBox", "position", 1 },
+    { "GtkHeaderBar", "position", 1 },
+    { "GtkPopoverMenu", "position", 1 },
+    { "GtkMenu", "left-attach", 1 },
+    { "GtkMenu", "right-attach", 1 },
+    { "GtkMenu", "top-attach", 1 },
+    { "GtkMenu", "bottom-attach", 1 }
   };
   gchar *canonical_name;
   gboolean found;
-  gint k;
+  gint i, k;
+
+  if (g_str_equal (element->parent->element_name, "packing"))
+    packing = TRUE;
+
+  class_name = get_class_name (element);
+  property_name = "";
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (strcmp (element->attribute_names[i], "name") == 0)
+        property_name = (const gchar *)element->attribute_values[i];
+    }
 
   canonical_name = g_strdup (property_name);
   g_strdelimit (canonical_name, "_", '-');
 
   found = FALSE;
-  for (k = 0; props[k].class; k++)
+  for (k = 0; k < G_N_ELEMENTS (props); k++)
     {
       if (strcmp (class_name, props[k].class) == 0 &&
           strcmp (canonical_name, props[k].property) == 0 &&
-          data->packing == props[k].packing)
+          packing == props[k].packing)
         {
           found = TRUE;
           break;
@@ -229,388 +510,176 @@ needs_explicit_setting (MyParserData *data,
   return found;
 }
 
-static void
-maybe_start_packing (MyParserData *data)
+static Element *
+rewrite_stack_child (Element *child, MyParserData *data)
 {
-  if (data->packing)
+  Element *object = NULL;
+  Element *packing = NULL;
+  Element *new_object;
+  Element *prop;
+  GList *l;
+
+  if (!g_str_equal (child->element_name, "child"))
+    return child;
+
+  for (l = child->children; l; l = l->next)
     {
-      if (!data->packing_started)
-        {
-          g_fprintf (data->output, "%*s<packing>\n", data->indent, "");
-          data->indent += 2;
-          data->packing_started = TRUE;
-        }
+      Element *elt = l->data;
+      if (g_str_equal (elt->element_name, "object"))
+        object = elt;
+      else if (g_str_equal (elt->element_name, "packing"))
+        packing = elt;
     }
+
+  if (!packing)
+    return child;
+
+  new_object = g_new0 (Element, 1);
+  new_object->element_name = g_strdup ("object");
+  new_object->attribute_names = g_new0 (char *, 2);
+  new_object->attribute_names[0] = g_strdup ("class");
+  new_object->attribute_values = g_new0 (char *, 2);
+  new_object->attribute_values[0] = g_strdup ("GtkStackPage");
+  new_object->children = packing->children;
+  packing->children = NULL;
+
+  prop = g_new0 (Element, 1);
+  prop->element_name = g_strdup ("property");
+  prop->attribute_names = g_new0 (char *, 2);
+  prop->attribute_names[0] = g_strdup ("name");
+  prop->attribute_values = g_new0 (char *, 2);
+  prop->attribute_values[0] = g_strdup ("child");
+  prop->children = g_list_append (prop->children, object);
+  new_object->children = g_list_append (new_object->children, prop);
+      
+  g_list_free (child->children);
+  child->children = g_list_append (NULL, new_object);
+
+  return child;
 }
 
 static void
-maybe_start_cell_packing (MyParserData *data)
+rewrite_stack (Element      *element,
+               MyParserData *data)
 {
-  if (data->cell_packing)
+  GList *l, *new_children;
+
+  new_children = NULL;
+  for (l = element->children; l; l = l->next)
     {
-      if (!data->cell_packing_started)
-        {
-          g_fprintf (data->output, "%*s<cell-packing>\n", data->indent, "");
-          data->indent += 2;
-          data->cell_packing_started = TRUE;
-        }
-    }
-}
-
-static void
-maybe_start_child (MyParserData *data)
-{
-  if (data->in_child > 0)
-    {
-      if (data->child_started < data->in_child)
-        {
-          g_fprintf (data->output, "%*s<child>\n", data->indent, "");
-          data->indent += 2;
-          data->child_started += 1;
-        }
-    }
-}
-
-static void
-maybe_emit_property (MyParserData *data)
-{
-  gint i;
-  gboolean bound;
-  gboolean translatable;
-  gchar *escaped;
-  const gchar *class_name;
-  const gchar *property_name;
-  const gchar *value_string;
-
-  class_name = (const gchar *)data->classes->data;
-  property_name = "";
-  value_string = (const gchar *)data->value->str;
-
-  bound = FALSE;
-  translatable = FALSE;
-  for (i = 0; data->attribute_names[i]; i++)
-    {
-      if (strcmp (data->attribute_names[i], "bind-source") == 0 ||
-          strcmp (data->attribute_names[i], "bind_source") == 0)
-        bound = TRUE;
-      else if (strcmp (data->attribute_names[i], "translatable") == 0)
-        translatable = TRUE;
-      else if (strcmp (data->attribute_names[i], "name") == 0)
-        property_name = (const gchar *)data->attribute_values[i];
+      Element *child = l->data;
+      new_children = g_list_append (new_children, rewrite_stack_child (child, data));
     }
 
-  if (!translatable &&
-      !bound &&
-      !needs_explicit_setting (data, class_name, property_name))
-    {
-      for (i = 0; data->attribute_names[i]; i++)
-        {
-          if (strcmp (data->attribute_names[i], "name") == 0)
-            {
-              if (data->classes == NULL)
-                break;
-
-              if (value_is_default (data, class_name, property_name, value_string))
-                return;
-            }
-        }
-    }
-
-  maybe_start_packing (data);
-  maybe_start_cell_packing (data);
-
-  g_fprintf (data->output, "%*s<property", data->indent, "");
-  for (i = 0; data->attribute_names[i]; i++)
-    {
-      if (!translatable &&
-          (strcmp (data->attribute_names[i], "comments") == 0 ||
-           strcmp (data->attribute_names[i], "context") == 0))
-        continue;
-
-      escaped = g_markup_escape_text (data->attribute_values[i], -1);
-
-      if (strcmp (data->attribute_names[i], "name") == 0)
-        canonicalize_key (escaped);
-
-      g_fprintf (data->output, " %s=\"%s\"", data->attribute_names[i], escaped);
-      g_free (escaped);
-    }
-
-  if (bound)
-    {
-      g_fprintf (data->output, "/>\n");
-    }
-  else
-    {
-      g_fprintf (data->output, ">");
-      if (property_is_boolean (data, class_name, property_name))
-        {
-          g_fprintf (data->output, "%s", canonical_boolean_value (data, value_string));
-        }
-      else
-        {
-          escaped = g_markup_escape_text (value_string, -1);
-          g_fprintf (data->output, "%s", escaped);
-          g_free (escaped);
-        }
-      g_fprintf (data->output, "</property>\n");
-    }
-}
-
-static void
-maybe_close_starttag (MyParserData *data)
-{
-  if (data->unclosed_starttag)
-    {
-      g_fprintf (data->output, ">\n");
-      data->unclosed_starttag = FALSE;
-    }
+  g_list_free (element->children);
+  element->children = new_children;
 }
 
 static gboolean
-stack_is (GMarkupParseContext *context,
-          ...)
+simplify_element (Element      *element,
+                  MyParserData *data)
 {
-  va_list args;
-  gchar *s, *p;
-  const GSList *stack;
+  GList *l;
 
-  stack = g_markup_parse_context_get_element_stack (context);
-
-  va_start (args, context);
-  s = va_arg (args, gchar *);
-  while (s)
+  if (!is_pcdata_element (element))
+    g_clear_pointer (&element->data, g_free);
+  else if (g_str_equal (element->element_name, "property") &&
+           property_is_boolean (element, data))
     {
-      if (stack == NULL)
-        {
-          va_end (args);
-          return FALSE;
-        }
-
-      p = (gchar *)stack->data;
-      if (strcmp (s, p) != 0)
-        {
-          va_end (args);
-          return FALSE;
-        }
-
-      s = va_arg (args, gchar *);
-      stack = stack->next;
+      const char *b = canonical_boolean_value (data, element->data);
+      g_free (element->data);
+      element->data = g_strdup (b);
     }
 
-  va_end (args);
-  return TRUE;
+  l = element->children;
+  while (l)
+    {
+      GList *next = l->next;
+      Element *child = l->data;
+      if (simplify_element (child, data))
+        {
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+        }
+      l = next;
+    }
+
+  if (is_container_element (element) && element->children == NULL)
+    return TRUE;
+
+  if (g_str_equal (element->element_name, "property") &&
+      property_can_be_omitted (element, data))
+    return TRUE;
+
+  if (data->convert3to4)
+    {
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkStack"))
+        rewrite_stack (element, data);
+          
+      if (g_str_equal (element->element_name, "property") &&
+          property_has_been_removed (element, data))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
-start_element (GMarkupParseContext  *context,
-               const gchar          *element_name,
-               const gchar         **attribute_names,
-               const gchar         **attribute_values,
-               gpointer              user_data,
-               GError              **error)
+simplify_tree (MyParserData *data)
 {
-  gint i;
-  gchar *escaped;
-  MyParserData *data = user_data;
+  simplify_element (data->root, data);
+}
 
-  maybe_close_starttag (data);
-
-  if (strcmp (element_name, "property") == 0)
+static void
+dump_element (Element *element,
+              FILE    *output,
+              int      indent)
+{
+  g_fprintf (output, "%*s<%s", indent, "", element->element_name);
+  if (element->attribute_names[0])
     {
-      g_assert (data->attribute_names == NULL);
-      g_assert (data->attribute_values == NULL);
-      g_assert (data->value == NULL);
-
-      data->attribute_names = g_strdupv ((gchar **)attribute_names);
-      data->attribute_values = g_strdupv ((gchar **)attribute_values);
-      data->value = g_string_new ("");
-
-      return;
-    }
-  else if (strcmp (element_name, "packing") == 0)
-    {
-      data->packing = TRUE;
-      data->packing_started = FALSE;
-
-      return;
-    }
-  else if (strcmp (element_name, "cell-packing") == 0)
-    {
-      data->cell_packing = TRUE;
-      data->cell_packing_started = FALSE;
-
-      return;
-    }
-  else if (strcmp (element_name, "child") == 0)
-    {
-      data->in_child += 1;
-
-      if (attribute_names[0] == NULL)
-        return;
-
-      data->child_started += 1;
-    }
-  else if (strcmp (element_name, "attribute") == 0)
-    {
-      /* attribute in label has no content */
-      if (data->classes == NULL ||
-          strcmp ((gchar *)data->classes->data, "GtkLabel") != 0)
-        data->value = g_string_new ("");
-    }
-  else if (stack_is (context, "item", "items", NULL) ||
-           stack_is (context, "action-widget", "action-widgets", NULL) ||
-           stack_is (context, "mime-type", "mime-types", NULL) ||
-           stack_is (context, "pattern", "patterns", NULL) ||
-           stack_is (context, "application", "applications", NULL) ||
-           stack_is (context, "col", "row", "data", NULL) ||
-           stack_is (context, "mark", "marks", NULL) ||
-           stack_is (context, "action", "accessibility", NULL))
-    {
-      data->value = g_string_new ("");
-    }
-  else if (strcmp (element_name, "placeholder") == 0)
-    {
-      return;
-    }
-  else if (strcmp (element_name, "object") == 0 ||
-           strcmp (element_name, "template") == 0)
-    {
-      maybe_start_child (data);
-
-      for (i = 0; attribute_names[i]; i++)
+      int i;
+      for (i = 0; element->attribute_names[i]; i++)
         {
-          if (strcmp (attribute_names[i], "class") == 0)
+          char *escaped = g_markup_escape_text (element->attribute_values[i], -1);
+          g_fprintf (output, " %s=\"%s\"", element->attribute_names[i], escaped);
+          g_free (escaped);
+        }
+    }
+  if (element->children || element->data)
+    {
+      g_fprintf (output, ">");
+
+      if (element->children)
+        {
+          GList *l;
+
+          g_fprintf (output, "\n");
+          for (l = element->children; l; l = l->next)
             {
-              data->classes = g_list_prepend (data->classes,
-                                              g_strdup (attribute_values[i]));
-              break;
+              Element *child = l->data;
+              dump_element (child, output, indent + 2);
             }
+          g_fprintf (output, "%*s", indent, "");
         }
-    }
-
-  g_fprintf (data->output, "%*s<%s", data->indent, "", element_name);
-  for (i = 0; attribute_names[i]; i++)
-    {
-      escaped = g_markup_escape_text (attribute_values[i], -1);
-      g_fprintf (data->output, " %s=\"%s\"", attribute_names[i], escaped);
-      g_free (escaped);
-    }
-  data->unclosed_starttag = TRUE;
-  data->indent += 2;
-}
-
-static void
-end_element (GMarkupParseContext  *context,
-             const gchar          *element_name,
-             gpointer              user_data,
-             GError              **error)
-{
-  MyParserData *data = user_data;
-
-  if (strcmp (element_name, "property") == 0)
-    {
-      maybe_emit_property (data);
-
-      g_clear_pointer (&data->attribute_names, g_strfreev);
-      g_clear_pointer (&data->attribute_values, g_strfreev);
-      g_string_free (data->value, TRUE);
-      data->value = NULL;
-      return;
-    }
-  else if (strcmp (element_name, "packing") == 0)
-    {
-      data->packing = FALSE;
-      if (!data->packing_started)
-        return;
-    }
-  else if (strcmp (element_name, "cell-packing") == 0)
-    {
-      data->cell_packing = FALSE;
-      if (!data->cell_packing_started)
-        return;
-    }
-  else if (strcmp (element_name, "child") == 0)
-    {
-      data->in_child -= 1;
-      if (data->child_started == data->in_child)
-        return;
-      data->child_started -= 1;
-    }
-  else if (strcmp (element_name, "placeholder") == 0)
-    {
-      return;
-    }
-  else if (strcmp (element_name, "object") == 0 ||
-           strcmp (element_name, "template") == 0)
-    {
-      g_free (data->classes->data);
-      data->classes = g_list_delete_link (data->classes, data->classes);
-    }
-
-  if (data->value != NULL)
-    {
-      gchar *escaped;
-
-      if (data->unclosed_starttag)
-        g_fprintf (data->output, ">");
-
-      escaped = g_markup_escape_text (data->value->str, -1);
-      g_fprintf (data->output, "%s</%s>\n", escaped, element_name);
-      g_free (escaped);
-
-      g_string_free (data->value, TRUE);
-      data->value = NULL;
+      else
+        {
+          char *escaped = g_markup_escape_text (element->data, -1);
+          g_fprintf (output, "%s", escaped);
+          g_free (escaped);
+        }
+      g_fprintf (output, "</%s>\n", element->element_name);
     }
   else
-    {
-      if (data->unclosed_starttag)
-        g_fprintf (data->output, "/>\n");
-      else
-        g_fprintf (data->output, "%*s</%s>\n", data->indent - 2, "", element_name);
-    }
-
-  data->indent -= 2;
-  data->unclosed_starttag = FALSE;
+    g_fprintf (output, "/>\n"); 
 }
 
 static void
-text (GMarkupParseContext  *context,
-      const gchar          *text,
-      gsize                 text_len,
-      gpointer              user_data,
-      GError              **error)
+dump_tree (MyParserData *data)
 {
-  MyParserData *data = user_data;
-
-  if (data->value)
-    {
-      g_string_append_len (data->value, text, text_len);
-      return;
-    }
+  dump_element (data->root, data->output, 0);
 }
-
-static void
-passthrough (GMarkupParseContext  *context,
-             const gchar          *text,
-             gsize                 text_len,
-             gpointer              user_data,
-             GError              **error)
-{
-  MyParserData *data = user_data;
-
-  maybe_close_starttag (data);
-
-  g_fprintf (data->output, "%*s%s\n", data->indent, "", text);
-}
-
-GMarkupParser parser = {
-  start_element,
-  end_element,
-  text,
-  passthrough,
-  NULL
-};
 
 void
 do_simplify (int          *argc,
@@ -624,6 +693,7 @@ do_simplify (int          *argc,
   GOptionContext *ctx;
   const GOptionEntry entries[] = {
     { "replace", 0, 0, G_OPTION_ARG_NONE, &replace, NULL, NULL },
+    { "3to4", 0, 0, G_OPTION_ARG_NONE, &data.convert3to4, NULL, NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
     { NULL, }
   };
@@ -674,19 +744,10 @@ do_simplify (int          *argc,
       exit (1);
     }
 
-  data.builder = gtk_builder_new ();
-  data.classes = NULL;
-  data.attribute_names = NULL;
-  data.attribute_values = NULL;
-  data.value = NULL;
-  data.packing = FALSE;
-  data.packing_started = FALSE;
-  data.cell_packing = FALSE;
-  data.cell_packing_started = FALSE;
-  data.in_child = 0;
-  data.child_started = 0;
-  data.unclosed_starttag = FALSE;
-  data.indent = 0;
+
+  data.root = NULL;
+  data.current = NULL;
+  data.value = g_string_new ("");
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
@@ -694,6 +755,12 @@ do_simplify (int          *argc,
       g_printerr (_("Can’t parse file: %s\n"), error->message);
       exit (1);
     }
+
+  data.builder = gtk_builder_new ();
+
+  simplify_tree (&data);
+
+  dump_tree (&data);
 
   fclose (data.output);
 
