@@ -54,7 +54,7 @@ typedef struct {
   Element *current;
   GString *value;
   GtkBuilder *builder;
-  char *input_filename;
+  const char *input_filename;
   char *output_filename;
   FILE *output;
   gboolean convert3to4;
@@ -228,7 +228,8 @@ is_container_element (Element *element)
     "mime-types",
     "attributes",
     "row",
-    "items"
+    "items",
+    NULL
   };
 
   if (g_strv_contains (names, element->element_name))
@@ -318,11 +319,11 @@ value_is_default (MyParserData *data,
   if (pspec == NULL)
     {
       if (packing)
-        g_printerr (_("Packing property %s::%s not found\n"), class_name, property_name);
+        g_printerr (_("%s: Packing property %s::%s not found\n"), data->input_filename, class_name, property_name);
       else if (cell_packing)
-        g_printerr (_("Cell property %s::%s not found\n"), class_name, property_name);
+        g_printerr (_("%s: Cell property %s::%s not found\n"), data->input_filename, class_name, property_name);
       else
-        g_printerr (_("Property %s::%s not found\n"), class_name, property_name);
+        g_printerr (_("%s: Property %s::%s not found\n"), data->input_filename, class_name, property_name);
       return FALSE;
     }
   else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_OBJECT))
@@ -330,7 +331,7 @@ value_is_default (MyParserData *data,
 
   if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
-      g_printerr (_("Couldn’t parse value for %s::%s: %s\n"), class_name, property_name, error->message);
+      g_printerr (_("%s: Couldn’t parse value for %s::%s: %s\n"), data->input_filename, class_name, property_name, error->message);
       g_error_free (error);
       ret = FALSE;
     }
@@ -681,51 +682,19 @@ dump_tree (MyParserData *data)
   dump_element (data->root, data->output, 0);
 }
 
-void
-do_simplify (int          *argc,
-             const char ***argv)
+gboolean
+simplify_file (const char *filename,
+               gboolean    replace,
+               gboolean    convert3to4)
 {
   GMarkupParseContext *context;
   gchar *buffer;
   MyParserData data;
-  gboolean replace = FALSE;
-  char **filenames = NULL;
-  GOptionContext *ctx;
-  const GOptionEntry entries[] = {
-    { "replace", 0, 0, G_OPTION_ARG_NONE, &replace, NULL, NULL },
-    { "3to4", 0, 0, G_OPTION_ARG_NONE, &data.convert3to4, NULL, NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
-    { NULL, }
-  };
   GError *error = NULL;
 
-  ctx = g_option_context_new (NULL);
-  g_option_context_set_help_enabled (ctx, FALSE);
-  g_option_context_add_main_entries (ctx, entries, NULL);
-
-  if (!g_option_context_parse (ctx, argc, (char ***)argv, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      g_error_free (error);
-      exit (1);
-    }
-
-  g_option_context_free (ctx);
-
-  if (filenames == NULL)
-    {
-      g_printerr ("No .ui file specified\n");
-      exit (1);
-    }
-
-  if (g_strv_length (filenames) > 1)
-    {
-      g_printerr ("Can only simplify a single .ui file\n");
-      exit (1);
-    }
-
-  data.input_filename = filenames[0];
+  data.input_filename = filename;
   data.output_filename = NULL;
+  data.convert3to4 = convert3to4;
 
   if (replace)
     {
@@ -738,12 +707,11 @@ do_simplify (int          *argc,
       data.output = stdout;
     }
 
-  if (!g_file_get_contents (filenames[0], &buffer, NULL, &error))
+  if (!g_file_get_contents (filename, &buffer, NULL, &error))
     {
-      g_printerr (_("Can’t load file: %s\n"), error->message);
-      exit (1);
+      g_printerr (_("Can’t load '%s': %s\n"), filename, error->message);
+      return FALSE;
     }
-
 
   data.root = NULL;
   data.current = NULL;
@@ -752,8 +720,8 @@ do_simplify (int          *argc,
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
-      g_printerr (_("Can’t parse file: %s\n"), error->message);
-      exit (1);
+      g_printerr (_("Can’t parse '%s': %s\n"), filename, error->message);
+      return FALSE;
     }
 
   data.builder = gtk_builder_new ();
@@ -771,14 +739,65 @@ do_simplify (int          *argc,
 
       if (!g_file_get_contents (data.output_filename, &content, &length, &error))
         {
-          g_printerr ("Failed to read %s: %s\n", data.output_filename, error->message);
-          exit (1);
+          g_printerr (_("Failed to read '%s': %s\n"), data.output_filename, error->message);
+          return FALSE;
         }
 
       if (!g_file_set_contents (data.input_filename, content, length, &error))
         {
-          g_printerr ("Failed to write %s: %s\n", data.input_filename, error->message);
-          exit (1);
+          g_printerr (_("Failed to write %s: '%s'\n"), data.input_filename, error->message);
+          return FALSE;
         }
+    }
+
+  return TRUE;
+}
+
+void
+do_simplify (int          *argc,
+             const char ***argv)
+{
+  gboolean replace = FALSE;
+  gboolean convert3to4 = FALSE;
+  char **filenames = NULL;
+  GOptionContext *ctx;
+  const GOptionEntry entries[] = {
+    { "replace", 0, 0, G_OPTION_ARG_NONE, &replace, NULL, NULL },
+    { "3to4", 0, 0, G_OPTION_ARG_NONE, &convert3to4, NULL, NULL },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
+    { NULL, }
+  };
+  GError *error = NULL;
+  int i;
+
+  ctx = g_option_context_new (NULL);
+  g_option_context_set_help_enabled (ctx, FALSE);
+  g_option_context_add_main_entries (ctx, entries, NULL);
+
+  if (!g_option_context_parse (ctx, argc, (char ***)argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      exit (1);
+    }
+
+  g_option_context_free (ctx);
+
+  if (filenames == NULL)
+    {
+      g_printerr (_("No .ui file specified\n"));
+      exit (1);
+    }
+
+  if (g_strv_length (filenames) > 1 && !replace)
+    {
+      g_printerr (_("Can only simplify a single .ui file without --replace\n"));
+      exit (1);
+    }
+
+  for (i = 0; filenames[i]; i++)
+    {
+      if (!simplify_file (filenames[i], replace, convert3to4))
+        exit (1);
     }
 }
