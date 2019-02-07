@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Fishbowl</property>
     <child type="titlebar">
@@ -69,8 +67,8 @@
         </child>
         <child>
           <object class="GtkToggleButton" id="changes_prevent">
-            <property name="active" bind-source="changes_allow" bind-property="active" bind-flags="bidirectional|invert-boolean">True</property>
-            <property name="visible" bind-source="changes_prevent" bind-property="active" bind-flags="invert-boolean">False</property>
+            <property name="active" bind-source="changes_allow" bind-property="active" bind-flags="bidirectional|invert-boolean"/>
+            <property name="visible" bind-source="changes_prevent" bind-property="active" bind-flags="invert-boolean"/>
             <property name="icon-name">changes-prevent</property>
             <property name="relief">none</property>
           </object>
@@ -84,7 +82,7 @@
       <object class="GtkFishbowl" id="bowl">
         <property name="visible">True</property>
         <property name="animating">True</property>
-        <property name="benchmark" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean">True</property>
+        <property name="benchmark" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean"/>
       </object>
     </child>
   </object>

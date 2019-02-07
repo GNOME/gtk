@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <requires lib="gtk+" version="3.16"/>
   <object class="GtkListStore" id="completion_store">
     <columns>
-      <!-- column-name name -->
       <column type="gchararray"/>
-      <!-- column-name uri -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -27,7 +24,7 @@
             <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server Addresses</property>
             <attributes>
-              <attribute name="weight" value="bold"/>
+              <attribute name="weight" value="bold"></attribute>
             </attributes>
             <style>
               <class name="dim-label"/>
@@ -66,7 +63,7 @@
                 <property name="label" translatable="yes">Available Protocols</property>
                 <property name="xalign">0</property>
                 <attributes>
-                  <attribute name="weight" value="bold"/>
+                  <attribute name="weight" value="bold"></attribute>
                 </attributes>
               </object>
               <packing>
@@ -79,7 +76,7 @@
                 <property name="label" translatable="yes">Prefix</property>
                 <property name="xalign">0</property>
                 <attributes>
-                  <attribute name="weight" value="bold"/>
+                  <attribute name="weight" value="bold"></attribute>
                 </attributes>
               </object>
               <packing>
@@ -96,146 +93,153 @@
     <child>
       <object class="GtkStack" id="recent_servers_stack">
         <child>
-          <object class="GtkBox">
-            <property name="vexpand">1</property>
-            <property name="valign">center</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">18</property>
-            <child>
-              <object class="GtkImage">
-                <property name="pixel-size">48</property>
-                <property name="icon-name">network-server-symbolic</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-          </object>
-          <packing>
+          <object class="GtkStackPage">
             <property name="name">empty</property>
-          </packing>
+            <property name="widget">
+              <object class="GtkBox">
+                <property name="vexpand">1</property>
+                <property name="valign">center</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">18</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="pixel-size">48</property>
+                    <property name="icon-name">network-server-symbolic</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <property name="margin">12</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Recent Servers</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="can-focus">1</property>
-                <property name="vexpand">1</property>
-                <property name="shadow-type">in</property>
-                <property name="min-content-width">250</property>
-                <property name="min-content-height">200</property>
+          <object class="GtkStackPage">
+            <property name="name">list</property>
+            <property name="widget">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <property name="margin">12</property>
                 <child>
-                  <object class="GtkViewport">
-                    <property name="shadow-type">none</property>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Recent Servers</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"></attribute>
+                    </attributes>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="can-focus">1</property>
+                    <property name="vexpand">1</property>
+                    <property name="shadow-type">in</property>
+                    <property name="min-content-width">250</property>
+                    <property name="min-content-height">200</property>
                     <child>
-                      <object class="GtkListBox" id="recent_servers_listbox">
-                        <property name="can-focus">1</property>
-                        <property name="selection-mode">none</property>
-                        <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
+                      <object class="GtkViewport">
+                        <property name="shadow-type">none</property>
+                        <child>
+                          <object class="GtkListBox" id="recent_servers_listbox">
+                            <property name="can-focus">1</property>
+                            <property name="selection-mode">none</property>
+                            <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
-          <packing>
-            <property name="name">list</property>
-          </packing>
         </child>
       </object>
     </child>
   </object>
   <template class="GtkPlacesView" parent="GtkBox">
-    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkStack" id="stack">
         <property name="vhomogeneous">0</property>
         <property name="transition-type">crossfade</property>
         <child>
-          <object class="GtkFrame">
-            <property name="shadow-type">none</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="hexpand">1</property>
-                <property name="vexpand">1</property>
+          <object class="GtkStackPage">
+            <property name="name">browse</property>
+            <property name="widget">
+              <object class="GtkFrame">
+                <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkViewport">
-                    <property name="shadow-type">none</property>
+                  <object class="GtkScrolledWindow">
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                     <child>
-                      <object class="GtkListBox" id="listbox">
-                        <property name="can-focus">1</property>
-                        <property name="selection-mode">none</property>
-                        <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
+                      <object class="GtkViewport">
+                        <property name="shadow-type">none</property>
+                        <child>
+                          <object class="GtkListBox" id="listbox">
+                            <property name="can-focus">1</property>
+                            <property name="selection-mode">none</property>
+                            <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
-          <packing>
-            <property name="name">browse</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="hexpand">1</property>
-            <property name="vexpand">1</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkImage">
-                <property name="pixel-size">72</property>
-                <property name="icon-name">edit-find-symbolic</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">No results found</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                  <attribute name="scale" value="1.44"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Try a different search</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-          </object>
-          <packing>
+          <object class="GtkStackPage">
             <property name="name">empty-search</property>
-          </packing>
+            <property name="widget">
+              <object class="GtkBox">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="pixel-size">72</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">No results found</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"></attribute>
+                      <attribute name="scale" value="1.44"></attribute>
+                    </attributes>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Try a different search</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
         </child>
       </object>
     </child>
@@ -253,7 +257,7 @@
             <property name="mnemonic-widget">address_entry</property>
             <property name="use-underline">1</property>
             <attributes>
-              <attribute name="weight" value="bold"/>
+              <attribute name="weight" value="bold"></attribute>
             </attributes>
           </object>
         </child>

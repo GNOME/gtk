@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkInspectorMiscInfo" parent="GtkScrolledWindow">
-    <property name="expand">0</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>

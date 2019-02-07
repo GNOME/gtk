@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkWindow" id="window1">
     <child type="titlebar">
       <object class="GtkHeaderBar">
@@ -56,7 +54,7 @@
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.color</property>
-            <property name="action-target">'red'</property>
+            <property name="action-target">&apos;red&apos;</property>
             <property name="text">Red</property>
             <property name="inverted">1</property>
           </object>
@@ -64,7 +62,7 @@
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.color</property>
-            <property name="action-target">'green'</property>
+            <property name="action-target">&apos;green&apos;</property>
             <property name="text">Green</property>
             <property name="inverted">1</property>
           </object>
@@ -72,7 +70,7 @@
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.color</property>
-            <property name="action-target">'blue'</property>
+            <property name="action-target">&apos;blue&apos;</property>
             <property name="text">Blue</property>
             <property name="inverted">1</property>
           </object>
@@ -99,8 +97,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSeparator">
-          </object>
+          <object class="GtkSeparator"/>
         </child>
         <child>
           <object class="GtkModelButton">

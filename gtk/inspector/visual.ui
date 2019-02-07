@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkAdjustment" id="scale_adjustment">
     <property name="lower">1</property>
@@ -26,8 +25,6 @@
   </object>
   <template class="GtkInspectorVisual" parent="GtkScrolledWindow">
     <property name="hscrollbar-policy">never</property>
-    <property name="vscrollbar-policy">automatic</property>
-    <property name="expand">0</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -224,7 +221,7 @@
                             <property name="draw-value">0</property>
                             <property name="hexpand">1</property>
                             <marks>
-                              <mark value="1.0" position="top"></mark>
+                              <mark value="1.0" position="top"/>
                             </marks>
                           </object>
                         </child>
@@ -348,7 +345,7 @@
                             <property name="draw-value">0</property>
                             <property name="hexpand">1</property>
                             <marks>
-                              <mark value="0.0" position="top"></mark>
+                              <mark value="0.0" position="top"/>
                             </marks>
                           </object>
                         </child>

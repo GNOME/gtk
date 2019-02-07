@@ -1,22 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkTreeStore" id="treestore">
     <columns>
-      <!-- column-name NAME -->
       <column type="gchararray"/>
-      <!-- column-name TITLE -->
       <column type="gchararray"/>
-      <!-- column-name FILENAME -->
       <column type="gchararray"/>
-      <!-- column-name FUNC -->
       <column type="gpointer"/>
-      <!-- column-name STYLE -->
       <column type="gint"/>
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="window">
-    <style><class name="devel"/></style>
+    <style>
+      <class name="devel"/>
+    </style>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <property name="title">GTK Demo</property>

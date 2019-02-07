@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Stack</property>
     <child>
@@ -20,38 +18,44 @@
             <property name="can-focus">1</property>
             <property name="transition-type">crossfade</property>
             <child>
-              <object class="GtkImage">
-                <property name="margin-top">20</property>
-                <property name="margin-bottom">20</property>
-                <property name="icon-name">gtk3-demo</property>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">page1</property>
                 <property name="title" translatable="yes">Page 1</property>
-              </packing>
+                <property name="widget">
+                  <object class="GtkImage">
+                    <property name="margin-top">20</property>
+                    <property name="margin-bottom">20</property>
+                    <property name="icon-name">gtk3-demo</property>
+                  </object>
+                </property>
+              </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
-                <property name="label" translatable="yes">Page 2</property>
-                <property name="can-focus">1</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">page2</property>
                 <property name="title" translatable="yes">Page 2</property>
-              </packing>
+                <property name="widget">
+                  <object class="GtkCheckButton">
+                    <property name="label" translatable="yes">Page 2</property>
+                    <property name="can-focus">1</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                  </object>
+                </property>
+              </object>
             </child>
             <child>
-              <object class="GtkSpinner">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="active">1</property>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">page3</property>
                 <property name="icon-name">face-laugh-symbolic</property>
-              </packing>
+                <property name="widget">
+                  <object class="GtkSpinner">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="active">1</property>
+                  </object>
+                </property>
+              </object>
             </child>
           </object>
           <packing>
