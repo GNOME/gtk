@@ -213,6 +213,7 @@ static void
 gtk_assistant_page_init (GtkAssistantPage *page)
 {
   page->type = GTK_ASSISTANT_PAGE_CONTENT;
+  page->has_padding = TRUE;
 }
 
 static void
