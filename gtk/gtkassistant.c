@@ -248,7 +248,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                                       P_("The type of the assistant page"),
                                                       GTK_TYPE_ASSISTANT_PAGE_TYPE,
                                                       GTK_ASSISTANT_PAGE_CONTENT,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkAssistantPage:title:
@@ -261,7 +261,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                                         P_("Page title"),
                                                         P_("The title of the assistant page"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkAssistantPage:complete:
@@ -276,14 +276,14 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                                          P_("Page complete"),
                                                          P_("Whether all required fields on the page have been filled out"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_HAS_PADDING,
                                    g_param_spec_boolean ("has-padding",
                                                          P_("Has padding"),
                                                          P_("Whether the assistant adds padding around the page"),
                                                          TRUE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_CHILD,
                                    g_param_spec_object ("child",
@@ -1268,7 +1268,8 @@ gtk_assistant_page_set_property (GObject      *object,
       if (page->has_padding != g_value_get_boolean (value))
         {
           page->has_padding = g_value_get_boolean (value);
-          g_object_set (page->box, "margin", page->has_padding ? 12 : 0, NULL);
+          if (page->box)
+            g_object_set (page->box, "margin", page->has_padding ? 12 : 0, NULL);
           g_object_notify (G_OBJECT (page), "has-padding");
         }
       break;
