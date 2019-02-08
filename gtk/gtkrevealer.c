@@ -28,7 +28,6 @@
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -108,8 +107,6 @@ static void gtk_revealer_measure (GtkWidget      *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
-static void     gtk_revealer_snapshot                            (GtkWidget     *widget,
-                                                                  GtkSnapshot   *snapshot);
 
 static void     gtk_revealer_set_position (GtkRevealer *revealer,
                                            gdouble      pos);
@@ -126,7 +123,8 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->current_pos = 0.0;
   priv->target_pos = 0.0;
 
-  gtk_widget_set_has_surface ((GtkWidget*) revealer, FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (revealer), FALSE);
+  gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
 
 static void
@@ -228,7 +226,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->unmap = gtk_revealer_unmap;
   widget_class->size_allocate = gtk_revealer_real_size_allocate;
   widget_class->measure = gtk_revealer_measure;
-  widget_class->snapshot = gtk_revealer_snapshot;
 
   container_class->add = gtk_revealer_real_add;
 
@@ -577,39 +574,6 @@ gtk_revealer_measure (GtkWidget      *widget,
   scale = get_child_size_scale (self, orientation);
   *minimum = ceil (*minimum * scale);
   *natural = ceil (*natural * scale);
-}
-
-static void
-gtk_revealer_snapshot (GtkWidget   *widget,
-                       GtkSnapshot *snapshot)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  GtkRevealerTransitionType transition;
-  GtkWidget *child;
-  gboolean clip_child;
-
-  child = gtk_bin_get_child (GTK_BIN (revealer));
-  if (child == NULL || !gtk_widget_get_mapped (child))
-    return;
-
-  transition = effective_transition (revealer);
-  clip_child = transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
-               transition != GTK_REVEALER_TRANSITION_TYPE_CROSSFADE &&
-               gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER;
-  if (clip_child)
-    {
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT(
-                                  0, 0,
-                                  gtk_widget_get_width (widget),
-                                  gtk_widget_get_height (widget)
-                              ));
-      gtk_widget_snapshot_child (widget, child, snapshot);
-      gtk_snapshot_pop (snapshot);
-    }
-  else
-    gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
 /**
