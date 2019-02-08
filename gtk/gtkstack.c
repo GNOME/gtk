@@ -220,8 +220,6 @@ gtk_stack_page_get_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   GtkStackPage *info = GTK_STACK_PAGE (object);
-  GtkWidget *stack = gtk_widget_get_parent (GTK_WIDGET (info->widget));
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (stack));
 
   switch (property_id)
     {
@@ -242,7 +240,15 @@ gtk_stack_page_get_property (GObject      *object,
       break;
 
     case CHILD_PROP_POSITION:
-      g_value_set_int (value, g_list_index (priv->children, info));
+      if (info->widget)
+        {
+          GtkWidget *stack = gtk_widget_get_parent (GTK_WIDGET (info->widget));
+          GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (stack));
+
+          g_value_set_int (value, g_list_index (priv->children, info));
+        }
+      else
+        g_value_set_int (value, 0);
       break;
 
     case CHILD_PROP_NEEDS_ATTENTION:
