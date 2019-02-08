@@ -463,6 +463,7 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
     gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, old_position - position + 1);
   else
     gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, position - old_position + 1);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
 }
 
 /**
