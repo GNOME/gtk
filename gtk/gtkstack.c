@@ -171,7 +171,6 @@ enum
   CHILD_PROP_NAME,
   CHILD_PROP_TITLE,
   CHILD_PROP_ICON_NAME,
-  CHILD_PROP_POSITION,
   CHILD_PROP_NEEDS_ATTENTION,
   CHILD_PROP_VISIBLE,
   LAST_CHILD_PROP
@@ -246,18 +245,6 @@ gtk_stack_page_get_property (GObject      *object,
       g_value_set_string (value, info->icon_name);
       break;
 
-    case CHILD_PROP_POSITION:
-      if (info->widget)
-        {
-          GtkWidget *stack = gtk_widget_get_parent (GTK_WIDGET (info->widget));
-          GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (stack));
-
-          g_value_set_int (value, g_list_index (priv->children, info));
-        }
-      else
-        g_value_set_int (value, 0);
-      break;
-
     case CHILD_PROP_NEEDS_ATTENTION:
       g_value_set_boolean (value, info->needs_attention);
       break;
@@ -271,10 +258,6 @@ gtk_stack_page_get_property (GObject      *object,
       break;
     }
 }
-
-static void reorder_child (GtkStack  *stack,
-                           GtkWidget *child,
-                           gint       position);
 
 static void
 gtk_stack_page_set_property (GObject      *object,
@@ -338,11 +321,6 @@ gtk_stack_page_set_property (GObject      *object,
       g_object_notify_by_pspec (object, pspec);
       break;
 
-    case CHILD_PROP_POSITION:
-      if (stack)
-        reorder_child (GTK_STACK (stack), info->widget, g_value_get_int (value));
-      break;
-
     case CHILD_PROP_NEEDS_ATTENTION:
       if (info->needs_attention != g_value_get_boolean (value))
         {
@@ -401,14 +379,6 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          P_("The icon name of the child page"),
                          NULL,
                          GTK_PARAM_READWRITE);
-
-  stack_child_props[CHILD_PROP_POSITION] =
-    g_param_spec_int ("position",
-                      P_("Position"),
-                      P_("The index of the child in the parent"),
-                      -1, G_MAXINT,
-                      0,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:needs-attention:
@@ -839,59 +809,6 @@ find_child_info_for_widget (GtkStack  *stack,
 
   return NULL;
 }
-
-static void
-reorder_child (GtkStack  *stack,
-               GtkWidget *child,
-               gint       position)
-{
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GList *l;
-  GList *old_link = NULL;
-  GList *new_link = NULL;
-  GtkStackPage *child_info = NULL;
-  gint num = 0;
-
-  l = priv->children;
-
-  /* Loop to find the old position and link of child, new link of child and
-   * total number of children. new_link will be NULL if the child should be
-   * moved to the end (in case of position being < 0 || >= num)
-   */
-  while (l && (new_link == NULL || old_link == NULL))
-    {
-      /* Record the new position if found */
-      if (position == num)
-        new_link = l;
-
-      if (old_link == NULL)
-        {
-          GtkStackPage *info;
-          info = l->data;
-
-          /* Keep trying to find the current position and link location of the child */
-          if (info->widget == child)
-            {
-              old_link = l;
-              child_info = info;
-            }
-        }
-
-      l = l->next;
-      num++;
-    }
-
-  g_return_if_fail (old_link != NULL);
-
-  if (old_link == new_link || (old_link->next == NULL && new_link == NULL))
-    return;
-
-  priv->children = g_list_delete_link (priv->children, old_link);
-  priv->children = g_list_insert_before (priv->children, new_link, child_info);
-
-  gtk_container_child_notify_by_pspec (GTK_CONTAINER (stack), child, stack_child_props[CHILD_PROP_POSITION]);
-}
-
 
 static inline gboolean
 is_left_transition (GtkStackTransitionType transition_type)
@@ -1479,8 +1396,6 @@ gtk_stack_add_page (GtkStack     *stack,
 
   g_signal_connect (child_info->widget, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);
-
-  g_object_notify_by_pspec (G_OBJECT (child_info), stack_child_props[CHILD_PROP_POSITION]);
 
   if (priv->visible_child == NULL &&
       gtk_widget_get_visible (child_info->widget))
