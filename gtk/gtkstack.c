@@ -2345,6 +2345,17 @@ transform_from (GBinding *binding,
   return TRUE;
 }
 
+/**
+ * gtk_stack_get_pages:
+ * @stack: a #GtkStack
+ *
+ * Returns a #GListModel that contains the children of the stack,
+ * and can be used to keep and up-to-date view. The model also
+ * implements #GtkSelectionModel and can be used to track and
+ * modify the visible child.
+ *
+ * Returns: (transfer full): a #GtkSelectionModel for the stack's children
+ */
 GtkSelectionModel *
 gtk_stack_get_pages (GtkStack *stack)
 {
