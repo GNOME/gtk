@@ -731,6 +731,8 @@ gtk_im_context_wayland_focus_in (GtkIMContext *context)
   if (!global->text_input)
     return;
 
+  if (context_wayland->gesture)
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (context_wayland->gesture));
   global->current = context;
 
   if (global->focused)
@@ -764,8 +766,29 @@ gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
                                             GdkRectangle *rect)
 {
   GtkIMContextWayland *context_wayland;
+  int side;
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+
+  if (context_wayland->cursor_rect.x == rect->x &&
+      context_wayland->cursor_rect.y == rect->y &&
+      context_wayland->cursor_rect.width == rect->width &&
+      context_wayland->cursor_rect.height == rect->height)
+    return;
+
+  /* Reset the gesture if the cursor changes too far (eg. clicking
+   * between disjoint positions in the text).
+   *
+   * Still Allow some jittering (a square almost double the cursor rect height
+   * on either side) as clicking on the exact same position between characters
+   * is hard.
+   */
+  side = context_wayland->cursor_rect.height;
+
+  if (context_wayland->gesture &&
+      (ABS (rect->x - context_wayland->cursor_rect.x) >= side ||
+       ABS (rect->y - context_wayland->cursor_rect.y) >= side))
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (context_wayland->gesture));
 
   context_wayland->cursor_rect = *rect;
   notify_cursor_location (context_wayland);
