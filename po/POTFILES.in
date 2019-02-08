@@ -351,6 +351,7 @@ gtk/paper_names_offsets.c
 gtk/script-names.c
 gtk/tools/encodesymbolic.c
 gtk/tools/gtk-builder-tool.c
+gtk/tools/gtk-builder-tool-simplify.c
 gtk/tools/gtk-launch.c
 gtk/tools/updateiconcache.c
 gtk/ui/gtkaboutdialog.ui
