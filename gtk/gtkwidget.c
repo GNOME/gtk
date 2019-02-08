@@ -11623,10 +11623,10 @@ gtk_widget_get_opacity (GtkWidget *widget)
 
 /**
  * gtk_widget_set_overflow:
- * @self: a #GtkWidget
+ * @widget: a #GtkWidget
  * @overflow: desired overflow
  *
- * Sets how @self treats content that is drawn outside the widget's content area.
+ * Sets how @widget treats content that is drawn outside the widget's content area.
  * See the definition of #GtkOverflow for details.
  *
  * This setting is provided for widget implementations and should not be used by
@@ -11635,37 +11635,37 @@ gtk_widget_get_opacity (GtkWidget *widget)
  * The default value is %GTK_OVERFLOW_VISIBLE.
  **/
 void
-gtk_widget_set_overflow (GtkWidget   *self,
+gtk_widget_set_overflow (GtkWidget   *widget,
                          GtkOverflow  overflow)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  g_return_if_fail (GTK_IS_WIDGET (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (priv->overflow == overflow)
     return;
 
   priv->overflow = overflow;
 
-  gtk_widget_queue_draw (self);
+  gtk_widget_queue_draw (widget);
 
-  g_object_notify_by_pspec (G_OBJECT (self), widget_props[PROP_OVERFLOW]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_OVERFLOW]);
 }
 
 /**
  * gtk_widget_get_overflow:
- * @self: a #GtkWidget
+ * @widget: a #GtkWidget
  *
  * Returns the value set via gtk_widget_set_overflow().
  *
  * Returns: The widget's overflow.
  **/
 GtkOverflow
-gtk_widget_get_overflow (GtkWidget *self)
+gtk_widget_get_overflow (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  g_return_val_if_fail (GTK_IS_WIDGET (self), GTK_OVERFLOW_VISIBLE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_OVERFLOW_VISIBLE);
 
   return priv->overflow;
 }
