@@ -570,7 +570,6 @@ gtk_public_headers = files([
   'gtkshortcutsshortcut.h',
   'gtkshortcutswindow.h',
   'gtkshow.h',
-  'gtksingleselection.h',
   'gtksizegroup.h',
   'gtksizerequest.h',
   'gtkslicelistmodel.h',
