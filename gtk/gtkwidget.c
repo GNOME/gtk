@@ -1314,7 +1314,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_OVERFLOW] =
       g_param_spec_enum ("overflow",
                          P_("Overflow"),
-                         P_("How content outside the widget's content area is treated"),
+                         P_("How content outside the widget’s content area is treated"),
                          GTK_TYPE_OVERFLOW,
                          GTK_OVERFLOW_VISIBLE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

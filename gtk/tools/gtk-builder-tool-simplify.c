@@ -772,7 +772,7 @@ simplify_file (const char *filename,
 
   if (!g_file_get_contents (filename, &buffer, NULL, &error))
     {
-      g_printerr (_("Can’t load '%s': %s\n"), filename, error->message);
+      g_printerr (_("Can’t load “%s”: %s\n"), filename, error->message);
       return FALSE;
     }
 
@@ -783,7 +783,7 @@ simplify_file (const char *filename,
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
-      g_printerr (_("Can’t parse '%s': %s\n"), filename, error->message);
+      g_printerr (_("Can’t parse “%s”: %s\n"), filename, error->message);
       return FALSE;
     }
 
@@ -802,13 +802,13 @@ simplify_file (const char *filename,
 
       if (!g_file_get_contents (data.output_filename, &content, &length, &error))
         {
-          g_printerr (_("Failed to read '%s': %s\n"), data.output_filename, error->message);
+          g_printerr (_("Failed to read “%s”: %s\n"), data.output_filename, error->message);
           return FALSE;
         }
 
       if (!g_file_set_contents (data.input_filename, content, length, &error))
         {
-          g_printerr (_("Failed to write %s: '%s'\n"), data.input_filename, error->message);
+          g_printerr (_("Failed to write %s: “%s”\n"), data.input_filename, error->message);
           return FALSE;
         }
     }
