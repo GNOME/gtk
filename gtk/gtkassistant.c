@@ -1773,6 +1773,8 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->has_padding = TRUE;
 
   return gtk_assistant_add_page (assistant, page_info, position);
+
+  g_object_unref (page_info);
 }
 
 static int
@@ -1815,7 +1817,7 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   if (position < 0 || position > n_pages)
     position = n_pages;
 
-  priv->pages = g_list_insert (priv->pages, page_info, position);
+  priv->pages = g_list_insert (priv->pages, g_object_ref (page_info), position);
 
   if (position == 0)
     sibling = NULL;
