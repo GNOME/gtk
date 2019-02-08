@@ -555,6 +555,10 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "visible-child-name"))
         continue;
 
+      if (pspec->owner_type == GTK_TYPE_STACK_PAGE && /* Can't change position without a stack */
+          g_str_equal (pspec->name, "position"))
+        continue;
+
       if (pspec->owner_type == GTK_TYPE_POPOVER_MENU &&
           g_str_equal (pspec->name, "visible-submenu"))
         continue;
