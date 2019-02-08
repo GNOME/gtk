@@ -21,6 +21,17 @@
 
 #include "gtkbuilder.h"
 
+enum {
+  TAG_PROPERTY,
+  TAG_MENU,
+  TAG_REQUIRES,
+  TAG_OBJECT,
+  TAG_CHILD,
+  TAG_SIGNAL,
+  TAG_INTERFACE,
+  TAG_TEMPLATE,
+};
+
 typedef struct {
   guint tag_type;
 } CommonInfo;

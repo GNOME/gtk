@@ -14,6 +14,7 @@ gtk_application_get_type
 gtk_application_window_get_type
 gtk_aspect_frame_get_type
 gtk_assistant_get_type
+gtk_assistant_page_get_type
 gtk_bin_get_type
 gtk_box_get_type
 gtk_builder_get_type
@@ -155,6 +156,7 @@ gtk_snapshot_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type
+gtk_stack_page_get_type
 gtk_stack_sidebar_get_type
 gtk_stack_switcher_get_type
 gtk_statusbar_get_type

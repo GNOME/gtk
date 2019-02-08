@@ -211,8 +211,11 @@ gtk_adjustment_get_type
 <FILE>gtkassistant</FILE>
 <TITLE>GtkAssistant</TITLE>
 GtkAssistant
+GtkAssistantPage
 GtkAssistantClass
 gtk_assistant_new
+gtk_assistant_get_page
+gtk_assistant_page_get_child
 gtk_assistant_get_current_page
 gtk_assistant_set_current_page
 gtk_assistant_get_n_pages
@@ -6242,10 +6245,13 @@ gtk_header_bar_get_type
 <FILE>gtkstack</FILE>
 <TITLE>GtkStack</TITLE>
 GtkStack
+GtkStackPage
 gtk_stack_new
 gtk_stack_add_named
 gtk_stack_add_titled
 gtk_stack_get_child_by_name
+gtk_stack_get_page
+gtk_stack_page_get_child
 gtk_stack_set_visible_child
 gtk_stack_get_visible_child
 gtk_stack_set_visible_child_name

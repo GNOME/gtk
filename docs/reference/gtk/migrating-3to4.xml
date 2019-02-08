@@ -306,11 +306,37 @@
     </section>
 
     <section>
+      <title>Stop using GtkButtonBox</title>
+      <para>
+        GtkButtonBox has been removed. Use a GtkBox instead.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to GtkButton API changes</title>
+      <para>
+        GtkBox no longer has pack-start and -end. Pack your widgets in the 
+        correct order, or reorder them as necessary.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkHeaderBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
         the more accurate name gtk_header_bar_set_show_title_buttons(). The corresponding
         getter and the property itself have also been renamed.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to GtkStack API changes</title>
+      <para>
+        The GtkStack child properties have been converted into child meta object.
+        Instead of gtk_container_child_set (stack, child, …), you can now use
+        g_object_set (gtk_stack_get_page (stack, child), …). In .ui files, the
+        GtkStackPage objects must be created explicitly, and take the child widget
+        as property. gtk4-builder-tool can help with this conversion.
       </para>
     </section>
 
@@ -559,6 +585,14 @@
       </para>
     </section>
 
+    <section>
+      <title>Convert .ui files</title>
+      <para>
+        The simplify command of gtk4-builder-tool has gained a --3to4 option, which
+        can help with some of the required changes in .ui files, such as converting
+        child properties to child meta objects.
+      </para>
+    </section>
   </section>
 
 </chapter>

@@ -556,7 +556,7 @@ set_needs_attention (GtkWidget *page, gboolean needs_attention)
   GtkWidget *stack;
 
   stack = gtk_widget_get_parent (page);
-  gtk_container_child_set (GTK_CONTAINER (stack), page,
+  g_object_set (gtk_stack_get_page (GTK_STACK (stack), page),
                            "needs-attention", needs_attention,
                            NULL);
 }

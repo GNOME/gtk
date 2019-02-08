@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
   <object class="IconStore" id="store"/>
   <object class="GtkTreeModelFilter" id="filter_model">
     <property name="child-model">store</property>
   </object>
   <template class="IconBrowserWindow" parent="GtkApplicationWindow">
-    <style><class name="devel"/></style>
+    <style>
+      <class name="devel"/>
+    </style>
     <property name="title" translatable="yes">Icon Browser</property>
     <property name="default-width">1024</property>
     <property name="default-height">768</property>

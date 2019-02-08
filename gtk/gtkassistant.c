@@ -41,6 +41,10 @@
  * handling buttons, you can use the #GTK_ASSISTANT_PAGE_CUSTOM page
  * type and handle buttons yourself.
  *
+ * GtkAssistant maintains a #GtkAssistantPage object for each added
+ * child, which holds additional per-child properties. You
+ * obtain the #GtkAssistantPage for a child with gtk_assistant_get_page().
+ * 
  * # GtkAssistant as GtkBuildable
  *
  * The GtkAssistant implementation of the #GtkBuildable interface
@@ -48,8 +52,9 @@
  * “action_area”.
  *
  * To add pages to an assistant in #GtkBuilder, simply add it as a
- * child to the GtkAssistant object, and set its child properties
- * as necessary.
+ * child to the GtkAssistant object. If you need to set per-object
+ * properties, create a #GtkAssistantPage object explicitly, and
+ * set the child widget as a property on it.
  *
  * # CSS nodes
  *
@@ -79,10 +84,9 @@
 #include "a11y/gtkwindowaccessible.h"
 
 
-typedef struct _GtkAssistantPage GtkAssistantPage;
-
 struct _GtkAssistantPage
 {
+  GObject instance;
   GtkAssistantPageType type;
   guint      complete     : 1;
   guint      complete_set : 1;
@@ -94,6 +98,11 @@ struct _GtkAssistantPage
   GtkWidget *page;
   GtkWidget *regular_title;
   GtkWidget *current_title;
+};
+
+struct _GtkAssistantPageClass
+{
+  GObjectClass parent_class;
 };
 
 struct _GtkAssistantPrivate
@@ -137,18 +146,20 @@ static void     gtk_assistant_add                (GtkContainer      *container,
                                                   GtkWidget         *page);
 static void     gtk_assistant_remove             (GtkContainer      *container,
                                                   GtkWidget         *page);
-static void     gtk_assistant_set_child_property (GtkContainer      *container,
-                                                  GtkWidget         *child,
+static void     gtk_assistant_page_set_property  (GObject           *object,
                                                   guint              property_id,
                                                   const GValue      *value,
                                                   GParamSpec        *pspec);
-static void     gtk_assistant_get_child_property (GtkContainer      *container,
-                                                  GtkWidget         *child,
+static void     gtk_assistant_page_get_property  (GObject           *object,
                                                   guint              property_id,
                                                   GValue            *value,
                                                   GParamSpec        *pspec);
 
 static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
+static void       gtk_assistant_buildable_add_child          (GtkBuildable  *buildable,
+                                                              GtkBuilder    *builder,          
+                                                              GObject       *child,
+                                                              const char    *type);
 static gboolean   gtk_assistant_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                               GtkBuilder    *builder,
                                                               GObject       *child,
@@ -180,16 +191,106 @@ static void       assistant_remove_page_cb                   (GtkContainer  *con
 							      GtkWidget     *page,
 							      GtkAssistant  *assistant);
 
+static int        gtk_assistant_add_page                     (GtkAssistant     *assistant,
+                                                              GtkAssistantPage *page_info,
+                                                              gint              position);
+
 GType             _gtk_assistant_accessible_get_type         (void);
 
 enum
 {
   CHILD_PROP_0,
+  CHILD_PROP_CHILD,
   CHILD_PROP_PAGE_TYPE,
   CHILD_PROP_PAGE_TITLE,
   CHILD_PROP_PAGE_COMPLETE,
   CHILD_PROP_HAS_PADDING
 };
+
+G_DEFINE_TYPE (GtkAssistantPage, gtk_assistant_page, G_TYPE_OBJECT)
+
+static void
+gtk_assistant_page_init (GtkAssistantPage *page)
+{
+  page->type = GTK_ASSISTANT_PAGE_CONTENT;
+}
+
+static void
+gtk_assistant_page_finalize (GObject *object)
+{
+  GtkAssistantPage *page = GTK_ASSISTANT_PAGE (object);
+
+  g_clear_object (&page->page);
+  g_free (page->title);
+
+  G_OBJECT_CLASS (gtk_assistant_page_parent_class)->finalize (object);
+}
+
+static void
+gtk_assistant_page_class_init (GtkAssistantPageClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = gtk_assistant_page_finalize;
+  object_class->get_property = gtk_assistant_page_get_property;
+  object_class->set_property = gtk_assistant_page_set_property;
+
+  /**
+   * GtkAssistantPage:page-type:
+   *
+   * The type of the assistant page.
+   */
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_PAGE_TYPE,
+                                   g_param_spec_enum ("page-type",
+                                                      P_("Page type"),
+                                                      P_("The type of the assistant page"),
+                                                      GTK_TYPE_ASSISTANT_PAGE_TYPE,
+                                                      GTK_ASSISTANT_PAGE_CONTENT,
+                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAssistantPage:title:
+   *
+   * The title of the page.
+   */
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_PAGE_TITLE,
+                                   g_param_spec_string ("title",
+                                                        P_("Page title"),
+                                                        P_("The title of the assistant page"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAssistantPage:complete:
+   *
+   * Setting the "complete" property to %TRUE marks a page as
+   * complete (i.e.: all the required fields are filled out). GTK+ uses
+   * this information to control the sensitivity of the navigation buttons.
+   */
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_PAGE_COMPLETE,
+                                   g_param_spec_boolean ("complete",
+                                                         P_("Page complete"),
+                                                         P_("Whether all required fields on the page have been filled out"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_HAS_PADDING,
+                                   g_param_spec_boolean ("has-padding",
+                                                         P_("Has padding"),
+                                                         P_("Whether the assistant adds padding around the page"),
+                                                         TRUE,
+                                                         G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_CHILD,
+                                   g_param_spec_object ("child",
+                                                        P_("Child widget"),
+                                                        P_("The content the assistant page"),
+                                                        GTK_TYPE_WIDGET,
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+}
 
 enum
 {
@@ -395,8 +496,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   container_class->add = gtk_assistant_add;
   container_class->remove = gtk_assistant_remove;
-  container_class->set_child_property = gtk_assistant_set_child_property;
-  container_class->get_child_property = gtk_assistant_get_child_property;
 
   window_class->close_request = gtk_assistant_close_request;
 
@@ -506,51 +605,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                      -1, 1, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
-  /**
-   * GtkAssistant:page-type:
-   *
-   * The type of the assistant page.
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_PAGE_TYPE,
-                                              g_param_spec_enum ("page-type",
-                                                                 P_("Page type"),
-                                                                 P_("The type of the assistant page"),
-                                                                 GTK_TYPE_ASSISTANT_PAGE_TYPE,
-                                                                 GTK_ASSISTANT_PAGE_CONTENT,
-                                                                 GTK_PARAM_READWRITE));
-
-  /**
-   * GtkAssistant:title:
-   *
-   * The title of the page.
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_PAGE_TITLE,
-                                              g_param_spec_string ("title",
-                                                                   P_("Page title"),
-                                                                   P_("The title of the assistant page"),
-                                                                   NULL,
-                                                                   GTK_PARAM_READWRITE));
-
-  /**
-   * GtkAssistant:complete:
-   *
-   * Setting the "complete" child property to %TRUE marks a page as
-   * complete (i.e.: all the required fields are filled out). GTK+ uses
-   * this information to control the sensitivity of the navigation buttons.
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_PAGE_COMPLETE,
-                                              g_param_spec_boolean ("complete",
-                                                                    P_("Page complete"),
-                                                                    P_("Whether all required fields on the page have been filled out"),
-                                                                    FALSE,
-                                                                    G_PARAM_READWRITE));
-
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_HAS_PADDING,
-      g_param_spec_boolean ("has-padding", P_("Has padding"), P_("Whether the assistant adds padding around the page"),
-                            TRUE, G_PARAM_READWRITE));
 
   /* Bind class to template
    */
@@ -1019,9 +1073,9 @@ alternative_button_order (GtkAssistant *assistant)
 }
 
 static void
-on_page_notify (GtkWidget  *widget,
-                GParamSpec *arg,
-                gpointer    data)
+on_page_page_notify (GtkWidget  *widget,
+                     GParamSpec *arg,
+                     gpointer    data)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (data);
 
@@ -1030,6 +1084,15 @@ on_page_notify (GtkWidget  *widget,
       update_buttons_state (assistant);
       update_title_state (assistant);
     }
+}
+
+static void
+on_page_notify (GtkAssistantPage *page,
+                GParamSpec *arg,
+                gpointer    data)
+{
+  if (page->page)
+    on_page_page_notify (page->page, arg, data);
 }
 
 static void
@@ -1072,7 +1135,8 @@ assistant_remove_page_cb (GtkContainer *container,
         }
     }
 
-  g_signal_handlers_disconnect_by_func (page_info->page, on_page_notify, assistant);
+  g_signal_handlers_disconnect_by_func (page_info->page, on_page_page_notify, assistant);
+  g_signal_handlers_disconnect_by_func (page_info, on_page_notify, assistant);
 
   gtk_size_group_remove_widget (priv->title_size_group, page_info->regular_title);
   gtk_size_group_remove_widget (priv->title_size_group, page_info->current_title);
@@ -1083,9 +1147,8 @@ assistant_remove_page_cb (GtkContainer *container,
   priv->pages = g_list_remove_link (priv->pages, element);
   priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
 
-  g_free (page_info->title);
+  g_object_unref (page_info);
 
-  g_slice_free (GtkAssistantPage, page_info);
   g_list_free_1 (element);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
@@ -1132,65 +1195,121 @@ gtk_assistant_init (GtkAssistant *assistant)
 }
 
 static void
-gtk_assistant_set_child_property (GtkContainer *container,
-                                  GtkWidget    *child,
-                                  guint         property_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
+gtk_assistant_page_set_property (GObject      *object,
+                                 guint         property_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
+  GtkAssistantPage *page = GTK_ASSISTANT_PAGE (object);
+  GtkWidget *assistant = NULL;
+
+  if (page->page)
+    assistant = gtk_widget_get_ancestor (page->page, GTK_TYPE_ASSISTANT);
+
   switch (property_id)
     {
+    case CHILD_PROP_CHILD:
+      g_set_object (&page->page, g_value_get_object (value));
+      break;
+
     case CHILD_PROP_PAGE_TYPE:
-      gtk_assistant_set_page_type (GTK_ASSISTANT (container), child,
-                                   g_value_get_enum (value));
+      if (page->type != g_value_get_enum (value))
+        {
+          page->type = g_value_get_enum (value);
+
+          /* backwards compatibility to the era before fixing bug 604289 */
+          if (page->type == GTK_ASSISTANT_PAGE_SUMMARY && !page->complete_set)
+            {
+              page->complete = TRUE;
+              page->complete_set = FALSE;
+            }
+
+          /* Always set buttons state, a change in a future page
+           * might change current page buttons
+           */
+          if (assistant)
+            update_buttons_state (GTK_ASSISTANT (assistant));
+          g_object_notify (G_OBJECT (page), "page-type");
+        }
       break;
+
     case CHILD_PROP_PAGE_TITLE:
-      gtk_assistant_set_page_title (GTK_ASSISTANT (container), child,
-                                    g_value_get_string (value));
+      g_free (page->title);
+      page->title = g_value_dup_string (value);
+
+      if (assistant)
+        {
+          gtk_label_set_text ((GtkLabel*) page->regular_title, page->title);
+          gtk_label_set_text ((GtkLabel*) page->current_title, page->title);
+          update_title_state (GTK_ASSISTANT (assistant));
+        }
+
+      g_object_notify (G_OBJECT (page), "title");
+
       break;
+
     case CHILD_PROP_PAGE_COMPLETE:
-      gtk_assistant_set_page_complete (GTK_ASSISTANT (container), child,
-                                       g_value_get_boolean (value));
+      if (page->complete != g_value_get_boolean (value))
+        {
+          page->complete = g_value_get_boolean (value);
+          page->complete_set = TRUE;
+
+          /* Always set buttons state, a change in a future page
+           * might change current page buttons
+           */
+          if (assistant)
+            update_buttons_state (GTK_ASSISTANT (assistant));
+          g_object_notify (G_OBJECT (page), "complete");
+        }
       break;
+
     case CHILD_PROP_HAS_PADDING:
-      gtk_assistant_set_page_has_padding (GTK_ASSISTANT (container), child,
-                                          g_value_get_boolean (value));
+      if (page->has_padding != g_value_get_boolean (value))
+        {
+          page->has_padding = g_value_get_boolean (value);
+          g_object_set (page->box, "margin", page->has_padding ? 12 : 0, NULL);
+          g_object_notify (G_OBJECT (page), "has-padding");
+        }
       break;
+
     default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
 }
 
 static void
-gtk_assistant_get_child_property (GtkContainer *container,
-                                  GtkWidget    *child,
-                                  guint         property_id,
-                                  GValue       *value,
-                                  GParamSpec   *pspec)
+gtk_assistant_page_get_property (GObject      *object,
+                                 guint         property_id,
+                                 GValue       *value,
+                                 GParamSpec   *pspec)
 {
-  GtkAssistant *assistant = GTK_ASSISTANT (container);
+  GtkAssistantPage *page = GTK_ASSISTANT_PAGE (object);
 
   switch (property_id)
     {
+    case CHILD_PROP_CHILD:
+      g_value_set_object (value, page->page);
+      break;
+
     case CHILD_PROP_PAGE_TYPE:
-      g_value_set_enum (value,
-                        gtk_assistant_get_page_type (assistant, child));
+      g_value_set_enum (value, page->type);
       break;
+
     case CHILD_PROP_PAGE_TITLE:
-      g_value_set_string (value,
-                          gtk_assistant_get_page_title (assistant, child));
+      g_value_set_string (value, page->title);
       break;
+
     case CHILD_PROP_PAGE_COMPLETE:
-      g_value_set_boolean (value,
-                           gtk_assistant_get_page_complete (assistant, child));
+      g_value_set_boolean (value, page->complete);
       break;
+
     case CHILD_PROP_HAS_PADDING:
-      g_value_set_boolean (value,
-                           gtk_assistant_get_page_has_padding (assistant, child));
+      g_value_set_boolean (value, page->has_padding);
       break;
+
     default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
 }
@@ -1342,13 +1461,14 @@ gtk_assistant_add (GtkContainer *container,
    * For the first invocation (from the builder template invocation),
    * let's make sure we add the actual direct container content properly.
    */
-  if (!gtk_bin_get_child (GTK_BIN (container)))
+  if (!GTK_ASSISTANT (container)->priv->constructed)
     {
       gtk_widget_set_parent (page, GTK_WIDGET (container));
       _gtk_bin_set_child (GTK_BIN (container), page);
       return;
     }
 
+g_print ("after template init\n");
   gtk_assistant_append_page (GTK_ASSISTANT (container), page);
 }
 
@@ -1639,25 +1759,33 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
                            GtkWidget    *page,
                            gint          position)
 {
-  GtkAssistantPrivate *priv;
   GtkAssistantPage *page_info;
-  gint n_pages;
-  GtkStyleContext *context;
-  GtkWidget *box;
-  GtkWidget *sibling;
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), 0);
   g_return_val_if_fail (GTK_IS_WIDGET (page), 0);
   g_return_val_if_fail (gtk_widget_get_parent (page) == NULL, 0);
   g_return_val_if_fail (!gtk_widget_is_toplevel (page), 0);
 
-  priv = assistant->priv;
-
-  page_info = g_slice_new0 (GtkAssistantPage);
-  page_info->page  = page;
-  page_info->regular_title = gtk_label_new (NULL);
+  page_info = g_object_new (GTK_TYPE_ASSISTANT_PAGE, NULL);
+  page_info->page = g_object_ref (page);
   page_info->has_padding = TRUE;
-  page_info->current_title = gtk_label_new (NULL);
+
+  return gtk_assistant_add_page (assistant, page_info, position);
+}
+
+static int
+gtk_assistant_add_page (GtkAssistant *assistant,
+                        GtkAssistantPage *page_info,
+                        gint position)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+  gint n_pages;
+  GtkStyleContext *context;
+  GtkWidget *box;
+  GtkWidget *sibling;
+
+  page_info->regular_title = gtk_label_new (page_info->title);
+  page_info->current_title = gtk_label_new (page_info->title);
 
   gtk_label_set_xalign (GTK_LABEL (page_info->regular_title), 0.0);
   gtk_label_set_xalign (GTK_LABEL (page_info->current_title), 0.0);
@@ -1671,13 +1799,13 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   gtk_size_group_add_widget (priv->title_size_group, page_info->regular_title);
   gtk_size_group_add_widget (priv->title_size_group, page_info->current_title);
 
-  g_signal_connect (G_OBJECT (page), "notify::visible",
+  g_signal_connect (G_OBJECT (page_info->page), "notify::visible",
+                    G_CALLBACK (on_page_page_notify), assistant);
+
+  g_signal_connect (G_OBJECT (page_info), "notify::page-title",
                     G_CALLBACK (on_page_notify), assistant);
 
-  g_signal_connect (G_OBJECT (page), "child-notify::page-title",
-                    G_CALLBACK (on_page_notify), assistant);
-
-  g_signal_connect (G_OBJECT (page), "child-notify::page-type",
+  g_signal_connect (G_OBJECT (page_info), "notify::page-type",
                     G_CALLBACK (on_page_notify), assistant);
 
   n_pages = g_list_length (priv->pages);
@@ -1702,7 +1830,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (box);
-  gtk_container_add (GTK_CONTAINER (box), page);
+  gtk_container_add (GTK_CONTAINER (box), page_info->page);
   g_object_set (box, "margin", 12, NULL);
   g_signal_connect (box, "remove", G_CALLBACK (assistant_remove_page_cb), assistant);
 
@@ -1893,15 +2021,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
 
   page_info = (GtkAssistantPage*) child->data;
 
-  g_free (page_info->title);
-  page_info->title = g_strdup (title);
-
-  gtk_label_set_text ((GtkLabel*) page_info->regular_title, title);
-  gtk_label_set_text ((GtkLabel*) page_info->current_title, title);
-
-  update_title_state (assistant);
-
-  gtk_container_child_notify (GTK_CONTAINER (assistant), page, "title");
+  g_object_set (page_info, "title", title, NULL);
 }
 
 /**
@@ -1959,24 +2079,7 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
 
   page_info = (GtkAssistantPage*) child->data;
 
-  if (type != page_info->type)
-    {
-      page_info->type = type;
-
-      /* backwards compatibility to the era before fixing bug 604289 */
-      if (type == GTK_ASSISTANT_PAGE_SUMMARY && !page_info->complete_set)
-        {
-          gtk_assistant_set_page_complete (assistant, page, TRUE);
-          page_info->complete_set = FALSE;
-        }
-
-      /* Always set buttons state, a change in a future page
-       * might change current page buttons
-       */
-      update_buttons_state (assistant);
-
-      gtk_container_child_notify (GTK_CONTAINER (assistant), page, "page-type");
-    }
+  g_object_set (page_info, "page-type", type, NULL);
 }
 
 /**
@@ -2035,18 +2138,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
 
   page_info = (GtkAssistantPage*) child->data;
 
-  if (complete != page_info->complete)
-    {
-      page_info->complete = complete;
-      page_info->complete_set = TRUE;
-
-      /* Always set buttons state, a change in a future page
-       * might change current page buttons
-       */
-      update_buttons_state (assistant);
-
-      gtk_container_child_notify (GTK_CONTAINER (assistant), page, "complete");
-    }
+  g_object_set (page_info, "complete", complete, NULL);
 }
 
 /**
@@ -2103,16 +2195,7 @@ gtk_assistant_set_page_has_padding (GtkAssistant *assistant,
 
   page_info = (GtkAssistantPage*) child->data;
 
-  if (page_info->has_padding != has_padding)
-    {
-      page_info->has_padding = has_padding;
-
-      g_object_set (page_info->box,
-                    "margin", has_padding ? 12 : 0,
-                    NULL);
-
-      gtk_container_child_notify (GTK_CONTAINER (assistant), page, "has-padding");
-    }
+  g_object_set (page_info, "has-padding", has_padding, NULL);
 }
 
 /**
@@ -2285,6 +2368,27 @@ gtk_assistant_buildable_interface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->custom_tag_start = gtk_assistant_buildable_custom_tag_start;
   iface->custom_finished = gtk_assistant_buildable_custom_finished;
+  iface->add_child = gtk_assistant_buildable_add_child;
+}
+
+static void
+gtk_assistant_buildable_add_child (GtkBuildable *buildable,
+                                   GtkBuilder   *builder,
+                                   GObject      *child,
+                                   const char   *type)
+{
+  if (GTK_IS_ASSISTANT_PAGE (child))
+    gtk_assistant_add_page (GTK_ASSISTANT (buildable), GTK_ASSISTANT_PAGE (child), -1);
+  else if (type && g_str_equal (type, "titlebar"))
+    {
+      GtkAssistant *assistant = GTK_ASSISTANT (buildable);
+      assistant->priv->headerbar = GTK_WIDGET (child);
+      gtk_window_set_titlebar (GTK_WINDOW (buildable), assistant->priv->headerbar);
+    }
+  else if (GTK_IS_WIDGET (child))
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else
+    g_warning ("Can't add a child of type '%s' to '%s'", G_OBJECT_TYPE_NAME (child), G_OBJECT_TYPE_NAME (buildable));
 }
 
 gboolean
@@ -2309,3 +2413,36 @@ gtk_assistant_buildable_custom_finished (GtkBuildable *buildable,
   parent_buildable_iface->custom_finished (buildable, builder, child,
                                            tagname, user_data);
 }
+
+/**
+ * gtk_assistant_get_page:
+ * @assistant: a #GtkAssistant
+ * @child: a child of @assistant
+ *
+ * Returns the #GtkAssistantPage object for @child.
+ *
+ * Returns: (transfer none): the #GtkAssistantPage for @child
+ */
+GtkAssistantPage *
+gtk_assistant_get_page (GtkAssistant *assistant,
+                        GtkWidget    *child)
+{
+  GList *page_info = find_page (assistant, child);
+  return (GtkAssistantPage *) (page_info ? page_info->data : NULL);
+}
+
+/**
+ * gtk_assistant_page_get_child:
+ * @page: a #GtkAssistantPage
+ *
+ * Returns the child to which @page belongs.
+ *
+ * Returns: (transfer none): the child to which @page belongs
+ */
+GtkWidget *
+gtk_assistant_page_get_child (GtkAssistantPage *page)
+{
+  return page->page;
+}
+
+

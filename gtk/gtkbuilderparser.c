@@ -34,16 +34,6 @@
 static void free_property_info (PropertyInfo *info);
 static void free_object_info (ObjectInfo *info);
 
-enum {
-  TAG_PROPERTY,
-  TAG_MENU,
-  TAG_REQUIRES,
-  TAG_OBJECT,
-  TAG_CHILD,
-  TAG_SIGNAL,
-  TAG_INTERFACE,
-  TAG_TEMPLATE,
-};
 
 static inline void
 state_push (ParserData *data, gpointer info)
@@ -1066,6 +1056,12 @@ end_element (GMarkupParseContext  *context,
     {
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
+      PropertyInfo* prop_info = state_peek_info (data, PropertyInfo);
+
+      if (child_info && child_info->tag_type != TAG_CHILD)
+        child_info = NULL;
+      if (prop_info && prop_info->tag_type != TAG_PROPERTY)
+        prop_info = NULL;
 
       if (data->requested_objects && data->inside_requested_object &&
           (data->cur_object_level == data->requested_object_level))
@@ -1089,6 +1085,8 @@ end_element (GMarkupParseContext  *context,
         }
       if (child_info)
         child_info->object = object_info->object;
+      if (prop_info)
+        g_string_assign (prop_info->text, object_info->id);
 
       if (GTK_IS_BUILDABLE (object_info->object) &&
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)

@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.6 -->
-  <!-- interface-requires gtkprivate 3.10 -->
   <object class="GtkAdjustment" id="copies_spin_adjustment">
     <property name="lower">1</property>
     <property name="upper">999</property>
@@ -10,31 +7,22 @@
   </object>
   <object class="GtkListStore" id="custom_paper_list">
     <columns>
-      <!-- column-name custom -->
       <column type="GObject"/>
     </columns>
   </object>
   <object class="GtkListStore" id="page_setup_list">
     <columns>
-      <!-- column-name page-setup -->
       <column type="GObject"/>
-      <!-- column-name is-separator -->
       <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="printer_list">
     <columns>
-      <!-- column-name icon -->
       <column type="GIcon"/>
-      <!-- column-name name -->
       <column type="gchararray"/>
-      <!-- column-name state -->
       <column type="gchararray"/>
-      <!-- column-name jobs -->
       <column type="gint"/>
-      <!-- column-name location -->
       <column type="gchararray"/>
-      <!-- column-name printer -->
       <column type="GObject"/>
     </columns>
   </object>
@@ -161,7 +149,7 @@
                                 <property name="valign">center</property>
                                 <property name="label" translatable="yes">Range</property>
                                 <attributes>
-                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="weight" value="bold"></attribute>
                                 </attributes>
                                 <accessibility>
                                   <relation type="label-for" target="range_table"/>
@@ -274,7 +262,7 @@
                                 <property name="valign">center</property>
                                 <property name="label" translatable="yes">Copies</property>
                                 <attributes>
-                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="weight" value="bold"></attribute>
                                 </attributes>
                                 <accessibility>
                                   <relation type="label-for" target="grid1"/>
@@ -382,7 +370,7 @@
                                 <property name="valign">center</property>
                                 <property name="label" translatable="yes">Layout</property>
                                 <attributes>
-                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="weight" value="bold"></attribute>
                                 </attributes>
                                 <accessibility>
                                   <relation type="label-for" target="grid2"/>
@@ -548,7 +536,7 @@
                                 <property name="valign">center</property>
                                 <property name="label" translatable="yes">Paper</property>
                                 <attributes>
-                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="weight" value="bold"></attribute>
                                 </attributes>
                                 <accessibility>
                                   <relation type="label-for" target="grid3"/>
@@ -731,7 +719,7 @@
                             <property name="valign">center</property>
                             <property name="label" translatable="yes">Job Details</property>
                             <attributes>
-                              <attribute name="weight" value="bold"/>
+                              <attribute name="weight" value="bold"></attribute>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="grid5"/>
@@ -804,7 +792,7 @@
                             <property name="valign">center</property>
                             <property name="label" translatable="yes">Print Document</property>
                             <attributes>
-                              <attribute name="weight" value="bold"/>
+                              <attribute name="weight" value="bold"></attribute>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="grid6"/>
@@ -913,7 +901,7 @@
                             <property name="valign">center</property>
                             <property name="label" translatable="yes">Add Cover Page</property>
                             <attributes>
-                              <attribute name="weight" value="bold"/>
+                              <attribute name="weight" value="bold"></attribute>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="grid7"/>
