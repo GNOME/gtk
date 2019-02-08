@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtksingleselection.h"
+#include "gtksingleselectionprivate.h"
 
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
