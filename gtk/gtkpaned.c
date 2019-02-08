@@ -40,7 +40,6 @@
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
-#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -219,8 +218,6 @@ static void     gtk_paned_size_allocate         (GtkWidget           *widget,
                                                  int                  height,
                                                  int                  baseline);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
-static void     gtk_paned_snapshot              (GtkWidget        *widget,
-						 GtkSnapshot      *snapshot);
 static gboolean gtk_paned_focus                 (GtkWidget        *widget,
 						 GtkDirectionType  direction);
 static void     gtk_paned_add                   (GtkContainer     *container,
@@ -329,25 +326,6 @@ gtk_paned_motion (GtkEventControllerMotion *motion,
     }
 }
 
-static GtkWidget *
-gtk_paned_pick (GtkWidget *widget,
-                   double     x,
-                   double     y)
-{
-  if (x >= 0 && x <= gtk_widget_get_width (widget) &&
-      y >= 0 && y <= gtk_widget_get_height(widget))
-    {
-      return GTK_WIDGET_CLASS (gtk_paned_parent_class)->pick (widget, x, y);
-    }
-  else
-    {
-      if (gtk_widget_contains (widget, x, y))
-        return widget;
-      else
-        return NULL;
-    }
-}
-
 static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
@@ -369,9 +347,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->measure = gtk_paned_measure;
   widget_class->size_allocate = gtk_paned_size_allocate;
   widget_class->unrealize = gtk_paned_unrealize;
-  widget_class->snapshot = gtk_paned_snapshot;
   widget_class->focus = gtk_paned_focus;
-  widget_class->pick = gtk_paned_pick;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -1367,23 +1343,6 @@ gtk_paned_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_paned_snapshot (GtkWidget   *widget,
-                    GtkSnapshot *snapshot)
-{
-  gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT (
-                              0, 0,
-                              gtk_widget_get_width (widget),
-                              gtk_widget_get_height (widget)
-                          ));
-
-
-  GTK_WIDGET_CLASS (gtk_paned_parent_class)->snapshot (widget, snapshot);
-
-  gtk_snapshot_pop (snapshot);
-}
-
-static void
 gtk_paned_render_handle (GtkGizmo    *gizmo,
                          GtkSnapshot *snapshot)
 {
@@ -1422,6 +1381,7 @@ gtk_paned_init (GtkPaned *paned)
 
   gtk_widget_set_has_surface (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
+  gtk_widget_set_overflow (GTK_WIDGET (paned), GTK_OVERFLOW_HIDDEN);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
