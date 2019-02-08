@@ -30,6 +30,7 @@
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
+#include "gtksingleselectionprivate.h"
 #include "a11y/gtkstackaccessible.h"
 #include "a11y/gtkstackaccessibleprivate.h"
 #include <math.h>
@@ -137,6 +138,9 @@ typedef struct {
   gboolean interpolate_size;
 
   GtkStackTransitionType active_transition_type;
+
+  GtkSelectionModel *pages;
+  gulong selection_changed_handler;
 
 } GtkStackPrivate;
 
@@ -1098,6 +1102,29 @@ set_visible_child (GtkStack               *stack,
   gtk_stack_accessible_update_visible_child (stack,
                                              priv->visible_child ? priv->visible_child->widget : NULL,
                                              child_info ? child_info->widget : NULL);
+
+  if (priv->pages)
+    {
+      guint position;
+      guint n_items;
+
+      if (priv->visible_child == NULL)
+        {
+          position = g_list_index (priv->children, child_info);
+          n_items = 1;
+        }
+      else
+        {
+          int old, new;
+          old = g_list_index (priv->children, priv->visible_child);
+          new = g_list_index (priv->children, child_info);
+
+          position = MIN (old, new);
+          n_items = MAX (old, new) + 1 - position;      
+        }
+
+      gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (priv->pages), position, n_items);
+    }
 
   priv->visible_child = child_info;
 
@@ -2293,4 +2320,47 @@ gtk_stack_init (GtkStack *stack)
   priv->hhomogeneous = TRUE;
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
+}
+
+static void
+selection_changed_cb (GtkSelectionModel *model,
+                      guint              position,
+                      guint              n_items,
+                      GtkStack          *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  guint selected;
+  GtkWidget *child;
+
+  selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model));
+  if (selected == GTK_INVALID_LIST_POSITION)
+    return;
+
+  child = g_list_model_get_item (G_LIST_MODEL (model), selected);
+
+  g_signal_handler_block (model, priv->selection_changed_handler);
+  gtk_stack_set_visible_child (stack, child);
+  g_signal_handler_unblock (model, priv->selection_changed_handler);
+}
+
+GtkSelectionModel *
+gtk_stack_get_pages (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  int selected;
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
+
+  if (priv->pages)
+    return g_object_ref (priv->pages);
+
+  priv->pages = GTK_SELECTION_MODEL (gtk_single_selection_new (gtk_widget_observe_children (GTK_WIDGET (stack))));
+  g_object_add_weak_pointer (G_OBJECT (priv->pages), (gpointer *)&priv->pages);
+  selected = g_list_index (priv->children, priv->visible_child);
+  if (selected != -1)
+    gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (priv->pages), (guint)selected);
+
+  priv->selection_changed_handler = g_signal_connect (priv->pages, "selection-changed", G_CALLBACK (selection_changed_cb), stack);
+
+  return priv->pages;
 }
