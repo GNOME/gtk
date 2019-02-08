@@ -275,7 +275,7 @@ add_child (GtkWidget       *widget,
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GtkWidget *item;
   GtkWidget *row;
-  GObject *page;
+  GtkStackPage *page;
 
   /* Check we don't actually already know about this widget */
   if (g_hash_table_lookup (priv->rows, widget))
@@ -320,7 +320,7 @@ remove_child (GtkWidget       *widget,
 
   if (priv->stack)
     {
-      GObject *page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
+      GtkStackPage *page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
       if (page)
         {
           g_signal_handlers_disconnect_by_func (page, on_child_updated, sidebar);
