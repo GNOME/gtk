@@ -936,6 +936,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
 
   gtk_widget_set_has_surface (GTK_WIDGET (icon_view), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
+  gtk_widget_set_overflow (GTK_WIDGET (icon_view), GTK_OVERFLOW_HIDDEN);
 
   icon_view->priv->item_orientation = GTK_ORIENTATION_VERTICAL;
 
@@ -1672,14 +1673,8 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   icon_view = GTK_ICON_VIEW (widget);
 
   context = gtk_widget_get_style_context (widget);
-
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
-  gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT (
-                              0, 0,
-                              width, height
-                          ));
 
   offset_x = gtk_adjustment_get_value (icon_view->priv->hadjustment);
   offset_y = gtk_adjustment_get_value (icon_view->priv->vadjustment);
@@ -1764,8 +1759,6 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
 
   if (icon_view->priv->doing_rubberband)
     gtk_icon_view_snapshot_rubberband (icon_view, snapshot);
-
-  gtk_snapshot_pop (snapshot);
 
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->snapshot (widget, snapshot);
 }
