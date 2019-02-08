@@ -298,7 +298,7 @@ section_notify_cb (GObject    *section,
       gchar *name;
 
       g_object_get (section, "section-name", &name, NULL);
-      gtk_container_child_set (GTK_CONTAINER (priv->stack), GTK_WIDGET (section), "name", name, NULL);
+      g_object_set (gtk_stack_get_page (priv->stack, GTK_WIDGET (section)), "name", name, NULL);
       g_free (name);
     }
   else if (strcmp (pspec->name, "title") == 0)
@@ -702,7 +702,7 @@ gtk_shortcuts_window_get_property (GObject    *object,
           {
             gchar *name = NULL;
 
-            gtk_container_child_get (GTK_CONTAINER (priv->stack), child,
+            g_object_get (gtk_stack_get_page (priv->stack, child),
                                      "name", &name,
                                      NULL);
             g_value_take_string (value, name);
