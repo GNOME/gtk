@@ -116,9 +116,6 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
   if (paintable_width <= 0.0 || paintable_height <= 0.0)
     return;
 
-  gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT (0, 0, width, height));
-
   graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (
                                  - CLAMP (priv->x, 0, paintable_width),
                                  - CLAMP (priv->y, 0, paintable_height),
@@ -131,8 +128,6 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_push_transform (snapshot, &transform);
   gdk_paintable_snapshot (priv->paintable, snapshot, paintable_width, paintable_height);
-  gtk_snapshot_pop (snapshot);
-
   gtk_snapshot_pop (snapshot);
 }
 
@@ -218,6 +213,8 @@ gtk_magnifier_init (GtkMagnifier *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   gtk_widget_set_has_surface (widget, FALSE);
+  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
+
   priv->magnification = 1;
   priv->resize = FALSE;
   priv->paintable = gtk_widget_paintable_new (NULL);
