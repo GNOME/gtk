@@ -133,6 +133,9 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 
       gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
 
+      if (fg.alpha == 0.0f)
+        goto transparent;
+
       graphene_matrix_init_from_float (&color_matrix, (float[16]) {
                                          sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
                                          wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
@@ -171,5 +174,6 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
+transparent:
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }
