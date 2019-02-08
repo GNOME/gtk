@@ -1618,6 +1618,7 @@ gtk_text_view_init (GtkTextView *text_view)
 
   gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
@@ -5416,14 +5417,6 @@ gtk_text_view_snapshot (GtkWidget   *widget,
   GtkTextViewPrivate *priv = ((GtkTextView *)widget)->priv;
   GSList *tmp_list;
   GtkStyleContext *context;
-  graphene_rect_t bounds;
-
-  graphene_rect_init (&bounds,
-                      0, 0,
-                      gtk_widget_get_width (widget),
-                      gtk_widget_get_height (widget));
-
-  gtk_snapshot_push_clip (snapshot, &bounds);
 
   context = gtk_widget_get_style_context (widget);
 
@@ -5449,8 +5442,6 @@ gtk_text_view_snapshot (GtkWidget   *widget,
       gtk_widget_snapshot_child (widget, vc->widget, snapshot);
       tmp_list = tmp_list->next;
     }
-
-  gtk_snapshot_pop (snapshot);
 }
 
 static gboolean
