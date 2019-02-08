@@ -143,9 +143,8 @@ canonical_boolean_value (MyParserData *data,
  * value from the superclass.
  */
 static gboolean
-needs_explicit_setting (const gchar  *class_name,
-                        const gchar  *property_name,
-                        gboolean      packing)
+needs_explicit_setting (GParamSpec *pspec,
+                        gboolean    packing)
 {
   struct _Prop {
     const char *class;
@@ -163,26 +162,23 @@ needs_explicit_setting (const gchar  *class_name,
     { "GtkWidget", "hexpand", 0 },
     { "GtkWidget", "vexpand", 0 },
   };
-  gchar *canonical_name;
   gboolean found;
   gint k;
+  const char *class_name;
 
-  canonical_name = g_strdup (property_name);
-  g_strdelimit (canonical_name, "_", '-');
+  class_name = g_type_name (pspec->owner_type);
 
   found = FALSE;
   for (k = 0; k < G_N_ELEMENTS (props); k++)
     {
       if (strcmp (class_name, props[k].class) == 0 &&
-          strcmp (canonical_name, props[k].property) == 0 &&
+          strcmp (pspec->name, props[k].property) == 0 &&
           packing == props[k].packing)
         {
           found = TRUE;
           break;
         }
     }
-
-  g_free (canonical_name);
 
   return found;
 }
@@ -303,35 +299,19 @@ get_property_pspec (MyParserData *data,
 
 static gboolean
 value_is_default (MyParserData *data,
-                  const gchar  *class_name,
-                  const gchar  *property_name,
-                  const gchar  *value_string,
-                  gboolean      packing,
-                  gboolean      cell_packing)
+                  GParamSpec   *pspec,
+                  const gchar  *value_string)
 {
   GValue value = { 0, };
   gboolean ret;
   GError *error = NULL;
-  GParamSpec *pspec;
 
-  pspec = get_property_pspec (data, class_name, property_name, packing, cell_packing);
-
-  if (pspec == NULL)
-    {
-      if (packing)
-        g_printerr (_("%s: Packing property %s::%s not found\n"), data->input_filename, class_name, property_name);
-      else if (cell_packing)
-        g_printerr (_("%s: Cell property %s::%s not found\n"), data->input_filename, class_name, property_name);
-      else
-        g_printerr (_("%s: Property %s::%s not found\n"), data->input_filename, class_name, property_name);
-      return FALSE;
-    }
-  else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_OBJECT))
+  if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_OBJECT))
     return FALSE;
 
   if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
-      g_printerr (_("%s: Couldn’t parse value for %s::%s: %s\n"), data->input_filename, class_name, property_name, error->message);
+      g_printerr (_("%s: Couldn’t parse value for %s: %s\n"), data->input_filename, pspec->name, error->message);
       g_error_free (error);
       ret = FALSE;
     }
@@ -411,11 +391,12 @@ property_can_be_omitted (Element      *element,
   gint i;
   gboolean bound;
   gboolean translatable;
-  const gchar *class_name;
-  const gchar *property_name;
-  const gchar *value_string;
+  const char *class_name;
+  const char *property_name;
+  const char *value_string;
   gboolean packing = FALSE;
   gboolean cell_packing = FALSE;
+  GParamSpec *pspec;
 
   if (g_str_equal (element->parent->element_name, "packing"))
     packing = TRUE;
@@ -445,10 +426,23 @@ property_can_be_omitted (Element      *element,
   if (bound)
     return FALSE;
 
-  if (needs_explicit_setting (class_name, property_name, packing))
+  pspec = get_property_pspec (data, class_name, property_name, packing, cell_packing);
+
+  if (pspec == NULL)
+    {
+      if (packing)
+        g_printerr (_("%s: Packing property %s::%s not found\n"), data->input_filename, class_name, property_name);
+      else if (cell_packing)
+        g_printerr (_("%s: Cell property %s::%s not found\n"), data->input_filename, class_name, property_name);
+      else
+        g_printerr (_("%s: Property %s::%s not found\n"), data->input_filename, class_name, property_name);
+      return FALSE;
+    }
+
+  if (needs_explicit_setting (pspec, packing))
     return FALSE;
 
-  return value_is_default (data, class_name, property_name, value_string, packing, cell_packing);
+  return value_is_default (data, pspec, value_string);
 }
 
 static gboolean
