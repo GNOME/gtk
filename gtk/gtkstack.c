@@ -333,8 +333,11 @@ gtk_stack_page_set_property (GObject      *object,
       break;
 
     case CHILD_PROP_NEEDS_ATTENTION:
-      info->needs_attention = g_value_get_boolean (value);
-      g_object_notify_by_pspec (object, pspec);
+      if (info->needs_attention != g_value_get_boolean (value))
+        {
+          info->needs_attention = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     default:
@@ -385,7 +388,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                       P_("The index of the child in the parent"),
                       -1, G_MAXINT,
                       0,
-                      GTK_PARAM_READWRITE);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:needs-attention:
@@ -400,7 +403,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          P_("Needs Attention"),
                          P_("Whether this page needs attention"),
                          FALSE,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_child_props);
 }
