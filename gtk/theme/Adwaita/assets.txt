@@ -58,3 +58,11 @@ slider-vert-scale-has-marks-above-active-dark
 slider-vert-scale-has-marks-above-insensitive-dark
 slider-vert-scale-has-marks-above-backdrop-dark
 slider-vert-scale-has-marks-above-backdrop-insensitive-dark
+checkbox-selectionmode
+checkbox-checked-selectionmode
+checkbox-hover-selectionmode
+checkbox-checked-hover-selectionmode
+checkbox-active-selectionmode
+checkbox-checked-active-selectionmode
+checkbox-backdrop-selectionmode
+checkbox-checked-backdrop-selectionmode
