@@ -29,7 +29,6 @@ static gboolean glyph_cache_equal      (gconstpointer v1,
                                         gconstpointer v2);
 static void     glyph_cache_key_free   (gpointer      v);
 static void     glyph_cache_value_free (gpointer      v);
-static void     dirty_glyph_free       (gpointer      v);
 
 static GskGLGlyphAtlas *
 create_atlas (GskGLGlyphCache *cache)
@@ -127,15 +126,6 @@ static void
 glyph_cache_value_free (gpointer v)
 {
   g_free (v);
-}
-
-static void
-dirty_glyph_free (gpointer v)
-{
-  DirtyGlyph *glyph = v;
-
-  if (glyph->surface)
-    cairo_surface_destroy (glyph->surface);
 }
 
 static void
@@ -249,14 +239,17 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   pango_cairo_show_glyph_string (cr, key->font, &glyph_string);
   cairo_destroy (cr);
 
-  glyph->surface = surface;
+  cairo_surface_flush (surface);
 
-  region->data = cairo_image_surface_get_data (surface);
   region->width = cairo_image_surface_get_width (surface);
   region->height = cairo_image_surface_get_height (surface);
   region->stride = cairo_image_surface_get_stride (surface);
+  region->data = g_memdup (cairo_image_surface_get_data (surface),
+                           region->stride * region->height * sizeof (guchar));
   region->x = (gsize)(value->tx * atlas->width);
   region->y = (gsize)(value->ty * atlas->height);
+
+  cairo_surface_destroy (surface);
 }
 
 static void
@@ -271,7 +264,8 @@ upload_dirty_glyph (GskGLGlyphCache *self,
 
   gsk_gl_image_upload_regions (atlas->image, self->gl_driver, 1, &region);
 
-  dirty_glyph_free (&atlas->pending_glyph);
+  g_free (region.data);
+
   atlas->pending_glyph.key = NULL;
   atlas->pending_glyph.value = NULL;
 }

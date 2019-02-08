@@ -32,7 +32,6 @@ struct _DirtyGlyph
 {
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
-  cairo_surface_t *surface;
 };
 
 typedef struct
