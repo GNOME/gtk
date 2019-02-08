@@ -342,6 +342,23 @@ typedef enum
 } GtkOrientation;
 
 /**
+ * GtkOverflow:
+ * @GTK_OVERFLOW_VISIBLE: No change is applied. Content is drawn at the specified
+ *     position.
+ * @GTK_OVERFLOW_HIDDEN: Content is clipped to the bounds of the area. Content
+ *     outside the area is not drawn and cannot be interacted with.
+ *
+ * Defines how content overflowing a given area should be handled, such as
+ * with gtk_widget_set_overflow(). This property is modeled after the CSS overflow
+ * property, but implements it only partially.
+ */
+typedef enum
+{
+  GTK_OVERFLOW_VISIBLE,
+  GTK_OVERFLOW_HIDDEN
+} GtkOverflow;
+
+/**
  * GtkPackType:
  * @GTK_PACK_START: The child is packed into the start of the box
  * @GTK_PACK_END: The child is packed into the end of the box

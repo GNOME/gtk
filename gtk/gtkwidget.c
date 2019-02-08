@@ -524,6 +524,7 @@ enum {
   PROP_TOOLTIP_TEXT,
   PROP_SURFACE,
   PROP_OPACITY,
+  PROP_OVERFLOW,
   PROP_HALIGN,
   PROP_VALIGN,
   PROP_MARGIN_START,
@@ -1304,6 +1305,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            0.0, 1.0,
                            1.0,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:overflow:
+   *
+   * How content outside the widget's content area is treated.
+   */
+  widget_props[PROP_OVERFLOW] =
+      g_param_spec_enum ("overflow",
+                         P_("Overflow"),
+                         P_("How content outside the widget's content area is treated"),
+                         GTK_TYPE_OVERFLOW,
+                         GTK_OVERFLOW_VISIBLE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:scale-factor:
@@ -2319,6 +2333,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_OPACITY:
       gtk_widget_set_opacity (widget, g_value_get_double (value));
       break;
+    case PROP_OVERFLOW:
+      gtk_widget_set_overflow (widget, g_value_get_enum (value));
+      break;
     case PROP_CSS_NAME:
       if (g_value_get_string (value) != NULL)
         gtk_css_node_set_name (priv->cssnode, g_intern_string (g_value_get_string (value)));
@@ -2458,6 +2475,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_widget_get_opacity (widget));
+      break;
+    case PROP_OVERFLOW:
+      g_value_set_enum (value, gtk_widget_get_overflow (widget));
       break;
     case PROP_SCALE_FACTOR:
       g_value_set_int (value, gtk_widget_get_scale_factor (widget));
@@ -11179,12 +11199,39 @@ gtk_widget_pick (GtkWidget *widget,
                  gdouble    x,
                  gdouble    y)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (gtk_widget_get_pass_through (widget) ||
       !gtk_widget_is_sensitive (widget) ||
       !_gtk_widget_is_drawable (widget))
     return NULL;
+
+  switch (priv->overflow)
+    {
+    default:
+    case GTK_OVERFLOW_VISIBLE:
+      break;
+
+    case GTK_OVERFLOW_HIDDEN:
+      {
+        GtkBorder margin, border, padding;
+        GtkCssStyle *style;
+
+        style = gtk_css_node_get_style (priv->cssnode);
+        get_box_margin (style, &margin);
+        get_box_border (style, &border);
+        get_box_padding (style, &padding);
+
+        if (x < -padding.left ||
+            y < -padding.top  ||
+            x >= priv->allocation.width - margin.left - margin.right - border.left - border.right - padding.left ||
+            y >= priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
+          return NULL;
+      }
+      break;
+    }
 
   return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
 }
@@ -11572,6 +11619,55 @@ gtk_widget_get_opacity (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0.0);
 
   return priv->user_alpha / 255.0;
+}
+
+/**
+ * gtk_widget_set_overflow:
+ * @self: a #GtkWidget
+ * @overflow: desired overflow
+ *
+ * Sets how @self treats content that is drawn outside the widget's content area.
+ * See the definition of #GtkOverflow for details.
+ *
+ * This setting is provided for widget implementations and should not be used by
+ * application code.
+ *
+ * The default value is %GTK_OVERFLOW_VISIBLE.
+ **/
+void
+gtk_widget_set_overflow (GtkWidget   *self,
+                         GtkOverflow  overflow)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_WIDGET (self));
+
+  if (priv->overflow == overflow)
+    return;
+
+  priv->overflow = overflow;
+
+  gtk_widget_queue_draw (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), widget_props[PROP_OVERFLOW]);
+}
+
+/**
+ * gtk_widget_get_overflow:
+ * @self: a #GtkWidget
+ *
+ * Returns the value set via gtk_widget_set_overflow().
+ *
+ * Returns: The widget's overflow.
+ **/
+GtkOverflow
+gtk_widget_get_overflow (GtkWidget *self)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (self), GTK_OVERFLOW_VISIBLE);
+
+  return priv->overflow;
 }
 
 /**
@@ -12959,7 +13055,21 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   /* Offset to content allocation */
   gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
+
+  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
+    {
+      gtk_snapshot_push_clip (snapshot,
+                              &GRAPHENE_RECT_INIT (- padding.left,
+                                                   - padding.top,
+                                                   allocation.width - margin.left - margin.right - border.left  - border.right,
+                                                   allocation.height - margin.top  - margin.bottom - border.top  - border.bottom));
+    }
+
   klass->snapshot (widget, snapshot);
+
+  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (snapshot);
+
   gtk_snapshot_offset (snapshot, - (padding.left + border.left), -(border.top + padding.top));
 
   gtk_css_style_snapshot_outline (style,

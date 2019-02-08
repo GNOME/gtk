@@ -99,6 +99,7 @@ struct _GtkWidgetPrivate
   guint   halign              : 4;
   guint   valign              : 4;
 
+  GtkOverflow overflow;
   guint8 alpha;
   guint8 user_alpha;
 

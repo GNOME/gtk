@@ -631,6 +631,12 @@ void       gtk_widget_set_opacity         (GtkWidget           *widget,
                                            double               opacity);
 GDK_AVAILABLE_IN_ALL
 double     gtk_widget_get_opacity         (GtkWidget           *widget);
+GDK_AVAILABLE_IN_ALL
+void         gtk_widget_set_overflow      (GtkWidget           *widget,
+                                           GtkOverflow          overflow);
+GDK_AVAILABLE_IN_ALL
+GtkOverflow  gtk_widget_get_overflow      (GtkWidget           *widget);
+
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_toplevel    (GtkWidget      *widget);
