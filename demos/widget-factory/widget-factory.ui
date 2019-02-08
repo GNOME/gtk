@@ -514,6 +514,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkBox">
+                                <property name="hexpand">0</property>
                                 <style>
                                   <class name="linked"/>
                                 </style>
@@ -1626,6 +1627,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="shadow-type">in</property>
                                 <property name="hscrollbar-policy">never</property>
                                 <property name="min-content-height">200</property>
+                                <property name="hexpand">0</property>
                                 <child>
                                   <object class="GtkListBox" id="listbox">
                                     <property name="selection-mode">none</property>
