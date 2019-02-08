@@ -108,16 +108,15 @@ on_button_clicked (GtkWidget        *widget,
                    GtkStackSwitcher *self)
 {
   GtkStackSwitcherPrivate *priv;
+  guint index;
 
   priv = gtk_stack_switcher_get_instance_private (self);
 
-  if (!priv->in_child_changed)
-    {
-      guint index;
+  if (priv->in_child_changed)
+    return;
 
-      index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "child-index"));
-      gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (priv->pages), index);
-    }
+  index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "child-index"));
+  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (priv->pages), index);
 }
 
 static void
@@ -209,9 +208,9 @@ on_visible_updated (GtkWidget        *widget,
 }
 
 static void
-on_page_props_updated (GtkStackPage     *page,
-                       GParamSpec       *pspec,
-                       GtkStackSwitcher *self)
+on_page_updated (GtkStackPage     *page,
+                 GParamSpec       *pspec,
+                 GtkStackSwitcher *self)
 {
   GtkWidget *widget;
   GtkWidget *button;
@@ -342,7 +341,7 @@ add_child (GtkWidget        *widget,
   g_object_set_data (G_OBJECT (button), "child-index", GUINT_TO_POINTER (position));
   g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), self);
   g_signal_connect (widget, "notify::visible", G_CALLBACK (on_visible_updated), self);
-  g_signal_connect (page, "notify", G_CALLBACK (on_page_props_updated), self);
+  g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
 
   g_hash_table_insert (priv->buttons, widget, button);
 }
@@ -390,7 +389,7 @@ clear_switcher (GtkStackSwitcher *self)
         {
           GtkStackPage *page = gtk_stack_get_page (priv->stack, widget);
           if (page)
-            g_signal_handlers_disconnect_by_func (page, on_page_props_updated, self);
+            g_signal_handlers_disconnect_by_func (page, on_page_updated, self);
           g_signal_handlers_disconnect_by_func (widget, on_visible_updated, self);
         }
     }
