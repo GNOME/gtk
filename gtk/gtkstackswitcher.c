@@ -29,7 +29,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkimage.h"
-#include "gtksingleselection.h"
+#include "gtkselectionmodel.h"
 
 /**
  * SECTION:gtkstackswitcher
@@ -104,19 +104,18 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 }
 
 static void
-on_button_clicked (GtkWidget        *widget,
+on_button_clicked (GtkWidget        *button,
                    GtkStackSwitcher *self)
 {
-  GtkStackSwitcherPrivate *priv;
-  guint index;
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
 
-  priv = gtk_stack_switcher_get_instance_private (self);
+  if (!priv->in_child_changed)
+    {
+      guint index;
 
-  if (priv->in_child_changed)
-    return;
-
-  index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "child-index"));
-  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (priv->pages), index);
+      index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "child-index"));
+      gtk_selection_model_select_item (GTK_SELECTION_MODEL (priv->pages), index, TRUE);
+    }
 }
 
 static void
@@ -165,13 +164,11 @@ update_button (GtkStackSwitcher *self,
                GtkWidget        *widget,
                GtkWidget        *button)
 {
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   gchar *title;
   gchar *icon_name;
   gboolean needs_attention;
-  GtkStackSwitcherPrivate *priv;
   GtkStyleContext *context;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
 
   g_object_get (gtk_stack_get_page (priv->stack, widget),
                 "title", &title,
@@ -198,10 +195,8 @@ on_visible_updated (GtkWidget        *widget,
                     GParamSpec       *pspec,
                     GtkStackSwitcher *self)
 {
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   GtkWidget *button;
-  GtkStackSwitcherPrivate *priv;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
 
   button = g_hash_table_lookup (priv->buttons, widget);
   update_button (self, widget, button);
@@ -212,11 +207,9 @@ on_page_updated (GtkStackPage     *page,
                  GParamSpec       *pspec,
                  GtkStackSwitcher *self)
 {
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   GtkWidget *widget;
   GtkWidget *button;
-  GtkStackSwitcherPrivate *priv;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
 
   widget = gtk_stack_page_get_child (page);
   button = g_hash_table_lookup (priv->buttons, widget);
@@ -226,9 +219,7 @@ on_page_updated (GtkStackPage     *page,
 static void
 remove_switch_timer (GtkStackSwitcher *self)
 {
-  GtkStackSwitcherPrivate *priv;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
 
   if (priv->switch_timer)
     {
@@ -241,10 +232,8 @@ static gboolean
 gtk_stack_switcher_switch_timeout (gpointer data)
 {
   GtkStackSwitcher *self = data;
-  GtkStackSwitcherPrivate *priv;
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   GtkWidget *button;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
 
   priv->switch_timer = 0;
 
@@ -264,13 +253,11 @@ gtk_stack_switcher_drag_motion (GtkWidget *widget,
                                 gint       y)
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
-  GtkStackSwitcherPrivate *priv;
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   GtkWidget *button;
   GHashTableIter iter;
   gpointer value;
   gboolean retval = FALSE;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
 
   button = NULL;
   g_hash_table_iter_init (&iter, priv->buttons);
@@ -310,40 +297,35 @@ gtk_stack_switcher_drag_leave (GtkWidget *widget,
 }
 
 static void
-add_child (GtkWidget        *widget,
-           guint             position,
+add_child (guint             position,
            GtkStackSwitcher *self)
 {
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   GtkWidget *button;
-  GList *group;
-  GtkStackSwitcherPrivate *priv;
+  GtkWidget *widget;
+  gboolean selected;
   GtkStackPage *page;
 
-  priv = gtk_stack_switcher_get_instance_private (self);
-
-  button = gtk_radio_button_new (NULL);
-
+  button = gtk_toggle_button_new ();
   gtk_widget_set_focus_on_click (button, FALSE);
-  gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (button), FALSE);
 
-  page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
+  widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), position);
   update_button (self, widget, button);
-
-  group = gtk_container_get_children (GTK_CONTAINER (self));
-  if (group != NULL)
-    {
-      gtk_radio_button_join_group (GTK_RADIO_BUTTON (button), GTK_RADIO_BUTTON (group->data));
-      g_list_free (group);
-    }
 
   gtk_container_add (GTK_CONTAINER (self), button);
 
   g_object_set_data (G_OBJECT (button), "child-index", GUINT_TO_POINTER (position));
+  selected = gtk_selection_model_is_selected (GTK_SELECTION_MODEL (priv->pages), position);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
   g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), self);
   g_signal_connect (widget, "notify::visible", G_CALLBACK (on_visible_updated), self);
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
 
   g_hash_table_insert (priv->buttons, widget, button);
+
+  g_object_unref (widget);
 }
 
 static void
@@ -351,24 +333,9 @@ populate_switcher (GtkStackSwitcher *self)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   guint i;
-  GtkWidget *button;
-  GtkWidget *widget;
 
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
-    {
-      widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
-      add_child (widget, i, self);
-      g_object_unref (widget);
-    }
-
-  widget = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (priv->pages));
-  if (widget != NULL)
-    {
-      button = g_hash_table_lookup (priv->buttons, widget);
-      priv->in_child_changed = TRUE;
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      priv->in_child_changed = FALSE;
-    }
+    add_child (i, self);
 }
 
 static void
@@ -401,31 +368,35 @@ items_changed_cb (GListModel       *model,
                   guint             added,
                   GtkStackSwitcher *switcher)
 {
-  /* FIXME: we can do better */
   clear_switcher (switcher);
   populate_switcher (switcher);
 }
 
 static void
 selection_changed_cb (GtkSelectionModel *model,
-                      GParamSpec        *pspec,
+                      guint              position,
+                      guint              n_items,
                       GtkStackSwitcher  *switcher)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
-  GtkWidget *child;
-  GtkWidget *button;
+  guint i;
 
-  child = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
-  if (child == NULL)
-    return;
+  priv->in_child_changed = TRUE;
 
-  button = g_hash_table_lookup (priv->buttons, child);
-  if (button != NULL)
+  for (i = position; i < position + n_items; i++)
     {
-      priv->in_child_changed = TRUE;
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      priv->in_child_changed = FALSE;
+      GtkWidget *child;
+      GtkWidget *button;
+      gboolean selected;
+
+      child = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
+      button = g_hash_table_lookup (priv->buttons, child);
+      selected = gtk_selection_model_is_selected (GTK_SELECTION_MODEL (priv->pages), i);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+      g_object_unref (child);
     }
+
+  priv->in_child_changed = FALSE;
 }
 
 static void
@@ -444,7 +415,7 @@ connect_stack_signals (GtkStackSwitcher *switcher)
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
 
   g_signal_connect (priv->pages, "items-changed", G_CALLBACK (items_changed_cb), switcher);
-  g_signal_connect (priv->pages, "notify::selected", G_CALLBACK (selection_changed_cb), switcher);
+  g_signal_connect (priv->pages, "selection-changed", G_CALLBACK (selection_changed_cb), switcher);
   g_signal_connect_swapped (priv->stack, "destroy", G_CALLBACK (disconnect_stack_signals), switcher);
 }
 
@@ -566,9 +537,7 @@ static void
 gtk_stack_switcher_finalize (GObject *object)
 {
   GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
-  GtkStackSwitcherPrivate *priv;
-
-  priv = gtk_stack_switcher_get_instance_private (switcher);
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
 
   g_hash_table_destroy (priv->buttons);
 
