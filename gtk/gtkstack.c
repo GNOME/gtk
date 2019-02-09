@@ -2223,18 +2223,21 @@ transform_to (GBinding *binding,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkWidget *child;
   guint i;
+  guint pos = GTK_INVALID_LIST_POSITION;
 
   child = g_value_get_object (from_value);
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
     {
-      if (g_list_model_get_item (G_LIST_MODEL (priv->pages), i) == child)
-        {
-          g_value_set_uint (to_value, i);
-          return TRUE;
-        }
+      GtkWidget *widget;
+      widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
+      if (widget == child)
+        pos = i;
+      g_object_unref (widget);
+      if (pos != GTK_INVALID_LIST_POSITION)
+        break;
     }
 
-  g_value_set_uint (to_value, GTK_INVALID_LIST_POSITION);
+  g_value_set_uint (to_value, pos);
   return TRUE;
 }
 
@@ -2254,6 +2257,7 @@ transform_from (GBinding *binding,
       GtkWidget *child;
       child = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
       g_value_set_object (to_value, child);
+      g_object_unref (child);
       return TRUE;
     }
   else
