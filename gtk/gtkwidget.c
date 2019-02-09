@@ -2810,10 +2810,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->visible = gtk_widget_class_get_visible_by_default (g_class);
   priv->child_visible = TRUE;
   priv->name = NULL;
-  priv->allocation.x = -1;
-  priv->allocation.y = -1;
-  priv->allocation.width = 0;
-  priv->allocation.height = 0;
   priv->user_alpha = 255;
   priv->alpha = 255;
   priv->surface = NULL;
@@ -2822,7 +2818,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->last_child = NULL;
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
-  priv->allocated_baseline = -1;
+  priv->baseline = -1;
   priv->allocated_size_baseline = -1;
 
   priv->sensitive = TRUE;
@@ -3044,8 +3040,8 @@ gtk_widget_unparent (GtkWidget *widget)
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent.
    */
-  priv->allocation.width = 0;
-  priv->allocation.height = 0;
+  priv->width = 0;
+  priv->height = 0;
 
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -4233,15 +4229,18 @@ gtk_widget_size_allocate (GtkWidget           *widget,
       real_allocation.height = MAX (1, real_allocation.height);
     }
 
-  baseline_changed = priv->allocated_baseline != baseline;
-  size_changed = (priv->allocation.width != real_allocation.width ||
-                  priv->allocation.height != real_allocation.height);
-  position_changed = (priv->allocation.x != real_allocation.x ||
-                      priv->allocation.y != real_allocation.y);
+  baseline_changed = priv->baseline != baseline;
+  size_changed = (priv->width != real_allocation.width ||
+                  priv->height != real_allocation.height);
+  position_changed = (priv->transform.x != real_allocation.x ||
+                      priv->transform.y != real_allocation.y);
 
   /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
-  priv->allocation = real_allocation;
-  priv->allocated_baseline = baseline;
+  priv->transform.x = real_allocation.x;
+  priv->transform.y = real_allocation.y;
+  priv->width = real_allocation.width;
+  priv->height = real_allocation.height;
+  priv->baseline = baseline;
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -4390,8 +4389,8 @@ gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
   get_box_padding (style, &padding);
 
   /* allocation is relative to the parent's origin */
-  *origin_x = priv->allocation.x;
-  *origin_y = priv->allocation.y;
+  *origin_x = priv->transform.x;
+  *origin_y = priv->transform.y;
 
   /* ... but points to the upper left, excluding widget margins
    * but including all the css properties */
@@ -6185,10 +6184,10 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
 
   if (!visible)
     {
-      priv->allocation.x = -1;
-      priv->allocation.y = -1;
-      priv->allocation.width = 0;
-      priv->allocation.height = 0;
+      priv->transform.x = 0;
+      priv->transform.y = 0;
+      priv->width = 0;
+      priv->height = 0;
       memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
       priv->allocated_size_baseline = 0;
       gtk_widget_update_paintables (widget);
@@ -6278,8 +6277,8 @@ gtk_widget_set_has_surface (GtkWidget *widget,
   priv->no_surface_set = TRUE;
 
   /* GdkSurface has a min size of 1×1 */
-  priv->allocation.width = 1;
-  priv->allocation.height = 1;
+  priv->width = 1;
+  priv->height = 1;
 }
 
 /**
@@ -11134,7 +11133,10 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (allocation != NULL);
 
-  *allocation = priv->allocation;
+  allocation->x = priv->transform.x;
+  allocation->y = priv->transform.y;
+  allocation->width = priv->width;
+  allocation->height = priv->height;
 }
 
 /**
@@ -11226,8 +11228,8 @@ gtk_widget_pick (GtkWidget *widget,
 
         if (x < -padding.left ||
             y < -padding.top  ||
-            x >= priv->allocation.width - margin.left - margin.right - border.left - border.right - padding.left ||
-            y >= priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
+            x >= priv->width - margin.left - margin.right - border.left - border.right - padding.left ||
+            y >= priv->height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
           return NULL;
       }
       break;
@@ -11275,8 +11277,8 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
 
   alloc.x = - (padding.left + border.left);
   alloc.y = - (padding.top + border.top);
-  alloc.width = priv->allocation.width - margin.left - margin.right;
-  alloc.height = priv->allocation.height -margin.top - margin.bottom;
+  alloc.width = priv->width - margin.left - margin.right;
+  alloc.height = priv->height - margin.top - margin.bottom;
 
   if (!gtk_widget_translate_coordinates (widget,
                                          target,
@@ -11311,7 +11313,7 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->allocation.width;
+  return priv->width;
 }
 
 /**
@@ -11329,7 +11331,7 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->allocation.height;
+  return priv->height;
 }
 
 /**
@@ -11352,7 +11354,7 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  if (priv->allocated_baseline == -1)
+  if (priv->baseline == -1)
     return -1;
 
   style = gtk_css_node_get_style (priv->cssnode);
@@ -11360,7 +11362,7 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  return priv->allocated_baseline - margin.top - border.top - padding.top;
+  return priv->baseline - margin.top - border.top - padding.top;
 }
 
 /**
@@ -12977,7 +12979,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
           graphene_rect_init (&bounds,
                               0,
                               margin.top + border.top + padding.top + baseline,
-                              priv->allocation.width, 1);
+                              priv->width, 1);
           gtk_snapshot_append_color (snapshot,
                                      &red,
                                      &bounds);
@@ -12992,7 +12994,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
 
       graphene_rect_init (&bounds,
                           0, 0,
-                          priv->allocation.width, priv->allocation.height);
+                          priv->width, priv->height);
 
       gtk_snapshot_append_color (snapshot,
                                  &blue,
@@ -13465,8 +13467,8 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  x = priv->allocation.x;
-  y = priv->allocation.y;
+  x = priv->transform.x;
+  y = priv->transform.y;
 
   gtk_snapshot_offset (snapshot, x, y);
   gtk_widget_snapshot (child, snapshot);
@@ -13668,7 +13670,7 @@ gtk_widget_get_width (GtkWidget *widget)
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  return priv->allocation.width -
+  return priv->width -
          margin.left  - margin.right -
          border.left  - border.right -
          padding.left - padding.right;
@@ -13698,7 +13700,7 @@ gtk_widget_get_height (GtkWidget *widget)
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  return priv->allocation.height -
+  return priv->height -
          margin.top  - margin.bottom -
          border.top  - border.bottom -
          padding.top - padding.bottom;

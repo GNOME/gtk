@@ -141,8 +141,13 @@ struct _GtkWidgetPrivate
   /* The widget's allocated size */
   GtkAllocation allocated_size;
   gint allocated_size_baseline;
-  GtkAllocation allocation;
-  gint allocated_baseline;
+  struct {
+    int x;
+    int y;
+  } transform;
+  int width;
+  int height;
+  int baseline;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
@@ -455,7 +460,12 @@ static inline void
 _gtk_widget_get_allocation (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
-  *allocation = widget->priv->allocation;
+  GtkWidgetPrivate *priv = widget->priv;
+
+  allocation->x = priv->transform.x;
+  allocation->y = priv->transform.y;
+  allocation->width = priv->width;
+  allocation->height = priv->height;
 }
 
 static inline GtkWidget *
