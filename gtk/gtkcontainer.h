@@ -56,7 +56,6 @@ struct _GtkContainer
  * @parent_class: The parent class.
  * @add: Signal emitted when a widget is added to container.
  * @remove: Signal emitted when a widget is removed from container.
- * @check_resize: Signal emitted when a size recalculation is needed.
  * @forall: Invokes callback on each child of container. The callback handler
  *    may remove the child.
  * @set_focus_child: Sets the focused child of container.
@@ -78,7 +77,6 @@ struct _GtkContainerClass
 				 GtkWidget	 *widget);
   void    (*remove)    		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
-  void    (*check_resize)	(GtkContainer	 *container);
   void    (*forall)    		(GtkContainer	 *container,
 				 GtkCallback	  callback,
 				 gpointer	  callback_data);
@@ -124,9 +122,6 @@ void    gtk_container_add		 (GtkContainer	   *container,
 GDK_AVAILABLE_IN_ALL
 void    gtk_container_remove		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
-
-GDK_AVAILABLE_IN_ALL
-void    gtk_container_check_resize       (GtkContainer     *container);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_container_foreach      (GtkContainer       *container,

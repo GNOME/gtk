@@ -432,7 +432,6 @@ static void gtk_window_focus_out          (GtkWidget         *widget);
 static void surface_state_changed         (GtkWidget          *widget);
 static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
-static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_window_forall             (GtkContainer   *container,
 					   GtkCallback     callback,
 					   gpointer        callback_data);
@@ -809,7 +808,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;
-  container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
 
   klass->set_focus = gtk_window_real_set_focus;
@@ -5704,7 +5702,6 @@ gtk_window_show (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkContainer *container = GTK_CONTAINER (window);
 
   if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
@@ -5718,7 +5715,7 @@ gtk_window_show (GtkWidget *widget)
 
   gtk_widget_realize (widget);
 
-  gtk_container_check_resize (container);
+  gtk_window_check_resize (window);
 
   gtk_widget_map (widget);
 
@@ -7163,13 +7160,15 @@ gtk_window_remove (GtkContainer *container,
     GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, widget);
 }
 
-static void
-gtk_window_check_resize (GtkContainer *container)
+void
+gtk_window_check_resize (GtkWindow *self)
 {
-  if (!_gtk_widget_get_alloc_needed (GTK_WIDGET (container)))
-    GTK_CONTAINER_CLASS (gtk_window_parent_class)->check_resize (container);
-  else if (gtk_widget_get_visible (GTK_WIDGET (container)))
-    gtk_window_move_resize (GTK_WINDOW (container));
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  if (!_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_ensure_allocate (widget);
+  else if (gtk_widget_get_visible (widget))
+    gtk_window_move_resize (self);
 }
 
 static void
