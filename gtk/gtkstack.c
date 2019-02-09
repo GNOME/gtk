@@ -2249,15 +2249,15 @@ transform_from (GBinding *binding,
   guint selected;
 
   selected = g_value_get_uint (from_value);
-  if (selected == GTK_INVALID_LIST_POSITION)
-    g_value_set_object (to_value, NULL);
-  else
+  if (selected < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)))
     {
       GtkWidget *child;
       child = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
       g_value_set_object (to_value, child);
+      return TRUE;
     }
-  return TRUE;
+  else
+    return FALSE;
 }
 
 /**
