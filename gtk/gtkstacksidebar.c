@@ -291,18 +291,18 @@ populate_sidebar (GtkStackSidebar *sidebar)
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GtkWidget *widget, *row;
-  guint i, selected;
+  guint i;
 
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
     {
       widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
       add_child (widget, i, sidebar);
+      g_object_unref (widget);
     }
 
-  selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (priv->pages));
-  if (selected != GTK_INVALID_LIST_POSITION)
+  widget = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (priv->pages));
+  if (widget != NULL)
     {
-      widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
       row = g_hash_table_lookup (priv->rows, widget);
       priv->in_child_changed = TRUE;
       gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
@@ -351,15 +351,13 @@ selection_changed_cb (GtkSelectionModel *model,
                       GtkStackSidebar   *sidebar)
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-  guint selected;
   GtkWidget *child;
   GtkWidget *row;
 
-  selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model));
-  if (selected == GTK_INVALID_LIST_POSITION)
+  child = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
+  if (child == NULL)
     return;
 
-  child = g_list_model_get_item (G_LIST_MODEL (model), selected);
   row = g_hash_table_lookup (priv->rows, child);
   if (row != NULL)
     {
