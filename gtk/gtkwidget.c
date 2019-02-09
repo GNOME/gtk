@@ -34,6 +34,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
@@ -4032,6 +4033,25 @@ get_number (GtkCssStyle *style,
 }
 
 static void
+get_corner (GtkCssStyle *style,
+            guint        property,
+            int         *x,
+            int         *y)
+{
+  GtkCssValue *css_value = gtk_css_style_get_value (style, property);
+  double d;
+
+  g_assert (x != NULL);
+  g_assert (y != NULL);
+
+  d = _gtk_css_corner_value_get_x (css_value, 100);
+  *x = d < 1.0 ? ceil (d) : floor (d);
+
+  d = _gtk_css_corner_value_get_y (css_value, 100);
+  *y = d < 1.0 ? ceil (d) : floor (d);
+}
+
+static void
 get_box_margin (GtkCssStyle *style,
                 GtkBorder   *margin)
 {
@@ -4059,6 +4079,29 @@ get_box_padding (GtkCssStyle *style,
   border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
   border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
   border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+}
+
+static void
+get_border_radius (GtkCssStyle *style,
+                   int         *border_radius)
+{
+  get_corner (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS, &border_radius[0], &border_radius[1]);
+  get_corner (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS, &border_radius[2], &border_radius[3]);
+  get_corner (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS, &border_radius[4], &border_radius[5]);
+  get_corner (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS, &border_radius[6], &border_radius[7]);
+}
+
+static inline gboolean
+has_border_radius (gint *border_radius)
+{
+  return border_radius[0] != 0 ||
+         border_radius[1] != 0 ||
+         border_radius[2] != 0 ||
+         border_radius[3] != 0 ||
+         border_radius[4] != 0 ||
+         border_radius[5] != 0 ||
+         border_radius[6] != 0 ||
+         border_radius[7] != 0;
 }
 
 /**
@@ -11200,6 +11243,10 @@ gtk_widget_pick (GtkWidget *widget,
                  gdouble    y)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  graphene_rect_t rect;
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
+  int border_radius[8];
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -11208,29 +11255,40 @@ gtk_widget_pick (GtkWidget *widget,
       !_gtk_widget_is_drawable (widget))
     return NULL;
 
-  switch (priv->overflow)
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+  get_border_radius (style, border_radius);
+
+  rect = GRAPHENE_RECT_INIT (- padding.left,
+                             - padding.top,
+                             priv->allocation.width - margin.left - margin.right - border.left  - border.right,
+                             priv->allocation.height - margin.top  - margin.bottom - border.top  - border.bottom);
+
+
+  if (has_border_radius (border_radius))
     {
-    default:
-    case GTK_OVERFLOW_VISIBLE:
-      break;
+      GskRoundedRect rounded_rect;
 
-    case GTK_OVERFLOW_HIDDEN:
-      {
-        GtkBorder margin, border, padding;
-        GtkCssStyle *style;
+      gsk_rounded_rect_init (&rounded_rect,
+                             &rect,
+                             &GRAPHENE_SIZE_INIT (border_radius[0], border_radius[1]),
+                             &GRAPHENE_SIZE_INIT (border_radius[2], border_radius[3]),
+                             &GRAPHENE_SIZE_INIT (border_radius[4], border_radius[5]),
+                             &GRAPHENE_SIZE_INIT (border_radius[6], border_radius[7]));
 
-        style = gtk_css_node_get_style (priv->cssnode);
-        get_box_margin (style, &margin);
-        get_box_border (style, &border);
-        get_box_padding (style, &padding);
-
-        if (x < -padding.left ||
-            y < -padding.top  ||
-            x >= priv->allocation.width - margin.left - margin.right - border.left - border.right - padding.left ||
-            y >= priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
+      if (!gsk_rounded_rect_contains_point (&rounded_rect,
+                                            &GRAPHENE_POINT_INIT (x, y)))
           return NULL;
-      }
-      break;
+    }
+  else
+    {
+      if (x < graphene_rect_get_x (&rect) ||
+          y < graphene_rect_get_y (&rect)  ||
+          x >= graphene_rect_get_width (&rect) ||
+          y >= graphene_rect_get_height (&rect))
+        return NULL;
     }
 
   return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
@@ -13058,11 +13116,32 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     {
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT (- padding.left,
-                                                   - padding.top,
-                                                   allocation.width - margin.left - margin.right - border.left  - border.right,
-                                                   allocation.height - margin.top  - margin.bottom - border.top  - border.bottom));
+      graphene_rect_t clip_rect;
+      int border_radius[8];
+
+      clip_rect = GRAPHENE_RECT_INIT (- padding.left,
+                                      - padding.top,
+                                      allocation.width - margin.left - margin.right - border.left  - border.right,
+                                      allocation.height - margin.top  - margin.bottom - border.top  - border.bottom);
+
+      get_border_radius (style, border_radius);
+      if (has_border_radius (border_radius))
+        {
+          GskRoundedRect rounded_clip_rect;
+
+          gsk_rounded_rect_init (&rounded_clip_rect,
+                                 &clip_rect,
+                                 &GRAPHENE_SIZE_INIT (border_radius[0], border_radius[1]),
+                                 &GRAPHENE_SIZE_INIT (border_radius[2], border_radius[3]),
+                                 &GRAPHENE_SIZE_INIT (border_radius[4], border_radius[5]),
+                                 &GRAPHENE_SIZE_INIT (border_radius[6], border_radius[7]));
+
+          gtk_snapshot_push_rounded_clip (snapshot, &rounded_clip_rect);
+        }
+      else
+        {
+          gtk_snapshot_push_clip (snapshot, &clip_rect);
+        }
     }
 
   klass->snapshot (widget, snapshot);
