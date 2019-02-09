@@ -264,6 +264,14 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
   return iface->unselect_all (model);
 }
 
+/**
+ * gtk_selection_model_get_model:
+ * @model: a #GtkSelectionModel
+ *
+ * Gets the underlying model of @model.
+ *
+ * Returns: (transfer none): the underlying model
+ */
 GListModel *
 gtk_selection_model_get_model (GtkSelectionModel *model)
 {
