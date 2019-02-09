@@ -113,7 +113,7 @@ on_button_clicked (GtkWidget        *button,
       guint index;
 
       index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "child-index"));
-      gtk_selection_model_select_item (GTK_SELECTION_MODEL (priv->pages), index, TRUE);
+      gtk_selection_model_select_item (priv->pages, index, TRUE);
     }
 }
 
@@ -314,7 +314,7 @@ add_child (guint             position,
   gtk_container_add (GTK_CONTAINER (self), button);
 
   g_object_set_data (G_OBJECT (button), "child-index", GUINT_TO_POINTER (position));
-  selected = gtk_selection_model_is_selected (GTK_SELECTION_MODEL (priv->pages), position);
+  selected = gtk_selection_model_is_selected (priv->pages, position);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
 
   page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
@@ -389,9 +389,15 @@ selection_changed_cb (GtkSelectionModel *model,
       gboolean selected;
 
       child = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
+      if (child == NULL)
+        continue;
+
       button = g_hash_table_lookup (priv->buttons, child);
-      selected = gtk_selection_model_is_selected (GTK_SELECTION_MODEL (priv->pages), i);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+      if (button)
+        {
+          selected = gtk_selection_model_is_selected (priv->pages, i);
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+        }
       g_object_unref (child);
     }
 
