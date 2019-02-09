@@ -34,12 +34,11 @@
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkshortcutssection.h"
-#include "gtkshortcutswindow.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkwindowprivate.h"
 
 #include "a11y/gtkcontaineraccessibleprivate.h"
 
@@ -129,7 +128,6 @@ struct _GtkContainerPrivate
 enum {
   ADD,
   REMOVE,
-  CHECK_RESIZE,
   SET_FOCUS_CHILD,
   LAST_SIGNAL
 };
@@ -148,7 +146,6 @@ static void     gtk_container_add_unimplemented    (GtkContainer      *container
                                                     GtkWidget         *widget);
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
                                                     GtkWidget         *widget);
-static void     gtk_container_real_check_resize    (GtkContainer      *container);
 static void     gtk_container_compute_expand       (GtkWidget         *widget,
                                                     gboolean          *hexpand_p,
                                                     gboolean          *vexpand_p);
@@ -284,7 +281,6 @@ gtk_container_class_init (GtkContainerClass *class)
 
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
-  class->check_resize = gtk_container_real_check_resize;
   class->forall = NULL;
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
@@ -308,14 +304,6 @@ gtk_container_class_init (GtkContainerClass *class)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
-  container_signals[CHECK_RESIZE] =
-    g_signal_new (I_("check-resize"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkContainerClass, check_resize),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
   container_signals[SET_FOCUS_CHILD] =
     g_signal_new (I_("set-focus-child"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1397,7 +1385,10 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
    */
   if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
     {
-      gtk_container_check_resize (container);
+      if (GTK_IS_WINDOW (container))
+        gtk_window_check_resize (GTK_WINDOW (container));
+      else
+        g_warning ("gtk_container_idle_sizer() called on a non-window");
     }
 
   if (!gtk_container_needs_idle_sizer (container))
@@ -1458,44 +1449,6 @@ _gtk_container_queue_restyle (GtkContainer *container)
 
   priv->restyle_pending = TRUE;
   gtk_container_start_idle_sizer (container);
-}
-
-void
-gtk_container_check_resize (GtkContainer *container)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  g_signal_emit (container, container_signals[CHECK_RESIZE], 0);
-}
-
-static void
-gtk_container_real_check_resize (GtkContainer *container)
-{
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkAllocation allocation;
-  GtkRequisition requisition;
-  int baseline;
-
-  if (_gtk_widget_get_alloc_needed (widget))
-    {
-      if (!_gtk_widget_is_toplevel (widget))
-        {
-          gtk_widget_get_preferred_size (widget, &requisition, NULL);
-          gtk_widget_get_allocated_size (widget, &allocation, &baseline);
-
-          if (allocation.width < requisition.width)
-            allocation.width = requisition.width;
-          if (allocation.height < requisition.height)
-            allocation.height = requisition.height;
-          gtk_widget_size_allocate (widget, &allocation, baseline);
-        }
-      else
-        gtk_widget_queue_resize (widget);
-    }
-  else
-    {
-      gtk_widget_ensure_allocate (widget);
-    }
 }
 
 static GtkSizeRequestMode 
