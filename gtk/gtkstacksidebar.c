@@ -61,7 +61,6 @@ struct _GtkStackSidebarPrivate
   GtkStack *stack;
   GtkSelectionModel *pages;
   GHashTable *rows;
-  gboolean in_child_changed;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSidebar, gtk_stack_sidebar, GTK_TYPE_BIN)
@@ -156,17 +155,13 @@ gtk_stack_sidebar_row_selected (GtkListBox    *box,
 {
   GtkStackSidebar *sidebar = GTK_STACK_SIDEBAR (userdata);
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
+  guint index;
 
   if (row == NULL)
     return;
 
-  if (!priv->in_child_changed)
-    {
-      guint index;
-
-      index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row), "child-index"));
-      gtk_selection_model_select_item (priv->pages, index, TRUE);
-    }
+  index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row), "child-index"));
+  gtk_selection_model_select_item (priv->pages, index, TRUE);
 }
 
 static void
@@ -348,8 +343,6 @@ selection_changed_cb (GtkSelectionModel *model,
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   guint i;
 
-  priv->in_child_changed = TRUE;
-
   for (i = position; i < position + n_items; i++)
     {
       GtkWidget *child;
@@ -363,8 +356,6 @@ selection_changed_cb (GtkSelectionModel *model,
         gtk_list_box_unselect_row (priv->list, GTK_LIST_BOX_ROW (row));
       g_object_unref (child);
     }
-
-  priv->in_child_changed = FALSE;
 }
 
 static void
