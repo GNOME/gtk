@@ -439,6 +439,23 @@ gtk_selection_model_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtksingleselection</FILE>
+<TITLE>GtkSingleSelection</TITLE>
+GtkSingleSelection
+GTK_INVALID_LIST_POSITION
+gtk_single_selection_new
+gtk_single_selection_get_selected
+gtk_single_selection_set_selected
+gtk_single_selection_get_selected_item
+gtk_single_selection_get_autoselect
+gtk_single_selection_set_autoselect
+gtk_single_selection_get_can_unselect
+gtk_single_selection_set_can_unselect
+<SUBSECTION Private>
+gtk_single_selection_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkbuildable</FILE>
 GtkBuildable
 GtkBuildableIface
