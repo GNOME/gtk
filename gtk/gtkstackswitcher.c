@@ -362,7 +362,7 @@ populate_switcher (GtkStackSwitcher *self)
     }
 
   selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (priv->pages));
-  if (selected != GTK_INVALID_LIST_POSITION)
+  if (selected < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)))
     {
       widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
       button = g_hash_table_lookup (priv->buttons, widget);
@@ -418,7 +418,7 @@ selection_changed_cb (GtkSelectionModel *model,
   GtkWidget *button;
 
   selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model));
-  if (selected == GTK_INVALID_LIST_POSITION)
+  if (g_list_model_get_n_items (G_LIST_MODEL (model)) <= selected)
     return;
 
   child = g_list_model_get_item (G_LIST_MODEL (model), selected);
