@@ -27,6 +27,7 @@
 #endif
 
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
 
@@ -155,6 +156,10 @@ void                   gtk_stack_set_interpolate_size    (GtkStack *stack,
                                                           gboolean  interpolate_size);
 GDK_AVAILABLE_IN_ALL
 gboolean               gtk_stack_get_interpolate_size    (GtkStack *stack);
+
+GDK_AVAILABLE_IN_ALL
+GtkSelectionModel *    gtk_stack_get_pages               (GtkStack *stack);
+
 G_END_DECLS
 
 #endif
