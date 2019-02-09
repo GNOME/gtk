@@ -30,6 +30,7 @@
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
+#include "gtksingleselection.h"
 #include "a11y/gtkstackaccessible.h"
 #include "a11y/gtkstackaccessibleprivate.h"
 #include <math.h>
@@ -137,6 +138,8 @@ typedef struct {
   gboolean interpolate_size;
 
   GtkStackTransitionType active_transition_type;
+
+  GtkSelectionModel *pages;
 
 } GtkStackPrivate;
 
@@ -2293,4 +2296,82 @@ gtk_stack_init (GtkStack *stack)
   priv->hhomogeneous = TRUE;
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
+}
+
+static gboolean
+transform_to (GBinding *binding,
+              const GValue *from_value,
+              GValue *to_value,
+              gpointer user_data)
+{
+  GtkStack *stack = user_data;
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkWidget *child;
+  guint i;
+
+  child = g_value_get_object (from_value);
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
+    {
+      if (g_list_model_get_item (G_LIST_MODEL (priv->pages), i) == child)
+        {
+          g_value_set_uint (to_value, i);
+          return TRUE;
+        }
+    }
+
+  g_value_set_uint (to_value, GTK_INVALID_LIST_POSITION);
+  return TRUE;
+}
+
+static gboolean
+transform_from (GBinding *binding,
+              const GValue *from_value,
+              GValue *to_value,
+              gpointer user_data)
+{
+  GtkStack *stack = user_data;
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  guint selected;
+
+  selected = g_value_get_uint (from_value);
+  if (selected == GTK_INVALID_LIST_POSITION)
+    g_value_set_object (to_value, NULL);
+  else
+    {
+      GtkWidget *child;
+      child = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
+      g_value_set_object (to_value, child);
+    }
+  return TRUE;
+}
+
+/**
+ * gtk_stack_get_pages:
+ * @stack: a #GtkStack
+ *
+ * Returns a #GListModel that contains the children of the stack,
+ * and can be used to keep and up-to-date view. The model also
+ * implements #GtkSelectionModel and can be used to track and
+ * modify the visible child.
+ *
+ * Returns: (transfer full): a #GtkSelectionModel for the stack's children
+ */
+GtkSelectionModel *
+gtk_stack_get_pages (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
+
+  if (priv->pages)
+    return g_object_ref (priv->pages);
+
+  priv->pages = GTK_SELECTION_MODEL (gtk_single_selection_new (gtk_widget_observe_children (GTK_WIDGET (stack))));
+  g_object_add_weak_pointer (G_OBJECT (priv->pages), (gpointer *)&priv->pages);
+  g_object_bind_property_full (stack, "visible-child",
+                               priv->pages, "selected",
+                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE,
+                               transform_to, transform_from, stack, NULL);
+
+  return priv->pages;
 }
