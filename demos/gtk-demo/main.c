@@ -58,7 +58,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK widgets",
                          "authors", authors,
-                         "logo-icon-name", "gtk4-demo",
+                         "logo-icon-name", "org.gtk.Demo",
                          "title", "About GTK Demo",
                          NULL);
 }

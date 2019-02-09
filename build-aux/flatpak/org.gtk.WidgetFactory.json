@@ -5,7 +5,6 @@
     "sdk": "org.gnome.Sdk",
     "command": "gtk4-widget-factory",
     "tags": ["devel", "development", "nightly"],
-    "rename-icon": "gtk4-widget-factory",
     "desktop-file-name-prefix": "(Development) ",
     "finish-args": [
         "--device=dri",

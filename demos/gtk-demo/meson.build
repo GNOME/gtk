@@ -99,7 +99,7 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
                                             source_dir: '.')
 
 executable('gtk4-demo',
-                   demos, demos_h, extra_demo_sources, gtkdemo_resources,
+           demos, demos_h, extra_demo_sources, gtkdemo_resources,
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
@@ -119,12 +119,10 @@ executable('gtk4-demo-application',
 # icons
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
-foreach icon_size: [ '16x16', '22x22', '24x24', '32x32', '48x48', '256x256', ]
-  gtk_demo_icons_dir = join_paths(icontheme_dir, '@0@/apps'.format(icon_size))
-  install_data('data/@0@/gtk4-demo.png'.format(icon_size),
-               install_dir: gtk_demo_icons_dir)
-  install_data('data/@0@/gtk4-demo-symbolic.symbolic.png'.format(icon_size),
-               install_dir: gtk_demo_icons_dir)
+foreach size: ['scalable', 'symbolic']
+  install_subdir('data/' + size,
+    install_dir: icontheme_dir
+  )
 endforeach
 
 # desktop file

@@ -232,7 +232,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK themes and widgets",
                          "authors", authors,
-                         "logo-icon-name", "gtk4-widget-factory",
+                         "logo-icon-name", "org.gtk.WidgetFactory",
                          "title", "About GTK Widget Factory",
                          "system-information", s->str,
                          NULL);
