@@ -387,7 +387,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    *
    * The selected item
    */
-  properties[PROP_SELECTED] =
+  properties[PROP_SELECTED_ITEM] =
     g_param_spec_object ("selected-item",
                        P_("Selected Item"),
                        P_("The selected item"),
@@ -494,7 +494,7 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
  * Gets the selected item. If no item is selected, %NULL is returned.
  *
  * Returns: (transfer none): The selected item
- *
+ */
 gpointer
 gtk_single_selection_get_selected_item (GtkSingleSelection *self)
 {
