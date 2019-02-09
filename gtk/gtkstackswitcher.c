@@ -351,7 +351,6 @@ populate_switcher (GtkStackSwitcher *self)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   guint i;
-  guint selected;
   GtkWidget *button;
   GtkWidget *widget;
 
@@ -359,12 +358,12 @@ populate_switcher (GtkStackSwitcher *self)
     {
       widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
       add_child (widget, i, self);
+      g_object_unref (widget);
     }
 
-  selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (priv->pages));
-  if (selected < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)))
+  widget = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (priv->pages));
+  if (widget != NULL)
     {
-      widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
       button = g_hash_table_lookup (priv->buttons, widget);
       priv->in_child_changed = TRUE;
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
@@ -413,15 +412,13 @@ selection_changed_cb (GtkSelectionModel *model,
                       GtkStackSwitcher  *switcher)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
-  guint selected;
   GtkWidget *child;
   GtkWidget *button;
 
-  selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model));
-  if (g_list_model_get_n_items (G_LIST_MODEL (model)) <= selected)
+  child = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
+  if (child == NULL)
     return;
 
-  child = g_list_model_get_item (G_LIST_MODEL (model), selected);
   button = g_hash_table_lookup (priv->buttons, child);
   if (button != NULL)
     {
