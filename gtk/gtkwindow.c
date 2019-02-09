@@ -2508,9 +2508,19 @@ gtk_window_root_get_display (GtkRoot *root)
 }
 
 static void
+gtk_window_root_get_surface_transform (GtkRoot *root,
+                                       int     *x,
+                                       int     *y)
+{
+  *x = 0;
+  *y = 0;
+}
+
+static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
+  iface->get_surface_transform = gtk_window_root_get_surface_transform;
 }
 
 /**

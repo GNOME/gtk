@@ -46,6 +46,10 @@ struct _GtkRootInterface
 
   /*< public >*/
   GdkDisplay *          (* get_display)                 (GtkRoot                *self);
+
+  void                  (* get_surface_transform)       (GtkRoot                *root,
+                                                         int                    *x,
+                                                         int                    *y);
 };
 
 

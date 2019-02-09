@@ -44,9 +44,19 @@ gtk_root_default_get_display (GtkRoot *self)
 }
 
 static void
+gtk_root_default_get_surface_transform (GtkRoot *self,
+                                        int     *x,
+                                        int     *y)
+{
+  *x = 0;
+  *y = 0;
+}
+
+static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
+  iface->get_surface_transform = gtk_root_default_get_surface_transform;
 }
 
 GdkDisplay *
@@ -60,3 +70,18 @@ gtk_root_get_display (GtkRoot *self)
   return iface->get_display (self);
 }
 
+
+void
+gtk_root_get_surface_transform (GtkRoot *self,
+                                int     *x,
+                                int     *y)
+{
+  GtkRootInterface *iface;
+
+  g_return_if_fail (GTK_IS_ROOT (self));
+  g_return_if_fail (x != 0);
+  g_return_if_fail (y != 0);
+
+  iface = GTK_ROOT_GET_IFACE (self);
+  return iface->get_surface_transform (self, x, y);
+}
