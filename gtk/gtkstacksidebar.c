@@ -28,7 +28,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkseparator.h"
 #include "gtkstylecontext.h"
-#include "gtksingleselection.h"
+#include "gtkselectionmodel.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -156,16 +156,17 @@ gtk_stack_sidebar_row_selected (GtkListBox    *box,
 {
   GtkStackSidebar *sidebar = GTK_STACK_SIDEBAR (userdata);
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-  guint index;
 
-  if (priv->in_child_changed)
+  if (row == NULL)
     return;
 
-  if (!row)
-    return;
+  if (!priv->in_child_changed)
+    {
+      guint index;
 
-  index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row), "child-index"));
-  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (priv->pages), index);
+      index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row), "child-index"));
+      gtk_selection_model_select_item (priv->pages, index, TRUE);
+    }
 }
 
 static void
@@ -257,13 +258,13 @@ on_page_updated (GtkStackPage    *page,
 }
 
 static void
-add_child (GtkWidget       *widget,
-           guint            position,
+add_child (guint            position,
            GtkStackSidebar *sidebar)
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GtkWidget *item;
   GtkWidget *row;
+  GtkWidget *widget;
   GtkStackPage *page;
 
   /* Make a pretty item when we add kids */
@@ -272,42 +273,35 @@ add_child (GtkWidget       *widget,
   gtk_widget_set_valign (item, GTK_ALIGN_CENTER);
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), item);
-  gtk_widget_show (item);
 
+  widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), position);
   update_row (sidebar, widget, row);
 
-  /* Hook up for events */
+  gtk_container_add (GTK_CONTAINER (priv->list), row);
+
+  g_object_set_data (G_OBJECT (row), "child-index", GUINT_TO_POINTER (position));
+  if (gtk_selection_model_is_selected (priv->pages, position))
+    gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
+  else
+    gtk_list_box_unselect_row (priv->list, GTK_LIST_BOX_ROW (row));
+
   page = gtk_stack_get_page (GTK_STACK (priv->stack), widget);
   g_signal_connect (widget, "notify::visible", G_CALLBACK (on_visible_updated), sidebar);
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), sidebar);
 
-  g_object_set_data (G_OBJECT (row), "child-index", GUINT_TO_POINTER (position));
   g_hash_table_insert (priv->rows, widget, row);
-  gtk_container_add (GTK_CONTAINER (priv->list), row);
+
+  g_object_unref (widget);
 }
 
 static void
 populate_sidebar (GtkStackSidebar *sidebar)
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-  GtkWidget *widget, *row;
   guint i;
 
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
-    {
-      widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
-      add_child (widget, i, sidebar);
-      g_object_unref (widget);
-    }
-
-  widget = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (priv->pages));
-  if (widget != NULL)
-    {
-      row = g_hash_table_lookup (priv->rows, widget);
-      priv->in_child_changed = TRUE;
-      gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
-      priv->in_child_changed = FALSE;
-    }
+    add_child (i, sidebar);
 }
 
 static void
@@ -347,24 +341,30 @@ items_changed_cb (GListModel       *model,
 
 static void
 selection_changed_cb (GtkSelectionModel *model,
-                      GParamSpec        *pspec,
+                      guint              position,
+                      guint              n_items,
                       GtkStackSidebar   *sidebar)
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-  GtkWidget *child;
-  GtkWidget *row;
+  guint i;
 
-  child = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
-  if (child == NULL)
-    return;
+  priv->in_child_changed = TRUE;
 
-  row = g_hash_table_lookup (priv->rows, child);
-  if (row != NULL)
+  for (i = position; i < position + n_items; i++)
     {
-      priv->in_child_changed = TRUE;
-      gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
-      priv->in_child_changed = FALSE;
+      GtkWidget *child;
+      GtkWidget *row;
+
+      child = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
+      row = g_hash_table_lookup (priv->rows, child);
+      if (gtk_selection_model_is_selected (priv->pages, i))
+        gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
+      else
+        gtk_list_box_unselect_row (priv->list, GTK_LIST_BOX_ROW (row));
+      g_object_unref (child);
     }
+
+  priv->in_child_changed = FALSE;
 }
 
 static void
@@ -383,7 +383,7 @@ connect_stack_signals (GtkStackSidebar *sidebar)
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
 
   g_signal_connect (priv->pages, "items-changed", G_CALLBACK (items_changed_cb), sidebar);
-  g_signal_connect (priv->pages, "notify::selected", G_CALLBACK (selection_changed_cb), sidebar);
+  g_signal_connect (priv->pages, "selection-changed", G_CALLBACK (selection_changed_cb), sidebar);
   g_signal_connect_swapped (priv->stack, "destroy", G_CALLBACK (disconnect_stack_signals), sidebar);
 }
 
