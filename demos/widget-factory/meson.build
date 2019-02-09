@@ -19,7 +19,7 @@ install_data('org.gtk.WidgetFactory.desktop', install_dir: gtk_applicationsdir)
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
 foreach size: ['scalable', 'symbolic']
-  install_subdir('hicolor/' + size,
+  install_subdir('data/' + size,
     install_dir: icontheme_dir
   )
 endforeach

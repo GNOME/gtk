@@ -99,7 +99,7 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
                                             source_dir: '.')
 
 executable('gtk4-demo',
-                   demos, demos_h, extra_demo_sources, gtkdemo_resources,
+           demos, demos_h, extra_demo_sources, gtkdemo_resources,
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
@@ -120,7 +120,7 @@ executable('gtk4-demo-application',
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
 foreach size: ['scalable', 'symbolic']
-  install_subdir('hicolor/' + size,
+  install_subdir('data/' + size,
     install_dir: icontheme_dir
   )
 endforeach
