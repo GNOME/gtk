@@ -94,7 +94,6 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (switcher));
-  gtk_style_context_add_class (context, "stack-switcher");
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (switcher), GTK_ORIENTATION_HORIZONTAL);
