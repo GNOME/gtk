@@ -4141,6 +4141,12 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 
   real_allocation = *allocation;
 
+  baseline_changed = priv->allocated_size_baseline != baseline;
+  size_changed = (priv->allocated_size.width != real_allocation.width ||
+                  priv->allocated_size.height != real_allocation.height);
+  position_changed = (priv->allocated_size.x != real_allocation.x ||
+                      priv->allocated_size.y != real_allocation.y);
+
   priv->allocated_size = *allocation;
   priv->allocated_size_baseline = baseline;
 
@@ -4228,12 +4234,6 @@ gtk_widget_size_allocate (GtkWidget           *widget,
       real_allocation.width = MAX (1, real_allocation.width);
       real_allocation.height = MAX (1, real_allocation.height);
     }
-
-  baseline_changed = priv->baseline != baseline;
-  size_changed = (priv->width != real_allocation.width ||
-                  priv->height != real_allocation.height);
-  position_changed = (priv->transform.x != real_allocation.x ||
-                      priv->transform.y != real_allocation.y);
 
   /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
   priv->transform.x = real_allocation.x;
