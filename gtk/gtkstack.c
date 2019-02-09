@@ -30,6 +30,8 @@
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
+#include "gtksingleselection.h"
+#include "gtklistlistmodelprivate.h"
 #include "a11y/gtkstackaccessible.h"
 #include "a11y/gtkstackaccessibleprivate.h"
 #include <math.h>
@@ -137,6 +139,9 @@ typedef struct {
   gboolean interpolate_size;
 
   GtkStackTransitionType active_transition_type;
+
+  GtkSelectionModel *pages;
+  GBinding *binding;
 
 } GtkStackPrivate;
 
@@ -431,6 +436,7 @@ static void     gtk_stack_measure                        (GtkWidget      *widget
                                                           int            *natural,
                                                           int            *minimum_baseline,
                                                           int            *natural_baseline);
+static void     gtk_stack_dispose                        (GObject       *obj);
 static void     gtk_stack_finalize                       (GObject       *obj);
 static void     gtk_stack_get_property                   (GObject       *object,
                                                           guint          property_id,
@@ -464,6 +470,33 @@ static void
 gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
 {
   iface->add_child = gtk_stack_buildable_add_child;
+}
+
+static void stack_remove (GtkStack  *stack,
+                          GtkWidget *child,
+                          gboolean   in_dispose);
+
+static void
+remove_child (GtkWidget *child, gpointer user_data)
+{
+  stack_remove (GTK_STACK (user_data), child, TRUE);
+}
+
+static void
+gtk_stack_dispose (GObject *obj)
+{
+  GtkStack *stack = GTK_STACK (obj);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_clear_pointer (&priv->binding, g_binding_unbind);
+  if (priv->pages)
+    {
+      GListModel *children = gtk_selection_model_get_model (priv->pages);
+      gtk_list_list_model_clear (GTK_LIST_LIST_MODEL (children));
+    }
+  gtk_container_foreach (GTK_CONTAINER (obj), remove_child, obj);
+
+  G_OBJECT_CLASS (gtk_stack_parent_class)->dispose (obj);
 }
 
 static void
@@ -571,6 +604,7 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   object_class->get_property = gtk_stack_get_property;
   object_class->set_property = gtk_stack_set_property;
+  object_class->dispose = gtk_stack_dispose;
   object_class->finalize = gtk_stack_finalize;
 
   widget_class->size_allocate = gtk_stack_size_allocate;
@@ -1281,6 +1315,12 @@ gtk_stack_add_page (GtkStack     *stack,
   gtk_widget_set_child_visible (child_info->widget, FALSE);
   gtk_widget_set_parent (child_info->widget, GTK_WIDGET (stack));
 
+  if (priv->pages)
+    {
+      GListModel *children = gtk_selection_model_get_model (priv->pages);
+      gtk_list_list_model_item_added (GTK_LIST_LIST_MODEL (children), child_info->widget);
+    }
+
   g_signal_connect (child_info->widget, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);
 
@@ -1295,10 +1335,10 @@ gtk_stack_add_page (GtkStack     *stack,
 }
 
 static void
-gtk_stack_remove (GtkContainer *container,
-                  GtkWidget    *child)
+stack_remove (GtkStack  *stack,
+              GtkWidget *child,
+              gboolean   in_dispose)
 {
-  GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *child_info;
   gboolean was_visible;
@@ -1308,7 +1348,7 @@ gtk_stack_remove (GtkContainer *container,
     return;
 
   priv->children = g_list_remove (priv->children, child_info);
-
+  
   g_signal_handlers_disconnect_by_func (child,
                                         stack_child_visibility_notify_cb,
                                         stack);
@@ -1318,7 +1358,12 @@ gtk_stack_remove (GtkContainer *container,
   child_info->widget = NULL;
 
   if (priv->visible_child == child_info)
-    set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
+    {
+      if (in_dispose)
+        priv->visible_child = NULL;
+      else
+        set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
+    }
 
   if (priv->last_visible_child == child_info)
     priv->last_visible_child = NULL;
@@ -1327,8 +1372,26 @@ gtk_stack_remove (GtkContainer *container,
 
   g_object_unref (child_info);
 
-  if ((priv->hhomogeneous || priv->vhomogeneous) && was_visible)
+  if (!in_dispose &&
+      (priv->hhomogeneous || priv->vhomogeneous) &&
+      was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
+}
+
+static void
+gtk_stack_remove (GtkContainer *container,
+                  GtkWidget    *child)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (container));
+  GtkWidget *prev_sibling = gtk_widget_get_prev_sibling (child);
+
+  stack_remove (GTK_STACK (container), child, FALSE);
+
+  if (priv->pages)
+    {
+      GListModel *children = gtk_selection_model_get_model (priv->pages);
+      gtk_list_list_model_item_removed (GTK_LIST_LIST_MODEL (children), prev_sibling);
+    }
 }
 
 /**
@@ -2293,4 +2356,97 @@ gtk_stack_init (GtkStack *stack)
   priv->hhomogeneous = TRUE;
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
+}
+
+static gboolean
+transform_to (GBinding *binding,
+              const GValue *from_value,
+              GValue *to_value,
+              gpointer user_data)
+{
+  GtkStack *stack = user_data;
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkWidget *child;
+  guint i;
+  guint pos = GTK_INVALID_LIST_POSITION;
+
+  child = g_value_get_object (from_value);
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
+    {
+      GtkWidget *widget;
+      widget = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
+      if (widget == child)
+        pos = i;
+      g_object_unref (widget);
+      if (pos != GTK_INVALID_LIST_POSITION)
+        break;
+    }
+
+  g_value_set_uint (to_value, pos);
+  return TRUE;
+}
+
+static gboolean
+transform_from (GBinding *binding,
+              const GValue *from_value,
+              GValue *to_value,
+              gpointer user_data)
+{
+  GtkStack *stack = user_data;
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  guint selected;
+
+  selected = g_value_get_uint (from_value);
+  if (selected < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)))
+    {
+      GtkWidget *child;
+      child = g_list_model_get_item (G_LIST_MODEL (priv->pages), selected);
+      g_value_set_object (to_value, child);
+      g_object_unref (child);
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+/**
+ * gtk_stack_get_pages:
+ * @stack: a #GtkStack
+ *
+ * Returns a #GListModel that contains the children of the stack,
+ * and can be used to keep and up-to-date view. The model also
+ * implements #GtkSelectionModel and can be used to track and
+ * modify the visible child.
+ *
+ * Returns: (transfer full): a #GtkSelectionModel for the stack's children
+ */
+GtkSelectionModel *
+gtk_stack_get_pages (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GListModel *children;
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
+
+  if (priv->pages)
+    return g_object_ref (priv->pages);
+
+  children = G_LIST_MODEL (gtk_list_list_model_new (GTK_TYPE_WIDGET,
+                                                    (gpointer) gtk_widget_get_first_child,
+                                                    (gpointer) gtk_widget_get_next_sibling,
+                                                    (gpointer) gtk_widget_get_prev_sibling,
+                                                    (gpointer) gtk_widget_get_last_child,
+                                                    (gpointer) g_object_ref,
+                                                    stack, NULL));
+  priv->pages = GTK_SELECTION_MODEL (gtk_single_selection_new (children));
+  g_object_unref (children);
+
+  g_object_add_weak_pointer (G_OBJECT (priv->pages), (gpointer *)&priv->pages);
+  priv->binding = g_object_bind_property_full (stack, "visible-child",
+                                               priv->pages, "selected",
+                                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE,
+                                               transform_to, transform_from, stack, NULL);
+  g_object_add_weak_pointer (G_OBJECT (priv->binding), (gpointer *)&priv->binding);
+
+  return priv->pages;
 }
