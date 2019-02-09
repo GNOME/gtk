@@ -56,6 +56,7 @@ enum {
   PROP_AUTOSELECT,
   PROP_CAN_UNSELECT,
   PROP_SELECTED,
+  PROP_SELECTED_ITEM,
 
   /* selectionmodel */
   PROP_MODEL,
@@ -168,6 +169,7 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
             {
               self->selected = 0;
               g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+              g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
             }
         }
     }
@@ -179,6 +181,7 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
     {
       self->selected += added - removed;
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
     }
   else
     {
@@ -194,6 +197,7 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
                 {
                   self->selected = position + i;
                   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+                  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
                 }
               break;
             }
@@ -220,6 +224,7 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
               self->selected = GTK_INVALID_LIST_POSITION;
             }
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
         }
     }
 
@@ -307,6 +312,10 @@ gtk_single_selection_get_property (GObject    *object,
       g_value_set_uint (value, self->selected);
       break;
 
+    case PROP_SELECTED_ITEM:
+      g_value_set_object (value, self->selected_item);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -338,7 +347,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   g_object_class_override_property (gobject_class, PROP_MODEL, "model");
 
   /**
-   * GtkSingleSelection:autoselect
+   * GtkSingleSelection:autoselect:
    *
    * If the selection will always select an item
    */
@@ -350,7 +359,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSingleSelection:can-unselect
+   * GtkSingleSelection:can-unselect:
    *
    * If unselecting the selected item is allowed
    */
@@ -362,7 +371,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSingleSelection:selected
+   * GtkSingleSelection:selected:
    *
    * Position of the selected item
    */
@@ -372,6 +381,18 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                        P_("Position of the selected item"),
                        0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkSingleSelection:selected-item:
+   *
+   * The selected item
+   */
+  properties[PROP_SELECTED] =
+    g_param_spec_object ("selected-item",
+                       P_("Selected Item"),
+                       P_("The selected item"),
+                       G_TYPE_OBJECT,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -467,6 +488,22 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
 }
 
 /**
+ * gtk_single_selection_get_selected_item:
+ * @self: a #GtkSingleSelection
+ * 
+ * Gets the selected item. If no item is selected, %NULL is returned.
+ *
+ * Returns: (transfer none): The selected item
+ *
+gpointer
+gtk_single_selection_get_selected_item (GtkSingleSelection *self)
+{
+  g_return_val_if_fail (GTK_IS_SINGLE_SELECTION (self), NULL);
+
+  return self->selected_item;
+}
+
+/**
  * gtk_single_selection_get_autoselect:
  * @self: a #GtkSingleSelection
  *
@@ -555,4 +592,3 @@ gtk_single_selection_set_can_unselect (GtkSingleSelection *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CAN_UNSELECT]);
 }
-

@@ -50,6 +50,8 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_single_selection_set_selected       (GtkSingleSelection     *self,
                                                          guint                   position);
 GDK_AVAILABLE_IN_ALL
+gpointer        gtk_single_selection_get_selected_item  (GtkSingleSelection     *self);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_single_selection_get_autoselect     (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_single_selection_set_autoselect     (GtkSingleSelection     *self,
