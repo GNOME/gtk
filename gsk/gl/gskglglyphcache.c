@@ -25,6 +25,7 @@
 #define MAX_OLD 0.333
 
 #define ATLAS_SIZE 512
+#define NODES_PER_ATLAS 512
 
 static guint    glyph_cache_hash       (gconstpointer v);
 static gboolean glyph_cache_equal      (gconstpointer v1,
@@ -40,14 +41,19 @@ create_atlas (GskGLGlyphCache *self,
   GskGLGlyphAtlas *atlas;
 
   atlas = g_new0 (GskGLGlyphAtlas, 1);
+
   atlas->width = MAX (width, ATLAS_SIZE);
   atlas->height = MAX (height, ATLAS_SIZE);
-  atlas->y0 = 1;
-  atlas->y = 1;
-  atlas->x = 1;
   atlas->image = NULL;
 
   GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Create atlas %d x %d", atlas->width, atlas->height));
+
+  atlas->nodes = g_malloc0 (sizeof (struct stbrp_node) * NODES_PER_ATLAS);
+  stbrp_init_target (&atlas->context,
+                     atlas->width,
+                     atlas->height,
+                     atlas->nodes,
+                     NODES_PER_ATLAS);
 
   return atlas;
 }
@@ -63,6 +69,7 @@ free_atlas (gpointer v)
       g_free (atlas->image);
     }
 
+  g_free (atlas->nodes);
   g_free (atlas);
 }
 
@@ -138,54 +145,48 @@ add_to_cache (GskGLGlyphCache  *cache,
               GlyphCacheKey    *key,
               GskGLCachedGlyph *value)
 {
-  GskGLGlyphAtlas *atlas;
-  int i;
-  int width = value->draw_width * key->scale / 1024;
-  int height = value->draw_height * key->scale / 1024;
+  const int width = value->draw_width * key->scale / 1024;
+  const int height = value->draw_height * key->scale / 1024;
+  GskGLGlyphAtlas *atlas = NULL;
+  stbrp_rect glyph_rect;
+  guint i, p;
 
-  for (i = 0; i < cache->atlases->len; i++)
+  glyph_rect.w = width;
+  glyph_rect.h = height;
+
+  /* Try all the atlases and pick the first one that can hold
+   * our new glyph */
+  for (i = 0, p = cache->atlases->len; i < p; i ++)
     {
-      int x, y, y0;
+      GskGLGlyphAtlas *test_atlas = g_ptr_array_index (cache->atlases, i);
 
-      atlas = g_ptr_array_index (cache->atlases, i);
-      x = atlas->x;
-      y = atlas->y;
-      y0 = atlas->y0;
+      stbrp_pack_rects (&test_atlas->context, &glyph_rect, 1);
 
-      if (atlas->x + width + 1 >= atlas->width)
+      if (glyph_rect.was_packed)
         {
-          /* start a new row */
-          y0 = y + 1;
-          x = 1;
+          atlas = test_atlas;
+          break;
         }
-
-      if (y0 + height + 1 >= atlas->height)
-        continue;
-
-      atlas->y0 = y0;
-      atlas->x = x;
-      atlas->y = y;
-      break;
     }
 
-  if (i == cache->atlases->len)
+  if (atlas == NULL)
     {
       atlas = create_atlas (cache, width + 2, height + 2);
       g_ptr_array_add (cache->atlases, atlas);
+
+      stbrp_pack_rects (&atlas->context, &glyph_rect, 1);
+      g_assert (glyph_rect.was_packed);
     }
 
-  value->tx = (float)atlas->x / atlas->width;
-  value->ty = (float)atlas->y0 / atlas->height;
-  value->tw = (float)width / atlas->width;
-  value->th = (float)height / atlas->height;
+  value->tx = (float)glyph_rect.x / atlas->width;
+  value->ty = (float)glyph_rect.y / atlas->height;
+  value->tw = (float)glyph_rect.w / atlas->width;
+  value->th = (float)glyph_rect.h / atlas->height;
 
   value->atlas = atlas;
 
   atlas->pending_glyph.key = key;
   atlas->pending_glyph.value = value;
-
-  atlas->x = atlas->x + width + 1;
-  atlas->y = MAX (atlas->y, atlas->y0 + height + 1);
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (cache->renderer, GLYPH_CACHE))
@@ -195,8 +196,7 @@ add_to_cache (GskGLGlyphCache  *cache,
           atlas = g_ptr_array_index (cache->atlases, i);
           g_message ("atlas %d (%dx%d): %.2g%% old pixels, filled to %d, %d / %d",
                    i, atlas->width, atlas->height,
-                   100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height),
-                   atlas->x, atlas->y0, atlas->y);
+                   100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height));
         }
     }
 #endif
@@ -204,7 +204,7 @@ add_to_cache (GskGLGlyphCache  *cache,
 
 static gboolean
 render_glyph (const GskGLGlyphAtlas *atlas,
-              DirtyGlyph            *glyph,
+              const DirtyGlyph      *glyph,
               GskImageRegion        *region)
 {
   GlyphCacheKey *key = glyph->key;
@@ -420,6 +420,12 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
           GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE,
                    g_message ("Dropping atlas %d (%g.2%% old)",
                             i, 100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height)));
+
+          static int kk;
+
+          g_message ("Dropping cache...");
+          gsk_gl_image_write_to_png (atlas->image, self->gl_driver,
+                                     g_strdup_printf ("dropped_%d.png", kk++));
 
           if (atlas->image)
             {
