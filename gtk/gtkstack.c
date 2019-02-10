@@ -169,6 +169,7 @@ enum
   CHILD_PROP_ICON_NAME,
   CHILD_PROP_POSITION,
   CHILD_PROP_NEEDS_ATTENTION,
+  CHILD_PROP_VISIBLE,
   LAST_CHILD_PROP
 };
 
@@ -179,6 +180,7 @@ struct _GtkStackPage {
   gchar *title;
   gchar *icon_name;
   gboolean needs_attention;
+  gboolean visible;
   GtkWidget *last_focus;
 };
 
@@ -194,6 +196,7 @@ G_DEFINE_TYPE (GtkStackPage, gtk_stack_page, G_TYPE_OBJECT)
 static void
 gtk_stack_page_init (GtkStackPage *page)
 {
+  page->visible = TRUE;
 }
 
 static void
@@ -253,6 +256,10 @@ gtk_stack_page_get_property (GObject      *object,
 
     case CHILD_PROP_NEEDS_ATTENTION:
       g_value_set_boolean (value, info->needs_attention);
+      break;
+
+    case CHILD_PROP_VISIBLE:
+      g_value_set_boolean (value, info->visible);
       break;
 
     default:
@@ -340,6 +347,16 @@ gtk_stack_page_set_property (GObject      *object,
         }
       break;
 
+    case CHILD_PROP_VISIBLE:
+      if (info->visible != g_value_get_boolean (value))
+        {
+          info->visible = g_value_get_boolean (value);
+          if (info->widget)
+            gtk_widget_set_visible (info->widget, info->visible);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -403,6 +420,13 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          P_("Needs Attention"),
                          P_("Whether this page needs attention"),
                          FALSE,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  stack_child_props[CHILD_PROP_VISIBLE] =
+    g_param_spec_boolean ("visible",
+                         P_("Visible"),
+                         P_("Whether this page is visible"),
+                         TRUE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_child_props);
