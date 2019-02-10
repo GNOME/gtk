@@ -370,15 +370,11 @@ See the GNU General Public License, version 3 or later for details.
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkRadioButtonAccessible-2
-        "radio button"
+      unnamed-GtkToggleButtonAccessible-2
+        "toggle button"
         parent: stack_switcher
         index: 0
         name: About
-        member-of: unnamed-GtkRadioButtonAccessible-3
-                   unnamed-GtkRadioButtonAccessible-4
-                   unnamed-GtkRadioButtonAccessible-5
-                   unnamed-GtkRadioButtonAccessible-2
         state: checked enabled focusable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -390,15 +386,11 @@ See the GNU General Public License, version 3 or later for details.
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      unnamed-GtkRadioButtonAccessible-5
-        "radio button"
+      unnamed-GtkToggleButtonAccessible-3
+        "toggle button"
         parent: stack_switcher
         index: 1
         name: Credits
-        member-of: unnamed-GtkRadioButtonAccessible-3
-                   unnamed-GtkRadioButtonAccessible-4
-                   unnamed-GtkRadioButtonAccessible-5
-                   unnamed-GtkRadioButtonAccessible-2
         state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
@@ -410,15 +402,11 @@ See the GNU General Public License, version 3 or later for details.
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      unnamed-GtkRadioButtonAccessible-4
-        "radio button"
+      unnamed-GtkToggleButtonAccessible-4
+        "toggle button"
         parent: stack_switcher
         index: 2
         name: License
-        member-of: unnamed-GtkRadioButtonAccessible-3
-                   unnamed-GtkRadioButtonAccessible-4
-                   unnamed-GtkRadioButtonAccessible-5
-                   unnamed-GtkRadioButtonAccessible-2
         state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
@@ -430,15 +418,11 @@ See the GNU General Public License, version 3 or later for details.
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      unnamed-GtkRadioButtonAccessible-3
-        "radio button"
+      unnamed-GtkToggleButtonAccessible-5
+        "toggle button"
         parent: stack_switcher
         index: 3
         name: System
-        member-of: unnamed-GtkRadioButtonAccessible-3
-                   unnamed-GtkRadioButtonAccessible-4
-                   unnamed-GtkRadioButtonAccessible-5
-                   unnamed-GtkRadioButtonAccessible-2
         state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
