@@ -2521,8 +2521,17 @@ gtk_window_root_get_surface_transform (GtkRoot *root,
                                        int     *x,
                                        int     *y)
 {
-  *x = 0;
-  *y = 0;
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkStyleContext *context;
+  GtkBorder margin, border, padding;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_get_margin (context, &margin);
+  gtk_style_context_get_border (context, &border);
+  gtk_style_context_get_padding (context, &padding);
+
+  *x = margin.left + border.left + padding.left;
+  *y = margin.top + border.top + padding.top;
 }
 
 static void

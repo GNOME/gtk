@@ -13121,7 +13121,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   if (!GTK_IS_WINDOW (widget))
     {
-      gtk_snapshot_offset (snapshot, margin.left, margin.top);
+      gtk_snapshot_offset (snapshot, - padding.left - border.left, - border.top - padding.top);
       gtk_css_style_snapshot_background (style,
                                          snapshot,
                                          allocation.width - margin.left - margin.right,
@@ -13130,11 +13130,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                      snapshot,
                                      allocation.width - margin.left - margin.right,
                                      allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+      gtk_snapshot_offset (snapshot, padding.left + border.left, border.top + padding.top);
     }
-
-  /* Offset to content allocation */
-  gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     {
@@ -13156,7 +13153,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                   snapshot,
                                   allocation.width - margin.left - margin.right,
                                   allocation.height - margin.top - margin.bottom);
-  gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+
+  gtk_snapshot_offset (snapshot, padding.left + border.left, border.top + padding.top);
 
   if (opacity < 1.0)
     gtk_snapshot_pop (snapshot);
@@ -13217,6 +13215,7 @@ gtk_widget_render (GtkWidget            *widget,
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
+  int x, y;
 
   if (!GTK_IS_ROOT (widget))
     return;
@@ -13230,7 +13229,10 @@ gtk_widget_render (GtkWidget            *widget,
     return;
 
   snapshot = gtk_snapshot_new ();
+  gtk_root_get_surface_transform (GTK_ROOT (widget), &x, &y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_widget_snapshot (widget, snapshot);
+  gtk_snapshot_offset (snapshot, -x, -y);
   root = gtk_snapshot_free_to_node (snapshot);
 
   if (root != NULL)
@@ -13542,14 +13544,12 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
                            GtkWidget   *child,
                            GtkSnapshot *snapshot)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
   int x, y;
 
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  x = priv->transform.x;
-  y = priv->transform.y;
+  gtk_widget_get_origin_relative_to_parent (child, &x, &y);
 
   gtk_snapshot_offset (snapshot, x, y);
   gtk_widget_snapshot (child, snapshot);
