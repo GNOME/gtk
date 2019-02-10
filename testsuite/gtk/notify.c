@@ -611,6 +611,12 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "expanded"))
 	continue;
 
+       /* can't select items without an underlying, populated model */
+       if (g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) &&
+           (g_str_equal (pspec->name, "selected") ||
+            g_str_equal (pspec->name, "selected-item")))
+         continue;
+
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
 
