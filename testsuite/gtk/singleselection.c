@@ -162,6 +162,11 @@ insert (GListStore *store,
   g_string_set_size (changes, 0); \
 }G_STMT_END
 
+#define ignore_selection_changes(model) G_STMT_START{ \
+  GString *changes = g_object_get_qdata (G_OBJECT (model), selection_quark); \
+  g_string_set_size (changes, 0); \
+}G_STMT_END
+
 static GListStore *
 new_empty_store (void)
 {
@@ -335,7 +340,7 @@ test_selection (void)
   assert_selection (selection, "1");
   assert_selection_changes (selection, "");
 
-  ret = gtk_selection_model_select_item (selection, 3, FALSE, FALSE);
+  ret = gtk_selection_model_select_item (selection, 3, FALSE);
   g_assert_true (ret);
   assert_selection (selection, "4");
   assert_selection_changes (selection, "0:4");
@@ -345,7 +350,7 @@ test_selection (void)
   assert_selection (selection, "4");
   assert_selection_changes (selection, "");
 
-  ret = gtk_selection_model_select_item (selection, 1, FALSE, FALSE);
+  ret = gtk_selection_model_select_item (selection, 1, FALSE);
   g_assert_true (ret);
   assert_selection (selection, "2");
   assert_selection_changes (selection, "1:3");
@@ -387,7 +392,7 @@ test_autoselect (void)
 
   add (store, 1);
   assert_selection (selection, "1");
-  assert_selection_changes (selection, "0:1");
+  assert_selection_changes (selection, "");
 
   splice (store, 0, 1, (guint[]) { 97 }, 1);
   assert_selection (selection, "97");
@@ -465,6 +470,51 @@ test_persistence (void)
   g_object_unref (selection);
 }
 
+static void
+check_query_range (GtkSelectionModel *selection)
+{
+  guint i, j;
+  guint position, n_items;
+  gboolean selected;
+
+  /* check that range always contains position, and has uniform selection */
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (selection)); i++)
+    {
+      position = i;
+      selected = gtk_selection_model_query_range (selection, &position, &n_items);
+      g_assert_cmpint (position, <=, i);
+      g_assert_cmpint (i, <, position + n_items);
+      for (j = position; j < position + n_items; j++)
+        g_assert_true (selected == gtk_selection_model_is_selected (selection, j));
+    }
+  
+}
+
+static void
+test_query_range (void)
+{
+  GtkSelectionModel *selection;
+  GListStore *store;
+  
+  store = new_store (1, 5, 1);
+  selection = new_model (store, TRUE, TRUE);
+  check_query_range (selection);
+
+  gtk_selection_model_unselect_item (selection, 0);
+  check_query_range (selection);
+
+  gtk_selection_model_select_item (selection, 2,  TRUE);
+  check_query_range (selection);
+
+  gtk_selection_model_select_item (selection, 4, TRUE);
+  check_query_range (selection);
+
+  ignore_selection_changes (selection);
+
+  g_object_unref (store);
+  g_object_unref (selection);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -484,6 +534,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/singleselection/autoselect", test_autoselect);
   g_test_add_func ("/singleselection/can-unselect", test_can_unselect);
   g_test_add_func ("/singleselection/persistence", test_persistence);
+  g_test_add_func ("/singleselection/query-range", test_query_range);
 
   return g_test_run ();
 }
