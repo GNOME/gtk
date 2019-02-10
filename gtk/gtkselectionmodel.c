@@ -120,6 +120,15 @@ gtk_selection_model_default_unselect_all (GtkSelectionModel *model)
   return gtk_selection_model_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));;
 }
 
+static gboolean
+gtk_selection_model_default_query_range (GtkSelectionModel *model,
+                                         guint             *position,
+                                         guint             *n_items)
+{
+  *n_items = 1;
+  return gtk_selection_model_is_selected (model, *position);  
+}
+
 static void
 gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
 {
@@ -130,6 +139,7 @@ gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
   iface->unselect_range = gtk_selection_model_default_unselect_range; 
   iface->select_all = gtk_selection_model_default_select_all; 
   iface->unselect_all = gtk_selection_model_default_unselect_all; 
+  iface->query_range = gtk_selection_model_default_query_range;
 
   /**
    * GtkSelectionModel::selection-changed
@@ -282,6 +292,32 @@ gtk_selection_model_get_model (GtkSelectionModel *model)
     g_object_unref (child);
 
   return child;
+}
+
+/**
+ * gtk_selection_model_query_range:
+ * @model: a #GtkSelectionModel
+ * @position: (inout): specifies the position on input, and the first element of the range on output
+ * @n_items: (out): returns the size of the range
+ *
+ * This function allows to query the selection status of multiple elements at once.
+ * It is passed a position and returns a range of elements of uniform selection status.
+ * The returned range is guaranteed to include the passed-in position.
+ * The selection status is returned from this function.
+ *
+ * Returns: %TRUE if the elements in the returned range are selected, %FALSE otherwise
+ */
+gboolean
+gtk_selection_model_query_range (GtkSelectionModel *model,
+                                 guint             *position,
+                                 guint             *n_items)
+{
+  GtkSelectionModelInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
+
+  iface = GTK_SELECTION_MODEL_GET_IFACE (model);
+  return iface->query_range (model, position, n_items);
 }
 
 void
