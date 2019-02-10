@@ -382,23 +382,19 @@ selection_changed_cb (GtkSelectionModel *model,
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
   guint i;
+  guint end;
 
-  for (i = position; i < position + n_items; i++)
+  end = MIN (position + n_items, g_list_model_get_n_items (G_LIST_MODEL (model)));
+  for (i = position; i < end; i++)
     {
       GtkWidget *child;
       GtkWidget *button;
       gboolean selected;
 
       child = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
-      if (child == NULL)
-        continue;
-
       button = g_hash_table_lookup (priv->buttons, child);
-      if (button)
-        {
-          selected = gtk_selection_model_is_selected (priv->pages, i);
-          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
-        }
+      selected = gtk_selection_model_is_selected (priv->pages, i);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
       g_object_unref (child);
     }
 }
