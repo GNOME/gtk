@@ -25,13 +25,11 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkRadioButtonAccessible-0
-        "radio button"
+      unnamed-GtkToggleButtonAccessible-0
+        "toggle button"
         parent: stackswitcher1
         index: 0
         name: Page 1
-        member-of: unnamed-GtkRadioButtonAccessible-1
-                   unnamed-GtkRadioButtonAccessible-0
         state: checked enabled focusable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
@@ -43,13 +41,11 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      unnamed-GtkRadioButtonAccessible-1
-        "radio button"
+      unnamed-GtkToggleButtonAccessible-1
+        "toggle button"
         parent: stackswitcher1
         index: 1
         name: Page 2
-        member-of: unnamed-GtkRadioButtonAccessible-1
-                   unnamed-GtkRadioButtonAccessible-0
         state: enabled focusable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
