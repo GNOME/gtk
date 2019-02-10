@@ -26,9 +26,13 @@ snapshot_blur (GtkWidget   *widget,
                GtkSnapshot *snapshot)
 {
   GtkBlurBox *box = (GtkBlurBox *) widget;
+  graphene_matrix_t m;
 
-  gtk_snapshot_push_blur (snapshot, box->radius);
+  /*gtk_snapshot_push_blur (snapshot, box->radius);*/
 
+  graphene_matrix_init_scale (&m, box->radius, box->radius, 1);
+
+  gtk_snapshot_push_transform (snapshot, &m);
   GTK_WIDGET_CLASS (gtk_blur_box_parent_class)->snapshot (widget, snapshot);
 
   gtk_snapshot_pop (snapshot);
@@ -36,7 +40,9 @@ snapshot_blur (GtkWidget   *widget,
 
 
 static void
-gtk_blur_box_init (GtkBlurBox *box) {}
+gtk_blur_box_init (GtkBlurBox *box) {
+  box->radius = 1;
+}
 
 static void
 gtk_blur_box_class_init (GtkBlurBoxClass *klass)
@@ -99,7 +105,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (blur_box), value_label);
 
 
-  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 10, 0.5);
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 10, 0.05);
   gtk_widget_set_size_request (scale, 200, -1);
   gtk_widget_set_halign (scale, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (scale, GTK_ALIGN_CENTER);

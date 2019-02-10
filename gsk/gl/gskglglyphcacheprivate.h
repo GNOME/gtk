@@ -4,6 +4,7 @@
 #include "gskgldriverprivate.h"
 #include "gskglimageprivate.h"
 #include "gskrendererprivate.h"
+#include "stb_rect_pack.h"
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 
@@ -38,10 +39,12 @@ typedef struct
 {
   GskGLImage *image;
   int width, height;
-  int x, y, y0;
   guint old_pixels;
 
   DirtyGlyph pending_glyph;
+
+  struct stbrp_context context;
+  struct stbrp_node *nodes;
 } GskGLGlyphAtlas;
 
 struct _GskGLCachedGlyph
