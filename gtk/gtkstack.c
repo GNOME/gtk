@@ -404,6 +404,7 @@ static void     gtk_stack_measure                        (GtkWidget      *widget
                                                           int            *natural,
                                                           int            *minimum_baseline,
                                                           int            *natural_baseline);
+static void     gtk_stack_dispose                        (GObject       *obj);
 static void     gtk_stack_finalize                       (GObject       *obj);
 static void     gtk_stack_get_property                   (GObject       *object,
                                                           guint          property_id,
@@ -437,6 +438,24 @@ static void
 gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
 {
   iface->add_child = gtk_stack_buildable_add_child;
+}
+
+static void stack_remove (GtkStack  *stack,
+                          GtkWidget *child,
+                          gboolean   in_dispose);
+
+static void
+remove_child (GtkWidget *child, gpointer user_data)
+{
+  stack_remove (GTK_STACK (user_data), child, TRUE);
+}
+
+static void
+gtk_stack_dispose (GObject *obj)
+{
+  gtk_container_foreach (GTK_CONTAINER (obj), remove_child, obj);
+
+  G_OBJECT_CLASS (gtk_stack_parent_class)->dispose (obj);
 }
 
 static void
@@ -544,6 +563,7 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   object_class->get_property = gtk_stack_get_property;
   object_class->set_property = gtk_stack_set_property;
+  object_class->dispose = gtk_stack_dispose;
   object_class->finalize = gtk_stack_finalize;
 
   widget_class->size_allocate = gtk_stack_size_allocate;
@@ -1213,10 +1233,10 @@ gtk_stack_add_page (GtkStack     *stack,
 }
 
 static void
-gtk_stack_remove (GtkContainer *container,
-                  GtkWidget    *child)
+stack_remove (GtkStack  *stack,
+              GtkWidget *child,
+              gboolean   in_dispose)
 {
-  GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *child_info;
   gboolean was_visible;
@@ -1226,7 +1246,7 @@ gtk_stack_remove (GtkContainer *container,
     return;
 
   priv->children = g_list_remove (priv->children, child_info);
-
+  
   g_signal_handlers_disconnect_by_func (child,
                                         stack_child_visibility_notify_cb,
                                         stack);
@@ -1236,7 +1256,12 @@ gtk_stack_remove (GtkContainer *container,
   child_info->widget = NULL;
 
   if (priv->visible_child == child_info)
-    set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
+    {
+      if (in_dispose)
+        priv->visible_child = NULL;
+      else
+        set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
+    }
 
   if (priv->last_visible_child == child_info)
     priv->last_visible_child = NULL;
@@ -1245,8 +1270,17 @@ gtk_stack_remove (GtkContainer *container,
 
   g_object_unref (child_info);
 
-  if ((priv->hhomogeneous || priv->vhomogeneous) && was_visible)
+  if (!in_dispose &&
+      (priv->hhomogeneous || priv->vhomogeneous) &&
+      was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
+}
+
+static void
+gtk_stack_remove (GtkContainer *container,
+                  GtkWidget    *child)
+{
+  stack_remove (GTK_STACK (container), child, FALSE);
 }
 
 /**
