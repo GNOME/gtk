@@ -365,7 +365,6 @@ disconnect_stack_signals (GtkStackSidebar *sidebar)
 
   g_signal_handlers_disconnect_by_func (priv->pages, items_changed_cb, sidebar);
   g_signal_handlers_disconnect_by_func (priv->pages, selection_changed_cb, sidebar);
-  g_signal_handlers_disconnect_by_func (priv->stack, disconnect_stack_signals, sidebar);
 }
 
 static void
@@ -375,7 +374,35 @@ connect_stack_signals (GtkStackSidebar *sidebar)
 
   g_signal_connect (priv->pages, "items-changed", G_CALLBACK (items_changed_cb), sidebar);
   g_signal_connect (priv->pages, "selection-changed", G_CALLBACK (selection_changed_cb), sidebar);
-  g_signal_connect_swapped (priv->stack, "destroy", G_CALLBACK (disconnect_stack_signals), sidebar);
+}
+
+static void
+set_stack (GtkStackSidebar *sidebar,
+           GtkStack        *stack)
+{
+  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
+
+  if (stack)
+    {
+      priv->stack = g_object_ref (stack);
+      priv->pages = gtk_stack_get_pages (stack);
+      populate_sidebar (sidebar);
+      connect_stack_signals (sidebar);
+    }
+}
+
+static void
+unset_stack (GtkStackSidebar *sidebar)
+{
+  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
+
+  if (priv->stack)
+    {
+      disconnect_stack_signals (sidebar);
+      clear_sidebar (sidebar);
+      g_clear_object (&priv->stack);
+      g_clear_object (&priv->pages);
+    }
 }
 
 static void
@@ -383,7 +410,7 @@ gtk_stack_sidebar_dispose (GObject *object)
 {
   GtkStackSidebar *sidebar = GTK_STACK_SIDEBAR (object);
 
-  gtk_stack_sidebar_set_stack (sidebar, NULL);
+  unset_stack (sidebar);
 
   G_OBJECT_CLASS (gtk_stack_sidebar_parent_class)->dispose (object);
 }
@@ -448,30 +475,17 @@ void
 gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
                              GtkStack        *stack)
 {
-  GtkStackSidebarPrivate *priv;
+  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
 
   g_return_if_fail (GTK_IS_STACK_SIDEBAR (sidebar));
   g_return_if_fail (GTK_IS_STACK (stack) || stack == NULL);
 
-  priv = gtk_stack_sidebar_get_instance_private (sidebar);
 
   if (priv->stack == stack)
     return;
 
-  if (priv->stack)
-    {
-      disconnect_stack_signals (sidebar);
-      clear_sidebar (sidebar);
-      g_clear_object (&priv->stack);
-      g_clear_object (&priv->pages);
-    }
-  if (stack)
-    {
-      priv->stack = g_object_ref (stack);
-      priv->pages = gtk_stack_get_pages (stack);
-      populate_sidebar (sidebar);
-      connect_stack_signals (sidebar);
-    }
+  unset_stack (sidebar);
+  set_stack (sidebar, stack);
 
   gtk_widget_queue_resize (GTK_WIDGET (sidebar));
 
