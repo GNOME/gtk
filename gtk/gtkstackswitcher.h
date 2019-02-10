@@ -55,6 +55,13 @@ struct _GtkStackSwitcherClass
   void (*_gtk_reserved4) (void);
 };
 
+typedef void (* GtkStackSwitcherDataFunc) (GObject    *item,
+                                           gpointer    data,
+                                           gboolean   *visible,
+                                           char      **title,
+                                           char      **icon_name,
+                                           gboolean   *needs_attention);
+
 GDK_AVAILABLE_IN_ALL
 GType        gtk_stack_switcher_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -65,6 +72,12 @@ void         gtk_stack_switcher_set_stack         (GtkStackSwitcher *switcher,
 GDK_AVAILABLE_IN_ALL
 GtkStack *   gtk_stack_switcher_get_stack         (GtkStackSwitcher *switcher);
 
+GDK_AVAILABLE_IN_ALL
+void         gtk_stack_switcher_set_model         (GtkStackSwitcher         *switcher,
+                                                   GtkSelectionModel        *model,
+                                                   GtkStackSwitcherDataFunc  data_func,
+                                                   gpointer                  data,
+                                                   GDestroyNotify            destroy);
 G_END_DECLS
 
 #endif /* __GTK_STACK_SWITCHER_H__ */
