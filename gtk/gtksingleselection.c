@@ -210,12 +210,18 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
             {
               self->selected = position + (self->selected - position) * added / removed;
               self->selected_item = g_list_model_get_item (self->model, self->selected);
-              if (self->selected_item == NULL && position > 0)
+              if (self->selected_item == NULL)
                 {
-                  self->selected = position - 1;
-                  self->selected_item = g_list_model_get_item (self->model, self->selected);
-                  g_assert (self->selected_item);
+                  if (position > 0)
+                    {
+                      self->selected = position - 1;
+                      self->selected_item = g_list_model_get_item (self->model, self->selected);
+                      g_assert (self->selected_item);
+                    }
+                  else
+                    self->selected = GTK_INVALID_LIST_POSITION;
                 }
+                
               emit_selection_changed = TRUE;
             }
           else
