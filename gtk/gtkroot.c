@@ -43,6 +43,12 @@ gtk_root_default_get_display (GtkRoot *self)
   return gdk_display_get_default ();
 }
 
+static GskRenderer *
+gtk_root_default_get_renderer (GtkRoot *self)
+{
+  return NULL;
+}
+
 static void
 gtk_root_default_get_surface_transform (GtkRoot *self,
                                         int     *x,
@@ -56,6 +62,7 @@ static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
+  iface->get_renderer = gtk_root_default_get_renderer;
   iface->get_surface_transform = gtk_root_default_get_surface_transform;
 }
 
@@ -70,6 +77,16 @@ gtk_root_get_display (GtkRoot *self)
   return iface->get_display (self);
 }
 
+GskRenderer *
+gtk_root_get_renderer (GtkRoot *self)
+{
+  GtkRootInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  iface = GTK_ROOT_GET_IFACE (self);
+  return iface->get_renderer (self);
+}
 
 void
 gtk_root_get_surface_transform (GtkRoot *self,

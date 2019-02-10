@@ -132,8 +132,6 @@ gboolean      gtk_window_export_handle   (GtkWindow               *window,
                                           gpointer                 user_data);
 void          gtk_window_unexport_handle (GtkWindow               *window);
 
-GskRenderer *gtk_window_get_renderer (GtkWindow *window);
-
 GtkWidget *      gtk_window_lookup_pointer_focus_widget (GtkWindow        *window,
                                                          GdkDevice        *device,
                                                          GdkEventSequence *sequence);
