@@ -342,8 +342,10 @@ selection_changed_cb (GtkSelectionModel *model,
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   guint i;
+  guint end;
 
-  for (i = position; i < position + n_items; i++)
+  end = MIN (position + n_items, g_list_model_get_n_items (G_LIST_MODEL (model));
+  for (i = position; i < end; i++)
     {
       GtkWidget *child;
       GtkWidget *row;
