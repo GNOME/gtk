@@ -410,7 +410,6 @@ disconnect_stack_signals (GtkStackSwitcher *switcher)
 
   g_signal_handlers_disconnect_by_func (priv->pages, items_changed_cb, switcher);
   g_signal_handlers_disconnect_by_func (priv->pages, selection_changed_cb, switcher);
-  g_signal_handlers_disconnect_by_func (priv->stack, disconnect_stack_signals, switcher);
 }
 
 static void
@@ -420,7 +419,35 @@ connect_stack_signals (GtkStackSwitcher *switcher)
 
   g_signal_connect (priv->pages, "items-changed", G_CALLBACK (items_changed_cb), switcher);
   g_signal_connect (priv->pages, "selection-changed", G_CALLBACK (selection_changed_cb), switcher);
-  g_signal_connect_swapped (priv->stack, "destroy", G_CALLBACK (disconnect_stack_signals), switcher);
+}
+
+static void
+set_stack (GtkStackSwitcher *switcher,
+           GtkStack         *stack)
+{
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
+
+  if (stack)
+    {
+      priv->stack = g_object_ref (stack);
+      priv->pages = gtk_stack_get_pages (stack);
+      populate_switcher (switcher);
+      connect_stack_signals (switcher);
+    }
+}
+
+static void
+unset_stack (GtkStackSwitcher *switcher)
+{
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
+
+  if (priv->stack)
+    {
+      disconnect_stack_signals (switcher);
+      clear_switcher (switcher);
+      g_clear_object (&priv->stack);
+      g_clear_object (&priv->pages);
+    }
 }
 
 /**
@@ -434,30 +461,16 @@ void
 gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
                               GtkStack         *stack)
 {
-  GtkStackSwitcherPrivate *priv;
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
 
   g_return_if_fail (GTK_IS_STACK_SWITCHER (switcher));
   g_return_if_fail (GTK_IS_STACK (stack) || stack == NULL);
 
-  priv = gtk_stack_switcher_get_instance_private (switcher);
-
   if (priv->stack == stack)
     return;
 
-  if (priv->stack)
-    {
-      disconnect_stack_signals (switcher);
-      clear_switcher (switcher);
-      g_clear_object (&priv->stack);
-      g_clear_object (&priv->pages);
-    }
-  if (stack)
-    {
-      priv->stack = g_object_ref (stack);
-      priv->pages = gtk_stack_get_pages (stack);
-      populate_switcher (switcher);
-      connect_stack_signals (switcher);
-    }
+  unset_stack (switcher);
+  set_stack (switcher, stack);
 
   gtk_widget_queue_resize (GTK_WIDGET (switcher));
 
@@ -532,7 +545,7 @@ gtk_stack_switcher_dispose (GObject *object)
   GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
 
   remove_switch_timer (switcher);
-  gtk_stack_switcher_set_stack (switcher, NULL);
+  unset_stack (switcher);
 
   G_OBJECT_CLASS (gtk_stack_switcher_parent_class)->dispose (object);
 }
