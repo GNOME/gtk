@@ -135,12 +135,46 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
   return TRUE;
 }
 
+static gboolean
+gtk_single_selection_query_range (GtkSelectionModel *model,
+                                  guint             *position,
+                                  guint             *n_items)
+{
+  GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
+
+  if (self->selected == GTK_INVALID_LIST_POSITION)
+    {
+      *position = 0;
+      *n_items = g_list_model_get_n_items (self->model);
+      return FALSE;
+    }
+  else if (*position < self->selected)
+    {
+      *position = 0;
+      *n_items = self->selected;
+      return FALSE;
+    }
+  else if (*position > self->selected)
+    {
+      *position = self->selected + 1;
+      *n_items = g_list_model_get_n_items (self->model) - *position;
+      return FALSE;
+    }
+  else
+    {
+      *position = self->selected;
+      *n_items = 1;
+      return TRUE;
+    }
+}
+
 static void
 gtk_single_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_single_selection_is_selected; 
   iface->select_item = gtk_single_selection_select_item; 
   iface->unselect_item = gtk_single_selection_unselect_item; 
+  iface->query_range = gtk_single_selection_query_range;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkSingleSelection, gtk_single_selection, G_TYPE_OBJECT, 0,
