@@ -79,6 +79,9 @@ struct _GtkSelectionModelInterface
                                                                  guint                   n_items);
   gboolean              (* select_all)                          (GtkSelectionModel      *model);
   gboolean              (* unselect_all)                        (GtkSelectionModel      *model);
+  gboolean              (* query_range)                         (GtkSelectionModel      *model,
+                                                                 guint                  *position,
+                                                                 guint                  *n_items);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -108,6 +111,10 @@ gboolean                gtk_selection_model_unselect_all        (GtkSelectionMod
 
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_selection_model_get_model           (GtkSelectionModel      *model);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_selection_model_query_range         (GtkSelectionModel      *model,
+                                                                 guint                  *position,
+                                                                 guint                  *n_items);
 
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL
