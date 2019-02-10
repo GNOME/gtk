@@ -288,7 +288,9 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
 
   if (value)
     {
-      if (cache->timestamp - value->timestamp >= MAX_AGE)
+      const guint age = cache->timestamp - value->timestamp;
+
+      if (MAX_AGE <= age && age < MAX_AGE + CHECK_INTERVAL)
         {
           GskGLGlyphAtlas *atlas = value->atlas;
 
@@ -363,16 +365,15 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
   self->timestamp++;
 
 
-  if (self->timestamp % CHECK_INTERVAL != 0)
+  if ((self->timestamp - 1) % CHECK_INTERVAL != 0)
     return;
 
   /* look for glyphs that have grown old since last time */
   g_hash_table_iter_init (&iter, self->hash_table);
   while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
     {
-      guint age;
+      const guint age = self->timestamp - value->timestamp;
 
-      age = self->timestamp - value->timestamp;
       if (MAX_AGE <= age && age < MAX_AGE + CHECK_INTERVAL)
         {
           GskGLGlyphAtlas *atlas = value->atlas;
