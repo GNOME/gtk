@@ -108,15 +108,19 @@ on_button_toggled (GtkWidget        *button,
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   gboolean active;
+  guint index;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "child-index"));
 
   if (active)
     {
-      guint index;
-
-      index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "child-index"));
       gtk_selection_model_select_item (priv->pages, index, TRUE);
+    }
+  else
+    {
+      gboolean selected = gtk_selection_model_is_selected (priv->pages, index);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
     }
 }
 
