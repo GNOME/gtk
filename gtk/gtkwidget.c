@@ -5085,18 +5085,6 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
-static GskRenderer *
-gtk_widget_get_renderer (GtkWidget *widget)
-{
-  GtkWidget *toplevel;
-
-  toplevel = _gtk_widget_get_toplevel (widget);
-  if (_gtk_widget_is_toplevel (toplevel))
-    return gtk_window_get_renderer (GTK_WINDOW (toplevel));
-
-  return NULL;
-}
-
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
 
@@ -13230,11 +13218,14 @@ gtk_widget_render (GtkWidget            *widget,
   GskRenderer *renderer;
   GskRenderNode *root;
 
+  if (!GTK_IS_ROOT (widget))
+    return;
+
   /* We only render double buffered on native windows */
   if (!gdk_surface_has_native (surface))
     return;
 
-  renderer = gtk_widget_get_renderer (widget);
+  renderer = gtk_root_get_renderer (GTK_ROOT (widget));
   if (renderer == NULL)
     return;
 

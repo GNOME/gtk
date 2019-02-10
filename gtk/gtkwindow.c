@@ -2507,6 +2507,15 @@ gtk_window_root_get_display (GtkRoot *root)
   return priv->display;
 }
 
+static GskRenderer *
+gtk_window_root_get_renderer (GtkRoot *root)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  return priv->renderer;
+}
+
 static void
 gtk_window_root_get_surface_transform (GtkRoot *root,
                                        int     *x,
@@ -2520,6 +2529,7 @@ static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
+  iface->get_renderer = gtk_window_root_get_renderer;
   iface->get_surface_transform = gtk_window_root_get_surface_transform;
 }
 
@@ -10576,14 +10586,6 @@ gtk_window_unexport_handle (GtkWindow *window)
       gdk_wayland_surface_unexport_handle (surface);
     }
 #endif
-}
-
-GskRenderer *
-gtk_window_get_renderer (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  return priv->renderer;
 }
 
 static void
