@@ -495,14 +495,19 @@ check_query_range (GtkSelectionModel *selection)
   /* check that range always contains position, and has uniform selection */
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (selection)); i++)
     {
-      position = i;
-      selected = gtk_selection_model_query_range (selection, &position, &n_items);
+      gtk_selection_model_query_range (selection, i, &position, &n_items, &selected);
       g_assert_cmpint (position, <=, i);
       g_assert_cmpint (i, <, position + n_items);
       for (j = position; j < position + n_items; j++)
         g_assert_true (selected == gtk_selection_model_is_selected (selection, j));
     }
   
+  /* check that out-of-range returns the correct invalid values */
+  i = MIN (i, g_random_int ());
+  gtk_selection_model_query_range (selection, i, &position, &n_items, &selected);
+  g_assert_cmpint (position, ==, i);
+  g_assert_cmpint (n_items, ==, 0);
+  g_assert_true (!selected);
 }
 
 static void
