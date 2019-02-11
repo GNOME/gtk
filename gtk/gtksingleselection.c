@@ -133,36 +133,47 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
   return TRUE;
 }
 
-static gboolean
+static void
 gtk_single_selection_query_range (GtkSelectionModel *model,
-                                  guint             *position,
-                                  guint             *n_items)
+                                  guint              position,
+                                  guint             *start_range,
+                                  guint             *n_range,
+                                  gboolean          *selected)
 {
   GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
+  guint n_items;
 
-  if (self->selected == GTK_INVALID_LIST_POSITION)
+  n_items = g_list_model_get_n_items (self->model);
+
+  if (position >= n_items)
     {
-      *position = 0;
-      *n_items = g_list_model_get_n_items (self->model);
-      return FALSE;
+      *start_range = position;
+      *n_range = 0;
+      *selected = FALSE;
     }
-  else if (*position < self->selected)
+  else if (self->selected == GTK_INVALID_LIST_POSITION)
     {
-      *position = 0;
-      *n_items = self->selected;
-      return FALSE;
+      *start_range = 0;
+      *n_range = n_items;
+      *selected = FALSE;
     }
-  else if (*position > self->selected)
+  else if (position < self->selected)
     {
-      *position = self->selected + 1;
-      *n_items = g_list_model_get_n_items (self->model) - *position;
-      return FALSE;
+      *start_range = 0;
+      *n_range = self->selected;
+      *selected = FALSE;
+    }
+  else if (position > self->selected)
+    {
+      *start_range = self->selected + 1;
+      *n_range = n_items - *start_range;
+      *selected = FALSE;
     }
   else
     {
-      *position = self->selected;
-      *n_items = 1;
-      return TRUE;
+      *start_range = self->selected;
+      *n_range = 1;
+      *selected = TRUE;
     }
 }
 

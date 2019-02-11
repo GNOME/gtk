@@ -79,9 +79,11 @@ struct _GtkSelectionModelInterface
                                                                  guint                   n_items);
   gboolean              (* select_all)                          (GtkSelectionModel      *model);
   gboolean              (* unselect_all)                        (GtkSelectionModel      *model);
-  gboolean              (* query_range)                         (GtkSelectionModel      *model,
-                                                                 guint                  *position,
-                                                                 guint                  *n_items);
+  void                  (* query_range)                         (GtkSelectionModel      *model,
+                                                                 guint                   position,
+                                                                 guint                  *start_range,
+                                                                 guint                  *n_items,
+                                                                 gboolean               *selected);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -110,9 +112,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_all        (GtkSelectionModel      *model);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_selection_model_query_range         (GtkSelectionModel      *model,
-                                                                 guint                  *position,
-                                                                 guint                  *n_items);
+void                    gtk_selection_model_query_range         (GtkSelectionModel      *model,
+                                                                 guint                   position,
+                                                                 guint                  *start_range,
+                                                                 guint                  *n_items,
+                                                                 gboolean               *selected);
 
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL
