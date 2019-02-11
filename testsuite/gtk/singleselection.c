@@ -28,9 +28,12 @@ static guint
 get (GListModel *model,
      guint       position)
 {
+  guint number;
   GObject *object = g_list_model_get_item (model, position);
   g_assert (object != NULL);
-  return GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
+  number = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
+  g_object_unref (object);
+  return number;
 }
 
 static char *
@@ -285,6 +288,7 @@ test_create (void)
   assert_selection_changes (selection, "");
 
   g_object_unref (store);
+
   assert_model (selection, "1 3 5");
   assert_changes (selection, "");
   assert_selection (selection, "");
@@ -324,8 +328,8 @@ test_changes (void)
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
-  g_object_unref (store);
   g_object_unref (selection);
+  g_object_unref (store);
 }
 
 static void
