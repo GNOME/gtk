@@ -184,6 +184,7 @@
 #include <gtk/gtksearchbar.h>
 #include <gtk/gtksearchentry.h>
 #include <gtk/gtkselection.h>
+#include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
@@ -194,6 +195,7 @@
 #include <gtk/gtkshortcutsshortcut.h>
 #include <gtk/gtkshortcutswindow.h>
 #include <gtk/gtkshow.h>
+#include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>
 #include <gtk/gtksnapshot.h>
 #include <gtk/gtksortlistmodel.h>

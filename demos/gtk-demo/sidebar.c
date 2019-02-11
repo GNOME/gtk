@@ -73,7 +73,7 @@ do_sidebar (GtkWidget *do_widget)
               widget = gtk_label_new (c);
             }
           gtk_stack_add_named (GTK_STACK (stack), widget, c);
-          gtk_container_child_set (GTK_CONTAINER (stack), widget, "title", c, NULL);
+          g_object_set (gtk_stack_get_page (GTK_STACK (stack), widget), "title", c, NULL);
         }
 
        gtk_container_add (GTK_CONTAINER (window), box);
