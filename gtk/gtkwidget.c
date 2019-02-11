@@ -11261,10 +11261,10 @@ gtk_widget_pick (GtkWidget *widget,
   get_box_padding (style, &padding);
   get_border_radius (style, border_radius);
 
-  rect = GRAPHENE_RECT_INIT (- padding.left,
-                             - padding.top,
-                             priv->allocation.width - margin.left - margin.right - border.left  - border.right,
-                             priv->allocation.height - margin.top  - margin.bottom - border.top  - border.bottom);
+  rect = GRAPHENE_RECT_INIT (- padding.left - border.left,
+                             - padding.top - border.top,
+                             priv->allocation.width - margin.left - margin.right,
+                             priv->allocation.height - margin.top  - margin.bottom);
 
 
   if (has_border_radius (border_radius))
