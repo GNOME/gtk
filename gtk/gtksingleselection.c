@@ -199,8 +199,6 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
                                        guint               added,
                                        GtkSingleSelection *self)
 {
-  gboolean emit_selection_changed = FALSE;
-
   g_object_freeze_notify (G_OBJECT (self));
 
   if (self->selected_item == NULL)
@@ -260,12 +258,27 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
                       self->selected = position - 1;
                       self->selected_item = g_list_model_get_item (self->model, self->selected);
                       g_assert (self->selected_item);
+                      /* We pretend the newly selected item was part of the original model change.
+                       * This way we get around inconsistent state (no item selected) during
+                       * the items-changed emission. */
+                      position--;
+                      removed++;
+                      added++;
                     }
                   else
                     self->selected = GTK_INVALID_LIST_POSITION;
                 }
-                
-              emit_selection_changed = TRUE;
+              else
+                {
+                  if (self->selected == position + added)
+                    {
+                      /* We pretend the newly selected item was part of the original model change.
+                       * This way we get around inconsistent state (no item selected) during
+                       * the items-changed emission. */
+                      removed++;
+                      added++;
+                    }
+                }
             }
           else
             {
@@ -278,9 +291,6 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
-
-  if (emit_selection_changed && self->selected != GTK_INVALID_LIST_POSITION)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), self->selected, 1);
 
   g_object_thaw_notify (G_OBJECT (self));
 }

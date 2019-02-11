@@ -390,30 +390,95 @@ test_autoselect (void)
   GtkSelectionModel *selection;
   GListStore *store;
   
-  store = new_store (2, 1, 1);
+  store = new_empty_store ();
   selection = new_model (store, TRUE, FALSE);
+  assert_model (selection, "");
+  assert_changes (selection, "");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
   add (store, 1);
+  assert_model (selection, "1");
+  assert_changes (selection, "+0");
   assert_selection (selection, "1");
   assert_selection_changes (selection, "");
 
-  splice (store, 0, 1, (guint[]) { 97 }, 1);
-  assert_selection (selection, "97");
-  assert_selection_changes (selection, "0:1");
+  splice (store, 0, 1, (guint[]) { 7, 8, 9 }, 3);
+  assert_model (selection, "7 8 9");
+  assert_changes (selection, "0-1+3");
+  assert_selection (selection, "7");
+  assert_selection_changes (selection, "");
+
+  splice (store, 0, 0, (guint[]) { 5, 6 }, 2);
+  assert_model (selection, "5 6 7 8 9");
+  assert_changes (selection, "0+2");
+  assert_selection (selection, "7");
+  assert_selection_changes (selection, "");
+
+  g_list_store_remove (store, 2);
+  assert_model (selection, "5 6 8 9");
+  assert_changes (selection, "2-2+1");
+  assert_selection (selection, "8");
+  assert_selection_changes (selection, "");
+
+  splice (store, 2, 2, NULL, 0);
+  assert_model (selection, "5 6");
+  assert_changes (selection, "1-3+1");
+  assert_selection (selection, "6");
+  assert_selection_changes (selection, "");
+
+  splice (store, 0, 2, (guint[]) { 1, 2 }, 2);
+  assert_model (selection, "1 2");
+  assert_changes (selection, "0-2+2");
+  assert_selection (selection, "2");
+  assert_selection_changes (selection, "");
+
+  g_list_store_remove (store, 0);
+  assert_model (selection, "2");
+  assert_changes (selection, "-0");
+  assert_selection (selection, "2");
+  assert_selection_changes (selection, "");
+
+  g_list_store_remove (store, 0);
+  assert_model (selection, "");
+  assert_changes (selection, "-0");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  g_object_unref (store);
+  g_object_unref (selection);
+}
+
+static void
+test_autoselect_toggle (void)
+{
+  GtkSelectionModel *selection;
+  GListStore *store;
+  
+  store = new_store (1, 1, 1);
+  selection = new_model (store, TRUE, TRUE);
+  assert_model (selection, "1");
+  assert_changes (selection, "");
+  assert_selection (selection, "1");
+  assert_selection_changes (selection, "");
 
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
-  gtk_single_selection_set_can_unselect (GTK_SINGLE_SELECTION (selection), TRUE);
+  assert_model (selection, "1");
+  assert_changes (selection, "");
+  assert_selection (selection, "1");
+  assert_selection_changes (selection, "");
+
   gtk_selection_model_unselect_item (selection, 0);
+  assert_model (selection, "1");
+  assert_changes (selection, "");
   assert_selection (selection, "");
   assert_selection_changes (selection, "0:1");
 
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), TRUE);
-  assert_selection (selection, "97");
+  assert_model (selection, "1");
+  assert_changes (selection, "");
+  assert_selection (selection, "1");
   assert_selection_changes (selection, "0:1");
-
-  ignore_changes (selection);
 
   g_object_unref (store);
   g_object_unref (selection);
@@ -547,12 +612,13 @@ main (int argc, char *argv[])
   selection_quark = g_quark_from_static_string ("Mana mana, badibidibi");
 
   g_test_add_func ("/singleselection/create", test_create);
-#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
+#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/singleselection/autoselect", test_autoselect);
+#endif
+  g_test_add_func ("/singleselection/autoselect-toggle", test_autoselect_toggle);
   g_test_add_func ("/singleselection/selection", test_selection);
   g_test_add_func ("/singleselection/can-unselect", test_can_unselect);
   g_test_add_func ("/singleselection/persistence", test_persistence);
-#endif
   g_test_add_func ("/singleselection/query-range", test_query_range);
 #if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/singleselection/changes", test_changes);
