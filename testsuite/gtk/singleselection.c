@@ -542,8 +542,10 @@ main (int argc, char *argv[])
   selection_quark = g_quark_from_static_string ("Mana mana, badibidibi");
 
   g_test_add_func ("/singleselection/create", test_create);
+#if GLIB_CHECK_VERSION (2, 59, 1) /* g_list_store_get_item() has overflow issues before */
   g_test_add_func ("/singleselection/autoselect", test_autoselect);
   g_test_add_func ("/singleselection/selection", test_selection);
+#endif
   g_test_add_func ("/singleselection/can-unselect", test_can_unselect);
   g_test_add_func ("/singleselection/persistence", test_persistence);
   g_test_add_func ("/singleselection/query-range", test_query_range);
