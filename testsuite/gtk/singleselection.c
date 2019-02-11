@@ -257,6 +257,7 @@ new_model (GListStore *store, gboolean autoselect, gboolean can_unselect)
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (result), FALSE);
   gtk_single_selection_set_can_unselect (GTK_SINGLE_SELECTION (result), TRUE);
   gtk_selection_model_unselect_item (result, 0);
+  assert_selection (result, "");
 
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (result), autoselect);
   gtk_single_selection_set_can_unselect (GTK_SINGLE_SELECTION (result), can_unselect);
@@ -399,6 +400,16 @@ test_autoselect (void)
   assert_selection_changes (selection, "");
 
   splice (store, 0, 1, (guint[]) { 97 }, 1);
+  assert_selection (selection, "97");
+  assert_selection_changes (selection, "0:1");
+
+  gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
+  gtk_single_selection_set_can_unselect (GTK_SINGLE_SELECTION (selection), TRUE);
+  gtk_selection_model_unselect_item (selection, 0);
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "0:1");
+
+  gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), TRUE);
   assert_selection (selection, "97");
   assert_selection_changes (selection, "0:1");
 
