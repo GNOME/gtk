@@ -6431,13 +6431,8 @@ gtk_window_realize (GtkWidget *widget)
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
     create_decoration (widget);
 
-  _gtk_widget_get_allocation (widget, &allocation);
-
   /* ensure widget tree is properly size allocated */
-  if (allocation.x == -1 &&
-      allocation.y == -1 &&
-      allocation.width == 1 &&
-      allocation.height == 1)
+  if (_gtk_widget_get_alloc_needed (widget))
     {
       GdkRectangle request;
 
@@ -6454,16 +6449,15 @@ gtk_window_realize (GtkWidget *widget)
       g_return_if_fail (!_gtk_widget_get_realized (widget));
     }
 
+  _gtk_widget_get_allocation (widget, &allocation);
+
   if (priv->hardcoded_surface)
     {
       surface = priv->hardcoded_surface;
-      _gtk_widget_get_allocation (widget, &allocation);
       gdk_surface_resize (surface, allocation.width, allocation.height);
     }
   else
     {
-      _gtk_widget_get_allocation (widget, &allocation);
-
       switch (priv->type)
         {
         case GTK_WINDOW_TOPLEVEL:
