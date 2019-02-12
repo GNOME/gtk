@@ -50,7 +50,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk4` -o example-0 example-0.c `pkg-config --libs gtk4`</literal>
+        <literal>gcc `pkg-config --cflags --libs gtk4` -o example-0 example-0.c</literal>
       </literallayout>
     </para>
 
@@ -160,7 +160,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk4` -o example-1 example-1.c `pkg-config --libs gtk4`</literal>
+        <literal>gcc `pkg-config --cflags --libs gtk4` -o example-1 example-1.c</literal>
       </literallayout>
     </para>
   </section>
@@ -238,7 +238,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk4` -o example-2 example-2.c `pkg-config --libs gtk4`</literal>
+        <literal>gcc `pkg-config --cflags --libs gtk4` -o example-2 example-2.c</literal>
       </literallayout>
     </para>
   </section>
@@ -264,7 +264,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk4` -o example-3 example-3.c `pkg-config --libs gtk4`</literal>
+        <literal>gcc `pkg-config --cflags --libs gtk4` -o example-3 example-3.c</literal>
       </literallayout>
     </para>
 
@@ -1073,7 +1073,7 @@ example_app_window_init (ExampleAppWindow *win)
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk4` -o example-4 example-4.c `pkg-config --libs gtk4`</literal>
+        <literal>gcc `pkg-config --cflags --libs gtk4` -o example-4 example-4.c</literal>
       </literallayout>
     </para>
   </section>
