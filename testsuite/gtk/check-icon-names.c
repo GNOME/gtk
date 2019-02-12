@@ -92,6 +92,7 @@ static char *icon_names[] = {
   "application-x-executable-symbolic",
   "applications-other",
   "appointment-soon-symbolic",
+  "bookmark-new-symbolic",
   "changes-allow-symbolic",
   "changes-prevent-symbolic",
   "dialog-password-symbolic",
