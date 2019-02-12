@@ -1300,8 +1300,10 @@ load_themes (GtkIconTheme *icon_theme)
    * and gnome is a pragmatic solution to prevent missing icons in
    * GTK+ applications when run under, e.g. KDE.
    */
+#if 0
   insert_theme (icon_theme, DEFAULT_ICON_THEME);
   insert_theme (icon_theme, "gnome");
+#endif
   insert_theme (icon_theme, FALLBACK_ICON_THEME);
   priv->themes = g_list_reverse (priv->themes);
 
