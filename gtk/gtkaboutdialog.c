@@ -627,24 +627,37 @@ static void
 update_stack_switcher_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
+  GtkStackPage *page;
+  gboolean visible;
+  gboolean any_visible;
 
-  if (gtk_widget_get_visible (priv->credits_page) ||
-      gtk_widget_get_visible (priv->license_page) ||
-      gtk_widget_get_visible (priv->system_page))
-    gtk_widget_show (priv->stack_switcher);
-  else
-    gtk_widget_hide (priv->stack_switcher);
+  any_visible = FALSE;
+  
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->credits_page);
+  g_object_get (page, "visible", &visible, NULL);
+  any_visible |= visible;
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->license_page);
+  g_object_get (page, "visible", &visible, NULL);
+  any_visible |= visible;
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->system_page);
+  g_object_get (page, "visible", &visible, NULL);
+  any_visible |= visible;
+
+  gtk_widget_set_visible (priv->stack_switcher, any_visible);
 }
 
 static void
 update_license_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
+  GtkStackPage *page;
 
-  if (priv->license_type == GTK_LICENSE_CUSTOM && priv->license != NULL && priv->license[0] != '\0')
-    gtk_widget_show (priv->license_page);
-  else
-    gtk_widget_hide (priv->license_page);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->license_page);
+  g_object_set (page, "visible",
+                priv->license_type == GTK_LICENSE_CUSTOM &&
+                priv->license != NULL &&
+                priv->license[0] != '\0',
+                NULL);
 
   update_stack_switcher_visibility (about);
 }
@@ -653,11 +666,13 @@ static void
 update_system_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
+  GtkStackPage *page;
 
-  if (priv->system_information != NULL && priv->system_information[0] != '\0')
-    gtk_widget_show (priv->system_page);
-  else
-    gtk_widget_hide (priv->system_page);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->system_page);
+  g_object_set (page, "visible",
+                priv->system_information != NULL &&
+                priv->system_information[0] != '\0',
+                NULL);
 
   update_stack_switcher_visibility (about);
 }
@@ -667,6 +682,9 @@ update_credits_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
   gboolean show;
+  GtkStackPage *page;
+
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->system_page);
 
   show = (priv->authors != NULL ||
           priv->documenters != NULL ||
@@ -675,10 +693,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
           (priv->translator_credits != NULL &&
            strcmp (priv->translator_credits, "translator_credits") &&
            strcmp (priv->translator_credits, "translator-credits")));
-  if (show)
-    gtk_widget_show (priv->credits_page);
-  else
-    gtk_widget_hide (priv->credits_page);
+  g_object_set (page, "visible", show, NULL);
 
   update_stack_switcher_visibility (about);
 }

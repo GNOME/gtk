@@ -110,7 +110,6 @@
                     <property name="title" translatable="yes">Credits</property>
                     <property name="child">
                       <object class="GtkBox" id="credits_page">
-                        <property name="visible">0</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">8</property>
                         <child>
@@ -147,7 +146,6 @@
                     <property name="title" translatable="yes">License</property>
                     <property name="child">
                       <object class="GtkBox" id="license_page">
-                        <property name="visible">0</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">8</property>
                         <child>
@@ -190,7 +188,6 @@
                     <property name="title" translatable="yes">System</property>
                     <property name="child">
                       <object class="GtkBox" id="system_page">
-                        <property name="visible">0</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">8</property>
                         <child>
