@@ -840,9 +840,6 @@ static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
-  const char *up_icon_names[] = { "value-increase-symbolic", "list-add-symbolic" };
-  const char *down_icon_names[] = { "value-decrease-symbolic", "list-remove-symbolic" };
-  GIcon *icon;
   GtkEventController *controller;
   GtkGesture *gesture;
 
@@ -879,9 +876,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
 
   priv->down_button = gtk_button_new ();
-  icon = g_themed_icon_new_from_names ((char **)down_icon_names, 2);
-  gtk_container_add (GTK_CONTAINER (priv->down_button), gtk_image_new_from_gicon (icon));
-  g_object_unref (icon);
+  gtk_container_add (GTK_CONTAINER (priv->down_button), gtk_image_new_from_icon_name ("value-decrease-symbolic"));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->down_button), "image-button");
   gtk_widget_set_can_focus (priv->down_button, FALSE);
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->down_button), "down");
@@ -897,9 +892,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_widget_add_controller (GTK_WIDGET (priv->down_button), GTK_EVENT_CONTROLLER (gesture));
 
   priv->up_button = gtk_button_new ();
-  icon = g_themed_icon_new_from_names ((char **)up_icon_names, 2);
-  gtk_container_add (GTK_CONTAINER (priv->up_button), gtk_image_new_from_gicon (icon));
-  g_object_unref (icon);
+  gtk_container_add (GTK_CONTAINER (priv->up_button), gtk_image_new_from_icon_name ("value-increase-symbolic"));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->up_button), "image-button");
   gtk_widget_set_can_focus (priv->up_button, FALSE);
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->up_button), "up");
