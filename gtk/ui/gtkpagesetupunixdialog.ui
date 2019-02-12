@@ -125,7 +125,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage" id="image1">
-                        <property name="icon-name">gtk-orientation-portrait</property>
+                        <property name="icon-name">orientation-portrait-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -153,7 +153,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage" id="image2">
-                        <property name="icon-name">gtk-orientation-reverse-portrait</property>
+                        <property name="icon-name">orientation-portrait-inverse-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -181,7 +181,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage" id="image3">
-                        <property name="icon-name">gtk-orientation-landscape</property>
+                        <property name="icon-name">orientation-landscape-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -208,7 +208,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage" id="image4">
-                        <property name="icon-name">gtk-orientation-reverse-landscape</property>
+                        <property name="icon-name">orientation-landscape-inverse-symbolic</property>
                       </object>
                     </child>
                     <child>
