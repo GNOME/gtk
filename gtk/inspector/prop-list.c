@@ -214,6 +214,7 @@ show_object (GtkInspectorPropEditor *editor,
 
   g_object_set_data_full (G_OBJECT (pl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
   gtk_inspector_object_tree_select_object (pl->priv->object_tree, object);
+  gtk_inspector_object_tree_activate_object (pl->priv->object_tree, object);
 }
 
 static void
