@@ -326,6 +326,23 @@ gtk_paned_motion (GtkEventControllerMotion *motion,
     }
 }
 
+static GtkWidget *
+gtk_paned_pick (GtkWidget *widget,
+                double     x,
+                double     y)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
+  graphene_rect_t handle_area;
+
+  get_handle_area (paned, &handle_area);
+
+  if (graphene_rect_contains_point (&handle_area, &(graphene_point_t){x, y}))
+    return priv->handle_widget;
+
+  return GTK_WIDGET_CLASS (gtk_paned_parent_class)->pick (widget, x, y);
+}
+
 static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
@@ -348,6 +365,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->size_allocate = gtk_paned_size_allocate;
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->focus = gtk_paned_focus;
+  widget_class->pick = gtk_paned_pick;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
