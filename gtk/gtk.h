@@ -225,6 +225,7 @@
 #include <gtk/gtktoolshell.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
+#include <gtk/gtktransformer.h>
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreelistmodel.h>
 #include <gtk/gtktreemodel.h>

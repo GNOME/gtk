@@ -1653,6 +1653,7 @@ activate (GApplication *app)
   gint i;
   GPermission *permission;
   GAction *action;
+  graphene_matrix_t matrix;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1894,6 +1895,13 @@ activate (GApplication *app)
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "progressbar2");
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "switch_transformer");
+  graphene_matrix_init_translate (&matrix,
+                                  &GRAPHENE_POINT3D_INIT (-450, -485, 0));
+  gtk_transformer_set_transform (GTK_TRANSFORMER (widget),
+                                 &matrix);
+
 
   gtk_widget_show (GTK_WIDGET (window));
 

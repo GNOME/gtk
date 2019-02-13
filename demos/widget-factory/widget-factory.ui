@@ -872,8 +872,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch1">
-                                <property name="halign">center</property>
+                              <object class="GtkTransformer" id="switch_transformer">
+                                <child>
+                                  <object class="GtkSwitch" id="switch1">
+                                    <property name="halign">center</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
