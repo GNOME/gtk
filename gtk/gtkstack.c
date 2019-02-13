@@ -464,8 +464,7 @@ gtk_stack_pages_is_selected (GtkSelectionModel *model,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (pages->stack);
   GtkStackPage *page;
 
-  page = GTK_STACK_PAGE (g_list_model_get_item (G_LIST_MODEL (model), position));
-  g_object_unref (page);
+  page = g_list_nth_data (priv->children, position);
 
   return page == priv->visible_child;
 }
@@ -484,8 +483,7 @@ gtk_stack_pages_select_item (GtkSelectionModel *model,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (pages->stack);
   GtkStackPage *page;
 
-  page = GTK_STACK_PAGE (g_list_model_get_item (G_LIST_MODEL (model), position));
-  g_object_unref (page);
+  page = g_list_nth_data (priv->children, position);
 
   set_visible_child (pages->stack, page, priv->transition_type, priv->transition_duration);
 
