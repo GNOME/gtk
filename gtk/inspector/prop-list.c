@@ -212,7 +212,7 @@ show_object (GtkInspectorPropEditor *editor,
   popover = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_POPOVER);
   gtk_widget_hide (popover);
 
-  g_object_set_data (G_OBJECT (pl->priv->object_tree), "next-tab", (gpointer)tab);
+  g_object_set_data_full (G_OBJECT (pl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
   gtk_inspector_object_tree_select_object (pl->priv->object_tree, object);
 }
 
