@@ -161,6 +161,7 @@ enum  {
   PROP_TRANSITION_TYPE,
   PROP_TRANSITION_RUNNING,
   PROP_INTERPOLATE_SIZE,
+  PROP_PAGES,
   LAST_PROP
 };
 
@@ -654,6 +655,9 @@ gtk_stack_get_property (GObject   *object,
     case PROP_INTERPOLATE_SIZE:
       g_value_set_boolean (value, gtk_stack_get_interpolate_size (stack));
       break;
+    case PROP_PAGES:
+      g_value_set_object (value, gtk_stack_get_pages (stack));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -770,6 +774,10 @@ gtk_stack_class_init (GtkStackClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  stack_props[PROP_PAGES] =
+      g_param_spec_object ("pages", P_("Pages"), P_("A selection model with the stacks pages"),
+                           GTK_TYPE_SELECTION_MODEL,
+                           GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
