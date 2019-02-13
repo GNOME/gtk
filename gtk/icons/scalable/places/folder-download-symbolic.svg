@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.031" height="16.01">
+    <g color="#000" fill="#474747">
+        <path d="M3.031 8a1 1 0 0 0-.707 1.707l5 5a1 1 0 0 0 1.414 0l5-5A1 1 0 0 0 13.031 8h-.5a1 1 0 0 0-.707.293l-3.793 3.793-3.793-3.793A1 1 0 0 0 3.531 8z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal;marker:none" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"/>
+        <path d="M3.031 9V8h-1v1zM14.031 9V8h-1v1zM9.031 8.5v-1c0-.277-.223-.5-.5-.5h-1c-.277 0-.5.223-.5.5v1c0 .277.223.5.5.5h1c.277 0 .5-.223.5-.5zM9.031 5.5v-1c0-.277-.223-.5-.5-.5h-1c-.277 0-.5.223-.5.5v1c0 .277.223.5.5.5h1c.277 0 .5-.223.5-.5zM9.031 2.5v-1c0-.277-.223-.5-.5-.5h-1c-.277 0-.5.223-.5.5v1c0 .277.223.5.5.5h1c.277 0 .5-.223.5-.5z" style="marker:none" overflow="visible"/>
+    </g>
+</svg>
