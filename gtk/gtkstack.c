@@ -1140,9 +1140,6 @@ set_visible_child (GtkStack               *stack,
   if (child_info == priv->visible_child)
     return;
 
-  if (child_info == NULL)
-    return;
-
   if (priv->pages)
     {
       guint position;
