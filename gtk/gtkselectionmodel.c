@@ -295,6 +295,8 @@ gtk_selection_model_selection_changed (GtkSelectionModel *model,
                                        guint              n_items)
 {
   g_return_if_fail (GTK_IS_SELECTION_MODEL (model));
+  g_return_if_fail (n_items > 0);
+  g_return_if_fail (position + n_items <= g_list_model_get_n_items (G_LIST_MODEL (model)));
 
   g_signal_emit (model, signals[SELECTION_CHANGED], 0, position, n_items);
 }
