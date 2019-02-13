@@ -686,6 +686,13 @@ gtk_inspector_get_object_title (GObject *object)
     return g_strconcat (G_OBJECT_TYPE_NAME (object), " — ", name, NULL);
 }
 
+void
+gtk_inspector_object_tree_activate_object (GtkInspectorObjectTree *wt,
+                                           GObject                *object)
+{
+  g_signal_emit (wt, signals[OBJECT_ACTIVATED], 0, object);
+}
+
 static void
 on_row_activated (GtkListBox             *box,
                   GtkListBoxRow          *row,
@@ -699,7 +706,7 @@ on_row_activated (GtkListBox             *box,
   item = g_list_model_get_item (G_LIST_MODEL (wt->priv->tree_model), pos);
   object = gtk_tree_list_row_get_item (item);
 
-  g_signal_emit (wt, signals[OBJECT_ACTIVATED], 0, object);
+  gtk_inspector_object_tree_activate_object (wt, object);
 
   g_object_unref (item);
   g_object_unref (object);
@@ -1281,6 +1288,7 @@ gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
                                               gtk_tree_list_row_get_position (row_item));
   g_return_if_fail (row_widget != NULL);
   gtk_list_box_select_row (wt->priv->list, row_widget);
+  g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object); // FIXME
   g_object_unref (row_item);
 }
 
