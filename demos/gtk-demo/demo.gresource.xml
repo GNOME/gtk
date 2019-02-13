@@ -260,4 +260,22 @@
   <gresource prefix="/dnd">
     <file>dnd.css</file>
   </gresource>
+  <gresource prefix="/org/gtk/Demo">
+    <file>icons/16x16/actions/document-new.png</file>
+    <file>icons/16x16/actions/document-open.png</file>
+    <file>icons/16x16/actions/document-save.png</file>
+    <file>icons/16x16/actions/edit-copy.png</file>
+    <file>icons/16x16/actions/edit-cut.png</file>
+    <file>icons/16x16/actions/edit-paste.png</file>
+    <file>icons/16x16/actions/process-stop.png</file>
+    <file>icons/16x16/actions/go-home.png</file>
+    <file>icons/16x16/actions/go-up.png</file>
+    <file>icons/16x16/actions/mail-send-receive-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/view-refresh-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/view-fullscreen-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/document-edit-symbolic.symbolic.png</file>
+    <file>icons/16x16/emotes/face-cool.png</file>
+    <file>icons/16x16/emotes/face-laugh-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/battery-caution-charging-symbolic.symbolic.png</file>
+  </gresource>
 </gresources>
