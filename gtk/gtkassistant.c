@@ -80,6 +80,8 @@
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
+#include "gtklistlistmodelprivate.h"
+#include "gtkmaplistmodel.h"
 
 #include "a11y/gtkwindowaccessible.h"
 
@@ -131,6 +133,8 @@ struct _GtkAssistantPrivate
   GtkAssistantPageFunc forward_function;
   gpointer forward_function_data;
   GDestroyNotify forward_data_destroy;
+
+  GListModel *model;
 
   gint extra_buttons;
 
@@ -305,7 +309,8 @@ enum
 
 enum {
   PROP_0,
-  PROP_USE_HEADER_BAR
+  PROP_USE_HEADER_BAR,
+  PROP_PAGES
 };
 
 static guint signals [LAST_SIGNAL] = { 0 };
@@ -360,6 +365,10 @@ gtk_assistant_get_property (GObject      *object,
     {
     case PROP_USE_HEADER_BAR:
       g_value_set_int (value, priv->use_header_bar);
+      break;
+
+    case PROP_PAGES:
+      g_value_set_object (value, gtk_assistant_get_pages (assistant));
       break;
 
     default:
@@ -606,6 +615,13 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                      -1, 1, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_PAGES,
+                                   g_param_spec_object ("pages",
+                                                        P_("Pages"),
+                                                        P_("The pages of the assitant."),
+                                                        G_TYPE_LIST_MODEL,
+                                                        GTK_PARAM_READABLE));
 
   /* Bind class to template
    */
@@ -1322,6 +1338,9 @@ gtk_assistant_destroy (GtkWidget *widget)
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
 
+  if (priv->model)
+    g_list_model_items_changed (G_LIST_MODEL (priv->model), 0, g_list_length (priv->pages), 0);
+
   /* We set current to NULL so that the remove code doesn't try
    * to do anything funny
    */
@@ -1848,6 +1867,9 @@ gtk_assistant_add_page (GtkAssistant *assistant,
       update_actions_size (assistant);
     }
 
+  if (priv->model)
+    g_list_model_items_changed (priv->model, position, 0, 1);
+
   return position;
 }
 
@@ -1871,6 +1893,9 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
 
   if (page)
     gtk_container_remove (GTK_CONTAINER (assistant), page);
+
+  if (assistant->priv->model)
+    g_list_model_items_changed (assistant->priv->model, page_num, 1, 0);
 }
 
 /**
@@ -2449,4 +2474,90 @@ gtk_assistant_page_get_child (GtkAssistantPage *page)
   return page->page;
 }
 
+#define GTK_TYPE_ASSISTANT_PAGES (gtk_assistant_pages_get_type ())
+G_DECLARE_FINAL_TYPE (GtkAssistantPages, gtk_assistant_pages, GTK, ASSISTANT_PAGES, GObject)
 
+struct _GtkAssistantPages
+{
+  GObject parent_instance;
+  GtkAssistant *assistant;
+};
+
+struct _GtkAssistantPagesClass
+{
+  GObjectClass parent_class;
+};
+
+static GType
+gtk_assistant_pages_get_item_type (GListModel *model)
+{
+  return GTK_TYPE_ASSISTANT_PAGE;
+}
+
+static guint
+gtk_assistant_pages_get_n_items (GListModel *model)
+{
+  GtkAssistantPages *pages = GTK_ASSISTANT_PAGES (model);
+
+  return g_list_length (pages->assistant->priv->pages);
+}
+
+static gpointer
+gtk_assistant_pages_get_item (GListModel *model,
+                          guint       position)
+{
+  GtkAssistantPages *pages = GTK_ASSISTANT_PAGES (model);
+  GtkAssistantPage *page;
+
+  page = g_list_nth_data (pages->assistant->priv->pages, position);
+
+  return g_object_ref (page);
+}
+
+static void
+gtk_assistant_pages_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_assistant_pages_get_item_type;
+  iface->get_n_items = gtk_assistant_pages_get_n_items;
+  iface->get_item = gtk_assistant_pages_get_item;
+}
+G_DEFINE_TYPE_WITH_CODE (GtkAssistantPages, gtk_assistant_pages, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_assistant_pages_list_model_init))
+
+static void
+gtk_assistant_pages_init (GtkAssistantPages *pages)
+{
+}
+
+static void
+gtk_assistant_pages_class_init (GtkAssistantPagesClass *class)
+{
+}
+
+static GtkAssistantPages *
+gtk_assistant_pages_new (GtkAssistant *assistant)
+{
+  GtkAssistantPages *pages;
+
+  pages = g_object_new (GTK_TYPE_ASSISTANT_PAGES, NULL);
+  pages->assistant = assistant;
+
+  return pages;
+}
+
+GListModel *
+gtk_assistant_get_pages (GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
+
+  if (priv->model)
+    return g_object_ref (priv->model);
+
+  priv->model = G_LIST_MODEL (gtk_assistant_pages_new (assistant));
+
+  g_object_add_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+
+  return priv->model;
+}

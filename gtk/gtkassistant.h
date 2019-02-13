@@ -227,6 +227,8 @@ GtkAssistantPage *    gtk_assistant_get_page       (GtkAssistant     *assistant,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_assistant_page_get_child (GtkAssistantPage *page);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *          gtk_assistant_get_pages (GtkAssistant *assistant);
 
 G_END_DECLS
 
