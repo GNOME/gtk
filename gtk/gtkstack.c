@@ -1114,8 +1114,8 @@ set_visible_child (GtkStack               *stack,
   GtkWidget *toplevel;
   GtkWidget *focus;
   gboolean contains_focus = FALSE;
-  guint old_pos = 0;
-  guint new_pos = 0;
+  guint old_pos = GTK_INVALID_LIST_POSITION;
+  guint new_pos = GTK_INVALID_LIST_POSITION;
 
   /* if we are being destroyed, do not bother with transitions
    * and notifications
@@ -1247,9 +1247,18 @@ set_visible_child (GtkStack               *stack,
                             stack_props[PROP_VISIBLE_CHILD_NAME]);
 
   if (priv->pages)
-    gtk_selection_model_selection_changed (priv->pages,
-                                           MIN (old_pos, new_pos), 
-                                           MAX (old_pos, new_pos) - MIN (old_pos, new_pos) + 1);
+    {
+      if (old_pos == GTK_INVALID_LIST_POSITION && new_pos == GTK_INVALID_LIST_POSITION)
+        ; /* nothing to do */
+      else if (old_pos == GTK_INVALID_LIST_POSITION)
+        gtk_selection_model_selection_changed (priv->pages, new_pos, 1);
+      else if (new_pos == GTK_INVALID_LIST_POSITION)
+        gtk_selection_model_selection_changed (priv->pages, old_pos, 1);
+      else
+        gtk_selection_model_selection_changed (priv->pages,
+                                               MIN (old_pos, new_pos),
+                                               MAX (old_pos, new_pos) - MIN (old_pos, new_pos) + 1);
+    }
 
   gtk_stack_start_transition (stack, transition_type, transition_duration);
 }
