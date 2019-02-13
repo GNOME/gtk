@@ -157,7 +157,12 @@ test_type (gconstpointer data)
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_ASSISTANT) &&
-	  (strcmp (pspec->name, "use-header-bar") == 0))
+	  (strcmp (pspec->name, "use-header-bar") == 0 ||
+           strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_STACK) &&
+	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
