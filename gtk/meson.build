@@ -352,6 +352,7 @@ gtk_public_sources = files([
   'gtkstyleprovider.c',
   'gtkswitch.c',
   'gtktestutils.c',
+  'gtktext.c',
   'gtktextattributes.c',
   'gtktextbuffer.c',
   'gtktextchild.c',
