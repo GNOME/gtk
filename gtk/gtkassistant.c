@@ -74,7 +74,7 @@
 #include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtknotebook.h"
+#include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
@@ -967,7 +967,7 @@ set_current_page (GtkAssistant *assistant,
 
   gtk_window_set_title (GTK_WINDOW (assistant), priv->current_page->title);
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->content), page_num);
+  gtk_stack_set_visible_child (GTK_STACK (priv->content), priv->current_page->box);
 
   /* update buttons state, flow may have changed */
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
@@ -1348,13 +1348,15 @@ gtk_assistant_destroy (GtkWidget *widget)
 
   if (priv->content)
     {
-      GtkNotebook *notebook;
-      GtkWidget *page;
+      GList *children, *l;
 
-      /* Remove all pages from the content notebook. */
-      notebook = (GtkNotebook *) priv->content;
-      while ((page = gtk_notebook_get_nth_page (notebook, 0)) != NULL)
-        gtk_container_remove ((GtkContainer *) notebook, page);
+      children = gtk_container_get_children (GTK_CONTAINER (priv->content));
+      for (l = children; l; l = l->next)
+        {
+          GtkWidget *page = l->data;
+          gtk_container_remove (GTK_CONTAINER (priv->content), page);
+        }
+      g_list_free (children);
 
       /* Our GtkAssistantPage list should be empty now. */
       g_warn_if_fail (priv->pages == NULL);
@@ -1500,7 +1502,7 @@ gtk_assistant_remove (GtkContainer *container,
   GtkAssistant *assistant = (GtkAssistant*) container;
   GtkWidget *box;
 
-  /* Forward this removal to the content notebook */
+  /* Forward this removal to the content stack */
   box = gtk_widget_get_parent (page);
   if (GTK_IS_BOX (box) &&
       assistant->priv->content != NULL &&
@@ -1806,6 +1808,7 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   GtkStyleContext *context;
   GtkWidget *box;
   GtkWidget *sibling;
+  char *name;
 
   page_info->regular_title = gtk_label_new (page_info->title);
   page_info->current_title = gtk_label_new (page_info->title);
@@ -1857,7 +1860,9 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   g_object_set (box, "margin", 12, NULL);
   g_signal_connect (box, "remove", G_CALLBACK (assistant_remove_page_cb), assistant);
 
-  gtk_notebook_insert_page (GTK_NOTEBOOK (priv->content), box, NULL, position);
+  name = g_strdup_printf ("page%d", position);
+  gtk_stack_add_named (GTK_STACK (priv->content), box, name);
+  g_free (name);
 
   page_info->box = box;
 
