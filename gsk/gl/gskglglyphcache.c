@@ -277,7 +277,7 @@ upload_dirty_glyph (GskGLGlyphCache   *self,
   if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
     {
 
-      gsk_gl_image_upload_regions (&atlas->image, self->gl_driver, 1, &region);
+      gsk_gl_image_upload_region (&atlas->image, self->gl_driver, &region);
 
       g_free (region.data);
     }
