@@ -855,8 +855,8 @@ gtk_widget_real_contains (GtkWidget *widget,
   graphene_rect_init (&bounds,
                       - border.left - padding.left,
                       - border.top - padding.top,
-                      priv->allocation.width - margin.left - margin.right,
-                      priv->allocation.height - margin.top - margin.bottom);
+                      priv->allocated_width - margin.left - margin.right,
+                      priv->allocated_height - margin.top - margin.bottom);
 
   /* XXX: This misses rounded rects */
   return graphene_rect_contains_point (&bounds,
@@ -2870,10 +2870,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->visible = gtk_widget_class_get_visible_by_default (g_class);
   priv->child_visible = TRUE;
   priv->name = NULL;
-  priv->allocation.x = -1;
-  priv->allocation.y = -1;
-  priv->allocation.width = 0;
-  priv->allocation.height = 0;
+  priv->allocated_width = 0;
+  priv->allocated_height = 0;
   priv->user_alpha = 255;
   priv->alpha = 255;
   priv->surface = NULL;
@@ -3107,8 +3105,8 @@ gtk_widget_unparent (GtkWidget *widget)
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent.
    */
-  priv->allocation.width = 0;
-  priv->allocation.height = 0;
+  priv->allocated_width = 0;
+  priv->allocated_height = 0;
 
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -4353,14 +4351,15 @@ gtk_widget_size_allocate_transformed (GtkWidget               *widget,
   }
 
   baseline_changed = priv->allocated_baseline != baseline;
-  size_changed = (priv->allocation.width != real_allocation.width ||
-                  priv->allocation.height != real_allocation.height);
+  size_changed = (priv->allocated_width != real_allocation.width ||
+                  priv->allocated_height != real_allocation.height);
   transform_changed = memcmp (&final_transform,
                               &priv->transform,
                               sizeof (graphene_matrix_t)) != 0;
 
   /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
-  priv->allocation = real_allocation;
+  priv->allocated_width = real_allocation.width;
+  priv->allocated_height = real_allocation.height;
   priv->allocated_baseline = baseline;
   priv->transform = final_transform;
   priv->has_transform = !graphene_matrix_is_identity (&final_transform);
@@ -4592,8 +4591,6 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
   parent = src_widget;
   while (parent != ancestor)
     {
-      graphene_vec4_t offset;
-      int origin_x, origin_y;
       GtkBorder margin, border, padding;
       GtkCssStyle *style;
 
@@ -4613,12 +4610,7 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
         graphene_vec4_add (&src_point, &v, &src_point);
       }
 
-      origin_x = parent->priv->allocation.x;
-      origin_y = parent->priv->allocation.y;
-
       graphene_matrix_transform_vec4 (&parent->priv->transform, &src_point, &src_point);
-      graphene_vec4_init (&offset, origin_x, origin_y, 0, 0);
-      graphene_vec4_add (&src_point, &offset, &src_point);
 
       parent = _gtk_widget_get_parent (parent);
     }
@@ -4627,8 +4619,6 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
 
   for (i = 0; i < dest_depth; i ++)
     {
-      int origin_x, origin_y;
-      graphene_vec4_t offset;
       graphene_matrix_t inv_transform;
       GtkBorder margin, border, padding;
       GtkCssStyle *style;
@@ -4639,12 +4629,6 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
       get_box_margin (style, &margin);
       get_box_border (style, &border);
       get_box_padding (style, &padding);
-
-      origin_x = parent->priv->allocation.x;
-      origin_y = parent->priv->allocation.y;
-
-      graphene_vec4_init (&offset, -origin_x, -origin_y, 0, 0);
-      graphene_vec4_add (&src_point, &offset, &src_point);
 
       /* TODO: inversion can fail */
       graphene_matrix_inverse (&parent->priv->transform, &inv_transform);
@@ -6260,10 +6244,8 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
 
   if (!visible)
     {
-      priv->allocation.x = -1;
-      priv->allocation.y = -1;
-      priv->allocation.width = 0;
-      priv->allocation.height = 0;
+      priv->allocated_width = 0;
+      priv->allocated_height = 0;
       memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
       priv->allocated_size_baseline = 0;
       gtk_widget_update_paintables (widget);
@@ -6353,8 +6335,8 @@ gtk_widget_set_has_surface (GtkWidget *widget,
   priv->no_surface_set = TRUE;
 
   /* GdkSurface has a min size of 1×1 */
-  priv->allocation.width = 1;
-  priv->allocation.height = 1;
+  priv->allocated_width = 1;
+  priv->allocated_height = 1;
 }
 
 /**
@@ -11217,8 +11199,8 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   *allocation = (GtkAllocation) {
     (int)graphene_matrix_get_value (&priv->transform, 3, 0),
     (int)graphene_matrix_get_value (&priv->transform, 3, 1),
-    priv->allocation.width,
-    priv->allocation.height
+    priv->allocated_width,
+    priv->allocated_height
   };
 }
 
@@ -11311,8 +11293,8 @@ gtk_widget_pick (GtkWidget *widget,
 
         if (x < -padding.left ||
             y < -padding.top  ||
-            x >= priv->allocation.width - margin.left - margin.right - border.left - border.right - padding.left ||
-            y >= priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
+            x >= priv->allocated_width - margin.left - margin.right - border.left - border.right - padding.left ||
+            y >= priv->allocated_height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
           return NULL;
       }
       break;
@@ -11392,14 +11374,12 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
   graphene_rect_init (&bounds,
                       - border.left - padding.left,
                       - border.top - padding.top,
-                      priv->allocation.width - margin.left - margin.right,
-                      priv->allocation.height - margin.top - margin.bottom);
+                      priv->allocated_width - margin.left - margin.right,
+                      priv->allocated_height - margin.top - margin.bottom);
 
   parent = widget;
   while (parent != ancestor)
     {
-      int origin_x, origin_y;
-
       style = gtk_css_node_get_style (parent->priv->cssnode);
       get_box_margin (style, &margin);
       get_box_border (style, &border);
@@ -11409,11 +11389,7 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                             margin.left + border.left + padding.left,
                             margin.top  + border.top  + padding.top);
 
-      origin_x = parent->priv->allocation.x;
-      origin_y = parent->priv->allocation.y;
-
       graphene_matrix_transform_bounds (&parent->priv->transform, &bounds, &bounds);
-      graphene_rect_offset (&bounds, origin_x, origin_y);
 
       parent = _gtk_widget_get_parent (parent);
     }
@@ -11422,7 +11398,6 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
 
   for (i = 0; i < dest_depth; i ++)
     {
-      int origin_x, origin_y;
       graphene_matrix_t inv_transform;
 
       parent = dest_path[i];
@@ -11431,11 +11406,6 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
       get_box_margin (style, &margin);
       get_box_border (style, &border);
       get_box_padding (style, &padding);
-
-      origin_x = parent->priv->allocation.x;
-      origin_y = parent->priv->allocation.y;
-
-      graphene_rect_offset (&bounds, -origin_x, -origin_y);
 
       /* TODO: Inversion can fail */
       graphene_matrix_inverse (&parent->priv->transform, &inv_transform);
@@ -11466,7 +11436,7 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->allocation.width;
+  return priv->allocated_width;
 }
 
 /**
@@ -11484,7 +11454,7 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->allocation.height;
+  return priv->allocated_height;
 }
 
 /**
@@ -13136,7 +13106,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
           graphene_rect_init (&bounds,
                               0,
                               margin.top + border.top + padding.top + baseline,
-                              priv->allocation.width, 1);
+                              priv->allocated_width, 1);
           gtk_snapshot_append_color (snapshot,
                                      &red,
                                      &bounds);
@@ -13151,7 +13121,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
 
       graphene_rect_init (&bounds,
                           0, 0,
-                          priv->allocation.width, priv->allocation.height);
+                          priv->allocated_width, priv->allocated_height);
 
       gtk_snapshot_append_color (snapshot,
                                  &blue,
@@ -13171,7 +13141,6 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkCssValue *filter_value;
   double opacity;
   GtkCssStyle *style;
-  GtkAllocation allocation;
   GtkBorder margin, border, padding;
   GtkSnapshot *snapshot;
 
@@ -13181,11 +13150,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
-  gtk_widget_get_allocation (widget, &allocation);
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p @ %d x %d",
                            G_OBJECT_TYPE_NAME (widget), widget,
-                           allocation.width, allocation.height);
+                           priv->allocated_width, priv->allocated_height);
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
@@ -13203,12 +13171,12 @@ gtk_widget_create_render_node (GtkWidget   *widget,
       gtk_snapshot_offset (snapshot, margin.left, margin.top);
       gtk_css_style_snapshot_background (style,
                                          snapshot,
-                                         allocation.width - margin.left - margin.right,
-                                         allocation.height - margin.top - margin.bottom);
+                                         priv->allocated_width - margin.left - margin.right,
+                                         priv->allocated_height - margin.top - margin.bottom);
       gtk_css_style_snapshot_border (style,
                                      snapshot,
-                                     allocation.width - margin.left - margin.right,
-                                     allocation.height - margin.top - margin.bottom);
+                                     priv->allocated_width - margin.left - margin.right,
+                                     priv->allocated_height - margin.top - margin.bottom);
       gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
     }
 
@@ -13220,8 +13188,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT (- padding.left,
                                                    - padding.top,
-                                                   allocation.width - margin.left - margin.right - border.left  - border.right,
-                                                   allocation.height - margin.top  - margin.bottom - border.top  - border.bottom));
+                                                   priv->allocated_width - margin.left - margin.right - border.left  - border.right,
+                                                   priv->allocated_height - margin.top  - margin.bottom - border.top  - border.bottom));
     }
 
   klass->snapshot (widget, snapshot);
@@ -13233,8 +13201,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   gtk_css_style_snapshot_outline (style,
                                   snapshot,
-                                  allocation.width - margin.left - margin.right,
-                                  allocation.height - margin.top - margin.bottom);
+                                  priv->allocated_width - margin.left - margin.right,
+                                  priv->allocated_height - margin.top - margin.bottom);
   gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
 
   if (opacity < 1.0)
@@ -13827,7 +13795,7 @@ gtk_widget_get_width (GtkWidget *widget)
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  return priv->allocation.width -
+  return priv->allocated_width -
          margin.left  - margin.right -
          border.left  - border.right -
          padding.left - padding.right;
@@ -13857,7 +13825,7 @@ gtk_widget_get_height (GtkWidget *widget)
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  return priv->allocation.height -
+  return priv->allocated_height -
          margin.top  - margin.bottom -
          border.top  - border.bottom -
          padding.top - padding.bottom;

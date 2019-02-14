@@ -141,7 +141,8 @@ struct _GtkWidgetPrivate
   /* The widget's allocated size */
   GtkAllocation allocated_size;
   gint allocated_size_baseline;
-  GtkAllocation allocation;
+  int allocated_width;
+  int allocated_height;
   gint allocated_baseline;
 
   graphene_matrix_t allocated_transform;
