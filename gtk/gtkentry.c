@@ -458,9 +458,8 @@ static void     gtk_entry_insert_text          (GtkEditable *editable,
 static void     gtk_entry_delete_text          (GtkEditable *editable,
 						gint         start_pos,
 						gint         end_pos);
-static gchar *  gtk_entry_get_chars            (GtkEditable *editable,
-						gint         start_pos,
-						gint         end_pos);
+static const char *gtk_entry_real_get_text     (GtkEditable *editable);
+static int      gtk_entry_get_length           (GtkEditable *editable);
 static void     gtk_entry_real_set_position    (GtkEditable *editable,
 						gint         position);
 static gint     gtk_entry_get_position         (GtkEditable *editable);
@@ -470,6 +469,8 @@ static void     gtk_entry_set_selection_bounds (GtkEditable *editable,
 static gboolean gtk_entry_get_selection_bounds (GtkEditable *editable,
 						gint        *start,
 						gint        *end);
+static void     gtk_entry_set_editable         (GtkEditable *editable,
+                                                gboolean     is_editable);
 
 /* GtkCellEditable method implementations
  */
@@ -1885,13 +1886,55 @@ gtk_entry_class_init (GtkEntryClass *class)
 }
 
 static void
+gtk_entry_set_editable (GtkEditable *editable,
+                        gboolean     is_editable)
+{
+  GtkEntry *entry = GTK_ENTRY (editable);
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+
+  if (is_editable != priv->editable)
+    {
+      GtkWidget *widget = GTK_WIDGET (entry);
+
+      if (!is_editable)
+        {
+          gtk_entry_reset_im_context (entry);
+          if (gtk_widget_has_focus (widget))
+            gtk_im_context_focus_out (priv->im_context);
+
+          priv->preedit_length = 0;
+          priv->preedit_cursor = 0;
+
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_READ_ONLY);
+        }
+      else
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_READ_ONLY);
+        }
+
+      priv->editable = is_editable;
+
+      if (is_editable && gtk_widget_has_focus (widget))
+        gtk_im_context_focus_in (priv->im_context);
+
+      gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
+                                               is_editable ? priv->im_context : NULL);
+
+      g_object_notify (G_OBJECT (editable), "editable");
+      gtk_widget_queue_draw (widget);
+    }
+}
+
+static void
 gtk_entry_editable_init (GtkEditableInterface *iface)
 {
   iface->do_insert_text = gtk_entry_insert_text;
   iface->do_delete_text = gtk_entry_delete_text;
   iface->insert_text = gtk_entry_real_insert_text;
   iface->delete_text = gtk_entry_real_delete_text;
-  iface->get_chars = gtk_entry_get_chars;
+  iface->get_text = gtk_entry_real_get_text;
+  iface->get_length = gtk_entry_get_length;
   iface->set_selection_bounds = gtk_entry_set_selection_bounds;
   iface->get_selection_bounds = gtk_entry_get_selection_bounds;
   iface->set_position = gtk_entry_real_set_position;
@@ -1920,42 +1963,7 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_EDITABLE:
-      {
-        gboolean new_value = g_value_get_boolean (value);
-        GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-
-        if (new_value != priv->editable)
-	  {
-            GtkWidget *widget = GTK_WIDGET (entry);
-
-	    if (!new_value)
-	      {
-		gtk_entry_reset_im_context (entry);
-		if (gtk_widget_has_focus (widget))
-		  gtk_im_context_focus_out (priv->im_context);
-
-		priv->preedit_length = 0;
-		priv->preedit_cursor = 0;
-
-                gtk_style_context_remove_class (context, GTK_STYLE_CLASS_READ_ONLY);
-	      }
-            else
-              {
-                gtk_style_context_add_class (context, GTK_STYLE_CLASS_READ_ONLY);
-              }
-
-	    priv->editable = new_value;
-
-	    if (new_value && gtk_widget_has_focus (widget))
-              gtk_im_context_focus_in (priv->im_context);
-
-            gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
-                                                     new_value ? priv->im_context : NULL);
-
-            g_object_notify_by_pspec (object, pspec);
-	    gtk_widget_queue_draw (widget);
-	  }
-      }
+      gtk_entry_set_editable (GTK_EDITABLE (entry), g_value_get_boolean (value));
       break;
 
     case PROP_MAX_LENGTH:
@@ -4274,29 +4282,16 @@ gtk_entry_delete_text (GtkEditable *editable,
   g_object_unref (editable);
 }
 
-static gchar *    
-gtk_entry_get_chars      (GtkEditable   *editable,
-			  gint           start_pos,
-			  gint           end_pos)
+static const char *
+gtk_entry_real_get_text (GtkEditable *editable)
 {
-  GtkEntry *entry = GTK_ENTRY (editable);
-  const gchar *text;
-  gint text_length;
-  gint start_index, end_index;
+  return gtk_entry_buffer_get_text (gtk_entry_get_buffer (GTK_ENTRY (editable)));
+}
 
-  text = gtk_entry_buffer_get_text (get_buffer (entry));
-  text_length = gtk_entry_buffer_get_length (get_buffer (entry));
-
-  if (end_pos < 0)
-    end_pos = text_length;
-
-  start_pos = MIN (text_length, start_pos);
-  end_pos = MIN (text_length, end_pos);
-
-  start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
-  end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
-
-  return g_strndup (text + start_index, end_index - start_index);
+static int
+gtk_entry_get_length (GtkEditable *editable)
+{
+  return gtk_entry_buffer_get_length (gtk_entry_get_buffer (GTK_ENTRY (editable)));
 }
 
 static void
