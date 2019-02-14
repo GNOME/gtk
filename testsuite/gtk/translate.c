@@ -276,6 +276,10 @@ pick (void)
   graphene_matrix_init_scale (&transform, 0.5, 1, 1);
   gtk_widget_set_transform (child, &transform);
 
+  /* XXX These are disabled because gtk_widget_pick()
+   *     checks for gtk_widget_is_drawable(), which is not the case here
+   *     since the widgets aren't mapped!
+   */
   /*g_assert (gtk_widget_pick (parent, WIDTH * 0.25, HEIGHT / 2) == child);*/
   /*g_assert (gtk_widget_pick (parent, WIDTH * 0.75, HEIGHT / 2) == parent);*/
 
@@ -288,16 +292,16 @@ pick (void)
   /* ... which means that picking on the parent with any positive x coordinate will
    * yield the parent widget, while negative x coordinates (up until -WIDTH) will
    * yield the child */
-  g_assert (gtk_widget_pick (parent, WIDTH * 0.1, 0) == parent);
-  g_assert (gtk_widget_pick (parent, WIDTH * 0.9, 0) == parent);
+  /*g_assert (gtk_widget_pick (parent, WIDTH * 0.1, 0) == parent);*/
+  /*g_assert (gtk_widget_pick (parent, WIDTH * 0.9, 0) == parent);*/
 
   /*double dx, dy;*/
   /*gtk_widget_translate_coordinatesf (parent, child, - WIDTH * 0.1, 0, &dx, &dy);*/
   /*g_message ("translate: %f, %f", dx, dy);*/
 
 
-  g_assert (gtk_widget_pick (parent, -WIDTH * 0.1, 0) == child);
-  g_assert (gtk_widget_pick (parent, -WIDTH * 0.9, 0) == child);
+  /*g_assert (gtk_widget_pick (parent, -WIDTH * 0.1, 0) == child);*/
+  /*g_assert (gtk_widget_pick (parent, -WIDTH * 0.9, 0) == child);*/
 }
 
 
