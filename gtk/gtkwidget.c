@@ -13181,7 +13181,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p @ %d x %d",
                            G_OBJECT_TYPE_NAME (widget), widget,

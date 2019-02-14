@@ -454,13 +454,6 @@ _gtk_widget_get_surface (GtkWidget *widget)
   return widget->priv->surface;
 }
 
-static inline void
-_gtk_widget_get_allocation (GtkWidget     *widget,
-                            GtkAllocation *allocation)
-{
-  *allocation = widget->priv->allocation;
-}
-
 static inline GtkWidget *
 _gtk_widget_get_prev_sibling (GtkWidget *widget)
 {
