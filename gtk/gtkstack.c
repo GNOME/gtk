@@ -600,6 +600,7 @@ gtk_stack_dispose (GObject *obj)
 
   if (priv->pages)
     g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
+
   gtk_container_foreach (GTK_CONTAINER (obj), remove_child, obj);
 
   G_OBJECT_CLASS (gtk_stack_parent_class)->dispose (obj);
@@ -610,6 +611,9 @@ gtk_stack_finalize (GObject *obj)
 {
   GtkStack *stack = GTK_STACK (obj);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  if (priv->pages)
+    g_object_remove_weak_pointer (G_OBJECT (priv->pages), (gpointer *)&priv->pages);
 
   gtk_stack_unschedule_ticks (stack);
 
