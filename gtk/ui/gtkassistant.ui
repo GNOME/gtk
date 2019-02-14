@@ -18,10 +18,8 @@
             <property name="orientation">vertical</property>
             <property name="hexpand">1</property>
             <child>
-              <object class="GtkNotebook" id="content">
+              <object class="GtkStack" id="content">
                 <property name="can-focus">1</property>
-                <property name="show-tabs">0</property>
-                <property name="show-border">0</property>
                 <property name="vexpand">1</property>
                 <signal name="remove" handler="assistant_remove_page_cb" swapped="no"/>
                 <child type="tab"/>
