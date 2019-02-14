@@ -215,13 +215,6 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_commit                (GtkAssistant *assistant);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_assistant_set_page_has_padding  (GtkAssistant *assistant,
-                                                           GtkWidget    *page,
-                                                           gboolean      has_padding);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_assistant_get_page_has_padding  (GtkAssistant *assistant,
-                                                           GtkWidget    *page);
-GDK_AVAILABLE_IN_ALL
 GtkAssistantPage *    gtk_assistant_get_page       (GtkAssistant     *assistant,
                                                     GtkWidget        *child);
 GDK_AVAILABLE_IN_ALL
