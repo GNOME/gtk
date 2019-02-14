@@ -2545,6 +2545,14 @@ gtk_assistant_pages_new (GtkAssistant *assistant)
   return pages;
 }
 
+/**
+ * gtk_assistant_get_pages:
+ * @assistant: a #GtkAssistant
+ * 
+ * Gets a list model of the assistant pages.
+ *
+ * Returns: (transfer full): A list model of the pages.
+ */
 GListModel *
 gtk_assistant_get_pages (GtkAssistant *assistant)
 {
