@@ -168,6 +168,7 @@ gtk_style_context_get_type
 gtk_style_provider_get_type
 gtk_text_buffer_get_type
 gtk_text_child_anchor_get_type
+gtk_text_get_type
 gtk_text_iter_get_type
 gtk_text_mark_get_type
 gtk_text_tag_get_type
