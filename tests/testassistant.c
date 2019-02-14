@@ -570,7 +570,6 @@ create_full_featured_assistant (GtkWidget *widget)
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Filechooser");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
-      gtk_assistant_set_page_has_padding (GTK_ASSISTANT (assistant), page, FALSE);
 
       page = get_test_page ("Page 3");
       gtk_widget_show (page);
