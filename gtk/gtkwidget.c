@@ -11215,8 +11215,8 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   *allocation = (GtkAllocation) {
-    (int)graphene_matrix_get_value (&priv->transform, 0, 3),
-    (int)graphene_matrix_get_value (&priv->transform, 1, 3),
+    (int)graphene_matrix_get_value (&priv->transform, 3, 0),
+    (int)graphene_matrix_get_value (&priv->transform, 3, 1),
     priv->allocation.width,
     priv->allocation.height
   };
