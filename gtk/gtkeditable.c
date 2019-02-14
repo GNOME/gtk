@@ -68,119 +68,157 @@
 #include <string.h>
 
 #include "gtkeditable.h"
+#include "gtkentrybuffer.h"
+#include "gtkeditableprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 
-
-static void gtk_editable_base_init (gpointer g_class);
-
-
-GType
-gtk_editable_get_type (void)
-{
-  static GType editable_type = 0;
-
-  if (!editable_type)
-    {
-      const GTypeInfo editable_info =
-      {
-	sizeof (GtkEditableInterface),  /* class_size */
-	gtk_editable_base_init,	    /* base_init */
-	NULL,			    /* base_finalize */
-      };
-
-      editable_type = g_type_register_static (G_TYPE_INTERFACE, I_("GtkEditable"),
-					      &editable_info, 0);
-    }
-
-  return editable_type;
-}
+G_DEFINE_INTERFACE (GtkEditable, gtk_editable, GTK_TYPE_WIDGET)
 
 static void
-gtk_editable_base_init (gpointer g_class)
+gtk_editable_default_init (GtkEditableInterface *iface)
 {
-  static gboolean initialized = FALSE;
+  /**
+   * GtkEditable::insert-text:
+   * @editable: the object which received the signal
+   * @new_text: the new text to insert
+   * @new_text_length: the length of the new text, in bytes,
+   *     or -1 if new_text is nul-terminated
+   * @position: (inout) (type int): the position, in characters,
+   *     at which to insert the new text. this is an in-out
+   *     parameter.  After the signal emission is finished, it
+   *     should point after the newly inserted text.
+   *
+   * This signal is emitted when text is inserted into
+   * the widget by the user. The default handler for
+   * this signal will normally be responsible for inserting
+   * the text, so by connecting to this signal and then
+   * stopping the signal with g_signal_stop_emission(), it
+   * is possible to modify the inserted text, or prevent
+   * it from being inserted entirely.
+   */
+  g_signal_new (I_("insert-text"),
+                GTK_TYPE_EDITABLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
+                NULL, NULL,
+                _gtk_marshal_VOID__STRING_INT_POINTER,
+                G_TYPE_NONE, 3,
+                G_TYPE_STRING,
+                G_TYPE_INT,
+                G_TYPE_POINTER);
 
-  if (! initialized)
-    {
-      /**
-       * GtkEditable::insert-text:
-       * @editable: the object which received the signal
-       * @new_text: the new text to insert
-       * @new_text_length: the length of the new text, in bytes,
-       *     or -1 if new_text is nul-terminated
-       * @position: (inout) (type int): the position, in characters,
-       *     at which to insert the new text. this is an in-out
-       *     parameter.  After the signal emission is finished, it
-       *     should point after the newly inserted text.
-       *
-       * This signal is emitted when text is inserted into
-       * the widget by the user. The default handler for
-       * this signal will normally be responsible for inserting
-       * the text, so by connecting to this signal and then
-       * stopping the signal with g_signal_stop_emission(), it
-       * is possible to modify the inserted text, or prevent
-       * it from being inserted entirely.
-       */
-      g_signal_new (I_("insert-text"),
-		    GTK_TYPE_EDITABLE,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
-		    NULL, NULL,
-		    _gtk_marshal_VOID__STRING_INT_POINTER,
-		    G_TYPE_NONE, 3,
-		    G_TYPE_STRING,
-		    G_TYPE_INT,
-		    G_TYPE_POINTER);
+  /**
+   * GtkEditable::delete-text:
+   * @editable: the object which received the signal
+   * @start_pos: the starting position
+   * @end_pos: the end position
+   * 
+   * This signal is emitted when text is deleted from
+   * the widget by the user. The default handler for
+   * this signal will normally be responsible for deleting
+   * the text, so by connecting to this signal and then
+   * stopping the signal with g_signal_stop_emission(), it
+   * is possible to modify the range of deleted text, or
+   * prevent it from being deleted entirely. The @start_pos
+   * and @end_pos parameters are interpreted as for
+   * gtk_editable_delete_text().
+   */
+  g_signal_new (I_("delete-text"),
+                GTK_TYPE_EDITABLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
+                NULL, NULL,
+                _gtk_marshal_VOID__INT_INT,
+                G_TYPE_NONE, 2,
+                G_TYPE_INT,
+                G_TYPE_INT);
 
-      /**
-       * GtkEditable::delete-text:
-       * @editable: the object which received the signal
-       * @start_pos: the starting position
-       * @end_pos: the end position
-       * 
-       * This signal is emitted when text is deleted from
-       * the widget by the user. The default handler for
-       * this signal will normally be responsible for deleting
-       * the text, so by connecting to this signal and then
-       * stopping the signal with g_signal_stop_emission(), it
-       * is possible to modify the range of deleted text, or
-       * prevent it from being deleted entirely. The @start_pos
-       * and @end_pos parameters are interpreted as for
-       * gtk_editable_delete_text().
-       */
-      g_signal_new (I_("delete-text"),
-		    GTK_TYPE_EDITABLE,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
-		    NULL, NULL,
-		    _gtk_marshal_VOID__INT_INT,
-		    G_TYPE_NONE, 2,
-		    G_TYPE_INT,
-		    G_TYPE_INT);
-      /**
-       * GtkEditable::changed:
-       * @editable: the object which received the signal
-       *
-       * The ::changed signal is emitted at the end of a single
-       * user-visible operation on the contents of the #GtkEditable.
-       *
-       * E.g., a paste operation that replaces the contents of the
-       * selection will cause only one signal emission (even though it
-       * is implemented by first deleting the selection, then inserting
-       * the new content, and may cause multiple ::notify::text signals
-       * to be emitted).
-       */ 
-      g_signal_new (I_("changed"),
-		    GTK_TYPE_EDITABLE,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableInterface, changed),
-		    NULL, NULL,
-		    NULL,
-		    G_TYPE_NONE, 0);
+  /**
+   * GtkEditable::changed:
+   * @editable: the object which received the signal
+   *
+   * The ::changed signal is emitted at the end of a single
+   * user-visible operation on the contents of the #GtkEditable.
+   *
+   * E.g., a paste operation that replaces the contents of the
+   * selection will cause only one signal emission (even though it
+   * is implemented by first deleting the selection, then inserting
+   * the new content, and may cause multiple ::notify::text signals
+   * to be emitted).
+   */ 
+  g_signal_new (I_("changed"),
+                GTK_TYPE_EDITABLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (GtkEditableInterface, changed),
+                NULL, NULL,
+                NULL,
+                G_TYPE_NONE, 0);
 
-      initialized = TRUE;
-    }
+  g_signal_new (I_("selection-changed"),
+                GTK_TYPE_EDITABLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (GtkEditableInterface, selection_changed),
+                NULL, NULL,
+                NULL,
+                G_TYPE_NONE, 2,
+                G_TYPE_INT,
+                G_TYPE_INT);
+
+  g_object_interface_install_property (iface,
+      g_param_spec_string ("text",
+                           P_("Text"),
+                           P_("The contents of the entry"),
+                           "",
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_int ("cursor-position",
+                        P_("Cursor Position"),
+                        P_("The current position of the insertion cursor in chars"),
+                        0, GTK_ENTRY_BUFFER_MAX_SIZE,
+                        0,
+                        GTK_PARAM_READABLE));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_int ("selection-bound",
+                        P_("Selection Bound"),
+                        P_("The position of the opposite end of the selection from the cursor in chars"),
+                        0, GTK_ENTRY_BUFFER_MAX_SIZE,
+                        0,
+                        GTK_PARAM_READABLE));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("editable",
+                            P_("Editable"),
+                            P_("Whether the entry contents can be edited"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_int ("width-chars",
+                        P_("Width in chars"),
+                        P_("Number of characters to leave space for in the entry"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_int ("max-width-chars",
+                        P_("Maximum width in characters"),
+                        P_("The desired maximum width of the entry, in characters"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_float ("xalign",
+                          P_("X align"),
+                          P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+                          0.0, 1.0,
+                          0.0,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 /**
@@ -198,17 +236,17 @@ gtk_editable_base_init (gpointer g_class)
  */
 void
 gtk_editable_insert_text (GtkEditable *editable,
-			  const gchar *new_text,
-			  gint         new_text_length,
-			  gint        *position)
+                          const char  *text,
+                          gint         length,
+                          gint        *position)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   g_return_if_fail (position != NULL);
 
-  if (new_text_length < 0)
-    new_text_length = strlen (new_text);
+  if (length < 0)
+    length = strlen (text);
   
-  GTK_EDITABLE_GET_IFACE (editable)->do_insert_text (editable, new_text, new_text_length, position);
+  GTK_EDITABLE_GET_IFACE (editable)->do_insert_text (editable, text, length, position);
 }
 
 /**
@@ -226,8 +264,8 @@ gtk_editable_insert_text (GtkEditable *editable,
  */
 void
 gtk_editable_delete_text (GtkEditable *editable,
-			  gint         start_pos,
-			  gint         end_pos)
+                          gint         start_pos,
+                          gint         end_pos)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
@@ -253,12 +291,56 @@ gtk_editable_delete_text (GtkEditable *editable,
  */
 gchar *    
 gtk_editable_get_chars (GtkEditable *editable,
-			gint         start_pos,
-			gint         end_pos)
+                        gint         start_pos,
+                        gint         end_pos)
+{
+  const char *text;
+  int length;
+  int start_index,end_index;
+
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
+
+  text = GTK_EDITABLE_GET_IFACE (editable)->get_text (editable);
+  length = GTK_EDITABLE_GET_IFACE (editable)->get_length (editable);
+
+  if (end_pos < 0)
+    end_pos = length;
+
+  start_pos = MIN (length, start_pos);
+  end_pos = MIN (length, end_pos);
+
+  start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
+  end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
+
+  return g_strndup (text + start_index, end_index - start_index);
+}
+
+const char *
+gtk_editable_get_text (GtkEditable *editable)
 {
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
 
-  return GTK_EDITABLE_GET_IFACE (editable)->get_chars (editable, start_pos, end_pos);
+  return GTK_EDITABLE_GET_IFACE (editable)->get_text (editable);
+}
+
+void
+gtk_editable_set_text (GtkEditable *editable,
+                       const char  *text)
+{
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  int pos;
+
+  gtk_editable_delete_text (editable, 0, -1);
+  pos = 0;
+  gtk_editable_insert_text (editable, text, -1, &pos);
+}
+
+int
+gtk_editable_get_length (GtkEditable *editable)
+{
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
+
+  return GTK_EDITABLE_GET_IFACE (editable)->get_length (editable);
 }
 
 /**
@@ -276,7 +358,7 @@ gtk_editable_get_chars (GtkEditable *editable,
  */
 void
 gtk_editable_set_position (GtkEditable      *editable,
-			   gint              position)
+                           gint              position)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
@@ -318,8 +400,8 @@ gtk_editable_get_position (GtkEditable *editable)
  */
 gboolean
 gtk_editable_get_selection_bounds (GtkEditable *editable,
-				   gint        *start_pos,
-				   gint        *end_pos)
+                                   gint        *start_pos,
+                                   gint        *end_pos)
 {
   gint tmp_start, tmp_end;
   gboolean result;
@@ -370,57 +452,12 @@ gtk_editable_delete_selection (GtkEditable *editable)
  */
 void
 gtk_editable_select_region (GtkEditable *editable,
-			    gint         start_pos,
-			    gint         end_pos)
+                            gint         start_pos,
+                            gint         end_pos)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
   GTK_EDITABLE_GET_IFACE (editable)->set_selection_bounds (editable, start_pos, end_pos);
-}
-
-/**
- * gtk_editable_cut_clipboard:
- * @editable: a #GtkEditable
- *
- * Removes the contents of the currently selected content in the editable and
- * puts it on the clipboard.
- */
-void
-gtk_editable_cut_clipboard (GtkEditable *editable)
-{
-  g_return_if_fail (GTK_IS_EDITABLE (editable));
-  
-  g_signal_emit_by_name (editable, "cut-clipboard");
-}
-
-/**
- * gtk_editable_copy_clipboard:
- * @editable: a #GtkEditable
- *
- * Copies the contents of the currently selected content in the editable and
- * puts it on the clipboard.
- */
-void
-gtk_editable_copy_clipboard (GtkEditable *editable)
-{
-  g_return_if_fail (GTK_IS_EDITABLE (editable));
-  
-  g_signal_emit_by_name (editable, "copy-clipboard");
-}
-
-/**
- * gtk_editable_paste_clipboard:
- * @editable: a #GtkEditable
- *
- * Pastes the content of the clipboard to the current position of the
- * cursor in the editable.
- */
-void
-gtk_editable_paste_clipboard (GtkEditable *editable)
-{
-  g_return_if_fail (GTK_IS_EDITABLE (editable));
-  
-  g_signal_emit_by_name (editable, "paste-clipboard");
 }
 
 /**
@@ -434,13 +471,11 @@ gtk_editable_paste_clipboard (GtkEditable *editable)
  */
 void
 gtk_editable_set_editable (GtkEditable    *editable,
-			   gboolean        is_editable)
+                           gboolean        is_editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  g_object_set (editable,
-		"editable", is_editable != FALSE,
-		NULL);
+  g_object_set (editable, "editable", is_editable, NULL);
 }
 
 /**
@@ -455,11 +490,284 @@ gtk_editable_set_editable (GtkEditable    *editable,
 gboolean
 gtk_editable_get_editable (GtkEditable *editable)
 {
-  gboolean value;
+  gboolean is_editable;
 
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), FALSE);
 
-  g_object_get (editable, "editable", &value, NULL);
+  g_object_get (editable, "editable", &is_editable, NULL);
 
-  return value;
+  return is_editable;
+}
+
+gfloat
+gtk_editable_get_alignment (GtkEditable *editable)
+{
+  gfloat xalign;
+
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
+
+  g_object_get (editable, "xalign", &xalign, NULL);
+
+  return xalign;
+}
+
+void
+gtk_editable_set_alignment (GtkEditable *editable,
+                            gfloat       alignment)
+{
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  g_object_set (editable, "xalign", alignment, NULL);
+}
+
+int
+gtk_editable_get_width_chars (GtkEditable *editable)
+{
+  int width_chars;
+
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
+
+  g_object_get (editable, "width-chars", &width_chars, NULL);
+
+  return width_chars;
+}
+
+void
+gtk_editable_set_width_chars (GtkEditable *editable,
+                              int          width_chars)
+{
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  g_object_set (editable, "width-chars", width_chars, NULL);
+}
+
+int
+gtk_editable_get_max_width_chars (GtkEditable *editable)
+{
+  int max_width_chars;
+
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
+
+  g_object_get (editable, "max-width-chars", &max_width_chars, NULL);
+
+  return max_width_chars;
+}
+
+void
+gtk_editable_set_max_width_chars (GtkEditable *editable,
+                                  int          max_width_chars)
+{
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  g_object_set (editable, "max-width-chars", max_width_chars, NULL);
+}
+
+void
+gtk_editable_install_properties (GObjectClass *class)
+{
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_TEXT, "text");
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_CURSOR_POSITION, "cursor-position");
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_SELECTION_BOUND, "selection-bound");
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_EDITABLE, "editable");
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_WIDTH_CHARS, "width-chars");
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_MAX_WIDTH_CHARS, "max-width-chars");
+  g_object_class_override_property (class, GTK_EDITABLE_PROP_XALIGN, "xalign");
+}
+
+static void
+delegate_changed (GtkEditable *delegate,
+                  gpointer     editable)
+{
+  g_signal_emit_by_name (editable, "changed");
+}
+
+static void
+delegate_selection_changed (GtkEditable *delegate,
+                            gpointer     editable)
+{
+  g_signal_emit_by_name (editable, "selection-changed");
+}
+
+static void
+delegate_notify (GObject    *object,
+                 GParamSpec *pspec,
+                 gpointer    data)
+{
+  gpointer iface;
+
+  iface = g_type_interface_peek (g_type_class_peek (G_OBJECT_TYPE (object)), gtk_editable_get_type ());
+  if (g_object_interface_find_property (iface, pspec->name))
+    g_object_notify (data, pspec->name);
+}
+
+void
+gtk_editable_set_delegate (GtkEditable *editable,
+                           GtkEditable *delegate)
+{
+  g_object_set_data (G_OBJECT (editable), "gtk-editable-delegate", delegate);
+  g_signal_connect (delegate, "notify", G_CALLBACK (delegate_notify), editable);
+  g_signal_connect (delegate, "changed", G_CALLBACK (delegate_changed), editable);
+  g_signal_connect (delegate, "selection-changed", G_CALLBACK (delegate_selection_changed), editable);
+}
+
+static GtkEditable *
+get_delegate (GtkEditable *editable)
+{
+  return GTK_EDITABLE (g_object_get_data (G_OBJECT (editable), "gtk-editable-delegate"));
+}
+
+static void
+delegate_do_insert_text (GtkEditable *editable,
+                         const char  *text,
+                         int          length,
+                         int         *position)
+{
+  gtk_editable_insert_text (get_delegate (editable), text, length, position);
+}
+
+static void
+delegate_do_delete_text (GtkEditable *editable,
+                         int          start_pos,
+                         int          end_pos)
+{
+  gtk_editable_delete_text (get_delegate (editable), start_pos, end_pos);
+}
+
+static const char *
+delegate_get_text (GtkEditable *editable)
+{
+  return gtk_editable_get_text (get_delegate (editable));
+}
+
+static int
+delegate_get_length (GtkEditable *editable)
+{
+  return gtk_editable_get_length (get_delegate (editable));
+}
+
+static void
+delegate_select_region (GtkEditable *editable,
+                        int          start_pos,
+                        int          end_pos)
+{
+  gtk_editable_select_region (get_delegate (editable), start_pos, end_pos);
+}
+
+static gboolean
+delegate_get_selection_bounds (GtkEditable *editable,
+                               int         *start_pos,
+                               int         *end_pos)
+{
+  return gtk_editable_get_selection_bounds (get_delegate (editable), start_pos, end_pos);
+}
+
+static void
+delegate_set_position (GtkEditable *editable,
+                       int          position)
+{
+  gtk_editable_set_position (get_delegate (editable), position);
+}
+
+static int
+delegate_get_position (GtkEditable *editable)
+{
+  return gtk_editable_get_position (get_delegate (editable));
+}
+
+void
+gtk_editable_delegate_iface_init (GtkEditableInterface *iface)
+{
+  iface->do_insert_text = delegate_do_insert_text;
+  iface->do_delete_text = delegate_do_delete_text;
+  iface->get_text = delegate_get_text;
+  iface->get_length = delegate_get_length;
+  iface->set_selection_bounds = delegate_select_region;
+  iface->get_selection_bounds = delegate_get_selection_bounds;
+  iface->set_position = delegate_set_position;
+  iface->get_position = delegate_get_position;
+}
+
+gboolean
+gtk_editable_delegate_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
+{
+  GtkEditable *delegate = get_delegate (GTK_EDITABLE (object));
+
+  switch (prop_id)
+    {
+    case GTK_EDITABLE_PROP_TEXT:
+      gtk_editable_set_text (delegate, g_value_get_string (value));
+      break;
+
+    case GTK_EDITABLE_PROP_EDITABLE:
+      gtk_editable_set_editable (delegate, g_value_get_boolean (value));
+      break;
+
+    case GTK_EDITABLE_PROP_WIDTH_CHARS:
+      gtk_editable_set_width_chars (delegate, g_value_get_int (value));
+      break;
+
+    case GTK_EDITABLE_PROP_MAX_WIDTH_CHARS:
+      gtk_editable_set_max_width_chars (delegate, g_value_get_int (value));
+      break;
+
+    case GTK_EDITABLE_PROP_XALIGN:
+      gtk_editable_set_alignment (delegate, g_value_get_float (value));
+      break;
+
+    default:
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gtk_editable_delegate_get_property (GObject      *object,
+                                    guint         prop_id,
+                                    GValue       *value,
+                                    GParamSpec   *pspec)
+{
+  GtkEditable *delegate = get_delegate (GTK_EDITABLE (object));
+  int cursor_position, selection_bound;
+
+  switch (prop_id)
+    {
+    case GTK_EDITABLE_PROP_TEXT:
+      g_value_set_string (value, gtk_editable_get_text (delegate));
+      break;
+
+    case GTK_EDITABLE_PROP_CURSOR_POSITION:
+      gtk_editable_get_selection_bounds (delegate, &cursor_position, &selection_bound);
+      g_value_set_int (value, cursor_position);
+      break;
+
+    case GTK_EDITABLE_PROP_SELECTION_BOUND:
+      gtk_editable_get_selection_bounds (delegate, &cursor_position, &selection_bound);
+      g_value_set_int (value, selection_bound);
+      break;
+
+    case GTK_EDITABLE_PROP_EDITABLE:
+      g_value_set_boolean (value, gtk_editable_get_editable (delegate));
+      break;
+
+    case GTK_EDITABLE_PROP_WIDTH_CHARS:
+      g_value_set_int (value, gtk_editable_get_width_chars (delegate));
+      break;
+
+    case GTK_EDITABLE_PROP_MAX_WIDTH_CHARS:
+      g_value_set_int (value, gtk_editable_get_max_width_chars (delegate));
+      break;
+
+    case GTK_EDITABLE_PROP_XALIGN:
+      g_value_set_float (value, gtk_editable_get_alignment (delegate));
+      break;
+
+    default:
+      return FALSE;
+    }
+
+  return TRUE;
 }
