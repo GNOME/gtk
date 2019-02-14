@@ -30,10 +30,9 @@ void gsk_gl_image_destroy        (GskGLImage           *self,
 void gsk_gl_image_write_to_png   (const GskGLImage     *self,
                                   GskGLDriver          *gl_driver,
                                   const char           *filename);
-void gsk_gl_image_upload_regions (GskGLImage           *self,
+void gsk_gl_image_upload_region  (GskGLImage           *self,
                                   GskGLDriver          *gl_driver,
-                                  guint                 n_regions,
-                                  const GskImageRegion *regions);
+                                  const GskImageRegion *region);
 
 
 #endif
