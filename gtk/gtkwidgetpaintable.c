@@ -92,13 +92,15 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
   else if (self->snapshot_count > 0)
     {
       graphene_matrix_t transform;
+      graphene_rect_t bounds;
 
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(0, 0, width, height));
-      graphene_matrix_init_scale (&transform,
-                                  width / gtk_widget_get_allocated_width (self->widget),
-                                  height / gtk_widget_get_allocated_height (self->widget),
-                                  1.0);
+      gtk_widget_compute_bounds (self->widget, self->widget, &bounds);
+      graphene_matrix_init_from_2d (&transform,
+                                    width / bounds.size.width, 0.0,
+                                    0.0, height / bounds.size.height,
+                                    bounds.origin.x, bounds.origin.y);
       gtk_snapshot_push_transform (snapshot, &transform);
 
       gtk_widget_snapshot (self->widget, snapshot);

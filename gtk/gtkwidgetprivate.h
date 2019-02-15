@@ -32,6 +32,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontroller.h"
 #include "gtklistlistmodelprivate.h"
+#include "gtkrootprivate.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkinvisibleprivate.h"
@@ -55,7 +56,6 @@ struct _GtkWidgetPrivate
 #endif
 
   guint in_destruction        : 1;
-  guint toplevel              : 1;
   guint anchored              : 1;
   guint no_surface            : 1;
   guint no_surface_set        : 1;
@@ -124,6 +124,11 @@ struct _GtkWidgetPrivate
    */
   gchar *name;
 
+  /* The root this widget belongs to or %NULL if widget is not
+   * rooted or is a #GtkRoot itself.
+   */
+  GtkRoot *root;
+
   /* The list of attached windows to this widget.
    * We keep a list in order to call reset_style to all of them,
    * recursively.
@@ -141,8 +146,13 @@ struct _GtkWidgetPrivate
   /* The widget's allocated size */
   GtkAllocation allocated_size;
   gint allocated_size_baseline;
-  GtkAllocation allocation;
-  gint allocated_baseline;
+  struct {
+    int x;
+    int y;
+  } transform;
+  int width;
+  int height;
+  int baseline;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
@@ -221,8 +231,6 @@ void              _gtk_widget_set_has_default              (GtkWidget *widget,
                                                             gboolean   has_default);
 void              _gtk_widget_set_has_grab                 (GtkWidget *widget,
                                                             gboolean   has_grab);
-void              _gtk_widget_set_is_toplevel              (GtkWidget *widget,
-                                                            gboolean   is_toplevel);
 
 void              _gtk_widget_grab_notify                  (GtkWidget *widget,
                                                             gboolean   was_grabbed);
@@ -385,7 +393,7 @@ _gtk_widget_get_realized (GtkWidget *widget)
 static inline gboolean
 _gtk_widget_is_toplevel (GtkWidget *widget)
 {
-  return widget->priv->toplevel;
+  return GTK_IS_ROOT (widget);
 }
 
 static inline GtkStateFlags
@@ -414,20 +422,21 @@ _gtk_widget_get_toplevel (GtkWidget *widget)
   return widget;
 }
 
+static inline GtkRoot *
+_gtk_widget_get_root (GtkWidget *widget)
+{
+  return widget->priv->root;
+}
+
 static inline GdkDisplay *
 _gtk_widget_get_display (GtkWidget *widget)
 {
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
+  GtkRoot *root = _gtk_widget_get_root (widget);
 
-  if (_gtk_widget_is_toplevel (toplevel))
-    {
-      if (GTK_IS_WINDOW (toplevel))
-        return gtk_window_get_display (GTK_WINDOW (toplevel));
-      else if (GTK_IS_INVISIBLE (toplevel))
-        return gtk_invisible_get_display (GTK_INVISIBLE (widget));
-    }
+  if (root == NULL)
+    return gdk_display_get_default ();
 
-  return gdk_display_get_default ();
+  return gtk_root_get_display (root);
 }
 
 static inline GtkStyleContext *
@@ -449,13 +458,6 @@ static inline GdkSurface *
 _gtk_widget_get_surface (GtkWidget *widget)
 {
   return widget->priv->surface;
-}
-
-static inline void
-_gtk_widget_get_allocation (GtkWidget     *widget,
-                            GtkAllocation *allocation)
-{
-  *allocation = widget->priv->allocation;
 }
 
 static inline GtkWidget *

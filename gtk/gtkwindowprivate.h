@@ -54,6 +54,7 @@ void            _gtk_window_set_allocation         (GtkWindow     *window,
                                                     int            width,
                                                     int            height,
                                                     GtkAllocation *allocation_out);
+void            gtk_window_check_resize            (GtkWindow     *self);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
@@ -120,8 +121,6 @@ GdkTexture *     gtk_window_get_icon_for_size (GtkWindow *window,
 void       gtk_window_set_hardcoded_surface (GtkWindow *window,
 					     GdkSurface *surface);
 
-GdkDisplay *gtk_window_get_display (GtkWindow *window);
-
 /* Exported handles */
 
 typedef void (*GtkWindowHandleExported)  (GtkWindow               *window,
@@ -132,8 +131,6 @@ gboolean      gtk_window_export_handle   (GtkWindow               *window,
                                           GtkWindowHandleExported  callback,
                                           gpointer                 user_data);
 void          gtk_window_unexport_handle (GtkWindow               *window);
-
-GskRenderer *gtk_window_get_renderer (GtkWindow *window);
 
 GtkWidget *      gtk_window_lookup_pointer_focus_widget (GtkWindow        *window,
                                                          GdkDevice        *device,

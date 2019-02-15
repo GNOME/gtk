@@ -51,10 +51,10 @@
 #include "gtklabel.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
+#include "gtkrootprivate.h"
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkwindowgroup.h"
-#include "gtkwindowprivate.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -273,7 +273,7 @@ gtk_inspector_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_inspector_window_parent_class)->realize (widget);
 
-  renderer = gtk_window_get_renderer (GTK_WINDOW (widget));
+  renderer = gtk_root_get_renderer (GTK_ROOT (widget));
   gsk_renderer_set_debug_flags (renderer, 0);
 }
 

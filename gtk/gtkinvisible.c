@@ -23,11 +23,13 @@
  */
 
 #include "config.h"
-#include <gdk/gdk.h>
+
 #include "gtkinvisibleprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkprivate.h"
+
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkroot.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -69,7 +71,24 @@ static void gtk_invisible_get_property  (GObject           *object,
 					 GParamSpec        *pspec);
 static void gtk_invisible_constructed   (GObject           *object);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET)
+static GdkDisplay *
+gtk_invisible_root_get_display (GtkRoot *root)
+{
+  GtkInvisible *invisible = GTK_INVISIBLE (root);
+
+  return invisible->priv->display;
+}
+
+static void
+gtk_invisible_root_interface_init (GtkRootInterface *iface)
+{
+  iface->get_display = gtk_invisible_root_get_display;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkInvisible)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
+						gtk_invisible_root_interface_init))
 
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
@@ -107,7 +126,6 @@ gtk_invisible_init (GtkInvisible *invisible)
   priv = invisible->priv;
 
   gtk_widget_set_has_surface (GTK_WIDGET (invisible), TRUE);
-  _gtk_widget_set_is_toplevel (GTK_WIDGET (invisible), TRUE);
 
   g_object_ref_sink (invisible);
 
@@ -199,22 +217,6 @@ gtk_invisible_set_display (GtkInvisible *invisible,
   
   if (was_realized)
     gtk_widget_realize (widget);
-}
-
-/**
- * gtk_invisible_get_display:
- * @invisible: a #GtkInvisible.
- *
- * Returns the #GdkDisplay object associated with @invisible
- *
- * Returns: (transfer none): the associated #GdkDisplay.
- **/
-GdkDisplay *
-gtk_invisible_get_display (GtkInvisible *invisible)
-{
-  g_return_val_if_fail (GTK_IS_INVISIBLE (invisible), NULL);
-
-  return invisible->priv->display;
 }
 
 static void

@@ -61,6 +61,7 @@
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopoverprivate.h"
 #include "gtkprivate.h"
+#include "gtkroot.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
@@ -432,7 +433,6 @@ static void gtk_window_focus_out          (GtkWidget         *widget);
 static void surface_state_changed         (GtkWidget          *widget);
 static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
-static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_window_forall             (GtkContainer   *container,
 					   GtkCallback     callback,
 					   gpointer        callback_data);
@@ -562,6 +562,9 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
+/* GtkRoot */
+static void             gtk_window_root_interface_init                  (GtkRootInterface       *iface);
+
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
 static void on_titlebar_title_notify (GtkHeaderBar *titlebar,
@@ -576,7 +579,9 @@ static void gtk_window_update_debugging (void);
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_window_buildable_interface_init))
+						gtk_window_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
+						gtk_window_root_interface_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -809,7 +814,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;
-  container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
 
   klass->set_focus = gtk_window_real_set_focus;
@@ -1724,7 +1728,7 @@ edge_under_coordinates (GtkWindow     *window,
       (priv->edge_constraints & constraints) != constraints)
     return FALSE;
 
-  _gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
   gtk_style_context_save_to_node (context, priv->decoration_node);
 
@@ -1862,7 +1866,6 @@ gtk_window_init (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   gtk_widget_set_has_surface (widget, TRUE);
-  _gtk_widget_set_is_toplevel (widget, TRUE);
   _gtk_widget_set_anchored (widget, TRUE);
 
   priv->title = NULL;
@@ -2493,6 +2496,50 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 
       g_slice_free (NameSubParserData, data);
     }
+}
+
+static GdkDisplay *
+gtk_window_root_get_display (GtkRoot *root)
+{
+  GtkWindow *window = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->display;
+}
+
+static GskRenderer *
+gtk_window_root_get_renderer (GtkRoot *root)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  return priv->renderer;
+}
+
+static void
+gtk_window_root_get_surface_transform (GtkRoot *root,
+                                       int     *x,
+                                       int     *y)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkStyleContext *context;
+  GtkBorder margin, border, padding;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_get_margin (context, &margin);
+  gtk_style_context_get_border (context, &border);
+  gtk_style_context_get_padding (context, &padding);
+
+  *x = margin.left + border.left + padding.left;
+  *y = margin.top + border.top + padding.top;
+}
+
+static void
+gtk_window_root_interface_init (GtkRootInterface *iface)
+{
+  iface->get_display = gtk_window_root_get_display;
+  iface->get_renderer = gtk_window_root_get_renderer;
+  iface->get_surface_transform = gtk_window_root_get_surface_transform;
 }
 
 /**
@@ -5224,7 +5271,7 @@ gtk_window_move (GtkWindow *window,
     {
       GtkAllocation allocation;
 
-      _gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_allocation (widget, &allocation);
 
       /* we have now sent a request with this position
        * with currently-active constraints, so toggle flag.
@@ -5704,7 +5751,6 @@ gtk_window_show (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkContainer *container = GTK_CONTAINER (window);
 
   if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
@@ -5718,7 +5764,7 @@ gtk_window_show (GtkWidget *widget)
 
   gtk_widget_realize (widget);
 
-  gtk_container_check_resize (container);
+  gtk_window_check_resize (window);
 
   gtk_widget_map (widget);
 
@@ -6017,7 +6063,7 @@ popover_get_rect (GtkWindowPopover      *popover,
   gdouble min, max;
 
   gtk_widget_get_preferred_size (popover->widget, NULL, &req);
-  _gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
+  gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
 
   get_shadow_width (window, &win_border);
   win_alloc.x += win_border.left;
@@ -6403,7 +6449,7 @@ gtk_window_realize (GtkWidget *widget)
       g_return_if_fail (!_gtk_widget_get_realized (widget));
     }
 
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
 
   if (priv->hardcoded_surface)
     {
@@ -6781,7 +6827,7 @@ gtk_window_configure (GtkWindow *window,
    * have been a queued resize from child widgets, and so we
    * need to reallocate our children in case *they* changed.
    */
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
   if (priv->configure_request_count == 0 &&
       (allocation.width == width && allocation.height == height))
     {
@@ -7002,7 +7048,7 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
       gtk_widget_get_visible (priv->title_box) &&
       gtk_widget_get_child_visible (priv->title_box))
     {
-      _gtk_widget_get_allocation (priv->title_box, &allocation);
+      gtk_widget_get_allocation (priv->title_box, &allocation);
       if (allocation.x <= x && allocation.x + allocation.width > x &&
           allocation.y <= y && allocation.y + allocation.height > y)
         return GTK_WINDOW_REGION_TITLE;
@@ -7157,13 +7203,15 @@ gtk_window_remove (GtkContainer *container,
     GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, widget);
 }
 
-static void
-gtk_window_check_resize (GtkContainer *container)
+void
+gtk_window_check_resize (GtkWindow *self)
 {
-  if (!_gtk_widget_get_alloc_needed (GTK_WIDGET (container)))
-    GTK_CONTAINER_CLASS (gtk_window_parent_class)->check_resize (container);
-  else if (gtk_widget_get_visible (GTK_WIDGET (container)))
-    gtk_window_move_resize (GTK_WINDOW (container));
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  if (!_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_ensure_allocate (widget);
+  else if (gtk_widget_get_visible (widget))
+    gtk_window_move_resize (self);
 }
 
 static void
@@ -7380,7 +7428,7 @@ gtk_window_style_updated (GtkWidget *widget)
       GtkAllocation allocation;
       GtkBorder window_border;
 
-      _gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_allocation (widget, &allocation);
       get_shadow_width (window, &window_border);
 
       update_opaque_region (window, &window_border, &allocation);
@@ -7926,7 +7974,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
             gdk_surface_get_origin (surface, &ox, &oy);
 
-            _gtk_widget_get_allocation (parent_widget, &allocation);
+            gtk_widget_get_allocation (parent_widget, &allocation);
             x = ox + (allocation.width - w) / 2;
             y = oy + (allocation.height - h) / 2;
 
@@ -9427,14 +9475,6 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
 }
 #endif
 
-GdkDisplay *
-gtk_window_get_display (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  return priv->display;
-}
-
 /**
  * gtk_window_is_active:
  * @window: a #GtkWindow
@@ -10555,14 +10595,6 @@ gtk_window_unexport_handle (GtkWindow *window)
       gdk_wayland_surface_unexport_handle (surface);
     }
 #endif
-}
-
-GskRenderer *
-gtk_window_get_renderer (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  return priv->renderer;
 }
 
 static void
