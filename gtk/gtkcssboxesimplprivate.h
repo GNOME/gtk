@@ -31,11 +31,13 @@ static inline void
 gtk_css_boxes_init (GtkCssBoxes *boxes,
                     GtkWidget   *widget)
 {
+  GtkWidgetPrivate *priv = widget->priv;
+
   gtk_css_boxes_init_content_box (boxes,
-                                  gtk_css_node_get_style (widget->priv->cssnode),
+                                  gtk_css_node_get_style (priv->cssnode),
                                   0, 0,
-                                  gtk_widget_get_width (widget),
-                                  gtk_widget_get_height (widget));
+                                  priv->width,
+                                  priv->height);
 }
 
 static inline void

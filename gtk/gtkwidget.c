@@ -34,6 +34,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
@@ -4313,13 +4314,6 @@ gtk_widget_size_allocate (GtkWidget           *widget,
       real_allocation.height = MAX (1, real_allocation.height);
     }
 
-  /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
-  priv->transform.x = real_allocation.x;
-  priv->transform.y = real_allocation.y;
-  priv->width = real_allocation.width;
-  priv->height = real_allocation.height;
-  priv->baseline = baseline;
-
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
       /* Still have to move the window... */
@@ -4342,6 +4336,9 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
+  priv->transform.x = real_allocation.x + margin.left + border.left + padding.left;
+  priv->transform.y = real_allocation.y + margin.top + border.top + padding.top;
+
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
   real_allocation.x = 0;
@@ -4353,6 +4350,10 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 
   if (baseline >= 0)
     baseline -= margin.top + border.top + padding.top;
+
+  priv->width = real_allocation.width;
+  priv->height = real_allocation.height;
+  priv->baseline = baseline;
 
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
     g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
@@ -4457,23 +4458,8 @@ gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
                                           int       *origin_x,
                                           int       *origin_y)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  /* allocation is relative to the parent's origin */
-  *origin_x = priv->transform.x;
-  *origin_y = priv->transform.y;
-
-  /* ... but points to the upper left, excluding widget margins
-   * but including all the css properties */
-  *origin_x += margin.left + border.left + padding.left;
-  *origin_y += margin.top + border.top + padding.top;
+  *origin_x = widget->priv->transform.x;
+  *origin_y = widget->priv->transform.y;
 }
 
 /**
@@ -11207,14 +11193,19 @@ gtk_widget_get_allocation (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  const graphene_rect_t *margin_rect;
+  GtkCssBoxes boxes;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (allocation != NULL);
 
-  allocation->x = priv->transform.x;
-  allocation->y = priv->transform.y;
-  allocation->width = priv->width;
-  allocation->height = priv->height;
+  gtk_css_boxes_init (&boxes, widget);
+  margin_rect = gtk_css_boxes_get_margin_rect (&boxes);
+
+  allocation->x = priv->transform.x + ceil (margin_rect->origin.x);
+  allocation->y = priv->transform.y + ceil (margin_rect->origin.y);
+  allocation->width = ceil (margin_rect->size.width);
+  allocation->height = ceil (margin_rect->size.height);
 }
 
 /**
@@ -11296,18 +11287,12 @@ gtk_widget_pick (GtkWidget *widget,
 
     case GTK_OVERFLOW_HIDDEN:
       {
-        GtkBorder margin, border, padding;
-        GtkCssStyle *style;
+        GtkCssBoxes boxes;
 
-        style = gtk_css_node_get_style (priv->cssnode);
-        get_box_margin (style, &margin);
-        get_box_border (style, &border);
-        get_box_padding (style, &padding);
+        gtk_css_boxes_init (&boxes, widget);
 
-        if (x < -padding.left ||
-            y < -padding.top  ||
-            x >= priv->width - margin.left - margin.right - border.left - border.right - padding.left ||
-            y >= priv->height - margin.top - margin.bottom - border.top - border.bottom - padding.top)
+        if (!graphene_rect_contains_point (gtk_css_boxes_get_padding_rect (&boxes),
+                                           &GRAPHENE_POINT_INIT (x, y)))
           return NULL;
       }
       break;
@@ -11339,39 +11324,26 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                            GtkWidget       *target,
                            graphene_rect_t *out_bounds)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
-  GtkAllocation alloc;
+  GtkCssBoxes boxes;
+  int x, y;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
   g_return_val_if_fail (out_bounds != NULL, FALSE);
 
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  alloc.x = - (padding.left + border.left);
-  alloc.y = - (padding.top + border.top);
-  alloc.width = priv->width - margin.left - margin.right;
-  alloc.height = priv->height - margin.top - margin.bottom;
-
   if (!gtk_widget_translate_coordinates (widget,
                                          target,
-                                         alloc.x, alloc.y,
-                                         &alloc.x, &alloc.y))
+                                         0, 0,
+                                         &x, &y))
     {
       graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
       return FALSE;
     }
 
-  graphene_rect_init (out_bounds,
-                      alloc.x,
-                      alloc.y,
-                      alloc.width,
-                      alloc.height);
+  gtk_css_boxes_init (&boxes, widget);
+  graphene_rect_offset_r (gtk_css_boxes_get_border_rect (&boxes),
+                          x, y,
+                          out_bounds);
 
   return TRUE;
 }
@@ -11387,11 +11359,13 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
 int
 gtk_widget_get_allocated_width (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssBoxes boxes;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->width;
+  gtk_css_boxes_init (&boxes, widget);
+
+  return gtk_css_boxes_get_margin_rect (&boxes)->size.width;
 }
 
 /**
@@ -11405,11 +11379,13 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
 int
 gtk_widget_get_allocated_height (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssBoxes boxes;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return priv->height;
+  gtk_css_boxes_init (&boxes, widget);
+
+  return gtk_css_boxes_get_margin_rect (&boxes)->size.height;
 }
 
 /**
@@ -13028,35 +13004,23 @@ gtk_widget_reset_controllers (GtkWidget *widget)
 }
 
 static inline void
-gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
-                                         GtkSnapshot           *snapshot)
+gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
+                                         GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkDisplay *display = _gtk_widget_get_display (widget);
-  GtkCssStyle *style;
-  GtkBorder margin, border, padding;
-
-  /* We should be offset to priv->allocation at this point */
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
     {
-      int baseline = gtk_widget_get_allocated_baseline (widget);
-
-      if (baseline != -1)
+      if (priv->baseline != -1)
         {
           GdkRGBA red = {1, 0, 0, 1};
           graphene_rect_t bounds;
 
-          style = gtk_css_node_get_style (priv->cssnode);
-          get_box_margin (style, &margin);
-          get_box_border (style, &border);
-          get_box_padding (style, &padding);
-
           /* Baselines are relative to the widget's origin,
            * and we are offset to the widget's allocation here */
           graphene_rect_init (&bounds,
-                              0,
-                              margin.top + border.top + padding.top + baseline,
+                              0, priv->baseline,
                               priv->width, 1);
           gtk_snapshot_append_color (snapshot,
                                      &red,
@@ -13102,7 +13066,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p @ %d x %d",
                            G_OBJECT_TYPE_NAME (widget), widget,
@@ -13741,20 +13705,10 @@ int
 gtk_widget_get_width (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  return priv->width -
-         margin.left  - margin.right -
-         border.left  - border.right -
-         padding.left - padding.right;
+  return priv->width;
 }
 
 /**
@@ -13771,18 +13725,8 @@ int
 gtk_widget_get_height (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  return priv->height -
-         margin.top  - margin.bottom -
-         border.top  - border.bottom -
-         padding.top - padding.bottom;
+  return priv->height;
 }

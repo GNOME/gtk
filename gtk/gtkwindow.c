@@ -1728,7 +1728,7 @@ edge_under_coordinates (GtkWindow     *window,
       (priv->edge_constraints & constraints) != constraints)
     return FALSE;
 
-  _gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
   gtk_style_context_save_to_node (context, priv->decoration_node);
 
@@ -5271,7 +5271,7 @@ gtk_window_move (GtkWindow *window,
     {
       GtkAllocation allocation;
 
-      _gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_allocation (widget, &allocation);
 
       /* we have now sent a request with this position
        * with currently-active constraints, so toggle flag.
@@ -6063,7 +6063,7 @@ popover_get_rect (GtkWindowPopover      *popover,
   gdouble min, max;
 
   gtk_widget_get_preferred_size (popover->widget, NULL, &req);
-  _gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
+  gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
 
   get_shadow_width (window, &win_border);
   win_alloc.x += win_border.left;
@@ -6449,7 +6449,7 @@ gtk_window_realize (GtkWidget *widget)
       g_return_if_fail (!_gtk_widget_get_realized (widget));
     }
 
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
 
   if (priv->hardcoded_surface)
     {
@@ -6827,7 +6827,7 @@ gtk_window_configure (GtkWindow *window,
    * have been a queued resize from child widgets, and so we
    * need to reallocate our children in case *they* changed.
    */
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
   if (priv->configure_request_count == 0 &&
       (allocation.width == width && allocation.height == height))
     {
@@ -7048,7 +7048,7 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
       gtk_widget_get_visible (priv->title_box) &&
       gtk_widget_get_child_visible (priv->title_box))
     {
-      _gtk_widget_get_allocation (priv->title_box, &allocation);
+      gtk_widget_get_allocation (priv->title_box, &allocation);
       if (allocation.x <= x && allocation.x + allocation.width > x &&
           allocation.y <= y && allocation.y + allocation.height > y)
         return GTK_WINDOW_REGION_TITLE;
@@ -7428,7 +7428,7 @@ gtk_window_style_updated (GtkWidget *widget)
       GtkAllocation allocation;
       GtkBorder window_border;
 
-      _gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_allocation (widget, &allocation);
       get_shadow_width (window, &window_border);
 
       update_opaque_region (window, &window_border, &allocation);
@@ -7974,7 +7974,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
             gdk_surface_get_origin (surface, &ox, &oy);
 
-            _gtk_widget_get_allocation (parent_widget, &allocation);
+            gtk_widget_get_allocation (parent_widget, &allocation);
             x = ox + (allocation.width - w) / 2;
             y = oy + (allocation.height - h) / 2;
 
