@@ -32,7 +32,7 @@ struct _GdkQuartzDeviceManagerCore
   GdkDeviceManager parent_object;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
-  GList *known_devices;
+  GList *known_tablet_devices;
   guint num_active_devices;
 };
 

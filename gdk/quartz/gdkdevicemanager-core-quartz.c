@@ -93,7 +93,7 @@ create_core_keyboard (GdkDeviceManager *device_manager,
 static void
 gdk_quartz_device_manager_core_init (GdkQuartzDeviceManagerCore *device_manager)
 {
-  device_manager->known_devices = NULL;
+  device_manager->known_tablet_devices = NULL;
 }
 
 static void
@@ -106,7 +106,7 @@ gdk_quartz_device_manager_core_finalize (GObject *object)
   g_object_unref (quartz_device_manager_core->core_pointer);
   g_object_unref (quartz_device_manager_core->core_keyboard);
 
-  g_list_free_full (quartz_device_manager_core->known_devices, g_object_unref);
+  g_list_free_full (quartz_device_manager_core->known_tablet_devices, g_object_unref);
 
   G_OBJECT_CLASS (gdk_quartz_device_manager_core_parent_class)->finalize (object);
 }
@@ -148,7 +148,7 @@ gdk_quartz_device_manager_core_list_devices (GdkDeviceManager *device_manager,
     }
 
   GList *devices_iter;
-  for (devices_iter = quartz_device_manager_core->known_devices;
+  for (devices_iter = quartz_device_manager_core->known_tablet_devices;
        devices_iter;
        devices_iter = g_list_next (devices_iter))
     {
@@ -167,12 +167,35 @@ gdk_quartz_device_manager_core_get_client_pointer (GdkDeviceManager *device_mana
   return quartz_device_manager_core->core_pointer;
 }
 
+static GdkDevice *
+gdk_quartz_device_manager_core_create_device(GdkDeviceManager *device_manager,
+                                             const gchar *device_name,
+                                             GdkInputSource source)
+{
+  GdkDisplay *display = gdk_device_manager_get_display (device_manager);
+  GdkDevice *device = g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
+                         "name", device_name,
+                         "type", GDK_DEVICE_TYPE_SLAVE,
+                         "input-source", source,
+                         "input-mode", GDK_MODE_SCREEN,
+                         "has-cursor", TRUE,
+                         "display", display,
+                         "device-manager", device_manager,
+                         /* "cocoa-unique-id", [nsevent uniqueID], */
+                         NULL);
 
-GdkDevice *_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager *device_manager,
-                                                                NSEvent *nsevent)
+  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_PRESSURE, 0.0, 1.0, 0.001);
+  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_XTILT, -1.0, 1.0, 0.001);
+  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_YTILT, -1.0, 1.0, 0.001);
+  
+  return device;
+}
+
+GdkDevice *
+_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager *device_manager,
+                                                     NSEvent *nsevent)
 {
   GdkQuartzDeviceManagerCore *quartz_device_manager_core = GDK_QUARTZ_DEVICE_MANAGER_CORE (device_manager);
-  GdkDisplay *display = gdk_device_manager_get_display (device_manager);
   GdkDevice *device = NULL;
 
   if ([nsevent type] == NSTabletProximity ||
@@ -188,7 +211,7 @@ GdkDevice *_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager
       else if ([nsevent pointingDeviceType] == NSEraserPointingDevice)
         input_source = GDK_SOURCE_ERASER;
 
-      for (devices_iter = quartz_device_manager_core->known_devices;
+      for (devices_iter = quartz_device_manager_core->known_tablet_devices;
            devices_iter;
            devices_iter = g_list_next (devices_iter))
         {
@@ -218,54 +241,21 @@ GdkDevice *_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager
         {
           if (input_source == GDK_SOURCE_PEN)
             {
-              device = g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
-                                     "name", "Quartz Pen",
-                                     "type", GDK_DEVICE_TYPE_SLAVE,
-                                     "input-source", GDK_SOURCE_PEN,
-                                     "input-mode", GDK_MODE_SCREEN,
-                                     "has-cursor", TRUE,
-                                     "display", display,
-                                     "device-manager", device_manager,
-                                     /* "cocoa-unique-id", [nsevent uniqueID], */
-                                     NULL);
-
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_PRESSURE, 0.0, 1.0, 0.001);
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_XTILT, -1.0, 1.0, 0.001);
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_YTILT, -1.0, 1.0, 0.001);
+              device = gdk_quartz_device_manager_core_create_device(device_manager,
+                                                                    "Quartz Pen",
+                                                                    GDK_SOURCE_PEN);
             }
           else if (input_source == GDK_SOURCE_CURSOR)
             {
-              device = g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
-                                     "name", "Quartz Cursor",
-                                     "type", GDK_DEVICE_TYPE_SLAVE,
-                                     "input-source", GDK_SOURCE_CURSOR,
-                                     "input-mode", GDK_MODE_SCREEN,
-                                     "has-cursor", TRUE,
-                                     "display", display,
-                                     "device-manager", device_manager,
-                                     /* "cocoa-unique-id", [nsevent uniqueID], */
-                                     NULL);
-
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_PRESSURE, 0.0, 1.0, 0.001);
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_XTILT, -1.0, 1.0, 0.001);
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_YTILT, -1.0, 1.0, 0.001);
+              device = gdk_quartz_device_manager_core_create_device(device_manager,
+                                                                    "Quartz Cursor",
+                                                                    GDK_SOURCE_CURSOR);
             }
           else if (input_source == GDK_SOURCE_ERASER)
             {
-              device = g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
-                                     "name", "Quartz Eraser",
-                                     "type", GDK_DEVICE_TYPE_SLAVE,
-                                     "input-source", GDK_SOURCE_ERASER,
-                                     "input-mode", GDK_MODE_SCREEN,
-                                     "has-cursor", TRUE,
-                                     "display", display,
-                                     "device-manager", device_manager,
-                                     /* "cocoa-unique-id", [nsevent uniqueID], */
-                                     NULL);
-
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_PRESSURE, 0.0, 1.0, 0.001);
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_XTILT, -1.0, 1.0, 0.001);
-              _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_YTILT, -1.0, 1.0, 0.001);
+              device = gdk_quartz_device_manager_core_create_device(device_manager,
+                                                                    "Quartz Eraser",
+                                                                    GDK_SOURCE_ERASER);
             }
 
           _gdk_device_set_associated_device (GDK_DEVICE (device), quartz_device_manager_core->core_pointer);
@@ -274,7 +264,7 @@ GdkDevice *_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager
           gdk_quartz_device_core_set_unique (device, [nsevent uniqueID]);
           gdk_quartz_device_core_set_active (device, TRUE, [nsevent deviceID]);
 
-          quartz_device_manager_core->known_devices = g_list_append (quartz_device_manager_core->known_devices,
+          quartz_device_manager_core->known_tablet_devices = g_list_append (quartz_device_manager_core->known_tablet_devices,
                                                                    device);
 
           if ([nsevent isEnteringProximity])
@@ -293,7 +283,7 @@ GdkDevice *_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager
     {
       /* Find the device based on deviceID */
       GList *devices_iter = NULL;
-      for (devices_iter = quartz_device_manager_core->known_devices;
+      for (devices_iter = quartz_device_manager_core->known_tablet_devices;
            devices_iter && !device;
            devices_iter = g_list_next(devices_iter))
         {
