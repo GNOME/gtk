@@ -13053,72 +13053,43 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssBoxes boxes;
   GtkCssValue *filter_value;
   double opacity;
-  GtkCssStyle *style;
-  GtkAllocation allocation;
-  GtkBorder margin, border, padding;
   GtkSnapshot *snapshot;
 
   opacity = priv->alpha / 255.0;
   if (opacity <= 0.0)
     return NULL;
 
+  gtk_css_boxes_init (&boxes, widget);
   snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
-  gtk_widget_get_allocation (widget, &allocation);
   gtk_snapshot_push_debug (snapshot,
-                           "RenderNode for %s %p @ %d x %d",
-                           G_OBJECT_TYPE_NAME (widget), widget,
-                           allocation.width, allocation.height);
+                           "RenderNode for %s %p",
+                           G_OBJECT_TYPE_NAME (widget), widget);
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
 
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
 
   if (!GTK_IS_WINDOW (widget))
     {
-      gtk_snapshot_offset (snapshot, - padding.left - border.left, - border.top - padding.top);
-      gtk_css_style_snapshot_background (style,
-                                         snapshot,
-                                         allocation.width - margin.left - margin.right,
-                                         allocation.height - margin.top - margin.bottom);
-      gtk_css_style_snapshot_border (style,
-                                     snapshot,
-                                     allocation.width - margin.left - margin.right,
-                                     allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_offset (snapshot, padding.left + border.left, border.top + padding.top);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
     }
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    {
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT (- padding.left,
-                                                   - padding.top,
-                                                   allocation.width - margin.left - margin.right - border.left  - border.right,
-                                                   allocation.height - margin.top  - margin.bottom - border.top  - border.bottom));
-    }
+    gtk_snapshot_push_clip (snapshot, gtk_css_boxes_get_padding_rect (&boxes));
 
   klass->snapshot (widget, snapshot);
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     gtk_snapshot_pop (snapshot);
 
-  gtk_snapshot_offset (snapshot, - (padding.left + border.left), -(border.top + padding.top));
-
-  gtk_css_style_snapshot_outline (style,
-                                  snapshot,
-                                  allocation.width - margin.left - margin.right,
-                                  allocation.height - margin.top - margin.bottom);
-
-  gtk_snapshot_offset (snapshot, padding.left + border.left, border.top + padding.top);
+  gtk_css_style_snapshot_outline (&boxes, snapshot);
 
   if (opacity < 1.0)
     gtk_snapshot_pop (snapshot);

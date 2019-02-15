@@ -1263,14 +1263,15 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
                                 gdouble          width,
                                 gdouble          height)
 {
+  GtkCssBoxes boxes;
+
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_offset (snapshot, x, y);
-  gtk_css_style_snapshot_background (gtk_style_context_lookup_style (context),
-                                     snapshot,
-                                     width, height);
-  gtk_snapshot_offset (snapshot, -x, -y);
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
 }
 
 /**
@@ -1294,14 +1295,15 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
                            gdouble          width,
                            gdouble          height)
 {
+  GtkCssBoxes boxes;
+
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_offset (snapshot, x, y);
-  gtk_css_style_snapshot_border (gtk_style_context_lookup_style (context),
-                                 snapshot,
-                                 width, height);
-  gtk_snapshot_offset (snapshot, -x, -y);
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
 }
 
 /**
@@ -1325,14 +1327,15 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
                            gdouble          width,
                            gdouble          height)
 {
+  GtkCssBoxes boxes;
+
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_offset (snapshot, x, y);
-  gtk_css_style_snapshot_outline (gtk_style_context_lookup_style (context),
-                                  snapshot,
-                                  width, height);
-  gtk_snapshot_offset (snapshot, -x, -y);
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_outline (&boxes, snapshot);
 }
 
 /**

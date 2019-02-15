@@ -23,21 +23,16 @@
 #define __GTK_RENDER_BORDER_H__
 
 #include "gtkborder.h"
-#include "gtkcssimageprivate.h"
-#include "gtkcssvalueprivate.h"
+#include "gtkcssboxesprivate.h"
 #include "gtktypes.h"
 
 G_BEGIN_DECLS
 
-void            gtk_css_style_snapshot_border           (GtkCssStyle            *style,
-                                                         GtkSnapshot            *snapshot,
-                                                         gdouble                 width,
-                                                         gdouble                 height);
+void            gtk_css_style_snapshot_border           (GtkCssBoxes            *boxes,
+                                                         GtkSnapshot            *snapshot);
 
-void            gtk_css_style_snapshot_outline          (GtkCssStyle            *style,
-                                                         GtkSnapshot            *snapshot,
-                                                         gdouble                 width,
-                                                         gdouble                 height);
+void            gtk_css_style_snapshot_outline          (GtkCssBoxes            *boxes,
+                                                         GtkSnapshot            *snapshot);
 
 G_END_DECLS
 
