@@ -239,25 +239,28 @@ _gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager *device_ma
       /* If we haven't seen this devie before, add it */
       if (!device)
         {
-          if (input_source == GDK_SOURCE_PEN)
+          switch (input_source)
             {
+            case GDK_SOURCE_PEN:
               device = gdk_quartz_device_manager_core_create_device(device_manager,
                                                                     "Quartz Pen",
                                                                     GDK_SOURCE_PEN);
-            }
-          else if (input_source == GDK_SOURCE_CURSOR)
-            {
+              break;
+            case GDK_SOURCE_CURSOR:
               device = gdk_quartz_device_manager_core_create_device(device_manager,
                                                                     "Quartz Cursor",
                                                                     GDK_SOURCE_CURSOR);
-            }
-          else if (input_source == GDK_SOURCE_ERASER)
-            {
+              break;
+            case GDK_SOURCE_ERASER:
               device = gdk_quartz_device_manager_core_create_device(device_manager,
                                                                     "Quartz Eraser",
                                                                     GDK_SOURCE_ERASER);
+              break;
+            default:
+              g_warning("GDK Quarz unknown input source: %i", input_source);
+              break;
             }
-
+            
           _gdk_device_set_associated_device (GDK_DEVICE (device), quartz_device_manager_core->core_pointer);
           _gdk_device_add_slave (quartz_device_manager_core->core_pointer, GDK_DEVICE (device));
 
