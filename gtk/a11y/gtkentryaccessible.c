@@ -961,7 +961,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_entry_get_layout (entry), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
 
   surface = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (surface, &x_surface, &y_surface);
