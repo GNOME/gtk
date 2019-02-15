@@ -61,8 +61,8 @@ gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *par
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 
-GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value);
-gboolean        gtk_css_number_value_has_percent    (const GtkCssValue      *value);
+GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value) G_GNUC_PURE;
+gboolean        gtk_css_number_value_has_percent    (const GtkCssValue      *value) G_GNUC_PURE;
 GtkCssValue *   gtk_css_number_value_multiply       (const GtkCssValue      *value,
                                                      double                  factor);
 GtkCssValue *   gtk_css_number_value_add            (GtkCssValue            *value1,
@@ -72,7 +72,7 @@ GtkCssValue *   gtk_css_number_value_try_add        (const GtkCssValue      *val
 gint            gtk_css_number_value_get_calc_term_order (const GtkCssValue *value);
 
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
-                                                     double                  one_hundred_percent);
+                                                     double                  one_hundred_percent) G_GNUC_PURE;
 
 
 G_END_DECLS
