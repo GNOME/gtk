@@ -497,7 +497,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <class name="linked"/>
                                 </style>
                                 <child>
-                                  <object class="GtkEntry" id="entry24">
+                                  <object class="GtkText" id="entry24">
                                     <property name="can-focus">1</property>
                                     <property name="invisible-char">•</property>
                                     <property name="text" translatable="yes">entry</property>
