@@ -40,6 +40,7 @@
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
+#define TABLET_AXES 5
 
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
@@ -1024,7 +1025,7 @@ fill_button_event (GdkWindow *window,
 
   if ([nsevent subtype] == NSEventSubtypeTabletPoint)
   {
-    axes = g_malloc_n (5, sizeof (gdouble));
+    axes = g_new (gdouble, TABLET_AXES);
 
     axes[0] = x;
     axes[1] = y;
