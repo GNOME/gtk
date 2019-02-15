@@ -298,6 +298,7 @@ test_create (void)
   g_object_unref (selection);
 }
 
+#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
 static void
 test_changes (void)
 {
@@ -332,7 +333,9 @@ test_changes (void)
   g_object_unref (selection);
   g_object_unref (store);
 }
+#endif
 
+#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static void
 test_selection (void)
 {
@@ -383,7 +386,9 @@ test_selection (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
+#endif
 
+#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static void
 test_autoselect (void)
 {
@@ -483,7 +488,9 @@ test_autoselect_toggle (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
+#endif
 
+#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static void
 test_can_unselect (void)
 {
@@ -514,7 +521,9 @@ test_can_unselect (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
+#endif
 
+#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static int
 sort_inverse (gconstpointer a, gconstpointer b, gpointer data)
 {
@@ -549,6 +558,7 @@ test_persistence (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
+#endif
 
 static void
 check_query_range (GtkSelectionModel *selection)

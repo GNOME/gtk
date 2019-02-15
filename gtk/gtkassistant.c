@@ -74,7 +74,7 @@
 #include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtknotebook.h"
+#include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
@@ -92,11 +92,9 @@ struct _GtkAssistantPage
   GtkAssistantPageType type;
   guint      complete     : 1;
   guint      complete_set : 1;
-  guint      has_padding  : 1;
 
   gchar *title;
 
-  GtkWidget *box;
   GtkWidget *page;
   GtkWidget *regular_title;
   GtkWidget *current_title;
@@ -217,7 +215,6 @@ static void
 gtk_assistant_page_init (GtkAssistantPage *page)
 {
   page->type = GTK_ASSISTANT_PAGE_CONTENT;
-  page->has_padding = TRUE;
 }
 
 static void
@@ -280,13 +277,6 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                                          P_("Page complete"),
                                                          P_("Whether all required fields on the page have been filled out"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (object_class,
-                                   CHILD_PROP_HAS_PADDING,
-                                   g_param_spec_boolean ("has-padding",
-                                                         P_("Has padding"),
-                                                         P_("Whether the assistant adds padding around the page"),
-                                                         TRUE,
                                                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_CHILD,
@@ -967,7 +957,7 @@ set_current_page (GtkAssistant *assistant,
 
   gtk_window_set_title (GTK_WINDOW (assistant), priv->current_page->title);
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->content), page_num);
+  gtk_stack_set_visible_child (GTK_STACK (priv->content), priv->current_page->page);
 
   /* update buttons state, flow may have changed */
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
@@ -1280,16 +1270,6 @@ gtk_assistant_page_set_property (GObject      *object,
         }
       break;
 
-    case CHILD_PROP_HAS_PADDING:
-      if (page->has_padding != g_value_get_boolean (value))
-        {
-          page->has_padding = g_value_get_boolean (value);
-          if (page->box)
-            g_object_set (page->box, "margin", page->has_padding ? 12 : 0, NULL);
-          g_object_notify (G_OBJECT (page), "has-padding");
-        }
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -1322,10 +1302,6 @@ gtk_assistant_page_get_property (GObject      *object,
       g_value_set_boolean (value, page->complete);
       break;
 
-    case CHILD_PROP_HAS_PADDING:
-      g_value_set_boolean (value, page->has_padding);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -1348,13 +1324,15 @@ gtk_assistant_destroy (GtkWidget *widget)
 
   if (priv->content)
     {
-      GtkNotebook *notebook;
-      GtkWidget *page;
+      GList *children, *l;
 
-      /* Remove all pages from the content notebook. */
-      notebook = (GtkNotebook *) priv->content;
-      while ((page = gtk_notebook_get_nth_page (notebook, 0)) != NULL)
-        gtk_container_remove ((GtkContainer *) notebook, page);
+      children = gtk_container_get_children (GTK_CONTAINER (priv->content));
+      for (l = children; l; l = l->next)
+        {
+          GtkWidget *page = l->data;
+          gtk_container_remove (GTK_CONTAINER (priv->content), page);
+        }
+      g_list_free (children);
 
       /* Our GtkAssistantPage list should be empty now. */
       g_warn_if_fail (priv->pages == NULL);
@@ -1399,7 +1377,7 @@ find_page (GtkAssistant  *assistant,
   while (child)
     {
       GtkAssistantPage *page_info = child->data;
-      if (page_info->page == page || page_info->box == page)
+      if (page_info->page == page)
         return child;
 
       child = child->next;
@@ -1498,16 +1476,11 @@ gtk_assistant_remove (GtkContainer *container,
                       GtkWidget    *page)
 {
   GtkAssistant *assistant = (GtkAssistant*) container;
-  GtkWidget *box;
 
-  /* Forward this removal to the content notebook */
-  box = gtk_widget_get_parent (page);
-  if (GTK_IS_BOX (box) &&
-      assistant->priv->content != NULL &&
-      gtk_widget_get_parent (box) == assistant->priv->content)
+  /* Forward this removal to the content stack */
+  if (gtk_widget_get_parent (page) == assistant->priv->content)
     {
-      gtk_container_remove (GTK_CONTAINER (box), page);
-      gtk_container_remove (GTK_CONTAINER (assistant->priv->content), box);
+      gtk_container_remove (GTK_CONTAINER (assistant->priv->content), page);
     }
   else
     {
@@ -1789,7 +1762,6 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 
   page_info = g_object_new (GTK_TYPE_ASSISTANT_PAGE, NULL);
   page_info->page = g_object_ref (page);
-  page_info->has_padding = TRUE;
 
   return gtk_assistant_add_page (assistant, page_info, position);
 
@@ -1804,8 +1776,8 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   GtkAssistantPrivate *priv = assistant->priv;
   gint n_pages;
   GtkStyleContext *context;
-  GtkWidget *box;
   GtkWidget *sibling;
+  char *name;
 
   page_info->regular_title = gtk_label_new (page_info->title);
   page_info->current_title = gtk_label_new (page_info->title);
@@ -1851,15 +1823,9 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   gtk_box_insert_child_after (GTK_BOX (priv->sidebar), page_info->current_title, sibling);
   gtk_box_insert_child_after (GTK_BOX (priv->sidebar), page_info->regular_title, sibling);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_show (box);
-  gtk_container_add (GTK_CONTAINER (box), page_info->page);
-  g_object_set (box, "margin", 12, NULL);
-  g_signal_connect (box, "remove", G_CALLBACK (assistant_remove_page_cb), assistant);
-
-  gtk_notebook_insert_page (GTK_NOTEBOOK (priv->content), box, NULL, position);
-
-  page_info->box = box;
+  name = g_strdup_printf ("%p", page_info->page);
+  gtk_stack_add_named (GTK_STACK (priv->content), page_info->page, name);
+  g_free (name);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     {
@@ -2199,63 +2165,6 @@ gtk_assistant_get_page_complete (GtkAssistant *assistant,
 }
 
 /**
- * gtk_assistant_set_page_has_padding:
- * @assistant: a #GtkAssistant
- * @page: a page of @assistant
- * @has_padding: whether this page has padding
- *
- * Sets whether the assistant is adding padding around
- * the page.
- */
-void
-gtk_assistant_set_page_has_padding (GtkAssistant *assistant,
-                                    GtkWidget    *page,
-                                    gboolean      has_padding)
-{
-  GtkAssistantPage *page_info;
-  GList *child;
-
-  g_return_if_fail (GTK_IS_ASSISTANT (assistant));
-  g_return_if_fail (GTK_IS_WIDGET (page));
-
-  child = find_page (assistant, page);
-
-  g_return_if_fail (child != NULL);
-
-  page_info = (GtkAssistantPage*) child->data;
-
-  g_object_set (page_info, "has-padding", has_padding, NULL);
-}
-
-/**
- * gtk_assistant_get_page_has_padding:
- * @assistant: a #GtkAssistant
- * @page: a page of @assistant
- *
- * Gets whether page has padding.
- *
- * Returns: %TRUE if @page has padding
- */
-gboolean
-gtk_assistant_get_page_has_padding (GtkAssistant *assistant,
-                                    GtkWidget    *page)
-{
-  GtkAssistantPage *page_info;
-  GList *child;
-
-  g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (page), FALSE);
-
-  child = find_page (assistant, page);
-
-  g_return_val_if_fail (child != NULL, TRUE);
-
-  page_info = (GtkAssistantPage*) child->data;
-
-  return page_info->has_padding;
-}
-
-/**
  * gtk_assistant_update_buttons_state:
  * @assistant: a #GtkAssistant
  *
@@ -2545,6 +2454,14 @@ gtk_assistant_pages_new (GtkAssistant *assistant)
   return pages;
 }
 
+/**
+ * gtk_assistant_get_pages:
+ * @assistant: a #GtkAssistant
+ * 
+ * Gets a list model of the assistant pages.
+ *
+ * Returns: (transfer full): A list model of the pages.
+ */
 GListModel *
 gtk_assistant_get_pages (GtkAssistant *assistant)
 {

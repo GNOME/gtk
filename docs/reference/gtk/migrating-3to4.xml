@@ -593,6 +593,14 @@
         child properties to child meta objects.
       </para>
     </section>
+
+    <section>
+      <title>Adapt to changes in the GtkAssistant API</title>
+      <para>
+        The ::has-padding property is gone, and GtkAssistant no longer adds padding
+        to pages. You can easily do that yourself.
+      </para>
+    </section>
   </section>
 
 </chapter>
