@@ -1417,7 +1417,8 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
                                 "insert-emoji", 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
+  //FIXME need a text accessible
+  //gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
@@ -7152,13 +7153,11 @@ set_enable_emoji_completion (GtkText *entry,
 
   priv->enable_emoji_completion = value;
 
-#if 0
   if (priv->enable_emoji_completion)
     g_object_set_data (G_OBJECT (entry), "emoji-completion-popup",
-                       gtk_emoji_completion_new (entry));
+                       gtk_emoji_completion_new (GTK_EDITABLE (entry)));
   else
     g_object_set_data (G_OBJECT (entry), "emoji-completion-popup", NULL);
-#endif
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }

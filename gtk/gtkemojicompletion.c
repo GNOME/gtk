@@ -19,6 +19,7 @@
 
 #include "gtkemojicompletion.h"
 
+#include "gtktextprivate.h"
 #include "gtkentryprivate.h"
 #include "gtkbox.h"
 #include "gtkcssprovider.h"
@@ -28,6 +29,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkgesturelongpress.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkflowbox.h"
 #include "gtkstack.h"
 
@@ -35,7 +37,7 @@ struct _GtkEmojiCompletion
 {
   GtkPopover parent_instance;
 
-  GtkEntry *entry;
+  GtkEditable *editable;
   char *text;
   guint length;
   guint offset;
@@ -54,7 +56,7 @@ struct _GtkEmojiCompletionClass {
 };
 
 static void connect_signals    (GtkEmojiCompletion *completion,
-                                GtkEntry           *entry);
+                                GtkEditable        *editable);
 static void disconnect_signals (GtkEmojiCompletion *completion);
 static int populate_completion (GtkEmojiCompletion *completion,
                                 const char          *text,
@@ -86,7 +88,7 @@ update_completion (GtkEmojiCompletion *completion)
 
   n_matches = 0;
 
-  text = gtk_entry_get_text (GTK_ENTRY (completion->entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (completion->editable));
   length = strlen (text);
 
   if (length > 0)
@@ -125,7 +127,8 @@ next:
 }
 
 static void
-entry_changed (GtkEntry *entry, GtkEmojiCompletion *completion)
+changed_cb (GtkEditable        *editable,
+            GtkEmojiCompletion *completion)
 {
   update_completion (completion);
 }
@@ -141,13 +144,16 @@ emoji_activated (GtkWidget          *row,
 
   emoji = (const char *)g_object_get_data (G_OBJECT (row), "text");
 
-  g_signal_handler_block (completion->entry, completion->changed_id);
+  g_signal_handler_block (completion->editable, completion->changed_id);
 
-  length = g_utf8_strlen (gtk_entry_get_text (completion->entry), -1);
-  gtk_entry_set_positions (completion->entry, length - completion->length, length);
-  gtk_entry_enter_text (completion->entry, emoji);
+  length = g_utf8_strlen (gtk_editable_get_text (completion->editable), -1);
+  gtk_editable_select_region (completion->editable, length - completion->length, length);
+  if (GTK_IS_TEXT (completion->editable))
+    gtk_text_enter_text (GTK_TEXT (completion->editable), emoji);
+  else
+    gtk_entry_enter_text (GTK_ENTRY (completion->editable), emoji);
 
-  g_signal_handler_unblock (completion->entry, completion->changed_id);
+  g_signal_handler_unblock (completion->editable, completion->changed_id);
 }
 
 static void
@@ -167,7 +173,6 @@ child_activated (GtkFlowBox      *box,
 {
   GtkEmojiCompletion *completion = data;
 
-  g_print ("child activated\n");
   emoji_activated (GTK_WIDGET (child), completion);
 }
 
@@ -300,11 +305,11 @@ move_active_variation (GtkEmojiCompletion *completion,
 }
 
 static gboolean
-entry_key_press (GtkEventControllerKey *key,
-                 guint                  keyval,
-                 guint                  keycode,
-                 GdkModifierType        modifiers,
-                 GtkEmojiCompletion    *completion)
+key_press_cb (GtkEventControllerKey *key,
+              guint                  keyval,
+              guint                  keycode,
+              GdkModifierType        modifiers,
+              GtkEmojiCompletion    *completion)
 {
   if (!gtk_widget_get_visible (GTK_WIDGET (completion)))
     return FALSE;
@@ -368,27 +373,30 @@ entry_key_press (GtkEventControllerKey *key,
 }
 
 static gboolean
-entry_focus_out (GtkWidget *entry,
-                 GParamSpec *pspec,
-                 GtkEmojiCompletion *completion)
+focus_out_cb (GtkWidget          *editable,
+              GParamSpec         *pspec,
+              GtkEmojiCompletion *completion)
 {
-  if (!gtk_widget_has_focus (entry))
+  if (!gtk_widget_has_focus (editable))
     gtk_popover_popdown (GTK_POPOVER (completion));
   return FALSE;
 }
 
 static void
 connect_signals (GtkEmojiCompletion *completion,
-                 GtkEntry           *entry)
+                 GtkEditable        *editable)
 {
   GtkEventController *key_controller;
 
-  completion->entry = g_object_ref (entry);
-  key_controller = gtk_entry_get_key_controller (entry);
+  completion->editable = g_object_ref (editable);
+  if (GTK_IS_TEXT (editable))
+    key_controller = gtk_text_get_key_controller (GTK_TEXT (editable));
+  else
+    key_controller = gtk_entry_get_key_controller (GTK_ENTRY (editable));
 
-  completion->changed_id = g_signal_connect (entry, "changed", G_CALLBACK (entry_changed), completion);
-  g_signal_connect (key_controller, "key-pressed", G_CALLBACK (entry_key_press), completion);
-  g_signal_connect (entry, "notify::has-focus", G_CALLBACK (entry_focus_out), completion);
+  g_signal_connect (key_controller, "key-pressed", G_CALLBACK (key_press_cb), completion);
+  completion->changed_id = g_signal_connect (editable, "changed", G_CALLBACK (changed_cb), completion);
+  g_signal_connect (editable, "notify::has-focus", G_CALLBACK (focus_out_cb), completion);
 }
 
 static void
@@ -396,13 +404,16 @@ disconnect_signals (GtkEmojiCompletion *completion)
 {
   GtkEventController *key_controller;
 
-  key_controller = gtk_entry_get_key_controller (completion->entry);
+  if (GTK_IS_TEXT (completion->editable))
+    key_controller = gtk_text_get_key_controller (GTK_TEXT (completion->editable));
+  else
+    key_controller = gtk_entry_get_key_controller (GTK_ENTRY (completion->editable));
 
-  g_signal_handlers_disconnect_by_func (completion->entry, entry_changed, completion);
-  g_signal_handlers_disconnect_by_func (key_controller, entry_key_press, completion);
-  g_signal_handlers_disconnect_by_func (completion->entry, entry_focus_out, completion);
+  g_signal_handlers_disconnect_by_func (completion->editable, changed_cb, completion);
+  g_signal_handlers_disconnect_by_func (key_controller, key_press_cb, completion);
+  g_signal_handlers_disconnect_by_func (completion->editable, focus_out_cb, completion);
 
-  g_clear_object (&completion->entry);
+  g_clear_object (&completion->editable);
 }
 
 static gboolean
@@ -554,8 +565,8 @@ add_emoji (GtkWidget          *list,
 
 static int
 populate_completion (GtkEmojiCompletion *completion,
-                     const char          *text,
-                     guint                offset)
+                     const char         *text,
+                     guint               offset)
 {
   GList *children, *l;
   guint n_matches;
@@ -657,15 +668,15 @@ gtk_emoji_completion_class_init (GtkEmojiCompletionClass *klass)
 }
 
 GtkWidget *
-gtk_emoji_completion_new (GtkEntry *entry)
+gtk_emoji_completion_new (GtkEditable *editable)
 {
   GtkEmojiCompletion *completion;
 
   completion = GTK_EMOJI_COMPLETION (g_object_new (GTK_TYPE_EMOJI_COMPLETION,
-                                                   "relative-to", entry,
+                                                   "relative-to", editable,
                                                    NULL));
 
-  connect_signals (completion, entry);
+  connect_signals (completion, editable);
 
   return GTK_WIDGET (completion);
 }

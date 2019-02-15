@@ -9513,7 +9513,7 @@ set_enable_emoji_completion (GtkEntry *entry,
 
   if (priv->enable_emoji_completion)
     g_object_set_data (G_OBJECT (entry), "emoji-completion-popup",
-                       gtk_emoji_completion_new (entry));
+                       gtk_emoji_completion_new (GTK_EDITABLE (entry)));
   else
     g_object_set_data (G_OBJECT (entry), "emoji-completion-popup", NULL);
 
