@@ -164,9 +164,11 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                    GTK_TYPE_SEARCH_ENTRY,
                                    G_CALLBACK (gtk_search_entry_icon_release));
 
+#if 0
   g_signal_override_class_handler ("preedit-changed",
                                    GTK_TYPE_SEARCH_ENTRY,
                                    G_CALLBACK (gtk_search_entry_preedit_changed));
+#endif
 
   /**
    * GtkSearchEntry::search-changed:
