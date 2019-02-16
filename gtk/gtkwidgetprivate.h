@@ -144,12 +144,12 @@ struct _GtkWidgetPrivate
   GtkStyleContext *context;
 
   /* The widget's allocated size */
-  GtkAllocation allocated_size;
+  graphene_matrix_t allocated_transform;
+  int allocated_width;
+  int allocated_height;
   gint allocated_size_baseline;
-  struct {
-    int x;
-    int y;
-  } transform;
+
+  graphene_matrix_t transform;
   int width;
   int height;
   int baseline;
@@ -304,7 +304,7 @@ void              gtk_widget_adjust_size_allocation        (GtkWidget         *w
                                                             GtkOrientation     orientation,
                                                             gint              *minimum_size,
                                                             gint              *natural_size,
-                                                            gint              *allocated_pos,
+                                                            graphene_matrix_t *transform,
                                                             gint              *allocated_size);
 void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             gint      *minimum_baseline,
