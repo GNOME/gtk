@@ -115,28 +115,9 @@ struct _GtkEntryClass
 {
   GtkWidgetClass parent_class;
 
-  /* Hook to customize right-click popup */
-  void (* populate_popup)   (GtkEntry       *entry,
-                             GtkWidget      *popup);
-
   /* Action signals
    */
   void (* activate)           (GtkEntry             *entry);
-  void (* move_cursor)        (GtkEntry             *entry,
-			       GtkMovementStep       step,
-			       gint                  count,
-			       gboolean              extend_selection);
-  void (* insert_at_cursor)   (GtkEntry             *entry,
-			       const gchar          *str);
-  void (* delete_from_cursor) (GtkEntry             *entry,
-			       GtkDeleteType         type,
-			       gint                  count);
-  void (* backspace)          (GtkEntry             *entry);
-  void (* cut_clipboard)      (GtkEntry             *entry);
-  void (* copy_clipboard)     (GtkEntry             *entry);
-  void (* paste_clipboard)    (GtkEntry             *entry);
-  void (* toggle_overwrite)   (GtkEntry             *entry);
-  void (* insert_emoji)       (GtkEntry             *entry);
 
   /*< private >*/
 
