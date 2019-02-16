@@ -67,7 +67,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 
-#include "a11y/gtkentryaccessible.h"
+#include "a11y/gtktextaccessible.h"
 
 #include <cairo-gobject.h>
 #include <string.h>
@@ -226,17 +226,6 @@ struct _GtkTextPrivate
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
-};
-
-struct _EntryIconInfo
-{
-  GtkWidget *widget;
-  gchar *tooltip;
-  guint nonactivatable : 1;
-  guint in_drag        : 1;
-
-  GdkDragAction actions;
-  GdkContentFormats *target_list;
 };
 
 struct _GtkTextPasswordHint
@@ -1379,7 +1368,7 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
                                 "insert-emoji", 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
 }
 
