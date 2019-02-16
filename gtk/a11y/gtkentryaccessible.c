@@ -26,6 +26,7 @@
 #include "gtkpango.h"
 #include "gtkentryaccessible.h"
 #include "gtkentryprivate.h"
+#include "gtktextprivate.h"
 #include "gtkcomboboxaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
@@ -762,7 +763,7 @@ gtk_entry_accessible_get_text (AtkText *atk_text,
   if (widget == NULL)
     return NULL;
 
-  return _gtk_entry_get_display_text (GTK_ENTRY (widget), start_pos, end_pos);
+  return gtk_text_get_display_text (gtk_entry_get_text_widget (GTK_ENTRY (widget)), start_pos, end_pos);
 }
 
 static gchar *
@@ -778,7 +779,7 @@ gtk_entry_accessible_get_text_before_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  return _gtk_pango_get_text_before (gtk_entry_get_layout (GTK_ENTRY (widget)),
+  return _gtk_pango_get_text_before (gtk_text_get_layout (gtk_entry_get_text_widget (GTK_ENTRY (widget))),
                                      boundary_type, offset,
                                      start_offset, end_offset);
 }
@@ -796,7 +797,7 @@ gtk_entry_accessible_get_text_at_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  return _gtk_pango_get_text_at (gtk_entry_get_layout (GTK_ENTRY (widget)),
+  return _gtk_pango_get_text_at (gtk_text_get_layout (gtk_entry_get_text_widget (GTK_ENTRY (widget))),
                                  boundary_type, offset,
                                  start_offset, end_offset);
 }
@@ -814,7 +815,7 @@ gtk_entry_accessible_get_text_after_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  return _gtk_pango_get_text_after (gtk_entry_get_layout (GTK_ENTRY (widget)),
+  return _gtk_pango_get_text_after (gtk_text_get_layout (gtk_entry_get_text_widget (GTK_ENTRY (widget))),
                                     boundary_type, offset,
                                     start_offset, end_offset);
 }
@@ -830,7 +831,7 @@ gtk_entry_accessible_get_character_count (AtkText *atk_text)
   if (widget == NULL)
     return 0;
 
-  text = _gtk_entry_get_display_text (GTK_ENTRY (widget), 0, -1);
+  text = gtk_text_get_display_text (gtk_entry_get_text_widget (GTK_ENTRY (widget)), 0, -1);
 
   char_count = 0;
   if (text)
@@ -900,7 +901,7 @@ gtk_entry_accessible_get_run_attributes (AtkText *text,
   attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
                                    gtk_widget_get_direction (widget));
   attributes = _gtk_pango_get_run_attributes (attributes,
-                                              gtk_entry_get_layout (GTK_ENTRY (widget)),
+                                              gtk_text_get_layout (gtk_entry_get_text_widget (GTK_ENTRY (widget))),
                                               offset,
                                               start_offset,
                                               end_offset);
@@ -922,7 +923,7 @@ gtk_entry_accessible_get_default_attributes (AtkText *text)
   attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
                                    gtk_widget_get_direction (widget));
   attributes = _gtk_pango_get_default_attributes (attributes,
-                                                  gtk_entry_get_layout (GTK_ENTRY (widget)));
+                                                  gtk_text_get_layout (gtk_entry_get_text_widget (GTK_ENTRY (widget))));
   attributes = _gtk_style_context_get_attributes (attributes,
                                                   gtk_widget_get_style_context (widget));
 
@@ -940,6 +941,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
 {
   GtkWidget *widget;
   GtkEntry *entry;
+  GtkText *textw;
   PangoRectangle char_rect;
   gchar *entry_text;
   gint index, x_layout, y_layout;
@@ -952,13 +954,14 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
     return;
 
   entry = GTK_ENTRY (widget);
+  textw = gtk_entry_get_text_widget (entry);
 
-  gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
-  entry_text = _gtk_entry_get_display_text (entry, 0, -1);
+  gtk_text_get_layout_offsets (textw, &x_layout, &y_layout);
+  entry_text = gtk_text_get_display_text (textw, 0, -1);
   index = g_utf8_offset_to_pointer (entry_text, offset) - entry_text;
   g_free (entry_text);
 
-  pango_layout_index_to_pos (gtk_entry_get_layout (entry), index, &char_rect);
+  pango_layout_index_to_pos (gtk_text_get_layout (textw), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -989,6 +992,7 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
 {
   GtkWidget *widget;
   GtkEntry *entry;
+  GtkText *textw;
   gchar *text;
   gint index, x_layout, y_layout;
   gint x_surface, y_surface;
@@ -1001,8 +1005,9 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
     return -1;
 
   entry = GTK_ENTRY (widget);
+  textw = gtk_entry_get_text_widget (entry);
 
-  gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
+  gtk_text_get_layout_offsets (textw, &x_layout, &y_layout);
 
   surface = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (surface, &x_surface, &y_surface);
@@ -1018,7 +1023,7 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
       x_local += x_surface;
       y_local += y_surface;
     }
-  if (!pango_layout_xy_to_index (gtk_entry_get_layout (entry),
+  if (!pango_layout_xy_to_index (gtk_text_get_layout (textw),
                                  x_local * PANGO_SCALE,
                                  y_local * PANGO_SCALE,
                                  &index, NULL))
@@ -1032,7 +1037,7 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
   offset = -1;
   if (index != -1)
     {
-      text = _gtk_entry_get_display_text (entry, 0, -1);
+      text = gtk_text_get_display_text (textw, 0, -1);
       offset = g_utf8_pointer_to_offset (text, text + index);
       g_free (text);
     }
@@ -1167,7 +1172,7 @@ gtk_entry_accessible_get_character_at_offset (AtkText *atk_text,
   if (!gtk_entry_get_visibility (GTK_ENTRY (widget)))
     return result;
 
-  text = _gtk_entry_get_display_text (GTK_ENTRY (widget), 0, -1);
+  text = gtk_text_get_display_text (gtk_entry_get_text_widget (GTK_ENTRY (widget)), 0, -1);
   if (offset < g_utf8_strlen (text, -1))
     {
       index = g_utf8_offset_to_pointer (text, offset);
@@ -1402,7 +1407,7 @@ delete_text_cb (GtkEditable *editable,
     {
       gchar *text;
 
-      text = _gtk_entry_get_display_text (GTK_ENTRY (editable), 0, -1);
+      text = gtk_text_get_display_text (gtk_entry_get_text_widget (GTK_ENTRY (editable)), 0, -1);
       end = g_utf8_strlen (text, -1);
       g_free (text);
     }
