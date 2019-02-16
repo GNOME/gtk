@@ -13528,16 +13528,21 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
                            GtkWidget   *child,
                            GtkSnapshot *snapshot)
 {
-  int x, y;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
+  gboolean needs_transform;
 
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  gtk_widget_get_origin_relative_to_parent (child, &x, &y);
+  needs_transform = !graphene_matrix_is_identity (&priv->transform);
 
-  gtk_snapshot_offset (snapshot, x, y);
+  if (needs_transform)
+    gtk_snapshot_push_transform (snapshot, &priv->transform);
+
   gtk_widget_snapshot (child, snapshot);
-  gtk_snapshot_offset (snapshot, -x, -y);
+
+  if (needs_transform)
+    gtk_snapshot_pop (snapshot);
 }
 
 /**
