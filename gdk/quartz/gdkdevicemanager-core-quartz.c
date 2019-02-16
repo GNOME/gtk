@@ -223,15 +223,17 @@ _gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager *device_ma
               device = device_to_check;
               if ([nsevent isEnteringProximity])
                 {
-                  /* FIXME: These should check that we actualy changed the device state
-                            before setting num_active_devices */
+                  if (!gdk_quartz_device_core_is_active(device), [nsevent deviceID])
+                    quartz_device_manager_core->num_active_devices++;
+
                   gdk_quartz_device_core_set_active(device, TRUE, [nsevent deviceID]);
-                  quartz_device_manager_core->num_active_devices++;
                 }
               else
                 {
+                  if (gdk_quartz_device_core_is_active(device), [nsevent deviceID])
+                    quartz_device_manager_core->num_active_devices--;
+
                   gdk_quartz_device_core_set_active(device, FALSE, [nsevent deviceID]);
-                  quartz_device_manager_core->num_active_devices--;
                 }
             }
         }
@@ -272,8 +274,9 @@ _gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager *device_ma
 
           if ([nsevent isEnteringProximity])
             {
-              gdk_quartz_device_core_set_active(device, TRUE, [nsevent deviceID]);
-              quartz_device_manager_core->num_active_devices++;
+              if (!gdk_quartz_device_core_is_active(device), [nsevent deviceID])
+                quartz_device_manager_core->num_active_devices++;
+              gdk_quartz_device_core_set_active (device, TRUE, [nsevent deviceID]);
             }
         }
 
