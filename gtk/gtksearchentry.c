@@ -31,6 +31,7 @@
 
 #include "gtkaccessible.h"
 #include "gtkbindings.h"
+#include "gtkentryprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
@@ -163,10 +164,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   g_signal_override_class_handler ("icon-release",
                                    GTK_TYPE_SEARCH_ENTRY,
                                    G_CALLBACK (gtk_search_entry_icon_release));
-
-  g_signal_override_class_handler ("preedit-changed",
-                                   GTK_TYPE_SEARCH_ENTRY,
-                                   G_CALLBACK (gtk_search_entry_preedit_changed));
 
   /**
    * GtkSearchEntry::search-changed:
@@ -368,6 +365,9 @@ gtk_search_entry_init (GtkSearchEntry *entry)
     atk_object_set_name (atk_obj, _("Search"));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("search"));
+
+  g_signal_connect (gtk_entry_get_text_widget (GTK_ENTRY (entry)), "preedit-changed",
+                     G_CALLBACK (gtk_search_entry_preedit_changed), NULL);
 }
 
 /**
