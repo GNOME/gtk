@@ -10247,7 +10247,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_entry,
 		    "activate", G_CALLBACK (gtk_tree_view_search_activate),
 		    tree_view);
-
+#if 0
   g_signal_connect (_gtk_entry_get_im_context (GTK_ENTRY (tree_view->priv->search_entry)),
 		    "preedit-changed",
 		    G_CALLBACK (gtk_tree_view_search_preedit_changed),
@@ -10256,7 +10256,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 		    "commit",
 		    G_CALLBACK (gtk_tree_view_search_commit),
 		    tree_view);
-
+#endif
   gtk_container_add (GTK_CONTAINER (vbox),
 		     tree_view->priv->search_entry);
 
