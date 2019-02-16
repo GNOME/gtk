@@ -46,6 +46,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtktext.h"
 #include "gtktreerbtreeprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkscrollable.h"
@@ -799,10 +800,10 @@ static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_
 static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry,
 							 GtkMenu          *menu,
 							 gpointer          data);
-static void     gtk_tree_view_search_preedit_changed    (GtkIMContext     *im_context,
+static void     gtk_tree_view_search_preedit_changed    (GtkText          *text,
+                                                         const char       *preedit,
 							 GtkTreeView      *tree_view);
-static void     gtk_tree_view_search_commit             (GtkIMContext     *im_context,
-                                                         gchar            *buf,
+static void     gtk_tree_view_search_changed            (GtkEditable      *editable,
                                                          GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_activate           (GtkEntry         *entry,
 							 GtkTreeView      *tree_view);
@@ -5383,7 +5384,7 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
                 }
               else
                 {
-                  gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+                  gtk_editable_set_text (GTK_EDITABLE (tree_view->priv->search_entry), "");
                   return FALSE;
                 }
             }
@@ -10239,24 +10240,16 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   gtk_container_add (GTK_CONTAINER (frame), vbox);
 
   /* add entry */
-  tree_view->priv->search_entry = gtk_entry_new ();
-  gtk_widget_show (tree_view->priv->search_entry);
+  tree_view->priv->search_entry = gtk_text_new ();
   g_signal_connect (tree_view->priv->search_entry, "populate-popup",
-		    G_CALLBACK (gtk_tree_view_search_disable_popdown),
-		    tree_view);
-  g_signal_connect (tree_view->priv->search_entry,
-		    "activate", G_CALLBACK (gtk_tree_view_search_activate),
-		    tree_view);
-#if 0
-  g_signal_connect (_gtk_entry_get_im_context (GTK_ENTRY (tree_view->priv->search_entry)),
-		    "preedit-changed",
-		    G_CALLBACK (gtk_tree_view_search_preedit_changed),
-		    tree_view);
-  g_signal_connect (_gtk_entry_get_im_context (GTK_ENTRY (tree_view->priv->search_entry)),
-		    "commit",
-		    G_CALLBACK (gtk_tree_view_search_commit),
-		    tree_view);
-#endif
+		    G_CALLBACK (gtk_tree_view_search_disable_popdown), tree_view);
+  g_signal_connect (tree_view->priv->search_entry, "activate",
+                    G_CALLBACK (gtk_tree_view_search_activate), tree_view);
+  g_signal_connect (tree_view->priv->search_entry, "preedit-changed",
+		    G_CALLBACK (gtk_tree_view_search_preedit_changed), tree_view);
+  g_signal_connect (tree_view->priv->search_entry, "changed",
+		    G_CALLBACK (gtk_tree_view_search_changed), tree_view);
+
   gtk_container_add (GTK_CONTAINER (vbox),
 		     tree_view->priv->search_entry);
 
@@ -13846,7 +13839,8 @@ gtk_tree_view_search_disable_popdown (GtkEntry *entry,
  * callback.
  */
 static void
-gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
+gtk_tree_view_search_preedit_changed (GtkText      *text,
+                                      const char   *predit,
 				      GtkTreeView  *tree_view)
 {
   tree_view->priv->imcontext_changed = 1;
@@ -13863,9 +13857,8 @@ gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
 }
 
 static void
-gtk_tree_view_search_commit (GtkIMContext *im_context,
-                             gchar        *buf,
-                             GtkTreeView  *tree_view)
+gtk_tree_view_search_changed (GtkEditable *editable,
+                              GtkTreeView  *tree_view)
 {
   tree_view->priv->imcontext_changed = 1;
 }
