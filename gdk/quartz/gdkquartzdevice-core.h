@@ -39,15 +39,6 @@ typedef struct _GdkQuartzDeviceCoreClass GdkQuartzDeviceCoreClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_quartz_device_core_get_type (void) G_GNUC_CONST;
 
-void gdk_quartz_device_core_set_active (GdkDevice *device,
-                                        gboolean   active,
-                                        NSUInteger device_id);
-gboolean gdk_quartz_device_core_is_active (GdkDevice *device,
-                                           NSUInteger device_id);
-void gdk_quartz_device_core_set_unique (GdkDevice *device,
-                                        unsigned long long unique_id);
-unsigned long long gdk_quartz_device_core_get_unique (GdkDevice *device);
-
 G_END_DECLS
 
 #endif /* __GDK_QUARTZ_DEVICE_CORE_H__ */

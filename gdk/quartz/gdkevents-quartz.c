@@ -1024,15 +1024,15 @@ fill_button_event (GdkWindow *window,
                                                                       nsevent);
 
   if ([nsevent subtype] == NSEventSubtypeTabletPoint)
-  {
-    axes = g_new (gdouble, TABLET_AXES);
+    {
+      axes = g_new (gdouble, TABLET_AXES);
 
-    axes[0] = x;
-    axes[1] = y;
-    axes[2] = [nsevent pressure];
-    axes[3] = [nsevent tilt].x;
-    axes[4] = [nsevent tilt].y;
-  }
+      axes[0] = x;
+      axes[1] = y;
+      axes[2] = [nsevent pressure];
+      axes[3] = [nsevent tilt].x;
+      axes[4] = [nsevent tilt].y;
+    }
 
   event->any.type = type;
   event->button.window = window;
@@ -1067,15 +1067,15 @@ fill_motion_event (GdkWindow *window,
                                                                       nsevent);
 
   if ([nsevent subtype] == NSEventSubtypeTabletPoint)
-  {
-    axes = g_malloc_n (5, sizeof (gdouble));
+    {
+      axes = g_malloc_n (5, sizeof (gdouble));
 
-    axes[0] = x;
-    axes[1] = y;
-    axes[2] = [nsevent pressure];
-    axes[3] = [nsevent tilt].x;
-    axes[4] = [nsevent tilt].y;
-  }
+      axes[0] = x;
+      axes[1] = y;
+      axes[2] = [nsevent pressure];
+      axes[3] = [nsevent tilt].x;
+      axes[4] = [nsevent tilt].y;
+    }
 
   event->any.type = GDK_MOTION_NOTIFY;
   event->motion.window = window;
