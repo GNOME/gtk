@@ -78,7 +78,7 @@ GtkWidget*  gtk_search_bar_new             (void);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_search_bar_connect_entry   (GtkSearchBar *bar,
-                                            GtkEntry     *entry);
+                                            GtkEditable  *entry);
 
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_search_bar_get_search_mode (GtkSearchBar *bar);
