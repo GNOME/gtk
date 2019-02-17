@@ -6,7 +6,7 @@ static const char *css =
 "test>button {"
 "  all: unset; "
 "  background-color: white;"
-/*"  border: 30px solid blue;"*/
+/*"  border: 30px solid teal;"*/
 /*"  margin: 40px;"*/
 /*"  padding: 40px;"*/
 "}"
@@ -24,7 +24,6 @@ GtkWidget *test_widget;
 GtkWidget *test_child;
 float scale = 1;
 gboolean do_picking = TRUE;
-graphene_matrix_t global_transform;
 
 static const GdkRGBA RED   = {1, 0, 0, 0.4};
 static const GdkRGBA GREEN = {0, 1, 0, 0.7};
@@ -105,6 +104,7 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
                                     int         baseline)
 {
   GtkTransformTester *self = (GtkTransformTester *)widget;
+  graphene_matrix_t global_transform;
   int w, h;
 
   if (!self->test_widget)
@@ -117,18 +117,26 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
   gtk_widget_measure (self->test_widget, GTK_ORIENTATION_VERTICAL, w,
                       &h, NULL, NULL, NULL);
 
-  graphene_matrix_init_identity (&global_transform);
-  graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ -w/2.0f, -h/2.0f, 0});
+  g_message ("%s: %d, %d", __FUNCTION__, w, h);
 
+  graphene_matrix_init_identity (&global_transform);
+
+  graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ -w/2.0f, -h/2.0f, 0});
   graphene_matrix_rotate (&global_transform, scale,
                           graphene_vec3_z_axis ());
 
   graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ width / 2.0f, height / 2.0f, 0});
 
+
+#if 0
+  gtk_widget_size_allocate (self->test_widget,
+                            &(GtkAllocation){ (width- w) / 2, (height - h) / 2, w,h }, -1);
+#else
   gtk_widget_allocate (self->test_widget,
                        w, h,
                        -1,
                        &global_transform);
+#endif
 }
 
 static void
@@ -147,7 +155,6 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
 
   if (!do_picking)
     return;
-
   gtk_widget_compute_bounds (self->test_widget, widget, &child_bounds);
   gtk_widget_compute_bounds (self->test_widget, self->test_widget, &self_bounds);
 
@@ -189,8 +196,8 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
           picked = gtk_widget_pick (widget, px, py);
 #else
           {
-            double dx, dy;
-            gtk_widget_translate_coordinatesf (widget, self->test_widget, px, py, &dx, &dy);
+            int dx, dy;
+            gtk_widget_translate_coordinates (widget, self->test_widget, px, py, &dx, &dy);
             picked = gtk_widget_pick (self->test_widget, dx, dy);
           }
 #endif
@@ -207,8 +214,6 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
                                        &GRAPHENE_RECT_INIT (px - (inc / 2), py - (inc / 2), inc, inc));
         }
     }
-
-
 
   gtk_snapshot_append_color (snapshot, &BLACK,
                              &GRAPHENE_RECT_INIT (child_bounds.origin.x,
