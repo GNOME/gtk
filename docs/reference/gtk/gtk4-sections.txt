@@ -997,6 +997,15 @@ gtk_entry_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkpasswordentry</FILE>
+<TITLE>GtkPasswordEntry</TITLE>
+GtkPasswordEntry
+gtk_password_entry_new
+<SUBSECTION Private>
+gtk_password_entry_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkentrybuffer</FILE>
 <TITLE>GtkEntryBuffer</TITLE>
 GtkEntryBuffer
