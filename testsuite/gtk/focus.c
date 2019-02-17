@@ -12,10 +12,10 @@ test_window_focus (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("label1"));
-  entry1 = gtk_entry_new ();
+  entry1 = gtk_text_new ();
   gtk_container_add (GTK_CONTAINER (box), entry1);
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("label2"));
-  entry2 = gtk_entry_new ();
+  entry2 = gtk_text_new ();
   gtk_container_add (GTK_CONTAINER (box), entry2);
 
   g_assert_null (gtk_window_get_focus (GTK_WINDOW (window)));
