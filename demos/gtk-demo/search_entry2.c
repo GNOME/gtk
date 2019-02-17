@@ -13,7 +13,7 @@ search_changed_cb (GtkSearchEntry *entry,
                    GtkLabel       *result_label)
 {
   const char *text;
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
   g_message ("search changed: %s", text);
   gtk_label_set_text (result_label, text ? text : "");
 }
@@ -22,7 +22,7 @@ static void
 changed_cb (GtkEditable *editable)
 {
   const char *text;
-  text = gtk_entry_get_text (GTK_ENTRY (editable));
+  text = gtk_editable_get_text (GTK_EDITABLE (editable));
   g_message ("changed: %s", text);
 }
 
@@ -85,7 +85,7 @@ do_search_entry2 (GtkWidget *do_widget)
       gtk_widget_set_halign (container, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (container), entry);
       searchbar = gtk_search_bar_new ();
-      gtk_search_bar_connect_entry (GTK_SEARCH_BAR (searchbar), GTK_ENTRY (entry));
+      gtk_search_bar_connect_entry (GTK_SEARCH_BAR (searchbar), GTK_EDITABLE (entry));
       gtk_search_bar_set_show_close_button (GTK_SEARCH_BAR (searchbar), FALSE);
       gtk_container_add (GTK_CONTAINER (searchbar), container);
       gtk_container_add (GTK_CONTAINER (vbox), searchbar);
