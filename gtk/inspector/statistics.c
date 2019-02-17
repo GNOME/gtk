@@ -374,7 +374,7 @@ gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
                                       GINT_TO_POINTER (COLUMN_CUMULATIVE2), NULL);
   sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, type_data_free);
 
-  gtk_tree_view_set_search_entry (sl->priv->view, GTK_ENTRY (sl->priv->search_entry));
+  gtk_tree_view_set_search_entry (sl->priv->view, GTK_EDITABLE (sl->priv->search_entry));
   gtk_tree_view_set_search_equal_func (sl->priv->view, match_row, sl, NULL);
   g_signal_connect (sl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 }
