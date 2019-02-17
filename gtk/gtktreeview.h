@@ -433,10 +433,10 @@ void                       gtk_tree_view_set_search_equal_func (GtkTreeView     
 								GDestroyNotify              search_destroy);
 
 GDK_AVAILABLE_IN_ALL
-GtkEntry                     *gtk_tree_view_get_search_entry         (GtkTreeView                   *tree_view);
+GtkEditable                  *gtk_tree_view_get_search_entry         (GtkTreeView                   *tree_view);
 GDK_AVAILABLE_IN_ALL
 void                          gtk_tree_view_set_search_entry         (GtkTreeView                   *tree_view,
-								      GtkEntry                      *entry);
+								      GtkEditable                   *entry);
 GDK_AVAILABLE_IN_ALL
 GtkTreeViewSearchPositionFunc gtk_tree_view_get_search_position_func (GtkTreeView                   *tree_view);
 GDK_AVAILABLE_IN_ALL
