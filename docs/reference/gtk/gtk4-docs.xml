@@ -143,6 +143,7 @@
       <xi:include href="xml/gtktext.xml" />
       <xi:include href="xml/gtkentry.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
+      <xi:include href="xml/gtkpasswordentry.xml" />
       <xi:include href="xml/gtkscale.xml" />
       <xi:include href="xml/gtkspinbutton.xml" />
       <xi:include href="xml/gtksearchentry.xml" />
