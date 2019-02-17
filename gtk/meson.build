@@ -117,6 +117,7 @@ gtk_private_sources = files([
   'gtkkineticscrolling.c',
   'gtkkeyhash.c',
   'gtkmagnifier.c',
+  'gtkmatrix.c',
   'gtkmenusectionbox.c',
   'gtkmenutracker.c',
   'gtkmenutrackeritem.c',
