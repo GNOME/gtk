@@ -799,12 +799,12 @@ gtk_widget_real_contains (GtkWidget *widget,
                           gdouble    x,
                           gdouble    y)
 {
-  graphene_rect_t widget_bounds;
+  GtkCssBoxes boxes;
 
-  gtk_widget_compute_bounds (widget, widget, &widget_bounds);
+  gtk_css_boxes_init (&boxes, widget);
 
   /* XXX: This misses rounded rects */
-  return graphene_rect_contains_point (&widget_bounds,
+  return graphene_rect_contains_point (gtk_css_boxes_get_border_rect (&boxes),
                                        &(graphene_point_t){x, y});
 }
 
@@ -820,11 +820,11 @@ gtk_widget_real_pick (GtkWidget *widget,
        child = _gtk_widget_get_prev_sibling (child))
     {
       GtkWidget *picked;
-      int dx, dy;
+      double dx, dy;
 
-      gtk_widget_get_origin_relative_to_parent (child, &dx, &dy);
+      gtk_widget_translate_coordinatesf (widget, child, x, y, &dx, &dy);
 
-      picked = gtk_widget_pick (child, x - dx, y - dy);
+      picked = gtk_widget_pick (child, dx, dy);
       if (picked)
         return picked;
     }
@@ -4524,54 +4524,31 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
                                    double     *dest_x,
                                    double     *dest_y)
 {
-  GtkWidget *ancestor;
-  GtkWidget *parent;
+  graphene_matrix_t transform;
+  graphene_vec4_t p;
 
   g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
 
-  ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
-  if (!ancestor)
+  if (!gtk_widget_compute_transform (src_widget, dest_widget, &transform))
     {
       if (dest_x)
         *dest_x = 0;
+
       if (dest_y)
         *dest_y = 0;
+
       return FALSE;
     }
 
-
-  parent = src_widget;
-  while (parent != ancestor)
-    {
-      int origin_x, origin_y;
-
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
-
-      src_x += origin_x;
-      src_y += origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
-
-  parent = dest_widget;
-  while (parent != ancestor)
-    {
-      int origin_x, origin_y;
-
-      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
-
-      src_x -= origin_x;
-      src_y -= origin_y;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
+  graphene_vec4_init (&p, src_x, src_y, 0, 1);
+  graphene_matrix_transform_vec4 (&transform, &p, &p);
 
   if (dest_x)
-    *dest_x = src_x;
+    *dest_x = graphene_vec4_get_x (&p);
 
   if (dest_y)
-    *dest_y = src_y;
+    *dest_y = graphene_vec4_get_y (&p);
 
   return TRUE;
 }
@@ -11351,6 +11328,91 @@ gtk_widget_pick (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_compute_transform:
+ * @widget: a #GtkWidget
+ * @target: the target widget that the matrix will transform to
+ * @out_transform: (out caller-allocates): location to
+ *   store the final transformation
+ *
+ * Computes a matrix suitable to describe a transformation from
+ * @widget's coordinate system into @target's coordinate system.
+ *
+ * Returns: %TRUE if the transform could be computed, %FALSE otherwise.
+ *   The transform can not be computed in certain cases, for example when
+ *   @widget and @target do not share a common ancestor.
+ */
+gboolean
+gtk_widget_compute_transform (GtkWidget         *widget,
+                              GtkWidget         *target,
+                              graphene_matrix_t *out_transform)
+{
+  GtkWidget *parent;
+  GtkWidget *ancestor;
+  graphene_matrix_t transform;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
+  g_return_val_if_fail (out_transform != NULL, FALSE);
+
+  ancestor = gtk_widget_common_ancestor (widget, target);
+
+  if (!ancestor)
+    return FALSE;
+
+  graphene_matrix_init_identity (&transform);
+  /* Walk up */
+  parent = widget;
+  while (parent != ancestor)
+    {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (parent);
+
+      graphene_matrix_multiply (&transform, &priv->transform, &transform);
+
+      parent = priv->parent;
+    }
+
+  g_assert (parent == ancestor);
+
+  /* Walk down */
+  {
+    int path_length = 0, i;
+    GtkWidget **path;
+
+    parent = target;
+    while (parent != ancestor)
+      {
+        path_length ++;
+        parent = parent->priv->parent;
+      }
+
+    path = g_alloca (sizeof (GtkWidget *) * path_length);
+
+    parent = target;
+    i = 0;
+    while (parent != ancestor)
+      {
+        path[i] = parent;
+        i ++;
+        parent = parent->priv->parent;
+      }
+
+    for (i = path_length - 1; i >= 0; i --)
+      {
+        GtkWidgetPrivate *priv = gtk_widget_get_instance_private (path[i]);
+        graphene_matrix_t inv;
+
+        graphene_matrix_inverse (&priv->transform, &inv);
+
+        graphene_matrix_multiply (&transform, &inv, &transform);
+      }
+  }
+
+  *out_transform = transform;
+
+  return TRUE;
+}
+
+/**
  * gtk_widget_compute_bounds:
  * @widget: the #GtkWidget to query
  * @target: the #GtkWidget
@@ -11373,26 +11435,23 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                            GtkWidget       *target,
                            graphene_rect_t *out_bounds)
 {
+  graphene_matrix_t transform;
   GtkCssBoxes boxes;
-  int x, y;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
   g_return_val_if_fail (out_bounds != NULL, FALSE);
 
-  if (!gtk_widget_translate_coordinates (widget,
-                                         target,
-                                         0, 0,
-                                         &x, &y))
+  if (!gtk_widget_compute_transform (widget, target, &transform))
     {
       graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
       return FALSE;
     }
 
   gtk_css_boxes_init (&boxes, widget);
-  graphene_rect_offset_r (gtk_css_boxes_get_border_rect (&boxes),
-                          x, y,
-                          out_bounds);
+  graphene_matrix_transform_bounds (&transform,
+                                    gtk_css_boxes_get_border_rect (&boxes),
+                                    out_bounds);
 
   return TRUE;
 }
