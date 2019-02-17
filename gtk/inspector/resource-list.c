@@ -548,7 +548,7 @@ match_row (GtkTreeModel *model,
   const gchar *text;
   gboolean match;
 
-  text = gtk_entry_get_text (GTK_ENTRY (sl->priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (sl->priv->search_entry));
   gtk_tree_model_get (model, iter,
                       COLUMN_NAME, &name,
                       COLUMN_PATH, &path,
@@ -622,7 +622,7 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
   g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (sl->priv->search_bar),
-                                GTK_ENTRY (sl->priv->search_entry));
+                                GTK_EDITABLE (sl->priv->search_entry));
 
   g_signal_connect (sl->priv->search_bar, "notify::search-mode-enabled",
                     G_CALLBACK (search_mode_changed), sl);
