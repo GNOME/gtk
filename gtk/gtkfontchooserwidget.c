@@ -372,11 +372,11 @@ text_changed_cb (GtkEntry             *entry,
 }
 
 static void
-stop_search_cb (GtkEntry             *entry,
+stop_search_cb (GtkSearchEntry       *entry,
                 GtkFontChooserWidget *fc)
 {
-  if (gtk_entry_get_text (entry)[0] != 0)
-    gtk_entry_set_text (entry, "");
+  if (gtk_editable_get_text (GTK_EDITABLE (entry))[0] != 0)
+    gtk_editable_set_text (GTK_EDITABLE (entry), "");
   else
     {
       GtkWidget *dialog;
@@ -623,7 +623,7 @@ gtk_font_chooser_widget_map (GtkWidget *widget)
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
-  gtk_entry_set_text (GTK_ENTRY (priv->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "list");
   g_simple_action_set_state (G_SIMPLE_ACTION (priv->tweak_action), g_variant_new_boolean (FALSE));
 
@@ -767,7 +767,7 @@ change_tweak (GSimpleAction *action,
     }
   else
     {
-      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (fontchooser->priv->search_entry));
+      gtk_widget_grab_focus (fontchooser->priv->search_entry);
       gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->priv->stack), "list");
     }
 
@@ -1034,7 +1034,7 @@ visible_func (GtkTreeModel *model,
     }
 
   /* If there's no filter string we show the item */
-  search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  search_text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
   if (strlen (search_text) == 0)
     return TRUE;
 
