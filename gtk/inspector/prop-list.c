@@ -79,7 +79,7 @@ static void
 search_close_clicked (GtkWidget            *button,
                       GtkInspectorPropList *pl)
 {
-  gtk_entry_set_text (GTK_ENTRY (pl->priv->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (pl->priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "title");
 }
 
@@ -275,7 +275,7 @@ constructed (GObject *object)
   pl->priv->search_stack = gtk_widget_get_parent (pl->priv->search_entry);
 
   gtk_tree_view_set_search_entry (GTK_TREE_VIEW (pl->priv->tree),
-                                  GTK_ENTRY (pl->priv->search_entry));
+                                  GTK_EDITABLE (pl->priv->search_entry));
 
   g_signal_connect (pl->priv->search_entry, "stop-search",
                     G_CALLBACK (search_close_clicked), pl);
@@ -525,7 +525,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   cleanup_object (pl);
 
-  gtk_entry_set_text (GTK_ENTRY (pl->priv->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (pl->priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "title");
 
   if (pl->priv->child_properties)
