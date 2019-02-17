@@ -5886,6 +5886,38 @@ GtkMountOperationPrivate
 </SECTION>
 
 <SECTION>
+<FILE>tranform</FILE>
+<TITLE>3D transformations</TITLE>
+GtkTransformType;
+GtkTransform;
+gtk_transform_ref
+gtk_transform_unref
+<SUBSECTION>
+gtk_transform_print
+gtk_transform_to_string
+gtk_transform_to_matrix
+<SUBSECTION>
+gtk_transform_identity
+gtk_transform_transform
+gtk_transform_matrix
+gtk_transform_translate
+gtk_transform_translate_3d
+gtk_transform_rotate
+gtk_transform_rotate_3d
+gtk_transform_scale
+gtk_transform_scale_3d
+<SUBSECTION>
+gtk_transform_equal
+<SUBSECTION>
+gtk_transform_get_transform_type
+gtk_transform_get_next
+<SUBSECTION Private>
+GTK_TYPE_TRANSFORM
+gdk_transform_get_type
+gtk_transform_new
+</SECTION>
+
+<SECTION>
 <FILE>gtkorientable</FILE>
 <TITLE>Orientable</TITLE>
 GtkOrientable
