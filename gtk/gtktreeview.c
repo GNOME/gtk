@@ -34,6 +34,7 @@
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkentryprivate.h"
+#include "gtksearchentryprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
@@ -2111,10 +2112,17 @@ gtk_tree_view_destroy (GtkWidget *widget)
 
   if (tree_view->priv->search_custom_entry_set)
     {
+      GtkEventController *controller;
+
       g_signal_handlers_disconnect_by_func (tree_view->priv->search_entry,
                                             G_CALLBACK (gtk_tree_view_search_init),
                                             tree_view);
-      g_signal_handlers_disconnect_by_func (gtk_entry_get_key_controller (GTK_ENTRY (tree_view->priv->search_entry)),
+
+      if (GTK_IS_ENTRY (tree_view->priv->search_entry))
+        controller = gtk_entry_get_key_controller (GTK_ENTRY (tree_view->priv->search_entry));
+      else
+        controller = gtk_search_entry_get_key_controller (GTK_SEARCH_ENTRY (tree_view->priv->search_entry));
+      g_signal_handlers_disconnect_by_func (controller,
                                             G_CALLBACK (gtk_tree_view_search_key_pressed),
                                             tree_view);
 
@@ -10310,13 +10318,16 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   gtk_tree_view_ensure_interactive_directory (tree_view);
 
   if (keybinding)
-    gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+    gtk_editable_set_text (GTK_EDITABLE (tree_view->priv->search_entry), "");
 
   /* done, show it */
   tree_view->priv->search_position_func (tree_view, tree_view->priv->search_window, tree_view->priv->search_position_user_data);
 
   /* Grab focus without selecting all the text. */
-  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (tree_view->priv->search_entry));
+  if (GTK_IS_ENTRY (tree_view->priv->search_entry))
+    gtk_entry_grab_focus_without_selecting (GTK_ENTRY (tree_view->priv->search_entry));
+  else
+    gtk_widget_grab_focus (tree_view->priv->search_entry);
 
   gtk_widget_show (tree_view->priv->search_window);
   if (tree_view->priv->search_entry_changed_id == 0)
@@ -13632,13 +13643,13 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
  *
  * Returns: (transfer none): the entry currently in use as search entry.
  */
-GtkEntry *
+GtkEditable *
 gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
   if (tree_view->priv->search_custom_entry_set)
-    return GTK_ENTRY (tree_view->priv->search_entry);
+    return GTK_EDITABLE (tree_view->priv->search_entry);
 
   return NULL;
 }
@@ -13656,10 +13667,10 @@ gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
  */
 void
 gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
-				GtkEntry    *entry)
+				GtkEditable *entry)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (entry == NULL || GTK_IS_ENTRY (entry));
+  g_return_if_fail (entry == NULL || GTK_IS_ENTRY (entry) || GTK_IS_SEARCH_ENTRY (entry));
 
   if (tree_view->priv->search_custom_entry_set)
     {
@@ -13683,6 +13694,8 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 
   if (entry)
     {
+      GtkEventController *controller;
+
       tree_view->priv->search_entry = GTK_WIDGET (g_object_ref (entry));
       tree_view->priv->search_custom_entry_set = TRUE;
 
@@ -13694,10 +13707,12 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 			      tree_view);
 	}
 
-      g_signal_connect (gtk_entry_get_key_controller (GTK_ENTRY (tree_view->priv->search_entry)),
-                        "key-pressed",
-                        G_CALLBACK (gtk_tree_view_search_key_pressed),
-                        tree_view);
+      if (GTK_IS_ENTRY (entry))
+        controller = gtk_entry_get_key_controller (GTK_ENTRY (entry));
+      else
+        controller = gtk_search_entry_get_key_controller (GTK_SEARCH_ENTRY (entry));
+      g_signal_connect (controller, "key-pressed",
+                        G_CALLBACK (gtk_tree_view_search_key_pressed), tree_view);
 
       gtk_tree_view_search_init (tree_view->priv->search_entry, tree_view);
     }
@@ -14266,10 +14281,9 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   GtkTreeModel *model;
   GtkTreeSelection *selection;
 
-  g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   model = gtk_tree_view_get_model (tree_view);
   selection = gtk_tree_view_get_selection (tree_view);
