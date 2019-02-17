@@ -62,7 +62,7 @@ window1
       parent: box1
       index: 1
       labelled-by: label1
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
