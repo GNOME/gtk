@@ -228,8 +228,15 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      /* Default invisible char is determined at runtime */
+      /* Default invisible char is determined at runtime,
+       * and buffer gets created on-demand
+       */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
+	  (strcmp (pspec->name, "invisible-char") == 0 ||
+           strcmp (pspec->name, "buffer") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_TEXT) &&
 	  (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
 	continue;
