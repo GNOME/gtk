@@ -48,17 +48,18 @@ typedef struct _GtkSearchEntryClass  GtkSearchEntryClass;
 
 struct _GtkSearchEntry
 {
-  GtkEntry parent;
+  GtkWidget parent;
 };
 
 struct _GtkSearchEntryClass
 {
-  GtkEntryClass parent_class;
+  GtkWidgetClass parent_class;
 
-  void (*search_changed) (GtkSearchEntry *entry);
-  void (*next_match)     (GtkSearchEntry *entry);
-  void (*previous_match) (GtkSearchEntry *entry);
-  void (*stop_search)    (GtkSearchEntry *entry);
+  void (* activate)       (GtkSearchEntry *entry);
+  void (* search_changed) (GtkSearchEntry *entry);
+  void (* next_match)     (GtkSearchEntry *entry);
+  void (* previous_match) (GtkSearchEntry *entry);
+  void (* stop_search)    (GtkSearchEntry *entry);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -76,7 +77,6 @@ void            gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
                                                          GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry);
-
 
 
 G_END_DECLS
