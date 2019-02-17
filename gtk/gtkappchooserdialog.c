@@ -362,7 +362,7 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
     g_object_unref (info);
 
   _gtk_app_chooser_widget_set_search_entry (GTK_APP_CHOOSER_WIDGET (self->priv->app_chooser_widget),
-                                            GTK_ENTRY (self->priv->search_entry));
+                                            GTK_EDITABLE (self->priv->search_entry));
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (self->priv->search_bar),
                                          GTK_WIDGET (self));
