@@ -3064,7 +3064,7 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
       gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
     }
 
-  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
+  gtk_widget_grab_focus (priv->search_entry);
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
@@ -7043,7 +7043,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
   if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->search_model), NULL) == 0)
     {
       gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "empty");
-      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
+      gtk_widget_grab_focus (priv->search_entry);
     }
 }
 
@@ -7084,7 +7084,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
 
   if (remove_query && priv->search_entry)
     {
-      gtk_entry_set_text (GTK_ENTRY (priv->search_entry), "");
+      gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
     }
 
   if (priv->search_engine)
@@ -7218,7 +7218,7 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
   if (priv->operation_mode != OPERATION_MODE_SEARCH)
     return;
 
-  text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
 
   /* reset any existing query object */
   g_set_object (&priv->search_query, NULL);
@@ -7254,7 +7254,7 @@ search_setup_widgets (GtkFileChooserWidget *impl)
       query = gtk_query_get_text (priv->search_query);
       if (query)
         {
-          gtk_entry_set_text (GTK_ENTRY (priv->search_entry), query);
+          gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), query);
           search_start_query (impl, query);
         }
       else
