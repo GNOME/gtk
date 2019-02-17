@@ -7084,7 +7084,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
 
   if (remove_query && priv->search_entry)
     {
-      gtk_entry_set_text (GTK_ENTRY (priv->search_entry), "");
+      gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
     }
 
   if (priv->search_engine)
@@ -7218,7 +7218,7 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
   if (priv->operation_mode != OPERATION_MODE_SEARCH)
     return;
 
-  text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
 
   /* reset any existing query object */
   g_set_object (&priv->search_query, NULL);
@@ -7254,7 +7254,7 @@ search_setup_widgets (GtkFileChooserWidget *impl)
       query = gtk_query_get_text (priv->search_query);
       if (query)
         {
-          gtk_entry_set_text (GTK_ENTRY (priv->search_entry), query);
+          gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), query);
           search_start_query (impl, query);
         }
       else
