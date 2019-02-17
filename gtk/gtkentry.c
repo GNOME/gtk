@@ -1265,13 +1265,14 @@ gtk_entry_dispose (GObject *object)
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
+  gtk_entry_set_completion (entry, NULL);
+
   g_clear_pointer (&priv->text, gtk_widget_unparent);
 
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
-  gtk_entry_set_completion (entry, NULL);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
