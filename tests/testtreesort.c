@@ -87,7 +87,7 @@ switch_search_method (GtkWidget *button,
   if (!gtk_tree_view_get_search_entry (GTK_TREE_VIEW (tree_view)))
     {
       gpointer data = g_object_get_data (tree_view, "my-search-entry");
-      gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_ENTRY (data));
+      gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_EDITABLE (data));
     }
   else
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), NULL);
@@ -145,7 +145,7 @@ main (int argc, char *argv[])
 */
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
 
-  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_ENTRY (entry));
+  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_EDITABLE (entry));
   g_object_set_data (G_OBJECT (tree_view), "my-search-entry", entry);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (switch_search_method), tree_view);
