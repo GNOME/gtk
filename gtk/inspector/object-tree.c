@@ -916,7 +916,7 @@ search (GtkInspectorObjectTree *wt,
   guint i, selected, n, row;
   const char *text;
 
-  text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
   if (gtk_list_box_get_selected_row (priv->list))
     {
       selected = gtk_list_box_row_get_index (gtk_list_box_get_selected_row (priv->list));
@@ -998,7 +998,7 @@ static void
 stop_search (GtkWidget              *entry,
              GtkInspectorObjectTree *wt)
 {
-  gtk_entry_set_text (GTK_ENTRY (wt->priv->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (wt->priv->search_entry), "");
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar), FALSE);
 }
 
@@ -1155,7 +1155,7 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
   gtk_widget_init_template (GTK_WIDGET (wt));
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (wt->priv->search_bar),
-                                GTK_ENTRY (wt->priv->search_entry));
+                                GTK_EDITABLE (wt->priv->search_entry));
 
   root_model = create_root_model ();
   wt->priv->tree_model = gtk_tree_list_model_new (FALSE,
