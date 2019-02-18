@@ -25,7 +25,7 @@
 #include "gtkaccessible.h"
 #include "gtkbindings.h"
 #include "gtktextprivate.h"
-#include "gtkeditableprivate.h"
+#include "gtkeditable.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -96,7 +96,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_set_hexpand (priv->entry, TRUE);
   gtk_widget_set_vexpand (priv->entry, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
-  gtk_editable_set_delegate (GTK_EDITABLE (entry), GTK_EDITABLE (priv->entry));
+  gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("dialog-warning-symbolic");
@@ -130,6 +130,8 @@ gtk_password_entry_dispose (GObject *object)
 
   if (priv->keymap)
     g_signal_handlers_disconnect_by_func (priv->keymap, keymap_state_changed, entry);
+
+  gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
   g_clear_pointer (&priv->box, gtk_widget_unparent);
 
@@ -212,15 +214,24 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->measure = gtk_password_entry_measure;
   widget_class->size_allocate = gtk_password_entry_size_allocate;
  
-  gtk_editable_install_properties (object_class);
+  gtk_editable_install_properties (object_class, 1);
 
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
+}
+
+static GtkEditable *
+gtk_password_entry_get_delegate (GtkEditable *editable)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (editable);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  return GTK_EDITABLE (priv->entry);
 }
 
 static void
 gtk_password_entry_editable_init (GtkEditableInterface *iface)
 {
-  gtk_editable_delegate_iface_init (iface);
+  iface->get_delegate = gtk_password_entry_get_delegate;
 }
 
 /**
