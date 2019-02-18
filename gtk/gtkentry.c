@@ -40,7 +40,7 @@
 #include "gtkdebug.h"
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
-#include "gtkeditableprivate.h"
+#include "gtkeditable.h"
 #include "gtkemojichooser.h"
 #include "gtkemojicompletion.h"
 #include "gtkentrybuffer.h"
@@ -845,7 +845,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
-  gtk_editable_install_properties (gobject_class);
+  gtk_editable_install_properties (gobject_class, NUM_PROPERTIES);
 
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -896,10 +896,19 @@ gtk_entry_class_init (GtkEntryClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
+static GtkEditable *
+gtk_entry_get_delegate (GtkEditable *editable)
+{
+  GtkEntry *entry = GTK_ENTRY (editable);
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  return GTK_EDITABLE (priv->text);
+}
+
 static void
 gtk_entry_editable_init (GtkEditableInterface *iface)
 {
-  gtk_editable_delegate_iface_init (iface);
+  iface->get_delegate = gtk_entry_get_delegate;
 }
 
 static void
@@ -1253,7 +1262,7 @@ gtk_entry_init (GtkEntry *entry)
 
   priv->text = gtk_text_new ();
   gtk_widget_set_parent (priv->text, GTK_WIDGET (entry));
-  gtk_editable_set_delegate (GTK_EDITABLE (entry), GTK_EDITABLE (priv->text));
+  gtk_editable_init_delegate (GTK_EDITABLE (entry));
   connect_text_signals (entry);
 
   priv->editing_canceled = FALSE;
@@ -1267,6 +1276,7 @@ gtk_entry_dispose (GObject *object)
 
   gtk_entry_set_completion (entry, NULL);
 
+  gtk_editable_finish_delegate (GTK_EDITABLE (entry));
   g_clear_pointer (&priv->text, gtk_widget_unparent);
 
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
