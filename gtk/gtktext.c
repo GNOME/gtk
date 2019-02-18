@@ -31,7 +31,7 @@
 #include "gtkdebug.h"
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
-#include "gtkeditableprivate.h"
+#include "gtkeditable.h"
 #include "gtkemojichooser.h"
 #include "gtkemojicompletion.h"
 #include "gtkentrybuffer.h"
@@ -921,7 +921,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, text_props);
 
-  gtk_editable_install_properties (gobject_class);
+  gtk_editable_install_properties (gobject_class, NUM_PROPERTIES);
 
   /**
    * GtkText::populate-popup:
@@ -1401,23 +1401,23 @@ gtk_text_set_property (GObject      *object,
   switch (prop_id)
     {
     /* GtkEditable properties */
-    case GTK_EDITABLE_PROP_EDITABLE:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_EDITABLE:
       gtk_text_set_editable (self, g_value_get_boolean (value));
       break;
 
-    case GTK_EDITABLE_PROP_WIDTH_CHARS:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_WIDTH_CHARS:
       gtk_text_set_width_chars (self, g_value_get_int (value));
       break;
 
-    case GTK_EDITABLE_PROP_MAX_WIDTH_CHARS:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_MAX_WIDTH_CHARS:
       gtk_text_set_max_width_chars (self, g_value_get_int (value));
       break;
 
-    case GTK_EDITABLE_PROP_TEXT:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_TEXT:
       gtk_text_set_text (self, g_value_get_string (value));
       break;
 
-    case GTK_EDITABLE_PROP_XALIGN:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_XALIGN:
       gtk_text_set_alignment (self, g_value_get_float (value));
       break;
 
@@ -1523,31 +1523,31 @@ gtk_text_get_property (GObject    *object,
   switch (prop_id)
     {
     /* GtkEditable properties */
-    case GTK_EDITABLE_PROP_CURSOR_POSITION:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_CURSOR_POSITION:
       g_value_set_int (value, priv->current_pos);
       break;
 
-    case GTK_EDITABLE_PROP_SELECTION_BOUND:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_SELECTION_BOUND:
       g_value_set_int (value, priv->selection_bound);
       break;
 
-    case GTK_EDITABLE_PROP_EDITABLE:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_EDITABLE:
       g_value_set_boolean (value, priv->editable);
       break;
 
-    case GTK_EDITABLE_PROP_WIDTH_CHARS:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_WIDTH_CHARS:
       g_value_set_int (value, priv->width_chars);
       break;
 
-    case GTK_EDITABLE_PROP_MAX_WIDTH_CHARS:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_MAX_WIDTH_CHARS:
       g_value_set_int (value, priv->max_width_chars);
       break;
 
-    case GTK_EDITABLE_PROP_TEXT:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_TEXT:
       g_value_set_string (value, gtk_entry_buffer_get_text (get_buffer (self)));
       break;
 
-    case GTK_EDITABLE_PROP_XALIGN:
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_XALIGN:
       g_value_set_float (value, priv->xalign);
       break;
 
