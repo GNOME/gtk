@@ -387,7 +387,7 @@ gtk_revealer_set_position (GtkRevealer *revealer,
 
   priv->current_pos = pos;
 
-  new_visible = priv->current_pos != 0.0;
+  new_visible = priv->target_pos != 0.0 || priv->current_pos != 0.0;
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL &&
@@ -468,6 +468,8 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
                                   priv->transition_duration * 1000,
                                   0,
                                   1.0);
+      gtk_widget_set_child_visible (gtk_bin_get_child (GTK_BIN (revealer)),
+                                    priv->target_pos != 0);
     }
   else
     {
