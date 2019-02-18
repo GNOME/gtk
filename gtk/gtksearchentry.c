@@ -406,6 +406,22 @@ gtk_search_entry_is_keynav (guint           keyval,
   return FALSE;
 }
 
+gboolean
+gtk_search_entry_should_trigger (guint           keyval,
+                                 GdkModifierType state)
+{
+  if (gtk_search_entry_is_keynav (keyval, state) ||
+      keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_Menu)
+    return FALSE;
+
+  if ((state & (GDK_CONTROL_MASK | GDK_MOD1_MASK |
+                GDK_SUPER_MASK | GDK_HYPER_MASK)) != 0)
+    return FALSE;
+
+  return g_unichar_isprint (gdk_keyval_to_unicode (keyval));
+}
+
 /**
  * gtk_search_entry_handle_event:
  * @entry: a #GtkSearchEntry
@@ -464,9 +480,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (GTK_SEARCH_ENTRY (entry));
   gboolean handled;
 
-  if (gtk_search_entry_is_keynav (keyval, state) ||
-      keyval == GDK_KEY_space ||
-      keyval == GDK_KEY_Menu)
+  if (!gtk_search_entry_should_trigger (keyval, state))
     return FALSE;
 
   priv->content_changed = FALSE;
@@ -474,7 +488,10 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
   handled = gtk_event_controller_key_forward (controller, entry);
 
-  return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
+  if (priv->search_stopped)
+    return GDK_EVENT_PROPAGATE;
+
+  return handled;
 }
 
 /**
