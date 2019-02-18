@@ -88,15 +88,6 @@ get_delegate (GtkEditable *editable)
   return NULL;
 }
 
-static void
-gtk_editable_default_do_insert_text (GtkEditable *editable,
-                                     const char  *text,
-                                     int          length,
-                                     int         *position)
-{
-  g_signal_emit_by_name (editable, "insert-text", text, length, position);
-}
-
 #define warn_no_delegate(func) \
   g_critical ("GtkEditable %s: default implementation called without a delegate", func);
 
@@ -112,14 +103,6 @@ gtk_editable_default_insert_text (GtkEditable *editable,
     gtk_editable_insert_text (delegate, text, length, position);
   else
     warn_no_delegate ("insert_text");
-}
-
-static void
-gtk_editable_default_do_delete_text (GtkEditable *editable,
-                                     int          start_pos,
-                                     int          end_pos)
-{
-  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos);
 }
 
 static void
@@ -184,66 +167,8 @@ gtk_editable_default_init (GtkEditableInterface *iface)
   iface->insert_text = gtk_editable_default_insert_text;
   iface->delete_text = gtk_editable_default_delete_text;
   iface->get_text = gtk_editable_default_get_text;
-  iface->do_insert_text = gtk_editable_default_do_insert_text;
-  iface->do_delete_text = gtk_editable_default_do_delete_text;
   iface->get_selection_bounds = gtk_editable_default_get_selection_bounds;
   iface->set_selection_bounds = gtk_editable_default_set_selection_bounds;
-
-  /**
-   * GtkEditable::insert-text:
-   * @editable: the object which received the signal
-   * @text: the new text to insert
-   * @length: the length of the new text, in bytes,
-   *     or -1 if new_text is nul-terminated
-   * @position: (inout) (type int): the position, in characters,
-   *     at which to insert the new text. this is an in-out
-   *     parameter.  After the signal emission is finished, it
-   *     should point after the newly inserted text.
-   *
-   * This signal is emitted when text is inserted into
-   * the widget by the user. The default handler for
-   * this signal will normally be responsible for inserting
-   * the text, so by connecting to this signal and then
-   * stopping the signal with g_signal_stop_emission(), it
-   * is possible to modify the inserted text, or prevent
-   * it from being inserted entirely.
-   */
-  g_signal_new (I_("insert-text"),
-                GTK_TYPE_EDITABLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
-                NULL, NULL,
-                _gtk_marshal_VOID__STRING_INT_POINTER,
-                G_TYPE_NONE, 3,
-                G_TYPE_STRING,
-                G_TYPE_INT,
-                G_TYPE_POINTER);
-
-  /**
-   * GtkEditable::delete-text:
-   * @editable: the object which received the signal
-   * @start_pos: the starting position
-   * @end_pos: the end position
-   * 
-   * This signal is emitted when text is deleted from
-   * the widget by the user. The default handler for
-   * this signal will normally be responsible for deleting
-   * the text, so by connecting to this signal and then
-   * stopping the signal with g_signal_stop_emission(), it
-   * is possible to modify the range of deleted text, or
-   * prevent it from being deleted entirely. The @start_pos
-   * and @end_pos parameters are interpreted as for
-   * gtk_editable_delete_text().
-   */
-  g_signal_new (I_("delete-text"),
-                GTK_TYPE_EDITABLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
-                NULL, NULL,
-                _gtk_marshal_VOID__INT_INT,
-                G_TYPE_NONE, 2,
-                G_TYPE_INT,
-                G_TYPE_INT);
 
   /**
    * GtkEditable::changed:
@@ -322,7 +247,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
 }
 
 /**
- * gtk_editable_insert_text: (virtual do_insert_text)
+ * gtk_editable_insert_text: (virtual insert_text)
  * @editable: a #GtkEditable
  * @text: the text to append
  * @length: the length of the text in bytes, or -1
@@ -346,11 +271,11 @@ gtk_editable_insert_text (GtkEditable *editable,
   if (length < 0)
     length = strlen (text);
   
-  GTK_EDITABLE_GET_IFACE (editable)->do_insert_text (editable, text, length, position);
+  GTK_EDITABLE_GET_IFACE (editable)->insert_text (editable, text, length, position);
 }
 
 /**
- * gtk_editable_delete_text: (virtual do_delete_text)
+ * gtk_editable_delete_text: (virtual delete_text)
  * @editable: a #GtkEditable
  * @start_pos: start position
  * @end_pos: end position
@@ -369,7 +294,7 @@ gtk_editable_delete_text (GtkEditable *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  GTK_EDITABLE_GET_IFACE (editable)->do_delete_text (editable, start_pos, end_pos);
+  GTK_EDITABLE_GET_IFACE (editable)->delete_text (editable, start_pos, end_pos);
 }
 
 /**

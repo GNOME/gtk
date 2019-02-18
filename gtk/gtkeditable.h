@@ -48,32 +48,24 @@ struct _GtkEditableInterface
   GTypeInterface                   base_iface;
 
   /* signals */
-  void (* insert_text)              (GtkEditable    *editable,
-                                     const gchar    *text,
-                                     int             length,
-                                     int            *position);
-  void (* delete_text)              (GtkEditable    *editable,
-                                     int             start_pos,
-                                     int             end_pos);
-  void (* changed)                  (GtkEditable    *editable);
+  void          (* changed)              (GtkEditable *editable);
 
   /* vtable */
-  const char * (* get_text)         (GtkEditable    *editable);
-  void     (* do_insert_text)       (GtkEditable    *editable,
-                                     const char     *text,
-                                     int             length,
-                                     int            *position);
-  void     (* do_delete_text)       (GtkEditable    *editable,
-                                     int             start_pos,
-                                     int             end_pos);
-
-  gboolean (* get_selection_bounds) (GtkEditable    *editable,
-                                     int            *start_pos,
-                                     int            *end_pos);
-  void     (* set_selection_bounds) (GtkEditable    *editable,
-                                     int             start_pos,
-                                     int             end_pos);
-  GtkEditable * (* get_delegate)    (GtkEditable    *editable);
+  const char *  (* get_text)             (GtkEditable *editable);
+  void          (* insert_text)          (GtkEditable *editable,
+                                          const char  *text,
+                                          int          length,
+                                          int         *position);
+  void          (* delete_text)          (GtkEditable *editable,
+                                          int          start_pos,
+                                          int          end_pos);
+  gboolean      (* get_selection_bounds) (GtkEditable *editable,
+                                          int         *start_pos,
+                                          int         *end_pos);
+  void          (* set_selection_bounds) (GtkEditable *editable,
+                                          int          start_pos,
+                                          int          end_pos);
+  GtkEditable * (* get_delegate)         (GtkEditable *editable);
 };
 
 GDK_AVAILABLE_IN_ALL
