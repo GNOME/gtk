@@ -31,7 +31,7 @@
 
 #include "gtkaccessible.h"
 #include "gtkbindings.h"
-#include "gtkeditableprivate.h"
+#include "gtkeditable.h"
 #include "gtkbox.h"
 #include "gtkgesturemultipress.h"
 #include "gtktextprivate.h"
@@ -130,6 +130,8 @@ gtk_search_entry_finalize (GObject *object)
 {
   GtkSearchEntry *entry = GTK_SEARCH_ENTRY (object);
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
   g_clear_pointer (&priv->box, gtk_widget_unparent);
 
@@ -265,7 +267,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
-  gtk_editable_install_properties (object_class);
+  gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -369,10 +371,19 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
+static GtkEditable *
+gtk_search_entry_get_delegate (GtkEditable *editable)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (editable);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  return GTK_EDITABLE (priv->entry);
+}
+
 static void
 gtk_search_entry_editable_init (GtkEditableInterface *iface)
 {
-  gtk_editable_delegate_iface_init (iface);
+  iface->get_delegate = gtk_search_entry_get_delegate;
 }
 
 static void
@@ -476,7 +487,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   gtk_widget_set_hexpand (priv->entry, TRUE);
   gtk_widget_set_vexpand (priv->entry, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), GTK_WIDGET (priv->entry));
-  gtk_editable_set_delegate (GTK_EDITABLE (entry), GTK_EDITABLE (priv->entry));
+  gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "changed", G_CALLBACK (text_changed), entry);
   g_signal_connect_after (priv->entry, "changed", G_CALLBACK (gtk_search_entry_changed), entry);
   g_signal_connect_swapped (priv->entry, "preedit-changed", G_CALLBACK (text_changed), entry);
