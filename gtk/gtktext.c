@@ -2943,7 +2943,7 @@ gtk_text_grab_focus (GtkWidget *widget)
   if (priv->editable && !priv->in_click)
     {
       g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-self-select-on-focus",
+                    "gtk-entry-select-on-focus",
                     &select_on_focus,
                     NULL);
 
