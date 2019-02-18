@@ -389,14 +389,6 @@ static void        gtk_text_set_alignment        (GtkText              *text,
  */
 static gboolean gtk_text_popup_menu         (GtkWidget       *widget);
 
-static void     gtk_text_real_insert_text   (GtkEditable     *editable,
-                                             const char      *text,
-                                             int              length,
-                                             int             *position);
-static void     gtk_text_real_delete_text   (GtkEditable     *editable,
-                                             int              start_pos,
-                                             int              end_pos);
-
 static void     gtk_text_move_cursor        (GtkText         *self,
                                              GtkMovementStep  step,
                                              int              count,
@@ -541,6 +533,7 @@ static GtkEntryBuffer *get_buffer                      (GtkText       *self);
 static void         set_enable_emoji_completion        (GtkText       *self,
                                                         gboolean       value);
 static void         set_text_cursor                    (GtkWidget     *widget);
+static void          update_placeholder_visibility     (GtkText *self);
 
 static void         buffer_connect_signals             (GtkText       *self);
 static void         buffer_disconnect_signals          (GtkText       *self);
@@ -1375,10 +1368,8 @@ gtk_text_class_init (GtkTextClass *class)
 static void
 gtk_text_editable_init (GtkEditableInterface *iface)
 {
-  iface->do_insert_text = gtk_text_insert_text;
-  iface->do_delete_text = gtk_text_delete_text;
-  iface->insert_text = gtk_text_real_insert_text;
-  iface->delete_text = gtk_text_real_delete_text;
+  iface->insert_text = gtk_text_insert_text;
+  iface->delete_text = gtk_text_delete_text;
   iface->get_text = gtk_text_get_text;
   iface->set_selection_bounds = gtk_text_set_selection_bounds;
   iface->get_selection_bounds = gtk_text_get_selection_bounds;
@@ -3017,16 +3008,28 @@ gtk_text_insert_text (GtkEditable *editable,
                       int          length,
                       int         *position)
 {
-  g_object_ref (editable);
+  guint n_inserted;
+  int n_chars;
+
+  n_chars = g_utf8_strlen (text, length);
 
   /*
-   * The incoming text may a password or other secret. We make sure
-   * not to copy it into temporary buffers.
+   * The actual insertion into the buffer. This will end up firing the
+   * following signal handlers: buffer_inserted_text(), buffer_notify_display_text(),
+   * buffer_notify_text()
    */
+  begin_change (GTK_TEXT (editable));
 
-  g_signal_emit_by_name (editable, "insert-text", text, length, position);
+  n_inserted = gtk_entry_buffer_insert_text (get_buffer (GTK_TEXT (editable)), *position, text, n_chars);
 
-  g_object_unref (editable);
+  end_change (GTK_TEXT (editable));
+
+  if (n_inserted != n_chars)
+    gtk_widget_error_bell (GTK_WIDGET (editable));
+
+  *position += n_inserted;
+
+  update_placeholder_visibility (GTK_TEXT (editable));
 }
 
 static void
@@ -3034,13 +3037,19 @@ gtk_text_delete_text (GtkEditable *editable,
                       int          start_pos,
                       int          end_pos)
 {
-  g_object_ref (editable);
+  /*
+   * The actual deletion from the buffer. This will end up firing the
+   * following signal handlers: buffer_deleted_text(), buffer_notify_display_text(),
+   * buffer_notify_text()
+   */
 
-  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos);
+  begin_change (GTK_TEXT (editable));
 
-  g_object_unref (editable);
+  gtk_entry_buffer_delete_text (get_buffer (GTK_TEXT (editable)), start_pos, end_pos - start_pos);
+
+  end_change (GTK_TEXT (editable));
+  update_placeholder_visibility (GTK_TEXT (editable));
 }
-
 static const char *
 gtk_text_get_text (GtkEditable *editable)
 {
@@ -3183,57 +3192,6 @@ update_placeholder_visibility (GtkText *self)
   if (priv->placeholder)
     gtk_widget_set_child_visible (priv->placeholder,
                                   gtk_entry_buffer_get_length (priv->buffer) == 0);
-}
-
-/* Default signal handlers
- */
-static void
-gtk_text_real_insert_text (GtkEditable *editable,
-                           const char  *text,
-                           int          length,
-                           int         *position)
-{
-  guint n_inserted;
-  int n_chars;
-
-  n_chars = g_utf8_strlen (text, length);
-
-  /*
-   * The actual insertion into the buffer. This will end up firing the
-   * following signal handlers: buffer_inserted_text(), buffer_notify_display_text(),
-   * buffer_notify_text()
-   */
-  begin_change (GTK_TEXT (editable));
-
-  n_inserted = gtk_entry_buffer_insert_text (get_buffer (GTK_TEXT (editable)), *position, text, n_chars);
-
-  end_change (GTK_TEXT (editable));
-
-  if (n_inserted != n_chars)
-    gtk_widget_error_bell (GTK_WIDGET (editable));
-
-  *position += n_inserted;
-
-  update_placeholder_visibility (GTK_TEXT (editable));
-}
-
-static void
-gtk_text_real_delete_text (GtkEditable *editable,
-                           int          start_pos,
-                           int          end_pos)
-{
-  /*
-   * The actual deletion from the buffer. This will end up firing the
-   * following signal handlers: buffer_deleted_text(), buffer_notify_display_text(),
-   * buffer_notify_text()
-   */
-
-  begin_change (GTK_TEXT (editable));
-
-  gtk_entry_buffer_delete_text (get_buffer (GTK_TEXT (editable)), start_pos, end_pos - start_pos);
-
-  end_change (GTK_TEXT (editable));
-  update_placeholder_visibility (GTK_TEXT (editable));
 }
 
 /* GtkEntryBuffer signal handlers
