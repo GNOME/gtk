@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 
 gboolean gtk_search_entry_is_keynav (guint           keyval,
                                      GdkModifierType state);
+gboolean gtk_search_entry_should_trigger (guint           keyval,
+                                          GdkModifierType state);
 
 GtkEventController * gtk_search_entry_get_key_controller (GtkSearchEntry *entry);
 
