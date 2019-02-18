@@ -641,6 +641,9 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
   gboolean handled;
 
+  if (!gtk_widget_get_mapped (GTK_WIDGET (bar)))
+    return GDK_EVENT_PROPAGATE;
+
   if (priv->reveal_child)
     return GDK_EVENT_PROPAGATE;
 
