@@ -69,16 +69,153 @@
 
 #include "gtkeditable.h"
 #include "gtkentrybuffer.h"
-#include "gtkeditableprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
 G_DEFINE_INTERFACE (GtkEditable, gtk_editable, GTK_TYPE_WIDGET)
 
+static GQuark quark_editable_data;
+
+static GtkEditable *
+get_delegate (GtkEditable *editable)
+{
+  GtkEditableInterface *iface = GTK_EDITABLE_GET_IFACE (editable);
+
+  if (iface->get_delegate)
+    return iface->get_delegate (editable);
+
+  return NULL;
+}
+
+static void
+gtk_editable_default_do_insert_text (GtkEditable *editable,
+                                     const char  *text,
+                                     int          length,
+                                     int         *position)
+{
+  g_signal_emit_by_name (editable, "insert-text", text, length, position);
+}
+
+#define warn_no_delegate(func) \
+  g_critical ("GtkEditable %s: default implementation called without a delegate", func);
+
+static void
+gtk_editable_default_insert_text (GtkEditable *editable,
+                                  const char  *text,
+                                  int          length,
+                                  int         *position)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    gtk_editable_insert_text (delegate, text, length, position);
+  else
+    warn_no_delegate ("insert_text");
+}
+
+static void
+gtk_editable_default_do_delete_text (GtkEditable *editable,
+                                     int          start_pos,
+                                     int          end_pos)
+{
+  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos);
+}
+
+static void
+gtk_editable_default_delete_text (GtkEditable *editable,
+                                  int          start_pos,
+                                  int          end_pos)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    gtk_editable_delete_text (delegate, start_pos, end_pos);
+  else
+    warn_no_delegate ("delete_text");
+}
+
+static const char *
+gtk_editable_default_get_text (GtkEditable *editable)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    return gtk_editable_get_text (delegate);
+  else
+    warn_no_delegate ("get_text");
+
+  return NULL;
+}
+
+static void
+gtk_editable_default_set_selection_bounds (GtkEditable *editable,
+                                           int          start_pos,
+                                           int          end_pos)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    gtk_editable_select_region (delegate, start_pos, end_pos);
+  else
+    warn_no_delegate ("select_region");
+}
+
+static gboolean
+gtk_editable_default_get_selection_bounds (GtkEditable *editable,
+                                           int         *start_pos,
+                                           int         *end_pos)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    return gtk_editable_get_selection_bounds (delegate, start_pos, end_pos);
+  else
+    warn_no_delegate ("select_region");
+
+  return FALSE;
+}
+
+static void
+gtk_editable_default_set_position (GtkEditable *editable,
+                                   int          position)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    gtk_editable_set_position (delegate, position);
+  else
+    warn_no_delegate ("select_region");
+}
+
+static int
+gtk_editable_default_get_position (GtkEditable *editable)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    return gtk_editable_get_position (delegate);
+  else
+    warn_no_delegate ("select_region");
+
+  return 0;
+}
+
 static void
 gtk_editable_default_init (GtkEditableInterface *iface)
 {
+  quark_editable_data = g_quark_from_static_string ("GtkEditable-data");
+
+  iface->insert_text = gtk_editable_default_insert_text;
+  iface->delete_text = gtk_editable_default_delete_text;
+  iface->get_text = gtk_editable_default_get_text;
+  iface->do_insert_text = gtk_editable_default_do_insert_text;
+  iface->do_delete_text = gtk_editable_default_do_delete_text;
+  iface->get_selection_bounds = gtk_editable_default_get_selection_bounds;
+  iface->set_selection_bounds = gtk_editable_default_set_selection_bounds;
+  iface->get_position = gtk_editable_default_get_position;
+  iface->set_position = gtk_editable_default_set_position;
+
   /**
    * GtkEditable::insert-text:
    * @editable: the object which received the signal
@@ -606,7 +743,6 @@ gtk_editable_get_max_width_chars (GtkEditable *editable)
   return max_width_chars;
 }
 
-
 /**
  * gtk_editable_set_max_width_chars:
  * @editable: a #GtkEditable
@@ -623,18 +759,42 @@ gtk_editable_set_max_width_chars (GtkEditable *editable,
   g_object_set (editable, "max-width-chars", n_chars, NULL);
 }
 
-/* Delegate setup helpers
+/**
+ * gtk_editable_install_properties:
+ * @object_class: a #GObjectClass
+ * @first_prop: property ID to use for the first property
+ *
+ * Installs the GtkEditable properties for @class.
+ *
+ * This is a helper function that should be called in class_init,
+ * after installing your own properties.
+ *
+ * To handle the properties in your set_property and get_property
+ * functions, you can either use gtk_editable_delegate_set_property()
+ * and gtk_editable_delegate_get_property() (if you are using a delegate),
+ * or remember the @first_prop offset and add it to the values in the
+ * #GtkEditableProperties enumeration to get the property IDs for these
+ * properties.
+ * 
+ * Returns: the number of properties that were installed
  */
-void
-gtk_editable_install_properties (GObjectClass *class)
+guint
+gtk_editable_install_properties (GObjectClass *object_class,
+                                 guint         first_prop)
 {
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_TEXT, "text");
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_CURSOR_POSITION, "cursor-position");
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_SELECTION_BOUND, "selection-bound");
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_EDITABLE, "editable");
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_WIDTH_CHARS, "width-chars");
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_MAX_WIDTH_CHARS, "max-width-chars");
-  g_object_class_override_property (class, GTK_EDITABLE_PROP_XALIGN, "xalign");
+  g_type_set_qdata (G_TYPE_FROM_CLASS (object_class),
+                    quark_editable_data,
+                    GUINT_TO_POINTER (first_prop));
+
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_TEXT, "text");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_CURSOR_POSITION, "cursor-position");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_SELECTION_BOUND, "selection-bound");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_EDITABLE, "editable");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_WIDTH_CHARS, "width-chars");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_MAX_WIDTH_CHARS, "max-width-chars");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_XALIGN, "xalign");
+
+  return GTK_EDITABLE_NUM_PROPERTIES;
 }
 
 static void
@@ -656,104 +816,56 @@ delegate_notify (GObject    *object,
     g_object_notify (data, pspec->name);
 }
 
+/**
+ * gtk_editable_init_delegate:
+ * @editable: a #GtkEditable
+ *
+ * Sets up a delegate for #GtkEditable, assuming that the
+ * get_delegate vfunc in the #GtkEditable interface has been
+ * set up for the @editable's type.
+ *
+ * This is a helper function that should be called in instance init,
+ * after creating the delegate object.
+ */
 void
-gtk_editable_set_delegate (GtkEditable *editable,
-                           GtkEditable *delegate)
+gtk_editable_init_delegate (GtkEditable *editable)
 {
-  g_object_set_data (G_OBJECT (editable), "gtk-editable-delegate", delegate);
+  GtkEditable *delegate = get_delegate (editable);
   g_signal_connect (delegate, "notify", G_CALLBACK (delegate_notify), editable);
   g_signal_connect (delegate, "changed", G_CALLBACK (delegate_changed), editable);
 }
 
-static GtkEditable *
-get_delegate (GtkEditable *editable)
-{
-  return GTK_EDITABLE (g_object_get_data (G_OBJECT (editable), "gtk-editable-delegate"));
-}
-
-static void
-delegate_do_insert_text (GtkEditable *editable,
-                         const char  *text,
-                         int          length,
-                         int         *position)
-{
-  g_signal_emit_by_name (editable, "insert-text", text, length, position);
-}
-
-static void
-delegate_real_insert_text (GtkEditable *editable,
-                           const char  *text,
-                           int          length,
-                           int         *position)
-{
-  gtk_editable_insert_text (get_delegate (editable), text, length, position);
-}
-
-static void
-delegate_do_delete_text (GtkEditable *editable,
-                         int          start_pos,
-                         int          end_pos)
-{
-  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos); 
-}
-
-static void
-delegate_real_delete_text (GtkEditable *editable,
-                           int          start_pos,
-                           int          end_pos)
-{
-  gtk_editable_delete_text (get_delegate (editable), start_pos, end_pos);
-}
-
-static const char *
-delegate_get_text (GtkEditable *editable)
-{
-  return gtk_editable_get_text (get_delegate (editable));
-}
-
-static void
-delegate_select_region (GtkEditable *editable,
-                        int          start_pos,
-                        int          end_pos)
-{
-  gtk_editable_select_region (get_delegate (editable), start_pos, end_pos);
-}
-
-static gboolean
-delegate_get_selection_bounds (GtkEditable *editable,
-                               int         *start_pos,
-                               int         *end_pos)
-{
-  return gtk_editable_get_selection_bounds (get_delegate (editable), start_pos, end_pos);
-}
-
-static void
-delegate_set_position (GtkEditable *editable,
-                       int          position)
-{
-  gtk_editable_set_position (get_delegate (editable), position);
-}
-
-static int
-delegate_get_position (GtkEditable *editable)
-{
-  return gtk_editable_get_position (get_delegate (editable));
-}
-
+/**
+ * gtk_editable_finish_delegate:
+ * @editable: a #GtkEditable
+ *
+ * Undoes the setup done by gtk_editable_init_delegate().
+ *
+ * This is a helper function that should be called from dispose,
+ * before removing the delegate object.
+ */
 void
-gtk_editable_delegate_iface_init (GtkEditableInterface *iface)
+gtk_editable_finish_delegate (GtkEditable *editable)
 {
-  iface->do_insert_text = delegate_do_insert_text;
-  iface->do_delete_text = delegate_do_delete_text;
-  iface->insert_text = delegate_real_insert_text;
-  iface->delete_text = delegate_real_delete_text;
-  iface->get_text = delegate_get_text;
-  iface->set_selection_bounds = delegate_select_region;
-  iface->get_selection_bounds = delegate_get_selection_bounds;
-  iface->set_position = delegate_set_position;
-  iface->get_position = delegate_get_position;
+  GtkEditable *delegate = get_delegate (editable);
+  g_signal_handlers_disconnect_by_func (delegate, delegate_notify, editable);
+  g_signal_handlers_disconnect_by_func (delegate, delegate_changed, editable);
 }
 
+/**
+ * gtk_editable_set_property:
+ * @object: a #GObject
+ * @prop_id: a property ID
+ * @value: value to set
+ * @pspec: the #GParamSpec for the property
+ *
+ * Sets a property on the #GtkEditable delegate for @object.
+ *
+ * This is a helper function that should be called in set_property,
+ * before handling your own properties.
+ * 
+ * Returns: %TRUE if the property was found
+ */
 gboolean
 gtk_editable_delegate_set_property (GObject      *object,
                                     guint         prop_id,
@@ -761,8 +873,15 @@ gtk_editable_delegate_set_property (GObject      *object,
                                     GParamSpec   *pspec)
 {
   GtkEditable *delegate = get_delegate (GTK_EDITABLE (object));
+  GType type = G_TYPE_FROM_INSTANCE (object);
+  guint first_prop;
 
-  switch (prop_id)
+  first_prop = GPOINTER_TO_UINT (g_type_get_qdata (type, quark_editable_data));
+
+  if (prop_id < first_prop)
+    return FALSE;
+
+  switch (prop_id - first_prop)
     {
     case GTK_EDITABLE_PROP_TEXT:
       gtk_editable_set_text (delegate, g_value_get_string (value));
@@ -791,6 +910,20 @@ gtk_editable_delegate_set_property (GObject      *object,
   return TRUE;
 }
 
+/**
+ * gtk_editable_get_property:
+ * @object: a #GObject
+ * @prop_id: a property ID
+ * @value: value to set
+ * @pspec: the #GParamSpec for the property
+ *
+ * Gets a property of the #GtkEditable delegate for @object.
+ *
+ * This is helper function that should be called in get_property,
+ * before handling your own properties.
+ * 
+ * Returns: %TRUE if the property was found
+ */
 gboolean
 gtk_editable_delegate_get_property (GObject    *object,
                                     guint       prop_id,
@@ -799,8 +932,15 @@ gtk_editable_delegate_get_property (GObject    *object,
 {
   GtkEditable *delegate = get_delegate (GTK_EDITABLE (object));
   int cursor_position, selection_bound;
+  GType type = G_TYPE_FROM_INSTANCE (object);
+  guint first_prop;
 
-  switch (prop_id)
+  first_prop = GPOINTER_TO_UINT (g_type_get_qdata (type, quark_editable_data));
+
+  if (prop_id < first_prop)
+    return FALSE;
+
+  switch (prop_id - first_prop)
     {
     case GTK_EDITABLE_PROP_TEXT:
       g_value_set_string (value, gtk_editable_get_text (delegate));
@@ -838,3 +978,5 @@ gtk_editable_delegate_get_property (GObject    *object,
 
   return TRUE;
 }
+
+

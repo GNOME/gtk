@@ -79,6 +79,7 @@ struct _GtkEditableInterface
   int      (* get_position)         (GtkEditable    *editable);
   void     (* set_position)         (GtkEditable    *editable,
                                      int             position);
+  GtkEditable * (* get_delegate)    (GtkEditable    *editable);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -143,6 +144,38 @@ int      gtk_editable_get_max_width_chars  (GtkEditable *editable);
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_set_max_width_chars  (GtkEditable *editable,
                                             int          n_chars);
+
+/* api for implementations */
+
+typedef enum {
+  GTK_EDITABLE_PROP_TEXT,
+  GTK_EDITABLE_PROP_CURSOR_POSITION,
+  GTK_EDITABLE_PROP_SELECTION_BOUND,
+  GTK_EDITABLE_PROP_EDITABLE,
+  GTK_EDITABLE_PROP_WIDTH_CHARS,
+  GTK_EDITABLE_PROP_MAX_WIDTH_CHARS,
+  GTK_EDITABLE_PROP_XALIGN,
+  GTK_EDITABLE_NUM_PROPERTIES
+} GtkEditableProperties;
+
+GDK_AVAILABLE_IN_ALL
+guint        gtk_editable_install_properties    (GObjectClass *object_class,
+                                                 guint         first_prop);
+GDK_AVAILABLE_IN_ALL
+void         gtk_editable_init_delegate         (GtkEditable  *editable);
+GDK_AVAILABLE_IN_ALL
+void         gtk_editable_finish_delegate       (GtkEditable  *editable);
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_editable_delegate_set_property (GObject      *object,
+                                                 guint         prop_id,
+                                                 const GValue *value,
+                                                 GParamSpec   *pspec);
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_editable_delegate_get_property (GObject      *object,
+                                                 guint         prop_id,
+                                                 GValue       *value,
+                                                 GParamSpec   *pspec);
+
 
 G_END_DECLS
 
