@@ -650,6 +650,9 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
       return GDK_EVENT_PROPAGATE;
     }
 
+  if (gtk_search_entry_should_trigger (keyval, state))
+    gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
+
   if (GTK_IS_SEARCH_ENTRY (priv->entry))
     {
       /* The search entry was told to listen to events from the search bar, so
@@ -695,9 +698,6 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
       if ((res && buffer_changed) || preedit_changed)
         handled = GDK_EVENT_STOP;
     }
-
-  if (handled == GDK_EVENT_STOP)
-    gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
 
   return handled;
 }
