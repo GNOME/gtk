@@ -16424,6 +16424,7 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
   GtkTreePath *path;
   GtkTreeModel *model;
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  const char *transformed_str = NULL;
 
   if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (widget),
 					  &x, &y,
@@ -16446,7 +16447,8 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
 
   g_value_unset (&value);
 
-  if (!g_value_get_string (&transformed))
+  transformed_str = g_value_get_string (&transformed);
+  if (transformed_str == NULL || *transformed_str == '\0')
     {
       g_value_unset (&transformed);
       gtk_tree_path_free (path);
@@ -16454,7 +16456,7 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
       return FALSE;
     }
 
-  gtk_tooltip_set_markup (tooltip, g_value_get_string (&transformed));
+  gtk_tooltip_set_markup (tooltip, transformed_str);
   gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
 
   gtk_tree_path_free (path);
