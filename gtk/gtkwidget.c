@@ -47,8 +47,8 @@
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkintl.h"
-#include "gtkmarshalers.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
@@ -61,6 +61,7 @@
 #include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltipprivate.h"
+#include "gtktransform.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 #include "gtkwidgetpaintableprivate.h"
@@ -4164,15 +4165,20 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
                           int                  baseline)
 {
-  graphene_matrix_t transform;
+  GtkTransform *transform;
 
-  graphene_matrix_init_translate (&transform,
-                                  &GRAPHENE_POINT3D_INIT (allocation->x, allocation->y, 0));
+  if (allocation->x || allocation->y)
+    transform = gtk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
+  else
+    transform = NULL;
+
   gtk_widget_allocate (widget,
                        allocation->width,
                        allocation->height,
                        baseline,
-                       &transform);
+                       transform);
+
+  gtk_transform_unref (transform);
 }
 
 /**
@@ -4181,7 +4187,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
  * @width: New width of @widget
  * @height: New height of @widget
  * @baseline: New baseline of @widget, or -1
- * @transform: Transformation to be applied to @widget
+ * @transform: (transfer none) (allow-none): Transformation to be applied to @widget
  *
  * This function is only used by #GtkWidget subclasses, to assign a size,
  * position and (optionally) baseline to their child widgets.
@@ -4193,11 +4199,11 @@ gtk_widget_size_allocate (GtkWidget           *widget,
  * For a version that does not take a transform, see gtk_widget_size_allocate()
  */
 void
-gtk_widget_allocate (GtkWidget               *widget,
-                     int                      width,
-                     int                      height,
-                     int                      baseline,
-                     const graphene_matrix_t *transform)
+gtk_widget_allocate (GtkWidget    *widget,
+                     int           width,
+                     int           height,
+                     int           baseline,
+                     GtkTransform *transform)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
@@ -4209,11 +4215,13 @@ gtk_widget_allocate (GtkWidget               *widget,
   gint min_width, min_height;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
+  graphene_matrix_t transform_matrix;
+#ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
+#endif
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
-  g_return_if_fail (transform != NULL);
 
   gtk_widget_push_verify_invariants (widget);
 
@@ -4243,11 +4251,12 @@ gtk_widget_allocate (GtkWidget               *widget,
   baseline_changed = priv->allocated_size_baseline != baseline;
   size_changed = (priv->allocated_width != width ||
                   priv->allocated_height != height);
-  transform_changed = memcmp (&priv->allocated_transform,
-                              transform,
-                              sizeof (graphene_matrix_t)) != 0;
+  transform_changed = !gtk_transform_equal (priv->allocated_transform, transform);
 
-  graphene_matrix_init_from_matrix (&priv->allocated_transform, transform);
+  /* order is important, sometimes priv->allocated_transform == transform */
+  gtk_transform_ref (transform);
+  gtk_transform_unref (priv->allocated_transform);
+  priv->allocated_transform = transform;
   priv->allocated_width = width;
   priv->allocated_height = height;
   priv->allocated_size_baseline = baseline;
@@ -4337,7 +4346,8 @@ gtk_widget_allocate (GtkWidget               *widget,
     baseline -= margin.top + border.top + padding.top;
 
   graphene_matrix_init_translate (&priv->transform, &GRAPHENE_POINT3D_INIT (adjusted.x, adjusted.y, 0));
-  graphene_matrix_multiply (&priv->transform, transform, &priv->transform);
+  gtk_transform_to_matrix (transform, &transform_matrix);
+  graphene_matrix_multiply (&priv->transform, &transform_matrix, &priv->transform);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -6217,7 +6227,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
 
   if (!visible)
     {
-      graphene_matrix_init_identity (&priv->allocated_transform);
+      g_clear_pointer (&priv->allocated_transform, gtk_transform_unref);
       priv->allocated_width = 0;
       priv->allocated_height = 0;
       priv->allocated_size_baseline = 0;
@@ -11929,7 +11939,7 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
                            priv->allocated_width,
                            priv->allocated_height,
                            priv->allocated_size_baseline,
-                           &priv->allocated_transform);
+                           priv->allocated_transform);
     }
   else if (priv->alloc_needed_on_child)
     {
