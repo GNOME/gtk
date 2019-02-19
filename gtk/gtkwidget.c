@@ -4446,15 +4446,6 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
   return widget_a;
 }
 
-void
-gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
-                                          int       *origin_x,
-                                          int       *origin_y)
-{
-  *origin_x = graphene_matrix_get_value (&widget->priv->transform, 3, 0);
-  *origin_y = graphene_matrix_get_value (&widget->priv->transform, 3, 1);
-}
-
 /**
  * gtk_widget_translate_coordinates:
  * @src_widget:  a #GtkWidget
