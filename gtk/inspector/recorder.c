@@ -901,6 +901,14 @@ populate_render_node_properties (GtkListStore  *store,
 
     case GSK_TRANSFORM_NODE:
       {
+        static const char * category_names[] = {
+          [GSK_MATRIX_CATEGORY_UNKNOWN] = "unknown",
+          [GSK_MATRIX_CATEGORY_DEGENERATE] = "degenerate",
+          [GSK_MATRIX_CATEGORY_LINEAR] = "linear",
+          [GSK_MATRIX_CATEGORY_2D_SCALE] = "2D scale",
+          [GSK_MATRIX_CATEGORY_2D_TRANSLATE] = "2D transform",
+          [GSK_MATRIX_CATEGORY_IDENTITY] = "identity"
+        };
         float f[16];
         guint i;
 
@@ -913,6 +921,7 @@ populate_render_node_properties (GtkListStore  *store,
             add_text_row (store, i == 0 ? "Matrix" : "", row_string);
             g_free (row_string);
           }
+        add_text_row (store, "Category", category_names[gsk_transform_node_get_category (node)]);
       }
       break;
 

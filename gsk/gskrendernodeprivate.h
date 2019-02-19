@@ -6,6 +6,44 @@
 
 G_BEGIN_DECLS
 
+/*<private>
+ * GskMatrixCategory:
+ * @GSK_MATRIX_CATEGORY_UNKNOWN: The category of the matrix has not been
+ *     determined.
+ * @GSK_MATRIX_CATEGORY_ANY: Analyzing the matrix concluded that it does
+ *     not fit in any other category.
+ * @GSK_MATRIX_CATEGORY_LINEAR: The matrix is linear independant and
+ *     should therefor be invertible. Note that this is not guaranteed
+ *     to actually be true due to rounding errors when inverting.
+ * @GSK_MATRIX_CATEGORY_2D: The matrix is a 2D matrix. This is equivalent
+ *     to graphene_matrix_is_2d() returning %TRUE. In particular, this
+ *     means that Cairo can deal with the matrix.
+ * @GSK_MATRIX_CATEGORY_2D_SCALE: The matrix is a combination of 2D scale
+ *     and 2D translation operations. In particular, this means that any
+ *     rectangle can be transformed exactly using this matrix.
+ * @GSK_MATRIX_CATEGORY_2D_TRANSLATE: The matrix is a 2D translation only.
+ * @GSK_MATRIX_CATEGORY_IDENTITY: The matrix is the identity matrix.
+ *
+ * The categories of matrices relevant for GSK and GTK. Note that any
+ * category includes matrices of all later categories. So if you want
+ * to for example check if a matrix is a 2D matrix,
+ * `category >= GSK_MATRIX_CATEGORY_2D` is the way to do this.
+ *
+ * Also keep in mind that rounding errors may cause matrices to not
+ * conform to their categories. Otherwise, matrix operations done via
+ * mutliplication will not worsen categories. So for the matrix
+ * multiplication `C = A * B`, `category(C) = MIN (category(A), category(B))`.
+ */
+typedef enum
+{
+  GSK_MATRIX_CATEGORY_UNKNOWN,
+  GSK_MATRIX_CATEGORY_DEGENERATE,
+  GSK_MATRIX_CATEGORY_LINEAR,
+  GSK_MATRIX_CATEGORY_2D_SCALE,
+  GSK_MATRIX_CATEGORY_2D_TRANSLATE,
+  GSK_MATRIX_CATEGORY_IDENTITY
+} GskMatrixCategory;
+
 typedef struct _GskRenderNodeClass GskRenderNodeClass;
 
 #define GSK_IS_RENDER_NODE_TYPE(node,type) (GSK_IS_RENDER_NODE (node) && (node)->node_class->node_type == (type))
@@ -57,6 +95,11 @@ GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType          typ
 
 GskRenderNode * gsk_cairo_node_new_for_surface   (const graphene_rect_t    *bounds,
                                                   cairo_surface_t          *surface);
+
+GskRenderNode *         gsk_transform_node_new_with_category    (GskRenderNode                  *child,
+                                                                 const graphene_matrix_t        *transform,
+                                                                 GskMatrixCategory               category);
+GskMatrixCategory       gsk_transform_node_get_category         (GskRenderNode                  *node);
 
 GskRenderNode * gsk_text_node_new_with_bounds     (PangoFont                *font,
                                                    PangoGlyphString         *glyphs,
