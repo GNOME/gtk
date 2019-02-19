@@ -2170,6 +2170,22 @@ _gdk_quartz_window_update_has_shadow (GdkWindowImplQuartz *impl)
 }
 
 static void
+_gdk_quartz_window_set_collection_behavior (NSWindow *nswindow,
+                                            GdkWindowTypeHint hint)
+{
+  /* Fullscreen Collection Behavior */
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_NORMAL:
+      [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+      break;
+    default:
+      [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenAuxiliary];
+      break;
+    }
+}
+
+static void
 gdk_quartz_window_set_type_hint (GdkWindow        *window,
                                  GdkWindowTypeHint hint)
 {
@@ -2188,6 +2204,8 @@ gdk_quartz_window_set_type_hint (GdkWindow        *window,
     return;
 
   _gdk_quartz_window_update_has_shadow (impl);
+  if (impl->toplevel)
+    _gdk_quartz_window_set_collection_behavior (impl->toplevel, hint);
   [impl->toplevel setLevel: window_type_hint_to_level (hint)];
   [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (hint)];
 }
