@@ -278,7 +278,7 @@
                              screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
-  [self setDelegate:self];
+  [self setDelegate:(id<NSWindowDelegate>)self];
   [self setReleasedWhenClosed:YES];
 
   return self;
