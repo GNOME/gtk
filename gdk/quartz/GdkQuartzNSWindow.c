@@ -384,40 +384,34 @@
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
   if (gdk_quartz_osx_version () >= GDK_OSX_MOJAVE)
-    {
-      return [super convertPointToScreen: point];
-    }
+    return [super convertPointToScreen: point];
 #endif
-  if (gdk_quartz_osx_version () >= GDK_OSX_LION)
-    {
-      NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
-      NSRect outrect = [self convertRectToScreen: inrect];
-      return (NSPoint)((CGRect)outrect).origin;
-    }
-
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  return [self convertBaseToScreen:point];
+  if (gdk_quartz_osx_version () < GDK_OSX_LION)
+    return [self convertBaseToScreen:point];
 #endif
+  {
+    NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
+    NSRect outrect = [self convertRectToScreen: inrect];
+    return outrect.origin;
+  }
 }
 
 - (NSPoint)convertPointFromScreen:(NSPoint)point
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
   if (gdk_quartz_osx_version () >= GDK_OSX_MOJAVE)
-    {
-      return [super convertPointFromScreen: point];
-    }
+    return [super convertPointFromScreen: point];
 #endif
-  if (gdk_quartz_osx_version () >= GDK_OSX_LION)
-    {
-      NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
-      NSRect outrect = [self convertRectFromScreen: inrect];
-      return (NSPoint)((CGRect)outrect).origin;
-    }
-
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-  return [self convertScreenToBase:point];
+  if (gdk_quartz_osx_version () < GDK_OSX_LION)
+    return [self convertScreenToBase:point];
 #endif
+  {
+    NSRect inrect = NSMakeRect (point.x, point.y, 0.0, 0.0);
+    NSRect outrect = [self convertRectFromScreen: inrect];
+    return outrect.origin;
+  }
 }
 
 - (BOOL)trackManualMove
