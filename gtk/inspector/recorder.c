@@ -899,8 +899,24 @@ populate_render_node_properties (GtkListStore  *store,
       add_float_row (store, "y offset", gsk_offset_node_get_y_offset (node));
       break;
 
-    case GSK_NOT_A_RENDER_NODE:
     case GSK_TRANSFORM_NODE:
+      {
+        float f[16];
+        guint i;
+
+        graphene_matrix_to_float (gsk_transform_node_peek_transform (node), f);
+        for (i = 0; i < 4; i++)
+          {
+            char *row_string = g_strdup_printf ("%.2f, %.2f, %.2f, %.2f",
+                                                f[4 * i], f[4 * i + 1],
+                                                f[4 * i + 2], f[4 * i + 3]);
+            add_text_row (store, i == 0 ? "Matrix" : "", row_string);
+            g_free (row_string);
+          }
+      }
+      break;
+
+    case GSK_NOT_A_RENDER_NODE:
     default:
       break;
     }
