@@ -601,6 +601,23 @@
         to pages. You can easily do that yourself.
       </para>
     </section>
+
+    <section>
+      <title>Adapt to changes in the API of GtkEntry and GtkSearchEntry</title>
+      <para>
+        The GtkEditable has been made more useful, and the core functionality of
+        GtkEntry has been broken out as a GtkText widget. GtkEntry, GtkSearchEntry,
+        GtkSpinButton and the new GtkPasswordEntry now use a GtkText widget internally
+        and implement GtkEditable. In particular, this means that it is no longer
+        possible to use GtkEntry API such as gtk_entry_grab_focus_without_selecting()
+        on a search entry.
+      </para>
+      <para>
+        Use GtkEditable API for editable functionality, and widget-specific APIs for
+        things that go beyond the common interface. For password entries, use
+        GtkPasswordEntry.
+      </para>
+    </section>
   </section>
 
 </chapter>
