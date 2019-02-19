@@ -285,7 +285,7 @@ enum {
   CHILD_PROP_DETACHABLE
 };
 
-#define GTK_NOTEBOOK_PAGE(_glist_)         ((GtkNotebookPage *)(_glist_)->data)
+#define GTK_NOTEBOOK_PAGE_FROM_LIST(_glist_)         ((GtkNotebookPage *)(_glist_)->data)
 
 #define NOTEBOOK_IS_TAB_LABEL_PARENT(_notebook_,_page_) \
   (g_object_get_data (G_OBJECT ((_page_)->tab_label), "notebook") == _notebook_)
@@ -3833,7 +3833,7 @@ page_visible_cb (GtkWidget  *child,
             }
 
           if (next)
-            gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next));
+            gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE_FROM_LIST (next));
         }
       gtk_widget_set_visible (priv->header_widget, priv->show_tabs && gtk_notebook_has_current_page (notebook));
     }
@@ -3862,7 +3862,7 @@ measure_tab (GtkGizmo       *gizmo,
 
   for (l = priv->children; l; l = l->next)
     {
-      GtkNotebookPage *p = GTK_NOTEBOOK_PAGE (l);
+      GtkNotebookPage *p = GTK_NOTEBOOK_PAGE_FROM_LIST (l);
       if (p->tab_widget == GTK_WIDGET (gizmo))
         {
           page = p;
@@ -3893,7 +3893,7 @@ allocate_tab (GtkGizmo *gizmo,
 
   for (l = priv->children; l; l = l->next)
     {
-      GtkNotebookPage *p = GTK_NOTEBOOK_PAGE (l);
+      GtkNotebookPage *p = GTK_NOTEBOOK_PAGE_FROM_LIST (l);
       if (p->tab_widget == GTK_WIDGET (gizmo))
         {
           page = p;
@@ -3957,7 +3957,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   priv->children = g_list_insert (priv->children, page, position);
 
   if (position < nchildren)
-    sibling = GTK_NOTEBOOK_PAGE (g_list_nth (priv->children, position))->tab_widget;
+    sibling = GTK_NOTEBOOK_PAGE_FROM_LIST (g_list_nth (priv->children, position))->tab_widget;
   else if (priv->arrow_widget[ARROW_LEFT_AFTER])
     sibling = priv->arrow_widget[ARROW_LEFT_AFTER];
   else
@@ -4161,7 +4161,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     {
       priv->cur_page = NULL;
       if (next_list && !destroying)
-        gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next_list));
+        gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE_FROM_LIST (next_list));
       if (priv->operation == DRAG_OPERATION_REORDER && !priv->remove_in_detach)
         gtk_notebook_stop_reorder (notebook);
     }
@@ -5324,7 +5324,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child));
-  GtkNotebookPage *page = GTK_NOTEBOOK_PAGE (list);
+  GtkNotebookPage *page = GTK_NOTEBOOK_PAGE_FROM_LIST (list);
   gboolean child_has_focus;
 
   if (priv->cur_page == page || !gtk_widget_get_visible (GTK_WIDGET (child)))
@@ -5970,7 +5970,7 @@ gtk_notebook_set_current_page (GtkNotebook *notebook,
 
   list = g_list_nth (priv->children, page_num);
   if (list)
-    gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (list));
+    gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE_FROM_LIST (list));
 
   g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_PAGE]);
 }
@@ -6000,7 +6000,7 @@ gtk_notebook_next_page (GtkNotebook *notebook)
   if (!list)
     return;
 
-  gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (list));
+  gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE_FROM_LIST (list));
 }
 
 /**
@@ -6028,7 +6028,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
   if (!list)
     return;
 
-  gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (list));
+  gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE_FROM_LIST (list));
 }
 
 /* Public GtkNotebook/Tab Style Functions
@@ -6459,10 +6459,10 @@ gtk_notebook_get_tab_label (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_val_if_fail (list != NULL, NULL);
 
-  if (GTK_NOTEBOOK_PAGE (list)->default_tab)
+  if (GTK_NOTEBOOK_PAGE_FROM_LIST (list)->default_tab)
     return NULL;
 
-  return GTK_NOTEBOOK_PAGE (list)->tab_label;
+  return GTK_NOTEBOOK_PAGE_FROM_LIST (list)->tab_label;
 }
 
 /**
@@ -6621,10 +6621,10 @@ gtk_notebook_get_menu_label (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_val_if_fail (list != NULL, NULL);
 
-  if (GTK_NOTEBOOK_PAGE (list)->default_menu)
+  if (GTK_NOTEBOOK_PAGE_FROM_LIST (list)->default_menu)
     return NULL;
 
-  return GTK_NOTEBOOK_PAGE (list)->menu_label;
+  return GTK_NOTEBOOK_PAGE_FROM_LIST (list)->menu_label;
 }
 
 /**
@@ -6750,7 +6750,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
     gtk_notebook_menu_item_recreate (notebook, list);
 
   if (list->prev)
-    sibling = gtk_widget_get_css_node (GTK_NOTEBOOK_PAGE (list->prev)->tab_widget);
+    sibling = gtk_widget_get_css_node (GTK_NOTEBOOK_PAGE_FROM_LIST (list->prev)->tab_widget);
   else if (priv->arrow_widget[ARROW_RIGHT_BEFORE])
     sibling = gtk_widget_get_css_node (priv->arrow_widget[ARROW_RIGHT_BEFORE]);
   else if (priv->arrow_widget[ARROW_LEFT_BEFORE])
@@ -6815,9 +6815,9 @@ gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
   g_return_if_fail (list != NULL);
 
   if (expand)
-    *expand = GTK_NOTEBOOK_PAGE (list)->expand;
+    *expand = GTK_NOTEBOOK_PAGE_FROM_LIST (list)->expand;
   if (fill)
-    *fill = GTK_NOTEBOOK_PAGE (list)->fill;
+    *fill = GTK_NOTEBOOK_PAGE_FROM_LIST (list)->fill;
 }
 
 /**
@@ -6962,7 +6962,7 @@ gtk_notebook_get_tab_reorderable (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_val_if_fail (list != NULL, FALSE);
 
-  return GTK_NOTEBOOK_PAGE (list)->reorderable;
+  return GTK_NOTEBOOK_PAGE_FROM_LIST (list)->reorderable;
 }
 
 /**
@@ -6988,7 +6988,7 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_if_fail (list != NULL);
 
-  page = GTK_NOTEBOOK_PAGE (list);
+  page = GTK_NOTEBOOK_PAGE_FROM_LIST (list);
   reorderable = reorderable != FALSE;
 
   if (page->reorderable != reorderable)
@@ -7025,7 +7025,7 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_val_if_fail (list != NULL, FALSE);
 
-  return GTK_NOTEBOOK_PAGE (list)->detachable;
+  return GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable;
 }
 
 /**
@@ -7092,9 +7092,9 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
 
   detachable = detachable != FALSE;
 
-  if (GTK_NOTEBOOK_PAGE (list)->detachable != detachable)
+  if (GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable != detachable)
     {
-      GTK_NOTEBOOK_PAGE (list)->detachable = detachable;
+      GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable = detachable;
       child_notify (notebook, child, "detachable");
     }
 }
