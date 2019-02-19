@@ -125,29 +125,6 @@ update_header (GtkListBoxRow *row,
     }
 }
 
-static gint
-sort_list (GtkListBoxRow *row1,
-           GtkListBoxRow *row2,
-           gpointer       userdata)
-{
-  gint left = 0; gint right = 0;
-
-
-  if (row1)
-    left = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row1), "child-index"));
-
-  if (row2)
-    right = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row2), "child-index"));
-
-  if (left < right)
-    return  -1;
-
-  if (left == right)
-    return 0;
-
-  return 1;
-}
-
 static void
 gtk_stack_sidebar_row_selected (GtkListBox    *box,
                                 GtkListBoxRow *row,
@@ -185,7 +162,6 @@ gtk_stack_sidebar_init (GtkStackSidebar *sidebar)
   gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (priv->list));
 
   gtk_list_box_set_header_func (priv->list, update_header, sidebar, NULL);
-  gtk_list_box_set_sort_func (priv->list, sort_list, sidebar, NULL);
 
   g_signal_connect (priv->list, "row-selected",
                     G_CALLBACK (gtk_stack_sidebar_row_selected), sidebar);
