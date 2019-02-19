@@ -819,12 +819,16 @@ gtk_widget_real_pick (GtkWidget *widget,
        child;
        child = _gtk_widget_get_prev_sibling (child))
     {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
+      graphene_matrix_t inv;
       GtkWidget *picked;
-      double dx, dy;
+      graphene_point_t p;
 
-      gtk_widget_translate_coordinatesf (widget, child, x, y, &dx, &dy);
+      graphene_matrix_inverse (&priv->transform, &inv);
+      graphene_point_init (&p, x, y);
+      graphene_matrix_transform_point (&inv, &p, &p);
 
-      picked = gtk_widget_pick (child, dx, dy);
+      picked = gtk_widget_pick (child, p.x, p.y);
       if (picked)
         return picked;
     }
