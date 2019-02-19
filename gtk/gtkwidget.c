@@ -49,7 +49,7 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmatrix.h"
+#include "gtkmatrixprivate.h"
 #include "gtkmenu.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
@@ -4335,6 +4335,9 @@ gtk_widget_allocate (GtkWidget *widget,
   graphene_matrix_init_translate (&priv->transform, &GRAPHENE_POINT3D_INIT (adjusted.x, adjusted.y, 0));
   gtk_matrix_compute (transform, &computed);
   graphene_matrix_multiply (&priv->transform, &computed, &priv->transform);
+  priv->transform_category = gtk_matrix_categorize (transform);
+  if (adjusted.x || adjusted.y)
+    priv->transform_category = MIN (priv->transform_category, GSK_MATRIX_CATEGORY_2D_TRANSLATE);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -13453,20 +13456,15 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
                            GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
-  gboolean needs_transform;
 
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  needs_transform = !graphene_matrix_is_identity (&priv->transform);
-
-  if (needs_transform)
-    gtk_snapshot_push_transform (snapshot, &priv->transform);
+  gtk_snapshot_push_transform_with_category (snapshot, &priv->transform, priv->transform_category);
 
   gtk_widget_snapshot (child, snapshot);
 
-  if (needs_transform)
-    gtk_snapshot_pop (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 /**
