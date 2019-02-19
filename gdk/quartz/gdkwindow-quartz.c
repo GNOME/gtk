@@ -2170,6 +2170,37 @@ _gdk_quartz_window_update_has_shadow (GdkWindowImplQuartz *impl)
 }
 
 static void
+_gdk_quartz_window_set_collection_behavior (NSWindow *nswindow,
+                                            GdkWindowTypeHint hint)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+     if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+    {
+      /* Fullscreen Collection Behavior */
+      NSWindowCollectionBehavior behavior = [nswindow collectionBehavior];
+      switch (hint)
+        {
+        case GDK_WINDOW_TYPE_HINT_NORMAL:
+        case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+          behavior &= ~(NSWindowCollectionBehaviorFullScreenAuxiliary &
+                        NSWindowCollectionBehaviorFullScreenDisallowsTiling);
+          behavior |= (NSWindowCollectionBehaviorFullScreenPrimary |
+                       NSWindowCollectionBehaviorFullScreenAllowsTiling);
+
+          break;
+        default:
+          behavior &= ~(NSWindowCollectionBehaviorFullScreenPrimary &
+                        NSWindowCollectionBehaviorFullScreenAllowsTiling);
+          behavior |= (NSWindowCollectionBehaviorFullScreenAuxiliary |
+                       NSWindowCollectionBehaviorFullScreenDisallowsTiling);
+          break;
+        }
+      [nswindow setCollectionBehavior:behavior];
+    }
+#endif
+}
+
+static void
 gdk_quartz_window_set_type_hint (GdkWindow        *window,
                                  GdkWindowTypeHint hint)
 {
@@ -2188,6 +2219,8 @@ gdk_quartz_window_set_type_hint (GdkWindow        *window,
     return;
 
   _gdk_quartz_window_update_has_shadow (impl);
+  if (impl->toplevel)
+    _gdk_quartz_window_set_collection_behavior (impl->toplevel, hint);
   [impl->toplevel setLevel: window_type_hint_to_level (hint)];
   [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (hint)];
 }
@@ -2439,7 +2472,6 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
       if (new_mask == GDK_QUARTZ_BORDERLESS_WINDOW)
         {
           [impl->toplevel setContentSize:rect.size];
-          [impl->toplevel setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
         }
       else
         [impl->toplevel setFrame:rect display:YES];
