@@ -18,10 +18,16 @@
 #include "config.h"
 #include <string.h>
 #include "gtkimcontext.h"
+#include "gtkcomposetable.h"
+#include "gtkimcontextsimpleprivate.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+
+#define GDK_COMPILATION
+#include "gdkeventsprivate.h"
+#undef GDK_COMPILATION
 
 /**
  * SECTION:gtkimcontext
@@ -120,6 +126,7 @@ typedef struct _GtkIMContextPrivate GtkIMContextPrivate;
 struct _GtkIMContextPrivate {
   GtkInputPurpose purpose;
   GtkInputHints hints;
+  GdkSurface *surface;
 };
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
@@ -136,6 +143,7 @@ static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							gint            len,
 							gint            cursor_index);
 
+static void     gtk_im_context_finalize                (GObject        *obj);
 static void     gtk_im_context_get_property            (GObject        *obj,
                                                         guint           property_id,
                                                         GValue         *value,
@@ -210,6 +218,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gtk_im_context_finalize;
   object_class->get_property = gtk_im_context_get_property;
   object_class->set_property = gtk_im_context_set_property;
 
@@ -491,6 +500,49 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
   g_return_if_fail (str == NULL || g_utf8_validate (*str, -1, NULL));
 }
 
+static gboolean
+gtk_im_context_commit_event (GtkIMContext *context,
+                             GdkEventKey  *key)
+{
+  GdkEvent *event = (GdkEvent *)key;
+  guint keyval = 0;
+  GdkModifierType state = 0;
+  int i;
+  GdkModifierType no_text_input_mask;
+  gunichar ch;
+
+  if (event->any.type == GDK_KEY_RELEASE)
+        return FALSE;
+  g_assert (gdk_event_get_keyval (event, &keyval));
+  g_assert (gdk_event_get_state (event, &state));
+  for (i = 0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
+    if (keyval == gtk_compose_ignore[i])
+      return FALSE;
+  no_text_input_mask = gdk_keymap_get_modifier_mask (
+    gdk_display_get_keymap (gdk_display_get_default ()),
+    GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+  if (state & no_text_input_mask ||
+      keyval == GDK_KEY_Return ||
+      keyval == GDK_KEY_ISO_Enter ||
+      keyval == GDK_KEY_KP_Enter)
+    {
+      return FALSE;
+    }
+  ch = gdk_keyval_to_unicode (keyval);
+  if (ch != 0 && !g_unichar_iscntrl (ch))
+    {
+      gchar buf[10];
+      gint len;
+      g_return_val_if_fail (g_unichar_validate (ch), FALSE);
+      len = g_unichar_to_utf8 (ch, buf);
+      buf[len] = '\0';
+      g_signal_emit_by_name (context, "commit", &buf);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 /**
  * gtk_im_context_filter_keypress:
  * @context: a #GtkIMContext
@@ -507,10 +559,23 @@ gboolean
 gtk_im_context_filter_keypress (GtkIMContext *context,
 				GdkEventKey  *key)
 {
+  GtkIMContextPrivate *priv;
+  GdkEvent *event = (GdkEvent *)key;
   GtkIMContextClass *klass;
   
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
-  g_return_val_if_fail (key != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT (key), FALSE);
+
+  priv = gtk_im_context_get_instance_private (context);
+  g_set_object (&priv->surface, gdk_event_get_surface (event));
+
+  /* If the event has already been processed by another #GtkIMContext,
+   * the event won't be forwarded to #GtkIMContextSimple because
+   * the compose key, Unicode code point and emoji functions can be
+   * duplicated between #GtkIMContextSimple and another #GtkIMContext.
+   */
+  if ((event->any.flags & GDK_EVENT_INPUT_METHOD) != 0)
+    return gtk_im_context_commit_event (context, key);
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
   return klass->filter_keypress (context, key);
@@ -754,6 +819,16 @@ gtk_im_context_delete_surrounding (GtkIMContext *context,
 }
 
 static void
+gtk_im_context_finalize (GObject *obj)
+{
+  GtkIMContextPrivate *priv = gtk_im_context_get_instance_private (GTK_IM_CONTEXT (obj));
+
+  if (priv->surface)
+    g_clear_object (&priv->surface);
+  G_OBJECT_CLASS (gtk_im_context_parent_class)->finalize (obj);
+}
+
+static void
 gtk_im_context_get_property (GObject    *obj,
                              guint       property_id,
                              GValue     *value,
@@ -803,4 +878,125 @@ gtk_im_context_set_property (GObject      *obj,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
     }
+}
+
+static gboolean
+_key_is_modifier (guint keyval)
+{
+  switch (keyval)
+    {
+    case GDK_KEY_Shift_L:
+    case GDK_KEY_Shift_R:
+    case GDK_KEY_Control_L:
+    case GDK_KEY_Control_R:
+    case GDK_KEY_Caps_Lock:
+    case GDK_KEY_Shift_Lock:
+    case GDK_KEY_Meta_L:
+    case GDK_KEY_Meta_R:
+    case GDK_KEY_Alt_L:
+    case GDK_KEY_Alt_R:
+    case GDK_KEY_Super_L:
+    case GDK_KEY_Super_R:
+    case GDK_KEY_Hyper_L:
+    case GDK_KEY_Hyper_R:
+    case GDK_KEY_ISO_Lock:
+    case GDK_KEY_ISO_Level2_Latch:
+    case GDK_KEY_ISO_Level3_Shift:
+    case GDK_KEY_ISO_Level3_Latch:
+    case GDK_KEY_ISO_Level3_Lock:
+    case GDK_KEY_ISO_Level5_Shift:
+    case GDK_KEY_ISO_Level5_Latch:
+    case GDK_KEY_ISO_Level5_Lock:
+    case GDK_KEY_ISO_Group_Shift:
+    case GDK_KEY_ISO_Group_Latch:
+    case GDK_KEY_ISO_Group_Lock:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+/**
+ * gtk_im_context_put_key_event:
+ * @context: a #GtkIMContext
+ * @event: a #GtkEvent
+ *
+ * Forward the key event with GDK_EVENT_INPUT_METHOD flag.
+ * The event type must be GDK_KEY_PRESS or GDK_KEY_RELEASE.
+ * The purpose is to return the key event as the result of the async process
+ * of gtk_im_context_filter_keypress().
+ */
+void
+gtk_im_context_put_key_event (GtkIMContext   *context,
+                              const GdkEvent *event)
+{
+  GdkEventType type;
+  GdkEvent *copy;
+
+  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+  g_return_if_fail (GDK_IS_EVENT (event));
+  type = gdk_event_get_event_type (event);
+  g_return_if_fail (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE);
+
+  copy = gdk_event_copy (event);
+  copy->any.flags = event->any.flags | GDK_EVENT_INPUT_METHOD;
+  gdk_display_put_event (gdk_display_get_default (), copy);
+  g_object_unref (copy);
+}
+
+/**
+ * gtk_im_context_forward_key:
+ * @context: a #GtkIMContext
+ * @keyval: a keyval
+ * @keycode: a keycode
+ * @state: a key state
+ * @time_: a time
+ * @press: %TRUE if the key event is GDK_KEY_PRESS otherwise %FALSE.
+ *
+ * Forward the keyval, keycode and state which are generated by an
+ * input method engine with GDK_EVENT_INPUT_METHOD flag and the
+ * current display, surface and keyboard device.
+ */
+void
+gtk_im_context_forward_key (GtkIMContext   *context,
+                            guint           keyval,
+                            guint16         keycode,
+                            GdkModifierType state,
+                            guint32         time_,
+                            gboolean        press)
+{
+  GtkIMContextPrivate *priv;
+  GdkEvent *event;
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+  GdkDevice *source_device;
+
+  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+  priv = gtk_im_context_get_instance_private (context);
+
+  display = gdk_display_get_default ();
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  seat = gdk_display_get_default_seat (display);
+  g_return_if_fail (GDK_IS_SEAT (seat));
+  source_device = device = gdk_seat_get_keyboard (seat);
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  event = gdk_event_new (press ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+  event->key.time = time_;
+  event->key.state = state;
+  event->key.keyval = keyval;
+  event->key.hardware_keycode = keycode;
+  event->key.key_scancode = 0;
+  event->key.group = 0;
+  event->key.is_modifier =_key_is_modifier (keyval);
+  event->any.surface = priv->surface ? g_object_ref (priv->surface) : NULL;
+  event->any.flags = GDK_EVENT_INPUT_METHOD;
+  event->any.send_event = FALSE;
+  event->any.device = g_object_ref (device);
+  event->any.source_device = g_object_ref (source_device);
+  event->any.display = display;
+
+  gdk_display_put_event (display, event);
+  g_object_unref (event);
 }

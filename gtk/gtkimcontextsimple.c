@@ -93,25 +93,6 @@ const GtkComposeTableCompact gtk_compose_table_compact = {
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
 
-static const guint16 gtk_compose_ignore[] = {
-  GDK_KEY_Shift_L,
-  GDK_KEY_Shift_R,
-  GDK_KEY_Control_L,
-  GDK_KEY_Control_R,
-  GDK_KEY_Caps_Lock,
-  GDK_KEY_Shift_Lock,
-  GDK_KEY_Meta_L,
-  GDK_KEY_Meta_R,
-  GDK_KEY_Alt_L,
-  GDK_KEY_Alt_R,
-  GDK_KEY_Super_L,
-  GDK_KEY_Super_R,
-  GDK_KEY_Hyper_L,
-  GDK_KEY_Hyper_R,
-  GDK_KEY_Mode_switch,
-  GDK_KEY_ISO_Level3_Shift
-};
-
 static void     gtk_im_context_simple_finalize           (GObject                  *obj);
 static gboolean gtk_im_context_simple_filter_keypress    (GtkIMContext             *context,
 							  GdkEventKey              *key);
