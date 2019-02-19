@@ -605,10 +605,6 @@ GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_baseline (GtkWidget     *widget);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_get_allocated_size     (GtkWidget     *widget,
-                                                         GtkAllocation *allocation,
-                                                         int           *baseline);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
