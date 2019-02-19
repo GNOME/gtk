@@ -484,6 +484,12 @@ _gtk_widget_get_last_child (GtkWidget *widget)
   return widget->priv->last_child;
 }
 
+static inline gboolean
+_gtk_widget_is_sensitive (GtkWidget *widget)
+{
+  return !(widget->priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
+}
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

@@ -6481,11 +6481,9 @@ gtk_widget_get_sensitive (GtkWidget *widget)
 gboolean
 gtk_widget_is_sensitive (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return !(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
+  return _gtk_widget_is_sensitive (widget);
 }
 
 
