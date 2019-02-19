@@ -2387,6 +2387,7 @@ struct _GskTransformNode
 
   GskRenderNode *child;
   graphene_matrix_t transform;
+  GskMatrixCategory category;
 };
 
 static void
@@ -2422,7 +2423,7 @@ gsk_transform_node_draw (GskRenderNode *node,
     }
 }
 
-#define GSK_TRANSFORM_NODE_VARIANT_TYPE "(dddddddddddddddduv)"
+#define GSK_TRANSFORM_NODE_VARIANT_TYPE "(idddddddddddddddduv)"
 
 static GVariant *
 gsk_transform_node_serialize (GskRenderNode *node)
@@ -2433,6 +2434,7 @@ gsk_transform_node_serialize (GskRenderNode *node)
   graphene_matrix_to_float (&self->transform, mat);
 
   return g_variant_new (GSK_TRANSFORM_NODE_VARIANT_TYPE,
+                        self->category,
                         (double) mat[0], (double) mat[1], (double) mat[2], (double) mat[3],
                         (double) mat[4], (double) mat[5], (double) mat[6], (double) mat[7],
                         (double) mat[8], (double) mat[9], (double) mat[10], (double) mat[11],
@@ -2448,6 +2450,7 @@ gsk_transform_node_deserialize (GVariant  *variant,
   graphene_matrix_t transform;
   double mat[16];
   guint32 child_type;
+  gint32 category;
   GVariant *child_variant;
   GskRenderNode *result, *child;
 
@@ -2455,6 +2458,7 @@ gsk_transform_node_deserialize (GVariant  *variant,
     return NULL;
 
   g_variant_get (variant, GSK_TRANSFORM_NODE_VARIANT_TYPE,
+                 &category,
                  &mat[0], &mat[1], &mat[2], &mat[3],
                  &mat[4], &mat[5], &mat[6], &mat[7],
                  &mat[8], &mat[9], &mat[10], &mat[11],
@@ -2475,7 +2479,7 @@ gsk_transform_node_deserialize (GVariant  *variant,
                                        mat[12], mat[13], mat[14], mat[15]
                                    });
 
-  result = gsk_transform_node_new (child, &transform);
+  result = gsk_transform_node_new_with_category (child, &transform, category);
 
   gsk_render_node_unref (child);
 
@@ -2508,15 +2512,39 @@ GskRenderNode *
 gsk_transform_node_new (GskRenderNode           *child,
                         const graphene_matrix_t *transform)
 {
-  GskTransformNode *self;
-
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (transform != NULL, NULL);
+
+  return gsk_transform_node_new_with_category (child, transform, GSK_MATRIX_CATEGORY_UNKNOWN);
+}
+
+/*<private>
+ * gsk_transform_node_new_with_category:
+ * @child: The node to transform
+ * @transform: The transform to apply
+ * @category: The category @transform belongs to
+ *
+ * Creates a #GskRenderNode that will transform the given @child
+ * with the given @transform.
+ *
+ * The given @category will be used by renderers for optimizations and must
+ * be correct. If you do not know the category of @transform, use
+ * %GSK_MATRIX_CATEGORY_UNKNOWN.
+ *
+ * Returns: A new #GskRenderNode
+ **/
+GskRenderNode *
+gsk_transform_node_new_with_category (GskRenderNode           *child,
+                                      const graphene_matrix_t *transform,
+                                      GskMatrixCategory        category)
+{
+  GskTransformNode *self;
 
   self = (GskTransformNode *) gsk_render_node_new (&GSK_TRANSFORM_NODE_CLASS, 0);
 
   self->child = gsk_render_node_ref (child);
   graphene_matrix_init_from_matrix (&self->transform, transform);
+  self->category = category;
 
   graphene_matrix_transform_bounds (&self->transform,
                                     &child->bounds,
@@ -2550,6 +2578,16 @@ gsk_transform_node_peek_transform (GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TRANSFORM_NODE), NULL);
 
   return &self->transform;
+}
+
+GskMatrixCategory
+gsk_transform_node_get_category (GskRenderNode *node)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TRANSFORM_NODE), GSK_MATRIX_CATEGORY_UNKNOWN);
+
+  return self->category;
 }
 
 /*** GSK_OFFSET_NODE ***/
