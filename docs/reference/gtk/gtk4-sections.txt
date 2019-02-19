@@ -862,6 +862,12 @@ gtk_editable_get_width_chars
 gtk_editable_set_width_chars
 gtk_editable_get_max_width_chars
 gtk_editable_set_max_width_chars
+<SUBSECTION>
+gtk_editable_install_properties
+gtk_editable_init_delegate
+gtk_editable_finish_delegate
+gtk_editable_delegate_set_property
+gtk_editable_delegate_get_property
 <SUBSECTION Standard>
 GTK_EDITABLE
 GTK_IS_EDITABLE
