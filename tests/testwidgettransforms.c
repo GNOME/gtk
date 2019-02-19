@@ -104,7 +104,7 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
                                     int         baseline)
 {
   GtkTransformTester *self = (GtkTransformTester *)widget;
-  graphene_matrix_t global_transform;
+  GtkTransform *global_transform;
   int w, h;
 
   if (!self->test_widget)
@@ -119,24 +119,18 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
 
   g_message ("%s: %d, %d", __FUNCTION__, w, h);
 
-  graphene_matrix_init_identity (&global_transform);
+  global_transform = NULL;
 
-  graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ -w/2.0f, -h/2.0f, 0});
-  graphene_matrix_rotate (&global_transform, scale,
-                          graphene_vec3_z_axis ());
+  global_transform = gtk_transform_translate (global_transform, &GRAPHENE_POINT_INIT (width / 2.0f, height / 2.0f));
+  global_transform = gtk_transform_rotate (global_transform, scale);
+  global_transform = gtk_transform_translate (global_transform, &GRAPHENE_POINT_INIT (-w / 2.0f, -h / 2.0f));
 
-  graphene_matrix_translate (&global_transform, &(graphene_point3d_t){ width / 2.0f, height / 2.0f, 0});
-
-
-#if 0
-  gtk_widget_size_allocate (self->test_widget,
-                            &(GtkAllocation){ (width- w) / 2, (height - h) / 2, w,h }, -1);
-#else
   gtk_widget_allocate (self->test_widget,
                        w, h,
                        -1,
-                       &global_transform);
-#endif
+                       global_transform);
+
+  gtk_transform_unref (global_transform);
 }
 
 static void
