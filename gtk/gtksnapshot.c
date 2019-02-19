@@ -296,7 +296,9 @@ gtk_snapshot_collect_transform (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  transform_node = gsk_transform_node_new (node, &state->data.transform.transform);
+  transform_node = gsk_transform_node_new_with_category (node,
+                                                         &state->data.transform.transform,
+                                                         state->data.transform.category);
 
   gsk_render_node_unref (node);
 
@@ -306,6 +308,16 @@ gtk_snapshot_collect_transform (GtkSnapshot      *snapshot,
 void
 gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
                              const graphene_matrix_t *transform)
+{
+  gtk_snapshot_push_transform_with_category (snapshot,
+                                             transform,
+                                             GSK_MATRIX_CATEGORY_UNKNOWN);
+}
+
+void
+gtk_snapshot_push_transform_with_category (GtkSnapshot             *snapshot,
+                                           const graphene_matrix_t *transform,
+                                           GskMatrixCategory        category)
 {
   GtkSnapshotState *previous_state;
   GtkSnapshotState *state;
@@ -325,6 +337,10 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
                                   ));
 
   graphene_matrix_multiply (transform, &offset, &state->data.transform.transform);
+  if (previous_state->translate_x || previous_state->translate_y)
+    state->data.transform.category = MIN (GSK_MATRIX_CATEGORY_2D_TRANSLATE, category);
+  else
+    state->data.transform.category = category;
 }
 
 static GskRenderNode *

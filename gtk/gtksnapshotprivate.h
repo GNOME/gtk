@@ -20,6 +20,8 @@
 
 #include "gtksnapshot.h"
 
+#include "gsk/gskrendernodeprivate.h"
+
 G_BEGIN_DECLS
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
@@ -40,6 +42,7 @@ struct _GtkSnapshotState {
   union {
     struct {
       graphene_matrix_t transform;
+      GskMatrixCategory category;
     } transform;
     struct {
       double            opacity;
@@ -103,6 +106,9 @@ void                    gtk_snapshot_append_node_internal       (GtkSnapshot    
 
 GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot            *parent_snapshot);
 
+void                    gtk_snapshot_push_transform_with_category (GtkSnapshot          *snapshot,
+                                                                 const graphene_matrix_t*transform,
+                                                                 GskMatrixCategory       category);
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_PRIVATE_H__ */

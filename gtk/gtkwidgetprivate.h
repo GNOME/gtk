@@ -38,6 +38,8 @@
 #include "gtkinvisibleprivate.h"
 #include "gtkgesture.h"
 
+#include "gsk/gskrendernodeprivate.h"
+
 G_BEGIN_DECLS
 
 #define GTK_STATE_FLAGS_BITS 14
@@ -150,6 +152,7 @@ struct _GtkWidgetPrivate
   gint allocated_size_baseline;
 
   graphene_matrix_t transform;
+  GskMatrixCategory transform_category;
   int width;
   int height;
   int baseline;
