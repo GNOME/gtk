@@ -622,7 +622,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
   priv->content_changed = FALSE;
   priv->search_stopped = FALSE;
 
-  handled = gtk_event_controller_key_forward (controller, entry);
+  handled = gtk_event_controller_key_forward (controller, priv->entry);
 
   return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
 }
