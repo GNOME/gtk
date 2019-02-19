@@ -333,10 +333,6 @@ void              gtk_widget_set_pass_through              (GtkWidget *widget,
                                                             gboolean   pass_through);
 gboolean          gtk_widget_get_pass_through              (GtkWidget *widget);
 
-void              gtk_widget_get_origin_relative_to_parent (GtkWidget        *widget,
-                                                            int              *origin_x,
-                                                            int              *origin_y);
-
 void              gtk_widget_cancel_event_sequence         (GtkWidget             *widget,
                                                             GtkGesture            *gesture,
                                                             GdkEventSequence      *sequence,
