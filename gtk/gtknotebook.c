@@ -292,6 +292,8 @@ enum {
 
 struct _GtkNotebookPage
 {
+  GObject *instance;
+
   GtkWidget *child;
   GtkWidget *tab_label;
   GtkWidget *menu_label;
@@ -311,6 +313,34 @@ struct _GtkNotebookPage
   gulong mnemonic_activate_signal;
   gulong notify_visible_handler;
 };
+
+struct _GtkNotebookPageClass
+{
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkNotebookPage, gtk_notebook_page, G_TYPE_OBJECT)
+
+static void
+gtk_notebook_page_init (GtkNotebookPage *page)
+{
+}
+
+static void
+gtk_notebook_page_finalize (GObject *object)
+{
+  GtkNotebookPage *page = GTK_NOTEBOOK_PAGE (object);
+
+  G_OBJECT_CLASS (gtk_notebook_page_parent_class)->finalize (object);
+}
+
+static void
+gtk_notebook_page_class_init (GtkNotebookPageClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = gtk_notebook_page_finalize;
+}
 
 static const char *src_notebook_targets [] = {
   "GTK_NOTEBOOK_TAB",
@@ -3947,7 +3977,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   gtk_widget_freeze_child_notify (child);
 
-  page = g_slice_new0 (GtkNotebookPage);
+  page = g_object_new (GTK_TYPE_NOTEBOOK_PAGE, NULL);
   page->child = child;
 
   nchildren = g_list_length (priv->children);
@@ -4228,7 +4258,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   gtk_widget_unparent (page->tab_widget);
 
-  g_slice_free (GtkNotebookPage, page);
+  g_object_unref (page);
 
   gtk_notebook_update_labels (notebook);
   if (need_resize)
