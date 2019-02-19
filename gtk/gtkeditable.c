@@ -62,6 +62,87 @@
  *   g_free (result);
  * }
  * ]|
+ *
+ * ## Implementing GtkEditable
+ * 
+ * The most likely scenario for implementing GtkEditable on your own widget
+ * is that you will embed a #GtkText inside a complex widget, and want to
+ * delegate the editable functionality to that text widget. GtkEditable
+ * provides some utility functions to make this easy.
+ *
+ * In your class_init function, call gtk_editable_install_properties(),
+ * passing the first available property ID:
+ * 
+ * |[
+ * static void
+ * my_class_init (MyClass *class)
+ * {
+ *    /* ... */
+ *    g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+ *    gtk_editable_install_properties (object_clas, NUM_PROPERTIES);
+ *    /* ... */
+ * }
+ * ]|
+ *
+ * In your interface_init function for the GtkEditable interface, provide
+ * an implementation for the get_delegate vfunc that returns your text widget:
+ *
+ * |[
+ * GtkEditable *
+ * get_editable_delegate (GtkEditable *editable)
+ * {
+ *   return GTK_EDITABLE (MY_WIDGET (editable)->text_widget);
+ * }
+ *
+ * static void
+ * my_editable_init (GtkEditableInterface *iface)
+ * {
+ *   iface->get_delegate = get_editable_delegate;
+ * }
+ * ]|
+ *
+ * You don't need to provide any other vfuncs. The default implementations
+ * work by forwarding to the delegate that the get_delegate() vfunc returns.
+ *
+ * In your instance_init function, create your text widget, and then call
+ * gtk_editable_init_delegate():
+ *
+ * |[
+ * static void
+ * my_widget_init (MyWidget *self)
+ * {
+ *   /* ... */
+ *   self->text_widget = gtk_text_new ();
+ *   gtk_editable_init_delegate (GTK_EDITABLE (self));
+ *   /* ... */
+ * }
+ * ]|
+ * 
+ * In your dispose function, call gtk_editable_finish_delegate() before
+ * destroying your text widget:
+ *
+ * |[
+ * static void
+ * my_widget_dispose (GObject *object)
+ * {
+ *   /* ... */
+ *   gtk_editable_finish_delegate (GTK_EDITABLE (self));
+ *   g_clear_pointer (&self->text_widget, gtk_widget_unparent);
+ *   /* ... */
+ * }
+ * ]|
+ * 
+ * Finally, use gtk_editable_delegate_set_property() in your set_property
+ * function (and similar for get_property), to set the editable properties:
+ *
+ * |[
+ *   /* ... */
+ *   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
+ *     return;
+ *
+ *   switch (prop_id)
+ *   /* ... */
+ * ]|
  */
 
 #include "config.h"
