@@ -614,13 +614,18 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_compute_transform      (GtkWidget         *widget,
-                                                         GtkWidget         *target,
-                                                         graphene_matrix_t *out_transform);
+gboolean                gtk_widget_compute_transform            (GtkWidget              *widget,
+                                                                 GtkWidget              *target,
+                                                                 graphene_matrix_t      *out_transform);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_compute_bounds         (GtkWidget     *widget,
-                                                         GtkWidget     *target,
-                                                         graphene_rect_t *out_bounds);
+gboolean                gtk_widget_compute_bounds               (GtkWidget              *widget,
+                                                                 GtkWidget              *target,
+                                                                 graphene_rect_t        *out_bounds);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_widget_compute_point                (GtkWidget              *widget,
+                                                                 GtkWidget              *target,
+                                                                 const graphene_point_t *point,
+                                                                 graphene_point_t       *out_point);
 
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_width              (GtkWidget     *widget);

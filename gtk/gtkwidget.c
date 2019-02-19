@@ -2536,6 +2536,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   GtkWidget *event_widget, *next_child, *parent;
   GdkEvent *press;
   gdouble x, y;
+  graphene_point_t p;
 
   event_widget = gtk_get_event_target ((GdkEvent *) event);
 
@@ -2543,10 +2544,10 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
     return;
 
   gdk_event_get_coords (event, &x, &y);
-  gtk_widget_translate_coordinatesf (event_widget,
-                                     gtk_widget_get_toplevel (event_widget),
-                                     x, y,
-                                     &x, &y);
+  gtk_widget_compute_point (event_widget,
+                            gtk_widget_get_toplevel (event_widget),
+                            &GRAPHENE_POINT_INIT (x, y),
+                            &p);
 
   if (event->any.type == GDK_TOUCH_BEGIN ||
       event->any.type == GDK_TOUCH_UPDATE ||
@@ -2592,7 +2593,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   else
     return;
 
-  gdk_event_set_coords (press, x, y);
+  gdk_event_set_coords (press, p.x, p.y);
 
   press->any.send_event = TRUE;
   next_child = event_widget;
@@ -4475,58 +4476,55 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
                                   gint       *dest_x,
                                   gint       *dest_y)
 {
-  double x, y;
-
-  if (!gtk_widget_translate_coordinatesf (src_widget, dest_widget,
-                                          src_x, src_y, &x, &y))
-    return FALSE;
-
-  if (dest_x)
-    *dest_x =x;
-
-  if (dest_y)
-    *dest_y = y;
-
-  return TRUE;
-}
-
-/* This is the same as translate_coordinates, but it works on doubles.
- * We use this for event coordinates.
- *
- * We should probably decide for only one of the 2 versions at some point */
-gboolean
-gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
-                                   GtkWidget  *dest_widget,
-                                   double      src_x,
-                                   double      src_y,
-                                   double     *dest_x,
-                                   double     *dest_y)
-{
-  graphene_matrix_t transform;
   graphene_point_t p;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
-
-  if (!gtk_widget_compute_transform (src_widget, dest_widget, &transform))
-    {
-      if (dest_x)
-        *dest_x = 0;
-
-      if (dest_y)
-        *dest_y = 0;
-
-      return FALSE;
-    }
-
-  graphene_point_init (&p, src_x, src_y);
-  graphene_matrix_transform_point (&transform, &p, &p);
+  if (!gtk_widget_compute_point (src_widget, dest_widget,
+                                 &GRAPHENE_POINT_INIT (src_x, src_y),
+                                 &p))
+    return FALSE;
 
   if (dest_x)
     *dest_x = p.x;
 
   if (dest_y)
     *dest_y = p.y;
+
+  return TRUE;
+}
+
+/**
+ * gtk_widget_compute_point:
+ * @widget: the #GtkWidget to query
+ * @target: the #GtkWidget to transform into
+ * @point: a point in @widget's coordinate system
+ * @out_point: (out caller-allocates): Set to the corresponding coordinates in
+ *     @target's coordinate system
+ *
+ * Translates the given @point in @widget's coordinates to coordinates
+ * relative to @target’s coodinate system. In order to perform this
+ * operation, both widgets must share a common ancestor.
+ *
+ * Returns: %TRUE if the point could be determined, %FALSE on failure.
+ *   In this case, 0 is stored in @out_point.
+ **/
+gboolean
+gtk_widget_compute_point (GtkWidget              *widget,
+                          GtkWidget              *target,
+                          const graphene_point_t *point,
+                          graphene_point_t       *out_point)
+{
+  graphene_matrix_t transform;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
+
+  if (!gtk_widget_compute_transform (widget, target, &transform))
+    {
+      graphene_point_init (out_point, 0, 0);
+      return FALSE;
+    }
+
+  graphene_matrix_transform_point (&transform, point, out_point);
 
   return TRUE;
 }
@@ -5204,19 +5202,19 @@ translate_event_coordinates (GdkEvent  *event,
 {
   GtkWidget *event_widget;
   double x, y;
-  double dx = 0.0, dy = 0.0;
+  graphene_point_t p;
 
   if (!gdk_event_get_coords (event, &x, &y))
     return;
 
   event_widget = gtk_get_event_widget (event);
 
-  gtk_widget_translate_coordinatesf (event_widget,
-                                     widget,
-                                     x, y,
-                                     &dx, &dy);
+  gtk_widget_compute_point (event_widget,
+                            widget,
+                            &GRAPHENE_POINT_INIT (x, y),
+                            &p);
 
-  gdk_event_set_coords (event, dx, dy);
+  gdk_event_set_coords (event, p.x, p.y);
 }
 
 static gboolean

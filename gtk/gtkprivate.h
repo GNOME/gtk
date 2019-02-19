@@ -94,13 +94,6 @@ void             gtk_propagate_event_internal  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
 
-gboolean         gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
-                                                    GtkWidget  *dest_widget,
-                                                    double      src_x,
-                                                    double      src_y,
-                                                    double     *dest_x,
-                                                    double     *dest_y);
-
 gdouble _gtk_get_slowdown (void);
 void    _gtk_set_slowdown (gdouble slowdown_factor);
 
