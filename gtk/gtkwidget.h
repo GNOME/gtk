@@ -416,7 +416,7 @@ void       gtk_widget_allocate            (GtkWidget               *widget,
                                            int                      width,
                                            int                      height,
                                            int                      baseline,
-                                           const graphene_matrix_t *transform);
+                                           GtkMatrix               *transform);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
