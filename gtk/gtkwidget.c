@@ -4188,11 +4188,7 @@ gtk_widget_allocate (GtkWidget               *widget,
                      const graphene_matrix_t *transform)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  int real_width;
-  int real_height;
-  int adjusted_width;
-  int adjusted_height;
-  graphene_matrix_t adjusted_transform;
+  GdkRectangle adjusted;
   gboolean alloc_needed;
   gboolean size_changed;
   gboolean baseline_changed;
@@ -4249,9 +4245,7 @@ gtk_widget_allocate (GtkWidget               *widget,
   priv->allocated_height = height;
   priv->allocated_size_baseline = baseline;
 
-  adjusted_width = width;
-  adjusted_height = height;
-  graphene_matrix_init_from_matrix (&adjusted_transform, transform);
+  adjusted = (GdkRectangle) { 0, 0, width, height };
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
       /* Go ahead and request the height for allocated width, note that the internals
@@ -4291,47 +4285,52 @@ gtk_widget_allocate (GtkWidget               *widget,
                                      GTK_ORIENTATION_HORIZONTAL,
                                      &dummy,
                                      &natural_width,
-                                     &adjusted_transform,
-                                     &adjusted_width);
+                                     &adjusted.x,
+                                     &adjusted.width);
   gtk_widget_adjust_size_allocation (widget,
                                      GTK_ORIENTATION_VERTICAL,
                                      &dummy,
                                      &natural_height,
-                                     &adjusted_transform,
-                                     &adjusted_height);
+                                     &adjusted.y,
+                                     &adjusted.height);
   if (baseline >= 0)
     baseline -= priv->margin.top;
 
-  real_width = adjusted_width;
-  real_height = adjusted_height;
-
-  if (real_width < 0 || real_height < 0)
+  if (adjusted.width < 0 || adjusted.height < 0)
     {
       g_warning ("gtk_widget_size_allocate(): attempt to allocate %s %s %p with width %d and height %d",
                  G_OBJECT_TYPE_NAME (widget), gtk_css_node_get_name (priv->cssnode), widget,
-                 real_width,
-                 real_height);
+                 adjusted.width,
+                 adjusted.height);
 
-      real_width = 0;
-      real_height = 0;
+      adjusted.width = 0;
+      adjusted.height = 0;
     }
 
   if (G_UNLIKELY (_gtk_widget_get_has_surface (widget)))
     {
-      real_width = MAX (1, real_width);
-      real_height = MAX (1, real_height);
+      adjusted.width = MAX (1, adjusted.width);
+      adjusted.height = MAX (1, adjusted.height);
     }
 
   style = gtk_css_node_get_style (priv->cssnode);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
-  graphene_matrix_translate (&adjusted_transform,
-                             &GRAPHENE_POINT3D_INIT (
-                               margin.left + border.left + padding.left,
-                               margin.top + border.top + padding.top,
-                               0
-                             ));
+  adjusted.x += margin.left + border.left + padding.left;
+  adjusted.y += margin.top + border.top + padding.top;
+
+  /* Since gtk_widget_measure does it for us, we can be sure here that
+   * the given alloaction is large enough for the css margin/bordder/padding */
+  adjusted.width -= margin.left + border.left + padding.left +
+                    margin.right + border.right + padding.right;
+  adjusted.height -= margin.top + border.top + padding.top +
+                     margin.bottom + border.bottom + padding.bottom;
+  if (baseline >= 0)
+    baseline -= margin.top + border.top + padding.top;
+
+  graphene_matrix_init_translate (&priv->transform, &GRAPHENE_POINT3D_INIT (adjusted.x, adjusted.y, 0));
+  graphene_matrix_multiply (&priv->transform, transform, &priv->transform);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -4347,20 +4346,11 @@ gtk_widget_allocate (GtkWidget               *widget,
                                    window_alloc.width, window_alloc.height);
          }
 
-      goto only_transform_changed;
+      goto skip_allocate;
     }
 
-  /* Since gtk_widget_measure does it for us, we can be sure here that
-   * the given alloaction is large enough for the css margin/bordder/padding */
-  real_width -= margin.left + border.left + padding.left +
-                margin.right + border.right + padding.right;
-  real_height -= margin.top + border.top + padding.top +
-                 margin.bottom + border.bottom + padding.bottom;
-  if (baseline >= 0)
-    baseline -= margin.top + border.top + padding.top;
-
-  priv->width = real_width;
-  priv->height = real_height;
+  priv->width = adjusted.width;
+  priv->height = adjusted.height;
   priv->baseline = baseline;
 
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
@@ -4389,9 +4379,7 @@ gtk_widget_allocate (GtkWidget               *widget,
 
   gtk_widget_update_paintables (widget);
 
-only_transform_changed:
-  graphene_matrix_init_from_matrix (&priv->transform, &adjusted_transform);
-
+skip_allocate:
   if (size_changed || baseline_changed)
     gtk_widget_queue_draw (widget);
   else if (transform_changed && priv->parent)
@@ -4616,11 +4604,10 @@ effective_align (GtkAlign         align,
 }
 
 static void
-adjust_for_align (GtkOrientation     orientation,
-                  GtkAlign           align,
-                  int               *natural_size,
-                  graphene_matrix_t *transform,
-                  int               *allocated_size)
+adjust_for_align (GtkAlign  align,
+                  gint     *natural_size,
+                  gint     *allocated_pos,
+                  gint     *allocated_size)
 {
   switch (align)
     {
@@ -4630,66 +4617,38 @@ adjust_for_align (GtkOrientation     orientation,
       /* change nothing */
       break;
     case GTK_ALIGN_START:
-      /* keep position where it is */
+      /* keep *allocated_pos where it is */
       *allocated_size = MIN (*allocated_size, *natural_size);
       break;
     case GTK_ALIGN_END:
       if (*allocated_size > *natural_size)
-        {
-          if (transform)
-            {
-              if (orientation == GTK_ORIENTATION_HORIZONTAL)
-                graphene_matrix_translate (transform,
-                                           &GRAPHENE_POINT3D_INIT (*allocated_size - *natural_size, 0, 0));
-              else
-                graphene_matrix_translate (transform,
-                                           &GRAPHENE_POINT3D_INIT (0, *allocated_size - *natural_size, 0));
-            }
-
-          *allocated_size = *natural_size;
-        }
+	{
+	  *allocated_pos += (*allocated_size - *natural_size);
+	  *allocated_size = *natural_size;
+	}
       break;
     case GTK_ALIGN_CENTER:
       if (*allocated_size > *natural_size)
-        {
-          if (transform)
-            {
-              if (orientation == GTK_ORIENTATION_HORIZONTAL)
-                graphene_matrix_translate (transform,
-                                           &GRAPHENE_POINT3D_INIT ((*allocated_size - *natural_size) / 2, 0, 0));
-              else
-                graphene_matrix_translate (transform,
-                                           &GRAPHENE_POINT3D_INIT (0, (*allocated_size - *natural_size) / 2, 0));
-            }
-
-          *allocated_size = MIN (*allocated_size, *natural_size);
-        }
+	{
+	  *allocated_pos += (*allocated_size - *natural_size) / 2;
+	  *allocated_size = MIN (*allocated_size, *natural_size);
+	}
       break;
     }
 }
 
 static void
-adjust_for_margin (GtkOrientation     orientation,
-                   int                start_margin,
-                   int                end_margin,
-                   int               *minimum_size,
-                   int               *natural_size,
-                   graphene_matrix_t *transform,
-                   int               *allocated_size)
+adjust_for_margin(gint               start_margin,
+                  gint               end_margin,
+                  gint              *minimum_size,
+                  gint              *natural_size,
+                  gint              *allocated_pos,
+                  gint              *allocated_size)
 {
   *minimum_size -= (start_margin + end_margin);
   *natural_size -= (start_margin + end_margin);
+  *allocated_pos += start_margin;
   *allocated_size -= (start_margin + end_margin);
-
-  if (transform)
-    {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        graphene_matrix_translate (transform,
-                                   &GRAPHENE_POINT3D_INIT (start_margin, 0, 0));
-      else
-        graphene_matrix_translate (transform,
-                                   &GRAPHENE_POINT3D_INIT (0, start_margin, 0));
-    }
 }
 
 void
@@ -4697,32 +4656,28 @@ gtk_widget_adjust_size_allocation (GtkWidget         *widget,
                                    GtkOrientation     orientation,
                                    gint              *minimum_size,
                                    gint              *natural_size,
-                                   graphene_matrix_t *transform,
+                                   gint              *allocated_pos,
                                    gint              *allocated_size)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      adjust_for_margin (orientation,
-                         priv->margin.left,
+      adjust_for_margin (priv->margin.left,
                          priv->margin.right,
                          minimum_size, natural_size,
-                         transform, allocated_size);
-      adjust_for_align (orientation,
-                        effective_align (priv->halign, _gtk_widget_get_direction (widget)),
-                        natural_size, transform, allocated_size);
+                         allocated_pos, allocated_size);
+      adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
+                        natural_size, allocated_pos, allocated_size);
     }
   else
     {
-      adjust_for_margin (orientation,
-                         priv->margin.top,
+      adjust_for_margin (priv->margin.top,
                          priv->margin.bottom,
                          minimum_size, natural_size,
-                         transform, allocated_size);
-      adjust_for_align (orientation,
-                        effective_align (priv->valign, GTK_TEXT_DIR_NONE),
-                        natural_size, transform, allocated_size);
+                         allocated_pos, allocated_size);
+      adjust_for_align (effective_align (priv->valign, GTK_TEXT_DIR_NONE),
+                        natural_size, allocated_pos, allocated_size);
     }
 }
 

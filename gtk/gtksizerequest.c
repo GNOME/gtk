@@ -208,6 +208,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           int adjusted_for_size;
           int minimum_for_size = 0;
           int natural_for_size = 0;
+          int dummy = 0;
 
           /* Pull the minimum for_size from the cache as it's needed to adjust
            * the proposed 'for_size' */
@@ -221,7 +222,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           adjusted_for_size = for_size;
           gtk_widget_adjust_size_allocation (widget, OPPOSITE_ORIENTATION (orientation),
                                              &for_size, &natural_for_size,
-                                             NULL, &adjusted_for_size);
+                                             &dummy, &adjusted_for_size);
 
           adjusted_for_size -= css_extra_for_size;
 

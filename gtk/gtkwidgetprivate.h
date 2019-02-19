@@ -304,7 +304,7 @@ void              gtk_widget_adjust_size_allocation        (GtkWidget         *w
                                                             GtkOrientation     orientation,
                                                             gint              *minimum_size,
                                                             gint              *natural_size,
-                                                            graphene_matrix_t *transform,
+                                                            gint              *allocated_pos,
                                                             gint              *allocated_size);
 void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             gint      *minimum_baseline,
