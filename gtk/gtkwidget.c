@@ -4235,11 +4235,6 @@ gtk_widget_allocate (GtkWidget               *widget,
                               transform,
                               sizeof (graphene_matrix_t)) != 0;
 
-  /*if (transform_changed)*/
-    /*g_message ("Transform changed: %s", G_OBJECT_TYPE_NAME (widget));*/
-
-  transform_changed = TRUE;
-
   graphene_matrix_init_from_matrix (&priv->allocated_transform, transform);
   priv->allocated_width = width;
   priv->allocated_height = height;
