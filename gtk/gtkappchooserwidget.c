@@ -1489,7 +1489,7 @@ gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self)
 
 void
 _gtk_app_chooser_widget_set_search_entry (GtkAppChooserWidget *self,
-                                          GtkEntry            *entry)
+                                          GtkEditable         *entry)
 {
   gtk_tree_view_set_search_entry (GTK_TREE_VIEW (self->priv->program_list), entry);
 

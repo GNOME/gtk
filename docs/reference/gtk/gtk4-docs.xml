@@ -138,14 +138,16 @@
 
     <chapter id="NumericEntry">
       <title>Numeric and Text Data Entry</title>
-      <xi:include href="xml/gtkentry.xml" />
+      <xi:include href="xml/gtkeditable.xml" />
       <xi:include href="xml/gtkentrybuffer.xml" />
+      <xi:include href="xml/gtktext.xml" />
+      <xi:include href="xml/gtkentry.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
+      <xi:include href="xml/gtkpasswordentry.xml" />
       <xi:include href="xml/gtkscale.xml" />
       <xi:include href="xml/gtkspinbutton.xml" />
       <xi:include href="xml/gtksearchentry.xml" />
       <xi:include href="xml/gtksearchbar.xml" />
-      <xi:include href="xml/gtkeditable.xml" />
     </chapter>
 
     <chapter id="TextWidgetObjects">

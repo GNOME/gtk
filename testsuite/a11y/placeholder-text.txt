@@ -22,7 +22,6 @@ window1
       index: 0
       state: editable enabled focusable sensitive showing single-line visible
       toolkit: gtk
-      placeholder-text: Subject or Addresses contain
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -64,7 +63,6 @@ window1
       index: 1
       state: editable enabled focusable sensitive showing single-line visible
       toolkit: gtk
-      placeholder-text: Message contains
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -106,7 +104,6 @@ window1
       index: 2
       state: editable enabled focusable sensitive showing single-line visible
       toolkit: gtk
-      placeholder-text: Body contains
       <AtkComponent>
       layer: widget
       alpha: 1

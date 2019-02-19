@@ -474,7 +474,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry1">
-                                <property name="can-focus">1</property>
                                 <property name="enable-emoji-completion">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="placeholder-text" translatable="yes">Click icon to change mode</property>
@@ -486,7 +485,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkEntry" id="entry2">
                                 <property name="sensitive">0</property>
-                                <property name="can-focus">1</property>
                                 <property name="invisible-char">•</property>
                                 <property name="text" translatable="yes">entry</property>
                               </object>
@@ -498,7 +496,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </style>
                                 <child>
                                   <object class="GtkEntry" id="entry24">
-                                    <property name="can-focus">1</property>
                                     <property name="invisible-char">•</property>
                                     <property name="text" translatable="yes">entry</property>
                                     <property name="hexpand">1</property>
@@ -575,7 +572,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkSpinButton" id="spinbutton1">
-                                    <property name="can-focus">1</property>
                                     <property name="width-chars">2</property>
                                     <property name="max-width-chars">2</property>
                                     <property name="adjustment">adjustment2</property>
@@ -583,7 +579,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkSpinButton" id="spinbutton2">
-                                    <property name="can-focus">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="width-chars">2</property>
                                     <property name="max-width-chars">2</property>
@@ -3000,14 +2995,12 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="halign">center</property>
                             <child>
                               <object class="GtkEntry">
-                                <property name="can-focus">1</property>
                                 <property name="placeholder-text" translatable="yes">Name…</property>
                                 <property name="completion">name_completion</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkEntry">
-                                <property name="can-focus">1</property>
                                 <property name="show-emoji-icon">1</property>
                                 <property name="placeholder-text" translatable="yes">Age…</property>
                               </object>

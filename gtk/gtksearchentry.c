@@ -31,7 +31,13 @@
 
 #include "gtkaccessible.h"
 #include "gtkbindings.h"
+#include "gtkeditable.h"
+#include "gtkbox.h"
+#include "gtkgesturemultipress.h"
+#include "gtktextprivate.h"
+#include "gtkimage.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
@@ -69,6 +75,7 @@
  */
 
 enum {
+  ACTIVATE,
   SEARCH_CHANGED,
   NEXT_MATCH,
   PREVIOUS_MATCH,
@@ -76,25 +83,33 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_PLACEHOLDER_TEXT,
+  PROP_ACTIVATES_DEFAULT,
+  NUM_PROPERTIES,
+};
+
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
 typedef struct {
   GtkWidget *capture_widget;
   GtkEventController *capture_widget_controller;
+
+  GtkWidget *box;
+  GtkWidget *entry;
+  GtkWidget *icon;
 
   guint delayed_changed_id;
   gboolean content_changed;
   gboolean search_stopped;
 } GtkSearchEntryPrivate;
 
-static void gtk_search_entry_icon_release  (GtkEntry             *entry,
-                                            GtkEntryIconPosition  icon_pos);
-static void gtk_search_entry_changed       (GtkEditable          *editable);
 static void gtk_search_entry_editable_init (GtkEditableInterface *iface);
 
-static GtkEditableInterface *parent_editable_iface;
-
-G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY,
+G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkSearchEntry)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_search_entry_editable_init))
@@ -102,36 +117,23 @@ G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY,
 /* 150 mseconds of delay */
 #define DELAYED_TIMEOUT_ID 150
 
-/* This widget got created without a private structure, meaning
- * that we cannot now have one without breaking ABI */
-#define GET_PRIV(e) ((GtkSearchEntryPrivate *) gtk_search_entry_get_instance_private ((GtkSearchEntry *) (e)))
-
 static void
-gtk_search_entry_preedit_changed (GtkEntry    *entry,
-                                  const gchar *preedit)
+text_changed (GtkSearchEntry *entry)
 {
-  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
   priv->content_changed = TRUE;
 }
 
 static void
-gtk_search_entry_notify (GObject    *object,
-                         GParamSpec *pspec)
-{
-  GtkSearchEntryPrivate *priv = GET_PRIV (object);
-
-  if (strcmp (pspec->name, "text") == 0)
-    priv->content_changed = TRUE;
-
-  if (G_OBJECT_CLASS (gtk_search_entry_parent_class)->notify)
-    G_OBJECT_CLASS (gtk_search_entry_parent_class)->notify (object, pspec);
-}
-
-static void
 gtk_search_entry_finalize (GObject *object)
 {
-  GtkSearchEntryPrivate *priv = GET_PRIV (object);
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (object);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_editable_finish_delegate (GTK_EDITABLE (entry));
+
+  g_clear_pointer (&priv->box, gtk_widget_unparent);
 
   if (priv->delayed_changed_id > 0)
     g_source_remove (priv->delayed_changed_id);
@@ -144,29 +146,147 @@ gtk_search_entry_finalize (GObject *object)
 static void
 gtk_search_entry_stop_search (GtkSearchEntry *entry)
 {
-  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
   priv->search_stopped = TRUE;
+}
+
+static void
+gtk_search_entry_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (object);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
+    return;
+
+  switch (prop_id)
+    {
+    case PROP_PLACEHOLDER_TEXT:
+      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), g_value_get_string (value));
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gtk_search_entry_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (object);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
+    return;
+
+  switch (prop_id)
+    {
+    case PROP_PLACEHOLDER_TEXT:
+      g_value_set_string (value, gtk_text_get_placeholder_text (GTK_TEXT (priv->entry)));
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gtk_search_entry_measure (GtkWidget      *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
+{ 
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_widget_measure (priv->box, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_search_entry_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
+{ 
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_widget_size_allocate (priv->box,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
+}
+
+static void
+gtk_search_entry_grab_focus (GtkWidget *widget)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->entry));
 }
 
 static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkBindingSet *binding_set;
 
   object_class->finalize = gtk_search_entry_finalize;
-  object_class->notify = gtk_search_entry_notify;
+  object_class->get_property = gtk_search_entry_get_property;
+  object_class->set_property = gtk_search_entry_set_property;
+
+  widget_class->measure = gtk_search_entry_measure;
+  widget_class->size_allocate = gtk_search_entry_size_allocate;
+  widget_class->grab_focus = gtk_search_entry_grab_focus;
 
   klass->stop_search = gtk_search_entry_stop_search;
 
-  g_signal_override_class_handler ("icon-release",
-                                   GTK_TYPE_SEARCH_ENTRY,
-                                   G_CALLBACK (gtk_search_entry_icon_release));
+  props[PROP_PLACEHOLDER_TEXT] =
+      g_param_spec_string ("placeholder-text",
+                           P_("Placeholder text"),
+                           P_("Show text in the entry when it’s empty and unfocused"),
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_signal_override_class_handler ("preedit-changed",
-                                   GTK_TYPE_SEARCH_ENTRY,
-                                   G_CALLBACK (gtk_search_entry_preedit_changed));
+  props[PROP_ACTIVATES_DEFAULT] =
+      g_param_spec_boolean ("activates-default",
+                            P_("Activates default"),
+                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+  gtk_editable_install_properties (object_class, NUM_PROPERTIES);
+
+  signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSearchEntryClass, activate),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkSearchEntry::search-changed:
@@ -257,37 +377,42 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                 "previous-match", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
                                 "stop-search", 0);
+
+  gtk_widget_class_set_css_name (widget_class, I_("entry"));
+}
+
+static GtkEditable *
+gtk_search_entry_get_delegate (GtkEditable *editable)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (editable);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  return GTK_EDITABLE (priv->entry);
 }
 
 static void
 gtk_search_entry_editable_init (GtkEditableInterface *iface)
 {
-  parent_editable_iface = g_type_interface_peek_parent (iface);
-  iface->do_insert_text = parent_editable_iface->do_insert_text;
-  iface->do_delete_text = parent_editable_iface->do_delete_text;
-  iface->insert_text = parent_editable_iface->insert_text;
-  iface->delete_text = parent_editable_iface->delete_text;
-  iface->get_chars = parent_editable_iface->get_chars;
-  iface->set_selection_bounds = parent_editable_iface->set_selection_bounds;
-  iface->get_selection_bounds = parent_editable_iface->get_selection_bounds;
-  iface->set_position = parent_editable_iface->set_position;
-  iface->get_position = parent_editable_iface->get_position;
-  iface->changed = gtk_search_entry_changed;
+  iface->get_delegate = gtk_search_entry_get_delegate;
 }
 
 static void
-gtk_search_entry_icon_release (GtkEntry             *entry,
-                               GtkEntryIconPosition  icon_pos)
+gtk_search_entry_icon_release (GtkGestureMultiPress *press,
+                               int                   n_press,
+                               double                x,
+                               double                y,
+                               GtkSearchEntry       *entry)
 {
-  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
-    gtk_entry_set_text (entry, "");
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_editable_set_text (GTK_EDITABLE (priv->entry), "");
 }
 
 static gboolean
 gtk_search_entry_changed_timeout_cb (gpointer user_data)
 {
   GtkSearchEntry *entry = user_data;
-  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
   g_signal_emit (entry, signals[SEARCH_CHANGED], 0);
   priv->delayed_changed_id = 0;
@@ -298,7 +423,7 @@ gtk_search_entry_changed_timeout_cb (gpointer user_data)
 static void
 reset_timeout (GtkSearchEntry *entry)
 {
-  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
   if (priv->delayed_changed_id > 0)
     g_source_remove (priv->delayed_changed_id);
@@ -309,35 +434,19 @@ reset_timeout (GtkSearchEntry *entry)
 }
 
 static void
-gtk_search_entry_changed (GtkEditable *editable)
+gtk_search_entry_changed (GtkEditable *editable,
+                          GtkSearchEntry *entry)
 {
-  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (editable);
-  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
-  const char *str, *icon_name;
-  gboolean cleared;
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+  const char *str;
 
   /* Update the icons first */
-  str = gtk_entry_get_text (GTK_ENTRY (entry));
+  str = gtk_editable_get_text (GTK_EDITABLE (priv->entry));
 
   if (str == NULL || *str == '\0')
     {
-      icon_name = NULL;
-      cleared = TRUE;
-    }
-  else
-    {
-      icon_name = "edit-clear-symbolic";
-      cleared = FALSE;
-    }
+      gtk_widget_hide (priv->icon);
 
-  g_object_set (entry,
-                "secondary-icon-name", icon_name,
-                "secondary-icon-activatable", !cleared,
-                "secondary-icon-sensitive", !cleared,
-                NULL);
-
-  if (cleared)
-    {
       if (priv->delayed_changed_id > 0)
         {
           g_source_remove (priv->delayed_changed_id);
@@ -347,21 +456,62 @@ gtk_search_entry_changed (GtkEditable *editable)
     }
   else
     {
+      gtk_widget_show (priv->icon);
+
       /* Queue up the timeout */
       reset_timeout (entry);
     }
 }
 
 static void
+notify_cb (GObject    *object,
+           GParamSpec *pspec,
+           gpointer    data)
+{
+  /* The editable interface properties are already forwarded by the editable delegate setup */
+  if (g_str_equal (pspec->name, "placeholder-text") ||
+      g_str_equal (pspec->name, "activates-default"))
+    g_object_notify (data, pspec->name);
+}
+
+static void
+activate_cb (GtkText  *text,
+             gpointer  data)
+{
+  g_signal_emit (data, signals[ACTIVATE], 0);
+}
+
+static void
 gtk_search_entry_init (GtkSearchEntry *entry)
 {
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
   AtkObject *atk_obj;
+  GtkGesture *press;
 
-  g_object_set (entry,
-                "primary-icon-name", "edit-find-symbolic",
-                "primary-icon-activatable", FALSE,
-                "primary-icon-sensitive", FALSE,
-                NULL);
+  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
+
+  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
+
+  priv->entry = gtk_text_new ();
+  gtk_widget_set_hexpand (priv->entry, TRUE);
+  gtk_widget_set_vexpand (priv->entry, TRUE);
+  gtk_container_add (GTK_CONTAINER (priv->box), GTK_WIDGET (priv->entry));
+  gtk_editable_init_delegate (GTK_EDITABLE (entry));
+  g_signal_connect_swapped (priv->entry, "changed", G_CALLBACK (text_changed), entry);
+  g_signal_connect_after (priv->entry, "changed", G_CALLBACK (gtk_search_entry_changed), entry);
+  g_signal_connect_swapped (priv->entry, "preedit-changed", G_CALLBACK (text_changed), entry);
+  g_signal_connect (priv->entry, "notify", G_CALLBACK (notify_cb), entry);
+  g_signal_connect (priv->entry, "activate", G_CALLBACK (activate_cb), entry);
+
+  priv->icon = gtk_image_new_from_icon_name ("edit-clear-symbolic");
+  gtk_widget_set_tooltip_text (priv->icon, _("Clear entry"));
+  gtk_container_add (GTK_CONTAINER (priv->box), GTK_WIDGET (priv->icon));
+  gtk_widget_hide (priv->icon);
+
+  press = gtk_gesture_multi_press_new ();
+  g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
+  gtk_widget_add_controller (priv->icon, GTK_EVENT_CONTROLLER (press));
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (entry));
   if (GTK_IS_ACCESSIBLE (atk_obj))
@@ -431,7 +581,7 @@ gboolean
 gtk_search_entry_handle_event (GtkSearchEntry *entry,
                                GdkEvent       *event)
 {
-  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
   gboolean handled;
   guint keyval, state;
 
@@ -544,3 +694,10 @@ gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
   return priv->capture_widget;
 }
 
+GtkEventController *
+gtk_search_entry_get_key_controller (GtkSearchEntry *entry)
+{
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  return gtk_text_get_key_controller (GTK_TEXT (priv->entry));
+}

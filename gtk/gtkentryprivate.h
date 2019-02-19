@@ -26,6 +26,7 @@
 #include "gtktreemodelfilter.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtktextprivate.h"
 
 G_BEGIN_DECLS
 
@@ -84,17 +85,12 @@ void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
                                              GtkEntry           *entry);
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
 
-gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
-                                            gint      start_pos,
-                                            gint      end_pos);
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
 void     gtk_entry_enter_text              (GtkEntry   *entry,
                                             const char *text);
-void     gtk_entry_set_positions           (GtkEntry   *entry,
-                                            int         current_pos,
-                                            int         selection_bound);
 
 GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
+GtkText *gtk_entry_get_text_widget (GtkEntry *entry);
 
 G_END_DECLS
 

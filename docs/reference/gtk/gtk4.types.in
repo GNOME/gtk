@@ -118,6 +118,7 @@ gtk_page_setup_get_type
 @DISABLE_ON_W32@gtk_page_setup_unix_dialog_get_type
 gtk_paned_get_type
 gtk_paper_size_get_type
+gtk_password_entry_get_type
 gtk_picture_get_type
 gtk_popover_get_type
 gtk_popover_menu_get_type
@@ -168,6 +169,7 @@ gtk_style_context_get_type
 gtk_style_provider_get_type
 gtk_text_buffer_get_type
 gtk_text_child_anchor_get_type
+gtk_text_get_type
 gtk_text_iter_get_type
 gtk_text_mark_get_type
 gtk_text_tag_get_type

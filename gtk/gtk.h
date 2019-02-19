@@ -159,8 +159,9 @@
 #include <gtk/gtkoverlay.h>
 #include <gtk/gtkpadcontroller.h>
 #include <gtk/gtkpagesetup.h>
-#include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>
+#include <gtk/gtkpapersize.h>
+#include <gtk/gtkpasswordentry.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopovermenu.h>
@@ -211,6 +212,7 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
+#include <gtk/gtktext.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextchild.h>
 #include <gtk/gtktextiter.h>

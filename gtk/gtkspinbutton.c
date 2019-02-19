@@ -35,7 +35,8 @@
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeditable.h"
-#include "gtkentry.h"
+#include "gtkimage.h"
+#include "gtktext.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
@@ -94,7 +95,7 @@
  * |[<!-- language="plain" -->
  * spinbutton.horizontal
  * ╰── box.horizontal
- *     ├── entry
+ *     ├── text
  *     │    ├── undershoot.left
  *     │    ╰── undershoot.right
  *     ├── button.down
@@ -105,7 +106,7 @@
  * spinbutton.vertical
  * ╰── box.vertical
  *     ├── button.up
- *     ├── entry
+ *     ├── text
  *     │    ├── undershoot.left
  *     │    ╰── undershoot.right
  *     ╰── button.down
@@ -113,8 +114,8 @@
  *
  * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
  * for the entry and the two buttons, with these names. The button nodes have
- * the style classes .up and .down. The GtkEntry subnodes (if present) are put
- * below the entry node. The orientation of the spin button is reflected in
+ * the style classes .up and .down. The GtkText subnodes (if present) are put
+ * below the text node. The orientation of the spin button is reflected in
  * the .vertical or .horizontal style class on the main node.
  *
  * ## Using a GtkSpinButton to get an integer
@@ -221,11 +222,8 @@ enum {
   PROP_WRAP,
   PROP_UPDATE_POLICY,
   PROP_VALUE,
-  PROP_WIDTH_CHARS,
-  PROP_MAX_WIDTH_CHARS,
-  PROP_TEXT,
   NUM_SPINBUTTON_PROPS,
-  PROP_ORIENTATION,
+  PROP_ORIENTATION = NUM_SPINBUTTON_PROPS
 };
 
 /* Signals */
@@ -271,7 +269,7 @@ static gboolean gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
 
-static void gtk_spin_button_activate       (GtkEntry           *entry,
+static void gtk_spin_button_activate       (GtkText            *entry,
                                             gpointer            user_data);
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
 static void gtk_spin_button_set_orientation (GtkSpinButton     *spin_button,
@@ -385,33 +383,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  spinbutton_props[PROP_WIDTH_CHARS] =
-    g_param_spec_int ("width-chars",
-                      P_("Width in chars"),
-                      P_("Number of characters to leave space for in the entry"),
-                      -1, G_MAXINT,
-                      0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  spinbutton_props[PROP_MAX_WIDTH_CHARS] =
-    g_param_spec_int ("max-width-chars",
-                      P_("Maximum width in characters"),
-                      P_("The desired maximum width of the entry, in characters"),
-                      -1, G_MAXINT,
-                      0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  spinbutton_props[PROP_TEXT] =
-    g_param_spec_string ("text",
-                         P_("Text"),
-                         P_("The contents of the entry"),
-                         "0",  /* Default value of the default adjustment */
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   g_object_class_install_properties (gobject_class, NUM_SPINBUTTON_PROPS, spinbutton_props);
-  g_object_class_override_property (gobject_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+  gtk_editable_install_properties (gobject_class, PROP_ORIENTATION + 1);
 
   /**
    * GtkSpinButton::input:
@@ -549,9 +523,19 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("spinbutton"));
 }
 
+static GtkEditable *
+gtk_spin_button_get_delegate (GtkEditable *editable)
+{
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (editable);
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  return GTK_EDITABLE (priv->entry);
+}
+
 static void
 gtk_spin_button_editable_init (GtkEditableInterface *iface)
 {
+  iface->get_delegate = gtk_spin_button_get_delegate;
   iface->insert_text = gtk_spin_button_insert_text;
 }
 
@@ -563,6 +547,9 @@ gtk_spin_button_set_property (GObject      *object,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
+    return;
 
   switch (prop_id)
     {
@@ -602,15 +589,6 @@ gtk_spin_button_set_property (GObject      *object,
     case PROP_ORIENTATION:
       gtk_spin_button_set_orientation (spin_button, g_value_get_enum (value));
       break;
-    case PROP_WIDTH_CHARS:
-      gtk_spin_button_set_width_chars (spin_button, g_value_get_int (value));
-      break;
-    case PROP_MAX_WIDTH_CHARS:
-      gtk_spin_button_set_max_width_chars (spin_button, g_value_get_int (value));
-      break;
-    case PROP_TEXT:
-      gtk_spin_button_set_text (spin_button, g_value_get_string (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -625,6 +603,9 @@ gtk_spin_button_get_property (GObject      *object,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
+    return;
 
   switch (prop_id)
     {
@@ -654,15 +635,6 @@ gtk_spin_button_get_property (GObject      *object,
       break;
     case PROP_ORIENTATION:
       g_value_set_enum (value, priv->orientation);
-      break;
-    case PROP_WIDTH_CHARS:
-      g_value_set_int (value, gtk_spin_button_get_width_chars (spin_button));
-      break;
-    case PROP_MAX_WIDTH_CHARS:
-      g_value_set_int (value, gtk_spin_button_get_max_width_chars (spin_button));
-      break;
-    case PROP_TEXT:
-      g_value_set_string (value, gtk_spin_button_get_text (spin_button));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -861,19 +833,18 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (spin_button));
-  gtk_widget_set_focus_on_click (GTK_WIDGET (spin_button), TRUE);
 
   priv->box = gtk_box_new (priv->orientation, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (spin_button));
 
-  priv->entry = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 0);
-  gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), 0);
+  priv->entry = gtk_text_new ();
+  gtk_editable_init_delegate (GTK_EDITABLE (spin_button));
+  gtk_editable_set_width_chars (GTK_EDITABLE (priv->entry), 0);
+  gtk_editable_set_max_width_chars (GTK_EDITABLE (priv->entry), 0);
   gtk_widget_set_hexpand (priv->entry, TRUE);
   gtk_widget_set_vexpand (priv->entry, TRUE);
   g_signal_connect (priv->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
-
 
   priv->down_button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (priv->down_button), gtk_image_new_from_icon_name ("value-decrease-symbolic"));
@@ -941,6 +912,8 @@ gtk_spin_button_finalize (GObject *object)
 
   gtk_spin_button_unset_adjustment (spin_button);
 
+  gtk_editable_finish_delegate (GTK_EDITABLE (spin_button));
+
   gtk_widget_unparent (priv->box);
 
   G_OBJECT_CLASS (gtk_spin_button_parent_class)->finalize (object);
@@ -960,6 +933,7 @@ gtk_spin_button_realize (GtkWidget *widget)
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
   gboolean return_val;
+  const char *text;
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->realize (widget);
 
@@ -969,8 +943,8 @@ gtk_spin_button_realize (GtkWidget *widget)
   /* If output wasn't processed explicitly by the method connected to the
    * 'output' signal; and if we don't have any explicit 'text' set initially,
    * fallback to the default output. */
-  if (!return_val &&
-      (priv->numeric || gtk_entry_get_text (GTK_ENTRY (priv->entry)) == NULL))
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->entry));
+  if (!return_val && (priv->numeric || text == NULL || *text == '\0'))
     gtk_spin_button_default_output (spin_button);
 }
 
@@ -1026,7 +1000,7 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
                                  GtkOrientation  orientation)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin);
-  GtkEntry *entry = GTK_ENTRY (priv->entry);
+  GtkEditable *editable = GTK_EDITABLE (priv->entry);
 
   if (priv->orientation == orientation)
     return;
@@ -1036,11 +1010,11 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
 
   /* change alignment if it's the default */
   if (priv->orientation == GTK_ORIENTATION_VERTICAL &&
-      gtk_entry_get_alignment (entry) == 0.0)
-    gtk_entry_set_alignment (entry, 0.5);
+      gtk_editable_get_alignment (editable) == 0.0)
+    gtk_editable_set_alignment (editable, 0.5);
   else if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-           gtk_entry_get_alignment (entry) == 0.5)
-    gtk_entry_set_alignment (entry, 0.0);
+           gtk_editable_get_alignment (editable) == 0.5)
+    gtk_editable_set_alignment (editable, 0.0);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1330,7 +1304,7 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 }
 
 static void
-gtk_spin_button_activate (GtkEntry *entry,
+gtk_spin_button_activate (GtkText *entry,
                           gpointer  user_data)
 {
   GtkSpinButton *spin_button = user_data;
@@ -1348,11 +1322,6 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (editable);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin);
-  GtkEntry *entry = GTK_ENTRY (priv->entry);
-  GtkEditableInterface *parent_editable_iface;
-
-  parent_editable_iface = g_type_interface_peek (gtk_spin_button_parent_class,
-                                                 GTK_TYPE_EDITABLE);
 
   if (priv->numeric)
     {
@@ -1365,8 +1334,8 @@ gtk_spin_button_insert_text (GtkEditable *editable,
       gint entry_length;
       const gchar *entry_text;
 
-      entry_length = gtk_entry_get_text_length (entry);
-      entry_text = gtk_entry_get_text (entry);
+      entry_text = gtk_editable_get_text (GTK_EDITABLE (priv->entry));
+      entry_length = g_utf8_strlen (entry_text, -1);
 
       lc = localeconv ();
 
@@ -1444,8 +1413,8 @@ gtk_spin_button_insert_text (GtkEditable *editable,
         }
     }
 
-  parent_editable_iface->insert_text (editable, new_text,
-                                      new_text_length, position);
+  gtk_editable_insert_text (GTK_EDITABLE (priv->entry),
+                            new_text, new_text_length, position);
 }
 
 static void
@@ -1505,8 +1474,9 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
   gchar *err = NULL;
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (priv->entry));
 
-  *new_val = g_strtod (gtk_entry_get_text (GTK_ENTRY (priv->entry)), &err);
+  *new_val = g_strtod (text, &err);
   if (*err)
     return GTK_INPUT_ERROR;
   else
@@ -1520,8 +1490,8 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
   gchar *buf = gtk_spin_button_format_for_value (spin_button,
                                                  gtk_adjustment_get_value (priv->adjustment));
 
-  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (priv->entry))))
-    gtk_entry_set_text (GTK_ENTRY (priv->entry), buf);
+  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (priv->entry))))
+    gtk_editable_set_text (GTK_EDITABLE (priv->entry), buf);
 
   g_free (buf);
 }
@@ -2260,7 +2230,7 @@ gtk_spin_button_get_text (GtkSpinButton *spin_button)
 
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), NULL);
 
-  return gtk_entry_get_text (GTK_ENTRY (priv->entry));
+  return gtk_editable_get_text (GTK_EDITABLE (priv->entry));
 }
 
 /**
@@ -2279,9 +2249,7 @@ gtk_spin_button_set_text (GtkSpinButton *spin_button,
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
-
-  g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_TEXT]);
+  gtk_editable_set_text (GTK_EDITABLE (priv->entry), text);
 }
 
 /**
@@ -2303,7 +2271,7 @@ gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
 
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), -1);
 
-  return gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry));
+  return gtk_editable_get_max_width_chars (GTK_EDITABLE (priv->entry));
 }
 
 /**
@@ -2323,11 +2291,7 @@ gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  if (max_width_chars != gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry)))
-    {
-      gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), max_width_chars);
-      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_MAX_WIDTH_CHARS]);
-    }
+  gtk_editable_set_max_width_chars (GTK_EDITABLE (priv->entry), max_width_chars);
 }
 
 /**
@@ -2347,7 +2311,7 @@ gtk_spin_button_get_width_chars (GtkSpinButton *spin_button)
 
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), -1);
 
-  return gtk_entry_get_width_chars (GTK_ENTRY (priv->entry));
+  return gtk_editable_get_width_chars (GTK_EDITABLE (priv->entry));
 }
 
 /**
@@ -2366,9 +2330,5 @@ gtk_spin_button_set_width_chars (GtkSpinButton *spin_button,
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  if (width_chars != gtk_entry_get_width_chars (GTK_ENTRY (priv->entry)))
-    {
-      gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), width_chars);
-      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_WIDTH_CHARS]);
-    }
+  gtk_editable_set_width_chars (GTK_EDITABLE (priv->entry), width_chars);
 }

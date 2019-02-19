@@ -28,7 +28,7 @@ activate_cb (GtkApplication *app,
   menu_button = gtk_menu_button_new ();
   gtk_container_add (GTK_CONTAINER (box), menu_button);
 
-  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (search_bar), GTK_ENTRY (entry));
+  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (search_bar), GTK_EDITABLE (entry));
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (search_bar), window);
 }
 
