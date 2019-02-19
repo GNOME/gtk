@@ -11132,41 +11132,6 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_allocated_size:
- * @widget: a #GtkWidget
- * @allocation: (out): a pointer to a #GtkAllocation to copy to
- * @baseline: (out) (allow-none): a pointer to an integer to copy to
- *
- * Retrieves the widget’s allocated size.
- *
- * This function returns the last values passed to
- * gtk_widget_size_allocate(). The value differs from
- * the size returned in gtk_widget_get_allocation() in that functions
- * like gtk_widget_set_halign() can adjust the allocation, but not
- * the value returned by this function.
- *
- * If a widget is not visible, its allocated size is 0.
- */
-void
-gtk_widget_get_allocated_size (GtkWidget     *widget,
-                               GtkAllocation *allocation,
-                               int           *baseline)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (allocation != NULL);
-
-  allocation->x = graphene_matrix_get_value (&priv->allocated_transform, 3, 0);
-  allocation->y = graphene_matrix_get_value (&priv->allocated_transform, 3, 1);
-  allocation->width = priv->allocated_width;
-  allocation->height = priv->allocated_height;
-
-  if (baseline)
-    *baseline = priv->allocated_size_baseline;
-}
-
-/**
  * gtk_widget_get_allocation:
  * @widget: a #GtkWidget
  * @allocation: (out): a pointer to a #GtkAllocation to copy to
