@@ -35,6 +35,7 @@
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkbindings.h"
+#include "gtkenums.h"
 
 #include <gdk/gdk.h>
 
@@ -342,9 +343,14 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
   if (!gtk_widget_get_realized (widget))
     gtk_widget_realize (widget);
 
-  if (_gtk_widget_captured_event (widget, controller->current_event))
+  if (gtk_widget_run_controllers (widget, controller->current_event,
+				  GTK_PHASE_CAPTURE))
     return TRUE;
-  if (gtk_widget_event (widget, controller->current_event))
+  if (gtk_widget_run_controllers (widget, controller->current_event,
+				  GTK_PHASE_TARGET))
+    return TRUE;
+  if (gtk_widget_run_controllers (widget, controller->current_event,
+				  GTK_PHASE_BUBBLE))
     return TRUE;
 
   return FALSE;

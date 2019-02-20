@@ -508,7 +508,7 @@ on_search_changed (GtkSearchEntry           *entry,
   gint length;
   gboolean backwards;
 
-  length = strlen (gtk_entry_get_text (GTK_ENTRY (entry)));
+  length = strlen (gtk_editable_get_text (GTK_EDITABLE (entry)));
   backwards = length < sl->priv->search_length;
   sl->priv->search_length = length;
 

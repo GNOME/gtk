@@ -338,9 +338,9 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
                                                             GdkEventSequence      *sequence,
                                                             GtkEventSequenceState  state);
 
-
-
-
+gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
+                                                            const GdkEvent      *event,
+                                                            GtkPropagationPhase  phase);
 
 /* inline getters */
 
