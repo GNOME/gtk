@@ -132,6 +132,16 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_delete_surrounding  (GtkIMContext       *context,
 					     gint                offset,
 					     gint                n_chars);
+GDK_AVAILABLE_IN_ALL
+void     gtk_im_context_put_key_event       (GtkIMContext       *context,
+					     const GdkEvent     *event);
+GDK_AVAILABLE_IN_ALL
+void     gtk_im_context_forward_key         (GtkIMContext       *context,
+					     guint               keyval,
+					     guint16             keycode,
+					     GdkModifierType     state,
+					     guint32             time_,
+					     gboolean            press);
 
 G_END_DECLS
 
