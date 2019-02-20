@@ -542,16 +542,6 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
   graphene_vec4_init_from_vec4 (&state->data.color_matrix.offset, color_offset);
 }
 
-static void
-rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
-                              const graphene_rect_t *graphene)
-{
-  cairo->x = floorf (graphene->origin.x);
-  cairo->y = floorf (graphene->origin.y);
-  cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
-  cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
-}
-
 static GskRenderNode *
 gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
                              GtkSnapshotState *state,
@@ -632,11 +622,8 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   graphene_rect_t real_bounds;
-  cairo_rectangle_int_t rect;
 
   graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
-
-  rectangle_init_from_graphene (&rect, &real_bounds);
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->translate_x,
