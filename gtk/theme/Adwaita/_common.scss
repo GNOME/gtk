@@ -1164,11 +1164,12 @@ spinbutton {
       border: none;
       border-radius: 0;
       box-shadow: none;
+      padding: 6px;
 
       &:backdrop:disabled { background-color: transparent; }
     }
 
-    entry {
+    text {
       @extend %spinbutton_horz_entry;
     }
 
@@ -1224,7 +1225,7 @@ spinbutton {
 
   // OSD horizontal
   .osd &:not(.vertical) {
-    entry {
+    text {
       @extend %spinbutton_horz_entry;
     }
 
@@ -1291,7 +1292,9 @@ spinbutton {
       box-shadow: none;
     }
 
-    entry {
+    text {
+      @extend %entry;
+
       min-height: 32px;
       min-width: 32px;
       padding: 0;
