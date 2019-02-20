@@ -33,6 +33,8 @@
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksearchentryprivate.h"
+#include "gtktext.h"
 
 #define BOX_SPACE 6
 
@@ -503,7 +505,7 @@ filter_func (GtkFlowBoxChild *child,
   res = TRUE;
 
   chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (GTK_WIDGET (child), GTK_TYPE_EMOJI_CHOOSER));
-  text = gtk_entry_get_text (GTK_ENTRY (chooser->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (chooser->search_entry));
   emoji_data = (GVariant *) g_object_get_data (G_OBJECT (child), "emoji-data");
 
   if (text[0] == 0)
@@ -604,10 +606,14 @@ static void
 gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
 {
   GtkAdjustment *adj;
+  GtkText *text;
 
   chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
 
   gtk_widget_init_template (GTK_WIDGET (chooser));
+
+  text = gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (chooser->search_entry));
+  gtk_text_set_input_hints (text, GTK_INPUT_HINT_NO_EMOJI);
 
   /* Get a reasonable maximum width for an emoji. We do this to
    * skip overly wide fallback rendering for certain emojis the
@@ -662,7 +668,7 @@ gtk_emoji_chooser_show (GtkWidget *widget)
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   gtk_adjustment_set_value (adj, 0);
 
-  gtk_entry_set_text (GTK_ENTRY (chooser->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (chooser->search_entry), "");
 }
 
 static void
