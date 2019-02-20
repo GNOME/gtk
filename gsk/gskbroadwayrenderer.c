@@ -580,15 +580,6 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
 
       /* Bin nodes */
 
-    case GSK_OFFSET_NODE:
-      {
-        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                        gsk_offset_node_get_child (node),
-                                        offset_x - gsk_offset_node_get_x_offset (node),
-                                        offset_y - gsk_offset_node_get_y_offset (node));
-      }
-      return;
-
     case GSK_SHADOW_NODE:
       {
         gsize i, n_shadows = gsk_shadow_node_get_n_shadows (node);
