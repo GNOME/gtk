@@ -11245,7 +11245,8 @@ gtk_widget_pick (GtkWidget *widget,
  *
  * Returns: %TRUE if the transform could be computed, %FALSE otherwise.
  *   The transform can not be computed in certain cases, for example when
- *   @widget and @target do not share a common ancestor.
+ *   @widget and @target do not share a common ancestor. In that
+ *   case @out_transform gets set to the identity matrix.
  */
 gboolean
 gtk_widget_compute_transform (GtkWidget         *widget,
@@ -11268,7 +11269,10 @@ gtk_widget_compute_transform (GtkWidget         *widget,
 
   ancestor = gtk_widget_common_ancestor (widget, target);
   if (ancestor == NULL)
-    return FALSE;
+    {
+      graphene_matrix_init_identity (out_transform);
+      return FALSE;
+    }
 
   graphene_matrix_init_identity (&transform);
   for (iter = widget; iter != ancestor; iter = iter->priv->parent)
@@ -11293,7 +11297,10 @@ gtk_widget_compute_transform (GtkWidget         *widget,
       graphene_matrix_multiply (&inverse, &priv->transform, &inverse);
     }
   if (!graphene_matrix_inverse (&inverse, &inverse))
-    return FALSE;
+    {
+      graphene_matrix_init_identity (out_transform);
+      return FALSE;
+    }
 
   graphene_matrix_multiply (&transform, &inverse, out_transform);
 
