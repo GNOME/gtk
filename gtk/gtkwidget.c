@@ -5099,10 +5099,10 @@ _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
   g_object_set_data (G_OBJECT (widget), I_("captured-event-handler"), callback);
 }
 
-static gboolean
-_gtk_widget_run_controllers (GtkWidget           *widget,
-                             const GdkEvent      *event,
-                             GtkPropagationPhase  phase)
+gboolean
+gtk_widget_run_controllers (GtkWidget           *widget,
+			    const GdkEvent      *event,
+			    GtkPropagationPhase  phase)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkEventController *controller;
@@ -5170,7 +5170,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   event_copy = gdk_event_copy (event);
   translate_event_coordinates (event_copy, widget);
 
-  return_val = _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
+  return_val = gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
   handler = g_object_get_data (G_OBJECT (widget), I_("captured-event-handler"));
   if (!handler)
@@ -5270,10 +5270,10 @@ gtk_widget_event_internal (GtkWidget      *widget,
   translate_event_coordinates (event_copy, widget);
 
   if (widget == gtk_get_event_target (event_copy))
-    return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
+    return_val |= gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
 
   if (return_val == FALSE)
-    return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
+    return_val |= gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
   g_object_unref (event_copy);
 
   if (return_val == FALSE &&
