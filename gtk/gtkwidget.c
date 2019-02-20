@@ -11283,7 +11283,7 @@ gtk_widget_compute_transform (GtkWidget         *widget,
     graphene_matrix_t inv;
 
     graphene_matrix_init_identity (&down_transform);
-
+    parent = target;
     while (parent != ancestor)
       {
         graphene_matrix_multiply (&down_transform, &parent->priv->transform, &down_transform);
