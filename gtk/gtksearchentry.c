@@ -707,5 +707,5 @@ gtk_search_entry_get_text_widget (GtkSearchEntry *entry)
 {
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  return priv->entry;
+  return GTK_TEXT (priv->entry);
 }
