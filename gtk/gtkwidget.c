@@ -11252,51 +11252,35 @@ gtk_widget_compute_transform (GtkWidget         *widget,
                               GtkWidget         *target,
                               graphene_matrix_t *out_transform)
 {
-  GtkWidget *parent;
-  GtkWidget *ancestor;
-  graphene_matrix_t transform;
+  GtkWidget *ancestor, *iter;
+  graphene_matrix_t transform, inverse;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
   g_return_val_if_fail (out_transform != NULL, FALSE);
 
   ancestor = gtk_widget_common_ancestor (widget, target);
-
-  if (!ancestor)
+  if (ancestor == NULL)
     return FALSE;
 
   graphene_matrix_init_identity (&transform);
-  parent = widget;
-  while (parent != ancestor)
+  for (iter = widget; iter != ancestor; iter = iter->priv->parent)
     {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (parent);
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
 
       graphene_matrix_multiply (&transform, &priv->transform, &transform);
-
-      parent = priv->parent;
     }
 
-  g_assert (parent == ancestor);
+  graphene_matrix_init_identity (&inverse);
+  for (iter = target; iter != ancestor; iter = iter->priv->parent)
+    {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
 
-  {
-    graphene_matrix_t down_transform;
-    graphene_matrix_t inv;
+      graphene_matrix_multiply (&inverse, &priv->transform, &inverse);
+    }
+  graphene_matrix_inverse (&inverse, &inverse);
 
-    graphene_matrix_init_identity (&down_transform);
-    parent = target;
-    while (parent != ancestor)
-      {
-        graphene_matrix_multiply (&down_transform, &parent->priv->transform, &down_transform);
-        parent = parent->priv->parent;
-      }
-
-    graphene_matrix_inverse (&down_transform, &inv);
-
-    graphene_matrix_multiply (&transform, &inv, &transform);
-  }
-
-
-  *out_transform = transform;
+  graphene_matrix_multiply (&transform, &inverse, out_transform);
 
   return TRUE;
 }
