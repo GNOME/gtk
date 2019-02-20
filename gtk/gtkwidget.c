@@ -11292,7 +11292,8 @@ gtk_widget_compute_transform (GtkWidget         *widget,
 
       graphene_matrix_multiply (&inverse, &priv->transform, &inverse);
     }
-  graphene_matrix_inverse (&inverse, &inverse);
+  if (!graphene_matrix_inverse (&inverse, &inverse))
+    return FALSE;
 
   graphene_matrix_multiply (&transform, &inverse, out_transform);
 
