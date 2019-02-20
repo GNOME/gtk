@@ -101,7 +101,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * text[.read-only][.flat][.warning][.error]
+ * text[.read-only]
  * ├── placeholder
  * ├── undershoot.left
  * ├── undershoot.right
@@ -111,8 +111,7 @@
  * ]|
  *
  * GtkText has a main node with the name text. Depending on the properties
- * of the widget, the style classes .read-only and .flat may appear. The style
- * classes .warning and .error may also be used with entries.
+ * of the widget, the .read-only style class may appear.
  *
  * When the entry has a selection, it adds a subnode with the name selection.
  *
@@ -1457,10 +1456,6 @@ gtk_text_set_property (GObject      *object,
       gtk_text_set_visibility (self, g_value_get_boolean (value));
       break;
 
-    case PROP_HAS_FRAME:
-      gtk_text_set_has_frame (self, g_value_get_boolean (value));
-      break;
-
     case PROP_INVISIBLE_CHAR:
       gtk_text_set_invisible_char (self, g_value_get_uint (value));
       break;
@@ -1585,10 +1580,6 @@ gtk_text_get_property (GObject    *object,
 
     case PROP_VISIBILITY:
       g_value_set_boolean (value, priv->visible);
-      break;
-
-    case PROP_HAS_FRAME:
-      g_value_set_boolean (value, gtk_text_get_has_frame (self));
       break;
 
     case PROP_INVISIBLE_CHAR:
@@ -1744,7 +1735,6 @@ gtk_text_init (GtkText *self)
     }
 
   set_text_cursor (GTK_WIDGET (self));
-  gtk_text_set_has_frame (self, FALSE);
 }
 
 static void
@@ -5537,55 +5527,6 @@ gtk_text_set_max_width_chars (GtkText *self,
       g_object_notify (G_OBJECT (self), "max-width-chars");
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
-}
-
-/**
- * gtk_text_set_has_frame:
- * @self: a #GtkText
- * @has_frame: new value
- * 
- * Sets whether the self has a beveled frame around it.
- **/
-void
-gtk_text_set_has_frame (GtkText  *self,
-                        gboolean  has_frame)
-{
-  GtkStyleContext *context;
-
-  g_return_if_fail (GTK_IS_TEXT (self));
-
-  has_frame = (has_frame != FALSE);
-
-  if (has_frame == gtk_text_get_has_frame (self))
-    return;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  if (has_frame)
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
-  else
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
-
-  g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_HAS_FRAME]);
-}
-
-/**
- * gtk_text_get_has_frame:
- * @self: a #GtkText
- * 
- * Gets the value set by gtk_text_set_has_frame().
- * 
- * Returns: whether the self has a beveled frame
- **/
-gboolean
-gtk_text_get_has_frame (GtkText *self)
-{
-  GtkStyleContext *context;
-
-  g_return_val_if_fail (GTK_IS_TEXT (self), FALSE);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-
-  return !gtk_style_context_has_class (context, GTK_STYLE_CLASS_FLAT);
 }
 
 PangoLayout *

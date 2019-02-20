@@ -159,12 +159,6 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_text_unset_invisible_char           (GtkText         *self);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_text_set_has_frame                  (GtkText         *self,
-                                                         gboolean         has_frame);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_text_get_has_frame                  (GtkText         *self);
-
-GDK_AVAILABLE_IN_ALL
 void            gtk_text_set_overwrite_mode             (GtkText         *self,
                                                          gboolean         overwrite);
 GDK_AVAILABLE_IN_ALL

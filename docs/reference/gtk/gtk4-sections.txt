@@ -891,8 +891,6 @@ gtk_text_get_visibility
 gtk_text_set_invisible_char
 gtk_text_get_invisible_char
 gtk_text_unset_invisible_char
-gtk_text_set_has_frame
-gtk_text_get_has_frame
 gtk_text_set_overwrite_mode
 gtk_text_get_overwrite_mode
 gtk_text_set_max_length
