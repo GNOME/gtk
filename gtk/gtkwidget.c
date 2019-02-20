@@ -11259,6 +11259,13 @@ gtk_widget_compute_transform (GtkWidget         *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
   g_return_val_if_fail (out_transform != NULL, FALSE);
 
+  /* optimization for common case: parent wants coordinates of a direct child */
+  if (target == widget->priv->parent)
+    {
+      graphene_matrix_init_from_matrix (out_transform, &widget->priv->transform);
+      return TRUE;
+    }
+
   ancestor = gtk_widget_common_ancestor (widget, target);
   if (ancestor == NULL)
     return FALSE;
@@ -11269,6 +11276,13 @@ gtk_widget_compute_transform (GtkWidget         *widget,
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
 
       graphene_matrix_multiply (&transform, &priv->transform, &transform);
+    }
+
+  /* optimization for common case: parent wants coordinates of a non-direct child */
+  if (ancestor == target)
+    {
+      graphene_matrix_init_from_matrix (out_transform, &transform);
+      return TRUE;
     }
 
   graphene_matrix_init_identity (&inverse);
