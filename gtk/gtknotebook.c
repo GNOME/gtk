@@ -716,6 +716,9 @@ static GList * gtk_notebook_search_page      (GtkNotebook      *notebook,
                                               gboolean          find_visible);
 static void  gtk_notebook_child_reordered    (GtkNotebook      *notebook,
                                               GtkNotebookPage  *page);
+static gint gtk_notebook_insert_notebook_page (GtkNotebook     *notebook,
+                                               GtkNotebookPage *page,
+                                               int              position);
 
 /*** GtkNotebook Size Allocate Functions ***/
 static void gtk_notebook_pages_allocate      (GtkNotebook      *notebook,
@@ -1376,7 +1379,11 @@ gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (buildable);
 
-  if (GTK_IS_WIDGET (child))
+  if (GTK_IS_NOTEBOOK_PAGE (child))
+    {
+      gtk_notebook_insert_notebook_page (notebook, GTK_NOTEBOOK_PAGE (child), -1);
+    }
+  else if (GTK_IS_WIDGET (child))
     {
       if (type && strcmp (type, "tab") == 0)
         {
