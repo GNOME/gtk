@@ -284,6 +284,8 @@ enum {
   CHILD_PROP_REORDERABLE,
   CHILD_PROP_DETACHABLE,
   CHILD_PROP_CHILD,
+  CHILD_PROP_TAB,
+  CHILD_PROP_MENU,
 };
 
 #define GTK_NOTEBOOK_PAGE_FROM_LIST(_glist_)         ((GtkNotebookPage *)(_glist_)->data)
@@ -301,6 +303,9 @@ struct _GtkNotebookPage
   GtkWidget *last_focus_child;  /* Last descendant of the page that had focus */
 
   GtkWidget *tab_widget;        /* widget used for the tab itself */
+
+  char *tab_text;
+  char *menu_text;
 
   guint default_menu : 1;       /* If true, we create the menu label ourself */
   guint default_tab  : 1;       /* If true, we create the tab label ourself */
@@ -325,6 +330,8 @@ G_DEFINE_TYPE (GtkNotebookPage, gtk_notebook_page, G_TYPE_OBJECT)
 static void
 gtk_notebook_page_init (GtkNotebookPage *page)
 {
+  page->default_tab = TRUE;
+  page->default_menu = TRUE;
 }
 
 static void
@@ -335,6 +342,9 @@ gtk_notebook_page_finalize (GObject *object)
   g_clear_object (&page->child);
   g_clear_object (&page->tab_label);
   g_clear_object (&page->menu_label);
+
+  g_free (page->tab_text);
+  g_free (page->menu_text);
 
   G_OBJECT_CLASS (gtk_notebook_page_parent_class)->finalize (object);
 }
@@ -354,12 +364,28 @@ gtk_notebook_page_set_property (GObject      *object,
       g_set_object (&page->child, g_value_get_object (value));
       break;
 
-    case CHILD_PROP_TAB_LABEL:
+    case CHILD_PROP_TAB:
       g_set_object (&page->tab_label, g_value_get_object (value));
+      page->default_tab = page->tab_label == NULL;
+      break;
+
+    case CHILD_PROP_MENU:
+      g_set_object (&page->menu_label, g_value_get_object (value));
+      page->default_menu = page->menu_label == NULL;
+      break;
+
+    case CHILD_PROP_TAB_LABEL:
+      g_free (page->tab_text);
+      page->tab_text = g_value_dup_string (value);
+      if (page->default_tab && GTK_IS_LABEL (page->tab_label))
+        gtk_label_set_label (GTK_LABEL (page->tab_label), page->tab_text);
       break;
 
     case CHILD_PROP_MENU_LABEL:
-      g_set_object (&page->tab_label, g_value_get_object (value));
+      g_free (page->menu_text);
+      page->menu_text = g_value_dup_string (value);
+      if (page->default_menu && GTK_IS_LABEL (page->menu_label))
+        gtk_label_set_label (GTK_LABEL (page->menu_label), page->menu_text);
       break;
 
     case CHILD_PROP_POSITION:
@@ -405,12 +431,20 @@ gtk_notebook_page_get_property (GObject    *object,
       g_value_set_object (value, page->child);
       break;
 
-    case CHILD_PROP_TAB_LABEL:
+    case CHILD_PROP_TAB:
       g_value_set_object (value, page->tab_label);
       break;
 
-    case CHILD_PROP_MENU_LABEL:
+    case CHILD_PROP_MENU:
       g_value_set_object (value, page->menu_label);
+      break;
+
+    case CHILD_PROP_TAB_LABEL:
+      g_value_set_string (value, page->tab_text);
+      break;
+
+    case CHILD_PROP_MENU_LABEL:
+      g_value_set_string (value, page->menu_text);
       break;
 
     case CHILD_PROP_POSITION:
@@ -458,19 +492,33 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
-                                   CHILD_PROP_TAB_LABEL,
-                                   g_param_spec_object ("tab-label",
+                                   CHILD_PROP_TAB,
+                                   g_param_spec_object ("tab",
                                                         P_("Tab"),
                                                         P_("The tab widget for this page"),
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
-                                   CHILD_PROP_MENU_LABEL,
-                                   g_param_spec_object ("menu-label",
+                                   CHILD_PROP_MENU,
+                                   g_param_spec_object ("menu",
                                                         P_("Menu"),
                                                         P_("The label widget displayed in the child’s menu entry"),
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_TAB_LABEL,
+                                   g_param_spec_string ("tab-label",
+                                                        P_("Tab label"),
+                                                        P_("The text of the tab widget"),
+                                                        NULL,
+                                                         GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   CHILD_PROP_MENU_LABEL,
+                                   g_param_spec_string ("menu-label",
+                                                        P_("Menu label"),
+                                                        P_("The text of the menu widget"),
+                                                        NULL,
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_POSITION,
                                    g_param_spec_int ("position",
@@ -696,7 +744,7 @@ static void gtk_notebook_menu_switch_page    (GtkWidget        *widget,
 
 /*** GtkNotebook Menu Functions ***/
 static void gtk_notebook_menu_item_create    (GtkNotebook      *notebook,
-                                              GList            *list);
+                                              GtkNotebookPage  *page);
 static void gtk_notebook_menu_item_recreate  (GtkNotebook      *notebook,
                                               GList            *list);
 static void gtk_notebook_menu_label_unparent (GtkWidget        *widget,
@@ -4130,25 +4178,16 @@ allocate_tab (GtkGizmo *gizmo,
 }
 
 static gint
-gtk_notebook_real_insert_page (GtkNotebook *notebook,
-                               GtkWidget   *child,
-                               GtkWidget   *tab_label,
-                               GtkWidget   *menu_label,
-                               gint         position)
+gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
+                                   GtkNotebookPage *page,
+                                   int position)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
   gint nchildren;
   GList *list;
   GtkWidget *sibling;
 
-  gtk_widget_freeze_child_notify (child);
-
-  page = g_object_new (GTK_TYPE_NOTEBOOK_PAGE,
-                       "child", child,
-                       "tab-label", tab_label,
-                       "menu-label", menu_label,
-                       NULL);
+  gtk_widget_freeze_child_notify (page->child);
 
   nchildren = g_list_length (priv->children);
   if ((position < 0) || (position > nchildren))
@@ -4163,30 +4202,21 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   else
   sibling = priv->arrow_widget[ARROW_RIGHT_AFTER];
 
-  page->tab_widget = gtk_gizmo_new ("tab",
-                                    measure_tab,
-                                    allocate_tab,
-                                    NULL);
+  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, priv->tabs_widget, sibling);
-
-  if (!tab_label)
-    page->default_tab = TRUE;
-  if (!menu_label)
-    page->default_menu = TRUE;
 
   page->expand = FALSE;
   page->fill = TRUE;
 
   if (priv->menu)
-    gtk_notebook_menu_item_create (notebook,
-                                   g_list_find (priv->children, page));
+    gtk_notebook_menu_item_create (notebook, page);
 
-  gtk_container_add (GTK_CONTAINER (priv->stack_widget), child);
+  gtk_container_add (GTK_CONTAINER (priv->stack_widget), page->child);
 
-  if (tab_label)
+  if (page->tab_label)
     {
-      gtk_widget_set_parent (tab_label, page->tab_widget);
+      gtk_widget_set_parent (page->tab_label, page->tab_widget);
       g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
     }
 
@@ -4195,28 +4225,24 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   if (!priv->first_tab)
     priv->first_tab = priv->children;
 
-  if (tab_label)
+  if (page->tab_label)
     {
-      if (priv->show_tabs && gtk_widget_get_visible (child))
-        gtk_widget_show (tab_label);
+      if (priv->show_tabs && gtk_widget_get_visible (page->child))
+        gtk_widget_show (page->tab_label);
       else
-        gtk_widget_hide (tab_label);
+        gtk_widget_hide (page->tab_label);
 
     page->mnemonic_activate_signal =
-      g_signal_connect (tab_label,
+      g_signal_connect (page->tab_label,
                         "mnemonic-activate",
                         G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
                         notebook);
     }
 
-  page->notify_visible_handler = g_signal_connect (child, "notify::visible",
+  page->notify_visible_handler = g_signal_connect (page->child, "notify::visible",
                                                    G_CALLBACK (page_visible_cb), notebook);
 
-  g_signal_emit (notebook,
-                 notebook_signals[PAGE_ADDED],
-                 0,
-                 child,
-                 position);
+  g_signal_emit (notebook, notebook_signals[PAGE_ADDED], 0, page->child, position);
 
   if (!gtk_notebook_has_current_page (notebook))
     {
@@ -4225,10 +4251,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
       gtk_notebook_switch_focus_tab (notebook, priv->focus_tab);
     }
 
-  child_notify (notebook, child, "tab-expand");
-  child_notify (notebook, child, "tab-fill");
-  child_notify (notebook, child, "tab-label");
-  child_notify (notebook, child, "menu-label");
+  child_notify (notebook, page->child, "tab-expand");
+  child_notify (notebook, page->child, "tab-fill");
+  child_notify (notebook, page->child, "tab-label");
+  child_notify (notebook, page->child, "menu-label");
 
   list = g_list_nth (priv->children, position);
   while (list)
@@ -4237,12 +4263,30 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
       list = list->next;
     }
 
-  gtk_widget_thaw_child_notify (child);
+  gtk_widget_thaw_child_notify (page->child);
 
   update_arrow_state (notebook);
 
   /* The page-added handler might have reordered the pages, re-get the position */
-  return gtk_notebook_page_num (notebook, child);
+  return gtk_notebook_page_num (notebook, page->child);
+}
+
+static gint
+gtk_notebook_real_insert_page (GtkNotebook *notebook,
+                               GtkWidget   *child,
+                               GtkWidget   *tab_label,
+                               GtkWidget   *menu_label,
+                               gint         position)
+{
+  GtkNotebookPage *page;
+
+  page = g_object_new (GTK_TYPE_NOTEBOOK_PAGE,
+                       "child", child,
+                       "tab", tab_label,
+                       "menu", menu_label,
+                       NULL);
+
+  return gtk_notebook_insert_notebook_page (notebook, page, position);
 }
 
 static gboolean
@@ -4410,8 +4454,6 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
       gtk_widget_queue_resize (priv->menu);
     }
-  if (!page->default_menu)
-    g_object_unref (page->menu_label);
 
   g_list_free (list);
 
@@ -4436,7 +4478,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *list;
-  gchar string[32];
+  char string[32];
   gint page_num = 1;
 
   if (!priv->show_tabs && !priv->menu)
@@ -4446,36 +4488,40 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
        list;
        list = gtk_notebook_search_page (notebook, list, STEP_NEXT, FALSE))
     {
+      const char *text;
       page = list->data;
-      g_snprintf (string, sizeof(string), _("Page %u"), page_num++);
+      g_snprintf (string, sizeof (string), _("Page %u"), page_num++);
+      if (page->tab_text)
+        text = page->tab_text;
+      else
+        text = string;
       if (priv->show_tabs)
         {
           if (page->default_tab)
             {
               if (!page->tab_label)
                 {
-                  page->tab_label = gtk_label_new (string);
+                  page->tab_label = gtk_label_new ("");
+                  g_object_ref_sink (page->tab_label);
                   g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
                   gtk_widget_set_parent (page->tab_label, page->tab_widget);
                 }
-              else
-                gtk_label_set_text (GTK_LABEL (page->tab_label), string);
+              gtk_label_set_text (GTK_LABEL (page->tab_label), text);
             }
 
-          if (gtk_widget_get_visible (page->child) &&
-              !gtk_widget_get_visible (page->tab_label))
-            gtk_widget_show (page->tab_label);
-          else if (!gtk_widget_get_visible (page->child) &&
-                   gtk_widget_get_visible (page->tab_label))
-            gtk_widget_hide (page->tab_label);
+          if (page->child && page->tab_label)
+            gtk_widget_set_visible (page->tab_label, gtk_widget_get_visible (page->child));
         }
+
       if (priv->menu && page->default_menu)
         {
-          if (GTK_IS_LABEL (page->tab_label))
-            gtk_label_set_text (GTK_LABEL (page->menu_label),
-                                gtk_label_get_text (GTK_LABEL (page->tab_label)));
+          if (page->menu_text)
+            text = page->menu_text;
+          else if (GTK_IS_LABEL (page->tab_label))
+            text = gtk_label_get_text (GTK_LABEL (page->tab_label));
           else
-            gtk_label_set_text (GTK_LABEL (page->menu_label), string);
+            text = string;
+          gtk_label_set_text (GTK_LABEL (page->menu_label), text);
         }
     }
 }
@@ -5693,19 +5739,18 @@ gtk_notebook_menu_switch_page (GtkWidget       *widget,
  */
 static void
 gtk_notebook_menu_item_create (GtkNotebook *notebook,
-                               GList       *list)
+                               GtkNotebookPage *page)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
   GtkWidget *menu_item;
 
-  page = list->data;
   if (page->default_menu)
     {
       if (GTK_IS_LABEL (page->tab_label))
         page->menu_label = gtk_label_new (gtk_label_get_text (GTK_LABEL (page->tab_label)));
       else
         page->menu_label = gtk_label_new ("");
+      g_object_ref_sink (page->menu_label);
       gtk_widget_set_halign (page->menu_label, GTK_ALIGN_START);
       gtk_widget_set_valign (page->menu_label, GTK_ALIGN_CENTER);
     }
@@ -5714,7 +5759,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   menu_item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_menu_shell_insert (GTK_MENU_SHELL (priv->menu), menu_item,
-                         g_list_position (priv->children, list));
+                         g_list_index (priv->children, page));
   g_signal_connect (menu_item, "activate",
                     G_CALLBACK (gtk_notebook_menu_switch_page), page);
   if (gtk_widget_get_visible (page->child))
@@ -5731,7 +5776,7 @@ gtk_notebook_menu_item_recreate (GtkNotebook *notebook,
 
   gtk_container_remove (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_container_remove (GTK_CONTAINER (priv->menu), menu_item);
-  gtk_notebook_menu_item_create (notebook, list);
+  gtk_notebook_menu_item_create (notebook, page);
 }
 
 static void
@@ -6582,7 +6627,7 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
   for (list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, FALSE);
        list;
        list = gtk_notebook_search_page (notebook, list, STEP_NEXT, FALSE))
-    gtk_notebook_menu_item_create (notebook, list);
+    gtk_notebook_menu_item_create (notebook, list->data);
 
   gtk_notebook_update_labels (notebook);
   gtk_menu_attach_to_widget (GTK_MENU (priv->menu),
@@ -6854,8 +6899,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
         gtk_container_remove (GTK_CONTAINER (priv->menu),
                               gtk_widget_get_parent (page->menu_label));
 
-      if (!page->default_menu)
-        g_object_unref (page->menu_label);
+      g_clear_object (&page->menu_label);
     }
 
   if (menu_label)
@@ -6868,7 +6912,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
     page->default_menu = TRUE;
 
   if (priv->menu)
-    gtk_notebook_menu_item_create (notebook, list);
+    gtk_notebook_menu_item_create (notebook, page);
   child_notify (notebook, child, "menu-label");
 }
 
