@@ -158,6 +158,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   double fps;
   char *fps_string;
   graphene_rect_t bounds;
+  gboolean has_bounds;
   int width, height;
   double overlay_opacity;
 
@@ -202,20 +203,20 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   if (GTK_IS_WINDOW (widget))
     {
       GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-      if (child)
-        gtk_widget_compute_bounds (child, widget, &bounds);
-      else
-        gtk_widget_compute_bounds (widget, widget, &bounds);
+      if (!child ||
+          !gtk_widget_compute_bounds (child, widget, &bounds))
+        has_bounds = gtk_widget_compute_bounds (widget, widget, &bounds);
     }
   else
     {
-      gtk_widget_compute_bounds (widget, widget, &bounds);
+      has_bounds = gtk_widget_compute_bounds (widget, widget, &bounds);
     }
 
   layout = gtk_widget_create_pango_layout (widget, fps_string);
   pango_layout_get_pixel_size (layout, &width, &height);
 
-  gtk_snapshot_offset (snapshot, bounds.origin.x + bounds.size.width - width, bounds.origin.y);
+  if (has_bounds)
+    gtk_snapshot_offset (snapshot, bounds.origin.x + bounds.size.width - width, bounds.origin.y);
   if (overlay_opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, overlay_opacity);
   gtk_snapshot_append_color (snapshot,
@@ -226,7 +227,8 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
                               &(GdkRGBA) { 1, 1, 1, 1 });
   if (overlay_opacity < 1.0)
     gtk_snapshot_pop (snapshot);
-  gtk_snapshot_offset (snapshot, - bounds.origin.x - bounds.size.width + width, - bounds.origin.y);
+  if (has_bounds)
+    gtk_snapshot_offset (snapshot, - bounds.origin.x - bounds.size.width + width, - bounds.origin.y);
   g_free (fps_string);
 
   gtk_widget_add_tick_callback (widget, gtk_fps_overlay_force_redraw, NULL, NULL);

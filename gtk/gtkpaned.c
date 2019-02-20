@@ -293,7 +293,8 @@ get_handle_area (GtkPaned        *paned,
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   int extra = 0;
 
-  gtk_widget_compute_bounds (priv->handle_widget, GTK_WIDGET (paned), area);
+  if (!gtk_widget_compute_bounds (priv->handle_widget, GTK_WIDGET (paned), area))
+    return;
 
   if (!gtk_paned_get_wide_handle (paned))
     extra = HANDLE_EXTRA_SIZE;

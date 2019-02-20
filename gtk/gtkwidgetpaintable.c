@@ -96,11 +96,17 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
 
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(0, 0, width, height));
-      gtk_widget_compute_bounds (self->widget, self->widget, &bounds);
-      graphene_matrix_init_from_2d (&transform,
-                                    width / bounds.size.width, 0.0,
-                                    0.0, height / bounds.size.height,
-                                    bounds.origin.x, bounds.origin.y);
+      if (gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
+        {
+          graphene_matrix_init_from_2d (&transform,
+                                        width / bounds.size.width, 0.0,
+                                        0.0, height / bounds.size.height,
+                                        bounds.origin.x, bounds.origin.y);
+        }
+      else
+        {
+          graphene_matrix_init_identity (&transform);
+        }
       gtk_snapshot_push_transform (snapshot, &transform);
 
       gtk_widget_snapshot (self->widget, snapshot);
@@ -269,7 +275,8 @@ gtk_widget_paintable_snapshot_widget (GtkWidgetPaintable *self)
   if (self->widget == NULL)
     return gdk_paintable_new_empty (0, 0);
 
-  gtk_widget_compute_bounds (self->widget, self->widget, &bounds);
+  if (!gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
+    return gdk_paintable_new_empty (0, 0);
 
   if (self->widget->priv->render_node == NULL)
     return gdk_paintable_new_empty (bounds.size.width, bounds.size.height);

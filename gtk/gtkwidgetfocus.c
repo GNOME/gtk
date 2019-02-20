@@ -80,8 +80,9 @@ tab_sort_func (gconstpointer a,
   GtkTextDirection text_direction = GPOINTER_TO_INT (user_data);
   float y1, y2;
 
-  gtk_widget_compute_bounds (child1, gtk_widget_get_parent (child1), &child_bounds1);
-  gtk_widget_compute_bounds (child2, gtk_widget_get_parent (child2), &child_bounds2);
+  if (!gtk_widget_compute_bounds (child1, gtk_widget_get_parent (child1), &child_bounds1) ||
+      !gtk_widget_compute_bounds (child2, gtk_widget_get_parent (child2), &child_bounds2))
+    return 0;
 
   y1 = child_bounds1.origin.y + (child_bounds1.size.height / 2.0f);
   y2 = child_bounds2.origin.y + (child_bounds2.size.height / 2.0f);
@@ -178,8 +179,9 @@ axis_compare (gconstpointer a,
   int start1, end1;
   int start2, end2;
 
-  gtk_widget_compute_bounds (*((GtkWidget **)a), compare->widget, &bounds1);
-  gtk_widget_compute_bounds (*((GtkWidget **)b), compare->widget, &bounds2);
+  if (!gtk_widget_compute_bounds (*((GtkWidget **)a), compare->widget, &bounds1) ||
+      !gtk_widget_compute_bounds (*((GtkWidget **)b), compare->widget, &bounds2))
+    return 0;
 
   get_axis_info (&bounds1, compare->axis, &start1, &end1);
   get_axis_info (&bounds2, compare->axis, &start2, &end2);
@@ -278,7 +280,8 @@ focus_sort_left_right (GtkWidget        *widget,
       graphene_rect_t old_focus_bounds;
 
       parent = gtk_widget_get_parent (widget);
-      gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds);
+      if (!gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds))
+        graphene_rect_init (&bounds, 0, 0, 0, 0);
 
       if (old_focus_coords (widget, &old_focus_bounds))
         {
@@ -379,7 +382,8 @@ focus_sort_up_down (GtkWidget        *widget,
       graphene_rect_t old_focus_bounds;
 
       parent = gtk_widget_get_parent (widget);
-      gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds);
+      if (!gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds))
+        graphene_rect_init (&bounds, 0, 0, 0, 0);
 
       if (old_focus_coords (widget, &old_focus_bounds))
         {

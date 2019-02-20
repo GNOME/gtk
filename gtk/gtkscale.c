@@ -336,7 +336,8 @@ gtk_scale_allocate_value (GtkScale *scale)
   range_height = gtk_widget_get_height (widget);
 
   slider_widget = gtk_range_get_slider_widget (range);
-  gtk_widget_compute_bounds (slider_widget, widget, &slider_bounds);
+  if (!gtk_widget_compute_bounds (slider_widget, widget, &slider_bounds))
+    graphene_rect_init (&slider_bounds, 0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
 
   gtk_widget_measure (priv->value_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
@@ -1519,7 +1520,8 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   graphene_rect_t value_bounds;
 
-  if (!priv->value_widget)
+  if (!priv->value_widget ||
+      !gtk_widget_compute_bounds (priv->value_widget, GTK_WIDGET (scale), &value_bounds))
     {
       *x = 0;
       *y = 0;
@@ -1527,7 +1529,6 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
       return;
     }
 
-  gtk_widget_compute_bounds (priv->value_widget, GTK_WIDGET (scale), &value_bounds);
 
   *x = value_bounds.origin.x;
   *y = value_bounds.origin.y;

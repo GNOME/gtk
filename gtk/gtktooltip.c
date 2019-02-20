@@ -585,11 +585,17 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   tooltip->tooltip_widget = new_tooltip_widget;
 
   toplevel = _gtk_widget_get_toplevel (new_tooltip_widget);
-  gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds);
-  anchor_rect = (GdkRectangle) {
-    floorf (anchor_bounds.origin.x), floorf (anchor_bounds.origin.y),
-    ceilf (anchor_bounds.size.width), ceilf (anchor_bounds.size.height)
-  };
+  if (gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds))
+    {
+      anchor_rect = (GdkRectangle) {
+        floorf (anchor_bounds.origin.x), floorf (anchor_bounds.origin.y),
+        ceilf (anchor_bounds.size.width), ceilf (anchor_bounds.size.height)
+      };
+    }
+  else
+    {
+      anchor_rect = (GdkRectangle) { 0, 0, 0, 0 };
+    }
 
   settings = gtk_settings_get_for_display (display);
   g_object_get (settings,

@@ -1046,7 +1046,8 @@ coords_close_to_indicator (GtkScrolledWindow *sw,
   graphene_rect_t indicator_bounds;
   gint distance;
 
-  gtk_widget_compute_bounds (indicator->scrollbar, GTK_WIDGET (sw), &indicator_bounds);
+  if (!gtk_widget_compute_bounds (indicator->scrollbar, GTK_WIDGET (sw), &indicator_bounds))
+    return FALSE;
 
   if (indicator->over)
     distance = INDICATOR_FAR_DISTANCE;

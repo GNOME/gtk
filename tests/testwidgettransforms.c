@@ -153,10 +153,10 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
 
   GTK_WIDGET_CLASS (gtk_transform_tester_parent_class)->snapshot (widget, snapshot);
 
-  if (!do_picking)
+  if (!do_picking ||
+      !gtk_widget_compute_bounds (self->test_widget, widget, &child_bounds) ||
+      !gtk_widget_compute_bounds (self->test_widget, self->test_widget, &self_bounds))
     return;
-  gtk_widget_compute_bounds (self->test_widget, widget, &child_bounds);
-  gtk_widget_compute_bounds (self->test_widget, self->test_widget, &self_bounds);
 
   {
     const struct {

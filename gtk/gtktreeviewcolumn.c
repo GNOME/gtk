@@ -3060,7 +3060,8 @@ _gtk_tree_view_column_coords_in_resize_rect (GtkTreeViewColumn *column,
       !priv->visible)
     return FALSE;
 
-  gtk_widget_compute_bounds (priv->button, priv->tree_view, &button_bounds);
+  if (!gtk_widget_compute_bounds (priv->button, priv->tree_view, &button_bounds))
+    return FALSE;
 
   if (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_LTR)
     button_bounds.origin.x += button_bounds.size.width - TREE_VIEW_DRAG_WIDTH;

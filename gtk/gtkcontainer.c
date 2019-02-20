@@ -1653,7 +1653,8 @@ gtk_container_real_set_focus_child (GtkContainer *container,
                                                  0, 0, &x, &y))
             return;
 
-          gtk_widget_compute_bounds (child, child, &child_bounds);
+          if (!gtk_widget_compute_bounds (child, child, &child_bounds))
+            return;
 
           if (vadj)
             gtk_adjustment_clamp_page (vadj, y, y + child_bounds.size.height);

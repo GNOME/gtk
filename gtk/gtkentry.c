@@ -2889,18 +2889,16 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
+  graphene_rect_t r;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (icon_area != NULL);
 
   icon_info = priv->icons[icon_pos];
 
-  if (icon_info)
+  if (icon_info &&
+      gtk_widget_compute_bounds (icon_info->widget, GTK_WIDGET (entry), &r))
     {
-      graphene_rect_t r;
-
-      gtk_widget_compute_bounds (icon_info->widget, GTK_WIDGET (entry), &r);
-
       *icon_area = (GdkRectangle){
         floorf (r.origin.x),
         floorf (r.origin.y),

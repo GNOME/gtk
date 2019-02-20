@@ -1443,7 +1443,9 @@ ensure_row_visible (GtkListBox    *box,
   if (!priv->adjustment)
     return;
 
-  gtk_widget_compute_bounds (GTK_WIDGET (row), GTK_WIDGET (box), &rect);
+  if (!gtk_widget_compute_bounds (GTK_WIDGET (row), GTK_WIDGET (box), &rect))
+    return;
+
   y = rect.origin.y;
   height = rect.size.height;
 
@@ -1451,9 +1453,11 @@ ensure_row_visible (GtkListBox    *box,
   header = ROW_PRIV (row)->header;
   if (GTK_IS_WIDGET (header) && gtk_widget_is_drawable (header))
     {
-      gtk_widget_compute_bounds (header, GTK_WIDGET (box), &rect);
-      y = rect.origin.y;
-      height += rect.size.height;
+      if (gtk_widget_compute_bounds (header, GTK_WIDGET (box), &rect))
+        {
+          y = rect.origin.y;
+          height += rect.size.height;
+        }
     }
 
   gtk_adjustment_clamp_page (priv->adjustment, y, y + height);

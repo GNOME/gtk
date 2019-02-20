@@ -2544,10 +2544,11 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
     return;
 
   gdk_event_get_coords (event, &x, &y);
-  gtk_widget_compute_point (event_widget,
-                            gtk_widget_get_toplevel (event_widget),
-                            &GRAPHENE_POINT_INIT (x, y),
-                            &p);
+  if (!gtk_widget_compute_point (event_widget,
+                                 gtk_widget_get_toplevel (event_widget),
+                                 &GRAPHENE_POINT_INIT (x, y),
+                                 &p))
+      return;
 
   if (event->any.type == GDK_TOUCH_BEGIN ||
       event->any.type == GDK_TOUCH_UPDATE ||
@@ -3863,13 +3864,19 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 
   g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
 
-  gtk_widget_compute_bounds (widget, parent, &bounds);
-  *allocation = (GtkAllocation){
-    floorf (bounds.origin.x),
-    floorf (bounds.origin.y),
-    ceilf (bounds.size.width),
-    ceilf (bounds.size.height)
-  };
+  if (gtk_widget_compute_bounds (widget, parent, &bounds))
+    {
+      *allocation = (GtkAllocation){
+        floorf (bounds.origin.x),
+        floorf (bounds.origin.y),
+        ceilf (bounds.size.width),
+        ceilf (bounds.size.height)
+      };
+    }
+  else
+    {
+      *allocation = (GtkAllocation) { 0, 0, 0, 0 };
+    }
 }
 
 static void
@@ -5120,9 +5127,9 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
   return handled;
 }
 
-static void
+static gboolean
 translate_event_coordinates (GdkEvent  *event,
-                       GtkWidget *widget);
+                             GtkWidget *widget);
 gboolean
 _gtk_widget_captured_event (GtkWidget      *widget,
                             const GdkEvent *event)
@@ -5138,7 +5145,11 @@ _gtk_widget_captured_event (GtkWidget      *widget,
     return TRUE;
 
   event_copy = gdk_event_copy (event);
-  translate_event_coordinates (event_copy, widget);
+  if (!translate_event_coordinates (event_copy, widget))
+    {
+      g_object_unref (event_copy);
+      return FALSE;
+    }
 
   return_val = _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
@@ -5196,7 +5207,7 @@ event_surface_is_still_viewable (const GdkEvent *event)
     }
 }
 
-static void
+static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              GtkWidget *widget)
 {
@@ -5205,16 +5216,19 @@ translate_event_coordinates (GdkEvent  *event,
   graphene_point_t p;
 
   if (!gdk_event_get_coords (event, &x, &y))
-    return;
+    return TRUE;
 
   event_widget = gtk_get_event_widget (event);
 
-  gtk_widget_compute_point (event_widget,
-                            widget,
-                            &GRAPHENE_POINT_INIT (x, y),
-                            &p);
+  if (!gtk_widget_compute_point (event_widget,
+                                 widget,
+                                 &GRAPHENE_POINT_INIT (x, y),
+                                 &p))
+    return FALSE;
 
   gdk_event_set_coords (event, p.x, p.y);
+
+  return TRUE;
 }
 
 static gboolean
@@ -5237,7 +5251,11 @@ gtk_widget_event_internal (GtkWidget      *widget,
 
   event_copy = gdk_event_copy (event);
 
-  translate_event_coordinates (event_copy, widget);
+  if (!translate_event_coordinates (event_copy, widget))
+    {
+      g_object_unref (event_copy);
+      return FALSE;
+    }
 
   if (widget == gtk_get_event_target (event_copy))
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);

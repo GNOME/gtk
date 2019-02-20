@@ -191,7 +191,9 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   graphene_rect_t switch_bounds;
 
-  gtk_widget_compute_bounds (GTK_WIDGET (sw), GTK_WIDGET (sw), &switch_bounds);
+  if (!gtk_widget_compute_bounds (GTK_WIDGET (sw), GTK_WIDGET (sw), &switch_bounds))
+    return;
+
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If the press didn't happen in the draggable handle,

@@ -284,13 +284,19 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 
       g_array_append_val (backlog_array, *time_coord);
       time_coord = &g_array_index (backlog_array, GdkTimeCoord, backlog_array->len - 1);
-      gtk_widget_compute_point (gtk_get_event_widget (event),
-                                gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                &GRAPHENE_POINT_INIT (time_coord->axes[GDK_AXIS_X],
-                                                      time_coord->axes[GDK_AXIS_Y]),
-                                &p);
-      time_coord->axes[GDK_AXIS_X] = p.x;
-      time_coord->axes[GDK_AXIS_Y] = p.y;
+      if (gtk_widget_compute_point (gtk_get_event_widget (event),
+                                    gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
+                                    &GRAPHENE_POINT_INIT (time_coord->axes[GDK_AXIS_X],
+                                                          time_coord->axes[GDK_AXIS_Y]),
+                                    &p))
+        {
+          time_coord->axes[GDK_AXIS_X] = p.x;
+          time_coord->axes[GDK_AXIS_Y] = p.y;
+        }
+      else
+        {
+          g_array_set_size (backlog_array, backlog_array->len - 1);
+        }
     }
 
   *n_elems = backlog_array->len;

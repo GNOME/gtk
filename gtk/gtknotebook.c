@@ -1628,10 +1628,9 @@ gtk_notebook_get_tab_area_position (GtkNotebook     *notebook,
 
   if (priv->show_tabs && gtk_notebook_has_current_page (notebook))
     {
-      gtk_widget_compute_bounds (priv->header_widget,
-                                 GTK_WIDGET (notebook),
-                                 rectangle);
-      return TRUE;
+      return gtk_widget_compute_bounds (priv->header_widget,
+                                        GTK_WIDGET (notebook),
+                                        rectangle);
     }
   else
     {
@@ -2094,9 +2093,10 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
           if (priv->arrow_widget[i] == NULL)
             continue;
 
-          gtk_widget_compute_bounds (priv->arrow_widget[i],
-                                     GTK_WIDGET (notebook),
-                                     &arrow_bounds);
+          if (!gtk_widget_compute_bounds (priv->arrow_widget[i],
+                                          GTK_WIDGET (notebook),
+                                          &arrow_bounds))
+            continue;
 
           if (graphene_rect_contains_point (&arrow_bounds,
                                             &(graphene_point_t){x, y}))
@@ -2184,7 +2184,8 @@ in_tabs (GtkNotebook *notebook,
   GtkNotebookPrivate *priv = notebook->priv;
   graphene_rect_t tabs_bounds;
 
-  gtk_widget_compute_bounds (priv->tabs_widget, GTK_WIDGET (notebook), &tabs_bounds);
+  if (!gtk_widget_compute_bounds (priv->tabs_widget, GTK_WIDGET (notebook), &tabs_bounds))
+    return FALSE;
 
   return graphene_rect_contains_point (&tabs_bounds,
                                        &(graphene_point_t){x, y});
@@ -2208,8 +2209,8 @@ get_tab_at_pos (GtkNotebook *notebook,
       if (!gtk_notebook_page_tab_label_is_visible (page))
         continue;
 
-      gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &bounds);
-
+      if (!gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &bounds))
+        continue;
 
       if (graphene_rect_contains_point (&bounds, &(graphene_point_t){x, y}))
         return children;
@@ -2285,10 +2286,14 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
           priv->drag_begin_x = priv->mouse_x;
           priv->drag_begin_y = priv->mouse_y;
 
-          gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &tab_bounds);
-
-          priv->drag_offset_x = priv->drag_begin_x - tab_bounds.origin.x;
-          priv->drag_offset_y = priv->drag_begin_y - tab_bounds.origin.y;
+          /* tab bounds get set to empty, which is fine */
+          priv->drag_offset_x = priv->drag_begin_x;
+          priv->drag_offset_y = priv->drag_begin_y;
+          if (gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &tab_bounds))
+            {
+              priv->drag_offset_x -= tab_bounds.origin.x;
+              priv->drag_offset_y -= tab_bounds.origin.y;
+            }
         }
     }
 }
@@ -2373,10 +2378,9 @@ get_drop_position (GtkNotebook *notebook)
   y = priv->mouse_y;
 
   is_rtl = gtk_widget_get_direction ((GtkWidget *) notebook) == GTK_TEXT_DIR_RTL;
-  children = priv->children;
   last_child = NULL;
 
-  while (children)
+  for (children = priv->children; children; children = children->next)
     {
       page = children->data;
 
@@ -2387,7 +2391,8 @@ get_drop_position (GtkNotebook *notebook)
         {
           graphene_rect_t tab_bounds;
 
-          gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &tab_bounds);
+          if (!gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &tab_bounds))
+            continue;
 
           switch (priv->tab_pos)
             {
@@ -2418,8 +2423,6 @@ get_drop_position (GtkNotebook *notebook)
 
           last_child = children->next;
         }
-
-      children = children->next;
     }
 
   return last_child;
@@ -2895,10 +2898,10 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
   gtk_widget_unparent (tab_label);
 
   priv->dnd_child = tab_label;
-  gtk_widget_compute_bounds (priv->dnd_child, priv->dnd_child, &bounds);
-  gtk_widget_set_size_request (priv->dnd_child,
-                               ceilf (bounds.size.width),
-                               ceilf (bounds.size.height));
+  if (gtk_widget_compute_bounds (priv->dnd_child, priv->dnd_child, &bounds))
+    gtk_widget_set_size_request (priv->dnd_child,
+                                 ceilf (bounds.size.width),
+                                 ceilf (bounds.size.height));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->dnd_child), "background");
 
@@ -4933,7 +4936,8 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
       break;
     }
 
-  gtk_widget_compute_bounds (priv->cur_page->tab_widget, priv->cur_page->tab_widget, &drag_bounds);
+  if (!gtk_widget_compute_bounds (priv->cur_page->tab_widget, priv->cur_page->tab_widget, &drag_bounds))
+    graphene_rect_init_from_rect (&drag_bounds, graphene_rect_zero ());
 
   left_x   = CLAMP (priv->mouse_x - priv->drag_offset_x,
                     allocation->x, allocation->x + allocation->width - drag_bounds.size.width);

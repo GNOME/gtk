@@ -2812,7 +2812,9 @@ definitely_within_item (GtkMenu   *menu,
   int w, h;
   graphene_rect_t bounds;
 
-  gtk_widget_compute_bounds (widget, GTK_WIDGET (menu), &bounds);
+  if (!gtk_widget_compute_bounds (widget, GTK_WIDGET (menu), &bounds))
+    return FALSE;
+
   w = bounds.size.width;
   h = bounds.size.height;
 
