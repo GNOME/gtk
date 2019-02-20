@@ -631,7 +631,6 @@ add_cups_options (const gchar *key,
   if (printer && printer->ppd_file && !g_str_has_prefix (value, "Custom."))
     {
       ppd_coption_t *coption;
-      ppd_cparam_t  *cparam;
       gboolean       found = FALSE;
       gboolean       custom_values_enabled = FALSE;
 
@@ -666,13 +665,17 @@ add_cups_options (const gchar *key,
 			!strcasecmp(p, "m" ) || !strcasecmp(p, "in") ||
 			!strcasecmp(p, "ft") || !strcasecmp(p, "pt"))))
 		    custom_value = TRUE;
+
 		  if (p)
 		    free(p);
 		}
 	      else
 		{
 		  /* Handle other custom options... */
-		  if ((cparam = (ppd_cparam_t *)cupsArrayFirst(coption->params)) != NULL)
+		  ppd_cparam_t  *cparam;
+
+		  cparam = (ppd_cparam_t *)cupsArrayFirst(coption->params);
+		  if (cparam != NULL)
 		    {
 		      switch (cparam->type)
 			{
@@ -707,6 +710,8 @@ add_cups_options (const gchar *key,
 			case PPD_CUSTOM_STRING :
 			  custom_value = TRUE;
 			  break;
+			default :
+			  custom_value = FALSE;
 			}
 		    }
 		}
