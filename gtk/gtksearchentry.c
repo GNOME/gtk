@@ -701,3 +701,11 @@ gtk_search_entry_get_key_controller (GtkSearchEntry *entry)
 
   return gtk_text_get_key_controller (GTK_TEXT (priv->entry));
 }
+
+GtkText *
+gtk_search_entry_get_text_widget (GtkSearchEntry *entry)
+{
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  return priv->entry;
+}
