@@ -349,8 +349,10 @@ gtk_snapshot_collect_offset (GtkSnapshot       *snapshot,
                              GskRenderNode    **nodes,
                              guint              n_nodes)
 {
-  GskRenderNode *node, *offset_node;
+  GskRenderNode *node, *result;
   GtkSnapshotState  *previous_state;
+  graphene_matrix_t matrix;
+  GskMatrixCategory category;
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
   if (node == NULL)
@@ -361,25 +363,24 @@ gtk_snapshot_collect_offset (GtkSnapshot       *snapshot,
       previous_state->translate_y == 0.0)
     return node;
 
-  if (gsk_render_node_get_node_type (node) == GSK_OFFSET_NODE)
-    {
-      const float dx = previous_state->translate_x;
-      const float dy = previous_state->translate_y;
+  graphene_matrix_init_translate (&matrix,
+                                  &GRAPHENE_POINT3D_INIT (previous_state->translate_x,
+                                                          previous_state->translate_y,
+                                                          0));
+  category = GSK_MATRIX_CATEGORY_2D_TRANSLATE;
 
-      offset_node = gsk_offset_node_new (gsk_offset_node_get_child (node),
-                                         gsk_offset_node_get_x_offset (node) + dx,
-                                         gsk_offset_node_get_y_offset (node) + dy);
-    }
-  else
+  if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
     {
-      offset_node = gsk_offset_node_new (node,
-                                         previous_state->translate_x,
-                                         previous_state->translate_y);
+      node = gsk_render_node_ref (gsk_transform_node_get_child (node));
+      graphene_matrix_multiply (&matrix, gsk_transform_node_peek_transform (node), &matrix);
+      category = MIN (category, gsk_transform_node_get_category (node));
     }
+  
+  result = gsk_transform_node_new_with_category (node, &matrix, category);
 
   gsk_render_node_unref (node);
 
-  return offset_node;
+  return result;
 }
 
 static void

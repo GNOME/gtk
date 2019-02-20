@@ -77,11 +77,6 @@ print_render_node_tree (GskRenderNode *root, int level)
           print_render_node_tree (gsk_container_node_get_child (root, i), level + 1);
         break;
 
-      case GSK_OFFSET_NODE:
-        g_print ("%*s Offset\n", level * INDENT, " ");
-        print_render_node_tree (gsk_offset_node_get_child (root), level + 1);
-        break;
-
       case GSK_TRANSFORM_NODE:
         g_print ("%*s Transform\n", level * INDENT, " ");
         print_render_node_tree (gsk_transform_node_get_child (root), level + 1);
@@ -763,20 +758,6 @@ render_texture_node (GskGLRenderer       *self,
         { { max_x, min_y }, { 1, 0 }, },
       });
     }
-}
-
-static inline void
-render_offset_node (GskGLRenderer   *self,
-                    GskRenderNode   *node,
-                    RenderOpBuilder *builder)
-{
-  GskRenderNode *child = gsk_offset_node_get_child (node);
-  const float dx = gsk_offset_node_get_x_offset (node);
-  const float dy = gsk_offset_node_get_y_offset (node);
-
-  ops_offset (builder, dx, dy);
-  gsk_gl_renderer_add_render_ops (self, child, builder);
-  ops_offset (builder, - dx, - dy);
 }
 
 static inline void
@@ -2346,10 +2327,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_TEXTURE_NODE:
       render_texture_node (self, node, builder);
-    break;
-
-    case GSK_OFFSET_NODE:
-      render_offset_node (self, node, builder);
     break;
 
     case GSK_TRANSFORM_NODE:

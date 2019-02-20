@@ -118,9 +118,6 @@ create_list_model_for_render_node (GskRenderNode *node)
       /* no children */
       return NULL;
 
-    case GSK_OFFSET_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_offset_node_get_child (node) }, 1);
-
     case GSK_TRANSFORM_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_transform_node_get_child (node) }, 1);
 
@@ -230,8 +227,6 @@ node_type_name (GskRenderNodeType type)
       return "Outset Shadow";
     case GSK_TRANSFORM_NODE:
       return "Transform";
-    case GSK_OFFSET_NODE:
-      return "Offset";
     case GSK_OPACITY_NODE:
       return "Opacity";
     case GSK_COLOR_MATRIX_NODE:
@@ -282,9 +277,6 @@ node_name (GskRenderNode *node)
     case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
-
-    case GSK_OFFSET_NODE:
-      return g_strdup_printf ("Offset %g, %g", gsk_offset_node_get_x_offset (node), gsk_offset_node_get_y_offset (node));
 
     case GSK_DEBUG_NODE:
       return g_strdup (gsk_debug_node_get_message (node));
@@ -892,11 +884,6 @@ populate_render_node_properties (GtkListStore  *store,
             g_free (label);
           }
       }
-      break;
-
-    case GSK_OFFSET_NODE:
-      add_float_row (store, "x offset", gsk_offset_node_get_x_offset (node));
-      add_float_row (store, "y offset", gsk_offset_node_get_y_offset (node));
       break;
 
     case GSK_TRANSFORM_NODE:
