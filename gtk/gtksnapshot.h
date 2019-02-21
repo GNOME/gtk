@@ -141,6 +141,11 @@ void            gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot      
                                                                const graphene_point_t *end_point,
                                                                const GskColorStop     *stops,
                                                                gsize                   n_stops);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_border              (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const float             border_width[4],
+                                                         const GdkRGBA           border_color[4]);
 /* next function implemented in gskpango.c */
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,

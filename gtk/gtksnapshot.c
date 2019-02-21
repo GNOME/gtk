@@ -1558,3 +1558,39 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
   gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
+
+/**
+ * gtk_snapshot_append_border:
+ * @snapshot: a #GtkSnapshot
+ * @outline: a #GskRoundedRect describing the outline of the border
+ * @border_width: (array fixed-size=4): the stroke width of the border on
+ *     the top, right, bottom and left side respectively.
+ * @border_color: (array fixed-size=4): the color used on the top, right,
+ *     bottom and left side.
+ *
+ * Appends a stroked border rectangle inside the given @outline. The
+ * 4 sides of the border can have different widths and colors.
+ **/
+void
+gtk_snapshot_append_border (GtkSnapshot          *snapshot,
+                            const GskRoundedRect *outline,
+                            const float           border_width[4],
+                            const GdkRGBA         border_color[4])
+{
+  GskRenderNode *node;
+  GskRoundedRect real_outline;
+  float scale_x, scale_y, dx, dy;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (outline != NULL);
+  g_return_if_fail (border_width != NULL);
+  g_return_if_fail (border_color != NULL);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+  gtk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
+
+  node = gsk_border_node_new (&real_outline, border_width, border_color);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+  gsk_render_node_unref (node);
+}
