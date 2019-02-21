@@ -187,6 +187,8 @@ struct _GtkNotebookPrivate
   GtkWidget                 *tabs_widget;
   GtkWidget                 *arrow_widget[4];
 
+  GListModel    *pages;
+
   GList         *children;
   GList         *first_tab;             /* The first tab visible (for scrolling notebooks) */
   GList         *focus_tab;
@@ -269,6 +271,7 @@ enum {
   PROP_PAGE,
   PROP_ENABLE_POPUP,
   PROP_GROUP_NAME,
+  PROP_PAGES,
   LAST_PROP
 };
 
@@ -1004,6 +1007,13 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                            P_("Group name for tab drag and drop"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_PAGES] = 
+      g_param_spec_object ("pages",
+                           P_("Pages"),
+                           P_("The pages of the notebook."),
+                           G_TYPE_LIST_MODEL,
+                           GTK_PARAM_READABLE);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
@@ -1790,6 +1800,9 @@ gtk_notebook_get_property (GObject         *object,
     case PROP_GROUP_NAME:
       g_value_set_string (value, gtk_notebook_get_group_name (notebook));
       break;
+    case PROP_PAGES:
+      g_value_set_object (value, gtk_notebook_get_pages (notebook));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1828,6 +1841,9 @@ gtk_notebook_destroy (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
+
+  if (priv->pages)
+    g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
 
   if (priv->menu)
     gtk_notebook_popup_disable (notebook);
@@ -4274,6 +4290,9 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
 
   update_arrow_state (notebook);
 
+  if (priv->pages)
+    g_list_model_items_changed (priv->pages, position, 0, 1);
+
   /* The page-added handler might have reordered the pages, re-get the position */
   return gtk_notebook_page_num (notebook, page->child);
 }
@@ -4394,6 +4413,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   gint need_resize = FALSE;
   GtkWidget *tab_label;
   gboolean destroying;
+  int position;
 
   destroying = gtk_widget_in_destruction (GTK_WIDGET (notebook));
 
@@ -4433,6 +4453,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     gtk_notebook_switch_focus_tab (notebook, next_list);
 
   page = list->data;
+
+  position = g_list_index (priv->children, page);
 
   g_signal_handler_disconnect (page->child, page->notify_visible_handler);
 
@@ -4477,6 +4499,9 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   gtk_notebook_update_labels (notebook);
   if (need_resize)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  if (priv->pages)
+    g_list_model_items_changed (priv->pages, position, 1, 0);
 }
 
 static void
@@ -7430,3 +7455,93 @@ gtk_notebook_page_get_child (GtkNotebookPage *page)
 {
   return page->child;
 }
+
+#define GTK_TYPE_NOTEBOOK_PAGES (gtk_notebook_pages_get_type ())
+G_DECLARE_FINAL_TYPE (GtkNotebookPages, gtk_notebook_pages, GTK, NOTEBOOK_PAGES, GObject)
+
+struct _GtkNotebookPages
+{
+  GObject parent_instance;
+  GtkNotebook *notebook;
+};
+
+struct _GtkNotebookPagesClass
+{
+  GObjectClass parent_class;
+};
+
+static GType
+gtk_notebook_pages_get_item_type (GListModel *model)
+{
+  return GTK_TYPE_NOTEBOOK_PAGE;
+}
+
+static guint
+gtk_notebook_pages_get_n_items (GListModel *model)
+{
+  GtkNotebookPages *pages = GTK_NOTEBOOK_PAGES (model);
+
+  return g_list_length (pages->notebook->priv->children);
+}
+
+
+static gpointer
+gtk_notebook_pages_get_item (GListModel *model,
+                             guint       position)
+{
+  GtkNotebookPages *pages = GTK_NOTEBOOK_PAGES (model);
+  GtkNotebookPage *page;
+
+  page = g_list_nth_data (pages->notebook->priv->children, position);
+
+  return g_object_ref (page);
+}
+
+static void
+gtk_notebook_pages_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_notebook_pages_get_item_type;
+  iface->get_n_items = gtk_notebook_pages_get_n_items;
+  iface->get_item = gtk_notebook_pages_get_item;
+}
+G_DEFINE_TYPE_WITH_CODE (GtkNotebookPages, gtk_notebook_pages, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_notebook_pages_list_model_init))
+
+static void
+gtk_notebook_pages_init (GtkNotebookPages *pages)
+{
+}
+
+static void
+gtk_notebook_pages_class_init (GtkNotebookPagesClass *class)
+{
+}
+
+static GtkNotebookPages *
+gtk_notebook_pages_new (GtkNotebook *notebook)
+{
+  GtkNotebookPages *pages;
+
+  pages = g_object_new (GTK_TYPE_NOTEBOOK_PAGES, NULL);
+  pages->notebook = notebook;
+
+  return pages;
+}
+
+GListModel *
+gtk_notebook_get_pages (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+
+  if (priv->pages)
+    return g_object_ref (priv->pages);
+
+  priv->pages = G_LIST_MODEL (gtk_notebook_pages_new (notebook));
+
+  g_object_add_weak_pointer (G_OBJECT (priv->pages), (gpointer *)&priv->pages);
+
+  return priv->pages;
+}
+

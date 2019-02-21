@@ -307,6 +307,8 @@ GtkNotebookPage *gtk_notebook_get_page (GtkNotebook *notebook,
                                         GtkWidget   *child);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_notebook_page_get_child (GtkNotebookPage *page);
+GDK_AVAILABLE_IN_ALL
+GListModel *gtk_notebook_get_pages (GtkNotebook *notebook);
 
 G_END_DECLS
 
