@@ -342,10 +342,6 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
                      const GdkRGBA         colors[4],
                      guint                 hidden_side)
 {
-  GskRoundedRect offset_outline;
-  GskRenderNode *node;
-  int off_x, off_y;
-
   if (hidden_side)
     {
       GdkRGBA real_colors[4];
@@ -363,13 +359,7 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
       return;
     }
 
-  gtk_snapshot_get_offset (snapshot, &off_x, &off_y);
-  gsk_rounded_rect_init_copy (&offset_outline, outline);
-  gsk_rounded_rect_offset (&offset_outline, off_x, off_y);
-  
-  node = gsk_border_node_new (&offset_outline, border_width, colors);
-  gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
+  gtk_snapshot_append_border (snapshot, outline, border_width, colors);
 }
 
 static void
