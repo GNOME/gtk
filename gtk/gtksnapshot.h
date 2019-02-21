@@ -109,11 +109,6 @@ void            gtk_snapshot_offset                     (GtkSnapshot            
                                                          int                     x,
                                                          int                     y);
 GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_get_offset                 (GtkSnapshot            *snapshot,
-                                                         int                    *x,
-                                                         int                    *y);
-
-GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_ALL
