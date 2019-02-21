@@ -4216,7 +4216,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   if ((position < 0) || (position > nchildren))
     position = nchildren;
 
-  priv->children = g_list_insert (priv->children, page, position);
+  priv->children = g_list_insert (priv->children, g_object_ref (page), position);
 
   if (position < nchildren)
     sibling = GTK_NOTEBOOK_PAGE_FROM_LIST (g_list_nth (priv->children, position))->tab_widget;
@@ -4305,6 +4305,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                gint         position)
 {
   GtkNotebookPage *page;
+  int ret;
 
   page = g_object_new (GTK_TYPE_NOTEBOOK_PAGE,
                        "child", child,
@@ -4312,7 +4313,11 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                        "menu", menu_label,
                        NULL);
 
-  return gtk_notebook_insert_notebook_page (notebook, page, position);
+  ret = gtk_notebook_insert_notebook_page (notebook, page, position);
+
+  g_object_unref (page);
+
+  return ret;
 }
 
 static gboolean
