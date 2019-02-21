@@ -101,13 +101,6 @@ GskRenderNode *         gsk_transform_node_new_with_category    (GskRenderNode  
                                                                  GskMatrixCategory               category);
 GskMatrixCategory       gsk_transform_node_get_category         (GskRenderNode                  *node);
 
-GskRenderNode * gsk_text_node_new_with_bounds     (PangoFont                *font,
-                                                   PangoGlyphString         *glyphs,
-                                                   const GdkRGBA            *color,
-                                                   double                    x,
-                                                   double                    y,
-                                                   const graphene_rect_t    *bounds);
-
 
 G_END_DECLS
 

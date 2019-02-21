@@ -113,41 +113,16 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
                                      int                   y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  int x_offset, y_offset;
-  GskRenderNode *node;
   GdkRGBA color;
-  graphene_rect_t node_bounds;
-  PangoRectangle ink_rect;
-
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
-  pango_extents_to_pixels (&ink_rect, NULL);
-
-  /* Don't create empty nodes */
-  if (ink_rect.width == 0 || ink_rect.height == 0)
-    return;
-
-  graphene_rect_init (&node_bounds,
-                      (float)x/PANGO_SCALE - 1.0,
-                      (float)y/PANGO_SCALE + ink_rect.y - 1.0,
-                      ink_rect.x + ink_rect.width + 2.0,
-                      ink_rect.height + 2.0);
-
-  gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
-  graphene_rect_offset (&node_bounds, x_offset, y_offset);
 
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
-  node = gsk_text_node_new_with_bounds (font,
-                                        glyphs,
-                                        &color,
-                                        x_offset + (double)x/PANGO_SCALE,
-                                        y_offset + (double)y/PANGO_SCALE,
-                                        &node_bounds);
-  if (node == NULL)
-    return;
-
-  gtk_snapshot_append_node_internal (crenderer->snapshot, node);
-  gsk_render_node_unref (node);
+  gtk_snapshot_append_text (crenderer->snapshot,
+                            font,
+                            glyphs,
+                            &color,
+                            (float) x / PANGO_SCALE,
+                            (float) y / PANGO_SCALE);
 }
 
 static void

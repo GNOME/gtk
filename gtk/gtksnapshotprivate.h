@@ -108,6 +108,12 @@ GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot    
 void                    gtk_snapshot_push_transform_with_category (GtkSnapshot          *snapshot,
                                                                  const graphene_matrix_t*transform,
                                                                  GskMatrixCategory       category);
+void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
+                                                                 PangoFont              *font,
+                                                                 PangoGlyphString       *glyphs,
+                                                                 const GdkRGBA          *color,
+                                                                 float                   x,
+                                                                 float                   y);
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_PRIVATE_H__ */
