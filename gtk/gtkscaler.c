@@ -44,22 +44,16 @@ gtk_scaler_paintable_snapshot (GdkPaintable *paintable,
 {
   GtkScaler *self = GTK_SCALER (paintable);
 
-  if (self->scale_factor == 1.0)
-    {
-      gdk_paintable_snapshot (self->paintable, snapshot, width, height);
-    }
-  else
-    {
-      graphene_matrix_t scale_matrix;
+  gtk_snapshot_save (snapshot);
 
-      graphene_matrix_init_scale (&scale_matrix, 1.0 / self->scale_factor, 1.0 / self->scale_factor, 1.0);
-      gtk_snapshot_push_transform (snapshot, &scale_matrix);
-      gdk_paintable_snapshot (self->paintable,
-                              snapshot,
-                              width * self->scale_factor,
-                              height * self->scale_factor);
-      gtk_snapshot_pop (snapshot);
-    }
+  gtk_snapshot_scale (snapshot, 1.0 / self->scale_factor, 1.0 / self->scale_factor);
+
+  gdk_paintable_snapshot (self->paintable,
+                          snapshot,
+                          width * self->scale_factor,
+                          height * self->scale_factor);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static GdkPaintable *
