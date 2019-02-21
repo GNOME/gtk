@@ -13199,9 +13199,8 @@ gtk_widget_render (GtkWidget            *widget,
 
   snapshot = gtk_snapshot_new ();
   gtk_root_get_surface_transform (GTK_ROOT (widget), &x, &y);
-  gtk_snapshot_offset (snapshot, x, y);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
   gtk_widget_snapshot (widget, snapshot);
-  gtk_snapshot_offset (snapshot, -x, -y);
   root = gtk_snapshot_free_to_node (snapshot);
 
   if (root != NULL)
@@ -13495,8 +13494,8 @@ gtk_widget_forall (GtkWidget   *widget,
  * @widget: a #GtkWidget
  * @child: a child of @widget
  * @snapshot: #GtkSnapshot as passed to the widget. In particular, no
- *   calls to gtk_snapshot_offset() should have been applied by the
- *   parent.
+ *   calls to gtk_snapshot_translate() or other transform calls should
+ *   have been made.
  *
  * When a widget receives a call to the snapshot function, it must send
  * synthetic #GtkWidget::snapshot calls to all children. This function
@@ -13518,11 +13517,12 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  gtk_snapshot_push_transform_with_category (snapshot, &priv->transform, priv->transform_category);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_transform_matrix_with_category (snapshot, &priv->transform, priv->transform_category);
 
   gtk_widget_snapshot (child, snapshot);
 
-  gtk_snapshot_pop (snapshot);
+  gtk_snapshot_restore (snapshot);
 }
 
 /**
