@@ -105,6 +105,38 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_save                       (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_restore                    (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
+                                                         GtkTransform           *transform);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_transform_matrix           (GtkSnapshot            *snapshot,
+                                                         const graphene_matrix_t*matrix);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_translate                  (GtkSnapshot            *snapshot,
+                                                         const graphene_point_t *point);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_translate_3d               (GtkSnapshot            *snapshot,
+                                                         const graphene_point3d_t*point);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_rotate                     (GtkSnapshot            *snapshot,
+                                                         float                  angle);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_rotate_3d                  (GtkSnapshot            *snapshot,
+                                                         float                   angle,
+                                                         const graphene_vec3_t  *axis);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_scale                      (GtkSnapshot            *snapshot,
+                                                         float                   factor_x,
+                                                         float                   factor_y);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_scale_3d                   (GtkSnapshot            *snapshot,
+                                                         float                   factor_x,
+                                                         float                   factor_y,
+                                                         float                   factor_z);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_offset                     (GtkSnapshot            *snapshot,
                                                          int                     x,
                                                          int                     y);
