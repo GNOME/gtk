@@ -253,7 +253,6 @@ enum {
   PROP_0,
   PROP_BUFFER,
   PROP_MAX_LENGTH,
-  PROP_HAS_FRAME,
   PROP_VISIBILITY,
   PROP_INVISIBLE_CHAR,
   PROP_INVISIBLE_CHAR_SET,
@@ -720,13 +719,6 @@ gtk_text_class_init (GtkTextClass *class)
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  text_props[PROP_HAS_FRAME] =
-      g_param_spec_boolean ("has-frame",
-                            P_("Has Frame"),
-                            P_("FALSE removes outside bevel from self"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   text_props[PROP_INVISIBLE_CHAR] =
       g_param_spec_unichar ("invisible-char",
