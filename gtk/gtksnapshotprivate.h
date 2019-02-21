@@ -105,9 +105,6 @@ void                    gtk_snapshot_append_node_internal       (GtkSnapshot    
 
 GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot            *parent_snapshot);
 
-void                    gtk_snapshot_push_transform_with_category (GtkSnapshot          *snapshot,
-                                                                 const graphene_matrix_t*transform,
-                                                                 GskMatrixCategory       category);
 void                    gtk_snapshot_transform_matrix_with_category
                                                                 (GtkSnapshot            *snapshot,
                                                                  const graphene_matrix_t*matrix,

@@ -327,57 +327,6 @@ gtk_snapshot_push_debug (GtkSnapshot *snapshot,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_transform (GtkSnapshot      *snapshot,
-                                GtkSnapshotState *state,
-                                GskRenderNode   **nodes,
-                                guint             n_nodes)
-{
-  GskRenderNode *node, *transform_node;
-
-  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
-  if (node == NULL)
-    return NULL;
-
-  transform_node = gsk_transform_node_new_with_category (node,
-                                                         &state->data.transform.transform,
-                                                         state->data.transform.category);
-
-  gsk_render_node_unref (node);
-
-  return transform_node;
-}
-
-void
-gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
-                             const graphene_matrix_t *transform)
-{
-  gtk_snapshot_push_transform_with_category (snapshot,
-                                             transform,
-                                             GSK_MATRIX_CATEGORY_UNKNOWN);
-}
-
-void
-gtk_snapshot_push_transform_with_category (GtkSnapshot             *snapshot,
-                                           const graphene_matrix_t *transform,
-                                           GskMatrixCategory        category)
-{
-  GtkSnapshotState *previous_state;
-  GtkSnapshotState *state;
-  graphene_matrix_t offset;
-
-  state = gtk_snapshot_push_state (snapshot,
-                                   NULL,
-                                   gtk_snapshot_collect_transform);
-
-  previous_state = gtk_snapshot_get_previous_state (snapshot);
-
-  gtk_transform_to_matrix (previous_state->transform, &offset);
-
-  graphene_matrix_multiply (transform, &offset, &state->data.transform.transform);
-  state->data.transform.category = MIN (gtk_transform_categorize (previous_state->transform), category);
-}
-
-static GskRenderNode *
 gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
                               GtkSnapshotState *state,
                               GskRenderNode   **nodes,
@@ -1384,24 +1333,6 @@ gtk_snapshot_scale_3d (GtkSnapshot *snapshot,
   state->transform = gtk_transform_scale_3d (state->transform, factor_x, factor_y, factor_z);
 }
 
-/**
- * gtk_snapshot_offset:
- * @snapshot: a #GtkSnapshot
- * @x: horizontal translation
- * @y: vertical translation
- *
- * Appends a translation by (@x, @y) to the current transformation.
- */
-void
-gtk_snapshot_offset (GtkSnapshot *snapshot,
-                     int          x,
-                     int          y)
-{
-  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-
-  current_state->transform = gtk_transform_translate (current_state->transform, &GRAPHENE_POINT_INIT (x, y));
-}
-
 void
 gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
                                    GskRenderNode *node)
@@ -1668,7 +1599,8 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  gtk_snapshot_offset (snapshot, x, y);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
 
   fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
@@ -1680,7 +1612,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_snapshot_offset (snapshot, -x, -y);
+  gtk_snapshot_restore (snapshot);
 }
 
 void
