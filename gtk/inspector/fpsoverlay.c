@@ -215,8 +215,9 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   layout = gtk_widget_create_pango_layout (widget, fps_string);
   pango_layout_get_pixel_size (layout, &width, &height);
 
+  gtk_snapshot_save (snapshot);
   if (has_bounds)
-    gtk_snapshot_offset (snapshot, bounds.origin.x + bounds.size.width - width, bounds.origin.y);
+    gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width - width, bounds.origin.y));
   if (overlay_opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, overlay_opacity);
   gtk_snapshot_append_color (snapshot,
@@ -227,8 +228,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
                               &(GdkRGBA) { 1, 1, 1, 1 });
   if (overlay_opacity < 1.0)
     gtk_snapshot_pop (snapshot);
-  if (has_bounds)
-    gtk_snapshot_offset (snapshot, - bounds.origin.x - bounds.size.width + width, - bounds.origin.y);
+  gtk_snapshot_restore (snapshot);
   g_free (fps_string);
 
   gtk_widget_add_tick_callback (widget, gtk_fps_overlay_force_redraw, NULL, NULL);
