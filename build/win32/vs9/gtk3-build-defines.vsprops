@@ -45,7 +45,7 @@
 	/>
 	<UserMacro
 		Name="GtkGdkCommonLibs"
-		Value="pangowin32-1.0.lib imm32.lib"
+		Value="pangowin32-1.0.lib fribidi.lib imm32.lib"
 	/>
 	<UserMacro
 		Name="GdkBroadwayAdditionalLibs"
