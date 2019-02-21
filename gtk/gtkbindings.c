@@ -1344,39 +1344,12 @@ gtk_bindings_activate_list (GObject  *object,
                             GSList   *entries,
                             gboolean  is_release)
 {
-  GtkStyleContext *context;
   GtkBindingSet *binding_set;
   gboolean handled = FALSE;
   gboolean unbound = FALSE;
-  GPtrArray *array;
 
   if (!entries)
     return FALSE;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (object));
-
-  gtk_style_context_get (context,
-                         "-gtk-key-bindings", &array,
-                         NULL);
-  if (array)
-    {
-      gint i;
-
-      for (i = 0; i < array->len; i++)
-        {
-          binding_set = g_ptr_array_index (array, i);
-          handled = binding_activate (binding_set, entries,
-                                      object, is_release,
-                                      &unbound);
-          if (handled || unbound)
-            break;
-        }
-
-      g_ptr_array_unref (array);
-
-      if (unbound)
-        return FALSE;
-    }
 
   if (!handled)
     {
