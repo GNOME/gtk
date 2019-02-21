@@ -712,9 +712,10 @@ gsk_border_node_peek_colors (GskRenderNode *node)
 /**
  * gsk_border_node_new:
  * @outline: a #GskRoundedRect describing the outline of the border
- * @border_width: the stroke width of the border on the top, right, bottom and
- *     left side respectively.
- * @border_color: the color used on the top, right, bottom and left side.
+ * @border_width: (array fixed-size=4): the stroke width of the border on
+ *     the top, right, bottom and left side respectively.
+ * @border_color: (array fixed-size=4): the color used on the top, right,
+ *     bottom and left side.
  *
  * Creates a #GskRenderNode that will stroke a border rectangle inside the
  * given @outline. The 4 sides of the border can have different widths and
