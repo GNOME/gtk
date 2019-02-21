@@ -906,54 +906,5 @@ spinner {
 
   </refsect2>
 
-  <refsect2>
-    <title>Key bindings</title>
-
-    <para>
-      In order to extend key bindings affecting different widgets,
-      GTK supports the @binding-set rule to parse a set of bind/unbind
-      directives. Note that in order to take effect, the binding sets
-      defined in this way must be associated with rule sets by setting
-      the -gtk-key-bindings property.
-    </para>
-
-    <para>
-      The syntax for @binding-set rules is as follows:
-    </para>
-
-<literallayout><code>〈binding set rule〉 = @binding-set 〈binding name〉 { [ [ 〈binding〉 | 〈unbinding〉 ] ; ]* }</code>
-<code>〈binding〉 = bind "〈accelerator〉" { 〈signal emission〉* }</code>
-<code>〈signal emission〉 = "〈signal name〉" ( [ 〈argument〉 [ , 〈argument〉 ]* ]? }</code>
-<code>〈unbinding〉 = unbind "〈accelerator〉"</code>
-</literallayout>
-
-    <para>
-      where 〈accelerator〉 is a string that can be parsed by gtk_accelerator_parse(),
-      〈signal name〉 is the name of a keybinding signal of the widget in question,
-      and the 〈argument〉 list must be according to the signals declaration.
-    </para>
-
-    <example>
-      <title>An example for using the @binding-set rule</title>
-      <programlisting><![CDATA[
-@binding-set binding-set1 {
-  bind "<alt>Left" { "move-cursor" (visual-positions, -3, 0) };
-  unbind "End";
-};
-
-@binding-set binding-set2 {
-  bind "<alt>Right" { "move-cursor" (visual-positions, 3, 0) };
-  bind "<alt>KP_space" { "delete-from-cursor" (whitespace, 1)
-                         "insert-at-cursor" (" ") };
-};
-
-entry {
-  -gtk-key-bindings: binding-set1, binding-set2;
-}
-]]></programlisting>
-    </example>
-
-  </refsect2>
-
 </refsect1>
 </refentry>

@@ -1486,32 +1486,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 </literallayout>
 
       <table pgwide="1">
-        <title>Key binding properties</title>
-        <tgroup cols="7">
-          <colspec colnum="4" align="center"/>
-          <colspec colnum="5" align="center"/>
-          <thead>
-            <row><entry>Name</entry><entry>Value</entry><entry>Initial</entry><entry>Inh.</entry><entry>Ani.</entry><entry>Reference</entry><entry>Notes</entry></row>
-          </thead>
-          <tbody>
-            <row>
-              <entry><phrase role="nowrap">-gtk-key-bindings</phrase></entry>
-              <entry><code>none | 〈binding name〉 [ , 〈binding name〉 ]*</code></entry>
-              <entry><code>none</code></entry>
-              <entry></entry>
-              <entry></entry>
-              <entry></entry>
-              <entry></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-    <para>
-      〈binding name〉 must have been assigned to a binding set with a @binding-set rule.
-    </para>
-
-      <table pgwide="1">
         <title>Table-related properties</title>
         <tgroup cols="7">
           <colspec colnum="4" align="center"/>
