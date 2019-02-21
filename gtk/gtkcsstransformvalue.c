@@ -17,13 +17,13 @@
 
 #include "config.h"
 
-#include "gtkcssbgsizevalueprivate.h"
+#include "gtkcsstransformvalueprivate.h"
 
 #include <math.h>
 #include <string.h>
 
-#include "gtkcsstransformvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtktransform.h"
 
 typedef union _GtkCssTransform GtkCssTransform;
 
@@ -161,64 +161,62 @@ gtk_css_transform_init_identity (GtkCssTransform     *transform,
   transform->type = type;
 }
 
-static void
+static GtkTransform *
 gtk_css_transform_apply (const GtkCssTransform   *transform,
-                         graphene_matrix_t       *matrix)
+                         GtkTransform            *next)
 {
-  graphene_matrix_t skew, tmp;
+  graphene_matrix_t skew;
 
   switch (transform->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
-      graphene_matrix_multiply (matrix, &transform->matrix.matrix, &tmp);
-      graphene_matrix_init_from_matrix (matrix, &tmp);
-      break;
+      return gtk_transform_matrix (next, &transform->matrix.matrix);
+
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      graphene_matrix_translate (matrix, &GRAPHENE_POINT3D_INIT(
-                                 _gtk_css_number_value_get (transform->translate.x, 100),
-                                 _gtk_css_number_value_get (transform->translate.y, 100),
-                                 _gtk_css_number_value_get (transform->translate.z, 100)));
-      break;
+      return gtk_transform_translate_3d (next,
+                                         &GRAPHENE_POINT3D_INIT (
+                                             _gtk_css_number_value_get (transform->translate.x, 100),
+                                             _gtk_css_number_value_get (transform->translate.y, 100),
+                                              _gtk_css_number_value_get (transform->translate.z, 100)
+                                         ));
+
     case GTK_CSS_TRANSFORM_ROTATE:
       {
-        graphene_vec3_t vec;
+        graphene_vec3_t axis;
 
-        graphene_vec3_init (&vec,
+        graphene_vec3_init (&axis,
                             _gtk_css_number_value_get (transform->rotate.x, 1),
                             _gtk_css_number_value_get (transform->rotate.y, 1),
                             _gtk_css_number_value_get (transform->rotate.z, 1));
-        graphene_matrix_rotate (matrix,
-                                _gtk_css_number_value_get (transform->rotate.angle, 100),
-                                &vec);
+        return gtk_transform_rotate_3d (next,
+                                        _gtk_css_number_value_get (transform->rotate.angle, 100),
+                                        &axis);
       }
-      break;
+
     case GTK_CSS_TRANSFORM_SCALE:
-      graphene_matrix_scale (matrix,
-                             _gtk_css_number_value_get (transform->scale.x, 1),
-                             _gtk_css_number_value_get (transform->scale.y, 1),
-                             _gtk_css_number_value_get (transform->scale.z, 1));
+      return gtk_transform_scale_3d (next,
+                                     _gtk_css_number_value_get (transform->scale.x, 1),
+                                     _gtk_css_number_value_get (transform->scale.y, 1),
+                                     _gtk_css_number_value_get (transform->scale.z, 1));
       break;
     case GTK_CSS_TRANSFORM_SKEW:
       graphene_matrix_init_skew (&skew,
                                  _gtk_css_number_value_get (transform->skew.x, 100) / 180.0f * G_PI,
-                                 _gtk_css_number_value_get (transform->skew.y, 100)  /180.0f * G_PI);
-      graphene_matrix_multiply (matrix, &skew, &tmp);
-      graphene_matrix_init_from_matrix (matrix, &tmp);
-      break;
+                                 _gtk_css_number_value_get (transform->skew.y, 100) / 180.0f * G_PI);
+      return gtk_transform_matrix (next, &skew);
+
     case GTK_CSS_TRANSFORM_SKEW_X:
       graphene_matrix_init_skew (&skew,
                                  _gtk_css_number_value_get (transform->skew_x.skew, 100) / 180.0f * G_PI,
                                  0);
-      graphene_matrix_multiply (matrix, &skew, &tmp);
-      graphene_matrix_init_from_matrix (matrix, &tmp);
-      break;
+      return gtk_transform_matrix (next, &skew);
+
     case GTK_CSS_TRANSFORM_SKEW_Y:
       graphene_matrix_init_skew (&skew,
                                  0,
                                  _gtk_css_number_value_get (transform->skew_y.skew, 100) / 180.0f * G_PI);
-      graphene_matrix_multiply (matrix, &skew, &tmp);
-      graphene_matrix_init_from_matrix (matrix, &tmp);
-      break;
+      return gtk_transform_matrix (next, &skew);
+
     case GTK_CSS_TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
@@ -227,18 +225,20 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
 }
 
 /* NB: The returned matrix may be invalid */
-static void
-gtk_css_transform_value_compute_matrix (const GtkCssValue *value,
-                                        graphene_matrix_t *matrix)
+static GtkTransform *
+gtk_css_transform_value_compute_transform (const GtkCssValue *value)
 {
+  GtkTransform *transform;
   guint i;
 
-  graphene_matrix_init_identity (matrix);
+  transform = NULL;
 
   for (i = 0; i < value->n_transforms; i++)
     {
-      gtk_css_transform_apply (&value->transforms[i], matrix);
+      transform = gtk_css_transform_apply (&value->transforms[i], transform);
     }
+
+  return transform;
 }
 
 static void
@@ -512,12 +512,16 @@ gtk_css_value_transform_transition (GtkCssValue *start,
     {
       if (start->transforms[i].type != end->transforms[i].type)
         {
+          GtkTransform *transform;
           graphene_matrix_t start_matrix, end_matrix;
 
-          graphene_matrix_init_identity (&start_matrix);
-          gtk_css_transform_value_compute_matrix (start, &start_matrix);
-          graphene_matrix_init_identity (&end_matrix);
-          gtk_css_transform_value_compute_matrix (end, &end_matrix);
+          transform = gtk_css_transform_value_compute_transform (start);
+          gtk_transform_to_matrix (transform, &start_matrix);
+          gtk_transform_unref (transform);
+
+          transform = gtk_css_transform_value_compute_transform (end);
+          gtk_transform_to_matrix (transform, &end_matrix);
+          gtk_transform_unref (transform);
 
           result = gtk_css_transform_value_alloc (1);
           result->transforms[0].type = GTK_CSS_TRANSFORM_MATRIX;
@@ -1094,17 +1098,11 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
   return value;
 }
 
-gboolean
-gtk_css_transform_value_get_matrix (const GtkCssValue *transform,
-                                    graphene_matrix_t *matrix)
+GtkTransform *
+gtk_css_transform_value_get_transform (const GtkCssValue *transform)
 {
-  graphene_matrix_t invert;
-
   g_return_val_if_fail (transform->class == &GTK_CSS_VALUE_TRANSFORM, FALSE);
-  g_return_val_if_fail (matrix != NULL, FALSE);
   
-  gtk_css_transform_value_compute_matrix (transform, matrix);
-
-  return graphene_matrix_inverse (matrix, &invert);
+  return gtk_css_transform_value_compute_transform (transform);
 }
 
