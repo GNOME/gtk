@@ -335,6 +335,7 @@ gtk_notebook_page_init (GtkNotebookPage *page)
 {
   page->default_tab = TRUE;
   page->default_menu = TRUE;
+  page->fill = TRUE;
 }
 
 static void
@@ -403,19 +404,35 @@ gtk_notebook_page_set_property (GObject      *object,
       break;
 
     case CHILD_PROP_TAB_EXPAND:
-      page->expand = g_value_get_boolean (value);
+      if (page->expand != g_value_get_boolean (value))
+        {
+          page->expand = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     case CHILD_PROP_TAB_FILL:
-      page->fill = g_value_get_boolean (value);
+      if (page->fill != g_value_get_boolean (value))
+        {
+          page->fill = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     case CHILD_PROP_REORDERABLE:
-      page->reorderable = g_value_get_boolean (value);
+      if (page->reorderable != g_value_get_boolean (value))
+        {
+          page->reorderable = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     case CHILD_PROP_DETACHABLE:
-      page->detachable = g_value_get_boolean (value);
+      if (page->detachable != g_value_get_boolean (value))
+        {
+          page->detachable = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     default:
@@ -544,28 +561,28 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                                          P_("Tab expand"),
                                                          P_("Whether to expand the child’s tab"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB_FILL,
                                    g_param_spec_boolean ("tab-fill",
                                                          P_("Tab fill"),
                                                          P_("Whether the child’s tab should fill the allocated area"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_REORDERABLE,
                                    g_param_spec_boolean ("reorderable",
                                                          P_("Tab reorderable"),
                                                          P_("Whether the tab is reorderable by user action"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    CHILD_PROP_DETACHABLE,
                                    g_param_spec_boolean ("detachable",
                                                          P_("Tab detachable"),
                                                          P_("Whether the tab is detachable"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 }
 
@@ -592,14 +609,6 @@ static gboolean gtk_notebook_reorder_tab         (GtkNotebook      *notebook,
                                                   gboolean          move_to_last);
 static void     gtk_notebook_remove_tab_label    (GtkNotebook      *notebook,
                                                   GtkNotebookPage  *page);
-static void     gtk_notebook_set_tab_label_packing   (GtkNotebook  *notebook,
-                                                      GtkWidget    *child,
-                                                      gboolean      expand,
-                                                      gboolean      fill);
-static void     gtk_notebook_query_tab_label_packing (GtkNotebook  *notebook,
-                                                      GtkWidget    *child,
-                                                      gboolean     *expand,
-                                                      gboolean     *fill);
 
 /*** GObject Methods ***/
 static void gtk_notebook_set_property        (GObject         *object,
@@ -665,16 +674,6 @@ static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
                                               GtkSelectionData *data);
 
 /*** GtkContainer Methods ***/
-static void gtk_notebook_set_child_property  (GtkContainer     *container,
-                                              GtkWidget        *child,
-                                              guint             property_id,
-                                              const GValue     *value,
-                                              GParamSpec       *pspec);
-static void gtk_notebook_get_child_property  (GtkContainer     *container,
-                                              GtkWidget        *child,
-                                              guint             property_id,
-                                              GValue           *value,
-                                              GParamSpec       *pspec);
 static void gtk_notebook_add                 (GtkContainer     *container,
                                               GtkWidget        *widget);
 static void gtk_notebook_remove              (GtkContainer     *container,
@@ -810,14 +809,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
                                                 gtk_notebook_buildable_init))
 
 static void
-child_notify (GtkNotebook *notebook,
-              GtkWidget   *child,
-              const char  *prop_name)
-{
-  gtk_container_child_notify (GTK_CONTAINER (notebook), child, prop_name);
-}
-
-static void
 add_tab_bindings (GtkBindingSet    *binding_set,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
@@ -947,8 +938,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class->remove = gtk_notebook_remove;
   container_class->forall = gtk_notebook_forall;
   container_class->set_focus_child = gtk_notebook_set_focus_child;
-  container_class->get_child_property = gtk_notebook_get_child_property;
-  container_class->set_child_property = gtk_notebook_set_child_property;
   container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_notebook_real_switch_page;
@@ -1025,57 +1014,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                            GTK_PARAM_READABLE);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
-
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_TAB_LABEL,
-                                              g_param_spec_string ("tab-label",
-                                                                   P_("Tab label"),
-                                                                   P_("The string displayed on the child’s tab label"),
-                                                                   NULL,
-                                                                   GTK_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_MENU_LABEL,
-                                              g_param_spec_string ("menu-label",
-                                                                   P_("Menu label"),
-                                                                   P_("The string displayed in the child’s menu entry"),
-                                                                   NULL,
-                                                                   GTK_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_POSITION,
-                                              g_param_spec_int ("position",
-                                                                P_("Position"),
-                                                                P_("The index of the child in the parent"),
-                                                                -1, G_MAXINT, 0,
-                                                                GTK_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_TAB_EXPAND,
-                                              g_param_spec_boolean ("tab-expand",
-                                                                    P_("Tab expand"),
-                                                                    P_("Whether to expand the child’s tab"),
-                                                                    FALSE,
-                                                                    GTK_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_TAB_FILL,
-                                              g_param_spec_boolean ("tab-fill",
-                                                                    P_("Tab fill"),
-                                                                    P_("Whether the child’s tab should fill the allocated area"),
-                                                                    TRUE,
-                                                                    GTK_PARAM_READWRITE));
-
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_REORDERABLE,
-                                              g_param_spec_boolean ("reorderable",
-                                                                    P_("Tab reorderable"),
-                                                                    P_("Whether the tab is reorderable by user action"),
-                                                                    FALSE,
-                                                                    GTK_PARAM_READWRITE));
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_DETACHABLE,
-                                              g_param_spec_boolean ("detachable",
-                                                                    P_("Tab detachable"),
-                                                                    P_("Whether the tab is detachable"),
-                                                                    FALSE,
-                                                                    GTK_PARAM_READWRITE));
 
   /**
    * GtkNotebook::switch-page:
@@ -1706,7 +1644,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
   for (element = priv->children, i = 0; element; element = element->next, i++)
     {
       if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
-        child_notify (notebook, ((GtkNotebookPage *) element->data)->child, "position");
+        g_object_notify (G_OBJECT (element->data), "position");
     }
   g_signal_emit (notebook,
                  notebook_signals[PAGE_REORDERED],
@@ -2763,7 +2701,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
               for (element = priv->children, i = 0; element; element = element->next, i++)
                 {
                   if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
-                    child_notify (notebook, ((GtkNotebookPage *) element->data)->child, "position");
+                    g_object_notify (G_OBJECT (element->data), "position");
                 }
               g_signal_emit (notebook,
                              notebook_signals[PAGE_REORDERED], 0,
@@ -3540,8 +3478,6 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
 
 /* Private GtkContainer Methods :
  *
- * gtk_notebook_set_child_arg
- * gtk_notebook_get_child_arg
  * gtk_notebook_add
  * gtk_notebook_remove
  * gtk_notebook_focus
@@ -3549,133 +3485,6 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
  * gtk_notebook_child_type
  * gtk_notebook_forall
  */
-static void
-gtk_notebook_set_child_property (GtkContainer    *container,
-                                 GtkWidget       *child,
-                                 guint            property_id,
-                                 const GValue    *value,
-                                 GParamSpec      *pspec)
-{
-  gboolean expand;
-  gboolean fill;
-
-  /* not finding child's page is valid for menus or labels */
-  if (!gtk_notebook_find_child (GTK_NOTEBOOK (container), child))
-    return;
-
-  switch (property_id)
-    {
-    case CHILD_PROP_TAB_LABEL:
-      /* a NULL pointer indicates a default_tab setting, otherwise
-       * we need to set the associated label
-       */
-      gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (container), child,
-                                       g_value_get_string (value));
-      break;
-    case CHILD_PROP_MENU_LABEL:
-      gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (container), child,
-                                        g_value_get_string (value));
-      break;
-    case CHILD_PROP_POSITION:
-      gtk_notebook_reorder_child (GTK_NOTEBOOK (container), child,
-                                  g_value_get_int (value));
-      break;
-    case CHILD_PROP_TAB_EXPAND:
-      gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
-                                            &expand, &fill);
-      gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (container), child,
-                                          g_value_get_boolean (value),
-                                          fill);
-      break;
-    case CHILD_PROP_TAB_FILL:
-      gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
-                                            &expand, &fill);
-      gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (container), child,
-                                          expand,
-                                          g_value_get_boolean (value));
-      break;
-    case CHILD_PROP_REORDERABLE:
-      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (container), child,
-                                        g_value_get_boolean (value));
-      break;
-    case CHILD_PROP_DETACHABLE:
-      gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (container), child,
-                                       g_value_get_boolean (value));
-      break;
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_notebook_get_child_property (GtkContainer    *container,
-                                 GtkWidget       *child,
-                                 guint            property_id,
-                                 GValue          *value,
-                                 GParamSpec      *pspec)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GList *list;
-  GtkWidget *label;
-  gboolean expand;
-  gboolean fill;
-
-  /* not finding child's page is valid for menus or labels */
-  list = gtk_notebook_find_child (notebook, child);
-  if (!list)
-    {
-      /* nothing to set on labels or menus */
-      g_param_value_set_default (pspec, value);
-      return;
-    }
-
-  switch (property_id)
-    {
-    case CHILD_PROP_TAB_LABEL:
-      label = gtk_notebook_get_tab_label (notebook, child);
-
-      if (GTK_IS_LABEL (label))
-        g_value_set_string (value, gtk_label_get_label (GTK_LABEL (label)));
-      else
-        g_value_set_string (value, NULL);
-      break;
-    case CHILD_PROP_MENU_LABEL:
-      label = gtk_notebook_get_menu_label (notebook, child);
-
-      if (GTK_IS_LABEL (label))
-        g_value_set_string (value, gtk_label_get_label (GTK_LABEL (label)));
-      else
-        g_value_set_string (value, NULL);
-      break;
-    case CHILD_PROP_POSITION:
-      g_value_set_int (value, g_list_position (priv->children, list));
-      break;
-    case CHILD_PROP_TAB_EXPAND:
-        gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
-                                              &expand, NULL);
-        g_value_set_boolean (value, expand);
-      break;
-    case CHILD_PROP_TAB_FILL:
-        gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
-                                              NULL, &fill);
-        g_value_set_boolean (value, fill);
-      break;
-    case CHILD_PROP_REORDERABLE:
-      g_value_set_boolean (value,
-                           gtk_notebook_get_tab_reorderable (GTK_NOTEBOOK (container), child));
-      break;
-    case CHILD_PROP_DETACHABLE:
-      g_value_set_boolean (value,
-                           gtk_notebook_get_tab_detachable (GTK_NOTEBOOK (container), child));
-      break;
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
 static void
 gtk_notebook_add (GtkContainer *container,
                   GtkWidget    *widget)
@@ -3716,7 +3525,7 @@ gtk_notebook_remove (GtkContainer *container,
 
   while (list)
     {
-      child_notify (notebook, ((GtkNotebookPage *)list->data)->child, "position");
+      g_object_notify (G_OBJECT (list->data), "position");
       list = list->next;
     }
 
@@ -4219,8 +4028,6 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   GList *list;
   GtkWidget *sibling;
 
-  gtk_widget_freeze_child_notify (page->child);
-
   nchildren = g_list_length (priv->children);
   if ((position < 0) || (position > nchildren))
     position = nchildren;
@@ -4283,19 +4090,17 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
       gtk_notebook_switch_focus_tab (notebook, priv->focus_tab);
     }
 
-  child_notify (notebook, page->child, "tab-expand");
-  child_notify (notebook, page->child, "tab-fill");
-  child_notify (notebook, page->child, "tab-label");
-  child_notify (notebook, page->child, "menu-label");
+  g_object_notify (G_OBJECT (page), "tab-expand");
+  g_object_notify (G_OBJECT (page), "tab-fill");
+  g_object_notify (G_OBJECT (page), "tab-label");
+  g_object_notify (G_OBJECT (page), "menu-label");
 
   list = g_list_nth (priv->children, position);
   while (list)
     {
-      child_notify (notebook, ((GtkNotebookPage *)list->data)->child, "position");
+      g_object_notify (G_OBJECT (list->data), "position");
       list = list->next;
     }
-
-  gtk_widget_thaw_child_notify (page->child);
 
   update_arrow_state (notebook);
 
@@ -6829,7 +6634,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
   if (priv->menu)
     gtk_notebook_menu_item_recreate (notebook, list);
 
-  child_notify (notebook, child, "tab-label");
+  g_object_notify (G_OBJECT (child), "tab-label");
 }
 
 /**
@@ -6959,7 +6764,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 
   if (priv->menu)
     gtk_notebook_menu_item_create (notebook, page);
-  child_notify (notebook, child, "menu-label");
+  g_object_notify (G_OBJECT (child), "menu-label");
 }
 
 /**
@@ -6986,7 +6791,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
       gtk_widget_set_valign (menu_label, GTK_ALIGN_CENTER);
     }
   gtk_notebook_set_menu_label (notebook, child, menu_label);
-  child_notify (notebook, child, "menu-label");
+  g_object_notify (G_OBJECT (child), "menu-label");
 }
 
 /**
@@ -7050,61 +6855,6 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
   gtk_widget_queue_allocate (priv->tabs_widget);
 }
 
-static void
-gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
-                                    GtkWidget   *child,
-                                    gboolean     expand,
-                                    gboolean     fill)
-{
-  GtkNotebookPrivate *priv;
-  GtkNotebookPage *page;
-  GList *list;
-
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  priv = notebook->priv;
-
-  list = gtk_notebook_find_child (notebook, child);
-  g_return_if_fail (list != NULL);
-
-  page = list->data;
-  expand = expand != FALSE;
-  fill = fill != FALSE;
-  if (page->expand == expand && page->fill == fill)
-    return;
-
-  gtk_widget_freeze_child_notify (child);
-  page->expand = expand;
-  child_notify (notebook, child, "tab-expand");
-  page->fill = fill;
-  child_notify (notebook, child, "tab-fill");
-  child_notify (notebook, child, "position");
-  if (priv->show_tabs)
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-  gtk_widget_thaw_child_notify (child);
-}
-
-static void
-gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
-                                      GtkWidget   *child,
-                                      gboolean    *expand,
-                                      gboolean    *fill)
-{
-  GList *list;
-
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  list = gtk_notebook_find_child (notebook, child);
-  g_return_if_fail (list != NULL);
-
-  if (expand)
-    *expand = GTK_NOTEBOOK_PAGE_FROM_LIST (list)->expand;
-  if (fill)
-    *fill = GTK_NOTEBOOK_PAGE_FROM_LIST (list)->fill;
-}
-
 /**
  * gtk_notebook_reorder_child:
  * @notebook: a #GtkNotebook
@@ -7157,18 +6907,14 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   if (priv->focus_tab == list)
     priv->focus_tab = new_list;
 
-  gtk_widget_freeze_child_notify (child);
-
   /* Move around the menu items if necessary */
   gtk_notebook_child_reordered (notebook, page);
 
   for (list = priv->children, i = 0; list; list = list->next, i++)
     {
       if (MIN (old_pos, position) <= i && i <= MAX (old_pos, position))
-        child_notify (notebook, ((GtkNotebookPage *) list->data)->child, "position");
+        g_object_notify (G_OBJECT (list->data), "position");
     }
-
-  gtk_widget_thaw_child_notify (child);
 
   g_signal_emit (notebook,
                  notebook_signals[PAGE_REORDERED],
@@ -7285,7 +7031,7 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
       else
         gtk_style_context_remove_class (gtk_widget_get_style_context (page->tab_widget),
                                         "reorderable-page");
-      child_notify (notebook, child, "reorderable");
+      g_object_notify (G_OBJECT (child), "reorderable");
     }
 }
 
@@ -7380,7 +7126,7 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
   if (GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable != detachable)
     {
       GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable = detachable;
-      child_notify (notebook, child, "detachable");
+      g_object_notify (G_OBJECT (child), "detachable");
     }
 }
 
