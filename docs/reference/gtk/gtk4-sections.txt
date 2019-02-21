@@ -5898,7 +5898,7 @@ GtkMountOperationPrivate
 </SECTION>
 
 <SECTION>
-<FILE>tranform</FILE>
+<FILE>gtktranform</FILE>
 <TITLE>3D transformations</TITLE>
 GtkTransformType;
 GtkTransform;
