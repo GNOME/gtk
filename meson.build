@@ -670,46 +670,44 @@ malloc_is_aligned = false
 
 if not meson.is_cross_build() or meson.has_exe_wrapper()
   malloc_test = cc.run ('''
-  #include <malloc.h>
-  #include <stdio.h>
+#include <malloc.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <errno.h>
 
-  #define COUNT 100
-  #define is_aligned(POINTER, BYTE_COUNT) \
-    (((uintptr_t)(const void *)(POINTER)) % (BYTE_COUNT) == 0)
-  int
-  main (int argc, char *argv[])
-  {
-    void **pointers;
-    int i, a, min_a;
-    FILE *f;
-    int wrote;
-    pointers = malloc (sizeof (void *) * COUNT);
-    for (i = 0, min_a = 128; i < COUNT; i++, pointers++)
+int
+main (int argc, char *argv[])
+{
+  const size_t desired_alignment = 16;
+  size_t block_sizes[] = {
+    1,
+    2,
+    sizeof (void *),
+    4 * sizeof (float),
+    16 * sizeof (float),
+  };
+  int n_block_sizes = sizeof (block_sizes) / sizeof (block_sizes[0]);
+  int i, res = 0;
+  for (i = 0; i < n_block_sizes; i++)
     {
-      *pointers = malloc (sizeof (void *));
-      for (a = 1; a <= 128; a = a * 2)
-      {
-        if (!is_aligned (*pointers, a))
+      void *p = malloc (block_sizes[i]);
+
+      if (p == NULL)
+        perror ("malloc");
+
+      if (((uintptr_t) p & (desired_alignment - 1)) != 0)
         {
-          a = a / 2;
-          break;
+          fprintf (stderr, "unaligned allocation of %d (%d)\n", block_sizes[i], i); 
+          return 1;
         }
-      }
-      if (a > 128)
-        a = 128;
-      if (a < min_a)
-        min_a = a;
     }
-    wrote = fprintf (stderr, "%d", min_a);
-    if (wrote <= 0)
-      return 1;
-    return 0;
-  }
-  ''')
+  return 0;
+}
+''')
 
   if not malloc_test.compiled() or malloc_test.returncode() != 0
     message ('malloc() alignment test failed, assuming unaligned malloc()')
-  elif malloc_test.stderr().to_int() >= 16
+  elif malloc_test.returncode() == 0
     malloc_is_aligned = true
     cdata.set('MALLOC_IS_ALIGNED16', 1)
   endif
