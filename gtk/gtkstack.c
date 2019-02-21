@@ -2095,13 +2095,12 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      gtk_snapshot_offset (snapshot,
-                           priv->last_visible_surface_allocation.x,
-                           priv->last_visible_surface_allocation.y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              priv->last_visible_surface_allocation.x,
+                              priv->last_visible_surface_allocation.y));
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_offset (snapshot,
-                           -priv->last_visible_surface_allocation.x,
-                           -priv->last_visible_surface_allocation.y);
+      gtk_snapshot_restore (snapshot);
     }
   gtk_snapshot_pop (snapshot);
 
@@ -2163,9 +2162,10 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      gtk_snapshot_offset (snapshot, pos_x, pos_y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (pos_x, pos_y));
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_offset (snapshot, -pos_x, -pos_y);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
@@ -2223,9 +2223,10 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
             y -= (priv->last_visible_widget_height - height) / 2;
         }
 
-      gtk_snapshot_offset (snapshot, x, y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_offset (snapshot, -x, -y);
+      gtk_snapshot_restore (snapshot);
      }
 
   gtk_widget_snapshot_child (widget,
