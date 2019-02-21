@@ -33,8 +33,6 @@ G_BEGIN_DECLS
  * @GTK_CSS_SECTION_IMPORT: The section defines an import rule.
  * @GTK_CSS_SECTION_COLOR_DEFINITION: The section defines a color. This
  *   is a GTK extension to CSS.
- * @GTK_CSS_SECTION_BINDING_SET: The section defines a binding set. This
- *   is a GTK extension to CSS.
  * @GTK_CSS_SECTION_RULESET: The section defines a CSS ruleset.
  * @GTK_CSS_SECTION_SELECTOR: The section defines a CSS selector.
  * @GTK_CSS_SECTION_DECLARATION: The section defines the declaration of
@@ -56,7 +54,6 @@ typedef enum
   GTK_CSS_SECTION_DOCUMENT,
   GTK_CSS_SECTION_IMPORT,
   GTK_CSS_SECTION_COLOR_DEFINITION,
-  GTK_CSS_SECTION_BINDING_SET,
   GTK_CSS_SECTION_RULESET,
   GTK_CSS_SECTION_SELECTOR,
   GTK_CSS_SECTION_DECLARATION,
