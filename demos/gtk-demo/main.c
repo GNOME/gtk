@@ -667,10 +667,9 @@ add_data_tab (const gchar *demoname)
       label = gtk_label_new (resources[i]);
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
-      gtk_container_child_set (GTK_CONTAINER (notebook),
-                               widget,
-                               "tab-expand", TRUE,
-                               NULL);
+      g_object_set (gtk_notebook_get_page (GTK_NOTEBOOK (notebook), widget),
+                    "tab-expand", TRUE,
+                    NULL);
 
       g_free (resource_name);
     }
