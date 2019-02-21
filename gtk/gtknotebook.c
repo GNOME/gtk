@@ -392,10 +392,14 @@ gtk_notebook_page_set_property (GObject      *object,
       break;
 
     case CHILD_PROP_POSITION:
-#if 0
-      gtk_notebook_reorder_child (GTK_NOTEBOOK (container), child,
-                                  g_value_get_int (value));
-#endif
+      {
+        GtkNotebook *notebook = NULL;
+        if (page->tab_widget)
+          notebook = GTK_NOTEBOOK (g_object_get_data (G_OBJECT (page->tab_widget), "notebook"));
+
+        if (notebook)
+          gtk_notebook_reorder_child (notebook, page->child, g_value_get_int (value));
+      }
       break;
 
     case CHILD_PROP_TAB_EXPAND:
@@ -451,9 +455,14 @@ gtk_notebook_page_get_property (GObject    *object,
       break;
 
     case CHILD_PROP_POSITION:
-#if 0
-      g_value_set_int (value, g_list_position (priv->children, list));
-#endif
+      {
+        GtkNotebook *notebook = NULL;
+        if (page->tab_widget)
+          notebook = GTK_NOTEBOOK (g_object_get_data (G_OBJECT (page->tab_widget), "notebook"));
+
+        if (notebook)
+          g_value_set_int (value, g_list_index (notebook->priv->children, page));
+      }
       break;
 
     case CHILD_PROP_TAB_EXPAND:
