@@ -4402,6 +4402,16 @@ gtk_snapshot_push_rounded_clip
 gtk_snapshot_push_cross_fade
 gtk_snapshot_push_blend
 gtk_snapshot_pop
+gtk_snapshot_save
+gtk_snapshot_restore
+gtk_snapshot_transform
+gtk_snapshot_transform_matrix
+gtk_snapshot_translate
+gtk_snapshot_translate_3d
+gtk_snapshot_rotate
+gtk_snapshot_rotate_3d
+gtk_snapshot_scale
+gtk_snapshot_scale_3d
 gtk_snapshot_offset
 gtk_snapshot_append_node
 gtk_snapshot_append_cairo
