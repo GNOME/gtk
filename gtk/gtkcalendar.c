@@ -2010,9 +2010,9 @@ calendar_snapshot_day_names (GtkCalendar *calendar,
   get_component_paddings (calendar, NULL, &day_name_padding, NULL);
   context = gtk_widget_get_style_context (widget);
 
-  gtk_snapshot_offset (snapshot,
-                       inner_border,
-                       priv->header_h + inner_border);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (inner_border, priv->header_h + inner_border));
 
   day_width = priv->day_width;
   cal_width = gtk_widget_get_width (widget) - (inner_border * 2);
@@ -2073,9 +2073,7 @@ calendar_snapshot_day_names (GtkCalendar *calendar,
   g_object_unref (layout);
 
   gtk_style_context_restore (context);
-  gtk_snapshot_offset (snapshot,
-                       - inner_border,
-                       - (priv->header_h + inner_border));
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
@@ -2403,16 +2401,15 @@ calendar_snapshot_arrow (GtkCalendar *calendar,
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
 
-  gtk_snapshot_offset (snapshot,
-                       rect.x + (rect.width - 8) / 2,
-                       rect.y + (rect.height - 8) / 2);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT(
+                          rect.x + (rect.width - 8) / 2,
+                          rect.y + (rect.height - 8) / 2));
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
                                snapshot,
                                8, 8,
                                image_type);
-  gtk_snapshot_offset (snapshot,
-                       - rect.x - (rect.width - 8) / 2,
-                       - rect.y - (rect.height - 8) / 2);
+  gtk_snapshot_restore (snapshot);
 
   gtk_style_context_restore (context);
 }
