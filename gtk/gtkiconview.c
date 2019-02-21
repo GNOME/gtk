@@ -1679,7 +1679,8 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   offset_x = gtk_adjustment_get_value (icon_view->priv->hadjustment);
   offset_y = gtk_adjustment_get_value (icon_view->priv->vadjustment);
 
-  gtk_snapshot_offset (snapshot, - offset_x, - offset_y);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- offset_x, - offset_y));
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
 
@@ -1759,6 +1760,8 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
 
   if (icon_view->priv->doing_rubberband)
     gtk_icon_view_snapshot_rubberband (icon_view, snapshot);
+
+  gtk_snapshot_restore (snapshot);
 
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->snapshot (widget, snapshot);
 }
