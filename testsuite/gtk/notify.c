@@ -617,6 +617,11 @@ test_type (gconstpointer data)
             g_str_equal (pspec->name, "selected-item")))
          continue;
 
+       /* can't set position without a notebook */
+       if (g_type_is_a (type, GTK_TYPE_NOTEBOOK_PAGE) &&
+           g_str_equal (pspec->name, "position"))
+         continue;
+
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
 
