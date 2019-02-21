@@ -471,6 +471,18 @@ escape_cb (GtkAssistant *assistant)
 }
 
 static void
+gtk_assistant_finalize (GObject *object)
+{
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  if (priv->model)
+    g_object_remove_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+
+  G_OBJECT_CLASS (gtk_assistant_parent_class)->finalize (object);
+}
+
+static void
 gtk_assistant_class_init (GtkAssistantClass *class)
 {
   GObjectClass *gobject_class;
@@ -484,6 +496,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   container_class = (GtkContainerClass *) class;
   window_class    = (GtkWindowClass *) class;
 
+  gobject_class->finalize = gtk_assistant_finalize;
   gobject_class->constructed  = gtk_assistant_constructed;
   gobject_class->set_property = gtk_assistant_set_property;
   gobject_class->get_property = gtk_assistant_get_property;
