@@ -55,6 +55,7 @@ gtk/a11y/gtkrenderercellaccessible.c
 gtk/a11y/gtkscalebuttonaccessible.c
 gtk/a11y/gtkspinneraccessible.c
 gtk/a11y/gtkswitchaccessible.c
+gtk/a11y/gtktextaccessible.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
@@ -213,6 +214,7 @@ gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
 gtk/gtkpapersize.c
+gtk/gtkpasswordentry.c
 gtk/gtkpathbar.c
 gtk/gtkpicture.c
 gtk/gtkplacessidebar.c
@@ -274,6 +276,7 @@ gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
 gtk/gtkswitch.c
 gtk/gtktextbuffer.c
+gtk/gtktext.c
 gtk/gtktextchild.c
 gtk/gtktextdisplay.c
 gtk/gtktexthandle.c
