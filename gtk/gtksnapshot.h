@@ -69,9 +69,6 @@ void            gtk_snapshot_push_debug                 (GtkSnapshot            
                                                          const char             *message,
                                                          ...) G_GNUC_PRINTF (2, 3);
 GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_push_transform             (GtkSnapshot            *snapshot,
-                                                         const graphene_matrix_t*transform);
-GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_opacity               (GtkSnapshot            *snapshot,
                                                          double                  opacity);
 GDK_AVAILABLE_IN_ALL
@@ -136,10 +133,6 @@ void            gtk_snapshot_scale_3d                   (GtkSnapshot            
                                                          float                   factor_x,
                                                          float                   factor_y,
                                                          float                   factor_z);
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_offset                     (GtkSnapshot            *snapshot,
-                                                         int                     x,
-                                                         int                     y);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);

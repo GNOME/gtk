@@ -4393,7 +4393,6 @@ gtk_snapshot_to_node
 gtk_snapshot_to_paintable
 gtk_snapshot_free_to_node
 gtk_snapshot_free_to_paintable
-gtk_snapshot_push_transform
 gtk_snapshot_push_opacity
 gtk_snapshot_push_color_matrix
 gtk_snapshot_push_repeat
@@ -4412,7 +4411,6 @@ gtk_snapshot_rotate
 gtk_snapshot_rotate_3d
 gtk_snapshot_scale
 gtk_snapshot_scale_3d
-gtk_snapshot_offset
 gtk_snapshot_append_node
 gtk_snapshot_append_cairo
 gtk_snapshot_append_texture
