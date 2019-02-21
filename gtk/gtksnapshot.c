@@ -1636,3 +1636,91 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
+
+/**
+ * gtk_snapshot_append_inset_shadow:
+ * @snapshot: a #GtkSnapshot
+ * @outline: outline of the region surrounded by shadow
+ * @color: color of the shadow
+ * @dx: horizontal offset of shadow
+ * @dy: vertical offset of shadow
+ * @spread: how far the shadow spreads towards the inside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Appends an inset shadow into the box given by @outline.
+ */
+void
+gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
+                                  const GskRoundedRect *outline,
+                                  const GdkRGBA        *color,
+                                  float                 dx,
+                                  float                 dy,
+                                  float                 spread,
+                                  float                 blur_radius)
+{
+  GskRenderNode *node;
+  GskRoundedRect real_outline;
+  float scale_x, scale_y, x, y;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (outline != NULL);
+  g_return_if_fail (color != NULL);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
+  gtk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
+
+  node = gsk_inset_shadow_node_new (&real_outline,
+                                    color,
+                                    scale_x * dx + x,
+                                    scale_y * dy + y,
+                                    spread,
+                                    blur_radius);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
+/**
+ * gtk_snapshot_append_outset_shadow:
+ * @snapshot: a #GtkSnapshot
+ * @outline: outline of the region surrounded by shadow
+ * @color: color of the shadow
+ * @dx: horizontal offset of shadow
+ * @dy: vertical offset of shadow
+ * @spread: how far the shadow spreads towards the outside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Appends an outset shadow node around the box given by @outline.
+ */
+void
+gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
+                                   const GskRoundedRect *outline,
+                                   const GdkRGBA        *color,
+                                   float                 dx,
+                                   float                 dy,
+                                   float                 spread,
+                                   float                 blur_radius)
+{
+  GskRenderNode *node;
+  GskRoundedRect real_outline;
+  float scale_x, scale_y, x, y;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (outline != NULL);
+  g_return_if_fail (color != NULL);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
+  gtk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
+
+  node = gsk_outset_shadow_node_new (&real_outline,
+                                     color,
+                                     scale_x * dx + x,
+                                     scale_y * dy + y,
+                                     spread,
+                                     blur_radius);
+
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
