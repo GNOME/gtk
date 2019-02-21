@@ -636,6 +636,127 @@ rewrite_assistant (Element      *element,
 }
 
 static gboolean
+has_attribute (Element    *elt,
+               const char *name,
+               const char *value)
+{
+  int i;
+
+  for (i = 0; elt->attribute_names[i]; i++)
+    {
+      if (strcmp (elt->attribute_names[i], name) == 0 &&
+          strcmp (elt->attribute_values[i], value) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static Element *
+rewrite_notebook_page (Element *child, Element *tab, MyParserData *data)
+{
+  Element *object = NULL;
+  Element *tab_obj = NULL;
+  Element *packing = NULL;
+  Element *new_object;
+  Element *prop;
+  GList *l;
+
+  if (!g_str_equal (child->element_name, "child"))
+    return child;
+
+  if (has_attribute (child, "type", "tab") ||
+      has_attribute (child, "type", "action-start") ||
+      has_attribute (child, "type", "action-end"))
+    return child;
+
+  for (l = child->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+      if (g_str_equal (elt->element_name, "object"))
+        object = elt;
+      else if (g_str_equal (elt->element_name, "packing"))
+        packing = elt;
+    }
+
+  if (!packing && !tab)
+    return child;
+
+  if (tab)
+    {
+      for (l = tab->children; l; l = l->next)
+        {
+          Element *elt = l->data;
+          if (g_str_equal (elt->element_name, "object"))
+            tab_obj = elt;
+        }
+    }
+
+  new_object = g_new0 (Element, 1);
+  new_object->element_name = g_strdup ("object");
+  new_object->attribute_names = g_new0 (char *, 2);
+  new_object->attribute_names[0] = g_strdup ("class");
+  new_object->attribute_values = g_new0 (char *, 2);
+  new_object->attribute_values[0] = g_strdup ("GtkNotebookPage");
+  if (packing)
+    {
+      new_object->children = packing->children;
+      packing->children = NULL;
+    }
+
+  prop = g_new0 (Element, 1);
+  prop->element_name = g_strdup ("property");
+  prop->attribute_names = g_new0 (char *, 2);
+  prop->attribute_names[0] = g_strdup ("name");
+  prop->attribute_values = g_new0 (char *, 2);
+  prop->attribute_values[0] = g_strdup ("child");
+  prop->children = g_list_append (prop->children, object);
+  new_object->children = g_list_append (new_object->children, prop);
+
+  if (tab_obj)
+    {
+      prop = g_new0 (Element, 1);
+      prop->element_name = g_strdup ("property");
+      prop->attribute_names = g_new0 (char *, 2);
+      prop->attribute_names[0] = g_strdup ("name");
+      prop->attribute_values = g_new0 (char *, 2);
+      prop->attribute_values[0] = g_strdup ("tab");
+      prop->children = g_list_append (prop->children, tab_obj);
+      new_object->children = g_list_append (new_object->children, prop);
+    }
+
+  g_list_free (child->children);
+  child->children = g_list_append (NULL, new_object);
+
+  return child;
+}
+
+static void
+rewrite_notebook (Element      *element,
+                  MyParserData *data)
+{
+  GList *l, *new_children;
+
+  new_children = NULL;
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+      Element *tab = l->next ? l->next->data : NULL;
+
+      if (tab && has_attribute (tab, "type", "tab"))
+        {
+          new_children = g_list_append (new_children, rewrite_notebook_page (child, tab, data));
+          l = l->next; /* skip the tab */
+        }
+      else
+        new_children = g_list_append (new_children, rewrite_notebook_page (child, NULL, data));
+    }
+
+  g_list_free (element->children);
+  element->children = new_children;
+}
+
+static gboolean
 simplify_element (Element      *element,
                   MyParserData *data)
 {
@@ -680,6 +801,10 @@ simplify_element (Element      *element,
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkAssistant"))
         rewrite_assistant (element, data);
+          
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkNotebook"))
+        rewrite_notebook (element, data);
           
       if (g_str_equal (element->element_name, "property") &&
           property_has_been_removed (element, data))

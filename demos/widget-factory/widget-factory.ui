@@ -1224,48 +1224,47 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           <object class="GtkNotebook" id="notebook1">
                             <property name="can-focus">1</property>
                             <child>
-                              <object class="GtkBox" id="box6">
-                                <property name="orientation">vertical</property>
+                              <object class="GtkNotebookPage">
+                                <property name="child">
+                                  <object class="GtkBox" id="box6">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label5">
+                                    <property name="label" translatable="yes">page 1</property>
+                                  </object>
+                                </property>
                               </object>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label5">
-                                <property name="label" translatable="yes">page 1</property>
-                              </object>
-                              <packing>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box7">
-                                <property name="orientation">vertical</property>
+                              <object class="GtkNotebookPage">
+                                <property name="child">
+                                  <object class="GtkBox" id="box7">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label6">
+                                    <property name="label" translatable="yes">page 2</property>
+                                  </object>
+                                </property>
                               </object>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label6">
-                                <property name="label" translatable="yes">page 2</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box8">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label7">
-                                <property name="label" translatable="yes">page 3</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box8">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label7">
+                                    <property name="label" translatable="yes">page 3</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">2</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1274,51 +1273,48 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can-focus">1</property>
                             <property name="tab-pos">right</property>
                             <child>
-                              <object class="GtkBox" id="box9">
-                                <property name="orientation">vertical</property>
+                              <object class="GtkNotebookPage">
+                                <property name="child">
+                                  <object class="GtkBox" id="box9">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label8">
+                                    <property name="label" translatable="yes">page 1</property>
+                                  </object>
+                                </property>
                               </object>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label8">
-                                <property name="label" translatable="yes">page 1</property>
-                              </object>
-                              <packing>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box10">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label9">
-                                <property name="label" translatable="yes">page 2</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box10">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label9">
+                                    <property name="label" translatable="yes">page 2</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box11">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label10">
-                                <property name="label" translatable="yes">page 3</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box11">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label10">
+                                    <property name="label" translatable="yes">page 3</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">2</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1327,51 +1323,48 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can-focus">1</property>
                             <property name="tab-pos">bottom</property>
                             <child>
-                              <object class="GtkBox" id="box12">
-                                <property name="orientation">vertical</property>
+                              <object class="GtkNotebookPage">
+                                <property name="child">
+                                  <object class="GtkBox" id="box12">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label11">
+                                    <property name="label" translatable="yes">page 1</property>
+                                  </object>
+                                </property>
                               </object>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label11">
-                                <property name="label" translatable="yes">page 1</property>
-                              </object>
-                              <packing>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box13">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label12">
-                                <property name="label" translatable="yes">page 2</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box13">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label12">
+                                    <property name="label" translatable="yes">page 2</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box14">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label13">
-                                <property name="label" translatable="yes">page 3</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box14">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label13">
+                                    <property name="label" translatable="yes">page 3</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">2</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1380,51 +1373,48 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can-focus">1</property>
                             <property name="tab-pos">left</property>
                             <child>
-                              <object class="GtkBox" id="box15">
-                                <property name="orientation">vertical</property>
+                              <object class="GtkNotebookPage">
+                                <property name="child">
+                                  <object class="GtkBox" id="box15">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label14">
+                                    <property name="label" translatable="yes">page 1</property>
+                                  </object>
+                                </property>
                               </object>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label14">
-                                <property name="label" translatable="yes">page 1</property>
-                              </object>
-                              <packing>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box16">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label15">
-                                <property name="label" translatable="yes">page 2</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box16">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label15">
+                                    <property name="label" translatable="yes">page 2</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box17">
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel" id="label16">
-                                <property name="label" translatable="yes">page 3</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="box17">
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel" id="label16">
+                                    <property name="label" translatable="yes">page 3</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="position">2</property>
-                                <property name="tab-fill">0</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -2892,63 +2882,67 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkNotebook">
                                         <property name="show-border">0</property>
                                         <child>
-                                          <object class="GtkBox" id="closable_page_1">
-                                            <property name="height-request">120</property>
-                                          </object>
-                                          <packing>
+                                          <object class="GtkNotebookPage">
                                             <property name="tab-expand">1</property>
-                                          </packing>
-                                        </child>
-                                        <child type="tab">
-                                          <object class="GtkBox">
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="label" translatable="yes">Page 1</property>
-                                                <property name="halign">center</property>
-                                                <property name="hexpand">1</property>
+                                            <property name="child">
+                                              <object class="GtkBox" id="closable_page_1">
+                                                <property name="height-request">120</property>
                                               </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton">
-                                                <property name="relief">none</property>
-                                                <property name="focus-on-click">0</property>
-                                                <property name="icon-name">window-close-symbolic</property>
-                                                <signal name="clicked" handler="tab_close_cb" object="closable_page_1"/>
-                                                <style>
-                                                  <class name="small-button"/>
-                                                </style>
+                                            </property>
+                                            <property name="tab">
+                                              <object class="GtkBox">
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="label" translatable="yes">Page 1</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="hexpand">1</property>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton">
+                                                    <property name="relief">none</property>
+                                                    <property name="focus-on-click">0</property>
+                                                    <property name="icon-name">window-close-symbolic</property>
+                                                    <signal name="clicked" handler="tab_close_cb" object="closable_page_1"/>
+                                                    <style>
+                                                      <class name="small-button"/>
+                                                    </style>
+                                                  </object>
+                                                </child>
                                               </object>
-                                            </child>
+                                            </property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkBox" id="closable_page_2">
-                                            <property name="vexpand">1</property>
-                                          </object>
-                                          <packing>
+                                          <object class="GtkNotebookPage">
                                             <property name="tab-expand">1</property>
-                                          </packing>
-                                        </child>
-                                        <child type="tab">
-                                          <object class="GtkBox">
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="label" translatable="yes">Page 2</property>
-                                                <property name="halign">center</property>
-                                                <property name="hexpand">1</property>
+                                            <property name="child">
+                                              <object class="GtkBox" id="closable_page_2">
+                                                <property name="vexpand">1</property>
                                               </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton">
-                                                <property name="relief">none</property>
-                                                <property name="focus-on-click">0</property>
-                                                <property name="icon-name">window-close-symbolic</property>
-                                                <signal name="clicked" handler="tab_close_cb" object="closable_page_2"/>
-                                                <style>
-                                                  <class name="small-button"/>
-                                                </style>
+                                            </property>
+                                            <property name="tab">
+                                              <object class="GtkBox">
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="label" translatable="yes">Page 2</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="hexpand">1</property>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton">
+                                                    <property name="relief">none</property>
+                                                    <property name="focus-on-click">0</property>
+                                                    <property name="icon-name">window-close-symbolic</property>
+                                                    <signal name="clicked" handler="tab_close_cb" object="closable_page_2"/>
+                                                    <style>
+                                                      <class name="small-button"/>
+                                                    </style>
+                                                  </object>
+                                                </child>
                                               </object>
-                                            </child>
+                                            </property>
                                           </object>
                                         </child>
                                       </object>
@@ -2957,13 +2951,17 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkNotebook">
                                         <property name="show-border">0</property>
                                         <child>
-                                          <object class="GtkBox">
-                                            <property name="vexpand">1</property>
-                                          </object>
-                                        </child>
-                                        <child type="tab">
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Page 3</property>
+                                          <object class="GtkNotebookPage">
+                                            <property name="child">
+                                              <object class="GtkBox">
+                                                <property name="vexpand">1</property>
+                                              </object>
+                                            </property>
+                                            <property name="tab">
+                                              <object class="GtkLabel">
+                                                <property name="label" translatable="yes">Page 3</property>
+                                              </object>
+                                            </property>
                                           </object>
                                         </child>
                                       </object>
@@ -3028,62 +3026,72 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkBox">
-                                <property name="height-request">120</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="tab-expand">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Page 1</property>
+                                <property name="child">
+                                  <object class="GtkBox">
+                                    <property name="height-request">120</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Page 1</property>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkBox">
-                                <property name="height-request">40</property>
-                              </object>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="tab-expand">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Page 2</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkBox"/>
-                              <packing>
-                                <property name="tab-expand">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Page 3</property>
+                                <property name="child">
+                                  <object class="GtkBox">
+                                    <property name="height-request">40</property>
+                                  </object>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Page 2</property>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkBox"/>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="tab-expand">1</property>
-                              </packing>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Page 4</property>
+                                <property name="child">
+                                  <object class="GtkBox"/>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Page 3</property>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkBox"/>
-                              <packing>
+                              <object class="GtkNotebookPage">
                                 <property name="tab-expand">1</property>
-                              </packing>
+                                <property name="child">
+                                  <object class="GtkBox"/>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Page 4</property>
+                                  </object>
+                                </property>
+                              </object>
                             </child>
-                            <child type="tab">
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Page 5</property>
+                            <child>
+                              <object class="GtkNotebookPage">
+                                <property name="tab-expand">1</property>
+                                <property name="child">
+                                  <object class="GtkBox"/>
+                                </property>
+                                <property name="tab">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Page 5</property>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                           </object>

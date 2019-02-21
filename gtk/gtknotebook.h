@@ -43,6 +43,16 @@ G_BEGIN_DECLS
 #define GTK_IS_NOTEBOOK_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK))
 #define GTK_NOTEBOOK_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 
+#define GTK_TYPE_NOTEBOOK_PAGE (gtk_notebook_page_get_type ())
+#define GTK_NOTEBOOK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPage))
+#define GTK_NOTEBOOK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPageClass))
+#define GTK_IS_NOTEBOOK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_NOTEBOOK_PAGE))
+#define GTK_IS_NOTEBOOK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK_PAGE))
+#define GTK_NOTEBOOK_PAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPageClass))
+
+typedef struct _GtkNotebookPage GtkNotebookPage;
+typedef struct _GtkNotebookPageClass GtkNotebookPageClass;
+
 
 typedef enum
 {
@@ -288,6 +298,17 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_notebook_set_action_widget (GtkNotebook *notebook,
                                            GtkWidget   *widget,
                                            GtkPackType  pack_type);
+
+GDK_AVAILABLE_IN_ALL
+GType   gtk_notebook_page_get_type  (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
+GtkNotebookPage *gtk_notebook_get_page (GtkNotebook *notebook,
+                                        GtkWidget   *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_notebook_page_get_child (GtkNotebookPage *page);
+GDK_AVAILABLE_IN_ALL
+GListModel *gtk_notebook_get_pages (GtkNotebook *notebook);
 
 G_END_DECLS
 

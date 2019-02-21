@@ -25,6 +25,76 @@
 
 G_BEGIN_DECLS
 
+#define GTK_TEXT_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT, GtkTextClass))
+#define GTK_IS_TEXT_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT))
+#define GTK_TEXT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT, GtkTextClass))
+
+typedef struct _GtkTextClass         GtkTextClass;
+
+/*<private>
+ * GtkTextClass:
+ * @parent_class: The parent class.
+ * @populate_popup: Class handler for the #GtkText::populate-popup signal. If
+ *   non-%NULL, this will be called to add additional entries to the context
+ *   menu when it is displayed.
+ * @activate: Class handler for the #GtkText::activate signal. The default
+ *   implementation calls gtk_window_activate_default() on the entry’s top-level
+ *   window.
+ * @move_cursor: Class handler for the #GtkText::move-cursor signal. The
+ *   default implementation specifies the standard #GtkText cursor movement
+ *   behavior.
+ * @insert_at_cursor: Class handler for the #GtkText::insert-at-cursor signal.
+ *   The default implementation inserts text at the cursor.
+ * @delete_from_cursor: Class handler for the #GtkText::delete-from-cursor
+ *   signal. The default implementation deletes the selection or the specified
+ *   number of characters or words.
+ * @backspace: Class handler for the #GtkText::backspace signal. The default
+ *   implementation deletes the selection or a single character or word.
+ * @cut_clipboard: Class handler for the #GtkText::cut-clipboard signal. The
+ *   default implementation cuts the selection, if one exists.
+ * @copy_clipboard: Class handler for the #GtkText::copy-clipboard signal. The
+ *   default implementation copies the selection, if one exists.
+ * @paste_clipboard: Class handler for the #GtkText::paste-clipboard signal.
+ *   The default implementation pastes at the current cursor position or over
+ *   the current selection if one exists.
+ * @toggle_overwrite: Class handler for the #GtkText::toggle-overwrite signal.
+ *   The default implementation toggles overwrite mode and blinks the cursor.
+ * @insert_emoji: Class handler for the #GtkText::insert-emoji signal.
+ *
+ * Class structure for #GtkText. All virtual functions have a default
+ * implementation. Derived classes may set the virtual function pointers for the
+ * signal handlers to %NULL, but must keep @get_text_area_size and
+ * @get_frame_size non-%NULL; either use the default implementation, or provide
+ * a custom one.
+ */
+struct _GtkTextClass
+{
+  GtkWidgetClass parent_class;
+
+  /* Hook to customize right-click popup */
+  void (* populate_popup)     (GtkText         *self,
+                               GtkWidget       *popup);
+
+  /* Action signals
+   */
+  void (* activate)           (GtkText         *self);
+  void (* move_cursor)        (GtkText         *self,
+                               GtkMovementStep  step,
+                               gint             count,
+                               gboolean         extend);
+  void (* insert_at_cursor)   (GtkText         *self,
+                               const gchar     *str);
+  void (* delete_from_cursor) (GtkText         *self,
+                               GtkDeleteType    type,
+                               gint             count);
+  void (* backspace)          (GtkText         *self);
+  void (* cut_clipboard)      (GtkText         *self);
+  void (* copy_clipboard)     (GtkText         *self);
+  void (* paste_clipboard)    (GtkText         *self);
+  void (* toggle_overwrite)   (GtkText         *self);
+  void (* insert_emoji)       (GtkText         *self);
+};
+
 char *              gtk_text_get_display_text   (GtkText    *entry,
                                                  int         start_pos,
                                                  int         end_pos);

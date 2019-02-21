@@ -165,6 +165,10 @@ test_type (gconstpointer data)
 	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_NOTEBOOK) &&
+	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
+	continue;
+
       if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
 	  (strcmp (pspec->name, "pointing-to") == 0))
 	continue;
