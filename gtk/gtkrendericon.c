@@ -73,19 +73,16 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
     }
   else
     {
-      graphene_matrix_t m1, m2, m3;
+      gtk_snapshot_save (snapshot);
 
       /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-      graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT (width / 2.0, height / 2.0, 0));
-      graphene_matrix_multiply (&transform_matrix, &m1, &m3);
-      graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
-      graphene_matrix_multiply (&m2, &m3, &m1);
-
-      gtk_snapshot_push_transform (snapshot, &m1);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2.0, height / 2.0));
+      gtk_snapshot_transform_matrix (snapshot, &transform_matrix);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- width / 2.0, - height / 2.0));
 
       gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
 
-      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_restore (snapshot);
     }
 
   if (has_shadow)
@@ -153,19 +150,16 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
     }
   else
     {
-      graphene_matrix_t m1, m2, m3;
+      gtk_snapshot_save (snapshot);
 
       /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-      graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT (width / 2.0, height / 2.0, 0));
-      graphene_matrix_multiply (&transform_matrix, &m1, &m3);
-      graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
-      graphene_matrix_multiply (&m2, &m3, &m1);
-
-      gtk_snapshot_push_transform (snapshot, &m1);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2.0, height / 2.0));
+      gtk_snapshot_transform_matrix (snapshot, &transform_matrix);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- width / 2.0, - height / 2.0));
 
       gdk_paintable_snapshot (paintable, snapshot, width, height);
 
-      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_restore (snapshot);
     }
 
   if (recolor)
