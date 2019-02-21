@@ -899,114 +899,6 @@ parse_color_definition (GtkCssScanner *scanner)
 }
 
 static gboolean
-parse_binding_set (GtkCssScanner *scanner)
-{
-  GtkBindingSet *binding_set;
-  char *name;
-
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_BINDING_SET);
-
-  if (!_gtk_css_parser_try (scanner->parser, "@binding-set", TRUE))
-    {
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_BINDING_SET);
-      return FALSE;
-    }
-
-  name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
-  if (name == NULL)
-    {
-      gtk_css_provider_error_literal (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Expected name for binding set");
-      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
-      goto skip_semicolon;
-    }
-
-  binding_set = gtk_binding_set_find (name);
-  if (!binding_set)
-    {
-      binding_set = gtk_binding_set_new (name);
-      binding_set->parsed = TRUE;
-    }
-  g_free (name);
-
-  if (!_gtk_css_parser_try (scanner->parser, "{", TRUE))
-    {
-      gtk_css_provider_error_literal (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Expected '{' for binding set");
-      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
-      goto skip_semicolon;
-    }
-
-  while (!_gtk_css_parser_is_eof (scanner->parser) &&
-         !_gtk_css_parser_begins_with (scanner->parser, '}'))
-    {
-      name = _gtk_css_parser_read_value (scanner->parser);
-      if (name == NULL)
-        {
-          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-          continue;
-        }
-
-      if (gtk_binding_entry_add_signal_from_string (binding_set, name) != G_TOKEN_NONE)
-        {
-          gtk_css_provider_error_literal (scanner->provider,
-                                          scanner,
-                                          GTK_CSS_PROVIDER_ERROR,
-                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                          "Failed to parse binding set.");
-        }
-
-      g_free (name);
-
-      if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
-        {
-          if (!_gtk_css_parser_begins_with (scanner->parser, '}') &&
-              !_gtk_css_parser_is_eof (scanner->parser))
-            {
-              gtk_css_provider_error_literal (scanner->provider,
-                                              scanner,
-                                              GTK_CSS_PROVIDER_ERROR,
-                                              GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                              "Expected semicolon");
-              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-            }
-        }
-    }
-
-  if (!_gtk_css_parser_try (scanner->parser, "}", TRUE))
-    {
-      gtk_css_provider_error_literal (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "expected '}' after declarations");
-      if (!_gtk_css_parser_is_eof (scanner->parser))
-        _gtk_css_parser_resync (scanner->parser, FALSE, 0);
-    }
-
-skip_semicolon:
-  if (_gtk_css_parser_begins_with (scanner->parser, ';'))
-    {
-      gtk_css_provider_error_literal (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                      "Nonstandard semicolon at end of binding set");
-      _gtk_css_parser_try (scanner->parser, ";", TRUE);
-    }
-
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_BINDING_SET);
-
-  return TRUE;
-}
-
-static gboolean
 parse_keyframes (GtkCssScanner *scanner)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
@@ -1078,8 +970,6 @@ parse_at_keyword (GtkCssScanner *scanner)
   if (parse_import (scanner))
     return;
   if (parse_color_definition (scanner))
-    return;
-  if (parse_binding_set (scanner))
     return;
   if (parse_keyframes (scanner))
     return;

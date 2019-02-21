@@ -120,7 +120,6 @@ struct _GtkSettingsPrivate
   GdkDisplay *display;
   GSList *style_cascades;
   GtkCssProvider *theme_provider;
-  GtkCssProvider *key_theme_provider;
   gint font_size;
   gboolean font_size_absolute;
   gchar *font_family;
@@ -149,7 +148,6 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
   PROP_ICON_THEME_NAME,
-  PROP_KEY_THEME_NAME,
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
   PROP_XFT_ANTIALIAS,
@@ -215,7 +213,6 @@ static void    settings_update_font_options      (GtkSettings           *setting
 static void    settings_update_font_values       (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 static void    settings_update_theme             (GtkSettings           *settings);
-static void    settings_update_key_theme         (GtkSettings           *settings);
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
@@ -418,15 +415,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_THEME_NAME);
-
-  result = settings_install_property_parser (class,
-                                             g_param_spec_string ("gtk-key-theme-name",
-                                                                  P_("Key Theme Name"),
-                                                                  P_("Name of key theme to load"),
-                                                                  NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
-  g_assert (result == PROP_KEY_THEME_NAME);
 
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-dnd-drag-threshold",
@@ -1040,7 +1028,6 @@ gtk_settings_finalize (GObject *object)
   g_datalist_clear (&priv->queued_settings);
 
   settings_update_provider (priv->display, &priv->theme_provider, NULL);
-  settings_update_provider (priv->display, &priv->key_theme_provider, NULL);
   g_slist_free_full (priv->style_cascades, g_object_unref);
 
   if (priv->font_options)
@@ -1119,7 +1106,6 @@ settings_init_style (GtkSettings *settings)
                                    GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
   settings_update_theme (settings);
-  settings_update_key_theme (settings);
 }
 
 static void
@@ -1299,9 +1285,6 @@ gtk_settings_notify (GObject    *object,
       settings_update_font_values (settings);
       settings_invalidate_style (settings);
       gtk_style_context_reset_widgets (priv->display);
-      break;
-    case PROP_KEY_THEME_NAME:
-      settings_update_key_theme (settings);
       break;
     case PROP_THEME_NAME:
     case PROP_APPLICATION_PREFER_DARK_THEME:
@@ -2246,24 +2229,6 @@ settings_update_theme (GtkSettings *settings)
 
   g_free (theme_name);
   g_free (theme_variant);
-}
-
-static void
-settings_update_key_theme (GtkSettings *settings)
-{
-  GtkSettingsPrivate *priv = settings->priv;
-  GtkCssProvider *provider = NULL;
-  gchar *key_theme_name;
-
-  g_object_get (settings,
-                "gtk-key-theme-name", &key_theme_name,
-                NULL);
-
-  if (key_theme_name && *key_theme_name)
-    provider = gtk_css_provider_get_named (key_theme_name, "keys");
-
-  settings_update_provider (priv->display, &priv->key_theme_provider, provider);
-  g_free (key_theme_name);
 }
 
 const cairo_font_options_t *
