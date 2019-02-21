@@ -1167,38 +1167,6 @@ gtk_snapshot_offset (GtkSnapshot *snapshot,
   current_state->transform = gtk_transform_translate (current_state->transform, &GRAPHENE_POINT_INIT (x, y));
 }
 
-/**
- * gtk_snapshot_get_offset:
- * @snapshot: a #GtkSnapshot
- * @x: (out) (optional): return location for x offset
- * @y: (out) (optional): return location for y offset
- *
- * Queries the offset managed by @snapshot. This offset is the
- * accumulated sum of calls to gtk_snapshot_offset().
- *
- * Use this offset to determine how to offset nodes that you
- * manually add to the snapshot using
- * gtk_snapshot_append().
- *
- * Note that other functions that add nodes for you, such as
- * gtk_snapshot_append_cairo() will add this offset for
- * you.
- **/
-void
-gtk_snapshot_get_offset (GtkSnapshot *snapshot,
-                         int         *x,
-                         int         *y)
-{
-  /* FIXME: remove this function */
-  gtk_snapshot_ensure_identity (snapshot);
-
-  if (x)
-    *x = 0;
-
-  if (y)
-    *y = 0;
-}
-
 void
 gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
                                    GskRenderNode *node)
