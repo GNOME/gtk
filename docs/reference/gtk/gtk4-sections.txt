@@ -4399,7 +4399,6 @@ gtk_snapshot_push_cross_fade
 gtk_snapshot_push_blend
 gtk_snapshot_pop
 gtk_snapshot_offset
-gtk_snapshot_get_offset
 gtk_snapshot_append_node
 gtk_snapshot_append_cairo
 gtk_snapshot_append_texture
