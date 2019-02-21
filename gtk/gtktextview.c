@@ -5337,7 +5337,8 @@ gtk_text_view_paint (GtkWidget   *widget,
           area->width, area->height);
 #endif
 
-  gtk_snapshot_offset (snapshot, -priv->xoffset, -priv->yoffset);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
 
   gtk_text_layout_snapshot (priv->layout,
                             widget,
@@ -5349,7 +5350,7 @@ gtk_text_view_paint (GtkWidget   *widget,
                               gtk_widget_get_height (widget)
                             });
 
-  gtk_snapshot_offset (snapshot, priv->xoffset, priv->yoffset);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
@@ -5374,18 +5375,20 @@ draw_text (GtkWidget   *widget,
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
-      gtk_snapshot_offset (snapshot, -priv->xoffset, -priv->yoffset);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
       GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, snapshot);
-      gtk_snapshot_offset (snapshot, priv->xoffset, priv->yoffset);
+      gtk_snapshot_restore (snapshot);
     }
 
   gtk_text_view_paint (widget, snapshot);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
-      gtk_snapshot_offset (snapshot, -priv->xoffset, -priv->yoffset);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
       GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, snapshot);
-      gtk_snapshot_offset (snapshot, priv->xoffset, priv->yoffset);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
