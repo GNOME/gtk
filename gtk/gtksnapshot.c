@@ -607,6 +607,23 @@ gtk_snapshot_ensure_affine (GtkSnapshot *snapshot,
 }
 
 static void
+gtk_snapshot_ensure_translate (GtkSnapshot *snapshot,
+                               float       *dx,
+                               float       *dy)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  float scale_x, scale_y;
+
+  if (gtk_transform_to_affine (current_state->transform, &scale_x, &scale_y, dx, dy) &&
+      scale_x == 1.0f && scale_y == 1.0f)
+    return;
+
+  gtk_snapshot_autopush_transform (snapshot);
+
+  *dx = *dy = 0;
+}
+
+static void
 gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
 {
   const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
@@ -1461,6 +1478,31 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
     gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_offset (snapshot, -x, -y);
+}
+
+void
+gtk_snapshot_append_text (GtkSnapshot           *snapshot,
+                          PangoFont             *font,
+                          PangoGlyphString      *glyphs,
+                          const GdkRGBA         *color,
+                          float                  x,
+                          float                  y)
+{
+  GskRenderNode *node;
+  float dx, dy;
+
+  gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
+
+  node = gsk_text_node_new (font,
+                            glyphs,
+                            color,
+                            x + dx,
+                            y + dy);
+  if (node == NULL)
+    return;
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+  gsk_render_node_unref (node);
 }
 
 /**
