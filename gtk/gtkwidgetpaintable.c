@@ -91,27 +91,19 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
     return;
   else if (self->snapshot_count > 0)
     {
-      graphene_matrix_t transform;
       graphene_rect_t bounds;
 
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(0, 0, width, height));
+
       if (gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
         {
-          graphene_matrix_init_from_2d (&transform,
-                                        width / bounds.size.width, 0.0,
-                                        0.0, height / bounds.size.height,
-                                        bounds.origin.x, bounds.origin.y);
+          gtk_snapshot_scale (snapshot, width / bounds.size.width, height / bounds.size.height);
+          gtk_snapshot_translate (snapshot, &bounds.origin);
         }
-      else
-        {
-          graphene_matrix_init_identity (&transform);
-        }
-      gtk_snapshot_push_transform (snapshot, &transform);
 
       gtk_widget_snapshot (self->widget, snapshot);
 
-      gtk_snapshot_pop (snapshot);
       gtk_snapshot_pop (snapshot);
     }
   else
