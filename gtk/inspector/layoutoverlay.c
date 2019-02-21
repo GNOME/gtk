@@ -92,10 +92,11 @@ recurse_child_widgets (GtkWidget   *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
+  gtk_snapshot_save (snapshot);
 
   /* Offset for all of the drawing done here. We assume cooridinates relative to
    * the widget allocation, not the content allocation. */
-  gtk_snapshot_offset (snapshot, allocation.x, allocation.y);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (allocation.x, allocation.y));
 
   /* Now do all the stuff */
   gtk_snapshot_push_debug (snapshot, "Widget layout debugging");
@@ -184,12 +185,11 @@ recurse_child_widgets (GtkWidget   *widget,
       const int offset_x = margin.left + border.left + padding.left;
       const int offset_y = margin.top + border.top + padding.top;
 
-      gtk_snapshot_offset (snapshot, offset_x, offset_y);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (offset_x, offset_y));
       recurse_child_widgets (child, snapshot);
-      gtk_snapshot_offset (snapshot, - offset_x, - offset_y);
     }
 
-  gtk_snapshot_offset (snapshot, - allocation.x, - allocation.y);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
