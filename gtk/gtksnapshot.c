@@ -275,8 +275,7 @@ gtk_snapshot_autopush_transform (GtkSnapshot *snapshot)
 static gboolean
 gtk_snapshot_state_should_autopop (const GtkSnapshotState *state)
 {
-  return state->collect_func == NULL ||
-         state->collect_func == gtk_snapshot_collect_autopush_transform;
+  return state->collect_func == gtk_snapshot_collect_autopush_transform;
 }
 
 static GskRenderNode *
@@ -1033,17 +1032,27 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state;
   GskRenderNode *node;
+  guint forgotten_restores = 0;
 
   for (state = gtk_snapshot_get_current_state (snapshot);
-       gtk_snapshot_state_should_autopop (state);
+       gtk_snapshot_state_should_autopop (state) ||
+       state->collect_func == NULL;
        state = gtk_snapshot_get_current_state (snapshot))
     {
+      if (state->collect_func == NULL)
+        forgotten_restores++;
+
       node = gtk_snapshot_pop_one (snapshot);
       if (node)
         {
           gtk_snapshot_append_node_internal (snapshot, node);
           gsk_render_node_unref (node);
         }
+    }
+
+  if (forgotten_restores)
+    {
+      g_warning ("Too many gtk_snapshot_save() calls. %u saves remaining.", forgotten_restores);
     }
 
   return gtk_snapshot_pop_one (snapshot);
@@ -1147,6 +1156,232 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
       gtk_snapshot_append_node_internal (snapshot, node);
       gsk_render_node_unref (node);
     }
+}
+
+/**
+ * gtk_snapshot_save:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Makes a copy of the current state of @snapshot and saves it
+ * on an internal stack of saved states for @snapshot. When
+ * gtk_snapshot_restore() is called, @snapshot will be restored to
+ * the saved state. Multiple calls to gtk_snapshot_save() and
+ * gtk_snapshot_restore() can be nested; each call to
+ * gtk_snapshot_restore() restores the state from the matching paired
+ * gtk_snapshot_save().
+ *
+ * It is necessary to clear all saved states with corresponding calls
+ * to gtk_snapshot_restore().
+ **/
+void
+gtk_snapshot_save (GtkSnapshot *snapshot)
+{
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+
+  gtk_snapshot_push_state (snapshot,
+                           gtk_snapshot_get_current_state (snapshot)->transform,
+                           NULL);
+}
+
+/**
+ * gtk_snapshot_restore:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Restores @snapshot to the state saved by a preceding call to
+ * gtk_snapshot_save() and removes that state from the stack of
+ * saved states.
+ **/
+void
+gtk_snapshot_restore (GtkSnapshot *snapshot)
+{
+  GtkSnapshotState *state;
+  GskRenderNode *node;
+
+  for (state = gtk_snapshot_get_current_state (snapshot);
+       gtk_snapshot_state_should_autopop (state);
+       state = gtk_snapshot_get_current_state (snapshot))
+    {
+      node = gtk_snapshot_pop_one (snapshot);
+      if (node)
+        {
+          gtk_snapshot_append_node_internal (snapshot, node);
+          gsk_render_node_unref (node);
+        }
+    }
+
+  if (state->collect_func != NULL)
+    {
+      g_warning ("Too many gtk_snapshot_restore() calls.");
+      return;
+    }
+
+  node = gtk_snapshot_pop_one (snapshot);
+  g_assert (node == NULL);
+}
+
+/**
+ * gtk_snapshot_transform_matrix:
+ * @snapshot: a #GtkSnapshot
+ * @matrix: the matrix to multiply the transform with
+ *
+ * Transforms @snapshot's coordinate system with the given @matrix.
+ **/
+void
+gtk_snapshot_transform_matrix (GtkSnapshot             *snapshot,
+                               const graphene_matrix_t *matrix)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+  g_return_if_fail (matrix != NULL);
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_matrix (state->transform, matrix);
+}
+
+void
+gtk_snapshot_transform_matrix_with_category (GtkSnapshot             *snapshot,
+                                             const graphene_matrix_t *matrix,
+                                             GskMatrixCategory        category)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+  g_return_if_fail (matrix != NULL);
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_matrix_with_category (state->transform, matrix, category);
+}
+
+/**
+ * gtk_snapshot_transform_translate:
+ * @snapshot: a #GtkSnapshot
+ * @point: the point to translate the snapshot by
+ *
+ * Translates @snapshot's coordinate system by @point in 2-dimensional space.
+ */
+void
+gtk_snapshot_translate (GtkSnapshot            *snapshot,
+                        const graphene_point_t *point)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+  g_return_if_fail (point != NULL);
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_translate (state->transform, point);
+}
+
+/**
+ * gtk_snapshot_transform_translate_3d:
+ * @snapshot: a #GtkSnapshot
+ * @point: the point to translate the snapshot by
+ *
+ * Translates @snapshot's coordinate system by @point.
+ */
+void
+gtk_snapshot_translate_3d (GtkSnapshot              *snapshot,
+                           const graphene_point3d_t *point)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+  g_return_if_fail (point != NULL);
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_translate_3d (state->transform, point);
+}
+
+/**
+ * gtk_snapshot_transform_rotate:
+ * @snapshot: a #GtkSnapshot
+ * @angle: the rotation angle, in degrees (clockwise)
+ *
+ * Rotates @@snapshot's coordinate system by @angle degrees in 2D space -
+ * or in 3D speak, rotates around the z axis.
+ */
+void
+gtk_snapshot_rotate (GtkSnapshot *snapshot,
+                     float        angle)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_rotate (state->transform, angle);
+}
+
+/**
+ * gtk_snapshot_transform_rotate_3d:
+ * @snapshot: a #GtkSnapshot
+ * @angle: the rotation angle, in degrees (clockwise)
+ * @axis: The rotation axis
+ *
+ * Rotates @snapshot's coordinate system by @angle degrees around @axis.
+ *
+ * For a rotation in 2D space, use gtk_transform_rotate().
+ */
+void
+gtk_snapshot_rotate_3d (GtkSnapshot           *snapshot,
+                        float                  angle,
+                        const graphene_vec3_t *axis)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+  g_return_if_fail (axis != NULL);
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_rotate_3d (state->transform, angle, axis);
+}
+
+/**
+ * gtk_snapshot_scale:
+ * @snapshot: a #GtkSnapshot
+ * @factor_x: scaling factor on the X axis
+ * @factor_y: scaling factor on the Y axis
+ *
+ * Scales @@snapshot's coordinate system in 2-dimensional space by
+ * the given factors.
+ *
+ * Use gtk_snapshot_scale_3d() to scale in all 3 dimensions.
+ **/
+void
+gtk_snapshot_scale (GtkSnapshot *snapshot,
+                    float        factor_x,
+                    float        factor_y)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_scale (state->transform, factor_x, factor_y);
+}
+
+/**
+ * gtk_snapshot_scale_3d:
+ * @snapshot: a #GtkSnapshot
+ * @factor_x: scaling factor on the X axis
+ * @factor_y: scaling factor on the Y axis
+ * @factor_z: scaling factor on the Z axis
+ *
+ * Scales @@snapshot's coordinate system by the given factors.
+ */
+void
+gtk_snapshot_scale_3d (GtkSnapshot *snapshot,
+                       float        factor_x,
+                       float        factor_y,
+                       float        factor_z)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gtk_transform_scale_3d (state->transform, factor_x, factor_y, factor_z);
 }
 
 /**
