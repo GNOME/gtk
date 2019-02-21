@@ -293,7 +293,6 @@ gtk_css_value_array_transition (GtkCssValue *start,
     case GTK_CSS_PROPERTY_TRANSITION_DURATION:
     case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
     case GTK_CSS_PROPERTY_TRANSITION_DELAY:
-    case GTK_CSS_PROPERTY_GTK_KEY_BINDINGS:
       return NULL;
     }
 }
