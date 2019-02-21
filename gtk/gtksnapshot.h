@@ -146,6 +146,22 @@ void            gtk_snapshot_append_border              (GtkSnapshot            
                                                          const GskRoundedRect   *outline,
                                                          const float             border_width[4],
                                                          const GdkRGBA           border_color[4]);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_inset_shadow        (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const GdkRGBA          *color,
+                                                         float                   dx,
+                                                         float                   dy,
+                                                         float                   spread,
+                                                         float                   blur_radius);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_outset_shadow       (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const GdkRGBA          *color,
+                                                         float                   dx,
+                                                         float                   dy,
+                                                         float                   spread,
+                                                         float                   blur_radius);
 /* next function implemented in gskpango.c */
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,
