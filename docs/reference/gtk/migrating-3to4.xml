@@ -330,13 +330,18 @@
     </section>
 
     <section>
-      <title>Adapt to GtkStack API changes</title>
+      <title>Adapt to GtkStack, GtkAssistant and GtkNotebook API changes</title>
       <para>
-        The GtkStack child properties have been converted into child meta object.
+        The child properties of GtkStack, GtkAssistant and GtkNotebook have been
+        converted into child meta objects.
         Instead of gtk_container_child_set (stack, child, …), you can now use
         g_object_set (gtk_stack_get_page (stack, child), …). In .ui files, the
         GtkStackPage objects must be created explicitly, and take the child widget
-        as property. gtk4-builder-tool can help with this conversion.
+        as property. GtkNotebook and GtkAssistant are similar.
+      </para>
+      <para>
+        gtk4-builder-tool can help with this conversion, with the --3to4 option
+        of the simplify command.
       </para>
     </section>
 
