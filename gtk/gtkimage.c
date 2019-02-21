@@ -1125,9 +1125,10 @@ gtk_image_snapshot (GtkWidget   *widget,
       else
         y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - ceil (h));
 
-      gtk_snapshot_offset (snapshot, x, y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
       gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, w, h);
-      gtk_snapshot_offset (snapshot, -x, -y);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
