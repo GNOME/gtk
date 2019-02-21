@@ -133,9 +133,10 @@ gtk_picture_snapshot (GtkWidget   *widget,
       x = (width - ceil (w)) / 2;
       y = floor(height - ceil (h)) / 2;
 
-      gtk_snapshot_offset (snapshot, x, y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
       gdk_paintable_snapshot (self->paintable, snapshot, w, h);
-      gtk_snapshot_offset (snapshot, -x, -y);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
