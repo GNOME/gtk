@@ -227,13 +227,14 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
         h = MIN (h, height);
         x = (width - w) / 2;
         y = (height - h) / 2;
-        gtk_snapshot_offset (snapshot, x, y);
+        gtk_snapshot_save (snapshot);
+        gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
         gtk_css_style_snapshot_icon_paintable (style,
                                                snapshot,
                                                self->paintable,
                                                w, h,
                                                self->texture_is_symbolic);
-        gtk_snapshot_offset (snapshot, -x, -y);
+        gtk_snapshot_restore (snapshot);
       }
       break;
 
@@ -268,13 +269,14 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
         x = floor (width - ceil (w)) / 2;
         y = floor (height - ceil (h)) / 2;
 
-        gtk_snapshot_offset (snapshot, x, y);
+        gtk_snapshot_save (snapshot);
+        gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
         gtk_css_style_snapshot_icon_paintable (style,
                                                snapshot,
                                                self->paintable,
                                                w, h,
                                                self->texture_is_symbolic);
-        gtk_snapshot_offset (snapshot, -x, -y);
+        gtk_snapshot_restore (snapshot);
       }
       break;
     }
