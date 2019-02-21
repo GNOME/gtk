@@ -287,8 +287,8 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_text_node_new                       (PangoFont                *font,
                                                                  PangoGlyphString         *glyphs,
                                                                  const GdkRGBA            *color,
-                                                                 double                    x,
-                                                                 double                    y);
+                                                                 float                     x,
+                                                                 float                     y);
 GDK_AVAILABLE_IN_ALL
 const PangoFont *       gsk_text_node_peek_font                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
