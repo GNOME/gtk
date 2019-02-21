@@ -111,6 +111,7 @@ gtk_message_dialog_get_type
 gtk_model_button_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
+gtk_notebook_page_get_type
 gtk_orientable_get_type
 gtk_overlay_get_type
 gtk_pad_controller_get_type

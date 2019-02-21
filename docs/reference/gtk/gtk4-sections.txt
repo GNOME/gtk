@@ -215,6 +215,7 @@ GtkAssistantPage
 GtkAssistantClass
 gtk_assistant_new
 gtk_assistant_get_page
+gtk_assistant_get_pages
 gtk_assistant_page_get_child
 gtk_assistant_get_current_page
 gtk_assistant_set_current_page
@@ -2057,7 +2058,11 @@ gtk_native_dialog_get_type
 <FILE>gtknotebook</FILE>
 <TITLE>GtkNotebook</TITLE>
 GtkNotebook
+GtkNotebookPage
 gtk_notebook_new
+gtk_notebook_get_page
+gtk_notebook_get_pages
+gtk_notebook_page_get_child
 gtk_notebook_append_page
 gtk_notebook_append_page_menu
 gtk_notebook_prepend_page
@@ -2109,6 +2114,7 @@ GTK_IS_NOTEBOOK_CLASS
 GTK_NOTEBOOK_GET_CLASS
 <SUBSECTION Private>
 gtk_notebook_get_type
+gtk_notebook_page_get_type
 GtkNotebookTab
 GtkNotebookPrivate
 </SECTION>
