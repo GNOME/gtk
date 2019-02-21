@@ -622,7 +622,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                    PROP_PAGES,
                                    g_param_spec_object ("pages",
                                                         P_("Pages"),
-                                                        P_("The pages of the assitant."),
+                                                        P_("The pages of the assistant."),
                                                         G_TYPE_LIST_MODEL,
                                                         GTK_PARAM_READABLE));
 
