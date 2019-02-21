@@ -1099,13 +1099,4 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 link_with: libgtk,
                                 link_args: common_ldflags)
 
-if quartz_enabled
-  # HACK: install_data() doesn't allow installing under a different name (#1487)
-  # FIXME: or maybe just rename it to gtk-keys.css in the src tree?
-  configure_file(input: 'gtk-keys.css.mac',
-                 output: 'gtk-keys.css',
-                 configuration: configuration_data(),
-                 install_dir: join_paths(get_option('datadir'), 'themes/Mac/gtk-4.0'))
-endif
-
 subdir('tools')
