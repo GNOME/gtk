@@ -236,6 +236,17 @@ gtk_search_entry_size_allocate (GtkWidget *widget,
                             baseline);
 }
 
+static AtkObject *
+gtk_search_entry_get_accessible (GtkWidget *widget)
+{
+  AtkObject *atk_obj;
+
+  atk_obj = GTK_WIDGET_CLASS (gtk_search_entry_parent_class)->get_accessible (widget);
+  atk_object_set_name (atk_obj, _("Search"));
+
+  return atk_obj;
+}
+
 static void
 gtk_search_entry_grab_focus (GtkWidget *widget)
 {
@@ -258,6 +269,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 
   widget_class->measure = gtk_search_entry_measure;
   widget_class->size_allocate = gtk_search_entry_size_allocate;
+  widget_class->get_accessible = gtk_search_entry_get_accessible;
   widget_class->grab_focus = gtk_search_entry_grab_focus;
 
   klass->stop_search = gtk_search_entry_stop_search;
@@ -485,7 +497,6 @@ static void
 gtk_search_entry_init (GtkSearchEntry *entry)
 {
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
-  AtkObject *atk_obj;
   GtkGesture *press;
 
   gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
@@ -512,10 +523,6 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   press = gtk_gesture_multi_press_new ();
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
   gtk_widget_add_controller (priv->icon, GTK_EVENT_CONTROLLER (press));
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (entry));
-  if (GTK_IS_ACCESSIBLE (atk_obj))
-    atk_object_set_name (atk_obj, _("Search"));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("search"));
 }
