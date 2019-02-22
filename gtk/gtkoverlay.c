@@ -64,7 +64,6 @@ typedef struct _GtkOverlayChild GtkOverlayChild;
 
 struct _GtkOverlayChild
 {
-  guint pass_through : 1;
   guint measure : 1;
   guint clip_overlay : 1;
 };
@@ -421,18 +420,6 @@ gtk_overlay_set_child_property (GtkContainer *container,
 
   switch (property_id)
     {
-    case CHILD_PROP_PASS_THROUGH:
-      /* Ignore value on main child */
-      if (child_info)
-	{
-	  if (g_value_get_boolean (value) != child_info->pass_through)
-	    {
-	      child_info->pass_through = g_value_get_boolean (value);
-              gtk_widget_set_pass_through (child, child_info->pass_through);
-	      gtk_container_child_notify (container, child, "pass-through");
-	    }
-	}
-      break;
     case CHILD_PROP_MEASURE:
       if (child_info)
 	{
@@ -488,12 +475,6 @@ gtk_overlay_get_child_property (GtkContainer *container,
 
   switch (property_id)
     {
-    case CHILD_PROP_PASS_THROUGH:
-      if (child_info)
-	g_value_set_boolean (value, child_info->pass_through);
-      else
-	g_value_set_boolean (value, FALSE);
-      break;
     case CHILD_PROP_MEASURE:
       if (child_info)
 	g_value_set_boolean (value, child_info->measure);
@@ -569,16 +550,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   container_class->get_child_property = gtk_overlay_get_child_property;
 
   klass->get_child_position = gtk_overlay_get_child_position;
-
-  /**
-   * GtkOverlay:pass-through:
-   *
-   * Pass through input, does not affect main child.
-   */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
-      g_param_spec_boolean ("pass-through", P_("Pass Through"), P_("Pass through input, does not affect main child"),
-                            FALSE,
-                            GTK_PARAM_READWRITE));
 
   /**
    * GtkOverlay:measure:
@@ -724,54 +695,6 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
 
   gtk_widget_insert_before (widget, GTK_WIDGET (overlay), NULL);
   gtk_overlay_set_overlay_child (widget, child);
-}
-
-/**
- * gtk_overlay_set_overlay_pass_through:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
- * @pass_through: whether the child should pass the input through
- *
- * Convenience function to set the value of the #GtkOverlay:pass-through
- * child property for @widget.
- */
-void
-gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
-				      GtkWidget  *widget,
-				      gboolean    pass_through)
-{
-  g_return_if_fail (GTK_IS_OVERLAY (overlay));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_container_child_set (GTK_CONTAINER (overlay), widget,
-			   "pass-through", pass_through,
-			   NULL);
-}
-
-/**
- * gtk_overlay_get_overlay_pass_through:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
- *
- * Convenience function to get the value of the #GtkOverlay:pass-through
- * child property for @widget.
- *
- * Returns: whether the widget is a pass through child.
- */
-gboolean
-gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
-				      GtkWidget  *widget)
-{
-  gboolean pass_through;
-
-  g_return_val_if_fail (GTK_IS_OVERLAY (overlay), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  gtk_container_child_get (GTK_CONTAINER (overlay), widget,
-			   "pass-through", &pass_through,
-			   NULL);
-
-  return pass_through;
 }
 
 /**
