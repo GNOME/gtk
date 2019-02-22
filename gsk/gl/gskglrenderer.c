@@ -765,64 +765,116 @@ render_transform_node (GskGLRenderer   *self,
                        GskRenderNode   *node,
                        RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
+  const GskMatrixCategory category = gsk_transform_node_get_category (node);
+  const graphene_matrix_t *node_transform = gsk_transform_node_peek_transform (node);
   GskRenderNode *child = gsk_transform_node_get_child (node);
-  graphene_matrix_t transform, transformed_mv;
 
-  graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
-  graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
-  graphene_matrix_translate (&transformed_mv,
-                             &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
 
-  /* We just added the offset to the new modelview matrix, so the following
-   * cases dont' have to care about builder->dx/dy! */
-
-  ops_push_modelview (builder, &transformed_mv);
-  if (ops_modelview_is_simple (builder) ||
-      node_supports_transform (child))
+  switch (category)
     {
-      const float dx = builder->dx;
-      const float dy = builder->dy;
-
-      builder->dx = 0;
-      builder->dy = 0;
+    case GSK_MATRIX_CATEGORY_IDENTITY:
       gsk_gl_renderer_add_render_ops (self, child, builder);
-      builder->dx = dx;
-      builder->dy = dy;
-    }
-  else
-    {
-      const float min_x = node->bounds.origin.x;
-      const float min_y = node->bounds.origin.y;
-      const float max_x = min_x + node->bounds.size.width;
-      const float max_y = min_y + node->bounds.size.height;
-      const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { 0, 1 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
+    break;
 
-        { { max_x, max_y }, { 1, 0 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
-      };
-      int texture_id;
-      gboolean is_offscreen;
-      /* For non-trivial transforms, we draw everything on a texture and then
-       * draw the texture transformed. */
-      /* TODO: We should compute a modelview containing only the "non-trivial"
-       *       part (e.g. the rotation) and use that. We want to keep the scale
-       *       for the texture.
-       */
-      add_offscreen_ops (self, builder,
-                         &node->bounds,
-                         child,
-                         &texture_id, &is_offscreen,
-                         RESET_CLIP | RESET_OPACITY);
-      ops_set_texture (builder, texture_id);
-      ops_set_program (builder, &self->blit_program);
-      ops_draw (builder, vertex_data);
+    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+      {
+        const float dx = graphene_matrix_get_value (node_transform, 3, 0);
+        const float dy = graphene_matrix_get_value (node_transform, 3, 1);
+
+        ops_offset (builder, dx, dy);
+        gsk_gl_renderer_add_render_ops (self, child, builder);
+        ops_offset (builder, -dx, -dy);
+      }
+    break;
+
+    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+      {
+        const float scale = ops_get_scale (builder);
+        graphene_matrix_t transform, transformed_mv;
+        const float dx = builder->dx;
+        const float dy = builder->dy;
+
+        graphene_matrix_init_from_matrix (&transform, node_transform);
+        graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
+        graphene_matrix_translate (&transformed_mv,
+                                   &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
+
+        builder->dx = 0;
+        builder->dy = 0;
+        ops_push_modelview (builder, &transformed_mv);
+        gsk_gl_renderer_add_render_ops (self, child, builder);
+        ops_pop_modelview (builder);
+        builder->dx = dx;
+        builder->dy = dy;
+      }
+    break;
+
+    case GSK_MATRIX_CATEGORY_UNKNOWN:
+    case GSK_MATRIX_CATEGORY_ANY:
+    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    default:
+      {
+        const float scale = ops_get_scale (builder);
+        graphene_matrix_t transform, transformed_mv;
+        const float min_x = child->bounds.origin.x;
+        const float min_y = child->bounds.origin.y;
+        const float max_x = min_x + child->bounds.size.width;
+        const float max_y = min_y + child->bounds.size.height;
+        int texture_id;
+        gboolean is_offscreen;
+
+        graphene_matrix_init_from_matrix (&transform, node_transform);
+        graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
+        graphene_matrix_translate (&transformed_mv,
+                                   &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
+
+        ops_push_modelview (builder, &transformed_mv);
+        /* For non-trivial transforms, we draw everything on a texture and then
+         * draw the texture transformed. */
+        /* TODO: We should compute a modelview containing only the "non-trivial"
+         *       part (e.g. the rotation) and use that. We want to keep the scale
+         *       for the texture.
+         */
+        add_offscreen_ops (self, builder,
+                           &child->bounds,
+                           child,
+                           &texture_id, &is_offscreen,
+                           RESET_CLIP | RESET_OPACITY);
+        ops_set_texture (builder, texture_id);
+        ops_set_program (builder, &self->blit_program);
+
+        if (is_offscreen)
+          {
+            const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
+              { { min_x, min_y }, { 0, 1 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+
+              { { max_x, max_y }, { 1, 0 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+            };
+
+            ops_draw (builder, offscreen_vertex_data);
+          }
+        else
+          {
+            const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
+              { { min_x, min_y }, { 0, 0 }, },
+              { { min_x, max_y }, { 0, 1 }, },
+              { { max_x, min_y }, { 1, 0 }, },
+
+              { { max_x, max_y }, { 1, 1 }, },
+              { { min_x, max_y }, { 0, 1 }, },
+              { { max_x, min_y }, { 1, 0 }, },
+            };
+
+            ops_draw (builder, onscreen_vertex_data);
+          }
+
+        ops_pop_modelview (builder);
+      }
     }
-  ops_pop_modelview (builder);
 }
 
 static inline void
