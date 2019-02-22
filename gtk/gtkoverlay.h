@@ -82,10 +82,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_add_overlay (GtkOverlay *overlay,
                                     GtkWidget  *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
-					GtkWidget      *child,
-					gint            position);
-GDK_AVAILABLE_IN_ALL
 gboolean   gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
 						 GtkWidget  *widget);
 GDK_AVAILABLE_IN_ALL
