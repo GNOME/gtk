@@ -506,6 +506,8 @@ gtk_search_entry_init (GtkSearchEntry *entry)
 
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
+  gtk_widget_set_hexpand (priv->box, FALSE);
+  gtk_widget_set_vexpand (priv->box, FALSE);
 
   priv->entry = gtk_text_new ();
   gtk_widget_set_hexpand (priv->entry, TRUE);

@@ -90,6 +90,8 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
 
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_hexpand (priv->box, FALSE);
+  gtk_widget_set_vexpand (priv->box, FALSE);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
 
   priv->entry = gtk_text_new ();
