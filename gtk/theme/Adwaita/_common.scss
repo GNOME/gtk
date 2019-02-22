@@ -4704,3 +4704,30 @@ popover.emoji-completion contents row box {
 popover.emoji-completion .emoji:hover {
   background-color: $popover_hover_color;
 }
+
+entry tag {
+  background: blue;
+  border-radius: 12px;
+  margin: 6px 3px;
+}
+
+entry tag label {
+  color: white;
+}
+
+entry tag button {
+  color: white;
+  padding: 0;
+}
+
+entry tag box {
+  border-spacing: 4px;
+}
+
+entry tag label.first-child {
+  margin-left: 10px;
+}
+
+entry tag label.last-child {
+  margin-right: 10px;
+}
