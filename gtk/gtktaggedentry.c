@@ -23,7 +23,7 @@
 #include "gtktaggedentry.h"
 
 #include "gtkaccessible.h"
-#include "gtktextprivate.h"
+#include "gtktext.h"
 #include "gtkeditable.h"
 #include "gtklabel.h"
 #include "gtkbutton.h"
