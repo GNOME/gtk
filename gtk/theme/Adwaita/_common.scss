@@ -849,6 +849,7 @@ button {
   &.circular { // The Bloody Circul Button
     border-radius: 9999px;
     -gtk-outline-radius: 9999px;
+    padding: 4px; /* circles instead of ellipses */
 
     label { padding: 0; }
 
