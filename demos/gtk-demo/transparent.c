@@ -4,6 +4,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "bluroverlay.h"
 
 GtkWidget *
 do_transparent (GtkWidget *do_widget)
@@ -27,7 +28,7 @@ do_transparent (GtkWidget *do_widget)
 
       gtk_window_set_title (GTK_WINDOW (window), "Transparency");
 
-      overlay = gtk_overlay_new ();
+      overlay = blur_overlay_new ();
       gtk_container_add (GTK_CONTAINER (window), overlay);
 
       button = gtk_button_new_with_label ("Don't click this button!");
@@ -38,8 +39,7 @@ do_transparent (GtkWidget *do_widget)
       gtk_widget_set_halign (button, GTK_ALIGN_FILL);
       gtk_widget_set_valign (button, GTK_ALIGN_START);
 
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-      gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
+      blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
 
       button = gtk_button_new_with_label ("Maybe this one?");
       label = gtk_bin_get_child (GTK_BIN (button));
@@ -49,8 +49,7 @@ do_transparent (GtkWidget *do_widget)
       gtk_widget_set_halign (button, GTK_ALIGN_FILL);
       gtk_widget_set_valign (button, GTK_ALIGN_END);
 
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-      gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
+      blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
 
       picture = gtk_picture_new_for_resource ("/transparent/portland-rose.jpg");
       gtk_container_add (GTK_CONTAINER (overlay), picture);
