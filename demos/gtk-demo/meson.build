@@ -75,7 +75,7 @@ demos = files([
 
 gtkdemo_deps = [ libgtk_dep, ]
 
-extra_demo_sources = files(['main.c', 'gtkfishbowl.c', 'fontplane.c', 'gtkgears.c', 'puzzlepiece.c'])
+extra_demo_sources = files(['main.c', 'gtkfishbowl.c', 'fontplane.c', 'gtkgears.c', 'puzzlepiece.c', 'bluroverlay.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')

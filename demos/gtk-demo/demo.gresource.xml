@@ -247,6 +247,7 @@
   </gresource>
   <gresource prefix="/transparent">
     <file>portland-rose.jpg</file>
+    <file>bluroverlay.c</file>
   </gresource>
   <gresource prefix="/markup">
     <file>markup.txt</file>

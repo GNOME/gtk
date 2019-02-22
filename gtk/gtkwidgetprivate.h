@@ -75,7 +75,7 @@ struct _GtkWidgetPrivate
   guint shadowed              : 1;
   guint child_visible         : 1;
   guint multidevice           : 1;
-  guint pass_through          : 1;
+  guint can_pick              : 1;
 
   /* Queue-resize related flags */
   guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
@@ -331,10 +331,6 @@ void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
 
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);
-
-void              gtk_widget_set_pass_through              (GtkWidget *widget,
-                                                            gboolean   pass_through);
-gboolean          gtk_widget_get_pass_through              (GtkWidget *widget);
 
 void              gtk_widget_cancel_event_sequence         (GtkWidget             *widget,
                                                             GtkGesture            *gesture,

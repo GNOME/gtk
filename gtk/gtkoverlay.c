@@ -64,10 +64,8 @@ typedef struct _GtkOverlayChild GtkOverlayChild;
 
 struct _GtkOverlayChild
 {
-  guint pass_through : 1;
   guint measure : 1;
   guint clip_overlay : 1;
-  double blur;
 };
 
 enum {
@@ -80,8 +78,6 @@ enum
   CHILD_PROP_0,
   CHILD_PROP_PASS_THROUGH,
   CHILD_PROP_MEASURE,
-  CHILD_PROP_BLUR,
-  CHILD_PROP_INDEX,
   CHILD_PROP_CLIP_OVERLAY
 };
 
@@ -375,82 +371,9 @@ gtk_overlay_remove (GtkContainer *container,
     }
   else
     {
-      GtkWidget *w;
-
       gtk_widget_unparent (widget);
-
-      for (w = gtk_widget_get_first_child (GTK_WIDGET (container));
-           w != NULL;
-           w = gtk_widget_get_next_sibling (w))
-        {
-          gtk_widget_child_notify (w, "index");
-        }
     }
 }
-
-/**
- * gtk_overlay_reorder_overlay:
- * @overlay: a #GtkOverlay
- * @child: the overlaid #GtkWidget to move
- * @position: the new index for @child in the list of overlay children
- *   of @overlay, starting from 0. If negative, indicates the end of
- *   the list
- *
- * Moves @child to a new @index in the list of @overlay children.
- * The list contains overlays in the order that these were
- * added to @overlay.
- *
- * A widget’s index in the @overlay children list determines which order
- * the children are drawn if they overlap. The first child is drawn at
- * the bottom. It also affects the focus order.
- */
-void
-gtk_overlay_reorder_overlay (GtkOverlay *overlay,
-                             GtkWidget  *child,
-                             gint        position)
-{
-  GtkWidget *w;
-
-  g_return_if_fail (GTK_IS_OVERLAY (overlay));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (overlay));
-
-  if (child == gtk_bin_get_child (GTK_BIN (overlay)))
-    return;
-
-  if (position < 0)
-    {
-      /* Just move it to the end */
-      gtk_widget_insert_before (child, GTK_WIDGET (overlay), NULL);
-    }
-  else
-    {
-      int pos = 0;
-      for (w = gtk_widget_get_first_child (GTK_WIDGET (overlay));
-           w != NULL;
-           w = gtk_widget_get_next_sibling (w))
-        {
-          if (pos == position)
-            break;
-
-          pos ++;
-        }
-
-      if (w == child)
-        return;
-
-      gtk_widget_insert_after (child, GTK_WIDGET (overlay), w);
-    }
-
-  /* Not all indices changed, but notify for all of them, for simplicity. */
-  for (w = gtk_widget_get_first_child (GTK_WIDGET (overlay));
-       w != NULL;
-       w = gtk_widget_get_next_sibling (w))
-    {
-      gtk_widget_child_notify (w, "index");
-    }
-}
-
 
 static void
 gtk_overlay_forall (GtkContainer *overlay,
@@ -497,18 +420,6 @@ gtk_overlay_set_child_property (GtkContainer *container,
 
   switch (property_id)
     {
-    case CHILD_PROP_PASS_THROUGH:
-      /* Ignore value on main child */
-      if (child_info)
-	{
-	  if (g_value_get_boolean (value) != child_info->pass_through)
-	    {
-	      child_info->pass_through = g_value_get_boolean (value);
-              gtk_widget_set_pass_through (child, child_info->pass_through);
-	      gtk_container_child_notify (container, child, "pass-through");
-	    }
-	}
-      break;
     case CHILD_PROP_MEASURE:
       if (child_info)
 	{
@@ -519,23 +430,6 @@ gtk_overlay_set_child_property (GtkContainer *container,
               gtk_widget_queue_resize (GTK_WIDGET (overlay));
 	    }
 	}
-      break;
-    case CHILD_PROP_BLUR:
-      if (child_info)
-	{
-	  if (g_value_get_double (value) != child_info->blur)
-	    {
-	      child_info->blur = g_value_get_double (value);
-	      gtk_container_child_notify (container, child, "blur");
-              gtk_widget_queue_draw (GTK_WIDGET (overlay));
-	    }
-	}
-      break;
-    case CHILD_PROP_INDEX:
-      if (child_info != NULL)
-	gtk_overlay_reorder_overlay (GTK_OVERLAY (container),
-				     child,
-				     g_value_get_int (value));
       break;
     case CHILD_PROP_CLIP_OVERLAY:
       if (child_info)
@@ -565,8 +459,6 @@ gtk_overlay_get_child_property (GtkContainer *container,
   GtkOverlay *overlay = GTK_OVERLAY (container);
   GtkOverlayChild *child_info;
   GtkWidget *main_widget;
-  GtkWidget *w;
-  int pos = 0;
 
   main_widget = gtk_bin_get_child (GTK_BIN (overlay));
   if (child == main_widget)
@@ -583,33 +475,11 @@ gtk_overlay_get_child_property (GtkContainer *container,
 
   switch (property_id)
     {
-    case CHILD_PROP_PASS_THROUGH:
-      if (child_info)
-	g_value_set_boolean (value, child_info->pass_through);
-      else
-	g_value_set_boolean (value, FALSE);
-      break;
     case CHILD_PROP_MEASURE:
       if (child_info)
 	g_value_set_boolean (value, child_info->measure);
       else
 	g_value_set_boolean (value, TRUE);
-      break;
-    case CHILD_PROP_BLUR:
-      if (child_info)
-	g_value_set_double (value, child_info->blur);
-      else
-	g_value_set_double (value, 0);
-      break;
-    case CHILD_PROP_INDEX:
-      for (w = _gtk_widget_get_first_child (GTK_WIDGET (container));
-           w != child;
-           w = _gtk_widget_get_next_sibling (w))
-        {
-          pos ++;
-        }
-
-      g_value_set_int (value, pos);
       break;
     case CHILD_PROP_CLIP_OVERLAY:
       if (child_info)
@@ -652,90 +522,14 @@ static void
 gtk_overlay_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
-  GtkWidget *main_widget;
-  GskRenderNode *main_widget_node = NULL;
   GtkWidget *child;
-  GtkAllocation main_alloc;
-  cairo_region_t *clip = NULL;
-  int i;
-
-  main_widget = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_widget_get_allocation (widget, &main_alloc);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      double blur;
-      gtk_container_child_get (GTK_CONTAINER (widget), child, "blur", &blur, NULL);
-      if (blur > 0)
-        {
-          GtkAllocation alloc;
-          graphene_rect_t bounds;
-
-          if (main_widget_node == NULL)
-            {
-              GtkSnapshot *child_snapshot;
-
-              child_snapshot = gtk_snapshot_new ();
-              gtk_widget_snapshot (main_widget, child_snapshot);
-              main_widget_node = gtk_snapshot_free_to_node (child_snapshot);
-            }
-
-          gtk_widget_get_allocation (child, &alloc);
-          graphene_rect_init (&bounds, alloc.x, alloc.y, alloc.width, alloc.height);
-          gtk_snapshot_push_blur (snapshot, blur);
-          gtk_snapshot_push_clip (snapshot, &bounds);
-          gtk_snapshot_append_node (snapshot, main_widget_node);
-          gtk_snapshot_pop (snapshot);
-          gtk_snapshot_pop (snapshot);
-
-          if (clip == NULL)
-            {
-              cairo_rectangle_int_t rect;
-              rect.x = rect.y = 0;
-              rect.width = main_alloc.width;
-              rect.height = main_alloc.height;
-              clip = cairo_region_create_rectangle (&rect);
-            }
-          cairo_region_subtract_rectangle (clip, (cairo_rectangle_int_t *)&alloc);
-        }
+      gtk_overlay_snapshot_child (widget, child, snapshot);
     }
-
-  if (clip == NULL)
-    {
-      for (child = _gtk_widget_get_first_child (widget);
-           child != NULL;
-           child = _gtk_widget_get_next_sibling (child))
-        {
-          gtk_overlay_snapshot_child (widget, child, snapshot);
-        }
-      return;
-    }
-
-  for (i = 0; i < cairo_region_num_rectangles (clip); i++)
-    {
-      cairo_rectangle_int_t rect;
-      graphene_rect_t bounds;
-
-      cairo_region_get_rectangle (clip, i, &rect);
-      graphene_rect_init (&bounds, rect.x, rect.y, rect.width, rect.height);
-      gtk_snapshot_push_clip (snapshot, &bounds);
-      gtk_snapshot_append_node (snapshot, main_widget_node);
-      gtk_snapshot_pop (snapshot);
-    }
-
-  cairo_region_destroy (clip);
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      if (child != main_widget)
-        gtk_overlay_snapshot_child (widget, child, snapshot);
-    }
-
-  gsk_render_node_unref (main_widget_node);
 }
 
 static void
@@ -758,16 +552,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   klass->get_child_position = gtk_overlay_get_child_position;
 
   /**
-   * GtkOverlay:pass-through:
-   *
-   * Pass through input, does not affect main child.
-   */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
-      g_param_spec_boolean ("pass-through", P_("Pass Through"), P_("Pass through input, does not affect main child"),
-                            FALSE,
-                            GTK_PARAM_READWRITE));
-
-  /**
    * GtkOverlay:measure:
    *
    * Include this child in determining the child request.
@@ -779,26 +563,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE));
 
-  /**
-   * GtkOverlay:blur:
-   *
-   * Blur the content behind this child with a Gaussian blur of this radius.
-   */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_BLUR,
-      g_param_spec_double ("blur", P_("Blur Radius"), P_("Apply a blur to the content behind this child"),
-                           0, 100, 0,
-                           GTK_PARAM_READWRITE));
-  /**
-   * GtkOverlay:index:
-   *
-   * The index of the overlay in the parent, -1 for the main child.
-   */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_INDEX,
-					      g_param_spec_int ("index",
-								P_("Index"),
-								P_("The index of the overlay in the parent, -1 for the main child"),
-								-1, G_MAXINT, 0,
-								GTK_PARAM_READWRITE));
   /**
    * GtkOverlay:clip-overlay:
    *
@@ -931,56 +695,6 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
 
   gtk_widget_insert_before (widget, GTK_WIDGET (overlay), NULL);
   gtk_overlay_set_overlay_child (widget, child);
-
-  gtk_widget_child_notify (widget, "index");
-}
-
-/**
- * gtk_overlay_set_overlay_pass_through:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
- * @pass_through: whether the child should pass the input through
- *
- * Convenience function to set the value of the #GtkOverlay:pass-through
- * child property for @widget.
- */
-void
-gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
-				      GtkWidget  *widget,
-				      gboolean    pass_through)
-{
-  g_return_if_fail (GTK_IS_OVERLAY (overlay));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_container_child_set (GTK_CONTAINER (overlay), widget,
-			   "pass-through", pass_through,
-			   NULL);
-}
-
-/**
- * gtk_overlay_get_overlay_pass_through:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
- *
- * Convenience function to get the value of the #GtkOverlay:pass-through
- * child property for @widget.
- *
- * Returns: whether the widget is a pass through child.
- */
-gboolean
-gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
-				      GtkWidget  *widget)
-{
-  gboolean pass_through;
-
-  g_return_val_if_fail (GTK_IS_OVERLAY (overlay), FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  gtk_container_child_get (GTK_CONTAINER (overlay), widget,
-			   "pass-through", &pass_through,
-			   NULL);
-
-  return pass_through;
 }
 
 /**

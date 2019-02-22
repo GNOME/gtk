@@ -518,6 +518,7 @@ enum {
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
   PROP_IS_FOCUS,
+  PROP_CAN_PICK,
   PROP_FOCUS_ON_CLICK,
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
@@ -1035,6 +1036,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Whether the widget is the focus widget within the toplevel"),
                             FALSE,
                             GTK_PARAM_READWRITE);
+
+  widget_props[PROP_CAN_PICK] =
+      g_param_spec_boolean ("can-pick",
+                            P_("Can pick"),
+                            P_("Whether the widget can receive pointer events"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:focus-on-click:
@@ -2262,6 +2270,9 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
+    case PROP_CAN_PICK:
+      gtk_widget_set_can_pick (widget, g_value_get_boolean (value));
+      break;
     case PROP_FOCUS_ON_CLICK:
       gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
       break;
@@ -2436,6 +2447,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_IS_FOCUS:
       g_value_set_boolean (value, gtk_widget_is_focus (widget));
+      break;
+    case PROP_CAN_PICK:
+      g_value_set_boolean (value, gtk_widget_get_can_pick (widget));
       break;
     case PROP_FOCUS_ON_CLICK:
       g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
@@ -2871,6 +2885,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
 #endif
+  priv->can_pick = TRUE;
 
   switch (_gtk_widget_get_direction (widget))
     {
@@ -11206,7 +11221,7 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  *
  * Pass-through widgets and insensitive widgets do never respond to
  * input and will therefor always return %FALSE here. See
- * gtk_widget_set_pass_through() and gtk_widget_set_sensitive() for
+ * gtk_widget_set_can_pick() and gtk_widget_set_sensitive() for
  * details about those functions.
  *
  * Returns: %TRUE if @widget contains (@x, @y).
@@ -11218,7 +11233,7 @@ gtk_widget_contains (GtkWidget  *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (gtk_widget_get_pass_through (widget) ||
+  if (!gtk_widget_get_can_pick (widget) ||
       !_gtk_widget_is_sensitive (widget) ||
       !_gtk_widget_is_drawable (widget))
     return FALSE;
@@ -11257,7 +11272,7 @@ gtk_widget_pick (GtkWidget *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (gtk_widget_get_pass_through (widget) ||
+  if (!gtk_widget_get_can_pick (widget) ||
       !_gtk_widget_is_sensitive (widget) ||
       !_gtk_widget_is_drawable (widget))
     return NULL;
@@ -13700,20 +13715,27 @@ gtk_widget_get_cursor (GtkWidget *widget)
 }
 
 void
-gtk_widget_set_pass_through (GtkWidget *widget,
-                             gboolean   pass_through)
+gtk_widget_set_can_pick (GtkWidget *widget,
+                         gboolean   can_pick)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  priv->pass_through = !!pass_through;
+  can_pick = !!can_pick;
+
+  if (priv->can_pick == can_pick)
+    return;
+
+  priv->can_pick = can_pick;
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_PICK]);
 }
 
 gboolean
-gtk_widget_get_pass_through (GtkWidget *widget)
+gtk_widget_get_can_pick (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  return priv->pass_through;
+  return priv->can_pick;
 }
 
 /**
