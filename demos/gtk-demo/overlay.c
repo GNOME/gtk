@@ -57,7 +57,7 @@ do_overlay (GtkWidget *do_widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
-      gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (overlay), vbox, TRUE);
+      gtk_widget_set_can_pick (vbox, FALSE);
       gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
 
