@@ -2022,6 +2022,16 @@ popover.emoji-completion contents row box { border-spacing: 10px; padding: 2px 1
 
 popover.emoji-completion .emoji:hover { background-color: #424242; }
 
+entry tag { background: blue; border-radius: 12px; margin: 6px 3px; }
+
+entry tag label { color: white; }
+
+entry tag box { border-spacing: 4px; }
+
+entry tag label.first-child { margin-left: 10px; }
+
+entry tag label.last-child { margin-right: 10px; }
+
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*
 widget text/foreground color */
