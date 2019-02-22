@@ -130,6 +130,7 @@ gtk_tests = [
   ['testoutsetshadowdrawing'],
   ['testblur'],
   ['testtexture'],
+  ['test-tagged-entry']
 ]
 
 if os_unix
