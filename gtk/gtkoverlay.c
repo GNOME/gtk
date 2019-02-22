@@ -67,7 +67,6 @@ struct _GtkOverlayChild
   guint pass_through : 1;
   guint measure : 1;
   guint clip_overlay : 1;
-  double blur;
 };
 
 enum {
@@ -80,7 +79,6 @@ enum
   CHILD_PROP_0,
   CHILD_PROP_PASS_THROUGH,
   CHILD_PROP_MEASURE,
-  CHILD_PROP_BLUR,
   CHILD_PROP_INDEX,
   CHILD_PROP_CLIP_OVERLAY
 };
@@ -520,17 +518,6 @@ gtk_overlay_set_child_property (GtkContainer *container,
 	    }
 	}
       break;
-    case CHILD_PROP_BLUR:
-      if (child_info)
-	{
-	  if (g_value_get_double (value) != child_info->blur)
-	    {
-	      child_info->blur = g_value_get_double (value);
-	      gtk_container_child_notify (container, child, "blur");
-              gtk_widget_queue_draw (GTK_WIDGET (overlay));
-	    }
-	}
-      break;
     case CHILD_PROP_INDEX:
       if (child_info != NULL)
 	gtk_overlay_reorder_overlay (GTK_OVERLAY (container),
@@ -595,12 +582,6 @@ gtk_overlay_get_child_property (GtkContainer *container,
       else
 	g_value_set_boolean (value, TRUE);
       break;
-    case CHILD_PROP_BLUR:
-      if (child_info)
-	g_value_set_double (value, child_info->blur);
-      else
-	g_value_set_double (value, 0);
-      break;
     case CHILD_PROP_INDEX:
       for (w = _gtk_widget_get_first_child (GTK_WIDGET (container));
            w != child;
@@ -652,90 +633,14 @@ static void
 gtk_overlay_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
-  GtkWidget *main_widget;
-  GskRenderNode *main_widget_node = NULL;
   GtkWidget *child;
-  GtkAllocation main_alloc;
-  cairo_region_t *clip = NULL;
-  int i;
-
-  main_widget = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_widget_get_allocation (widget, &main_alloc);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      double blur;
-      gtk_container_child_get (GTK_CONTAINER (widget), child, "blur", &blur, NULL);
-      if (blur > 0)
-        {
-          GtkAllocation alloc;
-          graphene_rect_t bounds;
-
-          if (main_widget_node == NULL)
-            {
-              GtkSnapshot *child_snapshot;
-
-              child_snapshot = gtk_snapshot_new ();
-              gtk_widget_snapshot (main_widget, child_snapshot);
-              main_widget_node = gtk_snapshot_free_to_node (child_snapshot);
-            }
-
-          gtk_widget_get_allocation (child, &alloc);
-          graphene_rect_init (&bounds, alloc.x, alloc.y, alloc.width, alloc.height);
-          gtk_snapshot_push_blur (snapshot, blur);
-          gtk_snapshot_push_clip (snapshot, &bounds);
-          gtk_snapshot_append_node (snapshot, main_widget_node);
-          gtk_snapshot_pop (snapshot);
-          gtk_snapshot_pop (snapshot);
-
-          if (clip == NULL)
-            {
-              cairo_rectangle_int_t rect;
-              rect.x = rect.y = 0;
-              rect.width = main_alloc.width;
-              rect.height = main_alloc.height;
-              clip = cairo_region_create_rectangle (&rect);
-            }
-          cairo_region_subtract_rectangle (clip, (cairo_rectangle_int_t *)&alloc);
-        }
+      gtk_overlay_snapshot_child (widget, child, snapshot);
     }
-
-  if (clip == NULL)
-    {
-      for (child = _gtk_widget_get_first_child (widget);
-           child != NULL;
-           child = _gtk_widget_get_next_sibling (child))
-        {
-          gtk_overlay_snapshot_child (widget, child, snapshot);
-        }
-      return;
-    }
-
-  for (i = 0; i < cairo_region_num_rectangles (clip); i++)
-    {
-      cairo_rectangle_int_t rect;
-      graphene_rect_t bounds;
-
-      cairo_region_get_rectangle (clip, i, &rect);
-      graphene_rect_init (&bounds, rect.x, rect.y, rect.width, rect.height);
-      gtk_snapshot_push_clip (snapshot, &bounds);
-      gtk_snapshot_append_node (snapshot, main_widget_node);
-      gtk_snapshot_pop (snapshot);
-    }
-
-  cairo_region_destroy (clip);
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      if (child != main_widget)
-        gtk_overlay_snapshot_child (widget, child, snapshot);
-    }
-
-  gsk_render_node_unref (main_widget_node);
 }
 
 static void
@@ -779,15 +684,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE));
 
-  /**
-   * GtkOverlay:blur:
-   *
-   * Blur the content behind this child with a Gaussian blur of this radius.
-   */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_BLUR,
-      g_param_spec_double ("blur", P_("Blur Radius"), P_("Apply a blur to the content behind this child"),
-                           0, 100, 0,
-                           GTK_PARAM_READWRITE));
   /**
    * GtkOverlay:index:
    *
