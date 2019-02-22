@@ -2534,12 +2534,35 @@ gtk_window_root_get_surface_transform (GtkRoot *root,
   *y = margin.top + border.top + padding.top;
 }
 
+static GtkWidget *
+gtk_window_root_get_focus (GtkRoot *root)
+{
+  GtkWindow *window = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->initial_focus)
+    return priv->initial_focus;
+  else
+    return priv->focus_widget;
+}
+
+static GtkWidget *
+gtk_window_root_get_default (GtkRoot *root)
+{
+  GtkWindow *window = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->default_widget;
+}
+
 static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
   iface->get_renderer = gtk_window_root_get_renderer;
   iface->get_surface_transform = gtk_window_root_get_surface_transform;
+  iface->get_focus = gtk_window_root_get_focus;
+  iface->get_default = gtk_window_root_get_default;
 }
 
 /**

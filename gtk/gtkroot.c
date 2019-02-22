@@ -58,12 +58,26 @@ gtk_root_default_get_surface_transform (GtkRoot *self,
   *y = 0;
 }
 
+static GtkWidget *
+gtk_root_default_get_focus (GtkRoot *self)
+{
+  return NULL;
+}
+
+static GtkWidget *
+gtk_root_default_get_default (GtkRoot *self)
+{
+  return NULL;
+}
+
 static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_renderer = gtk_root_default_get_renderer;
   iface->get_surface_transform = gtk_root_default_get_surface_transform;
+  iface->get_focus = gtk_root_default_get_focus;
+  iface->get_default = gtk_root_default_get_default;
 }
 
 GdkDisplay *
@@ -101,4 +115,20 @@ gtk_root_get_surface_transform (GtkRoot *self,
 
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_surface_transform (self, x, y);
+}
+
+GtkWidget *
+gtk_root_get_focus (GtkRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  return GTK_ROOT_GET_IFACE (self)->get_focus (self);
+}
+
+GtkWidget *
+gtk_root_get_default (GtkRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  return GTK_ROOT_GET_IFACE (self)->get_default (self);
 }

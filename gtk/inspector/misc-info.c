@@ -29,6 +29,7 @@
 #include "gtkframe.h"
 #include "gtkbutton.h"
 #include "gtkwidgetprivate.h"
+#include "gtkrootprivate.h"
 
 
 struct _GtkInspectorMiscInfoPrivate {
@@ -190,7 +191,7 @@ update_default_widget (GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_default_widget (GTK_WINDOW (sl->priv->object));
+  widget = gtk_root_get_default (GTK_ROOT (sl->priv->object));
   if (widget)
     {
       gchar *tmp;
@@ -222,7 +223,7 @@ update_focus_widget (GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
+  widget = gtk_root_get_focus (GTK_ROOT (sl->priv->object));
   if (widget)
     {
       gchar *tmp;
@@ -355,7 +356,7 @@ update_info (gpointer data)
                           gtk_buildable_get_name (GTK_BUILDABLE (sl->priv->object)));
     }
 
-  if (GTK_IS_WINDOW (sl->priv->object))
+  if (GTK_IS_ROOT (sl->priv->object))
     {
       update_default_widget (sl);
       update_focus_widget (sl);
