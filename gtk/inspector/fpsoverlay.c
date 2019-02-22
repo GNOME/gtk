@@ -158,7 +158,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   double fps;
   char *fps_string;
   graphene_rect_t bounds;
-  gboolean has_bounds;
+  gboolean has_bounds = FALSE;
   int width, height;
   double overlay_opacity;
 
