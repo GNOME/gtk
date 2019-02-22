@@ -41,6 +41,8 @@
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
+#include "a11y/gtkentryaccessible.h"
+
 
 /**
  * SECTION:gtksearchentry
@@ -390,6 +392,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
                                 "stop-search", 0);
 
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
