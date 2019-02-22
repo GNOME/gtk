@@ -48,11 +48,24 @@ struct _GtkListItemManagerClass
   GObjectClass parent_class;
 };
 
-struct _GtkListItemManagerChange
-{
-  GHashTable *items;
-};
-
+static GtkWidget *      gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
+                                                                 guint                   position,
+                                                                 GtkWidget              *prev_sibling);
+static GtkWidget *      gtk_list_item_manager_try_reacquire_list_item
+                                                                (GtkListItemManager     *self,
+                                                                 GHashTable             *change,
+                                                                 guint                   position,
+                                                                 GtkWidget              *prev_sibling);
+static void             gtk_list_item_manager_update_list_item  (GtkListItemManager     *self,
+                                                                 GtkWidget              *item,
+                                                                 guint                   position);
+static void             gtk_list_item_manager_move_list_item    (GtkListItemManager     *self,
+                                                                 GtkWidget              *list_item,
+                                                                 guint                   position,
+                                                                 GtkWidget              *prev_sibling);
+static void             gtk_list_item_manager_release_list_item (GtkListItemManager     *self,
+                                                                 GHashTable             *change,
+                                                                 GtkWidget              *widget);
 G_DEFINE_TYPE (GtkListItemManager, gtk_list_item_manager, G_TYPE_OBJECT)
 
 void
@@ -227,10 +240,10 @@ gtk_list_item_manager_get_item_augment (GtkListItemManager *self,
 }
 
 static void
-gtk_list_item_manager_remove_items (GtkListItemManager       *self,
-                                    GtkListItemManagerChange *change,
-                                    guint                     position,
-                                    guint                     n_items)
+gtk_list_item_manager_remove_items (GtkListItemManager *self,
+                                    GHashTable         *change,
+                                    guint               position,
+                                    guint               n_items)
 {
   GtkListItemManagerItem *item;
 
@@ -371,9 +384,9 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
 }
 
 static void
-gtk_list_item_manager_ensure_items (GtkListItemManager       *self,
-                                    GtkListItemManagerChange *change,
-                                    guint                     update_start)
+gtk_list_item_manager_ensure_items (GtkListItemManager *self,
+                                    GHashTable         *change,
+                                    guint               update_start)
 {
   GtkListItemManagerItem *item, *new_item;
   guint i, offset;
@@ -447,11 +460,11 @@ gtk_list_item_manager_ensure_items (GtkListItemManager       *self,
 }
 
 void
-gtk_list_item_manager_set_anchor (GtkListItemManager       *self,
-                                  guint                     position,
-                                  double                    align,
-                                  GtkListItemManagerChange *change,
-                                  guint                     update_start)
+gtk_list_item_manager_set_anchor (GtkListItemManager *self,
+                                  guint               position,
+                                  double              align,
+                                  GHashTable         *change,
+                                  guint               update_start)
 {
   GtkListItemManagerItem *item;
   guint items_before, items_after, total_items, n_items;
@@ -494,15 +507,17 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
                                               guint               added,
                                               GtkListItemManager *self)
 {
-  GtkListItemManagerChange *change;
+  GHashTable *change;
+  GHashTableIter iter;
+  gpointer list_item;
 
-  change = gtk_list_item_manager_begin_change (self);
+  change = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   gtk_list_item_manager_remove_items (self, change, position, removed);
   gtk_list_item_manager_add_items (self, position, added);
 
   /* The anchor was removed, but it may just have moved to a different position */
-  if (self->anchor && gtk_list_item_manager_change_contains (change, self->anchor))
+  if (self->anchor && g_hash_table_lookup (change, gtk_list_item_get_item (GTK_LIST_ITEM (self->anchor))) == self->anchor)
     {
       /* The anchor was removed, do a more expensive rebuild trying to find if
        * the anchor maybe got readded somewhere else */
@@ -600,7 +615,16 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       gtk_list_item_manager_set_anchor (self, anchor_pos, self->anchor_align, change, position);
     }
 
-  gtk_list_item_manager_end_change (self, change);
+  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
+  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
+
+  g_hash_table_iter_init (&iter, change);
+  while (g_hash_table_iter_next (&iter, NULL, &list_item))
+    {
+      gtk_list_item_manager_release_list_item (self, NULL, list_item);
+    }
+
+  g_hash_table_unref (change);
 }
 
 static void
@@ -783,107 +807,6 @@ gtk_list_item_manager_select (GtkListItemManager *self,
     }
 }
 
-#if 0 
-/*
- * gtk_list_item_manager_get_size:
- * @self: a #GtkListItemManager
- *
- * Queries the number of widgets currently handled by @self.
- *
- * This includes both widgets that have been acquired and
- * those currently waiting to be used again.
- *
- * Returns: Number of widgets handled by @self
- **/
-guint
-gtk_list_item_manager_get_size (GtkListItemManager *self)
-{
-  return g_hash_table_size (self->pool);
-}
-#endif
-
-/*
- * gtk_list_item_manager_begin_change:
- * @self: a #GtkListItemManager
- *
- * Begins a change operation in response to a model's items-changed
- * signal.
- * During an ongoing change operation, list items will not be discarded
- * when released but will be kept around in anticipation of them being
- * added back in a different posiion later.
- *
- * Once it is known that no more list items will be reused,
- * gtk_list_item_manager_end_change() should be called. This should happen
- * as early as possible, so the list items held for the change can be
- * reqcquired.
- *
- * Returns: The object to use for this change
- **/
-GtkListItemManagerChange *
-gtk_list_item_manager_begin_change (GtkListItemManager *self)
-{
-  GtkListItemManagerChange *change;
-
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
-
-  change = g_slice_new (GtkListItemManagerChange);
-  change->items = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-  return change;
-}
-
-/*
- * gtk_list_item_manager_end_change:
- * @self: a #GtkListItemManager
- * @change: a change
- *
- * Ends a change operation begun with gtk_list_item_manager_begin_change()
- * and releases all list items still cached.
- **/
-void
-gtk_list_item_manager_end_change (GtkListItemManager       *self,
-                                  GtkListItemManagerChange *change)
-{
-  GHashTableIter iter;
-  gpointer list_item;
-
-  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-
-  g_hash_table_iter_init (&iter, change->items);
-  while (g_hash_table_iter_next (&iter, NULL, &list_item))
-    {
-      gtk_list_item_manager_release_list_item (self, NULL, list_item);
-    }
-
-  g_hash_table_unref (change->items);
-  g_slice_free (GtkListItemManagerChange, change);
-}
-
-/*
- * gtk_list_item_manager_change_contains:
- * @change: a #GtkListItemManagerChange
- * @list_item: The item that may have been released into this change set
- *
- * Checks if @list_item has been released as part of @change but not been
- * reacquired yet.
- *
- * This is useful to test before calling gtk_list_item_manager_end_change()
- * if special actions need to be performed when important list items - like
- * the focused item - are about to be deleted.
- *
- * Returns: %TRUE if the item is part of this change
- **/
-gboolean
-gtk_list_item_manager_change_contains (GtkListItemManagerChange *change,
-                                       GtkWidget                *list_item)
-{
-  g_return_val_if_fail (change != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST_ITEM (list_item), FALSE);
-
-  return g_hash_table_lookup (change->items, gtk_list_item_get_item (GTK_LIST_ITEM (list_item))) == list_item;
-}
-
 /*
  * gtk_list_item_manager_acquire_list_item:
  * @self: a #GtkListItemManager
@@ -902,7 +825,7 @@ gtk_list_item_manager_change_contains (GtkListItemManagerChange *change,
  *
  * Returns: a properly setup widget to use in @position
  **/
-GtkWidget *
+static GtkWidget *
 gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
                                          guint               position,
                                          GtkWidget          *prev_sibling)
@@ -941,11 +864,11 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
  * Returns: (nullable): a properly setup widget to use in @position or %NULL if
  *     no item for reuse existed
  **/
-GtkWidget *
-gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
-                                               GtkListItemManagerChange *change,
-                                               guint                     position,
-                                               GtkWidget                *prev_sibling)
+static GtkWidget *
+gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
+                                               GHashTable         *change,
+                                               guint               position,
+                                               GtkWidget          *prev_sibling)
 {
   GtkListItem *result;
   gpointer item;
@@ -955,7 +878,7 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
 
   /* XXX: can we avoid temporarily allocating items on failure? */
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
-  if (g_hash_table_steal_extended (change->items, item, NULL, (gpointer *) &result))
+  if (g_hash_table_steal_extended (change, item, NULL, (gpointer *) &result))
     {
       gtk_list_item_factory_update (self->factory, result, position, FALSE);
       gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
@@ -984,7 +907,7 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager       *self,
  *
  * This is most useful when scrolling.
  **/
-void
+static void
 gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
                                       GtkWidget              *list_item,
                                       guint                   position,
@@ -1009,7 +932,7 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
  * Updates the position of the given @item. This function must be called whenever
  * the position of an item changes, like when new items are added before it.
  **/
-void
+static void
 gtk_list_item_manager_update_list_item (GtkListItemManager *self,
                                         GtkWidget          *item,
                                         guint               position)
@@ -1034,17 +957,17 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
  * Releases an item that was previously acquired via
  * gtk_list_item_manager_acquire_list_item() and is no longer in use.
  **/
-void
-gtk_list_item_manager_release_list_item (GtkListItemManager       *self,
-                                         GtkListItemManagerChange *change,
-                                         GtkWidget                *item)
+static void
+gtk_list_item_manager_release_list_item (GtkListItemManager *self,
+                                         GHashTable         *change,
+                                         GtkWidget          *item)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
   if (change != NULL)
     {
-      if (g_hash_table_insert (change->items, gtk_list_item_get_item (GTK_LIST_ITEM (item)), item))
+      if (g_hash_table_insert (change, gtk_list_item_get_item (GTK_LIST_ITEM (item)), item))
         return;
       
       g_warning ("FIXME: Handle the same item multiple times in the list.\nLars says this totally should not happen, but here we are.");
