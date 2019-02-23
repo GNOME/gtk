@@ -47,8 +47,7 @@ this reference manual for details.
 
 <qandaentry>
 <question><para>
-Where can I get help with GTK, submit a bug report, or make a feature
-request?
+Where can I get help with GTK, submit a bug report, or make a feature request?
 </para></question>
 
 <answer>
@@ -63,13 +62,14 @@ See the <link linkend="gtk-resources">documentation on this topic</link>.
 
 
 <qandaentry>
-<question><para>How do I port from one GTK
-version to another?</para></question>
+<question><para>
+How do I port from one GTK version to another?
+</para></question>
 
 <answer>
 
 <para>
-See <xref linkend="gtk-migrating-2-to-3"/>.
+See <xref linkend="migrating"/>.
 You may also find useful information in the documentation for
 specific widgets and functions.
 </para>
@@ -88,8 +88,7 @@ against the documentation.
 
 <qandaentry>
 <question><para>
-How does memory management work in GTK? Should I free data returned
-from functions?
+How does memory management work in GTK? Should I free data returned from functions?
 </para></question>
 
 <answer>
@@ -528,10 +527,9 @@ the call away if it appears that the value is not being used.
 </para>
 
 <para>
-A common workaround for this problem is to store the result in a volatile
-variable, which keeps the compiler from optimizing the call away.
+GLib provides the g_type_ensure() function to work around this problem.
 <informalexample><programlisting>
-volatile GType dummy = GTK_TYPE_BLAH;
+  g_type_ensure (GTK_TYPE_BLAH);
 </programlisting></informalexample>
 </para>
 </answer>
@@ -546,32 +544,9 @@ How do I create a transparent toplevel window ?
 
 <answer>
 <para>
-To make a window transparent, it needs to use a visual which supports that.
-This is done by getting the RGBA visual of the screen with
-gdk_screen_get_rgba_visual() and setting it on the window. Note that
-gdk_screen_get_rgba_visual() will return %NULL if transparent windows
-are not supported on the screen, you should fall back to
-gdk_screen_get_system_visual() in that case. Additionally, note that this
-will change from screen to screen, so it needs to be repeated whenever the
-window is moved to a different screen.
-<informalexample><programlisting>
-GdkVisual *visual;
-
-visual = gdk_screen_get_rgba_visual (screen);
-if (visual == NULL)
-  visual = gdk_screen_get_system_visual (screen);
-
-gtk_widget_set_visual (GTK_WIDGET (window), visual);
-</programlisting></informalexample>
-To fill the alpha channel on the window simply use cairos
-RGBA drawing capabilities.
-</para>
-<para>
-Note that the presence of an RGBA visual is no guarantee that the
-window will actually appear transparent on screen. On X11, this
-requires a compositing manager to be running. See
-gdk_display_is_composited() for a way to find out if the alpha
-channel will be respected.
+Any toplevel window can be transparent.
+It is just a matter of setting a transparent background
+in the CSS style for it.
 </para>
 </answer>
 </qandaentry>
@@ -587,9 +562,19 @@ channel will be respected.
 
 <answer>
 <para>
-See <link linkend="TreeWidget">tree widget overview</link> &mdash; you
-should use the #GtkTreeView widget. (A list is just a tree with no branches,
-so the tree widget is used for lists as well).
+This question has different answers, depending on the size of the dataset
+and the required formatting flexibility.
+</para>
+<para>
+If you want to display a large amount of data in a uniform way, your
+best option is a #GtkTreeView widget. See <link linkend="TreeWidget">tree
+widget overview</link>. A list is just a tree with no branches, so the treeview
+widget is used for lists as well.
+</para>
+<para>
+If you want to display a small amount of items, but need flexible formatting
+and widgetry inside the list, then you probably want to use a #GtkListBox,
+which uses regular widgets for display.
 </para>
 </answer>
 </qandaentry>
@@ -620,7 +605,11 @@ single-line text entry, see #GtkEntry.
 
 <answer>
 <para>
-#GtkImage can display images in just about any format GTK understands.
+GTK has two widgets that are dedicated to displaying images. #GtkImage, for
+small, fixed-size icons and #GtkPicture for content images.
+</para>
+<para>
+Both can display images in just about any format GTK understands.
 You can also use #GtkDrawingArea if you need to do something more complex,
 such as draw text or graphics over the top of the image.
 </para>
@@ -653,9 +642,10 @@ How do I change the color of a widget?
 </para></question>
 
 <answer><para>
-See gtk_widget_override_color() and gtk_widget_override_background_color().
-You can also change the appearance of a widget by installing a
-custom style provider, see gtk_style_context_add_provider().
+The background color of a widget is determined by the CSS style that applies
+to it. To change that, you can set style classes on the widget, and provide
+custom CSS to change the appearance. Such CSS can be loaded with
+gtk_css_provider_load_from_file() and its variants. See gtk_style_context_add_provider().
 </para></answer>
 </qandaentry>
 
@@ -665,16 +655,6 @@ How do I change the font of a widget?
 </para></question>
 
 <answer><para>
-This has several possible answers, depending on what exactly you want to
-achieve. One option is gtk_widget_override_font().
-<informalexample><programlisting>
- PangoFontDesc *font_desc = pango_font_description_new (<!-- -->);
- pango_font_description_set_size (font_desc, 40);
- gtk_widget_override_font (widget, font);
- pango_font_description_free (font_desc);
-</programlisting></informalexample>
-</para>
-<para>
 If you want to make the text of a label larger, you can use
 gtk_label_set_markup():
 <informalexample><programlisting>
@@ -939,32 +919,28 @@ How do I use cairo to draw in GTK applications ?
 </para></question>
 
 <answer><para>
-The #GtkWidget::draw signal gets a ready-to-use cairo context
-as parameter that you should use.
-</para>
-<para>
-All drawing in GTK is normally done in a draw handler, and GTK
-creates a temporary pixmap for double-buffering the drawing.
-It is possible to turn off double-buffering, with
-gtk_widget_set_double_buffered(), but this is not ideal,
-since it can cause some flickering.
+Use gtk_snapshot_append_cairo() in your #GtkWidget::snapshot signal handler
+to optain a cairo context and draw with that.
 </para>
 </answer>
 </qandaentry>
 
 <qandaentry>
 <question><para>
-Can I improve the performance of my application by using the
-Glitz or GL backend of cairo ?
+Can I improve the performance of my application by using another backend
+of cairo (such as GL) ?
 </para></question>
 
 <answer><para>
-No. The GDK X11 backend uses the cairo X backend (and the other
-GDK backends use their respective native cairo backends). The
-GTK developers believe that the best way to improving the GDK
-drawing performance is to optimize the cairo X backend and the
-relevant code paths in the X server that is uses (mostly the
-Render extension).
+No. Most drawing in GTK is not done via cairo anymore (but instead
+by the GL or Vulkan renderers of GSK).
+</para>
+<para>
+If you use cairo for drawing your own widgets, gtk_snapshot_append_cairo()
+will choose the most appropriate surface type for you.
+</para>
+<para>
+If you are interested in using GL for your own drawing, see #GtkGLArea.
 </para></answer>
 </qandaentry>
 
@@ -974,8 +950,11 @@ Can I use cairo to draw on a #GdkPixbuf ?
 </para></question>
 
 <answer><para>
-No, at least not yet. The cairo image surface does not support the
-pixel format used by GdkPixbuf.
+No. The cairo image surface does not support the pixel format used by GdkPixbuf.
+</para>
+<para>
+If you need to get cairo drawing into a format that can be displayed efficiently
+by GTK, you may want to use an image surface and gdk_memory_texture_new().
 </para></answer>
 </qandaentry>
 
