@@ -13793,7 +13793,7 @@ gtk_tree_view_search_window_hide (GtkWidget   *search_window,
       /* send focus-in event */
       send_focus_change (GTK_WIDGET (tree_view->priv->search_entry), device, FALSE);
       gtk_widget_hide (search_window);
-      gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+      gtk_editable_set_text (GTK_EDITABLE(tree_view->priv->search_entry), "");
       send_focus_change (GTK_WIDGET (tree_view), device, TRUE);
     }
 }
