@@ -22,6 +22,7 @@
 
 #include "gtkimcontextxim.h"
 #include "gtkimmoduleprivate.h"
+#include "gtkroot.h"
 
 #include "gtk/gtkintl.h"
 
@@ -1526,32 +1527,13 @@ on_client_widget_hierarchy_changed (GtkWidget       *widget,
   update_in_toplevel (context_xim);
 }
 
-/* Finds the GtkWidget that owns the window, or if none, the
- * widget owning the nearest parent that has a widget.
- */
-static GtkWidget *
-widget_for_window (GdkSurface *window)
-{
-  while (window)
-    {
-      gpointer user_data;
-      gdk_surface_get_user_data (window, &user_data);
-      if (user_data)
-	return user_data;
-
-      window = gdk_surface_get_parent (window);
-    }
-
-  return NULL;
-}
-
 /* Called when context_xim->client_surface changes; takes care of
  * removing and/or setting up our watches for the toplevel
  */
 static void
 update_client_widget (GtkIMContextXIM *context_xim)
 {
-  GtkWidget *new_client_widget = widget_for_window (context_xim->client_surface);
+  GtkWidget *new_client_widget = gtk_root_get_for_surface (context_xim->client_surface);
 
   if (new_client_widget != context_xim->client_widget)
     {
