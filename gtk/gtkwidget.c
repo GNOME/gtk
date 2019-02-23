@@ -11426,6 +11426,16 @@ surface_expose (GdkSurface     *surface,
   return TRUE;
 }
 
+static gboolean
+surface_event (GdkSurface *surface,
+               GdkEvent   *event,
+               GtkWidget  *widget)
+{
+  gtk_main_do_event (event);
+
+  return TRUE;
+}
+
 /**
  * gtk_widget_register_surface:
  * @widget: a #GtkWidget
@@ -11455,6 +11465,7 @@ gtk_widget_register_surface (GtkWidget    *widget,
   gdk_surface_set_user_data (surface, widget);
 
   g_signal_connect (surface, "render", G_CALLBACK (surface_expose), widget);
+  g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
 }
 
 /**
