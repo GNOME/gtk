@@ -452,8 +452,8 @@ static void     gtk_file_chooser_widget_dispose      (GObject               *obj
 static void     gtk_file_chooser_widget_realize        (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_map            (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_unmap          (GtkWidget             *widget);
-static void     gtk_file_chooser_widget_hierarchy_changed (GtkWidget          *widget,
-                                                            GtkWidget          *previous_toplevel);
+static void     gtk_file_chooser_widget_root           (GtkWidget             *widget);
+static void     gtk_file_chooser_widget_unroot         (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_style_updated   (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_display_changed (GtkWidget            *widget,
                                                          GdkDisplay           *previous_display);
@@ -3573,31 +3573,38 @@ toplevel_set_focus_cb (GtkWindow             *window,
  * was last focused at the time our “should_respond” method gets called.
  */
 static void
-gtk_file_chooser_widget_hierarchy_changed (GtkWidget *widget,
-                                            GtkWidget *previous_toplevel)
+gtk_file_chooser_widget_root (GtkWidget *widget)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkWidget *toplevel;
+
+  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->root (widget);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  g_assert (priv->toplevel_set_focus_id == 0);
+  priv->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
+                                                  G_CALLBACK (toplevel_set_focus_cb), impl);
+  priv->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
+}
+
+static void
+gtk_file_chooser_widget_unroot (GtkWidget *widget)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (widget);
-
-  if (previous_toplevel &&
-      priv->toplevel_set_focus_id != 0)
+  if (toplevel && priv->toplevel_set_focus_id != 0)
     {
-      g_signal_handler_disconnect (previous_toplevel,
-                                   priv->toplevel_set_focus_id);
+      g_signal_handler_disconnect (toplevel, priv->toplevel_set_focus_id);
       priv->toplevel_set_focus_id = 0;
       priv->toplevel_last_focus_widget = NULL;
     }
 
-  if (gtk_widget_is_toplevel (toplevel))
-    {
-      g_assert (priv->toplevel_set_focus_id == 0);
-      priv->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
-                                                      G_CALLBACK (toplevel_set_focus_cb), impl);
-      priv->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
-    }
+  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
 }
 
 /* Changes the icons wherever it is needed */
@@ -7994,7 +8001,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->realize = gtk_file_chooser_widget_realize;
   widget_class->map = gtk_file_chooser_widget_map;
   widget_class->unmap = gtk_file_chooser_widget_unmap;
-  widget_class->hierarchy_changed = gtk_file_chooser_widget_hierarchy_changed;
+  widget_class->root = gtk_file_chooser_widget_root;
+  widget_class->unroot = gtk_file_chooser_widget_unroot;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->display_changed = gtk_file_chooser_widget_display_changed;
   widget_class->measure = gtk_file_chooser_widget_measure;
