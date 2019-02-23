@@ -322,6 +322,14 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
+  /**
+   * GdkSurface::size-changed:
+   * @surface: the #GdkSurface
+   * @width: the new width
+   * @height: the new height
+   *
+   * Emitted when the size of @surface is changed.
+   */
   signals[SIZE_CHANGED] =
     g_signal_new (g_intern_static_string ("size-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -335,6 +343,15 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_INT,
                   G_TYPE_INT);
 
+  /**
+   * GdkSurface::render:
+   * @surface: the #GdkSurface
+   * @region: the region that needs to be redrawn
+   *
+   * Emitted when part of the surface needs to be redrawn.
+   *
+   * Returns: %TRUE to indicate that the signal has been handled
+   */ 
   signals[RENDER] =
     g_signal_new (g_intern_static_string ("render"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -347,6 +364,15 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   1,
                   CAIRO_GOBJECT_TYPE_REGION);
 
+  /**
+   * GdkSurface::event:
+   * @surface: the #GdkSurface
+   * @event: an input event
+   *
+   * Emitted when GDK receives an input event for @surface.
+   *
+   * Returns: %TRUE to indicate that the event has been handled
+   */ 
   signals[EVENT] =
     g_signal_new (g_intern_static_string ("event"),
                   G_OBJECT_CLASS_TYPE (object_class),
