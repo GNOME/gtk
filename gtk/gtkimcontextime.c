@@ -121,9 +121,6 @@ gtk_im_context_ime_message_filter               (GdkWin32Display *display,
 static void get_window_position                 (GdkSurface       *win,
                                                  gint            *x,
                                                  gint            *y);
-static void cb_client_widget_hierarchy_changed  (GtkWidget       *widget,
-                                                 GtkWidget       *widget2,
-                                                 GtkIMContextIME *context_ime);
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
 			 gtk_im_module_ensure_extension_point ();
@@ -157,7 +154,6 @@ static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 {
   context_ime->client_surface         = NULL;
-  context_ime->toplevel               = NULL;
   context_ime->use_preedit            = TRUE;
   context_ime->preediting             = FALSE;
   context_ime->opened                 = FALSE;
@@ -687,26 +683,12 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
     {
       gdk_win32_display_add_filter (gdk_surface_get_display (toplevel),
                                     gtk_im_context_ime_message_filter, context_ime);
-      context_ime->toplevel = toplevel;
     }
   else
     {
       g_warning ("gtk_im_context_ime_focus_in(): "
                  "cannot find toplevel window.");
       return;
-    }
-
-  /* trace reparenting (probably no need) */
-  gdk_surface_get_user_data (context_ime->client_surface, (gpointer) & widget);
-  if (GTK_IS_WIDGET (widget))
-    {
-      g_signal_connect (widget, "hierarchy-changed",
-                        G_CALLBACK (cb_client_widget_hierarchy_changed),
-                        context_ime);
-    }
-  else
-    {
-      /* warning? */
     }
 
   /* restore preedit context */
@@ -794,15 +776,6 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
       context_ime->preediting = FALSE;
     }
 
-  /* remove signal handler */
-  gdk_surface_get_user_data (context_ime->client_surface, (gpointer) & widget);
-  if (GTK_IS_WIDGET (widget))
-    {
-      g_signal_handlers_disconnect_by_func
-        (G_OBJECT (widget),
-         G_CALLBACK (cb_client_widget_hierarchy_changed), context_ime);
-    }
-
   /* remove event fileter */
   toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (GDK_IS_SURFACE (toplevel))
@@ -810,7 +783,6 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
       gdk_win32_display_remove_filter (gdk_surface_get_display (toplevel),
                                        gtk_im_context_ime_message_filter,
                                        context_ime);
-      context_ime->toplevel = NULL;
     }
   else
     {
@@ -1017,6 +989,7 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
   GtkIMContextIME *context_ime;
   HWND hwnd;
   HIMC himc;
+  GdkSurface *toplevel;
   GdkWin32MessageFilterReturn retval = GDK_WIN32_MESSAGE_FILTER_CONTINUE;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (data), retval);
@@ -1026,7 +999,8 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
   if (!context_ime->focus)
     return retval;
 
-  if (gdk_win32_surface_get_impl_hwnd (context_ime->toplevel) != msg->hwnd)
+  toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
+  if (gdk_win32_surface_get_impl_hwnd (toplevel) != msg->hwnd)
     return retval;
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
@@ -1162,30 +1136,4 @@ get_window_position (GdkSurface *surface, gint *x, gint *y)
 
   if (parent && parent != toplevel)
     get_window_position (parent, x, y);
-}
-
-
-/*
- *  probably, this handler isn't needed.
- */
-static void
-cb_client_widget_hierarchy_changed (GtkWidget       *widget,
-                                    GtkWidget       *widget2,
-                                    GtkIMContextIME *context_ime)
-{
-  GdkSurface *new_toplevel;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context_ime));
-
-  if (!context_ime->client_surface)
-    return;
-  if (!context_ime->focus)
-    return;
-
-  new_toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
-  if (context_ime->toplevel == new_toplevel)
-    return;
-
-  context_ime->toplevel = new_toplevel;
 }
