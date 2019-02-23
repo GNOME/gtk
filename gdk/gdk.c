@@ -108,14 +108,6 @@
  * of deprecated GDK APIs.
  */
 
-typedef struct _GdkPredicate  GdkPredicate;
-
-struct _GdkPredicate
-{
-  GdkEventFunc func;
-  gpointer data;
-};
-
 typedef struct _GdkThreadsDispatch GdkThreadsDispatch;
 
 struct _GdkThreadsDispatch
