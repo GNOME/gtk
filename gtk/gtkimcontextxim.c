@@ -1520,7 +1520,7 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
  */
 static void
 on_client_widget_hierarchy_changed (GtkWidget       *widget,
-				    GtkWidget       *old_toplevel,
+				    GParamSpec      *pspec,
 				    GtkIMContextXIM *context_xim)
 {
   update_in_toplevel (context_xim);
@@ -1564,7 +1564,7 @@ update_client_widget (GtkIMContextXIM *context_xim)
       context_xim->client_widget = new_client_widget;
       if (context_xim->client_widget)
 	{
-	  g_signal_connect (context_xim->client_widget, "hierarchy-changed",
+	  g_signal_connect (context_xim->client_widget, "notify::root",
 			    G_CALLBACK (on_client_widget_hierarchy_changed),
 			    context_xim);
 	}
