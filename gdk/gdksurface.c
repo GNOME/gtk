@@ -99,6 +99,7 @@ enum {
   MOVED_TO_RECT,
   SIZE_CHANGED,
   RENDER,
+  EVENT,
   LAST_SIGNAL
 };
 
@@ -345,6 +346,18 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_BOOLEAN,
                   1,
                   CAIRO_GOBJECT_TYPE_REGION);
+
+  signals[EVENT] =
+    g_signal_new (g_intern_static_string ("event"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  g_signal_accumulator_true_handled,
+                  NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  GDK_TYPE_EVENT);
 }
 
 static void
@@ -5462,12 +5475,17 @@ gdk_synthesize_surface_state (GdkSurface     *surface,
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
+  gboolean handled = FALSE;
   if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
     {
       g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
                      event->configure.width, event->configure.height);
-      return TRUE;
+      handled = TRUE;
+    }
+  else
+    {
+      g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
 
-  return FALSE;
+  return handled;
 }
