@@ -703,6 +703,7 @@ static GQuark           quark_widget_path = 0;
 static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
+static GQuark           quark_surface_widget = 0;
 
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
@@ -898,6 +899,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
+  quark_surface_widget = g_quark_from_static_string ("gtk-widget-surface-widget");
 
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
   cpn_context.quark_notify_queue = g_quark_from_static_string ("GtkWidget-child-property-notify-queue");
@@ -8598,13 +8600,10 @@ static gboolean
 is_my_surface (GtkWidget *widget,
 	       GdkSurface *surface)
 {
-  gpointer user_data;
-
   if (!surface)
     return FALSE;
 
-  gdk_surface_get_user_data (surface, &user_data);
-  return (user_data == widget);
+  return gtk_widget_for_surface (surface) == widget;
 }
 
 /*
@@ -11428,6 +11427,18 @@ surface_event (GdkSurface *surface,
   return TRUE;
 }
 
+GtkWidget *
+gtk_widget_for_surface (GdkSurface *surface)
+{
+  gpointer user_data;
+
+  user_data = g_object_get_qdata (surface, quark_surface_widget);
+  if (user_data)
+    return GTK_WIDGET (user_data);
+
+  return NULL;
+}
+
 /**
  * gtk_widget_register_surface:
  * @widget: a #GtkWidget
@@ -11446,15 +11457,11 @@ void
 gtk_widget_register_surface (GtkWidget    *widget,
 			     GdkSurface    *surface)
 {
-  gpointer user_data;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  gdk_surface_get_user_data (surface, &user_data);
-  g_assert (user_data == NULL);
-
-  gdk_surface_set_user_data (surface, widget);
+  g_assert (gtk_widget_for_surface (surface) == NULL);
+  g_object_set_qdata (surface, quark_surface_widget, widget);
 
   g_signal_connect (surface, "render", G_CALLBACK (surface_expose), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
@@ -11478,9 +11485,9 @@ gtk_widget_unregister_surface (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  gdk_surface_get_user_data (surface, &user_data);
+  user_data = g_object_get_qdata (surface, quark_surface_widget);
   g_assert (user_data == widget);
-  gdk_surface_set_user_data (surface, NULL);
+  g_object_set_qdata (surface, quark_surface_widget, NULL);
 
   g_signal_handlers_disconnect_by_func (surface, surface_expose, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);

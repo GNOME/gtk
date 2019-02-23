@@ -337,6 +337,8 @@ gboolean          gtk_widget_run_controllers               (GtkWidget           
                                                             const GdkEvent      *event,
                                                             GtkPropagationPhase  phase);
 
+gpointer          gtk_widget_for_surface                   (GdkSurface *surface);
+
 /* inline getters */
 
 static inline GtkWidget *
