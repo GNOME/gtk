@@ -1043,45 +1043,6 @@ gdk_surface_destroy (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_set_user_data:
- * @surface: a #GdkSurface
- * @user_data: (allow-none) (type GObject.Object): user data
- *
- * For most purposes this function is deprecated in favor of
- * g_object_set_data(). However, for historical reasons GTK+ stores
- * the #GtkWidget that owns a #GdkSurface as user data on the
- * #GdkSurface. So, custom widget implementations should use
- * this function for that. If GTK+ receives an event for a #GdkSurface,
- * and the user data for the surface is non-%NULL, GTK+ will assume the
- * user data is a #GtkWidget, and forward the event to that widget.
- *
- **/
-void
-gdk_surface_set_user_data (GdkSurface *surface,
-                           gpointer   user_data)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  surface->user_data = user_data;
-}
-
-/**
- * gdk_surface_get_user_data:
- * @surface: a #GdkSurface
- * @data: (out): return location for user data
- *
- * Retrieves the user data for @surface, which is normally the widget
- * that @surface belongs to. See gdk_surface_set_user_data().
- *
- **/
-void
-gdk_surface_get_user_data (GdkSurface *surface,
-                           gpointer  *data)
-{
-  *data = surface->user_data;
-}
-
-/**
  * gdk_surface_get_surface_type:
  * @surface: a #GdkSurface
  *
@@ -1264,49 +1225,6 @@ gdk_surface_peek_children (GdkSurface *surface)
 
   return surface->children;
 }
-
-
-/**
- * gdk_surface_get_children_with_user_data:
- * @surface: a #GdkSurface
- * @user_data: user data to look for
- *
- * Gets the list of children of @surface known to GDK with a
- * particular @user_data set on it.
- *
- * The returned list must be freed, but the elements in the
- * list need not be.
- *
- * The list is returned in (relative) stacking order, i.e. the
- * lowest surface is first.
- *
- * Returns: (transfer container) (element-type GdkSurface):
- *     list of child surfaces inside @surface
- **/
-GList *
-gdk_surface_get_children_with_user_data (GdkSurface *surface,
-                                         gpointer   user_data)
-{
-  GdkSurface *child;
-  GList *res, *l;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return NULL;
-
-  res = NULL;
-  for (l = surface->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      if (child->user_data == user_data)
-        res = g_list_prepend (res, child);
-    }
-
-  return res;
-}
-
 
 /**
  * gdk_surface_is_visible:

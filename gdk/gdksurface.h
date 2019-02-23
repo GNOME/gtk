@@ -491,9 +491,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_focus                 (GdkSurface     *surface,
                                                  guint32        timestamp);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_user_data         (GdkSurface     *surface,
-                                                 gpointer       user_data);
-GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_accept_focus      (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_accept_focus      (GdkSurface     *surface,
@@ -595,9 +592,6 @@ GDK_AVAILABLE_IN_ALL
 GdkCursor    *gdk_surface_get_device_cursor (GdkSurface     *surface,
                                              GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_user_data  (GdkSurface      *surface,
-                                          gpointer        *data);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_get_geometry   (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y,
@@ -666,9 +660,6 @@ GDK_AVAILABLE_IN_ALL
 GList *       gdk_surface_get_children   (GdkSurface      *surface);
 GDK_AVAILABLE_IN_ALL
 GList *       gdk_surface_peek_children   (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-GList *       gdk_surface_get_children_with_user_data (GdkSurface *surface,
-                                                       gpointer   user_data);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_list   (GdkSurface       *surface,
