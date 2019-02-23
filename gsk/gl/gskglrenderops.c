@@ -63,63 +63,55 @@ static void
 extract_matrix_metadata (const graphene_matrix_t *m,
                          OpsMatrixMetadata       *md)
 {
-  graphene_vec3_t col1;
-  graphene_vec3_t col2;
+  switch (md->category)
+    {
+    case GSK_MATRIX_CATEGORY_IDENTITY:
+      md->scale_x = 1;
+      md->scale_y = 1;
+    break;
 
-  /* Translate */
-  md->translate_x = graphene_matrix_get_value (m, 3, 0);
-  md->translate_y = graphene_matrix_get_value (m, 3, 1);
+    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+      md->translate_x = graphene_matrix_get_value (m, 3, 0);
+      md->translate_y = graphene_matrix_get_value (m, 3, 1);
+      md->scale_x = 1;
+      md->scale_y = 1;
+    break;
 
-  /* Scale */
-  graphene_vec3_init (&col1,
-                      graphene_matrix_get_value (m, 0, 0),
-                      graphene_matrix_get_value (m, 1, 0),
-                      graphene_matrix_get_value (m, 2, 0));
+    case GSK_MATRIX_CATEGORY_UNKNOWN:
+    case GSK_MATRIX_CATEGORY_ANY:
+    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+      {
+        graphene_vec3_t col1;
+        graphene_vec3_t col2;
 
-  graphene_vec3_init (&col2,
-                      graphene_matrix_get_value (m, 0, 1),
-                      graphene_matrix_get_value (m, 1, 1),
-                      graphene_matrix_get_value (m, 2, 1));
+        md->translate_x = graphene_matrix_get_value (m, 3, 0);
+        md->translate_y = graphene_matrix_get_value (m, 3, 1);
 
-  md->scale_x = graphene_vec3_length (&col1);
-  md->scale_y = graphene_vec3_length (&col2);
+        graphene_vec3_init (&col1,
+                            graphene_matrix_get_value (m, 0, 0),
+                            graphene_matrix_get_value (m, 1, 0),
+                            graphene_matrix_get_value (m, 2, 0));
 
-  /* A simple matrix (in our case) is one that doesn't do anything but scale
-   * and/or translate.
-   *
-   * For orher matrices, we fall back to offscreen drawing.
-   */
-  md->simple = TRUE;
-  {
-    static const guchar check_zero[4][4] = {
-      { 0, 1, 0, 1 },        /* If any of the values marked as '1' here is non-zero, */
-      { 1, 0, 0, 1 },        /* We have to resort to offscreen drawing later on. */
-      { 1, 1, 0, 1 },
-      { 0, 0, 0, 0 },
-    };
-    int x, y;
+        graphene_vec3_init (&col2,
+                            graphene_matrix_get_value (m, 0, 1),
+                            graphene_matrix_get_value (m, 1, 1),
+                            graphene_matrix_get_value (m, 2, 1));
 
-    for (x = 0; x < 4; x ++)
-      for (y = 0; y < 4; y ++)
-          if (check_zero[y][x] &&
-              graphene_matrix_get_value (m, y, x) != 0.0f)
-            {
-              md->simple = FALSE;
-              goto out;
-            }
-  }
-
-out:
-  md->only_translation = (md->simple && md->scale_x == 1 && md->scale_y == 1);
+        md->scale_x = graphene_vec3_length (&col1);
+        md->scale_y = graphene_vec3_length (&col2);
+      }
+    break;
+    default:
+      {}
+    }
 }
-
 
 void
 ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                 const graphene_rect_t *src,
                                 graphene_rect_t       *dst)
 {
-  const float scale = ops_get_scale (builder);
   const MatrixStackEntry *head;
 
   g_assert (builder->mv_stack != NULL);
@@ -127,34 +119,32 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
 
   head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  if (head->metadata.only_translation)
+  switch (head->metadata.category)
     {
+    case GSK_MATRIX_CATEGORY_IDENTITY:
       *dst = *src;
-      graphene_rect_offset (dst,
-                            head->metadata.translate_x,
-                            head->metadata.translate_y);
-    }
-  else
-    {
+      break;
+
+    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+      *dst = *src;
+      dst->origin.x += head->metadata.translate_x;
+      dst->origin.y += head->metadata.translate_y;
+      break;
+
+    /* TODO: Handle scale */
+    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+    case GSK_MATRIX_CATEGORY_UNKNOWN:
+    case GSK_MATRIX_CATEGORY_ANY:
+    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    default:
       graphene_matrix_transform_bounds (builder->current_modelview,
                                         src,
                                         dst);
+
     }
 
-  graphene_rect_offset (dst, builder->dx * scale, builder->dy * scale);
-}
-
-gboolean
-ops_modelview_is_simple (const RenderOpBuilder *builder)
-{
-  const MatrixStackEntry *head;
-
-  g_assert (builder->mv_stack != NULL);
-  g_assert (builder->mv_stack->len >= 1);
-
-  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
-
-  return head->metadata.simple;
+  dst->origin.x += builder->dx * head->metadata.scale_x;
+  dst->origin.y += builder->dy * head->metadata.scale_y;
 }
 
 void
@@ -303,8 +293,8 @@ ops_has_clip (RenderOpBuilder *self)
 }
 
 static void
-ops_set_modelview (RenderOpBuilder         *builder,
-                   const graphene_matrix_t *modelview)
+ops_set_modelview_internal (RenderOpBuilder         *builder,
+                            const graphene_matrix_t *modelview)
 {
   RenderOp op;
 
@@ -338,9 +328,12 @@ ops_set_modelview (RenderOpBuilder         *builder,
     builder->current_program_state->modelview = *modelview;
 }
 
+/* This sets the modelview to the given one without looking at the
+ * one that's currently set */
 void
-ops_push_modelview (RenderOpBuilder         *builder,
-                    const graphene_matrix_t *mv)
+ops_set_modelview (RenderOpBuilder         *builder,
+                   const graphene_matrix_t *mv,
+                   GskMatrixCategory        mv_category)
 {
   MatrixStackEntry *entry;
 
@@ -353,10 +346,64 @@ ops_push_modelview (RenderOpBuilder         *builder,
   entry = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
   entry->matrix = *mv;
+  entry->metadata.category = mv_category;
+
+  entry->metadata.dx_before = builder->dx;
+  entry->metadata.dy_before = builder->dy;
   extract_matrix_metadata (mv, &entry->metadata);
 
+  builder->dx = 0;
+  builder->dy = 0;
   builder->current_modelview = &entry->matrix;
-  ops_set_modelview (builder, mv);
+  ops_set_modelview_internal (builder, &entry->matrix);
+}
+
+/* This sets the given modelview to the one we get when multiplying
+ * the given modelview with the current one. */
+void
+ops_push_modelview (RenderOpBuilder         *builder,
+                    const graphene_matrix_t *mv,
+                    GskMatrixCategory        mv_category)
+{
+  float scale = ops_get_scale (builder);
+  MatrixStackEntry *entry;
+
+  if (G_UNLIKELY (builder->mv_stack == NULL))
+    builder->mv_stack = g_array_new (FALSE, TRUE, sizeof (MatrixStackEntry));
+
+  g_assert (builder->mv_stack != NULL);
+
+  g_array_set_size (builder->mv_stack, builder->mv_stack->len + 1);
+  entry = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
+
+  if (G_LIKELY (builder->mv_stack->len >= 2))
+    {
+      const MatrixStackEntry *cur;
+
+      cur = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 2);
+      /* Multiply given matrix with current modelview */
+
+      graphene_matrix_multiply (mv, &cur->matrix, &entry->matrix);
+      graphene_matrix_translate (&entry->matrix,
+                                 &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
+
+      entry->metadata.category = MIN (mv_category, cur->metadata.category);
+    }
+  else
+    {
+      entry->matrix = *mv;
+      entry->metadata.category = mv_category;
+    }
+
+  entry->metadata.dx_before = builder->dx;
+  entry->metadata.dy_before = builder->dy;
+
+  extract_matrix_metadata (mv, &entry->metadata);
+
+  builder->dx = 0;
+  builder->dy = 0;
+  builder->current_modelview = &entry->matrix;
+  ops_set_modelview_internal (builder, &entry->matrix);
 }
 
 void
@@ -368,6 +415,10 @@ ops_pop_modelview (RenderOpBuilder *builder)
   g_assert (builder->mv_stack);
   g_assert (builder->mv_stack->len >= 1);
 
+  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
+  builder->dx = head->metadata.dx_before;
+  builder->dy = head->metadata.dy_before;
+
   builder->mv_stack->len --;
   head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
   m = &head->matrix;
@@ -375,7 +426,7 @@ ops_pop_modelview (RenderOpBuilder *builder)
   if (builder->mv_stack->len >= 1)
     {
       builder->current_modelview = m;
-      ops_set_modelview (builder, m);
+      ops_set_modelview_internal (builder, m);
     }
   else
     {
@@ -684,6 +735,9 @@ ops_draw (RenderOpBuilder     *builder,
   builder->buffer_size += sizeof (GskQuadVertex) * GL_N_VERTICES;
 }
 
+/* The offset is only valid for the current modelview.
+ * Setting a new modelview will add the offset to that matrix
+ * and reset the internal offset to 0. */
 void
 ops_offset (RenderOpBuilder *builder,
             float            x,

@@ -249,6 +249,8 @@ node_supports_transform (GskRenderNode *node)
       case GSK_OPACITY_NODE:
       case GSK_COLOR_MATRIX_NODE:
       case GSK_TEXTURE_NODE:
+      case GSK_TRANSFORM_NODE:
+      case GSK_CROSS_FADE_NODE:
         return TRUE;
 
       default:
@@ -769,7 +771,6 @@ render_transform_node (GskGLRenderer   *self,
   const graphene_matrix_t *node_transform = gsk_transform_node_peek_transform (node);
   GskRenderNode *child = gsk_transform_node_get_child (node);
 
-
   switch (category)
     {
     case GSK_MATRIX_CATEGORY_IDENTITY:
@@ -789,23 +790,9 @@ render_transform_node (GskGLRenderer   *self,
 
     case GSK_MATRIX_CATEGORY_2D_AFFINE:
       {
-        const float scale = ops_get_scale (builder);
-        graphene_matrix_t transform, transformed_mv;
-        const float dx = builder->dx;
-        const float dy = builder->dy;
-
-        graphene_matrix_init_from_matrix (&transform, node_transform);
-        graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
-        graphene_matrix_translate (&transformed_mv,
-                                   &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
-
-        builder->dx = 0;
-        builder->dy = 0;
-        ops_push_modelview (builder, &transformed_mv);
+        ops_push_modelview (builder, node_transform, category);
         gsk_gl_renderer_add_render_ops (self, child, builder);
         ops_pop_modelview (builder);
-        builder->dx = dx;
-        builder->dy = dy;
       }
     break;
 
@@ -814,8 +801,6 @@ render_transform_node (GskGLRenderer   *self,
     case GSK_MATRIX_CATEGORY_INVERTIBLE:
     default:
       {
-        const float scale = ops_get_scale (builder);
-        graphene_matrix_t transform, transformed_mv;
         const float min_x = child->bounds.origin.x;
         const float min_y = child->bounds.origin.y;
         const float max_x = min_x + child->bounds.size.width;
@@ -823,53 +808,56 @@ render_transform_node (GskGLRenderer   *self,
         int texture_id;
         gboolean is_offscreen;
 
-        graphene_matrix_init_from_matrix (&transform, node_transform);
-        graphene_matrix_multiply (&transform, builder->current_modelview, &transformed_mv);
-        graphene_matrix_translate (&transformed_mv,
-                                   &(graphene_point3d_t) { builder->dx * scale, builder->dy * scale, 0});
+        ops_push_modelview (builder, node_transform, category);
 
-        ops_push_modelview (builder, &transformed_mv);
-        /* For non-trivial transforms, we draw everything on a texture and then
-         * draw the texture transformed. */
-        /* TODO: We should compute a modelview containing only the "non-trivial"
-         *       part (e.g. the rotation) and use that. We want to keep the scale
-         *       for the texture.
-         */
-        add_offscreen_ops (self, builder,
-                           &child->bounds,
-                           child,
-                           &texture_id, &is_offscreen,
-                           RESET_CLIP | RESET_OPACITY);
-        ops_set_texture (builder, texture_id);
-        ops_set_program (builder, &self->blit_program);
-
-        if (is_offscreen)
+        if (node_supports_transform (child))
           {
-            const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-              { { min_x, min_y }, { 0, 1 }, },
-              { { min_x, max_y }, { 0, 0 }, },
-              { { max_x, min_y }, { 1, 1 }, },
-
-              { { max_x, max_y }, { 1, 0 }, },
-              { { min_x, max_y }, { 0, 0 }, },
-              { { max_x, min_y }, { 1, 1 }, },
-            };
-
-            ops_draw (builder, offscreen_vertex_data);
+            gsk_gl_renderer_add_render_ops (self, child, builder);
           }
         else
           {
-            const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
-              { { min_x, min_y }, { 0, 0 }, },
-              { { min_x, max_y }, { 0, 1 }, },
-              { { max_x, min_y }, { 1, 0 }, },
+            /* For non-trivial transforms, we draw everything on a texture and then
+             * draw the texture transformed. */
+            /* TODO: We should compute a modelview containing only the "non-trivial"
+             *       part (e.g. the rotation) and use that. We want to keep the scale
+             *       for the texture.
+             */
+            add_offscreen_ops (self, builder,
+                               &child->bounds,
+                               child,
+                               &texture_id, &is_offscreen,
+                               RESET_CLIP | RESET_OPACITY);
+            ops_set_texture (builder, texture_id);
+            ops_set_program (builder, &self->blit_program);
 
-              { { max_x, max_y }, { 1, 1 }, },
-              { { min_x, max_y }, { 0, 1 }, },
-              { { max_x, min_y }, { 1, 0 }, },
-            };
+            if (is_offscreen)
+              {
+                const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
+                  { { min_x, min_y }, { 0, 1 }, },
+                  { { min_x, max_y }, { 0, 0 }, },
+                  { { max_x, min_y }, { 1, 1 }, },
 
-            ops_draw (builder, onscreen_vertex_data);
+                  { { max_x, max_y }, { 1, 0 }, },
+                  { { min_x, max_y }, { 0, 0 }, },
+                  { { max_x, min_y }, { 1, 1 }, },
+                };
+
+                ops_draw (builder, offscreen_vertex_data);
+              }
+            else
+              {
+                const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
+                  { { min_x, min_y }, { 0, 0 }, },
+                  { { min_x, max_y }, { 0, 1 }, },
+                  { { max_x, min_y }, { 1, 0 }, },
+
+                  { { max_x, max_y }, { 1, 1 }, },
+                  { { min_x, max_y }, { 0, 1 }, },
+                  { { max_x, min_y }, { 1, 0 }, },
+                };
+
+                ops_draw (builder, onscreen_vertex_data);
+              }
           }
 
         ops_pop_modelview (builder);
@@ -1306,7 +1294,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       op.op = OP_CLEAR;
       ops_add (builder, &op);
       prev_projection = ops_set_projection (builder, &item_proj);
-      ops_push_modelview (builder, &identity);
+      ops_set_modelview (builder, &identity, GSK_MATRIX_CATEGORY_IDENTITY);
       prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       /* Draw outline */
@@ -2368,7 +2356,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_DEBUG_NODE:
-      gsk_gl_renderer_add_render_ops (self, 
+      gsk_gl_renderer_add_render_ops (self,
                                       gsk_debug_node_get_child (node),
                                       builder);
     break;
@@ -2523,7 +2511,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   op.op = OP_CLEAR;
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
-  ops_push_modelview (builder, &identity);
+  ops_set_modelview (builder, &identity, GSK_MATRIX_CATEGORY_IDENTITY);
   prev_viewport = ops_set_viewport (builder,
                                     &GRAPHENE_RECT_INIT (bounds->origin.x * scale,
                                                          bounds->origin.y * scale,
@@ -2783,7 +2771,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_viewport = *viewport;
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
-  ops_push_modelview (&render_op_builder, &modelview);
+  ops_set_modelview (&render_op_builder, &modelview,
+                     scale_factor == 1 ? GSK_MATRIX_CATEGORY_IDENTITY : GSK_MATRIX_CATEGORY_2D_AFFINE);
 
   /* Initial clip is self->render_region! */
   if (self->render_region != NULL)

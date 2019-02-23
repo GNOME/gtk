@@ -8,6 +8,7 @@
 #include "gskgldriverprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskglrendererprivate.h"
+#include "gskrendernodeprivate.h"
 
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 11
@@ -21,8 +22,10 @@ typedef struct
   float scale_x;
   float scale_y;
 
-  guint simple : 1;
-  guint only_translation : 1;
+  float dx_before;
+  float dy_before;
+
+  GskMatrixCategory category;
 } OpsMatrixMetadata;
 
 typedef struct
@@ -277,9 +280,12 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
 
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,
-                                          const graphene_matrix_t *mv);
+                                          const graphene_matrix_t *mv,
+                                          GskMatrixCategory        mv_category);
+void              ops_set_modelview      (RenderOpBuilder         *builder,
+                                          const graphene_matrix_t *mv,
+                                          GskMatrixCategory        mv_category);
 void              ops_pop_modelview      (RenderOpBuilder         *builder);
-gboolean          ops_modelview_is_simple (const RenderOpBuilder  *builder);
 float             ops_get_scale          (const RenderOpBuilder   *builder);
 
 void              ops_set_program        (RenderOpBuilder         *builder,
