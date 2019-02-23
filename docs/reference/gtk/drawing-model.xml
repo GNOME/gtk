@@ -198,6 +198,7 @@
         for the resulting drawing to be associated with the right surface. GSK has
         renderers for OpenGL, Vulkan and cairo.
       </para>
+    </refsect2>
 
     <refsect2 id="hierarchical-drawing">
       <title>Hierarchical drawing</title>
