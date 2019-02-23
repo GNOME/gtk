@@ -814,28 +814,33 @@ destroy_controller (GtkEventController *controller)
 }
 
 static void
-on_hierarchy_changed (GtkWidget *widget,
-                      GtkWidget *previous_toplevel)
+root (GtkWidget *widget)
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
-  if (previous_toplevel)
-    g_object_set_data (G_OBJECT (previous_toplevel), "object-controller", NULL);
+  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->root (widget);
 
   toplevel = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "object-controller", controller, (GDestroyNotify)destroy_controller);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (wt->priv->search_bar),
-                                         toplevel);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (wt->priv->search_bar), toplevel);
+}
+
+static void
+unroot (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  g_object_set_data (G_OBJECT (toplevel), "object-controller", NULL);
+
+  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->unroot (widget);
 }
 
 static gboolean
@@ -1191,6 +1196,9 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
 
   object_class->dispose = gtk_inspector_object_tree_dispose;
 
+  widget_class->root = root;
+  widget_class->unroot = unroot;
+
   signals[OBJECT_ACTIVATED] =
       g_signal_new ("object-activated",
                     G_OBJECT_CLASS_TYPE (klass),
@@ -1216,7 +1224,6 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, type_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, name_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, label_size_group);
-  gtk_widget_class_bind_template_callback (widget_class, on_hierarchy_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, next_match);
