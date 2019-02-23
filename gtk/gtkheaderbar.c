@@ -1755,10 +1755,11 @@ surface_state_changed (GtkWidget *widget)
 }
 
 static void
-gtk_header_bar_hierarchy_changed (GtkWidget *widget,
-                                  GtkWidget *previous_toplevel)
+gtk_header_bar_root (GtkWidget *widget)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+
+  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->root (widget);
 
   _gtk_header_bar_update_window_buttons (bar);
 }
@@ -1779,7 +1780,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->measure = gtk_header_bar_measure;
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
-  widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;
+  widget_class->root = gtk_header_bar_root;
 
   container_class->add = gtk_header_bar_add;
   container_class->remove = gtk_header_bar_remove;
