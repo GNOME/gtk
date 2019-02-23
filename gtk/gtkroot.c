@@ -102,3 +102,24 @@ gtk_root_get_surface_transform (GtkRoot *self,
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_surface_transform (self, x, y);
 }
+
+/**
+ * gtk_root_get_for_surface:
+ * @surface: a #GdkSurface
+ *
+ * Finds the GtkRoot associated with the surface.
+ * 
+ * Returns: (transfer none): the #GtkRoot that is associated with @surface
+ */
+GtkWidget *
+gtk_root_get_for_surface (GdkSurface *surface)
+{
+  gpointer user_data;
+
+  gdk_surface_get_user_data (surface, &user_data);
+
+  if (user_data && GTK_IS_ROOT (user_data))
+    return GTK_WIDGET (user_data);
+
+  return NULL;
+}

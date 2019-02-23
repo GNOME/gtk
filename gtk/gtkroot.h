@@ -53,6 +53,8 @@ struct _GtkRootInterface
                                                          int                    *y);
 };
 
+GDK_AVAILABLE_IN_ALL
+GtkWidget * gtk_root_get_for_surface (GdkSurface *surface);
 
 G_END_DECLS
 
