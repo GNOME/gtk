@@ -240,7 +240,6 @@ gdk_surface_thaw_updates
 gdk_surface_get_frame_clock
 
 <SUBSECTION>
-gdk_surface_set_user_data
 gdk_surface_set_accept_focus
 gdk_surface_get_accept_focus
 gdk_surface_set_focus_on_map
@@ -252,7 +251,6 @@ gdk_surface_set_title
 GDK_PARENT_RELATIVE
 gdk_surface_set_cursor
 gdk_surface_get_cursor
-gdk_surface_get_user_data
 gdk_surface_get_geometry
 gdk_surface_set_geometry_hints
 gdk_surface_get_width
@@ -278,7 +276,6 @@ GdkModifierIntent
 gdk_surface_get_parent
 gdk_surface_get_toplevel
 gdk_surface_get_children
-gdk_surface_get_children_with_user_data
 gdk_surface_peek_children
 gdk_surface_set_icon_name
 gdk_surface_set_transient_for
