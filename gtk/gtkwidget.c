@@ -8598,13 +8598,10 @@ static gboolean
 is_my_surface (GtkWidget *widget,
 	       GdkSurface *surface)
 {
-  gpointer user_data;
-
   if (!surface)
     return FALSE;
 
-  gdk_surface_get_user_data (surface, &user_data);
-  return (user_data == widget);
+  return gdk_surface_get_widget (surface) == widget;
 }
 
 /*
@@ -11446,15 +11443,11 @@ void
 gtk_widget_register_surface (GtkWidget    *widget,
 			     GdkSurface    *surface)
 {
-  gpointer user_data;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  gdk_surface_get_user_data (surface, &user_data);
-  g_assert (user_data == NULL);
-
-  gdk_surface_set_user_data (surface, widget);
+  g_assert (gdk_surface_get_widget (surface) == NULL);
+  gdk_surface_set_widget (surface, widget);
 
   g_signal_connect (surface, "render", G_CALLBACK (surface_expose), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
@@ -11473,14 +11466,11 @@ void
 gtk_widget_unregister_surface (GtkWidget    *widget,
 			       GdkSurface    *surface)
 {
-  gpointer user_data;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  gdk_surface_get_user_data (surface, &user_data);
-  g_assert (user_data == widget);
-  gdk_surface_set_user_data (surface, NULL);
+  g_assert (gdk_surface_get_widget (surface) == widget);
+  gdk_surface_set_widget (surface, NULL);
 
   g_signal_handlers_disconnect_by_func (surface, surface_expose, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
