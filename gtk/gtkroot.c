@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkrootprivate.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:root
