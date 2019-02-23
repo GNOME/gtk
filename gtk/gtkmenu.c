@@ -2681,7 +2681,7 @@ gtk_menu_set_accel_group (GtkMenu       *menu,
   GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+  g_return_if_fail (!accel_group || GTK_IS_ACCEL_GROUP (accel_group));
 
   priv = menu->priv;
 
@@ -2822,7 +2822,7 @@ _gtk_menu_refresh_accel_paths (GtkMenu  *menu,
 {
   GtkMenuPrivate *priv = menu->priv;
 
-  if (priv->accel_path && priv->accel_group)
+  if (priv->accel_path)
     {
       AccelPropagation prop;
 
