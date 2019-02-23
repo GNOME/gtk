@@ -662,9 +662,6 @@ gdk_event_get_touchpad_gesture_n_fingers
 gdk_event_get_touchpad_gesture_phase
 gdk_event_get_touchpad_scale
 gdk_event_is_sent
-<SUBSECTION>
-gdk_event_handler_set
-GdkEventFunc
 
 <SUBSECTION>
 gdk_get_show_events

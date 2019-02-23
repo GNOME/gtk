@@ -67,10 +67,6 @@
 /* Private variable declarations
  */
 
-static GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
-static gpointer       _gdk_event_data = NULL;
-static GDestroyNotify _gdk_event_notify = NULL;
-
 static void gdk_event_constructed (GObject *object);
 static void gdk_event_finalize (GObject *object);
 
@@ -156,11 +152,7 @@ _gdk_event_emit (GdkEvent *event)
   if (gdk_drag_handle_source_event (event))
     return;
 
-  if (gdk_surface_handle_event (event))
-    return;
-
-  if (_gdk_event_func)
-    (*_gdk_event_func) (event, _gdk_event_data);
+  gdk_surface_handle_event (event);
 }
 
 /*********************************************
@@ -413,33 +405,6 @@ _gdk_event_queue_flush (GdkDisplay *display)
       GdkEvent *event = tmp_list->data;
       event->any.flags |= GDK_EVENT_FLUSHED;
     }
-}
-
-/**
- * gdk_event_handler_set:
- * @func: the function to call to handle events from GDK.
- * @data: user data to pass to the function. 
- * @notify: the function to call when the handler function is removed, i.e. when
- *          gdk_event_handler_set() is called with another event handler.
- * 
- * Sets the function to call to handle all events from GDK.
- *
- * Note that GTK+ uses this to install its own event handler, so it is
- * usually not useful for GTK+ applications. (Although an application
- * can call this function then call gtk_main_do_event() to pass
- * events to GTK+.)
- **/
-void 
-gdk_event_handler_set (GdkEventFunc   func,
-		       gpointer       data,
-		       GDestroyNotify notify)
-{
-  if (_gdk_event_notify)
-    (*_gdk_event_notify) (_gdk_event_data);
-
-  _gdk_event_func = func;
-  _gdk_event_data = data;
-  _gdk_event_notify = notify;
 }
 
 /**
