@@ -86,7 +86,7 @@
  * will be attached to the left edge of the pane. Setting
  * reading direction of the child to GTK_TEXT_DIR_RTL, it will
  * be attached to the right edge of the pane. See
- * #gtk_widget_set_direction() for details.
+ * gtk_widget_set_direction() for details.
  *
  * The application can set the position of the slider as if it were set
  * by the user, by calling gtk_paned_set_position().
