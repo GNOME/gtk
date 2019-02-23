@@ -158,8 +158,6 @@ struct _GtkWidget
  * @size_allocate: Signal emitted to get the widget allocation.
  * @state_flags_changed: Signal emitted when the widget state changes,
  *   see gtk_widget_get_state_flags().
- * @hierarchy_changed: Signal emitted when the anchored state of a
- *   widget changes.
  * @direction_changed: Signal emitted when the text direction of a
  *   widget changes.
  * @grab_notify: Signal emitted when a widget becomes shadowed by a
@@ -258,8 +256,6 @@ struct _GtkWidgetClass
                                 int                  baseline);
   void (* state_flags_changed) (GtkWidget        *widget,
                                 GtkStateFlags     previous_state_flags);
-  void (* hierarchy_changed)   (GtkWidget        *widget,
-                                GtkWidget        *previous_toplevel);
   void (* direction_changed)   (GtkWidget        *widget,
                                 GtkTextDirection  previous_direction);
   void (* grab_notify)         (GtkWidget        *widget,

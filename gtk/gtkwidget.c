@@ -681,8 +681,6 @@ static gboolean event_surface_is_still_viewable (const GdkEvent *event);
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
-static void _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
-                                                     GtkWidget *previous_toplevel);
 
 
 /* --- variables --- */
@@ -928,7 +926,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_request_mode = gtk_widget_real_get_request_mode;
   klass->measure = gtk_widget_real_measure;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
-  klass->hierarchy_changed = NULL;
   klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = gtk_widget_real_grab_notify;
   klass->child_notify = NULL;
@@ -1555,28 +1552,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_STATE_FLAGS);
-
-  /**
-   * GtkWidget::hierarchy-changed:
-   * @widget: the object on which the signal is emitted
-   * @previous_toplevel: (allow-none): the previous toplevel ancestor, or %NULL
-   *   if the widget was previously unanchored
-   *
-   * The ::hierarchy-changed signal is emitted when the
-   * anchored state of a widget changes. A widget is
-   * “anchored” when its toplevel
-   * ancestor is a #GtkWindow. This signal is emitted when
-   * a widget changes from un-anchored to anchored or vice-versa.
-   */
-  widget_signals[HIERARCHY_CHANGED] =
-    g_signal_new (I_("hierarchy-changed"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, hierarchy_changed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_WIDGET);
 
   /**
    * GtkWidget::style-updated:
@@ -3109,9 +3084,9 @@ gtk_widget_unparent (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GObjectNotifyQueue *nqueue;
-  GtkWidget *toplevel;
   GtkWidget *old_parent;
   GtkWidget *old_prev_sibling;
+  GtkWidget *toplevel;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -3150,13 +3125,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (priv->root)
     gtk_widget_unroot (widget);
 
-  /* If we are unanchoring the child, we save around the toplevel
-   * to emit hierarchy changed
-   */
-  if (priv->parent->priv->anchored)
-    g_object_ref (toplevel);
-  else
-    toplevel = NULL;
+  toplevel = NULL;
 
   /* Removing a widget from a container restores the child visible
    * flag to the default state, so it doesn't affect the child
@@ -3206,15 +3175,10 @@ gtk_widget_unparent (GtkWidget *widget)
   if (old_parent->priv->children_observer)
     gtk_list_list_model_item_removed (old_parent->priv->children_observer, old_prev_sibling);
 
-  if (toplevel)
-    _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
-
-  g_clear_object (&toplevel);
-
-  /* Now that the parent pointer is nullified and the hierarchy-changed
-   * already passed, go ahead and unset the parent window, if we are unparenting
-   * an embedded GtkWindow the window will become toplevel again and hierarchy-changed
-   * will fire again for the new subhierarchy.
+  /* Now that the parent pointer is nullified and the unroot vfunc already
+   * called, go ahead and unset the parent window, if we are unparenting
+   * an embedded GtkWindow the window will become toplevel again and root
+   * will fire for the new hierarchy.
    */
   gtk_widget_set_parent_surface (widget, NULL);
 
@@ -6669,10 +6633,6 @@ gtk_widget_reposition_after (GtkWidget *widget,
         gtk_list_list_model_item_added (parent->priv->children_observer, widget);
     }
 
-  if (priv->parent->priv->anchored && prev_parent == NULL)
-    {
-      _gtk_widget_propagate_hierarchy_changed (widget, NULL);
-    }
   if (parent->priv->root && priv->root == NULL)
     gtk_widget_root (widget);
 
@@ -6813,70 +6773,6 @@ do_display_change (GtkWidget  *widget,
 
       g_signal_emit (widget, widget_signals[DISPLAY_CHANGED], 0, old_display);
     }
-}
-
-static void
-gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
-						gpointer   client_data)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  HierarchyChangedInfo *info = client_data;
-  gboolean new_anchored = _gtk_widget_is_toplevel (widget) ||
-                 (priv->parent && priv->parent->priv->anchored);
-
-  if (priv->anchored != new_anchored)
-    {
-      g_object_ref (widget);
-
-      priv->anchored = new_anchored;
-
-      g_assert (!priv->realized);
-
-      g_signal_emit (widget, widget_signals[HIERARCHY_CHANGED], 0, info->previous_toplevel);
-      do_display_change (widget, info->previous_display, info->new_display);
-
-      gtk_widget_forall (widget, gtk_widget_propagate_hierarchy_changed_recurse, client_data);
-
-      g_object_unref (widget);
-    }
-}
-
-/**
- * _gtk_widget_propagate_hierarchy_changed:
- * @widget: a #GtkWidget
- * @previous_toplevel: Previous toplevel
- *
- * Propagates changes in the anchored state to a widget and all
- * children, unsetting or setting the %ANCHORED flag, and
- * emitting #GtkWidget::hierarchy-changed.
- **/
-static void
-_gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
-                                         GtkWidget *previous_toplevel)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  HierarchyChangedInfo info;
-
-  info.previous_toplevel = previous_toplevel;
-  info.previous_display = previous_toplevel ? _gtk_widget_get_display (previous_toplevel) : NULL;
-
-  if (_gtk_widget_is_toplevel (widget) ||
-      (priv->parent && priv->parent->priv->anchored))
-    info.new_display = _gtk_widget_get_display (widget);
-  else
-    info.new_display = NULL;
-
-  if (info.previous_display)
-    g_object_ref (info.previous_display);
-  if (previous_toplevel)
-    g_object_ref (previous_toplevel);
-
-  gtk_widget_propagate_hierarchy_changed_recurse (widget, &info);
-
-  if (previous_toplevel)
-    g_object_unref (previous_toplevel);
-  if (info.previous_display)
-    g_object_unref (info.previous_display);
 }
 
 static void
