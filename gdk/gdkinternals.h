@@ -145,7 +145,7 @@ struct _GdkSurface
   GdkSurface *parent;
   GdkSurface *transient_for;
 
-  gpointer user_data;
+  gpointer widget;
 
   gint x;
   gint y;

@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkrootprivate.h"
+#include "gdk/gdk-private.h"
 
 /**
  * SECTION:root
@@ -114,12 +115,12 @@ gtk_root_get_surface_transform (GtkRoot *self,
 GtkWidget *
 gtk_root_get_for_surface (GdkSurface *surface)
 {
-  gpointer user_data;
+  GtkWidget *widget;
 
-  gdk_surface_get_user_data (surface, &user_data);
+  widget = (GtkWidget *)gdk_surface_get_widget (surface);
 
-  if (user_data && GTK_IS_ROOT (user_data))
-    return GTK_WIDGET (user_data);
+  if (widget && GTK_IS_ROOT (widget))
+    return widget;
 
   return NULL;
 }
