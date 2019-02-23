@@ -938,7 +938,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus = gtk_widget_real_focus;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
-  klass->event = NULL;
   klass->drag_begin = NULL;
   klass->drag_end = NULL;
   klass->drag_data_delete = NULL;

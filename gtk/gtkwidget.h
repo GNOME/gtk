@@ -292,10 +292,6 @@ struct _GtkWidgetClass
   gboolean (* keynav_failed)            (GtkWidget           *widget,
                                          GtkDirectionType     direction);
 
-  /* events */
-  gboolean (* event)                    (GtkWidget           *widget,
-                                         GdkEvent            *event);
-
   /* Source side drag signals */
   void     (* drag_begin)          (GtkWidget          *widget,
                                     GdkDrag            *drag);
