@@ -41,8 +41,9 @@ gtk_drag_dest_realized (GtkWidget *widget)
 }
 
 static void
-gtk_drag_dest_hierarchy_changed (GtkWidget *widget,
-                                 GtkWidget *previous_toplevel)
+gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
+                                 GParamSpec *pspec,
+                                 gpointer    data)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
@@ -85,7 +86,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
 
   g_signal_connect (widget, "realize",
                     G_CALLBACK (gtk_drag_dest_realized), site);
-  g_signal_connect (widget, "hierarchy-changed",
+  g_signal_connect (widget, "notify::root",
                     G_CALLBACK (gtk_drag_dest_hierarchy_changed), site);
 
   g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"),
