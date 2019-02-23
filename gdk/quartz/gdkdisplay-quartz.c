@@ -32,6 +32,34 @@
 #include "gdkdisplay-quartz.h"
 #include "gdkmonitor-quartz.h"
 
+/* Note about coordinates: There are three coordinate systems at play:
+ *
+ * 1. Core Graphics starts at the origin at the upper right of the
+ * main window (the one with the menu bar when you look at arrangement
+ * in System Preferences>Displays) and increases down and to the
+ * right; up and to the left are negative values of y and x
+ * respectively.
+ *
+ * 2. AppKit (functions beginning with "NS" for NextStep) coordinates
+ * also have their origin at the main window, but it's the *lower*
+ * left corner and coordinates increase up and to the
+ * right. Coordinates below or left of the origin are negative.
+ *
+ * 3. Gdk coordinates origin is at the upper left corner of the
+ * imaginary rectangle enclosing all monitors and like Core Graphics
+ * increase down and to the right. There are no negative coordinates.
+ *
+ * We need to deal with all three because AppKit's NSScreen array is
+ * recomputed with new pointers whenever the monitor arrangement
+ * changes so we can't cache the references it provides. CoreGraphics
+ * screen IDs are constant between reboots so those are what we use to
+ * map GdkMonitors and screens, but the sizes and origins must be
+ * converted to Gdk coordinates to make sense to Gdk and we must
+ * frequently convert between Gdk and AppKit coordinates when
+ * determining the drawable area of a monitor and placing windows and
+ * views (the latter containing our cairo surfaces for drawing on).
+ */
+
 static gint MONITORS_CHANGED = 0;
 
 static void display_reconfiguration_callback (CGDirectDisplayID            display,
@@ -220,32 +248,45 @@ gdk_quartz_display_pop_error_trap (GdkDisplay *display, gboolean ignore)
  */
 
 int
-get_active_displays (CGDirectDisplayID **screens)
+get_active_displays (CGDirectDisplayID **displays)
 {
-  unsigned int displays = 0;
+  unsigned int n_displays = 0;
 
-  CGGetActiveDisplayList (0, NULL, &displays);
-  if (screens)
+  CGGetActiveDisplayList (0, NULL, &n_displays);
+  if (displays)
     {
-      *screens = g_new0 (CGDirectDisplayID, displays);
-      CGGetActiveDisplayList (displays, *screens, &displays);
+      *displays = g_new0 (CGDirectDisplayID, n_displays);
+      CGGetActiveDisplayList (n_displays, *displays, &n_displays);
     }
 
-  return displays;
+  return n_displays;
+}
+
+static inline GdkRectangle
+cgrect_to_gdkrect (CGRect cgrect)
+{
+  GdkRectangle gdkrect = {(int)trunc (cgrect.origin.x),
+                          (int)trunc (cgrect.origin.y),
+                          (int)trunc (cgrect.size.width),
+                          (int)trunc (cgrect.size.height)};
+  return gdkrect;
 }
 
 static void
-configure_monitor (GdkMonitor *monitor)
+configure_monitor (GdkMonitor       *monitor,
+                   GdkQuartzDisplay *display)
 {
   GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR (monitor);
   CGSize disp_size = CGDisplayScreenSize (quartz_monitor->id);
   gint width = (int)trunc (disp_size.width);
   gint height = (int)trunc (disp_size.height);
   CGRect disp_bounds = CGDisplayBounds (quartz_monitor->id);
-  GdkRectangle disp_geometry = {(int)trunc (disp_bounds.origin.x),
-                                (int)trunc (disp_bounds.origin.y),
-                                (int)trunc (disp_bounds.size.width),
-                                (int)trunc (disp_bounds.size.height)};
+  CGRect main_bounds = CGDisplayBounds (CGMainDisplayID());
+  /* Change origin to Gdk coordinates. */
+  disp_bounds.origin.x = disp_bounds.origin.x + display->geometry.origin.x;
+  disp_bounds.origin.y =
+    display->geometry.origin.y - main_bounds.size.height + disp_bounds.origin.y;
+  GdkRectangle disp_geometry = cgrect_to_gdkrect (disp_bounds);
   CGDisplayModeRef mode = CGDisplayCopyDisplayMode (quartz_monitor->id);
   gint refresh_rate = (int)trunc (CGDisplayModeGetRefreshRate (mode));
 
@@ -263,6 +304,42 @@ configure_monitor (GdkMonitor *monitor)
     monitor->scale_factor = 1;
   monitor->refresh_rate = refresh_rate;
   monitor->subpixel_layout = GDK_SUBPIXEL_LAYOUT_UNKNOWN;
+}
+
+static void
+display_rect (GdkQuartzDisplay *display)
+{
+  uint32_t disp, count = 0;
+  float min_x = 0.0, max_x = 0.0, min_y = 0.0, max_y = 0.0;
+  float min_x_mm = 0.0, max_x_mm = 0.0, min_y_mm = 0.0, max_y_mm = 0.0;
+  float main_height;
+  CGDirectDisplayID *displays;
+
+  count = get_active_displays (&displays);
+  for (disp = 0; disp < count; ++disp)
+    {
+      CGRect bounds = CGDisplayBounds (displays[disp]);
+      CGSize disp_size = CGDisplayScreenSize (displays[disp]);
+      float x_scale = disp_size.width / bounds.size.width;
+      float y_scale = disp_size.height / bounds.size.height;
+      if (disp == 0)
+        main_height = bounds.size.height;
+      min_x = MIN (min_x, bounds.origin.x);
+      min_y = MIN (min_y, bounds.origin.y);
+
+      max_x = MAX (max_x, bounds.origin.x + bounds.size.width);
+      max_y = MAX (max_y, bounds.origin.y + bounds.size.height);
+      min_x_mm = MIN (min_x_mm, bounds.origin.x / x_scale);
+      min_y_mm = MIN (min_y_mm, main_height - (bounds.size.height + bounds.origin.y) / y_scale);
+      max_x_mm = MAX (max_x_mm, (bounds.origin.x + bounds.size.width) / x_scale);
+      max_y_mm = MAX (max_y_mm, (bounds.origin.y + bounds.size.height) / y_scale);
+
+    }
+  g_free (displays);
+  /* Adjusts the origin to AppKit coordinates. */
+  display->geometry = NSMakeRect (-min_x, main_height - min_y,
+                                  max_x - min_x, max_y - min_y);
+  display->size = NSMakeSize (max_x_mm - min_x_mm, max_y_mm - min_y_mm);
 }
 
 static void
@@ -293,7 +370,8 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
           gdk_display_monitor_added (GDK_DISPLAY (display),
                                      GDK_MONITOR (monitor));
         }
-      configure_monitor (GDK_MONITOR (monitor));
+      display_rect (display);
+      configure_monitor (GDK_MONITOR (monitor), display);
     }
   else if (flags & (kCGDisplayRemoveFlag |  kCGDisplayDisabledFlag))
     {
@@ -322,12 +400,13 @@ gdk_quartz_display_get_monitor (GdkDisplay *display,
   CGDirectDisplayID *screens = NULL;
 
   int count = get_active_displays (&screens);
+  GdkMonitor *monitor = NULL;
 
   if (monitor_num >= 0 && monitor_num < count)
-    return g_hash_table_lookup (quartz_display->monitors,
+    monitor = g_hash_table_lookup (quartz_display->monitors,
                                 GINT_TO_POINTER (screens[monitor_num]));
-
-  return NULL;
+  g_free (screens);
+  return monitor;
 }
 
 static GdkMonitor *
@@ -347,10 +426,18 @@ gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   NSWindow *nswindow = impl->toplevel;
   NSScreen *screen = [nswindow screen];
-  CGDirectDisplayID id = [[[screen deviceDescription]
-                           objectForKey: @"NSScreenNumber"] unsignedIntValue];
-  return g_hash_table_lookup (GDK_QUARTZ_DISPLAY (display)->monitors,
-                              GINT_TO_POINTER (id));
+  if (screen)
+  {
+       CGDirectDisplayID disp_id =
+            [[[screen deviceDescription]
+              objectForKey: @"NSScreenNumber"] unsignedIntValue];
+       return g_hash_table_lookup (GDK_QUARTZ_DISPLAY (display)->monitors,
+                                   GINT_TO_POINTER (disp_id));
+  }
+  GdkRectangle rect = cgrect_to_gdkrect ([nswindow frame]);
+  return gdk_display_get_monitor_at_point (display,
+                                           rect.x + rect.width/2,
+                                           rect.y + rect.height /2);
 }
 
 G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
@@ -358,25 +445,26 @@ G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 static void
 gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
-  uint32_t max_displays = 0, disp;
+  uint32_t count = 0, disp;
   CGDirectDisplayID *displays;
 
-  CGGetActiveDisplayList (0, NULL, &max_displays);
+  display_rect(display); /* Initialize the overall display coordinates. */
+  count = get_active_displays (&displays);
   display->monitors = g_hash_table_new_full (g_direct_hash, NULL,
                                              NULL, g_object_unref);
-  displays = g_new0 (CGDirectDisplayID, max_displays);
-  CGGetActiveDisplayList (max_displays, displays, &max_displays);
-  for (disp = 0; disp < max_displays; ++disp)
+  for (disp = 0; disp < count; ++disp)
     {
       GdkQuartzMonitor *monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
                                                        "display", display, NULL);
       monitor->id = displays[disp];
       g_hash_table_insert (display->monitors, GINT_TO_POINTER (monitor->id),
                            monitor);
-      configure_monitor (GDK_MONITOR (monitor));
+      configure_monitor (GDK_MONITOR (monitor), display);
     }
+  g_free (displays);
   CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
                                             display);
+  /* So that monitors changed will keep display->geometry syncronized. */
   g_signal_emit (display, MONITORS_CHANGED, 0);
 }
 

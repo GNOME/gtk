@@ -60,11 +60,12 @@
  * but GDK coordinates can *not*!
  */
 
-static void  gdk_quartz_screen_dispose          (GObject         *object);
-static void  gdk_quartz_screen_finalize         (GObject         *object);
-static void  gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen);
-static void  gdk_quartz_screen_reconfigure      (GdkQuartzDisplay *dispplay,
-                                                 GdkQuartzScreen *screen);
+static void  gdk_quartz_screen_dispose          (GObject          *object);
+static void  gdk_quartz_screen_finalize         (GObject          *object);
+static void  gdk_quartz_screen_calculate_layout (GdkQuartzScreen  *screen,
+                                                 GdkQuartzDisplay *display);
+static void  gdk_quartz_screen_reconfigure      (GdkQuartzDisplay *display,
+                                                 GdkQuartzScreen  *screen);
 
 static const double dpi = 72.0;
 
@@ -88,7 +89,7 @@ gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
                     G_CALLBACK (gdk_quartz_screen_reconfigure), quartz_screen);
   /* The first monitors-changed should have fired already. */
   _gdk_screen_set_resolution (screen, dpi);
-  gdk_quartz_screen_calculate_layout (quartz_screen);
+  gdk_quartz_screen_calculate_layout (quartz_screen, NULL);
   quartz_screen->emit_monitors_changed = FALSE;
 }
 
@@ -118,45 +119,24 @@ gdk_quartz_screen_finalize (GObject *object)
 @end
 
 static void
-gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
+gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen,
+                                    GdkQuartzDisplay *display)
 {
   int i, monitors;
   int max_x, max_y;
-  GdkDisplay *display = gdk_screen_get_display (GDK_SCREEN (screen));
 
-  screen->width = 0;
-  screen->height = 0;
-  screen->min_x = 0;
-  screen->min_y = 0;
-  max_x = max_y = 0;
-  screen->mm_width = 0;
-  screen->mm_height = 0;
+  if (!display)
+    display = GDK_QUARTZ_DISPLAY (gdk_screen_get_display (GDK_SCREEN (screen)));
 
-  /* We determine the minimum and maximum x and y coordinates
-   * covered by the monitors.  From this we can deduce the width
-   * and height of the root screen.
-   */
-  monitors = gdk_display_get_n_monitors (display);
-  for (i = 0; i < monitors; ++i)
-    {
-      GdkQuartzMonitor *monitor =
-           GDK_QUARTZ_MONITOR (gdk_display_get_monitor (display, i));
-      GdkRectangle rect;
+/* Display geometry is the origin and size in AppKit coordinates. AppKit computes */
+  screen->width = (int)trunc (display->geometry.size.width);
+  screen->height = (int)trunc (display->geometry.size.height);
+  screen->orig_x = -(int)trunc (display->geometry.origin.x);
+  screen->orig_y = (int)trunc (display->geometry.origin.y);
+  screen->mm_width = (int)trunc (display->size.width);
+  screen->mm_height = (int)trunc (display->size.height);
 
-      gdk_monitor_get_geometry (GDK_MONITOR (monitor), &rect);
-      screen->min_x = MIN (screen->min_x, rect.x);
-      max_x = MAX (max_x, rect.x + rect.width);
-
-      screen->min_y = MIN (screen->min_y, rect.y);
-      max_y = MAX (max_y, rect.y + rect.height);
-
-      screen->mm_height += GDK_MONITOR (monitor)->height_mm;
-      screen->mm_width += GDK_MONITOR (monitor)->width_mm;
-    }
-
-  screen->width = max_x - screen->min_x;
-  screen->height = max_y - screen->min_y;
-}
+ }
 
 void
 _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
@@ -201,7 +181,7 @@ gdk_quartz_screen_reconfigure (GdkQuartzDisplay *display, GdkQuartzScreen *scree
   width = gdk_screen_get_width (GDK_SCREEN (screen));
   height = gdk_screen_get_height (GDK_SCREEN (screen));
 
-  gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
+  gdk_quartz_screen_calculate_layout (screen, display);
 
   _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
 
