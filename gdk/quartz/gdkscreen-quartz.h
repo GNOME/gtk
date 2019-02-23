@@ -29,9 +29,9 @@ struct _GdkQuartzScreen
 
   GdkDisplay *display;
 
-  /* Origin of "root window" in Cocoa coordinates */
-  gint min_x;
-  gint min_y;
+  /* Origin of "root window" in AppKit coordinates */
+  gint orig_x;
+  gint orig_y;
 
   gint width;
   gint height;
