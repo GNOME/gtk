@@ -78,14 +78,6 @@
  * ]|
  */
 
-typedef struct _GdkPredicate GdkPredicate;
-
-struct _GdkPredicate
-{
-  GdkEventFunc func;
-  gpointer data;
-};
-
 /* non-GDK previous error handler */
 typedef int (*GdkXErrorHandler) (Display *, XErrorEvent *);
 static GdkXErrorHandler _gdk_old_error_handler;

@@ -599,7 +599,6 @@ do_pre_parse_initialization (void)
     g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
 
   gdk_pre_parse ();
-  gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
 
 #ifdef G_ENABLE_DEBUG
   env_string = g_getenv ("GTK_DEBUG");

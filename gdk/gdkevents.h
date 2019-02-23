@@ -126,18 +126,6 @@ typedef struct _GdkEventSequence    GdkEventSequence;
 typedef union  _GdkEvent	    GdkEvent;
 
 /**
- * GdkEventFunc:
- * @event: the #GdkEvent to process.
- * @data: (closure): user data set when the event handler was installed with
- *   gdk_event_handler_set().
- *
- * Specifies the type of function passed to gdk_event_handler_set() to
- * handle all GDK events.
- */
-typedef void (*GdkEventFunc) (GdkEvent *event,
-			      gpointer	data);
-
-/**
  * GdkEventType:
  * @GDK_NOTHING: a special code to indicate a null event.
  * @GDK_DELETE: the window manager has requested that the toplevel surface be
@@ -445,11 +433,6 @@ gboolean  gdk_events_get_center         (GdkEvent        *event1,
                                          GdkEvent        *event2,
                                          gdouble         *x,
                                          gdouble         *y);
-
-GDK_AVAILABLE_IN_ALL
-void	  gdk_event_handler_set 	(GdkEventFunc    func,
-					 gpointer        data,
-					 GDestroyNotify  notify);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_event_set_display        (GdkEvent        *event,
