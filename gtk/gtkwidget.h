@@ -152,9 +152,8 @@ struct _GtkWidget
  *   widget is destroyed, which means that gtk_widget_unrealize() has
  *   been called or the widget has been unmapped (that is, it is going
  *   to be hidden).
- * @root: Called when the widget gets added to a #GtkRoot widget.
- * @unroot: Called when the widget is about to be removed from its
- *   #GtkRoot widget.
+ * @root: Called when the widget gets added to a #GtkRoot widget. Must chain up
+ * @unroot: Called when the widget is about to be removed from its #GtkRoot widget. Must chain up
  * @size_allocate: Signal emitted to get the widget allocation.
  * @state_flags_changed: Signal emitted when the widget state changes,
  *   see gtk_widget_get_state_flags().
