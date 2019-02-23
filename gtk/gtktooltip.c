@@ -35,6 +35,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkaccessible.h"
+#include "gtkroot.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -428,7 +429,7 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  gdk_surface_get_user_data (surface, (void **)&event_widget);
+  event_widget = gtk_root_get_for_surface (surface);
 
   if (!event_widget)
     return NULL;
@@ -499,7 +500,7 @@ gtk_tooltip_set_last_surface (GtkTooltip *tooltip,
 			       (gpointer *) &tooltip->last_surface);
 
   if (surface)
-    gdk_surface_get_user_data (surface, (gpointer *) &window_widget);
+    window_widget = gtk_root_get_for_surface (surface);
 
   if (window_widget)
     window_widget = gtk_widget_get_toplevel (window_widget);
