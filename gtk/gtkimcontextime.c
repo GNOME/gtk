@@ -29,6 +29,7 @@
 
 #include "gtkimcontextime.h"
 #include "gtkimmoduleprivate.h"
+#include "gtkroot.h"
 
 #include "imm-extra.h"
 
@@ -878,9 +879,9 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   if (!context_ime->client_surface)
     return;
 
-  gdk_surface_get_user_data (context_ime->client_surface, (gpointer) &widget);
-  if (!GTK_IS_WIDGET (widget))
-    return;
+  widget = gtk_root_get_for_surface (context_ime->client_surface);
+  if (!widget)
+    return
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
