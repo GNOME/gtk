@@ -104,6 +104,7 @@ main (int argc, char **argv)
     node = gsk_render_node_deserialize (bytes, &error);
     g_bytes_unref (bytes);
 
+    g_assert_no_error (error);
     g_assert (node != NULL);
   }
 
