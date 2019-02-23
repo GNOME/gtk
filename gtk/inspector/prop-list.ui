@@ -12,7 +12,6 @@
   </object>
   <template class="GtkInspectorPropList" parent="GtkBox">
     <property name="orientation">vertical</property>
-    <signal name="hierarchy-changed" handler="hierarchy_changed"/>
     <child>
       <object class="GtkScrolledWindow">
         <property name="expand">1</property>

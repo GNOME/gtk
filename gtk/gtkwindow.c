@@ -1866,7 +1866,6 @@ gtk_window_init (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   gtk_widget_set_has_surface (widget, TRUE);
-  _gtk_widget_set_anchored (widget, TRUE);
 
   priv->title = NULL;
   priv->wm_role = NULL;

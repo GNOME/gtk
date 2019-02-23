@@ -9,7 +9,6 @@
   </object>
   <object class="GtkTextBuffer" id="buffer"/>
   <template class="GtkInspectorResourceList" parent="GtkBox">
-    <signal name="hierarchy-changed" handler="on_hierarchy_changed"/>
     <child>
       <object class="GtkStack" id="stack">
         <child>

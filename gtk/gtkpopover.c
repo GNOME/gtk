@@ -1685,7 +1685,7 @@ gtk_popover_update_scrollable (GtkPopover *popover)
 
 static void
 _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
-                                       GtkWidget  *previous_toplevel,
+                                       GParamSpec *pspec,
                                        GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -1973,7 +1973,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
 
       priv->hierarchy_changed_id =
-        g_signal_connect (priv->widget, "hierarchy-changed",
+        g_signal_connect (priv->widget, "notify::root",
                           G_CALLBACK (_gtk_popover_parent_hierarchy_changed),
                           popover);
       priv->size_allocate_id =

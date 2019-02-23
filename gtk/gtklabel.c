@@ -452,8 +452,8 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
-static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
-						  GtkWidget     *old_toplevel);
+static void gtk_label_root                       (GtkWidget     *widget);
+static void gtk_label_unroot                     (GtkWidget     *widget);
 static void gtk_label_display_changed            (GtkWidget     *widget,
 						  GdkDisplay    *old_display);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
@@ -475,6 +475,7 @@ static void gtk_label_update_active_link  (GtkWidget *widget,
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
+                                             GtkWidget         *toplevel,
 					     guint              last_key);
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDrag           *drag,
@@ -604,7 +605,8 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->unmap = gtk_label_unmap;
-  widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
+  widget_class->root = gtk_label_root;
+  widget_class->unroot = gtk_label_unroot;
   widget_class->display_changed = gtk_label_display_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->drag_data_get = gtk_label_drag_data_get;
@@ -1738,12 +1740,12 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
-gtk_label_setup_mnemonic (GtkLabel *label,
-			  guint     last_key)
+gtk_label_setup_mnemonic (GtkLabel  *label,
+                          GtkWidget *toplevel,
+			  guint      last_key)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *toplevel;
   GtkWidget *mnemonic_menu;
   
   mnemonic_menu = g_object_get_qdata (G_OBJECT (label), quark_mnemonic_menu);
@@ -1771,8 +1773,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (gtk_widget_is_toplevel (toplevel))
+  if (toplevel && gtk_widget_is_toplevel (toplevel))
     {
       GtkWidget *menu_shell;
       
@@ -1801,13 +1802,25 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 }
 
 static void
-gtk_label_hierarchy_changed (GtkWidget *widget,
-			     GtkWidget *old_toplevel)
+gtk_label_root (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  gtk_label_setup_mnemonic (label, priv->mnemonic_keyval);
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
+
+  gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (widget), priv->mnemonic_keyval);
+}
+
+static void
+gtk_label_unroot (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  gtk_label_setup_mnemonic (label, NULL, priv->mnemonic_keyval);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
 }
 
 static void
@@ -2131,7 +2144,7 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (keyval != priv->mnemonic_keyval)
     {
-      gtk_label_setup_mnemonic (label, keyval);
+      gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (GTK_WIDGET (label)), keyval);
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 

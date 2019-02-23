@@ -110,24 +110,29 @@ destroy_controller (GtkEventController *controller)
 }
 
 static void
-hierarchy_changed (GtkWidget *widget,
-                   GtkWidget *previous_toplevel)
+root (GtkWidget *widget)
 {
   GtkEventController *controller;
   GtkWidget *toplevel;
 
-  if (previous_toplevel)
-    g_object_set_data (G_OBJECT (previous_toplevel), "prop-controller", NULL);
+  GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->root (widget);
 
   toplevel = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
-
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "prop-controller", controller, (GDestroyNotify)destroy_controller);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
+}
+
+static void
+unroot (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  g_object_set_data (G_OBJECT (toplevel), "prop-controller", NULL);
+
+  GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->unroot (widget);
 }
 
 static void
@@ -292,6 +297,9 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   object_class->set_property = set_property;
   object_class->constructed = constructed;
 
+  widget_class->root = root;
+  widget_class->unroot = unroot;
+
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -309,7 +317,6 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, tree);
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, search_close_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, hierarchy_changed);
 }
 
 /* Like g_strdup_value_contents, but keeps the type name separate */

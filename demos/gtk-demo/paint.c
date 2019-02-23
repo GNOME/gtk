@@ -171,8 +171,24 @@ on_pad_knob_change (GSimpleAction *action,
 }
 
 static void
-drawing_area_hierarchy_changed (GtkWidget *widget,
-                                GtkWidget *previous_toplevel)
+drawing_area_unroot (GtkWidget *widget)
+{
+  DrawingArea *area = (DrawingArea *) widget;
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (area->pad_controller)
+    {
+      gtk_widget_remove_controller (toplevel, GTK_EVENT_CONTROLLER (area->pad_controller));
+      area->pad_controller = NULL;
+    }
+
+  GTK_WIDGET_CLASS (drawing_area_parent_class)->unroot (widget);
+}
+
+static void
+drawing_area_root (GtkWidget *widget)
 {
   DrawingArea *area = (DrawingArea *) widget;
   GSimpleActionGroup *action_group;
@@ -180,20 +196,12 @@ drawing_area_hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel;
   gint i;
 
-  if (previous_toplevel && area->pad_controller)
-    {
-      gtk_widget_remove_controller (previous_toplevel,
-                                    GTK_EVENT_CONTROLLER (area->pad_controller));
-      area->pad_controller = NULL;
-    }
+  GTK_WIDGET_CLASS (drawing_area_parent_class)->root (widget);
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (area));
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
 
   action_group = g_simple_action_group_new ();
-  area->pad_controller = gtk_pad_controller_new (G_ACTION_GROUP (action_group),
-                                                 NULL);
+  area->pad_controller = gtk_pad_controller_new (G_ACTION_GROUP (action_group), NULL);
 
   for (i = 0; i < G_N_ELEMENTS (pad_actions); i++)
     {
@@ -220,8 +228,7 @@ drawing_area_hierarchy_changed (GtkWidget *widget,
   gtk_pad_controller_set_action_entries (area->pad_controller, pad_actions,
                                          G_N_ELEMENTS (pad_actions));
 
-  gtk_widget_add_controller (toplevel,
-                             GTK_EVENT_CONTROLLER (area->pad_controller));
+  gtk_widget_add_controller (toplevel, GTK_EVENT_CONTROLLER (area->pad_controller));
 }
 
 static void
@@ -233,7 +240,8 @@ drawing_area_class_init (DrawingAreaClass *klass)
   widget_class->snapshot = drawing_area_snapshot;
   widget_class->map = drawing_area_map;
   widget_class->unmap = drawing_area_unmap;
-  widget_class->hierarchy_changed = drawing_area_hierarchy_changed;
+  widget_class->root = drawing_area_root;
+  widget_class->unroot = drawing_area_unroot;
 
   area_signals[COLOR_SET] =
     g_signal_new ("color-set",

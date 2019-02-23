@@ -91,8 +91,8 @@ static void gtk_menu_bar_size_allocate     (GtkWidget *widget,
                                             int        width,
                                             int        height,
                                             int        baseline);
-static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
-					    GtkWidget       *old_toplevel);
+static void gtk_menu_bar_root              (GtkWidget *widget);
+static void gtk_menu_bar_unroot            (GtkWidget *widget);
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
 static void gtk_menu_bar_move_current      (GtkMenuShell     *menu_shell,
                                             GtkMenuDirectionType direction);
@@ -117,7 +117,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   widget_class->measure = gtk_menu_bar_measure;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
-  widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
+  widget_class->root = gtk_menu_bar_root;
+  widget_class->unroot = gtk_menu_bar_unroot;
 
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
   menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
@@ -536,21 +537,27 @@ remove_from_window (GtkWindow  *window,
 }
 
 static void
-gtk_menu_bar_hierarchy_changed (GtkWidget *widget,
-				GtkWidget *old_toplevel)
+gtk_menu_bar_root (GtkWidget *widget)
 {
+  GtkMenuBar *menubar = GTK_MENU_BAR (widget);
   GtkWidget *toplevel;  
-  GtkMenuBar *menubar;
 
-  menubar = GTK_MENU_BAR (widget);
+  GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->root (widget);
 
   toplevel = gtk_widget_get_toplevel (widget);
+  add_to_window (GTK_WINDOW (toplevel), menubar);
+}
 
-  if (old_toplevel)
-    remove_from_window (GTK_WINDOW (old_toplevel), menubar);
-  
-  if (gtk_widget_is_toplevel (toplevel))
-    add_to_window (GTK_WINDOW (toplevel), menubar);
+static void
+gtk_menu_bar_unroot (GtkWidget *widget)
+{
+  GtkMenuBar *menubar = GTK_MENU_BAR (widget);
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  remove_from_window (GTK_WINDOW (toplevel), menubar);
+
+  GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->unroot (widget);
 }
 
 /**
