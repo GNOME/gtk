@@ -3755,7 +3755,6 @@ gtk_widget_realize (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (priv->anchored || GTK_IS_INVISIBLE (widget));
 
   if (!_gtk_widget_get_realized (widget))
     {
@@ -5493,7 +5492,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
       if (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
         gtk_widget_update_pango_context (widget);
 
-      if (priv->anchored)
+      if (priv->root)
         {
           if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE) ||
               (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_SIZE)))
@@ -5515,7 +5514,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
     {
       gtk_widget_update_pango_context (widget);
 
-      if (priv->anchored)
+      if (priv->root)
         gtk_widget_queue_resize (widget);
     }
 }
@@ -11761,23 +11760,6 @@ gtk_widget_in_destruction (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   return priv->in_destruction;
-}
-
-gboolean
-_gtk_widget_get_anchored (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  return priv->anchored;
-}
-
-void
-_gtk_widget_set_anchored (GtkWidget *widget,
-                          gboolean   anchored)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->anchored = anchored;
 }
 
 gboolean

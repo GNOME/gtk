@@ -58,7 +58,6 @@ struct _GtkWidgetPrivate
 #endif
 
   guint in_destruction        : 1;
-  guint anchored              : 1;
   guint no_surface            : 1;
   guint no_surface_set        : 1;
   guint realized              : 1;
@@ -195,9 +194,6 @@ struct _GtkWidgetPrivate
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
-gboolean     _gtk_widget_get_anchored       (GtkWidget *widget);
-void         _gtk_widget_set_anchored       (GtkWidget *widget,
-                                             gboolean   anchored);
 gboolean     _gtk_widget_get_shadowed       (GtkWidget *widget);
 void         _gtk_widget_set_shadowed       (GtkWidget *widget,
                                              gboolean   shadowed);
