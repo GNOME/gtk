@@ -2896,7 +2896,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   /* Initial clip is self->render_region! */
   if (self->render_region != NULL)
     {
-      GskRoundedRect transformed_render_region = { 0, };
+      graphene_rect_t transformed_render_region;
       cairo_rectangle_int_t render_extents;
 
       cairo_region_get_extents (self->render_region, &render_extents);
@@ -2906,8 +2906,12 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                                                            render_extents.y,
                                                            render_extents.width,
                                                            render_extents.height),
-                                      &transformed_render_region.bounds);
-      ops_push_clip (&render_op_builder, &transformed_render_region);
+                                      &transformed_render_region);
+      ops_push_clip (&render_op_builder,
+                     &GSK_ROUNDED_RECT_INIT (transformed_render_region.origin.x,
+                                             transformed_render_region.origin.y,
+                                             transformed_render_region.size.width,
+                                             transformed_render_region.size.height));
     }
   else
     {
