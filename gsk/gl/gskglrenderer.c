@@ -2458,8 +2458,8 @@ add_offscreen_ops (GskGLRenderer         *self,
                    guint                  flags)
 {
   const float scale = ops_get_scale (builder);
-  const float width  = bounds->size.width  * scale;
-  const float height = bounds->size.height * scale;
+  const float width  = ceilf (bounds->size.width  * scale);
+  const float height = ceilf (bounds->size.height * scale);
   const float dx = builder->dx;
   const float dy = builder->dy;
   int render_target;
