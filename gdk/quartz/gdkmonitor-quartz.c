@@ -21,7 +21,7 @@
 #include <gio/gio.h>
 
 #include "gdkmonitor-quartz.h"
-#include "gdkscreen-quartz.h"
+#include "gdkdisplay-quartz.h"
 
 
 G_DEFINE_TYPE (GdkQuartzMonitor, gdk_quartz_monitor, GDK_TYPE_MONITOR)
@@ -30,19 +30,30 @@ static void
 gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
                                  GdkRectangle *dest)
 {
-  GdkQuartzScreen *quartz_screen = GDK_QUARTZ_SCREEN(gdk_display_get_default_screen (monitor->display));
-  GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR(monitor);
-
   GDK_QUARTZ_ALLOC_POOL;
 
   NSArray *array = [NSScreen screens];
-  if (quartz_monitor->monitor_num < [array count])
+  NSScreen* screen;
+  for (id obj in array)
     {
-      NSScreen *screen = [array objectAtIndex:quartz_monitor->monitor_num];
-      NSRect rect = [screen visibleFrame];
+      CGDirectDisplayID screen_id =
+        [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+      GdkQuartzMonitor *q_mon = GDK_QUARTZ_MONITOR (monitor);
+      if (screen_id == q_mon->id)
+        {
+          screen = obj;
+          break;
+        }
+    }
 
-      dest->x = rect.origin.x - quartz_screen->min_x;
-      dest->y = quartz_screen->height - (rect.origin.y + rect.size.height) + quartz_screen->min_y;
+  if (screen)
+    {
+      GdkQuartzDisplay *display =
+        GDK_QUARTZ_DISPLAY (gdk_monitor_get_display (monitor));
+      NSRect rect = [screen visibleFrame];
+      dest->x = (int)trunc (display->geometry.origin.x + rect.origin.x);
+      dest->y = (int)trunc (display->geometry.origin.y -
+                            rect.origin.y - rect.size.height);
       dest->width = rect.size.width;
       dest->height = rect.size.height;
     }
