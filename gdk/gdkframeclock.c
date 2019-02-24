@@ -179,7 +179,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the second step of toolkit and
    * application processing of the frame. Any work to update
    * sizes and positions of application elements should be
-   * performed. GTK+ normally handles this internally.
+   * performed. GTK normally handles this internally.
    */
   signals[LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),
@@ -197,7 +197,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the third step of toolkit and
    * application processing of the frame. The frame is
    * repainted. GDK normally handles this internally and
-   * produces expose events, which are turned into GTK+
+   * produces expose events, which are turned into GTK
    * #GtkWidget::draw signals.
    */
   signals[PAINT] =
@@ -230,7 +230,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * @clock: the frame clock emitting the signal
    *
    * This signal is emitted after processing of the frame is
-   * finished, and is handled internally by GTK+ to resume normal
+   * finished, and is handled internally by GTK to resume normal
    * event processing. Applications should not handle this signal.
    */
   signals[RESUME_EVENTS] =
@@ -289,7 +289,7 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
  * content and want to continually request the
  * %GDK_FRAME_CLOCK_PHASE_UPDATE phase for a period of time,
  * you should use gdk_frame_clock_begin_updating() instead, since
- * this allows GTK+ to adjust system parameters to get maximally
+ * this allows GTK to adjust system parameters to get maximally
  * smooth animations.
  */
 void

@@ -70,7 +70,7 @@
  *
  * You can use gdk_display_manager_get() to obtain the #GdkDisplayManager
  * singleton, but that should be rarely necessary. Typically, initializing
- * GTK+ opens a display that you can work with without ever accessing the
+ * GTK opens a display that you can work with without ever accessing the
  * #GdkDisplayManager.
  *
  * The GDK library can be built with support for multiple backends.

@@ -51,12 +51,12 @@
  * This section describes the GDK initialization functions and miscellaneous
  * utility functions, as well as deprecation facilities.
  *
- * The GDK and GTK+ headers annotate deprecated APIs in a way that produces
+ * The GDK and GTK headers annotate deprecated APIs in a way that produces
  * compiler warnings if these deprecated APIs are used. The warnings
  * can be turned off by defining the macro %GDK_DISABLE_DEPRECATION_WARNINGS
  * before including the glib.h header.
  *
- * GDK and GTK+ also provide support for building applications against
+ * GDK and GTK also provide support for building applications against
  * defined subsets of deprecated or new APIs. Define the macro
  * %GDK_VERSION_MIN_REQUIRED to specify up to what version
  * you want to receive warnings about deprecated APIs. Define the
@@ -299,11 +299,11 @@ gdk_should_use_portal (void)
  * locked for performance reasons. So e.g. you must coordinate
  * accesses to the same #GHashTable from multiple threads.
  *
- * GTK+, however, is not thread safe. You should only use GTK+ and GDK
+ * GTK, however, is not thread safe. You should only use GTK and GDK
  * from the thread gtk_init() and gtk_main() were called on.
  * This is usually referred to as the “main thread”.
  *
- * Signals on GTK+ and GDK types, as well as non-signal callbacks, are
+ * Signals on GTK and GDK types, as well as non-signal callbacks, are
  * emitted in the main thread.
  *
  * You can schedule work in the main thread safely from other threads
