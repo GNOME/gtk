@@ -171,6 +171,7 @@
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopovermenu.h>
+#include <gtk/gtkpopup.h>
 #include <gtk/gtkprintcontext.h>
 #include <gtk/gtkprintoperation.h>
 #include <gtk/gtkprintoperationpreview.h>

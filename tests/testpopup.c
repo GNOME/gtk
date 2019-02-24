@@ -1,41 +1,50 @@
 #include <gtk/gtk.h>
 
 static void
-draw_popup (GtkDrawingArea  *da,
-            cairo_t         *cr,
-            int              width,
-            int              height,
-            gpointer         data)
+clicked (GtkButton *button)
 {
-  cairo_set_source_rgb (cr, 1, 0, 0);
-  cairo_paint (cr);
+  g_print ("Yes!\n");
 }
 
-static void
-place_popup (GtkEventControllerMotion *motion,
-             gdouble                   x,
-             gdouble                   y,
-             GtkWidget                *popup)
+static GtkWidget *
+add_content (GtkWidget *parent)
 {
+  GtkWidget *box, *label, *entry, *button;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
+
+  label = gtk_label_new_with_mnemonic ("_Test");
+  entry = gtk_entry_new ();
+  button = gtk_button_new_with_mnemonic ("_Yes!");
+  g_signal_connect (button, "clicked", G_CALLBACK (clicked), NULL);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  gtk_widget_set_can_default (button, TRUE);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (parent), box);
+
+  gtk_widget_grab_default (button);
+
+  return box;
 }
 
 static gboolean
-on_map (GtkWidget *parent)
+create_popup (GtkWidget *parent)
 {
-  GtkWidget *popup, *da;
-  GtkEventController *motion;
+  GtkWidget *popup;
 
-  popup = gtk_window_new (GTK_WINDOW_POPUP);
-  da = gtk_drawing_area_new ();
-  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_popup, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (popup), da);
+  popup = gtk_popup_new ();
+  gtk_popup_set_relative_to (GTK_POPUP (popup), parent);
+  gtk_style_context_add_class (gtk_widget_get_style_context (popup), "background");
+  gtk_style_context_add_class (gtk_widget_get_style_context (popup), "frame");
 
-  gtk_widget_set_size_request (GTK_WIDGET (popup), 20, 20);
-  gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
-
-  motion = gtk_event_controller_motion_new ();
-  gtk_widget_add_controller (parent, motion);
-  g_signal_connect (motion, "motion", G_CALLBACK (place_popup), popup);
+  add_content (popup);
 
   gtk_widget_show (popup);
 
@@ -46,13 +55,17 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
+  GtkWidget *label;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
-  g_signal_connect (window, "map", G_CALLBACK (on_map), NULL);
+  label = add_content (window);
+
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect_swapped (window, "map", G_CALLBACK (create_popup), label);
 
   gtk_widget_show (window);
 
