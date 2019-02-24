@@ -1819,7 +1819,6 @@ gtk_menu_new
 gtk_menu_new_from_model
 gtk_menu_set_display
 gtk_menu_reorder_child
-gtk_menu_attach
 gtk_menu_popup_at_rect
 gtk_menu_popup_at_widget
 gtk_menu_popup_at_pointer
@@ -1841,7 +1840,6 @@ gtk_menu_attach_to_widget
 gtk_menu_detach
 gtk_menu_get_attach_widget
 gtk_menu_get_for_attach_widget
-GtkMenuPositionFunc
 GtkMenuDetachFunc
 <SUBSECTION Standard>
 GTK_MENU
@@ -4553,7 +4551,6 @@ gtk_widget_get_allocated_width
 gtk_widget_get_allocated_height
 gtk_widget_get_allocation
 gtk_widget_get_allocated_baseline
-gtk_widget_get_allocated_size
 gtk_widget_get_width
 gtk_widget_get_height
 gtk_widget_compute_bounds
@@ -4758,12 +4755,9 @@ gtk_window_set_startup_id
 gtk_window_set_role
 gtk_window_get_decorated
 gtk_window_get_deletable
-gtk_window_get_default_icon_list
 gtk_window_get_default_icon_name
 gtk_window_get_default_size
 gtk_window_get_destroy_with_parent
-gtk_window_get_icon
-gtk_window_get_icon_list
 gtk_window_get_icon_name
 gtk_window_get_mnemonic_modifier
 gtk_window_get_modal
@@ -4784,13 +4778,7 @@ gtk_window_has_group
 gtk_window_get_window_type
 gtk_window_move
 gtk_window_resize
-gtk_window_set_default_icon_list
-gtk_window_set_default_icon
-gtk_window_set_default_icon_from_file
 gtk_window_set_default_icon_name
-gtk_window_set_icon
-gtk_window_set_icon_list
-gtk_window_set_icon_from_file
 gtk_window_set_icon_name
 gtk_window_set_auto_startup_notification
 gtk_window_get_mnemonics_visible
@@ -5902,8 +5890,8 @@ GtkMountOperationPrivate
 <SECTION>
 <FILE>gtktransform</FILE>
 <TITLE>3D transformations</TITLE>
-GtkTransformType;
-GtkTransform;
+GtkTransformType
+GtkTransform
 gtk_transform_ref
 gtk_transform_unref
 <SUBSECTION>
@@ -6703,8 +6691,8 @@ gtk_gesture_single_get_type
 
 <SECTION>
 <FILE>gtkeventcontrollerlegacy</FILE>
-<TITLE>GtkEventControllerlegacy</TITLE>
-GtkEventControllerlegacy
+<TITLE>GtkEventControllerLegacy</TITLE>
+GtkEventControllerLegacy
 gtk_event_controller_legacy_new
 
 <SUBSECTION Standard>
