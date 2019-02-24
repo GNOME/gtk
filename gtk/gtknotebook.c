@@ -7193,6 +7193,15 @@ gtk_notebook_set_action_widget (GtkNotebook *notebook,
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
 }
 
+/**
+ * gtk_notebook_get_page:
+ * @notebook: a #GtkNotebook
+ * @child: a child of @notebook
+ *
+ * Returns the #GtkNotebookPage for @child.
+ *
+ * Returns: (transfer none): the #GtkNotebookPage for @child
+ */
 GtkNotebookPage *
 gtk_notebook_get_page (GtkNotebook *notebook,
                        GtkWidget   *child)
@@ -7210,6 +7219,14 @@ gtk_notebook_get_page (GtkNotebook *notebook,
   return page;
 }
 
+/**
+ * gtk_notebook_page_get_child:
+ * @page: a #GtkNotebookPage
+ *
+ * Returns the notebook child to which @page belongs.
+ *
+ * Returns: (transfer none): the child to which @page belongs
+ */
 GtkWidget *
 gtk_notebook_page_get_child (GtkNotebookPage *page)
 {
@@ -7288,6 +7305,15 @@ gtk_notebook_pages_new (GtkNotebook *notebook)
   return pages;
 }
 
+/**
+ * gtk_notebook_get_pages:
+ * @notebook: a #GtkNotebook
+ *
+ * Returns a #GListModel that contains the pages of the notebook,
+ * and can be used to keep an up-to-date view.
+ * 
+ * Returns: (transfer full): a #GListModel for the notebook's children
+ */
 GListModel *
 gtk_notebook_get_pages (GtkNotebook *notebook)
 {
