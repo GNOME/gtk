@@ -23,7 +23,7 @@
 
 ## Version information
 <!--
- - Which version of GTK+ you are using
+ - Which version of GTK you are using
  - What operating system and version
   - For Linux, which distribution
  - If you built GTK+ yourself, the list of options used to configure the build
