@@ -5133,7 +5133,7 @@ gtk_widget_run_controllers (GtkWidget           *widget,
   return handled;
 }
 
-static void
+static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              GtkWidget *widget);
 gboolean
@@ -5151,7 +5151,11 @@ _gtk_widget_captured_event (GtkWidget      *widget,
     return TRUE;
 
   event_copy = gdk_event_copy (event);
-  translate_event_coordinates (event_copy, widget);
+  if (!translate_event_coordinates (event_copy, widget))
+    {
+      g_object_unref (event_copy);
+      return FALSE;
+    }
 
   return_val = gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
@@ -5209,7 +5213,7 @@ event_surface_is_still_viewable (const GdkEvent *event)
     }
 }
 
-static void
+static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              GtkWidget *widget)
 {
@@ -5218,7 +5222,7 @@ translate_event_coordinates (GdkEvent  *event,
   graphene_point_t p;
 
   if (!gdk_event_get_coords (event, &x, &y))
-    return;
+    return TRUE;
 
   event_widget = gtk_get_event_widget (event);
 
@@ -5226,11 +5230,11 @@ translate_event_coordinates (GdkEvent  *event,
                                  widget,
                                  &GRAPHENE_POINT_INIT (x, y),
                                  &p))
-    {
-      p.x = p.y = 0;
-    }
+    return FALSE;
 
   gdk_event_set_coords (event, p.x, p.y);
+
+  return TRUE;
 }
 
 static gboolean
@@ -5253,7 +5257,11 @@ gtk_widget_event_internal (GtkWidget      *widget,
 
   event_copy = gdk_event_copy (event);
 
-  translate_event_coordinates (event_copy, widget);
+  if (!translate_event_coordinates (event_copy, widget))
+    {
+      g_object_unref (event_copy);
+      return FALSE;
+    }
 
   if (widget == gtk_get_event_target (event_copy))
     return_val |= gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
