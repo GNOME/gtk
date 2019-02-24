@@ -39,6 +39,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkpopup.h"
 
 #include "a11y/gtkcontaineraccessibleprivate.h"
 
@@ -1377,6 +1378,8 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
     {
       if (GTK_IS_WINDOW (container))
         gtk_window_check_resize (GTK_WINDOW (container));
+      else if (GTK_IS_POPUP (container))
+        gtk_popup_check_resize (GTK_POPUP (container));
       else
         g_warning ("gtk_container_idle_sizer() called on a non-window");
     }
