@@ -6350,8 +6350,9 @@ gtk_widget_get_has_surface (GtkWidget *widget)
  *
  * Determines whether @widget is a toplevel widget.
  *
- * Currently only #GtkWindow and #GtkInvisible are toplevel widgets.
- * Toplevel widgets have no parent widget.
+ * Currently only #GtkWindows are toplevel widgets.
+ * Toplevel widgets have no parent widget and implement
+ * the #GtkRoot interface.
  *
  * Returns: %TRUE if @widget is a toplevel, %FALSE otherwise
  **/
