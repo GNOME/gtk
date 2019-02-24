@@ -61,7 +61,7 @@
  *
  * A #GdkSurface is a (usually) rectangular region on the screen.
  * It’s a low-level object, used to implement high-level objects such as
- * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
+ * #GtkWidget and #GtkWindow on the GTK level. A #GtkWindow is a toplevel
  * surface, the thing a user might think of as a “window” with a titlebar
  * and so on; a #GtkWindow may contain many sub-GdkSurfaces.
  */
@@ -2692,7 +2692,7 @@ gdk_surface_move (GdkSurface *surface,
  * @height: new height of the surface
  *
  * Resizes @surface; for toplevel surfaces, asks the window manager to resize
- * the surface. The window manager may not allow the resize. When using GTK+,
+ * the surface. The window manager may not allow the resize. When using GTK,
  * use gtk_window_resize() instead of this low-level GDK function.
  *
  * Surfaces may not be resized below 1x1.
@@ -4264,7 +4264,7 @@ gdk_surface_set_geometry_hints (GdkSurface         *surface,
  * If you haven’t explicitly set the icon name for the surface
  * (using gdk_surface_set_icon_name()), the icon name will be set to
  * @title as well. @title must be in UTF-8 encoding (as with all
- * user-readable strings in GDK/GTK+). @title may not be %NULL.
+ * user-readable strings in GDK and GTK). @title may not be %NULL.
  **/
 void
 gdk_surface_set_title (GdkSurface   *surface,
@@ -4278,7 +4278,7 @@ gdk_surface_set_title (GdkSurface   *surface,
  * @surface: a toplevel #GdkSurface
  * @role: a string indicating its role
  *
- * When using GTK+, typically you should use gtk_window_set_role() instead
+ * When using GTK, typically you should use gtk_window_set_role() instead
  * of this low-level function.
  *
  * The window manager and session manager use a surface’s role to
@@ -4304,7 +4304,7 @@ gdk_surface_set_role (GdkSurface   *surface,
  * @surface: a toplevel #GdkSurface
  * @startup_id: a string with startup-notification identifier
  *
- * When using GTK+, typically you should use gtk_window_set_startup_id()
+ * When using GTK, typically you should use gtk_window_set_startup_id()
  * instead of this low-level function.
  **/
 void
@@ -4489,7 +4489,7 @@ gdk_surface_iconify (GdkSurface *surface)
  * @surface: a toplevel #GdkSurface
  *
  * Attempt to deiconify (unminimize) @surface. On X11 the window manager may
- * choose to ignore the request to deiconify. When using GTK+,
+ * choose to ignore the request to deiconify. When using GTK,
  * use gtk_window_deiconify() instead of the #GdkSurface variant. Or better yet,
  * you probably want to use gtk_window_present(), which raises the surface, focuses it,
  * unminimizes it, and puts it on the current desktop.
@@ -5262,7 +5262,7 @@ gdk_surface_get_unscaled_size (GdkSurface *surface,
  *
  * This function only works for toplevel surfaces.
  *
- * GTK+ will update this property automatically if
+ * GTK will update this property automatically if
  * the @surface background is opaque, as we know where the opaque regions
  * are. If your surface background is not opaque, please update this
  * property in your #GtkWidget::style-updated handler.
@@ -5298,14 +5298,14 @@ gdk_surface_set_opaque_region (GdkSurface      *surface,
  * @top: The top extent
  * @bottom: The bottom extent
  *
- * Newer GTK+ windows using client-side decorations use extra geometry
+ * Newer GTK windows using client-side decorations use extra geometry
  * around their frames for effects like shadows and invisible borders.
  * Window managers that want to maximize windows or snap to edges need
  * to know where the extents of the actual frame lie, so that users
  * don’t feel like windows are snapping against random invisible edges.
  *
- * Note that this property is automatically updated by GTK+, so this
- * function should only be used by applications which do not use GTK+
+ * Note that this property is automatically updated by GTK, so this
+ * function should only be used by applications which do not use GTK
  * to create toplevel surfaces.
  */
 void
