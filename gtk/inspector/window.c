@@ -286,6 +286,17 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   object_class->constructed = gtk_inspector_window_constructed;
   widget_class->realize = gtk_inspector_window_realize;
 
+  g_signal_new (g_intern_static_string ("event"),
+                G_OBJECT_CLASS_TYPE (object_class),
+                G_SIGNAL_RUN_LAST,
+                0,
+                g_signal_accumulator_true_handled,
+                NULL,
+                NULL,
+                G_TYPE_BOOLEAN,
+                1,
+                GDK_TYPE_EVENT);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
@@ -466,6 +477,21 @@ gtk_inspector_is_recording (GtkWidget *widget)
     return FALSE;
 
   return gtk_inspector_recorder_is_recording (GTK_INSPECTOR_RECORDER (iw->widget_recorder));
+}
+
+gboolean
+gtk_inspector_handle_event (GdkEvent *event)
+{
+  GtkInspectorWindow *iw;
+  gboolean handled = FALSE;
+
+  iw = gtk_inspector_window_get_for_display (gdk_event_get_display (event));
+  if (iw == NULL)
+    return FALSE;
+
+  g_signal_emit_by_name (iw, "event", event, &handled);
+
+  return handled;
 }
 
 // vim: set et sw=2 ts=2:

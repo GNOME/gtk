@@ -72,7 +72,6 @@ typedef struct
   GtkWidget *controllers;
   GtkWidget *magnifier;
 
-  GtkWidget *invisible;
   GtkWidget *selected_widget;
 
   GList *extra_pages;
@@ -117,6 +116,8 @@ GskRenderNode *         gtk_inspector_prepare_render                            
                                                                                  GdkSurface             *surface,
                                                                                  const cairo_region_t   *region,
                                                                                  GskRenderNode          *node);
+gboolean                gtk_inspector_handle_event                              (GdkEvent               *event);
+                                                                                
 
 G_END_DECLS
 
