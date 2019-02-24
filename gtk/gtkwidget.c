@@ -52,6 +52,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkpopover.h"
+#include "gtkpopup.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
@@ -12076,6 +12077,7 @@ gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class)
 {
   return !(GTK_IS_WINDOW_CLASS (widget_class) ||
            GTK_IS_INVISIBLE_CLASS (widget_class) ||
+           GTK_IS_POPUP_CLASS (widget_class) ||
            GTK_IS_POPOVER_CLASS (widget_class));
 }
 
