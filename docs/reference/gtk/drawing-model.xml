@@ -45,7 +45,7 @@
         windows gets raised to the top, then the application has to
         repaint it, so the previously obscured area can be shown.
         When the windowing system asks an application to redraw
-        a window, it sends an <firstterm>frame event</firstterm>
+        a window, it sends a <firstterm>frame event</firstterm>
         (<firstterm>expose event</firstterm> in X11 terminology)
         for that window.
       </para>
@@ -64,16 +64,14 @@
         tell the underlying surface that it needs to repaint itself.  The
         drawing cycle can also be initiated when a widget itself decides
         that it needs to update its display.  For example, when the user
-        types a character in a <link
-        linkend="GtkEntry"><classname>GtkEntry</classname></link>
-        widget, the entry asks GTK to queue a redraw operation for
-        itself.
+        types a character in an entry widget, the entry asks GTK to queue
+        a redraw operation for itself.
       </para>
 
       <para>
         The windowing system generates frame events for surfaces. The GDK
         interface to the windowing system translates such events into
-        emissions of the #GtkSurface::render signal on the affected surfaces.
+        emissions of the ::render signal on the affected surfaces.
         The GTK toplevel window connects to that signal, and reacts appropriately.
       </para>
 
@@ -205,21 +203,21 @@
       <title>Hierarchical drawing</title>
 
       <para>
-        During the Paint phase we will send a single ::render signal the toplevel
+        During the Paint phase GTK receives a single ::render signal on the toplevel
         window. The signal handler will create a snapshot object (which is a
         helper for creating a scene graph) and emit a GtkWidget::snapshot() signal,
-        which will propagate down the entire widget hierarchy. This lets each widget
+        which will propagate down the widget hierarchy. This lets each widget
         snapshot its content at the right place and time, correctly handling things
         like partial transparencies and overlapping widgets.
       </para>
 
       <para>
         To avoid excessive work when generating scene graphs, GTK caches render nodes.
-        GtkWidget keeps a reference to its render node (which in turn, will refer to
+        Each widget keeps a reference to its render node (which in turn, will refer to
         the render nodes of children, and grandchildren, and so on), and will reuse
-        that node during the Paint phase. Invalidating a widget (e.g. by calling
-        gtk_widget_queue_draw) discards the cached render node, forcing GTK to
-        regenerate it the next time it needs to snapshot the widget.
+        that node during the Paint phase. Invalidating a widget (by calling
+        gtk_widget_queue_draw()) discards the cached render node, forcing the widget
+        to regenerate it the next time it needs to handle a ::snapshot.
       </para>
     </refsect2>
 
