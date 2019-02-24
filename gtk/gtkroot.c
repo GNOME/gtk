@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkrootprivate.h"
+#include "gdk/gdk-private.h"
 
 /**
  * SECTION:root
@@ -101,4 +102,25 @@ gtk_root_get_surface_transform (GtkRoot *self,
 
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_surface_transform (self, x, y);
+}
+
+/**
+ * gtk_root_get_for_surface:
+ * @surface: a #GdkSurface
+ *
+ * Finds the GtkRoot associated with the surface.
+ * 
+ * Returns: (transfer none): the #GtkRoot that is associated with @surface
+ */
+GtkWidget *
+gtk_root_get_for_surface (GdkSurface *surface)
+{
+  GtkWidget *widget;
+
+  widget = (GtkWidget *)gdk_surface_get_widget (surface);
+
+  if (widget && GTK_IS_ROOT (widget))
+    return widget;
+
+  return NULL;
 }

@@ -131,6 +131,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkprintbackend.h"
 #include "gtkimmodule.h"
+#include "gtkroot.h"
 
 #include "a11y/gtkaccessibility.h"
 
@@ -1293,7 +1294,6 @@ rewrite_event_for_grabs (GdkEvent *event)
 {
   GdkSurface *grab_surface;
   GtkWidget *event_widget, *grab_widget;
-  gpointer grab_widget_ptr;
   gboolean owner_events;
   GdkDisplay *display;
   GdkDevice *device;
@@ -1326,8 +1326,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  gdk_surface_get_user_data (grab_surface, &grab_widget_ptr);
-  grab_widget = grab_widget_ptr;
+  grab_widget = gtk_root_get_for_surface (grab_surface);
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
@@ -2373,15 +2372,11 @@ GtkWidget*
 gtk_get_event_widget (const GdkEvent *event)
 {
   GtkWidget *widget;
-  gpointer widget_ptr;
 
   widget = NULL;
   if (event && event->any.surface &&
       (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.surface)))
-    {
-      gdk_surface_get_user_data (event->any.surface, &widget_ptr);
-      widget = widget_ptr;
-    }
+    widget = gtk_root_get_for_surface (event->any.surface);
 
   return widget;
 }

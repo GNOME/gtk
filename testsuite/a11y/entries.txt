@@ -184,7 +184,7 @@ window1
       action 0 description: Activates the entry
       action 0 keybinding: <Alt>e
     entry2
-      "password text"
+      "text"
       parent: box1
       index: 4
       labelled-by: label2
