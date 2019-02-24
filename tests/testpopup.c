@@ -11,41 +11,19 @@ draw_popup (GtkDrawingArea  *da,
   cairo_paint (cr);
 }
 
-static void
-place_popup (GtkEventControllerMotion *motion,
-             gdouble                   x,
-             gdouble                   y,
-             GtkWidget                *popup)
-{
-  gint width, height, win_x, win_y;
-  GtkWidget *widget;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
-
-  gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
-  gtk_window_get_position (GTK_WINDOW (widget), &win_x, &win_y);
-  gtk_window_move (GTK_WINDOW (popup),
-                   (int) win_x + x - width / 2,
-                   (int) win_y + y - height / 2);
-}
-
 static gboolean
-on_map (GtkWidget *parent)
+create_popup (GtkWidget *parent,
+              GtkWidget *label)
 {
   GtkWidget *popup, *da;
-  GtkEventController *motion;
 
-  popup = gtk_window_new (GTK_WINDOW_POPUP);
+  popup = gtk_popup_new ();
+  gtk_popup_set_relative_to (GTK_POPUP (popup), label);
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_popup, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (popup), da);
 
   gtk_widget_set_size_request (GTK_WIDGET (popup), 20, 20);
-  gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
-
-  motion = gtk_event_controller_motion_new ();
-  gtk_widget_add_controller (parent, motion);
-  g_signal_connect (motion, "motion", G_CALLBACK (place_popup), popup);
 
   gtk_widget_show (popup);
 
@@ -56,13 +34,20 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
+  GtkWidget *label;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
-  g_signal_connect (window, "map", G_CALLBACK (on_map), NULL);
+  label = gtk_label_new ("x");
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (window), label);
+
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "map", G_CALLBACK (create_popup), label);
 
   gtk_widget_show (window);
 
