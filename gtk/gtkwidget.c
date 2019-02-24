@@ -13593,6 +13593,14 @@ gtk_widget_get_cursor (GtkWidget *widget)
   return priv->cursor;
 }
 
+/**
+ * gtk_widget_set_can_pick:
+ * @widget: a #GtkWidget
+ * @can_pick: whether this widget should be able to receive pointer events
+ *
+ * Sets whether @widget can be the target of pointer events and
+ * can be returned by gtk_widget_pick().
+ */
 void
 gtk_widget_set_can_pick (GtkWidget *widget,
                          gboolean   can_pick)
@@ -13609,6 +13617,14 @@ gtk_widget_set_can_pick (GtkWidget *widget,
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_PICK]);
 }
 
+/**
+ * gtk_widget_get_can_pick:
+ * @widget: a #GtkWidget
+ * 
+ * Queries whether @widget can be the target of pointer events.
+ * 
+ * Returns: %TRUE if @widget can receive pointer events
+ */
 gboolean
 gtk_widget_get_can_pick (GtkWidget *widget)
 {

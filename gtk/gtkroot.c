@@ -23,9 +23,9 @@
 #include "gdk/gdk-private.h"
 
 /**
- * SECTION:root
+ * SECTION:gtkroot
  * @Title: GtkRoot
- * @Short_description: Root widgets
+ * @Short_description: Interface for root widgets
  * @See_also: #GtkWindow
  *
  * #GtkRoot is the interface implemented by all widgets that can act as a toplevel

@@ -120,17 +120,6 @@ void               gtk_range_get_slider_range              (GtkRange      *range
                                                             gint          *slider_end);
 
 GDK_AVAILABLE_IN_ALL
-void               gtk_range_set_lower_stepper_sensitivity (GtkRange      *range,
-                                                            GtkSensitivityType sensitivity);
-GDK_AVAILABLE_IN_ALL
-GtkSensitivityType gtk_range_get_lower_stepper_sensitivity (GtkRange      *range);
-GDK_AVAILABLE_IN_ALL
-void               gtk_range_set_upper_stepper_sensitivity (GtkRange      *range,
-                                                            GtkSensitivityType sensitivity);
-GDK_AVAILABLE_IN_ALL
-GtkSensitivityType gtk_range_get_upper_stepper_sensitivity (GtkRange      *range);
-
-GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_increments                (GtkRange      *range,
                                                             gdouble        step,
                                                             gdouble        page);

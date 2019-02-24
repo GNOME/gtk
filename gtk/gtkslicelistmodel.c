@@ -27,7 +27,7 @@
 /**
  * SECTION:gtkslicelistmodel
  * @title: GtkSliceListModel
- * @short_description: a #GListModel that presents a slice out of a larger list
+ * @short_description: A list model that presents a slice out of a larger list
  * @see_also: #GListModel
  *
  * #GtkSliceListModel is a list model that takes a list model and presents a slice of

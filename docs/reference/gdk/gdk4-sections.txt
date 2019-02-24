@@ -213,6 +213,7 @@ gdk_surface_get_pass_through
 gdk_surface_move
 gdk_surface_resize
 gdk_surface_move_resize
+gdk_surface_move_to_rect
 gdk_surface_has_native
 gdk_surface_raise
 gdk_surface_lower
@@ -374,6 +375,7 @@ gdk_content_formats_builder_to_formats
 GDK_TYPE_FILE_LIST
 gdk_file_list_get_type
 gdk_content_formats_get_type
+gdk_content_formats_builder_get_type
 </SECTION>
 
 <SECTION>
@@ -439,6 +441,7 @@ gdk_keymap_get_modifier_state
 gdk_keymap_add_virtual_modifiers
 gdk_keymap_map_virtual_modifiers
 gdk_keymap_get_modifier_mask
+gdk_keymap_get_display
 
 <SUBSECTION>
 gdk_keyval_name
@@ -619,6 +622,7 @@ GDK_BUTTON_SECONDARY
 gdk_event_new
 gdk_event_copy
 gdk_event_get_axes
+gdk_event_get_axis
 gdk_event_get_button
 gdk_event_get_click_count
 gdk_event_get_coords
@@ -681,6 +685,7 @@ GDK_TYPE_SCROLL_DIRECTION
 GDK_TYPE_NOTIFY_TYPE
 GDK_IS_EVENT
 gdk_event_get_type
+gdk_event_sequence_get_type
 </SECTION>
 
 <SECTION>
@@ -776,7 +781,6 @@ GDK_ACTION_ALL
 
 gdk_drag_get_display
 gdk_drag_get_actions
-gdk_drag_get_suggested_action
 gdk_drag_get_selected_action
 gdk_drag_get_formats
 gdk_drag_get_device

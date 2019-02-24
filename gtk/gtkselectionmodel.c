@@ -41,7 +41,7 @@
  * A #GtkSelectionModel supports a single boolean per row indicating if a row is selected
  * or not. This can be queried via gtk_selection_model_is_selected(). When the selected
  * state of one or more rows changes, the model will emit the
- * GtkSelectionModel::selection-changed signal by calling the
+ * #GtkSelectionModel::selection-changed signal by calling the
  * gtk_selection_model_selection_changed() function. The positions given in that signal
  * may have their selection state changed, though that is not a requirement.  
  * If new items added to the model via the #GListModel::items-changed signal are selected
@@ -57,6 +57,7 @@
  * selection functions do NOT indicate if selection or unselection happened. They are
  * only meant to indicate complete failure, like when this mode of selecting is not
  * supported by the model.
+ *
  * Selections may happen asynchronously, so the only reliable way to find out when an
  * item was selected is to listen to the signals that indicate selection.
  */
@@ -201,6 +202,14 @@ gtk_selection_model_is_selected (GtkSelectionModel *model,
   return iface->is_selected (model, position);
 }
 
+/**
+ * gtk_selection_model_select_item:
+ * @model: a #GtkSelectionModel
+ * @position: the position of the item to select
+ * @exclusive: whether previously selected items should be unselected
+ *
+ * Requests to select an item in the model.
+ */
 gboolean
 gtk_selection_model_select_item (GtkSelectionModel *model,
                                  guint              position,
@@ -214,6 +223,13 @@ gtk_selection_model_select_item (GtkSelectionModel *model,
   return iface->select_item (model, position, exclusive);
 }
 
+/**
+ * gtk_selection_model_unselect_item:
+ * @model: a #GtkSelectionModel
+ * @position: the position of the item to unselect
+ *
+ * Requests to unselect an item in the model.
+ */
 gboolean
 gtk_selection_model_unselect_item (GtkSelectionModel *model,
                                    guint              position)
@@ -226,6 +242,15 @@ gtk_selection_model_unselect_item (GtkSelectionModel *model,
   return iface->unselect_item (model, position);
 }
 
+/**
+ * gtk_selection_model_select_range:
+ * @model: a #GtkSelectionModel
+ * @position: the first item to select
+ * @n_items: the number of items to select
+ * @exclusive: whether previously selected items should be unselected
+ *
+ * Requests to select a range of items in the model.
+ */
 gboolean
 gtk_selection_model_select_range (GtkSelectionModel *model,
                                   guint              position,
@@ -240,6 +265,14 @@ gtk_selection_model_select_range (GtkSelectionModel *model,
   return iface->select_range (model, position, n_items, exclusive);
 }
 
+/**
+ * gtk_selection_model_unselect_range:
+ * @model: a #GtkSelectionModel
+ * @position: the first item to unselect
+ * @n_items: the number of items to unselect
+ *
+ * Requests to unselect a range of items in the model.
+ */
 gboolean
 gtk_selection_model_unselect_range (GtkSelectionModel *model,
                                     guint              position,
@@ -253,6 +286,12 @@ gtk_selection_model_unselect_range (GtkSelectionModel *model,
   return iface->unselect_range (model, position, n_items);
 }
 
+/**
+ * gtk_selection_model_select_all:
+ * @model: a #GtkSelectionModel
+ *
+ * Requests to select all items in the model.
+ */
 gboolean
 gtk_selection_model_select_all (GtkSelectionModel *model)
 {
@@ -264,6 +303,12 @@ gtk_selection_model_select_all (GtkSelectionModel *model)
   return iface->select_all (model);
 }
 
+/**
+ * gtk_selection_model_unselect_all:
+ * @model: a #GtkSelectionModel
+ *
+ * Requests to unselect all items in the model.
+ */
 gboolean
 gtk_selection_model_unselect_all (GtkSelectionModel *model)
 {
@@ -315,6 +360,16 @@ gtk_selection_model_query_range (GtkSelectionModel *model,
   return iface->query_range (model, position, start_range, n_items, selected);
 }
 
+/**
+ * gtk_selection_model_selection_changed:
+ * @model: a #GtkSelectionModel
+ * @position: the first changed item
+ * @n_items: the number of changed items
+ *
+ * Helper function for implementations of #GtkSelectionModel.
+ * Call this when a the selection changes to emit the ::selection-changed
+ * signal.
+ */
 void
 gtk_selection_model_selection_changed (GtkSelectionModel *model,
                                        guint              position,

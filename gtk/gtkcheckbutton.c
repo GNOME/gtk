@@ -557,8 +557,9 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
  * gtk_check_button_get_inconsistent:
  * @check_button: a #GtkCheckButton
  *
- * Returns: %TRUE if @check_button is currently in an 'in between' state,
- *   %FALSE otherwise.
+ * Returns whether the check button is in an inconsistent state.
+ * 
+ * Returns: %TRUE if @check_button is currently in an 'in between' state, %FALSE otherwise.
  */
 gboolean
 gtk_check_button_get_inconsistent (GtkCheckButton *check_button)

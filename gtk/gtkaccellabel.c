@@ -1076,9 +1076,11 @@ gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
  * gtk_accel_label_get_use_underline:
  * @accel_label: a #GtkAccelLabel
  *
- * Returns: Whether the accel label interprets underscores in it's
- * GtkAccelLabel:label property as mnemonic indicators.
+ * Returns whether the accel label interprets underscores in it's
+ * label property as mnemonic indicators.
  * See gtk_accel_label_set_use_underline() and gtk_label_set_use_underline();
+ *
+ * Returns: whether the accel label uses mnemonic underlines
  */
 gboolean
 gtk_accel_label_get_use_underline (GtkAccelLabel *accel_label)

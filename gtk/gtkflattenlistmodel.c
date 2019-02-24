@@ -28,7 +28,7 @@
 /**
  * SECTION:gtkflattenlistmodel
  * @title: GtkFlattenListModel
- * @short_description: a #GListModel that flattens a given listmodel
+ * @short_description: A list model that flattens a list of lists
  * @see_also: #GListModel
  *
  * #GtkFlattenListModel is a list model that takes a list model containing

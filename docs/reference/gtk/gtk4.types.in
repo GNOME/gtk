@@ -137,6 +137,7 @@ gtk_radio_tool_button_get_type
 gtk_range_get_type
 gtk_recent_manager_get_type
 gtk_revealer_get_type
+gtk_root_get_type
 gtk_scale_button_get_type
 gtk_scale_get_type
 gtk_scrollable_get_type

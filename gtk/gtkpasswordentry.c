@@ -36,12 +36,17 @@
 #include "a11y/gtkentryaccessible.h"
 
 /**
- * SECTION:gtkpasswordhentry
+ * SECTION:gtkpasswordentry
  * @Short_description: An entry for secrets
  * @Title: GtkPasswordEntry
  *
  * #GtkPasswordEntry is entry that has been tailored for
- * entering secrets.
+ * entering secrets. It does not show its contents in clear text,
+ * does not allow to copy it to the clipboard, and it shows a
+ * warning when Caps-Lock is engaged.
+ *
+ * GtkPasswordEntry provides no API of its own and should be used
+ * with the #GtkEditable API.
  */
 
 typedef struct {

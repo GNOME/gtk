@@ -28,8 +28,7 @@
 /**
  * SECTION:gtkmaplistmodel
  * @title: GtkMapListModel
- * @short_description: a #GListModel that maps items from a child list model to
- *     a different item
+ * @short_description: A list model that transforms its items
  * @see_also: #GListModel
  *
  * #GtkMapListModel is a list model that takes a list model and maps the items

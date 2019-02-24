@@ -1151,7 +1151,9 @@ gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
  * gtk_info_bar_get_revealed:
  * @info_bar: a #GtkInfoBar
  *
- * Returns: the current value of the #GtkInfoBar:revealed property.
+ * Returns whether the info bar is currently revealed.
+ *
+ * Returns: the current value of the #GtkInfoBar:revealed property
  */
 gboolean
 gtk_info_bar_get_revealed (GtkInfoBar *info_bar)

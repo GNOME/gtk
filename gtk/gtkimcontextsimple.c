@@ -1476,7 +1476,7 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
   G_UNLOCK (global_tables);
 }
 
-/*
+/**
  * gtk_im_context_simple_add_compose_file:
  * @context_simple: A #GtkIMContextSimple
  * @compose_file: The path of compose file

@@ -28,7 +28,7 @@
 /**
  * SECTION:gtkfilterlistmodel
  * @title: GtkFilterListModel
- * @short_description: a #GListModel that filters its items
+ * @short_description: A list model that filters its items
  * @see_also: #GListModel
  *
  * #GtkFilterListModel is a list model that filters a given other

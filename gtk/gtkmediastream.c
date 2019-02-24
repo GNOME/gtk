@@ -614,7 +614,7 @@ gtk_media_stream_set_playing (GtkMediaStream *self,
 }
 
 /**
- * gtk_medai_stream_get_ended:
+ * gtk_media_stream_get_ended:
  * @self: a #GtkMediaStream
  *
  * Returns whether the streams playback is finished.

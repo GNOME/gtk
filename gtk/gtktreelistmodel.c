@@ -27,7 +27,7 @@
 
 /**
  * SECTION:gtktreelistmodel
- * @Short_description: a List model that can create child models on demand
+ * @Short_description: A list model that can create child models on demand
  * @Title: GtkTreeListModel
  * @See_also: #GListModel
  *

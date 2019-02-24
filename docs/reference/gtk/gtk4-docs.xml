@@ -68,6 +68,7 @@
 
     <chapter id="WindowWidgets">
       <title>Windows</title>
+      <xi:include href="xml/gtkroot.xml" />
       <xi:include href="xml/gtkwindow.xml" />
       <xi:include href="xml/gtkdialog.xml" />
       <xi:include href="xml/gtkmessagedialog.xml" />

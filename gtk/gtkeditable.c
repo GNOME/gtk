@@ -516,6 +516,7 @@ gtk_editable_get_text (GtkEditable *editable)
 /**
  * gtk_editable_set_text:
  * @editable: a #GtkEditable
+ * @text: the text to set
  *
  * Sets the text in the editable to the given value,
  * replacing the current contents.
@@ -911,7 +912,7 @@ gtk_editable_finish_delegate (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_set_property:
+ * gtk_editable_delegate_set_property:
  * @object: a #GObject
  * @prop_id: a property ID
  * @value: value to set
@@ -969,7 +970,7 @@ gtk_editable_delegate_set_property (GObject      *object,
 }
 
 /**
- * gtk_editable_get_property:
+ * gtk_editable_delegate_get_property:
  * @object: a #GObject
  * @prop_id: a property ID
  * @value: value to set

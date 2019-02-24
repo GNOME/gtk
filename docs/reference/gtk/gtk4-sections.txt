@@ -675,12 +675,6 @@ gtk_combo_box_new
 gtk_combo_box_new_with_entry
 gtk_combo_box_new_with_model
 gtk_combo_box_new_with_model_and_entry
-gtk_combo_box_get_wrap_width
-gtk_combo_box_set_wrap_width
-gtk_combo_box_get_row_span_column
-gtk_combo_box_set_row_span_column
-gtk_combo_box_get_column_span_column
-gtk_combo_box_set_column_span_column
 gtk_combo_box_get_active
 gtk_combo_box_set_active
 gtk_combo_box_get_active_iter
@@ -695,6 +689,7 @@ gtk_combo_box_popdown
 gtk_combo_box_get_popup_accessible
 gtk_combo_box_get_row_separator_func
 gtk_combo_box_set_row_separator_func
+GtkSensitivityType
 gtk_combo_box_set_button_sensitivity
 gtk_combo_box_get_button_sensitivity
 gtk_combo_box_get_has_entry
@@ -2279,11 +2274,6 @@ gtk_range_set_increments
 gtk_range_set_range
 gtk_range_get_round_digits
 gtk_range_set_round_digits
-GtkSensitivityType
-gtk_range_set_lower_stepper_sensitivity
-gtk_range_get_lower_stepper_sensitivity
-gtk_range_set_upper_stepper_sensitivity
-gtk_range_get_upper_stepper_sensitivity
 gtk_range_get_flippable
 gtk_range_set_flippable
 gtk_range_get_range_rect
@@ -4398,6 +4388,7 @@ gtk_snapshot_push_clip
 gtk_snapshot_push_rounded_clip
 gtk_snapshot_push_cross_fade
 gtk_snapshot_push_blend
+gtk_snapshot_push_debug
 gtk_snapshot_pop
 gtk_snapshot_save
 gtk_snapshot_restore
@@ -4491,6 +4482,7 @@ gtk_widget_set_parent
 gtk_widget_set_parent_surface
 gtk_widget_get_parent_surface
 gtk_widget_get_toplevel
+gtk_widget_get_root
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
@@ -7183,4 +7175,13 @@ gtk_media_stream_error_valist
 <SUBSECTION Private>
 GTK_TYPE_MEDIA_STREAM
 gtk_media_stream_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkroot</FILE>
+<TITLE>GtkRoot</TITLE>
+GtkRoot
+gtk_root_get_for_surface
+<SUBSECTION Private>
+gtk_root_get_type
 </SECTION>

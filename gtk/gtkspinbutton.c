@@ -2221,6 +2221,8 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
  * gtk_spin_button_get_text:
  * @spin_button: a #GtkSpinButton
  *
+ * Returns the text shown in the entry.
+ *
  * Returns: (transfer none): The current text shown in the entry area of @spin_button.
  */
 const char *

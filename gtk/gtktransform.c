@@ -19,7 +19,7 @@
 
 
 /**
- * SECTION:GtkTransform
+ * SECTION:gtktransform
  * @Title: GtkTransform
  * @Short_description: A description for transform operations
  *

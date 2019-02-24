@@ -300,6 +300,16 @@ gtk_snapshot_collect_debug (GtkSnapshot      *snapshot,
   return debug_node;
 }
 
+/**
+ * gtk_snapshot_push_debug:
+ * @snapshot: a #GtkSnapshot
+ * @message: a printf-style format string
+ * @...: arguments for @message
+ *
+ * Inserts a debug node with a message. Debug nodes don't affect
+ * the rendering at all, but can be helpful in identifying parts
+ * of a render node tree dump, for example in the GTK inspector.
+ */
 void
 gtk_snapshot_push_debug (GtkSnapshot *snapshot,
                          const char  *message,
@@ -356,6 +366,15 @@ gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
   return opacity_node;
 }
 
+/**
+ * gtk_snapshot_push_opacity:
+ * @snapshot: a #GtkSnapshot
+ * @opacity: the opacity to use
+ *
+ * Modifies the opacity of an image.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
                            double       opacity)
@@ -394,6 +413,15 @@ gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
   return blur_node;
 }
 
+/**
+ * gtk_snapshot_push_blur:
+ * @snapshot: a #GtkSnapshot
+ * @radius: the blur radius to use
+ *
+ * Blurs an image.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_blur (GtkSnapshot *snapshot,
                         double       radius)
@@ -458,6 +486,17 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
   return color_matrix_node;
 }
 
+/**
+ * gtk_snapshot_push_color_matrix:
+ * @snapshot: a #GtkSnapshot
+ * @color_matrix: the color matrix to use
+ * @color_offset: the color offset to use
+ *
+ * Modifies the colors of an image by applying an affine transformation
+ * in RGB space.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
                                 const graphene_matrix_t *color_matrix,
@@ -631,6 +670,15 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
   return clip_node;
 }
 
+/**
+ * gtk_snapshot_push_clip:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rectangle to clip to
+ *
+ * Clips an image to a rectangle.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
                         const graphene_rect_t *bounds)
@@ -689,6 +737,15 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
   return clip_node;
 }
 
+/**
+ * gtk_snapshot_push_rounded_clip:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rounded rectangle to clip to
+ *
+ * Clips an image to a rounded rectangle.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
                                 const GskRoundedRect *bounds)
@@ -729,6 +786,16 @@ gtk_snapshot_collect_shadow (GtkSnapshot      *snapshot,
   return shadow_node;
 }
 
+/**
+ * gtk_snapshot_push_shadow:
+ * @snapshot: a #GtkSnapshot
+ * @shadow: the first shadow specification
+ * @n_shadows: number of shadow specifications
+ *
+ * Applies a shadow to an image.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
                           const GskShadow *shadow,
@@ -1171,7 +1238,7 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_transform:
  * @snapshot: a #GtkSnapshot
- * @tranform: (allow-none): the transform to apply
+ * @transform: (allow-none): the transform to apply
  *
  * Transforms @snapshot's coordinate system with the given @transform.
  **/
@@ -1222,7 +1289,7 @@ gtk_snapshot_transform_matrix_with_category (GtkSnapshot             *snapshot,
 }
 
 /**
- * gtk_snapshot_transform_translate:
+ * gtk_snapshot_translate:
  * @snapshot: a #GtkSnapshot
  * @point: the point to translate the snapshot by
  *
@@ -1242,7 +1309,7 @@ gtk_snapshot_translate (GtkSnapshot            *snapshot,
 }
 
 /**
- * gtk_snapshot_transform_translate_3d:
+ * gtk_snapshot_translate_3d:
  * @snapshot: a #GtkSnapshot
  * @point: the point to translate the snapshot by
  *
@@ -1262,7 +1329,7 @@ gtk_snapshot_translate_3d (GtkSnapshot              *snapshot,
 }
 
 /**
- * gtk_snapshot_transform_rotate:
+ * gtk_snapshot_rotate:
  * @snapshot: a #GtkSnapshot
  * @angle: the rotation angle, in degrees (clockwise)
  *
@@ -1282,7 +1349,7 @@ gtk_snapshot_rotate (GtkSnapshot *snapshot,
 }
 
 /**
- * gtk_snapshot_transform_rotate_3d:
+ * gtk_snapshot_rotate_3d:
  * @snapshot: a #GtkSnapshot
  * @angle: the rotation angle, in degrees (clockwise)
  * @axis: The rotation axis

@@ -17,7 +17,20 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
+/**
+ * SECTION:gtkeventcontrollerlegacy
+ * @Short_description: Event controller for miscellaneous events
+ * @Title: GtkEventControllerLegacy
+ * @See_also: #GtkEventController
+ *
+ * #GtkEventControllerLegacy is an event controller that gives you
+ * direct access to the event stream. It should only be used as a
+ * last resort if none of the other event controllers or gestures
+ * do the job.
+ **/
+
 #include "config.h"
+
 #include "gtkeventcontrollerlegacy.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkmarshalers.h"
@@ -67,11 +80,10 @@ gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
    * @controller: the object which received the signal.
    * @event: the #GdkEvent which triggered this signal
    *
-   * The GTK+ main loop will emit this signal for each GDK event delivered
-   * to @controller.
+   * Emitted for each GDK event delivered to @controller.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event
-   * and the emission of this signal. %FALSE to propagate the event further.
+   *    and the emission of this signal. %FALSE to propagate the event further.
    */
   signals[EVENT] =
     g_signal_new (I_("event"),
@@ -91,6 +103,13 @@ gtk_event_controller_legacy_init (GtkEventControllerLegacy *controller)
 {
 }
 
+/**
+ * gtk_event_controller_legacy_new:
+ *
+ * Creates a new legacy event controller.
+ *
+ * Returns: the newly created event controller.
+ */
 GtkEventController *
 gtk_event_controller_legacy_new (void)
 {
