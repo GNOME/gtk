@@ -35,7 +35,6 @@
 #include "gtkrootprivate.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkinvisibleprivate.h"
 #include "gtkgesture.h"
 
 #include "gsk/gskrendernodeprivate.h"

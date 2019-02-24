@@ -259,7 +259,6 @@ gtk_public_sources = files([
   'gtkimmodule.c',
   'gtkimmulticontext.c',
   'gtkinfobar.c',
-  'gtkinvisible.c',
   'gtklabel.c',
   'gtklayout.c',
   'gtklevelbar.c',
