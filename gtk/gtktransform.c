@@ -979,7 +979,7 @@ gtk_transform_get_next (GtkTransform *self)
 /**
  * gtk_transform_to_matrix:
  * @self: (allow-none): a #GtkTransform
- * @out_matrix: (out) (caller-allocates): The matrix to set
+ * @out_matrix: (out caller-allocates): The matrix to set
  *
  * Computes the actual value of @self and stores it in @out_matrix.
  * The previous value of @out_matrix will be ignored.
