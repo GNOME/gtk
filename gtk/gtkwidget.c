@@ -12087,7 +12087,7 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
 static gboolean
 gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class)
 {
-  return !(GTK_IS_WINDOW_CLASS (widget_class) ||
+  return !(g_type_is_a (G_TYPE_FROM_CLASS (widget_class), GTK_TYPE_ROOT) ||
            GTK_IS_POPOVER_CLASS (widget_class));
 }
 
