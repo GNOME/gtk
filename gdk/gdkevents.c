@@ -150,7 +150,10 @@ void
 _gdk_event_emit (GdkEvent *event)
 {
   if (gdk_event_get_event_type (event) == GDK_NOTHING)
-    return;
+    {
+      g_warning ("Ignoring GDK_NOTHING events; they're good for nothing");
+      return;
+    }
 
   if (gdk_drag_handle_source_event (event))
     return;
