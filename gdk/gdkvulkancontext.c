@@ -1008,7 +1008,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                                  .pNext = NULL,
                                                  .pApplicationName = g_get_application_name (),
                                                  .applicationVersion = 0,
-                                                 .pEngineName = "GTK+",
+                                                 .pEngineName = "GTK",
                                                  .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
                                                  .apiVersion = VK_API_VERSION_1_0
                                              },
