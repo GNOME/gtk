@@ -134,6 +134,7 @@
 #include "gtkroot.h"
 
 #include "a11y/gtkaccessibility.h"
+#include "inspector/window.h"
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
@@ -1729,6 +1730,9 @@ gtk_main_do_event (GdkEvent *event)
   GdkEvent *rewritten_event = NULL;
   GdkDevice *device;
   GList *tmp_list;
+
+  if (gtk_inspector_handle_event (event))
+    return;
 
   /* Find the widget which got the event. We store the widget
    * in the user_data field of GdkSurface's. Ignore the event
