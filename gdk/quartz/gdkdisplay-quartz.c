@@ -341,13 +341,22 @@ display_rect (GdkQuartzDisplay *display)
   display->size = NSMakeSize (max_x_mm - min_x_mm, max_y_mm - min_y_mm);
 }
 
+static gboolean
+same_monitor (gconstpointer a, gconstpointer b)
+{
+  GdkQuartzMonitor *mon_a = GDK_QUARTZ_MONITOR (a);
+  CGDirectDisplayID disp_id = (CGDirectDisplayID)GPOINTER_TO_INT (b);
+  if (!mon_a)
+    return FALSE;
+  return mon_a->id == disp_id;
+}
+
 static void
 display_reconfiguration_callback (CGDirectDisplayID            cg_display,
                                   CGDisplayChangeSummaryFlags  flags,
                                   void                        *data)
 {
   GdkQuartzDisplay *display = data;
-  GdkQuartzMonitor *monitor;
 
   /* Ignore the begin configuration signal. */
   if (flags & kCGDisplayBeginConfigurationFlag)
@@ -357,28 +366,44 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
                kCGDisplaySetMainFlag | kCGDisplayDesktopShapeChangedFlag |
                kCGDisplayMirrorFlag | kCGDisplayUnMirrorFlag))
     {
-      monitor = g_hash_table_lookup (display->monitors,
-                                     GINT_TO_POINTER (cg_display));
-      if (!monitor)
+      GdkQuartzMonitor *monitor = NULL;
+      guint index;
+
+      if (!g_ptr_array_find_with_equal_func (display->monitors,
+                                             GINT_TO_POINTER (cg_display),
+                                             same_monitor,
+                                             &index))
         {
           monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
                                   "display", display, NULL);
           monitor->id = cg_display;
-          g_hash_table_insert (display->monitors, GINT_TO_POINTER (monitor->id),
-                               monitor);
+          g_ptr_array_add (display->monitors, monitor);
           gdk_display_monitor_added (GDK_DISPLAY (display),
                                      GDK_MONITOR (monitor));
         }
+      else
+        {
+          monitor = g_ptr_array_index (display->monitors, index);
+        }
+
       display_rect (display);
       configure_monitor (GDK_MONITOR (monitor), display);
     }
   else if (flags & (kCGDisplayRemoveFlag |  kCGDisplayDisabledFlag))
     {
-      GdkMonitor *monitor = g_hash_table_lookup (display->monitors,
-                                                 GINT_TO_POINTER (cg_display));
-      gdk_display_monitor_removed (GDK_DISPLAY (display),
-                                   GDK_MONITOR (monitor));
-      g_hash_table_remove (display->monitors, GINT_TO_POINTER (cg_display));
+      guint index;
+
+      if (g_ptr_array_find_with_equal_func (display->monitors,
+                                            GINT_TO_POINTER (cg_display),
+                                            same_monitor,
+                                            &index))
+        {
+          GdkQuartzMonitor *monitor = g_ptr_array_index (display->monitors,
+                                                         index);
+          gdk_display_monitor_removed (GDK_DISPLAY (display),
+                                       GDK_MONITOR (monitor));
+          g_ptr_array_remove_fast (display->monitors, monitor);
+        }
     }
 
   g_signal_emit (display, MONITORS_CHANGED, 0);
@@ -388,7 +413,8 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
 static int
 gdk_quartz_display_get_n_monitors (GdkDisplay *display)
 {
-  return get_active_displays (NULL);
+  GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
+  return quartz_display->monitors->len;
 }
 
 static GdkMonitor *
@@ -396,16 +422,12 @@ gdk_quartz_display_get_monitor (GdkDisplay *display,
                                 int         monitor_num)
 {
   GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
-  CGDirectDisplayID *screens = NULL;
-
-  int count = get_active_displays (&screens);
-  GdkMonitor *monitor = NULL;
+  int count = gdk_quartz_display_get_n_monitors (display);
 
   if (monitor_num >= 0 && monitor_num < count)
-    monitor = g_hash_table_lookup (quartz_display->monitors,
-                                GINT_TO_POINTER (screens[monitor_num]));
-  g_free (screens);
-  return monitor;
+    return g_ptr_array_index (quartz_display->monitors, monitor_num);
+
+  return NULL;
 }
 
 static GdkMonitor *
@@ -413,9 +435,15 @@ gdk_quartz_display_get_primary_monitor (GdkDisplay *display)
 {
   GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
   CGDirectDisplayID primary_id = CGMainDisplayID ();
+  GdkMonitor *monitor = NULL;
+  guint index;
 
-  return g_hash_table_lookup (quartz_display->monitors,
-                              GINT_TO_POINTER (primary_id));
+  if (g_ptr_array_find_with_equal_func (quartz_display->monitors,
+                                        GINT_TO_POINTER (primary_id),
+                                        same_monitor, &index))
+    monitor = g_ptr_array_index (quartz_display->monitors, index);
+
+  return monitor;
 }
 
 static GdkMonitor *
@@ -425,18 +453,27 @@ gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   NSWindow *nswindow = impl->toplevel;
   NSScreen *screen = [nswindow screen];
+  GdkMonitor *monitor = NULL;
   if (screen)
   {
-       CGDirectDisplayID disp_id =
-            [[[screen deviceDescription]
-              objectForKey: @"NSScreenNumber"] unsignedIntValue];
-       return g_hash_table_lookup (GDK_QUARTZ_DISPLAY (display)->monitors,
-                                   GINT_TO_POINTER (disp_id));
+    GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
+    guint index;
+    CGDirectDisplayID disp_id =
+      [[[screen deviceDescription]
+        objectForKey: @"NSScreenNumber"] unsignedIntValue];
+    if (g_ptr_array_find_with_equal_func (quartz_display->monitors,
+                                          GINT_TO_POINTER (disp_id),
+                                          same_monitor, &index))
+      monitor = g_ptr_array_index (quartz_display->monitors, index);
   }
-  GdkRectangle rect = cgrect_to_gdkrect ([nswindow frame]);
-  return gdk_display_get_monitor_at_point (display,
-                                           rect.x + rect.width/2,
-                                           rect.y + rect.height /2);
+  if (!monitor)
+    {
+      GdkRectangle rect = cgrect_to_gdkrect ([nswindow frame]);
+      monitor = gdk_display_get_monitor_at_point (display,
+                                                 rect.x + rect.width/2,
+                                                 rect.y + rect.height /2);
+    }
+  return monitor;
 }
 
 G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
@@ -450,15 +487,13 @@ gdk_quartz_display_init (GdkQuartzDisplay *display)
 
   display_rect(display); /* Initialize the overall display coordinates. */
   max_displays = get_active_displays (&displays);
-  display->monitors = g_hash_table_new_full (g_direct_hash, NULL,
-                                             NULL, g_object_unref);
+  display->monitors = g_ptr_array_new_full (max_displays, g_object_unref);
   for (disp = 0; disp < max_displays; ++disp)
     {
       GdkQuartzMonitor *monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
                                                        "display", display, NULL);
       monitor->id = displays[disp];
-      g_hash_table_insert (display->monitors, GINT_TO_POINTER (monitor->id),
-                           monitor);
+      g_ptr_array_add (display->monitors, monitor);
       configure_monitor (GDK_MONITOR (monitor), display);
     }
   g_free (displays);
@@ -471,11 +506,11 @@ gdk_quartz_display_init (GdkQuartzDisplay *display)
 static void
 gdk_quartz_display_dispose (GObject *object)
 {
-  GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
+  GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (object);
 
-  g_hash_table_destroy (display_quartz->monitors);
+  g_ptr_array_free (quartz_display->monitors, TRUE);
   CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback,
-                                          display_quartz);
+                                          quartz_display);
 
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->dispose (object);
 }

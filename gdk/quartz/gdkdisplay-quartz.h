@@ -34,7 +34,7 @@ struct _GdkQuartzDisplay
   GdkDisplay parent_instance;
   NSRect geometry; /* In AppKit coordinates. */
   NSSize size; /* Aggregate size of displays in millimeters. */
-  GHashTable *monitors;
+  GPtrArray *monitors;
 };
 
 struct _GdkQuartzDisplayClass
