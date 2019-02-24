@@ -141,6 +141,30 @@ dump_framebuffer (const char *filename, int w, int h)
   g_free (data);
 }
 
+static void G_GNUC_UNUSED
+dump_node (GskRenderNode *node,
+           const char    *filename)
+{
+  const int surface_width = ceilf (node->bounds.size.width);
+  const int surface_height = ceilf (node->bounds.size.height);
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        surface_width,
+                                        surface_height);
+
+  cr = cairo_create (surface);
+  cairo_save (cr);
+  cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+  gsk_render_node_draw (node, cr);
+  cairo_restore (cr);
+  cairo_destroy (cr);
+
+  cairo_surface_write_to_png (surface, filename);
+  cairo_surface_destroy (surface);
+}
+
 static gboolean
 font_has_color_glyphs (const PangoFont *font)
 {
