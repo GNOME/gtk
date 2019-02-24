@@ -4350,7 +4350,8 @@ gtk_widget_allocate (GtkWidget    *widget,
     {
       /* Still have to move the window... */
       if (_gtk_widget_get_realized (widget) &&
-          _gtk_widget_get_has_surface (widget))
+          _gtk_widget_get_has_surface (widget) &&
+          GTK_IS_POPOVER (widget))
          {
            GtkAllocation window_alloc;
 
@@ -4552,7 +4553,8 @@ gtk_widget_real_size_allocate (GtkWidget *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (_gtk_widget_get_realized (widget) &&
-      _gtk_widget_get_has_surface (widget))
+      _gtk_widget_get_has_surface (widget) &&
+      GTK_IS_POPOVER (widget))
      {
        GtkAllocation window_alloc;
 
