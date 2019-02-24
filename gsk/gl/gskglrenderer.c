@@ -966,30 +966,125 @@ render_clip_node (GskGLRenderer   *self,
   ops_pop_clip (builder);
 }
 
+static inline void
+get_inner_rect (const GskRoundedRect *rect,
+                graphene_rect_t       *out)
+{
+  const float left = MAX (rect->corner[GSK_CORNER_TOP_LEFT].width,
+                          rect->corner[GSK_CORNER_BOTTOM_LEFT].width);
+  const float top  = MAX (rect->corner[GSK_CORNER_TOP_LEFT].height,
+                          rect->corner[GSK_CORNER_TOP_RIGHT].height);
+
+  out->origin.x = rect->bounds.origin.x + left;
+  out->origin.y = rect->bounds.origin.y + top;
+
+  out->size.width = rect->bounds.size.width - left -
+                    MAX (rect->corner[GSK_CORNER_TOP_RIGHT].width,
+                         rect->corner[GSK_CORNER_BOTTOM_RIGHT].width);
+
+  out->size.height = rect->bounds.size.height - top -
+                     MAX (rect->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                          rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
+}
+
+/* Best effort intersection of two rounded rectangles */
 static gboolean
-gsk_rounded_rect_intersection (const GskRoundedRect *self,
-                               const GskRoundedRect *other,
+gsk_rounded_rect_intersection (const GskRoundedRect *outer,
+                               const GskRoundedRect *inner,
                                GskRoundedRect       *out_intersection)
 {
-  const graphene_rect_t *self_bounds = &self->bounds;
-  const graphene_rect_t *other_bounds = &other->bounds;
+  const graphene_rect_t *outer_bounds = &outer->bounds;
+  const graphene_rect_t *inner_bounds = &inner->bounds;
+  graphene_rect_t outer_inner;
+  graphene_rect_t inner_inner;
+  gboolean contained_x;
+  gboolean contained_y;
 
-  if (graphene_rect_contains_rect (self_bounds, other_bounds))
+  if (graphene_rect_contains_rect (outer_bounds, inner_bounds))
     {
-      *out_intersection = *other;
+      *out_intersection = *inner;
       return TRUE;
     }
 
-  /* TODO: There are a few cases here that we can express using a single
-   *       rounded rectangle, which are even interesting in every day usage.
-   *       For example, a partially scrolled-away rounded rectangle
-   *       might just work.
-   */
+  get_inner_rect (outer, &outer_inner);
+  get_inner_rect (inner, &inner_inner);
 
+  contained_x = outer_inner.origin.x <= inner_inner.origin.x &&
+                (outer_inner.origin.x + outer_inner.size.width) > (inner_inner.origin.x +
+                                                                   inner_inner.size.width);
+
+  contained_y = outer_inner.origin.y <= inner_inner.origin.y &&
+                (outer_inner.origin.y + outer_inner.size.height) > (inner_inner.origin.y +
+                                                                    inner_inner.size.height);
+
+  if (contained_x && !contained_y)
+    {
+      /* The intersection is @inner, but cut-off and with the cut-off corners
+       * set to size 0 */
+      *out_intersection = *inner;
+
+      if (inner_bounds->origin.y < outer_bounds->origin.y)
+        {
+          /* Set top corners to 0 */
+          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_LEFT], 0, 0);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_RIGHT], 0, 0);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT],
+                                        &inner->corner[GSK_CORNER_BOTTOM_LEFT]);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT],
+                                        &inner->corner[GSK_CORNER_BOTTOM_RIGHT]);
+          return TRUE;
+        }
+      else if (inner_bounds->origin.y + inner_bounds->size.height >
+               outer_bounds->origin.y + outer_bounds->size.height)
+        {
+          /* Set bottom corners to 0 */
+          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT], 0, 0);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT], 0, 0);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_LEFT],
+                                        &inner->corner[GSK_CORNER_TOP_LEFT]);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_RIGHT],
+                                        &inner->corner[GSK_CORNER_TOP_RIGHT]);
+          return TRUE;
+        }
+    }
+  else if (!contained_x && contained_y)
+    {
+      /* The intersection is @inner, but cut-off and with the cut-off corners
+       * set to size 0 */
+      *out_intersection = *inner;
+
+      if (inner_bounds->origin.x < outer_bounds->origin.x)
+        {
+          /* Set left corners to 0 */
+          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_LEFT], 0, 0);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT], 0, 0);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_RIGHT],
+                                        &inner->corner[GSK_CORNER_TOP_RIGHT]);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT],
+                                        &inner->corner[GSK_CORNER_BOTTOM_RIGHT]);
+          return TRUE;
+        }
+      else if (inner_bounds->origin.x + inner_bounds->size.width >
+               outer_bounds->origin.x + outer_bounds->size.width)
+        {
+          /* Set right corners to 0 */
+          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_RIGHT], 0, 0);
+          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT], 0, 0);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_LEFT],
+                                        &inner->corner[GSK_CORNER_TOP_LEFT]);
+          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT],
+                                        &inner->corner[GSK_CORNER_BOTTOM_LEFT]);
+          return TRUE;
+        }
+    }
+
+  /* Actually not possible or just too much work. */
   return FALSE;
 }
-
-
 
 static inline void
 render_rounded_clip_node (GskGLRenderer       *self,
