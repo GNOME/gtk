@@ -59,8 +59,6 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_popup_set_relative_to (GtkPopup   *popup,
                                            GtkWidget  *relative_to);
 
-void gtk_popup_check_resize (GtkPopup *popup);
-
 G_END_DECLS
 
 #endif /* __GTK_POPUP_H__ */

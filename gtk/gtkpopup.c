@@ -77,11 +77,52 @@ gtk_popup_root_get_surface_transform (GtkRoot *root,
 }
 
 static void
+gtk_popup_move_resize (GtkPopup *popup)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GdkRectangle rect;
+ 
+  rect.x = 0;
+  rect.y = 0;
+  rect.width = gtk_widget_get_width (priv->relative_to);
+  rect.height = gtk_widget_get_height (priv->relative_to);
+  gtk_widget_translate_coordinates (priv->relative_to, gtk_widget_get_toplevel (priv->relative_to),
+                                    rect.x, rect.y, &rect.x, &rect.y);
+
+  gdk_surface_move_to_rect (priv->surface,
+                            &rect,
+                            GDK_GRAVITY_SOUTH,
+                            GDK_GRAVITY_NORTH,
+                            GDK_ANCHOR_FLIP_Y,
+                            0, 10);
+}
+
+static void
+gtk_popup_root_check_resize (GtkRoot *root)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GtkWidget *widget = GTK_WIDGET (popup);
+
+  if (!_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_ensure_allocate (widget);
+  else if (gtk_widget_get_visible (widget))
+    {
+      gtk_popup_move_resize (popup);
+      gtk_widget_allocate (GTK_WIDGET (popup),
+                           gdk_surface_get_width (priv->surface),
+                           gdk_surface_get_height (priv->surface),
+                           -1, NULL);
+    }
+}
+
+static void
 gtk_popup_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_popup_root_get_display;
   iface->get_renderer = gtk_popup_root_get_renderer;
   iface->get_surface_transform = gtk_popup_root_get_surface_transform;
+  iface->check_resize = gtk_popup_root_check_resize;
 }
 
 static void
@@ -220,27 +261,6 @@ gtk_popup_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_popup_move_resize (GtkPopup *popup)
-{
-  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
-  GdkRectangle rect;
- 
-  rect.x = 0;
-  rect.y = 0;
-  rect.width = gtk_widget_get_width (priv->relative_to);
-  rect.height = gtk_widget_get_height (priv->relative_to);
-  gtk_widget_translate_coordinates (priv->relative_to, gtk_widget_get_toplevel (priv->relative_to),
-                                    rect.x, rect.y, &rect.x, &rect.y);
-
-  gdk_surface_move_to_rect (priv->surface,
-                            &rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y,
-                            0, 10);
-}
-
-static void
 gtk_popup_size_allocate (GtkWidget *widget,
                          int        width,
                          int        height,
@@ -306,22 +326,3 @@ gtk_popup_set_relative_to (GtkPopup  *popup,
   g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popup);
   priv->display = gtk_widget_get_display (relative_to);
 }
-
-void
-gtk_popup_check_resize (GtkPopup *popup)
-{
-  GtkWidget *widget = GTK_WIDGET (popup);
-  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
-
-  if (!_gtk_widget_get_alloc_needed (widget))
-    gtk_widget_ensure_allocate (widget);
-  else if (gtk_widget_get_visible (widget))
-    {
-      gtk_popup_move_resize (popup);
-      gtk_widget_allocate (GTK_WIDGET (popup),
-                           gdk_surface_get_width (priv->surface),
-                           gdk_surface_get_height (priv->surface),
-                           -1, NULL);
-    }
-}
-
