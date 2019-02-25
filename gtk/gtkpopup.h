@@ -59,6 +59,9 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_popup_set_relative_to (GtkPopup   *popup,
                                            GtkWidget  *relative_to);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *    gtk_popup_get_popups (void);
+
 G_END_DECLS
 
 #endif /* __GTK_POPUP_H__ */
