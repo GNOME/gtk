@@ -25,6 +25,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 
+static GListStore *popup_list = NULL;
+
 typedef struct {
   GdkDisplay *display;
   GskRenderer *renderer;
@@ -81,7 +83,10 @@ gtk_popup_move_resize (GtkPopup *popup)
 {
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GdkRectangle rect;
+  GtkRequisition req;
  
+  gtk_widget_get_preferred_size (GTK_WIDGET (popup), NULL, &req);
+  gdk_surface_resize (priv->surface, req.width, req.height);
   rect.x = 0;
   rect.y = 0;
   rect.width = gtk_widget_get_width (priv->relative_to);
@@ -234,6 +239,20 @@ gtk_popup_unmap (GtkWidget *widget)
 static void
 gtk_popup_dispose (GObject *object)
 {
+  guint i;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (popup_list)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (popup_list), i);
+      if (item == object)
+        {
+          g_list_store_remove (popup_list, i);
+          break;
+        }
+      else
+        g_object_unref (item);
+    }
+
   G_OBJECT_CLASS (gtk_popup_parent_class)->dispose (object);
 }
 
@@ -241,6 +260,13 @@ static void
 gtk_popup_finalize (GObject *object)
 {
   G_OBJECT_CLASS (gtk_popup_parent_class)->finalize (object);
+}
+
+static void
+gtk_popup_constructed (GObject *object)
+{
+  g_list_store_append (popup_list, object);
+  g_object_unref (object);
 }
 
 static void
@@ -287,6 +313,10 @@ gtk_popup_class_init (GtkPopupClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  if (popup_list == NULL)
+    popup_list = g_list_store_new (GTK_TYPE_WIDGET);
+
+  object_class->constructed = gtk_popup_constructed;
   object_class->dispose = gtk_popup_dispose;
   object_class->finalize = gtk_popup_finalize;
 
@@ -326,3 +356,13 @@ gtk_popup_set_relative_to (GtkPopup  *popup,
   g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popup);
   priv->display = gtk_widget_get_display (relative_to);
 }
+
+GListModel *
+gtk_popup_get_popups (void)
+{
+  if (popup_list == NULL)
+    popup_list = g_list_store_new (GTK_TYPE_WIDGET);
+
+  return G_LIST_MODEL (popup_list);
+}
+
