@@ -56,6 +56,7 @@
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkpopup.h"
 
 enum
 {
@@ -1144,6 +1145,7 @@ create_root_model (void)
                                          g_object_unref);
   gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
   g_list_store_append (list, filter);
+  g_list_store_append (list, gtk_popup_get_popups ());
   g_object_unref (filter);
 
   flatten = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list));
