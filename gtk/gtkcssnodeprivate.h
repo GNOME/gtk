@@ -153,6 +153,7 @@ void                    gtk_css_node_invalidate_frame_clock
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode);
+gboolean                gtk_css_node_is_invalid         (GtkCssNode            *cssnode);
 
 gboolean                gtk_css_node_init_matcher       (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);
