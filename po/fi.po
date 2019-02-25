@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-30 11:58+0000\n"
-"PO-Revision-Date: 2018-05-01 22:46+0300\n"
+"POT-Creation-Date: 2019-02-25 18:02+0000\n"
+"PO-Revision-Date: 2019-02-25 20:30+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -32,48 +32,48 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "TGA-kuvatyyppi ei tuettu"
 
-#: gdk/gdk.c:182
+#: gdk/gdk.c:184
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Virhe tulkittaessa valitsinta --gdk-debug"
 
-#: gdk/gdk.c:202
+#: gdk/gdk.c:204
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Virhe tulkittaessa valitsinta --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:231
+#: gdk/gdk.c:233
 msgid "Program class as used by the window manager"
 msgstr "Ohjelman luokka ikkunointiohjelmaa varten"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:232
+#: gdk/gdk.c:234
 msgid "CLASS"
 msgstr "LUOKKA"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:234
+#: gdk/gdk.c:236
 msgid "Program name as used by the window manager"
 msgstr "Ohjelman nimi ikkunointiohjelmaa varten"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:235
+#: gdk/gdk.c:237
 msgid "NAME"
 msgstr "NIMI"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:238
+#: gdk/gdk.c:240
 msgid "X display to use"
 msgstr "Käytettävä X-näyttö"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:239
+#: gdk/gdk.c:241
 msgid "DISPLAY"
 msgstr "NÄYTTÖ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:243
+#: gdk/gdk.c:245
 msgid "GDK debugging flags to set"
 msgstr "Asetettavat GTK+-vianjäljitysvalinnat"
 
@@ -81,12 +81,12 @@ msgstr "Asetettavat GTK+-vianjäljitysvalinnat"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:246 gdk/gdk.c:249 gtk/gtkmain.c:471 gtk/gtkmain.c:474
 msgid "FLAGS"
 msgstr "VALITSIMET"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:246
+#: gdk/gdk.c:248
 msgid "GDK debugging flags to unset"
 msgstr "Poistettavat GTK+-vianjäljitysvalinnat"
 
@@ -408,11 +408,9 @@ msgid "WWW"
 msgstr ""
 
 #: gdk/keyname-table.h:6902
-#, fuzzy
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
-msgstr "Etsi"
+msgstr "Haku"
 
 #: gdk/keyname-table.h:6903
 msgctxt "keyboard label"
@@ -485,7 +483,7 @@ msgid "Suspend"
 msgstr "Suspend"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:814
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
 #: gdk/x11/gdkglcontext-x11.c:1277
 #, fuzzy
 #| msgid "No profile available"
@@ -493,14 +491,15 @@ msgid "No GL implementation is available"
 msgstr "Ei profiilia saatavilla"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:765 gdk/x11/gdkglcontext-x11.c:720
-#: gdk/x11/gdkglcontext-x11.c:770
+#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
+#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr ""
 
 #: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:719
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
+#: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
 #: gdk/x11/gdkglcontext-x11.c:971
 msgid "No available configurations for the given pixel format"
 msgstr ""
@@ -589,33 +588,33 @@ msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "Napsauttaa painiketta"
 
-#: gtk/a11y/gtkcellaccessible.c:255
+#: gtk/a11y/gtkcellaccessible.c:257
 msgctxt "Action name"
 msgid "Expand or contract"
 msgstr ""
 
-#: gtk/a11y/gtkcellaccessible.c:257
+#: gtk/a11y/gtkcellaccessible.c:259
 msgctxt "Action name"
 msgid "Edit"
 msgstr "Muokkaa"
 
-#: gtk/a11y/gtkcellaccessible.c:259 gtk/a11y/gtkcolorswatchaccessible.c:149
+#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:149
 #: gtk/a11y/gtkentryaccessible.c:1557 gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
 msgstr "Aktivoi"
 
-#: gtk/a11y/gtkcellaccessible.c:272
+#: gtk/a11y/gtkcellaccessible.c:274
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr ""
 
-#: gtk/a11y/gtkcellaccessible.c:274
+#: gtk/a11y/gtkcellaccessible.c:276
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
 msgstr ""
 
-#: gtk/a11y/gtkcellaccessible.c:276
+#: gtk/a11y/gtkcellaccessible.c:278
 msgctxt "Action description"
 msgid "Activates the cell"
 msgstr ""
@@ -665,7 +664,7 @@ msgstr ""
 #: gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "Aktivoi laajentimen"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -700,15 +699,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Sulje"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9229
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9305
 msgid "Minimize"
 msgstr "Pienennä"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9238
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9314
 msgid "Maximize"
 msgstr "Suurenna"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9195
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9271
 msgid "Restore"
 msgstr "Palauta"
 
@@ -1081,7 +1080,7 @@ msgstr "Valikko"
 #: gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr ""
+msgstr "Napsauttaa valikkokohdetta"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
@@ -1251,13 +1250,13 @@ msgstr ""
 "”Tallenna väri tähän”."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:632
+#: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:633
 #: gtk/gtkfilechooserwidget.c:1475 gtk/gtkfilechooserwidget.c:6330
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12698 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12792 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1306,7 +1305,7 @@ msgid "_Apply"
 msgstr "_Toteuta"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12699
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12793
 msgid "_OK"
 msgstr "_OK"
 
@@ -1471,7 +1470,7 @@ msgstr "Tiedostoa ”%s” ei voitu tallentaa: %s\n"
 msgid "Can't close stream"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:114 gtk/ui/gtkaboutdialog.ui:206
+#: gtk/gtkaboutdialog.c:114 gtk/ui/gtkaboutdialog.ui:210
 msgid "License"
 msgstr "Lisenssi"
 
@@ -1497,7 +1496,7 @@ msgstr "GNU Lesser General Public -lisenssi (GPL), versio 3 tai myöhempi"
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
-msgstr ""
+msgstr "Kaksiportainen BSD-lisenssi"
 
 #: gtk/gtkaboutdialog.c:121
 msgid "The MIT License (MIT)"
@@ -1505,7 +1504,7 @@ msgstr "MIT-lisenssi (MIT)"
 
 #: gtk/gtkaboutdialog.c:122
 msgid "Artistic License 2.0"
-msgstr ""
+msgstr "Artistic-lisenssi 2.0"
 
 #: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 2 only"
@@ -1550,36 +1549,36 @@ msgstr "_Sulje"
 msgid "Could not show link"
 msgstr "Linkkiä ei voitu näyttää"
 
-#: gtk/gtkaboutdialog.c:1035
+#: gtk/gtkaboutdialog.c:1037
 msgid "Website"
 msgstr "Verkkosivusto"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1085 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1087 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "Tietoja - %s"
 
-#: gtk/gtkaboutdialog.c:2312
+#: gtk/gtkaboutdialog.c:2314
 msgid "Created by"
 msgstr "Luonut"
 
-#: gtk/gtkaboutdialog.c:2315
+#: gtk/gtkaboutdialog.c:2317
 msgid "Documented by"
 msgstr "Dokumentoijat"
 
-#: gtk/gtkaboutdialog.c:2325
+#: gtk/gtkaboutdialog.c:2327
 msgid "Translated by"
 msgstr "Kääntäjät"
 
-#: gtk/gtkaboutdialog.c:2330
+#: gtk/gtkaboutdialog.c:2332
 msgid "Artwork by"
 msgstr "Graafinen ulkoasu"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2490
+#: gtk/gtkaboutdialog.c:2494
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1784,7 +1783,7 @@ msgstr "Tiedoston %s uudelleennimeäminen nimelle %s epäonnistui: %s\n"
 msgid "Can't parse file: %s\n"
 msgstr "Tiedoston jäsentäminen ei onnistu: %s\n"
 
-#: gtk/gtk-builder-tool.c:1056
+#: gtk/gtk-builder-tool.c:1058
 #, c-format
 msgid ""
 "Usage:\n"
@@ -2165,11 +2164,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Hallitse omia kokoja"
 
-#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:811
+#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:813
 msgid "inch"
 msgstr "tuumaa"
 
-#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:809
+#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:811
 msgid "mm"
 msgstr "mm"
 
@@ -2214,52 +2213,52 @@ msgstr "_Oikea:"
 msgid "Paper Margins"
 msgstr "Paperin marginaalit"
 
-#: gtk/gtkentry.c:9564 gtk/gtklabel.c:6680 gtk/gtktextview.c:9495
+#: gtk/gtkentry.c:9583 gtk/gtklabel.c:6680 gtk/gtktextview.c:9493
 msgid "Cu_t"
 msgstr "_Leikkaa"
 
-#: gtk/gtkentry.c:9568 gtk/gtklabel.c:6681 gtk/gtktextview.c:9499
+#: gtk/gtkentry.c:9587 gtk/gtklabel.c:6681 gtk/gtktextview.c:9497
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: gtk/gtkentry.c:9572 gtk/gtklabel.c:6682 gtk/gtktextview.c:9501
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6682 gtk/gtktextview.c:9499
 msgid "_Paste"
 msgstr "L_iitä"
 
-#: gtk/gtkentry.c:9575 gtk/gtkfilechooserwidget.c:1476
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9504
+#: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9502
 msgid "_Delete"
 msgstr "_Poista"
 
-#: gtk/gtkentry.c:9586 gtk/gtklabel.c:6693 gtk/gtktextview.c:9518
+#: gtk/gtkentry.c:9605 gtk/gtklabel.c:6693 gtk/gtktextview.c:9516
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
-#: gtk/gtkentry.c:9596 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:9615 gtk/gtktextview.c:9526
 msgid "Insert _Emoji"
 msgstr "Sy_ötä emoji"
 
-#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9753
+#: gtk/gtkentry.c:9791 gtk/gtktextview.c:9746
 msgid "Select all"
 msgstr "Valitse kaikki"
 
-#: gtk/gtkentry.c:9775 gtk/gtktextview.c:9756
+#: gtk/gtkentry.c:9794 gtk/gtktextview.c:9749
 msgid "Cut"
 msgstr "Leikkaa"
 
-#: gtk/gtkentry.c:9778 gtk/gtktextview.c:9759
+#: gtk/gtkentry.c:9797 gtk/gtktextview.c:9752
 msgid "Copy"
 msgstr "Kopioi"
 
-#: gtk/gtkentry.c:9781 gtk/gtktextview.c:9762
+#: gtk/gtkentry.c:9800 gtk/gtktextview.c:9755
 msgid "Paste"
 msgstr "Liitä"
 
-#: gtk/gtkentry.c:10851
+#: gtk/gtkentry.c:10870
 msgid "Caps Lock is on"
 msgstr "CapsLock on päällä"
 
-#: gtk/gtkentry.c:11126
+#: gtk/gtkentry.c:11145
 msgid "Insert Emoji"
 msgstr "Syötä emoji"
 
@@ -2284,13 +2283,13 @@ msgid "_Name"
 msgstr "_Nimi"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3594 gtk/gtkplacessidebar.c:3662
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkfilechoosernative.c:542 gtk/gtkfilechoosernative.c:627
+#: gtk/gtkplacessidebar.c:3618 gtk/gtkplacessidebar.c:3686
+#: gtk/gtkplacesview.c:1682
 msgid "_Open"
 msgstr "_Avaa"
 
-#: gtk/gtkfilechoosernative.c:626 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:627 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "_Tallenna"
 
@@ -2455,7 +2454,7 @@ msgstr "Kopioi si_jainti"
 msgid "_Add to Bookmarks"
 msgstr "_Lisää kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2710
+#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2734
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "_Nimeä uudelleen"
@@ -2595,18 +2594,80 @@ msgstr "Käytetty"
 msgid "File System"
 msgstr "Tiedostojärjestelmä"
 
-#: gtk/gtkfontbutton.c:368 gtk/gtkfontbutton.c:498
+#: gtk/gtkfontbutton.c:379 gtk/gtkfontbutton.c:509
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:481 gtk/gtkfontbutton.c:615
+#: gtk/gtkfontbutton.c:492 gtk/gtkfontbutton.c:626
 msgid "Pick a Font"
 msgstr "Valitse fontti"
 
-#: gtk/gtkfontbutton.c:1355
+#: gtk/gtkfontbutton.c:1395
 msgctxt "font"
 msgid "None"
 msgstr "Ei mitään"
+
+#: gtk/gtkfontchooserwidget.c:1523
+#, fuzzy
+#| msgid "_Width:"
+msgid "Width"
+msgstr "_Leveys:"
+
+#: gtk/gtkfontchooserwidget.c:1524
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "Right"
+msgid "Weight"
+msgstr "Oikea"
+
+#: gtk/gtkfontchooserwidget.c:1525
+#, fuzzy
+#| msgctxt "Stock label"
+#| msgid "_Italic"
+msgid "Italic"
+msgstr "_Kursiivi"
+
+#: gtk/gtkfontchooserwidget.c:1526
+msgid "Slant"
+msgstr ""
+
+#: gtk/gtkfontchooserwidget.c:1527
+msgid "Optical Size"
+msgstr ""
+
+#: gtk/gtkfontchooserwidget.c:2064 gtk/inspector/prop-editor.c:1676
+msgid "Default"
+msgstr "Oletus"
+
+#: gtk/gtkfontchooserwidget.c:2111
+msgid "Ligatures"
+msgstr ""
+
+#: gtk/gtkfontchooserwidget.c:2112
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "US Letter Plus"
+msgid "Letter Case"
+msgstr "US letter plus"
+
+#: gtk/gtkfontchooserwidget.c:2113
+msgid "Number Case"
+msgstr ""
+
+#: gtk/gtkfontchooserwidget.c:2114
+msgid "Number Spacing"
+msgstr ""
+
+#: gtk/gtkfontchooserwidget.c:2115
+msgid "Number Formatting"
+msgstr ""
+
+#: gtk/gtkfontchooserwidget.c:2116
+#, fuzzy
+#| msgctxt "Color name"
+#| msgid "Dark Orange"
+msgid "Character Variants"
+msgstr "Tummanoranssi"
 
 #: gtk/gtkglarea.c:313
 #, fuzzy
@@ -2618,16 +2679,16 @@ msgstr "Tulostimen tietojen nouto epäonnistui"
 msgid "Application menu"
 msgstr "Sovellusvalikko"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9265
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9341
 msgid "Close"
 msgstr "Sulje"
 
-#: gtk/gtkicontheme.c:2341 gtk/gtkicontheme.c:2406
+#: gtk/gtkicontheme.c:2343 gtk/gtkicontheme.c:2408
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Kuvake '%s' ei ole osana teemaa %s"
 
-#: gtk/gtkicontheme.c:4080 gtk/gtkicontheme.c:4447
+#: gtk/gtkicontheme.c:4082 gtk/gtkicontheme.c:4449
 msgid "Failed to load icon"
 msgstr "Kuvaketta ei voitu ladata"
 
@@ -2913,7 +2974,7 @@ msgid "Cannot end process with PID %d: %s"
 msgstr "Ei voi päättää prosessia, jonka prosessitunniste on %d: %s"
 
 # , c-format
-#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7386
+#: gtk/gtknotebook.c:5123 gtk/gtknotebook.c:7401
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
@@ -2930,7 +2991,7 @@ msgstr "Mikä tahansa tulostin"
 msgid "For portable documents"
 msgstr "siirrettäville asiakirjoille"
 
-#: gtk/gtkpagesetupunixdialog.c:829
+#: gtk/gtkpagesetupunixdialog.c:831
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2945,12 +3006,12 @@ msgstr ""
 " Ylä: %s %s\n"
 " Ala: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
+#: gtk/gtkpagesetupunixdialog.c:880 gtk/gtkprintunixdialog.c:3392
 msgid "Manage Custom Sizes…"
 msgstr "Hallitse omia kokoja…"
 
 # , c-format
-#: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
+#: gtk/gtkpagesetupunixdialog.c:902 gtk/ui/gtkpagesetupunixdialog.ui:31
 #: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Page Setup"
 msgstr "Sivun asetukset"
@@ -3041,182 +3102,227 @@ msgid "Show other locations"
 msgstr "Näytä muut sijainnit"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3682
+#: gtk/gtkplacessidebar.c:2327 gtk/gtkplacessidebar.c:3706
 msgid "_Start"
 msgstr "_Käynnistä"
 
-#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3683
+#: gtk/gtkplacessidebar.c:2328 gtk/gtkplacessidebar.c:3707
 msgid "_Stop"
 msgstr "_Pysäytä"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2332
+#: gtk/gtkplacessidebar.c:2335
 msgid "_Power On"
 msgstr "_Kytke virta"
 
-#: gtk/gtkplacessidebar.c:2333
+#: gtk/gtkplacessidebar.c:2336
 msgid "_Safely Remove Drive"
 msgstr "_Irrota asema turvallisesti"
 
-#: gtk/gtkplacessidebar.c:2337
+#: gtk/gtkplacessidebar.c:2340
 msgid "_Connect Drive"
 msgstr "_Yhdistä asema"
 
-#: gtk/gtkplacessidebar.c:2338
+#: gtk/gtkplacessidebar.c:2341
 msgid "_Disconnect Drive"
 msgstr "_Katkaise yhteys asemaan"
 
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2345
 msgid "_Start Multi-disk Device"
 msgstr "_Käynnistä Multi-disk-laite"
 
-#: gtk/gtkplacessidebar.c:2343
+#: gtk/gtkplacessidebar.c:2346
 msgid "_Stop Multi-disk Device"
 msgstr "_Pysäytä Multi-disk-laite"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2348
+#: gtk/gtkplacessidebar.c:2351
 msgid "_Unlock Device"
 msgstr "Avaa laitteen _lukitus"
 
-#: gtk/gtkplacessidebar.c:2349
+#: gtk/gtkplacessidebar.c:2352
 msgid "_Lock Device"
 msgstr "Lukitse _laite"
 
-#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3363
+#: gtk/gtkplacessidebar.c:2390 gtk/gtkplacessidebar.c:3387
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Kohteen “%s” käynnistäminen ei onnistunut"
 
-#: gtk/gtkplacessidebar.c:2417
+#: gtk/gtkplacessidebar.c:2423
+#, c-format
+#| msgid "Opening “%s”."
+msgid "Error unlocking “%s”"
+msgstr "Virhe avattaessa “%s”"
+
+#: gtk/gtkplacessidebar.c:2425
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Kohteen \"%s\" käyttäminen ei onnistunut"
 
-#: gtk/gtkplacessidebar.c:2635
+#: gtk/gtkplacessidebar.c:2659
 msgid "This name is already taken"
 msgstr "Nimi on jo käytössä"
 
-#: gtk/gtkplacessidebar.c:2704 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2728 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Nimi"
 
-#: gtk/gtkplacessidebar.c:2904
+#: gtk/gtkplacessidebar.c:2928
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Kohteen “%s” liitoksen irrottaminen ei onnistunut"
 
-#: gtk/gtkplacessidebar.c:3080
+#: gtk/gtkplacessidebar.c:3104
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Kohteen “%s” pysäyttäminen ei onnistunut"
 
-#: gtk/gtkplacessidebar.c:3109
+#: gtk/gtkplacessidebar.c:3133
 #, fuzzy, c-format
 #| msgid "Unable to end process"
 msgid "Unable to eject “%s”"
 msgstr "Ei voitu päättää prosessia"
 
-#: gtk/gtkplacessidebar.c:3138 gtk/gtkplacessidebar.c:3167
+#: gtk/gtkplacessidebar.c:3162 gtk/gtkplacessidebar.c:3191
 #, fuzzy, c-format
 #| msgid "Unable to end process"
 msgid "Unable to eject %s"
 msgstr "Ei voitu päättää prosessia"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3339
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:3599 gtk/gtkplacessidebar.c:3665
-#: gtk/gtkplacesview.c:1643
+#: gtk/gtkplacessidebar.c:3623 gtk/gtkplacessidebar.c:3689
+#: gtk/gtkplacesview.c:1692
 msgid "Open in New _Tab"
 msgstr "Avaa _uudessa välilehdessä"
 
-#: gtk/gtkplacessidebar.c:3605 gtk/gtkplacessidebar.c:3668
-#: gtk/gtkplacesview.c:1654
+#: gtk/gtkplacessidebar.c:3629 gtk/gtkplacessidebar.c:3692
+#: gtk/gtkplacesview.c:1703
 msgid "Open in New _Window"
 msgstr "Avaa uudessa _ikkunassa"
 
-#: gtk/gtkplacessidebar.c:3672
+#: gtk/gtkplacessidebar.c:3696
 msgid "_Add Bookmark"
 msgstr "_Lisää kirjanmerkki"
 
-#: gtk/gtkplacessidebar.c:3673
+#: gtk/gtkplacessidebar.c:3697
 msgid "_Remove"
 msgstr "_Poista"
 
-#: gtk/gtkplacessidebar.c:3674
+#: gtk/gtkplacessidebar.c:3698
 msgid "Rename…"
 msgstr "Nimeä uudelleen…"
 
-#: gtk/gtkplacessidebar.c:3678 gtk/gtkplacesview.c:1688
+#: gtk/gtkplacessidebar.c:3702 gtk/gtkplacesview.c:1737
 msgid "_Mount"
 msgstr "_Liitä"
 
-#: gtk/gtkplacessidebar.c:3679 gtk/gtkplacesview.c:1678
+#: gtk/gtkplacessidebar.c:3703 gtk/gtkplacesview.c:1727
 msgid "_Unmount"
 msgstr "_Poista liitos"
 
-#: gtk/gtkplacessidebar.c:3680
+#: gtk/gtkplacessidebar.c:3704
 msgid "_Eject"
 msgstr "_Irrota"
 
-#: gtk/gtkplacessidebar.c:3681
+#: gtk/gtkplacessidebar.c:3705
 msgid "_Detect Media"
 msgstr "_Havaitse media"
 
-#: gtk/gtkplacessidebar.c:4127 gtk/gtkplacesview.c:1121
+#: gtk/gtkplacessidebar.c:4151 gtk/gtkplacesview.c:1122
 msgid "Computer"
 msgstr "Tietokone"
 
-#: gtk/gtkplacesview.c:897
+#: gtk/gtkplacesview.c:898
 msgid "Searching for network locations"
 msgstr "Etsitään verkkosijainteja"
 
-#: gtk/gtkplacesview.c:904
+#: gtk/gtkplacesview.c:905
 msgid "No network locations found"
 msgstr "Verkkosijainteja ei löytynyt"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1231 gtk/gtkplacesview.c:1306
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1307
 msgid "Unable to access location"
 msgstr "Sijainnin käyttö epäonnistui"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1249 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1250 gtk/ui/gtkplacesview.ui:317
 msgid "Con_nect"
 msgstr "_Yhdistä"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1369
+#: gtk/gtkplacesview.c:1370
 msgid "Unable to unmount volume"
 msgstr "Liitoksen irrottaminen ei onnistunut"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1470
+#: gtk/gtkplacesview.c:1471
 msgid "Cance_l"
 msgstr "_Peru"
 
-#: gtk/gtkplacesview.c:1678
+#: gtk/gtkplacesview.c:1634
+msgid "AppleTalk"
+msgstr "AppleTalk"
+
+#. Translators: do not translate ftp:// and ftps://
+#: gtk/gtkplacesview.c:1638
+msgid "File Transfer Protocol"
+msgstr "File Transfer Protocol (FTP)"
+
+#: gtk/gtkplacesview.c:1638
+msgid "ftp:// or ftps://"
+msgstr "ftp:// tai ftps://"
+
+#: gtk/gtkplacesview.c:1641
+msgid "Network File System"
+msgstr "Network File System (NFS)"
+
+#: gtk/gtkplacesview.c:1644
+msgid "Samba"
+msgstr "Samba"
+
+#. Translators: do not translate sftp:// and ssh://
+#: gtk/gtkplacesview.c:1648
+msgid "SSH File Transfer Protocol"
+msgstr "SSH File Transfer Protocol"
+
+#: gtk/gtkplacesview.c:1648
+msgid "sftp:// or ssh://"
+msgstr "sftp:// tai ssh://"
+
+#. Translators: do not translate dav:// and davs://
+#: gtk/gtkplacesview.c:1652
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: gtk/gtkplacesview.c:1652
+msgid "dav:// or davs://"
+msgstr "dav:// tai davs://"
+
+#: gtk/gtkplacesview.c:1727
 msgid "_Disconnect"
 msgstr "_Katkaise yhteys"
 
-#: gtk/gtkplacesview.c:1688
+#: gtk/gtkplacesview.c:1737
 msgid "_Connect"
 msgstr "_Yhdistä"
 
-#: gtk/gtkplacesview.c:1829
+#: gtk/gtkplacesview.c:1878
 msgid "Unable to get remote server location"
 msgstr ""
 
-#: gtk/gtkplacesview.c:2017 gtk/gtkplacesview.c:2026
+#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
 msgid "Networks"
 msgstr "Verkot"
 
-#: gtk/gtkplacesview.c:2017 gtk/gtkplacesview.c:2026
+#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
 msgid "On This Computer"
 msgstr "Tällä tietokoneella"
 
@@ -3236,7 +3342,7 @@ msgid "Disconnect"
 msgstr "Katkaise yhteys"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
-#: gtk/ui/gtksidebarrow.ui:60
+#: gtk/ui/gtksidebarrow.ui:61
 msgid "Unmount"
 msgstr "Irrota liitos"
 
@@ -3252,7 +3358,7 @@ msgstr "_Muista salasana"
 msgid "Select a filename"
 msgstr "Valitse tiedostonimi"
 
-#: gtk/gtkprinteroptionwidget.c:767
+#: gtk/gtkprinteroptionwidget.c:769
 msgid "Not available"
 msgstr "Ei saatavilla"
 
@@ -3315,7 +3421,7 @@ msgstr "Valmistui virheellisesti"
 msgid "Preparing %d"
 msgstr "Valmistellaan %d"
 
-#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3005
+#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3007
 #, c-format
 msgid "Preparing"
 msgstr "Valmistelaan"
@@ -3325,19 +3431,19 @@ msgstr "Valmistelaan"
 msgid "Printing %d"
 msgstr "Tulostetaan %d"
 
-#: gtk/gtkprintoperation.c:3036
+#: gtk/gtkprintoperation.c:3038
 #, c-format
 msgid "Error creating print preview"
 msgstr "Virhe luotaessa tulostuksen esikatselua"
 
-#: gtk/gtkprintoperation.c:3039
+#: gtk/gtkprintoperation.c:3041
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Yleisin vian syy on, ettei väliaikaistiedostoa voitu luoda."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
-#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3414
 msgid "Print"
 msgstr "Tulosta"
 
@@ -3648,32 +3754,15 @@ msgstr "Hakutulokset"
 msgid "Search Shortcuts"
 msgstr "Etsi pikanäppäimiä"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:326
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Tuloksia ei löytynyt"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:340
-#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
+#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:274
 msgid "Try a different search"
 msgstr "Kokeile eri hakuehtoja"
-
-#. Translators: if the "on" state label requires more than three
-#. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-#. * the state
-#.
-#: gtk/gtkswitch.c:306
-msgctxt "switch"
-msgid "ON"
-msgstr "Päällä"
-
-#. Translators: if the "off" state label requires more than three
-#. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-#.
-#: gtk/gtkswitch.c:313
-msgctxt "switch"
-msgid "OFF"
-msgstr "Pois"
 
 #: gtk/gtktextbufferrichtext.c:648
 #, c-format
@@ -3855,24 +3944,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9213
+#: gtk/gtkwindow.c:9289
 msgid "Move"
 msgstr "Siirrä"
 
-#: gtk/gtkwindow.c:9221
+#: gtk/gtkwindow.c:9297
 msgid "Resize"
 msgstr "Muuta kokoa"
 
-#: gtk/gtkwindow.c:9252
+#: gtk/gtkwindow.c:9328
 msgid "Always on Top"
 msgstr "Aina päällimmäisenä"
 
-#: gtk/gtkwindow.c:12686
+#: gtk/gtkwindow.c:12780
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Haluatko käyttää GTK+ Inspectoria?"
 
-#: gtk/gtkwindow.c:12688
+#: gtk/gtkwindow.c:12782
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3880,7 +3969,7 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:12693
+#: gtk/gtkwindow.c:12787
 msgid "Don't show this message again"
 msgstr "Älä näytä tätä viestiä uudestaan"
 
@@ -3894,7 +3983,7 @@ msgid "State"
 msgstr "Tila"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
-#: gtk/ui/gtkplacesview.ui:158
+#: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Etuliite"
 
@@ -3950,7 +4039,7 @@ msgid "CSS Property"
 msgstr "CSS-ominaisuus"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
-#: gtk/ui/gtkcoloreditor.ui:295
+#: gtk/ui/gtkcoloreditor.ui:320
 msgid "Value"
 msgstr "Arvo"
 
@@ -4225,10 +4314,6 @@ msgstr "Lähde:"
 msgid "Reset"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:1676
-msgid "Default"
-msgstr "Oletus"
-
 #: gtk/inspector/prop-editor.c:1679
 msgid "Theme"
 msgstr "Teema"
@@ -4264,6 +4349,7 @@ msgid "Count"
 msgstr "_Liitä"
 
 #: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
+#: gtk/ui/gtkfontchooserwidget.ui:134 gtk/ui/gtkfontchooserwidget.ui:276
 msgid "Size"
 msgstr "Koko"
 
@@ -4363,7 +4449,7 @@ msgstr ""
 
 #: gtk/inspector/visual.c:631
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "Taustaosa ei tue ikkunoiden skaalausta"
 
 #: gtk/inspector/visual.c:726
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
@@ -4396,10 +4482,8 @@ msgid "Cursor Theme"
 msgstr "Kursoriteema"
 
 #: gtk/inspector/visual.ui:160
-#, fuzzy
-#| msgid "Custom Size %d"
 msgid "Cursor Size"
-msgstr "Oma koko %d"
+msgstr "Kursorin koko"
 
 #: gtk/inspector/visual.ui:197
 msgid "Icon Theme"
@@ -4612,6 +4696,751 @@ msgstr ""
 #: gtk/inspector/window.ui:537 gtk/ui/gtkprintunixdialog.ui:426
 msgid "General"
 msgstr "Yleiset"
+
+#: gtk/open-type-layout.h:13
+msgctxt "OpenType layout"
+msgid "Access All Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:14
+msgctxt "OpenType layout"
+msgid "Above-base Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:15
+msgctxt "OpenType layout"
+msgid "Above-base Mark Positioning"
+msgstr ""
+
+#: gtk/open-type-layout.h:16
+msgctxt "OpenType layout"
+msgid "Above-base Substitutions"
+msgstr ""
+
+#: gtk/open-type-layout.h:17
+#, fuzzy
+#| msgid "Authentication"
+msgctxt "OpenType layout"
+msgid "Alternative Fractions"
+msgstr "Todennus"
+
+#: gtk/open-type-layout.h:18
+msgctxt "OpenType layout"
+msgid "Akhands"
+msgstr ""
+
+#: gtk/open-type-layout.h:19
+msgctxt "OpenType layout"
+msgid "Below-base Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:20
+msgctxt "OpenType layout"
+msgid "Below-base Mark Positioning"
+msgstr ""
+
+#: gtk/open-type-layout.h:21
+msgctxt "OpenType layout"
+msgid "Below-base Substitutions"
+msgstr ""
+
+#: gtk/open-type-layout.h:22
+msgctxt "OpenType layout"
+msgid "Contextual Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:23
+msgctxt "OpenType layout"
+msgid "Case-Sensitive Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:24
+msgctxt "OpenType layout"
+msgid "Glyph Composition / Decomposition"
+msgstr ""
+
+#: gtk/open-type-layout.h:25
+msgctxt "OpenType layout"
+msgid "Conjunct Form After Ro"
+msgstr ""
+
+#: gtk/open-type-layout.h:26
+msgctxt "OpenType layout"
+msgid "Conjunct Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:27
+msgctxt "OpenType layout"
+msgid "Contextual Ligatures"
+msgstr ""
+
+#: gtk/open-type-layout.h:28
+msgctxt "OpenType layout"
+msgid "Centered CJK Punctuation"
+msgstr ""
+
+#: gtk/open-type-layout.h:29
+msgctxt "OpenType layout"
+msgid "Capital Spacing"
+msgstr ""
+
+#: gtk/open-type-layout.h:30
+msgctxt "OpenType layout"
+msgid "Contextual Swash"
+msgstr ""
+
+#: gtk/open-type-layout.h:31
+msgctxt "OpenType layout"
+msgid "Cursive Positioning"
+msgstr ""
+
+#: gtk/open-type-layout.h:32
+msgctxt "OpenType layout"
+msgid "Petite Capitals From Capitals"
+msgstr ""
+
+#: gtk/open-type-layout.h:33
+msgctxt "OpenType layout"
+msgid "Small Capitals From Capitals"
+msgstr ""
+
+#: gtk/open-type-layout.h:34
+msgctxt "OpenType layout"
+msgid "Distances"
+msgstr ""
+
+#: gtk/open-type-layout.h:35
+msgctxt "OpenType layout"
+msgid "Discretionary Ligatures"
+msgstr ""
+
+#: gtk/open-type-layout.h:36
+msgctxt "OpenType layout"
+msgid "Denominators"
+msgstr ""
+
+#: gtk/open-type-layout.h:37
+msgctxt "OpenType layout"
+msgid "Dotless Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:38
+msgctxt "OpenType layout"
+msgid "Expert Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:39
+msgctxt "OpenType layout"
+msgid "Final Glyph on Line Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:40
+#, fuzzy
+#| msgid "Terminal Pager"
+msgctxt "OpenType layout"
+msgid "Terminal Forms #2"
+msgstr "Päätteen sivutin"
+
+#: gtk/open-type-layout.h:41
+#, fuzzy
+#| msgid "Terminal Pager"
+msgctxt "OpenType layout"
+msgid "Terminal Forms #3"
+msgstr "Päätteen sivutin"
+
+#: gtk/open-type-layout.h:42
+#, fuzzy
+#| msgid "Terminal Pager"
+msgctxt "OpenType layout"
+msgid "Terminal Forms"
+msgstr "Päätteen sivutin"
+
+#: gtk/open-type-layout.h:43
+msgctxt "OpenType layout"
+msgid "Flattened accent forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:44
+#, fuzzy
+#| msgid "Actions"
+msgctxt "OpenType layout"
+msgid "Fractions"
+msgstr "Toiminnot"
+
+#: gtk/open-type-layout.h:45
+msgctxt "OpenType layout"
+msgid "Full Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:46
+msgctxt "OpenType layout"
+msgid "Half Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:47
+msgctxt "OpenType layout"
+msgid "Halant Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:48
+msgctxt "OpenType layout"
+msgid "Alternate Half Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:49
+msgctxt "OpenType layout"
+msgid "Historical Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:50
+msgctxt "OpenType layout"
+msgid "Horizontal Kana Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:51
+msgctxt "OpenType layout"
+msgid "Historical Ligatures"
+msgstr ""
+
+#: gtk/open-type-layout.h:52
+msgctxt "OpenType layout"
+msgid "Hangul"
+msgstr ""
+
+#: gtk/open-type-layout.h:53
+msgctxt "OpenType layout"
+msgid "Hojo Kanji Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:54
+msgctxt "OpenType layout"
+msgid "Half Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:55
+#, fuzzy
+#| msgctxt "print operation status"
+#| msgid "Initial state"
+msgctxt "OpenType layout"
+msgid "Initial Forms"
+msgstr "Aloitustila"
+
+#: gtk/open-type-layout.h:56
+msgctxt "OpenType layout"
+msgid "Isolated Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:57
+#, fuzzy
+#| msgctxt "Stock label"
+#| msgid "_Italic"
+msgctxt "OpenType layout"
+msgid "Italics"
+msgstr "_Kursiivi"
+
+#: gtk/open-type-layout.h:58
+msgctxt "OpenType layout"
+msgid "Justification Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:59
+msgctxt "OpenType layout"
+msgid "JIS78 Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:60
+msgctxt "OpenType layout"
+msgid "JIS83 Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:61
+msgctxt "OpenType layout"
+msgid "JIS90 Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:62
+msgctxt "OpenType layout"
+msgid "JIS2004 Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:63
+#, fuzzy
+#| msgid "Warning"
+msgctxt "OpenType layout"
+msgid "Kerning"
+msgstr "Varoitus"
+
+#: gtk/open-type-layout.h:64
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "Left"
+msgctxt "OpenType layout"
+msgid "Left Bounds"
+msgstr "Vasen"
+
+#: gtk/open-type-layout.h:65
+#, fuzzy
+#| msgctxt "cover page"
+#| msgid "Standard"
+msgctxt "OpenType layout"
+msgid "Standard Ligatures"
+msgstr "Normaali"
+
+#: gtk/open-type-layout.h:66
+msgctxt "OpenType layout"
+msgid "Leading Jamo Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:67
+msgctxt "OpenType layout"
+msgid "Lining Figures"
+msgstr ""
+
+#: gtk/open-type-layout.h:68
+msgctxt "OpenType layout"
+msgid "Localized Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:69
+#, fuzzy
+#| msgid "LRM _Left-to-right mark"
+msgctxt "OpenType layout"
+msgid "Left-to-right alternates"
+msgstr "LRM _Vasemmalta oikealle -merkki"
+
+#: gtk/open-type-layout.h:70
+#, fuzzy
+#| msgid "LRM _Left-to-right mark"
+msgctxt "OpenType layout"
+msgid "Left-to-right mirrored forms"
+msgstr "LRM _Vasemmalta oikealle -merkki"
+
+#: gtk/open-type-layout.h:71
+msgctxt "OpenType layout"
+msgid "Mark Positioning"
+msgstr ""
+
+#: gtk/open-type-layout.h:72
+msgctxt "OpenType layout"
+msgid "Medial Forms #2"
+msgstr ""
+
+#: gtk/open-type-layout.h:73
+msgctxt "OpenType layout"
+msgid "Medial Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:74
+msgctxt "OpenType layout"
+msgid "Mathematical Greek"
+msgstr ""
+
+#: gtk/open-type-layout.h:75
+msgctxt "OpenType layout"
+msgid "Mark to Mark Positioning"
+msgstr ""
+
+#: gtk/open-type-layout.h:76
+msgctxt "OpenType layout"
+msgid "Mark Positioning via Substitution"
+msgstr ""
+
+#: gtk/open-type-layout.h:77
+msgctxt "OpenType layout"
+msgid "Alternate Annotation Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:78
+msgctxt "OpenType layout"
+msgid "NLC Kanji Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:79
+msgctxt "OpenType layout"
+msgid "Nukta Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:80
+msgctxt "OpenType layout"
+msgid "Numerators"
+msgstr ""
+
+#: gtk/open-type-layout.h:81
+msgctxt "OpenType layout"
+msgid "Oldstyle Figures"
+msgstr ""
+
+#: gtk/open-type-layout.h:82
+msgctxt "OpenType layout"
+msgid "Optical Bounds"
+msgstr ""
+
+#: gtk/open-type-layout.h:83
+msgctxt "OpenType layout"
+msgid "Ordinals"
+msgstr ""
+
+#: gtk/open-type-layout.h:84
+msgctxt "OpenType layout"
+msgid "Ornaments"
+msgstr ""
+
+#: gtk/open-type-layout.h:85
+msgctxt "OpenType layout"
+msgid "Proportional Alternate Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:86
+msgctxt "OpenType layout"
+msgid "Petite Capitals"
+msgstr ""
+
+#: gtk/open-type-layout.h:87
+msgctxt "OpenType layout"
+msgid "Proportional Kana"
+msgstr ""
+
+#: gtk/open-type-layout.h:88
+#, fuzzy
+#| msgid "Properties"
+msgctxt "OpenType layout"
+msgid "Proportional Figures"
+msgstr "Ominaisuudet"
+
+#: gtk/open-type-layout.h:89
+msgctxt "OpenType layout"
+msgid "Pre-Base Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:90
+msgctxt "OpenType layout"
+msgid "Pre-base Substitutions"
+msgstr ""
+
+#: gtk/open-type-layout.h:91
+msgctxt "OpenType layout"
+msgid "Post-base Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:92
+msgctxt "OpenType layout"
+msgid "Post-base Substitutions"
+msgstr ""
+
+#: gtk/open-type-layout.h:93
+msgctxt "OpenType layout"
+msgid "Proportional Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:94
+msgctxt "OpenType layout"
+msgid "Quarter Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:95
+msgctxt "OpenType layout"
+msgid "Randomize"
+msgstr ""
+
+#: gtk/open-type-layout.h:96
+msgctxt "OpenType layout"
+msgid "Required Contextual Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:97
+msgctxt "OpenType layout"
+msgid "Rakar Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:98
+msgctxt "OpenType layout"
+msgid "Required Ligatures"
+msgstr ""
+
+#: gtk/open-type-layout.h:99
+msgctxt "OpenType layout"
+msgid "Reph Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:100
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "Right"
+msgctxt "OpenType layout"
+msgid "Right Bounds"
+msgstr "Oikea"
+
+#: gtk/open-type-layout.h:101
+#, fuzzy
+#| msgid "RLM _Right-to-left mark"
+msgctxt "OpenType layout"
+msgid "Right-to-left alternates"
+msgstr "RLM _Oikealta vasemmalle -merkki"
+
+#: gtk/open-type-layout.h:102
+#, fuzzy
+#| msgid "RLM _Right-to-left mark"
+msgctxt "OpenType layout"
+msgid "Right-to-left mirrored forms"
+msgstr "RLM _Oikealta vasemmalle -merkki"
+
+#: gtk/open-type-layout.h:103
+msgctxt "OpenType layout"
+msgid "Ruby Notation Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:104
+msgctxt "OpenType layout"
+msgid "Required Variation Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:105
+msgctxt "OpenType layout"
+msgid "Stylistic Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:106
+msgctxt "OpenType layout"
+msgid "Scientific Inferiors"
+msgstr ""
+
+#: gtk/open-type-layout.h:107
+msgctxt "OpenType layout"
+msgid "Optical size"
+msgstr ""
+
+#: gtk/open-type-layout.h:108
+msgctxt "OpenType layout"
+msgid "Small Capitals"
+msgstr ""
+
+#: gtk/open-type-layout.h:109
+msgctxt "OpenType layout"
+msgid "Simplified Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:110
+msgctxt "OpenType layout"
+msgid "Stylistic Set 1"
+msgstr ""
+
+#: gtk/open-type-layout.h:111
+msgctxt "OpenType layout"
+msgid "Stylistic Set 2"
+msgstr ""
+
+#: gtk/open-type-layout.h:112
+msgctxt "OpenType layout"
+msgid "Stylistic Set 3"
+msgstr ""
+
+#: gtk/open-type-layout.h:113
+msgctxt "OpenType layout"
+msgid "Stylistic Set 4"
+msgstr ""
+
+#: gtk/open-type-layout.h:114
+msgctxt "OpenType layout"
+msgid "Stylistic Set 5"
+msgstr ""
+
+#: gtk/open-type-layout.h:115
+msgctxt "OpenType layout"
+msgid "Stylistic Set 6"
+msgstr ""
+
+#: gtk/open-type-layout.h:116
+msgctxt "OpenType layout"
+msgid "Stylistic Set 7"
+msgstr ""
+
+#: gtk/open-type-layout.h:117
+msgctxt "OpenType layout"
+msgid "Stylistic Set 8"
+msgstr ""
+
+#: gtk/open-type-layout.h:118
+msgctxt "OpenType layout"
+msgid "Stylistic Set 9"
+msgstr ""
+
+#: gtk/open-type-layout.h:119
+msgctxt "OpenType layout"
+msgid "Stylistic Set 10"
+msgstr ""
+
+#: gtk/open-type-layout.h:120
+msgctxt "OpenType layout"
+msgid "Stylistic Set 11"
+msgstr ""
+
+#: gtk/open-type-layout.h:121
+msgctxt "OpenType layout"
+msgid "Stylistic Set 12"
+msgstr ""
+
+#: gtk/open-type-layout.h:122
+msgctxt "OpenType layout"
+msgid "Stylistic Set 13"
+msgstr ""
+
+#: gtk/open-type-layout.h:123
+msgctxt "OpenType layout"
+msgid "Stylistic Set 14"
+msgstr ""
+
+#: gtk/open-type-layout.h:124
+msgctxt "OpenType layout"
+msgid "Stylistic Set 15"
+msgstr ""
+
+#: gtk/open-type-layout.h:125
+msgctxt "OpenType layout"
+msgid "Stylistic Set 16"
+msgstr ""
+
+#: gtk/open-type-layout.h:126
+msgctxt "OpenType layout"
+msgid "Stylistic Set 17"
+msgstr ""
+
+#: gtk/open-type-layout.h:127
+msgctxt "OpenType layout"
+msgid "Stylistic Set 18"
+msgstr ""
+
+#: gtk/open-type-layout.h:128
+msgctxt "OpenType layout"
+msgid "Stylistic Set 19"
+msgstr ""
+
+#: gtk/open-type-layout.h:129
+msgctxt "OpenType layout"
+msgid "Stylistic Set 20"
+msgstr ""
+
+#: gtk/open-type-layout.h:130
+msgctxt "OpenType layout"
+msgid "Math script style alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:131
+msgctxt "OpenType layout"
+msgid "Stretching Glyph Decomposition"
+msgstr ""
+
+#: gtk/open-type-layout.h:132
+#, fuzzy
+#| msgid "Postscript"
+msgctxt "OpenType layout"
+msgid "Subscript"
+msgstr "Postscript"
+
+#: gtk/open-type-layout.h:133
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "Super"
+msgctxt "OpenType layout"
+msgid "Superscript"
+msgstr "Super"
+
+#: gtk/open-type-layout.h:134
+msgctxt "OpenType layout"
+msgid "Swash"
+msgstr ""
+
+#: gtk/open-type-layout.h:135
+msgctxt "OpenType layout"
+msgid "Titling"
+msgstr ""
+
+#: gtk/open-type-layout.h:136
+msgctxt "OpenType layout"
+msgid "Trailing Jamo Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:137
+msgctxt "OpenType layout"
+msgid "Traditional Name Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:138
+msgctxt "OpenType layout"
+msgid "Tabular Figures"
+msgstr ""
+
+#: gtk/open-type-layout.h:139
+msgctxt "OpenType layout"
+msgid "Traditional Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:140
+msgctxt "OpenType layout"
+msgid "Third Widths"
+msgstr ""
+
+#: gtk/open-type-layout.h:141
+msgctxt "OpenType layout"
+msgid "Unicase"
+msgstr ""
+
+#: gtk/open-type-layout.h:142
+msgctxt "OpenType layout"
+msgid "Alternate Vertical Metrics"
+msgstr ""
+
+#: gtk/open-type-layout.h:143
+#, fuzzy
+#| msgctxt "Color name"
+#| msgid "Dark Orange"
+msgctxt "OpenType layout"
+msgid "Vattu Variants"
+msgstr "Tummanoranssi"
+
+#: gtk/open-type-layout.h:144
+msgctxt "OpenType layout"
+msgid "Vertical Writing"
+msgstr ""
+
+#: gtk/open-type-layout.h:145
+msgctxt "OpenType layout"
+msgid "Alternate Vertical Half Metrics"
+msgstr ""
+
+#: gtk/open-type-layout.h:146
+msgctxt "OpenType layout"
+msgid "Vowel Jamo Forms"
+msgstr ""
+
+#: gtk/open-type-layout.h:147
+msgctxt "OpenType layout"
+msgid "Vertical Kana Alternates"
+msgstr ""
+
+#: gtk/open-type-layout.h:148
+msgctxt "OpenType layout"
+msgid "Vertical Kerning"
+msgstr ""
+
+#: gtk/open-type-layout.h:149
+msgctxt "OpenType layout"
+msgid "Proportional Alternate Vertical Metrics"
+msgstr ""
+
+#: gtk/open-type-layout.h:150
+msgctxt "OpenType layout"
+msgid "Vertical Alternates and Rotation"
+msgstr ""
+
+#: gtk/open-type-layout.h:151
+msgctxt "OpenType layout"
+msgid "Vertical Alternates for Rotation"
+msgstr ""
+
+#: gtk/open-type-layout.h:152
+msgctxt "OpenType layout"
+msgid "Slashed Zero"
+msgstr ""
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5544,11 +6373,735 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/ui/gtkaboutdialog.ui:133
+#: gtk/script-names.c:18
+msgctxt "Script"
+msgid "Arabic"
+msgstr ""
+
+#: gtk/script-names.c:19
+msgctxt "Script"
+msgid "Armenian"
+msgstr ""
+
+#: gtk/script-names.c:20
+msgctxt "Script"
+msgid "Bengali"
+msgstr ""
+
+#: gtk/script-names.c:21
+msgctxt "Script"
+msgid "Bopomofo"
+msgstr ""
+
+#: gtk/script-names.c:22
+msgctxt "Script"
+msgid "Cherokee"
+msgstr ""
+
+#: gtk/script-names.c:23
+msgctxt "Script"
+msgid "Coptic"
+msgstr ""
+
+#: gtk/script-names.c:24
+msgctxt "Script"
+msgid "Cyrillic"
+msgstr ""
+
+#: gtk/script-names.c:25
+msgctxt "Script"
+msgid "Deseret"
+msgstr ""
+
+#: gtk/script-names.c:26
+msgctxt "Script"
+msgid "Devanagari"
+msgstr ""
+
+#: gtk/script-names.c:27
+msgctxt "Script"
+msgid "Ethiopic"
+msgstr ""
+
+#: gtk/script-names.c:28
+msgctxt "Script"
+msgid "Georgian"
+msgstr ""
+
+#: gtk/script-names.c:29
+msgctxt "Script"
+msgid "Gothic"
+msgstr ""
+
+#: gtk/script-names.c:30
+#, fuzzy
+#| msgid "_Green:"
+msgctxt "Script"
+msgid "Greek"
+msgstr "_Vihreä:"
+
+#: gtk/script-names.c:31
+msgctxt "Script"
+msgid "Gujarati"
+msgstr ""
+
+#: gtk/script-names.c:32
+msgctxt "Script"
+msgid "Gurmukhi"
+msgstr ""
+
+#: gtk/script-names.c:33
+msgctxt "Script"
+msgid "Han"
+msgstr ""
+
+#: gtk/script-names.c:34
+msgctxt "Script"
+msgid "Hangul"
+msgstr ""
+
+#: gtk/script-names.c:35
+msgctxt "Script"
+msgid "Hebrew"
+msgstr ""
+
+#: gtk/script-names.c:36
+msgctxt "Script"
+msgid "Hiragana"
+msgstr ""
+
+#: gtk/script-names.c:37
+msgctxt "Script"
+msgid "Kannada"
+msgstr ""
+
+#: gtk/script-names.c:38
+msgctxt "Script"
+msgid "Katakana"
+msgstr ""
+
+#: gtk/script-names.c:39
+msgctxt "Script"
+msgid "Khmer"
+msgstr ""
+
+#: gtk/script-names.c:40
+#, fuzzy
+#| msgid "Low"
+msgctxt "Script"
+msgid "Lao"
+msgstr "Ei kiireellinen"
+
+#: gtk/script-names.c:41
+msgctxt "Script"
+msgid "Latin"
+msgstr ""
+
+#: gtk/script-names.c:42
+msgctxt "Script"
+msgid "Malayalam"
+msgstr ""
+
+#: gtk/script-names.c:43
+msgctxt "Script"
+msgid "Mongolian"
+msgstr ""
+
+#: gtk/script-names.c:44
+msgctxt "Script"
+msgid "Myanmar"
+msgstr ""
+
+#: gtk/script-names.c:45
+msgctxt "Script"
+msgid "Ogham"
+msgstr ""
+
+#: gtk/script-names.c:46
+#, fuzzy
+#| msgctxt "Stock label"
+#| msgid "_Italic"
+msgctxt "Script"
+msgid "Old Italic"
+msgstr "_Kursiivi"
+
+#: gtk/script-names.c:47
+msgctxt "Script"
+msgid "Oriya"
+msgstr ""
+
+#: gtk/script-names.c:48
+msgctxt "Script"
+msgid "Runic"
+msgstr ""
+
+#: gtk/script-names.c:49
+msgctxt "Script"
+msgid "Sinhala"
+msgstr ""
+
+#: gtk/script-names.c:50
+msgctxt "Script"
+msgid "Syriac"
+msgstr ""
+
+#: gtk/script-names.c:51
+#, fuzzy
+#| msgid "_Family:"
+msgctxt "Script"
+msgid "Tamil"
+msgstr "Pe_rhe:"
+
+#: gtk/script-names.c:52
+msgctxt "Script"
+msgid "Telugu"
+msgstr ""
+
+#: gtk/script-names.c:53
+msgctxt "Script"
+msgid "Thaana"
+msgstr ""
+
+#: gtk/script-names.c:54
+#, fuzzy
+#| msgid "Thai-Lao"
+msgctxt "Script"
+msgid "Thai"
+msgstr "Thai-Lao"
+
+#: gtk/script-names.c:55
+msgctxt "Script"
+msgid "Tibetan"
+msgstr ""
+
+#: gtk/script-names.c:56
+msgctxt "Script"
+msgid "Canadian Aboriginal"
+msgstr ""
+
+#: gtk/script-names.c:57
+msgctxt "Script"
+msgid "Yi"
+msgstr ""
+
+#: gtk/script-names.c:58
+msgctxt "Script"
+msgid "Tagalog"
+msgstr ""
+
+#: gtk/script-names.c:59
+msgctxt "Script"
+msgid "Hanunoo"
+msgstr ""
+
+#: gtk/script-names.c:60
+msgctxt "Script"
+msgid "Buhid"
+msgstr ""
+
+#: gtk/script-names.c:61
+msgctxt "Script"
+msgid "Tagbanwa"
+msgstr ""
+
+#: gtk/script-names.c:62
+msgctxt "Script"
+msgid "Braille"
+msgstr ""
+
+#: gtk/script-names.c:63
+msgctxt "Script"
+msgid "Cypriot"
+msgstr ""
+
+#: gtk/script-names.c:64
+msgctxt "Script"
+msgid "Limbu"
+msgstr ""
+
+#: gtk/script-names.c:65
+msgctxt "Script"
+msgid "Osmanya"
+msgstr ""
+
+#: gtk/script-names.c:66
+msgctxt "Script"
+msgid "Shavian"
+msgstr ""
+
+#: gtk/script-names.c:67
+msgctxt "Script"
+msgid "Linear B"
+msgstr ""
+
+#: gtk/script-names.c:68
+msgctxt "Script"
+msgid "Tai Le"
+msgstr ""
+
+#: gtk/script-names.c:69
+msgctxt "Script"
+msgid "Ugaritic"
+msgstr ""
+
+#: gtk/script-names.c:70
+msgctxt "Script"
+msgid "New Tai Lue"
+msgstr ""
+
+#: gtk/script-names.c:71
+msgctxt "Script"
+msgid "Buginese"
+msgstr ""
+
+#: gtk/script-names.c:72
+msgctxt "Script"
+msgid "Glagolitic"
+msgstr ""
+
+#: gtk/script-names.c:73
+msgctxt "Script"
+msgid "Tifinagh"
+msgstr ""
+
+#: gtk/script-names.c:74
+msgctxt "Script"
+msgid "Syloti Nagri"
+msgstr ""
+
+#: gtk/script-names.c:75
+msgctxt "Script"
+msgid "Old Persian"
+msgstr ""
+
+#: gtk/script-names.c:76
+msgctxt "Script"
+msgid "Kharoshthi"
+msgstr ""
+
+#: gtk/script-names.c:77
+msgctxt "Script"
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: gtk/script-names.c:78
+msgctxt "Script"
+msgid "Balinese"
+msgstr ""
+
+#: gtk/script-names.c:79
+msgctxt "Script"
+msgid "Cuneiform"
+msgstr ""
+
+#: gtk/script-names.c:80
+msgctxt "Script"
+msgid "Phoenician"
+msgstr ""
+
+#: gtk/script-names.c:81
+msgctxt "Script"
+msgid "Phags-pa"
+msgstr ""
+
+#: gtk/script-names.c:82
+msgctxt "Script"
+msgid "N'Ko"
+msgstr ""
+
+#: gtk/script-names.c:83
+msgctxt "Script"
+msgid "Kayah Li"
+msgstr ""
+
+#: gtk/script-names.c:84
+msgctxt "Script"
+msgid "Lepcha"
+msgstr ""
+
+#: gtk/script-names.c:85
+msgctxt "Script"
+msgid "Rejang"
+msgstr ""
+
+#: gtk/script-names.c:86
+msgctxt "Script"
+msgid "Sundanese"
+msgstr ""
+
+#: gtk/script-names.c:87
+msgctxt "Script"
+msgid "Saurashtra"
+msgstr ""
+
+#: gtk/script-names.c:88
+#, fuzzy
+#| msgctxt "Color name"
+#| msgid "Chameleon"
+msgctxt "Script"
+msgid "Cham"
+msgstr "Kameleontti"
+
+#: gtk/script-names.c:89
+msgctxt "Script"
+msgid "Ol Chiki"
+msgstr ""
+
+#: gtk/script-names.c:90
+msgctxt "Script"
+msgid "Vai"
+msgstr ""
+
+#: gtk/script-names.c:91
+msgctxt "Script"
+msgid "Carian"
+msgstr ""
+
+#: gtk/script-names.c:92
+msgctxt "Script"
+msgid "Lycian"
+msgstr ""
+
+#: gtk/script-names.c:93
+msgctxt "Script"
+msgid "Lydian"
+msgstr ""
+
+#: gtk/script-names.c:94
+msgctxt "Script"
+msgid "Avestan"
+msgstr ""
+
+#: gtk/script-names.c:95
+msgctxt "Script"
+msgid "Bamum"
+msgstr ""
+
+#: gtk/script-names.c:96
+msgctxt "Script"
+msgid "Egyptian Hieroglyphs"
+msgstr ""
+
+#: gtk/script-names.c:97
+msgctxt "Script"
+msgid "Imperial Aramaic"
+msgstr ""
+
+#: gtk/script-names.c:98
+msgctxt "Script"
+msgid "Inscriptional Pahlavi"
+msgstr ""
+
+#: gtk/script-names.c:99
+msgctxt "Script"
+msgid "Inscriptional Parthian"
+msgstr ""
+
+#: gtk/script-names.c:100
+msgctxt "Script"
+msgid "Javanese"
+msgstr ""
+
+#: gtk/script-names.c:101
+msgctxt "Script"
+msgid "Kaithi"
+msgstr ""
+
+#: gtk/script-names.c:102
+msgctxt "Script"
+msgid "Lisu"
+msgstr ""
+
+#: gtk/script-names.c:103
+msgctxt "Script"
+msgid "Meetei Mayek"
+msgstr ""
+
+#: gtk/script-names.c:104
+msgctxt "Script"
+msgid "Old South Arabian"
+msgstr ""
+
+#: gtk/script-names.c:105
+msgctxt "Script"
+msgid "Old Turkic"
+msgstr ""
+
+#: gtk/script-names.c:106
+msgctxt "Script"
+msgid "Samaritan"
+msgstr ""
+
+#: gtk/script-names.c:107
+msgctxt "Script"
+msgid "Tai Tham"
+msgstr ""
+
+#: gtk/script-names.c:108
+msgctxt "Script"
+msgid "Tai Viet"
+msgstr ""
+
+#: gtk/script-names.c:109
+msgctxt "Script"
+msgid "Batak"
+msgstr ""
+
+#: gtk/script-names.c:110
+msgctxt "Script"
+msgid "Brahmi"
+msgstr ""
+
+#: gtk/script-names.c:111
+msgctxt "Script"
+msgid "Mandaic"
+msgstr ""
+
+#: gtk/script-names.c:112
+msgctxt "Script"
+msgid "Chakma"
+msgstr ""
+
+#: gtk/script-names.c:113
+msgctxt "Script"
+msgid "Meroitic Cursive"
+msgstr ""
+
+#: gtk/script-names.c:114
+msgctxt "Script"
+msgid "Meroitic Hieroglyphs"
+msgstr ""
+
+#: gtk/script-names.c:115
+msgctxt "Script"
+msgid "Miao"
+msgstr ""
+
+#: gtk/script-names.c:116
+msgctxt "Script"
+msgid "Sharada"
+msgstr ""
+
+#: gtk/script-names.c:117
+msgctxt "Script"
+msgid "Sora Sompeng"
+msgstr ""
+
+#: gtk/script-names.c:118
+msgctxt "Script"
+msgid "Takri"
+msgstr ""
+
+#: gtk/script-names.c:119
+msgctxt "Script"
+msgid "Bassa"
+msgstr ""
+
+#: gtk/script-names.c:120
+msgctxt "Script"
+msgid "Caucasian Albanian"
+msgstr ""
+
+#: gtk/script-names.c:121
+msgctxt "Script"
+msgid "Duployan"
+msgstr ""
+
+#: gtk/script-names.c:122
+msgctxt "Script"
+msgid "Elbasan"
+msgstr ""
+
+#: gtk/script-names.c:123
+msgctxt "Script"
+msgid "Grantha"
+msgstr ""
+
+#: gtk/script-names.c:124
+msgctxt "Script"
+msgid "Khojki"
+msgstr ""
+
+#: gtk/script-names.c:125
+msgctxt "Script"
+msgid "Khudawadi, Sindhi"
+msgstr ""
+
+#: gtk/script-names.c:126
+msgctxt "Script"
+msgid "Linear A"
+msgstr ""
+
+#: gtk/script-names.c:127
+msgctxt "Script"
+msgid "Mahajani"
+msgstr ""
+
+#: gtk/script-names.c:128
+msgctxt "Script"
+msgid "Manichaean"
+msgstr ""
+
+#: gtk/script-names.c:129
+msgctxt "Script"
+msgid "Mende Kikakui"
+msgstr ""
+
+#: gtk/script-names.c:130
+#, fuzzy
+#| msgid "Modified"
+msgctxt "Script"
+msgid "Modi"
+msgstr "Muokattu"
+
+#: gtk/script-names.c:131
+msgctxt "Script"
+msgid "Mro"
+msgstr ""
+
+#: gtk/script-names.c:132
+msgctxt "Script"
+msgid "Nabataean"
+msgstr ""
+
+#: gtk/script-names.c:133
+msgctxt "Script"
+msgid "Old North Arabian"
+msgstr ""
+
+#: gtk/script-names.c:134
+msgctxt "Script"
+msgid "Old Permic"
+msgstr ""
+
+#: gtk/script-names.c:135
+msgctxt "Script"
+msgid "Pahawh Hmong"
+msgstr ""
+
+#: gtk/script-names.c:136
+msgctxt "Script"
+msgid "Palmyrene"
+msgstr ""
+
+#: gtk/script-names.c:137
+msgctxt "Script"
+msgid "Pau Cin Hau"
+msgstr ""
+
+#: gtk/script-names.c:138
+msgctxt "Script"
+msgid "Psalter Pahlavi"
+msgstr ""
+
+#: gtk/script-names.c:139
+msgctxt "Script"
+msgid "Siddham"
+msgstr ""
+
+#: gtk/script-names.c:140
+msgctxt "Script"
+msgid "Tirhuta"
+msgstr ""
+
+#: gtk/script-names.c:141
+msgctxt "Script"
+msgid "Warang Citi"
+msgstr ""
+
+#: gtk/script-names.c:142
+msgctxt "Script"
+msgid "Ahom"
+msgstr ""
+
+#: gtk/script-names.c:143
+msgctxt "Script"
+msgid "Anatolian Hieroglyphs"
+msgstr ""
+
+#: gtk/script-names.c:144
+msgctxt "Script"
+msgid "Hatran"
+msgstr ""
+
+#: gtk/script-names.c:145
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "Multi_key"
+msgctxt "Script"
+msgid "Multani"
+msgstr "Multi_key"
+
+#: gtk/script-names.c:146
+msgctxt "Script"
+msgid "Old Hungarian"
+msgstr ""
+
+#: gtk/script-names.c:147
+#, fuzzy
+#| msgctxt "print operation status"
+#| msgid "Printing"
+msgctxt "Script"
+msgid "Signwriting"
+msgstr "Tulostetaan"
+
+#: gtk/script-names.c:148
+msgctxt "Script"
+msgid "Adlam"
+msgstr ""
+
+#: gtk/script-names.c:149
+msgctxt "Script"
+msgid "Bhaiksuki"
+msgstr ""
+
+#: gtk/script-names.c:150
+#, fuzzy
+#| msgid "Searching"
+msgctxt "Script"
+msgid "Marchen"
+msgstr "Etsitään"
+
+#: gtk/script-names.c:151
+msgctxt "Script"
+msgid "Newa"
+msgstr ""
+
+#: gtk/script-names.c:152
+msgctxt "Script"
+msgid "Osage"
+msgstr ""
+
+#: gtk/script-names.c:153
+msgctxt "Script"
+msgid "Tangut"
+msgstr ""
+
+#: gtk/script-names.c:154
+msgctxt "Script"
+msgid "Masaram Gondi"
+msgstr ""
+
+#: gtk/script-names.c:155
+msgctxt "Script"
+msgid "Nushu"
+msgstr ""
+
+#: gtk/script-names.c:156
+msgctxt "Script"
+msgid "Soyombo"
+msgstr ""
+
+#: gtk/script-names.c:157
+msgctxt "Script"
+msgid "Zanabazar Square"
+msgstr ""
+
+#: gtk/ui/gtkaboutdialog.ui:137
 msgid "About"
 msgstr "Tietoja"
 
-#: gtk/ui/gtkaboutdialog.ui:173
+#: gtk/ui/gtkaboutdialog.ui:177
 msgid "Credits"
 msgstr "Tekijät"
 
@@ -5560,7 +7113,7 @@ msgstr "_Näytä kaikki sovellukset"
 msgid "_Find New Applications"
 msgstr "_Etsi uusia sovelluksia"
 
-#: gtk/ui/gtkappchooserwidget.ui:117
+#: gtk/ui/gtkappchooserwidget.ui:119
 msgid "No applications found."
 msgstr "Sovelluksia ei löytynyt."
 
@@ -5612,32 +7165,36 @@ msgstr "_Valmis"
 msgid "Select a Color"
 msgstr "Valitse väri"
 
-#: gtk/ui/gtkcoloreditor.ui:64
+#: gtk/ui/gtkcoloreditor.ui:57
+msgid "Pick a color from the screen"
+msgstr "Valitse väri näytöltä"
+
+#: gtk/ui/gtkcoloreditor.ui:89
 msgid "Color Name"
 msgstr "Värin nimi"
 
-#: gtk/ui/gtkcoloreditor.ui:155
+#: gtk/ui/gtkcoloreditor.ui:180
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:171
+#: gtk/ui/gtkcoloreditor.ui:196
 #, fuzzy
 #| msgctxt "Color channel"
 #| msgid "Alpha"
 msgid "Alpha"
 msgstr "Alpha"
 
-#: gtk/ui/gtkcoloreditor.ui:202
+#: gtk/ui/gtkcoloreditor.ui:227
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:218
+#: gtk/ui/gtkcoloreditor.ui:243
 msgid "Hue"
 msgstr "Sävy"
 
-#: gtk/ui/gtkcoloreditor.ui:250
+#: gtk/ui/gtkcoloreditor.ui:275
 #, fuzzy
 #| msgctxt "Color channel"
 #| msgid "S"
@@ -5645,7 +7202,7 @@ msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:260
+#: gtk/ui/gtkcoloreditor.ui:285
 #, fuzzy
 #| msgctxt "Color channel"
 #| msgid "V"
@@ -5653,44 +7210,44 @@ msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:276
+#: gtk/ui/gtkcoloreditor.ui:301
 msgid "Saturation"
 msgstr "Kylläisyys"
 
-#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:207
+#: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
 msgid "Smileys & People"
 msgstr "Hymiöt ja ihmiset"
 
-#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:217
+#: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
 msgid "Body & Clothing"
 msgstr "Keho ja vaatetus"
 
-#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:227
+#: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
 msgid "Animals & Nature"
 msgstr "Eläimet ja luonto"
 
-#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:237
+#: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
 msgid "Food & Drink"
 msgstr "Ruoka ja juoma"
 
-#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:247
+#: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
 msgid "Travel & Places"
 msgstr "Matkustaminen ja sijainnit"
 
-#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
 msgid "Activities"
 msgstr "Toiminnot"
 
-#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:267
+#: gtk/ui/gtkemojichooser.ui:143 gtk/ui/gtkemojichooser.ui:302
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objektit"
 
-#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:277
+#: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:317
 msgid "Symbols"
 msgstr "Symbolit"
 
-#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:287
+#: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:332
 msgid "Flags"
 msgstr "Liput"
 
@@ -5718,19 +7275,19 @@ msgstr "_Luo"
 msgid "Select Font"
 msgstr "Valitse fontti"
 
-#: gtk/ui/gtkfontchooserwidget.ui:50
+#: gtk/ui/gtkfontchooserwidget.ui:53
 msgid "Search font name"
 msgstr "Etsi fontin nimeä"
 
-#: gtk/ui/gtkfontchooserwidget.ui:98
+#: gtk/ui/gtkfontchooserwidget.ui:100
 msgid "Font Family"
 msgstr "Fonttiperhe"
 
-#: gtk/ui/gtkfontchooserwidget.ui:120
+#: gtk/ui/gtkfontchooserwidget.ui:121 gtk/ui/gtkfontchooserwidget.ui:248
 msgid "Preview text"
 msgstr "Esikatseluteksti"
 
-#: gtk/ui/gtkfontchooserwidget.ui:187
+#: gtk/ui/gtkfontchooserwidget.ui:201
 msgid "No Fonts Found"
 msgstr "Fontteja ei löytynyt"
 
@@ -5784,67 +7341,24 @@ msgstr ""
 msgid "Available Protocols"
 msgstr "Käytettävissä olevat protokollat"
 
-#: gtk/ui/gtkplacesview.ui:92
-msgid "AppleTalk"
-msgstr "AppleTalk"
-
-#: gtk/ui/gtkplacesview.ui:103
-msgid "File Transfer Protocol"
-msgstr "File Transfer Protocol (FTP)"
-
-#: gtk/ui/gtkplacesview.ui:114
-msgid "Network File System"
-msgstr "Network File System (NFS)"
-
-#: gtk/ui/gtkplacesview.ui:125
-msgid "Samba"
-msgstr "Samba"
-
-#: gtk/ui/gtkplacesview.ui:136
-msgid "SSH File Transfer Protocol"
-msgstr "SSH File Transfer Protocol"
-
-#: gtk/ui/gtkplacesview.ui:147
-msgid "WebDAV"
-msgstr "WebDAV"
-
-#. Translators: do not translate ftp:// and ftps://
-#: gtk/ui/gtkplacesview.ui:183
-msgid "ftp:// or ftps://"
-msgstr "ftp:// tai ftps://"
-
-#: gtk/ui/gtkplacesview.ui:205
-msgid "smb://"
-msgstr "smb://"
-
-#. Translators: do not translate sftp:// and ssh://
-#: gtk/ui/gtkplacesview.ui:216
-msgid "sftp:// or ssh://"
-msgstr "sftp:// tai ssh://"
-
-#. Translators: do not translate dav:// and davs://
-#: gtk/ui/gtkplacesview.ui:227
-msgid "dav:// or davs://"
-msgstr "dav:// tai davs://"
-
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:267
+#: gtk/ui/gtkplacesview.ui:135
 msgid "No recent servers found"
 msgstr "Viimeisimpiä palvelimia ei löytynyt"
 
-#: gtk/ui/gtkplacesview.ui:290
+#: gtk/ui/gtkplacesview.ui:158
 msgid "Recent Servers"
 msgstr "Viimeisimmät palvelimet"
 
-#: gtk/ui/gtkplacesview.ui:393
+#: gtk/ui/gtkplacesview.ui:261
 msgid "No results found"
 msgstr "Tuloksia ei löytynyt"
 
-#: gtk/ui/gtkplacesview.ui:439
+#: gtk/ui/gtkplacesview.ui:307
 msgid "Connect to _Server"
 msgstr "Yh_distä palvelimeen"
 
-#: gtk/ui/gtkplacesview.ui:472
+#: gtk/ui/gtkplacesview.ui:340
 msgid "Enter server address…"
 msgstr "Anna palvelimen osoite…"
 
@@ -6203,7 +7717,7 @@ msgstr "Amhari (EZ+)"
 #: modules/input/imbroadway.c:51
 msgctxt "input method menu"
 msgid "Broadway"
-msgstr ""
+msgstr "Broadway"
 
 #. ID
 #: modules/input/imcedilla.c:90
@@ -6288,10 +7802,16 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vietnam (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:82
+#: modules/input/imwayland.c:104
 msgctxt "input method menu"
 msgid "Wayland"
-msgstr ""
+msgstr "Wayland"
+
+#. ID
+#: modules/input/imwaylandgtk.c:82
+msgctxt "input method menu"
+msgid "Waylandgtk"
+msgstr "Waylandgtk"
 
 #. ID
 #: modules/input/imxim.c:26
@@ -6827,18 +8347,18 @@ msgstr "Tulosta ajankohtana"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5666
+#: modules/printbackends/cups/gtkprintbackendcups.c:5669
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Omavalintainen %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5775
+#: modules/printbackends/cups/gtkprintbackendcups.c:5779
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Tulostinprofiili"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5782
+#: modules/printbackends/cups/gtkprintbackendcups.c:5786
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Ei saatavilla"
@@ -6933,6 +8453,17 @@ msgstr "testituloste.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Tulosta testitulostimelle"
+
+#~ msgctxt "switch"
+#~ msgid "ON"
+#~ msgstr "Päällä"
+
+#~ msgctxt "switch"
+#~ msgid "OFF"
+#~ msgstr "Pois"
+
+#~ msgid "smb://"
+#~ msgstr "smb://"
 
 #~ msgid "Could not start the search process"
 #~ msgstr "Hakuprosessi ei voitu käynnistää"
