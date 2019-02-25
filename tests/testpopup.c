@@ -1,29 +1,19 @@
 #include <gtk/gtk.h>
 
-static void
-draw_popup (GtkDrawingArea  *da,
-            cairo_t         *cr,
-            int              width,
-            int              height,
-            gpointer         data)
-{
-  cairo_set_source_rgb (cr, 1, 0, 0);
-  cairo_paint (cr);
-}
-
 static gboolean
 create_popup (GtkWidget *parent,
               GtkWidget *label)
 {
-  GtkWidget *popup, *da;
+  GtkWidget *popup, *box;
 
   popup = gtk_popup_new ();
   gtk_popup_set_relative_to (GTK_POPUP (popup), label);
-  da = gtk_drawing_area_new ();
-  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_popup, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (popup), da);
-
-  gtk_widget_set_size_request (GTK_WIDGET (popup), 20, 20);
+  gtk_style_context_add_class (gtk_widget_get_style_context (popup), "background");
+  gtk_style_context_add_class (gtk_widget_get_style_context (popup), "frame");
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Test"));
+  gtk_container_add (GTK_CONTAINER (box), gtk_entry_new ());
+  gtk_container_add (GTK_CONTAINER (popup), box);
 
   gtk_widget_show (popup);
 
@@ -41,7 +31,7 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
-  label = gtk_label_new ("x");
+  label = gtk_entry_new ();
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (window), label);
