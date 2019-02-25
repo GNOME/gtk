@@ -122,8 +122,6 @@
 struct _GtkContainerPrivate
 {
   guint resize_handler;
-
-  guint restyle_pending    : 1;
 };
 
 enum {
@@ -1247,10 +1245,6 @@ static void
 gtk_container_destroy (GtkWidget *widget)
 {
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->restyle_pending)
-    priv->restyle_pending = FALSE;
 
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
@@ -1338,9 +1332,7 @@ gtk_container_remove (GtkContainer *container,
 static gboolean
 gtk_container_needs_idle_sizer (GtkContainer *container)
 {
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->restyle_pending)
+  if (gtk_css_node_is_invalid (gtk_widget_get_css_node (GTK_WIDGET (container))))
     return TRUE;
 
   return gtk_widget_needs_allocate (GTK_WIDGET (container));
@@ -1350,8 +1342,6 @@ static void
 gtk_container_idle_sizer (GdkFrameClock *clock,
 			  GtkContainer  *container)
 {
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
   /* We validate the style contexts in a single loop before even trying
    * to handle resizes instead of doing validations inline.
    * This is mostly necessary for compatibility reasons with old code,
@@ -1362,11 +1352,8 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
    * sane values. So the result of an invalid style context will never be
    * a program crash, but only a wrong layout or rendering.
    */
-  if (priv->restyle_pending)
-    {
-      priv->restyle_pending = FALSE;
-      gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
-    }
+  if (gtk_css_node_is_invalid (gtk_widget_get_css_node (GTK_WIDGET (container))))
+    gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
 
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
@@ -1433,14 +1420,11 @@ gtk_container_stop_idle_sizer (GtkContainer *container)
 void
 _gtk_container_queue_restyle (GtkContainer *container)
 {
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
   g_return_if_fail (GTK_CONTAINER (container));
 
-  if (priv->restyle_pending)
+  if (!gtk_css_node_is_invalid (gtk_widget_get_css_node (GTK_WIDGET (container))))
     return;
 
-  priv->restyle_pending = TRUE;
   gtk_container_start_idle_sizer (container);
 }
 
