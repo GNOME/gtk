@@ -2449,11 +2449,18 @@ gtk_window_root_get_surface_transform (GtkRoot *root,
 }
 
 static void
+gtk_window_root_check_resize (GtkRoot *root)
+{
+  gtk_window_check_resize (GTK_WINDOW (root));
+}
+
+static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
   iface->get_renderer = gtk_window_root_get_renderer;
   iface->get_surface_transform = gtk_window_root_get_surface_transform;
+  iface->check_resize = gtk_window_root_check_resize;
 }
 
 /**
