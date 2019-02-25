@@ -118,12 +118,6 @@
  *
  */
 
-
-struct _GtkContainerPrivate
-{
-  guint resize_handler;
-};
-
 enum {
   ADD,
   REMOVE,
@@ -224,9 +218,6 @@ gtk_container_get_type (void)
       container_type =
         g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
                                 &container_info, G_TYPE_FLAG_ABSTRACT);
-
-      GtkContainer_private_offset =
-        g_type_add_instance_private (container_type, sizeof (GtkContainerPrivate));
 
       g_type_add_interface_static (container_type,
                                    GTK_TYPE_BUILDABLE,
@@ -1327,105 +1318,6 @@ gtk_container_remove (GtkContainer *container,
 
   g_object_unref (widget);
   g_object_unref (container);
-}
-
-static gboolean
-gtk_container_needs_idle_sizer (GtkContainer *container)
-{
-  if (gtk_css_node_is_invalid (gtk_widget_get_css_node (GTK_WIDGET (container))))
-    return TRUE;
-
-  return gtk_widget_needs_allocate (GTK_WIDGET (container));
-}
-
-static void
-gtk_container_idle_sizer (GdkFrameClock *clock,
-			  GtkContainer  *container)
-{
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because both style_updated and size_allocate functions often change
-   * styles and so could cause infinite loops in this function.
-   *
-   * It's important to note that even an invalid style context returns
-   * sane values. So the result of an invalid style context will never be
-   * a program crash, but only a wrong layout or rendering.
-   */
-  if (gtk_css_node_is_invalid (gtk_widget_get_css_node (GTK_WIDGET (container))))
-    gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
-
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
-    {
-      if (GTK_IS_WINDOW (container))
-        gtk_window_check_resize (GTK_WINDOW (container));
-      else if (GTK_IS_POPUP (container))
-        gtk_popup_check_resize (GTK_POPUP (container));
-      else
-        g_warning ("gtk_container_idle_sizer() called on a non-window");
-    }
-
-  if (!gtk_container_needs_idle_sizer (container))
-    {
-      gtk_container_stop_idle_sizer (container);
-    }
-  else
-    {
-      gdk_frame_clock_request_phase (clock,
-                                     GDK_FRAME_CLOCK_PHASE_LAYOUT);
-    }
-}
-
-void
-gtk_container_start_idle_sizer (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-  GdkFrameClock *clock;
-
-  if (priv->resize_handler != 0)
-    return;
-
-  if (!gtk_container_needs_idle_sizer (container))
-    return;
-
-  clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));
-  if (clock == NULL)
-    return;
-
-  priv->resize_handler = g_signal_connect (clock, "layout",
-                                           G_CALLBACK (gtk_container_idle_sizer), container);
-  gdk_frame_clock_request_phase (clock,
-                                 GDK_FRAME_CLOCK_PHASE_LAYOUT);
-}
-
-void
-gtk_container_stop_idle_sizer (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->resize_handler == 0)
-    return;
-
-  g_signal_handler_disconnect (gtk_widget_get_frame_clock (GTK_WIDGET (container)),
-                               priv->resize_handler);
-  priv->resize_handler = 0;
-}
-
-void
-_gtk_container_queue_restyle (GtkContainer *container)
-{
-  g_return_if_fail (GTK_CONTAINER (container));
-
-  if (!gtk_css_node_is_invalid (gtk_widget_get_css_node (GTK_WIDGET (container))))
-    return;
-
-  gtk_container_start_idle_sizer (container);
 }
 
 static GtkSizeRequestMode 
