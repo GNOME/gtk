@@ -3363,11 +3363,11 @@ void
 gtk_entry_set_placeholder_text (GtkEntry    *entry,
                                 const gchar *text)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  //FIXME
-
-  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_PLACEHOLDER_TEXT]);
+  gtk_text_set_placeholder_text (GTK_TEXT (priv->text), text);
 }
 
 /**
@@ -3384,10 +3384,11 @@ gtk_entry_set_placeholder_text (GtkEntry    *entry,
 const gchar *
 gtk_entry_get_placeholder_text (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  //FIXME
-  return NULL;
+  return gtk_text_get_placeholder_text (GTK_TEXT (priv->text));
 }
 
 /**
