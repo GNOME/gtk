@@ -1420,3 +1420,9 @@ gtk_css_node_print (GtkCssNode                *cssnode,
         gtk_css_node_print (node, flags, string, indent + 2);
     }
 }
+
+gboolean
+gtk_css_node_is_invalid (GtkCssNode *cssnode)
+{
+  return cssnode->invalid;
+}
