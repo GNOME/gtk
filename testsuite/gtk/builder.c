@@ -1282,7 +1282,6 @@ test_cell_view (void)
     "      <object class=\"GtkCellView\" id=\"cellview1\">"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"model\">liststore1</property>"
-    "        <accelerator key=\"f\" modifiers=\"GDK_CONTROL_MASK\" signal=\"grab_focus\"/>"
     "        <child>"
     "          <object class=\"GtkCellRendererText\" id=\"renderer1\"/>"
     "          <attributes>"
@@ -1417,7 +1416,6 @@ test_accelerators (void)
     "    <child>"
     "      <object class=\"GtkTreeView\" id=\"treeview1\">"
     "        <signal name=\"cursor-changed\" handler=\"gtk_main_quit\"/>"
-    "        <accelerator key=\"f\" modifiers=\"GDK_CONTROL_MASK\" signal=\"grab_focus\"/>"
     "      </object>"
     "    </child>"
     "  </object>"
@@ -1445,9 +1443,7 @@ test_accelerators (void)
   g_assert (GTK_IS_WINDOW (window1));
 
   accel_groups = gtk_accel_groups_from_object (window1);
-  g_assert (g_slist_length (accel_groups) == 1);
-  accel_group = g_slist_nth_data (accel_groups, 0);
-  g_assert (accel_group);
+  g_assert_cmpint (g_slist_length (accel_groups), ==, 0);
 
   gtk_widget_destroy (GTK_WIDGET (window1));
   g_object_unref (builder);
