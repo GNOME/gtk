@@ -128,7 +128,6 @@ struct _GtkContainerPrivate
 enum {
   ADD,
   REMOVE,
-  SET_FOCUS_CHILD,
   LAST_SIGNAL
 };
 
@@ -300,15 +299,6 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkContainerClass, remove),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1,
-                  GTK_TYPE_WIDGET);
-  container_signals[SET_FOCUS_CHILD] =
-    g_signal_new (I_("set-focus-child"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkContainerClass, set_focus_child),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 1,
@@ -1569,7 +1559,7 @@ gtk_container_set_focus_child (GtkContainer *container,
   if (child)
     g_return_if_fail (GTK_IS_WIDGET (child));
 
-  g_signal_emit (container, container_signals[SET_FOCUS_CHILD], 0, child);
+  GTK_CONTAINER_GET_CLASS (container)->set_focus_child (container, child);
 }
 
 /**
