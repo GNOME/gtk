@@ -2547,9 +2547,30 @@ gsk_transform_node_new_with_category (GskRenderNode           *child,
   graphene_matrix_init_from_matrix (&self->transform, transform);
   self->category = category;
 
-  graphene_matrix_transform_bounds (&self->transform,
-                                    &child->bounds,
-                                    &self->render_node.bounds);
+  switch (category)
+    {
+    case GSK_MATRIX_CATEGORY_IDENTITY:
+      graphene_rect_init_from_rect (&self->render_node.bounds, &child->bounds);
+    break;
+
+    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+      {
+        graphene_rect_init_from_rect (&self->render_node.bounds, &child->bounds);
+        self->render_node.bounds.origin.x += graphene_matrix_get_value (transform, 3, 0);
+        self->render_node.bounds.origin.y += graphene_matrix_get_value (transform, 3, 1);
+      }
+    break;
+
+    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+    case GSK_MATRIX_CATEGORY_ANY:
+    case GSK_MATRIX_CATEGORY_UNKNOWN:
+    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    default:
+      graphene_matrix_transform_bounds (&self->transform,
+                                        &child->bounds,
+                                        &self->render_node.bounds);
+    }
+
   return &self->render_node;
 }
 
