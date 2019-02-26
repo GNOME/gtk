@@ -484,7 +484,6 @@ enum {
   GRAB_NOTIFY,
   CHILD_NOTIFY,
   MNEMONIC_ACTIVATE,
-  GRAB_FOCUS,
   FOCUS,
   MOVE_FOCUS,
   KEYNAV_FAILED,
@@ -1652,19 +1651,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOOLEAN,
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
-
-  /**
-   * GtkWidget::grab-focus:
-   * @widget: the object which received the signal.
-   */
-  widget_signals[GRAB_FOCUS] =
-    g_signal_new (I_("grab-focus"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkWidgetClass, grab_focus),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
 
   /**
    * GtkWidget::focus:
@@ -5343,7 +5329,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
     return;
 
   g_object_ref (widget);
-  g_signal_emit (widget, widget_signals[GRAB_FOCUS], 0);
+  GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
   g_object_unref (widget);
 }
