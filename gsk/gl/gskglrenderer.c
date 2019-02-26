@@ -2442,7 +2442,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
   /* This can still happen, even if the render nodes are created using
    * GtkSnapshot, so let's juse be safe. */
-  if (node->bounds.size.width == 0.0f || node->bounds.size.height == 0.0f)
+  if (node->bounds.size.width == 0.0f || node->bounds.size.height == 0.0f ||
+      isnan (node->bounds.size.width) || isnan (node->bounds.size.height))
     return;
 
   /* Check whether the render node is entirely out of the current
