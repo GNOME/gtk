@@ -8739,8 +8739,6 @@ gtk_window_snapshot (GtkWidget   *widget,
  * Presents a window to the user. This function should not be used
  * as when it is called, it is too late to gather a valid timestamp
  * to allow focus stealing prevention to work correctly.
- *
- * Deprecated: 4.0: Use gtk_window_present_with_time() instead.
  **/
 void
 gtk_window_present (GtkWindow *window)
@@ -8780,7 +8778,6 @@ gtk_window_present_with_time (GtkWindow *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
   GdkSurface *surface;
-  static gsize warned_current_time = FALSE;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -8797,17 +8794,8 @@ gtk_window_present_with_time (GtkWindow *window,
       /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
       if (timestamp == GDK_CURRENT_TIME)
         {
-	  if (g_once_init_enter (&warned_current_time))
-	    {
-	      gboolean warned = TRUE;
-	      g_warning ("gtk_window_present_with_time() should not be called with 0, or "
-			 "GDK_CURRENT_TIME as a timestamp, the timestamp should instead be "
-			 "gathered at the time the user initiated the request for the window "
-			 "to be shown");
-	      g_once_init_leave (&warned_current_time, warned);
-	    }
 #ifdef GDK_WINDOWING_X11
-	  if (GDK_IS_X11_SURFACE(surface))
+	  if (GDK_IS_X11_SURFACE (surface))
 	    {
 	      GdkDisplay *display;
 
