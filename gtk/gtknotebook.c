@@ -678,7 +678,7 @@ static void gtk_notebook_add                 (GtkContainer     *container,
                                               GtkWidget        *widget);
 static void gtk_notebook_remove              (GtkContainer     *container,
                                               GtkWidget        *widget);
-static void gtk_notebook_set_focus_child     (GtkContainer     *container,
+static void gtk_notebook_set_focus_child     (GtkWidget        *widget,
                                               GtkWidget        *child);
 static GType gtk_notebook_child_type       (GtkContainer     *container);
 static void gtk_notebook_forall              (GtkContainer     *container,
@@ -933,11 +933,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->drag_data_received = gtk_notebook_drag_data_received;
   widget_class->drag_failed = gtk_notebook_drag_failed;
   widget_class->compute_expand = gtk_notebook_compute_expand;
+  widget_class->set_focus_child = gtk_notebook_set_focus_child;
 
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
   container_class->forall = gtk_notebook_forall;
-  container_class->set_focus_child = gtk_notebook_set_focus_child;
   container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_notebook_real_switch_page;
@@ -3546,7 +3546,7 @@ focus_tabs_in (GtkNotebook *notebook)
   if (priv->show_tabs && gtk_notebook_has_current_page (notebook))
     {
       gtk_widget_grab_focus (GTK_WIDGET (notebook));
-      gtk_notebook_set_focus_child (GTK_CONTAINER (notebook), NULL);
+      gtk_notebook_set_focus_child (GTK_WIDGET (notebook), NULL);
       gtk_notebook_switch_focus_tab (notebook,
                                      g_list_find (priv->children,
                                                   priv->cur_page));
@@ -3790,10 +3790,10 @@ gtk_notebook_focus (GtkWidget        *widget,
 }
 
 static void
-gtk_notebook_set_focus_child (GtkContainer *container,
-                              GtkWidget    *child)
+gtk_notebook_set_focus_child (GtkWidget *widget,
+                              GtkWidget *child)
 {
-  GtkNotebook *notebook = GTK_NOTEBOOK (container);
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *page_child;
   GtkWidget *toplevel;
@@ -3803,13 +3803,13 @@ gtk_notebook_set_focus_child (GtkContainer *container,
    * for future use if we switch to the page with a mnemonic.
    */
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
+  toplevel = gtk_widget_get_toplevel (widget);
   if (toplevel && gtk_widget_is_toplevel (toplevel))
     {
       page_child = gtk_window_get_focus (GTK_WINDOW (toplevel));
       while (page_child)
         {
-          if (gtk_widget_get_parent (page_child) == GTK_WIDGET (container))
+          if (gtk_widget_get_parent (page_child) == widget)
             {
               GList *list = gtk_notebook_find_child (notebook, page_child);
               if (list != NULL)
@@ -3853,7 +3853,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
   else
     priv->child_has_focus = FALSE;
 
-  GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->set_focus_child (container, child);
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->set_focus_child (widget, child);
 }
 
 static void

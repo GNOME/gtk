@@ -231,7 +231,7 @@ static void     gtk_paned_calc_position         (GtkPaned         *paned,
                                                  gint              allocation,
                                                  gint              child1_req,
                                                  gint              child2_req);
-static void     gtk_paned_set_focus_child       (GtkContainer     *container,
+static void     gtk_paned_set_focus_child       (GtkWidget        *widget,
 						 GtkWidget        *child);
 static void     gtk_paned_set_saved_focus       (GtkPaned         *paned,
 						 GtkWidget        *widget);
@@ -367,12 +367,12 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->focus = gtk_paned_focus;
   widget_class->pick = gtk_paned_pick;
+  widget_class->set_focus_child = gtk_paned_set_focus_child;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
-  container_class->set_focus_child = gtk_paned_set_focus_child;
   container_class->set_child_property = gtk_paned_set_child_property;
   container_class->get_child_property = gtk_paned_get_child_property;
 
@@ -1905,14 +1905,14 @@ paned_get_focus_widget (GtkPaned *paned)
 }
 
 static void
-gtk_paned_set_focus_child (GtkContainer *container,
-			   GtkWidget    *focus_child)
+gtk_paned_set_focus_child (GtkWidget *widget,
+			   GtkWidget *focus_child)
 {
-  GtkPaned *paned = GTK_PANED (container);
+  GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   GtkWidget *container_focus_child;
 
-  g_return_if_fail (GTK_IS_PANED (container));
+  g_return_if_fail (GTK_IS_PANED (widget));
 
   if (focus_child == NULL)
     {
@@ -1930,7 +1930,7 @@ gtk_paned_set_focus_child (GtkContainer *container,
 	    if (GTK_IS_PANED (w))
 	      last_focus = w;
 
-          container_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
+          container_focus_child = gtk_widget_get_focus_child (widget);
           if (container_focus_child == priv->child1)
 	    gtk_paned_set_last_child1_focus (paned, last_focus);
 	  else if (container_focus_child == priv->child2)
@@ -1938,8 +1938,8 @@ gtk_paned_set_focus_child (GtkContainer *container,
 	}
     }
 
-  if (GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child)
-    GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child (container, focus_child);
+  if (GTK_WIDGET_CLASS (gtk_paned_parent_class)->set_focus_child)
+    GTK_WIDGET_CLASS (gtk_paned_parent_class)->set_focus_child (widget, focus_child);
 }
 
 static void

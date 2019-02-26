@@ -602,6 +602,8 @@ static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *obje
 								 GParamSpec      **pspecs);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
+static void             gtk_widget_real_set_focus_child         (GtkWidget        *widget,
+                                                                 GtkWidget        *focus_child);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
@@ -932,6 +934,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
+  klass->set_focus_child = gtk_widget_real_set_focus_child;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->drag_begin = NULL;
@@ -13442,15 +13445,22 @@ void
 gtk_widget_set_focus_child (GtkWidget *widget,
                             GtkWidget *child)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
   if (child != NULL)
     {
       g_return_if_fail (GTK_IS_WIDGET (child));
       g_return_if_fail (gtk_widget_get_parent (child) == widget);
     }
+
+
+  GTK_WIDGET_GET_CLASS (widget)->set_focus_child (widget, child);
+}
+
+static void
+gtk_widget_real_set_focus_child (GtkWidget *widget,
+                                 GtkWidget *child)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (priv->focus_child)
     gtk_widget_unset_state_flags (priv->focus_child,
@@ -13469,9 +13479,6 @@ gtk_widget_set_focus_child (GtkWidget *widget,
     }
 
   g_set_object (&priv->focus_child, child);
-
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_set_focus_child (GTK_CONTAINER (widget), child);
 }
 
 /**

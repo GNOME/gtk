@@ -185,7 +185,8 @@ struct _GtkWidget
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
  *   #GtkWindow it’s inside.
- * @focus:
+ * @focus: Move the focus among @widget's children
+ * @set_focus_child: Sets the focused child of widget
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
  * @drag_begin: Signal emitted on the drag source when a drag is
@@ -280,6 +281,8 @@ struct _GtkWidgetClass
   void     (* grab_focus)               (GtkWidget           *widget);
   gboolean (* focus)                    (GtkWidget           *widget,
                                          GtkDirectionType     direction);
+  void     (* set_focus_child)          (GtkWidget           *widget,
+                                         GtkWidget           *focus_child);
 
   /* keyboard navigation */
   void     (* move_focus)               (GtkWidget           *widget,

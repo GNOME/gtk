@@ -603,7 +603,7 @@ static void     gtk_tree_view_size_allocate        (GtkWidget      *widget,
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
 
-static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
+static void     gtk_tree_view_set_focus_child      (GtkWidget        *widget,
 						    GtkWidget        *child);
 static gboolean gtk_tree_view_key_controller_key_pressed  (GtkEventControllerKey *key,
                                                            guint                  keyval,
@@ -990,11 +990,11 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->style_updated = gtk_tree_view_style_updated;
+  widget_class->set_focus_child = gtk_tree_view_set_focus_child;
 
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
   container_class->forall = gtk_tree_view_forall;
-  container_class->set_focus_child = gtk_tree_view_set_focus_child;
 
   class->move_cursor = gtk_tree_view_real_move_cursor;
   class->select_all = gtk_tree_view_real_select_all;
@@ -8020,10 +8020,10 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
 
 static void
-gtk_tree_view_set_focus_child (GtkContainer *container,
-			       GtkWidget    *child)
+gtk_tree_view_set_focus_child (GtkWidget *widget,
+			       GtkWidget *child)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (container);
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *list;
 
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -8035,7 +8035,7 @@ gtk_tree_view_set_focus_child (GtkContainer *container,
 	}
     }
 
-  GTK_CONTAINER_CLASS (gtk_tree_view_parent_class)->set_focus_child (container, child);
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->set_focus_child (widget, child);
 }
 
 static gboolean
