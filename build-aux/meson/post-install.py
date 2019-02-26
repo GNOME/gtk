@@ -23,11 +23,9 @@ if 'DESTDIR' not in os.environ:
                     os.path.join(gtk_datadir, 'icons', 'hicolor')])
 
     print('Updating module cache for print backends...')
-    if not os.path.isdir(gtk_printmodule_dir):
-        os.mkdir(gtk_printmodule_dir)
+    os.makedirs(gtk_printmodule_dir, exist_ok=True)
     subprocess.call(['gio-querymodules', gtk_printmodule_dir])
 
     print('Updating module cache for input methods...')
-    if not os.path.isdir(gtk_immodule_dir):
-        os.mkdir(gtk_immodule_dir)
+    os.makedirs(gtk_immodule_dir), exist_ok=True)
     subprocess.call(['gio-querymodules', gtk_immodule_dir])
