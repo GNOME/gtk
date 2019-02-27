@@ -59,6 +59,9 @@ struct _GtkListView
   GtkScrollablePolicy scroll_policy[2];
 
   int list_width;
+
+  GtkListItemTracker *anchor;
+  double anchor_align;
 };
 
 struct _ListRow
@@ -230,6 +233,23 @@ gtk_list_view_get_list_height (GtkListView *self)
 }
 
 static void
+gtk_list_view_set_anchor (GtkListView *self,
+                          guint        position,
+                          double       align)
+{
+  gtk_list_item_tracker_set_position (self->item_manager,
+                                      self->anchor,
+                                      position,
+                                      GTK_LIST_VIEW_MAX_LIST_ITEMS * align,
+                                      GTK_LIST_VIEW_MAX_LIST_ITEMS - 1 - GTK_LIST_VIEW_MAX_LIST_ITEMS * align);
+  if (self->anchor_align != align)
+    {
+      self->anchor_align = align;
+      gtk_widget_queue_allocate (GTK_WIDGET (self));
+    }
+}
+
+static void
 gtk_list_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
                                            GtkListView   *self)
 {
@@ -247,7 +267,7 @@ gtk_list_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
       else
         pos = 0;
 
-      gtk_list_item_manager_set_anchor (self->item_manager, pos, 0, NULL, (guint) -1);
+      gtk_list_view_set_anchor (self, pos, 0);
     }
   
   gtk_widget_queue_allocate (GTK_WIDGET (self));
@@ -272,18 +292,17 @@ gtk_list_view_update_adjustments (GtkListView    *self,
     {
       ListRow *row;
       guint anchor;
-      double anchor_align;
 
       page_size = gtk_widget_get_height (GTK_WIDGET (self));
       upper = gtk_list_view_get_list_height (self);
 
-      anchor = gtk_list_item_manager_get_anchor (self->item_manager, &anchor_align);
+      anchor = gtk_list_item_tracker_get_position (self->item_manager, self->anchor);
       row = gtk_list_item_manager_get_nth (self->item_manager, anchor, NULL);
       if (row)
         value = list_row_get_y (self, row);
       else
         value = 0;
-      value += anchor_align * (page_size - (row ? row->height : 0));
+      value += self->anchor_align * (page_size - (row ? row->height : 0));
     }
   upper = MAX (upper, page_size);
 
@@ -536,6 +555,11 @@ gtk_list_view_dispose (GObject *object)
   gtk_list_view_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_list_view_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
+  if (self->anchor)
+    {
+      gtk_list_item_tracker_free (self->item_manager, self->anchor);
+      self->anchor = NULL;
+    }
   g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
@@ -714,6 +738,7 @@ static void
 gtk_list_view_init (GtkListView *self)
 {
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), ListRow, ListRowAugment, list_row_augment);
+  self->anchor = gtk_list_item_tracker_new (self->item_manager);
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
@@ -784,6 +809,7 @@ gtk_list_view_set_model (GtkListView *self,
         selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
 
       gtk_list_item_manager_set_model (self->item_manager, selection_model);
+      gtk_list_view_set_anchor (self, 0, 0.0);
 
       g_object_unref (selection_model);
     }
@@ -791,7 +817,6 @@ gtk_list_view_set_model (GtkListView *self,
     {
       gtk_list_item_manager_set_model (self->item_manager, NULL);
     }
-
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
