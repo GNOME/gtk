@@ -1129,6 +1129,8 @@ list row button {
     *:selected & { color: mix($selected_fg_color, $selected_bg_color, 80%); }
   }
 
+  &:disabled, &:disabled:backdrop { color: transparentize(desaturate($link_color,100%), 0.2); }
+
   &:backdrop { &:backdrop:hover, &:backdrop:hover:selected, & { color: $selected_bg_color; }}
 
   @at-root %link_selected,
@@ -1156,6 +1158,7 @@ button:visited {
     @extend %link;
 
     text-decoration-line: underline;
+
   }
 }
 
