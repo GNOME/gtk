@@ -40,6 +40,7 @@ typedef struct _GtkListItemManager GtkListItemManager;
 typedef struct _GtkListItemManagerClass GtkListItemManagerClass;
 typedef struct _GtkListItemManagerItem GtkListItemManagerItem; /* sorry */
 typedef struct _GtkListItemManagerItemAugment GtkListItemManagerItemAugment;
+typedef struct _GtkListItemTracker GtkListItemTracker;
 
 struct _GtkListItemManagerItem
 {
@@ -91,13 +92,16 @@ void                    gtk_list_item_manager_select            (GtkListItemMana
                                                                  gboolean                modify,
                                                                  gboolean                extend);
 
-void                    gtk_list_item_manager_set_anchor        (GtkListItemManager     *self,
+GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self);
+void                    gtk_list_item_tracker_free              (GtkListItemManager     *self,
+                                                                 GtkListItemTracker     *tracker);
+void                    gtk_list_item_tracker_set_position      (GtkListItemManager     *self,
+                                                                 GtkListItemTracker     *tracker,
                                                                  guint                   position,
-                                                                 double                  align,
-                                                                 GHashTable             *change,
-                                                                 guint                   update_start);
-guint                   gtk_list_item_manager_get_anchor        (GtkListItemManager     *self,
-                                                                 double                 *align);
+                                                                 guint                   n_before,
+                                                                 guint                   n_after);
+guint                   gtk_list_item_tracker_get_position      (GtkListItemManager     *self,
+                                                                 GtkListItemTracker     *tracker);
 
 
 G_END_DECLS
