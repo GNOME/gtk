@@ -4620,6 +4620,8 @@ gtk_window_get_icon_for_size (GtkWindow *window,
 
   if (!name)
     name = default_icon_name;
+  if (!name)
+    return NULL;
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
                                      name, size,
