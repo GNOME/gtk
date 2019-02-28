@@ -144,3 +144,36 @@ gsk_rounded_rect_contains_point
 gsk_rounded_rect_contains_rect
 gsk_rounded_rect_intersects_rect
 </SECTION>
+
+<SECTION>
+<FILE>GskTransform</FILE>
+<TITLE>3D transformations</TITLE>
+GskTransformType
+GskTransform
+gsk_transform_ref
+gsk_transform_unref
+<SUBSECTION>
+gsk_transform_print
+gsk_transform_to_string
+gsk_transform_to_matrix
+<SUBSECTION>
+gsk_transform_identity
+gsk_transform_transform
+gsk_transform_matrix
+gsk_transform_translate
+gsk_transform_translate_3d
+gsk_transform_rotate
+gsk_transform_rotate_3d
+gsk_transform_scale
+gsk_transform_scale_3d
+<SUBSECTION>
+gsk_transform_equal
+<SUBSECTION>
+gsk_transform_get_transform_type
+gsk_transform_get_next
+<SUBSECTION Private>
+GSK_TYPE_TRANSFORM
+gsk_transform_get_type
+gsk_transform_new
+</SECTION>
+

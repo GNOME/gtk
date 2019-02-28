@@ -144,7 +144,7 @@ struct _GtkWidgetPrivate
   GtkStyleContext *context;
 
   /* The widget's allocated size */
-  GtkTransform *allocated_transform;
+  GskTransform *allocated_transform;
   int allocated_width;
   int allocated_height;
   gint allocated_size_baseline;

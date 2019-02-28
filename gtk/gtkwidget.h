@@ -407,7 +407,7 @@ void       gtk_widget_allocate            (GtkWidget               *widget,
                                            int                      width,
                                            int                      height,
                                            int                      baseline,
-                                           GtkTransform            *transform);
+                                           GskTransform            *transform);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);

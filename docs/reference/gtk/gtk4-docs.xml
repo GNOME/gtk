@@ -345,7 +345,6 @@
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
-    <xi:include href="xml/gtktransform.xml" />
   </part>
 
   <part id="theming">

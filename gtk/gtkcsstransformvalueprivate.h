@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_transform_value_new_none       (void);
 GtkCssValue *   _gtk_css_transform_value_parse          (GtkCssParser           *parser);
 
-GtkTransform *  gtk_css_transform_value_get_transform   (const GtkCssValue      *transform);
+GskTransform *  gtk_css_transform_value_get_transform   (const GtkCssValue      *transform);
 
 G_END_DECLS
 

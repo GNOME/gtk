@@ -19,72 +19,72 @@
 
 
 /**
- * SECTION:gtktransform
- * @Title: GtkTransform
+ * SECTION:gsktransform
+ * @Title: GskTransform
  * @Short_description: A description for transform operations
  *
- * #GtkTransform is an object to describe transform matrices. Unlike
- * #graphene_matrix_t, #GtkTransform retains the steps in how a transform was
+ * #GskTransform is an object to describe transform matrices. Unlike
+ * #graphene_matrix_t, #GskTransform retains the steps in how a transform was
  * constructed, and allows inspecting them. It is modeled after the way
  * CSS describes transforms.
  *
- * #GtkTransform objects are immutable and cannot be changed after creation.
+ * #GskTransform objects are immutable and cannot be changed after creation.
  * This means code can safely expose them as properties of objects without
  * having to worry about others changing them.
  */
 
 #include "config.h"
 
-#include "gtktransformprivate.h"
+#include "gsktransformprivate.h"
 
-typedef struct _GtkTransformClass GtkTransformClass;
+typedef struct _GskTransformClass GskTransformClass;
 
-#define GTK_IS_TRANSFORM_TYPE(self,type) ((self) == NULL ? (type) == GTK_TRANSFORM_TYPE_IDENTITY : (self)->transform_class->transform_type == (type))
+#define GSK_IS_TRANSFORM_TYPE(self,type) ((self) == NULL ? (type) == GSK_TRANSFORM_TYPE_IDENTITY : (self)->transform_class->transform_type == (type))
 
-struct _GtkTransform
+struct _GskTransform
 {
-  const GtkTransformClass *transform_class;
+  const GskTransformClass *transform_class;
   
   volatile int ref_count;
-  GtkTransform *next;
+  GskTransform *next;
 };
 
-struct _GtkTransformClass
+struct _GskTransformClass
 {
-  GtkTransformType transform_type;
+  GskTransformType transform_type;
   gsize struct_size;
   const char *type_name;
 
-  void                  (* finalize)            (GtkTransform           *transform);
-  GskMatrixCategory     (* categorize)          (GtkTransform           *transform);
-  void                  (* to_matrix)           (GtkTransform           *transform,
+  void                  (* finalize)            (GskTransform           *transform);
+  GskMatrixCategory     (* categorize)          (GskTransform           *transform);
+  void                  (* to_matrix)           (GskTransform           *transform,
                                                  graphene_matrix_t      *out_matrix);
-  gboolean              (* apply_affine)        (GtkTransform           *transform,
+  gboolean              (* apply_affine)        (GskTransform           *transform,
                                                  float                  *out_scale_x,
                                                  float                  *out_scale_y,
                                                  float                  *out_dx,
                                                  float                  *out_dy);
-  void                  (* print)               (GtkTransform           *transform,
+  void                  (* print)               (GskTransform           *transform,
                                                  GString                *string);
-  GtkTransform *        (* apply)               (GtkTransform           *transform,
-                                                 GtkTransform           *apply_to);
+  GskTransform *        (* apply)               (GskTransform           *transform,
+                                                 GskTransform           *apply_to);
   /* both matrices have the same type */
-  gboolean              (* equal)               (GtkTransform           *first_transform,
-                                                 GtkTransform           *second_transform);
+  gboolean              (* equal)               (GskTransform           *first_transform,
+                                                 GskTransform           *second_transform);
 };
 
 /**
- * GtkTransform: (ref-func gtk_transform_ref) (unref-func gtk_transform_unref)
+ * GskTransform: (ref-func gsk_transform_ref) (unref-func gsk_transform_unref)
  *
- * The `GtkTransform` structure contains only private data.
+ * The `GskTransform` structure contains only private data.
  */
 
-G_DEFINE_BOXED_TYPE (GtkTransform, gtk_transform,
-                     gtk_transform_ref,
-                     gtk_transform_unref)
+G_DEFINE_BOXED_TYPE (GskTransform, gsk_transform,
+                     gsk_transform_ref,
+                     gsk_transform_unref)
 
 /*<private>
- * gtk_transform_is_identity:
+ * gsk_transform_is_identity:
  * @transform: (allow-none): A transform or %NULL
  *
  * Checks if the transform is a representation of the identity
@@ -97,24 +97,24 @@ G_DEFINE_BOXED_TYPE (GtkTransform, gtk_transform,
  *     the identity transform
  **/
 static gboolean
-gtk_transform_is_identity (GtkTransform *self)
+gsk_transform_is_identity (GskTransform *self)
 {
   return self == NULL ||
-         (GTK_IS_TRANSFORM_TYPE (self, GTK_TRANSFORM_TYPE_IDENTITY) && gtk_transform_is_identity (self->next));
+         (GSK_IS_TRANSFORM_TYPE (self, GSK_TRANSFORM_TYPE_IDENTITY) && gsk_transform_is_identity (self->next));
 }
 
 /*< private >
- * gtk_transform_alloc:
+ * gsk_transform_alloc:
  * @transform_class: class structure for this self
  * @next: (transfer full) Next matrix to multiply with or %NULL if none
  *
- * Returns: (transfer full): the newly created #GtkTransform
+ * Returns: (transfer full): the newly created #GskTransform
  */
 static gpointer
-gtk_transform_alloc (const GtkTransformClass *transform_class,
-                     GtkTransform            *next)
+gsk_transform_alloc (const GskTransformClass *transform_class,
+                     GskTransform            *next)
 {
-  GtkTransform *self;
+  GskTransform *self;
 
   g_return_val_if_fail (transform_class != NULL, NULL);
 
@@ -122,7 +122,7 @@ gtk_transform_alloc (const GtkTransformClass *transform_class,
 
   self->transform_class = transform_class;
   self->ref_count = 1;
-  self->next = gtk_transform_is_identity (next) ? NULL : next;
+  self->next = gsk_transform_is_identity (next) ? NULL : next;
 
   return self;
 }
@@ -130,25 +130,25 @@ gtk_transform_alloc (const GtkTransformClass *transform_class,
 /*** IDENTITY ***/
 
 static void
-gtk_identity_transform_finalize (GtkTransform *transform)
+gsk_identity_transform_finalize (GskTransform *transform)
 {
 }
 
 static GskMatrixCategory
-gtk_identity_transform_categorize (GtkTransform *transform)
+gsk_identity_transform_categorize (GskTransform *transform)
 {
   return GSK_MATRIX_CATEGORY_IDENTITY;
 }
 
 static void
-gtk_identity_transform_to_matrix (GtkTransform      *transform,
+gsk_identity_transform_to_matrix (GskTransform      *transform,
                                   graphene_matrix_t *out_matrix)
 {
   graphene_matrix_init_identity (out_matrix);
 }
 
 static gboolean
-gtk_identity_transform_apply_affine (GtkTransform *transform,
+gsk_identity_transform_apply_affine (GskTransform *transform,
                                      float        *out_scale_x,
                                      float        *out_scale_y,
                                      float        *out_dx,
@@ -158,42 +158,42 @@ gtk_identity_transform_apply_affine (GtkTransform *transform,
 }
 
 static void
-gtk_identity_transform_print (GtkTransform *transform,
+gsk_identity_transform_print (GskTransform *transform,
                               GString      *string)
 {
   g_string_append (string, "identity");
 }
 
-static GtkTransform *
-gtk_identity_transform_apply (GtkTransform *transform,
-                              GtkTransform *apply_to)
+static GskTransform *
+gsk_identity_transform_apply (GskTransform *transform,
+                              GskTransform *apply_to)
 {
-  return gtk_transform_identity (apply_to);
+  return gsk_transform_identity (apply_to);
 }
 
 static gboolean
-gtk_identity_transform_equal (GtkTransform *first_transform,
-                              GtkTransform *second_transform)
+gsk_identity_transform_equal (GskTransform *first_transform,
+                              GskTransform *second_transform)
 {
   return TRUE;
 }
 
-static const GtkTransformClass GTK_IDENTITY_TRANSFORM_CLASS =
+static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
 {
-  GTK_TRANSFORM_TYPE_IDENTITY,
-  sizeof (GtkTransform),
-  "GtkIdentityMatrix",
-  gtk_identity_transform_finalize,
-  gtk_identity_transform_categorize,
-  gtk_identity_transform_to_matrix,
-  gtk_identity_transform_apply_affine,
-  gtk_identity_transform_print,
-  gtk_identity_transform_apply,
-  gtk_identity_transform_equal,
+  GSK_TRANSFORM_TYPE_IDENTITY,
+  sizeof (GskTransform),
+  "GskIdentityMatrix",
+  gsk_identity_transform_finalize,
+  gsk_identity_transform_categorize,
+  gsk_identity_transform_to_matrix,
+  gsk_identity_transform_apply_affine,
+  gsk_identity_transform_print,
+  gsk_identity_transform_apply,
+  gsk_identity_transform_equal,
 };
 
 /**
- * gtk_transform_identity:
+ * gsk_transform_identity:
  * @next: (allow-none): the next transform operation or %NULL
  *
  * Adds an identity multiplication into the list of matrix operations.
@@ -205,57 +205,57 @@ static const GtkTransformClass GTK_IDENTITY_TRANSFORM_CLASS =
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_identity (GtkTransform *next)
+GskTransform *
+gsk_transform_identity (GskTransform *next)
 {
-  if (gtk_transform_is_identity (next))
+  if (gsk_transform_is_identity (next))
     return next;
 
-  return gtk_transform_alloc (&GTK_IDENTITY_TRANSFORM_CLASS, next);
+  return gsk_transform_alloc (&GSK_IDENTITY_TRANSFORM_CLASS, next);
 }
 
 /*** MATRIX ***/
 
-typedef struct _GtkMatrixTransform GtkMatrixTransform;
+typedef struct _GskMatrixTransform GskMatrixTransform;
 
-struct _GtkMatrixTransform
+struct _GskMatrixTransform
 {
-  GtkTransform parent;
+  GskTransform parent;
 
   graphene_matrix_t matrix;
   GskMatrixCategory category;
 };
 
 static void
-gtk_matrix_transform_finalize (GtkTransform *self)
+gsk_matrix_transform_finalize (GskTransform *self)
 {
 }
 
 static GskMatrixCategory
-gtk_matrix_transform_categorize (GtkTransform *transform)
+gsk_matrix_transform_categorize (GskTransform *transform)
 {
-  GtkMatrixTransform *self = (GtkMatrixTransform *) transform;
+  GskMatrixTransform *self = (GskMatrixTransform *) transform;
 
   return self->category;
 }
 
 static void
-gtk_matrix_transform_to_matrix (GtkTransform      *transform,
+gsk_matrix_transform_to_matrix (GskTransform      *transform,
                                 graphene_matrix_t *out_matrix)
 {
-  GtkMatrixTransform *self = (GtkMatrixTransform *) transform;
+  GskMatrixTransform *self = (GskMatrixTransform *) transform;
 
   graphene_matrix_init_from_matrix (out_matrix, &self->matrix);
 }
 
 static gboolean
-gtk_matrix_transform_apply_affine (GtkTransform *transform,
+gsk_matrix_transform_apply_affine (GskTransform *transform,
                                    float        *out_scale_x,
                                    float        *out_scale_y,
                                    float        *out_dx,
                                    float        *out_dy)
 {
-  GtkMatrixTransform *self = (GtkMatrixTransform *) transform;
+  GskMatrixTransform *self = (GskMatrixTransform *) transform;
 
   switch (self->category)
   {
@@ -293,10 +293,10 @@ string_append_double (GString *string,
 }
 
 static void
-gtk_matrix_transform_print (GtkTransform *transform,
+gsk_matrix_transform_print (GskTransform *transform,
                             GString      *string)
 {
-  GtkMatrixTransform *self = (GtkMatrixTransform *) transform;
+  GskMatrixTransform *self = (GskMatrixTransform *) transform;
   guint i;
   float f[16];
 
@@ -311,48 +311,48 @@ gtk_matrix_transform_print (GtkTransform *transform,
   g_string_append (string, ")");
 }
 
-static GtkTransform *
-gtk_matrix_transform_apply (GtkTransform *transform,
-                            GtkTransform *apply_to)
+static GskTransform *
+gsk_matrix_transform_apply (GskTransform *transform,
+                            GskTransform *apply_to)
 {
-  GtkMatrixTransform *self = (GtkMatrixTransform *) transform;
+  GskMatrixTransform *self = (GskMatrixTransform *) transform;
 
-  return gtk_transform_matrix_with_category (apply_to,
+  return gsk_transform_matrix_with_category (apply_to,
                                              &self->matrix,
                                              self->category);
 }
 
 static gboolean
-gtk_matrix_transform_equal (GtkTransform *first_transform,
-                            GtkTransform *second_transform)
+gsk_matrix_transform_equal (GskTransform *first_transform,
+                            GskTransform *second_transform)
 {
-  GtkMatrixTransform *first = (GtkMatrixTransform *) first_transform;
-  GtkMatrixTransform *second = (GtkMatrixTransform *) second_transform;
+  GskMatrixTransform *first = (GskMatrixTransform *) first_transform;
+  GskMatrixTransform *second = (GskMatrixTransform *) second_transform;
 
   /* Crude, but better than just returning FALSE */
   return memcmp (&first->matrix, &second->matrix, sizeof (graphene_matrix_t)) == 0;
 }
 
-static const GtkTransformClass GTK_TRANSFORM_TRANSFORM_CLASS =
+static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
 {
-  GTK_TRANSFORM_TYPE_TRANSFORM,
-  sizeof (GtkMatrixTransform),
-  "GtkMatrixTransform",
-  gtk_matrix_transform_finalize,
-  gtk_matrix_transform_categorize,
-  gtk_matrix_transform_to_matrix,
-  gtk_matrix_transform_apply_affine,
-  gtk_matrix_transform_print,
-  gtk_matrix_transform_apply,
-  gtk_matrix_transform_equal,
+  GSK_TRANSFORM_TYPE_TRANSFORM,
+  sizeof (GskMatrixTransform),
+  "GskMatrixTransform",
+  gsk_matrix_transform_finalize,
+  gsk_matrix_transform_categorize,
+  gsk_matrix_transform_to_matrix,
+  gsk_matrix_transform_apply_affine,
+  gsk_matrix_transform_print,
+  gsk_matrix_transform_apply,
+  gsk_matrix_transform_equal,
 };
 
-GtkTransform *
-gtk_transform_matrix_with_category (GtkTransform            *next,
+GskTransform *
+gsk_transform_matrix_with_category (GskTransform            *next,
                                     const graphene_matrix_t *matrix,
                                     GskMatrixCategory        category)
 {
-  GtkMatrixTransform *result = gtk_transform_alloc (&GTK_TRANSFORM_TRANSFORM_CLASS, next);
+  GskMatrixTransform *result = gsk_transform_alloc (&GSK_TRANSFORM_TRANSFORM_CLASS, next);
 
   graphene_matrix_init_from_matrix (&result->matrix, matrix);
   result->category = category;
@@ -361,7 +361,7 @@ gtk_transform_matrix_with_category (GtkTransform            *next,
 }
 
 /**
- * gtk_transform_matrix:
+ * gsk_transform_matrix:
  * @next: (allow-none): the next transform
  * @matrix: the matrix to multiply @next with
  *
@@ -369,33 +369,33 @@ gtk_transform_matrix_with_category (GtkTransform            *next,
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_matrix (GtkTransform            *next,
+GskTransform *
+gsk_transform_matrix (GskTransform            *next,
                       const graphene_matrix_t *matrix)
 {
-  return gtk_transform_matrix_with_category (next, matrix, GSK_MATRIX_CATEGORY_UNKNOWN);
+  return gsk_transform_matrix_with_category (next, matrix, GSK_MATRIX_CATEGORY_UNKNOWN);
 }
 
 /*** TRANSLATE ***/
 
-typedef struct _GtkTranslateTransform GtkTranslateTransform;
+typedef struct _GskTranslateTransform GskTranslateTransform;
 
-struct _GtkTranslateTransform
+struct _GskTranslateTransform
 {
-  GtkTransform parent;
+  GskTransform parent;
 
   graphene_point3d_t point;
 };
 
 static void
-gtk_translate_transform_finalize (GtkTransform *self)
+gsk_translate_transform_finalize (GskTransform *self)
 {
 }
 
 static GskMatrixCategory
-gtk_translate_transform_categorize (GtkTransform *transform)
+gsk_translate_transform_categorize (GskTransform *transform)
 {
-  GtkTranslateTransform *self = (GtkTranslateTransform *) transform;
+  GskTranslateTransform *self = (GskTranslateTransform *) transform;
 
   if (self->point.z != 0.0)
     return GSK_MATRIX_CATEGORY_INVERTIBLE;
@@ -404,22 +404,22 @@ gtk_translate_transform_categorize (GtkTransform *transform)
 }
 
 static void
-gtk_translate_transform_to_matrix (GtkTransform      *transform,
+gsk_translate_transform_to_matrix (GskTransform      *transform,
                                    graphene_matrix_t *out_matrix)
 {
-  GtkTranslateTransform *self = (GtkTranslateTransform *) transform;
+  GskTranslateTransform *self = (GskTranslateTransform *) transform;
 
   graphene_matrix_init_translate (out_matrix, &self->point);
 }
 
 static gboolean
-gtk_translate_transform_apply_affine (GtkTransform *transform,
+gsk_translate_transform_apply_affine (GskTransform *transform,
                                       float        *out_scale_x,
                                       float        *out_scale_y,
                                       float        *out_dx,
                                       float        *out_dy)
 {
-  GtkTranslateTransform *self = (GtkTranslateTransform *) transform;
+  GskTranslateTransform *self = (GskTranslateTransform *) transform;
 
   if (self->point.z != 0.0)
     return FALSE;
@@ -430,30 +430,30 @@ gtk_translate_transform_apply_affine (GtkTransform *transform,
   return TRUE;
 }
 
-static GtkTransform *
-gtk_translate_transform_apply (GtkTransform *transform,
-                               GtkTransform *apply_to)
+static GskTransform *
+gsk_translate_transform_apply (GskTransform *transform,
+                               GskTransform *apply_to)
 {
-  GtkTranslateTransform *self = (GtkTranslateTransform *) transform;
+  GskTranslateTransform *self = (GskTranslateTransform *) transform;
 
-  return gtk_transform_translate_3d (apply_to, &self->point);
+  return gsk_transform_translate_3d (apply_to, &self->point);
 }
 
 static gboolean
-gtk_translate_transform_equal (GtkTransform *first_transform,
-                               GtkTransform *second_transform)
+gsk_translate_transform_equal (GskTransform *first_transform,
+                               GskTransform *second_transform)
 {
-  GtkTranslateTransform *first = (GtkTranslateTransform *) first_transform;
-  GtkTranslateTransform *second = (GtkTranslateTransform *) second_transform;
+  GskTranslateTransform *first = (GskTranslateTransform *) first_transform;
+  GskTranslateTransform *second = (GskTranslateTransform *) second_transform;
 
   return graphene_point3d_equal (&first->point, &second->point);
 }
 
 static void
-gtk_translate_transform_print (GtkTransform *transform,
+gsk_translate_transform_print (GskTransform *transform,
                                GString      *string)
 {
-  GtkTranslateTransform *self = (GtkTranslateTransform *) transform;
+  GskTranslateTransform *self = (GskTranslateTransform *) transform;
 
   if (self->point.z == 0)
     g_string_append (string, "translate(");
@@ -471,22 +471,22 @@ gtk_translate_transform_print (GtkTransform *transform,
   g_string_append (string, ")");
 }
 
-static const GtkTransformClass GTK_TRANSLATE_TRANSFORM_CLASS =
+static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
 {
-  GTK_TRANSFORM_TYPE_TRANSLATE,
-  sizeof (GtkTranslateTransform),
-  "GtkTranslateTransform",
-  gtk_translate_transform_finalize,
-  gtk_translate_transform_categorize,
-  gtk_translate_transform_to_matrix,
-  gtk_translate_transform_apply_affine,
-  gtk_translate_transform_print,
-  gtk_translate_transform_apply,
-  gtk_translate_transform_equal,
+  GSK_TRANSFORM_TYPE_TRANSLATE,
+  sizeof (GskTranslateTransform),
+  "GskTranslateTransform",
+  gsk_translate_transform_finalize,
+  gsk_translate_transform_categorize,
+  gsk_translate_transform_to_matrix,
+  gsk_translate_transform_apply_affine,
+  gsk_translate_transform_print,
+  gsk_translate_transform_apply,
+  gsk_translate_transform_equal,
 };
 
 /**
- * gtk_transform_translate:
+ * gsk_transform_translate:
  * @next: (allow-none): the next transform
  * @point: the point to translate the matrix by
  *
@@ -494,19 +494,19 @@ static const GtkTransformClass GTK_TRANSLATE_TRANSFORM_CLASS =
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_translate (GtkTransform           *next,
+GskTransform *
+gsk_transform_translate (GskTransform           *next,
                          const graphene_point_t *point)
 {
   graphene_point3d_t point3d;
 
   graphene_point3d_init (&point3d, point->x, point->y, 0);
 
-  return gtk_transform_translate_3d (next, &point3d);
+  return gsk_transform_translate_3d (next, &point3d);
 }
 
 /**
- * gtk_transform_translate_3d:
+ * gsk_transform_translate_3d:
  * @next: (allow-none): the next transform
  * @point: the point to translate the matrix by
  *
@@ -514,11 +514,11 @@ gtk_transform_translate (GtkTransform           *next,
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_translate_3d (GtkTransform             *next,
+GskTransform *
+gsk_transform_translate_3d (GskTransform             *next,
                             const graphene_point3d_t *point)
 {
-  GtkTranslateTransform *result = gtk_transform_alloc (&GTK_TRANSLATE_TRANSFORM_CLASS, next);
+  GskTranslateTransform *result = gsk_transform_alloc (&GSK_TRANSLATE_TRANSFORM_CLASS, next);
 
   graphene_point3d_init_from_point (&result->point, point);
 
@@ -527,38 +527,38 @@ gtk_transform_translate_3d (GtkTransform             *next,
 
 /*** ROTATE ***/
 
-typedef struct _GtkRotateTransform GtkRotateTransform;
+typedef struct _GskRotateTransform GskRotateTransform;
 
-struct _GtkRotateTransform
+struct _GskRotateTransform
 {
-  GtkTransform parent;
+  GskTransform parent;
 
   float angle;
   graphene_vec3_t axis;
 };
 
 static void
-gtk_rotate_transform_finalize (GtkTransform *self)
+gsk_rotate_transform_finalize (GskTransform *self)
 {
 }
 
 static GskMatrixCategory
-gtk_rotate_transform_categorize (GtkTransform *transform)
+gsk_rotate_transform_categorize (GskTransform *transform)
 {
   return GSK_MATRIX_CATEGORY_INVERTIBLE;
 }
 
 static void
-gtk_rotate_transform_to_matrix (GtkTransform      *transform,
+gsk_rotate_transform_to_matrix (GskTransform      *transform,
                                 graphene_matrix_t *out_matrix)
 {
-  GtkRotateTransform *self = (GtkRotateTransform *) transform;
+  GskRotateTransform *self = (GskRotateTransform *) transform;
 
   graphene_matrix_init_rotate (out_matrix, self->angle, &self->axis);
 }
 
 static gboolean
-gtk_rotate_transform_apply_affine (GtkTransform *transform,
+gsk_rotate_transform_apply_affine (GskTransform *transform,
                                    float        *out_scale_x,
                                    float        *out_scale_y,
                                    float        *out_dx,
@@ -567,31 +567,31 @@ gtk_rotate_transform_apply_affine (GtkTransform *transform,
   return FALSE;
 }
 
-static GtkTransform *
-gtk_rotate_transform_apply (GtkTransform *transform,
-                            GtkTransform *apply_to)
+static GskTransform *
+gsk_rotate_transform_apply (GskTransform *transform,
+                            GskTransform *apply_to)
 {
-  GtkRotateTransform *self = (GtkRotateTransform *) transform;
+  GskRotateTransform *self = (GskRotateTransform *) transform;
 
-  return gtk_transform_rotate_3d (apply_to, self->angle, &self->axis);
+  return gsk_transform_rotate_3d (apply_to, self->angle, &self->axis);
 }
 
 static gboolean
-gtk_rotate_transform_equal (GtkTransform *first_transform,
-                            GtkTransform *second_transform)
+gsk_rotate_transform_equal (GskTransform *first_transform,
+                            GskTransform *second_transform)
 {
-  GtkRotateTransform *first = (GtkRotateTransform *) first_transform;
-  GtkRotateTransform *second = (GtkRotateTransform *) second_transform;
+  GskRotateTransform *first = (GskRotateTransform *) first_transform;
+  GskRotateTransform *second = (GskRotateTransform *) second_transform;
 
   return first->angle == second->angle
          && graphene_vec3_equal (&first->axis, &second->axis);
 }
 
 static void
-gtk_rotate_transform_print (GtkTransform *transform,
+gsk_rotate_transform_print (GskTransform *transform,
                             GString      *string)
 {
-  GtkRotateTransform *self = (GtkRotateTransform *) transform;
+  GskRotateTransform *self = (GskRotateTransform *) transform;
   graphene_vec3_t default_axis;
 
   graphene_vec3_init_from_vec3 (&default_axis, graphene_vec3_z_axis ());
@@ -618,22 +618,22 @@ gtk_rotate_transform_print (GtkTransform *transform,
     }
 }
 
-static const GtkTransformClass GTK_ROTATE_TRANSFORM_CLASS =
+static const GskTransformClass GSK_ROTATE_TRANSFORM_CLASS =
 {
-  GTK_TRANSFORM_TYPE_ROTATE,
-  sizeof (GtkRotateTransform),
-  "GtkRotateTransform",
-  gtk_rotate_transform_finalize,
-  gtk_rotate_transform_categorize,
-  gtk_rotate_transform_to_matrix,
-  gtk_rotate_transform_apply_affine,
-  gtk_rotate_transform_print,
-  gtk_rotate_transform_apply,
-  gtk_rotate_transform_equal,
+  GSK_TRANSFORM_TYPE_ROTATE,
+  sizeof (GskRotateTransform),
+  "GskRotateTransform",
+  gsk_rotate_transform_finalize,
+  gsk_rotate_transform_categorize,
+  gsk_rotate_transform_to_matrix,
+  gsk_rotate_transform_apply_affine,
+  gsk_rotate_transform_print,
+  gsk_rotate_transform_apply,
+  gsk_rotate_transform_equal,
 };
 
 /**
- * gtk_transform_rotate:
+ * gsk_transform_rotate:
  * @next: (allow-none): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  *
@@ -641,31 +641,31 @@ static const GtkTransformClass GTK_ROTATE_TRANSFORM_CLASS =
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_rotate (GtkTransform *next,
+GskTransform *
+gsk_transform_rotate (GskTransform *next,
                       float         angle)
 {
-  return gtk_transform_rotate_3d (next, angle, graphene_vec3_z_axis ());
+  return gsk_transform_rotate_3d (next, angle, graphene_vec3_z_axis ());
 }
 
 /**
- * gtk_transform_rotate_3d:
+ * gsk_transform_rotate_3d:
  * @next: (allow-none): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  * @axis: The rotation axis
  *
  * Rotates @next @angle degrees around @axis.
  *
- * For a rotation in 2D space, use gtk_transform_rotate().
+ * For a rotation in 2D space, use gsk_transform_rotate().
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_rotate_3d (GtkTransform          *next,
+GskTransform *
+gsk_transform_rotate_3d (GskTransform          *next,
                          float                  angle,
                          const graphene_vec3_t *axis)
 {
-  GtkRotateTransform *result = gtk_transform_alloc (&GTK_ROTATE_TRANSFORM_CLASS, next);
+  GskRotateTransform *result = gsk_transform_alloc (&GSK_ROTATE_TRANSFORM_CLASS, next);
 
   result->angle = angle;
   graphene_vec3_init_from_vec3 (&result->axis, axis);
@@ -675,11 +675,11 @@ gtk_transform_rotate_3d (GtkTransform          *next,
 
 /*** SCALE ***/
 
-typedef struct _GtkScaleTransform GtkScaleTransform;
+typedef struct _GskScaleTransform GskScaleTransform;
 
-struct _GtkScaleTransform
+struct _GskScaleTransform
 {
-  GtkTransform parent;
+  GskTransform parent;
 
   float factor_x;
   float factor_y;
@@ -687,14 +687,14 @@ struct _GtkScaleTransform
 };
 
 static void
-gtk_scale_transform_finalize (GtkTransform *self)
+gsk_scale_transform_finalize (GskTransform *self)
 {
 }
 
 static GskMatrixCategory
-gtk_scale_transform_categorize (GtkTransform *transform)
+gsk_scale_transform_categorize (GskTransform *transform)
 {
-  GtkScaleTransform *self = (GtkScaleTransform *) transform;
+  GskScaleTransform *self = (GskScaleTransform *) transform;
 
   if (self->factor_z != 1.0)
     return GSK_MATRIX_CATEGORY_INVERTIBLE;
@@ -703,22 +703,22 @@ gtk_scale_transform_categorize (GtkTransform *transform)
 }
 
 static void
-gtk_scale_transform_to_matrix (GtkTransform      *transform,
+gsk_scale_transform_to_matrix (GskTransform      *transform,
                                graphene_matrix_t *out_matrix)
 {
-  GtkScaleTransform *self = (GtkScaleTransform *) transform;
+  GskScaleTransform *self = (GskScaleTransform *) transform;
 
   graphene_matrix_init_scale (out_matrix, self->factor_x, self->factor_y, self->factor_z);
 }
 
 static gboolean
-gtk_scale_transform_apply_affine (GtkTransform *transform,
+gsk_scale_transform_apply_affine (GskTransform *transform,
                                   float        *out_scale_x,
                                   float        *out_scale_y,
                                   float        *out_dx,
                                   float        *out_dy)
 {
-  GtkScaleTransform *self = (GtkScaleTransform *) transform;
+  GskScaleTransform *self = (GskScaleTransform *) transform;
 
   if (self->factor_z != 1.0)
     return FALSE;
@@ -729,21 +729,21 @@ gtk_scale_transform_apply_affine (GtkTransform *transform,
   return TRUE;
 }
 
-static GtkTransform *
-gtk_scale_transform_apply (GtkTransform *transform,
-                           GtkTransform *apply_to)
+static GskTransform *
+gsk_scale_transform_apply (GskTransform *transform,
+                           GskTransform *apply_to)
 {
-  GtkScaleTransform *self = (GtkScaleTransform *) transform;
+  GskScaleTransform *self = (GskScaleTransform *) transform;
 
-  return gtk_transform_scale_3d (apply_to, self->factor_x, self->factor_y, self->factor_z);
+  return gsk_transform_scale_3d (apply_to, self->factor_x, self->factor_y, self->factor_z);
 }
 
 static gboolean
-gtk_scale_transform_equal (GtkTransform *first_transform,
-                           GtkTransform *second_transform)
+gsk_scale_transform_equal (GskTransform *first_transform,
+                           GskTransform *second_transform)
 {
-  GtkScaleTransform *first = (GtkScaleTransform *) first_transform;
-  GtkScaleTransform *second = (GtkScaleTransform *) second_transform;
+  GskScaleTransform *first = (GskScaleTransform *) first_transform;
+  GskScaleTransform *second = (GskScaleTransform *) second_transform;
 
   return first->factor_x == second->factor_x
          && first->factor_y == second->factor_y
@@ -751,10 +751,10 @@ gtk_scale_transform_equal (GtkTransform *first_transform,
 }
 
 static void
-gtk_scale_transform_print (GtkTransform *transform,
+gsk_scale_transform_print (GskTransform *transform,
                            GString      *string)
 {
-  GtkScaleTransform *self = (GtkScaleTransform *) transform;
+  GskScaleTransform *self = (GskScaleTransform *) transform;
 
   if (self->factor_z == 1.0)
     {
@@ -779,41 +779,41 @@ gtk_scale_transform_print (GtkTransform *transform,
     }
 }
 
-static const GtkTransformClass GTK_SCALE_TRANSFORM_CLASS =
+static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
 {
-  GTK_TRANSFORM_TYPE_SCALE,
-  sizeof (GtkScaleTransform),
-  "GtkScaleTransform",
-  gtk_scale_transform_finalize,
-  gtk_scale_transform_categorize,
-  gtk_scale_transform_to_matrix,
-  gtk_scale_transform_apply_affine,
-  gtk_scale_transform_print,
-  gtk_scale_transform_apply,
-  gtk_scale_transform_equal,
+  GSK_TRANSFORM_TYPE_SCALE,
+  sizeof (GskScaleTransform),
+  "GskScaleTransform",
+  gsk_scale_transform_finalize,
+  gsk_scale_transform_categorize,
+  gsk_scale_transform_to_matrix,
+  gsk_scale_transform_apply_affine,
+  gsk_scale_transform_print,
+  gsk_scale_transform_apply,
+  gsk_scale_transform_equal,
 };
 
 /**
- * gtk_transform_scale:
+ * gsk_transform_scale:
  * @next: (allow-none): the next transform
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  *
  * Scales @next in 2-dimensional space by the given factors.
- * Use gtk_transform_scale_3d() to scale in all 3 dimensions.
+ * Use gsk_transform_scale_3d() to scale in all 3 dimensions.
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_scale (GtkTransform *next,
+GskTransform *
+gsk_transform_scale (GskTransform *next,
                      float         factor_x,
                      float         factor_y)
 {
-  return gtk_transform_scale_3d (next, factor_x, factor_y, 1.0);
+  return gsk_transform_scale_3d (next, factor_x, factor_y, 1.0);
 }
 
 /**
- * gtk_transform_scale_3d:
+ * gsk_transform_scale_3d:
  * @next: (allow-none): the next transform
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
@@ -823,13 +823,13 @@ gtk_transform_scale (GtkTransform *next,
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_scale_3d (GtkTransform *next,
+GskTransform *
+gsk_transform_scale_3d (GskTransform *next,
                         float         factor_x,
                         float         factor_y,
                         float         factor_z)
 {
-  GtkScaleTransform *result = gtk_transform_alloc (&GTK_SCALE_TRANSFORM_CLASS, next);
+  GskScaleTransform *result = gsk_transform_alloc (&GSK_SCALE_TRANSFORM_CLASS, next);
 
   result->factor_x = factor_x;
   result->factor_y = factor_y;
@@ -841,25 +841,25 @@ gtk_transform_scale_3d (GtkTransform *next,
 /*** PUBLIC API ***/
 
 static void
-gtk_transform_finalize (GtkTransform *self)
+gsk_transform_finalize (GskTransform *self)
 {
   self->transform_class->finalize (self);
 
-  gtk_transform_unref (self->next);
+  gsk_transform_unref (self->next);
 
   g_free (self);
 }
 
 /**
- * gtk_transform_ref:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_ref:
+ * @self: (allow-none): a #GskTransform
  *
- * Acquires a reference on the given #GtkTransform.
+ * Acquires a reference on the given #GskTransform.
  *
- * Returns: (transfer none): the #GtkTransform with an additional reference
+ * Returns: (transfer none): the #GskTransform with an additional reference
  */
-GtkTransform *
-gtk_transform_ref (GtkTransform *self)
+GskTransform *
+gsk_transform_ref (GskTransform *self)
 {
   if (self == NULL)
     return NULL;
@@ -870,34 +870,34 @@ gtk_transform_ref (GtkTransform *self)
 }
 
 /**
- * gtk_transform_unref:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_unref:
+ * @self: (allow-none): a #GskTransform
  *
- * Releases a reference on the given #GtkTransform.
+ * Releases a reference on the given #GskTransform.
  *
  * If the reference was the last, the resources associated to the @self are
  * freed.
  */
 void
-gtk_transform_unref (GtkTransform *self)
+gsk_transform_unref (GskTransform *self)
 {
   if (self == NULL)
     return;
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
-    gtk_transform_finalize (self);
+    gsk_transform_finalize (self);
 }
 
 /**
- * gtk_transform_print:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_print:
+ * @self: (allow-none): a #GskTransform
  * @string:  The string to print into
  *
  * Converts @self into a string representation suitable for printing that
- * can later be parsed with gtk_transform_parse().
+ * can later be parsed with gsk_transform_parse().
  **/
 void
-gtk_transform_print (GtkTransform *self,
+gsk_transform_print (GskTransform *self,
                      GString      *string)
 {
   g_return_if_fail (string != NULL);
@@ -910,7 +910,7 @@ gtk_transform_print (GtkTransform *self,
 
   if (self->next != NULL)
     {
-      gtk_transform_print (self->next, string);
+      gsk_transform_print (self->next, string);
       g_string_append (string, " ");
     }
 
@@ -918,57 +918,57 @@ gtk_transform_print (GtkTransform *self,
 }
 
 /**
- * gtk_transform_to_string:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_to_string:
+ * @self: (allow-none): a #GskTransform
  *
  * Converts a matrix into a string that is suitable for
- * printing and can later be parsed with gtk_transform_parse().
+ * printing and can later be parsed with gsk_transform_parse().
  *
- * This is a wrapper around gtk_transform_print(), see that function
+ * This is a wrapper around gsk_transform_print(), see that function
  * for details.
  *
  * Returns: A new string for @self
  **/
 char *
-gtk_transform_to_string (GtkTransform *self)
+gsk_transform_to_string (GskTransform *self)
 {
   GString *string;
 
   string = g_string_new ("");
 
-  gtk_transform_print (self, string);
+  gsk_transform_print (self, string);
 
   return g_string_free (string, FALSE);
 }
 
 /**
- * gtk_transform_get_transform_type:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_get_transform_type:
+ * @self: (allow-none): a #GskTransform
  *
  * Returns the type of the @self.
  *
- * Returns: the type of the #GtkTransform
+ * Returns: the type of the #GskTransform
  */
-GtkTransformType
-gtk_transform_get_transform_type (GtkTransform *self)
+GskTransformType
+gsk_transform_get_transform_type (GskTransform *self)
 {
   if (self == NULL)
-    return GTK_TRANSFORM_TYPE_IDENTITY;
+    return GSK_TRANSFORM_TYPE_IDENTITY;
 
   return self->transform_class->transform_type;
 }
 
 /**
- * gtk_transform_get_next:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_get_next:
+ * @self: (allow-none): a #GskTransform
  *
  * Gets the rest of the matrix in the chain of operations.
  *
  * Returns: (transfer none) (nullable): The next transform or
  *     %NULL if this was the last operation.
  **/
-GtkTransform *
-gtk_transform_get_next (GtkTransform *self)
+GskTransform *
+gsk_transform_get_next (GskTransform *self)
 {
   if (self == NULL)
     return NULL;
@@ -977,15 +977,15 @@ gtk_transform_get_next (GtkTransform *self)
 }
 
 /**
- * gtk_transform_to_matrix:
- * @self: (allow-none): a #GtkTransform
+ * gsk_transform_to_matrix:
+ * @self: (allow-none): a #GskTransform
  * @out_matrix: (out caller-allocates): The matrix to set
  *
  * Computes the actual value of @self and stores it in @out_matrix.
  * The previous value of @out_matrix will be ignored.
  **/
 void
-gtk_transform_to_matrix (GtkTransform      *self,
+gsk_transform_to_matrix (GskTransform      *self,
                          graphene_matrix_t *out_matrix)
 {
   graphene_matrix_t m;
@@ -996,13 +996,13 @@ gtk_transform_to_matrix (GtkTransform      *self,
       return;
     }
 
-  gtk_transform_to_matrix (self->next, out_matrix);
+  gsk_transform_to_matrix (self->next, out_matrix);
   self->transform_class->to_matrix (self, &m);
   graphene_matrix_multiply (&m, out_matrix, out_matrix);
 }
 
 gboolean
-gtk_transform_to_affine (GtkTransform *self,
+gsk_transform_to_affine (GskTransform *self,
                          float        *out_scale_x,
                          float        *out_scale_y,
                          float        *out_dx,
@@ -1017,7 +1017,7 @@ gtk_transform_to_affine (GtkTransform *self,
       return TRUE;
     }
 
-  if (!gtk_transform_to_affine (self->next,
+  if (!gsk_transform_to_affine (self->next,
                                 out_scale_x, out_scale_y,
                                 out_dx, out_dy))
     return FALSE;
@@ -1028,7 +1028,7 @@ gtk_transform_to_affine (GtkTransform *self,
 }
 
 /**
- * gtk_transform_transform:
+ * gsk_transform_transform:
  * @next: (allow-none) (transfer full): Transform to apply @other to
  * @other: (allow-none):  Transform to apply
  *
@@ -1036,31 +1036,31 @@ gtk_transform_to_affine (GtkTransform *self,
  *
  * Returns: The new matrix
  **/
-GtkTransform *
-gtk_transform_transform (GtkTransform *next,
-                         GtkTransform *other)
+GskTransform *
+gsk_transform_transform (GskTransform *next,
+                         GskTransform *other)
 {
   if (other == NULL)
     return next;
 
-  next = gtk_transform_transform (next, other->next);
+  next = gsk_transform_transform (next, other->next);
   return other->transform_class->apply (other, next);
 }
 
 /**
- * gtk_transform_equal:
+ * gsk_transform_equal:
  * @first: the first matrix
  * @second: the second matrix
  *
  * Checks two matrices for equality. Note that matrices need to be literally
  * identical in their operations, it is not enough that they return the
- * same result in gtk_transform_to_matrix().
+ * same result in gsk_transform_to_matrix().
  *
  * Returns: %TRUE if the two matrices can be proven to be equal
  **/
 gboolean
-gtk_transform_equal (GtkTransform *first,
-                     GtkTransform *second)
+gsk_transform_equal (GskTransform *first,
+                     GskTransform *second)
 {
   if (first == second)
     return TRUE;
@@ -1068,7 +1068,7 @@ gtk_transform_equal (GtkTransform *first,
   if (first == NULL || second == NULL)
     return FALSE;
 
-  if (!gtk_transform_equal (first->next, second->next))
+  if (!gsk_transform_equal (first->next, second->next))
     return FALSE;
 
   if (first->transform_class != second->transform_class)
@@ -1078,7 +1078,7 @@ gtk_transform_equal (GtkTransform *first,
 }
 
 /*<private>
- * gtk_transform_categorize:
+ * gsk_transform_categorize:
  * @self: (allow-none): A matrix
  *
  *
@@ -1086,28 +1086,28 @@ gtk_transform_equal (GtkTransform *first,
  * Returns: The category this matrix belongs to
  **/
 GskMatrixCategory
-gtk_transform_categorize (GtkTransform *self)
+gsk_transform_categorize (GskTransform *self)
 {
   if (self == NULL)
     return GSK_MATRIX_CATEGORY_IDENTITY;
 
-  return MIN (gtk_transform_categorize (self->next),
+  return MIN (gsk_transform_categorize (self->next),
               self->transform_class->categorize (self));
 }
 
 /*
- * gtk_transform_new: (constructor):
+ * gsk_transform_new: (constructor):
  *
  * Creates a new identity matrix. This function is meant to be used by language
  * bindings. For C code, this equivalent to using %NULL.
  *
- * See also gtk_transform_identity() for inserting identity matrix operations
+ * See also gsk_transform_identity() for inserting identity matrix operations
  * when constructing matrices.
  *
  * Returns: A new identity matrix
  **/
-GtkTransform *
-gtk_transform_new (void)
+GskTransform *
+gsk_transform_new (void)
 {
-  return gtk_transform_alloc (&GTK_IDENTITY_TRANSFORM_CLASS, NULL);
+  return gsk_transform_alloc (&GSK_IDENTITY_TRANSFORM_CLASS, NULL);
 }
