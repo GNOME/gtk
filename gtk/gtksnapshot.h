@@ -107,7 +107,7 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_restore                    (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
-                                                         GtkTransform           *transform);
+                                                         GskTransform           *transform);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_transform_matrix           (GtkSnapshot            *snapshot,
                                                          const graphene_matrix_t*matrix);

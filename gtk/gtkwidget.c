@@ -62,7 +62,7 @@
 #include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltipprivate.h"
-#include "gtktransformprivate.h"
+#include "gsktransformprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 #include "gtkwidgetpaintableprivate.h"
@@ -4136,10 +4136,10 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
                           int                  baseline)
 {
-  GtkTransform *transform;
+  GskTransform *transform;
 
   if (allocation->x || allocation->y)
-    transform = gtk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
+    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
   else
     transform = NULL;
 
@@ -4149,7 +4149,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                        baseline,
                        transform);
 
-  gtk_transform_unref (transform);
+  gsk_transform_unref (transform);
 }
 
 /**
@@ -4174,7 +4174,7 @@ gtk_widget_allocate (GtkWidget    *widget,
                      int           width,
                      int           height,
                      int           baseline,
-                     GtkTransform *transform)
+                     GskTransform *transform)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
@@ -4187,7 +4187,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
   graphene_matrix_t transform_matrix;
-  GtkTransform *css_transform;
+  GskTransform *css_transform;
 #ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
 #endif
@@ -4223,11 +4223,11 @@ gtk_widget_allocate (GtkWidget    *widget,
   baseline_changed = priv->allocated_size_baseline != baseline;
   size_changed = (priv->allocated_width != width ||
                   priv->allocated_height != height);
-  transform_changed = !gtk_transform_equal (priv->allocated_transform, transform);
+  transform_changed = !gsk_transform_equal (priv->allocated_transform, transform);
 
   /* order is important, sometimes priv->allocated_transform == transform */
-  gtk_transform_ref (transform);
-  gtk_transform_unref (priv->allocated_transform);
+  gsk_transform_ref (transform);
+  gsk_transform_unref (priv->allocated_transform);
   priv->allocated_transform = transform;
   priv->allocated_width = width;
   priv->allocated_height = height;
@@ -4308,12 +4308,12 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   if (css_transform)
     {
-      transform = gtk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
       adjusted.x = adjusted.y = 0;
 
-      transform = gtk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.width / 2, adjusted.height / 2));
-      transform = gtk_transform_transform (transform, css_transform);
-      transform = gtk_transform_translate (transform, &GRAPHENE_POINT_INIT (- adjusted.width / 2, - adjusted.height / 2));
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.width / 2, adjusted.height / 2));
+      transform = gsk_transform_transform (transform, css_transform);
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- adjusted.width / 2, - adjusted.height / 2));
     }
 
   get_box_margin (style, &margin);
@@ -4332,9 +4332,9 @@ gtk_widget_allocate (GtkWidget    *widget,
     baseline -= margin.top + border.top + padding.top;
 
   graphene_matrix_init_translate (&priv->transform, &GRAPHENE_POINT3D_INIT (adjusted.x, adjusted.y, 0));
-  gtk_transform_to_matrix (transform, &transform_matrix);
+  gsk_transform_to_matrix (transform, &transform_matrix);
   graphene_matrix_multiply (&priv->transform, &transform_matrix, &priv->transform);
-  priv->transform_category = gtk_transform_categorize (transform);
+  priv->transform_category = gsk_transform_categorize (transform);
   if (adjusted.x || adjusted.y)
     priv->transform_category = MIN (priv->transform_category, GSK_MATRIX_CATEGORY_2D_TRANSLATE);
 
@@ -6220,7 +6220,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
 
   if (!visible)
     {
-      g_clear_pointer (&priv->allocated_transform, gtk_transform_unref);
+      g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
       priv->allocated_width = 0;
       priv->allocated_height = 0;
       priv->allocated_size_baseline = 0;

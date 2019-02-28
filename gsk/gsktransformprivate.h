@@ -18,29 +18,29 @@
  */
 
 
-#ifndef __GTK_TRANSFORM_PRIVATE_H__
-#define __GTK_TRANSFORM_PRIVATE_H__
+#ifndef __GSK_TRANSFORM_PRIVATE_H__
+#define __GSK_TRANSFORM_PRIVATE_H__
 
-#include "gtktransform.h"
+#include "gsktransform.h"
 
 #include <gsk/gsk.h>
 #include "gsk/gskrendernodeprivate.h"
 
 G_BEGIN_DECLS
 
-GskMatrixCategory       gtk_transform_categorize                (GtkTransform           *self);
+GskMatrixCategory       gsk_transform_categorize                (GskTransform           *self);
 
-gboolean                gtk_transform_to_affine                 (GtkTransform           *self,
+gboolean                gsk_transform_to_affine                 (GskTransform           *self,
                                                                  float                  *scale_x,
                                                                  float                  *scale_y,
                                                                  float                  *dx,
                                                                  float                  *dy) G_GNUC_WARN_UNUSED_RESULT;
 
-GtkTransform *          gtk_transform_matrix_with_category      (GtkTransform           *next,
+GskTransform *          gsk_transform_matrix_with_category      (GskTransform           *next,
                                                                  const graphene_matrix_t*matrix,
                                                                  GskMatrixCategory       category);
 
 G_END_DECLS
 
-#endif /* __GTK_TRANSFORM_PRIVATE_H__ */
+#endif /* __GSK_TRANSFORM_PRIVATE_H__ */
 

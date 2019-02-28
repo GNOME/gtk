@@ -28,7 +28,7 @@
 #include "gtkrendericonprivate.h"
 #include "gtkrendernodepaintableprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtktransformprivate.h"
+#include "gsktransformprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
 
@@ -109,7 +109,7 @@ gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
 
 static GtkSnapshotState *
 gtk_snapshot_push_state (GtkSnapshot            *snapshot,
-                         GtkTransform           *transform,
+                         GskTransform           *transform,
                          GtkSnapshotCollectFunc  collect_func)
 {
   const gsize n_states = snapshot->state_stack->len;
@@ -118,7 +118,7 @@ gtk_snapshot_push_state (GtkSnapshot            *snapshot,
   g_array_set_size (snapshot->state_stack, n_states + 1);
   state = &g_array_index (snapshot->state_stack, GtkSnapshotState, n_states);
 
-  state->transform = gtk_transform_ref (transform);
+  state->transform = gsk_transform_ref (transform);
   state->collect_func = collect_func;
   state->start_node_index = snapshot->nodes->len;
   state->n_nodes = 0;
@@ -145,7 +145,7 @@ gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
 static void
 gtk_snapshot_state_clear (GtkSnapshotState *state)
 {
-  gtk_transform_unref (state->transform);
+  gsk_transform_unref (state->transform);
 }
 
 /**
@@ -268,8 +268,8 @@ gtk_snapshot_autopush_transform (GtkSnapshot *snapshot)
 
   previous_state = gtk_snapshot_get_previous_state (snapshot);
 
-  gtk_transform_to_matrix (previous_state->transform, &state->data.transform.transform);
-  state->data.transform.category = gtk_transform_categorize (previous_state->transform);
+  gsk_transform_to_matrix (previous_state->transform, &state->data.transform.transform);
+  state->data.transform.category = gsk_transform_categorize (previous_state->transform);
 }
 
 static gboolean
@@ -584,7 +584,7 @@ gtk_snapshot_ensure_affine (GtkSnapshot *snapshot,
 {
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
 
-  if (gtk_transform_to_affine (current_state->transform, scale_x, scale_y, dx, dy))
+  if (gsk_transform_to_affine (current_state->transform, scale_x, scale_y, dx, dy))
     return;
 
   gtk_snapshot_autopush_transform (snapshot);
@@ -601,7 +601,7 @@ gtk_snapshot_ensure_translate (GtkSnapshot *snapshot,
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   float scale_x, scale_y;
 
-  if (gtk_transform_to_affine (current_state->transform, &scale_x, &scale_y, dx, dy) &&
+  if (gsk_transform_to_affine (current_state->transform, &scale_x, &scale_y, dx, dy) &&
       scale_x == 1.0f && scale_y == 1.0f)
     return;
 
@@ -1244,14 +1244,14 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
  **/
 void
 gtk_snapshot_transform (GtkSnapshot  *snapshot,
-                        GtkTransform *transform)
+                        GskTransform *transform)
 {
   GtkSnapshotState *state;
 
   g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_transform (state->transform, transform);
+  state->transform = gsk_transform_transform (state->transform, transform);
 }
 
 /**
@@ -1271,7 +1271,7 @@ gtk_snapshot_transform_matrix (GtkSnapshot             *snapshot,
   g_return_if_fail (matrix != NULL);
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_matrix (state->transform, matrix);
+  state->transform = gsk_transform_matrix (state->transform, matrix);
 }
 
 void
@@ -1285,7 +1285,7 @@ gtk_snapshot_transform_matrix_with_category (GtkSnapshot             *snapshot,
   g_return_if_fail (matrix != NULL);
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_matrix_with_category (state->transform, matrix, category);
+  state->transform = gsk_transform_matrix_with_category (state->transform, matrix, category);
 }
 
 /**
@@ -1305,7 +1305,7 @@ gtk_snapshot_translate (GtkSnapshot            *snapshot,
   g_return_if_fail (point != NULL);
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_translate (state->transform, point);
+  state->transform = gsk_transform_translate (state->transform, point);
 }
 
 /**
@@ -1325,7 +1325,7 @@ gtk_snapshot_translate_3d (GtkSnapshot              *snapshot,
   g_return_if_fail (point != NULL);
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_translate_3d (state->transform, point);
+  state->transform = gsk_transform_translate_3d (state->transform, point);
 }
 
 /**
@@ -1345,7 +1345,7 @@ gtk_snapshot_rotate (GtkSnapshot *snapshot,
   g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_rotate (state->transform, angle);
+  state->transform = gsk_transform_rotate (state->transform, angle);
 }
 
 /**
@@ -1356,7 +1356,7 @@ gtk_snapshot_rotate (GtkSnapshot *snapshot,
  *
  * Rotates @snapshot's coordinate system by @angle degrees around @axis.
  *
- * For a rotation in 2D space, use gtk_transform_rotate().
+ * For a rotation in 2D space, use gsk_transform_rotate().
  */
 void
 gtk_snapshot_rotate_3d (GtkSnapshot           *snapshot,
@@ -1369,7 +1369,7 @@ gtk_snapshot_rotate_3d (GtkSnapshot           *snapshot,
   g_return_if_fail (axis != NULL);
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_rotate_3d (state->transform, angle, axis);
+  state->transform = gsk_transform_rotate_3d (state->transform, angle, axis);
 }
 
 /**
@@ -1393,7 +1393,7 @@ gtk_snapshot_scale (GtkSnapshot *snapshot,
   g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_scale (state->transform, factor_x, factor_y);
+  state->transform = gsk_transform_scale (state->transform, factor_x, factor_y);
 }
 
 /**
@@ -1416,7 +1416,7 @@ gtk_snapshot_scale_3d (GtkSnapshot *snapshot,
   g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gtk_transform_scale_3d (state->transform, factor_x, factor_y, factor_z);
+  state->transform = gsk_transform_scale_3d (state->transform, factor_x, factor_y, factor_z);
 }
 
 void

@@ -104,7 +104,7 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
                                     int         baseline)
 {
   GtkTransformTester *self = (GtkTransformTester *)widget;
-  GtkTransform *global_transform;
+  GskTransform *global_transform;
   int w, h;
 
   if (!self->test_widget)
@@ -121,16 +121,16 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
 
   global_transform = NULL;
 
-  global_transform = gtk_transform_translate (global_transform, &GRAPHENE_POINT_INIT (width / 2.0f, height / 2.0f));
-  global_transform = gtk_transform_rotate (global_transform, scale);
-  global_transform = gtk_transform_translate (global_transform, &GRAPHENE_POINT_INIT (-w / 2.0f, -h / 2.0f));
+  global_transform = gsk_transform_translate (global_transform, &GRAPHENE_POINT_INIT (width / 2.0f, height / 2.0f));
+  global_transform = gsk_transform_rotate (global_transform, scale);
+  global_transform = gsk_transform_translate (global_transform, &GRAPHENE_POINT_INIT (-w / 2.0f, -h / 2.0f));
 
   gtk_widget_allocate (self->test_widget,
                        w, h,
                        -1,
                        global_transform);
 
-  gtk_transform_unref (global_transform);
+  gsk_transform_unref (global_transform);
 }
 
 static void

@@ -35,7 +35,7 @@ struct _GtkSnapshotState {
   guint                  start_node_index;
   guint                  n_nodes;
 
-  GtkTransform *         transform;
+  GskTransform *         transform;
 
   GtkSnapshotCollectFunc collect_func;
   union {

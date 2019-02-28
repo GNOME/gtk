@@ -29,7 +29,7 @@
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gtksnapshot.h"
-#include "gtktransform.h"
+#include "gsktransform.h"
 
 #include <math.h>
 
@@ -41,7 +41,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              GtkCssImageBuiltinType  builtin_type)
 {
   const GtkCssValue *shadows_value, *transform_value, *filter_value;
-  GtkTransform *transform;
+  GskTransform *transform;
   GtkCssImage *image;
   gboolean has_shadow;
 
@@ -92,7 +92,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
   gtk_snapshot_pop (snapshot);
 
-  gtk_transform_unref (transform);
+  gsk_transform_unref (transform);
 }
 
 void
@@ -104,7 +104,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
                                        gboolean      recolor)
 {
   const GtkCssValue *shadows_value, *transform_value, *filter_value;
-  GtkTransform *transform;
+  GskTransform *transform;
   gboolean has_shadow;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
@@ -172,5 +172,5 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 transparent:
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
-  gtk_transform_unref (transform);
+  gsk_transform_unref (transform);
 }
