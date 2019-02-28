@@ -535,3 +535,24 @@ gsk_rounded_rect_equal (gconstpointer rect1,
       && graphene_size_equal (&self1->corner[2], &self2->corner[2])
       && graphene_size_equal (&self1->corner[3], &self2->corner[3]);
 }
+
+char *
+gsk_rounded_rect_to_string (const GskRoundedRect *self)
+{
+  return g_strdup_printf ("GskRoundedRect %p: Bounds: (%f, %f, %f, %f)"
+                          " Corners: (%f, %f) (%f, %f) (%f, %f) (%f, %f)",
+                          self,
+                          self->bounds.origin.x,
+                          self->bounds.origin.y,
+                          self->bounds.size.width,
+                          self->bounds.size.height,
+                          self->corner[0].width,
+                          self->corner[0].height,
+                          self->corner[1].width,
+                          self->corner[1].height,
+                          self->corner[2].width,
+                          self->corner[2].height,
+                          self->corner[3].width,
+                          self->corner[3].height);
+
+}
