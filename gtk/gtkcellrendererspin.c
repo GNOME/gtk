@@ -273,7 +273,7 @@ gtk_cell_renderer_spin_focus_changed (GtkWidget  *widget,
     {
       path = g_object_get_data (G_OBJECT (widget), GTK_CELL_RENDERER_SPIN_PATH);
 
-      new_text = gtk_entry_get_text (GTK_ENTRY (widget));
+      new_text = gtk_editable_get_text (GTK_EDITABLE (widget));
       g_signal_emit_by_name (data, "edited", path, new_text);
     }
 }

@@ -31,7 +31,7 @@ search_text_changed (GtkEntry         *entry,
   GtkTextBuffer *buffer;
   GtkTextIter start, match_start, match_end;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (text[0] == '\0')
     return;
@@ -58,7 +58,7 @@ find_word (GtkButton        *button,
   const gchar *word;
 
   word = gtk_button_get_label (button);
-  gtk_entry_set_text (GTK_ENTRY (win->searchentry), word);
+  gtk_editable_set_text (GTK_EDITABLE (win->searchentry), word);
 }
 
 static void

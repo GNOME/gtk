@@ -85,7 +85,7 @@ stop_search (GtkButton *button,
 static void
 clear_entry (GtkEntry *entry)
 {
-  gtk_entry_set_text (entry, "");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "");
 }
 
 static void

@@ -969,7 +969,7 @@ new_folder_popover_active (GtkWidget            *button,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  gtk_entry_set_text (GTK_ENTRY (priv->new_folder_name_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (priv->new_folder_name_entry), "");
   gtk_widget_set_sensitive (priv->new_folder_create_button, FALSE);
   gtk_file_chooser_error_stack_set_error (GTK_FILE_CHOOSER_ERROR_STACK (priv->new_folder_error_stack),
                                           FALSE,
@@ -1105,7 +1105,7 @@ new_folder_name_changed (GtkEntry             *entry,
 
   check_valid_child_name (impl,
                           priv->current_folder,
-                          gtk_entry_get_text (entry),
+                          gtk_editable_get_text (entry),
                           TRUE,
                           NULL,
                           priv->new_folder_error_stack,
@@ -1121,7 +1121,7 @@ new_folder_create_clicked (GtkButton            *button,
   GFile *file;
   const gchar *name;
 
-  name = gtk_entry_get_text (GTK_ENTRY (priv->new_folder_name_entry));
+  name = gtk_editable_get_text (GTK_EDITABLE (priv->new_folder_name_entry));
   file = g_file_get_child_for_display_name (priv->current_folder, name, &error);
 
   gtk_popover_popdown (GTK_POPOVER (priv->new_folder_popover));
@@ -1570,7 +1570,7 @@ rename_file_name_changed (GtkEntry             *entry,
 
   check_valid_child_name (impl,
                           priv->current_folder,
-                          gtk_entry_get_text (entry),
+                          gtk_editable_get_text (GTK_EDITABLE (entry)),
                           file_type == G_FILE_TYPE_DIRECTORY,
                           priv->rename_file_source_file,
                           priv->rename_file_error_stack,
@@ -1594,7 +1594,7 @@ rename_file_rename_clicked (GtkButton            *button,
 
   gtk_popover_popdown (GTK_POPOVER (priv->rename_file_popover));
 
-  new_name = gtk_entry_get_text (GTK_ENTRY (priv->rename_file_name_entry));
+  new_name = gtk_editable_get_text (GTK_EDITABLE (priv->rename_file_name_entry));
   dest = g_file_get_parent (priv->rename_file_source_file);
 
   if (dest)
@@ -1638,7 +1638,7 @@ rename_selected_cb (GtkTreeModel *model,
                                                      rect.x, rect.y, &rect.x, &rect.y);
 
   filename = g_file_get_basename (priv->rename_file_source_file);
-  gtk_entry_set_text (GTK_ENTRY(priv->rename_file_name_entry), filename);
+  gtk_editable_set_text (GTK_EDITABLE (priv->rename_file_name_entry), filename);
   g_free (filename);
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->rename_file_popover), &rect);
@@ -2507,7 +2507,7 @@ location_entry_setup (GtkFileChooserWidget *impl)
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
   _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (priv->location_entry),
                                            priv->current_filter);
-  gtk_entry_set_width_chars (GTK_ENTRY (priv->location_entry), 45);
+  gtk_editable_set_width_chars (GTK_EDITABLE (priv->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (priv->location_entry), TRUE);
   gtk_widget_set_hexpand (priv->location_entry, TRUE);
 }
@@ -5127,7 +5127,7 @@ update_chooser_entry (GtkFileChooserWidget *impl)
           if (change_entry && !priv->auto_selecting_first_row)
             {
               g_signal_handlers_block_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
-              gtk_entry_set_text (GTK_ENTRY (priv->location_entry), priv->browse_files_last_selected_name);
+              gtk_editable_set_text (GTK_EDITABLE (priv->location_entry), priv->browse_files_last_selected_name);
               g_signal_handlers_unblock_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
 
               if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
@@ -5161,7 +5161,7 @@ update_chooser_entry (GtkFileChooserWidget *impl)
       priv->browse_files_last_selected_name = NULL;
 
       g_signal_handlers_block_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
-      gtk_entry_set_text (GTK_ENTRY (priv->location_entry), "");
+      gtk_editable_set_text (GTK_EDITABLE (priv->location_entry), "");
       g_signal_handlers_unblock_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
       return;
     }
@@ -5175,7 +5175,7 @@ update_chooser_entry (GtkFileChooserWidget *impl)
       int len;
       gboolean clear_entry;
 
-      entry_text = gtk_entry_get_text (GTK_ENTRY (priv->location_entry));
+      entry_text = gtk_editable_get_text (GTK_EDITABLE (priv->location_entry));
       len = strlen (entry_text);
       if (len != 0)
         {
@@ -5199,7 +5199,7 @@ update_chooser_entry (GtkFileChooserWidget *impl)
       if (clear_entry)
         {
           g_signal_handlers_block_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
-          gtk_entry_set_text (GTK_ENTRY (priv->location_entry), "");
+          gtk_editable_set_text (GTK_EDITABLE (priv->location_entry), "");
           g_signal_handlers_unblock_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
         }
     }
@@ -5389,7 +5389,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
                                                priv->current_folder);
 
       if (data->clear_entry)
-        gtk_entry_set_text (GTK_ENTRY (priv->location_entry), "");
+        gtk_editable_set_text (GTK_EDITABLE (priv->location_entry), "");
     }
 
   /* Create a new list model.  This is slightly evil; we store the result value
@@ -5498,7 +5498,7 @@ gtk_file_chooser_widget_set_current_name (GtkFileChooser *chooser,
                     priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
   pending_select_files_free (impl);
-  gtk_entry_set_text (GTK_ENTRY (priv->location_entry), name);
+  gtk_editable_set_text (GTK_EDITABLE (priv->location_entry), name);
 }
 
 static gchar *
@@ -5511,7 +5511,7 @@ gtk_file_chooser_widget_get_current_name (GtkFileChooser *chooser)
                         priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER,
                         NULL);
 
-  return g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->location_entry)));
+  return g_strdup (gtk_editable_get_text (GTK_EDITABLE (priv->location_entry)));
 }
 
 static gboolean
@@ -5692,7 +5692,7 @@ check_save_entry (GtkFileChooserWidget  *impl,
 
   chooser_entry = GTK_FILE_CHOOSER_ENTRY (priv->location_entry);
 
-  if (strlen (gtk_entry_get_text (GTK_ENTRY (chooser_entry))) == 0)
+  if (strlen (gtk_editable_get_text (GTK_EDITABLE (chooser_entry))) == 0)
     {
       *file_ret = NULL;
       *is_well_formed_ret = TRUE;
@@ -7797,7 +7797,7 @@ location_set_user_text (GtkFileChooserWidget *impl,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  gtk_entry_set_text (GTK_ENTRY (priv->location_entry), path);
+  gtk_editable_set_text (GTK_EDITABLE (priv->location_entry), path);
   gtk_editable_set_position (GTK_EDITABLE (priv->location_entry), -1);
 }
 

@@ -14045,7 +14045,7 @@ gtk_tree_view_search_move (GtkWidget   *window,
   GtkTreeModel *model;
   GtkTreeSelection *selection;
 
-  text = gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (tree_view->priv->search_entry));
 
   g_return_val_if_fail (text != NULL, FALSE);
 

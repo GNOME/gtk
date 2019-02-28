@@ -120,7 +120,7 @@ main (int    argc,
 
       for (i = 0; i < 3; i++) {
 	entry = gtk_entry_new ();
-	gtk_entry_set_text (GTK_ENTRY (entry), "│XYyj,Ö...");
+	gtk_editable_set_text (GTK_EDITABLE (entry), "│XYyj,Ö...");
 
         set_font_size (entry, i);
 

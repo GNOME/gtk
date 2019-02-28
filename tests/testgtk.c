@@ -2353,7 +2353,7 @@ create_entry (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (box2), hbox);
 
       entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "hello world \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205");
+      gtk_editable_set_text (GTK_EDITABLE (entry), "hello world \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_container_add (GTK_CONTAINER (hbox), entry);
 
@@ -2372,7 +2372,7 @@ create_entry (GtkWidget *widget)
       gtk_combo_box_text_append_text (cb, "item9 item9");
 
       cb_entry = gtk_bin_get_child (GTK_BIN (cb));
-      gtk_entry_set_text (GTK_ENTRY (cb_entry), "hello world \n\n\n foo");
+      gtk_editable_set_text (GTK_EDITABLE (cb_entry), "hello world \n\n\n foo");
       gtk_editable_select_region (GTK_EDITABLE (cb_entry), 0, -1);
       gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (cb));
 
@@ -2713,8 +2713,8 @@ spin_button_time_output_func (GtkSpinButton *spin_button)
   hours = gtk_adjustment_get_value (adjustment) / 60.0;
   minutes = (fabs(floor (hours) - hours) < 1e-5) ? 0.0 : 30;
   sprintf (buf, "%02.0f:%02.0f", floor (hours), minutes);
-  if (strcmp (buf, gtk_spin_button_get_text (spin_button)))
-    gtk_spin_button_set_text (spin_button, buf);
+  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))))
+    gtk_editable_set_text (GTK_EDITABLE (spin_button), buf);
   return TRUE;
 }
 
@@ -2732,7 +2732,7 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
   for (i = 1; i <= 12; i++)
     {
       tmp1 = g_ascii_strup (month[i - 1], -1);
-      tmp2 = g_ascii_strup (gtk_spin_button_get_text (spin_button), -1);
+      tmp2 = g_ascii_strup (gtk_editable_get_text (GTK_EDITABLE (spin_button)), -1);
       if (strstr (tmp1, tmp2) == tmp1)
 	found = TRUE;
       g_free (tmp1);
@@ -2764,8 +2764,8 @@ spin_button_month_output_func (GtkSpinButton *spin_button)
   for (i = 1; i <= 12; i++)
     if (fabs (value - (double)i) < 1e-5)
       {
-        if (strcmp (month[i-1], gtk_spin_button_get_text (spin_button)))
-          gtk_spin_button_set_text (spin_button, month[i-1]);
+        if (strcmp (month[i-1], gtk_editable_get_text (GTK_EDITABLE (spin_button))))
+          gtk_editable_set_text (GTK_EDITABLE (spin_button), month[i-1]);
       }
   return TRUE;
 }
@@ -2778,7 +2778,7 @@ spin_button_hex_input_func (GtkSpinButton *spin_button,
   gchar *err;
   gdouble res;
 
-  buf = gtk_spin_button_get_text (GTK_SPIN_BUTTON (spin_button));
+  buf = gtk_editable_get_text (GTK_EDITABLE (spin_button));
   res = strtol(buf, &err, 16);
   *new_val = res;
   if (*err)
@@ -2800,8 +2800,8 @@ spin_button_hex_output_func (GtkSpinButton *spin_button)
     sprintf (buf, "0x00");
   else
     sprintf (buf, "0x%.2X", (gint) val);
-  if (strcmp (buf, gtk_spin_button_get_text (spin_button)))
-    gtk_spin_button_set_text (spin_button, buf);
+  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))))
+    gtk_editable_set_text (GTK_EDITABLE (spin_button), buf);
 
   return TRUE;
 }
@@ -2864,7 +2864,7 @@ create_spins (GtkWidget *widget)
 			G_CALLBACK (spin_button_time_output_func),
 			NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_spin_button_set_width_chars (GTK_SPIN_BUTTON (spinner), 5);
+      gtk_editable_set_width_chars (GTK_EDITABLE (spinner), 5);
       gtk_container_add (GTK_CONTAINER (vbox2), spinner);
 
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -2889,7 +2889,7 @@ create_spins (GtkWidget *widget)
 			G_CALLBACK (spin_button_month_output_func),
 			NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_spin_button_set_width_chars (GTK_SPIN_BUTTON (spinner), 9);
+      gtk_editable_set_width_chars (GTK_EDITABLE (spinner), 9);
       gtk_container_add (GTK_CONTAINER (vbox2), spinner);
 
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -2912,7 +2912,7 @@ create_spins (GtkWidget *widget)
 			G_CALLBACK (spin_button_hex_output_func),
 			NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_spin_button_set_width_chars (GTK_SPIN_BUTTON (spinner), 4);
+      gtk_editable_set_width_chars (GTK_EDITABLE (spinner), 4);
       gtk_container_add (GTK_CONTAINER (vbox2), spinner);
 
       frame = gtk_frame_new ("Accelerated");
@@ -3193,7 +3193,7 @@ cursor_pressed_cb (GtkGesture *gesture,
   else
     i = (i + n - 1) % n;
 
-  gtk_entry_set_text (GTK_ENTRY (entry), cursor_names[i]);
+  gtk_editable_set_text (GTK_EDITABLE (entry), cursor_names[i]);
 }
 
 static void
@@ -3202,7 +3202,7 @@ set_cursor_from_name (GtkWidget *entry,
 {
   const gchar *name;
 
-  name = gtk_entry_get_text (GTK_ENTRY (entry));
+  name = gtk_editable_get_text (GTK_EDITABLE (entry));
   gtk_widget_set_cursor_from_name (widget, name);
 
   g_object_set_data_full (G_OBJECT (widget), "name", g_strdup (name), g_free);
@@ -3227,7 +3227,7 @@ change_cursor_theme (GtkWidget *widget,
 
   children = gtk_container_get_children (GTK_CONTAINER (data));
 
-  theme = gtk_entry_get_text (GTK_ENTRY (children->next->data));
+  theme = gtk_editable_get_text (GTK_EDITABLE (children->next->data));
   size = (gint) gtk_spin_button_get_value (GTK_SPIN_BUTTON (children->next->next->data));
 
   g_list_free (children);
@@ -3306,7 +3306,7 @@ create_cursors (GtkWidget *widget)
           gtk_container_add (GTK_CONTAINER (hbox), label);
 
           entry = gtk_entry_new ();
-          gtk_entry_set_text (GTK_ENTRY (entry), "default");
+          gtk_editable_set_text (GTK_EDITABLE (entry), "default");
           gtk_container_add (GTK_CONTAINER (hbox), entry);
 
           size = gtk_spin_button_new_with_range (1.0, 128.0, 1.0);
@@ -3372,7 +3372,7 @@ create_cursors (GtkWidget *widget)
 
       gtk_widget_show (window);
 
-      gtk_entry_set_text (GTK_ENTRY (entry), "arrow");
+      gtk_editable_set_text (GTK_EDITABLE (entry), "arrow");
     }
   else
     gtk_widget_destroy (window);
@@ -3699,7 +3699,7 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
   GdkDisplay *new_display = NULL;
   GdkDisplay *current_display = gtk_widget_get_display (widget);
   
-  display_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+  display_name = gtk_editable_get_text (GTK_EDITABLE (data->entry));
   display = gdk_display_open (display_name);
       
   if (!display)
@@ -3780,8 +3780,8 @@ create_display_screen (GtkWidget *widget)
   combo_dpy = gtk_combo_box_text_new_with_entry ();
   gtk_widget_set_hexpand (combo_dpy, TRUE);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
-  gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
-                      "<hostname>:<X Server Num>.<Screen Num>");
+  gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo_dpy))),
+                         "<hostname>:<X Server Num>.<Screen Num>");
 
   gtk_grid_attach (GTK_GRID (grid), label_dpy, 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), combo_dpy, 0, 1, 1, 1);
@@ -5759,7 +5759,7 @@ static void
 entry_changed (GtkWidget *widget, ProgressData *pdata)
 {
   gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata->pbar),
-			  gtk_entry_get_text (GTK_ENTRY (pdata->entry)));
+			  gtk_editable_get_text (GTK_EDITABLE (pdata->entry)));
 }
 
 void

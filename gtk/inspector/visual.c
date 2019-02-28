@@ -201,7 +201,7 @@ update_font_scale (GtkInspectorVisual *vis,
     {
       gchar *str = g_strdup_printf ("%0.2f", factor);
 
-      gtk_entry_set_text (GTK_ENTRY (vis->priv->font_scale_entry), str);
+      gtk_editable_set_text (GTK_EDITABLE (vis->priv->font_scale_entry), str);
       g_free (str);
     }
 }
@@ -223,7 +223,7 @@ font_scale_entry_activated (GtkEntry           *entry,
   gdouble factor;
   gchar *err = NULL;
 
-  factor = g_strtod (gtk_entry_get_text (entry), &err);
+  factor = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)
     update_font_scale (vis, factor, TRUE, FALSE);
 }
@@ -714,7 +714,7 @@ update_slowdown (GtkInspectorVisual *vis,
     {
       gchar *str = g_strdup_printf ("%0.*f", 2, slowdown);
 
-      gtk_entry_set_text (GTK_ENTRY (vis->priv->slowdown_entry), str);
+      gtk_editable_set_text (GTK_EDITABLE (vis->priv->slowdown_entry), str);
       g_free (str);
     }
 }
@@ -739,7 +739,7 @@ slowdown_entry_activated (GtkEntry *entry,
   gdouble slowdown;
   gchar *err = NULL;
 
-  slowdown = g_strtod (gtk_entry_get_text (entry), &err);
+  slowdown = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)
     update_slowdown (vis, slowdown, TRUE, FALSE);
 }

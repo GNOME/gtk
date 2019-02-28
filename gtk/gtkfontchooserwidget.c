@@ -420,7 +420,7 @@ output_cb (GtkSpinButton *spin,
   adjustment = gtk_spin_button_get_adjustment (spin);
   value = gtk_adjustment_get_value (adjustment);
   text = g_strdup_printf ("%2.4g", value);
-  gtk_spin_button_set_text (spin, text);
+  gtk_editable_set_text (GTK_EDITABLE (spin), text);
   g_free (text);
 
   return TRUE;
@@ -844,7 +844,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->language = pango_language_get_default ();
 
   /* Set default preview text */
-  gtk_entry_set_text (GTK_ENTRY (priv->preview), priv->preview_text);
+  gtk_editable_set_text (GTK_EDITABLE (priv->preview), priv->preview_text);
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 
@@ -2366,7 +2366,7 @@ gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
   g_free (priv->preview_text);
   priv->preview_text = g_strdup (text);
 
-  gtk_entry_set_text (GTK_ENTRY (priv->preview), text);
+  gtk_editable_set_text (GTK_EDITABLE (priv->preview), text);
 
   g_object_notify (G_OBJECT (fontchooser), "preview-text");
 

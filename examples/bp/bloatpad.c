@@ -364,7 +364,7 @@ combo_changed (GtkComboBox *combo,
   str = g_strjoinv (",", accels);
   g_strfreev (accels);
 
-  gtk_entry_set_text (entry, str);
+  gtk_editable_set_text (GTK_EDITABLE (entry), str);
 }
 
 static void
@@ -389,7 +389,7 @@ response (GtkDialog *dialog,
   if (!action)
     return;
 
-  str = gtk_entry_get_text (entry);
+  str = gtk_editable_get_text (GTK_EDITABLE (entry));
   accels = g_strsplit (str, ",", 0);
 
   gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const gchar **) accels);

@@ -140,7 +140,7 @@ action_clicked_cb (GtkWidget *button,
   GtkWidget *page, *title;
 
   page = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (page), "Addition");
+  gtk_editable_set_text (GTK_EDITABLE (page), "Addition");
 
   title = gtk_label_new ("Addition");
 
@@ -174,7 +174,7 @@ create_notebook (gchar           **labels,
   while (*labels)
     {
       page = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (page), *labels);
+      gtk_editable_set_text (GTK_EDITABLE (page), *labels);
 
       title = gtk_label_new (*labels);
 

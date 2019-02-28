@@ -608,7 +608,7 @@
     </section>
 
     <section>
-      <title>Adapt to changes in the API of GtkEntry and GtkSearchEntry</title>
+      <title>Adapt to changes in the API of GtkEntry, GtkSearchEntry adn GtkSpinButton</title>
       <para>
         The GtkEditable has been made more useful, and the core functionality of
         GtkEntry has been broken out as a GtkText widget. GtkEntry, GtkSearchEntry,
@@ -620,7 +620,8 @@
       <para>
         Use GtkEditable API for editable functionality, and widget-specific APIs for
         things that go beyond the common interface. For password entries, use
-        GtkPasswordEntry.
+        GtkPasswordEntry. As an example, gtk_spin_button_set_max_width_chars()
+        has been removed in favor of gtk_editable_set_max_width_chars().
       </para>
     </section>
 

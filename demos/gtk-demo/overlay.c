@@ -12,7 +12,7 @@
 static void
 do_number (GtkButton *button, GtkEntry *entry)
 {
-  gtk_entry_set_text (entry, gtk_button_get_label (button));
+  gtk_editable_set_text (GTK_EDITABLE (entry), gtk_button_get_label (button));
 }
 
 GtkWidget *

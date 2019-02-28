@@ -1238,7 +1238,7 @@ server_mount_ready_cb (GObject      *source_file,
        * Otherwise, the user would lost the typed address even if it fails
        * to connect.
        */
-      gtk_entry_set_text (GTK_ENTRY (priv->address_entry), "");
+      gtk_editable_set_text (GTK_EDITABLE (priv->address_entry), "");
 
       if (priv->should_open_location)
         emit_open_location (view, location, priv->open_flags);
@@ -1814,7 +1814,7 @@ on_connect_button_clicked (GtkPlacesView *view)
   if (!gtk_widget_get_sensitive (priv->connect_button))
     return;
 
-  uri = gtk_entry_get_text (GTK_ENTRY (priv->address_entry));
+  uri = gtk_editable_get_text (GTK_EDITABLE (priv->address_entry));
 
   if (uri != NULL && uri[0] != '\0')
     file = g_file_new_for_commandline_arg (uri);
@@ -1842,7 +1842,7 @@ on_address_entry_text_changed (GtkPlacesView *view)
   priv = gtk_places_view_get_instance_private (view);
   supported = FALSE;
   supported_protocols = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
-  address = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->address_entry)));
+  address = g_strdup (gtk_editable_get_text (GTK_EDITABLE (priv->address_entry)));
   scheme = g_uri_parse_scheme (address);
 
   if (!supported_protocols)
@@ -1897,7 +1897,7 @@ on_recent_servers_listbox_row_activated (GtkPlacesView    *view,
   priv = gtk_places_view_get_instance_private (view);
   uri = g_object_get_data (G_OBJECT (row), "uri");
 
-  gtk_entry_set_text (GTK_ENTRY (priv->address_entry), uri);
+  gtk_editable_set_text (GTK_EDITABLE (priv->address_entry), uri);
 
   gtk_widget_hide (priv->recent_servers_popover);
 }
@@ -2196,7 +2196,7 @@ gtk_places_view_map (GtkWidget *widget)
 
   priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (widget));
 
-  gtk_entry_set_text (GTK_ENTRY (priv->address_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (priv->address_entry), "");
 
   GTK_WIDGET_CLASS (gtk_places_view_parent_class)->map (widget);
 }

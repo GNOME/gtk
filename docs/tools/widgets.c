@@ -226,7 +226,7 @@ create_entry (void)
   widget = gtk_entry_new ();
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_entry_set_text (GTK_ENTRY (widget), "Entry");
+  gtk_editable_set_text (GTK_EDITABLE (widget), "Entry");
   gtk_editable_set_position (GTK_EDITABLE (widget), -1);
 
   return  new_widget_info ("entry", widget, SMALL);
@@ -320,7 +320,7 @@ create_combo_box_entry (void)
   g_object_unref (model);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_entry_set_text (GTK_ENTRY (child), "Combo Box Entry");
+  gtk_editable_set_text (GTK_EDITABLE (child), "Combo Box Entry");
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
@@ -399,7 +399,7 @@ create_search_bar (void)
   widget = gtk_search_bar_new ();
 
   entry = gtk_search_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (entry), "Search Bar");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "Search Bar");
   gtk_container_add (GTK_CONTAINER (widget), entry);
   gtk_widget_show (entry);
 

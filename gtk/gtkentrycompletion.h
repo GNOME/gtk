@@ -54,7 +54,7 @@ typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
  * Note that @key is normalized and case-folded (see g_utf8_normalize()
  * and g_utf8_casefold()). If this is not appropriate, match functions
  * have access to the unmodified key via
- * `gtk_entry_get_text (GTK_ENTRY (gtk_entry_completion_get_entry ()))`.
+ * `gtk_editable_get_text (GTK_EDITABLE (gtk_entry_completion_get_entry ()))`.
  *
  * Returns: %TRUE if @iter should be displayed as a possible completion
  *     for @key

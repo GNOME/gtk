@@ -87,14 +87,14 @@ iter_insert (GtkWidget *button, GtkTreeView *tree_view)
       gtk_tree_store_insert (GTK_TREE_STORE (model),
 			     &iter,
 			     &selected,
-			     atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
+			     atoi (gtk_editable_get_text (GTK_EDITABLE (entry))));
     }
   else
     {
       gtk_tree_store_insert (GTK_TREE_STORE (model),
 			     &iter,
 			     NULL,
-			     atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
+			     atoi (gtk_editable_get_text (GTK_EDITABLE (entry))));
     }
 
   node_set (&iter);
@@ -114,7 +114,7 @@ iter_change (GtkWidget *button, GtkTreeView *tree_view)
       gtk_tree_store_set (GTK_TREE_STORE (model),
 			  &selected,
 			  1,
-			  gtk_entry_get_text (GTK_ENTRY (entry)),
+			  gtk_editable_get_text (GTK_EDITABLE (entry)),
 			  -1);
     }
 }
@@ -130,7 +130,7 @@ iter_insert_with_values (GtkWidget *button, GtkTreeView *tree_view)
 
   entry = g_object_get_data (G_OBJECT (button), "user_data");
   str1 = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", node_count++);
-  str2 = g_strdup_printf ("%d", atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
+  str2 = g_strdup_printf ("%d", atoi (gtk_editable_get_text (GTK_EDITABLE (entry))));
 
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       NULL,
