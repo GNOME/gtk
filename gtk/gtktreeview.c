@@ -603,8 +603,6 @@ static void     gtk_tree_view_size_allocate        (GtkWidget      *widget,
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
 
-static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
-						    GtkWidget        *child);
 static gboolean gtk_tree_view_key_controller_key_pressed  (GtkEventControllerKey *key,
                                                            guint                  keyval,
                                                            guint                  keycode,
@@ -994,7 +992,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
   container_class->forall = gtk_tree_view_forall;
-  container_class->set_focus_child = gtk_tree_view_set_focus_child;
 
   class->move_cursor = gtk_tree_view_real_move_cursor;
   class->select_all = gtk_tree_view_real_select_all;
@@ -8016,26 +8013,6 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
   /* Invalidate expander size */
   priv->expander_size = -1;
-}
-
-
-static void
-gtk_tree_view_set_focus_child (GtkContainer *container,
-			       GtkWidget    *child)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (container);
-  GList *list;
-
-  for (list = tree_view->priv->columns; list; list = list->next)
-    {
-      if (gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (list->data)) == child)
-	{
-          _gtk_tree_view_set_focus_column (tree_view, GTK_TREE_VIEW_COLUMN (list->data));
-	  break;
-	}
-    }
-
-  GTK_CONTAINER_CLASS (gtk_tree_view_parent_class)->set_focus_child (container, child);
 }
 
 static gboolean
