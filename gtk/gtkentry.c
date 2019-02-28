@@ -1113,7 +1113,7 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_TEXT_LENGTH:
-      g_value_set_uint (value, gtk_entry_buffer_get_length (get_buffer (entry)));
+      g_value_set_uint (value, gtk_entry_get_text_length (entry));
       break;
 
     case PROP_PROGRESS_FRACTION:
@@ -1835,6 +1835,7 @@ GtkWidget*
 gtk_entry_new_with_buffer (GtkEntryBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), NULL);
+
   return g_object_new (GTK_TYPE_ENTRY, "buffer", buffer, NULL);
 }
 
@@ -2068,9 +2069,11 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
 const gchar*
 gtk_entry_get_text (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return gtk_entry_buffer_get_text (get_buffer (entry));
+  return gtk_editable_get_text (GTK_EDITABLE (priv->text));
 }
 
 /**
@@ -2092,8 +2095,11 @@ void
 gtk_entry_set_max_length (GtkEntry     *entry,
                           gint          max)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
   g_return_if_fail (GTK_IS_ENTRY (entry));
-  gtk_entry_buffer_set_max_length (get_buffer (entry), max);
+
+  gtk_text_set_max_length (GTK_TEXT (priv->text), max);
 }
 
 /**
@@ -2112,9 +2118,11 @@ gtk_entry_set_max_length (GtkEntry     *entry,
 gint
 gtk_entry_get_max_length (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  return gtk_entry_buffer_get_max_length (get_buffer (entry));
+  return gtk_text_get_max_length (GTK_TEXT (priv->text));
 }
 
 /**
@@ -2134,9 +2142,11 @@ gtk_entry_get_max_length (GtkEntry *entry)
 guint16
 gtk_entry_get_text_length (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  return gtk_entry_buffer_get_length (get_buffer (entry));
+  return gtk_text_get_text_length (GTK_TEXT (priv->text));
 }
 
 /**
