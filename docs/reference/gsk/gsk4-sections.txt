@@ -148,7 +148,6 @@ gsk_rounded_rect_intersects_rect
 <SECTION>
 <FILE>GskTransform</FILE>
 <TITLE>3D transformations</TITLE>
-GskTransformType
 GskTransform
 gsk_transform_ref
 gsk_transform_unref
@@ -171,9 +170,6 @@ gsk_transform_scale
 gsk_transform_scale_3d
 <SUBSECTION>
 gsk_transform_equal
-<SUBSECTION>
-gsk_transform_get_transform_type
-gsk_transform_get_next
 <SUBSECTION>
 gsk_transform_transform_bounds
 <SUBSECTION Private>

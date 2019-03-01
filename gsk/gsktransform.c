@@ -39,8 +39,6 @@
 
 typedef struct _GskTransformClass GskTransformClass;
 
-#define GSK_IS_TRANSFORM_TYPE(self,type) ((self) == NULL ? (type) == GSK_TRANSFORM_TYPE_IDENTITY : (self)->transform_class->transform_type == (type))
-
 struct _GskTransform
 {
   const GskTransformClass *transform_class;
@@ -51,7 +49,6 @@ struct _GskTransform
 
 struct _GskTransformClass
 {
-  GskTransformType transform_type;
   gsize struct_size;
   const char *type_name;
 
@@ -93,25 +90,8 @@ G_DEFINE_BOXED_TYPE (GskTransform, gsk_transform,
                      gsk_transform_ref,
                      gsk_transform_unref)
 
-/*<private>
- * gsk_transform_is_identity:
- * @transform: (allow-none): A transform or %NULL
- *
- * Checks if the transform is a representation of the identity
- * transform.
- *
- * This is different from a transform like `scale(2) scale(0.5)`
- * which just results in an identity transform when simplified.
- *
- * Returns: %TRUE  if this transform is a representation of
- *     the identity transform
- **/
 static gboolean
-gsk_transform_is_identity (GskTransform *self)
-{
-  return self == NULL ||
-         (GSK_IS_TRANSFORM_TYPE (self, GSK_TRANSFORM_TYPE_IDENTITY) && gsk_transform_is_identity (self->next));
-}
+gsk_transform_is_identity (GskTransform *self);
 
 /*< private >
  * gsk_transform_alloc:
@@ -210,7 +190,6 @@ gsk_identity_transform_equal (GskTransform *first_transform,
 
 static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
 {
-  GSK_TRANSFORM_TYPE_IDENTITY,
   sizeof (GskTransform),
   "GskIdentityMatrix",
   gsk_identity_transform_finalize,
@@ -223,6 +202,26 @@ static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
   gsk_identity_transform_apply,
   gsk_identity_transform_equal,
 };
+
+/*<private>
+ * gsk_transform_is_identity:
+ * @transform: (allow-none): A transform or %NULL
+ *
+ * Checks if the transform is a representation of the identity
+ * transform.
+ *
+ * This is different from a transform like `scale(2) scale(0.5)`
+ * which just results in an identity transform when simplified.
+ *
+ * Returns: %TRUE  if this transform is a representation of
+ *     the identity transform
+ **/
+static gboolean
+gsk_transform_is_identity (GskTransform *self)
+{
+  return self == NULL ||
+         (self->transform_class == &GSK_IDENTITY_TRANSFORM_CLASS && gsk_transform_is_identity (self->next));
+}
 
 /**
  * gsk_transform_identity:
@@ -406,7 +405,6 @@ gsk_matrix_transform_equal (GskTransform *first_transform,
 
 static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
 {
-  GSK_TRANSFORM_TYPE_TRANSFORM,
   sizeof (GskMatrixTransform),
   "GskMatrixTransform",
   gsk_matrix_transform_finalize,
@@ -582,7 +580,6 @@ gsk_translate_transform_print (GskTransform *transform,
 
 static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
 {
-  GSK_TRANSFORM_TYPE_TRANSLATE,
   sizeof (GskTranslateTransform),
   "GskTranslateTransform",
   gsk_translate_transform_finalize,
@@ -752,7 +749,6 @@ gsk_rotate_transform_print (GskTransform *transform,
 
 static const GskTransformClass GSK_ROTATE_TRANSFORM_CLASS =
 {
-  GSK_TRANSFORM_TYPE_ROTATE,
   sizeof (GskRotateTransform),
   "GskRotateTransform",
   gsk_rotate_transform_finalize,
@@ -945,7 +941,6 @@ gsk_scale_transform_print (GskTransform *transform,
 
 static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
 {
-  GSK_TRANSFORM_TYPE_SCALE,
   sizeof (GskScaleTransform),
   "GskScaleTransform",
   gsk_scale_transform_finalize,
@@ -1105,41 +1100,6 @@ gsk_transform_to_string (GskTransform *self)
   gsk_transform_print (self, string);
 
   return g_string_free (string, FALSE);
-}
-
-/**
- * gsk_transform_get_transform_type:
- * @self: (allow-none): a #GskTransform
- *
- * Returns the type of the @self.
- *
- * Returns: the type of the #GskTransform
- */
-GskTransformType
-gsk_transform_get_transform_type (GskTransform *self)
-{
-  if (self == NULL)
-    return GSK_TRANSFORM_TYPE_IDENTITY;
-
-  return self->transform_class->transform_type;
-}
-
-/**
- * gsk_transform_get_next:
- * @self: (allow-none): a #GskTransform
- *
- * Gets the rest of the matrix in the chain of operations.
- *
- * Returns: (transfer none) (nullable): The next transform or
- *     %NULL if this was the last operation.
- **/
-GskTransform *
-gsk_transform_get_next (GskTransform *self)
-{
-  if (self == NULL)
-    return NULL;
-
-  return self->next;
 }
 
 /**

@@ -31,15 +31,6 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_TRANSFORM (gsk_transform_get_type ())
 
-typedef enum
-{
-  GSK_TRANSFORM_TYPE_IDENTITY,
-  GSK_TRANSFORM_TYPE_TRANSFORM,
-  GSK_TRANSFORM_TYPE_TRANSLATE,
-  GSK_TRANSFORM_TYPE_ROTATE,
-  GSK_TRANSFORM_TYPE_SCALE
-} GskTransformType;
-
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_transform_get_type                  (void) G_GNUC_CONST;
 
@@ -116,11 +107,6 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_transform_bounds          (GskTransform                   *self,
                                                                  const graphene_rect_t          *rect,
                                                                  graphene_rect_t                *out_rect);
-
-GDK_AVAILABLE_IN_ALL
-GskTransformType        gsk_transform_get_transform_type        (GskTransform                   *self) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-GskTransform *          gsk_transform_get_next                  (GskTransform                   *self) G_GNUC_PURE;
 
 G_END_DECLS
 
