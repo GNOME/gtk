@@ -8,13 +8,14 @@
 #include "gskglprofilerprivate.h"
 #include "gskprofilerprivate.h"
 #include "gskrendererprivate.h"
-#include "gskrendernodeprivate.h"
+#include "gsktransformprivate.h"
 #include "gskshaderbuilderprivate.h"
 #include "gskglglyphcacheprivate.h"
 #include "gskglrenderopsprivate.h"
 #include "gskcairoblurprivate.h"
 #include "gskglshadowcacheprivate.h"
 #include "gskglnodesampleprivate.h"
+#include "gsktransform.h"
 
 #include "gskprivate.h"
 
@@ -791,8 +792,8 @@ render_transform_node (GskGLRenderer   *self,
                        GskRenderNode   *node,
                        RenderOpBuilder *builder)
 {
-  const GskMatrixCategory category = gsk_transform_node_get_category (node);
-  const graphene_matrix_t *node_transform = gsk_transform_node_peek_transform (node);
+  GskTransform *node_transform = gsk_transform_node_get_transform (node);
+  const GskMatrixCategory category = gsk_transform_categorize (node_transform);
   GskRenderNode *child = gsk_transform_node_get_child (node);
 
   switch (category)
@@ -803,8 +804,12 @@ render_transform_node (GskGLRenderer   *self,
 
     case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
       {
-        const float dx = graphene_matrix_get_value (node_transform, 3, 0);
-        const float dy = graphene_matrix_get_value (node_transform, 3, 1);
+        float dx, dy;
+        
+        if (!gsk_transform_to_translate (node_transform, &dx, &dy))
+          {
+            g_assert_not_reached ();
+          }
 
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);
@@ -814,7 +819,10 @@ render_transform_node (GskGLRenderer   *self,
 
     case GSK_MATRIX_CATEGORY_2D_AFFINE:
       {
-        ops_push_modelview (builder, node_transform, category);
+        graphene_matrix_t mat;
+
+        gsk_transform_to_matrix (node_transform, &mat);
+        ops_push_modelview (builder, &mat, category);
         gsk_gl_renderer_add_render_ops (self, child, builder);
         ops_pop_modelview (builder);
       }
@@ -831,8 +839,10 @@ render_transform_node (GskGLRenderer   *self,
         const float max_y = min_y + child->bounds.size.height;
         int texture_id;
         gboolean is_offscreen;
+        graphene_matrix_t mat;
 
-        ops_push_modelview (builder, node_transform, category);
+        gsk_transform_to_matrix (node_transform, &mat);
+        ops_push_modelview (builder, &mat, category);
 
         if (node_supports_transform (child))
           {

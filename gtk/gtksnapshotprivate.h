@@ -40,14 +40,10 @@ struct _GtkSnapshotState {
   GtkSnapshotCollectFunc collect_func;
   union {
     struct {
-      graphene_matrix_t transform;
-      GskMatrixCategory category;
-    } transform;
-    struct {
-      double            opacity;
+      double             opacity;
     } opacity;
     struct {
-      double            radius;
+      double             radius;
     } blur;
     struct {
       graphene_matrix_t matrix;

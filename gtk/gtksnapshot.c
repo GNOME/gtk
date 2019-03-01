@@ -242,14 +242,15 @@ gtk_snapshot_collect_autopush_transform (GtkSnapshot      *snapshot,
                                          guint             n_nodes)
 {
   GskRenderNode *node, *transform_node;
+  GtkSnapshotState *previous_state;
+
+  previous_state = gtk_snapshot_get_previous_state (snapshot);
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
   if (node == NULL)
     return NULL;
 
-  transform_node = gsk_transform_node_new_with_category (node,
-                                                         &state->data.transform.transform,
-                                                         state->data.transform.category);
+  transform_node = gsk_transform_node_new (node, previous_state->transform);
 
   gsk_render_node_unref (node);
 
@@ -259,17 +260,9 @@ gtk_snapshot_collect_autopush_transform (GtkSnapshot      *snapshot,
 static void
 gtk_snapshot_autopush_transform (GtkSnapshot *snapshot)
 {
-  GtkSnapshotState *previous_state;
-  GtkSnapshotState *state;
-
-  state = gtk_snapshot_push_state (snapshot,
-                                   NULL,
-                                   gtk_snapshot_collect_autopush_transform);
-
-  previous_state = gtk_snapshot_get_previous_state (snapshot);
-
-  gsk_transform_to_matrix (previous_state->transform, &state->data.transform.transform);
-  state->data.transform.category = gsk_transform_categorize (previous_state->transform);
+  gtk_snapshot_push_state (snapshot,
+                           NULL,
+                           gtk_snapshot_collect_autopush_transform);
 }
 
 static gboolean

@@ -8,6 +8,7 @@
 #include "gskrenderer.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gsktransform.h"
 #include "gskvulkanblendmodepipelineprivate.h"
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
@@ -560,7 +561,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 #endif
 
         child = gsk_transform_node_get_child (node);
-        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
+        gsk_transform_to_matrix (gsk_transform_node_get_transform (node), &transform);
         graphene_matrix_init_from_matrix (&mv, &self->mv);
         graphene_matrix_multiply (&transform, &mv, &self->mv);
         if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
