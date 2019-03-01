@@ -57,6 +57,25 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_to_matrix                 (GskTransform                   *self,
                                                                  graphene_matrix_t              *out_matrix);
 GDK_AVAILABLE_IN_ALL
+gboolean                gsk_transform_to_2d                     (GskTransform                   *self,
+                                                                 float                          *out_xx,
+                                                                 float                          *out_yx,
+                                                                 float                          *out_xy,
+                                                                 float                          *out_yy,
+                                                                 float                          *out_dx,
+                                                                 float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_transform_to_affine                 (GskTransform                   *self,
+                                                                 float                          *out_scale_x,
+                                                                 float                          *out_scale_y,
+                                                                 float                          *out_dx,
+                                                                 float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_transform_to_translate              (GskTransform                   *self,
+                                                                 float                          *out_dx,
+                                                                 float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
+
+GDK_AVAILABLE_IN_ALL
 gboolean                gsk_transform_equal                     (GskTransform                   *first,
                                                                  GskTransform                   *second) G_GNUC_PURE;
 
@@ -92,6 +111,11 @@ GskTransform *          gsk_transform_scale_3d                  (GskTransform   
                                                                  float                           factor_x,
                                                                  float                           factor_y,
                                                                  float                           factor_z);
+
+GDK_AVAILABLE_IN_ALL
+void                    gsk_transform_transform_bounds          (GskTransform                   *self,
+                                                                 const graphene_rect_t          *rect,
+                                                                 graphene_rect_t                *out_rect);
 
 GDK_AVAILABLE_IN_ALL
 GskTransformType        gsk_transform_get_transform_type        (GskTransform                   *self) G_GNUC_PURE;

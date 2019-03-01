@@ -156,6 +156,9 @@ gsk_transform_unref
 gsk_transform_print
 gsk_transform_to_string
 gsk_transform_to_matrix
+gsk_transform_to_2d
+gsk_transform_to_affine
+gsk_transform_to_translate
 <SUBSECTION>
 gsk_transform_identity
 gsk_transform_transform
@@ -171,6 +174,8 @@ gsk_transform_equal
 <SUBSECTION>
 gsk_transform_get_transform_type
 gsk_transform_get_next
+<SUBSECTION>
+gsk_transform_transform_bounds
 <SUBSECTION Private>
 GSK_TYPE_TRANSFORM
 gsk_transform_get_type
