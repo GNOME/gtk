@@ -33,6 +33,7 @@
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
+#include <gsk/gsktransformprivate.h>
 
 #include <glib/gi18n-lib.h>
 #include <gdk/gdktextureprivate.h>
@@ -896,19 +897,14 @@ populate_render_node_properties (GtkListStore  *store,
           [GSK_MATRIX_CATEGORY_2D_TRANSLATE] = "2D transform",
           [GSK_MATRIX_CATEGORY_IDENTITY] = "identity"
         };
-        float f[16];
-        guint i;
+        GskTransform *transform;
+        char *s;
 
-        graphene_matrix_to_float (gsk_transform_node_peek_transform (node), f);
-        for (i = 0; i < 4; i++)
-          {
-            char *row_string = g_strdup_printf ("%.2f, %.2f, %.2f, %.2f",
-                                                f[4 * i], f[4 * i + 1],
-                                                f[4 * i + 2], f[4 * i + 3]);
-            add_text_row (store, i == 0 ? "Matrix" : "", row_string);
-            g_free (row_string);
-          }
-        add_text_row (store, "Category", category_names[gsk_transform_node_get_category (node)]);
+        transform = gsk_transform_node_get_transform (node);
+        s = gsk_transform_to_string (transform);
+        add_text_row (store, "Matrix", s);
+        g_free (s);
+        add_text_row (store, "Category", category_names[gsk_transform_categorize (transform)]);
       }
       break;
 

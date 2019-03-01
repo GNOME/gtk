@@ -96,11 +96,6 @@ GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType          typ
 GskRenderNode * gsk_cairo_node_new_for_surface   (const graphene_rect_t    *bounds,
                                                   cairo_surface_t          *surface);
 
-GskRenderNode *         gsk_transform_node_new_with_category    (GskRenderNode                  *child,
-                                                                 const graphene_matrix_t        *transform,
-                                                                 GskMatrixCategory               category);
-GskMatrixCategory       gsk_transform_node_get_category         (GskRenderNode                  *node);
-
 
 G_END_DECLS
 

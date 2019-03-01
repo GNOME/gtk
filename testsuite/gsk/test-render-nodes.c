@@ -183,7 +183,7 @@ repeat (void)
   GskRenderNode *child;
   GskRenderNode *transform;
   GskRenderNode *container;
-  graphene_matrix_t matrix;
+  GskTransform *matrix;
 
   child = cairo ();
 
@@ -202,18 +202,21 @@ repeat (void)
 
   gsk_render_node_unref (child);
 
-  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 0, 20, 0 });
-  transform = gsk_transform_node_new (repeat[1], &matrix);
+  matrix = gsk_transform_translate (NULL, &(const graphene_point_t) { 0, 20 });
+  transform = gsk_transform_node_new (repeat[1], matrix);
+  gsk_transform_unref (matrix);
   gsk_render_node_unref (repeat[1]);
   repeat[1] = transform;
 
-  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 0, 40, 0 });
-  transform = gsk_transform_node_new (repeat[2], &matrix);
+  matrix = gsk_transform_translate (NULL, &(const graphene_point_t) { 0, 40 });
+  transform = gsk_transform_node_new (repeat[2], matrix);
+  gsk_transform_unref (matrix);
   gsk_render_node_unref (repeat[2]);
   repeat[2] = transform;
 
-  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 220, -100, 0 });
-  transform = gsk_transform_node_new (repeat[3], &matrix);
+  matrix = gsk_transform_translate (NULL, &(const graphene_point_t) { 220, -100 });
+  transform = gsk_transform_node_new (repeat[3], matrix);
+  gsk_transform_unref (matrix);
   gsk_render_node_unref (repeat[3]);
   repeat[3] = transform;
 
@@ -234,13 +237,14 @@ blendmode (void)
   GskRenderNode *child2;
   GskRenderNode *transform;
   GskRenderNode *container;
-  graphene_matrix_t matrix;
+  GskTransform *matrix;
 
   child1 = cairo ();
   child2 = cairo2 ();
 
-  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 50, 50, 0 });
-  transform = gsk_transform_node_new (child2, &matrix);
+  matrix = gsk_transform_translate (NULL, &(const graphene_point_t) { 50, 50 });
+  transform = gsk_transform_node_new (child2, matrix);
+  gsk_transform_unref (matrix);
   gsk_render_node_unref (child2);
   child2 = transform;
 
@@ -303,11 +307,12 @@ blendmodes (void)
     for (j = 0; j < 4; j++, mode++)
       {
         GskRenderNode *b;
-        graphene_matrix_t matrix;
+        GskTransform *transform;
 
         b = gsk_blend_node_new (child1, child2, mode);
-        graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { i * 110, j * 110, 0 });
-        blend[mode] = gsk_transform_node_new (b, &matrix);
+        transform = gsk_transform_translate (NULL, &(const graphene_point_t) { i * 110, j * 110 });
+        blend[mode] = gsk_transform_node_new (b, transform);
+        gsk_transform_unref (transform);
         gsk_render_node_unref (b);
       }
 
@@ -329,13 +334,14 @@ cross_fade (void)
   GskRenderNode *child2;
   GskRenderNode *transform;
   GskRenderNode *container;
-  graphene_matrix_t matrix;
+  GskTransform *matrix;
 
   child1 = cairo ();
   child2 = cairo2 ();
 
-  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 50, 50, 0 });
-  transform = gsk_transform_node_new (child2, &matrix);
+  matrix = gsk_transform_translate (NULL, &(const graphene_point_t) { 50, 50 });
+  transform = gsk_transform_node_new (child2, matrix);
+  gsk_transform_unref (matrix);
   gsk_render_node_unref (child2);
   child2 = transform;
 
@@ -355,7 +361,7 @@ cross_fades (void)
   GskRenderNode *node;
   GskRenderNode *nodes[5];
   GskRenderNode *container;
-  graphene_matrix_t matrix;
+  GskTransform *transform;
   int i;
 
   child1 = cairo2 ();
@@ -364,8 +370,9 @@ cross_fades (void)
   for (i = 0; i < 5; i++)
     {
       node = gsk_cross_fade_node_new (child1, child2, i / 4.0);
-      graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { i* 210, 0, 0 });
-      nodes[i] = gsk_transform_node_new (node, &matrix);
+      transform = gsk_transform_translate (NULL, &(const graphene_point_t) { i* 210, 0 });
+      nodes[i] = gsk_transform_node_new (node, transform);
+      gsk_transform_unref (transform);
       gsk_render_node_unref (node);
     }
 
@@ -386,21 +393,17 @@ transform (void)
   GskRenderNode *node;
   GskRenderNode *nodes[10];
   GskRenderNode *container;
-  graphene_matrix_t scale;
-  graphene_matrix_t translate;
-  graphene_matrix_t matrix;
-  graphene_vec3_t axis;
-  graphene_vec3_init (&axis, 0.0, 0.0, 1.0);
+  GskTransform *transform;
   int i;
 
   node = ducky ();
 
   for (i = 0; i < 10; i++)
     {
-      graphene_matrix_init_rotate (&scale, 20.0 * i, &axis);
-      graphene_matrix_init_translate (&translate, &(const graphene_point3d_t) { i* 110, 0, 0 });
-      graphene_matrix_multiply (&scale, &translate, &matrix);
-      nodes[i] = gsk_transform_node_new (node, &matrix);
+      transform = gsk_transform_rotate (NULL, 20.0 * i);
+      transform = gsk_transform_translate (transform, &(const graphene_point_t) { i* 110, 0 });
+      nodes[i] = gsk_transform_node_new (node, transform);
+      gsk_transform_unref (transform);
     }
 
   container = gsk_container_node_new (nodes, 5);
@@ -420,7 +423,7 @@ opacity (void)
   GskRenderNode *node;
   GskRenderNode *nodes[5];
   GskRenderNode *container;
-  graphene_matrix_t matrix;
+  GskTransform *transform;
   int i;
 
   child = ducky ();
@@ -428,8 +431,9 @@ opacity (void)
   for (i = 0; i < 5; i++)
     {
       node = gsk_opacity_node_new (child, i / 4.0);
-      graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { i* 210, 0, 0 });
-      nodes[i] = gsk_transform_node_new (node, &matrix);
+      transform = gsk_transform_translate (NULL, &(const graphene_point_t) { i* 210, 0 });
+      nodes[i] = gsk_transform_node_new (node, transform);
+      gsk_transform_unref (transform);
       gsk_render_node_unref (node);
     }
 
@@ -454,7 +458,7 @@ color_matrix1 (void)
   GskRenderNode *child_nodes[N];
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
-  graphene_matrix_t transform;
+  GskTransform *transform;
   float cairo_width = 150;
   graphene_rect_t bounds;
 
@@ -470,14 +474,16 @@ color_matrix1 (void)
   offset = *graphene_vec4_zero ();
   graphene_matrix_init_scale (&matrix, 0.3, 0.3, 0.3); /* Should make the node darker */
   n = gsk_color_matrix_node_new (cairo_node, &matrix, &offset);
-  graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (cairo_width, 0, 0));
-  child_nodes[1] = gsk_transform_node_new (n, &transform);
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (cairo_width, 0));
+  child_nodes[1] = gsk_transform_node_new (n, transform);
+  gsk_transform_unref (transform);
 
   /* Same as above, but this time we stuff the transform node in the color matrix node, and not vice versa */
   offset = *graphene_vec4_zero ();
   graphene_matrix_init_scale (&matrix, 0.3, 0.3, 0.3);
-  graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (2 * cairo_width, 0, 0));
-  n = gsk_transform_node_new (cairo_node, &transform);
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (2 * cairo_width, 0));
+  n = gsk_transform_node_new (cairo_node, transform);
+  gsk_transform_unref (transform);
   child_nodes[2] = gsk_color_matrix_node_new (n, &matrix, &offset);
 
   /* Color matrix inside color matrix, one reversing the other's effect */
@@ -491,8 +497,9 @@ color_matrix1 (void)
 
     graphene_matrix_init_scale (&matrix, 2, 2, 2);
     n = gsk_color_matrix_node_new (inner_color_matrix_node, &matrix, &offset);
-    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (3 * cairo_width, 0, 0));
-    child_nodes[3] = gsk_transform_node_new (n, &transform);
+    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (3 * cairo_width, 0));
+    child_nodes[3] = gsk_transform_node_new (n, transform);
+    gsk_transform_unref (transform);
   }
 
   /* Color matrix in color matrix in transform */
@@ -507,11 +514,12 @@ color_matrix1 (void)
     graphene_matrix_init_scale (&matrix, 2, 2, 2);
     offset = *graphene_vec4_zero ();
     n = gsk_color_matrix_node_new (inner_color_matrix_node, &matrix, &offset);
-    graphene_matrix_init_scale (&transform, 1, 1, 1);
-    graphene_matrix_rotate_z (&transform, 350);
-    graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (4 * cairo_width, 0, 0));
+    transform = gsk_transform_scale (NULL, 1, 1);
+    transform = gsk_transform_rotate (transform, 350);
+    transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (4 * cairo_width, 0));
 
-    child_nodes[4] = gsk_transform_node_new (n, &transform);
+    child_nodes[4] = gsk_transform_node_new (n, transform);
+    gsk_transform_unref (transform);
   }
 
   container_node = gsk_container_node_new (child_nodes, N);
@@ -528,36 +536,37 @@ transformed_clip (void)
   GskRenderNode *transform_node;
   GskRenderNode *clip_node;
   GskRenderNode *nodes[4];
-  graphene_matrix_t transform;
+  GskTransform *transform;
 
   {
     clip_node = gsk_clip_node_new (ducky (),
                                    &GRAPHENE_RECT_INIT (0, 0, 200, 500));
 
-    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (180, 0, 0));
-    nodes[0] = gsk_transform_node_new (clip_node, &transform);
+    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (180, 0));
+    nodes[0] = gsk_transform_node_new (clip_node, transform);
+    gsk_transform_unref (transform);
   }
 
   {
-    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (0, 200, 0));
-    transform_node = gsk_transform_node_new (ducky (), &transform);
+    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (0, 200));
+    transform_node = gsk_transform_node_new (ducky (), transform);
+    gsk_transform_unref (transform);
 
     nodes[1] = gsk_clip_node_new (transform_node,
                                   &GRAPHENE_RECT_INIT (0, 0, 500, 250));
   }
 
   {
-    graphene_vec3_t axis_vec;
-
-    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (150, 200, 0));
-    transform_node = gsk_transform_node_new (ducky (), &transform);
+    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (150, 200));
+    transform_node = gsk_transform_node_new (ducky (), transform);
+    gsk_transform_unref (transform);
     clip_node = gsk_clip_node_new (transform_node,
                                    &GRAPHENE_RECT_INIT (150, 200, 91, 100));
 
-    graphene_vec3_init (&axis_vec, 0, 0, 1);
-    graphene_matrix_init_rotate (&transform, 20, &axis_vec);
+    transform = gsk_transform_rotate (NULL, 20);
     /*graphene_matrix_init_identity (&transform);*/
-    nodes[2] = gsk_transform_node_new (clip_node, &transform);
+    nodes[2] = gsk_transform_node_new (clip_node, transform);
+    gsk_transform_unref (transform);
 
 
 
@@ -576,12 +585,10 @@ transformed_clip (void)
   }
 
   {
-    graphene_vec3_t axis_vec;
-
-    graphene_vec3_init (&axis_vec, 0, 0, 1);
-    graphene_matrix_init_rotate (&transform, 20, &axis_vec);
-    graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (350, 200, 0));
-    transform_node = gsk_transform_node_new (ducky (), &transform);
+    transform = gsk_transform_rotate (NULL, 20);
+    transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (350, 200));
+    transform_node = gsk_transform_node_new (ducky (), transform);
+    gsk_transform_unref (transform);
     nodes[3] = gsk_clip_node_new (transform_node,
                                    &GRAPHENE_RECT_INIT (350, 200, 91, 100));
   }
