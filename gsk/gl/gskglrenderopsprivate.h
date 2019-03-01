@@ -25,7 +25,7 @@ typedef struct
   float dx_before;
   float dy_before;
 
-  GskMatrixCategory category;
+  GskTransformCategory category;
 } OpsMatrixMetadata;
 
 typedef struct
@@ -281,10 +281,10 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *mv,
-                                          GskMatrixCategory        mv_category);
+                                          GskTransformCategory     mv_category);
 void              ops_set_modelview      (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *mv,
-                                          GskMatrixCategory        mv_category);
+                                          GskTransformCategory     mv_category);
 void              ops_pop_modelview      (RenderOpBuilder         *builder);
 float             ops_get_scale          (const RenderOpBuilder   *builder);
 

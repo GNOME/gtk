@@ -4327,9 +4327,9 @@ gtk_widget_allocate (GtkWidget    *widget,
   graphene_matrix_init_translate (&priv->transform, &GRAPHENE_POINT3D_INIT (adjusted.x, adjusted.y, 0));
   gsk_transform_to_matrix (transform, &transform_matrix);
   graphene_matrix_multiply (&priv->transform, &transform_matrix, &priv->transform);
-  priv->transform_category = gsk_transform_categorize (transform);
+  priv->transform_category = gsk_transform_get_category (transform);
   if (adjusted.x || adjusted.y)
-    priv->transform_category = MIN (priv->transform_category, GSK_MATRIX_CATEGORY_2D_TRANSLATE);
+    priv->transform_category = MIN (priv->transform_category, GSK_TRANSFORM_CATEGORY_2D_TRANSLATE);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
