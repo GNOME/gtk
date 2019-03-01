@@ -152,6 +152,9 @@ GskTransform
 gsk_transform_ref
 gsk_transform_unref
 <SUBSECTION>
+GskTransformCategory
+gsk_transform_get_category
+<SUBSECTION>
 gsk_transform_print
 gsk_transform_to_string
 gsk_transform_to_matrix

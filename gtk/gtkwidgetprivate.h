@@ -150,7 +150,7 @@ struct _GtkWidgetPrivate
   gint allocated_size_baseline;
 
   graphene_matrix_t transform;
-  GskMatrixCategory transform_category;
+  GskTransformCategory transform_category;
   int width;
   int height;
   int baseline;

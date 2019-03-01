@@ -104,7 +104,7 @@ GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot    
 void                    gtk_snapshot_transform_matrix_with_category
                                                                 (GtkSnapshot            *snapshot,
                                                                  const graphene_matrix_t*matrix,
-                                                                 GskMatrixCategory       category);
+                                                                 GskTransformCategory    category);
 void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
                                                                  PangoFont              *font,
                                                                  PangoGlyphString       *glyphs,

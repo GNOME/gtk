@@ -25,6 +25,7 @@
 #error "Only <gsk/gsk.h> can be included directly."
 #endif
 
+#include <gsk/gskenums.h>
 #include <gsk/gsktypes.h>
 
 G_BEGIN_DECLS
@@ -66,6 +67,8 @@ gboolean                gsk_transform_to_translate              (GskTransform   
                                                                  float                          *out_dx,
                                                                  float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
 
+GDK_AVAILABLE_IN_ALL
+GskTransformCategory    gsk_transform_get_category              (GskTransform                   *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_transform_equal                     (GskTransform                   *first,
                                                                  GskTransform                   *second) G_GNUC_PURE;

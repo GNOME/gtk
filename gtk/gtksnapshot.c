@@ -1270,7 +1270,7 @@ gtk_snapshot_transform_matrix (GtkSnapshot             *snapshot,
 void
 gtk_snapshot_transform_matrix_with_category (GtkSnapshot             *snapshot,
                                              const graphene_matrix_t *matrix,
-                                             GskMatrixCategory        category)
+                                             GskTransformCategory     category)
 {
   GtkSnapshotState *state;
 
