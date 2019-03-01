@@ -171,9 +171,6 @@ gsk_transform_scale
 gsk_transform_scale_3d
 <SUBSECTION>
 gsk_transform_equal
-<SUBSECTION>
-gsk_transform_get_transform_type
-gsk_transform_get_next
 <SUBSECTION Private>
 GSK_TYPE_TRANSFORM
 gsk_transform_get_type
