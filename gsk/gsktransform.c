@@ -53,7 +53,7 @@ struct _GskTransformClass
   const char *type_name;
 
   void                  (* finalize)            (GskTransform           *transform);
-  GskMatrixCategory     (* categorize)          (GskTransform           *transform);
+  GskTransformCategory  (* categorize)          (GskTransform           *transform);
   void                  (* to_matrix)           (GskTransform           *transform,
                                                  graphene_matrix_t      *out_matrix);
   gboolean              (* apply_2d)            (GskTransform           *transform,
@@ -124,10 +124,10 @@ gsk_identity_transform_finalize (GskTransform *transform)
 {
 }
 
-static GskMatrixCategory
+static GskTransformCategory
 gsk_identity_transform_categorize (GskTransform *transform)
 {
-  return GSK_MATRIX_CATEGORY_IDENTITY;
+  return GSK_TRANSFORM_CATEGORY_IDENTITY;
 }
 
 static void
@@ -254,7 +254,7 @@ struct _GskMatrixTransform
   GskTransform parent;
 
   graphene_matrix_t matrix;
-  GskMatrixCategory category;
+  GskTransformCategory category;
 };
 
 static void
@@ -262,7 +262,7 @@ gsk_matrix_transform_finalize (GskTransform *self)
 {
 }
 
-static GskMatrixCategory
+static GskTransformCategory
 gsk_matrix_transform_categorize (GskTransform *transform)
 {
   GskMatrixTransform *self = (GskMatrixTransform *) transform;
@@ -302,25 +302,26 @@ gsk_matrix_transform_apply_affine (GskTransform *transform,
 
   switch (self->category)
   {
-    case GSK_MATRIX_CATEGORY_UNKNOWN:
-    case GSK_MATRIX_CATEGORY_ANY:
-    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
     default:
       return FALSE;
 
-    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       *out_dx += *out_scale_x * graphene_matrix_get_value (&self->matrix, 3, 0);
       *out_dy += *out_scale_y * graphene_matrix_get_value (&self->matrix, 3, 1);
       *out_scale_x *= graphene_matrix_get_value (&self->matrix, 0, 0);
       *out_scale_y *= graphene_matrix_get_value (&self->matrix, 1, 1);
       return TRUE;
 
-    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       *out_dx += *out_scale_x * graphene_matrix_get_value (&self->matrix, 3, 0);
       *out_dy += *out_scale_y * graphene_matrix_get_value (&self->matrix, 3, 1);
       return TRUE;
 
-    case GSK_MATRIX_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
       return TRUE;
   }
 }
@@ -334,19 +335,20 @@ gsk_matrix_transform_apply_translate (GskTransform *transform,
 
   switch (self->category)
   {
-    case GSK_MATRIX_CATEGORY_UNKNOWN:
-    case GSK_MATRIX_CATEGORY_ANY:
-    case GSK_MATRIX_CATEGORY_INVERTIBLE:
-    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
     default:
       return FALSE;
 
-    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       *out_dx += graphene_matrix_get_value (&self->matrix, 3, 0);
       *out_dy += graphene_matrix_get_value (&self->matrix, 3, 1);
       return TRUE;
 
-    case GSK_MATRIX_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
       return TRUE;
   }
   return TRUE;
@@ -421,7 +423,7 @@ static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
 GskTransform *
 gsk_transform_matrix_with_category (GskTransform            *next,
                                     const graphene_matrix_t *matrix,
-                                    GskMatrixCategory        category)
+                                    GskTransformCategory     category)
 {
   GskMatrixTransform *result = gsk_transform_alloc (&GSK_TRANSFORM_TRANSFORM_CLASS, next);
 
@@ -444,7 +446,7 @@ GskTransform *
 gsk_transform_matrix (GskTransform            *next,
                       const graphene_matrix_t *matrix)
 {
-  return gsk_transform_matrix_with_category (next, matrix, GSK_MATRIX_CATEGORY_UNKNOWN);
+  return gsk_transform_matrix_with_category (next, matrix, GSK_TRANSFORM_CATEGORY_UNKNOWN);
 }
 
 /*** TRANSLATE ***/
@@ -463,15 +465,15 @@ gsk_translate_transform_finalize (GskTransform *self)
 {
 }
 
-static GskMatrixCategory
+static GskTransformCategory
 gsk_translate_transform_categorize (GskTransform *transform)
 {
   GskTranslateTransform *self = (GskTranslateTransform *) transform;
 
   if (self->point.z != 0.0)
-    return GSK_MATRIX_CATEGORY_INVERTIBLE;
+    return GSK_TRANSFORM_CATEGORY_3D;
 
-  return GSK_MATRIX_CATEGORY_2D_TRANSLATE;
+  return GSK_TRANSFORM_CATEGORY_2D_TRANSLATE;
 }
 
 static void
@@ -650,10 +652,10 @@ gsk_rotate_transform_finalize (GskTransform *self)
 {
 }
 
-static GskMatrixCategory
+static GskTransformCategory
 gsk_rotate_transform_categorize (GskTransform *transform)
 {
-  return GSK_MATRIX_CATEGORY_INVERTIBLE;
+  return GSK_TRANSFORM_CATEGORY_3D;
 }
 
 static void
@@ -821,15 +823,15 @@ gsk_scale_transform_finalize (GskTransform *self)
 {
 }
 
-static GskMatrixCategory
+static GskTransformCategory
 gsk_scale_transform_categorize (GskTransform *transform)
 {
   GskScaleTransform *self = (GskScaleTransform *) transform;
 
   if (self->factor_z != 1.0)
-    return GSK_MATRIX_CATEGORY_INVERTIBLE;
+    return GSK_TRANSFORM_CATEGORY_3D;
 
-  return GSK_MATRIX_CATEGORY_2D_AFFINE;
+  return GSK_TRANSFORM_CATEGORY_2D_AFFINE;
 }
 
 static void
@@ -1315,21 +1317,21 @@ gsk_transform_equal (GskTransform *first,
   return first->transform_class->equal (first, second);
 }
 
-/*<private>
- * gsk_transform_categorize:
- * @self: (allow-none): A matrix
+/**
+ * gsk_transform_get_category:
+ * @self: (allow-none): A #GskTransform
  *
+ * Returns the category this transform belongs to.
  *
- *
- * Returns: The category this matrix belongs to
+ * Returns: The category of the transform
  **/
-GskMatrixCategory
-gsk_transform_categorize (GskTransform *self)
+GskTransformCategory
+gsk_transform_get_category (GskTransform *self)
 {
   if (self == NULL)
-    return GSK_MATRIX_CATEGORY_IDENTITY;
+    return GSK_TRANSFORM_CATEGORY_IDENTITY;
 
-  return MIN (gsk_transform_categorize (self->next),
+  return MIN (gsk_transform_get_category (self->next),
               self->transform_class->categorize (self));
 }
 

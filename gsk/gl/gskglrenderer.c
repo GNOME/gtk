@@ -793,16 +793,16 @@ render_transform_node (GskGLRenderer   *self,
                        RenderOpBuilder *builder)
 {
   GskTransform *node_transform = gsk_transform_node_get_transform (node);
-  const GskMatrixCategory category = gsk_transform_categorize (node_transform);
+  const GskTransformCategory category = gsk_transform_get_category (node_transform);
   GskRenderNode *child = gsk_transform_node_get_child (node);
 
   switch (category)
     {
-    case GSK_MATRIX_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
       gsk_gl_renderer_add_render_ops (self, child, builder);
     break;
 
-    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       {
         float dx, dy;
         
@@ -817,7 +817,7 @@ render_transform_node (GskGLRenderer   *self,
       }
     break;
 
-    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
         graphene_matrix_t mat;
 
@@ -828,9 +828,10 @@ render_transform_node (GskGLRenderer   *self,
       }
     break;
 
-    case GSK_MATRIX_CATEGORY_UNKNOWN:
-    case GSK_MATRIX_CATEGORY_ANY:
-    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
     default:
       {
         const float min_x = child->bounds.origin.x;
@@ -1423,7 +1424,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       op.op = OP_CLEAR;
       ops_add (builder, &op);
       prev_projection = ops_set_projection (builder, &item_proj);
-      ops_set_modelview (builder, &identity, GSK_MATRIX_CATEGORY_IDENTITY);
+      ops_set_modelview (builder, &identity, GSK_TRANSFORM_CATEGORY_IDENTITY);
       prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       /* Draw outline */
@@ -2640,7 +2641,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   op.op = OP_CLEAR;
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
-  ops_set_modelview (builder, &identity, GSK_MATRIX_CATEGORY_IDENTITY);
+  ops_set_modelview (builder, &identity, GSK_TRANSFORM_CATEGORY_IDENTITY);
   prev_viewport = ops_set_viewport (builder,
                                     &GRAPHENE_RECT_INIT (bounds->origin.x * scale,
                                                          bounds->origin.y * scale,
@@ -2901,7 +2902,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
   ops_set_modelview (&render_op_builder, &modelview,
-                     scale_factor == 1 ? GSK_MATRIX_CATEGORY_IDENTITY : GSK_MATRIX_CATEGORY_2D_AFFINE);
+                     scale_factor == 1 ? GSK_TRANSFORM_CATEGORY_IDENTITY : GSK_TRANSFORM_CATEGORY_2D_AFFINE);
 
   /* Initial clip is self->render_region! */
   if (self->render_region != NULL)

@@ -28,11 +28,9 @@
 
 G_BEGIN_DECLS
 
-GskMatrixCategory       gsk_transform_categorize                (GskTransform           *self);
-
 GskTransform *          gsk_transform_matrix_with_category      (GskTransform           *next,
                                                                  const graphene_matrix_t*matrix,
-                                                                 GskMatrixCategory       category);
+                                                                 GskTransformCategory    category);
 
 G_END_DECLS
 

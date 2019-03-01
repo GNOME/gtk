@@ -65,22 +65,23 @@ extract_matrix_metadata (const graphene_matrix_t *m,
 {
   switch (md->category)
     {
-    case GSK_MATRIX_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
       md->scale_x = 1;
       md->scale_y = 1;
     break;
 
-    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       md->translate_x = graphene_matrix_get_value (m, 3, 0);
       md->translate_y = graphene_matrix_get_value (m, 3, 1);
       md->scale_x = 1;
       md->scale_y = 1;
     break;
 
-    case GSK_MATRIX_CATEGORY_UNKNOWN:
-    case GSK_MATRIX_CATEGORY_ANY:
-    case GSK_MATRIX_CATEGORY_INVERTIBLE:
-    case GSK_MATRIX_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
         graphene_vec3_t col1;
         graphene_vec3_t col2;
@@ -121,21 +122,22 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
 
   switch (head->metadata.category)
     {
-    case GSK_MATRIX_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
       *dst = *src;
       break;
 
-    case GSK_MATRIX_CATEGORY_2D_TRANSLATE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       *dst = *src;
       dst->origin.x += head->metadata.translate_x;
       dst->origin.y += head->metadata.translate_y;
       break;
 
     /* TODO: Handle scale */
-    case GSK_MATRIX_CATEGORY_2D_AFFINE:
-    case GSK_MATRIX_CATEGORY_UNKNOWN:
-    case GSK_MATRIX_CATEGORY_ANY:
-    case GSK_MATRIX_CATEGORY_INVERTIBLE:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
     default:
       graphene_matrix_transform_bounds (builder->current_modelview,
                                         src,
@@ -333,7 +335,7 @@ ops_set_modelview_internal (RenderOpBuilder         *builder,
 void
 ops_set_modelview (RenderOpBuilder         *builder,
                    const graphene_matrix_t *mv,
-                   GskMatrixCategory        mv_category)
+                   GskTransformCategory     mv_category)
 {
   MatrixStackEntry *entry;
 
@@ -363,7 +365,7 @@ ops_set_modelview (RenderOpBuilder         *builder,
 void
 ops_push_modelview (RenderOpBuilder         *builder,
                     const graphene_matrix_t *mv,
-                    GskMatrixCategory        mv_category)
+                    GskTransformCategory     mv_category)
 {
   float scale = ops_get_scale (builder);
   MatrixStackEntry *entry;

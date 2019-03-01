@@ -2441,7 +2441,7 @@ gsk_transform_node_serialize (GskRenderNode *node)
   graphene_matrix_to_float (&matrix, mat);
 
   return g_variant_new (GSK_TRANSFORM_NODE_VARIANT_TYPE,
-                        gsk_transform_categorize (self->transform),
+                        gsk_transform_get_category (self->transform),
                         (double) mat[0], (double) mat[1], (double) mat[2], (double) mat[3],
                         (double) mat[4], (double) mat[5], (double) mat[6], (double) mat[7],
                         (double) mat[8], (double) mat[9], (double) mat[10], (double) mat[11],
