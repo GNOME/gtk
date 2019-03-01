@@ -256,7 +256,7 @@ mask_entry_set_background (MaskEntry *entry)
 {
   if (entry->mask)
     {
-      if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
+      if (!g_regex_match_simple (entry->mask, gtk_editable_get_text (GTK_EDITABLE (entry)), 0, 0))
         {
           PangoAttrList *attrs;
 

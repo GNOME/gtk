@@ -279,7 +279,7 @@ match_selected_cb (GtkEntryCompletion *completion,
 
   entry = gtk_entry_completion_get_entry (completion);
   gtk_tree_model_get (GTK_TREE_MODEL (model), iter, 1, &str, -1);
-  gtk_entry_set_text (GTK_ENTRY (entry), str);
+  gtk_editable_set_text (GTK_EDITABLE (entry), str);
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_free (str);
 

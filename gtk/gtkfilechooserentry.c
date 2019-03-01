@@ -806,7 +806,7 @@ insert_text_callback (GtkFileChooserEntry *chooser_entry,
       (new_text_length > 0 &&
        *position <= 1 &&
        gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)) >= 2 &&
-       gtk_entry_get_text (GTK_ENTRY (chooser_entry))[1] == ':'))
+       gtk_editable_get_text (GTK_EDITABLE (chooser_entry))[1] == ':'))
     {
       gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
       g_signal_stop_emission_by_name (chooser_entry, "insert_text");
@@ -825,7 +825,7 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
   /* If deleting a drive letter, delete the colon, too */
   if (start_pos == 0 && end_pos == 1 &&
       gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)) >= 2 &&
-      gtk_entry_get_text (GTK_ENTRY (chooser_entry))[1] == ':')
+      gtk_editable_get_text (GTK_EDITABLE (chooser_entry))[1] == ':')
     {
       g_signal_handlers_block_by_func (chooser_entry,
 				       G_CALLBACK (delete_text_callback),
@@ -913,7 +913,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry), NULL);
 
   return gtk_file_chooser_get_directory_for_text (chooser_entry,
-                                                  gtk_entry_get_text (GTK_ENTRY (chooser_entry)));
+                                                  gtk_editable_get_text (GTK_EDITABLE (chooser_entry)));
 }
 
 /**
@@ -935,7 +935,7 @@ _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry), NULL);
 
-  text = gtk_entry_get_text (GTK_ENTRY (chooser_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (chooser_entry));
   last_slash = strrchr (text, G_DIR_SEPARATOR);
   if (last_slash)
     return last_slash + 1;
@@ -1044,7 +1044,7 @@ _gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
 
   if (chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      str = gtk_entry_get_text (GTK_ENTRY (chooser_entry));
+      str = gtk_editable_get_text (GTK_EDITABLE (chooser_entry));
       ext = g_strrstr (str, ".");
 
       if (ext)

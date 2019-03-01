@@ -2424,7 +2424,7 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
           g_signal_emit (combo_box, combo_box_signals[FORMAT_ENTRY_TEXT], 0,
                          path_str, &text);
 
-          gtk_entry_set_text (entry, text);
+          gtk_editable_set_text (GTK_EDITABLE (entry), text);
 
           g_signal_handlers_unblock_by_func (entry,
                                              gtk_combo_box_entry_contents_changed,

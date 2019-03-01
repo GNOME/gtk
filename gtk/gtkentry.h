@@ -185,27 +185,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_entry_set_width_chars            (GtkEntry      *entry,
-                                                 gint           n_chars);
-GDK_AVAILABLE_IN_ALL
-gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_entry_set_max_width_chars        (GtkEntry      *entry,
-                                                 gint           n_chars);
-GDK_AVAILABLE_IN_ALL
-gint       gtk_entry_get_max_width_chars        (GtkEntry      *entry);
-
-/* Somewhat more convenient than the GtkEditable generic functions
- */
-GDK_AVAILABLE_IN_ALL
-void       gtk_entry_set_text                   (GtkEntry      *entry,
-                                                 const gchar   *text);
-/* returns a reference to the text */
-GDK_AVAILABLE_IN_ALL
-const gchar* gtk_entry_get_text        (GtkEntry      *entry);
-
-GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_alignment              (GtkEntry      *entry,
                                                  gfloat         xalign);
 GDK_AVAILABLE_IN_ALL

@@ -5,7 +5,7 @@ static void
 clear_pressed (GtkEntry *entry, gint icon, gpointer data)
 {
    if (icon == GTK_ENTRY_ICON_SECONDARY)
-     gtk_entry_set_text (entry, "");
+     gtk_editable_set_text (GTK_EDITABLE (entry), "");
 }
 
 static void
@@ -180,7 +180,7 @@ main (int argc, char **argv)
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
-  gtk_entry_set_text (GTK_ENTRY (entry), "‏Right-to-left");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "‏Right-to-left");
   gtk_widget_set_direction (entry, GTK_TEXT_DIR_RTL);
   
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),

@@ -105,7 +105,7 @@ entry_set_rgba (GtkColorEditor *editor,
                           scale_round (color->red, 255),
                           scale_round (color->green, 255),
                           scale_round (color->blue, 255));
-  gtk_entry_set_text (GTK_ENTRY (editor->priv->entry), text);
+  gtk_editable_set_text (GTK_EDITABLE (editor->priv->entry), text);
   editor->priv->text_changed = FALSE;
   g_free (text);
 }

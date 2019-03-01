@@ -1467,7 +1467,7 @@ update_print_at_option (GtkPrintUnixDialog *dialog)
     {
       const gchar *text;
 
-      text = gtk_entry_get_text (GTK_ENTRY (priv->print_at_entry));
+      text = gtk_editable_get_text (GTK_EDITABLE (priv->print_at_entry));
       gtk_printer_option_set (option, text);
     }
 }
@@ -1488,7 +1488,7 @@ setup_print_at (GtkPrintUnixDialog *dialog)
       gtk_widget_set_sensitive (priv->print_at_radio, FALSE);
       gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
       gtk_widget_set_sensitive (priv->print_hold_radio, FALSE);
-      gtk_entry_set_text (GTK_ENTRY (priv->print_at_entry), "");
+      gtk_editable_set_text (GTK_EDITABLE (priv->print_at_entry), "");
       return FALSE;
     }
 
@@ -1515,7 +1515,7 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
   if (option != NULL)
-    gtk_entry_set_text (GTK_ENTRY (priv->print_at_entry), option->value);
+    gtk_editable_set_text (GTK_EDITABLE (priv->print_at_entry), option->value);
 
   priv->updating_print_at = FALSE;
 
@@ -1653,7 +1653,7 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   const gchar *copies;
   GtkWidget *button;
 
-  copies = gtk_spin_button_get_text (GTK_SPIN_BUTTON (priv->copies_spin));
+  copies = gtk_editable_get_text (GTK_EDITABLE (priv->copies_spin));
   can_collate = (*copies != '\0' && atoi (copies) > 1);
 
   caps = priv->manual_capabilities | priv->printer_capabilities;
@@ -2358,7 +2358,7 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
   GtkPageRange *ranges;
   gint start, end;
 
-  text = gtk_entry_get_text (GTK_ENTRY (priv->page_range_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->page_range_entry));
 
   if (*text == 0)
     {
@@ -2449,7 +2449,7 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
         g_string_append (s, ",");
     }
 
-  gtk_entry_set_text (GTK_ENTRY (priv->page_range_entry), s->str);
+  gtk_editable_set_text (GTK_EDITABLE (priv->page_range_entry), s->str);
 
   g_string_free (s, TRUE);
 }
@@ -2529,7 +2529,7 @@ dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 
   adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->copies_spin));
 
-  text = gtk_spin_button_get_text (GTK_SPIN_BUTTON (priv->copies_spin));
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->copies_spin));
   n_copies = g_ascii_strtoull (text, &endptr, 0);
 
   if (gtk_widget_is_sensitive (dialog->priv->copies_spin))

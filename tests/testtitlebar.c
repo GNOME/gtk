@@ -7,7 +7,7 @@ on_text_changed (GtkEntry       *entry,
 {
   const gchar *layout;
 
-  layout = gtk_entry_get_text (entry);
+  layout = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   gtk_header_bar_set_decoration_layout (bar, layout);
 }
@@ -137,7 +137,7 @@ activate (GApplication *gapp)
   entry = gtk_entry_new ();
 
   g_object_get (gtk_widget_get_settings (window), "gtk-decoration-layout", &layout, NULL);
-  gtk_entry_set_text (GTK_ENTRY (entry), layout);
+  gtk_editable_set_text (GTK_EDITABLE (entry), layout);
   g_free (layout);
 
   g_signal_connect (entry, "notify::text",

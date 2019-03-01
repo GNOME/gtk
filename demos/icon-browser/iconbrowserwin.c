@@ -68,7 +68,7 @@ search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
 {
   const gchar *text;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (text[0] == '\0')
     return;
@@ -322,7 +322,7 @@ icon_visible_func (GtkTreeModel *model,
   gboolean visible;
 
   search = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (win->search));
-  search_text = gtk_entry_get_text (GTK_ENTRY (win->searchentry));
+  search_text = gtk_editable_get_text (GTK_EDITABLE (win->searchentry));
 
   if (win->symbolic)
     column = ICON_STORE_SYMBOLIC_NAME_COLUMN;

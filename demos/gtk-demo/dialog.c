@@ -69,7 +69,7 @@ interactive_dialog_clicked (GtkButton *button,
   label = gtk_label_new_with_mnemonic ("_Entry 1");
   gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (local_entry1), gtk_entry_get_text (GTK_ENTRY (entry1)));
+  gtk_editable_set_text (GTK_EDITABLE (local_entry1), gtk_editable_get_text (GTK_EDITABLE (entry1)));
   gtk_grid_attach (GTK_GRID (table), local_entry1, 1, 0, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry1);
 
@@ -77,7 +77,7 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
 
   local_entry2 = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (local_entry2), gtk_entry_get_text (GTK_ENTRY (entry2)));
+  gtk_editable_set_text (GTK_EDITABLE (local_entry2), gtk_editable_get_text (GTK_EDITABLE (entry2)));
   gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
 
@@ -85,8 +85,8 @@ interactive_dialog_clicked (GtkButton *button,
 
   if (response == GTK_RESPONSE_OK)
     {
-      gtk_entry_set_text (GTK_ENTRY (entry1), gtk_entry_get_text (GTK_ENTRY (local_entry1)));
-      gtk_entry_set_text (GTK_ENTRY (entry2), gtk_entry_get_text (GTK_ENTRY (local_entry2)));
+      gtk_editable_set_text (GTK_EDITABLE (entry1), gtk_editable_get_text (GTK_EDITABLE (local_entry1)));
+      gtk_editable_set_text (GTK_EDITABLE (entry2), gtk_editable_get_text (GTK_EDITABLE (local_entry2)));
     }
 
   gtk_widget_destroy (dialog);

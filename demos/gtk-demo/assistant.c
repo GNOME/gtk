@@ -80,7 +80,7 @@ on_entry_changed (GtkWidget *widget, gpointer data)
 
   page_number = gtk_assistant_get_current_page (assistant);
   current_page = gtk_assistant_get_nth_page (assistant, page_number);
-  text = gtk_entry_get_text (GTK_ENTRY (widget));
+  text = gtk_editable_get_text (GTK_EDITABLE (widget));
 
   if (text && *text)
     gtk_assistant_set_page_complete (assistant, current_page, TRUE);

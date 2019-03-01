@@ -18,7 +18,7 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
   guint cookie;
 
   active = gtk_toggle_button_get_active (button);
-  reason = gtk_entry_get_text (GTK_ENTRY (inhibit_entry));
+  reason = gtk_editable_get_text (GTK_EDITABLE (inhibit_entry));
 
   flags = 0;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (inhibit_logout)))

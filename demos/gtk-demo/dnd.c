@@ -199,7 +199,7 @@ edit_label_done (GtkWidget *entry, gpointer data)
   gtk_container_child_get (GTK_CONTAINER (fixed), entry, "x", &x, "y", &y, NULL);
 
   label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
-  gtk_label_set_text (GTK_LABEL (label), gtk_entry_get_text (GTK_ENTRY (entry)));
+  gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
 
   gtk_widget_destroy (entry);
 }
@@ -218,7 +218,7 @@ edit_cb (GtkWidget *child)
 
       g_object_set_data (G_OBJECT (entry), "label", child);
 
-      gtk_entry_set_text (GTK_ENTRY (entry), gtk_label_get_text (GTK_LABEL (child)));
+      gtk_editable_set_text (GTK_EDITABLE (entry), gtk_label_get_text (GTK_LABEL (child)));
       g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
       gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
       gtk_widget_grab_focus (entry);

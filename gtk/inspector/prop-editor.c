@@ -390,7 +390,7 @@ string_modified (GtkEntry *entry, ObjectProperty *p)
   GValue val = G_VALUE_INIT;
   
   g_value_init (&val, G_TYPE_STRING);
-  g_value_set_static_string (&val, gtk_entry_get_text (entry));
+  g_value_set_static_string (&val, gtk_editable_get_text (GTK_EDITABLE (entry)));
   set_property_value (p->obj, p->spec, &val);
   g_value_unset (&val);
 }
@@ -400,7 +400,7 @@ intern_string_modified (GtkEntry *entry, ObjectProperty *p)
 {
   const gchar *s;
 
-  s = g_intern_string (gtk_entry_get_text (entry));
+  s = g_intern_string (gtk_editable_get_text (GTK_EDITABLE (entry)));
   if (g_str_equal (p->spec->name, "id"))
     gtk_css_node_set_id (GTK_CSS_NODE (p->obj), s);
   else if (g_str_equal (p->spec->name, "name"))
@@ -421,11 +421,11 @@ string_changed (GObject *object, GParamSpec *pspec, gpointer data)
   str = g_value_get_string (&val);
   if (str == NULL)
     str = "";
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
   if (g_strcmp0 (str, text) != 0)
     {
       block_controller (G_OBJECT (entry));
-      gtk_entry_set_text (entry, str);
+      gtk_editable_set_text (GTK_EDITABLE (entry), str);
       unblock_controller (G_OBJECT (entry));
     }
 
@@ -620,7 +620,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
 static gunichar
 unichar_get_value (GtkEntry *entry)
 {
-  const gchar *text = gtk_entry_get_text (entry);
+  const gchar *text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (text[0])
     return g_utf8_get_char (text);
@@ -663,7 +663,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
       buf[len] = '\0';
 
       block_controller (G_OBJECT (entry));
-      gtk_entry_set_text (entry, buf);
+      gtk_editable_set_text (GTK_EDITABLE (entry), buf);
       unblock_controller (G_OBJECT (entry));
     }
 }

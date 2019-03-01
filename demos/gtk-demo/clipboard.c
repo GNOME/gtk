@@ -28,7 +28,7 @@ copy_button_clicked (GtkWidget *button,
   clipboard = gtk_widget_get_clipboard (entry);
 
   /* Set clipboard text */
-  gdk_clipboard_set_text (clipboard, gtk_entry_get_text (GTK_ENTRY (entry)));
+  gdk_clipboard_set_text (clipboard, gtk_editable_get_text (GTK_EDITABLE (entry)));
 }
 
 void
@@ -50,7 +50,7 @@ paste_received (GObject      *source_object,
   if (text)
     {
       /* Set the entry text */
-      gtk_entry_set_text (GTK_ENTRY (entry), text);
+      gtk_editable_set_text (GTK_EDITABLE (entry), text);
       g_free (text);
     }
   else

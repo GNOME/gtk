@@ -333,19 +333,19 @@ pw_dialog_got_response (GtkDialog         *dialog,
 
       if (priv->username_entry)
         {
-          text = gtk_entry_get_text (GTK_ENTRY (priv->username_entry));
+          text = gtk_editable_get_text (GTK_EDITABLE (priv->username_entry));
           g_mount_operation_set_username (op, text);
         }
 
       if (priv->domain_entry)
         {
-          text = gtk_entry_get_text (GTK_ENTRY (priv->domain_entry));
+          text = gtk_editable_get_text (GTK_EDITABLE (priv->domain_entry));
           g_mount_operation_set_domain (op, text);
         }
 
       if (priv->password_entry)
         {
-          text = gtk_entry_get_text (GTK_ENTRY (priv->password_entry));
+          text = gtk_editable_get_text (GTK_EDITABLE (priv->password_entry));
           g_mount_operation_set_password (op, text);
         }
 
@@ -371,7 +371,7 @@ entry_has_input (GtkWidget *entry_widget)
   if (entry_widget == NULL)
     return TRUE;
 
-  text = gtk_entry_get_text (GTK_ENTRY (entry_widget));
+  text = gtk_editable_get_text (GTK_EDITABLE (entry_widget));
 
   return text != NULL && text[0] != '\0';
 }
@@ -478,7 +478,7 @@ table_add_entry (GtkMountOperation *operation,
   gtk_widget_set_hexpand (entry, TRUE);
 
   if (value)
-    gtk_entry_set_text (GTK_ENTRY (entry), value);
+    gtk_editable_set_text (GTK_EDITABLE (entry), value);
 
   gtk_grid_attach (GTK_GRID (operation->priv->grid), label, 0, row, 1, 1);
   gtk_grid_attach (GTK_GRID (operation->priv->grid), entry, 1, row, 1, 1);

@@ -591,7 +591,7 @@ store_entry (GtkEntry  *entry,
       g_free (*data);
     }
 
-  *data = g_strdup (gtk_entry_get_text (entry));
+  *data = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
 }
 
 static void
@@ -710,7 +710,7 @@ request_password (GtkPrintBackend  *backend,
           focus = entry;
 
           if (ai_default[i] != NULL)
-            gtk_entry_set_text (GTK_ENTRY (entry), ai_default[i]);
+            gtk_editable_set_text (GTK_EDITABLE (entry), ai_default[i]);
 
           gtk_entry_set_visibility (GTK_ENTRY (entry), ai_visible[i]);
           gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);

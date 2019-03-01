@@ -364,7 +364,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
     {
       entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
-      new_text = g_strdup (gtk_entry_get_text (entry));
+      new_text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
     }
   else 
     {
@@ -466,8 +466,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
       g_object_get (cell_text, "text", &text, NULL);
       if (text)
-	gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo))),
-			    text);
+	gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo))), text);
       g_free (text);
     }
   else

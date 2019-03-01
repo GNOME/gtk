@@ -393,7 +393,7 @@ combo_box_get (GtkWidget *combo, gboolean *custom)
     {
       if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
         {
-          value = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)))));
+          value = g_strdup (gtk_editable_get_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo)))));
           *custom = TRUE;
         }
 
@@ -673,7 +673,7 @@ combo_changed_cb (GtkWidget              *combo,
 	  
 	  entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
 
-          gtk_entry_set_text (entry, filtered_val);
+          gtk_editable_set_text (GTK_EDITABLE (entry), filtered_val);
 	}
       value = filtered_val;
     }
@@ -693,7 +693,7 @@ entry_changed_cb (GtkWidget              *entry,
   const gchar *value;
   
   g_signal_handler_block (priv->source, priv->source_changed_handler);
-  value = gtk_entry_get_text (GTK_ENTRY (entry));
+  value = gtk_editable_get_text (GTK_EDITABLE (entry));
   if (value)
     gtk_printer_option_set (priv->source, value);
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
@@ -970,7 +970,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
       alternative_set (priv->box, source->value);
       break;
     case GTK_PRINTER_OPTION_TYPE_STRING:
-      gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
+      gtk_editable_set_text (GTK_EDITABLE (priv->entry), source->value);
       break;
     case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:
     case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
@@ -984,7 +984,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
         if (gtk_printer_option_has_choice (source, source->value))
           combo_box_set (priv->combo, source->value);
         else
-          gtk_entry_set_text (entry, source->value);
+          gtk_editable_set_text (GTK_EDITABLE (entry), source->value);
 
         break;
       }

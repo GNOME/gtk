@@ -1184,7 +1184,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
 
   g_free (completion->priv->case_normalized_key);
 
-  tmp = g_utf8_normalize (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)),
+  tmp = g_utf8_normalize (gtk_editable_get_text (GTK_EDITABLE (completion->priv->entry)),
                           -1, G_NORMALIZE_ALL);
   completion->priv->case_normalized_key = g_utf8_casefold (tmp, -1);
   g_free (tmp);
@@ -1565,7 +1565,7 @@ gtk_entry_completion_match_selected (GtkEntryCompletion *completion,
   gchar *str = NULL;
 
   gtk_tree_model_get (model, iter, completion->priv->text_column, &str, -1);
-  gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), str ? str : "");
+  gtk_editable_set_text (GTK_EDITABLE (completion->priv->entry), str ? str : "");
 
   /* move cursor to the end */
   gtk_editable_set_position (GTK_EDITABLE (completion->priv->entry), -1);
@@ -1673,7 +1673,7 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
 
       prefix_len = g_utf8_strlen (prefix, -1);
 
-      key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
+      key = gtk_editable_get_text (GTK_EDITABLE (completion->priv->entry));
       key_len = g_utf8_strlen (key, -1);
 
       if (prefix_len > key_len)
@@ -2005,7 +2005,7 @@ gtk_entry_completion_timeout (gpointer data)
   completion->priv->completion_timeout = 0;
 
   if (completion->priv->filter_model &&
-      g_utf8_strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)), -1)
+      g_utf8_strlen (gtk_editable_get_text (GTK_EDITABLE (completion->priv->entry)), -1)
       >= completion->priv->minimum_key_length)
     {
       gint matches;
@@ -2160,8 +2160,8 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
           if (completion->priv->inline_selection &&
               completion->priv->completion_prefix)
             {
-              gtk_entry_set_text (GTK_ENTRY (completion->priv->entry),
-                                  completion->priv->completion_prefix);
+              gtk_editable_set_text (GTK_EDITABLE (completion->priv->entry),
+                                     completion->priv->completion_prefix);
               gtk_editable_set_position (GTK_EDITABLE (widget), -1);
             }
         }
@@ -2189,7 +2189,7 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
               model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
 
               if (completion->priv->completion_prefix == NULL)
-                completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
+                completion->priv->completion_prefix = g_strdup (gtk_editable_get_text (GTK_EDITABLE (completion->priv->entry)));
 
               g_signal_emit_by_name (completion, "cursor-on-match", model,
                                      &child_iter, &entry_set);
@@ -2206,8 +2206,8 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
           if (completion->priv->inline_selection &&
               completion->priv->completion_prefix)
             {
-              gtk_entry_set_text (GTK_ENTRY (completion->priv->entry),
-                                  completion->priv->completion_prefix);
+              gtk_editable_set_text (GTK_EDITABLE (completion->priv->entry),
+                                     completion->priv->completion_prefix);
               gtk_editable_set_position (GTK_EDITABLE (widget), -1);
             }
         }
@@ -2238,10 +2238,10 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
           if (keyval == GDK_KEY_Escape)
             {
               if (completion->priv->completion_prefix)
-                gtk_entry_set_text (GTK_ENTRY (completion->priv->entry),
-                                    completion->priv->completion_prefix);
+                gtk_editable_set_text (GTK_EDITABLE (completion->priv->entry),
+                                       completion->priv->completion_prefix);
               else
-                gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), "");
+                gtk_editable_set_text (GTK_EDITABLE (completion->priv->entry), "");
             }
 
           /* Move the cursor to the end for Right/Esc */
@@ -2312,7 +2312,7 @@ keypress_completion_out:
                                       completion->priv->text_column, &str,
                                       -1);
 
-                  gtk_entry_set_text (GTK_ENTRY (widget), str);
+                  gtk_editable_set_text (GTK_EDITABLE (widget), str);
 
                   /* move the cursor to the end */
                   gtk_editable_set_position (GTK_EDITABLE (widget), -1);

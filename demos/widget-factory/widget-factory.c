@@ -1406,7 +1406,7 @@ open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button
 {
   const gchar *text;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
   gtk_widget_set_sensitive (button, strlen (text) > 0);
 }
 

@@ -549,7 +549,7 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
   gpointer value;
   gboolean has_result;
 
-  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (search_entry));
 
   if (!text || !*text)
     {

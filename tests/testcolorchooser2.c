@@ -9,7 +9,7 @@ text_activated (GtkEntry *entry, gpointer data)
   GdkRGBA rgba;
   const char *text;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   g_signal_handlers_block_by_func (entry, rgba_changed, entry);
   if (gdk_rgba_parse (&rgba, text))
@@ -28,7 +28,7 @@ rgba_changed (GtkColorChooser *chooser, GParamSpec *pspec, gpointer data)
   s = gdk_rgba_to_string (&color);
 
   g_signal_handlers_block_by_func (entry, text_activated, chooser);
-  gtk_entry_set_text (GTK_ENTRY (entry), s);
+  gtk_editable_set_text (GTK_EDITABLE (entry), s);
   g_signal_handlers_unblock_by_func (entry, text_activated, chooser);
 
   g_free (s);

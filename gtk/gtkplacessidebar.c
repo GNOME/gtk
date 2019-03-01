@@ -2575,7 +2575,7 @@ rename_entry_changed (GtkEntry         *entry,
   GList *rows;
   GList *l;
 
-  new_name = gtk_entry_get_text (GTK_ENTRY (sidebar->rename_entry));
+  new_name = gtk_editable_get_text (GTK_EDITABLE (sidebar->rename_entry));
 
   if (strcmp (new_name, "") == 0)
     {
@@ -2615,7 +2615,7 @@ do_rename (GtkButton        *button,
   gchar *new_text;
   GFile *file;
 
-  new_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (sidebar->rename_entry)));
+  new_text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (sidebar->rename_entry)));
 
   file = g_file_new_for_uri (sidebar->rename_uri);
   if (!_gtk_bookmarks_manager_has_bookmark (sidebar->bookmarks_manager, file))
@@ -2764,7 +2764,7 @@ show_rename_popover (GtkSidebarRow *row)
     g_free (sidebar->rename_uri);
   sidebar->rename_uri = g_strdup (uri);
 
-  gtk_entry_set_text (GTK_ENTRY (sidebar->rename_entry), name);
+  gtk_editable_set_text (GTK_EDITABLE (sidebar->rename_entry), name);
   gtk_popover_set_relative_to (GTK_POPOVER (sidebar->rename_popover), GTK_WIDGET (row));
   setup_popover_shadowing (sidebar->rename_popover);
 

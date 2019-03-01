@@ -1884,25 +1884,6 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 }
 
 /**
- * gtk_entry_set_text:
- * @entry: a #GtkEntry
- * @text: the new text
- *
- * Sets the text in the widget to the given
- * value, replacing the current contents.
- *
- * See gtk_entry_buffer_set_text().
- */
-void
-gtk_entry_set_text (GtkEntry    *entry,
-		    const gchar *text)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  gtk_editable_set_text (GTK_EDITABLE (priv->text), text);
-}
-
-/**
  * gtk_entry_set_visibility:
  * @entry: a #GtkEntry
  * @visible: %TRUE if the contents of the entry are displayed
@@ -2052,31 +2033,6 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_get_text:
- * @entry: a #GtkEntry
- *
- * Retrieves the contents of the entry widget.
- * See also gtk_editable_get_chars().
- *
- * This is equivalent to getting @entry's #GtkEntryBuffer and calling
- * gtk_entry_buffer_get_text() on it.
- *
- * Returns: a pointer to the contents of the widget as a
- *      string. This string points to internally allocated
- *      storage in the widget and must not be freed, modified or
- *      stored.
- **/
-const gchar*
-gtk_entry_get_text (GtkEntry *entry)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-
-  return gtk_editable_get_text (GTK_EDITABLE (priv->text));
-}
-
-/**
  * gtk_entry_set_max_length:
  * @entry: a #GtkEntry
  * @max: the maximum length of the entry, or 0 for no maximum.
@@ -2190,83 +2146,6 @@ gtk_entry_get_activates_default (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
   return gtk_text_get_activates_default (GTK_TEXT (priv->text));
-}
-
-/**
- * gtk_entry_set_width_chars:
- * @entry: a #GtkEntry
- * @n_chars: width in chars
- *
- * Changes the size request of the entry to be about the right size
- * for @n_chars characters. Note that it changes the size
- * request, the size can still be affected by
- * how you pack the widget into containers. If @n_chars is -1, the
- * size reverts to the default entry size.
- **/
-void
-gtk_entry_set_width_chars (GtkEntry *entry,
-                           gint      n_chars)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_editable_set_width_chars (GTK_EDITABLE (priv->text), n_chars);
-}
-
-/**
- * gtk_entry_get_width_chars:
- * @entry: a #GtkEntry
- * 
- * Gets the value set by gtk_entry_set_width_chars().
- * 
- * Returns: number of chars to request space for, or negative if unset
- **/
-gint
-gtk_entry_get_width_chars (GtkEntry *entry)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
-
-  return gtk_editable_get_width_chars (GTK_EDITABLE (priv->text));
-}
-
-/**
- * gtk_entry_set_max_width_chars:
- * @entry: a #GtkEntry
- * @n_chars: the new desired maximum width, in characters
- *
- * Sets the desired maximum width in characters of @entry.
- */
-void
-gtk_entry_set_max_width_chars (GtkEntry *entry,
-                               gint      n_chars)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_editable_set_max_width_chars (GTK_EDITABLE (priv->text), n_chars);
-}
-
-/**
- * gtk_entry_get_max_width_chars:
- * @entry: a #GtkEntry
- *
- * Retrieves the desired maximum width of @entry, in characters.
- * See gtk_entry_set_max_width_chars().
- *
- * Returns: the maximum width of the entry, in characters
- */
-gint
-gtk_entry_get_max_width_chars (GtkEntry *entry)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
-
-  return gtk_editable_get_max_width_chars (GTK_EDITABLE (priv->text));
 }
 
 /**

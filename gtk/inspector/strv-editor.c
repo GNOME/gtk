@@ -66,7 +66,7 @@ add_string (GtkInspectorStrvEditor *editor,
   gtk_widget_show (box);
 
   entry = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (entry), str);
+  gtk_editable_set_text (GTK_EDITABLE (entry), str);
   gtk_widget_show (entry);
   gtk_container_add (GTK_CONTAINER (box), entry);
   g_object_set_data (G_OBJECT (box), "entry", entry);
@@ -163,7 +163,7 @@ gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor *editor)
       GtkEntry *entry;
 
       entry = GTK_ENTRY (g_object_get_data (G_OBJECT (l->data), "entry"));
-      g_ptr_array_add (p, g_strdup (gtk_entry_get_text (entry)));
+      g_ptr_array_add (p, g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
     }
   g_list_free (children);
 
