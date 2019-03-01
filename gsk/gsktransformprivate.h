@@ -30,12 +30,6 @@ G_BEGIN_DECLS
 
 GskMatrixCategory       gsk_transform_categorize                (GskTransform           *self);
 
-gboolean                gsk_transform_to_affine                 (GskTransform           *self,
-                                                                 float                  *scale_x,
-                                                                 float                  *scale_y,
-                                                                 float                  *dx,
-                                                                 float                  *dy) G_GNUC_WARN_UNUSED_RESULT;
-
 GskTransform *          gsk_transform_matrix_with_category      (GskTransform           *next,
                                                                  const graphene_matrix_t*matrix,
                                                                  GskMatrixCategory       category);
