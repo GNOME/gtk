@@ -450,13 +450,17 @@ gtk_widget_focus_sort (GtkWidget        *widget,
 
 gboolean
 gtk_widget_focus_move (GtkWidget        *widget,
-                       GtkDirectionType  direction,
-                       GPtrArray        *focus_order)
+                       GtkDirectionType  direction)
 {
+  GPtrArray *focus_order;
   GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
   int i;
+  gboolean ret = FALSE;
 
-  for (i = 0; i < focus_order->len; i ++)
+  focus_order = g_ptr_array_new ();
+  gtk_widget_focus_sort (widget, direction, focus_order);
+
+  for (i = 0; i < focus_order->len && !ret; i++)
     {
       GtkWidget *child = g_ptr_array_index (focus_order, i);
 
@@ -465,18 +469,17 @@ gtk_widget_focus_move (GtkWidget        *widget,
           if (focus_child == child)
             {
               focus_child = NULL;
-
-                if (gtk_widget_child_focus (child, direction))
-                  return TRUE;
+              ret = gtk_widget_child_focus (child, direction);
             }
         }
       else if (_gtk_widget_is_drawable (child) &&
                gtk_widget_is_ancestor (child, widget))
         {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
+          ret = gtk_widget_child_focus (child, direction);
         }
     }
 
-  return FALSE;
+  g_ptr_array_unref (focus_order);
+
+  return ret;
 }
