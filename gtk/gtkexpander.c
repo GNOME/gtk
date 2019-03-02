@@ -177,8 +177,6 @@ static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              int               width,
                                              int               height,
                                              int               baseline);
-static gboolean gtk_expander_focus          (GtkWidget        *widget,
-                                             GtkDirectionType  direction);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
                                              GdkDrop          *drop,
                                              gint              x,
@@ -253,7 +251,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   widget_class->destroy              = gtk_expander_destroy;
   widget_class->size_allocate        = gtk_expander_size_allocate;
-  widget_class->focus                = gtk_expander_focus;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
   widget_class->measure              = gtk_expander_measure;
@@ -562,142 +559,6 @@ gtk_expander_drag_leave (GtkWidget *widget,
     }
 }
 
-typedef enum
-{
-  FOCUS_NONE,
-  FOCUS_WIDGET,
-  FOCUS_LABEL,
-  FOCUS_CHILD
-} FocusSite;
-
-static gboolean
-focus_current_site (GtkExpander      *expander,
-                    GtkDirectionType  direction)
-{
-  GtkWidget *current_focus;
-
-  current_focus = gtk_widget_get_focus_child (GTK_WIDGET (expander));
-
-  if (!current_focus)
-    return FALSE;
-
-  return gtk_widget_child_focus (current_focus, direction);
-}
-
-static gboolean
-focus_in_site (GtkExpander      *expander,
-               FocusSite         site,
-               GtkDirectionType  direction)
-{
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
-
-  switch (site)
-    {
-    case FOCUS_WIDGET:
-      gtk_widget_grab_focus (GTK_WIDGET (expander));
-      return TRUE;
-    case FOCUS_LABEL:
-      if (priv->label_widget)
-        return gtk_widget_child_focus (priv->label_widget, direction);
-      else
-        return FALSE;
-    case FOCUS_CHILD:
-      {
-        GtkWidget *child = priv->child;
-
-        if (child && gtk_widget_get_child_visible (child))
-          return gtk_widget_child_focus (child, direction);
-        else
-          return FALSE;
-      }
-    case FOCUS_NONE:
-    default:
-      break;
-    }
-
-  g_assert_not_reached ();
-  return FALSE;
-}
-
-static FocusSite
-get_next_site (GtkExpander      *expander,
-               FocusSite         site,
-               GtkDirectionType  direction)
-{
-  gboolean ltr;
-
-  ltr = gtk_widget_get_direction (GTK_WIDGET (expander)) != GTK_TEXT_DIR_RTL;
-
-  switch (site)
-    {
-    case FOCUS_NONE:
-      switch (direction)
-        {
-        case GTK_DIR_TAB_BACKWARD:
-        case GTK_DIR_LEFT:
-        case GTK_DIR_UP:
-          return FOCUS_CHILD;
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_DOWN:
-        case GTK_DIR_RIGHT:
-        default:
-          return FOCUS_WIDGET;
-        }
-      break;
-    case FOCUS_WIDGET:
-      switch (direction)
-        {
-        case GTK_DIR_TAB_BACKWARD:
-        case GTK_DIR_UP:
-          return FOCUS_NONE;
-        case GTK_DIR_LEFT:
-          return ltr ? FOCUS_NONE : FOCUS_LABEL;
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_DOWN:
-        default:
-          return FOCUS_LABEL;
-        case GTK_DIR_RIGHT:
-          return ltr ? FOCUS_LABEL : FOCUS_NONE;
-        }
-      break;
-    case FOCUS_LABEL:
-      switch (direction)
-        {
-        case GTK_DIR_TAB_BACKWARD:
-        case GTK_DIR_UP:
-          return FOCUS_WIDGET;
-        case GTK_DIR_LEFT:
-          return ltr ? FOCUS_WIDGET : FOCUS_CHILD;
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_DOWN:
-        default:
-          return FOCUS_CHILD;
-        case GTK_DIR_RIGHT:
-          return ltr ? FOCUS_CHILD : FOCUS_WIDGET;
-        }
-      break;
-    case FOCUS_CHILD:
-      switch (direction)
-        {
-        case GTK_DIR_TAB_BACKWARD:
-        case GTK_DIR_LEFT:
-        case GTK_DIR_UP:
-          return FOCUS_LABEL;
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_DOWN:
-        case GTK_DIR_RIGHT:
-        default:
-          return FOCUS_NONE;
-        }
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-  
-  return FOCUS_NONE;
-}
-
 static void
 gtk_expander_resize_toplevel (GtkExpander *expander)
 {
@@ -729,41 +590,6 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
                              toplevel_height);
         }
     }
-}
-
-static gboolean
-gtk_expander_focus (GtkWidget        *widget,
-                    GtkDirectionType  direction)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
-
-  if (!focus_current_site (expander, direction))
-    {
-      GtkWidget *old_focus_child;
-      gboolean widget_is_focus;
-      FocusSite site = FOCUS_NONE;
-
-      widget_is_focus = gtk_widget_is_focus (widget);
-      old_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (widget));
-
-      if (old_focus_child && old_focus_child == priv->label_widget)
-        site = FOCUS_LABEL;
-      else if (old_focus_child)
-        site = FOCUS_CHILD;
-      else if (widget_is_focus)
-        site = FOCUS_WIDGET;
-
-      while ((site = get_next_site (expander, site, direction)) != FOCUS_NONE)
-        {
-          if (focus_in_site (expander, site, direction))
-            return TRUE;
-        }
-
-      return FALSE;
-    }
-
-  return TRUE;
 }
 
 static void
