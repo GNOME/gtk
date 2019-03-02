@@ -1123,7 +1123,6 @@ set_visible_child (GtkStack               *stack,
   GtkStackPage *info;
   GtkWidget *widget = GTK_WIDGET (stack);
   GList *l;
-  GtkWidget *toplevel;
   GtkWidget *focus;
   gboolean contains_focus = FALSE;
   guint old_pos = GTK_INVALID_LIST_POSITION;
@@ -1165,24 +1164,23 @@ set_visible_child (GtkStack               *stack,
         }
     }
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel))
+  if (gtk_widget_get_root (widget))
+    focus = gtk_root_get_focus (gtk_widget_get_root (widget));
+  else
+    focus = NULL;
+  if (focus &&
+      priv->visible_child &&
+      priv->visible_child->widget &&
+      gtk_widget_is_ancestor (focus, priv->visible_child->widget))
     {
-      focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-      if (focus &&
-          priv->visible_child &&
-          priv->visible_child->widget &&
-          gtk_widget_is_ancestor (focus, priv->visible_child->widget))
-        {
-          contains_focus = TRUE;
+      contains_focus = TRUE;
 
-          if (priv->visible_child->last_focus)
-            g_object_remove_weak_pointer (G_OBJECT (priv->visible_child->last_focus),
-                                          (gpointer *)&priv->visible_child->last_focus);
-          priv->visible_child->last_focus = focus;
-          g_object_add_weak_pointer (G_OBJECT (priv->visible_child->last_focus),
-                                     (gpointer *)&priv->visible_child->last_focus);
-        }
+      if (priv->visible_child->last_focus)
+        g_object_remove_weak_pointer (G_OBJECT (priv->visible_child->last_focus),
+                                      (gpointer *)&priv->visible_child->last_focus);
+      priv->visible_child->last_focus = focus;
+      g_object_add_weak_pointer (G_OBJECT (priv->visible_child->last_focus),
+                                 (gpointer *)&priv->visible_child->last_focus);
     }
 
   if (priv->last_visible_child)

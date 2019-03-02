@@ -36,6 +36,7 @@
 #include "gtkspinbutton.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkroot.h"
 
 #include <math.h>
 
@@ -224,7 +225,7 @@ popup_edit (GtkWidget      *widget,
     {
       dismiss_current_popup (editor);
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (editor));
-      g_set_object (&editor->priv->popdown_focus, gtk_window_get_focus (GTK_WINDOW (toplevel)));
+      g_set_object (&editor->priv->popdown_focus, gtk_root_get_focus (GTK_ROOT (toplevel)));
       editor->priv->current_popup = popup;
       editor->priv->popup_position = position;
       gtk_widget_show (popup);
