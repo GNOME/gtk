@@ -132,8 +132,6 @@ typedef struct
   GtkPaned       *first_paned;
   GtkWidget      *child1;
   GtkWidget      *child2;
-  GtkWidget      *last_child1_focus;
-  GtkWidget      *last_child2_focus;
   GtkWidget      *saved_focus;
   GtkOrientation  orientation;
 
@@ -231,16 +229,10 @@ static void     gtk_paned_calc_position         (GtkPaned         *paned,
                                                  gint              allocation,
                                                  gint              child1_req,
                                                  gint              child2_req);
-static void     gtk_paned_set_focus_child       (GtkContainer     *container,
-						 GtkWidget        *child);
 static void     gtk_paned_set_saved_focus       (GtkPaned         *paned,
 						 GtkWidget        *widget);
 static void     gtk_paned_set_first_paned       (GtkPaned         *paned,
 						 GtkPaned         *first_paned);
-static void     gtk_paned_set_last_child1_focus (GtkPaned         *paned,
-						 GtkWidget        *widget);
-static void     gtk_paned_set_last_child2_focus (GtkPaned         *paned,
-						 GtkWidget        *widget);
 static gboolean gtk_paned_cycle_child_focus     (GtkPaned         *paned,
 						 gboolean          reverse);
 static gboolean gtk_paned_cycle_handle_focus    (GtkPaned         *paned,
@@ -372,7 +364,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->remove = gtk_paned_remove;
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
-  container_class->set_focus_child = gtk_paned_set_focus_child;
   container_class->set_child_property = gtk_paned_set_child_property;
   container_class->get_child_property = gtk_paned_get_child_property;
 
@@ -1353,8 +1344,6 @@ gtk_paned_unrealize (GtkWidget *widget)
 {
   GtkPaned *paned = GTK_PANED (widget);
 
-  gtk_paned_set_last_child1_focus (paned, NULL);
-  gtk_paned_set_last_child2_focus (paned, NULL);
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
 
@@ -1410,8 +1399,6 @@ gtk_paned_init (GtkPaned *paned)
   priv->position_set = FALSE;
   priv->last_allocation = -1;
 
-  priv->last_child1_focus = NULL;
-  priv->last_child2_focus = NULL;
   priv->in_recursion = FALSE;
   priv->original_position = -1;
   priv->max_position = G_MAXINT;
@@ -1860,86 +1847,23 @@ gtk_paned_set_first_paned (GtkPaned *paned, GtkPaned *first_paned)
 			       (gpointer *)&(priv->first_paned));
 }
 
-static void
-gtk_paned_set_last_child1_focus (GtkPaned *paned, GtkWidget *widget)
-{
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-
-  if (priv->last_child1_focus)
-    g_object_remove_weak_pointer (G_OBJECT (priv->last_child1_focus),
-				  (gpointer *)&(priv->last_child1_focus));
-
-  priv->last_child1_focus = widget;
-
-  if (priv->last_child1_focus)
-    g_object_add_weak_pointer (G_OBJECT (priv->last_child1_focus),
-			       (gpointer *)&(priv->last_child1_focus));
-}
-
-static void
-gtk_paned_set_last_child2_focus (GtkPaned *paned, GtkWidget *widget)
-{
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-
-  if (priv->last_child2_focus)
-    g_object_remove_weak_pointer (G_OBJECT (priv->last_child2_focus),
-				  (gpointer *)&(priv->last_child2_focus));
-
-  priv->last_child2_focus = widget;
-
-  if (priv->last_child2_focus)
-    g_object_add_weak_pointer (G_OBJECT (priv->last_child2_focus),
-			       (gpointer *)&(priv->last_child2_focus));
-}
-
 static GtkWidget *
-paned_get_focus_widget (GtkPaned *paned)
+find_last_focus (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkWidget *f = widget;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (paned));
-  if (gtk_widget_is_toplevel (toplevel))
-    return gtk_window_get_focus (GTK_WINDOW (toplevel));
-
-  return NULL;
-}
-
-static void
-gtk_paned_set_focus_child (GtkContainer *container,
-			   GtkWidget    *focus_child)
-{
-  GtkPaned *paned = GTK_PANED (container);
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-  GtkWidget *container_focus_child;
-
-  g_return_if_fail (GTK_IS_PANED (container));
-
-  if (focus_child == NULL)
+  while (f)
     {
-      GtkWidget *last_focus;
-      GtkWidget *w;
-
-      last_focus = paned_get_focus_widget (paned);
-
-      if (last_focus)
-	{
-	  /* If there is one or more paned widgets between us and the
-	   * focus widget, we want the topmost of those as last_focus
-	   */
-	  for (w = last_focus; w != GTK_WIDGET (paned); w = gtk_widget_get_parent (w))
-	    if (GTK_IS_PANED (w))
-	      last_focus = w;
-
-          container_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
-          if (container_focus_child == priv->child1)
-	    gtk_paned_set_last_child1_focus (paned, last_focus);
-	  else if (container_focus_child == priv->child2)
-	    gtk_paned_set_last_child2_focus (paned, last_focus);
-	}
+      GtkWidget *focus_child = gtk_widget_get_focus_child (f);
+      if (focus_child == NULL)
+        break;
+      f = focus_child;
     }
 
-  if (GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child)
-    GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child (container, focus_child);
+  if (f != widget)
+    return f;
+
+  return NULL;
 }
 
 static void
@@ -1954,23 +1878,13 @@ gtk_paned_get_cycle_chain (GtkPaned          *paned,
   GtkWidget *widget = GTK_WIDGET (paned);
   GList *temp_list = NULL;
   GList *list;
+  GtkWidget *last_child1_focus;
+  GtkWidget *last_child2_focus;
 
   if (priv->in_recursion)
     return;
 
   g_assert (widgets != NULL);
-
-  if (priv->last_child1_focus &&
-      !gtk_widget_is_ancestor (priv->last_child1_focus, widget))
-    {
-      gtk_paned_set_last_child1_focus (paned, NULL);
-    }
-
-  if (priv->last_child2_focus &&
-      !gtk_widget_is_ancestor (priv->last_child2_focus, widget))
-    {
-      gtk_paned_set_last_child2_focus (paned, NULL);
-    }
 
   parent = gtk_widget_get_parent (widget);
   if (parent)
@@ -1984,26 +1898,28 @@ gtk_paned_get_cycle_chain (GtkPaned          *paned,
    * priv->last_child?_focus before priv->child?, both when we
    * are going forward and backward.
    */
+  last_child1_focus = find_last_focus (priv->child1);
+  last_child2_focus = find_last_focus (priv->child2);
   focus_child = gtk_widget_get_focus_child (GTK_WIDGET (paned));
   if (direction == GTK_DIR_TAB_FORWARD)
     {
       if (focus_child == priv->child1)
 	{
-	  temp_list = g_list_append (temp_list, priv->last_child2_focus);
+	  temp_list = g_list_append (temp_list, last_child2_focus);
 	  temp_list = g_list_append (temp_list, priv->child2);
 	  temp_list = g_list_append (temp_list, ancestor);
 	}
       else if (focus_child == priv->child2)
 	{
 	  temp_list = g_list_append (temp_list, ancestor);
-	  temp_list = g_list_append (temp_list, priv->last_child1_focus);
+	  temp_list = g_list_append (temp_list, last_child1_focus);
 	  temp_list = g_list_append (temp_list, priv->child1);
 	}
       else
 	{
-	  temp_list = g_list_append (temp_list, priv->last_child1_focus);
+	  temp_list = g_list_append (temp_list, last_child1_focus);
 	  temp_list = g_list_append (temp_list, priv->child1);
-	  temp_list = g_list_append (temp_list, priv->last_child2_focus);
+	  temp_list = g_list_append (temp_list, last_child2_focus);
 	  temp_list = g_list_append (temp_list, priv->child2);
 	  temp_list = g_list_append (temp_list, ancestor);
 	}
@@ -2013,20 +1929,20 @@ gtk_paned_get_cycle_chain (GtkPaned          *paned,
       if (focus_child == priv->child1)
 	{
 	  temp_list = g_list_append (temp_list, ancestor);
-	  temp_list = g_list_append (temp_list, priv->last_child2_focus);
+	  temp_list = g_list_append (temp_list, last_child2_focus);
 	  temp_list = g_list_append (temp_list, priv->child2);
 	}
       else if (focus_child == priv->child2)
 	{
-	  temp_list = g_list_append (temp_list, priv->last_child1_focus);
+	  temp_list = g_list_append (temp_list, last_child1_focus);
 	  temp_list = g_list_append (temp_list, priv->child1);
 	  temp_list = g_list_append (temp_list, ancestor);
 	}
       else
 	{
-	  temp_list = g_list_append (temp_list, priv->last_child2_focus);
+	  temp_list = g_list_append (temp_list, last_child2_focus);
 	  temp_list = g_list_append (temp_list, priv->child2);
-	  temp_list = g_list_append (temp_list, priv->last_child1_focus);
+	  temp_list = g_list_append (temp_list, last_child1_focus);
 	  temp_list = g_list_append (temp_list, priv->child1);
 	  temp_list = g_list_append (temp_list, ancestor);
 	}
