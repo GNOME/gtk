@@ -1,0 +1,13 @@
+cross_fade {
+  progress = 0.5
+  color {
+    bounds = (0, 0, 200, 200)
+    color = (1, 1, 1, 1)
+  }
+  linear_gradient {
+    bounds = (100, 100, 200, 200)
+    start = (200, 100)
+    end = (200, 300)
+    stops = (0, (1, 0, 0, 1)) (1, (0, 1, 0, 1))
+  }
+}
