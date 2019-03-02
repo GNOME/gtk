@@ -5334,10 +5334,8 @@ gtk_widget_grab_focus (GtkWidget *widget)
 static void
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
-  GtkWidget *toplevel;
-
-  toplevel = gtk_widget_get_toplevel (focus_widget);
-  gtk_window_set_focus (GTK_WINDOW (toplevel), focus_widget);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
+  gtk_root_set_focus (priv->root, focus_widget);
 }
 
 static gboolean
@@ -5622,16 +5620,14 @@ gtk_widget_has_visible_focus (GtkWidget *widget)
 gboolean
 gtk_widget_is_focus (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  toplevel = _gtk_widget_get_toplevel (widget);
+  if (priv->root)
+    return widget == gtk_root_get_focus (priv->root);
 
-  if (GTK_IS_WINDOW (toplevel))
-    return widget == gtk_window_get_focus (GTK_WINDOW (toplevel));
-  else
-    return FALSE;
+  return FALSE;
 }
 
 /**
@@ -8837,14 +8833,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
     priv->state_flags |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (gtk_widget_is_focus (widget) && !gtk_widget_is_sensitive (widget))
-    {
-      GtkWidget *window;
-
-      window = _gtk_widget_get_toplevel (widget);
-
-      if (window && _gtk_widget_is_toplevel (window))
-        gtk_window_set_focus (GTK_WINDOW (window), NULL);
-    }
+    gtk_root_set_focus (priv->root, NULL);
 
   new_flags = priv->state_flags;
 
