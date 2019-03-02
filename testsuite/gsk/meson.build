@@ -42,22 +42,16 @@ gl_tests = [
   ['outset shadow blurred simple', 'outset_shadow_blurred_simple'],
   ['outset shadow blurred small',  'outset_shadow_blurred_small'],
   ['outset shadow blurred offset', 'outset_shadow_blurred_offset'],
-  ['outset shadow transformed',    'outset_shadow_translated'],
-  ['Transform in Shadow',          'shadow_transform1'],
   ['Crossfade simple',             'cross_fade'],
-  ['Crossfade transformed',        'cross_fade_transformed'],
-  ['Clipped crossfade',            'clipped_cross_fade'],
   ['Clipped rounded clip',         'clipped_rounded_clip'],
-  ['clipped rounded clip2',        'transformed_clipped_rounded_clip'],
   ['gradient simple',              'gradient_simple'],
-  ['gradient transformed',         'gradient_transformed'],
   ['gradient clipped',             'gradient_clipped'],
   ['offscreen opacity',            'opacity_clip'],
 ]
 
 foreach gl_test : gl_tests
   test('GL ' + gl_test[0], compare_render,
-       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.node'),
+       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.txt'),
               join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.gl.png')],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',

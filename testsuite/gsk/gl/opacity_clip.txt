@@ -1,0 +1,13 @@
+clip {
+  clip = (50, 50, 50, 50)
+  opacity {
+    opacity = 0.4
+    rounded_clip {
+      clip = (50, 50, 100, 100) 50
+      color {
+        bounds = (50, 50, 100, 100)
+        color = (1, 0, 0, 1)
+      }
+    }
+  }
+}

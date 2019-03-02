@@ -1,0 +1,10 @@
+clip {
+  clip = (60, 80, 60, 70)
+  rounded_clip {
+    clip = (20, 50, 100, 100) 50
+    color {
+      bounds = (20, 50, 100, 100)
+      color = (1, 0, 0, 1)
+    }
+  }
+}
