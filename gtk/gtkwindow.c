@@ -436,10 +436,6 @@ static void gtk_window_remove             (GtkContainer      *container,
 static void gtk_window_forall             (GtkContainer   *container,
 					   GtkCallback     callback,
 					   gpointer        callback_data);
-static gint gtk_window_focus              (GtkWidget        *widget,
-				           GtkDirectionType  direction);
-static void gtk_window_move_focus         (GtkWidget         *widget,
-                                           GtkDirectionType   dir);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 
@@ -804,8 +800,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
-  widget_class->focus = gtk_window_focus;
-  widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
@@ -5750,7 +5744,7 @@ gtk_window_show (GtkWidget *widget)
       if (priv->initial_focus)
         gtk_window_set_focus (window, priv->initial_focus);
       else
-        gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
+        gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
     }
   
   if (priv->modal)
@@ -7207,98 +7201,6 @@ gtk_window_forall (GtkContainer *container,
   if (priv->title_box != NULL &&
       priv->titlebar == NULL)
     (* callback) (priv->title_box, callback_data);
-}
-
-static gboolean
-gtk_window_focus (GtkWidget        *widget,
-		  GtkDirectionType  direction)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkBin *bin;
-  GtkContainer *container;
-  GtkWidget *child;
-  GtkWidget *old_focus_child;
-  GtkWidget *parent;
-
-  if (!_gtk_widget_is_toplevel (widget))
-    return GTK_WIDGET_CLASS (gtk_window_parent_class)->focus (widget, direction);
-
-  container = GTK_CONTAINER (widget);
-  bin = GTK_BIN (widget);
-
-  old_focus_child = gtk_widget_get_focus_child (widget);
-
-  /* We need a special implementation here to deal properly with wrapping
-   * around in the tab chain without the danger of going into an
-   * infinite loop.
-   */
-  if (old_focus_child)
-    {
-      if (gtk_widget_child_focus (old_focus_child, direction))
-	return TRUE;
-    }
-
-  if (priv->focus_widget)
-    {
-      if (direction == GTK_DIR_LEFT ||
-	  direction == GTK_DIR_RIGHT ||
-	  direction == GTK_DIR_UP ||
-	  direction == GTK_DIR_DOWN)
-	{
-	  return FALSE;
-	}
-      
-      /* Wrapped off the end, clear the focus setting for the toplpevel */
-      parent = _gtk_widget_get_parent (priv->focus_widget);
-      while (parent)
-	{
-          gtk_widget_set_focus_child (parent, NULL);
-	  parent = _gtk_widget_get_parent (parent);
-	}
-      
-      gtk_window_set_focus (GTK_WINDOW (container), NULL);
-    }
-
-  /* Now try to focus the first widget in the window,
-   * taking care to hook titlebar widgets into the
-   * focus chain.
-  */
-  if (priv->title_box != NULL &&
-      old_focus_child != NULL &&
-      priv->title_box != old_focus_child)
-    child = priv->title_box;
-  else
-    child = gtk_bin_get_child (bin);
-
-  if (child)
-    {
-      if (gtk_widget_child_focus (child, direction))
-        return TRUE;
-      else if (priv->title_box != NULL &&
-               priv->title_box != child &&
-               gtk_widget_child_focus (priv->title_box, direction))
-        return TRUE;
-
-    }
-
-  return FALSE;
-}
-
-static void
-gtk_window_move_focus (GtkWidget        *widget,
-                       GtkDirectionType  dir)
-{
-  if (!_gtk_widget_is_toplevel (widget))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->move_focus (widget, dir);
-      return;
-    }
-
-  gtk_widget_child_focus (widget, dir);
-
-  if (!gtk_widget_get_focus_child (widget))
-    gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
 static void
