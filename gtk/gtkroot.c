@@ -60,11 +60,25 @@ gtk_root_default_get_surface_transform (GtkRoot *self,
 }
 
 static void
+gtk_root_default_set_focus (GtkRoot   *self,
+                            GtkWidget *focus)
+{
+}
+
+static GtkWidget *
+gtk_root_default_get_focus (GtkRoot *self)
+{
+  return NULL;
+}
+
+static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_renderer = gtk_root_default_get_renderer;
   iface->get_surface_transform = gtk_root_default_get_surface_transform;
+  iface->set_focus = gtk_root_default_set_focus;
+  iface->get_focus = gtk_root_default_get_focus;
 }
 
 GdkDisplay *
@@ -123,4 +137,49 @@ gtk_root_get_for_surface (GdkSurface *surface)
     return widget;
 
   return NULL;
+}
+
+/**
+ * gtk_root_set_focus:
+ * @self: a #GtkRoot
+ * @focus: (allow-none): widget to be the new focus widget, or %NULL
+ *    to unset the focus widget
+ *
+ * If @focus is not the current focus widget, and is focusable, sets
+ * it as the focus widget for the root. If @focus is %NULL, unsets
+ * the focus widget for the root.
+ *
+ * To set the focus to a particular widget in the root, it is usually
+ * more convenient to use gtk_widget_grab_focus() instead of this function.
+ */
+void
+gtk_root_set_focus (GtkRoot   *self,
+                    GtkWidget *focus)
+{
+  g_return_if_fail (GTK_IS_ROOT (self));
+  g_return_if_fail (focus == NULL || GTK_IS_WIDGET (focus));
+
+  GTK_ROOT_GET_IFACE (self)->set_focus (self, focus);
+}
+
+/**
+ * gtk_root_get_focus:
+ * @self: a #GtkRoot
+ *
+ * Retrieves the current focused widget within the root.
+ *
+ * Note that this is the widget that would have the focus
+ * if the root is active; if the root is not focused then
+ * `gtk_widget_has_focus (widget)` will be %FALSE for the
+ * widget.
+ *
+ * Returns: (nullable) (transfer none): the currently focused widget,
+ *    or %NULL if there is none.
+ */
+GtkWidget *
+gtk_root_get_focus (GtkRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  return GTK_ROOT_GET_IFACE (self)->get_focus (self);
 }
