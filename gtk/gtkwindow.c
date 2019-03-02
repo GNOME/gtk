@@ -2534,11 +2534,30 @@ gtk_window_root_get_surface_transform (GtkRoot *root,
 }
 
 static void
+gtk_window_root_set_focus (GtkRoot   *root,
+                           GtkWidget *focus)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+
+  gtk_window_set_focus (self, focus);
+}
+
+static GtkWidget *
+gtk_window_root_get_focus (GtkRoot *root)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+
+  return gtk_window_get_focus (self);
+}
+
+static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
   iface->get_renderer = gtk_window_root_get_renderer;
   iface->get_surface_transform = gtk_window_root_get_surface_transform;
+  iface->set_focus = gtk_window_root_set_focus;
+  iface->get_focus = gtk_window_root_get_focus;
 }
 
 /**
