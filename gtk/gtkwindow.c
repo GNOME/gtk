@@ -2787,52 +2787,9 @@ void
 gtk_window_set_focus (GtkWindow *window,
 		      GtkWidget *focus)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *parent;
-
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (focus)
-    {
-      g_return_if_fail (GTK_IS_WIDGET (focus));
-      g_return_if_fail (gtk_widget_get_can_focus (focus));
-
-      if (!gtk_widget_get_visible (GTK_WIDGET (window)))
-        priv->initial_focus = focus;
-      else
-        gtk_widget_grab_focus (focus);
-    }
-  else
-    {
-      /* Clear the existing focus chain, so that when we focus into
-       * the window again, we start at the beginnning.
-       */
-      GtkWidget *widget = priv->focus_widget;
-      if (widget)
-	{
-	  while ((parent = _gtk_widget_get_parent (widget)))
-	    {
-	      widget = parent;
-              gtk_widget_set_focus_child (widget, NULL);
-	    }
-	}
-      
-      _gtk_window_internal_set_focus (window, NULL);
-    }
-}
-
-void
-_gtk_window_internal_set_focus (GtkWindow *window,
-				GtkWidget *focus)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->initial_focus = NULL;
-  if ((priv->focus_widget != focus) ||
-      (focus && !gtk_widget_has_focus (focus)))
-    g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
+  g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
 }
 
 /**
@@ -7326,79 +7283,49 @@ gtk_window_move_focus (GtkWidget        *widget,
 }
 
 static void
+unset_focus_widget (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *f;
+
+  for (f = priv->focus_widget; f; f = gtk_widget_get_parent (f))
+    gtk_widget_unset_state_flags (f, GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_VISIBLE);
+
+  if (priv->focus_widget)
+    do_focus_change (priv->focus_widget, FALSE);
+  g_set_object (&priv->focus_widget, NULL);
+}
+
+static void
+set_focus_widget (GtkWindow *window,
+                  GtkWidget *focus)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *f;
+  GtkStateFlags flags = GTK_STATE_FLAG_FOCUSED;
+
+  if (gtk_window_get_focus_visible (window))
+    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+
+  for (f = focus; f; f = gtk_widget_get_parent (f))
+    {
+      GtkWidget *parent = gtk_widget_get_parent (f);
+      gtk_widget_set_state_flags (f, flags, FALSE);
+      if (parent)
+        gtk_widget_set_focus_child (parent, f);
+    }
+
+  g_set_object (&priv->focus_widget, focus);
+  if (priv->focus_widget)
+    do_focus_change (priv->focus_widget, TRUE);
+}
+
+static void
 gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *old_focus = priv->focus_widget;
-
-  if (old_focus)
-    {
-      g_object_ref (old_focus);
-      g_object_freeze_notify (G_OBJECT (old_focus));
-    }
-  if (focus)
-    {
-      g_object_ref (focus);
-      g_object_freeze_notify (G_OBJECT (focus));
-    }
-
-  if (priv->focus_widget)
-    {
-      if (gtk_widget_get_receives_default (priv->focus_widget) &&
-	  (priv->focus_widget != priv->default_widget))
-        {
-          _gtk_widget_set_has_default (priv->focus_widget, FALSE);
-
-	  if (priv->default_widget)
-            _gtk_widget_set_has_default (priv->default_widget, TRUE);
-	}
-
-      priv->focus_widget = NULL;
-
-      if (priv->is_active)
-	do_focus_change (old_focus, FALSE);
-
-      g_object_notify (G_OBJECT (old_focus), "is-focus");
-    }
-
-  /* The above notifications may have set a new focus widget,
-   * if so, we don't want to override it.
-   */
-  if (focus && !priv->focus_widget)
-    {
-      priv->focus_widget = focus;
-
-      if (gtk_widget_get_receives_default (priv->focus_widget) &&
-	  (priv->focus_widget != priv->default_widget))
-	{
-	  if (gtk_widget_get_can_default (priv->focus_widget))
-            _gtk_widget_set_has_default (priv->focus_widget, TRUE);
-
-	  if (priv->default_widget)
-            _gtk_widget_set_has_default (priv->default_widget, FALSE);
-	}
-
-      if (priv->is_active)
-	do_focus_change (priv->focus_widget, TRUE);
-
-      /* It's possible for do_focus_change() above to have callbacks
-       * that clear priv->focus_widget here.
-       */
-      if (priv->focus_widget)
-        g_object_notify (G_OBJECT (priv->focus_widget), "is-focus");
-    }
-
-  if (old_focus)
-    {
-      g_object_thaw_notify (G_OBJECT (old_focus));
-      g_object_unref (old_focus);
-    }
-  if (focus)
-    {
-      g_object_thaw_notify (G_OBJECT (focus));
-      g_object_unref (focus);
-    }
+  unset_focus_widget (window);
+  set_focus_widget (window, focus);
 }
 
 static void
