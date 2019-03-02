@@ -7331,6 +7331,9 @@ static void
 gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
+  if (focus && !gtk_widget_is_sensitive (focus))
+    return;
+
   unset_focus_widget (window);
   set_focus_widget (window, focus);
 
