@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-14 17:14+0000\n"
-"PO-Revision-Date: 2019-02-14 18:28+0100\n"
+"POT-Creation-Date: 2019-03-02 16:48+0000\n"
+"PO-Revision-Date: 2019-03-02 20:56+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1242,7 +1242,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12779 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12792 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1291,7 +1291,7 @@ msgid "_Apply"
 msgstr "_Uveljavi"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12780
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12793
 msgid "_OK"
 msgstr "_V redu"
 
@@ -1532,36 +1532,36 @@ msgstr "_Zapri"
 msgid "Could not show link"
 msgstr "Povezave ni mogoče pokazati"
 
-#: gtk/gtkaboutdialog.c:1035
+#: gtk/gtkaboutdialog.c:1037
 msgid "Website"
 msgstr "Spletišče"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1085 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1087 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "O programu %s"
 
-#: gtk/gtkaboutdialog.c:2312
+#: gtk/gtkaboutdialog.c:2314
 msgid "Created by"
 msgstr "Ustvarili:"
 
-#: gtk/gtkaboutdialog.c:2315
+#: gtk/gtkaboutdialog.c:2317
 msgid "Documented by"
 msgstr "Dokumentacija:"
 
-#: gtk/gtkaboutdialog.c:2325
+#: gtk/gtkaboutdialog.c:2327
 msgid "Translated by"
 msgstr "Prevod:"
 
-#: gtk/gtkaboutdialog.c:2330
+#: gtk/gtkaboutdialog.c:2332
 msgid "Artwork by"
 msgstr "Grafična podoba:"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2490
+#: gtk/gtkaboutdialog.c:2494
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1761,7 +1761,7 @@ msgstr "Ni mogoče razčleniti vrednosti za %s::%s: %s\n"
 msgid "Can't parse file: %s\n"
 msgstr "Ni mogoče razčleniti datoteke: %s\n"
 
-#: gtk/gtk-builder-tool.c:1056
+#: gtk/gtk-builder-tool.c:1058
 #, c-format
 msgid ""
 "Usage:\n"
@@ -2159,11 +2159,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Upravljanje poljubnih velikosti"
 
-#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:811
+#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:813
 msgid "inch"
 msgstr "palec"
 
-#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:809
+#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:811
 msgid "mm"
 msgstr "mm"
 
@@ -2594,7 +2594,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Izberite pisavo"
 
-#: gtk/gtkfontbutton.c:1393
+#: gtk/gtkfontbutton.c:1395
 msgctxt "font"
 msgid "None"
 msgstr "Brez"
@@ -2720,8 +2720,6 @@ msgid "Show program version"
 msgstr "Pokaži različico programa"
 
 #: gtk/gtk-launch.c:74
-#, fuzzy
-#| msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgstr "PROGRAM [URI ...] – zagon PROGRAMA z naslovom URI"
 
@@ -2970,7 +2968,7 @@ msgstr "Katerikoli tiskalnik"
 msgid "For portable documents"
 msgstr "Za prenosljive dokumente"
 
-#: gtk/gtkpagesetupunixdialog.c:829
+#: gtk/gtkpagesetupunixdialog.c:831
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2985,11 +2983,11 @@ msgstr ""
 " Zgoraj: %s %s\n"
 " Spodaj: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
+#: gtk/gtkpagesetupunixdialog.c:880 gtk/gtkprintunixdialog.c:3392
 msgid "Manage Custom Sizes…"
 msgstr "Upravljanje poljubnih velikosti ..."
 
-#: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
+#: gtk/gtkpagesetupunixdialog.c:902 gtk/ui/gtkpagesetupunixdialog.ui:31
 #: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Page Setup"
 msgstr "Nastavitev strani"
@@ -3335,7 +3333,7 @@ msgstr "Zapomni si _geslo"
 msgid "Select a filename"
 msgstr "Izbor imena datoteke"
 
-#: gtk/gtkprinteroptionwidget.c:767
+#: gtk/gtkprinteroptionwidget.c:769
 msgid "Not available"
 msgstr "Ni na voljo"
 
@@ -3398,7 +3396,7 @@ msgstr "Končano z napako"
 msgid "Preparing %d"
 msgstr "Pripravljanje %d"
 
-#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3005
+#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3007
 #, c-format
 msgid "Preparing"
 msgstr "Pripravljanje"
@@ -3408,19 +3406,19 @@ msgstr "Pripravljanje"
 msgid "Printing %d"
 msgstr "Tiskanje %d"
 
-#: gtk/gtkprintoperation.c:3036
+#: gtk/gtkprintoperation.c:3038
 #, c-format
 msgid "Error creating print preview"
 msgstr "Napaka med ustvarjanjem predogleda tiskanja"
 
-#: gtk/gtkprintoperation.c:3039
+#: gtk/gtkprintoperation.c:3041
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najverjetnejši razlog je, da začasne datoteke ni mogoče ustvariti"
 
 #. window
 #: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3414
 msgid "Print"
 msgstr "Natisni"
 
@@ -3661,9 +3659,7 @@ msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "Predmeta z naslovom URI »%s« ni mogoče premakniti v »%s«."
 
 #: gtk/gtkrecentmanager.c:2507
-#, fuzzy, c-format
-#| msgid ""
-#| "No registered application with name '%s' for item with URI '%s' found"
+#, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
 "Ni mogoče najti programa z imenom »%s« za odpiranje predmetov z naslovom URI "
@@ -3936,12 +3932,12 @@ msgstr "Spremeni velikost"
 msgid "Always on Top"
 msgstr "Vedno na vrhu"
 
-#: gtk/gtkwindow.c:12767
+#: gtk/gtkwindow.c:12780
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
-#: gtk/gtkwindow.c:12769
+#: gtk/gtkwindow.c:12782
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3951,9 +3947,7 @@ msgstr ""
 "Nadzornik GTK+ je razhroščevalnik, ki omogoča raziskovanje in spreminjanje "
 "nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
 
-#: gtk/gtkwindow.c:12774
-#, fuzzy
-#| msgid "Don't show this message again"
+#: gtk/gtkwindow.c:12787
 msgid "Don't show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -4158,8 +4152,6 @@ msgid "Frame Clock"
 msgstr "Okvir ure"
 
 #: gtk/inspector/misc-info.ui:475
-#, fuzzy
-#| msgid "Tick callback"
 msgid "Tick callback"
 msgstr "Označi povratni sklic"
 
@@ -4416,10 +4408,6 @@ msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavitev je vključena v privzeto vrednost GTK_TEST_TOUCHSCREEN"
 
 #: gtk/inspector/visual.c:791
-#, fuzzy
-#| msgid ""
-#| "Not settable at runtime.\n"
-#| "Use GDK_GL=always or GDK_GL=disable instead"
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4521,8 +4509,6 @@ msgid "Show Widget Resizes"
 msgstr "Pokaži prilagajanje velikosti gradnika"
 
 #: gtk/inspector/visual.ui:683
-#, fuzzy
-#| msgid "Simulate touchscreen"
 msgid "Simulate touchscreen"
 msgstr "Simuliraj zaslon na dotik"
 
@@ -4531,8 +4517,6 @@ msgid "GL Rendering"
 msgstr "Izrisovanje GL"
 
 #: gtk/inspector/visual.ui:740
-#, fuzzy
-#| msgid "When Needed"
 msgid "When needed"
 msgstr "Ko je zahtevano"
 
@@ -5011,12 +4995,9 @@ msgid "NLC Kanji Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:79
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr "Začetno stanje"
+msgstr "Oblike nukta"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
@@ -5311,10 +5292,9 @@ msgid "Trailing Jamo Forms"
 msgstr "Pozivnik terminala"
 
 #: gtk/open-type-layout.h:137
-#, fuzzy
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr "Pozivnik terminala"
+msgstr "Tradicionalne imenske oblike"
 
 #: gtk/open-type-layout.h:138
 #, fuzzy
@@ -5325,11 +5305,9 @@ msgid "Tabular Figures"
 msgstr "Zaupno"
 
 #: gtk/open-type-layout.h:139
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr "Pozivnik terminala"
+msgstr "Tradicionalne oblike"
 
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
