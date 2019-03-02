@@ -59,7 +59,7 @@ gl_tests = [
 
 foreach gl_test : gl_tests
   test('GL ' + gl_test[0], compare_render,
-       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.node'),
+       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.txt'),
               join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.gl.png')],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
