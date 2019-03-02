@@ -575,7 +575,7 @@ gsk_translate_transform_print (GskTransform *transform,
   if (self->point.z != 0)
     {
       g_string_append (string, ", ");
-      string_append_double (string, self->point.y);
+      string_append_double (string, self->point.z);
     }
   g_string_append (string, ")");
 }
