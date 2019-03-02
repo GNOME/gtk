@@ -178,7 +178,7 @@ static GskTransform *
 gsk_identity_transform_apply (GskTransform *transform,
                               GskTransform *apply_to)
 {
-  return gsk_transform_identity (apply_to);
+  return apply_to;
 }
 
 static gboolean
@@ -221,28 +221,6 @@ gsk_transform_is_identity (GskTransform *self)
 {
   return self == NULL ||
          (self->transform_class == &GSK_IDENTITY_TRANSFORM_CLASS && gsk_transform_is_identity (self->next));
-}
-
-/**
- * gsk_transform_identity:
- * @next: (allow-none): the next transform operation or %NULL
- *
- * Adds an identity multiplication into the list of matrix operations.
- *
- * This operation is generally useless, but may be useful when interpolating
- * matrices, because the identity matrix can be interpolated to and from
- * everything, so an identity matrix can be used as a keyframe between two
- * different types of matrices.
- *
- * Returns: The new matrix
- **/
-GskTransform *
-gsk_transform_identity (GskTransform *next)
-{
-  if (gsk_transform_is_identity (next))
-    return next;
-
-  return gsk_transform_alloc (&GSK_IDENTITY_TRANSFORM_CLASS, next);
 }
 
 /*** MATRIX ***/
@@ -1469,9 +1447,6 @@ gsk_transform_get_category (GskTransform *self)
  *
  * Creates a new identity matrix. This function is meant to be used by language
  * bindings. For C code, this equivalent to using %NULL.
- *
- * See also gsk_transform_identity() for inserting identity matrix operations
- * when constructing matrices.
  *
  * Returns: A new identity matrix
  **/

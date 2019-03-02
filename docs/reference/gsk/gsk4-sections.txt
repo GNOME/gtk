@@ -162,7 +162,6 @@ gsk_transform_to_2d
 gsk_transform_to_affine
 gsk_transform_to_translate
 <SUBSECTION>
-gsk_transform_identity
 gsk_transform_transform
 gsk_transform_matrix
 gsk_transform_translate
