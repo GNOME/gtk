@@ -211,7 +211,6 @@ struct _GtkNotebookPrivate
 
   guint32        timer;
 
-  guint          child_has_focus    : 1;
   guint          click_child        : 3;
   guint          remove_in_detach   : 1;
   guint          focus_out          : 1; /* Flag used by ::move-focus-out implementation */
@@ -303,7 +302,6 @@ struct _GtkNotebookPage
   GtkWidget *child;
   GtkWidget *tab_label;
   GtkWidget *menu_label;
-  GtkWidget *last_focus_child;  /* Last descendant of the page that had focus */
 
   GtkWidget *tab_widget;        /* widget used for the tab itself */
 
@@ -678,8 +676,6 @@ static void gtk_notebook_add                 (GtkContainer     *container,
                                               GtkWidget        *widget);
 static void gtk_notebook_remove              (GtkContainer     *container,
                                               GtkWidget        *widget);
-static void gtk_notebook_set_focus_child     (GtkContainer     *container,
-                                              GtkWidget        *child);
 static GType gtk_notebook_child_type       (GtkContainer     *container);
 static void gtk_notebook_forall              (GtkContainer     *container,
                                               GtkCallback       callback,
@@ -937,7 +933,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
   container_class->forall = gtk_notebook_forall;
-  container_class->set_focus_child = gtk_notebook_set_focus_child;
   container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_notebook_real_switch_page;
@@ -1258,7 +1253,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->scrollable = FALSE;
   priv->click_child = ARROW_NONE;
   priv->need_timer = 0;
-  priv->child_has_focus = FALSE;
   priv->focus_out = FALSE;
 
   priv->group = 0;
@@ -3215,13 +3209,7 @@ gtk_notebook_switch_tab_timeout (gpointer data)
   priv->switch_tab = NULL;
 
   if (switch_tab)
-    {
-      /* FIXME: hack, we don't want the
-       * focus to move fom the source widget
-       */
-      priv->child_has_focus = FALSE;
-      gtk_notebook_switch_focus_tab (notebook, switch_tab);
-    }
+    gtk_notebook_switch_focus_tab (notebook, switch_tab);
 
   return FALSE;
 }
@@ -3481,7 +3469,6 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
  * gtk_notebook_add
  * gtk_notebook_remove
  * gtk_notebook_focus
- * gtk_notebook_set_focus_child
  * gtk_notebook_child_type
  * gtk_notebook_forall
  */
@@ -3546,7 +3533,6 @@ focus_tabs_in (GtkNotebook *notebook)
   if (priv->show_tabs && gtk_notebook_has_current_page (notebook))
     {
       gtk_widget_grab_focus (GTK_WIDGET (notebook));
-      gtk_notebook_set_focus_child (GTK_CONTAINER (notebook), NULL);
       gtk_notebook_switch_focus_tab (notebook,
                                      g_list_find (priv->children,
                                                   priv->cur_page));
@@ -3787,73 +3773,6 @@ gtk_notebook_focus (GtkWidget        *widget,
 
   g_assert_not_reached ();
   return FALSE;
-}
-
-static void
-gtk_notebook_set_focus_child (GtkContainer *container,
-                              GtkWidget    *child)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkWidget *page_child;
-  GtkWidget *toplevel;
-
-  /* If the old focus widget was within a page of the notebook,
-   * (child may either be NULL or not in this case), record it
-   * for future use if we switch to the page with a mnemonic.
-   */
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
-  if (toplevel && gtk_widget_is_toplevel (toplevel))
-    {
-      page_child = gtk_window_get_focus (GTK_WINDOW (toplevel));
-      while (page_child)
-        {
-          if (gtk_widget_get_parent (page_child) == GTK_WIDGET (container))
-            {
-              GList *list = gtk_notebook_find_child (notebook, page_child);
-              if (list != NULL)
-                {
-                  GtkNotebookPage *page = list->data;
-
-                  if (page->last_focus_child)
-                    g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
-
-                  page->last_focus_child = gtk_window_get_focus (GTK_WINDOW (toplevel));
-                  g_object_add_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
-
-                  break;
-                }
-            }
-
-          page_child = gtk_widget_get_parent (page_child);
-        }
-    }
-
-  if (child)
-    {
-      g_return_if_fail (GTK_IS_WIDGET (child));
-
-      priv->child_has_focus = TRUE;
-      if (!priv->focus_tab)
-        {
-          GList *children;
-          GtkNotebookPage *page;
-
-          children = priv->children;
-          while (children)
-            {
-              page = children->data;
-              if (page->child == child || page->tab_label == child)
-                gtk_notebook_switch_focus_tab (notebook, children);
-              children = children->next;
-            }
-        }
-    }
-  else
-    priv->child_has_focus = FALSE;
-
-  GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->set_focus_child (container, child);
 }
 
 static void
@@ -4304,12 +4223,6 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     }
 
   g_list_free (list);
-
-  if (page->last_focus_child)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
-      page->last_focus_child = NULL;
-    }
 
   gtk_widget_unparent (page->tab_widget);
 
@@ -5405,6 +5318,25 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
     }
 }
 
+static GtkWidget *
+find_last_focus (GtkWidget *widget)
+{
+  GtkWidget *f = widget;
+
+  while (f)
+    {
+      GtkWidget *focus_child = gtk_widget_get_focus_child (f);
+      if (focus_child == NULL)
+        break;
+      f = focus_child;
+    }
+
+  if (f != widget)
+    return f;
+
+  return NULL;
+}
+
 /* Private GtkNotebook Page Switch Methods:
  *
  * gtk_notebook_real_switch_page
@@ -5417,16 +5349,19 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
   GtkNotebookPrivate *priv = notebook->priv;
   GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child));
   GtkNotebookPage *page = GTK_NOTEBOOK_PAGE_FROM_LIST (list);
-  gboolean child_has_focus;
+  gboolean child_has_focus = FALSE;
 
   if (priv->cur_page == page || !gtk_widget_get_visible (GTK_WIDGET (child)))
     return;
 
-  /* save the value here, changing visibility changes focus */
-  child_has_focus = priv->child_has_focus;
-
   if (priv->cur_page)
-    gtk_widget_unset_state_flags (priv->cur_page->tab_widget, GTK_STATE_FLAG_CHECKED);
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
+      GtkWidget *focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      if (focus)
+        child_has_focus = gtk_widget_is_ancestor (focus, priv->cur_page->child);
+      gtk_widget_unset_state_flags (priv->cur_page->tab_widget, GTK_STATE_FLAG_CHECKED);
+    }
 
   priv->cur_page = page;
   gtk_widget_set_state_flags (page->tab_widget, GTK_STATE_FLAG_CHECKED, FALSE);
@@ -5446,12 +5381,11 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
    */
   if (child_has_focus)
     {
-      if (priv->cur_page->last_focus_child &&
-          gtk_widget_is_ancestor (priv->cur_page->last_focus_child, priv->cur_page->child))
-        gtk_widget_grab_focus (priv->cur_page->last_focus_child);
-      else
-        if (!gtk_widget_child_focus (priv->cur_page->child, GTK_DIR_TAB_FORWARD))
-          gtk_widget_grab_focus (GTK_WIDGET (notebook));
+      GtkWidget *last_focus = find_last_focus (priv->cur_page->child);
+      if (last_focus)
+        gtk_widget_grab_focus (last_focus);
+      else if (!gtk_widget_child_focus (priv->cur_page->child, GTK_DIR_TAB_FORWARD))
+        gtk_widget_grab_focus (GTK_WIDGET (notebook));
     }
 
   update_arrow_state (notebook);
