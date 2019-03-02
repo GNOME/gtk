@@ -280,6 +280,9 @@ struct _GtkWidgetClass
   void     (* grab_focus)               (GtkWidget           *widget);
   gboolean (* focus)                    (GtkWidget           *widget,
                                          GtkDirectionType     direction);
+  GtkWidget * (* next_focus_child)      (GtkWidget           *widget,
+                                         GtkWidget           *child,
+                                         GtkDirectionType     direction);
 
   /* keyboard navigation */
   void     (* move_focus)               (GtkWidget           *widget,
@@ -479,6 +482,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_has_visible_focus   (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_grab_focus          (GtkWidget           *widget);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_widget_get_next_focus      (GtkWidget           *widget,
+                                           GtkDirectionType     direction);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_focus_on_click  (GtkWidget           *widget,
                                            gboolean             focus_on_click);
