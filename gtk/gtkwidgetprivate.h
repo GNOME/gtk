@@ -319,6 +319,9 @@ void              gtk_widget_focus_sort                    (GtkWidget        *wi
                                                             GPtrArray        *focus_order);
 gboolean          gtk_widget_focus_move                    (GtkWidget        *widget,
                                                             GtkDirectionType  direction);
+GtkWidget *       gtk_widget_next_focus_child              (GtkWidget        *widget,
+                                                            GtkWidget        *child,
+                                                            GtkDirectionType  direction);
 void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
 							     GtkAllocation *allocation);
 
