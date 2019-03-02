@@ -1766,7 +1766,7 @@ on_key_press_event (GtkEventController *controller,
       if (!toplevel)
         return FALSE;
 
-      focus_widget = gtk_window_get_focus (toplevel);
+      focus_widget = gtk_root_get_focus (GTK_ROOT (toplevel));
 
       if (!GTK_IS_PLACES_VIEW_ROW (focus_widget))
         return FALSE;
