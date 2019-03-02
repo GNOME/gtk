@@ -5447,17 +5447,8 @@ gtk_widget_real_focus (GtkWidget         *widget,
     }
   else
     {
-      GPtrArray *focus_order = g_ptr_array_new ();
-      gboolean ret = FALSE;
-
-      /* Try focusing any of the child widgets, depending on the given @direction */
-
-      gtk_widget_focus_sort (widget, direction, focus_order);
-      ret = gtk_widget_focus_move (widget, direction, focus_order);
-
-      g_ptr_array_unref (focus_order);
-
-      if (ret)
+      /* Try focusing any of the child widgets, depending on the given direction */
+      if (gtk_widget_focus_move (widget, direction))
         return TRUE;
     }
 
