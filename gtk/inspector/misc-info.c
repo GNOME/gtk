@@ -222,7 +222,7 @@ update_focus_widget (GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
+  widget = gtk_root_get_focus (GTK_ROOT (sl->priv->object));
   if (widget)
     {
       gchar *tmp;
@@ -249,7 +249,7 @@ show_focus_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
+  widget = gtk_root_get_focus (GTK_ROOT (sl->priv->object));
   if (widget)
     show_object (sl, G_OBJECT (widget), "properties");
 }

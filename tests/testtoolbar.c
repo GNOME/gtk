@@ -344,7 +344,7 @@ popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
       GtkWidget *widget;
 
       window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (toolbar)));
-      widget = gtk_window_get_focus (window);
+      widget = gtk_root_get_focus (GTK_ROOT (window));
       if (!widget)
         widget = GTK_WIDGET (toolbar);
 
