@@ -484,7 +484,6 @@ enum {
   GRAB_NOTIFY,
   CHILD_NOTIFY,
   MNEMONIC_ACTIVATE,
-  FOCUS,
   MOVE_FOCUS,
   KEYNAV_FAILED,
   DRAG_BEGIN,
@@ -1669,23 +1668,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOOLEAN,
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
-
-  /**
-   * GtkWidget::focus:
-   * @widget: the object which received the signal.
-   * @direction:
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-   */
-  widget_signals[FOCUS] =
-    g_signal_new (I_("focus"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, focus),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__ENUM,
-		  G_TYPE_BOOLEAN, 1,
-		  GTK_TYPE_DIRECTION_TYPE);
 
   /**
    * GtkWidget::move-focus:
@@ -7489,8 +7471,6 @@ gboolean
 gtk_widget_child_focus (GtkWidget       *widget,
                         GtkDirectionType direction)
 {
-  gboolean return_val;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!_gtk_widget_get_visible (widget) ||
@@ -7502,12 +7482,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
    * focus
    */
 
-  g_signal_emit (widget,
-		 widget_signals[FOCUS],
-		 0,
-		 direction, &return_val);
-
-  return return_val;
+  return GTK_WIDGET_GET_CLASS (widget)->focus (widget, direction);
 }
 
 /**
