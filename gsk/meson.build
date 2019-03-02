@@ -33,6 +33,7 @@ gsk_private_sources = files([
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
+  'gskrendernodeparser.c',
   'gl/gskshaderbuilder.c',
   'gl/gskglprofiler.c',
   'gl/gskglrenderer.c',
