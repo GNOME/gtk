@@ -824,7 +824,8 @@ gtk_widget_real_pick (GtkWidget *widget,
       GtkWidget *picked;
       graphene_point3d_t p0, p1, res;
 
-      if (!graphene_matrix_inverse (&priv->transform, &inv))
+      gsk_transform_to_matrix (priv->transform, &inv);
+      if (!graphene_matrix_inverse (&inv, &inv))
         continue;
       graphene_point3d_init (&p0, x, y, 0);
       graphene_point3d_init (&p1, x, y, 1);
@@ -2885,8 +2886,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->width_request = -1;
   priv->height_request = -1;
 
-  graphene_matrix_init_identity (&priv->transform);
-
   _gtk_size_request_cache_init (&priv->requests);
 
   priv->cssnode = gtk_css_widget_node_new (widget);
@@ -4186,7 +4185,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   gint min_width, min_height;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
-  graphene_matrix_t transform_matrix;
   GskTransform *css_transform;
 #ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
@@ -4330,13 +4328,10 @@ gtk_widget_allocate (GtkWidget    *widget,
                      margin.bottom + border.bottom + padding.bottom;
   if (baseline >= 0)
     baseline -= margin.top + border.top + padding.top;
-
-  graphene_matrix_init_translate (&priv->transform, &GRAPHENE_POINT3D_INIT (adjusted.x, adjusted.y, 0));
-  gsk_transform_to_matrix (transform, &transform_matrix);
-  graphene_matrix_multiply (&priv->transform, &transform_matrix, &priv->transform);
-  priv->transform_category = gsk_transform_get_category (transform);
   if (adjusted.x || adjusted.y)
-    priv->transform_category = MIN (priv->transform_category, GSK_TRANSFORM_CATEGORY_2D_TRANSLATE);
+    transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+
+  priv->transform = transform;
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -6224,7 +6219,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       priv->allocated_width = 0;
       priv->allocated_height = 0;
       priv->allocated_size_baseline = 0;
-      graphene_matrix_init_identity (&priv->transform);
+      g_clear_pointer (&priv->transform, gsk_transform_unref);
       priv->width = 0;
       priv->height = 0;
       gtk_widget_update_paintables (widget);
@@ -11075,6 +11070,7 @@ gtk_widget_get_allocation (GtkWidget     *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   const graphene_rect_t *margin_rect;
+  float dx, dy;
   GtkCssBoxes boxes;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -11083,10 +11079,11 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   gtk_css_boxes_init (&boxes, widget);
   margin_rect = gtk_css_boxes_get_margin_rect (&boxes);
 
-  allocation->x = graphene_matrix_get_value (&priv->transform, 3, 0) +
-                  ceil (margin_rect->origin.x);
-  allocation->y = graphene_matrix_get_value (&priv->transform, 3, 1) +
-                  ceil (margin_rect->origin.y);
+  if (!gsk_transform_to_translate (priv->transform, &dx, &dy))
+    dx = dy = 0;
+
+  allocation->x = dx + ceil (margin_rect->origin.x);
+  allocation->y = dy + ceil (margin_rect->origin.y);
   allocation->width = ceil (margin_rect->size.width);
   allocation->height = ceil (margin_rect->size.height);
 }
@@ -11205,7 +11202,7 @@ gtk_widget_compute_transform (GtkWidget         *widget,
                               graphene_matrix_t *out_transform)
 {
   GtkWidget *ancestor, *iter;
-  graphene_matrix_t transform, inverse;
+  graphene_matrix_t transform, inverse, tmp;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
@@ -11214,7 +11211,7 @@ gtk_widget_compute_transform (GtkWidget         *widget,
   /* optimization for common case: parent wants coordinates of a direct child */
   if (target == widget->priv->parent)
     {
-      graphene_matrix_init_from_matrix (out_transform, &widget->priv->transform);
+      gsk_transform_to_matrix (widget->priv->transform, out_transform);
       return TRUE;
     }
 
@@ -11229,8 +11226,9 @@ gtk_widget_compute_transform (GtkWidget         *widget,
   for (iter = widget; iter != ancestor; iter = iter->priv->parent)
     {
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
+      gsk_transform_to_matrix (priv->transform, &tmp);
 
-      graphene_matrix_multiply (&transform, &priv->transform, &transform);
+      graphene_matrix_multiply (&transform, &tmp, &transform);
     }
 
   /* optimization for common case: parent wants coordinates of a non-direct child */
@@ -11244,8 +11242,9 @@ gtk_widget_compute_transform (GtkWidget         *widget,
   for (iter = target; iter != ancestor; iter = iter->priv->parent)
     {
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
+      gsk_transform_to_matrix (priv->transform, &tmp);
 
-      graphene_matrix_multiply (&inverse, &priv->transform, &inverse);
+      graphene_matrix_multiply (&inverse, &tmp, &inverse);
     }
   if (!graphene_matrix_inverse (&inverse, &inverse))
     {
@@ -13425,7 +13424,7 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (snapshot != NULL);
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_transform_matrix_with_category (snapshot, &priv->transform, priv->transform_category);
+  gtk_snapshot_transform (snapshot, priv->transform);
 
   gtk_widget_snapshot (child, snapshot);
 
