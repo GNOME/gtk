@@ -422,7 +422,8 @@ gtk_widget_focus_sort (GtkWidget        *widget,
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          if (_gtk_widget_get_realized (child))
+          if (_gtk_widget_get_realized (child) &&
+              gtk_widget_get_sensitive (child))
             g_ptr_array_add (focus_order, child);
         }
     }
@@ -482,4 +483,76 @@ gtk_widget_focus_move (GtkWidget        *widget,
   g_ptr_array_unref (focus_order);
 
   return ret;
+}
+
+/**
+ * gtk_widget_get_next_focus:
+ * @widget: a #GtkWidget
+ * @direction: diretion to move in
+ *
+ * Finds the widget that would get focused if @widget was
+ * the focus widget, and focus was moved in @direcion.
+ *
+ * Returns: (nullable): (transfer none): the next focus widget
+ */
+GtkWidget *
+gtk_widget_get_next_focus (GtkWidget        *widget,
+                           GtkDirectionType  dir)
+{
+  GtkWidget *prev;
+  GtkWidget *next;
+
+  prev = NULL;
+  do {
+    next = GTK_WIDGET_GET_CLASS (widget)->next_focus_child (widget, prev, dir);
+    if (gtk_widget_get_can_focus (next))
+      {
+        return next;
+      }
+    else if (next == NULL)
+      {
+        prev = widget;
+        widget = gtk_widget_get_parent (widget);
+      }
+    else
+      {
+        widget = next;
+        prev = NULL;
+      }
+  } while (widget);
+
+  return NULL;
+}
+
+GtkWidget *
+gtk_widget_next_focus_child (GtkWidget        *widget,
+                             GtkWidget        *focus_child,
+                             GtkDirectionType  direction)
+{
+  GPtrArray *focus_order;
+  int i;
+  GtkWidget *next_child = NULL;
+
+  focus_order = g_ptr_array_new ();
+  gtk_widget_focus_sort (widget, direction, focus_order);
+
+  for (i = 0; i < focus_order->len; i++)
+    {
+      GtkWidget *child = g_ptr_array_index (focus_order, i);
+
+      if (focus_child)
+        {
+          if (focus_child == child)
+            focus_child = NULL;
+        }
+      else
+        {
+          next_child = child;
+          break;
+        }
+    }
+
+  g_ptr_array_unref (focus_order);
+
+  return next_child;
 }
