@@ -1,0 +1,8 @@
+outset_shadow {
+  outline = (100, 100, 100, 100)
+  color = (0, 0, 0, 1)
+  dx = 0
+  dy = 0
+  spread = 10
+  blur_radius = 0
+}
