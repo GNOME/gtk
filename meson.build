@@ -11,8 +11,8 @@ project('gtk', 'c',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
-glib_minor_req = 55
-glib_micro_req = 0
+glib_minor_req = 59
+glib_micro_req = 1
 
 if glib_minor_req.is_odd()
   glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req - 1)
@@ -35,7 +35,7 @@ gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
 wayland_proto_req  = '>= 1.12'
 wayland_req        = '>= 1.14.91'
-graphene_req       = '>= 1.5.1'
+graphene_req       = '>= 1.8.5'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.2.5'
 xkbcommon_req      = '>= 0.2.0'
