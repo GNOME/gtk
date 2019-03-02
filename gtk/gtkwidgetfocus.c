@@ -155,15 +155,11 @@ static gboolean
 old_focus_coords (GtkWidget       *widget,
                   graphene_rect_t *old_focus_bounds)
 {
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
   GtkWidget *old_focus;
 
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      old_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-      if (old_focus)
-        return gtk_widget_compute_bounds (old_focus, widget, old_focus_bounds);
-    }
+  old_focus = gtk_root_get_focus (gtk_widget_get_root (widget));
+  if (old_focus)
+    return gtk_widget_compute_bounds (old_focus, widget, old_focus_bounds);
 
   return FALSE;
 }
