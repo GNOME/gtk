@@ -1098,14 +1098,14 @@ check_valid_child_name (GtkFileChooserWidget *impl,
 }
 
 static void
-new_folder_name_changed (GtkEntry             *entry,
+new_folder_name_changed (GtkEditable          *editable,
                          GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   check_valid_child_name (impl,
                           priv->current_folder,
-                          gtk_editable_get_text (entry),
+                          gtk_editable_get_text (editable),
                           TRUE,
                           NULL,
                           priv->new_folder_error_stack,

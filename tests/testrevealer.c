@@ -73,7 +73,7 @@ main (gint argc,
   gtk_widget_set_vexpand (revealer, TRUE);
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
-  gtk_editable_set_text (GTK_ENTRY (entry), "23456");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "23456");
   gtk_container_add (GTK_CONTAINER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
