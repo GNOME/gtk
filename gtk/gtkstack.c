@@ -533,6 +533,9 @@ static void     gtk_stack_forall                         (GtkContainer  *contain
 static void     gtk_stack_compute_expand                 (GtkWidget     *widget,
                                                           gboolean      *hexpand,
                                                           gboolean      *vexpand);
+static GtkWidget *gtk_stack_next_focus_child             (GtkWidget     *widget,
+                                                          GtkWidget     *child,
+                                                          GtkDirectionType direction);
 static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
                                                           int            width,
                                                           int            height,
@@ -724,6 +727,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->snapshot = gtk_stack_snapshot;
   widget_class->measure = gtk_stack_measure;
   widget_class->compute_expand = gtk_stack_compute_expand;
+  widget_class->next_focus_child = gtk_stack_next_focus_child;
 
   container_class->add = gtk_stack_add;
   container_class->remove = gtk_stack_remove;
@@ -2432,6 +2436,19 @@ gtk_stack_measure (GtkWidget      *widget,
           *natural = LERP (*natural, priv->last_visible_widget_width, t);
         }
     }
+}
+
+static GtkWidget *
+gtk_stack_next_focus_child (GtkWidget *widget,
+                            GtkWidget *child,
+                            GtkDirectionType direction)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (widget));
+
+  if (child == NULL)
+    return priv->visible_child->widget;
+
+  return NULL;
 }
 
 static void
