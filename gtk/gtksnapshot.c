@@ -1267,20 +1267,6 @@ gtk_snapshot_transform_matrix (GtkSnapshot             *snapshot,
   state->transform = gsk_transform_matrix (state->transform, matrix);
 }
 
-void
-gtk_snapshot_transform_matrix_with_category (GtkSnapshot             *snapshot,
-                                             const graphene_matrix_t *matrix,
-                                             GskTransformCategory     category)
-{
-  GtkSnapshotState *state;
-
-  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
-  g_return_if_fail (matrix != NULL);
-
-  state = gtk_snapshot_get_current_state (snapshot);
-  state->transform = gsk_transform_matrix_with_category (state->transform, matrix, category);
-}
-
 /**
  * gtk_snapshot_translate:
  * @snapshot: a #GtkSnapshot
