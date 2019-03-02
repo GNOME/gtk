@@ -2172,10 +2172,8 @@ gtk_paned_restore_focus (GtkPaned *paned)
 	  
 	  if (!gtk_widget_child_focus (GTK_WIDGET (paned), GTK_DIR_TAB_FORWARD))
 	    {
-	      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (paned));
-	      
-	      if (GTK_IS_WINDOW (toplevel))
-		gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+              GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (paned));
+              gtk_root_set_focus (root, NULL);
 	    }
 	}
       
@@ -2280,7 +2278,6 @@ gtk_paned_cycle_handle_focus (GtkPaned *paned,
     {
       GtkPaned *focus;
       GtkPaned *first;
-      GtkWidget *toplevel;
       GtkWidget *focus_child;
 
       gtk_paned_find_neighbours (paned, &next, &prev);
@@ -2326,10 +2323,7 @@ gtk_paned_cycle_handle_focus (GtkPaned *paned,
 	    first = next;
 	}
 
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (paned));
-
-      if (GTK_IS_WINDOW (toplevel))
-        gtk_paned_set_saved_focus (focus, gtk_window_get_focus (GTK_WINDOW (toplevel)));
+      gtk_paned_set_saved_focus (focus, gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (paned))));
       gtk_paned_set_first_paned (focus, first);
       priv->original_position = gtk_paned_get_position (focus);
 

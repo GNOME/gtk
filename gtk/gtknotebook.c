@@ -5356,8 +5356,8 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 
   if (priv->cur_page)
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
-      GtkWidget *focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (notebook));
+      GtkWidget *focus = gtk_root_get_focus (root);
       if (focus)
         child_has_focus = gtk_widget_is_ancestor (focus, priv->cur_page->child);
       gtk_widget_unset_state_flags (priv->cur_page->tab_widget, GTK_STATE_FLAG_CHECKED);
