@@ -644,7 +644,6 @@ struct _GskRotateTransform
   GskTransform parent;
 
   float angle;
-  graphene_vec3_t axis;
 };
 
 static void
@@ -655,7 +654,7 @@ gsk_rotate_transform_finalize (GskTransform *self)
 static GskTransformCategory
 gsk_rotate_transform_categorize (GskTransform *transform)
 {
-  return GSK_TRANSFORM_CATEGORY_3D;
+  return GSK_TRANSFORM_CATEGORY_2D;
 }
 
 static void
@@ -663,8 +662,15 @@ gsk_rotate_transform_to_matrix (GskTransform      *transform,
                                 graphene_matrix_t *out_matrix)
 {
   GskRotateTransform *self = (GskRotateTransform *) transform;
+  float rad, c, s;
 
-  graphene_matrix_init_rotate (out_matrix, self->angle, &self->axis);
+  rad = self->angle * M_PI / 180.f;
+  c = cosf (rad);
+  s = sinf (rad);
+  graphene_matrix_init_from_2d (out_matrix,
+                                c, s,
+                                -s, c,
+                                0, 0);
 }
 
 static gboolean
@@ -676,8 +682,27 @@ gsk_rotate_transform_apply_2d (GskTransform *transform,
                                float        *out_dx,
                                float        *out_dy)
 {
-  /* FIXME: Do the right thing for normal rotations */
-  return FALSE;
+  GskRotateTransform *self = (GskRotateTransform *) transform;
+  float s, c, rad, xx, xy, yx, yy;
+
+  if (fmodf (self->angle, 360.0f) == 0.0)
+    return TRUE;
+
+  rad = self->angle * G_PI / 180.0f;
+  s = sinf (rad);
+  c = cosf (rad);
+
+  xx =  c * *out_xx + s * *out_xy;
+  yx =  c * *out_yx + s * *out_yy;
+  xy = -s * *out_xx + c * *out_xy;
+  yy = -s * *out_yx + c * *out_yy;
+
+  *out_xx = xx;
+  *out_yx = yx;
+  *out_xy = xy;
+  *out_yy = yy;
+
+  return TRUE;
 }
 
 static gboolean
@@ -704,7 +729,7 @@ gsk_rotate_transform_apply (GskTransform *transform,
 {
   GskRotateTransform *self = (GskRotateTransform *) transform;
 
-  return gsk_transform_rotate_3d (apply_to, self->angle, &self->axis);
+  return gsk_transform_rotate (apply_to, self->angle);
 }
 
 static gboolean
@@ -714,8 +739,7 @@ gsk_rotate_transform_equal (GskTransform *first_transform,
   GskRotateTransform *first = (GskRotateTransform *) first_transform;
   GskRotateTransform *second = (GskRotateTransform *) second_transform;
 
-  return first->angle == second->angle
-         && graphene_vec3_equal (&first->axis, &second->axis);
+  return first->angle == second->angle;
 }
 
 static void
@@ -723,30 +747,10 @@ gsk_rotate_transform_print (GskTransform *transform,
                             GString      *string)
 {
   GskRotateTransform *self = (GskRotateTransform *) transform;
-  graphene_vec3_t default_axis;
 
-  graphene_vec3_init_from_vec3 (&default_axis, graphene_vec3_z_axis ());
-  if (graphene_vec3_equal (&default_axis, &self->axis))
-    {
-      g_string_append (string, "rotate(");
-      string_append_double (string, self->angle);
-      g_string_append (string, ")");
-    }
-  else
-    {
-      float f[3];
-      guint i;
-
-      g_string_append (string, "rotate3d(");
-      graphene_vec3_to_float (&self->axis, f);
-      for (i = 0; i < 3; i++)
-        {
-          string_append_double (string, f[i]);
-          g_string_append (string, ", ");
-        }
-      string_append_double (string, self->angle);
-      g_string_append (string, ")");
-    }
+  g_string_append (string, "rotate(");
+  string_append_double (string, self->angle);
+  g_string_append (string, ")");
 }
 
 static const GskTransformClass GSK_ROTATE_TRANSFORM_CLASS =
@@ -777,8 +781,128 @@ GskTransform *
 gsk_transform_rotate (GskTransform *next,
                       float         angle)
 {
-  return gsk_transform_rotate_3d (next, angle, graphene_vec3_z_axis ());
+  GskRotateTransform *result = gsk_transform_alloc (&GSK_ROTATE_TRANSFORM_CLASS, next);
+
+  result->angle = angle;
+
+  return &result->parent;
 }
+
+/*** ROTATE 3D ***/
+
+typedef struct _GskRotate3dTransform GskRotate3dTransform;
+
+struct _GskRotate3dTransform
+{
+  GskTransform parent;
+
+  float angle;
+  graphene_vec3_t axis;
+};
+
+static void
+gsk_rotate3d_transform_finalize (GskTransform *self)
+{
+}
+
+static GskTransformCategory
+gsk_rotate3d_transform_categorize (GskTransform *transform)
+{
+  return GSK_TRANSFORM_CATEGORY_3D;
+}
+
+static void
+gsk_rotate3d_transform_to_matrix (GskTransform      *transform,
+                                  graphene_matrix_t *out_matrix)
+{
+  GskRotate3dTransform *self = (GskRotate3dTransform *) transform;
+
+  graphene_matrix_init_rotate (out_matrix, self->angle, &self->axis);
+}
+
+static gboolean
+gsk_rotate3d_transform_apply_2d (GskTransform *transform,
+                                 float        *out_xx,
+                                 float        *out_yx,
+                                 float        *out_xy,
+                                 float        *out_yy,
+                                 float        *out_dx,
+                                 float        *out_dy)
+{
+  return FALSE;
+}
+
+static gboolean
+gsk_rotate3d_transform_apply_affine (GskTransform *transform,
+                                     float        *out_scale_x,
+                                     float        *out_scale_y,
+                                     float        *out_dx,
+                                     float        *out_dy)
+{
+  return FALSE;
+}
+
+static gboolean
+gsk_rotate3d_transform_apply_translate (GskTransform *transform,
+                                        float        *out_dx,
+                                        float        *out_dy)
+{
+  return FALSE;
+}
+
+static GskTransform *
+gsk_rotate3d_transform_apply (GskTransform *transform,
+                              GskTransform *apply_to)
+{
+  GskRotate3dTransform *self = (GskRotate3dTransform *) transform;
+
+  return gsk_transform_rotate_3d (apply_to, self->angle, &self->axis);
+}
+
+static gboolean
+gsk_rotate3d_transform_equal (GskTransform *first_transform,
+                              GskTransform *second_transform)
+{
+  GskRotate3dTransform *first = (GskRotate3dTransform *) first_transform;
+  GskRotate3dTransform *second = (GskRotate3dTransform *) second_transform;
+
+  return first->angle == second->angle
+         && graphene_vec3_equal (&first->axis, &second->axis);
+}
+
+static void
+gsk_rotate3d_transform_print (GskTransform *transform,
+                            GString      *string)
+{
+  GskRotate3dTransform *self = (GskRotate3dTransform *) transform;
+  float f[3];
+  guint i;
+
+  g_string_append (string, "rotate3d(");
+  graphene_vec3_to_float (&self->axis, f);
+  for (i = 0; i < 3; i++)
+    {
+      string_append_double (string, f[i]);
+      g_string_append (string, ", ");
+    }
+  string_append_double (string, self->angle);
+  g_string_append (string, ")");
+}
+
+static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
+{
+  sizeof (GskRotate3dTransform),
+  "GskRotate3dTransform",
+  gsk_rotate3d_transform_finalize,
+  gsk_rotate3d_transform_categorize,
+  gsk_rotate3d_transform_to_matrix,
+  gsk_rotate3d_transform_apply_2d,
+  gsk_rotate3d_transform_apply_affine,
+  gsk_rotate3d_transform_apply_translate,
+  gsk_rotate3d_transform_print,
+  gsk_rotate3d_transform_apply,
+  gsk_rotate3d_transform_equal,
+};
 
 /**
  * gsk_transform_rotate_3d:
@@ -797,7 +921,12 @@ gsk_transform_rotate_3d (GskTransform          *next,
                          float                  angle,
                          const graphene_vec3_t *axis)
 {
-  GskRotateTransform *result = gsk_transform_alloc (&GSK_ROTATE_TRANSFORM_CLASS, next);
+  GskRotate3dTransform *result;
+  
+  if (graphene_vec3_get_x (axis) == 0.0 && graphene_vec3_get_y (axis) == 0.0)
+    return gsk_transform_rotate (next, angle);
+
+  result = gsk_transform_alloc (&GSK_ROTATE3D_TRANSFORM_CLASS, next);
 
   result->angle = angle;
   graphene_vec3_init_from_vec3 (&result->axis, axis);
