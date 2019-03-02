@@ -76,8 +76,6 @@ gboolean                gsk_transform_equal                     (GskTransform   
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_new                       (void);
 GDK_AVAILABLE_IN_ALL
-GskTransform *          gsk_transform_identity                  (GskTransform                   *next);
-GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_transform                 (GskTransform                   *next,
                                                                  GskTransform                   *other);
 GDK_AVAILABLE_IN_ALL
