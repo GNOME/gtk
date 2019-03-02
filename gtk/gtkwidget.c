@@ -931,6 +931,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
+  klass->next_focus_child = gtk_widget_next_focus_child;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->drag_begin = NULL;
@@ -5430,8 +5431,19 @@ gtk_widget_real_focus (GtkWidget         *widget,
   else
     {
       /* Try focusing any of the child widgets, depending on the given direction */
-      if (gtk_widget_focus_move (widget, direction))
-        return TRUE;
+      GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
+      GtkWidget *next_focus;
+
+      if (focus_child)
+        next_focus = gtk_widget_get_next_focus (focus_child, direction);
+      else
+        next_focus = gtk_widget_get_next_focus (widget, direction);
+
+      if (gtk_widget_is_ancestor (next_focus, widget))
+        {
+          gtk_widget_grab_focus (next_focus);
+          return TRUE;
+        }
     }
 
   return FALSE;
@@ -5441,10 +5453,15 @@ static void
 gtk_widget_real_move_focus (GtkWidget         *widget,
                             GtkDirectionType   direction)
 {
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
+  GtkWidget *focus_child;
+  GtkWidget *next_focus;
 
-  if (widget != toplevel && GTK_IS_WINDOW (toplevel))
-    g_signal_emit (toplevel, widget_signals[MOVE_FOCUS], 0, direction);
+  focus_child = gtk_root_get_focus (gtk_widget_get_root (widget));
+  if (focus_child)
+    next_focus = gtk_widget_get_next_focus (focus_child, direction);
+  else
+    next_focus = gtk_widget_get_next_focus (widget, direction);
+  gtk_widget_grab_focus (next_focus);
 }
 
 static gboolean
