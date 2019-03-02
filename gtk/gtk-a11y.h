@@ -71,6 +71,7 @@
 #include <gtk/a11y/gtkstackaccessible.h>
 #include <gtk/a11y/gtkstatusbaraccessible.h>
 #include <gtk/a11y/gtkswitchaccessible.h>
+#include <gtk/a11y/gtktextaccessible.h>
 #include <gtk/a11y/gtktextcellaccessible.h>
 #include <gtk/a11y/gtktextviewaccessible.h>
 #include <gtk/a11y/gtktogglebuttonaccessible.h>
