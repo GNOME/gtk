@@ -23,7 +23,12 @@
 #include "gtkpopup.h"
 #include "gtkroot.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkbindings.h"
+#include "gtkenums.h"
+#include "gtktypebuiltins.h"
+#include "gdk/gdkeventsprivate.h"
 
 static GListStore *popup_list = NULL;
 
@@ -32,6 +37,8 @@ typedef struct {
   GskRenderer *renderer;
   GdkSurface *surface;
   GtkWidget *relative_to;
+  GtkWidget *focus_widget;
+  gboolean active;
 } GtkPopupPrivate;
 
 
@@ -130,10 +137,33 @@ gtk_popup_root_interface_init (GtkRootInterface *iface)
   iface->check_resize = gtk_popup_root_check_resize;
 }
 
+static void gtk_popup_set_is_active (GtkPopup *popup, gboolean active);
+
+static void
+gtk_popup_focus_in (GtkWidget *widget)
+{
+  gtk_popup_set_is_active (GTK_POPUP (widget), TRUE);
+}
+
+static void
+gtk_popup_focus_out (GtkWidget *widget)
+{
+  gtk_popup_set_is_active (GTK_POPUP (widget), FALSE);
+}
+
+
 static void
 gtk_popup_init (GtkPopup *popup)
 {
+  GtkEventController *controller;
+
   gtk_widget_set_has_surface (GTK_WIDGET (popup), TRUE);
+  gtk_widget_set_can_focus (GTK_WIDGET (popup), TRUE);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popup_focus_in), popup);
+  g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (gtk_popup_focus_out), popup);
+  gtk_widget_add_controller (GTK_WIDGET (popup), controller);
 }
 
 static void
@@ -155,6 +185,7 @@ gtk_popup_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
+#if 0
   priv->surface = gdk_surface_new_popup (priv->display, &allocation);
   // TODO xdg-popop window type
   gdk_surface_set_transient_for (priv->surface, gtk_widget_get_surface (priv->relative_to));
@@ -165,6 +196,9 @@ gtk_popup_realize (GtkWidget *widget)
                             GDK_GRAVITY_NORTH,
                             GDK_ANCHOR_FLIP_Y,
                             0, 10);
+#else
+  priv->surface = gdk_surface_new_toplevel (priv->display, 20, 20);
+#endif
 
   gtk_widget_set_surface (widget, priv->surface);
   gtk_widget_register_surface (widget, priv->surface);
@@ -307,11 +341,67 @@ gtk_popup_size_allocate (GtkWidget *widget,
   gtk_widget_size_allocate (child, &(GtkAllocation) { 0, 0, width, height }, baseline);
 }
 
+static void gtk_popup_set_focus (GtkPopup  *popup,
+                                 GtkWidget *widget);
+
+static void
+gtk_popup_set_property (GObject       *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GtkPopup *popup = GTK_POPUP (object);
+
+  switch (prop_id)
+    {
+    case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
+      gtk_popup_set_focus (popup, g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_popup_get_property (GObject      *object,
+                        guint         prop_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GtkPopup *popup = GTK_POPUP (object);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  switch (prop_id)
+    {
+    case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
+      g_value_set_object (value, priv->focus_widget);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+add_tab_bindings (GtkBindingSet    *binding_set,
+                  GdkModifierType   modifiers,
+                  GtkDirectionType  direction)
+{
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
 static void
 gtk_popup_class_init (GtkPopupClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   if (popup_list == NULL)
     popup_list = g_list_store_new (GTK_TYPE_WIDGET);
@@ -319,6 +409,8 @@ gtk_popup_class_init (GtkPopupClass *klass)
   object_class->constructed = gtk_popup_constructed;
   object_class->dispose = gtk_popup_dispose;
   object_class->finalize = gtk_popup_finalize;
+  object_class->set_property = gtk_popup_set_property;
+  object_class->get_property = gtk_popup_get_property;
 
   widget_class->realize = gtk_popup_realize;
   widget_class->unrealize = gtk_popup_unrealize;
@@ -328,6 +420,15 @@ gtk_popup_class_init (GtkPopupClass *klass)
   widget_class->hide = gtk_popup_hide;
   widget_class->measure = gtk_popup_measure;
   widget_class->size_allocate = gtk_popup_size_allocate;
+
+  gtk_root_install_properties (object_class, 1);
+
+  binding_set = gtk_binding_set_by_class (klass);
+
+  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 }
 
 GtkWidget *
@@ -366,3 +467,117 @@ gtk_popup_get_popups (void)
   return G_LIST_MODEL (popup_list);
 }
 
+static void
+do_focus_change (GtkWidget *widget,
+                 gboolean   in)
+{
+  GdkSeat *seat;
+  GList *devices, *d;
+
+  g_object_ref (widget);
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
+  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *dev = d->data;
+      GdkEvent *fevent;
+      GdkSurface *surface;
+
+      surface = _gtk_widget_get_surface (widget);
+
+      fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+      gdk_event_set_display (fevent, gtk_widget_get_display (widget));
+
+      fevent->any.type = GDK_FOCUS_CHANGE;
+      fevent->any.surface = surface;
+      if (surface)
+        g_object_ref (surface);
+      fevent->focus_change.in = in;
+      gdk_event_set_device (fevent, dev);
+
+      gtk_widget_send_focus_change (widget, fevent);
+
+      g_object_unref (fevent);
+    }
+
+  g_list_free (devices);
+  g_object_unref (widget);
+}
+
+static void
+unset_focus_widget (GtkPopup *popup)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GtkWidget *f;
+
+  for (f = priv->focus_widget; f; f = gtk_widget_get_parent (f))
+    {
+      gtk_widget_unset_state_flags (f, GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_VISIBLE);
+      if (GTK_IS_ROOT (f))
+        break;
+    }
+
+  if (priv->focus_widget)
+    do_focus_change (priv->focus_widget, FALSE);
+  g_set_object (&priv->focus_widget, NULL);
+}
+
+static void
+set_focus_widget (GtkPopup  *popup,
+                  GtkWidget *focus)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GtkWidget *f;
+  GtkStateFlags flags = GTK_STATE_FLAG_FOCUSED;
+
+  flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+
+  for (f = focus; f; f = gtk_widget_get_parent (f))
+    {
+      GtkWidget *parent = gtk_widget_get_parent (f);
+      gtk_widget_set_state_flags (f, flags, FALSE);
+      if (GTK_IS_ROOT (f))
+        break;
+      if (parent)
+        gtk_widget_set_focus_child (parent, f);
+    }
+
+  g_set_object (&priv->focus_widget, focus);
+  if (priv->focus_widget)
+    do_focus_change (priv->focus_widget, TRUE);
+}
+
+static void
+gtk_popup_set_focus (GtkPopup  *popup,
+                     GtkWidget *focus)
+{
+  g_return_if_fail (GTK_IS_POPUP (popup));
+
+  if (focus && !gtk_widget_can_take_focus (focus))
+    return;
+
+  unset_focus_widget (popup);
+  set_focus_widget (popup, focus);
+
+  g_object_notify (G_OBJECT (popup), "focus-widget");
+}
+
+static void
+gtk_popup_set_is_active (GtkPopup *popup,
+                         gboolean  active)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  if (priv->active == active)
+    return;
+
+  priv->active = active;
+
+  if (priv->focus_widget &&
+      priv->focus_widget != GTK_WIDGET (popup) &&
+      gtk_widget_has_focus (priv->focus_widget) != active)
+    do_focus_change (priv->focus_widget, active);
+}
