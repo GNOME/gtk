@@ -255,7 +255,7 @@ gtk_search_entry_grab_focus (GtkWidget *widget)
   GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->entry));
+  gtk_widget_grab_focus (priv->entry);
 }
 
 static gboolean
@@ -523,6 +523,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   gtk_widget_set_vexpand (priv->box, FALSE);
 
   priv->entry = gtk_text_new ();
+  g_object_set (priv->entry, "select-on-focus", FALSE, NULL);
   gtk_widget_set_hexpand (priv->entry, TRUE);
   gtk_widget_set_vexpand (priv->entry, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), GTK_WIDGET (priv->entry));

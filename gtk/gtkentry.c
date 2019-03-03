@@ -1670,10 +1670,23 @@ gtk_entry_snapshot (GtkWidget   *widget,
 void
 gtk_entry_grab_focus_without_selecting (GtkEntry *entry)
 {
-  g_return_if_fail (GTK_IS_ENTRY (entry));
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  gboolean select, set;
 
-  gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->text));
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  g_object_get (priv->text,
+                "select-on-focus", &select,
+                "select-on-focus-set", &set,
+                NULL);
+  g_object_set (priv->text, "select-on-focus", FALSE, NULL);
+
+  gtk_widget_grab_focus (priv->text);
+
+  g_object_set (priv->text,
+                "select-on-focus", select,
+                "select-on-focus-set", set,
+                NULL);
 }
 
 static void
