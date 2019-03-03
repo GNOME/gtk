@@ -208,8 +208,6 @@ static void                 gtk_list_box_update_cursor                (GtkListBo
                                                                        GtkListBoxRow       *row,
                                                                        gboolean             grab_focus);
 static void                 gtk_list_box_show                         (GtkWidget           *widget);
-static gboolean             gtk_list_box_focus                        (GtkWidget           *widget,
-                                                                       GtkDirectionType     direction);
 static GSequenceIter*       gtk_list_box_get_previous_visible         (GtkListBox          *box,
                                                                        GSequenceIter       *iter);
 static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBox          *box);
@@ -407,7 +405,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   object_class->set_property = gtk_list_box_set_property;
   object_class->finalize = gtk_list_box_finalize;
   widget_class->show = gtk_list_box_show;
-  widget_class->focus = gtk_list_box_focus;
   widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
   widget_class->measure = gtk_list_box_measure;
@@ -1870,129 +1867,6 @@ gtk_list_box_show (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->show (widget);
 }
 
-static gboolean
-gtk_list_box_focus (GtkWidget        *widget,
-                    GtkDirectionType  direction)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-  GtkWidget *focus_child;
-  GtkListBoxRow *next_focus_row;
-  GtkWidget *row;
-  GtkWidget *header;
-
-  focus_child = gtk_widget_get_focus_child (widget);
-
-  next_focus_row = NULL;
-  if (focus_child != NULL)
-    {
-      GSequenceIter *i;
-
-      if (gtk_widget_child_focus (focus_child, direction))
-        return TRUE;
-
-      if (direction == GTK_DIR_UP || direction == GTK_DIR_TAB_BACKWARD)
-        {
-          if (GTK_IS_LIST_BOX_ROW (focus_child))
-            {
-              header = ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->header;
-              if (header && gtk_widget_child_focus (header, direction))
-                return TRUE;
-            }
-
-          if (GTK_IS_LIST_BOX_ROW (focus_child))
-            row = focus_child;
-          else
-            row = g_hash_table_lookup (priv->header_hash, focus_child);
-
-          if (GTK_IS_LIST_BOX_ROW (row))
-            i = gtk_list_box_get_previous_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (row))->iter);
-          else
-            i = NULL;
-
-          while (i != NULL)
-            {
-              if (gtk_widget_get_sensitive (g_sequence_get (i)))
-                {
-                  next_focus_row = g_sequence_get (i);
-                  break;
-                }
-
-              i = gtk_list_box_get_previous_visible (box, i);
-            }
-        }
-      else if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
-        {
-          if (GTK_IS_LIST_BOX_ROW (focus_child))
-            i = gtk_list_box_get_next_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
-          else
-            {
-              row = g_hash_table_lookup (priv->header_hash, focus_child);
-              if (GTK_IS_LIST_BOX_ROW (row))
-                i = ROW_PRIV (GTK_LIST_BOX_ROW (row))->iter;
-              else
-                i = NULL;
-            }
-
-          while (!g_sequence_iter_is_end (i))
-            {
-              if (gtk_widget_get_sensitive (g_sequence_get (i)))
-                {
-                  next_focus_row = g_sequence_get (i);
-                  break;
-                }
-
-              i = gtk_list_box_get_next_visible (box, i);
-            }
-        }
-    }
-  else
-    {
-      /* No current focus row */
-      switch (direction)
-        {
-        case GTK_DIR_UP:
-        case GTK_DIR_TAB_BACKWARD:
-          next_focus_row = priv->selected_row;
-          if (next_focus_row == NULL)
-            next_focus_row = gtk_list_box_get_last_focusable (box);
-          break;
-        case GTK_DIR_DOWN:
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_LEFT:
-        case GTK_DIR_RIGHT:
-        default:
-          next_focus_row = priv->selected_row;
-          if (next_focus_row == NULL)
-            next_focus_row = gtk_list_box_get_first_focusable (box);
-          break;
-        }
-    }
-
-  if (next_focus_row == NULL)
-    {
-      if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN)
-        {
-          if (gtk_widget_keynav_failed (GTK_WIDGET (box), direction))
-            return TRUE;
-        }
-
-      return FALSE;
-    }
-
-  if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
-    {
-      header = ROW_PRIV (next_focus_row)->header;
-      if (header && gtk_widget_child_focus (header, direction))
-        return TRUE;
-    }
-
-  if (gtk_widget_child_focus (GTK_WIDGET (next_focus_row), direction))
-    return TRUE;
-
-  return FALSE;
-}
-
 static void
 list_box_add_visible_rows (GtkListBox *box,
                            gint        n)
@@ -2883,77 +2757,6 @@ gtk_list_box_row_new (void)
 }
 
 static void
-gtk_list_box_row_set_focus (GtkListBoxRow *row)
-{
-  GtkListBox *box = gtk_list_box_row_get_box (row);
-  gboolean modify;
-  gboolean extend;
-
-  if (!box)
-    return;
-
-  get_current_selection_modifiers (GTK_WIDGET (row), &modify, &extend);
-
-  if (modify)
-    gtk_list_box_update_cursor (box, row, TRUE);
-  else
-    gtk_list_box_update_selection (box, row, FALSE, FALSE);
-}
-
-static gboolean
-gtk_list_box_row_focus (GtkWidget        *widget,
-                        GtkDirectionType  direction)
-{
-  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  gboolean had_focus = FALSE;
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  g_object_get (widget, "has-focus", &had_focus, NULL);
-  if (had_focus)
-    {
-      /* If on row, going right, enter into possible container */
-      if (child &&
-          (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD))
-        {
-          if (gtk_widget_child_focus (GTK_WIDGET (child), direction))
-            return TRUE;
-        }
-
-      return FALSE;
-    }
-  else if (gtk_widget_get_focus_child (widget) != NULL)
-    {
-      /* Child has focus, always navigate inside it first */
-      if (gtk_widget_child_focus (gtk_widget_get_focus_child (widget), direction))
-        return TRUE;
-
-      /* If exiting child container to the left, select row  */
-      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
-        {
-          gtk_list_box_row_set_focus (row);
-          return TRUE;
-        }
-
-      return FALSE;
-    }
-  else
-    {
-      /* If coming from the left, enter into possible container */
-      if (child &&
-          (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD))
-        {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
-        }
-
-      gtk_list_box_row_set_focus (row);
-      return TRUE;
-    }
-}
-
-static void
 gtk_list_box_row_activate (GtkListBoxRow *row)
 {
   GtkListBox *box;
@@ -3384,7 +3187,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
-  widget_class->focus = gtk_list_box_row_focus;
   widget_class->grab_focus = gtk_list_box_row_grab_focus;
 
   klass->activate = gtk_list_box_row_activate;

@@ -216,8 +216,6 @@ static void     gtk_paned_size_allocate         (GtkWidget           *widget,
                                                  int                  height,
                                                  int                  baseline);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
-static gboolean gtk_paned_focus                 (GtkWidget        *widget,
-						 GtkDirectionType  direction);
 static void     gtk_paned_add                   (GtkContainer     *container,
 						 GtkWidget        *widget);
 static void     gtk_paned_remove                (GtkContainer     *container,
@@ -357,7 +355,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->measure = gtk_paned_measure;
   widget_class->size_allocate = gtk_paned_size_allocate;
   widget_class->unrealize = gtk_paned_unrealize;
-  widget_class->focus = gtk_paned_focus;
   widget_class->pick = gtk_paned_pick;
 
   container_class->add = gtk_paned_add;
@@ -1483,24 +1480,6 @@ update_drag (GtkPaned *paned,
 
   if (size != priv->child1_size)
     gtk_paned_set_position (paned, size);
-}
-
-static gboolean
-gtk_paned_focus (GtkWidget        *widget,
-		 GtkDirectionType  direction)
-
-{
-  gboolean retval;
-  
-  /* This is a hack, but how can this be done without
-   * excessive cut-and-paste from gtkcontainer.c?
-   */
-
-  gtk_widget_set_can_focus (widget, FALSE);
-  retval = GTK_WIDGET_CLASS (gtk_paned_parent_class)->focus (widget, direction);
-  gtk_widget_set_can_focus (widget, TRUE);
-
-  return retval;
 }
 
 /**
