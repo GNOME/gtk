@@ -7122,25 +7122,6 @@ set_focus_widget (GtkWindow *window,
     do_focus_change (priv->focus_widget, TRUE);
 }
 
-static gboolean
-can_focus_widget (GtkWidget *widget)
-{
-  GtkWidget *w;
-
-  if (!gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_get_can_focus (widget))
-    return FALSE;
-
-  w = widget;
-  do {
-    if (!gtk_widget_get_child_focusable (w))
-      return FALSE;
-    w = gtk_widget_get_parent (w);
-  } while (w != NULL);
-
-  return TRUE;
-}
-
 /**
  * gtk_window_set_focus:
  * @window: a #GtkWindow
@@ -7159,7 +7140,7 @@ gtk_window_set_focus (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (focus && !can_focus_widget (focus))
+  if (focus && !gtk_widget_can_take_focus (focus))
     return;
 
   unset_focus_widget (window);
