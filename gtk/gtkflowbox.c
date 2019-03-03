@@ -303,91 +303,7 @@ gtk_flow_box_child_get_box (GtkFlowBoxChild *child)
   return NULL;
 }
 
-static void
-gtk_flow_box_child_set_focus (GtkFlowBoxChild *child)
-{
-  GtkFlowBox *box = gtk_flow_box_child_get_box (child);
-  gboolean modify;
-  gboolean extend;
-
-  get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
-
-  if (modify)
-    gtk_flow_box_update_cursor (box, child);
-  else
-    gtk_flow_box_update_selection (box, child, FALSE, FALSE);
-}
-
 /* GtkWidget implementation {{{2 */
-
-static gboolean
-gtk_flow_box_child_focus (GtkWidget        *widget,
-                          GtkDirectionType  direction)
-{
-  gboolean had_focus = FALSE;
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  /* Without "can-focus" flag try to pass the focus to the child immediately */
-  if (!gtk_widget_get_can_focus (widget))
-    {
-      if (child)
-        {
-          if (gtk_widget_child_focus (child, direction))
-            {
-              GtkFlowBox *box;
-              box = gtk_flow_box_child_get_box (GTK_FLOW_BOX_CHILD (widget));
-              if (box)
-                gtk_flow_box_update_cursor (box, GTK_FLOW_BOX_CHILD (widget));
-              return TRUE;
-            }
-        }
-      return FALSE;
-    }
-
-  g_object_get (widget, "has-focus", &had_focus, NULL);
-  if (had_focus)
-    {
-      /* If on row, going right, enter into possible container */
-      if (child &&
-          (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD))
-        {
-          if (gtk_widget_child_focus (GTK_WIDGET (child), direction))
-            return TRUE;
-        }
-
-      return FALSE;
-    }
-  else if (gtk_widget_get_focus_child (widget) != NULL)
-    {
-      /* Child has focus, always navigate inside it first */
-      if (gtk_widget_child_focus (child, direction))
-        return TRUE;
-
-      /* If exiting child container to the left, select child  */
-      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
-        {
-          gtk_flow_box_child_set_focus (GTK_FLOW_BOX_CHILD (widget));
-          return TRUE;
-        }
-
-      return FALSE;
-    }
-  else
-    {
-      /* If coming from the left, enter into possible container */
-      if (child &&
-          (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD))
-        {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
-        }
-
-      gtk_flow_box_child_set_focus (GTK_FLOW_BOX_CHILD (widget));
-      return TRUE;
-    }
-}
 
 static void
 gtk_flow_box_child_activate (GtkFlowBoxChild *child)
@@ -422,7 +338,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
-  widget_class->focus = gtk_flow_box_child_focus;
 
   class->activate = gtk_flow_box_child_activate;
 
@@ -2893,77 +2808,6 @@ gtk_flow_box_child_type (GtkContainer *container)
 
 /* Keynav {{{2 */
 
-static gboolean
-gtk_flow_box_focus (GtkWidget        *widget,
-                    GtkDirectionType  direction)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkWidget *focus_child;
-  GSequenceIter *iter;
-  GtkFlowBoxChild *next_focus_child;
-
-  /* Without "can-focus" flag fall back to the default behavior immediately */
-  if (!gtk_widget_get_can_focus (widget))
-    {
-      return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->focus (widget, direction);
-    }
-
-  focus_child = gtk_widget_get_focus_child (widget);
-  next_focus_child = NULL;
-
-  if (focus_child != NULL)
-    {
-      if (gtk_widget_child_focus (focus_child, direction))
-        return TRUE;
-
-      iter = CHILD_PRIV (focus_child)->iter;
-
-      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
-        iter = gtk_flow_box_get_previous_focusable (box, iter);
-      else if (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD)
-        iter = gtk_flow_box_get_next_focusable (box, iter);
-      else if (direction == GTK_DIR_UP)
-        iter = gtk_flow_box_get_above_focusable (box, iter);
-      else if (direction == GTK_DIR_DOWN)
-        iter = gtk_flow_box_get_below_focusable (box, iter);
-
-      if (iter != NULL)
-        next_focus_child = g_sequence_get (iter);
-    }
-  else
-    {
-      if (BOX_PRIV (box)->selected_child)
-        next_focus_child = BOX_PRIV (box)->selected_child;
-      else
-        {
-          if (direction == GTK_DIR_UP || direction == GTK_DIR_TAB_BACKWARD)
-            iter = gtk_flow_box_get_last_focusable (box);
-          else
-            iter = gtk_flow_box_get_first_focusable (box);
-
-          if (iter != NULL)
-            next_focus_child = g_sequence_get (iter);
-        }
-    }
-
-  if (next_focus_child == NULL)
-    {
-      if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN ||
-          direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT)
-        {
-          if (gtk_widget_keynav_failed (GTK_WIDGET (box), direction))
-            return TRUE;
-        }
-
-      return FALSE;
-    }
-
-  if (gtk_widget_child_focus (GTK_WIDGET (next_focus_child), direction))
-    return TRUE;
-
-  return TRUE;
-}
-
 static void
 gtk_flow_box_add_move_binding (GtkBindingSet   *binding_set,
                                guint            keyval,
@@ -3373,7 +3217,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   widget_class->size_allocate = gtk_flow_box_size_allocate;
   widget_class->unmap = gtk_flow_box_unmap;
-  widget_class->focus = gtk_flow_box_focus;
   widget_class->snapshot = gtk_flow_box_snapshot;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
   widget_class->measure = gtk_flow_box_measure;
