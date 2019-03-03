@@ -407,8 +407,6 @@ static void gtk_text_view_motion               (GtkEventController *controller,
                                                 gpointer            user_data);
 static void gtk_text_view_snapshot             (GtkWidget        *widget,
                                                 GtkSnapshot      *snapshot);
-static gboolean gtk_text_view_focus            (GtkWidget        *widget,
-                                                GtkDirectionType  direction);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
                                                 gboolean          select);
 static gboolean get_middle_click_paste         (GtkTextView      *text_view);
@@ -694,7 +692,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->snapshot = gtk_text_view_snapshot;
-  widget_class->focus = gtk_text_view_focus;
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
   widget_class->drag_data_get = gtk_text_view_drag_data_get;
@@ -5444,39 +5441,6 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 
       gtk_widget_snapshot_child (widget, vc->widget, snapshot);
       tmp_list = tmp_list->next;
-    }
-}
-
-static gboolean
-gtk_text_view_focus (GtkWidget        *widget,
-                     GtkDirectionType  direction)
-{
-  gboolean result;
-
-  if (!gtk_widget_is_focus (widget) &&
-      gtk_widget_get_focus_child (widget) == NULL)
-    {
-      if (gtk_widget_get_can_focus (widget))
-        {
-          gtk_widget_grab_focus (widget);
-          return TRUE;
-        }
-
-      return FALSE;
-    }
-  else
-    {
-      gboolean can_focus;
-      /*
-       * Unset CAN_FOCUS flag so that gtk_container_focus() allows
-       * children to get the focus
-       */
-      can_focus = gtk_widget_get_can_focus (widget);
-      gtk_widget_set_can_focus (widget, FALSE);
-      result = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->focus (widget, direction);
-      gtk_widget_set_can_focus (widget, can_focus);
-
-      return result;
     }
 }
 

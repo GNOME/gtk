@@ -322,8 +322,6 @@ static void     gtk_scrolled_window_size_allocate      (GtkWidget         *widge
                                                         int                width,
                                                         int                height,
                                                         int                baseline);
-static gboolean gtk_scrolled_window_focus              (GtkWidget         *widget,
-                                                        GtkDirectionType   direction);
 static void     gtk_scrolled_window_add                (GtkContainer      *container,
                                                         GtkWidget         *widget);
 static void     gtk_scrolled_window_remove             (GtkContainer      *container,
@@ -507,7 +505,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->destroy = gtk_scrolled_window_destroy;
   widget_class->snapshot = gtk_scrolled_window_snapshot;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
-  widget_class->focus = gtk_scrolled_window_focus;
   widget_class->measure = gtk_scrolled_window_measure;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
@@ -3328,45 +3325,6 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
   priv->deceleration_id = gtk_widget_add_tick_callback (GTK_WIDGET (scrolled_window),
                                                         scrolled_window_deceleration_cb, data,
                                                         (GDestroyNotify) kinetic_scroll_data_free);
-}
-
-static gboolean
-gtk_scrolled_window_focus (GtkWidget        *widget,
-			   GtkDirectionType  direction)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkWidget *child;
-  gboolean had_focus_child;
-
-  had_focus_child = gtk_widget_get_focus_child (widget) != NULL;
-
-  if (priv->focus_out)
-    {
-      priv->focus_out = FALSE; /* Clear this to catch the wrap-around case */
-      return FALSE;
-    }
-  
-  if (gtk_widget_is_focus (widget))
-    return FALSE;
-
-  /* We only put the scrolled window itself in the focus chain if it
-   * isn't possible to focus any children.
-   */
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child)
-    {
-      if (gtk_widget_child_focus (child, direction))
-	return TRUE;
-    }
-
-  if (!had_focus_child && gtk_widget_get_can_focus (widget))
-    {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 static void

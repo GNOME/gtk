@@ -189,8 +189,6 @@ static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
                                                     int                  height,
                                                     int                  baseline);
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
-static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
-						    GtkDirectionType     dir);
 static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_display_changed      (GtkWidget           *widget,
@@ -368,7 +366,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->measure = gtk_toolbar_measure;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_updated = gtk_toolbar_style_updated;
-  widget_class->focus = gtk_toolbar_focus;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_BAR);
 
@@ -1609,43 +1606,6 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
     }
   
   g_list_free (children);
-}
-
-/* The focus handler for the toolbar. It called when the user presses
- * TAB or otherwise tries to focus the toolbar.
- */
-static gboolean
-gtk_toolbar_focus (GtkWidget        *widget,
-		   GtkDirectionType  dir)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GList *children, *list;
-  gboolean result = FALSE;
-
-  /* if focus is already somewhere inside the toolbar then return FALSE.
-   * The only way focus can stay inside the toolbar is when the user presses
-   * arrow keys or Ctrl TAB (both of which are handled by the
-   * gtk_toolbar_move_focus() keybinding function.
-   */
-  if (gtk_widget_get_focus_child (widget))
-    return FALSE;
-
-  children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
-
-  for (list = children; list != NULL; list = list->next)
-    {
-      GtkWidget *child = list->data;
-      
-      if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
-	{
-	  result = TRUE;
-	  break;
-	}
-    }
-
-  g_list_free (children);
-
-  return result;
 }
 
 static GtkSettings *
