@@ -246,7 +246,10 @@ do_search_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       /* Create our entry */
-      entry = gtk_search_entry_new ();
+      entry = gtk_entry_new ();
+      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                         GTK_ENTRY_ICON_PRIMARY,
+                                         "edit-find-symbolic");
       gtk_container_add (GTK_CONTAINER (hbox), entry);
 
       /* Create the find and cancel buttons */
