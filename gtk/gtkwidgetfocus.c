@@ -465,6 +465,9 @@ gtk_widget_get_next_focus (GtkWidget        *widget,
 {
   GtkWidget *prev;
   GtkWidget *next;
+  GHashTable *seen;
+
+  seen = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   prev = NULL;
   do {
@@ -476,16 +479,23 @@ gtk_widget_get_next_focus (GtkWidget        *widget,
       }
     else if (gtk_widget_get_can_focus (next))
       {
-        return next;
+        break;
+      }
+    else if (g_hash_table_contains (seen, next))
+      {
+        next = NULL;
+        break;
       }
     else
       {
+        g_hash_table_add (seen, next);
         widget = next;
         prev = NULL;
       }
   } while (widget);
 
-  return NULL;
+  g_hash_table_unref (seen);
+  return next;
 }
 
 GtkWidget *
