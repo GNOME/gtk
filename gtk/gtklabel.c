@@ -33,6 +33,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdnd.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturemultipress.h"
@@ -523,6 +524,9 @@ static void          gtk_label_activate_current_link (GtkLabel *label);
 static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
+static gboolean      range_is_in_ellipsis       (GtkLabel *label,
+                                                 gint      range_start,
+                                                 gint      range_end);
 
 /* Event controller callbacks */
 static void   gtk_label_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
@@ -1119,6 +1123,46 @@ gtk_label_class_init (GtkLabelClass *class)
   quark_link = g_quark_from_static_string ("link");
 }
 
+static void
+focus_in_cb (GtkEventControllerKey *controller,
+             GtkWidget             *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  if (priv->select_info->selectable)
+    {
+      gboolean select_on_focus;
+
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-label-select-on-focus",
+                    &select_on_focus,
+                    NULL);
+
+      if (select_on_focus && !priv->in_click)
+        gtk_label_select_region (label, 0, -1);
+    }
+  else
+    {
+      if (priv->select_info->links && !priv->in_click)
+        {
+          GList *l;
+
+          for (l = priv->select_info->links; l; l = l->next)
+            {
+              GtkLabelLink *link = l->data;
+              if (!range_is_in_ellipsis (label, link->start, link->end))
+                {
+                  priv->select_info->selection_anchor = link->start;
+                  priv->select_info->selection_end = link->start;
+                  _gtk_label_accessible_focus_link_changed (label);
+                  break;
+                }
+            }
+        }
+    }
+}
+
 static void 
 gtk_label_set_property (GObject      *object,
 			guint         prop_id,
@@ -1270,6 +1314,7 @@ static void
 gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GtkEventController *controller;
 
   gtk_widget_set_has_surface (GTK_WIDGET (label), FALSE);
 
@@ -1300,6 +1345,10 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonic_window = NULL;
 
   priv->mnemonics_visible = TRUE;
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "focus-in", G_CALLBACK (focus_in_cb), label);
+  gtk_widget_add_controller (GTK_WIDGET (label), controller);
 }
 
 
@@ -4257,42 +4306,11 @@ gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  gboolean select_on_focus;
-  GtkLabelLink *link;
-  GList *l;
 
   if (priv->select_info == NULL)
     return;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget);
-
-  if (priv->select_info->selectable)
-    {
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-label-select-on-focus",
-                    &select_on_focus,
-                    NULL);
-
-      if (select_on_focus && !priv->in_click)
-        gtk_label_select_region (label, 0, -1);
-    }
-  else
-    {
-      if (priv->select_info->links && !priv->in_click)
-        {
-          for (l = priv->select_info->links; l; l = l->next)
-            {
-              link = l->data;
-              if (!range_is_in_ellipsis (label, link->start, link->end))
-                {
-                  priv->select_info->selection_anchor = link->start;
-                  priv->select_info->selection_end = link->start;
-                  _gtk_label_accessible_focus_link_changed (label);
-                  break;
-                }
-            }
-        }
-    }
 }
 
 static void
