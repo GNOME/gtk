@@ -341,6 +341,7 @@ struct _GtkFileChooserWidgetPrivate {
   GSource *focus_entry_idle;
 
   gulong toplevel_set_focus_id;
+  GtkWidget *toplevel_current_focus_widget;
   GtkWidget *toplevel_last_focus_widget;
 
   gint sort_column;
@@ -3561,13 +3562,14 @@ gtk_file_chooser_widget_dispose (GObject *object)
  * widget on our toplevel.  See gtk_file_chooser_widget_hierarchy_changed()
  */
 static void
-toplevel_set_focus_cb (GtkWindow             *window,
-                       GtkWidget             *focus,
+toplevel_set_focus_cb (GtkWindow            *window,
+                       GParamSpec           *pspec,
                        GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  priv->toplevel_last_focus_widget = gtk_root_get_focus (GTK_ROOT (window));
+  priv->toplevel_last_focus_widget = priv->toplevel_current_focus_widget;
+  priv->toplevel_current_focus_widget = gtk_root_get_focus (GTK_ROOT (window));
 }
 
 /* We monitor the focus widget on our toplevel to be able to know which widget
@@ -3585,9 +3587,10 @@ gtk_file_chooser_widget_root (GtkWidget *widget)
   toplevel = gtk_widget_get_toplevel (widget);
 
   g_assert (priv->toplevel_set_focus_id == 0);
-  priv->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
+  priv->toplevel_set_focus_id = g_signal_connect (toplevel, "notify::focus-widget",
                                                   G_CALLBACK (toplevel_set_focus_cb), impl);
-  priv->toplevel_last_focus_widget = gtk_root_get_focus (GTK_ROOT (toplevel));
+  priv->toplevel_last_focus_widget = NULL;
+  priv->toplevel_current_focus_widget = gtk_root_get_focus (GTK_ROOT (toplevel));
 }
 
 static void
@@ -3603,6 +3606,7 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
       g_signal_handler_disconnect (toplevel, priv->toplevel_set_focus_id);
       priv->toplevel_set_focus_id = 0;
       priv->toplevel_last_focus_widget = NULL;
+      priv->toplevel_current_focus_widget = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
