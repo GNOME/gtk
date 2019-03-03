@@ -822,13 +822,20 @@ gtk_widget_real_pick (GtkWidget *widget,
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
       graphene_matrix_t inv;
       GtkWidget *picked;
-      graphene_point_t p;
+      graphene_point3d_t p0, p1, res;
 
-      graphene_matrix_inverse (&priv->transform, &inv);
-      graphene_point_init (&p, x, y);
-      graphene_matrix_transform_point (&inv, &p, &p);
+      if (!graphene_matrix_inverse (&priv->transform, &inv))
+        continue;
+      graphene_point3d_init (&p0, x, y, 0);
+      graphene_point3d_init (&p1, x, y, 1);
+      graphene_matrix_transform_point3d (&inv, &p0, &p0);
+      graphene_matrix_transform_point3d (&inv, &p1, &p1);
+      if (fabs (p0.z - p1.z) < 1.f / 4096)
+        continue;
 
-      picked = gtk_widget_pick (child, p.x, p.y);
+      graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
+
+      picked = gtk_widget_pick (child, res.x, res.y);
       if (picked)
         return picked;
     }
