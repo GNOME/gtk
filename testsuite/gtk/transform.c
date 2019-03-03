@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#define EPSILON (1.f / 1024 / 1024)
+#define EPSILON (1.f / 1024 / 32) /* 2^-15 */
 
 /* macros stolen from graphene testsuite, so they get to keep their names */
 
@@ -64,6 +64,14 @@
         graphene_assert_fuzzy_matrix_cell_equal (__i, __j, __m1[__idx], __m2[__idx], epsilon); \
       } \
     } \
+  } G_STMT_END
+
+#define graphene_assert_fuzzy_transform_equal(t1,t2,epsilon) \
+  G_STMT_START { \
+    graphene_matrix_t __mat1, __mat2; \
+    gsk_transform_to_matrix ((t1), &__mat1); \
+    gsk_transform_to_matrix ((t2), &__mat2); \
+    graphene_assert_fuzzy_matrix_equal (&__mat1, &__mat2, (epsilon)); \
   } G_STMT_END
 
 static struct {
@@ -235,6 +243,38 @@ test_conversions_transformed (void)
     }
 }
 
+static void
+test_invert (void)
+{
+  GskTransform *transform, *inverse, *identity;
+  guint i, j, k;
+
+  for (i = 0; i < G_N_ELEMENTS (test_transforms); i++)
+    {
+      for (j = 0; j < G_N_ELEMENTS (test_transforms); j++)
+        {
+          for (k = 0; k < G_N_ELEMENTS (test_transforms); k++)
+            {
+              transform = apply_test_transform (NULL, i);
+              transform = apply_test_transform (transform, j);
+              transform = apply_test_transform (transform, k);
+              inverse = gsk_transform_invert (gsk_transform_ref (transform));
+              g_assert (inverse != NULL || transform == NULL);
+
+              identity = gsk_transform_transform (gsk_transform_ref (transform), inverse);
+              graphene_assert_fuzzy_transform_equal (identity, NULL, EPSILON);
+              gsk_transform_unref (identity);
+
+              inverse = gsk_transform_invert (inverse);
+              graphene_assert_fuzzy_transform_equal (transform, inverse, EPSILON);
+
+              gsk_transform_unref (transform);
+              gsk_transform_unref (inverse);
+            }
+        }
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -243,6 +283,7 @@ main (int   argc,
 
   g_test_add_func ("/transform/conversions/simple", test_conversions_simple);
   g_test_add_func ("/transform/conversions/transformed", test_conversions_transformed);
+  g_test_add_func ("/transform/invert", test_invert);
 
   return g_test_run ();
 }

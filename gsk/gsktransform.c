@@ -75,6 +75,8 @@ struct _GskTransformClass
                                                  GString                *string);
   GskTransform *        (* apply)               (GskTransform           *transform,
                                                  GskTransform           *apply_to);
+  GskTransform *        (* invert)              (GskTransform           *transform,
+                                                 GskTransform           *next);
   /* both matrices have the same type */
   gboolean              (* equal)               (GskTransform           *first_transform,
                                                  GskTransform           *second_transform);
@@ -178,7 +180,26 @@ static GskTransform *
 gsk_identity_transform_apply (GskTransform *transform,
                               GskTransform *apply_to)
 {
-  return apply_to;
+  /* We do the following to make sure inverting a non-NULL transform
+   * will return a non-NULL transform.
+   */
+  if (apply_to)
+    return apply_to;
+  else
+    return gsk_transform_new ();
+}
+
+static GskTransform *
+gsk_identity_transform_invert (GskTransform *transform,
+                               GskTransform *next)
+{
+  /* We do the following to make sure inverting a non-NULL transform
+   * will return a non-NULL transform.
+   */
+  if (next)
+    return next;
+  else
+    return gsk_transform_new ();
 }
 
 static gboolean
@@ -200,6 +221,7 @@ static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
   gsk_identity_transform_apply_translate,
   gsk_identity_transform_print,
   gsk_identity_transform_apply,
+  gsk_identity_transform_invert,
   gsk_identity_transform_equal,
 };
 
@@ -372,6 +394,24 @@ gsk_matrix_transform_apply (GskTransform *transform,
                                              self->category);
 }
 
+static GskTransform *
+gsk_matrix_transform_invert (GskTransform *transform,
+                             GskTransform *next)
+{
+  GskMatrixTransform *self = (GskMatrixTransform *) transform;
+  graphene_matrix_t inverse;
+
+  if (!graphene_matrix_inverse (&self->matrix, &inverse))
+    {
+      gsk_transform_unref (next);
+      return NULL;
+    }
+
+  return gsk_transform_matrix_with_category (next,
+                                             &inverse,
+                                             self->category);
+}
+
 static gboolean
 gsk_matrix_transform_equal (GskTransform *first_transform,
                             GskTransform *second_transform)
@@ -395,6 +435,7 @@ static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
   gsk_matrix_transform_apply_translate,
   gsk_matrix_transform_print,
   gsk_matrix_transform_apply,
+  gsk_matrix_transform_invert,
   gsk_matrix_transform_equal,
 };
 
@@ -526,6 +567,15 @@ gsk_translate_transform_apply (GskTransform *transform,
   return gsk_transform_translate_3d (apply_to, &self->point);
 }
 
+static GskTransform *
+gsk_translate_transform_invert (GskTransform *transform,
+                                GskTransform *next)
+{
+  GskTranslateTransform *self = (GskTranslateTransform *) transform;
+
+  return gsk_transform_translate_3d (next, &GRAPHENE_POINT3D_INIT (-self->point.x, -self->point.y, -self->point.z));
+}
+
 static gboolean
 gsk_translate_transform_equal (GskTransform *first_transform,
                                GskTransform *second_transform)
@@ -570,6 +620,7 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
   gsk_translate_transform_apply_translate,
   gsk_translate_transform_print,
   gsk_translate_transform_apply,
+  gsk_translate_transform_invert,
   gsk_translate_transform_equal,
 };
 
@@ -710,6 +761,15 @@ gsk_rotate_transform_apply (GskTransform *transform,
   return gsk_transform_rotate (apply_to, self->angle);
 }
 
+static GskTransform *
+gsk_rotate_transform_invert (GskTransform *transform,
+                             GskTransform *next)
+{
+  GskRotateTransform *self = (GskRotateTransform *) transform;
+
+  return gsk_transform_rotate (next, - self->angle);
+}
+
 static gboolean
 gsk_rotate_transform_equal (GskTransform *first_transform,
                             GskTransform *second_transform)
@@ -743,6 +803,7 @@ static const GskTransformClass GSK_ROTATE_TRANSFORM_CLASS =
   gsk_rotate_transform_apply_translate,
   gsk_rotate_transform_print,
   gsk_rotate_transform_apply,
+  gsk_rotate_transform_invert,
   gsk_rotate_transform_equal,
 };
 
@@ -837,6 +898,15 @@ gsk_rotate3d_transform_apply (GskTransform *transform,
   return gsk_transform_rotate_3d (apply_to, self->angle, &self->axis);
 }
 
+static GskTransform *
+gsk_rotate3d_transform_invert (GskTransform *transform,
+                               GskTransform *next)
+{
+  GskRotate3dTransform *self = (GskRotate3dTransform *) transform;
+
+  return gsk_transform_rotate_3d (next, - self->angle, &self->axis);
+}
+
 static gboolean
 gsk_rotate3d_transform_equal (GskTransform *first_transform,
                               GskTransform *second_transform)
@@ -879,6 +949,7 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
   gsk_rotate3d_transform_apply_translate,
   gsk_rotate3d_transform_print,
   gsk_rotate3d_transform_apply,
+  gsk_rotate3d_transform_invert,
   gsk_rotate3d_transform_equal,
 };
 
@@ -1007,6 +1078,18 @@ gsk_scale_transform_apply (GskTransform *transform,
   return gsk_transform_scale_3d (apply_to, self->factor_x, self->factor_y, self->factor_z);
 }
 
+static GskTransform *
+gsk_scale_transform_invert (GskTransform *transform,
+                            GskTransform *next)
+{
+  GskScaleTransform *self = (GskScaleTransform *) transform;
+
+  return gsk_transform_scale_3d (next,
+                                 1.f / self->factor_x,
+                                 1.f / self->factor_y,
+                                 1.f / self->factor_z);
+}
+
 static gboolean
 gsk_scale_transform_equal (GskTransform *first_transform,
                            GskTransform *second_transform)
@@ -1060,6 +1143,7 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
   gsk_scale_transform_apply_translate,
   gsk_scale_transform_print,
   gsk_scale_transform_apply,
+  gsk_scale_transform_invert,
   gsk_scale_transform_equal,
 };
 
@@ -1392,6 +1476,39 @@ gsk_transform_transform (GskTransform *next,
 
   next = gsk_transform_transform (next, other->next);
   return other->transform_class->apply (other, next);
+}
+
+/**
+ * gsk_transform_invert:
+ * @self: (allow-none) (transfer full): Transform to invert
+ *
+ * Inverts the given transform.
+ *
+ * If @self is not invertible, %NULL is returned.
+ * Note that inverting %NULL also returns %NULL, which is
+ * the correct inverse of %NULL. If you need to differentiate
+ * between those cases, you should check @self is not %NULL
+ * before calling this function.
+ *
+ * Returns: The inverted transform or %NULL if the transform
+ *     cannot be inverted.
+ **/
+GskTransform *
+gsk_transform_invert (GskTransform *self)
+{
+  GskTransform *result = NULL;
+  GskTransform *cur;
+
+  for (cur = self; cur; cur = cur->next)
+    {
+      result = cur->transform_class->invert (cur, result);
+      if (result == NULL)
+        break;
+    }
+
+  gsk_transform_unref (self);
+
+  return result;
 }
 
 /**
