@@ -449,6 +449,25 @@ gtk_widget_focus_sort (GtkWidget        *widget,
     }
 }
 
+gboolean
+gtk_widget_can_take_focus (GtkWidget *widget)
+{
+  GtkWidget *w;
+
+  if (!gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_get_can_focus (widget))
+    return FALSE;
+
+  w = widget;
+  do {
+    if (!gtk_widget_get_child_focusable (w))
+      return FALSE;
+    w = gtk_widget_get_parent (w);
+  } while (w != NULL);
+
+  return TRUE;
+}
+
 /**
  * gtk_widget_get_next_focus:
  * @widget: a #GtkWidget
@@ -477,7 +496,7 @@ gtk_widget_get_next_focus (GtkWidget        *widget,
         prev = widget;
         widget = gtk_widget_get_parent (widget);
       }
-    else if (gtk_widget_get_can_focus (next))
+    else if (gtk_widget_can_take_focus (next))
       {
         break;
       }
@@ -495,6 +514,7 @@ gtk_widget_get_next_focus (GtkWidget        *widget,
   } while (widget);
 
   g_hash_table_unref (seen);
+
   return next;
 }
 
