@@ -6634,7 +6634,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
   if (priv->menu)
     gtk_notebook_menu_item_recreate (notebook, list);
 
-  g_object_notify (G_OBJECT (child), "tab-label");
+  g_object_notify (G_OBJECT (page), "tab-label");
 }
 
 /**
@@ -6764,7 +6764,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 
   if (priv->menu)
     gtk_notebook_menu_item_create (notebook, page);
-  g_object_notify (G_OBJECT (child), "menu-label");
+  g_object_notify (G_OBJECT (page), "menu-label");
 }
 
 /**
@@ -6791,7 +6791,6 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
       gtk_widget_set_valign (menu_label, GTK_ALIGN_CENTER);
     }
   gtk_notebook_set_menu_label (notebook, child, menu_label);
-  g_object_notify (G_OBJECT (child), "menu-label");
 }
 
 /**
@@ -7031,7 +7030,7 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
       else
         gtk_style_context_remove_class (gtk_widget_get_style_context (page->tab_widget),
                                         "reorderable-page");
-      g_object_notify (G_OBJECT (child), "reorderable");
+      g_object_notify (G_OBJECT (page), "reorderable");
     }
 }
 
@@ -7114,6 +7113,7 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
                                  gboolean    detachable)
 {
   GList *list;
+  GtkNotebookPage *page;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -7121,12 +7121,13 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_if_fail (list != NULL);
 
+  page = GTK_NOTEBOOK_PAGE_FROM_LIST (list);
   detachable = detachable != FALSE;
 
-  if (GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable != detachable)
+  if (page->detachable != detachable)
     {
-      GTK_NOTEBOOK_PAGE_FROM_LIST (list)->detachable = detachable;
-      g_object_notify (G_OBJECT (child), "detachable");
+      page->detachable = detachable;
+      g_object_notify (G_OBJECT (page), "detachable");
     }
 }
 
