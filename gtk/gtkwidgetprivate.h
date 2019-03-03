@@ -340,6 +340,8 @@ gboolean          gtk_widget_run_controllers               (GtkWidget           
 gboolean          gtk_widget_send_focus_change             (GtkWidget           *widget,
                                                             GdkEvent            *event);
 
+gboolean          gtk_widget_can_take_focus                (GtkWidget           *widget);
+
 
 /* inline getters */
 
