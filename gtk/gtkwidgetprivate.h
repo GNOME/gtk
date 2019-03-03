@@ -317,8 +317,6 @@ GtkWidget        *gtk_widget_get_focus_child               (GtkWidget           
 void              gtk_widget_focus_sort                    (GtkWidget        *widget,
                                                             GtkDirectionType  direction,
                                                             GPtrArray        *focus_order);
-gboolean          gtk_widget_focus_move                    (GtkWidget        *widget,
-                                                            GtkDirectionType  direction);
 GtkWidget *       gtk_widget_next_focus_child              (GtkWidget        *widget,
                                                             GtkWidget        *child,
                                                             GtkDirectionType  direction);
