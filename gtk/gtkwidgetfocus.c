@@ -422,7 +422,9 @@ gtk_widget_focus_sort (GtkWidget        *widget,
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          if (_gtk_widget_get_realized (child))
+          if (_gtk_widget_get_realized (child) &&
+              _gtk_widget_is_drawable (child) &&
+              gtk_widget_get_sensitive (child))
             g_ptr_array_add (focus_order, child);
         }
     }
