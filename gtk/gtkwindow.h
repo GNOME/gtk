@@ -70,11 +70,6 @@ struct _GtkWindowClass
 {
   GtkBinClass parent_class;
 
-  /*< public >*/
-
-  void     (* set_focus)   (GtkWindow *window,
-                            GtkWidget *focus);
-
   /* G_SIGNAL_ACTION signals for keybindings */
 
   void     (* activate_focus)   (GtkWindow *window);
