@@ -251,8 +251,9 @@ static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
                                             gint              event_y,
                                             gboolean          enter,
                                             gboolean          motion);
-static gboolean gtk_menu_focus             (GtkWidget        *widget,
-                                            GtkDirectionType direction);
+static GtkWidget *gtk_menu_next_focus_child (GtkWidget       *widget,
+                                             GtkWidget       *child,
+                                             GtkDirectionType direction);
 static gint     gtk_menu_get_popup_delay   (GtkMenuShell     *menu_shell);
 static void     gtk_menu_move_current      (GtkMenuShell     *menu_shell,
                                             GtkMenuDirectionType direction);
@@ -492,7 +493,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
   widget_class->snapshot = gtk_menu_snapshot;
-  widget_class->focus = gtk_menu_focus;
+  widget_class->next_focus_child = gtk_menu_next_focus_child;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
   widget_class->grab_notify = gtk_menu_grab_notify;
   widget_class->measure = gtk_menu_measure;
@@ -2254,12 +2255,13 @@ gtk_menu_realize (GtkWidget *widget)
                                   GTK_MENU_SHELL (widget)->priv->active_menu_item);
 }
 
-static gboolean
-gtk_menu_focus (GtkWidget       *widget,
-                GtkDirectionType direction)
+static GtkWidget *
+gtk_menu_next_focus_child (GtkWidget        *widget,
+                           GtkWidget        *child,
+                           GtkDirectionType  direction)
 {
   /* A menu or its menu items cannot have focus */
-  return FALSE;
+  return NULL;
 }
 
 static GdkSurface *

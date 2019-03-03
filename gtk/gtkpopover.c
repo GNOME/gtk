@@ -1455,39 +1455,6 @@ gtk_popover_grab_focus (GtkWidget *widget)
     gtk_widget_child_focus (child, GTK_DIR_TAB_FORWARD);
 }
 
-static gboolean
-gtk_popover_focus (GtkWidget        *widget,
-                   GtkDirectionType  direction)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (!priv->visible)
-    return FALSE;
-
-  if (!GTK_WIDGET_CLASS (gtk_popover_parent_class)->focus (widget, direction))
-    {
-      GtkWidget *focus;
-
-      focus = gtk_window_get_focus (priv->window);
-      focus = gtk_widget_get_parent (focus);
-
-      /* Unset focus child through children, so it is next stepped from
-       * scratch.
-       */
-      while (focus && focus != widget)
-        {
-          gtk_widget_set_focus_child (focus, NULL);
-          focus = gtk_widget_get_parent (focus);
-        }
-
-      return gtk_widget_child_focus (gtk_bin_get_child (GTK_BIN (widget)),
-                                     direction);
-    }
-
-  return TRUE;
-}
-
 static void
 gtk_popover_show (GtkWidget *widget)
 {
@@ -1582,7 +1549,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
   widget_class->grab_focus = gtk_popover_grab_focus;
-  widget_class->focus = gtk_popover_focus;
   widget_class->show = gtk_popover_show;
   widget_class->hide = gtk_popover_hide;
   widget_class->state_flags_changed = gtk_popover_state_flags_changed;

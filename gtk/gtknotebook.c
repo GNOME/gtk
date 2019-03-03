@@ -643,8 +643,6 @@ static void gtk_notebook_grab_notify         (GtkWidget          *widget,
                                               gboolean            was_grabbed);
 static void gtk_notebook_state_flags_changed (GtkWidget          *widget,
                                               GtkStateFlags       previous_state);
-static gboolean gtk_notebook_focus           (GtkWidget        *widget,
-                                              GtkDirectionType  direction);
 
 /*** Drag and drop Methods ***/
 static void gtk_notebook_drag_begin          (GtkWidget        *widget,
@@ -919,7 +917,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
-  widget_class->focus = gtk_notebook_focus;
   widget_class->drag_begin = gtk_notebook_drag_begin;
   widget_class->drag_end = gtk_notebook_drag_end;
   widget_class->drag_motion = gtk_notebook_drag_motion;
@@ -3468,7 +3465,6 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
  *
  * gtk_notebook_add
  * gtk_notebook_remove
- * gtk_notebook_focus
  * gtk_notebook_child_type
  * gtk_notebook_forall
  */
@@ -3591,188 +3587,6 @@ focus_action_in (GtkNotebook      *notebook,
     return gtk_widget_child_focus (priv->action_widget[action], direction);
   else
     return FALSE;
-}
-
-/* Focus in the notebook can either be on the pages, or on
- * the tabs or on the action_widgets.
- */
-static gboolean
-gtk_notebook_focus (GtkWidget        *widget,
-                    GtkDirectionType  direction)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkWidget *old_focus_child;
-  GtkDirectionType effective_direction;
-  gint first_action;
-  gint last_action;
-
-  gboolean widget_is_focus;
-
-  if (priv->tab_pos == GTK_POS_TOP ||
-      priv->tab_pos == GTK_POS_LEFT)
-    {
-      first_action = ACTION_WIDGET_START;
-      last_action = ACTION_WIDGET_END;
-    }
-  else
-    {
-      first_action = ACTION_WIDGET_END;
-      last_action = ACTION_WIDGET_START;
-    }
-
-  if (priv->focus_out)
-    {
-      priv->focus_out = FALSE; /* Clear this to catch the wrap-around case */
-      return FALSE;
-    }
-
-  widget_is_focus = gtk_widget_is_focus (widget);
-  old_focus_child = gtk_widget_get_focus_child (widget);
-
-  effective_direction = get_effective_direction (notebook, direction);
-
-  if (old_focus_child)          /* Focus on page child or action widget */
-    {
-      if (gtk_widget_child_focus (old_focus_child, direction))
-        return TRUE;
-
-      if (old_focus_child == priv->action_widget[ACTION_WIDGET_START])
-        {
-          switch ((guint) effective_direction)
-            {
-            case GTK_DIR_DOWN:
-              return focus_child_in (notebook, GTK_DIR_TAB_FORWARD);
-            case GTK_DIR_RIGHT:
-              return focus_tabs_in (notebook);
-            case GTK_DIR_LEFT:
-              return FALSE;
-            case GTK_DIR_UP:
-              return FALSE;
-            default:
-              switch ((guint) direction)
-                {
-                case GTK_DIR_TAB_FORWARD:
-                  if ((priv->tab_pos == GTK_POS_RIGHT || priv->tab_pos == GTK_POS_BOTTOM) &&
-                      focus_child_in (notebook, direction))
-                    return TRUE;
-                  return focus_tabs_in (notebook);
-                case GTK_DIR_TAB_BACKWARD:
-                  return FALSE;
-                default:
-                  g_assert_not_reached ();
-                  break;
-                }
-            }
-        }
-      else if (old_focus_child == priv->action_widget[ACTION_WIDGET_END])
-        {
-          switch ((guint) effective_direction)
-            {
-            case GTK_DIR_DOWN:
-              return focus_child_in (notebook, GTK_DIR_TAB_FORWARD);
-            case GTK_DIR_RIGHT:
-              return FALSE;
-            case GTK_DIR_LEFT:
-              return focus_tabs_in (notebook);
-            case GTK_DIR_UP:
-              return FALSE;
-            default:
-              switch ((guint) direction)
-                {
-                case GTK_DIR_TAB_FORWARD:
-                  return FALSE;
-                case GTK_DIR_TAB_BACKWARD:
-                  if ((priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_LEFT) &&
-                      focus_child_in (notebook, direction))
-                    return TRUE;
-                  return focus_tabs_in (notebook);
-                default:
-                  g_assert_not_reached ();
-                  break;
-                }
-            }
-        }
-      else
-        {
-          switch ((guint) effective_direction)
-            {
-            case GTK_DIR_TAB_BACKWARD:
-            case GTK_DIR_UP:
-              /* Focus onto the tabs */
-              return focus_tabs_in (notebook);
-            case GTK_DIR_DOWN:
-            case GTK_DIR_LEFT:
-            case GTK_DIR_RIGHT:
-              return FALSE;
-            case GTK_DIR_TAB_FORWARD:
-              return focus_action_in (notebook, last_action, direction);
-            default:
-              break;
-            }
-        }
-    }
-  else if (widget_is_focus)     /* Focus was on tabs */
-    {
-      switch ((guint) effective_direction)
-        {
-        case GTK_DIR_TAB_BACKWARD:
-              return focus_action_in (notebook, first_action, direction);
-        case GTK_DIR_UP:
-          return FALSE;
-        case GTK_DIR_TAB_FORWARD:
-          if (focus_child_in (notebook, GTK_DIR_TAB_FORWARD))
-            return TRUE;
-          return focus_action_in (notebook, last_action, direction);
-        case GTK_DIR_DOWN:
-          /* We use TAB_FORWARD rather than direction so that we focus a more
-           * predictable widget for the user; users may be using arrow focusing
-           * in this situation even if they don't usually use arrow focusing.
-           */
-          return focus_child_in (notebook, GTK_DIR_TAB_FORWARD);
-        case GTK_DIR_LEFT:
-          return focus_tabs_move (notebook, direction, STEP_PREV);
-        case GTK_DIR_RIGHT:
-          return focus_tabs_move (notebook, direction, STEP_NEXT);
-        default:
-          break;
-        }
-    }
-  else /* Focus was not on widget */
-    {
-      switch ((guint) effective_direction)
-        {
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_DOWN:
-          if (focus_action_in (notebook, first_action, direction))
-            return TRUE;
-          if (focus_tabs_in (notebook))
-            return TRUE;
-          if (focus_action_in (notebook, last_action, direction))
-            return TRUE;
-          if (focus_child_in (notebook, direction))
-            return TRUE;
-          return FALSE;
-        case GTK_DIR_TAB_BACKWARD:
-          if (focus_action_in (notebook, last_action, direction))
-            return TRUE;
-          if (focus_child_in (notebook, direction))
-            return TRUE;
-          if (focus_tabs_in (notebook))
-            return TRUE;
-          if (focus_action_in (notebook, first_action, direction))
-            return TRUE;
-        case GTK_DIR_UP:
-        case GTK_DIR_LEFT:
-        case GTK_DIR_RIGHT:
-          return focus_child_in (notebook, direction);
-        default:
-          break;
-        }
-    }
-
-  g_assert_not_reached ();
-  return FALSE;
 }
 
 static void
