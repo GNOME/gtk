@@ -163,6 +163,7 @@ gsk_transform_to_affine
 gsk_transform_to_translate
 <SUBSECTION>
 gsk_transform_transform
+gsk_transform_invert
 gsk_transform_matrix
 gsk_transform_translate
 gsk_transform_translate_3d

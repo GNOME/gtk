@@ -79,6 +79,8 @@ GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_transform                 (GskTransform                   *next,
                                                                  GskTransform                   *other);
 GDK_AVAILABLE_IN_ALL
+GskTransform *          gsk_transform_invert                    (GskTransform                   *self);
+GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_matrix                    (GskTransform                   *next,
                                                                  const graphene_matrix_t        *matrix);
 GDK_AVAILABLE_IN_ALL
