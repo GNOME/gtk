@@ -616,8 +616,6 @@ static void     gtk_tree_view_key_controller_key_released (GtkEventControllerKey
 static void     gtk_tree_view_key_controller_focus_out    (GtkEventControllerKey *key,
                                                            GtkTreeView           *tree_view);
 
-static gint     gtk_tree_view_focus                (GtkWidget        *widget,
-						    GtkDirectionType  direction);
 static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
 static void     gtk_tree_view_style_updated        (GtkWidget        *widget);
 
@@ -985,7 +983,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->drag_motion = gtk_tree_view_drag_motion;
   widget_class->drag_drop = gtk_tree_view_drag_drop;
   widget_class->drag_data_received = gtk_tree_view_drag_data_received;
-  widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->style_updated = gtk_tree_view_style_updated;
 
@@ -7707,170 +7704,6 @@ gtk_tree_view_get_fixed_height_mode (GtkTreeView *tree_view)
   return tree_view->priv->fixed_height_mode;
 }
 
-/* Returns TRUE if the focus is within the headers, after the focus operation is
- * done
- */
-static gboolean
-gtk_tree_view_header_focus (GtkTreeView      *tree_view,
-			    GtkDirectionType  dir,
-			    gboolean          clamp_column_visible)
-{
-  GtkTreeViewColumn *column;
-  GtkWidget *button;
-  GtkWidget *focus_child;
-  GList *last_column, *first_column;
-  GList *tmp_list;
-  gboolean rtl;
-
-  if (! tree_view->priv->headers_visible)
-    return FALSE;
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (tree_view));
-
-  first_column = tree_view->priv->columns;
-  while (first_column)
-    {
-      column = GTK_TREE_VIEW_COLUMN (first_column->data);
-      button = gtk_tree_view_column_get_button (column);
-
-      if (gtk_widget_get_can_focus (button) &&
-          gtk_tree_view_column_get_visible (column) &&
-          (gtk_tree_view_column_get_clickable (column) ||
-           gtk_tree_view_column_get_reorderable (column)))
-	break;
-      first_column = first_column->next;
-    }
-
-  /* No headers are visible, or are focusable.  We can't focus in or out.
-   */
-  if (first_column == NULL)
-    return FALSE;
-
-  last_column = g_list_last (tree_view->priv->columns);
-  while (last_column)
-    {
-      column = GTK_TREE_VIEW_COLUMN (last_column->data);
-      button = gtk_tree_view_column_get_button (column);
-
-      if (gtk_widget_get_can_focus (button) &&
-          gtk_tree_view_column_get_visible (column) &&
-          (gtk_tree_view_column_get_clickable (column) ||
-           gtk_tree_view_column_get_reorderable (column)))
-	break;
-      last_column = last_column->prev;
-    }
-
-
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
-
-  switch (dir)
-    {
-    case GTK_DIR_TAB_BACKWARD:
-    case GTK_DIR_TAB_FORWARD:
-    case GTK_DIR_UP:
-    case GTK_DIR_DOWN:
-      if (focus_child == NULL)
-	{
-	  if (tree_view->priv->focus_column != NULL)
-	    button = gtk_tree_view_column_get_button (tree_view->priv->focus_column);
-	  else 
-	    button = NULL;
-
-	  if (button && gtk_widget_get_can_focus (button))
-	    focus_child = button;
-	  else
-	    focus_child = gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (first_column->data));
-
-	  gtk_widget_grab_focus (focus_child);
-	  break;
-	}
-      return FALSE;
-
-    case GTK_DIR_LEFT:
-    case GTK_DIR_RIGHT:
-      if (focus_child == NULL)
-	{
-	  if (tree_view->priv->focus_column != NULL)
-	    focus_child = gtk_tree_view_column_get_button (tree_view->priv->focus_column);
-	  else if (dir == GTK_DIR_LEFT)
-	    focus_child = gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (last_column->data));
-	  else
-	    focus_child = gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (first_column->data));
-
-	  gtk_widget_grab_focus (focus_child);
-	  break;
-	}
-
-      if (gtk_widget_child_focus (focus_child, dir))
-	{
-	  /* The focus moves inside the button. */
-	  /* This is probably a great example of bad UI */
-	  break;
-	}
-
-      /* We need to move the focus among the row of buttons. */
-      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-	if (gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (tmp_list->data)) == focus_child)
-	  break;
-
-      if ((tmp_list == first_column && dir == (rtl ? GTK_DIR_RIGHT : GTK_DIR_LEFT))
-	  || (tmp_list == last_column && dir == (rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT)))
-        {
-	  gtk_widget_error_bell (GTK_WIDGET (tree_view));
-	  break;
-	}
-
-      while (tmp_list)
-	{
-	  if (dir == (rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT))
-	    tmp_list = tmp_list->next;
-	  else
-	    tmp_list = tmp_list->prev;
-
-	  if (tmp_list == NULL)
-	    {
-	      g_warning ("Internal button not found");
-	      break;
-	    }
-	  column = tmp_list->data;
-	  button = gtk_tree_view_column_get_button (column);
-	  if (button &&
-	      gtk_tree_view_column_get_visible (column) &&
-	      gtk_widget_get_can_focus (button))
-	    {
-	      focus_child = button;
-	      gtk_widget_grab_focus (button);
-	      break;
-	    }
-	}
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  /* if focus child is non-null, we assume it's been set to the current focus child
-   */
-  if (focus_child)
-    {
-      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-	if (gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (tmp_list->data)) == focus_child)
-	  {
-            _gtk_tree_view_set_focus_column (tree_view, GTK_TREE_VIEW_COLUMN (tmp_list->data));
-	    break;
-	  }
-
-      if (clamp_column_visible)
-        {
-	  gtk_tree_view_clamp_column_visible (tree_view,
-					      tree_view->priv->focus_column,
-					      FALSE);
-	}
-    }
-
-  return (focus_child != NULL);
-}
-
 /* This function returns in 'path' the first focusable path, if the given path
  * is already focusable, it’s the returned one.
  */
@@ -7915,59 +7748,6 @@ search_first_focusable_path (GtkTreeView    *tree_view,
     *new_node = node;
 
   return (*path != NULL);
-}
-
-static gint
-gtk_tree_view_focus (GtkWidget        *widget,
-		     GtkDirectionType  direction)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GtkWidget *focus_child;
-
-  if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_can_focus (widget))
-    return FALSE;
-
-  focus_child = gtk_widget_get_focus_child (widget);
-
-  gtk_tree_view_stop_editing (GTK_TREE_VIEW (widget), FALSE);
-  /* Case 1.  Headers currently have focus. */
-  if (focus_child)
-    {
-      switch (direction)
-	{
-	case GTK_DIR_LEFT:
-	case GTK_DIR_RIGHT:
-	  gtk_tree_view_header_focus (tree_view, direction, TRUE);
-	  return TRUE;
-	case GTK_DIR_TAB_BACKWARD:
-	case GTK_DIR_UP:
-	  return FALSE;
-	case GTK_DIR_TAB_FORWARD:
-	case GTK_DIR_DOWN:
-	  gtk_widget_grab_focus (widget);
-	  return TRUE;
-	default:
-	  g_assert_not_reached ();
-	  return FALSE;
-	}
-    }
-
-  /* Case 2. We don't have focus at all. */
-  if (!gtk_widget_has_focus (widget))
-    {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
-    }
-
-  /* Case 3. We have focus already. */
-  if (direction == GTK_DIR_TAB_BACKWARD)
-    return (gtk_tree_view_header_focus (tree_view, direction, FALSE));
-  else if (direction == GTK_DIR_TAB_FORWARD)
-    return FALSE;
-
-  /* Other directions caught by the keybindings */
-  gtk_widget_grab_focus (widget);
-  return TRUE;
 }
 
 static void

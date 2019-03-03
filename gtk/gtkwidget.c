@@ -599,8 +599,6 @@ static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
-static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
-								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
@@ -937,7 +935,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
-  klass->focus = gtk_widget_real_focus;
   klass->next_focus_child = gtk_widget_next_focus_child;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
@@ -5418,48 +5415,11 @@ gtk_widget_real_style_updated (GtkWidget *widget)
     }
 }
 
-static gboolean
-gtk_widget_real_focus (GtkWidget         *widget,
-                       GtkDirectionType   direction)
-{
-  if (gtk_widget_get_can_focus (widget))
-    {
-      if (!gtk_widget_is_focus (widget))
-        {
-          gtk_widget_grab_focus (widget);
-          return TRUE;
-        }
-    }
-  else if (_gtk_widget_get_first_child (widget) == NULL)
-    {
-      /* No children, no possibility to focus anything */
-      return FALSE;
-    }
-  else
-    {
-      /* Try focusing any of the child widgets, depending on the given direction */
-      GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
-      GtkWidget *next_focus;
-
-      if (focus_child)
-        next_focus = gtk_widget_get_next_focus (focus_child, direction);
-      else
-        next_focus = gtk_widget_get_next_focus (widget, direction);
-
-      if (next_focus && gtk_widget_is_ancestor (next_focus, widget))
-        {
-          gtk_widget_grab_focus (next_focus);
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static void
 gtk_widget_real_move_focus (GtkWidget         *widget,
                             GtkDirectionType   direction)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *focus_child;
   GtkWidget *next_focus;
 
@@ -5470,7 +5430,7 @@ gtk_widget_real_move_focus (GtkWidget         *widget,
     next_focus = gtk_widget_get_next_focus (widget, direction);
 
   if (next_focus)
-    gtk_widget_grab_focus (next_focus);
+    gtk_root_set_focus (priv->root, next_focus);
 }
 
 static gboolean
@@ -7485,6 +7445,7 @@ gboolean
 gtk_widget_child_focus (GtkWidget       *widget,
                         GtkDirectionType direction)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *focus_child;
   GtkWidget *next_focus;
 
@@ -7497,7 +7458,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
     next_focus = gtk_widget_get_next_focus (widget, direction);
   if (next_focus && gtk_widget_is_ancestor (next_focus, widget))
     {
-      gtk_widget_grab_focus (next_focus);
+      gtk_root_set_focus (priv->root, next_focus);
       return TRUE;
     }
 
