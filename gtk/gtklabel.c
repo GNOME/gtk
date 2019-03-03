@@ -527,6 +527,7 @@ static void          emit_activate_link         (GtkLabel     *label,
 static gboolean      range_is_in_ellipsis       (GtkLabel *label,
                                                  gint      range_start,
                                                  gint      range_end);
+static GtkLabelLink *gtk_label_get_focus_link   (GtkLabel *label);
 
 /* Event controller callbacks */
 static void   gtk_label_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
@@ -1129,8 +1130,12 @@ focus_in_cb (GtkEventControllerKey *controller,
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GtkLabelSelectionInfo *info = priv->select_info;
 
-  if (priv->select_info->selectable)
+  if (!info)
+    return;
+
+  if (info->selectable)
     {
       gboolean select_on_focus;
 
@@ -1144,23 +1149,148 @@ focus_in_cb (GtkEventControllerKey *controller,
     }
   else
     {
-      if (priv->select_info->links && !priv->in_click)
+      if (info->links && !priv->in_click)
         {
           GList *l;
+          int i;
 
-          for (l = priv->select_info->links; l; l = l->next)
+          for (l = info->links, i = 0; l; l = l->next, i++)
             {
               GtkLabelLink *link = l->data;
               if (!range_is_in_ellipsis (label, link->start, link->end))
                 {
-                  priv->select_info->selection_anchor = link->start;
-                  priv->select_info->selection_end = link->start;
+                  info->selection_anchor = link->start;
+                  info->selection_end = link->start;
                   _gtk_label_accessible_focus_link_changed (label);
+                  gtk_widget_queue_draw (widget);
                   break;
                 }
             }
         }
     }
+}
+
+static gboolean
+key_press_cb (GtkEventControllerKey *controller,
+               guint                 keyval,
+               guint                 keycode,
+               GdkModifierType       modifiers,
+               GtkWidget            *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GtkLabelSelectionInfo *info = priv->select_info;
+  GtkDirectionType direction;
+  GtkLabelLink *focus_link;
+  GList *l;
+
+  if (keyval != GDK_KEY_Tab && keyval != GDK_KEY_KP_Tab)
+    return FALSE;
+
+  if ((modifiers & GDK_SHIFT_MASK) != 0)
+    direction = GTK_DIR_TAB_BACKWARD;
+  else
+    direction = GTK_DIR_TAB_FORWARD;
+
+  if (!info)
+    return FALSE;
+
+  if (info->selectable)
+    {
+      int index;
+      int i;
+
+      if (info->selection_anchor != info->selection_end)
+        return FALSE;
+
+      index = info->selection_anchor;
+
+      if (direction == GTK_DIR_TAB_FORWARD)
+        {
+          for (l = info->links, i = 0; l; l = l->next, i++)
+            {
+              GtkLabelLink *link = l->data;
+
+              if (link->start > index)
+                {
+                  if (!range_is_in_ellipsis (label, link->start, link->end))
+                    {
+                      gtk_label_select_region_index (label, link->start, link->start);
+                      _gtk_label_accessible_focus_link_changed (label);
+                      gtk_widget_queue_draw (widget);
+                      return TRUE;
+                    }
+                }
+            }
+        }
+      else
+        {
+          for (l = g_list_last (info->links), i = g_list_length (info->links) - 1; l; l = l->prev, i--)
+            {
+              GtkLabelLink *link = l->data;
+
+              if (link->end < index)
+                {
+                  if (!range_is_in_ellipsis (label, link->start, link->end))
+                    {
+                      gtk_label_select_region_index (label, link->start, link->start);
+                      _gtk_label_accessible_focus_link_changed (label);
+                      gtk_widget_queue_draw (widget);
+                      return TRUE;
+                    }
+                }
+            }
+        }
+    }
+  else
+    {
+      focus_link = gtk_label_get_focus_link (label);
+      if (direction == GTK_DIR_TAB_FORWARD)
+        {
+          if (focus_link)
+            {
+              l = g_list_find (info->links, focus_link);
+              l = l->next;
+            }
+          else
+            l = info->links;
+          for (; l; l = l->next)
+            {
+              GtkLabelLink *link = l->data;
+              if (!range_is_in_ellipsis (label, link->start, link->end))
+                break;
+            }
+        }
+      else
+        {
+          if (focus_link)
+            {
+              l = g_list_find (info->links, focus_link);
+              l = l->prev;
+            }
+          else
+            l = g_list_last (info->links);
+          for (; l; l = l->prev)
+            {
+              GtkLabelLink *link = l->data;
+              if (!range_is_in_ellipsis (label, link->start, link->end))
+                break;
+            }
+        }
+
+      if (l)
+        {
+          focus_link = l->data;
+          info->selection_anchor = focus_link->start;
+          info->selection_end = focus_link->start;
+          _gtk_label_accessible_focus_link_changed (label);
+          gtk_widget_queue_draw (widget);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static void 
@@ -1348,6 +1478,7 @@ gtk_label_init (GtkLabel *label)
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "focus-in", G_CALLBACK (focus_in_cb), label);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_press_cb), label);
   gtk_widget_add_controller (GTK_WIDGET (label), controller);
 }
 
