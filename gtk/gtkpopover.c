@@ -614,10 +614,11 @@ window_active_changed (GtkWindow  *window,
 
 static void
 window_set_focus (GtkWindow  *window,
-                  GtkWidget  *widget,
+                  GParamSpec *pspec,
                   GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *widget = gtk_root_get_focus (GTK_ROOT (window));
 
   if (!priv->modal || !widget || !gtk_widget_is_drawable (GTK_WIDGET (popover)))
     return;
@@ -673,7 +674,7 @@ gtk_popover_apply_modality (GtkPopover *popover,
 
       g_signal_connect (priv->window, "notify::is-active",
                         G_CALLBACK (window_active_changed), popover);
-      g_signal_connect (priv->window, "set-focus",
+      g_signal_connect (priv->window, "notify::focus-widget",
                         G_CALLBACK (window_set_focus), popover);
     }
   else
