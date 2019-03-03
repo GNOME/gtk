@@ -767,6 +767,27 @@ gtk_window_pick (GtkWidget *widget,
   return GTK_WIDGET_CLASS (gtk_window_parent_class)->pick (widget, x, y);
 }
 
+static GtkWidget *
+gtk_window_next_focus_child (GtkWidget        *widget,
+                             GtkWidget        *child,
+                             GtkDirectionType  direction)
+{
+  GtkWidget *next;
+
+  next = GTK_WIDGET_CLASS (gtk_window_parent_class)->next_focus_child (widget, child, direction);
+  if (next)
+    return next;
+
+  switch ((int)direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_TAB_BACKWARD:
+      return GTK_WIDGET_CLASS (gtk_window_parent_class)->next_focus_child (widget, NULL, direction);
+    default:
+      return NULL;
+    }
+}
+
 static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
@@ -805,6 +826,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->style_updated = gtk_window_style_updated;
   widget_class->snapshot = gtk_window_snapshot;
   widget_class->pick = gtk_window_pick;
+  widget_class->next_focus_child = gtk_window_next_focus_child;
 
   container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;
