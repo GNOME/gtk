@@ -451,9 +451,6 @@ gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_event               (GtkWidget           *widget,
                                            const GdkEvent      *event);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
-                                           GdkEvent            *event);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_activate               (GtkWidget        *widget);
