@@ -51,10 +51,6 @@ struct _GtkRootInterface
   void                  (* get_surface_transform)       (GtkRoot                *root,
                                                          int                    *x,
                                                          int                    *y);
-
-  void                  (* set_focus)                   (GtkRoot                *self,
-                                                         GtkWidget              *focus);
-  GtkWidget *           (* get_focus)                   (GtkRoot                *self);
 };
 
 GDK_AVAILABLE_IN_ALL

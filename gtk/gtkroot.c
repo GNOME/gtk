@@ -21,6 +21,8 @@
 
 #include "gtkrootprivate.h"
 #include "gdk/gdk-private.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 
 /**
  * SECTION:gtkroot
@@ -60,25 +62,18 @@ gtk_root_default_get_surface_transform (GtkRoot *self,
 }
 
 static void
-gtk_root_default_set_focus (GtkRoot   *self,
-                            GtkWidget *focus)
-{
-}
-
-static GtkWidget *
-gtk_root_default_get_focus (GtkRoot *self)
-{
-  return NULL;
-}
-
-static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_renderer = gtk_root_default_get_renderer;
   iface->get_surface_transform = gtk_root_default_get_surface_transform;
-  iface->set_focus = gtk_root_default_set_focus;
-  iface->get_focus = gtk_root_default_get_focus;
+
+  g_object_interface_install_property (iface,
+      g_param_spec_object ("focus-widget",
+                           P_("Focus widget"),
+                           P_("The focus widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 GdkDisplay *
@@ -159,7 +154,7 @@ gtk_root_set_focus (GtkRoot   *self,
   g_return_if_fail (GTK_IS_ROOT (self));
   g_return_if_fail (focus == NULL || GTK_IS_WIDGET (focus));
 
-  GTK_ROOT_GET_IFACE (self)->set_focus (self, focus);
+  g_object_set (self, "focus-widget", focus, NULL);
 }
 
 /**
@@ -179,7 +174,22 @@ gtk_root_set_focus (GtkRoot   *self,
 GtkWidget *
 gtk_root_get_focus (GtkRoot *self)
 {
+  GtkWidget *focus;
+
   g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
 
-  return GTK_ROOT_GET_IFACE (self)->get_focus (self);
+  g_object_get (self, "focus-widget", &focus, NULL);
+
+  if (focus)
+    g_object_unref (focus);
+
+  return focus;
+}
+
+guint
+gtk_root_install_properties (GObjectClass *object_class,
+                             guint         first_prop)
+{
+  g_object_class_override_property (object_class, first_prop + GTK_ROOT_PROP_FOCUS_WIDGET, "focus-widget");
+  return GTK_ROOT_NUM_PROPERTIES;
 }
