@@ -6395,6 +6395,8 @@ validate_row (GtkTreeView *tree_view,
       if (is_separator)
         {
           height = get_separator_height (tree_view);
+          /* gtk_tree_view_get_row_height() assumes separator nodes are > 0 */
+          height = MAX (height, 1);
         }
       else
         {
