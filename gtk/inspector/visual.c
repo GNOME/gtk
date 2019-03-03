@@ -20,6 +20,7 @@
 
 #include "visual.h"
 
+#include "focusoverlay.h"
 #include "fpsoverlay.h"
 #include "updatesoverlay.h"
 #include "layoutoverlay.h"
@@ -83,6 +84,7 @@ struct _GtkInspectorVisualPrivate
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
+  GtkInspectorOverlay *focus_overlay;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
@@ -292,6 +294,41 @@ updates_activate (GtkSwitch          *sw,
         {
           gtk_inspector_window_remove_overlay (iw, priv->updates_overlay);
           priv->updates_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
+}
+
+static void
+focus_activate (GtkSwitch          *sw,
+                GParamSpec         *pspec,
+                GtkInspectorVisual *vis)
+{
+  GtkInspectorVisualPrivate *priv = vis->priv;
+  GtkInspectorWindow *iw;
+  gboolean focus;
+
+  focus = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (focus)
+    {
+      if (priv->focus_overlay == NULL)
+        {
+          priv->focus_overlay = gtk_focus_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->focus_overlay);
+          g_object_unref (priv->focus_overlay);
+        }
+    }
+  else
+    {
+      if (priv->focus_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, priv->focus_overlay);
+          priv->focus_overlay = NULL;
         }
     }
 
@@ -952,6 +989,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
+  gtk_widget_class_bind_template_callback (widget_class, focus_activate);
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
