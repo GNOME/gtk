@@ -122,16 +122,12 @@
  * elements representing the #GtkAccelGroup objects you want to add to
  * your window (synonymous with gtk_window_add_accel_group().
  *
- * It also supports the <initial-focus> element, whose name property names
- * the widget to receive the focus when the window is mapped.
- *
  * An example of a UI definition fragment with accel groups:
  * |[
  * <object class="GtkWindow">
  *   <accel-groups>
  *     <group name="accelgroup1"/>
  *   </accel-groups>
- *   <initial-focus name="thunderclap"/>
  * </object>
  * 
  * ...
@@ -2365,55 +2361,6 @@ static const GMarkupParser window_parser =
     window_start_element
   };
 
-typedef struct {
-  GObject *object;
-  GtkBuilder *builder;
-  gchar *name;
-  gint line;
-  gint col;
-} NameSubParserData;
-
-static void
-focus_start_element (GMarkupParseContext  *context,
-                     const gchar          *element_name,
-                     const gchar         **names,
-                     const gchar         **values,
-                     gpointer              user_data,
-                     GError              **error)
-{
-  NameSubParserData *data = (NameSubParserData*)user_data;
-
-  if (strcmp (element_name, "initial-focus") == 0)
-    {
-      const gchar *name;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      data->name = g_strdup (name);
-      g_markup_parse_context_get_position (context, &data->line, &data->col);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkWindow", element_name,
-                                        error);
-    }
-}
-
-static const GMarkupParser focus_parser =
-{
-  focus_start_element
-};
-
 static gboolean
 gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
                                        GtkBuilder    *builder,
@@ -2441,21 +2388,6 @@ gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
       return TRUE;
     }
 
-  if (strcmp (tagname, "initial-focus") == 0)
-    {
-      NameSubParserData *data;
-
-      data = g_slice_new0 (NameSubParserData);
-      data->name = NULL;
-      data->object = G_OBJECT (buildable);
-      data->builder = builder;
-
-      *parser = focus_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
   return FALSE;
 }
 
@@ -2477,23 +2409,6 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
                                data->items, (GDestroyNotify) item_list_free);
 
       g_slice_free (GSListSubParserData, data);
-    }
-
-  if (strcmp (tagname, "initial-focus") == 0)
-    {
-      NameSubParserData *data = (NameSubParserData*)user_data;
-
-      if (data->name)
-        {
-          GObject *object;
-
-          object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
-          if (object)
-            gtk_window_set_focus (GTK_WINDOW (buildable), GTK_WIDGET (object));
-          g_free (data->name);
-        }
-
-      g_slice_free (NameSubParserData, data);
     }
 }
 
