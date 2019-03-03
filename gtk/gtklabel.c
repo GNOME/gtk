@@ -413,8 +413,6 @@ static void gtk_label_state_flags_changed   (GtkWidget        *widget,
 static void gtk_label_style_updated     (GtkWidget        *widget);
 static void gtk_label_snapshot          (GtkWidget        *widget,
                                          GtkSnapshot      *snapshot);
-static gboolean gtk_label_focus         (GtkWidget         *widget,
-                                         GtkDirectionType   direction);
 
 static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
@@ -612,7 +610,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
   widget_class->popup_menu = gtk_label_popup_menu;
-  widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
   widget_class->measure = gtk_label_measure;
 
@@ -4296,149 +4293,6 @@ gtk_label_grab_focus (GtkWidget *widget)
             }
         }
     }
-}
-
-static gboolean
-gtk_label_focus (GtkWidget        *widget,
-                 GtkDirectionType  direction)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkLabelSelectionInfo *info = priv->select_info;
-  GtkLabelLink *focus_link;
-  GList *l;
-
-  if (!gtk_widget_is_focus (widget))
-    {
-      gtk_widget_grab_focus (widget);
-      if (info)
-        {
-          focus_link = gtk_label_get_focus_link (label);
-          if (focus_link && direction == GTK_DIR_TAB_BACKWARD)
-            {
-              for (l = g_list_last (info->links); l; l = l->prev)
-                {
-                  focus_link = l->data;
-                  if (!range_is_in_ellipsis (label, focus_link->start, focus_link->end))
-                    {
-                      info->selection_anchor = focus_link->start;
-                      info->selection_end = focus_link->start;
-                      _gtk_label_accessible_focus_link_changed (label);
-                    }
-                }
-            }
-
-          return TRUE;
-        }
-
-      return FALSE;
-    }
-
-  if (!info)
-    return FALSE;
-
-  if (info->selectable)
-    {
-      gint index;
-
-      if (info->selection_anchor != info->selection_end)
-        goto out;
-
-      index = info->selection_anchor;
-
-      if (direction == GTK_DIR_TAB_FORWARD)
-        for (l = info->links; l; l = l->next)
-          {
-            GtkLabelLink *link = l->data;
-
-            if (link->start > index)
-              {
-                if (!range_is_in_ellipsis (label, link->start, link->end))
-                  {
-                    gtk_label_select_region_index (label, link->start, link->start);
-                    _gtk_label_accessible_focus_link_changed (label);
-                    return TRUE;
-                  }
-              }
-          }
-      else if (direction == GTK_DIR_TAB_BACKWARD)
-        for (l = g_list_last (info->links); l; l = l->prev)
-          {
-            GtkLabelLink *link = l->data;
-
-            if (link->end < index)
-              {
-                if (!range_is_in_ellipsis (label, link->start, link->end))
-                  {
-                    gtk_label_select_region_index (label, link->start, link->start);
-                    _gtk_label_accessible_focus_link_changed (label);
-                    return TRUE;
-                  }
-              }
-          }
-
-      goto out;
-    }
-  else
-    {
-      focus_link = gtk_label_get_focus_link (label);
-      switch (direction)
-        {
-        case GTK_DIR_TAB_FORWARD:
-          if (focus_link)
-            {
-              l = g_list_find (info->links, focus_link);
-              l = l->next;
-            }
-          else
-            l = info->links;
-          for (; l; l = l->next)
-            {
-              GtkLabelLink *link = l->data;
-              if (!range_is_in_ellipsis (label, link->start, link->end))
-                break;
-            }
-          break;
-
-        case GTK_DIR_TAB_BACKWARD:
-          if (focus_link)
-            {
-              l = g_list_find (info->links, focus_link);
-              l = l->prev;
-            }
-          else
-            l = g_list_last (info->links);
-          for (; l; l = l->prev)
-            {
-              GtkLabelLink *link = l->data;
-              if (!range_is_in_ellipsis (label, link->start, link->end))
-                break;
-            }
-          break;
-
-        default:
-        case GTK_DIR_UP:
-        case GTK_DIR_DOWN:
-        case GTK_DIR_LEFT:
-        case GTK_DIR_RIGHT:
-          goto out;
-        }
-
-      if (l)
-        {
-          focus_link = l->data;
-          info->selection_anchor = focus_link->start;
-          info->selection_end = focus_link->start;
-          _gtk_label_accessible_focus_link_changed (label);
-          gtk_widget_queue_draw (widget);
-
-          return TRUE;
-        }
-    }
-
-out:
-
-  return FALSE;
 }
 
 static void
