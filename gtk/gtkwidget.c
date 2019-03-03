@@ -2823,6 +2823,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   priv->visible = gtk_widget_class_get_visible_by_default (g_class);
   priv->child_visible = TRUE;
+  priv->child_focusable = TRUE;
   priv->name = NULL;
   priv->user_alpha = 255;
   priv->alpha = 255;
@@ -3110,10 +3111,11 @@ gtk_widget_unparent (GtkWidget *widget)
   toplevel = NULL;
 
   /* Removing a widget from a container restores the child visible
-   * flag to the default state, so it doesn't affect the child
-   * in the next parent.
+   * and focusable flags to the default state, so they don't affect
+   * the child in the next parent.
    */
   priv->child_visible = TRUE;
+  priv->child_focusable = TRUE;
 
   old_parent = priv->parent;
   if (old_parent)
@@ -13513,4 +13515,67 @@ gtk_widget_get_height (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   return priv->height;
+}
+
+/**
+ * gtk_widget_get_child_focusable:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value set with gtk_widget_set_child_focusable().
+ * If you feel a need to use this function, your code probably
+ * needs reorganization.
+ *
+ * This function is only useful for widget implementations and
+ * never should be called by an application.
+ *
+ * Returns: %TRUE if the widget is focusable
+ **/
+gboolean
+gtk_widget_get_child_focusable (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return priv->child_focusable;
+}
+
+/**
+ * gtk_widget_set_child_focusable:
+ * @widget: a #GtkWidget
+ * @focusable: if %TRUE, @widget should be focusable
+ *
+ * Sets whether @widget should be able to receive focus
+ *
+ * Child focusability will be reset to its default state of %TRUE
+ * when the widget is removed from its parent.
+ *
+ * This function is only useful for widget implementations and
+ * never should be called by an application.
+ **/
+void
+gtk_widget_set_child_focusable (GtkWidget *widget,
+                                gboolean   focusable)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  focusable = !!focusable;
+
+  if (priv->child_focusable == focusable)
+    return;
+
+  if (focusable)
+    priv->child_focusable = TRUE;
+  else
+    {
+      GtkWidget *toplevel;
+
+      priv->child_focusable = FALSE;
+
+      toplevel = _gtk_widget_get_toplevel (widget);
+      if (toplevel != widget && _gtk_widget_is_toplevel (toplevel))
+	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+    }
 }

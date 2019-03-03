@@ -1064,6 +1064,12 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_focus_child      (GtkWidget *widget,
                                                          GtkWidget *child);
 GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_set_child_focusable  (GtkWidget *widget,
+                                                         gboolean   focusable);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_widget_get_child_focusable  (GtkWidget *widget);
+
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
                                                          GtkWidget   *child,
                                                          GtkSnapshot *snapshot);
