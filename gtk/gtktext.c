@@ -225,6 +225,8 @@ struct _GtkTextPrivate
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
+  guint         select_on_focus         : 1;
+  guint         select_on_focus_set     : 1;
 };
 
 struct _GtkTextPasswordHint
@@ -268,6 +270,8 @@ enum {
   PROP_POPULATE_ALL,
   PROP_TABS,
   PROP_ENABLE_EMOJI_COMPLETION,
+  PROP_SELECT_ON_FOCUS,
+  PROP_SELECT_ON_FOCUS_SET,
   NUM_PROPERTIES
 };
 
@@ -321,7 +325,6 @@ static void   gtk_text_snapshot             (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
 static void   gtk_text_focus_in             (GtkWidget        *widget);
 static void   gtk_text_focus_out            (GtkWidget        *widget);
-static void   gtk_text_grab_focus           (GtkWidget        *widget);
 static void   gtk_text_style_updated        (GtkWidget        *widget);
 static void   gtk_text_direction_changed    (GtkWidget        *widget,
                                              GtkTextDirection  previous_dir);
@@ -675,7 +678,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->measure = gtk_text_measure;
   widget_class->size_allocate = gtk_text_size_allocate;
   widget_class->snapshot = gtk_text_snapshot;
-  widget_class->grab_focus = gtk_text_grab_focus;
   widget_class->style_updated = gtk_text_style_updated;
   widget_class->drag_begin = gtk_text_drag_begin;
   widget_class->drag_end = gtk_text_drag_end;
@@ -896,6 +898,26 @@ gtk_text_class_init (GtkTextClass *class)
                             P_("Visibility"),
                             P_("FALSE displays the “invisible char” instead of the actual text (password mode)"),
                             TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkEntry::select-on-focus:
+   *
+   * Whether to select the contents of the text when focus enters it.
+   * When set, this property overrides the system-widget setting for
+   * this feature. See #GtkEntry::select-on-enter-set
+   */
+  text_props[PROP_SELECT_ON_FOCUS] =
+      g_param_spec_boolean ("select-on-focus",
+                            P_("Selet on focus"),
+                            P_("Whether to select the text on focus"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  text_props[PROP_SELECT_ON_FOCUS_SET] =
+      g_param_spec_boolean ("select-on-focus-set",
+                            P_("Select on focus set"),
+                            P_("Whether the select-on-focus property has been set"),
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, text_props);
@@ -1515,6 +1537,27 @@ gtk_text_set_property (GObject      *object,
       set_enable_emoji_completion (self, g_value_get_boolean (value));
       break;
 
+    case PROP_SELECT_ON_FOCUS:
+      if (priv->select_on_focus != g_value_get_boolean (value))
+        {
+          priv->select_on_focus = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      if (!priv->select_on_focus_set)
+        {
+          priv->select_on_focus_set = TRUE;
+          g_object_notify_by_pspec (object, text_props[PROP_SELECT_ON_FOCUS_SET]);
+        }
+      break;
+
+    case PROP_SELECT_ON_FOCUS_SET:
+      if (priv->select_on_focus_set != g_value_get_boolean (value))
+        {
+          priv->select_on_focus_set = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1628,6 +1671,14 @@ gtk_text_get_property (GObject    *object,
 
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_value_set_boolean (value, priv->enable_emoji_completion);
+      break;
+
+    case PROP_SELECT_ON_FOCUS:
+      g_value_set_boolean (value, priv->select_on_focus);
+      break;
+
+    case PROP_SELECT_ON_FOCUS_SET:
+      g_value_set_boolean (value, priv->select_on_focus_set);
       break;
 
     default:
@@ -2896,6 +2947,22 @@ gtk_text_focus_in (GtkWidget *widget)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkKeymap *keymap;
 
+  if (priv->editable && !priv->in_click)
+    {
+      gboolean select_on_focus;
+
+      if (priv->select_on_focus_set)
+        select_on_focus = priv->select_on_focus;
+      else
+        g_object_get (gtk_widget_get_settings (widget),
+                      "gtk-entry-select-on-focus",
+                      &select_on_focus,
+                      NULL);
+
+      if (select_on_focus)
+        gtk_text_set_selection_bounds (self, 0, -1);
+    }
+
   gtk_widget_queue_draw (widget);
 
   keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
@@ -2939,47 +3006,6 @@ gtk_text_focus_out (GtkWidget *widget)
   gtk_text_check_cursor_blink (self);
 
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
-}
-
-static void
-gtk_text_grab_focus (GtkWidget *widget)
-{
-  GtkText *self = GTK_TEXT (widget);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  gboolean select_on_focus;
-
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self));
-
-  if (priv->editable && !priv->in_click)
-    {
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-entry-select-on-focus",
-                    &select_on_focus,
-                    NULL);
-
-      if (select_on_focus)
-        gtk_text_set_selection_bounds (self, 0, -1);
-    }
-}
-
-/**
- * gtk_text_grab_focus_without_selecting:
- * @self: a #GtkText
- *
- * Causes @self to have keyboard focus.
- *
- * It behaves like gtk_widget_grab_focus(),
- * except that it doesn't select the contents of the self.
- * You only want to call this on some special entries
- * which the user usually doesn't want to replace all text in,
- * such as search-as-you-type entries.
- */
-void
-gtk_text_grab_focus_without_selecting (GtkText *self)
-{
-  g_return_if_fail (GTK_IS_TEXT (self));
-
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self));
 }
 
 static void
