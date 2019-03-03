@@ -904,7 +904,6 @@ gtk_text_set_attributes
 gtk_text_get_attributes
 gtk_text_set_tabs
 gtk_text_get_tabs
-gtk_text_grab_focus_without_selecting
 <SUBSECTION Private>
 gtk_text_get_type
 </SECTION>
