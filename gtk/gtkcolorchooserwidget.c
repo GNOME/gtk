@@ -130,6 +130,22 @@ swatch_activate (GtkColorSwatch        *swatch,
 }
 
 static void
+show_editor (GtkColorChooserWidget *cc,
+             gboolean               show)
+{
+  gtk_widget_set_visible (cc->priv->palette, !show);
+  gtk_widget_set_visible (cc->priv->editor, show);
+  gtk_widget_set_child_focusable (cc->priv->palette, !show);
+  gtk_widget_set_child_focusable (cc->priv->editor, show);
+  if (show)
+    gtk_widget_child_focus (cc->priv->editor, GTK_DIR_TAB_FORWARD);
+  else
+    gtk_widget_child_focus (cc->priv->palette, GTK_DIR_TAB_FORWARD);
+
+  g_object_notify (G_OBJECT (cc), "show-editor");
+}
+
+static void
 swatch_customize (GtkColorSwatch        *swatch,
                   GtkColorChooserWidget *cc)
 {
@@ -138,9 +154,7 @@ swatch_customize (GtkColorSwatch        *swatch,
   gtk_color_swatch_get_rgba (swatch, &color);
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
 
-  gtk_widget_hide (cc->priv->palette);
-  gtk_widget_show (cc->priv->editor);
-  g_object_notify (G_OBJECT (cc), "show-editor");
+  show_editor (cc, TRUE);
 }
 
 static void
@@ -174,9 +188,7 @@ button_activate (GtkColorSwatch        *swatch,
 
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
 
-  gtk_widget_hide (cc->priv->palette);
-  gtk_widget_show (cc->priv->editor);
-  g_object_notify (G_OBJECT (cc), "show-editor");
+  show_editor (cc, TRUE);
 }
 
 static void
@@ -260,9 +272,9 @@ gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
 
 static void
 gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
-                                          gboolean               show_editor)
+                                          gboolean               show)
 {
-  if (show_editor)
+  if (show)
     {
       GdkRGBA color = { 0.75, 0.25, 0.25, 1.0 };
 
@@ -271,8 +283,7 @@ gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
     }
 
-  gtk_widget_set_visible (cc->priv->editor, show_editor);
-  gtk_widget_set_visible (cc->priv->palette, !show_editor);
+  show_editor (cc, show);
 }
 
 static void
@@ -592,6 +603,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &color);
 
   gtk_widget_hide (GTK_WIDGET (cc->priv->editor));
+  gtk_widget_set_child_focusable (GTK_WIDGET (cc->priv->editor), FALSE);
 
   cc->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   gtk_size_group_add_widget (cc->priv->size_group, cc->priv->palette);
