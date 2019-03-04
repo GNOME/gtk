@@ -47,6 +47,11 @@ struct _GtkPopup
 struct _GtkPopupClass
 {
   GtkBinClass parent_class;
+
+  /* keybinding signals */
+
+  void     (* activate_focus)   (GtkPopup *popup);
+  void     (* activate_default) (GtkPopup *popup);
 };
 
 GDK_AVAILABLE_IN_ALL
