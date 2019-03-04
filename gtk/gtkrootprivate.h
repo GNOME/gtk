@@ -16,6 +16,9 @@ void                    gtk_root_queue_restyle          (GtkRoot                
 void                    gtk_root_start_layout_phase     (GtkRoot                *self); 
 void                    gtk_root_stop_layout_phase      (GtkRoot                *self); 
 
+gboolean                gtk_root_activate_key           (GtkRoot                *self,
+                                                         GdkEventKey            *event);
+
 enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
   GTK_ROOT_PROP_DEFAULT_WIDGET,
