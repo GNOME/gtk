@@ -1679,7 +1679,7 @@ filechooserbutton:drop(active) { box-shadow: none; border-color: transparent; }
 
 stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list, stacksidebar.sidebar.left:dir(rtl) list, .sidebar:not(separator):dir(ltr), .sidebar:not(separator).left, .sidebar:not(separator).left:dir(rtl) { border-right: 1px solid #cdc7c2; border-left-style: none; }
 
-stacksidebar.sidebar:dir(rtl) list .sidebar:not(separator):dir(rtl), stacksidebar.sidebar.right list .sidebar:not(separator):dir(rtl), .sidebar:not(separator).right { border-left: 1px solid #cdc7c2; border-right-style: none; }
+stacksidebar.sidebar:dir(rtl) list, stacksidebar.sidebar.right list, .sidebar:not(separator):dir(rtl), .sidebar:not(separator).right { border-left: 1px solid #cdc7c2; border-right-style: none; }
 
 .sidebar:backdrop { background-color: #f9f9f8; border-color: #d5d0cc; transition: 200ms ease-out; }
 
