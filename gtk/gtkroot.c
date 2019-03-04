@@ -82,6 +82,13 @@ gtk_root_default_init (GtkRootInterface *iface)
                            P_("The focus widget"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_interface_install_property (iface,
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 GdkDisplay *
@@ -194,11 +201,94 @@ gtk_root_get_focus (GtkRoot *self)
   return focus;
 }
 
+/**
+ * gtk_root_set_default:
+ * @self: a #GtkRoot
+ * @widget: (allow-none): widget to be the default, or %NULL
+ *     to unset the default widget
+ *
+ * The default widget is the widget that’s activated when the user
+ * presses Enter in a dialog (for example). This function sets or
+ * unsets the default widget for a #GtkRoot.
+ *
+ * When setting (rather than unsetting) the default widget it is
+ * generally easier to call gtk_widget_grab_default() on the widget.
+ * Before making a widget the default widget, you must call
+ * gtk_widget_set_can_default() on the widget you’d like to make
+ * the default.
+ */
+void
+gtk_root_set_default (GtkRoot   *self,
+                      GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_ROOT (self));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
+
+  g_object_set (self, "default-widget", widget, NULL);
+}
+
+/**
+ * gtk_root_get_default:
+ * @self: a #GtkRoot
+ *
+ * Returns the default widget for @root. See
+ * gtk_root_set_default() for more details.
+ *
+ * Returns: (nullable) (transfer none): the default widget, or %NULL
+ *     if there is none
+ */
+GtkWidget *
+gtk_root_get_default (GtkRoot *self)
+{
+  GtkWidget *widget;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  g_object_get (self, "default-widget", &widget, NULL);
+
+  if (widget)
+    g_object_unref (widget);
+
+  return widget;
+}
+
+/**
+ * gtk_root_activate_default:
+ * @self: a #GtkRoot
+ *
+ * Activates the default widget for the window, unless the current
+ * focused widget has been configured to receive the default action
+ * (see gtk_widget_set_receives_default()), in which case the
+ * focused widget is activated.
+ *
+ * Returns: %TRUE if a widget got activated
+ */
+gboolean
+gtk_root_activate_default (GtkRoot *self)
+{
+  GtkWidget *default_widget;
+  GtkWidget *focus_widget;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), FALSE);
+
+  default_widget = gtk_root_get_default (self);
+  focus_widget = gtk_root_get_focus (self);
+
+  if (default_widget && gtk_widget_is_sensitive (default_widget) &&
+      (!focus_widget || !gtk_widget_get_receives_default (focus_widget)))
+    return gtk_widget_activate (default_widget);
+  else if (focus_widget && gtk_widget_is_sensitive (focus_widget))
+    return gtk_widget_activate (focus_widget);
+
+  return FALSE;
+}
+
 guint
 gtk_root_install_properties (GObjectClass *object_class,
                              guint         first_prop)
 {
   g_object_class_override_property (object_class, first_prop + GTK_ROOT_PROP_FOCUS_WIDGET, "focus-widget");
+  g_object_class_override_property (object_class, first_prop + GTK_ROOT_PROP_DEFAULT_WIDGET, "default-widget");
   return GTK_ROOT_NUM_PROPERTIES;
 }
 
