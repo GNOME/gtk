@@ -45,6 +45,7 @@ gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
           break;
         }
     }
+
   if (screen)
     {
       GdkQuartzDisplay *display =

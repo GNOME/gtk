@@ -34,10 +34,10 @@
 
 /* Note about coordinates: There are three coordinate systems at play:
  *
- * 1. Core Graphics starts at thehave the origin at the upper right of
- * the main window (the one with the menu bar when you look at
- * arrangement in System Preferences>Displays) and increases down and
- * to the right; up and to the left are negative values of y and x
+ * 1. Core Graphics starts at the origin at the upper right of the
+ * main window (the one with the menu bar when you look at arrangement
+ * in System Preferences>Displays) and increases down and to the
+ * right; up and to the left are negative values of y and x
  * respectively.
  *
  * 2. AppKit (functions beginning with "NS" for NextStep) coordinates
@@ -248,18 +248,18 @@ gdk_quartz_display_pop_error_trap (GdkDisplay *display, gboolean ignore)
  */
 
 int
-get_active_displays (CGDirectDisplayID **screens)
+get_active_displays (CGDirectDisplayID **displays)
 {
-  unsigned int displays = 0;
+  unsigned int n_displays = 0;
 
-  CGGetActiveDisplayList (0, NULL, &displays);
-  if (screens)
+  CGGetActiveDisplayList (0, NULL, &n_displays);
+  if (displays)
     {
-      *screens = g_new0 (CGDirectDisplayID, displays);
-      CGGetActiveDisplayList (displays, *screens, &displays);
+      *displays = g_new0 (CGDirectDisplayID, n_displays);
+      CGGetActiveDisplayList (n_displays, *displays, &n_displays);
     }
 
-  return displays;
+  return n_displays;
 }
 
 static inline GdkRectangle
@@ -273,7 +273,8 @@ cgrect_to_gdkrect (CGRect cgrect)
 }
 
 static void
-configure_monitor (GdkMonitor *monitor, GdkQuartzDisplay *display)
+configure_monitor (GdkMonitor       *monitor,
+                   GdkQuartzDisplay *display)
 {
   GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR (monitor);
   CGSize disp_size = CGDisplayScreenSize (quartz_monitor->id);
@@ -342,11 +343,12 @@ display_rect (GdkQuartzDisplay *display)
 }
 
 static gboolean
-same_monitor (gconstpointer a, gconstpointer b)
+same_monitor (gconstpointer a,
+              gconstpointer b)
 {
   GdkQuartzMonitor *mon_a = GDK_QUARTZ_MONITOR (a);
   CGDirectDisplayID disp_id = (CGDirectDisplayID)GPOINTER_TO_INT (b);
-  if (!mon_a)
+  if (mon_a == NULL)
     return FALSE;
   return mon_a->id == disp_id;
 }
@@ -454,18 +456,20 @@ gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
   NSWindow *nswindow = impl->toplevel;
   NSScreen *screen = [nswindow screen];
   GdkMonitor *monitor = NULL;
+
   if (screen)
-  {
-    GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
-    guint index;
-    CGDirectDisplayID disp_id =
-      [[[screen deviceDescription]
-        objectForKey: @"NSScreenNumber"] unsignedIntValue];
-    if (g_ptr_array_find_with_equal_func (quartz_display->monitors,
-                                          GINT_TO_POINTER (disp_id),
-                                          same_monitor, &index))
-      monitor = g_ptr_array_index (quartz_display->monitors, index);
-  }
+    {
+      GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
+      guint index;
+      CGDirectDisplayID disp_id =
+        [[[screen deviceDescription]
+          objectForKey: @"NSScreenNumber"] unsignedIntValue];
+      if (g_ptr_array_find_with_equal_func (quartz_display->monitors,
+                                            GINT_TO_POINTER (disp_id),
+                                            same_monitor, &index))
+        monitor = g_ptr_array_index (quartz_display->monitors, index);
+    }
+
   if (!monitor)
     {
       GdkRectangle rect = cgrect_to_gdkrect ([nswindow frame]);
@@ -473,22 +477,22 @@ gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
                                                  rect.x + rect.width/2,
                                                  rect.y + rect.height /2);
     }
+
   return monitor;
 }
 
 G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 
-
 static void
 gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
-  uint32_t max_displays = 0, disp;
+  uint32_t count = 0, disp;
   CGDirectDisplayID *displays;
 
   display_rect(display); /* Initialize the overall display coordinates. */
-  max_displays = get_active_displays (&displays);
-  display->monitors = g_ptr_array_new_full (max_displays, g_object_unref);
-  for (disp = 0; disp < max_displays; ++disp)
+  count = get_active_displays (&displays);
+  display->monitors = g_ptr_array_new_full (count, g_object_unref);
+  for (disp = 0; disp < count; ++disp)
     {
       GdkQuartzMonitor *monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
                                                        "display", display, NULL);

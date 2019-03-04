@@ -126,7 +126,8 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen,
   int max_x, max_y;
 
   if (!display)
-       display = GDK_QUARTZ_DISPLAY (gdk_screen_get_display (GDK_SCREEN (screen)));
+    display = GDK_QUARTZ_DISPLAY (gdk_screen_get_display (GDK_SCREEN (screen)));
+
 /* Display geometry is the origin and size in AppKit coordinates. AppKit computes */
   screen->width = (int)trunc (display->geometry.size.width);
   screen->height = (int)trunc (display->geometry.size.height);
