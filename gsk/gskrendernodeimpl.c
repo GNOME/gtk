@@ -2427,6 +2427,68 @@ gsk_transform_node_draw (GskRenderNode *node,
   gsk_render_node_draw (self->child, cr);
 }
 
+static void
+gsk_transform_node_diff (GskRenderNode  *node1,
+                         GskRenderNode  *node2,
+                         cairo_region_t *region)
+{
+  GskTransformNode *self1 = (GskTransformNode *) node1;
+  GskTransformNode *self2 = (GskTransformNode *) node2;
+
+  if (!gsk_transform_equal (self1->transform, self2->transform))
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
+  if (self1->child == self2->child)
+    return;
+
+  switch (gsk_transform_get_category (self1->transform))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+      gsk_render_node_diff (self1->child, self2->child, region);
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      {
+        cairo_region_t *sub;
+        float dx, dy;
+
+        gsk_transform_to_translate (self1->transform, &dx, &dy);
+        sub = cairo_region_create ();
+        gsk_render_node_diff (self1->child, self2->child, sub);
+        cairo_region_translate (sub, floor (dx), floor (dy));
+        if (floor (dx) != dx)
+          {
+            cairo_region_t *tmp = cairo_region_copy (sub);
+            cairo_region_translate (tmp, 1, 0);
+            cairo_region_union (sub, tmp);
+            cairo_region_destroy (sub);
+          }
+        if (floor (dy) != dy)
+          {
+            cairo_region_t *tmp = cairo_region_copy (sub);
+            cairo_region_translate (tmp, 0, 1);
+            cairo_region_union (sub, tmp);
+            cairo_region_destroy (sub);
+          }
+        cairo_region_union (region, sub);
+        cairo_region_destroy (sub);
+      }
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    default:
+      gsk_render_node_diff_impossible (node1, node2, region);
+      break;
+    }
+}
+
 #define GSK_TRANSFORM_NODE_VARIANT_TYPE "(idddddddddddddddduv)"
 
 static GVariant *
@@ -2502,7 +2564,7 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
   gsk_transform_node_finalize,
   gsk_transform_node_draw,
   gsk_render_node_can_diff_true,
-  gsk_render_node_diff_impossible,
+  gsk_transform_node_diff,
   gsk_transform_node_serialize,
   gsk_transform_node_deserialize
 };
