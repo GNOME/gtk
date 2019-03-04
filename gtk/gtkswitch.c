@@ -61,6 +61,7 @@
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkimage.h"
+#include "gtklegacylayoutprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
@@ -319,10 +320,10 @@ gtk_switch_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_switch_size_allocate (GtkWidget *widget,
-                          int        width,
-                          int        height,
-                          int        baseline)
+gtk_switch_allocate (GtkWidget *widget,
+                     int        width,
+                     int        height,
+                     int        baseline)
 {
   GtkSwitch *self = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
@@ -544,9 +545,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
 
-  widget_class->measure = gtk_switch_measure;
-  widget_class->size_allocate = gtk_switch_size_allocate;
-
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
 
@@ -613,6 +611,7 @@ static void
 gtk_switch_init (GtkSwitch *self)
 {
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
+  GtkLayoutManager *layout;
   GtkGesture *gesture;
 
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
@@ -642,6 +641,11 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
+  layout = gtk_legacy_layout_new (NULL,
+                                  gtk_switch_measure,
+                                  gtk_switch_allocate);
+  gtk_widget_set_layout_manager (GTK_WIDGET (self), layout);
+  g_object_unref (layout);
 
   priv->on_image = gtk_image_new_from_icon_name ("switch-on-symbolic");
   gtk_widget_set_parent (priv->on_image, GTK_WIDGET (self));
