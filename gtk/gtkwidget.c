@@ -5764,17 +5764,10 @@ _gtk_widget_set_has_default (GtkWidget *widget,
 void
 gtk_widget_grab_default (GtkWidget *widget)
 {
-  GtkWidget *window;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_can_default (widget));
 
-  window = _gtk_widget_get_toplevel (widget);
-
-  if (window && _gtk_widget_is_toplevel (window))
-    gtk_window_set_default (GTK_WINDOW (window), widget);
-  else
-    g_warning (G_STRLOC ": widget not within a GtkWindow");
+  gtk_root_set_default (gtk_widget_get_root (widget), widget);
 }
 
 /**
