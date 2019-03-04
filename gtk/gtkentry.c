@@ -332,6 +332,18 @@ gtk_entry_grab_focus (GtkWidget *widget)
   gtk_widget_grab_focus (priv->text);
 }
 
+static gboolean
+gtk_entry_mnemonic_activate (GtkWidget *widget,
+                             gboolean   group_cycling)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  gtk_widget_grab_focus (priv->text);
+
+  return TRUE;
+}
+
 static void
 gtk_entry_class_init (GtkEntryClass *class)
 {
@@ -351,6 +363,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->query_tooltip = gtk_entry_query_tooltip;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->grab_focus = gtk_entry_grab_focus;
+  widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
   
   quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");
 

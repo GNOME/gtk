@@ -226,6 +226,18 @@ gtk_password_entry_grab_focus (GtkWidget *widget)
   gtk_widget_grab_focus (priv->entry);
 }
 
+static gboolean
+gtk_password_entry_mnemonic_activate (GtkWidget *widget,
+                                      gboolean   group_cycling)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  gtk_widget_grab_focus (priv->entry);
+
+  return TRUE;
+}
+
 static void
 gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
 {
@@ -242,6 +254,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->size_allocate = gtk_password_entry_size_allocate;
   widget_class->get_accessible = gtk_password_entry_get_accessible;
   widget_class->grab_focus = gtk_password_entry_grab_focus;
+  widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
  
   gtk_editable_install_properties (object_class, 1);
 

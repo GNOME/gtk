@@ -304,6 +304,28 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                                 "change-value", 1,                     \
                                 GTK_TYPE_SCROLL_TYPE, scroll)
 
+
+static void
+gtk_spin_button_grab_focus (GtkWidget *widget)
+{
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  gtk_widget_grab_focus (priv->entry);
+}
+
+static gboolean
+gtk_spin_button_mnemonic_activate (GtkWidget *widget,
+                                   gboolean   group_cycling)
+{
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  gtk_widget_grab_focus (priv->entry);
+
+  return TRUE;
+}
+
 static void
 gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
@@ -321,6 +343,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->size_allocate = gtk_spin_button_size_allocate;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
+  widget_class->grab_focus = gtk_spin_button_grab_focus;
+  widget_class->mnemonic_activate = gtk_spin_button_mnemonic_activate;
 
   class->input = NULL;
   class->output = NULL;

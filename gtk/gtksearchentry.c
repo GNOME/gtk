@@ -259,6 +259,18 @@ gtk_search_entry_grab_focus (GtkWidget *widget)
 }
 
 static void
+gtk_search_entry_mnemonic_activate (GtkWidget *widget,
+                                    gboolean   group_cycling)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  gtk_widget_grab_focus (priv->entry);
+
+  return TRUE;
+}
+
+static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -273,6 +285,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   widget_class->size_allocate = gtk_search_entry_size_allocate;
   widget_class->get_accessible = gtk_search_entry_get_accessible;
   widget_class->grab_focus = gtk_search_entry_grab_focus;
+  widget_class->mnemonic_activate = gtk_search_entry_mnemonic_activate;
 
   klass->stop_search = gtk_search_entry_stop_search;
 
