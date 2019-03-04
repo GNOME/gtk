@@ -2406,25 +2406,25 @@ gsk_transform_node_draw (GskRenderNode *node,
 {
   GskTransformNode *self = (GskTransformNode *) node;
   float xx, yx, xy, yy, dx, dy;
+  cairo_matrix_t ctm;
 
-  if (gsk_transform_to_2d (self->transform, &xx, &yx, &xy, &yy, &dx, &dy))
-    {
-      cairo_matrix_t ctm = { xx, yx, xy, yy, dx, dy };
-
-      GSK_NOTE (CAIRO, g_message ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }",
-                                ctm.xx, ctm.yx,
-                                ctm.xy, ctm.yy,
-                                ctm.x0, ctm.y0));
-      cairo_transform (cr, &ctm);
-  
-      gsk_render_node_draw (self->child, cr);
-    }
-  else
+  if (gsk_transform_get_category (self->transform) < GSK_TRANSFORM_CATEGORY_2D)
     {
       cairo_set_source_rgb (cr, 255 / 255., 105 / 255., 180 / 255.);
       cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height);
       cairo_fill (cr);
+      return;
     }
+
+  gsk_transform_to_2d (self->transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  cairo_matrix_init (&ctm, xx, yx, xy, yy, dx, dy);
+  GSK_NOTE (CAIRO, g_message ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }",
+                            ctm.xx, ctm.yx,
+                            ctm.xy, ctm.yy,
+                            ctm.x0, ctm.y0));
+  cairo_transform (cr, &ctm);
+  
+  gsk_render_node_draw (self->child, cr);
 }
 
 #define GSK_TRANSFORM_NODE_VARIANT_TYPE "(idddddddddddddddduv)"

@@ -49,23 +49,23 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_to_matrix                 (GskTransform                   *self,
                                                                  graphene_matrix_t              *out_matrix);
 GDK_AVAILABLE_IN_ALL
-gboolean                gsk_transform_to_2d                     (GskTransform                   *self,
+void                    gsk_transform_to_2d                     (GskTransform                   *self,
                                                                  float                          *out_xx,
                                                                  float                          *out_yx,
                                                                  float                          *out_xy,
                                                                  float                          *out_yy,
                                                                  float                          *out_dx,
-                                                                 float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
+                                                                 float                          *out_dy);
 GDK_AVAILABLE_IN_ALL
-gboolean                gsk_transform_to_affine                 (GskTransform                   *self,
+void                    gsk_transform_to_affine                 (GskTransform                   *self,
                                                                  float                          *out_scale_x,
                                                                  float                          *out_scale_y,
                                                                  float                          *out_dx,
-                                                                 float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
+                                                                 float                          *out_dy);
 GDK_AVAILABLE_IN_ALL
-gboolean                gsk_transform_to_translate              (GskTransform                   *self,
+void                    gsk_transform_to_translate              (GskTransform                   *self,
                                                                  float                          *out_dx,
-                                                                 float                          *out_dy) G_GNUC_WARN_UNUSED_RESULT;
+                                                                 float                          *out_dy);
 
 GDK_AVAILABLE_IN_ALL
 GskTransformCategory    gsk_transform_get_category              (GskTransform                   *self) G_GNUC_PURE;

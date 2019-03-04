@@ -575,15 +575,15 @@ gtk_snapshot_ensure_affine (GtkSnapshot *snapshot,
                             float       *dx,
                             float       *dy)
 {
-  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
 
-  if (gsk_transform_to_affine (current_state->transform, scale_x, scale_y, dx, dy))
-    return;
-
-  gtk_snapshot_autopush_transform (snapshot);
-
-  *scale_x = *scale_y = 1;
-  *dx = *dy = 0;
+  if (gsk_transform_get_category (state->transform) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+    {
+      gtk_snapshot_autopush_transform (snapshot);
+      state = gtk_snapshot_get_current_state (snapshot);
+    }
+  
+  gsk_transform_to_affine (state->transform, scale_x, scale_y, dx, dy);
 }
 
 static void
@@ -591,16 +591,15 @@ gtk_snapshot_ensure_translate (GtkSnapshot *snapshot,
                                float       *dx,
                                float       *dy)
 {
-  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  float scale_x, scale_y;
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
 
-  if (gsk_transform_to_affine (current_state->transform, &scale_x, &scale_y, dx, dy) &&
-      scale_x == 1.0f && scale_y == 1.0f)
-    return;
-
-  gtk_snapshot_autopush_transform (snapshot);
-
-  *dx = *dy = 0;
+  if (gsk_transform_get_category (state->transform) < GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+    {
+      gtk_snapshot_autopush_transform (snapshot);
+      state = gtk_snapshot_get_current_state (snapshot);
+    }
+  
+  gsk_transform_to_translate (state->transform, dx, dy);
 }
 
 static void
@@ -608,10 +607,8 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
 {
   const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
 
-  if (state->transform == NULL)
-    return;
-
-  gtk_snapshot_autopush_transform (snapshot);
+  if (gsk_transform_get_category (state->transform) < GSK_TRANSFORM_CATEGORY_IDENTITY)
+    gtk_snapshot_autopush_transform (snapshot);
 }
 
 void
