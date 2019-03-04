@@ -284,6 +284,35 @@
  * </object>
  * ]|
  *
+ * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
+ * custom <layout> element, used to define layout properties:
+ *
+ * |[
+ * <object class="MyGrid" id="grid1">
+ *   <child>
+ *     <object class="GtkLabel" id="label1">
+ *       <property name="label">Description</property>
+ *       <layout>
+ *         <property name="left-attach">0</property>
+ *         <property name="top-attach">0</property>
+ *         <property name="row-span">1</property>
+ *         <property name="col-span">1</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ *   <child>
+ *     <object class="GtkEntry" id="description_entry">
+ *       <layout>
+ *         <property name="left-attach">1</property>
+ *         <property name="top-attach">0</property>
+ *         <property name="row-span">1</property>
+ *         <property name="col-span">1</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]|
+ *
  * Finally, GtkWidget allows style information such as style classes to
  * be associated with widgets, using the custom <style> element:
  * |[
@@ -4371,7 +4400,7 @@ gtk_widget_allocate (GtkWidget    *widget,
     {
       gtk_layout_manager_allocate (priv->layout_manager, widget,
                                    priv->width,
-                                   priv->priv->height,
+                                   priv->height,
                                    baseline);
     }
   else
@@ -10163,6 +10192,47 @@ static const GMarkupParser style_parser =
     style_start_element,
   };
 
+typedef struct
+{
+  char *name;
+  GString *value;
+} LayoutPropertyInfo;
+
+typedef struct
+{
+  GObject *object;
+  GtkBuilder *builder;
+
+  /* List<LayoutPropertyInfo> */
+  GList *layout_properties;
+} LayoutParserData;
+
+static void
+layout_start_element (GMarkupParseContext  *context,
+                      const gchar          *element_name,
+                      const gchar         **names,
+                      const gchar         **values,
+                      gpointer              user_data,
+                      GError              **error)
+{
+}
+
+static void
+layout_text (GMarkupParseContext  *context,
+             const gchar          *text,
+             gsize                 text_len,
+             gpointer              user_data,
+             GError              **error)
+{
+}
+
+static const GMarkupParser layout_parser =
+  {
+    layout_start_element,
+    NULL,
+    layout_text,
+  };
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
                                        GtkBuilder       *builder,
@@ -10206,6 +10276,20 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       data->builder = builder;
 
       *parser = style_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+
+  if (strcmp (tagname, "layout") == 0)
+    {
+      LayoutParserData *data;
+
+      data = g_slice_new0 (LayoutParserData);
+      data->builder = builder;
+      data->object = (GObject *) g_object_ref (buildable);
+
+      *parser = layout_parser;
       *parser_data = data;
 
       return TRUE;
