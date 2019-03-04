@@ -1456,8 +1456,7 @@ update_pointer_focus_state (GtkWindow *toplevel,
     return old_target;
 
   gdk_event_get_coords (event, &x, &y);
-  gtk_window_update_pointer_focus (toplevel, device, sequence,
-                                   new_target, x, y);
+  gtk_window_update_pointer_focus (toplevel, device, sequence, new_target, x, y);
 
   return old_target;
 }
@@ -1768,8 +1767,7 @@ gtk_main_do_event (GdkEvent *event)
       GtkWidget *focus_widget;
 
       if (event->any.type == GDK_KEY_PRESS &&
-          GTK_IS_WINDOW (target_widget) &&
-          gtk_window_activate_key (GTK_WINDOW (target_widget), (GdkEventKey *) event))
+          gtk_root_activate_key (GTK_ROOT (target_widget), (GdkEventKey *) event))
         goto cleanup;
 
       focus_widget = gtk_root_get_focus (GTK_ROOT (target_widget));
