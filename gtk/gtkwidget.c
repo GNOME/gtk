@@ -284,6 +284,35 @@
  * </object>
  * ]|
  *
+ * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
+ * custom <layout> element, used to define layout properties:
+ *
+ * |[
+ * <object class="MyGrid" id="grid1">
+ *   <child>
+ *     <object class="GtkLabel" id="label1">
+ *       <property name="label">Description</property>
+ *       <layout>
+ *         <property name="left-attach">0</property>
+ *         <property name="top-attach">0</property>
+ *         <property name="row-span">1</property>
+ *         <property name="col-span">1</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ *   <child>
+ *     <object class="GtkEntry" id="description_entry">
+ *       <layout>
+ *         <property name="left-attach">1</property>
+ *         <property name="top-attach">0</property>
+ *         <property name="row-span">1</property>
+ *         <property name="col-span">1</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]|
+ *
  * Finally, GtkWidget allows style information such as style classes to
  * be associated with widgets, using the custom <style> element:
  * |[
@@ -4371,7 +4400,7 @@ gtk_widget_allocate (GtkWidget    *widget,
     {
       gtk_layout_manager_allocate (priv->layout_manager, widget,
                                    priv->width,
-                                   priv->priv->height,
+                                   priv->height,
                                    baseline);
     }
   else
@@ -10163,6 +10192,134 @@ static const GMarkupParser style_parser =
     style_start_element,
   };
 
+typedef struct
+{
+  char *name;
+  GString *value;
+  char *context;
+  gboolean translatable;
+} LayoutPropertyInfo;
+
+typedef struct
+{
+  GObject *object;
+  GtkBuilder *builder;
+
+  LayoutPropertyInfo *cur_property;
+
+  /* SList<LayoutPropertyInfo> */
+  GSList *properties;
+} LayoutParserData;
+
+static void
+layout_property_info_free (gpointer data)
+{
+  LayoutPropertyInfo *pinfo = data;
+
+  if (pinfo == NULL)
+    return;
+
+  g_free (pinfo->name);
+  g_free (pinfo->context);
+  g_string_free (pinfo->value, TRUE);
+}
+
+static void
+layout_start_element (GMarkupParseContext  *context,
+                      const gchar          *element_name,
+                      const gchar         **names,
+                      const gchar         **values,
+                      gpointer              user_data,
+                      GError              **error)
+{
+  LayoutParserData *layout_data = user_data;
+
+  if (strcmp (element_name, "property") == 0)
+    {
+      const char *name = NULL;
+      const char *ctx = NULL;
+      gboolean translatable = FALSE;
+      LayoutPropertyInfo *pinfo;
+
+      if (!_gtk_builder_check_parent (layout_data->builder, context, "layout", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_BOOLEAN | G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "context", &ctx,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (layout_data->builder, context, error);
+          return;
+        }
+
+      pinfo = g_new0 (LayoutPropertyInfo, 1);
+      pinfo->name = g_strdup (name);
+      pinfo->translatable = translatable;
+      pinfo->context = g_strdup (ctx);
+      pinfo->value = g_string_new (NULL);
+
+      layout_data->cur_property = pinfo;
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (layout_data->builder, context,
+                                        "GtkWidget", element_name,
+                                        error);
+    }
+}
+
+static void
+layout_text (GMarkupParseContext  *context,
+             const gchar          *text,
+             gsize                 text_len,
+             gpointer              user_data,
+             GError              **error)
+{
+  LayoutParserData *layout_data = user_data;
+
+  if (layout_data->cur_property != NULL)
+    g_string_append_len (layout_data->cur_property->value, text, text_len);
+}
+
+static void
+layout_end_element (GMarkupParseContext  *context,
+                    const char           *element_name,
+                    gpointer              user_data,
+                    GError              **error)
+{
+  LayoutParserData *layout_data = user_data;
+
+  if (layout_data->cur_property != NULL)
+    {
+      LayoutPropertyInfo *pinfo = g_steal_pointer (&layout_data->cur_property);
+
+      /* Translate the string, if needed */
+      if (pinfo->value->len != 0 && pinfo->translatable)
+        {
+          const char *translated;
+          const char *domain;
+
+          domain = gtk_builder_get_translation_domain (layout_data->builder);
+
+          translated = _gtk_builder_parser_translate (domain, pinfo->context, pinfo->value->str);
+
+          g_string_assign (pinfo->value, translated);
+        }
+
+      /* We assign all properties at the end of the `layout` section */
+      layout_data->properties = g_slist_prepend (layout_data->properties, pinfo);
+    }
+}
+
+static const GMarkupParser layout_parser =
+  {
+    layout_start_element,
+    layout_end_element,
+    layout_text,
+  };
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
                                        GtkBuilder       *builder,
@@ -10211,6 +10368,20 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       return TRUE;
     }
 
+  if (strcmp (tagname, "layout") == 0)
+    {
+      LayoutParserData *data;
+
+      data = g_slice_new0 (LayoutParserData);
+      data->builder = builder;
+      data->object = (GObject *) g_object_ref (buildable);
+
+      *parser = layout_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -10250,6 +10421,72 @@ _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
   g_object_unref (accel_data->object);
   g_free (accel_data->signal);
   g_slice_free (AccelGroupParserData, accel_data);
+}
+
+static void
+gtk_widget_buildable_finish_layout_properties (GtkWidget *widget,
+                                               GtkWidget *parent,
+                                               gpointer   data)
+{
+  LayoutParserData *layout_data = data;
+  GtkLayoutManager *layout_manager;
+  GtkLayoutChild *layout_child;
+  GObject *gobject;
+  GObjectClass *gobject_class;
+  GSList *layout_properties, *l;
+
+  layout_manager = gtk_widget_get_layout_manager (parent);
+  if (layout_manager == NULL)
+    return;
+
+  layout_child = gtk_layout_manager_get_layout_child (layout_manager, widget);
+  if (layout_child == NULL)
+    return;
+
+  gobject = G_OBJECT (layout_child);
+  gobject_class = G_OBJECT_GET_CLASS (layout_child);
+
+  layout_properties = g_slist_reverse (layout_data->properties);
+  layout_data->properties = NULL;
+
+  for (l = layout_properties; l != NULL; l = l->next)
+    {
+      LayoutPropertyInfo *pinfo = l->data;
+      GParamSpec *pspec;
+      GValue value = G_VALUE_INIT;
+      GError *error = NULL;
+
+      pspec = g_object_class_find_property (gobject_class, pinfo->name);
+      if (pspec == NULL)
+        {
+          g_warning ("Unable to find layout property “%s” for children "
+                     "of layout managers of type “%s”",
+                     pinfo->name,
+                     G_OBJECT_TYPE_NAME (layout_manager));
+          continue;
+        }
+
+      gtk_builder_value_from_string (layout_data->builder,
+                                     pspec,
+                                     pinfo->value->str,
+                                     &value,
+                                     &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to set property “%s.%s” to “%s”: %s",
+                     G_OBJECT_TYPE_NAME (layout_child),
+                     pinfo->name,
+                     pinfo->value->str,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      g_object_set_property (gobject, pinfo->name, &value);
+      g_value_unset (&value);
+    }
+
+  g_slist_free_full (layout_properties, layout_property_info_free);
 }
 
 static void
@@ -10348,6 +10585,19 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
       g_slist_free_full (style_data->classes, g_free);
       g_slice_free (StyleParserData, style_data);
+    }
+  else if (strcmp (tagname, "layout") == 0)
+    {
+      LayoutParserData *layout_data = (LayoutParserData *) user_data;
+      GtkWidget *parent = _gtk_widget_get_parent (GTK_WIDGET (buildable));
+
+      if (parent != NULL)
+        gtk_widget_buildable_finish_layout_properties (GTK_WIDGET (buildable),
+                                                       parent,
+                                                       layout_data);
+
+      g_object_unref (layout_data->object);
+      g_slice_free (LayoutParserData, layout_data);
     }
 }
 
