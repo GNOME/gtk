@@ -29,6 +29,7 @@
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
 #include "gtkmnemonichash.h"
+#include "gtkintl.h"
 #include "gdk/gdkeventsprivate.h"
 
 static GListStore *popup_list = NULL;
@@ -44,6 +45,13 @@ typedef struct {
   GtkMnemonicHash *mnemonic_hash;
 } GtkPopupPrivate;
 
+enum {
+  ACTIVATE_FOCUS,
+  ACTIVATE_DEFAULT,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_popup_root_interface_init (GtkRootInterface *iface);
 
@@ -408,6 +416,18 @@ gtk_popup_get_property (GObject      *object,
 }
 
 static void
+gtk_popup_activate_default (GtkPopup *popup)
+{
+  gtk_root_activate_default (GTK_ROOT (popup));
+}
+
+static void
+gtk_popup_activate_focus (GtkPopup *popup)
+{
+  gtk_root_activate_focus (GTK_ROOT (popup));
+}
+
+static void
 add_tab_bindings (GtkBindingSet    *binding_set,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
@@ -445,7 +465,30 @@ gtk_popup_class_init (GtkPopupClass *klass)
   widget_class->measure = gtk_popup_measure;
   widget_class->size_allocate = gtk_popup_size_allocate;
 
+  klass->activate_default = gtk_popup_activate_default;
+  klass->activate_focus = gtk_popup_activate_focus;
+
   gtk_root_install_properties (object_class, 1);
+
+  signals[ACTIVATE_FOCUS] =
+    g_signal_new (I_("activate-focus"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkPopupClass, activate_focus),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  signals[ACTIVATE_DEFAULT] =
+    g_signal_new (I_("activate-default"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkPopupClass, activate_default),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
 
   binding_set = gtk_binding_set_by_class (klass);
 
@@ -453,6 +496,13 @@ gtk_popup_class_init (GtkPopupClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0, "activate-focus", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0, "activate-focus", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "activate-default", 0);
 }
 
 GtkWidget *
