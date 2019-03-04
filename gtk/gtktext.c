@@ -3845,30 +3845,9 @@ static void
 gtk_text_real_activate (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkWindow *window;
-  GtkWidget *default_widget, *focus_widget;
-  GtkWidget *toplevel;
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (self);
 
   if (priv->activates_default)
-    {
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_IS_WINDOW (toplevel))
-        {
-          window = GTK_WINDOW (toplevel);
-
-          if (window)
-            {
-              default_widget = gtk_window_get_default_widget (window);
-              focus_widget = gtk_root_get_focus (GTK_ROOT (window));
-              if (widget != default_widget &&
-                  !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
-                gtk_window_activate_default (window);
-            }
-        }
-    }
+    gtk_root_activate_default (gtk_widget_get_root (GTK_WIDGET (self)));
 }
 
 static void
