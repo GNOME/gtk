@@ -1510,9 +1510,33 @@ gsk_transform_transform_bounds (GskTransform          *self,
                                 const graphene_rect_t *rect,
                                 graphene_rect_t       *out_rect)
 {
-  graphene_matrix_t mat;
+  switch (gsk_transform_get_category (self))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+      graphene_rect_init_from_rect (out_rect, rect);
+      break;
 
-  /* XXX: vfuncify */
-  gsk_transform_to_matrix (self, &mat);
-  graphene_matrix_transform_bounds (&mat, rect, out_rect);
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      {
+        float dx, dy;
+
+        gsk_transform_to_translate (self, &dx, &dy);
+        graphene_rect_offset_r (rect, dx, dy, out_rect);
+      }
+    break;
+
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    default:
+      {
+        graphene_matrix_t mat;
+
+        gsk_transform_to_matrix (self, &mat);
+        graphene_matrix_transform_bounds (&mat, rect, out_rect);
+      }
+      break;
+    }
 }
