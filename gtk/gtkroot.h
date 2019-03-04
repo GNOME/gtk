@@ -52,6 +52,15 @@ struct _GtkRootInterface
                                                          int                    *x,
                                                          int                    *y);
   void                  (* check_resize)                (GtkRoot                *root);
+
+  void                  (* add_mnemonic)                (GtkRoot                *root,
+                                                         guint                   keyval,
+                                                         GtkWidget              *target);
+  void                  (* remove_mnemonic)             (GtkRoot                *root,
+                                                         guint                   keyval,
+                                                         GtkWidget              *target);
+  gboolean              (* activate_key)                (GtkRoot                *root,
+                                                         GdkEventKey            *event);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -73,6 +82,14 @@ GtkWidget * gtk_root_get_default (GtkRoot   *self);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_root_activate_default (GtkRoot *self);
 
+GDK_AVAILABLE_IN_ALL
+void        gtk_root_add_mnemonic      (GtkRoot   *root,
+                                        guint      keyval,
+                                        GtkWidget *target);
+GDK_AVAILABLE_IN_ALL
+void        gtk_root_remove_mnemonic   (GtkRoot   *root,
+                                        guint      keyval,
+                                        GtkWidget *target);
 
 G_END_DECLS
 
