@@ -474,7 +474,7 @@ static void gtk_label_update_active_link  (GtkWidget *widget,
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
-                                             GtkWidget         *toplevel,
+                                             GtkRoot           *root,
 					     guint              last_key);
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDrag           *drag,
@@ -1918,7 +1918,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 
 static void
 gtk_label_setup_mnemonic (GtkLabel  *label,
-                          GtkWidget *toplevel,
+                          GtkRoot   *root,
 			  guint      last_key)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
@@ -1950,7 +1950,7 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
 
-  if (toplevel && gtk_widget_is_toplevel (toplevel))
+  if (root)
     {
       GtkWidget *menu_shell;
       
@@ -1965,12 +1965,12 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 	  mnemonic_menu = menu_shell;
 	}
       
-      if (!GTK_IS_MENU (menu_shell))
+      if (!GTK_IS_MENU (menu_shell) && GTK_IS_WINDOW (root))
 	{
-	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
+	  gtk_window_add_mnemonic (GTK_WINDOW (root),
 				   priv->mnemonic_keyval,
 				   widget);
-	  priv->mnemonic_window = GTK_WINDOW (toplevel);
+	  priv->mnemonic_window = GTK_WINDOW (root);
 	}
     }
   
@@ -1986,7 +1986,7 @@ gtk_label_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
 
-  gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (widget), priv->mnemonic_keyval);
+  gtk_label_setup_mnemonic (label, gtk_widget_get_root (widget), priv->mnemonic_keyval);
 }
 
 static void
@@ -2321,7 +2321,7 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (keyval != priv->mnemonic_keyval)
     {
-      gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (GTK_WIDGET (label)), keyval);
+      gtk_label_setup_mnemonic (label, gtk_widget_get_root (GTK_WIDGET (label)), keyval);
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
