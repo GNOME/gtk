@@ -430,15 +430,15 @@ toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutt
 
 .linked:not(.vertical) > spinbutton:only-child:not(.vertical), .linked:not(.vertical) > entry:only-child, .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat, .linked:not(.vertical) > combobox:only-child > box > button.combo { border-radius: 5px; border-style: solid; }
 
-filechooser .path-bar.linked > button:only-child { border-radius: 3px; border-style: solid; }
+filechooser .path-bar.linked > button:only-child { border-radius: 5px; border-style: solid; }
 
 .linked.vertical > spinbutton:not(.vertical), .linked.vertical > entry, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > box > button.combo { border-style: solid solid none solid; border-radius: 0; }
 
-.linked.vertical > spinbutton:first-child:not(.vertical), .linked.vertical > entry:first-child, .linked.vertical > button:first-child, .linked.vertical > combobox:first-child > box > button.combo { border-top-left-radius: 3px; border-top-right-radius: 3px; }
+.linked.vertical > spinbutton:first-child:not(.vertical), .linked.vertical > entry:first-child, .linked.vertical > button:first-child, .linked.vertical > combobox:first-child > box > button.combo { border-top-left-radius: 5px; border-top-right-radius: 5px; }
 
-.linked.vertical > spinbutton:last-child:not(.vertical), .linked.vertical > entry:last-child, .linked.vertical > button:last-child, .linked.vertical > combobox:last-child > box > button.combo { border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-style: solid; }
+.linked.vertical > spinbutton:last-child:not(.vertical), .linked.vertical > entry:last-child, .linked.vertical > button:last-child, .linked.vertical > combobox:last-child > box > button.combo { border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-style: solid; }
 
-.linked.vertical > spinbutton:only-child:not(.vertical), .linked.vertical > entry:only-child, .linked.vertical > button:only-child, .linked.vertical > combobox:only-child > box > button.combo { border-radius: 3px; border-style: solid; }
+.linked.vertical > spinbutton:only-child:not(.vertical), .linked.vertical > entry:only-child, .linked.vertical > button:only-child, .linked.vertical > combobox:only-child > box > button.combo { border-radius: 5px; border-style: solid; }
 
 modelbutton.flat, .menuitem.button.flat, modelbutton.flat:backdrop, modelbutton.flat:backdrop:hover, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, list row button, button:link, button:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, calendar.button, .scale-popup button:hover, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:disabled, .scale-popup button:backdrop { background-color: transparent; background-image: none; border-color: transparent; box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
