@@ -258,7 +258,7 @@ gtk_search_entry_grab_focus (GtkWidget *widget)
   gtk_widget_grab_focus (priv->entry);
 }
 
-static void
+static gboolean
 gtk_search_entry_mnemonic_activate (GtkWidget *widget,
                                     gboolean   group_cycling)
 {
