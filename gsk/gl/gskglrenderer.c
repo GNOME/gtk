@@ -809,10 +809,7 @@ render_transform_node (GskGLRenderer   *self,
       {
         float dx, dy;
         
-        if (!gsk_transform_to_translate (node_transform, &dx, &dy))
-          {
-            g_assert_not_reached ();
-          }
+        gsk_transform_to_translate (node_transform, &dx, &dy);
 
         ops_offset (builder, dx, dy);
         gsk_gl_renderer_add_render_ops (self, child, builder);

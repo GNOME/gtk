@@ -182,25 +182,25 @@ check_conversions (GskTransform         *transform,
 
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      g_assert (gsk_transform_to_translate (transform,
-                                            &f[4 * 3 + 0], &f[4 * 3 + 1]));
+      gsk_transform_to_translate (transform,
+                                  &f[4 * 3 + 0], &f[4 * 3 + 1]);
       graphene_matrix_init_from_float (&test, f);
       graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
       G_GNUC_FALLTHROUGH;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-      g_assert (gsk_transform_to_affine (transform,
-                                         &f[4 * 0 + 0], &f[4 * 1 + 1],
-                                         &f[4 * 3 + 0], &f[4 * 3 + 1]));
+      gsk_transform_to_affine (transform,
+                               &f[4 * 0 + 0], &f[4 * 1 + 1],
+                               &f[4 * 3 + 0], &f[4 * 3 + 1]);
       graphene_matrix_init_from_float (&test, f);
       graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
       G_GNUC_FALLTHROUGH;
 
     case GSK_TRANSFORM_CATEGORY_2D:
-      g_assert (gsk_transform_to_2d (transform,
-                                     &f[4 * 0 + 0], &f[4 * 0 + 1],
-                                     &f[4 * 1 + 0], &f[4 * 1 + 1],
-                                     &f[4 * 3 + 0], &f[4 * 3 + 1]));
+      gsk_transform_to_2d (transform,
+                           &f[4 * 0 + 0], &f[4 * 0 + 1],
+                           &f[4 * 1 + 0], &f[4 * 1 + 1],
+                           &f[4 * 3 + 0], &f[4 * 3 + 1]);
       graphene_matrix_init_from_float (&test, f);
       graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
       break;

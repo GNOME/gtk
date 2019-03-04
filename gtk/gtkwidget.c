@@ -11089,7 +11089,9 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   gtk_css_boxes_init (&boxes, widget);
   margin_rect = gtk_css_boxes_get_margin_rect (&boxes);
 
-  if (!gsk_transform_to_translate (priv->transform, &dx, &dy))
+  if (gsk_transform_get_category (priv->transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+    gsk_transform_to_translate (priv->transform, &dx, &dy);
+  else
     dx = dy = 0;
 
   allocation->x = dx + ceil (margin_rect->origin.x);
