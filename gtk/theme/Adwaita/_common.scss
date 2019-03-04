@@ -3907,7 +3907,7 @@ filechooserbutton:drop(active) {
       border-left-style: none;
     }
 
-    @at-root %sidebar_right
+    @at-root %sidebar_right,
     &:dir(rtl),
     &.right {
       border-left: 1px solid $borders_color;
