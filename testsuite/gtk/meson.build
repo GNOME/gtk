@@ -1,3 +1,5 @@
+subdir('focus-chain')
+
 testexecdir = join_paths(installed_test_bindir, 'gtk')
 testdatadir = join_paths(installed_test_datadir, 'gtk')
 
