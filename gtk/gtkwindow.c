@@ -2088,6 +2088,9 @@ gtk_window_set_property (GObject      *object,
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       gtk_window_set_focus (window, g_value_get_object (value));
       break;
+    case LAST_ARG + GTK_ROOT_PROP_DEFAULT_WIDGET:
+      gtk_window_set_default (window, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2205,6 +2208,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
+      break;
+    case LAST_ARG + GTK_ROOT_PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, gtk_window_get_default_widget (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
