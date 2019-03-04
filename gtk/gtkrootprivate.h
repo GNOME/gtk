@@ -18,6 +18,7 @@ void                    gtk_root_stop_layout_phase      (GtkRoot                
 
 enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
+  GTK_ROOT_PROP_DEFAULT_WIDGET,
   GTK_ROOT_NUM_PROPERTIES
 } GtkRootProperties;
 
