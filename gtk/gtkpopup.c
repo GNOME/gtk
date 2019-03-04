@@ -39,6 +39,7 @@ typedef struct {
   GtkWidget *relative_to;
   GtkWidget *focus_widget;
   gboolean active;
+  GtkWidget *default_widget;
 } GtkPopupPrivate;
 
 
@@ -344,6 +345,9 @@ gtk_popup_size_allocate (GtkWidget *widget,
 static void gtk_popup_set_focus (GtkPopup  *popup,
                                  GtkWidget *widget);
 
+static void gtk_popup_set_default (GtkPopup  *popup,
+                                   GtkWidget *widget);
+
 static void
 gtk_popup_set_property (GObject       *object,
                          guint         prop_id,
@@ -356,6 +360,9 @@ gtk_popup_set_property (GObject       *object,
     {
     case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
       gtk_popup_set_focus (popup, g_value_get_object (value));
+      break;
+    case 1 + GTK_ROOT_PROP_DEFAULT_WIDGET:
+      gtk_popup_set_default (popup, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -376,6 +383,9 @@ gtk_popup_get_property (GObject      *object,
     {
     case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, priv->focus_widget);
+      break;
+    case 1 + GTK_ROOT_PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, priv->default_widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -580,4 +590,43 @@ gtk_popup_set_is_active (GtkPopup *popup,
       priv->focus_widget != GTK_WIDGET (popup) &&
       gtk_widget_has_focus (priv->focus_widget) != active)
     do_focus_change (priv->focus_widget, active);
+}
+
+static void
+gtk_popup_set_default (GtkPopup  *popup,
+                       GtkWidget *widget)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_if_fail (GTK_IS_POPUP (popup));
+
+  if (widget && !gtk_widget_get_can_default (widget))
+    return;
+
+  if (priv->default_widget == widget)
+    return;
+
+  if (priv->default_widget)
+    {
+      if (priv->focus_widget != priv->default_widget ||
+          !gtk_widget_get_receives_default (priv->default_widget))
+        _gtk_widget_set_has_default (priv->default_widget, FALSE);
+
+      gtk_widget_queue_draw (priv->default_widget);
+      g_object_notify (G_OBJECT (priv->default_widget), "has-default");
+    }
+
+  g_set_object (&priv->default_widget, widget);
+
+  if (priv->default_widget)
+    {
+      if (priv->focus_widget == NULL ||
+          !gtk_widget_get_receives_default (priv->focus_widget))
+        _gtk_widget_set_has_default (priv->default_widget, TRUE);
+
+      gtk_widget_queue_draw (priv->default_widget);
+      g_object_notify (G_OBJECT (priv->default_widget), "has-default");
+    }
+
+  g_object_notify (G_OBJECT (popup), "default-widget");
 }
