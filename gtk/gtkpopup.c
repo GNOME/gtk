@@ -28,6 +28,7 @@
 #include "gtkbindings.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
+#include "gtkmnemonichash.h"
 #include "gdk/gdkeventsprivate.h"
 
 static GListStore *popup_list = NULL;
@@ -40,6 +41,7 @@ typedef struct {
   GtkWidget *focus_widget;
   gboolean active;
   GtkWidget *default_widget;
+  GtkMnemonicHash *mnemonic_hash;
 } GtkPopupPrivate;
 
 
@@ -129,6 +131,15 @@ gtk_popup_root_check_resize (GtkRoot *root)
     }
 }
 
+static void gtk_popup_root_add_mnemonic    (GtkRoot   *root,
+                                            guint      keyval,
+                                            GtkWidget *target);
+static void gtk_popup_root_remove_mnemonic (GtkRoot   *root,
+                                            guint      keyval,
+                                            GtkWidget *target);
+static gboolean gtk_popup_root_activate_key (GtkRoot     *root,
+                                             GdkEventKey *event);
+
 static void
 gtk_popup_root_interface_init (GtkRootInterface *iface)
 {
@@ -136,6 +147,9 @@ gtk_popup_root_interface_init (GtkRootInterface *iface)
   iface->get_renderer = gtk_popup_root_get_renderer;
   iface->get_surface_transform = gtk_popup_root_get_surface_transform;
   iface->check_resize = gtk_popup_root_check_resize;
+  iface->add_mnemonic = gtk_popup_root_add_mnemonic;
+  iface->remove_mnemonic = gtk_popup_root_remove_mnemonic;
+  iface->activate_key = gtk_popup_root_activate_key;
 }
 
 static void gtk_popup_set_is_active (GtkPopup *popup, gboolean active);
@@ -629,4 +643,49 @@ gtk_popup_set_default (GtkPopup  *popup,
     }
 
   g_object_notify (G_OBJECT (popup), "default-widget");
+}
+
+static GtkMnemonicHash *
+gtk_popup_get_mnemonic_hash (GtkPopup *popup,
+                             gboolean  create)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  if (!priv->mnemonic_hash && create)
+    priv->mnemonic_hash = _gtk_mnemonic_hash_new ();
+
+  return priv->mnemonic_hash;
+}
+
+static void
+gtk_popup_root_add_mnemonic (GtkRoot   *root,
+                             guint      keyval,
+                             GtkWidget *target)
+{
+  _gtk_mnemonic_hash_add (gtk_popup_get_mnemonic_hash (GTK_POPUP (root), TRUE), keyval, target);
+}
+
+static void
+gtk_popup_root_remove_mnemonic (GtkRoot   *root,
+                                guint      keyval,
+                                GtkWidget *target)
+{
+  _gtk_mnemonic_hash_remove (gtk_popup_get_mnemonic_hash (GTK_POPUP (root), TRUE), keyval, target);
+}
+
+static gboolean
+gtk_popup_root_activate_key (GtkRoot     *root,
+                             GdkEventKey *event)
+{
+  GdkModifierType modifier = event->state;
+  guint keyval = event->keyval;
+
+  if ((modifier & gtk_accelerator_get_default_mod_mask ()) == GDK_MOD1_MASK)
+    {
+      GtkMnemonicHash *hash = gtk_popup_get_mnemonic_hash (GTK_POPUP (root), FALSE);
+      if (hash)
+        return _gtk_mnemonic_hash_activate (hash, keyval);      
+    }
+
+  return FALSE;
 }
