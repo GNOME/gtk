@@ -6203,31 +6203,9 @@ gtk_label_activate_current_link (GtkLabel *label)
   link = gtk_label_get_focus_link (label);
 
   if (link)
-    {
-      emit_activate_link (label, link);
-    }
+    emit_activate_link (label, link);
   else
-    {
-      GtkWidget *toplevel;
-      GtkWindow *window;
-      GtkWidget *default_widget, *focus_widget;
-
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_IS_WINDOW (toplevel))
-        {
-          window = GTK_WINDOW (toplevel);
-
-          if (window)
-            {
-              default_widget = gtk_window_get_default_widget (window);
-              focus_widget = gtk_root_get_focus (GTK_ROOT (window));
-
-              if (default_widget != widget &&
-                  !(widget == focus_widget && (!default_widget || !gtk_widget_is_sensitive (default_widget))))
-                gtk_window_activate_default (window);
-            }
-        }
-    }
+    gtk_root_activate_default (gtk_widget_get_root (widget));
 }
 
 static GtkLabelLink *
