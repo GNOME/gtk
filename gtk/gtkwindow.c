@@ -2446,12 +2446,38 @@ gtk_window_root_check_resize (GtkRoot *root)
 }
 
 static void
+gtk_window_root_add_mnemonic (GtkRoot   *root,
+                              guint      keyval,
+                              GtkWidget *target)
+{
+  gtk_window_add_mnemonic (GTK_WINDOW (root), keyval, target);
+}
+
+static void
+gtk_window_root_remove_mnemonic (GtkRoot   *root,
+                                 guint      keyval,
+                                 GtkWidget *target)
+{
+  gtk_window_remove_mnemonic (GTK_WINDOW (root), keyval, target);
+}
+
+static gboolean
+gtk_window_root_activate_key (GtkRoot     *root,
+                              GdkEventKey *event)
+{
+  return gtk_window_activate_key (GTK_WINDOW (root), event);
+}
+
+static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
   iface->get_renderer = gtk_window_root_get_renderer;
   iface->get_surface_transform = gtk_window_root_get_surface_transform;
   iface->check_resize = gtk_window_root_check_resize;
+  iface->add_mnemonic = gtk_window_root_add_mnemonic;
+  iface->remove_mnemonic = gtk_window_root_remove_mnemonic;
+  iface->activate_key = gtk_window_root_activate_key;
 }
 
 /**
