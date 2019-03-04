@@ -255,7 +255,7 @@ struct _GtkLabelPrivate
 {
   GtkLabelSelectionInfo *select_info;
   GtkWidget *mnemonic_widget;
-  GtkWindow *mnemonic_window;
+  GtkRoot *mnemonic_root;
 
   PangoAttrList *attrs;
   PangoAttrList *markup_attrs;
@@ -1472,7 +1472,7 @@ gtk_label_init (GtkLabel *label)
   priv->attrs = NULL;
 
   priv->mnemonic_widget = NULL;
-  priv->mnemonic_window = NULL;
+  priv->mnemonic_root = NULL;
 
   priv->mnemonics_visible = TRUE;
 
@@ -1929,12 +1929,10 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
   
   if (last_key != GDK_KEY_VoidSymbol)
     {
-      if (priv->mnemonic_window)
+      if (priv->mnemonic_root)
 	{
-	  gtk_window_remove_mnemonic  (priv->mnemonic_window,
-				       last_key,
-				       widget);
-	  priv->mnemonic_window = NULL;
+	  gtk_root_remove_mnemonic (priv->mnemonic_root, last_key, widget);
+	  priv->mnemonic_root = NULL;
 	}
       if (mnemonic_menu)
 	{
@@ -1965,12 +1963,10 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 	  mnemonic_menu = menu_shell;
 	}
       
-      if (!GTK_IS_MENU (menu_shell) && GTK_IS_WINDOW (root))
+      if (!GTK_IS_MENU (menu_shell))
 	{
-	  gtk_window_add_mnemonic (GTK_WINDOW (root),
-				   priv->mnemonic_keyval,
-				   widget);
-	  priv->mnemonic_window = GTK_WINDOW (root);
+	  gtk_root_add_mnemonic (root, priv->mnemonic_keyval, widget);
+	  priv->mnemonic_root = root;
 	}
     }
   
