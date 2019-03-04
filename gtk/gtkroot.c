@@ -69,12 +69,36 @@ gtk_root_default_check_resize (GtkRoot *self)
 }
 
 static void
+gtk_root_default_add_mnemonic (GtkRoot   *self,
+                               guint      keyval,
+                               GtkWidget *target)
+{
+}
+
+static void
+gtk_root_default_remove_mnemonic (GtkRoot   *self,
+                                  guint      keyval,
+                                  GtkWidget *target)
+{
+}
+
+static gboolean
+gtk_root_default_activate_key (GtkRoot     *self,
+                               GdkEventKey *event)
+{
+  return FALSE;
+}
+
+static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_renderer = gtk_root_default_get_renderer;
   iface->get_surface_transform = gtk_root_default_get_surface_transform;
   iface->check_resize = gtk_root_default_check_resize;
+  iface->add_mnemonic = gtk_root_default_add_mnemonic;
+  iface->remove_mnemonic = gtk_root_default_remove_mnemonic;
+  iface->activate_key = gtk_root_default_activate_key;
 
   g_object_interface_install_property (iface,
       g_param_spec_object ("focus-widget",
@@ -412,4 +436,33 @@ gtk_root_queue_restyle (GtkRoot *root)
     return;
 
   gtk_root_start_layout_phase (root);
+}
+
+void
+gtk_root_add_mnemonic (GtkRoot   *root,
+                       guint      keyval,
+                       GtkWidget *target)
+{
+  g_return_if_fail (GTK_ROOT (root));
+
+  GTK_ROOT_GET_IFACE (root)->add_mnemonic (root, keyval, target); 
+}
+
+void
+gtk_root_remove_mnemonic (GtkRoot   *root,
+                          guint      keyval,
+                          GtkWidget *target)
+{
+  g_return_if_fail (GTK_ROOT (root));
+
+  GTK_ROOT_GET_IFACE (root)->remove_mnemonic (root, keyval, target); 
+}
+
+gboolean
+gtk_root_activate_key (GtkRoot     *root,
+                       GdkEventKey *event)
+{
+  g_return_val_if_fail (GTK_ROOT (root), FALSE);
+
+  return GTK_ROOT_GET_IFACE (root)->activate_key (root, event); 
 }
