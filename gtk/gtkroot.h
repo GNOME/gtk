@@ -59,9 +59,8 @@ struct _GtkRootInterface
   void                  (* remove_mnemonic)             (GtkRoot                *root,
                                                          guint                   keyval,
                                                          GtkWidget              *target);
-  gboolean              (*activate_key)                 (GtkRoot                *root,
+  gboolean              (* activate_key)                (GtkRoot                *root,
                                                          GdkEventKey            *event);
-  
 };
 
 GDK_AVAILABLE_IN_ALL
