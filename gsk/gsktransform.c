@@ -1095,6 +1095,120 @@ gsk_transform_scale_3d (GskTransform *next,
   return &result->parent;
 }
 
+/*** PERSPECTIVE ***/
+
+typedef struct _GskPerspectiveTransform GskPerspectiveTransform;
+
+struct _GskPerspectiveTransform
+{
+  GskTransform parent;
+
+  float depth;
+};
+
+static void
+gsk_perspective_transform_finalize (GskTransform *self)
+{
+}
+
+static void
+gsk_perspective_transform_to_matrix (GskTransform      *transform,
+                                     graphene_matrix_t *out_matrix)
+{
+  GskPerspectiveTransform *self = (GskPerspectiveTransform *) transform;
+  float f[16] = { 1.f, 0.f, 0.f,  0.f,
+                  0.f, 1.f, 0.f,  0.f,
+                  0.f, 0.f, 1.f, -1.f / self->depth,
+                  0.f, 0.f, 0.f,  1.f };
+
+  graphene_matrix_init_from_float (out_matrix, f);
+}
+
+
+static GskTransform *
+gsk_perspective_transform_apply (GskTransform *transform,
+                                 GskTransform *apply_to)
+{
+  GskPerspectiveTransform *self = (GskPerspectiveTransform *) transform;
+
+  return gsk_transform_perspective (apply_to, self->depth);
+}
+
+static GskTransform *
+gsk_perspective_transform_invert (GskTransform *transform,
+                                  GskTransform *next)
+{
+  GskPerspectiveTransform *self = (GskPerspectiveTransform *) transform;
+
+  return gsk_transform_perspective (next, - self->depth);
+}
+
+static gboolean
+gsk_perspective_transform_equal (GskTransform *first_transform,
+                                 GskTransform *second_transform)
+{
+  GskPerspectiveTransform *first = (GskPerspectiveTransform *) first_transform;
+  GskPerspectiveTransform *second = (GskPerspectiveTransform *) second_transform;
+
+  return first->depth == second->depth;
+}
+
+static void
+gsk_perspective_transform_print (GskTransform *transform,
+                                 GString      *string)
+{
+  GskPerspectiveTransform *self = (GskPerspectiveTransform *) transform;
+
+  g_string_append (string, "perspective(");
+  string_append_double (string, self->depth);
+  g_string_append (string, ")");
+}
+
+static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
+{
+  sizeof (GskPerspectiveTransform),
+  "GskPerspectiveTransform",
+  gsk_perspective_transform_finalize,
+  gsk_perspective_transform_to_matrix,
+  NULL,
+  NULL,
+  NULL,
+  gsk_perspective_transform_print,
+  gsk_perspective_transform_apply,
+  gsk_perspective_transform_invert,
+  gsk_perspective_transform_equal,
+};
+
+/**
+ * gsk_transform_perspective:
+ * @next: (allow-none): the next transform
+ * @depth: distance of the z=0 plane. Lower values give a more
+ *     flattened pyramid and therefore a more pronounced
+ *     perspective effect.
+ *
+ * Applies a perspective projection transform. This transform
+ * scales points in X and Y based on their Z value, scaling
+ * points with positive Z values away from the origin, and
+ * those with negative Z values towards the origin. Points
+ * on the z=0 plane are unchanged.
+ *
+ * Returns: The new matrix
+ **/
+GskTransform *
+gsk_transform_perspective (GskTransform *next,
+                           float         depth)
+{
+  GskPerspectiveTransform *result;
+  
+  result = gsk_transform_alloc (&GSK_PERSPECTIVE_TRANSFORM_CLASS,
+                                GSK_TRANSFORM_CATEGORY_ANY,
+                                next);
+
+  result->depth = depth;
+
+  return &result->parent;
+}
+
 /*** PUBLIC API ***/
 
 static void

@@ -171,6 +171,7 @@ gsk_transform_rotate
 gsk_transform_rotate_3d
 gsk_transform_scale
 gsk_transform_scale_3d
+gsk_transform_perspective
 <SUBSECTION>
 gsk_transform_equal
 <SUBSECTION>

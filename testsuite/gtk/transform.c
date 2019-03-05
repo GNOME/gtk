@@ -85,6 +85,7 @@ static struct {
   { GSK_TRANSFORM_CATEGORY_3D },
   { GSK_TRANSFORM_CATEGORY_2D_AFFINE },
   { GSK_TRANSFORM_CATEGORY_3D },
+  { GSK_TRANSFORM_CATEGORY_3D },
 };
 
 static GskTransform *
@@ -116,6 +117,9 @@ apply_test_transform (GskTransform *transform,
 
     case 7:
       return gsk_transform_scale_3d (transform, 2, 3, 5);
+
+    case 8:
+      return gsk_transform_perspective (transform, 5);
 
     default:
       g_assert_not_reached ();
