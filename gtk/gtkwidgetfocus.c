@@ -495,8 +495,15 @@ gtk_widget_get_next_focus (GtkWidget        *widget,
     next = GTK_WIDGET_GET_CLASS (widget)->next_focus_child (widget, prev, dir);
     if (next == NULL)
       {
-        prev = widget;
-        widget = gtk_widget_get_parent (widget);
+        if (GTK_IS_ROOT (widget))
+          {
+            prev = NULL;
+          }
+        else
+          {
+            prev = widget;
+            widget = gtk_widget_get_parent (widget);
+          }
       }
     else if (gtk_widget_can_take_focus (next))
       {
