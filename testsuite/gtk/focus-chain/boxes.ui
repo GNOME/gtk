@@ -1,0 +1,60 @@
+<interface>
+  <object class="GtkWindow" id="window1">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkButton" id="button1">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button2">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button3">
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="box2">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkButton" id="button4">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button5">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button6">
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="box3">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkButton" id="button7">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button8">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button9">
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
