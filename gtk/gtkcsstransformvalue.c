@@ -35,7 +35,8 @@ typedef enum {
   GTK_CSS_TRANSFORM_SCALE,
   GTK_CSS_TRANSFORM_SKEW,
   GTK_CSS_TRANSFORM_SKEW_X,
-  GTK_CSS_TRANSFORM_SKEW_Y
+  GTK_CSS_TRANSFORM_SKEW_Y,
+  GTK_CSS_TRANSFORM_PERSPECTIVE
 } GtkCssTransformType;
 
 union _GtkCssTransform {
@@ -66,6 +67,10 @@ union _GtkCssTransform {
     GtkCssTransformType type;
     GtkCssValue        *skew;
   }                   skew_x, skew_y;
+  struct {
+    GtkCssTransformType type;
+    GtkCssValue        *depth;
+  }                   perspective;
 };
 
 struct _GtkCssValue {
@@ -110,6 +115,9 @@ gtk_css_transform_clear (GtkCssTransform *transform)
     case GTK_CSS_TRANSFORM_SKEW_Y:
       _gtk_css_value_unref (transform->skew_y.skew);
       break;
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      _gtk_css_value_unref (transform->perspective.depth);
+      break;
     case GTK_CSS_TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
@@ -117,7 +125,7 @@ gtk_css_transform_clear (GtkCssTransform *transform)
     }
 }
 
-static void
+static gboolean
 gtk_css_transform_init_identity (GtkCssTransform     *transform,
                                  GtkCssTransformType  type)
 {
@@ -152,13 +160,18 @@ gtk_css_transform_init_identity (GtkCssTransform     *transform,
     case GTK_CSS_TRANSFORM_SKEW_Y:
       transform->skew_y.skew = _gtk_css_number_value_new (0, GTK_CSS_DEG);
       break;
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      return FALSE;
+
     case GTK_CSS_TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
-      break;
+      return FALSE;
     }
 
   transform->type = type;
+
+  return TRUE;
 }
 
 static GskTransform *
@@ -198,7 +211,7 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
                                      _gtk_css_number_value_get (transform->scale.x, 1),
                                      _gtk_css_number_value_get (transform->scale.y, 1),
                                      _gtk_css_number_value_get (transform->scale.z, 1));
-      break;
+
     case GTK_CSS_TRANSFORM_SKEW:
       graphene_matrix_init_skew (&skew,
                                  _gtk_css_number_value_get (transform->skew.x, 100) / 180.0f * G_PI,
@@ -216,6 +229,10 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
                                  0,
                                  _gtk_css_number_value_get (transform->skew_y.skew, 100) / 180.0f * G_PI);
       return gsk_transform_matrix (next, &skew);
+
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      return gsk_transform_perspective (next,
+                                        _gtk_css_number_value_get (transform->perspective.depth, 100));
 
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -303,6 +320,9 @@ gtk_css_transform_compute (GtkCssTransform  *dest,
     case GTK_CSS_TRANSFORM_SKEW_Y:
       dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, style, parent_style);
       return dest->skew_y.skew == src->skew_y.skew;
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      dest->perspective.depth = _gtk_css_value_compute (src->perspective.depth, property_id, provider, style, parent_style);
+      return dest->perspective.depth == src->perspective.depth;
     case GTK_CSS_TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
@@ -389,6 +409,8 @@ gtk_css_transform_equal (const GtkCssTransform *transform1,
       return _gtk_css_value_equal (transform1->skew_x.skew, transform2->skew_x.skew);
     case GTK_CSS_TRANSFORM_SKEW_Y:
       return _gtk_css_value_equal (transform1->skew_y.skew, transform2->skew_y.skew);
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      return _gtk_css_value_equal (transform1->perspective.depth, transform2->perspective.depth);
     case GTK_CSS_TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
@@ -416,7 +438,8 @@ gtk_css_value_transform_equal (const GtkCssValue *value1,
     {
       GtkCssTransform transform;
 
-      gtk_css_transform_init_identity (&transform, larger->transforms[i].type);
+      if (!gtk_css_transform_init_identity (&transform, larger->transforms[i].type))
+        return FALSE;
 
       if (!gtk_css_transform_equal (&larger->transforms[i], &transform))
         {
@@ -428,6 +451,38 @@ gtk_css_value_transform_equal (const GtkCssValue *value1,
     }
 
   return TRUE;
+}
+
+static void
+gtk_css_transform_transition_default (GtkCssTransform       *result,
+                                      const GtkCssTransform *start,
+                                      const GtkCssTransform *end,
+                                      guint                  property_id,
+                                      double                 progress)
+{
+  graphene_matrix_t start_mat, end_mat;
+  GskTransform *trans;
+
+  result->type = GTK_CSS_TRANSFORM_MATRIX;
+
+  if (start)
+    trans = gtk_css_transform_apply (start, NULL);
+  else
+    trans = NULL;
+  gsk_transform_to_matrix (trans, &start_mat);
+  gsk_transform_unref (trans);
+
+  if (end)
+    trans = gtk_css_transform_apply (end, NULL);
+  else
+    trans = NULL;
+  gsk_transform_to_matrix (trans, &end_mat);
+  gsk_transform_unref (trans);
+
+  graphene_matrix_interpolate (&start_mat,
+                               &end_mat,
+                               progress,
+                               &result->matrix.matrix);
 }
 
 static void
@@ -472,6 +527,9 @@ gtk_css_transform_transition (GtkCssTransform       *result,
       break;
     case GTK_CSS_TRANSFORM_SKEW_Y:
       result->skew_y.skew = _gtk_css_value_transition (start->skew_y.skew, end->skew_y.skew, property_id, progress);
+      break;
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      gtk_css_transform_transition_default (result, start, end, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -546,25 +604,45 @@ gtk_css_value_transform_transition (GtkCssValue *start,
     {
       GtkCssTransform transform;
 
-      gtk_css_transform_init_identity (&transform, start->transforms[i].type);
-      gtk_css_transform_transition (&result->transforms[i],
-                                    &start->transforms[i],
-                                    &transform,
-                                    property_id,
-                                    progress);
-      gtk_css_transform_clear (&transform);
+      if (gtk_css_transform_init_identity (&transform, start->transforms[i].type))
+        {
+          gtk_css_transform_transition (&result->transforms[i],
+                                        &start->transforms[i],
+                                        &transform,
+                                        property_id,
+                                        progress);
+          gtk_css_transform_clear (&transform);
+        }
+      else
+        {
+          gtk_css_transform_transition_default (&result->transforms[i],
+                                                &start->transforms[i],
+                                                NULL,
+                                                property_id,
+                                                progress);
+        }
     }
   for (; i < end->n_transforms; i++)
     {
       GtkCssTransform transform;
 
-      gtk_css_transform_init_identity (&transform, end->transforms[i].type);
-      gtk_css_transform_transition (&result->transforms[i],
-                                    &transform,
-                                    &end->transforms[i],
-                                    property_id,
-                                    progress);
-      gtk_css_transform_clear (&transform);
+      if (gtk_css_transform_init_identity (&transform, end->transforms[i].type))
+        {
+          gtk_css_transform_transition (&result->transforms[i],
+                                        &transform,
+                                        &end->transforms[i],
+                                        property_id,
+                                        progress);
+          gtk_css_transform_clear (&transform);
+        }
+      else
+        {
+          gtk_css_transform_transition_default (&result->transforms[i],
+                                                NULL,
+                                                &end->transforms[i],
+                                                property_id,
+                                                progress);
+        }
     }
 
   g_assert (i == MAX (start->n_transforms, end->n_transforms));
@@ -676,6 +754,11 @@ gtk_css_transform_print (const GtkCssTransform *transform,
     case GTK_CSS_TRANSFORM_SKEW_Y:
       g_string_append (string, "skewY(");
       _gtk_css_value_print (transform->skew_y.skew, string);
+      g_string_append (string, ")");
+      break;
+    case GTK_CSS_TRANSFORM_PERSPECTIVE:
+      g_string_append (string, "perspective(");
+      _gtk_css_value_print (transform->perspective.depth, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_NONE:
@@ -1044,6 +1127,14 @@ gtk_css_transform_parse (GtkCssTransform *transform,
 
       transform->skew_y.skew = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
       if (transform->skew_y.skew == NULL)
+        return FALSE;
+    }
+  else if (_gtk_css_parser_try (parser, "perspective(", TRUE))
+    {
+      transform->type = GTK_CSS_TRANSFORM_PERSPECTIVE;
+
+      transform->perspective.depth = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+      if (transform->perspective.depth == NULL)
         return FALSE;
     }
   else

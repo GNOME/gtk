@@ -4388,6 +4388,7 @@ gtk_snapshot_rotate
 gtk_snapshot_rotate_3d
 gtk_snapshot_scale
 gtk_snapshot_scale_3d
+gtk_snapshot_perspective
 gtk_snapshot_append_node
 gtk_snapshot_append_cairo
 gtk_snapshot_append_texture

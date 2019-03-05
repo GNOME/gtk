@@ -134,6 +134,9 @@ void            gtk_snapshot_scale_3d                   (GtkSnapshot            
                                                          float                   factor_y,
                                                          float                   factor_z);
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_perspective                (GtkSnapshot            *snapshot,
+                                                         float                   depth);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_ALL
