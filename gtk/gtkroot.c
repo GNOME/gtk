@@ -152,7 +152,8 @@ gtk_root_set_focus (GtkRoot   *self,
                     GtkWidget *focus)
 {
   g_return_if_fail (GTK_IS_ROOT (self));
-  g_return_if_fail (focus == NULL || GTK_IS_WIDGET (focus));
+  g_return_if_fail (focus == NULL ||
+                    (GTK_IS_WIDGET (focus) && gtk_widget_get_root (focus) == self));
 
   g_object_set (self, "focus-widget", focus, NULL);
 }
