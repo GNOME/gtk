@@ -1354,7 +1354,7 @@ gtk_snapshot_rotate_3d (GtkSnapshot           *snapshot,
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  *
- * Scales @@snapshot's coordinate system in 2-dimensional space by
+ * Scales @snapshot's coordinate system in 2-dimensional space by
  * the given factors.
  *
  * Use gtk_snapshot_scale_3d() to scale in all 3 dimensions.
@@ -1379,7 +1379,7 @@ gtk_snapshot_scale (GtkSnapshot *snapshot,
  * @factor_y: scaling factor on the Y axis
  * @factor_z: scaling factor on the Z axis
  *
- * Scales @@snapshot's coordinate system by the given factors.
+ * Scales @snapshot's coordinate system by the given factors.
  */
 void
 gtk_snapshot_scale_3d (GtkSnapshot *snapshot,
@@ -1393,6 +1393,27 @@ gtk_snapshot_scale_3d (GtkSnapshot *snapshot,
 
   state = gtk_snapshot_get_current_state (snapshot);
   state->transform = gsk_transform_scale_3d (state->transform, factor_x, factor_y, factor_z);
+}
+
+/**
+ * gtk_snapshot_perspective:
+ * @snapshot: a #GtkSnapshot
+ * @depth: distance of the z=0 plane
+ *
+ * Applies a perspective projection transform.
+ *
+ * See gsk_transform_perspective() for a discussion on the details.
+ */
+void
+gtk_snapshot_perspective (GtkSnapshot *snapshot,
+                          float        depth)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->transform = gsk_transform_perspective (state->transform, depth);
 }
 
 void

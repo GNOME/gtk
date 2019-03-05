@@ -105,6 +105,9 @@ GskTransform *          gsk_transform_scale_3d                  (GskTransform   
                                                                  float                           factor_x,
                                                                  float                           factor_y,
                                                                  float                           factor_z);
+GDK_AVAILABLE_IN_ALL
+GskTransform *          gsk_transform_perspective               (GskTransform                   *next,
+                                                                 float                           depth);
 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_transform_bounds          (GskTransform                   *self,
