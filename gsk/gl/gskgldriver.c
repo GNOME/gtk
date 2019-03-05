@@ -547,6 +547,25 @@ gsk_gl_driver_get_texture_for_pointer (GskGLDriver *self,
 
   id = GPOINTER_TO_INT (g_hash_table_lookup (self->pointer_textures, pointer));
 
+  if (id != 0)
+    {
+      GHashTableIter iter;
+      gpointer value_p;
+      /* Find the texture in self->textures and mark it used */
+
+      g_hash_table_iter_init (&iter, self->textures);
+      while (g_hash_table_iter_next (&iter, NULL, &value_p))
+        {
+          Texture *t = value_p;
+
+          if (t->texture_id == id)
+            {
+              t->in_use = TRUE;
+              break;
+            }
+        }
+    }
+
   return id;
 }
 
