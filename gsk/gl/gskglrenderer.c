@@ -433,11 +433,22 @@ render_fallback_node (GskGLRenderer       *self,
   const int surface_height = ceilf (node->bounds.size.height) * scale;
   cairo_surface_t *surface;
   cairo_t *cr;
+  int cached_id;
   int texture_id;
 
   if (surface_width <= 0 ||
       surface_height <= 0)
     return;
+
+  cached_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+
+  if (cached_id != 0)
+    {
+      ops_set_program (builder, &self->blit_program);
+      ops_set_texture (builder, cached_id);
+      ops_draw (builder, vertex_data);
+      return;
+    }
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         surface_width,
@@ -473,6 +484,8 @@ render_fallback_node (GskGLRenderer       *self,
                                            GL_NEAREST, GL_NEAREST);
 
   cairo_surface_destroy (surface);
+
+  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, texture_id);
 
   ops_set_program (builder, &self->blit_program);
   ops_set_texture (builder, texture_id);
