@@ -185,7 +185,10 @@ struct _GtkWidget
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
  *   #GtkWindow it’s inside.
- * @next_focus_child: Returns the next child that is a candidate for receiving focus
+ * @next_focus_child: Returns the next child that is a candidate for receiving focus.
+ *   Note that the returned child does not have to be focusable itself, it might just
+ *   contain focusable children. The default implementation returns all children, in
+ *   their logical order.
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
  * @drag_begin: Signal emitted on the drag source when a drag is
