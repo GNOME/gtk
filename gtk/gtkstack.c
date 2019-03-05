@@ -104,6 +104,7 @@
  * @GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP: Cover the old page sliding down or uncover the new page sliding up, according to order
  * @GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT: Cover the old page sliding left or uncover the new page sliding right, according to order
  * @GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT: Cover the old page sliding right or uncover the new page sliding left, according to order
+ * @GTK_STACK_TRANSITION_TYPE_CUBE: Pretend the pages are sides of a cube and rotate that cube
  *
  * These enumeration values describe the possible transitions
  * between pages in a #GtkStack widget.
@@ -911,6 +912,7 @@ get_simple_transition_type (gboolean               new_child_first,
     case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
     case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
     case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
+    case GTK_STACK_TRANSITION_TYPE_CUBE:
     default:
       return transition_type;
     }
@@ -1071,6 +1073,7 @@ effective_transition_type (GtkStack               *stack,
         case GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT:
         case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
         case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
+        case GTK_STACK_TRANSITION_TYPE_CUBE:
         default:
           return transition_type;
         }
@@ -2047,7 +2050,6 @@ gtk_stack_forall (GtkContainer *container,
     }
 }
 
-#include <gsk/gskrendernodeprivate.h>
 static void
 gtk_stack_compute_expand (GtkWidget *widget,
                           gboolean  *hexpand_p,
@@ -2170,6 +2172,84 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 }
 
 static void
+gtk_stack_snapshot_cube (GtkWidget   *widget,
+                         GtkSnapshot *snapshot)
+{
+  GtkStack *stack = GTK_STACK (widget);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  double progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
+
+  if (priv->last_visible_node && progress > 0.5)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 gtk_widget_get_width (widget) / 2.f,
+                                 gtk_widget_get_height (widget) / 2.f,
+                                 0));
+      gtk_snapshot_perspective (snapshot, 2 * gtk_widget_get_width (widget) / 1.f);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 0, 0,
+                                 - gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_rotate_3d (snapshot, -90 * progress, graphene_vec3_y_axis());
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 - gtk_widget_get_width (widget) / 2.f,
+                                 - gtk_widget_get_height (widget) / 2.f,
+                                 gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              priv->last_visible_surface_allocation.x,
+                              priv->last_visible_surface_allocation.y));
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_restore (snapshot);
+    }
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                             gtk_widget_get_width (widget) / 2.f,
+                             gtk_widget_get_height (widget) / 2.f,
+                             0));
+  gtk_snapshot_perspective (snapshot, 2 * gtk_widget_get_width (widget) / 1.f);
+  gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                             0, 0,
+                             - gtk_widget_get_width (widget) / 2.f));
+  gtk_snapshot_rotate_3d (snapshot, 90 * (1.0 - progress), graphene_vec3_y_axis());
+  gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                             - gtk_widget_get_width (widget) / 2.f,
+                             - gtk_widget_get_height (widget) / 2.f,
+                             gtk_widget_get_width (widget) / 2.f));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                          priv->last_visible_surface_allocation.x,
+                          priv->last_visible_surface_allocation.y));
+
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
+  gtk_snapshot_restore (snapshot);
+
+  if (priv->last_visible_node && progress <= 0.5)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 gtk_widget_get_width (widget) / 2.f,
+                                 gtk_widget_get_height (widget) / 2.f,
+                                 0));
+      gtk_snapshot_perspective (snapshot, 2 * gtk_widget_get_width (widget) / 1.f);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 0, 0,
+                                 - gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_rotate_3d (snapshot, -90 * progress, graphene_vec3_y_axis());
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 - gtk_widget_get_width (widget) / 2.f,
+                                 - gtk_widget_get_height (widget) / 2.f,
+                                 gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              priv->last_visible_surface_allocation.x,
+                              priv->last_visible_surface_allocation.y));
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_restore (snapshot);
+    }
+}
+
+static void
 gtk_stack_snapshot_slide (GtkWidget   *widget,
                           GtkSnapshot *snapshot)
 {
@@ -2284,6 +2364,9 @@ gtk_stack_snapshot (GtkWidget   *widget,
             case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
             case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
 	      gtk_stack_snapshot_under (widget, snapshot);
+              break;
+            case GTK_STACK_TRANSITION_TYPE_CUBE:
+	      gtk_stack_snapshot_cube (widget, snapshot);
               break;
             case GTK_STACK_TRANSITION_TYPE_NONE:
             case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT:
