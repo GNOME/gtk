@@ -5298,16 +5298,11 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  * gtk_widget_grab_focus:
  * @widget: a #GtkWidget
  *
- * Causes @widget to have the keyboard focus for the #GtkWindow it's
- * inside. @widget must be a focusable widget, such as a #GtkEntry;
- * something like #GtkFrame won’t work.
+ * Causes @widget (or one of its descendents) to have the keyboard focus
+ * for the #GtkWindow it's inside.
  *
- * More precisely, it must have the %GTK_CAN_FOCUS flag set. Use
- * gtk_widget_set_can_focus() to modify that flag.
- *
- * The widget also needs to be realized and mapped. This is indicated by the
- * related signals. Grabbing the focus immediately after creating the widget
- * will likely fail and cause critical warnings.
+ * @widget must be focusable, or have a ::grab_focus implementation that
+ * transfers the focus to a descendant of @widget that is focusable.
  **/
 void
 gtk_widget_grab_focus (GtkWidget *widget)
@@ -5463,9 +5458,15 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
  * @widget: a #GtkWidget
  * @can_focus: whether or not @widget can own the input focus.
  *
- * Specifies whether @widget can own the input focus. See
- * gtk_widget_grab_focus() for actually setting the input focus on a
- * widget.
+ * Specifies whether @widget can own the input focus.
+ * 
+ * Note that having @can_focus be %TRUE is only one of the
+ * necessary conditions for being focusable. A widget must
+ * also be sensitive and not have a ancestor that is marked
+ * as not child-focusable in order to receive input focus.
+ *
+ * See gtk_widget_grab_focus() for actually setting the input
+ * focus on a widget.
  **/
 void
 gtk_widget_set_can_focus (GtkWidget *widget,
