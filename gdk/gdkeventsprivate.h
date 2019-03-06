@@ -312,6 +312,8 @@ struct _GdkEventCrossing
  * @send_event: %TRUE if the event was sent explicitly.
  * @in: %TRUE if the surface has gained the keyboard focus, %FALSE if
  *   it has lost the focus.
+ * @mode: the crossing mode
+ * @detail: the kind of crossing that happened
  *
  * Describes a change of keyboard focus.
  */
@@ -319,6 +321,8 @@ struct _GdkEventFocus
 {
   GdkEventAny any;
   gint16 in;
+  GdkCrossingMode mode;
+  GdkNotifyType detail;
 };
 
 /*
