@@ -2427,6 +2427,19 @@ gsk_transform_node_draw (GskRenderNode *node,
   gsk_render_node_draw (self->child, cr);
 }
 
+static gboolean
+gsk_transform_node_can_diff (GskRenderNode *node1,
+                             GskRenderNode *node2)
+{
+  GskTransformNode *self1 = (GskTransformNode *) node1;
+  GskTransformNode *self2 = (GskTransformNode *) node2;
+
+  if (!gsk_transform_equal (self1->transform, self2->transform))
+    return FALSE;
+
+  return gsk_render_node_can_diff (self1->child, self2->child);
+}
+
 static void
 gsk_transform_node_diff (GskRenderNode  *node1,
                          GskRenderNode  *node2,
@@ -2563,7 +2576,7 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
   "GskTransformNode",
   gsk_transform_node_finalize,
   gsk_transform_node_draw,
-  gsk_render_node_can_diff_true,
+  gsk_transform_node_can_diff,
   gsk_transform_node_diff,
   gsk_transform_node_serialize,
   gsk_transform_node_deserialize
