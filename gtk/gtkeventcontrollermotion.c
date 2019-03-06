@@ -67,16 +67,27 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
   if (type == GDK_ENTER_NOTIFY)
     {
       double x, y;
+      GdkCrossingMode mode;
+      GdkNotifyType detail;
+
       gdk_event_get_coords (event, &x, &y);
-      g_signal_emit (controller, signals[ENTER], 0, x, y);
+      gdk_event_get_crossing_mode (event, &mode);
+      gdk_event_get_crossing_detail (event, &detail);
+      g_signal_emit (controller, signals[ENTER], 0, x, y, mode, detail);
     }
   else if (type == GDK_LEAVE_NOTIFY)
     {
-      g_signal_emit (controller, signals[LEAVE], 0);
+      GdkCrossingMode mode;
+      GdkNotifyType detail;
+
+      gdk_event_get_crossing_mode (event, &mode);
+      gdk_event_get_crossing_detail (event, &detail);
+      g_signal_emit (controller, signals[LEAVE], 0, mode, detail);
     }
   else if (type == GDK_MOTION_NOTIFY)
     {
       double x, y;
+
       gdk_event_get_coords (event, &x, &y);
       g_signal_emit (controller, signals[MOTION], 0, x, y);
     }
@@ -107,7 +118,12 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+                  G_TYPE_NONE,
+                  4,
+                  G_TYPE_DOUBLE,
+                  G_TYPE_DOUBLE,
+                  GDK_TYPE_CROSSING_MODE,
+                  GDK_TYPE_NOTIFY_TYPE);
 
   /**
    * GtkEventControllerMotion::leave:
@@ -121,7 +137,10 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
         	  NULL,
-                  G_TYPE_NONE, 0);
+                  G_TYPE_NONE,
+                  2,
+                  GDK_TYPE_CROSSING_MODE,
+                  GDK_TYPE_NOTIFY_TYPE);
 
   /**
    * GtkEventControllerMotion::motion:
