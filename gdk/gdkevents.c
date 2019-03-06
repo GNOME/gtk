@@ -1980,6 +1980,11 @@ gdk_event_get_crossing_mode (const GdkEvent  *event,
       *mode = event->crossing.mode;
       return TRUE;
     }
+  else if (event->any.type == GDK_FOCUS_CHANGE)
+    {
+      *mode = event->focus_change.mode;
+      return TRUE;
+    }
 
   return FALSE;
 }
@@ -2004,6 +2009,11 @@ gdk_event_get_crossing_detail (const GdkEvent *event,
       event->any.type == GDK_LEAVE_NOTIFY)
     {
       *detail = event->crossing.detail;
+      return TRUE;
+    }
+  else if (event->any.type == GDK_FOCUS_CHANGE)
+    {
+      *detail = event->focus_change.detail;
       return TRUE;
     }
 
