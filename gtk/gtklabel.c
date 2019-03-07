@@ -1126,6 +1126,8 @@ gtk_label_class_init (GtkLabelClass *class)
 
 static void
 focus_in_cb (GtkEventControllerKey *controller,
+             GdkCrossingMode        mode,
+             GdkNotifyType          detail,
              GtkWidget             *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);

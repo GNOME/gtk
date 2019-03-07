@@ -824,6 +824,8 @@ key_controller_key_released (GtkEventControllerKey *key,
 
 static void
 key_controller_focus_out (GtkEventControllerKey *key,
+                          GdkCrossingMode        mode,
+                          GdkNotifyType          detail,
                           GtkSpinButton         *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
