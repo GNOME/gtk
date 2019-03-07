@@ -105,12 +105,7 @@ gtk_popup_move_resize (GtkPopup *popup)
  
   gtk_widget_get_preferred_size (GTK_WIDGET (popup), NULL, &req);
   gdk_surface_resize (priv->surface, req.width, req.height);
-  rect.x = 0;
-  rect.y = 0;
-  rect.width = gtk_widget_get_width (priv->relative_to);
-  rect.height = gtk_widget_get_height (priv->relative_to);
-  gtk_widget_translate_coordinates (priv->relative_to, gtk_widget_get_toplevel (priv->relative_to),
-                                    rect.x, rect.y, &rect.x, &rect.y);
+  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
 
   gdk_surface_move_to_rect (priv->surface,
                             &rect,
@@ -194,10 +189,11 @@ gtk_popup_realize (GtkWidget *widget)
 {
   GtkPopup *popup = GTK_POPUP (widget);
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
-  GdkRectangle allocation;
+  GdkRectangle parent_rect;
 
   if (_gtk_widget_get_alloc_needed (widget))
     {
+      GdkRectangle allocation;
       allocation.x = 0;
       allocation.y = 0;
       allocation.width = 20; // FIXME
@@ -206,22 +202,18 @@ gtk_popup_realize (GtkWidget *widget)
       gtk_widget_queue_resize (widget);
     }
 
-  gtk_widget_get_allocation (widget, &allocation);
-
-#if 0
-  priv->surface = gdk_surface_new_popup (priv->display, &allocation);
+  gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
+  priv->surface = gdk_surface_new_popup (priv->display, &parent_rect);
   // TODO xdg-popop window type
   gdk_surface_set_transient_for (priv->surface, gtk_widget_get_surface (priv->relative_to));
   gdk_surface_set_type_hint (priv->surface, GDK_SURFACE_TYPE_HINT_POPUP_MENU);
+
   gdk_surface_move_to_rect (priv->surface,
-                            &allocation,
+                            &parent_rect,
                             GDK_GRAVITY_SOUTH,
                             GDK_GRAVITY_NORTH,
                             GDK_ANCHOR_FLIP_Y,
                             0, 10);
-#else
-  priv->surface = gdk_surface_new_toplevel (priv->display, 20, 20);
-#endif
 
   gtk_widget_set_surface (widget, priv->surface);
   gtk_widget_register_surface (widget, priv->surface);
