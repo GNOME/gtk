@@ -1464,7 +1464,7 @@ synth_crossing (GtkWidget       *widget,
   g_object_unref (event);
 }
 
-static void
+void
 gtk_synthesize_crossing_events (GtkWindow       *toplevel,
                                 GtkWidget       *old_target,
                                 GtkWidget       *new_target,
