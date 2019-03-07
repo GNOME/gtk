@@ -1432,6 +1432,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                   <object class="GtkOverlay" id="page2">
                     <child type="overlay">
                       <object class="GtkRevealer" id="page2revealer">
+                        <property name="transition-type">swing-down</property>
                         <property name="halign">center</property>
                         <property name="valign">start</property>
                         <child>

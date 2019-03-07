@@ -66,6 +66,10 @@
  * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT: Slide in from the right
  * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP: Slide in from the bottom
  * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN: Slide in from the top
+ * @GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT: Floop in from the left
+ * @GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT: Floop in from the right
+ * @GTK_REVEALER_TRANSITION_TYPE_SWING_UP: Floop in from the bottom
+ * @GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN: Floop in from the top
  *
  * These enumeration values describe the possible transitions
  * when the child of a #GtkRevealer widget is shown or hidden.
@@ -287,6 +291,10 @@ effective_transition (GtkRevealer *revealer)
         return GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT;
       else if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         return GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT;
+      if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT)
+        return GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT;
+      else if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT)
+        return GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT;
     }
 
   return priv->transition_type;
@@ -328,6 +336,20 @@ get_child_size_scale (GtkRevealer    *revealer,
       else
         return 1.0;
 
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT:
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT:
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        return sin (G_PI * priv->current_pos / 2);
+      else
+        return 1.0;
+
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN:
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_UP:
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        return sin (G_PI * priv->current_pos / 2);
+      else
+        return 1.0;
+
     case GTK_REVEALER_TRANSITION_TYPE_NONE:
     case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
     default:
@@ -342,14 +364,18 @@ gtk_revealer_real_size_allocate (GtkWidget *widget,
                                  int        baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
     {
-      GtkAllocation child_allocation = {0, 0, width, height};
+      GskTransform *transform;
       double hscale, vscale;
+      int child_width, child_height;
 
+      child_width = width;
+      child_height = height;
       hscale = get_child_size_scale (revealer, GTK_ORIENTATION_HORIZONTAL);
       vscale = get_child_size_scale (revealer, GTK_ORIENTATION_VERTICAL);
 
@@ -362,17 +388,61 @@ gtk_revealer_real_size_allocate (GtkWidget *widget,
       else if (hscale < 1.0)
         {
           g_assert (vscale == 1.0);
-          child_allocation.width = MIN (G_MAXINT, ceil (width / hscale));
-          if (effective_transition (revealer) == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-            child_allocation.x = width - child_allocation.width;
+          child_width = MIN (G_MAXINT, ceil (width / hscale));
         }
       else if (vscale < 1.0)
         {
-          child_allocation.height = MIN (G_MAXINT, ceil (height / vscale));
-          if (effective_transition (revealer) == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
-            child_allocation.y = height - child_allocation.height;
+          child_height = MIN (G_MAXINT, ceil (height / vscale));
         }
-      gtk_widget_size_allocate (child, &child_allocation, -1);
+
+      transform = NULL;
+      switch (effective_transition (revealer))
+        {
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width - child_width, 0));
+          break;
+
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, height - child_height));
+
+        case GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT:
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width, height / 2));
+          transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
+          transform = gsk_transform_rotate_3d (transform, -90 * (1.0 - priv->current_pos), graphene_vec3_y_axis ());
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- child_width, - child_height / 2));
+          break;
+
+        case GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT:
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, height / 2));
+          transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
+          transform = gsk_transform_rotate_3d (transform, 90 * (1.0 - priv->current_pos), graphene_vec3_y_axis ());
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, - child_height / 2));
+          break;
+
+        case GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN:
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width / 2, 0));
+          transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
+          transform = gsk_transform_rotate_3d (transform, -90 * (1.0 - priv->current_pos), graphene_vec3_x_axis ());
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- child_width / 2, 0));
+          break;
+
+        case GTK_REVEALER_TRANSITION_TYPE_SWING_UP:
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width / 2, height));
+          transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
+          transform = gsk_transform_rotate_3d (transform, 90 * (1.0 - priv->current_pos), graphene_vec3_x_axis ());
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- child_width / 2, - child_height));
+          break;
+
+        case GTK_REVEALER_TRANSITION_TYPE_NONE:
+        case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+        default:
+          break;
+        }
+
+      gtk_widget_allocate (child, child_width, child_height, -1, transform);
+      gsk_transform_unref (transform);
     }
 }
 
