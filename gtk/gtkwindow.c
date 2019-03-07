@@ -6904,40 +6904,28 @@ do_focus_change (GtkWidget *widget,
                  gboolean   in)
 {
   GdkSeat *seat;
-  GList *devices, *d;
-
-  g_object_ref (widget);
+  GdkDevice *device;
+  GdkEvent *event;
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  device = gdk_seat_get_keyboard (seat);
 
-  for (d = devices; d; d = d->next)
-    {
-      GdkDevice *dev = d->data;
-      GdkEvent *fevent;
-      GdkSurface *surface;
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  gdk_event_set_display (event, gtk_widget_get_display (widget));
+  gdk_event_set_device (event, device);
 
-      surface = _gtk_widget_get_surface (widget);
+  event->any.type = GDK_FOCUS_CHANGE;
+  event->any.surface = _gtk_widget_get_surface (widget);
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
+  event->focus_change.in = in;
+  event->focus_change.mode = GDK_CROSSING_STATE_CHANGED;
+  event->focus_change.detail = GDK_NOTIFY_ANCESTOR;
 
-      fevent = gdk_event_new (GDK_FOCUS_CHANGE);
-      gdk_event_set_display (fevent, gtk_widget_get_display (widget));
+  gtk_widget_set_has_focus (widget, in);
+  gtk_widget_event (widget, event);
 
-      fevent->any.type = GDK_FOCUS_CHANGE;
-      fevent->any.surface = surface;
-      if (surface)
-        g_object_ref (surface);
-      fevent->focus_change.in = in;
-      gdk_event_set_device (fevent, dev);
-
-      gtk_widget_set_has_focus (widget, in);
-      gtk_widget_event (widget, fevent);
-
-      g_object_unref (fevent);
-    }
-
-  g_list_free (devices);
-  g_object_unref (widget);
+  g_object_unref (event);
 }
 
 static gboolean
@@ -7063,44 +7051,6 @@ gtk_window_forall (GtkContainer *container,
     (* callback) (priv->title_box, callback_data);
 }
 
-static void
-unset_focus_widget (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *f;
-
-  for (f = priv->focus_widget; f; f = gtk_widget_get_parent (f))
-    gtk_widget_unset_state_flags (f, GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_VISIBLE);
-
-  if (priv->focus_widget)
-    do_focus_change (priv->focus_widget, FALSE);
-  g_set_object (&priv->focus_widget, NULL);
-}
-
-static void
-set_focus_widget (GtkWindow *window,
-                  GtkWidget *focus)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *f;
-  GtkStateFlags flags = GTK_STATE_FLAG_FOCUSED;
-
-  if (gtk_window_get_focus_visible (window))
-    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
-
-  for (f = focus; f; f = gtk_widget_get_parent (f))
-    {
-      GtkWidget *parent = gtk_widget_get_parent (f);
-      gtk_widget_set_state_flags (f, flags, FALSE);
-      if (parent)
-        gtk_widget_set_focus_child (parent, f);
-    }
-
-  g_set_object (&priv->focus_widget, focus);
-  if (priv->focus_widget)
-    do_focus_change (priv->focus_widget, TRUE);
-}
-
 /**
  * gtk_window_set_focus:
  * @window: a #GtkWindow
@@ -7117,13 +7067,46 @@ void
 gtk_window_set_focus (GtkWindow *window,
                       GtkWidget *focus)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *old_focus = NULL;
+  GtkWidget *f;
+  GdkSeat *seat;
+  GdkDevice *device;
+  GdkEvent *event;
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (focus && !gtk_widget_can_take_focus (focus))
     return;
 
-  unset_focus_widget (window);
-  set_focus_widget (window, focus);
+  if (priv->focus_widget)
+    old_focus = g_object_ref (priv->focus_widget);
+  g_set_object (&priv->focus_widget, NULL);
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (window)));
+  device = gdk_seat_get_keyboard (seat);
+
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  gdk_event_set_display (event, gtk_widget_get_display (GTK_WIDGET (window)));
+  gdk_event_set_device (event, device);
+  event->any.surface = _gtk_widget_get_surface (GTK_WIDGET (window));
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
+
+  gtk_synthesize_crossing_events (window, old_focus, focus, event, GDK_CROSSING_NORMAL);
+
+  g_object_unref (event);
+
+  g_set_object (&priv->focus_widget, focus);
+
+  g_clear_object (&old_focus);
+
+  for (f = focus; f; f = gtk_widget_get_parent (f))
+    {
+      GtkWidget *parent = gtk_widget_get_parent (f);
+      if (parent)
+        gtk_widget_set_focus_child (parent, f);
+    }
 
   g_object_notify (G_OBJECT (window), "focus-widget");
 }
