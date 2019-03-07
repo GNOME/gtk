@@ -1407,59 +1407,63 @@ static void
 synth_crossing (GtkWidget       *widget,
                 GtkWidget       *toplevel,
                 gboolean         enter,
-                GtkWidget       *other_widget,
+                GtkWidget       *target,
+                GtkWidget       *related_target,
                 GdkEvent        *source,
                 GdkNotifyType    notify_type,
                 GdkCrossingMode  crossing_mode)
 {
   GdkEvent *event;
-  gdouble x, y;
+  GtkStateFlags flags;
 
-  event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
-  gdk_event_set_target (event, G_OBJECT (widget));
+  if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
+    {
+      event = gdk_event_new (GDK_FOCUS_CHANGE);
+      event->focus_change.in = enter;
+      event->focus_change.mode = crossing_mode;
+      event->focus_change.detail = notify_type;
+
+      flags = GTK_STATE_FLAG_FOCUSED;
+      if (!GTK_IS_WINDOW (toplevel) || gtk_window_get_focus_visible (GTK_WINDOW (toplevel)))
+        flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+    }
+  else
+    {
+      gdouble x, y;
+      event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
+      if (related_target)
+        event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (related_target));
+      gdk_event_get_coords (source, &x, &y);
+      event->crossing.x = x;
+      event->crossing.y = y;
+      event->crossing.mode = crossing_mode;
+      event->crossing.detail = notify_type;
+
+      flags = GTK_STATE_FLAG_PRELIGHT;
+    }
+
+  gdk_event_set_target (event, G_OBJECT (target));
+  gdk_event_set_related_target (event, G_OBJECT (related_target));
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
   event->any.surface = g_object_ref (gtk_widget_get_surface (toplevel));
-  if (other_widget)
-    event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (other_widget));
 
   if (enter)
-    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+    gtk_widget_set_state_flags (widget, flags, FALSE);
   else
-    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+    gtk_widget_unset_state_flags (widget, flags);
 
-  gdk_event_get_coords (source, &x, &y);
-  event->crossing.x = x;
-  event->crossing.y = y;
-  event->crossing.mode = crossing_mode;
-  event->crossing.detail = notify_type;
-
+  if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
+    {
+      if (notify_type == GDK_NOTIFY_ANCESTOR ||
+          notify_type == GDK_NOTIFY_INFERIOR ||
+          notify_type == GDK_NOTIFY_NONLINEAR)
+        gtk_widget_set_has_focus (widget, enter);
+    }
+    
   gtk_widget_event (widget, event);
   g_object_unref (event);
-}
-
-static GtkWidget *
-update_pointer_focus_state (GtkWindow *toplevel,
-                            GdkEvent  *event,
-                            GtkWidget *new_target)
-{
-  GtkWidget *old_target = NULL;
-  GdkEventSequence *sequence;
-  GdkDevice *device;
-  gdouble x, y;
-
-  device = gdk_event_get_device (event);
-  sequence = gdk_event_get_event_sequence (event);
-  old_target = gtk_window_lookup_pointer_focus_widget (toplevel, device, sequence);
-  if (old_target == new_target)
-    return old_target;
-
-  gdk_event_get_coords (event, &x, &y);
-  gtk_window_update_pointer_focus (toplevel, device, sequence,
-                                   new_target, x, y);
-
-  return old_target;
 }
 
 static void
@@ -1498,7 +1502,7 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
             leave_type : get_virtual_notify_type (leave_type);
 
           synth_crossing (widget, GTK_WIDGET (toplevel), FALSE,
-                          new_target, event, notify_type, mode);
+                          old_target, new_target, event, notify_type, mode);
           widget = gtk_widget_get_parent (widget);
         }
     }
@@ -1523,9 +1527,33 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
             enter_type : get_virtual_notify_type (enter_type);
 
           synth_crossing (widget, GTK_WIDGET (toplevel), TRUE,
-                          old_target, event, notify_type, mode);
+                          new_target, old_target, event, notify_type, mode);
         }
     }
+}
+
+
+static GtkWidget *
+update_pointer_focus_state (GtkWindow *toplevel,
+                            GdkEvent  *event,
+                            GtkWidget *new_target)
+{
+  GtkWidget *old_target = NULL;
+  GdkEventSequence *sequence;
+  GdkDevice *device;
+  gdouble x, y;
+
+  device = gdk_event_get_device (event);
+  sequence = gdk_event_get_event_sequence (event);
+  old_target = gtk_window_lookup_pointer_focus_widget (toplevel, device, sequence);
+  if (old_target == new_target)
+    return old_target;
+
+  gdk_event_get_coords (event, &x, &y);
+  gtk_window_update_pointer_focus (toplevel, device, sequence,
+                                   new_target, x, y);
+
+  return old_target;
 }
 
 static gboolean
