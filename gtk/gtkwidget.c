@@ -11600,6 +11600,19 @@ gtk_widget_send_focus_change (GtkWidget *widget,
   return TRUE;
 }
 
+void
+gtk_widget_set_has_focus (GtkWidget *widget,
+                          gboolean   has_focus)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->has_focus == has_focus)
+    return;
+
+  priv->has_focus = has_focus;
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
+}
+
 /**
  * gtk_widget_in_destruction:
  * @widget: a #GtkWidget
