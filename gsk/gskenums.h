@@ -176,7 +176,7 @@ typedef enum {
  *     determined.
  * @GSK_TRANSFORM_CATEGORY_ANY: Analyzing the matrix concluded that it does
  *     not fit in any other category.
- * @GSK_TRANSFORM_CATEGORY_2D: The matrix is a 3D matrix. This means that
+ * @GSK_TRANSFORM_CATEGORY_3D: The matrix is a 3D matrix. This means that
  *     the w column (the last column) has the values (0, 0, 0, 1).
  * @GSK_TRANSFORM_CATEGORY_2D: The matrix is a 2D matrix. This is equivalent
  *     to graphene_matrix_is_2d() returning %TRUE. In particular, this

@@ -1339,7 +1339,7 @@ gsk_transform_to_matrix (GskTransform      *self,
 
 /**
  * gsk_transform_to_2d:
- * @m: a 2D #GskTransform
+ * @self: a 2D #GskTransform
  * @out_xx: (out): return location for the xx member
  * @out_yx: (out): return location for the yx member
  * @out_xy: (out): return location for the xy member
@@ -1364,9 +1364,6 @@ gsk_transform_to_matrix (GskTransform      *self,
  * This function can be used to convert between a #GskTransform
  * and a matrix type from other 2D drawing libraries, in particular
  * Cairo.
- *
- * Returns: %TRUE if the matrix is compatible with an 2D
- *   transformation matrix.
  */
 void
 gsk_transform_to_2d (GskTransform *self,
@@ -1458,7 +1455,7 @@ gsk_transform_to_affine (GskTransform *self,
 
 /**
  * gsk_transform_to_translate:
- * @m: a #GskTransform
+ * @self: a #GskTransform
  * @out_dx: (out): return location for the translation
  *     in the x direction
  * @out_dy: (out): return location for the translation
