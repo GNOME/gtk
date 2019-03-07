@@ -93,11 +93,16 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
   if (event_type == GDK_FOCUS_CHANGE)
     {
       gboolean focus_in;
+      GdkCrossingMode mode;
+      GdkNotifyType detail;
+
+      gdk_event_get_crossing_mode (event, &mode);
+      gdk_event_get_crossing_detail (event, &detail);
 
       if (gdk_event_get_focus_in (event, &focus_in) && focus_in)
-        g_signal_emit (controller, signals[FOCUS_IN], 0);
+        g_signal_emit (controller, signals[FOCUS_IN], 0, mode, detail);
       else
-        g_signal_emit (controller, signals[FOCUS_OUT], 0);
+        g_signal_emit (controller, signals[FOCUS_OUT], 0, mode, detail);
 
       return FALSE;
     }
@@ -233,12 +238,14 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
    * GtkEventControllerKey::focus-in:
    * @controller: the object which received the signal.
+   * @mode: crossing mode indicating what caused this change
+   * @detail: detail indication where the focus is coming from
    *
    * This signal is emitted whenever the #GtkEventController:widget controlled
    * by the @controller is given the keyboard focus.
@@ -248,12 +255,17 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+                  NULL,
+                  G_TYPE_NONE,
+                  2,
+                  GDK_TYPE_CROSSING_MODE,
+                  GDK_TYPE_NOTIFY_TYPE);
 
   /**
    * GtkEventControllerKey::focus-out:
    * @controller: the object which received the signal.
+   * @mode: crossing mode indicating what caused this change
+   * @detail: detail indication where the focus is going
    *
    * This signal is emitted whenever the #GtkEventController:widget controlled
    * by the @controller loses the keyboard focus.
@@ -263,8 +275,11 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+                  NULL,
+                  G_TYPE_NONE,
+                  2,
+                  GDK_TYPE_CROSSING_MODE,
+                  GDK_TYPE_NOTIFY_TYPE);
 }
 
 static void
@@ -283,8 +298,7 @@ gtk_event_controller_key_init (GtkEventControllerKey *controller)
 GtkEventController *
 gtk_event_controller_key_new (void)
 {
-  return g_object_new (GTK_TYPE_EVENT_CONTROLLER_KEY,
-                       NULL);
+  return g_object_new (GTK_TYPE_EVENT_CONTROLLER_KEY, NULL);
 }
 
 /**
