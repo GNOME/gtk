@@ -814,6 +814,8 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
 
 static void
 focus_in (GtkEventControllerKey *controller,
+          GdkCrossingMode        mode,
+          GdkNotifyType          detail,
           GtkTreeViewColumn     *column)
 {
   _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
