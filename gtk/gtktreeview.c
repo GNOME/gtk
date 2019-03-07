@@ -614,6 +614,8 @@ static void     gtk_tree_view_key_controller_key_released (GtkEventControllerKey
                                                            GdkModifierType        state,
                                                            GtkTreeView           *tree_view);
 static void     gtk_tree_view_key_controller_focus_out    (GtkEventControllerKey *key,
+                                                           GdkCrossingMode        mode,
+                                                           GdkNotifyType          detail,
                                                            GtkTreeView           *tree_view);
 
 static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
@@ -5472,6 +5474,8 @@ gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
 
 static void
 gtk_tree_view_key_controller_focus_out (GtkEventControllerKey *key,
+                                        GdkCrossingMode        mode,
+                                        GdkNotifyType          detail,
                                         GtkTreeView           *tree_view)
 {
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));

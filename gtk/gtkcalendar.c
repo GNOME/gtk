@@ -295,6 +295,8 @@ static gboolean gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *
                                                          GdkModifierType        state,
                                                          GtkWidget             *widget);
 static void     gtk_calendar_key_controller_focus       (GtkEventControllerKey *controller,
+                                                         GdkCrossingMode        mode,
+                                                         GdkNotifyType          detail,
                                                          GtkWidget             *widget);
 static void     gtk_calendar_grab_notify    (GtkWidget        *widget,
                                              gboolean          was_grabbed);
@@ -2854,6 +2856,8 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
 
 static void
 gtk_calendar_key_controller_focus (GtkEventControllerKey *key,
+                                   GdkCrossingMode        mode,
+                                   GdkNotifyType          detail,
                                    GtkWidget             *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
