@@ -6901,7 +6901,7 @@ gtk_window_real_activate_focus (GtkWindow *window)
 
 static void
 do_focus_change (GtkWidget *widget,
-		 gboolean   in)
+                 gboolean   in)
 {
   GdkSeat *seat;
   GList *devices, *d;
@@ -6930,7 +6930,8 @@ do_focus_change (GtkWidget *widget,
       fevent->focus_change.in = in;
       gdk_event_set_device (fevent, dev);
 
-      gtk_widget_send_focus_change (widget, fevent);
+      gtk_widget_set_has_focus (widget, in);
+      gtk_widget_event (widget, fevent);
 
       g_object_unref (fevent);
     }
