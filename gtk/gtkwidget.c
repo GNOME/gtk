@@ -7459,6 +7459,9 @@ gtk_widget_child_focus (GtkWidget       *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  if (!gtk_widget_get_root (widget))
+    return FALSE;
+
   focus_child = gtk_root_get_focus (gtk_widget_get_root (widget));
   if (focus_child)
     next_focus = gtk_widget_get_next_focus (focus_child, direction);
