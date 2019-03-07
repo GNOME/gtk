@@ -338,9 +338,6 @@ gboolean          gtk_widget_run_controllers               (GtkWidget           
                                                             const GdkEvent      *event,
                                                             GtkPropagationPhase  phase);
 
-gboolean          gtk_widget_send_focus_change             (GtkWidget           *widget,
-                                                            GdkEvent            *event);
-
 gboolean          gtk_widget_can_take_focus                (GtkWidget           *widget);
 
 

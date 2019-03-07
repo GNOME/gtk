@@ -11561,56 +11561,6 @@ gtk_widget_get_overflow (GtkWidget *widget)
   return priv->overflow;
 }
 
-/**
- * gtk_widget_send_focus_change:
- * @widget: a #GtkWidget
- * @event: a #GdkEvent of type GDK_FOCUS_CHANGE
- *
- * Sends the focus change @event to @widget
- *
- * This function is not meant to be used by applications. The only time it
- * should be used is when it is necessary for a #GtkWidget to assign focus
- * to a widget that is semantically owned by the first widget even though
- * it’s not a direct child - for instance, a search entry in a floating
- * window similar to the quick search in #GtkTreeView.
- *
- * An example of its usage is:
- *
- * |[<!-- language="C" -->
- *   GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
- *
- *   fevent->focus_change.type = GDK_FOCUS_CHANGE;
- *   fevent->focus_change.in = TRUE;
- *   fevent->focus_change.surface = _gtk_widget_get_surface (widget);
- *   if (fevent->focus_change.surface != NULL)
- *     g_object_ref (fevent->focus_change.surface);
- *
- *   gtk_widget_send_focus_change (widget, fevent);
- *
- *   g_object_unref (event);
- * ]|
- *
- * Returns: the return value from the event signal emission: %TRUE
- *   if the event was handled, and %FALSE otherwise
- */
-gboolean
-gtk_widget_send_focus_change (GtkWidget *widget,
-                              GdkEvent  *event)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (event != NULL && event->any.type == GDK_FOCUS_CHANGE, FALSE);
-
-  priv->has_focus = event->focus_change.in;
-
-  gtk_propagate_event (widget, event);
-
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
-
-  return TRUE;
-}
-
 void
 gtk_widget_set_has_focus (GtkWidget *widget,
                           gboolean   has_focus)
