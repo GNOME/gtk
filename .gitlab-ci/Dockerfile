@@ -62,14 +62,13 @@ RUN dnf -y install \
     python3-wheel \
     redhat-rpm-config \
     sassc \
+    strace \
     systemtap-sdt-devel \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
     which \
     xorg-x11-server-Xvfb \
- && dnf -y remove \
-    gvfs \
  && dnf clean all
 
 RUN pip3 install meson==0.49.0
