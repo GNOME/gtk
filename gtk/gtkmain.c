@@ -1458,6 +1458,21 @@ synth_crossing (GtkWidget       *widget,
 
   if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
     {
+      /* maintain focus chain */
+      if (enter || notify_type == GDK_NOTIFY_INFERIOR)
+        {
+          GtkWidget *parent = gtk_widget_get_parent (widget);
+          if (parent)
+            gtk_widget_set_focus_child (parent, widget);
+        }
+      else if (!enter && notify_type != GDK_NOTIFY_INFERIOR)
+        {
+          GtkWidget *parent = gtk_widget_get_parent (widget);
+          if (parent)
+            gtk_widget_set_focus_child (parent, NULL);
+        }
+
+      /* maintain widget state */
       if (notify_type == GDK_NOTIFY_ANCESTOR ||
           notify_type == GDK_NOTIFY_INFERIOR ||
           notify_type == GDK_NOTIFY_NONLINEAR)
