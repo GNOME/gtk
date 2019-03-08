@@ -6702,6 +6702,12 @@ gtk_event_controller_motion_get_type
 <TITLE>GtkEventControllerKey</TITLE>
 GtkEventControllerKey
 gtk_event_controller_key_new
+gtk_event_controller_key_set_im_context
+gtk_event_controller_key_get_im_context
+gtk_event_controller_key_forward
+gtk_event_controller_key_get_group
+gtk_event_controller_key_get_focus_origin
+gtk_event_controller_key_get_focus_target
 
 <SUBSECTION Standard>
 GTK_TYPE_EVENT_CONTROLLER_KEY
