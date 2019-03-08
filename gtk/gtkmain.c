@@ -1447,7 +1447,9 @@ synth_crossing (GtkWidget       *widget,
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
-  event->any.surface = g_object_ref (gtk_widget_get_surface (toplevel));
+  event->any.surface = gtk_widget_get_surface (toplevel);
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
 
   if (enter)
     gtk_widget_set_state_flags (widget, flags, FALSE);
@@ -1496,13 +1498,16 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
     {
       widget = old_target;
 
-      while (widget != ancestor)
+      while (widget)
         {
           notify_type = (widget == old_target) ?
             leave_type : get_virtual_notify_type (leave_type);
 
-          synth_crossing (widget, GTK_WIDGET (toplevel), FALSE,
-                          old_target, new_target, event, notify_type, mode);
+          if (widget != ancestor || widget == old_target)
+            synth_crossing (widget, GTK_WIDGET (toplevel), FALSE,
+                            old_target, new_target, event, notify_type, mode);
+          if (widget == ancestor)
+            break;
           widget = gtk_widget_get_parent (widget);
         }
     }
@@ -1513,9 +1518,11 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
 
       widget = new_target;
 
-      while (widget != ancestor)
+      while (widget)
         {
           widgets = g_slist_prepend (widgets, widget);
+          if (widget == ancestor)
+            break;
           widget = gtk_widget_get_parent (widget);
         }
 
@@ -1526,8 +1533,9 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
           notify_type = (widget == new_target) ?
             enter_type : get_virtual_notify_type (enter_type);
 
-          synth_crossing (widget, GTK_WIDGET (toplevel), TRUE,
-                          new_target, old_target, event, notify_type, mode);
+          if (widget != ancestor || widget == new_target)
+            synth_crossing (widget, GTK_WIDGET (toplevel), TRUE,
+                            new_target, old_target, event, notify_type, mode);
         }
     }
 }
