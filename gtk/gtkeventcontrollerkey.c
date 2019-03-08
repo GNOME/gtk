@@ -36,6 +36,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkbindings.h"
 #include "gtkenums.h"
+#include "gtkmain.h"
 
 #include <gdk/gdk.h>
 
@@ -157,10 +158,14 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
 
       update_focus (key, focus_in, detail);
 
+      key->current_event = event;
+
       if (focus_in)
         g_signal_emit (controller, signals[FOCUS_IN], 0, mode, detail);
       else
         g_signal_emit (controller, signals[FOCUS_OUT], 0, mode, detail);
+
+      key->current_event = NULL;
 
       return FALSE;
     }
@@ -511,4 +516,65 @@ gtk_event_controller_key_get_group (GtkEventControllerKey *controller)
   gdk_event_get_key_group (controller->current_event, &group);
 
   return group;
+}
+
+/**
+ * gtk_event_controller_key_get_focus_origin:
+ * @controller: a #GtkEventControllerKey
+ *
+ * Returns the widget that was holding focus before.
+ *
+ * This function can only be used in handlers for the
+ * #GtkEventControllerKey::focus-in and
+ * #GtkEventControllerKey::focus-out signals.
+ *
+ * Returns: (transfer none): the previous focus
+ */
+GtkWidget *
+gtk_event_controller_key_get_focus_origin (GtkEventControllerKey *controller)
+{
+  gboolean focus_in;
+  GtkWidget *origin;
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
+  g_return_val_if_fail (controller->current_event != NULL, NULL);
+  g_return_val_if_fail (gdk_event_get_event_type (controller->current_event) == GDK_FOCUS_CHANGE, NULL);
+
+  gdk_event_get_focus_in (controller->current_event, &focus_in);
+
+  if (focus_in)
+    origin = (GtkWidget *)gdk_event_get_related_target (controller->current_event);
+  else
+    origin = (GtkWidget *)gdk_event_get_target (controller->current_event);
+
+  return origin;
+}
+
+/**
+ * gtk_event_controller_key_get_focus_target:
+ * @controller: a #GtkEventControllerKey
+ *
+ * Returns the widget that will be holding focus afterwards.
+ *
+ * This function can only be used in handlers for the
+ * #GtkEventControllerKey::focus-in and
+ * #GtkEventControllerKey::focus-out signals.
+ *
+ * Returns: (transfer none): the next focus
+ */
+GtkWidget *
+gtk_event_controller_key_get_focus_target (GtkEventControllerKey *controller)
+{
+  gboolean focus_in;
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
+  g_return_val_if_fail (controller->current_event != NULL, NULL);
+  g_return_val_if_fail (gdk_event_get_event_type (controller->current_event) == GDK_FOCUS_CHANGE, NULL);
+
+  gdk_event_get_focus_in (controller->current_event, &focus_in);
+
+  if (focus_in)
+    return (GtkWidget *)gdk_event_get_target (controller->current_event);
+  else
+    return (GtkWidget *)gdk_event_get_related_target (controller->current_event);
 }
