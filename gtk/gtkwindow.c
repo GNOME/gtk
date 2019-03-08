@@ -7168,7 +7168,6 @@ gtk_window_set_focus (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *old_focus = NULL;
-  GtkWidget *f;
   GdkSeat *seat;
   GdkDevice *device;
   GdkEvent *event;
@@ -7199,13 +7198,6 @@ gtk_window_set_focus (GtkWindow *window,
   g_set_object (&priv->focus_widget, focus);
 
   g_clear_object (&old_focus);
-
-  for (f = focus; f; f = gtk_widget_get_parent (f))
-    {
-      GtkWidget *parent = gtk_widget_get_parent (f);
-      if (parent)
-        gtk_widget_set_focus_child (parent, f);
-    }
 
   g_object_notify (G_OBJECT (window), "focus-widget");
 }
