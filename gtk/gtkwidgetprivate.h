@@ -317,8 +317,6 @@ void              gtk_widget_forall                        (GtkWidget           
                                                             GtkCallback           callback,
                                                             gpointer              user_data);
 
-GtkWidget        *gtk_widget_get_focus_child               (GtkWidget            *widget);
-
 void              gtk_widget_focus_sort                    (GtkWidget        *widget,
                                                             GtkDirectionType  direction,
                                                             GPtrArray        *focus_order);
