@@ -2054,9 +2054,7 @@ gtk_text_measure (GtkWidget      *widget,
   PangoFontMetrics *metrics;
 
   context = gtk_widget_get_pango_context (widget);
-  metrics = pango_context_get_metrics (context,
-                                       pango_context_get_font_description (context),
-                                       pango_context_get_language (context));
+  metrics = pango_context_get_metrics (context, NULL, NULL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
