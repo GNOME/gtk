@@ -11183,8 +11183,8 @@ gtk_widget_pick (GtkWidget *widget,
 
         gtk_css_boxes_init (&boxes, widget);
 
-        if (!graphene_rect_contains_point (gtk_css_boxes_get_padding_rect (&boxes),
-                                           &GRAPHENE_POINT_INIT (x, y)))
+        if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_padding_box (&boxes),
+                                              &GRAPHENE_POINT_INIT (x, y)))
           return NULL;
       }
       break;
@@ -13034,7 +13034,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
     }
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_push_clip (snapshot, gtk_css_boxes_get_padding_rect (&boxes));
+    gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
 
   klass->snapshot (widget, snapshot);
 
