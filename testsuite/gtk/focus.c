@@ -3,7 +3,9 @@
 const char *
 widget_name (GtkWidget *widget)
 {
-  if (gtk_widget_get_name (widget))
+  if (!widget)
+    return NULL;
+  else if (gtk_widget_get_name (widget))
     return gtk_widget_get_name (widget);
   else if (GTK_IS_LABEL (widget))
     return gtk_label_get_label (GTK_LABEL (widget));
@@ -32,19 +34,27 @@ add_event (GtkEventController *controller,
            GdkNotifyType detail,
            GString *s)
 {
+  GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (controller);
   gboolean is_focus;
   gboolean contains_focus;
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
+  GtkWidget *origin = gtk_event_controller_key_get_focus_origin (key);
+  GtkWidget *target = gtk_event_controller_key_get_focus_target (key);
+
   g_object_get (controller,
                 "is-focus", &is_focus,
                 "contains-focus", &contains_focus,
                 NULL);
-  g_string_append_printf (s, "%s: %s %s %s is-focus: %d contains-focus: %d\n",
+
+  g_string_append_printf (s, "%s: %s %s %s is-focus: %d contains-focus: %d origin: %s target: %s\n",
                           widget_name (widget),
                           in ? "focus-in" : "focus-out",
                           mode_to_string (mode),
                           detail_to_string (detail),
-                          is_focus, contains_focus);
+                          is_focus,
+                          contains_focus,
+                          widget_name (origin),
+                          widget_name (target));
 }
 
 static void
@@ -146,8 +156,8 @@ test_window_focus (void)
     g_print ("-> box\n%s\n", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
-"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
+"window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1 origin: (null) target: box\n"
+"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0 origin: (null) target: box\n");
   g_string_truncate (s, 0);
 
   gtk_widget_grab_focus (entry1);
@@ -156,9 +166,9 @@ test_window_focus (void)
     g_print ("box -> entry1\n%s\n", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"box: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 0 contains-focus: 1\n"
-"box1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
-"entry1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
+"box: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 0 contains-focus: 1 origin: box target: entry1\n"
+"box1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1 origin: box target: entry1\n"
+"entry1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0 origin: box target: entry1\n");
 
   g_string_truncate (s, 0);
 
@@ -170,10 +180,10 @@ test_window_focus (void)
     g_print ("entry1 -> entry2\n%s\n", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"entry1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR is-focus: 0 contains-focus: 0\n"
-"box1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL is-focus: 0 contains-focus: 0\n"
-"box2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL is-focus: 0 contains-focus: 1\n"
-"entry2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR is-focus: 1 contains-focus: 0\n");
+"entry1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR is-focus: 0 contains-focus: 0 origin: entry1 target: entry2\n"
+"box1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL is-focus: 0 contains-focus: 0 origin: entry1 target: entry2\n"
+"box2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL is-focus: 0 contains-focus: 1 origin: entry1 target: entry2\n"
+"entry2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR is-focus: 1 contains-focus: 0 origin: entry1 target: entry2\n");
 
   g_string_truncate (s, 0);
 
@@ -185,9 +195,9 @@ test_window_focus (void)
     g_print ("entry2 -> box\n%s", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"entry2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 0 contains-focus: 0\n"
-"box2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 0\n"
-"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 1 contains-focus: 0\n");
+"entry2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 0 contains-focus: 0 origin: entry2 target: box\n"
+"box2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 0 origin: entry2 target: box\n"
+"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 1 contains-focus: 0 origin: entry2 target: box\n");
 
   g_string_truncate (s, 0);
 
