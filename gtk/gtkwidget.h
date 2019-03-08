@@ -185,6 +185,8 @@ struct _GtkWidget
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
  *   #GtkWindow it’s inside.
+ * @set_focus_child: Allows widget implementations to do extra actions when
+ *   the child containing the focus is changed. Must chain up
  * @next_focus_child: Returns the next child that is a candidate for receiving focus.
  *   Note that the returned child does not have to be focusable itself, it might just
  *   contain focusable children. The default implementation returns all children, in
@@ -280,7 +282,9 @@ struct _GtkWidgetClass
                                          gboolean             group_cycling);
 
   /* explicit focus */
-  void     (* grab_focus)               (GtkWidget           *widget);
+  void        (* grab_focus)            (GtkWidget           *widget);
+  void        (* set_focus_child)       (GtkWidget           *widget,
+                                         GtkWidget           *child);
   GtkWidget * (* next_focus_child)      (GtkWidget           *widget,
                                          GtkWidget           *child,
                                          GtkDirectionType     direction);

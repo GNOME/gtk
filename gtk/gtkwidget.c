@@ -588,7 +588,9 @@ static void	gtk_widget_real_size_allocate    (GtkWidget         *widget,
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
-static void	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
+static void	gtk_widget_real_grab_focus       (GtkWidget         *focus_widget);
+static void	gtk_widget_real_set_focus_child  (GtkWidget         *widget,
+                                                  GtkWidget         *child);
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gint               x,
 						  gint               y,
@@ -946,6 +948,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
+  klass->set_focus_child = gtk_widget_real_set_focus_child;
   klass->next_focus_child = gtk_widget_next_focus_child;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
@@ -13286,8 +13289,6 @@ void
 gtk_widget_set_focus_child (GtkWidget *widget,
                             GtkWidget *child)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (child != NULL)
@@ -13295,6 +13296,15 @@ gtk_widget_set_focus_child (GtkWidget *widget,
       g_return_if_fail (GTK_IS_WIDGET (child));
       g_return_if_fail (gtk_widget_get_parent (child) == widget);
     }
+
+  GTK_WIDGET_GET_CLASS (widget)->set_focus_child (widget, child);
+}
+
+static void
+gtk_widget_real_set_focus_child (GtkWidget *widget,
+                                 GtkWidget *child)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_set_object (&priv->focus_child, child);
 }
