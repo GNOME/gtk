@@ -69,7 +69,7 @@ G_DEFINE_TYPE (GtkEventControllerKey, gtk_event_controller_key,
                GTK_TYPE_EVENT_CONTROLLER)
 
 static void
-gtk_event_controller_finalize (GObject *object)
+gtk_event_controller_key_finalize (GObject *object)
 {
   GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (object);
 
@@ -169,7 +169,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gtk_event_controller_finalize;
+  object_class->finalize = gtk_event_controller_key_finalize;
   controller_class->handle_event = gtk_event_controller_key_handle_event;
 
   /**
