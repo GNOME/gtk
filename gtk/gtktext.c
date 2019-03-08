@@ -1644,6 +1644,7 @@ gtk_text_init (GtkText *self)
 
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
   priv->editable = TRUE;
   priv->visible = TRUE;
@@ -2196,13 +2197,6 @@ gtk_text_snapshot (GtkWidget   *widget,
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT (
-                            0,
-                            0,
-                            gtk_widget_get_width (widget),
-                            gtk_widget_get_height (widget)));
-
   /* Draw text and cursor */
   if (priv->dnd_position != -1)
     gtk_text_draw_cursor (GTK_TEXT (widget), snapshot, CURSOR_DND);
@@ -2217,8 +2211,6 @@ gtk_text_snapshot (GtkWidget   *widget,
       gtk_widget_has_focus (widget) &&
       priv->selection_bound == priv->current_pos && priv->cursor_visible)
     gtk_text_draw_cursor (GTK_TEXT (widget), snapshot, CURSOR_STANDARD);
-
-  gtk_snapshot_pop (snapshot);
 
   gtk_text_draw_undershoot (self, snapshot);
 }
