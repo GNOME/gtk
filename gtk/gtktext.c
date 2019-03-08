@@ -172,9 +172,6 @@ struct _GtkTextPrivate
   GtkCssNode    *block_cursor_node;
   GtkCssNode    *undershoot_node[2];
 
-  int           text_x;
-  int           text_width;
-
   float         xalign;
 
   int           ascent;                     /* font ascent in pango units  */
@@ -2145,8 +2142,6 @@ gtk_text_size_allocate (GtkWidget *widget,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   priv->text_baseline = baseline;
-  priv->text_x = 0;
-  priv->text_width = width;
 
   if (priv->placeholder)
     {
@@ -2203,9 +2198,9 @@ gtk_text_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
-                            priv->text_x,
                             0,
-                            priv->text_width,
+                            0,
+                            gtk_widget_get_width (widget),
                             gtk_widget_get_height (widget)));
 
   /* Draw text and cursor */
@@ -4234,7 +4229,7 @@ get_layout_position (GtkText *self,
   y_pos = y_pos / PANGO_SCALE;
 
   if (x)
-    *x = priv->text_x - priv->scroll_offset;
+    *x = - priv->scroll_offset;
 
   if (y)
     *y = y_pos;
@@ -4603,7 +4598,7 @@ gtk_text_get_scroll_limits (GtkText *self,
   PangoLayout *layout;
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
-  int text_width;
+  int text_width, width;
 
   layout = gtk_text_ensure_layout (self, TRUE);
   line = pango_layout_get_lines_readonly (layout)->data;
@@ -4618,15 +4613,16 @@ gtk_text_get_scroll_limits (GtkText *self,
       xalign = 1.0 - priv->xalign;
 
   text_width = PANGO_PIXELS(logical_rect.width);
+  width = gtk_widget_get_width (GTK_WIDGET (self));
 
-  if (text_width > priv->text_width)
+  if (text_width > width)
     {
       *min_offset = 0;
-      *max_offset = text_width - priv->text_width;
+      *max_offset = text_width - width;
     }
   else
     {
-      *min_offset = (text_width - priv->text_width) * xalign;
+      *min_offset = (text_width - width) * xalign;
       *max_offset = *min_offset;
     }
 }
