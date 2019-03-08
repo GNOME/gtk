@@ -68,6 +68,8 @@ RUN dnf -y install \
     wayland-protocols-devel \
     which \
     xorg-x11-server-Xvfb \
+ && dnf -y remove \
+    gvfs \
  && dnf clean all
 
 RUN pip3 install meson==0.49.0
