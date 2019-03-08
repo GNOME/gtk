@@ -76,6 +76,21 @@ focus_out (GtkEventController *controller,
 }
 
 static void
+verify_focus_chain (GtkWidget *window)
+{
+  GtkWidget *child, *last;
+
+  child = window;
+  while (child)
+    {
+      last = child;
+      child = gtk_widget_get_focus_child (child);
+    }
+
+  g_assert (last == gtk_root_get_focus (GTK_ROOT (window)));
+}
+
+static void
 add_controller (GtkWidget *widget, GString *s)
 {
   GtkEventController *controller;
@@ -151,6 +166,7 @@ test_window_focus (void)
 
   /* show puts the initial focus on box */
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == box);
+  verify_focus_chain (window);
 
   if (g_test_verbose ())
     g_print ("-> box\n%s\n", s->str);
@@ -158,6 +174,7 @@ test_window_focus (void)
   g_assert_cmpstr (s->str, ==,
 "window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1 origin: (null) target: box\n"
 "box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0 origin: (null) target: box\n");
+
   g_string_truncate (s, 0);
 
   gtk_widget_grab_focus (entry1);
@@ -173,6 +190,7 @@ test_window_focus (void)
   g_string_truncate (s, 0);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
+  verify_focus_chain (window);
 
   gtk_widget_grab_focus (entry2);
 
@@ -188,6 +206,7 @@ test_window_focus (void)
   g_string_truncate (s, 0);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry2);
+  verify_focus_chain (window);
 
   gtk_widget_grab_focus (box);
 
@@ -204,6 +223,7 @@ test_window_focus (void)
   gtk_widget_hide (window);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == box);
+  verify_focus_chain (window);
    
   gtk_window_set_focus (GTK_WINDOW (window), entry1);
 
