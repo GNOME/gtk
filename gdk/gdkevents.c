@@ -564,8 +564,8 @@ gdk_event_copy (const GdkEvent *event)
     g_object_ref (new_event->any.device);
   if (new_event->any.source_device)
     g_object_ref (new_event->any.source_device);
-  if (new_event->any.user_data)
-    g_object_ref (new_event->any.user_data);
+  if (new_event->any.target)
+    g_object_ref (new_event->any.target);
 
   switch ((guint) event->any.type)
     {
@@ -675,7 +675,7 @@ gdk_event_finalize (GObject *object)
 
   g_clear_object (&event->any.device);
   g_clear_object (&event->any.source_device);
-  g_clear_object (&event->any.user_data);
+  g_clear_object (&event->any.target);
 
   G_OBJECT_CLASS (gdk_event_parent_class)->finalize (object);
 }
@@ -1904,16 +1904,16 @@ gdk_event_get_scancode (GdkEvent *event)
 }
 
 void
-gdk_event_set_user_data (GdkEvent *event,
-                         GObject  *user_data)
+gdk_event_set_target (GdkEvent *event,
+                      GObject  *target)
 {
-  g_set_object (&event->any.user_data, user_data);
+  g_set_object (&event->any.target, target);
 }
 
 GObject *
-gdk_event_get_user_data (const GdkEvent *event)
+gdk_event_get_target (const GdkEvent *event)
 {
-  return event->any.user_data;
+  return event->any.target;
 }
 
 /**

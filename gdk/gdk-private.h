@@ -20,8 +20,6 @@ void            gdk_surface_thaw_toplevel_updates        (GdkSurface *surface);
 
 gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
-GObject *       gdk_event_get_user_data         (const GdkEvent *event);
-
 guint32         gdk_display_get_last_seen_time  (GdkDisplay *display);
 
 void gdk_display_set_double_click_time     (GdkDisplay   *display,

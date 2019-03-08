@@ -1416,7 +1416,7 @@ synth_crossing (GtkWidget       *widget,
   gdouble x, y;
 
   event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
-  gdk_event_set_user_data (event, G_OBJECT (widget));
+  gdk_event_set_target (event, G_OBJECT (widget));
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
@@ -1779,7 +1779,7 @@ gtk_main_do_event (GdkEvent *event)
   if (!target_widget)
     goto cleanup;
 
-  gdk_event_set_user_data (event, G_OBJECT (target_widget));
+  gdk_event_set_target (event, G_OBJECT (target_widget));
 
   window_group = gtk_main_get_window_group (target_widget);
   device = gdk_event_get_device (event);
@@ -2398,7 +2398,7 @@ gtk_get_event_widget (const GdkEvent *event)
 GtkWidget *
 gtk_get_event_target (const GdkEvent *event)
 {
-  return GTK_WIDGET (gdk_event_get_user_data (event));
+  return GTK_WIDGET (gdk_event_get_target (event));
 }
 
 /**
