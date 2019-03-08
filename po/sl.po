@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-02 16:48+0000\n"
-"PO-Revision-Date: 2019-03-02 20:56+0100\n"
+"PO-Revision-Date: 2019-03-07 18:34+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -4711,7 +4711,7 @@ msgstr ""
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Konjugirane oblike"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
@@ -4759,11 +4759,9 @@ msgid "Discretionary Ligatures"
 msgstr "Diskretne ligature"
 
 #: gtk/open-type-layout.h:36
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr "Pozivnik terminala"
+msgstr "Denominatorji"
 
 #: gtk/open-type-layout.h:37
 #, fuzzy
@@ -4821,12 +4819,9 @@ msgid "Half Forms"
 msgstr "Polovične oblike"
 
 #: gtk/open-type-layout.h:47
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr "Začetno stanje"
+msgstr "Oblike Halant"
 
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
@@ -4970,7 +4965,7 @@ msgstr "Sredinske oblike"
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Grški matematični znaki"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
@@ -4992,7 +4987,7 @@ msgstr "Overitev"
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "Oblike NLC Kanji"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
@@ -5002,7 +4997,7 @@ msgstr "Oblike nukta"
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Numeratorji"
 
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
@@ -5015,11 +5010,9 @@ msgid "Optical Bounds"
 msgstr "Optične meje"
 
 #: gtk/open-type-layout.h:83
-#, fuzzy
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "Signali"
+msgstr "Ordinalni znaki"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
@@ -5089,7 +5082,7 @@ msgstr ""
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Oblike Rakar"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
@@ -6835,12 +6828,9 @@ msgid "Khudawadi, Sindhi"
 msgstr ""
 
 #: gtk/script-names.c:126
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear A"
-msgstr "_linearna"
+msgstr "Linearno A"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
@@ -6898,10 +6888,9 @@ msgid "Pau Cin Hau"
 msgstr "paučinhauski"
 
 #: gtk/script-names.c:138
-#, fuzzy
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr "Psalter"
+msgstr "Psalter Pahlavi"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
