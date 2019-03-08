@@ -612,7 +612,7 @@ _gdk_quartz_window_gdk_xy_to_xy (gint  gdk_x,
     *ns_y = screen_quartz->orig_y - gdk_y;
 
   if (ns_x)
-    *ns_x = gdk_x - screen_quartz->orig_x;
+    *ns_x = gdk_x + screen_quartz->orig_x;
 }
 
 void
@@ -627,7 +627,7 @@ _gdk_quartz_window_xy_to_gdk_xy (gint  ns_x,
     *gdk_y = screen_quartz->orig_y - ns_y;
 
   if (gdk_x)
-    *gdk_x = ns_x + screen_quartz->orig_x;
+    *gdk_x = ns_x - screen_quartz->orig_x;
 }
 
 void
