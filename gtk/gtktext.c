@@ -184,8 +184,6 @@ struct _GtkTextPrivate
   int           insert_pos;
   int           selection_bound;
   int           scroll_offset;
-  int           start_x;
-  int           start_y;
   int           width_chars;
   int           max_width_chars;
 
