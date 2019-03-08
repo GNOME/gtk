@@ -470,6 +470,13 @@ gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
  *
  * Forwards the current event of this @controller to a @widget.
  *
+ * This function can only be used in handlers for the
+ * #GtkEventControllerKey::key-pressed,
+ * #GtkEventControllerKey::key-released
+ * or
+ * #GtkEventControllerKey::modifiers
+ * signals.
+ *
  * Returns: whether the @widget handled the event
  **/
 gboolean
