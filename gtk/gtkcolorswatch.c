@@ -35,15 +35,12 @@
 #include "gtkmodelbutton.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
-#include "gtkroundedboxprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
-
-#include "gsk/gskroundedrectprivate.h"
 
 /*
  * GtkColorSwatch has two CSS nodes, the main one named colorswatch
@@ -97,30 +94,21 @@ swatch_snapshot (GtkWidget   *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
 
   if (priv->has_color)
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
-      GskRoundedRect content_box;
-
-      gtk_rounded_boxes_init_for_style (NULL,
-                                        NULL,
-                                        &content_box,
-                                        gtk_style_context_lookup_style (context),
-                                        0, 0,
-                                        gtk_widget_get_width (widget),
-                                        gtk_widget_get_height (widget));
-      gtk_snapshot_push_rounded_clip (snapshot, &content_box);
 
       if (priv->use_alpha && !gdk_rgba_is_opaque (&priv->color))
         {
           cairo_t *cr;
 
-          cr = gtk_snapshot_append_cairo (snapshot, &content_box.bounds);
+          cr = gtk_snapshot_append_cairo (snapshot,
+                                          &GRAPHENE_RECT_INIT (
+                                              0, 0,
+                                              gtk_widget_get_width (widget),
+                                              gtk_widget_get_height (widget)));
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
           cairo_paint (cr);
 
@@ -136,7 +124,10 @@ swatch_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_append_color (snapshot,
                                      &priv->color,
-                                     &content_box.bounds);
+                                     &GRAPHENE_RECT_INIT (
+                                         0, 0,
+                                         gtk_widget_get_width (widget),
+                                         gtk_widget_get_height (widget)));
         }
       else
         {
@@ -146,10 +137,11 @@ swatch_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_append_color (snapshot,
                                      &color,
-                                     &content_box.bounds);
+                                     &GRAPHENE_RECT_INIT (
+                                         0, 0,
+                                         gtk_widget_get_width (widget),
+                                         gtk_widget_get_height (widget)));
         }
-
-      gtk_snapshot_pop (snapshot);
     }
 
   gtk_widget_snapshot_child (widget, priv->overlay_widget, snapshot);
@@ -576,6 +568,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (swatch), FALSE);
+  gtk_widget_set_overflow (GTK_WIDGET (swatch), GTK_OVERFLOW_HIDDEN);
 
   gesture = gtk_gesture_long_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
