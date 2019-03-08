@@ -486,6 +486,8 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (controller->current_event != NULL, FALSE);
+  g_return_val_if_fail (gdk_event_get_event_type (controller->current_event) == GDK_KEY_PRESS ||
+                        gdk_event_get_event_type (controller->current_event) == GDK_KEY_RELEASE, FALSE);
 
   if (!gtk_widget_get_realized (widget))
     gtk_widget_realize (widget);
